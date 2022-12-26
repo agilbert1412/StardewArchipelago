@@ -71,11 +71,23 @@ namespace StardewArchipelago
 
         private void GiveResourcePackToFarmer(string stardewItemName, int resourcePackAmount)
         {
-            var item = _itemManager.GetItemByName(stardewItemName);
             var player = Game1.player;
+
+            if (stardewItemName == "Gold")
+            {
+                GiveGoldToPlayer(player, resourcePackAmount);
+                return;
+            }
+
+            var item = _itemManager.GetItemByName(stardewItemName);
             var stardewItem = new StardewValley.Object(item.Id, resourcePackAmount);
             GiveResourcePackToPlayer(player, stardewItem);
             // SpawnResourcePackOnGround(player, stardewItem);
+        }
+
+        private void GiveGoldToPlayer(Farmer player, int amount)
+        {
+            player.addUnearnedMoney(amount);
         }
 
         private void GiveResourcePackToPlayer(Farmer player, StardewValley.Object item)

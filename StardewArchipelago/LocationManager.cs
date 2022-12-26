@@ -5,6 +5,7 @@ using Netcode;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
+using StardewValley.Menus;
 
 namespace StardewArchipelago
 {
@@ -34,9 +35,11 @@ namespace StardewArchipelago
             }
 
             var allCheckedLocations = new List<long>();
+            allCheckedLocations.AddRange(_lastReportedLocations);
             allCheckedLocations.AddRange(CheckAllBundleLocations());
-
             allCheckedLocations.AddRange(_newLocations);
+
+            allCheckedLocations = allCheckedLocations.Distinct().ToList();
             if (forceReport || allCheckedLocations.Count > _lastReportedLocations.Count || _newLocations.Any())
             {
                 _archipelago.ReportCollectedLocations(allCheckedLocations.ToArray());
