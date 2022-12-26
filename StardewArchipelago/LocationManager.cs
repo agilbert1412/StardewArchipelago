@@ -110,13 +110,13 @@ namespace StardewArchipelago
                     AreaAPLocationName = "Complete Pantry";
                     break;
                 case Area.CraftsRoom:
-                    AreaAPLocationName = "Complete CraftsRoom";
+                    AreaAPLocationName = "Complete Crafts Room";
                     break;
                 case Area.FishTank:
-                    AreaAPLocationName = "Complete FishTank";
+                    AreaAPLocationName = "Complete Fish Tank";
                     break;
                 case Area.BoilerRoom:
-                    AreaAPLocationName = "Complete BoilerRoom";
+                    AreaAPLocationName = "Complete Boiler Room";
                     break;
                 case Area.Vault:
                     AreaAPLocationName = "Complete Vault";

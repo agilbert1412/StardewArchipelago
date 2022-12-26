@@ -17,12 +17,15 @@ namespace StardewArchipelago
         private StardewJsonSerializer _serializer;
         private ItemManager _itemManager;
         private LocationManager _locationsManager;
+        private StardewItemManager _stardewItemManager;
+        private UnlockManager _unlockManager;
 
         private ArchipelagoStateDto _state;
 
         public ModEntry() : base()
         {
             _state = new ArchipelagoStateDto();
+            _unlockManager = new UnlockManager();
         }
 
         /*********
@@ -34,7 +37,7 @@ namespace StardewArchipelago
         {
             _helper = helper;
 
-            _archipelago = new ArchipelagoClient(Monitor);
+            _archipelago = new ArchipelagoClient(Monitor, OnItemReceived);
             _helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
             _helper.Events.GameLoop.SaveCreated += this.OnSaveCreated;
             _helper.Events.GameLoop.Saved += this.OnSaved;
@@ -61,6 +64,7 @@ namespace StardewArchipelago
 
         private void OnSaved(object sender, SavedEventArgs e)
         {
+            _state.ItemsReceived = _itemManager.GetAllItemsAlreadyProcessed().ToList();
             _helper.Data.WriteJsonFile(GetApDataJsonPath(), _state);
         }
 
@@ -71,14 +75,23 @@ namespace StardewArchipelago
             {
                 _state = state;
             }
+
+            _stardewItemManager = new StardewItemManager();
             _bundleReader = new BundleReader();
+            _itemManager = new ItemManager(_archipelago, _stardewItemManager, _unlockManager, _state.ItemsReceived);
             _locationsManager = new LocationManager(_archipelago, _bundleReader, _helper);
             _locationsManager.RemoveDefaultRewardsOnAllLocations();
+
+            if (_state.APConnectionInfo != null)
+            {
+                _archipelago.Connect(_state.APConnectionInfo);
+            }
         }
 
         private void OnDayStarted(object sender, DayStartedEventArgs e)
         {
             _locationsManager.CheckAllLocations(true);
+            _itemManager.ReceiveAllNewItems();
         }
 
         private void OnDayEnding(object sender, DayEndingEventArgs e)
@@ -92,7 +105,7 @@ namespace StardewArchipelago
 
         private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
         {
-            // _archipelago.APUpdate(_state.APConnectionInfo);
+            _archipelago.APUpdate(_state.APConnectionInfo);
         }
 
         private void OnConnectToArchipelago(string arg1, string[] arg2)
@@ -122,6 +135,11 @@ namespace StardewArchipelago
             }
 
             _state.APConnectionInfo = apConnection;
+        }
+
+        private void OnItemReceived(long itemId)
+        {
+            _itemManager.ReceiveAllNewItems();
         }
 
         private void DebugMethod(string arg1, string[] arg2)

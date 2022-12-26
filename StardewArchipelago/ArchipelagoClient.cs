@@ -14,12 +14,16 @@ namespace StardewArchipelago
         private IMonitor _console;
         private ArchipelagoSession _session;
 
+        private Action<long> _itemReceivedFunction;
+
         public bool IsConnected { get; private set; }
 
-        public ArchipelagoClient(IMonitor console)
+        public ArchipelagoClient(IMonitor console, Action<long> itemReceivedFunction)
         {
             _console = console;
+            _itemReceivedFunction = itemReceivedFunction;
             IsConnected = false;
+
         }
 
         public void Connect(ArchipelagoConnectionInfo archipelagoConnectionInfo)
@@ -63,7 +67,7 @@ namespace StardewArchipelago
 
             // Must go AFTER a successful connection attempt
             _session.Items.ItemReceived += OnItemReceived;
-
+            _itemReceivedFunction(0);
             IsConnected = true;
         }
 
@@ -78,7 +82,7 @@ namespace StardewArchipelago
 
         private void OnMessageReceived(LogMessage message)
         {
-            throw new NotImplementedException();
+            var todo = 5;
         }
 
         private void SessionErrorReceived(Exception e, string message)
@@ -132,8 +136,13 @@ namespace StardewArchipelago
 
         private void OnItemReceived(ReceivedItemsHelper receivedItemsHelper)
         {
+            if (!IsConnected)
+            {
+                return;
+            }
+
             var receivedItem = receivedItemsHelper.DequeueItem();
-            // ... Handle item receipt here
+            _itemReceivedFunction(receivedItem.Item);
         }
         
         public void ReportCollectedLocations(long[] locationIds)
@@ -163,7 +172,7 @@ namespace StardewArchipelago
             return _session.Locations.GetLocationIdFromName(gameName, locationName);
         }
 
-        private string GetItemName(long itemId)
+        public string GetItemName(long itemId)
         {
             return _session.Items.GetItemName(itemId);
         }
