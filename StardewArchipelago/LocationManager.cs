@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using HarmonyLib;
 using Netcode;
 using StardewModdingAPI;
 using StardewValley;
@@ -14,17 +15,21 @@ namespace StardewArchipelago
         private ArchipelagoClient _archipelago;
         private BundleReader _bundleReader;
         private IModHelper _modHelper;
+        private Harmony _harmony;
+        private LocationsCodeInjection _locationsCodeInjection;
 
         private List<long> _lastReportedLocations;
         private List<long> _newLocations;
 
-        public LocationManager(ArchipelagoClient archipelago, BundleReader bundleReader, IModHelper modHelper)
+        public LocationManager(ArchipelagoClient archipelago, BundleReader bundleReader, IModHelper modHelper, Harmony harmony)
         {
             _archipelago = archipelago;
             _bundleReader = bundleReader;
             _modHelper = modHelper;
+            _harmony = harmony;
             _lastReportedLocations = new List<long>();
             _newLocations = new List<long>();
+            _locationsCodeInjection = new LocationsCodeInjection(_archipelago, (id) => _newLocations.Add(id));
         }
 
         public void CheckAllLocations(bool forceReport = false)
@@ -73,6 +78,7 @@ namespace StardewArchipelago
         {
             RemoveDefaultRewardsOnAllBundles();
             RemoveDefaultRewardsOnCommunityCenterAreas();
+            RemoveBackPackIncreaseOnBackpackPurchase();
         }
 
         private static void RemoveDefaultRewardsOnAllBundles()
@@ -101,35 +107,18 @@ namespace StardewArchipelago
             var areaCompleteRewardEventField = _modHelper.Reflection.GetField<NetEvent1Field<int, NetInt>>(communityCenter, "areaCompleteRewardEvent");
 
             areaCompleteRewardEventField.GetValue().Clear();
-            areaCompleteRewardEventField.GetValue().onEvent += this.doAreaCompleteReward;
+            areaCompleteRewardEventField.GetValue().onEvent += _locationsCodeInjection.DoAreaCompleteReward;
         }
 
-        private void doAreaCompleteReward(int whichArea)
+        private void RemoveBackPackIncreaseOnBackpackPurchase()
         {
-            string AreaAPLocationName = "";
-            switch ((Area)whichArea)
-            {
-                case Area.Pantry:
-                    AreaAPLocationName = "Complete Pantry";
-                    break;
-                case Area.CraftsRoom:
-                    AreaAPLocationName = "Complete Crafts Room";
-                    break;
-                case Area.FishTank:
-                    AreaAPLocationName = "Complete Fish Tank";
-                    break;
-                case Area.BoilerRoom:
-                    AreaAPLocationName = "Complete Boiler Room";
-                    break;
-                case Area.Vault:
-                    AreaAPLocationName = "Complete Vault";
-                    break;
-                case Area.Bulletin:
-                    AreaAPLocationName = "Complete Bulletin";
-                    break;
-            }
-            var completedAreaAPLocationId = _archipelago.GetLocationId(AreaAPLocationName);
-            _newLocations.Add(completedAreaAPLocationId);
+            var seedShop = Game1.locations.OfType<SeedShop>().First();
+            var answerDialogMethod = _modHelper.Reflection.GetMethod(seedShop, "answerDialogueAction");
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(SeedShop), nameof(SeedShop.answerDialogueAction)),
+                prefix: new HarmonyMethod(typeof(LocationsCodeInjection), nameof(LocationsCodeInjection.answerDialogueAction_Prefix))
+            );
         }
     }
 }

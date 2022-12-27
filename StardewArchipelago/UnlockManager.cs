@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Netcode;
 using StardewValley;
+using StardewValley.Objects;
 
 namespace StardewArchipelago
 {
@@ -15,6 +18,7 @@ namespace StardewArchipelago
         {
             _unlockables = new Dictionary<string, Action>();
             RegisterCommunityCenterRepairs();
+            RegisterPlayerImprovement();
         }
 
         public void DoUnlock(string unlockName)
@@ -57,7 +61,7 @@ namespace StardewArchipelago
             SendCommunityRepairMail("ccVault");
         }
 
-        private static void SendCommunityRepairMail(string mailTitle)
+        private void SendCommunityRepairMail(string mailTitle)
         {
             if (Game1.player.mailReceived.Contains(mailTitle))
             {
@@ -65,6 +69,40 @@ namespace StardewArchipelago
             }
 
             Game1.player.mailForTomorrow.Add(mailTitle + "%&NL&%");
+        }
+
+        private void RegisterPlayerImprovement()
+        {
+            _unlockables.Add("Progressive Backpack 1", () => SetBackPackLevel(1));
+            _unlockables.Add("Progressive Backpack 2", () => SetBackPackLevel(2));
+        }
+
+        private void SetBackPackLevel(int level)
+        {
+            var previousMaxItems = Game1.player.MaxItems;
+            var backpack1Name = Game1.content.LoadString("Strings\\StringsFromCSFiles:GameLocation.cs.8708");
+            var backpack2Name = Game1.content.LoadString("Strings\\StringsFromCSFiles:GameLocation.cs.8709");
+            switch (level)
+            {
+                case 0:
+                    Game1.player.MaxItems = 12;
+                    break;
+                case 1:
+                    Game1.player.MaxItems = 24;
+                    break;
+                case 2:
+                    Game1.player.MaxItems = 36;
+                    break;
+            }
+
+            if (previousMaxItems < Game1.player.MaxItems)
+            {
+                while (Game1.player.Items.Count <= Game1.player.MaxItems)
+                {
+                    Game1.player.Items.Add(null);
+                }
+                Game1.player.holdUpItemThenMessage(new SpecialItem(99, level == 1 ? backpack1Name : backpack2Name));
+            }
         }
     }
 }

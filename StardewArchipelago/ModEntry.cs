@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using HarmonyLib;
 using StardewArchipelago.Serialization;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -12,6 +13,7 @@ namespace StardewArchipelago
         private const string CONNECT_SYNTAX = "Syntax: connect ip:port slot password";
 
         private IModHelper _helper;
+        private Harmony _harmony;
         private BundleReader _bundleReader;
         private ArchipelagoClient _archipelago;
         private StardewJsonSerializer _serializer;
@@ -36,6 +38,7 @@ namespace StardewArchipelago
         public override void Entry(IModHelper helper)
         {
             _helper = helper;
+            _harmony = new Harmony(this.ModManifest.UniqueID);
 
             _archipelago = new ArchipelagoClient(Monitor, OnItemReceived);
             _helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;

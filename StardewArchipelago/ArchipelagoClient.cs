@@ -5,6 +5,7 @@ using Archipelago.MultiClient.Net.Enums;
 using Archipelago.MultiClient.Net.Helpers;
 using Archipelago.MultiClient.Net.Packets;
 using StardewModdingAPI;
+using StardewValley;
 
 namespace StardewArchipelago
 {
@@ -82,7 +83,11 @@ namespace StardewArchipelago
 
         private void OnMessageReceived(LogMessage message)
         {
-            var todo = 5;
+            foreach (var messagePart in message.Parts)
+            {
+                _console.Log(messagePart.Text, LogLevel.Info);
+                Game1.chatBox.addInfoMessage(messagePart.Text);
+            }
         }
 
         private void SessionErrorReceived(Exception e, string message)
