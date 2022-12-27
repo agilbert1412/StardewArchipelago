@@ -13,40 +13,47 @@ namespace StardewArchipelago
         private ArchipelagoClient _archipelago;
         private StardewItemManager _itemManager;
         private UnlockManager _unlockManager;
-        private List<long> _itemsAlreadyProcessed;
+        private Dictionary<long, int> _itemsAlreadyProcessed;
 
-        public ItemManager(ArchipelagoClient archipelago, StardewItemManager itemManager, UnlockManager unlockManager, IEnumerable<long> itemsAlreadyProcessed)
+        public ItemManager(ArchipelagoClient archipelago, StardewItemManager itemManager, UnlockManager unlockManager, Dictionary<long, int> itemsAlreadyProcessed)
         {
             _archipelago = archipelago;
             _itemManager = itemManager;
             _unlockManager = unlockManager;
-            _itemsAlreadyProcessed = itemsAlreadyProcessed.ToList();
+            _itemsAlreadyProcessed = itemsAlreadyProcessed.ToDictionary(x => x.Key, x => x.Value);
         }
 
         public void ReceiveAllNewItems()
         {
             var allReceivedItems = _archipelago.GetAllReceivedItems();
-            var receivedItemsNotProcessedYet = allReceivedItems.Where(x => !_itemsAlreadyProcessed.Contains(x));
+            var receivedItemsNotProcessedYet = allReceivedItems.Where(x => !_itemsAlreadyProcessed.ContainsKey(x.Key) || _itemsAlreadyProcessed[x.Key] < x.Value);
 
-            foreach (var itemToReceive in receivedItemsNotProcessedYet)
+            foreach (var (itemToReceive, numberReceived) in receivedItemsNotProcessedYet)
             {
-                ReceiveNewItem(itemToReceive);
+                ReceiveNewItem(itemToReceive, numberReceived);
             }
         }
 
-        private void ReceiveNewItem(long itemArchipelagoId)
+        private void ReceiveNewItem(long itemArchipelagoId, int numberReceived)
         {
+            if (!_itemsAlreadyProcessed.ContainsKey(itemArchipelagoId))
+            {
+                _itemsAlreadyProcessed.Add(itemArchipelagoId, 0);
+            }
+
+            var numberNewReceived = numberReceived - _itemsAlreadyProcessed[itemArchipelagoId];
             var itemName = _archipelago.GetItemName(itemArchipelagoId);
             var itemIsResourcePack = TryParseResourcePack(itemName, out var stardewItemName, out var resourcePackAmount);
             if (itemIsResourcePack)
             {
-                GiveResourcePackToFarmer(stardewItemName, resourcePackAmount);
+                GiveResourcePackToFarmer(stardewItemName, resourcePackAmount * numberNewReceived);
             }
             else
             {
-                HandleArchipelagoUnlock(itemName);
+                HandleArchipelagoUnlock(itemName, numberReceived);
             }
-            _itemsAlreadyProcessed.Add(itemArchipelagoId);
+
+            _itemsAlreadyProcessed[itemArchipelagoId]++;
         }
 
         private bool TryParseResourcePack(string apItemName, out string stardewItemName, out int amount)
@@ -101,14 +108,14 @@ namespace StardewArchipelago
             playerLocation.dropObject(item, player.GetDropLocation(), Game1.viewport, true, (Farmer)null);
         }
 
-        private void HandleArchipelagoUnlock(string itemName)
+        private void HandleArchipelagoUnlock(string itemName, int numberReceived)
         {
-            _unlockManager.DoUnlock(itemName);
+            _unlockManager.DoUnlock(itemName, numberReceived);
         }
 
-        public IEnumerable<long> GetAllItemsAlreadyProcessed()
+        public Dictionary<long, int> GetAllItemsAlreadyProcessed()
         {
-            return _itemsAlreadyProcessed;
+            return _itemsAlreadyProcessed.ToDictionary(x => x.Key, x => x.Value);
         }
     }
 }

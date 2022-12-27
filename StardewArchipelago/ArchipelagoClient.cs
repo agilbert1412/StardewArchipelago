@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Archipelago.MultiClient.Net;
 using Archipelago.MultiClient.Net.Enums;
@@ -86,7 +87,7 @@ namespace StardewArchipelago
             foreach (var messagePart in message.Parts)
             {
                 _console.Log(messagePart.Text, LogLevel.Info);
-                Game1.chatBox.addInfoMessage(messagePart.Text);
+                Game1.chatBox?.addInfoMessage(messagePart.Text);
             }
         }
 
@@ -155,9 +156,9 @@ namespace StardewArchipelago
             _session.Locations.CompleteLocationChecks(locationIds);
         }
 
-        public long[] GetAllReceivedItems()
+        public Dictionary<long, int> GetAllReceivedItems()
         {
-            return _session.Items.AllItemsReceived.Select(item => item.Item).ToArray();
+            return _session.Items.AllItemsReceived.GroupBy(x => x.Item).ToDictionary(group => group.Key, group => group.Count());
         }
 
         public void ReportGoalCompletion()

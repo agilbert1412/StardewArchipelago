@@ -61,13 +61,13 @@ namespace StardewArchipelago
 
         private void OnSaveCreated(object sender, SaveCreatedEventArgs e)
         {
-            _state.ItemsReceived = new List<long>();
+            _state.ItemsReceived = new Dictionary<long, int>();
             _helper.Data.WriteJsonFile(GetApDataJsonPath(), _state);
         }
 
         private void OnSaved(object sender, SavedEventArgs e)
         {
-            _state.ItemsReceived = _itemManager.GetAllItemsAlreadyProcessed().ToList();
+            _state.ItemsReceived = _itemManager.GetAllItemsAlreadyProcessed();
             _helper.Data.WriteJsonFile(GetApDataJsonPath(), _state);
         }
 
@@ -82,7 +82,7 @@ namespace StardewArchipelago
             _stardewItemManager = new StardewItemManager();
             _bundleReader = new BundleReader();
             _itemManager = new ItemManager(_archipelago, _stardewItemManager, _unlockManager, _state.ItemsReceived);
-            _locationsManager = new LocationManager(_archipelago, _bundleReader, _helper);
+            _locationsManager = new LocationManager(Monitor, _archipelago, _bundleReader, _helper, _harmony);
             _locationsManager.RemoveDefaultRewardsOnAllLocations();
 
             if (_state.APConnectionInfo != null)
@@ -142,6 +142,11 @@ namespace StardewArchipelago
 
         private void OnItemReceived(long itemId)
         {
+            if (_itemManager == null)
+            {
+                return;
+            }
+
             _itemManager.ReceiveAllNewItems();
         }
 

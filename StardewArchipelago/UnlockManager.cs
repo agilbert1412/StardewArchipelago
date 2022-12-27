@@ -12,27 +12,27 @@ namespace StardewArchipelago
 {
     internal class UnlockManager
     {
-        private Dictionary<string, Action> _unlockables;
+        private Dictionary<string, Action<int>> _unlockables;
 
         public UnlockManager()
         {
-            _unlockables = new Dictionary<string, Action>();
+            _unlockables = new Dictionary<string, Action<int>>();
             RegisterCommunityCenterRepairs();
             RegisterPlayerImprovement();
         }
 
-        public void DoUnlock(string unlockName)
+        public void DoUnlock(string unlockName, int numberReceived)
         {
-            _unlockables[unlockName]();
+            _unlockables[unlockName](numberReceived);
         }
 
         private void RegisterCommunityCenterRepairs()
         {
-            _unlockables.Add("Bridge Repair", RepairBridge);
-            _unlockables.Add("Greenhouse", RepairGreenHouse);
-            _unlockables.Add("Glittering Boulder Removed", RemoveGlitteringBoulder);
-            _unlockables.Add("Minecarts Repair", RepairMinecarts);
-            _unlockables.Add("Bus Repair", RepairBus);
+            _unlockables.Add("Bridge Repair", (_) => RepairBridge());
+            _unlockables.Add("Greenhouse", (_) => RepairGreenHouse());
+            _unlockables.Add("Glittering Boulder Removed", (_) => RemoveGlitteringBoulder());
+            _unlockables.Add("Minecarts Repair", (_) => RepairMinecarts());
+            _unlockables.Add("Bus Repair", (_) => RepairBus());
             // _unlockables.Add("Movie Theater", BuildMovieTheater);
         }
 
@@ -73,8 +73,8 @@ namespace StardewArchipelago
 
         private void RegisterPlayerImprovement()
         {
-            _unlockables.Add("Progressive Backpack 1", () => SetBackPackLevel(1));
-            _unlockables.Add("Progressive Backpack 2", () => SetBackPackLevel(2));
+            //_unlockables.Add("Stardrop", () => SetBackPackLevel(1));
+            _unlockables.Add("Progressive Backpack", (numberReceived) => SetBackPackLevel(numberReceived));
         }
 
         private void SetBackPackLevel(int level)

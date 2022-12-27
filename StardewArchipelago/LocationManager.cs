@@ -12,6 +12,7 @@ namespace StardewArchipelago
 {
     public class LocationManager
     {
+        private static IMonitor _monitor;
         private ArchipelagoClient _archipelago;
         private BundleReader _bundleReader;
         private IModHelper _modHelper;
@@ -21,15 +22,16 @@ namespace StardewArchipelago
         private List<long> _lastReportedLocations;
         private List<long> _newLocations;
 
-        public LocationManager(ArchipelagoClient archipelago, BundleReader bundleReader, IModHelper modHelper, Harmony harmony)
+        public LocationManager(IMonitor monitor, ArchipelagoClient archipelago, BundleReader bundleReader, IModHelper modHelper, Harmony harmony)
         {
+            _monitor = monitor;
             _archipelago = archipelago;
             _bundleReader = bundleReader;
             _modHelper = modHelper;
             _harmony = harmony;
             _lastReportedLocations = new List<long>();
             _newLocations = new List<long>();
-            _locationsCodeInjection = new LocationsCodeInjection(_archipelago, (id) => _newLocations.Add(id));
+            _locationsCodeInjection = new LocationsCodeInjection(_monitor, _archipelago, (id) => _newLocations.Add(id));
         }
 
         public void CheckAllLocations(bool forceReport = false)
@@ -116,9 +118,19 @@ namespace StardewArchipelago
             var answerDialogMethod = _modHelper.Reflection.GetMethod(seedShop, "answerDialogueAction");
 
             _harmony.Patch(
-                original: AccessTools.Method(typeof(SeedShop), nameof(SeedShop.answerDialogueAction)),
-                prefix: new HarmonyMethod(typeof(LocationsCodeInjection), nameof(LocationsCodeInjection.answerDialogueAction_Prefix))
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performAction)),
+                prefix: new HarmonyMethod(typeof(LocationsCodeInjection), nameof(LocationsCodeInjection.PerformAction_Prefix))
             );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.answerDialogueAction)),
+                prefix: new HarmonyMethod(typeof(LocationsCodeInjection), nameof(LocationsCodeInjection.AnswerDialogueAction_Prefix))
+            );
+
+            // This would need a transpile patch for SeedShop.draw and I don't think it's worth it.
+            // _harmony.Patch(
+            //     original: AccessTools.Method(typeof(SeedShop), nameof(SeedShop.draw)),
+            //     transpiler: new HarmonyMethod(typeof(LocationsCodeInjection), nameof(LocationsCodeInjection.AnswerDialogueAction_Prefix)));
         }
     }
 }
