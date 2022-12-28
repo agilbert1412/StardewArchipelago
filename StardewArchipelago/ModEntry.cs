@@ -63,6 +63,14 @@ namespace StardewArchipelago
         {
             _state.ItemsReceived = new Dictionary<long, int>();
             _helper.Data.WriteJsonFile(GetApDataJsonPath(), _state);
+
+            if (!_archipelago.IsConnected)
+            {
+                Monitor.Log("Created a save game without being connected to Archipelago. This can cause issues with some settings that must be initialized immediately", LogLevel.Warn);
+                return;
+            }
+
+            Game1.player.Money = _archipelago.SlotData.StartingMoney;
         }
 
         private void OnSaved(object sender, SavedEventArgs e)
@@ -85,7 +93,7 @@ namespace StardewArchipelago
             _locationsManager = new LocationManager(Monitor, _archipelago, _bundleReader, _helper, _harmony);
             _locationsManager.RemoveDefaultRewardsOnAllLocations();
 
-            if (_state.APConnectionInfo != null)
+            if (_state.APConnectionInfo != null && !_archipelago.IsConnected)
             {
                 _archipelago.Connect(_state.APConnectionInfo);
             }
@@ -140,7 +148,7 @@ namespace StardewArchipelago
             _state.APConnectionInfo = apConnection;
         }
 
-        private void OnItemReceived(long itemId)
+        private void OnItemReceived()
         {
             if (_itemManager == null)
             {

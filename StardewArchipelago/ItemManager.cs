@@ -53,7 +53,7 @@ namespace StardewArchipelago
                 HandleArchipelagoUnlock(itemName, numberReceived);
             }
 
-            _itemsAlreadyProcessed[itemArchipelagoId]++;
+            _itemsAlreadyProcessed[itemArchipelagoId] = numberReceived;
         }
 
         private bool TryParseResourcePack(string apItemName, out string stardewItemName, out int amount)

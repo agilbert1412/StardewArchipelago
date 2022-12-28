@@ -7,6 +7,7 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Menus;
+using StardewValley.Objects;
 
 namespace StardewArchipelago
 {
@@ -31,7 +32,7 @@ namespace StardewArchipelago
             _harmony = harmony;
             _lastReportedLocations = new List<long>();
             _newLocations = new List<long>();
-            _locationsCodeInjection = new LocationsCodeInjection(_monitor, _archipelago, (id) => _newLocations.Add(id));
+            _locationsCodeInjection = new LocationsCodeInjection(_monitor, _modHelper, _archipelago, (id) => _newLocations.Add(id));
         }
 
         public void CheckAllLocations(bool forceReport = false)
@@ -79,8 +80,9 @@ namespace StardewArchipelago
         public void RemoveDefaultRewardsOnAllLocations()
         {
             RemoveDefaultRewardsOnAllBundles();
-            RemoveDefaultRewardsOnCommunityCenterAreas();
-            RemoveBackPackIncreaseOnBackpackPurchase();
+            ReplaceCommunityCenterAreasWithChecks();
+            ReplaceBackPackUpgradesWithChecks();
+            ReplaceMineshaftChestsWithChecks();
         }
 
         private static void RemoveDefaultRewardsOnAllBundles()
@@ -103,7 +105,7 @@ namespace StardewArchipelago
             }
         }
 
-        private void RemoveDefaultRewardsOnCommunityCenterAreas()
+        private void ReplaceCommunityCenterAreasWithChecks()
         {
             var communityCenter = Game1.locations.OfType<CommunityCenter>().First();
             var areaCompleteRewardEventField = _modHelper.Reflection.GetField<NetEvent1Field<int, NetInt>>(communityCenter, "areaCompleteRewardEvent");
@@ -112,11 +114,8 @@ namespace StardewArchipelago
             areaCompleteRewardEventField.GetValue().onEvent += _locationsCodeInjection.DoAreaCompleteReward;
         }
 
-        private void RemoveBackPackIncreaseOnBackpackPurchase()
+        private void ReplaceBackPackUpgradesWithChecks()
         {
-            var seedShop = Game1.locations.OfType<SeedShop>().First();
-            var answerDialogMethod = _modHelper.Reflection.GetMethod(seedShop, "answerDialogueAction");
-
             _harmony.Patch(
                 original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performAction)),
                 prefix: new HarmonyMethod(typeof(LocationsCodeInjection), nameof(LocationsCodeInjection.PerformAction_Prefix))
@@ -131,6 +130,14 @@ namespace StardewArchipelago
             // _harmony.Patch(
             //     original: AccessTools.Method(typeof(SeedShop), nameof(SeedShop.draw)),
             //     transpiler: new HarmonyMethod(typeof(LocationsCodeInjection), nameof(LocationsCodeInjection.AnswerDialogueAction_Prefix)));
+        }
+
+        private void ReplaceMineshaftChestsWithChecks()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Chest), nameof(Chest.checkForAction)),
+                prefix: new HarmonyMethod(typeof(LocationsCodeInjection), nameof(LocationsCodeInjection.CheckForAction_Prefix))
+            );
         }
     }
 }

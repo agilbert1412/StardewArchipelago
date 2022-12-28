@@ -16,16 +16,16 @@ namespace StardewArchipelago
         private IMonitor _console;
         private ArchipelagoSession _session;
 
-        private Action<long> _itemReceivedFunction;
+        private Action _itemReceivedFunction;
 
         public bool IsConnected { get; private set; }
+        public SlotData SlotData { get; private set; }
 
-        public ArchipelagoClient(IMonitor console, Action<long> itemReceivedFunction)
+        public ArchipelagoClient(IMonitor console, Action itemReceivedFunction)
         {
             _console = console;
             _itemReceivedFunction = itemReceivedFunction;
             IsConnected = false;
-
         }
 
         public void Connect(ArchipelagoConnectionInfo archipelagoConnectionInfo)
@@ -69,8 +69,14 @@ namespace StardewArchipelago
 
             // Must go AFTER a successful connection attempt
             _session.Items.ItemReceived += OnItemReceived;
-            _itemReceivedFunction(0);
+            _itemReceivedFunction();
+            InitializeSlotData(loginSuccess.SlotData);
             IsConnected = true;
+        }
+
+        private void InitializeSlotData(Dictionary<string, object> slotDataFields)
+        {
+            SlotData = new SlotData(slotDataFields);
         }
 
         private void InitSession(ArchipelagoConnectionInfo archipelagoConnectionInfo)
@@ -84,11 +90,9 @@ namespace StardewArchipelago
 
         private void OnMessageReceived(LogMessage message)
         {
-            foreach (var messagePart in message.Parts)
-            {
-                _console.Log(messagePart.Text, LogLevel.Info);
-                Game1.chatBox?.addInfoMessage(messagePart.Text);
-            }
+            var fullMessage = string.Join(" ", message.Parts.Select(str => str.Text));
+            _console.Log(fullMessage, LogLevel.Info);
+            Game1.chatBox?.addInfoMessage(fullMessage);
         }
 
         private void SessionErrorReceived(Exception e, string message)
@@ -148,7 +152,7 @@ namespace StardewArchipelago
             }
 
             var receivedItem = receivedItemsHelper.DequeueItem();
-            _itemReceivedFunction(receivedItem.Item);
+            _itemReceivedFunction();
         }
         
         public void ReportCollectedLocations(long[] locationIds)
