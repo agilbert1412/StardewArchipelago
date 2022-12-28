@@ -1,7 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using HarmonyLib;
+using StardewArchipelago.Archipelago;
+using StardewArchipelago.Items;
+using StardewArchipelago.Locations;
 using StardewArchipelago.Serialization;
+using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;

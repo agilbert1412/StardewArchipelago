@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using HarmonyLib;
 using Netcode;
+using StardewArchipelago.Archipelago;
+using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Objects;
 
-namespace StardewArchipelago
+namespace StardewArchipelago.Locations
 {
     public class LocationManager
     {

@@ -5,7 +5,7 @@ using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Menus;
 
-namespace StardewArchipelago
+namespace StardewArchipelago.Stardew
 {
     public class BundleReader
     {
@@ -62,9 +62,9 @@ namespace StardewArchipelago
             _bundleDictionary = new Dictionary<int, Bundle>();
             _areaToBundleDictionary = new Dictionary<Area, List<Bundle>>();
             _bundleToAreaDictionary = new Dictionary<Bundle, Area>();
-            foreach(var area in Enum.GetValues<Area>())
+            foreach (var area in Enum.GetValues<Area>())
             {
-                this._areaToBundleDictionary.Add(area, new List<Bundle>());
+                _areaToBundleDictionary.Add(area, new List<Bundle>());
             }
 
             foreach (var keyValuePair in Game1.netWorldState.Value.BundleData)

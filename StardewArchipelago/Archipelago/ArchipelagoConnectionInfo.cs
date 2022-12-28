@@ -1,4 +1,4 @@
-﻿namespace StardewArchipelago
+﻿namespace StardewArchipelago.Archipelago
 {
     public class ArchipelagoConnectionInfo
     {

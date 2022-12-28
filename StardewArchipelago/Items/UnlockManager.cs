@@ -8,7 +8,7 @@ using Netcode;
 using StardewValley;
 using StardewValley.Objects;
 
-namespace StardewArchipelago
+namespace StardewArchipelago.Items
 {
     internal class UnlockManager
     {

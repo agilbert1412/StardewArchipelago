@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using StardewArchipelago.Archipelago;
+using System.Collections.Generic;
 
 namespace StardewArchipelago.Serialization
 {

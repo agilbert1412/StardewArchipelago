@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using StardewValley;
 
-namespace StardewArchipelago
+namespace StardewArchipelago.Stardew
 {
     public class StardewItemManager
     {

@@ -1,4 +1,4 @@
-﻿namespace StardewArchipelago
+﻿namespace StardewArchipelago.Stardew
 {
     public class Bundle
     {

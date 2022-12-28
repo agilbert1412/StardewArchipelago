@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using StardewArchipelago.Archipelago;
+using StardewArchipelago.Stardew;
 using StardewValley;
 
-namespace StardewArchipelago
+namespace StardewArchipelago.Items
 {
     internal class ItemManager
     {
@@ -105,7 +107,7 @@ namespace StardewArchipelago
         private void SpawnResourcePackOnGround(Farmer player, StardewValley.Object item)
         {
             var playerLocation = player.currentLocation;
-            playerLocation.dropObject(item, player.GetDropLocation(), Game1.viewport, true, (Farmer)null);
+            playerLocation.dropObject(item, player.GetDropLocation(), Game1.viewport, true, null);
         }
 
         private void HandleArchipelagoUnlock(string itemName, int numberReceived)

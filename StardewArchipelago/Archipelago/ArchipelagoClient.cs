@@ -8,7 +8,7 @@ using Archipelago.MultiClient.Net.Packets;
 using StardewModdingAPI;
 using StardewValley;
 
-namespace StardewArchipelago
+namespace StardewArchipelago.Archipelago
 {
     public class ArchipelagoClient
     {
@@ -46,13 +46,13 @@ namespace StardewArchipelago
 
             if (!result.Successful)
             {
-                LoginFailure failure = (LoginFailure)result;
-                string errorMessage = $"Failed to Connect to {archipelagoConnectionInfo.HostUrl}:{archipelagoConnectionInfo.Port} as {archipelagoConnectionInfo.SlotName}:";
-                foreach (string error in failure.Errors)
+                var failure = (LoginFailure)result;
+                var errorMessage = $"Failed to Connect to {archipelagoConnectionInfo.HostUrl}:{archipelagoConnectionInfo.Port} as {archipelagoConnectionInfo.SlotName}:";
+                foreach (var error in failure.Errors)
                 {
                     errorMessage += $"\n    {error}";
                 }
-                foreach (ConnectionRefusedError error in failure.ErrorCodes)
+                foreach (var error in failure.ErrorCodes)
                 {
                     errorMessage += $"\n    {error}";
                 }
@@ -113,7 +113,7 @@ namespace StardewArchipelago
             {
                 return;
             }
-            
+
             _session.Socket.DisconnectAsync();
             _session = null;
             IsConnected = false;
@@ -154,7 +154,7 @@ namespace StardewArchipelago
             var receivedItem = receivedItemsHelper.DequeueItem();
             _itemReceivedFunction();
         }
-        
+
         public void ReportCollectedLocations(long[] locationIds)
         {
             _session.Locations.CompleteLocationChecks(locationIds);

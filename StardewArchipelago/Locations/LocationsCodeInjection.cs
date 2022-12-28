@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Graphics;
 using Netcode;
+using StardewArchipelago.Archipelago;
+using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
@@ -13,7 +15,7 @@ using StardewValley.Menus;
 using StardewValley.Objects;
 using xTile.Dimensions;
 
-namespace StardewArchipelago
+namespace StardewArchipelago.Locations
 {
     internal class LocationsCodeInjection
     {
@@ -34,7 +36,7 @@ namespace StardewArchipelago
 
         public void DoAreaCompleteReward(int whichArea)
         {
-            string AreaAPLocationName = "";
+            var AreaAPLocationName = "";
             switch ((Area)whichArea)
             {
                 case Area.Pantry:
@@ -139,11 +141,11 @@ namespace StardewArchipelago
                 modData.Add(BACKPACK_UPGRADE_LEVEL_KEY, "0");
             }
 
-            Response responsePurchaseLevel1 = new Response("Purchase",
+            var responsePurchaseLevel1 = new Response("Purchase",
                 Game1.content.LoadString("Strings\\Locations:SeedShop_BuyBackpack_Response2000"));
-            Response responsePurchaseLevel2 = new Response("Purchase",
+            var responsePurchaseLevel2 = new Response("Purchase",
                 Game1.content.LoadString("Strings\\Locations:SeedShop_BuyBackpack_Response10000"));
-            Response responseDontPurchase = new Response("Not",
+            var responseDontPurchase = new Response("Not",
                 Game1.content.LoadString("Strings\\Locations:SeedShop_BuyBackpack_ResponseNo"));
             if (modData[BACKPACK_UPGRADE_LEVEL_KEY] == "0")
             {
@@ -171,7 +173,7 @@ namespace StardewArchipelago
         {
             try
             {
-                if (justCheckingForActivity || __instance.giftbox.Value || __instance.playerChest.Value|| Game1.mine == null)
+                if (justCheckingForActivity || __instance.giftbox.Value || __instance.playerChest.Value || Game1.mine == null)
                 {
                     return true; // run original logic
                 }
@@ -183,17 +185,17 @@ namespace StardewArchipelago
 
                 who.currentLocation.playSound("openChest");
                 if (__instance.synchronized.Value)
-                    __instance.GetMutex().RequestLock((Action)(() => __instance.openChestEvent.Fire()));
+                    __instance.GetMutex().RequestLock(() => __instance.openChestEvent.Fire());
                 else
                     __instance.performOpenChest();
 
                 Game1.mine.chestConsumed();
-                Item obj = __instance.items[0];
-                __instance.items[0] = (Item)null;
+                var obj = __instance.items[0];
+                __instance.items[0] = null;
                 __instance.items.RemoveAt(0);
                 __result = true;
 
-                var completedAreaAPLocationId = _archipelago.GetLocationId($"Mine Level {Game1.mine.mineLevel} Reward Chest");
+                var completedAreaAPLocationId = _archipelago.GetLocationId($"The Mines Floor {Game1.mine.mineLevel} Treasure");
                 _addCheckedLocation(completedAreaAPLocationId);
 
                 return false; // don't run original logic
