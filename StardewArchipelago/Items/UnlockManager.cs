@@ -10,7 +10,7 @@ using StardewValley.Objects;
 
 namespace StardewArchipelago.Items
 {
-    internal class UnlockManager
+    public class UnlockManager
     {
         private Dictionary<string, Action<int>> _unlockables;
 
@@ -21,9 +21,9 @@ namespace StardewArchipelago.Items
             RegisterPlayerImprovement();
         }
 
-        public void DoUnlock(string unlockName, int numberReceived)
+        public Action GetUnlockProcess(string unlockName, int numberReceived)
         {
-            _unlockables[unlockName](numberReceived);
+            return () => _unlockables[unlockName](numberReceived);
         }
 
         private void RegisterCommunityCenterRepairs()

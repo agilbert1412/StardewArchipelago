@@ -6,6 +6,7 @@ using StardewArchipelago.Items;
 using StardewArchipelago.Locations;
 using StardewArchipelago.Serialization;
 using StardewArchipelago.Stardew;
+using StardewArchipelago.Test;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -26,6 +27,8 @@ namespace StardewArchipelago
         private StardewItemManager _stardewItemManager;
         private UnlockManager _unlockManager;
 
+        private Tester _tester;
+
         private ArchipelagoStateDto _state;
 
         public ModEntry() : base()
@@ -43,6 +46,7 @@ namespace StardewArchipelago
         {
             _helper = helper;
             _harmony = new Harmony(this.ModManifest.UniqueID);
+            _tester = new Tester(helper, Monitor);
 
             _archipelago = new ArchipelagoClient(Monitor, OnItemReceived);
             _helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
@@ -55,6 +59,8 @@ namespace StardewArchipelago
             _helper.Events.GameLoop.DayEnding += this.OnDayEnding;
 
             _helper.ConsoleCommands.Add("connect", $"Connect to Archipelago. {CONNECT_SYNTAX}", this.OnConnectToArchipelago);
+            _helper.ConsoleCommands.Add("test_getallitems", "Tests if every AP item in the stardew_valley_item_table json file are supported by the mod", _tester.TestGetAllItems);
+            _helper.ConsoleCommands.Add("test_sendalllocations", "Tests if every AP item in the stardew_valley_location_table json file are supported by the mod", _tester.TestSendAllLocations);
             _helper.ConsoleCommands.Add("debugMethod", "Runs whatever is currently in the debug method", this.DebugMethod);
         }
 
