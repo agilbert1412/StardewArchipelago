@@ -40,6 +40,11 @@ namespace StardewArchipelago.Locations
 
         private void AddCheckedLocation(string locationName)
         {
+            if (_checkedLocations.ContainsKey(locationName))
+            {
+                return;
+            }
+
             var locationId = _archipelago.GetLocationId(locationName);
 
             if (locationId == -1)
@@ -64,10 +69,8 @@ namespace StardewArchipelago.Locations
             allCheckedLocations.AddRange(_checkedLocations.Values);
 
             allCheckedLocations = allCheckedLocations.Distinct().Where(x => x > -1).ToList();
-            if (forceReport || allCheckedLocations.Count > _checkedLocations.Count)
-            {
-                _archipelago.ReportCollectedLocations(allCheckedLocations.ToArray());
-            }
+
+            _archipelago.ReportCollectedLocations(allCheckedLocations.ToArray());
 
             CheckGoalCompletion();
         }
