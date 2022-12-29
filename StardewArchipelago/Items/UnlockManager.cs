@@ -21,9 +21,14 @@ namespace StardewArchipelago.Items
             RegisterPlayerImprovement();
         }
 
-        public Action GetUnlockProcess(string unlockName, int numberReceived)
+        public bool IsUnlock(string unlockName)
         {
-            return () => _unlockables[unlockName](numberReceived);
+            return _unlockables.ContainsKey(unlockName);
+        }
+
+        public void PerformUnlock(string unlockName, int numberReceived)
+        {
+            _unlockables[unlockName](numberReceived);
         }
 
         private void RegisterCommunityCenterRepairs()
@@ -73,7 +78,6 @@ namespace StardewArchipelago.Items
 
         private void RegisterPlayerImprovement()
         {
-            //_unlockables.Add("Stardrop", () => SetBackPackLevel(1));
             _unlockables.Add("Progressive Backpack", (numberReceived) => SetBackPackLevel(numberReceived));
         }
 

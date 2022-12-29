@@ -26,6 +26,7 @@ namespace StardewArchipelago
         private LocationManager _locationsManager;
         private StardewItemManager _stardewItemManager;
         private UnlockManager _unlockManager;
+        private SpecialItemManager _specialItemManager;
 
         private Tester _tester;
 
@@ -35,6 +36,7 @@ namespace StardewArchipelago
         {
             _state = new ArchipelagoStateDto();
             _unlockManager = new UnlockManager();
+            _specialItemManager = new SpecialItemManager();
         }
 
         /*********
@@ -60,6 +62,7 @@ namespace StardewArchipelago
 
             _helper.ConsoleCommands.Add("connect", $"Connect to Archipelago. {CONNECT_SYNTAX}", this.OnConnectToArchipelago);
             _helper.ConsoleCommands.Add("test_getallitems", "Tests if every AP item in the stardew_valley_item_table json file are supported by the mod", _tester.TestGetAllItems);
+            _helper.ConsoleCommands.Add("test_getitem", "Get one specific item", _tester.TestGetSpecificItem);
             _helper.ConsoleCommands.Add("test_sendalllocations", "Tests if every AP item in the stardew_valley_location_table json file are supported by the mod", _tester.TestSendAllLocations);
             _helper.ConsoleCommands.Add("debugMethod", "Runs whatever is currently in the debug method", this.DebugMethod);
         }
@@ -99,7 +102,7 @@ namespace StardewArchipelago
 
             _stardewItemManager = new StardewItemManager();
             _bundleReader = new BundleReader();
-            _itemManager = new ItemManager(_archipelago, _stardewItemManager, _unlockManager, _state.ItemsReceived);
+            _itemManager = new ItemManager(_archipelago, _stardewItemManager, _unlockManager, _specialItemManager, _state.ItemsReceived);
             _locationsManager = new LocationManager(Monitor, _archipelago, _bundleReader, _helper, _harmony);
             _locationsManager.RemoveDefaultRewardsOnAllLocations();
 
@@ -122,6 +125,18 @@ namespace StardewArchipelago
         private void OnTimeChanged(object sender, TimeChangedEventArgs e)
         {
             _locationsManager.CheckAllLocations();
+            var allReceivedItems = _itemManager.GetAllItemsAlreadyProcessed();
+            var numberReceivedStardrops = 0;
+            foreach (var (name, amount) in allReceivedItems)
+            {
+                if (_archipelago.GetItemName(name) != "Stardrop")
+                {
+                    continue;
+                }
+                numberReceivedStardrops = amount;
+                break;
+            }
+            _specialItemManager.ReceiveStardropIfDeserved(numberReceivedStardrops);
         }
 
         private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)

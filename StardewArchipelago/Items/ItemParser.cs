@@ -14,24 +14,41 @@ namespace StardewArchipelago.Items
         
         private StardewItemManager _itemManager;
         private UnlockManager _unlockManager;
+        private SpecialItemManager _specialItemManager;
 
-        public ItemParser(StardewItemManager itemManager, UnlockManager unlockManager)
+        public ItemParser(StardewItemManager itemManager, UnlockManager unlockManager, SpecialItemManager specialItemManager)
         {
             _itemManager = itemManager;
             _unlockManager = unlockManager;
+            _specialItemManager = specialItemManager;
         }
 
-        public Action GetActionToProcessItem(string itemName, int numberReceived, int numberNewReceived)
+        public Item ProcessItem(string itemName, int numberReceived, int numberNewReceived)
         {
             var itemIsResourcePack = TryParseResourcePack(itemName, out var stardewItemName, out var resourcePackAmount);
             if (itemIsResourcePack)
             {
-                return () => GiveResourcePackToFarmer(stardewItemName, resourcePackAmount * numberNewReceived);
+                return GetResourcePack(stardewItemName, resourcePackAmount * numberNewReceived);
             }
-            else
+
+            if (_unlockManager.IsUnlock(itemName))
             {
-                return HandleArchipelagoUnlock(itemName, numberReceived);
+                _unlockManager.PerformUnlock(itemName, numberReceived);
+                return null;
             }
+
+            if (_specialItemManager.IsUnlock(itemName))
+            {
+                _specialItemManager.PerformUnlock(itemName, numberNewReceived);
+                return null;
+            }
+
+            if (_itemManager.ItemExists(itemName))
+            {
+                return GetSingleItem(itemName);
+            }
+
+            throw new ArgumentException($"Could not process item {itemName}");
         }
 
         private bool TryParseResourcePack(string apItemName, out string stardewItemName, out int amount)
@@ -54,34 +71,29 @@ namespace StardewArchipelago.Items
             return true;
         }
 
-        private void GiveResourcePackToFarmer(string stardewItemName, int resourcePackAmount)
+        private Item GetSingleItem(string stardewItemName)
+        {
+            var item = _itemManager.GetItemByName(stardewItemName);
+            return item.PrepareForGivingToFarmer();
+        }
+
+        private Item GetResourcePack(string stardewItemName, int resourcePackAmount)
         {
             var player = Game1.player;
 
             if (stardewItemName == "Money")
             {
                 GiveGoldToPlayer(player, resourcePackAmount);
-                return;
+                return null;
             }
 
             var item = _itemManager.GetItemByName(stardewItemName);
-            var stardewItem = new StardewValley.Object(item.Id, resourcePackAmount);
-            GiveResourcePackToPlayer(player, stardewItem);
+            return item.PrepareForGivingToFarmer(resourcePackAmount);
         }
 
         private void GiveGoldToPlayer(Farmer player, int amount)
         {
             player.addUnearnedMoney(amount);
-        }
-
-        private void GiveResourcePackToPlayer(Farmer player, StardewValley.Object item)
-        {
-            player.addItemByMenuIfNecessary(item);
-        }
-
-        private Action HandleArchipelagoUnlock(string itemName, int numberReceived)
-        {
-            return _unlockManager.GetUnlockProcess(itemName, numberReceived);
         }
     }
 }

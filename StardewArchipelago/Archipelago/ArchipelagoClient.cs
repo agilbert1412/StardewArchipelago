@@ -157,11 +157,21 @@ namespace StardewArchipelago.Archipelago
 
         public void ReportCollectedLocations(long[] locationIds)
         {
+            if (_session == null)
+            {
+                return;
+            }
+
             _session.Locations.CompleteLocationChecks(locationIds);
         }
 
         public Dictionary<long, int> GetAllReceivedItems()
         {
+            if (_session == null)
+            {
+                return new Dictionary<long, int>();
+            }
+
             return _session.Items.AllItemsReceived.GroupBy(x => x.Item).ToDictionary(group => group.Key, group => group.Count());
         }
 
