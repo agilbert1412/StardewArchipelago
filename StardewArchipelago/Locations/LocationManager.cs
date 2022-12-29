@@ -112,6 +112,7 @@ namespace StardewArchipelago.Locations
             ReplaceCommunityCenterAreasWithChecks();
             ReplaceBackPackUpgradesWithChecks();
             ReplaceMineshaftChestsWithChecks();
+            ReplaceToolUpgradesWithChecks();
         }
 
         private static void RemoveDefaultRewardsOnAllBundles()
@@ -165,13 +166,13 @@ namespace StardewArchipelago.Locations
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.answerDialogueAction)),
-                prefix: new HarmonyMethod(typeof(LocationsCodeInjection), nameof(LocationsCodeInjection.AnswerDialogueAction_Prefix))
+                prefix: new HarmonyMethod(typeof(LocationsCodeInjection), nameof(LocationsCodeInjection.AnswerDialogueAction_BackPackPurchase_Prefix))
             );
 
             // This would need a transpile patch for SeedShop.draw and I don't think it's worth it.
             // _harmony.Patch(
             //     original: AccessTools.Method(typeof(SeedShop), nameof(SeedShop.draw)),
-            //     transpiler: new HarmonyMethod(typeof(LocationsCodeInjection), nameof(LocationsCodeInjection.AnswerDialogueAction_Prefix)));
+            //     transpiler: new HarmonyMethod(typeof(LocationsCodeInjection), nameof(LocationsCodeInjection.AnswerDialogueAction_BackPackPurchase_Prefix)));
         }
 
         private void ReplaceMineshaftChestsWithChecks()
@@ -179,6 +180,24 @@ namespace StardewArchipelago.Locations
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Chest), nameof(Chest.checkForAction)),
                 prefix: new HarmonyMethod(typeof(LocationsCodeInjection), nameof(LocationsCodeInjection.CheckForAction_Prefix))
+            );
+        }
+
+        private void ReplaceToolUpgradesWithChecks()
+        {
+            if (_archipelago.SlotData.ToolProgression == ToolProgression.Vanilla)
+            {
+                return;
+            }
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.answerDialogueAction)),
+                prefix: new HarmonyMethod(typeof(LocationsCodeInjection), nameof(LocationsCodeInjection.AnswerDialogueAction_ToolUpgrade_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Tool), nameof(Tool.actionWhenPurchased)),
+                prefix: new HarmonyMethod(typeof(LocationsCodeInjection), nameof(LocationsCodeInjection.ActionWhenPurchased_ToolUpgrade_Prefix))
             );
         }
     }
