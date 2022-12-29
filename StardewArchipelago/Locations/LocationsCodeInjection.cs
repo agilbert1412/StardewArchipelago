@@ -6,6 +6,7 @@ using StardewValley.Menus;
 using StardewValley.Objects;
 using System;
 using System.Linq;
+using StardewValley.Locations;
 using xTile.Dimensions;
 
 namespace StardewArchipelago.Locations
@@ -18,9 +19,9 @@ namespace StardewArchipelago.Locations
         private static IModHelper _modHelper;
         private static ArchipelagoClient _archipelago;
         private static BundleReader _bundleReader;
-        private static Action<long> _addCheckedLocation;
+        private static Action<string> _addCheckedLocation;
 
-        public LocationsCodeInjection(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, BundleReader bundleReader, Action<long> addCheckedLocation)
+        public LocationsCodeInjection(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, BundleReader bundleReader, Action<string> addCheckedLocation)
         {
             _monitor = monitor;
             _modHelper = modHelper;
@@ -53,8 +54,7 @@ namespace StardewArchipelago.Locations
                     AreaAPLocationName = "Complete Bulletin";
                     break;
             }
-            var completedAreaAPLocationId = _archipelago.GetLocationId(AreaAPLocationName);
-            _addCheckedLocation(completedAreaAPLocationId);
+            _addCheckedLocation(AreaAPLocationName);
         }
 
         public static void CheckForRewards_PostFix(JunimoNoteMenu __instance)
@@ -62,11 +62,17 @@ namespace StardewArchipelago.Locations
             try
             {
                 var bundleStates = _bundleReader.ReadCurrentBundleStates();
-                var completedBundleNames = bundleStates.Where(x => x.IsCompleted).Select(x => x.RelatedBundle.BundleName);
-                var completedBundleAPIds = completedBundleNames.Select(x => _archipelago.GetLocationId(x + " Bundle"));
-                foreach (var completedBundleAPId in completedBundleAPIds)
+                var completedBundleNames = bundleStates.Where(x => x.IsCompleted).Select(x => x.RelatedBundle.BundleName + " Bundle");
+                foreach (var completedBundleName in completedBundleNames)
                 {
-                    _addCheckedLocation(completedBundleAPId);    
+                    _addCheckedLocation(completedBundleName);    
+                }
+
+                var communityCenter = Game1.locations.OfType<CommunityCenter>().First();
+                var bundleRewardsDictionary = communityCenter.bundleRewards;
+                foreach (var bundleRewardKey in bundleRewardsDictionary.Keys)
+                {
+                    bundleRewardsDictionary[bundleRewardKey] = false;
                 }
             }
             catch (Exception ex)
@@ -95,8 +101,7 @@ namespace StardewArchipelago.Locations
                 {
                     Game1.player.Money -= 2000;
                     modData[BACKPACK_UPGRADE_LEVEL_KEY] = "1";
-                    var completedAreaAPLocationId = _archipelago.GetLocationId("Large Pack");
-                    _addCheckedLocation(completedAreaAPLocationId);
+                    _addCheckedLocation("Large Pack");
                     return false; // don't run original logic
                 }
 
@@ -104,8 +109,7 @@ namespace StardewArchipelago.Locations
                 {
                     Game1.player.Money -= 10000;
                     modData[BACKPACK_UPGRADE_LEVEL_KEY] = "2";
-                    var completedAreaAPLocationId = _archipelago.GetLocationId("Deluxe Pack");
-                    _addCheckedLocation(completedAreaAPLocationId);
+                    _addCheckedLocation("Deluxe Pack");
                     return false; // don't run original logic
                 }
 
@@ -207,9 +211,8 @@ namespace StardewArchipelago.Locations
                 __instance.items[0] = null;
                 __instance.items.RemoveAt(0);
                 __result = true;
-
-                var completedAreaAPLocationId = _archipelago.GetLocationId($"The Mines Floor {Game1.mine.mineLevel} Treasure");
-                _addCheckedLocation(completedAreaAPLocationId);
+                
+                _addCheckedLocation($"The Mines Floor {Game1.mine.mineLevel} Treasure");
 
                 return false; // don't run original logic
 

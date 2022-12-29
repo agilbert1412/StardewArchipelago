@@ -21,8 +21,8 @@ namespace StardewArchipelago.Locations
         private Harmony _harmony;
         private LocationsCodeInjection _locationsCodeInjection;
 
-        private List<long> _lastReportedLocations;
-        private List<long> _newLocations;
+        private Dictionary<string, long> _reportedLocations;
+        private Dictionary<string, long> _newLocations;
 
         public LocationManager(IMonitor monitor, ArchipelagoClient archipelago, BundleReader bundleReader, IModHelper modHelper, Harmony harmony)
         {
@@ -30,9 +30,24 @@ namespace StardewArchipelago.Locations
             _archipelago = archipelago;
             _modHelper = modHelper;
             _harmony = harmony;
-            _lastReportedLocations = new List<long>();
-            _newLocations = new List<long>();
-            _locationsCodeInjection = new LocationsCodeInjection(_monitor, _modHelper, _archipelago, bundleReader, (id) => _newLocations.Add(id));
+            _reportedLocations = new Dictionary<string, long>();
+            _newLocations = new Dictionary<string, long>();
+            _locationsCodeInjection = new LocationsCodeInjection(_monitor, _modHelper, _archipelago, bundleReader, AddCheckedLocation);
+        }
+
+        private void AddCheckedLocation(string locationName)
+        {
+            var locationId = _archipelago.GetLocationId(locationName);
+
+            if (locationId == -1)
+            {
+                _monitor.Log($"Location \"{locationName}\" could not be converted to an Archipelago id", LogLevel.Error);
+                _reportedLocations.Add(locationName, locationId);
+                return;
+            }
+
+            _newLocations.Add(locationName, locationId);
+            SendAllLocationChecks(false);
         }
 
         public void SendAllLocationChecks(bool forceReport = false)
@@ -42,19 +57,40 @@ namespace StardewArchipelago.Locations
                 return;
             }
 
-            var allCheckedLocations = new List<long>();
-            allCheckedLocations.AddRange(_lastReportedLocations);
-            allCheckedLocations.AddRange(_newLocations);
+            TryToIdentifyUnknownLocationNames();
 
-            allCheckedLocations = allCheckedLocations.Distinct().ToList();
-            if (forceReport || allCheckedLocations.Count > _lastReportedLocations.Count)
+            var allCheckedLocations = new List<long>();
+            allCheckedLocations.AddRange(_reportedLocations.Values);
+            allCheckedLocations.AddRange(_newLocations.Values);
+
+            allCheckedLocations = allCheckedLocations.Distinct().Where(x => x > -1).ToList();
+            if (forceReport || allCheckedLocations.Count > _reportedLocations.Count)
             {
                 _archipelago.ReportCollectedLocations(allCheckedLocations.ToArray());
-                _lastReportedLocations = allCheckedLocations;
+                AddRange(_reportedLocations, _newLocations);
                 _newLocations.Clear();
             }
 
             CheckGoalCompletion();
+        }
+
+        private void TryToIdentifyUnknownLocationNames()
+        {
+            foreach (var locationName in _reportedLocations.Keys)
+            {
+                if (_reportedLocations[locationName] > -1)
+                {
+                    continue;
+                }
+
+                var locationId = _archipelago.GetLocationId(locationName);
+                if (locationId == -1)
+                {
+                    continue;
+                }
+
+                _reportedLocations[locationName] = locationId;
+            }
         }
 
         private void CheckGoalCompletion()
@@ -143,6 +179,14 @@ namespace StardewArchipelago.Locations
                 original: AccessTools.Method(typeof(Chest), nameof(Chest.checkForAction)),
                 prefix: new HarmonyMethod(typeof(LocationsCodeInjection), nameof(LocationsCodeInjection.CheckForAction_Prefix))
             );
+        }
+
+        private static void AddRange<TKey, TValue>(Dictionary<TKey, TValue> srcDict, Dictionary<TKey, TValue> newDict)
+        {
+            foreach (var (key, value) in newDict)
+            {
+                srcDict.Add(key, value);
+            }
         }
     }
 }

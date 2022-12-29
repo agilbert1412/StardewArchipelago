@@ -32,6 +32,8 @@ namespace StardewArchipelago
 
         private ArchipelagoStateDto _state;
 
+        private bool _hasNewItemsToReceive = true;
+
         public ModEntry() : base()
         {
             _state = new ArchipelagoStateDto();
@@ -133,7 +135,12 @@ namespace StardewArchipelago
 
         private void OnTimeChanged(object sender, TimeChangedEventArgs e)
         {
-            _locationsManager.SendAllLocationChecks();
+            if (_hasNewItemsToReceive)
+            {
+                _itemManager.ReceiveAllNewItems();
+                _hasNewItemsToReceive = false;
+            }
+
             var allReceivedItems = _itemManager.GetAllItemsAlreadyProcessed();
             var numberReceivedStardrops = 0;
             foreach (var (name, amount) in allReceivedItems)
@@ -184,12 +191,7 @@ namespace StardewArchipelago
 
         private void OnItemReceived()
         {
-            if (_itemManager == null)
-            {
-                return;
-            }
-
-            _itemManager.ReceiveAllNewItems();
+            _hasNewItemsToReceive = true;
         }
 
         private void DebugMethod(string arg1, string[] arg2)
