@@ -21,18 +21,21 @@ namespace StardewArchipelago.Locations
         private Harmony _harmony;
         private LocationsCodeInjection _locationsCodeInjection;
 
-        private Dictionary<string, long> _reportedLocations;
-        private Dictionary<string, long> _newLocations;
+        private Dictionary<string, long> _checkedLocations;
 
-        public LocationManager(IMonitor monitor, ArchipelagoClient archipelago, BundleReader bundleReader, IModHelper modHelper, Harmony harmony)
+        public LocationManager(IMonitor monitor, ArchipelagoClient archipelago, BundleReader bundleReader, IModHelper modHelper, Harmony harmony, List<string> locationsAlreadyChecked)
         {
             _monitor = monitor;
             _archipelago = archipelago;
             _modHelper = modHelper;
             _harmony = harmony;
-            _reportedLocations = new Dictionary<string, long>();
-            _newLocations = new Dictionary<string, long>();
+            _checkedLocations = locationsAlreadyChecked.ToDictionary(x => x, x => (long)-1);
             _locationsCodeInjection = new LocationsCodeInjection(_monitor, _modHelper, _archipelago, bundleReader, AddCheckedLocation);
+        }
+
+        public List<string> GetAllLocationsAlreadyChecked()
+        {
+            return _checkedLocations.Keys.ToList();
         }
 
         private void AddCheckedLocation(string locationName)
@@ -42,11 +45,9 @@ namespace StardewArchipelago.Locations
             if (locationId == -1)
             {
                 _monitor.Log($"Location \"{locationName}\" could not be converted to an Archipelago id", LogLevel.Error);
-                _reportedLocations.Add(locationName, locationId);
-                return;
             }
 
-            _newLocations.Add(locationName, locationId);
+            _checkedLocations.Add(locationName, locationId);
             SendAllLocationChecks(false);
         }
 
@@ -60,15 +61,12 @@ namespace StardewArchipelago.Locations
             TryToIdentifyUnknownLocationNames();
 
             var allCheckedLocations = new List<long>();
-            allCheckedLocations.AddRange(_reportedLocations.Values);
-            allCheckedLocations.AddRange(_newLocations.Values);
+            allCheckedLocations.AddRange(_checkedLocations.Values);
 
             allCheckedLocations = allCheckedLocations.Distinct().Where(x => x > -1).ToList();
-            if (forceReport || allCheckedLocations.Count > _reportedLocations.Count)
+            if (forceReport || allCheckedLocations.Count > _checkedLocations.Count)
             {
                 _archipelago.ReportCollectedLocations(allCheckedLocations.ToArray());
-                AddRange(_reportedLocations, _newLocations);
-                _newLocations.Clear();
             }
 
             CheckGoalCompletion();
@@ -76,9 +74,9 @@ namespace StardewArchipelago.Locations
 
         private void TryToIdentifyUnknownLocationNames()
         {
-            foreach (var locationName in _reportedLocations.Keys)
+            foreach (var locationName in _checkedLocations.Keys)
             {
-                if (_reportedLocations[locationName] > -1)
+                if (_checkedLocations[locationName] > -1)
                 {
                     continue;
                 }
@@ -89,7 +87,7 @@ namespace StardewArchipelago.Locations
                     continue;
                 }
 
-                _reportedLocations[locationName] = locationId;
+                _checkedLocations[locationName] = locationId;
             }
         }
 
@@ -179,14 +177,6 @@ namespace StardewArchipelago.Locations
                 original: AccessTools.Method(typeof(Chest), nameof(Chest.checkForAction)),
                 prefix: new HarmonyMethod(typeof(LocationsCodeInjection), nameof(LocationsCodeInjection.CheckForAction_Prefix))
             );
-        }
-
-        private static void AddRange<TKey, TValue>(Dictionary<TKey, TValue> srcDict, Dictionary<TKey, TValue> newDict)
-        {
-            foreach (var (key, value) in newDict)
-            {
-                srcDict.Add(key, value);
-            }
         }
     }
 }

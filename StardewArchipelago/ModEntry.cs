@@ -77,6 +77,7 @@ namespace StardewArchipelago
         private void OnSaveCreated(object sender, SaveCreatedEventArgs e)
         {
             _state.ItemsReceived = new Dictionary<long, int>();
+            _state.LocationsChecked = new List<string>();
             _helper.Data.WriteJsonFile(GetApDataJsonPath(), _state);
 
             if (!_archipelago.IsConnected)
@@ -92,6 +93,7 @@ namespace StardewArchipelago
         private void OnSaved(object sender, SavedEventArgs e)
         {
             _state.ItemsReceived = _itemManager.GetAllItemsAlreadyProcessed();
+            _state.LocationsChecked = _locationsManager.GetAllLocationsAlreadyChecked();
             _helper.Data.WriteJsonFile(GetApDataJsonPath(), _state);
         }
 
@@ -106,7 +108,7 @@ namespace StardewArchipelago
             _stardewItemManager = new StardewItemManager();
             _bundleReader = new BundleReader();
             _itemManager = new ItemManager(_archipelago, _stardewItemManager, _unlockManager, _specialItemManager, _state.ItemsReceived);
-            _locationsManager = new LocationManager(Monitor, _archipelago, _bundleReader, _helper, _harmony);
+            _locationsManager = new LocationManager(Monitor, _archipelago, _bundleReader, _helper, _harmony, _state.LocationsChecked);
 
             if (_state.APConnectionInfo != null && !_archipelago.IsConnected)
             {
