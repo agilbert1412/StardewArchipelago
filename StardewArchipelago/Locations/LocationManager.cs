@@ -17,7 +17,6 @@ namespace StardewArchipelago.Locations
     {
         private static IMonitor _monitor;
         private ArchipelagoClient _archipelago;
-        private BundleReader _bundleReader;
         private IModHelper _modHelper;
         private Harmony _harmony;
         private LocationsCodeInjection _locationsCodeInjection;
@@ -29,15 +28,14 @@ namespace StardewArchipelago.Locations
         {
             _monitor = monitor;
             _archipelago = archipelago;
-            _bundleReader = bundleReader;
             _modHelper = modHelper;
             _harmony = harmony;
             _lastReportedLocations = new List<long>();
             _newLocations = new List<long>();
-            _locationsCodeInjection = new LocationsCodeInjection(_monitor, _modHelper, _archipelago, (id) => _newLocations.Add(id));
+            _locationsCodeInjection = new LocationsCodeInjection(_monitor, _modHelper, _archipelago, bundleReader, (id) => _newLocations.Add(id));
         }
 
-        public void CheckAllLocations(bool forceReport = false)
+        public void SendAllLocationChecks(bool forceReport = false)
         {
             if (!_archipelago.IsConnected)
             {
@@ -46,11 +44,10 @@ namespace StardewArchipelago.Locations
 
             var allCheckedLocations = new List<long>();
             allCheckedLocations.AddRange(_lastReportedLocations);
-            allCheckedLocations.AddRange(CheckAllBundleLocations());
             allCheckedLocations.AddRange(_newLocations);
 
             allCheckedLocations = allCheckedLocations.Distinct().ToList();
-            if (forceReport || allCheckedLocations.Count > _lastReportedLocations.Count || _newLocations.Any())
+            if (forceReport || allCheckedLocations.Count > _lastReportedLocations.Count)
             {
                 _archipelago.ReportCollectedLocations(allCheckedLocations.ToArray());
                 _lastReportedLocations = allCheckedLocations;
@@ -58,14 +55,6 @@ namespace StardewArchipelago.Locations
             }
 
             CheckGoalCompletion();
-        }
-
-        private IEnumerable<long> CheckAllBundleLocations()
-        {
-            var bundleStates = _bundleReader.ReadCurrentBundleStates();
-            var completedBundleNames = bundleStates.Where(x => x.IsCompleted).Select(x => x.RelatedBundle.BundleName);
-            var completedBundleAPIds = completedBundleNames.Select(x => _archipelago.GetLocationId(x + " Bundle"));
-            return completedBundleAPIds;
         }
 
         private void CheckGoalCompletion()
@@ -79,9 +68,10 @@ namespace StardewArchipelago.Locations
             _archipelago.ReportGoalCompletion();
         }
 
-        public void RemoveDefaultRewardsOnAllLocations()
+        public void ReplaceAllLocationsRewardsWithChecks()
         {
             RemoveDefaultRewardsOnAllBundles();
+            ReplaceCommunityCenterBundlesWithChecks();
             ReplaceCommunityCenterAreasWithChecks();
             ReplaceBackPackUpgradesWithChecks();
             ReplaceMineshaftChestsWithChecks();
@@ -107,6 +97,14 @@ namespace StardewArchipelago.Locations
             }
         }
 
+        private void ReplaceCommunityCenterBundlesWithChecks()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(JunimoNoteMenu), nameof(JunimoNoteMenu.checkForRewards)),
+                postfix: new HarmonyMethod(typeof(LocationsCodeInjection), nameof(LocationsCodeInjection.CheckForRewards_PostFix))
+            );
+        }
+
         private void ReplaceCommunityCenterAreasWithChecks()
         {
             var communityCenter = Game1.locations.OfType<CommunityCenter>().First();
@@ -118,6 +116,11 @@ namespace StardewArchipelago.Locations
 
         private void ReplaceBackPackUpgradesWithChecks()
         {
+            if (_archipelago.SlotData.BackpackProgression == BackpackProgression.Vanilla)
+            {
+                return;
+            }
+
             _harmony.Patch(
                 original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performAction)),
                 prefix: new HarmonyMethod(typeof(LocationsCodeInjection), nameof(LocationsCodeInjection.PerformAction_Prefix))

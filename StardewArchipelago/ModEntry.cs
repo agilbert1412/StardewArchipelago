@@ -79,7 +79,8 @@ namespace StardewArchipelago
 
             if (!_archipelago.IsConnected)
             {
-                Monitor.Log("Created a save game without being connected to Archipelago. This can cause issues with some settings that must be initialized immediately", LogLevel.Warn);
+                Monitor.Log("You are not allowed to create a new game without connecting to Archipelago", LogLevel.Error);
+                Game1.ExitToTitle();
                 return;
             }
 
@@ -104,17 +105,25 @@ namespace StardewArchipelago
             _bundleReader = new BundleReader();
             _itemManager = new ItemManager(_archipelago, _stardewItemManager, _unlockManager, _specialItemManager, _state.ItemsReceived);
             _locationsManager = new LocationManager(Monitor, _archipelago, _bundleReader, _helper, _harmony);
-            _locationsManager.RemoveDefaultRewardsOnAllLocations();
 
             if (_state.APConnectionInfo != null && !_archipelago.IsConnected)
             {
                 _archipelago.Connect(_state.APConnectionInfo);
             }
+
+            if (!_archipelago.IsConnected)
+            {
+                Monitor.Log("You are not allowed to load a save without connecting to Archipelago", LogLevel.Error);
+                Game1.ExitToTitle();
+                return;
+            }
+            
+            _locationsManager.ReplaceAllLocationsRewardsWithChecks();
         }
 
         private void OnDayStarted(object sender, DayStartedEventArgs e)
         {
-            _locationsManager.CheckAllLocations(true);
+            _locationsManager.SendAllLocationChecks(true);
             _itemManager.ReceiveAllNewItems();
         }
 
@@ -124,7 +133,7 @@ namespace StardewArchipelago
 
         private void OnTimeChanged(object sender, TimeChangedEventArgs e)
         {
-            _locationsManager.CheckAllLocations();
+            _locationsManager.SendAllLocationChecks();
             var allReceivedItems = _itemManager.GetAllItemsAlreadyProcessed();
             var numberReceivedStardrops = 0;
             foreach (var (name, amount) in allReceivedItems)

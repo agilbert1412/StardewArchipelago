@@ -1,18 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework.Graphics;
-using Netcode;
-using StardewArchipelago.Archipelago;
+﻿using StardewArchipelago.Archipelago;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
-using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Objects;
+using System;
+using System.Linq;
 using xTile.Dimensions;
 
 namespace StardewArchipelago.Locations
@@ -24,13 +17,15 @@ namespace StardewArchipelago.Locations
         private static IMonitor _monitor;
         private static IModHelper _modHelper;
         private static ArchipelagoClient _archipelago;
+        private static BundleReader _bundleReader;
         private static Action<long> _addCheckedLocation;
 
-        public LocationsCodeInjection(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, Action<long> addCheckedLocation)
+        public LocationsCodeInjection(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, BundleReader bundleReader, Action<long> addCheckedLocation)
         {
             _monitor = monitor;
             _modHelper = modHelper;
             _archipelago = archipelago;
+            _bundleReader = bundleReader;
             _addCheckedLocation = addCheckedLocation;
         }
 
@@ -62,6 +57,24 @@ namespace StardewArchipelago.Locations
             _addCheckedLocation(completedAreaAPLocationId);
         }
 
+        public static void CheckForRewards_PostFix(JunimoNoteMenu __instance)
+        {
+            try
+            {
+                var bundleStates = _bundleReader.ReadCurrentBundleStates();
+                var completedBundleNames = bundleStates.Where(x => x.IsCompleted).Select(x => x.RelatedBundle.BundleName);
+                var completedBundleAPIds = completedBundleNames.Select(x => _archipelago.GetLocationId(x + " Bundle"));
+                foreach (var completedBundleAPId in completedBundleAPIds)
+                {
+                    _addCheckedLocation(completedBundleAPId);    
+                }
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(CheckForRewards_PostFix)}:\n{ex}", LogLevel.Error);
+            }
+        }
+
         public static bool AnswerDialogueAction_Prefix(GameLocation __instance, string questionAndAnswer, string[] questionParams, ref bool __result)
         {
             try
@@ -82,7 +95,7 @@ namespace StardewArchipelago.Locations
                 {
                     Game1.player.Money -= 2000;
                     modData[BACKPACK_UPGRADE_LEVEL_KEY] = "1";
-                    var completedAreaAPLocationId = _archipelago.GetLocationId("Backpack Upgrade 1");
+                    var completedAreaAPLocationId = _archipelago.GetLocationId("Large Pack");
                     _addCheckedLocation(completedAreaAPLocationId);
                     return false; // don't run original logic
                 }
@@ -91,7 +104,7 @@ namespace StardewArchipelago.Locations
                 {
                     Game1.player.Money -= 10000;
                     modData[BACKPACK_UPGRADE_LEVEL_KEY] = "2";
-                    var completedAreaAPLocationId = _archipelago.GetLocationId("Backpack Upgrade 2");
+                    var completedAreaAPLocationId = _archipelago.GetLocationId("Deluxe Pack");
                     _addCheckedLocation(completedAreaAPLocationId);
                     return false; // don't run original logic
                 }
