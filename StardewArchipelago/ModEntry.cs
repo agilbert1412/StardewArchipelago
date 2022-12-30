@@ -2,6 +2,7 @@
 using System.Linq;
 using HarmonyLib;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.GameModifications;
 using StardewArchipelago.Items;
 using StardewArchipelago.Locations;
 using StardewArchipelago.Serialization;
@@ -28,6 +29,7 @@ namespace StardewArchipelago
         private UnlockManager _unlockManager;
         private SpecialItemManager _specialItemManager;
         private DeathManager _deathManager;
+        private MultiSleep _multiSleep;
 
         private Tester _tester;
 
@@ -52,9 +54,9 @@ namespace StardewArchipelago
             _helper = helper;
             _harmony = new Harmony(this.ModManifest.UniqueID);
             _tester = new Tester(helper, Monitor);
+            _multiSleep = new MultiSleep(Monitor, _helper, _harmony);
 
             _archipelago = new ArchipelagoClient(Monitor, OnItemReceived);
-            _deathManager = new DeathManager(Monitor, helper, _archipelago, _harmony);
             _helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
             _helper.Events.GameLoop.SaveCreated += this.OnSaveCreated;
             _helper.Events.GameLoop.Saved += this.OnSaved;
@@ -125,10 +127,18 @@ namespace StardewArchipelago
             }
             
             _locationsManager.ReplaceAllLocationsRewardsWithChecks();
+            _deathManager = new DeathManager(Monitor, _helper, _archipelago, _harmony);
         }
 
         private void OnDayStarted(object sender, DayStartedEventArgs e)
         {
+            if (MultiSleep.DaysToSkip > 0)
+            {
+                MultiSleep.DaysToSkip--;
+                Game1.NewDay(0);
+                return;
+            }
+
             _locationsManager.SendAllLocationChecks(true);
             _itemManager.ReceiveAllNewItems();
         }

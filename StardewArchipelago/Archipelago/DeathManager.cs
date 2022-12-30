@@ -68,7 +68,7 @@ namespace StardewArchipelago.Archipelago
 
         private void HookIntoPassOutEvent()
         {
-            var farmer = Game1.player.passedOut;
+            var farmer = Game1.player;
             var passOutEventField = _modHelper.Reflection.GetField<NetEvent0>(farmer, "passOutEvent");
             
             passOutEventField.GetValue().onEvent += SendDeathLink;
