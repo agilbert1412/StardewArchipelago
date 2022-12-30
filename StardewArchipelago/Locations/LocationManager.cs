@@ -113,6 +113,7 @@ namespace StardewArchipelago.Locations
             ReplaceBackPackUpgradesWithChecks();
             ReplaceMineshaftChestsWithChecks();
             ReplaceToolUpgradesWithChecks();
+            ReplaceFishingRodsWithChecks();
         }
 
         private static void RemoveDefaultRewardsOnAllBundles()
@@ -179,7 +180,7 @@ namespace StardewArchipelago.Locations
         {
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Chest), nameof(Chest.checkForAction)),
-                prefix: new HarmonyMethod(typeof(LocationsCodeInjection), nameof(LocationsCodeInjection.CheckForAction_Prefix))
+                prefix: new HarmonyMethod(typeof(LocationsCodeInjection), nameof(LocationsCodeInjection.CheckForAction_MineshaftChest_Prefix))
             );
         }
 
@@ -203,6 +204,24 @@ namespace StardewArchipelago.Locations
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Tool), nameof(Tool.actionWhenPurchased)),
                 prefix: new HarmonyMethod(typeof(LocationsCodeInjection), nameof(LocationsCodeInjection.ActionWhenPurchased_ToolUpgrade_Prefix))
+            );
+        }
+
+        private void ReplaceFishingRodsWithChecks()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Event), nameof(Event.skipEvent)),
+                prefix: new HarmonyMethod(typeof(LocationsCodeInjection), nameof(LocationsCodeInjection.SkipEvent_BambooPole_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Event), nameof(Event.command_awardFestivalPrize)),
+                prefix: new HarmonyMethod(typeof(LocationsCodeInjection), nameof(LocationsCodeInjection.AwardFestivalPrize_BambooPole_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Utility), nameof(Utility.getFishShopStock)),
+                prefix: new HarmonyMethod(typeof(LocationsCodeInjection), nameof(LocationsCodeInjection.GetFishShopStock_Prefix))
             );
         }
     }

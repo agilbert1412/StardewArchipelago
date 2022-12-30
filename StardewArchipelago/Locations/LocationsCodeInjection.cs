@@ -7,6 +7,8 @@ using StardewValley.Objects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using Microsoft.Xna.Framework;
 using Netcode;
 using StardewValley.Locations;
 using StardewValley.Tools;
@@ -23,6 +25,15 @@ namespace StardewArchipelago.Locations
         private const string WATERINGCAN_UPGRADE_LEVEL_KEY = "WateringCan_Upgrade_Level_Key";
         private const string TRASHCAN_UPGRADE_LEVEL_KEY = "TrashCan_Upgrade_Level_Key";
         private const string GOT_GOLDEN_SCYTHE_KEY = "Got_GoldenScythe_Key";
+
+        public const string RECEIVED_TRAINING_ROD_KEY = "Got_TrainingRod_Key";
+        public const string RECEIVED_BAMBOO_POLE_KEY = "Got_BambooPole_Key";
+        public const string RECEIVED_FIBERGLASS_ROD_KEY = "Got_FiberglassRod_Key";
+        public const string RECEIVED_IRIDIUM_ROD_KEY = "Got_IridiumRod_Key";
+
+        private const string PURCHASED_TRAINING_ROD_KEY = "Purchased_TrainingRod_Key";
+        private const string PURCHASED_FIBERGLASS_ROD_KEY = "Purchased_FiberglassRod_Key";
+        private const string PURCHASED_IRIDIUM_ROD_KEY = "Purchased_IridiumRod_Key";
 
         private static IMonitor _monitor;
         private static IModHelper _modHelper;
@@ -145,7 +156,7 @@ namespace StardewArchipelago.Locations
                 var utilityPriceForToolMethod = _modHelper.Reflection.GetMethod(typeof(Utility), "priceForToolUpgradeLevel");
                 var indexOfExtraMaterialForToolMethod = _modHelper.Reflection.GetMethod(typeof(Utility), "indexOfExtraMaterialForToolUpgrade");
 
-                Dictionary<ISalable, int[]> blacksmithUpgradeStock = new Dictionary<ISalable, int[]>();
+                var blacksmithUpgradeStock = new Dictionary<ISalable, int[]>();
                 AddToolUpgradeToStock(modData, blacksmithUpgradeStock, AXE_UPGRADE_LEVEL_KEY, () => new Axe(), utilityPriceForToolMethod, indexOfExtraMaterialForToolMethod);
                 AddToolUpgradeToStock(modData, blacksmithUpgradeStock, WATERINGCAN_UPGRADE_LEVEL_KEY, () => new WateringCan(), utilityPriceForToolMethod, indexOfExtraMaterialForToolMethod);
                 AddToolUpgradeToStock(modData, blacksmithUpgradeStock, PICKAXE_UPGRADE_LEVEL_KEY, () => new Pickaxe(), utilityPriceForToolMethod, indexOfExtraMaterialForToolMethod);
@@ -193,7 +204,7 @@ namespace StardewArchipelago.Locations
                 return;
             }
 
-            string name = "";
+            var name = "";
             switch (currentTrashCanLevel + 1)
             {
                 case 1:
@@ -254,7 +265,7 @@ namespace StardewArchipelago.Locations
                         break;
                     case GenericTool _:
                         IncrementModDataValue(TRASHCAN_UPGRADE_LEVEL_KEY);
-                        _addCheckedLocation($"{GetMetalNameForTier(modData[WATERINGCAN_UPGRADE_LEVEL_KEY])} Trash Can Upgrade");
+                        _addCheckedLocation($"{GetMetalNameForTier(modData[TRASHCAN_UPGRADE_LEVEL_KEY])} Trash Can Upgrade");
                         break;
                 }
 
@@ -397,7 +408,7 @@ namespace StardewArchipelago.Locations
             }
         }
 
-        public static bool CheckForAction_Prefix(Chest __instance, Farmer who, bool justCheckingForActivity, ref bool __result)
+        public static bool CheckForAction_MineshaftChest_Prefix(Chest __instance, Farmer who, bool justCheckingForActivity, ref bool __result)
         {
             try
             {
@@ -430,9 +441,257 @@ namespace StardewArchipelago.Locations
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(CheckForAction_Prefix)}:\n{ex}", LogLevel.Error);
+                _monitor.Log($"Failed in {nameof(CheckForAction_MineshaftChest_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
             }
+        }
+
+        public static bool SkipEvent_BambooPole_Prefix(Event __instance)
+        {
+            try
+            {
+                if (__instance.id != 739330)
+                {
+                    return true; // run original logic
+                }
+
+                SkipBambooPoleEventArchipelago(__instance);
+                return false; // don't run original logic
+
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(SkipEvent_BambooPole_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
+        }
+
+        public static bool AwardFestivalPrize_BambooPole_Prefix(Event __instance, GameLocation location, GameTime time, string[] split)
+        {
+            try
+            {
+                var festivalWinnersField = _modHelper.Reflection.GetField<HashSet<long>>(__instance, "festivalWinners");
+                if (__instance.id != 739330 || festivalWinnersField.GetValue().Contains(Game1.player.UniqueMultiplayerID) || split.Length <= 1 || split[1].ToLower() != "rod")
+                {
+                    return true; // run original logic
+                }
+                
+                CheckBambooPoleLocation();
+
+                if (Game1.activeClickableMenu == null)
+                    __instance.CurrentCommand++;
+                __instance.CurrentCommand++;
+
+                SkipBambooPoleEventArchipelago(__instance);
+                return false; // don't run original logic
+
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(AwardFestivalPrize_BambooPole_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
+        }
+
+        private static void SkipBambooPoleEventArchipelago(Event __instance)
+        {
+            if (__instance.playerControlSequence)
+            {
+                __instance.EndPlayerControlSequence();
+            }
+
+            Game1.playSound("drumkit6");
+
+            var actorPositionsAfterMoveField = _modHelper.Reflection.GetField<Dictionary<string, Vector3>>(__instance, "actorPositionsAfterMove");
+            actorPositionsAfterMoveField.GetValue().Clear();
+
+            foreach (var actor in __instance.actors)
+            {
+                var ignoreStopAnimation = actor.Sprite.ignoreStopAnimation;
+                actor.Sprite.ignoreStopAnimation = true;
+                actor.Halt();
+                actor.Sprite.ignoreStopAnimation = ignoreStopAnimation;
+                __instance.resetDialogueIfNecessary(actor);
+            }
+
+            __instance.farmer.Halt();
+            __instance.farmer.ignoreCollisions = false;
+            Game1.exitActiveMenu();
+            Game1.dialogueUp = false;
+            Game1.dialogueTyping = false;
+            Game1.pauseTime = 0.0f;
+
+            CheckBambooPoleLocation();
+
+            __instance.endBehaviors(new string[4]
+            {
+                "end",
+                "position",
+                "43",
+                "36"
+            }, Game1.currentLocation);
+        }
+
+        private static void CheckBambooPoleLocation()
+        {
+            _addCheckedLocation("Purchase Bamboo Pole");
+        }
+
+        public static bool GetFishShopStock_Prefix(Farmer who, ref Dictionary<ISalable, int[]> __result)
+        {
+            try
+            {
+                InitializeFishingRodsModDataValues();
+
+                var fishShopStock = new Dictionary<ISalable, int[]>();
+                AddFishingObjects(fishShopStock);
+                AddFishingToolsAPLocations(fishShopStock);
+                AddFishingTools(fishShopStock);
+                AddFishingFurniture(fishShopStock);
+                AddItemsFromPlayerToSell(fishShopStock);
+                __result = fishShopStock;
+
+                return false; // don't run original logic
+
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(SkipEvent_BambooPole_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
+        }
+
+        private static void AddFishingObjects(Dictionary<ISalable, int[]> fishShopStock)
+        {
+            fishShopStock.Add(new StardewValley.Object(TROUT_SOUP_ID, 1), new[] { 250, int.MaxValue });
+            if (Game1.player.fishingLevel.Value >= 2)
+            {
+                fishShopStock.Add(new StardewValley.Object(BAIT_ID, 1), new[] { 5, int.MaxValue });
+            }
+
+            if (Game1.player.fishingLevel.Value >= 3)
+            {
+                fishShopStock.Add(new StardewValley.Object(CRAB_POT_ID, 1), new[] { 1500, int.MaxValue });
+            }
+
+            if (Game1.player.fishingLevel.Value >= 6)
+            {
+                fishShopStock.Add(new StardewValley.Object(SPINNER_ID, 1), new[] { 500, int.MaxValue });
+                fishShopStock.Add(new StardewValley.Object(TRAP_BOBBER_ID, 1), new[] { 500, int.MaxValue });
+                fishShopStock.Add(new StardewValley.Object(LEAD_BOBBER_ID, 1), new[] { 200, int.MaxValue });
+            }
+
+            if (Game1.player.fishingLevel.Value >= 7)
+            {
+                fishShopStock.Add(new StardewValley.Object(TREASURE_HUNTER_ID, 1), new[] { 750, int.MaxValue });
+                fishShopStock.Add(new StardewValley.Object(CORK_BOBBER_ID, 1), new[] { 750, int.MaxValue });
+            }
+
+            if (Game1.player.fishingLevel.Value >= 8)
+            {
+                fishShopStock.Add(new StardewValley.Object(BARBED_HOOK_ID, 1), new[] { 1000, int.MaxValue });
+                fishShopStock.Add(new StardewValley.Object(DRESSED_SPINNER_ID, 1), new[] { 1000, int.MaxValue });
+            }
+
+            if (Game1.player.fishingLevel.Value >= 9)
+            {
+                fishShopStock.Add(new StardewValley.Object(MAGNET_ID, 1), new[] { 1000, int.MaxValue });
+            }
+        }
+
+        private static void AddFishingToolsAPLocations(Dictionary<ISalable, int[]> fishShopStock)
+        {
+            var modData = Game1.getFarm().modData;
+            if (modData[PURCHASED_TRAINING_ROD_KEY] == "0")
+            {
+                var trainingRod = new FishingRod(1);
+                fishShopStock.Add(new PurchaseableArchipelagoLocation("Archipelago Check: Training Rod", Game1.toolSpriteSheet, trainingRod.IndexOfMenuItemView, OnPurchaseTrainingRodLocation), new[] { 25, 1 });
+            }
+            if (Game1.player.fishingLevel.Value >= 2 && modData[PURCHASED_FIBERGLASS_ROD_KEY] == "0")
+            {
+                var fiberglassRod = new FishingRod(2);
+                fishShopStock.Add(new PurchaseableArchipelagoLocation("Archipelago Check: Fiberglass Rod", Game1.toolSpriteSheet, fiberglassRod.IndexOfMenuItemView, OnPurchaseFiberglassRodLocation), new[] { 1800, 1 });
+            }
+            if (Game1.player.fishingLevel.Value >= 6 && modData[PURCHASED_IRIDIUM_ROD_KEY] == "0")
+            {
+                var iridiumRod = new FishingRod(3);
+                fishShopStock.Add(new PurchaseableArchipelagoLocation("Archipelago Check: Iridium Rod", Game1.toolSpriteSheet, iridiumRod.IndexOfMenuItemView, OnPurchaseIridiumRodLocation), new[] { 7500, 1 });
+            }
+        }
+
+        private static void AddFishingTools(Dictionary<ISalable, int[]> fishShopStock)
+        {
+            var modData = Game1.getFarm().modData;
+            if (modData[RECEIVED_TRAINING_ROD_KEY] == "1")
+            {
+                fishShopStock.Add(new FishingRod(1), new[] { 25, int.MaxValue });
+            }
+
+            if (modData[RECEIVED_BAMBOO_POLE_KEY] == "1")
+            {
+                fishShopStock.Add(new FishingRod(0), new[] { 500, int.MaxValue });
+            }
+
+            if (modData[RECEIVED_FIBERGLASS_ROD_KEY] == "1")
+            {
+                fishShopStock.Add(new FishingRod(2), new[] { 1800, int.MaxValue });
+            }
+
+            if (modData[RECEIVED_IRIDIUM_ROD_KEY] == "1")
+            {
+                fishShopStock.Add(new FishingRod(3), new[] { 7500, int.MaxValue });
+            }
+
+            if (Game1.MasterPlayer.mailReceived.Contains("ccFishTank"))
+            {
+                fishShopStock.Add(new Pan(), new[] { 2500, int.MaxValue });
+            }
+        }
+
+        private static void AddFishingFurniture(Dictionary<ISalable, int[]> fishShopStock)
+        {
+            fishShopStock.Add(new FishTankFurniture(2304, Vector2.Zero), new[] { 2000, int.MaxValue });
+            fishShopStock.Add(new FishTankFurniture(2322, Vector2.Zero), new[] { 500, int.MaxValue });
+            if (Game1.player.mailReceived.Contains("WillyTropicalFish"))
+            {
+                fishShopStock.Add(new FishTankFurniture(2312, Vector2.Zero), new[] { 5000, int.MaxValue });
+            }
+
+            fishShopStock.Add(new BedFurniture(2502, Vector2.Zero), new[] { 25000, int.MaxValue });
+        }
+
+        private static void AddItemsFromPlayerToSell(Dictionary<ISalable, int[]> fishShopStock)
+        {
+            var locationFromName = Game1.getLocationFromName("FishShop");
+            if (locationFromName is not ShopLocation fishShop) return;
+            foreach (var key in fishShop.itemsFromPlayerToSell)
+            {
+                if (key.Stack <= 0) continue;
+                var num = key.salePrice();
+                if (key is StardewValley.Object)
+                {
+                    num = (key as StardewValley.Object).sellToStorePrice();
+                }
+                fishShopStock.Add(key, new[] { num, key.Stack });
+            }
+        }
+
+        private static void OnPurchaseTrainingRodLocation()
+        {
+            _addCheckedLocation("Purchase Training Rod");
+            SetToOneModDataValue(PURCHASED_TRAINING_ROD_KEY);
+        }
+
+        private static void OnPurchaseFiberglassRodLocation()
+        {
+            _addCheckedLocation("Purchase Fiberglass Rod");
+            SetToOneModDataValue(PURCHASED_FIBERGLASS_ROD_KEY);
+        }
+
+        private static void OnPurchaseIridiumRodLocation()
+        {
+            _addCheckedLocation("Purchase Iridium Rod");
+            SetToOneModDataValue(PURCHASED_IRIDIUM_ROD_KEY);
         }
 
         private static void InitializeToolUpgradeModDataValues()
@@ -444,6 +703,18 @@ namespace StardewArchipelago.Locations
             InitializeModDataValue(TRASHCAN_UPGRADE_LEVEL_KEY, "0");
         }
 
+        private static void InitializeFishingRodsModDataValues()
+        {
+            InitializeModDataValue(RECEIVED_TRAINING_ROD_KEY, "0");
+            InitializeModDataValue(RECEIVED_BAMBOO_POLE_KEY, "0");
+            InitializeModDataValue(RECEIVED_FIBERGLASS_ROD_KEY, "0");
+            InitializeModDataValue(RECEIVED_IRIDIUM_ROD_KEY, "0");
+
+            InitializeModDataValue(PURCHASED_TRAINING_ROD_KEY, "0");
+            InitializeModDataValue(PURCHASED_FIBERGLASS_ROD_KEY, "0");
+            InitializeModDataValue(PURCHASED_IRIDIUM_ROD_KEY, "0");
+        }
+
         private static void InitializeModDataValue(string key, string defaultValue)
         {
             var modData = Game1.getFarm().modData;
@@ -453,10 +724,28 @@ namespace StardewArchipelago.Locations
             }
         }
 
+        public static void SetToOneModDataValue(string key)
+        {
+            var modData = Game1.getFarm().modData;
+            modData[key] = "1";
+        }
+
         private static void IncrementModDataValue(string key, int increment = 1)
         {
             var modData = Game1.getFarm().modData;
             modData[key] = (int.Parse(modData[key]) + increment).ToString();
         }
+
+        private const int TROUT_SOUP_ID = 219;
+        private const int BAIT_ID = 685;
+        private const int CRAB_POT_ID = 710;
+        private const int SPINNER_ID = 686;
+        private const int TRAP_BOBBER_ID = 694;
+        private const int LEAD_BOBBER_ID = 692;
+        private const int TREASURE_HUNTER_ID = 693;
+        private const int CORK_BOBBER_ID = 695;
+        private const int BARBED_HOOK_ID = 691;
+        private const int DRESSED_SPINNER_ID = 687;
+        private const int MAGNET_ID = 703;
     }
 }

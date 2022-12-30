@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 using Netcode;
+using StardewArchipelago.Locations;
 using StardewValley;
 using StardewValley.Objects;
 using StardewValley.Tools;
@@ -56,6 +57,7 @@ namespace StardewArchipelago.Items
             _unlockables.Add("Progressive Hoe", ReceiveProgressiveHoe);
             _unlockables.Add("Progressive Watering Can", ReceiveProgressiveWateringCan);
             _unlockables.Add("Progressive Trash Can", ReceiveProgressiveTrashCan);
+            _unlockables.Add("Progressive Fishing Rod", ReceiveProgressiveFishingRod);
         }
 
         private void RepairBridge()
@@ -123,43 +125,60 @@ namespace StardewArchipelago.Items
 
         private void ReceiveProgressiveAxe(int numberReceived)
         {
-            ReceiveProgressiveTool(numberReceived, () => new Axe(), "Axe");
+            ReceiveProgressiveTool(numberReceived, () => new Axe { UpgradeLevel = numberReceived }, "Axe");
         }
 
         private void ReceiveProgressivePickaxe(int numberReceived)
         {
-            ReceiveProgressiveTool(numberReceived, () => new Pickaxe(), "Pickaxe");
+            ReceiveProgressiveTool(numberReceived, () => new Pickaxe { UpgradeLevel = numberReceived }, "Pickaxe");
         }
 
         private void ReceiveProgressiveHoe(int numberReceived)
         {
-            ReceiveProgressiveTool(numberReceived, () => new Hoe(), "Hoe");
+            ReceiveProgressiveTool(numberReceived, () => new Hoe { UpgradeLevel = numberReceived }, "Hoe");
         }
 
         private void ReceiveProgressiveWateringCan(int numberReceived)
         {
-            ReceiveProgressiveTool(numberReceived, () => new WateringCan(), "Watering Can");
+            ReceiveProgressiveTool(numberReceived, () => new WateringCan {UpgradeLevel = numberReceived}, "Watering Can");
         }
 
         private void ReceiveProgressiveTrashCan(int numberReceived)
         {
-            ReceiveProgressiveTool(numberReceived, () => new GenericTool(), "Trash Can");
+            ReceiveProgressiveTool(numberReceived, () => new GenericTool { UpgradeLevel = numberReceived }, "Trash Can");
         }
 
-        private void ReceiveProgressiveTool(int numberReceived, Func<Tool> toolCreationFunction, string toolGenericName)
+        private void ReceiveProgressiveFishingRod(int numberReceived)
+        {
+            var modData = Game1.getFarm().modData;
+            var whichWasReceived = numberReceived switch
+            {
+                1 => LocationsCodeInjection.RECEIVED_BAMBOO_POLE_KEY,
+                2 => LocationsCodeInjection.RECEIVED_TRAINING_ROD_KEY,
+                3 => LocationsCodeInjection.RECEIVED_FIBERGLASS_ROD_KEY,
+                4 => LocationsCodeInjection.RECEIVED_IRIDIUM_ROD_KEY,
+                _ => ""
+            };
+            LocationsCodeInjection.SetToOneModDataValue(whichWasReceived);
+            var upgradeLevel = numberReceived - 1;
+            ReceiveProgressiveTool(numberReceived, () => new FishingRod(upgradeLevel));
+        }
+
+        private void ReceiveProgressiveTool(int numberReceived, Func<Tool> toolCreationFunction, string toolGenericName = null)
         {
             var player = Game1.player;
-            var playerAxes = new List<Tool>();
-            foreach (Item playerItem in player.Items)
+            if (!string.IsNullOrWhiteSpace(toolGenericName))
             {
-                if (playerItem != null && playerItem is Tool && playerItem.Name.Contains(toolGenericName))
+                foreach (Item playerItem in player.Items)
                 {
-                    Game1.player.removeItemFromInventory(playerItem);
+                    if (playerItem != null && playerItem is Tool && playerItem.Name.Contains(toolGenericName))
+                    {
+                        Game1.player.removeItemFromInventory(playerItem);
+                    }
                 }
             }
 
             var newTool = toolCreationFunction();
-            newTool.UpgradeLevel = numberReceived;
 
             Game1.player.holdUpItemThenMessage(newTool);
 
