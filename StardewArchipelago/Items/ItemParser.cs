@@ -43,6 +43,11 @@ namespace StardewArchipelago.Items
                 return null;
             }
 
+            if (_specialItemManager.IsItem(itemName))
+            {
+                return _specialItemManager.GetSpecialItem(itemName);
+            }
+
             if (_itemManager.ItemExists(itemName))
             {
                 return GetSingleItem(itemName);

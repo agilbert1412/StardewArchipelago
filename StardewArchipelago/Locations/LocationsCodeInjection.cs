@@ -22,6 +22,7 @@ namespace StardewArchipelago.Locations
         private const string HOE_UPGRADE_LEVEL_KEY = "Hoe_Upgrade_Level_Key";
         private const string WATERINGCAN_UPGRADE_LEVEL_KEY = "WateringCan_Upgrade_Level_Key";
         private const string TRASHCAN_UPGRADE_LEVEL_KEY = "TrashCan_Upgrade_Level_Key";
+        private const string GOT_GOLDEN_SCYTHE_KEY = "Got_GoldenScythe_Key";
 
         private static IMonitor _monitor;
         private static IModHelper _modHelper;
@@ -100,7 +101,7 @@ namespace StardewArchipelago.Locations
 
                 __result = true;
                 var modData = Game1.getFarm().modData;
-                InitializeModDataValue(modData, BACKPACK_UPGRADE_LEVEL_KEY, "0");
+                InitializeModDataValue(BACKPACK_UPGRADE_LEVEL_KEY, "0");
 
                 if (Game1.getFarm().modData[BACKPACK_UPGRADE_LEVEL_KEY] == "0" && Game1.player.Money >= 2000)
                 {
@@ -138,7 +139,7 @@ namespace StardewArchipelago.Locations
 
                 __result = true;
                 var modData = Game1.getFarm().modData;
-                InitializeToolUpgradeModDataValues(modData);
+                InitializeToolUpgradeModDataValues();
 
                 var farmer = Game1.player;
                 var utilityPriceForToolMethod = _modHelper.Reflection.GetMethod(typeof(Utility), "priceForToolUpgradeLevel");
@@ -231,28 +232,28 @@ namespace StardewArchipelago.Locations
             try
             {
                 var modData = Game1.getFarm().modData;
-                InitializeToolUpgradeModDataValues(modData);
+                InitializeToolUpgradeModDataValues();
 
                 switch (__instance)
                 {
                     case Axe _:
-                        IncrementModDataValue(modData, AXE_UPGRADE_LEVEL_KEY);
+                        IncrementModDataValue(AXE_UPGRADE_LEVEL_KEY);
                         _addCheckedLocation($"{GetMetalNameForTier(modData[AXE_UPGRADE_LEVEL_KEY])} Axe Upgrade");
                         break;
                     case Pickaxe _:
-                        IncrementModDataValue(modData, PICKAXE_UPGRADE_LEVEL_KEY);
+                        IncrementModDataValue(PICKAXE_UPGRADE_LEVEL_KEY);
                         _addCheckedLocation($"{GetMetalNameForTier(modData[PICKAXE_UPGRADE_LEVEL_KEY])} Pickaxe Upgrade");
                         break;
                     case Hoe _:
-                        IncrementModDataValue(modData, HOE_UPGRADE_LEVEL_KEY);
+                        IncrementModDataValue(HOE_UPGRADE_LEVEL_KEY);
                         _addCheckedLocation($"{GetMetalNameForTier(modData[HOE_UPGRADE_LEVEL_KEY])} Hoe Upgrade");
                         break;
                     case WateringCan _:
-                        IncrementModDataValue(modData, WATERINGCAN_UPGRADE_LEVEL_KEY);
+                        IncrementModDataValue(WATERINGCAN_UPGRADE_LEVEL_KEY);
                         _addCheckedLocation($"{GetMetalNameForTier(modData[WATERINGCAN_UPGRADE_LEVEL_KEY])} Watering Can Upgrade");
                         break;
                     case GenericTool _:
-                        IncrementModDataValue(modData, TRASHCAN_UPGRADE_LEVEL_KEY);
+                        IncrementModDataValue(TRASHCAN_UPGRADE_LEVEL_KEY);
                         _addCheckedLocation($"{GetMetalNameForTier(modData[WATERINGCAN_UPGRADE_LEVEL_KEY])} Trash Can Upgrade");
                         break;
                 }
@@ -290,7 +291,7 @@ namespace StardewArchipelago.Locations
             }
         }
 
-        public static bool PerformAction_Prefix(GameLocation __instance, string action, Farmer who, Location tileLocation, ref bool __result)
+        public static bool PerformAction_BuyBackpack_Prefix(GameLocation __instance, string action, Farmer who, Location tileLocation, ref bool __result)
         {
             try
             {
@@ -311,7 +312,52 @@ namespace StardewArchipelago.Locations
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(PerformAction_Prefix)}:\n{ex}", LogLevel.Error);
+                _monitor.Log($"Failed in {nameof(PerformAction_BuyBackpack_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
+        }
+
+        public static bool PerformAction_GoldenScythe_Prefix(GameLocation __instance, string action, Farmer who, Location tileLocation, ref bool __result)
+        {
+            try
+            {
+                if (action == null || !who.IsLocalPlayer)
+                {
+                    return true;
+                }
+
+                var actionParts = action.Split(' ');
+                var actionName = actionParts[0];
+                if (actionName == "GoldenScythe")
+                {
+                    __result = true;
+                    var modData = Game1.getFarm().modData;
+                    InitializeModDataValue(GOT_GOLDEN_SCYTHE_KEY, "0");
+
+                    if (modData[GOT_GOLDEN_SCYTHE_KEY] == "0")
+                    {
+                        Game1.playSound("parry");
+                        __instance.setMapTileIndex(29, 4, 245, "Front");
+                        __instance.setMapTileIndex(30, 4, 246, "Front");
+                        __instance.setMapTileIndex(29, 5, 261, "Front");
+                        __instance.setMapTileIndex(30, 5, 262, "Front");
+                        __instance.setMapTileIndex(29, 6, 277, "Buildings");
+                        __instance.setMapTileIndex(30, 56, 278, "Buildings");
+                        _addCheckedLocation("Golden Scythe");
+                        modData[GOT_GOLDEN_SCYTHE_KEY] = "1";
+                        return false; // don't run original logic
+                    }
+
+                    Game1.changeMusicTrack("none");
+                    __instance.performTouchAction("MagicWarp Mine 67 10", Game1.player.getStandingPosition());
+                    return false; // don't run original logic
+                }
+
+                return true; // run original logic
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(PerformAction_GoldenScythe_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
             }
         }
@@ -321,7 +367,7 @@ namespace StardewArchipelago.Locations
             __result = true;
 
             var modData = Game1.getFarm().modData;
-            InitializeModDataValue(modData, BACKPACK_UPGRADE_LEVEL_KEY, "0");
+            InitializeModDataValue(BACKPACK_UPGRADE_LEVEL_KEY, "0");
 
             var responsePurchaseLevel1 = new Response("Purchase",
                 Game1.content.LoadString("Strings\\Locations:SeedShop_BuyBackpack_Response2000"));
@@ -389,25 +435,27 @@ namespace StardewArchipelago.Locations
             }
         }
 
-        private static void InitializeToolUpgradeModDataValues(ModDataDictionary modData)
+        private static void InitializeToolUpgradeModDataValues()
         {
-            InitializeModDataValue(modData, PICKAXE_UPGRADE_LEVEL_KEY, "0");
-            InitializeModDataValue(modData, AXE_UPGRADE_LEVEL_KEY, "0");
-            InitializeModDataValue(modData, HOE_UPGRADE_LEVEL_KEY, "0");
-            InitializeModDataValue(modData, WATERINGCAN_UPGRADE_LEVEL_KEY, "0");
-            InitializeModDataValue(modData, TRASHCAN_UPGRADE_LEVEL_KEY, "0");
+            InitializeModDataValue(PICKAXE_UPGRADE_LEVEL_KEY, "0");
+            InitializeModDataValue(AXE_UPGRADE_LEVEL_KEY, "0");
+            InitializeModDataValue(HOE_UPGRADE_LEVEL_KEY, "0");
+            InitializeModDataValue(WATERINGCAN_UPGRADE_LEVEL_KEY, "0");
+            InitializeModDataValue(TRASHCAN_UPGRADE_LEVEL_KEY, "0");
         }
 
-        private static void InitializeModDataValue(ModDataDictionary modData, string key, string defaultValue)
+        private static void InitializeModDataValue(string key, string defaultValue)
         {
+            var modData = Game1.getFarm().modData;
             if (!modData.ContainsKey(key))
             {
                 modData.Add(key, defaultValue);
             }
         }
 
-        private static void IncrementModDataValue(ModDataDictionary modData, string key, int increment = 1)
+        private static void IncrementModDataValue(string key, int increment = 1)
         {
+            var modData = Game1.getFarm().modData;
             modData[key] = (int.Parse(modData[key]) + increment).ToString();
         }
     }

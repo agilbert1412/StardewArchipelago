@@ -161,7 +161,7 @@ namespace StardewArchipelago.Locations
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performAction)),
-                prefix: new HarmonyMethod(typeof(LocationsCodeInjection), nameof(LocationsCodeInjection.PerformAction_Prefix))
+                prefix: new HarmonyMethod(typeof(LocationsCodeInjection), nameof(LocationsCodeInjection.PerformAction_BuyBackpack_Prefix))
             );
 
             _harmony.Patch(
@@ -185,6 +185,11 @@ namespace StardewArchipelago.Locations
 
         private void ReplaceToolUpgradesWithChecks()
         {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performAction)),
+                prefix: new HarmonyMethod(typeof(LocationsCodeInjection), nameof(LocationsCodeInjection.PerformAction_GoldenScythe_Prefix))
+            );
+
             if (_archipelago.SlotData.ToolProgression == ToolProgression.Vanilla)
             {
                 return;

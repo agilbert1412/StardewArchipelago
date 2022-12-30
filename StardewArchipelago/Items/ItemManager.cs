@@ -54,6 +54,12 @@ namespace StardewArchipelago.Items
                 return;
             }
 
+            if (itemsToGiveFarmer.Count == 1)
+            {
+                Game1.player.addItemByMenuIfNecessaryElseHoldUp(itemsToGiveFarmer.First());
+                return;
+            }
+
             var itemsToDrop = new List<Item>();
             const int maxItemsToGive = 36;
             if (itemsToGiveFarmer.Count() > maxItemsToGive)
