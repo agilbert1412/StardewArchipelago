@@ -27,6 +27,7 @@ namespace StardewArchipelago
         private StardewItemManager _stardewItemManager;
         private UnlockManager _unlockManager;
         private SpecialItemManager _specialItemManager;
+        private DeathManager _deathManager;
 
         private Tester _tester;
 
@@ -53,6 +54,7 @@ namespace StardewArchipelago
             _tester = new Tester(helper, Monitor);
 
             _archipelago = new ArchipelagoClient(Monitor, OnItemReceived);
+            _deathManager = new DeathManager(Monitor, helper, _archipelago, _harmony);
             _helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
             _helper.Events.GameLoop.SaveCreated += this.OnSaveCreated;
             _helper.Events.GameLoop.Saved += this.OnSaved;

@@ -95,6 +95,7 @@ namespace StardewArchipelago.Items
         {
             Game1.playSound("parry");
             Game1.player.mailReceived.Add("gotGoldenScythe");
+
             return new MeleeWeapon(53);
         }
     }

@@ -297,7 +297,7 @@ namespace StardewArchipelago.Locations
             {
                 if (action == null || !who.IsLocalPlayer)
                 {
-                    return true;
+                    return true; // run original logic
                 }
 
                 var actionParts = action.Split(' ');
@@ -323,7 +323,7 @@ namespace StardewArchipelago.Locations
             {
                 if (action == null || !who.IsLocalPlayer)
                 {
-                    return true;
+                    return true; // run original logic
                 }
 
                 var actionParts = action.Split(' ');
@@ -343,7 +343,7 @@ namespace StardewArchipelago.Locations
                         __instance.setMapTileIndex(30, 5, 262, "Front");
                         __instance.setMapTileIndex(29, 6, 277, "Buildings");
                         __instance.setMapTileIndex(30, 56, 278, "Buildings");
-                        _addCheckedLocation("Golden Scythe");
+                        _addCheckedLocation("Grim Reaper statue");
                         modData[GOT_GOLDEN_SCYTHE_KEY] = "1";
                         return false; // don't run original logic
                     }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Archipelago.MultiClient.Net;
+using Archipelago.MultiClient.Net.BounceFeatures.DeathLink;
 using Archipelago.MultiClient.Net.Enums;
 using Archipelago.MultiClient.Net.Helpers;
 using Archipelago.MultiClient.Net.Packets;
@@ -15,6 +16,7 @@ namespace StardewArchipelago.Archipelago
         private const string GAME_NAME = "Stardew Valley";
         private IMonitor _console;
         private ArchipelagoSession _session;
+        private DeathLinkService _deathLinkService;
 
         private Action _itemReceivedFunction;
 
@@ -71,6 +73,15 @@ namespace StardewArchipelago.Archipelago
             _session.Items.ItemReceived += OnItemReceived;
             _itemReceivedFunction();
             InitializeSlotData(loginSuccess.SlotData);
+            if (SlotData.DeathLink)
+            {
+                _deathLinkService.EnableDeathLink();
+                _deathLinkService.OnDeathLinkReceived += ReceiveDeathLink;
+            }
+            else
+            {
+                _deathLinkService.DisableDeathLink();
+            }
             IsConnected = true;
         }
 
@@ -86,6 +97,8 @@ namespace StardewArchipelago.Archipelago
             _session.MessageLog.OnMessageReceived += OnMessageReceived;
             _session.Socket.ErrorReceived += SessionErrorReceived;
             _session.Socket.SocketClosed += SessionSocketClosed;
+
+            _deathLinkService = _session.CreateDeathLinkService();
         }
 
         private void OnMessageReceived(LogMessage message)
@@ -195,6 +208,20 @@ namespace StardewArchipelago.Archipelago
         public string GetItemName(long itemId)
         {
             return _session.Items.GetItemName(itemId);
+        }
+
+        public void SendDeathLink(string player, string reason = "Unknown cause")
+        {
+            _deathLinkService.SendDeathLink(new DeathLink(player, reason));
+        }
+
+        private void ReceiveDeathLink(DeathLink deathlink)
+        {
+            DeathManager.ReceiveDeathLink();
+
+            var deathLinkMessage = $"You have been killed by {deathlink.Source} ({deathlink.Cause})";
+            _console.Log(deathLinkMessage, LogLevel.Info);
+            Game1.chatBox?.addInfoMessage(deathLinkMessage);
         }
 
         /*private string ScoutLocation(long locationId)

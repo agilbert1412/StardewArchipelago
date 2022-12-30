@@ -18,6 +18,11 @@ namespace StardewArchipelago.Stardew
         private Dictionary<int, Weapon> _weaponsById;
         private Dictionary<string, Weapon> _weaponsByName;
 
+        private List<int> _priorityIds = new List<int>()
+        {
+            390
+        };
+
         public StardewItemManager()
         {
             InitializeData();
@@ -77,8 +82,19 @@ namespace StardewArchipelago.Stardew
             {
                 var stardewItem = ParseStardewObjectData(id, objectInfo);
 
-                if (_objectsById.ContainsKey(id) || _objectsByName.ContainsKey(stardewItem.Name))
+                if (_objectsById.ContainsKey(id))
                 {
+                    continue;
+                }
+
+                if (_objectsByName.ContainsKey(stardewItem.Name))
+                {
+                    if (_priorityIds.Contains(id))
+                    {
+                        _objectsById.Add(id, stardewItem);
+                        _objectsByName[stardewItem.Name] = stardewItem;
+                    }
+
                     continue;
                 }
 
