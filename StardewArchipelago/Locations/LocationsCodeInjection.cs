@@ -476,7 +476,7 @@ namespace StardewArchipelago.Locations
                     return true; // run original logic
                 }
                 
-                CheckBambooPoleLocation();
+                OnCheckBambooPoleLocation();
 
                 if (Game1.activeClickableMenu == null)
                     __instance.CurrentCommand++;
@@ -521,7 +521,7 @@ namespace StardewArchipelago.Locations
             Game1.dialogueTyping = false;
             Game1.pauseTime = 0.0f;
 
-            CheckBambooPoleLocation();
+            OnCheckBambooPoleLocation();
 
             __instance.endBehaviors(new string[4]
             {
@@ -530,11 +530,6 @@ namespace StardewArchipelago.Locations
                 "43",
                 "36"
             }, Game1.currentLocation);
-        }
-
-        private static void CheckBambooPoleLocation()
-        {
-            _addCheckedLocation("Purchase Bamboo Pole");
         }
 
         public static bool GetFishShopStock_Prefix(Farmer who, ref Dictionary<ISalable, int[]> __result)
@@ -674,6 +669,11 @@ namespace StardewArchipelago.Locations
                 }
                 fishShopStock.Add(key, new[] { num, key.Stack });
             }
+        }
+
+        private static void OnCheckBambooPoleLocation()
+        {
+            _addCheckedLocation("Purchase Bamboo Pole");
         }
 
         private static void OnPurchaseTrainingRodLocation()
