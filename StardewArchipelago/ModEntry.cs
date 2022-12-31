@@ -131,6 +131,7 @@ namespace StardewArchipelago
             
             _locationsManager.ReplaceAllLocationsRewardsWithChecks();
             _jojaDisabler.DisableJojaMembership();
+            _multiSleep.InjectMultiSleepOption(_archipelago.SlotData);
             _deathManager = new DeathManager(Monitor, _helper, _archipelago, _harmony);
         }
 

@@ -15,6 +15,8 @@ namespace StardewArchipelago.Archipelago
         private const string DEATH_LINK_KEY = "death_link";
         private const string GOAL_KEY = "goal";
         private const string SEED_KEY = "seed";
+        private const string MULTI_SLEEP_ENABLED_KEY = "multiple_day_sleep_enabled";
+        private const string MULTI_SLEEP_COST_KEY = "multiple_day_sleep_cost";
 
         // public int ProgressionBalancing { get; private set; }
         // public int Accessibility { get; private set; }
@@ -27,6 +29,8 @@ namespace StardewArchipelago.Archipelago
         public bool DeathLink { get; private set; }
         public Goal Goal { get; private set; }
         public string Seed { get; private set; }
+        public bool EnableMultiSleep { get; private set; }
+        public int MultiSleepCostPerDay { get; private set; }
 
         public SlotData(Dictionary<string, object> slotDataFields)
         {
@@ -37,6 +41,8 @@ namespace StardewArchipelago.Archipelago
             DeathLink = slotDataFields.ContainsKey(DEATH_LINK_KEY) && (bool)slotDataFields[DEATH_LINK_KEY];
             Goal = slotDataFields.ContainsKey(GOAL_KEY) ? (Goal)(long)slotDataFields[GOAL_KEY] : Goal.CommunityCenter;
             Seed = slotDataFields.ContainsKey(SEED_KEY) ? slotDataFields[SEED_KEY].ToString() : "";
+            EnableMultiSleep = !slotDataFields.ContainsKey(MULTI_SLEEP_ENABLED_KEY) || (bool)slotDataFields[MULTI_SLEEP_ENABLED_KEY];
+            MultiSleepCostPerDay = slotDataFields.ContainsKey(MULTI_SLEEP_COST_KEY) ? (int)(long)slotDataFields[MULTI_SLEEP_COST_KEY] : 0;
         }
     }
 

@@ -24,6 +24,7 @@ namespace StardewArchipelago.GameModifications
         private Harmony _harmony;
 
         public static int DaysToSkip = 0;
+        private static int _multiSleepPrice = -1;
 
         public MultiSleep(IMonitor monitor, IModHelper modHelper, Harmony harmony)
         {
@@ -31,11 +32,17 @@ namespace StardewArchipelago.GameModifications
             _modHelper = modHelper;
             _harmony = harmony;
             DaysToSkip = 0;
-            InjectMultiSleepOption();
         }
 
-        public void InjectMultiSleepOption()
+        public void InjectMultiSleepOption(SlotData slotData)
         {
+            if (!slotData.EnableMultiSleep)
+            {
+                return;
+            }
+
+            _multiSleepPrice = slotData.MultiSleepCostPerDay;
+
             _harmony.Patch(
                 original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performTouchAction)),
                 prefix: new HarmonyMethod(typeof(MultiSleep), nameof(MultiSleep.PerformTouchAction_Sleep_Prefix))
@@ -86,7 +93,7 @@ namespace StardewArchipelago.GameModifications
 
                 var multiSleepMessage =
                     "How many days do you wish to sleep for?\n(Warning: Sleeping saves the game, this action cannot be undone)";
-                Game1.activeClickableMenu = new NumberSelectionMenu(multiSleepMessage, (value, price, who) => SleepMany(__instance, value), minValue: 1, maxValue: 112, defaultNumber: 7, price: 0);
+                Game1.activeClickableMenu = new MultiSleepSelectionMenu(multiSleepMessage, (value, price, who) => SleepMany(__instance, value), minValue: 1, maxValue: 112, defaultNumber: 7, price: _multiSleepPrice);
 
                 return false; // don't run original logic
             }
@@ -100,6 +107,18 @@ namespace StardewArchipelago.GameModifications
         public static void SleepMany(GameLocation instance, int numberOfDays)
         {
             DaysToSkip = numberOfDays - 1;
+            var totalPrice = 0;
+            if (_multiSleepPrice > 0)
+            {
+                totalPrice = _multiSleepPrice * DaysToSkip;
+            }
+
+            if (Game1.player.Money < totalPrice)
+            {
+                return;
+            }
+
+            Game1.player.Money -= totalPrice;
 
             var startSleepMethod = _modHelper.Reflection.GetMethod(instance, "startSleep");
             startSleepMethod.Invoke();
