@@ -182,6 +182,10 @@ namespace StardewArchipelago.Locations
                 original: AccessTools.Method(typeof(Chest), nameof(Chest.checkForAction)),
                 prefix: new HarmonyMethod(typeof(LocationsCodeInjection), nameof(LocationsCodeInjection.CheckForAction_MineshaftChest_Prefix))
             );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(MineShaft), "addLevelChests"),
+                prefix: new HarmonyMethod(typeof(LocationsCodeInjection), nameof(LocationsCodeInjection.AddLevelChests_Level120_Prefix))
+            );
         }
 
         private void ReplaceToolUpgradesWithChecks()

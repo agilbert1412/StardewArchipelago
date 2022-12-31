@@ -22,7 +22,6 @@ namespace StardewArchipelago
         private Harmony _harmony;
         private BundleReader _bundleReader;
         private ArchipelagoClient _archipelago;
-        private StardewJsonSerializer _serializer;
         private ItemManager _itemManager;
         private LocationManager _locationsManager;
         private StardewItemManager _stardewItemManager;
@@ -31,6 +30,7 @@ namespace StardewArchipelago
         private DeathManager _deathManager;
         private MultiSleep _multiSleep;
         private AdvancedOptionsManager _advancedOptionManager;
+        private JojaDisabler _jojaDisabler;
 
         private Tester _tester;
 
@@ -115,6 +115,7 @@ namespace StardewArchipelago
             _bundleReader = new BundleReader();
             _itemManager = new ItemManager(_archipelago, _stardewItemManager, _unlockManager, _specialItemManager, _state.ItemsReceived);
             _locationsManager = new LocationManager(Monitor, _archipelago, _bundleReader, _helper, _harmony, _state.LocationsChecked);
+            _jojaDisabler = new JojaDisabler(Monitor, _helper, _harmony);
 
             if (_state.APConnectionInfo != null && !_archipelago.IsConnected)
             {
@@ -129,6 +130,7 @@ namespace StardewArchipelago
             }
             
             _locationsManager.ReplaceAllLocationsRewardsWithChecks();
+            _jojaDisabler.DisableJojaMembership();
             _deathManager = new DeathManager(Monitor, _helper, _archipelago, _harmony);
         }
 

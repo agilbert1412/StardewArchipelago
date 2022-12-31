@@ -429,6 +429,35 @@ namespace StardewArchipelago.Locations
             }
         }
 
+        public static bool AddLevelChests_Level120_Prefix(MineShaft __instance)
+        {
+            try
+            {
+                if (__instance.mineLevel != 120 || Game1.player.chestConsumedMineLevels.ContainsKey(120))
+                {
+                    return true; // run original logic
+                }
+
+                Game1.player.completeQuest(18);
+                Game1.getSteamAchievement("Achievement_TheBottom");
+                var chestPosition = new Vector2(9f, 9f);
+                List<Item> items = new List<Item>();
+                items.Add(new MeleeWeapon(8));
+                __instance.overlayObjects[chestPosition] = new Chest(0, items, chestPosition)
+                {
+                    Tint = Color.Pink
+                };
+
+                return false; // don't run original logic
+
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(CheckForAction_MineshaftChest_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
+        }
+
         public static bool SkipEvent_BambooPole_Prefix(Event __instance)
         {
             try
