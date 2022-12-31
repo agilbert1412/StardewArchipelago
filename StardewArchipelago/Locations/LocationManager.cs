@@ -209,6 +209,11 @@ namespace StardewArchipelago.Locations
 
         private void ReplaceFishingRodsWithChecks()
         {
+            if (_archipelago.SlotData.ToolProgression == ToolProgression.Vanilla)
+            {
+                return;
+            }
+
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Event), nameof(Event.skipEvent)),
                 prefix: new HarmonyMethod(typeof(LocationsCodeInjection), nameof(LocationsCodeInjection.SkipEvent_BambooPole_Prefix))

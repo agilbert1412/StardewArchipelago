@@ -6,6 +6,7 @@ using Archipelago.MultiClient.Net.BounceFeatures.DeathLink;
 using Archipelago.MultiClient.Net.Enums;
 using Archipelago.MultiClient.Net.Helpers;
 using Archipelago.MultiClient.Net.Packets;
+using StardewArchipelago.GameModifications;
 using StardewModdingAPI;
 using StardewValley;
 
@@ -22,6 +23,7 @@ namespace StardewArchipelago.Archipelago
 
         public bool IsConnected { get; private set; }
         public SlotData SlotData { get; private set; }
+        public AdvancedOptionsManager OptionsManager { get; set; }
 
         public ArchipelagoClient(IMonitor console, Action itemReceivedFunction)
         {
@@ -73,6 +75,7 @@ namespace StardewArchipelago.Archipelago
             _session.Items.ItemReceived += OnItemReceived;
             _itemReceivedFunction();
             InitializeSlotData(loginSuccess.SlotData);
+            OptionsManager.InjectArchipelagoAdvancedOptions();
             if (SlotData.DeathLink)
             {
                 _deathLinkService.EnableDeathLink();

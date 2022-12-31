@@ -13,6 +13,8 @@ namespace StardewArchipelago.Archipelago
         private const string TOOL_PROGRESSION_KEY = "tool_progression";
         private const string EARLY_MINE_KEY = "the_mines_open";
         private const string DEATH_LINK_KEY = "death_link";
+        private const string GOAL_KEY = "goal";
+        private const string SEED_KEY = "seed";
 
         // public int ProgressionBalancing { get; private set; }
         // public int Accessibility { get; private set; }
@@ -23,6 +25,8 @@ namespace StardewArchipelago.Archipelago
         public ToolProgression ToolProgression { get; private set; }
         public bool EarlyMine { get; private set; }
         public bool DeathLink { get; private set; }
+        public Goal Goal { get; private set; }
+        public string Seed { get; private set; }
 
         public SlotData(Dictionary<string, object> slotDataFields)
         {
@@ -31,6 +35,8 @@ namespace StardewArchipelago.Archipelago
             ToolProgression = slotDataFields.ContainsKey(TOOL_PROGRESSION_KEY) ? (ToolProgression)(long)slotDataFields[TOOL_PROGRESSION_KEY] : ToolProgression.Progressive;
             EarlyMine = slotDataFields.ContainsKey(EARLY_MINE_KEY) && (bool)slotDataFields[EARLY_MINE_KEY];
             DeathLink = slotDataFields.ContainsKey(DEATH_LINK_KEY) && (bool)slotDataFields[DEATH_LINK_KEY];
+            Goal = slotDataFields.ContainsKey(GOAL_KEY) ? (Goal)(long)slotDataFields[GOAL_KEY] : Goal.CommunityCenter;
+            Seed = slotDataFields.ContainsKey(SEED_KEY) ? slotDataFields[SEED_KEY].ToString() : "";
         }
     }
 
@@ -45,5 +51,11 @@ namespace StardewArchipelago.Archipelago
         Vanilla = 0,
         Progressive = 1,
         World = 2,
+    }
+
+    public enum Goal
+    {
+        CommunityCenter = 0,
+        GrandpaEvaluation = 1
     }
 }

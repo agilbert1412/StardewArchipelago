@@ -71,7 +71,7 @@ namespace StardewArchipelago.Locations
                     AreaAPLocationName = "Complete Vault";
                     break;
                 case Area.Bulletin:
-                    AreaAPLocationName = "Complete Bulletin";
+                    AreaAPLocationName = "Complete Bulletin Board";
                     break;
             }
             _addCheckedLocation(AreaAPLocationName);
@@ -203,36 +203,17 @@ namespace StardewArchipelago.Locations
             {
                 return;
             }
-
-            var name = "";
-            switch (currentTrashCanLevel + 1)
-            {
-                case 1:
-                    name = Game1.content.LoadString("Strings\\StringsFromCSFiles:Tool.cs.14299",
-                        Game1.content.LoadString("Strings\\StringsFromCSFiles:TrashCan"));
-                    break;
-                case 2:
-                    name = Game1.content.LoadString("Strings\\StringsFromCSFiles:Tool.cs.14300",
-                        Game1.content.LoadString("Strings\\StringsFromCSFiles:TrashCan"));
-                    break;
-                case 3:
-                    name = Game1.content.LoadString("Strings\\StringsFromCSFiles:Tool.cs.14301",
-                        Game1.content.LoadString("Strings\\StringsFromCSFiles:TrashCan"));
-                    break;
-                case 4:
-                    name = Game1.content.LoadString("Strings\\StringsFromCSFiles:Tool.cs.14302",
-                        Game1.content.LoadString("Strings\\StringsFromCSFiles:TrashCan"));
-                    break;
-            }
-
-            Tool newTool = new GenericTool(name,
+            
+            var newUpgradeLevel = currentTrashCanLevel + 1;
+            Tool newTool = new GenericTool("Trash Can",
                 Game1.content.LoadString("Strings\\StringsFromCSFiles:TrashCan_Description",
-                    (((currentTrashCanLevel + 1) * 15).ToString() ?? "")), currentTrashCanLevel + 1,
+                    ((newUpgradeLevel * 15).ToString() ?? "")), newUpgradeLevel,
                 13 + currentTrashCanLevel, 13 + currentTrashCanLevel);
+            newTool.upgradeLevel.Value = newUpgradeLevel;
 
             blacksmithUpgradeStock.Add(newTool, new int[3]
             {
-                utilityPriceForToolMethod.Invoke<int>(newTool.UpgradeLevel),
+                utilityPriceForToolMethod.Invoke<int>(newTool.UpgradeLevel) / 2,
                 1,
                 indexOfExtraMaterialForToolMethod.Invoke<int>(newTool.UpgradeLevel),
             });
@@ -267,6 +248,8 @@ namespace StardewArchipelago.Locations
                         IncrementModDataValue(TRASHCAN_UPGRADE_LEVEL_KEY);
                         _addCheckedLocation($"{GetMetalNameForTier(modData[TRASHCAN_UPGRADE_LEVEL_KEY])} Trash Can Upgrade");
                         break;
+                    default:
+                        return true; // run original logic
                 }
 
                 Game1.playSound("parry");
@@ -673,7 +656,7 @@ namespace StardewArchipelago.Locations
 
         private static void OnCheckBambooPoleLocation()
         {
-            _addCheckedLocation("Purchase Bamboo Pole");
+            _addCheckedLocation("Bamboo Pole Cutscene");
         }
 
         private static void OnPurchaseTrainingRodLocation()

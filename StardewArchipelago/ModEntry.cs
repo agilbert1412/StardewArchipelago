@@ -30,6 +30,7 @@ namespace StardewArchipelago
         private SpecialItemManager _specialItemManager;
         private DeathManager _deathManager;
         private MultiSleep _multiSleep;
+        private AdvancedOptionsManager _advancedOptionManager;
 
         private Tester _tester;
 
@@ -57,6 +58,7 @@ namespace StardewArchipelago
             _multiSleep = new MultiSleep(Monitor, _helper, _harmony);
 
             _archipelago = new ArchipelagoClient(Monitor, OnItemReceived);
+            _advancedOptionManager = new AdvancedOptionsManager(Monitor, _helper, _harmony, _archipelago);
             _helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
             _helper.Events.GameLoop.SaveCreated += this.OnSaveCreated;
             _helper.Events.GameLoop.Saved += this.OnSaved;

@@ -11,7 +11,9 @@ namespace StardewArchipelago.Items
     public class ItemParser
     {
         private const string RESOURCE_PACK_PREFIX = "Resource Pack: ";
-        
+        private const string FRIENDSHIP_BONUS_PREFIX = "Friendship Bonus (";
+
+
         private StardewItemManager _itemManager;
         private UnlockManager _unlockManager;
         private SpecialItemManager _specialItemManager;
@@ -29,6 +31,17 @@ namespace StardewArchipelago.Items
             if (itemIsResourcePack)
             {
                 return GetResourcePack(stardewItemName, resourcePackAmount * numberNewReceived);
+            }
+
+            var itemIsFriendshipBonus = TryParseFriendshipBonus(itemName, out var numberOfPoints);
+            if (itemIsFriendshipBonus)
+            {
+                var farmer = Game1.player;
+                foreach (var npc in farmer.friendshipData.Keys)
+                {
+                    farmer.friendshipData[npc].Points += numberOfPoints;
+                }
+                return null;
             }
 
             if (_unlockManager.IsUnlock(itemName))
@@ -73,6 +86,26 @@ namespace StardewArchipelago.Items
             }
 
             stardewItemName = apItemWithoutPrefix.Substring(apItemWithoutPrefix.IndexOf(" ", StringComparison.Ordinal) + 1);
+            return true;
+        }
+
+        private bool TryParseFriendshipBonus(string apItemName, out int numberOfPoints)
+        {
+            numberOfPoints = 0;
+            if (!apItemName.StartsWith(FRIENDSHIP_BONUS_PREFIX))
+            {
+                return false;
+            }
+
+            var apItemWithoutPrefix = apItemName.Substring(FRIENDSHIP_BONUS_PREFIX.Length);
+            var parts = apItemWithoutPrefix.Split(" ");
+            if (!double.TryParse(parts[0], out var numberOfHearts))
+            {
+                return false;
+            }
+
+            numberOfPoints = (int)Math.Round(numberOfHearts * 250);
+
             return true;
         }
 
