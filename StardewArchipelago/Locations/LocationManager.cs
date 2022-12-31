@@ -71,8 +71,6 @@ namespace StardewArchipelago.Locations
             allCheckedLocations = allCheckedLocations.Distinct().Where(x => x > -1).ToList();
 
             _archipelago.ReportCollectedLocations(allCheckedLocations.ToArray());
-
-            CheckGoalCompletion();
         }
 
         private void TryToIdentifyUnknownLocationNames()
@@ -92,17 +90,6 @@ namespace StardewArchipelago.Locations
 
                 _checkedLocations[locationName] = locationId;
             }
-        }
-
-        private void CheckGoalCompletion()
-        {
-            var communityCenter = Game1.locations.OfType<CommunityCenter>().First();
-            if (!communityCenter.areAllAreasComplete())
-            {
-                return;
-            }
-
-            _archipelago.ReportGoalCompletion();
         }
 
         public void ReplaceAllLocationsRewardsWithChecks()
@@ -146,11 +133,10 @@ namespace StardewArchipelago.Locations
 
         private void ReplaceCommunityCenterAreasWithChecks()
         {
-            var communityCenter = Game1.locations.OfType<CommunityCenter>().First();
-            var areaCompleteRewardEventField = _modHelper.Reflection.GetField<NetEvent1Field<int, NetInt>>(communityCenter, "areaCompleteRewardEvent");
-
-            areaCompleteRewardEventField.GetValue().Clear();
-            areaCompleteRewardEventField.GetValue().onEvent += _locationsCodeInjection.DoAreaCompleteReward;
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(CommunityCenter), "doAreaCompleteReward"),
+                prefix: new HarmonyMethod(typeof(LocationsCodeInjection), nameof(LocationsCodeInjection.DoAreaCompleteReward_AreaLocations_Prefix))
+            );
         }
 
         private void ReplaceBackPackUpgradesWithChecks()

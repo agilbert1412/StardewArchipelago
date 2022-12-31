@@ -10,6 +10,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework;
 using Netcode;
+using StardewArchipelago.Goals;
 using StardewValley.Locations;
 using StardewValley.Tools;
 using xTile.Dimensions;
@@ -50,31 +51,43 @@ namespace StardewArchipelago.Locations
             _addCheckedLocation = addCheckedLocation;
         }
 
-        public void DoAreaCompleteReward(int whichArea)
+        public static bool DoAreaCompleteReward_AreaLocations_Prefix(CommunityCenter __instance, int whichArea)
         {
-            var AreaAPLocationName = "";
-            switch ((Area)whichArea)
+            try
             {
-                case Area.Pantry:
-                    AreaAPLocationName = "Complete Pantry";
-                    break;
-                case Area.CraftsRoom:
-                    AreaAPLocationName = "Complete Crafts Room";
-                    break;
-                case Area.FishTank:
-                    AreaAPLocationName = "Complete Fish Tank";
-                    break;
-                case Area.BoilerRoom:
-                    AreaAPLocationName = "Complete Boiler Room";
-                    break;
-                case Area.Vault:
-                    AreaAPLocationName = "Complete Vault";
-                    break;
-                case Area.Bulletin:
-                    AreaAPLocationName = "Complete Bulletin Board";
-                    break;
+                var AreaAPLocationName = "";
+                switch ((Area)whichArea)
+                {
+                    case Area.Pantry:
+                        AreaAPLocationName = "Complete Pantry";
+                        break;
+                    case Area.CraftsRoom:
+                        AreaAPLocationName = "Complete Crafts Room";
+                        break;
+                    case Area.FishTank:
+                        AreaAPLocationName = "Complete Fish Tank";
+                        break;
+                    case Area.BoilerRoom:
+                        AreaAPLocationName = "Complete Boiler Room";
+                        break;
+                    case Area.Vault:
+                        AreaAPLocationName = "Complete Vault";
+                        break;
+                    case Area.Bulletin:
+                        AreaAPLocationName = "Complete Bulletin Board";
+                        break;
+                }
+
+                _addCheckedLocation(AreaAPLocationName);
+                GoalCodeInjection.CheckCommunityCenterGoalCompletion();
+
+                return false; // don't run original logic
             }
-            _addCheckedLocation(AreaAPLocationName);
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(DoAreaCompleteReward_AreaLocations_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
         }
 
         public static void CheckForRewards_PostFix(JunimoNoteMenu __instance)

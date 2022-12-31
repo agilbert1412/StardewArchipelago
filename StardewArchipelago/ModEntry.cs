@@ -3,6 +3,7 @@ using System.Linq;
 using HarmonyLib;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.GameModifications;
+using StardewArchipelago.Goals;
 using StardewArchipelago.Items;
 using StardewArchipelago.Locations;
 using StardewArchipelago.Serialization;
@@ -24,6 +25,7 @@ namespace StardewArchipelago
         private ArchipelagoClient _archipelago;
         private ItemManager _itemManager;
         private LocationManager _locationsManager;
+        private GoalManager _goalManager;
         private StardewItemManager _stardewItemManager;
         private UnlockManager _unlockManager;
         private SpecialItemManager _specialItemManager;
@@ -115,6 +117,7 @@ namespace StardewArchipelago
             _bundleReader = new BundleReader();
             _itemManager = new ItemManager(_archipelago, _stardewItemManager, _unlockManager, _specialItemManager, _state.ItemsReceived);
             _locationsManager = new LocationManager(Monitor, _archipelago, _bundleReader, _helper, _harmony, _state.LocationsChecked);
+            _goalManager = new GoalManager(Monitor, _helper, _harmony, _archipelago);
             _jojaDisabler = new JojaDisabler(Monitor, _helper, _harmony);
 
             if (_state.APConnectionInfo != null && !_archipelago.IsConnected)
@@ -130,6 +133,7 @@ namespace StardewArchipelago
             }
             
             _locationsManager.ReplaceAllLocationsRewardsWithChecks();
+            _goalManager.InjectGoalMethods();
             _jojaDisabler.DisableJojaMembership();
             _multiSleep.InjectMultiSleepOption(_archipelago.SlotData);
             _deathManager = new DeathManager(Monitor, _helper, _archipelago, _harmony);
@@ -146,6 +150,7 @@ namespace StardewArchipelago
 
             _locationsManager.SendAllLocationChecks(true);
             _itemManager.ReceiveAllNewItems();
+            _goalManager.CheckGoalCompletion();
         }
 
         private void OnDayEnding(object sender, DayEndingEventArgs e)

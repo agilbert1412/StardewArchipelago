@@ -37,8 +37,8 @@ namespace StardewArchipelago.Archipelago
             StartingMoney = slotDataFields.ContainsKey(STARTING_MONEY_KEY) ? (int)(long)slotDataFields[STARTING_MONEY_KEY] : 500;
             BackpackProgression = slotDataFields.ContainsKey(BACKPACK_PROGRESSION_KEY) ? (BackpackProgression)(long)slotDataFields[BACKPACK_PROGRESSION_KEY] : BackpackProgression.Progressive;
             ToolProgression = slotDataFields.ContainsKey(TOOL_PROGRESSION_KEY) ? (ToolProgression)(long)slotDataFields[TOOL_PROGRESSION_KEY] : ToolProgression.Progressive;
-            EarlyMine = slotDataFields.ContainsKey(EARLY_MINE_KEY) && (bool)slotDataFields[EARLY_MINE_KEY];
-            DeathLink = slotDataFields.ContainsKey(DEATH_LINK_KEY) && (bool)slotDataFields[DEATH_LINK_KEY];
+            EarlyMine = slotDataFields.ContainsKey(EARLY_MINE_KEY) && slotDataFields[EARLY_MINE_KEY] != null && (bool)slotDataFields[EARLY_MINE_KEY];
+            DeathLink = slotDataFields.ContainsKey(DEATH_LINK_KEY) && slotDataFields[DEATH_LINK_KEY] != null && (bool)slotDataFields[DEATH_LINK_KEY];
             Goal = slotDataFields.ContainsKey(GOAL_KEY) ? (Goal)(long)slotDataFields[GOAL_KEY] : Goal.CommunityCenter;
             Seed = slotDataFields.ContainsKey(SEED_KEY) ? slotDataFields[SEED_KEY].ToString() : "";
             EnableMultiSleep = !slotDataFields.ContainsKey(MULTI_SLEEP_ENABLED_KEY) || (bool)slotDataFields[MULTI_SLEEP_ENABLED_KEY];
