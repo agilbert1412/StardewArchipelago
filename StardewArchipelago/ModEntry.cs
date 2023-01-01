@@ -71,10 +71,14 @@ namespace StardewArchipelago
             _helper.Events.GameLoop.DayEnding += this.OnDayEnding;
 
             _helper.ConsoleCommands.Add("connect", $"Connect to Archipelago. {CONNECT_SYNTAX}", this.OnConnectToArchipelago);
+
+#if DEBUG
+            _helper.ConsoleCommands.Add("disconnect", $"Disconnects from Archipelago. {CONNECT_SYNTAX}", this.OnDisconnectFromArchipelago);
             _helper.ConsoleCommands.Add("test_getallitems", "Tests if every AP item in the stardew_valley_item_table json file are supported by the mod", _tester.TestGetAllItems);
             _helper.ConsoleCommands.Add("test_getitem", "Get one specific item", _tester.TestGetSpecificItem);
             _helper.ConsoleCommands.Add("test_sendalllocations", "Tests if every AP item in the stardew_valley_location_table json file are supported by the mod", _tester.TestSendAllLocations);
             _helper.ConsoleCommands.Add("debugMethod", "Runs whatever is currently in the debug method", this.DebugMethod);
+#endif
         }
 
         private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
@@ -211,6 +215,12 @@ namespace StardewArchipelago
             }
 
             _state.APConnectionInfo = apConnection;
+        }
+
+        private void OnDisconnectFromArchipelago(string arg1, string[] arg2)
+        {
+            Game1.ExitToTitle();
+            _archipelago.Disconnect();
         }
 
         private void OnItemReceived()
