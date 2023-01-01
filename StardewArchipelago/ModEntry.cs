@@ -192,14 +192,14 @@ namespace StardewArchipelago
         {
             if (arg2.Length < 2)
             {
-                Monitor.Log($"You must provide an IP with a port, and a slot name, to connect to archipelago. {CONNECT_SYNTAX}");
+                Monitor.Log($"You must provide an IP with a port, and a slot name, to connect to archipelago. {CONNECT_SYNTAX}", LogLevel.Info);
                 return;
             }
 
             var ipAndPort = arg2[0].Split(":");
             if (ipAndPort.Length < 2)
             {
-                Monitor.Log($"You must provide an IP with a port, and a slot name, to connect to archipelago. {CONNECT_SYNTAX}");
+                Monitor.Log($"You must provide an IP with a port, and a slot name, to connect to archipelago. {CONNECT_SYNTAX}", LogLevel.Info);
                 return;
             }
 
