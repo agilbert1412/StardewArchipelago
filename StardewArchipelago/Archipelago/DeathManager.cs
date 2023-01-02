@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using HarmonyLib;
+using Microsoft.Xna.Framework;
 using Netcode;
 using StardewArchipelago.Locations;
 using StardewArchipelago.Stardew;
@@ -54,6 +55,11 @@ namespace StardewArchipelago.Archipelago
 
         public void HookIntoDeathlinkEvents()
         {
+            if (!_archipelago.SlotData.DeathLink)
+            {
+                return;
+            }
+
             HookIntoDeathEvent();
             HookIntoPassOutEvent();
         }
@@ -61,34 +67,47 @@ namespace StardewArchipelago.Archipelago
         private void HookIntoDeathEvent()
         {
             _harmony.Patch(
-                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.playSound)),
-                prefix: new HarmonyMethod(typeof(DeathManager), nameof(DeathManager.PlaySound_Death_Prefix))
+                original: AccessTools.Method(typeof(Farmer), nameof(Farmer.Update)),
+                prefix: new HarmonyMethod(typeof(DeathManager), nameof(DeathManager.Update_SendDeathLink_Prefix))
             );
         }
 
         private void HookIntoPassOutEvent()
         {
-            var farmer = Game1.player;
-            var passOutEventField = _modHelper.Reflection.GetField<NetEvent0>(farmer, "passOutEvent");
-            
-            passOutEventField.GetValue().onEvent += SendDeathLink;
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Farmer), "performPassOut"),
+                prefix: new HarmonyMethod(typeof(DeathManager), nameof(DeathManager.PerformPassOut_SendDeathLink_Prefix))
+            );
         }
 
-        public static bool PlaySound_Death_Prefix(GameLocation __instance, string audioName, NetAudio.SoundContext soundContext = NetAudio.SoundContext.Default)
+        public static bool Update_SendDeathLink_Prefix(Farmer __instance, GameTime time, GameLocation location)
         {
             try
             {
-                if (audioName != "death")
+                if (__instance.CanMove && __instance.health <= 0 && !Game1.killScreen && Game1.timeOfDay < 2600)
                 {
-                    return true; // run original logic
+                    SendDeathLink();
                 }
 
+                return true; // run original logic
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(Update_SendDeathLink_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
+        }
+
+        public static bool PerformPassOut_SendDeathLink_Prefix(Farmer __instance)
+        {
+            try
+            {
                 SendDeathLink();
                 return true; // run original logic
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(PlaySound_Death_Prefix)}:\n{ex}", LogLevel.Error);
+                _monitor.Log($"Failed in {nameof(PerformPassOut_SendDeathLink_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
             }
         }

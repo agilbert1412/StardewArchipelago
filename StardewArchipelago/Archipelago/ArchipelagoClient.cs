@@ -40,7 +40,7 @@ namespace StardewArchipelago.Archipelago
                 InitSession(archipelagoConnectionInfo);
                 var itemsHandling = ItemsHandlingFlags.IncludeOwnItems;
                 var minimumVersion = new Version(0, 3, 7);
-                var tags = archipelagoConnectionInfo.DeathLink ? new[] { "AP" } : new[] { "AP", "DeathLink" };
+                var tags = new[] { "AP", "DeathLink" };
                 result = _session.TryConnectAndLogin(GAME_NAME, archipelagoConnectionInfo.SlotName, itemsHandling, minimumVersion, tags, null, archipelagoConnectionInfo.Password);
             }
             catch (Exception e)
@@ -76,6 +76,7 @@ namespace StardewArchipelago.Archipelago
             _itemReceivedFunction();
             InitializeSlotData(loginSuccess.SlotData);
             OptionsManager.InjectArchipelagoAdvancedOptions();
+            _deathLinkService = _session.CreateDeathLinkService();
             if (SlotData.DeathLink)
             {
                 _deathLinkService.EnableDeathLink();
@@ -100,8 +101,6 @@ namespace StardewArchipelago.Archipelago
             _session.MessageLog.OnMessageReceived += OnMessageReceived;
             _session.Socket.ErrorReceived += SessionErrorReceived;
             _session.Socket.SocketClosed += SessionSocketClosed;
-
-            _deathLinkService = _session.CreateDeathLinkService();
         }
 
         private void OnMessageReceived(LogMessage message)

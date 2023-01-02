@@ -17,11 +17,8 @@ namespace StardewArchipelago.Archipelago
         private const string SEED_KEY = "seed";
         private const string MULTI_SLEEP_ENABLED_KEY = "multiple_day_sleep_enabled";
         private const string MULTI_SLEEP_COST_KEY = "multiple_day_sleep_cost";
+        private const string QUICK_START_KEY = "quick_start";
 
-        // public int ProgressionBalancing { get; private set; }
-        // public int Accessibility { get; private set; }
-        // public int ResourcePackMultiplier { get; private set; }
-        // public int ResourcePackUtility { get; private set; }
         public int StartingMoney { get; private set; }
         public BackpackProgression BackpackProgression { get; private set; }
         public ToolProgression ToolProgression { get; private set; }
@@ -31,6 +28,7 @@ namespace StardewArchipelago.Archipelago
         public string Seed { get; private set; }
         public bool EnableMultiSleep { get; private set; }
         public int MultiSleepCostPerDay { get; private set; }
+        public bool QuickStart { get; private set; }
 
         public SlotData(Dictionary<string, object> slotDataFields)
         {
@@ -41,8 +39,9 @@ namespace StardewArchipelago.Archipelago
             DeathLink = slotDataFields.ContainsKey(DEATH_LINK_KEY) && slotDataFields[DEATH_LINK_KEY] != null && (bool)slotDataFields[DEATH_LINK_KEY];
             Goal = slotDataFields.ContainsKey(GOAL_KEY) ? (Goal)(long)slotDataFields[GOAL_KEY] : Goal.CommunityCenter;
             Seed = slotDataFields.ContainsKey(SEED_KEY) ? slotDataFields[SEED_KEY].ToString() : "";
-            EnableMultiSleep = !slotDataFields.ContainsKey(MULTI_SLEEP_ENABLED_KEY) || (bool)slotDataFields[MULTI_SLEEP_ENABLED_KEY];
+            EnableMultiSleep = !slotDataFields.ContainsKey(MULTI_SLEEP_ENABLED_KEY) || slotDataFields[DEATH_LINK_KEY] == null || (bool)slotDataFields[MULTI_SLEEP_ENABLED_KEY];
             MultiSleepCostPerDay = slotDataFields.ContainsKey(MULTI_SLEEP_COST_KEY) ? (int)(long)slotDataFields[MULTI_SLEEP_COST_KEY] : 0;
+            QuickStart = true;// slotDataFields.ContainsKey(QUICK_START_KEY) && slotDataFields[QUICK_START_KEY] != null && (bool)slotDataFields[QUICK_START_KEY];
         }
     }
 

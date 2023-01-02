@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using HarmonyLib;
+using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.GameModifications;
 using StardewArchipelago.Goals;
@@ -12,6 +13,8 @@ using StardewArchipelago.Test;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
+using StardewValley.Locations;
+using StardewValley.Objects;
 
 namespace StardewArchipelago
 {
@@ -70,10 +73,10 @@ namespace StardewArchipelago
             _helper.Events.GameLoop.DayStarted += this.OnDayStarted;
             _helper.Events.GameLoop.DayEnding += this.OnDayEnding;
 
-            _helper.ConsoleCommands.Add("connect", $"Connect to Archipelago. {CONNECT_SYNTAX}", this.OnConnectToArchipelago);
+            _helper.ConsoleCommands.Add("connect", $"Connect to Archipelago. {CONNECT_SYNTAX}", this.OnCommandConnectToArchipelago);
 
 #if DEBUG
-            _helper.ConsoleCommands.Add("disconnect", $"Disconnects from Archipelago. {CONNECT_SYNTAX}", this.OnDisconnectFromArchipelago);
+            _helper.ConsoleCommands.Add("disconnect", $"Disconnects from Archipelago. {CONNECT_SYNTAX}", this.OnCommandDisconnectFromArchipelago);
             _helper.ConsoleCommands.Add("test_getallitems", "Tests if every AP item in the stardew_valley_item_table json file are supported by the mod", _tester.TestGetAllItems);
             _helper.ConsoleCommands.Add("test_getitem", "Get one specific item", _tester.TestGetSpecificItem);
             _helper.ConsoleCommands.Add("test_sendalllocations", "Tests if every AP item in the stardew_valley_location_table json file are supported by the mod", _tester.TestSendAllLocations);
@@ -99,7 +102,7 @@ namespace StardewArchipelago
                 return;
             }
 
-            Game1.player.Money = _archipelago.SlotData.StartingMoney;
+            GivePlayerStartingResources();
         }
 
         private void OnSaved(object sender, SavedEventArgs e)
@@ -145,6 +148,11 @@ namespace StardewArchipelago
 
         private void OnDayStarted(object sender, DayStartedEventArgs e)
         {
+            if (_archipelago == null || !_archipelago.IsConnected)
+            {
+                return;
+            }
+
             if (MultiSleep.DaysToSkip > 0)
             {
                 MultiSleep.DaysToSkip--;
@@ -188,7 +196,7 @@ namespace StardewArchipelago
             _archipelago.APUpdate(_state.APConnectionInfo);
         }
 
-        private void OnConnectToArchipelago(string arg1, string[] arg2)
+        private void OnCommandConnectToArchipelago(string arg1, string[] arg2)
         {
             if (arg2.Length < 2)
             {
@@ -217,10 +225,11 @@ namespace StardewArchipelago
             _state.APConnectionInfo = apConnection;
         }
 
-        private void OnDisconnectFromArchipelago(string arg1, string[] arg2)
+        private void OnCommandDisconnectFromArchipelago(string arg1, string[] arg2)
         {
             Game1.ExitToTitle();
             _archipelago.Disconnect();
+            _state.APConnectionInfo = null;
         }
 
         private void OnItemReceived()
@@ -237,6 +246,39 @@ namespace StardewArchipelago
         {
             var path = $"APData - {Game1.getFarm().Name} - {Game1.player.Name}.json";
             return path;
+        }
+
+        private void GivePlayerStartingResources()
+        {
+            Game1.player.Money = _archipelago.SlotData.StartingMoney;
+            GivePlayerQuickStart();
+        }
+
+        private void GivePlayerQuickStart()
+        {
+            if (!_archipelago.SlotData.QuickStart)
+            {
+                return;
+            }
+
+            var farmhouse = Game1.getLocationFromName("FarmHouse") as FarmHouse;
+            if (farmhouse == null)
+            {
+                return;
+            }
+
+            var iridiumSprinklers = new StardewValley.Object(621, 4);
+            var iridiumBand = new Ring(527);
+
+            farmhouse.objects.Add(new Vector2(3f, 8f), new Chest(0, new List<Item>()
+            {
+                iridiumSprinklers
+            }, new Vector2(3f, 8f), true));
+
+            farmhouse.objects.Add(new Vector2(4f, 7f), new Chest(0, new List<Item>()
+            {
+                iridiumBand
+            }, new Vector2(4f, 7f), true));
         }
     }
 }
