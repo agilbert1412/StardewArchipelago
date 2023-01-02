@@ -7,6 +7,7 @@ using Archipelago.MultiClient.Net.Enums;
 using Archipelago.MultiClient.Net.Helpers;
 using Archipelago.MultiClient.Net.Packets;
 using StardewArchipelago.GameModifications;
+using StardewArchipelago.Serialization;
 using StardewModdingAPI;
 using StardewValley;
 
@@ -24,12 +25,14 @@ namespace StardewArchipelago.Archipelago
         public bool IsConnected { get; private set; }
         public SlotData SlotData { get; private set; }
         public AdvancedOptionsManager OptionsManager { get; set; }
+        public Dictionary<string, ScoutedLocation> ScoutedLocations { get; set; }
 
         public ArchipelagoClient(IMonitor console, Action itemReceivedFunction)
         {
             _console = console;
             _itemReceivedFunction = itemReceivedFunction;
             IsConnected = false;
+            ScoutedLocations = new Dictionary<string, ScoutedLocation>();
         }
 
         public void Connect(ArchipelagoConnectionInfo archipelagoConnectionInfo)
@@ -110,55 +113,6 @@ namespace StardewArchipelago.Archipelago
             Game1.chatBox?.addInfoMessage(fullMessage);
         }
 
-        private void SessionErrorReceived(Exception e, string message)
-        {
-            _console.Log(message, LogLevel.Error);
-            Disconnect();
-        }
-
-        private void SessionSocketClosed(string reason)
-        {
-            _console.Log($"Connection to Archipelago lost: {reason}", LogLevel.Error);
-            Disconnect();
-        }
-
-        public void Disconnect()
-        {
-            if (!IsConnected)
-            {
-                return;
-            }
-
-            _session.Socket.DisconnectAsync();
-            _session = null;
-            IsConnected = false;
-        }
-
-
-        private int _lastTime;
-        private float _disconnectTimeout = 5.0f;
-        public void APUpdate(ArchipelagoConnectionInfo connectionInfo)
-        {
-            if (!IsConnected && connectionInfo != null)
-            {
-                var now = DateTime.Now.Second;
-                var dT = now - _lastTime;
-                _lastTime = now;
-                _disconnectTimeout -= dT;
-                if (!(_disconnectTimeout <= 0.0f)) return;
-
-                Connect(connectionInfo);
-                _disconnectTimeout = 5.0f;
-                return;
-            }
-
-            /*Utils.PrintMessages();
-            if (ServerData.Index >= Session.Items.AllItemsReceived.Count) return;
-            var currentItemId = Session.Items.AllItemsReceived[Convert.ToInt32(ServerData.Index)].Item;
-            ++ServerData.Index;
-            ItemManager.Unlock(currentItemId);*/
-        }
-
         private void OnItemReceived(ReceivedItemsHelper receivedItemsHelper)
         {
             if (!IsConnected)
@@ -226,25 +180,100 @@ namespace StardewArchipelago.Archipelago
             Game1.chatBox?.addInfoMessage(deathLinkMessage);
         }
 
-        /*private string ScoutLocation(long locationId)
+        public ScoutedLocation ScoutSingleLocation(string locationName)
         {
-            var a = _session.Locations.ScoutLocationsAsync(true, locationId);
-        }*/
-
-        /*private void PrintMessages()
-        {
-            dequeueTimeout -= 1; // this function gets called once every second
-            if (!(dequeueTimeout <= 0)) return;
-            var toProcess = new List<ChatMessage>();
-            while (toProcess.Count < DequeueCount && ChatMessages.Count > 0)
+            if (ScoutedLocations.ContainsKey(locationName))
             {
-                toProcess.Add(ChatMessages[0]);
-                ChatMessages.RemoveAt(0);
+                return ScoutedLocations[locationName];
             }
 
-            foreach (var message in toProcess)
-                Game1.chatBox.addMessage(message.Message, message.Color);
-            dequeueTimeout = 3;
-        }*/
+            try
+            {
+                var locationId = GetLocationId(locationName);
+                if (locationId == -1)
+                {
+                    _console.Log($"Could not find the id for location \"{locationName}\".");
+                    return null;
+                }
+
+                var locationInfo = ScoutLocation(locationId);
+                if (locationInfo.Locations.Length < 1)
+                {
+                    _console.Log($"Could not scout location \"{locationName}\".");
+                    return null;
+                }
+
+                var firstLocationInfo = locationInfo.Locations[0];
+                var itemName = GetItemName(firstLocationInfo.Item);
+                var playerSlotName = _session.Players.GetPlayerName(firstLocationInfo.Player);
+
+                var scoutedLocation = new ScoutedLocation(locationName, itemName, playerSlotName, locationId,
+                    firstLocationInfo.Item, firstLocationInfo.Player);
+
+                ScoutedLocations.Add(locationName, scoutedLocation);
+                return scoutedLocation;
+            }
+            catch (Exception e)
+            {
+                _console.Log($"Could not scout location \"{locationName}\". Message: {e.Message}");
+                return null;
+            }
+        }
+
+        private LocationInfoPacket ScoutLocation(long locationId)
+        {
+            var scoutTask = _session.Locations.ScoutLocationsAsync(true, locationId);
+            scoutTask.Wait();
+            return scoutTask.Result;
+        }
+
+        private void SessionErrorReceived(Exception e, string message)
+        {
+            _console.Log(message, LogLevel.Error);
+            Disconnect();
+        }
+
+        private void SessionSocketClosed(string reason)
+        {
+            _console.Log($"Connection to Archipelago lost: {reason}", LogLevel.Error);
+            Disconnect();
+        }
+
+        public void Disconnect()
+        {
+            if (!IsConnected)
+            {
+                return;
+            }
+
+            _session.Socket.DisconnectAsync();
+            _session = null;
+            IsConnected = false;
+        }
+
+
+        private int _lastTime;
+        private float _disconnectTimeout = 5.0f;
+        public void APUpdate(ArchipelagoConnectionInfo connectionInfo)
+        {
+            if (!IsConnected && connectionInfo != null)
+            {
+                var now = DateTime.Now.Second;
+                var dT = now - _lastTime;
+                _lastTime = now;
+                _disconnectTimeout -= dT;
+                if (!(_disconnectTimeout <= 0.0f)) return;
+
+                Connect(connectionInfo);
+                _disconnectTimeout = 5.0f;
+                return;
+            }
+
+            /*Utils.PrintMessages();
+            if (ServerData.Index >= Session.Items.AllItemsReceived.Count) return;
+            var currentItemId = Session.Items.AllItemsReceived[Convert.ToInt32(ServerData.Index)].Item;
+            ++ServerData.Index;
+            ItemManager.Unlock(currentItemId);*/
+        }
     }
 }

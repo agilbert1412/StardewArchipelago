@@ -36,6 +36,10 @@ namespace StardewArchipelago.Locations
         private const string PURCHASED_FIBERGLASS_ROD_KEY = "Purchased_FiberglassRod_Key";
         private const string PURCHASED_IRIDIUM_ROD_KEY = "Purchased_IridiumRod_Key";
 
+        private const string PURCHASE_TRAINING_ROD_AP_LOCATION_NAME = "Purchase Training Rod";
+        private const string PURCHASE_FIBERGLASS_ROD_AP_LOCATION_NAME = "Purchase Fiberglass Rod";
+        private const string PURCHASE_IRIDIUM_ROD_AP_LOCATION_NAME = "Purchase Iridium Rod";
+
         private static IMonitor _monitor;
         private static IModHelper _modHelper;
         private static ArchipelagoClient _archipelago;
@@ -622,20 +626,30 @@ namespace StardewArchipelago.Locations
         private static void AddFishingToolsAPLocations(Dictionary<ISalable, int[]> fishShopStock)
         {
             var modData = Game1.getFarm().modData;
+            var toolSpriteSheet = Game1.toolSpriteSheet;
             if (modData[PURCHASED_TRAINING_ROD_KEY] == "0")
             {
                 var trainingRod = new FishingRod(1);
-                fishShopStock.Add(new PurchaseableArchipelagoLocation("Archipelago Check: Training Rod", Game1.toolSpriteSheet, trainingRod.IndexOfMenuItemView, OnPurchaseTrainingRodLocation), new[] { 25, 1 });
+                var indexOfMenuItemView = trainingRod.IndexOfMenuItemView;
+                var trainingRodAPlocation = new PurchaseableArchipelagoLocation("Training Rod", PURCHASE_TRAINING_ROD_AP_LOCATION_NAME,
+                    toolSpriteSheet, indexOfMenuItemView, OnPurchaseTrainingRodLocation, _archipelago);
+                fishShopStock.Add(trainingRodAPlocation, new[] { 25, 1 });
             }
             if (Game1.player.fishingLevel.Value >= 2 && modData[PURCHASED_FIBERGLASS_ROD_KEY] == "0")
             {
                 var fiberglassRod = new FishingRod(2);
-                fishShopStock.Add(new PurchaseableArchipelagoLocation("Archipelago Check: Fiberglass Rod", Game1.toolSpriteSheet, fiberglassRod.IndexOfMenuItemView, OnPurchaseFiberglassRodLocation), new[] { 1800, 1 });
+                var indexOfMenuItemView = fiberglassRod.IndexOfMenuItemView;
+                var fiberglassRodAPlocation = new PurchaseableArchipelagoLocation("Fiberglass Rod", PURCHASE_FIBERGLASS_ROD_AP_LOCATION_NAME,
+                    toolSpriteSheet, indexOfMenuItemView, OnPurchaseFiberglassRodLocation, _archipelago);
+                fishShopStock.Add(fiberglassRodAPlocation, new[] { 1800, 1 });
             }
             if (Game1.player.fishingLevel.Value >= 6 && modData[PURCHASED_IRIDIUM_ROD_KEY] == "0")
             {
                 var iridiumRod = new FishingRod(3);
-                fishShopStock.Add(new PurchaseableArchipelagoLocation("Archipelago Check: Iridium Rod", Game1.toolSpriteSheet, iridiumRod.IndexOfMenuItemView, OnPurchaseIridiumRodLocation), new[] { 7500, 1 });
+                var indexOfMenuItemView = iridiumRod.IndexOfMenuItemView;
+                var iridiumRodAPLocation = new PurchaseableArchipelagoLocation("Iridium Rod", PURCHASE_IRIDIUM_ROD_AP_LOCATION_NAME,
+                    toolSpriteSheet, indexOfMenuItemView, OnPurchaseIridiumRodLocation, _archipelago);
+                fishShopStock.Add(iridiumRodAPLocation, new[] { 7500, 1 });
             }
         }
 
@@ -644,22 +658,26 @@ namespace StardewArchipelago.Locations
             var modData = Game1.getFarm().modData;
             if (modData[RECEIVED_TRAINING_ROD_KEY] == "1")
             {
-                fishShopStock.Add(new FishingRod(1), new[] { 25, int.MaxValue });
+                var trainingRod = new FishingRod(1);
+                fishShopStock.Add(trainingRod, new[] { 25, int.MaxValue });
             }
 
             if (modData[RECEIVED_BAMBOO_POLE_KEY] == "1")
             {
-                fishShopStock.Add(new FishingRod(0), new[] { 500, int.MaxValue });
+                var bambooPole = new FishingRod(0);
+                fishShopStock.Add(bambooPole, new[] { 500, int.MaxValue });
             }
 
             if (modData[RECEIVED_FIBERGLASS_ROD_KEY] == "1")
             {
-                fishShopStock.Add(new FishingRod(2), new[] { 1800, int.MaxValue });
+                var fiberglassRod = new FishingRod(2);
+                fishShopStock.Add(fiberglassRod, new[] { 1800, int.MaxValue });
             }
 
             if (modData[RECEIVED_IRIDIUM_ROD_KEY] == "1")
             {
-                fishShopStock.Add(new FishingRod(3), new[] { 7500, int.MaxValue });
+                var iridiumRod = new FishingRod(3);
+                fishShopStock.Add(iridiumRod, new[] { 7500, int.MaxValue });
             }
 
             if (Game1.MasterPlayer.mailReceived.Contains("ccFishTank"))
@@ -703,19 +721,19 @@ namespace StardewArchipelago.Locations
 
         private static void OnPurchaseTrainingRodLocation()
         {
-            _addCheckedLocation("Purchase Training Rod");
+            _addCheckedLocation(PURCHASE_TRAINING_ROD_AP_LOCATION_NAME);
             SetToOneModDataValue(PURCHASED_TRAINING_ROD_KEY);
         }
 
         private static void OnPurchaseFiberglassRodLocation()
         {
-            _addCheckedLocation("Purchase Fiberglass Rod");
+            _addCheckedLocation(PURCHASE_FIBERGLASS_ROD_AP_LOCATION_NAME);
             SetToOneModDataValue(PURCHASED_FIBERGLASS_ROD_KEY);
         }
 
         private static void OnPurchaseIridiumRodLocation()
         {
-            _addCheckedLocation("Purchase Iridium Rod");
+            _addCheckedLocation(PURCHASE_IRIDIUM_ROD_AP_LOCATION_NAME);
             SetToOneModDataValue(PURCHASED_IRIDIUM_ROD_KEY);
         }
 

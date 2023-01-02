@@ -5,22 +5,28 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using StardewArchipelago.Archipelago;
 using StardewValley;
 
 namespace StardewArchipelago.Locations
 {
     internal class PurchaseableArchipelagoLocation : Item
     {
+        private const string ARCHIPELAGO_PREFIX = "Archipelago: ";
+
         private string _locationDisplayName;
+        private string _apLocationName;
         private string _description;
         private Texture2D _spriteSheet;
         private int _indexOfMenuItemView;
         private Action _purchaseCallBack;
 
-        public PurchaseableArchipelagoLocation(string locationDisplayName, Texture2D spriteSheet, int indexOfMenuItemView, Action purchaseCallBack)
+        public PurchaseableArchipelagoLocation(string locationDisplayName, string apLocationName, Texture2D spriteSheet, int indexOfMenuItemView, Action purchaseCallBack, ArchipelagoClient archipelago)
         {
-            _locationDisplayName = locationDisplayName;
-            _description = "";
+            _locationDisplayName = $"{ARCHIPELAGO_PREFIX}{locationDisplayName}";
+            _apLocationName = apLocationName;
+            var scoutedLocation = archipelago.ScoutSingleLocation(_apLocationName);
+            _description = scoutedLocation == null ? ScoutedLocation.GenericItemName() : scoutedLocation.ToString();
             _spriteSheet = spriteSheet;
             _indexOfMenuItemView = indexOfMenuItemView;
             _purchaseCallBack = purchaseCallBack;

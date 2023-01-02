@@ -93,6 +93,7 @@ namespace StardewArchipelago
         {
             _state.ItemsReceived = new Dictionary<long, int>();
             _state.LocationsChecked = new List<string>();
+            _state.LocationsScouted = new Dictionary<string, ScoutedLocation>();
             _helper.Data.WriteJsonFile(GetApDataJsonPath(), _state);
 
             if (!_archipelago.IsConnected)
@@ -109,6 +110,7 @@ namespace StardewArchipelago
         {
             _state.ItemsReceived = _itemManager.GetAllItemsAlreadyProcessed();
             _state.LocationsChecked = _locationsManager.GetAllLocationsAlreadyChecked();
+            _state.LocationsScouted = _archipelago.ScoutedLocations;
             _helper.Data.WriteJsonFile(GetApDataJsonPath(), _state);
         }
 
@@ -118,6 +120,7 @@ namespace StardewArchipelago
             if (state != null)
             {
                 _state = state;
+                _archipelago.ScoutedLocations = _state.LocationsScouted;
             }
 
             _stardewItemManager = new StardewItemManager();
