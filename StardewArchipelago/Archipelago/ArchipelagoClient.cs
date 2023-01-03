@@ -180,7 +180,7 @@ namespace StardewArchipelago.Archipelago
             Game1.chatBox?.addInfoMessage(deathLinkMessage);
         }
 
-        public ScoutedLocation ScoutSingleLocation(string locationName)
+        public ScoutedLocation ScoutSingleLocation(string locationName, bool createAsHint = false)
         {
             if (ScoutedLocations.ContainsKey(locationName))
             {
@@ -196,7 +196,7 @@ namespace StardewArchipelago.Archipelago
                     return null;
                 }
 
-                var locationInfo = ScoutLocation(locationId);
+                var locationInfo = ScoutLocation(locationId, createAsHint);
                 if (locationInfo.Locations.Length < 1)
                 {
                     _console.Log($"Could not scout location \"{locationName}\".");
@@ -220,9 +220,9 @@ namespace StardewArchipelago.Archipelago
             }
         }
 
-        private LocationInfoPacket ScoutLocation(long locationId)
+        private LocationInfoPacket ScoutLocation(long locationId, bool createAsHint)
         {
-            var scoutTask = _session.Locations.ScoutLocationsAsync(true, locationId);
+            var scoutTask = _session.Locations.ScoutLocationsAsync(createAsHint, locationId);
             scoutTask.Wait();
             return scoutTask.Result;
         }
