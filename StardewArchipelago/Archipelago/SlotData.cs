@@ -41,7 +41,7 @@ namespace StardewArchipelago.Archipelago
             Seed = slotDataFields.ContainsKey(SEED_KEY) ? slotDataFields[SEED_KEY].ToString() : "";
             EnableMultiSleep = !slotDataFields.ContainsKey(MULTI_SLEEP_ENABLED_KEY) || slotDataFields[DEATH_LINK_KEY] == null || (bool)slotDataFields[MULTI_SLEEP_ENABLED_KEY];
             MultiSleepCostPerDay = slotDataFields.ContainsKey(MULTI_SLEEP_COST_KEY) ? (int)(long)slotDataFields[MULTI_SLEEP_COST_KEY] : 0;
-            QuickStart = true;// slotDataFields.ContainsKey(QUICK_START_KEY) && slotDataFields[QUICK_START_KEY] != null && (bool)slotDataFields[QUICK_START_KEY];
+            QuickStart = slotDataFields.ContainsKey(QUICK_START_KEY) && slotDataFields[QUICK_START_KEY] != null && (bool)slotDataFields[QUICK_START_KEY];
         }
     }
 
