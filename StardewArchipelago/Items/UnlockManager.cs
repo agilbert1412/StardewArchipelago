@@ -115,7 +115,7 @@ namespace StardewArchipelago.Items
 
             if (previousMaxItems < Game1.player.MaxItems)
             {
-                while (Game1.player.Items.Count <= Game1.player.MaxItems)
+                while (Game1.player.Items.Count < Game1.player.MaxItems)
                 {
                     Game1.player.Items.Add(null);
                 }

@@ -102,8 +102,6 @@ namespace StardewArchipelago
                 Game1.ExitToTitle();
                 return;
             }
-
-            GivePlayerStartingResources();
         }
 
         private void OnSaved(object sender, SavedEventArgs e)
@@ -147,6 +145,17 @@ namespace StardewArchipelago
             _jojaDisabler.DisableJojaMembership();
             _multiSleep.InjectMultiSleepOption(_archipelago.SlotData);
             _deathManager = new DeathManager(Monitor, _helper, _archipelago, _harmony);
+
+            // Fix Beta1 Bug
+            while (Game1.player.Items.Count > Game1.player.MaxItems)
+            {
+                Game1.player.Items.RemoveAt(Game1.player.Items.Count - 1);
+            }
+
+            if (Game1.Date.TotalDays == 0)
+            {
+                GivePlayerStartingResources();
+            }
         }
 
         private void OnDayStarted(object sender, DayStartedEventArgs e)
@@ -264,8 +273,7 @@ namespace StardewArchipelago
                 return;
             }
 
-            var farmhouse = Game1.getLocationFromName("FarmHouse") as FarmHouse;
-            if (farmhouse == null)
+            if (Game1.getLocationFromName("FarmHouse") is not FarmHouse farmhouse)
             {
                 return;
             }
@@ -273,15 +281,22 @@ namespace StardewArchipelago
             var iridiumSprinklers = new StardewValley.Object(621, 4);
             var iridiumBand = new Ring(527);
 
-            farmhouse.objects.Add(new Vector2(3f, 8f), new Chest(0, new List<Item>()
-            {
-                iridiumSprinklers
-            }, new Vector2(3f, 8f), true));
+            CreateGiftBoxItemInEmptySpot(farmhouse, iridiumSprinklers, new Vector2(0, 1));
+            CreateGiftBoxItemInEmptySpot(farmhouse, iridiumBand, new Vector2(1, 0));
+        }
 
-            farmhouse.objects.Add(new Vector2(4f, 7f), new Chest(0, new List<Item>()
+        private static void CreateGiftBoxItemInEmptySpot(FarmHouse farmhouse, Item itemToGift, Vector2 step)
+        {
+            var emptySpot = new Vector2(4f, 7f);
+            while (farmhouse.objects.ContainsKey(emptySpot))
             {
-                iridiumBand
-            }, new Vector2(4f, 7f), true));
+                emptySpot = new Vector2(emptySpot.X + step.X, emptySpot.Y + step.Y);
+            }
+
+            farmhouse.objects.Add(emptySpot, new Chest(0, new List<Item>()
+            {
+                itemToGift
+            }, emptySpot, true));
         }
     }
 }
