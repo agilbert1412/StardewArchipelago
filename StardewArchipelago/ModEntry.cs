@@ -114,6 +114,8 @@ namespace StardewArchipelago
 
         private void OnSaveLoaded(object sender, SaveLoadedEventArgs e)
         {
+            TruncateGameUniqueIDAndSeed();
+
             var state = _helper.Data.ReadJsonFile<ArchipelagoStateDto>(GetApDataJsonPath());
             if (state != null)
             {
@@ -156,6 +158,17 @@ namespace StardewArchipelago
             {
                 GivePlayerStartingResources();
             }
+        }
+
+        private static void TruncateGameUniqueIDAndSeed()
+        {
+            var idAsString = Game1.uniqueIDForThisGame.ToString();
+            if (idAsString.Length <= 9)
+            {
+                return;
+            }
+            Game1.uniqueIDForThisGame = (ulong)int.Parse(idAsString.Substring(0, 9));
+            Game1.startingGameSeed = Game1.uniqueIDForThisGame;
         }
 
         private void OnDayStarted(object sender, DayStartedEventArgs e)

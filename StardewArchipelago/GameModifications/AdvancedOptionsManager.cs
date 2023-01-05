@@ -93,17 +93,9 @@ namespace StardewArchipelago.GameModifications
         private static void ForceGameSeedToArchipelagoProvidedSeed()
         {
             var trimmedSeed = _archipelago.SlotData.Seed.Trim();
-
-            Game1.startingGameSeed = new ulong?();
-            ulong result = 0;
-            for (; trimmedSeed.Length > 0; trimmedSeed = trimmedSeed.Substring(0, trimmedSeed.Length - 1))
-            {
-                if (ulong.TryParse(trimmedSeed, out result))
-                {
-                    Game1.startingGameSeed = result;
-                    break;
-                }
-            }
+            
+            int result = int.Parse(trimmedSeed.Substring(0, 9));
+            Game1.startingGameSeed = (ulong)result;
         }
     }
 }
