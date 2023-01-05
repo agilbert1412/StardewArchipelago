@@ -174,6 +174,7 @@ namespace StardewArchipelago
 
             _locationsManager.SendAllLocationChecks(true);
             _itemManager.ReceiveAllNewItems();
+            _itemManager.RegisterAllUnlocks();
             _goalManager.CheckGoalCompletion();
         }
 

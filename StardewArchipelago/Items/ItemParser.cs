@@ -69,6 +69,18 @@ namespace StardewArchipelago.Items
             throw new ArgumentException($"Could not process item {itemName}");
         }
 
+        public void ProcessUnlockWithoutGivingNewItems(string itemName, int numberReceived)
+        {
+            if (!_unlockManager.IsUnlock(itemName))
+            {
+                return;
+            }
+
+            _unlockManager.ShouldGiveItemsWithUnlocks = false;
+            _unlockManager.PerformUnlock(itemName, numberReceived);
+            _unlockManager.ShouldGiveItemsWithUnlocks = true;
+        }
+
         private bool TryParseResourcePack(string apItemName, out string stardewItemName, out int amount)
         {
             stardewItemName = "";

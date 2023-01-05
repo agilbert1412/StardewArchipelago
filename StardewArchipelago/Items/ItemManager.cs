@@ -21,6 +21,16 @@ namespace StardewArchipelago.Items
             _itemsAlreadyProcessed = itemsAlreadyProcessed.ToDictionary(x => x.Key, x => x.Value);
         }
 
+        public void RegisterAllUnlocks()
+        {
+            var allReceivedItems = _archipelago.GetAllReceivedItems();
+            foreach (var (itemId, numberReceived) in allReceivedItems)
+            {
+                var itemName = _archipelago.GetItemName(itemId);
+                _itemParser.ProcessUnlockWithoutGivingNewItems(itemName, numberReceived);
+            }
+        }
+
         public void ReceiveAllNewItems()
         {
             var allReceivedItems = _archipelago.GetAllReceivedItems();

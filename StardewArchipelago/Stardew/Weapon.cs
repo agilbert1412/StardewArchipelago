@@ -43,6 +43,11 @@ namespace StardewArchipelago.Stardew
 
         public override Item PrepareForGivingToFarmer(int amount = 1)
         {
+            if (Type == 4)
+            {
+                return new Slingshot(Id);
+            }
+
             return new MeleeWeapon(Id);
         }
 

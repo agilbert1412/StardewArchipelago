@@ -27,10 +27,7 @@ namespace StardewArchipelago.Locations
         private const string TRASHCAN_UPGRADE_LEVEL_KEY = "TrashCan_Upgrade_Level_Key";
         private const string GOT_GOLDEN_SCYTHE_KEY = "Got_GoldenScythe_Key";
 
-        public const string RECEIVED_TRAINING_ROD_KEY = "Got_TrainingRod_Key";
-        public const string RECEIVED_BAMBOO_POLE_KEY = "Got_BambooPole_Key";
-        public const string RECEIVED_FIBERGLASS_ROD_KEY = "Got_FiberglassRod_Key";
-        public const string RECEIVED_IRIDIUM_ROD_KEY = "Got_IridiumRod_Key";
+        public const string RECEIVED_FISHING_ROD_LEVEL_KEY = "FishingRod_Received_Level_Key";
 
         private const string PURCHASED_TRAINING_ROD_KEY = "Purchased_TrainingRod_Key";
         private const string PURCHASED_FIBERGLASS_ROD_KEY = "Purchased_FiberglassRod_Key";
@@ -656,25 +653,26 @@ namespace StardewArchipelago.Locations
         private static void AddFishingTools(Dictionary<ISalable, int[]> fishShopStock)
         {
             var modData = Game1.getFarm().modData;
-            if (modData[RECEIVED_TRAINING_ROD_KEY] == "1")
+            var receivedFishingRodLevel = int.Parse(modData[RECEIVED_FISHING_ROD_LEVEL_KEY]);
+            if (receivedFishingRodLevel >= 1)
             {
                 var trainingRod = new FishingRod(1);
                 fishShopStock.Add(trainingRod, new[] { 25, int.MaxValue });
             }
 
-            if (modData[RECEIVED_BAMBOO_POLE_KEY] == "1")
+            if (receivedFishingRodLevel >= 2)
             {
                 var bambooPole = new FishingRod(0);
                 fishShopStock.Add(bambooPole, new[] { 500, int.MaxValue });
             }
 
-            if (modData[RECEIVED_FIBERGLASS_ROD_KEY] == "1")
+            if (receivedFishingRodLevel >= 3)
             {
                 var fiberglassRod = new FishingRod(2);
                 fishShopStock.Add(fiberglassRod, new[] { 1800, int.MaxValue });
             }
 
-            if (modData[RECEIVED_IRIDIUM_ROD_KEY] == "1")
+            if (receivedFishingRodLevel >= 4)
             {
                 var iridiumRod = new FishingRod(3);
                 fishShopStock.Add(iridiumRod, new[] { 7500, int.MaxValue });
@@ -746,12 +744,9 @@ namespace StardewArchipelago.Locations
             InitializeModDataValue(TRASHCAN_UPGRADE_LEVEL_KEY, "0");
         }
 
-        private static void InitializeFishingRodsModDataValues()
+        public static void InitializeFishingRodsModDataValues()
         {
-            InitializeModDataValue(RECEIVED_TRAINING_ROD_KEY, "0");
-            InitializeModDataValue(RECEIVED_BAMBOO_POLE_KEY, "0");
-            InitializeModDataValue(RECEIVED_FIBERGLASS_ROD_KEY, "0");
-            InitializeModDataValue(RECEIVED_IRIDIUM_ROD_KEY, "0");
+            InitializeModDataValue(RECEIVED_FISHING_ROD_LEVEL_KEY, "0");
 
             InitializeModDataValue(PURCHASED_TRAINING_ROD_KEY, "0");
             InitializeModDataValue(PURCHASED_FIBERGLASS_ROD_KEY, "0");
@@ -769,14 +764,19 @@ namespace StardewArchipelago.Locations
 
         public static void SetToOneModDataValue(string key)
         {
-            var modData = Game1.getFarm().modData;
-            modData[key] = "1";
+            SetModDataValue(key, "1");
         }
 
         private static void IncrementModDataValue(string key, int increment = 1)
         {
             var modData = Game1.getFarm().modData;
             modData[key] = (int.Parse(modData[key]) + increment).ToString();
+        }
+
+        public static void SetModDataValue(string key, string value)
+        {
+            var modData = Game1.getFarm().modData;
+            modData[key] = value;
         }
 
         private const int TROUT_SOUP_ID = 219;

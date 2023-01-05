@@ -16,10 +16,12 @@ namespace StardewArchipelago.Items
     public class UnlockManager
     {
         private Dictionary<string, Action<int>> _unlockables;
+        public bool ShouldGiveItemsWithUnlocks { get; set; }
 
         public UnlockManager()
         {
             _unlockables = new Dictionary<string, Action<int>>();
+            ShouldGiveItemsWithUnlocks = true;
             RegisterCommunityCenterRepairs();
             RegisterPlayerImprovement();
             RegisterProgressiveTools();
@@ -102,25 +104,27 @@ namespace StardewArchipelago.Items
             var backpack2Name = Game1.content.LoadString("Strings\\StringsFromCSFiles:GameLocation.cs.8709");
             switch (level)
             {
-                case 0:
+                case <= 0:
                     Game1.player.MaxItems = 12;
                     break;
                 case 1:
                     Game1.player.MaxItems = 24;
                     break;
-                case 2:
+                case >= 2:
                     Game1.player.MaxItems = 36;
                     break;
             }
 
-            if (previousMaxItems < Game1.player.MaxItems)
+            if (previousMaxItems >= Game1.player.MaxItems)
             {
-                while (Game1.player.Items.Count < Game1.player.MaxItems)
-                {
-                    Game1.player.Items.Add(null);
-                }
-                Game1.player.holdUpItemThenMessage(new SpecialItem(99, level == 1 ? backpack1Name : backpack2Name));
+                return;
             }
+
+            while (Game1.player.Items.Count < Game1.player.MaxItems)
+            {
+                Game1.player.Items.Add(null);
+            }
+            Game1.player.holdUpItemThenMessage(new SpecialItem(99, level == 1 ? backpack1Name : backpack2Name));
         }
 
         private void ReceiveProgressiveAxe(int numberReceived)
@@ -151,17 +155,18 @@ namespace StardewArchipelago.Items
         private void ReceiveProgressiveFishingRod(int numberReceived)
         {
             var modData = Game1.getFarm().modData;
-            var whichWasReceived = numberReceived switch
+            LocationsCodeInjection.InitializeFishingRodsModDataValues();
+            LocationsCodeInjection.SetModDataValue(LocationsCodeInjection.RECEIVED_FISHING_ROD_LEVEL_KEY, numberReceived.ToString());
+
+            if (!ShouldGiveItemsWithUnlocks || numberReceived < 1)
             {
-                1 => LocationsCodeInjection.RECEIVED_BAMBOO_POLE_KEY,
-                2 => LocationsCodeInjection.RECEIVED_TRAINING_ROD_KEY,
-                3 => LocationsCodeInjection.RECEIVED_FIBERGLASS_ROD_KEY,
-                4 => LocationsCodeInjection.RECEIVED_IRIDIUM_ROD_KEY,
-                _ => ""
-            };
-            LocationsCodeInjection.SetToOneModDataValue(whichWasReceived);
-            var upgradeLevel = numberReceived - 1;
-            ReceiveProgressiveTool(numberReceived, () => new FishingRod(upgradeLevel));
+                return;
+            }
+
+            var itemToAdd = new FishingRod(numberReceived - 1);
+
+            Game1.player.holdUpItemThenMessage(itemToAdd);
+            Game1.player.addItemByMenuIfNecessary(itemToAdd);
         }
 
         private void ReceiveProgressiveTool(int numberReceived, Func<Tool> toolCreationFunction, string toolGenericName = null)
@@ -179,6 +184,11 @@ namespace StardewArchipelago.Items
             }
 
             var newTool = toolCreationFunction();
+
+            if (newTool == null)
+            {
+                return;
+            }
 
             Game1.player.holdUpItemThenMessage(newTool);
 
