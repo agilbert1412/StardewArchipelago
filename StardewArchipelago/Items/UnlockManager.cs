@@ -171,20 +171,6 @@ namespace StardewArchipelago.Items
 
         private void ReceiveProgressiveTool(int numberReceived, Func<Tool> toolCreationFunction, string toolGenericName = null)
         {
-            var itemHasBeenRemoved = false;
-            var player = Game1.player;
-            if (!string.IsNullOrWhiteSpace(toolGenericName))
-            {
-                foreach (Item playerItem in player.Items)
-                {
-                    if (playerItem != null && playerItem is Tool && playerItem.Name.Contains(toolGenericName))
-                    {
-                        itemHasBeenRemoved = true;
-                        Game1.player.removeItemFromInventory(playerItem);
-                    }
-                }
-            }
-
             var newTool = toolCreationFunction();
 
             if (newTool == null)
@@ -192,21 +178,46 @@ namespace StardewArchipelago.Items
                 return;
             }
 
-            if (ShouldGiveItemsWithUnlocks)
+            var oldToolHasBeenRemoved = false;
+            var newToolIsOwned = false;
+            var player = Game1.player;
+            if (!string.IsNullOrWhiteSpace(toolGenericName))
             {
-                Game1.player.holdUpItemThenMessage(newTool);
+                foreach (Item playerItem in player.Items)
+                {
+                    if (playerItem is not Tool oldTool || !oldTool.Name.Contains(toolGenericName))
+                    {
+                        continue;
+                    }
+
+                    if (newTool.UpgradeLevel != oldTool.UpgradeLevel)
+                    {
+                        Game1.player.removeItemFromInventory(playerItem);
+                        oldToolHasBeenRemoved = true;
+                        continue;
+                    }
+
+                    if (newToolIsOwned)
+                    {
+                        Game1.player.removeItemFromInventory(playerItem);
+                        continue;
+                    }
+                    newToolIsOwned = true;
+                }
             }
 
             if (newTool is GenericTool)
             {
+                if (ShouldGiveItemsWithUnlocks)
+                {
+                    Game1.player.holdUpItemThenMessage(newTool);
+                }
                 Game1.player.trashCanLevel = numberReceived;
             }
-            else
+            else if(oldToolHasBeenRemoved && !newToolIsOwned)
             {
-                if (itemHasBeenRemoved || ShouldGiveItemsWithUnlocks)
-                {
-                    Game1.player.addItemByMenuIfNecessary(newTool);
-                }
+                Game1.player.holdUpItemThenMessage(newTool);
+                Game1.player.addItemByMenuIfNecessary(newTool);
             }
         }
     }
