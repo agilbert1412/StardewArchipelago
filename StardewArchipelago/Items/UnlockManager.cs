@@ -171,6 +171,7 @@ namespace StardewArchipelago.Items
 
         private void ReceiveProgressiveTool(int numberReceived, Func<Tool> toolCreationFunction, string toolGenericName = null)
         {
+            var itemHasBeenRemoved = false;
             var player = Game1.player;
             if (!string.IsNullOrWhiteSpace(toolGenericName))
             {
@@ -178,6 +179,7 @@ namespace StardewArchipelago.Items
                 {
                     if (playerItem != null && playerItem is Tool && playerItem.Name.Contains(toolGenericName))
                     {
+                        itemHasBeenRemoved = true;
                         Game1.player.removeItemFromInventory(playerItem);
                     }
                 }
@@ -190,15 +192,18 @@ namespace StardewArchipelago.Items
                 return;
             }
 
-            Game1.player.holdUpItemThenMessage(newTool);
-
             if (newTool is GenericTool)
             {
+                Game1.player.holdUpItemThenMessage(newTool);
                 Game1.player.trashCanLevel = numberReceived;
             }
             else
             {
-                Game1.player.addItemByMenuIfNecessary(newTool);
+                if (itemHasBeenRemoved || ShouldGiveItemsWithUnlocks)
+                {
+                    Game1.player.holdUpItemThenMessage(newTool);
+                    Game1.player.addItemByMenuIfNecessary(newTool);
+                }
             }
         }
     }
