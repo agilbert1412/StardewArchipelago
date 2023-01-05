@@ -192,16 +192,19 @@ namespace StardewArchipelago.Items
                 return;
             }
 
-            if (newTool is GenericTool)
+            if (ShouldGiveItemsWithUnlocks)
             {
                 Game1.player.holdUpItemThenMessage(newTool);
+            }
+
+            if (newTool is GenericTool)
+            {
                 Game1.player.trashCanLevel = numberReceived;
             }
             else
             {
                 if (itemHasBeenRemoved || ShouldGiveItemsWithUnlocks)
                 {
-                    Game1.player.holdUpItemThenMessage(newTool);
                     Game1.player.addItemByMenuIfNecessary(newTool);
                 }
             }
