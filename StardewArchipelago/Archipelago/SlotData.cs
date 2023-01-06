@@ -19,6 +19,7 @@ namespace StardewArchipelago.Archipelago
         private const string MULTI_SLEEP_COST_KEY = "multiple_day_sleep_cost";
         private const string QUICK_START_KEY = "quick_start";
 
+        public string SlotName { get; private set; }
         public int StartingMoney { get; private set; }
         public BackpackProgression BackpackProgression { get; private set; }
         public ToolProgression ToolProgression { get; private set; }
@@ -30,8 +31,9 @@ namespace StardewArchipelago.Archipelago
         public int MultiSleepCostPerDay { get; private set; }
         public bool QuickStart { get; private set; }
 
-        public SlotData(Dictionary<string, object> slotDataFields)
+        public SlotData(string slotName, Dictionary<string, object> slotDataFields)
         {
+            SlotName = slotName;
             StartingMoney = slotDataFields.ContainsKey(STARTING_MONEY_KEY) ? (int)(long)slotDataFields[STARTING_MONEY_KEY] : 500;
             BackpackProgression = slotDataFields.ContainsKey(BACKPACK_PROGRESSION_KEY) ? (BackpackProgression)(long)slotDataFields[BACKPACK_PROGRESSION_KEY] : BackpackProgression.Progressive;
             ToolProgression = slotDataFields.ContainsKey(TOOL_PROGRESSION_KEY) ? (ToolProgression)(long)slotDataFields[TOOL_PROGRESSION_KEY] : ToolProgression.Progressive;

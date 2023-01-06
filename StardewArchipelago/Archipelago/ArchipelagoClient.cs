@@ -6,6 +6,8 @@ using Archipelago.MultiClient.Net.BounceFeatures.DeathLink;
 using Archipelago.MultiClient.Net.Enums;
 using Archipelago.MultiClient.Net.Helpers;
 using Archipelago.MultiClient.Net.Packets;
+using HarmonyLib;
+using Microsoft.Xna.Framework;
 using StardewArchipelago.GameModifications;
 using StardewArchipelago.Serialization;
 using StardewModdingAPI;
@@ -19,6 +21,8 @@ namespace StardewArchipelago.Archipelago
         private IMonitor _console;
         private ArchipelagoSession _session;
         private DeathLinkService _deathLinkService;
+        private Harmony _harmony;
+        private ChatForwarder _chatForwarder;
 
         private Action _itemReceivedFunction;
 
@@ -27,9 +31,10 @@ namespace StardewArchipelago.Archipelago
         public AdvancedOptionsManager OptionsManager { get; set; }
         public Dictionary<string, ScoutedLocation> ScoutedLocations { get; set; }
 
-        public ArchipelagoClient(IMonitor console, Action itemReceivedFunction)
+        public ArchipelagoClient(IMonitor console, Harmony harmony, Action itemReceivedFunction)
         {
             _console = console;
+            _harmony = harmony;
             _itemReceivedFunction = itemReceivedFunction;
             IsConnected = false;
             ScoutedLocations = new Dictionary<string, ScoutedLocation>();
@@ -75,10 +80,24 @@ namespace StardewArchipelago.Archipelago
             _console.Log(loginMessage, LogLevel.Info);
 
             // Must go AFTER a successful connection attempt
+            InitializeAfterConnection(loginSuccess, archipelagoConnectionInfo.SlotName);
+        }
+
+        private void InitializeAfterConnection(LoginSuccessful loginSuccess, string slotName)
+        {
             _session.Items.ItemReceived += OnItemReceived;
+            _chatForwarder = new ChatForwarder(_console, _harmony);
+            _chatForwarder.ListenToChatMessages(this);
             _itemReceivedFunction();
-            InitializeSlotData(loginSuccess.SlotData);
+            InitializeSlotData(slotName, loginSuccess.SlotData);
             OptionsManager.InjectArchipelagoAdvancedOptions();
+            InitializeDeathLink();
+
+            IsConnected = true;
+        }
+
+        private void InitializeDeathLink()
+        {
             _deathLinkService = _session.CreateDeathLinkService();
             if (SlotData.DeathLink)
             {
@@ -89,12 +108,11 @@ namespace StardewArchipelago.Archipelago
             {
                 _deathLinkService.DisableDeathLink();
             }
-            IsConnected = true;
         }
 
-        private void InitializeSlotData(Dictionary<string, object> slotDataFields)
+        private void InitializeSlotData(string slotName, Dictionary<string, object> slotDataFields)
         {
-            SlotData = new SlotData(slotDataFields);
+            SlotData = new SlotData(slotName, slotDataFields);
         }
 
         private void InitSession(ArchipelagoConnectionInfo archipelagoConnectionInfo)
@@ -106,11 +124,62 @@ namespace StardewArchipelago.Archipelago
             _session.Socket.SocketClosed += SessionSocketClosed;
         }
 
+        private static readonly Color[] ChatterColors = new[]
+        {
+            Color.Red, Color.Green, Color.Blue, Color.Yellow,
+            Color.DarkRed, Color.DarkGreen, Color.DarkBlue,
+            Color.Pink, Color.LightGreen, Color.LightBlue,
+            Color.Teal, Color.Purple, Color.Orange, Color.Beige, Color.DarkGoldenrod, Color.Brown, Color.Violet, Color.Olive,
+            Color.Azure, Color.Bisque, Color.Turquoise, Color.Crimson, Color.DarkCyan, Color.SpringGreen,
+        };
+
         private void OnMessageReceived(LogMessage message)
         {
             var fullMessage = string.Join(" ", message.Parts.Select(str => str.Text));
+            if (fullMessage.StartsWith($"{SlotData.SlotName}: "))
+            {
+                return;
+            }
+
+            fullMessage = fullMessage.Replace("<3", "<");
             _console.Log(fullMessage, LogLevel.Info);
-            Game1.chatBox?.addInfoMessage(fullMessage);
+
+            var messageParts = fullMessage.Split(':');
+            var color = Color.Gray;
+            if (message is ItemSendLogMessage itemSendLogMessage)
+            {
+                var receiver = itemSendLogMessage.ReceivingPlayerSlot;
+                var sender = itemSendLogMessage.SendingPlayerSlot;
+
+                if (_session.Players.GetPlayerName(receiver) != SlotData.SlotName &&
+                    _session.Players.GetPlayerName(sender) != SlotData.SlotName)
+                {
+                    return;
+                }
+                color = Color.Gold;
+            }
+            else if (messageParts.Length >= 2)
+            {
+                var senderName = messageParts[0];
+                var senderColorIndex = Math.Abs(senderName.GetHashCode()) % ChatterColors.Length;
+                color = ChatterColors[senderColorIndex];
+            }
+            Game1.chatBox.addMessage(fullMessage, color);
+        }
+
+        public void SendMessage(string text)
+        {
+            if (!IsConnected)
+            {
+                return;
+            }
+
+            var packet = new SayPacket()
+            {
+                Text = text
+            };
+
+            _session.Socket.SendPacket(packet);
         }
 
         private void OnItemReceived(ReceivedItemsHelper receivedItemsHelper)

@@ -15,6 +15,7 @@ namespace StardewArchipelago.Archipelago
     public class ChatForwarder
     {
         private static IMonitor _monitor;
+        private static ArchipelagoClient _archipelago;
         private Harmony _harmony;
 
         public ChatForwarder(IMonitor monitor, Harmony harmony)
@@ -23,8 +24,10 @@ namespace StardewArchipelago.Archipelago
             _harmony = harmony;
         }
 
-        public void ListenToChatMessages()
+        public void ListenToChatMessages(ArchipelagoClient archipelago)
         {
+            _archipelago = archipelago;
+
             _harmony.Patch(
                 original: AccessTools.Method(typeof(ChatBox), nameof(ChatBox.receiveChatMessage)),
                 postfix: new HarmonyMethod(typeof(ChatForwarder), nameof(ChatForwarder.ReceiveChatMessage_ForwardToAp_PostFix))
@@ -35,12 +38,12 @@ namespace StardewArchipelago.Archipelago
         {
             try
             {
-                if (!message.StartsWith("!"))
+                if (sourceFarmer == 0 || chatKind != 0)
                 {
                     return;
                 }
 
-
+                _archipelago.SendMessage(message);
             }
             catch (Exception ex)
             {

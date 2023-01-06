@@ -62,7 +62,7 @@ namespace StardewArchipelago
             _tester = new Tester(helper, Monitor);
             _multiSleep = new MultiSleep(Monitor, _helper, _harmony);
 
-            _archipelago = new ArchipelagoClient(Monitor, OnItemReceived);
+            _archipelago = new ArchipelagoClient(Monitor, _harmony, OnItemReceived);
             _advancedOptionManager = new AdvancedOptionsManager(Monitor, _helper, _harmony, _archipelago);
             _helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
             _helper.Events.GameLoop.SaveCreated += this.OnSaveCreated;
