@@ -27,16 +27,14 @@ namespace StardewArchipelago.Test
 
         public void TestGetSpecificItem(string arg1, string[] arg2)
         {
-            if (arg2.Length < 1)
+            if (arg2.Length < 2)
             {
                 return;
             }
-            var itemName = arg2[0];
             var amount = 1;
-            if (arg2.Length > 1)
-            {
-                amount = int.Parse(arg2[1]);
-            }
+            amount = int.Parse(arg2[0]);
+
+            var itemName = string.Join(" ", arg2.Skip(1).ToArray());
 
             _itemParser = new ItemParser(new StardewItemManager(), new UnlockManager(), new SpecialItemManager());
             try

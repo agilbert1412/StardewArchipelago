@@ -149,7 +149,14 @@ namespace StardewArchipelago.Items
 
         private void ReceiveProgressiveTrashCan(int numberReceived)
         {
-            ReceiveProgressiveTool(numberReceived, () => new GenericTool { UpgradeLevel = numberReceived }, "Trash Can");
+            Tool CreateTrashCan()
+            {
+                var trashCan = new GenericTool("Trash Can", Game1.content.LoadString("Strings\\StringsFromCSFiles:TrashCan_Description", ((numberReceived * 15).ToString() ?? "")), numberReceived, 12 + numberReceived, 12 + numberReceived);
+                trashCan.upgradeLevel.Value = numberReceived;
+                return trashCan;
+            }
+
+            ReceiveProgressiveTool(numberReceived, CreateTrashCan, "Trash Can");
         }
 
         private void ReceiveProgressiveFishingRod(int numberReceived)
