@@ -30,7 +30,6 @@ namespace StardewArchipelago.GameModifications
             _modHelper = modHelper;
             _harmony = harmony;
             _archipelago = archipelago;
-            _archipelago.OptionsManager = this;
         }
 
         public void InjectArchipelagoAdvancedOptions()

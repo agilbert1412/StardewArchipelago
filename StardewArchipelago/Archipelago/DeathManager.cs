@@ -24,13 +24,12 @@ namespace StardewArchipelago.Archipelago
 
         private static bool _isCurrentlyReceivingDeathLink = false;
 
-        public DeathManager(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, Harmony harmony)
+        public DeathManager(IMonitor monitor, IModHelper modHelper, Harmony harmony, ArchipelagoClient archipelago)
         {
             _monitor = monitor;
-            _archipelago = archipelago;
             _modHelper = modHelper;
             _harmony = harmony;
-            HookIntoDeathlinkEvents();
+            _archipelago = archipelago;
         }
 
         public static void ReceiveDeathLink()

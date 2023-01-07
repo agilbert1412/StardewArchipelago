@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Extensions;
 using StardewArchipelago.GameModifications;
 using StardewArchipelago.Goals;
 using StardewArchipelago.Items;
@@ -32,9 +34,7 @@ namespace StardewArchipelago
         private StardewItemManager _stardewItemManager;
         private UnlockManager _unlockManager;
         private SpecialItemManager _specialItemManager;
-        private DeathManager _deathManager;
         private MultiSleep _multiSleep;
-        private AdvancedOptionsManager _advancedOptionManager;
         private JojaDisabler _jojaDisabler;
 
         private Tester _tester;
@@ -62,8 +62,7 @@ namespace StardewArchipelago
             _tester = new Tester(helper, Monitor);
             _multiSleep = new MultiSleep(Monitor, _helper, _harmony);
 
-            _archipelago = new ArchipelagoClient(Monitor, _harmony, OnItemReceived);
-            _advancedOptionManager = new AdvancedOptionsManager(Monitor, _helper, _harmony, _archipelago);
+            _archipelago = new ArchipelagoClient(Monitor, _helper, _harmony, OnItemReceived);
             _helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
             _helper.Events.GameLoop.SaveCreated += this.OnSaveCreated;
             _helper.Events.GameLoop.Saved += this.OnSaved;
@@ -146,7 +145,6 @@ namespace StardewArchipelago
             _goalManager.InjectGoalMethods();
             _jojaDisabler.DisableJojaMembership();
             _multiSleep.InjectMultiSleepOption(_archipelago.SlotData);
-            _deathManager = new DeathManager(Monitor, _helper, _archipelago, _harmony);
 
             // Fix Beta1 Bug
             while (Game1.player.Items.Count > Game1.player.MaxItems)
@@ -265,7 +263,12 @@ namespace StardewArchipelago
 
         private void DebugMethod(string arg1, string[] arg2)
         {
-            _bundleReader.ReadCurrentBundleStates();
+            var r = new Random();
+            for (var i = 0; i < (arg2.Length > 0 ? int.Parse(arg2[0]) : 10); i++)
+            {
+                var color = (arg2.Length > 1 ? int.Parse(arg2[1]) : r.Next()).GetAsBrightColor();
+                Game1.chatBox?.addMessage("Player: Hello", color);
+            }
         }
 
         private string GetApDataJsonPath()

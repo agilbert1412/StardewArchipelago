@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Archipelago.MultiClient.Net;
 using Archipelago.MultiClient.Net.BounceFeatures.DeathLink;
 using Archipelago.MultiClient.Net.Enums;
@@ -8,6 +9,7 @@ using Archipelago.MultiClient.Net.Helpers;
 using Archipelago.MultiClient.Net.Packets;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
+using StardewArchipelago.Extensions;
 using StardewArchipelago.GameModifications;
 using StardewArchipelago.Serialization;
 using StardewModdingAPI;
@@ -19,21 +21,24 @@ namespace StardewArchipelago.Archipelago
     {
         private const string GAME_NAME = "Stardew Valley";
         private IMonitor _console;
+        private IModHelper _modHelper;
         private ArchipelagoSession _session;
         private DeathLinkService _deathLinkService;
         private Harmony _harmony;
+        private DeathManager _deathManager;
+        private AdvancedOptionsManager _advancedOptionsManager;
         private ChatForwarder _chatForwarder;
 
         private Action _itemReceivedFunction;
 
         public bool IsConnected { get; private set; }
         public SlotData SlotData { get; private set; }
-        public AdvancedOptionsManager OptionsManager { get; set; }
         public Dictionary<string, ScoutedLocation> ScoutedLocations { get; set; }
 
-        public ArchipelagoClient(IMonitor console, Harmony harmony, Action itemReceivedFunction)
+        public ArchipelagoClient(IMonitor console, IModHelper modHelper, Harmony harmony, Action itemReceivedFunction)
         {
             _console = console;
+            _modHelper = modHelper;
             _harmony = harmony;
             _itemReceivedFunction = itemReceivedFunction;
             IsConnected = false;
@@ -42,6 +47,7 @@ namespace StardewArchipelago.Archipelago
 
         public void Connect(ArchipelagoConnectionInfo archipelagoConnectionInfo)
         {
+            Disconnect();
             LoginResult result;
             try
             {
@@ -86,11 +92,24 @@ namespace StardewArchipelago.Archipelago
         private void InitializeAfterConnection(LoginSuccessful loginSuccess, string slotName)
         {
             _session.Items.ItemReceived += OnItemReceived;
-            _chatForwarder = new ChatForwarder(_console, _harmony);
-            _chatForwarder.ListenToChatMessages(this);
+            _session.MessageLog.OnMessageReceived += OnMessageReceived;
+            _session.Socket.ErrorReceived += SessionErrorReceived;
+            _session.Socket.SocketClosed += SessionSocketClosed;
+
+            if (_chatForwarder == null)
+            {
+                _chatForwarder = new ChatForwarder(_console, _harmony);
+                _chatForwarder.ListenToChatMessages(this);
+            }
             _itemReceivedFunction();
             InitializeSlotData(slotName, loginSuccess.SlotData);
-            OptionsManager.InjectArchipelagoAdvancedOptions();
+
+            if (_advancedOptionsManager == null)
+            {
+                _advancedOptionsManager = new AdvancedOptionsManager(_console, _modHelper, _harmony, this);
+                _advancedOptionsManager.InjectArchipelagoAdvancedOptions();
+            }
+
             InitializeDeathLink();
 
             IsConnected = true;
@@ -98,6 +117,12 @@ namespace StardewArchipelago.Archipelago
 
         private void InitializeDeathLink()
         {
+            if (_deathManager == null)
+            {
+                _deathManager = new DeathManager(_console, _modHelper, _harmony, this);
+                _deathManager.HookIntoDeathlinkEvents();
+            }
+
             _deathLinkService = _session.CreateDeathLinkService();
             if (SlotData.DeathLink)
             {
@@ -119,30 +144,19 @@ namespace StardewArchipelago.Archipelago
         {
             _session = ArchipelagoSessionFactory.CreateSession(archipelagoConnectionInfo.HostUrl,
                 archipelagoConnectionInfo.Port);
-            _session.MessageLog.OnMessageReceived += OnMessageReceived;
-            _session.Socket.ErrorReceived += SessionErrorReceived;
-            _session.Socket.SocketClosed += SessionSocketClosed;
         }
-
-        private static readonly Color[] ChatterColors = new[]
-        {
-            Color.Red, Color.Green, Color.Blue, Color.Yellow,
-            Color.DarkRed, Color.DarkGreen, Color.DarkBlue,
-            Color.Pink, Color.LightGreen, Color.LightBlue,
-            Color.Teal, Color.Purple, Color.Orange, Color.Beige, Color.DarkGoldenrod, Color.Brown, Color.Violet, Color.Olive,
-            Color.Azure, Color.Bisque, Color.Turquoise, Color.Crimson, Color.DarkCyan, Color.SpringGreen,
-        };
 
         private void OnMessageReceived(LogMessage message)
         {
             var fullMessage = string.Join(" ", message.Parts.Select(str => str.Text));
+            _console.Log(fullMessage, LogLevel.Info);
+
+            fullMessage = fullMessage.Replace("<3", "<");
+
             if (fullMessage.StartsWith($"{SlotData.SlotName}: "))
             {
                 return;
             }
-
-            fullMessage = fullMessage.Replace("<3", "<");
-            _console.Log(fullMessage, LogLevel.Info);
 
             var messageParts = fullMessage.Split(':');
             var color = Color.Gray;
@@ -161,10 +175,9 @@ namespace StardewArchipelago.Archipelago
             else if (messageParts.Length >= 2)
             {
                 var senderName = messageParts[0];
-                var senderColorIndex = Math.Abs(senderName.GetHashCode()) % ChatterColors.Length;
-                color = ChatterColors[senderColorIndex];
+                color = senderName.GetAsBrightColor();
             }
-            Game1.chatBox.addMessage(fullMessage, color);
+            Game1.chatBox?.addMessage(fullMessage, color);
         }
 
         public void SendMessage(string text)
@@ -315,6 +328,10 @@ namespace StardewArchipelago.Archipelago
                 return;
             }
 
+            _session.Items.ItemReceived -= OnItemReceived;
+            _session.MessageLog.OnMessageReceived -= OnMessageReceived;
+            _session.Socket.ErrorReceived -= SessionErrorReceived;
+            _session.Socket.SocketClosed -= SessionSocketClosed;
             _session.Socket.DisconnectAsync();
             _session = null;
             IsConnected = false;
@@ -327,6 +344,7 @@ namespace StardewArchipelago.Archipelago
         {
             if (!IsConnected && connectionInfo != null)
             {
+                Disconnect();
                 var now = DateTime.Now.Second;
                 var dT = now - _lastTime;
                 _lastTime = now;
