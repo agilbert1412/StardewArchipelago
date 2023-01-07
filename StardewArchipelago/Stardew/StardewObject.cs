@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using StardewValley;
+using StardewValley.Objects;
 
 namespace StardewArchipelago.Stardew
 {
@@ -29,6 +30,10 @@ namespace StardewArchipelago.Stardew
 
         public override Item PrepareForGivingToFarmer(int amount = 1)
         {
+            if (Type == "Ring")
+            {
+                return new Ring(Id);
+            }
             return new StardewValley.Object(Id, amount);
         }
 
