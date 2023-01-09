@@ -7,6 +7,7 @@ namespace StardewArchipelago.Archipelago
         private const string STARTING_MONEY_KEY = "starting_money";
         private const string BACKPACK_PROGRESSION_KEY = "backpack_progression";
         private const string TOOL_PROGRESSION_KEY = "tool_progression";
+        private const string ELEVATOR_PROGRESSION_KEY = "elevator_progression";
         private const string EARLY_MINE_KEY = "the_mines_open";
         private const string DEATH_LINK_KEY = "death_link";
         private const string GOAL_KEY = "goal";
@@ -19,6 +20,7 @@ namespace StardewArchipelago.Archipelago
         public int StartingMoney { get; private set; }
         public BackpackProgression BackpackProgression { get; private set; }
         public ToolProgression ToolProgression { get; private set; }
+        public ElevatorProgression ElevatorProgression { get; private set; }
         public bool EarlyMine { get; private set; }
         public bool DeathLink { get; private set; }
         public Goal Goal { get; private set; }
@@ -33,6 +35,7 @@ namespace StardewArchipelago.Archipelago
             StartingMoney = slotDataFields.ContainsKey(STARTING_MONEY_KEY) ? (int)(long)slotDataFields[STARTING_MONEY_KEY] : 500;
             BackpackProgression = slotDataFields.ContainsKey(BACKPACK_PROGRESSION_KEY) ? (BackpackProgression)(long)slotDataFields[BACKPACK_PROGRESSION_KEY] : BackpackProgression.Progressive;
             ToolProgression = slotDataFields.ContainsKey(TOOL_PROGRESSION_KEY) ? (ToolProgression)(long)slotDataFields[TOOL_PROGRESSION_KEY] : ToolProgression.Progressive;
+            ElevatorProgression = slotDataFields.ContainsKey(ELEVATOR_PROGRESSION_KEY) ? (ElevatorProgression)(long)slotDataFields[ELEVATOR_PROGRESSION_KEY] : ElevatorProgression.Progressive;
             EarlyMine = slotDataFields.ContainsKey(EARLY_MINE_KEY) && slotDataFields[EARLY_MINE_KEY] != null && (bool)slotDataFields[EARLY_MINE_KEY];
             DeathLink = slotDataFields.ContainsKey(DEATH_LINK_KEY) && slotDataFields[DEATH_LINK_KEY] != null && (bool)slotDataFields[DEATH_LINK_KEY];
             Goal = slotDataFields.ContainsKey(GOAL_KEY) ? (Goal)(long)slotDataFields[GOAL_KEY] : Goal.CommunityCenter;
@@ -54,6 +57,12 @@ namespace StardewArchipelago.Archipelago
         Vanilla = 0,
         Progressive = 1,
         World = 2,
+    }
+
+    public enum ElevatorProgression
+    {
+        Vanilla = 0,
+        Progressive = 1
     }
 
     public enum Goal

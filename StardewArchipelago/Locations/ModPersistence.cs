@@ -4,6 +4,20 @@ namespace StardewArchipelago.Locations
 {
     internal class ModPersistence
     {
+        public int GetAsInt(string key)
+        {
+            return int.Parse(this[key]);
+        }
+
+        public string this[string key]
+        {
+            get
+            {
+                var modData = Game1.getFarm().modData;
+                return modData[key];
+            }
+        }
+
         public void InitializeModDataValue(string key, string defaultValue)
         {
             var modData = Game1.getFarm().modData;

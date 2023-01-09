@@ -98,6 +98,7 @@ namespace StardewArchipelago.Locations
             ReplaceCommunityCenterAreasWithChecks();
             ReplaceBackPackUpgradesWithChecks();
             ReplaceMineshaftChestsWithChecks();
+            ReplaceElevatorsWithChecks();
             ReplaceToolUpgradesWithChecks();
             ReplaceFishingRodsWithChecks();
         }
@@ -158,7 +159,7 @@ namespace StardewArchipelago.Locations
             // This would need a transpile patch for SeedShop.draw and I don't think it's worth it.
             // _harmony.Patch(
             //     original: AccessTools.Method(typeof(SeedShop), nameof(SeedShop.draw)),
-            //     transpiler: new HarmonyMethod(typeof(LocationsCodeInjection), nameof(LocationsCodeInjection.AnswerDialogueAction_BackPackPurchase_Prefix)));
+            //     transpiler: new HarmonyMethod(typeof(BackpackInjections), nameof(LocationsCodeInjection.AnswerDialogueAction_BackPackPurchase_Prefix)));
         }
 
         private void ReplaceMineshaftChestsWithChecks()
@@ -177,7 +178,7 @@ namespace StardewArchipelago.Locations
         {
             _harmony.Patch(
                 original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performAction)),
-                prefix: new HarmonyMethod(typeof(LocationsCodeInjection), nameof(ScytheInjections.PerformAction_GoldenScythe_Prefix))
+                prefix: new HarmonyMethod(typeof(ScytheInjections), nameof(ScytheInjections.PerformAction_GoldenScythe_Prefix))
             );
 
             if (_archipelago.SlotData.ToolProgression == ToolProgression.Vanilla)
@@ -187,12 +188,12 @@ namespace StardewArchipelago.Locations
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.answerDialogueAction)),
-                prefix: new HarmonyMethod(typeof(LocationsCodeInjection), nameof(ToolInjections.AnswerDialogueAction_ToolUpgrade_Prefix))
+                prefix: new HarmonyMethod(typeof(ToolInjections), nameof(ToolInjections.AnswerDialogueAction_ToolUpgrade_Prefix))
             );
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Tool), nameof(Tool.actionWhenPurchased)),
-                prefix: new HarmonyMethod(typeof(LocationsCodeInjection), nameof(ToolInjections.ActionWhenPurchased_ToolUpgrade_Prefix))
+                prefix: new HarmonyMethod(typeof(ToolInjections), nameof(ToolInjections.ActionWhenPurchased_ToolUpgrade_Prefix))
             );
         }
 
@@ -216,6 +217,27 @@ namespace StardewArchipelago.Locations
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Utility), nameof(Utility.getFishShopStock)),
                 prefix: new HarmonyMethod(typeof(FishingRodInjections), nameof(FishingRodInjections.GetFishShopStock_Prefix))
+            );
+        }
+
+        private void ReplaceElevatorsWithChecks()
+        {
+            if (_archipelago.SlotData.ElevatorProgression == ElevatorProgression.Vanilla)
+            {
+                return;
+            }
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Game1), nameof(Game1.enterMine)),
+                postfix: new HarmonyMethod(typeof(MineshaftInjections), nameof(MineshaftInjections.EnterMine_SendElevatorCheck_PostFix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performAction)),
+                prefix: new HarmonyMethod(typeof(MineshaftInjections), nameof(MineshaftInjections.PerformAction_LoadElevatorMenu_Prefix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(MineShaft), nameof(MineShaft.checkAction)),
+                prefix: new HarmonyMethod(typeof(MineshaftInjections), nameof(MineshaftInjections.CheckAction_LoadElevatorMenu_Prefix))
             );
         }
     }

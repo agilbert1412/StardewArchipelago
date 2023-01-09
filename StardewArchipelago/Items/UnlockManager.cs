@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using StardewArchipelago.Locations;
 using StardewArchipelago.Locations.CodeInjections;
 using StardewValley;
 using StardewValley.Objects;
@@ -9,16 +10,19 @@ namespace StardewArchipelago.Items
 {
     public class UnlockManager
     {
+        private ModPersistence _modPersistence;
         private Dictionary<string, Action<int>> _unlockables;
         public bool ShouldGiveItemsWithUnlocks { get; set; }
 
         public UnlockManager()
         {
+            _modPersistence = new ModPersistence();
             _unlockables = new Dictionary<string, Action<int>>();
             ShouldGiveItemsWithUnlocks = true;
             RegisterCommunityCenterRepairs();
             RegisterPlayerImprovement();
             RegisterProgressiveTools();
+            RegisterMineElevators();
         }
 
         public bool IsUnlock(string unlockName)
@@ -54,6 +58,11 @@ namespace StardewArchipelago.Items
             _unlockables.Add("Progressive Watering Can", ReceiveProgressiveWateringCan);
             _unlockables.Add("Progressive Trash Can", ReceiveProgressiveTrashCan);
             _unlockables.Add("Progressive Fishing Rod", ReceiveProgressiveFishingRod);
+        }
+
+        private void RegisterMineElevators()
+        {
+            _unlockables.Add("Progressive Mine Elevator", ReceiveProgressiveMineElevator);
         }
 
         private void RepairBridge()
@@ -156,8 +165,8 @@ namespace StardewArchipelago.Items
         private void ReceiveProgressiveFishingRod(int numberReceived)
         {
             var modData = Game1.getFarm().modData;
-            LocationsCodeInjection.InitializeFishingRodsModDataValues();
-            LocationsCodeInjection.SetModDataValue(LocationsCodeInjection.RECEIVED_FISHING_ROD_LEVEL_KEY, numberReceived.ToString());
+            FishingRodInjections.InitializeFishingRodsModDataValues();
+            _modPersistence.SetModDataValue(FishingRodInjections.RECEIVED_FISHING_ROD_LEVEL_KEY, numberReceived.ToString());
 
             if (!ShouldGiveItemsWithUnlocks || numberReceived < 1)
             {
@@ -220,6 +229,12 @@ namespace StardewArchipelago.Items
                 Game1.player.holdUpItemThenMessage(newTool);
                 Game1.player.addItemByMenuIfNecessary(newTool);
             }
+        }
+
+        private void ReceiveProgressiveMineElevator(int numberReceived)
+        {
+            MineshaftInjections.InitializeMineElevatorModDataValues();
+            _modPersistence.SetModDataValue(MineshaftInjections.RECEIVED_MINE_ELEVATOR_KEY, numberReceived.ToString());
         }
     }
 }

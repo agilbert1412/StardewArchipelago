@@ -4,20 +4,28 @@ using Microsoft.Xna.Framework;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
+using StardewValley.Menus;
 using StardewValley.Objects;
 using StardewValley.Tools;
+using xTile.Dimensions;
+using xTile.Tiles;
+using Rectangle = xTile.Dimensions.Rectangle;
 
 namespace StardewArchipelago.Locations.CodeInjections
 {
     public class MineshaftInjections
     {
+        public const string RECEIVED_MINE_ELEVATOR_KEY = "MineElevator_Received_Level_Key";
+
         private static IMonitor _monitor;
         private static Action<string> _addCheckedLocation;
+        private static ModPersistence _modPersistence;
 
         public MineshaftInjections(IMonitor monitor, Action<string> addCheckedLocation)
         {
             _monitor = monitor;
             _addCheckedLocation = addCheckedLocation;
+            _modPersistence = new ModPersistence();
         }
 
         public static bool CheckForAction_MineshaftChest_Prefix(Chest __instance, Farmer who, bool justCheckingForActivity, ref bool __result)
@@ -85,6 +93,95 @@ namespace StardewArchipelago.Locations.CodeInjections
                 _monitor.Log($"Failed in {nameof(AddLevelChests_Level120_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
             }
+        }
+
+        public static void EnterMine_SendElevatorCheck_PostFix(int whatLevel)
+        {
+            try
+            {
+                if (whatLevel < 5 || whatLevel > 120 || whatLevel % 5 != 0)
+                {
+                    return;
+                }
+
+                _addCheckedLocation($"The Mines Floor {whatLevel} Elevator");
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(PerformAction_LoadElevatorMenu_Prefix)}:\n{ex}", LogLevel.Error);
+                return;
+            }
+        }
+
+        public static bool PerformAction_LoadElevatorMenu_Prefix(GameLocation __instance, string action, Farmer who,
+            Location tileLocation, ref bool __result)
+        {
+            try
+            {
+                if (action == null || !who.IsLocalPlayer || action.Split(' ')[0] != "MineElevator")
+                {
+                    return true; // run original logic
+                }
+
+                CreateElevatorMenuIfUnlocked();
+                __result = true;
+                return false; // don't run original logic
+
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(PerformAction_LoadElevatorMenu_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
+        }
+
+        public static bool CheckAction_LoadElevatorMenu_Prefix(MineShaft __instance, Location tileLocation, Rectangle viewport, Farmer who, ref bool __result)
+        {
+            try
+            {
+                Tile tile = __instance.map.GetLayer("Buildings").PickTile(new Location(tileLocation.X * 64, tileLocation.Y * 64), viewport.Size);
+
+                if (tile == null || !who.IsLocalPlayer || tile.TileIndex != 112 || __instance.mineLevel > 120)
+                {
+                    return true; // run original logic
+                }
+
+                CreateElevatorMenuIfUnlocked();
+                __result = true;
+                return false; // don't run original logic
+
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(CheckAction_LoadElevatorMenu_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
+        }
+
+        private static void CreateElevatorMenuIfUnlocked()
+        {
+            InitializeMineElevatorModDataValues();
+            var numberOfMineElevatorReceived = _modPersistence.GetAsInt(RECEIVED_MINE_ELEVATOR_KEY);
+            var mineLevelUnlocked = numberOfMineElevatorReceived * 5;
+            mineLevelUnlocked = Math.Min(120, Math.Max(0, mineLevelUnlocked));
+
+            if (mineLevelUnlocked < 5)
+            {
+                Game1.drawObjectDialogue(
+                    Game1.parseText(Game1.content.LoadString("Strings\\Locations:Mines_MineElevator_NotWorking")));
+            }
+            else
+            {
+                var previousMaxLevel = MineShaft.lowestLevelReached;
+                MineShaft.lowestLevelReached = mineLevelUnlocked;
+                Game1.activeClickableMenu = new MineElevatorMenu();
+                MineShaft.lowestLevelReached = previousMaxLevel;
+            }
+        }
+
+        public static void InitializeMineElevatorModDataValues()
+        {
+            _modPersistence.InitializeModDataValue(RECEIVED_MINE_ELEVATOR_KEY, "0");
         }
     }
 }
