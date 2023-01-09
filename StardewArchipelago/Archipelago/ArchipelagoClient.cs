@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using Archipelago.MultiClient.Net;
 using Archipelago.MultiClient.Net.BounceFeatures.DeathLink;
 using Archipelago.MultiClient.Net.Enums;
@@ -11,7 +10,6 @@ using HarmonyLib;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Extensions;
 using StardewArchipelago.GameModifications;
-using StardewArchipelago.Serialization;
 using StardewModdingAPI;
 using StardewValley;
 
@@ -19,6 +17,15 @@ namespace StardewArchipelago.Archipelago
 {
     public class ArchipelagoClient
     {
+        private static ArchipelagoClient _instance;
+        public static ArchipelagoClient Instance
+        {
+            get
+            {
+                return _instance;
+            }
+        }
+
         private const string GAME_NAME = "Stardew Valley";
         private IMonitor _console;
         private IModHelper _modHelper;
@@ -37,12 +44,18 @@ namespace StardewArchipelago.Archipelago
 
         public ArchipelagoClient(IMonitor console, IModHelper modHelper, Harmony harmony, Action itemReceivedFunction)
         {
+            if (_instance != null)
+            {
+                throw new Exception("There is already an ArchipelagoClient instance initialized");
+            }
+
             _console = console;
             _modHelper = modHelper;
             _harmony = harmony;
             _itemReceivedFunction = itemReceivedFunction;
             IsConnected = false;
             ScoutedLocations = new Dictionary<string, ScoutedLocation>();
+            _instance = this;
         }
 
         public void Connect(ArchipelagoConnectionInfo archipelagoConnectionInfo)

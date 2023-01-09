@@ -1,20 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using HarmonyLib;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using Netcode;
-using StardewArchipelago.Archipelago;
-using StardewArchipelago.Locations;
-using StardewArchipelago.Stardew;
-using StardewModdingAPI;
 using StardewValley;
-using StardewValley.Locations;
 using StardewValley.Menus;
-using StardewValley.Objects;
-using xTile.Dimensions;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace StardewArchipelago.GameModifications

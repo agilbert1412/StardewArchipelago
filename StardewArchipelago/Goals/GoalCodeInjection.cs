@@ -1,17 +1,10 @@
 ﻿using StardewArchipelago.Archipelago;
-using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
-using StardewValley.Menus;
-using StardewValley.Objects;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework;
-using Netcode;
 using StardewValley.Locations;
-using StardewValley.Tools;
 using xTile.Dimensions;
 
 namespace StardewArchipelago.Goals

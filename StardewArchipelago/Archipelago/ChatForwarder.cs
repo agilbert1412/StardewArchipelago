@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using HarmonyLib;
-using StardewArchipelago.Locations;
 using StardewModdingAPI;
 using StardewValley;
-using StardewValley.Locations;
 using StardewValley.Menus;
 
 namespace StardewArchipelago.Archipelago

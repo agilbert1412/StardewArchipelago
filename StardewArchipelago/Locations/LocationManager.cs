@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using HarmonyLib;
-using Netcode;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Locations.CodeInjections;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
@@ -127,7 +126,7 @@ namespace StardewArchipelago.Locations
         {
             _harmony.Patch(
                 original: AccessTools.Method(typeof(JunimoNoteMenu), nameof(JunimoNoteMenu.checkForRewards)),
-                postfix: new HarmonyMethod(typeof(LocationsCodeInjection), nameof(LocationsCodeInjection.CheckForRewards_PostFix))
+                postfix: new HarmonyMethod(typeof(CommunityCenterInjections), nameof(CommunityCenterInjections.CheckForRewards_PostFix))
             );
         }
 
@@ -135,7 +134,7 @@ namespace StardewArchipelago.Locations
         {
             _harmony.Patch(
                 original: AccessTools.Method(typeof(CommunityCenter), "doAreaCompleteReward"),
-                prefix: new HarmonyMethod(typeof(LocationsCodeInjection), nameof(LocationsCodeInjection.DoAreaCompleteReward_AreaLocations_Prefix))
+                prefix: new HarmonyMethod(typeof(CommunityCenterInjections), nameof(CommunityCenterInjections.DoAreaCompleteReward_AreaLocations_Prefix))
             );
         }
 
@@ -148,12 +147,12 @@ namespace StardewArchipelago.Locations
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performAction)),
-                prefix: new HarmonyMethod(typeof(LocationsCodeInjection), nameof(LocationsCodeInjection.PerformAction_BuyBackpack_Prefix))
+                prefix: new HarmonyMethod(typeof(BackpackInjections), nameof(BackpackInjections.PerformAction_BuyBackpack_Prefix))
             );
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.answerDialogueAction)),
-                prefix: new HarmonyMethod(typeof(LocationsCodeInjection), nameof(LocationsCodeInjection.AnswerDialogueAction_BackPackPurchase_Prefix))
+                prefix: new HarmonyMethod(typeof(BackpackInjections), nameof(BackpackInjections.AnswerDialogueAction_BackPackPurchase_Prefix))
             );
 
             // This would need a transpile patch for SeedShop.draw and I don't think it's worth it.
@@ -166,11 +165,11 @@ namespace StardewArchipelago.Locations
         {
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Chest), nameof(Chest.checkForAction)),
-                prefix: new HarmonyMethod(typeof(LocationsCodeInjection), nameof(LocationsCodeInjection.CheckForAction_MineshaftChest_Prefix))
+                prefix: new HarmonyMethod(typeof(MineshaftInjections), nameof(MineshaftInjections.CheckForAction_MineshaftChest_Prefix))
             );
             _harmony.Patch(
                 original: AccessTools.Method(typeof(MineShaft), "addLevelChests"),
-                prefix: new HarmonyMethod(typeof(LocationsCodeInjection), nameof(LocationsCodeInjection.AddLevelChests_Level120_Prefix))
+                prefix: new HarmonyMethod(typeof(MineshaftInjections), nameof(MineshaftInjections.AddLevelChests_Level120_Prefix))
             );
         }
 
@@ -178,7 +177,7 @@ namespace StardewArchipelago.Locations
         {
             _harmony.Patch(
                 original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performAction)),
-                prefix: new HarmonyMethod(typeof(LocationsCodeInjection), nameof(LocationsCodeInjection.PerformAction_GoldenScythe_Prefix))
+                prefix: new HarmonyMethod(typeof(LocationsCodeInjection), nameof(ScytheInjections.PerformAction_GoldenScythe_Prefix))
             );
 
             if (_archipelago.SlotData.ToolProgression == ToolProgression.Vanilla)
@@ -188,12 +187,12 @@ namespace StardewArchipelago.Locations
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.answerDialogueAction)),
-                prefix: new HarmonyMethod(typeof(LocationsCodeInjection), nameof(LocationsCodeInjection.AnswerDialogueAction_ToolUpgrade_Prefix))
+                prefix: new HarmonyMethod(typeof(LocationsCodeInjection), nameof(ToolInjections.AnswerDialogueAction_ToolUpgrade_Prefix))
             );
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Tool), nameof(Tool.actionWhenPurchased)),
-                prefix: new HarmonyMethod(typeof(LocationsCodeInjection), nameof(LocationsCodeInjection.ActionWhenPurchased_ToolUpgrade_Prefix))
+                prefix: new HarmonyMethod(typeof(LocationsCodeInjection), nameof(ToolInjections.ActionWhenPurchased_ToolUpgrade_Prefix))
             );
         }
 
@@ -206,17 +205,17 @@ namespace StardewArchipelago.Locations
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Event), nameof(Event.skipEvent)),
-                prefix: new HarmonyMethod(typeof(LocationsCodeInjection), nameof(LocationsCodeInjection.SkipEvent_BambooPole_Prefix))
+                prefix: new HarmonyMethod(typeof(FishingRodInjections), nameof(FishingRodInjections.SkipEvent_BambooPole_Prefix))
             );
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Event), nameof(Event.command_awardFestivalPrize)),
-                prefix: new HarmonyMethod(typeof(LocationsCodeInjection), nameof(LocationsCodeInjection.AwardFestivalPrize_BambooPole_Prefix))
+                prefix: new HarmonyMethod(typeof(FishingRodInjections), nameof(FishingRodInjections.AwardFestivalPrize_BambooPole_Prefix))
             );
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Utility), nameof(Utility.getFishShopStock)),
-                prefix: new HarmonyMethod(typeof(LocationsCodeInjection), nameof(LocationsCodeInjection.GetFishShopStock_Prefix))
+                prefix: new HarmonyMethod(typeof(FishingRodInjections), nameof(FishingRodInjections.GetFishShopStock_Prefix))
             );
         }
     }

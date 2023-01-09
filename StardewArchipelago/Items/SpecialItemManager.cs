@@ -1,14 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Netcode;
-using StardewArchipelago.Archipelago;
 using StardewValley;
-using StardewValley.Menus;
-using StardewValley.Objects;
 using StardewValley.Tools;
 
 namespace StardewArchipelago.Items

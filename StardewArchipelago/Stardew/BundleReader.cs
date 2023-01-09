@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using StardewValley;
 using StardewValley.Locations;
-using StardewValley.Menus;
 
 namespace StardewArchipelago.Stardew
 {
