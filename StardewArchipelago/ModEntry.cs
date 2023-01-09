@@ -29,6 +29,7 @@ namespace StardewArchipelago
         private BundleReader _bundleReader;
         private ArchipelagoClient _archipelago;
         private ItemManager _itemManager;
+        private RandomizedLogicPatcher _logicPatcher;
         private LocationChecker _locationsChecker;
         private LocationPatcher _locationsPatcher;
         private GoalManager _goalManager;
@@ -126,6 +127,7 @@ namespace StardewArchipelago
             _stardewItemManager = new StardewItemManager();
             _bundleReader = new BundleReader();
             _itemManager = new ItemManager(_archipelago, _stardewItemManager, _unlockManager, _specialItemManager, _state.ItemsReceived);
+            _logicPatcher = new RandomizedLogicPatcher(Monitor, _harmony);
             _locationsChecker = new LocationChecker(Monitor, _archipelago, _state.LocationsChecked);
             _locationsPatcher = new LocationPatcher(Monitor, _archipelago, _bundleReader, _helper, _harmony, _locationsChecker);
             _goalManager = new GoalManager(Monitor, _helper, _harmony, _archipelago);
@@ -142,7 +144,8 @@ namespace StardewArchipelago
                 Game1.ExitToTitle();
                 return;
             }
-            
+
+            _logicPatcher.PatchAllGameLogic();
             _locationsPatcher.ReplaceAllLocationsRewardsWithChecks();
             _goalManager.InjectGoalMethods();
             _jojaDisabler.DisableJojaMembership();
