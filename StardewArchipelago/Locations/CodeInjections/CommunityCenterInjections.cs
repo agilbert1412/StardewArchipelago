@@ -9,17 +9,17 @@ using StardewValley.Menus;
 
 namespace StardewArchipelago.Locations.CodeInjections
 {
-    public class CommunityCenterInjections
+    public static class CommunityCenterInjections
     {
         private static IMonitor _monitor;
         private static BundleReader _bundleReader;
-        private static Action<string> _addCheckedLocation;
+        private static LocationChecker _locationChecker;
 
-        public CommunityCenterInjections(IMonitor monitor, BundleReader bundleReader, Action<string> addCheckedLocation)
+        public static void Initialize(IMonitor monitor, BundleReader bundleReader, LocationChecker locationChecker)
         {
                 _monitor = monitor;
             _bundleReader = bundleReader;
-            _addCheckedLocation = addCheckedLocation;
+            _locationChecker = locationChecker;
         }
 
         public static bool DoAreaCompleteReward_AreaLocations_Prefix(CommunityCenter __instance, int whichArea)
@@ -49,7 +49,7 @@ namespace StardewArchipelago.Locations.CodeInjections
                         break;
                 }
 
-                _addCheckedLocation(AreaAPLocationName);
+                _locationChecker.AddCheckedLocation(AreaAPLocationName);
                 GoalCodeInjection.CheckCommunityCenterGoalCompletion();
 
                 return false; // don't run original logic
@@ -69,7 +69,7 @@ namespace StardewArchipelago.Locations.CodeInjections
                 var completedBundleNames = bundleStates.Where(x => x.IsCompleted).Select(x => x.RelatedBundle.BundleName + " Bundle");
                 foreach (var completedBundleName in completedBundleNames)
                 {
-                    _addCheckedLocation(completedBundleName);
+                    _locationChecker.AddCheckedLocation(completedBundleName);
                 }
 
                 var communityCenter = Game1.locations.OfType<CommunityCenter>().First();

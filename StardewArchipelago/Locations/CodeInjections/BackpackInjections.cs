@@ -5,18 +5,18 @@ using xTile.Dimensions;
 
 namespace StardewArchipelago.Locations.CodeInjections
 {
-    public class BackpackInjections
+    public static class BackpackInjections
     {
         private const string BACKPACK_UPGRADE_LEVEL_KEY = "Backpack_Upgrade_Level_Key";
 
         private static IMonitor _monitor;
-        private static Action<string> _addCheckedLocation;
+        private static LocationChecker _locationChecker;
         private static ModPersistence _modPersistence;
 
-        public BackpackInjections(IMonitor monitor, Action<string> addCheckedLocation)
+        public static void Initialize(IMonitor monitor, LocationChecker locationChecker)
         {
             _monitor = monitor;
-            _addCheckedLocation = addCheckedLocation;
+            _locationChecker = locationChecker;
             _modPersistence = new ModPersistence();
         }
 
@@ -37,8 +37,7 @@ namespace StardewArchipelago.Locations.CodeInjections
                 {
                     Game1.player.Money -= 2000;
                     modData[BACKPACK_UPGRADE_LEVEL_KEY] = "1";
-                    _addCheckedLocation("Large Pack");
-                    return false; // don't run original logic
+                    _locationChecker.AddCheckedLocation("Large Pack");
                     return false; // don't run original logic
                 }
 
@@ -46,7 +45,7 @@ namespace StardewArchipelago.Locations.CodeInjections
                 {
                     Game1.player.Money -= 10000;
                     modData[BACKPACK_UPGRADE_LEVEL_KEY] = "2";
-                    _addCheckedLocation("Deluxe Pack");
+                    _locationChecker.AddCheckedLocation("Deluxe Pack");
                     return false; // don't run original logic
                 }
 

@@ -1,0 +1,87 @@
+﻿using System.Collections.Generic;
+using System.Linq;
+using HarmonyLib;
+using StardewArchipelago.Archipelago;
+using StardewArchipelago.Locations.CodeInjections;
+using StardewArchipelago.Stardew;
+using StardewModdingAPI;
+using StardewValley;
+using StardewValley.Locations;
+using StardewValley.Menus;
+using StardewValley.Objects;
+
+namespace StardewArchipelago.Locations
+{
+    public class LocationChecker
+    {
+        private static IMonitor _monitor;
+        private ArchipelagoClient _archipelago;
+        private Dictionary<string, long> _checkedLocations;
+
+        public LocationChecker(IMonitor monitor, ArchipelagoClient archipelago, List<string> locationsAlreadyChecked)
+        {
+            _monitor = monitor;
+            _archipelago = archipelago;
+            _checkedLocations = locationsAlreadyChecked.ToDictionary(x => x, x => (long)-1);
+        }
+
+        public List<string> GetAllLocationsAlreadyChecked()
+        {
+            return _checkedLocations.Keys.ToList();
+        }
+
+        public void AddCheckedLocation(string locationName)
+        {
+            if (_checkedLocations.ContainsKey(locationName))
+            {
+                return;
+            }
+
+            var locationId = _archipelago.GetLocationId(locationName);
+
+            if (locationId == -1)
+            {
+                _monitor.Log($"Location \"{locationName}\" could not be converted to an Archipelago id", LogLevel.Error);
+            }
+
+            _checkedLocations.Add(locationName, locationId);
+            SendAllLocationChecks();
+        }
+
+        public void SendAllLocationChecks()
+        {
+            if (!_archipelago.IsConnected)
+            {
+                return;
+            }
+
+            TryToIdentifyUnknownLocationNames();
+
+            var allCheckedLocations = new List<long>();
+            allCheckedLocations.AddRange(_checkedLocations.Values);
+
+            allCheckedLocations = allCheckedLocations.Distinct().Where(x => x > -1).ToList();
+
+            _archipelago.ReportCollectedLocations(allCheckedLocations.ToArray());
+        }
+
+        private void TryToIdentifyUnknownLocationNames()
+        {
+            foreach (var locationName in _checkedLocations.Keys)
+            {
+                if (_checkedLocations[locationName] > -1)
+                {
+                    continue;
+                }
+
+                var locationId = _archipelago.GetLocationId(locationName);
+                if (locationId == -1)
+                {
+                    continue;
+                }
+
+                _checkedLocations[locationName] = locationId;
+            }
+        }
+    }
+}

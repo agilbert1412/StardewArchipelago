@@ -12,83 +12,16 @@ using StardewValley.Objects;
 
 namespace StardewArchipelago.Locations
 {
-    public class LocationManager
+    public class LocationPatcher
     {
-        private static IMonitor _monitor;
-        private ArchipelagoClient _archipelago;
-        private IModHelper _modHelper;
-        private Harmony _harmony;
-        private LocationsCodeInjection _locationsCodeInjection;
+        private readonly ArchipelagoClient _archipelago;
+        private readonly Harmony _harmony;
 
-        private Dictionary<string, long> _checkedLocations;
-
-        public LocationManager(IMonitor monitor, ArchipelagoClient archipelago, BundleReader bundleReader, IModHelper modHelper, Harmony harmony, List<string> locationsAlreadyChecked)
+        public LocationPatcher(IMonitor monitor, ArchipelagoClient archipelago, BundleReader bundleReader, IModHelper modHelper, Harmony harmony, LocationChecker locationChecker)
         {
-            _monitor = monitor;
             _archipelago = archipelago;
-            _modHelper = modHelper;
             _harmony = harmony;
-            _checkedLocations = locationsAlreadyChecked.ToDictionary(x => x, x => (long)-1);
-            _locationsCodeInjection = new LocationsCodeInjection(_monitor, _modHelper, _archipelago, bundleReader, AddCheckedLocation);
-        }
-
-        public List<string> GetAllLocationsAlreadyChecked()
-        {
-            return _checkedLocations.Keys.ToList();
-        }
-
-        private void AddCheckedLocation(string locationName)
-        {
-            if (_checkedLocations.ContainsKey(locationName))
-            {
-                return;
-            }
-
-            var locationId = _archipelago.GetLocationId(locationName);
-
-            if (locationId == -1)
-            {
-                _monitor.Log($"Location \"{locationName}\" could not be converted to an Archipelago id", LogLevel.Error);
-            }
-
-            _checkedLocations.Add(locationName, locationId);
-            SendAllLocationChecks(false);
-        }
-
-        public void SendAllLocationChecks(bool forceReport = false)
-        {
-            if (!_archipelago.IsConnected)
-            {
-                return;
-            }
-
-            TryToIdentifyUnknownLocationNames();
-
-            var allCheckedLocations = new List<long>();
-            allCheckedLocations.AddRange(_checkedLocations.Values);
-
-            allCheckedLocations = allCheckedLocations.Distinct().Where(x => x > -1).ToList();
-
-            _archipelago.ReportCollectedLocations(allCheckedLocations.ToArray());
-        }
-
-        private void TryToIdentifyUnknownLocationNames()
-        {
-            foreach (var locationName in _checkedLocations.Keys)
-            {
-                if (_checkedLocations[locationName] > -1)
-                {
-                    continue;
-                }
-
-                var locationId = _archipelago.GetLocationId(locationName);
-                if (locationId == -1)
-                {
-                    continue;
-                }
-
-                _checkedLocations[locationName] = locationId;
-            }
+            LocationsCodeInjections.Initialize(monitor, modHelper, _archipelago, bundleReader, locationChecker);
         }
 
         public void ReplaceAllLocationsRewardsWithChecks()
@@ -159,7 +92,7 @@ namespace StardewArchipelago.Locations
             // This would need a transpile patch for SeedShop.draw and I don't think it's worth it.
             // _harmony.Patch(
             //     original: AccessTools.Method(typeof(SeedShop), nameof(SeedShop.draw)),
-            //     transpiler: new HarmonyMethod(typeof(BackpackInjections), nameof(LocationsCodeInjection.AnswerDialogueAction_BackPackPurchase_Prefix)));
+            //     transpiler: new HarmonyMethod(typeof(BackpackInjections), nameof(LocationsCodeInjections.AnswerDialogueAction_BackPackPurchase_Prefix)));
         }
 
         private void ReplaceMineshaftChestsWithChecks()

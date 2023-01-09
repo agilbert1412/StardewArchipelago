@@ -5,18 +5,18 @@ using xTile.Dimensions;
 
 namespace StardewArchipelago.Locations.CodeInjections
 {
-    public class ScytheInjections
+    public static class ScytheInjections
     {
         private const string GOT_GOLDEN_SCYTHE_KEY = "Got_GoldenScythe_Key";
 
         private static IMonitor _monitor;
-        private static Action<string> _addCheckedLocation;
+        private static LocationChecker _locationChecker;
         private static ModPersistence _modPersistence;
 
-        public ScytheInjections(IMonitor monitor, Action<string> addCheckedLocation)
+        public static void Initialize(IMonitor monitor, LocationChecker locationChecker)
         {
             _monitor = monitor;
-            _addCheckedLocation = addCheckedLocation;
+            _locationChecker = locationChecker;
             _modPersistence = new ModPersistence();
         }
 
@@ -46,7 +46,7 @@ namespace StardewArchipelago.Locations.CodeInjections
                         __instance.setMapTileIndex(30, 5, 262, "Front");
                         __instance.setMapTileIndex(29, 6, 277, "Buildings");
                         __instance.setMapTileIndex(30, 56, 278, "Buildings");
-                        _addCheckedLocation("Grim Reaper statue");
+                        _locationChecker.AddCheckedLocation("Grim Reaper statue");
                         modData[GOT_GOLDEN_SCYTHE_KEY] = "1";
                         return false; // don't run original logic
                     }

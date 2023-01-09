@@ -7,7 +7,7 @@ using StardewValley.Tools;
 
 namespace StardewArchipelago.Locations.CodeInjections
 {
-    public class ToolInjections
+    public static class ToolInjections
     {
         private const string PICKAXE_UPGRADE_LEVEL_KEY = "Pickaxe_Upgrade_Level_Key";
         private const string AXE_UPGRADE_LEVEL_KEY = "Axe_Upgrade_Level_Key";
@@ -17,14 +17,14 @@ namespace StardewArchipelago.Locations.CodeInjections
 
         private static IMonitor _monitor;
         private static IModHelper _modHelper;
-        private static Action<string> _addCheckedLocation;
+        private static LocationChecker _locationChecker;
         private static ModPersistence _modPersistence;
 
-        public ToolInjections(IMonitor monitor, IModHelper modHelper, Action<string> addCheckedLocation)
+        public static void Initialize(IMonitor monitor, IModHelper modHelper, LocationChecker locationChecker)
         {
             _monitor = monitor;
             _modHelper = modHelper;
-            _addCheckedLocation = addCheckedLocation;
+            _locationChecker = locationChecker;
             _modPersistence = new ModPersistence();
         }
 
@@ -119,23 +119,23 @@ namespace StardewArchipelago.Locations.CodeInjections
                 {
                     case Axe _:
                         _modPersistence.IncrementModDataValue(AXE_UPGRADE_LEVEL_KEY);
-                        _addCheckedLocation($"{GetMetalNameForTier(modData[AXE_UPGRADE_LEVEL_KEY])} Axe Upgrade");
+                        _locationChecker.AddCheckedLocation($"{GetMetalNameForTier(modData[AXE_UPGRADE_LEVEL_KEY])} Axe Upgrade");
                         break;
                     case Pickaxe _:
                         _modPersistence.IncrementModDataValue(PICKAXE_UPGRADE_LEVEL_KEY);
-                        _addCheckedLocation($"{GetMetalNameForTier(modData[PICKAXE_UPGRADE_LEVEL_KEY])} Pickaxe Upgrade");
+                        _locationChecker.AddCheckedLocation($"{GetMetalNameForTier(modData[PICKAXE_UPGRADE_LEVEL_KEY])} Pickaxe Upgrade");
                         break;
                     case Hoe _:
                         _modPersistence.IncrementModDataValue(HOE_UPGRADE_LEVEL_KEY);
-                        _addCheckedLocation($"{GetMetalNameForTier(modData[HOE_UPGRADE_LEVEL_KEY])} Hoe Upgrade");
+                        _locationChecker.AddCheckedLocation($"{GetMetalNameForTier(modData[HOE_UPGRADE_LEVEL_KEY])} Hoe Upgrade");
                         break;
                     case WateringCan _:
                         _modPersistence.IncrementModDataValue(WATERINGCAN_UPGRADE_LEVEL_KEY);
-                        _addCheckedLocation($"{GetMetalNameForTier(modData[WATERINGCAN_UPGRADE_LEVEL_KEY])} Watering Can Upgrade");
+                        _locationChecker.AddCheckedLocation($"{GetMetalNameForTier(modData[WATERINGCAN_UPGRADE_LEVEL_KEY])} Watering Can Upgrade");
                         break;
                     case GenericTool _:
                         _modPersistence.IncrementModDataValue(TRASHCAN_UPGRADE_LEVEL_KEY);
-                        _addCheckedLocation($"{GetMetalNameForTier(modData[TRASHCAN_UPGRADE_LEVEL_KEY])} Trash Can Upgrade");
+                        _locationChecker.AddCheckedLocation($"{GetMetalNameForTier(modData[TRASHCAN_UPGRADE_LEVEL_KEY])} Trash Can Upgrade");
                         break;
                     default:
                         return true; // run original logic

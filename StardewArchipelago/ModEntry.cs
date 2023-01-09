@@ -16,6 +16,7 @@ using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Objects;
+using xTile.Dimensions;
 
 namespace StardewArchipelago
 {
@@ -28,7 +29,8 @@ namespace StardewArchipelago
         private BundleReader _bundleReader;
         private ArchipelagoClient _archipelago;
         private ItemManager _itemManager;
-        private LocationManager _locationsManager;
+        private LocationChecker _locationsChecker;
+        private LocationPatcher _locationsPatcher;
         private GoalManager _goalManager;
         private StardewItemManager _stardewItemManager;
         private UnlockManager _unlockManager;
@@ -105,7 +107,7 @@ namespace StardewArchipelago
         private void OnSaved(object sender, SavedEventArgs e)
         {
             _state.ItemsReceived = _itemManager.GetAllItemsAlreadyProcessed();
-            _state.LocationsChecked = _locationsManager.GetAllLocationsAlreadyChecked();
+            _state.LocationsChecked = _locationsChecker.GetAllLocationsAlreadyChecked();
             _state.LocationsScouted = _archipelago.ScoutedLocations;
             _helper.Data.WriteJsonFile(GetApDataJsonPath(), _state);
         }
@@ -124,7 +126,8 @@ namespace StardewArchipelago
             _stardewItemManager = new StardewItemManager();
             _bundleReader = new BundleReader();
             _itemManager = new ItemManager(_archipelago, _stardewItemManager, _unlockManager, _specialItemManager, _state.ItemsReceived);
-            _locationsManager = new LocationManager(Monitor, _archipelago, _bundleReader, _helper, _harmony, _state.LocationsChecked);
+            _locationsChecker = new LocationChecker(Monitor, _archipelago, _state.LocationsChecked);
+            _locationsPatcher = new LocationPatcher(Monitor, _archipelago, _bundleReader, _helper, _harmony, _locationsChecker);
             _goalManager = new GoalManager(Monitor, _helper, _harmony, _archipelago);
             _jojaDisabler = new JojaDisabler(Monitor, _helper, _harmony);
 
@@ -140,7 +143,7 @@ namespace StardewArchipelago
                 return;
             }
             
-            _locationsManager.ReplaceAllLocationsRewardsWithChecks();
+            _locationsPatcher.ReplaceAllLocationsRewardsWithChecks();
             _goalManager.InjectGoalMethods();
             _jojaDisabler.DisableJojaMembership();
             _multiSleep.InjectMultiSleepOption(_archipelago.SlotData);
@@ -182,7 +185,7 @@ namespace StardewArchipelago
                 return;
             }
 
-            _locationsManager.SendAllLocationChecks(true);
+            _locationsChecker.SendAllLocationChecks();
             _itemManager.ReceiveAllNewItems();
             _itemManager.RegisterAllUnlocks();
             _goalManager.CheckGoalCompletion();

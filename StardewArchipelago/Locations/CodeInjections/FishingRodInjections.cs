@@ -10,7 +10,7 @@ using StardewValley.Tools;
 
 namespace StardewArchipelago.Locations.CodeInjections
 {
-    public class FishingRodInjections
+    public static class FishingRodInjections
     {
         public const string RECEIVED_FISHING_ROD_LEVEL_KEY = "FishingRod_Received_Level_Key";
 
@@ -25,15 +25,15 @@ namespace StardewArchipelago.Locations.CodeInjections
         private static IMonitor _monitor;
         private static IModHelper _modHelper;
         private static ArchipelagoClient _archipelago;
-        private static Action<string> _addCheckedLocation;
+        private static LocationChecker _locationChecker;
         private static ModPersistence _modPersistence;
 
-        public FishingRodInjections(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, Action<string> addCheckedLocation)
+        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             _monitor = monitor;
             _modHelper = modHelper;
             _archipelago = archipelago;
-            _addCheckedLocation = addCheckedLocation;
+            _locationChecker = locationChecker;
             _modPersistence = new ModPersistence();
         }
 
@@ -279,24 +279,24 @@ namespace StardewArchipelago.Locations.CodeInjections
 
         private static void OnCheckBambooPoleLocation()
         {
-            _addCheckedLocation("Bamboo Pole Cutscene");
+            _locationChecker.AddCheckedLocation("Bamboo Pole Cutscene");
         }
 
         private static void OnPurchaseTrainingRodLocation()
         {
-            _addCheckedLocation(PURCHASE_TRAINING_ROD_AP_LOCATION_NAME);
+            _locationChecker.AddCheckedLocation(PURCHASE_TRAINING_ROD_AP_LOCATION_NAME);
             _modPersistence.SetToOneModDataValue(PURCHASED_TRAINING_ROD_KEY);
         }
 
         private static void OnPurchaseFiberglassRodLocation()
         {
-            _addCheckedLocation(PURCHASE_FIBERGLASS_ROD_AP_LOCATION_NAME);
+            _locationChecker.AddCheckedLocation(PURCHASE_FIBERGLASS_ROD_AP_LOCATION_NAME);
             _modPersistence.SetToOneModDataValue(PURCHASED_FIBERGLASS_ROD_KEY);
         }
 
         private static void OnPurchaseIridiumRodLocation()
         {
-            _addCheckedLocation(PURCHASE_IRIDIUM_ROD_AP_LOCATION_NAME);
+            _locationChecker.AddCheckedLocation(PURCHASE_IRIDIUM_ROD_AP_LOCATION_NAME);
             _modPersistence.SetToOneModDataValue(PURCHASED_IRIDIUM_ROD_KEY);
         }
 

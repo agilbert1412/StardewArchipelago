@@ -13,18 +13,18 @@ using Rectangle = xTile.Dimensions.Rectangle;
 
 namespace StardewArchipelago.Locations.CodeInjections
 {
-    public class MineshaftInjections
+    public static class MineshaftInjections
     {
         public const string RECEIVED_MINE_ELEVATOR_KEY = "MineElevator_Received_Level_Key";
 
         private static IMonitor _monitor;
-        private static Action<string> _addCheckedLocation;
+        private static LocationChecker _locationChecker;
         private static ModPersistence _modPersistence;
 
-        public MineshaftInjections(IMonitor monitor, Action<string> addCheckedLocation)
+        public static void Initialize(IMonitor monitor, LocationChecker locationChecker)
         {
             _monitor = monitor;
-            _addCheckedLocation = addCheckedLocation;
+            _locationChecker = locationChecker;
             _modPersistence = new ModPersistence();
         }
 
@@ -54,7 +54,7 @@ namespace StardewArchipelago.Locations.CodeInjections
                 __instance.items.RemoveAt(0);
                 __result = true;
 
-                _addCheckedLocation($"The Mines Floor {Game1.mine.mineLevel} Treasure");
+                _locationChecker.AddCheckedLocation($"The Mines Floor {Game1.mine.mineLevel} Treasure");
 
                 return false; // don't run original logic
 
@@ -104,7 +104,7 @@ namespace StardewArchipelago.Locations.CodeInjections
                     return;
                 }
 
-                _addCheckedLocation($"The Mines Floor {whatLevel} Elevator");
+                _locationChecker.AddCheckedLocation($"The Mines Floor {whatLevel} Elevator");
             }
             catch (Exception ex)
             {
