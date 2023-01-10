@@ -16,7 +16,6 @@ using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Objects;
-using xTile.Dimensions;
 
 namespace StardewArchipelago
 {
@@ -35,7 +34,6 @@ namespace StardewArchipelago
         private GoalManager _goalManager;
         private StardewItemManager _stardewItemManager;
         private UnlockManager _unlockManager;
-        private SpecialItemManager _specialItemManager;
         private MultiSleep _multiSleep;
         private JojaDisabler _jojaDisabler;
 
@@ -49,7 +47,6 @@ namespace StardewArchipelago
         {
             _state = new ArchipelagoStateDto();
             _unlockManager = new UnlockManager();
-            _specialItemManager = new SpecialItemManager();
         }
 
         /*********
@@ -92,7 +89,7 @@ namespace StardewArchipelago
 
         private void OnSaveCreated(object sender, SaveCreatedEventArgs e)
         {
-            _state.ItemsReceived = new Dictionary<long, int>();
+            _state.ItemsReceived = new List<ReceivedItem>();
             _state.LocationsChecked = new List<string>();
             _state.LocationsScouted = new Dictionary<string, ScoutedLocation>();
             _helper.Data.WriteJsonFile(GetApDataJsonPath(), _state);
@@ -126,7 +123,7 @@ namespace StardewArchipelago
 
             _stardewItemManager = new StardewItemManager();
             _bundleReader = new BundleReader();
-            _itemManager = new ItemManager(_archipelago, _stardewItemManager, _unlockManager, _specialItemManager, _state.ItemsReceived);
+            _itemManager = new ItemManager(_archipelago, _stardewItemManager, _unlockManager, _state.ItemsReceived);
             _logicPatcher = new RandomizedLogicPatcher(Monitor, _harmony);
             _locationsChecker = new LocationChecker(Monitor, _archipelago, _state.LocationsChecked);
             _locationsPatcher = new LocationPatcher(Monitor, _archipelago, _bundleReader, _helper, _harmony, _locationsChecker);
@@ -206,7 +203,12 @@ namespace StardewArchipelago
                 _hasNewItemsToReceive = false;
             }
 
-            var allReceivedItems = _itemManager.GetAllItemsAlreadyProcessed();
+            GiveMissedStardrops();
+        }
+
+        private void GiveMissedStardrops()
+        {
+            /*var allReceivedItems = _itemManager.GetAllItemsAlreadyProcessed();
             var numberReceivedStardrops = 0;
             foreach (var (name, amount) in allReceivedItems)
             {
@@ -214,10 +216,12 @@ namespace StardewArchipelago
                 {
                     continue;
                 }
+
                 numberReceivedStardrops = amount;
                 break;
             }
-            _specialItemManager.ReceiveStardropIfDeserved(numberReceivedStardrops);
+
+            _specialItemManager.ReceiveStardropIfDeserved(numberReceivedStardrops);*/
         }
 
         private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)

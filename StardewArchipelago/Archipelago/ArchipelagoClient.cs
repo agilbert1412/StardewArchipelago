@@ -229,14 +229,35 @@ namespace StardewArchipelago.Archipelago
             _session.Locations.CompleteLocationChecks(locationIds);
         }
 
-        public Dictionary<long, int> GetAllReceivedItems()
+        public List<ReceivedItem> GetAllReceivedItems()
         {
             if (_session == null)
             {
-                return new Dictionary<long, int>();
+                return new List<ReceivedItem>();
             }
 
-            return _session.Items.AllItemsReceived.GroupBy(x => x.Item).ToDictionary(group => group.Key, group => group.Count());
+            var allReceivedItems = new List<ReceivedItem>();
+            foreach (var apItem in _session.Items.AllItemsReceived)
+            {
+                var itemName = GetItemName(apItem.Item);
+                var playerName = _session.Players.GetPlayerName(apItem.Player);
+                var locationName = GetLocationName(apItem.Location);
+
+                var receivedItem = new ReceivedItem(locationName, itemName, playerName, apItem.Location, apItem.Item,
+                    apItem.Player);
+
+                allReceivedItems.Add(receivedItem);
+            }
+
+            return allReceivedItems;
+        }
+
+        public Dictionary<string, int> GetAllReceivedItemNamesAndCounts()
+        {
+            var allReceivedItems = GetAllReceivedItems();
+            var receivedItemsGrouped = allReceivedItems.GroupBy(x => x.ItemId);
+            var receivedItemsWithCount = receivedItemsGrouped.ToDictionary(x => x.First().ItemName, x => x.Count());
+            return receivedItemsWithCount;
         }
 
         public void ReportGoalCompletion()

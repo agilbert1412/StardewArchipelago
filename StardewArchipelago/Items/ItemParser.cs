@@ -1,4 +1,6 @@
 ﻿using System;
+using StardewArchipelago.Archipelago;
+using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Stardew;
 using StardewValley;
 
@@ -12,57 +14,45 @@ namespace StardewArchipelago.Items
 
         private StardewItemManager _itemManager;
         private UnlockManager _unlockManager;
-        private SpecialItemManager _specialItemManager;
 
-        public ItemParser(StardewItemManager itemManager, UnlockManager unlockManager, SpecialItemManager specialItemManager)
+        public ItemParser(StardewItemManager itemManager, UnlockManager unlockManager)
         {
             _itemManager = itemManager;
             _unlockManager = unlockManager;
-            _specialItemManager = specialItemManager;
         }
 
-        public Item ProcessItem(string itemName, int numberReceived, int numberNewReceived)
+        public LetterAttachment ProcessItem(ReceivedItem receivedItem)
         {
-            var itemIsResourcePack = TryParseResourcePack(itemName, out var stardewItemName, out var resourcePackAmount);
+            var itemIsResourcePack = TryParseResourcePack(receivedItem.ItemName, out var stardewItemName, out var resourcePackAmount);
             if (itemIsResourcePack)
             {
-                return GetResourcePack(stardewItemName, resourcePackAmount * numberNewReceived);
+                if (stardewItemName == "Money")
+                {
+                    return new LetterMoneyAttachment(receivedItem, resourcePackAmount);
+                }
+
+                var resourcePackItem = GetResourcePackItem(stardewItemName);
+                return new LetterItemAttachment(receivedItem, resourcePackItem, resourcePackAmount);
             }
 
-            var itemIsFriendshipBonus = TryParseFriendshipBonus(itemName, out var numberOfPoints);
+            var itemIsFriendshipBonus = TryParseFriendshipBonus(receivedItem.ItemName, out var numberOfPoints);
             if (itemIsFriendshipBonus)
             {
-                var farmer = Game1.player;
-                foreach (var npc in farmer.friendshipData.Keys)
-                {
-                    farmer.friendshipData[npc].Points += numberOfPoints;
-                }
-                return null;
+                return new LetterCustomAttachment(receivedItem, openedAction: () => IncreaseFriendshipWithEveryone(numberOfPoints));
             }
 
-            if (_unlockManager.IsUnlock(itemName))
+            if (_unlockManager.IsUnlock(receivedItem.ItemName))
             {
-                _unlockManager.PerformUnlock(itemName, numberReceived);
-                return null;
+                return new LetterCustomAttachment(receivedItem, openedAction: () => _unlockManager.PerformUnlock(receivedItem.ItemName, numberReceived));
             }
 
-            if (_specialItemManager.IsUnlock(itemName))
+            if (_itemManager.ItemExists(receivedItem.ItemName))
             {
-                _specialItemManager.PerformUnlock(itemName, numberNewReceived);
-                return null;
+                var resourcePackItem = GetSingleItem(receivedItem.ItemName);
+                return new LetterItemAttachment(receivedItem, resourcePackItem);
             }
 
-            if (_specialItemManager.IsItem(itemName))
-            {
-                return _specialItemManager.GetSpecialItem(itemName);
-            }
-
-            if (_itemManager.ItemExists(itemName))
-            {
-                return GetSingleItem(itemName);
-            }
-
-            throw new ArgumentException($"Could not process item {itemName}");
+            throw new ArgumentException($"Could not process item {receivedItem.ItemName}");
         }
 
         public void ProcessUnlockWithoutGivingNewItems(string itemName, int numberReceived)
@@ -117,29 +107,25 @@ namespace StardewArchipelago.Items
             return true;
         }
 
-        private Item GetSingleItem(string stardewItemName)
+        private StardewItem GetSingleItem(string stardewItemName)
         {
             var item = _itemManager.GetItemByName(stardewItemName);
-            return item.PrepareForGivingToFarmer();
+            return item;
         }
 
-        private Item GetResourcePack(string stardewItemName, int resourcePackAmount)
+        private StardewItem GetResourcePackItem(string stardewItemName)
         {
-            var player = Game1.player;
+            var item = _itemManager.GetItemByName(stardewItemName);
+            return item;
+        }
 
-            if (stardewItemName == "Money")
+        private void IncreaseFriendshipWithEveryone(int numberOfPoints)
+        {
+            var farmer = Game1.player;
+            foreach (var npc in farmer.friendshipData.Keys)
             {
-                GiveGoldToPlayer(player, resourcePackAmount);
-                return null;
+                farmer.friendshipData[npc].Points += numberOfPoints;
             }
-
-            var item = _itemManager.GetItemByName(stardewItemName);
-            return item.PrepareForGivingToFarmer(resourcePackAmount);
-        }
-
-        private void GiveGoldToPlayer(Farmer player, int amount)
-        {
-            player.addUnearnedMoney(amount);
         }
     }
 }

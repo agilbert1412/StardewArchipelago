@@ -1,6 +1,5 @@
 ﻿using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
-using System;
 using StardewArchipelago.Stardew;
 
 namespace StardewArchipelago.Locations.CodeInjections

@@ -1,16 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework;
 using StardewModdingAPI;
-using StardewValley;
-using StardewValley.Locations;
-using StardewValley.Menus;
 using StardewValley.Network;
-using StardewValley.Objects;
-using StardewValley.Tools;
-using xTile.Dimensions;
-using xTile.Tiles;
-using Rectangle = xTile.Dimensions.Rectangle;
 
 namespace StardewArchipelago.Locations.CodeInjections
 {

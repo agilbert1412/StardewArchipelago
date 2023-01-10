@@ -48,6 +48,10 @@ namespace StardewArchipelago.Items
         private void RegisterPlayerImprovement()
         {
             _unlockables.Add("Progressive Backpack", SetBackPackLevel);
+            _unlockables.Add("Stardrop", (_) => ReceiveStardrop());
+            _unlockables.Add("Dwarvish Translation Guide", (_) => ReceiveDwarvishTranslationGuide());
+            _unlockables.Add("Skull Key", (_) => ReceiveSkullKey());
+            _unlockables.Add("Rusty Key", (_) => ReceiveRustyKey());
         }
 
         private void RegisterProgressiveTools()
@@ -58,6 +62,11 @@ namespace StardewArchipelago.Items
             _unlockables.Add("Progressive Watering Can", ReceiveProgressiveWateringCan);
             _unlockables.Add("Progressive Trash Can", ReceiveProgressiveTrashCan);
             _unlockables.Add("Progressive Fishing Rod", ReceiveProgressiveFishingRod);
+        }
+
+        private void RegisterUniqueItems()
+        {
+            _unlockables.Add("Golden Scythe", (_) => ReceiveGoldenScythe());
         }
 
         private void RegisterMineElevators()
@@ -235,6 +244,45 @@ namespace StardewArchipelago.Items
         {
             MineshaftInjections.InitializeMineElevatorModDataValues();
             _modPersistence.SetModDataValue(MineshaftInjections.RECEIVED_MINE_ELEVATOR_KEY, numberReceived.ToString());
+        }
+
+        public void ReceiveStardropIfDeserved(int expectedNumber)
+        {
+            var expectedEnergy = 270 + (expectedNumber * 34);
+            if (expectedEnergy > Game1.player.MaxStamina)
+            {
+                ReceiveStardrop();
+            }
+        }
+
+        private void ReceiveStardrop()
+        {
+            var stardrop = new StardewValley.Object(434, 1);
+            Game1.player.eatObject(stardrop, true);
+        }
+
+        private void ReceiveDwarvishTranslationGuide()
+        {
+            Game1.player.canUnderstandDwarves = true;
+            Game1.playSound("fireball");
+        }
+
+        private void ReceiveSkullKey()
+        {
+            Game1.player.hasSkullKey = true;
+            Game1.player.addQuest(19);
+        }
+
+        private void ReceiveRustyKey()
+        {
+            Game1.player.hasRustyKey = true;
+        }
+
+        private Item ReceiveGoldenScythe()
+        {
+            Game1.playSound("parry");
+            Game1.player.mailReceived.Add("gotGoldenScythe");
+            return new MeleeWeapon(53);
         }
     }
 }
