@@ -9,23 +9,15 @@ namespace StardewArchipelago.Locations.CodeInjections
 {
     public static class ToolInjections
     {
-        private const string PICKAXE_UPGRADE_LEVEL_KEY = "Pickaxe_Upgrade_Level_Key";
-        private const string AXE_UPGRADE_LEVEL_KEY = "Axe_Upgrade_Level_Key";
-        private const string HOE_UPGRADE_LEVEL_KEY = "Hoe_Upgrade_Level_Key";
-        private const string WATERINGCAN_UPGRADE_LEVEL_KEY = "WateringCan_Upgrade_Level_Key";
-        private const string TRASHCAN_UPGRADE_LEVEL_KEY = "TrashCan_Upgrade_Level_Key";
-
         private static IMonitor _monitor;
         private static IModHelper _modHelper;
         private static LocationChecker _locationChecker;
-        private static ModPersistence _modPersistence;
 
         public static void Initialize(IMonitor monitor, IModHelper modHelper, LocationChecker locationChecker)
         {
             _monitor = monitor;
             _modHelper = modHelper;
             _locationChecker = locationChecker;
-            _modPersistence = new ModPersistence();
         }
 
         public static bool AnswerDialogueAction_ToolUpgrade_Prefix(GameLocation __instance, string questionAndAnswer, string[] questionParams, ref bool __result)
@@ -38,19 +30,17 @@ namespace StardewArchipelago.Locations.CodeInjections
                 }
 
                 __result = true;
-                var modData = Game1.getFarm().modData;
-                InitializeToolUpgradeModDataValues();
 
                 var farmer = Game1.player;
                 var utilityPriceForToolMethod = _modHelper.Reflection.GetMethod(typeof(Utility), "priceForToolUpgradeLevel");
                 var indexOfExtraMaterialForToolMethod = _modHelper.Reflection.GetMethod(typeof(Utility), "indexOfExtraMaterialForToolUpgrade");
 
                 var blacksmithUpgradeStock = new Dictionary<ISalable, int[]>();
-                AddToolUpgradeToStock(modData, blacksmithUpgradeStock, AXE_UPGRADE_LEVEL_KEY, () => new Axe(), utilityPriceForToolMethod, indexOfExtraMaterialForToolMethod);
-                AddToolUpgradeToStock(modData, blacksmithUpgradeStock, WATERINGCAN_UPGRADE_LEVEL_KEY, () => new WateringCan(), utilityPriceForToolMethod, indexOfExtraMaterialForToolMethod);
-                AddToolUpgradeToStock(modData, blacksmithUpgradeStock, PICKAXE_UPGRADE_LEVEL_KEY, () => new Pickaxe(), utilityPriceForToolMethod, indexOfExtraMaterialForToolMethod);
-                AddToolUpgradeToStock(modData, blacksmithUpgradeStock, HOE_UPGRADE_LEVEL_KEY, () => new Hoe(), utilityPriceForToolMethod, indexOfExtraMaterialForToolMethod);
-                AddTrashCanUpgradeToStock(modData, blacksmithUpgradeStock, utilityPriceForToolMethod, indexOfExtraMaterialForToolMethod);
+                AddToolUpgradeToStock("Axe", blacksmithUpgradeStock, () => new Axe(), utilityPriceForToolMethod, indexOfExtraMaterialForToolMethod);
+                AddToolUpgradeToStock("Watering Can", blacksmithUpgradeStock, () => new WateringCan(), utilityPriceForToolMethod, indexOfExtraMaterialForToolMethod);
+                AddToolUpgradeToStock("Pickaxe", blacksmithUpgradeStock, () => new Pickaxe(), utilityPriceForToolMethod, indexOfExtraMaterialForToolMethod);
+                AddToolUpgradeToStock("Hoe", blacksmithUpgradeStock, () => new Hoe(), utilityPriceForToolMethod, indexOfExtraMaterialForToolMethod);
+                AddTrashCanUpgradeToStock(blacksmithUpgradeStock, utilityPriceForToolMethod, indexOfExtraMaterialForToolMethod);
 
                 Game1.activeClickableMenu = new ShopMenu(blacksmithUpgradeStock, who: "ClintUpgrade");
 
@@ -63,11 +53,10 @@ namespace StardewArchipelago.Locations.CodeInjections
             }
         }
 
-        private static void AddToolUpgradeToStock(ModDataDictionary modData, Dictionary<ISalable, int[]> blacksmithUpgradeStock,
-            string toolUpgradeKey, Func<Tool> toolCreationFunction,
+        private static void AddToolUpgradeToStock(string toolGenericName, Dictionary<ISalable, int[]> blacksmithUpgradeStock, Func<Tool> toolCreationFunction,
             IReflectedMethod utilityPriceForToolMethod, IReflectedMethod indexOfExtraMaterialForToolMethod)
         {
-            var currentToolLevel = int.Parse(modData[toolUpgradeKey]);
+            var currentToolLevel = GetCurrentToolUpgradeLevel(toolGenericName);
             if (currentToolLevel >= 4)
             {
                 return;
@@ -84,10 +73,10 @@ namespace StardewArchipelago.Locations.CodeInjections
             });
         }
 
-        private static void AddTrashCanUpgradeToStock(ModDataDictionary modData, Dictionary<ISalable, int[]> blacksmithUpgradeStock,
+        private static void AddTrashCanUpgradeToStock(Dictionary<ISalable, int[]> blacksmithUpgradeStock,
             IReflectedMethod utilityPriceForToolMethod, IReflectedMethod indexOfExtraMaterialForToolMethod)
         {
-            var currentTrashCanLevel = int.Parse(modData[TRASHCAN_UPGRADE_LEVEL_KEY]);
+            var currentTrashCanLevel = GetCurrentToolUpgradeLevel("Trash Can");
             if (currentTrashCanLevel >= 4)
             {
                 return;
@@ -108,34 +97,51 @@ namespace StardewArchipelago.Locations.CodeInjections
             });
         }
 
+        private static int GetCurrentToolUpgradeLevel(string toolGenericName)
+        {
+            var currentToolLevel = 0;
+            if (_locationChecker.IsLocationChecked($"Iridium {toolGenericName} Upgrade"))
+            {
+                currentToolLevel = 4;
+            }
+            else if (_locationChecker.IsLocationChecked($"Gold {toolGenericName} Upgrade"))
+            {
+                currentToolLevel = 3;
+            }
+            else if (_locationChecker.IsLocationChecked($"Iron {toolGenericName} Upgrade"))
+            {
+                currentToolLevel = 2;
+            }
+            else if (_locationChecker.IsLocationChecked($"Copper {toolGenericName} Upgrade"))
+            {
+                currentToolLevel = 1;
+            }
+
+            return currentToolLevel;
+        }
+
         public static bool ActionWhenPurchased_ToolUpgrade_Prefix(Tool __instance, ref bool __result)
         {
             try
             {
-                var modData = Game1.getFarm().modData;
-                InitializeToolUpgradeModDataValues();
+                var metalName = GetMetalNameForTier(__instance.UpgradeLevel);
 
                 switch (__instance)
                 {
                     case Axe _:
-                        _modPersistence.IncrementModDataValue(AXE_UPGRADE_LEVEL_KEY);
-                        _locationChecker.AddCheckedLocation($"{GetMetalNameForTier(modData[AXE_UPGRADE_LEVEL_KEY])} Axe Upgrade");
+                        _locationChecker.AddCheckedLocation($"{metalName} Axe Upgrade");
                         break;
                     case Pickaxe _:
-                        _modPersistence.IncrementModDataValue(PICKAXE_UPGRADE_LEVEL_KEY);
-                        _locationChecker.AddCheckedLocation($"{GetMetalNameForTier(modData[PICKAXE_UPGRADE_LEVEL_KEY])} Pickaxe Upgrade");
+                        _locationChecker.AddCheckedLocation($"{metalName} Pickaxe Upgrade");
                         break;
                     case Hoe _:
-                        _modPersistence.IncrementModDataValue(HOE_UPGRADE_LEVEL_KEY);
-                        _locationChecker.AddCheckedLocation($"{GetMetalNameForTier(modData[HOE_UPGRADE_LEVEL_KEY])} Hoe Upgrade");
+                        _locationChecker.AddCheckedLocation($"{metalName} Hoe Upgrade");
                         break;
                     case WateringCan _:
-                        _modPersistence.IncrementModDataValue(WATERINGCAN_UPGRADE_LEVEL_KEY);
-                        _locationChecker.AddCheckedLocation($"{GetMetalNameForTier(modData[WATERINGCAN_UPGRADE_LEVEL_KEY])} Watering Can Upgrade");
+                        _locationChecker.AddCheckedLocation($"{metalName} Watering Can Upgrade");
                         break;
                     case GenericTool _:
-                        _modPersistence.IncrementModDataValue(TRASHCAN_UPGRADE_LEVEL_KEY);
-                        _locationChecker.AddCheckedLocation($"{GetMetalNameForTier(modData[TRASHCAN_UPGRADE_LEVEL_KEY])} Trash Can Upgrade");
+                        _locationChecker.AddCheckedLocation($"{metalName} Trash Can Upgrade");
                         break;
                     default:
                         return true; // run original logic
@@ -154,10 +160,9 @@ namespace StardewArchipelago.Locations.CodeInjections
             }
         }
 
-        private static string GetMetalNameForTier(string s)
+        private static string GetMetalNameForTier(int upgradeLevel)
         {
-            var value = int.Parse(s);
-            switch (value)
+            switch (upgradeLevel)
             {
                 case 0:
                     return "Basic";
@@ -170,17 +175,8 @@ namespace StardewArchipelago.Locations.CodeInjections
                 case 4:
                     return "Iridium";
                 default:
-                    throw new ArgumentException($"Tier {value} is not a value upgrade level for a tool");
+                    throw new ArgumentException($"Tier {upgradeLevel} is not a value upgrade level for a tool");
             }
-        }
-
-        private static void InitializeToolUpgradeModDataValues()
-        {
-            _modPersistence.InitializeModDataValue(PICKAXE_UPGRADE_LEVEL_KEY, "0");
-            _modPersistence.InitializeModDataValue(AXE_UPGRADE_LEVEL_KEY, "0");
-            _modPersistence.InitializeModDataValue(HOE_UPGRADE_LEVEL_KEY, "0");
-            _modPersistence.InitializeModDataValue(WATERINGCAN_UPGRADE_LEVEL_KEY, "0");
-            _modPersistence.InitializeModDataValue(TRASHCAN_UPGRADE_LEVEL_KEY, "0");
         }
     }
 }

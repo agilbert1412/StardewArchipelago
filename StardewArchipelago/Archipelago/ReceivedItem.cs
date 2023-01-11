@@ -28,6 +28,9 @@
                 hash = (hash * 13) + ItemId.GetHashCode();
                 hash = (hash * 13) + LocationId.GetHashCode();
                 hash = (hash * 13) + PlayerId.GetHashCode();
+                hash = (hash * 13) + ItemName.GetHashCode();
+                hash = (hash * 13) + LocationName.GetHashCode();
+                hash = (hash * 13) + PlayerName.GetHashCode();
                 return hash;
             }
         }

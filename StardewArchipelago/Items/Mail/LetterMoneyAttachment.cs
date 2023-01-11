@@ -15,5 +15,10 @@ namespace StardewArchipelago.Items.Mail
         {
             return $"%item money {MoneyAmount} %%";
         }
+
+        public override void SendToPlayer(Mailman _mailman)
+        {
+            _mailman.SendArchipelagoMail(ArchipelagoItem.ItemName, ArchipelagoItem.PlayerName, ArchipelagoItem.LocationName, GetEmbedString());
+        }
     }
 }

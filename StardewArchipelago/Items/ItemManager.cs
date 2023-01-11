@@ -13,22 +13,22 @@ namespace StardewArchipelago.Items
         private Mailman _mail;
         private HashSet<ReceivedItem> _itemsAlreadyProcessed;
 
-        public ItemManager(ArchipelagoClient archipelago, StardewItemManager itemManager, UnlockManager unlockManager, IEnumerable<ReceivedItem> itemsAlreadyProcessed)
+        public ItemManager(ArchipelagoClient archipelago, StardewItemManager itemManager, UnlockManager unlockManager, Mailman mail, IEnumerable<ReceivedItem> itemsAlreadyProcessed)
         {
             _archipelago = archipelago;
             _itemParser = new ItemParser(itemManager, unlockManager);
-            _mail = new Mailman();
+            _mail = mail;
             _itemsAlreadyProcessed = itemsAlreadyProcessed.ToHashSet();
         }
 
-        public void RegisterAllUnlocks()
+        /*public void RegisterAllUnlocks()
         {
             var allReceivedItems = _archipelago.GetAllReceivedItemNamesAndCounts();
             foreach (var (itemName, numberReceived) in allReceivedItems)
             {
                 _itemParser.ProcessUnlockWithoutGivingNewItems(itemName, numberReceived);
             }
-        }
+        }*/
 
         public void ReceiveAllNewItems()
         {
@@ -48,7 +48,7 @@ namespace StardewArchipelago.Items
             }
 
             var attachment = _itemParser.ProcessItem(receivedItem);
-            _mail.SendArchipelagoMail(receivedItem.ItemName, receivedItem.PlayerName, receivedItem.LocationName, attachment);
+            attachment.SendToPlayer(_mail);
             _itemsAlreadyProcessed.Add(receivedItem);
         }
 

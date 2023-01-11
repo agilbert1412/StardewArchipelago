@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
@@ -7,6 +8,7 @@ using StardewArchipelago.Extensions;
 using StardewArchipelago.GameModifications;
 using StardewArchipelago.Goals;
 using StardewArchipelago.Items;
+using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Locations;
 using StardewArchipelago.Serialization;
 using StardewArchipelago.Stardew;
@@ -25,6 +27,7 @@ namespace StardewArchipelago
 
         private IModHelper _helper;
         private Harmony _harmony;
+        private Mailman _mail;
         private BundleReader _bundleReader;
         private ArchipelagoClient _archipelago;
         private ItemManager _itemManager;
@@ -46,7 +49,6 @@ namespace StardewArchipelago
         public ModEntry() : base()
         {
             _state = new ArchipelagoStateDto();
-            _unlockManager = new UnlockManager();
         }
 
         /*********
@@ -92,7 +94,7 @@ namespace StardewArchipelago
             _state.ItemsReceived = new List<ReceivedItem>();
             _state.LocationsChecked = new List<string>();
             _state.LocationsScouted = new Dictionary<string, ScoutedLocation>();
-            _helper.Data.WriteJsonFile(GetApDataJsonPath(), _state);
+            _helper.Data.WriteGlobalData(GetApDataJsonPath(), _state);
 
             if (!_archipelago.IsConnected)
             {
@@ -107,14 +109,12 @@ namespace StardewArchipelago
             _state.ItemsReceived = _itemManager.GetAllItemsAlreadyProcessed();
             _state.LocationsChecked = _locationsChecker.GetAllLocationsAlreadyChecked();
             _state.LocationsScouted = _archipelago.ScoutedLocations;
-            _helper.Data.WriteJsonFile(GetApDataJsonPath(), _state);
+            _helper.Data.WriteGlobalData(GetApDataJsonPath(), _state);
         }
 
         private void OnSaveLoaded(object sender, SaveLoadedEventArgs e)
         {
-            TruncateGameUniqueIDAndSeed();
-
-            var state = _helper.Data.ReadJsonFile<ArchipelagoStateDto>(GetApDataJsonPath());
+            var state = _helper.Data.ReadGlobalData<ArchipelagoStateDto>(GetApDataJsonPath());
             if (state != null)
             {
                 _state = state;
@@ -122,8 +122,10 @@ namespace StardewArchipelago
             }
 
             _stardewItemManager = new StardewItemManager();
+            _mail = new Mailman();
             _bundleReader = new BundleReader();
-            _itemManager = new ItemManager(_archipelago, _stardewItemManager, _unlockManager, _state.ItemsReceived);
+            _unlockManager = new UnlockManager(_mail);
+            _itemManager = new ItemManager(_archipelago, _stardewItemManager, _unlockManager, _mail, _state.ItemsReceived);
             _logicPatcher = new RandomizedLogicPatcher(Monitor, _harmony);
             _locationsChecker = new LocationChecker(Monitor, _archipelago, _state.LocationsChecked);
             _locationsPatcher = new LocationPatcher(Monitor, _archipelago, _bundleReader, _helper, _harmony, _locationsChecker);
@@ -148,27 +150,10 @@ namespace StardewArchipelago
             _jojaDisabler.DisableJojaMembership();
             _multiSleep.InjectMultiSleepOption(_archipelago.SlotData);
 
-            // Fix Beta1 Bug
-            while (Game1.player.Items.Count > Game1.player.MaxItems)
-            {
-                Game1.player.Items.RemoveAt(Game1.player.Items.Count - 1);
-            }
-
             if (Game1.Date.TotalDays == 0)
             {
                 GivePlayerStartingResources();
             }
-        }
-
-        private static void TruncateGameUniqueIDAndSeed()
-        {
-            var idAsString = Game1.uniqueIDForThisGame.ToString();
-            if (idAsString.Length <= 9)
-            {
-                return;
-            }
-            Game1.uniqueIDForThisGame = (ulong)int.Parse(idAsString.Substring(0, 9));
-            Game1.startingGameSeed = Game1.uniqueIDForThisGame;
         }
 
         private void OnDayStarted(object sender, DayStartedEventArgs e)
@@ -187,7 +172,7 @@ namespace StardewArchipelago
 
             _locationsChecker.SendAllLocationChecks();
             _itemManager.ReceiveAllNewItems();
-            _itemManager.RegisterAllUnlocks();
+            //_itemManager.RegisterAllUnlocks();
             _goalManager.CheckGoalCompletion();
         }
 
@@ -282,7 +267,10 @@ namespace StardewArchipelago
 
         private string GetApDataJsonPath()
         {
-            var path = $"APData - {Game1.getFarm().Name} - {Game1.player.Name}.json";
+            var farmFileName = SaveGame.FilterFileName(Game1.GetSaveGameName());
+            var farmFolder = $"{farmFileName}_{Game1.uniqueIDForThisGame}";
+            var saveDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "StardewValley", "Saves", farmFolder + Path.DirectorySeparatorChar);
+            var path = $"{saveDirectory}APData - {Game1.GetSaveGameName()} - {Game1.player.Name} - {Game1.uniqueIDForThisGame}.json";
             return path;
         }
 

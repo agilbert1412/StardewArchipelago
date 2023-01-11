@@ -23,6 +23,16 @@ namespace StardewArchipelago.Locations
             return _checkedLocations.Keys.ToList();
         }
 
+        public bool IsLocationChecked(string locationName)
+        {
+            return _checkedLocations.ContainsKey(locationName);
+        }
+
+        public bool IsLocationMissing(string locationName)
+        {
+            return !IsLocationChecked(locationName);
+        }
+
         public void AddCheckedLocation(string locationName)
         {
             if (_checkedLocations.ContainsKey(locationName))

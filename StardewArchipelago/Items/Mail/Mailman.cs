@@ -12,7 +12,32 @@ namespace StardewArchipelago.Items.Mail
             "Hey @, I was at {2}, minding my own business, and there I found {0}. I thought you would would make better use of it than I ever could.   -{1}{3}[#]Archipelago Item"
         };
 
-        public void SendArchipelagoMail(string apItemName, string findingPlayer, string locationName, LetterAttachment attachment)
+        public void SendVanillaMail(string mailTitle, bool noLetter)
+        {
+            if (Game1.player.mailReceived.Contains(mailTitle))
+            {
+                return;
+            }
+
+            Game1.player.mailForTomorrow.Add(mailTitle + (noLetter ? "%&NL&%" : ""));
+        }
+
+        public void SendArchipelagoInvisibleMail(string apItemName, string findingPlayer, string locationName)
+        {
+            var mailKey = GetMailKey(apItemName, findingPlayer, locationName);
+
+            if (Game1.player.hasOrWillReceiveMail(apItemName))
+            {
+                return;
+            }
+
+            var mailData = Game1.content.Load<Dictionary<string, string>>("Data\\mail");
+            var embedString = "";
+            mailData[mailKey] = string.Format(GetRandomApMailString(), apItemName, findingPlayer, locationName, embedString);
+            Game1.player.mailForTomorrow.Add(mailKey + "%&NL&%");
+        }
+
+        public void SendArchipelagoMail(string apItemName, string findingPlayer, string locationName, string attachmentEmbedString)
         {
             var mailKey = GetMailKey(apItemName, findingPlayer, locationName);
 
@@ -23,9 +48,7 @@ namespace StardewArchipelago.Items.Mail
 
             var mailData = Game1.content.Load<Dictionary<string, string>>("Data\\mail");
 
-            var embedString = GetEmbedString(attachment);
-
-            mailData[mailKey] = string.Format(GetRandomApMailString(), apItemName, findingPlayer, locationName, embedString);
+            mailData[mailKey] = string.Format(GetRandomApMailString(), apItemName, findingPlayer, locationName, attachmentEmbedString);
 
             Game1.player.mailForTomorrow.Add(mailKey);
         }
@@ -44,16 +67,6 @@ namespace StardewArchipelago.Items.Mail
             }
 
             return numberReceived;
-        }
-
-        private string GetEmbedString(LetterAttachment attachment)
-        {
-            if (attachment == null)
-            {
-                return "";
-            }
-
-            return attachment.GetEmbedString();
         }
 
         private string GetMailKey(string apItemName, string findingPlayer, string locationName)

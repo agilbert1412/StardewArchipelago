@@ -7,17 +7,16 @@ namespace StardewArchipelago.Locations.CodeInjections
 {
     public static class BackpackInjections
     {
-        private const string BACKPACK_UPGRADE_LEVEL_KEY = "Backpack_Upgrade_Level_Key";
+        private const string LARGE_PACK = "Large Pack";
+        private const string DELUXE_PACK = "Deluxe Pack";
 
         private static IMonitor _monitor;
         private static LocationChecker _locationChecker;
-        private static ModPersistence _modPersistence;
 
         public static void Initialize(IMonitor monitor, LocationChecker locationChecker)
         {
             _monitor = monitor;
             _locationChecker = locationChecker;
-            _modPersistence = new ModPersistence();
         }
 
         public static bool AnswerDialogueAction_BackPackPurchase_Prefix(GameLocation __instance, string questionAndAnswer, string[] questionParams, ref bool __result)
@@ -30,22 +29,18 @@ namespace StardewArchipelago.Locations.CodeInjections
                 }
 
                 __result = true;
-                var modData = Game1.getFarm().modData;
-                _modPersistence.InitializeModDataValue(BACKPACK_UPGRADE_LEVEL_KEY, "0");
 
-                if (Game1.getFarm().modData[BACKPACK_UPGRADE_LEVEL_KEY] == "0" && Game1.player.Money >= 2000)
+                if (_locationChecker.IsLocationMissing(LARGE_PACK) && Game1.player.Money >= 2000)
                 {
                     Game1.player.Money -= 2000;
-                    modData[BACKPACK_UPGRADE_LEVEL_KEY] = "1";
-                    _locationChecker.AddCheckedLocation("Large Pack");
+                    _locationChecker.AddCheckedLocation(LARGE_PACK);
                     return false; // don't run original logic
                 }
 
-                if (Game1.getFarm().modData[BACKPACK_UPGRADE_LEVEL_KEY] == "1" && Game1.player.Money >= 10000)
+                if (_locationChecker.IsLocationMissing(DELUXE_PACK) && Game1.player.Money >= 10000)
                 {
                     Game1.player.Money -= 10000;
-                    modData[BACKPACK_UPGRADE_LEVEL_KEY] = "2";
-                    _locationChecker.AddCheckedLocation("Deluxe Pack");
+                    _locationChecker.AddCheckedLocation(DELUXE_PACK);
                     return false; // don't run original logic
                 }
 
@@ -88,16 +83,13 @@ namespace StardewArchipelago.Locations.CodeInjections
         {
             __result = true;
 
-            var modData = Game1.getFarm().modData;
-            _modPersistence.InitializeModDataValue(BACKPACK_UPGRADE_LEVEL_KEY, "0");
-
             var responsePurchaseLevel1 = new Response("Purchase",
                 Game1.content.LoadString("Strings\\Locations:SeedShop_BuyBackpack_Response2000"));
             var responsePurchaseLevel2 = new Response("Purchase",
                 Game1.content.LoadString("Strings\\Locations:SeedShop_BuyBackpack_Response10000"));
             var responseDontPurchase = new Response("Not",
                 Game1.content.LoadString("Strings\\Locations:SeedShop_BuyBackpack_ResponseNo"));
-            if (modData[BACKPACK_UPGRADE_LEVEL_KEY] == "0")
+            if (_locationChecker.IsLocationMissing(LARGE_PACK))
             {
                 __instance.createQuestionDialogue(
                     Game1.content.LoadString("Strings\\Locations:SeedShop_BuyBackpack_Question24"),
@@ -107,7 +99,7 @@ namespace StardewArchipelago.Locations.CodeInjections
                         responseDontPurchase
                     }, "Backpack");
             }
-            else if (modData[BACKPACK_UPGRADE_LEVEL_KEY] == "1")
+            else if (_locationChecker.IsLocationMissing(DELUXE_PACK))
             {
                 __instance.createQuestionDialogue(
                     Game1.content.LoadString("Strings\\Locations:SeedShop_BuyBackpack_Question36"),

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Items;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
@@ -12,21 +13,15 @@ namespace StardewArchipelago.Locations.CodeInjections
 {
     public static class FishingRodInjections
     {
-        public const string RECEIVED_FISHING_ROD_LEVEL_KEY = "FishingRod_Received_Level_Key";
-
-        private const string PURCHASED_TRAINING_ROD_KEY = "Purchased_TrainingRod_Key";
-        private const string PURCHASED_FIBERGLASS_ROD_KEY = "Purchased_FiberglassRod_Key";
-        private const string PURCHASED_IRIDIUM_ROD_KEY = "Purchased_IridiumRod_Key";
-
-        private const string PURCHASE_TRAINING_ROD_AP_LOCATION_NAME = "Purchase Training Rod";
-        private const string PURCHASE_FIBERGLASS_ROD_AP_LOCATION_NAME = "Purchase Fiberglass Rod";
-        private const string PURCHASE_IRIDIUM_ROD_AP_LOCATION_NAME = "Purchase Iridium Rod";
+        private const string PROGRESSIVE_FISHING_ROD = "Progressive Fishing Rod";
+        private const string TRAINING_ROD = "Purchase Training Rod";
+        private const string FIBERGLASS_ROD = "Purchase Fiberglass Rod";
+        private const string IRIDIUM_ROD = "Purchase Iridium Rod";
 
         private static IMonitor _monitor;
         private static IModHelper _modHelper;
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
-        private static ModPersistence _modPersistence;
 
         public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
@@ -34,7 +29,6 @@ namespace StardewArchipelago.Locations.CodeInjections
             _modHelper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
-            _modPersistence = new ModPersistence();
         }
 
         public static bool SkipEvent_BambooPole_Prefix(Event __instance)
@@ -127,8 +121,6 @@ namespace StardewArchipelago.Locations.CodeInjections
         {
             try
             {
-                InitializeFishingRodsModDataValues();
-
                 var fishShopStock = new Dictionary<ISalable, int[]>();
                 AddFishingObjects(fishShopStock);
                 AddFishingToolsAPLocations(fishShopStock);
@@ -187,29 +179,28 @@ namespace StardewArchipelago.Locations.CodeInjections
 
         private static void AddFishingToolsAPLocations(Dictionary<ISalable, int[]> fishShopStock)
         {
-            var modData = Game1.getFarm().modData;
             var toolSpriteSheet = Game1.toolSpriteSheet;
-            if (modData[PURCHASED_TRAINING_ROD_KEY] == "0")
+            if (_locationChecker.IsLocationMissing(TRAINING_ROD))
             {
                 var trainingRod = new FishingRod(1);
                 var indexOfMenuItemView = trainingRod.IndexOfMenuItemView;
-                var trainingRodAPlocation = new PurchaseableArchipelagoLocation("Training Rod", PURCHASE_TRAINING_ROD_AP_LOCATION_NAME,
+                var trainingRodAPlocation = new PurchaseableArchipelagoLocation("Training Rod", TRAINING_ROD,
                     toolSpriteSheet, indexOfMenuItemView, OnPurchaseTrainingRodLocation, _archipelago);
                 fishShopStock.Add(trainingRodAPlocation, new[] { 25, 1 });
             }
-            if (Game1.player.fishingLevel.Value >= 2 && modData[PURCHASED_FIBERGLASS_ROD_KEY] == "0")
+            if (Game1.player.fishingLevel.Value >= 2 && _locationChecker.IsLocationMissing(FIBERGLASS_ROD))
             {
                 var fiberglassRod = new FishingRod(2);
                 var indexOfMenuItemView = fiberglassRod.IndexOfMenuItemView;
-                var fiberglassRodAPlocation = new PurchaseableArchipelagoLocation("Fiberglass Rod", PURCHASE_FIBERGLASS_ROD_AP_LOCATION_NAME,
+                var fiberglassRodAPlocation = new PurchaseableArchipelagoLocation("Fiberglass Rod", FIBERGLASS_ROD,
                     toolSpriteSheet, indexOfMenuItemView, OnPurchaseFiberglassRodLocation, _archipelago);
                 fishShopStock.Add(fiberglassRodAPlocation, new[] { 1800, 1 });
             }
-            if (Game1.player.fishingLevel.Value >= 6 && modData[PURCHASED_IRIDIUM_ROD_KEY] == "0")
+            if (Game1.player.fishingLevel.Value >= 6 && _locationChecker.IsLocationMissing(IRIDIUM_ROD))
             {
                 var iridiumRod = new FishingRod(3);
                 var indexOfMenuItemView = iridiumRod.IndexOfMenuItemView;
-                var iridiumRodAPLocation = new PurchaseableArchipelagoLocation("Iridium Rod", PURCHASE_IRIDIUM_ROD_AP_LOCATION_NAME,
+                var iridiumRodAPLocation = new PurchaseableArchipelagoLocation("Iridium Rod", IRIDIUM_ROD,
                     toolSpriteSheet, indexOfMenuItemView, OnPurchaseIridiumRodLocation, _archipelago);
                 fishShopStock.Add(iridiumRodAPLocation, new[] { 7500, 1 });
             }
@@ -218,7 +209,7 @@ namespace StardewArchipelago.Locations.CodeInjections
         private static void AddFishingTools(Dictionary<ISalable, int[]> fishShopStock)
         {
             var modData = Game1.getFarm().modData;
-            var receivedFishingRodLevel = int.Parse(modData[RECEIVED_FISHING_ROD_LEVEL_KEY]);
+            var receivedFishingRodLevel = _archipelago.GetReceivedItemCount(UnlockManager.PROGRESSIVE_FISHING_ROD_AP_NAME);
             if (receivedFishingRodLevel >= 1)
             {
                 var trainingRod = new FishingRod(1);
@@ -284,29 +275,17 @@ namespace StardewArchipelago.Locations.CodeInjections
 
         private static void OnPurchaseTrainingRodLocation()
         {
-            _locationChecker.AddCheckedLocation(PURCHASE_TRAINING_ROD_AP_LOCATION_NAME);
-            _modPersistence.SetToOneModDataValue(PURCHASED_TRAINING_ROD_KEY);
+            _locationChecker.AddCheckedLocation(TRAINING_ROD);
         }
 
         private static void OnPurchaseFiberglassRodLocation()
         {
-            _locationChecker.AddCheckedLocation(PURCHASE_FIBERGLASS_ROD_AP_LOCATION_NAME);
-            _modPersistence.SetToOneModDataValue(PURCHASED_FIBERGLASS_ROD_KEY);
+            _locationChecker.AddCheckedLocation(FIBERGLASS_ROD);
         }
 
         private static void OnPurchaseIridiumRodLocation()
         {
-            _locationChecker.AddCheckedLocation(PURCHASE_IRIDIUM_ROD_AP_LOCATION_NAME);
-            _modPersistence.SetToOneModDataValue(PURCHASED_IRIDIUM_ROD_KEY);
-        }
-
-        public static void InitializeFishingRodsModDataValues()
-        {
-            _modPersistence.InitializeModDataValue(RECEIVED_FISHING_ROD_LEVEL_KEY, "0");
-
-            _modPersistence.InitializeModDataValue(PURCHASED_TRAINING_ROD_KEY, "0");
-            _modPersistence.InitializeModDataValue(PURCHASED_FIBERGLASS_ROD_KEY, "0");
-            _modPersistence.InitializeModDataValue(PURCHASED_IRIDIUM_ROD_KEY, "0");
+            _locationChecker.AddCheckedLocation(IRIDIUM_ROD);
         }
 
         private const int TROUT_SOUP_ID = 219;

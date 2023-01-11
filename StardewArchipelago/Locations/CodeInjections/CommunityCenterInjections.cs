@@ -17,7 +17,7 @@ namespace StardewArchipelago.Locations.CodeInjections
 
         public static void Initialize(IMonitor monitor, BundleReader bundleReader, LocationChecker locationChecker)
         {
-                _monitor = monitor;
+            _monitor = monitor;
             _bundleReader = bundleReader;
             _locationChecker = locationChecker;
         }

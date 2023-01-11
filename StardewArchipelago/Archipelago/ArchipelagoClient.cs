@@ -254,10 +254,14 @@ namespace StardewArchipelago.Archipelago
 
         public Dictionary<string, int> GetAllReceivedItemNamesAndCounts()
         {
-            var allReceivedItems = GetAllReceivedItems();
-            var receivedItemsGrouped = allReceivedItems.GroupBy(x => x.ItemId);
-            var receivedItemsWithCount = receivedItemsGrouped.ToDictionary(x => x.First().ItemName, x => x.Count());
+            var receivedItemsGrouped = _session.Items.AllItemsReceived.GroupBy(x => x.Item);
+            var receivedItemsWithCount = receivedItemsGrouped.ToDictionary(x => GetItemName(x.First().Item), x => x.Count());
             return receivedItemsWithCount;
+        }
+
+        public int GetReceivedItemCount(string itemName)
+        {
+            return _session.Items.AllItemsReceived.Count(x => GetItemName(x.Item) == itemName);
         }
 
         public void ReportGoalCompletion()

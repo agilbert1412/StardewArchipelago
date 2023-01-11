@@ -1,4 +1,5 @@
 ﻿using System;
+using StardewArchipelago.Items;
 using StardewModdingAPI;
 using StardewValley;
 using xTile.Dimensions;
@@ -7,17 +8,15 @@ namespace StardewArchipelago.Locations.CodeInjections
 {
     public static class ScytheInjections
     {
-        private const string GOT_GOLDEN_SCYTHE_KEY = "Got_GoldenScythe_Key";
+        private const string GRIM_REAPER_STATUE = "Grim Reaper statue";
 
         private static IMonitor _monitor;
         private static LocationChecker _locationChecker;
-        private static ModPersistence _modPersistence;
 
         public static void Initialize(IMonitor monitor, LocationChecker locationChecker)
         {
             _monitor = monitor;
             _locationChecker = locationChecker;
-            _modPersistence = new ModPersistence();
         }
 
         public static bool PerformAction_GoldenScythe_Prefix(GameLocation __instance, string action, Farmer who, Location tileLocation, ref bool __result)
@@ -34,10 +33,8 @@ namespace StardewArchipelago.Locations.CodeInjections
                 if (actionName == "GoldenScythe")
                 {
                     __result = true;
-                    var modData = Game1.getFarm().modData;
-                    _modPersistence.InitializeModDataValue(GOT_GOLDEN_SCYTHE_KEY, "0");
 
-                    if (modData[GOT_GOLDEN_SCYTHE_KEY] == "0")
+                    if (_locationChecker.IsLocationMissing(GRIM_REAPER_STATUE))
                     {
                         Game1.playSound("parry");
                         __instance.setMapTileIndex(29, 4, 245, "Front");
@@ -46,8 +43,7 @@ namespace StardewArchipelago.Locations.CodeInjections
                         __instance.setMapTileIndex(30, 5, 262, "Front");
                         __instance.setMapTileIndex(29, 6, 277, "Buildings");
                         __instance.setMapTileIndex(30, 56, 278, "Buildings");
-                        _locationChecker.AddCheckedLocation("Grim Reaper statue");
-                        modData[GOT_GOLDEN_SCYTHE_KEY] = "1";
+                        _locationChecker.AddCheckedLocation(GRIM_REAPER_STATUE);
                         return false; // don't run original logic
                     }
 

@@ -43,7 +43,7 @@ namespace StardewArchipelago.Items
 
             if (_unlockManager.IsUnlock(receivedItem.ItemName))
             {
-                return new LetterCustomAttachment(receivedItem, openedAction: () => _unlockManager.PerformUnlock(receivedItem.ItemName, numberReceived));
+                return _unlockManager.PerformUnlock(receivedItem);
             }
 
             if (_itemManager.ItemExists(receivedItem.ItemName))
@@ -53,18 +53,6 @@ namespace StardewArchipelago.Items
             }
 
             throw new ArgumentException($"Could not process item {receivedItem.ItemName}");
-        }
-
-        public void ProcessUnlockWithoutGivingNewItems(string itemName, int numberReceived)
-        {
-            if (!_unlockManager.IsUnlock(itemName))
-            {
-                return;
-            }
-
-            _unlockManager.ShouldGiveItemsWithUnlocks = false;
-            _unlockManager.PerformUnlock(itemName, numberReceived);
-            _unlockManager.ShouldGiveItemsWithUnlocks = true;
         }
 
         private bool TryParseResourcePack(string apItemName, out string stardewItemName, out int amount)

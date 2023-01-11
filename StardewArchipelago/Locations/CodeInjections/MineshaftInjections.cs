@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using StardewArchipelago.Archipelago;
+using StardewArchipelago.Items;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
@@ -18,14 +20,14 @@ namespace StardewArchipelago.Locations.CodeInjections
         public const string RECEIVED_MINE_ELEVATOR_KEY = "MineElevator_Received_Level_Key";
 
         private static IMonitor _monitor;
+        private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
-        private static ModPersistence _modPersistence;
 
-        public static void Initialize(IMonitor monitor, LocationChecker locationChecker)
+        public static void Initialize(IMonitor monitor, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             _monitor = monitor;
+            _archipelago = archipelago;
             _locationChecker = locationChecker;
-            _modPersistence = new ModPersistence();
         }
 
         public static bool CheckForAction_MineshaftChest_Prefix(Chest __instance, Farmer who, bool justCheckingForActivity, ref bool __result)
@@ -160,8 +162,8 @@ namespace StardewArchipelago.Locations.CodeInjections
 
         private static void CreateElevatorMenuIfUnlocked()
         {
-            InitializeMineElevatorModDataValues();
-            var numberOfMineElevatorReceived = _modPersistence.GetAsInt(RECEIVED_MINE_ELEVATOR_KEY);
+            var numberOfMineElevatorReceived =
+                _archipelago.GetReceivedItemCount(UnlockManager.PROGRESSIVE_MINE_ELEVATOR_AP_NAME);
             var mineLevelUnlocked = numberOfMineElevatorReceived * 5;
             mineLevelUnlocked = Math.Min(120, Math.Max(0, mineLevelUnlocked));
 
@@ -177,11 +179,6 @@ namespace StardewArchipelago.Locations.CodeInjections
                 Game1.activeClickableMenu = new MineElevatorMenu();
                 MineShaft.lowestLevelReached = previousMaxLevel;
             }
-        }
-
-        public static void InitializeMineElevatorModDataValues()
-        {
-            _modPersistence.InitializeModDataValue(RECEIVED_MINE_ELEVATOR_KEY, "0");
         }
     }
 }
