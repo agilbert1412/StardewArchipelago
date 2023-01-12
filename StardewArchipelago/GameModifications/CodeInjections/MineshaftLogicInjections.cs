@@ -2,7 +2,7 @@
 using StardewModdingAPI;
 using StardewValley.Network;
 
-namespace StardewArchipelago.Locations.CodeInjections
+namespace StardewArchipelago.GameModifications.CodeInjections
 {
     public static class MineshaftLogicInjections
     {

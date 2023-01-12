@@ -11,6 +11,13 @@ namespace StardewArchipelago.Locations.CodeInjections
 {
     public static class CommunityCenterInjections
     {
+        public const string AP_LOCATION_PANTRY = "Complete Pantry";
+        public const string AP_LOCATION_CRAFTS_ROOM = "Complete Crafts Room";
+        public const string AP_LOCATION_FISH_TANK = "Complete Fish Tank";
+        public const string AP_LOCATION_BOILER_ROOM = "Complete Boiler Room";
+        public const string AP_LOCATION_VAULT = "Complete Vault";
+        public const string AP_LOCATION_BULLETIN_BOARD = "Complete Bulletin Board";
+
         private static IMonitor _monitor;
         private static BundleReader _bundleReader;
         private static LocationChecker _locationChecker;
@@ -30,22 +37,22 @@ namespace StardewArchipelago.Locations.CodeInjections
                 switch ((Area)whichArea)
                 {
                     case Area.Pantry:
-                        AreaAPLocationName = "Complete Pantry";
+                        AreaAPLocationName = AP_LOCATION_PANTRY;
                         break;
                     case Area.CraftsRoom:
-                        AreaAPLocationName = "Complete Crafts Room";
+                        AreaAPLocationName = AP_LOCATION_CRAFTS_ROOM;
                         break;
                     case Area.FishTank:
-                        AreaAPLocationName = "Complete Fish Tank";
+                        AreaAPLocationName = AP_LOCATION_FISH_TANK;
                         break;
                     case Area.BoilerRoom:
-                        AreaAPLocationName = "Complete Boiler Room";
+                        AreaAPLocationName = AP_LOCATION_BOILER_ROOM;
                         break;
                     case Area.Vault:
-                        AreaAPLocationName = "Complete Vault";
+                        AreaAPLocationName = AP_LOCATION_VAULT;
                         break;
                     case Area.Bulletin:
-                        AreaAPLocationName = "Complete Bulletin Board";
+                        AreaAPLocationName = AP_LOCATION_BULLETIN_BOARD;
                         break;
                 }
 
