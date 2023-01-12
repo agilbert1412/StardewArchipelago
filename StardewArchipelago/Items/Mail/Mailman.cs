@@ -8,6 +8,7 @@ namespace StardewArchipelago.Items.Mail
     public class Mailman
     {
         private static readonly Random _random = new Random();
+        private bool _sendForTomorrow = true;
 
         private Dictionary<string, string> _lettersGenerated;
 
@@ -80,15 +81,26 @@ namespace StardewArchipelago.Items.Mail
             return numberReceived;
         }
 
+        public Dictionary<string, string> GetAllLettersGenerated()
+        {
+            return _lettersGenerated.DeepClone();
+        }
+
+        public void SendToday()
+        {
+            _sendForTomorrow = false;
+        }
+
+        public void SendTomorrow()
+        {
+            _sendForTomorrow = true;
+        }
+
         private string GetRandomApMailString()
         {
             return ApMailStrings[_random.Next(0, ApMailStrings.Length)];
         }
 
-        public Dictionary<string, string> GetAllLettersGenerated()
-        {
-            return _lettersGenerated.DeepClone();
-        }
         private static readonly string[] ApMailStrings = {
             "Hey @, I was at {2}, minding my own business, and there I found a {0}.^I thought you would make better use of it than I ever could.^^    -{1}{3}[#]Archipelago Item",
             "I found a {0} in {2}.^Enjoy!^^    -{1}{3}[#]Archipelago Item",

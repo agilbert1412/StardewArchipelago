@@ -46,8 +46,6 @@ namespace StardewArchipelago
 
         private ArchipelagoStateDto _state;
 
-        private bool _hasNewItemsToReceive = true;
-
         public ModEntry() : base()
         {
             _state = new ArchipelagoStateDto();
@@ -130,10 +128,10 @@ namespace StardewArchipelago
             _bundleReader = new BundleReader();
             _unlockManager = new UnlockManager();
             _itemManager = new ItemManager(_archipelago, _stardewItemManager, _unlockManager, _mail, _state.ItemsReceived);
-            _logicPatcher = new RandomizedLogicPatcher(Monitor, _harmony);
             _mailPatcher = new MailPatcher(Monitor, new LetterActions(_mail), _harmony);
             _locationsChecker = new LocationChecker(Monitor, _archipelago, _state.LocationsChecked);
             _locationsPatcher = new LocationPatcher(Monitor, _archipelago, _bundleReader, _helper, _harmony, _locationsChecker);
+            _logicPatcher = new RandomizedLogicPatcher(Monitor, _harmony, _locationsChecker);
             _goalManager = new GoalManager(Monitor, _helper, _harmony, _archipelago);
             _jojaDisabler = new JojaDisabler(Monitor, _helper, _harmony);
 
@@ -176,10 +174,11 @@ namespace StardewArchipelago
                 return;
             }
 
+            _mail.SendToday();
             _locationsChecker.SendAllLocationChecks();
             _itemManager.ReceiveAllNewItems();
-            //_itemManager.RegisterAllUnlocks();
             _goalManager.CheckGoalCompletion();
+            _mail.SendTomorrow();
         }
 
         private void OnDayEnding(object sender, DayEndingEventArgs e)
@@ -188,31 +187,6 @@ namespace StardewArchipelago
 
         private void OnTimeChanged(object sender, TimeChangedEventArgs e)
         {
-            if (_hasNewItemsToReceive)
-            {
-                _itemManager.ReceiveAllNewItems();
-                _hasNewItemsToReceive = false;
-            }
-
-            GiveMissedStardrops();
-        }
-
-        private void GiveMissedStardrops()
-        {
-            /*var allReceivedItems = _itemManager.GetAllItemsAlreadyProcessed();
-            var numberReceivedStardrops = 0;
-            foreach (var (name, amount) in allReceivedItems)
-            {
-                if (_archipelago.GetItemName(name) != "Stardrop")
-                {
-                    continue;
-                }
-
-                numberReceivedStardrops = amount;
-                break;
-            }
-
-            _specialItemManager.ReceiveStardropIfDeserved(numberReceivedStardrops);*/
         }
 
         private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
@@ -258,7 +232,7 @@ namespace StardewArchipelago
 
         private void OnItemReceived()
         {
-            _hasNewItemsToReceive = true;
+            _itemManager.ReceiveAllNewItems();
         }
 
         private void DebugMethod(string arg1, string[] arg2)
@@ -269,15 +243,6 @@ namespace StardewArchipelago
                 var color = (arg2.Length > 1 ? int.Parse(arg2[1]) : r.Next()).GetAsBrightColor();
                 Game1.chatBox?.addMessage("Player: Hello", color);
             }
-        }
-
-        private string GetApDataJsonPath()
-        {
-            var farmFileName = SaveGame.FilterFileName(Game1.GetSaveGameName());
-            var farmFolder = $"{farmFileName}_{Game1.uniqueIDForThisGame}";
-            var saveDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "StardewValley", "Saves", farmFolder + Path.DirectorySeparatorChar);
-            var path = $"{saveDirectory}APData - {Game1.GetSaveGameName()} - {Game1.player.Name} - {Game1.uniqueIDForThisGame}.json";
-            return path;
         }
 
         private void GivePlayerStartingResources()

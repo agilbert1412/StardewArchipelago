@@ -34,7 +34,7 @@ namespace StardewArchipelago.Locations.CodeInjections
         {
             try
             {
-                if (justCheckingForActivity || __instance.giftbox.Value || __instance.playerChest.Value || Game1.mine == null)
+                if (justCheckingForActivity || __instance.giftbox.Value || __instance.playerChest.Value || Game1.mine == null || Game1.mine.mineLevel > 120)
                 {
                     return true; // run original logic
                 }
