@@ -18,11 +18,11 @@ namespace StardewArchipelago.Test
         private ItemParser _itemParser;
         private Mailman _mail;
 
-        public Tester(IModHelper helper, IMonitor monitor)
+        public Tester(IModHelper helper, IMonitor monitor, Mailman mail)
         {
             _helper = helper;
             _monitor = monitor;
-            _mail = new Mailman();
+            _mail = mail;
         }
 
         public void TestGetSpecificItem(string arg1, string[] arg2)
@@ -37,7 +37,7 @@ namespace StardewArchipelago.Test
             var itemName = string.Join(" ", arg2.Skip(1).ToArray());
             var receivedItem = new ReceivedItem("locationName", itemName, "playerName", 1, 2, 3);
 
-            _itemParser = new ItemParser(new StardewItemManager(), new UnlockManager(_mail));
+            _itemParser = new ItemParser(new StardewItemManager(), new UnlockManager());
             try
             {
                 var attachment = _itemParser.ProcessItem(receivedItem);
@@ -51,7 +51,7 @@ namespace StardewArchipelago.Test
 
         public void TestGetAllItems(string arg1, string[] arg2)
         {
-            _itemParser = new ItemParser(new StardewItemManager(), new UnlockManager(_mail));
+            _itemParser = new ItemParser(new StardewItemManager(), new UnlockManager());
 
             var itemsTable = _helper.Data.ReadJsonFile<Dictionary<string, JObject>>("stardew_valley_item_table.json");
             var items = itemsTable["items"];

@@ -11,10 +11,10 @@ namespace StardewArchipelago.Stardew
         private Dictionary<string, StardewObject> _objectsByName;
         private Dictionary<int, BigCraftable> _bigCraftablesById;
         private Dictionary<string, BigCraftable> _bigCraftablesByName;
-        private Dictionary<int, Boots> _bootsById;
-        private Dictionary<string, Boots> _bootsByName;
-        private Dictionary<int, Weapon> _weaponsById;
-        private Dictionary<string, Weapon> _weaponsByName;
+        private Dictionary<int, StardewBoots> _bootsById;
+        private Dictionary<string, StardewBoots> _bootsByName;
+        private Dictionary<int, StardewWeapon> _weaponsById;
+        private Dictionary<string, StardewWeapon> _weaponsByName;
 
         private List<int> _priorityIds = new List<int>()
         {
@@ -122,8 +122,8 @@ namespace StardewArchipelago.Stardew
 
         private void InitializeBoots()
         {
-            _bootsById = new Dictionary<int, Boots>();
-            _bootsByName = new Dictionary<string, Boots>();
+            _bootsById = new Dictionary<int, StardewBoots>();
+            _bootsByName = new Dictionary<string, StardewBoots>();
             var allBootsInformation = (IDictionary<int, string>)Game1.content.Load<Dictionary<int, string>>("Data\\Boots");
             foreach (var (id, bootsInfo) in allBootsInformation)
             {
@@ -141,8 +141,8 @@ namespace StardewArchipelago.Stardew
 
         private void InitializeWeapons()
         {
-            _weaponsById = new Dictionary<int, Weapon>();
-            _weaponsByName = new Dictionary<string, Weapon>();
+            _weaponsById = new Dictionary<int, StardewWeapon>();
+            _weaponsByName = new Dictionary<string, StardewWeapon>();
             var allWeaponsInformation = (IDictionary<int, string>)Game1.content.Load<Dictionary<int, string>>("Data\\Weapons");
             foreach (var (id, weaponsInfo) in allWeaponsInformation)
             {
@@ -170,9 +170,13 @@ namespace StardewArchipelago.Stardew
             var displayName = fields[4];
             var description = fields[5];
 
-            var stardewItem = new StardewObject(id, name, sellPrice, edibility, objectType, category, displayName,
-                description);
-            return stardewItem;
+
+            if (objectType == "Ring")
+            {
+                return new StardewRing(id, name, sellPrice, edibility, objectType, category, displayName, description);
+            }
+
+            return new StardewObject(id, name, sellPrice, edibility, objectType, category, displayName, description);
         }
 
         private static BigCraftable ParseStardewBigCraftableData(int id, string objectInfo)
@@ -194,7 +198,7 @@ namespace StardewArchipelago.Stardew
             return bigCraftable;
         }
 
-        private static Boots ParseStardewBootsData(int id, string objectInfo)
+        private static StardewBoots ParseStardewBootsData(int id, string objectInfo)
         {
             var fields = objectInfo.Split("/");
             var name = fields[0];
@@ -205,12 +209,12 @@ namespace StardewArchipelago.Stardew
             var colorIndex = int.Parse(fields[5]);
             var displayName = fields.Length > 6 ? fields[6] : name;
 
-            var bigCraftable = new Boots(id, name, sellPrice, description, addedDefense,
+            var bigCraftable = new StardewBoots(id, name, sellPrice, description, addedDefense,
                 addedImmunity, colorIndex, displayName);
             return bigCraftable;
         }
 
-        private static Weapon ParseStardewWeaponData(int id, string objectInfo)
+        private static StardewWeapon ParseStardewWeaponData(int id, string objectInfo)
         {
             var fields = objectInfo.Split("/");
             var name = fields[0];
@@ -229,10 +233,17 @@ namespace StardewArchipelago.Stardew
             var criticalDamage = double.Parse(fields[13]);
             var displayName = fields.Length > 14 ? fields[14] : name;
 
-            var bigCraftable = new Weapon(id, name, description, minDamage, maxDamage, knockBack, speed,
+            if (type == 4)
+            {
+                return new StardewSlingshot(id, name, description, minDamage, maxDamage, knockBack, speed,
+                    addedPrecision, addedDefence, type, baseMineLevel, minMineLevel, addedAoe, criticalChance,
+                    criticalDamage, displayName);
+            }
+
+            var meleeWeapon = new StardewWeapon(id, name, description, minDamage, maxDamage, knockBack, speed,
                 addedPrecision, addedDefence, type, baseMineLevel, minMineLevel, addedAoe, criticalChance,
                 criticalDamage, displayName);
-            return bigCraftable;
+            return meleeWeapon;
         }
     }
 }

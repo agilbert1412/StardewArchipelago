@@ -24,6 +24,7 @@ namespace StardewArchipelago
     public class ModEntry : Mod
     {
         private const string CONNECT_SYNTAX = "Syntax: connect ip:port slot password";
+        private const string AP_DATA_KEY = "ArchipelagoData";
 
         private IModHelper _helper;
         private Harmony _harmony;
@@ -32,6 +33,7 @@ namespace StardewArchipelago
         private ArchipelagoClient _archipelago;
         private ItemManager _itemManager;
         private RandomizedLogicPatcher _logicPatcher;
+        private MailPatcher _mailPatcher;
         private LocationChecker _locationsChecker;
         private LocationPatcher _locationsPatcher;
         private GoalManager _goalManager;
@@ -60,7 +62,6 @@ namespace StardewArchipelago
         {
             _helper = helper;
             _harmony = new Harmony(this.ModManifest.UniqueID);
-            _tester = new Tester(helper, Monitor);
             _multiSleep = new MultiSleep(Monitor, _helper, _harmony);
 
             _archipelago = new ArchipelagoClient(Monitor, _helper, _harmony, OnItemReceived);
@@ -77,9 +78,9 @@ namespace StardewArchipelago
 
 #if DEBUG
             _helper.ConsoleCommands.Add("disconnect", $"Disconnects from Archipelago. {CONNECT_SYNTAX}", this.OnCommandDisconnectFromArchipelago);
-            _helper.ConsoleCommands.Add("test_getallitems", "Tests if every AP item in the stardew_valley_item_table json file are supported by the mod", _tester.TestGetAllItems);
-            _helper.ConsoleCommands.Add("test_getitem", "Get one specific item", _tester.TestGetSpecificItem);
-            _helper.ConsoleCommands.Add("test_sendalllocations", "Tests if every AP item in the stardew_valley_location_table json file are supported by the mod", _tester.TestSendAllLocations);
+            _helper.ConsoleCommands.Add("test_getallitems", "Tests if every AP item in the stardew_valley_item_table json file are supported by the mod", this.TestGetAllItems);
+            _helper.ConsoleCommands.Add("test_getitem", "Get one specific item", this.TestGetSpecificItem);
+            //_helper.ConsoleCommands.Add("test_sendalllocations", "Tests if every AP item in the stardew_valley_location_table json file are supported by the mod", _tester.TestSendAllLocations);
             _helper.ConsoleCommands.Add("debugMethod", "Runs whatever is currently in the debug method", this.DebugMethod);
 #endif
         }
@@ -94,7 +95,8 @@ namespace StardewArchipelago
             _state.ItemsReceived = new List<ReceivedItem>();
             _state.LocationsChecked = new List<string>();
             _state.LocationsScouted = new Dictionary<string, ScoutedLocation>();
-            _helper.Data.WriteGlobalData(GetApDataJsonPath(), _state);
+            _state.LettersGenerated = new Dictionary<string, string>();
+            _helper.Data.WriteSaveData(AP_DATA_KEY, _state);
 
             if (!_archipelago.IsConnected)
             {
@@ -109,12 +111,13 @@ namespace StardewArchipelago
             _state.ItemsReceived = _itemManager.GetAllItemsAlreadyProcessed();
             _state.LocationsChecked = _locationsChecker.GetAllLocationsAlreadyChecked();
             _state.LocationsScouted = _archipelago.ScoutedLocations;
-            _helper.Data.WriteGlobalData(GetApDataJsonPath(), _state);
+            _state.LettersGenerated = _mail.GetAllLettersGenerated();
+            _helper.Data.WriteSaveData(AP_DATA_KEY, _state);
         }
 
         private void OnSaveLoaded(object sender, SaveLoadedEventArgs e)
         {
-            var state = _helper.Data.ReadGlobalData<ArchipelagoStateDto>(GetApDataJsonPath());
+            var state = _helper.Data.ReadSaveData<ArchipelagoStateDto>(AP_DATA_KEY);
             if (state != null)
             {
                 _state = state;
@@ -122,11 +125,13 @@ namespace StardewArchipelago
             }
 
             _stardewItemManager = new StardewItemManager();
-            _mail = new Mailman();
+            _mail = new Mailman(_state.LettersGenerated);
+            _tester = new Tester(_helper, Monitor, _mail);
             _bundleReader = new BundleReader();
-            _unlockManager = new UnlockManager(_mail);
+            _unlockManager = new UnlockManager();
             _itemManager = new ItemManager(_archipelago, _stardewItemManager, _unlockManager, _mail, _state.ItemsReceived);
             _logicPatcher = new RandomizedLogicPatcher(Monitor, _harmony);
+            _mailPatcher = new MailPatcher(Monitor, new LetterActions(_mail), _harmony);
             _locationsChecker = new LocationChecker(Monitor, _archipelago, _state.LocationsChecked);
             _locationsPatcher = new LocationPatcher(Monitor, _archipelago, _bundleReader, _helper, _harmony, _locationsChecker);
             _goalManager = new GoalManager(Monitor, _helper, _harmony, _archipelago);
@@ -145,6 +150,7 @@ namespace StardewArchipelago
             }
 
             _logicPatcher.PatchAllGameLogic();
+            _mailPatcher.PatchMailBoxForApItems();
             _locationsPatcher.ReplaceAllLocationsRewardsWithChecks();
             _goalManager.InjectGoalMethods();
             _jojaDisabler.DisableJojaMembership();
@@ -311,6 +317,16 @@ namespace StardewArchipelago
             {
                 itemToGift
             }, emptySpot, true));
+        }
+
+        private void TestGetSpecificItem(string arg1, string[] arg2)
+        {
+            _tester.TestGetSpecificItem(arg1, arg2);
+        }
+
+        private void TestGetAllItems(string arg1, string[] arg2)
+        {
+            _tester.TestGetAllItems(arg1, arg2);
         }
     }
 }

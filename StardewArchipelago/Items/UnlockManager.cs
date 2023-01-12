@@ -15,18 +15,16 @@ namespace StardewArchipelago.Items
         public const string PROGRESSIVE_MINE_ELEVATOR_AP_NAME = "Progressive Mine Elevator";
         public const string PROGRESSIVE_FISHING_ROD_AP_NAME = "Progressive Fishing Rod";
         public const string GOLDEN_SCYTHE_AP_NAME = "Golden Scythe";
-
-        private Mailman _mail;
         private Dictionary<string, Func<ReceivedItem, LetterAttachment>> _unlockables;
 
-        public UnlockManager(Mailman mailman)
+        public UnlockManager()
         {
-            _mail = mailman;
             _unlockables = new Dictionary<string, Func<ReceivedItem, LetterAttachment>>();
             RegisterCommunityCenterRepairs();
             RegisterPlayerImprovement();
             RegisterProgressiveTools();
             RegisterMineElevators();
+            RegisterUniqueItems();
         }
 
         public bool IsUnlock(string unlockName)
@@ -103,40 +101,9 @@ namespace StardewArchipelago.Items
             return new LetterVanillaAttachment(receivedItem, "ccVault", true);
         }
 
-        private LetterCustomAttachment SendProgressiveBackpackLetter(ReceivedItem receivedItem)
+        private LetterActionAttachment SendProgressiveBackpackLetter(ReceivedItem receivedItem)
         {
-            return new LetterCustomAttachment(receivedItem, IncreaseBackpackLevel);
-        }
-
-        private void IncreaseBackpackLevel()
-        {
-            var previousMaxItems = Game1.player.MaxItems;
-            var backpackName = "";
-            switch (Game1.player.MaxItems)
-            {
-                case < 12:
-                    Game1.player.MaxItems = 12;
-                    break;
-                case < 24:
-                    Game1.player.MaxItems = 24;
-                    backpackName = Game1.content.LoadString("Strings\\StringsFromCSFiles:GameLocation.cs.8708");
-                    break;
-                case >= 24:
-                    Game1.player.MaxItems = 36;
-                    backpackName = Game1.content.LoadString("Strings\\StringsFromCSFiles:GameLocation.cs.8709");
-                    break;
-            }
-
-            if (previousMaxItems >= Game1.player.MaxItems)
-            {
-                return;
-            }
-
-            while (Game1.player.Items.Count < Game1.player.MaxItems)
-            {
-                Game1.player.Items.Add(null);
-            }
-            Game1.player.holdUpItemThenMessage(new SpecialItem(99, backpackName));
+            return new LetterActionAttachment(receivedItem, LetterActionsKeys.Backpack);
         }
 
         private LetterAttachment SendProgressiveMineElevatorLetter(ReceivedItem receivedItem)
@@ -159,153 +126,55 @@ namespace StardewArchipelago.Items
             return new LetterItemIdAttachment(receivedItem, 434);
         }
 
-        private LetterItemIdAttachment SendDwarvishTranslationGuideLetter(ReceivedItem receivedItem)
+        private LetterActionAttachment SendDwarvishTranslationGuideLetter(ReceivedItem receivedItem)
         {
-            return new LetterItemIdAttachment(receivedItem, 326);
-            /*Game1.player.canUnderstandDwarves = true;
-            Game1.playSound("fireball");*/
+            return new LetterActionAttachment(receivedItem, LetterActionsKeys.DwarvishTranslationGuide);
         }
 
-        private LetterCustomAttachment SendSkullKeyLetter(ReceivedItem receivedItem)
+        private LetterActionAttachment SendSkullKeyLetter(ReceivedItem receivedItem)
         {
-            return new LetterCustomAttachment(receivedItem, ReceiveSkullKey);
+            return new LetterActionAttachment(receivedItem, LetterActionsKeys.SkullKey);
         }
 
-        private void ReceiveSkullKey()
+        private LetterActionAttachment SendRustyKeyLetter(ReceivedItem receivedItem)
         {
-            Game1.player.hasSkullKey = true;
-            Game1.player.addQuest(19);
+            return new LetterActionAttachment(receivedItem, LetterActionsKeys.RustyKey);
         }
 
-        private LetterCustomAttachment SendRustyKeyLetter(ReceivedItem receivedItem)
-        {
-            return new LetterCustomAttachment(receivedItem, ReceiveRustyKey);
-        }
-
-        private void ReceiveRustyKey()
-        {
-            Game1.player.hasRustyKey = true;
-        }
-
-        private LetterCustomAttachment SendGoldenScytheLetter(ReceivedItem receivedItem)
+        private LetterActionAttachment SendGoldenScytheLetter(ReceivedItem receivedItem)
         {
             Game1.player.mailReceived.Add("gotGoldenScythe");
-            return new LetterCustomAttachment(receivedItem, SendGoldenScytheLetter);
+            return new LetterActionAttachment(receivedItem, LetterActionsKeys.GoldenScythe);
         }
 
-        private void SendGoldenScytheLetter()
+        private LetterActionAttachment SendProgressiveAxeLetter(ReceivedItem receivedItem)
         {
-            Game1.playSound("parry");
-            var goldenScythe = new MeleeWeapon(53);
-            Game1.player.holdUpItemThenMessage(goldenScythe);
-            Game1.player.addItemByMenuIfNecessary(goldenScythe);
+            return new LetterActionAttachment(receivedItem, LetterActionsKeys.ProgressiveTool, "Axe");
         }
 
-        private LetterCustomAttachment SendProgressiveAxeLetter(ReceivedItem receivedItem)
+        private LetterActionAttachment SendProgressivePickaxeLetter(ReceivedItem receivedItem)
         {
-            return new LetterCustomAttachment(receivedItem, () => ReceiveProgressiveTool("Axe"));
+            return new LetterActionAttachment(receivedItem, LetterActionsKeys.ProgressiveTool, "Pickaxe");
         }
 
-        private LetterCustomAttachment SendProgressivePickaxeLetter(ReceivedItem receivedItem)
+        private LetterActionAttachment SendProgressiveHoeLetter(ReceivedItem receivedItem)
         {
-            return new LetterCustomAttachment(receivedItem, () => ReceiveProgressiveTool("Pickaxe"));
+            return new LetterActionAttachment(receivedItem, LetterActionsKeys.ProgressiveTool, "Hoe");
         }
 
-        private LetterCustomAttachment SendProgressiveHoeLetter(ReceivedItem receivedItem)
+        private LetterActionAttachment SendProgressiveWateringCanLetter(ReceivedItem receivedItem)
         {
-            return new LetterCustomAttachment(receivedItem, () => ReceiveProgressiveTool("Hoe"));
+            return new LetterActionAttachment(receivedItem, LetterActionsKeys.ProgressiveTool, "Watering Can");
         }
 
-        private LetterCustomAttachment SendProgressiveWateringCanLetter(ReceivedItem receivedItem)
+        private LetterActionAttachment SendProgressiveTrashCanLetter(ReceivedItem receivedItem)
         {
-            return new LetterCustomAttachment(receivedItem, () => ReceiveProgressiveTool("Watering Can"));
+            return new LetterActionAttachment(receivedItem, LetterActionsKeys.ProgressiveTool, "Trash Can");
         }
 
-        private LetterCustomAttachment SendProgressiveTrashCanLetter(ReceivedItem receivedItem)
+        private LetterActionAttachment SendProgressiveFishingRodLetter(ReceivedItem receivedItem)
         {
-            return new LetterCustomAttachment(receivedItem, () => ReceiveProgressiveTool("Trash Can"));
-        }
-
-        private LetterCustomAttachment SendProgressiveFishingRodLetter(ReceivedItem receivedItem)
-        {
-            return new LetterCustomAttachment(receivedItem, () => GetFishingRodOfLevel());
-        }
-
-        private void GetFishingRodOfLevel()
-        {
-            var numberOfPreviousFishingRodLetters = _mail.OpenedMailsStartingWithKey(PROGRESSIVE_FISHING_ROD_AP_NAME);
-            var itemToAdd = new FishingRod(numberOfPreviousFishingRodLetters);
-
-            Game1.player.holdUpItemThenMessage(itemToAdd);
-            Game1.player.addItemByMenuIfNecessary(itemToAdd);
-        }
-
-        private void ReceiveProgressiveTool(string toolGenericName)
-        {
-            if (toolGenericName.Contains("Trash Can"))
-            {
-                ReceiveTrashCanUpgrade();
-                return;
-            }
-            
-            var upgradedTool = UpgradeToolInEntireWorld(toolGenericName);
-
-            if (upgradedTool == null)
-            {
-                throw new Exception($"Could not find a tool of type {toolGenericName} in this entire world");
-            }
-
-            Game1.player.holdUpItemThenMessage(upgradedTool);
-        }
-
-        private static Tool UpgradeToolInEntireWorld(string toolGenericName)
-        {
-            var player = Game1.player;
-            foreach (var playerItem in player.Items)
-            {
-                if (playerItem is not Tool toolToUpgrade || !toolToUpgrade.Name.Contains(toolGenericName))
-                {
-                    continue;
-                }
-
-                toolToUpgrade.UpgradeLevel++;
-                return toolToUpgrade;
-            }
-
-            foreach (var gameLocation in Game1.locations)
-            {
-                foreach (var (tile, gameObject) in gameLocation.Objects.Pairs)
-                {
-                    if (gameObject is not Chest chest)
-                    {
-                        continue;
-                    }
-
-                    foreach (var chestItem in chest.items)
-                    {
-                        if (chestItem is not Tool toolToUpgrade || !toolToUpgrade.Name.Contains(toolGenericName))
-                        {
-                            continue;
-                        }
-
-                        toolToUpgrade.UpgradeLevel++;
-                        return toolToUpgrade;
-                    }
-                }
-            }
-
-            return null;
-        }
-
-        private static void ReceiveTrashCanUpgrade()
-        {
-            Game1.player.trashCanLevel++;
-            var trashCanToHoldUp = new GenericTool("Trash Can",
-                Game1.content.LoadString("Strings\\StringsFromCSFiles:TrashCan_Description",
-                    ((Game1.player.trashCanLevel * 15).ToString() ?? "")), Game1.player.trashCanLevel,
-                12 + Game1.player.trashCanLevel, 12 + Game1.player.trashCanLevel);
-            trashCanToHoldUp.upgradeLevel.Value = Game1.player.trashCanLevel;
-            Game1.player.holdUpItemThenMessage(trashCanToHoldUp);
+            return new LetterActionAttachment(receivedItem, LetterActionsKeys.FishingRod);
         }
     }
 }

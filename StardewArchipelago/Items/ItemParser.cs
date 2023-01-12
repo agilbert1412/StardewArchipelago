@@ -32,13 +32,13 @@ namespace StardewArchipelago.Items
                 }
 
                 var resourcePackItem = GetResourcePackItem(stardewItemName);
-                return new LetterItemAttachment(receivedItem, resourcePackItem, resourcePackAmount);
+                return resourcePackItem.GetAsLetter(receivedItem, resourcePackAmount);
             }
 
             var itemIsFriendshipBonus = TryParseFriendshipBonus(receivedItem.ItemName, out var numberOfPoints);
             if (itemIsFriendshipBonus)
             {
-                return new LetterCustomAttachment(receivedItem, openedAction: () => IncreaseFriendshipWithEveryone(numberOfPoints));
+                return new LetterActionAttachment(receivedItem, LetterActionsKeys.Frienship, numberOfPoints.ToString());
             }
 
             if (_unlockManager.IsUnlock(receivedItem.ItemName))
@@ -48,8 +48,8 @@ namespace StardewArchipelago.Items
 
             if (_itemManager.ItemExists(receivedItem.ItemName))
             {
-                var resourcePackItem = GetSingleItem(receivedItem.ItemName);
-                return new LetterItemAttachment(receivedItem, resourcePackItem);
+                var singleItem = GetSingleItem(receivedItem.ItemName);
+                return singleItem.GetAsLetter(receivedItem);
             }
 
             throw new ArgumentException($"Could not process item {receivedItem.ItemName}");
@@ -105,15 +105,6 @@ namespace StardewArchipelago.Items
         {
             var item = _itemManager.GetItemByName(stardewItemName);
             return item;
-        }
-
-        private void IncreaseFriendshipWithEveryone(int numberOfPoints)
-        {
-            var farmer = Game1.player;
-            foreach (var npc in farmer.friendshipData.Keys)
-            {
-                farmer.friendshipData[npc].Points += numberOfPoints;
-            }
         }
     }
 }

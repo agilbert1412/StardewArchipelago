@@ -106,7 +106,7 @@ namespace StardewArchipelago.Locations.CodeInjections
                     return;
                 }
 
-                _locationChecker.AddCheckedLocation($"The Mines Floor {whatLevel} Elevator");
+                _locationChecker.AddCheckedLocation($"Floor {whatLevel} Elevator");
             }
             catch (Exception ex)
             {

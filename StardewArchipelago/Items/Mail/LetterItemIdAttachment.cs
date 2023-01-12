@@ -16,12 +16,12 @@ namespace StardewArchipelago.Items.Mail
 
         public override string GetEmbedString()
         {
-            return $"%item {ItemId} {AttachmentAmount} %%";
+            return $"%item object {ItemId} {AttachmentAmount} %%";
         }
 
         public override void SendToPlayer(Mailman _mailman)
         {
-            _mailman.SendArchipelagoMail(ArchipelagoItem.ItemName, ArchipelagoItem.PlayerName, ArchipelagoItem.LocationName, GetEmbedString());
+            _mailman.SendArchipelagoMail(GetMailKey(), ArchipelagoItem.ItemName, ArchipelagoItem.PlayerName, ArchipelagoItem.LocationName, GetEmbedString());
         }
     }
 }

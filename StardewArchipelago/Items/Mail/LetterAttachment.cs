@@ -18,7 +18,12 @@ namespace StardewArchipelago.Items.Mail
 
         public virtual void SendToPlayer(Mailman _mailman)
         {
-            _mailman.SendArchipelagoMail(ArchipelagoItem.ItemName, ArchipelagoItem.PlayerName, ArchipelagoItem.LocationName, "");
+            _mailman.SendArchipelagoMail(GetMailKey(), ArchipelagoItem.ItemName, ArchipelagoItem.PlayerName, ArchipelagoItem.LocationName, "");
+        }
+
+        public virtual string GetMailKey()
+        {
+            return $"AP|{ArchipelagoItem.ItemName}{ArchipelagoItem.PlayerName}{ArchipelagoItem.LocationName}";
         }
     }
 }

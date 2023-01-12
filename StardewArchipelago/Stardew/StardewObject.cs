@@ -1,4 +1,6 @@
-﻿using StardewValley;
+﻿using StardewArchipelago.Archipelago;
+using StardewArchipelago.Items.Mail;
+using StardewValley;
 using StardewValley.Objects;
 
 namespace StardewArchipelago.Stardew
@@ -25,10 +27,6 @@ namespace StardewArchipelago.Stardew
 
         public override Item PrepareForGivingToFarmer(int amount = 1)
         {
-            if (Type == "Ring")
-            {
-                return new Ring(Id);
-            }
             return new StardewValley.Object(Id, amount);
         }
 
@@ -36,6 +34,11 @@ namespace StardewArchipelago.Stardew
         {
             var item = PrepareForGivingToFarmer(amount);
             farmer.addItemByMenuIfNecessary(item);
+        }
+
+        public override LetterAttachment GetAsLetter(ReceivedItem receivedItem, int amount = 1)
+        {
+            return new LetterItemAttachment(receivedItem, this, amount);
         }
     }
 }

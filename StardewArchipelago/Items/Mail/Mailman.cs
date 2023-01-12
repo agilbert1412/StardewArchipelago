@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Force.DeepCloner;
 using StardewArchipelago.Stardew;
 using StardewValley;
 
@@ -8,9 +10,18 @@ namespace StardewArchipelago.Items.Mail
     public class Mailman
     {
         private static readonly Random _random = new Random();
-        private static readonly string[] ApMailStrings = {
-            "Hey @, I was at {2}, minding my own business, and there I found {0}. I thought you would would make better use of it than I ever could.   -{1}{3}[#]Archipelago Item"
-        };
+
+        private Dictionary<string, string> _lettersGenerated;
+
+        public Mailman(Dictionary<string, string> lettersGenerated)
+        {
+            _lettersGenerated = lettersGenerated.DeepClone();
+            foreach (var (mailKey, mailContent) in lettersGenerated)
+            {
+                var mailData = Game1.content.Load<Dictionary<string, string>>("Data\\mail");
+                mailData[mailKey] = mailContent;
+            }
+        }
 
         public void SendVanillaMail(string mailTitle, bool noLetter)
         {
@@ -22,43 +33,45 @@ namespace StardewArchipelago.Items.Mail
             Game1.player.mailForTomorrow.Add(mailTitle + (noLetter ? "%&NL&%" : ""));
         }
 
-        public void SendArchipelagoInvisibleMail(string apItemName, string findingPlayer, string locationName)
+        public void SendArchipelagoInvisibleMail(string mailKey, string apItemName, string findingPlayer, string locationName)
         {
-            var mailKey = GetMailKey(apItemName, findingPlayer, locationName);
-
-            if (Game1.player.hasOrWillReceiveMail(apItemName))
+            if (Game1.player.hasOrWillReceiveMail(mailKey))
             {
                 return;
             }
 
-            var mailData = Game1.content.Load<Dictionary<string, string>>("Data\\mail");
-            var embedString = "";
-            mailData[mailKey] = string.Format(GetRandomApMailString(), apItemName, findingPlayer, locationName, embedString);
+            GenerateMail(mailKey, apItemName, findingPlayer, locationName, "");
             Game1.player.mailForTomorrow.Add(mailKey + "%&NL&%");
         }
 
-        public void SendArchipelagoMail(string apItemName, string findingPlayer, string locationName, string attachmentEmbedString)
+        public void SendArchipelagoMail(string mailKey, string apItemName, string findingPlayer, string locationName, string attachmentEmbedString)
         {
-            var mailKey = GetMailKey(apItemName, findingPlayer, locationName);
-
-            if (Game1.player.hasOrWillReceiveMail(apItemName))
+            if (Game1.player.hasOrWillReceiveMail(mailKey))
             {
                 return;
             }
 
-            var mailData = Game1.content.Load<Dictionary<string, string>>("Data\\mail");
-
-            mailData[mailKey] = string.Format(GetRandomApMailString(), apItemName, findingPlayer, locationName, attachmentEmbedString);
+            GenerateMail(mailKey, apItemName, findingPlayer, locationName, attachmentEmbedString);
 
             Game1.player.mailForTomorrow.Add(mailKey);
         }
 
-        public int OpenedMailsStartingWithKey(string apItemName)
+        private void GenerateMail(string mailKey, string apItemName, string findingPlayer, string locationName,
+            string embedString)
+        {
+            apItemName = apItemName.Replace("<3", "<");
+            var mailData = Game1.content.Load<Dictionary<string, string>>("Data\\mail");
+            var mailContent = string.Format(GetRandomApMailString(), apItemName, findingPlayer, locationName, embedString);
+            mailData[mailKey] = mailContent;
+            _lettersGenerated.Add(mailKey, mailContent);
+        }
+
+        public int OpenedMailsContainingKey(string apItemName)
         {
             var numberReceived = 0;
             foreach (var mail in Game1.player.mailReceived)
             {
-                if (!mail.StartsWith(apItemName))
+                if (!mail.Contains($"AP|{apItemName}"))
                 {
                     continue;
                 }
@@ -69,14 +82,19 @@ namespace StardewArchipelago.Items.Mail
             return numberReceived;
         }
 
-        private string GetMailKey(string apItemName, string findingPlayer, string locationName)
-        {
-            return (apItemName + findingPlayer + locationName);
-        }
-
         private string GetRandomApMailString()
         {
             return ApMailStrings[_random.Next(0, ApMailStrings.Length)];
         }
+
+        public Dictionary<string, string> GetAllLettersGenerated()
+        {
+            return _lettersGenerated.DeepClone();
+        }
+        private static readonly string[] ApMailStrings = {
+            "Hey @, I was at {2}, minding my own business, and there I found a {0}.^I thought you would make better use of it than I ever could.^^    -{1}{3}[#]Archipelago Item",
+            "I found a {0} in {2}.^Enjoy!^^    -{1}{3}[#]Archipelago Item",
+            "There was a {0} in my {2}.^Do you think you can make it useful?^^    -{1}{3}[#]Archipelago Item",
+        };
     }
 }

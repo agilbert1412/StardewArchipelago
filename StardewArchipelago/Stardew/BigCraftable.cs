@@ -1,4 +1,6 @@
 ﻿using System;
+using StardewArchipelago.Archipelago;
+using StardewArchipelago.Items.Mail;
 using StardewValley;
 
 namespace StardewArchipelago.Stardew
@@ -29,6 +31,11 @@ namespace StardewArchipelago.Stardew
         }
 
         public override void GiveToFarmer(Farmer farmer, int amount = 1)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override LetterAttachment GetAsLetter(ReceivedItem receivedItem, int amount = 1)
         {
             throw new NotImplementedException();
         }

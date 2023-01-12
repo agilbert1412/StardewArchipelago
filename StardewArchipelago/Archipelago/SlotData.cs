@@ -62,7 +62,8 @@ namespace StardewArchipelago.Archipelago
     public enum ElevatorProgression
     {
         Vanilla = 0,
-        Progressive = 1
+        Progressive = 1,
+        ProgressiveFromPreviousFloor = 2
     }
 
     public enum Goal

@@ -1,9 +1,11 @@
-﻿using StardewValley;
+﻿using StardewArchipelago.Archipelago;
+using StardewArchipelago.Items.Mail;
+using StardewValley;
 using StardewValley.Tools;
 
 namespace StardewArchipelago.Stardew
 {
-    public class Weapon : StardewItem
+    public class StardewWeapon : StardewItem
     {
         public int MinDamage { get; }
         public int MaxDamage { get; }
@@ -18,8 +20,7 @@ namespace StardewArchipelago.Stardew
         public double CriticalChance { get; }
         public double CriticalDamage { get; }
 
-
-        public Weapon(int id, string name, string description, int minDamage, int maxDamage, double knockBack, double speed, double addedPrecision, double addedDefence, int type, int baseMineLevel, int minMineLevel, double addedAoe, double criticalChance, double criticalDamage, string displayName)
+        public StardewWeapon(int id, string name, string description, int minDamage, int maxDamage, double knockBack, double speed, double addedPrecision, double addedDefence, int type, int baseMineLevel, int minMineLevel, double addedAoe, double criticalChance, double criticalDamage, string displayName)
         : base(id, name, /* TODO */1, displayName, description)
         {
             MinDamage = minDamage;
@@ -38,11 +39,6 @@ namespace StardewArchipelago.Stardew
 
         public override Item PrepareForGivingToFarmer(int amount = 1)
         {
-            if (Type == 4)
-            {
-                return new Slingshot(Id);
-            }
-
             return new MeleeWeapon(Id);
         }
 
@@ -50,6 +46,11 @@ namespace StardewArchipelago.Stardew
         {
             var weapon = PrepareForGivingToFarmer();
             farmer.addItemByMenuIfNecessary(weapon);
+        }
+
+        public override LetterAttachment GetAsLetter(ReceivedItem receivedItem, int amount = 1)
+        {
+            return new LetterActionAttachment(receivedItem, LetterActionsKeys.GiveMeleeWeapon, Id.ToString());
         }
     }
 }

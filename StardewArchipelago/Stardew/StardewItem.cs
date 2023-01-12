@@ -1,4 +1,6 @@
-﻿using StardewValley;
+﻿using StardewArchipelago.Archipelago;
+using StardewArchipelago.Items.Mail;
+using StardewValley;
 
 namespace StardewArchipelago.Stardew
 {
@@ -22,5 +24,7 @@ namespace StardewArchipelago.Stardew
         public abstract Item PrepareForGivingToFarmer(int amount = 1);
 
         public abstract void GiveToFarmer(Farmer farmer, int amount = 1);
+
+        public abstract LetterAttachment GetAsLetter(ReceivedItem receivedItem, int amount = 1);
     }
 }
