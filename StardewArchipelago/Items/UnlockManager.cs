@@ -2,11 +2,7 @@
 using System.Collections.Generic;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Items.Mail;
-using StardewArchipelago.Locations;
-using StardewArchipelago.Locations.CodeInjections;
 using StardewValley;
-using StardewValley.Objects;
-using StardewValley.Tools;
 
 namespace StardewArchipelago.Items
 {

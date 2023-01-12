@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using StardewValley;
-
-namespace StardewArchipelago.Items.Mail
+﻿namespace StardewArchipelago.Items.Mail
 {
     public static class LetterActionsKeys
     {

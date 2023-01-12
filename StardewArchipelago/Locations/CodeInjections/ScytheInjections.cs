@@ -1,5 +1,4 @@
 ﻿using System;
-using StardewArchipelago.Items;
 using StardewModdingAPI;
 using StardewValley;
 using xTile.Dimensions;

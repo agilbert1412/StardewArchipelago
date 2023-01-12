@@ -7,7 +7,6 @@ using StardewArchipelago.Archipelago;
 using StardewArchipelago.Items;
 using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Stardew;
-using StardewValley;
 
 namespace StardewArchipelago.Test
 {
