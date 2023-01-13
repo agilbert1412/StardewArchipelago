@@ -104,6 +104,7 @@ namespace StardewArchipelago.Archipelago
 
         private void InitializeAfterConnection(LoginSuccessful loginSuccess, string slotName)
         {
+            InitializeSlotData(slotName, loginSuccess.SlotData);
             _session.Items.ItemReceived += OnItemReceived;
             _session.MessageLog.OnMessageReceived += OnMessageReceived;
             _session.Socket.ErrorReceived += SessionErrorReceived;
@@ -115,7 +116,6 @@ namespace StardewArchipelago.Archipelago
                 _chatForwarder.ListenToChatMessages(this);
             }
             _itemReceivedFunction();
-            InitializeSlotData(slotName, loginSuccess.SlotData);
 
             if (_advancedOptionsManager == null)
             {

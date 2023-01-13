@@ -58,11 +58,11 @@ namespace StardewArchipelago.Items
 
         private void RegisterPlayerSkills()
         {
-            _unlockables.Add($"Progressive {Skill.Farming} Skill", SendProgressiveFarmingLevel);
-            _unlockables.Add($"Progressive {Skill.Fishing} Skill", SendProgressiveFishingLevel);
-            _unlockables.Add($"Progressive {Skill.Foraging} Skill", SendProgressiveForagingLevel);
-            _unlockables.Add($"Progressive {Skill.Mining} Skill", SendProgressiveMiningLevel);
-            _unlockables.Add($"Progressive {Skill.Combat} Skill", SendProgressiveCombatLevel);
+            _unlockables.Add($"Progressive {Skill.Farming} Level", SendProgressiveFarmingLevel);
+            _unlockables.Add($"Progressive {Skill.Fishing} Level", SendProgressiveFishingLevel);
+            _unlockables.Add($"Progressive {Skill.Foraging} Level", SendProgressiveForagingLevel);
+            _unlockables.Add($"Progressive {Skill.Mining} Level", SendProgressiveMiningLevel);
+            _unlockables.Add($"Progressive {Skill.Combat} Level", SendProgressiveCombatLevel);
         }
 
         private void RegisterProgressiveTools()

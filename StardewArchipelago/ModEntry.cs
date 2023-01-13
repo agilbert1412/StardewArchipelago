@@ -66,7 +66,7 @@ namespace StardewArchipelago
             _archipelago = new ArchipelagoClient(Monitor, _helper, _harmony, OnItemReceived);
             _helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
             _helper.Events.GameLoop.SaveCreated += this.OnSaveCreated;
-            _helper.Events.GameLoop.Saved += this.OnSaved;
+            _helper.Events.GameLoop.Saving += this.OnSaving;
             _helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
             _helper.Events.GameLoop.TimeChanged += this.OnTimeChanged;
             _helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
@@ -106,7 +106,7 @@ namespace StardewArchipelago
             }
         }
 
-        private void OnSaved(object sender, SavedEventArgs e)
+        private void OnSaving(object sender, SavingEventArgs e)
         {
             _state.ItemsReceived = _itemManager.GetAllItemsAlreadyProcessed();
             _state.LocationsChecked = _locationsChecker.GetAllLocationsAlreadyChecked();
@@ -114,6 +114,10 @@ namespace StardewArchipelago
             _state.LettersGenerated = _mail.GetAllLettersGenerated();
             _helper.Data.WriteSaveData(AP_DATA_KEY, _state);
             _helper.Data.WriteSaveData(AP_EXPERIENCE_KEY, SkillsInjections.GetArchipelagoExperience());
+        }
+
+        private void OnSaved(object sender, SavedEventArgs e)
+        {
         }
 
         private void OnSaveLoaded(object sender, SaveLoadedEventArgs e)
@@ -243,7 +247,7 @@ namespace StardewArchipelago
 
         private void OnItemReceived()
         {
-            _itemManager.ReceiveAllNewItems();
+            _itemManager?.ReceiveAllNewItems();
         }
 
         private void DebugMethod(string arg1, string[] arg2)

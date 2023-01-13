@@ -29,7 +29,7 @@ namespace StardewArchipelago.Items.Mail
                 return;
             }
 
-            Game1.player.mailForTomorrow.Add(mailTitle + (noLetter ? "%&NL&%" : ""));
+            SendMail(mailTitle + (noLetter ? "%&NL&%" : ""));
         }
 
         public void SendArchipelagoInvisibleMail(string mailKey, string apItemName, string findingPlayer, string locationName)
@@ -40,7 +40,7 @@ namespace StardewArchipelago.Items.Mail
             }
 
             GenerateMail(mailKey, apItemName, findingPlayer, locationName, "");
-            Game1.player.mailForTomorrow.Add(mailKey + "%&NL&%");
+            SendMail(mailKey + "%&NL&%");
         }
 
         public void SendArchipelagoMail(string mailKey, string apItemName, string findingPlayer, string locationName, string attachmentEmbedString)
@@ -52,7 +52,7 @@ namespace StardewArchipelago.Items.Mail
 
             GenerateMail(mailKey, apItemName, findingPlayer, locationName, attachmentEmbedString);
 
-            Game1.player.mailForTomorrow.Add(mailKey);
+            SendMail(mailKey);
         }
 
         private void GenerateMail(string mailKey, string apItemName, string findingPlayer, string locationName,
@@ -99,6 +99,18 @@ namespace StardewArchipelago.Items.Mail
         private string GetRandomApMailString()
         {
             return ApMailStrings[_random.Next(0, ApMailStrings.Length)];
+        }
+
+        private void SendMail(string mailTitle)
+        {
+            if (_sendForTomorrow)
+            {
+                Game1.player.mailForTomorrow.Add(mailTitle);
+            }
+            else
+            {
+                Game1.player.mailbox.Add(mailTitle);
+            }
         }
 
         private static readonly string[] ApMailStrings = {

@@ -24,6 +24,14 @@ namespace StardewArchipelago.Locations.CodeInjections
             _helper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
+            foreach (var skill in Enum.GetValues<Skill>())
+            {
+                if (_archipelagoExperience.ContainsKey(skill))
+                {
+                    continue;
+                }
+                _archipelagoExperience.Add(skill, 0);
+            }
         }
 
         public static Dictionary<int, int> GetArchipelagoExperience()
@@ -36,6 +44,64 @@ namespace StardewArchipelago.Locations.CodeInjections
             _archipelagoExperience = values.ToDictionary(x => (Skill)x.Key, x => (double)x.Value);
         }
 
+        public static bool GainExperience_NormalExperience_Prefix(Farmer __instance, int which, int howMuch)
+        {
+            try
+            {
+                if (which < 0 || which > 4 || howMuch <= 0 || !__instance.IsLocalPlayer)
+                {
+                    return true; // run original logic
+                }
+
+                var skill = (Skill)which;
+                var experienceAmount = GetMultipliedExperience(howMuch);
+                var oldExperienceLevel = _archipelagoExperience[skill];
+                var newExperienceLevel = _archipelagoExperience[skill] + experienceAmount;
+                _archipelagoExperience[skill] = newExperienceLevel;
+                var oldLevel = GetLevel(oldExperienceLevel);
+                var newLevel = GetLevel(newExperienceLevel);
+                if (newLevel <= oldLevel)
+                {
+                    return false; // don't run original logic
+                }
+
+                switch (skill)
+                {
+                    case Skill.Farming:
+                        __instance.farmingLevel.Value = newLevel;
+                        break;
+                    case Skill.Fishing:
+                        __instance.fishingLevel.Value = newLevel;
+                        break;
+                    case Skill.Foraging:
+                        __instance.foragingLevel.Value = newLevel;
+                        break;
+                    case Skill.Mining:
+                        __instance.miningLevel.Value = newLevel;
+                        break;
+                    case Skill.Combat:
+                        __instance.combatLevel.Value = newLevel;
+                        break;
+                    case Skill.Luck:
+                        __instance.luckLevel.Value = newLevel;
+                        break;
+                }
+
+                for (var levelUp = oldLevel + 1; levelUp <= newLevel; ++levelUp)
+                {
+                    __instance.newLevels.Add(new Point(which, levelUp));
+                }
+
+                return false; // don't run original logic
+
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(GainExperience_ArchipelagoExperience_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
+        }
+
         public static bool GainExperience_ArchipelagoExperience_Prefix(Farmer __instance, int which, int howMuch)
         {
             try
@@ -46,11 +112,16 @@ namespace StardewArchipelago.Locations.CodeInjections
                 }
 
                 var skill = (Skill)which;
-                var experienceAmount = howMuch * 1.0;
+                var experienceAmount = GetMultipliedExperience(howMuch);
                 var oldExperienceLevel = _archipelagoExperience[skill];
                 var newExperienceLevel = _archipelagoExperience[skill] + experienceAmount;
                 _archipelagoExperience[skill] = newExperienceLevel;
                 var newLevel = GetLevel(_archipelagoExperience[skill]);
+                if (newLevel < 1)
+                {
+                    return false; // don't run original logic
+                }
+
                 var checkedLocation = string.Format(_skillLocationName, newLevel, skill.ToString());
                 _locationChecker.AddCheckedLocation(checkedLocation);
                 return false; // don't run original logic
@@ -61,6 +132,11 @@ namespace StardewArchipelago.Locations.CodeInjections
                 _monitor.Log($"Failed in {nameof(GainExperience_ArchipelagoExperience_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
             }
+        }
+
+        private static double GetMultipliedExperience(int amount)
+        {
+            return amount * _archipelago.SlotData.ExperienceMultiplier;
         }
 
         private static int GetLevel(double experienceAmount)

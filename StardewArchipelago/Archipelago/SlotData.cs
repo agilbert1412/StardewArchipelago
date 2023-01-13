@@ -9,7 +9,7 @@ namespace StardewArchipelago.Archipelago
         private const string BACKPACK_PROGRESSION_KEY = "backpack_progression";
         private const string TOOL_PROGRESSION_KEY = "tool_progression";
         private const string ELEVATOR_PROGRESSION_KEY = "elevator_progression";
-        private const string SKILLS_PROGRESSION_KEY = "skills_progression";
+        private const string SKILLS_PROGRESSION_KEY = "skill_progression";
         private const string EXPERIENCE_MULTIPLIER_KEY = "experience_multiplier";
         private const string EARLY_MINE_KEY = "the_mines_open";
         private const string DEATH_LINK_KEY = "death_link";
@@ -26,6 +26,7 @@ namespace StardewArchipelago.Archipelago
         public ToolProgression ToolProgression { get; private set; }
         public ElevatorProgression ElevatorProgression { get; private set; }
         public SkillsProgression SkillsProgression { get; private set; }
+        public double ExperienceMultiplier { get; private set; }
         public bool EarlyMine { get; private set; }
         public bool DeathLink { get; private set; }
         public Goal Goal { get; private set; }
@@ -43,6 +44,7 @@ namespace StardewArchipelago.Archipelago
             ToolProgression = GetSlotSetting(TOOL_PROGRESSION_KEY, ToolProgression.Progressive);
             ElevatorProgression = GetSlotSetting(ELEVATOR_PROGRESSION_KEY, ElevatorProgression.Progressive);
             SkillsProgression = GetSlotSetting(SKILLS_PROGRESSION_KEY, SkillsProgression.Progressive);
+            ExperienceMultiplier = (GetSlotSetting(EXPERIENCE_MULTIPLIER_KEY, 100) / 100.0);
             EarlyMine = GetSlotSetting(EARLY_MINE_KEY, false);
             DeathLink = GetSlotSetting(DEATH_LINK_KEY, false);
             Goal = GetSlotSetting(GOAL_KEY, Goal.CommunityCenter);

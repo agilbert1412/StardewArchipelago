@@ -177,12 +177,16 @@ namespace StardewArchipelago.Locations
         {
             if (_archipelago.SlotData.SkillsProgression == SkillsProgression.Vanilla)
             {
+                _harmony.Patch(
+                    original: AccessTools.Method(typeof(Farmer), nameof(Farmer.gainExperience)),
+                    prefix: new HarmonyMethod(typeof(SkillsInjections), nameof(SkillsInjections.GainExperience_NormalExperience_Prefix))
+                );
                 return;
             }
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Farmer), nameof(Farmer.gainExperience)),
-                postfix: new HarmonyMethod(typeof(SkillsInjections), nameof(SkillsInjections.GainExperience_ArchipelagoExperience_Prefix))
+                prefix: new HarmonyMethod(typeof(SkillsInjections), nameof(SkillsInjections.GainExperience_ArchipelagoExperience_Prefix))
             );
         }
     }
