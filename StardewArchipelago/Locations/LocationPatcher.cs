@@ -32,6 +32,7 @@ namespace StardewArchipelago.Locations
             ReplaceElevatorsWithChecks();
             ReplaceToolUpgradesWithChecks();
             ReplaceFishingRodsWithChecks();
+            ReplaceSkillsWithChecks();
         }
 
         private static void RemoveDefaultRewardsOnAllBundles()
@@ -169,6 +170,19 @@ namespace StardewArchipelago.Locations
             _harmony.Patch(
                 original: AccessTools.Method(typeof(MineShaft), nameof(MineShaft.checkAction)),
                 prefix: new HarmonyMethod(typeof(MineshaftInjections), nameof(MineshaftInjections.CheckAction_LoadElevatorMenu_Prefix))
+            );
+        }
+
+        private void ReplaceSkillsWithChecks()
+        {
+            if (_archipelago.SlotData.SkillsProgression == SkillsProgression.Vanilla)
+            {
+                return;
+            }
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Farmer), nameof(Farmer.gainExperience)),
+                postfix: new HarmonyMethod(typeof(SkillsInjections), nameof(SkillsInjections.GainExperience_ArchipelagoExperience_Prefix))
             );
         }
     }

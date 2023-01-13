@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
+using Netcode;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Items.Mail;
+using StardewArchipelago.Locations.CodeInjections;
 using StardewValley;
 
 namespace StardewArchipelago.Items
@@ -17,6 +20,7 @@ namespace StardewArchipelago.Items
         {
             _unlockables = new Dictionary<string, Func<ReceivedItem, LetterAttachment>>();
             RegisterCommunityCenterRepairs();
+            RegisterPlayerSkills();
             RegisterPlayerImprovement();
             RegisterProgressiveTools();
             RegisterMineElevators();
@@ -50,6 +54,15 @@ namespace StardewArchipelago.Items
             _unlockables.Add("Dwarvish Translation Guide", SendDwarvishTranslationGuideLetter);
             _unlockables.Add("Skull Key", SendSkullKeyLetter);
             _unlockables.Add("Rusty Key", SendRustyKeyLetter);
+        }
+
+        private void RegisterPlayerSkills()
+        {
+            _unlockables.Add($"Progressive {Skill.Farming} Skill", SendProgressiveFarmingLevel);
+            _unlockables.Add($"Progressive {Skill.Fishing} Skill", SendProgressiveFishingLevel);
+            _unlockables.Add($"Progressive {Skill.Foraging} Skill", SendProgressiveForagingLevel);
+            _unlockables.Add($"Progressive {Skill.Mining} Skill", SendProgressiveMiningLevel);
+            _unlockables.Add($"Progressive {Skill.Combat} Skill", SendProgressiveCombatLevel);
         }
 
         private void RegisterProgressiveTools()
@@ -107,16 +120,6 @@ namespace StardewArchipelago.Items
             return new LetterAttachment(receivedItem);
         }
 
-        public void ReceiveStardropIfDeserved(int expectedNumber)
-        {
-            var expectedEnergy = 270 + (expectedNumber * 34);
-            if (expectedEnergy > Game1.player.MaxStamina)
-            {
-                var stardrop = new StardewValley.Object(434, 1);
-                Game1.player.eatObject(stardrop, true);
-            }
-        }
-
         private LetterItemIdAttachment SendStardropLetter(ReceivedItem receivedItem)
         {
             return new LetterItemIdAttachment(receivedItem, 434);
@@ -171,6 +174,101 @@ namespace StardewArchipelago.Items
         private LetterActionAttachment SendProgressiveFishingRodLetter(ReceivedItem receivedItem)
         {
             return new LetterActionAttachment(receivedItem, LetterActionsKeys.FishingRod);
+        }
+
+        private LetterAttachment SendProgressiveFarmingLevel(ReceivedItem receivedItem)
+        {
+            const int whichSkill = (int)Skill.Farming;
+            foreach (var farmer in Game1.getAllFarmers())
+            {
+                GiveExperienceToNextLevel(farmer, whichSkill);
+                farmer.FarmingLevel = farmer.farmingLevel.Value + 1;
+                farmer.newLevels.Add(new Point(whichSkill, farmer.farmingLevel.Value));
+            }
+            return new LetterAttachment(receivedItem);
+        }
+
+        private LetterAttachment SendProgressiveFishingLevel(ReceivedItem receivedItem)
+        {
+            const int whichSkill = (int)Skill.Fishing;
+            foreach (var farmer in Game1.getAllFarmers())
+            {
+                GiveExperienceToNextLevel(farmer, whichSkill);
+                farmer.FishingLevel = farmer.fishingLevel.Value + 1;
+                farmer.newLevels.Add(new Point(whichSkill, farmer.fishingLevel.Value));
+            }
+            return new LetterAttachment(receivedItem);
+        }
+
+        private LetterAttachment SendProgressiveForagingLevel(ReceivedItem receivedItem)
+        {
+            const int whichSkill = (int)Skill.Foraging;
+            foreach (var farmer in Game1.getAllFarmers())
+            {
+                GiveExperienceToNextLevel(farmer, whichSkill);
+                farmer.ForagingLevel = farmer.foragingLevel.Value + 1;
+                farmer.newLevels.Add(new Point(whichSkill, farmer.foragingLevel.Value));
+            }
+            return new LetterAttachment(receivedItem);
+        }
+
+        private LetterAttachment SendProgressiveMiningLevel(ReceivedItem receivedItem)
+        {
+            const int whichSkill = (int)Skill.Mining;
+            foreach (var farmer in Game1.getAllFarmers())
+            {
+                GiveExperienceToNextLevel(farmer, whichSkill);
+                farmer.MiningLevel = farmer.miningLevel.Value + 1;
+                farmer.newLevels.Add(new Point(whichSkill, farmer.miningLevel.Value));
+            }
+            return new LetterAttachment(receivedItem);
+        }
+
+        private LetterAttachment SendProgressiveCombatLevel(ReceivedItem receivedItem)
+        {
+            const int whichSkill = (int)Skill.Combat;
+            foreach (var farmer in Game1.getAllFarmers())
+            {
+                GiveExperienceToNextLevel(farmer, whichSkill);
+                farmer.CombatLevel = farmer.combatLevel.Value + 1;
+                farmer.newLevels.Add(new Point(whichSkill, farmer.combatLevel.Value));
+            }
+            return new LetterAttachment(receivedItem);
+        }
+
+        private void GiveExperienceToNextLevel(Farmer farmer, int whichSkill)
+        {
+            var experienceForLevelUp = GetExperienceToNextLevel(farmer, whichSkill);
+            farmer.experiencePoints[whichSkill] += experienceForLevelUp;
+        }
+
+        private int GetExperienceToNextLevel(Farmer farmer, int skill)
+        {
+            switch (farmer.experiencePoints[skill])
+            {
+                case < 100:
+                    return 100 - farmer.experiencePoints[skill];
+                case < 380:
+                    return 380 - farmer.experiencePoints[skill];
+                case < 770:
+                    return 770 - farmer.experiencePoints[skill];
+                case < 1300:
+                    return 1300 - farmer.experiencePoints[skill];
+                case < 2150:
+                    return 2150 - farmer.experiencePoints[skill];
+                case < 3300:
+                    return 3300 - farmer.experiencePoints[skill];
+                case < 4800:
+                    return 4800 - farmer.experiencePoints[skill];
+                case < 6900:
+                    return 6900 - farmer.experiencePoints[skill];
+                case < 10000:
+                    return 10000 - farmer.experiencePoints[skill];
+                case < 15000:
+                    return 15000 - farmer.experiencePoints[skill];
+            }
+
+            return 0;
         }
     }
 }

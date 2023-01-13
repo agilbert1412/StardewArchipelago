@@ -3,7 +3,6 @@ using StardewArchipelago.Locations;
 using StardewArchipelago.Locations.CodeInjections;
 using StardewModdingAPI;
 using StardewValley;
-using StardewValley.Network;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
 {
@@ -38,7 +37,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(SetLowestMineLevel_SkipToSkullCavern_Prefix)}:\n{ex}", LogLevel.Error);
+                _monitor.Log($"Failed in {nameof(HasCompletedCommunityCenter_CheckGameStateInsteadOfLetters_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
             }
         }

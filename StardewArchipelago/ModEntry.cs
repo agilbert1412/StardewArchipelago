@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
@@ -10,6 +9,7 @@ using StardewArchipelago.Goals;
 using StardewArchipelago.Items;
 using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Locations;
+using StardewArchipelago.Locations.CodeInjections;
 using StardewArchipelago.Serialization;
 using StardewArchipelago.Stardew;
 using StardewArchipelago.Test;
@@ -25,6 +25,7 @@ namespace StardewArchipelago
     {
         private const string CONNECT_SYNTAX = "Syntax: connect ip:port slot password";
         private const string AP_DATA_KEY = "ArchipelagoData";
+        private const string AP_EXPERIENCE_KEY = "ArchipelagoSkillsExperience";
 
         private IModHelper _helper;
         private Harmony _harmony;
@@ -95,6 +96,7 @@ namespace StardewArchipelago
             _state.LocationsScouted = new Dictionary<string, ScoutedLocation>();
             _state.LettersGenerated = new Dictionary<string, string>();
             _helper.Data.WriteSaveData(AP_DATA_KEY, _state);
+            _helper.Data.WriteSaveData(AP_EXPERIENCE_KEY, SkillsInjections.GetArchipelagoExperience());
 
             if (!_archipelago.IsConnected)
             {
@@ -111,16 +113,12 @@ namespace StardewArchipelago
             _state.LocationsScouted = _archipelago.ScoutedLocations;
             _state.LettersGenerated = _mail.GetAllLettersGenerated();
             _helper.Data.WriteSaveData(AP_DATA_KEY, _state);
+            _helper.Data.WriteSaveData(AP_EXPERIENCE_KEY, SkillsInjections.GetArchipelagoExperience());
         }
 
         private void OnSaveLoaded(object sender, SaveLoadedEventArgs e)
         {
-            var state = _helper.Data.ReadSaveData<ArchipelagoStateDto>(AP_DATA_KEY);
-            if (state != null)
-            {
-                _state = state;
-                _archipelago.ScoutedLocations = _state.LocationsScouted;
-            }
+            ReadPersistentArchipelagoData();
 
             _stardewItemManager = new StardewItemManager();
             _mail = new Mailman(_state.LettersGenerated);
@@ -158,6 +156,19 @@ namespace StardewArchipelago
             {
                 GivePlayerStartingResources();
             }
+        }
+
+        private void ReadPersistentArchipelagoData()
+        {
+            var state = _helper.Data.ReadSaveData<ArchipelagoStateDto>(AP_DATA_KEY);
+            if (state != null)
+            {
+                _state = state;
+                _archipelago.ScoutedLocations = _state.LocationsScouted;
+            }
+
+            var apExperience = _helper.Data.ReadSaveData<Dictionary<int, int>>(AP_EXPERIENCE_KEY);
+            SkillsInjections.SetArchipelagoExperience(apExperience);
         }
 
         private void OnDayStarted(object sender, DayStartedEventArgs e)
