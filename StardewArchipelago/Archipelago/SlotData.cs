@@ -42,7 +42,7 @@ namespace StardewArchipelago.Archipelago
             StartingMoney = GetSlotSetting(STARTING_MONEY_KEY, 500);
             BackpackProgression = GetSlotSetting(BACKPACK_PROGRESSION_KEY, BackpackProgression.Progressive);
             ToolProgression = GetSlotSetting(TOOL_PROGRESSION_KEY, ToolProgression.Progressive);
-            ElevatorProgression = GetSlotSetting(ELEVATOR_PROGRESSION_KEY, ElevatorProgression.Progressive);
+            ElevatorProgression = GetSlotSetting(ELEVATOR_PROGRESSION_KEY, ElevatorProgression.ProgressiveFromPreviousFloor);
             SkillsProgression = GetSlotSetting(SKILLS_PROGRESSION_KEY, SkillsProgression.Progressive);
             ExperienceMultiplier = (GetSlotSetting(EXPERIENCE_MULTIPLIER_KEY, 100) / 100.0);
             EarlyMine = GetSlotSetting(EARLY_MINE_KEY, false);

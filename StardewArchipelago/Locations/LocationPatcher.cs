@@ -179,14 +179,14 @@ namespace StardewArchipelago.Locations
             {
                 _harmony.Patch(
                     original: AccessTools.Method(typeof(Farmer), nameof(Farmer.gainExperience)),
-                    prefix: new HarmonyMethod(typeof(SkillsInjections), nameof(SkillsInjections.GainExperience_NormalExperience_Prefix))
+                    prefix: new HarmonyMethod(typeof(SkillInjections), nameof(SkillInjections.GainExperience_NormalExperience_Prefix))
                 );
                 return;
             }
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Farmer), nameof(Farmer.gainExperience)),
-                prefix: new HarmonyMethod(typeof(SkillsInjections), nameof(SkillsInjections.GainExperience_ArchipelagoExperience_Prefix))
+                prefix: new HarmonyMethod(typeof(SkillInjections), nameof(SkillInjections.GainExperience_ArchipelagoExperience_Prefix))
             );
         }
     }

@@ -8,7 +8,7 @@ using StardewValley;
 
 namespace StardewArchipelago.Locations.CodeInjections
 {
-    public static class SkillsInjections
+    public static class SkillInjections
     {
         private const string _skillLocationName = "Level {0} {1}";
 

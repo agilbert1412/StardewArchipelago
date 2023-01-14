@@ -33,7 +33,6 @@ namespace StardewArchipelago.Archipelago
         private DeathLinkService _deathLinkService;
         private Harmony _harmony;
         private DeathManager _deathManager;
-        private AdvancedOptionsManager _advancedOptionsManager;
         private ChatForwarder _chatForwarder;
 
         private Action _itemReceivedFunction;
@@ -116,12 +115,6 @@ namespace StardewArchipelago.Archipelago
                 _chatForwarder.ListenToChatMessages(this);
             }
             _itemReceivedFunction();
-
-            if (_advancedOptionsManager == null)
-            {
-                _advancedOptionsManager = new AdvancedOptionsManager(_console, _modHelper, _harmony, this);
-                _advancedOptionsManager.InjectArchipelagoAdvancedOptions();
-            }
 
             InitializeDeathLink();
 

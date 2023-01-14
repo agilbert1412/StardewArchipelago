@@ -29,9 +29,10 @@ namespace StardewArchipelago
 
         private IModHelper _helper;
         private Harmony _harmony;
+        private ArchipelagoClient _archipelago;
+        private AdvancedOptionsManager _advancedOptionsManager;
         private Mailman _mail;
         private BundleReader _bundleReader;
-        private ArchipelagoClient _archipelago;
         private ItemManager _itemManager;
         private RandomizedLogicPatcher _logicPatcher;
         private MailPatcher _mailPatcher;
@@ -49,7 +50,6 @@ namespace StardewArchipelago
 
         public ModEntry() : base()
         {
-            _state = new ArchipelagoStateDto();
         }
 
         /*********
@@ -64,6 +64,9 @@ namespace StardewArchipelago
             _multiSleep = new MultiSleep(Monitor, _helper, _harmony);
 
             _archipelago = new ArchipelagoClient(Monitor, _helper, _harmony, OnItemReceived);
+            _advancedOptionsManager = new AdvancedOptionsManager(Monitor, _helper, _harmony, _archipelago);
+            _advancedOptionsManager.InjectArchipelagoAdvancedOptions();
+
             _helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
             _helper.Events.GameLoop.SaveCreated += this.OnSaveCreated;
             _helper.Events.GameLoop.Saving += this.OnSaving;
@@ -72,10 +75,10 @@ namespace StardewArchipelago
             _helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
             _helper.Events.GameLoop.DayStarted += this.OnDayStarted;
             _helper.Events.GameLoop.DayEnding += this.OnDayEnding;
-
-            _helper.ConsoleCommands.Add("connect", $"Connect to Archipelago. {CONNECT_SYNTAX}", this.OnCommandConnectToArchipelago);
+            _helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
 
 #if DEBUG
+            _helper.ConsoleCommands.Add("connect", $"Connect to Archipelago. {CONNECT_SYNTAX}", this.OnCommandConnectToArchipelago);
             _helper.ConsoleCommands.Add("disconnect", $"Disconnects from Archipelago. {CONNECT_SYNTAX}", this.OnCommandDisconnectFromArchipelago);
             _helper.ConsoleCommands.Add("test_getallitems", "Tests if every AP item in the stardew_valley_item_table json file are supported by the mod", this.TestGetAllItems);
             _helper.ConsoleCommands.Add("test_getitem", "Get one specific item", this.TestGetSpecificItem);
@@ -86,7 +89,7 @@ namespace StardewArchipelago
 
         private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
         {
-
+            _state = new ArchipelagoStateDto();
         }
 
         private void OnSaveCreated(object sender, SaveCreatedEventArgs e)
@@ -96,7 +99,7 @@ namespace StardewArchipelago
             _state.LocationsScouted = new Dictionary<string, ScoutedLocation>();
             _state.LettersGenerated = new Dictionary<string, string>();
             _helper.Data.WriteSaveData(AP_DATA_KEY, _state);
-            _helper.Data.WriteSaveData(AP_EXPERIENCE_KEY, SkillsInjections.GetArchipelagoExperience());
+            _helper.Data.WriteSaveData(AP_EXPERIENCE_KEY, SkillInjections.GetArchipelagoExperience());
 
             if (!_archipelago.IsConnected)
             {
@@ -113,7 +116,7 @@ namespace StardewArchipelago
             _state.LocationsScouted = _archipelago.ScoutedLocations;
             _state.LettersGenerated = _mail.GetAllLettersGenerated();
             _helper.Data.WriteSaveData(AP_DATA_KEY, _state);
-            _helper.Data.WriteSaveData(AP_EXPERIENCE_KEY, SkillsInjections.GetArchipelagoExperience());
+            _helper.Data.WriteSaveData(AP_EXPERIENCE_KEY, SkillInjections.GetArchipelagoExperience());
         }
 
         private void OnSaved(object sender, SavedEventArgs e)
@@ -172,7 +175,7 @@ namespace StardewArchipelago
             }
 
             var apExperience = _helper.Data.ReadSaveData<Dictionary<int, int>>(AP_EXPERIENCE_KEY);
-            SkillsInjections.SetArchipelagoExperience(apExperience);
+            SkillInjections.SetArchipelagoExperience(apExperience);
         }
 
         private void OnDayStarted(object sender, DayStartedEventArgs e)
@@ -207,6 +210,13 @@ namespace StardewArchipelago
         private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
         {
             _archipelago.APUpdate(_state.APConnectionInfo);
+        }
+
+        private void OnReturnedToTitle(object sender, ReturnedToTitleEventArgs e)
+        {
+            _archipelago.Disconnect();
+            _state.APConnectionInfo = null;
+            _state = new ArchipelagoStateDto();
         }
 
         private void OnCommandConnectToArchipelago(string arg1, string[] arg2)

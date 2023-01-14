@@ -106,6 +106,14 @@ namespace StardewArchipelago.Locations.CodeInjections
                     return;
                 }
 
+                var progression = _archipelago.SlotData.ElevatorProgression;
+                var currentMineshaft = Game1.player.currentLocation as MineShaft;
+                var currentMineLevel = currentMineshaft?.mineLevel ?? 0;
+                if (progression == ElevatorProgression.ProgressiveFromPreviousFloor && currentMineLevel != whatLevel - 1)
+                {
+                    return;
+                }
+
                 _locationChecker.AddCheckedLocation($"Floor {whatLevel} Elevator");
             }
             catch (Exception ex)
