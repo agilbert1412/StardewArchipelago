@@ -64,7 +64,7 @@ namespace StardewArchipelago
             _multiSleep = new MultiSleep(Monitor, _helper, _harmony);
 
             _archipelago = new ArchipelagoClient(Monitor, _helper, _harmony, OnItemReceived);
-            _advancedOptionsManager = new AdvancedOptionsManager(Monitor, _helper, _harmony, _archipelago);
+            _advancedOptionsManager = new AdvancedOptionsManager(this, _harmony, _archipelago);
             _advancedOptionsManager.InjectArchipelagoAdvancedOptions();
 
             _helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
@@ -238,21 +238,12 @@ namespace StardewArchipelago
             var port = int.Parse(ipAndPort[1]);
             var slot = arg2[1];
             var password = arg2.Length >= 3 ? arg2[2] : "";
-            var apConnection = new ArchipelagoConnectionInfo(ip, port, slot, false, password);
-            _archipelago.Connect(apConnection);
-            if (!_archipelago.IsConnected)
-            {
-                return;
-            }
-
-            _state.APConnectionInfo = apConnection;
+            ArchipelagoConnect(ip, port, slot, password);
         }
 
         private void OnCommandDisconnectFromArchipelago(string arg1, string[] arg2)
         {
-            Game1.ExitToTitle();
-            _archipelago.Disconnect();
-            _state.APConnectionInfo = null;
+            ArchipelagoDisconnect();
         }
 
         private void OnItemReceived()
@@ -307,6 +298,26 @@ namespace StardewArchipelago
             {
                 itemToGift
             }, emptySpot, true));
+        }
+
+        public bool ArchipelagoConnect(string ip, int port, string slot, string password)
+        {
+            var apConnection = new ArchipelagoConnectionInfo(ip, port, slot, false, password);
+            _archipelago.Connect(apConnection);
+            if (!_archipelago.IsConnected)
+            {
+                return false;
+            }
+
+            _state.APConnectionInfo = apConnection;
+            return true;
+        }
+
+        public void ArchipelagoDisconnect()
+        {
+            Game1.ExitToTitle();
+            _archipelago.Disconnect();
+            _state.APConnectionInfo = null;
         }
 
         private void TestGetSpecificItem(string arg1, string[] arg2)

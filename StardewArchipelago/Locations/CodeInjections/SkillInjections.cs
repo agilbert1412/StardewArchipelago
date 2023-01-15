@@ -24,14 +24,7 @@ namespace StardewArchipelago.Locations.CodeInjections
             _helper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
-            foreach (var skill in Enum.GetValues<Skill>())
-            {
-                if (_archipelagoExperience.ContainsKey(skill))
-                {
-                    continue;
-                }
-                _archipelagoExperience.Add(skill, 0);
-            }
+            InitializeSkillExperienceToZero();
         }
 
         public static Dictionary<int, int> GetArchipelagoExperience()
@@ -41,6 +34,13 @@ namespace StardewArchipelago.Locations.CodeInjections
 
         public static void SetArchipelagoExperience(Dictionary<int, int> values)
         {
+            if (values == null)
+            {
+                _archipelagoExperience = new Dictionary<Skill, double>();
+                InitializeSkillExperienceToZero();
+                return;
+            }
+
             _archipelagoExperience = values.ToDictionary(x => (Skill)x.Key, x => (double)x.Value);
         }
 
@@ -160,6 +160,19 @@ namespace StardewArchipelago.Locations.CodeInjections
                 < 15000 => 9,
                 _ => 10
             };
+        }
+
+        private static void InitializeSkillExperienceToZero()
+        {
+            foreach (var skill in Enum.GetValues<Skill>())
+            {
+                if (_archipelagoExperience.ContainsKey(skill))
+                {
+                    continue;
+                }
+
+                _archipelagoExperience.Add(skill, 0);
+            }
         }
     }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using HarmonyLib;
+using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
 using StardewValley;
@@ -9,15 +10,13 @@ namespace StardewArchipelago.GameModifications
 {
     public class AdvancedOptionsManager
     {
-        private static IMonitor _monitor;
-        private static IModHelper _modHelper;
+        private static ModEntry _modEntry;
         private Harmony _harmony;
         private static ArchipelagoClient _archipelago;
 
-        public AdvancedOptionsManager(IMonitor monitor, IModHelper modHelper, Harmony harmony, ArchipelagoClient archipelago)
+        public AdvancedOptionsManager(ModEntry modEntry, Harmony harmony, ArchipelagoClient archipelago)
         {
-            _monitor = monitor;
-            _modHelper = modHelper;
+            _modEntry = modEntry;
             _harmony = harmony;
             _archipelago = archipelago;
         }
@@ -26,6 +25,7 @@ namespace StardewArchipelago.GameModifications
         {
             InjectAdvancedOptionsRemoval();
             InjectNewGameForcedSettings();
+            InjectArchipelagoConnectionFields();
         }
 
         private void InjectAdvancedOptionsRemoval()
@@ -44,6 +44,24 @@ namespace StardewArchipelago.GameModifications
             );
         }
 
+        private void InjectArchipelagoConnectionFields()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(TitleMenu), nameof(TitleMenu.update)),
+                postfix: new HarmonyMethod(typeof(AdvancedOptionsManager), nameof(AdvancedOptionsManager.TitleMenuUpdate_ReplaceCharacterMenu_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(CharacterCustomization), nameof(CharacterCustomization.canLeaveMenu)),
+                prefix: new HarmonyMethod(typeof(AdvancedOptionsManager), nameof(AdvancedOptionsManager.CanLeaveMenu_ConsiderNewFields_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(CharacterCustomization), "optionButtonClick"),
+                prefix: new HarmonyMethod(typeof(AdvancedOptionsManager), nameof(AdvancedOptionsManager.OptionButtonClick_OkConnectToAp_Prefix))
+            );
+        }
+
         public static void SetUpPositions_RemoveAdvancedOptionsButton_Postfix(CharacterCustomization __instance)
         {
             try
@@ -52,7 +70,7 @@ namespace StardewArchipelago.GameModifications
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(SetUpPositions_RemoveAdvancedOptionsButton_Postfix)}:\n{ex}", LogLevel.Error);
+                _modEntry.Monitor.Log($"Failed in {nameof(SetUpPositions_RemoveAdvancedOptionsButton_Postfix)}:\n{ex}", LogLevel.Error);
                 return;
             }
         }
@@ -70,11 +88,11 @@ namespace StardewArchipelago.GameModifications
                 Game1.bundleType = Game1.BundleType.Default;
                 Game1.game1.SetNewGameOption<bool>("YearOneCompletable", true);
 
-                return true;
+                return true; // run original logic
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(LoadForNewGame_ForceSettings_Prefix)}:\n{ex}", LogLevel.Error);
+                _modEntry.Monitor.Log($"Failed in {nameof(LoadForNewGame_ForceSettings_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
             }
         }
@@ -85,6 +103,73 @@ namespace StardewArchipelago.GameModifications
             
             int result = int.Parse(trimmedSeed.Substring(0, 9));
             Game1.startingGameSeed = (ulong)result;
+        }
+
+        public static void TitleMenuUpdate_ReplaceCharacterMenu_Postfix(TitleMenu __instance, GameTime time)
+        {
+            try
+            {
+                if (!(TitleMenu.subMenu is CharacterCustomization characterMenu) || TitleMenu.subMenu is CharacterCustomizationArchipelago || characterMenu.source != CharacterCustomization.Source.NewGame)
+                {
+                    return;
+                }
+
+                var apCharacterMenu = new CharacterCustomizationArchipelago(characterMenu);
+                TitleMenu.subMenu = apCharacterMenu;
+            }
+            catch (Exception ex)
+            {
+                _modEntry.Monitor.Log($"Failed in {nameof(TitleMenuUpdate_ReplaceCharacterMenu_Postfix)}:\n{ex}", LogLevel.Error);
+                return;
+            }
+        }
+
+        public static bool CanLeaveMenu_ConsiderNewFields_Prefix(CharacterCustomization __instance, ref bool __result)
+        {
+            try
+            {
+                if (!(__instance is CharacterCustomizationArchipelago apInstance))
+                {
+                    return true; // run original logic
+                }
+
+                __result = Game1.player.Name.Length > 0 &&
+                           Game1.player.farmName.Length > 0 &&
+                           Game1.player.favoriteThing.Length > 0 &&
+                           apInstance.IpAddressTextBox.Text.Length > 0 &&
+                           apInstance.SlotNameTextBox.Text.Length > 0 &&
+                           apInstance.IpIsFormattedCorrectly();
+
+                return false; // don't run original logic
+            }
+            catch (Exception ex)
+            {
+                _modEntry.Monitor.Log($"Failed in {nameof(CanLeaveMenu_ConsiderNewFields_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
+        }
+
+        public static bool OptionButtonClick_OkConnectToAp_Prefix(CharacterCustomization __instance, string name)
+        {
+            try
+            {
+                if (!(__instance is CharacterCustomizationArchipelago apInstance) || name != "OK" || !__instance.canLeaveMenu())
+                {
+                    return true; // run original logic
+                }
+
+                var ipAndPort = apInstance.IpAddressTextBox.Text.Split(":");
+                var ip = ipAndPort[0];
+                var port = int.Parse(ipAndPort[1]);
+                var connected = _modEntry.ArchipelagoConnect(ip, port, apInstance.SlotNameTextBox.Text, apInstance.PasswordTextBox.Text);
+
+                return connected; // run original logic only if connected successfully
+            }
+            catch (Exception ex)
+            {
+                _modEntry.Monitor.Log($"Failed in {nameof(OptionButtonClick_OkConnectToAp_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
         }
     }
 }
