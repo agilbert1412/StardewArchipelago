@@ -39,7 +39,7 @@ namespace StardewArchipelago.Locations.CodeInjections
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(QuestComplete_LocationInsteadOfReward_Prefix)}:\n{ex}", LogLevel.Error);
+                _monitor.Log($"Failed in {nameof(UsePowerup_PrairieKingVictory_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
             }
         }
@@ -59,7 +59,7 @@ namespace StardewArchipelago.Locations.CodeInjections
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(QuestComplete_LocationInsteadOfReward_Prefix)}:\n{ex}", LogLevel.Error);
+                _monitor.Log($"Failed in {nameof(EndCutscene_JunimoKartVictory_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
             }
         }
