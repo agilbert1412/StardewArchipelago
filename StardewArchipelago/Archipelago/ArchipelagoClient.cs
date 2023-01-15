@@ -57,7 +57,7 @@ namespace StardewArchipelago.Archipelago
             _instance = this;
         }
 
-        public void Connect(ArchipelagoConnectionInfo archipelagoConnectionInfo)
+        public void Connect(ArchipelagoConnectionInfo archipelagoConnectionInfo, out string errorMessage)
         {
             Disconnect();
             LoginResult result;
@@ -77,20 +77,24 @@ namespace StardewArchipelago.Archipelago
             if (!result.Successful)
             {
                 var failure = (LoginFailure)result;
-                var errorMessage = $"Failed to Connect to {archipelagoConnectionInfo.HostUrl}:{archipelagoConnectionInfo.Port} as {archipelagoConnectionInfo.SlotName}:";
+                errorMessage = $"Failed to Connect to {archipelagoConnectionInfo.HostUrl}:{archipelagoConnectionInfo.Port} as {archipelagoConnectionInfo.SlotName}:";
                 foreach (var error in failure.Errors)
                 {
                     errorMessage += $"\n    {error}";
                 }
+
+                var detailedErrorMessage = errorMessage;
                 foreach (var error in failure.ErrorCodes)
                 {
-                    errorMessage += $"\n    {error}";
+                    detailedErrorMessage += $"\n    {error}";
                 }
 
-                _console.Log(errorMessage, LogLevel.Error);
+                _console.Log(detailedErrorMessage, LogLevel.Error);
                 IsConnected = false;
                 return; // Did not connect, show the user the contents of `errorMessage`
             }
+
+            errorMessage = "";
 
             // Successfully connected, `ArchipelagoSession` (assume statically defined as `session` from now on) can now be used to interact with the server and the returned `LoginSuccessful` contains some useful information about the initial connection (e.g. a copy of the slot data as `loginSuccess.SlotData`)
             var loginSuccess = (LoginSuccessful)result;
@@ -382,7 +386,7 @@ namespace StardewArchipelago.Archipelago
                 _disconnectTimeout -= dT;
                 if (!(_disconnectTimeout <= 0.0f)) return;
 
-                Connect(connectionInfo);
+                Connect(connectionInfo, out _);
                 _disconnectTimeout = 5.0f;
                 return;
             }

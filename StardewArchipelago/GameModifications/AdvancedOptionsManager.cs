@@ -161,7 +161,13 @@ namespace StardewArchipelago.GameModifications
                 var ipAndPort = apInstance.IpAddressTextBox.Text.Split(":");
                 var ip = ipAndPort[0];
                 var port = int.Parse(ipAndPort[1]);
-                var connected = _modEntry.ArchipelagoConnect(ip, port, apInstance.SlotNameTextBox.Text, apInstance.PasswordTextBox.Text);
+                var connected = _modEntry.ArchipelagoConnect(ip, port, apInstance.SlotNameTextBox.Text, apInstance.PasswordTextBox.Text, out var errorMessage);
+
+                if (!connected)
+                {
+                    var currentMenu = TitleMenu.subMenu;
+                    TitleMenu.subMenu = new InformationDialog(errorMessage, (_) => OnClickOkBehavior(currentMenu));
+                }
 
                 return connected; // run original logic only if connected successfully
             }
@@ -170,6 +176,11 @@ namespace StardewArchipelago.GameModifications
                 _modEntry.Monitor.Log($"Failed in {nameof(OptionButtonClick_OkConnectToAp_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
             }
+        }
+
+        private static void OnClickOkBehavior(IClickableMenu previousMenu)
+        {
+            TitleMenu.subMenu = previousMenu;
         }
     }
 }

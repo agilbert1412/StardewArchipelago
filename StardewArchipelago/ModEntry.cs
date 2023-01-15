@@ -61,15 +61,14 @@ namespace StardewArchipelago
         {
             _helper = helper;
             _harmony = new Harmony(this.ModManifest.UniqueID);
-            _multiSleep = new MultiSleep(Monitor, _helper, _harmony);
 
             _archipelago = new ArchipelagoClient(Monitor, _helper, _harmony, OnItemReceived);
-            _advancedOptionsManager = new AdvancedOptionsManager(this, _harmony, _archipelago);
-            _advancedOptionsManager.InjectArchipelagoAdvancedOptions();
 
             _helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
+            _helper.Events.GameLoop.SaveCreating += this.OnSaveCreating;
             _helper.Events.GameLoop.SaveCreated += this.OnSaveCreated;
             _helper.Events.GameLoop.Saving += this.OnSaving;
+            _helper.Events.GameLoop.Saved += this.OnSaved;
             _helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
             _helper.Events.GameLoop.TimeChanged += this.OnTimeChanged;
             _helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
@@ -87,12 +86,27 @@ namespace StardewArchipelago
 #endif
         }
 
-        private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
+        private void ResetArchipelago()
         {
+            _archipelago.Disconnect();
+            if (_state != null)
+            {
+                _state.APConnectionInfo = null;
+            }
             _state = new ArchipelagoStateDto();
+
+            _harmony.UnpatchAll(this.ModManifest.UniqueID);
+            _multiSleep = new MultiSleep(Monitor, _helper, _harmony);
+            _advancedOptionsManager = new AdvancedOptionsManager(this, _harmony, _archipelago);
+            _advancedOptionsManager.InjectArchipelagoAdvancedOptions();
         }
 
-        private void OnSaveCreated(object sender, SaveCreatedEventArgs e)
+        private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
+        {
+            ResetArchipelago();
+        }
+
+        private void OnSaveCreating(object sender, SaveCreatingEventArgs e)
         {
             _state.ItemsReceived = new List<ReceivedItem>();
             _state.LocationsChecked = new List<string>();
@@ -107,6 +121,10 @@ namespace StardewArchipelago
                 Game1.ExitToTitle();
                 return;
             }
+        }
+
+        private void OnSaveCreated(object sender, SaveCreatedEventArgs e)
+        {
         }
 
         private void OnSaving(object sender, SavingEventArgs e)
@@ -142,7 +160,7 @@ namespace StardewArchipelago
 
             if (_state.APConnectionInfo != null && !_archipelago.IsConnected)
             {
-                _archipelago.Connect(_state.APConnectionInfo);
+                _archipelago.Connect(_state.APConnectionInfo, out _);
             }
 
             if (!_archipelago.IsConnected)
@@ -214,9 +232,7 @@ namespace StardewArchipelago
 
         private void OnReturnedToTitle(object sender, ReturnedToTitleEventArgs e)
         {
-            _archipelago.Disconnect();
-            _state.APConnectionInfo = null;
-            _state = new ArchipelagoStateDto();
+            ResetArchipelago();
         }
 
         private void OnCommandConnectToArchipelago(string arg1, string[] arg2)
@@ -238,7 +254,7 @@ namespace StardewArchipelago
             var port = int.Parse(ipAndPort[1]);
             var slot = arg2[1];
             var password = arg2.Length >= 3 ? arg2[2] : "";
-            ArchipelagoConnect(ip, port, slot, password);
+            ArchipelagoConnect(ip, port, slot, password, out _);
         }
 
         private void OnCommandDisconnectFromArchipelago(string arg1, string[] arg2)
@@ -300,10 +316,10 @@ namespace StardewArchipelago
             }, emptySpot, true));
         }
 
-        public bool ArchipelagoConnect(string ip, int port, string slot, string password)
+        public bool ArchipelagoConnect(string ip, int port, string slot, string password, out string errorMessage)
         {
             var apConnection = new ArchipelagoConnectionInfo(ip, port, slot, false, password);
-            _archipelago.Connect(apConnection);
+            _archipelago.Connect(apConnection, out errorMessage);
             if (!_archipelago.IsConnected)
             {
                 return false;

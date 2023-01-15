@@ -136,9 +136,9 @@ namespace StardewArchipelago.GameModifications
             {
                 X = xPosition,
                 Y = yPosition,
-                Text = defaultserver
             };
             IpAddressTextBox.limitWidth = false;
+            IpAddressTextBox.Text = defaultserver;
             var ipAddressRectangle = new Rectangle(xPosition, yPosition, 192, 48);
             ipAddressCC = new ClickableComponent(ipAddressRectangle, "")
             {
@@ -161,9 +161,9 @@ namespace StardewArchipelago.GameModifications
             {
                 X = xPosition,
                 Y = yPosition,
-                Text = ""
             };
             SlotNameTextBox.limitWidth = false;
+            SlotNameTextBox.Text = "";
             var ipAddressRectangle = new Rectangle(xPosition, yPosition, 192, 48);
             slotNameCC = new ClickableComponent(ipAddressRectangle, "")
             {
@@ -186,9 +186,9 @@ namespace StardewArchipelago.GameModifications
             {
                 X = xPosition,
                 Y = yPosition,
-                Text = ""
             };
             PasswordTextBox.limitWidth = false;
+            PasswordTextBox.Text = "";
             var ipAddressRectangle = new Rectangle(xPosition, yPosition, 192, 48);
             passwordCC = new ClickableComponent(ipAddressRectangle, "")
             {
