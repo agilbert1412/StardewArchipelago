@@ -6,6 +6,7 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Menus;
+using StardewValley.Minigames;
 using StardewValley.Objects;
 
 namespace StardewArchipelago.Locations
@@ -33,6 +34,7 @@ namespace StardewArchipelago.Locations
             ReplaceToolUpgradesWithChecks();
             ReplaceFishingRodsWithChecks();
             ReplaceSkillsWithChecks();
+            ReplaceArcadeMachinesWithChecks();
         }
 
         private static void RemoveDefaultRewardsOnAllBundles()
@@ -187,6 +189,24 @@ namespace StardewArchipelago.Locations
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Farmer), nameof(Farmer.gainExperience)),
                 prefix: new HarmonyMethod(typeof(SkillInjections), nameof(SkillInjections.GainExperience_ArchipelagoExperience_Prefix))
+            );
+        }
+
+        private void ReplaceArcadeMachinesWithChecks()
+        {
+            if (_archipelago.SlotData.ArcadeMachinesProgression != ArcadeProgression.Shuffled)
+            {
+                return;
+            }
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(AbigailGame), nameof(AbigailGame.usePowerup)),
+                prefix: new HarmonyMethod(typeof(ArcadeMachineInjections), nameof(ArcadeMachineInjections.UsePowerup_PrairieKingVictory_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(MineCart), nameof(MineCart.EndCutscene)),
+                prefix: new HarmonyMethod(typeof(ArcadeMachineInjections), nameof(ArcadeMachineInjections.EndCutscene_JunimoKartVictory_Prefix))
             );
         }
     }

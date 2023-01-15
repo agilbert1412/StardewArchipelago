@@ -18,6 +18,7 @@ namespace StardewArchipelago.Archipelago
         private const string MULTI_SLEEP_ENABLED_KEY = "multiple_day_sleep_enabled";
         private const string MULTI_SLEEP_COST_KEY = "multiple_day_sleep_cost";
         private const string QUICK_START_KEY = "quick_start";
+        private const string ARCADE_MACHINES_KEY = "arcade_machine";
 
         public string SlotName { get; private set; }
         private Dictionary<string, object> _slotDataFields;
@@ -34,6 +35,7 @@ namespace StardewArchipelago.Archipelago
         public bool EnableMultiSleep { get; private set; }
         public int MultiSleepCostPerDay { get; private set; }
         public bool QuickStart { get; private set; }
+        public ArcadeProgression ArcadeMachinesProgression { get; private set; }
 
         public SlotData(string slotName, Dictionary<string, object> slotDataFields)
         {
@@ -52,6 +54,7 @@ namespace StardewArchipelago.Archipelago
             EnableMultiSleep = GetSlotSetting(MULTI_SLEEP_ENABLED_KEY, true);
             MultiSleepCostPerDay = GetSlotSetting(MULTI_SLEEP_COST_KEY, 0);
             QuickStart = GetSlotSetting(QUICK_START_KEY, false); ;
+            ArcadeMachinesProgression = GetSlotSetting(ARCADE_MACHINES_KEY, ArcadeMachinesProgression);
         }
 
         private T GetSlotSetting<T>(string key, T defaultValue) where T : struct, Enum, IConvertible
@@ -105,5 +108,11 @@ namespace StardewArchipelago.Archipelago
     {
         CommunityCenter = 0,
         GrandpaEvaluation = 1
+    }
+
+    public enum ArcadeProgression
+    {
+        Vanilla,
+        Shuffled,
     }
 }
