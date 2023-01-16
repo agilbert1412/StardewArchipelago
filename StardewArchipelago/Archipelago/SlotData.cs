@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using StardewModdingAPI;
 
 namespace StardewArchipelago.Archipelago
 {
@@ -22,6 +23,7 @@ namespace StardewArchipelago.Archipelago
 
         public string SlotName { get; private set; }
         private Dictionary<string, object> _slotDataFields;
+        private IMonitor _console;
         public int StartingMoney { get; private set; }
         public BackpackProgression BackpackProgression { get; private set; }
         public ToolProgression ToolProgression { get; private set; }
@@ -37,10 +39,11 @@ namespace StardewArchipelago.Archipelago
         public bool QuickStart { get; private set; }
         public ArcadeProgression ArcadeMachinesProgression { get; private set; }
 
-        public SlotData(string slotName, Dictionary<string, object> slotDataFields)
+        public SlotData(string slotName, Dictionary<string, object> slotDataFields, IMonitor console)
         {
             SlotName = slotName;
             _slotDataFields = slotDataFields;
+            _console = console;
             StartingMoney = GetSlotSetting(STARTING_MONEY_KEY, 500);
             BackpackProgression = GetSlotSetting(BACKPACK_PROGRESSION_KEY, BackpackProgression.Progressive);
             ToolProgression = GetSlotSetting(TOOL_PROGRESSION_KEY, ToolProgression.Progressive);
@@ -59,22 +62,28 @@ namespace StardewArchipelago.Archipelago
 
         private T GetSlotSetting<T>(string key, T defaultValue) where T : struct, Enum, IConvertible
         {
-            return _slotDataFields.ContainsKey(key) ? Enum.Parse<T>(_slotDataFields[key].ToString(), true) : defaultValue;
+            return _slotDataFields.ContainsKey(key) ? Enum.Parse<T>(_slotDataFields[key].ToString(), true) : GetSlotDefaultValue(key, defaultValue);
         }
 
         private string GetSlotSetting(string key, string defaultValue)
         {
-            return _slotDataFields.ContainsKey(key) ? _slotDataFields[key].ToString() : defaultValue;
+            return _slotDataFields.ContainsKey(key) ? _slotDataFields[key].ToString() : GetSlotDefaultValue(key, defaultValue);
         }
 
         private int GetSlotSetting(string key, int defaultValue)
         {
-            return _slotDataFields.ContainsKey(key) ? (int)(long)_slotDataFields[key] : defaultValue;
+            return _slotDataFields.ContainsKey(key) ? (int)(long)_slotDataFields[key] : GetSlotDefaultValue(key, defaultValue);
         }
 
         private bool GetSlotSetting(string key, bool defaultValue)
         {
-            return _slotDataFields.ContainsKey(EARLY_MINE_KEY) && _slotDataFields[EARLY_MINE_KEY] != null ? (bool)_slotDataFields[EARLY_MINE_KEY] : defaultValue;
+            return _slotDataFields.ContainsKey(EARLY_MINE_KEY) && _slotDataFields[EARLY_MINE_KEY] != null ? (bool)_slotDataFields[EARLY_MINE_KEY] : GetSlotDefaultValue(key, defaultValue);
+        }
+
+        private T GetSlotDefaultValue<T>(string key, T defaultValue)
+        {
+            _console.Log($"SlotData did not contain expected key: \"{key}\"", LogLevel.Warn);
+            return defaultValue;
         }
     }
 
