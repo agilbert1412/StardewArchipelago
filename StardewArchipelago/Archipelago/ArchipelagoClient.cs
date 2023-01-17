@@ -9,7 +9,6 @@ using Archipelago.MultiClient.Net.Packets;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Extensions;
-using StardewArchipelago.GameModifications;
 using StardewModdingAPI;
 using StardewValley;
 

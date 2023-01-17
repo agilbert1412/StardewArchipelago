@@ -1,5 +1,4 @@
-﻿using System;
-using HarmonyLib;
+﻿using HarmonyLib;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Locations.CodeInjections;
 using StardewArchipelago.Stardew;
@@ -38,6 +37,7 @@ namespace StardewArchipelago.Locations
             ReplaceSkillsWithChecks();
             ReplaceQuestsWithChecks();
             ReplaceCarpenterBuildingsWithChecks();
+            ReplaceWizardBuildingsWithChecks();
             ReplaceArcadeMachinesWithChecks();
         }
 
@@ -225,6 +225,14 @@ namespace StardewArchipelago.Locations
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Utility), nameof(Utility.getCarpenterStock)),
                 postfix: new HarmonyMethod(typeof(CarpenterInjections), nameof(CarpenterInjections.GetCarpenterStock_PurchasableChecks_Postfix))
+            );
+        }
+
+        private void ReplaceWizardBuildingsWithChecks()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performAction)),
+                prefix: new HarmonyMethod(typeof(WizardInjections), nameof(WizardInjections.PerformAction_WizardBook_Prefix))
             );
         }
 

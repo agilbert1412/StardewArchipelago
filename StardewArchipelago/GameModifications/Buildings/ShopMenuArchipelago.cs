@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using StardewArchipelago.Archipelago;
-using StardewArchipelago.Items;
-using StardewModdingAPI;
+﻿using System.Collections.Generic;
 using StardewValley;
 using StardewValley.Menus;
 
