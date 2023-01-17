@@ -16,6 +16,7 @@ using StardewArchipelago.Test;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
+using StardewValley.Buildings;
 using StardewValley.Locations;
 using StardewValley.Objects;
 
@@ -281,6 +282,7 @@ namespace StardewArchipelago
         {
             Game1.player.Money = _archipelago.SlotData.StartingMoney;
             GivePlayerQuickStart();
+            RemoveShippingBin();
         }
 
         private void GivePlayerQuickStart()
@@ -300,6 +302,28 @@ namespace StardewArchipelago
 
             CreateGiftBoxItemInEmptySpot(farmhouse, iridiumSprinklers, new Vector2(0, 1));
             CreateGiftBoxItemInEmptySpot(farmhouse, iridiumBand, new Vector2(1, 0));
+        }
+
+        private void RemoveShippingBin()
+        {
+            if (_archipelago.SlotData.BuildingProgression == BuildingProgression.Vanilla)
+            {
+                return;
+            }
+
+            var farm = Game1.getFarm();
+            ShippingBin shippingBin = null;
+            foreach (var building in Game1.getFarm().buildings)
+            {
+                if (building is ShippingBin bin)
+                {
+                    shippingBin = bin;
+                    break;
+                }
+            }
+
+            shippingBin.BeforeDemolish();
+            farm.destroyStructure(shippingBin);
         }
 
         private static void CreateGiftBoxItemInEmptySpot(FarmHouse farmhouse, Item itemToGift, Vector2 step)

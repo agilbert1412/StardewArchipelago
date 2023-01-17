@@ -13,14 +13,12 @@ namespace StardewArchipelago.Locations.CodeInjections
     {
         private static IMonitor _monitor;
         private static IModHelper _helper;
-        private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
 
-        public static void Initialize(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(IMonitor monitor, IModHelper helper, LocationChecker locationChecker)
         {
             _monitor = monitor;
             _helper = helper;
-            _archipelago = archipelago;
             _locationChecker = locationChecker;
         }
 

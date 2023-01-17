@@ -179,29 +179,22 @@ namespace StardewArchipelago.Locations.CodeInjections
 
         private static void AddFishingToolsAPLocations(Dictionary<ISalable, int[]> fishShopStock)
         {
-            var toolSpriteSheet = Game1.toolSpriteSheet;
             if (_locationChecker.IsLocationMissing(TRAINING_ROD))
             {
-                var trainingRod = new FishingRod(1);
-                var indexOfMenuItemView = trainingRod.IndexOfMenuItemView;
                 var trainingRodAPlocation = new PurchaseableArchipelagoLocation("Training Rod", TRAINING_ROD,
-                    toolSpriteSheet, indexOfMenuItemView, OnPurchaseTrainingRodLocation, _archipelago);
+                    OnPurchaseTrainingRodLocation, _archipelago);
                 fishShopStock.Add(trainingRodAPlocation, new[] { 25, 1 });
             }
             if (Game1.player.fishingLevel.Value >= 2 && _locationChecker.IsLocationMissing(FIBERGLASS_ROD))
             {
-                var fiberglassRod = new FishingRod(2);
-                var indexOfMenuItemView = fiberglassRod.IndexOfMenuItemView;
                 var fiberglassRodAPlocation = new PurchaseableArchipelagoLocation("Fiberglass Rod", FIBERGLASS_ROD,
-                    toolSpriteSheet, indexOfMenuItemView, OnPurchaseFiberglassRodLocation, _archipelago);
+                    OnPurchaseFiberglassRodLocation, _archipelago);
                 fishShopStock.Add(fiberglassRodAPlocation, new[] { 1800, 1 });
             }
             if (Game1.player.fishingLevel.Value >= 6 && _locationChecker.IsLocationMissing(IRIDIUM_ROD))
             {
-                var iridiumRod = new FishingRod(3);
-                var indexOfMenuItemView = iridiumRod.IndexOfMenuItemView;
                 var iridiumRodAPLocation = new PurchaseableArchipelagoLocation("Iridium Rod", IRIDIUM_ROD,
-                    toolSpriteSheet, indexOfMenuItemView, OnPurchaseIridiumRodLocation, _archipelago);
+                    OnPurchaseIridiumRodLocation, _archipelago);
                 fishShopStock.Add(iridiumRodAPLocation, new[] { 7500, 1 });
             }
         }

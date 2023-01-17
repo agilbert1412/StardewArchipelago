@@ -147,7 +147,7 @@ namespace StardewArchipelago.Archipelago
 
         private void InitializeSlotData(string slotName, Dictionary<string, object> slotDataFields)
         {
-            SlotData = new SlotData(slotName, slotDataFields);
+            SlotData = new SlotData(slotName, slotDataFields, _console);
         }
 
         private void InitSession(ArchipelagoConnectionInfo archipelagoConnectionInfo)
@@ -254,6 +254,23 @@ namespace StardewArchipelago.Archipelago
             var receivedItemsGrouped = _session.Items.AllItemsReceived.GroupBy(x => x.Item);
             var receivedItemsWithCount = receivedItemsGrouped.ToDictionary(x => GetItemName(x.First().Item), x => x.Count());
             return receivedItemsWithCount;
+        }
+
+        public bool HasReceivedItem(string itemName, out string sendingPlayer)
+        {
+            sendingPlayer = "";
+            foreach (var receivedItem in _session.Items.AllItemsReceived)
+            {
+                if (GetItemName(receivedItem.Item) != itemName)
+                {
+                    continue;
+                }
+
+                sendingPlayer = _session.Players.GetPlayerName(receivedItem.Player);
+                return true;
+            }
+
+            return false;
         }
 
         public int GetReceivedItemCount(string itemName)

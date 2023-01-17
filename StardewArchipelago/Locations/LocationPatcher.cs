@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using System;
+using HarmonyLib;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Locations.CodeInjections;
 using StardewArchipelago.Stardew;
@@ -8,6 +9,7 @@ using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Minigames;
 using StardewValley.Objects;
+using StardewValley.Quests;
 
 namespace StardewArchipelago.Locations
 {
@@ -34,6 +36,8 @@ namespace StardewArchipelago.Locations
             ReplaceToolUpgradesWithChecks();
             ReplaceFishingRodsWithChecks();
             ReplaceSkillsWithChecks();
+            ReplaceQuestsWithChecks();
+            ReplaceCarpenterBuildingsWithChecks();
             ReplaceArcadeMachinesWithChecks();
         }
 
@@ -177,7 +181,7 @@ namespace StardewArchipelago.Locations
 
         private void ReplaceSkillsWithChecks()
         {
-            if (_archipelago.SlotData.SkillsProgression == SkillsProgression.Vanilla)
+            if (_archipelago.SlotData.SkillProgression == SkillsProgression.Vanilla)
             {
                 _harmony.Patch(
                     original: AccessTools.Method(typeof(Farmer), nameof(Farmer.gainExperience)),
@@ -192,9 +196,41 @@ namespace StardewArchipelago.Locations
             );
         }
 
+        private void ReplaceQuestsWithChecks()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Quest), nameof(Quest.questComplete)),
+                prefix: new HarmonyMethod(typeof(QuestInjections), nameof(QuestInjections.QuestComplete_LocationInsteadOfReward_Prefix))
+            );
+        }
+
+        private void ReplaceCarpenterBuildingsWithChecks()
+        {
+            if (_archipelago.SlotData.BuildingProgression != BuildingProgression.Shuffled)
+            {
+                return;
+            }
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.answerDialogueAction)),
+                prefix: new HarmonyMethod(typeof(CarpenterInjections), nameof(CarpenterInjections.AnswerDialogueAction_CarpenterConstruct_Prefix))
+            );
+
+            var desiredOverloadParameters = new[] { typeof(string), typeof(Response[]), typeof(string) };
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.createQuestionDialogue), desiredOverloadParameters),
+                prefix: new HarmonyMethod(typeof(CarpenterInjections), nameof(CarpenterInjections.CreateQuestionDialogue_CarpenterDialogOptions_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Utility), nameof(Utility.getCarpenterStock)),
+                postfix: new HarmonyMethod(typeof(CarpenterInjections), nameof(CarpenterInjections.GetCarpenterStock_PurchasableChecks_Postfix))
+            );
+        }
+
         private void ReplaceArcadeMachinesWithChecks()
         {
-            if (_archipelago.SlotData.ArcadeMachinesProgression != ArcadeProgression.Shuffled)
+            if (_archipelago.SlotData.ArcadeMachineProgression != ArcadeProgression.Shuffled)
             {
                 return;
             }

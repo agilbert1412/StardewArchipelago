@@ -7,9 +7,9 @@ namespace StardewArchipelago.Items
 {
     public class ItemParser
     {
-        private const string RESOURCE_PACK_PREFIX = "Resource Pack: ";
-        private const string FRIENDSHIP_BONUS_PREFIX = "Friendship Bonus (";
-
+        public const string RESOURCE_PACK_PREFIX = "Resource Pack: ";
+        public const string FRIENDSHIP_BONUS_PREFIX = "Friendship Bonus (";
+        public const string BUILDING_PREFIX = "Building: ";
 
         private StardewItemManager _itemManager;
         private UnlockManager _unlockManager;
@@ -37,12 +37,18 @@ namespace StardewArchipelago.Items
             var itemIsFriendshipBonus = TryParseFriendshipBonus(receivedItem.ItemName, out var numberOfPoints);
             if (itemIsFriendshipBonus)
             {
-                return new LetterActionAttachment(receivedItem, LetterActionsKeys.Frienship, numberOfPoints.ToString());
+                return new LetterAttachment(receivedItem);
             }
 
             if (_unlockManager.IsUnlock(receivedItem.ItemName))
             {
                 return _unlockManager.PerformUnlock(receivedItem);
+            }
+
+            var itemIsBuilding = TryParseBuilding(receivedItem.ItemName, out var buildingName);
+            if (itemIsBuilding)
+            {
+                return new LetterActionAttachment(receivedItem, LetterActionsKeys.Frienship, numberOfPoints.ToString());
             }
 
             if (_itemManager.ItemExists(receivedItem.ItemName))
@@ -91,6 +97,18 @@ namespace StardewArchipelago.Items
 
             numberOfPoints = (int)Math.Round(numberOfHearts * 250);
 
+            return true;
+        }
+
+        private bool TryParseBuilding(string apItemName, out string buildingName)
+        {
+            buildingName = "";
+            if (!apItemName.StartsWith(BUILDING_PREFIX))
+            {
+                return false;
+            }
+
+            buildingName = apItemName.Substring(BUILDING_PREFIX.Length);
             return true;
         }
 

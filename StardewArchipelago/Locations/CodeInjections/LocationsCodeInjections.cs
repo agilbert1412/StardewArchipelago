@@ -15,6 +15,9 @@ namespace StardewArchipelago.Locations.CodeInjections
             CommunityCenterInjections.Initialize(monitor, bundleReader, locationChecker);
             MineshaftInjections.Initialize(monitor, archipelago, locationChecker);
             SkillInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
+            QuestInjections.Initialize(monitor, archipelago, locationChecker);
+            ArcadeMachineInjections.Initialize(monitor, modHelper, locationChecker);
+            CarpenterInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
         }
     }
 }
