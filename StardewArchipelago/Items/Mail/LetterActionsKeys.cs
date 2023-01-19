@@ -8,6 +8,7 @@
         public const string DwarvishTranslationGuide = "DwarvishTranslationGuide";
         public const string RustyKey = "RustyKey";
         public const string GoldenScythe = "GoldenScythe";
+        public const string BeachBridge = "BeachBridge";
         public const string ProgressiveTool = "ProgressiveTool";
         public const string FishingRod = "FishingRod";
         public const string GiveRing = "GiveRing";

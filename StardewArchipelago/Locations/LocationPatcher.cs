@@ -38,6 +38,7 @@ namespace StardewArchipelago.Locations
             ReplaceQuestsWithChecks();
             ReplaceCarpenterBuildingsWithChecks();
             ReplaceWizardBuildingsWithChecks();
+            ReplaceIsolatedEventsWithChecks();
             ReplaceArcadeMachinesWithChecks();
         }
 
@@ -233,6 +234,22 @@ namespace StardewArchipelago.Locations
             _harmony.Patch(
                 original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performAction)),
                 prefix: new HarmonyMethod(typeof(WizardInjections), nameof(WizardInjections.PerformAction_WizardBook_Prefix))
+            );
+        }
+
+        private void ReplaceIsolatedEventsWithChecks()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Woods), nameof(Woods.checkAction)),
+                prefix: new HarmonyMethod(typeof(IsolatedEventInjections), nameof(IsolatedEventInjections.CheckAction_OldMasterCanolli_Prefix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Beach), nameof(Beach.answerDialogueAction)),
+                prefix: new HarmonyMethod(typeof(IsolatedEventInjections), nameof(IsolatedEventInjections.AnswerDialogueAction_BeachBridge_Prefix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Beach), nameof(Beach.checkAction)),
+                prefix: new HarmonyMethod(typeof(IsolatedEventInjections), nameof(IsolatedEventInjections.CheckAction_BeachBridge_Prefix))
             );
         }
 

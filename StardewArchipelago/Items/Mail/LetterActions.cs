@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using StardewValley;
+using StardewValley.Locations;
 using StardewValley.Objects;
 using StardewValley.Tools;
 
@@ -21,6 +22,7 @@ namespace StardewArchipelago.Items.Mail
             _letterActions.Add(LetterActionsKeys.SkullKey, (_) => ReceiveSkullKey());
             _letterActions.Add(LetterActionsKeys.RustyKey, (_) => ReceiveRustyKey());
             _letterActions.Add(LetterActionsKeys.GoldenScythe, (_) => ReceiveGoldenScythe());
+            _letterActions.Add(LetterActionsKeys.BeachBridge, (_) => RepairBeachBridge());
             _letterActions.Add(LetterActionsKeys.ProgressiveTool, ReceiveProgressiveTool);
             _letterActions.Add(LetterActionsKeys.FishingRod, (_) => GetFishingRodOfNextLevel());
             _letterActions.Add(LetterActionsKeys.GiveRing, ReceiveRing);
@@ -98,6 +100,13 @@ namespace StardewArchipelago.Items.Mail
             var goldenScythe = new MeleeWeapon(53);
             Game1.player.holdUpItemThenMessage(goldenScythe);
             Game1.player.addItemByMenuIfNecessary(goldenScythe);
+        }
+
+        private void RepairBeachBridge()
+        {
+            var beach = Game1.getLocationFromName("Beach") as Beach;
+            beach.bridgeFixed.Value = true;
+            Beach.fixBridge(beach);
         }
 
         private void ReceiveProgressiveTool(string toolGenericName)

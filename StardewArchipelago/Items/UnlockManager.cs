@@ -13,6 +13,7 @@ namespace StardewArchipelago.Items
         public const string PROGRESSIVE_MINE_ELEVATOR_AP_NAME = "Progressive Mine Elevator";
         public const string PROGRESSIVE_FISHING_ROD_AP_NAME = "Progressive Fishing Rod";
         public const string GOLDEN_SCYTHE_AP_NAME = "Golden Scythe";
+        public const string BEACH_BRIDGE_AP_NAME = "Beach Bridge Repair";
         private Dictionary<string, Func<ReceivedItem, LetterAttachment>> _unlockables;
 
         public UnlockManager()
@@ -24,6 +25,7 @@ namespace StardewArchipelago.Items
             RegisterProgressiveTools();
             RegisterMineElevators();
             RegisterUniqueItems();
+            RegisterIsolatedEventsItems();
         }
 
         public bool IsUnlock(string unlockName)
@@ -77,6 +79,11 @@ namespace StardewArchipelago.Items
         private void RegisterUniqueItems()
         {
             _unlockables.Add(GOLDEN_SCYTHE_AP_NAME, SendGoldenScytheLetter);
+        }
+
+        private void RegisterIsolatedEventsItems()
+        {
+            _unlockables.Add(BEACH_BRIDGE_AP_NAME, SendBeachBridgeLetter);
         }
 
         private void RegisterMineElevators()
@@ -143,6 +150,11 @@ namespace StardewArchipelago.Items
         {
             Game1.player.mailReceived.Add("gotGoldenScythe");
             return new LetterActionAttachment(receivedItem, LetterActionsKeys.GoldenScythe);
+        }
+
+        private LetterActionAttachment SendBeachBridgeLetter(ReceivedItem receivedItem)
+        {
+            return new LetterActionAttachment(receivedItem, LetterActionsKeys.BeachBridge);
         }
 
         private LetterActionAttachment SendProgressiveAxeLetter(ReceivedItem receivedItem)
