@@ -1,23 +1,39 @@
 ﻿using System;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Characters;
+using StardewValley.Locations;
+using StardewValley.Menus;
+using StardewValley.Objects;
 using StardewValley.Quests;
+using xTile.Dimensions;
+using xTile.ObjectModel;
+using xTile.Tiles;
+using Object = StardewValley.Object;
+using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace StardewArchipelago.Locations.CodeInjections
 {
     public static class QuestInjections
     {
-        private const string QUEST_AP_LOCATION_PATTERN = "Quest #{0} ({1})";
+        private static readonly string[] _ignoredQuests = {
+            "To The Beach", "Explore The Mine", "Deeper In The Mine", "To The Bottom?", "The Mysterious Qi",
+            "A Winter Mystery", "Cryptic Note", "Dark Talisman", "Goblin Problem", "The Pirate's Wife"
+        };
 
         private static IMonitor _monitor;
+        private static IModHelper _helper;
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
 
-        public static void Initialize(IMonitor monitor, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             _monitor = monitor;
+            _helper = helper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
         }
@@ -26,7 +42,8 @@ namespace StardewArchipelago.Locations.CodeInjections
         {
             try
             {
-                if (__instance.completed.Value)
+                var questName = __instance.GetName();
+                if (__instance.completed.Value || _ignoredQuests.Contains(questName))
                 {
                     return true; // run original logic
                 }
@@ -56,17 +73,231 @@ namespace StardewArchipelago.Locations.CodeInjections
                     Game1.player.activeDialogueEvents.Add("emilyFiber", 2);
                 }
                 Game1.dayTimeMoneyBox.questsDirty = true;
+                
+                _locationChecker.AddCheckedLocation(questName);
 
-                var apLocationName =
-                    string.Format(QUEST_AP_LOCATION_PATTERN, __instance.id.Value, __instance.GetName());
-                _locationChecker.AddCheckedLocation(apLocationName);
+                return false; // don't run original logic
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(QuestComplete_LocationInsteadOfReward_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
+        }
 
+        public static void Command_RemoveQuest_CheckLocation_Postfix(Event __instance, GameLocation location, GameTime time, string[] split)
+        {
+            try
+            {
+                var questId = Convert.ToInt32(split[1]);
+                var quest = Quest.getQuestFromId(questId);
+                var questName = quest.GetName();
+                if (_ignoredQuests.Contains(questName))
+                {
+                    return;
+                }
+                _locationChecker.AddCheckedLocation(questName);
+
+                return;
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(Command_RemoveQuest_CheckLocation_Postfix)}:\n{ex}", LogLevel.Error);
+                return;
+            }
+        }
+
+        public static bool CheckAction_AdventurerGuild_Prefix(Mountain __instance, Location tileLocation, xTile.Dimensions.Rectangle viewport, Farmer who, ref bool __result)
+        {
+            try
+            {
+                var tile = __instance.map.GetLayer("Buildings").Tiles[tileLocation];
+                if (tile == null || tile.TileIndex != 1136)
+                {
+                    return true; // run original logic
+                }
+
+                if (!who.mailReceived.Contains("guildMember"))
+                {
+                    Game1.drawLetterMessage(Game1.content.LoadString("Strings\\Locations:Mountain_AdventurersGuildNote").Replace('\n', '^'));
+                    __result = true;
+                    return false; // don't run original logic
+                }
+
+                string action = null;
+                //var tile = __instance.map.GetLayer("Buildings").PickTile(new Location(tileLocation.X * 64, tileLocation.Y * 64), viewport.Size);
+                PropertyValue propertyValue;
+                tile.Properties.TryGetValue("Action", out propertyValue);
+                if (propertyValue != null)
+                    action = propertyValue.ToString();
+                if (action == null)
+                {
+                    action = __instance.doesTileHaveProperty(tileLocation.X, tileLocation.Y, "Action", "Buildings");
+                }
+                if (action != null)
+                {
+                    __result = __instance.performAction(action, who, tileLocation);
+                }
+
+                return false; // don't run original logic
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(CheckAction_AdventurerGuild_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
+        }
+
+        public static bool PerformAction_MysteriousQiLumberPile_Prefix(GameLocation __instance, string action, Farmer who, Location tileLocation, ref bool __result)
+        {
+            try
+            {
+                if (action == null || !who.IsLocalPlayer)
+                {
+                    return true; // run original logic
+                }
+
+                var actionWords = action.Split(' ');
+                var actionFirstWord = actionWords[0];
+
+                if (actionFirstWord != "LumberPile" || who.hasOrWillReceiveMail("TH_LumberPile") || !who.hasOrWillReceiveMail("TH_SandDragon"))
+                {
+                    return true; // run original logic
+                }
+
+                Game1.player.mailReceived.Add("TH_LumberPile");
+                Game1.player.removeQuest(5);
+                _locationChecker.AddCheckedLocation("The Mysterious Qi");
+
+                __result = true;
                 return false; // don't run original logic
 
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(QuestComplete_LocationInsteadOfReward_Prefix)}:\n{ex}", LogLevel.Error);
+                _monitor.Log($"Failed in {nameof(PerformAction_MysteriousQiLumberPile_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
+        }
+
+        public static bool MgThief_AfterSpeech_WinterMysteryFinished_Prefix(Town __instance)
+        {
+            try
+            {
+                var afterGlassMethod = _helper.Reflection.GetMethod(__instance, "mgThief_afterGlass");
+                Game1.afterDialogues = () => afterGlassMethod.Invoke();
+                Game1.player.removeQuest(31);
+                _locationChecker.AddCheckedLocation("A Winter Mystery");
+                return false; // don't run original logic
+
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(MgThief_AfterSpeech_WinterMysteryFinished_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
+        }
+
+        public static void SkillsPageCtor_BearKnowledge_Postfix(SkillsPage __instance, int x, int y, int width, int height)
+        {
+            try
+            {
+                const int bearKnowledgeIndex = 8;
+                int x1 = __instance.xPositionOnScreen + IClickableMenu.spaceToClearSideBorder + 80;
+                int y1 = __instance.yPositionOnScreen + IClickableMenu.spaceToClearTopBorder + (int)((double)height / 2.0) + 80;
+                if (_archipelago.HasReceivedItem("Bear's Knowledge", out _))
+                {
+                    ClickableTextureComponent textureComponent = new ClickableTextureComponent("", new Rectangle(x1 + 544, y1, 64, 64), (string)null, Game1.content.LoadString("Strings\\Objects:BearPaw"), Game1.mouseCursors, new Rectangle(192, 336, 16, 16), 4f, true);
+                    textureComponent.myID = 10208;
+                    textureComponent.rightNeighborID = -99998;
+                    textureComponent.leftNeighborID = -99998;
+                    textureComponent.upNeighborID = 4;
+                    __instance.specialItems[bearKnowledgeIndex] = textureComponent;
+                }
+                else
+                {
+                    __instance.specialItems[bearKnowledgeIndex] = null;
+                }
+
+
+                int num1 = 680 / __instance.specialItems.Count;
+                for (int index = 0; index < __instance.specialItems.Count; ++index)
+                {
+                    if (__instance.specialItems[index] != null)
+                        __instance.specialItems[index].bounds.X = x1 + index * num1;
+                }
+                ClickableComponent.SetUpNeighbors<ClickableTextureComponent>(__instance.specialItems, 4);
+                ClickableComponent.ChainNeighborsLeftRight<ClickableTextureComponent>(__instance.specialItems);
+
+                return;
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(SkillsPageCtor_BearKnowledge_Postfix)}:\n{ex}", LogLevel.Error);
+                return;
+            }
+        }
+
+        public static void GetPriceAfterMultipliers_BearKnowledge_Postfix(Object __instance, float startPrice, long specificPlayerID, ref float __result)
+        {
+            try
+            {
+                if (__instance.ParentSheetIndex != 296 && __instance.ParentSheetIndex != 410)
+                {
+                    return;
+                }
+
+                var hasSeenBearEvent = Game1.player.eventsSeen.Contains(2120303);
+                var hasReceivedBearKnowledge = _archipelago.HasReceivedItem("Bear's Knowledge", out _);
+                if (hasSeenBearEvent == hasReceivedBearKnowledge)
+                {
+                    return;
+                }
+
+                if (hasReceivedBearKnowledge)
+                {
+                    __result *= 3f;
+                    return;
+                }
+
+                __result /= 3f;
+                return;
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(GetPriceAfterMultipliers_BearKnowledge_Postfix)}:\n{ex}", LogLevel.Error);
+                return;
+            }
+        }
+
+        public static bool Command_AwardFestivalPrize_QiMilk_Prefix(Event __instance, GameLocation location,
+            GameTime time, string[] split)
+        {
+            try
+            {
+                if (split.Length < 2)
+                {
+                    return true; // run original logic
+                }
+                string lower = split[1].ToLower();
+                if (lower != "qimilk")
+                {
+                    return true; // run original logic
+                }
+
+                if (!Game1.player.mailReceived.Contains("qiCave"))
+                {
+                    _locationChecker.AddCheckedLocation("Cryptic Note");
+                    Game1.player.mailReceived.Add("qiCave");
+                }
+                ++__instance.CurrentCommand;
+
+                return false; // don't run original logic
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(Command_AwardFestivalPrize_QiMilk_Prefix)}:\n{ex}",
+                    LogLevel.Error);
                 return true; // run original logic
             }
         }

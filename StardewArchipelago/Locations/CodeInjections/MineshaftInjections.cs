@@ -118,7 +118,7 @@ namespace StardewArchipelago.Locations.CodeInjections
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(PerformAction_LoadElevatorMenu_Prefix)}:\n{ex}", LogLevel.Error);
+                _monitor.Log($"Failed in {nameof(EnterMine_SendElevatorCheck_PostFix)}:\n{ex}", LogLevel.Error);
                 return;
             }
         }

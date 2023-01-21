@@ -120,7 +120,7 @@ namespace StardewArchipelago.Locations.CodeInjections
 
             carpenterAPStock.AddArchipelagoLocationToStock(BUILDING_BARN, 6000, new[] { Wood(350), Stone(150) });
             carpenterAPStock.AddArchipelagoLocationToStock(BUILDING_BIG_BARN, 12000, new[] { Wood(400), Stone(200) }, BUILDING_BARN);
-            carpenterAPStock.AddArchipelagoLocationToStock(BUILDING_DELUXE_BARN, 25000, new[] { Wood(500), Stone(00) }, BUILDING_BIG_BARN);
+            carpenterAPStock.AddArchipelagoLocationToStock(BUILDING_DELUXE_BARN, 25000, new[] { Wood(500), Stone(300) }, BUILDING_BIG_BARN);
 
             carpenterAPStock.AddArchipelagoLocationToStock(BUILDING_FISH_POND, 5000, new[] { Stone(100), Seaweed(5), GreenAlgae(5) });
             carpenterAPStock.AddArchipelagoLocationToStock(BUILDING_MILL, 2500, new[] { Stone(50), Wood(150), Cloth(4)});
@@ -147,8 +147,7 @@ namespace StardewArchipelago.Locations.CodeInjections
 
             if (requiredBuilding != null)
             {
-                var receivedBuildingApName = $"{ItemParser.BUILDING_PREFIX}{buildingName}";
-                var hasReceivedRequirement = _archipelago.HasReceivedItem(receivedBuildingApName, out _);
+                var hasReceivedRequirement = HasReceivedBuilding(requiredBuilding, out _);
                 if (!hasReceivedRequirement)
                 {
                     return;
@@ -162,6 +161,43 @@ namespace StardewArchipelago.Locations.CodeInjections
             }
 
             stock.Add(purchasableCheck, new[] { price, 1 });
+        }
+
+        public static bool HasReceivedBuilding(string buildingName, out string senderName)
+        {
+            senderName = "";
+            var numberRequired = 1;
+
+            var bigPrefix = "Big ";
+            if (buildingName­.StartsWith(bigPrefix))
+            {
+                numberRequired = 2;
+                buildingName = buildingName.Substring(bigPrefix.Length);
+            }
+
+            var deluxePrefix = "Deluxe ";
+            if (buildingName­.StartsWith(deluxePrefix))
+            {
+                numberRequired = 3;
+                buildingName = buildingName.Substring(deluxePrefix.Length);
+            }
+
+            if (buildingName == BUILDING_COOP || buildingName == BUILDING_BARN || buildingName == BUILDING_SHED)
+            {
+                buildingName = $"Progressive {buildingName}";
+            }
+            
+            var receivedBuildingApName = $"{ItemParser.BUILDING_PREFIX}{buildingName}";
+            var numberReceived = _archipelago.GetReceivedItemCount(receivedBuildingApName);
+
+            var hasReceivedEnough = numberReceived >= numberRequired;
+            if (!hasReceivedEnough)
+            {
+                return false;
+            }
+
+            senderName = _archipelago.GetAllReceivedItems().Last(x => x.ItemName == receivedBuildingApName).PlayerName;
+            return true;
         }
 
         private static Item Wood(int amount)

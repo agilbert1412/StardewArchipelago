@@ -18,6 +18,7 @@ namespace StardewArchipelago.Archipelago
         private const string MULTI_SLEEP_ENABLED_KEY = "multiple_day_sleep_enabled";
         private const string MULTI_SLEEP_COST_KEY = "multiple_day_sleep_cost";
         private const string EXPERIENCE_MULTIPLIER_KEY = "experience_multiplier";
+        private const string DEBRIS_MULTIPLIER_KEY = "debris_multiplier";
         private const string QUICK_START_KEY = "quick_start";
         private const string DEATH_LINK_KEY = "death_link";
         private const string SEED_KEY = "seed";
@@ -38,6 +39,7 @@ namespace StardewArchipelago.Archipelago
         public bool EnableMultiSleep { get; private set; }
         public int MultiSleepCostPerDay { get; private set; }
         public double ExperienceMultiplier { get; private set; }
+        public DebrisMultiplier DebrisMultiplier { get; private set; }
         public bool QuickStart { get; private set; }
         public bool DeathLink { get; private set; }
         public string Seed { get; private set; }
@@ -55,11 +57,12 @@ namespace StardewArchipelago.Archipelago
             ElevatorProgression = GetSlotSetting(ELEVATOR_PROGRESSION_KEY, ElevatorProgression.ProgressiveFromPreviousFloor);
             SkillProgression = GetSlotSetting(SKILLS_PROGRESSION_KEY, SkillsProgression.Progressive);
             BuildingProgression = GetSlotSetting(BUILDING_PROGRESSION_KEY, BuildingProgression.Shuffled);
-            ArcadeMachineProgression = GetSlotSetting(ARCADE_MACHINES_KEY, ArcadeProgression.Shuffled);
+            ArcadeMachineProgression = GetSlotSetting(ARCADE_MACHINES_KEY, ArcadeProgression.VictoriesEasy);
             EarlyMine = GetSlotSetting(EARLY_MINE_KEY, false);
             EnableMultiSleep = GetSlotSetting(MULTI_SLEEP_ENABLED_KEY, true);
             MultiSleepCostPerDay = GetSlotSetting(MULTI_SLEEP_COST_KEY, 0);
             ExperienceMultiplier = (GetSlotSetting(EXPERIENCE_MULTIPLIER_KEY, 100) / 100.0);
+            DebrisMultiplier = GetSlotSetting(DEBRIS_MULTIPLIER_KEY, DebrisMultiplier.HalfDebris);
             QuickStart = GetSlotSetting(QUICK_START_KEY, false);
             DeathLink = GetSlotSetting(DEATH_LINK_KEY, false);
             Seed = GetSlotSetting(SEED_KEY, "");
@@ -118,21 +121,33 @@ namespace StardewArchipelago.Archipelago
         Progressive = 1,
     }
 
-    public enum Goal
+    public enum BuildingProgression
     {
-        CommunityCenter = 0,
-        GrandpaEvaluation = 1
+        Vanilla = 0,
+        Shuffled = 1
     }
 
     public enum ArcadeProgression
     {
-        Vanilla,
-        Shuffled,
+        Disabled = 0,
+        Victories = 1,
+        VictoriesEasy = 2,
+        FullShuffling = 3,
     }
 
-    public enum BuildingProgression
+    public enum Goal
+    {
+        CommunityCenter = 0,
+        GrandpaEvaluation = 1,
+        BottomOfMines = 2
+    }
+
+    public enum DebrisMultiplier
     {
         Vanilla,
-        Shuffled,
+        HalfDebris,
+        QuarterDebris,
+        NoDebris,
+        StartClear
     }
 }

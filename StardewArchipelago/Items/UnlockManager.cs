@@ -10,10 +10,11 @@ namespace StardewArchipelago.Items
 {
     public class UnlockManager
     {
+        public const string PROGRESSIVE_TOOL_AP_PREFIX = "Progressive ";
         public const string PROGRESSIVE_MINE_ELEVATOR_AP_NAME = "Progressive Mine Elevator";
         public const string PROGRESSIVE_FISHING_ROD_AP_NAME = "Progressive Fishing Rod";
         public const string GOLDEN_SCYTHE_AP_NAME = "Golden Scythe";
-        public const string BEACH_BRIDGE_AP_NAME = "Beach Bridge Repair";
+        public const string BEACH_BRIDGE_AP_NAME = "Beach Bridge";
         private Dictionary<string, Func<ReceivedItem, LetterAttachment>> _unlockables;
 
         public UnlockManager()
@@ -55,6 +56,11 @@ namespace StardewArchipelago.Items
             _unlockables.Add("Dwarvish Translation Guide", SendDwarvishTranslationGuideLetter);
             _unlockables.Add("Skull Key", SendSkullKeyLetter);
             _unlockables.Add("Rusty Key", SendRustyKeyLetter);
+
+            _unlockables.Add("Adventurer's Guild", SendAdventurerGuildLetter);
+            _unlockables.Add("Club Card", SendClubCardLetter);
+            _unlockables.Add("Magnifying Glass", SendMagnifyingGlassLetter);
+            _unlockables.Add("Iridium Snake Milk", SendIridiumSnakeMilkLetter);
         }
 
         private void RegisterPlayerSkills()
@@ -68,11 +74,11 @@ namespace StardewArchipelago.Items
 
         private void RegisterProgressiveTools()
         {
-            _unlockables.Add("Progressive Axe", SendProgressiveAxeLetter);
-            _unlockables.Add("Progressive Pickaxe", SendProgressivePickaxeLetter);
-            _unlockables.Add("Progressive Hoe", SendProgressiveHoeLetter);
-            _unlockables.Add("Progressive Watering Can", SendProgressiveWateringCanLetter);
-            _unlockables.Add("Progressive Trash Can", SendProgressiveTrashCanLetter);
+            _unlockables.Add($"{PROGRESSIVE_TOOL_AP_PREFIX}Axe", SendProgressiveAxeLetter);
+            _unlockables.Add($"{PROGRESSIVE_TOOL_AP_PREFIX}Pickaxe", SendProgressivePickaxeLetter);
+            _unlockables.Add($"{PROGRESSIVE_TOOL_AP_PREFIX}Hoe", SendProgressiveHoeLetter);
+            _unlockables.Add($"{PROGRESSIVE_TOOL_AP_PREFIX}Watering Can", SendProgressiveWateringCanLetter);
+            _unlockables.Add($"{PROGRESSIVE_TOOL_AP_PREFIX}Trash Can", SendProgressiveTrashCanLetter);
             _unlockables.Add(PROGRESSIVE_FISHING_ROD_AP_NAME, SendProgressiveFishingRodLetter);
         }
 
@@ -144,6 +150,26 @@ namespace StardewArchipelago.Items
         private LetterActionAttachment SendRustyKeyLetter(ReceivedItem receivedItem)
         {
             return new LetterActionAttachment(receivedItem, LetterActionsKeys.RustyKey);
+        }
+
+        private LetterActionAttachment SendAdventurerGuildLetter(ReceivedItem receivedItem)
+        {
+            return new LetterActionAttachment(receivedItem, LetterActionsKeys.AdventurerGuild);
+        }
+
+        private LetterActionAttachment SendClubCardLetter(ReceivedItem receivedItem)
+        {
+            return new LetterActionAttachment(receivedItem, LetterActionsKeys.ClubCard);
+        }
+
+        private LetterActionAttachment SendMagnifyingGlassLetter(ReceivedItem receivedItem)
+        {
+            return new LetterActionAttachment(receivedItem, LetterActionsKeys.MagnifyingGlass);
+        }
+
+        private LetterActionAttachment SendIridiumSnakeMilkLetter(ReceivedItem receivedItem)
+        {
+            return new LetterActionAttachment(receivedItem, LetterActionsKeys.IridiumSnakeMilk);
         }
 
         private LetterActionAttachment SendGoldenScytheLetter(ReceivedItem receivedItem)

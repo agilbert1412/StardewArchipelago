@@ -34,28 +34,39 @@ namespace StardewArchipelago.Locations.CodeInjections
             try
             {
                 var AreaAPLocationName = "";
+                var mailToSend = "";
                 switch ((Area)whichArea)
                 {
                     case Area.Pantry:
                         AreaAPLocationName = AP_LOCATION_PANTRY;
+                        mailToSend = "apccPantry";
                         break;
                     case Area.CraftsRoom:
                         AreaAPLocationName = AP_LOCATION_CRAFTS_ROOM;
+                        mailToSend = "apccCraftsRoom";
                         break;
                     case Area.FishTank:
                         AreaAPLocationName = AP_LOCATION_FISH_TANK;
+                        mailToSend = "apccFishTank";
                         break;
                     case Area.BoilerRoom:
                         AreaAPLocationName = AP_LOCATION_BOILER_ROOM;
+                        mailToSend = "apccBoilerRoom";
                         break;
                     case Area.Vault:
                         AreaAPLocationName = AP_LOCATION_VAULT;
+                        mailToSend = "apccVault";
                         break;
                     case Area.Bulletin:
                         AreaAPLocationName = AP_LOCATION_BULLETIN_BOARD;
+                        mailToSend = "apccBulletin";
                         break;
                 }
 
+                if (!Game1.player.mailReceived.Contains(mailToSend))
+                {
+                    Game1.player.mailForTomorrow.Add(mailToSend + "%&NL&%");
+                }
                 _locationChecker.AddCheckedLocation(AreaAPLocationName);
                 GoalCodeInjection.CheckCommunityCenterGoalCompletion();
 

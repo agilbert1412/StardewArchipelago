@@ -18,14 +18,25 @@ namespace StardewArchipelago.GameModifications.Buildings
         {
             var blueprints = new List<BluePrint>();
 
-            AddBuildingBlueprint(blueprints, WizardInjections.BUILDING_EARTH_OBELISK);
-            AddBuildingBlueprint(blueprints, WizardInjections.BUILDING_WATER_OBELISK);
-            AddBuildingBlueprint(blueprints, WizardInjections.BUILDING_DESERT_OBELISK);
-            AddBuildingBlueprint(blueprints, WizardInjections.BUILDING_ISLAND_OBELISK);
-            AddBuildingBlueprint(blueprints, WizardInjections.BUILDING_JUNIMO_HUT);
-            AddBuildingBlueprint(blueprints, WizardInjections.BUILDING_GOLD_CLOCK);
+            AddBuildingBlueprintIfReceived(blueprints, WizardInjections.BUILDING_EARTH_OBELISK);
+            AddBuildingBlueprintIfReceived(blueprints, WizardInjections.BUILDING_WATER_OBELISK);
+            AddBuildingBlueprintIfReceived(blueprints, WizardInjections.BUILDING_DESERT_OBELISK);
+            AddBuildingBlueprintIfReceived(blueprints, WizardInjections.BUILDING_ISLAND_OBELISK);
+            AddBuildingBlueprintIfReceived(blueprints, WizardInjections.BUILDING_JUNIMO_HUT);
+            AddBuildingBlueprintIfReceived(blueprints, WizardInjections.BUILDING_GOLD_CLOCK);
 
             return blueprints;
+        }
+
+        private void AddBuildingBlueprintIfReceived(List<BluePrint> blueprints, string buildingName, bool onlyOne = false, string requiredBuilding = null)
+        {
+            var hasReceivedBuilding = _archipelago.HasReceivedItem(buildingName,  out var sendingPlayer);
+            if (!hasReceivedBuilding)
+            {
+                return;
+            }
+
+            AddBuildingBlueprint(blueprints, buildingName, sendingPlayer, onlyOne, requiredBuilding);
         }
     }
 }

@@ -5,6 +5,9 @@ using System;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using StardewValley.Locations;
+using StardewValley.Menus;
+using StardewValley.Network;
+using StardewValley.Objects;
 using xTile.Dimensions;
 
 namespace StardewArchipelago.Goals
@@ -62,6 +65,23 @@ namespace StardewArchipelago.Goals
             _archipelago.ReportGoalCompletion();
         }
 
+        public static void CheckBottomOfTheMinesGoalCompletion()
+        {
+            if (!_archipelago.IsConnected || _archipelago.SlotData.Goal != Goal.BottomOfMines)
+            {
+                return;
+            }
+
+            var lowestMineLevel = Game1.netWorldState.Value.LowestMineLevel;
+
+            if (lowestMineLevel < 120)
+            {
+                return;
+            }
+
+            _archipelago.ReportGoalCompletion();
+        }
+
         public static void DoAreaCompleteReward_CommunityCenterGoal_PostFix(CommunityCenter __instance, int whichArea)
         {
             try
@@ -76,81 +96,20 @@ namespace StardewArchipelago.Goals
             }
         }
 
-        private static int _previousScore = 0;
-        public static bool CheckAction_GrandpaReevaluation_PreFix(Farm __instance, Location tileLocation, xTile.Dimensions.Rectangle viewport, Farmer who, ref bool __result)
+        public static void EnterMine_Level120Goal_PostFix(int whatLevel)
         {
             try
             {
-                Game1.year += 2;
-                _previousScore = __instance.grandpaScore.Value;
-                __instance.grandpaScore.Value = 1;
-                return true; // run original logic
-            }
-            catch (Exception ex)
-            {
-                _monitor.Log($"Failed in {nameof(DoAreaCompleteReward_CommunityCenterGoal_PostFix)}:\n{ex}", LogLevel.Error);
-                return true; // run original logic
-            }
-        }
-
-        public static void CheckAction_GrandpaReevaluation_PostFix(Farm __instance, Location tileLocation, xTile.Dimensions.Rectangle viewport, Farmer who, ref bool __result)
-        {
-            try
-            {
-                Game1.year -= 2;
-                __instance.grandpaScore.Value = _previousScore;
-                return;
-            }
-            catch (Exception ex)
-            {
-                _monitor.Log($"Failed in {nameof(DoAreaCompleteReward_CommunityCenterGoal_PostFix)}:\n{ex}", LogLevel.Error);
-                return;
-            }
-        }
-
-        public static bool SkipEvent_GrandpaReevaluation_PreFix(Event __instance)
-        {
-            try
-            {
-                if (__instance.id != 558292)
+                if (whatLevel != 120)
                 {
-                    return true; // run original logic
+                    return;
                 }
 
-                CheckGrandpaEvaluationGoalCompletion();
-                return true; // run original logic
+                _archipelago.ReportGoalCompletion();
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(DoAreaCompleteReward_CommunityCenterGoal_PostFix)}:\n{ex}", LogLevel.Error);
-                return true; // run original logic
-            }
-        }
-
-        public static void CommandGrandpaCandles_GrandpaGoal_PostFix(Event __instance, GameLocation location, GameTime time, string[] split)
-        {
-            try
-            {
-                CheckGrandpaEvaluationGoalCompletion();
-                return;
-            }
-            catch (Exception ex)
-            {
-                _monitor.Log($"Failed in {nameof(DoAreaCompleteReward_CommunityCenterGoal_PostFix)}:\n{ex}", LogLevel.Error);
-                return;
-            }
-        }
-
-        public static void CommandEvaluation2_GrandpaGoal_PostFix(Event __instance, GameLocation location, GameTime time, string[] split)
-        {
-            try
-            {
-                CheckGrandpaEvaluationGoalCompletion();
-                return;
-            }
-            catch (Exception ex)
-            {
-                _monitor.Log($"Failed in {nameof(DoAreaCompleteReward_CommunityCenterGoal_PostFix)}:\n{ex}", LogLevel.Error);
+                _monitor.Log($"Failed in {nameof(EnterMine_Level120Goal_PostFix)}:\n{ex}", LogLevel.Error);
                 return;
             }
         }

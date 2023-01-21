@@ -155,7 +155,7 @@ namespace StardewArchipelago
             _mailPatcher = new MailPatcher(Monitor, new LetterActions(_mail), _harmony);
             _locationsChecker = new LocationChecker(Monitor, _archipelago, _state.LocationsChecked);
             _locationsPatcher = new LocationPatcher(Monitor, _archipelago, _bundleReader, _helper, _harmony, _locationsChecker);
-            _logicPatcher = new RandomizedLogicPatcher(Monitor, _harmony, _locationsChecker);
+            _logicPatcher = new RandomizedLogicPatcher(Monitor, _harmony, _archipelago, _locationsChecker);
             _goalManager = new GoalManager(Monitor, _helper, _harmony, _archipelago);
             _jojaDisabler = new JojaDisabler(Monitor, _helper, _harmony);
 

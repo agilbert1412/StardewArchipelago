@@ -7,6 +7,10 @@
         public const string SkullKey = "SkullKey"; 
         public const string DwarvishTranslationGuide = "DwarvishTranslationGuide";
         public const string RustyKey = "RustyKey";
+        public const string ClubCard = "ClubCard";
+        public const string MagnifyingGlass = "MagnifyingGlass";
+        public const string IridiumSnakeMilk = "IridiumSnakeMilk";
+        public const string AdventurerGuild = "AdventurerGuild";
         public const string GoldenScythe = "GoldenScythe";
         public const string BeachBridge = "BeachBridge";
         public const string ProgressiveTool = "ProgressiveTool";

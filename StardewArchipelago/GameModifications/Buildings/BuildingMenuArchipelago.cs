@@ -11,8 +11,8 @@ namespace StardewArchipelago.GameModifications.Buildings
 {
     public abstract class BuildingMenuArchipelago : CarpenterMenu
     {
-        private IModHelper _modHelper;
-        private ArchipelagoClient _archipelago;
+        protected IModHelper _modHelper;
+        protected ArchipelagoClient _archipelago;
 
         public BuildingMenuArchipelago(ArchipelagoClient archipelago)
         {
@@ -43,14 +43,8 @@ namespace StardewArchipelago.GameModifications.Buildings
 
         public abstract List<BluePrint> GetAvailableBlueprints();
 
-        protected void AddBuildingBlueprint(List<BluePrint> blueprints, string buildingName, bool onlyOne = false, string requiredBuilding = null)
+        protected virtual void AddBuildingBlueprint(List<BluePrint> blueprints, string buildingName, string sendingPlayer, bool onlyOne = false, string requiredBuilding = null)
         {
-            var hasReceivedBuilding = _archipelago.HasReceivedItem(GetBuildingArchipelagoName(buildingName), out var sendingPlayer);
-            if (!hasReceivedBuilding)
-            {
-                return;
-            }
-
             var isConstructedAlready = Game1.getFarm().isBuildingConstructed(buildingName);
             if (onlyOne && isConstructedAlready)
             {
@@ -74,11 +68,6 @@ namespace StardewArchipelago.GameModifications.Buildings
             {
                 blueprints.Add(new FreeBlueprint(buildingName, sendingPlayer));
             }
-        }
-
-        private string GetBuildingArchipelagoName(string buildingName)
-        {
-            return $"{ItemParser.BUILDING_PREFIX}{buildingName}";
         }
     }
 }

@@ -203,6 +203,42 @@ namespace StardewArchipelago.Locations
                 original: AccessTools.Method(typeof(Quest), nameof(Quest.questComplete)),
                 prefix: new HarmonyMethod(typeof(QuestInjections), nameof(QuestInjections.QuestComplete_LocationInsteadOfReward_Prefix))
             );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Event), nameof(Event.command_removeQuest)),
+                postfix: new HarmonyMethod(typeof(QuestInjections), nameof(QuestInjections.Command_RemoveQuest_CheckLocation_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Mountain), nameof(Mountain.checkAction)),
+                prefix: new HarmonyMethod(typeof(QuestInjections), nameof(QuestInjections.CheckAction_AdventurerGuild_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performAction)),
+                prefix: new HarmonyMethod(typeof(QuestInjections), nameof(QuestInjections.PerformAction_MysteriousQiLumberPile_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Town), "mgThief_afterSpeech"),
+                prefix: new HarmonyMethod(typeof(QuestInjections), nameof(QuestInjections.MgThief_AfterSpeech_WinterMysteryFinished_Prefix))
+            );
+
+            var desiredSkillsPageCtorParameters = new[] { typeof(int), typeof(int), typeof(int), typeof(int) };
+            _harmony.Patch(
+                original: AccessTools.Constructor(typeof(SkillsPage), desiredSkillsPageCtorParameters),
+                postfix: new HarmonyMethod(typeof(QuestInjections), nameof(QuestInjections.SkillsPageCtor_BearKnowledge_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Object), "getPriceAfterMultipliers"),
+                postfix: new HarmonyMethod(typeof(QuestInjections), nameof(QuestInjections.GetPriceAfterMultipliers_BearKnowledge_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Event), nameof(Event.command_awardFestivalPrize)),
+                prefix: new HarmonyMethod(typeof(QuestInjections), nameof(QuestInjections.Command_AwardFestivalPrize_QiMilk_Prefix))
+            );
         }
 
         private void ReplaceCarpenterBuildingsWithChecks()
@@ -255,20 +291,59 @@ namespace StardewArchipelago.Locations
 
         private void ReplaceArcadeMachinesWithChecks()
         {
-            if (_archipelago.SlotData.ArcadeMachineProgression != ArcadeProgression.Shuffled)
+            if (_archipelago.SlotData.ArcadeMachineProgression == ArcadeProgression.Disabled)
             {
                 return;
             }
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(AbigailGame), nameof(AbigailGame.usePowerup)),
-                prefix: new HarmonyMethod(typeof(ArcadeMachineInjections), nameof(ArcadeMachineInjections.UsePowerup_PrairieKingVictory_Prefix))
+                prefix: new HarmonyMethod(typeof(ArcadeMachineInjections), nameof(ArcadeMachineInjections.UsePowerup_PrairieKingBossBeaten_Prefix))
             );
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(MineCart), nameof(MineCart.EndCutscene)),
-                prefix: new HarmonyMethod(typeof(ArcadeMachineInjections), nameof(ArcadeMachineInjections.EndCutscene_JunimoKartVictory_Prefix))
+                prefix: new HarmonyMethod(typeof(ArcadeMachineInjections), nameof(ArcadeMachineInjections.EndCutscene_JunimoKartLevelComplete_Prefix))
             );
+
+            if (_archipelago.SlotData.ArcadeMachineProgression == ArcadeProgression.Victories)
+            {
+                return;
+            }
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(AbigailGame.CowboyMonster), nameof(AbigailGame.CowboyMonster.getLootDrop)),
+                prefix: new HarmonyMethod(typeof(ArcadeMachineInjections), nameof(ArcadeMachineInjections.GetLootDrop_ExtraLoot_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(MineCart), "restartLevel"),
+                postfix: new HarmonyMethod(typeof(ArcadeMachineInjections), nameof(ArcadeMachineInjections.RestartLevel_NewGame_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(MineCart), nameof(MineCart.UpdateFruitsSummary)),
+                postfix: new HarmonyMethod(typeof(ArcadeMachineInjections), nameof(ArcadeMachineInjections.UpdateFruitsSummary_ExtraLives_Postfix))
+            );
+
+            var desiredAbigailGameCtorParameters = new[] { typeof(bool) };
+            _harmony.Patch(
+                original: AccessTools.Constructor(typeof(AbigailGame), desiredAbigailGameCtorParameters),
+                postfix: new HarmonyMethod(typeof(ArcadeMachineInjections), nameof(ArcadeMachineInjections.AbigailGameCtor_Equipments_Postfix))
+            );
+
+            if (_archipelago.SlotData.ArcadeMachineProgression == ArcadeProgression.FullShuffling)
+            {
+                _harmony.Patch(
+                    original: AccessTools.Method(typeof(AbigailGame), nameof(AbigailGame.startShoppingLevel)),
+                    postfix: new HarmonyMethod(typeof(ArcadeMachineInjections), nameof(ArcadeMachineInjections.StartShoppingLevel_ShopBasedOnSentChecks_PostFix))
+                );
+
+                _harmony.Patch(
+                    original: AccessTools.Method(typeof(AbigailGame), nameof(AbigailGame.tick)),
+                    prefix: new HarmonyMethod(typeof(ArcadeMachineInjections), nameof(ArcadeMachineInjections.Tick_Shopping_Prefix))
+                );
+            }
         }
     }
 }

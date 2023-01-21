@@ -21,6 +21,10 @@ namespace StardewArchipelago.Items.Mail
             _letterActions.Add(LetterActionsKeys.DwarvishTranslationGuide, (_) => ReceiveDwarvishTranslationGuide());
             _letterActions.Add(LetterActionsKeys.SkullKey, (_) => ReceiveSkullKey());
             _letterActions.Add(LetterActionsKeys.RustyKey, (_) => ReceiveRustyKey());
+            _letterActions.Add(LetterActionsKeys.AdventurerGuild, (_) => ReceiveAdventurerGuild());
+            _letterActions.Add(LetterActionsKeys.ClubCard, (_) => ReceiveClubCard());
+            _letterActions.Add(LetterActionsKeys.MagnifyingGlass, (_) => ReceiveMagnifyingGlass());
+            _letterActions.Add(LetterActionsKeys.IridiumSnakeMilk, (_) => ReceiveIridiumSnakeMilk());
             _letterActions.Add(LetterActionsKeys.GoldenScythe, (_) => ReceiveGoldenScythe());
             _letterActions.Add(LetterActionsKeys.BeachBridge, (_) => RepairBeachBridge());
             _letterActions.Add(LetterActionsKeys.ProgressiveTool, ReceiveProgressiveTool);
@@ -94,6 +98,28 @@ namespace StardewArchipelago.Items.Mail
             Game1.player.hasRustyKey = true;
         }
 
+        private void ReceiveClubCard()
+        {
+            Game1.player.hasClubCard = true;
+            Game1.player.addItemByMenuIfNecessaryElseHoldUp(new SpecialItem(2));
+        }
+
+        private void ReceiveMagnifyingGlass()
+        {
+            Game1.player.holdUpItemThenMessage((Item)new SpecialItem(5));
+            Game1.player.hasMagnifyingGlass = true;
+        }
+
+        private void ReceiveIridiumSnakeMilk()
+        {
+            Game1.player.maxHealth += 25;
+        }
+
+        private void ReceiveAdventurerGuild()
+        {
+            Game1.player.mailReceived.Add("guildMember");
+        }
+
         private void ReceiveGoldenScythe()
         {
             Game1.playSound("parry");
@@ -137,7 +163,10 @@ namespace StardewArchipelago.Items.Mail
                     continue;
                 }
 
-                toolToUpgrade.UpgradeLevel++;
+                if (toolToUpgrade.UpgradeLevel < 4)
+                {
+                    toolToUpgrade.UpgradeLevel++;
+                }
                 return toolToUpgrade;
             }
 
@@ -157,7 +186,10 @@ namespace StardewArchipelago.Items.Mail
                             continue;
                         }
 
-                        toolToUpgrade.UpgradeLevel++;
+                        if (toolToUpgrade.UpgradeLevel < 4)
+                        {
+                            toolToUpgrade.UpgradeLevel++;
+                        }
                         return toolToUpgrade;
                     }
                 }
@@ -169,6 +201,7 @@ namespace StardewArchipelago.Items.Mail
         private static void ReceiveTrashCanUpgrade()
         {
             Game1.player.trashCanLevel++;
+            Game1.player.trashCanLevel = Math.Max(1, Math.Min(4, Game1.player.trashCanLevel));
             var trashCanToHoldUp = new GenericTool("Trash Can",
                 Game1.content.LoadString("Strings\\StringsFromCSFiles:TrashCan_Description",
                     ((Game1.player.trashCanLevel * 15).ToString() ?? "")), Game1.player.trashCanLevel,
@@ -180,6 +213,9 @@ namespace StardewArchipelago.Items.Mail
         private void GetFishingRodOfNextLevel()
         {
             var numberOfPreviousFishingRodLetters = _mail.OpenedMailsContainingKey(UnlockManager.PROGRESSIVE_FISHING_ROD_AP_NAME);
+
+            numberOfPreviousFishingRodLetters = Math.Max(1, Math.Min(4, numberOfPreviousFishingRodLetters));
+
             var itemToAdd = new FishingRod(numberOfPreviousFishingRodLetters - 1);
 
             Game1.player.holdUpItemThenMessage(itemToAdd);

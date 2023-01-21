@@ -15,7 +15,7 @@ namespace StardewArchipelago.Locations.CodeInjections
     public static class IsolatedEventInjections
     {
         public const string OLD_MASTER_CANNOLI_AP_LOCATION = "Old Master Cannoli";
-        public const string BEACH_BRIDGE_AP_LOCATION = "Beach Bridge";
+        public const string BEACH_BRIDGE_AP_LOCATION = "Beach Bridge Repair";
 
         private static IMonitor _monitor;
         private static IModHelper _helper;

@@ -22,24 +22,35 @@ namespace StardewArchipelago.GameModifications.Buildings
         {
             var blueprints = new List<BluePrint>();
 
-            AddBuildingBlueprint(blueprints, CarpenterInjections.BUILDING_COOP);
-            AddBuildingBlueprint(blueprints, CarpenterInjections.BUILDING_BARN);
-            AddBuildingBlueprint(blueprints, CarpenterInjections.BUILDING_WELL);
-            AddBuildingBlueprint(blueprints, CarpenterInjections.BUILDING_SILO);
-            AddBuildingBlueprint(blueprints, CarpenterInjections.BUILDING_MILL);
-            AddBuildingBlueprint(blueprints, CarpenterInjections.BUILDING_SHED);
-            AddBuildingBlueprint(blueprints, CarpenterInjections.BUILDING_FISH_POND);
-            AddBuildingBlueprint(blueprints, CarpenterInjections.BUILDING_STABLE, true);
-            AddBuildingBlueprint(blueprints, CarpenterInjections.BUILDING_SLIME_HUTCH);
+            AddBuildingBlueprintIfReceived(blueprints, CarpenterInjections.BUILDING_COOP);
+            AddBuildingBlueprintIfReceived(blueprints, CarpenterInjections.BUILDING_BARN);
+            AddBuildingBlueprintIfReceived(blueprints, CarpenterInjections.BUILDING_WELL);
+            AddBuildingBlueprintIfReceived(blueprints, CarpenterInjections.BUILDING_SILO);
+            AddBuildingBlueprintIfReceived(blueprints, CarpenterInjections.BUILDING_MILL);
+            AddBuildingBlueprintIfReceived(blueprints, CarpenterInjections.BUILDING_SHED);
+            AddBuildingBlueprintIfReceived(blueprints, CarpenterInjections.BUILDING_FISH_POND);
+            AddBuildingBlueprintIfReceived(blueprints, CarpenterInjections.BUILDING_STABLE, true);
+            AddBuildingBlueprintIfReceived(blueprints, CarpenterInjections.BUILDING_SLIME_HUTCH);
 
-            AddBuildingBlueprint(blueprints, CarpenterInjections.BUILDING_BIG_COOP, requiredBuilding: CarpenterInjections.BUILDING_COOP);
-            AddBuildingBlueprint(blueprints, CarpenterInjections.BUILDING_DELUXE_COOP, requiredBuilding: CarpenterInjections.BUILDING_BIG_COOP);
-            AddBuildingBlueprint(blueprints, CarpenterInjections.BUILDING_BIG_BARN, requiredBuilding: CarpenterInjections.BUILDING_BARN);
-            AddBuildingBlueprint(blueprints, CarpenterInjections.BUILDING_DELUXE_BARN, requiredBuilding: CarpenterInjections.BUILDING_BIG_BARN);
-            AddBuildingBlueprint(blueprints, CarpenterInjections.BUILDING_BIG_SHED, requiredBuilding: CarpenterInjections.BUILDING_SHED);
+            AddBuildingBlueprintIfReceived(blueprints, CarpenterInjections.BUILDING_BIG_COOP, requiredBuilding: CarpenterInjections.BUILDING_COOP);
+            AddBuildingBlueprintIfReceived(blueprints, CarpenterInjections.BUILDING_DELUXE_COOP, requiredBuilding: CarpenterInjections.BUILDING_BIG_COOP);
+            AddBuildingBlueprintIfReceived(blueprints, CarpenterInjections.BUILDING_BIG_BARN, requiredBuilding: CarpenterInjections.BUILDING_BARN);
+            AddBuildingBlueprintIfReceived(blueprints, CarpenterInjections.BUILDING_DELUXE_BARN, requiredBuilding: CarpenterInjections.BUILDING_BIG_BARN);
+            AddBuildingBlueprintIfReceived(blueprints, CarpenterInjections.BUILDING_BIG_SHED, requiredBuilding: CarpenterInjections.BUILDING_SHED);
 
-            AddBuildingBlueprint(blueprints, CarpenterInjections.BUILDING_SHIPPING_BIN);
+            AddBuildingBlueprintIfReceived(blueprints, CarpenterInjections.BUILDING_SHIPPING_BIN);
             return blueprints;
+        }
+
+        private void AddBuildingBlueprintIfReceived(List<BluePrint> blueprints, string buildingName, bool onlyOne = false, string requiredBuilding = null)
+        {
+            var hasReceivedBuilding = CarpenterInjections.HasReceivedBuilding(buildingName, out var sendingPlayer);
+            if (!hasReceivedBuilding)
+            {
+                return;
+            }
+
+            AddBuildingBlueprint(blueprints, buildingName, sendingPlayer, onlyOne, requiredBuilding);
         }
     }
 }

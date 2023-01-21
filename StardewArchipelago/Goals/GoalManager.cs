@@ -33,7 +33,10 @@ namespace StardewArchipelago.Goals
                     return;
                 case Goal.GrandpaEvaluation:
                     GoalCodeInjection.CheckGrandpaEvaluationGoalCompletion();
-                    break;
+                    return;
+                case Goal.BottomOfMines:
+                    GoalCodeInjection.CheckBottomOfTheMinesGoalCompletion();
+                    return;
                 default:
                     throw new ArgumentOutOfRangeException($"Goal [{_archipelago.SlotData.Goal}] is not supported in this version of the mod.");
             }
@@ -47,8 +50,10 @@ namespace StardewArchipelago.Goals
                     InjectCommunityCenterGoalMethods();
                     return;
                 case Goal.GrandpaEvaluation:
-                    InjectGrandpaEvaluationGoalMethods();
-                    break;
+                    return;
+                case Goal.BottomOfMines:
+                    InjectBottomOfTheMinesGoalMethods();
+                    return;
                 default:
                     throw new ArgumentOutOfRangeException($"Goal [{_archipelago.SlotData.Goal}] is not supported in this version of the mod.");
             }
@@ -62,26 +67,11 @@ namespace StardewArchipelago.Goals
             );
         }
 
-        private void InjectGrandpaEvaluationGoalMethods()
+        private void InjectBottomOfTheMinesGoalMethods()
         {
             _harmony.Patch(
-                original: AccessTools.Method(typeof(Farm), nameof(Farm.checkAction)),
-                prefix: new HarmonyMethod(typeof(GoalCodeInjection), nameof(GoalCodeInjection.CheckAction_GrandpaReevaluation_PreFix)),
-                postfix: new HarmonyMethod(typeof(GoalCodeInjection), nameof(GoalCodeInjection.CheckAction_GrandpaReevaluation_PostFix))
-            );
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(Event), nameof(Event.skipEvent)),
-                prefix: new HarmonyMethod(typeof(GoalCodeInjection), nameof(GoalCodeInjection.SkipEvent_GrandpaReevaluation_PreFix))
-            );
-
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(Event), nameof(Event.command_grandpaCandles)),
-                postfix: new HarmonyMethod(typeof(GoalCodeInjection), nameof(GoalCodeInjection.CommandGrandpaCandles_GrandpaGoal_PostFix))
-            );
-
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(Event), nameof(Event.command_grandpaEvaluation2)),
-                postfix: new HarmonyMethod(typeof(GoalCodeInjection), nameof(GoalCodeInjection.CommandEvaluation2_GrandpaGoal_PostFix))
+                original: AccessTools.Method(typeof(Game1), nameof(Game1.enterMine)),
+                postfix: new HarmonyMethod(typeof(GoalCodeInjection), nameof(GoalCodeInjection.EnterMine_Level120Goal_PostFix))
             );
         }
     }

@@ -37,18 +37,12 @@ namespace StardewArchipelago.Items
             var itemIsFriendshipBonus = TryParseFriendshipBonus(receivedItem.ItemName, out var numberOfPoints);
             if (itemIsFriendshipBonus)
             {
-                return new LetterAttachment(receivedItem);
+                return new LetterActionAttachment(receivedItem, LetterActionsKeys.Frienship, numberOfPoints.ToString());
             }
 
             if (_unlockManager.IsUnlock(receivedItem.ItemName))
             {
                 return _unlockManager.PerformUnlock(receivedItem);
-            }
-
-            var itemIsBuilding = TryParseBuilding(receivedItem.ItemName, out var buildingName);
-            if (itemIsBuilding)
-            {
-                return new LetterActionAttachment(receivedItem, LetterActionsKeys.Frienship, numberOfPoints.ToString());
             }
 
             if (_itemManager.ItemExists(receivedItem.ItemName))
@@ -57,6 +51,7 @@ namespace StardewArchipelago.Items
                 return singleItem.GetAsLetter(receivedItem);
             }
 
+            return new LetterAttachment(receivedItem);
             throw new ArgumentException($"Could not process item {receivedItem.ItemName}");
         }
 

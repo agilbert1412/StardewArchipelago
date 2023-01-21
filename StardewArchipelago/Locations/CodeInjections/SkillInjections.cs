@@ -117,13 +117,12 @@ namespace StardewArchipelago.Locations.CodeInjections
                 var newExperienceLevel = _archipelagoExperience[skill] + experienceAmount;
                 _archipelagoExperience[skill] = newExperienceLevel;
                 var newLevel = GetLevel(_archipelagoExperience[skill]);
-                if (newLevel < 1)
+                for (var i = 1; i <= newLevel; i++)
                 {
-                    return false; // don't run original logic
+                    var checkedLocation = string.Format(_skillLocationName, i, skill.ToString());
+                    _locationChecker.AddCheckedLocation(checkedLocation);
                 }
 
-                var checkedLocation = string.Format(_skillLocationName, newLevel, skill.ToString());
-                _locationChecker.AddCheckedLocation(checkedLocation);
                 return false; // don't run original logic
 
             }
