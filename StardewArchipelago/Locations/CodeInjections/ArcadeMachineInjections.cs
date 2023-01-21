@@ -34,6 +34,12 @@ namespace StardewArchipelago.Locations.CodeInjections
         private static IModHelper _helper;
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
+        private static int _bootsLevel;
+        private static int _gunLevel;
+        private static int _ammoLevel;
+        private static int _bootsItemOffered;
+        private static int _gunItemOffered;
+        private static int _ammoItemOffered;
 
         public static void Initialize(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
@@ -217,14 +223,14 @@ namespace StardewArchipelago.Locations.CodeInjections
         {
             try
             {
-                var bootsItemOffered = GetBootsItemToOffer();
-                var gunItemOffered = GetGunItemToOffer();
-                var ammoItemOffered = GetAmmoItemToOffer();
+                _bootsItemOffered = GetBootsItemToOffer();
+                _gunItemOffered = GetGunItemToOffer();
+                _ammoItemOffered = GetAmmoItemToOffer();
 
                 __instance.storeItems.Clear();
-                __instance.storeItems.Add(new Rectangle(7 * AbigailGame.TileSize + 12, 8 * AbigailGame.TileSize - AbigailGame.TileSize * 2, AbigailGame.TileSize, AbigailGame.TileSize), bootsItemOffered);
-                __instance.storeItems.Add(new Rectangle(8 * AbigailGame.TileSize + 24, 8 * AbigailGame.TileSize - AbigailGame.TileSize * 2, AbigailGame.TileSize, AbigailGame.TileSize), gunItemOffered);
-                __instance.storeItems.Add(new Rectangle(9 * AbigailGame.TileSize + 36, 8 * AbigailGame.TileSize - AbigailGame.TileSize * 2, AbigailGame.TileSize, AbigailGame.TileSize), ammoItemOffered);
+                __instance.storeItems.Add(new Rectangle(7 * AbigailGame.TileSize + 12, 8 * AbigailGame.TileSize - AbigailGame.TileSize * 2, AbigailGame.TileSize, AbigailGame.TileSize), _bootsItemOffered);
+                __instance.storeItems.Add(new Rectangle(8 * AbigailGame.TileSize + 24, 8 * AbigailGame.TileSize - AbigailGame.TileSize * 2, AbigailGame.TileSize, AbigailGame.TileSize), _gunItemOffered);
+                __instance.storeItems.Add(new Rectangle(9 * AbigailGame.TileSize + 36, 8 * AbigailGame.TileSize - AbigailGame.TileSize * 2, AbigailGame.TileSize, AbigailGame.TileSize), _ammoItemOffered);
                 return;
             }
             catch (Exception ex)
@@ -234,99 +240,71 @@ namespace StardewArchipelago.Locations.CodeInjections
             }
         }
 
-        public static bool Tick_Shopping_Prefix(AbigailGame __instance, GameTime time, ref bool __result)
+        public static void Tick_Shopping_PostFix(AbigailGame __instance, GameTime time, ref bool __result)
         {
             try
             {
-                if (__instance.motionPause > 0 || !AbigailGame.shopping || AbigailGame.merchantArriving || AbigailGame.merchantLeaving || !AbigailGame.merchantShopOpen)
+                if (__instance.runSpeedLevel > _bootsLevel)
                 {
-                    return true; // run original logic
-                }
-
-                Rectangle boughtItemRectangle = Rectangle.Empty;
-                var boughtItemId = -1;
-
-                foreach (var (itemRectangle, itemId) in __instance.storeItems)
-                {
-                    // if (!__instance.playerBoundingBox.Intersects(__instance.shoppingCarpetNoPickup))
-                    if (!__instance.playerBoundingBox.Intersects(itemRectangle))
+                    switch (_bootsItemOffered)
                     {
-                        continue;
+                        case 3:
+                            _locationChecker.AddCheckedLocation(JOTPK_BOOTS_1);
+                            break;
+                        case 4:
+                            _locationChecker.AddCheckedLocation(JOTPK_BOOTS_2);
+                            break;
                     }
 
-                    var coins = __instance.coins;
-                    var priceForItem = __instance.getPriceForItem(itemId);
-                    if (coins < priceForItem)
+                    AssignStartingEquipment(__instance);
+                    return;
+                }
+                if (__instance.fireSpeedLevel > _gunLevel || __instance.spreadPistol && _gunLevel < 4)
+                {
+                    switch (_gunItemOffered)
                     {
-                        continue;
+                        case 0:
+                            _locationChecker.AddCheckedLocation(JOTPK_GUN_1);
+                            break;
+                        case 1:
+                            _locationChecker.AddCheckedLocation(JOTPK_GUN_2);
+                            break;
+                        case 2:
+                            _locationChecker.AddCheckedLocation(JOTPK_GUN_3);
+                            break;
+                        case 9:
+                            _locationChecker.AddCheckedLocation(JOTPK_SUPER_GUN);
+                            break;
                     }
 
-                    boughtItemRectangle = itemRectangle;
-                    boughtItemId = itemId;
-                    break;
+                    AssignStartingEquipment(__instance);
+                    return;
                 }
-
-                if (boughtItemId == -1)
+                if (__instance.ammoLevel > _ammoLevel)
                 {
-                    return true; // run original logic
+                    switch (_ammoItemOffered)
+                    {
+                        case 6:
+                            _locationChecker.AddCheckedLocation(JOTPK_AMMO_1);
+                            break;
+                        case 7:
+                            _locationChecker.AddCheckedLocation(JOTPK_AMMO_2);
+                            break;
+                        case 8:
+                            _locationChecker.AddCheckedLocation(JOTPK_AMMO_3);
+                            break;
+                    }
+
+                    AssignStartingEquipment(__instance);
+                    return;
                 }
 
-                Game1.playSound("Cowboy_Secret");
-                AbigailGame.holdItemTimer = 2500;
-                __instance.motionPause = 2500;
-                AbigailGame.itemToHold = boughtItemId;
-                Dictionary<Rectangle, int> storeItems = __instance.storeItems;
-                storeItems.Remove(boughtItemRectangle);
-                AbigailGame.merchantLeaving = true;
-                AbigailGame.merchantArriving = false;
-                AbigailGame.merchantShopOpen = false;
-                __instance.coins -= __instance.getPriceForItem(AbigailGame.itemToHold);
-                switch (AbigailGame.itemToHold)
-                {
-                    case 0:
-                        _locationChecker.AddCheckedLocation(JOTPK_GUN_1);
-                        break;
-                    case 1:
-                        _locationChecker.AddCheckedLocation(JOTPK_GUN_2);
-                        break;
-                    case 2:
-                        _locationChecker.AddCheckedLocation(JOTPK_GUN_3);
-                        break;
-                    case 3:
-                        _locationChecker.AddCheckedLocation(JOTPK_BOOTS_1);
-                        break;
-                    case 4:
-                        _locationChecker.AddCheckedLocation(JOTPK_BOOTS_2);
-                        break;
-                    case 5:
-                        ++__instance.lives;
-                        break;
-                    case 6:
-                        _locationChecker.AddCheckedLocation(JOTPK_AMMO_1);
-                        break;
-                    case 7:
-                        _locationChecker.AddCheckedLocation(JOTPK_AMMO_2);
-                        break;
-                    case 8:
-                        _locationChecker.AddCheckedLocation(JOTPK_AMMO_3);
-                        break;
-                    case 9:
-                        _locationChecker.AddCheckedLocation(JOTPK_SUPER_GUN);
-                        break;
-                    case 10:
-                        __instance.heldItem = new AbigailGame.CowboyPowerup(10, Point.Zero, 9999);
-                        break;
-                    default:
-                        _monitor.Log($"Purchased an unrecognized item in Journey of the Prairie King: {AbigailGame.itemToHold}", LogLevel.Error);
-                        break;
-                }
-
-                return false; // don't run original logic
+                return;
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(Tick_Shopping_Prefix)}:\n{ex}", LogLevel.Error);
-                return true; // run original logic
+                _monitor.Log($"Failed in {nameof(Tick_Shopping_PostFix)}:\n{ex}", LogLevel.Error);
+                return;
             }
         }
 
@@ -334,24 +312,11 @@ namespace StardewArchipelago.Locations.CodeInjections
         {
             try
             {
+                AssignStartingEquipment(__instance);
+
                 var easyMode = _archipelago.SlotData.ArcadeMachineProgression == ArcadeProgression.VictoriesEasy;
-
-                var bootsLevel = easyMode ? 1 : _archipelago.GetReceivedItemCount(JOTPK_PROGRESSIVE_BOOTS);
-                bootsLevel = Math.Max(0, Math.Min(2, bootsLevel));
-
-                var gunLevel = easyMode ? 1 : _archipelago.GetReceivedItemCount(JOTPK_PROGRESSIVE_GUN);
-                gunLevel = Math.Max(0, Math.Min(4, gunLevel));
-
-                var ammoLevel = easyMode ? 1 : _archipelago.GetReceivedItemCount(JOTPK_PROGRESSIVE_AMMO);
-                ammoLevel = Math.Max(0, Math.Min(3, ammoLevel));
-
                 var extraLives = easyMode ? 2 : _archipelago.GetReceivedItemCount(JOTPK_EXTRA_LIFE);
                 extraLives = Math.Max(0, Math.Min(2, extraLives));
-
-                __instance.runSpeedLevel = bootsLevel;
-                __instance.fireSpeedLevel = gunLevel;
-                __instance.ammoLevel = ammoLevel;
-                __instance.bulletDamage += ammoLevel;
                 __instance.lives += extraLives;
                 return;
             }
@@ -362,24 +327,25 @@ namespace StardewArchipelago.Locations.CodeInjections
             }
         }
 
-        /* 
-           ++this.fireSpeedLevel;
-           continue;
-           case 3:
-           case 4:
-           ++this.runSpeedLevel;
-           continue;
-           case 5:
-           ++this.lives;
-           continue;
-           case 6:
-           case 7:
-           case 8:
-           ++this.ammoLevel;
-           ++this.bulletDamage;
-           continue;
-           case 9:
-           this.spreadPistol = true; */
+        private static void AssignStartingEquipment(AbigailGame __instance)
+        {
+            var easyMode = _archipelago.SlotData.ArcadeMachineProgression == ArcadeProgression.VictoriesEasy;
+
+            _bootsLevel = easyMode ? 1 : _archipelago.GetReceivedItemCount(JOTPK_PROGRESSIVE_BOOTS);
+            _bootsLevel = Math.Max(0, Math.Min(2, _bootsLevel));
+
+            _gunLevel = easyMode ? 1 : _archipelago.GetReceivedItemCount(JOTPK_PROGRESSIVE_GUN);
+            _gunLevel = Math.Max(0, Math.Min(4, _gunLevel));
+
+            _ammoLevel = easyMode ? 1 : _archipelago.GetReceivedItemCount(JOTPK_PROGRESSIVE_AMMO);
+            _ammoLevel = Math.Max(0, Math.Min(3, _ammoLevel));
+
+            __instance.runSpeedLevel = _bootsLevel;
+            __instance.fireSpeedLevel = _gunLevel == 4 ? 3 : _gunLevel;
+            __instance.spreadPistol = _gunLevel == 4;
+            __instance.ammoLevel = _ammoLevel;
+            __instance.bulletDamage = 1 + _ammoLevel;
+        }
 
         private static int GetBootsItemToOffer()
         {

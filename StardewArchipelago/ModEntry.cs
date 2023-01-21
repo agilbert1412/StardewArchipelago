@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Extensions;
 using StardewArchipelago.GameModifications;
+using StardewArchipelago.GameModifications.CodeInjections;
 using StardewArchipelago.Goals;
 using StardewArchipelago.Items;
 using StardewArchipelago.Items.Mail;
@@ -211,6 +212,7 @@ namespace StardewArchipelago
                 return;
             }
 
+            FarmInjections.DeleteStartingDebris();
             _mail.SendToday();
             _locationsChecker.SendAllLocationChecks();
             _itemManager.ReceiveAllNewItems();

@@ -13,8 +13,7 @@ namespace StardewArchipelago.Archipelago
         private const string ELEVATOR_PROGRESSION_KEY = "elevator_progression";
         private const string SKILLS_PROGRESSION_KEY = "skill_progression";
         private const string BUILDING_PROGRESSION_KEY = "building_progression";
-        private const string ARCADE_MACHINES_KEY = "arcade_machine";
-        private const string EARLY_MINE_KEY = "the_mines_open";
+        private const string ARCADE_MACHINES_KEY = "arcade_machine_progression";
         private const string MULTI_SLEEP_ENABLED_KEY = "multiple_day_sleep_enabled";
         private const string MULTI_SLEEP_COST_KEY = "multiple_day_sleep_cost";
         private const string EXPERIENCE_MULTIPLIER_KEY = "experience_multiplier";
@@ -35,7 +34,6 @@ namespace StardewArchipelago.Archipelago
         public SkillsProgression SkillProgression { get; private set; }
         public BuildingProgression BuildingProgression { get; private set; }
         public ArcadeProgression ArcadeMachineProgression { get; private set; }
-        public bool EarlyMine { get; private set; }
         public bool EnableMultiSleep { get; private set; }
         public int MultiSleepCostPerDay { get; private set; }
         public double ExperienceMultiplier { get; private set; }
@@ -57,8 +55,7 @@ namespace StardewArchipelago.Archipelago
             ElevatorProgression = GetSlotSetting(ELEVATOR_PROGRESSION_KEY, ElevatorProgression.ProgressiveFromPreviousFloor);
             SkillProgression = GetSlotSetting(SKILLS_PROGRESSION_KEY, SkillsProgression.Progressive);
             BuildingProgression = GetSlotSetting(BUILDING_PROGRESSION_KEY, BuildingProgression.Shuffled);
-            ArcadeMachineProgression = GetSlotSetting(ARCADE_MACHINES_KEY, ArcadeProgression.VictoriesEasy);
-            EarlyMine = GetSlotSetting(EARLY_MINE_KEY, false);
+            ArcadeMachineProgression = GetSlotSetting(ARCADE_MACHINES_KEY, ArcadeProgression.FullShuffling);
             EnableMultiSleep = GetSlotSetting(MULTI_SLEEP_ENABLED_KEY, true);
             MultiSleepCostPerDay = GetSlotSetting(MULTI_SLEEP_COST_KEY, 0);
             ExperienceMultiplier = (GetSlotSetting(EXPERIENCE_MULTIPLIER_KEY, 100) / 100.0);
@@ -105,7 +102,6 @@ namespace StardewArchipelago.Archipelago
     {
         Vanilla = 0,
         Progressive = 1,
-        World = 2,
     }
 
     public enum ElevatorProgression
@@ -144,10 +140,10 @@ namespace StardewArchipelago.Archipelago
 
     public enum DebrisMultiplier
     {
-        Vanilla,
-        HalfDebris,
-        QuarterDebris,
-        NoDebris,
-        StartClear
+        Vanilla = 0,
+        HalfDebris = 1,
+        QuarterDebris = 2,
+        NoDebris = 3,
+        StartClear = 4,
     }
 }

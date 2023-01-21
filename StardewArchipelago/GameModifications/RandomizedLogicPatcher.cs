@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using HarmonyLib;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.GameModifications.CodeInjections;
 using StardewArchipelago.Locations;
+using StardewArchipelago.Locations.CodeInjections;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;

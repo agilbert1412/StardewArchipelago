@@ -341,7 +341,7 @@ namespace StardewArchipelago.Locations
 
                 _harmony.Patch(
                     original: AccessTools.Method(typeof(AbigailGame), nameof(AbigailGame.tick)),
-                    prefix: new HarmonyMethod(typeof(ArcadeMachineInjections), nameof(ArcadeMachineInjections.Tick_Shopping_Prefix))
+                    postfix: new HarmonyMethod(typeof(ArcadeMachineInjections), nameof(ArcadeMachineInjections.Tick_Shopping_PostFix))
                 );
             }
         }

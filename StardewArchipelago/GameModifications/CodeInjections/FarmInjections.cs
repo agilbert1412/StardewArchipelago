@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
+using StardewValley.TerrainFeatures;
 using xTile.Dimensions;
 using Rectangle = xTile.Dimensions.Rectangle;
 
@@ -56,6 +58,11 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         {
             try
             {
+                if (numDebris < 0)
+                {
+                    return true; // run original logic;
+                }
+
                 switch (_archipelago.SlotData.DebrisMultiplier)
                 {
                     case DebrisMultiplier.Vanilla:
@@ -86,6 +93,80 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             {
                 _monitor.Log($"Failed in {nameof(SpawnWeedsAndStones_ConsiderUserPreference_PreFix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
+            }
+        }
+
+        public static void DeleteStartingDebris()
+        {
+            try
+            {
+                var farm = Game1.getFarm();
+
+                if (Game1.Date.TotalDays < 1)
+                {
+                    var chanceOfStaying = GetChanceOfStaying();
+                    for (var i = farm.resourceClumps.Count - 1; i >= 0; i--)
+                    {
+                        var clump = farm.resourceClumps[i];
+                        if (Game1.random.NextDouble() > chanceOfStaying)
+                        {
+                            farm.removeEverythingFromThisTile((int)clump.tile.X, (int)clump.tile.Y);
+                        }
+                    }
+
+                    foreach (var (tile, feature) in farm.terrainFeatures.Pairs)
+                    {
+                        if (!(feature is Tree) && !(feature is Grass))
+                        {
+                            continue;
+                        }
+                        if (Game1.random.NextDouble() > chanceOfStaying)
+                        {
+                            farm.removeEverythingFromThisTile((int)tile.X, (int)tile.Y);
+                        }
+                    }
+                    foreach (var (tile, obj) in farm.Objects.Pairs)
+                    {
+                        if (obj.name != "Stone" && !obj.name.StartsWith("Weed") && obj.name != "Twig")
+                        {
+                            continue;
+                        }
+
+                        if (Game1.random.NextDouble() > chanceOfStaying)
+                        {
+                            farm.removeEverythingFromThisTile((int)tile.X, (int)tile.Y);
+                        }
+                    }
+                }
+                return;
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(DeleteStartingDebris)}:\n{ex}", LogLevel.Error);
+                return;
+            }
+        }
+
+        private static double GetChanceOfStaying()
+        {
+            switch (_archipelago.SlotData.DebrisMultiplier)
+            {
+                case DebrisMultiplier.Vanilla:
+                    return 1;
+                case DebrisMultiplier.HalfDebris:
+                    return 0.5;
+                case DebrisMultiplier.QuarterDebris:
+                    return 0.25;
+                case DebrisMultiplier.NoDebris:
+                    return 0;
+                case DebrisMultiplier.StartClear:
+                    if (Game1.Date.TotalDays < 1)
+                    {
+                        return 0;
+                    }
+                    return 1;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }
