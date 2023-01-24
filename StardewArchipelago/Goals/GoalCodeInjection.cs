@@ -3,12 +3,7 @@ using StardewModdingAPI;
 using StardewValley;
 using System;
 using System.Linq;
-using Microsoft.Xna.Framework;
 using StardewValley.Locations;
-using StardewValley.Menus;
-using StardewValley.Network;
-using StardewValley.Objects;
-using xTile.Dimensions;
 
 namespace StardewArchipelago.Goals
 {

@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Items;
-using StardewArchipelago.Locations.CodeInjections;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;

@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Items;
 using StardewArchipelago.Locations.CodeInjections;
 using StardewModdingAPI;
 using StardewValley;
-using StardewValley.Menus;
 
 namespace StardewArchipelago.GameModifications.Buildings
 {

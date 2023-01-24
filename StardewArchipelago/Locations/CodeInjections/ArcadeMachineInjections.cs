@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
 using StardewValley;
-using StardewValley.GameData.HomeRenovations;
 using StardewValley.Minigames;
 
 namespace StardewArchipelago.Locations.CodeInjections
