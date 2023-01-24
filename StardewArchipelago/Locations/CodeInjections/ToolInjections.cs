@@ -78,8 +78,13 @@ namespace StardewArchipelago.Locations.CodeInjections
 
                 var newTool = toolCreationFunction();
                 newTool.UpgradeLevel = upgradeLevel;
+                var metalName = GetMetalNameForTier(upgradeLevel);
+                var locationName = $"{metalName} {toolGenericName} Upgrade";
 
-                blacksmithUpgradeStock.Add(newTool, new int[3]
+                var toolApLocation = new PurchaseableArchipelagoLocation(locationName, locationName,
+                    _locationChecker, _archipelago, () => Game1.playSound("parry"));
+
+                blacksmithUpgradeStock.Add(toolApLocation, new int[3]
                 {
                     utilityPriceForToolMethod.Invoke<int>(upgradeLevel),
                     1,
@@ -124,47 +129,6 @@ namespace StardewArchipelago.Locations.CodeInjections
             var progressiveToolItemName = $"{UnlockManager.PROGRESSIVE_TOOL_AP_PREFIX}{toolGenericName}";
             var receivedToolsOfThatType = _archipelago.GetReceivedItemCount(progressiveToolItemName);
             return receivedToolsOfThatType >= upgradeLevel - 1;
-        }
-
-        public static bool ActionWhenPurchased_ToolUpgrade_Prefix(Tool __instance, ref bool __result)
-        {
-            try
-            {
-                var metalName = GetMetalNameForTier(__instance.UpgradeLevel);
-
-                switch (__instance)
-                {
-                    case Axe _:
-                        _locationChecker.AddCheckedLocation($"{metalName} Axe Upgrade");
-                        break;
-                    case Pickaxe _:
-                        _locationChecker.AddCheckedLocation($"{metalName} Pickaxe Upgrade");
-                        break;
-                    case Hoe _:
-                        _locationChecker.AddCheckedLocation($"{metalName} Hoe Upgrade");
-                        break;
-                    case WateringCan _:
-                        _locationChecker.AddCheckedLocation($"{metalName} Watering Can Upgrade");
-                        break;
-                    case GenericTool _:
-                        _locationChecker.AddCheckedLocation($"{metalName} Trash Can Upgrade");
-                        break;
-                    default:
-                        return true; // run original logic
-                }
-
-                Game1.playSound("parry");
-                Game1.exitActiveMenu();
-                Game1.drawDialogue(Game1.getCharacterFromName("Clint"),
-                    Game1.content.LoadString("Strings\\StringsFromCSFiles:Tool.cs.14317"));
-                __result = true;
-                return false; // don't run original logic
-            }
-            catch (Exception ex)
-            {
-                _monitor.Log($"Failed in {nameof(ActionWhenPurchased_ToolUpgrade_Prefix)}:\n{ex}", LogLevel.Error);
-                return true; // run original logic
-            }
         }
 
         private static string GetMetalNameForTier(int upgradeLevel)

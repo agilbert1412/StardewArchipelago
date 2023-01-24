@@ -15,17 +15,19 @@ namespace StardewArchipelago.Locations
         private string _locationDisplayName;
         private string _apLocationName;
         private string _description;
-        private Action _purchaseCallBack;
+        private LocationChecker _locationChecker;
         private List<Item> _extraMaterialsRequired;
+        private Action _purchaseCallBack;
 
-        public PurchaseableArchipelagoLocation(string locationDisplayName, string apLocationName, Action purchaseCallBack, ArchipelagoClient archipelago)
+        public PurchaseableArchipelagoLocation(string locationDisplayName, string apLocationName, LocationChecker locationChecker, ArchipelagoClient archipelago, Action purchaseCallback = null)
         {
             _locationDisplayName = $"{ARCHIPELAGO_PREFIX}{locationDisplayName}";
             _apLocationName = apLocationName;
             var scoutedLocation = archipelago.ScoutSingleLocation(_apLocationName);
             _description = scoutedLocation == null ? ScoutedLocation.GenericItemName() : scoutedLocation.ToString();
-            _purchaseCallBack = purchaseCallBack;
+            _locationChecker = locationChecker;
             _extraMaterialsRequired = new List<Item>();
+            _purchaseCallBack = purchaseCallback;
 
 
             if (!(Game1.content.ServiceProvider.GetService(typeof(IGraphicsDeviceService)) is IGraphicsDeviceService service))
@@ -63,7 +65,8 @@ namespace StardewArchipelago.Locations
             {
                 Game1.player.removeItemsFromInventory(item.ParentSheetIndex, item.Stack);
             }
-            _purchaseCallBack();
+            _locationChecker.AddCheckedLocation(_apLocationName);
+            _purchaseCallBack?.Invoke();
             return true;
         }
 

@@ -154,7 +154,7 @@ namespace StardewArchipelago.Locations.CodeInjections
                 }
             }
 
-            var purchasableCheck = new PurchaseableArchipelagoLocation(buildingName, locationName, () => _locationChecker.AddCheckedLocation(locationName), _archipelago);
+            var purchasableCheck = new PurchaseableArchipelagoLocation(buildingName, locationName, _locationChecker, _archipelago);
             foreach (var material in materials)
             {
                 purchasableCheck.AddMaterialRequirement(material);

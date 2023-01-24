@@ -1,5 +1,6 @@
 ﻿using System;
 using HarmonyLib;
+using Microsoft.Xna.Framework;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
@@ -37,12 +38,42 @@ namespace StardewArchipelago.Archipelago
                     return;
                 }
 
+                if (TryHandleCommand(message))
+                {
+                    return;
+                }
+
                 _archipelago.SendMessage(message);
             }
             catch (Exception ex)
             {
                 _monitor.Log($"Failed in {nameof(ReceiveChatMessage_ForwardToAp_PostFix)}:\n{ex}", LogLevel.Error);
             }
+        }
+
+        private static bool TryHandleCommand(string message)
+        {
+            if (message == null)
+            {
+                return false;
+            }
+
+            if (message.ToLower() == "!goal")
+            {
+                var goal = _archipelago.SlotData.Goal switch
+                {
+                    Goal.GrandpaEvaluation => "Complete Grandpa's Evaluation with a score of at least 12 (4 candles)",
+                    Goal.BottomOfMines => "Reach Floor 120 in the Pelican Town Mineshaft",
+                    Goal.CommunityCenter => "Complete the Community Center",
+                    _ => throw new NotImplementedException()
+                };
+
+                var goalMessage = $"Your Goal is: {goal}";
+                Game1.chatBox?.addMessage(goalMessage, Color.Gold);
+                return true;
+            }
+
+            return false;
         }
     }
 }

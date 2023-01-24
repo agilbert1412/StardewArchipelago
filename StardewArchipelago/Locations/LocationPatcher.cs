@@ -112,11 +112,6 @@ namespace StardewArchipelago.Locations
                 original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.answerDialogueAction)),
                 prefix: new HarmonyMethod(typeof(ToolInjections), nameof(ToolInjections.AnswerDialogueAction_ToolUpgrade_Prefix))
             );
-
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(Tool), nameof(Tool.actionWhenPurchased)),
-                prefix: new HarmonyMethod(typeof(ToolInjections), nameof(ToolInjections.ActionWhenPurchased_ToolUpgrade_Prefix))
-            );
         }
 
         private void ReplaceFishingRodsWithChecks()
