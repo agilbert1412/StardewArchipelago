@@ -26,7 +26,6 @@ namespace StardewArchipelago.Locations
 
         public void ReplaceAllLocationsRewardsWithChecks()
         {
-            RemoveDefaultRewardsOnAllBundles();
             ReplaceCommunityCenterBundlesWithChecks();
             ReplaceCommunityCenterAreasWithChecks();
             ReplaceBackPackUpgradesWithChecks();
@@ -42,28 +41,12 @@ namespace StardewArchipelago.Locations
             ReplaceArcadeMachinesWithChecks();
         }
 
-        private static void RemoveDefaultRewardsOnAllBundles()
-        {
-            foreach (var key in Game1.netWorldState.Value.BundleData.Keys)
-            {
-                var splitKey = key.Split('/');
-                var value = Game1.netWorldState.Value.BundleData[key];
-                var splitValue = value.Split('/');
-
-                var areaName = splitKey[0];
-                var bundleReward = splitValue[1];
-
-                if (bundleReward == "")
-                {
-                    continue;
-                }
-
-                Game1.netWorldState.Value.BundleData[key] = value.Replace(bundleReward, "");
-            }
-        }
-
         private void ReplaceCommunityCenterBundlesWithChecks()
         {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(CommunityCenter), nameof(CommunityCenter.shouldNoteAppearInArea)),
+                prefix: new HarmonyMethod(typeof(CommunityCenterInjections), nameof(CommunityCenterInjections.ShouldNoteAppearInArea_AllowAccessEverything_Prefix))
+            );
             _harmony.Patch(
                 original: AccessTools.Method(typeof(JunimoNoteMenu), nameof(JunimoNoteMenu.checkForRewards)),
                 postfix: new HarmonyMethod(typeof(CommunityCenterInjections), nameof(CommunityCenterInjections.CheckForRewards_PostFix))
@@ -286,6 +269,10 @@ namespace StardewArchipelago.Locations
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Beach), nameof(Beach.checkAction)),
                 prefix: new HarmonyMethod(typeof(IsolatedEventInjections), nameof(IsolatedEventInjections.CheckAction_BeachBridge_Prefix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performTouchAction)),
+                prefix: new HarmonyMethod(typeof(IsolatedEventInjections), nameof(IsolatedEventInjections.PerformTouchAction_GalaxySwordShrine_Prefix))
             );
         }
 

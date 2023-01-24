@@ -174,6 +174,7 @@ namespace StardewArchipelago
 
             _logicPatcher.PatchAllGameLogic();
             _mailPatcher.PatchMailBoxForApItems();
+            _archipelago.SlotData.ReplaceAllBundles();
             _locationsPatcher.ReplaceAllLocationsRewardsWithChecks();
             _goalManager.InjectGoalMethods();
             _jojaDisabler.DisableJojaMembership();

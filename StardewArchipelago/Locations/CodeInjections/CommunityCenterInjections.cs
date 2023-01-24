@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using StardewArchipelago.Goals;
 using StardewArchipelago.Stardew;
@@ -22,11 +23,14 @@ namespace StardewArchipelago.Locations.CodeInjections
         private static BundleReader _bundleReader;
         private static LocationChecker _locationChecker;
 
+        public static Dictionary<string, string> _bundleNames;
+
         public static void Initialize(IMonitor monitor, BundleReader bundleReader, LocationChecker locationChecker)
         {
             _monitor = monitor;
             _bundleReader = bundleReader;
             _locationChecker = locationChecker;
+            _bundleNames = new Dictionary<string, string>();
         }
 
         public static bool DoAreaCompleteReward_AreaLocations_Prefix(CommunityCenter __instance, int whichArea)
@@ -79,15 +83,53 @@ namespace StardewArchipelago.Locations.CodeInjections
             }
         }
 
+        public static bool ShouldNoteAppearInArea_AllowAccessEverything_Prefix(CommunityCenter __instance, int area, ref bool __result)
+        {
+            try
+            {
+                switch (area)
+                {
+                    case 0:
+                    case 2:
+                    case 1:
+                    case 3:
+                    case 4:
+                    case 5:
+                        __result = true;
+                        return false; // don't run original logic
+                    case 6:
+                        if (Utility.HasAnyPlayerSeenEvent(191393))
+                        {
+                            __result = true;
+                            return false; // don't run original logic
+                        }
+
+                        break;
+                }
+                __result = false;
+                return false; // don't run original logic
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(ShouldNoteAppearInArea_AllowAccessEverything_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
+        }
+
         public static void CheckForRewards_PostFix(JunimoNoteMenu __instance)
         {
             try
             {
                 var bundleStates = _bundleReader.ReadCurrentBundleStates();
-                var completedBundleNames = bundleStates.Where(x => x.IsCompleted).Select(x => x.RelatedBundle.BundleName + " Bundle");
+                var completedBundleNames = bundleStates.Where(x => x.IsCompleted).Select(x => x.RelatedBundle.BundleName);
                 foreach (var completedBundleName in completedBundleNames)
                 {
-                    _locationChecker.AddCheckedLocation(completedBundleName);
+                    var bundleNameLocation = completedBundleName;
+                    if (_bundleNames.ContainsKey(bundleNameLocation))
+                    {
+                        bundleNameLocation = _bundleNames[bundleNameLocation];
+                    }
+                    _locationChecker.AddCheckedLocation(bundleNameLocation + " Bundle");
                 }
 
                 var communityCenter = Game1.locations.OfType<CommunityCenter>().First();

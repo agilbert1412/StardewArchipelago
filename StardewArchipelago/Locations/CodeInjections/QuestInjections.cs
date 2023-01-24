@@ -1,18 +1,14 @@
 ﻿using System;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
 using StardewValley;
-using StardewValley.Characters;
 using StardewValley.Locations;
 using StardewValley.Menus;
-using StardewValley.Objects;
 using StardewValley.Quests;
 using xTile.Dimensions;
 using xTile.ObjectModel;
-using xTile.Tiles;
 using Object = StardewValley.Object;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
@@ -48,12 +44,6 @@ namespace StardewArchipelago.Locations.CodeInjections
                     return true; // run original logic
                 }
 
-                if (__instance.dailyQuest.Value ||
-                    __instance.questType.Value == (int)QuestType.Fishing)
-                {
-                    ++Game1.stats.QuestsCompleted;
-                }
-
                 __instance.completed.Value = true;
                 if (__instance.nextQuests.Count > 0)
                 {
@@ -73,9 +63,34 @@ namespace StardewArchipelago.Locations.CodeInjections
                     Game1.player.activeDialogueEvents.Add("emilyFiber", 2);
                 }
                 Game1.dayTimeMoneyBox.questsDirty = true;
+
+                // Item Delivery: __instance.dailyQuest == true and questType == 3
+                // Copper Ores: Daily True, Type 10
+                // Slay Monsters: Daily True, Type 4
+                // Catch fish: Daily Trye, Type 7
+                if (__instance.dailyQuest.Value)
+                {
+                    ++Game1.stats.QuestsCompleted;
+                    switch (__instance.questType.Value)
+                    {
+                        case (int)QuestType.ItemDelivery:
+                            CheckDailyQuestLocation("Item Delivery");
+                            break;
+                        case (int)QuestType.SlayMonsters:
+                            CheckDailyQuestLocation("Slay Monsters");
+                            break;
+                        case (int)QuestType.Fishing:
+                            CheckDailyQuestLocation("Fishing");
+                            break;
+                        case (int)QuestType.ResourceCollection:
+                            CheckDailyQuestLocation("Gathering");
+                            break;
+                    }
+
+                    return false; // don't run original logic
+                }
                 
                 _locationChecker.AddCheckedLocation(questName);
-
                 return false; // don't run original logic
             }
             catch (Exception ex)
@@ -83,6 +98,22 @@ namespace StardewArchipelago.Locations.CodeInjections
                 _monitor.Log($"Failed in {nameof(QuestComplete_LocationInsteadOfReward_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
             }
+        }
+
+        private static void CheckDailyQuestLocation(string typeApName)
+        {
+            var locationName = $"Help Wanted: {typeApName}";
+            var alreadyCheckedLocations = _locationChecker.GetAllLocationsAlreadyChecked();
+            var nextLocationNumber = 1;
+            foreach (var checkedLocation in alreadyCheckedLocations)
+            {
+                if (checkedLocation.StartsWith(locationName))
+                {
+                    nextLocationNumber++;
+                }
+            }
+
+            _locationChecker.AddCheckedLocation($"{locationName} {nextLocationNumber}");
         }
 
         public static void Command_RemoveQuest_CheckLocation_Postfix(Event __instance, GameLocation location, GameTime time, string[] split)
@@ -204,10 +235,10 @@ namespace StardewArchipelago.Locations.CodeInjections
             {
                 const int bearKnowledgeIndex = 8;
                 int x1 = __instance.xPositionOnScreen + IClickableMenu.spaceToClearSideBorder + 80;
-                int y1 = __instance.yPositionOnScreen + IClickableMenu.spaceToClearTopBorder + (int)((double)height / 2.0) + 80;
+                int y1 = __instance.yPositionOnScreen + IClickableMenu.spaceToClearTopBorder + (int)(height / 2.0) + 80;
                 if (_archipelago.HasReceivedItem("Bear's Knowledge", out _))
                 {
-                    ClickableTextureComponent textureComponent = new ClickableTextureComponent("", new Rectangle(x1 + 544, y1, 64, 64), (string)null, Game1.content.LoadString("Strings\\Objects:BearPaw"), Game1.mouseCursors, new Rectangle(192, 336, 16, 16), 4f, true);
+                    ClickableTextureComponent textureComponent = new ClickableTextureComponent("", new Rectangle(x1 + 544, y1, 64, 64), null, Game1.content.LoadString("Strings\\Objects:BearPaw"), Game1.mouseCursors, new Rectangle(192, 336, 16, 16), 4f, true);
                     textureComponent.myID = 10208;
                     textureComponent.rightNeighborID = -99998;
                     textureComponent.leftNeighborID = -99998;
@@ -309,7 +340,7 @@ namespace StardewArchipelago.Locations.CodeInjections
         Crafting = 2,
         ItemDelivery = 3,
         Monster = 4,
-        SlayMonster = 4,
+        SlayMonsters = 4,
         Socialize = 5,
         Location = 6,
         Fishing = 7,

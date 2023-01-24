@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
+using StardewArchipelago.Locations.CodeInjections;
 using StardewModdingAPI;
+using StardewValley;
 
 namespace StardewArchipelago.Archipelago
 {
@@ -21,6 +24,7 @@ namespace StardewArchipelago.Archipelago
         private const string QUICK_START_KEY = "quick_start";
         private const string DEATH_LINK_KEY = "death_link";
         private const string SEED_KEY = "seed";
+        private const string MODIFIED_BUNDLES_KEY = "modified_bundles";
 
         private Dictionary<string, object> _slotDataFields;
         private IMonitor _console;
@@ -41,6 +45,7 @@ namespace StardewArchipelago.Archipelago
         public bool QuickStart { get; private set; }
         public bool DeathLink { get; private set; }
         public string Seed { get; private set; }
+        private Dictionary<string, string> ModifiedBundles { get; set; }
 
         public SlotData(string slotName, Dictionary<string, object> slotDataFields, IMonitor console)
         {
@@ -58,11 +63,13 @@ namespace StardewArchipelago.Archipelago
             ArcadeMachineProgression = GetSlotSetting(ARCADE_MACHINES_KEY, ArcadeProgression.FullShuffling);
             EnableMultiSleep = GetSlotSetting(MULTI_SLEEP_ENABLED_KEY, true);
             MultiSleepCostPerDay = GetSlotSetting(MULTI_SLEEP_COST_KEY, 0);
-            ExperienceMultiplier = (GetSlotSetting(EXPERIENCE_MULTIPLIER_KEY, 100) / 100.0);
+            ExperienceMultiplier = GetSlotSetting(EXPERIENCE_MULTIPLIER_KEY, 100) / 100.0;
             DebrisMultiplier = GetSlotSetting(DEBRIS_MULTIPLIER_KEY, DebrisMultiplier.HalfDebris);
             QuickStart = GetSlotSetting(QUICK_START_KEY, false);
             DeathLink = GetSlotSetting(DEATH_LINK_KEY, false);
             Seed = GetSlotSetting(SEED_KEY, "");
+            var newBundleStringData = GetSlotSetting(MODIFIED_BUNDLES_KEY, "");
+            ModifiedBundles = JsonConvert.DeserializeObject<Dictionary<string, string>>(newBundleStringData);
         }
 
         private T GetSlotSetting<T>(string key, T defaultValue) where T : struct, Enum, IConvertible
@@ -89,6 +96,26 @@ namespace StardewArchipelago.Archipelago
         {
             _console.Log($"SlotData did not contain expected key: \"{key}\"", LogLevel.Warn);
             return defaultValue;
+        }
+
+        private static Dictionary<string, string> vanillaBundleData = null;
+
+        public void ReplaceAllBundles()
+        {
+            if (vanillaBundleData == null)
+            {
+                vanillaBundleData = Game1.content.LoadBase<Dictionary<string, string>>("Data\\Bundles");
+            }
+            Game1.netWorldState.Value.SetBundleData(vanillaBundleData);
+            foreach (var key in ModifiedBundles.Keys)
+            {
+                var oldBundle = Game1.netWorldState.Value.BundleData[key];
+                var newBundle = ModifiedBundles[key];
+                var oldBundleName = oldBundle.Split("/")[0];
+                var newBundleName = newBundle.Split("/")[0];
+                CommunityCenterInjections._bundleNames.Add(newBundleName, oldBundleName);
+                Game1.netWorldState.Value.BundleData[key] = newBundle;
+            }
         }
     }
 
