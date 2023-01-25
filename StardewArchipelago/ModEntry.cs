@@ -40,6 +40,7 @@ namespace StardewArchipelago
         private MailPatcher _mailPatcher;
         private LocationChecker _locationsChecker;
         private LocationPatcher _locationsPatcher;
+        private ItemPatcher _itemPatcher;
         private GoalManager _goalManager;
         private StardewItemManager _stardewItemManager;
         private UnlockManager _unlockManager;
@@ -156,6 +157,7 @@ namespace StardewArchipelago
             _mailPatcher = new MailPatcher(Monitor, new LetterActions(_mail), _harmony);
             _locationsChecker = new LocationChecker(Monitor, _archipelago, _state.LocationsChecked);
             _locationsPatcher = new LocationPatcher(Monitor, _archipelago, _bundleReader, _helper, _harmony, _locationsChecker);
+            _itemPatcher = new ItemPatcher(Monitor, _helper, _harmony, _archipelago);
             _logicPatcher = new RandomizedLogicPatcher(Monitor, _harmony, _archipelago, _locationsChecker);
             _goalManager = new GoalManager(Monitor, _helper, _harmony, _archipelago);
             _jojaDisabler = new JojaDisabler(Monitor, _helper, _harmony);
@@ -176,6 +178,7 @@ namespace StardewArchipelago
             _mailPatcher.PatchMailBoxForApItems();
             _archipelago.SlotData.ReplaceAllBundles();
             _locationsPatcher.ReplaceAllLocationsRewardsWithChecks();
+            _itemPatcher.PatchApItems();
             _goalManager.InjectGoalMethods();
             _jojaDisabler.DisableJojaMembership();
             _multiSleep.InjectMultiSleepOption(_archipelago.SlotData);

@@ -5,7 +5,6 @@ using StardewArchipelago.Items;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
-using StardewValley.Tools;
 
 namespace StardewArchipelago.Locations.CodeInjections
 {
@@ -43,15 +42,15 @@ namespace StardewArchipelago.Locations.CodeInjections
                     _modHelper.Reflection.GetMethod(typeof(Utility), "indexOfExtraMaterialForToolUpgrade");
 
                 var blacksmithUpgradeStock = new Dictionary<ISalable, int[]>();
-                AddToolUpgradeToStock("Axe", blacksmithUpgradeStock, () => new Axe(), utilityPriceForToolMethod,
+                AddToolUpgradeToStock("Axe", blacksmithUpgradeStock, utilityPriceForToolMethod,
                     indexOfExtraMaterialForToolMethod);
-                AddToolUpgradeToStock("Watering Can", blacksmithUpgradeStock, () => new WateringCan(),
+                AddToolUpgradeToStock("Watering Can", blacksmithUpgradeStock,
                     utilityPriceForToolMethod, indexOfExtraMaterialForToolMethod);
-                AddToolUpgradeToStock("Pickaxe", blacksmithUpgradeStock, () => new Pickaxe(), utilityPriceForToolMethod,
+                AddToolUpgradeToStock("Pickaxe", blacksmithUpgradeStock, utilityPriceForToolMethod,
                     indexOfExtraMaterialForToolMethod);
-                AddToolUpgradeToStock("Hoe", blacksmithUpgradeStock, () => new Hoe(), utilityPriceForToolMethod,
+                AddToolUpgradeToStock("Hoe", blacksmithUpgradeStock, utilityPriceForToolMethod,
                     indexOfExtraMaterialForToolMethod);
-                AddTrashCanUpgradeToStock(blacksmithUpgradeStock, utilityPriceForToolMethod,
+                AddToolUpgradeToStock("Trash Can", blacksmithUpgradeStock, utilityPriceForToolMethod,
                     indexOfExtraMaterialForToolMethod);
 
                 Game1.activeClickableMenu = new ShopMenu(blacksmithUpgradeStock, who: "ClintUpgrade");
@@ -66,8 +65,7 @@ namespace StardewArchipelago.Locations.CodeInjections
         }
 
         private static void AddToolUpgradeToStock(string toolGenericName,
-            Dictionary<ISalable, int[]> blacksmithUpgradeStock, Func<Tool> toolCreationFunction,
-            IReflectedMethod utilityPriceForToolMethod, IReflectedMethod indexOfExtraMaterialForToolMethod)
+            Dictionary<ISalable, int[]> blacksmithUpgradeStock, IReflectedMethod utilityPriceForToolMethod, IReflectedMethod indexOfExtraMaterialForToolMethod)
         {
             for (var upgradeLevel = 1; upgradeLevel < 5; upgradeLevel++)
             {
@@ -75,43 +73,22 @@ namespace StardewArchipelago.Locations.CodeInjections
                 {
                     continue;
                 }
-
-                var newTool = toolCreationFunction();
-                newTool.UpgradeLevel = upgradeLevel;
+                
                 var metalName = GetMetalNameForTier(upgradeLevel);
                 var locationName = $"{metalName} {toolGenericName} Upgrade";
 
                 var toolApLocation = new PurchaseableArchipelagoLocation(locationName, locationName,
                     _locationChecker, _archipelago, () => Game1.playSound("parry"));
 
-                blacksmithUpgradeStock.Add(toolApLocation, new int[3]
+                var priceForUpgrade = utilityPriceForToolMethod.Invoke<int>(upgradeLevel);
+                if (toolGenericName == "Trash Can")
                 {
-                    utilityPriceForToolMethod.Invoke<int>(upgradeLevel),
-                    1,
-                    indexOfExtraMaterialForToolMethod.Invoke<int>(upgradeLevel),
-                });
-            }
-        }
-
-        private static void AddTrashCanUpgradeToStock(Dictionary<ISalable, int[]> blacksmithUpgradeStock,
-            IReflectedMethod utilityPriceForToolMethod, IReflectedMethod indexOfExtraMaterialForToolMethod)
-        {
-            for (var upgradeLevel = 1; upgradeLevel < 5; upgradeLevel++)
-            {
-                if (!ShouldShowToolUpgradeInShop("Trash Can", upgradeLevel))
-                {
-                    continue;
+                    priceForUpgrade /= 2;
                 }
 
-                Tool newTool = new GenericTool("Trash Can",
-                    Game1.content.LoadString("Strings\\StringsFromCSFiles:TrashCan_Description",
-                        (upgradeLevel * 15).ToString() ?? ""), upgradeLevel,
-                    12 + upgradeLevel, 12 + upgradeLevel);
-                newTool.upgradeLevel.Value = upgradeLevel;
-
-                blacksmithUpgradeStock.Add(newTool, new int[3]
+                blacksmithUpgradeStock.Add(toolApLocation, new int[3]
                 {
-                    utilityPriceForToolMethod.Invoke<int>(upgradeLevel) / 2,
+                    priceForUpgrade,
                     1,
                     indexOfExtraMaterialForToolMethod.Invoke<int>(upgradeLevel),
                 });

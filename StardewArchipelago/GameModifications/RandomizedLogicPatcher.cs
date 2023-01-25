@@ -21,14 +21,24 @@ namespace StardewArchipelago.GameModifications
             MineshaftLogicInjections.Initialize(monitor);
             CommunityCenterLogicInjections.Initialize(monitor, locationChecker);
             FarmInjections.Initialize(monitor, archipelago);
+            AchievementInjections.Initialize(monitor, archipelago);
         }
 
         public void PatchAllGameLogic()
         {
+            PatchAchievements();
             PatchMineMaxFloorReached();
             PatchDefinitionOfCommunityCenterComplete();
             PatchGrandpaNote();
             PatchDebris();
+        }
+
+        private void PatchAchievements()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Game1), nameof(Game1.getSteamAchievement)),
+                prefix: new HarmonyMethod(typeof(AchievementInjections), nameof(AchievementInjections.GetSteamAchievement_DisableUndeservedAchievements_Prefix))
+            );
         }
 
         private void PatchMineMaxFloorReached()
