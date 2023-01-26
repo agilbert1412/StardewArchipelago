@@ -27,7 +27,7 @@ namespace StardewArchipelago.Items
             {
                 var baseCoefficient = 1.0f;
                 var numberOfSpeedBonus = _archipelago.GetReceivedItemCount(MOVEMENT_SPEED_AP_LOCATION);
-                var totalCoefficient = baseCoefficient + (0.25f + numberOfSpeedBonus);
+                var totalCoefficient = baseCoefficient + (0.25f * numberOfSpeedBonus);
 
                 __result *= totalCoefficient;
                 return;
