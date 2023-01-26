@@ -66,8 +66,7 @@ namespace StardewArchipelago.Locations.CodeInjections
                 if (Game1.activeClickableMenu == null)
                     __instance.CurrentCommand++;
                 __instance.CurrentCommand++;
-
-                SkipBambooPoleEventArchipelago(__instance);
+                
                 return false; // don't run original logic
 
             }
@@ -134,7 +133,7 @@ namespace StardewArchipelago.Locations.CodeInjections
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(SkipEvent_BambooPole_Prefix)}:\n{ex}", LogLevel.Error);
+                _monitor.Log($"Failed in {nameof(GetFishShopStock_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
             }
         }

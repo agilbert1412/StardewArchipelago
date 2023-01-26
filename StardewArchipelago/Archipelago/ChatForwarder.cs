@@ -65,6 +65,7 @@ namespace StardewArchipelago.Archipelago
                     Goal.GrandpaEvaluation => "Complete Grandpa's Evaluation with a score of at least 12 (4 candles)",
                     Goal.BottomOfMines => "Reach Floor 120 in the Pelican Town Mineshaft",
                     Goal.CommunityCenter => "Complete the Community Center",
+                    Goal.CrypticNote => "Find Secret Note #10 and complete the \"Cryptic Note\" Quest",
                     _ => throw new NotImplementedException()
                 };
 

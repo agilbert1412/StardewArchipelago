@@ -159,7 +159,7 @@ namespace StardewArchipelago
             _locationsPatcher = new LocationPatcher(Monitor, _archipelago, _bundleReader, _helper, _harmony, _locationsChecker);
             _itemPatcher = new ItemPatcher(Monitor, _helper, _harmony, _archipelago);
             _logicPatcher = new RandomizedLogicPatcher(Monitor, _harmony, _archipelago, _locationsChecker);
-            _goalManager = new GoalManager(Monitor, _helper, _harmony, _archipelago);
+            _goalManager = new GoalManager(Monitor, _helper, _harmony, _archipelago, _locationsChecker);
             _jojaDisabler = new JojaDisabler(Monitor, _helper, _harmony);
 
             if (_state.APConnectionInfo != null && !_archipelago.IsConnected)
@@ -218,6 +218,7 @@ namespace StardewArchipelago
 
             FarmInjections.DeleteStartingDebris();
             _mail.SendToday();
+            _locationsChecker.VerifyNewLocationChecksWithArchipelago();
             _locationsChecker.SendAllLocationChecks();
             _itemManager.ReceiveAllNewItems();
             _goalManager.CheckGoalCompletion();

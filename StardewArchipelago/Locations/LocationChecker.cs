@@ -66,6 +66,23 @@ namespace StardewArchipelago.Locations
             allCheckedLocations = allCheckedLocations.Distinct().Where(x => x > -1).ToList();
 
             _archipelago.ReportCollectedLocations(allCheckedLocations.ToArray());
+
+            if (_archipelago.SlotData.Goal == Goal.CrypticNote && _checkedLocations.Keys.Contains("Cryptic Note"))
+            {
+                _archipelago.ReportGoalCompletion();
+            }
+        }
+
+        public void VerifyNewLocationChecksWithArchipelago()
+        {
+            var allCheckedLocations = _archipelago.GetAllCheckedLocations();
+            foreach (var (locationName, locationId) in allCheckedLocations)
+            {
+                if (!_checkedLocations.ContainsKey(locationName))
+                {
+                    _checkedLocations.Add(locationName, locationId);
+                }
+            }
         }
 
         private void TryToIdentifyUnknownLocationNames()

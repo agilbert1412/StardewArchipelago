@@ -1,6 +1,7 @@
 ﻿using System;
 using HarmonyLib;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Locations;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
@@ -13,15 +14,16 @@ namespace StardewArchipelago.Goals
         private IModHelper _modHelper;
         private Harmony _harmony;
         private ArchipelagoClient _archipelago;
-        private GoalCodeInjection _codeInjection;
+        private LocationChecker _locationChecker;
 
-        public GoalManager(IMonitor monitor, IModHelper modHelper, Harmony harmony, ArchipelagoClient archipelago)
+        public GoalManager(IMonitor monitor, IModHelper modHelper, Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             _monitor = monitor;
             _modHelper = modHelper;
             _harmony = harmony;
             _archipelago = archipelago;
-            _codeInjection = new GoalCodeInjection(_monitor, _modHelper, _archipelago);
+            _locationChecker = locationChecker;
+            GoalCodeInjection.Initialize(_monitor, _modHelper, _archipelago, _locationChecker);
         }
 
         public void CheckGoalCompletion()
@@ -36,6 +38,9 @@ namespace StardewArchipelago.Goals
                     return;
                 case Goal.BottomOfMines:
                     GoalCodeInjection.CheckBottomOfTheMinesGoalCompletion();
+                    return;
+                case Goal.CrypticNote:
+                    // GoalCodeInjection.CheckCrypticNoteGoalCompletion(); // Don't win through collected cryptic note
                     return;
                 default:
                     throw new ArgumentOutOfRangeException($"Goal [{_archipelago.SlotData.Goal}] is not supported in this version of the mod.");
@@ -53,6 +58,8 @@ namespace StardewArchipelago.Goals
                     return;
                 case Goal.BottomOfMines:
                     InjectBottomOfTheMinesGoalMethods();
+                    return;
+                case Goal.CrypticNote:
                     return;
                 default:
                     throw new ArgumentOutOfRangeException($"Goal [{_archipelago.SlotData.Goal}] is not supported in this version of the mod.");

@@ -225,6 +225,18 @@ namespace StardewArchipelago.Archipelago
             _session.Locations.CompleteLocationChecks(locationIds);
         }
 
+        public Dictionary<string, long> GetAllCheckedLocations()
+        {
+            if (_session == null)
+            {
+                return new Dictionary<string, long>();
+            }
+
+            var allLocationsCheckedIds = _session.Locations.AllLocationsChecked;
+            var allLocationsChecked = allLocationsCheckedIds.ToDictionary(GetLocationName, x => x);
+            return allLocationsChecked;
+        }
+
         public List<ReceivedItem> GetAllReceivedItems()
         {
             if (_session == null)

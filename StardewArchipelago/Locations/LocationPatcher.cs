@@ -38,6 +38,7 @@ namespace StardewArchipelago.Locations
             ReplaceCarpenterBuildingsWithChecks();
             ReplaceWizardBuildingsWithChecks();
             ReplaceIsolatedEventsWithChecks();
+            PatchAdventurerGuildShop();
             ReplaceArcadeMachinesWithChecks();
         }
 
@@ -254,6 +255,14 @@ namespace StardewArchipelago.Locations
         private void ReplaceIsolatedEventsWithChecks()
         {
             _harmony.Patch(
+                original: AccessTools.Method(typeof(Event), nameof(Event.skipEvent)),
+                prefix: new HarmonyMethod(typeof(IsolatedEventInjections), nameof(IsolatedEventInjections.SkipEvent_RustySword_Prefix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Event), nameof(Event.command_awardFestivalPrize)),
+                prefix: new HarmonyMethod(typeof(IsolatedEventInjections), nameof(IsolatedEventInjections.AwardFestivalPrize_RustySword_Prefix))
+            );
+            _harmony.Patch(
                 original: AccessTools.Method(typeof(Woods), nameof(Woods.checkAction)),
                 prefix: new HarmonyMethod(typeof(IsolatedEventInjections), nameof(IsolatedEventInjections.CheckAction_OldMasterCanolli_Prefix))
             );
@@ -269,6 +278,15 @@ namespace StardewArchipelago.Locations
                 original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performTouchAction)),
                 prefix: new HarmonyMethod(typeof(IsolatedEventInjections), nameof(IsolatedEventInjections.PerformTouchAction_GalaxySwordShrine_Prefix))
             );
+        }
+
+        private void PatchAdventurerGuildShop()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Utility), nameof(Utility.getAdventureShopStock)),
+                prefix: new HarmonyMethod(typeof(AdventurerGuildInjections), nameof(AdventurerGuildInjections.GetAdventureShopStock_ShopBasedOnReceivedItems_Prefix))
+            );
+            
         }
 
         private void ReplaceArcadeMachinesWithChecks()

@@ -162,7 +162,8 @@ namespace StardewArchipelago.Archipelago
     {
         CommunityCenter = 0,
         GrandpaEvaluation = 1,
-        BottomOfMines = 2
+        BottomOfMines = 2,
+        CrypticNote = 3,
     }
 
     public enum DebrisMultiplier

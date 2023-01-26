@@ -3,6 +3,7 @@ using StardewModdingAPI;
 using StardewValley;
 using System;
 using System.Linq;
+using StardewArchipelago.Locations;
 using StardewValley.Locations;
 
 namespace StardewArchipelago.Goals
@@ -12,12 +13,14 @@ namespace StardewArchipelago.Goals
         private static IMonitor _monitor;
         private static IModHelper _modHelper;
         private static ArchipelagoClient _archipelago;
+        private static LocationChecker _locationChecker;
 
-        public GoalCodeInjection(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago)
+        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             _monitor = monitor;
             _modHelper = modHelper;
             _archipelago = archipelago;
+            _locationChecker = locationChecker;
         }
 
         public static void CheckCommunityCenterGoalCompletion()
@@ -70,6 +73,21 @@ namespace StardewArchipelago.Goals
             var lowestMineLevel = Game1.netWorldState.Value.LowestMineLevel;
 
             if (lowestMineLevel < 120)
+            {
+                return;
+            }
+
+            _archipelago.ReportGoalCompletion();
+        }
+
+        public static void CheckCrypticNoteGoalCompletion()
+        {
+            if (!_archipelago.IsConnected || _archipelago.SlotData.Goal != Goal.CrypticNote)
+            {
+                return;
+            }
+
+            if (_locationChecker.IsLocationMissing("Cryptic Note"))
             {
                 return;
             }

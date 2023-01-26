@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
@@ -14,6 +15,7 @@ namespace StardewArchipelago.Locations.CodeInjections
         public const string OLD_MASTER_CANNOLI_AP_LOCATION = "Old Master Cannoli";
         public const string BEACH_BRIDGE_AP_LOCATION = "Beach Bridge Repair";
         public const string GALAXY_SWORD_SHRINE_AP_LOCATION = "Galaxy Sword Shrine";
+        public const string RUSTY_SWORD_AP_LOCATION = "The Mines Entrance Cutscene";
 
         private static IMonitor _monitor;
         private static IModHelper _helper;
@@ -161,6 +163,83 @@ namespace StardewArchipelago.Locations.CodeInjections
 
             Game1.player.jitterStrength = 0.0f;
             Game1.screenGlowHold = false;
+        }
+
+        public static bool SkipEvent_RustySword_Prefix(Event __instance)
+        {
+            try
+            {
+                if (__instance.id != 100162)
+                {
+                    return true; // run original logic
+                }
+
+
+                if (__instance.playerControlSequence)
+                {
+                    __instance.EndPlayerControlSequence();
+                }
+
+                Game1.playSound("drumkit6");
+
+                var actorPositionsAfterMoveField = _helper.Reflection.GetField<Dictionary<string, Vector3>>(__instance, "actorPositionsAfterMove");
+                actorPositionsAfterMoveField.GetValue().Clear();
+
+                foreach (var actor in __instance.actors)
+                {
+                    var ignoreStopAnimation = actor.Sprite.ignoreStopAnimation;
+                    actor.Sprite.ignoreStopAnimation = true;
+                    actor.Halt();
+                    actor.Sprite.ignoreStopAnimation = ignoreStopAnimation;
+                    __instance.resetDialogueIfNecessary(actor);
+                }
+
+                __instance.farmer.Halt();
+                __instance.farmer.ignoreCollisions = false;
+                Game1.exitActiveMenu();
+                Game1.dialogueUp = false;
+                Game1.dialogueTyping = false;
+                Game1.pauseTime = 0.0f;
+
+                _locationChecker.AddCheckedLocation(RUSTY_SWORD_AP_LOCATION);
+                
+                Game1.player.Position = new Vector2(-9999f, -99999f);
+                __instance.endBehaviors(new string[1] { "end" }, Game1.currentLocation);
+                return false; // don't run original logic
+
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(SkipEvent_RustySword_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
+        }
+
+        public static bool AwardFestivalPrize_RustySword_Prefix(Event __instance, GameLocation location, GameTime time, string[] split)
+        {
+            try
+            {
+                var festivalWinnersField = _helper.Reflection.GetField<HashSet<long>>(__instance, "festivalWinners");
+                if (__instance.id != 100162 ||
+                    festivalWinnersField.GetValue().Contains(Game1.player.UniqueMultiplayerID) || split.Length <= 1 ||
+                    split[1].ToLower() != "sword") 
+                {
+                    return true; // run original logic
+                }
+
+                if (Game1.activeClickableMenu == null)
+                    __instance.CurrentCommand++;
+                __instance.CurrentCommand++;
+
+                _locationChecker.AddCheckedLocation(RUSTY_SWORD_AP_LOCATION);
+                return false; // don't run original logic
+
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(AwardFestivalPrize_RustySword_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
         }
     }
 }
