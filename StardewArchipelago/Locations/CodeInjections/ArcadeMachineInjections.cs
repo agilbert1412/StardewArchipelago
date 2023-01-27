@@ -72,6 +72,8 @@ namespace StardewArchipelago.Locations.CodeInjections
         {
             try
             {
+                SendJunimoKartLevelsBeatChecks(__instance);
+
                 var livesLeftField = _helper.Reflection.GetField<int>(__instance, "livesLeft");
                 var livesLeft = livesLeftField.GetValue();
                 var numberExtraLives = GetJunimoKartExtraLives();
@@ -94,20 +96,7 @@ namespace StardewArchipelago.Locations.CodeInjections
         {
             try
             {
-                var gamemode = _helper.Reflection.GetField<int>(__instance, "gameMode");
-                var levelsBeat = _helper.Reflection.GetField<int>(__instance, "levelsBeat");
-                if (gamemode.GetValue() != 3 || levelsBeat.GetValue() < 1)
-                {
-                    return true; // run original logic
-                }
-
-                if (levelsBeat.GetValue() != 7)
-                {
-                    _locationChecker.AddCheckedLocation(string.Format(JK_LEVEL_LOCATION, levelsBeat.GetValue()));
-                    return true; // run original logic
-                }
-
-                _locationChecker.AddCheckedLocation(JK_VICTORY);
+                SendJunimoKartLevelsBeatChecks(__instance);
                 return true; // run original logic
             }
             catch (Exception ex)
@@ -115,6 +104,24 @@ namespace StardewArchipelago.Locations.CodeInjections
                 _monitor.Log($"Failed in {nameof(EndCutscene_JunimoKartLevelComplete_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
             }
+        }
+
+        private static void SendJunimoKartLevelsBeatChecks(MineCart __instance)
+        {
+            var gamemode = _helper.Reflection.GetField<int>(__instance, "gameMode");
+            var levelsBeat = _helper.Reflection.GetField<int>(__instance, "levelsBeat");
+            if (gamemode.GetValue() != 3 || levelsBeat.GetValue() < 1)
+            {
+                return;
+            }
+
+            if (levelsBeat.GetValue() != 7)
+            {
+                _locationChecker.AddCheckedLocation(string.Format(JK_LEVEL_LOCATION, levelsBeat.GetValue()));
+                return;
+            }
+
+            _locationChecker.AddCheckedLocation(JK_VICTORY);
         }
 
         private static int GetJunimoKartExtraLives()
