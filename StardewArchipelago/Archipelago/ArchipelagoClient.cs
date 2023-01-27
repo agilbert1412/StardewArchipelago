@@ -258,8 +258,8 @@ namespace StardewArchipelago.Archipelago
             foreach (var apItem in _session.Items.AllItemsReceived)
             {
                 var itemName = GetItemName(apItem.Item);
-                var playerName = _session.Players.GetPlayerName(apItem.Player);
-                var locationName = GetLocationName(apItem.Location);
+                var playerName = _session.Players.GetPlayerName(apItem.Player) ?? "Archipelago";
+                var locationName = GetLocationName(apItem.Location) ?? "Thin air";
 
                 var receivedItem = new ReceivedItem(locationName, itemName, playerName, apItem.Location, apItem.Item,
                     apItem.Player);
