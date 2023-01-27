@@ -6,7 +6,9 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Menus;
+using StardewValley.Minigames;
 using StardewValley.Quests;
+using StardewValley.TerrainFeatures;
 using xTile.Dimensions;
 using xTile.ObjectModel;
 using Object = StardewValley.Object;
@@ -210,6 +212,38 @@ namespace StardewArchipelago.Locations.CodeInjections
                 return true; // run original logic
             }
         }
+        
+        public static bool Shake_WinterMysteryBush_Prefix(Bush __instance, Vector2 tileLocation,
+            bool doEvenIfStillShaking)
+        {
+            try
+            {
+                var maxShakeField = _helper.Reflection.GetField<float>(__instance, "maxShake");
+                if (!((double)maxShakeField.GetValue() == 0.0 || doEvenIfStillShaking))
+                {
+                    return true; // run original logic
+                }
+
+                var correctLocation = (double)tileLocation.X == 28.0 && (double)tileLocation.Y == 14.0;
+                var hasSeenKrobusEvent = Game1.player.eventsSeen.Contains(520702);
+                var hasNotCompletedQuest = _locationChecker.IsLocationMissing("A Winter Mystery");
+                var isInTown = Game1.currentLocation is Town town;
+
+                if (!correctLocation || !hasSeenKrobusEvent || !hasNotCompletedQuest || !isInTown)
+                {
+                    return true; // run original logic
+                }
+
+                ((Town)(Game1.currentLocation)).initiateMagnifyingGlassGet();
+                return false; // don't run original logic
+
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(Shake_WinterMysteryBush_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
+        }
 
         public static bool MgThief_AfterSpeech_WinterMysteryFinished_Prefix(Town __instance)
         {
@@ -320,6 +354,11 @@ namespace StardewArchipelago.Locations.CodeInjections
                 {
                     _locationChecker.AddCheckedLocation("Cryptic Note");
                     Game1.player.mailReceived.Add("qiCave");
+
+                    if (_archipelago.SlotData.Goal == Goal.CrypticNote)
+                    {
+                        _archipelago.ReportGoalCompletion();
+                    }
                 }
                 ++__instance.CurrentCommand;
 

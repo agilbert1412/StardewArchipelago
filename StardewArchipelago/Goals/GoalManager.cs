@@ -40,7 +40,7 @@ namespace StardewArchipelago.Goals
                     GoalCodeInjection.CheckBottomOfTheMinesGoalCompletion();
                     return;
                 case Goal.CrypticNote:
-                    // GoalCodeInjection.CheckCrypticNoteGoalCompletion(); // Don't win through collected cryptic note
+                    GoalCodeInjection.CheckCrypticNoteGoalCompletion();
                     return;
                 default:
                     throw new ArgumentOutOfRangeException($"Goal [{_archipelago.SlotData.Goal}] is not supported in this version of the mod.");

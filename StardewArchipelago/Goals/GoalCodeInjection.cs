@@ -87,7 +87,7 @@ namespace StardewArchipelago.Goals
                 return;
             }
 
-            if (_locationChecker.IsLocationMissing("Cryptic Note"))
+            if (!Game1.player.mailReceived.Contains("qiCave"))
             {
                 return;
             }
@@ -125,6 +125,32 @@ namespace StardewArchipelago.Goals
                 _monitor.Log($"Failed in {nameof(EnterMine_Level120Goal_PostFix)}:\n{ex}", LogLevel.Error);
                 return;
             }
+        }
+
+        public static string GetGoalString()
+        {
+            var goal = _archipelago.SlotData.Goal switch
+            {
+                Goal.GrandpaEvaluation => "Complete Grandpa's Evaluation with a score of at least 12 (4 candles)",
+                Goal.BottomOfMines => "Reach Floor 120 in the Pelican Town Mineshaft",
+                Goal.CommunityCenter => "Complete the Community Center",
+                Goal.CrypticNote => "Find Secret Note #10 and complete the \"Cryptic Note\" Quest",
+                _ => throw new NotImplementedException()
+            };
+            return goal;
+        }
+
+        public static string GetGoalStringGrandpa()
+        {
+            var goal = _archipelago.SlotData.Goal switch
+            {
+                Goal.GrandpaEvaluation => "Make the most of this farm, and make me proud",
+                Goal.BottomOfMines => "Finish exploring the mineshaft in this town for me",
+                Goal.CommunityCenter => "Restore the old Community Center for the sake of all the villagers",
+                Goal.CrypticNote => "Meet one of my old friend on floor 100 of the Skull Cavern",
+                _ => throw new NotImplementedException()
+            };
+            return goal;
         }
     }
 }

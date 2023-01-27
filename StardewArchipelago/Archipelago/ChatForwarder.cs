@@ -1,6 +1,8 @@
 ﻿using System;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
+using StardewArchipelago.Goals;
+using StardewArchipelago.Locations.CodeInjections;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
@@ -25,7 +27,7 @@ namespace StardewArchipelago.Archipelago
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(ChatBox), nameof(ChatBox.receiveChatMessage)),
-                postfix: new HarmonyMethod(typeof(ChatForwarder), nameof(ChatForwarder.ReceiveChatMessage_ForwardToAp_PostFix))
+                postfix: new HarmonyMethod(typeof(ChatForwarder), nameof(ReceiveChatMessage_ForwardToAp_PostFix))
             );
         }
 
@@ -53,24 +55,27 @@ namespace StardewArchipelago.Archipelago
 
         private static bool TryHandleCommand(string message)
         {
-            if (message == null)
+            if (message == null || !message.StartsWith("!"))
             {
                 return false;
             }
 
-            if (message.ToLower() == "!goal")
+            var messageLower = message.ToLower();
+            if (messageLower == "!goal")
             {
-                var goal = _archipelago.SlotData.Goal switch
-                {
-                    Goal.GrandpaEvaluation => "Complete Grandpa's Evaluation with a score of at least 12 (4 candles)",
-                    Goal.BottomOfMines => "Reach Floor 120 in the Pelican Town Mineshaft",
-                    Goal.CommunityCenter => "Complete the Community Center",
-                    Goal.CrypticNote => "Find Secret Note #10 and complete the \"Cryptic Note\" Quest",
-                    _ => throw new NotImplementedException()
-                };
-
+                var goal = GoalCodeInjection.GetGoalString();
                 var goalMessage = $"Your Goal is: {goal}";
                 Game1.chatBox?.addMessage(goalMessage, Color.Gold);
+                return true;
+            }
+
+            if (messageLower == "!experience")
+            {
+                var skillsExperiences = SkillInjections.GetArchipelagoExperienceForPrinting();
+                foreach (var skill in skillsExperiences)
+                {
+                    Game1.chatBox?.addMessage(skill, Color.Gold);
+                }
                 return true;
             }
 

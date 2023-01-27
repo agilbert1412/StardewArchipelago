@@ -19,35 +19,35 @@ namespace StardewArchipelago.GameModifications
         public override void draw(SpriteBatch b)
         {
             b.Draw(Game1.fadeToBlackRect, new Rectangle(0, 0, Game1.uiViewport.Width, Game1.uiViewport.Height), Color.Black * 0.5f);
-            Game1.drawDialogueBox(this.xPositionOnScreen, this.yPositionOnScreen, this.width, this.height, false, true);
-            b.DrawString(Game1.dialogueFont, _message, new Vector2((float)(this.xPositionOnScreen + IClickableMenu.borderWidth), (float)(this.yPositionOnScreen + IClickableMenu.spaceToClearTopBorder + IClickableMenu.borderWidth / 2)), Game1.textColor);
-            this.okButton.draw(b);
-            this.cancelButton.draw(b);
-            this.leftButton.draw(b);
-            this.rightButton.draw(b);
-            if (this.price > 0)
+            Game1.drawDialogueBox(xPositionOnScreen, yPositionOnScreen, width, height, false, true);
+            b.DrawString(Game1.dialogueFont, _message, new Vector2((float)(xPositionOnScreen + borderWidth), (float)(yPositionOnScreen + spaceToClearTopBorder + borderWidth / 2)), Game1.textColor);
+            okButton.draw(b);
+            cancelButton.draw(b);
+            leftButton.draw(b);
+            rightButton.draw(b);
+            if (price > 0)
             {
-                var totalPrice = this.price * (this.currentValue - 1);
+                var totalPrice = price * (currentValue - 1);
                 var text = Game1.content.LoadString("Strings\\StringsFromCSFiles:LoadGameMenu.cs.11020", totalPrice);
                 var positionX = (float)(rightButton.bounds.Right + 32 + (priceShake > 0 ? Game1.random.Next(-1, 2) : 0));
                 var positionY = (float)(rightButton.bounds.Y + (priceShake > 0 ? Game1.random.Next(-1, 2) : 0));
                 var position = new Vector2(positionX, positionY);
                 b.DrawString(Game1.dialogueFont, text, position, totalPrice > Game1.player.Money ? Color.Red : Game1.textColor);
             }
-            this.numberSelectedBox.Draw(b);
-            this.drawMouse(b);
+            numberSelectedBox.Draw(b);
+            drawMouse(b);
         }
 
         public override void receiveLeftClick(int x, int y, bool playSound = true)
         {
-            if (this.rightButton.containsPoint(x, y))
+            if (rightButton.containsPoint(x, y))
             {
-                int num = this.currentValue + 1;
-                if (num <= this.maxValue && (this.price == -1 || this.currentValue * this.price <= Game1.player.Money))
+                int num = currentValue + 1;
+                if (num <= maxValue && (price == -1 || currentValue * price <= Game1.player.Money))
                 {
-                    this.rightButton.scale = this.rightButton.baseScale;
-                    this.currentValue = num;
-                    this.numberSelectedBox.Text = this.currentValue.ToString() ?? "";
+                    rightButton.scale = rightButton.baseScale;
+                    currentValue = num;
+                    numberSelectedBox.Text = currentValue.ToString() ?? "";
                     Game1.playSound("smallSelect");
                 }
                 return;

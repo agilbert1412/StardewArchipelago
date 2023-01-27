@@ -26,7 +26,7 @@ namespace StardewArchipelago.Stardew
 
         public override Item PrepareForGivingToFarmer(int amount = 1)
         {
-            return new StardewValley.Object(Id, amount);
+            return new Object(Id, amount);
         }
 
         public override void GiveToFarmer(Farmer farmer, int amount = 1)

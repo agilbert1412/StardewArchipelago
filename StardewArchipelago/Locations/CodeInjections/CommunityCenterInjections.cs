@@ -7,6 +7,7 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Menus;
+using xTile.Dimensions;
 
 namespace StardewArchipelago.Locations.CodeInjections
 {
@@ -83,39 +84,6 @@ namespace StardewArchipelago.Locations.CodeInjections
             }
         }
 
-        public static bool ShouldNoteAppearInArea_AllowAccessEverything_Prefix(CommunityCenter __instance, int area, ref bool __result)
-        {
-            try
-            {
-                switch (area)
-                {
-                    case 0:
-                    case 2:
-                    case 1:
-                    case 3:
-                    case 4:
-                    case 5:
-                        __result = true;
-                        return false; // don't run original logic
-                    case 6:
-                        if (Utility.HasAnyPlayerSeenEvent(191393))
-                        {
-                            __result = true;
-                            return false; // don't run original logic
-                        }
-
-                        break;
-                }
-                __result = false;
-                return false; // don't run original logic
-            }
-            catch (Exception ex)
-            {
-                _monitor.Log($"Failed in {nameof(ShouldNoteAppearInArea_AllowAccessEverything_Prefix)}:\n{ex}", LogLevel.Error);
-                return true; // run original logic
-            }
-        }
-
         public static void CheckForRewards_PostFix(JunimoNoteMenu __instance)
         {
             try
@@ -142,6 +110,71 @@ namespace StardewArchipelago.Locations.CodeInjections
             catch (Exception ex)
             {
                 _monitor.Log($"Failed in {nameof(CheckForRewards_PostFix)}:\n{ex}", LogLevel.Error);
+            }
+        }
+
+        public static bool ShouldNoteAppearInArea_AllowAccessEverything_Prefix(CommunityCenter __instance, int area, ref bool __result)
+        {
+            try
+            {
+                switch ((Area)area)
+                {
+                    case Area.Pantry:
+                        __result = _locationChecker.IsLocationMissing(AP_LOCATION_PANTRY);
+                        return false; // don't run original logic
+                    case Area.CraftsRoom:
+                        __result = _locationChecker.IsLocationMissing(AP_LOCATION_CRAFTS_ROOM);
+                        return false; // don't run original logic
+                    case Area.FishTank:
+                        __result = _locationChecker.IsLocationMissing(AP_LOCATION_FISH_TANK);
+                        return false; // don't run original logic
+                    case Area.BoilerRoom:
+                        __result = _locationChecker.IsLocationMissing(AP_LOCATION_BOILER_ROOM);
+                        return false; // don't run original logic
+                    case Area.Vault:
+                        __result = _locationChecker.IsLocationMissing(AP_LOCATION_VAULT);
+                        return false; // don't run original logic
+                    case Area.Bulletin:
+                        __result = _locationChecker.IsLocationMissing(AP_LOCATION_BULLETIN_BOARD);
+                        return false; // don't run original logic
+                    case Area.AbandonedJojaMart:
+                        if (Utility.HasAnyPlayerSeenEvent(191393))
+                        {
+                            __result = true;
+                            return false; // don't run original logic
+                        }
+
+                        break;
+                }
+                __result = false;
+                return false; // don't run original logic
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(ShouldNoteAppearInArea_AllowAccessEverything_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
+        }
+        
+        public static bool CheckAction_BulletinBoardNoRequirements_Prefix(CommunityCenter __instance,
+            Location tileLocation, Rectangle viewport, Farmer who, ref bool __result)
+        {
+            try
+            {
+                var tile = __instance.map.GetLayer("Buildings").Tiles[tileLocation];
+                if (tile == null || tile.TileIndex != 1799)
+                {
+                    return true; // run original logic
+                }
+
+                __instance.checkBundle(5);
+                __result = true;
+                return false; // don't run original logic
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(CheckAction_BulletinBoardNoRequirements_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
             }
         }
     }

@@ -10,6 +10,7 @@ namespace StardewArchipelago.Locations
     internal class PurchaseableArchipelagoLocation : Item
     {
         private const string ARCHIPELAGO_PREFIX = "Archipelago: ";
+        private const string ARCHIPELAGO_SHORT_PREFIX = "AP: ";
         private Texture2D _archipelagoTexture;
 
         private string _locationDisplayName;
@@ -21,7 +22,8 @@ namespace StardewArchipelago.Locations
 
         public PurchaseableArchipelagoLocation(string locationDisplayName, string apLocationName, LocationChecker locationChecker, ArchipelagoClient archipelago, Action purchaseCallback = null)
         {
-            _locationDisplayName = $"{ARCHIPELAGO_PREFIX}{locationDisplayName}";
+            var prefix = locationDisplayName.Length < 18 ? ARCHIPELAGO_PREFIX : ARCHIPELAGO_SHORT_PREFIX;
+            _locationDisplayName = $"{prefix}{locationDisplayName}";
             _apLocationName = apLocationName;
             var scoutedLocation = archipelago.ScoutSingleLocation(_apLocationName);
             _description = scoutedLocation == null ? ScoutedLocation.GenericItemName() : scoutedLocation.ToString();

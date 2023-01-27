@@ -43,7 +43,8 @@ namespace StardewArchipelago.GameModifications.Buildings
 
         protected virtual void AddBuildingBlueprint(List<BluePrint> blueprints, string buildingName, string sendingPlayer, bool onlyOne = false, string requiredBuilding = null)
         {
-            var isConstructedAlready = Game1.getFarm().isBuildingConstructed(buildingName);
+            var farm = Game1.getFarm();
+            var isConstructedAlready = farm.isBuildingConstructed(buildingName);
             if (onlyOne && isConstructedAlready)
             {
                 return;
@@ -51,14 +52,27 @@ namespace StardewArchipelago.GameModifications.Buildings
 
             if (requiredBuilding != null)
             {
-                var requiredBuildingExists = Game1.getFarm().isBuildingConstructed(requiredBuilding);
+                var requiredBuildingExists = farm.isBuildingConstructed(requiredBuilding);
                 if (!requiredBuildingExists)
                 {
                     return;
                 }
             }
 
-            if (isConstructedAlready)
+            var shouldBePaid = isConstructedAlready;
+            if (!shouldBePaid && (buildingName.EndsWith("Coop") || buildingName.EndsWith("Barn") || buildingName.EndsWith("Shed")))
+            {
+                if (buildingName.StartsWith("Big"))
+                {
+                    shouldBePaid |= farm.isBuildingConstructed(buildingName.Replace("Big", "Deluxe"));
+                }
+                else
+                {
+                    shouldBePaid |= farm.isBuildingConstructed($"Big {buildingName}");
+                    shouldBePaid |= farm.isBuildingConstructed($"Deluxe {buildingName}");
+                }
+            }
+            if (shouldBePaid)
             {
                 blueprints.Add(new BluePrint(buildingName));
             }

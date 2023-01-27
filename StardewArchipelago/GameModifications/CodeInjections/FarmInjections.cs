@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Goals;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
@@ -42,7 +43,10 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
                 Game1.addMail("hasSeenGrandpaNote", true);
                 __instance.hasSeenGrandpaNote = true;
-                Game1.activeClickableMenu = new LetterViewerMenu($"{_archipelago.SlotData.SlotName}^^I may be gone, but I am still watching over you^^-Grandpa");
+                var noteContentTemplate = "{0}^^I may be gone, but I am still watching over you^Don't forget why you are here:^{1}^^-Grandpa";
+                var goalGrandpaString = GoalCodeInjection.GetGoalStringGrandpa();
+                var noteContent = string.Format(noteContentTemplate, _archipelago.SlotData.SlotName, goalGrandpaString);
+                Game1.activeClickableMenu = new LetterViewerMenu(noteContent);
                 __result = true;
                 return false; // don't run original logic
             }

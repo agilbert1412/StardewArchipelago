@@ -32,6 +32,23 @@ namespace StardewArchipelago.Locations.CodeInjections
             return _archipelagoExperience.ToDictionary(x => (int)x.Key, x => (int)Math.Round(x.Value));
         }
 
+        public static List<string> GetArchipelagoExperienceForPrinting()
+        {
+            var pattern = "{0}: Level {1} ({2}/{3} to next level)";
+            return _archipelagoExperience.Where(x => x.Key != Skill.Luck).Select(x =>
+            {
+                var skillName = x.Key.ToString();
+                var currentExperience = (int)Math.Round(x.Value);
+                var currentLevel = GetLevel(currentExperience);
+                if (currentLevel >= 10)
+                {
+                    return $"{skillName}: Max!";
+                }
+                var neededExperience = GetExperienceNeeded(currentLevel + 1);
+                return string.Format(pattern, skillName, currentLevel, currentExperience, neededExperience);
+            }).ToList();
+        }
+
         public static void SetArchipelagoExperience(Dictionary<int, int> values)
         {
             if (values == null)
@@ -158,6 +175,24 @@ namespace StardewArchipelago.Locations.CodeInjections
                 < 10000 => 8,
                 < 15000 => 9,
                 _ => 10
+            };
+        }
+
+        private static int GetExperienceNeeded(int level)
+        {
+            return level switch
+            {
+                1 => 100,
+                2 => 380,
+                3 => 770,
+                4 => 1300,
+                5 => 2150,
+                6 => 3300,
+                7 => 4800,
+                8 => 6900,
+                9 => 10000,
+                10 => 15000,
+                _ => 0
             };
         }
 

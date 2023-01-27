@@ -3,6 +3,7 @@ using System.Linq;
 using HarmonyLib;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.GameModifications.CodeInjections;
+using StardewArchipelago.Goals;
 using StardewArchipelago.Locations;
 using StardewModdingAPI;
 using StardewValley;

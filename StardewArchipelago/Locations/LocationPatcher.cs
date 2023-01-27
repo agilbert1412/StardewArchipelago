@@ -9,6 +9,7 @@ using StardewValley.Menus;
 using StardewValley.Minigames;
 using StardewValley.Objects;
 using StardewValley.Quests;
+using StardewValley.TerrainFeatures;
 
 namespace StardewArchipelago.Locations
 {
@@ -45,12 +46,16 @@ namespace StardewArchipelago.Locations
         private void ReplaceCommunityCenterBundlesWithChecks()
         {
             _harmony.Patch(
+                original: AccessTools.Method(typeof(JunimoNoteMenu), nameof(JunimoNoteMenu.checkForRewards)),
+                postfix: new HarmonyMethod(typeof(CommunityCenterInjections), nameof(CommunityCenterInjections.CheckForRewards_PostFix))
+            );
+            _harmony.Patch(
                 original: AccessTools.Method(typeof(CommunityCenter), nameof(CommunityCenter.shouldNoteAppearInArea)),
                 prefix: new HarmonyMethod(typeof(CommunityCenterInjections), nameof(CommunityCenterInjections.ShouldNoteAppearInArea_AllowAccessEverything_Prefix))
             );
             _harmony.Patch(
-                original: AccessTools.Method(typeof(JunimoNoteMenu), nameof(JunimoNoteMenu.checkForRewards)),
-                postfix: new HarmonyMethod(typeof(CommunityCenterInjections), nameof(CommunityCenterInjections.CheckForRewards_PostFix))
+                original: AccessTools.Method(typeof(CommunityCenter), nameof(CommunityCenter.checkAction)),
+                prefix: new HarmonyMethod(typeof(CommunityCenterInjections), nameof(CommunityCenterInjections.CheckAction_BulletinBoardNoRequirements_Prefix))
             );
         }
 
@@ -196,6 +201,11 @@ namespace StardewArchipelago.Locations
             _harmony.Patch(
                 original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performAction)),
                 prefix: new HarmonyMethod(typeof(QuestInjections), nameof(QuestInjections.PerformAction_MysteriousQiLumberPile_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Bush), "shake"),
+                prefix: new HarmonyMethod(typeof(QuestInjections), nameof(QuestInjections.Shake_WinterMysteryBush_Prefix))
             );
 
             _harmony.Patch(

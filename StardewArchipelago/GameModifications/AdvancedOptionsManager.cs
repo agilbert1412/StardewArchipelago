@@ -32,7 +32,7 @@ namespace StardewArchipelago.GameModifications
         {
             _harmony.Patch(
                 original: AccessTools.Method(typeof(CharacterCustomization), "setUpPositions"),
-                postfix: new HarmonyMethod(typeof(AdvancedOptionsManager), nameof(AdvancedOptionsManager.SetUpPositions_RemoveAdvancedOptionsButton_Postfix))
+                postfix: new HarmonyMethod(typeof(AdvancedOptionsManager), nameof(SetUpPositions_RemoveAdvancedOptionsButton_Postfix))
             );
         }
 
@@ -40,7 +40,7 @@ namespace StardewArchipelago.GameModifications
         {
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Game1), nameof(Game1.loadForNewGame)),
-                prefix: new HarmonyMethod(typeof(AdvancedOptionsManager), nameof(AdvancedOptionsManager.LoadForNewGame_ForceSettings_Prefix))
+                prefix: new HarmonyMethod(typeof(AdvancedOptionsManager), nameof(LoadForNewGame_ForceSettings_Prefix))
             );
         }
 
@@ -48,17 +48,17 @@ namespace StardewArchipelago.GameModifications
         {
             _harmony.Patch(
                 original: AccessTools.Method(typeof(TitleMenu), nameof(TitleMenu.update)),
-                postfix: new HarmonyMethod(typeof(AdvancedOptionsManager), nameof(AdvancedOptionsManager.TitleMenuUpdate_ReplaceCharacterMenu_Postfix))
+                postfix: new HarmonyMethod(typeof(AdvancedOptionsManager), nameof(TitleMenuUpdate_ReplaceCharacterMenu_Postfix))
             );
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(CharacterCustomization), nameof(CharacterCustomization.canLeaveMenu)),
-                prefix: new HarmonyMethod(typeof(AdvancedOptionsManager), nameof(AdvancedOptionsManager.CanLeaveMenu_ConsiderNewFields_Prefix))
+                prefix: new HarmonyMethod(typeof(AdvancedOptionsManager), nameof(CanLeaveMenu_ConsiderNewFields_Prefix))
             );
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(CharacterCustomization), "optionButtonClick"),
-                prefix: new HarmonyMethod(typeof(AdvancedOptionsManager), nameof(AdvancedOptionsManager.OptionButtonClick_OkConnectToAp_Prefix))
+                prefix: new HarmonyMethod(typeof(AdvancedOptionsManager), nameof(OptionButtonClick_OkConnectToAp_Prefix))
             );
         }
 

@@ -58,7 +58,7 @@ namespace StardewArchipelago.Archipelago
         {
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Farmer), nameof(Farmer.Update)),
-                prefix: new HarmonyMethod(typeof(DeathManager), nameof(DeathManager.Update_SendDeathLink_Prefix))
+                prefix: new HarmonyMethod(typeof(DeathManager), nameof(Update_SendDeathLink_Prefix))
             );
         }
 
@@ -66,7 +66,7 @@ namespace StardewArchipelago.Archipelago
         {
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Farmer), "performPassOut"),
-                prefix: new HarmonyMethod(typeof(DeathManager), nameof(DeathManager.PerformPassOut_SendDeathLink_Prefix))
+                prefix: new HarmonyMethod(typeof(DeathManager), nameof(PerformPassOut_SendDeathLink_Prefix))
             );
         }
 

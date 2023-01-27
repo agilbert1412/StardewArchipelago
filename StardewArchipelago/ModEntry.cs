@@ -98,7 +98,7 @@ namespace StardewArchipelago
             }
             _state = new ArchipelagoStateDto();
 
-            _harmony.UnpatchAll(this.ModManifest.UniqueID);
+            _harmony.UnpatchAll(ModManifest.UniqueID);
             _multiSleep = new MultiSleep(Monitor, _helper, _harmony);
             _advancedOptionsManager = new AdvancedOptionsManager(this, _harmony, _archipelago);
             _advancedOptionsManager.InjectArchipelagoAdvancedOptions();
@@ -158,8 +158,8 @@ namespace StardewArchipelago
             _locationsChecker = new LocationChecker(Monitor, _archipelago, _state.LocationsChecked);
             _locationsPatcher = new LocationPatcher(Monitor, _archipelago, _bundleReader, _helper, _harmony, _locationsChecker);
             _itemPatcher = new ItemPatcher(Monitor, _helper, _harmony, _archipelago);
-            _logicPatcher = new RandomizedLogicPatcher(Monitor, _harmony, _archipelago, _locationsChecker);
             _goalManager = new GoalManager(Monitor, _helper, _harmony, _archipelago, _locationsChecker);
+            _logicPatcher = new RandomizedLogicPatcher(Monitor, _harmony, _archipelago, _locationsChecker);
             _jojaDisabler = new JojaDisabler(Monitor, _helper, _harmony);
 
             if (_state.APConnectionInfo != null && !_archipelago.IsConnected)
