@@ -63,7 +63,7 @@ namespace StardewArchipelago.Archipelago
             try
             {
                 InitSession(archipelagoConnectionInfo);
-                var itemsHandling = ItemsHandlingFlags.IncludeOwnItems;
+                var itemsHandling = ItemsHandlingFlags.AllItems;
                 var minimumVersion = new Version(0, 3, 7);
                 var tags = new[] { "AP", "DeathLink" };
                 result = _session.TryConnectAndLogin(GAME_NAME, archipelagoConnectionInfo.SlotName, itemsHandling, minimumVersion, tags, null, archipelagoConnectionInfo.Password);
@@ -122,6 +122,16 @@ namespace StardewArchipelago.Archipelago
             InitializeDeathLink();
 
             IsConnected = true;
+        }
+
+        private void TestPacketReceived(ArchipelagoPacketBase packet)
+        {
+            var a = 5;
+        }
+
+        public void Sync()
+        {
+            _session.Socket.SendPacket(new SyncPacket());
         }
 
         private void InitializeDeathLink()

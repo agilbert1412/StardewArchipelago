@@ -79,6 +79,12 @@ namespace StardewArchipelago.Archipelago
                 return true;
             }
 
+            if (messageLower == "!sync")
+            {
+                _archipelago.Sync();
+                return true;
+            }
+
             return false;
         }
     }
