@@ -1,4 +1,6 @@
-﻿namespace StardewArchipelago.Archipelago
+﻿using System;
+
+namespace StardewArchipelago.Archipelago
 {
     public class ReceivedItem
     {
@@ -18,6 +20,12 @@
             LocationId = locationId;
             ItemId = itemId;
             PlayerId = playerId;
+
+            // TODO: Makes StartInventory letters unique 
+            /*if (LocationId < 0)
+            {
+                LocationId = new Random().Next(-999999, -99);
+            }*/
         }
 
         public override int GetHashCode()

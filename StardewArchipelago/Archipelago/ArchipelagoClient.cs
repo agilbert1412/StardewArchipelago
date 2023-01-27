@@ -117,7 +117,6 @@ namespace StardewArchipelago.Archipelago
                 _chatForwarder = new ChatForwarder(_console, _harmony);
                 _chatForwarder.ListenToChatMessages(this);
             }
-            _itemReceivedFunction();
 
             InitializeDeathLink();
 
@@ -220,8 +219,7 @@ namespace StardewArchipelago.Archipelago
             {
                 return;
             }
-
-            var receivedItem = receivedItemsHelper.DequeueItem();
+            
             _itemReceivedFunction();
         }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Archipelago;
@@ -35,7 +36,8 @@ namespace StardewArchipelago.Locations
             if (!(Game1.content.ServiceProvider.GetService(typeof(IGraphicsDeviceService)) is IGraphicsDeviceService service))
                 throw new InvalidOperationException("No Graphics Device Service");
 
-            _archipelagoTexture = Texture2D.FromFile(service.GraphicsDevice, @"Mods\StardewArchipelago\Textures\archipelago.png");
+            var relativePathToTexture = Path.Combine("Mods", "StardewArchipelago", "Textures", "archipelago.png"); 
+            _archipelagoTexture = Texture2D.FromFile(service.GraphicsDevice, relativePathToTexture);
         }
 
         public void AddMaterialRequirement(Item requiredItem)
@@ -45,11 +47,6 @@ namespace StardewArchipelago.Locations
 
         public override bool CanBuyItem(Farmer who)
         {
-            if (!base.CanBuyItem(who))
-            {
-                return false;
-            }
-
             foreach (var item in _extraMaterialsRequired)
             {
                 if (!who.hasItemInInventory(item.ParentSheetIndex, item.Stack))

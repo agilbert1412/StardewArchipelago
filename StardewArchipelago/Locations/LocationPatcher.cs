@@ -232,7 +232,7 @@ namespace StardewArchipelago.Locations
 
         private void ReplaceCarpenterBuildingsWithChecks()
         {
-            if (_archipelago.SlotData.BuildingProgression != BuildingProgression.Shuffled)
+            if (_archipelago.SlotData.BuildingProgression == BuildingProgression.Vanilla)
             {
                 return;
             }

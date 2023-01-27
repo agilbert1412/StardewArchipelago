@@ -122,7 +122,8 @@ namespace StardewArchipelago.Archipelago
     public enum BackpackProgression
     {
         Vanilla = 0,
-        Progressive = 1
+        Progressive = 1,
+        ProgressiveEarlyBackpack = 2
     }
 
     public enum ToolProgression
@@ -147,7 +148,8 @@ namespace StardewArchipelago.Archipelago
     public enum BuildingProgression
     {
         Vanilla = 0,
-        Shuffled = 1
+        Shuffled = 1,
+        ShuffledEarlyShippingBin = 2
     }
 
     public enum ArcadeProgression

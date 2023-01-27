@@ -147,7 +147,7 @@ namespace StardewArchipelago.Goals
                 Goal.GrandpaEvaluation => "Make the most of this farm, and make me proud",
                 Goal.BottomOfMines => "Finish exploring the mineshaft in this town for me",
                 Goal.CommunityCenter => "Restore the old Community Center for the sake of all the villagers",
-                Goal.CrypticNote => "Meet one of my old friend on floor 100 of the Skull Cavern",
+                Goal.CrypticNote => "Meet an old friend of mine on floor 100 of the Skull Cavern",
                 _ => throw new NotImplementedException()
             };
             return goal;
