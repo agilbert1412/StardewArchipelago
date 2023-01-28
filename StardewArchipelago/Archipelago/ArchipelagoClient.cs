@@ -200,7 +200,7 @@ namespace StardewArchipelago.Archipelago
 
         public void SendMessage(string text)
         {
-            if (!IsConnected)
+            if (!IsConnected || _session == null)
             {
                 return;
             }
@@ -215,7 +215,7 @@ namespace StardewArchipelago.Archipelago
 
         private void OnItemReceived(ReceivedItemsHelper receivedItemsHelper)
         {
-            if (!IsConnected)
+            if (!IsConnected || _session == null)
             {
                 return;
             }
@@ -225,7 +225,7 @@ namespace StardewArchipelago.Archipelago
 
         public void ReportCollectedLocations(long[] locationIds)
         {
-            if (_session == null)
+            if (!IsConnected || _session == null)
             {
                 return;
             }
@@ -235,7 +235,7 @@ namespace StardewArchipelago.Archipelago
 
         public Dictionary<string, long> GetAllCheckedLocations()
         {
-            if (_session == null)
+            if (!IsConnected || _session == null)
             {
                 return new Dictionary<string, long>();
             }
@@ -247,7 +247,7 @@ namespace StardewArchipelago.Archipelago
 
         public List<ReceivedItem> GetAllReceivedItems()
         {
-            if (_session == null)
+            if (!IsConnected || _session == null)
             {
                 return new List<ReceivedItem>();
             }
@@ -278,6 +278,11 @@ namespace StardewArchipelago.Archipelago
         public bool HasReceivedItem(string itemName, out string sendingPlayer)
         {
             sendingPlayer = "";
+            if (!IsConnected || _session == null)
+            {
+                return false;
+            }
+
             foreach (var receivedItem in _session.Items.AllItemsReceived)
             {
                 if (GetItemName(receivedItem.Item) != itemName)
@@ -294,6 +299,11 @@ namespace StardewArchipelago.Archipelago
 
         public int GetReceivedItemCount(string itemName)
         {
+            if (!IsConnected || _session == null)
+            {
+                return 0;
+            }
+
             return _session.Items.AllItemsReceived.Count(x => GetItemName(x.Item) == itemName);
         }
 
@@ -306,21 +316,41 @@ namespace StardewArchipelago.Archipelago
 
         private string GetLocationName(long locationId)
         {
+            if (!IsConnected || _session == null)
+            {
+                return "";
+            }
+
             return _session.Locations.GetLocationNameFromId(locationId);
         }
 
         public long GetLocationId(string locationName, string gameName = GAME_NAME)
         {
+            if (!IsConnected || _session == null)
+            {
+                return -1;
+            }
+
             return _session.Locations.GetLocationIdFromName(gameName, locationName);
         }
 
         public string GetItemName(long itemId)
         {
+            if (!IsConnected || _session == null)
+            {
+                return "";
+            }
+
             return _session.Items.GetItemName(itemId);
         }
 
         public void SendDeathLink(string player, string reason = "Unknown cause")
         {
+            if (!IsConnected || _session == null)
+            {
+                return;
+            }
+
             _deathLinkService.SendDeathLink(new DeathLink(player, reason));
         }
 
@@ -335,9 +365,16 @@ namespace StardewArchipelago.Archipelago
 
         public ScoutedLocation ScoutSingleLocation(string locationName, bool createAsHint = false)
         {
+
             if (ScoutedLocations.ContainsKey(locationName))
             {
                 return ScoutedLocations[locationName];
+            }
+
+            if (!IsConnected || _session == null)
+            {
+                _console.Log($"Could not find the id for location \"{locationName}\".");
+                return null;
             }
 
             try
