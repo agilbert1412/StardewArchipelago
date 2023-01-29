@@ -141,7 +141,7 @@ namespace StardewArchipelago.Items.Mail
             "I was thinking of you today, so when I saw this {0} at {2}, I thought it would make a perfect gift!^^    -{1}",
             "I know, I know, your birthday was a while ago. Sorry this is so late. It took me a while to get this {0}. It was only being sold at {2}, can you believe that?!^^    -{1}",
             "It's dangerous to go alone. Take this! ({0})^^    -{1}",
-            "<Item>^<Location>^It was hard^You're welcome^^--<Sender>",
+            "{0}^{2}^It was hard^You're welcome^^    -{1}",
             "You are a cool person. And because you're cool, I went all the way to {2} to grab your {0}.^^    -{1}",
             "You're our 10,000th* Subscriber!^^Please take this {0}, freshly discovered for you at {2}! Click below to claim your prize!^^*Subscriber count may vary. All items are non-refundable. {1} Inc. is not liable for any illness, financial loss or harm to self that occur to the recipient.",
             "Here at Jojamart, we take pride in being aggressively progressive.^We're currently surveying cooperative* individuals on our progressive products.^Please take the time to test and review this {0}. Then contact your designated reviewer {1} at 1-800-867-5309.^^*All employees, current and prior have agreed to this in their contract, lasting in perpetuity.^Unsubscription is expressly forbidden under Article 307 subsection 4546B clause 3-4",
