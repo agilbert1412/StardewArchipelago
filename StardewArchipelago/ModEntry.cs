@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
@@ -38,7 +39,7 @@ namespace StardewArchipelago
         private ItemManager _itemManager;
         private RandomizedLogicPatcher _logicPatcher;
         private MailPatcher _mailPatcher;
-        private LocationChecker _locationsChecker;
+        private LocationChecker _locationChecker;
         private LocationPatcher _locationsPatcher;
         private ItemPatcher _itemPatcher;
         private GoalManager _goalManager;
@@ -133,7 +134,7 @@ namespace StardewArchipelago
         private void OnSaving(object sender, SavingEventArgs e)
         {
             _state.ItemsReceived = _itemManager.GetAllItemsAlreadyProcessed();
-            _state.LocationsChecked = _locationsChecker.GetAllLocationsAlreadyChecked();
+            _state.LocationsChecked = _locationChecker.GetAllLocationsAlreadyChecked();
             _state.LocationsScouted = _archipelago.ScoutedLocations;
             _state.LettersGenerated = _mail.GetAllLettersGenerated();
             _helper.Data.WriteSaveData(AP_DATA_KEY, _state);
@@ -155,11 +156,11 @@ namespace StardewArchipelago
             _unlockManager = new UnlockManager();
             _itemManager = new ItemManager(_archipelago, _stardewItemManager, _unlockManager, _mail, _state.ItemsReceived);
             _mailPatcher = new MailPatcher(Monitor, new LetterActions(_mail), _harmony);
-            _locationsChecker = new LocationChecker(Monitor, _archipelago, _state.LocationsChecked);
-            _locationsPatcher = new LocationPatcher(Monitor, _archipelago, _bundleReader, _helper, _harmony, _locationsChecker);
+            _locationChecker = new LocationChecker(Monitor, _archipelago, _state.LocationsChecked);
+            _locationsPatcher = new LocationPatcher(Monitor, _archipelago, _bundleReader, _helper, _harmony, _locationChecker);
             _itemPatcher = new ItemPatcher(Monitor, _helper, _harmony, _archipelago);
-            _goalManager = new GoalManager(Monitor, _helper, _harmony, _archipelago, _locationsChecker);
-            _logicPatcher = new RandomizedLogicPatcher(Monitor, _harmony, _archipelago, _locationsChecker);
+            _goalManager = new GoalManager(Monitor, _helper, _harmony, _archipelago, _locationChecker);
+            _logicPatcher = new RandomizedLogicPatcher(Monitor, _harmony, _archipelago, _locationChecker);
             _jojaDisabler = new JojaDisabler(Monitor, _helper, _harmony);
 
             if (_state.APConnectionInfo != null && !_archipelago.IsConnected)
@@ -186,6 +187,53 @@ namespace StardewArchipelago
             if (Game1.Date.TotalDays == 0)
             {
                 GivePlayerStartingResources();
+            }
+
+            FixDailyQuestLocations("Item Delivery");
+            FixDailyQuestLocations("Slay Monsters");
+            FixDailyQuestLocations("Fishing");
+            FixDailyQuestLocations("Gathering");
+        }
+
+        private void FixDailyQuestLocations(string typeApName)
+        {
+            var locationName = $"Help Wanted: {typeApName}";
+            var checkedLocationOfType =
+                _locationChecker.GetAllLocationsAlreadyChecked().Where(x => x.StartsWith(locationName));
+            var checkedLocationsNotResolved = checkedLocationOfType.Where(x => _archipelago.GetLocationId(x) < 1);
+            var numberOfCheckedLocationsNotResolved = checkedLocationsNotResolved.Count();
+            if (numberOfCheckedLocationsNotResolved < 1)
+            {
+                return;
+            }
+
+            for (var i = 0; i < numberOfCheckedLocationsNotResolved; i++)
+            {
+                CheckDailyQuestLocation(locationName);
+            }
+
+            _locationChecker.ForgetLocations(checkedLocationsNotResolved);
+        }
+
+        private void CheckDailyQuestLocation(string locationName)
+        {
+            var nextLocationNumber = 1;
+            while (true)
+            {
+                var fullName = $"{locationName} {nextLocationNumber}";
+                var id = _archipelago.GetLocationId(fullName);
+                if (id < 1)
+                {
+                    return;
+                }
+
+                if (_locationChecker.IsLocationChecked(fullName))
+                {
+                    nextLocationNumber++;
+                    continue;
+                }
+
+                _locationChecker.AddCheckedLocation(fullName);
             }
         }
 
@@ -218,8 +266,8 @@ namespace StardewArchipelago
 
             FarmInjections.DeleteStartingDebris();
             _mail.SendToday();
-            _locationsChecker.VerifyNewLocationChecksWithArchipelago();
-            _locationsChecker.SendAllLocationChecks();
+            _locationChecker.VerifyNewLocationChecksWithArchipelago();
+            _locationChecker.SendAllLocationChecks();
             _itemManager.ReceiveAllNewItems();
             _goalManager.CheckGoalCompletion();
             _mail.SendTomorrow();

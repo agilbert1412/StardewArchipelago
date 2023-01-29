@@ -105,17 +105,25 @@ namespace StardewArchipelago.Locations.CodeInjections
         private static void CheckDailyQuestLocation(string typeApName)
         {
             var locationName = $"Help Wanted: {typeApName}";
-            var alreadyCheckedLocations = _locationChecker.GetAllLocationsAlreadyChecked();
             var nextLocationNumber = 1;
-            foreach (var checkedLocation in alreadyCheckedLocations)
+            while (true)
             {
-                if (checkedLocation.StartsWith(locationName))
+                var fullName = $"{locationName} {nextLocationNumber}";
+                var id = _archipelago.GetLocationId(fullName);
+                if (id < 1)
+                {
+                    return;
+                }
+
+                if (_locationChecker.IsLocationChecked(fullName))
                 {
                     nextLocationNumber++;
+                    continue;
                 }
-            }
 
-            _locationChecker.AddCheckedLocation($"{locationName} {nextLocationNumber}");
+                _locationChecker.AddCheckedLocation(fullName);
+                return;
+            }
         }
 
         public static void Command_RemoveQuest_CheckLocation_Postfix(Event __instance, GameLocation location, GameTime time, string[] split)

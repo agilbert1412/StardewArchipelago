@@ -98,5 +98,18 @@ namespace StardewArchipelago.Locations
                 _checkedLocations[locationName] = locationId;
             }
         }
+
+        public void ForgetLocations(IEnumerable<string> locations)
+        {
+            foreach (var location in locations)
+            {
+                if (!_checkedLocations.ContainsKey(location))
+                {
+                    continue;
+                }
+
+                _checkedLocations.Remove(location);
+            }
+        }
     }
 }
