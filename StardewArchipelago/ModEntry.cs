@@ -20,6 +20,7 @@ using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Locations;
+using StardewValley.Menus;
 using StardewValley.Objects;
 
 namespace StardewArchipelago
@@ -51,6 +52,7 @@ namespace StardewArchipelago
         private Tester _tester;
 
         private ArchipelagoStateDto _state;
+        private ArchipelagoConnectionInfo _apConnectionOverride;
 
         public ModEntry() : base()
         {
@@ -63,6 +65,8 @@ namespace StardewArchipelago
         /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
+            _apConnectionOverride = null;
+
             _helper = helper;
             _harmony = new Harmony(this.ModManifest.UniqueID);
 
@@ -79,6 +83,9 @@ namespace StardewArchipelago
             _helper.Events.GameLoop.DayStarted += this.OnDayStarted;
             _helper.Events.GameLoop.DayEnding += this.OnDayEnding;
             _helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
+
+
+            _helper.ConsoleCommands.Add("connect_override", $"Overrides your next connection to Archipelago. {CONNECT_SYNTAX}", this.OnCommandConnectToArchipelago);
 
 #if DEBUG
             _helper.ConsoleCommands.Add("connect", $"Connect to Archipelago. {CONNECT_SYNTAX}", this.OnCommandConnectToArchipelago);
@@ -163,16 +170,26 @@ namespace StardewArchipelago
             _logicPatcher = new RandomizedLogicPatcher(Monitor, _harmony, _archipelago, _locationChecker);
             _jojaDisabler = new JojaDisabler(Monitor, _helper, _harmony);
 
-            if (_state.APConnectionInfo != null && !_archipelago.IsConnected)
+            if (_state.APConnectionInfo == null)
             {
-                _archipelago.Connect(_state.APConnectionInfo, out _);
+                return;
             }
 
             if (!_archipelago.IsConnected)
             {
-                Monitor.Log("You are not allowed to load a save without connecting to Archipelago", LogLevel.Error);
-                Game1.ExitToTitle();
-                return;
+                if (_apConnectionOverride != null)
+                {
+                    _state.APConnectionInfo = _apConnectionOverride;
+                    _apConnectionOverride = null;
+                }
+                _archipelago.Connect(_state.APConnectionInfo, out var errorMessage);
+
+                if (!_archipelago.IsConnected)
+                {
+                    _state.APConnectionInfo = null;
+                    Game1.activeClickableMenu = new InformationDialog(errorMessage, onCloseBehavior: (_) => OnCloseBehavior());
+                    return;
+                }
             }
 
             _logicPatcher.PatchAllGameLogic();
@@ -195,6 +212,13 @@ namespace StardewArchipelago
             FixDailyQuestLocations("Gathering");
         }
 
+        private void OnCloseBehavior()
+        {
+            Monitor.Log("You are not allowed to load a save without connecting to Archipelago", LogLevel.Error);
+            // TitleMenu.subMenu = previousMenu;
+            Game1.ExitToTitle();
+        }
+
         private void FixDailyQuestLocations(string typeApName)
         {
             var locationName = $"Help Wanted: {typeApName}";
@@ -209,32 +233,10 @@ namespace StardewArchipelago
 
             for (var i = 0; i < numberOfCheckedLocationsNotResolved; i++)
             {
-                CheckDailyQuestLocation(locationName);
+                QuestInjections.CheckDailyQuestLocation(locationName);
             }
 
             _locationChecker.ForgetLocations(checkedLocationsNotResolved);
-        }
-
-        private void CheckDailyQuestLocation(string locationName)
-        {
-            var nextLocationNumber = 1;
-            while (true)
-            {
-                var fullName = $"{locationName} {nextLocationNumber}";
-                var id = _archipelago.GetLocationId(fullName);
-                if (id < 1)
-                {
-                    return;
-                }
-
-                if (_locationChecker.IsLocationChecked(fullName))
-                {
-                    nextLocationNumber++;
-                    continue;
-                }
-
-                _locationChecker.AddCheckedLocation(fullName);
-            }
         }
 
         private void ReadPersistentArchipelagoData()
@@ -310,7 +312,7 @@ namespace StardewArchipelago
             var port = int.Parse(ipAndPort[1]);
             var slot = arg2[1];
             var password = arg2.Length >= 3 ? arg2[2] : "";
-            ArchipelagoConnect(ip, port, slot, password, out _);
+            _apConnectionOverride = new ArchipelagoConnectionInfo(ip, port, slot, false, password);
         }
 
         private void OnCommandDisconnectFromArchipelago(string arg1, string[] arg2)

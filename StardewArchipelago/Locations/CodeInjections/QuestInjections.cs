@@ -76,16 +76,16 @@ namespace StardewArchipelago.Locations.CodeInjections
                     switch (__instance.questType.Value)
                     {
                         case (int)QuestType.ItemDelivery:
-                            CheckDailyQuestLocation("Item Delivery");
+                            CheckDailyQuestLocationOfType("Item Delivery");
                             break;
                         case (int)QuestType.SlayMonsters:
-                            CheckDailyQuestLocation("Slay Monsters");
+                            CheckDailyQuestLocationOfType("Slay Monsters");
                             break;
                         case (int)QuestType.Fishing:
-                            CheckDailyQuestLocation("Fishing");
+                            CheckDailyQuestLocationOfType("Fishing");
                             break;
                         case (int)QuestType.ResourceCollection:
-                            CheckDailyQuestLocation("Gathering");
+                            CheckDailyQuestLocationOfType("Gathering");
                             break;
                     }
 
@@ -102,9 +102,14 @@ namespace StardewArchipelago.Locations.CodeInjections
             }
         }
 
-        private static void CheckDailyQuestLocation(string typeApName)
+        private static void CheckDailyQuestLocationOfType(string typeApName)
         {
             var locationName = $"Help Wanted: {typeApName}";
+            CheckDailyQuestLocation(locationName);
+        }
+
+        public static void CheckDailyQuestLocation(string locationName)
+        {
             var nextLocationNumber = 1;
             while (true)
             {

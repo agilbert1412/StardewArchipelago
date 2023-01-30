@@ -35,9 +35,9 @@ namespace StardewArchipelago.Locations.CodeInjections
         private static int _bootsLevel;
         private static int _gunLevel;
         private static int _ammoLevel;
-        private static int _bootsItemOffered;
-        private static int _gunItemOffered;
-        private static int _ammoItemOffered;
+        private static int _bootsItemOffered = -1;
+        private static int _gunItemOffered = -1;
+        private static int _ammoItemOffered = -1;
 
         public static void Initialize(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
@@ -249,7 +249,7 @@ namespace StardewArchipelago.Locations.CodeInjections
         {
             try
             {
-                if (__instance.runSpeedLevel > _bootsLevel)
+                if (__instance.runSpeedLevel != _bootsLevel)
                 {
                     switch (_bootsItemOffered)
                     {
@@ -264,7 +264,9 @@ namespace StardewArchipelago.Locations.CodeInjections
                     AssignStartingEquipment(__instance);
                     return;
                 }
-                if (__instance.fireSpeedLevel > _gunLevel || __instance.spreadPistol && _gunLevel < 4)
+
+                var instanceGun = __instance.fireSpeedLevel + (__instance.spreadPistol ? 1 : 0);
+                if (instanceGun != _gunLevel)
                 {
                     switch (_gunItemOffered)
                     {
@@ -285,7 +287,8 @@ namespace StardewArchipelago.Locations.CodeInjections
                     AssignStartingEquipment(__instance);
                     return;
                 }
-                if (__instance.ammoLevel > _ammoLevel)
+
+                if (__instance.ammoLevel != _ammoLevel)
                 {
                     switch (_ammoItemOffered)
                     {
@@ -350,6 +353,10 @@ namespace StardewArchipelago.Locations.CodeInjections
             __instance.spreadPistol = _gunLevel == 4;
             __instance.ammoLevel = _ammoLevel;
             __instance.bulletDamage = 1 + _ammoLevel;
+
+            _bootsItemOffered = -1;
+            _gunItemOffered = -1;
+            _ammoItemOffered = -1;
         }
 
         private static int GetBootsItemToOffer()
