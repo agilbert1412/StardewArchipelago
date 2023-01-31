@@ -16,15 +16,6 @@ namespace StardewArchipelago.Archipelago
 {
     public class ArchipelagoClient
     {
-        private static ArchipelagoClient _instance;
-        public static ArchipelagoClient Instance
-        {
-            get
-            {
-                return _instance;
-            }
-        }
-
         private const string GAME_NAME = "Stardew Valley";
         private IMonitor _console;
         private IModHelper _modHelper;
@@ -33,6 +24,7 @@ namespace StardewArchipelago.Archipelago
         private Harmony _harmony;
         private DeathManager _deathManager;
         private ChatForwarder _chatForwarder;
+        private ArchipelagoConnectionInfo _connectionInfo;
 
         private Action _itemReceivedFunction;
 
@@ -42,31 +34,34 @@ namespace StardewArchipelago.Archipelago
 
         public ArchipelagoClient(IMonitor console, IModHelper modHelper, Harmony harmony, Action itemReceivedFunction)
         {
-            if (_instance != null)
-            {
-                throw new Exception("There is already an ArchipelagoClient instance initialized");
-            }
-
             _console = console;
             _modHelper = modHelper;
             _harmony = harmony;
             _itemReceivedFunction = itemReceivedFunction;
             IsConnected = false;
             ScoutedLocations = new Dictionary<string, ScoutedLocation>();
-            _instance = this;
         }
 
-        public void Connect(ArchipelagoConnectionInfo archipelagoConnectionInfo, out string errorMessage)
+        public void Connect(ArchipelagoConnectionInfo connectionInfo, out string errorMessage)
         {
-            Disconnect();
+            DisconnectPermanently();
+            var success = TryConnect(connectionInfo, out errorMessage);
+            if (!success)
+            {
+                DisconnectPermanently();
+            }
+        }
+
+        private bool TryConnect(ArchipelagoConnectionInfo connectionInfo, out string errorMessage)
+        {
             LoginResult result;
             try
             {
-                InitSession(archipelagoConnectionInfo);
+                InitSession(connectionInfo);
                 var itemsHandling = ItemsHandlingFlags.AllItems;
                 var minimumVersion = new Version(0, 3, 7);
                 var tags = new[] { "AP", "DeathLink" };
-                result = _session.TryConnectAndLogin(GAME_NAME, archipelagoConnectionInfo.SlotName, itemsHandling, minimumVersion, tags, null, archipelagoConnectionInfo.Password);
+                result = _session.TryConnectAndLogin(GAME_NAME, _connectionInfo.SlotName, itemsHandling, minimumVersion, tags, null, _connectionInfo.Password);
             }
             catch (Exception e)
             {
@@ -76,7 +71,7 @@ namespace StardewArchipelago.Archipelago
             if (!result.Successful)
             {
                 var failure = (LoginFailure)result;
-                errorMessage = $"Failed to Connect to {archipelagoConnectionInfo.HostUrl}:{archipelagoConnectionInfo.Port} as {archipelagoConnectionInfo.SlotName}:";
+                errorMessage = $"Failed to Connect to {_connectionInfo.HostUrl}:{_connectionInfo.Port} as {_connectionInfo.SlotName}:";
                 foreach (var error in failure.Errors)
                 {
                     errorMessage += $"\n    {error}";
@@ -89,19 +84,20 @@ namespace StardewArchipelago.Archipelago
                 }
 
                 _console.Log(detailedErrorMessage, LogLevel.Error);
-                IsConnected = false;
-                return; // Did not connect, show the user the contents of `errorMessage`
+                DisconnectAndCleanup();
+                return false; // Did not connect, show the user the contents of `errorMessage`
             }
 
             errorMessage = "";
 
             // Successfully connected, `ArchipelagoSession` (assume statically defined as `session` from now on) can now be used to interact with the server and the returned `LoginSuccessful` contains some useful information about the initial connection (e.g. a copy of the slot data as `loginSuccess.SlotData`)
             var loginSuccess = (LoginSuccessful)result;
-            var loginMessage = $"Connected to Archipelago server as {archipelagoConnectionInfo.SlotName} (Team {loginSuccess.Team}).";
+            var loginMessage = $"Connected to Archipelago server as {connectionInfo.SlotName} (Team {loginSuccess.Team}).";
             _console.Log(loginMessage, LogLevel.Info);
 
             // Must go AFTER a successful connection attempt
-            InitializeAfterConnection(loginSuccess, archipelagoConnectionInfo.SlotName);
+            InitializeAfterConnection(loginSuccess, connectionInfo.SlotName);
+            return true;
         }
 
         private void InitializeAfterConnection(LoginSuccessful loginSuccess, string slotName)
@@ -121,11 +117,6 @@ namespace StardewArchipelago.Archipelago
             InitializeDeathLink();
 
             IsConnected = true;
-        }
-
-        private void TestPacketReceived(ArchipelagoPacketBase packet)
-        {
-            var a = 5;
         }
 
         public void Sync()
@@ -158,10 +149,11 @@ namespace StardewArchipelago.Archipelago
             SlotData = new SlotData(slotName, slotDataFields, _console);
         }
 
-        private void InitSession(ArchipelagoConnectionInfo archipelagoConnectionInfo)
+        private void InitSession(ArchipelagoConnectionInfo connectionInfo)
         {
-            _session = ArchipelagoSessionFactory.CreateSession(archipelagoConnectionInfo.HostUrl,
-                archipelagoConnectionInfo.Port);
+            _session = ArchipelagoSessionFactory.CreateSession(connectionInfo.HostUrl,
+                connectionInfo.Port);
+            _connectionInfo = connectionInfo;
         }
 
         private void OnMessageReceived(LogMessage message)
@@ -171,7 +163,7 @@ namespace StardewArchipelago.Archipelago
 
             fullMessage = fullMessage.Replace("<3", "<");
 
-            if (fullMessage.StartsWith($"{SlotData.SlotName}: "))
+            if (fullMessage.StartsWith($"{SlotData.SlotName}: ") || fullMessage.Contains($"({SlotData.SlotName}): "))
             {
                 return;
             }
@@ -200,7 +192,7 @@ namespace StardewArchipelago.Archipelago
 
         public void SendMessage(string text)
         {
-            if (!IsConnected || _session == null)
+            if (!MakeSureConnected())
             {
                 return;
             }
@@ -215,7 +207,7 @@ namespace StardewArchipelago.Archipelago
 
         private void OnItemReceived(ReceivedItemsHelper receivedItemsHelper)
         {
-            if (!IsConnected || _session == null)
+            if (!MakeSureConnected())
             {
                 return;
             }
@@ -223,9 +215,9 @@ namespace StardewArchipelago.Archipelago
             _itemReceivedFunction();
         }
 
-        public void ReportCollectedLocations(long[] locationIds)
+        public void ReportCheckedLocations(long[] locationIds)
         {
-            if (!IsConnected || _session == null)
+            if (!MakeSureConnected())
             {
                 return;
             }
@@ -235,7 +227,7 @@ namespace StardewArchipelago.Archipelago
 
         public Dictionary<string, long> GetAllCheckedLocations()
         {
-            if (!IsConnected || _session == null)
+            if (!MakeSureConnected())
             {
                 return new Dictionary<string, long>();
             }
@@ -247,7 +239,7 @@ namespace StardewArchipelago.Archipelago
 
         public List<ReceivedItem> GetAllReceivedItems()
         {
-            if (!IsConnected || _session == null)
+            if (!MakeSureConnected())
             {
                 return new List<ReceivedItem>();
             }
@@ -270,6 +262,11 @@ namespace StardewArchipelago.Archipelago
 
         public Dictionary<string, int> GetAllReceivedItemNamesAndCounts()
         {
+            if (!MakeSureConnected())
+            {
+                return new Dictionary<string, int>();
+            }
+
             var receivedItemsGrouped = _session.Items.AllItemsReceived.GroupBy(x => x.Item);
             var receivedItemsWithCount = receivedItemsGrouped.ToDictionary(x => GetItemName(x.First().Item), x => x.Count());
             return receivedItemsWithCount;
@@ -278,7 +275,7 @@ namespace StardewArchipelago.Archipelago
         public bool HasReceivedItem(string itemName, out string sendingPlayer)
         {
             sendingPlayer = "";
-            if (!IsConnected || _session == null)
+            if (!MakeSureConnected())
             {
                 return false;
             }
@@ -299,7 +296,7 @@ namespace StardewArchipelago.Archipelago
 
         public int GetReceivedItemCount(string itemName)
         {
-            if (!IsConnected || _session == null)
+            if (!MakeSureConnected())
             {
                 return 0;
             }
@@ -309,6 +306,11 @@ namespace StardewArchipelago.Archipelago
 
         public void ReportGoalCompletion()
         {
+            if (!MakeSureConnected())
+            {
+                return;
+            }
+
             var statusUpdatePacket = new StatusUpdatePacket();
             statusUpdatePacket.Status = ArchipelagoClientState.ClientGoal;
             _session.Socket.SendPacket(statusUpdatePacket);
@@ -316,7 +318,7 @@ namespace StardewArchipelago.Archipelago
 
         private string GetLocationName(long locationId)
         {
-            if (!IsConnected || _session == null)
+            if (!MakeSureConnected())
             {
                 return "";
             }
@@ -326,7 +328,7 @@ namespace StardewArchipelago.Archipelago
 
         public long GetLocationId(string locationName, string gameName = GAME_NAME)
         {
-            if (!IsConnected || _session == null)
+            if (!MakeSureConnected())
             {
                 return -1;
             }
@@ -336,7 +338,7 @@ namespace StardewArchipelago.Archipelago
 
         public string GetItemName(long itemId)
         {
-            if (!IsConnected || _session == null)
+            if (!MakeSureConnected())
             {
                 return "";
             }
@@ -346,7 +348,7 @@ namespace StardewArchipelago.Archipelago
 
         public void SendDeathLink(string player, string reason = "Unknown cause")
         {
-            if (!IsConnected || _session == null)
+            if (!MakeSureConnected())
             {
                 return;
             }
@@ -357,7 +359,6 @@ namespace StardewArchipelago.Archipelago
         private void ReceiveDeathLink(DeathLink deathlink)
         {
             DeathManager.ReceiveDeathLink();
-
             var deathLinkMessage = $"You have been killed by {deathlink.Source} ({deathlink.Cause})";
             _console.Log(deathLinkMessage, LogLevel.Info);
             Game1.chatBox?.addInfoMessage(deathLinkMessage);
@@ -365,13 +366,12 @@ namespace StardewArchipelago.Archipelago
 
         public ScoutedLocation ScoutSingleLocation(string locationName, bool createAsHint = false)
         {
-
             if (ScoutedLocations.ContainsKey(locationName))
             {
                 return ScoutedLocations[locationName];
             }
 
-            if (!IsConnected || _session == null)
+            if (!MakeSureConnected())
             {
                 _console.Log($"Could not find the id for location \"{locationName}\".");
                 return null;
@@ -420,55 +420,81 @@ namespace StardewArchipelago.Archipelago
         private void SessionErrorReceived(Exception e, string message)
         {
             _console.Log(message, LogLevel.Error);
-            Disconnect();
+            Game1.chatBox?.addMessage("Connection to Archipelago lost. The game will try reconnecting later. Check the SMAPI console for details", Color.Red);
+            _lastConnectFailure = DateTime.Now;
+            DisconnectAndCleanup();
         }
 
         private void SessionSocketClosed(string reason)
         {
             _console.Log($"Connection to Archipelago lost: {reason}", LogLevel.Error);
-            Disconnect();
+            Game1.chatBox?.addMessage("Connection to Archipelago lost. The game will try reconnecting later. Check the SMAPI console for details", Color.Red);
+            _lastConnectFailure = DateTime.Now;
+            DisconnectAndCleanup();
         }
 
-        public void Disconnect()
+        public void DisconnectAndCleanup()
         {
             if (!IsConnected)
             {
                 return;
             }
 
-            _session.Items.ItemReceived -= OnItemReceived;
-            _session.MessageLog.OnMessageReceived -= OnMessageReceived;
-            _session.Socket.ErrorReceived -= SessionErrorReceived;
-            _session.Socket.SocketClosed -= SessionSocketClosed;
-            _session.Socket.DisconnectAsync();
+            if (_session != null)
+            {
+                _session.Items.ItemReceived -= OnItemReceived;
+                _session.MessageLog.OnMessageReceived -= OnMessageReceived;
+                _session.Socket.ErrorReceived -= SessionErrorReceived;
+                _session.Socket.SocketClosed -= SessionSocketClosed;
+                _session.Socket.DisconnectAsync();
+            }
             _session = null;
             IsConnected = false;
         }
 
-
-        private int _lastTime;
-        private float _disconnectTimeout = 5.0f;
-        public void APUpdate(ArchipelagoConnectionInfo connectionInfo)
+        public void DisconnectPermanently()
         {
-            if (!IsConnected && connectionInfo != null)
-            {
-                Disconnect();
-                var now = DateTime.Now.Second;
-                var dT = now - _lastTime;
-                _lastTime = now;
-                _disconnectTimeout -= dT;
-                if (!(_disconnectTimeout <= 0.0f)) return;
+            DisconnectAndCleanup();
+            _connectionInfo = null;
+        }
 
-                Connect(connectionInfo, out _);
-                _disconnectTimeout = 5.0f;
-                return;
+        private DateTime _lastConnectFailure;
+        private const int THRESHOLD_TO_RETRY_CONNECTION_IN_SECONDS = 15;
+        public bool MakeSureConnected(int threshold = THRESHOLD_TO_RETRY_CONNECTION_IN_SECONDS)
+        {
+            if (IsConnected)
+            {
+                return true;
             }
 
-            /*Utils.PrintMessages();
-            if (ServerData.Index >= Session.Items.AllItemsReceived.Count) return;
-            var currentItemId = Session.Items.AllItemsReceived[Convert.ToInt32(ServerData.Index)].Item;
-            ++ServerData.Index;
-            ItemManager.Unlock(currentItemId);*/
+            if (_connectionInfo == null)
+            {
+                return false;
+            }
+
+
+            var now = DateTime.Now;
+            var timeSinceLastFailure = now - _lastConnectFailure;
+            if (timeSinceLastFailure.TotalSeconds < threshold)
+            {
+                return false;
+            }
+
+            TryConnect(_connectionInfo, out _);
+            if (!IsConnected)
+            {
+                Game1.chatBox?.addMessage("Reconnection attempt failed", Color.Red);
+                _lastConnectFailure = DateTime.Now;
+                return false;
+            }
+
+            Game1.chatBox?.addMessage("Reconnection attempt successful!", Color.Green);
+            return IsConnected;
+        }
+        
+        public void APUpdate()
+        {
+            MakeSureConnected(60);
         }
     }
 }

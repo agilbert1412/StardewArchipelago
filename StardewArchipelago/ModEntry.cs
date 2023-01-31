@@ -99,7 +99,7 @@ namespace StardewArchipelago
 
         private void ResetArchipelago()
         {
-            _archipelago.Disconnect();
+            _archipelago.DisconnectPermanently();
             if (_state != null)
             {
                 _state.APConnectionInfo = null;
@@ -254,7 +254,7 @@ namespace StardewArchipelago
 
         private void OnDayStarted(object sender, DayStartedEventArgs e)
         {
-            if (_archipelago == null || !_archipelago.IsConnected)
+            if (!_archipelago.MakeSureConnected(5))
             {
                 return;
             }
@@ -273,6 +273,7 @@ namespace StardewArchipelago
             _itemManager.ReceiveAllNewItems();
             _goalManager.CheckGoalCompletion();
             _mail.SendTomorrow();
+            PlayerBuffInjections.CheckForApBuffs();
         }
 
         private void OnDayEnding(object sender, DayEndingEventArgs e)
@@ -285,7 +286,7 @@ namespace StardewArchipelago
 
         private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
         {
-            _archipelago.APUpdate(_state.APConnectionInfo);
+            _archipelago.APUpdate();
         }
 
         private void OnReturnedToTitle(object sender, ReturnedToTitleEventArgs e)
@@ -413,7 +414,7 @@ namespace StardewArchipelago
         public void ArchipelagoDisconnect()
         {
             Game1.ExitToTitle();
-            _archipelago.Disconnect();
+            _archipelago.DisconnectPermanently();
             _state.APConnectionInfo = null;
         }
 

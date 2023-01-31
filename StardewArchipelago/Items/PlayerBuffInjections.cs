@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
 using StardewValley;
@@ -14,6 +15,9 @@ namespace StardewArchipelago.Items
         private static IModHelper _helper;
         private static ArchipelagoClient _archipelago;
 
+        private static int _numberOfSpeedBonuses = 0;
+        private static int _numberOfLuckBonuses = 0;
+
         public static void Initialize(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago)
         {
             _monitor = monitor;
@@ -21,13 +25,18 @@ namespace StardewArchipelago.Items
             _archipelago = archipelago;
         }
 
+        public static void CheckForApBuffs()
+        {
+            _numberOfSpeedBonuses = _archipelago.GetReceivedItemCount(MOVEMENT_SPEED_AP_LOCATION);
+            _numberOfLuckBonuses = _archipelago.GetReceivedItemCount(LUCK_AP_LOCATION);
+        }
+
         public static void GetMovementSpeed_AddApBuffs_Postfix(Farmer __instance, ref float __result)
         {
             try
             {
                 var baseCoefficient = 1.0f;
-                var numberOfSpeedBonus = _archipelago.GetReceivedItemCount(MOVEMENT_SPEED_AP_LOCATION);
-                var totalCoefficient = baseCoefficient + (0.25f * numberOfSpeedBonus);
+                var totalCoefficient = baseCoefficient + (0.25f * _numberOfSpeedBonuses);
 
                 __result *= totalCoefficient;
                 return;
@@ -43,8 +52,7 @@ namespace StardewArchipelago.Items
         {
             try
             {
-                var numberOfLuckBonus = _archipelago.GetReceivedItemCount(LUCK_AP_LOCATION);
-                var totalBonus = 0.025f * numberOfLuckBonus;
+                var totalBonus = 0.025f * _numberOfLuckBonuses;
 
                 __result += totalBonus;
                 return;

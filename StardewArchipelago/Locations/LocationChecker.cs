@@ -65,7 +65,7 @@ namespace StardewArchipelago.Locations
 
             allCheckedLocations = allCheckedLocations.Distinct().Where(x => x > -1).ToList();
 
-            _archipelago.ReportCollectedLocations(allCheckedLocations.ToArray());
+            _archipelago.ReportCheckedLocations(allCheckedLocations.ToArray());
         }
 
         public void VerifyNewLocationChecksWithArchipelago()
