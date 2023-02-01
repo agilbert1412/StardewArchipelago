@@ -115,7 +115,7 @@ namespace StardewArchipelago.Locations.CodeInjections
                 return;
             }
 
-            if (levelsBeat.GetValue() != 7)
+            if (levelsBeat.GetValue() < 6)
             {
                 _locationChecker.AddCheckedLocation(string.Format(JK_LEVEL_LOCATION, levelsBeat.GetValue()));
                 return;
