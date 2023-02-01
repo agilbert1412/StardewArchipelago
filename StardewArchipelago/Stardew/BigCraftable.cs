@@ -1,7 +1,10 @@
 ﻿using System;
+using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Items.Mail;
 using StardewValley;
+using StardewValley.Tools;
+using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Stardew
 {
@@ -27,7 +30,9 @@ namespace StardewArchipelago.Stardew
 
         public override Item PrepareForGivingToFarmer(int amount = 1)
         {
-            throw new NotImplementedException();
+            var bigCraftable = new Object(Vector2.Zero, Id);
+            bigCraftable.Stack = amount;
+            return bigCraftable;
         }
 
         public override void GiveToFarmer(Farmer farmer, int amount = 1)

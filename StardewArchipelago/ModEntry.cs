@@ -355,11 +355,15 @@ namespace StardewArchipelago
                 return;
             }
 
-            var iridiumSprinklers = new StardewValley.Object(621, 4);
-            var iridiumBand = new Ring(527);
+            var iridiumSprinklers = _stardewItemManager.GetItemByName("Quality Sprinkler").PrepareForGivingToFarmer(4);
+            var iridiumBand = _stardewItemManager.GetItemByName("Iridium Band").PrepareForGivingToFarmer(4);
+            var autoPetters = _stardewItemManager.GetItemByName("Auto-Petter").PrepareForGivingToFarmer(2);
+            var autoGrabbers = _stardewItemManager.GetItemByName("Auto-Grabber").PrepareForGivingToFarmer(2);
 
             CreateGiftBoxItemInEmptySpot(farmhouse, iridiumSprinklers, new Vector2(0, 1));
             CreateGiftBoxItemInEmptySpot(farmhouse, iridiumBand, new Vector2(1, 0));
+            CreateGiftBoxItemInEmptySpot(farmhouse, autoPetters, new Vector2(1, 1));
+            CreateGiftBoxItemInEmptySpot(farmhouse, autoGrabbers, new Vector2(0, 2));
         }
 
         private void RemoveShippingBin()

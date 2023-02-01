@@ -27,8 +27,12 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             try
             {
                 var rect = new Microsoft.Xna.Framework.Rectangle(tileLocation.X * 64, tileLocation.Y * 64, 64, 64);
-                if (!__instance.objects.ContainsKey(new Vector2((float)tileLocation.X, (float)tileLocation.Y)) && __instance.CheckPetAnimal(rect, who))
-                    return true; // run original logic
+                if (!__instance.objects.ContainsKey(new Vector2((float)tileLocation.X, (float)tileLocation.Y)) &&
+                    __instance.CheckPetAnimal(rect, who))
+                {
+                    __result = true;
+                    return false; // don't run original logic
+                }
                 var grandpaShrinePosition = __instance.GetGrandpaShrinePosition();
                 if (tileLocation.X < grandpaShrinePosition.X - 1 || tileLocation.X > grandpaShrinePosition.X + 1 ||
                     tileLocation.Y != grandpaShrinePosition.Y)

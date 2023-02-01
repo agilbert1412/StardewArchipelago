@@ -150,6 +150,10 @@ namespace StardewArchipelago.Items.Mail
             "i maed you a cukie but i eated it. have this {0} instaed^^    -{1}",
             "Me hat seller, poke. {1} dropped {0} off here. Me giving it to you okay poke? They say it come from {2}.",
             "Declaration of returned goods.^^{0} is being returned to you after seizure by multiworld officers from {1}. Suspect was found near {2} with stolen goods in hand and have been detained for further questioning.^^    -APPD",
+            "Statement of Accounts^{1} Credit Union^Overpaid Balance: 1 {0}^See contained check below.^You may cash at your local {2} or go online with our App",
+            "Find enclosed your prescription {0}. Remember to always follow the instructions on the bottle.^If you experience nausea, headaches or bouts of desire to go to Burger King, please consult your physician.^^Brought to you by {1} Pharmacies",
+            "So, hear me out, I know you wanted a cool sword, but I got you this {0} instead. It was free, found it on the road by {2}. Cheers!^^    -{1}",
+            "Hopefully, this {0} will convince you to leave the Burger King...^^    -{1}",
         };
     }
 }
