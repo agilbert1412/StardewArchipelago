@@ -24,6 +24,7 @@ namespace StardewArchipelago.Archipelago
         private Harmony _harmony;
         private DeathManager _deathManager;
         private ChatForwarder _chatForwarder;
+        private GiftHandler _giftHandler;
         private ArchipelagoConnectionInfo _connectionInfo;
 
         private Action _itemReceivedFunction;
@@ -31,6 +32,7 @@ namespace StardewArchipelago.Archipelago
         public bool IsConnected { get; private set; }
         public SlotData SlotData { get; private set; }
         public Dictionary<string, ScoutedLocation> ScoutedLocations { get; set; }
+        // public Random MultiRandom { get; set; }
 
         public ArchipelagoClient(IMonitor console, IModHelper modHelper, Harmony harmony, Action itemReceivedFunction)
         {
@@ -42,8 +44,9 @@ namespace StardewArchipelago.Archipelago
             ScoutedLocations = new Dictionary<string, ScoutedLocation>();
         }
 
-        public void Connect(ArchipelagoConnectionInfo connectionInfo, out string errorMessage)
+        public void Connect(ArchipelagoConnectionInfo connectionInfo, GiftHandler giftHandler, out string errorMessage)
         {
+            _giftHandler = giftHandler;
             DisconnectPermanently();
             var success = TryConnect(connectionInfo, out errorMessage);
             if (!success)
@@ -110,13 +113,14 @@ namespace StardewArchipelago.Archipelago
 
             if (_chatForwarder == null)
             {
-                _chatForwarder = new ChatForwarder(_console, _harmony);
+                _chatForwarder = new ChatForwarder(_console, _harmony, _giftHandler);
                 _chatForwarder.ListenToChatMessages(this);
             }
 
             InitializeDeathLink();
 
             IsConnected = true;
+            // MultiRandom = new Random(SlotData.Seed);
         }
 
         public void Sync()
@@ -225,6 +229,70 @@ namespace StardewArchipelago.Archipelago
             _session.Locations.CompleteLocationChecks(locationIds);
         }
 
+        public string GetPlayerName(int playerId)
+        {
+            return _session.Players.GetPlayerName(playerId) ?? "Archipelago";
+        }
+
+        public bool IsStardewValleyPlayer(string playerName)
+        {
+            var player = _session.Players.AllPlayers.FirstOrDefault(x => x.Name == playerName);
+            if (player == null)
+            {
+                player = _session.Players.AllPlayers.FirstOrDefault(x => x.Alias == playerName);
+            }
+
+            return player != null && player.Game == GAME_NAME;
+        }
+
+        public void SetDataStorage(string key, string value)
+        {
+            if (!MakeSureConnected())
+            {
+                return;
+            }
+
+            _session.DataStorage[Scope.Game, key] = value;
+        }
+
+        public bool ExistsInDataStorage(string key)
+        {
+            if (!MakeSureConnected())
+            {
+                return false;
+            }
+
+            var value = _session.DataStorage[Scope.Game, key];
+            return !string.IsNullOrWhiteSpace(value.To<string>());
+        }
+
+        public string ReadFromDataStorage(string key)
+        {
+            if (!MakeSureConnected())
+            {
+                return null;
+            }
+
+            var value = _session.DataStorage[Scope.Game, key];
+            var stringValue = value.To<string>();
+            if (string.IsNullOrWhiteSpace(stringValue))
+            {
+                return null;
+            }
+
+            return stringValue;
+        }
+
+        public void RemoveFromDataStorage(string key)
+        {
+            if (!MakeSureConnected())
+            {
+                return;
+            }
+
+            _session.DataStorage[Scope.Game, key] = "";
+        }
+
         public Dictionary<string, long> GetAllCheckedLocations()
         {
             if (!MakeSureConnected())
@@ -248,7 +316,7 @@ namespace StardewArchipelago.Archipelago
             foreach (var apItem in _session.Items.AllItemsReceived)
             {
                 var itemName = GetItemName(apItem.Item);
-                var playerName = _session.Players.GetPlayerName(apItem.Player) ?? "Archipelago";
+                var playerName = GetPlayerName(apItem.Player);
                 var locationName = GetLocationName(apItem.Location) ?? "Thin air";
 
                 var receivedItem = new ReceivedItem(locationName, itemName, playerName, apItem.Location, apItem.Item,

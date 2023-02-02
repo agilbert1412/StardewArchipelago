@@ -11,7 +11,7 @@ namespace StardewArchipelago.Locations.CodeInjections
     {
         private const string JK_EXTRA_LIFE = "Junimo Kart: Extra Life";
         private const string JK_LEVEL_LOCATION = "Junimo Kart: Level {0}";
-        private const string JK_VICTORY = "Junimo Kart Victory";
+        public const string JK_VICTORY = "Junimo Kart Victory";
 
         private const string JOTPK_BOOTS_1 = "JotPK: Boots 1";
         private const string JOTPK_BOOTS_2 = "JotPK: Boots 2";
@@ -22,11 +22,28 @@ namespace StardewArchipelago.Locations.CodeInjections
         private const string JOTPK_AMMO_1 = "JotPK: Ammo 1";
         private const string JOTPK_AMMO_2 = "JotPK: Ammo 2";
         private const string JOTPK_AMMO_3 = "JotPK: Ammo 3";
+        private const string JOTPK_COWBOY_1 = "JotPK: Cowboy 1";
+        private const string JOTPK_COWBOY_2 = "JotPK: Cowboy 2";
+        public const string JOTPK_VICTORY = "Journey of the Prairie King Victory";
+
         private const string JOTPK_DROP_RATE = "JotPK: Increased Drop Rate";
         private const string JOTPK_PROGRESSIVE_BOOTS = "JotPK: Progressive Boots";
         private const string JOTPK_PROGRESSIVE_GUN = "JotPK: Progressive Gun";
         private const string JOTPK_PROGRESSIVE_AMMO = "JotPK: Progressive Ammo";
         private const string JOTPK_EXTRA_LIFE = "JotPK: Extra Life";
+
+        private static readonly string[] JK_ALL_LOCATIONS =
+        {
+            string.Format(JK_LEVEL_LOCATION, 1), string.Format(JK_LEVEL_LOCATION, 2),
+            string.Format(JK_LEVEL_LOCATION, 3), string.Format(JK_LEVEL_LOCATION, 4),
+            string.Format(JK_LEVEL_LOCATION, 5), JK_VICTORY
+        };
+
+        private static readonly string[] JOTPK_ALL_LOCATIONS =
+        {
+            JOTPK_BOOTS_1, JOTPK_BOOTS_2, JOTPK_GUN_1, JOTPK_GUN_2, JOTPK_GUN_3, JOTPK_SUPER_GUN, JOTPK_AMMO_1,
+            JOTPK_AMMO_2, JOTPK_AMMO_3, JOTPK_COWBOY_1, JOTPK_COWBOY_2, JOTPK_VICTORY
+        };
 
         private static IMonitor _monitor;
         private static IModHelper _helper;
@@ -209,12 +226,12 @@ namespace StardewArchipelago.Locations.CodeInjections
 
                 if (which == -3)
                 {
-                    _locationChecker.AddCheckedLocation("Journey of the Prairie King Victory");
+                    _locationChecker.AddCheckedLocation(JOTPK_VICTORY);
                     return true; // run original logic
                 }
 
-                var whichCowboyWasBeaten = which == -1 ? 1 : 2;
-                _locationChecker.AddCheckedLocation($"JotPK: Cowboy {whichCowboyWasBeaten}");
+                var whichCowboyWasBeaten = which == -1 ? JOTPK_COWBOY_1 : JOTPK_COWBOY_2;
+                _locationChecker.AddCheckedLocation(whichCowboyWasBeaten);
                 return true; // run original logic
             }
             catch (Exception ex)
@@ -384,6 +401,22 @@ namespace StardewArchipelago.Locations.CodeInjections
             var missingAmmo3 = _locationChecker.IsLocationMissing(JOTPK_AMMO_3);
             var ammoItemOffered = missingAmmo1 ? 6 : (missingAmmo2 ? 7 : (missingAmmo3 ? 8 : 10));
             return ammoItemOffered;
+        }
+
+        public static void ReleaseJunimoKart()
+        {
+            foreach (var junimoKartLocation in JK_ALL_LOCATIONS)
+            {
+                _locationChecker.AddCheckedLocation(junimoKartLocation);
+            }
+        }
+
+        public static void ReleasePrairieKing()
+        {
+            foreach (var prairieKingLocation in JOTPK_ALL_LOCATIONS)
+            {
+                _locationChecker.AddCheckedLocation(prairieKingLocation);
+            }
         }
     }
 

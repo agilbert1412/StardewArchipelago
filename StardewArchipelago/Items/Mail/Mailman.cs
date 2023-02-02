@@ -43,6 +43,14 @@ namespace StardewArchipelago.Items.Mail
             SendMail(mailKey + "%&NL&%");
         }
 
+        public void SendArchipelagoGiftMail(string mailKey, string findingPlayer, string attachmentEmbedString)
+        {
+            var mailContent =
+                $"I thought you could use this^^    -{findingPlayer}{attachmentEmbedString}[#]Archipelago Gift";
+            GenerateMail(mailKey, mailContent);
+            SendMail(mailKey);
+        }
+
         public void SendArchipelagoMail(string mailKey, string apItemName, string findingPlayer, string locationName, string attachmentEmbedString)
         {
             if (Game1.player.hasOrWillReceiveMail(mailKey))
@@ -58,12 +66,24 @@ namespace StardewArchipelago.Items.Mail
         private void GenerateMail(string mailKey, string apItemName, string findingPlayer, string locationName,
             string embedString)
         {
-            apItemName = apItemName.Replace("<3", "<");
-            var mailData = Game1.content.Load<Dictionary<string, string>>("Data\\mail");
             var mailContentTemplate = GetRandomApMailString();
             var mailContent = string.Format(mailContentTemplate, apItemName, findingPlayer, locationName, embedString);
+            GenerateMail(mailKey, mailContent);
+        }
+
+        private void GenerateMail(string mailKey, string mailContent)
+        {
+            mailContent = mailContent.Replace("<3", "<");
+            var mailData = Game1.content.Load<Dictionary<string, string>>("Data\\mail");
             mailData[mailKey] = mailContent;
-            _lettersGenerated.Add(mailKey, mailContent);
+            if (_lettersGenerated.ContainsKey(mailKey))
+            {
+                _lettersGenerated[mailKey] = mailContent;
+            }
+            else
+            {
+                _lettersGenerated.Add(mailKey, mailContent);
+            }
         }
 
         public int OpenedMailsContainingKey(string apItemName)

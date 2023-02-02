@@ -36,6 +36,7 @@ namespace StardewArchipelago
         private ArchipelagoClient _archipelago;
         private AdvancedOptionsManager _advancedOptionsManager;
         private Mailman _mail;
+        private GiftHandler _giftHandler;
         private BundleReader _bundleReader;
         private ItemManager _itemManager;
         private RandomizedLogicPatcher _logicPatcher;
@@ -110,6 +111,7 @@ namespace StardewArchipelago
             _multiSleep = new MultiSleep(Monitor, _helper, _harmony);
             _advancedOptionsManager = new AdvancedOptionsManager(this, _harmony, _archipelago);
             _advancedOptionsManager.InjectArchipelagoAdvancedOptions();
+            _giftHandler = new GiftHandler();
         }
 
         private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
@@ -182,7 +184,7 @@ namespace StardewArchipelago
                     _state.APConnectionInfo = _apConnectionOverride;
                     _apConnectionOverride = null;
                 }
-                _archipelago.Connect(_state.APConnectionInfo, out var errorMessage);
+                _archipelago.Connect(_state.APConnectionInfo, _giftHandler, out var errorMessage);
 
                 if (!_archipelago.IsConnected)
                 {
@@ -192,6 +194,7 @@ namespace StardewArchipelago
                 }
             }
 
+            _giftHandler.Initialize(_stardewItemManager, _mail, _archipelago);
             _logicPatcher.PatchAllGameLogic();
             _mailPatcher.PatchMailBoxForApItems();
             _archipelago.SlotData.ReplaceAllBundles();
@@ -278,6 +281,7 @@ namespace StardewArchipelago
 
         private void OnDayEnding(object sender, DayEndingEventArgs e)
         {
+            _giftHandler.ReceiveAllGiftsTomorrow();
         }
 
         private void OnTimeChanged(object sender, TimeChangedEventArgs e)
@@ -360,10 +364,10 @@ namespace StardewArchipelago
             var autoPetters = _stardewItemManager.GetItemByName("Auto-Petter").PrepareForGivingToFarmer(2);
             var autoGrabbers = _stardewItemManager.GetItemByName("Auto-Grabber").PrepareForGivingToFarmer(2);
 
-            CreateGiftBoxItemInEmptySpot(farmhouse, iridiumSprinklers, new Vector2(0, 1));
-            CreateGiftBoxItemInEmptySpot(farmhouse, iridiumBand, new Vector2(1, 0));
-            CreateGiftBoxItemInEmptySpot(farmhouse, autoPetters, new Vector2(1, 1));
-            CreateGiftBoxItemInEmptySpot(farmhouse, autoGrabbers, new Vector2(0, 2));
+            CreateGiftBoxItemInEmptySpot(farmhouse, iridiumSprinklers);
+            CreateGiftBoxItemInEmptySpot(farmhouse, iridiumBand);
+            CreateGiftBoxItemInEmptySpot(farmhouse, autoPetters);
+            CreateGiftBoxItemInEmptySpot(farmhouse, autoGrabbers);
         }
 
         private void RemoveShippingBin()
@@ -388,12 +392,24 @@ namespace StardewArchipelago
             farm.destroyStructure(shippingBin);
         }
 
-        private static void CreateGiftBoxItemInEmptySpot(FarmHouse farmhouse, Item itemToGift, Vector2 step)
+        private static void CreateGiftBoxItemInEmptySpot(FarmHouse farmhouse, Item itemToGift)
         {
-            var emptySpot = new Vector2(4f, 7f);
+            var origSpot = new Vector2(3f, 7f);
+            var emptySpot = origSpot;
+            var maxStep = 3;
             while (farmhouse.objects.ContainsKey(emptySpot))
             {
-                emptySpot = new Vector2(emptySpot.X + step.X, emptySpot.Y + step.Y);
+                emptySpot.X = emptySpot.X + 1;
+                if (emptySpot.X > origSpot.X + maxStep)
+                {
+                    emptySpot.X = origSpot.X;
+                    emptySpot.Y += 1;
+                }
+
+                if (emptySpot.Y > origSpot.Y + maxStep)
+                {
+                    emptySpot.Y = origSpot.Y - maxStep;
+                }
             }
 
             farmhouse.objects.Add(emptySpot, new Chest(0, new List<Item>()
@@ -405,7 +421,7 @@ namespace StardewArchipelago
         public bool ArchipelagoConnect(string ip, int port, string slot, string password, out string errorMessage)
         {
             var apConnection = new ArchipelagoConnectionInfo(ip, port, slot, false, password);
-            _archipelago.Connect(apConnection, out errorMessage);
+            _archipelago.Connect(apConnection, _giftHandler, out errorMessage);
             if (!_archipelago.IsConnected)
             {
                 return false;
