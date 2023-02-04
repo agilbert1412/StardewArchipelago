@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
@@ -10,7 +12,19 @@ namespace StardewArchipelago.Locations.CodeInjections
     public static class ArcadeMachineInjections
     {
         private const string JK_EXTRA_LIFE = "Junimo Kart: Extra Life";
-        private const string JK_LEVEL_LOCATION = "Junimo Kart: Level {0}";
+        private static readonly Dictionary<int, string> JK_LEVEL_LOCATIONS = new Dictionary<int, string>()
+        {
+            {0, "Junimo Kart: Crumble Cavern"},
+            {1, "Junimo Kart: Slippery Slopes"},
+            {8, "Junimo Kart: Secret Level"},
+            {2, "Junimo Kart: The Gem Sea Giant"},
+            {5, "Junimo Kart: Slomp's Stomp"},
+            {3, "Junimo Kart: Ghastly Galleon"},
+            {9, "Junimo Kart: Glowshroom Grotto"},
+            {4, "Junimo Kart: Red Hot Rollercoaster"},
+            {6, "Junimo Kart: Sunset Speedway (Victory)"},
+        };
+
         public const string JK_VICTORY = "Junimo Kart Victory";
 
         private const string JOTPK_BOOTS_1 = "JotPK: Boots 1";
@@ -32,12 +46,7 @@ namespace StardewArchipelago.Locations.CodeInjections
         private const string JOTPK_PROGRESSIVE_AMMO = "JotPK: Progressive Ammo";
         private const string JOTPK_EXTRA_LIFE = "JotPK: Extra Life";
 
-        private static readonly string[] JK_ALL_LOCATIONS =
-        {
-            string.Format(JK_LEVEL_LOCATION, 1), string.Format(JK_LEVEL_LOCATION, 2),
-            string.Format(JK_LEVEL_LOCATION, 3), string.Format(JK_LEVEL_LOCATION, 4),
-            string.Format(JK_LEVEL_LOCATION, 5), JK_VICTORY
-        };
+        private static readonly string[] JK_ALL_LOCATIONS = JK_LEVEL_LOCATIONS.Values.ToArray();
 
         private static readonly string[] JOTPK_ALL_LOCATIONS =
         {
@@ -127,23 +136,23 @@ namespace StardewArchipelago.Locations.CodeInjections
         {
             var gamemode = _helper.Reflection.GetField<int>(__instance, "gameMode");
             var levelsBeat = _helper.Reflection.GetField<int>(__instance, "levelsBeat");
+            var currentLevel = _helper.Reflection.GetField<int>(__instance, "currentTheme");
+            var levelsFinishedThisRun =
+                _helper.Reflection.GetField<List<int>>(__instance, "levelThemesFinishedThisRun");
             if (gamemode.GetValue() != 3 || levelsBeat.GetValue() < 1)
             {
                 return;
             }
 
-            if (levelsBeat.GetValue() < 6)
+            foreach (var levelFinished in levelsFinishedThisRun.GetValue())
             {
-                _locationChecker.AddCheckedLocation(string.Format(JK_LEVEL_LOCATION, levelsBeat.GetValue()));
-                return;
+                _locationChecker.AddCheckedLocation(JK_LEVEL_LOCATIONS[levelFinished]);
             }
-
-            _locationChecker.AddCheckedLocation(JK_VICTORY);
         }
 
         private static int GetJunimoKartExtraLives()
         {
-            var numberExtraLives = 6;
+            var numberExtraLives = 8;
             if (_archipelago.SlotData.ArcadeMachineProgression == ArcadeProgression.FullShuffling)
             {
                 numberExtraLives = _archipelago.GetReceivedItemCount(JK_EXTRA_LIFE);
