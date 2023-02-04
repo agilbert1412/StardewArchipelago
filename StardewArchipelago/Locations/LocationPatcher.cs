@@ -293,10 +293,14 @@ namespace StardewArchipelago.Locations
         private void PatchAdventurerGuildShop()
         {
             _harmony.Patch(
+                original: AccessTools.Method(typeof(Utility), nameof(Utility.getAdventureRecoveryStock)),
+                postfix: new HarmonyMethod(typeof(AdventurerGuildInjections), nameof(AdventurerGuildInjections.GetAdventureRecoveryStock_AddReceivedWeapons_Postfix))
+            );
+
+            _harmony.Patch(
                 original: AccessTools.Method(typeof(Utility), nameof(Utility.getAdventureShopStock)),
                 prefix: new HarmonyMethod(typeof(AdventurerGuildInjections), nameof(AdventurerGuildInjections.GetAdventureShopStock_ShopBasedOnReceivedItems_Prefix))
             );
-            
         }
 
         private void ReplaceArcadeMachinesWithChecks()

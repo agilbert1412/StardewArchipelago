@@ -345,6 +345,7 @@ namespace StardewArchipelago
             Game1.player.Money = _archipelago.SlotData.StartingMoney;
             GivePlayerQuickStart();
             RemoveShippingBin();
+            SendGilTelephoneLetter();
         }
 
         private void GivePlayerQuickStart()
@@ -416,6 +417,11 @@ namespace StardewArchipelago
             {
                 itemToGift
             }, emptySpot, true));
+        }
+
+        private static void SendGilTelephoneLetter()
+        {
+            Game1.player.mailReceived.Add("Gil_Telephone");
         }
 
         public bool ArchipelagoConnect(string ip, int port, string slot, string password, out string errorMessage)

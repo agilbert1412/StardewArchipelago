@@ -234,6 +234,17 @@ namespace StardewArchipelago.Archipelago
             return _session.Players.GetPlayerName(playerId) ?? "Archipelago";
         }
 
+        public string GetPlayerAlias(string playerName)
+        {
+            var player = _session.Players.AllPlayers.FirstOrDefault(x => x.Name == playerName);
+            if (player == null)
+            {
+                return null;
+            }
+
+            return player.Alias;
+        }
+
         public bool IsStardewValleyPlayer(string playerName)
         {
             var player = _session.Players.AllPlayers.FirstOrDefault(x => x.Name == playerName);

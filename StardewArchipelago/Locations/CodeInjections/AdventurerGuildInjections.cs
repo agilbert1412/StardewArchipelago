@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Items;
+using StardewArchipelago.Items.Mail;
+using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
@@ -27,7 +30,57 @@ namespace StardewArchipelago.Locations.CodeInjections
             _archipelago = archipelago;
             _locationChecker = locationChecker;
         }
-        
+
+        public static void GetAdventureRecoveryStock_AddReceivedWeapons_Postfix(ref Dictionary<ISalable, int[]> __result)
+        {
+            try
+            {
+                const string prefix = "AP|";
+                foreach (var mail in Game1.player.mailReceived)
+                {
+                    if (!mail.StartsWith(prefix))
+                    {
+                        continue;
+                    }
+
+                    var parts = mail.Split("|");
+                    if (parts.Length < 4)
+                    {
+                        continue;
+                    }
+                    var openedAction = parts[2];
+
+                    if (openedAction != LetterActionsKeys.GiveMeleeWeapon)
+                    {
+                        continue;
+                    }
+
+                    var weaponIdStr = parts[3];
+                    var weaponId = int.Parse(weaponIdStr);
+                    var weapon = new MeleeWeapon(weaponId);
+
+                    if (__result.Keys.Any(x => x.Name == weapon.Name))
+                    {
+                        continue;
+                    }
+
+                    weapon.isLostItem = true;
+                    __result.Add(weapon, new[]
+                    {
+                        Utility.getSellToStorePriceOfItem(weapon) * 4,
+                        1
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(GetAdventureRecoveryStock_AddReceivedWeapons_Postfix)}:\n{ex}",
+                    LogLevel.Error);
+                throw;
+            }
+        }
+
+
         public static bool GetAdventureShopStock_ShopBasedOnReceivedItems_Prefix(
             ref Dictionary<ISalable, int[]> __result)
         {

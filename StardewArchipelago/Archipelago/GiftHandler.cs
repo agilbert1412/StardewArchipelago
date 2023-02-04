@@ -105,6 +105,16 @@ namespace StardewArchipelago.Archipelago
                 itemNumber++;
                 key = string.Format(gift_key_pattern, mySlotName, itemNumber);
             }
+
+            var myAlias = _archipelago.GetPlayerAlias(mySlotName);
+            itemNumber = 0;
+            key = string.Format(gift_key_pattern, myAlias, itemNumber);
+            while (_archipelago.ExistsInDataStorage(key))
+            {
+                ReceiveGiftTomorrow(key);
+                itemNumber++;
+                key = string.Format(gift_key_pattern, mySlotName, itemNumber);
+            }
         }
 
         private void ReceiveGiftTomorrow(string giftKey)

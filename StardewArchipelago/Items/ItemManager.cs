@@ -6,7 +6,7 @@ using StardewArchipelago.Stardew;
 
 namespace StardewArchipelago.Items
 {
-    internal class ItemManager
+    public class ItemManager
     {
         private ArchipelagoClient _archipelago;
         private ItemParser _itemParser;

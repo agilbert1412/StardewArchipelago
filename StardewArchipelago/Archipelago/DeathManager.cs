@@ -32,7 +32,7 @@ namespace StardewArchipelago.Archipelago
             }
         }
 
-        private static void SendDeathLink()
+        private static void SendDeathLink(string cause)
         {
             if (_isCurrentlyReceivingDeathLink)
             {
@@ -40,7 +40,7 @@ namespace StardewArchipelago.Archipelago
                 return;
             }
 
-            _archipelago.SendDeathLink(Game1.player.Name);
+            _archipelago.SendDeathLink(Game1.player.Name, cause);
         }
 
         public void HookIntoDeathlinkEvents()
@@ -76,7 +76,7 @@ namespace StardewArchipelago.Archipelago
             {
                 if (__instance.CanMove && __instance.health <= 0 && !Game1.killScreen && Game1.timeOfDay < 2600)
                 {
-                    SendDeathLink();
+                    SendDeathLink("died in combat");
                 }
 
                 return true; // run original logic
@@ -92,7 +92,7 @@ namespace StardewArchipelago.Archipelago
         {
             try
             {
-                SendDeathLink();
+                SendDeathLink("Passed out");
                 return true; // run original logic
             }
             catch (Exception ex)
