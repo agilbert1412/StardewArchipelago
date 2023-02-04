@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net;
 using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
 using StardewValley;

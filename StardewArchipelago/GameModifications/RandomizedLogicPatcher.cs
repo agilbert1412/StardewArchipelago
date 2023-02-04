@@ -3,8 +3,8 @@ using System.Linq;
 using HarmonyLib;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.GameModifications.CodeInjections;
-using StardewArchipelago.Goals;
 using StardewArchipelago.Locations;
+using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
@@ -15,14 +15,20 @@ namespace StardewArchipelago.GameModifications
     public class RandomizedLogicPatcher
     {
         private readonly Harmony _harmony;
+        private readonly ArchipelagoClient _archipelago;
+        private readonly StardewItemManager _stardewItemManager;
+        private readonly StartingResources _startingResources;
 
-        public RandomizedLogicPatcher(IMonitor monitor, Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public RandomizedLogicPatcher(IMonitor monitor, Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager stardewItemManager)
         {
             _harmony = harmony;
+            _archipelago = archipelago;
+            _stardewItemManager = stardewItemManager;
+            _startingResources = new StartingResources(_archipelago, _stardewItemManager);
             MineshaftLogicInjections.Initialize(monitor);
             CommunityCenterLogicInjections.Initialize(monitor, locationChecker);
-            FarmInjections.Initialize(monitor, archipelago);
-            AchievementInjections.Initialize(monitor, archipelago);
+            FarmInjections.Initialize(monitor, _archipelago);
+            AchievementInjections.Initialize(monitor, _archipelago);
         }
 
         public void PatchAllGameLogic()
@@ -32,6 +38,7 @@ namespace StardewArchipelago.GameModifications
             PatchDefinitionOfCommunityCenterComplete();
             PatchGrandpaNote();
             PatchDebris();
+            _startingResources.GivePlayerStartingResources();
         }
 
         private void PatchAchievements()

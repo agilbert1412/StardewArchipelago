@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Items.Mail;
 using StardewValley;
-using StardewValley.Tools;
 using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Stardew

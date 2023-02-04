@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace StardewArchipelago.Archipelago
+﻿namespace StardewArchipelago.Archipelago
 {
     public class ReceivedItem
     {

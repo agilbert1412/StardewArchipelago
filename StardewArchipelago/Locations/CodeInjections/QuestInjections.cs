@@ -6,7 +6,6 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Menus;
-using StardewValley.Minigames;
 using StardewValley.Quests;
 using StardewValley.TerrainFeatures;
 using xTile.Dimensions;
