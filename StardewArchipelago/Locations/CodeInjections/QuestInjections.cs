@@ -45,53 +45,43 @@ namespace StardewArchipelago.Locations.CodeInjections
                     return true; // run original logic
                 }
 
-                __instance.completed.Value = true;
-                if (__instance.nextQuests.Count > 0)
-                {
-                    foreach (var nextQuest in __instance.nextQuests.Where(nextQuest => nextQuest > 0))
-                    {
-                        Game1.player.questLog.Add(Quest.getQuestFromId(nextQuest));
-                    }
-
-                    Game1.addHUDMessage(new HUDMessage(Game1.content.LoadString("Strings\\StringsFromCSFiles:Quest.cs.13636"), 2));
-                }
-
-                Game1.player.questLog.Remove(__instance);
-                Game1.playSound("questcomplete");
-                if (__instance.id.Value == 126)
-                {
-                    Game1.player.mailReceived.Add("emilyFiber");
-                    Game1.player.activeDialogueEvents.Add("emilyFiber", 2);
-                }
-                Game1.dayTimeMoneyBox.questsDirty = true;
-
-                // Item Delivery: __instance.dailyQuest == true and questType == 3
-                // Copper Ores: Daily True, Type 10
-                // Slay Monsters: Daily True, Type 4
-                // Catch fish: Daily Trye, Type 7
+                // Item Delivery: __instance.dailyQuest == true and questType == 3 [Chance: 40 / 65]
+                // Copper Ores: Daily True, Type 10 [Chance: 8 / 65]
+                // Slay Monsters: Daily True, Type 4 [Chance: 10 / 65]
+                // Catch fish: Daily Trye, Type 7 [Chance: 7 / 65]
                 if (__instance.dailyQuest.Value)
                 {
-                    ++Game1.stats.QuestsCompleted;
+                    var isArchipelago = true;
                     switch (__instance.questType.Value)
                     {
                         case (int)QuestType.ItemDelivery:
-                            CheckDailyQuestLocationOfType("Item Delivery");
+                            isArchipelago = CheckDailyQuestLocationOfType("Item Delivery");
                             break;
                         case (int)QuestType.SlayMonsters:
-                            CheckDailyQuestLocationOfType("Slay Monsters");
+                            isArchipelago = CheckDailyQuestLocationOfType("Slay Monsters");
                             break;
                         case (int)QuestType.Fishing:
-                            CheckDailyQuestLocationOfType("Fishing");
+                            isArchipelago = CheckDailyQuestLocationOfType("Fishing");
                             break;
                         case (int)QuestType.ResourceCollection:
-                            CheckDailyQuestLocationOfType("Gathering");
+                            isArchipelago = CheckDailyQuestLocationOfType("Gathering");
                             break;
                     }
 
-                    return false; // don't run original logic
+                    if (!isArchipelago)
+                    {
+                        return true; // run original logic
+                    }
+
+                    ++Game1.stats.QuestsCompleted;
                 }
-                
-                _locationChecker.AddCheckedLocation(questName);
+                else
+                {
+                    // Story Quest
+                    _locationChecker.AddCheckedLocation(questName);
+                }
+
+                OriginalQuestCompleteCode(__instance);
                 return false; // don't run original logic
             }
             catch (Exception ex)
@@ -101,13 +91,37 @@ namespace StardewArchipelago.Locations.CodeInjections
             }
         }
 
-        private static void CheckDailyQuestLocationOfType(string typeApName)
+        private static void OriginalQuestCompleteCode(Quest __instance)
         {
-            var locationName = $"Help Wanted: {typeApName}";
-            CheckDailyQuestLocation(locationName);
+            __instance.completed.Value = true;
+            if (__instance.nextQuests.Count > 0)
+            {
+                foreach (var nextQuest in __instance.nextQuests.Where(nextQuest => nextQuest > 0))
+                {
+                    Game1.player.questLog.Add(Quest.getQuestFromId(nextQuest));
+                }
+
+                Game1.addHUDMessage(new HUDMessage(Game1.content.LoadString("Strings\\StringsFromCSFiles:Quest.cs.13636"), 2));
+            }
+
+            Game1.player.questLog.Remove(__instance);
+            Game1.playSound("questcomplete");
+            if (__instance.id.Value == 126)
+            {
+                Game1.player.mailReceived.Add("emilyFiber");
+                Game1.player.activeDialogueEvents.Add("emilyFiber", 2);
+            }
+
+            Game1.dayTimeMoneyBox.questsDirty = true;
         }
 
-        public static void CheckDailyQuestLocation(string locationName)
+        private static bool CheckDailyQuestLocationOfType(string typeApName)
+        {
+            var locationName = $"Help Wanted: {typeApName}";
+            return CheckDailyQuestLocation(locationName);
+        }
+
+        public static bool CheckDailyQuestLocation(string locationName)
         {
             var nextLocationNumber = 1;
             while (true)
@@ -116,7 +130,7 @@ namespace StardewArchipelago.Locations.CodeInjections
                 var id = _archipelago.GetLocationId(fullName);
                 if (id < 1)
                 {
-                    return;
+                    return false;
                 }
 
                 if (_locationChecker.IsLocationChecked(fullName))
@@ -126,7 +140,7 @@ namespace StardewArchipelago.Locations.CodeInjections
                 }
 
                 _locationChecker.AddCheckedLocation(fullName);
-                return;
+                return true;
             }
         }
 

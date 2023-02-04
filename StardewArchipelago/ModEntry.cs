@@ -164,7 +164,7 @@ namespace StardewArchipelago
             _locationsPatcher = new LocationPatcher(Monitor, _archipelago, _bundleReader, _helper, _harmony, _locationChecker);
             _itemPatcher = new ItemPatcher(Monitor, _helper, _harmony, _archipelago);
             _goalManager = new GoalManager(Monitor, _helper, _harmony, _archipelago, _locationChecker);
-            _logicPatcher = new RandomizedLogicPatcher(Monitor, _harmony, _archipelago, _locationChecker);
+            _logicPatcher = new RandomizedLogicPatcher(Monitor, _harmony, _archipelago, _locationChecker, _stardewItemManager);
             _jojaDisabler = new JojaDisabler(Monitor, _helper, _harmony);
 
             if (_state.APConnectionInfo == null)
