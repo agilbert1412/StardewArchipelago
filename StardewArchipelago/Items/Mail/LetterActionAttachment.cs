@@ -21,7 +21,9 @@ namespace StardewArchipelago.Items.Mail
 
         public override string GetMailKey()
         {
-            return $"AP|{ArchipelagoItem.ItemName}{ArchipelagoItem.PlayerName}{ArchipelagoItem.LocationName}|{LetterOpenedAction}|{ActionParameter}";
+            var key = $"AP|{ArchipelagoItem.ItemName}{ArchipelagoItem.PlayerName}{ArchipelagoItem.LocationName}|{LetterOpenedAction}|{ActionParameter}";
+            var trimmedKey = key.Replace(" ", "_");
+            return trimmedKey;
         }
     }
 }

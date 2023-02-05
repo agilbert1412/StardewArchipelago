@@ -23,7 +23,9 @@ namespace StardewArchipelago.Items.Mail
 
         public virtual string GetMailKey()
         {
-            return $"AP|{ArchipelagoItem.ItemName}{ArchipelagoItem.PlayerName}{ArchipelagoItem.LocationName}";
+            var key = $"AP|{ArchipelagoItem.ItemName}|{ArchipelagoItem.PlayerName}|{ArchipelagoItem.LocationName}";
+            var trimmedKey = key.Replace(" ", "_");
+            return trimmedKey;
         }
     }
 }

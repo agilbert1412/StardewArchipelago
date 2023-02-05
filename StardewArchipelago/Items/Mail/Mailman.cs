@@ -45,8 +45,8 @@ namespace StardewArchipelago.Items.Mail
 
         public void SendArchipelagoGiftMail(string mailKey, string findingPlayer, string attachmentEmbedString)
         {
-            var mailContent =
-                $"I thought you could use this^^    -{findingPlayer}{attachmentEmbedString}[#]Archipelago Gift";
+            var mailContentTemplate = GetRandomApMailGiftString();
+            var mailContent = string.Format(mailContentTemplate, findingPlayer, attachmentEmbedString);
             GenerateMail(mailKey, mailContent);
             SendMail(mailKey);
         }
@@ -117,6 +117,13 @@ namespace StardewArchipelago.Items.Mail
             _sendForTomorrow = true;
         }
 
+        private string GetRandomApMailGiftString()
+        {
+            var chosenString = ApGiftStrings[_random.Next(0, ApGiftStrings.Length)];
+            chosenString += "{1}[#]Archipelago Item";
+            return chosenString;
+        }
+
         private string GetRandomApMailString()
         {
             var chosenString = ApMailStrings[_random.Next(0, ApMailStrings.Length)];
@@ -146,6 +153,16 @@ namespace StardewArchipelago.Items.Mail
                 }
             }
         }
+
+        // 0: Sender
+        // 1: Embed
+        private static readonly string[] ApGiftStrings = {
+            "It's dangerous to go alone. Take this!^^    -{0}",
+            "Hopefully, this will convince you to leave the Burger King...^^    -{0}",
+            "Here you go!^^    -{0}",
+            "I thought you could use this^^    -{0}",
+            "I heard you wanted that?^^    -{0}",
+        };
 
         // 0: Item
         // 1: Sender

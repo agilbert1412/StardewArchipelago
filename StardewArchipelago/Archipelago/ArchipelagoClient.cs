@@ -114,8 +114,9 @@ namespace StardewArchipelago.Archipelago
             if (_chatForwarder == null)
             {
                 _chatForwarder = new ChatForwarder(_console, _harmony, _giftHandler);
-                _chatForwarder.ListenToChatMessages(this);
             }
+
+            _chatForwarder.ListenToChatMessages(this);
 
             InitializeDeathLink();
 
@@ -252,11 +253,30 @@ namespace StardewArchipelago.Archipelago
             {
                 player = _session.Players.AllPlayers.FirstOrDefault(x => x.Alias == playerName);
             }
-
+            
             return player != null && player.Game == GAME_NAME;
         }
 
-        public void SetDataStorage(string key, string value)
+        public const string STRING_DATA_STORAGE_DELIMITER = "|||";
+        public void AddToStringDataStorage(string key, string value)
+        {
+            if (!MakeSureConnected())
+            {
+                return;
+            }
+
+            var existingValue = ReadStringFromDataStorage(key);
+            if (string.IsNullOrWhiteSpace(existingValue))
+            {
+                _session.DataStorage[Scope.Game, key] = value;
+            }
+            else
+            {
+                _session.DataStorage[Scope.Game, key] = existingValue + STRING_DATA_STORAGE_DELIMITER + value;
+            }
+        }
+
+        public void SetStringDataStorage(string key, string value)
         {
             if (!MakeSureConnected())
             {
@@ -266,7 +286,7 @@ namespace StardewArchipelago.Archipelago
             _session.DataStorage[Scope.Game, key] = value;
         }
 
-        public bool ExistsInDataStorage(string key)
+        public bool StringExistsInDataStorage(string key)
         {
             if (!MakeSureConnected())
             {
@@ -277,7 +297,7 @@ namespace StardewArchipelago.Archipelago
             return !string.IsNullOrWhiteSpace(value.To<string>());
         }
 
-        public string ReadFromDataStorage(string key)
+        public string ReadStringFromDataStorage(string key)
         {
             if (!MakeSureConnected())
             {
@@ -294,7 +314,7 @@ namespace StardewArchipelago.Archipelago
             return stringValue;
         }
 
-        public void RemoveFromDataStorage(string key)
+        public void RemoveStringFromDataStorage(string key)
         {
             if (!MakeSureConnected())
             {

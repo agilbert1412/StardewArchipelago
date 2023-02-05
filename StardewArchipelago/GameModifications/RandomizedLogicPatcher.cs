@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using HarmonyLib;
+using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.GameModifications.CodeInjections;
 using StardewArchipelago.Locations;
@@ -8,6 +9,7 @@ using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
+using StardewValley.Menus;
 using StardewValley.Network;
 
 namespace StardewArchipelago.GameModifications
@@ -19,7 +21,7 @@ namespace StardewArchipelago.GameModifications
         private readonly StardewItemManager _stardewItemManager;
         private readonly StartingResources _startingResources;
 
-        public RandomizedLogicPatcher(IMonitor monitor, Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager stardewItemManager)
+        public RandomizedLogicPatcher(IMonitor monitor, IModHelper helper, Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager stardewItemManager)
         {
             _harmony = harmony;
             _archipelago = archipelago;

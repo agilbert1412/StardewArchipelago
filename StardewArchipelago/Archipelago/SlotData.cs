@@ -22,6 +22,8 @@ namespace StardewArchipelago.Archipelago
         private const string EXPERIENCE_MULTIPLIER_KEY = "experience_multiplier";
         private const string DEBRIS_MULTIPLIER_KEY = "debris_multiplier";
         private const string QUICK_START_KEY = "quick_start";
+        private const string GIFTING_KEY = "gifting";
+        private const string GIFT_TAX_KEY = "gift_tax";
         private const string DEATH_LINK_KEY = "death_link";
         private const string SEED_KEY = "seed";
         private const string MODIFIED_BUNDLES_KEY = "modified_bundles";
@@ -43,6 +45,8 @@ namespace StardewArchipelago.Archipelago
         public double ExperienceMultiplier { get; private set; }
         public DebrisMultiplier DebrisMultiplier { get; private set; }
         public bool QuickStart { get; private set; }
+        public bool Gifting { get; private set; }
+        public double GiftTax { get; private set; }
         public bool DeathLink { get; private set; }
         public string Seed { get; private set; }
         private Dictionary<string, string> ModifiedBundles { get; set; }
@@ -66,6 +70,8 @@ namespace StardewArchipelago.Archipelago
             ExperienceMultiplier = GetSlotSetting(EXPERIENCE_MULTIPLIER_KEY, 100) / 100.0;
             DebrisMultiplier = GetSlotSetting(DEBRIS_MULTIPLIER_KEY, DebrisMultiplier.HalfDebris);
             QuickStart = GetSlotSetting(QUICK_START_KEY, false);
+            Gifting = GetSlotSetting(GIFTING_KEY, true);
+            GiftTax = GetSlotSetting(GIFT_TAX_KEY, 30) / 100.0;
             DeathLink = GetSlotSetting(DEATH_LINK_KEY, false);
             Seed = GetSlotSetting(SEED_KEY, "");
             var newBundleStringData = GetSlotSetting(MODIFIED_BUNDLES_KEY, "");

@@ -101,7 +101,7 @@ namespace StardewArchipelago.GameModifications
         {
             var trimmedSeed = _archipelago.SlotData.Seed.Trim();
             
-            int result = int.Parse(trimmedSeed.Substring(0, 9));
+            int result = int.Parse(trimmedSeed.Substring(0, Math.Min(9, trimmedSeed.Length)));
             Game1.startingGameSeed = (ulong)result;
         }
 
