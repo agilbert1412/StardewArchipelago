@@ -12,6 +12,8 @@ namespace StardewArchipelago.Locations.CodeInjections
     public static class ArcadeMachineInjections
     {
         private const string JK_EXTRA_LIFE = "Junimo Kart: Extra Life";
+
+        public const string JK_VICTORY = "Junimo Kart: Sunset Speedway (Victory)";
         private static readonly Dictionary<int, string> JK_LEVEL_LOCATIONS = new Dictionary<int, string>()
         {
             {0, "Junimo Kart: Crumble Cavern"},
@@ -22,10 +24,8 @@ namespace StardewArchipelago.Locations.CodeInjections
             {3, "Junimo Kart: Ghastly Galleon"},
             {9, "Junimo Kart: Glowshroom Grotto"},
             {4, "Junimo Kart: Red Hot Rollercoaster"},
-            {6, "Junimo Kart: Sunset Speedway (Victory)"},
+            {6, JK_VICTORY},
         };
-
-        public const string JK_VICTORY = "Junimo Kart Victory";
 
         private const string JOTPK_BOOTS_1 = "JotPK: Boots 1";
         private const string JOTPK_BOOTS_2 = "JotPK: Boots 2";
@@ -158,6 +158,7 @@ namespace StardewArchipelago.Locations.CodeInjections
                 numberExtraLives = _archipelago.GetReceivedItemCount(JK_EXTRA_LIFE);
             }
 
+            numberExtraLives = 16;
             return numberExtraLives;
         }
 

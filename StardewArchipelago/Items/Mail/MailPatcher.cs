@@ -42,13 +42,13 @@ namespace StardewArchipelago.Items.Mail
                 }
                 
                 var parts = title.Split('|');
-                if (parts.Length < 4)
+                if (parts.Length < 6)
                 {
                     return;
                 }
 
-                var apActionName = parts[2];
-                var apActionParameter = parts[3];
+                var apActionName = parts[4];
+                var apActionParameter = parts[5];
 
                 _letterActions.ExecuteLetterAction(apActionName, apActionParameter);
             }

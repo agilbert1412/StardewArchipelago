@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using HarmonyLib;
+using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Extensions;
 using StardewArchipelago.GameModifications;
 using StardewArchipelago.GameModifications.CodeInjections;
+using StardewArchipelago.GameModifications.Entrances;
 using StardewArchipelago.Goals;
 using StardewArchipelago.Items;
 using StardewArchipelago.Items.Mail;
@@ -44,6 +46,7 @@ namespace StardewArchipelago
         private UnlockManager _unlockManager;
         private MultiSleep _multiSleep;
         private JojaDisabler _jojaDisabler;
+        private EntranceRandomizer _entranceRandomizer;
 
         private Tester _tester;
 
@@ -89,6 +92,8 @@ namespace StardewArchipelago
             _helper.ConsoleCommands.Add("test_getallitems", "Tests if every AP item in the stardew_valley_item_table json file are supported by the mod", this.TestGetAllItems);
             _helper.ConsoleCommands.Add("test_getitem", "Get one specific item", this.TestGetSpecificItem);
             //_helper.ConsoleCommands.Add("test_sendalllocations", "Tests if every AP item in the stardew_valley_location_table json file are supported by the mod", _tester.TestSendAllLocations);
+            _helper.ConsoleCommands.Add("load_entrances", "Loads the entrances file", (_, _) => _entranceRandomizer.LoadTransports());
+            _helper.ConsoleCommands.Add("save_entrances", "Saves the entrances file", (_, _) => _entranceRandomizer.SaveTransports());
             _helper.ConsoleCommands.Add("debugMethod", "Runs whatever is currently in the debug method", this.DebugMethod);
 #endif
         }
@@ -164,7 +169,8 @@ namespace StardewArchipelago
             _locationsPatcher = new LocationPatcher(Monitor, _archipelago, _bundleReader, _helper, _harmony, _locationChecker);
             _itemPatcher = new ItemPatcher(Monitor, _helper, _harmony, _archipelago);
             _goalManager = new GoalManager(Monitor, _helper, _harmony, _archipelago, _locationChecker);
-            _logicPatcher = new RandomizedLogicPatcher(Monitor, _helper, _harmony, _archipelago, _locationChecker, _stardewItemManager);
+            _entranceRandomizer = new EntranceRandomizer(_helper);
+            _logicPatcher = new RandomizedLogicPatcher(Monitor, _helper, _harmony, _archipelago, _locationChecker, _stardewItemManager, _entranceRandomizer);
             _jojaDisabler = new JojaDisabler(Monitor, _helper, _harmony);
 
             if (_state.APConnectionInfo == null)
@@ -199,10 +205,7 @@ namespace StardewArchipelago
             _jojaDisabler.DisableJojaMembership();
             _multiSleep.InjectMultiSleepOption(_archipelago.SlotData);
 
-            FixDailyQuestLocations("Item Delivery");
-            FixDailyQuestLocations("Slay Monsters");
-            FixDailyQuestLocations("Fishing");
-            FixDailyQuestLocations("Gathering");
+            Game1.chatBox?.addMessage($"Connected to Archipelago as {_archipelago.SlotData.SlotName}. Type !!help for client commands", Color.Green);
         }
 
         private void OnCloseBehavior()
@@ -210,26 +213,6 @@ namespace StardewArchipelago
             Monitor.Log("You are not allowed to load a save without connecting to Archipelago", LogLevel.Error);
             // TitleMenu.subMenu = previousMenu;
             Game1.ExitToTitle();
-        }
-
-        private void FixDailyQuestLocations(string typeApName)
-        {
-            var locationName = $"Help Wanted: {typeApName}";
-            var checkedLocationOfType =
-                _locationChecker.GetAllLocationsAlreadyChecked().Where(x => x.StartsWith(locationName));
-            var checkedLocationsNotResolved = checkedLocationOfType.Where(x => _archipelago.GetLocationId(x) < 1);
-            var numberOfCheckedLocationsNotResolved = checkedLocationsNotResolved.Count();
-            if (numberOfCheckedLocationsNotResolved < 1)
-            {
-                return;
-            }
-
-            for (var i = 0; i < numberOfCheckedLocationsNotResolved; i++)
-            {
-                QuestInjections.CheckDailyQuestLocation(locationName);
-            }
-
-            _locationChecker.ForgetLocations(checkedLocationsNotResolved);
         }
 
         private void ReadPersistentArchipelagoData()
@@ -322,12 +305,7 @@ namespace StardewArchipelago
 
         private void DebugMethod(string arg1, string[] arg2)
         {
-            var r = new Random();
-            for (var i = 0; i < (arg2.Length > 0 ? int.Parse(arg2[0]) : 10); i++)
-            {
-                var color = (arg2.Length > 1 ? int.Parse(arg2[1]) : r.Next()).GetAsBrightColor();
-                Game1.chatBox?.addMessage("Player: Hello", color);
-            }
+
         }
 
         public bool ArchipelagoConnect(string ip, int port, string slot, string password, out string errorMessage)

@@ -55,16 +55,16 @@ namespace StardewArchipelago.Locations.CodeInjections
                     switch (__instance.questType.Value)
                     {
                         case (int)QuestType.ItemDelivery:
-                            isArchipelago = CheckDailyQuestLocationOfType("Item Delivery");
+                            isArchipelago = CheckDailyQuestLocationOfType("Item Delivery", _archipelago.SlotData.HelpWantedLocationNumber * 4 / 7);
                             break;
                         case (int)QuestType.SlayMonsters:
-                            isArchipelago = CheckDailyQuestLocationOfType("Slay Monsters");
+                            isArchipelago = CheckDailyQuestLocationOfType("Slay Monsters", _archipelago.SlotData.HelpWantedLocationNumber / 7);
                             break;
                         case (int)QuestType.Fishing:
-                            isArchipelago = CheckDailyQuestLocationOfType("Fishing");
+                            isArchipelago = CheckDailyQuestLocationOfType("Fishing", _archipelago.SlotData.HelpWantedLocationNumber / 7);
                             break;
                         case (int)QuestType.ResourceCollection:
-                            isArchipelago = CheckDailyQuestLocationOfType("Gathering");
+                            isArchipelago = CheckDailyQuestLocationOfType("Gathering", _archipelago.SlotData.HelpWantedLocationNumber / 7);
                             break;
                     }
 
@@ -115,16 +115,16 @@ namespace StardewArchipelago.Locations.CodeInjections
             Game1.dayTimeMoneyBox.questsDirty = true;
         }
 
-        private static bool CheckDailyQuestLocationOfType(string typeApName)
+        private static bool CheckDailyQuestLocationOfType(string typeApName, int max)
         {
             var locationName = $"Help Wanted: {typeApName}";
-            return CheckDailyQuestLocation(locationName);
+            return CheckDailyQuestLocation(locationName, max);
         }
 
-        public static bool CheckDailyQuestLocation(string locationName)
+        public static bool CheckDailyQuestLocation(string locationName, int max)
         {
             var nextLocationNumber = 1;
-            while (true)
+            while (nextLocationNumber <= max)
             {
                 var fullName = $"{locationName} {nextLocationNumber}";
                 var id = _archipelago.GetLocationId(fullName);
@@ -142,6 +142,8 @@ namespace StardewArchipelago.Locations.CodeInjections
                 _locationChecker.AddCheckedLocation(fullName);
                 return true;
             }
+
+            return false;
         }
 
         public static void Command_RemoveQuest_CheckLocation_Postfix(Event __instance, GameLocation location, GameTime time, string[] split)

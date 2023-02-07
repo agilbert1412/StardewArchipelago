@@ -4,6 +4,7 @@ using HarmonyLib;
 using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.GameModifications.CodeInjections;
+using StardewArchipelago.GameModifications.Entrances;
 using StardewArchipelago.Locations;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
@@ -21,7 +22,7 @@ namespace StardewArchipelago.GameModifications
         private readonly StardewItemManager _stardewItemManager;
         private readonly StartingResources _startingResources;
 
-        public RandomizedLogicPatcher(IMonitor monitor, IModHelper helper, Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager stardewItemManager)
+        public RandomizedLogicPatcher(IMonitor monitor, IModHelper helper, Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager stardewItemManager, EntranceRandomizer entranceRandomizer)
         {
             _harmony = harmony;
             _archipelago = archipelago;
@@ -31,6 +32,7 @@ namespace StardewArchipelago.GameModifications
             CommunityCenterLogicInjections.Initialize(monitor, locationChecker);
             FarmInjections.Initialize(monitor, _archipelago);
             AchievementInjections.Initialize(monitor, _archipelago);
+            EntranceInjections.Initialize(monitor, _archipelago, entranceRandomizer);
         }
 
         public void PatchAllGameLogic()
@@ -40,6 +42,7 @@ namespace StardewArchipelago.GameModifications
             PatchDefinitionOfCommunityCenterComplete();
             PatchGrandpaNote();
             PatchDebris();
+            PatchEntrances();
             _startingResources.GivePlayerStartingResources();
         }
 
@@ -118,6 +121,19 @@ namespace StardewArchipelago.GameModifications
             _harmony.Patch(
                 original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.spawnWeedsAndStones)),
                 prefix: new HarmonyMethod(typeof(FarmInjections), nameof(FarmInjections.SpawnWeedsAndStones_ConsiderUserPreference_PreFix))
+            );
+        }
+
+        private void PatchEntrances()
+        {
+            if (_archipelago.SlotData.EntranceRandomization == EntranceRandomization.Disabled)
+            {
+                return;
+            }
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Game1), "performWarpFarmer"),
+                prefix: new HarmonyMethod(typeof(EntranceInjections), nameof(EntranceInjections.PerformWarpFarmer_EntranceRandomization_Prefix))
             );
         }
     }
