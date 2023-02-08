@@ -237,15 +237,25 @@ namespace StardewArchipelago.Locations
                 return;
             }
 
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.answerDialogueAction)),
-                prefix: new HarmonyMethod(typeof(CarpenterInjections), nameof(CarpenterInjections.AnswerDialogueAction_CarpenterConstruct_Prefix))
-            );
-
             var desiredOverloadParameters = new[] { typeof(string), typeof(Response[]), typeof(string) };
             _harmony.Patch(
                 original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.createQuestionDialogue), desiredOverloadParameters),
                 prefix: new HarmonyMethod(typeof(CarpenterInjections), nameof(CarpenterInjections.CreateQuestionDialogue_CarpenterDialogOptions_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), "houseUpgradeOffer"),
+                prefix: new HarmonyMethod(typeof(CarpenterInjections), nameof(CarpenterInjections.HouseUpgradeOffer_OfferFreeUpgrade_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), "houseUpgradeAccept"),
+                prefix: new HarmonyMethod(typeof(CarpenterInjections), nameof(CarpenterInjections.HouseUpgradeAccept_FreeFromAP_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.answerDialogueAction)),
+                prefix: new HarmonyMethod(typeof(CarpenterInjections), nameof(CarpenterInjections.AnswerDialogueAction_CarpenterConstruct_Prefix))
             );
 
             _harmony.Patch(

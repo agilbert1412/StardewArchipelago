@@ -7,8 +7,8 @@ namespace StardewArchipelago.Items
 {
     public class PlayerBuffInjections
     {
-        private const string MOVEMENT_SPEED_AP_LOCATION = "Progressive Movement Speed Bonus";
-        private const string LUCK_AP_LOCATION = "Progressive Luck Bonus";
+        private const string MOVEMENT_SPEED_AP_LOCATION = "Movement Speed Bonus";
+        private const string LUCK_AP_LOCATION = "Luck Bonus";
 
         private static IMonitor _monitor;
         private static IModHelper _helper;

@@ -24,7 +24,7 @@ namespace StardewArchipelago.GameModifications.Entrances
         {
             var random = new Random();
             var vanillaTransports = AllVanillaTransportations.Select(x => x.DeepCopy()).ToList();
-            var vanillaTransportCouples = new Dictionary<LocationTransport, LocationTransport>();
+            var transportCouples = new Dictionary<LocationTransport, LocationTransport>();
 
             while (vanillaTransports.Any())
             {
@@ -33,17 +33,17 @@ namespace StardewArchipelago.GameModifications.Entrances
                 var side2 = GetInverseEntrance(side1, vanillaTransports);
                 vanillaTransports.Remove(side2);
 
-                vanillaTransportCouples.Add(side1, side2);
+                transportCouples.Add(side1, side2);
             }
 
-            for (var i = 0; i < vanillaTransportCouples.Count * 2; i++)
+            for (var i = 0; i < transportCouples.Count * 2; i++)
             {
-                var keys = vanillaTransportCouples.Keys.ToArray();
-                var randomIndex1 = random.Next(0, vanillaTransportCouples.Count);
+                var keys = transportCouples.Keys.ToArray();
+                var randomIndex1 = random.Next(0, transportCouples.Count);
                 var firstEntrance = keys[randomIndex1];
-                var firstEntranceInverted = vanillaTransportCouples[firstEntrance];
+                var firstEntranceInverted = transportCouples[firstEntrance];
 
-                var randomIndex2 = random.Next(0, vanillaTransportCouples.Count);
+                var randomIndex2 = random.Next(0, transportCouples.Count);
 
                 if (randomIndex2 == randomIndex1)
                 {
@@ -51,7 +51,7 @@ namespace StardewArchipelago.GameModifications.Entrances
                 }
 
                 var pickedEntrance = keys[randomIndex2];
-                var pickedEntranceInverted = vanillaTransportCouples[pickedEntrance];
+                var pickedEntranceInverted = transportCouples[pickedEntrance];
 
                 var newEntrance1 = new LocationTransport(firstEntrance.Origin, pickedEntrance.Destination);
                 var newEntrance1Inverted = new LocationTransport(pickedEntranceInverted.Origin, firstEntranceInverted.Destination);
@@ -59,14 +59,14 @@ namespace StardewArchipelago.GameModifications.Entrances
                 var newEntrance2 = new LocationTransport(pickedEntrance.Origin, firstEntrance.Destination);
                 var newEntrance2Inverted = new LocationTransport(firstEntranceInverted.Origin, pickedEntranceInverted.Destination);
 
-                vanillaTransportCouples.Remove(firstEntrance);
-                vanillaTransportCouples.Remove(pickedEntrance);
+                transportCouples.Remove(firstEntrance);
+                transportCouples.Remove(pickedEntrance);
 
-                vanillaTransportCouples.Add(newEntrance1, newEntrance1Inverted);
-                vanillaTransportCouples.Add(newEntrance2, newEntrance2Inverted);
+                transportCouples.Add(newEntrance1, newEntrance1Inverted);
+                transportCouples.Add(newEntrance2, newEntrance2Inverted);
             }
 
-            return vanillaTransportCouples.SelectMany(x => new[] { x.Key, x.Value }).ToList();
+            return transportCouples.SelectMany(x => new[] { x.Key, x.Value }).ToList();
         }
 
         private LocationTransport GetInverseEntrance(LocationTransport entrance, List<LocationTransport> possibilities)
