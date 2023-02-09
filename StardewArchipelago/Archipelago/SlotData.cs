@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
-using StardewArchipelago.GameModifications.Entrances;
+using StardewArchipelago.GameModifications.EntranceRandomizer;
 using StardewArchipelago.Locations.CodeInjections;
 using StardewModdingAPI;
 using StardewValley;
@@ -30,6 +31,7 @@ namespace StardewArchipelago.Archipelago
         private const string DEATH_LINK_KEY = "death_link";
         private const string SEED_KEY = "seed";
         private const string MODIFIED_BUNDLES_KEY = "modified_bundles";
+        private const string MODIFIED_ENTRANCES_KEY = "modified_entrances";
 
         private Dictionary<string, object> _slotDataFields;
         private IMonitor _console;
@@ -55,6 +57,7 @@ namespace StardewArchipelago.Archipelago
         public bool DeathLink { get; private set; }
         public string Seed { get; private set; }
         private Dictionary<string, string> ModifiedBundles { get; set; }
+        public Dictionary<string, string> ModifiedEntrances { get; set; }
 
         public SlotData(string slotName, Dictionary<string, object> slotDataFields, IMonitor console)
         {
@@ -83,6 +86,11 @@ namespace StardewArchipelago.Archipelago
             Seed = GetSlotSetting(SEED_KEY, "");
             var newBundleStringData = GetSlotSetting(MODIFIED_BUNDLES_KEY, "");
             ModifiedBundles = JsonConvert.DeserializeObject<Dictionary<string, string>>(newBundleStringData);
+            /*var modifiedEntrancesStringData = GetSlotSetting(MODIFIED_ENTRANCES_KEY, "");
+            ModifiedEntrances = JsonConvert.DeserializeObject<Dictionary<string, string>>(modifiedEntrancesStringData);*/
+
+            EntranceRandomization = EntranceRandomization.Pelican_town;
+            ModifiedEntrances = GetDummyModifiedEntrancesData();
         }
 
         private T GetSlotSetting<T>(string key, T defaultValue) where T : struct, Enum, IConvertible
@@ -129,6 +137,95 @@ namespace StardewArchipelago.Archipelago
                 CommunityCenterInjections._bundleNames.Add(newBundleName, oldBundleName);
                 Game1.netWorldState.Value.BundleData[key] = newBundle;
             }
+        }
+
+        public void ReplaceEntrances()
+        {
+            foreach (var (original, replacement) in ModifiedEntrances)
+            {
+
+                var originalExists = Entrances.TryGetEntrance(original, out var originalEntrance);
+                var replacementExists = Entrances.TryGetEntrance(replacement, out var replacementEntrance);
+                if (!originalExists || !replacementExists)
+                {
+                    if (!originalExists)
+                    {
+                        _console.Log($"Entrance \"{original}\" not found. Could not apply randomization provided by the AP server", LogLevel.Warn);
+                    }
+                    if (!replacementExists)
+                    {
+                        _console.Log($"Entrance \"{replacement}\" not found. Could not apply randomization provided by the AP server", LogLevel.Warn);
+                    }
+                    continue;
+                }
+
+                originalEntrance.ReplaceWith(replacementEntrance);
+                DoReplacementOnEquivalentAreasAsWell(originalEntrance, original, replacementEntrance);
+            }
+        }
+
+        private static void DoReplacementOnEquivalentAreasAsWell(OneWayEntrance originalEntrance, string original,
+            OneWayEntrance replacementEntrance)
+        {
+            foreach (var equivalentGroup in EquivalentWarps.EquivalentAreas)
+            {
+                ReplaceEquivalentEntrances(originalEntrance.OriginName, original, replacementEntrance, equivalentGroup);
+                ReplaceEquivalentEntrances(originalEntrance.DestinationName, original, replacementEntrance, equivalentGroup);
+            }
+        }
+
+        private static void ReplaceEquivalentEntrances(string locationName, string originalLocationName, OneWayEntrance replacementEntrance,
+            string[] equivalentAreasGroup)
+        {
+            if (!equivalentAreasGroup.Contains(locationName))
+            {
+                return;
+            }
+
+            foreach (var equivalentArea in equivalentAreasGroup)
+            {
+                if (locationName == equivalentArea)
+                {
+                    continue;
+                }
+
+                var newWarpName = originalLocationName.Replace(locationName, equivalentArea);
+                var newEntranceExists = Entrances.TryGetEntrance(newWarpName, out var newEntrance);
+                if (newEntranceExists)
+                {
+                    newEntrance.ReplaceWith(replacementEntrance);
+                }
+            }
+        }
+
+        private Dictionary<string, string> GetDummyModifiedEntrancesData()
+        {
+            var dic = new Dictionary<string, string>();
+
+            dic.Add("Town to SeedShop", "Town to Saloon");
+            dic.Add("Saloon To Town", "SeedShop to Town");
+            dic.Add("Town to Saloon", "Town to Hospital");
+            dic.Add("Hospital to Town", "Saloon to Town");
+
+            dic.Add("Town to Hospital", "Forest to Woods");
+            dic.Add("Woods to Forest", "Hospital to Town");
+
+            dic.Add("Forest to Woods", "Town to SeedShop");
+            dic.Add("SeedShop to Town", "Woods to Forest");
+
+            dic.Add("Town to Blacksmith", "Town to JojaMart");
+            dic.Add("JojaMart to Town", "Blacksmith to Town");
+            
+            dic.Add("Town to AbandonedJojaMart", "Town to Blacksmith");
+            dic.Add("Blacksmith to Town", "JojaMart to Town");
+
+            dic.Add("Town to Trailer", "Mountain to ScienceHouse");
+            dic.Add("ScienceHouse to Mountain", "Trailer to Town");
+
+            dic.Add("Mountain to ScienceHouse", "Town to Trailer");
+            dic.Add("Trailer_Big to Town", "ScienceHouse to Mountain");
+
+            return dic;
         }
     }
 

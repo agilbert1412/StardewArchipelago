@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.GameModifications.Entrances;
+using StardewArchipelago.GameModifications.EntranceRandomizer;
 using StardewArchipelago.Locations;
 using StardewModdingAPI;
 using StardewValley;
@@ -17,15 +18,11 @@ namespace StardewArchipelago.GameModifications.CodeInjections
     {
         private static IMonitor _monitor;
         private static ArchipelagoClient _archipelago;
-        private static EntranceRandomizer _entranceRandomizer;
-        private static List<LocationTransport> _randomizedEntrances;
 
-        public static void Initialize(IMonitor monitor, ArchipelagoClient archipelago, EntranceRandomizer entranceRandomizer)
+        public static void Initialize(IMonitor monitor, ArchipelagoClient archipelago)
         {
             _monitor = monitor;
             _archipelago = archipelago;
-            _entranceRandomizer = entranceRandomizer;
-            _randomizedEntrances = _entranceRandomizer.RandomizeEntrances();
         }
 
         public static bool PerformWarpFarmer_EntranceRandomization_Prefix(ref LocationRequest locationRequest, ref int tileX,
@@ -33,25 +30,32 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         {
             try
             {
-                /*var entrance1 = new Entrance(Game1.currentLocation.Name, new Point(Game1.player.getTileX(), Game1.player.getTileY()));
-                var entrance2 = new Entrance(locationRequest.Name, new Point(tileX, tileY));
-                var transport = new LocationTransport(entrance1, entrance2);
-                _entranceRandomizer.AddTransport(transport);*/
-
-                // _monitor.Log($"Warp to {locationRequest.Name} from {Game1.currentLocation.Name} [{tileX}, {tileY}] [{facingDirectionAfterWarp}]", LogLevel.Alert);
-
-                // _randomizedEntrances = _entranceRandomizer.RandomizeEntrances();
-                var desiredEntrance = FindBestMatch(Game1.currentLocation.Name, new Point(Game1.player.getTileX(), Game1.player.getTileY()), _randomizedEntrances);
-
-                if (desiredEntrance == null)
+                if (Game1.currentLocation.Name.ToLower() == locationRequest.Name.ToLower())
                 {
                     return true; // run original logic
                 }
 
-                locationRequest.Name = desiredEntrance.Destination.LocationName;
-                locationRequest.Location = Game1.getLocationFromName(locationRequest.Name, locationRequest.IsStructure);
-                tileX = desiredEntrance.Destination.Tile.X;
-                tileY = desiredEntrance.Destination.Tile.Y;
+                var entranceExists = Entrances.TryGetEntrance(Game1.currentLocation.Name, locationRequest.Name,
+                    out var desiredEntrance);
+                if (!entranceExists)
+                {
+                    RecordNewEntrance(locationRequest, tileX, tileY, facingDirectionAfterWarp);
+                    return true; // run original logic
+                }
+
+                var warpRequest = new WarpRequest(locationRequest, tileX, tileY, facingDirectionAfterWarp);
+                var warpIsModified = desiredEntrance.GetModifiedWarp(warpRequest, out var newWarp);
+                if (!warpIsModified)
+                {
+                    return true; // run original logic
+                }
+
+                locationRequest.Name = newWarp.LocationRequest.Name;
+                locationRequest.Location = newWarp.LocationRequest.Location;
+                locationRequest.IsStructure = newWarp.LocationRequest.IsStructure;
+                tileX = newWarp.TileX;
+                tileY = newWarp.TileY;
+                facingDirectionAfterWarp = newWarp.FacingDirectionAfterWarp;
                 return true; // run original logic
             }
             catch (Exception ex)
@@ -61,26 +65,45 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             }
         }
 
-        private static LocationTransport FindBestMatch(string originName, Point originTile, List<LocationTransport> entranceCandidates)
-        {
-            LocationTransport bestMatch = null;
-            var bestMatchDistance = 2;
-            foreach (var entranceCandidate in entranceCandidates)
-            {
-                if (entranceCandidate.Origin.LocationName != originName)
-                {
-                    continue;
-                }
 
-                var distance = _entranceRandomizer.GetTotalTileDistance(originTile, entranceCandidate.Origin.Tile);
-                if (distance < bestMatchDistance)
-                {
-                    bestMatchDistance = distance;
-                    bestMatch = entranceCandidate;
-                }
+        private static OneWayEntrance _temporaryOneWayEntrance;
+        private static List<(OneWayEntrance, OneWayEntrance)> _newEntrances = new();
+        private static void RecordNewEntrance(LocationRequest locationRequest, int tileX, int tileY, int facingDirectionAfterWarp)
+        {
+            var currentPosition = new Point(Game1.player.getTileX(), Game1.player.getTileY());
+            var warpPosition = new Point(tileX, tileY);
+            var newEntrance = new OneWayEntrance(Game1.currentLocation.Name, locationRequest.Name, currentPosition,
+                warpPosition, facingDirectionAfterWarp);
+
+            if (_temporaryOneWayEntrance == null ||
+                _temporaryOneWayEntrance.OriginName.ToLower() != newEntrance.DestinationName.ToLower() ||
+                _temporaryOneWayEntrance.DestinationName.ToLower() != newEntrance.OriginName.ToLower())
+            {
+                _temporaryOneWayEntrance = newEntrance;
+                _monitor.Log($"Found a new Entrance from {newEntrance.OriginName} to {newEntrance.DestinationName}", LogLevel.Warn);
+                return;
+            }
+            
+            var entranceSide1 = new OneWayEntrance(_temporaryOneWayEntrance.OriginName, newEntrance.OriginName,
+                newEntrance.DestinationPosition, _temporaryOneWayEntrance.DestinationPosition, _temporaryOneWayEntrance.FacingDirectionAfterWarp);
+            var entranceSide2 = new OneWayEntrance(newEntrance.OriginName, _temporaryOneWayEntrance.OriginName,
+                _temporaryOneWayEntrance.DestinationPosition, newEntrance.DestinationPosition, newEntrance.FacingDirectionAfterWarp);
+            _newEntrances.Add((entranceSide1, entranceSide2));
+            _monitor.Log($"Completed the entrance from {entranceSide1.OriginName} to {entranceSide1.DestinationName}", LogLevel.Warn);
+            _temporaryOneWayEntrance = null;
+        }
+
+        public static void SaveNewEntrancesToFile()
+        {
+            using var streamWriter =
+                new StreamWriter(
+                    "D:\\Programs\\Steam\\steamapps\\common\\Stardew Valley\\Mods\\StardewArchipelago\\NewEntrances.txt");
+            foreach (var (entrance1, entrance2) in _newEntrances)
+            {
+                streamWriter.WriteLine($"public static readonly (OneWayEntrance, OneWayEntrance) {entrance1.OriginName}To{entrance1.DestinationName} = AddEntrance(\"{entrance1.OriginName}\", \"{entrance1.DestinationName}\", {entrance1.OriginPosition.X}, {entrance1.OriginPosition.Y}, {entrance1.DestinationPosition.X}, {entrance1.DestinationPosition.Y}, {entrance2.FacingDirectionAfterWarp}, {entrance1.FacingDirectionAfterWarp});");
             }
 
-            return bestMatch;
+            _newEntrances = new();
         }
     }
 }

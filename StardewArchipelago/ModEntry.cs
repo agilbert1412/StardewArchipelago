@@ -7,7 +7,6 @@ using StardewArchipelago.Archipelago;
 using StardewArchipelago.Extensions;
 using StardewArchipelago.GameModifications;
 using StardewArchipelago.GameModifications.CodeInjections;
-using StardewArchipelago.GameModifications.Entrances;
 using StardewArchipelago.Goals;
 using StardewArchipelago.Items;
 using StardewArchipelago.Items.Mail;
@@ -46,7 +45,6 @@ namespace StardewArchipelago
         private UnlockManager _unlockManager;
         private MultiSleep _multiSleep;
         private JojaDisabler _jojaDisabler;
-        private EntranceRandomizer _entranceRandomizer;
 
         private Tester _tester;
 
@@ -92,8 +90,8 @@ namespace StardewArchipelago
             _helper.ConsoleCommands.Add("test_getallitems", "Tests if every AP item in the stardew_valley_item_table json file are supported by the mod", this.TestGetAllItems);
             _helper.ConsoleCommands.Add("test_getitem", "Get one specific item", this.TestGetSpecificItem);
             //_helper.ConsoleCommands.Add("test_sendalllocations", "Tests if every AP item in the stardew_valley_location_table json file are supported by the mod", _tester.TestSendAllLocations);
-            _helper.ConsoleCommands.Add("load_entrances", "Loads the entrances file", (_, _) => _entranceRandomizer.LoadTransports());
-            _helper.ConsoleCommands.Add("save_entrances", "Saves the entrances file", (_, _) => _entranceRandomizer.SaveTransports());
+            // _helper.ConsoleCommands.Add("load_entrances", "Loads the entrances file", (_, _) => _entranceRandomizer.LoadTransports());
+            _helper.ConsoleCommands.Add("save_entrances", "Saves the entrances file", (_, _) => EntranceInjections.SaveNewEntrancesToFile());
             _helper.ConsoleCommands.Add("debugMethod", "Runs whatever is currently in the debug method", this.DebugMethod);
 #endif
         }
@@ -169,8 +167,7 @@ namespace StardewArchipelago
             _locationsPatcher = new LocationPatcher(Monitor, _archipelago, _bundleReader, _helper, _harmony, _locationChecker);
             _itemPatcher = new ItemPatcher(Monitor, _helper, _harmony, _archipelago);
             _goalManager = new GoalManager(Monitor, _helper, _harmony, _archipelago, _locationChecker);
-            _entranceRandomizer = new EntranceRandomizer(_helper);
-            _logicPatcher = new RandomizedLogicPatcher(Monitor, _helper, _harmony, _archipelago, _locationChecker, _stardewItemManager, _entranceRandomizer);
+            _logicPatcher = new RandomizedLogicPatcher(Monitor, _helper, _harmony, _archipelago, _locationChecker, _stardewItemManager);
             _jojaDisabler = new JojaDisabler(Monitor, _helper, _harmony);
 
             if (_state.APConnectionInfo == null)
@@ -199,6 +196,7 @@ namespace StardewArchipelago
             _logicPatcher.PatchAllGameLogic();
             _mailPatcher.PatchMailBoxForApItems();
             _archipelago.SlotData.ReplaceAllBundles();
+            _archipelago.SlotData.ReplaceEntrances();
             _locationsPatcher.ReplaceAllLocationsRewardsWithChecks();
             _itemPatcher.PatchApItems();
             _goalManager.InjectGoalMethods();

@@ -4,7 +4,6 @@ using HarmonyLib;
 using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.GameModifications.CodeInjections;
-using StardewArchipelago.GameModifications.Entrances;
 using StardewArchipelago.Locations;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
@@ -22,7 +21,7 @@ namespace StardewArchipelago.GameModifications
         private readonly StardewItemManager _stardewItemManager;
         private readonly StartingResources _startingResources;
 
-        public RandomizedLogicPatcher(IMonitor monitor, IModHelper helper, Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager stardewItemManager, EntranceRandomizer entranceRandomizer)
+        public RandomizedLogicPatcher(IMonitor monitor, IModHelper helper, Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager stardewItemManager)
         {
             _harmony = harmony;
             _archipelago = archipelago;
@@ -32,7 +31,7 @@ namespace StardewArchipelago.GameModifications
             CommunityCenterLogicInjections.Initialize(monitor, locationChecker);
             FarmInjections.Initialize(monitor, _archipelago);
             AchievementInjections.Initialize(monitor, _archipelago);
-            EntranceInjections.Initialize(monitor, _archipelago, entranceRandomizer);
+            EntranceInjections.Initialize(monitor, _archipelago);
         }
 
         public void PatchAllGameLogic()
