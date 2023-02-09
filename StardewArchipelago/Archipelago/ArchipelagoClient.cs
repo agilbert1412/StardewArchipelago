@@ -344,14 +344,16 @@ namespace StardewArchipelago.Archipelago
             }
 
             var allReceivedItems = new List<ReceivedItem>();
-            foreach (var apItem in _session.Items.AllItemsReceived)
+            var apItems = _session.Items.AllItemsReceived.ToArray();
+            for (var itemIndex = 0; itemIndex < apItems.Length; itemIndex++)
             {
+                var apItem = apItems[itemIndex];
                 var itemName = GetItemName(apItem.Item);
                 var playerName = GetPlayerName(apItem.Player);
                 var locationName = GetLocationName(apItem.Location) ?? "Thin air";
 
                 var receivedItem = new ReceivedItem(locationName, itemName, playerName, apItem.Location, apItem.Item,
-                    apItem.Player);
+                    apItem.Player, itemIndex);
 
                 allReceivedItems.Add(receivedItem);
             }

@@ -16,12 +16,14 @@ namespace StardewArchipelago.Test
         private IMonitor _monitor;
         private ItemParser _itemParser;
         private Mailman _mail;
+        private Random _random;
 
         public Tester(IModHelper helper, IMonitor monitor, Mailman mail)
         {
             _helper = helper;
             _monitor = monitor;
             _mail = mail;
+            _random = new Random();
         }
 
         public void TestGetSpecificItem(string arg1, string[] arg2)
@@ -34,7 +36,7 @@ namespace StardewArchipelago.Test
             amount = int.Parse(arg2[0]);
 
             var itemName = string.Join(" ", arg2.Skip(1).ToArray());
-            var receivedItem = new ReceivedItem("locationName", itemName, "playerName", 1, 2, 3);
+            var receivedItem = new ReceivedItem("locationName", itemName, "playerName", 1, 2, 3, _random.Next(10000, int.MaxValue));
 
             _itemParser = new ItemParser(new StardewItemManager(), new UnlockManager());
             try
@@ -60,7 +62,7 @@ namespace StardewArchipelago.Test
                 var code = jEntry["code"].Value<long>();
                 var classification = Enum.Parse<ItemClassification>(jEntry["classification"].Value<string>(), true);
                 var item = new ArchipelagoItem(key, code, classification);
-                var receivedItem = new ReceivedItem("locationName", key, "playerName", 1, code, 3);
+                var receivedItem = new ReceivedItem("locationName", key, "playerName", 1, code, 3, _random.Next(10000, int.MaxValue));
                 try
                 {
                     var attachment = _itemParser.ProcessItem(receivedItem);

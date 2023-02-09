@@ -36,19 +36,18 @@ namespace StardewArchipelago.Items.Mail
                 }
 
                 var title = letterMenuInstance.mailTitle;
-                if (!title.StartsWith("AP|"))
-                {
-                    return;
-                }
-                
-                var parts = title.Split('|');
-                if (parts.Length < 6)
+                if (!MailKey.TryParse(title, out var apMailKey))
                 {
                     return;
                 }
 
-                var apActionName = parts[4];
-                var apActionParameter = parts[5];
+                var apActionName = apMailKey.LetterOpenedAction;
+                var apActionParameter = apMailKey.ActionParameter;
+
+                if (string.IsNullOrWhiteSpace(apActionName))
+                {
+                    return;
+                }
 
                 _letterActions.ExecuteLetterAction(apActionName, apActionParameter);
             }

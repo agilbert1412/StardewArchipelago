@@ -51,16 +51,17 @@ namespace StardewArchipelago.Items.Mail
             SendMail(mailKey);
         }
 
-        public void SendArchipelagoMail(string mailKey, string apItemName, string findingPlayer, string locationName, string attachmentEmbedString)
+        public void SendArchipelagoMail(MailKey mailKey, string apItemName, string findingPlayer, string locationName, string attachmentEmbedString)
         {
-            if (Game1.player.hasOrWillReceiveMail(mailKey))
+            var mailKeyString = mailKey.ToString();
+            if (Game1.player.hasOrWillReceiveMail(mailKeyString))
             {
                 return;
             }
 
-            GenerateMail(mailKey, apItemName, findingPlayer, locationName, attachmentEmbedString);
+            GenerateMail(mailKeyString, apItemName, findingPlayer, locationName, attachmentEmbedString);
 
-            SendMail(mailKey);
+            SendMail(mailKeyString);
         }
 
         private void GenerateMail(string mailKey, string apItemName, string findingPlayer, string locationName,
@@ -91,7 +92,7 @@ namespace StardewArchipelago.Items.Mail
             var numberReceived = 0;
             foreach (var mail in Game1.player.mailReceived)
             {
-                if (!mail.Contains($"AP|{apItemName}"))
+                if (!mail.Contains(MailKey.GetBeginningOfKeyForItem(apItemName)))
                 {
                     continue;
                 }

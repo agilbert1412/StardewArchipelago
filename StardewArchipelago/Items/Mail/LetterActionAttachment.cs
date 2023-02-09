@@ -19,11 +19,9 @@ namespace StardewArchipelago.Items.Mail
             _mailman.SendArchipelagoMail(key, ArchipelagoItem.ItemName, ArchipelagoItem.PlayerName, ArchipelagoItem.LocationName, GetEmbedString());
         }
 
-        public override string GetMailKey()
+        public override MailKey GetMailKey()
         {
-            var key = $"AP|{ArchipelagoItem.ItemName}|{ArchipelagoItem.PlayerName}|{ArchipelagoItem.LocationName}|{LetterOpenedAction}|{ActionParameter}|{Random.Next()}";
-            var trimmedKey = key.Replace(" ", "_");
-            return trimmedKey;
+            return new MailKey(ArchipelagoItem.ItemName, ArchipelagoItem.PlayerName, ArchipelagoItem.LocationName, LetterOpenedAction, ActionParameter, ArchipelagoItem.UniqueId.ToString());
         }
     }
 }

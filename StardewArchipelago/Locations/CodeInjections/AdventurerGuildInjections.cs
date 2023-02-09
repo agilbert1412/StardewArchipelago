@@ -32,28 +32,21 @@ namespace StardewArchipelago.Locations.CodeInjections
         {
             try
             {
-                const string prefix = "AP|";
                 foreach (var mail in Game1.player.mailReceived)
                 {
-                    if (!mail.StartsWith(prefix))
+                    if (!MailKey.TryParse(mail, out var mailKey))
                     {
                         continue;
                     }
 
-                    var parts = mail.Split("|");
-                    if (parts.Length < 4)
-                    {
-                        continue;
-                    }
-
-                    var apActionName = parts[4];
+                    var apActionName = mailKey.LetterOpenedAction;
 
                     if (apActionName != LetterActionsKeys.GiveMeleeWeapon)
                     {
                         continue;
                     }
 
-                    var weaponIdStr = parts[5];
+                    var weaponIdStr = mailKey.ActionParameter;
                     var weaponId = int.Parse(weaponIdStr);
                     var weapon = new MeleeWeapon(weaponId);
 
