@@ -45,14 +45,15 @@ namespace StardewArchipelago.Locations.CodeInjections
                     {
                         continue;
                     }
-                    var openedAction = parts[2];
 
-                    if (openedAction != LetterActionsKeys.GiveMeleeWeapon)
+                    var apActionName = parts[4];
+
+                    if (apActionName != LetterActionsKeys.GiveMeleeWeapon)
                     {
                         continue;
                     }
 
-                    var weaponIdStr = parts[3];
+                    var weaponIdStr = parts[5];
                     var weaponId = int.Parse(weaponIdStr);
                     var weapon = new MeleeWeapon(weaponId);
 
