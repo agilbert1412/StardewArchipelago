@@ -137,7 +137,7 @@ namespace StardewArchipelago.Items.Mail
 
         private void ReceiveProgressiveTool(string toolGenericName)
         {
-            if (toolGenericName.Contains("Trash Can"))
+            if (toolGenericName.Contains("Trash_Can"))
             {
                 ReceiveTrashCanUpgrade();
                 return;
@@ -156,9 +156,10 @@ namespace StardewArchipelago.Items.Mail
         private static Tool UpgradeToolInEntireWorld(string toolGenericName)
         {
             var player = Game1.player;
+            var toolName = toolGenericName.Replace(" ", "_").ToLower();
             foreach (var playerItem in player.Items)
             {
-                if (playerItem is not Tool toolToUpgrade || !toolToUpgrade.Name.Contains(toolGenericName))
+                if (playerItem is not Tool toolToUpgrade || !toolToUpgrade.Name.Replace(" ", "_").ToLower().Contains(toolName))
                 {
                     continue;
                 }
@@ -181,7 +182,7 @@ namespace StardewArchipelago.Items.Mail
 
                     foreach (var chestItem in chest.items)
                     {
-                        if (chestItem is not Tool toolToUpgrade || !toolToUpgrade.Name.Contains(toolGenericName))
+                        if (chestItem is not Tool toolToUpgrade || !toolToUpgrade.Name.Replace(" ", "_").ToLower().Contains(toolName))
                         {
                             continue;
                         }

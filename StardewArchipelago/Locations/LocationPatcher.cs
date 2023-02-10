@@ -41,6 +41,7 @@ namespace StardewArchipelago.Locations
             ReplaceIsolatedEventsWithChecks();
             PatchAdventurerGuildShop();
             ReplaceArcadeMachinesWithChecks();
+            PatchTravelingMerchant();
         }
 
         private void ReplaceCommunityCenterBundlesWithChecks()
@@ -368,6 +369,24 @@ namespace StardewArchipelago.Locations
                     postfix: new HarmonyMethod(typeof(ArcadeMachineInjections), nameof(ArcadeMachineInjections.Tick_Shopping_PostFix))
                 );
             }
+        }
+
+        private void PatchTravelingMerchant()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Forest), nameof(Forest.DayUpdate)),
+                postfix: new HarmonyMethod(typeof(TravelingMerchantInjections), nameof(TravelingMerchantInjections.DayUpdate_IsTravelingMerchantDay_Postfix))
+            ); 
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(ShopMenu), nameof(ShopMenu.setUpShopOwner)),
+                postfix: new HarmonyMethod(typeof(TravelingMerchantInjections), nameof(TravelingMerchantInjections.SetUpShopOwner_TravelingMerchantApFlair_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Utility), "generateLocalTravelingMerchantStock"),
+                postfix: new HarmonyMethod(typeof(TravelingMerchantInjections), nameof(TravelingMerchantInjections.GenerateLocalTravelingMerchantStock_APStock_Postfix))
+            );
         }
     }
 }
