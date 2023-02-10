@@ -22,14 +22,29 @@ namespace StardewArchipelago.GameModifications
 
         public void GivePlayerStartingResources()
         {
+            GivePlayerStartingMoney();
             if (Game1.Date.TotalDays == 0)
             {
-                Game1.player.Money = _archipelago.SlotData.StartingMoney;
                 GivePlayerQuickStart();
                 RemoveShippingBin();
             }
 
             SendGilTelephoneLetter();
+        }
+
+        private void GivePlayerStartingMoney()
+        {
+            var startingMoney = _archipelago.SlotData.StartingMoney;
+            var isUnlimitedMoney = startingMoney < 0;
+            if (isUnlimitedMoney)
+            {
+                startingMoney = 99999999;
+            }
+
+            if (Game1.Date.TotalDays == 0 || (isUnlimitedMoney && Game1.player.Money < 10000000))
+            {
+                Game1.player.Money = startingMoney;
+            }
         }
 
         private void GivePlayerQuickStart()
