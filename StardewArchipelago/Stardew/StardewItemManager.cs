@@ -34,6 +34,14 @@ namespace StardewArchipelago.Stardew
                    _weaponsByName.ContainsKey(itemName);
         }
 
+        public bool ItemExists(int itemId)
+        {
+            return _objectsById.ContainsKey(itemId) ||
+                   _bigCraftablesById.ContainsKey(itemId) ||
+                   _bootsById.ContainsKey(itemId) ||
+                   _weaponsById.ContainsKey(itemId);
+        }
+
         public StardewItem GetItemByName(string itemName)
         {
             if (_objectsByName.ContainsKey(itemName))
@@ -57,6 +65,46 @@ namespace StardewArchipelago.Stardew
             }
 
             throw new ArgumentException($"Item not found: {itemName}");
+        }
+
+        public StardewObject GetObjectById(int itemId)
+        {
+            if (_objectsById.ContainsKey(itemId))
+            {
+                return _objectsById[itemId];
+            }
+
+            throw new ArgumentException($"Item not found: {itemId}");
+        }
+
+        public BigCraftable GetBigCraftableById(int itemId)
+        {
+            if (_bigCraftablesById.ContainsKey(itemId))
+            {
+                return _bigCraftablesById[itemId];
+            }
+
+            throw new ArgumentException($"Item not found: {itemId}");
+        }
+
+        public StardewBoots GetBootsById(int itemId)
+        {
+            if (_bootsById.ContainsKey(itemId))
+            {
+                return _bootsById[itemId];
+            }
+
+            throw new ArgumentException($"Item not found: {itemId}");
+        }
+
+        public StardewWeapon GetWeaponById(int itemId)
+        {
+            if (_weaponsById.ContainsKey(itemId))
+            {
+                return _weaponsById[itemId];
+            }
+
+            throw new ArgumentException($"Item not found: {itemId}");
         }
 
         private void InitializeData()

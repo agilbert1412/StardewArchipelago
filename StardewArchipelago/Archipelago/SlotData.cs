@@ -21,6 +21,7 @@ namespace StardewArchipelago.Archipelago
         private const string BUILDING_PROGRESSION_KEY = "building_progression";
         private const string ARCADE_MACHINES_KEY = "arcade_machine_progression";
         private const string HELP_WANTED_LOCATIONS_KEY = "help_wanted_locations";
+        private const string FISHSANITY_KEY = "fishsanity";
         private const string MULTI_SLEEP_ENABLED_KEY = "multiple_day_sleep_enabled";
         private const string MULTI_SLEEP_COST_KEY = "multiple_day_sleep_cost";
         private const string EXPERIENCE_MULTIPLIER_KEY = "experience_multiplier";
@@ -31,7 +32,7 @@ namespace StardewArchipelago.Archipelago
         private const string DEATH_LINK_KEY = "death_link";
         private const string SEED_KEY = "seed";
         private const string MODIFIED_BUNDLES_KEY = "modified_bundles";
-        private const string MODIFIED_ENTRANCES_KEY = "modified_entrances";
+        private const string MODIFIED_ENTRANCES_KEY = "randomized_entrances";
 
         private Dictionary<string, object> _slotDataFields;
         private IMonitor _console;
@@ -47,6 +48,7 @@ namespace StardewArchipelago.Archipelago
         public BuildingProgression BuildingProgression { get; private set; }
         public ArcadeProgression ArcadeMachineProgression { get; private set; }
         public int HelpWantedLocationNumber { get; private set; }
+        public Fishsanity Fishsanity { get; private set; }
         public bool EnableMultiSleep { get; private set; }
         public int MultiSleepCostPerDay { get; private set; }
         public double ExperienceMultiplier { get; private set; }
@@ -75,6 +77,7 @@ namespace StardewArchipelago.Archipelago
             BuildingProgression = GetSlotSetting(BUILDING_PROGRESSION_KEY, BuildingProgression.Shuffled);
             ArcadeMachineProgression = GetSlotSetting(ARCADE_MACHINES_KEY, ArcadeProgression.FullShuffling);
             HelpWantedLocationNumber = GetSlotSetting(HELP_WANTED_LOCATIONS_KEY, 0);
+            Fishsanity = GetSlotSetting(FISHSANITY_KEY, Fishsanity.None);
             EnableMultiSleep = GetSlotSetting(MULTI_SLEEP_ENABLED_KEY, true);
             MultiSleepCostPerDay = GetSlotSetting(MULTI_SLEEP_COST_KEY, 0);
             ExperienceMultiplier = GetSlotSetting(EXPERIENCE_MULTIPLIER_KEY, 100) / 100.0;
@@ -86,11 +89,8 @@ namespace StardewArchipelago.Archipelago
             Seed = GetSlotSetting(SEED_KEY, "");
             var newBundleStringData = GetSlotSetting(MODIFIED_BUNDLES_KEY, "");
             ModifiedBundles = JsonConvert.DeserializeObject<Dictionary<string, string>>(newBundleStringData);
-            /*var modifiedEntrancesStringData = GetSlotSetting(MODIFIED_ENTRANCES_KEY, "");
-            ModifiedEntrances = JsonConvert.DeserializeObject<Dictionary<string, string>>(modifiedEntrancesStringData);*/
-
-            EntranceRandomization = EntranceRandomization.Pelican_town;
-            ModifiedEntrances = GetDummyModifiedEntrancesData();
+            var newEntrancesStringData = GetSlotSetting(MODIFIED_ENTRANCES_KEY, "");
+            ModifiedEntrances = JsonConvert.DeserializeObject<Dictionary<string, string>>(newEntrancesStringData);
         }
 
         private T GetSlotSetting<T>(string key, T defaultValue) where T : struct, Enum, IConvertible
@@ -141,9 +141,13 @@ namespace StardewArchipelago.Archipelago
 
         public void ReplaceEntrances()
         {
+            if (EntranceRandomization == EntranceRandomization.Disabled)
+            {
+                return;
+            }
+
             foreach (var (original, replacement) in ModifiedEntrances)
             {
-
                 var originalExists = Entrances.TryGetEntrance(original, out var originalEntrance);
                 var replacementExists = Entrances.TryGetEntrance(replacement, out var replacementEntrance);
                 if (!originalExists || !replacementExists)
@@ -232,8 +236,8 @@ namespace StardewArchipelago.Archipelago
     public enum EntranceRandomization
     {
         Disabled = 0,
-        Pelican_town = 1,
-        Non_progression = 2,
+        PelicanTown = 1,
+        NonProgression = 2,
         Buildings = 3,
         Everything = 4,
         Chaos = 4,
@@ -278,6 +282,15 @@ namespace StardewArchipelago.Archipelago
         Victories = 1,
         VictoriesEasy = 2,
         FullShuffling = 3,
+    }
+
+    public enum Fishsanity
+    {
+        None = 0,
+        Legendaries = 1,
+        Special = 2,
+        RandomSelection = 3,
+        All = 4,
     }
 
     public enum Goal

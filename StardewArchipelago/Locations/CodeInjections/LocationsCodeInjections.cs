@@ -6,7 +6,7 @@ namespace StardewArchipelago.Locations.CodeInjections
 {
     public static class LocationsCodeInjections
     {
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, BundleReader bundleReader, LocationChecker locationChecker)
+        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, BundleReader bundleReader, LocationChecker locationChecker, StardewItemManager itemManager)
         {
             BackpackInjections.Initialize(monitor, locationChecker);
             ToolInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
@@ -22,6 +22,7 @@ namespace StardewArchipelago.Locations.CodeInjections
             AdventurerGuildInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             ArcadeMachineInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             TravelingMerchantInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
+            FishingInjections.Initialize(monitor, modHelper, archipelago, locationChecker, itemManager);
         }
     }
 }

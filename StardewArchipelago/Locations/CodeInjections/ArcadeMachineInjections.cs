@@ -157,8 +157,7 @@ namespace StardewArchipelago.Locations.CodeInjections
             {
                 numberExtraLives = _archipelago.GetReceivedItemCount(JK_EXTRA_LIFE);
             }
-
-            numberExtraLives = 16;
+            
             return numberExtraLives;
         }
 

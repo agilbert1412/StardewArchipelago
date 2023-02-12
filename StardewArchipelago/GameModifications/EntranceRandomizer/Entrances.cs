@@ -71,22 +71,26 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
 
         public static bool TryGetEntrance(string key, out OneWayEntrance entrance)
         {
-            if (_allEntrances.TryGetValue(key, out entrance))
+            var aliasedKey = TurnAliased(key);
+
+            if (_allEntrances.TryGetValue(aliasedKey, out entrance))
             {
                 return true;
             }
 
-            if (_allEntrances.TryGetValue(key.ToLower(), out entrance))
+            if (_allEntrances.TryGetValue(aliasedKey.ToLower(), out entrance))
             {
                 return true;
             }
 
-            return _allEntrances.TryGetValue(key.ToUpper(), out entrance);
+            return _allEntrances.TryGetValue(aliasedKey.ToUpper(), out entrance);
         }
 
         public static bool TryGetEntrance(string location1, string location2, out OneWayEntrance entrance)
         {
-            var key = $"{location1}{TRANSITIONAL_STRING}{location2}";
+            var aliasedlocation1 = TurnAliased(location1);
+            var aliasedlocation2 = TurnAliased(location2);
+            var key = $"{aliasedlocation1}{TRANSITIONAL_STRING}{aliasedlocation2}";
             return TryGetEntrance(key, out entrance);
         }
 
@@ -101,13 +105,55 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             var entrance2 = new OneWayEntrance(location2Name, location1Name, location2Position, location1Position, facingDirection1);
             var key1 = $"{location1Name}{TRANSITIONAL_STRING}{location2Name}";
             var key2 = $"{location2Name}{TRANSITIONAL_STRING}{location1Name}";
-            _allEntrances.Add(key1, entrance1);
-            _allEntrances.Add(key1.ToLower(), entrance1);
-            _allEntrances.Add(key1.ToUpper(), entrance1);
-            _allEntrances.Add(key2, entrance2);
-            _allEntrances.Add(key2.ToLower(), entrance2);
-            _allEntrances.Add(key2.ToUpper(), entrance2);
+
+            AddDefaultAliases(key1, entrance1);
+            AddDefaultAliases(key2, entrance2);
+
             return (entrance1, entrance2);
         }
+
+        private static void AddDefaultAliases(string entranceName, OneWayEntrance entrance)
+        {
+            _allEntrances.Add(entranceName, entrance);
+            _allEntrances.Add(entranceName.ToLower(), entrance);
+            _allEntrances.Add(entranceName.ToUpper(), entrance);
+        }
+
+        private static string TurnAliased(string key)
+        {
+            if (key.Contains(TRANSITIONAL_STRING))
+            {
+                var parts = key.Split(TRANSITIONAL_STRING);
+                var aliased1 = TurnAliased(parts[0]);
+                var aliased2 = TurnAliased(parts[1]);
+                return $"{aliased1}{TRANSITIONAL_STRING}{aliased2}";
+            }
+
+            var modifiedString = key;
+            foreach (var (oldString, newString) in _aliases)
+            {
+                modifiedString = modifiedString.Replace(oldString, newString);
+            }
+
+            return modifiedString;
+        }
+
+        private static readonly Dictionary<string, string> _aliases = new()
+        {
+            {"Mayor's Manor", "ManorHouse"},
+            {"Pierre's General Store", "SeedShop"},
+            {"Clint's Blacksmith", "Blacksmith"},
+            {"Alex", "Josh"},
+            {"Tunnel Entrance", "Backwoods"},
+            {"Marnie's Ranch", "AnimalShop"},
+            {"Cottage", "House"},
+            {"Tower", "House"},
+            {"Carpenter Shop", "ScienceHouse"},
+            {"Adventurer", "Adventure"},
+            {"Willy's Fish Shop", "FishShop"},
+            {"Museum", "ArchaeologyHouse"},
+            {"'s", ""},
+            {" ", ""},
+        };
     }
 }

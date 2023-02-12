@@ -18,11 +18,11 @@ namespace StardewArchipelago.Locations
         private readonly ArchipelagoClient _archipelago;
         private readonly Harmony _harmony;
 
-        public LocationPatcher(IMonitor monitor, ArchipelagoClient archipelago, BundleReader bundleReader, IModHelper modHelper, Harmony harmony, LocationChecker locationChecker)
+        public LocationPatcher(IMonitor monitor, ArchipelagoClient archipelago, BundleReader bundleReader, IModHelper modHelper, Harmony harmony, LocationChecker locationChecker, StardewItemManager itemManager)
         {
             _archipelago = archipelago;
             _harmony = harmony;
-            LocationsCodeInjections.Initialize(monitor, modHelper, _archipelago, bundleReader, locationChecker);
+            LocationsCodeInjections.Initialize(monitor, modHelper, _archipelago, bundleReader, locationChecker, itemManager);
         }
 
         public void ReplaceAllLocationsRewardsWithChecks()
@@ -42,6 +42,7 @@ namespace StardewArchipelago.Locations
             PatchAdventurerGuildShop();
             ReplaceArcadeMachinesWithChecks();
             PatchTravelingMerchant();
+            AddFishsanityLocations();
         }
 
         private void ReplaceCommunityCenterBundlesWithChecks()
@@ -386,6 +387,19 @@ namespace StardewArchipelago.Locations
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Utility), "generateLocalTravelingMerchantStock"),
                 postfix: new HarmonyMethod(typeof(TravelingMerchantInjections), nameof(TravelingMerchantInjections.GenerateLocalTravelingMerchantStock_APStock_Postfix))
+            );
+        }
+
+        private void AddFishsanityLocations()
+        {
+            if (_archipelago.SlotData.Fishsanity == Fishsanity.None)
+            {
+                return;
+            }
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Farmer), nameof(Farmer.caughtFish)),
+                postfix: new HarmonyMethod(typeof(FishingInjections), nameof(FishingInjections.CaughtFish_Fishsanity_Postfix))
             );
         }
     }
