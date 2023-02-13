@@ -51,12 +51,15 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
         public static readonly (OneWayEntrance, OneWayEntrance) MountainToTent = AddEntrance("Mountain", "Tent", 29, 7, 2, 5, 2, 0);
         public static readonly (OneWayEntrance, OneWayEntrance) MountainToScienceHouse = AddEntrance("Mountain", "ScienceHouse", 12, 26, 6, 24, 2, 0);
         public static readonly (OneWayEntrance, OneWayEntrance) MountainToAdventureGuild = AddEntrance("Mountain", "AdventureGuild", 76, 9, 6, 19, 2, 0);
+        public static readonly (OneWayEntrance, OneWayEntrance) MountainToMine = AddEntrance("Mountain", "Mine", 54, 5, 18, 13, 2, 0);
 
         public static readonly (OneWayEntrance, OneWayEntrance) BeachToFishShop = AddEntrance("Beach", "FishShop", 30, 34, 5, 9, 2, 0);
         
         public static readonly (OneWayEntrance, OneWayEntrance) RailroadToBathHouse_Entry = AddEntrance("Railroad", "BathHouse_Entry", 10, 57, 5, 9, 2, 0);
         public static readonly (OneWayEntrance, OneWayEntrance) RailroadToWitchWarpCave = AddEntrance("Railroad", "WitchWarpCave", 54, 34, 4, 9, 2, 0);
-        
+        public static readonly (OneWayEntrance, OneWayEntrance) WitchWarpCaveToWitchSwamp = AddEntrance("WitchWarpCave", "WitchSwamp", 4, 5, 20, 42, 2, 0);
+        public static readonly (OneWayEntrance, OneWayEntrance) WitchSwampToWitchHut = AddEntrance("WitchSwamp", "WitchHut", 20, 21, 7, 15, 2, 0);
+
         public static readonly (OneWayEntrance, OneWayEntrance) ScienceHouseToSebastianRoom = AddEntrance("ScienceHouse", "SebastianRoom", 12, 21, 1, 1, 0, 2);
         
         public static readonly (OneWayEntrance, OneWayEntrance) HospitalToHarveyRoom = AddEntrance("Hospital", "HarveyRoom", 10, 2, 6, 12, 2, 0);
@@ -64,7 +67,6 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
 
 
         // Quarry Mine
-        // public static readonly (OneWayEntrance, OneWayEntrance) MountainToMine = AddEntrance("Mountain", "Mine", 54, 5, 18, 13, 2, 0);
         // public static readonly (OneWayEntrance, OneWayEntrance) MountainToMine = AddEntrance("Mountain", "Mine", 103, 17, 67, 17, 2, 0);
 
 
@@ -151,6 +153,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             {"Adventurer", "Adventure"},
             {"Willy's Fish Shop", "FishShop"},
             {"Museum", "ArchaeologyHouse"},
+            {"The Mines", "Mine"},
             {"'s", ""},
             {" ", ""},
         };
