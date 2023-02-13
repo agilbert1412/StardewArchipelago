@@ -42,6 +42,9 @@ namespace StardewArchipelago.Goals
                 case Goal.CrypticNote:
                     GoalCodeInjection.CheckCrypticNoteGoalCompletion();
                     return;
+                case Goal.MasterAngler:
+                    GoalCodeInjection.CheckMasterAnglerGoalCompletion();
+                    return;
                 default:
                     throw new ArgumentOutOfRangeException($"Goal [{_archipelago.SlotData.Goal}] is not supported in this version of the mod.");
             }

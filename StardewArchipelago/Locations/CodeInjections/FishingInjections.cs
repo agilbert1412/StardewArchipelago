@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Goals;
 using StardewArchipelago.Items;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
@@ -14,6 +15,10 @@ namespace StardewArchipelago.Locations.CodeInjections
 {
     public static class FishingInjections
     {
+        private const int GREEN_ALGAE = 153;
+        private const int WHITE_ALGAE = 157;
+        private const int GOLDEN_WALNUT = 73;
+        private const int JOURNAL_SCRAP = 842;
         private const string FISHSANITY_PREFIX = "Fishsanity: ";
 
         private static IMonitor _monitor;
@@ -47,10 +52,12 @@ namespace StardewArchipelago.Locations.CodeInjections
                 {
                     _locationChecker.AddCheckedLocation(apLocation);
                 }
-                else
+                else if (index != GREEN_ALGAE && index != WHITE_ALGAE && index != GOLDEN_WALNUT && index != JOURNAL_SCRAP)
                 {
                     _monitor.Log($"Unrecognized Fishsanity Location: {fishName} [{index}]", LogLevel.Error);
                 }
+
+                GoalCodeInjection.CheckMasterAnglerGoalCompletion();
             }
             catch (Exception ex)
             {

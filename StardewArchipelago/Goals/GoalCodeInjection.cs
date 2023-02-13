@@ -95,6 +95,21 @@ namespace StardewArchipelago.Goals
             _archipelago.ReportGoalCompletion();
         }
 
+        public static void CheckMasterAnglerGoalCompletion()
+        {
+            if (!_archipelago.IsConnected || _archipelago.SlotData.Goal != Goal.MasterAngler)
+            {
+                return;
+            }
+
+            if (!Game1.player.hasOrWillReceiveMail("CF_Fish"))
+            {
+                return;
+            }
+
+            _archipelago.ReportGoalCompletion();
+        }
+
         public static void DoAreaCompleteReward_CommunityCenterGoal_PostFix(CommunityCenter __instance, int whichArea)
         {
             try
@@ -135,6 +150,7 @@ namespace StardewArchipelago.Goals
                 Goal.BottomOfMines => "Reach Floor 120 in the Pelican Town Mineshaft",
                 Goal.CommunityCenter => "Complete the Community Center",
                 Goal.CrypticNote => "Find Secret Note #10 and complete the \"Cryptic Note\" Quest",
+                Goal.MasterAngler => "Catch every single one of the 55 fish available in the game",
                 _ => throw new NotImplementedException()
             };
             return goal;
@@ -148,6 +164,7 @@ namespace StardewArchipelago.Goals
                 Goal.BottomOfMines => "Finish exploring the mineshaft in this town for me",
                 Goal.CommunityCenter => "Restore the old Community Center for the sake of all the villagers",
                 Goal.CrypticNote => "Meet an old friend of mine on floor 100 of the Skull Cavern",
+                Goal.MasterAngler => "Catch and document every specie of fish in the Ferngill Republic",
                 _ => throw new NotImplementedException()
             };
             return goal;

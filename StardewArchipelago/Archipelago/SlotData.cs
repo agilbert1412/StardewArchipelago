@@ -201,36 +201,6 @@ namespace StardewArchipelago.Archipelago
                 }
             }
         }
-
-        private Dictionary<string, string> GetDummyModifiedEntrancesData()
-        {
-            var dic = new Dictionary<string, string>();
-
-            dic.Add("Town to SeedShop", "Town to Saloon");
-            dic.Add("Saloon To Town", "SeedShop to Town");
-            dic.Add("Town to Saloon", "Town to Hospital");
-            dic.Add("Hospital to Town", "Saloon to Town");
-
-            dic.Add("Town to Hospital", "Forest to Woods");
-            dic.Add("Woods to Forest", "Hospital to Town");
-
-            dic.Add("Forest to Woods", "Town to SeedShop");
-            dic.Add("SeedShop to Town", "Woods to Forest");
-
-            dic.Add("Town to Blacksmith", "Town to JojaMart");
-            dic.Add("JojaMart to Town", "Blacksmith to Town");
-            
-            dic.Add("Town to AbandonedJojaMart", "Town to Blacksmith");
-            dic.Add("Blacksmith to Town", "JojaMart to Town");
-
-            dic.Add("Town to Trailer", "Mountain to ScienceHouse");
-            dic.Add("ScienceHouse to Mountain", "Trailer to Town");
-
-            dic.Add("Mountain to ScienceHouse", "Town to Trailer");
-            dic.Add("Trailer_Big to Town", "ScienceHouse to Mountain");
-
-            return dic;
-        }
     }
 
     public enum EntranceRandomization
@@ -299,6 +269,7 @@ namespace StardewArchipelago.Archipelago
         GrandpaEvaluation = 1,
         BottomOfMines = 2,
         CrypticNote = 3,
+        MasterAngler = 4,
     }
 
     public enum DebrisMultiplier
