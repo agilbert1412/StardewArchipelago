@@ -19,7 +19,9 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
 
         public static readonly (OneWayEntrance, OneWayEntrance) BusStopToBackwoods = AddEntrance("BusStop", "Backwoods", 0, 8, 49, 30, 1, 3);
         public static readonly (OneWayEntrance, OneWayEntrance) BusStopToTown = AddEntrance("BusStop", "Town", 34, 23, 0, 54, 3, 1);
-        
+        public static readonly (OneWayEntrance, OneWayEntrance) BackwoodsToTunnel = AddEntrance("Backwoods", "Tunnel", 23, 30, 39, 9, 1, 3);
+
+
         public static readonly (OneWayEntrance, OneWayEntrance) BackwoodsToMountain = AddEntrance("Backwoods", "Mountain", 48, 14, 0, 13, 1, 1);
         
         public static readonly (OneWayEntrance, OneWayEntrance) ForestToWoods = AddEntrance("Forest", "Woods", 0, 7, 58, 15, 1, 3);
