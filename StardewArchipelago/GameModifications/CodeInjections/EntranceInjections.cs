@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.GameModifications.EntranceRandomizer;
-using StardewArchipelago.Locations;
 using StardewModdingAPI;
 using StardewValley;
-using xTile.Dimensions;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
 {

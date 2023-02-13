@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using HarmonyLib;
-using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.GameModifications.CodeInjections;
 using StardewArchipelago.Locations;
@@ -9,7 +8,6 @@ using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
-using StardewValley.Menus;
 using StardewValley.Network;
 
 namespace StardewArchipelago.GameModifications

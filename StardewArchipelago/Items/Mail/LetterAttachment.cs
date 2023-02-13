@@ -1,6 +1,4 @@
-﻿using System;
-using StardewArchipelago.Archipelago;
-using StardewValley;
+﻿using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.Items.Mail
 {

@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Extensions;
 using StardewArchipelago.GameModifications;
 using StardewArchipelago.GameModifications.CodeInjections;
 using StardewArchipelago.Goals;
