@@ -63,7 +63,7 @@ namespace StardewArchipelago.Archipelago
                 InitSession(connectionInfo);
                 var itemsHandling = ItemsHandlingFlags.AllItems;
                 var minimumVersion = new Version(0, 3, 7);
-                var tags = new[] { "AP", "DeathLink" };
+                var tags = connectionInfo.DeathLink ? new[] { "AP", "DeathLink" } : new[] { "AP" };
                 result = _session.TryConnectAndLogin(GAME_NAME, _connectionInfo.SlotName, itemsHandling, minimumVersion, tags, null, _connectionInfo.Password);
             }
             catch (Exception e)
@@ -100,6 +100,7 @@ namespace StardewArchipelago.Archipelago
 
             // Must go AFTER a successful connection attempt
             InitializeAfterConnection(loginSuccess, connectionInfo.SlotName);
+            connectionInfo.DeathLink = SlotData.DeathLink;
             return true;
         }
 

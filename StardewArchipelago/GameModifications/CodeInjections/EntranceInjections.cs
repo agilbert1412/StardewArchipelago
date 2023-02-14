@@ -34,7 +34,9 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     out var desiredEntrance);
                 if (!entranceExists)
                 {
+#if DEBUG
                     RecordNewEntrance(locationRequest, tileX, tileY, facingDirectionAfterWarp);
+#endif
                     return true; // run original logic
                 }
 
@@ -60,6 +62,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             }
         }
 
+#if DEBUG
 
         private static OneWayEntrance _temporaryOneWayEntrance;
         private static List<(OneWayEntrance, OneWayEntrance)> _newEntrances = new();
@@ -100,5 +103,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
             _newEntrances = new();
         }
+
+#endif
     }
 }

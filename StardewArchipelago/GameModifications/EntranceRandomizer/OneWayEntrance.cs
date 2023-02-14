@@ -10,8 +10,8 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
 
         public string OriginName { get; }
         public string DestinationName { get; }
-        public Point OriginPosition { get; }
-        public Point DestinationPosition { get; }
+        public Point OriginPosition { get; set; }
+        public Point DestinationPosition { get; set; }
         public int FacingDirectionAfterWarp { get; }
 
         private OneWayEntrance _replacement;
@@ -25,9 +25,9 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             FacingDirectionAfterWarp = facingDirectionAfterWarp;
         }
 
-        public void ReplaceWith(OneWayEntrance otherWarp)
+        public void ReplaceWith(OneWayEntrance replacementEntrance)
         {
-            _replacement = otherWarp;
+            _replacement = replacementEntrance;
         }
 
         public bool GetModifiedWarp(WarpRequest originalWarp, out WarpRequest newWarp)

@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Reflection.Metadata.Ecma335;
 using Microsoft.Xna.Framework;
+using StardewValley;
+using StardewValley.Locations;
 
 namespace StardewArchipelago.GameModifications.EntranceRandomizer
 {
@@ -95,6 +98,40 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             var aliasedlocation2 = TurnAliased(location2);
             var key = $"{aliasedlocation1}{TRANSITIONAL_STRING}{aliasedlocation2}";
             return TryGetEntrance(key, out entrance);
+        }
+
+        public static void UpdateDynamicEntrances()
+        {
+            UpdateFarmCaveWarp();
+            // UpdateFarmHouseWarp();
+            // UpdateGreenhouseWarp();
+        }
+
+        private static void UpdateFarmCaveWarp()
+        {
+            var (farmToFarmCave, farmCavetoFarm) = FarmToFarmCave;
+            UpdateDynamicWarp(farmToFarmCave, farmCavetoFarm, new Point(0, 1));
+        }
+
+        private static void UpdateFarmHouseWarp()
+        {
+            var (farmHouseToFarm, farmToFarmHouse) = FarmHouseToFarm;
+            UpdateDynamicWarp(farmToFarmHouse, farmHouseToFarm, new Point(0, 0));
+        }
+
+        private static void UpdateGreenhouseWarp()
+        {
+            var (farmToGreenhouse, greenhouseToFarm) = FarmToGreenhouse;
+            UpdateDynamicWarp(farmToGreenhouse, greenhouseToFarm, new Point(0, 0));
+        }
+
+        private static void UpdateDynamicWarp(OneWayEntrance entrance1, OneWayEntrance entrance2, Point offset)
+        {
+            var location1 = Game1.getLocationFromName(entrance1.OriginName);
+            var location2 = Game1.getLocationFromName(entrance1.DestinationName);
+            var warpPointOnFarm = location1.getWarpPointTo(entrance1.DestinationName) + offset;
+            entrance1.OriginPosition = warpPointOnFarm;
+            entrance2.DestinationPosition = warpPointOnFarm;
         }
 
         private static (OneWayEntrance, OneWayEntrance) AddEntrance(string location1Name, string location2Name, int location1X, int location1Y, int location2X, int location2Y, int facingDirection1, int facingDirection2)

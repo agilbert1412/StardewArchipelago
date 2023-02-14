@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.GameModifications;
 using StardewArchipelago.GameModifications.CodeInjections;
+using StardewArchipelago.GameModifications.EntranceRandomizer;
 using StardewArchipelago.Goals;
 using StardewArchipelago.Items;
 using StardewArchipelago.Items.Mail;
@@ -245,6 +246,7 @@ namespace StardewArchipelago
             _goalManager.CheckGoalCompletion();
             _mail.SendTomorrow();
             PlayerBuffInjections.CheckForApBuffs();
+            Entrances.UpdateDynamicEntrances();
         }
 
         private void OnDayEnding(object sender, DayEndingEventArgs e)

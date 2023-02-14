@@ -11,6 +11,8 @@ namespace StardewArchipelago.GameModifications
 {
     public class StartingResources
     {
+        private const int UNLIMITED_MONEY_AMOUNT = 9999999;
+        private const int MINIMUM_UNLIMITED_MONEY = 1000000;
         private ArchipelagoClient _archipelago;
         private StardewItemManager _stardewItemManager;
 
@@ -38,10 +40,10 @@ namespace StardewArchipelago.GameModifications
             var isUnlimitedMoney = startingMoney < 0;
             if (isUnlimitedMoney)
             {
-                startingMoney = 99999999;
+                startingMoney = UNLIMITED_MONEY_AMOUNT;
             }
 
-            if (Game1.Date.TotalDays == 0 || (isUnlimitedMoney && Game1.player.Money < 10000000))
+            if (Game1.Date.TotalDays == 0 || (isUnlimitedMoney && Game1.player.Money < MINIMUM_UNLIMITED_MONEY))
             {
                 Game1.player.Money = startingMoney;
             }

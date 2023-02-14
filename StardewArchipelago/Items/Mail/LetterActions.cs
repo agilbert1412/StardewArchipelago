@@ -159,7 +159,7 @@ namespace StardewArchipelago.Items.Mail
             var toolName = toolGenericName.Replace(" ", "_").ToLower();
             foreach (var playerItem in player.Items)
             {
-                if (playerItem is not Tool toolToUpgrade || !toolToUpgrade.Name.Replace(" ", "_").ToLower().Contains(toolName))
+                if (playerItem is not Tool toolToUpgrade || !toolToUpgrade.Name.Replace(" ", "_").ToLower().Equals(toolName))
                 {
                     continue;
                 }
