@@ -13,6 +13,7 @@ namespace StardewArchipelago.Items
         public const string PROGRESSIVE_TOOL_AP_PREFIX = "Progressive ";
         public const string PROGRESSIVE_MINE_ELEVATOR_AP_NAME = "Progressive Mine Elevator";
         public const string PROGRESSIVE_FISHING_ROD_AP_NAME = "Progressive Fishing Rod";
+        public const string RETURN_SCEPTER_AP_NAME = "Return Scepter";
         public const string GOLDEN_SCYTHE_AP_NAME = "Golden Scythe";
         public const string BEACH_BRIDGE_AP_NAME = "Beach Bridge";
         private Dictionary<string, Func<ReceivedItem, LetterAttachment>> _unlockables;
@@ -80,6 +81,7 @@ namespace StardewArchipelago.Items
             _unlockables.Add($"{PROGRESSIVE_TOOL_AP_PREFIX}Watering Can", SendProgressiveWateringCanLetter);
             _unlockables.Add($"{PROGRESSIVE_TOOL_AP_PREFIX}Trash Can", SendProgressiveTrashCanLetter);
             _unlockables.Add(PROGRESSIVE_FISHING_ROD_AP_NAME, SendProgressiveFishingRodLetter);
+            _unlockables.Add(RETURN_SCEPTER_AP_NAME, SendReturnScepterLetter);
         }
 
         private void RegisterUniqueItems()
@@ -211,6 +213,11 @@ namespace StardewArchipelago.Items
         private LetterActionAttachment SendProgressiveFishingRodLetter(ReceivedItem receivedItem)
         {
             return new LetterActionAttachment(receivedItem, LetterActionsKeys.FishingRod);
+        }
+
+        private LetterActionAttachment SendReturnScepterLetter(ReceivedItem receivedItem)
+        {
+            return new LetterActionAttachment(receivedItem, LetterActionsKeys.ReturnScepter);
         }
 
         private LetterAttachment SendProgressiveFarmingLevel(ReceivedItem receivedItem)

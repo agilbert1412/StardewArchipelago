@@ -30,6 +30,7 @@ namespace StardewArchipelago.GameModifications
             FarmInjections.Initialize(monitor, _archipelago);
             AchievementInjections.Initialize(monitor, _archipelago);
             EntranceInjections.Initialize(monitor, _archipelago);
+            ForestInjections.Initialize(monitor, _archipelago);
         }
 
         public void PatchAllGameLogic()
@@ -39,6 +40,7 @@ namespace StardewArchipelago.GameModifications
             PatchDefinitionOfCommunityCenterComplete();
             PatchGrandpaNote();
             PatchDebris();
+            PatchForest();
             PatchEntrances();
             _startingResources.GivePlayerStartingResources();
         }
@@ -118,6 +120,14 @@ namespace StardewArchipelago.GameModifications
             _harmony.Patch(
                 original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.spawnWeedsAndStones)),
                 prefix: new HarmonyMethod(typeof(FarmInjections), nameof(FarmInjections.SpawnWeedsAndStones_ConsiderUserPreference_PreFix))
+            );
+        }
+
+        private void PatchForest()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Forest), "isWizardHouseUnlocked"),
+                prefix: new HarmonyMethod(typeof(ForestInjections), nameof(ForestInjections.IsWizardHouseUnlocked_UnlockAtRatProblem_Prefix))
             );
         }
 

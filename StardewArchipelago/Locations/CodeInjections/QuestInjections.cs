@@ -257,7 +257,7 @@ namespace StardewArchipelago.Locations.CodeInjections
                 var hasNotCompletedQuest = _locationChecker.IsLocationMissing("A Winter Mystery");
                 var isInTown = Game1.currentLocation is Town town;
 
-                if (!correctLocation || !hasSeenKrobusEvent || (!hasNotCompletedQuest && Game1.player.hasQuest(31)) || !isInTown)
+                if (!correctLocation || !hasSeenKrobusEvent || (!hasNotCompletedQuest && !Game1.player.hasQuest(31)) || !isInTown)
                 {
                     return true; // run original logic
                 }

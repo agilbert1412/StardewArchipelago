@@ -29,6 +29,7 @@ namespace StardewArchipelago.Items.Mail
             _letterActions.Add(LetterActionsKeys.BeachBridge, (_) => RepairBeachBridge());
             _letterActions.Add(LetterActionsKeys.ProgressiveTool, ReceiveProgressiveTool);
             _letterActions.Add(LetterActionsKeys.FishingRod, (_) => GetFishingRodOfNextLevel());
+            _letterActions.Add(LetterActionsKeys.ReturnScepter, (_) => GetReturnScepter());
             _letterActions.Add(LetterActionsKeys.GiveRing, ReceiveRing);
             _letterActions.Add(LetterActionsKeys.GiveBoots, ReceiveBoots);
             _letterActions.Add(LetterActionsKeys.GiveMeleeWeapon, ReceiveMeleeWeapon);
@@ -156,10 +157,10 @@ namespace StardewArchipelago.Items.Mail
         private static Tool UpgradeToolInEntireWorld(string toolGenericName)
         {
             var player = Game1.player;
-            var toolName = toolGenericName.Replace(" ", "_").ToLower();
+            var toolName = toolGenericName.Replace(" ", "_");
             foreach (var playerItem in player.Items)
             {
-                if (playerItem is not Tool toolToUpgrade || !toolToUpgrade.Name.Replace(" ", "_").ToLower().Equals(toolName))
+                if (playerItem is not Tool toolToUpgrade || !toolToUpgrade.Name.Replace(" ", "_").EndsWith(toolName))
                 {
                     continue;
                 }
@@ -224,6 +225,14 @@ namespace StardewArchipelago.Items.Mail
 
             var itemToAdd = new FishingRod(upgradeLevel);
 
+            Game1.player.holdUpItemThenMessage(itemToAdd);
+            Game1.player.addItemByMenuIfNecessary(itemToAdd);
+        }
+
+        private void GetReturnScepter()
+        {
+            Game1.player.mailReceived.Add("ReturnScepter");
+            var itemToAdd = new Wand();
             Game1.player.holdUpItemThenMessage(itemToAdd);
             Game1.player.addItemByMenuIfNecessary(itemToAdd);
         }
