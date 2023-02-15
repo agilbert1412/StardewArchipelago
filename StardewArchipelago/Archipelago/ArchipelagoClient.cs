@@ -127,6 +127,11 @@ namespace StardewArchipelago.Archipelago
 
         public void Sync()
         {
+            if (!MakeSureConnected(0))
+            {
+                return;
+            }
+
             _session.Socket.SendPacket(new SyncPacket());
         }
 
@@ -573,7 +578,6 @@ namespace StardewArchipelago.Archipelago
             {
                 return false;
             }
-
 
             var now = DateTime.Now;
             var timeSinceLastFailure = now - _lastConnectFailure;
