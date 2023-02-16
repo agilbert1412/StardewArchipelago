@@ -52,19 +52,24 @@ namespace StardewArchipelago.Locations.CodeInjections
                 if (__instance.dailyQuest.Value)
                 {
                     var isArchipelago = true;
+                    var numberOfSteps = _archipelago.SlotData.HelpWantedLocationNumber / 7;
+                    if (_archipelago.SlotData.HelpWantedLocationNumber % 7 > 0)
+                    {
+                        numberOfSteps++;
+                    }
                     switch (__instance.questType.Value)
                     {
                         case (int)QuestType.ItemDelivery:
-                            isArchipelago = CheckDailyQuestLocationOfType("Item Delivery", _archipelago.SlotData.HelpWantedLocationNumber * 4 / 7);
+                            isArchipelago = CheckDailyQuestLocationOfType("Item Delivery", numberOfSteps * 4);
                             break;
                         case (int)QuestType.SlayMonsters:
-                            isArchipelago = CheckDailyQuestLocationOfType("Slay Monsters", _archipelago.SlotData.HelpWantedLocationNumber / 7);
+                            isArchipelago = CheckDailyQuestLocationOfType("Slay Monsters", numberOfSteps);
                             break;
                         case (int)QuestType.Fishing:
-                            isArchipelago = CheckDailyQuestLocationOfType("Fishing", _archipelago.SlotData.HelpWantedLocationNumber / 7);
+                            isArchipelago = CheckDailyQuestLocationOfType("Fishing", numberOfSteps);
                             break;
                         case (int)QuestType.ResourceCollection:
-                            isArchipelago = CheckDailyQuestLocationOfType("Gathering", _archipelago.SlotData.HelpWantedLocationNumber / 7);
+                            isArchipelago = CheckDailyQuestLocationOfType("Gathering", numberOfSteps);
                             break;
                     }
 
