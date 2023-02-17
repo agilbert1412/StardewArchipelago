@@ -183,7 +183,7 @@ namespace StardewArchipelago.Items.Mail
 
                     foreach (var chestItem in chest.items)
                     {
-                        if (chestItem is not Tool toolToUpgrade || !toolToUpgrade.Name.Replace(" ", "_").ToLower().Contains(toolName))
+                        if (chestItem is not Tool toolToUpgrade || !toolToUpgrade.Name.Replace(" ", "_").Contains(toolName))
                         {
                             continue;
                         }
