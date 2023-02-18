@@ -124,7 +124,7 @@ namespace StardewArchipelago.GameModifications
         {
             var defaultserver = "archipelago.gg:";
 #if DEBUG
-            defaultserver = "localhost:38282";
+            defaultserver = "localhost:38281";
 #endif
             var xPosition = xOffset + 256 + 64 + 16;
             var yPosition = yOffset - 16;

@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.GameModifications;
 using StardewArchipelago.GameModifications.CodeInjections;
 using StardewArchipelago.GameModifications.EntranceRandomizer;
+using StardewArchipelago.GameModifications.Seasons;
 using StardewArchipelago.Goals;
 using StardewArchipelago.Items;
 using StardewArchipelago.Items.Mail;
@@ -43,6 +45,7 @@ namespace StardewArchipelago
         private UnlockManager _unlockManager;
         private MultiSleep _multiSleep;
         private JojaDisabler _jojaDisabler;
+        private SeasonsRandomizer _seasonsRandomizer;
 
         private Tester _tester;
 
@@ -87,6 +90,7 @@ namespace StardewArchipelago
             _helper.ConsoleCommands.Add("disconnect", $"Disconnects from Archipelago. {CONNECT_SYNTAX}", this.OnCommandDisconnectFromArchipelago);
             _helper.ConsoleCommands.Add("test_getallitems", "Tests if every AP item in the stardew_valley_item_table json file are supported by the mod", this.TestGetAllItems);
             _helper.ConsoleCommands.Add("test_getitem", "Get one specific item", this.TestGetSpecificItem);
+            _helper.ConsoleCommands.Add("set_next_season", "Sets the next season to a chosen value", this.SetNextSeason);
             //_helper.ConsoleCommands.Add("test_sendalllocations", "Tests if every AP item in the stardew_valley_location_table json file are supported by the mod", _tester.TestSendAllLocations);
             // _helper.ConsoleCommands.Add("load_entrances", "Loads the entrances file", (_, _) => _entranceRandomizer.LoadTransports());
             _helper.ConsoleCommands.Add("save_entrances", "Saves the entrances file", (_, _) => EntranceInjections.SaveNewEntrancesToFile());
@@ -121,8 +125,6 @@ namespace StardewArchipelago
             _state.LocationsChecked = new List<string>();
             _state.LocationsScouted = new Dictionary<string, ScoutedLocation>();
             _state.LettersGenerated = new Dictionary<string, string>();
-            _helper.Data.WriteSaveData(AP_DATA_KEY, _state);
-            _helper.Data.WriteSaveData(AP_EXPERIENCE_KEY, SkillInjections.GetArchipelagoExperience());
 
             if (!_archipelago.IsConnected)
             {
@@ -130,6 +132,13 @@ namespace StardewArchipelago
                 Game1.ExitToTitle();
                 return;
             }
+
+            _seasonsRandomizer = new SeasonsRandomizer(Monitor, _helper, _archipelago, _state);
+            _state.SeasonsOrder = new List<string>();
+            _state.SeasonsOrder.Add(_seasonsRandomizer.GetFirstSeason());
+            SeasonsRandomizer.SetSeason(_state.SeasonsOrder.Last());
+            _helper.Data.WriteSaveData(AP_DATA_KEY, _state);
+            _helper.Data.WriteSaveData(AP_EXPERIENCE_KEY, SkillInjections.GetArchipelagoExperience());
         }
 
         private void OnSaveCreated(object sender, SaveCreatedEventArgs e)
@@ -138,10 +147,12 @@ namespace StardewArchipelago
 
         private void OnSaving(object sender, SavingEventArgs e)
         {
+            SeasonsRandomizer.PrepareDateForSaveGame();
             _state.ItemsReceived = _itemManager.GetAllItemsAlreadyProcessed();
             _state.LocationsChecked = _locationChecker.GetAllLocationsAlreadyChecked();
             _state.LocationsScouted = _archipelago.ScoutedLocations;
             _state.LettersGenerated = _mail.GetAllLettersGenerated();
+            // _state.SeasonOrder should be fine?
             _helper.Data.WriteSaveData(AP_DATA_KEY, _state);
             _helper.Data.WriteSaveData(AP_EXPERIENCE_KEY, SkillInjections.GetArchipelagoExperience());
         }
@@ -165,8 +176,9 @@ namespace StardewArchipelago
             _locationsPatcher = new LocationPatcher(Monitor, _archipelago, _bundleReader, _helper, _harmony, _locationChecker, _stardewItemManager);
             _itemPatcher = new ItemPatcher(Monitor, _helper, _harmony, _archipelago);
             _goalManager = new GoalManager(Monitor, _helper, _harmony, _archipelago, _locationChecker);
-            _logicPatcher = new RandomizedLogicPatcher(Monitor, _helper, _harmony, _archipelago, _locationChecker, _stardewItemManager);
+            _logicPatcher = new RandomizedLogicPatcher(Monitor, _helper, _harmony, _archipelago, _locationChecker, _stardewItemManager, _state);
             _jojaDisabler = new JojaDisabler(Monitor, _helper, _harmony);
+            _seasonsRandomizer = new SeasonsRandomizer(Monitor, _helper, _archipelago, _state);
 
             if (_state.APConnectionInfo == null)
             {
@@ -238,7 +250,9 @@ namespace StardewArchipelago
                 return;
             }
 
+            SeasonsRandomizer.SetSeason(_state.SeasonsOrder.Last());
             FarmInjections.DeleteStartingDebris();
+            SeasonsRandomizer.SendMailHardcodedForToday();
             _mail.SendToday();
             _locationChecker.VerifyNewLocationChecksWithArchipelago();
             _locationChecker.SendAllLocationChecks();
@@ -333,6 +347,26 @@ namespace StardewArchipelago
         private void TestGetAllItems(string arg1, string[] arg2)
         {
             _tester.TestGetAllItems(arg1, arg2);
+        }
+
+        private void SetNextSeason(string arg1, string[] arg2)
+        {
+            if (arg2.Length < 1)
+            {
+                Monitor.Log($"You must specify a season", LogLevel.Info);
+                return;
+            }
+
+            var season = arg2[0];
+            var currentSeasonNumber = (int) Game1.stats.DaysPlayed / 28;
+            if (_state.SeasonsOrder.Count <= currentSeasonNumber)
+            {
+                _state.SeasonsOrder.Add(season);
+            }
+            else
+            {
+                _state.SeasonsOrder[currentSeasonNumber] = season;
+            }
         }
     }
 }

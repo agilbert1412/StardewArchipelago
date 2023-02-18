@@ -3,7 +3,9 @@ using System.Linq;
 using HarmonyLib;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.GameModifications.CodeInjections;
+using StardewArchipelago.GameModifications.Seasons;
 using StardewArchipelago.Locations;
+using StardewArchipelago.Serialization;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
@@ -19,7 +21,7 @@ namespace StardewArchipelago.GameModifications
         private readonly StardewItemManager _stardewItemManager;
         private readonly StartingResources _startingResources;
 
-        public RandomizedLogicPatcher(IMonitor monitor, IModHelper helper, Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager stardewItemManager)
+        public RandomizedLogicPatcher(IMonitor monitor, IModHelper helper, Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager stardewItemManager, ArchipelagoStateDto state)
         {
             _harmony = harmony;
             _archipelago = archipelago;
@@ -32,6 +34,7 @@ namespace StardewArchipelago.GameModifications
             EntranceInjections.Initialize(monitor, _archipelago);
             ForestInjections.Initialize(monitor, _archipelago);
             SeedShopsInjections.Initialize(monitor, archipelago);
+            SeasonsInjections.Initialize(monitor, helper, _archipelago, state);
         }
 
         public void PatchAllGameLogic()
@@ -43,6 +46,7 @@ namespace StardewArchipelago.GameModifications
             PatchDebris();
             PatchForest();
             PatchEntrances();
+            PatchSeasons();
             PatchSeedShops();
             _startingResources.GivePlayerStartingResources();
         }
@@ -143,6 +147,31 @@ namespace StardewArchipelago.GameModifications
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Game1), "performWarpFarmer"),
                 prefix: new HarmonyMethod(typeof(EntranceInjections), nameof(EntranceInjections.PerformWarpFarmer_EntranceRandomization_Prefix))
+            );
+        }
+
+        private void PatchSeasons()
+        {
+            // Game1: public static void loadForNewGame(bool loadedGame = false)
+            // Game1: private static void newSeason()
+            // Game1: public static void NewDay(float timeToPause)
+
+            var original = AccessTools.Method(typeof(Game1), nameof(Game1.NewDay));
+            var prefix = new HarmonyMethod(typeof(SeasonsRandomizer), nameof(SeasonsRandomizer.NewDay_SeasonChoice_Prefix));
+
+            _harmony.Patch(
+                original: original,
+                prefix: prefix
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.answerDialogueAction)),
+                prefix: new HarmonyMethod(typeof(SeasonsRandomizer), nameof(SeasonsRandomizer.AnswerDialogueAction_SeasonChoice_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.PropertyGetter(typeof(WorldDate), nameof(WorldDate.TotalDays)),
+                prefix: new HarmonyMethod(typeof(SeasonsRandomizer), nameof(SeasonsRandomizer.TotalDays_UseStats_Prefix))
             );
         }
 
