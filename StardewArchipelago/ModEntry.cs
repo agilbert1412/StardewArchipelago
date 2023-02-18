@@ -108,6 +108,7 @@ namespace StardewArchipelago
             _state = new ArchipelagoStateDto();
 
             _harmony.UnpatchAll(ModManifest.UniqueID);
+            SeasonsRandomizer.ResetMailKeys();
             _multiSleep = new MultiSleep(Monitor, _helper, _harmony);
             _advancedOptionsManager = new AdvancedOptionsManager(this, _harmony, _archipelago);
             _advancedOptionsManager.InjectArchipelagoAdvancedOptions();
@@ -243,6 +244,9 @@ namespace StardewArchipelago
                 return;
             }
 
+            SeasonsRandomizer.SetSeason(_state.SeasonsOrder.Last());
+            SeasonsRandomizer.SendMailHardcodedForToday();
+
             if (MultiSleep.DaysToSkip > 0)
             {
                 MultiSleep.DaysToSkip--;
@@ -250,9 +254,7 @@ namespace StardewArchipelago
                 return;
             }
 
-            SeasonsRandomizer.SetSeason(_state.SeasonsOrder.Last());
             FarmInjections.DeleteStartingDebris();
-            SeasonsRandomizer.SendMailHardcodedForToday();
             _mail.SendToday();
             _locationChecker.VerifyNewLocationChecksWithArchipelago();
             _locationChecker.SendAllLocationChecks();

@@ -150,21 +150,95 @@ namespace StardewArchipelago.GameModifications.Seasons
             Game1.exitActiveMenu();
         }
 
+        private static readonly Dictionary<string, string> _alternateMailKeys = new()
+        {
+            {"spring_2_1", "year_1_day_2"},
+            {"spring_1_2", "year_2_day_1"},
+            {"spring_6_2", "spring_6_1"},
+            {"spring_15_2", "spring_15_1"},
+            {"spring_21_2", "spring_21_1"},
+            {"summer_6_2", "summer_6_1"},
+            {"summer_21_2", "summer_21_1"},
+            {"fall_6_2", "fall_6_1"},
+            {"fall_19_2", "fall_19_1"},
+            {"winter_5_2", "winter_5_1"},
+            {"winter_13_2", "winter_13_1"},
+            {"winter_19_2", "winter_19_1"},
+        };
+
+        public static void ChangeMailKeysBasedOnSeasonsToDaysElapsed()
+        {
+            var mailData = Game1.content.Load<Dictionary<string, string>>("Data\\mail");
+            foreach (var originalKey in _alternateMailKeys.Keys)
+            {
+                if (mailData.ContainsKey(originalKey))
+                {
+                    mailData.Add(_alternateMailKeys[originalKey], mailData[originalKey]);
+                    mailData.Remove(originalKey);
+                }
+            }
+        }
+
+        public static void ResetMailKeys()
+        {
+            var mailData = Game1.content.Load<Dictionary<string, string>>("Data\\mail");
+            foreach (var modifiedKey in _alternateMailKeys.Values)
+            {
+                if (mailData.ContainsKey(modifiedKey))
+                {
+                    var originalKey = _alternateMailKeys.Keys.First(x => _alternateMailKeys[x] == modifiedKey);
+                    mailData.Add(originalKey, mailData[modifiedKey]);
+                    mailData.Remove(modifiedKey);
+                }
+            }
+        }
+
         public static void SendMailHardcodedForToday()
         {
             GetVanillaValues(out var totalDays, out var year, out var seasonNumber, out var seasonName);
             var mailData = Game1.content.Load<Dictionary<string, string>>("Data\\mail");
+            SendMailForCurrentDateSpecificYear(year, seasonName, mailData);
+            SendMailForCurrentTotalDaysElapsed(year, seasonName, mailData);
+            SendMailForCurrentDateEveryYear(seasonName, mailData);
+        }
+
+        private static void SendMailForCurrentDateSpecificYear(int year, string seasonName, Dictionary<string, string> mailData)
+        {
             for (var i = 1; i <= year + 1; i++)
             {
                 var key = seasonName + "_" + Game1.dayOfMonth + "_" + i;
-                if (!mailData.ContainsKey(key) || Game1.player.hasOrWillReceiveMail(key))
+                SendMailIfNeverReceivedBefore(mailData, key);
+            }
+        }
+
+        private static void SendMailForCurrentTotalDaysElapsed(int year, string seasonName, Dictionary<string, string> mailData)
+        {
+            var totalDays = Game1.stats.DaysPlayed;
+            var daysThisYear = totalDays - (112 * year);
+            for (var i = 1; i <= year + 1; i++)
+            {
+                var keyToday = $"year_{i}_day_{daysThisYear}";
+                SendMailIfNeverReceivedBefore(mailData, keyToday);
+            }
+        }
+
+        private static void SendMailIfNeverReceivedBefore(Dictionary<string, string> mailData, string key)
+        {
+            if (!mailData.ContainsKey(key) || Game1.player.hasOrWillReceiveMail(key))
+            {
+                if (Game1.player.mailReceived.Contains(key) && Game1.player.mailbox.Contains(key))
                 {
-                    continue;
+                    Game1.player.mailbox.Remove(key);
                 }
 
-                Game1.mailbox.Add(key);
+                return;
             }
 
+            Game1.mailbox.Add(key);
+        }
+
+        private static void SendMailForCurrentDateEveryYear(string seasonName, Dictionary<string, string> mailData)
+        {
             var keyAnyYear = seasonName + "_" + Game1.dayOfMonth;
             if (!mailData.ContainsKey(keyAnyYear) || Game1.player.hasOrWillReceiveMail(keyAnyYear))
             {
