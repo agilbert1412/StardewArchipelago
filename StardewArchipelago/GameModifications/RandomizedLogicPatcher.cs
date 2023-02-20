@@ -42,6 +42,7 @@ namespace StardewArchipelago.GameModifications
             PatchDebris();
             PatchForest();
             PatchEntrances();
+            PatchSeedShops();
             _startingResources.GivePlayerStartingResources();
         }
 
@@ -141,6 +142,18 @@ namespace StardewArchipelago.GameModifications
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Game1), "performWarpFarmer"),
                 prefix: new HarmonyMethod(typeof(EntranceInjections), nameof(EntranceInjections.PerformWarpFarmer_EntranceRandomization_Prefix))
+            );
+        }
+
+        private void PatchSeedShops()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(SeedShop), nameof(SeedShop.shopStock)),
+                prefix: new HarmonyMethod(typeof(SeedShopsInjections), nameof(SeedShopsInjections.ShopStock_PierreSeasonal_Prefix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Utility), nameof(Utility.getJojaStock)),
+                prefix: new HarmonyMethod(typeof(SeedShopsInjections), nameof(SeedShopsInjections.GetJojaStock_FullCostco_Prefix))
             );
         }
     }
