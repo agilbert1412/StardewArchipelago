@@ -32,13 +32,13 @@ namespace StardewArchipelago.GameModifications.Seasons
         
         public string GetFirstSeason()
         {
-            var firstReceivedSeason = _archipelago.GetAllReceivedItems().FirstOrDefault(x => ValidSeasons.Contains(x.ItemName.ToLower()));
-            return firstReceivedSeason?.ItemName.ToLower() ?? ValidSeasons[1];
+            var firstReceivedSeason = _archipelago.GetAllReceivedItems().FirstOrDefault(x => ValidSeasons.Contains(x.ItemName));
+            return firstReceivedSeason?.ItemName.ToLower() ?? ValidSeasons[0];
         }
 
         public static List<string> GetUnlockedSeasons()
         {
-            var receivedSeasons = _archipelago.GetAllReceivedItems().Select(x => x.ItemName).Where(x => ValidSeasons.Contains(x.ToLower())).ToList();
+            var receivedSeasons = _archipelago.GetAllReceivedItems().Select(x => x.ItemName).Where(x => ValidSeasons.Contains(x)).ToList();
             return receivedSeasons.Any() ? receivedSeasons : ValidSeasons.ToList();
         }
 
@@ -155,12 +155,12 @@ namespace StardewArchipelago.GameModifications.Seasons
             {"spring_2_1", "year_1_day_2"},
             {"spring_1_2", "year_2_day_1"},
             {"spring_6_2", "spring_6_1"},
-            {"spring_15_2", "spring_15_1"},
+            {"spring_15_2", "spring_16_1"},
             {"spring_21_2", "spring_21_1"},
             {"summer_6_2", "summer_6_1"},
             {"summer_21_2", "summer_21_1"},
             {"fall_6_2", "fall_6_1"},
-            {"fall_19_2", "fall_19_1"},
+            {"fall_19_2", "fall_20_1"},
             {"winter_5_2", "winter_5_1"},
             {"winter_13_2", "winter_13_1"},
             {"winter_19_2", "winter_19_1"},
