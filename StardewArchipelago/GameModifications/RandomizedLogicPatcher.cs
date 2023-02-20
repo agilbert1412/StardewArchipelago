@@ -151,6 +151,7 @@ namespace StardewArchipelago.GameModifications
                 original: AccessTools.Method(typeof(SeedShop), nameof(SeedShop.shopStock)),
                 prefix: new HarmonyMethod(typeof(SeedShopsInjections), nameof(SeedShopsInjections.ShopStock_PierreSeasonal_Prefix))
             );
+
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Utility), nameof(Utility.getJojaStock)),
                 prefix: new HarmonyMethod(typeof(SeedShopsInjections), nameof(SeedShopsInjections.GetJojaStock_FullCostco_Prefix))

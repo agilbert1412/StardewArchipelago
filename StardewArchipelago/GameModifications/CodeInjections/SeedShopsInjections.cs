@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Netcode;
 using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
@@ -24,8 +25,8 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             _monitor = monitor;
             _archipelago = archipelago;
         }
-        
-        public static bool ShopStock_PierreSeasonal_Prefix(SeedShop __instance, ref Dictionary<ISalable, int[]> result)
+
+        public static bool ShopStock_PierreSeasonal_Prefix(SeedShop __instance, ref Dictionary<ISalable, int[]> __result)
         {
             try
             {
@@ -39,7 +40,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 AddBuyBackToShop(__instance, stock);
                 AddBouquetToShop(stock);
 
-                result = stock;
+                __result = stock;
                 return false; // don't run original logic
             }
             catch (Exception ex)
@@ -51,7 +52,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
         // public static Dictionary<ISalable, int[]> getJojaStock()
 
-        public static bool GetJojaStock_FullCostco_Prefix(ref Dictionary<ISalable, int[]> result)
+        public static bool GetJojaStock_FullCostco_Prefix(ref Dictionary<ISalable, int[]> __result)
         {
             try
             {
@@ -64,7 +65,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 AddGrassStarterToJojaStock(jojaStock);
                 AddCookingIngredientsToJojaStock(jojaStock);
 
-                result = jojaStock;
+                __result = jojaStock;
                 return false; // don't run original logic
             }
             catch (Exception ex)
@@ -150,19 +151,23 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
         private static void AddFertilizersToShop(Dictionary<ISalable, int[]> stock)
         {
-            if ((int)Game1.stats.DaysPlayed >= 15)
+            if ((int)Game1.stats.DaysPlayed < 15)
             {
-                AddToPierreStock(stock, BASIC_FERTILIZER, 50);
-                AddToPierreStock(stock, BASIC_RETAINING_SOIL, 50);
-                AddToPierreStock(stock, SPEED_GRO, 50);
+                return;
             }
 
-            if (Game1.year > 1)
+            AddToPierreStock(stock, BASIC_FERTILIZER, 50);
+            AddToPierreStock(stock, BASIC_RETAINING_SOIL, 50);
+            AddToPierreStock(stock, SPEED_GRO, 50);
+
+            if (Game1.year <= 1)
             {
-                AddToPierreStock(stock, QUALITY_FERTILIZER, 75);
-                AddToPierreStock(stock, QUALITY_RETAINING_SOIL, 75);
-                AddToPierreStock(stock, DELUXE_SPEED_GRO, 75);
+                return;
             }
+
+            AddToPierreStock(stock, QUALITY_FERTILIZER, 75);
+            AddToPierreStock(stock, QUALITY_RETAINING_SOIL, 75);
+            AddToPierreStock(stock, DELUXE_SPEED_GRO, 75);
         }
 
         private static void AddFurnitureToShop(Dictionary<ISalable, int[]> stock)
@@ -196,12 +201,12 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
         private static void AddSaplingsToShop(Dictionary<ISalable, int[]> stock)
         {
-            AddToPierreStock(stock, CHERRY_SAPLING, 1700);
-            AddToPierreStock(stock, APRICOT_SAPLING, 1000);
-            AddToPierreStock(stock, ORANGE_SAPLING, 2000);
-            AddToPierreStock(stock, PEACH_SAPLING, 3000);
-            AddToPierreStock(stock, POMEGRANATE_SAPLING, 3000);
-            AddToPierreStock(stock, APPLE_SAPLING, 2000);
+            AddToPierreStock(stock, CHERRY_SAPLING, 1700, howManyInStock: 1);
+            AddToPierreStock(stock, APRICOT_SAPLING, 1000, howManyInStock: 1);
+            AddToPierreStock(stock, ORANGE_SAPLING, 2000, howManyInStock: 1);
+            AddToPierreStock(stock, PEACH_SAPLING, 3000, howManyInStock: 1);
+            AddToPierreStock(stock, POMEGRANATE_SAPLING, 3000, howManyInStock: 1);
+            AddToPierreStock(stock, APPLE_SAPLING, 2000, howManyInStock: 1);
         }
 
         private static void AddBuyBackToShop(SeedShop __instance, Dictionary<ISalable, int[]> stock)
@@ -230,7 +235,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         {
             if (Game1.player.hasAFriendWithHeartLevel(8, true))
             {
-                AddToPierreStock(stock, BOUQUET);
+                AddToPierreStock(stock, BOUQUET, howManyInStock: 1);
             }
         }
 
@@ -289,6 +294,8 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     return;
                 }
             }
+
+            item.Stack = howManyInStock;
             stock.Add(item, new int[2]
             {
                 price,
