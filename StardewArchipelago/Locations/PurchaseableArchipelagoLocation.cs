@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Archipelago;
@@ -33,11 +34,31 @@ namespace StardewArchipelago.Locations
             _purchaseCallBack = purchaseCallback;
 
 
-            if (!(Game1.content.ServiceProvider.GetService(typeof(IGraphicsDeviceService)) is IGraphicsDeviceService service))
+            if (!(Game1.content.ServiceProvider.GetService(typeof(IGraphicsDeviceService)) is IGraphicsDeviceService
+                    service))
+            {
                 throw new InvalidOperationException("No Graphics Device Service");
+            }
 
-            var relativePathToTexture = Path.Combine("Mods", "StardewArchipelago", "Textures", "archipelago.png"); 
-            _archipelagoTexture = Texture2D.FromFile(service.GraphicsDevice, relativePathToTexture);
+            var directories = Directory.EnumerateDirectories("Mods", "StardewArchipelago", SearchOption.AllDirectories).ToArray();
+            if (!directories.Any())
+            {
+                throw new InvalidOperationException("Could not find StardewArchipelago folder");
+            }
+
+            foreach (var directory in directories)
+            {
+                var subfolders = Directory.GetDirectories(directory);
+                var texturesFolder = "Textures";
+                if (subfolders.Any(x => x.EndsWith(texturesFolder)))
+                {
+                    var relativePathToTexture = Path.Combine(directory, texturesFolder, "archipelago.png");
+                    _archipelagoTexture = Texture2D.FromFile(service.GraphicsDevice, relativePathToTexture);
+                    return;
+                }
+            }
+
+            throw new InvalidOperationException("Could not find StardewArchipelago mod folder");
         }
 
         public void AddMaterialRequirement(Item requiredItem)

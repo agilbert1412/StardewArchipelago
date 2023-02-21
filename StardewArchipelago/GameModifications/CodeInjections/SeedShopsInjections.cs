@@ -10,6 +10,7 @@ using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
+using StardewValley.Menus;
 using StardewValley.Objects;
 using Object = StardewValley.Object;
 
@@ -19,35 +20,68 @@ namespace StardewArchipelago.GameModifications.CodeInjections
     {
         private static IMonitor _monitor;
         private static ArchipelagoClient _archipelago;
+        private static PersistentStock _pierrePersistentStock;
 
         public static void Initialize(IMonitor monitor, ArchipelagoClient archipelago)
         {
             _monitor = monitor;
             _archipelago = archipelago;
+            _pierrePersistentStock = new PersistentStock();
         }
 
-        public static bool ShopStock_PierreSeasonal_Prefix(SeedShop __instance, ref Dictionary<ISalable, int[]> __result)
+        // public virtual bool openShopMenu(string which)
+
+        public static bool OpenShopMenu_PierrePersistentEvent_Prefix(GameLocation __instance, string which, ref bool __result)
         {
             try
             {
-                var stock = new Dictionary<ISalable, int[]>();
-                AddSeedsToPierreStock(stock);
-                AddGrassStarterToPierreStock(stock);
-                AddCookingIngredientsToPierreStock(stock);
-                AddFertilizersToShop(stock);
-                AddFurnitureToShop(stock);
-                AddSaplingsToShop(stock);
-                AddBuyBackToShop(__instance, stock);
-                AddBouquetToShop(stock);
+                if (which.Equals("Fish") || !(__instance is SeedShop seedShop))
+                {
+                    return true; // run original logic
+                }
 
-                __result = stock;
-                return false; // don't run original logic
+                if (__instance.getCharacterFromName("Pierre") != null &&
+                    __instance.getCharacterFromName("Pierre").getTileLocation().Equals(new Vector2(4f, 17f)) &&
+                    Game1.player.getTileY() > __instance.getCharacterFromName("Pierre").getTileY())
+                {
+                    Game1.activeClickableMenu = new ShopMenu(GetPierreShopStock(seedShop), who: "Pierre", on_purchase: _pierrePersistentStock.OnPurchase);
+                    __result = true;
+                    return false; // don't run original logic
+                }
+
+                return true; // run original logic
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(ShopStock_PierreSeasonal_Prefix)}:\n{ex}", LogLevel.Error);
+                _monitor.Log($"Failed in {nameof(OpenShopMenu_PierrePersistentEvent_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
             }
+        }
+
+        private static Dictionary<ISalable, int[]> GetPierreShopStock(SeedShop seedShop)
+        {
+            var stockAlreadyExists = _pierrePersistentStock.TryGetStockForToday(out var stock);
+            if (!stockAlreadyExists)
+            {
+                stock = GeneratePierreStock();
+                AddBuyBackToShop(seedShop, stock);
+                _pierrePersistentStock.SetStockForToday(stock);
+            }
+
+            return stock;
+        }
+
+        private static Dictionary<ISalable, int[]> GeneratePierreStock()
+        {
+            var stock = new Dictionary<ISalable, int[]>();
+            AddSeedsToPierreStock(stock);
+            AddGrassStarterToPierreStock(stock);
+            AddCookingIngredientsToPierreStock(stock);
+            AddFertilizersToShop(stock);
+            AddFurnitureToShop(stock);
+            AddSaplingsToShop(stock);
+            AddBouquetToShop(stock);
+            return stock;
         }
 
         // public static Dictionary<ISalable, int[]> getJojaStock()

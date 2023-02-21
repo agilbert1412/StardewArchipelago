@@ -31,6 +31,7 @@ namespace StardewArchipelago.GameModifications
             AchievementInjections.Initialize(monitor, _archipelago);
             EntranceInjections.Initialize(monitor, _archipelago);
             ForestInjections.Initialize(monitor, _archipelago);
+            SeedShopsInjections.Initialize(monitor, archipelago);
         }
 
         public void PatchAllGameLogic()
@@ -148,8 +149,8 @@ namespace StardewArchipelago.GameModifications
         private void PatchSeedShops()
         {
             _harmony.Patch(
-                original: AccessTools.Method(typeof(SeedShop), nameof(SeedShop.shopStock)),
-                prefix: new HarmonyMethod(typeof(SeedShopsInjections), nameof(SeedShopsInjections.ShopStock_PierreSeasonal_Prefix))
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.openShopMenu)),
+                prefix: new HarmonyMethod(typeof(SeedShopsInjections), nameof(SeedShopsInjections.OpenShopMenu_PierrePersistentEvent_Prefix))
             );
 
             _harmony.Patch(
