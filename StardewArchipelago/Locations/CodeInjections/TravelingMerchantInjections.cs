@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
 using StardewValley;
@@ -99,8 +100,6 @@ namespace StardewArchipelago.Locations.CodeInjections
 
                 var random = new Random(seed);
 
-                AddApStock(ref __result, random);
-
                 var itemsToRemove = new List<ISalable>();
 
                 foreach (var (item, prices) in __result)
@@ -110,8 +109,10 @@ namespace StardewArchipelago.Locations.CodeInjections
                         itemsToRemove.Add(item);
                     }
 
-                    prices[0] = (int)Math.Round(prices[0] * priceMultiplier, MidpointRounding.ToEven);
+                    prices[0] = ModifyPrice(prices[0], priceMultiplier);
                 }
+
+                AddApStock(ref __result, random, priceMultiplier);
 
                 foreach (var itemToRemove in itemsToRemove)
                 {
@@ -127,6 +128,11 @@ namespace StardewArchipelago.Locations.CodeInjections
             }
         }
 
+        private static int ModifyPrice(int price, double priceMultiplier)
+        {
+            return (int)Math.Round(price * priceMultiplier, MidpointRounding.ToEven);
+        }
+
         private static bool IsTravelingMerchantDay(int dayOfMonth, out string playerName)
         {
             var dayOfWeek = GetDayOfWeekName(dayOfMonth);
@@ -134,21 +140,33 @@ namespace StardewArchipelago.Locations.CodeInjections
             return _archipelago.HasReceivedItem(requiredAPItemToSeeMerchantToday, out playerName);
         }
 
-        private static void AddApStock(ref Dictionary<ISalable, int[]> currentStock, Random random)
+        private static void AddApStock(ref Dictionary<ISalable, int[]> currentStock, Random random, double priceMultiplier)
         {
             var dayOfWeek = GetDayOfWeekName(Game1.dayOfMonth);
-            var chosenApItem = random.Next(0, 3) + 1;
-            var apLocationName = string.Format(AP_MERCHANT_LOCATION, dayOfWeek, chosenApItem);
+            var apItems = new List<string>();
+            for (var i = 1; i < 4; i++)
+            {
+                var apLocationName = string.Format(AP_MERCHANT_LOCATION, dayOfWeek, i);
 
-            if (_locationChecker.IsLocationChecked(apLocationName))
+                if (_locationChecker.IsLocationChecked(apLocationName))
+                {
+                    continue;
+                }
+
+                apItems.Add(apLocationName);
+            }
+
+            if (!apItems.Any())
             {
                 return;
             }
 
+            var chosenApItem = apItems[random.Next(0, apItems.Count)];
+
             var scamName = _merchantApItemNames[random.Next(0, _merchantApItemNames.Length)];
             var apLocation =
-                new PurchaseableArchipelagoLocation(scamName, apLocationName, _locationChecker, _archipelago);
-            var price = _merchantPrices[random.Next(0, _merchantPrices.Length)];
+                new PurchaseableArchipelagoLocation(scamName, chosenApItem, _locationChecker, _archipelago);
+            var price = ModifyPrice(_merchantPrices[random.Next(0, _merchantPrices.Length)], priceMultiplier);
 
             currentStock.Add(apLocation, new []{price, 1});
         }
