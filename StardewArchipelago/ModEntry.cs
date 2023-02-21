@@ -243,8 +243,7 @@ namespace StardewArchipelago
             {
                 return;
             }
-
-            SeasonsRandomizer.SetSeason(_state.SeasonsOrder.Last());
+            
             SeasonsRandomizer.SendMailHardcodedForToday();
 
             if (MultiSleep.DaysToSkip > 0)

@@ -62,11 +62,27 @@ namespace StardewArchipelago.GameModifications.Seasons
             Utility.ForAllLocations(l => l.seasonUpdate(Game1.GetSeasonForLocation(l)));
         }
 
+        // private static void newSeason()
+        public static bool NewSeason_UsePredefinedChoice_Prefix()
+        {
+            try
+            {
+                SetSeason(_state.SeasonsOrder.Last());
+                Game1.dayOfMonth = 1;
+                return false; // don't run original logic
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(NewSeason_UsePredefinedChoice_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
+        }
+
         public static bool TotalDays_UseStats_Prefix(WorldDate __instance, ref int __result)
         {
             try
             {
-                __result = (int)Game1.stats.DaysPlayed;
+                __result = (int)Game1.stats.DaysPlayed - 1;
                 return false; // don't run original logic
             }
             catch (Exception ex)
@@ -92,8 +108,9 @@ namespace StardewArchipelago.GameModifications.Seasons
                 {
                     possibleResponses.Add(new Response(season, season).SetHotKey(Keys.None));
                 }
-                
-                Game1.currentLocation.createQuestionDialogue($"{Game1.CurrentSeasonDisplayName} has come to an end. What season is next?", possibleResponses.ToArray(), _nextSeasonDialogKey, null);
+
+                var seasonName = Utility.capitalizeFirstLetter(Game1.CurrentSeasonDisplayName);
+                Game1.currentLocation.createQuestionDialogue($"{seasonName} has come to an end. What season is next?", possibleResponses.ToArray(), _nextSeasonDialogKey, null);
                 return false; // don't run original logic
             }
             catch (Exception ex)
@@ -195,11 +212,10 @@ namespace StardewArchipelago.GameModifications.Seasons
 
         public static void SendMailHardcodedForToday()
         {
-            GetVanillaValues(out var totalDays, out var year, out var seasonNumber, out var seasonName);
+            GetVanillaValues(out var totalDays, out var year, out var seasonNumber, out var _);
             var mailData = Game1.content.Load<Dictionary<string, string>>("Data\\mail");
-            SendMailForCurrentDateSpecificYear(year, seasonName, mailData);
-            SendMailForCurrentTotalDaysElapsed(year, seasonName, mailData);
-            SendMailForCurrentDateEveryYear(seasonName, mailData);
+            SendMailForCurrentDateSpecificYear(year, Game1.currentSeason, mailData);
+            SendMailForCurrentTotalDaysElapsed(year, mailData);
         }
 
         private static void SendMailForCurrentDateSpecificYear(int year, string seasonName, Dictionary<string, string> mailData)
@@ -211,7 +227,7 @@ namespace StardewArchipelago.GameModifications.Seasons
             }
         }
 
-        private static void SendMailForCurrentTotalDaysElapsed(int year, string seasonName, Dictionary<string, string> mailData)
+        private static void SendMailForCurrentTotalDaysElapsed(int year, Dictionary<string, string> mailData)
         {
             var totalDays = Game1.stats.DaysPlayed;
             var daysThisYear = totalDays - (112 * year);
@@ -224,7 +240,12 @@ namespace StardewArchipelago.GameModifications.Seasons
 
         private static void SendMailIfNeverReceivedBefore(Dictionary<string, string> mailData, string key)
         {
-            if (!mailData.ContainsKey(key) || Game1.player.hasOrWillReceiveMail(key))
+            if (!mailData.ContainsKey(key))
+            {
+                return;
+            }
+
+            if (Game1.player.hasOrWillReceiveMail(key))
             {
                 if (Game1.player.mailReceived.Contains(key) && Game1.player.mailbox.Contains(key))
                 {
@@ -235,17 +256,6 @@ namespace StardewArchipelago.GameModifications.Seasons
             }
 
             Game1.mailbox.Add(key);
-        }
-
-        private static void SendMailForCurrentDateEveryYear(string seasonName, Dictionary<string, string> mailData)
-        {
-            var keyAnyYear = seasonName + "_" + Game1.dayOfMonth;
-            if (!mailData.ContainsKey(keyAnyYear) || Game1.player.hasOrWillReceiveMail(keyAnyYear))
-            {
-                return;
-            }
-
-            Game1.mailbox.Add(keyAnyYear);
         }
 
         public static void PrepareDateForSaveGame()
