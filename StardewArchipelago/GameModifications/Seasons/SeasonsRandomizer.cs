@@ -16,6 +16,7 @@ namespace StardewArchipelago.GameModifications.Seasons
     {
         private const string _nextSeasonDialogKey = "NextSeason";
         public static readonly string[] ValidSeasons = new[] { "Spring", "Summer", "Fall", "Winter" };
+        private const string PROGRESSIVE_SEASON = "Progressive Season";
 
         private static IMonitor _monitor;
         private static IModHelper _helper;
@@ -39,6 +40,13 @@ namespace StardewArchipelago.GameModifications.Seasons
         public static List<string> GetUnlockedSeasons()
         {
             var receivedSeasons = _archipelago.GetAllReceivedItems().Select(x => x.ItemName).Where(x => ValidSeasons.Contains(x)).ToList();
+            if (receivedSeasons.Any())
+            {
+                return receivedSeasons;
+            }
+
+            var progressiveSeasonsNumber = _archipelago.GetReceivedItemCount(PROGRESSIVE_SEASON)"";
+
             return receivedSeasons.Any() ? receivedSeasons : ValidSeasons.ToList();
         }
 
