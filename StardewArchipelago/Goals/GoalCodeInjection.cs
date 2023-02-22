@@ -110,6 +110,21 @@ namespace StardewArchipelago.Goals
             _archipelago.ReportGoalCompletion();
         }
 
+        public static void CheckCompleteCollectionGoalCompletion()
+        {
+            if (!_archipelago.IsConnected || _archipelago.SlotData.Goal != Goal.CompleteCollection)
+            {
+                return;
+            }
+
+            if (!Game1.player.hasOrWillReceiveMail("museumComplete"))
+            {
+                return;
+            }
+
+            _archipelago.ReportGoalCompletion();
+        }
+
         public static void DoAreaCompleteReward_CommunityCenterGoal_PostFix(CommunityCenter __instance, int whichArea)
         {
             try

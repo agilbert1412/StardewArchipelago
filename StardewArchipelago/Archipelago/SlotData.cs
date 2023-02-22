@@ -14,14 +14,17 @@ namespace StardewArchipelago.Archipelago
         private const string GOAL_KEY = "goal";
         private const string STARTING_MONEY_KEY = "starting_money";
         private const string ENTRANCE_RANDOMIZATION_KEY = "entrance_randomization";
+        private const string SEASON_RANDOMIZATION_KEY = "season_randomization";
+        private const string SEED_SHUFFLE_KEY = "seed_shuffle";
         private const string BACKPACK_PROGRESSION_KEY = "backpack_progression";
         private const string TOOL_PROGRESSION_KEY = "tool_progression";
         private const string ELEVATOR_PROGRESSION_KEY = "elevator_progression";
         private const string SKILLS_PROGRESSION_KEY = "skill_progression";
         private const string BUILDING_PROGRESSION_KEY = "building_progression";
-        private const string ARCADE_MACHINES_KEY = "arcade_machine_progression";
+        private const string ARCADE_MACHINES_KEY = "arcade_machine_locations";
         private const string HELP_WANTED_LOCATIONS_KEY = "help_wanted_locations";
         private const string FISHSANITY_KEY = "fishsanity";
+        private const string MUSEUMSANITY_KEY = "museumsanity";
         private const string MULTI_SLEEP_ENABLED_KEY = "multiple_day_sleep_enabled";
         private const string MULTI_SLEEP_COST_KEY = "multiple_day_sleep_cost";
         private const string EXPERIENCE_MULTIPLIER_KEY = "experience_multiplier";
@@ -42,6 +45,8 @@ namespace StardewArchipelago.Archipelago
         public Goal Goal { get; private set; }
         public int StartingMoney { get; private set; }
         public EntranceRandomization EntranceRandomization { get; private set; }
+        public SeasonRandomization SeasonRandomization { get; private set; }
+        public SeedShuffle SeedShuffle { get; private set; }
         public BackpackProgression BackpackProgression { get; private set; }
         public ToolProgression ToolProgression { get; private set; }
         public ElevatorProgression ElevatorProgression { get; private set; }
@@ -50,6 +55,7 @@ namespace StardewArchipelago.Archipelago
         public ArcadeProgression ArcadeMachineProgression { get; private set; }
         public int HelpWantedLocationNumber { get; private set; }
         public Fishsanity Fishsanity { get; private set; }
+        public Museumsanity Museumsanity { get; private set; }
         public bool EnableMultiSleep { get; private set; }
         public int MultiSleepCostPerDay { get; private set; }
         public double ExperienceMultiplier { get; private set; }
@@ -72,6 +78,8 @@ namespace StardewArchipelago.Archipelago
             Goal = GetSlotSetting(GOAL_KEY, Goal.CommunityCenter);
             StartingMoney = GetSlotSetting(STARTING_MONEY_KEY, 500);
             EntranceRandomization = GetSlotSetting(ENTRANCE_RANDOMIZATION_KEY, EntranceRandomization.Disabled);
+            SeasonRandomization = GetSlotSetting(SEASON_RANDOMIZATION_KEY, SeasonRandomization.Disabled);
+            SeedShuffle = GetSlotSetting(SEED_SHUFFLE_KEY, SeedShuffle.Disabled);
             BackpackProgression = GetSlotSetting(BACKPACK_PROGRESSION_KEY, BackpackProgression.Progressive);
             ToolProgression = GetSlotSetting(TOOL_PROGRESSION_KEY, ToolProgression.Progressive);
             ElevatorProgression = GetSlotSetting(ELEVATOR_PROGRESSION_KEY, ElevatorProgression.ProgressiveFromPreviousFloor);
@@ -80,6 +88,7 @@ namespace StardewArchipelago.Archipelago
             ArcadeMachineProgression = GetSlotSetting(ARCADE_MACHINES_KEY, ArcadeProgression.FullShuffling);
             HelpWantedLocationNumber = GetSlotSetting(HELP_WANTED_LOCATIONS_KEY, 0);
             Fishsanity = GetSlotSetting(FISHSANITY_KEY, Fishsanity.None);
+            Museumsanity = GetSlotSetting(MUSEUMSANITY_KEY, Museumsanity.None);
             EnableMultiSleep = GetSlotSetting(MULTI_SLEEP_ENABLED_KEY, true);
             MultiSleepCostPerDay = GetSlotSetting(MULTI_SLEEP_COST_KEY, 0);
             ExperienceMultiplier = GetSlotSetting(EXPERIENCE_MULTIPLIER_KEY, 100) / 100.0;
@@ -216,6 +225,20 @@ namespace StardewArchipelago.Archipelago
         Chaos = 4,
     }
 
+    public enum SeasonRandomization
+    {
+        Disabled = 0,
+        Randomized = 1,
+        RandomizedNotWinter = 2,
+        Progressive = 3,
+    }
+
+    public enum SeedShuffle
+    {
+        Disabled = 0,
+        Shuffled = 1,
+    }
+
     public enum BackpackProgression
     {
         Vanilla = 0,
@@ -266,6 +289,14 @@ namespace StardewArchipelago.Archipelago
         All = 4,
     }
 
+    public enum Museumsanity
+    {
+        None = 0,
+        Milestones = 1,
+        RandomSelection = 2,
+        All = 3,
+    }
+
     public enum Goal
     {
         CommunityCenter = 0,
@@ -273,6 +304,7 @@ namespace StardewArchipelago.Archipelago
         BottomOfMines = 2,
         CrypticNote = 3,
         MasterAngler = 4,
+        CompleteCollection = 5,
     }
 
     public enum DebrisMultiplier

@@ -43,6 +43,7 @@ namespace StardewArchipelago.Locations
             ReplaceArcadeMachinesWithChecks();
             PatchTravelingMerchant();
             AddFishsanityLocations();
+            AddMuseumsanityLocations();
         }
 
         private void ReplaceCommunityCenterBundlesWithChecks()
@@ -400,6 +401,19 @@ namespace StardewArchipelago.Locations
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Farmer), nameof(Farmer.caughtFish)),
                 postfix: new HarmonyMethod(typeof(FishingInjections), nameof(FishingInjections.CaughtFish_Fishsanity_Postfix))
+            );
+        }
+
+        private void AddMuseumsanityLocations()
+        {
+            if (_archipelago.SlotData.Museumsanity == Museumsanity.None)
+            {
+                return;
+            }
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(LibraryMuseum), nameof(LibraryMuseum.getRewardsForPlayer)),
+                postfix: new HarmonyMethod(typeof(MuseumInjections), nameof(MuseumInjections.GetRewardsForPlayer_Museumsanity_Prefix))
             );
         }
     }

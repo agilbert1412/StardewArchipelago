@@ -33,21 +33,24 @@ namespace StardewArchipelago.GameModifications.Seasons
         
         public string GetFirstSeason()
         {
-            var firstReceivedSeason = _archipelago.GetAllReceivedItems().FirstOrDefault(x => ValidSeasons.Contains(x.ItemName));
-            return firstReceivedSeason?.ItemName.ToLower() ?? ValidSeasons[0];
+            return GetUnlockedSeasons()[0];
         }
 
         public static List<string> GetUnlockedSeasons()
         {
-            var receivedSeasons = _archipelago.GetAllReceivedItems().Select(x => x.ItemName).Where(x => ValidSeasons.Contains(x)).ToList();
-            if (receivedSeasons.Any())
+            if (_archipelago.SlotData.SeasonRandomization == SeasonRandomization.Progressive)
             {
-                return receivedSeasons;
+                var progressiveSeasonsNumber = _archipelago.GetReceivedItemCount(PROGRESSIVE_SEASON);
+                return ValidSeasons.Take(progressiveSeasonsNumber + 1).ToList();
             }
 
-            var progressiveSeasonsNumber = _archipelago.GetReceivedItemCount(PROGRESSIVE_SEASON)"";
+            if (_archipelago.SlotData.SeasonRandomization == SeasonRandomization.Disabled)
+            {
+                return ValidSeasons.ToList();
+            }
 
-            return receivedSeasons.Any() ? receivedSeasons : ValidSeasons.ToList();
+            var receivedSeasons = _archipelago.GetAllReceivedItems().Select(x => x.ItemName).Where(x => ValidSeasons.Contains(x)).ToList();
+            return receivedSeasons;
         }
 
         public static void SetNextSeason(string season)
