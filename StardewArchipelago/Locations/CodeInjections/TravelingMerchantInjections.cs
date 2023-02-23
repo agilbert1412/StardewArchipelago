@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Menus;
+using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Locations.CodeInjections
 {
@@ -19,6 +21,7 @@ namespace StardewArchipelago.Locations.CodeInjections
         private const string AP_MERCHANT_STOCK = "Traveling Merchant Stock Size"; // 10% base size, 6 upgrades of 15% each
         private const string AP_MERCHANT_DISCOUNT = "Traveling Merchant Discount"; // Base Price 140%, 8 x 10% discount
         private const string AP_MERCHANT_LOCATION = "Traveling Merchant {0} Item {1}";
+        private const string AP_METAL_DETECTOR = "Traveling Merchant Metal Detector"; // Base Price 140%, 8 x 10% discount
 
         private static readonly string[] _days = new[]
             { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
@@ -28,39 +31,22 @@ namespace StardewArchipelago.Locations.CodeInjections
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
 
+        private static Dictionary<ISalable, string> _flairOverride;
+
         public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             _monitor = monitor;
             _modHelper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
+            _flairOverride = new Dictionary<ISalable, string>();
         }
         
         public static void DayUpdate_IsTravelingMerchantDay_Postfix(Forest __instance, int dayOfMonth)
         {
             try
             {
-                if (IsTravelingMerchantDay(dayOfMonth, out _))
-                {
-                    __instance.travelingMerchantDay = true;
-                    __instance.travelingMerchantBounds.Add(new Microsoft.Xna.Framework.Rectangle(1472, 640, 492, 116));
-                    __instance.travelingMerchantBounds.Add(new Microsoft.Xna.Framework.Rectangle(1652, 744, 76, 48));
-                    __instance.travelingMerchantBounds.Add(new Microsoft.Xna.Framework.Rectangle(1812, 744, 104, 48));
-                    foreach (var travelingMerchantBound in __instance.travelingMerchantBounds)
-                    {
-                        Utility.clearObjectsInArea(travelingMerchantBound, __instance);
-                    }
-
-                    if (Game1.IsMasterGame && Game1.netWorldState.Value.VisitsUntilY1Guarantee >= 0 && (dayOfMonth % 7 % 5 != 0))
-                    {
-                        --Game1.netWorldState.Value.VisitsUntilY1Guarantee;
-                    }
-                }
-                else
-                {
-                    __instance.travelingMerchantBounds.Clear();
-                    __instance.travelingMerchantDay = false;
-                }
+                UpdateTravelingMerchantForToday(__instance, dayOfMonth);
             }
             catch (Exception ex)
             {
@@ -68,7 +54,32 @@ namespace StardewArchipelago.Locations.CodeInjections
                 return;
             }
         }
-        
+
+        public static void UpdateTravelingMerchantForToday(Forest __instance, int dayOfMonth)
+        {
+            if (IsTravelingMerchantDay(dayOfMonth, out _))
+            {
+                __instance.travelingMerchantDay = true;
+                __instance.travelingMerchantBounds.Add(new Microsoft.Xna.Framework.Rectangle(1472, 640, 492, 116));
+                __instance.travelingMerchantBounds.Add(new Microsoft.Xna.Framework.Rectangle(1652, 744, 76, 48));
+                __instance.travelingMerchantBounds.Add(new Microsoft.Xna.Framework.Rectangle(1812, 744, 104, 48));
+                foreach (var travelingMerchantBound in __instance.travelingMerchantBounds)
+                {
+                    Utility.clearObjectsInArea(travelingMerchantBound, __instance);
+                }
+
+                if (Game1.IsMasterGame && Game1.netWorldState.Value.VisitsUntilY1Guarantee >= 0 && (dayOfMonth % 7 % 5 != 0))
+                {
+                    --Game1.netWorldState.Value.VisitsUntilY1Guarantee;
+                }
+            }
+            else
+            {
+                __instance.travelingMerchantBounds.Clear();
+                __instance.travelingMerchantDay = false;
+            }
+        }
+
         public static void SetUpShopOwner_TravelingMerchantApFlair_Postfix(ShopMenu __instance, string who)
         {
             try
@@ -79,7 +90,7 @@ namespace StardewArchipelago.Locations.CodeInjections
                 }
 
                 var day = GetDayOfWeekName(Game1.dayOfMonth);
-                var text = $"{playerName} recommended that I visit the valley on {day}s. Take a look at my wares!";
+                var text = _flairOverride.Any() ? _flairOverride.Values.First() : $"{playerName} recommended that I visit the valley on {day}s. Take a look at my wares!";
                 __instance.potraitPersonDialogue = Game1.parseText(text, Game1.dialogueFont, 304);
             }
             catch (Exception ex)
@@ -100,6 +111,8 @@ namespace StardewArchipelago.Locations.CodeInjections
 
                 var random = new Random(seed);
 
+                AddMetalDetectorItems(__result, seed);
+
                 var itemsToRemove = new List<ISalable>();
 
                 foreach (var (item, prices) in __result)
@@ -117,6 +130,10 @@ namespace StardewArchipelago.Locations.CodeInjections
                 foreach (var itemToRemove in itemsToRemove)
                 {
                     __result.Remove(itemToRemove);
+                    if (_flairOverride.ContainsKey(itemToRemove))
+                    {
+                        _flairOverride.Remove(itemToRemove);
+                    }
                 }
 
                 return;
@@ -126,6 +143,100 @@ namespace StardewArchipelago.Locations.CodeInjections
                 _monitor.Log($"Failed in {nameof(GenerateLocalTravelingMerchantStock_APStock_Postfix)}:\n{ex}", LogLevel.Error);
                 return;
             }
+        }
+
+        private static void AddMetalDetectorItems(Dictionary<ISalable, int[]> stock, int seed)
+        {
+            _flairOverride.Clear();
+            var metalDetectorUpgrades = _archipelago.GetReceivedItemCount(AP_METAL_DETECTOR);
+            if (metalDetectorUpgrades < 1)
+            {
+                return;
+            }
+
+            var allDonatableItems = GetAllDonatableItems().ToList();
+            var allMissingDonatableItems = GetAllMissingDonatableItems(allDonatableItems).ToList();
+            var allHintedDonatableItemsWithFlair = GetAllHintedDonatableItems(allMissingDonatableItems);
+            var allHintedDonatableItems = allHintedDonatableItemsWithFlair.Keys.ToList();
+
+            for (var i = 0; i < metalDetectorUpgrades; i++)
+            {
+                var random = new Random(seed + i);
+                var choice = random.NextDouble();
+                var price = new[] { _merchantArtifactPrices[random.Next(0, _merchantArtifactPrices.Length)], 1 };
+                if (allHintedDonatableItems.Any() && choice < 0.25)
+                {
+                    price[0] *= 4;
+                    var chosenArtifactOrMineral = GetRandomArtifactOrMineral(random, allHintedDonatableItems);
+                    _flairOverride.Add(chosenArtifactOrMineral, allHintedDonatableItemsWithFlair[chosenArtifactOrMineral]);
+                    stock.Add(chosenArtifactOrMineral, price);
+                }
+                else if (allMissingDonatableItems.Any() && choice < 0.50)
+                {
+                    price[0] *= 2;
+                    stock.Add(GetRandomArtifactOrMineral(random, allMissingDonatableItems), price);
+                }
+                else
+                {
+                    stock.Add(GetRandomArtifactOrMineral(random, allDonatableItems), price);
+                }
+            }
+        }
+
+        private static IEnumerable<Object> GetAllDonatableItems()
+        {
+            for (var i = 50; i < 600; i++)
+            {
+                var item = new Object(i, 1);
+                if (item != null && item.Type != null && (item.Type.Equals("Arch") || item.Type.Equals("Minerals")))
+                {
+                    yield return item;
+                }
+            }
+        }
+
+        private static IEnumerable<Object> GetAllMissingDonatableItems(IEnumerable<Object> allDonatableItems)
+        {
+            var museum = Game1.getLocationFromName("ArchaeologyHouse") as LibraryMuseum;
+            foreach (var donatableItem in allDonatableItems)
+            {
+                if (museum.museumAlreadyHasArtifact(donatableItem.ParentSheetIndex))
+                {
+                    continue;
+                }
+
+                yield return donatableItem;
+            }
+        }
+
+        private static Dictionary<Object, string> GetAllHintedDonatableItems(IEnumerable<Object> allMissingDonatableItems)
+        {
+            var hints = _archipelago.GetHints().Where(x => !x.Found && _archipelago.GetPlayerName(x.FindingPlayer) == _archipelago.SlotData.SlotName).ToArray();
+            var donatableItems = new Dictionary<Object, string>();
+            foreach (var donatableItem in allMissingDonatableItems)
+            {
+                var relevantHint = hints.FirstOrDefault(x =>
+                    _archipelago.GetLocationName(x.LocationId) == $"Museumsanity: {donatableItem.Name}");
+                if (relevantHint == null)
+                {
+                    continue;
+                }
+
+                var playerName = _archipelago.GetPlayerName(relevantHint.ReceivingPlayer);
+                var text =
+                    $"I found something interesting, and I hear {playerName} wants someone to donate it to the Museum...";
+                donatableItems.Add(donatableItem, text);
+            }
+
+            return donatableItems;
+        }
+
+        private static Object GetRandomArtifactOrMineral(Random random, List<Object> allDonatableItems)
+        {
+            var chosenIndex = random.Next(0, allDonatableItems.Count);
+            var chosenObject = allDonatableItems[chosenIndex];
+            allDonatableItems.RemoveAt(chosenIndex);
+            return chosenObject;
         }
 
         private static int ModifyPrice(int price, double priceMultiplier)
@@ -194,6 +305,19 @@ namespace StardewArchipelago.Locations.CodeInjections
 
             throw new ArgumentException($"Invalid day: {day}");
         }
+
+        private static readonly int[] _merchantArtifactPrices = new[]
+        {
+            10,
+            25,
+            50,
+            75,
+            100,
+            250,
+            500,
+            750,
+            1000,
+        };
 
         private static readonly int[] _merchantPrices = new[]
         {

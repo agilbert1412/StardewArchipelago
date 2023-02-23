@@ -5,12 +5,13 @@ using Archipelago.MultiClient.Net;
 using Archipelago.MultiClient.Net.BounceFeatures.DeathLink;
 using Archipelago.MultiClient.Net.Enums;
 using Archipelago.MultiClient.Net.Helpers;
+using Archipelago.MultiClient.Net.Models;
 using Archipelago.MultiClient.Net.Packets;
 using HarmonyLib;
-using Microsoft.Xna.Framework;
 using StardewArchipelago.Extensions;
 using StardewModdingAPI;
 using StardewValley;
+using Color = Microsoft.Xna.Framework.Color;
 
 namespace StardewArchipelago.Archipelago
 {
@@ -422,6 +423,16 @@ namespace StardewArchipelago.Archipelago
             return _session.Items.AllItemsReceived.Count(x => GetItemName(x.Item) == itemName);
         }
 
+        public Hint[] GetHints()
+        {
+            if (!MakeSureConnected())
+            {
+                return Array.Empty<Hint>();
+            }
+
+            return _session.DataStorage.GetHints();
+        }
+
         public void ReportGoalCompletion()
         {
             if (!MakeSureConnected())
@@ -434,13 +445,13 @@ namespace StardewArchipelago.Archipelago
             _session.Socket.SendPacket(statusUpdatePacket);
         }
 
-        private string GetLocationName(long locationId)
+        public string GetLocationName(long locationId)
         {
             if (!MakeSureConnected())
             {
                 return "";
             }
-
+            
             return _session.Locations.GetLocationNameFromId(locationId);
         }
 
