@@ -9,6 +9,7 @@ namespace StardewArchipelago.Items
     {
         public const string RESOURCE_PACK_PREFIX = "Resource Pack: ";
         public const string FRIENDSHIP_BONUS_PREFIX = "Friendship Bonus (";
+        public const string RECIPE_SUFFIX = " Recipe";
 
         private StardewItemManager _itemManager;
         private UnlockManager _unlockManager;
@@ -42,6 +43,13 @@ namespace StardewArchipelago.Items
             if (_unlockManager.IsUnlock(receivedItem.ItemName))
             {
                 return _unlockManager.PerformUnlock(receivedItem);
+            }
+
+            if (receivedItem.ItemName.EndsWith(RECIPE_SUFFIX))
+            {
+                var itemOfRecipe =
+                    receivedItem.ItemName.Substring(0, receivedItem.ItemName.Length - RECIPE_SUFFIX.Length);
+                return new LetterCraftingRecipeAttachment(receivedItem, itemOfRecipe);
             }
 
             if (_itemManager.ItemExists(receivedItem.ItemName))
