@@ -86,29 +86,32 @@ namespace StardewArchipelago.Items.Mail
         {
             Game1.player.canUnderstandDwarves = true;
             Game1.playSound("fireball");
+            Game1.player.holdUpItemThenMessage(new StardewValley.Object(326, 1));
         }
 
         private void ReceiveSkullKey()
         {
             Game1.player.hasSkullKey = true;
             Game1.player.addQuest(19);
+            Game1.player.holdUpItemThenMessage(new SpecialItem(4));
         }
 
         private void ReceiveRustyKey()
         {
             Game1.player.hasRustyKey = true;
+            // We could play the event or something here
         }
 
         private void ReceiveClubCard()
         {
             Game1.player.hasClubCard = true;
-            Game1.player.addItemByMenuIfNecessaryElseHoldUp(new SpecialItem(2));
+            Game1.player.holdUpItemThenMessage(new SpecialItem(2));
         }
 
         private void ReceiveMagnifyingGlass()
         {
-            Game1.player.holdUpItemThenMessage((Item)new SpecialItem(5));
             Game1.player.hasMagnifyingGlass = true;
+            Game1.player.holdUpItemThenMessage(new SpecialItem(5));
         }
 
         private void ReceiveIridiumSnakeMilk()

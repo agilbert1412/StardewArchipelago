@@ -218,6 +218,11 @@ namespace StardewArchipelago.Stardew
             var displayName = fields[4];
             var description = fields[5];
 
+            if (id == 126)
+            {
+                name += " (Green)";
+            }
+
 
             if (objectType == "Ring")
             {
