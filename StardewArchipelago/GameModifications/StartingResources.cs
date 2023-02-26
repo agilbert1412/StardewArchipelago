@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Stardew;
@@ -61,12 +62,15 @@ namespace StardewArchipelago.GameModifications
                 return;
             }
 
+            RemoveGiftBoxes(farmhouse);
+            var seeds = _stardewItemManager.GetItemByName(GetStartingSeedsForThisSeason()).PrepareForGivingToFarmer(15);
             var chest = _stardewItemManager.GetItemByName("Chest").PrepareForGivingToFarmer(1);
             var iridiumBand = _stardewItemManager.GetItemByName("Iridium Band").PrepareForGivingToFarmer(4);
             var qualitySprinklers = _stardewItemManager.GetItemByName("Quality Sprinkler").PrepareForGivingToFarmer(4);
             var autoPetters = _stardewItemManager.GetItemByName("Auto-Petter").PrepareForGivingToFarmer(2);
             var autoGrabbers = _stardewItemManager.GetItemByName("Auto-Grabber").PrepareForGivingToFarmer(2);
 
+            CreateGiftBoxItemInEmptySpot(farmhouse, seeds);
             CreateGiftBoxItemInEmptySpot(farmhouse, chest);
             CreateGiftBoxItemInEmptySpot(farmhouse, iridiumBand);
             CreateGiftBoxItemInEmptySpot(farmhouse, qualitySprinklers);
@@ -74,26 +78,29 @@ namespace StardewArchipelago.GameModifications
             CreateGiftBoxItemInEmptySpot(farmhouse, autoGrabbers);
         }
 
-        private void RemoveShippingBin()
+        private void RemoveGiftBoxes(FarmHouse farmhouse)
         {
-            if (_archipelago.SlotData.BuildingProgression == BuildingProgression.Vanilla)
+            foreach (var position in farmhouse.Objects.Keys.ToList())
             {
-                return;
-            }
-
-            var farm = Game1.getFarm();
-            ShippingBin shippingBin = null;
-            foreach (var building in Game1.getFarm().buildings)
-            {
-                if (building is ShippingBin bin)
+                if (!(farmhouse.Objects[position] is Chest chest) || !chest.giftbox.Value)
                 {
-                    shippingBin = bin;
-                    break;
+                    continue;
                 }
-            }
 
-            shippingBin.BeforeDemolish();
-            farm.destroyStructure(shippingBin);
+                farmhouse.Objects.Remove(position);
+            }
+        }
+
+        private string GetStartingSeedsForThisSeason()
+        {
+            return Game1.currentSeason switch
+            {
+                "spring" => "Parsnip Seeds",
+                "summer" => "Wheat Seeds",
+                "fall" => "Bok Choy Seeds",
+                "winter" => "Winter Seeds",
+                _ => "Mixed Seeds"
+            };
         }
 
         private void CreateGiftBoxItemInEmptySpot(FarmHouse farmhouse, Item itemToGift)
@@ -120,6 +127,28 @@ namespace StardewArchipelago.GameModifications
             {
                 itemToGift
             }, emptySpot, true));
+        }
+
+        private void RemoveShippingBin()
+        {
+            if (_archipelago.SlotData.BuildingProgression == BuildingProgression.Vanilla)
+            {
+                return;
+            }
+
+            var farm = Game1.getFarm();
+            ShippingBin shippingBin = null;
+            foreach (var building in Game1.getFarm().buildings)
+            {
+                if (building is ShippingBin bin)
+                {
+                    shippingBin = bin;
+                    break;
+                }
+            }
+
+            shippingBin.BeforeDemolish();
+            farm.destroyStructure(shippingBin);
         }
 
         private void SendGilTelephoneLetter()

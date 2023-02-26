@@ -193,6 +193,11 @@ namespace StardewArchipelago.GameModifications
                 original: AccessTools.Method(typeof(Utility), nameof(Utility.getJojaStock)),
                 prefix: new HarmonyMethod(typeof(SeedShopsInjections), nameof(SeedShopsInjections.GetJojaStock_FullCostco_Prefix))
             );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), "sandyShopStock"),
+                prefix: new HarmonyMethod(typeof(SeedShopsInjections), nameof(SeedShopsInjections.SandyShopStock_SeedShuffle_Prefix))
+            );
         }
     }
 }

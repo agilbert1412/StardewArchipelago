@@ -7,6 +7,8 @@ using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Objects;
+using StardewValley.Util;
+using Object = StardewValley.Object;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
 {
@@ -22,9 +24,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             _archipelago = archipelago;
             _pierrePersistentStock = new PersistentStock();
         }
-
-        // public virtual bool openShopMenu(string which)
-
+        
         public static bool OpenShopMenu_PierrePersistentEvent_Prefix(GameLocation __instance, string which, ref bool __result)
         {
             try
@@ -78,7 +78,6 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             return stock;
         }
 
-        // public static Dictionary<ISalable, int[]> getJojaStock()
 
         public static bool GetJojaStock_FullCostco_Prefix(ref Dictionary<ISalable, int[]> __result)
         {
@@ -87,7 +86,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
                 var jojaStock = new Dictionary<ISalable, int[]>();
                 // AutoPetter has been removed
-                AddToJojaStock(jojaStock, JOJA_COLA, 75, 6);
+                AddToJojaStock(jojaStock, JOJA_COLA, false, 75, 6);
                 AddJojaFurnitureToShop(jojaStock);
                 AddSeedsToJojaStock(jojaStock);
                 AddGrassStarterToJojaStock(jojaStock);
@@ -112,47 +111,47 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
         private static void AddSpringSeedsToPierreStock(Dictionary<ISalable, int[]> stock)
         {
-            AddToPierreStock(stock, PARSNIP_SEEDS, itemSeason: "spring");
-            AddToPierreStock(stock, BEAN_STARTER, itemSeason: "spring");
-            AddToPierreStock(stock, CAULIFLOWER_SEEDS, itemSeason: "spring");
-            AddToPierreStock(stock, POTATO_SEEDS, itemSeason: "spring");
-            AddToPierreStock(stock, TULIP_BULB, itemSeason: "spring");
-            AddToPierreStock(stock, KALE_SEEDS, itemSeason: "spring");
-            AddToPierreStock(stock, JAZZ_SEEDS, itemSeason: "spring");
-            AddToPierreStock(stock, GARLIC_SEEDS, itemSeason: "spring");
-            AddToPierreStock(stock, RICE_SHOOT, itemSeason: "spring");
+            AddToPierreStock(stock, PARSNIP_SEEDS, true, itemSeason: "spring");
+            AddToPierreStock(stock, BEAN_STARTER, true, itemSeason: "spring");
+            AddToPierreStock(stock, CAULIFLOWER_SEEDS, true, itemSeason: "spring");
+            AddToPierreStock(stock, POTATO_SEEDS, true, itemSeason: "spring");
+            AddToPierreStock(stock, TULIP_BULB, true, itemSeason: "spring");
+            AddToPierreStock(stock, KALE_SEEDS, true, itemSeason: "spring");
+            AddToPierreStock(stock, JAZZ_SEEDS, true, itemSeason: "spring");
+            AddToPierreStock(stock, GARLIC_SEEDS, true, itemSeason: "spring");
+            AddToPierreStock(stock, RICE_SHOOT, true, itemSeason: "spring");
         }
 
         private static void AddSummerSeedsToPierreStock(Dictionary<ISalable, int[]> stock)
         {
-            AddToPierreStock(stock, MELON_SEEDS, itemSeason: "summer");
-            AddToPierreStock(stock, TOMATO_SEEDS, itemSeason: "summer");
-            AddToPierreStock(stock, BLUEBERRY_SEEDS, itemSeason: "summer");
-            AddToPierreStock(stock, PEPPER_SEEDS, itemSeason: "summer");
-            AddToPierreStock(stock, WHEAT_SEEDS, itemSeason: "summer");
-            AddToPierreStock(stock, RADISH_SEEDS, itemSeason: "summer");
-            AddToPierreStock(stock, POPPY_SEEDS, itemSeason: "summer");
-            AddToPierreStock(stock, SPANGLE_SEEDS, itemSeason: "summer");
-            AddToPierreStock(stock, HOPS_STARTER, itemSeason: "summer");
-            AddToPierreStock(stock, CORN_SEEDS, itemSeason: "summer");
-            AddToPierreStock(stock, SUNFLOWER_SEEDS, 100, "summer");
-            AddToPierreStock(stock, RED_CABBAGE_SEEDS, itemSeason: "summer");
+            AddToPierreStock(stock, MELON_SEEDS, true, itemSeason: "summer");
+            AddToPierreStock(stock, TOMATO_SEEDS, true, itemSeason: "summer");
+            AddToPierreStock(stock, BLUEBERRY_SEEDS, true, itemSeason: "summer");
+            AddToPierreStock(stock, PEPPER_SEEDS, true, itemSeason: "summer");
+            AddToPierreStock(stock, WHEAT_SEEDS, true, itemSeason: "summer");
+            AddToPierreStock(stock, RADISH_SEEDS, true, itemSeason: "summer");
+            AddToPierreStock(stock, POPPY_SEEDS, true, itemSeason: "summer");
+            AddToPierreStock(stock, SPANGLE_SEEDS, true, itemSeason: "summer");
+            AddToPierreStock(stock, HOPS_STARTER, true, itemSeason: "summer");
+            AddToPierreStock(stock, CORN_SEEDS, true, itemSeason: "summer");
+            AddToPierreStock(stock, SUNFLOWER_SEEDS, true, 100, "summer");
+            AddToPierreStock(stock, RED_CABBAGE_SEEDS, true, itemSeason: "summer");
         }
 
         private static void AddFallSeedsToPierreStock(Dictionary<ISalable, int[]> stock)
         {
-            AddToPierreStock(stock, PUMPKIN_SEEDS, itemSeason: "fall");
-            AddToPierreStock(stock, CORN_SEEDS, itemSeason: "fall");
-            AddToPierreStock(stock, EGGPLANT_SEEDS, itemSeason: "fall");
-            AddToPierreStock(stock, BOK_CHOY_SEEDS, itemSeason: "fall");
-            AddToPierreStock(stock, YAM_SEEDS, itemSeason: "fall");
-            AddToPierreStock(stock, CRANBERRY_SEEDS, itemSeason: "fall");
-            AddToPierreStock(stock, WHEAT_SEEDS, itemSeason: "fall");
-            AddToPierreStock(stock, SUNFLOWER_SEEDS, 100, "fall");
-            AddToPierreStock(stock, FAIRY_SEEDS, itemSeason: "fall");
-            AddToPierreStock(stock, AMARANTH_SEEDS, itemSeason: "fall");
-            AddToPierreStock(stock, GRAPE_STARTER, itemSeason: "fall");
-            AddToPierreStock(stock, ARTICHOKE_SEEDS, itemSeason: "fall");
+            AddToPierreStock(stock, PUMPKIN_SEEDS, true, itemSeason: "fall");
+            AddToPierreStock(stock, CORN_SEEDS, true, itemSeason: "fall");
+            AddToPierreStock(stock, EGGPLANT_SEEDS, true, itemSeason: "fall");
+            AddToPierreStock(stock, BOK_CHOY_SEEDS, true, itemSeason: "fall");
+            AddToPierreStock(stock, YAM_SEEDS, true, itemSeason: "fall");
+            AddToPierreStock(stock, CRANBERRY_SEEDS, true, itemSeason: "fall");
+            AddToPierreStock(stock, WHEAT_SEEDS, true, itemSeason: "fall");
+            AddToPierreStock(stock, SUNFLOWER_SEEDS, true, 100, "fall");
+            AddToPierreStock(stock, FAIRY_SEEDS, true, itemSeason: "fall");
+            AddToPierreStock(stock, AMARANTH_SEEDS, true, itemSeason: "fall");
+            AddToPierreStock(stock, GRAPE_STARTER, true, itemSeason: "fall");
+            AddToPierreStock(stock, ARTICHOKE_SEEDS, true, itemSeason: "fall");
         }
 
         private static void AddGrassStarterToPierreStock(Dictionary<ISalable, int[]> stock)
@@ -184,18 +183,18 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 return;
             }
 
-            AddToPierreStock(stock, BASIC_FERTILIZER, 50);
-            AddToPierreStock(stock, BASIC_RETAINING_SOIL, 50);
-            AddToPierreStock(stock, SPEED_GRO, 50);
+            AddToPierreStock(stock, BASIC_FERTILIZER, false, 50);
+            AddToPierreStock(stock, BASIC_RETAINING_SOIL, false, 50);
+            AddToPierreStock(stock, SPEED_GRO, false, 50);
 
             if (Game1.year <= 1)
             {
                 return;
             }
 
-            AddToPierreStock(stock, QUALITY_FERTILIZER, 75);
-            AddToPierreStock(stock, QUALITY_RETAINING_SOIL, 75);
-            AddToPierreStock(stock, DELUXE_SPEED_GRO, 75);
+            AddToPierreStock(stock, QUALITY_FERTILIZER, false, 75);
+            AddToPierreStock(stock, QUALITY_RETAINING_SOIL, false, 75);
+            AddToPierreStock(stock, DELUXE_SPEED_GRO, false, 75);
         }
 
         private static void AddFurnitureToShop(Dictionary<ISalable, int[]> stock)
@@ -229,12 +228,12 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
         private static void AddSaplingsToShop(Dictionary<ISalable, int[]> stock)
         {
-            AddToPierreStock(stock, CHERRY_SAPLING, 1700, howManyInStock: 1);
-            AddToPierreStock(stock, APRICOT_SAPLING, 1000, howManyInStock: 1);
-            AddToPierreStock(stock, ORANGE_SAPLING, 2000, howManyInStock: 1);
-            AddToPierreStock(stock, PEACH_SAPLING, 3000, howManyInStock: 1);
-            AddToPierreStock(stock, POMEGRANATE_SAPLING, 3000, howManyInStock: 1);
-            AddToPierreStock(stock, APPLE_SAPLING, 2000, howManyInStock: 1);
+            AddToPierreStock(stock, CHERRY_SAPLING, false, 1700, howManyInStock: 1);
+            AddToPierreStock(stock, APRICOT_SAPLING, false, 1000, howManyInStock: 1);
+            AddToPierreStock(stock, ORANGE_SAPLING, false, 2000, howManyInStock: 1);
+            AddToPierreStock(stock, PEACH_SAPLING, false, 3000, howManyInStock: 1);
+            AddToPierreStock(stock, POMEGRANATE_SAPLING, false, 3000, howManyInStock: 1);
+            AddToPierreStock(stock, APPLE_SAPLING, false, 2000, howManyInStock: 1);
         }
 
         private static void AddBuyBackToShop(SeedShop __instance, Dictionary<ISalable, int[]> stock)
@@ -270,12 +269,26 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         private static void AddToPierreStock(
             Dictionary<ISalable, int[]> stock,
             int itemId,
+            bool isSeed = false,
             int basePrice = -1,
             string itemSeason = null,
             int howManyInStock = -1)
         {
             var priceMultiplier = 2.0;
             var item = new StardewValley.Object(Vector2.Zero, itemId, 1);
+
+            var sendingPlayerName = "";
+            if (isSeed && _archipelago.SlotData.SeedShuffle == SeedShuffle.Shuffled &&
+                !_archipelago.HasReceivedItem(item.Name, out sendingPlayerName))
+            {
+                return;
+            }
+
+            if (!string.IsNullOrWhiteSpace(sendingPlayerName))
+            {
+                // Can I add the sender to the description?
+            }
+
             if (basePrice == -1)
             {
                 basePrice = item.salePrice();
@@ -340,44 +353,44 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
         private static void AddSpringSeedsToJojaStock(Dictionary<ISalable, int[]> stock)
         {
-            AddToJojaStock(stock, PARSNIP_SEEDS);
-            AddToJojaStock(stock, BEAN_STARTER);
-            AddToJojaStock(stock, CAULIFLOWER_SEEDS);
-            AddToJojaStock(stock, POTATO_SEEDS);
-            AddToJojaStock(stock, TULIP_BULB);
-            AddToJojaStock(stock, KALE_SEEDS);
-            AddToJojaStock(stock, JAZZ_SEEDS);
-            AddToJojaStock(stock, GARLIC_SEEDS);
-            AddToJojaStock(stock, RICE_SHOOT);
+            AddToJojaStock(stock, PARSNIP_SEEDS, true);
+            AddToJojaStock(stock, BEAN_STARTER, true);
+            AddToJojaStock(stock, CAULIFLOWER_SEEDS, true);
+            AddToJojaStock(stock, POTATO_SEEDS, true);
+            AddToJojaStock(stock, TULIP_BULB, true);
+            AddToJojaStock(stock, KALE_SEEDS, true);
+            AddToJojaStock(stock, JAZZ_SEEDS, true);
+            AddToJojaStock(stock, GARLIC_SEEDS, true);
+            AddToJojaStock(stock, RICE_SHOOT, true);
         }
 
         private static void AddSummerSeedsToJojaStock(Dictionary<ISalable, int[]> stock)
         {
-            AddToJojaStock(stock, MELON_SEEDS);
-            AddToJojaStock(stock, TOMATO_SEEDS);
-            AddToJojaStock(stock, BLUEBERRY_SEEDS);
-            AddToJojaStock(stock, PEPPER_SEEDS);
-            AddToJojaStock(stock, WHEAT_SEEDS);
-            AddToJojaStock(stock, RADISH_SEEDS);
-            AddToJojaStock(stock, POPPY_SEEDS);
-            AddToJojaStock(stock, SPANGLE_SEEDS);
-            AddToJojaStock(stock, HOPS_STARTER);
-            AddToJojaStock(stock, CORN_SEEDS);
-            AddToJojaStock(stock, SUNFLOWER_SEEDS);
-            AddToJojaStock(stock, RED_CABBAGE_SEEDS);
+            AddToJojaStock(stock, MELON_SEEDS, true);
+            AddToJojaStock(stock, TOMATO_SEEDS, true);
+            AddToJojaStock(stock, BLUEBERRY_SEEDS, true);
+            AddToJojaStock(stock, PEPPER_SEEDS, true);
+            AddToJojaStock(stock, WHEAT_SEEDS, true);
+            AddToJojaStock(stock, RADISH_SEEDS, true);
+            AddToJojaStock(stock, POPPY_SEEDS, true);
+            AddToJojaStock(stock, SPANGLE_SEEDS, true);
+            AddToJojaStock(stock, HOPS_STARTER, true);
+            AddToJojaStock(stock, CORN_SEEDS, true);
+            AddToJojaStock(stock, SUNFLOWER_SEEDS, true);
+            AddToJojaStock(stock, RED_CABBAGE_SEEDS, true);
         }
 
         private static void AddFallSeedsToJojaStock(Dictionary<ISalable, int[]> stock)
         {
-            AddToJojaStock(stock, PUMPKIN_SEEDS);
-            AddToJojaStock(stock, EGGPLANT_SEEDS);
-            AddToJojaStock(stock, BOK_CHOY_SEEDS);
-            AddToJojaStock(stock, YAM_SEEDS);
-            AddToJojaStock(stock, CRANBERRY_SEEDS);
-            AddToJojaStock(stock, FAIRY_SEEDS);
-            AddToJojaStock(stock, AMARANTH_SEEDS);
-            AddToJojaStock(stock, GRAPE_STARTER);
-            AddToJojaStock(stock, ARTICHOKE_SEEDS);
+            AddToJojaStock(stock, PUMPKIN_SEEDS, true);
+            AddToJojaStock(stock, EGGPLANT_SEEDS, true);
+            AddToJojaStock(stock, BOK_CHOY_SEEDS, true);
+            AddToJojaStock(stock, YAM_SEEDS, true);
+            AddToJojaStock(stock, CRANBERRY_SEEDS, true);
+            AddToJojaStock(stock, FAIRY_SEEDS, true);
+            AddToJojaStock(stock, AMARANTH_SEEDS, true);
+            AddToJojaStock(stock, GRAPE_STARTER, true);
+            AddToJojaStock(stock, ARTICHOKE_SEEDS, true);
         }
 
         private static void AddGrassStarterToJojaStock(Dictionary<ISalable, int[]> stock)
@@ -397,11 +410,25 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         private static void AddToJojaStock(
             Dictionary<ISalable, int[]> stock,
             int itemId,
+            bool isSeed = false,
             int basePrice = -1,
             int packSize = 50)
         {
             var priceMultiplier = 1.0;
             var item = new StardewValley.Object(Vector2.Zero, itemId, packSize);
+
+            var sendingPlayerName = "";
+            if (isSeed && _archipelago.SlotData.SeedShuffle == SeedShuffle.Shuffled &&
+                !_archipelago.HasReceivedItem(item.Name, out sendingPlayerName))
+            {
+                return;
+            }
+
+            if (!string.IsNullOrWhiteSpace(sendingPlayerName))
+            {
+                // Can I add the sender to the description?
+            }
+
             if (basePrice == -1)
             {
                 basePrice = item.salePrice();
@@ -418,6 +445,109 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 price,
                 int.MaxValue
             });
+        }
+
+        public static bool SandyShopStock_SeedShuffle_Prefix(GameLocation __instance,
+            ref Dictionary<ISalable, int[]> __result)
+        {
+            try
+            {
+                var sandyStock = new Dictionary<ISalable, int[]>();
+                AddSeedToSandyStock(sandyStock, CACTUS_SEEDS, (int)(75.0 * Game1.MasterPlayer.difficultyModifier));
+                AddSeedToSandyStock(sandyStock, RHUBARB_SEEDS);
+                AddSeedToSandyStock(sandyStock, STARFRUIT_SEEDS);
+                AddSeedToSandyStock(sandyStock, BEET_SEEDS);
+                Random random = new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame / 2);
+                AddSandyRotatingStock(sandyStock, random);
+                AddSandyPermanentCosmetics(sandyStock, random);
+
+                Game1.player.team.synchronizedShopStock.UpdateLocalStockWithSyncedQuanitities(
+                    SynchronizedShopStock.SynchedShop.Sandy, sandyStock);
+
+                __result = sandyStock;
+                return false; // don't run original logic
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(SandyShopStock_SeedShuffle_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
+        }
+
+        private static void AddSandyRotatingStock(Dictionary<ISalable, int[]> sandyStock, Random random)
+        {
+            switch (Game1.dayOfMonth % 7)
+            {
+                case 0:
+                    Utility.AddStock(sandyStock, new Object(233, int.MaxValue));
+                    AddToSandyStock(sandyStock, new Furniture(2720, Vector2.Zero), 3000);
+                    break;
+                case 1:
+                    Utility.AddStock(sandyStock, new Object(88, 1), 200, 10);
+                    AddToSandyStock(sandyStock, new Furniture(2802, Vector2.Zero), 2000);
+                    break;
+                case 2:
+                    Utility.AddStock(sandyStock, new Object(90, int.MaxValue));
+                    AddToSandyStock(sandyStock, new Furniture(2734 + random.Next(4) * 2, Vector2.Zero), 500);
+                    break;
+                case 3:
+                    Utility.AddStock(sandyStock, new Object(749, 1), 500, 3);
+                    AddToSandyStock(sandyStock, new Furniture(2584, Vector2.Zero), 5000);
+                    break;
+                case 4:
+                    Utility.AddStock(sandyStock, new Object(466, int.MaxValue));
+                    AddToSandyStock(sandyStock, new Furniture(2794, Vector2.Zero), 2500);
+                    break;
+                case 5:
+                    Utility.AddStock(sandyStock, new Object(340, int.MaxValue));
+                    AddToSandyStock(sandyStock, new Furniture(2784, Vector2.Zero), 2500);
+                    break;
+                case 6:
+                    Utility.AddStock(sandyStock, new Object(371, int.MaxValue), 100);
+                    AddToSandyStock(sandyStock, new Furniture(2748, Vector2.Zero), 500);
+                    AddToSandyStock(sandyStock, new Furniture(2812, Vector2.Zero), 500);
+                    break;
+            }
+        }
+
+        private static void AddSandyPermanentCosmetics(Dictionary<ISalable, int[]> sandyStock, Random random)
+        {
+            Object seasonalPlant = new Object(Vector2.Zero, SEASONAL_PLANT);
+            seasonalPlant.Stack = int.MaxValue;
+            Utility.AddStock(sandyStock, seasonalPlant);
+            AddToSandyStock(sandyStock, new Clothing(1000 + random.Next(sbyte.MaxValue)), 1000);
+            AddToSandyStock(sandyStock, new Furniture(WALL_CACTUS, Vector2.Zero), 700);
+        }
+
+        private static void AddSeedToSandyStock(Dictionary<ISalable, int[]> sandyStock, int itemId, int price = -1)
+        {
+            var sendingPlayerName = "";
+            var item = new Object(itemId, int.MaxValue);
+            if (_archipelago.SlotData.SeedShuffle == SeedShuffle.Shuffled &&
+                !_archipelago.HasReceivedItem(item.Name, out sendingPlayerName))
+            {
+                return;
+            }
+
+            if (!string.IsNullOrWhiteSpace(sendingPlayerName))
+            {
+                // Can I add the sender to the description?
+            }
+
+            var random = new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame / 2 + itemId);
+            var howManyInStock = random.Next(20);
+            if (howManyInStock < 5)
+            {
+                return;
+            }
+
+            item.Stack = howManyInStock;
+            Utility.AddStock(sandyStock, item, price, limitedQuantity:howManyInStock);
+        }
+
+        private static void AddToSandyStock(Dictionary<ISalable, int[]> sandyStock, ISalable item, int price, int stack = int.MaxValue)
+        {
+            sandyStock.Add(item, new[] { price, stack });
         }
 
         private static void AddJojaFurnitureToShop(Dictionary<ISalable, int[]> stock)
@@ -506,5 +636,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         private const int MANGO_SAPLING = 835;
 
         private const int BOUQUET = 458;
+        private const int SEASONAL_PLANT = 196;
+        private const int WALL_CACTUS = 2655;
     }
 }
