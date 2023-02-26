@@ -16,7 +16,7 @@ namespace StardewArchipelago.Items.Mail
         {
             _mail = mail;
             _letterActions = new Dictionary<string, Action<string>>();
-            _letterActions.Add(LetterActionsKeys.Frienship, IncreaseFriendshipWithEveryone);
+            _letterActions.Add(LetterActionsKeys.Friendship, IncreaseFriendshipWithEveryone);
             _letterActions.Add(LetterActionsKeys.Backpack, (_) => IncreaseBackpackLevel());
             _letterActions.Add(LetterActionsKeys.DwarvishTranslationGuide, (_) => ReceiveDwarvishTranslationGuide());
             _letterActions.Add(LetterActionsKeys.SkullKey, (_) => ReceiveSkullKey());

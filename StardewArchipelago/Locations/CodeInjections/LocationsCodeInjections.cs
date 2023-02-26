@@ -24,6 +24,7 @@ namespace StardewArchipelago.Locations.CodeInjections
             TravelingMerchantInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             FishingInjections.Initialize(monitor, modHelper, archipelago, locationChecker, itemManager);
             MuseumInjections.Initialize(monitor, modHelper, archipelago, locationChecker, itemManager);
+            FriendshipInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
         }
     }
 }

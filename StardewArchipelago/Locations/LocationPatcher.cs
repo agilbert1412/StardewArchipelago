@@ -4,6 +4,7 @@ using StardewArchipelago.Locations.CodeInjections;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Characters;
 using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Minigames;
@@ -44,6 +45,7 @@ namespace StardewArchipelago.Locations
             PatchTravelingMerchant();
             AddFishsanityLocations();
             AddMuseumsanityLocations();
+            ReplaceFriendshipsWithChecks();
         }
 
         private void ReplaceCommunityCenterBundlesWithChecks()
@@ -414,6 +416,29 @@ namespace StardewArchipelago.Locations
             _harmony.Patch(
                 original: AccessTools.Method(typeof(LibraryMuseum), nameof(LibraryMuseum.getRewardsForPlayer)),
                 prefix: new HarmonyMethod(typeof(MuseumInjections), nameof(MuseumInjections.GetRewardsForPlayer_Museumsanity_Prefix))
+            );
+        }
+
+        private void ReplaceFriendshipsWithChecks()
+        {
+            _harmony.Patch(
+                original: AccessTools.PropertyGetter(typeof(Friendship), nameof(Friendship.Points)),
+                prefix: new HarmonyMethod(typeof(FriendshipInjections), nameof(FriendshipInjections.GetPoints_ArchipelagoHearts_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.PropertySetter(typeof(Friendship), nameof(Friendship.Points)),
+                prefix: new HarmonyMethod(typeof(FriendshipInjections), nameof(FriendshipInjections.SetPoints_ArchipelagoPoints_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Pet), nameof(Pet.dayUpdate)),
+                prefix: new HarmonyMethod(typeof(FriendshipInjections), nameof(FriendshipInjections.DayUpdate_ArchipelagoPoints_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Farmer), nameof(Farmer.changeFriendship)),
+                prefix: new HarmonyMethod(typeof(FriendshipInjections), nameof(FriendshipInjections.ChangeFriendship_ArchipelagoPoints_Prefix))
             );
         }
     }

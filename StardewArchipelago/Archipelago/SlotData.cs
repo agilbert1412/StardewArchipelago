@@ -25,9 +25,11 @@ namespace StardewArchipelago.Archipelago
         private const string HELP_WANTED_LOCATIONS_KEY = "help_wanted_locations";
         private const string FISHSANITY_KEY = "fishsanity";
         private const string MUSEUMSANITY_KEY = "museumsanity";
+        private const string FRIENDSANITY_KEY = "friendsanity";
         private const string MULTI_SLEEP_ENABLED_KEY = "multiple_day_sleep_enabled";
         private const string MULTI_SLEEP_COST_KEY = "multiple_day_sleep_cost";
         private const string EXPERIENCE_MULTIPLIER_KEY = "experience_multiplier";
+        private const string FRIENDSHIP_MULTIPLIER_KEY = "friendship_multiplier";
         private const string DEBRIS_MULTIPLIER_KEY = "debris_multiplier";
         private const string QUICK_START_KEY = "quick_start";
         private const string GIFTING_KEY = "gifting";
@@ -56,9 +58,11 @@ namespace StardewArchipelago.Archipelago
         public int HelpWantedLocationNumber { get; private set; }
         public Fishsanity Fishsanity { get; private set; }
         public Museumsanity Museumsanity { get; private set; }
+        public Friendsanity Friendsanity { get; private set; }
         public bool EnableMultiSleep { get; private set; }
         public int MultiSleepCostPerDay { get; private set; }
         public double ExperienceMultiplier { get; private set; }
+        public double FriendshipMultiplier { get; private set; }
         public DebrisMultiplier DebrisMultiplier { get; private set; }
         public bool QuickStart { get; private set; }
         public bool Gifting { get; private set; }
@@ -89,9 +93,11 @@ namespace StardewArchipelago.Archipelago
             HelpWantedLocationNumber = GetSlotSetting(HELP_WANTED_LOCATIONS_KEY, 0);
             Fishsanity = GetSlotSetting(FISHSANITY_KEY, Fishsanity.None);
             Museumsanity = GetSlotSetting(MUSEUMSANITY_KEY, Museumsanity.None);
+            Friendsanity = GetSlotSetting(FRIENDSANITY_KEY, Friendsanity.None);
             EnableMultiSleep = GetSlotSetting(MULTI_SLEEP_ENABLED_KEY, true);
             MultiSleepCostPerDay = GetSlotSetting(MULTI_SLEEP_COST_KEY, 0);
             ExperienceMultiplier = GetSlotSetting(EXPERIENCE_MULTIPLIER_KEY, 100) / 100.0;
+            FriendshipMultiplier = GetSlotSetting(FRIENDSHIP_MULTIPLIER_KEY, 100) / 100.0;
             DebrisMultiplier = GetSlotSetting(DEBRIS_MULTIPLIER_KEY, DebrisMultiplier.HalfDebris);
             QuickStart = GetSlotSetting(QUICK_START_KEY, false);
             Gifting = GetSlotSetting(GIFTING_KEY, true);
@@ -297,6 +303,16 @@ namespace StardewArchipelago.Archipelago
         All = 3,
     }
 
+    public enum Friendsanity
+    {
+        None = 0,
+        // MarryOnePerson = 1,
+        Bachelors = 2,
+        StartingNpcs = 3,
+        All = 4,
+        AllWithMarriage = 5,
+    }
+
     public enum Goal
     {
         CommunityCenter = 0,
@@ -305,6 +321,7 @@ namespace StardewArchipelago.Archipelago
         CrypticNote = 3,
         MasterAngler = 4,
         CompleteCollection = 5,
+        FullHouse = 6,
     }
 
     public enum DebrisMultiplier

@@ -175,8 +175,8 @@ namespace StardewArchipelago.GameModifications
             );
 
             _harmony.Patch(
-                original: AccessTools.PropertyGetter(typeof(WorldDate), nameof(WorldDate.TotalDays)),
-                prefix: new HarmonyMethod(typeof(SeasonsRandomizer), nameof(SeasonsRandomizer.TotalDays_UseStats_Prefix))
+                original: AccessTools.PropertyGetter(typeof(Game1), nameof(Game1.Date)),
+                prefix: new HarmonyMethod(typeof(SeasonsRandomizer), nameof(SeasonsRandomizer.Date_UseTotalDaysStats_Prefix))
             );
 
             SeasonsRandomizer.ChangeMailKeysBasedOnSeasonsToDaysElapsed();

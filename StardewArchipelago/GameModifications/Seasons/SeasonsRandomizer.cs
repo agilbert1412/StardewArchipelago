@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Input;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Serialization;
@@ -89,16 +87,18 @@ namespace StardewArchipelago.GameModifications.Seasons
             }
         }
 
-        public static bool TotalDays_UseStats_Prefix(WorldDate __instance, ref int __result)
+        // public static WorldDate Date
+        public static bool Date_UseTotalDaysStats_Prefix(ref WorldDate __result)
         {
             try
             {
-                __result = (int)Game1.stats.DaysPlayed - 1;
+                GetVanillaValues(out var totalDays, out var year, out var seasonNumber, out var seasonName);
+                __result = new WorldDate(year, seasonName.ToLower(), Game1.dayOfMonth);
                 return false; // don't run original logic
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(TotalDays_UseStats_Prefix)}:\n{ex}", LogLevel.Error);
+                _monitor.Log($"Failed in {nameof(Date_UseTotalDaysStats_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
             }
         }
@@ -231,7 +231,7 @@ namespace StardewArchipelago.GameModifications.Seasons
 
         private static void SendMailForCurrentDateSpecificYear(int year, string seasonName, Dictionary<string, string> mailData)
         {
-            for (var i = 1; i <= year + 1; i++)
+            for (var i = 1; i <= year; i++)
             {
                 var key = seasonName + "_" + Game1.dayOfMonth + "_" + i;
                 SendMailIfNeverReceivedBefore(mailData, key);
@@ -241,8 +241,8 @@ namespace StardewArchipelago.GameModifications.Seasons
         private static void SendMailForCurrentTotalDaysElapsed(int year, Dictionary<string, string> mailData)
         {
             var totalDays = Game1.stats.DaysPlayed;
-            var daysThisYear = totalDays - (112 * year);
-            for (var i = 1; i <= year + 1; i++)
+            var daysThisYear = totalDays - (112 * (year - 1));
+            for (var i = 1; i <= year; i++)
             {
                 var keyToday = $"year_{i}_day_{daysThisYear}";
                 SendMailIfNeverReceivedBefore(mailData, keyToday);
@@ -272,7 +272,7 @@ namespace StardewArchipelago.GameModifications.Seasons
         public static void PrepareDateForSaveGame()
         {
             GetVanillaValues(out var totalDays, out var year, out var seasonNumber, out _);
-            Game1.year = year + 1;
+            Game1.year = year;
             Game1.player.dayOfMonthForSaveGame = Game1.dayOfMonth;
             Game1.player.seasonForSaveGame = seasonNumber;
             Game1.player.yearForSaveGame = Game1.year;
@@ -281,10 +281,11 @@ namespace StardewArchipelago.GameModifications.Seasons
         private static void GetVanillaValues(out int totalDays, out int year, out int seasonNumber, out string seasonName)
         {
             totalDays = (int)Game1.stats.DaysPlayed;
-            year = totalDays / 112;
+            year = (totalDays / 112);
             var daysThisYear = totalDays - (year * 112);
             seasonNumber = daysThisYear / 28;
             seasonName = SeasonsRandomizer.ValidSeasons[seasonNumber];
+            year = year + 1;
         }
     }
 }

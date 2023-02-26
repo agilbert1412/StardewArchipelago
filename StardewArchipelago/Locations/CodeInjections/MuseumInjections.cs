@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Goals;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
-using StardewValley.Objects;
 
 namespace StardewArchipelago.Locations.CodeInjections
 {

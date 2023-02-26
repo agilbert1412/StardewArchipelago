@@ -48,6 +48,9 @@ namespace StardewArchipelago.Goals
                 case Goal.CompleteCollection:
                     GoalCodeInjection.CheckCompleteCollectionGoalCompletion();
                     return;
+                case Goal.FullHouse:
+                    GoalCodeInjection.CheckFullHouseGoalCompletion();
+                    return;
                 default:
                     throw new ArgumentOutOfRangeException($"Goal [{_archipelago.SlotData.Goal}] is not supported in this version of the mod.");
             }
@@ -70,6 +73,8 @@ namespace StardewArchipelago.Goals
                 case Goal.MasterAngler:
                     return;
                 case Goal.CompleteCollection:
+                    return;
+                case Goal.FullHouse:
                     return;
                 default:
                     throw new ArgumentOutOfRangeException($"Goal [{_archipelago.SlotData.Goal}] is not supported in this version of the mod.");

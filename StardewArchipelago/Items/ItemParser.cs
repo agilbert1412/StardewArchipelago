@@ -37,7 +37,7 @@ namespace StardewArchipelago.Items
             var itemIsFriendshipBonus = TryParseFriendshipBonus(receivedItem.ItemName, out var numberOfPoints);
             if (itemIsFriendshipBonus)
             {
-                return new LetterActionAttachment(receivedItem, LetterActionsKeys.Frienship, numberOfPoints.ToString());
+                return new LetterActionAttachment(receivedItem, LetterActionsKeys.Friendship, numberOfPoints.ToString());
             }
 
             if (_unlockManager.IsUnlock(receivedItem.ItemName))

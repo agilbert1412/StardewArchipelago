@@ -27,6 +27,7 @@ namespace StardewArchipelago
         private const string CONNECT_SYNTAX = "Syntax: connect ip:port slot password";
         private const string AP_DATA_KEY = "ArchipelagoData";
         private const string AP_EXPERIENCE_KEY = "ArchipelagoSkillsExperience";
+        private const string AP_FRIENDSHIP_KEY = "ArchipelagoFriendshipPoints";
 
         private IModHelper _helper;
         private Harmony _harmony;
@@ -141,6 +142,7 @@ namespace StardewArchipelago
             SeasonsRandomizer.SetSeason(_state.SeasonsOrder.Last());
             _helper.Data.WriteSaveData(AP_DATA_KEY, _state);
             _helper.Data.WriteSaveData(AP_EXPERIENCE_KEY, SkillInjections.GetArchipelagoExperience());
+            _helper.Data.WriteSaveData(AP_FRIENDSHIP_KEY, FriendshipInjections.GetArchipelagoFriendshipPoints());
         }
 
         private void OnSaveCreated(object sender, SaveCreatedEventArgs e)
@@ -157,6 +159,7 @@ namespace StardewArchipelago
             // _state.SeasonOrder should be fine?
             _helper.Data.WriteSaveData(AP_DATA_KEY, _state);
             _helper.Data.WriteSaveData(AP_EXPERIENCE_KEY, SkillInjections.GetArchipelagoExperience());
+            _helper.Data.WriteSaveData(AP_FRIENDSHIP_KEY, FriendshipInjections.GetArchipelagoFriendshipPoints());
         }
 
         private void OnSaved(object sender, SavedEventArgs e)
@@ -237,6 +240,9 @@ namespace StardewArchipelago
 
             var apExperience = _helper.Data.ReadSaveData<Dictionary<int, int>>(AP_EXPERIENCE_KEY);
             SkillInjections.SetArchipelagoExperience(apExperience);
+
+            var apFriendship = _helper.Data.ReadSaveData<Dictionary<string, int>>(AP_FRIENDSHIP_KEY);
+            FriendshipInjections.SetArchipelagoFriendshipPoints(apFriendship);
         }
 
         private void OnDayStarted(object sender, DayStartedEventArgs e)

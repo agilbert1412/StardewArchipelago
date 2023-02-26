@@ -1,18 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Netcode;
 using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Objects;
-using Object = StardewValley.Object;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
 {

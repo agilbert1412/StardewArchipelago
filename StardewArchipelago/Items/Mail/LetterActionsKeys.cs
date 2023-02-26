@@ -2,7 +2,7 @@
 {
     public static class LetterActionsKeys
     {
-        public const string Frienship = "Friendship";
+        public const string Friendship = "Friendship";
         public const string Backpack = "Backpack";
         public const string SkullKey = "SkullKey"; 
         public const string DwarvishTranslationGuide = "DwarvishTranslationGuide";

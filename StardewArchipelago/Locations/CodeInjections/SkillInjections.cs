@@ -114,7 +114,7 @@ namespace StardewArchipelago.Locations.CodeInjections
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(GainExperience_ArchipelagoExperience_Prefix)}:\n{ex}", LogLevel.Error);
+                _monitor.Log($"Failed in {nameof(GainExperience_NormalExperience_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
             }
         }
