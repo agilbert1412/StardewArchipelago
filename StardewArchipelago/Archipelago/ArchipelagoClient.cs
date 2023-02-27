@@ -26,6 +26,7 @@ namespace StardewArchipelago.Archipelago
         private ChatForwarder _chatForwarder;
         private GiftHandler _giftHandler;
         private ArchipelagoConnectionInfo _connectionInfo;
+        private IManifest _modManifest;
 
         private Action _itemReceivedFunction;
 
@@ -34,13 +35,14 @@ namespace StardewArchipelago.Archipelago
         public Dictionary<string, ScoutedLocation> ScoutedLocations { get; set; }
         // public Random MultiRandom { get; set; }
 
-        public ArchipelagoClient(IMonitor console, IModHelper modHelper, Harmony harmony, Action itemReceivedFunction)
+        public ArchipelagoClient(IMonitor console, IModHelper modHelper, Harmony harmony, Action itemReceivedFunction, IManifest manifest)
         {
             _console = console;
             _modHelper = modHelper;
             _harmony = harmony;
             _itemReceivedFunction = itemReceivedFunction;
             IsConnected = false;
+            _modManifest = manifest;
             ScoutedLocations = new Dictionary<string, ScoutedLocation>();
         }
 
@@ -52,6 +54,15 @@ namespace StardewArchipelago.Archipelago
             if (!success)
             {
                 DisconnectPermanently();
+                return;
+            }
+
+            var majorVersion = _modManifest.Version.MajorVersion.ToString();
+            if (!SlotData.MultiworldVersion.StartsWith(majorVersion))
+            {
+                errorMessage = $"This Multiworld has been created for StardewArchipelago version {SlotData.MultiworldVersion},\nbut this is StardewArchipelago version {_modManifest.Version}.\nPlease update to a compatible mod version.";
+                DisconnectPermanently();
+                return;
             }
         }
 
@@ -62,7 +73,7 @@ namespace StardewArchipelago.Archipelago
             {
                 InitSession(connectionInfo);
                 var itemsHandling = ItemsHandlingFlags.AllItems;
-                var minimumVersion = new Version(0, 3, 7);
+                var minimumVersion = new Version(0, 3, 9);
                 var tags = connectionInfo.DeathLink ? new[] { "AP", "DeathLink" } : new[] { "AP" };
                 result = _session.TryConnectAndLogin(GAME_NAME, _connectionInfo.SlotName, itemsHandling, minimumVersion, tags, null, _connectionInfo.Password);
             }
@@ -99,14 +110,14 @@ namespace StardewArchipelago.Archipelago
             _console.Log(loginMessage, LogLevel.Info);
 
             // Must go AFTER a successful connection attempt
-            InitializeAfterConnection(loginSuccess, connectionInfo.SlotName);
+            InitializeSlotData(connectionInfo.SlotName, loginSuccess.SlotData);
+            InitializeAfterConnection();
             connectionInfo.DeathLink = SlotData.DeathLink;
             return true;
         }
 
-        private void InitializeAfterConnection(LoginSuccessful loginSuccess, string slotName)
+        private void InitializeAfterConnection()
         {
-            InitializeSlotData(slotName, loginSuccess.SlotData);
             _session.Items.ItemReceived += OnItemReceived;
             _session.MessageLog.OnMessageReceived += OnMessageReceived;
             _session.Socket.ErrorReceived += SessionErrorReceived;

@@ -65,7 +65,7 @@ namespace StardewArchipelago
             _helper = helper;
             _harmony = new Harmony(this.ModManifest.UniqueID);
 
-            _archipelago = new ArchipelagoClient(Monitor, _helper, _harmony, OnItemReceived);
+            _archipelago = new ArchipelagoClient(Monitor, _helper, _harmony, OnItemReceived, ModManifest);
 
             _helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
             _helper.Events.GameLoop.SaveCreating += this.OnSaveCreating;

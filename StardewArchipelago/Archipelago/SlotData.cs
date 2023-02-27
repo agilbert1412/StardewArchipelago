@@ -33,6 +33,7 @@ namespace StardewArchipelago.Archipelago
         private const string SEED_KEY = "seed";
         private const string MODIFIED_BUNDLES_KEY = "modified_bundles";
         private const string MODIFIED_ENTRANCES_KEY = "randomized_entrances";
+        private const string MULTIWORLD_VERSION_KEY = "client_version";
 
         private Dictionary<string, object> _slotDataFields;
         private IMonitor _console;
@@ -58,6 +59,7 @@ namespace StardewArchipelago.Archipelago
         public double GiftTax { get; private set; }
         public bool DeathLink { get; private set; }
         public string Seed { get; private set; }
+        public string MultiworldVersion { get; private set; }
         private Dictionary<string, string> ModifiedBundles { get; set; }
         public Dictionary<string, string> ModifiedEntrances { get; set; }
 
@@ -87,6 +89,7 @@ namespace StardewArchipelago.Archipelago
             GiftTax = GetSlotSetting(GIFT_TAX_KEY, 30) / 100.0;
             DeathLink = GetSlotSetting(DEATH_LINK_KEY, false);
             Seed = GetSlotSetting(SEED_KEY, "");
+            MultiworldVersion = GetSlotSetting(MULTIWORLD_VERSION_KEY, "");
             var newBundleStringData = GetSlotSetting(MODIFIED_BUNDLES_KEY, "");
             ModifiedBundles = JsonConvert.DeserializeObject<Dictionary<string, string>>(newBundleStringData);
             var newEntrancesStringData = GetSlotSetting(MODIFIED_ENTRANCES_KEY, "");
