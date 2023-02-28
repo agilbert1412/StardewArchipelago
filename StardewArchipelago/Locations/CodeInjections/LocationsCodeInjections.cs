@@ -8,7 +8,7 @@ namespace StardewArchipelago.Locations.CodeInjections
     {
         public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, BundleReader bundleReader, LocationChecker locationChecker, StardewItemManager itemManager)
         {
-            BackpackInjections.Initialize(monitor, locationChecker);
+            BackpackInjections.Initialize(monitor, archipelago, locationChecker);
             ToolInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             ScytheInjections.Initialize(monitor, locationChecker);
             FishingRodInjections.Initialize(monitor, modHelper, archipelago, locationChecker);

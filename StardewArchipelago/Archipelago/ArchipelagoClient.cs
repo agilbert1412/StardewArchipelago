@@ -58,8 +58,7 @@ namespace StardewArchipelago.Archipelago
                 return;
             }
 
-            var majorVersion = _modManifest.Version.MajorVersion.ToString();
-            if (!SlotData.MultiworldVersion.StartsWith(majorVersion))
+            if (IsMultiworldVersionSupported())
             {
                 errorMessage = $"This Multiworld has been created for StardewArchipelago version {SlotData.MultiworldVersion},\nbut this is StardewArchipelago version {_modManifest.Version}.\nPlease update to a compatible mod version.";
                 DisconnectPermanently();
@@ -623,6 +622,21 @@ namespace StardewArchipelago.Archipelago
         public void APUpdate()
         {
             MakeSureConnected(60);
+        }
+
+        private bool IsMultiworldVersionSupported()
+        {
+            var majorVersion = _modManifest.Version.MajorVersion.ToString();
+            var multiworldVersionParts = SlotData.MultiworldVersion.Split(".");
+            if (multiworldVersionParts.Length < 3)
+            {
+                return false;
+            }
+
+            var multiworldMajor = multiworldVersionParts[0];
+            var multiworldMinor = multiworldVersionParts[1];
+            var multiworldFix = multiworldVersionParts[2];
+            return majorVersion == multiworldMajor;
         }
     }
 }
