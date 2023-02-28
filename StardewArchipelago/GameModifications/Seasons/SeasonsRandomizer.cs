@@ -256,13 +256,14 @@ namespace StardewArchipelago.GameModifications.Seasons
                 return;
             }
 
+            var originalKey = _alternateMailKeys.Keys.FirstOrDefault(x => _alternateMailKeys[x] == key);
+            if (originalKey != null && !Game1.player.mailReceived.Contains(originalKey))
+            {
+                Game1.player.mailReceived.Add(originalKey);
+            }
+
             if (Game1.player.hasOrWillReceiveMail(key))
             {
-                var originalKey = _alternateMailKeys.Keys.FirstOrDefault(x => _alternateMailKeys[x] == key);
-                if (originalKey != null && !Game1.player.mailReceived.Contains(originalKey))
-                {
-                    Game1.player.mailReceived.Add(originalKey);
-                }
                 if (Game1.player.mailReceived.Contains(key) && Game1.player.mailbox.Contains(key))
                 {
                     Game1.player.mailbox.Remove(key);
