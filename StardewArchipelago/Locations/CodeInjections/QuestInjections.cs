@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Netcode;
 using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
 using StardewValley;
@@ -26,6 +30,7 @@ namespace StardewArchipelago.Locations.CodeInjections
         private static IModHelper _helper;
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
+        private static ContentManager _englishContentManager;
 
         public static void Initialize(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
@@ -33,6 +38,8 @@ namespace StardewArchipelago.Locations.CodeInjections
             _helper = helper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
+            _englishContentManager =
+                new ContentManager(Game1.game1.Content.ServiceProvider, Game1.game1.Content.RootDirectory);
         }
 
         public static bool QuestComplete_LocationInsteadOfReward_Prefix(Quest __instance)
@@ -82,8 +89,7 @@ namespace StardewArchipelago.Locations.CodeInjections
                 }
                 else
                 {
-                    // Story Quest
-                    _locationChecker.AddCheckedLocation(questName);
+                    CheckStoryQuestApLocation(__instance);
                 }
 
                 OriginalQuestCompleteCode(__instance);
@@ -94,6 +100,21 @@ namespace StardewArchipelago.Locations.CodeInjections
                 _monitor.Log($"Failed in {nameof(QuestComplete_LocationInsteadOfReward_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
             }
+        }
+
+        private static void CheckStoryQuestApLocation(Quest __instance)
+        {
+            // Story Quest
+            var englishTitle = GetQuestEnglishName(__instance.id.Value);
+            _locationChecker.AddCheckedLocation(englishTitle);
+        }
+
+        private static string GetQuestEnglishName(int questId)
+        {
+            var englishQuests = _englishContentManager.Load<Dictionary<int, string>>("Data\\Quests");
+            var equivalentEnglishQuestString = englishQuests[questId];
+            var englishTitle = equivalentEnglishQuestString.Split('/')[1];
+            return englishTitle;
         }
 
         private static void OriginalQuestCompleteCode(Quest __instance)
