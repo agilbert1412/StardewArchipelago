@@ -291,7 +291,8 @@ namespace StardewArchipelago.Locations.CodeInjections
                 var isInBloom = __instance.inBloom(seasonForLocation, Game1.dayOfMonth);
                 if (!isTownBush && __instance.tileSheetOffset.Value == 1 && isInBloom)
                 {
-                    return true; // run original logic;
+                    ShakeForBushItem(__instance, tileLocation);
+                    return false; // run original logic;
                 }
                 
                 if (tileLocation.X == 20.0 && tileLocation.Y == 8.0 && Game1.dayOfMonth == 28 && Game1.timeOfDay == 1200 && !Game1.player.mailReceived.Contains("junimoPlush"))
@@ -321,6 +322,84 @@ namespace StardewArchipelago.Locations.CodeInjections
                 _monitor.Log($"Failed in {nameof(Shake_WinterMysteryBush_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
             }
+        }
+
+        private static void ShakeForBushItem(Bush bush, Vector2 tileLocation)
+        {
+            var str = bush.overrideSeason.Value == -1 ? Game1.GetSeasonForLocation(bush.currentLocation) : Utility.getSeasonNameFromNumber(bush.overrideSeason.Value);
+            var shakeOff = -1;
+            if (str != "spring")
+            {
+                if (str == "fall")
+                {
+                    shakeOff = 410;
+                }
+            }
+            else
+            {
+                shakeOff = 296;
+            }
+
+            if (bush.size.Value == 3)
+            {
+                shakeOff = 815;
+            }
+
+            if (bush.size.Value == 4)
+            {
+                shakeOff = 73;
+            }
+
+            if (shakeOff == -1)
+            {
+                return;
+            }
+
+            bush.tileSheetOffset.Value = 0;
+            bush.setUpSourceRect();
+            var random = new Random((int)tileLocation.X + (int)tileLocation.Y * 5000 + (int)Game1.uniqueIDForThisGame + (int)Game1.stats.DaysPlayed);
+            if (bush.size.Value == 3 || bush.size.Value == 4)
+            {
+                var num = 1;
+                for (var index = 0; index < num; ++index)
+                {
+                    if (bush.size.Value == 4)
+                    {
+                        bush.uniqueSpawnMutex.RequestLock(() =>
+                        {
+                            Game1.player.team.MarkCollectedNut("Bush_" + bush.currentLocation.Name + "_" + tileLocation.X + "_" + tileLocation.Y);
+                            var @object = new Object(shakeOff, 1);
+                            var boundingBox = bush.getBoundingBox();
+                            var x = (double)boundingBox.Center.X;
+                            boundingBox = bush.getBoundingBox();
+                            var y = (double)(boundingBox.Bottom - 2);
+                            var origin = new Vector2((float)x, (float)y);
+                            var currentLocation = bush.currentLocation;
+                            boundingBox = bush.getBoundingBox();
+                            var bottom = boundingBox.Bottom;
+                            Game1.createItemDebris(@object, origin, 0, currentLocation, bottom);
+                        });
+                    }
+                    else
+                    {
+                        Game1.createObjectDebris(shakeOff, (int)tileLocation.X, (int)tileLocation.Y);
+                    }
+                }
+            }
+            else
+            {
+                var num = random.Next(1, 2) + Game1.player.ForagingLevel / 4;
+                for (var index = 0; index < num; ++index)
+                {
+                    Game1.createItemDebris(new Object(shakeOff, 1, quality: (Game1.player.professions.Contains(16) ? 4 : 0)), Utility.PointToVector2(bush.getBoundingBox().Center), Game1.random.Next(1, 4));
+                }
+            }
+            if (bush.size.Value == 3)
+            {
+                return;
+            }
+
+            DelayedAction.playSoundAfterDelay("leafrustle", 100);
         }
 
         private static void GetJunimoPlush(Bush __instance)
