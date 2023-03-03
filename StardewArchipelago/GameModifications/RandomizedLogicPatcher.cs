@@ -48,6 +48,7 @@ namespace StardewArchipelago.GameModifications
             PatchEntrances();
             PatchSeasons();
             PatchSeedShops();
+            // PatchAppearanceRandomization();
             _startingResources.GivePlayerStartingResources();
         }
 
@@ -197,6 +198,14 @@ namespace StardewArchipelago.GameModifications
             _harmony.Patch(
                 original: AccessTools.Method(typeof(GameLocation), "sandyShopStock"),
                 prefix: new HarmonyMethod(typeof(SeedShopsInjections), nameof(SeedShopsInjections.SandyShopStock_SeedShuffle_Prefix))
+            );
+        }
+
+        private void PatchAppearanceRandomization()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(AnimatedSprite), nameof(AnimatedSprite.LoadTexture)),
+                prefix: new HarmonyMethod(typeof(AppearanceRandomizer), nameof(AppearanceRandomizer.LoadTexture_ShuffleAppearance_Prefix))
             );
         }
     }

@@ -24,6 +24,8 @@ namespace StardewArchipelago
 {
     public class ModEntry : Mod
     {
+        public static ModEntry Instance;
+
         private const string CONNECT_SYNTAX = "Syntax: connect ip:port slot password";
         private const string AP_DATA_KEY = "ArchipelagoData";
         private const string AP_EXPERIENCE_KEY = "ArchipelagoSkillsExperience";
@@ -34,6 +36,7 @@ namespace StardewArchipelago
         private ArchipelagoClient _archipelago;
         private AdvancedOptionsManager _advancedOptionsManager;
         private Mailman _mail;
+        private ChatForwarder _chatForwarder;
         private GiftHandler _giftHandler;
         private BundleReader _bundleReader;
         private ItemManager _itemManager;
@@ -48,14 +51,16 @@ namespace StardewArchipelago
         private MultiSleep _multiSleep;
         private JojaDisabler _jojaDisabler;
         private SeasonsRandomizer _seasonsRandomizer;
+        private AppearanceRandomizer _appearanceRandomizer;
 
         private Tester _tester;
 
-        private ArchipelagoStateDto _state;
+        public ArchipelagoStateDto _state;
         private ArchipelagoConnectionInfo _apConnectionOverride;
 
         public ModEntry() : base()
         {
+            Instance = this;
         }
 
         /*********
@@ -137,6 +142,7 @@ namespace StardewArchipelago
             }
 
             _seasonsRandomizer = new SeasonsRandomizer(Monitor, _helper, _archipelago, _state);
+            _state.DisableAppearanceRandomizerOverride = false;
             _state.SeasonsOrder = new List<string>();
             _state.SeasonsOrder.Add(_seasonsRandomizer.GetFirstSeason());
             SeasonsRandomizer.SetSeason(_state.SeasonsOrder.Last());
@@ -184,6 +190,9 @@ namespace StardewArchipelago
             _logicPatcher = new RandomizedLogicPatcher(Monitor, _helper, _harmony, _archipelago, _locationChecker, _stardewItemManager, _state);
             _jojaDisabler = new JojaDisabler(Monitor, _helper, _harmony);
             _seasonsRandomizer = new SeasonsRandomizer(Monitor, _helper, _archipelago, _state);
+            _appearanceRandomizer = new AppearanceRandomizer(Monitor, _archipelago);
+            _chatForwarder = new ChatForwarder(Monitor, _harmony, _giftHandler, _appearanceRandomizer);
+
 
             if (_state.APConnectionInfo == null)
             {
@@ -197,7 +206,7 @@ namespace StardewArchipelago
                     _state.APConnectionInfo = _apConnectionOverride;
                     _apConnectionOverride = null;
                 }
-                _archipelago.Connect(_state.APConnectionInfo, _giftHandler, out var errorMessage);
+                _archipelago.Connect(_state.APConnectionInfo, out var errorMessage);
 
                 if (!_archipelago.IsConnected)
                 {
@@ -205,6 +214,8 @@ namespace StardewArchipelago
                     Game1.activeClickableMenu = new InformationDialog(errorMessage, onCloseBehavior: (_) => OnCloseBehavior());
                     return;
                 }
+
+                _chatForwarder.ListenToChatMessages(_archipelago);
             }
 
             _giftHandler.Initialize(_stardewItemManager, _mail, _archipelago);
@@ -270,6 +281,15 @@ namespace StardewArchipelago
             _mail.SendTomorrow();
             PlayerBuffInjections.CheckForApBuffs();
             Entrances.UpdateDynamicEntrances();
+            if (_state.DisableAppearanceRandomizerOverride)
+            {
+                _archipelago.SlotData.AppearanceRandomization = AppearanceRandomization.Disabled;
+            }
+            else
+            {
+                _archipelago.SlotData.AppearanceRandomization = AppearanceRandomization.Villagers;
+            }
+            _appearanceRandomizer.ShuffleCharacterAppearances();
         }
 
         private void OnDayEnding(object sender, DayEndingEventArgs e)
@@ -331,12 +351,13 @@ namespace StardewArchipelago
         public bool ArchipelagoConnect(string ip, int port, string slot, string password, out string errorMessage)
         {
             var apConnection = new ArchipelagoConnectionInfo(ip, port, slot, false, password);
-            _archipelago.Connect(apConnection, _giftHandler, out errorMessage);
+            _archipelago.Connect(apConnection, out errorMessage);
             if (!_archipelago.IsConnected)
             {
                 return false;
             }
 
+            _chatForwarder.ListenToChatMessages(_archipelago);
             _state.APConnectionInfo = apConnection;
             return true;
         }

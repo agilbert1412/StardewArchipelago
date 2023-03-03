@@ -38,6 +38,8 @@ namespace StardewArchipelago.Archipelago
         private const string SEED_KEY = "seed";
         private const string MODIFIED_BUNDLES_KEY = "modified_bundles";
         private const string MODIFIED_ENTRANCES_KEY = "randomized_entrances";
+        private const string RANDOMIZE_NPC_APPEARANCES_KEY = "randomize_appearances";
+        private const string RANDOMIZE_NPC_APPEARANCES_DAILY_KEY = "randomize_appearances_daily";
         private const string MULTIWORLD_VERSION_KEY = "client_version";
 
         private Dictionary<string, object> _slotDataFields;
@@ -72,6 +74,8 @@ namespace StardewArchipelago.Archipelago
         public string MultiworldVersion { get; private set; }
         private Dictionary<string, string> ModifiedBundles { get; set; }
         public Dictionary<string, string> ModifiedEntrances { get; set; }
+        public AppearanceRandomization AppearanceRandomization { get; set; }
+        public bool AppearanceRandomizationDaily { get; set; }
 
         public SlotData(string slotName, Dictionary<string, object> slotDataFields, IMonitor console)
         {
@@ -109,6 +113,8 @@ namespace StardewArchipelago.Archipelago
             ModifiedBundles = JsonConvert.DeserializeObject<Dictionary<string, string>>(newBundleStringData);
             var newEntrancesStringData = GetSlotSetting(MODIFIED_ENTRANCES_KEY, "");
             ModifiedEntrances = JsonConvert.DeserializeObject<Dictionary<string, string>>(newEntrancesStringData);
+            AppearanceRandomization = GetSlotSetting(RANDOMIZE_NPC_APPEARANCES_KEY, AppearanceRandomization.Villagers);
+            AppearanceRandomizationDaily = GetSlotSetting(RANDOMIZE_NPC_APPEARANCES_DAILY_KEY, false);
         }
 
         private T GetSlotSetting<T>(string key, T defaultValue) where T : struct, Enum, IConvertible
@@ -331,5 +337,13 @@ namespace StardewArchipelago.Archipelago
         QuarterDebris = 2,
         NoDebris = 3,
         StartClear = 4,
+    }
+
+    public enum AppearanceRandomization
+    {
+        Disabled = 0,
+        Villagers = 1,
+        All = 2,
+        Chaos = 3,
     }
 }
