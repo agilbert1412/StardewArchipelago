@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Characters;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
 {
@@ -35,7 +36,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 {
                     foreach (var character in gameLocation.characters)
                     {
-                        var isVillager = character.isVillager();
+                        var isVillager = character.isVillager() || character is Pet;
 
                         if (!isVillager && _archipelago.SlotData.AppearanceRandomization == AppearanceRandomization.Villagers)
                         {
