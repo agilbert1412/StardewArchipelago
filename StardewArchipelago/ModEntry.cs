@@ -214,10 +214,9 @@ namespace StardewArchipelago
                     Game1.activeClickableMenu = new InformationDialog(errorMessage, onCloseBehavior: (_) => OnCloseBehavior());
                     return;
                 }
-
-                _chatForwarder.ListenToChatMessages(_archipelago);
             }
 
+            _chatForwarder.ListenToChatMessages(_archipelago);
             _giftHandler.Initialize(_stardewItemManager, _mail, _archipelago);
             _logicPatcher.PatchAllGameLogic();
             _mailPatcher.PatchMailBoxForApItems();
@@ -357,7 +356,6 @@ namespace StardewArchipelago
                 return false;
             }
 
-            _chatForwarder.ListenToChatMessages(_archipelago);
             _state.APConnectionInfo = apConnection;
             return true;
         }
