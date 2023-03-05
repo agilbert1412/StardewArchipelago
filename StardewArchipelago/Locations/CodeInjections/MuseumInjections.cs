@@ -12,15 +12,15 @@ namespace StardewArchipelago.Locations.CodeInjections
 {
     public static class MuseumInjections
     {
-        private const string MUSEUMSANITY_PREFIX = "Museumsanity:";
+        public const string MUSEUMSANITY_PREFIX = "Museumsanity:";
         private const string MUSEUMSANITY_TOTAL_DONATIONS = "{0} {1} Donations";
         private const string MUSEUMSANITY_TOTAL_MINERALS = "{0} {1} Minerals";
         private const string MUSEUMSANITY_TOTAL_ARTIFACTS = "{0} {1} Artifacts";
         private const string MUSEUMSANITY_ANCIENT_SEED = "Ancient Seed";
-        private const string MUSEUMSANITY_DWARF_SCROLLS = "Dwarf Scrolls";
-        private const string MUSEUMSANITY_SKELETON_FRONT = "Skeleton Front";
-        private const string MUSEUMSANITY_SKELETON_MIDDLE = "Skeleton Middle";
-        private const string MUSEUMSANITY_SKELETON_BACK = "Skeleton Back";
+        public const string MUSEUMSANITY_DWARF_SCROLLS = "Dwarf Scrolls";
+        public const string MUSEUMSANITY_SKELETON_FRONT = "Skeleton Front";
+        public const string MUSEUMSANITY_SKELETON_MIDDLE = "Skeleton Middle";
+        public const string MUSEUMSANITY_SKELETON_BACK = "Skeleton Back";
 
         private static IMonitor _monitor;
         private static IModHelper _modHelper;

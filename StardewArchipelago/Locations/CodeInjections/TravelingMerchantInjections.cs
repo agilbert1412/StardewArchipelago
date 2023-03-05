@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Archipelago.MultiClient.Net.Models;
 using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
 using StardewValley;
@@ -214,8 +215,7 @@ namespace StardewArchipelago.Locations.CodeInjections
             var donatableItems = new Dictionary<Object, string>();
             foreach (var donatableItem in allMissingDonatableItems)
             {
-                var relevantHint = hints.FirstOrDefault(x =>
-                    _archipelago.GetLocationName(x.LocationId) == $"Museumsanity: {donatableItem.Name}");
+                var relevantHint = hints.FirstOrDefault(hint => IsItemRelevantForHint(hint, donatableItem));
                 if (relevantHint == null)
                 {
                     continue;
@@ -228,6 +228,38 @@ namespace StardewArchipelago.Locations.CodeInjections
             }
 
             return donatableItems;
+        }
+
+        private static bool IsItemRelevantForHint(Hint hint, Object item)
+        {
+            var locationName = _archipelago.GetLocationName(hint.LocationId);
+            var isDirectlyNeeded = locationName == $"Museumsanity: {item.Name}";
+            if (isDirectlyNeeded)
+            {
+                return true;
+            }
+
+            if (locationName == $"{MuseumInjections.MUSEUMSANITY_PREFIX} {MuseumInjections.MUSEUMSANITY_DWARF_SCROLLS}")
+            {
+                return item.Name.Contains("Dwarf Scroll");
+            }
+
+            if (locationName == $"{MuseumInjections.MUSEUMSANITY_PREFIX} {MuseumInjections.MUSEUMSANITY_SKELETON_FRONT}")
+            {
+                return item.Name is "Prehistoric Skull" or "Skeletal Hand" or "Prehistoric Scapula";
+            }
+
+            if (locationName == $"{MuseumInjections.MUSEUMSANITY_PREFIX} {MuseumInjections.MUSEUMSANITY_SKELETON_MIDDLE}")
+            {
+                return item.Name is "Prehistoric Rib" or "Prehistoric Vertebra";
+            }
+
+            if (locationName == $"{MuseumInjections.MUSEUMSANITY_PREFIX} {MuseumInjections.MUSEUMSANITY_SKELETON_BACK}")
+            {
+                return item.Name is "Prehistoric Tibia" or "Skeletal Tail";
+            }
+
+            return false;
         }
 
         private static Object GetRandomArtifactOrMineral(Random random, List<Object> allDonatableItems)

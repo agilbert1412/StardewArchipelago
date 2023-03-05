@@ -155,7 +155,7 @@ namespace StardewArchipelago.Locations.CodeInjections
 
                 var wasPet = __instance.grantedFriendshipForPet.Value;
                 var farm = (__instance.currentLocation as Farm);
-                var wasWatered = farm.petBowlWatered.Value;
+                var wasWatered = farm?.petBowlWatered?.Value ?? false;
                 var pointIncrease = (wasPet ? 12 : 0) + (wasWatered ? 6 : 0);
                 var multipliedPointIncrease = GetMultipliedFriendship(pointIncrease);
 
@@ -166,7 +166,7 @@ namespace StardewArchipelago.Locations.CodeInjections
                 {
                     _locationChecker.AddCheckedLocation(string.Format(FRIENDSANITY_PATTERN, PET_NAME, i));
                 }
-                farm.petBowlWatered.Set(false);
+                farm?.petBowlWatered?.Set(false);
 
                 var archipelagoHearts = _archipelago.GetReceivedItemCount(string.Format(HEARTS_PATTERN, PET_NAME));
                 __instance.friendshipTowardFarmer.Set(Math.Min(1000, archipelagoHearts * POINTS_PER_PET_HEART));

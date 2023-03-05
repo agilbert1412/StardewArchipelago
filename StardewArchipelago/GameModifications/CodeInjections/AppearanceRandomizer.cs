@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Extensions;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Characters;
@@ -124,7 +125,8 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
         private static Random GetSeededRandom(string originalName)
         {
-            var seed = (int)Game1.uniqueIDForThisGame + originalName.GetHashCode();
+            var originalNameHashForSeed = Math.Abs(originalName.GetHash()) / 10;
+            var seed = (int)Game1.uniqueIDForThisGame + originalNameHashForSeed;
             if (_archipelago.SlotData.AppearanceRandomizationDaily)
             {
                 seed += (int)Game1.stats.DaysPlayed;
