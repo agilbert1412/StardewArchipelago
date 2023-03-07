@@ -85,7 +85,9 @@ namespace StardewArchipelago.Locations.CodeInjections
                 friendshipPoints = GetBoundedToCurrentRelationState(friendshipPoints, name);
                 if (archipelagoHearts >= maxShuffled)
                 {
-                    friendshipPoints += (int)GetFriendshipPoints(name);
+                    var earnedPoints = (int)GetFriendshipPoints(name);
+                    var earnedPointsAboveMaxShuffled = earnedPoints - (maxShuffled * POINTS_PER_HEART);
+                    friendshipPoints += earnedPointsAboveMaxShuffled;
                 }
 
                 __result = friendshipPoints;

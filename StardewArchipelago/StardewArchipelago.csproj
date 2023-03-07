@@ -18,6 +18,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="IdTables\stardew_valley_item_table.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="IdTables\stardew_valley_location_table.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Textures\archipelago.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
