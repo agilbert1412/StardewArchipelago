@@ -33,6 +33,8 @@ namespace StardewArchipelago.Archipelago
         public bool IsConnected { get; private set; }
         public SlotData SlotData { get; private set; }
         public Dictionary<string, ScoutedLocation> ScoutedLocations { get; set; }
+
+        private DataPackageCache _localDataPackage;
         // public Random MultiRandom { get; set; }
 
         public ArchipelagoClient(IMonitor console, IModHelper modHelper, Harmony harmony, Action itemReceivedFunction, IManifest manifest)
@@ -44,6 +46,7 @@ namespace StardewArchipelago.Archipelago
             IsConnected = false;
             _modManifest = manifest;
             ScoutedLocations = new Dictionary<string, ScoutedLocation>();
+            _localDataPackage = new DataPackageCache(modHelper);
         }
 
         public void Connect(ArchipelagoConnectionInfo connectionInfo, GiftHandler giftHandler, out string errorMessage)
@@ -441,7 +444,13 @@ namespace StardewArchipelago.Archipelago
                 return "";
             }
 
-            return _session.Locations.GetLocationNameFromId(locationId);
+            var locationName = _session.Locations.GetLocationNameFromId(locationId);
+            if (string.IsNullOrWhiteSpace(locationName))
+            {
+                locationName = _localDataPackage.GetLocalLocationName(locationId);
+            }
+
+            return locationName;
         }
 
         public long GetLocationId(string locationName, string gameName = GAME_NAME)
@@ -451,7 +460,13 @@ namespace StardewArchipelago.Archipelago
                 return -1;
             }
 
-            return _session.Locations.GetLocationIdFromName(gameName, locationName);
+            var locationId = _session.Locations.GetLocationIdFromName(gameName, locationName);
+            if (locationId <= 0)
+            {
+                locationId = _localDataPackage.GetLocalLocationId(locationName);
+            }
+
+            return locationId;
         }
 
         public string GetItemName(long itemId)
@@ -461,7 +476,13 @@ namespace StardewArchipelago.Archipelago
                 return "";
             }
 
-            return _session.Items.GetItemName(itemId);
+            var itemName =  _session.Items.GetItemName(itemId);
+            if (string.IsNullOrWhiteSpace(itemName))
+            {
+                itemName = _localDataPackage.GetLocalItemName(itemId);
+            }
+
+            return itemName;
         }
 
         public void SendDeathLink(string player, string reason = "Unknown cause")
