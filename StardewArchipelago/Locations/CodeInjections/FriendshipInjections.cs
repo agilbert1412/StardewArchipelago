@@ -86,7 +86,7 @@ namespace StardewArchipelago.Locations.CodeInjections
                 if (archipelagoHearts >= maxShuffled)
                 {
                     var earnedPoints = (int)GetFriendshipPoints(name);
-                    var earnedPointsAboveMaxShuffled = earnedPoints - (maxShuffled * POINTS_PER_HEART);
+                    var earnedPointsAboveMaxShuffled = Math.Max(0, earnedPoints - (maxShuffled * POINTS_PER_HEART));
                     friendshipPoints += earnedPointsAboveMaxShuffled;
                 }
 
@@ -96,37 +96,6 @@ namespace StardewArchipelago.Locations.CodeInjections
             catch (Exception ex)
             {
                 _monitor.Log($"Failed in {nameof(GetPoints_ArchipelagoHearts_Prefix)}:\n{ex}", LogLevel.Error);
-                return true; // run original logic
-            }
-        }
-
-        public static bool SetPoints_ArchipelagoPoints_Prefix(Friendship __instance, int value)
-        {
-            try
-            {
-                var name = GetNpcName(__instance);
-                if (name == null)
-                {
-                    return true; // run original logic
-                }
-                var originalPointsField = _helper.Reflection.GetField<NetInt>(__instance, "points");
-                var originalPoints = originalPointsField.GetValue().Value;
-                var pointDifference = value - originalPoints;
-                var multipliedPointDifference = GetMultipliedFriendship(pointDifference);
-                var apPoints = GetFriendshipPoints(name);
-                var newApPoints = apPoints + multipliedPointDifference;
-                newApPoints = GetBoundedToCurrentRelationState(newApPoints, name);
-                SetFriendshipPoints(name, newApPoints);
-                for (var i = 1; i < newApPoints / POINTS_PER_HEART; i++)
-                {
-                    _locationChecker.AddCheckedLocation(string.Format(FRIENDSANITY_PATTERN, name, i));
-                }
-
-                return false; // don't run original logic
-            }
-            catch (Exception ex)
-            {
-                _monitor.Log($"Failed in {nameof(SetPoints_ArchipelagoPoints_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
             }
         }
@@ -197,9 +166,17 @@ namespace StardewArchipelago.Locations.CodeInjections
                         return false; // don't run original logic
                     }
 
-                    var originalPointsField = _helper.Reflection.GetField<NetInt>(__instance.friendshipData[n.Name], "points");
-                    var originalPoints = originalPointsField.GetValue().Value;
-                    __instance.friendshipData[n.Name].Points = originalPoints + amount;
+                    var pointDifference = amount;
+                    var multipliedPointDifference = GetMultipliedFriendship(pointDifference);
+                    var apPoints = GetFriendshipPoints(n.Name);
+                    var newApPoints = apPoints + multipliedPointDifference;
+                    newApPoints = GetBoundedToCurrentRelationState(newApPoints, n.Name);
+                    SetFriendshipPoints(n.Name, newApPoints);
+                    for (var i = 1; i < newApPoints / POINTS_PER_HEART; i++)
+                    {
+                        _locationChecker.AddCheckedLocation(string.Format(FRIENDSANITY_PATTERN, n.Name, i));
+                    }
+
                     if (n.datable.Value && __instance.friendshipData[n.Name].Points >= 2000 && !__instance.hasOrWillReceiveMail("Bouquet"))
                     {
                         Game1.addMailForTomorrow("Bouquet");
@@ -208,11 +185,6 @@ namespace StardewArchipelago.Locations.CodeInjections
                     if (n.datable.Value && __instance.friendshipData[n.Name].Points >= 2500 && !__instance.hasOrWillReceiveMail("SeaAmulet"))
                     {
                         Game1.addMailForTomorrow("SeaAmulet");
-                    }
-
-                    if (__instance.friendshipData[n.Name].Points < 0)
-                    {
-                        __instance.friendshipData[n.Name].Points = 0;
                     }
                 }
                 else
@@ -305,6 +277,11 @@ namespace StardewArchipelago.Locations.CodeInjections
             if (!_friendshipPoints.ContainsKey(npc))
             {
                 _friendshipPoints.Add(npc, 0);
+            }
+
+            if (points < 0)
+            {
+                points = 0;
             }
 
             _friendshipPoints[npc] = points;

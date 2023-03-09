@@ -427,11 +427,6 @@ namespace StardewArchipelago.Locations
             );
 
             _harmony.Patch(
-                original: AccessTools.PropertySetter(typeof(Friendship), nameof(Friendship.Points)),
-                prefix: new HarmonyMethod(typeof(FriendshipInjections), nameof(FriendshipInjections.SetPoints_ArchipelagoPoints_Prefix))
-            );
-
-            _harmony.Patch(
                 original: AccessTools.Method(typeof(Pet), nameof(Pet.dayUpdate)),
                 prefix: new HarmonyMethod(typeof(FriendshipInjections), nameof(FriendshipInjections.DayUpdate_ArchipelagoPoints_Prefix))
             );

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using Newtonsoft.Json.Linq;
 using StardewArchipelago.Items.Mail;
 using StardewModdingAPI;
@@ -21,7 +22,8 @@ namespace StardewArchipelago.Archipelago
 
         public static IEnumerable<ArchipelagoItem> LoadItems(IModHelper helper)
         {
-            var itemsTable = helper.Data.ReadJsonFile<Dictionary<string, JObject>>("stardew_valley_item_table.json");
+            var pathToItemTable = Path.Combine("IdTables", "stardew_valley_item_table.json");
+            var itemsTable = helper.Data.ReadJsonFile<Dictionary<string, JObject>>(pathToItemTable);
             var items = itemsTable["items"];
             foreach (var (key, jEntry) in items)
             {
