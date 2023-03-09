@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using Newtonsoft.Json.Linq;
 using StardewModdingAPI;
 
@@ -20,7 +21,8 @@ namespace StardewArchipelago.Archipelago
 
         public static IEnumerable<ArchipelagoLocation> LoadLocations(IModHelper helper)
         {
-            var locationsTable = helper.Data.ReadJsonFile<Dictionary<string, JObject>>("stardew_valley_location_table.json");
+            var pathToLocationTable = Path.Combine("IdTables", "stardew_valley_location_table.json");
+            var locationsTable = helper.Data.ReadJsonFile<Dictionary<string, JObject>>(pathToLocationTable);
             var locations = locationsTable["locations"];
             foreach (var (key, jEntry) in locations)
             {
