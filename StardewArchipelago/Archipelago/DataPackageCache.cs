@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using StardewModdingAPI;
+using xTile.Dimensions;
 
 namespace StardewArchipelago.Archipelago
 {
@@ -39,21 +40,37 @@ namespace StardewArchipelago.Archipelago
 
         public string GetLocalItemName(long itemId)
         {
+            if (!_itemCacheById.ContainsKey(itemId))
+            {
+                return null;
+            }
             return _itemCacheById[itemId].Name;
         }
 
         public long GetLocalItemId(string itemName)
         {
+            if (!_itemCacheByName.ContainsKey(itemName))
+            {
+                return -1;
+            }
             return _itemCacheByName[itemName].Id;
         }
 
         public string GetLocalLocationName(long locationId)
         {
+            if (!_locationCacheById.ContainsKey(locationId))
+            {
+                return null;
+            }
             return _locationCacheById[locationId].Name;
         }
 
         public long GetLocalLocationId(string locationName)
         {
+            if (!_locationCacheByName.ContainsKey(locationName))
+            {
+                return -1;
+            }
             return _locationCacheByName[locationName].Id;
         }
     }
