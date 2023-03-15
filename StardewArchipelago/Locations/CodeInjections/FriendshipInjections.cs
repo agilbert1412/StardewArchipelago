@@ -154,7 +154,9 @@ namespace StardewArchipelago.Locations.CodeInjections
         {
             try
             {
-                if (n == null || !(n is Child) && !n.isVillager() || amount > 0 && n.Name.Equals("Dwarf") && !__instance.canUnderstandDwarves)
+                var isValidTarget = n != null && (n is Child || n.isVillager());
+                var canCommunicateWithNpc = !n.Name.Equals("Dwarf") || __instance.canUnderstandDwarves;
+                if (!isValidTarget || (amount > 0 && !canCommunicateWithNpc))
                 {
                     return false; // don't run original logic
                 }
@@ -172,7 +174,8 @@ namespace StardewArchipelago.Locations.CodeInjections
                     var newApPoints = apPoints + multipliedPointDifference;
                     newApPoints = GetBoundedToCurrentRelationState(newApPoints, n.Name);
                     SetFriendshipPoints(n.Name, newApPoints);
-                    for (var i = 1; i < newApPoints / POINTS_PER_HEART; i++)
+                    var earnedHearts = (int)newApPoints / POINTS_PER_HEART;
+                    for (var i = 1; i <= earnedHearts; i++)
                     {
                         _locationChecker.AddCheckedLocation(string.Format(FRIENDSANITY_PATTERN, n.Name, i));
                     }
