@@ -286,7 +286,7 @@ namespace StardewArchipelago.GameModifications.Seasons
 
         private static void GetVanillaValues(out int totalDays, out int year, out int seasonNumber, out string seasonName)
         {
-            totalDays = (int)Game1.stats.DaysPlayed;
+            totalDays = (int)Game1.stats.DaysPlayed - 1;
             year = (totalDays / 112);
             var daysThisYear = totalDays - (year * 112);
             seasonNumber = daysThisYear / 28;

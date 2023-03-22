@@ -118,14 +118,14 @@ namespace StardewArchipelago.Archipelago
 
         private void InitializeAfterConnection()
         {
+            IsConnected = true;
+			
             _session.Items.ItemReceived += OnItemReceived;
             _session.MessageLog.OnMessageReceived += OnMessageReceived;
             _session.Socket.ErrorReceived += SessionErrorReceived;
             _session.Socket.SocketClosed += SessionSocketClosed;
 
             InitializeDeathLink();
-
-            IsConnected = true;
             // MultiRandom = new Random(SlotData.Seed);
         }
 

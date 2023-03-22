@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
@@ -24,7 +25,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             _archipelago = archipelago;
             _pierrePersistentStock = new PersistentStock();
         }
-        
+
         public static bool OpenShopMenu_PierrePersistentEvent_Prefix(GameLocation __instance, string which, ref bool __result)
         {
             try
@@ -560,6 +561,47 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             key2.Stack = int.MaxValue;
             var numArray2 = new int[] { 500, int.MaxValue };
             stock.Add(key2, numArray2);
+        }
+
+        // public ShopMenu(Dictionary<ISalable, int[]> itemPriceAndStock, int currency = 0, string who = null, Func<ISalable, Farmer, int, bool> on_purchase = null, Func<ISalable, bool> on_sell = null, string context = null)
+        public static bool ShopMenu_HandleStrawberries_Prefix(ShopMenu __instance, ref Dictionary<ISalable, int[]> itemPriceAndStock, int currency = 0, string who = null, Func<ISalable, Farmer, int, bool> on_purchase = null, Func<ISalable, bool> on_sell = null, string context = null)
+        {
+            try
+            {
+                if (_archipelago.SlotData.SeedShuffle != SeedShuffle.Shuffled)
+                {
+                    return true; // run original logic
+                }
+                foreach (var salableItem in itemPriceAndStock.Keys.ToArray())
+                {
+                    if (salableItem is not Object salableObject)
+                    {
+                        continue;
+                    }
+
+                    if (salableObject.ParentSheetIndex != STRAWBERRY_SEEDS)
+                    {
+                        continue;
+                    }
+
+                    if (_archipelago.HasReceivedItem(salableObject.Name, out var sendingPlayerName))
+                    {
+                        if (!string.IsNullOrWhiteSpace(sendingPlayerName))
+                        {
+                            // Can I add the sender to the description?
+                        }
+                        continue;
+                    }
+
+                    itemPriceAndStock.Remove(salableItem);
+                }
+                return true; //  run original logic
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(ShopMenu_HandleStrawberries_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
         }
 
         private const int JOJA_COLA = 167;

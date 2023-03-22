@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Items.Mail;
+using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
@@ -28,10 +29,18 @@ namespace StardewArchipelago.Locations.CodeInjections
             _locationChecker = locationChecker;
         }
 
-        public static void GetAdventureRecoveryStock_AddReceivedWeapons_Postfix(ref Dictionary<ISalable, int[]> __result)
+        // public virtual bool answerDialogueAction(string questionAndAnswer, string[] questionParams)
+        public static bool TelephoneAdventureGuild_AddReceivedWeapons_Prefix(GameLocation __instance, string questionAndAnswer, string[] questionParams, bool __result)
         {
             try
             {
+                if (questionAndAnswer != "telephone_AdventureGuild")
+                {
+                    return true; // run original logic
+                }
+
+                var farmer = Game1.player;
+
                 foreach (var mail in Game1.player.mailReceived)
                 {
                     if (!MailKey.TryParse(mail, out var mailKey))
@@ -48,24 +57,22 @@ namespace StardewArchipelago.Locations.CodeInjections
 
                     var weaponIdStr = mailKey.ActionParameter;
                     var weaponId = int.Parse(weaponIdStr);
-                    var weapon = new MeleeWeapon(weaponId);
+                    var weapon = new MeleeWeaponToRecover(weaponId);
 
-                    if (__result.Keys.Any(x => x.Name == weapon.Name))
+                    if (farmer.itemsLostLastDeath.Any(x => x.Name == weapon.Name))
                     {
                         continue;
                     }
 
                     weapon.isLostItem = true;
-                    __result.Add(weapon, new[]
-                    {
-                        Utility.getSellToStorePriceOfItem(weapon) * 4,
-                        1
-                    });
+                    farmer.itemsLostLastDeath.Add(weapon);
                 }
+
+                return true; // run original logic
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(GetAdventureRecoveryStock_AddReceivedWeapons_Postfix)}:\n{ex}",
+                _monitor.Log($"Failed in {nameof(TelephoneAdventureGuild_AddReceivedWeapons_Prefix)}:\n{ex}",
                     LogLevel.Error);
                 throw;
             }

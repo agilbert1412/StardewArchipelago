@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using HarmonyLib;
 using StardewArchipelago.Archipelago;
@@ -10,6 +11,7 @@ using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
+using StardewValley.Menus;
 using StardewValley.Network;
 
 namespace StardewArchipelago.GameModifications
@@ -199,6 +201,16 @@ namespace StardewArchipelago.GameModifications
                 original: AccessTools.Method(typeof(GameLocation), "sandyShopStock"),
                 prefix: new HarmonyMethod(typeof(SeedShopsInjections), nameof(SeedShopsInjections.SandyShopStock_SeedShuffle_Prefix))
             );
+
+            var shopMenuParameterTypes = new[]
+            {
+                typeof(Dictionary<ISalable, int[]>), typeof(int), typeof(string),
+                typeof(Func<ISalable, Farmer, int, bool>), typeof(Func<ISalable, bool>), typeof(string)
+            };
+            _harmony.Patch(
+                original: AccessTools.Constructor(typeof(ShopMenu), shopMenuParameterTypes),
+                prefix: new HarmonyMethod(typeof(SeedShopsInjections), nameof(SeedShopsInjections.ShopMenu_HandleStrawberries_Prefix))
+            ); 
         }
 
         private void PatchAppearanceRandomization()

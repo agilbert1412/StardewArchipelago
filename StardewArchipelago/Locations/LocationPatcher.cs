@@ -308,8 +308,8 @@ namespace StardewArchipelago.Locations
         private void PatchAdventurerGuildShop()
         {
             _harmony.Patch(
-                original: AccessTools.Method(typeof(Utility), nameof(Utility.getAdventureRecoveryStock)),
-                postfix: new HarmonyMethod(typeof(AdventurerGuildInjections), nameof(AdventurerGuildInjections.GetAdventureRecoveryStock_AddReceivedWeapons_Postfix))
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.answerDialogueAction)),
+                prefix: new HarmonyMethod(typeof(AdventurerGuildInjections), nameof(AdventurerGuildInjections.TelephoneAdventureGuild_AddReceivedWeapons_Prefix))
             );
 
             _harmony.Patch(
