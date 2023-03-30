@@ -158,7 +158,7 @@ namespace StardewArchipelago.Archipelago
                 var newBundle = ModifiedBundles[key];
                 var oldBundleName = oldBundle.Split("/")[0];
                 var newBundleName = newBundle.Split("/")[0];
-                CommunityCenterInjections._bundleNames.Add(newBundleName, oldBundleName);
+                CommunityCenterInjections.BundleNames.Add(newBundleName, oldBundleName);
                 Game1.netWorldState.Value.BundleData[key] = newBundle;
             }
         }
