@@ -20,7 +20,7 @@ namespace StardewArchipelago.GameModifications
         {
             b.Draw(Game1.fadeToBlackRect, new Rectangle(0, 0, Game1.uiViewport.Width, Game1.uiViewport.Height), Color.Black * 0.5f);
             Game1.drawDialogueBox(xPositionOnScreen, yPositionOnScreen, width, height, false, true);
-            b.DrawString(Game1.dialogueFont, _message, new Vector2((float)(xPositionOnScreen + borderWidth), (float)(yPositionOnScreen + spaceToClearTopBorder + borderWidth / 2)), Game1.textColor);
+            b.DrawString(Game1.dialogueFont, _message, new Vector2(xPositionOnScreen + borderWidth, yPositionOnScreen + spaceToClearTopBorder + borderWidth / 2), Game1.textColor);
             okButton.draw(b);
             cancelButton.draw(b);
             leftButton.draw(b);

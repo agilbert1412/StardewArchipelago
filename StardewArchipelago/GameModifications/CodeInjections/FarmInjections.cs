@@ -27,7 +27,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             try
             {
                 var rect = new Microsoft.Xna.Framework.Rectangle(tileLocation.X * 64, tileLocation.Y * 64, 64, 64);
-                if (!__instance.objects.ContainsKey(new Vector2((float)tileLocation.X, (float)tileLocation.Y)) &&
+                if (!__instance.objects.ContainsKey(new Vector2(tileLocation.X, tileLocation.Y)) &&
                     __instance.CheckPetAnimal(rect, who))
                 {
                     __result = true;

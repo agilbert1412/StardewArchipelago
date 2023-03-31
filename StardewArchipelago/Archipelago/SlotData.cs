@@ -21,6 +21,7 @@ namespace StardewArchipelago.Archipelago
         private const string ELEVATOR_PROGRESSION_KEY = "elevator_progression";
         private const string SKILLS_PROGRESSION_KEY = "skill_progression";
         private const string BUILDING_PROGRESSION_KEY = "building_progression";
+        private const string FESTIVAL_OBJECTIVES_KEY = "festival_objectives";
         private const string ARCADE_MACHINES_KEY = "arcade_machine_locations";
         private const string HELP_WANTED_LOCATIONS_KEY = "help_wanted_locations";
         private const string FISHSANITY_KEY = "fishsanity";
@@ -56,6 +57,7 @@ namespace StardewArchipelago.Archipelago
         public ElevatorProgression ElevatorProgression { get; private set; }
         public SkillsProgression SkillProgression { get; private set; }
         public BuildingProgression BuildingProgression { get; private set; }
+        public FestivalObjectives FestivalObjectives { get; private set; }
         public ArcadeProgression ArcadeMachineProgression { get; private set; }
         public int HelpWantedLocationNumber { get; private set; }
         public Fishsanity Fishsanity { get; private set; }
@@ -93,6 +95,7 @@ namespace StardewArchipelago.Archipelago
             ElevatorProgression = GetSlotSetting(ELEVATOR_PROGRESSION_KEY, ElevatorProgression.ProgressiveFromPreviousFloor);
             SkillProgression = GetSlotSetting(SKILLS_PROGRESSION_KEY, SkillsProgression.Progressive);
             BuildingProgression = GetSlotSetting(BUILDING_PROGRESSION_KEY, BuildingProgression.Shuffled);
+            FestivalObjectives = GetSlotSetting(FESTIVAL_OBJECTIVES_KEY, FestivalObjectives.Shuffled);
             ArcadeMachineProgression = GetSlotSetting(ARCADE_MACHINES_KEY, ArcadeProgression.FullShuffling);
             HelpWantedLocationNumber = GetSlotSetting(HELP_WANTED_LOCATIONS_KEY, 0);
             Fishsanity = GetSlotSetting(FISHSANITY_KEY, Fishsanity.None);
@@ -282,6 +285,13 @@ namespace StardewArchipelago.Archipelago
         Vanilla = 0,
         Shuffled = 1,
         ShuffledEarlyShippingBin = 2
+    }
+
+    public enum FestivalObjectives
+    {
+        Vanilla = 0,
+        Shuffled = 1,
+        Difficult = 2,
     }
 
     public enum ArcadeProgression

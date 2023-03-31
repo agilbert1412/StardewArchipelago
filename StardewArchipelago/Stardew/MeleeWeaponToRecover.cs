@@ -1,7 +1,4 @@
-﻿using StardewArchipelago.Archipelago;
-using StardewArchipelago.Items.Mail;
-using StardewValley;
-using StardewValley.Tools;
+﻿using StardewValley.Tools;
 
 namespace StardewArchipelago.Stardew
 {

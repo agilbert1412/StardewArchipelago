@@ -35,7 +35,7 @@ namespace StardewArchipelago.GameModifications
             AchievementInjections.Initialize(monitor, _archipelago);
             EntranceInjections.Initialize(monitor, _archipelago);
             ForestInjections.Initialize(monitor, _archipelago);
-            SeedShopsInjections.Initialize(monitor, archipelago);
+            SeedShopsInjections.Initialize(monitor, archipelago, locationChecker);
             SeasonsInjections.Initialize(monitor, helper, _archipelago, state);
         }
 

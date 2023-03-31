@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
-using Netcode;
 using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
 using StardewValley;

@@ -1,6 +1,9 @@
-﻿using HarmonyLib;
+﻿using System;
+using System.Collections.Generic;
+using HarmonyLib;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Locations.CodeInjections;
+using StardewArchipelago.Locations.Festival;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
@@ -11,6 +14,7 @@ using StardewValley.Minigames;
 using StardewValley.Objects;
 using StardewValley.Quests;
 using StardewValley.TerrainFeatures;
+using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Locations
 {
@@ -45,6 +49,7 @@ namespace StardewArchipelago.Locations
             PatchTravelingMerchant();
             AddFishsanityLocations();
             AddMuseumsanityLocations();
+            AddFestivalLocations();
             ReplaceFriendshipsWithChecks();
         }
 
@@ -380,7 +385,12 @@ namespace StardewArchipelago.Locations
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Forest), nameof(Forest.DayUpdate)),
                 postfix: new HarmonyMethod(typeof(TravelingMerchantInjections), nameof(TravelingMerchantInjections.DayUpdate_IsTravelingMerchantDay_Postfix))
-            ); 
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(BeachNightMarket), nameof(BeachNightMarket.checkAction)),
+                prefix: new HarmonyMethod(typeof(TravelingMerchantInjections), nameof(TravelingMerchantInjections.NightMarketCheckAction_IsTravelingMerchantDay_Prefix))
+            );
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(ShopMenu), nameof(ShopMenu.setUpShopOwner)),
@@ -434,6 +444,84 @@ namespace StardewArchipelago.Locations
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Farmer), nameof(Farmer.changeFriendship)),
                 prefix: new HarmonyMethod(typeof(FriendshipInjections), nameof(FriendshipInjections.ChangeFriendship_ArchipelagoPoints_Prefix))
+            );
+        }
+
+        private void AddFestivalLocations()
+        {
+            if (_archipelago.SlotData.FestivalObjectives == FestivalObjectives.Vanilla)
+            {
+                return;
+            }
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Event), nameof(Event.command_awardFestivalPrize)),
+                prefix: new HarmonyMethod(typeof(EggFestivalInjections), nameof(EggFestivalInjections.AwardFestivalPrize_Strawhat_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Event), nameof(Event.setUpFestivalMainEvent)),
+                postfix: new HarmonyMethod(typeof(FlowerDanceInjections), nameof(FlowerDanceInjections.SetUpFestivalMainEvent_FlowerDance_Postfix))
+            );
+
+            var shopMenuParameterTypes = new[]
+            {
+                typeof(Dictionary<ISalable, int[]>), typeof(int), typeof(string),
+                typeof(Func<ISalable, Farmer, int, bool>), typeof(Func<ISalable, bool>), typeof(string)
+            };
+            _harmony.Patch(
+                original: AccessTools.Constructor(typeof(ShopMenu), shopMenuParameterTypes),
+                prefix: new HarmonyMethod(typeof(FlowerDanceInjections), nameof(FlowerDanceInjections.ShopMenu_HandleRarecrow5_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Event), nameof(Event.command_switchEvent)),
+                postfix: new HarmonyMethod(typeof(LuauInjections), nameof(LuauInjections.SwitchEvent_GovernorReactionToSoup_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Event), nameof(Event.setUpFestivalMainEvent)),
+                postfix: new HarmonyMethod(typeof(MoonlightJelliesInjections), nameof(MoonlightJelliesInjections.SetUpFestivalMainEvent_MoonlightJellies_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(StrengthGame), nameof(StrengthGame.update)),
+                prefix: new HarmonyMethod(typeof(FairInjections), nameof(FairInjections.StrengthGameUpdate_StrongEnough_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Event), nameof(Event.interpretGrangeResults)),
+                postfix: new HarmonyMethod(typeof(FairInjections), nameof(FairInjections.InterpretGrangeResults_Success_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Constructor(typeof(ShopMenu), shopMenuParameterTypes),
+                prefix: new HarmonyMethod(typeof(FairInjections), nameof(FairInjections.ShopMenu_HandleFairItems_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Chest), nameof(Chest.checkForAction)),
+                prefix: new HarmonyMethod(typeof(SpiritEveInjections), nameof(SpiritEveInjections.CheckForAction_SpiritEveChest_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Constructor(typeof(ShopMenu), shopMenuParameterTypes),
+                prefix: new HarmonyMethod(typeof(SpiritEveInjections), nameof(SpiritEveInjections.ShopMenu_HandleRarecrow2_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Event), nameof(Event.command_awardFestivalPrize)),
+                prefix: new HarmonyMethod(typeof(IceFestivalInjections), nameof(IceFestivalInjections.AwardFestivalPrize_FishingCompetition_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Constructor(typeof(ShopMenu), shopMenuParameterTypes),
+                prefix: new HarmonyMethod(typeof(IceFestivalInjections), nameof(IceFestivalInjections.ShopMenu_HandleRarecrow4_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(MermaidHouse), nameof(MermaidHouse.playClamTone), new Type[] { typeof(int), typeof(Farmer) }),
+                prefix: new HarmonyMethod(typeof(MermaidHouseInjections), nameof(MermaidHouseInjections.PlayClamTone_SongFinished_Postfix))
             );
         }
     }
