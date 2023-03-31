@@ -33,6 +33,7 @@ namespace StardewArchipelago.Stardew
             return _objectsByName.ContainsKey(itemName) || 
                    _bigCraftablesByName.ContainsKey(itemName) ||
                    _bootsByName.ContainsKey(itemName) ||
+                   _hatsByName.ContainsKey(itemName) ||
                    _weaponsByName.ContainsKey(itemName);
         }
 
@@ -41,6 +42,7 @@ namespace StardewArchipelago.Stardew
             return _objectsById.ContainsKey(itemId) ||
                    _bigCraftablesById.ContainsKey(itemId) ||
                    _bootsById.ContainsKey(itemId) ||
+                   _hatsById.ContainsKey(itemId) ||
                    _weaponsById.ContainsKey(itemId);
         }
 
@@ -59,6 +61,11 @@ namespace StardewArchipelago.Stardew
             if (_bootsByName.ContainsKey(itemName))
             {
                 return _bootsByName[itemName];
+            }
+
+            if (_hatsByName.ContainsKey(itemName))
+            {
+                return _hatsByName[itemName];
             }
 
             if (_weaponsByName.ContainsKey(itemName))
@@ -94,6 +101,16 @@ namespace StardewArchipelago.Stardew
             if (_bootsById.ContainsKey(itemId))
             {
                 return _bootsById[itemId];
+            }
+
+            throw new ArgumentException($"Item not found: {itemId}");
+        }
+
+        public StardewHat GetHatById(int itemId)
+        {
+            if (_hatsById.ContainsKey(itemId))
+            {
+                return _hatsById[itemId];
             }
 
             throw new ArgumentException($"Item not found: {itemId}");
