@@ -17,9 +17,11 @@
         public const string FISHING_COMPETITION = "Win Fishing Competition";
         public const string RARECROW_4 = "Rarecrow #4 (Snowman)";
         public const string MERMAID_PEARL = "Mermaid Pearl";
+        public const string CONE_HAT = "Cone Hat";
+        public const string IRIDIUM_FIREPLACE = "Iridium Fireplace";
+        public const string RARECROW_7 = "Rarecrow #7 (Tanuki)";
+        public const string RARECROW_8 = "Rarecrow #8 (Tribal Mask)";
         //public const string Night = "Night Market: Magic Shop Boat Seeds should be removed";
-        //public const string Night = "Night Market: Cone Hat";
-        //public const string Night = "Night Market: Iridium Fireplace";
         //public const string Night = "Night Market: Famous Painter Lupini 9 checks (?)";
         //public const string Night = "Night Market: Decoration boat (?)";
         //public const string Feast = "Feast of the Winter Star: Give any gift (?)";

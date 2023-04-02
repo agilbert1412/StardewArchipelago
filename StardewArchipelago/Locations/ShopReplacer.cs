@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Objects;
 using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Locations
@@ -23,13 +24,39 @@ namespace StardewArchipelago.Locations
             _locationChecker = locationChecker;
         }
 
-        public void ReplaceShopItem(Dictionary<ISalable, int[]> itemPriceAndStock, ISalable itemOnSale, string apLocation, Func<Object, bool> conditionToMeet, int price)
+        public void ReplaceShopItem(Dictionary<ISalable, int[]> itemPriceAndStock, ISalable itemOnSale, string apLocation, Func<Object, bool> conditionToMeet)
         {
             if (itemOnSale is not Object salableObject || !conditionToMeet(salableObject))
             {
                 return;
             }
 
+            ReplaceShopItem(itemPriceAndStock, itemOnSale, apLocation, salableObject);
+        }
+
+        public void ReplaceShopItem(Dictionary<ISalable, int[]> itemPriceAndStock, ISalable itemOnSale, string apLocation, Func<Furniture, bool> conditionToMeet)
+        {
+            if (itemOnSale is not Furniture salableFurniture || !conditionToMeet(salableFurniture))
+            {
+                return;
+            }
+
+            ReplaceShopItem(itemPriceAndStock, itemOnSale, apLocation, itemOnSale);
+        }
+
+        public void ReplaceShopItem(Dictionary<ISalable, int[]> itemPriceAndStock, ISalable itemOnSale, string apLocation, Func<Hat, bool> conditionToMeet)
+        {
+            if (itemOnSale is not Hat salableHat || !conditionToMeet(salableHat))
+            {
+                return;
+            }
+
+            ReplaceShopItem(itemPriceAndStock, itemOnSale, apLocation, itemOnSale);
+        }
+
+        private void ReplaceShopItem(Dictionary<ISalable, int[]> itemPriceAndStock, ISalable itemOnSale, string apLocation, ISalable salableObject)
+        {
+            var itemPrice = itemPriceAndStock[itemOnSale][0];
             itemPriceAndStock.Remove(itemOnSale);
             if (_locationChecker.IsLocationChecked(apLocation))
             {
@@ -39,7 +66,7 @@ namespace StardewArchipelago.Locations
             var purchaseableLocation =
                 new PurchaseableArchipelagoLocation(salableObject.Name, apLocation, _locationChecker,
                     _archipelago);
-            itemPriceAndStock.Add(purchaseableLocation, new[] { price, 1 });
+            itemPriceAndStock.Add(purchaseableLocation, new[] { itemPrice, 1 });
         }
     }
 }

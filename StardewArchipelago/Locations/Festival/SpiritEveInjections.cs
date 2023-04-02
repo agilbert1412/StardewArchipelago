@@ -72,7 +72,7 @@ namespace StardewArchipelago.Locations.Festival
             {
                 foreach (var salableItem in itemPriceAndStock.Keys.ToArray())
                 {
-                    _shopReplacer.ReplaceShopItem(itemPriceAndStock, salableItem, FestivalLocationNames.RARECROW_2, item => item.IsScarecrow() && item.Name != "Rarecrow #2", 5000);
+                    _shopReplacer.ReplaceShopItem(itemPriceAndStock, salableItem, FestivalLocationNames.RARECROW_2, item => item.IsScarecrow() && item.Name != "Rarecrow #2");
                 }
                 return true; //  run original logic
             }

@@ -449,6 +449,11 @@ namespace StardewArchipelago.Locations
 
         private void AddFestivalLocations()
         {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(BeachNightMarket), nameof(BeachNightMarket.geMagicShopStock)),
+                postfix: new HarmonyMethod(typeof(BeachNightMarketInjections), nameof(BeachNightMarketInjections.GetMagicShopStock_UniqueItemsAndSeeds_Postfix))
+            );
+
             if (_archipelago.SlotData.FestivalObjectives == FestivalObjectives.Vanilla)
             {
                 return;
