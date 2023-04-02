@@ -4,6 +4,7 @@ using StardewArchipelago.Locations.CodeInjections;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Characters;
 using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Minigames;
@@ -43,6 +44,8 @@ namespace StardewArchipelago.Locations
             ReplaceArcadeMachinesWithChecks();
             PatchTravelingMerchant();
             AddFishsanityLocations();
+            AddMuseumsanityLocations();
+            ReplaceFriendshipsWithChecks();
         }
 
         private void ReplaceCommunityCenterBundlesWithChecks()
@@ -305,8 +308,8 @@ namespace StardewArchipelago.Locations
         private void PatchAdventurerGuildShop()
         {
             _harmony.Patch(
-                original: AccessTools.Method(typeof(Utility), nameof(Utility.getAdventureRecoveryStock)),
-                postfix: new HarmonyMethod(typeof(AdventurerGuildInjections), nameof(AdventurerGuildInjections.GetAdventureRecoveryStock_AddReceivedWeapons_Postfix))
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.answerDialogueAction)),
+                prefix: new HarmonyMethod(typeof(AdventurerGuildInjections), nameof(AdventurerGuildInjections.TelephoneAdventureGuild_AddReceivedWeapons_Prefix))
             );
 
             _harmony.Patch(
@@ -400,6 +403,37 @@ namespace StardewArchipelago.Locations
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Farmer), nameof(Farmer.caughtFish)),
                 postfix: new HarmonyMethod(typeof(FishingInjections), nameof(FishingInjections.CaughtFish_Fishsanity_Postfix))
+            );
+        }
+
+        private void AddMuseumsanityLocations()
+        {
+            if (_archipelago.SlotData.Museumsanity == Museumsanity.None)
+            {
+                return;
+            }
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(LibraryMuseum), nameof(LibraryMuseum.getRewardsForPlayer)),
+                prefix: new HarmonyMethod(typeof(MuseumInjections), nameof(MuseumInjections.GetRewardsForPlayer_Museumsanity_Prefix))
+            );
+        }
+
+        private void ReplaceFriendshipsWithChecks()
+        {
+            _harmony.Patch(
+                original: AccessTools.PropertyGetter(typeof(Friendship), nameof(Friendship.Points)),
+                prefix: new HarmonyMethod(typeof(FriendshipInjections), nameof(FriendshipInjections.GetPoints_ArchipelagoHearts_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Pet), nameof(Pet.dayUpdate)),
+                prefix: new HarmonyMethod(typeof(FriendshipInjections), nameof(FriendshipInjections.DayUpdate_ArchipelagoPoints_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Farmer), nameof(Farmer.changeFriendship)),
+                prefix: new HarmonyMethod(typeof(FriendshipInjections), nameof(FriendshipInjections.ChangeFriendship_ArchipelagoPoints_Prefix))
             );
         }
     }

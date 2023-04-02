@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.GameModifications;
 using StardewArchipelago.GameModifications.CodeInjections;
 using StardewArchipelago.GameModifications.EntranceRandomizer;
+using StardewArchipelago.GameModifications.Seasons;
 using StardewArchipelago.Goals;
 using StardewArchipelago.Items;
 using StardewArchipelago.Items.Mail;
@@ -16,20 +18,25 @@ using StardewArchipelago.Test;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
+using StardewValley.Locations;
 
 namespace StardewArchipelago
 {
     public class ModEntry : Mod
     {
+        public static ModEntry Instance;
+
         private const string CONNECT_SYNTAX = "Syntax: connect ip:port slot password";
         private const string AP_DATA_KEY = "ArchipelagoData";
         private const string AP_EXPERIENCE_KEY = "ArchipelagoSkillsExperience";
+        private const string AP_FRIENDSHIP_KEY = "ArchipelagoFriendshipPoints";
 
         private IModHelper _helper;
         private Harmony _harmony;
         private ArchipelagoClient _archipelago;
         private AdvancedOptionsManager _advancedOptionsManager;
         private Mailman _mail;
+        private ChatForwarder _chatForwarder;
         private GiftHandler _giftHandler;
         private BundleReader _bundleReader;
         private ItemManager _itemManager;
@@ -43,14 +50,17 @@ namespace StardewArchipelago
         private UnlockManager _unlockManager;
         private MultiSleep _multiSleep;
         private JojaDisabler _jojaDisabler;
+        private SeasonsRandomizer _seasonsRandomizer;
+        private AppearanceRandomizer _appearanceRandomizer;
 
         private Tester _tester;
 
-        private ArchipelagoStateDto _state;
+        public ArchipelagoStateDto _state;
         private ArchipelagoConnectionInfo _apConnectionOverride;
 
         public ModEntry() : base()
         {
+            Instance = this;
         }
 
         /*********
@@ -87,6 +97,7 @@ namespace StardewArchipelago
             _helper.ConsoleCommands.Add("disconnect", $"Disconnects from Archipelago. {CONNECT_SYNTAX}", this.OnCommandDisconnectFromArchipelago);
             _helper.ConsoleCommands.Add("test_getallitems", "Tests if every AP item in the stardew_valley_item_table json file are supported by the mod", this.TestGetAllItems);
             _helper.ConsoleCommands.Add("test_getitem", "Get one specific item", this.TestGetSpecificItem);
+            _helper.ConsoleCommands.Add("set_next_season", "Sets the next season to a chosen value", this.SetNextSeason);
             //_helper.ConsoleCommands.Add("test_sendalllocations", "Tests if every AP item in the stardew_valley_location_table json file are supported by the mod", _tester.TestSendAllLocations);
             // _helper.ConsoleCommands.Add("load_entrances", "Loads the entrances file", (_, _) => _entranceRandomizer.LoadTransports());
             _helper.ConsoleCommands.Add("save_entrances", "Saves the entrances file", (_, _) => EntranceInjections.SaveNewEntrancesToFile());
@@ -104,6 +115,7 @@ namespace StardewArchipelago
             _state = new ArchipelagoStateDto();
 
             _harmony.UnpatchAll(ModManifest.UniqueID);
+            SeasonsRandomizer.ResetMailKeys();
             _multiSleep = new MultiSleep(Monitor, _helper, _harmony);
             _advancedOptionsManager = new AdvancedOptionsManager(this, _harmony, _archipelago);
             _advancedOptionsManager.InjectArchipelagoAdvancedOptions();
@@ -121,8 +133,6 @@ namespace StardewArchipelago
             _state.LocationsChecked = new List<string>();
             _state.LocationsScouted = new Dictionary<string, ScoutedLocation>();
             _state.LettersGenerated = new Dictionary<string, string>();
-            _helper.Data.WriteSaveData(AP_DATA_KEY, _state);
-            _helper.Data.WriteSaveData(AP_EXPERIENCE_KEY, SkillInjections.GetArchipelagoExperience());
 
             if (!_archipelago.IsConnected)
             {
@@ -130,6 +140,15 @@ namespace StardewArchipelago
                 Game1.ExitToTitle();
                 return;
             }
+
+            _seasonsRandomizer = new SeasonsRandomizer(Monitor, _helper, _archipelago, _state);
+            _state.DisableAppearanceRandomizerOverride = false;
+            _state.SeasonsOrder = new List<string>();
+            _state.SeasonsOrder.Add(_seasonsRandomizer.GetFirstSeason());
+            SeasonsRandomizer.SetSeason(_state.SeasonsOrder.Last());
+            _helper.Data.WriteSaveData(AP_DATA_KEY, _state);
+            _helper.Data.WriteSaveData(AP_EXPERIENCE_KEY, SkillInjections.GetArchipelagoExperience());
+            _helper.Data.WriteSaveData(AP_FRIENDSHIP_KEY, FriendshipInjections.GetArchipelagoFriendshipPoints());
         }
 
         private void OnSaveCreated(object sender, SaveCreatedEventArgs e)
@@ -138,12 +157,15 @@ namespace StardewArchipelago
 
         private void OnSaving(object sender, SavingEventArgs e)
         {
+            SeasonsRandomizer.PrepareDateForSaveGame();
             _state.ItemsReceived = _itemManager.GetAllItemsAlreadyProcessed();
             _state.LocationsChecked = _locationChecker.GetAllLocationsAlreadyChecked();
             _state.LocationsScouted = _archipelago.ScoutedLocations;
             _state.LettersGenerated = _mail.GetAllLettersGenerated();
+            // _state.SeasonOrder should be fine?
             _helper.Data.WriteSaveData(AP_DATA_KEY, _state);
             _helper.Data.WriteSaveData(AP_EXPERIENCE_KEY, SkillInjections.GetArchipelagoExperience());
+            _helper.Data.WriteSaveData(AP_FRIENDSHIP_KEY, FriendshipInjections.GetArchipelagoFriendshipPoints());
         }
 
         private void OnSaved(object sender, SavedEventArgs e)
@@ -165,8 +187,12 @@ namespace StardewArchipelago
             _locationsPatcher = new LocationPatcher(Monitor, _archipelago, _bundleReader, _helper, _harmony, _locationChecker, _stardewItemManager);
             _itemPatcher = new ItemPatcher(Monitor, _helper, _harmony, _archipelago);
             _goalManager = new GoalManager(Monitor, _helper, _harmony, _archipelago, _locationChecker);
-            _logicPatcher = new RandomizedLogicPatcher(Monitor, _helper, _harmony, _archipelago, _locationChecker, _stardewItemManager);
+            _logicPatcher = new RandomizedLogicPatcher(Monitor, _helper, _harmony, _archipelago, _locationChecker, _stardewItemManager, _state);
             _jojaDisabler = new JojaDisabler(Monitor, _helper, _harmony);
+            _seasonsRandomizer = new SeasonsRandomizer(Monitor, _helper, _archipelago, _state);
+            _appearanceRandomizer = new AppearanceRandomizer(Monitor, _archipelago);
+            _chatForwarder = new ChatForwarder(Monitor, _harmony, _giftHandler, _appearanceRandomizer);
+
 
             if (_state.APConnectionInfo == null)
             {
@@ -180,7 +206,7 @@ namespace StardewArchipelago
                     _state.APConnectionInfo = _apConnectionOverride;
                     _apConnectionOverride = null;
                 }
-                _archipelago.Connect(_state.APConnectionInfo, _giftHandler, out var errorMessage);
+                _archipelago.Connect(_state.APConnectionInfo, out var errorMessage);
 
                 if (!_archipelago.IsConnected)
                 {
@@ -190,6 +216,7 @@ namespace StardewArchipelago
                 }
             }
 
+            _chatForwarder.ListenToChatMessages(_archipelago);
             _giftHandler.Initialize(_stardewItemManager, _mail, _archipelago);
             _logicPatcher.PatchAllGameLogic();
             _mailPatcher.PatchMailBoxForApItems();
@@ -200,6 +227,7 @@ namespace StardewArchipelago
             _goalManager.InjectGoalMethods();
             _jojaDisabler.DisableJojaMembership();
             _multiSleep.InjectMultiSleepOption(_archipelago.SlotData);
+            TravelingMerchantInjections.UpdateTravelingMerchantForToday(Game1.getLocationFromName("Forest") as Forest, Game1.dayOfMonth);
 
             Game1.chatBox?.addMessage($"Connected to Archipelago as {_archipelago.SlotData.SlotName}. Type !!help for client commands", Color.Green);
         }
@@ -222,6 +250,9 @@ namespace StardewArchipelago
 
             var apExperience = _helper.Data.ReadSaveData<Dictionary<int, int>>(AP_EXPERIENCE_KEY);
             SkillInjections.SetArchipelagoExperience(apExperience);
+
+            var apFriendship = _helper.Data.ReadSaveData<Dictionary<string, int>>(AP_FRIENDSHIP_KEY);
+            FriendshipInjections.SetArchipelagoFriendshipPoints(apFriendship);
         }
 
         private void OnDayStarted(object sender, DayStartedEventArgs e)
@@ -230,6 +261,8 @@ namespace StardewArchipelago
             {
                 return;
             }
+            
+            SeasonsRandomizer.SendMailHardcodedForToday();
 
             if (MultiSleep.DaysToSkip > 0)
             {
@@ -247,6 +280,15 @@ namespace StardewArchipelago
             _mail.SendTomorrow();
             PlayerBuffInjections.CheckForApBuffs();
             Entrances.UpdateDynamicEntrances();
+            if (_state.DisableAppearanceRandomizerOverride)
+            {
+                _archipelago.SlotData.AppearanceRandomization = AppearanceRandomization.Disabled;
+            }
+            else
+            {
+                _archipelago.SlotData.AppearanceRandomization = AppearanceRandomization.Villagers;
+            }
+            _appearanceRandomizer.ShuffleCharacterAppearances();
         }
 
         private void OnDayEnding(object sender, DayEndingEventArgs e)
@@ -308,7 +350,7 @@ namespace StardewArchipelago
         public bool ArchipelagoConnect(string ip, int port, string slot, string password, out string errorMessage)
         {
             var apConnection = new ArchipelagoConnectionInfo(ip, port, slot, false, password);
-            _archipelago.Connect(apConnection, _giftHandler, out errorMessage);
+            _archipelago.Connect(apConnection, out errorMessage);
             if (!_archipelago.IsConnected)
             {
                 return false;
@@ -333,6 +375,26 @@ namespace StardewArchipelago
         private void TestGetAllItems(string arg1, string[] arg2)
         {
             _tester.TestGetAllItems(arg1, arg2);
+        }
+
+        private void SetNextSeason(string arg1, string[] arg2)
+        {
+            if (arg2.Length < 1)
+            {
+                Monitor.Log($"You must specify a season", LogLevel.Info);
+                return;
+            }
+
+            var season = arg2[0];
+            var currentSeasonNumber = (int) Game1.stats.DaysPlayed / 28;
+            if (_state.SeasonsOrder.Count <= currentSeasonNumber)
+            {
+                _state.SeasonsOrder.Add(season);
+            }
+            else
+            {
+                _state.SeasonsOrder[currentSeasonNumber] = season;
+            }
         }
     }
 }

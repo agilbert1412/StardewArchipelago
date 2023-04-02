@@ -14,17 +14,22 @@ namespace StardewArchipelago.Archipelago
         private const string GOAL_KEY = "goal";
         private const string STARTING_MONEY_KEY = "starting_money";
         private const string ENTRANCE_RANDOMIZATION_KEY = "entrance_randomization";
+        private const string SEASON_RANDOMIZATION_KEY = "season_randomization";
+        private const string SEED_SHUFFLE_KEY = "seed_shuffle";
         private const string BACKPACK_PROGRESSION_KEY = "backpack_progression";
         private const string TOOL_PROGRESSION_KEY = "tool_progression";
         private const string ELEVATOR_PROGRESSION_KEY = "elevator_progression";
         private const string SKILLS_PROGRESSION_KEY = "skill_progression";
         private const string BUILDING_PROGRESSION_KEY = "building_progression";
-        private const string ARCADE_MACHINES_KEY = "arcade_machine_progression";
+        private const string ARCADE_MACHINES_KEY = "arcade_machine_locations";
         private const string HELP_WANTED_LOCATIONS_KEY = "help_wanted_locations";
         private const string FISHSANITY_KEY = "fishsanity";
+        private const string MUSEUMSANITY_KEY = "museumsanity";
+        private const string FRIENDSANITY_KEY = "friendsanity";
         private const string MULTI_SLEEP_ENABLED_KEY = "multiple_day_sleep_enabled";
         private const string MULTI_SLEEP_COST_KEY = "multiple_day_sleep_cost";
         private const string EXPERIENCE_MULTIPLIER_KEY = "experience_multiplier";
+        private const string FRIENDSHIP_MULTIPLIER_KEY = "friendship_multiplier";
         private const string DEBRIS_MULTIPLIER_KEY = "debris_multiplier";
         private const string QUICK_START_KEY = "quick_start";
         private const string GIFTING_KEY = "gifting";
@@ -33,6 +38,8 @@ namespace StardewArchipelago.Archipelago
         private const string SEED_KEY = "seed";
         private const string MODIFIED_BUNDLES_KEY = "modified_bundles";
         private const string MODIFIED_ENTRANCES_KEY = "randomized_entrances";
+        private const string RANDOMIZE_NPC_APPEARANCES_KEY = "randomize_appearances";
+        private const string RANDOMIZE_NPC_APPEARANCES_DAILY_KEY = "randomize_appearances_daily";
         private const string MULTIWORLD_VERSION_KEY = "client_version";
 
         private Dictionary<string, object> _slotDataFields;
@@ -42,6 +49,8 @@ namespace StardewArchipelago.Archipelago
         public Goal Goal { get; private set; }
         public int StartingMoney { get; private set; }
         public EntranceRandomization EntranceRandomization { get; private set; }
+        public SeasonRandomization SeasonRandomization { get; private set; }
+        public SeedShuffle SeedShuffle { get; private set; }
         public BackpackProgression BackpackProgression { get; private set; }
         public ToolProgression ToolProgression { get; private set; }
         public ElevatorProgression ElevatorProgression { get; private set; }
@@ -50,9 +59,12 @@ namespace StardewArchipelago.Archipelago
         public ArcadeProgression ArcadeMachineProgression { get; private set; }
         public int HelpWantedLocationNumber { get; private set; }
         public Fishsanity Fishsanity { get; private set; }
+        public Museumsanity Museumsanity { get; private set; }
+        public Friendsanity Friendsanity { get; private set; }
         public bool EnableMultiSleep { get; private set; }
         public int MultiSleepCostPerDay { get; private set; }
         public double ExperienceMultiplier { get; private set; }
+        public double FriendshipMultiplier { get; private set; }
         public DebrisMultiplier DebrisMultiplier { get; private set; }
         public bool QuickStart { get; private set; }
         public bool Gifting { get; private set; }
@@ -62,6 +74,8 @@ namespace StardewArchipelago.Archipelago
         public string MultiworldVersion { get; private set; }
         private Dictionary<string, string> ModifiedBundles { get; set; }
         public Dictionary<string, string> ModifiedEntrances { get; set; }
+        public AppearanceRandomization AppearanceRandomization { get; set; }
+        public bool AppearanceRandomizationDaily { get; set; }
 
         public SlotData(string slotName, Dictionary<string, object> slotDataFields, IMonitor console)
         {
@@ -72,6 +86,8 @@ namespace StardewArchipelago.Archipelago
             Goal = GetSlotSetting(GOAL_KEY, Goal.CommunityCenter);
             StartingMoney = GetSlotSetting(STARTING_MONEY_KEY, 500);
             EntranceRandomization = GetSlotSetting(ENTRANCE_RANDOMIZATION_KEY, EntranceRandomization.Disabled);
+            SeasonRandomization = GetSlotSetting(SEASON_RANDOMIZATION_KEY, SeasonRandomization.Disabled);
+            SeedShuffle = GetSlotSetting(SEED_SHUFFLE_KEY, SeedShuffle.Disabled);
             BackpackProgression = GetSlotSetting(BACKPACK_PROGRESSION_KEY, BackpackProgression.Progressive);
             ToolProgression = GetSlotSetting(TOOL_PROGRESSION_KEY, ToolProgression.Progressive);
             ElevatorProgression = GetSlotSetting(ELEVATOR_PROGRESSION_KEY, ElevatorProgression.ProgressiveFromPreviousFloor);
@@ -80,9 +96,12 @@ namespace StardewArchipelago.Archipelago
             ArcadeMachineProgression = GetSlotSetting(ARCADE_MACHINES_KEY, ArcadeProgression.FullShuffling);
             HelpWantedLocationNumber = GetSlotSetting(HELP_WANTED_LOCATIONS_KEY, 0);
             Fishsanity = GetSlotSetting(FISHSANITY_KEY, Fishsanity.None);
+            Museumsanity = GetSlotSetting(MUSEUMSANITY_KEY, Museumsanity.None);
+            Friendsanity = GetSlotSetting(FRIENDSANITY_KEY, Friendsanity.None);
             EnableMultiSleep = GetSlotSetting(MULTI_SLEEP_ENABLED_KEY, true);
             MultiSleepCostPerDay = GetSlotSetting(MULTI_SLEEP_COST_KEY, 0);
             ExperienceMultiplier = GetSlotSetting(EXPERIENCE_MULTIPLIER_KEY, 100) / 100.0;
+            FriendshipMultiplier = GetSlotSetting(FRIENDSHIP_MULTIPLIER_KEY, 100) / 100.0;
             DebrisMultiplier = GetSlotSetting(DEBRIS_MULTIPLIER_KEY, DebrisMultiplier.HalfDebris);
             QuickStart = GetSlotSetting(QUICK_START_KEY, false);
             Gifting = GetSlotSetting(GIFTING_KEY, true);
@@ -94,6 +113,8 @@ namespace StardewArchipelago.Archipelago
             ModifiedBundles = JsonConvert.DeserializeObject<Dictionary<string, string>>(newBundleStringData);
             var newEntrancesStringData = GetSlotSetting(MODIFIED_ENTRANCES_KEY, "");
             ModifiedEntrances = JsonConvert.DeserializeObject<Dictionary<string, string>>(newEntrancesStringData);
+            AppearanceRandomization = GetSlotSetting(RANDOMIZE_NPC_APPEARANCES_KEY, AppearanceRandomization.Villagers);
+            AppearanceRandomizationDaily = GetSlotSetting(RANDOMIZE_NPC_APPEARANCES_DAILY_KEY, false);
         }
 
         private T GetSlotSetting<T>(string key, T defaultValue) where T : struct, Enum, IConvertible
@@ -137,7 +158,7 @@ namespace StardewArchipelago.Archipelago
                 var newBundle = ModifiedBundles[key];
                 var oldBundleName = oldBundle.Split("/")[0];
                 var newBundleName = newBundle.Split("/")[0];
-                CommunityCenterInjections._bundleNames.Add(newBundleName, oldBundleName);
+                CommunityCenterInjections.BundleNames.Add(newBundleName, oldBundleName);
                 Game1.netWorldState.Value.BundleData[key] = newBundle;
             }
         }
@@ -216,6 +237,20 @@ namespace StardewArchipelago.Archipelago
         Chaos = 4,
     }
 
+    public enum SeasonRandomization
+    {
+        Disabled = 0,
+        Randomized = 1,
+        RandomizedNotWinter = 2,
+        Progressive = 3,
+    }
+
+    public enum SeedShuffle
+    {
+        Disabled = 0,
+        Shuffled = 1,
+    }
+
     public enum BackpackProgression
     {
         Vanilla = 0,
@@ -266,6 +301,24 @@ namespace StardewArchipelago.Archipelago
         All = 4,
     }
 
+    public enum Museumsanity
+    {
+        None = 0,
+        Milestones = 1,
+        RandomSelection = 2,
+        All = 3,
+    }
+
+    public enum Friendsanity
+    {
+        None = 0,
+        // MarryOnePerson = 1,
+        Bachelors = 2,
+        StartingNpcs = 3,
+        All = 4,
+        AllWithMarriage = 5,
+    }
+
     public enum Goal
     {
         CommunityCenter = 0,
@@ -273,6 +326,8 @@ namespace StardewArchipelago.Archipelago
         BottomOfMines = 2,
         CrypticNote = 3,
         MasterAngler = 4,
+        CompleteCollection = 5,
+        FullHouse = 6,
     }
 
     public enum DebrisMultiplier
@@ -282,5 +337,13 @@ namespace StardewArchipelago.Archipelago
         QuarterDebris = 2,
         NoDebris = 3,
         StartClear = 4,
+    }
+
+    public enum AppearanceRandomization
+    {
+        Disabled = 0,
+        Villagers = 1,
+        All = 2,
+        Chaos = 3,
     }
 }

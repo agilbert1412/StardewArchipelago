@@ -110,6 +110,36 @@ namespace StardewArchipelago.Goals
             _archipelago.ReportGoalCompletion();
         }
 
+        public static void CheckCompleteCollectionGoalCompletion()
+        {
+            if (!_archipelago.IsConnected || _archipelago.SlotData.Goal != Goal.CompleteCollection)
+            {
+                return;
+            }
+
+            if (!Game1.player.hasOrWillReceiveMail("museumComplete"))
+            {
+                return;
+            }
+
+            _archipelago.ReportGoalCompletion();
+        }
+
+        public static void CheckFullHouseGoalCompletion()
+        {
+            if (!_archipelago.IsConnected || _archipelago.SlotData.Goal != Goal.FullHouse)
+            {
+                return;
+            }
+
+            if (Game1.player.getChildrenCount() < 2)
+            {
+                return;
+            }
+
+            _archipelago.ReportGoalCompletion();
+        }
+
         public static void DoAreaCompleteReward_CommunityCenterGoal_PostFix(CommunityCenter __instance, int whichArea)
         {
             try
@@ -151,6 +181,8 @@ namespace StardewArchipelago.Goals
                 Goal.CommunityCenter => "Complete the Community Center",
                 Goal.CrypticNote => "Find Secret Note #10 and complete the \"Cryptic Note\" Quest",
                 Goal.MasterAngler => "Catch every single one of the 55 fish available in the game",
+                Goal.CompleteCollection => "Complete the Museum Collection by donating all 95 items",
+                Goal.FullHouse => "Get married and have two children",
                 _ => throw new NotImplementedException()
             };
             return goal;
@@ -165,6 +197,8 @@ namespace StardewArchipelago.Goals
                 Goal.CommunityCenter => "Restore the old Community Center for the sake of all the villagers",
                 Goal.CrypticNote => "Meet an old friend of mine on floor 100 of the Skull Cavern",
                 Goal.MasterAngler => "Catch and document every specie of fish in the Ferngill Republic",
+                Goal.CompleteCollection => "Restore our beautiful museum with a full collection of various artifacts and minerals",
+                Goal.FullHouse => "I wish for my bloodline to thrive. Please find a partner and live happily ever after",
                 _ => throw new NotImplementedException()
             };
             return goal;

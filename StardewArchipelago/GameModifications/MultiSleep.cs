@@ -85,7 +85,7 @@ namespace StardewArchipelago.GameModifications
                 var multiSleepMessage =
                     "How many days do you wish to sleep for?\n(Warning: Sleeping saves the game, this action cannot be undone)";
                 Game1.activeClickableMenu = new MultiSleepSelectionMenu(multiSleepMessage, (value, price, who) => SleepMany(__instance, value), minValue: 1, maxValue: 112, defaultNumber: 7, price: _multiSleepPrice);
-
+                __result = true;
                 return false; // don't run original logic
             }
             catch (Exception ex)

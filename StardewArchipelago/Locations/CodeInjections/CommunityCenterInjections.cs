@@ -24,14 +24,14 @@ namespace StardewArchipelago.Locations.CodeInjections
         private static BundleReader _bundleReader;
         private static LocationChecker _locationChecker;
 
-        public static Dictionary<string, string> _bundleNames;
+        public static Dictionary<string, string> BundleNames;
 
         public static void Initialize(IMonitor monitor, BundleReader bundleReader, LocationChecker locationChecker)
         {
             _monitor = monitor;
             _bundleReader = bundleReader;
             _locationChecker = locationChecker;
-            _bundleNames = new Dictionary<string, string>();
+            BundleNames = new Dictionary<string, string>();
         }
 
         public static bool DoAreaCompleteReward_AreaLocations_Prefix(CommunityCenter __instance, int whichArea)
@@ -93,9 +93,9 @@ namespace StardewArchipelago.Locations.CodeInjections
                 foreach (var completedBundleName in completedBundleNames)
                 {
                     var bundleNameLocation = completedBundleName;
-                    if (_bundleNames.ContainsKey(bundleNameLocation))
+                    if (BundleNames.ContainsKey(bundleNameLocation))
                     {
-                        bundleNameLocation = _bundleNames[bundleNameLocation];
+                        bundleNameLocation = BundleNames[bundleNameLocation];
                     }
                     _locationChecker.AddCheckedLocation(bundleNameLocation + " Bundle");
                 }

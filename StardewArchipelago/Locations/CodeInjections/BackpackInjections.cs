@@ -1,4 +1,5 @@
 ﻿using System;
+using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
 using StardewValley;
 using xTile.Dimensions;
@@ -11,11 +12,13 @@ namespace StardewArchipelago.Locations.CodeInjections
         private const string DELUXE_PACK = "Deluxe Pack";
 
         private static IMonitor _monitor;
+        private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
 
-        public static void Initialize(IMonitor monitor, LocationChecker locationChecker)
+        public static void Initialize(IMonitor monitor, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             _monitor = monitor;
+            _archipelago = archipelago;
             _locationChecker = locationChecker;
         }
 
@@ -99,7 +102,7 @@ namespace StardewArchipelago.Locations.CodeInjections
                         responseDontPurchase
                     }, "Backpack");
             }
-            else if (_locationChecker.IsLocationMissing(DELUXE_PACK))
+            else if (_locationChecker.IsLocationMissing(DELUXE_PACK) && _archipelago.HasReceivedItem("Progressive Backpack", out _))
             {
                 __instance.createQuestionDialogue(
                     Game1.content.LoadString("Strings\\Locations:SeedShop_BuyBackpack_Question36"),

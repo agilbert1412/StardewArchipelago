@@ -5,12 +5,13 @@ using Archipelago.MultiClient.Net;
 using Archipelago.MultiClient.Net.BounceFeatures.DeathLink;
 using Archipelago.MultiClient.Net.Enums;
 using Archipelago.MultiClient.Net.Helpers;
+using Archipelago.MultiClient.Net.Models;
 using Archipelago.MultiClient.Net.Packets;
 using HarmonyLib;
-using Microsoft.Xna.Framework;
 using StardewArchipelago.Extensions;
 using StardewModdingAPI;
 using StardewValley;
+using Color = Microsoft.Xna.Framework.Color;
 
 namespace StardewArchipelago.Archipelago
 {
@@ -23,8 +24,6 @@ namespace StardewArchipelago.Archipelago
         private DeathLinkService _deathLinkService;
         private Harmony _harmony;
         private DeathManager _deathManager;
-        private ChatForwarder _chatForwarder;
-        private GiftHandler _giftHandler;
         private ArchipelagoConnectionInfo _connectionInfo;
         private IManifest _modManifest;
 
@@ -49,9 +48,8 @@ namespace StardewArchipelago.Archipelago
             _localDataPackage = new DataPackageCache(modHelper);
         }
 
-        public void Connect(ArchipelagoConnectionInfo connectionInfo, GiftHandler giftHandler, out string errorMessage)
+        public void Connect(ArchipelagoConnectionInfo connectionInfo, out string errorMessage)
         {
-            _giftHandler = giftHandler;
             DisconnectPermanently();
             var success = TryConnect(connectionInfo, out errorMessage);
             if (!success)
@@ -60,8 +58,7 @@ namespace StardewArchipelago.Archipelago
                 return;
             }
 
-            var majorVersion = _modManifest.Version.MajorVersion.ToString();
-            if (!SlotData.MultiworldVersion.StartsWith(majorVersion))
+            if (!IsMultiworldVersionSupported())
             {
                 errorMessage = $"This Multiworld has been created for StardewArchipelago version {SlotData.MultiworldVersion},\nbut this is StardewArchipelago version {_modManifest.Version}.\nPlease update to a compatible mod version.";
                 DisconnectPermanently();
@@ -121,21 +118,14 @@ namespace StardewArchipelago.Archipelago
 
         private void InitializeAfterConnection()
         {
+            IsConnected = true;
+			
             _session.Items.ItemReceived += OnItemReceived;
             _session.MessageLog.OnMessageReceived += OnMessageReceived;
             _session.Socket.ErrorReceived += SessionErrorReceived;
             _session.Socket.SocketClosed += SessionSocketClosed;
 
-            if (_chatForwarder == null)
-            {
-                _chatForwarder = new ChatForwarder(_console, _harmony, _giftHandler);
-            }
-
-            _chatForwarder.ListenToChatMessages(this);
-
             InitializeDeathLink();
-
-            IsConnected = true;
             // MultiRandom = new Random(SlotData.Seed);
         }
 
@@ -425,6 +415,16 @@ namespace StardewArchipelago.Archipelago
             return _session.Items.AllItemsReceived.Count(x => GetItemName(x.Item) == itemName);
         }
 
+        public Hint[] GetHints()
+        {
+            if (!MakeSureConnected())
+            {
+                return Array.Empty<Hint>();
+            }
+
+            return _session.DataStorage.GetHints();
+        }
+
         public void ReportGoalCompletion()
         {
             if (!MakeSureConnected())
@@ -437,13 +437,13 @@ namespace StardewArchipelago.Archipelago
             _session.Socket.SendPacket(statusUpdatePacket);
         }
 
-        private string GetLocationName(long locationId)
+        public string GetLocationName(long locationId)
         {
             if (!MakeSureConnected())
             {
                 return "";
             }
-
+            
             var locationName = _session.Locations.GetLocationNameFromId(locationId);
             if (string.IsNullOrWhiteSpace(locationName))
             {
@@ -633,6 +633,21 @@ namespace StardewArchipelago.Archipelago
         public void APUpdate()
         {
             MakeSureConnected(60);
+        }
+
+        private bool IsMultiworldVersionSupported()
+        {
+            var majorVersion = _modManifest.Version.MajorVersion.ToString();
+            var multiworldVersionParts = SlotData.MultiworldVersion.Split(".");
+            if (multiworldVersionParts.Length < 3)
+            {
+                return false;
+            }
+
+            var multiworldMajor = multiworldVersionParts[0];
+            var multiworldMinor = multiworldVersionParts[1];
+            var multiworldFix = multiworldVersionParts[2];
+            return majorVersion == multiworldMajor;
         }
     }
 }
