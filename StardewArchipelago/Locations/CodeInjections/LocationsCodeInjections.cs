@@ -1,4 +1,5 @@
 ﻿using StardewArchipelago.Archipelago;
+using StardewArchipelago.Locations.Festival;
 using StardewModdingAPI;
 using StardewArchipelago.Stardew;
 
@@ -8,6 +9,7 @@ namespace StardewArchipelago.Locations.CodeInjections
     {
         public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, BundleReader bundleReader, LocationChecker locationChecker, StardewItemManager itemManager)
         {
+            var shopReplacer = new ShopReplacer(monitor, archipelago, locationChecker);
             BackpackInjections.Initialize(monitor, archipelago, locationChecker);
             ToolInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             ScytheInjections.Initialize(monitor, locationChecker);
@@ -25,6 +27,20 @@ namespace StardewArchipelago.Locations.CodeInjections
             FishingInjections.Initialize(monitor, modHelper, archipelago, locationChecker, itemManager);
             MuseumInjections.Initialize(monitor, modHelper, archipelago, locationChecker, itemManager);
             FriendshipInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
+            InitializeFestivalPatches(monitor, modHelper, archipelago, locationChecker, shopReplacer);
+        }
+
+        private static void InitializeFestivalPatches(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago,
+            LocationChecker locationChecker, ShopReplacer shopReplacer)
+        {
+            EggFestivalInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
+            FlowerDanceInjections.Initialize(monitor, modHelper, archipelago, locationChecker, shopReplacer);
+            LuauInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
+            MoonlightJelliesInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
+            FairInjections.Initialize(monitor, modHelper, archipelago, locationChecker, shopReplacer);
+            SpiritEveInjections.Initialize(monitor, modHelper, archipelago, locationChecker, shopReplacer);
+            IceFestivalInjections.Initialize(monitor, modHelper, archipelago, locationChecker, shopReplacer);
+            MermaidHouseInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
         }
     }
 }

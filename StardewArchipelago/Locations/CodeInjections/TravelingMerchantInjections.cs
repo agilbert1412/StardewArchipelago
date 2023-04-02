@@ -7,6 +7,7 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Menus;
+using xTile.Dimensions;
 using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Locations.CodeInjections
@@ -55,6 +56,47 @@ namespace StardewArchipelago.Locations.CodeInjections
             }
         }
 
+        // public override bool checkAction(Location tileLocation, xTile.Dimensions.Rectangle viewport, Farmer who)
+        public static bool NightMarketCheckAction_IsTravelingMerchantDay_Prefix(BeachNightMarket __instance, Location tileLocation, xTile.Dimensions.Rectangle viewport, Farmer who, ref bool __result)
+        {
+            try
+            {
+                if (__instance.map.GetLayer("Buildings").Tiles[tileLocation] == null)
+                {
+                    return true; // run original logic
+                }
+
+                var tileIndex = __instance.map.GetLayer("Buildings").Tiles[tileLocation].TileIndex;
+                if (tileIndex != 399)
+                {
+                    return true; // run original logic
+                }
+
+                if (Game1.timeOfDay < 1700)
+                {
+                    Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\Locations:BeachNightMarket_Closed"));
+                    return false; // don't run original logic
+                }
+
+                var isTravelingMerchantDay =
+                    TravelingMerchantInjections.IsTravelingMerchantDay(Game1.dayOfMonth, out var sendingPlayer);
+
+                if (!isTravelingMerchantDay)
+                {
+                    Game1.drawObjectDialogue("The traveling merchant isn't here today.");
+                    return false; // don't run original logic
+                }
+
+                Game1.activeClickableMenu = new ShopMenu(Utility.getTravelingMerchantStock((int)((long)Game1.uniqueIDForThisGame + Game1.stats.DaysPlayed)), who: "TravelerNightMarket", on_purchase: Utility.onTravelingMerchantShopPurchase);
+                return false; // don't run original logic
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(NightMarketCheckAction_IsTravelingMerchantDay_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
+        }
+
         public static void UpdateTravelingMerchantForToday(Forest __instance, int dayOfMonth)
         {
             if (IsTravelingMerchantDay(dayOfMonth, out _))
@@ -90,7 +132,8 @@ namespace StardewArchipelago.Locations.CodeInjections
                 }
 
                 var day = GetDayOfWeekName(Game1.dayOfMonth);
-                var text = _flairOverride.Any() ? _flairOverride.Values.First() : $"{playerName} recommended that I visit the valley on {day}s. Take a look at my wares!";
+                var locationName = Game1.currentLocation is Forest ? "Cindersap Forest" : "the Beach Night Market";
+                var text = _flairOverride.Any() ? _flairOverride.Values.First() : $"{playerName} recommended that I visit {locationName} on {day}s. Take a look at my wares!";
                 __instance.potraitPersonDialogue = Game1.parseText(text, Game1.dialogueFont, 304);
             }
             catch (Exception ex)
@@ -275,11 +318,17 @@ namespace StardewArchipelago.Locations.CodeInjections
             return (int)Math.Round(price * priceMultiplier, MidpointRounding.ToEven);
         }
 
-        private static bool IsTravelingMerchantDay(int dayOfMonth, out string playerName)
+        public static bool IsTravelingMerchantDay(int dayOfMonth, out string playerName)
         {
             var dayOfWeek = GetDayOfWeekName(dayOfMonth);
             var requiredAPItemToSeeMerchantToday = string.Format(AP_MERCHANT_DAYS, dayOfWeek);
-            return _archipelago.HasReceivedItem(requiredAPItemToSeeMerchantToday, out playerName);
+            var hasReceivedToday = _archipelago.HasReceivedItem(requiredAPItemToSeeMerchantToday, out playerName);
+            if (!hasReceivedToday)
+            {
+                // Scout the item
+            }
+
+            return hasReceivedToday;
         }
 
         private static void AddApStock(ref Dictionary<ISalable, int[]> currentStock, Random random, double priceMultiplier)

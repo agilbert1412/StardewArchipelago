@@ -13,6 +13,8 @@ namespace StardewArchipelago.Stardew
         private Dictionary<string, BigCraftable> _bigCraftablesByName;
         private Dictionary<int, StardewBoots> _bootsById;
         private Dictionary<string, StardewBoots> _bootsByName;
+        private Dictionary<int, StardewHat> _hatsById;
+        private Dictionary<string, StardewHat> _hatsByName;
         private Dictionary<int, StardewWeapon> _weaponsById;
         private Dictionary<string, StardewWeapon> _weaponsByName;
 
@@ -31,6 +33,7 @@ namespace StardewArchipelago.Stardew
             return _objectsByName.ContainsKey(itemName) || 
                    _bigCraftablesByName.ContainsKey(itemName) ||
                    _bootsByName.ContainsKey(itemName) ||
+                   _hatsByName.ContainsKey(itemName) ||
                    _weaponsByName.ContainsKey(itemName);
         }
 
@@ -39,6 +42,7 @@ namespace StardewArchipelago.Stardew
             return _objectsById.ContainsKey(itemId) ||
                    _bigCraftablesById.ContainsKey(itemId) ||
                    _bootsById.ContainsKey(itemId) ||
+                   _hatsById.ContainsKey(itemId) ||
                    _weaponsById.ContainsKey(itemId);
         }
 
@@ -57,6 +61,11 @@ namespace StardewArchipelago.Stardew
             if (_bootsByName.ContainsKey(itemName))
             {
                 return _bootsByName[itemName];
+            }
+
+            if (_hatsByName.ContainsKey(itemName))
+            {
+                return _hatsByName[itemName];
             }
 
             if (_weaponsByName.ContainsKey(itemName))
@@ -97,6 +106,16 @@ namespace StardewArchipelago.Stardew
             throw new ArgumentException($"Item not found: {itemId}");
         }
 
+        public StardewHat GetHatById(int itemId)
+        {
+            if (_hatsById.ContainsKey(itemId))
+            {
+                return _hatsById[itemId];
+            }
+
+            throw new ArgumentException($"Item not found: {itemId}");
+        }
+
         public StardewWeapon GetWeaponById(int itemId)
         {
             if (_weaponsById.ContainsKey(itemId))
@@ -114,7 +133,7 @@ namespace StardewArchipelago.Stardew
             InitializeBoots();
             // InitializeClothing(); var allClothingInformation = Game1.clothingInformation;
             // InitializeFurniture();
-            // InitializeHats();
+            InitializeHats();
             // InitializeTools();
             InitializeWeapons();
         }
@@ -184,6 +203,25 @@ namespace StardewArchipelago.Stardew
 
                 _bootsById.Add(id, boots);
                 _bootsByName.Add(boots.Name, boots);
+            }
+        }
+
+        private void InitializeHats()
+        {
+            _hatsById = new Dictionary<int, StardewHat>();
+            _hatsByName = new Dictionary<string, StardewHat>();
+            var allHatsInformation = (IDictionary<int, string>)Game1.content.Load<Dictionary<int, string>>("Data\\Hats");
+            foreach (var (id, hatInfo) in allHatsInformation)
+            {
+                var hat = ParseStardewHatData(id, hatInfo);
+
+                if (_hatsById.ContainsKey(id) || _hatsByName.ContainsKey(hat.Name))
+                {
+                    continue;
+                }
+
+                _hatsById.Add(id, hat);
+                _hatsByName.Add(hat.Name, hat);
             }
         }
 
@@ -265,6 +303,19 @@ namespace StardewArchipelago.Stardew
             var bigCraftable = new StardewBoots(id, name, sellPrice, description, addedDefense,
                 addedImmunity, colorIndex, displayName);
             return bigCraftable;
+        }
+
+        private static StardewHat ParseStardewHatData(int id, string objectInfo)
+        {
+            var fields = objectInfo.Split("/");
+            var name = fields[0];
+            var description = fields[1];
+            var skipHairDraw = bool.Parse(fields[2]);
+            var ignoreHairstyleOffset = bool.Parse(fields[3]);
+            var displayName = fields.Length > 4 ? fields[4] : name;
+
+            var hat = new StardewHat(id, name, description, skipHairDraw, ignoreHairstyleOffset, displayName);
+            return hat;
         }
 
         private static StardewWeapon ParseStardewWeaponData(int id, string objectInfo)

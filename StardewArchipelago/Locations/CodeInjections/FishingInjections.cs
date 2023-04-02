@@ -31,7 +31,8 @@ namespace StardewArchipelago.Locations.CodeInjections
             _itemManager = itemManager;
         }
         
-        public static void CaughtFish_Fishsanity_Postfix(Farmer __instance, int index, int size, bool from_fish_pond, int numberCaught, ref bool __result)
+        public static void CaughtFish_Fishsanity_Postfix(Farmer __instance, int index, int size,
+            bool from_fish_pond, int numberCaught, ref bool __result)
         {
             try
             {

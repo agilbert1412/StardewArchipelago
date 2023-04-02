@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Locations;
+using StardewArchipelago.Locations.Events;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
@@ -17,12 +19,14 @@ namespace StardewArchipelago.GameModifications.CodeInjections
     {
         private static IMonitor _monitor;
         private static ArchipelagoClient _archipelago;
+        private static LocationChecker _locationChecker;
         private static PersistentStock _pierrePersistentStock;
 
-        public static void Initialize(IMonitor monitor, ArchipelagoClient archipelago)
+        public static void Initialize(IMonitor monitor, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             _monitor = monitor;
             _archipelago = archipelago;
+            _locationChecker = locationChecker;
             _pierrePersistentStock = new PersistentStock();
         }
 
@@ -582,6 +586,13 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     if (salableObject.ParentSheetIndex != STRAWBERRY_SEEDS)
                     {
                         continue;
+                    }
+
+                    if (_locationChecker.IsLocationMissing(FestivalLocationNames.STRAWBERRY_SEEDS))
+                    {
+                        var strawberrySeedsApItem =
+                            new PurchaseableArchipelagoLocation(salableObject.Name, FestivalLocationNames.STRAWBERRY_SEEDS, _locationChecker, _archipelago);
+                        itemPriceAndStock.Add(strawberrySeedsApItem, new[] { 1000, 1 });
                     }
 
                     if (_archipelago.HasReceivedItem(salableObject.Name, out var sendingPlayerName))

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json.Linq;
-using StardewArchipelago.Items.Mail;
 using StardewModdingAPI;
 
 namespace StardewArchipelago.Archipelago

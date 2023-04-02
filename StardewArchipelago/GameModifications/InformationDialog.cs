@@ -26,7 +26,7 @@ namespace StardewArchipelago.GameModifications
             onClose = onCloseBehavior;
             var titleSafeArea = Game1.graphics.GraphicsDevice.Viewport.GetTitleSafeArea();
             this.message = Game1.parseText(message, Game1.dialogueFont, Math.Min(titleSafeArea.Width - 64, width));
-            okButton = new ClickableTextureComponent("OK", new Rectangle(xPositionOnScreen + width - borderWidth - spaceToClearSideBorder - 128 - 4, yPositionOnScreen + height - borderWidth - spaceToClearTopBorder + 21, 64, 64), (string)null, (string)null, Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 46), 1f);
+            okButton = new ClickableTextureComponent("OK", new Rectangle(xPositionOnScreen + width - borderWidth - spaceToClearSideBorder - 128 - 4, yPositionOnScreen + height - borderWidth - spaceToClearTopBorder + 21, 64, 64), null, null, Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 46), 1f);
             okButton.myID = 101;
             okButton.rightNeighborID = 102;
             if (!Game1.options.SnappyMenus)
@@ -115,7 +115,7 @@ namespace StardewArchipelago.GameModifications
                 return;
             b.Draw(Game1.fadeToBlackRect, new Rectangle(0, 0, Game1.uiViewport.Width, Game1.uiViewport.Height), Color.Black * 0.5f);
             Game1.drawDialogueBox(xPositionOnScreen, yPositionOnScreen, width, height, false, true);
-            b.DrawString(Game1.dialogueFont, message, new Vector2((float)(xPositionOnScreen + borderWidth), (float)(yPositionOnScreen + spaceToClearTopBorder + borderWidth / 2)), Game1.textColor);
+            b.DrawString(Game1.dialogueFont, message, new Vector2(xPositionOnScreen + borderWidth, yPositionOnScreen + spaceToClearTopBorder + borderWidth / 2), Game1.textColor);
             okButton.draw(b);
             drawMouse(b);
         }
