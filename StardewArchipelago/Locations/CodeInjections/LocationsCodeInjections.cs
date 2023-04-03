@@ -41,6 +41,8 @@ namespace StardewArchipelago.Locations.CodeInjections
             SpiritEveInjections.Initialize(monitor, modHelper, archipelago, locationChecker, shopReplacer);
             IceFestivalInjections.Initialize(monitor, modHelper, archipelago, locationChecker, shopReplacer);
             MermaidHouseInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
+            BeachNightMarketInjections.Initialize(monitor, modHelper, archipelago, locationChecker, shopReplacer);
+            WinterStarInjections.Initialize(monitor, modHelper, archipelago, locationChecker, shopReplacer);
         }
     }
 }

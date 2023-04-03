@@ -528,6 +528,16 @@ namespace StardewArchipelago.Locations
                 original: AccessTools.Method(typeof(MermaidHouse), nameof(MermaidHouse.playClamTone), new Type[] { typeof(int), typeof(Farmer) }),
                 prefix: new HarmonyMethod(typeof(MermaidHouseInjections), nameof(MermaidHouseInjections.PlayClamTone_SongFinished_Postfix))
             );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(BeachNightMarket), nameof(BeachNightMarket.answerDialogueAction)),
+                prefix: new HarmonyMethod(typeof(BeachNightMarketInjections), nameof(BeachNightMarketInjections.AnswerDialogueAction_LupiniPainting_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Event), nameof(Event.chooseSecretSantaGift)),
+                prefix: new HarmonyMethod(typeof(WinterStarInjections), nameof(WinterStarInjections.ChooseSecretSantaGift_SuccessfulGift_Prefix))
+            );
         }
     }
 }

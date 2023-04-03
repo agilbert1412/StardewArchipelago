@@ -21,11 +21,15 @@
         public const string IRIDIUM_FIREPLACE = "Iridium Fireplace";
         public const string RARECROW_7 = "Rarecrow #7 (Tanuki)";
         public const string RARECROW_8 = "Rarecrow #8 (Tribal Mask)";
-        //public const string Night = "Night Market: Magic Shop Boat Seeds should be removed";
-        //public const string Night = "Night Market: Famous Painter Lupini 9 checks (?)";
-        //public const string Night = "Night Market: Decoration boat (?)";
-        //public const string Feast = "Feast of the Winter Star: Give any gift (?)";
-        //public const string Feast = "Feast of the Winter Star: Give a loved gift (?)";
-        //public const string Feast = "Feast of the Winter Star: Receive an AP item if possible";
+        public const string LUPINI_YEAR_1_PAINTING_1 = "Lupini: Red Eagle";
+        public const string LUPINI_YEAR_1_PAINTING_2 = "Lupini: Portrait Of A Mermaid";
+        public const string LUPINI_YEAR_1_PAINTING_3 = "Lupini: Solar Kingdom";
+        public const string LUPINI_YEAR_2_PAINTING_1 = "Lupini: Clouds";
+        public const string LUPINI_YEAR_2_PAINTING_2 = "Lupini: 1000 Years From Now";
+        public const string LUPINI_YEAR_2_PAINTING_3 = "Lupini: Three Trees";
+        public const string LUPINI_YEAR_3_PAINTING_1 = "Lupini: The Serpent";
+        public const string LUPINI_YEAR_3_PAINTING_2 = "Lupini: Tropical Fish #173";
+        public const string LUPINI_YEAR_3_PAINTING_3 = "Lupini: Land Of Clay";
+        public const string SECRET_SANTA = "Secret Santa";
     }
 }

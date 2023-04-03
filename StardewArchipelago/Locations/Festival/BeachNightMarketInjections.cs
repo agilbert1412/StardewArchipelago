@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using StardewArchipelago.Archipelago;
@@ -80,6 +81,81 @@ namespace StardewArchipelago.Locations.Festival
                 _monitor.Log($"Failed in {nameof(GetMagicShopStock_UniqueItemsAndSeeds_Postfix)}:\n{ex}", LogLevel.Error);
                 return;
             }
+        }
+
+        // public override bool answerDialogueAction(string questionAndAnswer, string[] questionParams)
+        public static bool AnswerDialogueAction_LupiniPainting_Prefix(BeachNightMarket __instance, string questionAndAnswer, string[] questionParams, ref bool __result)
+        {
+            try
+            {
+                if (_archipelago.SlotData.FestivalObjectives == FestivalObjectives.Vanilla || questionAndAnswer != "PainterQuestion_Yes")
+                {
+                    return true; // run original logic
+                }
+
+                __result = true;
+                var paintingLocations = GetPaintingLocations();
+                var year = (Game1.year % 3) + 1;
+                var day = __instance.getDayOfNightMarket();
+                var paintingLocationSoldToday = paintingLocations[year][day];
+                var paintingMailKey = $"NightMarketYear{Game1.year}Day{__instance.getDayOfNightMarket()}_paintingSold";
+                if (_locationChecker.IsLocationChecked(paintingLocationSoldToday))
+                {
+                    Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\Locations:BeachNightMarket_PainterSold"));
+                    return false; // don't run original logic
+                }
+                if (Game1.player.Money < 1200)
+                {
+                    Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\Locations:BusStop_NotEnoughMoneyForTicket"));
+                    return false; // don't run original logic
+                }
+
+                Game1.player.Money -= 1200;
+                Game1.activeClickableMenu = (IClickableMenu)null;
+                _locationChecker.AddCheckedLocation(paintingLocationSoldToday);
+                return false; // don't run original logic
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(GetMagicShopStock_UniqueItemsAndSeeds_Postfix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
+        }
+
+        private static Dictionary<int, Dictionary<int, string>> GetPaintingLocations()
+        {
+            var year1Locations = new Dictionary<int, string>
+            {
+                { 1, FestivalLocationNames.LUPINI_YEAR_1_PAINTING_1 },
+                { 2, FestivalLocationNames.LUPINI_YEAR_1_PAINTING_2 },
+                { 3, FestivalLocationNames.LUPINI_YEAR_1_PAINTING_3 },
+            };
+            var year2Locations = new Dictionary<int, string>
+            {
+                { 1, FestivalLocationNames.LUPINI_YEAR_2_PAINTING_1 },
+                { 2, FestivalLocationNames.LUPINI_YEAR_2_PAINTING_2 },
+                { 3, FestivalLocationNames.LUPINI_YEAR_2_PAINTING_3 },
+            };
+            var year3Locations = new Dictionary<int, string>
+            {
+                { 1, FestivalLocationNames.LUPINI_YEAR_3_PAINTING_1 },
+                { 2, FestivalLocationNames.LUPINI_YEAR_3_PAINTING_2 },
+                { 3, FestivalLocationNames.LUPINI_YEAR_3_PAINTING_3 },
+            };
+            var paintingLocations = new Dictionary<int, Dictionary<int, string>>();
+            paintingLocations.Add(1, year1Locations);
+            if (_archipelago.SlotData.FestivalObjectives == FestivalObjectives.Difficult)
+            {
+                paintingLocations.Add(2, year2Locations);
+                paintingLocations.Add(3, year3Locations);
+            }
+            else
+            {
+                paintingLocations.Add(2, year1Locations);
+                paintingLocations.Add(3, year1Locations);
+            }
+
+            return paintingLocations;
         }
     }
 }
