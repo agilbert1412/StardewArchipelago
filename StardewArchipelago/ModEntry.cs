@@ -120,6 +120,8 @@ namespace StardewArchipelago
             _advancedOptionsManager = new AdvancedOptionsManager(this, _harmony, _archipelago);
             _advancedOptionsManager.InjectArchipelagoAdvancedOptions();
             _giftHandler = new GiftHandler();
+            SkillInjections.ResetSkillExperience();
+            FriendshipInjections.ResetArchipelagoFriendshipPoints();
         }
 
         private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
@@ -133,6 +135,8 @@ namespace StardewArchipelago
             _state.LocationsChecked = new List<string>();
             _state.LocationsScouted = new Dictionary<string, ScoutedLocation>();
             _state.LettersGenerated = new Dictionary<string, string>();
+            SkillInjections.ResetSkillExperience();
+            FriendshipInjections.ResetArchipelagoFriendshipPoints();
 
             if (!_archipelago.IsConnected)
             {
