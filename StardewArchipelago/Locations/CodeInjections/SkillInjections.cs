@@ -24,7 +24,7 @@ namespace StardewArchipelago.Locations.CodeInjections
             _helper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
-            InitializeSkillExperienceToZero();
+            AddMissingSkillsToDictionary();
         }
 
         public static Dictionary<int, int> GetArchipelagoExperience()
@@ -53,8 +53,7 @@ namespace StardewArchipelago.Locations.CodeInjections
         {
             if (values == null)
             {
-                _archipelagoExperience = new Dictionary<Skill, double>();
-                InitializeSkillExperienceToZero();
+                ResetSkillExperience();
                 return;
             }
 
@@ -196,7 +195,7 @@ namespace StardewArchipelago.Locations.CodeInjections
             };
         }
 
-        private static void InitializeSkillExperienceToZero()
+        public static void AddMissingSkillsToDictionary()
         {
             foreach (var skill in Enum.GetValues<Skill>())
             {
@@ -207,6 +206,12 @@ namespace StardewArchipelago.Locations.CodeInjections
 
                 _archipelagoExperience.Add(skill, 0);
             }
+        }
+
+        public static void ResetSkillExperience()
+        {
+            _archipelagoExperience = new Dictionary<Skill, double>();
+            AddMissingSkillsToDictionary();
         }
     }
 
