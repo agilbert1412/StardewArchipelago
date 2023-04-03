@@ -66,6 +66,11 @@ namespace StardewArchipelago.Locations.CodeInjections
             _friendshipPoints = values.ToDictionary(x => x.Key, x => (double)x.Value);
         }
 
+        public static void ResetArchipelagoFriendshipPoints()
+        {
+            _friendshipPoints = new Dictionary<string, double>();
+        }
+
         public static bool GetPoints_ArchipelagoHearts_Prefix(Friendship __instance, ref int __result)
         {
             try
