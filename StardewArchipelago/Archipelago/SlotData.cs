@@ -58,7 +58,7 @@ namespace StardewArchipelago.Archipelago
         public SkillsProgression SkillProgression { get; private set; }
         public BuildingProgression BuildingProgression { get; private set; }
         public FestivalLocations FestivalLocations { get; private set; }
-        public ArcadeProgression ArcadeMachineProgression { get; private set; }
+        public ArcadeLocations ArcadeMachineLocations { get; private set; }
         public int HelpWantedLocationNumber { get; private set; }
         public Fishsanity Fishsanity { get; private set; }
         public Museumsanity Museumsanity { get; private set; }
@@ -96,7 +96,7 @@ namespace StardewArchipelago.Archipelago
             SkillProgression = GetSlotSetting(SKILLS_PROGRESSION_KEY, SkillsProgression.Progressive);
             BuildingProgression = GetSlotSetting(BUILDING_PROGRESSION_KEY, BuildingProgression.Shuffled);
             FestivalLocations = GetSlotSetting(FESTIVAL_OBJECTIVES_KEY, FestivalLocations.Easy);
-            ArcadeMachineProgression = GetSlotSetting(ARCADE_MACHINES_KEY, ArcadeProgression.FullShuffling);
+            ArcadeMachineLocations = GetSlotSetting(ARCADE_MACHINES_KEY, ArcadeLocations.FullShuffling);
             HelpWantedLocationNumber = GetSlotSetting(HELP_WANTED_LOCATIONS_KEY, 0);
             Fishsanity = GetSlotSetting(FISHSANITY_KEY, Fishsanity.None);
             Museumsanity = GetSlotSetting(MUSEUMSANITY_KEY, Museumsanity.None);
@@ -294,7 +294,7 @@ namespace StardewArchipelago.Archipelago
         Hard = 2,
     }
 
-    public enum ArcadeProgression
+    public enum ArcadeLocations
     {
         Disabled = 0,
         Victories = 1,
