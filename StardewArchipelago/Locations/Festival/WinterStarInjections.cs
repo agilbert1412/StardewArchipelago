@@ -1,19 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Locations.CodeInjections;
-using StardewArchipelago.Locations.Events;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
-using StardewValley.Locations;
-using StardewValley.Menus;
-using StardewValley.Objects;
-using xTile.Dimensions;
 using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Locations.Festival
@@ -40,7 +29,7 @@ namespace StardewArchipelago.Locations.Festival
         {
             try
             {
-                if (i is not Object gift || _archipelago.SlotData.FestivalObjectives == FestivalObjectives.Vanilla)
+                if (i is not Object gift || _archipelago.SlotData.FestivalLocations == FestivalLocations.Vanilla)
                 {
                     return true; // don't run original logic
                 }
@@ -48,7 +37,7 @@ namespace StardewArchipelago.Locations.Festival
                 var recipient = __instance.getActorByName(__instance.secretSantaRecipient.Name);
                 var taste = (GiftTaste) recipient.getGiftTasteForThisItem(gift);
 
-                if (_archipelago.SlotData.FestivalObjectives != FestivalObjectives.Difficult || taste == GiftTaste.Love)
+                if (_archipelago.SlotData.FestivalLocations != FestivalLocations.Hard || taste == GiftTaste.Love)
                 {
                     _locationChecker.AddCheckedLocation(FestivalLocationNames.SECRET_SANTA);
                 }

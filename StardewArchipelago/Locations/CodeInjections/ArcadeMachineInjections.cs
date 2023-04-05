@@ -153,7 +153,7 @@ namespace StardewArchipelago.Locations.CodeInjections
         private static int GetJunimoKartExtraLives()
         {
             var numberExtraLives = 8;
-            if (_archipelago.SlotData.ArcadeMachineProgression == ArcadeProgression.FullShuffling)
+            if (_archipelago.SlotData.ArcadeMachineLocations == ArcadeLocations.FullShuffling)
             {
                 numberExtraLives = _archipelago.GetReceivedItemCount(JK_EXTRA_LIFE);
             }
@@ -171,7 +171,7 @@ namespace StardewArchipelago.Locations.CodeInjections
                     return false; // don't run original logic
                 }
 
-                var easyMode = _archipelago.SlotData.ArcadeMachineProgression == ArcadeProgression.VictoriesEasy;
+                var easyMode = _archipelago.SlotData.ArcadeMachineLocations == ArcadeLocations.VictoriesEasy;
                 var receivedDropRate = _archipelago.HasReceivedItem(JOTPK_DROP_RATE, out _);
                 var increasedDropRate = easyMode || receivedDropRate;
                 
@@ -348,7 +348,7 @@ namespace StardewArchipelago.Locations.CodeInjections
             {
                 AssignStartingEquipment(__instance);
 
-                var easyMode = _archipelago.SlotData.ArcadeMachineProgression == ArcadeProgression.VictoriesEasy;
+                var easyMode = _archipelago.SlotData.ArcadeMachineLocations == ArcadeLocations.VictoriesEasy;
                 var extraLives = easyMode ? 2 : _archipelago.GetReceivedItemCount(JOTPK_EXTRA_LIFE);
                 extraLives = Math.Max(0, Math.Min(2, extraLives));
                 __instance.lives += extraLives;
@@ -363,7 +363,7 @@ namespace StardewArchipelago.Locations.CodeInjections
 
         private static void AssignStartingEquipment(AbigailGame __instance)
         {
-            var easyMode = _archipelago.SlotData.ArcadeMachineProgression == ArcadeProgression.VictoriesEasy;
+            var easyMode = _archipelago.SlotData.ArcadeMachineLocations == ArcadeLocations.VictoriesEasy;
 
             _bootsLevel = easyMode ? 1 : _archipelago.GetReceivedItemCount(JOTPK_PROGRESSIVE_BOOTS);
             _bootsLevel = Math.Max(0, Math.Min(2, _bootsLevel));

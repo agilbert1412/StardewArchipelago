@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Locations.Events;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
@@ -42,7 +41,7 @@ namespace StardewArchipelago.Locations.Festival
 
                 var powerField = _modHelper.Reflection.GetField<float>(__instance, "power");
                 var power = powerField.GetValue();
-                if (power >= 99.0 || (power < 2.0 && _archipelago.SlotData.FestivalObjectives != FestivalObjectives.Difficult))
+                if (power >= 99.0 || (power < 2.0 && _archipelago.SlotData.FestivalLocations != FestivalLocations.Hard))
                 {
                     _locationChecker.AddCheckedLocation(FestivalLocationNames.STRENGTH_GAME);
                 }
@@ -60,7 +59,7 @@ namespace StardewArchipelago.Locations.Festival
         {
             try
             {
-                var isEasyMode = _archipelago.SlotData.FestivalObjectives != FestivalObjectives.Difficult;
+                var isEasyMode = _archipelago.SlotData.FestivalLocations != FestivalLocations.Hard;
                 if (__instance.grangeScore >= 90 || ((__instance.grangeScore >= 60 || __instance.grangeScore == -666) && isEasyMode))
                 {
                     _locationChecker.AddCheckedLocation(FestivalLocationNames.GRANGE_DISPLAY);

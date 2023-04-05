@@ -57,7 +57,7 @@ namespace StardewArchipelago.Archipelago
         public ElevatorProgression ElevatorProgression { get; private set; }
         public SkillsProgression SkillProgression { get; private set; }
         public BuildingProgression BuildingProgression { get; private set; }
-        public FestivalObjectives FestivalObjectives { get; private set; }
+        public FestivalLocations FestivalLocations { get; private set; }
         public ArcadeProgression ArcadeMachineProgression { get; private set; }
         public int HelpWantedLocationNumber { get; private set; }
         public Fishsanity Fishsanity { get; private set; }
@@ -95,7 +95,7 @@ namespace StardewArchipelago.Archipelago
             ElevatorProgression = GetSlotSetting(ELEVATOR_PROGRESSION_KEY, ElevatorProgression.ProgressiveFromPreviousFloor);
             SkillProgression = GetSlotSetting(SKILLS_PROGRESSION_KEY, SkillsProgression.Progressive);
             BuildingProgression = GetSlotSetting(BUILDING_PROGRESSION_KEY, BuildingProgression.Shuffled);
-            FestivalObjectives = GetSlotSetting(FESTIVAL_OBJECTIVES_KEY, FestivalObjectives.Shuffled);
+            FestivalLocations = GetSlotSetting(FESTIVAL_OBJECTIVES_KEY, FestivalLocations.Easy);
             ArcadeMachineProgression = GetSlotSetting(ARCADE_MACHINES_KEY, ArcadeProgression.FullShuffling);
             HelpWantedLocationNumber = GetSlotSetting(HELP_WANTED_LOCATIONS_KEY, 0);
             Fishsanity = GetSlotSetting(FISHSANITY_KEY, Fishsanity.None);
@@ -287,11 +287,11 @@ namespace StardewArchipelago.Archipelago
         ShuffledEarlyShippingBin = 2
     }
 
-    public enum FestivalObjectives
+    public enum FestivalLocations
     {
         Vanilla = 0,
-        Shuffled = 1,
-        Difficult = 2,
+        Easy = 1,
+        Hard = 2,
     }
 
     public enum ArcadeProgression

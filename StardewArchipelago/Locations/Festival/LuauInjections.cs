@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Locations.Events;
 using StardewModdingAPI;
 using StardewValley;
 
@@ -35,7 +34,7 @@ namespace StardewArchipelago.Locations.Festival
                 }
 
                 var soupScore = int.Parse(switchEventKey[governorReactionKey.Length..]);
-                var isEasyMode = _archipelago.SlotData.FestivalObjectives != FestivalObjectives.Difficult;
+                var isEasyMode = _archipelago.SlotData.FestivalLocations != FestivalLocations.Hard;
 
                 if (soupScore == 4 || (isEasyMode && soupScore is 2 or 3))
                 {

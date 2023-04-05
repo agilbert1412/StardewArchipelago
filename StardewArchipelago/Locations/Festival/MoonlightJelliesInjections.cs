@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Locations.Events;
 using StardewModdingAPI;
 using StardewValley;
 

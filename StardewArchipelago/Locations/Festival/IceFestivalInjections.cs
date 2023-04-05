@@ -3,12 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Locations.Events;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
-using StardewValley.Objects;
-using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Locations.Festival
 {
@@ -53,7 +50,7 @@ namespace StardewArchipelago.Locations.Festival
                     return true; // run original logic
                 }
 
-                Game1.player.mailReceived.Add("Egg Festival");
+                Game1.player.mailReceived.Add("Ice Festival");
                 __instance.CurrentCommand += 2;
 
                 return false; // don't run original logic

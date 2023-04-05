@@ -325,7 +325,7 @@ namespace StardewArchipelago.Locations
 
         private void ReplaceArcadeMachinesWithChecks()
         {
-            if (_archipelago.SlotData.ArcadeMachineProgression == ArcadeProgression.Disabled)
+            if (_archipelago.SlotData.ArcadeMachineLocations == ArcadeLocations.Disabled)
             {
                 return;
             }
@@ -340,7 +340,7 @@ namespace StardewArchipelago.Locations
                 prefix: new HarmonyMethod(typeof(ArcadeMachineInjections), nameof(ArcadeMachineInjections.EndCutscene_JunimoKartLevelComplete_Prefix))
             );
 
-            if (_archipelago.SlotData.ArcadeMachineProgression == ArcadeProgression.Victories)
+            if (_archipelago.SlotData.ArcadeMachineLocations == ArcadeLocations.Victories)
             {
                 return;
             }
@@ -366,7 +366,7 @@ namespace StardewArchipelago.Locations
                 postfix: new HarmonyMethod(typeof(ArcadeMachineInjections), nameof(ArcadeMachineInjections.AbigailGameCtor_Equipments_Postfix))
             );
 
-            if (_archipelago.SlotData.ArcadeMachineProgression == ArcadeProgression.FullShuffling)
+            if (_archipelago.SlotData.ArcadeMachineLocations == ArcadeLocations.FullShuffling)
             {
                 _harmony.Patch(
                     original: AccessTools.Method(typeof(AbigailGame), nameof(AbigailGame.startShoppingLevel)),
@@ -454,7 +454,7 @@ namespace StardewArchipelago.Locations
                 postfix: new HarmonyMethod(typeof(BeachNightMarketInjections), nameof(BeachNightMarketInjections.GetMagicShopStock_UniqueItemsAndSeeds_Postfix))
             );
 
-            if (_archipelago.SlotData.FestivalObjectives == FestivalObjectives.Vanilla)
+            if (_archipelago.SlotData.FestivalLocations == FestivalLocations.Vanilla)
             {
                 return;
             }

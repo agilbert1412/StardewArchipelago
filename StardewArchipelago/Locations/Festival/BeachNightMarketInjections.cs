@@ -1,18 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Locations.CodeInjections;
-using StardewArchipelago.Locations.Events;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Objects;
-using xTile.Dimensions;
 using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Locations.Festival
@@ -55,7 +49,7 @@ namespace StardewArchipelago.Locations.Festival
                         continue;
                     }
 
-                    if (_archipelago.SlotData.FestivalObjectives == FestivalObjectives.Vanilla)
+                    if (_archipelago.SlotData.FestivalLocations == FestivalLocations.Vanilla)
                     {
                         continue;
                     }
@@ -63,7 +57,7 @@ namespace StardewArchipelago.Locations.Festival
                     _shopReplacer.ReplaceShopItem(__result, salableItem, FestivalLocationNames.RARECROW_7, item => item.IsScarecrow() && item.Name != "Rarecrow #7");
                     _shopReplacer.ReplaceShopItem(__result, salableItem, FestivalLocationNames.RARECROW_8, item => item.IsScarecrow() && item.Name != "Rarecrow #8");
 
-                    if (_archipelago.SlotData.FestivalObjectives != FestivalObjectives.Difficult)
+                    if (_archipelago.SlotData.FestivalLocations != FestivalLocations.Hard)
                     {
                         continue;
                     }
@@ -88,7 +82,7 @@ namespace StardewArchipelago.Locations.Festival
         {
             try
             {
-                if (_archipelago.SlotData.FestivalObjectives == FestivalObjectives.Vanilla || questionAndAnswer != "PainterQuestion_Yes")
+                if (_archipelago.SlotData.FestivalLocations == FestivalLocations.Vanilla || questionAndAnswer != "PainterQuestion_Yes")
                 {
                     return true; // run original logic
                 }
@@ -144,7 +138,7 @@ namespace StardewArchipelago.Locations.Festival
             };
             var paintingLocations = new Dictionary<int, Dictionary<int, string>>();
             paintingLocations.Add(1, year1Locations);
-            if (_archipelago.SlotData.FestivalObjectives == FestivalObjectives.Difficult)
+            if (_archipelago.SlotData.FestivalLocations == FestivalLocations.Hard)
             {
                 paintingLocations.Add(2, year2Locations);
                 paintingLocations.Add(3, year3Locations);
