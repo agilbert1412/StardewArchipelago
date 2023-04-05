@@ -20,6 +20,7 @@
         public const string GiveBoots = "GiveBoots";
         public const string GiveMeleeWeapon = "GiveMeleeWeapon";
         public const string GiveSlingshot = "GiveSlingshot";
+        public const string GiveFurniture = "GiveFurniture";
         public const string GiveHat = "GiveHat";
     }
 }

@@ -34,6 +34,7 @@ namespace StardewArchipelago.Items.Mail
             _letterActions.Add(LetterActionsKeys.GiveBoots, ReceiveBoots);
             _letterActions.Add(LetterActionsKeys.GiveMeleeWeapon, ReceiveMeleeWeapon);
             _letterActions.Add(LetterActionsKeys.GiveSlingshot, ReceiveSlingshot);
+            _letterActions.Add(LetterActionsKeys.GiveFurniture, ReceiveFurniture);
             _letterActions.Add(LetterActionsKeys.GiveHat, ReceiveHat);
         }
 
@@ -267,6 +268,13 @@ namespace StardewArchipelago.Items.Mail
             var id = int.Parse(slingshotId);
             var slingshot = new Slingshot(id);
             Game1.player.addItemByMenuIfNecessaryElseHoldUp(slingshot);
+        }
+
+        private void ReceiveFurniture(string furnitureId)
+        {
+            var id = int.Parse(furnitureId);
+            var furniture = new Hat(id);
+            Game1.player.addItemByMenuIfNecessaryElseHoldUp(furniture);
         }
 
         private void ReceiveHat(string hatId)

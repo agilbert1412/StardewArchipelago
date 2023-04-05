@@ -13,6 +13,8 @@ namespace StardewArchipelago.Stardew
         private Dictionary<string, BigCraftable> _bigCraftablesByName;
         private Dictionary<int, StardewBoots> _bootsById;
         private Dictionary<string, StardewBoots> _bootsByName;
+        private Dictionary<int, StardewFurniture> _furnitureById;
+        private Dictionary<string, StardewFurniture> _furnitureByName;
         private Dictionary<int, StardewHat> _hatsById;
         private Dictionary<string, StardewHat> _hatsByName;
         private Dictionary<int, StardewWeapon> _weaponsById;
@@ -33,6 +35,7 @@ namespace StardewArchipelago.Stardew
             return _objectsByName.ContainsKey(itemName) || 
                    _bigCraftablesByName.ContainsKey(itemName) ||
                    _bootsByName.ContainsKey(itemName) ||
+                   _furnitureByName.ContainsKey(itemName) ||
                    _hatsByName.ContainsKey(itemName) ||
                    _weaponsByName.ContainsKey(itemName);
         }
@@ -42,6 +45,7 @@ namespace StardewArchipelago.Stardew
             return _objectsById.ContainsKey(itemId) ||
                    _bigCraftablesById.ContainsKey(itemId) ||
                    _bootsById.ContainsKey(itemId) ||
+                   _furnitureById.ContainsKey(itemId) ||
                    _hatsById.ContainsKey(itemId) ||
                    _weaponsById.ContainsKey(itemId);
         }
@@ -61,6 +65,11 @@ namespace StardewArchipelago.Stardew
             if (_bootsByName.ContainsKey(itemName))
             {
                 return _bootsByName[itemName];
+            }
+
+            if (_furnitureByName.ContainsKey(itemName))
+            {
+                return _furnitureByName[itemName];
             }
 
             if (_hatsByName.ContainsKey(itemName))
@@ -106,6 +115,16 @@ namespace StardewArchipelago.Stardew
             throw new ArgumentException($"Item not found: {itemId}");
         }
 
+        public StardewFurniture GetFurnitureById(int itemId)
+        {
+            if (_furnitureById.ContainsKey(itemId))
+            {
+                return _furnitureById[itemId];
+            }
+
+            throw new ArgumentException($"Item not found: {itemId}");
+        }
+
         public StardewHat GetHatById(int itemId)
         {
             if (_hatsById.ContainsKey(itemId))
@@ -132,7 +151,7 @@ namespace StardewArchipelago.Stardew
             InitializeBigCraftables();
             InitializeBoots();
             // InitializeClothing(); var allClothingInformation = Game1.clothingInformation;
-            // InitializeFurniture();
+            InitializeFurniture();
             InitializeHats();
             // InitializeTools();
             InitializeWeapons();
@@ -203,6 +222,25 @@ namespace StardewArchipelago.Stardew
 
                 _bootsById.Add(id, boots);
                 _bootsByName.Add(boots.Name, boots);
+            }
+        }
+
+        private void InitializeFurniture()
+        {
+            _furnitureById = new Dictionary<int, StardewFurniture>();
+            _furnitureByName = new Dictionary<string, StardewFurniture>();
+            var allFurnitureInformation = (IDictionary<int, string>)Game1.content.Load<Dictionary<int, string>>("Data\\Furniture");
+            foreach (var (id, furnitureInfo) in allFurnitureInformation)
+            {
+                var furniture = ParseStardewFurnitureData(id, furnitureInfo);
+
+                if (_furnitureById.ContainsKey(id) || _furnitureByName.ContainsKey(furniture.Name))
+                {
+                    continue;
+                }
+
+                _furnitureById.Add(id, furniture);
+                _furnitureByName.Add(furniture.Name, furniture);
             }
         }
 
@@ -303,6 +341,22 @@ namespace StardewArchipelago.Stardew
             var bigCraftable = new StardewBoots(id, name, sellPrice, description, addedDefense,
                 addedImmunity, colorIndex, displayName);
             return bigCraftable;
+        }
+
+        private static StardewFurniture ParseStardewFurnitureData(int id, string objectInfo)
+        {
+            var fields = objectInfo.Split("/");
+            var name = fields[0];
+            var type = fields[1];
+            var tilesheetSize = fields[2];
+            var boundingBoxSize = fields[3];
+            var rotations = fields[5];
+            var price = fields[6];
+            var displayName = fields.Length > 7 ? fields[7] : name;
+            var placementRestriction = fields.Length > 8 ? fields[8] : "";
+
+            var furniture = new StardewFurniture(id, name, type, tilesheetSize, boundingBoxSize, rotations, price, displayName, placementRestriction);
+            return furniture;
         }
 
         private static StardewHat ParseStardewHatData(int id, string objectInfo)
