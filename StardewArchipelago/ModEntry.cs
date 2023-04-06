@@ -333,7 +333,7 @@ namespace StardewArchipelago
             var port = int.Parse(ipAndPort[1]);
             var slot = arg2[1];
             var password = arg2.Length >= 3 ? arg2[2] : "";
-            _apConnectionOverride = new ArchipelagoConnectionInfo(ip, port, slot, false, password);
+            _apConnectionOverride = new ArchipelagoConnectionInfo(ip, port, slot, null, password);
         }
 
         private void OnCommandDisconnectFromArchipelago(string arg1, string[] arg2)
@@ -353,7 +353,7 @@ namespace StardewArchipelago
 
         public bool ArchipelagoConnect(string ip, int port, string slot, string password, out string errorMessage)
         {
-            var apConnection = new ArchipelagoConnectionInfo(ip, port, slot, false, password);
+            var apConnection = new ArchipelagoConnectionInfo(ip, port, slot, null, password);
             _archipelago.Connect(apConnection, out errorMessage);
             if (!_archipelago.IsConnected)
             {
