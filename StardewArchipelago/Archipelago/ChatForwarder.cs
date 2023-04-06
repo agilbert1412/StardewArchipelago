@@ -91,6 +91,11 @@ namespace StardewArchipelago.Archipelago
                 return true;
             }
 
+            if (HandleDeathlinkCommand(messageLower))
+            {
+                return true;
+            }
+
             if (HandleHelpCommand(messageLower))
             {
                 return true;
@@ -142,6 +147,17 @@ namespace StardewArchipelago.Archipelago
             }
 
             _archipelago.Sync();
+            return true;
+        }
+
+        private static bool HandleDeathlinkCommand(string message)
+        {
+            if (message != $"{COMMAND_PREFIX}deathlink")
+            {
+                return false;
+            }
+
+            _archipelago.ToggleDeathlink();
             return true;
         }
 
@@ -222,6 +238,7 @@ namespace StardewArchipelago.Archipelago
             Game1.chatBox?.addMessage($"{COMMAND_PREFIX}goal - Shows your current Archipelago Goal", Color.Gold);
             Game1.chatBox?.addMessage($"{COMMAND_PREFIX}experience - Shows your current progressive skills experience levels", Color.Gold);
             Game1.chatBox?.addMessage($"{COMMAND_PREFIX}gift [slotName] - Sends your currently held item stack to a chosen player as a gift", Color.Gold);
+            Game1.chatBox?.addMessage($"{COMMAND_PREFIX}deathlink - Toggles Deathlink on/off. Saves when sleeping", Color.Gold);
 #if DEBUG
             Game1.chatBox?.addMessage($"{COMMAND_PREFIX}sync - Sends a Sync packet to the Archipelago server", Color.Gold);
 #endif

@@ -33,6 +33,7 @@ namespace StardewArchipelago.Archipelago
         public bool IsConnected { get; private set; }
         public SlotData SlotData { get; private set; }
         public Dictionary<string, ScoutedLocation> ScoutedLocations { get; set; }
+        public bool DeathLink => _connectionInfo?.DeathLink == true;
 
         private DataPackageCache _localDataPackage;
         // public Random MultiRandom { get; set; }
@@ -77,7 +78,7 @@ namespace StardewArchipelago.Archipelago
                 InitSession(connectionInfo);
                 var itemsHandling = ItemsHandlingFlags.AllItems;
                 var minimumVersion = new Version(0, 3, 9);
-                var tags = connectionInfo.DeathLink ? new[] { "AP", "DeathLink" } : new[] { "AP" };
+                var tags = connectionInfo.DeathLink == true ? new[] { "AP", "DeathLink" } : new[] { "AP" };
                 result = _session.TryConnectAndLogin(GAME_NAME, _connectionInfo.SlotName, itemsHandling, minimumVersion, tags, null, _connectionInfo.Password);
             }
             catch (Exception e)
@@ -114,8 +115,11 @@ namespace StardewArchipelago.Archipelago
 
             // Must go AFTER a successful connection attempt
             InitializeSlotData(connectionInfo.SlotName, loginSuccess.SlotData);
+            if (connectionInfo.DeathLink == null)
+            {
+                connectionInfo.DeathLink = SlotData.DeathLink;
+            }
             InitializeAfterConnection();
-            connectionInfo.DeathLink = SlotData.DeathLink;
             return true;
         }
 
@@ -158,14 +162,28 @@ namespace StardewArchipelago.Archipelago
             }
 
             _deathLinkService = _session.CreateDeathLinkService();
-            if (SlotData.DeathLink)
+            _deathLinkService.OnDeathLinkReceived += ReceiveDeathLink;
+            if (_connectionInfo.DeathLink == true)
             {
                 _deathLinkService.EnableDeathLink();
-                _deathLinkService.OnDeathLinkReceived += ReceiveDeathLink;
             }
             else
             {
                 _deathLinkService.DisableDeathLink();
+            }
+        }
+
+        public void ToggleDeathlink()
+        {
+            if (_connectionInfo.DeathLink == true)
+            {
+                _deathLinkService.DisableDeathLink();
+                _connectionInfo.DeathLink = false;
+            }
+            else
+            {
+                _deathLinkService.EnableDeathLink();
+                _connectionInfo.DeathLink = true;
             }
         }
 
@@ -497,6 +515,11 @@ namespace StardewArchipelago.Archipelago
 
         private void ReceiveDeathLink(DeathLink deathlink)
         {
+            if (_connectionInfo.DeathLink != true)
+            {
+                return;
+            }
+
             DeathManager.ReceiveDeathLink();
             var deathLinkMessage = $"You have been killed by {deathlink.Source} ({deathlink.Cause})";
             _console.Log(deathLinkMessage, LogLevel.Info);
