@@ -25,6 +25,11 @@ namespace StardewArchipelago.Archipelago
 
         public static void ReceiveDeathLink()
         {
+            if (!_archipelago.DeathLink)
+            {
+                return;
+            }
+
             _isCurrentlyReceivingDeathLink = true;
             foreach (var farmer in Game1.getAllFarmers())
             {
@@ -34,6 +39,11 @@ namespace StardewArchipelago.Archipelago
 
         private static void SendDeathLink(string cause)
         {
+            if (!_archipelago.DeathLink)
+            {
+                return;
+            }
+
             if (_isCurrentlyReceivingDeathLink)
             {
                 _isCurrentlyReceivingDeathLink = false;
@@ -45,11 +55,6 @@ namespace StardewArchipelago.Archipelago
 
         public void HookIntoDeathlinkEvents()
         {
-            if (!_archipelago.SlotData.DeathLink)
-            {
-                return;
-            }
-
             HookIntoDeathEvent();
             HookIntoPassOutEvent();
         }
