@@ -9,7 +9,7 @@ namespace StardewArchipelago.Locations.CodeInjections
     {
         public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, BundleReader bundleReader, LocationChecker locationChecker, StardewItemManager itemManager)
         {
-            var shopReplacer = new ShopReplacer(monitor, archipelago, locationChecker);
+            var shopReplacer = new ShopReplacer(monitor, modHelper, archipelago, locationChecker);
             BackpackInjections.Initialize(monitor, archipelago, locationChecker);
             ToolInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             ScytheInjections.Initialize(monitor, locationChecker);

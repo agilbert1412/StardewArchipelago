@@ -11,12 +11,14 @@ namespace StardewArchipelago.Locations
     public class ShopReplacer
     {
         private IMonitor _monitor;
+        private IModHelper _modHelper;
         private ArchipelagoClient _archipelago;
         private LocationChecker _locationChecker;
 
-        public ShopReplacer(IMonitor monitor, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public ShopReplacer(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             _monitor = monitor;
+            _modHelper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
         }
@@ -61,7 +63,7 @@ namespace StardewArchipelago.Locations
             }
 
             var purchaseableLocation =
-                new PurchaseableArchipelagoLocation(salableObject.Name, apLocation, _locationChecker,
+                new PurchaseableArchipelagoLocation(salableObject.Name, apLocation, _modHelper, _locationChecker,
                     _archipelago);
             itemPriceAndStock.Add(purchaseableLocation, new[] { itemPrice, 1 });
         }

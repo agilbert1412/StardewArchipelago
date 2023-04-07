@@ -18,13 +18,15 @@ namespace StardewArchipelago.GameModifications.CodeInjections
     internal class SeedShopsInjections
     {
         private static IMonitor _monitor;
+        private static IModHelper _modHelper;
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
         private static PersistentStock _pierrePersistentStock;
 
-        public static void Initialize(IMonitor monitor, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             _monitor = monitor;
+            _modHelper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
             _pierrePersistentStock = new PersistentStock();
@@ -591,7 +593,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     if (_locationChecker.IsLocationMissing(FestivalLocationNames.STRAWBERRY_SEEDS))
                     {
                         var strawberrySeedsApItem =
-                            new PurchaseableArchipelagoLocation(salableObject.Name, FestivalLocationNames.STRAWBERRY_SEEDS, _locationChecker, _archipelago);
+                            new PurchaseableArchipelagoLocation(salableObject.Name, FestivalLocationNames.STRAWBERRY_SEEDS, _modHelper, _locationChecker, _archipelago);
                         itemPriceAndStock.Add(strawberrySeedsApItem, new[] { 1000, 1 });
                     }
 
