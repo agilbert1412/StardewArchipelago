@@ -289,7 +289,7 @@ namespace StardewArchipelago.Locations.CodeInjections
                 return;
             }
 
-            var purchasableCheck = new PurchaseableArchipelagoLocation(houseUpgradeName, locationName, _locationChecker, _archipelago);
+            var purchasableCheck = new PurchaseableArchipelagoLocation(houseUpgradeName, locationName, _modHelper, _locationChecker, _archipelago);
             foreach (var material in materials)
             {
                 purchasableCheck.AddMaterialRequirement(material);
@@ -315,7 +315,7 @@ namespace StardewArchipelago.Locations.CodeInjections
                 }
             }
 
-            var purchasableCheck = new PurchaseableArchipelagoLocation(buildingName, locationName, _locationChecker, _archipelago);
+            var purchasableCheck = new PurchaseableArchipelagoLocation(buildingName, locationName, _modHelper, _locationChecker, _archipelago);
             foreach (var material in materials)
             {
                 purchasableCheck.AddMaterialRequirement(material);
