@@ -77,7 +77,7 @@ namespace StardewArchipelago.Locations.CodeInjections
                 var metalName = GetMetalNameForTier(upgradeLevel);
                 var locationName = $"{metalName} {toolGenericName} Upgrade";
 
-                var toolApLocation = new PurchaseableArchipelagoLocation(locationName, locationName,
+                var toolApLocation = new PurchaseableArchipelagoLocation(locationName, locationName, _modHelper,
                     _locationChecker, _archipelago, () => Game1.playSound("parry"));
 
                 var priceForUpgrade = utilityPriceForToolMethod.Invoke<int>(upgradeLevel);

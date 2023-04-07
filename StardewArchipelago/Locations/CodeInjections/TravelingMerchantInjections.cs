@@ -356,7 +356,7 @@ namespace StardewArchipelago.Locations.CodeInjections
 
             var scamName = _merchantApItemNames[random.Next(0, _merchantApItemNames.Length)];
             var apLocation =
-                new PurchaseableArchipelagoLocation(scamName, chosenApItem, _locationChecker, _archipelago);
+                new PurchaseableArchipelagoLocation(scamName, chosenApItem, _modHelper, _locationChecker, _archipelago);
             var price = ModifyPrice(_merchantPrices[random.Next(0, _merchantPrices.Length)], priceMultiplier);
 
             currentStock.Add(apLocation, new []{price, 1});
