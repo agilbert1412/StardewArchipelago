@@ -33,6 +33,11 @@ namespace StardewArchipelago.Locations.Festival
                 var festivalDataField = _modHelper.Reflection.GetField<Dictionary<string, string>>(__instance, "festivalData");
                 var festivalData = festivalDataField.GetValue();
 
+                if (festivalWinners == null || festivalData == null)
+                {
+                    return true; // run original logic
+                }
+
                 var playerWonFestival = festivalWinners.Contains(Game1.player.UniqueMultiplayerID);
                 var isEggFestivalDay = festivalData["file"] == "spring13";
 

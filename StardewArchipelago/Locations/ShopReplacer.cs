@@ -72,7 +72,7 @@ namespace StardewArchipelago.Locations
         {
             return item.IsScarecrow() &&
                    item.Name == "Rarecrow" &&
-                   item.getDescription().Contains($"({rarecrowNumber} of 8)");
+                   item.getDescription().Contains($"{rarecrowNumber} of");
         }
     }
 }
