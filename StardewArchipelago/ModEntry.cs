@@ -265,7 +265,7 @@ namespace StardewArchipelago
             {
                 return;
             }
-            
+
             SeasonsRandomizer.SendMailHardcodedForToday();
 
             if (MultiSleep.DaysToSkip > 0)
