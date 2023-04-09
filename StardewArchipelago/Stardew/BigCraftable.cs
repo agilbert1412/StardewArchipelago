@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Items.Mail;
@@ -25,6 +26,14 @@ namespace StardewArchipelago.Stardew
             Outdoors = outdoors;
             Indoors = indoors;
             Fragility = fragility;
+
+            if (Name == "Rarecrow")
+            {
+                var pattern = @"\((\d) of \d\)"; // (# of 8)
+                var match = Regex.Match(Description, pattern);
+                var rarecrowNumber = match.Groups[1].Value;
+                Name += $" #{rarecrowNumber}";
+            }
         }
 
         public override Item PrepareForGivingToFarmer(int amount = 1)
@@ -36,12 +45,13 @@ namespace StardewArchipelago.Stardew
 
         public override void GiveToFarmer(Farmer farmer, int amount = 1)
         {
-            throw new NotImplementedException();
+            var bigCraftable = PrepareForGivingToFarmer();
+            farmer.addItemByMenuIfNecessaryElseHoldUp(bigCraftable);
         }
 
         public override LetterAttachment GetAsLetter(ReceivedItem receivedItem, int amount = 1)
         {
-            throw new NotImplementedException();
+            return new LetterActionAttachment(receivedItem, LetterActionsKeys.GiveBigCraftable, Id.ToString());
         }
     }
 }

@@ -16,6 +16,7 @@
         public const string ProgressiveTool = "ProgressiveTool";
         public const string FishingRod = "FishingRod";
         public const string ReturnScepter = "ReturnScepter";
+        public const string GiveBigCraftable = "GiveBigCraftable";
         public const string GiveRing = "GiveRing";
         public const string GiveBoots = "GiveBoots";
         public const string GiveMeleeWeapon = "GiveMeleeWeapon";

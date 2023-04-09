@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Objects;
 using StardewValley.Tools;
+using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Items.Mail
 {
@@ -30,6 +32,7 @@ namespace StardewArchipelago.Items.Mail
             _letterActions.Add(LetterActionsKeys.ProgressiveTool, ReceiveProgressiveTool);
             _letterActions.Add(LetterActionsKeys.FishingRod, (_) => GetFishingRodOfNextLevel());
             _letterActions.Add(LetterActionsKeys.ReturnScepter, (_) => GetReturnScepter());
+            _letterActions.Add(LetterActionsKeys.GiveBigCraftable, ReceiveBigCraftable);
             _letterActions.Add(LetterActionsKeys.GiveRing, ReceiveRing);
             _letterActions.Add(LetterActionsKeys.GiveBoots, ReceiveBoots);
             _letterActions.Add(LetterActionsKeys.GiveMeleeWeapon, ReceiveMeleeWeapon);
@@ -242,11 +245,19 @@ namespace StardewArchipelago.Items.Mail
             Game1.player.addItemByMenuIfNecessary(itemToAdd);
         }
 
+        private void ReceiveBigCraftable(string bigCraftableId)
+        {
+            var id = int.Parse(bigCraftableId);
+            var bigCraftable = new Object(Vector2.Zero, id);
+            bigCraftable.Stack = 1;
+            Game1.player.addItemByMenuIfNecessaryElseHoldUp(bigCraftable);
+        }
+
         private void ReceiveRing(string ringId)
         {
             var id = int.Parse(ringId);
-            var boots = new Ring(id);
-            Game1.player.addItemByMenuIfNecessaryElseHoldUp(boots);
+            var ring = new Ring(id);
+            Game1.player.addItemByMenuIfNecessaryElseHoldUp(ring);
         }
 
         private void ReceiveBoots(string bootsId)

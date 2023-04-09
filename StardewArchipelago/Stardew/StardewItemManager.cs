@@ -350,8 +350,8 @@ namespace StardewArchipelago.Stardew
             var type = fields[1];
             var tilesheetSize = fields[2];
             var boundingBoxSize = fields[3];
-            var rotations = fields[5];
-            var price = fields[6];
+            var price = fields[5];
+            var rotations = fields.Length > 6 ? fields[6] : "1";
             var displayName = fields.Length > 7 ? fields[7] : name;
             var placementRestriction = fields.Length > 8 ? fields[8] : "";
 
@@ -364,7 +364,7 @@ namespace StardewArchipelago.Stardew
             var fields = objectInfo.Split("/");
             var name = fields[0];
             var description = fields[1];
-            var skipHairDraw = bool.Parse(fields[2]);
+            var skipHairDraw = fields[2];
             var ignoreHairstyleOffset = bool.Parse(fields[3]);
             var displayName = fields.Length > 4 ? fields[4] : name;
 

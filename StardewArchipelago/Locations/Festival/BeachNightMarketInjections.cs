@@ -54,8 +54,8 @@ namespace StardewArchipelago.Locations.Festival
                         continue;
                     }
 
-                    _shopReplacer.ReplaceShopItem(__result, salableItem, FestivalLocationNames.RARECROW_7, item => item.IsScarecrow() && item.Name != "Rarecrow #7");
-                    _shopReplacer.ReplaceShopItem(__result, salableItem, FestivalLocationNames.RARECROW_8, item => item.IsScarecrow() && item.Name != "Rarecrow #8");
+                    _shopReplacer.ReplaceShopItem(__result, salableItem, FestivalLocationNames.RARECROW_7, item => _shopReplacer.IsRarecrow(item, 7));
+                    _shopReplacer.ReplaceShopItem(__result, salableItem, FestivalLocationNames.RARECROW_8, item => _shopReplacer.IsRarecrow(item, 8));
 
                     if (_archipelago.SlotData.FestivalLocations != FestivalLocations.Hard)
                     {

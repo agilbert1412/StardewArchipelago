@@ -67,5 +67,12 @@ namespace StardewArchipelago.Locations
                     _archipelago);
             itemPriceAndStock.Add(purchaseableLocation, new[] { itemPrice, 1 });
         }
+
+        public bool IsRarecrow(Object item, int rarecrowNumber)
+        {
+            return item.IsScarecrow() &&
+                   item.Name == "Rarecrow" &&
+                   item.getDescription().Contains($"({rarecrowNumber} of 8)");
+        }
     }
 }

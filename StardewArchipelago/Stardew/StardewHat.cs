@@ -6,10 +6,10 @@ namespace StardewArchipelago.Stardew
 {
     public class StardewHat : StardewItem
     {
-        public bool SkipHairDraw { get; }
+        public string SkipHairDraw { get; }
         public bool IgnoreHairstyleOffset { get; }
 
-        public StardewHat(int id, string name, string description, bool skipHairDraw, bool ignoreHairstyleOffset, string displayName)
+        public StardewHat(int id, string name, string description, string skipHairDraw, bool ignoreHairstyleOffset, string displayName)
         : base(id, name, 0, displayName, description)
         {
         }
