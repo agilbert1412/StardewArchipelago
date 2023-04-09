@@ -96,6 +96,8 @@ namespace StardewArchipelago.Locations.CodeInjections
                 }
 
                 __result = friendshipPoints;
+                var pointsField = _helper.Reflection.GetField<NetInt>(__instance, "points");
+                pointsField.GetValue().Value = friendshipPoints;
                 return false; // don't run original logic
             }
             catch (Exception ex)

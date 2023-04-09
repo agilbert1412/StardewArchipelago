@@ -87,13 +87,14 @@ namespace StardewArchipelago.GameModifications.Seasons
             }
         }
 
-        // public static WorldDate Date
+        // public static WorldDate Date => Game1.netWorldState.Value.Date;
         public static bool Date_UseTotalDaysStats_Prefix(ref WorldDate __result)
         {
             try
             {
                 GetVanillaValues(out var totalDays, out var year, out var seasonNumber, out var seasonName);
-                __result = new WorldDate(year, seasonName.ToLower(), Game1.dayOfMonth);
+                var dayOfMonth = (totalDays % 28) + 1;
+                __result = new WorldDate(year, seasonName.ToLower(), dayOfMonth);
                 return false; // don't run original logic
             }
             catch (Exception ex)
@@ -176,6 +177,25 @@ namespace StardewArchipelago.GameModifications.Seasons
                 return;
             Game1.activeClickableMenu.emergencyShutDown();
             Game1.exitActiveMenu();
+        }
+
+        // public int CountdownToWedding
+        public static bool CountdownToWedding_Add1_Prefix(Friendship __instance, ref int __result)
+        {
+            try
+            {
+                if (__instance.WeddingDate == null || __instance.WeddingDate.TotalDays < Game1.Date.TotalDays)
+                    __result = 0;
+                else
+                    __result = __instance.WeddingDate.TotalDays - Game1.Date.TotalDays + 1;
+
+                return false; // don't run original logic
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(CountdownToWedding_Add1_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
         }
 
         private static readonly Dictionary<string, string> _alternateMailKeys = new()
