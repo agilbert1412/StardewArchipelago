@@ -74,7 +74,7 @@ namespace StardewArchipelago.Archipelago
             {
                 InitSession(connectionInfo);
                 var itemsHandling = ItemsHandlingFlags.AllItems;
-                var minimumVersion = new Version(0, 3, 9);
+                var minimumVersion = new Version(0, 4, 0);
                 var tags = connectionInfo.DeathLink == true ? new[] { "AP", "DeathLink" } : new[] { "AP" };
                 result = _session.TryConnectAndLogin(GAME_NAME, _connectionInfo.SlotName, itemsHandling, minimumVersion, tags, null, _connectionInfo.Password);
             }
