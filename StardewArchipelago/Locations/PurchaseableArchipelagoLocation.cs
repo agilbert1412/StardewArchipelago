@@ -34,27 +34,7 @@ namespace StardewArchipelago.Locations
             _extraMaterialsRequired = new List<Item>();
             _purchaseCallBack = purchaseCallback;
 
-
-            if (!(Game1.content.ServiceProvider.GetService(typeof(IGraphicsDeviceService)) is IGraphicsDeviceService
-                    service))
-            {
-                throw new InvalidOperationException("No Graphics Device Service");
-            }
-
-            var currentModFolder = modHelper.DirectoryPath;
-            if (!Directory.Exists(currentModFolder))
-            {
-                throw new InvalidOperationException("Could not find StardewArchipelago folder");
-            }
-            
-            var texturesFolder = "Textures";
-            var relativePathToTexture = Path.Combine(currentModFolder, texturesFolder, "archipelago.png");
-            if (!File.Exists(relativePathToTexture))
-            {
-                throw new InvalidOperationException("Could not find Archipelago Texture file");
-            }
-
-            _archipelagoTexture = Texture2D.FromFile(service.GraphicsDevice, relativePathToTexture);
+            _archipelagoTexture = ArchipelagoTextures.GetColoredLogo(modHelper, 48, "color");
         }
 
         public void AddMaterialRequirement(Item requiredItem)

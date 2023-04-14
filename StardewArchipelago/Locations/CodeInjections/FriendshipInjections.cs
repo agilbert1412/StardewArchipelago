@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Netcode;
 using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Characters;
 using StardewValley.Locations;
+using StardewValley.Menus;
 
 namespace StardewArchipelago.Locations.CodeInjections
 {
@@ -32,6 +35,12 @@ namespace StardewArchipelago.Locations.CodeInjections
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
         private static Dictionary<string, double> _friendshipPoints = new();
+        private static Texture2D _apLogoColor;
+        private static Texture2D _apLogoBlue;
+        private static Texture2D _apLogoWhite;
+        private static Texture2D _apLogoBlack;
+
+        private static string[] _hintedFriendshipLocations;
 
         public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
@@ -39,6 +48,11 @@ namespace StardewArchipelago.Locations.CodeInjections
             _helper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
+            _apLogoColor = ArchipelagoTextures.GetColoredLogo(modHelper, 24, "color");
+            _apLogoBlue = ArchipelagoTextures.GetColoredLogo(modHelper, 24, "blue");
+            _apLogoWhite = ArchipelagoTextures.GetColoredLogo(modHelper, 24, "white");
+            _apLogoBlack = ArchipelagoTextures.GetColoredLogo(modHelper, 24, "black");
+            _hintedFriendshipLocations = Array.Empty<string>();
         }
 
         public static Dictionary<string, int> GetArchipelagoFriendshipPoints()
@@ -107,6 +121,80 @@ namespace StardewArchipelago.Locations.CodeInjections
             }
         }
 
+        // public SocialPage(int x, int y, int width, int height)
+        public static void SocialPageCtor_CheckHints_Postfix(SocialPage __instance, int x, int y, int width, int height)
+        {
+            try
+            {
+                var hints = _archipelago.GetHints().Where(x => !x.Found && _archipelago.GetPlayerName(x.FindingPlayer) == _archipelago.SlotData.SlotName);
+                var hintedLocationNames = hints.Select(hint => _archipelago.GetLocationName(hint.LocationId)).Where(hint => hint.StartsWith($"Friendsanity: ")).ToArray();
+                _hintedFriendshipLocations = hintedLocationNames;
+                return;
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(DrawNPCSlot_DrawEarnedHearts_Postfix)}:\n{ex}", LogLevel.Error);
+                return;
+            }
+        }
+
+        // private void drawNPCSlot(SpriteBatch b, int i)
+        public static void DrawNPCSlot_DrawEarnedHearts_Postfix(SocialPage __instance, SpriteBatch b, int i)
+        {
+            try
+            {
+                var name = __instance.names[i] as string;
+                //var hints = _archipelago.GetHints().Where(x => !x.Found && _archipelago.GetPlayerName(x.FindingPlayer) == _archipelago.SlotData.SlotName);
+                //var hintedLocationNames = hints.Select(hint => _archipelago.GetLocationName(hint.LocationId)).Where(hint => hint.StartsWith($"Friendsanity: {name}"));
+                var apPoints = (int)GetFriendshipPoints(name);
+                var maxShuffled = ShuffledUpTo(name);
+                var maxHeartForCurrentRelation = GetMaximumHeartsWithRelationState(name);
+                var apHearts = apPoints / POINTS_PER_HEART;
+                var spritesField = _helper.Reflection.GetField<List<ClickableTextureComponent>>(__instance, "sprites");
+                var sprites = spritesField.GetValue();
+                for (var index = 0; index < maxShuffled; ++index)
+                {
+                    var positionX = __instance.xPositionOnScreen + 320 - 2 + index * 32;
+                    var smallHeartOffset = 28;
+                    var positionY = sprites[i].bounds.Y + 64 - 28;
+                    var position = new Vector2(positionX, positionY - smallHeartOffset);
+                    var sourceRectangle = new Rectangle(0, 0, 24, 24);
+                    var color = Color.White;
+                    var texture = _apLogoColor;
+                    if (index >= 10)
+                    {
+                        var reverseX = 9 - (index - 10);
+                        positionX = __instance.xPositionOnScreen + 320 - 2 + reverseX * 32;
+                        position = new Vector2(positionX, positionY + smallHeartOffset); // position = new Vector2(__instance.xPositionOnScreen + 320 - 4 + (index - 10) * 32, sprites[i].bounds.Y + 64);
+                    }
+
+                    if (index >= apHearts)
+                    {
+                        if (_hintedFriendshipLocations.Any(x => x.Contains($"{name} {index + 1} ")))
+                        {
+                            texture = _apLogoBlue;
+                        }
+                        else if (index < maxHeartForCurrentRelation)
+                        {
+                            texture = _apLogoWhite;
+                            color = new Color(191, 191, 191);
+                        }
+                        else
+                        {
+                            texture = _apLogoBlack;
+                        }
+                    }
+
+                    b.Draw(texture, position, sourceRectangle, color, 0.0f, Vector2.Zero, 1f, SpriteEffects.None, 0.88f);
+                }
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(DrawNPCSlot_DrawEarnedHearts_Postfix)}:\n{ex}", LogLevel.Error);
+                return;
+            }
+        }
+
         private static int GetBoundedToCurrentRelationState(double friendshipPoints, string npcName)
         {
             return GetBoundedToCurrentRelationState((int)friendshipPoints, npcName);
@@ -116,6 +204,12 @@ namespace StardewArchipelago.Locations.CodeInjections
         {
             var npc = Game1.getCharacterFromName(npcName);
             return Math.Max(0, Math.Min(friendshipPoints, (Utility.GetMaximumHeartsForCharacter(npc) + 1) * POINTS_PER_HEART - 1));
+        }
+
+        private static int GetMaximumHeartsWithRelationState(string npcName)
+        {
+            var npc = Game1.getCharacterFromName(npcName);
+            return Utility.GetMaximumHeartsForCharacter(npc);
         }
 
         public static bool DayUpdate_ArchipelagoPoints_Prefix(Pet __instance, int dayOfMonth)

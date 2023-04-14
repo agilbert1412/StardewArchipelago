@@ -79,11 +79,6 @@ namespace StardewArchipelago.Archipelago
                 return true;
             }
 
-            if (HandleFriendshipCommand(message))
-            {
-                return true;
-            }
-
             if (HandleArcadeReleaseCommand(messageLower))
             {
                 return true;
@@ -155,59 +150,6 @@ namespace StardewArchipelago.Archipelago
             }
 
             return true;
-        }
-
-        private static bool HandleFriendshipCommand(string message)
-        {
-            var friendshipPrefix = $"{COMMAND_PREFIX}friendship ";
-            if (!message.StartsWith(friendshipPrefix))
-            {
-                return false;
-            }
-
-            var remainder = message.Substring(friendshipPrefix.Length);
-            var name = CorrectName(remainder);
-            var state = FriendshipInjections.GetArchipelagoFriendshipPointsForPrinting(name);
-            Game1.chatBox?.addMessage(state, Color.Gold);
-
-            return true;
-        }
-
-        private static string CorrectName(string enteredName)
-        {
-            var loweredName = enteredName.ToLower().Replace(" ", "");
-            var loweredPetName = Game1.player.getPetName().ToLower().Replace(" ", "");
-            if (loweredName == loweredPetName)
-            {
-                return Game1.player.getPetName();
-            }
-            switch (loweredName)
-            {
-                case "pet":
-                case "cat":
-                case "dog":
-                    return Game1.player.getPetName();
-                case "rasmodius":
-                    return "Wizard";
-                case "milf":
-                    return "Robin";
-                case "hobo":
-                    return "Linus";
-                case "josh":
-                    return "Alex";
-                case "bestgirl":
-                    return "Abigail";
-                case "gilf":
-                    return "Evelyn";
-                case "boomer":
-                    return "George";
-                case "nerd":
-                    return "Maru";
-                case "emo":
-                    return "Sebastian";
-                default:
-                    return Utility.capitalizeFirstLetter(enteredName);
-            }
         }
 
         private static bool HandleSyncCommand(string message)
@@ -374,7 +316,6 @@ namespace StardewArchipelago.Archipelago
             Game1.chatBox?.addMessage($"{COMMAND_PREFIX}help - Shows the list of client commands", Color.Gold);
             Game1.chatBox?.addMessage($"{COMMAND_PREFIX}goal - Shows your current Archipelago Goal", Color.Gold);
             Game1.chatBox?.addMessage($"{COMMAND_PREFIX}experience - Shows your current progressive skills experience levels", Color.Gold);
-            Game1.chatBox?.addMessage($"{COMMAND_PREFIX}friendship [npc] - Shows your current earned friendship points with a specific npc", Color.Gold);
             Game1.chatBox?.addMessage($"{COMMAND_PREFIX}gift [slotName] - Sends your currently held item stack to a chosen player as a gift", Color.Gold);
             Game1.chatBox?.addMessage($"{COMMAND_PREFIX}deathlink - Toggles Deathlink on/off. Saves when sleeping", Color.Gold);
             Game1.chatBox?.addMessage($"{COMMAND_PREFIX}sprite - Enable/Disable the Appearance Randomizer", Color.Gold);
