@@ -241,6 +241,10 @@ namespace StardewArchipelago.Stardew
 
                 _furnitureById.Add(id, furniture);
                 _furnitureByName.Add(furniture.Name, furniture);
+                if (id % 2 == 0 && id >= 1838 && id <= 1854)
+                {
+                    _furnitureByName.Add($"Lupini: {furniture.Name}", furniture);
+                }
             }
         }
 

@@ -284,7 +284,7 @@ namespace StardewArchipelago.Items.Mail
         private void ReceiveFurniture(string furnitureId)
         {
             var id = int.Parse(furnitureId);
-            var furniture = new Hat(id);
+            var furniture = new Furniture(id, Vector2.Zero);
             Game1.player.addItemByMenuIfNecessaryElseHoldUp(furniture);
         }
 
