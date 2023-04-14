@@ -437,6 +437,16 @@ namespace StardewArchipelago.Locations
             );
 
             _harmony.Patch(
+                original: AccessTools.Constructor(typeof(SocialPage), new []{ typeof(int) , typeof(int) , typeof(int) , typeof(int) }),
+                postfix: new HarmonyMethod(typeof(FriendshipInjections), nameof(FriendshipInjections.SocialPageCtor_CheckHints_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(SocialPage), "drawNPCSlot"),
+                postfix: new HarmonyMethod(typeof(FriendshipInjections), nameof(FriendshipInjections.DrawNPCSlot_DrawEarnedHearts_Postfix))
+            );
+
+            _harmony.Patch(
                 original: AccessTools.Method(typeof(Pet), nameof(Pet.dayUpdate)),
                 prefix: new HarmonyMethod(typeof(FriendshipInjections), nameof(FriendshipInjections.DayUpdate_ArchipelagoPoints_Prefix))
             );
