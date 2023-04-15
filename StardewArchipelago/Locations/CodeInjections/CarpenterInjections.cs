@@ -277,7 +277,7 @@ namespace StardewArchipelago.Locations.CodeInjections
         private static void AddArchipelagoHouseLocationToStock(this Dictionary<ISalable, int[]> stock, string houseUpgradeName, int price, Item[] materials, int requiredHouseUpgrade = 0)
         {
             var locationName = string.Format(BUILDING_BLUEPRINT_LOCATION_NAME, houseUpgradeName);
-            if (!_locationChecker.IsLocationNotChecked(locationName))
+            if (_locationChecker.IsLocationChecked(locationName))
             {
                 return;
             }
@@ -301,7 +301,7 @@ namespace StardewArchipelago.Locations.CodeInjections
         private static void AddArchipelagoLocationToStock(this Dictionary<ISalable, int[]> stock, string buildingName, int price, Item[] materials, string requiredBuilding = null)
         {
             var locationName = string.Format(BUILDING_BLUEPRINT_LOCATION_NAME, buildingName);
-            if (!_locationChecker.IsLocationNotChecked(locationName))
+            if (_locationChecker.IsLocationChecked(locationName))
             {
                 return;
             }
