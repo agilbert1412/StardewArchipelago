@@ -16,6 +16,7 @@ namespace StardewArchipelago.Items
         public const string RETURN_SCEPTER_AP_NAME = "Return Scepter";
         public const string GOLDEN_SCYTHE_AP_NAME = "Golden Scythe";
         public const string BEACH_BRIDGE_AP_NAME = "Beach Bridge";
+        public const string SPECIAL_ORDER_BOARD_AP_NAME = "Special Order Board";
         private Dictionary<string, Func<ReceivedItem, LetterAttachment>> _unlockables;
 
         public UnlockManager()

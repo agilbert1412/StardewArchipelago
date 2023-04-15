@@ -471,6 +471,12 @@ namespace StardewArchipelago.Archipelago
             return locationName;
         }
 
+        public bool LocationExists(string locationName)
+        {
+            var id = GetLocationId(locationName);
+            return _session.Locations.AllLocations.Contains(id);
+        }
+
         public long GetLocationId(string locationName, string gameName = GAME_NAME)
         {
             if (!MakeSureConnected())

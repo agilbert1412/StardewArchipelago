@@ -120,22 +120,22 @@ namespace StardewArchipelago.Locations.CodeInjections
                 switch ((Area)area)
                 {
                     case Area.Pantry:
-                        __result = !Game1.player.hasOrWillReceiveMail("apccPantry"); // _locationChecker.IsLocationMissing(AP_LOCATION_PANTRY);
+                        __result = !Game1.player.hasOrWillReceiveMail("apccPantry"); // _locationChecker.IsLocationNotChecked(AP_LOCATION_PANTRY);
                         return false; // don't run original logic
                     case Area.CraftsRoom:
-                        __result = !Game1.player.hasOrWillReceiveMail("apccCraftsRoom"); // _locationChecker.IsLocationMissing(AP_LOCATION_CRAFTS_ROOM);
+                        __result = !Game1.player.hasOrWillReceiveMail("apccCraftsRoom"); // _locationChecker.IsLocationNotChecked(AP_LOCATION_CRAFTS_ROOM);
                         return false; // don't run original logic
                     case Area.FishTank:
-                        __result = !Game1.player.hasOrWillReceiveMail("apccFishTank"); // _locationChecker.IsLocationMissing(AP_LOCATION_FISH_TANK);
+                        __result = !Game1.player.hasOrWillReceiveMail("apccFishTank"); // _locationChecker.IsLocationNotChecked(AP_LOCATION_FISH_TANK);
                         return false; // don't run original logic
                     case Area.BoilerRoom:
-                        __result = !Game1.player.hasOrWillReceiveMail("apccBoilerRoom"); // _locationChecker.IsLocationMissing(AP_LOCATION_BOILER_ROOM);
+                        __result = !Game1.player.hasOrWillReceiveMail("apccBoilerRoom"); // _locationChecker.IsLocationNotChecked(AP_LOCATION_BOILER_ROOM);
                         return false; // don't run original logic
                     case Area.Vault:
-                        __result = !Game1.player.hasOrWillReceiveMail("apccVault"); // _locationChecker.IsLocationMissing(AP_LOCATION_VAULT);
+                        __result = !Game1.player.hasOrWillReceiveMail("apccVault"); // _locationChecker.IsLocationNotChecked(AP_LOCATION_VAULT);
                         return false; // don't run original logic
                     case Area.Bulletin:
-                        __result = !Game1.player.hasOrWillReceiveMail("apccBulletin"); // _locationChecker.IsLocationMissing(AP_LOCATION_BULLETIN_BOARD);
+                        __result = !Game1.player.hasOrWillReceiveMail("apccBulletin"); // _locationChecker.IsLocationNotChecked(AP_LOCATION_BULLETIN_BOARD);
                         return false; // don't run original logic
                     case Area.AbandonedJojaMart:
                         if (Utility.HasAnyPlayerSeenEvent(191393))

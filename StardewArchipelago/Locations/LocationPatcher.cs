@@ -51,6 +51,7 @@ namespace StardewArchipelago.Locations
             AddMuseumsanityLocations();
             AddFestivalLocations();
             ReplaceFriendshipsWithChecks();
+            ReplaceSpecialOrdersWithChecks();
         }
 
         private void ReplaceCommunityCenterBundlesWithChecks()
@@ -237,6 +238,28 @@ namespace StardewArchipelago.Locations
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Event), nameof(Event.command_awardFestivalPrize)),
                 prefix: new HarmonyMethod(typeof(QuestInjections), nameof(QuestInjections.Command_AwardFestivalPrize_QiMilk_Prefix))
+            );
+        }
+
+        private void ReplaceSpecialOrdersWithChecks()
+        {
+            if (_archipelago.SlotData.SpecialOrderLocations == SpecialOrderLocations.Disabled)
+            {
+                return;
+            }
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(SpecialOrder), nameof(SpecialOrder.IsSpecialOrdersBoardUnlocked)),
+                prefix: new HarmonyMethod(typeof(SpecialOrderInjections), nameof(SpecialOrderInjections.IsSpecialOrdersBoardUnlocked_UnlockBasedOnApItem_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(SpecialOrder), nameof(SpecialOrder.GetSpecialOrder)),
+                postfix: new HarmonyMethod(typeof(SpecialOrderInjections), nameof(SpecialOrderInjections.GetSpecialOrder_ArchipelagoReward_Postfix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(SpecialOrder), nameof(SpecialOrder.CheckCompletion)),
+                postfix: new HarmonyMethod(typeof(SpecialOrderInjections), nameof(SpecialOrderInjections.CheckCompletion_ArchipelagoReward_Postfix))
             );
         }
 

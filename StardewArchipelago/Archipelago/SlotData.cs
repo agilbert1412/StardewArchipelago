@@ -23,6 +23,7 @@ namespace StardewArchipelago.Archipelago
         private const string BUILDING_PROGRESSION_KEY = "building_progression";
         private const string FESTIVAL_OBJECTIVES_KEY = "festival_objectives";
         private const string ARCADE_MACHINES_KEY = "arcade_machine_locations";
+        private const string SPECIAL_ORDERS_KEY = "special_orders_key";
         private const string HELP_WANTED_LOCATIONS_KEY = "help_wanted_locations";
         private const string FISHSANITY_KEY = "fishsanity";
         private const string MUSEUMSANITY_KEY = "museumsanity";
@@ -59,6 +60,7 @@ namespace StardewArchipelago.Archipelago
         public BuildingProgression BuildingProgression { get; private set; }
         public FestivalLocations FestivalLocations { get; private set; }
         public ArcadeLocations ArcadeMachineLocations { get; private set; }
+        public SpecialOrderLocations SpecialOrderLocations { get; private set; }
         public int HelpWantedLocationNumber { get; private set; }
         public Fishsanity Fishsanity { get; private set; }
         public Museumsanity Museumsanity { get; private set; }
@@ -97,6 +99,7 @@ namespace StardewArchipelago.Archipelago
             BuildingProgression = GetSlotSetting(BUILDING_PROGRESSION_KEY, BuildingProgression.Shuffled);
             FestivalLocations = GetSlotSetting(FESTIVAL_OBJECTIVES_KEY, FestivalLocations.Easy);
             ArcadeMachineLocations = GetSlotSetting(ARCADE_MACHINES_KEY, ArcadeLocations.FullShuffling);
+            SpecialOrderLocations = GetSlotSetting(SPECIAL_ORDERS_KEY, SpecialOrderLocations.BoardOnly);
             HelpWantedLocationNumber = GetSlotSetting(HELP_WANTED_LOCATIONS_KEY, 0);
             Fishsanity = GetSlotSetting(FISHSANITY_KEY, Fishsanity.None);
             Museumsanity = GetSlotSetting(MUSEUMSANITY_KEY, Museumsanity.None);
@@ -300,6 +303,13 @@ namespace StardewArchipelago.Archipelago
         Victories = 1,
         VictoriesEasy = 2,
         FullShuffling = 3,
+    }
+
+    public enum SpecialOrderLocations
+    {
+        Disabled = 0,
+        BoardOnly = 1,
+        BoardAndQi = 2,
     }
 
     public enum Fishsanity

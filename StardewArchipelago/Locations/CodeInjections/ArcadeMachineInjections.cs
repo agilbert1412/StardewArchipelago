@@ -387,27 +387,27 @@ namespace StardewArchipelago.Locations.CodeInjections
 
         private static int GetBootsItemToOffer()
         {
-            var missingBoots1 = _locationChecker.IsLocationMissing(JOTPK_BOOTS_1);
-            var missingBoots2 = _locationChecker.IsLocationMissing(JOTPK_BOOTS_2);
+            var missingBoots1 = _locationChecker.IsLocationNotChecked(JOTPK_BOOTS_1);
+            var missingBoots2 = _locationChecker.IsLocationNotChecked(JOTPK_BOOTS_2);
             var bootsItemOffered = missingBoots1 ? 3 : (missingBoots2 ? 4 : 5);
             return bootsItemOffered;
         }
 
         private static int GetGunItemToOffer()
         {
-            var missingGun1 = _locationChecker.IsLocationMissing(JOTPK_GUN_1);
-            var missingGun2 = _locationChecker.IsLocationMissing(JOTPK_GUN_2);
-            var missingGun3 = _locationChecker.IsLocationMissing(JOTPK_GUN_3);
-            var missingSuperGun = _locationChecker.IsLocationMissing(JOTPK_SUPER_GUN);
+            var missingGun1 = _locationChecker.IsLocationNotChecked(JOTPK_GUN_1);
+            var missingGun2 = _locationChecker.IsLocationNotChecked(JOTPK_GUN_2);
+            var missingGun3 = _locationChecker.IsLocationNotChecked(JOTPK_GUN_3);
+            var missingSuperGun = _locationChecker.IsLocationNotChecked(JOTPK_SUPER_GUN);
             var gunItemOffered = missingGun1 ? 0 : (missingGun2 ? 1 : (missingGun3 ? 2 : (missingSuperGun ? 9 : 10)));
             return gunItemOffered;
         }
 
         private static int GetAmmoItemToOffer()
         {
-            var missingAmmo1 = _locationChecker.IsLocationMissing(JOTPK_AMMO_1);
-            var missingAmmo2 = _locationChecker.IsLocationMissing(JOTPK_AMMO_2);
-            var missingAmmo3 = _locationChecker.IsLocationMissing(JOTPK_AMMO_3);
+            var missingAmmo1 = _locationChecker.IsLocationNotChecked(JOTPK_AMMO_1);
+            var missingAmmo2 = _locationChecker.IsLocationNotChecked(JOTPK_AMMO_2);
+            var missingAmmo3 = _locationChecker.IsLocationNotChecked(JOTPK_AMMO_3);
             var ammoItemOffered = missingAmmo1 ? 6 : (missingAmmo2 ? 7 : (missingAmmo3 ? 8 : 10));
             return ammoItemOffered;
         }

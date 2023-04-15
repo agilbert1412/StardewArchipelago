@@ -590,7 +590,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                         continue;
                     }
 
-                    if (_locationChecker.IsLocationMissing(FestivalLocationNames.STRAWBERRY_SEEDS))
+                    if (_locationChecker.IsLocationNotChecked(FestivalLocationNames.STRAWBERRY_SEEDS))
                     {
                         var strawberrySeedsApItem =
                             new PurchaseableArchipelagoLocation(salableObject.Name, FestivalLocationNames.STRAWBERRY_SEEDS, _modHelper, _locationChecker, _archipelago);

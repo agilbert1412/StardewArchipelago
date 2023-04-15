@@ -33,14 +33,14 @@ namespace StardewArchipelago.Locations.CodeInjections
 
                 __result = true;
 
-                if (_locationChecker.IsLocationMissing(LARGE_PACK) && Game1.player.Money >= 2000)
+                if (_locationChecker.IsLocationNotChecked(LARGE_PACK) && Game1.player.Money >= 2000)
                 {
                     Game1.player.Money -= 2000;
                     _locationChecker.AddCheckedLocation(LARGE_PACK);
                     return false; // don't run original logic
                 }
 
-                if (_locationChecker.IsLocationMissing(DELUXE_PACK) && Game1.player.Money >= 10000)
+                if (_locationChecker.IsLocationNotChecked(DELUXE_PACK) && Game1.player.Money >= 10000)
                 {
                     Game1.player.Money -= 10000;
                     _locationChecker.AddCheckedLocation(DELUXE_PACK);
@@ -92,7 +92,7 @@ namespace StardewArchipelago.Locations.CodeInjections
                 Game1.content.LoadString("Strings\\Locations:SeedShop_BuyBackpack_Response10000"));
             var responseDontPurchase = new Response("Not",
                 Game1.content.LoadString("Strings\\Locations:SeedShop_BuyBackpack_ResponseNo"));
-            if (_locationChecker.IsLocationMissing(LARGE_PACK))
+            if (_locationChecker.IsLocationNotChecked(LARGE_PACK))
             {
                 __instance.createQuestionDialogue(
                     Game1.content.LoadString("Strings\\Locations:SeedShop_BuyBackpack_Question24"),
@@ -102,7 +102,7 @@ namespace StardewArchipelago.Locations.CodeInjections
                         responseDontPurchase
                     }, "Backpack");
             }
-            else if (_locationChecker.IsLocationMissing(DELUXE_PACK) && _archipelago.HasReceivedItem("Progressive Backpack", out _))
+            else if (_locationChecker.IsLocationNotChecked(DELUXE_PACK) && _archipelago.HasReceivedItem("Progressive Backpack", out _))
             {
                 __instance.createQuestionDialogue(
                     Game1.content.LoadString("Strings\\Locations:SeedShop_BuyBackpack_Question36"),

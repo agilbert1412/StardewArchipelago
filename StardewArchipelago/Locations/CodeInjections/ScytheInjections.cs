@@ -33,7 +33,7 @@ namespace StardewArchipelago.Locations.CodeInjections
                 {
                     __result = true;
 
-                    if (_locationChecker.IsLocationMissing(GRIM_REAPER_STATUE))
+                    if (_locationChecker.IsLocationNotChecked(GRIM_REAPER_STATUE))
                     {
                         Game1.playSound("parry");
                         __instance.setMapTileIndex(29, 4, 245, "Front");
