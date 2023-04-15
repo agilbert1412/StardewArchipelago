@@ -52,6 +52,7 @@ namespace StardewArchipelago
         private JojaDisabler _jojaDisabler;
         private SeasonsRandomizer _seasonsRandomizer;
         private AppearanceRandomizer _appearanceRandomizer;
+        private QuestCleaner _questCleaner;
 
         private Tester _tester;
 
@@ -196,6 +197,7 @@ namespace StardewArchipelago
             _seasonsRandomizer = new SeasonsRandomizer(Monitor, _helper, _archipelago, _state);
             _appearanceRandomizer = new AppearanceRandomizer(Monitor, _archipelago);
             _chatForwarder = new ChatForwarder(Monitor, _harmony, _giftHandler, _appearanceRandomizer);
+            _questCleaner = new QuestCleaner();
 
 
             if (_state.APConnectionInfo == null)
@@ -275,6 +277,7 @@ namespace StardewArchipelago
                 return;
             }
 
+            _questCleaner.CleanQuests(Game1.player);
             FarmInjections.DeleteStartingDebris();
             _mail.SendToday();
             _locationChecker.VerifyNewLocationChecksWithArchipelago();
