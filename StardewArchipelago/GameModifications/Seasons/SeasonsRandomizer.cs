@@ -248,6 +248,7 @@ namespace StardewArchipelago.GameModifications.Seasons
             {"spring_6_2", "spring_6_1"},
             {"spring_15_2", "spring_16_1"},
             {"spring_21_2", "spring_21_1"},
+            {"summer_3_1", "year_1_day_31"},
             {"summer_6_2", "summer_6_1"},
             {"summer_21_2", "summer_21_1"},
             {"fall_6_2", "fall_6_1"},

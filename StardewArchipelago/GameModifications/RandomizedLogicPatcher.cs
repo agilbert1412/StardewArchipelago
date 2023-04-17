@@ -208,7 +208,7 @@ namespace StardewArchipelago.GameModifications
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(GameLocation), "sandyShopStock"),
-                prefix: new HarmonyMethod(typeof(SeedShopsInjections), nameof(SeedShopsInjections.SandyShopStock_SeedShuffle_Prefix))
+                prefix: new HarmonyMethod(typeof(SeedShopsInjections), nameof(SeedShopsInjections.SandyShopStock_LimitedStock_Prefix))
             );
 
             var shopMenuParameterTypes = new[]
@@ -218,7 +218,7 @@ namespace StardewArchipelago.GameModifications
             };
             _harmony.Patch(
                 original: AccessTools.Constructor(typeof(ShopMenu), shopMenuParameterTypes),
-                prefix: new HarmonyMethod(typeof(SeedShopsInjections), nameof(SeedShopsInjections.ShopMenu_HandleStrawberries_Prefix))
+                prefix: new HarmonyMethod(typeof(SeedShopsInjections), nameof(SeedShopsInjections.ShopMenu_SeedShuffle_Prefix))
             ); 
         }
 

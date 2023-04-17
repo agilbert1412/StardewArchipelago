@@ -63,7 +63,7 @@ namespace StardewArchipelago.Locations
             }
 
             var purchaseableLocation =
-                new PurchaseableArchipelagoLocation(salableObject.Name, apLocation, _modHelper, _locationChecker,
+                new PurchaseableArchipelagoLocation(apLocation, apLocation, _modHelper, _locationChecker,
                     _archipelago);
             itemPriceAndStock.Add(purchaseableLocation, new[] { itemPrice, 1 });
         }

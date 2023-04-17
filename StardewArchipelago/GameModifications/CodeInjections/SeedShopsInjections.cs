@@ -23,7 +23,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         private static LocationChecker _locationChecker;
         private static PersistentStock _pierrePersistentStock;
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker, ShopReplacer shopReplacer)
         {
             _monitor = monitor;
             _modHelper = modHelper;
@@ -284,18 +284,6 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             var priceMultiplier = 2.0;
             var item = new StardewValley.Object(Vector2.Zero, itemId, 1);
 
-            var sendingPlayerName = "";
-            if (isSeed && _archipelago.SlotData.SeedShuffle == SeedShuffle.Shuffled &&
-                !_archipelago.HasReceivedItem(item.Name, out sendingPlayerName))
-            {
-                return;
-            }
-
-            if (!string.IsNullOrWhiteSpace(sendingPlayerName))
-            {
-                // Can I add the sender to the description?
-            }
-
             if (basePrice == -1)
             {
                 basePrice = item.salePrice();
@@ -424,18 +412,6 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             var priceMultiplier = 1.0;
             var item = new StardewValley.Object(Vector2.Zero, itemId, packSize);
 
-            var sendingPlayerName = "";
-            if (isSeed && _archipelago.SlotData.SeedShuffle == SeedShuffle.Shuffled &&
-                !_archipelago.HasReceivedItem(item.Name, out sendingPlayerName))
-            {
-                return;
-            }
-
-            if (!string.IsNullOrWhiteSpace(sendingPlayerName))
-            {
-                // Can I add the sender to the description?
-            }
-
             if (basePrice == -1)
             {
                 basePrice = item.salePrice();
@@ -454,7 +430,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             });
         }
 
-        public static bool SandyShopStock_SeedShuffle_Prefix(GameLocation __instance,
+        public static bool SandyShopStock_LimitedStock_Prefix(GameLocation __instance,
             ref Dictionary<ISalable, int[]> __result)
         {
             try
@@ -476,7 +452,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(SandyShopStock_SeedShuffle_Prefix)}:\n{ex}", LogLevel.Error);
+                _monitor.Log($"Failed in {nameof(SandyShopStock_LimitedStock_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
             }
         }
@@ -530,16 +506,6 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         {
             var sendingPlayerName = "";
             var item = new Object(itemId, int.MaxValue);
-            if (_archipelago.SlotData.SeedShuffle == SeedShuffle.Shuffled &&
-                !_archipelago.HasReceivedItem(item.Name, out sendingPlayerName))
-            {
-                return;
-            }
-
-            if (!string.IsNullOrWhiteSpace(sendingPlayerName))
-            {
-                // Can I add the sender to the description?
-            }
 
             var random = new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame / 2 + itemId);
             var howManyInStock = random.Next(20);
@@ -570,7 +536,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         }
 
         // public ShopMenu(Dictionary<ISalable, int[]> itemPriceAndStock, int currency = 0, string who = null, Func<ISalable, Farmer, int, bool> on_purchase = null, Func<ISalable, bool> on_sell = null, string context = null)
-        public static bool ShopMenu_HandleStrawberries_Prefix(ShopMenu __instance, ref Dictionary<ISalable, int[]> itemPriceAndStock, int currency = 0, string who = null, Func<ISalable, Farmer, int, bool> on_purchase = null, Func<ISalable, bool> on_sell = null, string context = null)
+        public static bool ShopMenu_SeedShuffle_Prefix(ShopMenu __instance, ref Dictionary<ISalable, int[]> itemPriceAndStock, int currency = 0, string who = null, Func<ISalable, Farmer, int, bool> on_purchase = null, Func<ISalable, bool> on_sell = null, string context = null)
         {
             try
             {
@@ -580,9 +546,14 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 }
                 foreach (var salableItem in itemPriceAndStock.Keys.ToArray())
                 {
-                    if (salableItem is not Object salableObject)
+                    if (salableItem is not Object salableObject || salableObject.Category != CATEGORY_SEEDS)
                     {
                         continue;
+                    }
+
+                    if (_archipelago.SlotData.SeedShuffle == SeedShuffle.Shuffled && !_archipelago.HasReceivedItem(salableObject.Name, out _))
+                    {
+                        itemPriceAndStock.Remove(salableItem);
                     }
 
                     if (salableObject.ParentSheetIndex != STRAWBERRY_SEEDS)
@@ -596,27 +567,17 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                             new PurchaseableArchipelagoLocation(salableObject.Name, FestivalLocationNames.STRAWBERRY_SEEDS, _modHelper, _locationChecker, _archipelago);
                         itemPriceAndStock.Add(strawberrySeedsApItem, new[] { 1000, 1 });
                     }
-
-                    if (_archipelago.HasReceivedItem(salableObject.Name, out var sendingPlayerName))
-                    {
-                        if (!string.IsNullOrWhiteSpace(sendingPlayerName))
-                        {
-                            // Can I add the sender to the description?
-                        }
-                        continue;
-                    }
-
-                    itemPriceAndStock.Remove(salableItem);
                 }
                 return true; //  run original logic
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(ShopMenu_HandleStrawberries_Prefix)}:\n{ex}", LogLevel.Error);
+                _monitor.Log($"Failed in {nameof(ShopMenu_SeedShuffle_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
             }
         }
 
+        private const int CATEGORY_SEEDS = -74;
         private const int JOJA_COLA = 167;
 
         private const int SUGAR = 245;
