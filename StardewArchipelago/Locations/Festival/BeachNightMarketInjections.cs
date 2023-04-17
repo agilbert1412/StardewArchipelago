@@ -35,17 +35,10 @@ namespace StardewArchipelago.Locations.Festival
         {
             try
             {
-                var seedShuffle = _archipelago.SlotData.SeedShuffle == SeedShuffle.Shuffled;
                 foreach (var salableItem in __result.Keys.ToArray())
                 {
                     if (salableItem is not Object salableObject)
                     {
-                        continue;
-                    }
-
-                    if (seedShuffle && salableObject.Category == CATEGORY_SEEDS && !_archipelago.HasReceivedItem(salableObject.Name, out var sendingPlayerName))
-                    {
-                        __result.Remove(salableItem);
                         continue;
                     }
 

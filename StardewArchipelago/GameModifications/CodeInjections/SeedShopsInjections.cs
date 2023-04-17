@@ -23,7 +23,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         private static LocationChecker _locationChecker;
         private static PersistentStock _pierrePersistentStock;
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker, ShopReplacer shopReplacer)
+        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             _monitor = monitor;
             _modHelper = modHelper;
@@ -551,7 +551,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                         continue;
                     }
 
-                    if (_archipelago.SlotData.SeedShuffle == SeedShuffle.Shuffled && !_archipelago.HasReceivedItem(salableObject.Name, out _))
+                    if (!_archipelago.HasReceivedItem(salableObject.Name, out _))
                     {
                         itemPriceAndStock.Remove(salableItem);
                     }
