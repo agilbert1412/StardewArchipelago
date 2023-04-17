@@ -14,8 +14,6 @@ namespace StardewArchipelago.Locations.CodeInjections
         private const int SEAWEED = 152;
         private const int GOLDEN_WALNUT = 73;
         private const int JOURNAL_SCRAP = 842;
-        private const int OTHER_DECORATION = -1;
-        private const int PYRAMID_DECORATION = 2334;
         private const string FISHSANITY_PREFIX = "Fishsanity: ";
 
         private static IMonitor _monitor;
