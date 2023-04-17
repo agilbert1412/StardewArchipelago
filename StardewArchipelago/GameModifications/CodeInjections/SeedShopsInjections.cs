@@ -545,7 +545,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                         continue;
                     }
 
-                    if (_archipelago.SlotData.SeedShuffle == SeedShuffle.Shuffled && !_archipelago.HasReceivedItem(salableObject.Name, out _))
+                    if (!_archipelago.HasReceivedItem(salableObject.Name, out _))
                     {
                         itemPriceAndStock.Remove(salableItem);
                     }
