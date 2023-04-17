@@ -104,7 +104,6 @@ namespace StardewArchipelago.GameModifications.Seasons
             }
         }
 
-
         public static bool NewDay_SeasonChoice_Prefix(float timeToPause)
         {
             try
@@ -194,6 +193,50 @@ namespace StardewArchipelago.GameModifications.Seasons
             catch (Exception ex)
             {
                 _monitor.Log($"Failed in {nameof(CountdownToWedding_Add1_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
+        }
+
+        // public static int getWeatherModificationsForDate(WorldDate date, int default_weather)
+        public static bool GetWeatherModificationsForDate_UseCorrectDates_Prefix(WorldDate date, int default_weather,
+            ref int __result)
+        {
+            try
+            {
+                var chosenWeather = (Weather) default_weather;
+                int num = date.TotalDays - Game1.Date.TotalDays;
+                var currentSeason = Game1.currentSeason;
+                if (date.DayOfMonth == 1 || (long)Game1.stats.DaysPlayed + (long)num <= 4L)
+                {
+                    chosenWeather = Weather.Sunny;
+                }
+
+                if ((long)Game1.stats.DaysPlayed + (long)num == 3L)
+                {
+                    chosenWeather = Weather.Rain;
+                }
+
+                if (currentSeason.Equals("summer") && date.DayOfMonth % 13 == 0)
+                {
+                    chosenWeather = Weather.Lightning;
+                }
+
+                if (Utility.isFestivalDay(date.DayOfMonth, currentSeason))
+                {
+                    chosenWeather = Weather.Festival;
+                }
+
+                if (currentSeason.Equals("winter") && date.DayOfMonth >= 14 && date.DayOfMonth <= 16)
+                {
+                    chosenWeather = Weather.Sunny;
+                }
+
+                __result = (int)chosenWeather;
+                return false; // don't run original logic
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(GetWeatherModificationsForDate_UseCorrectDates_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
             }
         }
@@ -313,5 +356,16 @@ namespace StardewArchipelago.GameModifications.Seasons
             seasonName = SeasonsRandomizer.ValidSeasons[seasonNumber];
             year = year + 1;
         }
+    }
+
+    public enum Weather
+    {
+        Sunny = 0,
+        Rain = 1,
+        Debris = 2,
+        Lightning = 3,
+        Festival = 4,
+        Snow = 5,
+        Wedding = 6,
     }
 }

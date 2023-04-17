@@ -186,6 +186,11 @@ namespace StardewArchipelago.GameModifications
                 prefix: new HarmonyMethod(typeof(SeasonsRandomizer), nameof(SeasonsRandomizer.CountdownToWedding_Add1_Prefix))
             );
 
+            _harmony.Patch(
+                original: AccessTools.PropertyGetter(typeof(Game1), nameof(Game1.getWeatherModificationsForDate)),
+                prefix: new HarmonyMethod(typeof(SeasonsRandomizer), nameof(SeasonsRandomizer.GetWeatherModificationsForDate_UseCorrectDates_Prefix))
+            );
+
             SeasonsRandomizer.ChangeMailKeysBasedOnSeasonsToDaysElapsed();
         }
 
