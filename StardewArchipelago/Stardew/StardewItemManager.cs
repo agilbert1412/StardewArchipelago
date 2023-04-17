@@ -50,6 +50,11 @@ namespace StardewArchipelago.Stardew
                    _weaponsById.ContainsKey(itemId);
         }
 
+        public bool ObjectExists(int itemId)
+        {
+            return _objectsById.ContainsKey(itemId);
+        }
+
         public StardewItem GetItemByName(string itemName)
         {
             if (_objectsByName.ContainsKey(itemName))

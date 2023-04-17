@@ -14,6 +14,8 @@ namespace StardewArchipelago.Locations.CodeInjections
         private const int SEAWEED = 152;
         private const int GOLDEN_WALNUT = 73;
         private const int JOURNAL_SCRAP = 842;
+        private const int OTHER_DECORATION = -1;
+        private const int PYRAMID_DECORATION = 2334;
         private const string FISHSANITY_PREFIX = "Fishsanity: ";
 
         private static IMonitor _monitor;
@@ -36,7 +38,7 @@ namespace StardewArchipelago.Locations.CodeInjections
         {
             try
             {
-                if (from_fish_pond || (index >= 167 && index < 173) || !_itemManager.ItemExists(index))
+                if (from_fish_pond || (index >= 167 && index < 173) || !_itemManager.ObjectExists(index))
                 {
                     return;
                 }
