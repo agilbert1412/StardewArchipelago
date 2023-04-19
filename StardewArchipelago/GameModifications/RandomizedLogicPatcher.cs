@@ -187,7 +187,7 @@ namespace StardewArchipelago.GameModifications
             );
 
             _harmony.Patch(
-                original: AccessTools.PropertyGetter(typeof(Game1), nameof(Game1.getWeatherModificationsForDate)),
+                original: AccessTools.Method(typeof(Game1), nameof(Game1.getWeatherModificationsForDate)),
                 prefix: new HarmonyMethod(typeof(SeasonsRandomizer), nameof(SeasonsRandomizer.GetWeatherModificationsForDate_UseCorrectDates_Prefix))
             );
 
