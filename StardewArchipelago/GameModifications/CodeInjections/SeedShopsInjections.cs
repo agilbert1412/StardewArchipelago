@@ -276,7 +276,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             int howManyInStock = -1)
         {
             var priceMultiplier = 2.0;
-            var item = new StardewValley.Object(Vector2.Zero, itemId, 1);
+            var item = new Object(Vector2.Zero, itemId, 1);
 
             if (basePrice == -1)
             {
@@ -404,7 +404,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             int packSize = 50)
         {
             var priceMultiplier = 1.0;
-            var item = new StardewValley.Object(Vector2.Zero, itemId, packSize);
+            var item = new Object(Vector2.Zero, itemId, packSize);
 
             if (basePrice == -1)
             {
@@ -538,6 +538,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 {
                     return true; // run original logic
                 }
+
                 foreach (var salableItem in itemPriceAndStock.Keys.ToArray())
                 {
                     if (salableItem is not Object salableObject || salableObject.Category != CATEGORY_SEEDS)
@@ -549,22 +550,6 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     {
                         itemPriceAndStock.Remove(salableItem);
                     }
-
-                    if (salableObject.ParentSheetIndex != STRAWBERRY_SEEDS)
-                    {
-                        continue;
-                    }
-
-                    if (_archipelago.HasReceivedItem(salableObject.Name, out var sendingPlayerName))
-                    {
-                        if (!string.IsNullOrWhiteSpace(sendingPlayerName))
-                        {
-                            // Can I add the sender to the description?
-                        }
-                        continue;
-                    }
-
-                    itemPriceAndStock.Remove(salableItem);
                 }
                 return true; //  run original logic
             }
