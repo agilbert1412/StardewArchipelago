@@ -28,7 +28,7 @@ namespace StardewArchipelago.Archipelago
                 return false;
             }
 
-            var bankPrefix = $"{ChatForwarder.COMMAND_PREFIX}bank ";
+            var bankPrefix = $"{ChatForwarder.COMMAND_PREFIX}bank";
             if (!message.StartsWith(bankPrefix))
             {
                 return false;
