@@ -322,6 +322,7 @@ namespace StardewArchipelago.Archipelago
             Game1.chatBox?.addMessage($"{COMMAND_PREFIX}help - Shows the list of client commands", Color.Gold);
             Game1.chatBox?.addMessage($"{COMMAND_PREFIX}goal - Shows your current Archipelago Goal", Color.Gold);
             Game1.chatBox?.addMessage($"{COMMAND_PREFIX}experience - Shows your current progressive skills experience levels", Color.Gold);
+            Game1.chatBox?.addMessage($"{COMMAND_PREFIX}bank [deposit|withdraw] [amount] - Deposit or withdraw money from your shared bank account", Color.Gold);
             Game1.chatBox?.addMessage($"{COMMAND_PREFIX}gift [slotName] - Sends your currently held item stack to a chosen player as a gift", Color.Gold);
             Game1.chatBox?.addMessage($"{COMMAND_PREFIX}deathlink - Toggles Deathlink on/off. Saves when sleeping", Color.Gold);
             Game1.chatBox?.addMessage($"{COMMAND_PREFIX}sprite - Enable/Disable the Appearance Randomizer", Color.Gold);
