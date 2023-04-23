@@ -196,7 +196,7 @@ namespace StardewArchipelago
             _jojaDisabler = new JojaDisabler(Monitor, _helper, _harmony);
             _seasonsRandomizer = new SeasonsRandomizer(Monitor, _helper, _archipelago, _state);
             _appearanceRandomizer = new AppearanceRandomizer(Monitor, _archipelago);
-            _chatForwarder = new ChatForwarder(Monitor, _harmony, _giftHandler, _appearanceRandomizer);
+            _chatForwarder = new ChatForwarder(Monitor, _harmony, _archipelago, _giftHandler, _appearanceRandomizer);
             _questCleaner = new QuestCleaner();
 
 
@@ -222,7 +222,7 @@ namespace StardewArchipelago
                 }
             }
 
-            _chatForwarder.ListenToChatMessages(_archipelago);
+            _chatForwarder.ListenToChatMessages();
             _giftHandler.Initialize(_stardewItemManager, _mail, _archipelago);
             _logicPatcher.PatchAllGameLogic();
             _mailPatcher.PatchMailBoxForApItems();
