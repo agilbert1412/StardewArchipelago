@@ -60,9 +60,18 @@ namespace StardewArchipelago.GameModifications
                 return false;
             }
             var ipParts = IpAddressTextBox.Text.Split(":");
-            var ipIsValid = ipParts.Length == 2 && ipParts.All(x => x.Length > 0) && int.TryParse(ipParts[1], out _);
+            var numberParts = ipParts.Length;
+            var allPartsHaveContent = ipParts.All(x => x.Length > 0);
+            if (numberParts == 2)
+            {
+                return allPartsHaveContent && int.TryParse(ipParts[1], out _);
+            }
+            else if (numberParts == 3)
+            {
+                return allPartsHaveContent && ipParts[1].StartsWith("//") && ipParts[1].Length > 2 && int.TryParse(ipParts[2], out _);
+            }
 
-            return ipIsValid;
+            return false;
         }
 
         public override void performHoverAction(int x, int y)
