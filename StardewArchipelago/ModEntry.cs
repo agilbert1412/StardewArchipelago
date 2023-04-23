@@ -171,7 +171,7 @@ namespace StardewArchipelago
             _goalManager = new GoalManager(Monitor, _helper, _harmony, _archipelago, _locationChecker);
             _logicPatcher = new RandomizedLogicPatcher(Monitor, _helper, _harmony, _archipelago, _locationChecker, _stardewItemManager);
             _jojaDisabler = new JojaDisabler(Monitor, _helper, _harmony);
-            _chatForwarder = new ChatForwarder(Monitor, _helper, _harmony, _giftHandler);
+            _chatForwarder = new ChatForwarder(Monitor, _helper, _harmony, _archipelago, _giftHandler);
 
             if (_state.APConnectionInfo == null)
             {
@@ -195,7 +195,7 @@ namespace StardewArchipelago
                 }
             }
 
-            _chatForwarder.ListenToChatMessages(_archipelago);
+            _chatForwarder.ListenToChatMessages();
             _giftHandler.Initialize(_stardewItemManager, _mail, _archipelago);
             _logicPatcher.PatchAllGameLogic();
             _mailPatcher.PatchMailBoxForApItems();
