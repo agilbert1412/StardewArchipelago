@@ -110,8 +110,8 @@ namespace StardewArchipelago.Archipelago
             QuickStart = GetSlotSetting(QUICK_START_KEY, false);
             Gifting = GetSlotSetting(GIFTING_KEY, true);
             GiftTax = GetSlotSetting(GIFT_TAX_KEY, 30) / 100.0;
-            Banking = GetSlotSetting(BANKING_KEY, true);
-            BankTax = GetSlotSetting(BANK_TAX_KEY, 25) / 100.0;
+            Banking = true;
+            BankTax = 25 / 100.0;
             DeathLink = GetSlotSetting(DEATH_LINK_KEY, false);
             Seed = GetSlotSetting(SEED_KEY, "");
             MultiworldVersion = GetSlotSetting(MULTIWORLD_VERSION_KEY, "");
