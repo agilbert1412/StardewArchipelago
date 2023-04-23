@@ -19,20 +19,21 @@ namespace StardewArchipelago.Archipelago
         private static ArchipelagoClient _archipelago;
         private Harmony _harmony;
         private static GiftHandler _giftHandler;
+        private static BankHandler _bankHandler;
         private static AppearanceRandomizer _appearanceRandomizer;
 
-        public ChatForwarder(IMonitor monitor, Harmony harmony, GiftHandler giftHandler, AppearanceRandomizer appearanceRandomizer)
+        public ChatForwarder(IMonitor monitor, Harmony harmony, ArchipelagoClient archipelago, GiftHandler giftHandler, AppearanceRandomizer appearanceRandomizer)
         {
             _monitor = monitor;
             _harmony = harmony;
+            _archipelago = archipelago;
             _giftHandler = giftHandler;
+            _bankHandler = new BankHandler(_archipelago);
             _appearanceRandomizer = appearanceRandomizer;
         }
 
-        public void ListenToChatMessages(ArchipelagoClient archipelago)
+        public void ListenToChatMessages()
         {
-            _archipelago = archipelago;
-
             _harmony.Patch(
                 original: AccessTools.Method(typeof(ChatBox), nameof(ChatBox.receiveChatMessage)),
                 postfix: new HarmonyMethod(typeof(ChatForwarder), nameof(ReceiveChatMessage_ForwardToAp_PostFix))
@@ -85,6 +86,11 @@ namespace StardewArchipelago.Archipelago
             }
 
             if (_giftHandler.HandleGiftItemCommand(message))
+            {
+                return true;
+            }
+
+            if (_bankHandler.HandleBankCommand(message))
             {
                 return true;
             }

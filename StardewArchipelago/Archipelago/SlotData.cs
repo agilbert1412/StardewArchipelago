@@ -34,6 +34,8 @@ namespace StardewArchipelago.Archipelago
         private const string QUICK_START_KEY = "quick_start";
         private const string GIFTING_KEY = "gifting";
         private const string GIFT_TAX_KEY = "gift_tax";
+        private const string BANKING_KEY = "banking";
+        private const string BANK_TAX_KEY = "bank_tax";
         private const string DEATH_LINK_KEY = "death_link";
         private const string SEED_KEY = "seed";
         private const string MODIFIED_BUNDLES_KEY = "modified_bundles";
@@ -69,6 +71,8 @@ namespace StardewArchipelago.Archipelago
         public bool QuickStart { get; private set; }
         public bool Gifting { get; private set; }
         public double GiftTax { get; private set; }
+        public bool Banking { get; private set; }
+        public double BankTax { get; private set; }
         public bool DeathLink { get; private set; }
         public string Seed { get; private set; }
         public string MultiworldVersion { get; private set; }
@@ -106,6 +110,8 @@ namespace StardewArchipelago.Archipelago
             QuickStart = GetSlotSetting(QUICK_START_KEY, false);
             Gifting = GetSlotSetting(GIFTING_KEY, true);
             GiftTax = GetSlotSetting(GIFT_TAX_KEY, 30) / 100.0;
+            Banking = GetSlotSetting(BANKING_KEY, true);
+            BankTax = GetSlotSetting(BANK_TAX_KEY, 25) / 100.0;
             DeathLink = GetSlotSetting(DEATH_LINK_KEY, false);
             Seed = GetSlotSetting(SEED_KEY, "");
             MultiworldVersion = GetSlotSetting(MULTIWORLD_VERSION_KEY, "");
