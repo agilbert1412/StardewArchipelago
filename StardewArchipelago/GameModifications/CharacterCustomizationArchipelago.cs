@@ -66,7 +66,8 @@ namespace StardewArchipelago.GameModifications
             {
                 return allPartsHaveContent && int.TryParse(ipParts[1], out _);
             }
-            else if (numberParts == 3)
+
+            if (numberParts == 3)
             {
                 return allPartsHaveContent && ipParts[1].StartsWith("//") && ipParts[1].Length > 2 && int.TryParse(ipParts[2], out _);
             }
