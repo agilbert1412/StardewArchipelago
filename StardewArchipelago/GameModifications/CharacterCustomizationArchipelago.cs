@@ -53,7 +53,7 @@ namespace StardewArchipelago.GameModifications
             Utility.drawTextWithShadow(b, slotNameLabel.name, Game1.smallFont, new Vector2(slotNameLabel.bounds.X, slotNameLabel.bounds.Y), slotNameLabelColor);
         }
 
-        private bool IpIsFormattedCorrectly()
+        public bool IpIsFormattedCorrectly()
         {
             return TryParseIpAddress(out _, out _);
         }
