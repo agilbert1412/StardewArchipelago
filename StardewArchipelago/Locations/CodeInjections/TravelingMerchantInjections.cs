@@ -40,27 +40,7 @@ namespace StardewArchipelago.Locations.CodeInjections
         {
             try
             {
-                if (IsTravelingMerchantDay(dayOfMonth, out _))
-                {
-                    __instance.travelingMerchantDay = true;
-                    __instance.travelingMerchantBounds.Add(new Microsoft.Xna.Framework.Rectangle(1472, 640, 492, 116));
-                    __instance.travelingMerchantBounds.Add(new Microsoft.Xna.Framework.Rectangle(1652, 744, 76, 48));
-                    __instance.travelingMerchantBounds.Add(new Microsoft.Xna.Framework.Rectangle(1812, 744, 104, 48));
-                    foreach (var travelingMerchantBound in __instance.travelingMerchantBounds)
-                    {
-                        Utility.clearObjectsInArea(travelingMerchantBound, __instance);
-                    }
-
-                    if (Game1.IsMasterGame && Game1.netWorldState.Value.VisitsUntilY1Guarantee >= 0 && (dayOfMonth % 7 % 5 != 0))
-                    {
-                        --Game1.netWorldState.Value.VisitsUntilY1Guarantee;
-                    }
-                }
-                else
-                {
-                    __instance.travelingMerchantBounds.Clear();
-                    __instance.travelingMerchantDay = false;
-                }
+                UpdateTravelingMerchantForToday(__instance, dayOfMonth);
             }
             catch (Exception ex)
             {
@@ -68,7 +48,32 @@ namespace StardewArchipelago.Locations.CodeInjections
                 return;
             }
         }
-        
+
+        public static void UpdateTravelingMerchantForToday(Forest __instance, int dayOfMonth)
+        {
+            if (IsTravelingMerchantDay(dayOfMonth, out _))
+            {
+                __instance.travelingMerchantDay = true;
+                __instance.travelingMerchantBounds.Add(new Microsoft.Xna.Framework.Rectangle(1472, 640, 492, 116));
+                __instance.travelingMerchantBounds.Add(new Microsoft.Xna.Framework.Rectangle(1652, 744, 76, 48));
+                __instance.travelingMerchantBounds.Add(new Microsoft.Xna.Framework.Rectangle(1812, 744, 104, 48));
+                foreach (var travelingMerchantBound in __instance.travelingMerchantBounds)
+                {
+                    Utility.clearObjectsInArea(travelingMerchantBound, __instance);
+                }
+
+                if (Game1.IsMasterGame && Game1.netWorldState.Value.VisitsUntilY1Guarantee >= 0 && (dayOfMonth % 7 % 5 != 0))
+                {
+                    --Game1.netWorldState.Value.VisitsUntilY1Guarantee;
+                }
+            }
+            else
+            {
+                __instance.travelingMerchantBounds.Clear();
+                __instance.travelingMerchantDay = false;
+            }
+        }
+
         public static void SetUpShopOwner_TravelingMerchantApFlair_Postfix(ShopMenu __instance, string who)
         {
             try
