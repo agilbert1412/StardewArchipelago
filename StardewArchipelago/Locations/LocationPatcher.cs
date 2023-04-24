@@ -4,6 +4,8 @@ using HarmonyLib;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Locations.CodeInjections;
 using StardewArchipelago.Locations.Festival;
+using StardewArchipelago.Locations.GingerIsland;
+using StardewArchipelago.Locations.GingerIsland.Boat;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
@@ -22,12 +24,14 @@ namespace StardewArchipelago.Locations
     {
         private readonly ArchipelagoClient _archipelago;
         private readonly Harmony _harmony;
+        private readonly GingerIslandPatcher _gingerIslandPatcher;
 
-        public LocationPatcher(IMonitor monitor, ArchipelagoClient archipelago, BundleReader bundleReader, IModHelper modHelper, Harmony harmony, LocationChecker locationChecker, StardewItemManager itemManager)
+        public LocationPatcher(IMonitor monitor, IModHelper modHelper, Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker, BundleReader bundleReader, StardewItemManager itemManager)
         {
             _archipelago = archipelago;
             _harmony = harmony;
-            LocationsCodeInjections.Initialize(monitor, modHelper, _archipelago, bundleReader, locationChecker, itemManager);
+            _gingerIslandPatcher = new GingerIslandPatcher(monitor, modHelper, harmony, archipelago, locationChecker);
+            CodeInjectionInitializer.Initialize(monitor, modHelper, _archipelago, bundleReader, locationChecker, itemManager);
         }
 
         public void ReplaceAllLocationsRewardsWithChecks()
@@ -52,6 +56,7 @@ namespace StardewArchipelago.Locations
             AddFestivalLocations();
             ReplaceFriendshipsWithChecks();
             ReplaceSpecialOrdersWithChecks();
+            _gingerIslandPatcher.PatchGingerIslandLocations();
         }
 
         private void ReplaceCommunityCenterBundlesWithChecks()
@@ -98,7 +103,7 @@ namespace StardewArchipelago.Locations
             // This would need a transpile patch for SeedShop.draw and I don't think it's worth it.
             // _harmony.Patch(
             //     original: AccessTools.Method(typeof(SeedShop), nameof(SeedShop.draw)),
-            //     transpiler: new HarmonyMethod(typeof(BackpackInjections), nameof(LocationsCodeInjections.AnswerDialogueAction_BackPackPurchase_Prefix)));
+            //     transpiler: new HarmonyMethod(typeof(BackpackInjections), nameof(CodeInjectionInitializer.AnswerDialogueAction_BackPackPurchase_Prefix)));
         }
 
         private void ReplaceMineshaftChestsWithChecks()
