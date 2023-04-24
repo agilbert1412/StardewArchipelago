@@ -13,10 +13,10 @@ namespace StardewArchipelago.Items.Mail
             ActionParameter = parameter;
         }
 
-        public override void SendToPlayer(Mailman _mailman)
+        public override void SendToPlayer(Mailman mailman)
         {
             var key = GetMailKey();
-            _mailman.SendArchipelagoMail(key, ArchipelagoItem.ItemName, ArchipelagoItem.PlayerName, ArchipelagoItem.LocationName, GetEmbedString());
+            mailman.SendArchipelagoMail(key, ArchipelagoItem.ItemName, ArchipelagoItem.PlayerName, ArchipelagoItem.LocationName, GetEmbedString());
         }
 
         public override MailKey GetMailKey()

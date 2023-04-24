@@ -17,9 +17,9 @@ namespace StardewArchipelago.Items.Mail
             return $"%item craftingRecipe {RecipeItemName} %%";
         }
 
-        public override void SendToPlayer(Mailman _mailman)
+        public override void SendToPlayer(Mailman mailman)
         {
-            _mailman.SendArchipelagoMail(GetMailKey(), ArchipelagoItem.ItemName, ArchipelagoItem.PlayerName, ArchipelagoItem.LocationName, GetEmbedString());
+            mailman.SendArchipelagoMail(GetMailKey(), ArchipelagoItem.ItemName, ArchipelagoItem.PlayerName, ArchipelagoItem.LocationName, GetEmbedString());
         }
     }
 }

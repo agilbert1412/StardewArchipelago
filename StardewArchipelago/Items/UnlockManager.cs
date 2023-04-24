@@ -29,6 +29,7 @@ namespace StardewArchipelago.Items
             RegisterMineElevators();
             RegisterUniqueItems();
             RegisterIsolatedEventsItems();
+            RegisterGingerIslandRepairs();
         }
 
         public bool IsUnlock(string unlockName)
@@ -95,6 +96,11 @@ namespace StardewArchipelago.Items
             _unlockables.Add(BEACH_BRIDGE_AP_NAME, SendBeachBridgeLetter);
         }
 
+        private void RegisterGingerIslandRepairs()
+        {
+            _unlockables.Add("Boat Repair", RepairBoat);
+        }
+
         private void RegisterMineElevators()
         {
             _unlockables.Add(PROGRESSIVE_MINE_ELEVATOR_AP_NAME, SendProgressiveMineElevatorLetter);
@@ -125,6 +131,11 @@ namespace StardewArchipelago.Items
             return new LetterVanillaAttachment(receivedItem, "ccVault", true);
         }
 
+        private LetterVanillaAttachment RepairBoat(ReceivedItem receivedItem)
+        {
+            return new LetterVanillaAttachment(receivedItem, "willyBoatFixed", true);
+        }
+
         private LetterActionAttachment SendProgressiveBackpackLetter(ReceivedItem receivedItem)
         {
             return new LetterActionAttachment(receivedItem, LetterActionsKeys.Backpack);
@@ -132,7 +143,7 @@ namespace StardewArchipelago.Items
 
         private LetterAttachment SendProgressiveMineElevatorLetter(ReceivedItem receivedItem)
         {
-            return new LetterAttachment(receivedItem);
+            return new LetterInformationAttachment(receivedItem);
         }
 
         private LetterItemIdAttachment SendStardropLetter(ReceivedItem receivedItem)
@@ -230,7 +241,7 @@ namespace StardewArchipelago.Items
                 farmer.FarmingLevel = farmer.farmingLevel.Value + 1;
                 farmer.newLevels.Add(new Point(whichSkill, farmer.farmingLevel.Value));
             }
-            return new LetterAttachment(receivedItem);
+            return new LetterInformationAttachment(receivedItem);
         }
 
         private LetterAttachment SendProgressiveFishingLevel(ReceivedItem receivedItem)
@@ -242,7 +253,7 @@ namespace StardewArchipelago.Items
                 farmer.FishingLevel = farmer.fishingLevel.Value + 1;
                 farmer.newLevels.Add(new Point(whichSkill, farmer.fishingLevel.Value));
             }
-            return new LetterAttachment(receivedItem);
+            return new LetterInformationAttachment(receivedItem);
         }
 
         private LetterAttachment SendProgressiveForagingLevel(ReceivedItem receivedItem)
@@ -254,7 +265,7 @@ namespace StardewArchipelago.Items
                 farmer.ForagingLevel = farmer.foragingLevel.Value + 1;
                 farmer.newLevels.Add(new Point(whichSkill, farmer.foragingLevel.Value));
             }
-            return new LetterAttachment(receivedItem);
+            return new LetterInformationAttachment(receivedItem);
         }
 
         private LetterAttachment SendProgressiveMiningLevel(ReceivedItem receivedItem)
@@ -266,7 +277,7 @@ namespace StardewArchipelago.Items
                 farmer.MiningLevel = farmer.miningLevel.Value + 1;
                 farmer.newLevels.Add(new Point(whichSkill, farmer.miningLevel.Value));
             }
-            return new LetterAttachment(receivedItem);
+            return new LetterInformationAttachment(receivedItem);
         }
 
         private LetterAttachment SendProgressiveCombatLevel(ReceivedItem receivedItem)
@@ -278,7 +289,7 @@ namespace StardewArchipelago.Items
                 farmer.CombatLevel = farmer.combatLevel.Value + 1;
                 farmer.newLevels.Add(new Point(whichSkill, farmer.combatLevel.Value));
             }
-            return new LetterAttachment(receivedItem);
+            return new LetterInformationAttachment(receivedItem);
         }
 
         private void GiveExperienceToNextLevel(Farmer farmer, int whichSkill)

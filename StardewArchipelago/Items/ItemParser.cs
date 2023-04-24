@@ -58,7 +58,7 @@ namespace StardewArchipelago.Items
                 return singleItem.GetAsLetter(receivedItem);
             }
 
-            return new LetterAttachment(receivedItem);
+            return new LetterInformationAttachment(receivedItem);
             throw new ArgumentException($"Could not process item {receivedItem.ItemName}");
         }
 

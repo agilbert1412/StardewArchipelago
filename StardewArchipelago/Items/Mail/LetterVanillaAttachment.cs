@@ -13,9 +13,9 @@ namespace StardewArchipelago.Items.Mail
             NoLetter = noLetter;
         }
 
-        public override void SendToPlayer(Mailman _mailman)
+        public override void SendToPlayer(Mailman mailman)
         {
-            _mailman.SendVanillaMail(VanillaMailTitle, NoLetter);
+            mailman.SendVanillaMail(VanillaMailTitle, NoLetter);
         }
     }
 }

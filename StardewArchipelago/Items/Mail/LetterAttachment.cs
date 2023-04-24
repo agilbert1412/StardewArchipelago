@@ -2,7 +2,7 @@
 
 namespace StardewArchipelago.Items.Mail
 {
-    public class LetterAttachment
+    public abstract class LetterAttachment
     {
         public ReceivedItem ArchipelagoItem { get; private set; }
 
@@ -16,9 +16,9 @@ namespace StardewArchipelago.Items.Mail
             return "";
         }
 
-        public virtual void SendToPlayer(Mailman _mailman)
+        public virtual void SendToPlayer(Mailman mailman)
         {
-            _mailman.SendArchipelagoMail(GetMailKey(), ArchipelagoItem.ItemName, ArchipelagoItem.PlayerName, ArchipelagoItem.LocationName, "");
+            mailman.SendArchipelagoMail(GetMailKey(), ArchipelagoItem.ItemName, ArchipelagoItem.PlayerName, ArchipelagoItem.LocationName, "");
         }
 
         public virtual MailKey GetMailKey()
