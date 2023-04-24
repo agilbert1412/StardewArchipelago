@@ -158,9 +158,11 @@ namespace StardewArchipelago.GameModifications
                     return true; // run original logic
                 }
 
-                var ipAndPort = apInstance.IpAddressTextBox.Text.Split(":");
-                var ip = ipAndPort[0];
-                var port = int.Parse(ipAndPort[1]);
+                if (!apInstance.TryParseIpAddress(out var ip, out var port))
+                {
+                    return false;
+                }
+
                 var connected = _modEntry.ArchipelagoConnect(ip, port, apInstance.SlotNameTextBox.Text, apInstance.PasswordTextBox.Text, out var errorMessage);
 
                 if (!connected)

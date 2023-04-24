@@ -53,23 +53,44 @@ namespace StardewArchipelago.GameModifications
             Utility.drawTextWithShadow(b, slotNameLabel.name, Game1.smallFont, new Vector2(slotNameLabel.bounds.X, slotNameLabel.bounds.Y), slotNameLabelColor);
         }
 
-        public bool IpIsFormattedCorrectly()
+        private bool IpIsFormattedCorrectly()
         {
-            if (IpAddressTextBox.Text == null)
+            return TryParseIpAddress(out _, out _);
+        }
+
+        public bool TryParseIpAddress(out string url, out int port)
+        {
+            url = "";
+            port = 0;
+            if (IpAddressTextBox?.Text == null)
             {
                 return false;
             }
+
             var ipParts = IpAddressTextBox.Text.Split(":");
             var numberParts = ipParts.Length;
+            if (numberParts < 2 || numberParts > 3)
+            {
+                return false;
+            }
+
             var allPartsHaveContent = ipParts.All(x => x.Length > 0);
             if (numberParts == 2)
             {
-                return allPartsHaveContent && int.TryParse(ipParts[1], out _);
+                if (int.TryParse(ipParts[1], out port))
+                {
+                    url = ipParts[0];
+                    return allPartsHaveContent;
+                }
             }
 
             if (numberParts == 3)
             {
-                return allPartsHaveContent && ipParts[1].StartsWith("//") && ipParts[1].Length > 2 && int.TryParse(ipParts[2], out _);
+                if (int.TryParse(ipParts[2], out port) && allPartsHaveContent && ipParts[1].Length > 2 && ipParts[1].StartsWith("//"))
+                {
+                    url = $"{ipParts[0]}:{ipParts[1]}";
+                    return true;
+                }
             }
 
             return false;
