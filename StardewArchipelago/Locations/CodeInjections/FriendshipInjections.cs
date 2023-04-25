@@ -323,6 +323,11 @@ namespace StardewArchipelago.Locations.CodeInjections
 
         private static int ShuffledUpTo(string name)
         {
+            if (_archipelago.SlotData.ExcludeGingerIsland && name == "Leo")
+            {
+                return 0;
+            }
+
             var isBachelor = _bachelors.Contains(name);
             switch (_archipelago.SlotData.Friendsanity)
             {

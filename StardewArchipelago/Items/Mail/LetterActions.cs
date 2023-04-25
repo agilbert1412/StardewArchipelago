@@ -309,6 +309,18 @@ namespace StardewArchipelago.Items.Mail
             }
         }
 
+        private static void GainLeoTrust()
+        {
+            var location = Game1.getLocationFromName("Island Hut");
+            if (!(location is IslandHut IslandHut))
+            {
+                throw new Exception("Could not find island south");
+            }
+
+            IslandHut.firstParrotDone.Value = true;
+            IslandHut.parrotBoyEvent.Fire();
+        }
+
         private static void MoveTurtleToIslandWest()
         {
             var location = Game1.getLocationFromName("Island South");
@@ -332,6 +344,30 @@ namespace StardewArchipelago.Items.Mail
 
             Game1.addMailForTomorrow("Island_Resort", true, true);
             islandSouth.resortRestored.Value = true;
+        }
+
+        private static void RepairDigSiteBridge()
+        {
+            var location = Game1.getLocationFromName("Island North");
+            if (!(location is IslandNorth islandNorth))
+            {
+                throw new Exception("Could not find island south");
+            }
+
+            Game1.addMailForTomorrow("Island_UpgradeBridge", true, true);
+            islandNorth.bridgeFixed.Value = true;
+        }
+
+        private static void RestoreIslandTrader()
+        {
+            var location = Game1.getLocationFromName("Island North");
+            if (!(location is IslandNorth islandNorth))
+            {
+                throw new Exception("Could not find island south");
+            }
+
+            Game1.addMailForTomorrow("Island_UpgradeTrader", true, true);
+            islandNorth.traderActivated.Value = true;
         }
     }
 }

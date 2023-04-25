@@ -99,7 +99,12 @@ namespace StardewArchipelago.Items
         private void RegisterGingerIslandRepairs()
         {
             _unlockables.Add("Boat Repair", RepairBoat);
+            _unlockables.Add("Leo's Trust", GetLeoTrust);
+            _unlockables.Add("Island North Turtle", RemoveNorthernTurtle);
             _unlockables.Add("Island West Turtle", RemoveWesternTurtle);
+            _unlockables.Add("Dig Site Bridge", RepairDigSiteBridge);
+            _unlockables.Add("Island Trader", RestoreIslandTrader);
+            _unlockables.Add("Island Resort", RepairResort);
         }
 
         private void RegisterMineElevators()
@@ -137,9 +142,34 @@ namespace StardewArchipelago.Items
             return new LetterVanillaAttachment(receivedItem, "willyBoatFixed", true);
         }
 
+        private LetterActionAttachment GetLeoTrust(ReceivedItem receivedItem)
+        {
+            return new LetterActionAttachment(receivedItem, LetterActionsKeys.IslandUnlock, "Hut");
+        }
+
+        private LetterVanillaAttachment RemoveNorthernTurtle(ReceivedItem receivedItem)
+        {
+            return new LetterVanillaAttachment(receivedItem, "Island_FirstParrot", true);
+        }
+
         private LetterActionAttachment RemoveWesternTurtle(ReceivedItem receivedItem)
         {
             return new LetterActionAttachment(receivedItem, LetterActionsKeys.IslandUnlock, "Turtle");
+        }
+
+        private LetterActionAttachment RepairResort(ReceivedItem receivedItem)
+        {
+            return new LetterActionAttachment(receivedItem, LetterActionsKeys.IslandUnlock, "Resort");
+        }
+
+        private LetterActionAttachment RepairDigSiteBridge(ReceivedItem receivedItem)
+        {
+            return new LetterActionAttachment(receivedItem, LetterActionsKeys.IslandUnlock, "Bridge");
+        }
+
+        private LetterActionAttachment RestoreIslandTrader(ReceivedItem receivedItem)
+        {
+            return new LetterActionAttachment(receivedItem, LetterActionsKeys.IslandUnlock, "Trader");
         }
 
         private LetterActionAttachment SendProgressiveBackpackLetter(ReceivedItem receivedItem)

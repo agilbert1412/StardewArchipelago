@@ -30,8 +30,8 @@ namespace StardewArchipelago.Locations
         {
             _archipelago = archipelago;
             _harmony = harmony;
-            _gingerIslandPatcher = new GingerIslandPatcher(monitor, modHelper, harmony, archipelago, locationChecker);
             CodeInjectionInitializer.Initialize(monitor, modHelper, _archipelago, bundleReader, locationChecker, itemManager);
+            _gingerIslandPatcher = new GingerIslandPatcher(monitor, modHelper, harmony, archipelago, locationChecker);
         }
 
         public void ReplaceAllLocationsRewardsWithChecks()

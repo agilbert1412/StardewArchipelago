@@ -45,7 +45,7 @@ namespace StardewArchipelago.Locations.GingerIsland.Parrots
             }
         }
 
-        private static void AddResortParrot(IslandSouth __instance)
+        private static void AddResortParrot(IslandLocation __instance)
         {
             __instance.parrotUpgradePerches.Add(new ParrotUpgradePerch(__instance, new Point(17, 22),
                 new Microsoft.Xna.Framework.Rectangle(12, 18, 14, 7), 20, PurchaseResortParrot, IsResortParrotPurchased, "Resort", "Island_UpgradeHouse"));
@@ -63,7 +63,6 @@ namespace StardewArchipelago.Locations.GingerIsland.Parrots
 
         private static void AddWesternTurtleParrot(IslandSouth __instance)
         {
-
             __instance.parrotUpgradePerches.Add(new ParrotUpgradePerch(__instance, new Point(5, 9),
                 new Microsoft.Xna.Framework.Rectangle(1, 10, 3, 4), 10, PurchaseWesternTurtleParrot, IsWesternTurtleParrotPurchased, "Turtle", "Island_FirstParrot"));
         }
