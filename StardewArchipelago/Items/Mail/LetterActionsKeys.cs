@@ -23,5 +23,6 @@
         public const string GiveSlingshot = "GiveSlingshot";
         public const string GiveFurniture = "GiveFurniture";
         public const string GiveHat = "GiveHat";
+        public const string IslandUnlock = "IslandUnlock";
     }
 }

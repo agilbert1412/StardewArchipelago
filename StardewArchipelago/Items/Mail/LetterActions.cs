@@ -39,6 +39,7 @@ namespace StardewArchipelago.Items.Mail
             _letterActions.Add(LetterActionsKeys.GiveSlingshot, ReceiveSlingshot);
             _letterActions.Add(LetterActionsKeys.GiveFurniture, ReceiveFurniture);
             _letterActions.Add(LetterActionsKeys.GiveHat, ReceiveHat);
+            _letterActions.Add(LetterActionsKeys.IslandUnlock, PerformParrotUpgrade);
         }
 
         public void ExecuteLetterAction(string key, string parameter)
@@ -293,6 +294,44 @@ namespace StardewArchipelago.Items.Mail
             var id = int.Parse(hatId);
             var hat = new Hat(id);
             Game1.player.addItemByMenuIfNecessaryElseHoldUp(hat);
+        }
+
+        private void PerformParrotUpgrade(string whichUpgrade)
+        {
+            switch (whichUpgrade)
+            {
+                case "Turtle":
+                    MoveTurtleToIslandWest();
+                    return;
+                case "Resort":
+                    RestoreIslandResort();
+                    return;
+            }
+        }
+
+        private static void MoveTurtleToIslandWest()
+        {
+            var location = Game1.getLocationFromName("Island South");
+            if (!(location is IslandSouth islandSouth))
+            {
+                throw new Exception("Could not find island south");
+            }
+
+            Game1.addMailForTomorrow("Island_Turtle", true, true);
+            islandSouth.westernTurtleMoved.Value = true;
+            islandSouth.moveTurtleEvent.Fire();
+        }
+
+        private static void RestoreIslandResort()
+        {
+            var location = Game1.getLocationFromName("Island South");
+            if (!(location is IslandSouth islandSouth))
+            {
+                throw new Exception("Could not find island south");
+            }
+
+            Game1.addMailForTomorrow("Island_Resort", true, true);
+            islandSouth.resortRestored.Value = true;
         }
     }
 }

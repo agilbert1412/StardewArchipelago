@@ -7,6 +7,7 @@ using HarmonyLib;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Locations.CodeInjections;
 using StardewArchipelago.Locations.GingerIsland.Boat;
+using StardewArchipelago.Locations.GingerIsland.Parrots;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley.Locations;
@@ -33,6 +34,7 @@ namespace StardewArchipelago.Locations.GingerIsland
             }
 
             ReplaceBoatRepairWithChecks();
+            ReplaceParrotsWithChecks();
         }
 
         private void ReplaceBoatRepairWithChecks()
@@ -45,6 +47,14 @@ namespace StardewArchipelago.Locations.GingerIsland
             _harmony.Patch(
                 original: AccessTools.Method(typeof(BoatTunnel), nameof(BoatTunnel.answerDialogue)),
                 postfix: new HarmonyMethod(typeof(BoatTunnelInjections), nameof(BoatTunnelInjections.AnswerDialogue_BoatRepairAndUsage_Prefix))
+            );
+        }
+
+        private void ReplaceParrotsWithChecks()
+        {
+            _harmony.Patch(
+                original: AccessTools.Constructor(typeof(IslandSouth), new[]{typeof(string), typeof(string)}),
+                prefix: new HarmonyMethod(typeof(IslandSouthInjections), nameof(IslandSouthInjections.Constructor_ReplaceParrots_Postfix))
             );
         }
     }

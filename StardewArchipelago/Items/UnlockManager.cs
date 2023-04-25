@@ -99,6 +99,7 @@ namespace StardewArchipelago.Items
         private void RegisterGingerIslandRepairs()
         {
             _unlockables.Add("Boat Repair", RepairBoat);
+            _unlockables.Add("Island West Turtle", RemoveWesternTurtle);
         }
 
         private void RegisterMineElevators()
@@ -134,6 +135,11 @@ namespace StardewArchipelago.Items
         private LetterVanillaAttachment RepairBoat(ReceivedItem receivedItem)
         {
             return new LetterVanillaAttachment(receivedItem, "willyBoatFixed", true);
+        }
+
+        private LetterActionAttachment RemoveWesternTurtle(ReceivedItem receivedItem)
+        {
+            return new LetterActionAttachment(receivedItem, LetterActionsKeys.IslandUnlock, "Turtle");
         }
 
         private LetterActionAttachment SendProgressiveBackpackLetter(ReceivedItem receivedItem)
