@@ -13,6 +13,8 @@ namespace StardewArchipelago.Locations.CodeInjections
             IslandSouthInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             IslandHutInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             IslandNorthInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
+            IslandWestInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
+            VolcanoDungeonInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
         }
     }
 }

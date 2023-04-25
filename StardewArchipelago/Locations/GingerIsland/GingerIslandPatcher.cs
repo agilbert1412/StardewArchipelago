@@ -54,17 +54,27 @@ namespace StardewArchipelago.Locations.GingerIsland
         {
             _harmony.Patch(
                 original: AccessTools.Constructor(typeof(IslandSouth), new[]{typeof(string), typeof(string)}),
-                prefix: new HarmonyMethod(typeof(IslandSouthInjections), nameof(IslandSouthInjections.Constructor_ReplaceParrots_Postfix))
+                postfix: new HarmonyMethod(typeof(IslandSouthInjections), nameof(IslandSouthInjections.Constructor_ReplaceParrots_Postfix))
             );
 
             _harmony.Patch(
                 original: AccessTools.Constructor(typeof(IslandHut), new[] { typeof(string), typeof(string) }),
-                prefix: new HarmonyMethod(typeof(IslandHutInjections), nameof(IslandHutInjections.Constructor_ReplaceParrots_Postfix))
+                postfix: new HarmonyMethod(typeof(IslandHutInjections), nameof(IslandHutInjections.Constructor_ReplaceParrots_Postfix))
             );
 
             _harmony.Patch(
                 original: AccessTools.Constructor(typeof(IslandNorth), new[] { typeof(string), typeof(string) }),
-                prefix: new HarmonyMethod(typeof(IslandNorthInjections), nameof(IslandNorthInjections.Constructor_ReplaceParrots_Postfix))
+                postfix: new HarmonyMethod(typeof(IslandNorthInjections), nameof(IslandNorthInjections.Constructor_ReplaceParrots_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Constructor(typeof(IslandWest), new[] { typeof(string), typeof(string) }),
+                postfix: new HarmonyMethod(typeof(IslandWestInjections), nameof(IslandWestInjections.Constructor_ReplaceParrots_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(VolcanoDungeon), nameof(VolcanoDungeon.GenerateContents)),
+                postfix: new HarmonyMethod(typeof(VolcanoDungeonInjections), nameof(VolcanoDungeonInjections.GenerateContents_ReplaceParrots_Postfix))
             );
         }
     }

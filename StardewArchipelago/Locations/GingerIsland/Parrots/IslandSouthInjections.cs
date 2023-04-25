@@ -1,12 +1,9 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Stardew;
 using StardewModdingAPI;
-using StardewValley;
 using StardewValley.BellsAndWhistles;
 using StardewValley.Locations;
-using xTile.Dimensions;
 
 namespace StardewArchipelago.Locations.GingerIsland.Parrots
 {

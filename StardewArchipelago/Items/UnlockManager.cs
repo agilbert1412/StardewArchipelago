@@ -105,6 +105,10 @@ namespace StardewArchipelago.Items
             _unlockables.Add("Dig Site Bridge", RepairDigSiteBridge);
             _unlockables.Add("Island Trader", RestoreIslandTrader);
             _unlockables.Add("Island Resort", RepairResort);
+            _unlockables.Add("Farm Obelisk", CreateFarmObelisk);
+            _unlockables.Add("Island Farmhouse Mailbox", RepairIslandMailbox);
+            _unlockables.Add("Island Farmhouse", RepairIslandFarmhouse);
+            _unlockables.Add("Parrot Express", RepairParrotExpress);
         }
 
         private void RegisterMineElevators()
@@ -170,6 +174,26 @@ namespace StardewArchipelago.Items
         private LetterActionAttachment RestoreIslandTrader(ReceivedItem receivedItem)
         {
             return new LetterActionAttachment(receivedItem, LetterActionsKeys.IslandUnlock, "Trader");
+        }
+
+        private LetterActionAttachment CreateFarmObelisk(ReceivedItem receivedItem)
+        {
+            return new LetterActionAttachment(receivedItem, LetterActionsKeys.IslandUnlock, "Obelisk");
+        }
+
+        private LetterActionAttachment RepairIslandMailbox(ReceivedItem receivedItem)
+        {
+            return new LetterActionAttachment(receivedItem, LetterActionsKeys.IslandUnlock, "House_Mailbox");
+        }
+
+        private LetterActionAttachment RepairIslandFarmhouse(ReceivedItem receivedItem)
+        {
+            return new LetterActionAttachment(receivedItem, LetterActionsKeys.IslandUnlock, "House");
+        }
+
+        private LetterActionAttachment RepairParrotExpress(ReceivedItem receivedItem)
+        {
+            return new LetterActionAttachment(receivedItem, LetterActionsKeys.IslandUnlock, "ParrotPlatforms");
         }
 
         private LetterActionAttachment SendProgressiveBackpackLetter(ReceivedItem receivedItem)

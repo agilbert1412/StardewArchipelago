@@ -309,25 +309,33 @@ namespace StardewArchipelago.Items.Mail
             }
         }
 
-        private static void GainLeoTrust()
+        private const string _islandHut = "Island Hut";
+        private const string _islandSouth = "Island South";
+        private const string _islandNorth = "Island North";
+        private const string _islandWest = "Island West";
+
+        private static T FindLocation<T>(string locationName)
         {
-            var location = Game1.getLocationFromName("Island Hut");
-            if (!(location is IslandHut IslandHut))
+            var location = Game1.getLocationFromName(locationName);
+            if (!(location is T locationOfDesiredType))
             {
-                throw new Exception("Could not find island south");
+                throw new Exception($"Could not find location: {locationName}");
             }
 
-            IslandHut.firstParrotDone.Value = true;
-            IslandHut.parrotBoyEvent.Fire();
+            return locationOfDesiredType;
+        }
+
+        private static void GainLeoTrust()
+        {
+            var islandHut = FindLocation<IslandHut>(_islandHut);
+
+            islandHut.firstParrotDone.Value = true;
+            islandHut.parrotBoyEvent.Fire();
         }
 
         private static void MoveTurtleToIslandWest()
         {
-            var location = Game1.getLocationFromName("Island South");
-            if (!(location is IslandSouth islandSouth))
-            {
-                throw new Exception("Could not find island south");
-            }
+            var islandSouth = FindLocation<IslandSouth>(_islandSouth);
 
             Game1.addMailForTomorrow("Island_Turtle", true, true);
             islandSouth.westernTurtleMoved.Value = true;
@@ -336,11 +344,7 @@ namespace StardewArchipelago.Items.Mail
 
         private static void RestoreIslandResort()
         {
-            var location = Game1.getLocationFromName("Island South");
-            if (!(location is IslandSouth islandSouth))
-            {
-                throw new Exception("Could not find island south");
-            }
+            var islandSouth = FindLocation<IslandSouth>(_islandSouth);
 
             Game1.addMailForTomorrow("Island_Resort", true, true);
             islandSouth.resortRestored.Value = true;
@@ -348,11 +352,7 @@ namespace StardewArchipelago.Items.Mail
 
         private static void RepairDigSiteBridge()
         {
-            var location = Game1.getLocationFromName("Island North");
-            if (!(location is IslandNorth islandNorth))
-            {
-                throw new Exception("Could not find island south");
-            }
+            var islandNorth = FindLocation<IslandNorth>(_islandNorth);
 
             Game1.addMailForTomorrow("Island_UpgradeBridge", true, true);
             islandNorth.bridgeFixed.Value = true;
@@ -360,14 +360,42 @@ namespace StardewArchipelago.Items.Mail
 
         private static void RestoreIslandTrader()
         {
-            var location = Game1.getLocationFromName("Island North");
-            if (!(location is IslandNorth islandNorth))
-            {
-                throw new Exception("Could not find island south");
-            }
+            var islandNorth = FindLocation<IslandNorth>(_islandNorth);
 
             Game1.addMailForTomorrow("Island_UpgradeTrader", true, true);
             islandNorth.traderActivated.Value = true;
+        }
+
+        private static void CreateFarmObelisk()
+        {
+            var islandWest = FindLocation<IslandWest>(_islandWest);
+
+            Game1.addMailForTomorrow("Island_W_Obelisk", true, true);
+            islandWest.farmObelisk.Value = true;
+        }
+
+        private static void RepairIslandMailbox()
+        {
+            var islandWest = FindLocation<IslandWest>(_islandWest);
+
+            Game1.addMailForTomorrow("Island_UpgradeHouse_Mailbox", true, true);
+            islandWest.farmhouseMailbox.Value = true;
+        }
+
+        private static void RepairIslandFarmhouse()
+        {
+            var islandWest = FindLocation<IslandWest>(_islandWest);
+
+            Game1.addMailForTomorrow("Island_UpgradeHouse", true, true);
+            islandWest.farmhouseRestored.Value = true;
+        }
+
+        private static void RepairParrotExpress()
+        {
+            var islandWest = FindLocation<IslandWest>(_islandWest);
+
+            Game1.addMailForTomorrow("Island_UpgradeParrotPlatform", true, true);
+            Game1.netWorldState.Value.ParrotPlatformsUnlocked.Value = true;
         }
     }
 }
