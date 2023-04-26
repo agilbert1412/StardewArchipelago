@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Netcode;
+using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Objects;
@@ -11,11 +13,13 @@ namespace StardewArchipelago.Items.Mail
 {
     public class LetterActions
     {
+        private readonly IModHelper _modHelper;
         private readonly Mailman _mail;
         private Dictionary<string, Action<string>> _letterActions;
 
-        public LetterActions(Mailman mail)
+        public LetterActions(IModHelper modHelper, Mailman mail)
         {
+            _modHelper = modHelper;
             _mail = mail;
             _letterActions = new Dictionary<string, Action<string>>();
             _letterActions.Add(LetterActionsKeys.Friendship, IncreaseFriendshipWithEveryone);
@@ -306,6 +310,33 @@ namespace StardewArchipelago.Items.Mail
                 case "Resort":
                     RestoreIslandResort();
                     return;
+                case "Hut":
+                    GainLeoTrust();
+                    return;
+                case "Bridge":
+                    RepairDigSiteBridge();
+                    return;
+                case "Trader":
+                    RestoreIslandTrader();
+                    return;
+                case "Obelisk":
+                    CreateFarmObelisk();
+                    return;
+                case "House_Mailbox":
+                    RepairIslandMailbox();
+                    return;
+                case "House":
+                    RepairIslandFarmhouse();
+                    return;
+                case "ParrotPlatforms":
+                    RepairParrotExpress();
+                    return;
+                case "VolcanoBridge":
+                    ConstructVolcanoBridge();
+                    return;
+                case "VolcanoShortcutOut":
+                    OpenVolcanoExitShortcut();
+                    return;
             }
         }
 
@@ -313,6 +344,7 @@ namespace StardewArchipelago.Items.Mail
         private const string _islandSouth = "Island South";
         private const string _islandNorth = "Island North";
         private const string _islandWest = "Island West";
+        private const string _volcanoDungeon = "Volcano Dungeon";
 
         private static T FindLocation<T>(string locationName)
         {
@@ -396,6 +428,25 @@ namespace StardewArchipelago.Items.Mail
 
             Game1.addMailForTomorrow("Island_UpgradeParrotPlatform", true, true);
             Game1.netWorldState.Value.ParrotPlatformsUnlocked.Value = true;
+        }
+
+        private void ConstructVolcanoBridge()
+        {
+            var volcanoDungeon = FindLocation<VolcanoDungeon>(_volcanoDungeon);
+
+            Game1.addMailForTomorrow("Island_VolcanoBridge", true, true);
+            var bridgeUnlockedField = _modHelper.Reflection.GetField<NetBool>(volcanoDungeon, "bridgeUnlocked");
+            bridgeUnlockedField.GetValue().Value = true;
+        }
+
+        private void OpenVolcanoExitShortcut()
+        {
+            var volcanoDungeon = FindLocation<VolcanoDungeon>(_volcanoDungeon);
+
+            Game1.addMailForTomorrow("Island_VolcanoShortcutOut", true, true);
+            var shortcutOutUnlockedField = _modHelper.Reflection.GetField<NetBool>(volcanoDungeon, "shortcutOutUnlocked");
+            shortcutOutUnlockedField.GetValue().Value = true;
+
         }
     }
 }

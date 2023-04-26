@@ -109,6 +109,8 @@ namespace StardewArchipelago.Items
             _unlockables.Add("Island Farmhouse Mailbox", RepairIslandMailbox);
             _unlockables.Add("Island Farmhouse", RepairIslandFarmhouse);
             _unlockables.Add("Parrot Express", RepairParrotExpress);
+            _unlockables.Add("Volcano Bridge", ConstructVolcanoBridge);
+            _unlockables.Add("Volcano Exit Shortcut", OpenVolcanoExitShortcut);
         }
 
         private void RegisterMineElevators()
@@ -194,6 +196,16 @@ namespace StardewArchipelago.Items
         private LetterActionAttachment RepairParrotExpress(ReceivedItem receivedItem)
         {
             return new LetterActionAttachment(receivedItem, LetterActionsKeys.IslandUnlock, "ParrotPlatforms");
+        }
+
+        private LetterActionAttachment ConstructVolcanoBridge(ReceivedItem receivedItem)
+        {
+            return new LetterActionAttachment(receivedItem, LetterActionsKeys.IslandUnlock, "VolcanoBridge");
+        }
+
+        private LetterActionAttachment OpenVolcanoExitShortcut(ReceivedItem receivedItem)
+        {
+            return new LetterActionAttachment(receivedItem, LetterActionsKeys.IslandUnlock, "VolcanoShortcutOut");
         }
 
         private LetterActionAttachment SendProgressiveBackpackLetter(ReceivedItem receivedItem)
