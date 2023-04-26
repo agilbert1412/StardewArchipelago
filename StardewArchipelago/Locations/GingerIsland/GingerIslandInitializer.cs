@@ -1,6 +1,7 @@
 ﻿using StardewArchipelago.Archipelago;
 using StardewArchipelago.Locations.GingerIsland.Boat;
 using StardewArchipelago.Locations.GingerIsland.Parrots;
+using StardewArchipelago.Locations.GingerIsland.WalnutRoom;
 using StardewModdingAPI;
 
 namespace StardewArchipelago.Locations.CodeInjections
@@ -9,6 +10,7 @@ namespace StardewArchipelago.Locations.CodeInjections
     {
         public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
+            WalnutRoomDoorInjection.Initialize(monitor, modHelper, archipelago, locationChecker);
             BoatTunnelInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             IslandSouthInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             IslandHutInjections.Initialize(monitor, modHelper, archipelago, locationChecker);

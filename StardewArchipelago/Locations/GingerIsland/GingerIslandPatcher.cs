@@ -8,6 +8,7 @@ using StardewArchipelago.Archipelago;
 using StardewArchipelago.Locations.CodeInjections;
 using StardewArchipelago.Locations.GingerIsland.Boat;
 using StardewArchipelago.Locations.GingerIsland.Parrots;
+using StardewArchipelago.Locations.GingerIsland.WalnutRoom;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley.Locations;
@@ -33,8 +34,18 @@ namespace StardewArchipelago.Locations.GingerIsland
                 return;
             }
 
+            UnlockWalnutRoomBasedOnApItem();
             ReplaceBoatRepairWithChecks();
             ReplaceParrotsWithChecks();
+
+        }
+
+        private void UnlockWalnutRoomBasedOnApItem()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(IslandWest), nameof(IslandWest.checkAction)),
+                prefix: new HarmonyMethod(typeof(WalnutRoomDoorInjection), nameof(WalnutRoomDoorInjection.CheckAction_WalnutRoomDoorBasedOnAPItem_Prefix))
+            );
         }
 
         private void ReplaceBoatRepairWithChecks()
