@@ -2,6 +2,7 @@
 using StardewModdingAPI;
 using StardewValley;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using StardewArchipelago.Locations;
 using StardewValley.Locations;
@@ -102,12 +103,51 @@ namespace StardewArchipelago.Goals
                 return;
             }
 
+            CheckMasterAnglerWithoutIslandFish();
             if (!Game1.player.hasOrWillReceiveMail("CF_Fish"))
             {
                 return;
             }
 
             _archipelago.ReportGoalCompletion();
+        }
+
+        private static void CheckMasterAnglerWithoutIslandFish()
+        {
+            if (!_archipelago.SlotData.ExcludeGingerIsland || Game1.player.hasOrWillReceiveMail("CF_Fish"))
+            {
+                return;
+            }
+
+            var uniqueFishCaught = 0;
+            var totalFishExist = 0;
+            foreach (var (id, information) in Game1.objectInformation)
+            {
+                var isFish = information.Split('/')[3].Contains("Fish");
+                var isTrash = (id >= 167 && id <= 172);
+                var isLegendaryFamily = (id >= 898 && id <= 902);
+                var isIslandFish = (id >= 836 && id <= 838);
+                if (!isFish || isTrash || isLegendaryFamily || isIslandFish)
+                {
+                    continue;
+                }
+
+                ++totalFishExist;
+                if (Game1.player.fishCaught.ContainsKey(id))
+                {
+                    ++uniqueFishCaught;
+                }
+            }
+
+            if (uniqueFishCaught < totalFishExist)
+            {
+                return;
+            }
+
+            if (!Game1.player.hasOrWillReceiveMail("CF_Fish"))
+            {
+                Game1.addMailForTomorrow("CF_Fish");
+            }
         }
 
         public static void CheckCompleteCollectionGoalCompletion()
