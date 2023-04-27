@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using HarmonyLib;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.GameModifications.CodeInjections;
@@ -44,6 +45,7 @@ namespace StardewArchipelago.GameModifications
             PatchForest();
             PatchEntrances();
             PatchSeedShops();
+            PatchJodiFishQuest();
             _startingResources.GivePlayerStartingResources();
         }
 
@@ -157,6 +159,43 @@ namespace StardewArchipelago.GameModifications
                 original: AccessTools.Method(typeof(Utility), nameof(Utility.getJojaStock)),
                 prefix: new HarmonyMethod(typeof(SeedShopsInjections), nameof(SeedShopsInjections.GetJojaStock_FullCostco_Prefix))
             );
+        }
+
+        private void PatchJodiFishQuest()
+        {
+            if (_archipelago.SlotData.EntranceRandomization == EntranceRandomization.Disabled)
+            {
+                return;
+            }
+
+            var jodiHouseEvents = Game1.content.Load<Dictionary<string, string>>("Data\\Events\\SamHouse");
+            const string originalTimeRequired = "1800 1950";
+            const string newTimeRequired = "1200 2250";
+            var eventsToFix = new HashSet<string>();
+
+            foreach (var (key, value) in jodiHouseEvents)
+            {
+                if (!key.Contains(originalTimeRequired))
+                {
+                    continue;
+                }
+
+                eventsToFix.Add(key);
+            }
+
+            foreach (var eventToFix in eventsToFix)
+            {
+                var eventValue = jodiHouseEvents[eventToFix];
+                jodiHouseEvents.Remove(eventToFix);
+                var fixedKey = eventToFix.Replace(originalTimeRequired, newTimeRequired);
+                jodiHouseEvents.Add(fixedKey, eventValue);
+            }
+
+            var quests = Game1.content.Load<Dictionary<int, string>>("Data\\Quests");
+            var fishQuest = quests[22];
+            var modifiedFishQuest = fishQuest.Replace("dinner at 7:00 PM.", "dinner.")
+                .Replace("bass at 7:00 PM.", "bass in the afternoon.");
+            quests[22] = modifiedFishQuest;
         }
     }
 }
