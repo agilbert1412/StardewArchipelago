@@ -58,7 +58,7 @@ namespace StardewArchipelago.Items
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(GetMovementSpeed_AddApBuffs_Postfix)}:\n{ex}", LogLevel.Error);
+                _monitor.Log($"Failed in {nameof(DailyLuck_AddApBuffs_Postfix)}:\n{ex}", LogLevel.Error);
                 return;
             }
         }
