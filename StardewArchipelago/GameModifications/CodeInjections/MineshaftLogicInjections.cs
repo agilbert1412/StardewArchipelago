@@ -6,7 +6,6 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 {
     public static class MineshaftLogicInjections
     {
-
         private static IMonitor _monitor;
 
         public static void Initialize(IMonitor monitor)
