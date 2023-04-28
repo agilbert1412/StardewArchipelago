@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using HarmonyLib;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.GameModifications.CodeInjections;
 using StardewArchipelago.GameModifications.Seasons;
@@ -229,6 +231,8 @@ namespace StardewArchipelago.GameModifications
             );
         }
 
+        private const int FISH_CASSEROLE_QUEST_ID = 22;
+
         private void PatchJodiFishQuest()
         {
             if (_archipelago.SlotData.EntranceRandomization == EntranceRandomization.Disabled)
@@ -236,6 +240,13 @@ namespace StardewArchipelago.GameModifications
                 return;
             }
 
+            ChangeFishCasseroleEventTriggerTimes();
+            ChangeFishCasseroleQuestText();
+            RefreshFishCasseroleQuestIfAlreadyHasIt();
+        }
+
+        private static void ChangeFishCasseroleEventTriggerTimes()
+        {
             var jodiHouseEvents = Game1.content.Load<Dictionary<string, string>>("Data\\Events\\SamHouse");
             const string originalTimeRequired = "1800 1950";
             const string newTimeRequired = "1200 2250";
@@ -258,12 +269,36 @@ namespace StardewArchipelago.GameModifications
                 var fixedKey = eventToFix.Replace(originalTimeRequired, newTimeRequired);
                 jodiHouseEvents.Add(fixedKey, eventValue);
             }
+        }
 
-            var quests = Game1.content.Load<Dictionary<int, string>>("Data\\Quests");
-            var fishQuest = quests[22];
+        private static void ChangeFishCasseroleQuestText()
+        {
+            ChangeFishCasseroleQuestText(Game1.content);
+            ChangeFishCasseroleQuestText(Game1.temporaryContent);
+        }
+
+        private static void ChangeFishCasseroleQuestText(ContentManager contentManager)
+        {
+            var quests = contentManager.Load<Dictionary<int, string>>("Data\\Quests");
+            var fishQuest = quests[FISH_CASSEROLE_QUEST_ID];
             var modifiedFishQuest = fishQuest.Replace("dinner at 7:00 PM.", "dinner.")
                 .Replace("bass at 7:00 PM.", "bass in the afternoon.");
-            quests[22] = modifiedFishQuest;
+            quests[FISH_CASSEROLE_QUEST_ID] = modifiedFishQuest;
+        }
+
+        private static void RefreshFishCasseroleQuestIfAlreadyHasIt()
+        {
+            foreach (var quest in Game1.player.questLog.ToArray())
+            {
+                if (quest.id.Value != FISH_CASSEROLE_QUEST_ID || quest.completed.Value ||
+                    !quest.currentObjective.Contains("7:00 PM"))
+                {
+                    continue;
+                }
+
+                Game1.player.removeQuest(FISH_CASSEROLE_QUEST_ID);
+                Game1.player.addQuest(FISH_CASSEROLE_QUEST_ID);
+            }
         }
 
         private void PatchLostAndFoundBox()
