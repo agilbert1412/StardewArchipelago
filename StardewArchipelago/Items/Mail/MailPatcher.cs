@@ -30,7 +30,7 @@ namespace StardewArchipelago.Items.Mail
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.mailbox)),
-                postfix: new HarmonyMethod(typeof(MailPatcher), nameof(MailPatcher.Mailbox_HideEmptyApLetters_Prefix))
+                prefix: new HarmonyMethod(typeof(MailPatcher), nameof(MailPatcher.Mailbox_HideEmptyApLetters_Prefix))
             );
         }
 

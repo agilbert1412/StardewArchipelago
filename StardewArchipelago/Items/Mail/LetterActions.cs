@@ -161,7 +161,7 @@ namespace StardewArchipelago.Items.Mail
 
             if (upgradedTool == null)
             {
-                throw new Exception($"Could not find a tool of type {toolGenericName} in this entire world");
+                throw new Exception($"Could not find a upgradedTool of type {toolGenericName} in this entire world");
             }
 
             Game1.player.holdUpItemThenMessage(upgradedTool);
@@ -171,20 +171,40 @@ namespace StardewArchipelago.Items.Mail
         {
             var player = Game1.player;
             var toolName = toolGenericName.Replace(" ", "_");
-            foreach (var playerItem in player.Items)
+            if (TryUpgradeToolInInventory(player, toolName, out var upgradedTool))
             {
-                if (playerItem is not Tool toolToUpgrade || !toolToUpgrade.Name.Replace(" ", "_").EndsWith(toolName))
-                {
-                    continue;
-                }
-
-                if (toolToUpgrade.UpgradeLevel < 4)
-                {
-                    toolToUpgrade.UpgradeLevel++;
-                }
-                return toolToUpgrade;
+                return upgradedTool;
             }
 
+            if (TryUpgradeToolInChests(toolName, out upgradedTool))
+            {
+                return upgradedTool;
+            }
+
+            if (TryUpgradeToolInLostAndFoundBox(player, toolName, out upgradedTool))
+            {
+                return upgradedTool;
+            }
+
+            return null;
+        }
+
+        private static bool TryUpgradeToolInInventory(Farmer player, string toolName, out Tool upgradedTool)
+        {
+            foreach (var playerItem in player.Items)
+            {
+                if (TryUpgradeCorrectTool(toolName, playerItem, out upgradedTool))
+                {
+                    return true;
+                }
+            }
+
+            upgradedTool = null;
+            return false;
+        }
+
+        private static bool TryUpgradeToolInChests(string toolName, out Tool upgradedTool)
+        {
             foreach (var gameLocation in Game1.locations)
             {
                 foreach (var (tile, gameObject) in gameLocation.Objects.Pairs)
@@ -196,21 +216,49 @@ namespace StardewArchipelago.Items.Mail
 
                     foreach (var chestItem in chest.items)
                     {
-                        if (chestItem is not Tool toolToUpgrade || !toolToUpgrade.Name.Replace(" ", "_").Contains(toolName))
+                        if (TryUpgradeCorrectTool(toolName, chestItem, out upgradedTool))
                         {
-                            continue;
+                            return true;
                         }
-
-                        if (toolToUpgrade.UpgradeLevel < 4)
-                        {
-                            toolToUpgrade.UpgradeLevel++;
-                        }
-                        return toolToUpgrade;
                     }
                 }
             }
 
-            return null;
+            upgradedTool = null;
+            return false;
+        }
+
+        private static bool TryUpgradeToolInLostAndFoundBox(Farmer player, string toolName, out Tool upgradedTool)
+        {
+            foreach (var lostAndFoundItem in player.team.returnedDonations)
+            {
+                if (TryUpgradeCorrectTool(toolName, lostAndFoundItem, out upgradedTool))
+                {
+                    return true;
+                }
+            }
+
+            upgradedTool = null;
+            return false;
+        }
+
+        private static bool TryUpgradeCorrectTool(string toolName, Item item, out Tool upgradedTool)
+        {
+            if (item is not Tool toolToUpgrade || !toolToUpgrade.Name.Replace(" ", "_").Contains(toolName))
+            {
+                upgradedTool = null;
+                return false;
+            }
+
+            if (toolToUpgrade.UpgradeLevel < 4)
+            {
+                toolToUpgrade.UpgradeLevel++;
+            }
+
+            {
+                upgradedTool = toolToUpgrade;
+                return true;
+            }
         }
 
         private static void ReceiveTrashCanUpgrade()
