@@ -95,12 +95,7 @@ namespace StardewArchipelago.Archipelago
                 return true;
             }
 
-            if (DisableAppearanceRandomizerCommand(messageLower))
-            {
-                return true;
-            }
-
-            if (HandleAppearanceRandomizationCommand(message))
+            if (HandleOverrideSpriteRandomizerCommand(messageLower))
             {
                 return true;
             }
@@ -240,69 +235,26 @@ namespace StardewArchipelago.Archipelago
             return trimmedToMinimum is "jotpk" or "journeyoftheprairieking" or "journey" or "prairieking" or "prairie" or "king";
         }
 
-        private static bool DisableAppearanceRandomizerCommand(string message)
+        private static bool HandleOverrideSpriteRandomizerCommand(string message)
         {
             if (!message.ToLower().Equals($"{COMMAND_PREFIX}sprite"))
             {
                 return false;
             }
 
-            var disabled = ModEntry.Instance._state.DisableAppearanceRandomizerOverride;
-            disabled = !disabled;
-            ModEntry.Instance._state.DisableAppearanceRandomizerOverride = disabled;
-            var disabledString = disabled ? "off" : "on";
-            Game1.chatBox?.addMessage($"Appearance Randomizer is now {disabledString}. Changes will take effect after sleeping, then reloading your game.", Color.Gold);
-            return true;
-        }
-
-        private static bool HandleAppearanceRandomizationCommand(string message)
-        {
-            var sprite = $"{COMMAND_PREFIX}sprite ";
-            if (!message.StartsWith(sprite))
+            var currentOverride = ModEntry.Instance._state.AppearanceRandomizerOverride;
+            var overrideStatus = "off";
+            if (currentOverride == null || currentOverride == AppearanceRandomization.Disabled)
             {
-                return false;
+                currentOverride = AppearanceRandomization.Villagers;
+                overrideStatus = "on";
             }
-
-            var remainder = message.Substring(sprite.Length).Split(" ");
-            if (remainder.Length < 1)
+            else
             {
-                Game1.chatBox?.addMessage($"You need to choose an option from [Disabled|Villagers|All|Chaos]", Color.Gold);
-                return true;
+                currentOverride = AppearanceRandomization.Disabled;
             }
-
-            var setting = remainder[0].ToLower();
-            AppearanceRandomization parsedSetting;
-            switch (setting)
-            {
-                case "villagers":
-                    parsedSetting = AppearanceRandomization.Villagers;
-                    break;
-                case "all":
-                    parsedSetting = AppearanceRandomization.All;
-                    break;
-                case "chaos":
-                    parsedSetting = AppearanceRandomization.Chaos;
-                    break;
-                case "disabled":
-                    parsedSetting = AppearanceRandomization.Disabled;
-                    break;
-                default:
-                    Game1.chatBox?.addMessage($"You need to choose an option from [Disabled|Villagers|All|Chaos]", Color.Gold);
-                    return true;
-            }
-
-            var daily = false;
-            if (remainder.Length >= 2)
-            {
-                bool.TryParse(remainder[1], out daily);
-            }
-
-            var dailyString = daily ? " (Daily)" : "";
-            _archipelago.SlotData.AppearanceRandomization = parsedSetting;
-            _archipelago.SlotData.AppearanceRandomizationDaily = daily;
-            _appearanceRandomizer.ShuffleCharacterAppearances();
-            Game1.chatBox?.addMessage($"Switch Randomization to {parsedSetting}{dailyString}", Color.Gold);
-
+            ModEntry.Instance._state.AppearanceRandomizerOverride = currentOverride;
+            Game1.chatBox?.addMessage($"Sprite Randomizer is now {overrideStatus}. Changes will take effect after sleeping, then reloading your game.", Color.Gold);
             return true;
         }
 
@@ -327,7 +279,7 @@ namespace StardewArchipelago.Archipelago
             Game1.chatBox?.addMessage($"{COMMAND_PREFIX}deathlink - Toggles Deathlink on/off. Saves when sleeping", Color.Gold);
             Game1.chatBox?.addMessage($"{COMMAND_PREFIX}sprite - Enable/Disable the Appearance Randomizer", Color.Gold);
 #if DEBUG
-            Game1.chatBox?.addMessage($"{COMMAND_PREFIX}sprite [Disabled|Villagers|All|Chaos] [daily:true/false] - Sets your appearance randomizer setting", Color.Gold);
+            Game1.chatBox?.addMessage($"{COMMAND_PREFIX}sprite - Enable/Disable the sprite randomizer", Color.Gold);
             Game1.chatBox?.addMessage($"{COMMAND_PREFIX}sync - Sends a Sync packet to the Archipelago server", Color.Gold);
 #endif
             Game1.chatBox?.addMessage($"{COMMAND_PREFIX}arcade_release [game] - Releases all remaining checks in an arcade machine that you have already completed", Color.Gold);

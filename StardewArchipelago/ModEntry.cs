@@ -147,7 +147,7 @@ namespace StardewArchipelago
             }
 
             _seasonsRandomizer = new SeasonsRandomizer(Monitor, _helper, _archipelago, _state);
-            _state.DisableAppearanceRandomizerOverride = false;
+            _state.AppearanceRandomizerOverride = null;
             _state.SeasonsOrder = new List<string>();
             _state.SeasonsOrder.Add(_seasonsRandomizer.GetFirstSeason());
             SeasonsRandomizer.SetSeason(_state.SeasonsOrder.Last());
@@ -287,13 +287,9 @@ namespace StardewArchipelago
             _mail.SendTomorrow();
             PlayerBuffInjections.CheckForApBuffs();
             Entrances.UpdateDynamicEntrances();
-            if (_state.DisableAppearanceRandomizerOverride)
+            if (_state.AppearanceRandomizerOverride != null)
             {
-                _archipelago.SlotData.AppearanceRandomization = AppearanceRandomization.Disabled;
-            }
-            else
-            {
-                _archipelago.SlotData.AppearanceRandomization = AppearanceRandomization.Villagers;
+                _archipelago.SlotData.AppearanceRandomization = _state.AppearanceRandomizerOverride.Value;
             }
             _appearanceRandomizer.ShuffleCharacterAppearances();
         }
