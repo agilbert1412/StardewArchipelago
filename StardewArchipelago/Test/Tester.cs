@@ -44,7 +44,7 @@ namespace StardewArchipelago.Test
                 var attachment = _itemParser.ProcessItem(receivedItem);
                 attachment.SendToPlayer(_mail);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 _monitor.Log($"Item: \"{itemName}\" was not processed properly by the mod", LogLevel.Error);
             }
@@ -68,7 +68,7 @@ namespace StardewArchipelago.Test
                     var attachment = _itemParser.ProcessItem(receivedItem);
                     attachment.SendToPlayer(_mail);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     _monitor.Log($"Item: \"{key}\" was not processed properly by the mod", LogLevel.Error);
                 }

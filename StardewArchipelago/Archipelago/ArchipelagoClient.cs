@@ -5,7 +5,7 @@ using Archipelago.MultiClient.Net;
 using Archipelago.MultiClient.Net.BounceFeatures.DeathLink;
 using Archipelago.MultiClient.Net.Enums;
 using Archipelago.MultiClient.Net.Helpers;
-using Archipelago.MultiClient.Net.Models;
+using Archipelago.MultiClient.Net.MessageLog.Messages;
 using Archipelago.MultiClient.Net.Packets;
 using HarmonyLib;
 using StardewArchipelago.Extensions;
@@ -196,31 +196,25 @@ namespace StardewArchipelago.Archipelago
 
             fullMessage = fullMessage.Replace("<3", "<");
 
-            if (fullMessage.StartsWith($"{SlotData.SlotName}: ") || fullMessage.Contains($"({SlotData.SlotName}): "))
+            switch (message)
             {
-                return;
-            }
-
-            var messageParts = fullMessage.Split(':');
-            var color = Color.Gray;
-            if (message is ItemSendLogMessage itemSendLogMessage)
-            {
-                var receiver = itemSendLogMessage.ReceivingPlayerSlot;
-                var sender = itemSendLogMessage.SendingPlayerSlot;
-
-                if (_session.Players.GetPlayerName(receiver) != SlotData.SlotName &&
-                    _session.Players.GetPlayerName(sender) != SlotData.SlotName)
+                case ChatLogMessage chatMessage:
                 {
+                    var color = chatMessage.Player.Name.GetAsBrightColor();
+                    Game1.chatBox?.addMessage(fullMessage, color);
                     return;
                 }
-                color = Color.Gold;
+                case ItemSendLogMessage itemSendLogMessage:
+                {
+                    if (!itemSendLogMessage.IsRelatedToActivePlayer)
+                    {
+                        return;
+                    }
+                    var color = Color.Gold;
+                    Game1.chatBox?.addMessage(fullMessage, color);
+                    return;
+                }
             }
-            else if (messageParts.Length >= 2)
-            {
-                var senderName = messageParts[0];
-                color = senderName.GetAsBrightColor();
-            }
-            Game1.chatBox?.addMessage(fullMessage, color);
         }
 
         public void SendMessage(string text)

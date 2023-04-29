@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
@@ -16,15 +17,17 @@ namespace StardewArchipelago.Archipelago
         public const string COMMAND_PREFIX = "!!";
 
         private static IMonitor _monitor;
+        private static IModHelper _helper;
         private static ArchipelagoClient _archipelago;
         private Harmony _harmony;
         private static GiftHandler _giftHandler;
         private static BankHandler _bankHandler;
         private static AppearanceRandomizer _appearanceRandomizer;
 
-        public ChatForwarder(IMonitor monitor, Harmony harmony, ArchipelagoClient archipelago, GiftHandler giftHandler, AppearanceRandomizer appearanceRandomizer)
+        public ChatForwarder(IMonitor monitor, IModHelper helper, Harmony harmony, ArchipelagoClient archipelago, GiftHandler giftHandler, AppearanceRandomizer appearanceRandomizer)
         {
             _monitor = monitor;
+            _helper = helper;
             _harmony = harmony;
             _archipelago = archipelago;
             _giftHandler = giftHandler;
@@ -54,6 +57,9 @@ namespace StardewArchipelago.Archipelago
                     return;
                 }
 
+                var messagesField = _helper.Reflection.GetField<List<ChatMessage>>(__instance, "messages");
+                var messages = messagesField.GetValue();
+                messages.RemoveAt(messages.Count - 1);
                 _archipelago.SendMessage(message);
             }
             catch (Exception ex)
