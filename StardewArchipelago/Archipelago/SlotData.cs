@@ -357,6 +357,8 @@ namespace StardewArchipelago.Archipelago
         MasterAngler = 4,
         CompleteCollection = 5,
         FullHouse = 6,
+        GreatestWalnutHunter = 7,
+        Perfection = 25,
     }
 
     public enum DebrisMultiplier

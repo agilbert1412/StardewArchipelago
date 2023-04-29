@@ -51,6 +51,12 @@ namespace StardewArchipelago.Goals
                 case Goal.FullHouse:
                     GoalCodeInjection.CheckFullHouseGoalCompletion();
                     return;
+                case Goal.GreatestWalnutHunter:
+                    GoalCodeInjection.CheckWalnutHunterGoalCompletion();
+                    return;
+                case Goal.Perfection:
+                    GoalCodeInjection.CheckPerfectionGoalCompletion();
+                    return;
                 default:
                     throw new ArgumentOutOfRangeException($"Goal [{_archipelago.SlotData.Goal}] is not supported in this version of the mod.");
             }
@@ -69,12 +75,21 @@ namespace StardewArchipelago.Goals
                     InjectBottomOfTheMinesGoalMethods();
                     return;
                 case Goal.CrypticNote:
+                    // Gets tested on quest completion
                     return;
                 case Goal.MasterAngler:
+                    // Gets tested on fish caught
                     return;
                 case Goal.CompleteCollection:
+                    // Gets tested on donation
                     return;
                 case Goal.FullHouse:
+                    return;
+                case Goal.GreatestWalnutHunter:
+                    InjectWalnutHunterGoalMethods();
+                    return;
+                case Goal.Perfection:
+                    InjectPerfectionGoalMethods();
                     return;
                 default:
                     throw new ArgumentOutOfRangeException($"Goal [{_archipelago.SlotData.Goal}] is not supported in this version of the mod.");
@@ -94,6 +109,22 @@ namespace StardewArchipelago.Goals
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Game1), nameof(Game1.enterMine)),
                 postfix: new HarmonyMethod(typeof(GoalCodeInjection), nameof(GoalCodeInjection.EnterMine_Level120Goal_PostFix))
+            );
+        }
+
+        private void InjectWalnutHunterGoalMethods()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Farmer), nameof(Farmer.foundWalnut)),
+                postfix: new HarmonyMethod(typeof(GoalCodeInjection), nameof(GoalCodeInjection.FounddWalnut_WalnutHunterGoal_Postfix))
+            );
+        }
+
+        private void InjectPerfectionGoalMethods()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Utility), nameof(Utility.percentGameComplete)),
+                postfix: new HarmonyMethod(typeof(GoalCodeInjection), nameof(GoalCodeInjection.PercentGameComplete_PerfectionGoal_Postfix))
             );
         }
     }

@@ -180,6 +180,36 @@ namespace StardewArchipelago.Goals
             _archipelago.ReportGoalCompletion();
         }
 
+        public static void CheckWalnutHunterGoalCompletion()
+        {
+            if (!_archipelago.IsConnected || _archipelago.SlotData.Goal != Goal.GreatestWalnutHunter)
+            {
+                return;
+            }
+
+            if (Game1.netWorldState.Value.GoldenWalnutsFound.Value < 130)
+            {
+                return;
+            }
+
+            _archipelago.ReportGoalCompletion();
+        }
+
+        public static void CheckPerfectionGoalCompletion()
+        {
+            if (!_archipelago.IsConnected || _archipelago.SlotData.Goal != Goal.GreatestWalnutHunter)
+            {
+                return;
+            }
+
+            if (Utility.percentGameComplete() < 1.0)
+            {
+                return;
+            }
+
+            _archipelago.ReportGoalCompletion();
+        }
+
         public static void DoAreaCompleteReward_CommunityCenterGoal_PostFix(CommunityCenter __instance, int whichArea)
         {
             try
@@ -212,6 +242,39 @@ namespace StardewArchipelago.Goals
             }
         }
 
+        // public void foundWalnut(int stack = 1)
+        public static void FounddWalnut_WalnutHunterGoal_Postfix(Farmer __instance, int stack)
+        {
+            try
+            {
+                CheckWalnutHunterGoalCompletion();
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(FounddWalnut_WalnutHunterGoal_Postfix)}:\n{ex}", LogLevel.Error);
+                return;
+            }
+        }
+
+        // public static float percentGameComplete()
+        public static void PercentGameComplete_PerfectionGoal_Postfix(ref float __result)
+        {
+            try
+            {
+                if (__result < 1.0)
+                {
+                    return;
+                }
+
+                _archipelago.ReportGoalCompletion();
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(PercentGameComplete_PerfectionGoal_Postfix)}:\n{ex}", LogLevel.Error);
+                return;
+            }
+        }
+
         public static string GetGoalString()
         {
             var goal = _archipelago.SlotData.Goal switch
@@ -223,6 +286,8 @@ namespace StardewArchipelago.Goals
                 Goal.MasterAngler => "Catch every single one of the 55 fish available in the game",
                 Goal.CompleteCollection => "Complete the Museum Collection by donating all 95 items",
                 Goal.FullHouse => "Get married and have two children",
+                Goal.GreatestWalnutHunter => "Find all 130 Golden Walnuts",
+                Goal.Perfection => "Achieve Perfection",
                 _ => throw new NotImplementedException()
             };
             return goal;
@@ -239,6 +304,8 @@ namespace StardewArchipelago.Goals
                 Goal.MasterAngler => "Catch and document every specie of fish in the Ferngill Republic",
                 Goal.CompleteCollection => "Restore our beautiful museum with a full collection of various artifacts and minerals",
                 Goal.FullHouse => "I wish for my bloodline to thrive. Please find a partner and live happily ever after",
+                Goal.GreatestWalnutHunter => "Prove your worth to an old friend of mine, and become the greatest walnut hunter",
+                Goal.Perfection => "For a fulfilling life, you need to do a lot of everything. Leave no loose ends",
                 _ => throw new NotImplementedException()
             };
             return goal;

@@ -187,7 +187,7 @@ namespace StardewArchipelago
             _bundleReader = new BundleReader();
             _unlockManager = new UnlockManager();
             _itemManager = new ItemManager(_archipelago, _stardewItemManager, _unlockManager, _mail, _state.ItemsReceived);
-            _mailPatcher = new MailPatcher(Monitor, new LetterActions(_mail), _harmony);
+            _mailPatcher = new MailPatcher(Monitor, new LetterActions(_helper, _mail), _harmony);
             _locationChecker = new LocationChecker(Monitor, _archipelago, _state.LocationsChecked);
             _locationsPatcher = new LocationPatcher(Monitor, _helper, _harmony, _archipelago, _locationChecker, _bundleReader, _stardewItemManager);
             _itemPatcher = new ItemPatcher(Monitor, _helper, _harmony, _archipelago);
