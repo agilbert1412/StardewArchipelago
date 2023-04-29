@@ -5,6 +5,7 @@ namespace StardewArchipelago.Items.Mail
     public abstract class LetterAttachment
     {
         public ReceivedItem ArchipelagoItem { get; private set; }
+        protected abstract bool IsEmptyLetter { get; }
 
         public LetterAttachment(ReceivedItem apItem)
         {
@@ -23,7 +24,8 @@ namespace StardewArchipelago.Items.Mail
 
         public virtual MailKey GetMailKey()
         {
-            return new MailKey(ArchipelagoItem.ItemName, ArchipelagoItem.PlayerName, ArchipelagoItem.LocationName, ArchipelagoItem.UniqueId.ToString());
+            return new MailKey(ArchipelagoItem.ItemName, ArchipelagoItem.PlayerName, ArchipelagoItem.LocationName,
+                ArchipelagoItem.UniqueId.ToString(), IsEmptyLetter);
         }
     }
 }

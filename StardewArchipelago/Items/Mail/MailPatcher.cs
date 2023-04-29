@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using HarmonyLib;
 using StardewModdingAPI;
+using StardewValley;
 using StardewValley.Menus;
 
 namespace StardewArchipelago.Items.Mail
@@ -23,6 +26,11 @@ namespace StardewArchipelago.Items.Mail
             _harmony.Patch(
                 original: AccessTools.Method(typeof(IClickableMenu), nameof(IClickableMenu.exitThisMenu)),
                 postfix: new HarmonyMethod(typeof(MailPatcher), nameof(MailPatcher.ExitThisMenu_ApplyLetterAction_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.mailbox)),
+                postfix: new HarmonyMethod(typeof(MailPatcher), nameof(MailPatcher.Mailbox_HideEmptyApLetters_Prefix))
             );
         }
 
@@ -56,6 +64,49 @@ namespace StardewArchipelago.Items.Mail
                 _monitor.Log($"Failed in {nameof(ExitThisMenu_ApplyLetterAction_Postfix)}:\n{ex}", LogLevel.Error);
                 return;
             }
+        }
+
+        // public void mailbox()
+        public static bool Mailbox_HideEmptyApLetters_Prefix(GameLocation __instance)
+        {
+            try
+            {
+                CleanMailboxUntilNonEmptyLetter();
+                return true; // run original logic
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(Mailbox_HideEmptyApLetters_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
+        }
+
+        private static void CleanMailboxUntilNonEmptyLetter()
+        {
+            if (!ModEntry.Instance.State.HideEmptyArchipelagoLetters)
+            {
+                return;
+            }
+
+            var mailbox = Game1.mailbox;
+            while (mailbox.Any())
+            {
+                var firstLetterInMailbox = Game1.mailbox.First();
+
+                if (!MailKey.TryParse(firstLetterInMailbox, out var apMailKey))
+                {
+                    return;
+                }
+
+                if (!apMailKey.IsEmpty)
+                {
+                    return;
+                }
+
+                Game1.player.mailReceived.Add(firstLetterInMailbox);
+                mailbox.RemoveAt(0);
+            }
+            
         }
     }
 }

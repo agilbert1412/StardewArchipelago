@@ -7,6 +7,8 @@ namespace StardewArchipelago.Items.Mail
         public string RecipeItemName { get; private set; }
         public int AttachmentAmount { get; private set; }
 
+        protected override bool IsEmptyLetter => false;
+
         public LetterCraftingRecipeAttachment(ReceivedItem apItem, string recipeItemName) : base(apItem)
         {
             RecipeItemName = recipeItemName.Replace(" ", "_");

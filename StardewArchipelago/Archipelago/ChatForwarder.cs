@@ -20,16 +20,14 @@ namespace StardewArchipelago.Archipelago
         private Harmony _harmony;
         private static GiftHandler _giftHandler;
         private static BankHandler _bankHandler;
-        private static AppearanceRandomizer _appearanceRandomizer;
 
-        public ChatForwarder(IMonitor monitor, Harmony harmony, ArchipelagoClient archipelago, GiftHandler giftHandler, AppearanceRandomizer appearanceRandomizer)
+        public ChatForwarder(IMonitor monitor, Harmony harmony, ArchipelagoClient archipelago, GiftHandler giftHandler)
         {
             _monitor = monitor;
             _harmony = harmony;
             _archipelago = archipelago;
             _giftHandler = giftHandler;
             _bankHandler = new BankHandler(_archipelago);
-            _appearanceRandomizer = appearanceRandomizer;
         }
 
         public void ListenToChatMessages()
@@ -91,6 +89,11 @@ namespace StardewArchipelago.Archipelago
             }
 
             if (_bankHandler.HandleBankCommand(message))
+            {
+                return true;
+            }
+
+            if (HandleHideEmptyLettersCommand(messageLower))
             {
                 return true;
             }
@@ -175,6 +178,21 @@ namespace StardewArchipelago.Archipelago
             return true;
         }
 
+        private static bool HandleHideEmptyLettersCommand(string message)
+        {
+            if (message != $"{COMMAND_PREFIX}letters")
+            {
+                return false;
+            }
+
+            var currentSetting = ModEntry.Instance.State.HideEmptyArchipelagoLetters;
+            var newSetting = !currentSetting;
+            var status = newSetting ? "hidden" : "visible";
+            ModEntry.Instance.State.HideEmptyArchipelagoLetters = newSetting;
+            Game1.chatBox?.addMessage($"Empty archipelago letters are now {status}. Changes will take effect when opening your mailbox", Color.Gold);
+            return true;
+        }
+
         private static bool HandleArcadeReleaseCommand(string message)
         {
             var arcadePrefix = $"{COMMAND_PREFIX}arcade_release ";
@@ -242,7 +260,7 @@ namespace StardewArchipelago.Archipelago
                 return false;
             }
 
-            var currentOverride = ModEntry.Instance._state.AppearanceRandomizerOverride;
+            var currentOverride = ModEntry.Instance.State.AppearanceRandomizerOverride;
             var overrideStatus = "off";
             if (currentOverride == null || currentOverride == AppearanceRandomization.Disabled)
             {
@@ -253,7 +271,7 @@ namespace StardewArchipelago.Archipelago
             {
                 currentOverride = AppearanceRandomization.Disabled;
             }
-            ModEntry.Instance._state.AppearanceRandomizerOverride = currentOverride;
+            ModEntry.Instance.State.AppearanceRandomizerOverride = currentOverride;
             Game1.chatBox?.addMessage($"Sprite Randomizer is now {overrideStatus}. Changes will take effect after sleeping, then reloading your game.", Color.Gold);
             return true;
         }
@@ -276,6 +294,7 @@ namespace StardewArchipelago.Archipelago
             Game1.chatBox?.addMessage($"{COMMAND_PREFIX}experience - Shows your current progressive skills experience levels", Color.Gold);
             Game1.chatBox?.addMessage($"{COMMAND_PREFIX}bank [deposit|withdraw] [amount] - Deposit or withdraw money from your shared bank account", Color.Gold);
             Game1.chatBox?.addMessage($"{COMMAND_PREFIX}gift [slotName] - Sends your currently held item stack to a chosen player as a gift", Color.Gold);
+            Game1.chatBox?.addMessage($"{COMMAND_PREFIX}letters - Toggle Hiding Empty Archipelago Letters", Color.Gold);
             Game1.chatBox?.addMessage($"{COMMAND_PREFIX}deathlink - Toggles Deathlink on/off. Saves when sleeping", Color.Gold);
             Game1.chatBox?.addMessage($"{COMMAND_PREFIX}sprite - Enable/Disable the Appearance Randomizer", Color.Gold);
 #if DEBUG

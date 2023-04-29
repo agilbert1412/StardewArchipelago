@@ -13,13 +13,14 @@ namespace StardewArchipelago.Items.Mail
         public string LetterOpenedAction { get; set; }
         public string ActionParameter { get; set; }
         private string UniqueId { get; set; }
+        public bool IsEmpty { get; set; }
 
-        public MailKey(string itemName, string playerName, string locationName, string uniqueId)
-            : this(itemName, playerName, locationName, "", "", uniqueId)
+        public MailKey(string itemName, string playerName, string locationName, string uniqueId, bool isEmpty)
+            : this(itemName, playerName, locationName, "", "", uniqueId, isEmpty)
         {
         }
 
-        public MailKey(string itemName, string playerName, string locationName, string letterOpenedAction, string actionParameter, string uniqueId)
+        public MailKey(string itemName, string playerName, string locationName, string letterOpenedAction, string actionParameter, string uniqueId, bool isEmpty)
         {
             ItemName = itemName;
             PlayerName = playerName;
@@ -27,11 +28,12 @@ namespace StardewArchipelago.Items.Mail
             LetterOpenedAction = letterOpenedAction;
             ActionParameter = actionParameter;
             UniqueId = uniqueId;
+            IsEmpty = isEmpty;
         }
 
         public override string ToString()
         {
-            var key = $"{AP_PREFIX}|{ItemName}|{PlayerName}|{LocationName}|{LetterOpenedAction}|{ActionParameter}|{UniqueId}";
+            var key = $"{AP_PREFIX}|{ItemName}|{PlayerName}|{LocationName}|{LetterOpenedAction}|{ActionParameter}|{UniqueId}|{IsEmpty}";
             var trimmedKey = key.Replace(" ", "_");
             return trimmedKey;
         }
@@ -61,8 +63,9 @@ namespace StardewArchipelago.Items.Mail
             var letterOpenedAction = splitKey[4];
             var actionParameter = splitKey[5];
             var uniqueId = splitKey[6];
+            var isEmpty = splitKey.Length > 7 && bool.Parse(splitKey[7]);
 
-            mailKey = new MailKey(itemName, playerName, locationName, letterOpenedAction, actionParameter, uniqueId);
+            mailKey = new MailKey(itemName, playerName, locationName, letterOpenedAction, actionParameter, uniqueId, isEmpty);
             return true;
         }
 

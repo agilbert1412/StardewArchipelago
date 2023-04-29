@@ -12,6 +12,7 @@ namespace StardewArchipelago.Serialization
         public Dictionary<string, string> LettersGenerated { get; set; }
         public List<string> SeasonsOrder { get; set; }
         public AppearanceRandomization? AppearanceRandomizerOverride { get; set; }
+        public bool HideEmptyArchipelagoLetters { get; set; }
 
         public ArchipelagoStateDto()
         {
@@ -21,6 +22,7 @@ namespace StardewArchipelago.Serialization
             LettersGenerated = new Dictionary<string, string>();
             SeasonsOrder = new List<string>();
             AppearanceRandomizerOverride = null;
+            HideEmptyArchipelagoLetters = false;
         }
     }
 }

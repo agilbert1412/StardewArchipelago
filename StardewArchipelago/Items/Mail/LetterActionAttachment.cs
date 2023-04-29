@@ -7,6 +7,8 @@ namespace StardewArchipelago.Items.Mail
         public string LetterOpenedAction { get; private set; }
         public string ActionParameter { get; private set; }
 
+        protected override bool IsEmptyLetter => false;
+
         public LetterActionAttachment(ReceivedItem apItem, string openedAction, string parameter = "") : base(apItem)
         {
             LetterOpenedAction = openedAction;
@@ -21,7 +23,7 @@ namespace StardewArchipelago.Items.Mail
 
         public override MailKey GetMailKey()
         {
-            return new MailKey(ArchipelagoItem.ItemName, ArchipelagoItem.PlayerName, ArchipelagoItem.LocationName, LetterOpenedAction, ActionParameter, ArchipelagoItem.UniqueId.ToString());
+            return new MailKey(ArchipelagoItem.ItemName, ArchipelagoItem.PlayerName, ArchipelagoItem.LocationName, LetterOpenedAction, ActionParameter, ArchipelagoItem.UniqueId.ToString(), IsEmptyLetter);
         }
     }
 }

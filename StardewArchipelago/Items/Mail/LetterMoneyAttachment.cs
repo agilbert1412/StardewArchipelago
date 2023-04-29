@@ -6,6 +6,8 @@ namespace StardewArchipelago.Items.Mail
     {
         public int MoneyAmount { get; private set; }
 
+        protected override bool IsEmptyLetter => false;
+
         public LetterMoneyAttachment(ReceivedItem apItem, int moneyAmount) : base(apItem)
         {
             MoneyAmount = moneyAmount;

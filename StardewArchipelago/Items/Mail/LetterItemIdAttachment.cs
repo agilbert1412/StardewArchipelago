@@ -7,6 +7,8 @@ namespace StardewArchipelago.Items.Mail
         public int ItemId { get; private set; }
         public int AttachmentAmount { get; private set; }
 
+        protected override bool IsEmptyLetter => false;
+
         public LetterItemIdAttachment(ReceivedItem apItem, int itemId, int attachmentAmount = 1) : base(apItem)
         {
             ItemId = itemId;

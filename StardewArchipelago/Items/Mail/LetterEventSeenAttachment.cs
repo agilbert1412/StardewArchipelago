@@ -7,6 +7,8 @@ namespace StardewArchipelago.Items.Mail
     {
         public int EventToMarkAsSeen { get; private set; }
 
+        protected override bool IsEmptyLetter => true;
+
         public LetterEventSeenAttachment(ReceivedItem apItem, int eventToMarkAsSeen) : base(apItem)
         {
             EventToMarkAsSeen = eventToMarkAsSeen;
