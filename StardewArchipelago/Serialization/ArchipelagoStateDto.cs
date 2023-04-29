@@ -11,7 +11,7 @@ namespace StardewArchipelago.Serialization
         public Dictionary<string, ScoutedLocation> LocationsScouted { get; set; }
         public Dictionary<string, string> LettersGenerated { get; set; }
         public List<string> SeasonsOrder { get; set; }
-        public bool DisableAppearanceRandomizerOverride { get; set; }
+        public AppearanceRandomization? AppearanceRandomizerOverride { get; set; }
 
         public ArchipelagoStateDto()
         {
@@ -20,7 +20,7 @@ namespace StardewArchipelago.Serialization
             LocationsScouted = new Dictionary<string, ScoutedLocation>();
             LettersGenerated = new Dictionary<string, string>();
             SeasonsOrder = new List<string>();
-            DisableAppearanceRandomizerOverride = false;
+            AppearanceRandomizerOverride = null;
         }
     }
 }

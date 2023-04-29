@@ -25,8 +25,12 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         {
             try
             {
-                var spritePool = GetSpritePool();
+                if (_archipelago.SlotData.AppearanceRandomization == AppearanceRandomization.Disabled)
+                {
+                    return;
+                }
 
+                var spritePool = GetSpritePool();
                 if (!spritePool.Any())
                 {
                     return;
