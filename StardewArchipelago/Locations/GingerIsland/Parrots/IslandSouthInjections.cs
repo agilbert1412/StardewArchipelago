@@ -2,12 +2,13 @@
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
+using StardewValley;
 using StardewValley.BellsAndWhistles;
 using StardewValley.Locations;
 
 namespace StardewArchipelago.Locations.GingerIsland.Parrots
 {
-    public class IslandSouthInjections
+    public class IslandSouthInjections : IParrotReplacer
     {
         private const string AP_WESTERN_TURTLE = "Island West Turtle";
         private const string AP_RESORT = "Island Resort";
@@ -17,6 +18,8 @@ namespace StardewArchipelago.Locations.GingerIsland.Parrots
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
 
+        private IslandLocation _islandLocation;
+
         public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             _monitor = monitor;
@@ -25,21 +28,16 @@ namespace StardewArchipelago.Locations.GingerIsland.Parrots
             _locationChecker = locationChecker;
         }
 
-        // public IslandSouth(string map, string name)
-        public static void Constructor_ReplaceParrots_Postfix(IslandSouth __instance, string map, string name)
+        public IslandSouthInjections()
         {
-            try
-            {
-                __instance.parrotUpgradePerches.Clear();
-                AddResortParrot(__instance);
-                AddWesternTurtleParrot(__instance);
-                return;
-            }
-            catch (Exception ex)
-            {
-                _monitor.Log($"Failed in {nameof(Constructor_ReplaceParrots_Postfix)}:\n{ex}", LogLevel.Error);
-                return;
-            }
+            _islandLocation = (IslandSouth)Game1.getLocationFromName("IslandSouth");
+        }
+
+        public void ReplaceParrots()
+        {
+            _islandLocation.parrotUpgradePerches.Clear();
+            AddResortParrot(_islandLocation);
+            AddWesternTurtleParrot(_islandLocation);
         }
 
         private static void AddResortParrot(IslandLocation __instance)
@@ -58,10 +56,12 @@ namespace StardewArchipelago.Locations.GingerIsland.Parrots
             return _locationChecker.IsLocationChecked(AP_RESORT);
         }
 
-        private static void AddWesternTurtleParrot(IslandSouth __instance)
+        private static void AddWesternTurtleParrot(IslandLocation __instance)
         {
             __instance.parrotUpgradePerches.Add(new ParrotUpgradePerch(__instance, new Point(5, 9),
-                new Microsoft.Xna.Framework.Rectangle(1, 10, 3, 4), 10, PurchaseWesternTurtleParrot, IsWesternTurtleParrotPurchased, "Turtle", "Island_FirstParrot"));
+                new Rectangle(1, 10, 3, 4), 10,
+                PurchaseWesternTurtleParrot,
+                IsWesternTurtleParrotPurchased, "Turtle", "Island_FirstParrot"));
         }
 
         private static void PurchaseWesternTurtleParrot()

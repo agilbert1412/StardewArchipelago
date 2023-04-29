@@ -51,7 +51,7 @@ namespace StardewArchipelago.Locations.CodeInjections
         {
             try
             {
-                var specialOrderName = __result.MakeLocalizationReplacements(__result.questName.Value);
+                var specialOrderName = __result.GetName();
                 if (_ignoredSpecialOrders.Contains(specialOrderName))
                 {
                     return;

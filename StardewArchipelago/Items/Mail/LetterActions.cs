@@ -340,11 +340,11 @@ namespace StardewArchipelago.Items.Mail
             }
         }
 
-        private const string _islandHut = "Island Hut";
-        private const string _islandSouth = "Island South";
-        private const string _islandNorth = "Island North";
-        private const string _islandWest = "Island West";
-        private const string _volcanoDungeon = "Volcano Dungeon";
+        private const string _islandHut = "IslandHut";
+        private const string _islandSouth = "IslandSouth";
+        private const string _islandNorth = "IslandNorth";
+        private const string _islandWest = "IslandWest";
+        private const string _volcanoDungeon = "VolcanoDungeon";
 
         private static T FindLocation<T>(string locationName)
         {

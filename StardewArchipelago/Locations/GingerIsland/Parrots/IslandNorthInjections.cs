@@ -2,12 +2,13 @@
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
+using StardewValley;
 using StardewValley.BellsAndWhistles;
 using StardewValley.Locations;
 
 namespace StardewArchipelago.Locations.GingerIsland.Parrots
 {
-    public class IslandNorthInjections
+    public class IslandNorthInjections : IParrotReplacer
     {
         private const string AP_BRIDGE_PARROT = "Dig Site Bridge";
         private const string AP_TRADER_PARROT = "Island Trader";
@@ -17,6 +18,8 @@ namespace StardewArchipelago.Locations.GingerIsland.Parrots
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
 
+        private IslandLocation _islandLocation;
+
         public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             _monitor = monitor;
@@ -25,21 +28,16 @@ namespace StardewArchipelago.Locations.GingerIsland.Parrots
             _locationChecker = locationChecker;
         }
 
-        // public IslandNorth(string map, string name)
-        public static void Constructor_ReplaceParrots_Postfix(IslandNorth __instance, string map, string name)
+        public IslandNorthInjections()
         {
-            try
-            {
-                __instance.parrotUpgradePerches.Clear();
-                AddBridgeParrot(__instance);
-                AddTraderParrot(__instance);
-                return;
-            }
-            catch (Exception ex)
-            {
-                _monitor.Log($"Failed in {nameof(Constructor_ReplaceParrots_Postfix)}:\n{ex}", LogLevel.Error);
-                return;
-            }
+            _islandLocation = (IslandNorth)Game1.getLocationFromName("IslandNorth");
+        }
+
+        public void ReplaceParrots()
+        {
+            _islandLocation.parrotUpgradePerches.Clear();
+            AddBridgeParrot(_islandLocation);
+            AddTraderParrot(_islandLocation);
         }
 
         private static void AddBridgeParrot(IslandLocation __instance)

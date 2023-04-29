@@ -19,12 +19,18 @@ namespace StardewArchipelago.Locations.GingerIsland
     {
         private readonly ArchipelagoClient _archipelago;
         private readonly Harmony _harmony;
+        private readonly IParrotReplacer[] _parrotReplacers;
 
         public GingerIslandPatcher(IMonitor monitor, IModHelper modHelper, Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             _archipelago = archipelago;
             _harmony = harmony;
             GingerIslandInitializer.Initialize(monitor, modHelper, _archipelago, locationChecker);
+            _parrotReplacers = new IParrotReplacer[]
+            {
+                new IslandHutInjections(), new IslandNorthInjections(),
+                new IslandSouthInjections(), new IslandWestInjections()
+            };
         }
 
         public void PatchGingerIslandLocations()
@@ -57,31 +63,16 @@ namespace StardewArchipelago.Locations.GingerIsland
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(BoatTunnel), nameof(BoatTunnel.answerDialogue)),
-                postfix: new HarmonyMethod(typeof(BoatTunnelInjections), nameof(BoatTunnelInjections.AnswerDialogue_BoatRepairAndUsage_Prefix))
+                prefix: new HarmonyMethod(typeof(BoatTunnelInjections), nameof(BoatTunnelInjections.AnswerDialogue_BoatRepairAndUsage_Prefix))
             );
         }
 
         private void ReplaceParrotsWithChecks()
         {
-            _harmony.Patch(
-                original: AccessTools.Constructor(typeof(IslandSouth), new[]{typeof(string), typeof(string)}),
-                postfix: new HarmonyMethod(typeof(IslandSouthInjections), nameof(IslandSouthInjections.Constructor_ReplaceParrots_Postfix))
-            );
-
-            _harmony.Patch(
-                original: AccessTools.Constructor(typeof(IslandHut), new[] { typeof(string), typeof(string) }),
-                postfix: new HarmonyMethod(typeof(IslandHutInjections), nameof(IslandHutInjections.Constructor_ReplaceParrots_Postfix))
-            );
-
-            _harmony.Patch(
-                original: AccessTools.Constructor(typeof(IslandNorth), new[] { typeof(string), typeof(string) }),
-                postfix: new HarmonyMethod(typeof(IslandNorthInjections), nameof(IslandNorthInjections.Constructor_ReplaceParrots_Postfix))
-            );
-
-            _harmony.Patch(
-                original: AccessTools.Constructor(typeof(IslandWest), new[] { typeof(string), typeof(string) }),
-                postfix: new HarmonyMethod(typeof(IslandWestInjections), nameof(IslandWestInjections.Constructor_ReplaceParrots_Postfix))
-            );
+            foreach (var parrotReplacer in _parrotReplacers)
+            {
+                parrotReplacer.ReplaceParrots();
+            }
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(VolcanoDungeon), nameof(VolcanoDungeon.GenerateContents)),

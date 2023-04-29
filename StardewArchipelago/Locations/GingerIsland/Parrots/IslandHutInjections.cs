@@ -2,12 +2,13 @@
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
+using StardewValley;
 using StardewValley.BellsAndWhistles;
 using StardewValley.Locations;
 
 namespace StardewArchipelago.Locations.GingerIsland.Parrots
 {
-    public class IslandHutInjections
+    public class IslandHutInjections : IParrotReplacer
     {
         private const string AP_LEO_PARROT = "Leo's Parrot";
 
@@ -15,6 +16,8 @@ namespace StardewArchipelago.Locations.GingerIsland.Parrots
         private static IModHelper _modHelper;
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
+
+        private IslandLocation _islandLocation;
 
         public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
@@ -24,25 +27,20 @@ namespace StardewArchipelago.Locations.GingerIsland.Parrots
             _locationChecker = locationChecker;
         }
 
-        // public IslandHut(string map, string name)
-        public static void Constructor_ReplaceParrots_Postfix(IslandHut __instance, string map, string name)
+        public IslandHutInjections()
         {
-            try
-            {
-                __instance.parrotUpgradePerches.Clear();
-                AddLeoParrot(__instance);
-                return;
-            }
-            catch (Exception ex)
-            {
-                _monitor.Log($"Failed in {nameof(Constructor_ReplaceParrots_Postfix)}:\n{ex}", LogLevel.Error);
-                return;
-            }
+            _islandLocation = (IslandHut)Game1.getLocationFromName("IslandHut");
+        }
+        
+        public void ReplaceParrots()
+        {
+            _islandLocation.parrotUpgradePerches.Clear();
+            AddLeoParrot(_islandLocation);
         }
 
-        private static void AddLeoParrot(IslandLocation __instance)
+        private static void AddLeoParrot(IslandLocation islandLocation)
         {
-            __instance.parrotUpgradePerches.Add(new ParrotUpgradePerch(__instance, new Point(7, 6), new Microsoft.Xna.Framework.Rectangle(-1000, -1000, 1, 1), 1, BefriendLeoParrot, IsLeoParrotBefriended, "Hut"));
+            islandLocation.parrotUpgradePerches.Add(new ParrotUpgradePerch(islandLocation, new Point(7, 6), new Microsoft.Xna.Framework.Rectangle(-1000, -1000, 1, 1), 1, BefriendLeoParrot, IsLeoParrotBefriended, "Hut"));
         }
 
         private static void BefriendLeoParrot()
