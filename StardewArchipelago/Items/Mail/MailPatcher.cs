@@ -89,11 +89,11 @@ namespace StardewArchipelago.Items.Mail
             }
 
             var mailbox = Game1.mailbox;
-            while (mailbox.Any())
+            while (mailbox.Count > 1)
             {
-                var firstLetterInMailbox = Game1.mailbox.First();
+                var nextLetterInMailbox = Game1.mailbox[1];
 
-                if (!MailKey.TryParse(firstLetterInMailbox, out var apMailKey))
+                if (!MailKey.TryParse(nextLetterInMailbox, out var apMailKey))
                 {
                     return;
                 }
@@ -103,8 +103,8 @@ namespace StardewArchipelago.Items.Mail
                     return;
                 }
 
-                Game1.player.mailReceived.Add(firstLetterInMailbox);
-                mailbox.RemoveAt(0);
+                Game1.player.mailReceived.Add(nextLetterInMailbox);
+                mailbox.RemoveAt(1);
             }
             
         }
