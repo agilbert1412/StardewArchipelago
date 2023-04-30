@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Netcode;
 using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
 using StardewValley;
@@ -172,7 +173,7 @@ namespace StardewArchipelago.Locations.CodeInjections
                 }
 
                 var easyMode = _archipelago.SlotData.ArcadeMachineLocations == ArcadeLocations.VictoriesEasy;
-                var receivedDropRate = _archipelago.HasReceivedItem(JOTPK_DROP_RATE, out _);
+                var receivedDropRate = _archipelago.HasReceivedItem(JOTPK_DROP_RATE);
                 var increasedDropRate = easyMode || receivedDropRate;
                 
                 var moneyDropChance = increasedDropRate ? 0.1 : 0.05;

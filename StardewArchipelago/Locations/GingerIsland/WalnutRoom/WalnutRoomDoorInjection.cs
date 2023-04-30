@@ -35,7 +35,7 @@ namespace StardewArchipelago.Locations.GingerIsland.WalnutRoom
                     return true; // run original logic
                 }
                 
-                if (_archipelago.HasReceivedItem(UnlockManager.QI_WALNUT_ROOM, out _))
+                if (_archipelago.HasReceivedItem(UnlockManager.QI_WALNUT_ROOM))
                 {
                     Game1.playSound("doorClose");
                     Game1.warpFarmer("QiNutRoom", 7, 8, 0);

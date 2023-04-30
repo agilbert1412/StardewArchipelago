@@ -429,7 +429,7 @@ namespace StardewArchipelago.Locations.CodeInjections
                 const int bearKnowledgeIndex = 8;
                 var x1 = __instance.xPositionOnScreen + IClickableMenu.spaceToClearSideBorder + 80;
                 var y1 = __instance.yPositionOnScreen + IClickableMenu.spaceToClearTopBorder + (int)(height / 2.0) + 80;
-                if (_archipelago.HasReceivedItem("Bear's Knowledge", out _))
+                if (_archipelago.HasReceivedItem("Bear's Knowledge"))
                 {
                     var textureComponent = new ClickableTextureComponent("", new Rectangle(x1 + 544, y1, 64, 64), null, Game1.content.LoadString("Strings\\Objects:BearPaw"), Game1.mouseCursors, new Rectangle(192, 336, 16, 16), 4f, true);
                     textureComponent.myID = 10208;
@@ -472,7 +472,7 @@ namespace StardewArchipelago.Locations.CodeInjections
                 }
 
                 var hasSeenBearEvent = Game1.player.eventsSeen.Contains(2120303);
-                var hasReceivedBearKnowledge = _archipelago.HasReceivedItem("Bear's Knowledge", out _);
+                var hasReceivedBearKnowledge = _archipelago.HasReceivedItem("Bear's Knowledge");
                 if (hasSeenBearEvent == hasReceivedBearKnowledge)
                 {
                     return;

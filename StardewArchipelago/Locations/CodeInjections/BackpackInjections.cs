@@ -102,7 +102,7 @@ namespace StardewArchipelago.Locations.CodeInjections
                         responseDontPurchase
                     }, "Backpack");
             }
-            else if (_locationChecker.IsLocationNotChecked(DELUXE_PACK) && _archipelago.HasReceivedItem("Progressive Backpack", out _))
+            else if (_locationChecker.IsLocationNotChecked(DELUXE_PACK) && _archipelago.HasReceivedItem("Progressive Backpack"))
             {
                 __instance.createQuestionDialogue(
                     Game1.content.LoadString("Strings\\Locations:SeedShop_BuyBackpack_Question36"),

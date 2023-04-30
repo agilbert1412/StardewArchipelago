@@ -401,6 +401,11 @@ namespace StardewArchipelago.Archipelago
             return receivedItemsWithCount;
         }
 
+        public bool HasReceivedItem(string itemName)
+        {
+            return HasReceivedItem(itemName, out _);
+        }
+
         public bool HasReceivedItem(string itemName, out string sendingPlayer)
         {
             sendingPlayer = "";

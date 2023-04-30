@@ -166,7 +166,7 @@ namespace StardewArchipelago.Locations.GingerIsland.Boat
                 return;
             }
 
-            var boatIsFunctional = _archipelago.HasReceivedItem(AP_BOAT_REPAIRED, out _);
+            var boatIsFunctional = _archipelago.HasReceivedItem(AP_BOAT_REPAIRED);
             if (boatIsFunctional)
             {
                 CreateBuyTicketDialogue(__instance);

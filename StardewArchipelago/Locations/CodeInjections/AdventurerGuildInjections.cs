@@ -218,7 +218,7 @@ namespace StardewArchipelago.Locations.CodeInjections
         {
             foreach (var (item, price) in items)
             {
-                if (_archipelago.HasReceivedItem(item.Name, out _))
+                if (_archipelago.HasReceivedItem(item.Name))
                 {
                     adventureShopStock.Add(item, price);
                 }
