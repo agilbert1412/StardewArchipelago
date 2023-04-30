@@ -196,7 +196,7 @@ namespace StardewArchipelago
             _jojaDisabler = new JojaDisabler(Monitor, _helper, _harmony);
             _seasonsRandomizer = new SeasonsRandomizer(Monitor, _helper, _archipelago, State);
             _appearanceRandomizer = new AppearanceRandomizer(Monitor, _archipelago);
-            _chatForwarder = new ChatForwarder(Monitor, _harmony, _archipelago, _giftHandler);
+            _chatForwarder = new ChatForwarder(Monitor, _helper, _harmony, _archipelago, _giftHandler);
             _questCleaner = new QuestCleaner();
 
 
