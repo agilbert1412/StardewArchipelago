@@ -42,8 +42,10 @@ namespace StardewArchipelago.Locations.GingerIsland.Parrots
 
         private static void AddResortParrot(IslandLocation __instance)
         {
-            __instance.parrotUpgradePerches.Add(new ParrotUpgradePerch(__instance, new Point(17, 22),
-                new Microsoft.Xna.Framework.Rectangle(12, 18, 14, 7), 20, PurchaseResortParrot, IsResortParrotPurchased, "Resort", "Island_UpgradeHouse"));
+            var resortParrot = new ParrotUpgradePerch(__instance, new Point(17, 22),
+                new Rectangle(12, 18, 14, 7), 20, PurchaseResortParrot, IsResortParrotPurchased,
+                "Resort", "Island_UpgradeHouse");
+            __instance.parrotUpgradePerches.Add(resortParrot);
         }
 
         private static void PurchaseResortParrot()

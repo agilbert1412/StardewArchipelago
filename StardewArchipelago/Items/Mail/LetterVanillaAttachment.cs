@@ -4,20 +4,27 @@ namespace StardewArchipelago.Items.Mail
 {
     public class LetterVanillaAttachment : LetterAttachment
     {
-        public string VanillaMailTitle { get; private set; }
+        public string[] VanillaMailTitles { get; private set; }
         public bool NoLetter { get; private set; }
 
         protected override bool IsEmptyLetter => false;
 
-        public LetterVanillaAttachment(ReceivedItem apItem, string mailTitle, bool noLetter) : base(apItem)
+        public LetterVanillaAttachment(ReceivedItem apItem, string mailTitle, bool noLetter) : this(apItem, new []{mailTitle}, noLetter)
         {
-            VanillaMailTitle = mailTitle;
+        }
+
+        public LetterVanillaAttachment(ReceivedItem apItem, string[] mailTitles, bool noLetter) : base(apItem)
+        {
+            VanillaMailTitles = mailTitles;
             NoLetter = noLetter;
         }
 
         public override void SendToPlayer(Mailman mailman)
         {
-            mailman.SendVanillaMail(VanillaMailTitle, NoLetter);
+            foreach (var vanillaMailTitle in VanillaMailTitles)
+            {
+                mailman.SendVanillaMail(vanillaMailTitle, NoLetter);
+            }
         }
     }
 }

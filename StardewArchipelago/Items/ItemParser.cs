@@ -66,19 +66,19 @@ namespace StardewArchipelago.Items
         {
             stardewItemName = "";
             amount = 0;
-            if (!apItemName.StartsWith(RESOURCE_PACK_PREFIX))
+            if (apItemName.StartsWith(RESOURCE_PACK_PREFIX))
             {
-                return false;
+                var apItemWithoutPrefix = apItemName.Substring(RESOURCE_PACK_PREFIX.Length);
+                return TryParseResourcePack(apItemWithoutPrefix, out stardewItemName, out amount);
             }
 
-            var apItemWithoutPrefix = apItemName.Substring(RESOURCE_PACK_PREFIX.Length);
-            var parts = apItemWithoutPrefix.Split(" ");
+            var parts = apItemName.Split(" ");
             if (!int.TryParse(parts[0], out amount))
             {
                 return false;
             }
 
-            stardewItemName = apItemWithoutPrefix.Substring(apItemWithoutPrefix.IndexOf(" ", StringComparison.Ordinal) + 1);
+            stardewItemName = apItemName.Substring(apItemName.IndexOf(" ", StringComparison.Ordinal) + 1);
             return true;
         }
 
@@ -110,8 +110,16 @@ namespace StardewArchipelago.Items
 
         private StardewItem GetResourcePackItem(string stardewItemName)
         {
-            var item = _itemManager.GetItemByName(stardewItemName);
-            return item;
+            if (_itemManager.ItemExists(stardewItemName))
+            {
+                return _itemManager.GetItemByName(stardewItemName);
+            }
+
+            // Sometimes an item is plural because it's a resource pack, but the item is registered with a singular name in-game
+            // So I try the alternate version before giving up
+            var isPlural = stardewItemName.EndsWith('s');
+            var otherVersion = isPlural ? stardewItemName.Substring(0, stardewItemName.Length - 1) : stardewItemName + "s";
+            return _itemManager.GetItemByName(otherVersion);
         }
     }
 }

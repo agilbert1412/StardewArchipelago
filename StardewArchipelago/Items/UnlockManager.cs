@@ -146,7 +146,8 @@ namespace StardewArchipelago.Items
 
         private LetterVanillaAttachment RepairBoat(ReceivedItem receivedItem)
         {
-            return new LetterVanillaAttachment(receivedItem, "willyBoatFixed", true);
+            var vanillaMails = new[] { "willyBoatFixed", "willyBackRoomInvitation" };
+            return new LetterVanillaAttachment(receivedItem, vanillaMails, true);
         }
 
         private LetterActionAttachment GetLeoTrust(ReceivedItem receivedItem)

@@ -36,13 +36,16 @@ namespace StardewArchipelago.Locations.GingerIsland.Parrots
         public void ReplaceParrots()
         {
             _islandLocation.parrotUpgradePerches.Clear();
-            AddBridgeParrot(_islandLocation);
-            AddTraderParrot(_islandLocation);
+            AddDigSiteBridgeParrot(_islandLocation);
+            AddIslandTraderParrot(_islandLocation);
         }
 
-        private static void AddBridgeParrot(IslandLocation __instance)
+        private static void AddDigSiteBridgeParrot(IslandLocation __instance)
         {
-            __instance.parrotUpgradePerches.Add(new ParrotUpgradePerch(__instance, new Point(35, 52), new Microsoft.Xna.Framework.Rectangle(31, 52, 4, 4), 10, PurchaseBridgeParrot, IsBridgeParrotPurchased, "Bridge", "Island_Turtle"));
+            var digSiteBridgeParrot = new ParrotUpgradePerch(__instance, new Point(35, 52),
+                new Rectangle(31, 52, 4, 4), 10, PurchaseBridgeParrot, IsBridgeParrotPurchased,
+                "Bridge", "Island_Turtle");
+            __instance.parrotUpgradePerches.Add(digSiteBridgeParrot);
         }
 
         private static void PurchaseBridgeParrot()
@@ -55,9 +58,12 @@ namespace StardewArchipelago.Locations.GingerIsland.Parrots
             return _locationChecker.IsLocationChecked(AP_BRIDGE_PARROT);
         }
 
-        private static void AddTraderParrot(IslandLocation __instance)
+        private static void AddIslandTraderParrot(IslandLocation __instance)
         {
-            __instance.parrotUpgradePerches.Add(new ParrotUpgradePerch(__instance, new Point(32, 72), new Microsoft.Xna.Framework.Rectangle(33, 68, 5, 5), 10, PurchaseTraderParrot, IsTraderParrotPurchased, "Trader", "Island_UpgradeHouse"));
+            var islandTraderParrot = new ParrotUpgradePerch(__instance, new Point(32, 72),
+                new Rectangle(33, 68, 5, 5), 10, PurchaseTraderParrot, IsTraderParrotPurchased,
+                "Trader", "Island_UpgradeHouse");
+            __instance.parrotUpgradePerches.Add(islandTraderParrot);
         }
 
         private static void PurchaseTraderParrot()
