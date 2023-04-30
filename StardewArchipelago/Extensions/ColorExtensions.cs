@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Microsoft.Xna.Framework;
 
 namespace StardewArchipelago.Extensions
@@ -10,6 +11,11 @@ namespace StardewArchipelago.Extensions
 
         public static Color GetAsBrightColor(this string name)
         {
+            if (name == null)
+            {
+                Debugger.Break();
+                return "".GetHash().GetAsBrightColor();
+            }
             var hash = name.GetHash();
             return hash.GetAsBrightColor();
         }
