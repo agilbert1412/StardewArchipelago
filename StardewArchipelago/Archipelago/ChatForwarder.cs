@@ -283,9 +283,8 @@ namespace StardewArchipelago.Archipelago
             Game1.chatBox?.addMessage($"{COMMAND_PREFIX}bank [deposit|withdraw] [amount] - Deposit or withdraw money from your shared bank account", Color.Gold);
             Game1.chatBox?.addMessage($"{COMMAND_PREFIX}gift [slotName] - Sends your currently held item stack to a chosen player as a gift", Color.Gold);
             Game1.chatBox?.addMessage($"{COMMAND_PREFIX}deathlink - Toggles Deathlink on/off. Saves when sleeping", Color.Gold);
-            Game1.chatBox?.addMessage($"{COMMAND_PREFIX}sprite - Enable/Disable the Appearance Randomizer", Color.Gold);
-#if DEBUG
             Game1.chatBox?.addMessage($"{COMMAND_PREFIX}sprite - Enable/Disable the sprite randomizer", Color.Gold);
+#if DEBUG
             Game1.chatBox?.addMessage($"{COMMAND_PREFIX}sync - Sends a Sync packet to the Archipelago server", Color.Gold);
 #endif
             Game1.chatBox?.addMessage($"{COMMAND_PREFIX}arcade_release [game] - Releases all remaining checks in an arcade machine that you have already completed", Color.Gold);
