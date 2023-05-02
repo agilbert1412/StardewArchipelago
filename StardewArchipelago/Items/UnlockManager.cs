@@ -18,6 +18,7 @@ namespace StardewArchipelago.Items
         public const string BEACH_BRIDGE_AP_NAME = "Beach Bridge";
         public const string SPECIAL_ORDER_BOARD_AP_NAME = "Special Order Board";
         public const string QI_WALNUT_ROOM = "Qi Walnut Room";
+        public const string PIERRE_STOCKLIST = "Pierre's Missing Stocklist";
         private Dictionary<string, Func<ReceivedItem, LetterAttachment>> _unlockables;
 
         public UnlockManager()
@@ -90,6 +91,7 @@ namespace StardewArchipelago.Items
         private void RegisterUniqueItems()
         {
             _unlockables.Add(GOLDEN_SCYTHE_AP_NAME, SendGoldenScytheLetter);
+            // _unlockables.Add(PIERRE_STOCKLIST, SendPierreStocklistLetter);
         }
 
         private void RegisterIsolatedEventsItems()
@@ -265,6 +267,11 @@ namespace StardewArchipelago.Items
             Game1.player.mailReceived.Add("gotGoldenScythe");
             return new LetterActionAttachment(receivedItem, LetterActionsKeys.GoldenScythe);
         }
+
+        /*private LetterVanillaAttachment SendGoldenScytheLetter(ReceivedItem receivedItem)
+        {
+            return new LetterVanillaAttachment(receivedItem, "PierreStocklist", );
+        }*/
 
         private LetterActionAttachment SendBeachBridgeLetter(ReceivedItem receivedItem)
         {
