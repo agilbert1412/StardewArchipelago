@@ -2,7 +2,9 @@
 using System.Linq;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Items.Mail;
+using StardewArchipelago.Items.Traps;
 using StardewArchipelago.Stardew;
+using StardewModdingAPI;
 
 namespace StardewArchipelago.Items
 {
@@ -13,13 +15,15 @@ namespace StardewArchipelago.Items
         private Mailman _mail;
         private HashSet<ReceivedItem> _itemsAlreadyProcessed;
 
-        public ItemManager(ArchipelagoClient archipelago, StardewItemManager itemManager, UnlockManager unlockManager, Mailman mail, IEnumerable<ReceivedItem> itemsAlreadyProcessed)
+        public ItemManager(IModHelper helper, ArchipelagoClient archipelago, StardewItemManager itemManager, Mailman mail, IEnumerable<ReceivedItem> itemsAlreadyProcessed)
         {
             _archipelago = archipelago;
-            _itemParser = new ItemParser(itemManager, unlockManager);
+            _itemParser = new ItemParser(helper, itemManager);
             _mail = mail;
             _itemsAlreadyProcessed = itemsAlreadyProcessed.ToHashSet();
         }
+
+        public TrapManager TrapManager => _itemParser.TrapManager;
 
         /*public void RegisterAllUnlocks()
         {
@@ -30,26 +34,38 @@ namespace StardewArchipelago.Items
             }
         }*/
 
-        public void ReceiveAllNewItems()
+        public void ReceiveAllNewItems(bool immediatelyIfPossible)
         {
             var allReceivedItems = _archipelago.GetAllReceivedItems();
 
             foreach (var receivedItem in allReceivedItems)
             {
-                ReceiveNewItem(receivedItem);
+                ReceiveNewItem(receivedItem, immediatelyIfPossible);
             }
         }
 
-        private void ReceiveNewItem(ReceivedItem receivedItem)
+        private void ReceiveNewItem(ReceivedItem receivedItem, bool immediatelyIfPossible)
         {
             if (_itemsAlreadyProcessed.Contains(receivedItem))
             {
                 return;
             }
 
-            var attachment = _itemParser.ProcessItem(receivedItem);
-            attachment.SendToPlayer(_mail);
+            ProcessItem(receivedItem, immediatelyIfPossible);
             _itemsAlreadyProcessed.Add(receivedItem);
+        }
+
+        private void ProcessItem(ReceivedItem receivedItem, bool immediatelyIfPossible)
+        {
+            if (immediatelyIfPossible)
+            {
+                if (_itemParser.TrySendItemImmediately(receivedItem))
+                {
+                    return;
+                }
+            }
+            var attachment = _itemParser.ProcessItemAsLetter(receivedItem);
+            attachment.SendToPlayer(_mail);
         }
 
         public List<ReceivedItem> GetAllItemsAlreadyProcessed()

@@ -39,7 +39,7 @@ namespace StardewArchipelago.Items
             return _unlockables.ContainsKey(unlockName);
         }
 
-        public LetterAttachment PerformUnlock(ReceivedItem unlock)
+        public LetterAttachment PerformUnlockAsLetter(ReceivedItem unlock)
         {
             return _unlockables[unlock.ItemName](unlock);
         }

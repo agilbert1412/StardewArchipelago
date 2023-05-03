@@ -38,10 +38,10 @@ namespace StardewArchipelago.Test
             var itemName = string.Join(" ", arg2.Skip(1).ToArray());
             var receivedItem = new ReceivedItem("locationName", itemName, "playerName", 1, 2, 3, _random.Next(10000, int.MaxValue));
 
-            _itemParser = new ItemParser(new StardewItemManager(), new UnlockManager());
+            _itemParser = new ItemParser(_helper, new StardewItemManager());
             try
             {
-                var attachment = _itemParser.ProcessItem(receivedItem);
+                var attachment = _itemParser.ProcessItemAsLetter(receivedItem);
                 attachment.SendToPlayer(_mail);
             }
             catch (Exception)
@@ -52,7 +52,7 @@ namespace StardewArchipelago.Test
 
         public void TestGetAllItems(string arg1, string[] arg2)
         {
-            _itemParser = new ItemParser(new StardewItemManager(), new UnlockManager());
+            _itemParser = new ItemParser(_helper, new StardewItemManager());
 
             var itemsTable = _helper.Data.ReadJsonFile<Dictionary<string, JObject>>("stardew_valley_item_table.json");
             var items = itemsTable["items"];
@@ -65,7 +65,7 @@ namespace StardewArchipelago.Test
                 var receivedItem = new ReceivedItem("locationName", key, "playerName", 1, code, 3, _random.Next(10000, int.MaxValue));
                 try
                 {
-                    var attachment = _itemParser.ProcessItem(receivedItem);
+                    var attachment = _itemParser.ProcessItemAsLetter(receivedItem);
                     attachment.SendToPlayer(_mail);
                 }
                 catch (Exception)

@@ -47,7 +47,6 @@ namespace StardewArchipelago
         private ItemPatcher _itemPatcher;
         private GoalManager _goalManager;
         private StardewItemManager _stardewItemManager;
-        private UnlockManager _unlockManager;
         private MultiSleep _multiSleep;
         private JojaDisabler _jojaDisabler;
         private SeasonsRandomizer _seasonsRandomizer;
@@ -185,9 +184,8 @@ namespace StardewArchipelago
             _mail = new Mailman(State.LettersGenerated);
             _tester = new Tester(_helper, Monitor, _mail);
             _bundleReader = new BundleReader();
-            _unlockManager = new UnlockManager();
-            _itemManager = new ItemManager(_archipelago, _stardewItemManager, _unlockManager, _mail, State.ItemsReceived);
-            _mailPatcher = new MailPatcher(Monitor, new LetterActions(_helper, _mail), _harmony);
+            _itemManager = new ItemManager(_helper, _archipelago, _stardewItemManager, _mail, State.ItemsReceived);
+            _mailPatcher = new MailPatcher(Monitor, _harmony, new LetterActions(_helper, _mail, _itemManager.TrapManager));
             _locationChecker = new LocationChecker(Monitor, _archipelago, State.LocationsChecked);
             _locationsPatcher = new LocationPatcher(Monitor, _helper, _harmony, _archipelago, _locationChecker, _bundleReader, _stardewItemManager);
             _itemPatcher = new ItemPatcher(Monitor, _helper, _harmony, _archipelago);
@@ -282,7 +280,7 @@ namespace StardewArchipelago
             _mail.SendToday();
             _locationChecker.VerifyNewLocationChecksWithArchipelago();
             _locationChecker.SendAllLocationChecks();
-            _itemManager.ReceiveAllNewItems();
+            _itemManager.ReceiveAllNewItems(false);
             _goalManager.CheckGoalCompletion();
             _mail.SendTomorrow();
             PlayerBuffInjections.CheckForApBuffs();
@@ -342,7 +340,7 @@ namespace StardewArchipelago
 
         private void OnItemReceived()
         {
-            _itemManager?.ReceiveAllNewItems();
+            _itemManager?.ReceiveAllNewItems(true);
         }
 
         private void DebugMethod(string arg1, string[] arg2)

@@ -1,7 +1,9 @@
 ﻿using System;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Items.Mail;
+using StardewArchipelago.Items.Traps;
 using StardewArchipelago.Stardew;
+using StardewModdingAPI;
 
 namespace StardewArchipelago.Items
 {
@@ -13,14 +15,28 @@ namespace StardewArchipelago.Items
 
         private StardewItemManager _itemManager;
         private UnlockManager _unlockManager;
+        private TrapManager _trapManager;
 
-        public ItemParser(StardewItemManager itemManager, UnlockManager unlockManager)
+        public ItemParser(IModHelper helper, StardewItemManager itemManager)
         {
             _itemManager = itemManager;
-            _unlockManager = unlockManager;
+            _unlockManager = new UnlockManager();
+            _trapManager = new TrapManager(helper);
         }
 
-        public LetterAttachment ProcessItem(ReceivedItem receivedItem)
+        public TrapManager TrapManager => _trapManager;
+
+        public bool TrySendItemImmediately(ReceivedItem receivedItem)
+        {
+            if (_trapManager.IsTrap(receivedItem.ItemName))
+            {
+                return _trapManager.TryExecuteTrapImmediately(receivedItem.ItemName);
+            }
+
+            return false;
+        }
+
+        public LetterAttachment ProcessItemAsLetter(ReceivedItem receivedItem)
         {
             var itemIsResourcePack = TryParseResourcePack(receivedItem.ItemName, out var stardewItemName, out var resourcePackAmount);
             if (itemIsResourcePack)
@@ -40,9 +56,14 @@ namespace StardewArchipelago.Items
                 return new LetterActionAttachment(receivedItem, LetterActionsKeys.Friendship, numberOfPoints.ToString());
             }
 
+            if (_trapManager.IsTrap(receivedItem.ItemName))
+            {
+                return _trapManager.GenerateTrapLetter(receivedItem);
+            }
+
             if (_unlockManager.IsUnlock(receivedItem.ItemName))
             {
-                return _unlockManager.PerformUnlock(receivedItem);
+                return _unlockManager.PerformUnlockAsLetter(receivedItem);
             }
 
             if (receivedItem.ItemName.EndsWith(RECIPE_SUFFIX))

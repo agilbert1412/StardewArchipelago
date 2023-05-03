@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Netcode;
+using StardewArchipelago.Items.Traps;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
@@ -15,12 +16,14 @@ namespace StardewArchipelago.Items.Mail
     {
         private readonly IModHelper _modHelper;
         private readonly Mailman _mail;
+        private readonly TrapManager _trapManager;
         private Dictionary<string, Action<string>> _letterActions;
 
-        public LetterActions(IModHelper modHelper, Mailman mail)
+        public LetterActions(IModHelper modHelper, Mailman mail, TrapManager trapManager)
         {
             _modHelper = modHelper;
             _mail = mail;
+            _trapManager = trapManager;
             _letterActions = new Dictionary<string, Action<string>>();
             _letterActions.Add(LetterActionsKeys.Friendship, IncreaseFriendshipWithEveryone);
             _letterActions.Add(LetterActionsKeys.Backpack, (_) => IncreaseBackpackLevel());
@@ -44,6 +47,7 @@ namespace StardewArchipelago.Items.Mail
             _letterActions.Add(LetterActionsKeys.GiveFurniture, ReceiveFurniture);
             _letterActions.Add(LetterActionsKeys.GiveHat, ReceiveHat);
             _letterActions.Add(LetterActionsKeys.IslandUnlock, PerformParrotUpgrade);
+            _letterActions.Add(LetterActionsKeys.Trap, ExecuteTrap);
         }
 
         public void ExecuteLetterAction(string key, string parameter)
@@ -495,6 +499,16 @@ namespace StardewArchipelago.Items.Mail
             var shortcutOutUnlockedField = _modHelper.Reflection.GetField<NetBool>(volcanoDungeon, "shortcutOutUnlocked");
             shortcutOutUnlockedField.GetValue().Value = true;
 
+        }
+
+        private void ExecuteTrap(string trapName)
+        {
+            if (!_trapManager.IsTrap(trapName))
+            {
+                throw new ArgumentException(trapName);
+            }
+
+            _trapManager.TryExecuteTrapImmediately(trapName);
         }
     }
 }
