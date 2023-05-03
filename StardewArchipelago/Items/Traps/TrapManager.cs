@@ -299,7 +299,7 @@ namespace StardewArchipelago.Items.Traps
 
         private void SpawnMonsters()
         {
-            const int numberMonsters = 10;
+            const int numberMonsters = 5;
             for (var i = 0; i < numberMonsters; i++)
             {
                 _monsterSpawner.SpawnOneMonster(Game1.player.currentLocation);
