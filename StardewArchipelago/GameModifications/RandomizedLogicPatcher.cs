@@ -58,7 +58,7 @@ namespace StardewArchipelago.GameModifications
             PatchJodiFishQuest();
             PatchLostAndFoundBox();
             PatchTvChannels();
-            // PatchAppearanceRandomization();
+            PatchCleanupBeforeSave();
             _startingResources.GivePlayerStartingResources();
         }
 
@@ -317,11 +317,11 @@ namespace StardewArchipelago.GameModifications
             );
         }
 
-        private void PatchAppearanceRandomization()
+        private void PatchCleanupBeforeSave()
         {
             _harmony.Patch(
-                original: AccessTools.Method(typeof(AnimatedSprite), nameof(AnimatedSprite.LoadTexture)),
-                prefix: new HarmonyMethod(typeof(AppearanceRandomizer), nameof(AppearanceRandomizer.LoadTexture_ShuffleAppearance_Prefix))
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.cleanupBeforeSave)),
+                postfix: new HarmonyMethod(typeof(CleanupBeforeSaveInjections), nameof(CleanupBeforeSaveInjections.CleanupBeforeSave_RemoveIllegalMonsters_Postfix))
             );
         }
     }
