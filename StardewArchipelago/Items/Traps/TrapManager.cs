@@ -43,11 +43,15 @@ namespace StardewArchipelago.Items.Traps
         private const string DROUGHT = "Drought";
 
         private readonly IModHelper _helper;
+        private readonly TileChooser _tileChooser;
+        private readonly MonsterSpawner _monsterSpawner;
         private Dictionary<string, Action> _traps;
 
         public TrapManager(IModHelper helper)
         {
             _helper = helper;
+            _tileChooser = new TileChooser();
+            _monsterSpawner = new MonsterSpawner(_tileChooser);
             _traps = new Dictionary<string, Action>();
             RegisterTraps();
         }
@@ -158,20 +162,11 @@ namespace StardewArchipelago.Items.Traps
         private void TeleportRandomly()
         {
             var area = Game1.locations[Game1.random.Next(Game1.locations.Count)];
-            var tile = area.getRandomTile();
-            var tilePoint = new Point((int)tile.X, (int)tile.Y);
-            var tileLocation = new Location(tilePoint.X, tilePoint.Y);
-            while (area.isTileOccupied(tile) || area.isWaterTile(tilePoint.X, tilePoint.Y) || !area.isTileLocationTotallyClearAndPlaceable(tile) || !area.isTileLocationOpenIgnoreFrontLayers(tileLocation))
-            {
-                tile = area.getRandomTile();
-                tilePoint = new Point((int)tile.X, (int)tile.Y);
-                tileLocation = new Location(tilePoint.X, tilePoint.Y);
-            }
-
-            TeleportFarmerTo(area.Name, tilePoint);
+            var tile = _tileChooser.GetRandomTileInbounds(area);
+            TeleportFarmerTo(area.Name, tile);
         }
 
-        private void TeleportFarmerTo(string locationName, Point tile)
+        private void TeleportFarmerTo(string locationName, Vector2 tile)
         {
             var farmer = Game1.player;
             var multiplayerField = _helper.Reflection.GetField<Multiplayer>(typeof(Game1), "multiplayer");
@@ -205,9 +200,10 @@ namespace StardewArchipelago.Items.Traps
             }
         }
 
-        private void AfterTeleport(Farmer farmer, string locationName, Point tile)
+        private void AfterTeleport(Farmer farmer, string locationName, Vector2 tile)
         {
-            Game1.warpFarmer(locationName, tile.X, tile.Y, false);
+            var destination = Utility.Vector2ToPoint(tile);
+            Game1.warpFarmer(locationName, destination.X, destination.Y, false);
             if (!Game1.isStartingToGetDarkOut() && !Game1.isRaining)
                 Game1.playMorningSong();
             else
@@ -307,60 +303,8 @@ namespace StardewArchipelago.Items.Traps
             const int numberMonsters = 10;
             for (var i = 0; i < numberMonsters; i++)
             {
-                SpawnOneMonster(Game1.player.currentLocation);
+                _monsterSpawner.SpawnOneMonster(Game1.player.currentLocation);
             }
-        }
-
-        private void SpawnOneMonster(GameLocation map)
-        {
-            var monster = ChooseRandomMonster(map);
-            monster.focusedOnFarmers = true;
-            monster.wildernessFarmMonster = true;
-            map.characters.Add(monster);
-        }
-
-        private Monster ChooseRandomMonster(GameLocation map)
-        {
-            var spawnPosition = GetMonsterSpawnPosition(map);
-            var monsterTypes = new[] { "Bat", "Frost Bat", "Lava Bat", "Iridium Bat", "Serpent", "Shadow Brute", "Rock Golem", "Slime" };
-            var chosenMonsterType = monsterTypes[Game1.random.Next(0, monsterTypes.Length)];
-            switch (chosenMonsterType)
-            {
-                case "Bat":
-                    return new Bat(spawnPosition * 64f, 1);
-                case "Frost Bat":
-                    return new Bat(spawnPosition * 64f, 41);
-                case "Lava Bat":
-                    return new Bat(spawnPosition * 64f, 81);
-                case "Iridium Bat":
-                    return new Bat(spawnPosition * 64f, 172);
-                case "Serpent":
-                    return new Serpent(spawnPosition * 64f);
-                case "Shadow Brute":
-                    return new ShadowBrute(spawnPosition * 64f);
-                case "Rock Golem":
-                    return new RockGolem(spawnPosition * 64f, Game1.player.CombatLevel);
-                case "Slime":
-                    var mineLevel = Game1.player.CombatLevel switch
-                    {
-                        >= 10 => 140,
-                        >= 8 => 100,
-                        >= 4 => 41,
-                        _ => 1
-                    };
-                    return new GreenSlime(spawnPosition * 64f, mineLevel);
-
-                default:
-                    throw new Exception("Could not choose a monster");
-            }
-        }
-
-        private Vector2 GetMonsterSpawnPosition(GameLocation map)
-        {
-            var spawnPosition = map.getRandomTile();
-            if (Utility.isOnScreen(Utility.Vector2ToPoint(spawnPosition), 64, map))
-                spawnPosition.X -= Game1.viewport.Width / 64;
-            return spawnPosition;
         }
 
         private void CreateDebris()
