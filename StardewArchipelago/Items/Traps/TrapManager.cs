@@ -23,7 +23,6 @@ namespace StardewArchipelago.Items.Traps
 {
     public class TrapManager
     {
-        private const int DEBUFF_DURATION = 1200000;
         private const string BURNT = "Burnt";
         private const string DARKNESS = "Darkness";
         private const string FROZEN = "Frozen";
@@ -119,7 +118,7 @@ namespace StardewArchipelago.Items.Traps
 
         private void AddFrozenDebuff()
         {
-            AddDebuff(Buffs.Frozen);
+            AddDebuff(Buffs.Frozen, BuffDuration.OneHour);
         }
 
         private void AddJinxedDebuff()
@@ -142,11 +141,11 @@ namespace StardewArchipelago.Items.Traps
             AddDebuff(Buffs.Weakness);
         }
 
-        private void AddDebuff(Buffs whichBuff)
+        private void AddDebuff(Buffs whichBuff, BuffDuration duration = BuffDuration.WholeDay)
         {
             var debuff = new Buff((int)whichBuff);
-            debuff.millisecondsDuration = DEBUFF_DURATION;
-            debuff.totalMillisecondsDuration = DEBUFF_DURATION;
+            debuff.millisecondsDuration = (int)duration;
+            debuff.totalMillisecondsDuration = (int)duration;
             Game1.buffsDisplay.addOtherBuff(debuff);
         }
 
@@ -317,7 +316,7 @@ namespace StardewArchipelago.Items.Traps
                 locations.Add(currentLocation);
             }
 
-            const int numberDebrisPerTrap = 50;
+            const int numberDebrisPerTrap = 100;
             foreach (var gameLocation in locations)
             {
                 gameLocation.spawnWeedsAndStones(numberDebrisPerTrap);
