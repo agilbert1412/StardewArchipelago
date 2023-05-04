@@ -18,7 +18,7 @@ namespace StardewArchipelago.Items
         public ItemManager(IModHelper helper, ArchipelagoClient archipelago, StardewItemManager itemManager, Mailman mail, IEnumerable<ReceivedItem> itemsAlreadyProcessed)
         {
             _archipelago = archipelago;
-            _itemParser = new ItemParser(helper, itemManager);
+            _itemParser = new ItemParser(helper, archipelago, itemManager);
             _mail = mail;
             _itemsAlreadyProcessed = itemsAlreadyProcessed.ToHashSet();
         }

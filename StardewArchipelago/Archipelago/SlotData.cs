@@ -29,6 +29,7 @@ namespace StardewArchipelago.Archipelago
         private const string MUSEUMSANITY_KEY = "museumsanity";
         private const string FRIENDSANITY_KEY = "friendsanity";
         private const string EXCLUDE_GINGER_ISLAND_KEY = "exclude_ginger_island";
+        private const string TRAP_ITEMS_KEY = "trap_items";
         private const string MULTI_SLEEP_ENABLED_KEY = "multiple_day_sleep_enabled";
         private const string MULTI_SLEEP_COST_KEY = "multiple_day_sleep_cost";
         private const string EXPERIENCE_MULTIPLIER_KEY = "experience_multiplier";
@@ -69,6 +70,7 @@ namespace StardewArchipelago.Archipelago
         public Museumsanity Museumsanity { get; private set; }
         public Friendsanity Friendsanity { get; private set; }
         public bool ExcludeGingerIsland { get; private set; }
+        public TrapItemsDifficulty TrapItemsDifficulty { get; private set; }
         public bool EnableMultiSleep { get; private set; }
         public int MultiSleepCostPerDay { get; private set; }
         public double ExperienceMultiplier { get; private set; }
@@ -111,6 +113,7 @@ namespace StardewArchipelago.Archipelago
             Museumsanity = GetSlotSetting(MUSEUMSANITY_KEY, Museumsanity.None);
             Friendsanity = GetSlotSetting(FRIENDSANITY_KEY, Friendsanity.None);
             ExcludeGingerIsland = GetSlotSetting(EXCLUDE_GINGER_ISLAND_KEY, true);
+            TrapItemsDifficulty = GetSlotSetting(TRAP_ITEMS_KEY, TrapItemsDifficulty.Medium);
             EnableMultiSleep = GetSlotSetting(MULTI_SLEEP_ENABLED_KEY, true);
             MultiSleepCostPerDay = GetSlotSetting(MULTI_SLEEP_COST_KEY, 0);
             ExperienceMultiplier = GetSlotSetting(EXPERIENCE_MULTIPLIER_KEY, 100) / 100.0;
@@ -346,6 +349,16 @@ namespace StardewArchipelago.Archipelago
         StartingNpcs = 3,
         All = 4,
         AllWithMarriage = 5,
+    }
+
+    public enum TrapItemsDifficulty
+    {
+        NoTraps = 0,
+        Easy = 1,
+        Medium = 2,
+        Hard = 3,
+        Hell = 4,
+        Nightmare = 5,
     }
 
     public enum Goal

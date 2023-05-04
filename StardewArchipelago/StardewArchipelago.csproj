@@ -52,6 +52,7 @@
 
   <ItemGroup>
     <Folder Include="GameModifications\CustomOptions\" />
+    <Folder Include="Test\" />
   </ItemGroup>
 
 </Project>

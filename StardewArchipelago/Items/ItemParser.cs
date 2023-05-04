@@ -17,11 +17,11 @@ namespace StardewArchipelago.Items
         private UnlockManager _unlockManager;
         private TrapManager _trapManager;
 
-        public ItemParser(IModHelper helper, StardewItemManager itemManager)
+        public ItemParser(IModHelper helper, ArchipelagoClient archipelago, StardewItemManager itemManager)
         {
             _itemManager = itemManager;
             _unlockManager = new UnlockManager();
-            _trapManager = new TrapManager(helper);
+            _trapManager = new TrapManager(helper, archipelago);
         }
 
         public TrapManager TrapManager => _trapManager;

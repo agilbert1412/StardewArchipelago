@@ -14,7 +14,6 @@ using StardewArchipelago.Locations;
 using StardewArchipelago.Locations.CodeInjections;
 using StardewArchipelago.Serialization;
 using StardewArchipelago.Stardew;
-using StardewArchipelago.Test;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -52,8 +51,6 @@ namespace StardewArchipelago
         private SeasonsRandomizer _seasonsRandomizer;
         private AppearanceRandomizer _appearanceRandomizer;
         private QuestCleaner _questCleaner;
-
-        private Tester _tester;
 
         public ArchipelagoStateDto State { get; set; }
         private ArchipelagoConnectionInfo _apConnectionOverride;
@@ -95,8 +92,6 @@ namespace StardewArchipelago
 #if DEBUG
             _helper.ConsoleCommands.Add("connect", $"Connect to Archipelago. {CONNECT_SYNTAX}", this.OnCommandConnectToArchipelago);
             _helper.ConsoleCommands.Add("disconnect", $"Disconnects from Archipelago. {CONNECT_SYNTAX}", this.OnCommandDisconnectFromArchipelago);
-            _helper.ConsoleCommands.Add("test_getallitems", "Tests if every AP item in the stardew_valley_item_table json file are supported by the mod", this.TestGetAllItems);
-            _helper.ConsoleCommands.Add("test_getitem", "Get one specific item", this.TestGetSpecificItem);
             _helper.ConsoleCommands.Add("set_next_season", "Sets the next season to a chosen value", this.SetNextSeason);
             //_helper.ConsoleCommands.Add("test_sendalllocations", "Tests if every AP item in the stardew_valley_location_table json file are supported by the mod", _tester.TestSendAllLocations);
             // _helper.ConsoleCommands.Add("load_entrances", "Loads the entrances file", (_, _) => _entranceRandomizer.LoadTransports());
@@ -182,7 +177,6 @@ namespace StardewArchipelago
 
             _stardewItemManager = new StardewItemManager();
             _mail = new Mailman(State.LettersGenerated);
-            _tester = new Tester(_helper, Monitor, _mail);
             _bundleReader = new BundleReader();
             _itemManager = new ItemManager(_helper, _archipelago, _stardewItemManager, _mail, State.ItemsReceived);
             _mailPatcher = new MailPatcher(Monitor, _harmony, new LetterActions(_helper, _mail, _itemManager.TrapManager));
@@ -366,16 +360,6 @@ namespace StardewArchipelago
             Game1.ExitToTitle();
             _archipelago.DisconnectPermanently();
             State.APConnectionInfo = null;
-        }
-
-        private void TestGetSpecificItem(string arg1, string[] arg2)
-        {
-            _tester.TestGetSpecificItem(arg1, arg2);
-        }
-
-        private void TestGetAllItems(string arg1, string[] arg2)
-        {
-            _tester.TestGetAllItems(arg1, arg2);
         }
 
         private void SetNextSeason(string arg1, string[] arg2)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -16,6 +17,7 @@ using StardewValley.Locations;
 using StardewValley.Monsters;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
+using StardewValley.Tools;
 using xTile.Dimensions;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
@@ -42,15 +44,21 @@ namespace StardewArchipelago.Items.Traps
         private const string DROUGHT = "Drought";
 
         private readonly IModHelper _helper;
+        private readonly ArchipelagoClient _archipelago;
+        private readonly TrapDifficultyBalancer _difficultyBalancer;
         private readonly TileChooser _tileChooser;
         private readonly MonsterSpawner _monsterSpawner;
+        private readonly InventoryShuffler _inventoryShuffler;
         private Dictionary<string, Action> _traps;
 
-        public TrapManager(IModHelper helper)
+        public TrapManager(IModHelper helper, ArchipelagoClient archipelago)
         {
             _helper = helper;
+            _archipelago = archipelago;
+            _difficultyBalancer = new TrapDifficultyBalancer();
             _tileChooser = new TileChooser();
             _monsterSpawner = new MonsterSpawner(_tileChooser);
+            _inventoryShuffler = new InventoryShuffler();
             _traps = new Dictionary<string, Action>();
             RegisterTraps();
         }
@@ -94,7 +102,7 @@ namespace StardewArchipelago.Items.Traps
             _traps.Add(SHUFFLE, ShuffleInventory);
             // _traps.Add(WINTER, );
             _traps.Add(PARIAH, SendDislikedGiftToEveryone);
-            _traps.Add(DROUGHT, UnwaterAllCrops);
+            _traps.Add(DROUGHT, PerformDroughtTrap);
 
             foreach (var trapName in _traps.Keys.ToArray())
             {
@@ -118,7 +126,8 @@ namespace StardewArchipelago.Items.Traps
 
         private void AddFrozenDebuff()
         {
-            AddDebuff(Buffs.Frozen, BuffDuration.OneHour);
+            var duration = _difficultyBalancer.FrozenDebuffDurations[_archipelago.SlotData.TrapItemsDifficulty];
+            AddDebuff(Buffs.Frozen, duration);
         }
 
         private void AddJinxedDebuff()
@@ -141,7 +150,13 @@ namespace StardewArchipelago.Items.Traps
             AddDebuff(Buffs.Weakness);
         }
 
-        private void AddDebuff(Buffs whichBuff, BuffDuration duration = BuffDuration.WholeDay)
+        private void AddDebuff(Buffs whichBuff)
+        {
+            var duration = _difficultyBalancer.DefaultDebuffDurations[_archipelago.SlotData.TrapItemsDifficulty];
+            AddDebuff(whichBuff, duration);
+        }
+
+        private void AddDebuff(Buffs whichBuff, BuffDuration duration)
         {
             var debuff = new Buff((int)whichBuff);
             debuff.millisecondsDuration = (int)duration;
@@ -151,7 +166,7 @@ namespace StardewArchipelago.Items.Traps
 
         private void ChargeTaxes()
         {
-            const double taxRate = 0.4;
+            var taxRate = _difficultyBalancer.TaxRates[_archipelago.SlotData.TrapItemsDifficulty];
             var player = Game1.player;
             var currentMoney = player.Money;
             var tax = (int)(currentMoney * taxRate);
@@ -217,15 +232,30 @@ namespace StardewArchipelago.Items.Traps
 
         private void SendCrows()
         {
-            const double crowRateFarm = 0.5;
-            const double crowRateRoof = 0.1;
-            const double crowRateIsland = 0.3;
+            var crowRate = _difficultyBalancer.CrowAttackRate[_archipelago.SlotData.TrapItemsDifficulty];
+            var crowTargets = _difficultyBalancer.CrowValidTargets[_archipelago.SlotData.TrapItemsDifficulty];
+            if (crowTargets == CrowTargets.None)
+            {
+                return;
+            }
+
             var farm = Game1.getFarm();
-            var greenHouse = Game1.getLocationFromName("Greenhouse");
+            SendCrowsForLocation(farm, crowRate);
+            if (crowTargets == CrowTargets.Farm)
+            {
+                return;
+            }
+
             var islandSouth = Game1.getLocationFromName("IslandSouth");
-            SendCrowsForLocation(farm, crowRateFarm);
-            SendCrowsForLocation(greenHouse, crowRateRoof);
-            SendCrowsForLocation(islandSouth, crowRateIsland);
+            SendCrowsForLocation(islandSouth, crowRate);
+
+            if (crowTargets == CrowTargets.Island)
+            {
+                return;
+            }
+
+            var greenHouse = Game1.getLocationFromName("Greenhouse");
+            SendCrowsForLocation(greenHouse, crowRate);
         }
 
         private static void SendCrowsForLocation(GameLocation map, double crowRate)
@@ -239,11 +269,6 @@ namespace StardewArchipelago.Items.Traps
                 var chosenIndex = Game1.random.Next(vulnerableCrops.Count);
                 var cropToEat = vulnerableCrops[chosenIndex];
                 vulnerableCrops.RemoveAt(chosenIndex);
-                if (cropToEat.crop.currentPhase.Value <= 1)
-                {
-                    continue;
-                }
-
                 cropToEat.destroyCrop(cropToEat.currentTileLocation, true, map);
                 map.critters.Add(new Crow((int)cropToEat.currentTileLocation.X, (int)cropToEat.currentTileLocation.Y));
             }
@@ -268,7 +293,7 @@ namespace StardewArchipelago.Items.Traps
             var vulnerableCrops = new List<HoeDirt>();
             foreach (var (cropPosition, cropTile) in farm.terrainFeatures.Pairs)
             {
-                if (cropTile is not HoeDirt dirt || dirt.crop == null)
+                if (cropTile is not HoeDirt dirt || dirt.crop == null || dirt.crop.currentPhase.Value <= 1)
                 {
                     continue;
                 }
@@ -299,7 +324,7 @@ namespace StardewArchipelago.Items.Traps
 
         private void SpawnMonsters()
         {
-            const int numberMonsters = 5;
+            var numberMonsters = _difficultyBalancer.NumberOfMonsters[_archipelago.SlotData.TrapItemsDifficulty];
             for (var i = 0; i < numberMonsters; i++)
             {
                 _monsterSpawner.SpawnOneMonster(Game1.player.currentLocation);
@@ -315,25 +340,25 @@ namespace StardewArchipelago.Items.Traps
             {
                 locations.Add(currentLocation);
             }
-
-            const int numberDebrisPerTrap = 100;
+            
+            var amountOfDebris = _difficultyBalancer.AmountOfDebris[_archipelago.SlotData.TrapItemsDifficulty];
+            var amountOfDebrisPerLocation = amountOfDebris / locations.Count;
             foreach (var gameLocation in locations)
             {
-                gameLocation.spawnWeedsAndStones(numberDebrisPerTrap);
+                gameLocation.spawnWeedsAndStones(amountOfDebrisPerLocation);
             }
         }
 
         private void ShuffleInventory()
         {
-            var inventory = Game1.player.Items.ToList();
-            var random = new Random((int)(Game1.uniqueIDForThisGame + Game1.stats.DaysPlayed));
-            var shuffled = inventory.Shuffle(random);
-            Game1.player.Items = shuffled;
+            var targets = _difficultyBalancer.ShuffleInventoryTargets[_archipelago.SlotData.TrapItemsDifficulty];
+            _inventoryShuffler.ShuffleInventories(targets);
         }
 
         private void SendDislikedGiftToEveryone()
         {
             var player = Game1.player;
+            var friendshipLoss = _difficultyBalancer.PariahFriendshipLoss[_archipelago.SlotData.TrapItemsDifficulty];
             foreach (var name in player.friendshipData.Keys)
             {
                 var npc = Game1.getCharacterFromName(name) ?? Game1.getCharacterFromName<Child>(name, false);
@@ -347,13 +372,14 @@ namespace StardewArchipelago.Items.Traps
                 ++player.friendshipData[name].GiftsToday;
                 ++player.friendshipData[name].GiftsThisWeek;
                 player.friendshipData[name].LastGiftDate = new WorldDate(Game1.Date);
-                Game1.player.changeFriendship(-20, npc);
+                Game1.player.changeFriendship(friendshipLoss, npc);
             }
         }
 
-        private void UnwaterAllCrops()
+        private void PerformDroughtTrap()
         {
-            var hoeDirts = GetAllHoeDirt();
+            var droughtTargets = _difficultyBalancer.DroughtTargets[_archipelago.SlotData.TrapItemsDifficulty];
+            var hoeDirts = GetAllHoeDirt(droughtTargets);
             foreach (var hoeDirt in hoeDirts)
             {
                 if (hoeDirt.state.Value == 1)
@@ -361,15 +387,40 @@ namespace StardewArchipelago.Items.Traps
                     hoeDirt.state.Value = 0;
                 }
             }
+
+            if (droughtTargets != DroughtTarget.CropsIncludingWateringCan)
+            {
+                return;
+            }
+
+            foreach (var wateringCan in GetAllWateringCans())
+            {
+                wateringCan.WaterLeft = 0;
+            }
         }
 
-        private IEnumerable<HoeDirt> GetAllHoeDirt()
+        private IEnumerable<HoeDirt> GetAllHoeDirt(DroughtTarget validTargets)
         {
+            if (validTargets == DroughtTarget.None)
+            {
+                yield break;
+            }
+
             foreach (var gameLocation in Game1.locations)
             {
+                if (!gameLocation.IsOutdoors && validTargets < DroughtTarget.CropsIncludingInside)
+                {
+                    continue;
+                }
+
                 foreach (var terrainFeature in gameLocation.terrainFeatures.Values)
                 {
                     if (terrainFeature is not HoeDirt groundDirt)
+                    {
+                        continue;
+                    }
+
+                    if (validTargets == DroughtTarget.Soil && groundDirt.crop != null)
                     {
                         continue;
                     }
@@ -385,6 +436,41 @@ namespace StardewArchipelago.Items.Traps
                     }
 
                     yield return gardenPot.hoeDirt.Value;
+                }
+            }
+        }
+
+        private IEnumerable<WateringCan> GetAllWateringCans()
+        {
+            foreach (var item in Game1.player.Items)
+            {
+                if (item is not WateringCan wateringCan)
+                {
+                    continue;
+                }
+
+                yield return wateringCan;
+            }
+
+
+            foreach (var gameLocation in Game1.locations)
+            {
+                foreach (var (tile, gameObject) in gameLocation.Objects.Pairs)
+                {
+                    if (gameObject is not Chest chest)
+                    {
+                        continue;
+                    }
+
+                    foreach (var chestItem in chest.items)
+                    {
+                        if (chestItem is not WateringCan wateringCan)
+                        {
+                            continue;
+                        }
+
+                        yield return wateringCan;
+                    }
                 }
             }
         }
