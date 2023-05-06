@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using StardewArchipelago.Extensions;
 using StardewValley;
 
 namespace StardewArchipelago.GameModifications.EntranceRandomizer
@@ -8,16 +9,19 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
     {
         private const int MAX_DISTANCE = 2;
 
+        private readonly EquivalentWarps _equivalentWarps;
+
         public string OriginName { get; }
         public string DestinationName { get; }
         public Point OriginPosition { get; set; }
         public Point DestinationPosition { get; set; }
-        public int FacingDirectionAfterWarp { get; }
+        public FacingDirection FacingDirectionAfterWarp { get; }
 
         private OneWayEntrance _replacement;
 
-        public OneWayEntrance(string originName, string destinationName, Point originPosition, Point destinationPosition, int facingDirectionAfterWarp)
+        public OneWayEntrance(EquivalentWarps equivalentWarps, string originName, string destinationName, Point originPosition, Point destinationPosition, FacingDirection facingDirectionAfterWarp)
         {
+            _equivalentWarps = equivalentWarps;
             OriginName = originName;
             DestinationName = destinationName;
             OriginPosition = originPosition;
@@ -51,28 +55,18 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
         {
             newWarp = originalWarp;
             var currentTile = new Point(Game1.player.getTileX(), Game1.player.getTileY());
-            if (!IsCloseEnough(OriginPosition, currentTile))
+            if (!OriginPosition.IsCloseEnough(currentTile, MAX_DISTANCE))
             {
                 return false;
             }
 
-            var correctReplacement = EquivalentWarps.GetCorrectEquivalentWarp(_replacement);
+            var correctReplacement = _equivalentWarps.GetCorrectEquivalentWarp(_replacement);
 
             var locationRequest = originalWarp.LocationRequest;
             locationRequest.Name = correctReplacement.DestinationName;
             locationRequest.Location = Game1.getLocationFromName(correctReplacement.DestinationName, locationRequest.IsStructure);
             newWarp = new WarpRequest(locationRequest, correctReplacement.DestinationPosition.X, correctReplacement.DestinationPosition.Y, correctReplacement.FacingDirectionAfterWarp);
             return true;
-        }
-
-        private int GetTotalTileDistance(Point tile1, Point tile2)
-        {
-            return Math.Abs(tile1.X - tile2.X) + Math.Abs(tile1.Y - tile2.Y);
-        }
-
-        private bool IsCloseEnough(Point tile1, Point tile2)
-        {
-            return GetTotalTileDistance(tile1, tile2) <= MAX_DISTANCE;
         }
     }
 }

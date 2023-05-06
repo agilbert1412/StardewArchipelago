@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.GameModifications.CodeInjections;
+using StardewArchipelago.GameModifications.EntranceRandomizer;
 using StardewArchipelago.GameModifications.Seasons;
 using StardewArchipelago.Locations;
 using StardewArchipelago.Serialization;
@@ -27,7 +28,7 @@ namespace StardewArchipelago.GameModifications
         private readonly StardewItemManager _stardewItemManager;
         private readonly StartingResources _startingResources;
 
-        public RandomizedLogicPatcher(IMonitor monitor, IModHelper helper, Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager stardewItemManager, ArchipelagoStateDto state)
+        public RandomizedLogicPatcher(IMonitor monitor, IModHelper helper, Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager stardewItemManager, EntranceManager entranceManager)
         {
             _harmony = harmony;
             _archipelago = archipelago;
@@ -37,7 +38,7 @@ namespace StardewArchipelago.GameModifications
             CommunityCenterLogicInjections.Initialize(monitor, locationChecker);
             FarmInjections.Initialize(monitor, _archipelago);
             AchievementInjections.Initialize(monitor, _archipelago);
-            EntranceInjections.Initialize(monitor, _archipelago);
+            EntranceInjections.Initialize(monitor, _archipelago, entranceManager);
             ForestInjections.Initialize(monitor, _archipelago);
             SeedShopsInjections.Initialize(monitor, helper, archipelago, locationChecker);
             LostAndFoundInjections.Initialize(monitor, archipelago);

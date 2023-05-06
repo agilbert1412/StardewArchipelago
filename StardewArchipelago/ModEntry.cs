@@ -51,6 +51,7 @@ namespace StardewArchipelago
         private SeasonsRandomizer _seasonsRandomizer;
         private AppearanceRandomizer _appearanceRandomizer;
         private QuestCleaner _questCleaner;
+        private EntranceManager _entranceManager;
 
         public ArchipelagoStateDto State { get; set; }
         private ArchipelagoConnectionInfo _apConnectionOverride;
@@ -95,7 +96,7 @@ namespace StardewArchipelago
             _helper.ConsoleCommands.Add("set_next_season", "Sets the next season to a chosen value", this.SetNextSeason);
             //_helper.ConsoleCommands.Add("test_sendalllocations", "Tests if every AP item in the stardew_valley_location_table json file are supported by the mod", _tester.TestSendAllLocations);
             // _helper.ConsoleCommands.Add("load_entrances", "Loads the entrances file", (_, _) => _entranceRandomizer.LoadTransports());
-            _helper.ConsoleCommands.Add("save_entrances", "Saves the entrances file", (_, _) => EntranceInjections.SaveNewEntrancesToFile());
+            // _helper.ConsoleCommands.Add("save_entrances", "Saves the entrances file", (_, _) => EntranceInjections.SaveNewEntrancesToFile());
             _helper.ConsoleCommands.Add("debugMethod", "Runs whatever is currently in the debug method", this.DebugMethod);
 #endif
         }
@@ -184,7 +185,8 @@ namespace StardewArchipelago
             _locationsPatcher = new LocationPatcher(Monitor, _helper, _harmony, _archipelago, _locationChecker, _bundleReader, _stardewItemManager);
             _itemPatcher = new ItemPatcher(Monitor, _helper, _harmony, _archipelago);
             _goalManager = new GoalManager(Monitor, _helper, _harmony, _archipelago, _locationChecker);
-            _logicPatcher = new RandomizedLogicPatcher(Monitor, _helper, _harmony, _archipelago, _locationChecker, _stardewItemManager, State);
+            _entranceManager = new EntranceManager(Monitor);
+            _logicPatcher = new RandomizedLogicPatcher(Monitor, _helper, _harmony, _archipelago, _locationChecker, _stardewItemManager, _entranceManager);
             _jojaDisabler = new JojaDisabler(Monitor, _helper, _harmony);
             _seasonsRandomizer = new SeasonsRandomizer(Monitor, _helper, _archipelago, State);
             _appearanceRandomizer = new AppearanceRandomizer(Monitor, _archipelago);
@@ -219,7 +221,7 @@ namespace StardewArchipelago
             _logicPatcher.PatchAllGameLogic();
             _mailPatcher.PatchMailBoxForApItems();
             _archipelago.SlotData.ReplaceAllBundles();
-            _archipelago.SlotData.ReplaceEntrances();
+            _entranceManager.ReplaceEntrances(_archipelago.SlotData);
             _locationsPatcher.ReplaceAllLocationsRewardsWithChecks();
             _itemPatcher.PatchApItems();
             _goalManager.InjectGoalMethods();
@@ -278,12 +280,13 @@ namespace StardewArchipelago
             _goalManager.CheckGoalCompletion();
             _mail.SendTomorrow();
             PlayerBuffInjections.CheckForApBuffs();
-            Entrances.UpdateDynamicEntrances();
             if (State.AppearanceRandomizerOverride != null)
             {
                 _archipelago.SlotData.AppearanceRandomization = State.AppearanceRandomizerOverride.Value;
             }
             _appearanceRandomizer.ShuffleCharacterAppearances();
+            _entranceManager.RegisterAllEntrances();
+            _entranceManager.ReplaceEntrances(_archipelago.SlotData);
         }
 
         private void OnDayEnding(object sender, DayEndingEventArgs e)
@@ -298,6 +301,8 @@ namespace StardewArchipelago
         private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
         {
             _archipelago.APUpdate();
+            // _entranceManager.RegisterAllEntrances();
+            // _entranceManager.ReplaceEntrances(_archipelago.SlotData);
         }
 
         private void OnReturnedToTitle(object sender, ReturnedToTitleEventArgs e)

@@ -180,69 +180,6 @@ namespace StardewArchipelago.Archipelago
                 Game1.netWorldState.Value.BundleData[key] = newBundle;
             }
         }
-
-        public void ReplaceEntrances()
-        {
-            if (EntranceRandomization == EntranceRandomization.Disabled)
-            {
-                return;
-            }
-
-            foreach (var (original, replacement) in ModifiedEntrances)
-            {
-                var originalExists = Entrances.TryGetEntrance(original, out var originalEntrance);
-                var replacementExists = Entrances.TryGetEntrance(replacement, out var replacementEntrance);
-                if (!originalExists || !replacementExists)
-                {
-                    if (!originalExists)
-                    {
-                        _console.Log($"Entrance \"{original}\" not found. Could not apply randomization provided by the AP server", LogLevel.Warn);
-                    }
-                    if (!replacementExists)
-                    {
-                        _console.Log($"Entrance \"{replacement}\" not found. Could not apply randomization provided by the AP server", LogLevel.Warn);
-                    }
-                    continue;
-                }
-
-                originalEntrance.ReplaceWith(replacementEntrance);
-                DoReplacementOnEquivalentAreasAsWell(originalEntrance, original, replacementEntrance);
-            }
-        }
-
-        private static void DoReplacementOnEquivalentAreasAsWell(OneWayEntrance originalEntrance, string original,
-            OneWayEntrance replacementEntrance)
-        {
-            foreach (var equivalentGroup in EquivalentWarps.EquivalentAreas)
-            {
-                ReplaceEquivalentEntrances(originalEntrance.OriginName, original, replacementEntrance, equivalentGroup);
-                ReplaceEquivalentEntrances(originalEntrance.DestinationName, original, replacementEntrance, equivalentGroup);
-            }
-        }
-
-        private static void ReplaceEquivalentEntrances(string locationName, string originalLocationName, OneWayEntrance replacementEntrance,
-            string[] equivalentAreasGroup)
-        {
-            if (!equivalentAreasGroup.Contains(locationName))
-            {
-                return;
-            }
-
-            foreach (var equivalentArea in equivalentAreasGroup)
-            {
-                if (locationName == equivalentArea)
-                {
-                    continue;
-                }
-
-                var newWarpName = originalLocationName.Replace(locationName, equivalentArea);
-                var newEntranceExists = Entrances.TryGetEntrance(newWarpName, out var newEntrance);
-                if (newEntranceExists)
-                {
-                    newEntrance.ReplaceWith(replacementEntrance);
-                }
-            }
-        }
     }
 
     public enum EntranceRandomization
