@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using StardewArchipelago.GameModifications.EntranceRandomizer;
 
 namespace StardewArchipelago.Extensions
 {
@@ -14,9 +15,24 @@ namespace StardewArchipelago.Extensions
             return Math.Abs(point1.X - point2.X) + Math.Abs(point1.Y - point2.Y);
         }
 
-        public static bool IsCloseEnough(this Point tile1, Point tile2, int acceptableDistance)
+        public static bool IsCloseEnough(this Point point1, Point point2, int acceptableDistance)
         {
-            return GetTotalDistance(tile1, tile2) <= acceptableDistance;
+            return GetTotalDistance(point1, point2) <= acceptableDistance;
+        }
+
+        public static FacingDirection GetFacingAwayFrom(this Point currentPoint, Point otherPoint)
+        {
+            if (currentPoint == otherPoint)
+            {
+                return FacingDirection.Down;
+            }
+
+            if (currentPoint.Y == otherPoint.Y)
+            {
+                return currentPoint.X > otherPoint.X ? FacingDirection.Right : FacingDirection.Left;
+            }
+
+            return currentPoint.Y > otherPoint.Y ? FacingDirection.Down : FacingDirection.Up;
         }
 
         public static Point GetAveragePoint(this List<Point> pointGroup)

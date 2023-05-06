@@ -15,243 +15,96 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
         private const string TRANSITIONAL_STRING = " to ";
 
         private readonly IMonitor _monitor;
-        public EquivalentWarps Equivalencies { get; }
-        private Dictionary<string, OneWayEntrance> _allEntrances;
+        private Dictionary<string, string> _modifiedEntrances;
+
+        private HashSet<string> _checkedEntrancesToday;
+        private Dictionary<string, WarpRequest> generatedWarps;
 
         public EntranceManager(IMonitor monitor)
         {
             _monitor = monitor;
-            Equivalencies = new EquivalentWarps();
-            RegisterAllEntrances();
-            Equivalencies.SetAllEntrances(_allEntrances);
+            generatedWarps = new Dictionary<string, WarpRequest>(StringComparer.OrdinalIgnoreCase);
+            ResetCheckedEntrancesToday();
         }
 
-        public void RegisterAllEntrances()
+        public void ResetCheckedEntrancesToday()
         {
-            _allEntrances = new Dictionary<string, OneWayEntrance>();
-            CreateTwoWayEntrance("FarmHouse", "Farm", FacingDirection.Up, FacingDirection.Down);
-            CreateTwoWayEntrance("FarmHouse", "Cellar", FacingDirection.Up, FacingDirection.Down);
-
-            CreateTwoWayEntrance("Farm", "Greenhouse", FacingDirection.Down, FacingDirection.Up);
-            CreateTwoWayEntrance("Farm", "FarmCave", FacingDirection.Down, FacingDirection.Up);
-            CreateTwoWayEntrance("Farm", "Backwoods", FacingDirection.Down, FacingDirection.Up);
-            CreateTwoWayEntrance("Farm", "BusStop", FacingDirection.Left, FacingDirection.Right);
-            CreateTwoWayEntrance("Farm", "Forest", FacingDirection.Up, FacingDirection.Down);
-
-            CreateTwoWayEntrance("BusStop", "Backwoods", FacingDirection.Right, FacingDirection.Left);
-            CreateTwoWayEntrance("BusStop", "Town", FacingDirection.Left, FacingDirection.Right);
-            CreateTwoWayEntrance("Backwoods", "Tunnel", FacingDirection.Right, FacingDirection.Left);
-
-
-            CreateTwoWayEntrance("Backwoods", "Mountain", FacingDirection.Right, FacingDirection.Left);
-
-            CreateTwoWayEntrance("Forest", "Woods", FacingDirection.Right, FacingDirection.Left);
-            CreateTwoWayEntrance("Forest", "WizardHouse", FacingDirection.Down, FacingDirection.Up);
-            CreateTwoWayEntrance("Forest", "AnimalShop", FacingDirection.Down, FacingDirection.Up);
-            CreateTwoWayEntrance("Forest", "LeahHouse", FacingDirection.Down, FacingDirection.Up);
-            CreateTwoWayEntrance("Forest", "Town", FacingDirection.Left, FacingDirection.Right);
-
-            CreateTwoWayEntrance("Town", "CommunityCenter", FacingDirection.Down, FacingDirection.Up);
-            CreateTwoWayEntrance("Town", "Hospital", FacingDirection.Down, FacingDirection.Up);
-            CreateTwoWayEntrance("Town", "SeedShop", FacingDirection.Down, FacingDirection.Up);
-            CreateTwoWayEntrance("Town", "Saloon", FacingDirection.Down, FacingDirection.Up);
-            CreateTwoWayEntrance("Town", "JoshHouse", FacingDirection.Down, FacingDirection.Up);
-            CreateTwoWayEntrance("Town", "Trailer", FacingDirection.Down, FacingDirection.Up);
-            CreateTwoWayEntrance("Town", "Trailer_Big", FacingDirection.Down, FacingDirection.Up);
-            CreateTwoWayEntrance("Town", "HaleyHouse", FacingDirection.Down, FacingDirection.Up);
-            CreateTwoWayEntrance("Town", "SamHouse", FacingDirection.Down, FacingDirection.Up);
-            CreateTwoWayEntrance("Town", "Sewer", FacingDirection.Down, FacingDirection.Down);
-            CreateTwoWayEntrance("Town", "ManorHouse", FacingDirection.Down, FacingDirection.Up);
-            CreateTwoWayEntrance("Town", "Beach", FacingDirection.Up, FacingDirection.Down);
-            CreateTwoWayEntrance("Town", "ArchaeologyHouse", FacingDirection.Down, FacingDirection.Up);
-            CreateTwoWayEntrance("Town", "Blacksmith", FacingDirection.Down, FacingDirection.Up);
-            CreateTwoWayEntrance("Town", "Mountain", FacingDirection.Down, FacingDirection.Up);
-            CreateTwoWayEntrance("Town", "JojaMart", FacingDirection.Down, FacingDirection.Up);
-            CreateTwoWayEntrance("Town", "AbandonedJojaMart", FacingDirection.Down, FacingDirection.Up);
-            CreateTwoWayEntrance("Town", "MovieTheater", FacingDirection.Down, FacingDirection.Up);
-            CreateTwoWayEntrance("Mountain", "Railroad", FacingDirection.Down, FacingDirection.Up);
-            CreateTwoWayEntrance("Mountain", "Tent", FacingDirection.Down, FacingDirection.Up);
-            CreateTwoWayEntrances("Mountain", "ScienceHouse", FacingDirection.Down, FacingDirection.Up).ToArray();
-            CreateTwoWayEntrance("Mountain", "AdventureGuild", FacingDirection.Down, FacingDirection.Up);
-            CreateTwoWayEntrance("Mountain", "Mine", FacingDirection.Down, FacingDirection.Up);
-            CreateTwoWayEntrance("Beach", "FishShop", FacingDirection.Down, FacingDirection.Up);
-            CreateTwoWayEntrance("Railroad", "BathHouse_Entry", FacingDirection.Down, FacingDirection.Up);
-            CreateTwoWayEntrance("Railroad", "WitchWarpCave", FacingDirection.Down, FacingDirection.Up);
-            CreateTwoWayEntrance("WitchWarpCave", "WitchSwamp", FacingDirection.Down, FacingDirection.Up);
-            CreateTwoWayEntrance("WitchSwamp", "WitchHut", FacingDirection.Down, FacingDirection.Up);
-            CreateTwoWayEntrance("ScienceHouse", "SebastianRoom", FacingDirection.Up, FacingDirection.Down);
-            CreateTwoWayEntrance("Hospital", "HarveyRoom", FacingDirection.Down, FacingDirection.Up);
-            CreateTwoWayEntrance("WizardHouse", "WizardHouseBasement",
-                FacingDirection.Up, FacingDirection.Down);
-
-            // Quarry Mine
-            // public static readonly (OneWayEntrance, OneWayEntrance) MountainToMine = AddEntrance("Mountain", "Mine", 103, 17, 67, 17, 2, 0);
+            _checkedEntrancesToday = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         }
 
-        public void ReplaceEntrances(SlotData slotData)
+        public void SetEntranceRandomizerSettings(SlotData slotData)
         {
-            var replacer = new EntranceReplacer(_monitor, slotData, this);
-            replacer.ReplaceEntrances();
-        }
-
-        public bool TryGetEntrance(string key, out OneWayEntrance entrance)
-        {
-            var aliasedKey = TurnAliased(key);
-
-            if (_allEntrances.TryGetValue(aliasedKey, out entrance))
+            _modifiedEntrances = new Dictionary<string, string>();
+            if (slotData.EntranceRandomization == EntranceRandomization.Disabled)
             {
-                return true;
+                return;
             }
 
-            if (_allEntrances.TryGetValue(aliasedKey.ToLower(), out entrance))
+            foreach (var (originalEntrance, replacementEntrance) in slotData.ModifiedEntrances)
             {
-                return true;
-            }
-
-            return _allEntrances.TryGetValue(aliasedKey.ToUpper(), out entrance);
-        }
-
-        public bool TryGetEntrance(string location1, string location2, out OneWayEntrance entrance)
-        {
-            var aliasedlocation1 = TurnAliased(location1);
-            var aliasedlocation2 = TurnAliased(location2);
-            var key = $"{aliasedlocation1}{TRANSITIONAL_STRING}{aliasedlocation2}";
-            return TryGetEntrance(key, out entrance);
-        }
-
-        private (OneWayEntrance, OneWayEntrance) CreateTwoWayEntrance(string location1Name, string location2Name,
-            FacingDirection direction1, FacingDirection direction2)
-        {
-            return CreateTwoWayEntrances(location1Name, location2Name, direction1, direction2).FirstOrDefault();
-        }
-
-        private IEnumerable<(OneWayEntrance, OneWayEntrance)> CreateTwoWayEntrances(string location1Name,
-            string location2Name, FacingDirection direction1, FacingDirection direction2)
-        {
-            var location1 = Game1.getLocationFromName(location1Name);
-            var location2 = Game1.getLocationFromName(location2Name);
-
-            var (warpPointsFirstDirection, warpPointsSecondDirection) = GetAllWarpPointsBetween(location1, location2);
-
-            if (warpPointsFirstDirection.Count != warpPointsSecondDirection.Count ||
-                warpPointsFirstDirection.Count == 0)
-            {
-                Debugger.Break();
-                yield break;
-                /*throw new ArgumentException(
-                    $"Could not create TwoWayEntrances between {location1Name} and {location2Name}");*/
-            }
-
-            for (var i = 0; i < warpPointsFirstDirection.Count; i++)
-            {
-                var warpPoint1 = warpPointsFirstDirection[i];
-                var warpPoint2 = warpPointsSecondDirection[i];
-                var entrance = AddEntrance(location1Name, location2Name,
-                    warpPoint2.Item2, warpPoint1.Item2,
-                    direction1, direction2);
-                yield return entrance;
+                _modifiedEntrances.Add(TurnAliased(originalEntrance), TurnAliased(replacementEntrance));
             }
         }
 
-        private static (List<(Point, Point)>, List<(Point, Point)>) GetAllWarpPointsBetween(GameLocation location1, GameLocation location2)
+        public bool TryGetEntranceReplacement(string currentLocationName, string locationRequestName, out WarpRequest warpRequest)
         {
-            var warpPointsFirstDirection = GetWarpPointsTo(location1, location2);
-            var warpPointsSecondDirection = GetWarpPointsTo(location2, location1);
-
-            var firstDirectionTargets = warpPointsFirstDirection.Select(x => x.Item2).RemoveDuplicates(true).ToArray();
-            var secondDirectionTargets = warpPointsSecondDirection.Select(x => x.Item2).RemoveDuplicates(true).ToArray();
-
-            if (firstDirectionTargets.Length > 1 && secondDirectionTargets.Length > 1)
+            warpRequest = null;
+            var key = GetKey(currentLocationName, locationRequestName);
+            if (!_modifiedEntrances.ContainsKey(key))
             {
-                Debugger.Break();
-                return (warpPointsFirstDirection, warpPointsSecondDirection);
+                return false;
             }
 
-            if (!firstDirectionTargets.Any() || !secondDirectionTargets.Any())
+            var desiredWarpName = _modifiedEntrances[key];
+
+            if (_checkedEntrancesToday.Contains(desiredWarpName))
             {
-                return (new List<(Point, Point)>(),
-                    new List<(Point, Point)>());
-                throw new ArgumentException($"Could not detect the warps between {location1.Name} and {location2.Name}");
-            }
-
-            var closestWarpFirstDirection = GetClosestWarpTo(warpPointsFirstDirection, secondDirectionTargets[0]);
-            var closestWarpSecondDirection = GetClosestWarpTo(warpPointsSecondDirection, firstDirectionTargets[0]);
-
-            return (new List<(Point, Point)> { closestWarpFirstDirection },
-                new List<(Point, Point)> { closestWarpSecondDirection });
-        }
-
-        private static (Point, Point) GetClosestWarpTo(List<(Point, Point)> warpPoints, Point reverseTarget)
-        {
-            var shortestDistance = int.MaxValue;
-            (Point, Point) closestWarp = warpPoints.First();
-            foreach (var warpPoint in warpPoints)
-            {
-                var originPoint = warpPoint.Item1;
-                var distance = originPoint.GetTotalDistance(reverseTarget);
-                if (distance < shortestDistance)
+                if (generatedWarps.ContainsKey(desiredWarpName))
                 {
-                    shortestDistance = distance;
-                    closestWarp = warpPoint;
+                    warpRequest = generatedWarps[desiredWarpName];
+                    return true;
                 }
+
+                return false;
             }
 
-            return closestWarp;
+            return TryFindWarpToDestination(desiredWarpName, out warpRequest);
         }
 
-        private static List<(Point, Point)> GetWarpPointsTo(GameLocation location1, GameLocation location2)
+        private bool TryFindWarpToDestination(string desiredWarpKey, out WarpRequest warpRequest)
         {
-            var warps = new List<(Point, Point)>();
-            foreach (var warp in location1.warps)
+            var currentTile = Game1.player.getTileLocationPoint();
+            var (locationOriginName, locationDestinationName) = GetLocationNames(desiredWarpKey);
+            var locationOrigin = Game1.getLocationFromName(locationOriginName);
+            _checkedEntrancesToday.Add(desiredWarpKey);
+
+            if (!locationOrigin.TryGetClosestWarpPointTo(locationDestinationName, currentTile, out var warpPoint))
             {
-                if (warp.TargetName.Equals(location2.Name))
-                {
-                    warps.Add((new Point(warp.X, warp.Y), new Point(warp.TargetX, warp.TargetY)));
-                }
+                warpRequest = null;
+                return false;
             }
 
-            foreach (var pair in location1.doors.Pairs)
-            {
-                if (pair.Value.Equals(location2.Name))
-                {
-                    var target = location1.getWarpPointTarget(pair.Key);
-                    warps.Add((pair.Key, target));
-                }
-            }
-
-            return warps;
+            var locationDestination = Game1.getLocationFromName(locationDestinationName);
+            var warpPointTarget = locationOrigin.getWarpPointTarget(warpPoint);
+            var warpAwayPoint = locationDestination.GetClosestWarpPointTo(locationOriginName, warpPointTarget);
+            var facingDirection = warpPointTarget.GetFacingAwayFrom(warpAwayPoint);
+            var locationRequest = new LocationRequest(locationDestinationName, locationDestination.isStructure.Value,
+                locationDestination);
+            warpRequest = new WarpRequest(locationRequest, warpPointTarget.X, warpPointTarget.Y, facingDirection);
+            generatedWarps[desiredWarpKey] = warpRequest;
+            return true;
         }
 
-        private (OneWayEntrance, OneWayEntrance) AddEntrance(string location1Name, string location2Name,
-            int location1X, int location1Y, int location2X, int location2Y, FacingDirection facingDirection1,
-            FacingDirection facingDirection2)
+        private static string GetKey(string currentLocationName, string locationRequestName)
         {
-            return AddEntrance(location1Name, location2Name, new Point(location1X, location1Y),
-                new Point(location2X, location2Y), facingDirection1, facingDirection2);
+            var key = $"{currentLocationName}{TRANSITIONAL_STRING}{locationRequestName}";
+            return key;
         }
 
-        private (OneWayEntrance, OneWayEntrance) AddEntrance(string location1Name, string location2Name,
-            Point location1Position, Point location2Position, FacingDirection facingDirection1,
-            FacingDirection facingDirection2)
+        private static (string, string) GetLocationNames(string key)
         {
-            var entrance1 = new OneWayEntrance(Equivalencies, location1Name, location2Name, location1Position, location2Position,
-                facingDirection2);
-            var entrance2 = new OneWayEntrance(Equivalencies, location2Name, location1Name, location2Position, location1Position,
-                facingDirection1);
-            var key1 = $"{location1Name}{TRANSITIONAL_STRING}{location2Name}";
-            var key2 = $"{location2Name}{TRANSITIONAL_STRING}{location1Name}";
-
-            AddDefaultAliases(key1, entrance1);
-            AddDefaultAliases(key2, entrance2);
-
-            return (entrance1, entrance2);
-        }
-
-        private void AddDefaultAliases(string entranceName, OneWayEntrance entrance)
-        {
-            _allEntrances.Add(entranceName, entrance);
-            _allEntrances.Add(entranceName.ToLower(), entrance);
-            _allEntrances.Add(entranceName.ToUpper(), entrance);
+            var split = key.Split(TRANSITIONAL_STRING);
+            return (split[0], split[1]);
         }
 
         private static string TurnAliased(string key)

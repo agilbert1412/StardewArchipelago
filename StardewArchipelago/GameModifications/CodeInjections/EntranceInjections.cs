@@ -32,26 +32,18 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     return true; // run original logic
                 }
 
-                var entranceExists = _entranceManager.TryGetEntrance(Game1.currentLocation.Name, locationRequest.Name,
-                    out var desiredEntrance);
-                if (!entranceExists)
+                var entranceIsReplaced = _entranceManager.TryGetEntranceReplacement(Game1.currentLocation.Name, locationRequest.Name, out var replacedWarp);
+                if (!entranceIsReplaced)
                 {
                     return true; // run original logic
                 }
 
-                var warpRequest = new WarpRequest(locationRequest, tileX, tileY, (FacingDirection)facingDirectionAfterWarp);
-                var warpIsModified = desiredEntrance.GetModifiedWarp(warpRequest, out var newWarp);
-                if (!warpIsModified)
-                {
-                    return true; // run original logic
-                }
-
-                locationRequest.Name = newWarp.LocationRequest.Name;
-                locationRequest.Location = newWarp.LocationRequest.Location;
-                locationRequest.IsStructure = newWarp.LocationRequest.IsStructure;
-                tileX = newWarp.TileX;
-                tileY = newWarp.TileY;
-                facingDirectionAfterWarp = (int)newWarp.FacingDirectionAfterWarp;
+                locationRequest.Name = replacedWarp.LocationRequest.Name;
+                locationRequest.Location = replacedWarp.LocationRequest.Location;
+                locationRequest.IsStructure = replacedWarp.LocationRequest.IsStructure;
+                tileX = replacedWarp.TileX;
+                tileY = replacedWarp.TileY;
+                facingDirectionAfterWarp = (int)replacedWarp.FacingDirectionAfterWarp;
                 return true; // run original logic
             }
             catch (Exception ex)

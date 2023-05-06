@@ -221,7 +221,7 @@ namespace StardewArchipelago
             _logicPatcher.PatchAllGameLogic();
             _mailPatcher.PatchMailBoxForApItems();
             _archipelago.SlotData.ReplaceAllBundles();
-            _entranceManager.ReplaceEntrances(_archipelago.SlotData);
+            _entranceManager.SetEntranceRandomizerSettings(_archipelago.SlotData);
             _locationsPatcher.ReplaceAllLocationsRewardsWithChecks();
             _itemPatcher.PatchApItems();
             _goalManager.InjectGoalMethods();
@@ -285,8 +285,7 @@ namespace StardewArchipelago
                 _archipelago.SlotData.AppearanceRandomization = State.AppearanceRandomizerOverride.Value;
             }
             _appearanceRandomizer.ShuffleCharacterAppearances();
-            _entranceManager.RegisterAllEntrances();
-            _entranceManager.ReplaceEntrances(_archipelago.SlotData);
+            _entranceManager.ResetCheckedEntrancesToday();
         }
 
         private void OnDayEnding(object sender, DayEndingEventArgs e)
@@ -302,7 +301,7 @@ namespace StardewArchipelago
         {
             _archipelago.APUpdate();
             // _entranceManager.RegisterAllEntrances();
-            // _entranceManager.ReplaceEntrances(_archipelago.SlotData);
+            // _entranceManager.SetEntranceRandomizerSettings(_archipelago.SlotData);
         }
 
         private void OnReturnedToTitle(object sender, ReturnedToTitleEventArgs e)
