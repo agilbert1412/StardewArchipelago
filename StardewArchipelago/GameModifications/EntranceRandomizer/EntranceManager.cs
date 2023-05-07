@@ -34,7 +34,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
 
         public void SetEntranceRandomizerSettings(SlotData slotData)
         {
-            _modifiedEntrances = new Dictionary<string, string>();
+            _modifiedEntrances = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             if (slotData.EntranceRandomization == EntranceRandomization.Disabled)
             {
                 return;
@@ -42,7 +42,23 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
 
             foreach (var (originalEntrance, replacementEntrance) in slotData.ModifiedEntrances)
             {
-                _modifiedEntrances.Add(TurnAliased(originalEntrance), TurnAliased(replacementEntrance));
+                RegisterRandomizedEntrance(originalEntrance, replacementEntrance);
+            }
+        }
+
+        private void RegisterRandomizedEntrance(string originalEntrance, string replacementEntrance)
+        {
+            var aliasedOriginal = TurnAliased(originalEntrance);
+            var aliasedReplacement = TurnAliased(replacementEntrance);
+            var originalEquivalentEntrances = _equivalentAreas.FirstOrDefault(x => x.Contains(aliasedOriginal)) ?? new[] { aliasedOriginal };
+            var replacementEquivalentEntrances = _equivalentAreas.FirstOrDefault(x => x.Contains(aliasedReplacement)) ??
+                                                 new[] { aliasedReplacement };
+            foreach (var originalEquivalentEntrance in originalEquivalentEntrances)
+            {
+                foreach (var replacementEquivalentEntrance in replacementEquivalentEntrances)
+                {
+                    _modifiedEntrances.Add(originalEquivalentEntrance, replacementEquivalentEntrance);
+                }
             }
         }
 
@@ -75,17 +91,16 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
         {
             var currentTile = Game1.player.getTileLocationPoint();
             var (locationOriginName, locationDestinationName) = GetLocationNames(desiredWarpKey);
-            var locationOrigin = Game1.getLocationFromName(locationOriginName);
             _checkedEntrancesToday.Add(desiredWarpKey);
 
-            if (!locationOrigin.TryGetClosestWarpPointTo(locationDestinationName, currentTile, out var warpPoint))
+            if (!locationOriginName.TryGetClosestWarpPointTo(ref locationDestinationName, currentTile, out var locationOrigin, out var warpPoint))
             {
                 warpRequest = null;
                 return false;
             }
 
+            var warpPointTarget = locationOrigin.GetWarpPointTarget(warpPoint, locationDestinationName);
             var locationDestination = Game1.getLocationFromName(locationDestinationName);
-            var warpPointTarget = locationOrigin.getWarpPointTarget(warpPoint);
             var warpAwayPoint = locationDestination.GetClosestWarpPointTo(locationOriginName, warpPointTarget);
             var facingDirection = warpPointTarget.GetFacingAwayFrom(warpAwayPoint);
             var locationRequest = new LocationRequest(locationDestinationName, locationDestination.isStructure.Value,
@@ -120,7 +135,12 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             var modifiedString = key;
             foreach (var (oldString, newString) in _aliases)
             {
-                modifiedString = modifiedString.Replace(oldString, newString);
+                var customizedNewString = newString;
+                if (customizedNewString.Contains("{0}"))
+                {
+                    customizedNewString = string.Format(newString, Game1.player.isMale ? "Mens" : "Womens");
+                }
+                modifiedString = modifiedString.Replace(oldString, customizedNewString);
             }
 
             return modifiedString;
@@ -136,13 +156,40 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Marnie's Ranch", "AnimalShop" },
             { "Cottage", "House" },
             { "Tower", "House" },
-            { "Carpenter Shop", "ScienceHouse" },
+            { "Carpenter Shop", "ScienceHouse|Left" },
+            { "Maru's Room", "ScienceHouse|Right" },
             { "Adventurer", "Adventure" },
             { "Willy's Fish Shop", "FishShop" },
             { "Museum", "ArchaeologyHouse" },
-            { "The Mines", "Mine" },
+            { "The Mines", "Mine|Left" },
+            { "Quarry Mine Entrance", "Mine|Right" },
+            { "Quarry", "Mountain" },
+            { "Shipwreck", "CaptainRoom" },
+            { "Crystal Cave", "IslandWestCave1" },
+            { "Boulder Cave", "IslandNorthCave1" },
+            { "Skull Cavern Entrance", "SkullCave" },
+            { "Oasis", "SandyHouse" },
+            { "Bathhouse Entrance", "BathHouse_Entry" },
+            { "Locker Room", "BathHouse_{0}Locker" },
+            { "Public Bath", "BathHouse_Pool" },
+            { "Pirate Cove", "IslandSouthEastCave" },
+            { "Leo Hut", "IslandHut" },
+            { "Field Office", "IslandFieldOffice" },
+            { "Island Farmhouse", "IslandFarmHouse" },
+            { "Qi Walnut Room", "QiNutRoom" },
             { "'s", "" },
             { " ", "" },
+        };
+
+        private static string[] _jojaMartLocations = new[] { "JojaMart", "AbandonedJojaMart", "MovieTheater" };
+        private static string[] _trailerLocations = new[] { "Trailer", "Trailer_Big" };
+        private static string[] _beachLocations = new[] { "Beach", "BeachNightMarket" };
+
+        private List<string[]> _equivalentAreas = new()
+        {
+            _jojaMartLocations,
+            _trailerLocations,
+            _beachLocations,
         };
     }
 
