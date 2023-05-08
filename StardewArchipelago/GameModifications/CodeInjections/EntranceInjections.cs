@@ -32,7 +32,8 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     return true; // run original logic
                 }
 
-                var entranceIsReplaced = _entranceManager.TryGetEntranceReplacement(Game1.currentLocation.Name, locationRequest.Name, out var replacedWarp);
+                var targetPosition = new Point(tileX, tileY);
+                var entranceIsReplaced = _entranceManager.TryGetEntranceReplacement(Game1.currentLocation.Name, locationRequest.Name, targetPosition, out var replacedWarp);
                 if (!entranceIsReplaced)
                 {
                     return true; // run original logic

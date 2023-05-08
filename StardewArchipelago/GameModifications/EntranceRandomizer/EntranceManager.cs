@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Extensions;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Locations;
 
 namespace StardewArchipelago.GameModifications.EntranceRandomizer
 {
@@ -44,6 +46,78 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             {
                 RegisterRandomizedEntrance(originalEntrance, replacementEntrance);
             }
+
+            CleanCoordinatesFromEntrancesWithoutSiblings();
+
+            if (slotData.EntranceRandomization == EntranceRandomization.PelicanTown)
+            {
+                return;
+            }
+
+            SwapFarmhouseEntranceWithAnotherEmptyAreaEntrance(slotData);
+        }
+
+        private void CleanCoordinatesFromEntrancesWithoutSiblings()
+        {
+            foreach (var entranceKey in _modifiedEntrances.Keys.ToArray())
+            {
+                var entranceValue = _modifiedEntrances[entranceKey];
+                if (TryCleanEntrance(entranceValue, _modifiedEntrances.Values, out var newValue))
+                {
+                    _modifiedEntrances[entranceKey] = newValue;
+                    entranceValue = newValue;
+                }
+                if (TryCleanEntrance(entranceKey, _modifiedEntrances.Keys, out var newKey))
+                {
+                    _modifiedEntrances.Add(newKey, entranceValue);
+                    _modifiedEntrances.Remove(entranceKey);
+                }
+            }
+        }
+
+        private bool TryCleanEntrance(string entrance, IEnumerable<string> otherEntrances, out string cleanEntrance)
+        {
+            var (location1, location2) = GetLocationNames(entrance);
+            cleanEntrance = entrance;
+            if (!location1.Contains("|") && !location2.Contains("|"))
+            {
+                return false;
+            }
+
+            var location1Name = location1.Split("|")[0];
+            var location2Name = location2.Split("|")[0];
+            var numberSiblings = otherEntrances.Count(x => x.StartsWith(location1Name) && x.Contains(location2Name));
+            if (numberSiblings >= 2)
+            {
+                return false;
+            }
+
+            cleanEntrance = GetKey(location1Name, location2Name);
+            return true;
+        }
+
+        private void SwapFarmhouseEntranceWithAnotherEmptyAreaEntrance(SlotData slotData)
+        {
+            var farmToFarmhouse = "Farm to Farmhouse";
+            var farmhouseToFarm = "Farmhouse to Farm";
+            var outsideAreas = new[] { "Town", "Mountain", "Farm", "Forest", "BusStop", "Desert", "Beach" };
+            var random = new Random(int.Parse(slotData.Seed));
+            var chosenEntrance = "";
+            var replacementIsOutside = false;
+            while (!replacementIsOutside)
+            {
+                chosenEntrance = _modifiedEntrances.Keys.ToArray()[random.Next(_modifiedEntrances.Keys.Count)];
+                replacementIsOutside = outsideAreas.Contains(chosenEntrance.Split(" ")[0]) && !chosenEntrance.Contains("67|17"); // 67|17 is Quarry Mine
+            }
+
+            // Trust me
+            var chosenEntranceDestination = _modifiedEntrances[chosenEntrance];
+            var reversedChosenEntrance = ReverseKey(chosenEntrance);
+            var reverseDestination = ReverseKey(chosenEntranceDestination);
+            _modifiedEntrances.Add(farmToFarmhouse, chosenEntranceDestination);
+            _modifiedEntrances.Add(farmhouseToFarm, reversedChosenEntrance);
+            _modifiedEntrances[chosenEntrance] = farmToFarmhouse;
+            _modifiedEntrances[reverseDestination] = farmhouseToFarm;
         }
 
         private void RegisterRandomizedEntrance(string originalEntrance, string replacementEntrance)
@@ -57,21 +131,25 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             {
                 foreach (var replacementEquivalentEntrance in replacementEquivalentEntrances)
                 {
-                    _modifiedEntrances.Add(originalEquivalentEntrance, replacementEquivalentEntrance);
+                    RegisterRandomizedEntranceWithCoordinates(originalEquivalentEntrance, replacementEquivalentEntrance);
                 }
             }
         }
 
-        public bool TryGetEntranceReplacement(string currentLocationName, string locationRequestName, out WarpRequest warpRequest)
+        private void RegisterRandomizedEntranceWithCoordinates(string originalEquivalentEntrance,
+            string replacementEquivalentEntrance)
+        {
+            _modifiedEntrances.Add(originalEquivalentEntrance, replacementEquivalentEntrance);
+        }
+
+        public bool TryGetEntranceReplacement(string currentLocationName, string locationRequestName, Point targetPosition, out WarpRequest warpRequest)
         {
             warpRequest = null;
-            var key = GetKey(currentLocationName, locationRequestName);
-            if (!_modifiedEntrances.ContainsKey(key))
+            var key = GetKeys(currentLocationName, locationRequestName, targetPosition);
+            if (!TryGetModifiedWarpName(key, out var desiredWarpName))
             {
                 return false;
             }
-
-            var desiredWarpName = _modifiedEntrances[key];
 
             if (_checkedEntrancesToday.Contains(desiredWarpName))
             {
@@ -87,13 +165,27 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             return TryFindWarpToDestination(desiredWarpName, out warpRequest);
         }
 
+        private bool TryGetModifiedWarpName(string[] keys, out string desiredWarpName)
+        {
+            foreach (var key in keys)
+            {
+                if (_modifiedEntrances.ContainsKey(key))
+                {
+                    desiredWarpName = _modifiedEntrances[key];
+                    return true;
+                }
+            }
+
+            desiredWarpName = "";
+            return false;
+        }
+
         private bool TryFindWarpToDestination(string desiredWarpKey, out WarpRequest warpRequest)
         {
-            var currentTile = Game1.player.getTileLocationPoint();
             var (locationOriginName, locationDestinationName) = GetLocationNames(desiredWarpKey);
             _checkedEntrancesToday.Add(desiredWarpKey);
 
-            if (!locationOriginName.TryGetClosestWarpPointTo(ref locationDestinationName, currentTile, out var locationOrigin, out var warpPoint))
+            if (!locationOriginName.TryGetClosestWarpPointTo(ref locationDestinationName, out var locationOrigin, out var warpPoint))
             {
                 warpRequest = null;
                 return false;
@@ -110,10 +202,46 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             return true;
         }
 
+        private static string[] GetKeys(string currentLocationName, string locationRequestName, Point targetPosition)
+        {
+            var currentPosition = Game1.player.getTileLocationPoint();
+            return new[]
+            {
+                GetKey(currentLocationName, locationRequestName),
+                GetKey(currentLocationName, locationRequestName, targetPosition),
+                GetKey(currentLocationName, currentPosition, locationRequestName),
+                GetKey(currentLocationName, currentPosition, locationRequestName, targetPosition),
+            };
+        }
+
         private static string GetKey(string currentLocationName, string locationRequestName)
         {
             var key = $"{currentLocationName}{TRANSITIONAL_STRING}{locationRequestName}";
             return key;
+        }
+
+        private static string GetKey(string currentLocationName, string locationRequestName, Point targetPosition)
+        {
+            var key = $"{currentLocationName}{TRANSITIONAL_STRING}{locationRequestName}|{targetPosition.X}|{targetPosition.Y}";
+            return key;
+        }
+
+        private static string GetKey(string currentLocationName, Point currentPosition, string locationRequestName)
+        {
+            var key = $"{currentLocationName}|{currentPosition.X}|{currentPosition.Y}{TRANSITIONAL_STRING}{locationRequestName}";
+            return key;
+        }
+
+        private static string GetKey(string currentLocationName, Point currentPosition, string locationRequestName, Point targetPosition)
+        {
+            var key = $"{currentLocationName}|{currentPosition.X}|{currentPosition.Y}{TRANSITIONAL_STRING}{locationRequestName}|{targetPosition.X}|{targetPosition.Y}";
+            return key;
+        }
+
+        private static string ReverseKey(string key)
+        {
+            var parts = key.Split(TRANSITIONAL_STRING);
+            return $"{parts[1]}{TRANSITIONAL_STRING}{parts[0]}";
         }
 
         private static (string, string) GetLocationNames(string key)
@@ -156,19 +284,22 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Marnie's Ranch", "AnimalShop" },
             { "Cottage", "House" },
             { "Tower", "House" },
-            { "Carpenter Shop", "ScienceHouse|Left" },
-            { "Maru's Room", "ScienceHouse|Right" },
+            { "Carpenter Shop", "ScienceHouse|6|24" }, // LockedDoorWarp 6 24 ScienceHouse 900 2000S–
+            { "Maru's Room", "ScienceHouse|3|8" }, // LockedDoorWarp 3 8 ScienceHouse 900 2000 Maru 500N
             { "Adventurer", "Adventure" },
             { "Willy's Fish Shop", "FishShop" },
             { "Museum", "ArchaeologyHouse" },
-            { "The Mines", "Mine|Left" },
-            { "Quarry Mine Entrance", "Mine|Right" },
+            { "Wizard Basement", "WizardHouseBasement"},
+            { "The Mines", "Mine|18|13" }, // 54 4 Mine 18 13
+            { "Quarry Mine Entrance", "Mine|67|17" },  // 103 15 Mine 67 17
             { "Quarry", "Mountain" },
             { "Shipwreck", "CaptainRoom" },
+            { "Gourmand Cave", "IslandFarmcave" },
             { "Crystal Cave", "IslandWestCave1" },
             { "Boulder Cave", "IslandNorthCave1" },
             { "Skull Cavern Entrance", "SkullCave" },
             { "Oasis", "SandyHouse" },
+            { "Casino", "Club" },
             { "Bathhouse Entrance", "BathHouse_Entry" },
             { "Locker Room", "BathHouse_{0}Locker" },
             { "Public Bath", "BathHouse_Pool" },
@@ -176,6 +307,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Leo Hut", "IslandHut" },
             { "Field Office", "IslandFieldOffice" },
             { "Island Farmhouse", "IslandFarmHouse" },
+            { "Volcano", "VolcanoDungeon0" },
             { "Qi Walnut Room", "QiNutRoom" },
             { "'s", "" },
             { " ", "" },

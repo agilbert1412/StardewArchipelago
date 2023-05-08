@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using StardewArchipelago.GameModifications.EntranceRandomizer;
 using StardewValley;
 using StardewValley.Locations;
+using xTile.ObjectModel;
 
 namespace StardewArchipelago.Extensions
 {
@@ -16,16 +17,20 @@ namespace StardewArchipelago.Extensions
         {
             {new WarpRequest(Game1.getLocationRequest("Town"), 35, 97, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("Sewer"), 16, 11, FacingDirection.Down)},
             {new WarpRequest(Game1.getLocationRequest("IslandWest"), 20, 23, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("QiNutRoom"), 7, 8, FacingDirection.Up)},
+            {new WarpRequest(Game1.getLocationRequest("WizardHouse"), 4, 5, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("WizardHouseBasement"), 4, 4, FacingDirection.Down)},
+            {new WarpRequest(Game1.getLocationRequest("IslandWest"), 77, 40, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("IslandFarmhouse"), 14, 17, FacingDirection.Down)},
         };
 
         public static List<Point> GetAllWarpPointsTo(this GameLocation origin, string destinationName)
         {
             var warpPoints = new List<Point>();
             warpPoints.AddRange(GetAllTouchWarpsTo(origin, destinationName).Select(warp => new Point(warp.X, warp.Y)));
+            warpPoints.AddRange(GetAllTouchActionWarpsTo(origin, destinationName).Select(x => new Point(x.Key.X, x.Key.Y)));
             warpPoints.AddRange(GetDoorWarpPoints(origin, destinationName));
+            warpPoints.AddRange(GetAllActionWarpsTo(origin, destinationName).Select(x => new Point(x.Key.X, x.Key.Y)));
             warpPoints.AddRange(GetSpecialTriggerWarps(origin, destinationName).Keys);
 
-            return warpPoints;
+            return warpPoints.Distinct().ToList();
         }
 
         public static Point GetWarpPointTarget(this GameLocation origin, Point warpPointLocation, string destinationName)
@@ -37,10 +42,24 @@ namespace StardewArchipelago.Extensions
                     return new Point(warp.TargetX, warp.TargetY);
                 }
             }
+            foreach (var (warp, target) in GetAllTouchActionWarpsTo(origin, destinationName))
+            {
+                if (warp.X == warpPointLocation.X && warp.Y == warpPointLocation.Y)
+                {
+                    return new Point(target.X, target.Y);
+                }
+            }
 
             if (TryGetDoorWarpPointTarget(origin, warpPointLocation, destinationName, out var warpPointTarget))
             {
                 return warpPointTarget;
+            }
+            foreach (var (warp, target) in GetAllActionWarpsTo(origin, destinationName))
+            {
+                if (warp.X == warpPointLocation.X && warp.Y == warpPointLocation.Y)
+                {
+                    return new Point(target.X, target.Y);
+                }
             }
 
             foreach (var (warp, warpTarget) in GetSpecialTriggerWarps(origin, destinationName))
@@ -64,10 +83,122 @@ namespace StardewArchipelago.Extensions
                 {
                     warps.Add(warp);
                 }
+                else if (warp.TargetName == "VolcanoEntrance" && destinationName == "VolcanoDungeon0")
+                {
+                    warps.Add(warp);
+                }
             }
 
             warps.AddRange(GetSpecialTouchWarps(origin));
             return warps;
+        }
+
+        private static Dictionary<string, Dictionary<Point, Point>> _touchActionWarpCache = new();
+
+        private static Dictionary<Point, Point> GetAllTouchActionWarpsTo(GameLocation origin, string destinationName)
+        {
+            var key = $"{origin.Name}->{destinationName}";
+            if (_touchActionWarpCache.ContainsKey(key))
+            {
+                return _touchActionWarpCache[key];
+            }
+
+            var touchActionWarps = new Dictionary<Point, Point>();
+            var map = origin.map;
+            var backLayer = map?.GetLayer("Back");
+            if (map == null || backLayer == null)
+            {
+                _touchActionWarpCache.Add(key, touchActionWarps);
+                return touchActionWarps;
+            }
+
+            for (var y = 0; y < backLayer.LayerHeight; y++)
+            {
+                for (var x = 0; x < backLayer.LayerWidth; x++)
+                {
+                    var tile = backLayer.Tiles[x, y];
+                    if (tile == null || (!tile.TileIndexProperties.TryGetValue("TouchAction", out var propertyValue) && !tile.Properties.TryGetValue("TouchAction", out propertyValue)))
+                    {
+                        continue;
+                    }
+
+                    if (TryGetWarpPointFromProperty(destinationName, propertyValue, out var warpPoint))
+                    {
+                        touchActionWarps.Add(new Point(x, y), warpPoint);
+                    }
+                }
+            }
+
+            _touchActionWarpCache.Add(key, touchActionWarps);
+            return touchActionWarps;
+        }
+
+        private static Dictionary<string, Dictionary<Point, Point>> _actionWarpCache = new();
+
+        private static Dictionary<Point, Point> GetAllActionWarpsTo(GameLocation origin, string destinationName)
+        {
+            var key = $"{origin.Name}->{destinationName}";
+            if (_actionWarpCache.ContainsKey(key))
+            {
+                return _actionWarpCache[key];
+            }
+
+            var actionWarps = new Dictionary<Point, Point>();
+            var map = origin.map;
+            var buildingsLayer = map?.GetLayer("Buildings");
+            if (map == null || buildingsLayer == null)
+            {
+                _actionWarpCache.Add(key, actionWarps);
+                return actionWarps;
+            }
+
+            for (var y = 0; y < buildingsLayer.LayerHeight; y++)
+            {
+                for (var x = 0; x < buildingsLayer.LayerWidth; x++)
+                {
+                    var tile = buildingsLayer.Tiles[x, y];
+                    if (tile == null || (!tile.TileIndexProperties.TryGetValue("Action", out var propertyValue) && !tile.Properties.TryGetValue("Action", out propertyValue)))
+                    {
+                        continue;
+                    }
+
+                    if (TryGetWarpPointFromProperty(destinationName, propertyValue, out var warpPoint))
+                    {
+                        actionWarps.Add(new Point(x, y), warpPoint);
+                    }
+                }
+            }
+
+            _actionWarpCache.Add(key, actionWarps);
+            return actionWarps;
+        }
+
+        private static bool TryGetWarpPointFromProperty(string destinationName, PropertyValue propertyValue, out Point warpPoint)
+        {
+            var propertyString = propertyValue.ToString();
+            var touchActionParts = propertyString.Split(' ');
+            var touchAction = touchActionParts[0];
+            if (!touchAction.Contains("Warp") || touchActionParts.Length < 4)
+            {
+                warpPoint = Point.Zero;
+                return false;
+            }
+
+            var isCoordinatesFirst = int.TryParse(touchActionParts[1], out _);
+            var xIndex = isCoordinatesFirst ? 1 : 2;
+            var yIndex = isCoordinatesFirst ? 2 : 3;
+            var destinationIndex = isCoordinatesFirst ? 3 : 1;
+            var locationToWarp = touchActionParts[destinationIndex];
+            if (!locationToWarp.Equals(destinationName, StringComparison.OrdinalIgnoreCase))
+            {
+                warpPoint = Point.Zero;
+                return false;
+            }
+
+            var locationX = Convert.ToInt32(touchActionParts[xIndex]);
+            var locationY = Convert.ToInt32(touchActionParts[yIndex]);
+            warpPoint = new Point(locationX, locationY);
+            return true;
         }
 
         private static IEnumerable<Warp> GetSpecialTouchWarps(GameLocation origin)
@@ -168,7 +299,7 @@ namespace StardewArchipelago.Extensions
             return allWarpPoints.OrderBy(x => x.GetTotalDistance(currentLocation)).First();
         }
 
-        public static bool TryGetClosestWarpPointTo(this string originName, ref string destinationName, Point currentLocation, out GameLocation originLocation, out Point closestWarpPoint)
+        public static bool TryGetClosestWarpPointTo(this string originName, ref string destinationName, out GameLocation originLocation, out Point closestWarpPoint)
         {
             var originParts = originName.Split("|");
             var originTrueLocationName = originParts[0];
@@ -178,35 +309,33 @@ namespace StardewArchipelago.Extensions
             var allWarpPoints = originLocation.GetAllWarpPointsTo(destinationName);
             if (!allWarpPoints.Any())
             {
-                closestWarpPoint = new Point(currentLocation.X, currentLocation.Y - 1);
+                closestWarpPoint = Point.Zero;
                 return false;
             }
 
-            if (originParts.Length >= 2 || destinationParts.Length >= 2)
+            if (originParts.Length >= 3)
             {
-                var direction = originParts.Length >= 2 ? originParts[1] : destinationParts[1];
-                Point referencePoint = Point.Zero;
-                switch (direction)
-                {
-                    case "Left":
-                        referencePoint = new Point(-9999, 0);
-                        break;
-                    case "Right":
-                        referencePoint = new Point(9999, 0);
-                        break;
-                    case "Up":
-                        referencePoint = new Point(0, -9999);
-                        break;
-                    case "Down":
-                        referencePoint = new Point(0, 9999);
-                        break;
-                }
+                var x = originParts[1];
+                var y = originParts[2];
+                var referencePoint = new Point(int.Parse(x), int.Parse(y));
 
                 closestWarpPoint = allWarpPoints.OrderBy(x => x.GetTotalDistance(referencePoint)).First();
                 return true;
             }
 
-            closestWarpPoint = allWarpPoints.OrderBy(x => x.GetTotalDistance(currentLocation)).First();
+            if (destinationParts.Length >= 3)
+            {
+                var x = destinationParts[1];
+                var y = destinationParts[2];
+                var referencePoint = new Point(int.Parse(x), int.Parse(y));
+
+                var loc = originLocation;
+                var dest = destinationName;
+                closestWarpPoint = allWarpPoints.OrderBy(x => loc.GetWarpPointTarget(x, dest).GetTotalDistance(referencePoint)).First();
+                return true;
+            }
+
+            closestWarpPoint = allWarpPoints.First();
             return true;
         }
     }
