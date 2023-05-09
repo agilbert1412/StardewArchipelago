@@ -31,7 +31,6 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
         public void ResetCheckedEntrancesToday(SlotData slotData)
         {
             _checkedEntrancesToday = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-
             if (slotData.EntranceRandomization == EntranceRandomization.Chaos)
             {
                 ReshuffleEntrances(slotData);
