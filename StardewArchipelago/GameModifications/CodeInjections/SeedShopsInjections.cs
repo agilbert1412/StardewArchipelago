@@ -546,6 +546,12 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                         continue;
                     }
 
+                    var lowerName =  salableObject.Name.ToLower();
+                    if (lowerName.Contains("sapling") || lowerName.Contains("rare seed"))
+                    {
+                        continue;
+                    }
+
                     if (!_archipelago.HasReceivedItem(salableObject.Name, out _))
                     {
                         itemPriceAndStock.Remove(salableItem);
