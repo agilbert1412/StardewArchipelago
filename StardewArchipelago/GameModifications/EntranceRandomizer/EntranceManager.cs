@@ -26,12 +26,29 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
         {
             _monitor = monitor;
             generatedWarps = new Dictionary<string, WarpRequest>(StringComparer.OrdinalIgnoreCase);
-            ResetCheckedEntrancesToday();
         }
 
-        public void ResetCheckedEntrancesToday()
+        public void ResetCheckedEntrancesToday(SlotData slotData)
         {
             _checkedEntrancesToday = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+            if (slotData.EntranceRandomization == EntranceRandomization.Chaos)
+            {
+                ReshuffleEntrances(slotData);
+            }
+        }
+
+        private void ReshuffleEntrances(SlotData slotData)
+        {
+            var random = new Random(int.Parse(slotData.Seed) + (int)Game1.stats.DaysPlayed);
+            var numShuffles = _modifiedEntrances.Count * _modifiedEntrances.Count;
+            for (var i = 0; i < numShuffles; i++)
+            {
+                var keys = _modifiedEntrances.Keys.ToArray();
+                var chosenEntrance1 = keys[random.Next(keys.Length)];
+                var chosenEntrance2 = keys[random.Next(keys.Length)];
+                SwapTwoEntrances(chosenEntrance1, chosenEntrance2);
+            }
         }
 
         public void SetEntranceRandomizerSettings(SlotData slotData)
@@ -98,8 +115,6 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
 
         private void SwapFarmhouseEntranceWithAnotherEmptyAreaEntrance(SlotData slotData)
         {
-            var farmToFarmhouse = "Farm to Farmhouse";
-            var farmhouseToFarm = "Farmhouse to Farm";
             var outsideAreas = new[] { "Town", "Mountain", "Farm", "Forest", "BusStop", "Desert", "Beach" };
             var random = new Random(int.Parse(slotData.Seed));
             var chosenEntrance = "";
@@ -110,14 +125,26 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
                 replacementIsOutside = outsideAreas.Contains(chosenEntrance.Split(" ")[0]) && !chosenEntrance.Contains("67|17"); // 67|17 is Quarry Mine
             }
 
+            var farmToFarmhouse = "Farm to Farmhouse";
+            var farmhouseToFarm = ReverseKey(farmToFarmhouse);
+            _modifiedEntrances.Add(farmToFarmhouse, farmToFarmhouse);
+            _modifiedEntrances.Add(farmhouseToFarm, farmhouseToFarm);
+            SwapTwoEntrances(chosenEntrance, farmToFarmhouse);
+        }
+
+        private void SwapTwoEntrances(string entrance1, string entrance2)
+        {
             // Trust me
-            var chosenEntranceDestination = _modifiedEntrances[chosenEntrance];
-            var reversedChosenEntrance = ReverseKey(chosenEntrance);
-            var reverseDestination = ReverseKey(chosenEntranceDestination);
-            _modifiedEntrances.Add(farmToFarmhouse, chosenEntranceDestination);
-            _modifiedEntrances.Add(farmhouseToFarm, reversedChosenEntrance);
-            _modifiedEntrances[chosenEntrance] = farmToFarmhouse;
-            _modifiedEntrances[reverseDestination] = farmhouseToFarm;
+            var destination1 = _modifiedEntrances[entrance1];
+            var destination2 = _modifiedEntrances[entrance2];
+            var reversed1 = ReverseKey(entrance1);
+            var reversed2 = ReverseKey(entrance2);
+            var reversedDestination1 = ReverseKey(destination1);
+            var reversedDestination2 = ReverseKey(destination2);
+            _modifiedEntrances[entrance1] = destination2;
+            _modifiedEntrances[reversedDestination1] = reversed2;
+            _modifiedEntrances[entrance2] = destination1;
+            _modifiedEntrances[reversedDestination2] = reversed1;
         }
 
         private void RegisterRandomizedEntrance(string originalEntrance, string replacementEntrance)

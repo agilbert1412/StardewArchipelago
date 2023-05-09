@@ -285,7 +285,7 @@ namespace StardewArchipelago
                 _archipelago.SlotData.AppearanceRandomization = State.AppearanceRandomizerOverride.Value;
             }
             _appearanceRandomizer.ShuffleCharacterAppearances();
-            _entranceManager.ResetCheckedEntrancesToday();
+            _entranceManager.ResetCheckedEntrancesToday(_archipelago.SlotData);
         }
 
         private void OnDayEnding(object sender, DayEndingEventArgs e)

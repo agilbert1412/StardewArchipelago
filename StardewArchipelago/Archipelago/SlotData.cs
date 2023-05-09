@@ -189,7 +189,7 @@ namespace StardewArchipelago.Archipelago
         NonProgression = 2,
         Buildings = 3,
         Everything = 4,
-        Chaos = 4,
+        Chaos = 5,
     }
 
     public enum SeasonRandomization
