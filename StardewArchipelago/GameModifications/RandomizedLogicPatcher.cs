@@ -18,6 +18,7 @@ using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Network;
 using StardewValley.Objects;
+using Object = StardewValley.Object;
 
 namespace StardewArchipelago.GameModifications
 {
@@ -43,6 +44,7 @@ namespace StardewArchipelago.GameModifications
             SeedShopsInjections.Initialize(monitor, helper, archipelago, locationChecker);
             LostAndFoundInjections.Initialize(monitor, archipelago);
             TVInjections.Initialize(monitor, archipelago);
+            ProfitInjections.Initialize(monitor, archipelago);
         }
 
         public void PatchAllGameLogic()
@@ -60,6 +62,7 @@ namespace StardewArchipelago.GameModifications
             PatchLostAndFoundBox();
             PatchTvChannels();
             PatchCleanupBeforeSave();
+            PatchProfitMargin();
             _startingResources.GivePlayerStartingResources();
         }
 
@@ -323,6 +326,14 @@ namespace StardewArchipelago.GameModifications
             _harmony.Patch(
                 original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.cleanupBeforeSave)),
                 postfix: new HarmonyMethod(typeof(CleanupBeforeSaveInjections), nameof(CleanupBeforeSaveInjections.CleanupBeforeSave_RemoveIllegalMonsters_Postfix))
+            );
+        }
+
+        private void PatchProfitMargin()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Object), nameof(Object.sellToStorePrice)),
+                postfix: new HarmonyMethod(typeof(ProfitInjections), nameof(ProfitInjections.SellToStorePrice_ApplyProfitMargin_Postfix))
             );
         }
     }

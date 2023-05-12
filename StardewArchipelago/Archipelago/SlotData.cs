@@ -13,6 +13,7 @@ namespace StardewArchipelago.Archipelago
     {
         private const string GOAL_KEY = "goal";
         private const string STARTING_MONEY_KEY = "starting_money";
+        private const string PROFIT_MARGIN_KEY = "profit_margin";
         private const string ENTRANCE_RANDOMIZATION_KEY = "entrance_randomization";
         private const string SEASON_RANDOMIZATION_KEY = "season_randomization";
         private const string SEED_SHUFFLE_KEY = "seed_shuffle";
@@ -54,6 +55,7 @@ namespace StardewArchipelago.Archipelago
         public string SlotName { get; private set; }
         public Goal Goal { get; private set; }
         public int StartingMoney { get; private set; }
+        public double ProfitMargin { get; private set; }
         public EntranceRandomization EntranceRandomization { get; private set; }
         public SeasonRandomization SeasonRandomization { get; private set; }
         public SeedShuffle SeedShuffle { get; private set; }
@@ -97,6 +99,7 @@ namespace StardewArchipelago.Archipelago
 
             Goal = GetSlotSetting(GOAL_KEY, Goal.CommunityCenter);
             StartingMoney = GetSlotSetting(STARTING_MONEY_KEY, 500);
+            ProfitMargin = GetSlotSetting(PROFIT_MARGIN_KEY, 100) / 100.0;
             EntranceRandomization = GetSlotSetting(ENTRANCE_RANDOMIZATION_KEY, EntranceRandomization.Disabled);
             SeasonRandomization = GetSlotSetting(SEASON_RANDOMIZATION_KEY, SeasonRandomization.Disabled);
             SeedShuffle = GetSlotSetting(SEED_SHUFFLE_KEY, SeedShuffle.Disabled);
