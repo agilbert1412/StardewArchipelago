@@ -45,6 +45,7 @@ namespace StardewArchipelago.GameModifications
             LostAndFoundInjections.Initialize(monitor, archipelago);
             TVInjections.Initialize(monitor, archipelago);
             ProfitInjections.Initialize(monitor, archipelago);
+            QuestLogInjections.Initialize(monitor, archipelago);
         }
 
         public void PatchAllGameLogic()
@@ -59,6 +60,7 @@ namespace StardewArchipelago.GameModifications
             PatchSeasons();
             PatchSeedShops();
             PatchJodiFishQuest();
+            PatchQuestLog();
             PatchLostAndFoundBox();
             PatchTvChannels();
             PatchCleanupBeforeSave();
@@ -310,6 +312,14 @@ namespace StardewArchipelago.GameModifications
             _harmony.Patch(
                 original: AccessTools.Method(typeof(FarmerTeam), nameof(FarmerTeam.CheckReturnedDonations)),
                 prefix: new HarmonyMethod(typeof(LostAndFoundInjections), nameof(LostAndFoundInjections.CheckReturnedDonations_UpgradeToolsProperly_Prefix))
+            );
+        }
+
+        private void PatchQuestLog()
+        {
+            _harmony.Patch(
+                original: AccessTools.Constructor(typeof(QuestLog)),
+                postfix: new HarmonyMethod(typeof(QuestLogInjections), nameof(QuestLogInjections.Constructor_MakeQuestsNonCancellable_Postfix))
             );
         }
 
