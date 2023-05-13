@@ -40,6 +40,7 @@ namespace StardewArchipelago.GameModifications
             ForestInjections.Initialize(monitor, _archipelago);
             SeedShopsInjections.Initialize(monitor, archipelago);
             SeasonsInjections.Initialize(monitor, helper, _archipelago, state);
+            QuestLogInjections.Initialize(monitor, archipelago);
         }
 
         public void PatchAllGameLogic()
@@ -54,6 +55,7 @@ namespace StardewArchipelago.GameModifications
             PatchSeasons();
             PatchSeedShops();
             PatchJodiFishQuest();
+            PatchQuestLog();
             // PatchAppearanceRandomization();
             _startingResources.GivePlayerStartingResources();
         }
@@ -302,6 +304,14 @@ namespace StardewArchipelago.GameModifications
             _harmony.Patch(
                 original: AccessTools.Method(typeof(AnimatedSprite), nameof(AnimatedSprite.LoadTexture)),
                 prefix: new HarmonyMethod(typeof(AppearanceRandomizer), nameof(AppearanceRandomizer.LoadTexture_ShuffleAppearance_Prefix))
+            );
+        }
+
+        private void PatchQuestLog()
+        {
+            _harmony.Patch(
+                original: AccessTools.Constructor(typeof(QuestLog)),
+                postfix: new HarmonyMethod(typeof(QuestLogInjections), nameof(QuestLogInjections.Constructor_MakeQuestsNonCancellable_Postfix))
             );
         }
     }
