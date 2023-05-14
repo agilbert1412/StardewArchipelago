@@ -278,8 +278,12 @@ namespace StardewArchipelago
             }
 
             _questCleaner.CleanQuests(Game1.player);
+
+
+
             FarmInjections.DeleteStartingDebris();
             _mail.SendToday();
+            FarmInjections.ForcePetIfNeeded(_mail);
             _locationChecker.VerifyNewLocationChecksWithArchipelago();
             _locationChecker.SendAllLocationChecks();
             _itemManager.ReceiveAllNewItems();

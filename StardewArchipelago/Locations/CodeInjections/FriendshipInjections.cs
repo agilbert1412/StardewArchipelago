@@ -18,9 +18,9 @@ namespace StardewArchipelago.Locations.CodeInjections
         private const int POINTS_PER_HEART = 250;
         private const int POINTS_PER_PET_HEART = 200;
         private const string HEARTS_PATTERN = "{0}: 1 <3";
-        private const string FRIENDSANITY_PATTERN = "Friendsanity: {0} {1} <3";
+        public const string FRIENDSANITY_PATTERN = "Friendsanity: {0} {1} <3";
 
-        private const string PET_NAME = "Pet";
+        public const string PET_NAME = "Pet";
         private static readonly string[] _bachelors = new[]
         {
             "Harvey", "Elliott", "Sam", "Alex", "Shane", "Sebastian",
