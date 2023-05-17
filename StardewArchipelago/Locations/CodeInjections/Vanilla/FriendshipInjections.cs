@@ -21,11 +21,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private const string FRIENDSANITY_PATTERN = "Friendsanity: {0} {1} <3";
 
         private const string PET_NAME = "Pet";
-        private static string[] _bachelors = new[]
-        {
-            "Harvey", "Elliott", "Sam", "Alex", "Shane", "Sebastian",
-            "Emily", "Haley", "Leah", "Abigail", "Penny", "Maru"
-        };
+        private static List<string> _bachelorNames;
 
         private static string[] _notImmediatelyAccessible = new[]
         {
@@ -55,23 +51,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             _apLogoWhite = ArchipelagoTextures.GetColoredLogo(modHelper, 24, "white");
             _apLogoBlack = ArchipelagoTextures.GetColoredLogo(modHelper, 24, "black");
             _hintedFriendshipLocations = Array.Empty<string>();
-            UpdateBachelors();
+            _bachelorNames = InitializeBachelorNames();
         }
 
         public static Dictionary<string, int> GetArchipelagoFriendshipPoints()
         {
             return _friendshipPoints.ToDictionary(x => x.Key, x => (int)Math.Round(x.Value));
-        }
-
-        public static string GetArchipelagoFriendshipPointsForPrinting(string characterName)
-        {
-            characterName = ParseInternalName(characterName);
-            var points = GetFriendshipPoints(characterName);
-            if (points <= 0)
-            {
-                return $"You have never met someone named {characterName}";
-            }
-            return $"{characterName}: {points} ({GetHearts(points)} <)";
         }
 
         public static void SetArchipelagoFriendshipPoints(Dictionary<string, int> values)
@@ -327,21 +312,25 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             return null;
         }
 
-        private static void UpdateBachelors()
+        private static List<string> InitializeBachelorNames()
         {
-            var source = Game1.content.Load<Dictionary<string, string>>("Data\\NPCDispositions");
-            var villagers = new List<string>(source.Keys);
-            foreach (var name in villagers)
+            var bachelorNames = new List<string>();
+            var villagers = Game1.content.Load<Dictionary<string, string>>("Data\\NPCDispositions");
+            foreach (var (name, villagerInfo) in villagers)
             {
-                var loadedBachelor = source[name].Split('/');
-                if (!_bachelors.Contains(name) & loadedBachelor[5] == "datable")
+                if (_bachelorNames.Contains(name))
                 {
-                    Array.Resize(ref _bachelors, _bachelors.Length + 1);
-                    _bachelors[_bachelors.Length - 1] = name;
+                    continue;
                 }
 
+                var villagerInfoParts = villagerInfo.Split('/');
+                var datable = villagerInfoParts[5] == "datable";
+                if (datable)
+                {
+                    _bachelorNames.Add(name);
+                }
             }
-
+            return bachelorNames;
         }
 
         private static int ShuffledUpTo(string name)
@@ -351,7 +340,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 return 0;
             }
 
-            var isBachelor = _bachelors.Contains(name);
+            var isBachelor = _bachelorNames.Contains(name);
             switch (_archipelago.SlotData.Friendsanity)
             {
                 case Friendsanity.None:
