@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants;
 using StardewArchipelago.GameModifications.Buildings;
 using StardewModdingAPI;
 using StardewValley;
@@ -272,7 +273,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             carpenterAPStock.AddArchipelagoLocationToStock(BUILDING_STABLE, 10000, new[] { Hardwood(100), IronBar(5) });
             carpenterAPStock.AddArchipelagoLocationToStock(BUILDING_WELL, 1000, new[] { Stone(75) });
             carpenterAPStock.AddArchipelagoLocationToStock(BUILDING_SHIPPING_BIN, 250, new[] { Wood(150) });
-            if (_archipelago.SlotData.ModList.ContainsKey("Tractor Mod"))
+            if (_archipelago.SlotData.Mods.HasMod(ModNames.TRACTOR))
             {
                 carpenterAPStock.AddArchipelagoLocationToStock(BUILDING_TRACTOR_GARAGE, 150000, new[] { IronBar(20), IridiumBar(5), BatteryPack(5) });
             }

@@ -3,6 +3,7 @@ using System.Linq;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants;
 using StardewArchipelago.GameModifications;
 using StardewArchipelago.GameModifications.CodeInjections;
 using StardewArchipelago.GameModifications.EntranceRandomizer;
@@ -137,7 +138,7 @@ namespace StardewArchipelago
                 .GetField<List<BluePrint>>(e.NewMenu, "blueprints")
                 .GetValue();
                     if (blueprints.Any(x => x.name == "Stable" && x.displayName == "Tractor Garage") && 
-                    _archipelago.SlotData.ModList.ContainsKey("Tractor Mod"))
+                    _archipelago.SlotData.Mods.HasMod(ModNames.TRACTOR))
                     {
                         var isConstructedAlready = Game1.getFarm().isBuildingConstructed("Stable");
                         if (_archipelago.GetReceivedItemCount("Stable") == 0 || !isConstructedAlready)

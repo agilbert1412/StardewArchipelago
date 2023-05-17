@@ -7,10 +7,10 @@ using StardewArchipelago.Constants;
 using StardewModdingAPI;
 using StardewValley;
 
-namespace StardewArchipelago.Locations.CodeInjections.Vanilla
+namespace StardewArchipelago.Locations.CodeInjections.Modded
 {
 
-    public static class SkillInjections
+    public static class ModdedSkillInjections
     {
         private const string _skillLocationName = "Level {0} {1}";
 
@@ -94,10 +94,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 var idMax = 4;
                 if (_archipelago.SlotData.Mods.HasMod(ModNames.LUCK))
-                {
                     idMax = 5;
-                }
-
                 if (which < 0 || which > idMax || howMuch <= 0 || !__instance.IsLocalPlayer)
                 {
                     return true; // run original logic
@@ -158,10 +155,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 var idMax = 4;
                 if (_archipelago.SlotData.Mods.HasMod(ModNames.LUCK))
-                {
                     idMax = 5;
-                }
-
                 if (which < 0 || which > idMax || howMuch <= 0 || !__instance.IsLocalPlayer)
                 {
                     return true; // run original logic
@@ -309,7 +303,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             return modSkillList;
         }
 
-        public static bool AddExperience_ArchipelacoModExperience_Prefix(Farmer __instance, string skillName, int amt)
+        public static bool AddExperience_ArchipelagoModExperience_Prefix(Farmer __instance, string skillName, int amt)
         {
             try
             {
@@ -344,7 +338,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(AddExperience_ArchipelacoModExperience_Prefix)}:\n{ex}",
+                _monitor.Log($"Failed in {nameof(AddExperience_ArchipelagoModExperience_Prefix)}:\n{ex}",
                     LogLevel.Error);
                 return true; // run original logic
             }

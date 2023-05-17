@@ -9,6 +9,7 @@ using StardewValley.Locations;
 using StardewValley.Objects;
 using StardewValley.Tools;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants;
 using Object = StardewValley.Object;
 using StardewArchipelago.Items.Unlocks;
 
@@ -87,7 +88,7 @@ namespace StardewArchipelago.Items.Mail
                     backpackName = Game1.content.LoadString("Strings\\StringsFromCSFiles:GameLocation.cs.8709");
                     break;
                 case >= 36:
-                    if (_archipelago.SlotData.ModList.ContainsKey("Bigger Backpack") & (Game1.player.MaxItems >= 36))
+                    if (_archipelago.SlotData.Mods.HasMod(ModNames.BIGGER_BACKPACK) & (Game1.player.MaxItems >= 36))
                     {
                         Game1.player.MaxItems = 48;
                         backpackName = "Premium Pack";

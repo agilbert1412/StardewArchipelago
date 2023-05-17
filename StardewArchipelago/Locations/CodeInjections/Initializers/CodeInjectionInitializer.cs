@@ -10,7 +10,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
         public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, BundleReader bundleReader, LocationChecker locationChecker, StardewItemManager itemManager)
         {
             VanillaCodeInjectionInitializer.Initialize(monitor, modHelper, archipelago, bundleReader, locationChecker, itemManager);
-            if (archipelago.SlotData.ModList.Any())
+            if (archipelago.SlotData.Mods.IsModded)
             {
                 ModCodeInjectionInitializer.Initialize(monitor, modHelper, archipelago, locationChecker);
             }

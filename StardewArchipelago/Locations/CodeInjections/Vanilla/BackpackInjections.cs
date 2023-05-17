@@ -1,6 +1,7 @@
 ﻿using System;
 using StardewArchipelago.Archipelago;
 using HarmonyLib;
+using StardewArchipelago.Constants;
 using StardewModdingAPI;
 using StardewValley;
 using xTile.Dimensions;
@@ -122,7 +123,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                         responseDontPurchase
                     }, "Backpack");
             }
-            else if (_archipelago.SlotData.ModList.ContainsKey("Bigger Backpack") & _locationChecker.IsLocationNotChecked(PREMIUM_PACK)
+            else if (_archipelago.SlotData.Mods.HasMod(ModNames.BIGGER_BACKPACK) & _locationChecker.IsLocationNotChecked(PREMIUM_PACK)
             && _archipelago.GetReceivedItemCount("Progressive Backpack") >= 2)
             {
                 var backpackType = AccessTools.TypeByName("BiggerBackpack.Mod");

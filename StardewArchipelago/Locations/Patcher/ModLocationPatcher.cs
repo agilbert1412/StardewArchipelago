@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants;
 using StardewArchipelago.Locations.CodeInjections.Modded;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Locations.GingerIsland;
@@ -26,9 +27,9 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void AddModSkillInjections()
         {
-            if (_archipelago.SlotData.ModList.ContainsKey("Luck Skill") || _archipelago.SlotData.ModList.ContainsKey("Binning Skill")
-             || _archipelago.SlotData.ModList.ContainsKey("Cooking Skill") || _archipelago.SlotData.ModList.ContainsKey("Magic")
-             || _archipelago.SlotData.ModList.ContainsKey("Socializing Skill") || _archipelago.SlotData.ModList.ContainsKey("Archaeology"))
+            if (_archipelago.SlotData.Mods.HasMod(ModNames.LUCK) || _archipelago.SlotData.Mods.HasMod(ModNames.BINNING)
+             || _archipelago.SlotData.Mods.HasMod(ModNames.COOKING) || _archipelago.SlotData.Mods.HasMod(ModNames.MAGIC)
+             || _archipelago.SlotData.Mods.HasMod(ModNames.SOCIALIZING) || _archipelago.SlotData.Mods.HasMod(ModNames.ARCHAEOLOGY))
             {
                 var _spaceCoreType = AccessTools.TypeByName("SpaceCore.Skills");
                 _harmony.Patch(
@@ -40,7 +41,7 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void AddDeepWoodsModInjections()
         {
-            if (_archipelago.SlotData.ModList.ContainsKey("DeepWoods"))
+            if (_archipelago.SlotData.Mods.HasMod(ModNames.DEEP_WOODS))
             {
                 var _deepWoodsType = AccessTools.TypeByName("DeepWoodsMod.DeepWoods");
                 var _unicornType = AccessTools.TypeByName("DeepWoodsMod.Unicorn");

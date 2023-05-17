@@ -17,7 +17,7 @@ namespace StardewArchipelago.Items.Unlocks
         {
             _specificUnlockManagers = new List<IUnlockManager>();
             _specificUnlockManagers.Add(new VanillaUnlockManager());
-            if (archipelago.SlotData.ModList.Any())
+            if (archipelago.SlotData.Mods.IsModded)
             {
                 _specificUnlockManagers.Add(new ModUnlockManager());
             }
