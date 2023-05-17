@@ -30,7 +30,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
         private static Dictionary<Skill, double> _archipelagoExperience = new();
-        private static Dictionary<Skill, int> _archipelagoSkillLevel = new();
 
         public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago,
             LocationChecker locationChecker)
@@ -45,11 +44,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         public static Dictionary<int, int> GetArchipelagoExperience()
         {
             return _archipelagoExperience.ToDictionary(x => (int)x.Key, x => (int)Math.Round(x.Value));
-        }
-
-        public static Dictionary<int, int> GetArchipelagoSkillLevel()
-        {
-            return _archipelagoSkillLevel.ToDictionary(x => (int)x.Key, x => x.Value);
         }
 
         public static List<string> GetArchipelagoExperienceForPrinting()
