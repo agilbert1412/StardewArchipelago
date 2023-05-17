@@ -10,6 +10,7 @@ using StardewValley.Objects;
 using StardewValley.Tools;
 using StardewArchipelago.Archipelago;
 using Object = StardewValley.Object;
+using StardewArchipelago.Items.Unlocks;
 
 namespace StardewArchipelago.Items.Mail
 {

@@ -2,6 +2,7 @@
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Items.Traps;
+using StardewArchipelago.Items.Unlocks;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 

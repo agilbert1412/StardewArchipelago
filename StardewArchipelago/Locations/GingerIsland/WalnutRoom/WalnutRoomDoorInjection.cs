@@ -1,6 +1,6 @@
 ﻿using System;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Items;
+using StardewArchipelago.Items.Unlocks;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;

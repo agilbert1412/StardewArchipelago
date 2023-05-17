@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Content;
 using Netcode;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Extensions;
-using StardewArchipelago.Items;
+using StardewArchipelago.Items.Unlocks;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.GameData;

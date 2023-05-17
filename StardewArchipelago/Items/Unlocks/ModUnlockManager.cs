@@ -9,18 +9,37 @@ using StardewArchipelago.Locations.CodeInjections;
 using StardewArchipelago.Items.Mail;
 using StardewValley;
 
-namespace StardewArchipelago.Items
+namespace StardewArchipelago.Items.Unlocks
 {
-    public class ModUnlockManager
+    public class ModUnlockManager : IUnlockManager
     {
         public const string Excalibur = "Excalibur";
-        private IModHelper _helper;
-        private ArchipelagoClient _archipelago;
+        private Dictionary<string, Func<ReceivedItem, LetterAttachment>> _unlockables;
 
-        public void Initialize(IModHelper helper, ArchipelagoClient archipelago)
+        public ModUnlockManager()
         {
-            _helper = helper;
-            _archipelago = archipelago;
+            _unlockables = new Dictionary<string, Func<ReceivedItem, LetterAttachment>>();
+            RegisterAPMods();
+        }
+
+        public void RegisterAPMods()
+        {
+            _unlockables.Add($"Magic Level", SendProgressiveMagicLevel);
+            _unlockables.Add($"Binning Level", SendProgressiveBinningLevel);
+            _unlockables.Add($"Cooking Level", SendProgressiveCookingLevel);
+            _unlockables.Add($"Luck Level", SendProgressiveLuckLevel);
+            _unlockables.Add($"Archaeology Level", SendProgressiveArchaeologyLevel);
+            _unlockables.Add($"Socializing Level", SendProgressiveSocializingLevel);
+        }
+
+        public bool IsUnlock(string unlockName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public LetterAttachment PerformUnlockAsLetter(ReceivedItem unlock)
+        {
+            throw new NotImplementedException();
         }
 
         /*public LetterActionAttachment SendExcalibur(ReceivedItem receivedItem)
@@ -30,7 +49,7 @@ namespace StardewArchipelago.Items
             return new LetterActionAttachment(receivedItem, Excalibur);
         }*/
 
-        public LetterAttachment SendProgressiveLuckLevel(ReceivedItem receivedItem)
+        private LetterAttachment SendProgressiveLuckLevel(ReceivedItem receivedItem)
         {
             const int whichSkill = (int)Skill.Luck;
             foreach (var farmer in Game1.getAllFarmers())
@@ -43,7 +62,7 @@ namespace StardewArchipelago.Items
             return new LetterInformationAttachment(receivedItem);
         }
 
-        public LetterAttachment SendProgressiveMagicLevel(ReceivedItem receivedItem)
+        private LetterAttachment SendProgressiveMagicLevel(ReceivedItem receivedItem)
         {
             foreach (var farmer in Game1.getAllFarmers())
             {
@@ -52,7 +71,7 @@ namespace StardewArchipelago.Items
             return new LetterInformationAttachment(receivedItem);
         }
 
-        public LetterAttachment SendProgressiveBinningLevel(ReceivedItem receivedItem)
+        private LetterAttachment SendProgressiveBinningLevel(ReceivedItem receivedItem)
         {
             foreach (var farmer in Game1.getAllFarmers())
             {
@@ -61,7 +80,7 @@ namespace StardewArchipelago.Items
             return new LetterInformationAttachment(receivedItem);
         }
 
-        public LetterAttachment SendProgressiveCookingLevel(ReceivedItem receivedItem)
+        private LetterAttachment SendProgressiveCookingLevel(ReceivedItem receivedItem)
         {
             foreach (var farmer in Game1.getAllFarmers())
             {
@@ -70,7 +89,7 @@ namespace StardewArchipelago.Items
             return new LetterInformationAttachment(receivedItem);
         }
 
-        public LetterAttachment SendProgressiveSocializingLevel(ReceivedItem receivedItem)
+        private LetterAttachment SendProgressiveSocializingLevel(ReceivedItem receivedItem)
         {
             foreach (var farmer in Game1.getAllFarmers())
             {
@@ -79,7 +98,7 @@ namespace StardewArchipelago.Items
             return new LetterInformationAttachment(receivedItem);
         }
 
-        public LetterAttachment SendProgressiveArchaeologyLevel(ReceivedItem receivedItem)
+        private LetterAttachment SendProgressiveArchaeologyLevel(ReceivedItem receivedItem)
         {
             foreach (var farmer in Game1.getAllFarmers())
             {
@@ -146,7 +165,7 @@ namespace StardewArchipelago.Items
             return 0;
         }
 
-        public void ReceiveAPLevel(string skill)
+        private void ReceiveAPLevel(string skill)
         {
             var farmer = Game1.player;
             var skillsType = AccessTools.TypeByName("SpaceCore.Skills");
@@ -155,18 +174,28 @@ namespace StardewArchipelago.Items
             var myNewLevelsField = ModEntry.Instance.Helper.Reflection.GetField<List<KeyValuePair<string, int>>>(skillsType, "NewLevels");
             var myNewLevels = myNewLevelsField.GetValue();
             if (!exp.ContainsKey(farmer.UniqueMultiplayerID))
+            {
                 exp.Add(farmer.UniqueMultiplayerID, new Dictionary<string, int>());
+            }
+
             if (!exp[farmer.UniqueMultiplayerID].ContainsKey(skill))
+            {
                 exp[farmer.UniqueMultiplayerID].Add(skill, 0);
+            }
+
             var modOldSkillExp = exp[farmer.UniqueMultiplayerID][skill];
             var modPrevSkillLevel = SkillInjections.ModdedGetLevel(modOldSkillExp);
             var expToNextLevel = GetModdedExperienceToNextLevel(modOldSkillExp);
             exp[farmer.UniqueMultiplayerID][skill] += expToNextLevel;
             var modNewSkillExp = exp[farmer.UniqueMultiplayerID][skill];
             var modNewSkillLevel = SkillInjections.ModdedGetLevel(modNewSkillExp);
-            if (modPrevSkillLevel !=modNewSkillLevel)
-                for ( int i = modPrevSkillLevel + 1; i <= modNewSkillLevel; ++i )
+            if (modPrevSkillLevel != modNewSkillLevel)
+            {
+                for (var i = modPrevSkillLevel + 1; i <= modNewSkillLevel; ++i)
+                {
                     myNewLevels.Add(new KeyValuePair<string, int>(skill, i));
+                }
+            }
         }
     }
 }

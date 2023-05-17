@@ -47,8 +47,6 @@ namespace StardewArchipelago
         private ItemPatcher _itemPatcher;
         private GoalManager _goalManager;
         private StardewItemManager _stardewItemManager;
-        private UnlockManager _unlockManager;
-        private ModUnlockManager _modUnlockManager;
         private MultiSleep _multiSleep;
         private JojaDisabler _jojaDisabler;
         private SeasonsRandomizer _seasonsRandomizer;
