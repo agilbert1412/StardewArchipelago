@@ -7,7 +7,8 @@ using StardewValley;
 namespace StardewArchipelago.GameModifications.Buildings
 {
     public class CarpenterMenuArchipelago : BuildingMenuArchipelago
-    {
+    {   
+        
         public CarpenterMenuArchipelago(ArchipelagoClient archipelago) : base(archipelago)
         {
         }
@@ -19,24 +20,28 @@ namespace StardewArchipelago.GameModifications.Buildings
         public override List<BluePrint> GetAvailableBlueprints()
         {
             var blueprints = new List<BluePrint>();
+            var blueprintData = BlueprintDict();
+            foreach (var blueprint in blueprintData)
+            {
+                var blueprintMagical = blueprint.Value[2];
+                var blueprintUpgrade = blueprint.Value[1];
 
-            AddBuildingBlueprintIfReceived(blueprints, CarpenterInjections.BUILDING_COOP);
-            AddBuildingBlueprintIfReceived(blueprints, CarpenterInjections.BUILDING_BARN);
-            AddBuildingBlueprintIfReceived(blueprints, CarpenterInjections.BUILDING_WELL);
-            AddBuildingBlueprintIfReceived(blueprints, CarpenterInjections.BUILDING_SILO);
-            AddBuildingBlueprintIfReceived(blueprints, CarpenterInjections.BUILDING_MILL);
-            AddBuildingBlueprintIfReceived(blueprints, CarpenterInjections.BUILDING_SHED);
-            AddBuildingBlueprintIfReceived(blueprints, CarpenterInjections.BUILDING_FISH_POND);
-            AddBuildingBlueprintIfReceived(blueprints, CarpenterInjections.BUILDING_STABLE, true);
-            AddBuildingBlueprintIfReceived(blueprints, CarpenterInjections.BUILDING_SLIME_HUTCH);
-
-            AddBuildingBlueprintIfReceived(blueprints, CarpenterInjections.BUILDING_BIG_COOP, requiredBuilding: CarpenterInjections.BUILDING_COOP);
-            AddBuildingBlueprintIfReceived(blueprints, CarpenterInjections.BUILDING_DELUXE_COOP, requiredBuilding: CarpenterInjections.BUILDING_BIG_COOP);
-            AddBuildingBlueprintIfReceived(blueprints, CarpenterInjections.BUILDING_BIG_BARN, requiredBuilding: CarpenterInjections.BUILDING_BARN);
-            AddBuildingBlueprintIfReceived(blueprints, CarpenterInjections.BUILDING_DELUXE_BARN, requiredBuilding: CarpenterInjections.BUILDING_BIG_BARN);
-            AddBuildingBlueprintIfReceived(blueprints, CarpenterInjections.BUILDING_BIG_SHED, requiredBuilding: CarpenterInjections.BUILDING_SHED);
-
-            AddBuildingBlueprintIfReceived(blueprints, CarpenterInjections.BUILDING_SHIPPING_BIN);
+                if (blueprintMagical == "false")
+                {
+                    if (blueprint.Key == "Stable")
+                    {
+                        AddBuildingBlueprintIfReceived(blueprints, blueprint.Key, true);
+                        continue;
+                    }
+                    if (blueprintUpgrade == "none")
+                    {
+                        AddBuildingBlueprintIfReceived(blueprints, blueprint.Key, requiredBuilding: null);
+                        continue;
+                    }
+                    AddBuildingBlueprintIfReceived(blueprints, blueprint.Key, requiredBuilding: blueprintUpgrade);
+                }
+            }
+            AddBuildingBlueprintIfReceived(blueprints, CarpenterInjections.BUILDING_TRACTOR_GARAGE, true);
             return blueprints;
         }
 

@@ -18,6 +18,7 @@ using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Locations;
+using StardewValley.Menus;
 
 namespace StardewArchipelago
 {
@@ -46,6 +47,8 @@ namespace StardewArchipelago
         private ItemPatcher _itemPatcher;
         private GoalManager _goalManager;
         private StardewItemManager _stardewItemManager;
+        private UnlockManager _unlockManager;
+        private ModUnlockManager _modUnlockManager;
         private MultiSleep _multiSleep;
         private JojaDisabler _jojaDisabler;
         private SeasonsRandomizer _seasonsRandomizer;
@@ -80,6 +83,7 @@ namespace StardewArchipelago
             _helper.Events.GameLoop.SaveCreated += this.OnSaveCreated;
             _helper.Events.GameLoop.Saving += this.OnSaving;
             _helper.Events.GameLoop.Saved += this.OnSaved;
+            _helper.Events.Display.MenuChanged += this.OnMenuChanged;
             _helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
             _helper.Events.GameLoop.TimeChanged += this.OnTimeChanged;
             _helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
@@ -117,12 +121,39 @@ namespace StardewArchipelago
             _advancedOptionsManager.InjectArchipelagoAdvancedOptions();
             _giftHandler = new GiftHandler();
             SkillInjections.ResetSkillExperience();
+            SkillInjections.ResetModSkillLevel();
             FriendshipInjections.ResetArchipelagoFriendshipPoints();
         }
 
         private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
         {
             ResetArchipelago();
+        }
+
+        private void OnMenuChanged(object sender, MenuChangedEventArgs e)
+        {
+            if (e.NewMenu is CarpenterMenu)
+            {
+                IList<BluePrint> blueprints = this.Helper.Reflection
+                .GetField<List<BluePrint>>(e.NewMenu, "blueprints")
+                .GetValue();
+                    if (blueprints.Any(x => x.name == "Stable" && x.displayName == "Tractor Garage") && 
+                    _archipelago.SlotData.ModList.ContainsKey("Tractor Mod"))
+                    {
+                        var isConstructedAlready = Game1.getFarm().isBuildingConstructed("Stable");
+                        if (_archipelago.GetReceivedItemCount("Stable") == 0 || !isConstructedAlready)
+                        {
+                            var removeAddedStableKey = blueprints.FirstOrDefault(x => x.displayName == "Stable");
+                            blueprints.Remove(removeAddedStableKey);
+                        }
+                        
+                        var tractorInfo = blueprints.FirstOrDefault(x=> x.displayName == "Tractor Garage");
+                        if (_archipelago.GetReceivedItemCount("Tractor Garage") == 0 || !isConstructedAlready)
+                        {
+                            blueprints.Remove(tractorInfo);
+                        }
+                    }
+            }
         }
 
         private void OnSaveCreating(object sender, SaveCreatingEventArgs e)
@@ -180,7 +211,7 @@ namespace StardewArchipelago
             _mail = new Mailman(State.LettersGenerated);
             _bundleReader = new BundleReader();
             _itemManager = new ItemManager(_helper, _archipelago, _stardewItemManager, _mail, State.ItemsReceived);
-            _mailPatcher = new MailPatcher(Monitor, _harmony, new LetterActions(_helper, _mail, _itemManager.TrapManager));
+            _mailPatcher = new MailPatcher(Monitor, _harmony, new LetterActions(_helper, _mail, _archipelago, _itemManager.TrapManager));
             _locationChecker = new LocationChecker(Monitor, _archipelago, State.LocationsChecked);
             _locationsPatcher = new LocationPatcher(Monitor, _helper, _harmony, _archipelago, _locationChecker, _bundleReader, _stardewItemManager);
             _itemPatcher = new ItemPatcher(Monitor, _helper, _harmony, _archipelago);

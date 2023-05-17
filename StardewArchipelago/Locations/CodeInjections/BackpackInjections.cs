@@ -1,5 +1,6 @@
 ﻿using System;
 using StardewArchipelago.Archipelago;
+using HarmonyLib;
 using StardewModdingAPI;
 using StardewValley;
 using xTile.Dimensions;
@@ -10,6 +11,7 @@ namespace StardewArchipelago.Locations.CodeInjections
     {
         private const string LARGE_PACK = "Large Pack";
         private const string DELUXE_PACK = "Deluxe Pack";
+        private const string PREMIUM_PACK = "Premium Pack";
 
         private static IMonitor _monitor;
         private static ArchipelagoClient _archipelago;
@@ -46,6 +48,14 @@ namespace StardewArchipelago.Locations.CodeInjections
                     _locationChecker.AddCheckedLocation(DELUXE_PACK);
                     return false; // don't run original logic
                 }
+
+                if (_locationChecker.IsLocationNotChecked(PREMIUM_PACK) && Game1.player.Money >= 10000)
+                {
+                    Game1.player.Money -= 10000;
+                    _locationChecker.AddCheckedLocation(PREMIUM_PACK);
+                    return false; // don't run original logic
+                }
+
 
                 return false; // don't run original logic
             }
@@ -111,6 +121,13 @@ namespace StardewArchipelago.Locations.CodeInjections
                         responsePurchaseLevel2,
                         responseDontPurchase
                     }, "Backpack");
+            }
+            else if (_archipelago.SlotData.ModList.ContainsKey("Bigger Backpack") &_locationChecker.IsLocationNotChecked(PREMIUM_PACK) 
+            && _archipelago.GetReceivedItemCount("Progressive Backpack") >= 2)
+            {
+                Type backpackType = AccessTools.TypeByName("BiggerBackpack.Mod");
+                var clickBackpackMethod = ModEntry.Instance.Helper.Reflection.GetMethod(backpackType, "clickBackpack");
+                clickBackpackMethod.Invoke();
             }
         }
     }

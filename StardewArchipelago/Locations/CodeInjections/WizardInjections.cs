@@ -16,6 +16,7 @@ namespace StardewArchipelago.Locations.CodeInjections
         public const string BUILDING_ISLAND_OBELISK = "Island Obelisk";
         public const string BUILDING_JUNIMO_HUT = "Junimo Hut";
         public const string BUILDING_GOLD_CLOCK = "Gold Clock";
+        public const string BUILDING_DEEP_WOODS_OBELISK = "Deep Woods Obelisk";
 
         private static IMonitor _monitor;
         private static IModHelper _modHelper;

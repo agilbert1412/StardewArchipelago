@@ -48,7 +48,7 @@ namespace StardewArchipelago.Archipelago
         private const string RANDOMIZE_NPC_APPEARANCES_KEY = "randomize_appearances";
         private const string RANDOMIZE_NPC_APPEARANCES_DAILY_KEY = "randomize_appearances_daily";
         private const string MULTIWORLD_VERSION_KEY = "client_version";
-
+        private const string MOD_LIST = "mod_versions";
         private Dictionary<string, object> _slotDataFields;
         private IMonitor _console;
 
@@ -90,6 +90,7 @@ namespace StardewArchipelago.Archipelago
         public Dictionary<string, string> ModifiedEntrances { get; set; }
         public AppearanceRandomization AppearanceRandomization { get; set; }
         public bool AppearanceRandomizationDaily { get; set; }
+        public Dictionary<string, string> ModList { get; set; }
 
         public SlotData(string slotName, Dictionary<string, object> slotDataFields, IMonitor console)
         {
@@ -136,6 +137,8 @@ namespace StardewArchipelago.Archipelago
             ModifiedEntrances = JsonConvert.DeserializeObject<Dictionary<string, string>>(newEntrancesStringData);
             AppearanceRandomization = GetSlotSetting(RANDOMIZE_NPC_APPEARANCES_KEY, AppearanceRandomization.Disabled);
             AppearanceRandomizationDaily = GetSlotSetting(RANDOMIZE_NPC_APPEARANCES_DAILY_KEY, false);
+            var modList = GetSlotSetting(MOD_LIST, ""); 
+            ModList = JsonConvert.DeserializeObject<Dictionary<string, string>>(modList);
         }
 
         private T GetSlotSetting<T>(string key, T defaultValue) where T : struct, Enum, IConvertible

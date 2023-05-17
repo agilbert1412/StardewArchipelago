@@ -8,6 +8,7 @@ using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Objects;
 using StardewValley.Tools;
+using StardewArchipelago.Archipelago;
 using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Items.Mail
@@ -18,11 +19,13 @@ namespace StardewArchipelago.Items.Mail
         private readonly Mailman _mail;
         private readonly TrapManager _trapManager;
         private Dictionary<string, Action<string>> _letterActions;
+        private ArchipelagoClient _archipelago;
 
-        public LetterActions(IModHelper modHelper, Mailman mail, TrapManager trapManager)
+        public LetterActions(IModHelper modHelper, Mailman mail, ArchipelagoClient archipelago, TrapManager trapManager)
         {
             _modHelper = modHelper;
             _mail = mail;
+            _archipelago = archipelago;
             _trapManager = trapManager;
             _letterActions = new Dictionary<string, Action<string>>();
             _letterActions.Add(LetterActionsKeys.Friendship, IncreaseFriendshipWithEveryone);
@@ -78,12 +81,18 @@ namespace StardewArchipelago.Items.Mail
                     Game1.player.MaxItems = 24;
                     backpackName = Game1.content.LoadString("Strings\\StringsFromCSFiles:GameLocation.cs.8708");
                     break;
-                case >= 24:
+                case < 36:
                     Game1.player.MaxItems = 36;
                     backpackName = Game1.content.LoadString("Strings\\StringsFromCSFiles:GameLocation.cs.8709");
                     break;
+                case >= 36:
+                    if (_archipelago.SlotData.ModList.ContainsKey("Bigger Backpack") & (Game1.player.MaxItems >= 36))
+                    {
+                        Game1.player.MaxItems = 48;
+                        backpackName = "Premium Pack";
+                    }
+                    break;
             }
-
             if (previousMaxItems >= Game1.player.MaxItems)
             {
                 return;

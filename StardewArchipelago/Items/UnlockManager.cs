@@ -17,6 +17,7 @@ namespace StardewArchipelago.Items
         public const string GOLDEN_SCYTHE_AP_NAME = "Golden Scythe";
         public const string BEACH_BRIDGE_AP_NAME = "Beach Bridge";
         public const string SPECIAL_ORDER_BOARD_AP_NAME = "Special Order Board";
+        private ModUnlockManager _modUnlockManager;
         public const string QI_WALNUT_ROOM = "Qi Walnut Room";
         public const string PIERRE_STOCKLIST = "Pierre's Missing Stocklist";
         private Dictionary<string, Func<ReceivedItem, LetterAttachment>> _unlockables;
@@ -24,6 +25,7 @@ namespace StardewArchipelago.Items
         public UnlockManager()
         {
             _unlockables = new Dictionary<string, Func<ReceivedItem, LetterAttachment>>();
+            _modUnlockManager = new ModUnlockManager();
             RegisterCommunityCenterRepairs();
             RegisterPlayerSkills();
             RegisterPlayerImprovement();
@@ -32,6 +34,7 @@ namespace StardewArchipelago.Items
             RegisterUniqueItems();
             RegisterIsolatedEventsItems();
             RegisterGingerIslandRepairs();
+            RegisterAPMods();
         }
 
         public bool IsUnlock(string unlockName)
@@ -119,6 +122,17 @@ namespace StardewArchipelago.Items
         private void RegisterMineElevators()
         {
             _unlockables.Add(PROGRESSIVE_MINE_ELEVATOR_AP_NAME, SendProgressiveMineElevatorLetter);
+        }
+
+        public void RegisterAPMods()
+        {
+            _unlockables.Add($"Magic Level", _modUnlockManager.SendProgressiveMagicLevel);
+            _unlockables.Add($"Binning Level", _modUnlockManager.SendProgressiveBinningLevel);
+            _unlockables.Add($"Cooking Level", _modUnlockManager.SendProgressiveCookingLevel);
+            _unlockables.Add($"Luck Level", _modUnlockManager.SendProgressiveLuckLevel);
+            _unlockables.Add($"Archaeology Level", _modUnlockManager.SendProgressiveArchaeologyLevel);
+            _unlockables.Add($"Socializing Level", _modUnlockManager.SendProgressiveSocializingLevel);
+            
         }
 
         private LetterVanillaAttachment RepairBridge(ReceivedItem receivedItem)
@@ -373,7 +387,7 @@ namespace StardewArchipelago.Items
             return new LetterInformationAttachment(receivedItem);
         }
 
-        private void GiveExperienceToNextLevel(Farmer farmer, int whichSkill)
+        public void GiveExperienceToNextLevel(Farmer farmer, int whichSkill)
         {
             var experienceForLevelUp = GetExperienceToNextLevel(farmer, whichSkill);
             farmer.experiencePoints[whichSkill] += experienceForLevelUp;

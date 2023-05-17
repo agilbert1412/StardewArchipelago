@@ -21,14 +21,16 @@ namespace StardewArchipelago.Locations.CodeInjections
         private const string FRIENDSANITY_PATTERN = "Friendsanity: {0} {1} <3";
 
         private const string PET_NAME = "Pet";
-        private static readonly string[] _bachelors = new[]
+        private static string[] _bachelors = new[]
         {
             "Harvey", "Elliott", "Sam", "Alex", "Shane", "Sebastian",
             "Emily", "Haley", "Leah", "Abigail", "Penny", "Maru"
         };
 
-        private static readonly string[]
-            _notImmediatelyAccessible = new[] { "Leo", "Krobus", "Dwarf", "Sandy", "Kent" };
+        private static string[] _notImmediatelyAccessible = new[] 
+        { 
+            "Leo", "Krobus", "Dwarf", "Sandy", "Kent" 
+        };
 
         private static IMonitor _monitor;
         private static IModHelper _helper;
@@ -53,6 +55,7 @@ namespace StardewArchipelago.Locations.CodeInjections
             _apLogoWhite = ArchipelagoTextures.GetColoredLogo(modHelper, 24, "white");
             _apLogoBlack = ArchipelagoTextures.GetColoredLogo(modHelper, 24, "black");
             _hintedFriendshipLocations = Array.Empty<string>();
+            UpdateBachelors();
         }
 
         public static Dictionary<string, int> GetArchipelagoFriendshipPoints()
@@ -62,6 +65,7 @@ namespace StardewArchipelago.Locations.CodeInjections
 
         public static string GetArchipelagoFriendshipPointsForPrinting(string characterName)
         {
+            characterName = ParseInternalName(characterName);
             var points = GetFriendshipPoints(characterName);
             if (points <= 0)
             {
@@ -90,7 +94,8 @@ namespace StardewArchipelago.Locations.CodeInjections
         {
             try
             {
-                var name = GetNpcName(__instance);
+                var prename = GetNpcName(__instance);
+                var name =ParseInternalName(prename);
                 if (name == null)
                 {
                     return true; // run original logic
@@ -269,6 +274,7 @@ namespace StardewArchipelago.Locations.CodeInjections
                         return false; // don't run original logic
                     }
 
+                    var name = ParseInternalName(n.Name);
                     var pointDifference = amount;
                     var multipliedPointDifference = GetMultipliedFriendship(pointDifference);
                     var apPoints = GetFriendshipPoints(n.Name);
@@ -278,7 +284,7 @@ namespace StardewArchipelago.Locations.CodeInjections
                     var earnedHearts = (int)newApPoints / POINTS_PER_HEART;
                     for (var i = 1; i <= earnedHearts; i++)
                     {
-                        _locationChecker.AddCheckedLocation(string.Format(FRIENDSANITY_PATTERN, n.Name, i));
+                        _locationChecker.AddCheckedLocation(string.Format(FRIENDSANITY_PATTERN, name, i));
                     }
 
                     if (n.datable.Value && __instance.friendshipData[n.Name].Points >= 2000 && !__instance.hasOrWillReceiveMail("Bouquet"))
@@ -319,6 +325,23 @@ namespace StardewArchipelago.Locations.CodeInjections
             }
 
             return null;
+        }
+
+        private static void UpdateBachelors()
+        {
+            Dictionary<string, string> source = Game1.content.Load<Dictionary<string, string>>("Data\\NPCDispositions");
+            List<string> villagers = new List<string>(source.Keys);
+            foreach (var name in villagers)
+            {
+                string[] loadedBachelor = source[name].Split('/');
+                if (!_bachelors.Contains(name) & loadedBachelor[5] == "datable")
+                {
+                    Array.Resize(ref _bachelors, _bachelors.Length + 1);
+                    _bachelors[_bachelors.Length -1] = name;
+                }
+                
+            }
+            
         }
 
         private static int ShuffledUpTo(string name)
@@ -395,5 +418,19 @@ namespace StardewArchipelago.Locations.CodeInjections
 
             _friendshipPoints[npc] = points;
         }
+
+        private static string ParseInternalName(string name)
+        {
+                if (name == "Mr. Ginger")
+                {
+                    return "MisterGinger";
+                }
+                if (name == "MisterGinger")
+                {
+                    return "Mr. Ginger";
+                }
+                return name;
+        }
+
     }
 }

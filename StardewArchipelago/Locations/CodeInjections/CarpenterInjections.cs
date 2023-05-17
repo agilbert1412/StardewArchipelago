@@ -34,6 +34,8 @@ namespace StardewArchipelago.Locations.CodeInjections
 
         public const string BUILDING_SHIPPING_BIN = "Shipping Bin";
 
+        public const string BUILDING_TRACTOR_GARAGE = "Tractor Garage";
+        
         public const string BUILDING_BLUEPRINT_LOCATION_NAME = "{0} Blueprint";
 
         private static IMonitor _monitor;
@@ -270,6 +272,10 @@ namespace StardewArchipelago.Locations.CodeInjections
             carpenterAPStock.AddArchipelagoLocationToStock(BUILDING_STABLE, 10000, new[] { Hardwood(100), IronBar(5) });
             carpenterAPStock.AddArchipelagoLocationToStock(BUILDING_WELL, 1000, new[] { Stone(75) });
             carpenterAPStock.AddArchipelagoLocationToStock(BUILDING_SHIPPING_BIN, 250, new[] { Wood(150) });
+            if (_archipelago.SlotData.ModList.ContainsKey("Tractor Mod"))
+            {
+                carpenterAPStock.AddArchipelagoLocationToStock(BUILDING_TRACTOR_GARAGE, 150000, new[] { IronBar(20), IridiumBar(5), BatteryPack(5) });
+            }
 
             return carpenterAPStock;
         }
@@ -326,6 +332,10 @@ namespace StardewArchipelago.Locations.CodeInjections
 
         public static bool HasReceivedBuilding(string buildingName, out string senderName)
         {
+            if (buildingName == "TractorGarage")
+            {
+                buildingName = "Tractor Garage";
+            }
             senderName = "";
             var numberRequired = 1;
 
@@ -413,6 +423,11 @@ namespace StardewArchipelago.Locations.CodeInjections
         private static Item IronBar(int amount)
         {
             return StardewObject(335, amount);
+        }
+
+        private static Item BatteryPack(int amount)
+        {
+            return StardewObject(787, amount);
         }
 
         private static Item StardewObject(int id, int amount)

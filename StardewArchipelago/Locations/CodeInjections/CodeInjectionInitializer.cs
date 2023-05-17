@@ -29,6 +29,7 @@ namespace StardewArchipelago.Locations.CodeInjections
             MuseumInjections.Initialize(monitor, modHelper, archipelago, locationChecker, itemManager);
             FriendshipInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             SpecialOrderInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
+            InitializeModdedContent(monitor, modHelper, archipelago, locationChecker, shopReplacer);
             InitializeFestivalPatches(monitor, modHelper, archipelago, locationChecker, shopReplacer);
         }
 
@@ -45,6 +46,12 @@ namespace StardewArchipelago.Locations.CodeInjections
             MermaidHouseInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             BeachNightMarketInjections.Initialize(monitor, modHelper, archipelago, locationChecker, shopReplacer);
             WinterStarInjections.Initialize(monitor, modHelper, archipelago, locationChecker, shopReplacer);
+        }
+
+        private static void InitializeModdedContent(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago,
+            LocationChecker locationChecker, ShopReplacer shopReplacer)
+        {
+            DeepWoodsModInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
         }
     }
 }
