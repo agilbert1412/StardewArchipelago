@@ -126,11 +126,11 @@ namespace StardewArchipelago.Items.Unlocks
             }
 
             var modOldSkillExp = exp[farmer.UniqueMultiplayerID][skill];
-            var modPrevSkillLevel = SkillInjections.ModdedGetLevel(modOldSkillExp);
+            var modPrevSkillLevel = SkillInjections.GetLevel(modOldSkillExp);
             var expToNextLevel = farmer.GetExperienceToNextLevel(modOldSkillExp);
             exp[farmer.UniqueMultiplayerID][skill] += expToNextLevel;
             var modNewSkillExp = exp[farmer.UniqueMultiplayerID][skill];
-            var modNewSkillLevel = SkillInjections.ModdedGetLevel(modNewSkillExp);
+            var modNewSkillLevel = SkillInjections.GetLevel(modNewSkillExp);
             if (modPrevSkillLevel != modNewSkillLevel)
             {
                 for (var i = modPrevSkillLevel + 1; i <= modNewSkillLevel; ++i)

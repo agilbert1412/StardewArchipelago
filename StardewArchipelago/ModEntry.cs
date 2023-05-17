@@ -121,7 +121,6 @@ namespace StardewArchipelago
             _advancedOptionsManager.InjectArchipelagoAdvancedOptions();
             _giftHandler = new GiftHandler();
             SkillInjections.ResetSkillExperience();
-            SkillInjections.ResetModSkillLevel();
             FriendshipInjections.ResetArchipelagoFriendshipPoints();
         }
 

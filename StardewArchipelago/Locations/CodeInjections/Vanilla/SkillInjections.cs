@@ -214,7 +214,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             return GetLevel((int)Math.Floor(experienceAmount));
         }
 
-        private static int GetLevel(int experienceAmount)
+        public static int GetLevel(int experienceAmount)
         {
             return experienceAmount switch
             {
