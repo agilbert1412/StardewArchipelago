@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using StardewArchipelago.Constants;
 
 namespace StardewArchipelago.Archipelago
 {
@@ -25,6 +26,12 @@ namespace StardewArchipelago.Archipelago
         public string GetVersion(string modName)
         {
             return _activeMods[modName];
+        }
+
+        public bool HasModdedSkill()
+        {
+            return HasMod(ModNames.LUCK) || HasMod(ModNames.BINNING) || HasMod(ModNames.COOKING) ||
+                   HasMod(ModNames.MAGIC) || HasMod(ModNames.SOCIALIZING) || HasMod(ModNames.ARCHAEOLOGY);
         }
     }
 }
