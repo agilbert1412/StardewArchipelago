@@ -10,7 +10,7 @@ using StardewValley.Menus;
 using xTile.Dimensions;
 using Object = StardewValley.Object;
 
-namespace StardewArchipelago.Locations.CodeInjections
+namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
     public class TravelingMerchantInjections
     {
@@ -42,7 +42,7 @@ namespace StardewArchipelago.Locations.CodeInjections
             _locationChecker = locationChecker;
             _flairOverride = new Dictionary<ISalable, string>();
         }
-        
+
         public static void DayUpdate_IsTravelingMerchantDay_Postfix(Forest __instance, int dayOfMonth)
         {
             try
@@ -57,7 +57,7 @@ namespace StardewArchipelago.Locations.CodeInjections
         }
 
         // public override bool checkAction(Location tileLocation, xTile.Dimensions.Rectangle viewport, Farmer who)
-        public static bool NightMarketCheckAction_IsTravelingMerchantDay_Prefix(BeachNightMarket __instance, Location tileLocation, xTile.Dimensions.Rectangle viewport, Farmer who, ref bool __result)
+        public static bool NightMarketCheckAction_IsTravelingMerchantDay_Prefix(BeachNightMarket __instance, Location tileLocation, Rectangle viewport, Farmer who, ref bool __result)
         {
             try
             {
@@ -79,7 +79,7 @@ namespace StardewArchipelago.Locations.CodeInjections
                 }
 
                 var isTravelingMerchantDay =
-                    TravelingMerchantInjections.IsTravelingMerchantDay(Game1.dayOfMonth, out var sendingPlayer);
+                    IsTravelingMerchantDay(Game1.dayOfMonth, out var sendingPlayer);
 
                 if (!isTravelingMerchantDay)
                 {
@@ -110,7 +110,7 @@ namespace StardewArchipelago.Locations.CodeInjections
                     Utility.clearObjectsInArea(travelingMerchantBound, __instance);
                 }
 
-                if (Game1.IsMasterGame && Game1.netWorldState.Value.VisitsUntilY1Guarantee >= 0 && (dayOfMonth % 7 % 5 != 0))
+                if (Game1.IsMasterGame && Game1.netWorldState.Value.VisitsUntilY1Guarantee >= 0 && dayOfMonth % 7 % 5 != 0)
                 {
                     --Game1.netWorldState.Value.VisitsUntilY1Guarantee;
                 }
@@ -142,15 +142,15 @@ namespace StardewArchipelago.Locations.CodeInjections
                 return;
             }
         }
-        
+
         public static void GenerateLocalTravelingMerchantStock_APStock_Postfix(int seed, ref Dictionary<ISalable, int[]> __result)
         {
             try
             {
                 var priceUpgrades = _archipelago.GetReceivedItemCount(AP_MERCHANT_DISCOUNT);
-                var priceMultiplier = BASE_PRICE - (priceUpgrades * DISCOUNT_PER_UPGRADE);
+                var priceMultiplier = BASE_PRICE - priceUpgrades * DISCOUNT_PER_UPGRADE;
                 var stockUpgrades = _archipelago.GetReceivedItemCount(AP_MERCHANT_STOCK);
-                var chanceForItemToRemain = BASE_STOCK + (stockUpgrades * STOCK_AMOUNT_PER_UPGRADE);
+                var chanceForItemToRemain = BASE_STOCK + stockUpgrades * STOCK_AMOUNT_PER_UPGRADE;
 
                 var random = new Random(seed);
 
@@ -359,7 +359,7 @@ namespace StardewArchipelago.Locations.CodeInjections
                 new PurchaseableArchipelagoLocation(scamName, chosenApItem, _modHelper, _locationChecker, _archipelago);
             var price = ModifyPrice(_merchantPrices[random.Next(0, _merchantPrices.Length)], priceMultiplier);
 
-            currentStock.Add(apLocation, new []{price, 1});
+            currentStock.Add(apLocation, new[] { price, 1 });
         }
 
         private static string GetDayOfWeekName(int day)

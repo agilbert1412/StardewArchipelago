@@ -6,9 +6,9 @@ using HarmonyLib;
 using StardewModdingAPI;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Extensions;
-using StardewArchipelago.Locations.CodeInjections;
 using StardewArchipelago.Items.Mail;
 using StardewValley;
+using StardewArchipelago.Locations.CodeInjections.Vanilla;
 
 namespace StardewArchipelago.Items.Unlocks
 {

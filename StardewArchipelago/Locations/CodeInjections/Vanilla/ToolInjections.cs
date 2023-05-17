@@ -6,7 +6,7 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
 
-namespace StardewArchipelago.Locations.CodeInjections
+namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
     public static class ToolInjections
     {
@@ -73,7 +73,7 @@ namespace StardewArchipelago.Locations.CodeInjections
                 {
                     continue;
                 }
-                
+
                 var metalName = GetMetalNameForTier(upgradeLevel);
                 var locationName = $"{metalName} {toolGenericName} Upgrade";
 

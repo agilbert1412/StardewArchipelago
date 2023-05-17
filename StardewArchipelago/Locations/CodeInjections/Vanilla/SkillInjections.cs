@@ -6,7 +6,7 @@ using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
 using StardewValley;
 
-namespace StardewArchipelago.Locations.CodeInjections
+namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
 
     public static class SkillInjections
@@ -43,7 +43,7 @@ namespace StardewArchipelago.Locations.CodeInjections
 
         public static Dictionary<int, int> GetArchipelagoSkillLevel()
         {
-            return _archipelagoSkillLevel.ToDictionary(x => (int)x.Key, x => (int)x.Value);
+            return _archipelagoSkillLevel.ToDictionary(x => (int)x.Key, x => x.Value);
         }
 
         public static List<string> GetArchipelagoExperienceForPrinting()
@@ -84,7 +84,7 @@ namespace StardewArchipelago.Locations.CodeInjections
                 return;
             }
 
-            _archipelagoSkillLevel = values.ToDictionary(x => (Skill)x.Key, x => (int)x.Value);
+            _archipelagoSkillLevel = values.ToDictionary(x => (Skill)x.Key, x => x.Value);
         }
 
         public static bool GainExperience_NormalExperience_Prefix(Farmer __instance, int which, int howMuch)
@@ -312,7 +312,7 @@ namespace StardewArchipelago.Locations.CodeInjections
                     return true; // run original logic
                 }
 
-                Skill skill = (Skill)Enum.Parse(typeof(Skill), skillActualName);
+                var skill = (Skill)Enum.Parse(typeof(Skill), skillActualName);
                 var experienceAmount = GetMultipliedExperience(amt);
                 var oldExperienceLevel = _archipelagoExperience[skill];
                 var newExperienceLevel = _archipelagoExperience[skill] + experienceAmount;

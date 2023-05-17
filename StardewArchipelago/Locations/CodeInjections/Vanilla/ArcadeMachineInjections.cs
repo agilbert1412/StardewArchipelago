@@ -8,7 +8,7 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Minigames;
 
-namespace StardewArchipelago.Locations.CodeInjections
+namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
     public static class ArcadeMachineInjections
     {
@@ -158,7 +158,7 @@ namespace StardewArchipelago.Locations.CodeInjections
             {
                 numberExtraLives = _archipelago.GetReceivedItemCount(JK_EXTRA_LIFE);
             }
-            
+
             return numberExtraLives;
         }
 
@@ -175,14 +175,14 @@ namespace StardewArchipelago.Locations.CodeInjections
                 var easyMode = _archipelago.SlotData.ArcadeMachineLocations == ArcadeLocations.VictoriesEasy;
                 var receivedDropRate = _archipelago.HasReceivedItem(JOTPK_DROP_RATE);
                 var increasedDropRate = easyMode || receivedDropRate;
-                
+
                 var moneyDropChance = increasedDropRate ? 0.1 : 0.05;
                 if (Game1.random.NextDouble() < moneyDropChance)
                 {
                     var type0Mob5CoinChance = increasedDropRate ? 0.02 : 0.01;
                     var otherMob5CoinChance = increasedDropRate ? 0.2 : 0.1;
                     var mobIsType0 = __instance.type != 0;
-                    __result = ((mobIsType0 && Game1.random.NextDouble() < type0Mob5CoinChance) || (Game1.random.NextDouble() < otherMob5CoinChance)) ? 1 : 0;
+                    __result = mobIsType0 && Game1.random.NextDouble() < type0Mob5CoinChance || Game1.random.NextDouble() < otherMob5CoinChance ? 1 : 0;
                     return false; // don't run original logic
                 }
 
@@ -390,7 +390,7 @@ namespace StardewArchipelago.Locations.CodeInjections
         {
             var missingBoots1 = _locationChecker.IsLocationNotChecked(JOTPK_BOOTS_1);
             var missingBoots2 = _locationChecker.IsLocationNotChecked(JOTPK_BOOTS_2);
-            var bootsItemOffered = missingBoots1 ? 3 : (missingBoots2 ? 4 : 5);
+            var bootsItemOffered = missingBoots1 ? 3 : missingBoots2 ? 4 : 5;
             return bootsItemOffered;
         }
 
@@ -400,7 +400,7 @@ namespace StardewArchipelago.Locations.CodeInjections
             var missingGun2 = _locationChecker.IsLocationNotChecked(JOTPK_GUN_2);
             var missingGun3 = _locationChecker.IsLocationNotChecked(JOTPK_GUN_3);
             var missingSuperGun = _locationChecker.IsLocationNotChecked(JOTPK_SUPER_GUN);
-            var gunItemOffered = missingGun1 ? 0 : (missingGun2 ? 1 : (missingGun3 ? 2 : (missingSuperGun ? 9 : 10)));
+            var gunItemOffered = missingGun1 ? 0 : missingGun2 ? 1 : missingGun3 ? 2 : missingSuperGun ? 9 : 10;
             return gunItemOffered;
         }
 
@@ -409,7 +409,7 @@ namespace StardewArchipelago.Locations.CodeInjections
             var missingAmmo1 = _locationChecker.IsLocationNotChecked(JOTPK_AMMO_1);
             var missingAmmo2 = _locationChecker.IsLocationNotChecked(JOTPK_AMMO_2);
             var missingAmmo3 = _locationChecker.IsLocationNotChecked(JOTPK_AMMO_3);
-            var ammoItemOffered = missingAmmo1 ? 6 : (missingAmmo2 ? 7 : (missingAmmo3 ? 8 : 10));
+            var ammoItemOffered = missingAmmo1 ? 6 : missingAmmo2 ? 7 : missingAmmo3 ? 8 : 10;
             return ammoItemOffered;
         }
 

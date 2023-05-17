@@ -5,7 +5,7 @@ using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
 
-namespace StardewArchipelago.Locations.CodeInjections
+namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
     public static class FishingInjections
     {
@@ -30,13 +30,13 @@ namespace StardewArchipelago.Locations.CodeInjections
             _locationChecker = locationChecker;
             _itemManager = itemManager;
         }
-        
+
         public static void CaughtFish_Fishsanity_Postfix(Farmer __instance, int index, int size,
             bool from_fish_pond, int numberCaught, ref bool __result)
         {
             try
             {
-                if (from_fish_pond || (index >= 167 && index < 173) || !_itemManager.ObjectExists(index))
+                if (from_fish_pond || index >= 167 && index < 173 || !_itemManager.ObjectExists(index))
                 {
                     return;
                 }

@@ -16,7 +16,7 @@ using xTile.ObjectModel;
 using Object = StardewValley.Object;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
-namespace StardewArchipelago.Locations.CodeInjections
+namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
     public static class QuestInjections
     {
@@ -265,7 +265,7 @@ namespace StardewArchipelago.Locations.CodeInjections
                 return true; // run original logic
             }
         }
-        
+
         public static bool Shake_WinterMysteryBush_Prefix(Bush __instance, Vector2 tileLocation,
             bool doEvenIfStillShaking)
         {
@@ -292,7 +292,7 @@ namespace StardewArchipelago.Locations.CodeInjections
                     ShakeForBushItem(__instance, tileLocation);
                     return false; // run original logic;
                 }
-                
+
                 if (tileLocation.X == 20.0 && tileLocation.Y == 8.0 && Game1.dayOfMonth == 28 && Game1.timeOfDay == 1200 && !Game1.player.mailReceived.Contains("junimoPlush"))
                 {
                     GetJunimoPlush(__instance);
@@ -310,7 +310,7 @@ namespace StardewArchipelago.Locations.CodeInjections
                         return false; // don't run original logic
                     }
                     Game1.player.mailReceived.Add("secretNote21_done");
-                    ((Town)(Game1.currentLocation)).initiateMarnieLewisBush();
+                    ((Town)Game1.currentLocation).initiateMarnieLewisBush();
                 }
 
                 return false; // don't run original logic
@@ -389,7 +389,7 @@ namespace StardewArchipelago.Locations.CodeInjections
                 var num = random.Next(1, 2) + Game1.player.ForagingLevel / 4;
                 for (var index = 0; index < num; ++index)
                 {
-                    Game1.createItemDebris(new Object(shakeOff, 1, quality: (Game1.player.professions.Contains(16) ? 4 : 0)), Utility.PointToVector2(bush.getBoundingBox().Center), Game1.random.Next(1, 4));
+                    Game1.createItemDebris(new Object(shakeOff, 1, quality: Game1.player.professions.Contains(16) ? 4 : 0), Utility.PointToVector2(bush.getBoundingBox().Center), Game1.random.Next(1, 4));
                 }
             }
             if (bush.size.Value == 3)
@@ -450,8 +450,8 @@ namespace StardewArchipelago.Locations.CodeInjections
                     if (__instance.specialItems[index] != null)
                         __instance.specialItems[index].bounds.X = x1 + index * num1;
                 }
-                ClickableComponent.SetUpNeighbors<ClickableTextureComponent>(__instance.specialItems, 4);
-                ClickableComponent.ChainNeighborsLeftRight<ClickableTextureComponent>(__instance.specialItems);
+                ClickableComponent.SetUpNeighbors(__instance.specialItems, 4);
+                ClickableComponent.ChainNeighborsLeftRight(__instance.specialItems);
 
                 return;
             }

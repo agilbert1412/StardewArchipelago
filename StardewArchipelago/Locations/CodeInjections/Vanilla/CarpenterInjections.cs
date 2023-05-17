@@ -7,7 +7,7 @@ using StardewModdingAPI;
 using StardewValley;
 using Object = StardewValley.Object;
 
-namespace StardewArchipelago.Locations.CodeInjections
+namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
     public static class CarpenterInjections
     {
@@ -35,7 +35,7 @@ namespace StardewArchipelago.Locations.CodeInjections
         public const string BUILDING_SHIPPING_BIN = "Shipping Bin";
 
         public const string BUILDING_TRACTOR_GARAGE = "Tractor Garage";
-        
+
         public const string BUILDING_BLUEPRINT_LOCATION_NAME = "{0} Blueprint";
 
         private static IMonitor _monitor;
@@ -98,7 +98,7 @@ namespace StardewArchipelago.Locations.CodeInjections
 
                 __instance.lastQuestionKey = dialogKey;
                 Game1.drawObjectQuestionDialogue(question, answerChoices.ToList());
-                
+
                 return false; // don't run original logic
             }
             catch (Exception ex)
@@ -122,7 +122,7 @@ namespace StardewArchipelago.Locations.CodeInjections
                 return;
             }
         }
-        
+
         public static bool HouseUpgradeOffer_OfferFreeUpgrade_Prefix(GameLocation __instance)
         {
             try
@@ -222,7 +222,7 @@ namespace StardewArchipelago.Locations.CodeInjections
 
             return "";
         }
-        
+
         public static bool HouseUpgradeAccept_FreeFromAP_Prefix(GameLocation __instance)
         {
             try
@@ -262,7 +262,7 @@ namespace StardewArchipelago.Locations.CodeInjections
             carpenterAPStock.AddArchipelagoLocationToStock(BUILDING_DELUXE_BARN, 25000, new[] { Wood(500), Stone(300) }, BUILDING_BIG_BARN);
 
             carpenterAPStock.AddArchipelagoLocationToStock(BUILDING_FISH_POND, 5000, new[] { Stone(100), Seaweed(5), GreenAlgae(5) });
-            carpenterAPStock.AddArchipelagoLocationToStock(BUILDING_MILL, 2500, new[] { Stone(50), Wood(150), Cloth(4)});
+            carpenterAPStock.AddArchipelagoLocationToStock(BUILDING_MILL, 2500, new[] { Stone(50), Wood(150), Cloth(4) });
 
             carpenterAPStock.AddArchipelagoLocationToStock(BUILDING_SHED, 15000, new[] { Wood(300) });
             carpenterAPStock.AddArchipelagoLocationToStock(BUILDING_BIG_SHED, 20000, new[] { Wood(550), Stone(300) }, BUILDING_SHED);
@@ -357,7 +357,7 @@ namespace StardewArchipelago.Locations.CodeInjections
             {
                 buildingName = $"Progressive {buildingName}";
             }
-            
+
             var numberReceived = _archipelago.GetReceivedItemCount(buildingName);
 
             var hasReceivedEnough = numberReceived >= numberRequired;

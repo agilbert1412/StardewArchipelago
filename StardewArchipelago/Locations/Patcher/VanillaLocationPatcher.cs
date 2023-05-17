@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using HarmonyLib;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Locations.CodeInjections;
+using StardewArchipelago.Locations.CodeInjections.Initializers;
+using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Locations.Festival;
 using StardewArchipelago.Locations.GingerIsland;
 using StardewArchipelago.Locations.GingerIsland.Boat;
@@ -18,15 +19,15 @@ using StardewValley.Quests;
 using StardewValley.TerrainFeatures;
 using Object = StardewValley.Object;
 
-namespace StardewArchipelago.Locations
+namespace StardewArchipelago.Locations.Patcher
 {
-    public class LocationPatcher
+    public class VanillaLocationPatcher : ILocationPatcher
     {
         private readonly ArchipelagoClient _archipelago;
         private readonly Harmony _harmony;
         private readonly GingerIslandPatcher _gingerIslandPatcher;
 
-        public LocationPatcher(IMonitor monitor, IModHelper modHelper, Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker, BundleReader bundleReader, StardewItemManager itemManager)
+        public VanillaLocationPatcher(IMonitor monitor, IModHelper modHelper, Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker, BundleReader bundleReader, StardewItemManager itemManager)
         {
             _archipelago = archipelago;
             _harmony = harmony;
@@ -57,8 +58,6 @@ namespace StardewArchipelago.Locations
             ReplaceFriendshipsWithChecks();
             ReplaceSpecialOrdersWithChecks();
             _gingerIslandPatcher.PatchGingerIslandLocations();
-            AddModSkillInjections();
-            AddDeepWoodsModInjections();
         }
 
         private void ReplaceCommunityCenterBundlesWithChecks()
@@ -478,7 +477,7 @@ namespace StardewArchipelago.Locations
             );
 
             _harmony.Patch(
-                original: AccessTools.Constructor(typeof(SocialPage), new []{ typeof(int) , typeof(int) , typeof(int) , typeof(int) }),
+                original: AccessTools.Constructor(typeof(SocialPage), new[] { typeof(int), typeof(int), typeof(int), typeof(int) }),
                 postfix: new HarmonyMethod(typeof(FriendshipInjections), nameof(FriendshipInjections.SocialPageCtor_CheckHints_Postfix))
             );
 
@@ -589,62 +588,6 @@ namespace StardewArchipelago.Locations
                 original: AccessTools.Method(typeof(Event), nameof(Event.chooseSecretSantaGift)),
                 prefix: new HarmonyMethod(typeof(WinterStarInjections), nameof(WinterStarInjections.ChooseSecretSantaGift_SuccessfulGift_Prefix))
             );
-        }
-
-        private void AddModSkillInjections()
-        {
-            if (_archipelago.SlotData.ModList.ContainsKey("Luck Skill") || _archipelago.SlotData.ModList.ContainsKey("Binning Skill")
-             || _archipelago.SlotData.ModList.ContainsKey("Cooking Skill") || _archipelago.SlotData.ModList.ContainsKey("Magic")
-             || _archipelago.SlotData.ModList.ContainsKey("Socializing Skill") || _archipelago.SlotData.ModList.ContainsKey("Archaeology"))
-            {
-                var _spaceCoreType = AccessTools.TypeByName("SpaceCore.Skills");
-                _harmony.Patch(
-                    original: AccessTools.Method(_spaceCoreType, "AddExperience"),
-                    prefix: new HarmonyMethod(typeof(SkillInjections), nameof(SkillInjections.AddExperience_ArchipelacoModExperience_Prefix))
-                );
-            }
-        }
-
-        private void AddDeepWoodsModInjections()
-        {
-            if (_archipelago.SlotData.ModList.ContainsKey("DeepWoods"))
-            {
-                var _deepWoodsType = AccessTools.TypeByName("DeepWoodsMod.DeepWoods");
-                var _unicornType = AccessTools.TypeByName("DeepWoodsMod.Unicorn");
-                var _gingerbreadType = AccessTools.TypeByName("DeepWoodsMod.GingerBreadHouse");
-                var _iridiumtreeType = AccessTools.TypeByName("DeepWoodsMod.IridiumTree");
-                var _treasureType = AccessTools.TypeByName("DeepWoodsMod.TreasureChest");
-                var _fountainType = AccessTools.TypeByName("DeepWoodsMod.HealingFountain");
-
-                /*_harmony.Patch(
-                    original: AccessTools.Method(_deepWoodsType, "DetermineExits"),
-                    postfix: new HarmonyMethod(typeof(DeepWoodsModInjections), nameof(DeepWoodsModInjections.DetermineExits_ChangeFromLevelHook_Postfix))
-                );*/
-                _harmony.Patch(
-                    original: AccessTools.Method(_unicornType, "checkAction"),
-                    prefix: new HarmonyMethod(typeof(DeepWoodsModInjections), nameof(DeepWoodsModInjections.CheckAction_PetUnicornLocation_Prefix))
-                );
-                _harmony.Patch(
-                    original: AccessTools.Method(_unicornType, "CheckScared"),
-                    prefix: new HarmonyMethod(typeof(DeepWoodsModInjections), nameof(DeepWoodsModInjections.CheckScared_MakeUnicornLessScared_Prefix))
-                );
-                _harmony.Patch(
-                    original: AccessTools.Method(_treasureType, "checkForAction"),
-                    postfix: new HarmonyMethod(typeof(DeepWoodsModInjections), nameof(DeepWoodsModInjections.CheckForAction_TreasureChestLocation_Postfix))
-                );
-                _harmony.Patch(
-                    original: AccessTools.Method(_gingerbreadType, "PlayDestroyedSounds"),
-                    postfix: new HarmonyMethod(typeof(DeepWoodsModInjections), nameof(DeepWoodsModInjections.PlayDestroyedSounds_GingerbreadLocation_Postfix))
-                );
-                _harmony.Patch(
-                    original: AccessTools.Method(_iridiumtreeType, "PlayDestroyedSounds"),
-                    postfix: new HarmonyMethod(typeof(DeepWoodsModInjections), nameof(DeepWoodsModInjections.PlayDestroyedSounds_IridiumTreeLocation_Postfix))
-                );
-                _harmony.Patch(
-                    original: AccessTools.Method(_fountainType, "performUseAction"),
-                    prefix: new HarmonyMethod(typeof(DeepWoodsModInjections), nameof(DeepWoodsModInjections.PerformUseAction_HealingFountainLocation_Prefix))
-                );
-            }
         }
 
     }

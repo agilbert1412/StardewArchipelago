@@ -11,7 +11,7 @@ using StardewValley.Characters;
 using StardewValley.Locations;
 using StardewValley.Menus;
 
-namespace StardewArchipelago.Locations.CodeInjections
+namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
     public static class FriendshipInjections
     {
@@ -27,9 +27,9 @@ namespace StardewArchipelago.Locations.CodeInjections
             "Emily", "Haley", "Leah", "Abigail", "Penny", "Maru"
         };
 
-        private static string[] _notImmediatelyAccessible = new[] 
-        { 
-            "Leo", "Krobus", "Dwarf", "Sandy", "Kent" 
+        private static string[] _notImmediatelyAccessible = new[]
+        {
+            "Leo", "Krobus", "Dwarf", "Sandy", "Kent"
         };
 
         private static IMonitor _monitor;
@@ -95,7 +95,7 @@ namespace StardewArchipelago.Locations.CodeInjections
             try
             {
                 var prename = GetNpcName(__instance);
-                var name =ParseInternalName(prename);
+                var name = ParseInternalName(prename);
                 if (name == null)
                 {
                     return true; // run original logic
@@ -110,7 +110,7 @@ namespace StardewArchipelago.Locations.CodeInjections
                 if (archipelagoHearts >= maxShuffled)
                 {
                     var earnedPoints = (int)GetFriendshipPoints(name);
-                    var earnedPointsAboveMaxShuffled = Math.Max(0, earnedPoints - (maxShuffled * POINTS_PER_HEART));
+                    var earnedPointsAboveMaxShuffled = Math.Max(0, earnedPoints - maxShuffled * POINTS_PER_HEART);
                     friendshipPoints += earnedPointsAboveMaxShuffled;
                 }
 
@@ -231,7 +231,7 @@ namespace StardewArchipelago.Locations.CodeInjections
                 }
 
                 var wasPet = __instance.grantedFriendshipForPet.Value;
-                var farm = (__instance.currentLocation as Farm);
+                var farm = __instance.currentLocation as Farm;
                 var wasWatered = farm?.petBowlWatered?.Value ?? false;
                 var pointIncrease = (wasPet ? 12 : 0) + (wasWatered ? 6 : 0);
                 var multipliedPointIncrease = GetMultipliedFriendship(pointIncrease);
@@ -262,7 +262,7 @@ namespace StardewArchipelago.Locations.CodeInjections
             {
                 var isValidTarget = n != null && (n is Child || n.isVillager());
                 var canCommunicateWithNpc = !n.Name.Equals("Dwarf") || __instance.canUnderstandDwarves;
-                if (!isValidTarget || (amount > 0 && !canCommunicateWithNpc))
+                if (!isValidTarget || amount > 0 && !canCommunicateWithNpc)
                 {
                     return false; // don't run original logic
                 }
@@ -329,19 +329,19 @@ namespace StardewArchipelago.Locations.CodeInjections
 
         private static void UpdateBachelors()
         {
-            Dictionary<string, string> source = Game1.content.Load<Dictionary<string, string>>("Data\\NPCDispositions");
-            List<string> villagers = new List<string>(source.Keys);
+            var source = Game1.content.Load<Dictionary<string, string>>("Data\\NPCDispositions");
+            var villagers = new List<string>(source.Keys);
             foreach (var name in villagers)
             {
-                string[] loadedBachelor = source[name].Split('/');
+                var loadedBachelor = source[name].Split('/');
                 if (!_bachelors.Contains(name) & loadedBachelor[5] == "datable")
                 {
                     Array.Resize(ref _bachelors, _bachelors.Length + 1);
-                    _bachelors[_bachelors.Length -1] = name;
+                    _bachelors[_bachelors.Length - 1] = name;
                 }
-                
+
             }
-            
+
         }
 
         private static int ShuffledUpTo(string name)
@@ -364,7 +364,7 @@ namespace StardewArchipelago.Locations.CodeInjections
                         return 5;
                     }
 
-                    return _notImmediatelyAccessible.Contains(name) ? 0 : (isBachelor ? 8 : 10);
+                    return _notImmediatelyAccessible.Contains(name) ? 0 : isBachelor ? 8 : 10;
                 case Friendsanity.All:
                     if (name == PET_NAME)
                     {
@@ -421,15 +421,15 @@ namespace StardewArchipelago.Locations.CodeInjections
 
         private static string ParseInternalName(string name)
         {
-                if (name == "Mr. Ginger")
-                {
-                    return "MisterGinger";
-                }
-                if (name == "MisterGinger")
-                {
-                    return "Mr. Ginger";
-                }
-                return name;
+            if (name == "Mr. Ginger")
+            {
+                return "MisterGinger";
+            }
+            if (name == "MisterGinger")
+            {
+                return "Mr. Ginger";
+            }
+            return name;
         }
 
     }

@@ -1,12 +1,12 @@
 ﻿using StardewArchipelago.Archipelago;
 using StardewArchipelago.Locations.Festival;
-using StardewArchipelago.Locations.GingerIsland.Boat;
 using StardewModdingAPI;
 using StardewArchipelago.Stardew;
+using StardewArchipelago.Locations.CodeInjections.Vanilla;
 
-namespace StardewArchipelago.Locations.CodeInjections
+namespace StardewArchipelago.Locations.CodeInjections.Initializers
 {
-    public static class CodeInjectionInitializer
+    public static class VanillaCodeInjectionInitializer
     {
         public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, BundleReader bundleReader, LocationChecker locationChecker, StardewItemManager itemManager)
         {
@@ -29,7 +29,6 @@ namespace StardewArchipelago.Locations.CodeInjections
             MuseumInjections.Initialize(monitor, modHelper, archipelago, locationChecker, itemManager);
             FriendshipInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             SpecialOrderInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
-            InitializeModdedContent(monitor, modHelper, archipelago, locationChecker, shopReplacer);
             InitializeFestivalPatches(monitor, modHelper, archipelago, locationChecker, shopReplacer);
         }
 
@@ -46,12 +45,6 @@ namespace StardewArchipelago.Locations.CodeInjections
             MermaidHouseInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             BeachNightMarketInjections.Initialize(monitor, modHelper, archipelago, locationChecker, shopReplacer);
             WinterStarInjections.Initialize(monitor, modHelper, archipelago, locationChecker, shopReplacer);
-        }
-
-        private static void InitializeModdedContent(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago,
-            LocationChecker locationChecker, ShopReplacer shopReplacer)
-        {
-            DeepWoodsModInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
         }
     }
 }

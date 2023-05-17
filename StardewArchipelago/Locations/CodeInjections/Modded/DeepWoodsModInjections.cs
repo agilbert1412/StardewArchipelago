@@ -8,7 +8,7 @@ using StardewArchipelago.Archipelago;
 using StardewValley;
 using StardewValley.Menus;
 
-namespace StardewArchipelago.Locations.CodeInjections
+namespace StardewArchipelago.Locations.CodeInjections.Modded
 {
     public static class DeepWoodsModInjections
     {
@@ -177,7 +177,7 @@ namespace StardewArchipelago.Locations.CodeInjections
             {
                 _monitor.Log($"Failed in {nameof(DetermineExits_ChangeFromLevelHook_Postfix)}:\n{ex}", LogLevel.Error);
                 return;
-            } 
+            }
         }
         //Later, should also make it so the spawned drops for chest and also gingerbread + tree
         ///don't show up first time, but don't know how to just yet due to DeepWoods type reference in method call. - Albrekka

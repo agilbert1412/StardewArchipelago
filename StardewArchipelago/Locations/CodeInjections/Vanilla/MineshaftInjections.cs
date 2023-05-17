@@ -13,7 +13,7 @@ using xTile.Dimensions;
 using xTile.Tiles;
 using Rectangle = xTile.Dimensions.Rectangle;
 
-namespace StardewArchipelago.Locations.CodeInjections
+namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
     public static class MineshaftInjections
     {
@@ -149,7 +149,7 @@ namespace StardewArchipelago.Locations.CodeInjections
         {
             try
             {
-                Tile tile = __instance.map.GetLayer("Buildings").PickTile(new Location(tileLocation.X * 64, tileLocation.Y * 64), viewport.Size);
+                var tile = __instance.map.GetLayer("Buildings").PickTile(new Location(tileLocation.X * 64, tileLocation.Y * 64), viewport.Size);
 
                 if (tile == null || !who.IsLocalPlayer || tile.TileIndex != 112 || __instance.mineLevel > 120)
                 {

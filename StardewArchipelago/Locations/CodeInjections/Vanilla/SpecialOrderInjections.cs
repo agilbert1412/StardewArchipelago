@@ -11,7 +11,7 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.GameData;
 
-namespace StardewArchipelago.Locations.CodeInjections
+namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
     public class SpecialOrderInjections
     {
@@ -110,14 +110,14 @@ namespace StardewArchipelago.Locations.CodeInjections
                 {
                     case SpecialOrder.QuestDuration.Week:
                         // worldDate = new WorldDate(Game1.year, Game1.currentSeason, (Game1.dayOfMonth - 1) / 7 * 7);
-                        __instance.dueDate.Value = today + (7 - (Game1.dayOfMonth % 7));
+                        __instance.dueDate.Value = today + (7 - Game1.dayOfMonth % 7);
                         break;
                     case SpecialOrder.QuestDuration.Month:
                         __instance.dueDate.Value = today + (28 - Game1.dayOfMonth);
                         break;
                     case SpecialOrder.QuestDuration.TwoWeeks:
                         // worldDate = new WorldDate(Game1.year, Game1.currentSeason, (Game1.dayOfMonth - 1) / 7 * 7);
-                        __instance.dueDate.Value = today + (14 - (Game1.dayOfMonth % 7));
+                        __instance.dueDate.Value = today + (14 - Game1.dayOfMonth % 7);
                         break;
                     case SpecialOrder.QuestDuration.TwoDays:
                         __instance.dueDate.Value = today + 2;
@@ -179,9 +179,9 @@ namespace StardewArchipelago.Locations.CodeInjections
             var specialOrdersThatCanBeStartedToday = FilterToSpecialOrdersThatCanBeStartedToday(allSpecialOrdersData);
             var specialOrdersForBoard = CreateSpecialOrderInstancesForType(specialOrdersThatCanBeStartedToday, "", random);
             var specialOrdersForQi = CreateSpecialOrderInstancesForType(specialOrdersThatCanBeStartedToday, "Qi", random);
-            
+
             var hints = _archipelago.GetHints().Where(x => !x.Found && _archipelago.GetPlayerName(x.FindingPlayer) == _archipelago.SlotData.SlotName).ToArray();
-            
+
             AddTwoOrdersToBoard(specialOrdersForBoard, hints, random);
             AddTwoOrdersToBoard(specialOrdersForQi, hints, random);
         }

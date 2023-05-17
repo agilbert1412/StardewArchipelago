@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Locations.CodeInjections;
+using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewModdingAPI;
 using StardewValley;
 

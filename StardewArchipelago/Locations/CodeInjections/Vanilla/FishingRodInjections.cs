@@ -9,7 +9,7 @@ using StardewValley.Locations;
 using StardewValley.Objects;
 using StardewValley.Tools;
 
-namespace StardewArchipelago.Locations.CodeInjections
+namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
     public static class FishingRodInjections
     {
@@ -66,7 +66,7 @@ namespace StardewArchipelago.Locations.CodeInjections
                 if (Game1.activeClickableMenu == null)
                     __instance.CurrentCommand++;
                 __instance.CurrentCommand++;
-                
+
                 return false; // don't run original logic
 
             }

@@ -5,7 +5,7 @@ using StardewModdingAPI;
 using StardewValley;
 using xTile.Dimensions;
 
-namespace StardewArchipelago.Locations.CodeInjections
+namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
     public static class BackpackInjections
     {
@@ -122,10 +122,10 @@ namespace StardewArchipelago.Locations.CodeInjections
                         responseDontPurchase
                     }, "Backpack");
             }
-            else if (_archipelago.SlotData.ModList.ContainsKey("Bigger Backpack") &_locationChecker.IsLocationNotChecked(PREMIUM_PACK) 
+            else if (_archipelago.SlotData.ModList.ContainsKey("Bigger Backpack") & _locationChecker.IsLocationNotChecked(PREMIUM_PACK)
             && _archipelago.GetReceivedItemCount("Progressive Backpack") >= 2)
             {
-                Type backpackType = AccessTools.TypeByName("BiggerBackpack.Mod");
+                var backpackType = AccessTools.TypeByName("BiggerBackpack.Mod");
                 var clickBackpackMethod = ModEntry.Instance.Helper.Reflection.GetMethod(backpackType, "clickBackpack");
                 clickBackpackMethod.Invoke();
             }
