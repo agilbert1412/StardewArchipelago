@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using HarmonyLib;
 using StardewModdingAPI;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Extensions;
 using StardewArchipelago.Locations.CodeInjections;
 using StardewArchipelago.Items.Mail;
 using StardewValley;
@@ -51,13 +52,12 @@ namespace StardewArchipelago.Items.Unlocks
 
         private LetterAttachment SendProgressiveLuckLevel(ReceivedItem receivedItem)
         {
-            const int whichSkill = (int)Skill.Luck;
             foreach (var farmer in Game1.getAllFarmers())
             {
-                var experienceForLevelUp = GetExperienceToNextLevel(farmer, whichSkill);
-                farmer.experiencePoints[whichSkill] += experienceForLevelUp;
+                var experienceForLevelUp = farmer.GetExperienceToNextLevel(Skill.Luck);
+                farmer.AddExperience(Skill.Luck, experienceForLevelUp);
                 farmer.LuckLevel = farmer.luckLevel.Value + 1;
-                farmer.newLevels.Add(new Point(whichSkill, farmer.luckLevel.Value));
+                farmer.newLevels.Add(new Point((int)Skill.Luck, farmer.luckLevel.Value));
             }
             return new LetterInformationAttachment(receivedItem);
         }
@@ -107,64 +107,6 @@ namespace StardewArchipelago.Items.Unlocks
             return new LetterInformationAttachment(receivedItem);
         }
 
-        private int GetExperienceToNextLevel(Farmer farmer, int skill)
-        {
-            switch (farmer.experiencePoints[skill])
-            {
-                case < 100:
-                    return 100 - farmer.experiencePoints[skill];
-                case < 380:
-                    return 380 - farmer.experiencePoints[skill];
-                case < 770:
-                    return 770 - farmer.experiencePoints[skill];
-                case < 1300:
-                    return 1300 - farmer.experiencePoints[skill];
-                case < 2150:
-                    return 2150 - farmer.experiencePoints[skill];
-                case < 3300:
-                    return 3300 - farmer.experiencePoints[skill];
-                case < 4800:
-                    return 4800 - farmer.experiencePoints[skill];
-                case < 6900:
-                    return 6900 - farmer.experiencePoints[skill];
-                case < 10000:
-                    return 10000 - farmer.experiencePoints[skill];
-                case < 15000:
-                    return 15000 - farmer.experiencePoints[skill];
-            }
-
-            return 0;
-        }
-
-        private int GetModdedExperienceToNextLevel(int amt)
-        {
-            switch (amt)
-            {
-                case < 100:
-                    return 100 - amt;
-                case < 380:
-                    return 380 - amt;
-                case < 770:
-                    return 770 - amt;
-                case < 1300:
-                    return 1300 - amt;
-                case < 2150:
-                    return 2150 - amt;
-                case < 3300:
-                    return 3300 - amt;
-                case < 4800:
-                    return 4800 - amt;
-                case < 6900:
-                    return 6900 - amt;
-                case < 10000:
-                    return 10000 - amt;
-                case < 15000:
-                    return 15000 - amt;
-            }
-
-            return 0;
-        }
-
         private void ReceiveAPLevel(string skill)
         {
             var farmer = Game1.player;
@@ -185,7 +127,7 @@ namespace StardewArchipelago.Items.Unlocks
 
             var modOldSkillExp = exp[farmer.UniqueMultiplayerID][skill];
             var modPrevSkillLevel = SkillInjections.ModdedGetLevel(modOldSkillExp);
-            var expToNextLevel = GetModdedExperienceToNextLevel(modOldSkillExp);
+            var expToNextLevel = farmer.GetExperienceToNextLevel(modOldSkillExp);
             exp[farmer.UniqueMultiplayerID][skill] += expToNextLevel;
             var modNewSkillExp = exp[farmer.UniqueMultiplayerID][skill];
             var modNewSkillLevel = SkillInjections.ModdedGetLevel(modNewSkillExp);

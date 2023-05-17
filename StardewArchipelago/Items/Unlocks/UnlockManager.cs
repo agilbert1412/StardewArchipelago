@@ -37,6 +37,8 @@ namespace StardewArchipelago.Items.Unlocks
                     return specificUnlockManager.PerformUnlockAsLetter(unlock);
                 }
             }
+
+            throw new ArgumentException($"Could not perform unlock '{unlock.ItemName}'");
         }
     }
 }

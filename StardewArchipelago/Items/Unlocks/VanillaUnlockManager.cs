@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Extensions;
 using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Locations.CodeInjections;
 using StardewValley;
@@ -315,97 +316,63 @@ namespace StardewArchipelago.Items.Unlocks
 
         private LetterAttachment SendProgressiveFarmingLevel(ReceivedItem receivedItem)
         {
-            const int whichSkill = (int)Skill.Farming;
             foreach (var farmer in Game1.getAllFarmers())
             {
-                GiveExperienceToNextLevel(farmer, whichSkill);
+                GiveExperienceToNextLevel(farmer, Skill.Farming);
                 farmer.FarmingLevel = farmer.farmingLevel.Value + 1;
-                farmer.newLevels.Add(new Point(whichSkill, farmer.farmingLevel.Value));
+                farmer.newLevels.Add(new Point((int)Skill.Farming, farmer.farmingLevel.Value));
             }
             return new LetterInformationAttachment(receivedItem);
         }
 
         private LetterAttachment SendProgressiveFishingLevel(ReceivedItem receivedItem)
         {
-            const int whichSkill = (int)Skill.Fishing;
             foreach (var farmer in Game1.getAllFarmers())
             {
-                GiveExperienceToNextLevel(farmer, whichSkill);
+                GiveExperienceToNextLevel(farmer, Skill.Fishing);
                 farmer.FishingLevel = farmer.fishingLevel.Value + 1;
-                farmer.newLevels.Add(new Point(whichSkill, farmer.fishingLevel.Value));
+                farmer.newLevels.Add(new Point((int)Skill.Fishing, farmer.fishingLevel.Value));
             }
             return new LetterInformationAttachment(receivedItem);
         }
 
         private LetterAttachment SendProgressiveForagingLevel(ReceivedItem receivedItem)
         {
-            const int whichSkill = (int)Skill.Foraging;
             foreach (var farmer in Game1.getAllFarmers())
             {
-                GiveExperienceToNextLevel(farmer, whichSkill);
+                GiveExperienceToNextLevel(farmer, Skill.Foraging);
                 farmer.ForagingLevel = farmer.foragingLevel.Value + 1;
-                farmer.newLevels.Add(new Point(whichSkill, farmer.foragingLevel.Value));
+                farmer.newLevels.Add(new Point((int)Skill.Foraging, farmer.foragingLevel.Value));
             }
             return new LetterInformationAttachment(receivedItem);
         }
 
         private LetterAttachment SendProgressiveMiningLevel(ReceivedItem receivedItem)
         {
-            const int whichSkill = (int)Skill.Mining;
             foreach (var farmer in Game1.getAllFarmers())
             {
-                GiveExperienceToNextLevel(farmer, whichSkill);
+                GiveExperienceToNextLevel(farmer, Skill.Mining);
                 farmer.MiningLevel = farmer.miningLevel.Value + 1;
-                farmer.newLevels.Add(new Point(whichSkill, farmer.miningLevel.Value));
+                farmer.newLevels.Add(new Point((int)Skill.Mining, farmer.miningLevel.Value));
             }
             return new LetterInformationAttachment(receivedItem);
         }
 
         private LetterAttachment SendProgressiveCombatLevel(ReceivedItem receivedItem)
         {
-            const int whichSkill = (int)Skill.Combat;
             foreach (var farmer in Game1.getAllFarmers())
             {
-                GiveExperienceToNextLevel(farmer, whichSkill);
+                GiveExperienceToNextLevel(farmer, Skill.Combat);
                 farmer.CombatLevel = farmer.combatLevel.Value + 1;
-                farmer.newLevels.Add(new Point(whichSkill, farmer.combatLevel.Value));
+                farmer.newLevels.Add(new Point((int)Skill.Combat, farmer.combatLevel.Value));
             }
             return new LetterInformationAttachment(receivedItem);
         }
 
-        public void GiveExperienceToNextLevel(Farmer farmer, int whichSkill)
+        public void GiveExperienceToNextLevel(Farmer farmer, Skill skill)
         {
-            var experienceForLevelUp = GetExperienceToNextLevel(farmer, whichSkill);
-            farmer.experiencePoints[whichSkill] += experienceForLevelUp;
-        }
-
-        private int GetExperienceToNextLevel(Farmer farmer, int skill)
-        {
-            switch (farmer.experiencePoints[skill])
-            {
-                case < 100:
-                    return 100 - farmer.experiencePoints[skill];
-                case < 380:
-                    return 380 - farmer.experiencePoints[skill];
-                case < 770:
-                    return 770 - farmer.experiencePoints[skill];
-                case < 1300:
-                    return 1300 - farmer.experiencePoints[skill];
-                case < 2150:
-                    return 2150 - farmer.experiencePoints[skill];
-                case < 3300:
-                    return 3300 - farmer.experiencePoints[skill];
-                case < 4800:
-                    return 4800 - farmer.experiencePoints[skill];
-                case < 6900:
-                    return 6900 - farmer.experiencePoints[skill];
-                case < 10000:
-                    return 10000 - farmer.experiencePoints[skill];
-                case < 15000:
-                    return 15000 - farmer.experiencePoints[skill];
-            }
-
-            return 0;
+            var experienceForLevelUp = farmer.GetExperienceToNextLevel(skill);
+            farmer.AddExperience(skill, experienceForLevelUp);
         }
     }
 }

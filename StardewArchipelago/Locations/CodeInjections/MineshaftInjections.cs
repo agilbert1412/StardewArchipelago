@@ -171,7 +171,7 @@ namespace StardewArchipelago.Locations.CodeInjections
         private static void CreateElevatorMenuIfUnlocked()
         {
             var numberOfMineElevatorReceived =
-                _archipelago.GetReceivedItemCount(UnlockManager.PROGRESSIVE_MINE_ELEVATOR_AP_NAME);
+                _archipelago.GetReceivedItemCount(VanillaUnlockManager.PROGRESSIVE_MINE_ELEVATOR_AP_NAME);
             var mineLevelUnlocked = numberOfMineElevatorReceived * 5;
             mineLevelUnlocked = Math.Min(120, Math.Max(0, mineLevelUnlocked));
 

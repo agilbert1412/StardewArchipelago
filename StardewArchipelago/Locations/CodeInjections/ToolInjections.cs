@@ -103,7 +103,7 @@ namespace StardewArchipelago.Locations.CodeInjections
                 return false;
             }
 
-            var progressiveToolItemName = $"{UnlockManager.PROGRESSIVE_TOOL_AP_PREFIX}{toolGenericName}";
+            var progressiveToolItemName = $"{VanillaUnlockManager.PROGRESSIVE_TOOL_AP_PREFIX}{toolGenericName}";
             var receivedToolsOfThatType = _archipelago.GetReceivedItemCount(progressiveToolItemName);
             return receivedToolsOfThatType >= upgradeLevel - 1;
         }

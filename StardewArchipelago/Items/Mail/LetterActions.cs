@@ -289,7 +289,7 @@ namespace StardewArchipelago.Items.Mail
 
         private void GetFishingRodOfNextLevel()
         {
-            var numberOfPreviousFishingRodLetters = _mail.OpenedMailsContainingKey(UnlockManager.PROGRESSIVE_FISHING_ROD_AP_NAME);
+            var numberOfPreviousFishingRodLetters = _mail.OpenedMailsContainingKey(VanillaUnlockManager.PROGRESSIVE_FISHING_ROD_AP_NAME);
 
             numberOfPreviousFishingRodLetters = Math.Max(1, Math.Min(4, numberOfPreviousFishingRodLetters));
             var upgradeLevel = numberOfPreviousFishingRodLetters - 1;

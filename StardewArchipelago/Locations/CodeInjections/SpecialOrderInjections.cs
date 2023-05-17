@@ -41,7 +41,7 @@ namespace StardewArchipelago.Locations.CodeInjections
         {
             try
             {
-                __result = _archipelago.HasReceivedItem(UnlockManager.SPECIAL_ORDER_BOARD_AP_NAME);
+                __result = _archipelago.HasReceivedItem(VanillaUnlockManager.SPECIAL_ORDER_BOARD_AP_NAME);
                 return false; // don't run original logic;
             }
             catch (Exception ex)
