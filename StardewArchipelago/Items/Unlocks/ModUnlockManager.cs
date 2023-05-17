@@ -34,12 +34,12 @@ namespace StardewArchipelago.Items.Unlocks
 
         public bool IsUnlock(string unlockName)
         {
-            throw new NotImplementedException();
+            return _unlockables.ContainsKey(unlockName);
         }
 
         public LetterAttachment PerformUnlockAsLetter(ReceivedItem unlock)
         {
-            throw new NotImplementedException();
+            return _unlockables[unlock.ItemName](unlock);
         }
 
         /*public LetterActionAttachment SendExcalibur(ReceivedItem receivedItem)
