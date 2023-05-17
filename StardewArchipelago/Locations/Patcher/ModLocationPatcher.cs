@@ -34,7 +34,7 @@ namespace StardewArchipelago.Locations.Patcher
                 var _spaceCoreType = AccessTools.TypeByName("SpaceCore.Skills");
                 _harmony.Patch(
                     original: AccessTools.Method(_spaceCoreType, "AddExperience"),
-                    prefix: new HarmonyMethod(typeof(SkillInjections), nameof(SkillInjections.AddExperience_ArchipelacoModExperience_Prefix))
+                    prefix: new HarmonyMethod(typeof(SkillInjections), nameof(SkillInjections.AddExperience_ArchipelagoModExperience_Prefix))
                 );
             }
         }

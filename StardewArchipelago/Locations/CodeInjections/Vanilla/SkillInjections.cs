@@ -309,7 +309,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             return modSkillList;
         }
 
-        public static bool AddExperience_ArchipelacoModExperience_Prefix(Farmer __instance, string skillName, int amt)
+        public static bool AddExperience_ArchipelagoModExperience_Prefix(Farmer __instance, string skillName, int amt)
         {
             try
             {
@@ -344,7 +344,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(AddExperience_ArchipelacoModExperience_Prefix)}:\n{ex}",
+                _monitor.Log($"Failed in {nameof(AddExperience_ArchipelagoModExperience_Prefix)}:\n{ex}",
                     LogLevel.Error);
                 return true; // run original logic
             }
