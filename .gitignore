@@ -348,3 +348,14 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+_gamedirref
+LICENSE
+.devcontainer/devcontainer.json
+.devcontainer/Dockerfile
+.vscode/tasks.json
+.gitignore
+src/ModEntry.cs
+.gitignore
+src/SampleMod.csproj
+StardewArchipelago/.vscode/launch.json
+src/manifest.json
