@@ -27,11 +27,10 @@ namespace StardewArchipelago.Locations.Patcher
         private readonly Harmony _harmony;
         private readonly GingerIslandPatcher _gingerIslandPatcher;
 
-        public VanillaLocationPatcher(IMonitor monitor, IModHelper modHelper, Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker, BundleReader bundleReader, StardewItemManager itemManager)
+        public VanillaLocationPatcher(IMonitor monitor, IModHelper modHelper, Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             _archipelago = archipelago;
             _harmony = harmony;
-            CodeInjectionInitializer.Initialize(monitor, modHelper, _archipelago, bundleReader, locationChecker, itemManager);
             _gingerIslandPatcher = new GingerIslandPatcher(monitor, modHelper, harmony, archipelago, locationChecker);
         }
 

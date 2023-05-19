@@ -266,7 +266,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         public static void ResetSkillExperience()
         {
             _archipelagoExperience = new Dictionary<Skill, double>();
-            AddMissingSkillsToDictionary();
         }
 
         private static IEnumerable<Skill> VanillaSkills()

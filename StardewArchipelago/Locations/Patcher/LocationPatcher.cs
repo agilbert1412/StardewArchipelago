@@ -31,7 +31,7 @@ namespace StardewArchipelago.Locations.Patcher
         {
             CodeInjectionInitializer.Initialize(monitor, modHelper, archipelago, bundleReader, locationChecker, itemManager);
             _patchers = new List<ILocationPatcher>();
-            _patchers.Add(new VanillaLocationPatcher(monitor, modHelper, harmony, archipelago, locationChecker, bundleReader, itemManager));
+            _patchers.Add(new VanillaLocationPatcher(monitor, modHelper, harmony, archipelago, locationChecker));
             if (archipelago.SlotData.Mods.IsModded)
             {
                 _patchers.Add(new ModLocationPatcher(harmony, archipelago, modsManager));
