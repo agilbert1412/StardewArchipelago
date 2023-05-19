@@ -12,11 +12,13 @@ namespace StardewArchipelago.Locations.Patcher
         private readonly ArchipelagoClient _archipelago;
         private readonly Harmony _harmony;
         private readonly GingerIslandPatcher _gingerIslandPatcher;
+        private ModsManager _modsManager;
 
-        public ModLocationPatcher(Harmony harmony, ArchipelagoClient archipelago)
+        public ModLocationPatcher(Harmony harmony, ArchipelagoClient archipelago, ModsManager modsManager)
         {
             _archipelago = archipelago;
             _harmony = harmony;
+            _modsManager = modsManager;
         }
 
         public void ReplaceAllLocationsRewardsWithChecks()
@@ -27,9 +29,7 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void AddModSkillInjections()
         {
-            if (_archipelago.SlotData.Mods.HasMod(ModNames.LUCK) || _archipelago.SlotData.Mods.HasMod(ModNames.BINNING)
-             || _archipelago.SlotData.Mods.HasMod(ModNames.COOKING) || _archipelago.SlotData.Mods.HasMod(ModNames.MAGIC)
-             || _archipelago.SlotData.Mods.HasMod(ModNames.SOCIALIZING) || _archipelago.SlotData.Mods.HasMod(ModNames.ARCHAEOLOGY))
+            if (_modsManager.HasModdedSkill() & _archipelago.SlotData.SkillProgression != SkillsProgression.Vanilla)
             {
                 var _spaceCoreType = AccessTools.TypeByName("SpaceCore.Skills");
                 _harmony.Patch(
