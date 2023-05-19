@@ -132,27 +132,29 @@ namespace StardewArchipelago
 
         private void OnMenuChanged(object sender, MenuChangedEventArgs e)
         {
-            if (e.NewMenu is CarpenterMenu)
+            if (e.NewMenu is not CarpenterMenu)
             {
-                var blueprints = _helper.Reflection
-                .GetField<List<BluePrint>>(e.NewMenu, "blueprints")
-                .GetValue();
-                if (blueprints.Any(x => x.name == "Stable" && x.displayName == "Tractor Garage") && 
-                _archipelago.SlotData.Mods.HasMod(ModNames.TRACTOR))
+                return;
+            }
+            var blueprints = _helper.Reflection
+            .GetField<List<BluePrint>>(e.NewMenu, "blueprints")
+            .GetValue();
+            if (blueprints.Any(x => x.name == "Stable" && x.displayName == "Tractor Garage") &&
+            _archipelago.SlotData.Mods.HasMod(ModNames.TRACTOR))
+            {
+                var isConstructedAlready = Game1.getFarm().isBuildingConstructed("Stable");
+                if (_archipelago.GetReceivedItemCount("Stable") == 0 || !isConstructedAlready)
                 {
-                    var isConstructedAlready = Game1.getFarm().isBuildingConstructed("Stable");
-                    if (_archipelago.GetReceivedItemCount("Stable") == 0 || !isConstructedAlready)
-                    {
-                        var removeAddedStableKey = blueprints.FirstOrDefault(x => x.displayName == "Stable");
-                        blueprints.Remove(removeAddedStableKey);
-                    }
-                    
-                    var tractorInfo = blueprints.FirstOrDefault(x=> x.displayName == "Tractor Garage");
-                    if (_archipelago.GetReceivedItemCount("Tractor Garage") == 0 || !isConstructedAlready)
-                    {
-                        blueprints.Remove(tractorInfo);
-                    }
+                    var removeAddedStableKey = blueprints.FirstOrDefault(x => x.displayName == "Stable");
+                    blueprints.Remove(removeAddedStableKey);
                 }
+
+                var tractorInfo = blueprints.FirstOrDefault(x => x.displayName == "Tractor Garage");
+                if (_archipelago.GetReceivedItemCount("Tractor Garage") == 0 || !isConstructedAlready)
+                {
+                    blueprints.Remove(tractorInfo);
+                }
+                
             }
         }
 
