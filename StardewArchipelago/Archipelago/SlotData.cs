@@ -24,7 +24,7 @@ namespace StardewArchipelago.Archipelago
         private const string BUILDING_PROGRESSION_KEY = "building_progression";
         private const string FESTIVAL_OBJECTIVES_KEY = "festival_locations";
         private const string ARCADE_MACHINES_KEY = "arcade_machine_locations";
-        private const string SPECIAL_ORDERS_KEY = "special_orders_key";
+        private const string SPECIAL_ORDERS_KEY = "special_orders";
         private const string HELP_WANTED_LOCATIONS_KEY = "help_wanted_locations";
         private const string FISHSANITY_KEY = "fishsanity";
         private const string MUSEUMSANITY_KEY = "museumsanity";
