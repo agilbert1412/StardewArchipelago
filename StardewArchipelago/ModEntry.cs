@@ -55,7 +55,6 @@ namespace StardewArchipelago
         private AppearanceRandomizer _appearanceRandomizer;
         private QuestCleaner _questCleaner;
         private EntranceManager _entranceManager;
-        private ModsManager _modsManager;
 
         public ArchipelagoStateDto State { get; set; }
         private ArchipelagoConnectionInfo _apConnectionOverride;
@@ -212,8 +211,6 @@ namespace StardewArchipelago
             _stardewItemManager = new StardewItemManager();
             _mail = new Mailman(State.LettersGenerated);
             _bundleReader = new BundleReader();
-            _itemManager = new ItemManager(_helper, _archipelago, _stardewItemManager, _mail, State.ItemsReceived);
-            _mailPatcher = new MailPatcher(Monitor, _harmony, new LetterActions(_helper, _mail, _archipelago, _itemManager.TrapManager));
             _locationChecker = new LocationChecker(Monitor, _archipelago, State.LocationsChecked);
             _itemPatcher = new ItemPatcher(Monitor, _helper, _harmony, _archipelago);
             _goalManager = new GoalManager(Monitor, _helper, _harmony, _archipelago, _locationChecker);
@@ -248,7 +245,9 @@ namespace StardewArchipelago
                 }
             }
 
-            _locationsPatcher = new LocationPatcher(Monitor, _helper, _harmony, _archipelago, _locationChecker, _bundleReader, _stardewItemManager, _modsManager);
+            _itemManager = new ItemManager(_helper, _archipelago, _stardewItemManager, _mail, State.ItemsReceived);
+            _mailPatcher = new MailPatcher(Monitor, _harmony, new LetterActions(_helper, _mail, _archipelago, _itemManager.TrapManager));
+            _locationsPatcher = new LocationPatcher(Monitor, _helper, _harmony, _archipelago, _locationChecker, _bundleReader, _stardewItemManager);
             _chatForwarder.ListenToChatMessages();
             _giftHandler.Initialize(_stardewItemManager, _mail, _archipelago);
             _logicPatcher.PatchAllGameLogic();

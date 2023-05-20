@@ -14,11 +14,11 @@ namespace StardewArchipelago.Locations.Patcher
         private readonly GingerIslandPatcher _gingerIslandPatcher;
         private ModsManager _modsManager;
 
-        public ModLocationPatcher(Harmony harmony, ArchipelagoClient archipelago, ModsManager modsManager)
+        public ModLocationPatcher(Harmony harmony, ArchipelagoClient archipelago)
         {
             _archipelago = archipelago;
             _harmony = harmony;
-            _modsManager = modsManager;
+            _modsManager = archipelago.SlotData.Mods;
         }
 
         public void ReplaceAllLocationsRewardsWithChecks()

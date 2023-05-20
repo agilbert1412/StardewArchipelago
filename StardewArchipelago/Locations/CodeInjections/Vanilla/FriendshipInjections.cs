@@ -318,7 +318,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             var villagers = Game1.content.Load<Dictionary<string, string>>("Data\\NPCDispositions");
             foreach (var (name, villagerInfo) in villagers)
             {
-                if (_bachelorNames.Contains(name))
+                if (bachelorNames.Contains(name))
                 {
                     continue;
                 }
@@ -327,7 +327,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 var datable = villagerInfoParts[5] == "datable";
                 if (datable)
                 {
-                    _bachelorNames.Add(name);
+                    bachelorNames.Add(name);
                 }
             }
             return bachelorNames;
