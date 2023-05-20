@@ -258,10 +258,15 @@ namespace StardewArchipelago.Extensions
                     return true;
                 }
 
-                if (strArray[3].Equals("Trailer") && Game1.MasterPlayer.mailReceived.Contains("pamHouseUpgrade"))
+                if (strArray.Length > 3 && strArray[3].Equals("Trailer") && Game1.MasterPlayer.mailReceived.Contains("pamHouseUpgrade"))
                 {
                     warpPointTarget = new Point(13, 24);
                     return true;
+                }
+
+                if (strArray.Length < 3)
+                {
+                    continue;
                 }
 
                 warpPointTarget = new Point(Convert.ToInt32(strArray[1]), Convert.ToInt32(strArray[2]));
