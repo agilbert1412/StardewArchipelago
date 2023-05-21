@@ -3,6 +3,7 @@ using StardewArchipelago.Locations.Festival;
 using StardewModdingAPI;
 using StardewArchipelago.Stardew;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
 
 namespace StardewArchipelago.Locations.CodeInjections.Initializers
 {
