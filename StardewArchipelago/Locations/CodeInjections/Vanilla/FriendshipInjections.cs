@@ -28,6 +28,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             "Leo", "Krobus", "Dwarf", "Sandy", "Kent"
         };
 
+        private static Dictionary<string, string> _actualNameDict = new Dictionary<string, string>{
+            {"Mr. Ginger", "MisterGinger"}
+        };
+
         private static IMonitor _monitor;
         private static IModHelper _helper;
         private static ArchipelagoClient _archipelago;
@@ -79,8 +83,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             try
             {
-                var prename = GetNpcName(__instance);
-                var name = ParseInternalName(prename);
+                var name = GetNpcName(__instance);
+                if (_actualNameDict.ContainsKey(name))
+                {
+                    name = _actualNameDict[name];
+                }
                 if (name == null)
                 {
                     return true; // run original logic
@@ -258,8 +265,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     {
                         return false; // don't run original logic
                     }
-
-                    var name = ParseInternalName(n.Name);
+                    //  Checks if actual name is a value in the dictionary and updates if necessary.
+                    var name = n.Name;
+                    if (_actualNameDict.ContainsValue(n.Name))
+                    {
+                        name = _actualNameDict.First(x => x.Value == n.Name).Key;
+                    }
                     var pointDifference = amount;
                     var multipliedPointDifference = GetMultipliedFriendship(pointDifference);
                     var apPoints = GetFriendshipPoints(n.Name);
@@ -407,19 +418,5 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
             _friendshipPoints[npc] = points;
         }
-
-        private static string ParseInternalName(string name)
-        {
-            if (name == "Mr. Ginger")
-            {
-                return "MisterGinger";
-            }
-            if (name == "MisterGinger")
-            {
-                return "Mr. Ginger";
-            }
-            return name;
-        }
-
     }
 }
