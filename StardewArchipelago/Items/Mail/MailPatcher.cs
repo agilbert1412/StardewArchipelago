@@ -38,7 +38,7 @@ namespace StardewArchipelago.Items.Mail
         {
             try
             {
-                if (__instance is not LetterViewerMenu letterMenuInstance || letterMenuInstance.mailTitle == null)
+                if (__instance is not LetterViewerMenu letterMenuInstance || letterMenuInstance.mailTitle == null || letterMenuInstance.isFromCollection)
                 {
                     return;
                 }
