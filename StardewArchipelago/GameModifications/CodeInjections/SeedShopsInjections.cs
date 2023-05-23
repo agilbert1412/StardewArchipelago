@@ -32,20 +32,41 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             _pierrePersistentStock = new PersistentStock();
         }
 
-        public static bool OpenShopMenu_PierrePersistentEvent_Prefix(GameLocation __instance, string which, ref bool __result)
+        public static bool OpenShopMenu_PierreAndSandyPersistentEvent_Prefix(GameLocation __instance, string which, ref bool __result)
         {
             try
             {
-                if (which.Equals("Fish") || !(__instance is SeedShop seedShop))
+                if (which.Equals("Fish"))
                 {
                     return true; // run original logic
                 }
 
-                if (__instance.getCharacterFromName("Pierre") != null &&
-                    __instance.getCharacterFromName("Pierre").getTileLocation().Equals(new Vector2(4f, 17f)) &&
-                    Game1.player.getTileY() > __instance.getCharacterFromName("Pierre").getTileY())
+                if ((__instance is SeedShop seedShop))
                 {
-                    Game1.activeClickableMenu = new ShopMenu(GetPierreShopStock(seedShop), who: "Pierre", on_purchase: _pierrePersistentStock.OnPurchase);
+                    var pierre = __instance.getCharacterFromName("Pierre");
+                    if (pierre != null &&
+                        pierre.getTileLocation().Equals(new Vector2(4f, 17f)) &&
+                        Game1.player.getTileY() > pierre.getTileY())
+                    {
+                        Game1.activeClickableMenu = new ShopMenu(GetPierreShopStock(seedShop), who: "Pierre", on_purchase: _pierrePersistentStock.OnPurchase);
+                        __result = true;
+                        return false; // don't run original logic
+                    }
+
+                    return true; // run original logic
+                }
+
+                if (__instance.Name.Equals("SandyHouse"))
+                {
+                    var sandy = __instance.getCharacterFromName("Sandy");
+                    if (sandy != null && sandy.currentLocation == __instance)
+                    {
+                        var stock = GetSandyLimitedStock(__instance);
+                        var onSandyShopPurchaseMethod = _helper.Reflection.GetMethod(__instance, "onSandyShopPurchase");
+                        Func<ISalable, Farmer, int, bool> onSandyShopPurchase = (item, farmer, amount) => onSandyShopPurchaseMethod.Invoke<bool>(item, farmer, amount);
+                        Game1.activeClickableMenu = new ShopMenu(stock, who: "Sandy", on_purchase: onSandyShopPurchase);
+                    }
+
                     __result = true;
                     return false; // don't run original logic
                 }
@@ -54,7 +75,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(OpenShopMenu_PierrePersistentEvent_Prefix)}:\n{ex}", LogLevel.Error);
+                _monitor.Log($"Failed in {nameof(OpenShopMenu_PierreAndSandyPersistentEvent_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
             }
         }
@@ -430,8 +451,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             });
         }
 
-        public static bool SandyShopStock_LimitedStock_Prefix(GameLocation __instance,
-            ref Dictionary<ISalable, int[]> __result)
+        public static Dictionary<ISalable, int[]> GetSandyLimitedStock(GameLocation shop)
         {
             try
             {
@@ -447,13 +467,12 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 Game1.player.team.synchronizedShopStock.UpdateLocalStockWithSyncedQuanitities(
                     SynchronizedShopStock.SynchedShop.Sandy, sandyStock);
 
-                __result = sandyStock;
-                return false; // don't run original logic
+                return sandyStock;
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(SandyShopStock_LimitedStock_Prefix)}:\n{ex}", LogLevel.Error);
-                return true; // run original logic
+                _monitor.Log($"Failed in {nameof(GetSandyLimitedStock)}:\n{ex}", LogLevel.Error);
+                return null;
             }
         }
 
