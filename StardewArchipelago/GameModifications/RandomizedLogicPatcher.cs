@@ -38,7 +38,7 @@ namespace StardewArchipelago.GameModifications
             AchievementInjections.Initialize(monitor, _archipelago);
             EntranceInjections.Initialize(monitor, _archipelago);
             ForestInjections.Initialize(monitor, _archipelago);
-            SeedShopsInjections.Initialize(monitor, archipelago);
+            SeedShopsInjections.Initialize(monitor, helper, archipelago);
             SeasonsInjections.Initialize(monitor, helper, _archipelago, state);
             QuestLogInjections.Initialize(monitor, archipelago);
         }
@@ -205,17 +205,12 @@ namespace StardewArchipelago.GameModifications
         {
             _harmony.Patch(
                 original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.openShopMenu)),
-                prefix: new HarmonyMethod(typeof(SeedShopsInjections), nameof(SeedShopsInjections.OpenShopMenu_PierrePersistentEvent_Prefix))
+                prefix: new HarmonyMethod(typeof(SeedShopsInjections), nameof(SeedShopsInjections.OpenShopMenu_PierreAndSandyPersistentEvent_Prefix))
             );
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Utility), nameof(Utility.getJojaStock)),
                 prefix: new HarmonyMethod(typeof(SeedShopsInjections), nameof(SeedShopsInjections.GetJojaStock_FullCostco_Prefix))
-            );
-
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(GameLocation), "sandyShopStock"),
-                prefix: new HarmonyMethod(typeof(SeedShopsInjections), nameof(SeedShopsInjections.SandyShopStock_LimitedStock_Prefix))
             );
 
             var shopMenuParameterTypes = new[]
