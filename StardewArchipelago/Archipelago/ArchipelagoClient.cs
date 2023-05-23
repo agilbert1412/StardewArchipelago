@@ -440,7 +440,9 @@ namespace StardewArchipelago.Archipelago
                 return Array.Empty<Hint>();
             }
 
-            return _session.DataStorage.GetHints();
+            var hintTask = _session.DataStorage.GetHintsAsync();
+            hintTask.Wait();
+            return hintTask.Result;
         }
 
         public void ReportGoalCompletion()
