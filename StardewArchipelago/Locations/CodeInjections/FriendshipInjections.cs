@@ -133,7 +133,7 @@ namespace StardewArchipelago.Locations.CodeInjections
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(DrawNPCSlot_DrawEarnedHearts_Postfix)}:\n{ex}", LogLevel.Error);
+                _monitor.Log($"Failed in {nameof(SocialPageCtor_CheckHints_Postfix)}:\n{ex}", LogLevel.Error);
                 return;
             }
         }
