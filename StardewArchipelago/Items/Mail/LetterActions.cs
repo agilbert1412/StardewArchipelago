@@ -95,6 +95,7 @@ namespace StardewArchipelago.Items.Mail
                     }
                     break;
             }
+            
             if (previousMaxItems >= Game1.player.MaxItems)
             {
                 return;

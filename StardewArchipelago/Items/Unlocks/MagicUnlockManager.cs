@@ -272,8 +272,8 @@ namespace StardewArchipelago.Items.Unlocks
             var magicType = AccessTools.TypeByName("Magic");
             var getSpellBookMethod = ModEntry.Instance.Helper.Reflection.GetMethod(magicType, "GetSpellBook");
             object[] getSpellBookArgs = {farmer};
-            object spellBook = getSpellBookMethod.Invoke<object>(getSpellBookArgs);
-            Type[] learnSpellArgTypes = new Type[] {typeof(string), typeof(int), typeof(bool)};
+            var spellBook = getSpellBookMethod.Invoke<object>(getSpellBookArgs);
+            var learnSpellArgTypes = new Type[] {typeof(string), typeof(int), typeof(bool)};
             var spellBookType = AccessTools.TypeByName("SpellBook");
             var learnSpellMethod = AccessTools.Method(spellBookType, "LearnSpell", learnSpellArgTypes);
             object[] learnSpellArgs = {spellName, 0, false};

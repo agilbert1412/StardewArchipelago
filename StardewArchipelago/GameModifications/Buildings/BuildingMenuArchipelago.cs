@@ -7,9 +7,12 @@ using StardewValley.Menus;
 using Microsoft.Xna.Framework;
 
 namespace StardewArchipelago.GameModifications.Buildings
-{
+{   
     public abstract class BuildingMenuArchipelago : CarpenterMenu
     {
+        private List<string> ExcludedBuildings = new List<string>{
+            "Stone Cabin", "Plank Cabin", "Log Cabin", "Greenhouse", "Mine Elevator"
+        };
         protected IModHelper _modHelper;
         protected ArchipelagoClient _archipelago;
 
@@ -42,23 +45,25 @@ namespace StardewArchipelago.GameModifications.Buildings
 
         public abstract List<BluePrint> GetAvailableBlueprints();
 
-        public Dictionary<string, List<string>> BlueprintDict()
+        public Dictionary<string, BluePrint> FullBlueprintData()
         {
-            var blueprintDict = new Dictionary<string, List<string>>();
-            Dictionary<string, string> blueprintData = Game1.content.Load<Dictionary<string, string>>("Data\\blueprints");
-            foreach (var blueprintKey in blueprintData)
+            var fullBlueprintData = new Dictionary<string, BluePrint>();
+            Dictionary<string, string> rawBlueprintData = Game1.content.Load<Dictionary<string, string>>("Data\\blueprints");
+            foreach (var blueprintPair in rawBlueprintData)
             {
-                string[] strArray = blueprintKey.Value.Split('/');
-                //Blueprints also have animals for some reason; ignore those.
-                if (strArray.Count() < 18)
+                if (ExcludedBuildings.Contains(blueprintPair.Key))
                 {
                     continue;
                 }
-                var strArray2 = new List<string>(){strArray[10], strArray[11], strArray[18]};
-                blueprintDict.Add(blueprintKey.Key, strArray2);
+                var blueprintDataArray = blueprintPair.Value.Split('/');
+                if (blueprintDataArray[0] == "animal")
+                {
+                    continue;
+                }
+                fullBlueprintData.Add(blueprintPair.Key, new BluePrint(blueprintPair.Key));
             }
             
-            return blueprintDict;
+            return fullBlueprintData;
         }
 
         protected virtual void AddBuildingBlueprint(List<BluePrint> blueprints, string buildingName, string sendingPlayer, bool onlyOne = false, string requiredBuilding = null)
@@ -94,50 +99,57 @@ namespace StardewArchipelago.GameModifications.Buildings
             }
             if (shouldBePaid)
             {
-                //Tractor Mod implementation utilizes an extremely oddball building type...
+                //Tractor Mod implementation utilizes an odd building type...
                 if (buildingName == "Tractor Garage")
                 {
-                    blueprints.Add(new BluePrint("Stable"){
-                    displayName = "Tractor Garage",
-                    description = "A garage to store your tractor. Tractor included!",
-                    maxOccupants = -794739,
-                    moneyRequired = 150000,
-                    tilesWidth = 4,
-                    tilesHeight = 2,
-                    sourceRectForMenuView = new Rectangle(0, 0, 64, 96),
-                    itemsRequired = new Dictionary<int,int>(){{355, 20}, {337, 5}, {787, 5}},
-                    magical = false
-                    });
+                    blueprints.Add(CreateTractorGarageBlueprint(false));
 
                 }
                 else
                 {
                     blueprints.Add(new BluePrint(buildingName));
                 }
-                
+
             }
             else
             {
                 if (buildingName == "Tractor Garage")
                 {
-                    //Tractor Mod implementation utilizes an extremely oddball building type.  Using FreeBlueprint in case its needed in future.
-                    blueprints.Add(new FreeBlueprint("Stable", sendingPlayer){
-                    displayName = "Free Tractor Garage",
-                    description = $"A gift from {sendingPlayer}. A garage to store your tractor. Tractor included!",
-                    maxOccupants = -794739,
-                    tilesWidth = 4,
-                    tilesHeight = 2,
-                    sourceRectForMenuView = new Rectangle(0, 0, 64, 96),
-                    itemsRequired = new Dictionary<int, int>(),
-                    magical = false
-                    });
+                    blueprints.Add(CreateTractorGarageBlueprint(true, sendingPlayer));
                 }
                 else
                 {
                     blueprints.Add(new FreeBlueprint(buildingName, sendingPlayer));
                 }
-                
+
             }
+        }
+
+        private static BluePrint CreateTractorGarageBlueprint(bool free, string sendingPlayerName = null)
+        {
+            const string blueprintName = "Tractor Garage";
+            const string tractorDescription = "A garage to store your tractor. Tractor included!";
+            var garageBlueprint = new BluePrint("Stable")
+            {
+                displayName = blueprintName,
+                description = tractorDescription,
+                moneyRequired = 150000,
+                itemsRequired = new Dictionary<int, int>() { { 355, 20 }, { 337, 5 }, { 787, 5 } },
+            };
+
+            if (free)
+            {
+                var freeGarageBlueprint = new FreeBlueprint("Stable", sendingPlayerName);
+                freeGarageBlueprint.SetDisplayFields(blueprintName, tractorDescription, sendingPlayerName);
+                garageBlueprint = freeGarageBlueprint;
+            }
+
+            garageBlueprint.maxOccupants = -794739;
+            garageBlueprint.tilesWidth = 4;
+            garageBlueprint.tilesHeight = 2;
+            garageBlueprint.sourceRectForMenuView = new Rectangle(0, 0, 64, 96);
+            garageBlueprint.magical = false;
+            return garageBlueprint;
         }
     }
 }

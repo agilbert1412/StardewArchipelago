@@ -389,7 +389,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 var num = random.Next(1, 2) + Game1.player.ForagingLevel / 4;
                 for (var index = 0; index < num; ++index)
                 {
-                    Game1.createItemDebris(new Object(shakeOff, 1, quality: Game1.player.professions.Contains(16) ? 4 : 0), Utility.PointToVector2(bush.getBoundingBox().Center), Game1.random.Next(1, 4));
+                    Game1.createItemDebris(new Object(shakeOff, 1, quality: (Game1.player.professions.Contains(16) ? 4 : 0)), Utility.PointToVector2(bush.getBoundingBox().Center), Game1.random.Next(1, 4));
                 }
             }
             if (bush.size.Value == 3)

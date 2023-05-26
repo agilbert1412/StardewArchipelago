@@ -36,7 +36,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 var tile = __instance.map.GetLayer("Buildings")
                     .PickTile(new Location(tileLocation.X * 64, tileLocation.Y * 64), viewport.Size);
-                if (tile == null || !who.IsLocalPlayer || tile.TileIndex != 1140 && tile.TileIndex != 1141 || !__instance.hasUnlockedStatue.Value)
+                if (tile == null || !who.IsLocalPlayer || (tile.TileIndex != 1140 && tile.TileIndex != 1141) || !__instance.hasUnlockedStatue.Value)
                 {
                     return true; // run original logic
                 }

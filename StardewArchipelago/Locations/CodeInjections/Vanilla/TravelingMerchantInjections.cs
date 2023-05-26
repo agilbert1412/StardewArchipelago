@@ -110,7 +110,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     Utility.clearObjectsInArea(travelingMerchantBound, __instance);
                 }
 
-                if (Game1.IsMasterGame && Game1.netWorldState.Value.VisitsUntilY1Guarantee >= 0 && dayOfMonth % 7 % 5 != 0)
+                if (Game1.IsMasterGame && Game1.netWorldState.Value.VisitsUntilY1Guarantee >= 0 && (dayOfMonth % 7 % 5 != 0))
                 {
                     --Game1.netWorldState.Value.VisitsUntilY1Guarantee;
                 }
@@ -148,9 +148,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             try
             {
                 var priceUpgrades = _archipelago.GetReceivedItemCount(AP_MERCHANT_DISCOUNT);
-                var priceMultiplier = BASE_PRICE - priceUpgrades * DISCOUNT_PER_UPGRADE;
+                var priceMultiplier = BASE_PRICE - (priceUpgrades * DISCOUNT_PER_UPGRADE);
                 var stockUpgrades = _archipelago.GetReceivedItemCount(AP_MERCHANT_STOCK);
-                var chanceForItemToRemain = BASE_STOCK + stockUpgrades * STOCK_AMOUNT_PER_UPGRADE;
+                var chanceForItemToRemain = BASE_STOCK + (stockUpgrades * STOCK_AMOUNT_PER_UPGRADE);
 
                 var random = new Random(seed);
 

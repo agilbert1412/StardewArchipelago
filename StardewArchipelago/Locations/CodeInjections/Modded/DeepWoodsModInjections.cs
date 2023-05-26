@@ -122,63 +122,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 return true; //run original logic
             }
         }
-        //Likely fixable if I knew how to utilize the DeepWoods type call in the original method, perhaps better if
-        //it was the 'elevator' call.  Currently turned off. - Albrekka
-        public static void DetermineExits_ChangeFromLevelHook_Postfix()
-        {
-            try
-            {
-                var deepWoodsSettingsType = AccessTools.TypeByName("DeepWoodsMod.DeepWoodsSettings");
-                var deepWoodsDataField = deepWoodsSettingsType.GetProperty("DeepWoodsState");
-                var deepWoodsDataType = AccessTools.TypeByName("DeepWoodsMod.DeepWoodsStateData");
-                var deepWoodsType = AccessTools.TypeByName("DeepWoodsMod.DeepWoods");
-                var lowestLevelReachedField = _helper.Reflection.GetProperty<int>(deepWoodsDataField, "DeepWoodsState.LowestLevelReached");
-                var lowestLevelReached = lowestLevelReachedField.GetValue();
-                var levelField = _helper.Reflection.GetField<NetInt>(deepWoodsType, "Level");
-                var level = levelField.GetValue();
-                var progression = _archipelago.SlotData.ElevatorProgression;
-                if (level.Value == 1)
-                    _locationChecker.AddCheckedLocation($"Entering the Deep Woods");
-                if (progression == ElevatorProgression.ProgressiveFromPreviousFloor && level.Value != previousDepth + 1)
-                {
-                    return;
-                }
-                previousDepth = level.Value - 1;
-                _locationChecker.AddCheckedLocation($"Deep Woods Depth {level}");
-                var totalFloorsReceived = _archipelago.GetReceivedItemCount("Progressive Woods Obeliesk");
-                switch (totalFloorsReceived)
-                {
-                    case < 1:
-                        lowestLevelReached = 1;
-                        return;
-                    case < 3:
-                        lowestLevelReached = 10;
-                        return;
-                    case < 4:
-                        lowestLevelReached = 30;
-                        return;
-                    case < 5:
-                        lowestLevelReached = 50;
-                        return;
-                    case < 6:
-                        lowestLevelReached = 70;
-                        return;
-                    case < 7:
-                        lowestLevelReached = 90;
-                        return;
-                    case >= 8:
-                        lowestLevelReached = 100;
-                        return;
-                }
-                lowestLevelReached = 0;
-                return;
-            }
-            catch (Exception ex)
-            {
-                _monitor.Log($"Failed in {nameof(DetermineExits_ChangeFromLevelHook_Postfix)}:\n{ex}", LogLevel.Error);
-                return;
-            }
-        }
+
         //Later, should also make it so the spawned drops for chest and also gingerbread + tree
         ///don't show up first time, but don't know how to just yet due to DeepWoods type reference in method call. - Albrekka
         public static void CheckForAction_TreasureChestLocation_Postfix(Farmer __instance, bool justCheckingForActivity = false)

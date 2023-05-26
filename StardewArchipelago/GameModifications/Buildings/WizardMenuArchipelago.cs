@@ -15,13 +15,12 @@ namespace StardewArchipelago.GameModifications.Buildings
         public override List<BluePrint> GetAvailableBlueprints()
         {
             var blueprints = new List<BluePrint>();
-            var blueprintData = BlueprintDict();
+            var blueprintData = FullBlueprintData();
             foreach (var blueprint in blueprintData)
             {
-                var blueprintMagical = blueprint.Value[2];
-                var blueprintUpgrade = blueprint.Value[1];
+                var blueprintMagical = blueprint.Value.magical;
 
-                if (blueprintMagical == "true")
+                if (blueprintMagical)
                 {
                     AddBuildingBlueprintIfReceived(blueprints, blueprint.Key);
                 }

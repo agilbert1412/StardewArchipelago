@@ -36,7 +36,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             try
             {
-                if (from_fish_pond || index >= 167 && index < 173 || !_itemManager.ObjectExists(index))
+                if (from_fish_pond || (index >= 167 && index < 173) || !_itemManager.ObjectExists(index))
                 {
                     return;
                 }

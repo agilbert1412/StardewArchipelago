@@ -343,7 +343,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Juna's Cave", "Custom_JunaNPC_JunaCave" },
             { "Jasper's Bedroom", "Custom_LK_Museum2"},
             { "'s", "" },
-            { " ", "" }
+            { " ", "" },
         };
 
         private static string[] _jojaMartLocations = new[] { "JojaMart", "AbandonedJojaMart", "MovieTheater" };

@@ -50,7 +50,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     return false; // don't run original logic
                 }
 
-                if (_locationChecker.IsLocationNotChecked(PREMIUM_PACK) && Game1.player.Money >= 10000)
+                if (_locationChecker.IsLocationNotChecked(PREMIUM_PACK) && Game1.player.Money >= 50000)
                 {
                     Game1.player.Money -= 10000;
                     _locationChecker.AddCheckedLocation(PREMIUM_PACK);
@@ -126,9 +126,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             else if (_archipelago.SlotData.Mods.HasMod(ModNames.BIGGER_BACKPACK) & _locationChecker.IsLocationNotChecked(PREMIUM_PACK)
             && _archipelago.GetReceivedItemCount("Progressive Backpack") >= 2)
             {
-                var backpackType = AccessTools.TypeByName("BiggerBackpack.Mod");
-                var clickBackpackMethod = ModEntry.Instance.Helper.Reflection.GetMethod(backpackType, "clickBackpack");
-                clickBackpackMethod.Invoke();
+                Response yes = new Response("Purchase", "Purchase (50,000g)");
+                Response no = new Response("Not", Game1.content.LoadString("Strings\\Locations:SeedShop_BuyBackpack_ResponseNo"));
+                Response[] resps = new Response[] { yes, no };
+                __instance.createQuestionDialogue("Backpack Upgrade -- 48 slots", resps, "Backpack");
             }
         }
     }
