@@ -25,6 +25,7 @@ namespace StardewArchipelago.Locations.Patcher
         {
             AddModSkillInjections();
             AddDeepWoodsModInjections();
+            AddMagicModInjections();
         }
 
         private void AddModSkillInjections()
@@ -78,6 +79,18 @@ namespace StardewArchipelago.Locations.Patcher
                     original: AccessTools.Method(_fountainType, "performUseAction"),
                     prefix: new HarmonyMethod(typeof(DeepWoodsModInjections), nameof(DeepWoodsModInjections.PerformUseAction_HealingFountainLocation_Prefix))
                 );
+            }
+        }
+
+        private void AddMagicModInjections()
+        {
+            if (_archipelago.SlotData.Mods.HasMod(ModNames.MAGIC))
+            {
+                var _analyzeSpellType = AccessTools.TypeByName("AnalyzeSpell");
+                _harmony.Patch(
+                        original: AccessTools.Method(_analyzeSpellType, "OnCast"),
+                        prefix: new HarmonyMethod(typeof(MagicModInjections), nameof(MagicModInjections.OnCast_AnalyzeGivesLocations_Prefix))
+                    );
             }
         }
 

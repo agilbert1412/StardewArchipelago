@@ -15,6 +15,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
         private static void InitializeModdedContent(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             DeepWoodsModInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
+            MagicModInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
         }
     }
 }

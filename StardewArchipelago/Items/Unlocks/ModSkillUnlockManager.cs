@@ -9,22 +9,17 @@ using StardewArchipelago.Extensions;
 using StardewArchipelago.Items.Mail;
 using StardewValley;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
+using StardewArchipelago.Locations.CodeInjections.Modded;
 
 namespace StardewArchipelago.Items.Unlocks
 {
-    public class ModUnlockManager : IUnlockManager
+    public class ModSkillUnlockManager : IUnlockManager
     {
-        public const string Excalibur = "Excalibur";
         private Dictionary<string, Func<ReceivedItem, LetterAttachment>> _unlockables;
 
-        public ModUnlockManager()
+        public ModSkillUnlockManager()
         {
             _unlockables = new Dictionary<string, Func<ReceivedItem, LetterAttachment>>();
-            RegisterAPMods();
-        }
-
-        public void RegisterAPMods()
-        {
             _unlockables.Add($"Magic Level", SendProgressiveMagicLevel);
             _unlockables.Add($"Binning Level", SendProgressiveBinningLevel);
             _unlockables.Add($"Cooking Level", SendProgressiveCookingLevel);
