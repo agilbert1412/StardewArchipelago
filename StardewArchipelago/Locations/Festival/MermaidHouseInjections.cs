@@ -34,6 +34,7 @@ namespace StardewArchipelago.Locations.Festival
                 }
 
                 _locationChecker.AddCheckedLocation(FestivalLocationNames.MERMAID_PEARL);
+                pearlRecipientField.SetValue(null);
                 return;
             }
             catch (Exception ex)

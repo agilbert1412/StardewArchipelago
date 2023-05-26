@@ -119,7 +119,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 var actionFirstWord = fullActionString.Split(' ')[0];
                 if (Game1.eventUp || actionFirstWord != "legendarySword" || _locationChecker.IsLocationChecked(GALAXY_SWORD_SHRINE_AP_LOCATION))
                 {
-                    return true; // run original logic
+                    return actionFirstWord != "legendarySword"; // run original logic only if it's something other than the shrine
                 }
 
                 if (Game1.player.ActiveObject != null && Utility.IsNormalObjectAtParentSheetIndex(Game1.player.ActiveObject, 74))
