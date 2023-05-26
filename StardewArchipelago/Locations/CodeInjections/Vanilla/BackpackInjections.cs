@@ -123,7 +123,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                         responseDontPurchase
                     }, "Backpack");
             }
-            else if (_archipelago.SlotData.Mods.HasMod(ModNames.BIGGER_BACKPACK) & _locationChecker.IsLocationNotChecked(PREMIUM_PACK)
+            else if (_archipelago.SlotData.Mods.HasMod(ModNames.BIGGER_BACKPACK) && _locationChecker.IsLocationNotChecked(PREMIUM_PACK)
             && _archipelago.GetReceivedItemCount("Progressive Backpack") >= 2)
             {
                 Response yes = new Response("Purchase", "Purchase (50,000g)");
