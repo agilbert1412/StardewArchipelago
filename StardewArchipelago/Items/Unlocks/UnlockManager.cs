@@ -4,8 +4,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Items.Mail;
-using StardewArchipelago.Locations.CodeInjections;
-using StardewValley;
+using StardewArchipelago.Constants;
 
 namespace StardewArchipelago.Items.Unlocks
 {
@@ -17,9 +16,13 @@ namespace StardewArchipelago.Items.Unlocks
         {
             _specificUnlockManagers = new List<IUnlockManager>();
             _specificUnlockManagers.Add(new VanillaUnlockManager());
-            if (archipelago.SlotData.Mods.IsModded)
+            if (archipelago.SlotData.Mods.HasModdedSkill())
             {
                 _specificUnlockManagers.Add(new ModSkillUnlockManager());
+                
+            }
+            if (archipelago.SlotData.Mods.HasMod(ModNames.MAGIC))
+            {
                 _specificUnlockManagers.Add(new MagicUnlockManager());
             }
         }

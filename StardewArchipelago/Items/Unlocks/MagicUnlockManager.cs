@@ -1,16 +1,9 @@
 using System;
-using System.Reflection;
 using System.Collections.Generic;
-using Microsoft.Xna.Framework;
 using HarmonyLib;
-using StardewModdingAPI;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Extensions;
 using StardewArchipelago.Items.Mail;
 using StardewValley;
-using StardewValley.Characters;
-using StardewArchipelago.Locations.CodeInjections.Vanilla;
-using StardewArchipelago.Locations.CodeInjections.Modded;
 
 namespace StardewArchipelago.Items.Unlocks
 {
@@ -78,190 +71,127 @@ namespace StardewArchipelago.Items.Unlocks
 
         private LetterAttachment SendClearDebrisSpell(ReceivedItem receivedItem)
         {
-            foreach (var farmer in Game1.getAllFarmers())
-            {
-                ReceiveSpell("toil:cleardebris");
-            }
+            ReceiveSpell("toil:cleardebris");
             return new LetterInformationAttachment(receivedItem);
         }
 
         private LetterAttachment SendTillSpell(ReceivedItem receivedItem)
         {
-            foreach (var farmer in Game1.getAllFarmers())
-            {
-                ReceiveSpell("toil:till");
-            }
+            ReceiveSpell("toil:till");
             return new LetterInformationAttachment(receivedItem);
         }
 
         private LetterAttachment SendWaterSpell(ReceivedItem receivedItem)
         {
-            foreach (var farmer in Game1.getAllFarmers())
-            {
-                ReceiveSpell("toil:water");
-            }
+            ReceiveSpell("toil:water");
             return new LetterInformationAttachment(receivedItem);
         }
 
         private LetterAttachment SendBlinkSpell(ReceivedItem receivedItem)
         {
-            foreach (var farmer in Game1.getAllFarmers())
-            {
-                ReceiveSpell("toil:blink");
-            }
+            ReceiveSpell("toil:blink");
             return new LetterInformationAttachment(receivedItem);
         }
 
         private LetterAttachment SendEvacSpell(ReceivedItem receivedItem)
         {
-            foreach (var farmer in Game1.getAllFarmers())
-            {
-                ReceiveSpell("life:evac");
-            }
+            ReceiveSpell("life:evac");
             return new LetterInformationAttachment(receivedItem);
         }
 
         private LetterAttachment SendHealSpell(ReceivedItem receivedItem)
         {
-            foreach (var farmer in Game1.getAllFarmers())
-            {
-                ReceiveSpell("life:heal");
-            }
+            ReceiveSpell("life:heal");
             return new LetterInformationAttachment(receivedItem);
         }
 
         private LetterAttachment SendHasteSpell(ReceivedItem receivedItem)
         {
-            foreach (var farmer in Game1.getAllFarmers())
-            {
-                ReceiveSpell("life:haste");
-            }
+            ReceiveSpell("life:haste");
             return new LetterInformationAttachment(receivedItem);
         }
 
         private LetterAttachment SendBuffSpell(ReceivedItem receivedItem)
         {
-            foreach (var farmer in Game1.getAllFarmers())
-            {
-                ReceiveSpell("life:buff");
-            }
+            ReceiveSpell("life:buff");
             return new LetterInformationAttachment(receivedItem);
         }
 
         private LetterAttachment SendDescendSpell(ReceivedItem receivedItem)
         {
-            foreach (var farmer in Game1.getAllFarmers())
-            {
-                ReceiveSpell("elemental:descend");
-            }
+            ReceiveSpell("elemental:descend");
             return new LetterInformationAttachment(receivedItem);
         }       
 
         private LetterAttachment SendFireballSpell(ReceivedItem receivedItem)
         {
-            foreach (var farmer in Game1.getAllFarmers())
-            {
-                ReceiveSpell("elemental:fireball");
-            }
+            ReceiveSpell("elemental:fireball");
             return new LetterInformationAttachment(receivedItem);
         }   
 
         private LetterAttachment SendFrostbiteSpell(ReceivedItem receivedItem)
         {
-            foreach (var farmer in Game1.getAllFarmers())
-            {
-                ReceiveSpell("elemental:frostbite");
-            }
+            ReceiveSpell("elemental:frostbite");
             return new LetterInformationAttachment(receivedItem);
         }   
 
         private LetterAttachment SendTeleportSpell(ReceivedItem receivedItem)
         {
-            foreach (var farmer in Game1.getAllFarmers())
-            {
-                ReceiveSpell("elemental:teleport");
-            }
+            ReceiveSpell("elemental:teleport");
             return new LetterInformationAttachment(receivedItem);
         }
 
         private LetterAttachment SendShockwaveSpell(ReceivedItem receivedItem)
         {
-            foreach (var farmer in Game1.getAllFarmers())
-            {
-                ReceiveSpell("nature:shockwave");
-            }
+            ReceiveSpell("nature:shockwave");
             return new LetterInformationAttachment(receivedItem);
         }
 
         private LetterAttachment SendTendrilsSpell(ReceivedItem receivedItem)
         {
-            foreach (var farmer in Game1.getAllFarmers())
-            {
-                ReceiveSpell("nature:tendrils");
-            }
+            ReceiveSpell("nature:tendrils");
             return new LetterInformationAttachment(receivedItem);
         }
 
         private LetterAttachment SendLanternSpell(ReceivedItem receivedItem)
         {
-            foreach (var farmer in Game1.getAllFarmers())
-            {
-                ReceiveSpell("nature:lantern");
-            }
+            ReceiveSpell("nature:lantern");
             return new LetterInformationAttachment(receivedItem);
         }
 
         private LetterAttachment SendPhotosynthesisSpell(ReceivedItem receivedItem)
         {
-            foreach (var farmer in Game1.getAllFarmers())
-            {
-                ReceiveSpell("nature:photosynthesis");
-            }
+            ReceiveSpell("nature:photosynthesis");
             return new LetterInformationAttachment(receivedItem);
         }
 
         private LetterAttachment SendMeteorSpell(ReceivedItem receivedItem)
         {
-            foreach (var farmer in Game1.getAllFarmers())
-            {
-                ReceiveSpell("eldritch:meteor");
-            }
+            ReceiveSpell("eldritch:meteor");
             return new LetterInformationAttachment(receivedItem);
         }
 
         private LetterAttachment SendBloodmanaSpell(ReceivedItem receivedItem)
         {
-            foreach (var farmer in Game1.getAllFarmers())
-            {
-                ReceiveSpell("eldritch:bloodmana");
-            }
+            ReceiveSpell("eldritch:bloodmana");
             return new LetterInformationAttachment(receivedItem);
         }
 
         private LetterAttachment SendLuckstealSpell(ReceivedItem receivedItem)
         {
-            foreach (var farmer in Game1.getAllFarmers())
-            {
-                ReceiveSpell("eldritch:lucksteal");
-            }
+            ReceiveSpell("eldritch:lucksteal");
             return new LetterInformationAttachment(receivedItem);
         }
 
         private LetterAttachment SendSpiritSpell(ReceivedItem receivedItem)
         {
-            foreach (var farmer in Game1.getAllFarmers())
-            {
-                ReceiveSpell("eldritch:spirit");
-            }
+            ReceiveSpell("eldritch:spirit");
             return new LetterInformationAttachment(receivedItem);
         }
 
         private LetterAttachment SendRewindSpell(ReceivedItem receivedItem)
         {
-            foreach (var farmer in Game1.getAllFarmers())
-            {
-                ReceiveSpell("arcane:rewind");
-            }
+            ReceiveSpell("arcane:rewind");
             return new LetterInformationAttachment(receivedItem);
         }
 
@@ -269,15 +199,15 @@ namespace StardewArchipelago.Items.Unlocks
         {
             foreach (var farmer in Game1.getAllFarmers())
             {
-            var magicType = AccessTools.TypeByName("Magic");
-            var getSpellBookMethod = ModEntry.Instance.Helper.Reflection.GetMethod(magicType, "GetSpellBook");
-            object[] getSpellBookArgs = {farmer};
-            var spellBook = getSpellBookMethod.Invoke<object>(getSpellBookArgs);
-            var learnSpellArgTypes = new Type[] {typeof(string), typeof(int), typeof(bool)};
-            var spellBookType = AccessTools.TypeByName("SpellBook");
-            var learnSpellMethod = AccessTools.Method(spellBookType, "LearnSpell", learnSpellArgTypes);
-            object[] learnSpellArgs = {spellName, 0, false};
-            learnSpellMethod.Invoke(spellBook, learnSpellArgs);
+                var magicType = AccessTools.TypeByName("Magic");
+                var getSpellBookMethod = ModEntry.Instance.Helper.Reflection.GetMethod(magicType, "GetSpellBook");
+                object[] getSpellBookArgs = { farmer };
+                var spellBook = getSpellBookMethod.Invoke<object>(getSpellBookArgs);
+                var learnSpellArgTypes = new Type[] { typeof(string), typeof(int), typeof(bool) };
+                var spellBookType = AccessTools.TypeByName("SpellBook");
+                var learnSpellMethod = AccessTools.Method(spellBookType, "LearnSpell", learnSpellArgTypes);
+                object[] learnSpellArgs = { spellName, 0, false };
+                learnSpellMethod.Invoke(spellBook, learnSpellArgs);
             }
         }
     }

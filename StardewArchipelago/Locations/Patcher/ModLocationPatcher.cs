@@ -30,31 +30,30 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void AddModSkillInjections()
         {
-            if (_modsManager.HasModdedSkill() & _archipelago.SlotData.SkillProgression != SkillsProgression.Vanilla)
+            if (!(_modsManager.HasModdedSkill() & _archipelago.SlotData.SkillProgression != SkillsProgression.Vanilla))
             {
-                var _spaceCoreType = AccessTools.TypeByName("SpaceCore.Skills");
+                return;
+            }
+            var _spaceCoreType = AccessTools.TypeByName("SpaceCore.Skills");
                 _harmony.Patch(
                     original: AccessTools.Method(_spaceCoreType, "AddExperience"),
                     prefix: new HarmonyMethod(typeof(SkillInjections), nameof(SkillInjections.AddExperience_ArchipelagoModExperience_Prefix))
                 );
-            }
         }
 
         private void AddDeepWoodsModInjections()
         {
-            if (_archipelago.SlotData.Mods.HasMod(ModNames.DEEP_WOODS))
+            if (!_archipelago.SlotData.Mods.HasMod(ModNames.DEEP_WOODS))
             {
-                var _deepWoodsType = AccessTools.TypeByName("DeepWoodsMod.DeepWoods");
+                return;
+            }
+            var _deepWoodsType = AccessTools.TypeByName("DeepWoodsMod.DeepWoods");
                 var _unicornType = AccessTools.TypeByName("DeepWoodsMod.Unicorn");
                 var _gingerbreadType = AccessTools.TypeByName("DeepWoodsMod.GingerBreadHouse");
                 var _iridiumtreeType = AccessTools.TypeByName("DeepWoodsMod.IridiumTree");
                 var _treasureType = AccessTools.TypeByName("DeepWoodsMod.TreasureChest");
                 var _fountainType = AccessTools.TypeByName("DeepWoodsMod.HealingFountain");
 
-                /*_harmony.Patch(
-                    original: AccessTools.Method(_deepWoodsType, "DetermineExits"),
-                    postfix: new HarmonyMethod(typeof(DeepWoodsModInjections), nameof(DeepWoodsModInjections.DetermineExits_ChangeFromLevelHook_Postfix))
-                );*/
                 _harmony.Patch(
                     original: AccessTools.Method(_unicornType, "checkAction"),
                     prefix: new HarmonyMethod(typeof(DeepWoodsModInjections), nameof(DeepWoodsModInjections.CheckAction_PetUnicornLocation_Prefix))
@@ -79,19 +78,19 @@ namespace StardewArchipelago.Locations.Patcher
                     original: AccessTools.Method(_fountainType, "performUseAction"),
                     prefix: new HarmonyMethod(typeof(DeepWoodsModInjections), nameof(DeepWoodsModInjections.PerformUseAction_HealingFountainLocation_Prefix))
                 );
-            }
         }
 
         private void AddMagicModInjections()
         {
-            if (_archipelago.SlotData.Mods.HasMod(ModNames.MAGIC))
+            if (!_archipelago.SlotData.Mods.HasMod(ModNames.MAGIC))
             {
-                var _analyzeSpellType = AccessTools.TypeByName("AnalyzeSpell");
+                return;
+            }
+            var _analyzeSpellType = AccessTools.TypeByName("AnalyzeSpell");
                 _harmony.Patch(
                         original: AccessTools.Method(_analyzeSpellType, "OnCast"),
                         prefix: new HarmonyMethod(typeof(MagicModInjections), nameof(MagicModInjections.OnCast_AnalyzeGivesLocations_Prefix))
                     );
-            }
         }
 
     }
