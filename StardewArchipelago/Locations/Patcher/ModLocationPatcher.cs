@@ -86,12 +86,13 @@ namespace StardewArchipelago.Locations.Patcher
             {
                 return;
             }
+
             var _analyzeSpellType = AccessTools.TypeByName("AnalyzeSpell");
             _harmony.Patch(
-                    original: AccessTools.Method(_analyzeSpellType, "OnCast"),
-                    prefix: new HarmonyMethod(typeof(MagicModInjections), nameof(MagicModInjections.OnCast_AnalyzeGivesLocations_Prefix))
-                );
+                original: AccessTools.Method(_analyzeSpellType, "OnCast"),
+                prefix: new HarmonyMethod(typeof(MagicModInjections),
+                    nameof(MagicModInjections.OnCast_AnalyzeGivesLocations_Prefix))
+            );
         }
-
     }
 }

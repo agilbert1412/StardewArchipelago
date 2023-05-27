@@ -54,10 +54,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             _locationChecker = locationChecker;
         }
 
-        public static bool OnCast_AnalyzeGivesLocations_Prefix(Farmer player, int level, int targetX, int targetY)
+        // internal class AnalyzeSpell : Spell
+        // public override IActiveEffect OnCast(Farmer player, int level, int targetX, int targetY)
+        public static bool OnCast_AnalyzeGivesLocations_Prefix(object __instance, Farmer player, int level, int targetX, int targetY, object __result)
         {
             try
             {
+                __result = null;
                 if (player != Game1.player)
                     return false;
                 var spellsLearned = new List<string>();
