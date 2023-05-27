@@ -6,7 +6,9 @@ using Microsoft.Xna.Framework;
 using StardewModdingAPI;
 using StardewArchipelago.Archipelago;
 using StardewValley;
+using StardewValley.Characters;
 using StardewValley.Menus;
+using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 
 namespace StardewArchipelago.Locations.CodeInjections.Modded
@@ -25,7 +27,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         private static IModHelper _helper;
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
-        private static NetBool isPetted = new NetBool(false);
         private static LargeTerrainFeature fountainThatGrantedAPCheck = null;
 
 
@@ -78,35 +79,40 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 return true; //run original logic
             }
         }*/
+
         //It makes the chime if you pet after reload, but not really a problem.  Also patches out being scared
         //since its highly likely by the time you check unicorn, you'll be moving too fast naturally from buffs. - Albrekka
-        public static bool CheckAction_PetUnicornLocation_Prefix(Farmer who, GameLocation l, ref bool __result)
+        // public class Unicorn : Horse
+        // public override bool checkAction(Farmer who, GameLocation l)
+        public static bool CheckAction_PetUnicornLocation_Prefix(Horse __instance, Farmer who, GameLocation l, ref bool __result)
         {
             try
             {
-                var farmer = Game1.player;
-                var unicornType = AccessTools.TypeByName("DeepWoodsMod.Unicorn");
-                if (!isPetted)
+                var isPettedField = _helper.Reflection.GetField<NetBool>(__instance, "isPetted");
+                var isPetted = isPettedField.GetValue();
+                if (isPetted)
                 {
-                    isPetted.Value = true;
-                    farmer.farmerPassesThrough = true;
-                    who.health = who.maxHealth;
-                    who.Stamina = who.MaxStamina;
-                    who.addedLuckLevel.Value = Math.Max(10, who.addedLuckLevel.Value);
-                    if (!_locationChecker.IsLocationChecked(MEET_UNICORN_AP_LOCATION))
-                    {
-                        _locationChecker.AddCheckedLocation(MEET_UNICORN_AP_LOCATION);
-                    }
-
-                    Game1.playSound("achievement");
-                    Game1.playSound("healSound");
-                    Game1.playSound("reward");
-                    Game1.playSound("secret1");
-                    Game1.playSound("shiny4");
-                    Game1.playSound("yoba");
+                    return false; // don't run original logic
                 }
 
-                return false; // don't use original logic
+                isPetted.Value = true;
+                who.farmerPassesThrough = true;
+                who.health = who.maxHealth;
+                who.Stamina = who.MaxStamina;
+                who.addedLuckLevel.Value = Math.Max(10, who.addedLuckLevel.Value);
+                if (!_locationChecker.IsLocationChecked(MEET_UNICORN_AP_LOCATION))
+                {
+                    _locationChecker.AddCheckedLocation(MEET_UNICORN_AP_LOCATION);
+                }
+
+                l.playSoundAt("achievement", __instance.getTileLocation());
+                l.playSoundAt("healSound", __instance.getTileLocation());
+                l.playSoundAt("reward", __instance.getTileLocation());
+                l.playSoundAt("secret1", __instance.getTileLocation());
+                l.playSoundAt("shiny4", __instance.getTileLocation());
+                l.playSoundAt("yoba", __instance.getTileLocation());
+
+                return false; // don't run original logic
             }
             catch (Exception ex)
             {
@@ -115,7 +121,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             }
         }
 
-        public static bool CheckScared_MakeUnicornLessScared_Prefix()
+        // public class Unicorn : Horse
+        // private void CheckScared()
+        public static bool CheckScared_MakeUnicornLessScared_Prefix(Horse __instance)
         {
             try
             {
@@ -129,9 +137,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         }
 
         //Later, should also make it so the spawned drops for chest and also gingerbread + tree
-        ///don't show up first time, but don't know how to just yet due to DeepWoods type reference in method call. - Albrekka
-        public static void CheckForAction_TreasureChestLocation_Postfix(Farmer __instance,
-            bool justCheckingForActivity = false)
+        //don't show up first time, but don't know how to just yet due to DeepWoods type reference in method call. - Albrekka
+        // public class TreasureChest : Chest
+        // public override bool checkForAction(Farmer who, bool justCheckingForActivity = false)
+        public static void CheckForAction_TreasureChestLocation_Postfix(Chest __instance, bool justCheckingForActivity = false)
         {
             try
             {
@@ -154,7 +163,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             }
         }
 
-        public static void PlayDestroyedSounds_GingerbreadLocation_Postfix(GameLocation __instance)
+        // public class GingerBreadHouse : ResourceClump
+        // private void PlayDestroyedSounds(GameLocation location)
+        public static void PlayDestroyedSounds_GingerbreadLocation_Postfix(ResourceClump __instance, GameLocation location)
         {
             try
             {
@@ -172,7 +183,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             }
         }
 
-        public static void PlayDestroyedSounds_IridiumTreeLocation_Postfix(GameLocation __instance)
+        // public class IridiumTree : ResourceClump
+        // private void PlayDestroyedSounds(GameLocation location)
+        public static void PlayDestroyedSounds_IridiumTreeLocation_Postfix(ResourceClump __instance, GameLocation location)
         {
             try
             {
@@ -190,11 +203,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             }
         }
 
+        // public class HealingFountain : LargeTerrainFeature
+        // public override bool performUseAction(Vector2 tileLocation, GameLocation location)
         public static bool PerformUseAction_HealingFountainLocation_Prefix(LargeTerrainFeature __instance, Vector2 tileLocation, GameLocation location,
             ref bool __result)
         {
             try
             {
+                __result = true;
+                
                 if (_locationChecker.IsLocationMissingAndExists(FOUNTAIN_DRINK_LOCATION))
                 {
                     var apMessage = "You drink the water... it tastes like a stale Burger King Meal...?";
