@@ -25,6 +25,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         private static NetBool isPetted = new NetBool(false);
         private static IMonitor _monitor;
         private static IModHelper _helper;
+        private static bool drankWaterFirst = false;
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
 
@@ -181,11 +182,21 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         {
             try
             {
+                var apMessage = "You're drink the water...tastes like a stale Burger King Meal...?";
                 if (!_locationChecker.IsLocationChecked(FOUNTAIN_DRINK_LOCATION))
                 {
+                    var fountainType = AccessTools.TypeByName("HealingFountain");
                     _locationChecker.AddCheckedLocation(FOUNTAIN_DRINK_LOCATION);
+                    location.playSoundAt("gulp", tileLocation);
+                    DelayedAction.playSoundAfterDelay("yoba", 800, location, -1);
+                    Game1.addHUDMessage(new HUDMessage(apMessage) { noIcon = true });
+                    drankWaterFirst = true;
+                    return false; //don't run original logic
                 }
-
+                if (drankWaterFirst == true)
+                {
+                    return false; //don't run original logic
+                }
                 return true; //run original logic
             }
             catch (Exception ex)
