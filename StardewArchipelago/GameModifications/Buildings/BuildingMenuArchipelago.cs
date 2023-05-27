@@ -45,9 +45,9 @@ namespace StardewArchipelago.GameModifications.Buildings
 
         public abstract List<BluePrint> GetAvailableBlueprints();
 
-        public Dictionary<string, BluePrint> FullBlueprintData()
+        public List<BluePrint> FullBlueprintData()
         {
-            var fullBlueprintData = new Dictionary<string, BluePrint>();
+            var fullBlueprintData = new List<BluePrint>();
             Dictionary<string, string> rawBlueprintData = Game1.content.Load<Dictionary<string, string>>("Data\\blueprints");
             foreach (var blueprintPair in rawBlueprintData)
             {
@@ -60,7 +60,7 @@ namespace StardewArchipelago.GameModifications.Buildings
                 {
                     continue;
                 }
-                fullBlueprintData.Add(blueprintPair.Key, new BluePrint(blueprintPair.Key));
+                fullBlueprintData.Add(new BluePrint(blueprintPair.Key));
             }
             
             return fullBlueprintData;

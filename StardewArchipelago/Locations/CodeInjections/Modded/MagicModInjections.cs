@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI;
@@ -73,16 +74,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                     }
                 }
                 CheckTileAnalyzeLocations(player, spellsLearned, targetX, targetY);
-                for (int i = spellsLearned.Count - 1; i >= 0; --i)
-                    if (_locationChecker.IsLocationChecked(spellsLearned[i]))
-                        spellsLearned.RemoveAt(i);
-                if (spellsLearned.Count > 0)
+                if (spellsLearned.Any(spell => _locationChecker.IsLocationMissingAndExists(spell)))
                 {
                     Game1.playSound("secret1");
-                    foreach (var spell in spellsLearned)
-                    {
-                        _locationChecker.AddCheckedLocation(spell);
-                    }
+                }
+                foreach (var spell in spellsLearned)
+                {
+                    _locationChecker.AddCheckedLocation(spell);
                 }
                 CheckTotalCheckLocations();
                 return false; //Don't run original logic
@@ -98,60 +96,60 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         private static void CheckItemAnalyzeLocations(Farmer player, List<string> spellsLearned)
         {
             if (player.CurrentTool != null)
-                    {
-                        if (player.CurrentTool is StardewValley.Tools.Axe || player.CurrentTool is StardewValley.Tools.Pickaxe)
-                            spellsLearned.Add(ANALYZE_CLEARDEBRIS_AP_LOCATION);
-                        else if (player.CurrentTool is StardewValley.Tools.Hoe)
-                            spellsLearned.Add(ANALYZE_TILL_AP_LOCATION);
-                        else if (player.CurrentTool is StardewValley.Tools.WateringCan)
-                            spellsLearned.Add(ANALYZE_WATER_AP_LOCATION);
-                    }
-                    else if (player.CurrentItem is StardewValley.Objects.Boots)
-                    {
-                        spellsLearned.Add(ANALYZE_EVAC_AP_LOCATION);
-                    }
-                    else if (player.ActiveObject != null)
-                    {
-                        if (!player.ActiveObject.bigCraftable.Value)
-                        {
-                            int index = player.ActiveObject.ParentSheetIndex;
-                            if (index == COFFEE)
-                                spellsLearned.Add(ANALYZE_HASTE_AP_LOCATION);
-                            else if (index == LIFE_ELIXIR)
-                                spellsLearned.Add(ANALYZE_HEAL_AP_LOCATION);
-                            else if (index == EARTH_CRYSTAL)
-                                spellsLearned.Add(ANALYZE_SHOCKWAVE_AP_LOCATION);
-                            else if (index == FIRE_QUARTZ)
-                                spellsLearned.Add(ANALYZE_FIREBALL_AP_LOCATION);
-                            else if (index == ICE_PIP)
-                                spellsLearned.Add(ANALYZE_FROSTBITE_AP_LOCATION);
-                        }
-                    }
+            {
+                if (player.CurrentTool is StardewValley.Tools.Axe || player.CurrentTool is StardewValley.Tools.Pickaxe)
+                    spellsLearned.Add(ANALYZE_CLEARDEBRIS_AP_LOCATION);
+                else if (player.CurrentTool is StardewValley.Tools.Hoe)
+                    spellsLearned.Add(ANALYZE_TILL_AP_LOCATION);
+                else if (player.CurrentTool is StardewValley.Tools.WateringCan)
+                    spellsLearned.Add(ANALYZE_WATER_AP_LOCATION);
+            }
+            else if (player.CurrentItem is StardewValley.Objects.Boots)
+            {
+                spellsLearned.Add(ANALYZE_EVAC_AP_LOCATION);
+            }
+            else if (player.ActiveObject != null)
+            {
+                if (!player.ActiveObject.bigCraftable.Value)
+                {
+                    int index = player.ActiveObject.ParentSheetIndex;
+                    if (index == COFFEE)
+                        spellsLearned.Add(ANALYZE_HASTE_AP_LOCATION);
+                    else if (index == LIFE_ELIXIR)
+                        spellsLearned.Add(ANALYZE_HEAL_AP_LOCATION);
+                    else if (index == EARTH_CRYSTAL)
+                        spellsLearned.Add(ANALYZE_SHOCKWAVE_AP_LOCATION);
+                    else if (index == FIRE_QUARTZ)
+                        spellsLearned.Add(ANALYZE_FIREBALL_AP_LOCATION);
+                    else if (index == ICE_PIP)
+                        spellsLearned.Add(ANALYZE_FROSTBITE_AP_LOCATION);
+                }
+            }
         }
 
         private static void CheckTileAnalyzeLocations(Farmer player, List<string> spellsLearned, int targetX, int targetY)
         {
             var tilePos = new Vector2(targetX / Game1.tileSize, targetY / Game1.tileSize);
-                if (player.currentLocation.terrainFeatures.ContainsKey(tilePos) && player.currentLocation.terrainFeatures[tilePos] is StardewValley.TerrainFeatures.HoeDirt hoeDirt)
+            if (player.currentLocation.terrainFeatures.ContainsKey(tilePos) && player.currentLocation.terrainFeatures[tilePos] is StardewValley.TerrainFeatures.HoeDirt hoeDirt)
+            {
+                if (hoeDirt.crop != null)
+                    spellsLearned.Add(ANALYZE_TENDRILS_AP_LOCATION);
+            }
+            var tile = player.currentLocation.map.GetLayer("Buildings").Tiles[(int)tilePos.X, (int)tilePos.Y];
+            if (tile != null && tile.TileIndex == MINE_LADDER)
+                spellsLearned.Add(ANALYZE_DESCEND_AP_LOCATION);
+            if (player.currentLocation is Farm farm)
+            {
+                foreach (var clump in farm.resourceClumps)
                 {
-                    if (hoeDirt.crop != null)
-                        spellsLearned.Add(ANALYZE_TENDRILS_AP_LOCATION);
+                    if (clump.parentSheetIndex.Value == CROP_TILE && new Rectangle((int)clump.tile.Value.X, (int)clump.tile.Value.Y, clump.width.Value, clump.height.Value).Contains((int)tilePos.X, (int)tilePos.Y))
+                        spellsLearned.Add(ANALYZE_METEOR_AP_LOCATION);
                 }
-                var tile = player.currentLocation.map.GetLayer("Buildings").Tiles[(int)tilePos.X, (int)tilePos.Y];
-                if (tile != null && tile.TileIndex == MINE_LADDER)
-                    spellsLearned.Add(ANALYZE_DESCEND_AP_LOCATION);
-                if (player.currentLocation is Farm farm)
-                {
-                    foreach (var clump in farm.resourceClumps)
-                    {
-                        if (clump.parentSheetIndex.Value == CROP_TILE && new Rectangle((int)clump.tile.Value.X, (int)clump.tile.Value.Y, clump.width.Value, clump.height.Value).Contains((int)tilePos.X, (int)tilePos.Y))
-                            spellsLearned.Add(ANALYZE_METEOR_AP_LOCATION);
-                    }
-                }
-                if (player.currentLocation.doesTileHaveProperty((int)tilePos.X, (int)tilePos.Y, "Action", "Buildings") == "EvilShrineLeft")
-                    spellsLearned.Add(ANALYZE_LUCKSTEAL_AP_LOCATION);
-                if (player.currentLocation is StardewValley.Locations.MineShaft mineShaft && mineShaft.mineLevel == 100 && mineShaft.waterTiles[(int)tilePos.X, (int)tilePos.Y])
-                    spellsLearned.Add(ANALYZE_BLOODMANA_AP_LOCATION);
+            }
+            if (player.currentLocation.doesTileHaveProperty((int)tilePos.X, (int)tilePos.Y, "Action", "Buildings") == "EvilShrineLeft")
+                spellsLearned.Add(ANALYZE_LUCKSTEAL_AP_LOCATION);
+            if (player.currentLocation is StardewValley.Locations.MineShaft mineShaft && mineShaft.mineLevel == 100 && mineShaft.waterTiles[(int)tilePos.X, (int)tilePos.Y])
+                spellsLearned.Add(ANALYZE_BLOODMANA_AP_LOCATION);
 
         }
 

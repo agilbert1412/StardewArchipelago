@@ -23,23 +23,24 @@ namespace StardewArchipelago.GameModifications.Buildings
             var blueprintData = FullBlueprintData();
             foreach (var blueprint in blueprintData)
             {
-                var blueprintMagical = blueprint.Value.magical;
-                var blueprintUpgrade = blueprint.Value.blueprintType;
+                var blueprintMagical = blueprint.magical;
+                var blueprintUpgrade = blueprint.nameOfBuildingToUpgrade;
 
                 if (blueprintMagical)
                 {
-                    if (blueprint.Key == "Stable")
-                    {
-                        AddBuildingBlueprintIfReceived(blueprints, blueprint.Key, true);
-                        continue;
-                    }
-                    if (blueprintUpgrade == "none")
-                    {
-                        AddBuildingBlueprintIfReceived(blueprints, blueprint.Key, requiredBuilding: null);
-                        continue;
-                    }
-                    AddBuildingBlueprintIfReceived(blueprints, blueprint.Key, requiredBuilding: blueprintUpgrade);
+                    continue;
                 }
+                if (blueprint.name == "Stable")
+                {
+                    AddBuildingBlueprintIfReceived(blueprints, blueprint.name, true);
+                    continue;
+                }
+                if (blueprintUpgrade == "none")
+                {
+                    AddBuildingBlueprintIfReceived(blueprints, blueprint.name, requiredBuilding: null);
+                    continue;
+                }
+                AddBuildingBlueprintIfReceived(blueprints, blueprint.name, requiredBuilding: blueprintUpgrade);
             }
             AddBuildingBlueprintIfReceived(blueprints, CarpenterInjections.BUILDING_TRACTOR_GARAGE, true);
             return blueprints;

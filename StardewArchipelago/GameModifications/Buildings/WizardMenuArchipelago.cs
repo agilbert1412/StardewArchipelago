@@ -18,11 +18,11 @@ namespace StardewArchipelago.GameModifications.Buildings
             var blueprintData = FullBlueprintData();
             foreach (var blueprint in blueprintData)
             {
-                var blueprintMagical = blueprint.Value.magical;
+                var blueprintMagical = blueprint.magical;
 
                 if (blueprintMagical)
                 {
-                    AddBuildingBlueprintIfReceived(blueprints, blueprint.Key);
+                    AddBuildingBlueprintIfReceived(blueprints, blueprint.name);
                 }
             }
             return blueprints;

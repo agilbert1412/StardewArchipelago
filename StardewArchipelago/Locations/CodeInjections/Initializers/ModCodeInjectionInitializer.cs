@@ -17,11 +17,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
 
         private static void InitializeModdedContent(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
-            if (!_archipelago.SlotData.Mods.HasMod(ModNames.DEEP_WOODS))
+            if (_archipelago.SlotData.Mods.HasMod(ModNames.DEEP_WOODS))
             {
                 DeepWoodsModInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             }
-            if (!_archipelago.SlotData.Mods.HasMod(ModNames.MAGIC))
+            if (_archipelago.SlotData.Mods.HasMod(ModNames.MAGIC))
             {
                 MagicModInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             }

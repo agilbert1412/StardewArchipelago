@@ -30,7 +30,7 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void AddModSkillInjections()
         {
-            if (!(_modsManager.HasModdedSkill() & _archipelago.SlotData.SkillProgression != SkillsProgression.Vanilla))
+            if ((!_modsManager.HasModdedSkill() || _archipelago.SlotData.SkillProgression == SkillsProgression.Vanilla))
             {
                 return;
             }
@@ -48,36 +48,36 @@ namespace StardewArchipelago.Locations.Patcher
                 return;
             }
             var _deepWoodsType = AccessTools.TypeByName("DeepWoodsMod.DeepWoods");
-                var _unicornType = AccessTools.TypeByName("DeepWoodsMod.Unicorn");
-                var _gingerbreadType = AccessTools.TypeByName("DeepWoodsMod.GingerBreadHouse");
-                var _iridiumtreeType = AccessTools.TypeByName("DeepWoodsMod.IridiumTree");
-                var _treasureType = AccessTools.TypeByName("DeepWoodsMod.TreasureChest");
-                var _fountainType = AccessTools.TypeByName("DeepWoodsMod.HealingFountain");
+            var _unicornType = AccessTools.TypeByName("DeepWoodsMod.Unicorn");
+            var _gingerbreadType = AccessTools.TypeByName("DeepWoodsMod.GingerBreadHouse");
+            var _iridiumtreeType = AccessTools.TypeByName("DeepWoodsMod.IridiumTree");
+            var _treasureType = AccessTools.TypeByName("DeepWoodsMod.TreasureChest");
+            var _fountainType = AccessTools.TypeByName("DeepWoodsMod.HealingFountain");
 
-                _harmony.Patch(
-                    original: AccessTools.Method(_unicornType, "checkAction"),
-                    prefix: new HarmonyMethod(typeof(DeepWoodsModInjections), nameof(DeepWoodsModInjections.CheckAction_PetUnicornLocation_Prefix))
-                );
-                _harmony.Patch(
-                    original: AccessTools.Method(_unicornType, "CheckScared"),
-                    prefix: new HarmonyMethod(typeof(DeepWoodsModInjections), nameof(DeepWoodsModInjections.CheckScared_MakeUnicornLessScared_Prefix))
-                );
-                _harmony.Patch(
-                    original: AccessTools.Method(_treasureType, "checkForAction"),
-                    postfix: new HarmonyMethod(typeof(DeepWoodsModInjections), nameof(DeepWoodsModInjections.CheckForAction_TreasureChestLocation_Postfix))
-                );
-                _harmony.Patch(
-                    original: AccessTools.Method(_gingerbreadType, "PlayDestroyedSounds"),
-                    postfix: new HarmonyMethod(typeof(DeepWoodsModInjections), nameof(DeepWoodsModInjections.PlayDestroyedSounds_GingerbreadLocation_Postfix))
-                );
-                _harmony.Patch(
-                    original: AccessTools.Method(_iridiumtreeType, "PlayDestroyedSounds"),
-                    postfix: new HarmonyMethod(typeof(DeepWoodsModInjections), nameof(DeepWoodsModInjections.PlayDestroyedSounds_IridiumTreeLocation_Postfix))
-                );
-                _harmony.Patch(
-                    original: AccessTools.Method(_fountainType, "performUseAction"),
-                    prefix: new HarmonyMethod(typeof(DeepWoodsModInjections), nameof(DeepWoodsModInjections.PerformUseAction_HealingFountainLocation_Prefix))
-                );
+            _harmony.Patch(
+                original: AccessTools.Method(_unicornType, "checkAction"),
+                prefix: new HarmonyMethod(typeof(DeepWoodsModInjections), nameof(DeepWoodsModInjections.CheckAction_PetUnicornLocation_Prefix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(_unicornType, "CheckScared"),
+                prefix: new HarmonyMethod(typeof(DeepWoodsModInjections), nameof(DeepWoodsModInjections.CheckScared_MakeUnicornLessScared_Prefix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(_treasureType, "checkForAction"),
+                postfix: new HarmonyMethod(typeof(DeepWoodsModInjections), nameof(DeepWoodsModInjections.CheckForAction_TreasureChestLocation_Postfix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(_gingerbreadType, "PlayDestroyedSounds"),
+                postfix: new HarmonyMethod(typeof(DeepWoodsModInjections), nameof(DeepWoodsModInjections.PlayDestroyedSounds_GingerbreadLocation_Postfix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(_iridiumtreeType, "PlayDestroyedSounds"),
+                postfix: new HarmonyMethod(typeof(DeepWoodsModInjections), nameof(DeepWoodsModInjections.PlayDestroyedSounds_IridiumTreeLocation_Postfix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(_fountainType, "performUseAction"),
+                prefix: new HarmonyMethod(typeof(DeepWoodsModInjections), nameof(DeepWoodsModInjections.PerformUseAction_HealingFountainLocation_Prefix))
+            );
         }
 
         private void AddMagicModInjections()
@@ -87,10 +87,10 @@ namespace StardewArchipelago.Locations.Patcher
                 return;
             }
             var _analyzeSpellType = AccessTools.TypeByName("AnalyzeSpell");
-                _harmony.Patch(
-                        original: AccessTools.Method(_analyzeSpellType, "OnCast"),
-                        prefix: new HarmonyMethod(typeof(MagicModInjections), nameof(MagicModInjections.OnCast_AnalyzeGivesLocations_Prefix))
-                    );
+            _harmony.Patch(
+                    original: AccessTools.Method(_analyzeSpellType, "OnCast"),
+                    prefix: new HarmonyMethod(typeof(MagicModInjections), nameof(MagicModInjections.OnCast_AnalyzeGivesLocations_Prefix))
+                );
         }
 
     }

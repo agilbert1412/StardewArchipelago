@@ -52,7 +52,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
                 if (_locationChecker.IsLocationNotChecked(PREMIUM_PACK) && Game1.player.Money >= 50000)
                 {
-                    Game1.player.Money -= 10000;
+                    Game1.player.Money -= 50000;
                     _locationChecker.AddCheckedLocation(PREMIUM_PACK);
                     return false; // don't run original logic
                 }
