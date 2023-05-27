@@ -7,6 +7,7 @@ using StardewModdingAPI;
 using StardewArchipelago.Archipelago;
 using StardewValley;
 using StardewValley.Menus;
+using StardewValley.TerrainFeatures;
 
 namespace StardewArchipelago.Locations.CodeInjections.Modded
 {
@@ -20,23 +21,23 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         private const string FOUNTAIN_DRINK_LOCATION = "Drinking From Deep Woods Fountain";
         private const string TREASURE1_AP_LOCATION = "Deep Woods Trash Bin";
         private const string TREASURE2_AP_LOCATION = "Deep Woods Treasure Chest";
-        private static int previousDepth = 0;
-        private static NetBool stardropGet = new NetBool(false);
-        private static NetBool isPetted = new NetBool(false);
         private static IMonitor _monitor;
         private static IModHelper _helper;
-        private static bool drankWaterFirst = false;
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
+        private static NetBool isPetted = new NetBool(false);
+        private static LargeTerrainFeature fountainThatGrantedAPCheck = null;
 
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago,
+            LocationChecker locationChecker)
         {
             _monitor = monitor;
             _helper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
         }
+
         // Future Goal; Currently Unimplemented - Albrekka
         /*public static bool PerformUseAction_ExcaliburLocation_Prefix(Vector2 tileLocation, GameLocation location, bool __result)
         {
@@ -96,6 +97,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                     {
                         _locationChecker.AddCheckedLocation(MEET_UNICORN_AP_LOCATION);
                     }
+
                     Game1.playSound("achievement");
                     Game1.playSound("healSound");
                     Game1.playSound("reward");
@@ -103,6 +105,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                     Game1.playSound("shiny4");
                     Game1.playSound("yoba");
                 }
+
                 return false; // don't use original logic
             }
             catch (Exception ex)
@@ -111,11 +114,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 return true; //run original logic
             }
         }
+
         public static bool CheckScared_MakeUnicornLessScared_Prefix()
         {
             try
             {
-                return false;  //don't run original logic
+                return false; //don't run original logic
             }
             catch (Exception ex)
             {
@@ -126,7 +130,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
 
         //Later, should also make it so the spawned drops for chest and also gingerbread + tree
         ///don't show up first time, but don't know how to just yet due to DeepWoods type reference in method call. - Albrekka
-        public static void CheckForAction_TreasureChestLocation_Postfix(Farmer __instance, bool justCheckingForActivity = false)
+        public static void CheckForAction_TreasureChestLocation_Postfix(Farmer __instance,
+            bool justCheckingForActivity = false)
         {
             try
             {
@@ -137,15 +142,18 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                     _locationChecker.AddCheckedLocation(TREASURE1_AP_LOCATION);
                     return;
                 }
+
                 _locationChecker.AddCheckedLocation(TREASURE2_AP_LOCATION);
                 return;
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(CheckForAction_TreasureChestLocation_Postfix)}:\n{ex}", LogLevel.Error);
+                _monitor.Log($"Failed in {nameof(CheckForAction_TreasureChestLocation_Postfix)}:\n{ex}",
+                    LogLevel.Error);
                 return;
             }
         }
+
         public static void PlayDestroyedSounds_GingerbreadLocation_Postfix(GameLocation __instance)
         {
             try
@@ -158,10 +166,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(PlayDestroyedSounds_GingerbreadLocation_Postfix)}:\n{ex}", LogLevel.Error);
+                _monitor.Log($"Failed in {nameof(PlayDestroyedSounds_GingerbreadLocation_Postfix)}:\n{ex}",
+                    LogLevel.Error);
                 return;
             }
         }
+
         public static void PlayDestroyedSounds_IridiumTreeLocation_Postfix(GameLocation __instance)
         {
             try
@@ -174,34 +184,39 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(PlayDestroyedSounds_IridiumTreeLocation_Postfix)}:\n{ex}", LogLevel.Error);
+                _monitor.Log($"Failed in {nameof(PlayDestroyedSounds_IridiumTreeLocation_Postfix)}:\n{ex}",
+                    LogLevel.Error);
                 return;
             }
         }
-        public static bool PerformUseAction_HealingFountainLocation_Prefix(Vector2 tileLocation, GameLocation location, ref bool __result)
+
+        public static bool PerformUseAction_HealingFountainLocation_Prefix(LargeTerrainFeature __instance, Vector2 tileLocation, GameLocation location,
+            ref bool __result)
         {
             try
             {
-                var apMessage = "You're drink the water...tastes like a stale Burger King Meal...?";
-                if (!_locationChecker.IsLocationChecked(FOUNTAIN_DRINK_LOCATION))
+                if (_locationChecker.IsLocationMissingAndExists(FOUNTAIN_DRINK_LOCATION))
                 {
-                    var fountainType = AccessTools.TypeByName("HealingFountain");
+                    var apMessage = "You drink the water... it tastes like a stale Burger King Meal...?";
                     _locationChecker.AddCheckedLocation(FOUNTAIN_DRINK_LOCATION);
                     location.playSoundAt("gulp", tileLocation);
                     DelayedAction.playSoundAfterDelay("yoba", 800, location, -1);
                     Game1.addHUDMessage(new HUDMessage(apMessage) { noIcon = true });
-                    drankWaterFirst = true;
+                    fountainThatGrantedAPCheck = __instance;
                     return false; //don't run original logic
                 }
-                if (drankWaterFirst == true)
+
+                if (fountainThatGrantedAPCheck != __instance)
                 {
-                    return false; //don't run original logic
+                    return true; //run original logic
                 }
-                return true; //run original logic
+
+                return false; //don't run original logic
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(PerformUseAction_HealingFountainLocation_Prefix)}:\n{ex}", LogLevel.Error);
+                _monitor.Log($"Failed in {nameof(PerformUseAction_HealingFountainLocation_Prefix)}:\n{ex}",
+                    LogLevel.Error);
                 return true; //run original logic
             }
         }
