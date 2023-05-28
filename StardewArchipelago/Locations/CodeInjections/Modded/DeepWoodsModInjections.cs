@@ -95,7 +95,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                     return false; // don't run original logic
                 }
 
-                isPetted.Value = true;
+                // I am not sure which of the following two lines truly does what we need. Maybe both? To be tested
+                isPettedField.SetValue(new NetBool(true));
+                // isPetted.Value = true;
+
                 who.farmerPassesThrough = true;
                 who.health = who.maxHealth;
                 who.Stamina = who.MaxStamina;
