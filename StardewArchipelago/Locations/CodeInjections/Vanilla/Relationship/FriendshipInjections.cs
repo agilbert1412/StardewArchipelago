@@ -17,12 +17,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
     {
         private const int POINTS_PER_HEART = 250;
         private const int POINTS_PER_PET_HEART = 200;
-        private const string HEARTS_PATTERN = "{0}: 1 <3";
+        private const string HEARTS_PATTERN = "{0} <3";
         public const string FRIENDSANITY_PATTERN = "Friendsanity: {0} {1} <3";
 
         private static string[] _notImmediatelyAccessible = new[]
         {
-            "Leo", "Krobus", "Dwarf", "Sandy", "Kent"
+            "Leo", "Krobus", "Dwarf", "Sandy", "Kent", "Yoba",
         };
 
         private static IMonitor _monitor;
@@ -83,16 +83,21 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
                     return true; // run original logic
                 }
 
-                var archipelagoHearts =
-                    _archipelago.GetReceivedItemCount(string.Format(HEARTS_PATTERN, friend.ArchipelagoName));
-                var maxShuffled = ShuffledUpTo(friend);
+                var archipelagoHeartItems = _archipelago.GetReceivedItemCount(string.Format(HEARTS_PATTERN, friend.ArchipelagoName));
+                var receivedHearts = archipelagoHeartItems * _archipelago.SlotData.FriendsanityHeartSize;
 
-                var friendshipPoints = archipelagoHearts * POINTS_PER_HEART;
+                var maxShuffled = ShuffledUpTo(friend);
+                if (receivedHearts > maxShuffled)
+                {
+                    receivedHearts = maxShuffled;
+                }
+
+                var friendshipPoints = receivedHearts * POINTS_PER_HEART;
                 friendshipPoints = GetBoundedToCurrentRelationState(friendshipPoints, friend.StardewName);
-                if (archipelagoHearts >= maxShuffled)
+                if (receivedHearts >= maxShuffled)
                 {
                     var earnedPoints = (int)GetFriendshipPoints(friend.StardewName);
-                    var earnedPointsAboveMaxShuffled = Math.Max(0, earnedPoints - maxShuffled * POINTS_PER_HEART);
+                    var earnedPointsAboveMaxShuffled = Math.Max(0, earnedPoints - (maxShuffled * POINTS_PER_HEART));
                     friendshipPoints += earnedPointsAboveMaxShuffled;
                 }
 
@@ -136,12 +141,19 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
                 //var hintedLocationNames = hints.Select(hint => _archipelago.GetLocationName(hint.LocationId)).Where(hint => hint.StartsWith($"Friendsanity: {name}"));
                 var apPoints = (int)GetFriendshipPoints(friend.StardewName);
                 var maxShuffled = ShuffledUpTo(friend);
+                var heartSize = _archipelago.SlotData.FriendsanityHeartSize;
                 var maxHeartForCurrentRelation = GetMaximumHeartsWithRelationState(friend.StardewName);
                 var apHearts = apPoints / POINTS_PER_HEART;
                 var spritesField = _helper.Reflection.GetField<List<ClickableTextureComponent>>(__instance, "sprites");
                 var sprites = spritesField.GetValue();
                 for (var index = 0; index < maxShuffled; ++index)
                 {
+                    var heartNumber = index + 1;
+                    if (heartNumber % heartSize != 0 && heartNumber != maxShuffled)
+                    {
+                        continue;
+                    }
+
                     var positionX = __instance.xPositionOnScreen + 320 - 2 + index * 32;
                     var smallHeartOffset = 28;
                     var positionY = sprites[i].bounds.Y + 64 - 28;
@@ -158,7 +170,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
 
                     if (index >= apHearts)
                     {
-                        if (_hintedFriendshipLocations.Any(x => x.Contains($"{friend.ArchipelagoName} {index + 1} ")))
+                        if (_hintedFriendshipLocations.Any(x => x.Contains($"{friend.ArchipelagoName} {heartNumber} ")))
                         {
                             texture = _apLogoBlue;
                         }
@@ -221,17 +233,24 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
 
                 var petName = Game1.player.getPetName();
                 _friends.AddPet(petName);
-                var friend = _friends.GetFriend(petName);
-                var newApPoints = GetFriendshipPoints(friend.StardewName) + multipliedPointIncrease;
-                SetFriendshipPoints(friend.StardewName, Math.Min(1000, newApPoints));
+                var petFriend = _friends.GetFriend(petName);
+                var newApPoints = GetFriendshipPoints(petFriend.StardewName) + multipliedPointIncrease;
+                SetFriendshipPoints(petFriend.StardewName, Math.Min(1000, newApPoints));
                 for (var i = 1; i < newApPoints / POINTS_PER_PET_HEART; i++)
                 {
-                    _locationChecker.AddCheckedLocation(string.Format(FRIENDSANITY_PATTERN, friend.ArchipelagoName, i));
+                    _locationChecker.AddCheckedLocation(string.Format(FRIENDSANITY_PATTERN, petFriend.ArchipelagoName, i));
                 }
                 farm?.petBowlWatered?.Set(false);
 
-                var archipelagoHearts = _archipelago.GetReceivedItemCount(string.Format(HEARTS_PATTERN, friend.ArchipelagoName));
-                __instance.friendshipTowardFarmer.Set(Math.Min(1000, archipelagoHearts * POINTS_PER_PET_HEART));
+                var archipelagoHeartItems = _archipelago.GetReceivedItemCount(string.Format(HEARTS_PATTERN, petFriend.ArchipelagoName));
+                var receivedHearts = archipelagoHeartItems * _archipelago.SlotData.FriendsanityHeartSize;
+                var maxShuffled = ShuffledUpTo(petFriend);
+                if (receivedHearts > maxShuffled)
+                {
+                    receivedHearts = maxShuffled;
+                }
+
+                __instance.friendshipTowardFarmer.Set(Math.Min(1000, receivedHearts * POINTS_PER_PET_HEART));
                 return true; // run original logic
             }
             catch (Exception ex)
