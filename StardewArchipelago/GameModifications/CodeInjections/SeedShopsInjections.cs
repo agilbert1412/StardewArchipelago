@@ -62,7 +62,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     if (sandy != null && sandy.currentLocation == __instance)
                     {
                         var stock = GetSandyLimitedStock(__instance);
-                        var onSandyShopPurchaseMethod = _helper.Reflection.GetMethod(__instance, "onSandyShopPurchase");
+                        var onSandyShopPurchaseMethod = _modHelper.Reflection.GetMethod(__instance, "onSandyShopPurchase");
                         Func<ISalable, Farmer, int, bool> onSandyShopPurchase = (item, farmer, amount) => onSandyShopPurchaseMethod.Invoke<bool>(item, farmer, amount);
                         Game1.activeClickableMenu = new ShopMenu(stock, who: "Sandy", on_purchase: onSandyShopPurchase);
                     }

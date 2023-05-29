@@ -5,6 +5,7 @@ using StardewArchipelago.Archipelago;
 using StardewArchipelago.Goals;
 using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Locations.CodeInjections;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Characters;
@@ -226,7 +227,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 return "What would your grandfather say if you abandoned this poor animal?";
             }
 
-            var location = string.Format(FriendshipInjections.FRIENDSANITY_PATTERN, FriendshipInjections.PET_NAME, Game1.random.Next(1, 6));
+            var location = string.Format(FriendshipInjections.FRIENDSANITY_PATTERN, Friends.PET_NAME, Game1.random.Next(1, 6));
             var scouted = _archipelago.ScoutSingleLocation(location);
             return $"After all, what would {scouted.PlayerName} do without their {scouted.ItemName}?";
         }

@@ -10,7 +10,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
 {
     public class Friends
     {
-        private const string PET_NAME = "Pet";
+        public const string PET_NAME = "Pet";
 
         private static Dictionary<string, string> _stardewNameToArchipelagoName = new Dictionary<string, string>{
             {"MisterGinger", "Mr. Ginger"}
