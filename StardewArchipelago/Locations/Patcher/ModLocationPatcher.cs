@@ -64,7 +64,7 @@ namespace StardewArchipelago.Locations.Patcher
             );
             _harmony.Patch(
                 original: AccessTools.Method(_treasureType, "checkForAction"),
-                postfix: new HarmonyMethod(typeof(DeepWoodsModInjections), nameof(DeepWoodsModInjections.CheckForAction_TreasureChestLocation_Postfix))
+                prefix: new HarmonyMethod(typeof(DeepWoodsModInjections), nameof(DeepWoodsModInjections.CheckForAction_TreasureChestLocation_Prefix))
             );
             _harmony.Patch(
                 original: AccessTools.Method(_gingerbreadType, "PlayDestroyedSounds"),

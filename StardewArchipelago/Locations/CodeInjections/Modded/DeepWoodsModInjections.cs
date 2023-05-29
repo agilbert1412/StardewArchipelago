@@ -27,6 +27,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         private static IModHelper _helper;
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
+        private static Chest chestOrTrashThatGrantedAPCheck = null;
         private static LargeTerrainFeature fountainThatGrantedAPCheck = null;
 
 
@@ -39,13 +40,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             _locationChecker = locationChecker;
         }
 
-        // Future Goal; Currently Unimplemented - Albrekka
-        /*public static bool PerformUseAction_ExcaliburLocation_Prefix(Vector2 tileLocation, GameLocation location, bool __result)
+         // Future Goal; Currently Unimplemented - Albrekka
+        //public class ExcaliburStone : LargeTerrainFeature
+        //public override bool performUseAction(Vector2 tileLocation, GameLocation location)
+        /*public static bool PerformUseAction_ExcaliburLocation_Prefix(LargeTerrainFeature __instance, Vector2 tileLocation, GameLocation location, bool __result)
         {
             try
             {
-                var swordPulledOutType = AccessTools.TypeByName("DeepWoodsMod.Unicorn");
-                var swordPulledOutField = _helper.Reflection.GetField<NetBool>(swordPulledOutType, "DeepWoodsMod.ExcaliburStone:swordPulledOut");
+                var swordPulledOutField = _helper.Reflection.GetField<NetBool>(__instance, "swordPulledOut");
                 var swordPulledOut = swordPulledOutField.GetValue();
                 if (swordPulledOut.Value)
                     return false; //don't run original logic
@@ -88,6 +90,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         {
             try
             {
+                __result = true; //conclude with same value as original method
                 var isPettedField = _helper.Reflection.GetField<NetBool>(__instance, "isPetted");
                 var isPetted = isPettedField.GetValue();
                 if (isPetted)
@@ -130,6 +133,32 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         {
             try
             {
+                var isPettedField = _helper.Reflection.GetField<NetBool>(__instance, "isPetted");
+                var isPetted = isPettedField.GetValue();
+                var isScaredField = _helper.Reflection.GetField<NetBool>(__instance, "isScared");
+                var isScared = isScaredField.GetValue();    
+            if (isScared || isPetted)
+                return false;
+
+            foreach (Farmer farmer in __instance.currentLocation.farmers)
+            {
+                if ((farmer.Position - __instance.Position).Length() < 512)
+                {
+                    if (farmer.running)
+                    {
+                        isScared.Value = true;
+                        __instance.farmerPassesThrough = true;
+                        Game1.player.team.sharedDailyLuck.Value = -0.12;
+                        farmer.addedLuckLevel.Value = Math.Min(-10, farmer.addedLuckLevel.Value);
+                        __instance.currentLocation.playSoundAt("thunder_small", __instance.getTileLocation());
+                        __instance.currentLocation.playSoundAt("ghost", __instance.getTileLocation());
+                        Game1.isRaining = true;
+                        Game1.isLightning = true;
+                        Game1.changeMusicTrack("rain");
+                        return false;
+                    }
+                }
+            }
                 return false; //don't run original logic
             }
             catch (Exception ex)
@@ -143,26 +172,30 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         //don't show up first time, but don't know how to just yet due to DeepWoods type reference in method call. - Albrekka
         // public class TreasureChest : Chest
         // public override bool checkForAction(Farmer who, bool justCheckingForActivity = false)
-        public static void CheckForAction_TreasureChestLocation_Postfix(Chest __instance, bool justCheckingForActivity = false)
+        public static bool CheckForAction_TreasureChestLocation_Prefix(Chest __instance, Farmer who, bool justCheckingForActivity = false)
         {
             try
             {
                 if (justCheckingForActivity)
-                    return;
-                if (__instance.displayName != "Chest")
+                    return false; //don't run original logic
+                var isTrashCanField = _helper.Reflection.GetField<NetBool>(__instance, "isTrashCan");
+                var isTrashCan = isTrashCanField.GetValue();
+                if (_locationChecker.IsLocationNotChecked(isTrashCan.Value ? TREASURE1_AP_LOCATION : TREASURE2_AP_LOCATION))
                 {
-                    _locationChecker.AddCheckedLocation(TREASURE1_AP_LOCATION);
-                    return;
+                    _locationChecker.AddCheckedLocation(isTrashCan.Value ? TREASURE1_AP_LOCATION : TREASURE2_AP_LOCATION);
+                    Game1.playSound(isTrashCan.Value ? "trashcan" : "openChest");
+                    chestOrTrashThatGrantedAPCheck = __instance;
                 }
-
-                _locationChecker.AddCheckedLocation(TREASURE2_AP_LOCATION);
-                return;
+                if (chestOrTrashThatGrantedAPCheck != __instance)
+                {
+                    return true; //run original logic (all other treasure save first is vanilla)
+                }
+                return false; //don't run original logic
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(CheckForAction_TreasureChestLocation_Postfix)}:\n{ex}",
-                    LogLevel.Error);
-                return;
+                _monitor.Log($"Failed in {nameof(CheckForAction_TreasureChestLocation_Prefix)}:\n{ex}", LogLevel.Error);
+                return true;
             }
         }
 
