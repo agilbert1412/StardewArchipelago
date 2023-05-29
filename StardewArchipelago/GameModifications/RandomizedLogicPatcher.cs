@@ -40,6 +40,7 @@ namespace StardewArchipelago.GameModifications
             EntranceInjections.Initialize(monitor, _archipelago);
             ForestInjections.Initialize(monitor, _archipelago);
             SeedShopsInjections.Initialize(monitor, helper, archipelago);
+            LostAndFoundInjections.Initialize(monitor, archipelago);
             SeasonsInjections.Initialize(monitor, helper, _archipelago, state);
             QuestLogInjections.Initialize(monitor, archipelago);
             WorldChangeEventInjections.Initialize(monitor);
@@ -56,6 +57,7 @@ namespace StardewArchipelago.GameModifications
             PatchEntrances();
             PatchSeasons();
             PatchSeedShops();
+            PatchLostAndFoundBox();
             PatchJodiFishQuest();
             PatchQuestLog();
             PatchWorldChangedEvent();
@@ -224,7 +226,15 @@ namespace StardewArchipelago.GameModifications
             _harmony.Patch(
                 original: AccessTools.Constructor(typeof(ShopMenu), shopMenuParameterTypes),
                 prefix: new HarmonyMethod(typeof(SeedShopsInjections), nameof(SeedShopsInjections.ShopMenu_SeedShuffle_Prefix))
-            ); 
+            );
+        }
+
+        private void PatchLostAndFoundBox()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(FarmerTeam), nameof(FarmerTeam.CheckReturnedDonations)),
+                prefix: new HarmonyMethod(typeof(LostAndFoundInjections), nameof(LostAndFoundInjections.CheckReturnedDonations_UpgradeToolsProperly_Prefix))
+            );
         }
 
         private const int FISH_CASSEROLE_QUEST_ID = 22;
