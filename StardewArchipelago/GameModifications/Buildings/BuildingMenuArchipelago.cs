@@ -69,6 +69,7 @@ namespace StardewArchipelago.GameModifications.Buildings
         protected virtual void AddBuildingBlueprint(List<BluePrint> blueprints, string buildingName, string sendingPlayer, bool onlyOne = false, string requiredBuilding = null)
         {
             var farm = Game1.getFarm();
+            BluePrint blueprintToAdd = null;
             var isConstructedAlready = farm.isBuildingConstructed(buildingName);
             if (onlyOne && isConstructedAlready)
             {
@@ -102,12 +103,12 @@ namespace StardewArchipelago.GameModifications.Buildings
                 //Tractor Mod implementation utilizes an odd building type...
                 if (buildingName == "Tractor Garage")
                 {
-                    blueprints.Add(CreateTractorGarageBlueprint(false));
+                    blueprintToAdd = CreateTractorGarageBlueprint(false);
 
                 }
                 else
                 {
-                    blueprints.Add(new BluePrint(buildingName));
+                    blueprintToAdd = new BluePrint(buildingName);
                 }
 
             }
@@ -115,14 +116,15 @@ namespace StardewArchipelago.GameModifications.Buildings
             {
                 if (buildingName == "Tractor Garage")
                 {
-                    blueprints.Add(CreateTractorGarageBlueprint(true, sendingPlayer));
+                    blueprintToAdd = CreateTractorGarageBlueprint(true, sendingPlayer);
                 }
                 else
                 {
-                    blueprints.Add(new FreeBlueprint(buildingName, sendingPlayer));
+                    blueprintToAdd = new FreeBlueprint(buildingName, sendingPlayer);
                 }
 
             }
+            blueprints.Add(blueprintToAdd);
         }
 
         private static BluePrint CreateTractorGarageBlueprint(bool free, string sendingPlayerName = null)
