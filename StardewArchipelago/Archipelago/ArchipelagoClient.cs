@@ -66,6 +66,12 @@ namespace StardewArchipelago.Archipelago
                 DisconnectPermanently();
                 return;
             }
+
+            if (!SlotData.Mods.IsModStateCorrect(_modHelper, out errorMessage))
+            {
+                DisconnectPermanently();
+                return;
+            }
         }
 
         private bool TryConnect(ArchipelagoConnectionInfo connectionInfo, out string errorMessage)

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using StardewArchipelago.Constants;
+using StardewModdingAPI;
 
 namespace StardewArchipelago.Archipelago
 {
@@ -32,6 +33,67 @@ namespace StardewArchipelago.Archipelago
         {
             return HasMod(ModNames.LUCK) || HasMod(ModNames.BINNING) || HasMod(ModNames.COOKING) ||
                    HasMod(ModNames.MAGIC) || HasMod(ModNames.SOCIALIZING) || HasMod(ModNames.ARCHAEOLOGY);
+        }
+
+        public bool IsModStateCorrect(IModHelper modHelper, out string errorMessage)
+        {
+            var loadedModData = modHelper.ModRegistry.GetAll().ToList();
+            errorMessage = $"The slot you are connecting to has been created expecting modded content,\r\nbut not all expected mods are installed and active.";
+            var valid = true;
+            foreach (var (mod, version) in _activeMods)
+            {
+                if (!IsModActiveAndCorrectVersion(loadedModData, mod, version, out var existingVersion))
+                {
+                    valid = false;
+                    errorMessage +=
+                        $"{Environment.NewLine}\tMod: {mod}, expected version: {version}, current Version: {existingVersion}";
+                }
+            }
+
+            return valid;
+        }
+
+        private static bool IsModActiveAndCorrectVersion(List<IModInfo> loadedModData, string desiredModName, string desiredVersion, out string existingVersion)
+        {
+            var normalizedDesiredModName = GetNormalizedModName(desiredModName);
+            foreach (var modInfo in loadedModData)
+            {
+                var modName = GetNormalizedModName(modInfo.Manifest.Name);
+                if (!modName.Equals(normalizedDesiredModName, StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                existingVersion = modInfo.Manifest.Version.ToString();
+                if (existingVersion.Equals(desiredVersion, StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+
+                return false;
+            }
+
+            existingVersion = "[NOT FOUND]";
+            return false;
+        }
+
+        private static string GetNormalizedModName(string modName)
+        {
+            var aliasedName = modName;
+            if (ModInternalNames.InternalNames.ContainsKey(modName))
+            {
+                aliasedName = ModInternalNames.InternalNames[modName];
+            }
+            var cleanName = aliasedName
+                .Replace(" ", "")
+                .Replace("_", "")
+                .Replace("-", "")
+                .Replace("'", "")
+                .Replace("(", "")
+                .Replace(")", "")
+                .Replace("[", "")
+                .Replace("]", "");
+            return cleanName;
         }
     }
 }
