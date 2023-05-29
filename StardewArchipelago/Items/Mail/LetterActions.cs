@@ -202,6 +202,11 @@ namespace StardewArchipelago.Items.Mail
 
             foreach (var building in Game1.getFarm().buildings)
             {
+                if (building.indoors.Value == null)
+                {
+                    continue;
+                }
+
                 foreach (var (tile, gameObject) in building.indoors.Value.Objects.Pairs)
                 {
                     if (gameObject is not Chest chest)
