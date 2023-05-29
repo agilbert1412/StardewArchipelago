@@ -165,7 +165,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         }
         //public class Skills
         //public static void AddExperience( Farmer farmer, string skillName, int amt )
-        public static bool AddExperience_ArchipelagoModExperience_Prefix(Farmer __instance, string skillName, int amt)
+        public static bool AddExperience_ArchipelagoModExperience_Prefix(Farmer farmer, string skillName, int amt)
         {
             try
             {
