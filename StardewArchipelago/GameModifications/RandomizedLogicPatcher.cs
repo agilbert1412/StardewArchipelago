@@ -14,6 +14,7 @@ using StardewArchipelago.Serialization;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Events;
 using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Network;
@@ -48,6 +49,7 @@ namespace StardewArchipelago.GameModifications
             TVInjections.Initialize(monitor, archipelago);
             ProfitInjections.Initialize(monitor, archipelago);
             QuestLogInjections.Initialize(monitor, archipelago);
+            WorldChangeEventInjections.Initialize(monitor);
         }
 
         public void PatchAllGameLogic()
@@ -63,6 +65,7 @@ namespace StardewArchipelago.GameModifications
             PatchSeedShops();
             PatchJodiFishQuest();
             PatchQuestLog();
+            PatchWorldChangedEvent();
             PatchLostAndFoundBox();
             PatchTvChannels();
             PatchCleanupBeforeSave();
@@ -317,6 +320,14 @@ namespace StardewArchipelago.GameModifications
             _harmony.Patch(
                 original: AccessTools.Constructor(typeof(QuestLog)),
                 postfix: new HarmonyMethod(typeof(QuestLogInjections), nameof(QuestLogInjections.Constructor_MakeQuestsNonCancellable_Postfix))
+            );
+        }
+
+        private void PatchWorldChangedEvent()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(WorldChangeEvent), nameof(WorldChangeEvent.setUp)),
+                prefix: new HarmonyMethod(typeof(WorldChangeEventInjections), nameof(WorldChangeEventInjections.SetUp_MakeSureEventsAreNotDuplicated_Prefix))
             );
         }
 
