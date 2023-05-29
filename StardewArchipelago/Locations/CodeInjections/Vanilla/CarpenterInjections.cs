@@ -83,7 +83,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     return true; // run original logic
                 }
 
-                var carpenterMenu = new CarpenterMenuArchipelago(_archipelago);
+                var carpenterMenu = new CarpenterMenuArchipelago(_modHelper, _archipelago);
                 var carpenterBlueprints = carpenterMenu.GetAvailableBlueprints();
 
                 if (!carpenterBlueprints.Any())

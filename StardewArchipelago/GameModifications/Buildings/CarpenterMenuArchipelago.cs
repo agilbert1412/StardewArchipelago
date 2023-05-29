@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewModdingAPI;
 using StardewValley;
@@ -7,11 +8,7 @@ using StardewValley;
 namespace StardewArchipelago.GameModifications.Buildings
 {
     public class CarpenterMenuArchipelago : BuildingMenuArchipelago
-    {   
-        
-        public CarpenterMenuArchipelago(ArchipelagoClient archipelago) : base(archipelago)
-        {
-        }
+    {
 
         public CarpenterMenuArchipelago(IModHelper modHelper, ArchipelagoClient archipelago) : base(modHelper, archipelago, false)
         {
@@ -42,7 +39,11 @@ namespace StardewArchipelago.GameModifications.Buildings
                 }
                 AddBuildingBlueprintIfReceived(blueprints, blueprint.name, requiredBuilding: blueprintUpgrade);
             }
-            AddBuildingBlueprintIfReceived(blueprints, CarpenterInjections.BUILDING_TRACTOR_GARAGE, true);
+
+            if (_archipelago.SlotData.Mods.HasMod(ModNames.TRACTOR))
+            {
+                AddBuildingBlueprintIfReceived(blueprints, CarpenterInjections.BUILDING_TRACTOR_GARAGE, true);
+            }
             return blueprints;
         }
 

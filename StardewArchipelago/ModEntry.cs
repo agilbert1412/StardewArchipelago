@@ -84,7 +84,6 @@ namespace StardewArchipelago
             _helper.Events.GameLoop.SaveCreated += this.OnSaveCreated;
             _helper.Events.GameLoop.Saving += this.OnSaving;
             _helper.Events.GameLoop.Saved += this.OnSaved;
-            _helper.Events.Display.MenuChanged += this.OnMenuChanged;
             _helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
             _helper.Events.GameLoop.TimeChanged += this.OnTimeChanged;
             _helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
@@ -128,34 +127,6 @@ namespace StardewArchipelago
         private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
         {
             ResetArchipelago();
-        }
-
-        private void OnMenuChanged(object sender, MenuChangedEventArgs e)
-        {
-            if (e.NewMenu is not CarpenterMenu)
-            {
-                return;
-            }
-            var blueprints = _helper.Reflection
-            .GetField<List<BluePrint>>(e.NewMenu, "blueprints")
-            .GetValue();
-            if (blueprints.Any(x => x.name == "Stable" && x.displayName == "Tractor Garage") &&
-            _archipelago.SlotData.Mods.HasMod(ModNames.TRACTOR))
-            {
-                var isConstructedAlready = Game1.getFarm().isBuildingConstructed("Stable");
-                if (_archipelago.GetReceivedItemCount("Stable") == 0 || !isConstructedAlready)
-                {
-                    var removeAddedStableKey = blueprints.FirstOrDefault(x => x.displayName == "Stable");
-                    blueprints.Remove(removeAddedStableKey);
-                }
-
-                var tractorInfo = blueprints.FirstOrDefault(x => x.displayName == "Tractor Garage");
-                if (_archipelago.GetReceivedItemCount("Tractor Garage") == 0 || !isConstructedAlready)
-                {
-                    blueprints.Remove(tractorInfo);
-                }
-                
-            }
         }
 
         private void OnSaveCreating(object sender, SaveCreatingEventArgs e)
