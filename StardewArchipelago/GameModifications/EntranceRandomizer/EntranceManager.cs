@@ -335,6 +335,13 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Island Farmhouse", "IslandFarmHouse" },
             { "Volcano", "VolcanoDungeon0" },
             { "Qi Walnut Room", "QiNutRoom" },
+            { "Eugene's Garden", "Custom_EugeneNPC_EugeneHouse" },
+            { "Eugene's Bedroom", "Custom_EugeneNPC_EugeneRoom" },
+            { "Deep Woods House", "DeepWoodsMaxHouse" },
+            { "Alec's Pet Shop", "Custom_AlecsPetShop" },
+            { "Alec's Bedroom", "Custom_AlecsRoom" },
+            { "Juna's Cave", "Custom_JunaNPC_JunaCave" },
+            { "Jasper's Bedroom", "Custom_LK_Museum2"},
             { "'s", "" },
             { " ", "" },
         };

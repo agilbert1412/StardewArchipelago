@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Items;
+using StardewArchipelago.Items.Unlocks;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
 
-namespace StardewArchipelago.Locations.CodeInjections
+namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
     public static class ToolInjections
     {
@@ -73,7 +73,7 @@ namespace StardewArchipelago.Locations.CodeInjections
                 {
                     continue;
                 }
-                
+
                 var metalName = GetMetalNameForTier(upgradeLevel);
                 var locationName = $"{metalName} {toolGenericName} Upgrade";
 
@@ -103,7 +103,7 @@ namespace StardewArchipelago.Locations.CodeInjections
                 return false;
             }
 
-            var progressiveToolItemName = $"{UnlockManager.PROGRESSIVE_TOOL_AP_PREFIX}{toolGenericName}";
+            var progressiveToolItemName = $"{VanillaUnlockManager.PROGRESSIVE_TOOL_AP_PREFIX}{toolGenericName}";
             var receivedToolsOfThatType = _archipelago.GetReceivedItemCount(progressiveToolItemName);
             return receivedToolsOfThatType >= upgradeLevel - 1;
         }

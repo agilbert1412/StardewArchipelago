@@ -8,7 +8,7 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Minigames;
 
-namespace StardewArchipelago.Locations.CodeInjections
+namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
     public static class ArcadeMachineInjections
     {
@@ -158,7 +158,7 @@ namespace StardewArchipelago.Locations.CodeInjections
             {
                 numberExtraLives = _archipelago.GetReceivedItemCount(JK_EXTRA_LIFE);
             }
-            
+
             return numberExtraLives;
         }
 
@@ -175,14 +175,14 @@ namespace StardewArchipelago.Locations.CodeInjections
                 var easyMode = _archipelago.SlotData.ArcadeMachineLocations == ArcadeLocations.VictoriesEasy;
                 var receivedDropRate = _archipelago.HasReceivedItem(JOTPK_DROP_RATE);
                 var increasedDropRate = easyMode || receivedDropRate;
-                
+
                 var moneyDropChance = increasedDropRate ? 0.1 : 0.05;
                 if (Game1.random.NextDouble() < moneyDropChance)
                 {
                     var type0Mob5CoinChance = increasedDropRate ? 0.02 : 0.01;
                     var otherMob5CoinChance = increasedDropRate ? 0.2 : 0.1;
                     var mobIsType0 = __instance.type != 0;
-                    __result = ((mobIsType0 && Game1.random.NextDouble() < type0Mob5CoinChance) || (Game1.random.NextDouble() < otherMob5CoinChance)) ? 1 : 0;
+                    __result = ((mobIsType0 && Game1.random.NextDouble() < type0Mob5CoinChance || Game1.random.NextDouble() < otherMob5CoinChance)) ? 1 : 0;
                     return false; // don't run original logic
                 }
 

@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Items;
+using StardewArchipelago.Items.Unlocks;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Objects;
 using StardewValley.Tools;
 
-namespace StardewArchipelago.Locations.CodeInjections
+namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
     public static class FishingRodInjections
     {
@@ -66,7 +66,7 @@ namespace StardewArchipelago.Locations.CodeInjections
                 if (Game1.activeClickableMenu == null)
                     __instance.CurrentCommand++;
                 __instance.CurrentCommand++;
-                
+
                 return false; // don't run original logic
 
             }
@@ -201,7 +201,7 @@ namespace StardewArchipelago.Locations.CodeInjections
         private static void AddFishingTools(Dictionary<ISalable, int[]> fishShopStock)
         {
             var modData = Game1.getFarm().modData;
-            var receivedFishingRodLevel = _archipelago.GetReceivedItemCount(UnlockManager.PROGRESSIVE_FISHING_ROD_AP_NAME);
+            var receivedFishingRodLevel = _archipelago.GetReceivedItemCount(VanillaUnlockManager.PROGRESSIVE_FISHING_ROD_AP_NAME);
             if (receivedFishingRodLevel >= 1)
             {
                 var trainingRod = new FishingRod(1);

@@ -1,12 +1,13 @@
 ﻿using StardewArchipelago.Archipelago;
 using StardewArchipelago.Locations.Festival;
-using StardewArchipelago.Locations.GingerIsland.Boat;
 using StardewModdingAPI;
 using StardewArchipelago.Stardew;
+using StardewArchipelago.Locations.CodeInjections.Vanilla;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
 
-namespace StardewArchipelago.Locations.CodeInjections
+namespace StardewArchipelago.Locations.CodeInjections.Initializers
 {
-    public static class CodeInjectionInitializer
+    public static class VanillaCodeInjectionInitializer
     {
         public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, BundleReader bundleReader, LocationChecker locationChecker, StardewItemManager itemManager)
         {
