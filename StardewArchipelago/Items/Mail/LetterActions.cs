@@ -200,6 +200,31 @@ namespace StardewArchipelago.Items.Mail
                 }
             }
 
+            foreach (var building in Game1.getFarm().buildings)
+            {
+                foreach (var (tile, gameObject) in building.indoors.Value.Objects.Pairs)
+                {
+                    if (gameObject is not Chest chest)
+                    {
+                        continue;
+                    }
+
+                    foreach (var chestItem in chest.items)
+                    {
+                        if (chestItem is not Tool toolToUpgrade || !toolToUpgrade.Name.Replace(" ", "_").Contains(toolName))
+                        {
+                            continue;
+                        }
+
+                        if (toolToUpgrade.UpgradeLevel < 4)
+                        {
+                            toolToUpgrade.UpgradeLevel++;
+                        }
+                        return toolToUpgrade;
+                    }
+                }
+            }
+
             return null;
         }
 
