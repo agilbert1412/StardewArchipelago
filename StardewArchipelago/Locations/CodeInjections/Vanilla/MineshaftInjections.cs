@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Items;
+using StardewArchipelago.Items.Unlocks;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
@@ -13,7 +13,7 @@ using xTile.Dimensions;
 using xTile.Tiles;
 using Rectangle = xTile.Dimensions.Rectangle;
 
-namespace StardewArchipelago.Locations.CodeInjections
+namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
     public static class MineshaftInjections
     {
@@ -149,7 +149,7 @@ namespace StardewArchipelago.Locations.CodeInjections
         {
             try
             {
-                Tile tile = __instance.map.GetLayer("Buildings").PickTile(new Location(tileLocation.X * 64, tileLocation.Y * 64), viewport.Size);
+                var tile = __instance.map.GetLayer("Buildings").PickTile(new Location(tileLocation.X * 64, tileLocation.Y * 64), viewport.Size);
 
                 if (tile == null || !who.IsLocalPlayer || tile.TileIndex != 112 || __instance.mineLevel > 120)
                 {
@@ -171,7 +171,7 @@ namespace StardewArchipelago.Locations.CodeInjections
         private static void CreateElevatorMenuIfUnlocked()
         {
             var numberOfMineElevatorReceived =
-                _archipelago.GetReceivedItemCount(UnlockManager.PROGRESSIVE_MINE_ELEVATOR_AP_NAME);
+                _archipelago.GetReceivedItemCount(VanillaUnlockManager.PROGRESSIVE_MINE_ELEVATOR_AP_NAME);
             var mineLevelUnlocked = numberOfMineElevatorReceived * 5;
             mineLevelUnlocked = Math.Min(120, Math.Max(0, mineLevelUnlocked));
 

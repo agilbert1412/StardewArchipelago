@@ -11,7 +11,7 @@ using StardewValley.Characters;
 using StardewValley.Locations;
 using StardewValley.Menus;
 
-namespace StardewArchipelago.Locations.CodeInjections
+namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
 {
     public static class FriendshipInjections
     {
@@ -20,20 +20,16 @@ namespace StardewArchipelago.Locations.CodeInjections
         private const string HEARTS_PATTERN = "{0}: 1 <3";
         private const string FRIENDSANITY_PATTERN = "Friendsanity: {0} {1} <3";
 
-        private const string PET_NAME = "Pet";
-        private static readonly string[] _bachelors = new[]
+        private static string[] _notImmediatelyAccessible = new[]
         {
-            "Harvey", "Elliott", "Sam", "Alex", "Shane", "Sebastian",
-            "Emily", "Haley", "Leah", "Abigail", "Penny", "Maru"
+            "Leo", "Krobus", "Dwarf", "Sandy", "Kent"
         };
-
-        private static readonly string[]
-            _notImmediatelyAccessible = new[] { "Leo", "Krobus", "Dwarf", "Sandy", "Kent" };
 
         private static IMonitor _monitor;
         private static IModHelper _helper;
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
+        private static Friends _friends;
         private static Dictionary<string, double> _friendshipPoints = new();
         private static Texture2D _apLogoColor;
         private static Texture2D _apLogoBlue;
@@ -48,6 +44,7 @@ namespace StardewArchipelago.Locations.CodeInjections
             _helper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
+            _friends = new Friends();
             _apLogoColor = ArchipelagoTextures.GetColoredLogo(modHelper, 24, "color");
             _apLogoBlue = ArchipelagoTextures.GetColoredLogo(modHelper, 24, "blue");
             _apLogoWhite = ArchipelagoTextures.GetColoredLogo(modHelper, 24, "white");
@@ -58,16 +55,6 @@ namespace StardewArchipelago.Locations.CodeInjections
         public static Dictionary<string, int> GetArchipelagoFriendshipPoints()
         {
             return _friendshipPoints.ToDictionary(x => x.Key, x => (int)Math.Round(x.Value));
-        }
-
-        public static string GetArchipelagoFriendshipPointsForPrinting(string characterName)
-        {
-            var points = GetFriendshipPoints(characterName);
-            if (points <= 0)
-            {
-                return $"You have never met someone named {characterName}";
-            }
-            return $"{characterName}: {points} ({GetHearts(points)} <)";
         }
 
         public static void SetArchipelagoFriendshipPoints(Dictionary<string, int> values)
@@ -90,22 +77,22 @@ namespace StardewArchipelago.Locations.CodeInjections
         {
             try
             {
-                var name = GetNpcName(__instance);
-                if (name == null)
+                var friend = _friends.GetFriend(__instance);
+                if (friend == null)
                 {
                     return true; // run original logic
                 }
 
                 var archipelagoHearts =
-                    _archipelago.GetReceivedItemCount(string.Format(HEARTS_PATTERN, name));
-                var maxShuffled = ShuffledUpTo(name);
+                    _archipelago.GetReceivedItemCount(string.Format(HEARTS_PATTERN, friend.ArchipelagoName));
+                var maxShuffled = ShuffledUpTo(friend);
 
                 var friendshipPoints = archipelagoHearts * POINTS_PER_HEART;
-                friendshipPoints = GetBoundedToCurrentRelationState(friendshipPoints, name);
+                friendshipPoints = GetBoundedToCurrentRelationState(friendshipPoints, friend.StardewName);
                 if (archipelagoHearts >= maxShuffled)
                 {
-                    var earnedPoints = (int)GetFriendshipPoints(name);
-                    var earnedPointsAboveMaxShuffled = Math.Max(0, earnedPoints - (maxShuffled * POINTS_PER_HEART));
+                    var earnedPoints = (int)GetFriendshipPoints(friend.StardewName);
+                    var earnedPointsAboveMaxShuffled = Math.Max(0, earnedPoints - maxShuffled * POINTS_PER_HEART);
                     friendshipPoints += earnedPointsAboveMaxShuffled;
                 }
 
@@ -133,7 +120,7 @@ namespace StardewArchipelago.Locations.CodeInjections
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(DrawNPCSlot_DrawEarnedHearts_Postfix)}:\n{ex}", LogLevel.Error);
+                _monitor.Log($"Failed in {nameof(SocialPageCtor_CheckHints_Postfix)}:\n{ex}", LogLevel.Error);
                 return;
             }
         }
@@ -144,11 +131,12 @@ namespace StardewArchipelago.Locations.CodeInjections
             try
             {
                 var name = __instance.names[i] as string;
+                var friend = _friends.GetFriend(name);
                 //var hints = _archipelago.GetHints().Where(x => !x.Found && _archipelago.GetPlayerName(x.FindingPlayer) == _archipelago.SlotData.SlotName);
                 //var hintedLocationNames = hints.Select(hint => _archipelago.GetLocationName(hint.LocationId)).Where(hint => hint.StartsWith($"Friendsanity: {name}"));
-                var apPoints = (int)GetFriendshipPoints(name);
-                var maxShuffled = ShuffledUpTo(name);
-                var maxHeartForCurrentRelation = GetMaximumHeartsWithRelationState(name);
+                var apPoints = (int)GetFriendshipPoints(friend.StardewName);
+                var maxShuffled = ShuffledUpTo(friend);
+                var maxHeartForCurrentRelation = GetMaximumHeartsWithRelationState(friend.StardewName);
                 var apHearts = apPoints / POINTS_PER_HEART;
                 var spritesField = _helper.Reflection.GetField<List<ClickableTextureComponent>>(__instance, "sprites");
                 var sprites = spritesField.GetValue();
@@ -170,7 +158,7 @@ namespace StardewArchipelago.Locations.CodeInjections
 
                     if (index >= apHearts)
                     {
-                        if (_hintedFriendshipLocations.Any(x => x.Contains($"{name} {index + 1} ")))
+                        if (_hintedFriendshipLocations.Any(x => x.Contains($"{friend.ArchipelagoName} {index + 1} ")))
                         {
                             texture = _apLogoBlue;
                         }
@@ -226,21 +214,23 @@ namespace StardewArchipelago.Locations.CodeInjections
                 }
 
                 var wasPet = __instance.grantedFriendshipForPet.Value;
-                var farm = (__instance.currentLocation as Farm);
+                var farm = __instance.currentLocation as Farm;
                 var wasWatered = farm?.petBowlWatered?.Value ?? false;
                 var pointIncrease = (wasPet ? 12 : 0) + (wasWatered ? 6 : 0);
                 var multipliedPointIncrease = GetMultipliedFriendship(pointIncrease);
 
                 var petName = Game1.player.getPetName();
-                var newApPoints = GetFriendshipPoints(petName) + multipliedPointIncrease;
-                SetFriendshipPoints(petName, Math.Min(1000, newApPoints));
+                _friends.AddPet(petName);
+                var friend = _friends.GetFriend(petName);
+                var newApPoints = GetFriendshipPoints(friend.StardewName) + multipliedPointIncrease;
+                SetFriendshipPoints(friend.StardewName, Math.Min(1000, newApPoints));
                 for (var i = 1; i < newApPoints / POINTS_PER_PET_HEART; i++)
                 {
-                    _locationChecker.AddCheckedLocation(string.Format(FRIENDSANITY_PATTERN, PET_NAME, i));
+                    _locationChecker.AddCheckedLocation(string.Format(FRIENDSANITY_PATTERN, friend.ArchipelagoName, i));
                 }
                 farm?.petBowlWatered?.Set(false);
 
-                var archipelagoHearts = _archipelago.GetReceivedItemCount(string.Format(HEARTS_PATTERN, PET_NAME));
+                var archipelagoHearts = _archipelago.GetReceivedItemCount(string.Format(HEARTS_PATTERN, friend.ArchipelagoName));
                 __instance.friendshipTowardFarmer.Set(Math.Min(1000, archipelagoHearts * POINTS_PER_PET_HEART));
                 return true; // run original logic
             }
@@ -255,14 +245,17 @@ namespace StardewArchipelago.Locations.CodeInjections
         {
             try
             {
+                //  Checks if actual name is a value in the dictionary and updates if necessary.
+                var name = n.Name;
+                var friend = _friends.GetFriend(name);
                 var isValidTarget = n != null && (n is Child || n.isVillager());
-                var canCommunicateWithNpc = !n.Name.Equals("Dwarf") || __instance.canUnderstandDwarves;
-                if (!isValidTarget || (amount > 0 && !canCommunicateWithNpc))
+                var canCommunicateWithNpc = !friend.RequiresDwarfLanguage || __instance.canUnderstandDwarves;
+                if (!isValidTarget || amount > 0 && !canCommunicateWithNpc)
                 {
                     return false; // don't run original logic
                 }
 
-                if (__instance.friendshipData.ContainsKey(n.Name))
+                if (__instance.friendshipData.ContainsKey(friend.StardewName))
                 {
                     if (n.isDivorcedFrom(__instance) && amount > 0)
                     {
@@ -271,22 +264,22 @@ namespace StardewArchipelago.Locations.CodeInjections
 
                     var pointDifference = amount;
                     var multipliedPointDifference = GetMultipliedFriendship(pointDifference);
-                    var apPoints = GetFriendshipPoints(n.Name);
+                    var apPoints = GetFriendshipPoints(friend.StardewName);
                     var newApPoints = apPoints + multipliedPointDifference;
-                    newApPoints = GetBoundedToCurrentRelationState(newApPoints, n.Name);
-                    SetFriendshipPoints(n.Name, newApPoints);
+                    newApPoints = GetBoundedToCurrentRelationState(newApPoints, friend.StardewName);
+                    SetFriendshipPoints(friend.StardewName, newApPoints);
                     var earnedHearts = (int)newApPoints / POINTS_PER_HEART;
                     for (var i = 1; i <= earnedHearts; i++)
                     {
-                        _locationChecker.AddCheckedLocation(string.Format(FRIENDSANITY_PATTERN, n.Name, i));
+                        _locationChecker.AddCheckedLocation(string.Format(FRIENDSANITY_PATTERN, friend.ArchipelagoName, i));
                     }
 
-                    if (n.datable.Value && __instance.friendshipData[n.Name].Points >= 2000 && !__instance.hasOrWillReceiveMail("Bouquet"))
+                    if (n.datable.Value && __instance.friendshipData[friend.StardewName].Points >= 2000 && !__instance.hasOrWillReceiveMail("Bouquet"))
                     {
                         Game1.addMailForTomorrow("Bouquet");
                     }
 
-                    if (n.datable.Value && __instance.friendshipData[n.Name].Points >= 2500 && !__instance.hasOrWillReceiveMail("SeaAmulet"))
+                    if (n.datable.Value && __instance.friendshipData[friend.StardewName].Points >= 2500 && !__instance.hasOrWillReceiveMail("SeaAmulet"))
                     {
                         Game1.addMailForTomorrow("SeaAmulet");
                     }
@@ -307,55 +300,40 @@ namespace StardewArchipelago.Locations.CodeInjections
             }
         }
 
-        private static string GetNpcName(Friendship __instance)
+        private static int ShuffledUpTo(ArchipelagoFriend friend)
         {
-            var farmer = Game1.player;
-            foreach (var name in farmer.friendshipData.Keys)
-            {
-                if (ReferenceEquals(farmer.friendshipData[name], __instance))
-                {
-                    return name;
-                }
-            }
-
-            return null;
-        }
-
-        private static int ShuffledUpTo(string name)
-        {
-            if (_archipelago.SlotData.ExcludeGingerIsland && name == "Leo")
+            if (_archipelago.SlotData.ExcludeGingerIsland && friend.RequiresGingerIsland)
             {
                 return 0;
             }
-
-            var isBachelor = _bachelors.Contains(name);
+            
             switch (_archipelago.SlotData.Friendsanity)
             {
                 case Friendsanity.None:
                     return 0;
                 case Friendsanity.Bachelors:
-                    return isBachelor ? 8 : 0;
+                    return friend.Bachelor ? 8 : 0;
                 case Friendsanity.StartingNpcs:
-                    if (name == PET_NAME)
+                    if (friend.Pet)
                     {
                         return 5;
                     }
 
-                    return _notImmediatelyAccessible.Contains(name) ? 0 : (isBachelor ? 8 : 10);
+                    return _notImmediatelyAccessible.Contains(friend.StardewName) ? 0 : friend.Bachelor ? 8 : 10;
                 case Friendsanity.All:
-                    if (name == PET_NAME)
+                    if (friend.Pet)
                     {
                         return 5;
                     }
 
-                    return isBachelor ? 8 : 10;
+                    return friend.Bachelor ? 8 : 10;
                 case Friendsanity.AllWithMarriage:
-                    if (name == PET_NAME)
+                    if (friend.Pet)
                     {
                         return 5;
                     }
 
-                    return isBachelor ? 14 : 10;
+                    return friend.Bachelor ? 14 : 10;
             }
 
             return 0;

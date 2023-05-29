@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using HarmonyLib;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Locations.CodeInjections;
+using StardewArchipelago.Locations.CodeInjections.Initializers;
+using StardewArchipelago.Locations.CodeInjections.Vanilla;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
 using StardewArchipelago.Locations.Festival;
 using StardewArchipelago.Locations.GingerIsland;
 using StardewArchipelago.Locations.GingerIsland.Boat;
@@ -18,19 +20,18 @@ using StardewValley.Quests;
 using StardewValley.TerrainFeatures;
 using Object = StardewValley.Object;
 
-namespace StardewArchipelago.Locations
+namespace StardewArchipelago.Locations.Patcher
 {
-    public class LocationPatcher
+    public class VanillaLocationPatcher : ILocationPatcher
     {
         private readonly ArchipelagoClient _archipelago;
         private readonly Harmony _harmony;
         private readonly GingerIslandPatcher _gingerIslandPatcher;
 
-        public LocationPatcher(IMonitor monitor, IModHelper modHelper, Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker, BundleReader bundleReader, StardewItemManager itemManager)
+        public VanillaLocationPatcher(IMonitor monitor, IModHelper modHelper, Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             _archipelago = archipelago;
             _harmony = harmony;
-            CodeInjectionInitializer.Initialize(monitor, modHelper, _archipelago, bundleReader, locationChecker, itemManager);
             _gingerIslandPatcher = new GingerIslandPatcher(monitor, modHelper, harmony, archipelago, locationChecker);
         }
 
@@ -476,7 +477,7 @@ namespace StardewArchipelago.Locations
             );
 
             _harmony.Patch(
-                original: AccessTools.Constructor(typeof(SocialPage), new []{ typeof(int) , typeof(int) , typeof(int) , typeof(int) }),
+                original: AccessTools.Constructor(typeof(SocialPage), new[] { typeof(int), typeof(int), typeof(int), typeof(int) }),
                 postfix: new HarmonyMethod(typeof(FriendshipInjections), nameof(FriendshipInjections.SocialPageCtor_CheckHints_Postfix))
             );
 
@@ -588,5 +589,6 @@ namespace StardewArchipelago.Locations
                 prefix: new HarmonyMethod(typeof(WinterStarInjections), nameof(WinterStarInjections.ChooseSecretSantaGift_SuccessfulGift_Prefix))
             );
         }
+
     }
 }

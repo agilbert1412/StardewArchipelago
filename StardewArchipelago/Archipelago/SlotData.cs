@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 using StardewArchipelago.GameModifications.EntranceRandomizer;
-using StardewArchipelago.Locations.CodeInjections;
+using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewModdingAPI;
 using StardewValley;
 
@@ -24,7 +24,7 @@ namespace StardewArchipelago.Archipelago
         private const string BUILDING_PROGRESSION_KEY = "building_progression";
         private const string FESTIVAL_OBJECTIVES_KEY = "festival_locations";
         private const string ARCADE_MACHINES_KEY = "arcade_machine_locations";
-        private const string SPECIAL_ORDERS_KEY = "special_orders_key";
+        private const string SPECIAL_ORDERS_KEY = "special_orders";
         private const string HELP_WANTED_LOCATIONS_KEY = "help_wanted_locations";
         private const string FISHSANITY_KEY = "fishsanity";
         private const string MUSEUMSANITY_KEY = "museumsanity";
@@ -48,7 +48,8 @@ namespace StardewArchipelago.Archipelago
         private const string RANDOMIZE_NPC_APPEARANCES_KEY = "randomize_appearances";
         private const string RANDOMIZE_NPC_APPEARANCES_DAILY_KEY = "randomize_appearances_daily";
         private const string MULTIWORLD_VERSION_KEY = "client_version";
-
+        private const string MOD_LIST_KEY = "mod_versions";
+        
         private Dictionary<string, object> _slotDataFields;
         private IMonitor _console;
 
@@ -90,6 +91,7 @@ namespace StardewArchipelago.Archipelago
         public Dictionary<string, string> ModifiedEntrances { get; set; }
         public AppearanceRandomization AppearanceRandomization { get; set; }
         public bool AppearanceRandomizationDaily { get; set; }
+        public ModsManager Mods { get; set; }
 
         public SlotData(string slotName, Dictionary<string, object> slotDataFields, IMonitor console)
         {
@@ -136,6 +138,9 @@ namespace StardewArchipelago.Archipelago
             ModifiedEntrances = JsonConvert.DeserializeObject<Dictionary<string, string>>(newEntrancesStringData);
             AppearanceRandomization = GetSlotSetting(RANDOMIZE_NPC_APPEARANCES_KEY, AppearanceRandomization.Disabled);
             AppearanceRandomizationDaily = GetSlotSetting(RANDOMIZE_NPC_APPEARANCES_DAILY_KEY, false);
+            var modsString = GetSlotSetting(MOD_LIST_KEY, "");
+            var modsAndVersions = JsonConvert.DeserializeObject<Dictionary<string, string>>(modsString);
+            Mods = new ModsManager(modsAndVersions);
         }
 
         private T GetSlotSetting<T>(string key, T defaultValue) where T : struct, Enum, IConvertible

@@ -3,6 +3,7 @@ using System.Linq;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants;
 using StardewArchipelago.GameModifications;
 using StardewArchipelago.GameModifications.CodeInjections;
 using StardewArchipelago.GameModifications.EntranceRandomizer;
@@ -11,13 +12,16 @@ using StardewArchipelago.Goals;
 using StardewArchipelago.Items;
 using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Locations;
-using StardewArchipelago.Locations.CodeInjections;
+using StardewArchipelago.Locations.CodeInjections.Vanilla;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
+using StardewArchipelago.Locations.Patcher;
 using StardewArchipelago.Serialization;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Locations;
+using StardewValley.Menus;
 
 namespace StardewArchipelago
 {
@@ -179,10 +183,7 @@ namespace StardewArchipelago
             _stardewItemManager = new StardewItemManager();
             _mail = new Mailman(State.LettersGenerated);
             _bundleReader = new BundleReader();
-            _itemManager = new ItemManager(_helper, _archipelago, _stardewItemManager, _mail, State.ItemsReceived);
-            _mailPatcher = new MailPatcher(Monitor, _harmony, new LetterActions(_helper, _mail, _itemManager.TrapManager));
             _locationChecker = new LocationChecker(Monitor, _archipelago, State.LocationsChecked);
-            _locationsPatcher = new LocationPatcher(Monitor, _helper, _harmony, _archipelago, _locationChecker, _bundleReader, _stardewItemManager);
             _itemPatcher = new ItemPatcher(Monitor, _helper, _harmony, _archipelago);
             _goalManager = new GoalManager(Monitor, _helper, _harmony, _archipelago, _locationChecker);
             _entranceManager = new EntranceManager(Monitor);
@@ -216,6 +217,9 @@ namespace StardewArchipelago
                 }
             }
 
+            _itemManager = new ItemManager(_helper, _archipelago, _stardewItemManager, _mail, State.ItemsReceived);
+            _mailPatcher = new MailPatcher(Monitor, _harmony, new LetterActions(_helper, _mail, _archipelago, _itemManager.TrapManager));
+            _locationsPatcher = new LocationPatcher(Monitor, _helper, _harmony, _archipelago, _locationChecker, _bundleReader, _stardewItemManager);
             _chatForwarder.ListenToChatMessages();
             _giftHandler.Initialize(_stardewItemManager, _mail, _archipelago);
             _logicPatcher.PatchAllGameLogic();

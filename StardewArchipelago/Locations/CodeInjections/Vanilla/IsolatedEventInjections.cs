@@ -8,7 +8,7 @@ using StardewValley.Locations;
 using StardewValley.Tools;
 using xTile.Dimensions;
 
-namespace StardewArchipelago.Locations.CodeInjections
+namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
     public static class IsolatedEventInjections
     {
@@ -157,7 +157,7 @@ namespace StardewArchipelago.Locations.CodeInjections
             Game1.player.holdUpItemThenMessage(new MeleeWeapon(4));
             Game1.player.reduceActiveItemByOne();
             _locationChecker.AddCheckedLocation(GALAXY_SWORD_SHRINE_AP_LOCATION);
-            
+
             // Game1.player.mailReceived.Contains("galaxySword")
             // GameLocation.getGalaxySword
 
@@ -202,7 +202,7 @@ namespace StardewArchipelago.Locations.CodeInjections
                 Game1.pauseTime = 0.0f;
 
                 _locationChecker.AddCheckedLocation(RUSTY_SWORD_AP_LOCATION);
-                
+
                 Game1.player.Position = new Vector2(-9999f, -99999f);
                 __instance.endBehaviors(new string[1] { "end" }, Game1.currentLocation);
                 return false; // don't run original logic
@@ -222,7 +222,7 @@ namespace StardewArchipelago.Locations.CodeInjections
                 var festivalWinnersField = _helper.Reflection.GetField<HashSet<long>>(__instance, "festivalWinners");
                 if (__instance.id != 100162 ||
                     festivalWinnersField.GetValue().Contains(Game1.player.UniqueMultiplayerID) || split.Length <= 1 ||
-                    split[1].ToLower() != "sword") 
+                    split[1].ToLower() != "sword")
                 {
                     return true; // run original logic
                 }

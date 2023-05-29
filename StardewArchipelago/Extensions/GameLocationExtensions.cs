@@ -19,6 +19,7 @@ namespace StardewArchipelago.Extensions
             {new WarpRequest(Game1.getLocationRequest("IslandWest"), 20, 23, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("QiNutRoom"), 7, 8, FacingDirection.Up)},
             {new WarpRequest(Game1.getLocationRequest("WizardHouse"), 4, 5, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("WizardHouseBasement"), 4, 4, FacingDirection.Down)},
             {new WarpRequest(Game1.getLocationRequest("IslandWest"), 77, 40, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("IslandFarmhouse"), 14, 17, FacingDirection.Down)},
+            {new WarpRequest(Game1.getLocationRequest("DeepWoods"), 20, 6, FacingDirection.Up), new WarpRequest(Game1.getLocationRequest("DeepWoodsMaxHouse"), 19, 24, FacingDirection.Up)}
         };
 
         public static List<Point> GetAllWarpPointsTo(this GameLocation origin, string destinationName)
@@ -257,10 +258,15 @@ namespace StardewArchipelago.Extensions
                     return true;
                 }
 
-                if (strArray[3].Equals("Trailer") && Game1.MasterPlayer.mailReceived.Contains("pamHouseUpgrade"))
+                if (strArray.Length > 3 && strArray[3].Equals("Trailer") && Game1.MasterPlayer.mailReceived.Contains("pamHouseUpgrade"))
                 {
                     warpPointTarget = new Point(13, 24);
                     return true;
+                }
+
+                if (strArray.Length < 3)
+                {
+                    continue;
                 }
 
                 warpPointTarget = new Point(Convert.ToInt32(strArray[1]), Convert.ToInt32(strArray[2]));

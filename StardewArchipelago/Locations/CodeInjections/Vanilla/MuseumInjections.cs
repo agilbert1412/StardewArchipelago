@@ -8,7 +8,7 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 
-namespace StardewArchipelago.Locations.CodeInjections
+namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
     public static class MuseumInjections
     {
@@ -36,7 +36,7 @@ namespace StardewArchipelago.Locations.CodeInjections
             _locationChecker = locationChecker;
             _itemManager = itemManager;
         }
-        
+
         public static bool GetRewardsForPlayer_Museumsanity_Prefix(LibraryMuseum __instance, Farmer who,
             ref List<Item> __result)
         {

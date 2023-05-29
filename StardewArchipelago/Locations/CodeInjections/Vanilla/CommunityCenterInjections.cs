@@ -9,7 +9,7 @@ using StardewValley.Locations;
 using StardewValley.Menus;
 using xTile.Dimensions;
 
-namespace StardewArchipelago.Locations.CodeInjections
+namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
     public static class CommunityCenterInjections
     {
@@ -155,7 +155,7 @@ namespace StardewArchipelago.Locations.CodeInjections
                 return true; // run original logic
             }
         }
-        
+
         public static bool CheckAction_BulletinBoardNoRequirements_Prefix(CommunityCenter __instance,
             Location tileLocation, Rectangle viewport, Farmer who, ref bool __result)
         {

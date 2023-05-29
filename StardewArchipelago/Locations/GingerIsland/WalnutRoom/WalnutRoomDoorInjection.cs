@@ -1,6 +1,6 @@
 ﻿using System;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Items;
+using StardewArchipelago.Items.Unlocks;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
@@ -35,7 +35,7 @@ namespace StardewArchipelago.Locations.GingerIsland.WalnutRoom
                     return true; // run original logic
                 }
                 
-                if (_archipelago.HasReceivedItem(UnlockManager.QI_WALNUT_ROOM))
+                if (_archipelago.HasReceivedItem(VanillaUnlockManager.QI_WALNUT_ROOM))
                 {
                     Game1.playSound("doorClose");
                     Game1.warpFarmer("QiNutRoom", 7, 8, 0);

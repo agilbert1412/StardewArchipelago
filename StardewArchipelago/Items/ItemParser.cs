@@ -2,6 +2,7 @@
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Items.Traps;
+using StardewArchipelago.Items.Unlocks;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 
@@ -20,7 +21,7 @@ namespace StardewArchipelago.Items
         public ItemParser(IModHelper helper, ArchipelagoClient archipelago, StardewItemManager itemManager)
         {
             _itemManager = itemManager;
-            _unlockManager = new UnlockManager();
+            _unlockManager = new UnlockManager(archipelago);
             _trapManager = new TrapManager(helper, archipelago);
         }
 

@@ -3,7 +3,7 @@ using StardewModdingAPI;
 using StardewValley;
 using xTile.Dimensions;
 
-namespace StardewArchipelago.Locations.CodeInjections
+namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
     public static class ScytheInjections
     {

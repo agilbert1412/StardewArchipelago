@@ -11,7 +11,7 @@ using StardewValley.Objects;
 using StardewValley.Tools;
 using Object = StardewValley.Object;
 
-namespace StardewArchipelago.Locations.CodeInjections
+namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
     public static class AdventurerGuildInjections
     {
@@ -84,7 +84,7 @@ namespace StardewArchipelago.Locations.CodeInjections
         {
             try
             {
-                Dictionary<ISalable, int[]> adventureShopStock = new Dictionary<ISalable, int[]>();
+                var adventureShopStock = new Dictionary<ISalable, int[]>();
                 AddWeapons(adventureShopStock);
                 AddShoes(adventureShopStock);
                 AddRings(adventureShopStock);
@@ -225,7 +225,7 @@ namespace StardewArchipelago.Locations.CodeInjections
             }
         }
 
-        private static readonly KeyValuePair<ISalable, int[]> WoodenBlade = new(new MeleeWeapon(12), new[]{ 250, int.MaxValue});
+        private static readonly KeyValuePair<ISalable, int[]> WoodenBlade = new(new MeleeWeapon(12), new[] { 250, int.MaxValue });
         private static readonly KeyValuePair<ISalable, int[]> IronDirk = new(new MeleeWeapon(17), new[] { 500, int.MaxValue });
         private static readonly KeyValuePair<ISalable, int[]> WindSpire = new(new MeleeWeapon(22), new[] { 500, int.MaxValue });
         private static readonly KeyValuePair<ISalable, int[]> Femur = new(new MeleeWeapon(31), new[] { 500, int.MaxValue });

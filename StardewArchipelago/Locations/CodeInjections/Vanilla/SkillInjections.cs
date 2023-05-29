@@ -3,14 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants;
 using StardewModdingAPI;
 using StardewValley;
 
-namespace StardewArchipelago.Locations.CodeInjections
+namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
+
     public static class SkillInjections
     {
         private const string _skillLocationName = "Level {0} {1}";
+
+        private static readonly Dictionary<Skill, string> _skillToArchipelagoName = new()
+        {
+            { Skill.Excavation, ArchipelagoSkillNames.ARCHAEOLOGY },
+        };
+
+        private static readonly Dictionary<Skill, string> _skillToModName = new()
+        {
+            { Skill.Magic, ModNames.MAGIC }, { Skill.Binning, ModNames.BINNING }, { Skill.Cooking, ModNames.COOKING },
+            { Skill.Excavation, ModNames.ARCHAEOLOGY }, { Skill.Socializing, ModNames.SOCIALIZING }
+        };
 
         private static IMonitor _monitor;
         private static IModHelper _helper;
@@ -18,7 +31,8 @@ namespace StardewArchipelago.Locations.CodeInjections
         private static LocationChecker _locationChecker;
         private static Dictionary<Skill, double> _archipelagoExperience = new();
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago,
+            LocationChecker locationChecker)
         {
             _monitor = monitor;
             _helper = modHelper;
@@ -35,18 +49,24 @@ namespace StardewArchipelago.Locations.CodeInjections
         public static List<string> GetArchipelagoExperienceForPrinting()
         {
             var pattern = "{0}: Level {1} ({2}/{3} to next level)";
-            return _archipelagoExperience.Where(x => x.Key != Skill.Luck).Select(x =>
+            var printedSkills = new List<string>();
+
+            foreach (var (skill, experience) in _archipelagoExperience)
             {
-                var skillName = x.Key.ToString();
-                var currentExperience = (int)Math.Round(x.Value);
+                var skillName = skill.ToString();
+                var currentExperience = (int)Math.Round(experience);
                 var currentLevel = GetLevel(currentExperience);
                 if (currentLevel >= 10)
                 {
-                    return $"{skillName}: Max!";
+                    printedSkills.Add($"{skillName}: Max!");
+                    continue;
                 }
+
                 var neededExperience = GetExperienceNeeded(currentLevel + 1);
-                return string.Format(pattern, skillName, currentLevel, currentExperience, neededExperience);
-            }).ToList();
+                printedSkills.Add(string.Format(pattern, skillName, currentLevel, currentExperience, neededExperience));
+            }
+
+            return printedSkills;
         }
 
         public static void SetArchipelagoExperience(Dictionary<int, int> values)
@@ -64,12 +84,14 @@ namespace StardewArchipelago.Locations.CodeInjections
         {
             try
             {
-                if (which < 0 || which > 4 || howMuch <= 0 || !__instance.IsLocalPlayer)
+                var skill = (Skill)which;
+                var enabledSkills = GetEnabledSkills();
+
+                if (!enabledSkills.Contains(skill) || howMuch <= 0 || !__instance.IsLocalPlayer)
                 {
                     return true; // run original logic
                 }
 
-                var skill = (Skill)which;
                 var experienceAmount = GetMultipliedExperience(howMuch);
                 var oldExperienceLevel = _archipelagoExperience[skill];
                 var newExperienceLevel = _archipelagoExperience[skill] + experienceAmount;
@@ -122,22 +144,15 @@ namespace StardewArchipelago.Locations.CodeInjections
         {
             try
             {
-                if (which < 0 || which > 4 || howMuch <= 0 || !__instance.IsLocalPlayer)
+                var skill = (Skill)which;
+                var enabledSkills = GetEnabledSkills();
+
+                if (!enabledSkills.Contains(skill) || howMuch <= 0 || !__instance.IsLocalPlayer)
                 {
                     return true; // run original logic
                 }
 
-                var skill = (Skill)which;
-                var experienceAmount = GetMultipliedExperience(howMuch);
-                var oldExperienceLevel = _archipelagoExperience[skill];
-                var newExperienceLevel = _archipelagoExperience[skill] + experienceAmount;
-                _archipelagoExperience[skill] = newExperienceLevel;
-                var newLevel = GetLevel(_archipelagoExperience[skill]);
-                for (var i = 1; i <= newLevel; i++)
-                {
-                    var checkedLocation = string.Format(_skillLocationName, i, skill.ToString());
-                    _locationChecker.AddCheckedLocation(checkedLocation);
-                }
+                AddApExperienceAndCheckLocations(skill, howMuch);
 
                 return false; // don't run original logic
 
@@ -146,6 +161,47 @@ namespace StardewArchipelago.Locations.CodeInjections
             {
                 _monitor.Log($"Failed in {nameof(GainExperience_ArchipelagoExperience_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
+            }
+        }
+        //public class Skills
+        //public static void AddExperience( Farmer farmer, string skillName, int amt )
+        public static bool AddExperience_ArchipelagoModExperience_Prefix(Farmer farmer, string skillName, int amt)
+        {
+            try
+            {
+                var skillActualName = skillName.Split('.').Last().Replace("Skill", "");
+                var skill = Enum.Parse<Skill>(skillActualName);
+
+                if (!_archipelago.SlotData.Mods.HasMod(_skillToModName[skill]))
+                {
+                    return true; // run original logic
+                }
+
+                AddApExperienceAndCheckLocations(skill, amt);
+
+                return false; // don't run original logic
+
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(AddExperience_ArchipelagoModExperience_Prefix)}:\n{ex}",
+                    LogLevel.Error);
+                return true; // run original logic
+            }
+        }
+
+        private static void AddApExperienceAndCheckLocations(Skill skill, int amount)
+        {
+            var experienceAmount = GetMultipliedExperience(amount);
+            var oldExperienceLevel = _archipelagoExperience[skill];
+            var newExperienceLevel = _archipelagoExperience[skill] + experienceAmount;
+            _archipelagoExperience[skill] = newExperienceLevel;
+            var newLevel = GetLevel(_archipelagoExperience[skill]);
+            var apSkillName = _skillToArchipelagoName.ContainsKey(skill) ? _skillToArchipelagoName[skill] : skill.ToString();
+            for (var i = 1; i <= newLevel; i++)
+            {
+                var checkedLocation = string.Format(_skillLocationName, i, apSkillName);
+                _locationChecker.AddCheckedLocation(checkedLocation);
             }
         }
 
@@ -159,7 +215,7 @@ namespace StardewArchipelago.Locations.CodeInjections
             return GetLevel((int)Math.Floor(experienceAmount));
         }
 
-        private static int GetLevel(int experienceAmount)
+        public static int GetLevel(int experienceAmount)
         {
             return experienceAmount switch
             {
@@ -197,7 +253,7 @@ namespace StardewArchipelago.Locations.CodeInjections
 
         public static void AddMissingSkillsToDictionary()
         {
-            foreach (var skill in Enum.GetValues<Skill>())
+            foreach (var skill in GetEnabledSkills())
             {
                 if (_archipelagoExperience.ContainsKey(skill))
                 {
@@ -211,7 +267,53 @@ namespace StardewArchipelago.Locations.CodeInjections
         public static void ResetSkillExperience()
         {
             _archipelagoExperience = new Dictionary<Skill, double>();
-            AddMissingSkillsToDictionary();
+        }
+
+        private static IEnumerable<Skill> VanillaSkills()
+        {
+            yield return Skill.Farming;
+            yield return Skill.Fishing;
+            yield return Skill.Foraging;
+            yield return Skill.Mining;
+            yield return Skill.Combat;
+        }
+
+        public static List<Skill> GetEnabledSkills()
+        {
+            var skills = new List<Skill>();
+            skills.AddRange(VanillaSkills());
+
+            if (_archipelago.SlotData.Mods.HasMod(ModNames.LUCK))
+            {
+                skills.Add(Skill.Luck);
+            }
+
+            if (_archipelago.SlotData.Mods.HasMod(ModNames.BINNING))
+            {
+                skills.Add(Skill.Binning);
+            }
+
+            if (_archipelago.SlotData.Mods.HasMod(ModNames.MAGIC))
+            {
+                skills.Add(Skill.Magic);
+            }
+
+            if (_archipelago.SlotData.Mods.HasMod(ModNames.ARCHAEOLOGY))
+            {
+                skills.Add(Skill.Excavation);
+            }
+
+            if (_archipelago.SlotData.Mods.HasMod(ModNames.COOKING))
+            {
+                skills.Add(Skill.Cooking);
+            }
+
+            if (_archipelago.SlotData.Mods.HasMod(ModNames.SOCIALIZING))
+            {
+                skills.Add(Skill.Socializing);
+            }
+
+            return skills;
         }
     }
 
@@ -223,5 +325,10 @@ namespace StardewArchipelago.Locations.CodeInjections
         Mining = 3,
         Combat = 4,
         Luck = 5,
+        Magic = 6,
+        Socializing = 7,
+        Excavation = 8,
+        Binning = 9,
+        Cooking = 10
     }
 }
