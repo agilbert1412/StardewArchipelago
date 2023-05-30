@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Netcode;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Locations.CodeInjections;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
@@ -342,6 +343,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             AddSpringSeedsToJojaStock(stock);
             AddSummerSeedsToJojaStock(stock);
             AddFallSeedsToJojaStock(stock);
+            AddSpecialSeedsToJojaStock(stock);
         }
 
         private static void AddSpringSeedsToJojaStock(Dictionary<ISalable, int[]> stock)
@@ -384,6 +386,21 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             AddToJojaStock(stock, AMARANTH_SEEDS);
             AddToJojaStock(stock, GRAPE_STARTER);
             AddToJojaStock(stock, ARTICHOKE_SEEDS);
+        }
+
+        private static void AddSpecialSeedsToJojaStock(Dictionary<ISalable, int[]> stock)
+        {
+            if (Game1.player.friendshipData.ContainsKey("Sandy"))
+            {
+                AddToJojaStock(stock, RHUBARB_SEEDS);
+                AddToJojaStock(stock, STARFRUIT_SEEDS);
+                AddToJojaStock(stock, BEET_SEEDS);
+            }
+
+            if (TravelingMerchantInjections.HasAnyTravelingMerchantDay())
+            {
+                AddToJojaStock(stock, RARE_SEED, basePrice:800, packSize: 10);
+            }
         }
 
         private static void AddGrassStarterToJojaStock(Dictionary<ISalable, int[]> stock)
@@ -448,6 +465,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         private const int AMARANTH_SEEDS = 299;
         private const int GRAPE_STARTER = 301;
         private const int HOPS_STARTER = 302;
+        private const int RARE_SEED = 347;
         private const int VINEGAR = 419;
         private const int RICE = 423;
         private const int FAIRY_SEEDS = 425;
