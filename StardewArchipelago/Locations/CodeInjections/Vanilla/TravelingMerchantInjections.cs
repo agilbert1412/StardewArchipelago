@@ -331,6 +331,20 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             return hasReceivedToday;
         }
 
+        public static bool HasAnyTravelingMerchantDay()
+        {
+            foreach (var day in _days)
+            {
+                var requiredAPItemToSeeMerchantToday = string.Format(AP_MERCHANT_DAYS, day);
+                if (_archipelago.HasReceivedItem(requiredAPItemToSeeMerchantToday, out _))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         private static void AddApStock(ref Dictionary<ISalable, int[]> currentStock, Random random, double priceMultiplier)
         {
             var dayOfWeek = GetDayOfWeekName(Game1.dayOfMonth);
