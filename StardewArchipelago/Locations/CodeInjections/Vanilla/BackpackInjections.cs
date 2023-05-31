@@ -31,7 +31,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             _monitor = monitor;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
-
+            _realMaxItems = UNINITIALIZED;
             UpdateMaxItemsForBackpackDisplay();
         }
 
@@ -198,7 +198,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             try
             {
-                Game1.player.MaxItems = _realMaxItems;
+                if (_realMaxItems != UNINITIALIZED)
+                {
+                    Game1.player.MaxItems = _realMaxItems;
+                }
                 _realMaxItems = UNINITIALIZED;
                 return;
             }

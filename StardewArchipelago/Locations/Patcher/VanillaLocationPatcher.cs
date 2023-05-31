@@ -101,10 +101,11 @@ namespace StardewArchipelago.Locations.Patcher
                 prefix: new HarmonyMethod(typeof(BackpackInjections), nameof(BackpackInjections.AnswerDialogueAction_BackPackPurchase_Prefix))
             );
 
-            // This would need a transpile patch for SeedShop.draw and I don't think it's worth it.
-            // _harmony.Patch(
-            //     original: AccessTools.Method(typeof(SeedShop), nameof(SeedShop.draw)),
-            //     transpiler: new HarmonyMethod(typeof(BackpackInjections), nameof(CodeInjectionInitializer.AnswerDialogueAction_BackPackPurchase_Prefix)));
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(SeedShop), nameof(SeedShop.draw)),
+                prefix: new HarmonyMethod(typeof(BackpackInjections), nameof(BackpackInjections.Draw_SeedShopBackpack_Prefix)),
+                postfix: new HarmonyMethod(typeof(BackpackInjections), nameof(BackpackInjections.Draw_SeedShopBackpack_Postfix))
+            );
         }
 
         private void ReplaceMineshaftChestsWithChecks()
@@ -343,6 +344,10 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Beach), nameof(Beach.checkAction)),
                 prefix: new HarmonyMethod(typeof(IsolatedEventInjections), nameof(IsolatedEventInjections.CheckAction_BeachBridge_Prefix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Beach), nameof(Beach.draw)),
+                postfix: new HarmonyMethod(typeof(IsolatedEventInjections), nameof(IsolatedEventInjections.Draw_BeachBridgeQuestionMark_Postfix))
             );
             _harmony.Patch(
                 original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performTouchAction)),
