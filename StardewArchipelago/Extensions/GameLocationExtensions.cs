@@ -16,6 +16,7 @@ namespace StardewArchipelago.Extensions
         private static readonly Dictionary<WarpRequest, WarpRequest> ExtraWarps = new()
         {
             {new WarpRequest(Game1.getLocationRequest("Town"), 35, 97, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("Sewer"), 16, 11, FacingDirection.Down)},
+            {new WarpRequest(Game1.getLocationRequest("FishShop"), 4, 3, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("BoatTunnel"), 6, 12, FacingDirection.Up)},
             {new WarpRequest(Game1.getLocationRequest("IslandWest"), 20, 23, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("QiNutRoom"), 7, 8, FacingDirection.Up)},
             {new WarpRequest(Game1.getLocationRequest("WizardHouse"), 4, 5, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("WizardHouseBasement"), 4, 4, FacingDirection.Down)},
             {new WarpRequest(Game1.getLocationRequest("IslandWest"), 77, 40, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("IslandFarmhouse"), 14, 17, FacingDirection.Down)},

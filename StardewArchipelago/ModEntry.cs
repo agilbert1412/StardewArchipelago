@@ -224,7 +224,7 @@ namespace StardewArchipelago
             _giftHandler.Initialize(_stardewItemManager, _mail, _archipelago);
             _logicPatcher.PatchAllGameLogic();
             _mailPatcher.PatchMailBoxForApItems();
-            _archipelago.SlotData.ReplaceAllBundles();
+            _archipelago.SlotData.Bundles.ReplaceAllBundles();
             _entranceManager.SetEntranceRandomizerSettings(_archipelago.SlotData);
             _locationsPatcher.ReplaceAllLocationsRewardsWithChecks();
             _itemPatcher.PatchApItems();

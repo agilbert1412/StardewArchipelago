@@ -15,6 +15,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
     public class EntranceManager
     {
         private const string TRANSITIONAL_STRING = " to ";
+        private const string FARM_TO_FARMHOUSE = "Farm to Farmhouse";
 
         private readonly IMonitor _monitor;
         private Dictionary<string, string> _modifiedEntrances;
@@ -70,7 +71,21 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
                 return;
             }
 
+            AddFarmhouseToModifiedEntrances();
+
+            if (slotData.EntranceRandomization == EntranceRandomization.Chaos)
+            {
+                return;
+            }
+
             SwapFarmhouseEntranceWithAnotherEmptyAreaEntrance(slotData);
+        }
+
+        private void AddFarmhouseToModifiedEntrances()
+        {
+            var farmhouseToFarm = ReverseKey(FARM_TO_FARMHOUSE);
+            _modifiedEntrances.Add(FARM_TO_FARMHOUSE, FARM_TO_FARMHOUSE);
+            _modifiedEntrances.Add(farmhouseToFarm, farmhouseToFarm);
         }
 
         private void CleanCoordinatesFromEntrancesWithoutSiblings()
@@ -124,11 +139,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
                 replacementIsOutside = outsideAreas.Contains(chosenEntrance.Split(" ")[0]) && !chosenEntrance.Contains("67|17"); // 67|17 is Quarry Mine
             }
 
-            var farmToFarmhouse = "Farm to Farmhouse";
-            var farmhouseToFarm = ReverseKey(farmToFarmhouse);
-            _modifiedEntrances.Add(farmToFarmhouse, farmToFarmhouse);
-            _modifiedEntrances.Add(farmhouseToFarm, farmhouseToFarm);
-            SwapTwoEntrances(chosenEntrance, farmToFarmhouse);
+            SwapTwoEntrances(chosenEntrance, FARM_TO_FARMHOUSE);
         }
 
         private void SwapTwoEntrances(string entrance1, string entrance2)
@@ -219,10 +230,10 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
 
             var warpPointTarget = locationOrigin.GetWarpPointTarget(warpPoint, locationDestinationName);
             var locationDestination = Game1.getLocationFromName(locationDestinationName);
+            var locationRequest = new LocationRequest(locationDestinationName, locationDestination.isStructure.Value, locationDestination);
+            (locationRequest, warpPointTarget) = locationRequest.PerformLastLocationRequestChanges(locationOrigin, warpPoint, warpPointTarget);
             var warpAwayPoint = locationDestination.GetClosestWarpPointTo(locationOriginName, warpPointTarget);
             var facingDirection = warpPointTarget.GetFacingAwayFrom(warpAwayPoint);
-            var locationRequest = new LocationRequest(locationDestinationName, locationDestination.isStructure.Value,
-                locationDestination);
             warpRequest = new WarpRequest(locationRequest, warpPointTarget.X, warpPointTarget.Y, facingDirection);
             generatedWarps[desiredWarpKey] = warpRequest;
             return true;

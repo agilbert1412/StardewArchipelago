@@ -266,6 +266,11 @@ namespace StardewArchipelago.Archipelago
 
         public string GetPlayerAlias(string playerName)
         {
+            if (!MakeSureConnected())
+            {
+                return null;
+            }
+
             var player = _session.Players.AllPlayers.FirstOrDefault(x => x.Name == playerName);
             if (player == null)
             {

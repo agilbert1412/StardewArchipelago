@@ -109,6 +109,11 @@ namespace StardewArchipelago.Archipelago
                 return true;
             }
 
+            if (HandleSleepCommand(messageLower))
+            {
+                return true;
+            }
+
             if (HandleSyncCommand(messageLower))
             {
                 return true;
@@ -282,6 +287,17 @@ namespace StardewArchipelago.Archipelago
             return true;
         }
 
+        private static bool HandleSleepCommand(string message)
+        {
+            if (message != $"{COMMAND_PREFIX}sleep")
+            {
+                return false;
+            }
+
+            Game1.player.startToPassOut();
+            return true;
+        }
+
         private static bool HandleHelpCommand(string message)
         {
             if (message != $"{COMMAND_PREFIX}help")
@@ -303,6 +319,7 @@ namespace StardewArchipelago.Archipelago
             Game1.chatBox?.addMessage($"{COMMAND_PREFIX}letters - Toggle Hiding Empty Archipelago Letters", Color.Gold);
             Game1.chatBox?.addMessage($"{COMMAND_PREFIX}deathlink - Toggles Deathlink on/off. Saves when sleeping", Color.Gold);
             Game1.chatBox?.addMessage($"{COMMAND_PREFIX}sprite - Enable/Disable the sprite randomizer", Color.Gold);
+            Game1.chatBox?.addMessage($"{COMMAND_PREFIX}sleep - Immediately pass out, ending the day", Color.Gold);
 #if DEBUG
             Game1.chatBox?.addMessage($"{COMMAND_PREFIX}sync - Sends a Sync packet to the Archipelago server", Color.Gold);
 #endif

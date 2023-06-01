@@ -89,7 +89,7 @@ namespace StardewArchipelago.Archipelago
         public bool DeathLink { get; private set; }
         public string Seed { get; private set; }
         public string MultiworldVersion { get; private set; }
-        private Dictionary<string, string> ModifiedBundles { get; set; }
+        public BundlesManager Bundles { get; set; }
         public Dictionary<string, string> ModifiedEntrances { get; set; }
         public AppearanceRandomization AppearanceRandomization { get; set; }
         public bool AppearanceRandomizationDaily { get; set; }
@@ -136,7 +136,8 @@ namespace StardewArchipelago.Archipelago
             Seed = GetSlotSetting(SEED_KEY, "");
             MultiworldVersion = GetSlotSetting(MULTIWORLD_VERSION_KEY, "");
             var newBundleStringData = GetSlotSetting(MODIFIED_BUNDLES_KEY, "");
-            ModifiedBundles = JsonConvert.DeserializeObject<Dictionary<string, string>>(newBundleStringData);
+            var bundlesData = JsonConvert.DeserializeObject<Dictionary<string, string>>(newBundleStringData);
+            Bundles = new BundlesManager(bundlesData);
             var newEntrancesStringData = GetSlotSetting(MODIFIED_ENTRANCES_KEY, "");
             ModifiedEntrances = JsonConvert.DeserializeObject<Dictionary<string, string>>(newEntrancesStringData);
             AppearanceRandomization = GetSlotSetting(RANDOMIZE_NPC_APPEARANCES_KEY, AppearanceRandomization.Disabled);
@@ -170,26 +171,6 @@ namespace StardewArchipelago.Archipelago
         {
             _console.Log($"SlotData did not contain expected key: \"{key}\"", LogLevel.Warn);
             return defaultValue;
-        }
-
-        private static Dictionary<string, string> vanillaBundleData = null;
-
-        public void ReplaceAllBundles()
-        {
-            if (vanillaBundleData == null)
-            {
-                vanillaBundleData = Game1.content.LoadBase<Dictionary<string, string>>("Data\\Bundles");
-            }
-            Game1.netWorldState.Value.SetBundleData(vanillaBundleData);
-            foreach (var key in ModifiedBundles.Keys)
-            {
-                var oldBundle = Game1.netWorldState.Value.BundleData[key];
-                var newBundle = ModifiedBundles[key];
-                var oldBundleName = oldBundle.Split("/")[0];
-                var newBundleName = newBundle.Split("/")[0];
-                CommunityCenterInjections.BundleNames.Add(newBundleName, oldBundleName);
-                Game1.netWorldState.Value.BundleData[key] = newBundle;
-            }
         }
     }
 
