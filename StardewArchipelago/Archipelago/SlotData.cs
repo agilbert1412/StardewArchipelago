@@ -24,7 +24,7 @@ namespace StardewArchipelago.Archipelago
         private const string BUILDING_PROGRESSION_KEY = "building_progression";
         private const string FESTIVAL_OBJECTIVES_KEY = "festival_locations";
         private const string ARCADE_MACHINES_KEY = "arcade_machine_locations";
-        private const string SPECIAL_ORDERS_KEY = "special_orders";
+        private const string SPECIAL_ORDERS_KEY = "special_order_locations";
         private const string HELP_WANTED_LOCATIONS_KEY = "help_wanted_locations";
         private const string FISHSANITY_KEY = "fishsanity";
         private const string MUSEUMSANITY_KEY = "museumsanity";
@@ -46,8 +46,8 @@ namespace StardewArchipelago.Archipelago
         private const string SEED_KEY = "seed";
         private const string MODIFIED_BUNDLES_KEY = "modified_bundles";
         private const string MODIFIED_ENTRANCES_KEY = "randomized_entrances";
-        private const string RANDOMIZE_NPC_APPEARANCES_KEY = "randomize_appearances";
-        private const string RANDOMIZE_NPC_APPEARANCES_DAILY_KEY = "randomize_appearances_daily";
+        // private const string RANDOMIZE_NPC_APPEARANCES_KEY = "randomize_appearances";
+        // private const string RANDOMIZE_NPC_APPEARANCES_DAILY_KEY = "randomize_appearances_daily";
         private const string MULTIWORLD_VERSION_KEY = "client_version";
         private const string MOD_LIST_KEY = "mod_versions";
         
@@ -140,8 +140,8 @@ namespace StardewArchipelago.Archipelago
             Bundles = new BundlesManager(bundlesData);
             var newEntrancesStringData = GetSlotSetting(MODIFIED_ENTRANCES_KEY, "");
             ModifiedEntrances = JsonConvert.DeserializeObject<Dictionary<string, string>>(newEntrancesStringData);
-            AppearanceRandomization = GetSlotSetting(RANDOMIZE_NPC_APPEARANCES_KEY, AppearanceRandomization.Disabled);
-            AppearanceRandomizationDaily = GetSlotSetting(RANDOMIZE_NPC_APPEARANCES_DAILY_KEY, false);
+            AppearanceRandomization = AppearanceRandomization.Disabled; // GetSlotSetting(RANDOMIZE_NPC_APPEARANCES_KEY, AppearanceRandomization.Disabled);
+            AppearanceRandomizationDaily = false; // GetSlotSetting(RANDOMIZE_NPC_APPEARANCES_DAILY_KEY, false);
             var modsString = GetSlotSetting(MOD_LIST_KEY, "");
             var modsAndVersions = JsonConvert.DeserializeObject<Dictionary<string, string>>(modsString);
             Mods = new ModsManager(modsAndVersions);
