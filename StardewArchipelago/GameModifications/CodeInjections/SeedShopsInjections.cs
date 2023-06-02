@@ -571,45 +571,88 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             stock.Add(key2, numArray2);
         }
 
-        // public ShopMenu(Dictionary<ISalable, int[]> itemPriceAndStock, int currency = 0, string who = null, Func<ISalable, Farmer, int, bool> on_purchase = null, Func<ISalable, bool> on_sell = null, string context = null)
-        public static bool ShopMenu_SeedShuffle_Prefix(ShopMenu __instance, ref Dictionary<ISalable, int[]> itemPriceAndStock, int currency = 0, string who = null, Func<ISalable, Farmer, int, bool> on_purchase = null, Func<ISalable, bool> on_sell = null, string context = null)
+        // public void setUpShopOwner(string who)
+        public static void SetUpShopOwner_SeedShuffle_Postfix(ShopMenu __instance, string who)
         {
             try
             {
-                if (_archipelago.SlotData.SeedShuffle != SeedShuffle.Shuffled)
-                {
-                    return true; // run original logic
-                }
-                foreach (var salableItem in itemPriceAndStock.Keys.ToArray())
-                {
-                    if (salableItem is not Object salableObject || salableObject.Category != CATEGORY_SEEDS)
-                    {
-                        continue;
-                    }
-
-                    if (!_archipelago.HasReceivedItem(salableObject.Name))
-                    {
-                        itemPriceAndStock.Remove(salableItem);
-                    }
-
-                    if (salableObject.ParentSheetIndex != STRAWBERRY_SEEDS)
-                    {
-                        continue;
-                    }
-
-                    if (_locationChecker.IsLocationMissingAndExists(FestivalLocationNames.STRAWBERRY_SEEDS))
-                    {
-                        var strawberrySeedsApItem =
-                            new PurchaseableArchipelagoLocation(salableObject.Name, FestivalLocationNames.STRAWBERRY_SEEDS, _modHelper, _locationChecker, _archipelago);
-                        itemPriceAndStock.Add(strawberrySeedsApItem, new[] { 1000, 1 });
-                    }
-                }
-                return true; //  run original logic
+                DisableSeedsIfNeeded(__instance);
+                return;
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(ShopMenu_SeedShuffle_Prefix)}:\n{ex}", LogLevel.Error);
-                return true; // run original logic
+                _monitor.Log($"Failed in {nameof(SetUpShopOwner_SeedShuffle_Postfix)}:\n{ex}", LogLevel.Error);
+                return;
+            }
+        }
+
+        // This one works unmodded, but suddenly doesn't get called with mods...
+        // public ShopMenu(Dictionary<ISalable, int[]> itemPriceAndStock, int currency = 0, string who = null, Func<ISalable, Farmer, int, bool> on_purchase = null, Func<ISalable, bool> on_sell = null, string context = null)
+        public static void ShopMenu_SeedShuffleDictionary_Postfix(ShopMenu __instance, Dictionary<ISalable, int[]> itemPriceAndStock, int currency = 0, string who = null, Func<ISalable, Farmer, int, bool> on_purchase = null, Func<ISalable, bool> on_sell = null, string context = null)
+        {
+            try
+            {
+                DisableSeedsIfNeeded(__instance);
+                return;
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(ShopMenu_SeedShuffleDictionary_Postfix)}:\n{ex}", LogLevel.Error);
+                return;
+            }
+        }        
+        
+        // public ShopMenu(Dictionary<ISalable, int[]> itemPriceAndStock, int currency = 0, string who = null, Func<ISalable, Farmer, int, bool> on_purchase = null, Func<ISalable, bool> on_sell = null, string context = null)
+        public static void ShopMenu_SeedShuffleList_Postfix(ShopMenu __instance, List<ISalable> itemsForSale, int currency = 0, string who = null, Func<ISalable, Farmer, int, bool> on_purchase = null, Func<ISalable, bool> on_sell = null, string context = null)
+        {
+            try
+            {
+                DisableSeedsIfNeeded(__instance);
+                return;
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(ShopMenu_SeedShuffleList_Postfix)}:\n{ex}", LogLevel.Error);
+                return;
+            }
+        }
+
+        private static void DisableSeedsIfNeeded(ShopMenu __instance, Dictionary<ISalable, int[]> itemPriceAndStock = null)
+        {
+            if (_archipelago.SlotData.SeedShuffle != SeedShuffle.Shuffled)
+            {
+                return;
+            }
+
+            if (itemPriceAndStock != null)
+            {
+                __instance.itemPriceAndStock = itemPriceAndStock;
+            }
+
+            foreach (var salableItem in __instance.itemPriceAndStock.Keys.ToArray())
+            {
+                if (salableItem is not Object salableObject || salableObject.Category != CATEGORY_SEEDS)
+                {
+                    continue;
+                }
+
+                if (!_archipelago.HasReceivedItem(salableObject.Name))
+                {
+                    __instance.itemPriceAndStock.Remove(salableItem);
+                }
+
+                if (salableObject.ParentSheetIndex != STRAWBERRY_SEEDS)
+                {
+                    continue;
+                }
+
+                if (_locationChecker.IsLocationMissingAndExists(FestivalLocationNames.STRAWBERRY_SEEDS))
+                {
+                    var strawberrySeedsApItem =
+                        new PurchaseableArchipelagoLocation(salableObject.Name, FestivalLocationNames.STRAWBERRY_SEEDS,
+                            _modHelper, _locationChecker, _archipelago);
+                    __instance.itemPriceAndStock.Add(strawberrySeedsApItem, new[] { 1000, 1 });
+                }
             }
         }
 

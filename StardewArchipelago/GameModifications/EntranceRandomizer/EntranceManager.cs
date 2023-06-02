@@ -15,7 +15,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
     public class EntranceManager
     {
         private const string TRANSITIONAL_STRING = " to ";
-        private const string FARM_TO_FARMHOUSE = "Farm to Farmhouse";
+        private const string FARM_TO_FARMHOUSE = "Farm to FarmHouse";
 
         private readonly IMonitor _monitor;
         private Dictionary<string, string> _modifiedEntrances;
@@ -40,15 +40,22 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
 
         private void ReshuffleEntrances(SlotData slotData)
         {
-            var random = new Random(int.Parse(slotData.Seed) + (int)Game1.stats.DaysPlayed);
+            var seed = int.Parse(slotData.Seed) + (int)Game1.stats.DaysPlayed; // 998252633 on day 9
+            var random = new Random(seed);
             var numShuffles = _modifiedEntrances.Count * _modifiedEntrances.Count;
+            var newModifiedEntrances = _modifiedEntrances.ToDictionary(x => x.Key, x => x.Value);
+
             for (var i = 0; i < numShuffles; i++)
             {
-                var keys = _modifiedEntrances.Keys.ToArray();
-                var chosenEntrance1 = keys[random.Next(keys.Length)];
-                var chosenEntrance2 = keys[random.Next(keys.Length)];
-                SwapTwoEntrances(chosenEntrance1, chosenEntrance2);
+                var keys = newModifiedEntrances.Keys.ToArray();
+                var chosenIndex1 = random.Next(keys.Length);
+                var chosenIndex2 = random.Next(keys.Length);
+                var chosenEntrance1 = keys[chosenIndex1];
+                var chosenEntrance2 = keys[chosenIndex2];
+                SwapTwoEntrances(newModifiedEntrances, chosenEntrance1, chosenEntrance2);
             }
+
+            _modifiedEntrances = new Dictionary<string, string>(newModifiedEntrances, StringComparer.OrdinalIgnoreCase);
         }
 
         public void SetEntranceRandomizerSettings(SlotData slotData)
@@ -136,25 +143,29 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             while (!replacementIsOutside)
             {
                 chosenEntrance = _modifiedEntrances.Keys.ToArray()[random.Next(_modifiedEntrances.Keys.Count)];
-                replacementIsOutside = outsideAreas.Contains(chosenEntrance.Split(" ")[0]) && !chosenEntrance.Contains("67|17"); // 67|17 is Quarry Mine
+                replacementIsOutside = outsideAreas.Contains(chosenEntrance.Split(TRANSITIONAL_STRING)[0]) && !chosenEntrance.Contains("67|17"); // 67|17 is Quarry Mine
             }
 
-            SwapTwoEntrances(chosenEntrance, FARM_TO_FARMHOUSE);
+            SwapTwoEntrances(_modifiedEntrances, chosenEntrance, FARM_TO_FARMHOUSE);
         }
 
-        private void SwapTwoEntrances(string entrance1, string entrance2)
+        private static void SwapTwoEntrances(Dictionary<string, string> entrances, string entrance1, string entrance2)
         {
             // Trust me
-            var destination1 = _modifiedEntrances[entrance1];
-            var destination2 = _modifiedEntrances[entrance2];
+            var destination1 = entrances[entrance1];
+            var destination2 = entrances[entrance2];
             var reversed1 = ReverseKey(entrance1);
             var reversed2 = ReverseKey(entrance2);
             var reversedDestination1 = ReverseKey(destination1);
             var reversedDestination2 = ReverseKey(destination2);
-            _modifiedEntrances[entrance1] = destination2;
-            _modifiedEntrances[reversedDestination1] = reversed2;
-            _modifiedEntrances[entrance2] = destination1;
-            _modifiedEntrances[reversedDestination2] = reversed1;
+            if (destination2 == reversed1 || destination1 == reversed2)
+            {
+                return;
+            }
+            entrances[entrance1] = destination2;
+            entrances[reversedDestination1] = reversed2;
+            entrances[entrance2] = destination1;
+            entrances[reversedDestination2] = reversed1;
         }
 
         private void RegisterRandomizedEntrance(string originalEntrance, string replacementEntrance)

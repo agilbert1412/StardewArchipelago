@@ -308,6 +308,7 @@ namespace StardewArchipelago
         private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
         {
             _archipelago.APUpdate();
+            // var methods = _harmony.GetPatchedMethods().ToList();
             // _entranceManager.RegisterAllEntrances();
             // _entranceManager.SetEntranceRandomizerSettings(_archipelago.SlotData);
         }
