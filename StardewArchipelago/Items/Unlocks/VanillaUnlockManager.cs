@@ -110,7 +110,7 @@ namespace StardewArchipelago.Items.Unlocks
             _unlockables.Add("Island Trader", RestoreIslandTrader);
             _unlockables.Add("Island Resort", RepairResort);
             _unlockables.Add("Farm Obelisk", CreateFarmObelisk);
-            _unlockables.Add("Island Farmhouse Mailbox", RepairIslandMailbox);
+            _unlockables.Add("Island Mailbox", RepairIslandMailbox);
             _unlockables.Add("Island Farmhouse", RepairIslandFarmhouse);
             _unlockables.Add("Parrot Express", RepairParrotExpress);
             _unlockables.Add("Volcano Bridge", ConstructVolcanoBridge);
