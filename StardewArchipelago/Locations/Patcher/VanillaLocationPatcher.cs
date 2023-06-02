@@ -524,14 +524,9 @@ namespace StardewArchipelago.Locations.Patcher
                 postfix: new HarmonyMethod(typeof(FlowerDanceInjections), nameof(FlowerDanceInjections.SetUpFestivalMainEvent_FlowerDance_Postfix))
             );
 
-            var shopMenuParameterTypes = new[]
-            {
-                typeof(Dictionary<ISalable, int[]>), typeof(int), typeof(string),
-                typeof(Func<ISalable, Farmer, int, bool>), typeof(Func<ISalable, bool>), typeof(string)
-            };
             _harmony.Patch(
-                original: AccessTools.Constructor(typeof(ShopMenu), shopMenuParameterTypes),
-                prefix: new HarmonyMethod(typeof(FlowerDanceInjections), nameof(FlowerDanceInjections.ShopMenu_HandleRarecrow5_Prefix))
+                original: AccessTools.Method(typeof(ShopMenu), nameof(ShopMenu.update)),
+                postfix: new HarmonyMethod(typeof(FlowerDanceInjections), nameof(FlowerDanceInjections.Update_HandleRarecrow5FirstTimeOnly_Postfix))
             );
 
             _harmony.Patch(
@@ -555,8 +550,8 @@ namespace StardewArchipelago.Locations.Patcher
             );
 
             _harmony.Patch(
-                original: AccessTools.Constructor(typeof(ShopMenu), shopMenuParameterTypes),
-                prefix: new HarmonyMethod(typeof(FairInjections), nameof(FairInjections.ShopMenu_HandleFairItems_Prefix))
+                original: AccessTools.Method(typeof(ShopMenu), nameof(ShopMenu.update)),
+                postfix: new HarmonyMethod(typeof(FairInjections), nameof(FairInjections.Update_HandleFairItemsFirstTimeOnly_Postfix))
             );
 
             _harmony.Patch(
@@ -565,8 +560,9 @@ namespace StardewArchipelago.Locations.Patcher
             );
 
             _harmony.Patch(
-                original: AccessTools.Constructor(typeof(ShopMenu), shopMenuParameterTypes),
-                prefix: new HarmonyMethod(typeof(SpiritEveInjections), nameof(SpiritEveInjections.ShopMenu_HandleRarecrow2_Prefix))
+                original: AccessTools.Method(typeof(ShopMenu), nameof(ShopMenu.update)),
+                postfix: new HarmonyMethod(typeof(SpiritEveInjections),
+                    nameof(SpiritEveInjections.Update_HandleRarecrow2FirstTimeOnly_Postfix))
             );
 
             _harmony.Patch(
@@ -575,8 +571,9 @@ namespace StardewArchipelago.Locations.Patcher
             );
 
             _harmony.Patch(
-                original: AccessTools.Constructor(typeof(ShopMenu), shopMenuParameterTypes),
-                prefix: new HarmonyMethod(typeof(IceFestivalInjections), nameof(IceFestivalInjections.ShopMenu_HandleRarecrow4_Prefix))
+                original: AccessTools.Method(typeof(ShopMenu), nameof(ShopMenu.update)),
+                postfix: new HarmonyMethod(typeof(IceFestivalInjections),
+                    nameof(IceFestivalInjections.Update_HandleRarecrow4FirstTimeOnly_Postfix))
             );
 
             _harmony.Patch(

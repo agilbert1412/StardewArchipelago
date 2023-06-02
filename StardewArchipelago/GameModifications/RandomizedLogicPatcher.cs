@@ -225,28 +225,8 @@ namespace StardewArchipelago.GameModifications
             );
 
             _harmony.Patch(
-                original: AccessTools.Method(typeof(ShopMenu), nameof(ShopMenu.setUpShopOwner)),
-                postfix: new HarmonyMethod(typeof(SeedShopsInjections), nameof(SeedShopsInjections.SetUpShopOwner_SeedShuffle_Postfix))
-            );
-
-            var shopMenuParameterTypesDictionary = new[]
-            {
-                typeof(Dictionary<ISalable, int[]>), typeof(int), typeof(string),
-                typeof(Func<ISalable, Farmer, int, bool>), typeof(Func<ISalable, bool>), typeof(string)
-            };
-            _harmony.Patch(
-                original: AccessTools.Constructor(typeof(ShopMenu), shopMenuParameterTypesDictionary),
-                postfix: new HarmonyMethod(typeof(SeedShopsInjections), nameof(SeedShopsInjections.ShopMenu_SeedShuffleDictionary_Postfix))
-            );
-
-            var shopMenuParameterTypesList = new[]
-            {
-                typeof(List<ISalable>), typeof(int), typeof(string),
-                typeof(Func<ISalable, Farmer, int, bool>), typeof(Func<ISalable, bool>), typeof(string)
-            };
-            _harmony.Patch(
-                original: AccessTools.Constructor(typeof(ShopMenu), shopMenuParameterTypesList),
-                postfix: new HarmonyMethod(typeof(SeedShopsInjections), nameof(SeedShopsInjections.ShopMenu_SeedShuffleList_Postfix))
+                original: AccessTools.Method(typeof(ShopMenu), nameof(ShopMenu.update)),
+                postfix: new HarmonyMethod(typeof(SeedShopsInjections), nameof(SeedShopsInjections.Update_SeedShuffleFirstTimeOnly_Postfix))
             );
         }
 

@@ -571,62 +571,35 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             stock.Add(key2, numArray2);
         }
 
-        // public void setUpShopOwner(string who)
-        public static void SetUpShopOwner_SeedShuffle_Postfix(ShopMenu __instance, string who)
+        private static ShopMenu _lastShopMenuUpdated = null;
+        // public override void update(GameTime time)
+        public static void Update_SeedShuffleFirstTimeOnly_Postfix(ShopMenu __instance, GameTime time)
         {
             try
             {
+                // We only run this once for each menu
+                if (_lastShopMenuUpdated == __instance)
+                {
+                    return;
+                }
+
+                _lastShopMenuUpdated = __instance;
                 DisableSeedsIfNeeded(__instance);
+                __instance.forSale = __instance.itemPriceAndStock.Keys.ToList();
                 return;
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(SetUpShopOwner_SeedShuffle_Postfix)}:\n{ex}", LogLevel.Error);
+                _monitor.Log($"Failed in {nameof(Update_SeedShuffleFirstTimeOnly_Postfix)}:\n{ex}", LogLevel.Error);
                 return;
             }
         }
 
-        // This one works unmodded, but suddenly doesn't get called with mods...
-        // public ShopMenu(Dictionary<ISalable, int[]> itemPriceAndStock, int currency = 0, string who = null, Func<ISalable, Farmer, int, bool> on_purchase = null, Func<ISalable, bool> on_sell = null, string context = null)
-        public static void ShopMenu_SeedShuffleDictionary_Postfix(ShopMenu __instance, Dictionary<ISalable, int[]> itemPriceAndStock, int currency = 0, string who = null, Func<ISalable, Farmer, int, bool> on_purchase = null, Func<ISalable, bool> on_sell = null, string context = null)
-        {
-            try
-            {
-                DisableSeedsIfNeeded(__instance);
-                return;
-            }
-            catch (Exception ex)
-            {
-                _monitor.Log($"Failed in {nameof(ShopMenu_SeedShuffleDictionary_Postfix)}:\n{ex}", LogLevel.Error);
-                return;
-            }
-        }        
-        
-        // public ShopMenu(Dictionary<ISalable, int[]> itemPriceAndStock, int currency = 0, string who = null, Func<ISalable, Farmer, int, bool> on_purchase = null, Func<ISalable, bool> on_sell = null, string context = null)
-        public static void ShopMenu_SeedShuffleList_Postfix(ShopMenu __instance, List<ISalable> itemsForSale, int currency = 0, string who = null, Func<ISalable, Farmer, int, bool> on_purchase = null, Func<ISalable, bool> on_sell = null, string context = null)
-        {
-            try
-            {
-                DisableSeedsIfNeeded(__instance);
-                return;
-            }
-            catch (Exception ex)
-            {
-                _monitor.Log($"Failed in {nameof(ShopMenu_SeedShuffleList_Postfix)}:\n{ex}", LogLevel.Error);
-                return;
-            }
-        }
-
-        private static void DisableSeedsIfNeeded(ShopMenu __instance, Dictionary<ISalable, int[]> itemPriceAndStock = null)
+        private static void DisableSeedsIfNeeded(ShopMenu __instance)
         {
             if (_archipelago.SlotData.SeedShuffle != SeedShuffle.Shuffled)
             {
                 return;
-            }
-
-            if (itemPriceAndStock != null)
-            {
-                __instance.itemPriceAndStock = itemPriceAndStock;
             }
 
             foreach (var salableItem in __instance.itemPriceAndStock.Keys.ToArray())
