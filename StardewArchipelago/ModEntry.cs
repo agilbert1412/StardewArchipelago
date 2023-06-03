@@ -294,6 +294,16 @@ namespace StardewArchipelago
             }
             _appearanceRandomizer.ShuffleCharacterAppearances();
             _entranceManager.ResetCheckedEntrancesToday(_archipelago.SlotData);
+
+            DoBugsCleanup();
+        }
+
+        private void DoBugsCleanup()
+        {
+            if (_archipelago.HasReceivedItem("Dark Talisman"))
+            {
+                Game1.player.hasDarkTalisman = true;
+            }
         }
 
         private void OnDayEnding(object sender, DayEndingEventArgs e)

@@ -39,6 +39,7 @@ namespace StardewArchipelago.Items.Mail
             _letterActions.Add(LetterActionsKeys.ClubCard, (_) => ReceiveClubCard());
             _letterActions.Add(LetterActionsKeys.MagnifyingGlass, (_) => ReceiveMagnifyingGlass());
             _letterActions.Add(LetterActionsKeys.IridiumSnakeMilk, (_) => ReceiveIridiumSnakeMilk());
+            _letterActions.Add(LetterActionsKeys.DarkTalisman, (_) => ReceiveDarkTalisman());
             _letterActions.Add(LetterActionsKeys.GoldenScythe, (_) => ReceiveGoldenScythe());
             _letterActions.Add(LetterActionsKeys.BeachBridge, (_) => RepairBeachBridge());
             _letterActions.Add(LetterActionsKeys.ProgressiveTool, ReceiveProgressiveTool);
@@ -143,6 +144,11 @@ namespace StardewArchipelago.Items.Mail
         private void ReceiveIridiumSnakeMilk()
         {
             Game1.player.maxHealth += 25;
+        }
+
+        public void ReceiveDarkTalisman()
+        {
+            Game1.player.hasDarkTalisman = true;
         }
 
         private void ReceiveAdventurerGuild()
