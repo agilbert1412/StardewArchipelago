@@ -67,7 +67,7 @@ namespace StardewArchipelago.Items.Unlocks
             _unlockables.Add("Club Card", SendClubCardLetter);
             _unlockables.Add("Magnifying Glass", SendMagnifyingGlassLetter);
             _unlockables.Add("Iridium Snake Milk", SendIridiumSnakeMilkLetter);
-            _unlockables.Add("Dark Talisman", SendDarkTalisman);
+            _unlockables.Add("Dark Talisman", SendDarkTalismanLetter);
         }
 
         private void RegisterPlayerSkills()
