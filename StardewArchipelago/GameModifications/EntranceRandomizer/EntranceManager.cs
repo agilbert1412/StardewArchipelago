@@ -193,6 +193,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
         public bool TryGetEntranceReplacement(string currentLocationName, string locationRequestName, Point targetPosition, out WarpRequest warpRequest)
         {
             warpRequest = null;
+            targetPosition = targetPosition.CheckSpecialVolcanoEdgeCaseWarp(locationRequestName);
             var key = GetKeys(currentLocationName, locationRequestName, targetPosition);
             if (!TryGetModifiedWarpName(key, out var desiredWarpName))
             {
@@ -213,7 +214,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             return TryFindWarpToDestination(desiredWarpName, out warpRequest);
         }
 
-        private bool TryGetModifiedWarpName(string[] keys, out string desiredWarpName)
+        private bool TryGetModifiedWarpName(IEnumerable<string> keys, out string desiredWarpName)
         {
             foreach (var key in keys)
             {
@@ -250,16 +251,31 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             return true;
         }
 
-        private static string[] GetKeys(string currentLocationName, string locationRequestName, Point targetPosition)
+        private static List<string> GetKeys(string currentLocationName, string locationRequestName,
+            Point targetPosition)
         {
             var currentPosition = Game1.player.getTileLocationPoint();
-            return new[]
+            var currentPositions = new List<Point>();
+            var targetPositions = new List<Point>();
+            for (var x = -1; x <= 1; x++)
             {
-                GetKey(currentLocationName, locationRequestName),
-                GetKey(currentLocationName, locationRequestName, targetPosition),
-                GetKey(currentLocationName, currentPosition, locationRequestName),
-                GetKey(currentLocationName, currentPosition, locationRequestName, targetPosition),
-            };
+                for (var y = -1; y <= 1; y++)
+                {
+                    currentPositions.Add(new Point(currentPosition.X + x, currentPosition.Y + y));
+                    targetPositions.Add(new Point(targetPosition.X + x, targetPosition.Y + y));
+                }
+            }
+
+            var keys = new List<string>();
+            keys.Add(GetKey(currentLocationName, locationRequestName));
+            keys.AddRange(targetPositions.Select(targetPositionWithOffset => GetKey(currentLocationName, locationRequestName, targetPositionWithOffset)));
+            keys.AddRange(currentPositions.Select(currentPositionWithOffset => GetKey(currentLocationName, currentPositionWithOffset, locationRequestName)));
+            foreach (var currentPositionWithOffset in currentPositions)
+            {
+                keys.AddRange(targetPositions.Select(targetPositionWithOffset => GetKey(currentLocationName, currentPositionWithOffset, locationRequestName, targetPositionWithOffset)));
+            }
+
+            return keys;
         }
 
         private static string GetKey(string currentLocationName, string locationRequestName)
@@ -355,7 +371,9 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Leo Hut", "IslandHut" },
             { "Field Office", "IslandFieldOffice" },
             { "Island Farmhouse", "IslandFarmHouse" },
-            { "Volcano", "VolcanoDungeon0" },
+            { "Volcano Entrance", "VolcanoDungeon0|31|53" },
+            { "Volcano River", "VolcanoDungeon0|6|49" },
+            { "Secret Beach", "IslandNorth|12|31" },
             { "Qi Walnut Room", "QiNutRoom" },
             { "Eugene's Garden", "Custom_EugeneNPC_EugeneHouse" },
             { "Eugene's Bedroom", "Custom_EugeneNPC_EugeneRoom" },

@@ -87,12 +87,23 @@ namespace StardewArchipelago.Extensions
                 }
                 else if (warp.TargetName == "VolcanoEntrance" && destinationName == "VolcanoDungeon0")
                 {
-                    warps.Add(warp);
+                    var realTargetPoint = new Point(warp.TargetX, warp.TargetY).CheckSpecialVolcanoEdgeCaseWarp(destinationName);
+                    warps.Add(new Warp(warp.X, warp.Y, warp.TargetName, realTargetPoint.X, realTargetPoint.Y, warp.flipFarmer.Value));
                 }
             }
 
             warps.AddRange(GetSpecialTouchWarps(origin));
             return warps;
+        }
+
+        public static Point CheckSpecialVolcanoEdgeCaseWarp(this Point targetPoint, string destinationName)
+        {
+            if (destinationName == "VolcanoDungeon0" && targetPoint.X == 1 && targetPoint.Y == 1)
+            {
+                return new Point(31, 53);
+            }
+
+            return targetPoint;
         }
 
         private static Dictionary<string, Dictionary<Point, Point>> _touchActionWarpCache = new();
@@ -338,7 +349,7 @@ namespace StardewArchipelago.Extensions
 
                 var loc = originLocation;
                 var dest = destinationName;
-                closestWarpPoint = allWarpPoints.OrderBy(x => loc.GetWarpPointTarget(x, dest).GetTotalDistance(referencePoint)).First();
+                closestWarpPoint = allWarpPoints.OrderBy(warpPoint => loc.GetWarpPointTarget(warpPoint, dest).GetTotalDistance(referencePoint)).First();
                 return true;
             }
 
