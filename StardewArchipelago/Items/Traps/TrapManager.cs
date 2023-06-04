@@ -175,9 +175,48 @@ namespace StardewArchipelago.Items.Traps
 
         private void TeleportRandomly()
         {
-            var area = Game1.locations[Game1.random.Next(Game1.locations.Count)];
-            var tile = _tileChooser.GetRandomTileInbounds(area);
-            TeleportFarmerTo(area.Name, tile);
+            var destination = _difficultyBalancer.TeleportDestinations[_archipelago.SlotData.TrapItemsDifficulty];
+            var validMaps = new List<GameLocation>();
+            switch (destination)
+            {
+                case TeleportDestination.Nearby:
+                case TeleportDestination.SameMap:
+                    validMaps.Add(Game1.player.currentLocation);
+                    break;
+                case TeleportDestination.SameMapOrHome:
+                    validMaps.Add(Game1.getFarm());
+                    validMaps.Add(Game1.getLocationFromName("FarmHouse"));
+                    if (!Game1.player.currentLocation.Name.Contains("Farm"))
+                    {
+                        validMaps.Add(Game1.player.currentLocation);
+                    }
+                    break;
+                case TeleportDestination.PelicanTown:
+                    validMaps.AddRange(Game1.locations.Where(x => x is not IslandLocation));
+                    break;
+                case TeleportDestination.Anywhere:
+                    validMaps.AddRange(Game1.locations);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            GameLocation chosenLocation = null;
+            Vector2? chosenTile = null;
+            while (chosenLocation == null || chosenTile == null)
+            {
+                chosenLocation = validMaps[Game1.random.Next(validMaps.Count)];
+                if (destination == TeleportDestination.Nearby)
+                {
+                    chosenTile = _tileChooser.GetRandomTileInbounds(chosenLocation, Game1.player.getTileLocationPoint(), 20);
+                }
+                else
+                {
+                    chosenTile = _tileChooser.GetRandomTileInbounds(chosenLocation);
+                }
+            }
+
+            TeleportFarmerTo(chosenLocation.Name, chosenTile.Value);
         }
 
         private void TeleportFarmerTo(string locationName, Vector2 tile)
