@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Items.Mail;
 using StardewValley;
@@ -24,6 +25,23 @@ namespace StardewArchipelago.Stardew
 
         public override Item PrepareForGivingToFarmer(int amount = 1)
         {
+            if (Type.Equals("bed", StringComparison.OrdinalIgnoreCase) ||
+                Type.Equals("double bed", StringComparison.OrdinalIgnoreCase))
+            {
+                return new StardewValley.Objects.BedFurniture(Id, Vector2.Zero);
+            }
+
+            if (Type.Equals("fishtank", StringComparison.OrdinalIgnoreCase))
+            {
+                return new StardewValley.Objects.FishTankFurniture(Id, Vector2.Zero);
+            }
+
+            if (Type.Contains("TV", StringComparison.OrdinalIgnoreCase) ||
+                Name.Contains("TV", StringComparison.OrdinalIgnoreCase))
+            {
+                return new StardewValley.Objects.TV(Id, Vector2.Zero);
+            }
+
             return new StardewValley.Objects.Furniture(Id, Vector2.Zero);
         }
 
