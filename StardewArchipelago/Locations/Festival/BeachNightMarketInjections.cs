@@ -100,11 +100,12 @@ namespace StardewArchipelago.Locations.Festival
                 Game1.player.Money -= 1200;
                 Game1.activeClickableMenu = (IClickableMenu)null;
                 _locationChecker.AddCheckedLocation(paintingLocationSoldToday);
+                Game1.player.CanMove = true;
                 return false; // don't run original logic
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(GetMagicShopStock_UniqueItemsAndSeeds_Postfix)}:\n{ex}", LogLevel.Error);
+                _monitor.Log($"Failed in {nameof(AnswerDialogueAction_LupiniPainting_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
             }
         }
