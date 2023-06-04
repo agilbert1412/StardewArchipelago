@@ -445,6 +445,11 @@ namespace StardewArchipelago.Locations
                 original: AccessTools.Method(typeof(Farmer), nameof(Farmer.changeFriendship)),
                 prefix: new HarmonyMethod(typeof(FriendshipInjections), nameof(FriendshipInjections.ChangeFriendship_ArchipelagoPoints_Prefix))
             );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Farmer), nameof(Farmer.resetFriendshipsForNewDay)),
+                prefix: new HarmonyMethod(typeof(FriendshipInjections), nameof(FriendshipInjections.ResetFriendshipsForNewDay_AutopetHumans_Prefix))
+            );
         }
     }
 }
