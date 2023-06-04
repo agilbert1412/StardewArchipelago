@@ -173,9 +173,10 @@ namespace StardewArchipelago.Items.Traps
             Game1.player.addUnearnedMoney(tax * -1);
         }
 
-        private void TeleportRandomly()
+        public void TeleportRandomly()
         {
-            var destination = _difficultyBalancer.TeleportDestinations[_archipelago.SlotData.TrapItemsDifficulty];
+            var difficulty = _archipelago.SlotData.TrapItemsDifficulty;
+            var destination = _difficultyBalancer.TeleportDestinations[difficulty];
             var validMaps = new List<GameLocation>();
             switch (destination)
             {
