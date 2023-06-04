@@ -397,7 +397,7 @@ namespace StardewArchipelago.Locations.CodeInjections
             return farmer.spouse != null && npcName.Equals(farmer.spouse);
         }
 
-        private static int ShuffledUpTo(ArchipelagoFriend friend)
+        private static string GetNpcName(Friendship __instance)
         {
             var farmer = Game1.player;
             foreach (var name in farmer.friendshipData.Keys)
@@ -425,21 +425,21 @@ namespace StardewArchipelago.Locations.CodeInjections
                     {
                         return 5;
                     }
-
+                    
                     return _notImmediatelyAccessible.Contains(name) ? 0 : (isBachelor ? 8 : 10);
                 case Friendsanity.All:
                     if (name == PET_NAME)
                     {
                         return 5;
                     }
-
+                    
                     return isBachelor ? 8 : 10;
                 case Friendsanity.AllWithMarriage:
                     if (name == PET_NAME)
                     {
                         return 5;
                     }
-
+                        
                     return isBachelor ? 14 : 10;
             }
 
