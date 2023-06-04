@@ -65,7 +65,7 @@ namespace StardewArchipelago.Archipelago
 
             if (bankCommandParts[0].Equals(WITHDRAW_COMMAND, StringComparison.OrdinalIgnoreCase))
             {
-                HandleWithdrawCommand(bankCommandParts[2]);
+                HandleWithdrawCommand(bankCommandParts[1]);
                 return true;
             }
 
