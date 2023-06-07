@@ -82,10 +82,10 @@ namespace StardewArchipelago.Locations.Festival
 
                 __result = true;
                 var paintingLocations = GetPaintingLocations();
-                var year = (Game1.year % 3) + 1;
+                var month = (int)((Game1.stats.daysPlayed / 28) % 3) + 1;
                 var day = __instance.getDayOfNightMarket();
-                var paintingLocationSoldToday = paintingLocations[year][day];
-                var paintingMailKey = $"NightMarketYear{Game1.year}Day{__instance.getDayOfNightMarket()}_paintingSold";
+                var paintingLocationSoldToday = paintingLocations[month][day];
+                // var paintingMailKey = $"NightMarketYear{Game1.year}Day{__instance.getDayOfNightMarket()}_paintingSold";
                 if (_locationChecker.IsLocationChecked(paintingLocationSoldToday))
                 {
                     Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\Locations:BeachNightMarket_PainterSold"));
