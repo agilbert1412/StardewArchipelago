@@ -180,6 +180,8 @@ namespace StardewArchipelago.Items.Traps
             var validMaps = new List<GameLocation>();
             switch (destination)
             {
+                case TeleportDestination.None:
+                    return;
                 case TeleportDestination.Nearby:
                 case TeleportDestination.SameMap:
                     validMaps.Add(Game1.player.currentLocation);

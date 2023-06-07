@@ -43,11 +43,11 @@ namespace StardewArchipelago.Items.Traps
         // TODO: Figure out a way to have different difficulties to random teleports
         public Dictionary<TrapItemsDifficulty, TeleportDestination> TeleportDestinations = new()
         {
-            {TrapItemsDifficulty.NoTraps, TeleportDestination.Nearby},
-            {TrapItemsDifficulty.Easy, TeleportDestination.SameMap},
-            {TrapItemsDifficulty.Medium, TeleportDestination.SameMapOrHome},
-            {TrapItemsDifficulty.Hard, TeleportDestination.PelicanTown},
-            {TrapItemsDifficulty.Hell, TeleportDestination.Anywhere},
+            {TrapItemsDifficulty.NoTraps, TeleportDestination.None},
+            {TrapItemsDifficulty.Easy, TeleportDestination.Nearby},
+            {TrapItemsDifficulty.Medium, TeleportDestination.SameMap},
+            {TrapItemsDifficulty.Hard, TeleportDestination.SameMapOrHome},
+            {TrapItemsDifficulty.Hell, TeleportDestination.PelicanTown},
             {TrapItemsDifficulty.Nightmare, TeleportDestination.Anywhere},
         };
 
@@ -151,6 +151,7 @@ namespace StardewArchipelago.Items.Traps
 
     public enum TeleportDestination
     {
+        None,
         Nearby,
         SameMap,
         SameMapOrHome,
