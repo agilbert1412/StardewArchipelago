@@ -71,7 +71,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
                 RegisterRandomizedEntrance(originalEntrance, replacementEntrance);
             }
 
-            CleanCoordinatesFromEntrancesWithoutSiblings();
+            // CleanCoordinatesFromEntrancesWithoutSiblings();
 
             if (slotData.EntranceRandomization == EntranceRandomization.PelicanTown)
             {
@@ -95,44 +95,44 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             _modifiedEntrances.Add(farmhouseToFarm, farmhouseToFarm);
         }
 
-        private void CleanCoordinatesFromEntrancesWithoutSiblings()
-        {
-            foreach (var entranceKey in _modifiedEntrances.Keys.ToArray())
-            {
-                var entranceValue = _modifiedEntrances[entranceKey];
-                if (TryCleanEntrance(entranceValue, _modifiedEntrances.Values, out var newValue))
-                {
-                    _modifiedEntrances[entranceKey] = newValue;
-                    entranceValue = newValue;
-                }
-                if (TryCleanEntrance(entranceKey, _modifiedEntrances.Keys, out var newKey))
-                {
-                    _modifiedEntrances.Add(newKey, entranceValue);
-                    _modifiedEntrances.Remove(entranceKey);
-                }
-            }
-        }
+        //private void CleanCoordinatesFromEntrancesWithoutSiblings()
+        //{
+        //    foreach (var entranceKey in _modifiedEntrances.Keys.ToArray())
+        //    {
+        //        var entranceValue = _modifiedEntrances[entranceKey];
+        //        if (TryCleanEntrance(entranceValue, _modifiedEntrances.Values, out var newValue))
+        //        {
+        //            _modifiedEntrances[entranceKey] = newValue;
+        //            entranceValue = newValue;
+        //        }
+        //        if (TryCleanEntrance(entranceKey, _modifiedEntrances.Keys, out var newKey))
+        //        {
+        //            _modifiedEntrances.Add(newKey, entranceValue);
+        //            _modifiedEntrances.Remove(entranceKey);
+        //        }
+        //    }
+        //}
 
-        private bool TryCleanEntrance(string entrance, IEnumerable<string> otherEntrances, out string cleanEntrance)
-        {
-            var (location1, location2) = GetLocationNames(entrance);
-            cleanEntrance = entrance;
-            if (!location1.Contains("|") && !location2.Contains("|"))
-            {
-                return false;
-            }
+        //private bool TryCleanEntrance(string entrance, IEnumerable<string> otherEntrances, out string cleanEntrance)
+        //{
+        //    var (location1, location2) = GetLocationNames(entrance);
+        //    cleanEntrance = entrance;
+        //    if (!location1.Contains("|") && !location2.Contains("|"))
+        //    {
+        //        return false;
+        //    }
 
-            var location1Name = location1.Split("|")[0];
-            var location2Name = location2.Split("|")[0];
-            var numberSiblings = otherEntrances.Count(x => x.StartsWith(location1Name) && x.Contains(location2Name));
-            if (numberSiblings >= 2)
-            {
-                return false;
-            }
+        //    var location1Name = location1.Split("|")[0];
+        //    var location2Name = location2.Split("|")[0];
+        //    var numberSiblings = otherEntrances.Count(x => x.StartsWith(location1Name) && x.Contains(location2Name));
+        //    if (numberSiblings >= 2)
+        //    {
+        //        return false;
+        //    }
 
-            cleanEntrance = GetKey(location1Name, location2Name);
-            return true;
-        }
+        //    cleanEntrance = GetKey(location1Name, location2Name);
+        //    return true;
+        //}
 
         private void SwapFarmhouseEntranceWithAnotherEmptyAreaEntrance(SlotData slotData)
         {
@@ -321,24 +321,40 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
                 var parts = key.Split(TRANSITIONAL_STRING);
                 var aliased1 = TurnAliased(parts[0]);
                 var aliased2 = TurnAliased(parts[1]);
-                return $"{aliased1}{TRANSITIONAL_STRING}{aliased2}";
+                var newEntrance = $"{aliased1}{TRANSITIONAL_STRING}{aliased2}";
+                var newEntranceAliased = TurnAliased(newEntrance, _entranceAliases);
+                return newEntranceAliased;
             }
 
+            var modifiedString = TurnAliased(key, _locationAliases);
+
+            return modifiedString;
+        }
+
+        private static string TurnAliased(string key, Dictionary<string, string> aliases)
+        {
             var modifiedString = key;
-            foreach (var (oldString, newString) in _aliases)
+            foreach (var (oldString, newString) in aliases)
             {
                 var customizedNewString = newString;
                 if (customizedNewString.Contains("{0}"))
                 {
                     customizedNewString = string.Format(newString, Game1.player.isMale ? "Mens" : "Womens");
                 }
+
                 modifiedString = modifiedString.Replace(oldString, customizedNewString);
             }
 
             return modifiedString;
         }
 
-        private static readonly Dictionary<string, string> _aliases = new()
+        private static readonly Dictionary<string, string> _entranceAliases = new()
+        {
+            { "SebastianRoom to ScienceHouse|6|24", "SebastianRoom to ScienceHouse" }, // LockedDoorWarp 6 24 ScienceHouse 900 2000S–
+            { "ScienceHouse|6|24 to SebastianRoom", "ScienceHouse to SebastianRoom" }, // LockedDoorWarp 6 24 ScienceHouse 900 2000S–
+        };
+
+        private static readonly Dictionary<string, string> _locationAliases = new()
         {
             { "Mayor's Manor", "ManorHouse" },
             { "Pierre's General Store", "SeedShop" },
