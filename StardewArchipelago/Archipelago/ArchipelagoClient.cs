@@ -215,6 +215,12 @@ namespace StardewArchipelago.Archipelago
                     Game1.chatBox?.addMessage(fullMessage, color);
                     return;
                 }
+                case CommandResultLogMessage commandResultLogMessage:
+                {
+                    var color = Color.Gray;
+                    Game1.chatBox?.addMessage(fullMessage, color);
+                    return;
+                }
             }
         }
 
