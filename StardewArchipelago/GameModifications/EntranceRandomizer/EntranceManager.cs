@@ -73,7 +73,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
 
             // CleanCoordinatesFromEntrancesWithoutSiblings();
 
-            if (slotData.EntranceRandomization == EntranceRandomization.PelicanTown)
+            if (slotData.EntranceRandomization == EntranceRandomization.PelicanTown || slotData.EntranceRandomization == EntranceRandomization.NonProgression)
             {
                 return;
             }
