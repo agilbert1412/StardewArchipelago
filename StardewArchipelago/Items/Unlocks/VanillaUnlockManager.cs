@@ -20,6 +20,7 @@ namespace StardewArchipelago.Items.Unlocks
         public const string SPECIAL_ORDER_BOARD_AP_NAME = "Special Order Board";
         public const string QI_WALNUT_ROOM = "Qi Walnut Room";
         public const string PIERRE_STOCKLIST = "Pierre's Missing Stocklist";
+        public const string ADVENTURE_GUILD = "Adventurer's Guild";
         private Dictionary<string, Func<ReceivedItem, LetterAttachment>> _unlockables;
 
         public VanillaUnlockManager()
@@ -63,7 +64,7 @@ namespace StardewArchipelago.Items.Unlocks
             _unlockables.Add("Skull Key", SendSkullKeyLetter);
             _unlockables.Add("Rusty Key", SendRustyKeyLetter);
 
-            _unlockables.Add("Adventurer's Guild", SendAdventurerGuildLetter);
+            _unlockables.Add(ADVENTURE_GUILD, SendAdventurerGuildLetter);
             _unlockables.Add("Club Card", SendClubCardLetter);
             _unlockables.Add("Magnifying Glass", SendMagnifyingGlassLetter);
             _unlockables.Add("Iridium Snake Milk", SendIridiumSnakeMilkLetter);
