@@ -71,8 +71,6 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
                 RegisterRandomizedEntrance(originalEntrance, replacementEntrance);
             }
 
-            // CleanCoordinatesFromEntrancesWithoutSiblings();
-
             if (slotData.EntranceRandomization == EntranceRandomization.PelicanTown || slotData.EntranceRandomization == EntranceRandomization.NonProgression)
             {
                 return;
@@ -94,45 +92,6 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             _modifiedEntrances.Add(FARM_TO_FARMHOUSE, FARM_TO_FARMHOUSE);
             _modifiedEntrances.Add(farmhouseToFarm, farmhouseToFarm);
         }
-
-        //private void CleanCoordinatesFromEntrancesWithoutSiblings()
-        //{
-        //    foreach (var entranceKey in _modifiedEntrances.Keys.ToArray())
-        //    {
-        //        var entranceValue = _modifiedEntrances[entranceKey];
-        //        if (TryCleanEntrance(entranceValue, _modifiedEntrances.Values, out var newValue))
-        //        {
-        //            _modifiedEntrances[entranceKey] = newValue;
-        //            entranceValue = newValue;
-        //        }
-        //        if (TryCleanEntrance(entranceKey, _modifiedEntrances.Keys, out var newKey))
-        //        {
-        //            _modifiedEntrances.Add(newKey, entranceValue);
-        //            _modifiedEntrances.Remove(entranceKey);
-        //        }
-        //    }
-        //}
-
-        //private bool TryCleanEntrance(string entrance, IEnumerable<string> otherEntrances, out string cleanEntrance)
-        //{
-        //    var (location1, location2) = GetLocationNames(entrance);
-        //    cleanEntrance = entrance;
-        //    if (!location1.Contains("|") && !location2.Contains("|"))
-        //    {
-        //        return false;
-        //    }
-
-        //    var location1Name = location1.Split("|")[0];
-        //    var location2Name = location2.Split("|")[0];
-        //    var numberSiblings = otherEntrances.Count(x => x.StartsWith(location1Name) && x.Contains(location2Name));
-        //    if (numberSiblings >= 2)
-        //    {
-        //        return false;
-        //    }
-
-        //    cleanEntrance = GetKey(location1Name, location2Name);
-        //    return true;
-        //}
 
         private void SwapFarmhouseEntranceWithAnotherEmptyAreaEntrance(SlotData slotData)
         {
