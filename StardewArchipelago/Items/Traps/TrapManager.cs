@@ -51,12 +51,12 @@ namespace StardewArchipelago.Items.Traps
         private readonly InventoryShuffler _inventoryShuffler;
         private Dictionary<string, Action> _traps;
 
-        public TrapManager(IModHelper helper, ArchipelagoClient archipelago)
+        public TrapManager(IModHelper helper, ArchipelagoClient archipelago, TileChooser tileChooser)
         {
             _helper = helper;
             _archipelago = archipelago;
             _difficultyBalancer = new TrapDifficultyBalancer();
-            _tileChooser = new TileChooser();
+            _tileChooser = tileChooser;
             _monsterSpawner = new MonsterSpawner(_tileChooser);
             _inventoryShuffler = new InventoryShuffler();
             _traps = new Dictionary<string, Action>();

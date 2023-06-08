@@ -17,10 +17,10 @@ namespace StardewArchipelago.Items
         private Mailman _mail;
         private HashSet<ReceivedItem> _itemsAlreadyProcessed;
 
-        public ItemManager(IModHelper helper, ArchipelagoClient archipelago, StardewItemManager itemManager, Mailman mail, IEnumerable<ReceivedItem> itemsAlreadyProcessed)
+        public ItemManager(IModHelper helper, ArchipelagoClient archipelago, StardewItemManager itemManager, Mailman mail, TileChooser tileChooser, IEnumerable<ReceivedItem> itemsAlreadyProcessed)
         {
             _archipelago = archipelago;
-            _itemParser = new ItemParser(helper, archipelago, itemManager);
+            _itemParser = new ItemParser(helper, archipelago, itemManager, tileChooser);
             _mail = mail;
             _itemsAlreadyProcessed = itemsAlreadyProcessed.ToHashSet();
         }

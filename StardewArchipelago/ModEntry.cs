@@ -11,6 +11,7 @@ using StardewArchipelago.GameModifications.Seasons;
 using StardewArchipelago.Goals;
 using StardewArchipelago.Items;
 using StardewArchipelago.Items.Mail;
+using StardewArchipelago.Items.Traps;
 using StardewArchipelago.Locations;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
@@ -191,7 +192,8 @@ namespace StardewArchipelago
             _jojaDisabler = new JojaDisabler(Monitor, _helper, _harmony);
             _seasonsRandomizer = new SeasonsRandomizer(Monitor, _helper, _archipelago, State);
             _appearanceRandomizer = new AppearanceRandomizer(Monitor, _archipelago);
-            _chatForwarder = new ChatForwarder(Monitor, _helper, _harmony, _archipelago, _giftHandler);
+            var tileChooser = new TileChooser();
+            _chatForwarder = new ChatForwarder(Monitor, _helper, _harmony, _archipelago, _giftHandler, tileChooser);
             _questCleaner = new QuestCleaner();
 
 
@@ -217,7 +219,7 @@ namespace StardewArchipelago
                 }
             }
 
-            _itemManager = new ItemManager(_helper, _archipelago, _stardewItemManager, _mail, State.ItemsReceived);
+            _itemManager = new ItemManager(_helper, _archipelago, _stardewItemManager, _mail, tileChooser, State.ItemsReceived);
             _mailPatcher = new MailPatcher(Monitor, _harmony, new LetterActions(_helper, _mail, _archipelago, _itemManager.TrapManager));
             _locationsPatcher = new LocationPatcher(Monitor, _helper, _harmony, _archipelago, _locationChecker, _bundleReader, _stardewItemManager);
             _chatForwarder.ListenToChatMessages();

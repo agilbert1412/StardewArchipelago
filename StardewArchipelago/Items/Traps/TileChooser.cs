@@ -60,7 +60,7 @@ namespace StardewArchipelago.Items.Traps
             return spawnPosition.Value;
         }
 
-        private bool CanPathFindToAnyWarp(GameLocation location, Point startPoint)
+        public bool CanPathFindToAnyWarp(GameLocation location, Point startPoint)
         {
             if (location.warps == null || location.warps.Count < 1)
             {

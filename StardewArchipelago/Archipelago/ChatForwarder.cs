@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
+using StardewArchipelago.GameModifications;
 using StardewArchipelago.GameModifications.CodeInjections;
 using StardewArchipelago.Goals;
+using StardewArchipelago.Items.Traps;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
 using StardewModdingAPI;
@@ -23,14 +25,16 @@ namespace StardewArchipelago.Archipelago
         private Harmony _harmony;
         private static GiftHandler _giftHandler;
         private static BankHandler _bankHandler;
+        private static PlayerUnstucker _playerUnstucker;
 
-        public ChatForwarder(IMonitor monitor, IModHelper helper, Harmony harmony, ArchipelagoClient archipelago, GiftHandler giftHandler)
+        public ChatForwarder(IMonitor monitor, IModHelper helper, Harmony harmony, ArchipelagoClient archipelago, GiftHandler giftHandler, TileChooser tileChooser)
         {
             _monitor = monitor;
             _helper = helper;
             _harmony = harmony;
             _archipelago = archipelago;
             _giftHandler = giftHandler;
+            _playerUnstucker = new PlayerUnstucker(tileChooser);
             _bankHandler = new BankHandler(_archipelago);
         }
 
@@ -111,6 +115,11 @@ namespace StardewArchipelago.Archipelago
             }
 
             if (HandleOverrideSpriteRandomizerCommand(messageLower))
+            {
+                return true;
+            }
+
+            if (HandleUnstuckCommand(messageLower))
             {
                 return true;
             }
@@ -346,6 +355,22 @@ namespace StardewArchipelago.Archipelago
             return true;
         }
 
+        private static bool HandleUnstuckCommand(string message)
+        {
+            if (message != $"{COMMAND_PREFIX}unstuck")
+            {
+                return false;
+            }
+
+            var success = _playerUnstucker.Unstuck();
+            var response = success
+                ? $"You have been moved back inbounds, be more careful next time"
+                : $"Could not find suitable location to move. Consider !!sleep to end your day";
+            Game1.chatBox?.addMessage(response, Color.Gold);
+
+            return true;
+        }
+
         private static bool HandleSleepCommand(string message)
         {
             if (message != $"{COMMAND_PREFIX}sleep")
@@ -377,9 +402,10 @@ namespace StardewArchipelago.Archipelago
             Game1.chatBox?.addMessage($"{COMMAND_PREFIX}gift [slotName] - Sends your currently held item stack to a chosen player as a gift", Color.Gold);
             Game1.chatBox?.addMessage($"{COMMAND_PREFIX}letters - Toggle Hiding Empty Archipelago Letters", Color.Gold);
             Game1.chatBox?.addMessage($"{COMMAND_PREFIX}deathlink - Toggles Deathlink on/off. Saves when sleeping", Color.Gold);
-            Game1.chatBox?.addMessage($"{COMMAND_PREFIX}sprite - Enable/Disable the sprite randomizer", Color.Gold);
+            Game1.chatBox?.addMessage($"{COMMAND_PREFIX}unstuck - Nudge your character if you are stuck in a wall", Color.Gold);
             Game1.chatBox?.addMessage($"{COMMAND_PREFIX}sleep - Immediately pass out, ending the day", Color.Gold);
 #if DEBUG
+            Game1.chatBox?.addMessage($"{COMMAND_PREFIX}sprite - Enable/Disable the sprite randomizer", Color.Gold);
             Game1.chatBox?.addMessage($"{COMMAND_PREFIX}sync - Sends a Sync packet to the Archipelago server", Color.Gold);
 #endif
             Game1.chatBox?.addMessage($"{COMMAND_PREFIX}arcade_release [game] - Releases all remaining checks in an arcade machine that you have already completed", Color.Gold);
