@@ -67,6 +67,12 @@ namespace StardewArchipelago.Items.Traps
                 return false;
             }
 
+            if (location.isCollidingPosition(new Microsoft.Xna.Framework.Rectangle(startPoint.X * 64 + 1, startPoint.Y * 64 + 1, 62, 62),
+                    Game1.viewport, true, 0, false, Game1.player, true))
+            {
+                return false;
+            }
+
             foreach (var warp in location.warps)
             {
                 var endPoint = new Point(warp.X, warp.Y);
