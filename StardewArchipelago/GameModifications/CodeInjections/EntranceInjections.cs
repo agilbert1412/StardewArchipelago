@@ -27,7 +27,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         {
             try
             {
-                if (Game1.currentLocation.Name.ToLower() == locationRequest.Name.ToLower())
+                if (Game1.currentLocation.Name.ToLower() == locationRequest.Name.ToLower() || Game1.player.passedOut || Game1.player.FarmerSprite.isPassingOut() || Game1.player.isInBed)
                 {
                     return true; // run original logic
                 }
