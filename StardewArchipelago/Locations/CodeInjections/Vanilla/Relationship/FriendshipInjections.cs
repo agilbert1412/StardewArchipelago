@@ -63,6 +63,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
             return _friendshipPoints.ToDictionary(x => x.Key, x => (int)Math.Round(x.Value));
         }
 
+        public static string GetArchipelagoFriendshipPointsForPrinting(string characterName)
+        {
+            var points = GetFriendshipPoints(characterName);
+            if (points <= 0)
+            {
+                return $"You have never met someone named {characterName}";
+            }
+            return $"{characterName}: {points} ({GetHearts(points)} <)";
+        }
+
         public static void SetArchipelagoFriendshipPoints(Dictionary<string, int> values)
         {
             if (values == null)

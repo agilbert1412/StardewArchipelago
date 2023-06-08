@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using StardewArchipelago.GameModifications.CodeInjections;
 using StardewArchipelago.Goals;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
@@ -80,6 +81,11 @@ namespace StardewArchipelago.Archipelago
             }
 
             if (HandleExperienceCommand(messageLower))
+            {
+                return true;
+            }
+
+            if (HandleFriendshipCommand(message))
             {
                 return true;
             }
@@ -165,6 +171,59 @@ namespace StardewArchipelago.Archipelago
             }
 
             return true;
+        }
+
+        private static bool HandleFriendshipCommand(string message)
+        {
+            var friendshipPrefix = $"{COMMAND_PREFIX}friendship ";
+            if (!message.StartsWith(friendshipPrefix))
+            {
+                return false;
+            }
+
+            var remainder = message.Substring(friendshipPrefix.Length);
+            var name = CorrectName(remainder);
+            var state = FriendshipInjections.GetArchipelagoFriendshipPointsForPrinting(name);
+            Game1.chatBox?.addMessage(state, Color.Gold);
+
+            return true;
+        }
+
+        private static string CorrectName(string enteredName)
+        {
+            var loweredName = enteredName.ToLower().Replace(" ", "");
+            var loweredPetName = Game1.player.getPetName().ToLower().Replace(" ", "");
+            if (loweredName == loweredPetName)
+            {
+                return Game1.player.getPetName();
+            }
+            switch (loweredName)
+            {
+                case "pet":
+                case "cat":
+                case "dog":
+                    return Game1.player.getPetName();
+                case "rasmodius":
+                    return "Wizard";
+                case "milf":
+                    return "Robin";
+                case "hobo":
+                    return "Linus";
+                case "josh":
+                    return "Alex";
+                case "bestgirl":
+                    return "Abigail";
+                case "gilf":
+                    return "Evelyn";
+                case "boomer":
+                    return "George";
+                case "nerd":
+                    return "Maru";
+                case "emo":
+                    return "Sebastian";
+                default:
+                    return Utility.capitalizeFirstLetter(enteredName);
+            }
         }
 
         private static bool HandleSyncCommand(string message)
