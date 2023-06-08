@@ -369,6 +369,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
                 return;
             }
 
+            const int bachelorNoDecayThreshold = 2000;
+            const int nonBachelorNoDecayThreshold = 2500;
+            var earnedPoints = GetFriendshipPoints(npcName);
+
             if (NpcIsSpouse(farmer, npcName))
             {
                 farmer.changeFriendship(DECAY_SPOUSE, npc);
@@ -377,8 +381,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
             {
                 farmer.changeFriendship(DECAY_PARTNER, npc);
             }
-            else if (!isSingleBachelor && farmer.friendshipData[npcName].Points < 2500 ||
-                     isSingleBachelor && farmer.friendshipData[npcName].Points < 2000)
+            else if ((!isSingleBachelor && farmer.friendshipData[npcName].Points < nonBachelorNoDecayThreshold && earnedPoints < nonBachelorNoDecayThreshold) ||
+                     (isSingleBachelor && farmer.friendshipData[npcName].Points < bachelorNoDecayThreshold && earnedPoints < bachelorNoDecayThreshold))
             {
                 farmer.changeFriendship(DECAY_OTHER, npc);
             }
