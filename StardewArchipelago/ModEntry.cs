@@ -306,6 +306,11 @@ namespace StardewArchipelago
             {
                 Game1.player.hasDarkTalisman = true;
             }
+
+            if (_archipelago.HasReceivedItem("Key To The Town"))
+            {
+                Game1.player.HasTownKey = true;
+            }
         }
 
         private void OnDayEnding(object sender, DayEndingEventArgs e)
