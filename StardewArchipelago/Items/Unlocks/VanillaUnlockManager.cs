@@ -69,6 +69,7 @@ namespace StardewArchipelago.Items.Unlocks
             _unlockables.Add("Magnifying Glass", SendMagnifyingGlassLetter);
             _unlockables.Add("Iridium Snake Milk", SendIridiumSnakeMilkLetter);
             _unlockables.Add("Dark Talisman", SendDarkTalismanLetter);
+            _unlockables.Add("Key To The Town", SendKeyToTheTownLetter);
         }
 
         private void RegisterPlayerSkills()
@@ -268,6 +269,11 @@ namespace StardewArchipelago.Items.Unlocks
         private LetterActionAttachment SendDarkTalismanLetter(ReceivedItem receivedItem)
         {
             return new LetterActionAttachment(receivedItem, LetterActionsKeys.DarkTalisman);
+        }
+
+        private LetterActionAttachment SendKeyToTheTownLetter(ReceivedItem receivedItem)
+        {
+            return new LetterActionAttachment(receivedItem, LetterActionsKeys.KeyToTheTown);
         }
 
         private LetterActionAttachment SendGoldenScytheLetter(ReceivedItem receivedItem)

@@ -11,6 +11,7 @@
         public const string MagnifyingGlass = "MagnifyingGlass";
         public const string IridiumSnakeMilk = "IridiumSnakeMilk";
         public const string DarkTalisman = "DarkTalisman";
+        public const string KeyToTheTown = "KeyToTheTown";
         public const string AdventurerGuild = "AdventurerGuild";
         public const string GoldenScythe = "GoldenScythe";
         public const string BeachBridge = "BeachBridge";
