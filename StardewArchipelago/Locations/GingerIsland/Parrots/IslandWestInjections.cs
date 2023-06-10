@@ -11,7 +11,7 @@ namespace StardewArchipelago.Locations.GingerIsland.Parrots
     public class IslandWestInjections : IParrotReplacer
     {
         private const string AP_FARM_OBELISK_PARROT = "Farm Obelisk";
-        private const string AP_MAILBOX_PARROT = "Island Farmhouse Mailbox";
+        private const string AP_MAILBOX_PARROT = "Island Mailbox";
         private const string AP_FARMHOUSE_PARROT = "Island Farmhouse";
         private const string AP_FAST_TRAVEL_PARROT = "Parrot Express";
 
