@@ -14,18 +14,20 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
 {
     public class EntranceManager
     {
-        private const string TRANSITIONAL_STRING = " to ";
+        public const string TRANSITIONAL_STRING = " to ";
         private const string FARM_TO_FARMHOUSE = "Farm to FarmHouse";
 
         private readonly IMonitor _monitor;
-        private Dictionary<string, string> _modifiedEntrances;
+        private readonly EquivalentWarps _equivalentAreas;
 
+        private Dictionary<string, string> _modifiedEntrances;
         private HashSet<string> _checkedEntrancesToday;
         private Dictionary<string, WarpRequest> generatedWarps;
 
         public EntranceManager(IMonitor monitor)
         {
             _monitor = monitor;
+            _equivalentAreas = new EquivalentWarps();
             generatedWarps = new Dictionary<string, WarpRequest>(StringComparer.OrdinalIgnoreCase);
         }
 
@@ -131,16 +133,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
         {
             var aliasedOriginal = TurnAliased(originalEntrance);
             var aliasedReplacement = TurnAliased(replacementEntrance);
-            var originalEquivalentEntrances = _equivalentAreas.FirstOrDefault(x => x.Contains(aliasedOriginal)) ?? new[] { aliasedOriginal };
-            var replacementEquivalentEntrances = _equivalentAreas.FirstOrDefault(x => x.Contains(aliasedReplacement)) ??
-                                                 new[] { aliasedReplacement };
-            foreach (var originalEquivalentEntrance in originalEquivalentEntrances)
-            {
-                foreach (var replacementEquivalentEntrance in replacementEquivalentEntrances)
-                {
-                    RegisterRandomizedEntranceWithCoordinates(originalEquivalentEntrance, replacementEquivalentEntrance);
-                }
-            }
+            RegisterRandomizedEntranceWithCoordinates(aliasedOriginal, aliasedReplacement);
         }
 
         private void RegisterRandomizedEntranceWithCoordinates(string originalEquivalentEntrance,
@@ -152,25 +145,28 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
         public bool TryGetEntranceReplacement(string currentLocationName, string locationRequestName, Point targetPosition, out WarpRequest warpRequest)
         {
             warpRequest = null;
-            targetPosition = targetPosition.CheckSpecialVolcanoEdgeCaseWarp(locationRequestName);
-            var key = GetKeys(currentLocationName, locationRequestName, targetPosition);
+            var defaultCurrentLocationName = _equivalentAreas.GetDefaultEquivalentEntrance(currentLocationName);
+            var defaultLocationRequestName = _equivalentAreas.GetDefaultEquivalentEntrance(locationRequestName);
+            targetPosition = targetPosition.CheckSpecialVolcanoEdgeCaseWarp(defaultLocationRequestName);
+            var key = GetKeys(defaultCurrentLocationName, defaultLocationRequestName, targetPosition);
             if (!TryGetModifiedWarpName(key, out var desiredWarpName))
             {
                 return false;
             }
 
-            if (_checkedEntrancesToday.Contains(desiredWarpName))
+            var correctDesiredWarpName = _equivalentAreas.GetCorrectEquivalentEntrance(desiredWarpName);
+            if (_checkedEntrancesToday.Contains(correctDesiredWarpName))
             {
-                if (generatedWarps.ContainsKey(desiredWarpName))
+                if (generatedWarps.ContainsKey(correctDesiredWarpName))
                 {
-                    warpRequest = generatedWarps[desiredWarpName];
+                    warpRequest = generatedWarps[correctDesiredWarpName];
                     return true;
                 }
 
                 return false;
             }
 
-            return TryFindWarpToDestination(desiredWarpName, out warpRequest);
+            return TryFindWarpToDestination(correctDesiredWarpName, out warpRequest);
         }
 
         private bool TryGetModifiedWarpName(IEnumerable<string> keys, out string desiredWarpName)
@@ -359,17 +355,6 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Jasper's Bedroom", "Custom_LK_Museum2"},
             { "'s", "" },
             { " ", "" },
-        };
-
-        private static string[] _jojaMartLocations = new[] { "JojaMart", "AbandonedJojaMart", "MovieTheater" };
-        private static string[] _trailerLocations = new[] { "Trailer", "Trailer_Big" };
-        private static string[] _beachLocations = new[] { "Beach", "BeachNightMarket" };
-
-        private List<string[]> _equivalentAreas = new()
-        {
-            _jojaMartLocations,
-            _trailerLocations,
-            _beachLocations,
         };
     }
 

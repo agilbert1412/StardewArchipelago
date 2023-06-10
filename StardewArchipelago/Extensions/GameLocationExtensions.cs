@@ -15,7 +15,12 @@ namespace StardewArchipelago.Extensions
     {
         private static readonly Dictionary<WarpRequest, WarpRequest> ExtraWarps = new()
         {
+            {new WarpRequest(Game1.getLocationRequest("Town"), 96, 51, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("AbandonedJojaMart"), 9, 14, FacingDirection.Up)},
+            {new WarpRequest(Game1.getLocationRequest("Town"), 96, 51, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("MovieTheater"), 13, 15, FacingDirection.Up)},
+            // {new WarpRequest(Game1.getLocationRequest("Town"), , , FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("Trailer_Big"), , , FacingDirection.Up)},
             {new WarpRequest(Game1.getLocationRequest("Town"), 35, 97, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("Sewer"), 16, 11, FacingDirection.Down)},
+            {new WarpRequest(Game1.getLocationRequest("BeachNightMarket"), 49, 11, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("ElliottHouse"), 3, 9, FacingDirection.Down)},
+            {new WarpRequest(Game1.getLocationRequest("BeachNightMarket"), 30, 34, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("FishShop"), 5, 9, FacingDirection.Down)},
             {new WarpRequest(Game1.getLocationRequest("FishShop"), 4, 3, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("BoatTunnel"), 6, 12, FacingDirection.Up)},
             {new WarpRequest(Game1.getLocationRequest("IslandWest"), 20, 23, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("QiNutRoom"), 7, 8, FacingDirection.Up)},
             {new WarpRequest(Game1.getLocationRequest("WizardHouse"), 4, 5, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("WizardHouseBasement"), 4, 4, FacingDirection.Down)},
