@@ -336,7 +336,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
             catch (Exception ex)
             {
                 _monitor.Log($"Failed in {nameof(ChangeFriendship_ArchipelagoPoints_Prefix)}:\n{ex}", LogLevel.Error);
-                _monitor.Log($"NPC: {n?.Name ?? "null"}:\n{ex}", LogLevel.Error);
+                _monitor.Log($"NPC: {n?.Name ?? "null"}", LogLevel.Error);
                 return true; // run original logic
             }
         }
