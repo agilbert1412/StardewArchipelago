@@ -420,7 +420,7 @@ namespace StardewArchipelago.Items.Mail
         private const string _islandSouth = "IslandSouth";
         private const string _islandNorth = "IslandNorth";
         private const string _islandWest = "IslandWest";
-        private const string _volcanoDungeon = "VolcanoDungeon";
+        private const string _volcanoDungeon = "VolcanoDungeon0";
 
         private static T FindLocation<T>(string locationName)
         {
