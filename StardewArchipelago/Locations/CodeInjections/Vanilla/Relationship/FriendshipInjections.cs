@@ -280,12 +280,17 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
         {
             try
             {
+                var isValidTarget = n != null && (n is Child || n.isVillager());
+                if (!isValidTarget)
+                {
+                    return false; // don't run original logic
+                }
+
                 //  Checks if actual name is a value in the dictionary and updates if necessary.
                 var name = n.Name;
                 var friend = _friends.GetFriend(name);
-                var isValidTarget = n != null && (n is Child || n.isVillager());
                 var canCommunicateWithNpc = !friend.RequiresDwarfLanguage || __instance.canUnderstandDwarves;
-                if (!isValidTarget || amount > 0 && !canCommunicateWithNpc)
+                if (amount > 0 && !canCommunicateWithNpc)
                 {
                     return false; // don't run original logic
                 }
@@ -331,6 +336,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
             catch (Exception ex)
             {
                 _monitor.Log($"Failed in {nameof(ChangeFriendship_ArchipelagoPoints_Prefix)}:\n{ex}", LogLevel.Error);
+                _monitor.Log($"NPC: {n?.Name ?? "null"}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
             }
         }
