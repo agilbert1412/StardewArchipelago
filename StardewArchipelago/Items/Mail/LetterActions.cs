@@ -305,8 +305,13 @@ namespace StardewArchipelago.Items.Mail
         {
             var numberOfPreviousFishingRodLetters = _mail.OpenedMailsContainingKey(VanillaUnlockManager.PROGRESSIVE_FISHING_ROD_AP_NAME);
 
-            numberOfPreviousFishingRodLetters = Math.Max(1, Math.Min(4, numberOfPreviousFishingRodLetters));
-            var upgradeLevel = numberOfPreviousFishingRodLetters - 1;
+            // received 0 -> training rod [1]
+            // received 1 -> bamboo [0]
+            // received 2 -> fiberglass [2]
+            // received 3 -> iridium [3]
+
+            numberOfPreviousFishingRodLetters = Math.Max(0, Math.Min(4, numberOfPreviousFishingRodLetters));
+            var upgradeLevel = numberOfPreviousFishingRodLetters;
             if (upgradeLevel < 2)
             {
                 upgradeLevel = 1 - upgradeLevel;
