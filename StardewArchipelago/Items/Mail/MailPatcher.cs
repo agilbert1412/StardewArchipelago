@@ -72,6 +72,20 @@ namespace StardewArchipelago.Items.Mail
             try
             {
                 CleanMailboxUntilNonEmptyLetter();
+                var mailbox = Game1.mailbox;
+                if (mailbox == null || !mailbox.Any())
+                {
+                    return true; // run original logic
+                }
+
+                var nextLetter = mailbox.First();
+
+                if (!MailKey.TryParse(nextLetter, out _))
+                {
+                    return true; // run original logic
+                }
+
+                Game1.player.mailReceived.Add(nextLetter);
                 return true; // run original logic
             }
             catch (Exception ex)

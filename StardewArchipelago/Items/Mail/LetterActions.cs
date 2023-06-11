@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Netcode;
@@ -303,15 +304,16 @@ namespace StardewArchipelago.Items.Mail
 
         private void GetFishingRodOfNextLevel()
         {
+            // This includes the current letter due to the timing of this patch
             var numberOfPreviousFishingRodLetters = _mail.OpenedMailsContainingKey(VanillaUnlockManager.PROGRESSIVE_FISHING_ROD_AP_NAME);
 
-            // received 0 -> training rod [1]
-            // received 1 -> bamboo [0]
-            // received 2 -> fiberglass [2]
-            // received 3 -> iridium [3]
+            // received 1 -> training rod [1]
+            // received 2 -> bamboo [0]
+            // received 3 -> fiberglass [2]
+            // received 4 -> iridium [3]
 
-            numberOfPreviousFishingRodLetters = Math.Max(0, Math.Min(4, numberOfPreviousFishingRodLetters));
-            var upgradeLevel = numberOfPreviousFishingRodLetters;
+            numberOfPreviousFishingRodLetters = Math.Max(1, Math.Min(4, numberOfPreviousFishingRodLetters));
+            var upgradeLevel = numberOfPreviousFishingRodLetters - 1;
             if (upgradeLevel < 2)
             {
                 upgradeLevel = 1 - upgradeLevel;
