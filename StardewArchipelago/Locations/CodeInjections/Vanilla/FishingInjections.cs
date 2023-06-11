@@ -13,7 +13,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private const int WHITE_ALGAE = 157;
         private const int SEAWEED = 152;
         private const int GOLDEN_WALNUT = 73;
+        private const int SECRET_NOTE = 79;
         private const int JOURNAL_SCRAP = 842;
+        private const int FOSSILIZED_SPINE = 821;
         private const string FISHSANITY_PREFIX = "Fishsanity: ";
 
         private static IMonitor _monitor;
@@ -48,7 +50,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 {
                     _locationChecker.AddCheckedLocation(apLocation);
                 }
-                else if (index != GREEN_ALGAE && index != WHITE_ALGAE && index != SEAWEED && index != GOLDEN_WALNUT && index != JOURNAL_SCRAP)
+                else if (index != GREEN_ALGAE && index != WHITE_ALGAE && index != SEAWEED && index != GOLDEN_WALNUT && index != SECRET_NOTE && index != FOSSILIZED_SPINE && index != JOURNAL_SCRAP)
                 {
                     _monitor.Log($"Unrecognized Fishsanity Location: {fishName} [{index}]", LogLevel.Error);
                 }
