@@ -95,7 +95,7 @@ namespace StardewArchipelago.Items.Unlocks
         private void RegisterUniqueItems()
         {
             _unlockables.Add(GOLDEN_SCYTHE_AP_NAME, SendGoldenScytheLetter);
-            // _unlockables.Add(PIERRE_STOCKLIST, SendPierreStocklistLetter);
+            _unlockables.Add(PIERRE_STOCKLIST, SendPierreStocklistLetter);
         }
 
         private void RegisterIsolatedEventsItems()
@@ -282,10 +282,10 @@ namespace StardewArchipelago.Items.Unlocks
             return new LetterActionAttachment(receivedItem, LetterActionsKeys.GoldenScythe);
         }
 
-        /*private LetterVanillaAttachment SendGoldenScytheLetter(ReceivedItem receivedItem)
+        private LetterActionAttachment SendPierreStocklistLetter(ReceivedItem receivedItem)
         {
-            return new LetterVanillaAttachment(receivedItem, "PierreStocklist", );
-        }*/
+            return new LetterActionAttachment(receivedItem, LetterActionsKeys.PierreStocklist);
+        }
 
         private LetterActionAttachment SendBeachBridgeLetter(ReceivedItem receivedItem)
         {

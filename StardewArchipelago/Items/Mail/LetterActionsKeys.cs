@@ -14,6 +14,7 @@
         public const string KeyToTheTown = "KeyToTheTown";
         public const string AdventurerGuild = "AdventurerGuild";
         public const string GoldenScythe = "GoldenScythe";
+        public const string PierreStocklist = "PierreStocklist";
         public const string BeachBridge = "BeachBridge";
         public const string ProgressiveTool = "ProgressiveTool";
         public const string FishingRod = "FishingRod";

@@ -43,6 +43,7 @@ namespace StardewArchipelago.Items.Mail
             _letterActions.Add(LetterActionsKeys.DarkTalisman, (_) => ReceiveDarkTalisman());
             _letterActions.Add(LetterActionsKeys.KeyToTheTown, (_) => ReceiveKeyToTheTown());
             _letterActions.Add(LetterActionsKeys.GoldenScythe, (_) => ReceiveGoldenScythe());
+            _letterActions.Add(LetterActionsKeys.PierreStocklist, (_) => ReceivePierreStocklist());
             _letterActions.Add(LetterActionsKeys.BeachBridge, (_) => RepairBeachBridge());
             _letterActions.Add(LetterActionsKeys.ProgressiveTool, ReceiveProgressiveTool);
             _letterActions.Add(LetterActionsKeys.FishingRod, (_) => GetFishingRodOfNextLevel());
@@ -169,6 +170,15 @@ namespace StardewArchipelago.Items.Mail
             var goldenScythe = new MeleeWeapon(53);
             Game1.player.holdUpItemThenMessage(goldenScythe);
             Game1.player.addItemByMenuIfNecessary(goldenScythe);
+        }
+
+        private void ReceivePierreStocklist()
+        {
+            Game1.addMailForTomorrow("gotMissingStocklist", true, true);
+            var stocklist = new Object(897, 1);
+            stocklist.questItem.Value = true;
+            Game1.player.holdUpItemThenMessage(stocklist);
+            Game1.player.addItemByMenuIfNecessary(stocklist);
         }
 
         private void RepairBeachBridge()
