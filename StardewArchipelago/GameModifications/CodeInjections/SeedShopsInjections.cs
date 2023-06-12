@@ -585,7 +585,6 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
                 _lastShopMenuUpdated = __instance;
                 DisableSeedsIfNeeded(__instance);
-                __instance.forSale = __instance.itemPriceAndStock.Keys.ToList();
                 return;
             }
             catch (Exception ex)
@@ -612,6 +611,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 if (!_archipelago.HasReceivedItem(salableObject.Name))
                 {
                     __instance.itemPriceAndStock.Remove(salableItem);
+                    __instance.forSale.Remove(salableItem);
                 }
 
                 if (salableObject.ParentSheetIndex != STRAWBERRY_SEEDS)
@@ -625,6 +625,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                         new PurchaseableArchipelagoLocation(salableObject.Name, FestivalLocationNames.STRAWBERRY_SEEDS,
                             _modHelper, _locationChecker, _archipelago);
                     __instance.itemPriceAndStock.Add(strawberrySeedsApItem, new[] { 1000, 1 });
+                    __instance.forSale.Add(strawberrySeedsApItem);
                 }
             }
         }
