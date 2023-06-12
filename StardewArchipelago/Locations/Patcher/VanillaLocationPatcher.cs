@@ -347,6 +347,7 @@ namespace StardewArchipelago.Locations.Patcher
             );
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Beach), nameof(Beach.draw)),
+                prefix: new HarmonyMethod(typeof(IsolatedEventInjections), nameof(IsolatedEventInjections.Draw_BeachBridgeQuestionMark_Prefix)),
                 postfix: new HarmonyMethod(typeof(IsolatedEventInjections), nameof(IsolatedEventInjections.Draw_BeachBridgeQuestionMark_Postfix))
             );
             _harmony.Patch(
