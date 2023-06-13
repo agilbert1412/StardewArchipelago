@@ -116,6 +116,31 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
         private static bool? _realBridgeFixed = null;
 
+        // public static void fixBridge(GameLocation location)
+
+        public static bool FixBridge_DontFixDuringDraw_Prefix(GameLocation location)
+        {
+            try
+            {
+                if (_realBridgeFixed != null)
+                {
+                    return false; // don't run original logic
+                }
+
+                if (_archipelago.HasReceivedItem(VanillaUnlockManager.BEACH_BRIDGE_AP_NAME))
+                {
+                    return true;
+                }
+
+                return false; // don't run original logic
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(FixBridge_DontFixDuringDraw_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
+        }
+
         // public override void draw(SpriteBatch b)
 
         public static bool Draw_BeachBridgeQuestionMark_Prefix(Beach __instance, SpriteBatch b)
@@ -128,7 +153,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 }
 
                 __instance.bridgeFixed.Value = _locationChecker.IsLocationChecked(BEACH_BRIDGE_AP_LOCATION);
-                return false; // don't ru
+                return true; // run original logic
             }
             catch (Exception ex)
             {
