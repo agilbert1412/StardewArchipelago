@@ -26,13 +26,15 @@ namespace StardewArchipelago.Locations.Patcher
     {
         private readonly ArchipelagoClient _archipelago;
         private readonly Harmony _harmony;
+        private readonly IModHelper _modHelper;
         private readonly GingerIslandPatcher _gingerIslandPatcher;
 
         public VanillaLocationPatcher(IMonitor monitor, IModHelper modHelper, Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             _archipelago = archipelago;
             _harmony = harmony;
-            _gingerIslandPatcher = new GingerIslandPatcher(monitor, modHelper, harmony, archipelago, locationChecker);
+            _modHelper = modHelper;
+            _gingerIslandPatcher = new GingerIslandPatcher(monitor, _modHelper, _harmony, _archipelago, locationChecker);
         }
 
         public void ReplaceAllLocationsRewardsWithChecks()
@@ -231,11 +233,7 @@ namespace StardewArchipelago.Locations.Patcher
                 prefix: new HarmonyMethod(typeof(QuestInjections), nameof(QuestInjections.MgThief_AfterSpeech_WinterMysteryFinished_Prefix))
             );
 
-            var desiredSkillsPageCtorParameters = new[] { typeof(int), typeof(int), typeof(int), typeof(int) };
-            _harmony.Patch(
-                original: AccessTools.Constructor(typeof(SkillsPage), desiredSkillsPageCtorParameters),
-                postfix: new HarmonyMethod(typeof(QuestInjections), nameof(QuestInjections.SkillsPageCtor_BearKnowledge_Postfix))
-            );
+            PatchSkillsPage();
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Object), "getPriceAfterMultipliers"),
@@ -245,6 +243,16 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Event), nameof(Event.command_awardFestivalPrize)),
                 prefix: new HarmonyMethod(typeof(QuestInjections), nameof(QuestInjections.Command_AwardFestivalPrize_QiMilk_Prefix))
+            );
+        }
+
+        private void PatchSkillsPage()
+        {
+            var desiredSkillsPageCtorParameters = new[] { typeof(int), typeof(int), typeof(int), typeof(int) };
+            _harmony.Patch(
+                original: AccessTools.Constructor(typeof(SkillsPage), desiredSkillsPageCtorParameters),
+                postfix: new HarmonyMethod(typeof(QuestInjections),
+                    nameof(QuestInjections.SkillsPageCtor_BearKnowledge_Postfix))
             );
         }
 
