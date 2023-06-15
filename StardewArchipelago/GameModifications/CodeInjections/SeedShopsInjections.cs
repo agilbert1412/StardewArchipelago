@@ -603,7 +603,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
             foreach (var salableItem in __instance.itemPriceAndStock.Keys.ToArray())
             {
-                if (salableItem is not Object salableObject || salableObject.Category != CATEGORY_SEEDS)
+                if (salableItem is not Object salableObject || salableObject.Category != CATEGORY_SEEDS || salableObject.ParentSheetIndex == MIXED_SEEDS)
                 {
                     continue;
                 }
