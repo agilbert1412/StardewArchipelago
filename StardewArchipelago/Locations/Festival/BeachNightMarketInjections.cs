@@ -37,7 +37,7 @@ namespace StardewArchipelago.Locations.Festival
             {
                 foreach (var salableItem in __result.Keys.ToArray())
                 {
-                    if (salableItem is not Object salableObject)
+                    if (salableItem is not Item)
                     {
                         continue;
                     }
