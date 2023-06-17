@@ -24,6 +24,9 @@
         public const string GiveBoots = "GiveBoots";
         public const string GiveMeleeWeapon = "GiveMeleeWeapon";
         public const string GiveSlingshot = "GiveSlingshot";
+        public const string GiveBed = "GiveBed";
+        public const string GiveFishTank = "GiveFishTank";
+        public const string GiveTV = "GiveTV";
         public const string GiveFurniture = "GiveFurniture";
         public const string GiveHat = "GiveHat";
         public const string IslandUnlock = "IslandUnlock";

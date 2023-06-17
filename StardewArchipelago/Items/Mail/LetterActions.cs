@@ -53,6 +53,9 @@ namespace StardewArchipelago.Items.Mail
             _letterActions.Add(LetterActionsKeys.GiveBoots, ReceiveBoots);
             _letterActions.Add(LetterActionsKeys.GiveMeleeWeapon, ReceiveMeleeWeapon);
             _letterActions.Add(LetterActionsKeys.GiveSlingshot, ReceiveSlingshot);
+            _letterActions.Add(LetterActionsKeys.GiveBed, ReceiveBed);
+            _letterActions.Add(LetterActionsKeys.GiveFishTank, ReceiveFishTank);
+            _letterActions.Add(LetterActionsKeys.GiveTV, ReceiveTV);
             _letterActions.Add(LetterActionsKeys.GiveFurniture, ReceiveFurniture);
             _letterActions.Add(LetterActionsKeys.GiveHat, ReceiveHat);
             _letterActions.Add(LetterActionsKeys.IslandUnlock, PerformParrotUpgrade);
@@ -359,49 +362,75 @@ namespace StardewArchipelago.Items.Mail
             var id = int.Parse(bigCraftableId);
             var bigCraftable = new Object(Vector2.Zero, id);
             bigCraftable.Stack = 1;
-            Game1.player.addItemByMenuIfNecessaryElseHoldUp(bigCraftable);
+            ReceiveItem(bigCraftable);
         }
 
         private void ReceiveRing(string ringId)
         {
             var id = int.Parse(ringId);
             var ring = new Ring(id);
-            Game1.player.addItemByMenuIfNecessaryElseHoldUp(ring);
+            ReceiveItem(ring);
         }
 
         private void ReceiveBoots(string bootsId)
         {
             var id = int.Parse(bootsId);
             var boots = new Boots(id);
-            Game1.player.addItemByMenuIfNecessaryElseHoldUp(boots);
+            ReceiveItem(boots);
         }
 
         private void ReceiveMeleeWeapon(string weaponId)
         {
             var id = int.Parse(weaponId);
             var weapon = new MeleeWeapon(id);
-            Game1.player.addItemByMenuIfNecessaryElseHoldUp(weapon);
+            ReceiveItem(weapon);
         }
 
         private void ReceiveSlingshot(string slingshotId)
         {
             var id = int.Parse(slingshotId);
             var slingshot = new Slingshot(id);
-            Game1.player.addItemByMenuIfNecessaryElseHoldUp(slingshot);
+            ReceiveItem(slingshot);
+        }
+
+        private void ReceiveBed(string furnitureId)
+        {
+            var id = int.Parse(furnitureId);
+            var furniture = new BedFurniture(id, Vector2.Zero);
+            ReceiveItem(furniture);
+        }
+
+        private void ReceiveFishTank(string furnitureId)
+        {
+            var id = int.Parse(furnitureId);
+            var furniture = new FishTankFurniture(id, Vector2.Zero);
+            ReceiveItem(furniture);
+        }
+
+        private void ReceiveTV(string furnitureId)
+        {
+            var id = int.Parse(furnitureId);
+            var furniture = new TV(id, Vector2.Zero);
+            ReceiveItem(furniture);
         }
 
         private void ReceiveFurniture(string furnitureId)
         {
             var id = int.Parse(furnitureId);
             var furniture = new Furniture(id, Vector2.Zero);
-            Game1.player.addItemByMenuIfNecessaryElseHoldUp(furniture);
+            ReceiveItem(furniture);
+        }
+
+        private void ReceiveItem(Item item)
+        {
+            Game1.player.addItemByMenuIfNecessaryElseHoldUp(item);
         }
 
         private void ReceiveHat(string hatId)
         {
             var id = int.Parse(hatId);
             var hat = new Hat(id);
-            Game1.player.addItemByMenuIfNecessaryElseHoldUp(hat);
+            ReceiveItem(hat);
         }
 
         private void PerformParrotUpgrade(string whichUpgrade)
