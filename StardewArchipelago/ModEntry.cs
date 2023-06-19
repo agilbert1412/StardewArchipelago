@@ -171,7 +171,7 @@ namespace StardewArchipelago
             _goalManager = new GoalManager(Monitor, _helper, _harmony, _archipelago, _locationChecker);
             _logicPatcher = new RandomizedLogicPatcher(Monitor, _helper, _harmony, _archipelago, _locationChecker, _stardewItemManager);
             _jojaDisabler = new JojaDisabler(Monitor, _helper, _harmony);
-            _chatForwarder = new ChatForwarder(Monitor, _helper, _harmony, _archipelago, _giftHandler);
+            _chatForwarder = new ChatForwarder(Monitor, _helper, _archipelago, _harmony, _giftHandler);
 
             if (_state.APConnectionInfo == null)
             {

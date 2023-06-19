@@ -93,11 +93,11 @@ namespace StardewArchipelago.Archipelago
                 return true;
             }
 
-
             if (_bankHandler.HandleBankCommand(message))
             {
                 return true;
             }
+
             if (HandleSyncCommand(messageLower))
             {
                 return true;
