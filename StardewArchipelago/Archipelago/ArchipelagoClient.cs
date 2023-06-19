@@ -24,8 +24,6 @@ namespace StardewArchipelago.Archipelago
         private DeathLinkService _deathLinkService;
         private Harmony _harmony;
         private DeathManager _deathManager;
-        private ChatForwarder _chatForwarder;
-        private GiftHandler _giftHandler;
         private ArchipelagoConnectionInfo _connectionInfo;
         private IManifest _modManifest;
 
@@ -51,9 +49,8 @@ namespace StardewArchipelago.Archipelago
             _localDataPackage = new DataPackageCache(modHelper);
         }
 
-        public void Connect(ArchipelagoConnectionInfo connectionInfo, GiftHandler giftHandler, out string errorMessage)
+        public void Connect(ArchipelagoConnectionInfo connectionInfo, out string errorMessage)
         {
-            _giftHandler = giftHandler;
             DisconnectPermanently();
             var success = TryConnect(connectionInfo, out errorMessage);
             if (!success)
@@ -130,13 +127,6 @@ namespace StardewArchipelago.Archipelago
             _session.MessageLog.OnMessageReceived += OnMessageReceived;
             _session.Socket.ErrorReceived += SessionErrorReceived;
             _session.Socket.SocketClosed += SessionSocketClosed;
-
-            if (_chatForwarder == null)
-            {
-                _chatForwarder = new ChatForwarder(_console, _modHelper, _harmony, _giftHandler);
-            }
-
-            _chatForwarder.ListenToChatMessages(this);
 
             InitializeDeathLink();
 

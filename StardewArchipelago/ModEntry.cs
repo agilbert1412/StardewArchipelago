@@ -31,6 +31,7 @@ namespace StardewArchipelago
         private ArchipelagoClient _archipelago;
         private AdvancedOptionsManager _advancedOptionsManager;
         private Mailman _mail;
+        private ChatForwarder _chatForwarder;
         private GiftHandler _giftHandler;
         private BundleReader _bundleReader;
         private ItemManager _itemManager;
@@ -170,6 +171,7 @@ namespace StardewArchipelago
             _goalManager = new GoalManager(Monitor, _helper, _harmony, _archipelago, _locationChecker);
             _logicPatcher = new RandomizedLogicPatcher(Monitor, _helper, _harmony, _archipelago, _locationChecker, _stardewItemManager);
             _jojaDisabler = new JojaDisabler(Monitor, _helper, _harmony);
+            _chatForwarder = new ChatForwarder(Monitor, _helper, _harmony, _giftHandler);
 
             if (_state.APConnectionInfo == null)
             {
@@ -183,7 +185,7 @@ namespace StardewArchipelago
                     _state.APConnectionInfo = _apConnectionOverride;
                     _apConnectionOverride = null;
                 }
-                _archipelago.Connect(_state.APConnectionInfo, _giftHandler, out var errorMessage);
+                _archipelago.Connect(_state.APConnectionInfo, out var errorMessage);
 
                 if (!_archipelago.IsConnected)
                 {
@@ -193,6 +195,7 @@ namespace StardewArchipelago
                 }
             }
 
+            _chatForwarder.ListenToChatMessages(_archipelago);
             _giftHandler.Initialize(_stardewItemManager, _mail, _archipelago);
             _logicPatcher.PatchAllGameLogic();
             _mailPatcher.PatchMailBoxForApItems();
@@ -312,7 +315,7 @@ namespace StardewArchipelago
         public bool ArchipelagoConnect(string ip, int port, string slot, string password, out string errorMessage)
         {
             var apConnection = new ArchipelagoConnectionInfo(ip, port, slot, null, password);
-            _archipelago.Connect(apConnection, _giftHandler, out errorMessage);
+            _archipelago.Connect(apConnection, out errorMessage);
             if (!_archipelago.IsConnected)
             {
                 return false;
