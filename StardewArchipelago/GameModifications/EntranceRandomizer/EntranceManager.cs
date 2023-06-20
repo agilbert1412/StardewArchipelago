@@ -345,6 +345,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Volcano Entrance", "VolcanoDungeon0|31|53" },
             { "Volcano River", "VolcanoDungeon0|6|49" },
             { "Secret Beach", "IslandNorth|12|31" },
+            { "Professor Snail Cave", "IslandNorthCave1"},
             { "Qi Walnut Room", "QiNutRoom" },
             { "Eugene's Garden", "Custom_EugeneNPC_EugeneHouse" },
             { "Eugene's Bedroom", "Custom_EugeneNPC_EugeneRoom" },
