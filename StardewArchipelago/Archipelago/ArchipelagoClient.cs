@@ -287,53 +287,53 @@ namespace StardewArchipelago.Archipelago
         }
 
         public const string STRING_DATA_STORAGE_DELIMITER = "|||";
-        public void AddToStringDataStorage(string key, string value)
+        public void AddToStringDataStorage(Scope scope, string key, string value)
         {
             if (!MakeSureConnected())
             {
                 return;
             }
 
-            var existingValue = ReadStringFromDataStorage(key);
+            var existingValue = ReadStringFromDataStorage(scope, key);
             if (string.IsNullOrWhiteSpace(existingValue))
             {
-                _session.DataStorage[Scope.Game, key] = value;
+                _session.DataStorage[scope, key] = value;
             }
             else
             {
-                _session.DataStorage[Scope.Game, key] = existingValue + STRING_DATA_STORAGE_DELIMITER + value;
+                _session.DataStorage[scope, key] = existingValue + STRING_DATA_STORAGE_DELIMITER + value;
             }
         }
 
-        public void SetStringDataStorage(string key, string value)
+        public void SetStringDataStorage(Scope scope, string key, string value)
         {
             if (!MakeSureConnected())
             {
                 return;
             }
 
-            _session.DataStorage[Scope.Game, key] = value;
+            _session.DataStorage[scope, key] = value;
         }
 
-        public bool StringExistsInDataStorage(string key)
+        public bool StringExistsInDataStorage(Scope scope, string key)
         {
             if (!MakeSureConnected())
             {
                 return false;
             }
 
-            var value = _session.DataStorage[Scope.Game, key];
+            var value = _session.DataStorage[scope, key];
             return !string.IsNullOrWhiteSpace(value.To<string>());
         }
 
-        public string ReadStringFromDataStorage(string key)
+        public string ReadStringFromDataStorage(Scope scope, string key)
         {
             if (!MakeSureConnected())
             {
                 return null;
             }
 
-            var value = _session.DataStorage[Scope.Game, key];
+            var value = _session.DataStorage[scope, key];
             var stringValue = value.To<string>();
             if (string.IsNullOrWhiteSpace(stringValue))
             {
@@ -343,14 +343,14 @@ namespace StardewArchipelago.Archipelago
             return stringValue;
         }
 
-        public void RemoveStringFromDataStorage(string key)
+        public void RemoveStringFromDataStorage(Scope scope, string key)
         {
             if (!MakeSureConnected())
             {
                 return;
             }
 
-            _session.DataStorage[Scope.Game, key] = "";
+            _session.DataStorage[scope, key] = "";
         }
 
         public Dictionary<string, long> GetAllCheckedLocations()
