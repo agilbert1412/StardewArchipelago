@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Numerics;
+using Archipelago.MultiClient.Net.Enums;
 using Microsoft.Xna.Framework;
 using StardewValley;
 
@@ -146,7 +147,7 @@ namespace StardewArchipelago.Archipelago
 
         private BigInteger GetBankJoulesAmount()
         {
-            var bankValue = _archipelago.ReadStringFromDataStorage(BANKING_KEY);
+            var bankValue = _archipelago.ReadStringFromDataStorage(Scope.Global, BANKING_KEY);
             if (string.IsNullOrWhiteSpace(bankValue))
             {
                 return 0;
@@ -165,7 +166,7 @@ namespace StardewArchipelago.Archipelago
             var currentAmountJoules = GetBankJoulesAmount();
             var amountToAddJoules = MoneyToJoules(amountToAdd);
             var bankAmountAfterOperation = currentAmountJoules + amountToAddJoules;
-            _archipelago.SetStringDataStorage(BANKING_KEY, bankAmountAfterOperation.ToString());
+            _archipelago.SetStringDataStorage(Scope.Global, BANKING_KEY, bankAmountAfterOperation.ToString());
         }
 
         private void RemoveFromBank(int amountToRemove)
@@ -173,7 +174,7 @@ namespace StardewArchipelago.Archipelago
             var currentAmountJoules = GetBankJoulesAmount();
             var amountToRemoveJoules = MoneyToJoules(amountToRemove);
             var bankAmountAfterOperation = currentAmountJoules - amountToRemoveJoules;
-            _archipelago.SetStringDataStorage(BANKING_KEY, bankAmountAfterOperation.ToString());
+            _archipelago.SetStringDataStorage(Scope.Global, BANKING_KEY, bankAmountAfterOperation.ToString());
         }
 
         private BigInteger MoneyToJoules(BigInteger money)
