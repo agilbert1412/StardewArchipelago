@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Goals;
 using StardewArchipelago.Stardew;
@@ -14,8 +15,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private const int SEAWEED = 152;
         private const int GOLDEN_WALNUT = 73;
         private const int SECRET_NOTE = 79;
-        private const int JOURNAL_SCRAP = 842;
         private const int FOSSILIZED_SPINE = 821;
+        private const int SNAKE_SKULL = 825;
+        private const int JOURNAL_SCRAP = 842;
+        private const int QI_BEAN = 890;
+        private static readonly int[] _fishsanityExceptions = new []{GREEN_ALGAE, WHITE_ALGAE, SEAWEED, GOLDEN_WALNUT, SECRET_NOTE, FOSSILIZED_SPINE, SNAKE_SKULL, JOURNAL_SCRAP, QI_BEAN}
         private const string FISHSANITY_PREFIX = "Fishsanity: ";
 
         private static IMonitor _monitor;
@@ -50,7 +54,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 {
                     _locationChecker.AddCheckedLocation(apLocation);
                 }
-                else if (index != GREEN_ALGAE && index != WHITE_ALGAE && index != SEAWEED && index != GOLDEN_WALNUT && index != SECRET_NOTE && index != FOSSILIZED_SPINE && index != JOURNAL_SCRAP)
+                else if (!_fishsanityExceptions.Contains(index))
                 {
                     _monitor.Log($"Unrecognized Fishsanity Location: {fishName} [{index}]", LogLevel.Error);
                 }
