@@ -219,13 +219,20 @@ namespace StardewArchipelago.Archipelago
                     {
                         return;
                     }
+
                     var color = Color.Gold;
                     Game1.chatBox?.addMessage(fullMessage, color);
                     return;
                 }
-                case CommandResultLogMessage commandResultLogMessage:
+                case CommandResultLogMessage:
                 {
                     var color = Color.Gray;
+                    Game1.chatBox?.addMessage(fullMessage, color);
+                    return;
+                }
+                case GoalLogMessage:
+                {
+                    var color = Color.Green;
                     Game1.chatBox?.addMessage(fullMessage, color);
                     return;
                 }
