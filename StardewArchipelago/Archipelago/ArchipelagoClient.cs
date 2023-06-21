@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using Archipelago.MultiClient.Net;
 using Archipelago.MultiClient.Net.BounceFeatures.DeathLink;
 using Archipelago.MultiClient.Net.Enums;
@@ -9,6 +10,7 @@ using Archipelago.MultiClient.Net.MessageLog.Messages;
 using Archipelago.MultiClient.Net.Models;
 using Archipelago.MultiClient.Net.Packets;
 using HarmonyLib;
+using Newtonsoft.Json.Linq;
 using StardewArchipelago.Extensions;
 using StardewModdingAPI;
 using StardewValley;
@@ -351,6 +353,37 @@ namespace StardewArchipelago.Archipelago
             }
 
             _session.DataStorage[scope, key] = "";
+        }
+
+        public void SetBigIntegerDataStorage(Scope scope, string key, BigInteger value)
+        {
+            if (!MakeSureConnected())
+            {
+                return;
+            }
+
+            var token = JToken.FromObject(value);
+            _session.DataStorage[scope, key] = token;
+        }
+
+        public BigInteger? ReadBigIntegerFromDataStorage(Scope scope, string key)
+        {
+            if (!MakeSureConnected())
+            {
+                return null;
+            }
+
+            var value = _session.DataStorage[scope, key];
+            try
+            {
+                var integerValue = value.To<BigInteger>();
+                return integerValue;
+            }
+            catch (Exception ex)
+            {
+                _console.Log($"Error Reading BigInteger from DataStorage key [{key}]. Value: {value}");
+                return null;
+            }
         }
 
         public Dictionary<string, long> GetAllCheckedLocations()
