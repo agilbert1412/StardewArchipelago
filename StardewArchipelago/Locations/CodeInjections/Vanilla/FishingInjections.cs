@@ -19,7 +19,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private const int SNAKE_SKULL = 825;
         private const int JOURNAL_SCRAP = 842;
         private const int QI_BEAN = 890;
-        private static readonly int[] _fishsanityExceptions = new []{GREEN_ALGAE, WHITE_ALGAE, SEAWEED, GOLDEN_WALNUT, SECRET_NOTE, FOSSILIZED_SPINE, SNAKE_SKULL, JOURNAL_SCRAP, QI_BEAN}
+
+        private static readonly int[] _fishsanityExceptions = new[]
+        {
+            GREEN_ALGAE, WHITE_ALGAE, SEAWEED, GOLDEN_WALNUT, SECRET_NOTE, FOSSILIZED_SPINE, SNAKE_SKULL, JOURNAL_SCRAP,
+            QI_BEAN
+        };
         private const string FISHSANITY_PREFIX = "Fishsanity: ";
 
         private static IMonitor _monitor;
