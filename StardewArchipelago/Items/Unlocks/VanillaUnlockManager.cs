@@ -106,8 +106,7 @@ namespace StardewArchipelago.Items.Unlocks
         private void RegisterGingerIslandRepairs()
         {
             _unlockables.Add("Boat Repair", RepairBoat);
-            _unlockables.Add("Leo's Trust", GetLeoTrust);
-            _unlockables.Add("Island North Turtle", RemoveNorthernTurtle);
+            _unlockables.Add("Island North Turtle", GetLeoTrustAndRemoveNorthernTurtle);
             _unlockables.Add("Island West Turtle", RemoveWesternTurtle);
             _unlockables.Add("Dig Site Bridge", RepairDigSiteBridge);
             _unlockables.Add("Island Trader", RestoreIslandTrader);
@@ -156,14 +155,9 @@ namespace StardewArchipelago.Items.Unlocks
             return new LetterVanillaAttachment(receivedItem, vanillaMails, true);
         }
 
-        private LetterActionAttachment GetLeoTrust(ReceivedItem receivedItem)
+        private LetterActionAttachment GetLeoTrustAndRemoveNorthernTurtle(ReceivedItem receivedItem)
         {
             return new LetterActionAttachment(receivedItem, LetterActionsKeys.IslandUnlock, "Hut");
-        }
-
-        private LetterVanillaAttachment RemoveNorthernTurtle(ReceivedItem receivedItem)
-        {
-            return new LetterVanillaAttachment(receivedItem, "Island_FirstParrot", true);
         }
 
         private LetterActionAttachment RemoveWesternTurtle(ReceivedItem receivedItem)

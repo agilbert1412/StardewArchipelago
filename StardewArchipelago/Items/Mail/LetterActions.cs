@@ -444,7 +444,7 @@ namespace StardewArchipelago.Items.Mail
                     RestoreIslandResort();
                     return;
                 case "Hut":
-                    GainLeoTrust();
+                    GainLeoTrustAndRemoveNorthernTurtle();
                     return;
                 case "Bridge":
                     RepairDigSiteBridge();
@@ -490,9 +490,14 @@ namespace StardewArchipelago.Items.Mail
             return locationOfDesiredType;
         }
 
-        private static void GainLeoTrust()
+        private static void GainLeoTrustAndRemoveNorthernTurtle()
         {
             var islandHut = FindLocation<IslandHut>(_islandHut);
+            const string vanillaLetter = "Island_FirstParrot";
+            if (!Game1.player.mailReceived.Contains(vanillaLetter))
+            {
+                Game1.player.mailReceived.Add(vanillaLetter);
+            }
 
             islandHut.firstParrotDone.Value = true;
             islandHut.parrotBoyEvent.Fire();
