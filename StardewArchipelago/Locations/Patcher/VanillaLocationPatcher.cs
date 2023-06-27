@@ -610,6 +610,11 @@ namespace StardewArchipelago.Locations.Patcher
             );
 
             _harmony.Patch(
+                original: AccessTools.Method(typeof(Dialogue), nameof(Dialogue.chooseResponse)),
+                prefix: new HarmonyMethod(typeof(WinterStarInjections), nameof(WinterStarInjections.ChooseResponse_LegendOfTheWinterStar_Postfix))
+            );
+
+            _harmony.Patch(
                 original: AccessTools.Method(typeof(Event), nameof(Event.chooseSecretSantaGift)),
                 prefix: new HarmonyMethod(typeof(WinterStarInjections), nameof(WinterStarInjections.ChooseSecretSantaGift_SuccessfulGift_Prefix))
             );
