@@ -319,6 +319,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Marnie's Ranch", "AnimalShop" },
             { "Cottage", "House" },
             { "Tower", "House" },
+            { "Bus Tunnel", "Tunnel" },
             { "Carpenter Shop", "ScienceHouse|6|24" }, // LockedDoorWarp 6 24 ScienceHouse 900 2000S–
             { "Maru's Room", "ScienceHouse|3|8" }, // LockedDoorWarp 3 8 ScienceHouse 900 2000 Maru 500N
             { "Adventurer", "Adventure" },
@@ -347,6 +348,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Secret Beach", "IslandNorth|12|31" },
             { "Professor Snail Cave", "IslandNorthCave1"},
             { "Qi Walnut Room", "QiNutRoom" },
+            {"Mutant Bug Lair", "BugLand"},
             { "Eugene's Garden", "Custom_EugeneNPC_EugeneHouse" },
             { "Eugene's Bedroom", "Custom_EugeneNPC_EugeneRoom" },
             { "Deep Woods House", "DeepWoodsMaxHouse" },
