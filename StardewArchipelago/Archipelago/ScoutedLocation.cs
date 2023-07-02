@@ -10,9 +10,10 @@
         public long LocationId { get; private set; }
         public long ItemId { get; private set; }
         public long PlayerId { get; private set; }
+        public string Classification { get; private set; }
 
         public ScoutedLocation(string locationName, string itemName, string playerName, long locationId, long itemId,
-            long playerId)
+            long playerId, string classification)
         {
             LocationName = locationName;
             ItemName = itemName;
@@ -20,6 +21,7 @@
             LocationId = locationId;
             ItemId = itemId;
             PlayerId = playerId;
+            Classification = classification;
         }
 
         public override string ToString()

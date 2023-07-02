@@ -30,6 +30,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             MuseumInjections.Initialize(monitor, modHelper, archipelago, locationChecker, itemManager);
             FriendshipInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             SpecialOrderInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
+            PregnancyInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             InitializeFestivalPatches(monitor, modHelper, archipelago, locationChecker, shopReplacer);
         }
 

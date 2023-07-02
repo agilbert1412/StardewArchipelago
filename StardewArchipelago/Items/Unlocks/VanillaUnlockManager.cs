@@ -34,6 +34,7 @@ namespace StardewArchipelago.Items.Unlocks
             RegisterUniqueItems();
             RegisterIsolatedEventsItems();
             RegisterGingerIslandRepairs();
+            RegisterSpecialItems();
         }
 
         public bool IsUnlock(string unlockName)
@@ -117,6 +118,12 @@ namespace StardewArchipelago.Items.Unlocks
             _unlockables.Add("Parrot Express", RepairParrotExpress);
             _unlockables.Add("Volcano Bridge", ConstructVolcanoBridge);
             _unlockables.Add("Volcano Exit Shortcut", OpenVolcanoExitShortcut);
+        }
+
+        private void RegisterSpecialItems()
+        {
+            _unlockables.Add("Ugly Baby", GetNewBabyLetter);
+            _unlockables.Add("Cute Baby", GetNewBabyLetter);
         }
 
         private void RegisterMineElevators()
@@ -208,6 +215,11 @@ namespace StardewArchipelago.Items.Unlocks
         private LetterActionAttachment OpenVolcanoExitShortcut(ReceivedItem receivedItem)
         {
             return new LetterActionAttachment(receivedItem, LetterActionsKeys.IslandUnlock, "VolcanoShortcutOut");
+        }
+
+        private LetterActionAttachment GetNewBabyLetter(ReceivedItem receivedItem)
+        {
+            return new LetterActionAttachment(receivedItem, LetterActionsKeys.SpawnBaby);
         }
 
         private LetterActionAttachment SendProgressiveBackpackLetter(ReceivedItem receivedItem)

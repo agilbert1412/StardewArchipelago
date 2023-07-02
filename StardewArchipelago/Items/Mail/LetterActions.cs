@@ -21,6 +21,7 @@ namespace StardewArchipelago.Items.Mail
         private readonly IModHelper _modHelper;
         private readonly Mailman _mail;
         private readonly TrapManager _trapManager;
+        private readonly BabyBirther _babyBirther;
         private Dictionary<string, Action<string>> _letterActions;
         private ArchipelagoClient _archipelago;
 
@@ -30,6 +31,7 @@ namespace StardewArchipelago.Items.Mail
             _mail = mail;
             _archipelago = archipelago;
             _trapManager = trapManager;
+            _babyBirther = new BabyBirther();
             _letterActions = new Dictionary<string, Action<string>>();
             _letterActions.Add(LetterActionsKeys.Friendship, IncreaseFriendshipWithEveryone);
             _letterActions.Add(LetterActionsKeys.Backpack, (_) => IncreaseBackpackLevel());
@@ -59,6 +61,7 @@ namespace StardewArchipelago.Items.Mail
             _letterActions.Add(LetterActionsKeys.GiveFurniture, ReceiveFurniture);
             _letterActions.Add(LetterActionsKeys.GiveHat, ReceiveHat);
             _letterActions.Add(LetterActionsKeys.IslandUnlock, PerformParrotUpgrade);
+            _letterActions.Add(LetterActionsKeys.SpawnBaby, (_) => _babyBirther.SpawnNewBaby());
             _letterActions.Add(LetterActionsKeys.Trap, ExecuteTrap);
         }
 

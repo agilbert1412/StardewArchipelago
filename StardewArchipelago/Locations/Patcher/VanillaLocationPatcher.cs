@@ -12,6 +12,7 @@ using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Characters;
+using StardewValley.Events;
 using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Minigames;
@@ -59,6 +60,7 @@ namespace StardewArchipelago.Locations.Patcher
             AddFestivalLocations();
             ReplaceFriendshipsWithChecks();
             ReplaceSpecialOrdersWithChecks();
+            ReplaceChildrenWithChecks();
             _gingerIslandPatcher.PatchGingerIslandLocations();
         }
 
@@ -286,6 +288,24 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony.Patch(
                 original: AccessTools.Method(typeof(SpecialOrder), nameof(SpecialOrder.UpdateAvailableSpecialOrders)),
                 prefix: new HarmonyMethod(typeof(SpecialOrderInjections), nameof(SpecialOrderInjections.UpdateAvailableSpecialOrders_ChangeFrequencyToBeLessRng_Prefix))
+            );
+        }
+
+        private void ReplaceChildrenWithChecks()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(NPC), nameof(NPC.canGetPregnant)),
+                prefix: new HarmonyMethod(typeof(PregnancyInjections), nameof(PregnancyInjections.CanGetPregnant_ShuffledPregnancies_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(QuestionEvent), nameof(QuestionEvent.setUp)),
+                prefix: new HarmonyMethod(typeof(PregnancyInjections), nameof(PregnancyInjections.Setup_PregnancyQuestionEvent_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(BirthingEvent), nameof(BirthingEvent.tickUpdate)),
+                prefix: new HarmonyMethod(typeof(PregnancyInjections), nameof(PregnancyInjections.TickUpdate_BirthingEvent_Prefix))
             );
         }
 
