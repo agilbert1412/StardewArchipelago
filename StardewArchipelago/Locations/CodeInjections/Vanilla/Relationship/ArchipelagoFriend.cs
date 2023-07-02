@@ -15,8 +15,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
         public bool Pet { get; private set; }
         public bool RequiresGingerIsland { get; private set; }
         public bool RequiresDwarfLanguage { get; private set; }
+        public bool Child { get; set; }
 
-        public ArchipelagoFriend(string stardewName, string archipelagoName, bool bachelor, bool pet, bool requiresGingerIsland, bool requiresDwarfLanguage)
+        public ArchipelagoFriend(string stardewName, string archipelagoName, bool bachelor, bool pet, bool requiresGingerIsland, bool requiresDwarfLanguage, bool child)
         {
             StardewName = stardewName;
             ArchipelagoName = archipelagoName;
@@ -24,6 +25,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
             Pet = pet;
             RequiresGingerIsland = requiresGingerIsland;
             RequiresDwarfLanguage = requiresDwarfLanguage;
+            Child = child;
         }
     }
 }

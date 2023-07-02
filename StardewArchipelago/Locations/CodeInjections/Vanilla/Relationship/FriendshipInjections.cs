@@ -435,6 +435,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
             {
                 return 0;
             }
+
+            if (friend.Child)
+            {
+                return 0;
+            }
             
             switch (_archipelago.SlotData.Friendsanity)
             {
