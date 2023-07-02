@@ -11,6 +11,7 @@ using StardewArchipelago.Locations.GingerIsland.Parrots;
 using StardewArchipelago.Locations.GingerIsland.WalnutRoom;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
+using StardewValley;
 using StardewValley.Locations;
 
 namespace StardewArchipelago.Locations.GingerIsland
@@ -43,7 +44,7 @@ namespace StardewArchipelago.Locations.GingerIsland
             UnlockWalnutRoomBasedOnApItem();
             ReplaceBoatRepairWithChecks();
             ReplaceParrotsWithChecks();
-
+            ReplaceFieldOfficeWithChecks();
         }
 
         private void UnlockWalnutRoomBasedOnApItem()
@@ -82,6 +83,14 @@ namespace StardewArchipelago.Locations.GingerIsland
             _harmony.Patch(
                 original: AccessTools.Method(typeof(IslandWest), nameof(IslandWest.ApplyFarmHouseRestore)),
                 prefix: new HarmonyMethod(typeof(IslandWestInjections), nameof(IslandWestInjections.ApplyFarmHouseRestore_RestoreOnlyCorrectParts_Prefix))
+            );
+        }
+
+        private void ReplaceFieldOfficeWithChecks()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Event), nameof(Event.command_addCraftingRecipe)),
+                postfix: new HarmonyMethod(typeof(FieldOfficeInjections), nameof(FieldOfficeInjections.CommandAddCraftingRecipe_OstrichIncubator_Prefix))
             );
         }
     }
