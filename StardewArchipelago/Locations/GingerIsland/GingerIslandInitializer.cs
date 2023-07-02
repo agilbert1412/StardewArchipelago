@@ -1,6 +1,7 @@
 ﻿using StardewArchipelago.Archipelago;
 using StardewArchipelago.Locations.GingerIsland.Boat;
 using StardewArchipelago.Locations.GingerIsland.Parrots;
+using StardewArchipelago.Locations.GingerIsland.VolcanoForge;
 using StardewArchipelago.Locations.GingerIsland.WalnutRoom;
 using StardewModdingAPI;
 
@@ -17,6 +18,7 @@ namespace StardewArchipelago.Locations.CodeInjections
             IslandNorthInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             IslandWestInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             VolcanoDungeonInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
+            CalderaInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
         }
     }
 }
