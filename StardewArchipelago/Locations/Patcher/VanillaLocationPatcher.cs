@@ -4,6 +4,7 @@ using HarmonyLib;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Locations.CodeInjections.Initializers;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.Quests;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
 using StardewArchipelago.Locations.Festival;
 using StardewArchipelago.Locations.GingerIsland;
@@ -245,6 +246,32 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Event), nameof(Event.command_awardFestivalPrize)),
                 prefix: new HarmonyMethod(typeof(QuestInjections), nameof(QuestInjections.Command_AwardFestivalPrize_QiMilk_Prefix))
+            );
+
+            ReplaceDarkTalismanQuestsWithChecks();
+        }
+
+        private void ReplaceDarkTalismanQuestsWithChecks()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(NPC), nameof(NPC.checkAction)),
+                prefix: new HarmonyMethod(typeof(DarkTalismanInjections),
+                    nameof(DarkTalismanInjections.CheckAction_ShowWizardMagicInk_Postfix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Chest), nameof(Chest.checkForAction)),
+                prefix: new HarmonyMethod(typeof(DarkTalismanInjections),
+                    nameof(DarkTalismanInjections.CheckForAction_BuglandChest_Prefix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(NPC), "performRemoveHenchman"),
+                prefix: new HarmonyMethod(typeof(DarkTalismanInjections),
+                    nameof(DarkTalismanInjections.PerformRemoveHenchman_CheckGoblinProblemLocation_Postfix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Railroad), "resetLocalState"),
+                prefix: new HarmonyMethod(typeof(DarkTalismanInjections),
+                    nameof(DarkTalismanInjections.ResetLocalState_PlayCutsceneIfConditionsAreMet_Postfix))
             );
         }
 
