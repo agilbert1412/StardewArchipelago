@@ -39,7 +39,7 @@ namespace StardewArchipelago.Items
             Utility.getHomeOfFarmer(Game1.player).characters.Add(baby);
             Game1.playSound("smallSelect");
             var spouse = Game1.player.getSpouse();
-            if (Game1.player.getChildrenCount() == 2)
+            if (Game1.player.getChildrenCount() >= 2)
             {
                 GoalCodeInjection.CheckFullHouseGoalCompletion();
             }
@@ -59,9 +59,19 @@ namespace StardewArchipelago.Items
                 npcNames.Add(npc.Name);
             }
             string babyName;
+            var maxAttempts = _babyNames.Length * 10;
+            var attempt = 0;
             do
             {
+                attempt++;
                 babyName = _babyNames[random.Next(0, _babyNames.Length)];
+                if (attempt >= maxAttempts)
+                {
+                    while (npcNames.Contains(babyName))
+                    {
+                        babyName += " ";
+                    }
+                }
             }
             while (npcNames.Contains(babyName));
 

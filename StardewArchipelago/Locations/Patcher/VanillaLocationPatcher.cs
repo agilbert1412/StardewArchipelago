@@ -331,6 +331,11 @@ namespace StardewArchipelago.Locations.Patcher
             );
 
             _harmony.Patch(
+                original: AccessTools.Method(typeof(QuestionEvent), "answerPregnancyQuestion"),
+                prefix: new HarmonyMethod(typeof(PregnancyInjections), nameof(PregnancyInjections.AnswerPregnancyQuestion_CorrectDate_Prefix))
+            );
+
+            _harmony.Patch(
                 original: AccessTools.Method(typeof(BirthingEvent), nameof(BirthingEvent.tickUpdate)),
                 prefix: new HarmonyMethod(typeof(PregnancyInjections), nameof(PregnancyInjections.TickUpdate_BirthingEvent_Prefix))
             );
@@ -658,7 +663,7 @@ namespace StardewArchipelago.Locations.Patcher
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Dialogue), nameof(Dialogue.chooseResponse)),
-                prefix: new HarmonyMethod(typeof(WinterStarInjections), nameof(WinterStarInjections.ChooseResponse_LegendOfTheWinterStar_Postfix))
+                postfix: new HarmonyMethod(typeof(WinterStarInjections), nameof(WinterStarInjections.ChooseResponse_LegendOfTheWinterStar_Postfix))
             );
 
             _harmony.Patch(

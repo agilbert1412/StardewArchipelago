@@ -124,7 +124,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
                 return;
             }
 
-            var pet = new ArchipelagoFriend(petName, PET_NAME, false, true, false, false);
+            var pet = new ArchipelagoFriend(petName, PET_NAME, false, true, false, false, false);
             _friends.Add(pet);
             _friendsByName.Add(petName, pet);
         }

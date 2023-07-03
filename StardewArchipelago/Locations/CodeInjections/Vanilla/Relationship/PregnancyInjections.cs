@@ -85,7 +85,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
             try
             {
                 var whichQuestionField = _helper.Reflection.GetField<int>(__instance, "whichQuestion");
-                if (whichQuestionField.GetValue() != 1)
+                var whichQuestion = whichQuestionField.GetValue();
+                if (whichQuestion != 1 && whichQuestion != 3)
                 {
                     return true; // run original logic
                 }
@@ -123,6 +124,29 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
             catch (Exception ex)
             {
                 _monitor.Log($"Failed in {nameof(Setup_PregnancyQuestionEvent_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
+        }
+
+        // private void answerPregnancyQuestion(Farmer who, string answer)
+        public static bool AnswerPregnancyQuestion_CorrectDate_Prefix(QuestionEvent __instance, Farmer who, string answer)
+        {
+            try
+            {
+                if (!answer.Equals("Yes", StringComparison.OrdinalIgnoreCase))
+                {
+                    return false; // don't run original logic
+                }
+
+                var worldDate = new WorldDate(Game1.Date);
+                worldDate.TotalDays += 14;
+                who.GetSpouseFriendship().NextBirthingDate = worldDate;
+
+                return false; // don't run original logic
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(AnswerPregnancyQuestion_CorrectDate_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
             }
         }
@@ -172,6 +196,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
                 Game1.player.Position = Utility.PointToVector2(Utility.getHomeOfFarmer(Game1.player).GetPlayerBedSpot()) * 64f;
                 Game1.globalFadeToClear();
 
+                _locationChecker.AddCheckedLocation(locationBeingChecked);
                 __result = true;
                 return false; // don't run original logic
             }
