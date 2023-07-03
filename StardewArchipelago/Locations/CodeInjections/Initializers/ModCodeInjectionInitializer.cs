@@ -33,6 +33,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             {
                 NewSkillsPageInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             }
+            if (archipelago.SlotData.Mods.ModIsInstalledAndLoaded(modHelper, ModNames.JUNA))
+            {
+                ModifiedVillagerEventChecker.Initialize(archipelago);
+            }
         }
     }
 }

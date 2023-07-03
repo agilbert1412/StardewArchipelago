@@ -15,6 +15,7 @@ using StardewArchipelago.Items.Traps;
 using StardewArchipelago.Locations;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
+using StardewArchipelago.Locations.CodeInjections.Modded;
 using StardewArchipelago.Locations.Patcher;
 using StardewArchipelago.Serialization;
 using StardewArchipelago.Stardew;
@@ -57,6 +58,8 @@ namespace StardewArchipelago
         private AppearanceRandomizer _appearanceRandomizer;
         private QuestCleaner _questCleaner;
         private EntranceManager _entranceManager;
+
+        private ModifiedVillagerEventChecker _villagerEvents;
 
         public ArchipelagoStateDto State { get; set; }
         private ArchipelagoConnectionInfo _apConnectionOverride;
@@ -316,6 +319,7 @@ namespace StardewArchipelago
         private void OnDayEnding(object sender, DayEndingEventArgs e)
         {
             _giftHandler.ReceiveAllGiftsTomorrow();
+            _villagerEvents.CheckJunaHearts();
         }
 
         private void OnTimeChanged(object sender, TimeChangedEventArgs e)
