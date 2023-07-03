@@ -300,7 +300,6 @@ namespace StardewArchipelago
             }
             _appearanceRandomizer.ShuffleCharacterAppearances();
             _entranceManager.ResetCheckedEntrancesToday(_archipelago.SlotData);
-            _villagerEvents.CheckJunaHearts(_archipelago);
 
             DoBugsCleanup();
         }
@@ -321,6 +320,7 @@ namespace StardewArchipelago
         private void OnDayEnding(object sender, DayEndingEventArgs e)
         {
             _giftHandler.ReceiveAllGiftsTomorrow();
+            _villagerEvents.CheckJunaHearts(_archipelago);
         }
 
         private void OnTimeChanged(object sender, TimeChangedEventArgs e)

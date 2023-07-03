@@ -8,7 +8,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
 {
     public class ModifiedVillagerEventChecker
     {
-        private static ArchipelagoClient _archipelago;
         private const string JUNA_MOD = "Juna - Roommate NPC";
         private const string JUNA_MAIL_ONE = "JunaWizardletter2";
         private const string JUNA_MAIL_TWO = "JunaWizardletter4";
@@ -25,12 +24,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             var juna = Game1.player.friendshipData["Juna"];
             if (juna.Points >= 3*HEART_SIZE && SENT_MAIL_ONE == false)
             {
-                Game1.player.mailReceived.Add(JUNA_MAIL_ONE);
+                Game1.player.mailForTomorrow.Add(JUNA_MAIL_ONE);
                 SENT_MAIL_ONE = true;
             }
             if (juna.Points >= 6*HEART_SIZE && SENT_MAIL_TWO == false)
             {
-                Game1.player.mailReceived.Add(JUNA_MAIL_TWO);
+                Game1.player.mailForTomorrow.Add(JUNA_MAIL_TWO);
                 SENT_MAIL_TWO = true;
             }
         }
