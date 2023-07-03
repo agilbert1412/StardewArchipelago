@@ -5,6 +5,7 @@ using StardewArchipelago.Locations.CodeInjections.Modded;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Locations.GingerIsland;
 using StardewModdingAPI;
+using StardewValley;
 
 namespace StardewArchipelago.Locations.Patcher
 {
@@ -29,6 +30,7 @@ namespace StardewArchipelago.Locations.Patcher
             AddModSkillInjections();
             AddDeepWoodsModInjections();
             AddMagicModInjections();
+            AddSkullCavernElevatorModInjections();
         }
 
         private void AddModSkillInjections()
@@ -116,6 +118,41 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(_analyzeSpellType, "OnCast"),
                 prefix: new HarmonyMethod(typeof(MagicModInjections),
                     nameof(MagicModInjections.OnCast_AnalyzeGivesLocations_Prefix))
+            );
+        }
+
+        private void AddSkullCavernElevatorModInjections()
+        {
+            if (!_archipelago.SlotData.Mods.HasMod(ModNames.SKULL_CAVERN_ELEVATOR))
+            {
+                return;
+            }
+
+            if (_archipelago.SlotData.ElevatorProgression == ElevatorProgression.Vanilla)
+            {
+                return;
+            }
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Game1), nameof(Game1.enterMine)),
+                postfix: new HarmonyMethod(typeof(SkullCavernInjections), nameof(SkullCavernInjections.EnterMine_SendSkullCavernElevatorCheck_PostFix))
+            );
+
+            var constructorParameterTypes = new[] { typeof(int), typeof(double), typeof(int) };
+            var myElevatorMenuType = AccessTools.TypeByName("MyElevatorMenu");
+            var myElevatorMenuConstructor = AccessTools.Constructor(myElevatorMenuType, constructorParameterTypes);
+            _harmony.Patch(
+                original: myElevatorMenuConstructor,
+                prefix: new HarmonyMethod(typeof(SkullCavernInjections), nameof(SkullCavernInjections.MyElevatorMenuConstructor_SkullCavernElevator_Prefix)),
+                postfix: new HarmonyMethod(typeof(SkullCavernInjections), nameof(SkullCavernInjections.MyElevatorMenuConstructor_SkullCavernElevator_Postfix))
+            );
+
+            var myElevatorMenuWithScrollBarType = AccessTools.TypeByName("MyElevatorMenuWithScrollbar");
+            var myElevatorMenuWithScrollBarConstructor = AccessTools.Constructor(myElevatorMenuWithScrollBarType, constructorParameterTypes);
+            _harmony.Patch(
+                original: myElevatorMenuWithScrollBarConstructor,
+                prefix: new HarmonyMethod(typeof(SkullCavernInjections), nameof(SkullCavernInjections.MyElevatorMenuConstructor_SkullCavernElevator_Prefix)),
+                postfix: new HarmonyMethod(typeof(SkullCavernInjections), nameof(SkullCavernInjections.MyElevatorMenuConstructor_SkullCavernElevator_Postfix))
             );
         }
     }
