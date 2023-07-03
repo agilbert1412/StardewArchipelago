@@ -54,10 +54,4 @@
     <Folder Include="Test\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="SkullCavernElevator">
-      <HintPath>..\..\..\..\Programs\Steam\steamapps\common\Stardew Valley\Mods\SkullCavernElevator\SkullCavernElevator.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
 </Project>
