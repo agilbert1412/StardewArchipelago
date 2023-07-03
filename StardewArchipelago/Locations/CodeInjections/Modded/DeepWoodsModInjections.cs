@@ -101,7 +101,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 
                 lowestLevelReachedField.SetValue(10 * _archipelago.GetReceivedItemCount(WOODS_OBELISK_SIGILS)); 
 
-                if (level % LEVEL_STEP != 0)
+                if ( ( level + 1 ) % LEVEL_STEP != 0)
                 {
                     return;
                 }
@@ -286,9 +286,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         {
             try
             {
-                if (!_locationChecker.IsLocationChecked(DESTROY_TREE_AP_LOCATION))
+                if (!_locationChecker.IsLocationChecked(DEINFEST_AP_LOCATION))
                 {
-                    _locationChecker.AddCheckedLocation(DESTROY_TREE_AP_LOCATION);
+                    _locationChecker.AddCheckedLocation(DEINFEST_AP_LOCATION);
                     return;
                 }
             }

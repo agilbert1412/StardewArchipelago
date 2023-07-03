@@ -360,7 +360,6 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Jasper's Bedroom", "Custom_LK_Museum2" },
             { "Ayeisha's Mail Van", "Custom_AyeishaVanRoad" },
             { "Yoba's Clearing", "Custom_Woods3" },
-            { "Riley's House", "RileyHouse" },
             { "'s", "" },
             { " ", "" },
         };
