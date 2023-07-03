@@ -198,6 +198,7 @@ namespace StardewArchipelago
             var tileChooser = new TileChooser();
             _chatForwarder = new ChatForwarder(Monitor, _helper, _harmony, _archipelago, _giftHandler, tileChooser);
             _questCleaner = new QuestCleaner();
+            _villagerEvents = new ModifiedVillagerEventChecker();
 
 
             if (State.APConnectionInfo == null)
@@ -299,6 +300,7 @@ namespace StardewArchipelago
             }
             _appearanceRandomizer.ShuffleCharacterAppearances();
             _entranceManager.ResetCheckedEntrancesToday(_archipelago.SlotData);
+            _villagerEvents.CheckJunaHearts(_archipelago);
 
             DoBugsCleanup();
         }
@@ -319,7 +321,6 @@ namespace StardewArchipelago
         private void OnDayEnding(object sender, DayEndingEventArgs e)
         {
             _giftHandler.ReceiveAllGiftsTomorrow();
-            _villagerEvents.CheckJunaHearts();
         }
 
         private void OnTimeChanged(object sender, TimeChangedEventArgs e)

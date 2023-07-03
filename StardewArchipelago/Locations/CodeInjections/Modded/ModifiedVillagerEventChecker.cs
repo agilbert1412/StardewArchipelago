@@ -16,14 +16,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         private static bool SENT_MAIL_ONE = false;
         private static bool SENT_MAIL_TWO = false;
 
-        public static void Initialize(ArchipelagoClient archipelago)
+        public void CheckJunaHearts(ArchipelagoClient _archipelago)
         {
-            _archipelago = archipelago;
-        }
-
-        public void CheckJunaHearts()
-        {
-            if (!_archipelago.SlotData.Mods.HasMod(JUNA_MOD))
+            if (!_archipelago.SlotData.Mods.HasMod(JUNA_MOD) || !Game1.player.friendshipData.ContainsKey("Juna"))
             {
                 return;
             }
