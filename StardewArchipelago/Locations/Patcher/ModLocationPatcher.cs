@@ -74,11 +74,14 @@ namespace StardewArchipelago.Locations.Patcher
                 return;
             }
             var _deepWoodsType = AccessTools.TypeByName("DeepWoodsMod.DeepWoods");
+            var _enterDirectionType = AccessTools.TypeByName("DeepWoodsMod.DeepWoodsEnterExit+EnterDirection");
+            var constructorParameterTypes = new[] { _deepWoodsType, typeof(int), _enterDirectionType };
             var _unicornType = AccessTools.TypeByName("DeepWoodsMod.Unicorn");
             var _gingerbreadType = AccessTools.TypeByName("DeepWoodsMod.GingerBreadHouse");
             var _iridiumtreeType = AccessTools.TypeByName("DeepWoodsMod.IridiumTree");
             var _treasureType = AccessTools.TypeByName("DeepWoodsMod.TreasureChest");
             var _fountainType = AccessTools.TypeByName("DeepWoodsMod.HealingFountain");
+            var _infestedType = AccessTools.TypeByName("DeepWoodsMod.InfestedTree");
 
             _harmony.Patch(
                 original: AccessTools.Method(_unicornType, "checkAction"),
@@ -104,6 +107,17 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(_fountainType, "performUseAction"),
                 prefix: new HarmonyMethod(typeof(DeepWoodsModInjections), nameof(DeepWoodsModInjections.PerformUseAction_HealingFountainLocation_Prefix))
             );
+            _harmony.Patch(
+                original: AccessTools.Method(_infestedType, "DeInfest"),
+                postfix: new HarmonyMethod(typeof(DeepWoodsModInjections), nameof(DeepWoodsModInjections.Deinfest_DeinfestLocation_Postfix))
+            );
+            if (_archipelago.SlotData.ElevatorProgression != ElevatorProgression.Vanilla)
+            {
+                _harmony.Patch(
+                    original: AccessTools.Constructor(_deepWoodsType, constructorParameterTypes),
+                    postfix: new HarmonyMethod(typeof(DeepWoodsModInjections), nameof(DeepWoodsModInjections.Constructor_WoodsDepthChecker_Postfix))
+                );
+            }
         }
 
         private void AddMagicModInjections()

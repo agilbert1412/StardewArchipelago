@@ -357,9 +357,9 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Alec's Pet Shop", "Custom_AlecsPetShop" },
             { "Alec's Bedroom", "Custom_AlecsRoom" },
             { "Juna's Cave", "Custom_JunaNPC_JunaCave" },
-            { "Jasper's Bedroom", "Custom_LK_Museum2"},
+            { "Jasper's Bedroom", "Custom_LK_Museum2" },
             { "Ayeisha's Mail Van", "Custom_AyeishaVanRoad" },
-            { "Yoba Clearing", "Custom_Woods3" },
+            { "Yoba's Clearing", "Custom_Woods3" },
             { "'s", "" },
             { " ", "" },
         };

@@ -23,6 +23,7 @@ using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Menus;
+using StardewArchipelago.GameModifications.Modded;
 
 namespace StardewArchipelago
 {
@@ -57,6 +58,8 @@ namespace StardewArchipelago
         private AppearanceRandomizer _appearanceRandomizer;
         private QuestCleaner _questCleaner;
         private EntranceManager _entranceManager;
+
+        private ModifiedVillagerEventChecker _villagerEvents;
 
         public ArchipelagoStateDto State { get; set; }
         private ArchipelagoConnectionInfo _apConnectionOverride;
@@ -195,6 +198,7 @@ namespace StardewArchipelago
             var tileChooser = new TileChooser();
             _chatForwarder = new ChatForwarder(Monitor, _helper, _harmony, _archipelago, _giftHandler, tileChooser);
             _questCleaner = new QuestCleaner();
+            _villagerEvents = new ModifiedVillagerEventChecker();
 
 
             if (State.APConnectionInfo == null)
@@ -316,6 +320,7 @@ namespace StardewArchipelago
         private void OnDayEnding(object sender, DayEndingEventArgs e)
         {
             _giftHandler.ReceiveAllGiftsTomorrow();
+            _villagerEvents.CheckJunaHearts(_archipelago);
         }
 
         private void OnTimeChanged(object sender, TimeChangedEventArgs e)
