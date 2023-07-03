@@ -27,6 +27,7 @@ namespace StardewArchipelago.Constants
         public const string SHIKO = "Shiko - New Custom NPC";
         public const string DELORES = "Delores - Custom NPC";
         public const string AYEISHA = "Ayeisha - The Postal Worker (Custom NPC)";
+        public const string RILEY = "Custom NPC - Riley";
         public const string SKULL_CAVERN_ELEVATOR = "Skull Cavern Elevator";
     }
 }

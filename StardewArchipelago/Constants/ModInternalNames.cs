@@ -21,6 +21,7 @@ namespace StardewArchipelago.Constants
             { ModNames.SHIKO, "Papaya's Custom NPC Mod" },
             { ModNames.DELORES, "Delores" },
             { ModNames.AYEISHA, "Ayeisha" },
+            { ModNames.RILEY, "NPC Riley" },
         };
     }
 }
