@@ -79,6 +79,7 @@ namespace StardewArchipelago.Locations.Patcher
             var _iridiumtreeType = AccessTools.TypeByName("DeepWoodsMod.IridiumTree");
             var _treasureType = AccessTools.TypeByName("DeepWoodsMod.TreasureChest");
             var _fountainType = AccessTools.TypeByName("DeepWoodsMod.HealingFountain");
+            var _infestedType = AccessTools.TypeByName("DeepWoodsMod.InfestedTree");
 
             _harmony.Patch(
                 original: AccessTools.Method(_unicornType, "checkAction"),
@@ -104,6 +105,17 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(_fountainType, "performUseAction"),
                 prefix: new HarmonyMethod(typeof(DeepWoodsModInjections), nameof(DeepWoodsModInjections.PerformUseAction_HealingFountainLocation_Prefix))
             );
+            _harmony.Patch(
+                original: AccessTools.Method(_infestedType, "Deinfest"),
+                postfix: new HarmonyMethod(typeof(DeepWoodsModInjections), nameof(DeepWoodsModInjections.Deinfest_DeinfestLocation_Postfix))
+            );
+            if (_archipelago.SlotData.ElevatorProgression != ElevatorProgression.Vanilla)
+            {
+                _harmony.Patch(
+                    original: AccessTools.Constructor(_deepWoodsType),
+                    postfix: new HarmonyMethod(typeof(DeepWoodsModInjections), nameof(DeepWoodsModInjections.Constructor_WoodsDepthChecker_Postfix))
+                );
+            }
         }
 
         private void AddMagicModInjections()
