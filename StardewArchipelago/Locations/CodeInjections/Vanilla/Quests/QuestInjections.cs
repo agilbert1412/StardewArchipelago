@@ -46,7 +46,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
             try
             {
                 var questName = __instance.GetName();
-                if (__instance.completed.Value || _ignoredQuests.Contains(questName))
+                var englishQuestName = GetQuestEnglishName(__instance.id.Value, questName);
+                if (__instance.completed.Value || _ignoredQuests.Contains(englishQuestName))
                 {
                     return true; // run original logic
                 }
@@ -88,7 +89,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
                 }
                 else
                 {
-                    CheckStoryQuestApLocation(__instance);
+                    _locationChecker.AddCheckedLocation(englishQuestName);
                 }
 
                 OriginalQuestCompleteCode(__instance);
@@ -101,16 +102,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
             }
         }
 
-        private static void CheckStoryQuestApLocation(Quest __instance)
-        {
-            // Story Quest
-            var englishTitle = GetQuestEnglishName(__instance.id.Value);
-            _locationChecker.AddCheckedLocation(englishTitle);
-        }
-
-        private static string GetQuestEnglishName(int questId)
+        private static string GetQuestEnglishName(int questId, string defaultName)
         {
             var englishQuests = _englishContentManager.Load<Dictionary<int, string>>("Data\\Quests");
+
+            if (!englishQuests.ContainsKey(questId))
+            {
+                return defaultName;
+            }
+
             var equivalentEnglishQuestString = englishQuests[questId];
             var englishTitle = equivalentEnglishQuestString.Split('/')[1];
             return englishTitle;
