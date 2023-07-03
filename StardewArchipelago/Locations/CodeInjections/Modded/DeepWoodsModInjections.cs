@@ -93,9 +93,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             try
             {
                 var deepWoodsSettingsType = AccessTools.TypeByName("DeepWoodsMod.DeepWoodsSettings");
+                var deepWoodsStateDataType = AccessTools.TypeByName("DeepWoodsMod.DeepWoodsStateData");
 
-                var deepWoodsStateProperty = _helper.Reflection.GetProperty<object>(deepWoodsSettingsType, "DeepWoodsState");
-                var deepWoodsState = deepWoodsStateProperty.GetValue();
+
+                var deepWoodsStateProperty = deepWoodsSettingsType.GetProperty("DeepWoodsState", BindingFlags.Public | BindingFlags.Static);
+                var deepWoodsState = deepWoodsStateProperty.GetValue(null);
                 var lowestLevelReachedField = _helper.Reflection.GetField<int>(deepWoodsState, "lowestLevelReached");
                 
                 lowestLevelReachedField.SetValue(10 * _archipelago.GetReceivedItemCount(WOODS_OBELISK_SIGILS)); 
