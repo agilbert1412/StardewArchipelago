@@ -246,11 +246,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         {
             try
             {
-                if (!_locationChecker.IsLocationChecked(DESTROY_HOUSE_AP_LOCATION))
-                {
-                    _locationChecker.AddCheckedLocation(DESTROY_HOUSE_AP_LOCATION);
+                _locationChecker.AddCheckedLocation(DESTROY_HOUSE_AP_LOCATION);
                     return;
-                }
             }
             catch (Exception ex)
             {
@@ -266,11 +263,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         {
             try
             {
-                if (!_locationChecker.IsLocationChecked(DESTROY_TREE_AP_LOCATION))
-                {
-                    _locationChecker.AddCheckedLocation(DESTROY_TREE_AP_LOCATION);
+                _locationChecker.AddCheckedLocation(DESTROY_TREE_AP_LOCATION);
                     return;
-                }
             }
             catch (Exception ex)
             {
@@ -286,11 +280,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         {
             try
             {
-                if (!_locationChecker.IsLocationChecked(DEINFEST_AP_LOCATION))
-                {
-                    _locationChecker.AddCheckedLocation(DEINFEST_AP_LOCATION);
+                _locationChecker.AddCheckedLocation(DEINFEST_AP_LOCATION);
                     return;
-                }
             }
             catch (Exception ex)
             {
