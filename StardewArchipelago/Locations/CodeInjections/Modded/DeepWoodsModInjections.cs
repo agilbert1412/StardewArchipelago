@@ -247,7 +247,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             try
             {
                 _locationChecker.AddCheckedLocation(DESTROY_HOUSE_AP_LOCATION);
-                    return;
+                return;
             }
             catch (Exception ex)
             {
@@ -264,7 +264,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             try
             {
                 _locationChecker.AddCheckedLocation(DESTROY_TREE_AP_LOCATION);
-                    return;
+                return;
             }
             catch (Exception ex)
             {
@@ -281,7 +281,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             try
             {
                 _locationChecker.AddCheckedLocation(DEINFEST_AP_LOCATION);
-                    return;
+                return;
             }
             catch (Exception ex)
             {
