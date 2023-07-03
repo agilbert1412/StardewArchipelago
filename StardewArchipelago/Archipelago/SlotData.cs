@@ -39,7 +39,6 @@ namespace StardewArchipelago.Archipelago
         private const string DEBRIS_MULTIPLIER_KEY = "debris_multiplier";
         private const string QUICK_START_KEY = "quick_start";
         private const string GIFTING_KEY = "gifting";
-        private const string GIFT_TAX_KEY = "gift_tax";
         private const string BANKING_KEY = "banking";
         private const string BANK_TAX_KEY = "bank_tax";
         private const string DEATH_LINK_KEY = "death_link";
@@ -83,7 +82,6 @@ namespace StardewArchipelago.Archipelago
         public DebrisMultiplier DebrisMultiplier { get; private set; }
         public bool QuickStart { get; private set; }
         public bool Gifting { get; private set; }
-        public double GiftTax { get; private set; }
         public bool Banking { get; private set; }
         public double BankTax { get; private set; }
         public bool DeathLink { get; private set; }
@@ -129,7 +127,6 @@ namespace StardewArchipelago.Archipelago
             DebrisMultiplier = GetSlotSetting(DEBRIS_MULTIPLIER_KEY, DebrisMultiplier.HalfDebris);
             QuickStart = GetSlotSetting(QUICK_START_KEY, false);
             Gifting = GetSlotSetting(GIFTING_KEY, true);
-            GiftTax = GetSlotSetting(GIFT_TAX_KEY, 30) / 100.0;
             Banking = true;
             BankTax = 25 / 100.0;
             DeathLink = GetSlotSetting(DEATH_LINK_KEY, false);
