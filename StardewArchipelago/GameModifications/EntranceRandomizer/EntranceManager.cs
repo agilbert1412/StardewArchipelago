@@ -359,6 +359,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Juna's Cave", "Custom_JunaNPC_JunaCave" },
             { "Jasper's Bedroom", "Custom_LK_Museum2"},
             { "Ayeisha's Mail Van", "Custom_AyeishaVanRoad" },
+            { "Yoba Clearing", "Custom_Woods3" },
             { "'s", "" },
             { " ", "" },
         };
