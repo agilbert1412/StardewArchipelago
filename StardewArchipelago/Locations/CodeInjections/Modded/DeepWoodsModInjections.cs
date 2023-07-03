@@ -95,7 +95,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 var deepWoodsSettingsType = AccessTools.TypeByName("DeepWoodsMod.DeepWoodsSettings");
                 var deepWoodsStateDataType = AccessTools.TypeByName("DeepWoodsMod.DeepWoodsStateData");
 
-
                 var deepWoodsStateProperty = deepWoodsSettingsType.GetProperty("DeepWoodsState", BindingFlags.Public | BindingFlags.Static);
                 var deepWoodsState = deepWoodsStateProperty.GetValue(null);
                 var lowestLevelReachedField = _helper.Reflection.GetField<int>(deepWoodsState, "lowestLevelReached");
