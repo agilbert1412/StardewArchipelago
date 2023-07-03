@@ -15,7 +15,6 @@ using StardewArchipelago.Items.Traps;
 using StardewArchipelago.Locations;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
-using StardewArchipelago.Locations.CodeInjections.Modded;
 using StardewArchipelago.Locations.Patcher;
 using StardewArchipelago.Serialization;
 using StardewArchipelago.Stardew;
@@ -24,6 +23,7 @@ using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Menus;
+using StardewArchipelago.GameModifications.Modded;
 
 namespace StardewArchipelago
 {

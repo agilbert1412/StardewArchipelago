@@ -1,7 +1,7 @@
 using StardewArchipelago.Archipelago;
 using StardewValley;
 
-namespace StardewArchipelago.Locations.CodeInjections.Modded
+namespace StardewArchipelago.GameModifications.Modded
 {
     public class ModifiedVillagerEventChecker
     {
