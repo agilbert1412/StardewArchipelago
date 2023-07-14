@@ -59,6 +59,7 @@ namespace StardewArchipelago.Locations.Patcher
             AddFishsanityLocations();
             AddMuseumsanityLocations();
             AddFestivalLocations();
+            AddCropSanityLocations();
             ReplaceFriendshipsWithChecks();
             ReplaceSpecialOrdersWithChecks();
             ReplaceChildrenWithChecks();
@@ -669,6 +670,24 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Event), nameof(Event.chooseSecretSantaGift)),
                 prefix: new HarmonyMethod(typeof(WinterStarInjections), nameof(WinterStarInjections.ChooseSecretSantaGift_SuccessfulGift_Prefix))
+            );
+        }
+
+        private void AddCropSanityLocations()
+        {
+            if (_archipelago.SlotData.Cropsanity == Cropsanity.Disabled)
+            {
+                return;
+            }
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Crop), nameof(Crop.harvest)),
+                postfix: new HarmonyMethod(typeof(CropsanityInjections), nameof(CropsanityInjections.Harvest_CheckCropsanityLocation_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(FruitTree), nameof(FruitTree.shake)),
+                prefix: new HarmonyMethod(typeof(CropsanityInjections), nameof(CropsanityInjections.Shake_CheckCropsanityFruitTreeLocation_Prefix))
             );
         }
 

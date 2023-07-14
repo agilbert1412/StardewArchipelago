@@ -16,7 +16,7 @@ namespace StardewArchipelago.Archipelago
         private const string PROFIT_MARGIN_KEY = "profit_margin";
         private const string ENTRANCE_RANDOMIZATION_KEY = "entrance_randomization";
         private const string SEASON_RANDOMIZATION_KEY = "season_randomization";
-        private const string SEED_SHUFFLE_KEY = "seed_shuffle";
+        private const string CROPSANITY_KEY = "cropsanity";
         private const string BACKPACK_PROGRESSION_KEY = "backpack_progression";
         private const string TOOL_PROGRESSION_KEY = "tool_progression";
         private const string ELEVATOR_PROGRESSION_KEY = "elevator_progression";
@@ -59,7 +59,7 @@ namespace StardewArchipelago.Archipelago
         public double ProfitMargin { get; private set; }
         public EntranceRandomization EntranceRandomization { get; private set; }
         public SeasonRandomization SeasonRandomization { get; private set; }
-        public SeedShuffle SeedShuffle { get; private set; }
+        public Cropsanity Cropsanity { get; private set; }
         public BackpackProgression BackpackProgression { get; private set; }
         public ToolProgression ToolProgression { get; private set; }
         public ElevatorProgression ElevatorProgression { get; private set; }
@@ -104,7 +104,7 @@ namespace StardewArchipelago.Archipelago
             ProfitMargin = GetSlotSetting(PROFIT_MARGIN_KEY, 100) / 100.0;
             EntranceRandomization = GetSlotSetting(ENTRANCE_RANDOMIZATION_KEY, EntranceRandomization.Disabled);
             SeasonRandomization = GetSlotSetting(SEASON_RANDOMIZATION_KEY, SeasonRandomization.Disabled);
-            SeedShuffle = GetSlotSetting(SEED_SHUFFLE_KEY, SeedShuffle.Disabled);
+            Cropsanity = GetSlotSetting(CROPSANITY_KEY, Cropsanity.Disabled);
             BackpackProgression = GetSlotSetting(BACKPACK_PROGRESSION_KEY, BackpackProgression.Progressive);
             ToolProgression = GetSlotSetting(TOOL_PROGRESSION_KEY, ToolProgression.Progressive);
             ElevatorProgression = GetSlotSetting(ELEVATOR_PROGRESSION_KEY, ElevatorProgression.ProgressiveFromPreviousFloor);
@@ -189,7 +189,7 @@ namespace StardewArchipelago.Archipelago
         Progressive = 3,
     }
 
-    public enum SeedShuffle
+    public enum Cropsanity
     {
         Disabled = 0,
         Shuffled = 1,
