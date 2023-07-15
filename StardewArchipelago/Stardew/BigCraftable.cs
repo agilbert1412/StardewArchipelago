@@ -43,7 +43,7 @@ namespace StardewArchipelago.Stardew
                 return stardewName;
             }
 
-            var pattern = @"\((\d) of \d\)"; // (# of 8)
+            var pattern = @"\((\d) of \s*\d\)"; // (# of 8)
             var match = Regex.Match(stardewDescription, pattern);
             var rarecrowNumber = match.Groups[1].Value;
             return $"{stardewName} #{rarecrowNumber}";
