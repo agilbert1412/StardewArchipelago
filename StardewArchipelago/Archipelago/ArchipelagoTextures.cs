@@ -12,6 +12,14 @@ namespace StardewArchipelago.Archipelago
 {
     public static class ArchipelagoTextures
     {
+        public const string COLOR = "color";
+        public const string WHITE = "white";
+        public const string BLUE = "blue";
+        public const string BLACK = "black";
+        public const string PLEADING = "pleading";
+
+        public static readonly string[] ValidLogos = { COLOR, WHITE, BLUE, BLACK, PLEADING };
+
         public static Texture2D GetColoredLogo(IModHelper modHelper, int size, string color)
         {
             if (!(Game1.content.ServiceProvider.GetService(typeof(IGraphicsDeviceService)) is IGraphicsDeviceService
