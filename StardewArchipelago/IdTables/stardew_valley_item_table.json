@@ -754,35 +754,35 @@
     },
     "Rarecrow #1": {
       "code": 717202,
-      "classification": "filler"
+      "classification": "progression"
     },
     "Rarecrow #2": {
       "code": 717203,
-      "classification": "filler"
+      "classification": "progression"
     },
     "Rarecrow #3": {
       "code": 717204,
-      "classification": "filler"
+      "classification": "progression"
     },
     "Rarecrow #4": {
       "code": 717205,
-      "classification": "filler"
+      "classification": "progression"
     },
     "Rarecrow #5": {
       "code": 717206,
-      "classification": "filler"
+      "classification": "progression"
     },
     "Rarecrow #6": {
       "code": 717207,
-      "classification": "filler"
+      "classification": "progression"
     },
     "Rarecrow #7": {
       "code": 717208,
-      "classification": "filler"
+      "classification": "progression"
     },
     "Rarecrow #8": {
       "code": 717209,
-      "classification": "filler"
+      "classification": "progression"
     },
     "Straw Hat": {
       "code": 717210,
@@ -1082,6 +1082,10 @@
     },
     "Ugly Baby": {
       "code": 717285,
+      "classification": "progression"
+    },
+    "Deluxe Scarecrow Recipe": {
+      "code": 717286,
       "classification": "progression"
     },
     "Burnt": {

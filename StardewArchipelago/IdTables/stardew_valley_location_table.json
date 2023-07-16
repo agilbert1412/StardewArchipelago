@@ -3784,6 +3784,10 @@
       "code": 719030,
       "region": "Town"
     },
+    "Collect All Rarecrows": {
+      "code": 719031,
+      "region": "Farm"
+    },
     "Island Ingredients": {
       "code": 719101,
       "region": "Town"
@@ -3959,6 +3963,190 @@
     "Complete Island Field Office": {
       "code": 719216,
       "region": "Field Office"
+    },
+    "Harvest Amaranth": {
+      "code": 719301,
+      "region": "Farm"
+    },
+    "Harvest Artichoke": {
+      "code": 719302,
+      "region": "Farm"
+    },
+    "Harvest Beet": {
+      "code": 719303,
+      "region": "Farm"
+    },
+    "Harvest Blue Jazz": {
+      "code": 719304,
+      "region": "Farm"
+    },
+    "Harvest Blueberry": {
+      "code": 719305,
+      "region": "Farm"
+    },
+    "Harvest Bok Choy": {
+      "code": 719306,
+      "region": "Farm"
+    },
+    "Harvest Cauliflower": {
+      "code": 719307,
+      "region": "Farm"
+    },
+    "Harvest Corn": {
+      "code": 719308,
+      "region": "Farm"
+    },
+    "Harvest Cranberries": {
+      "code": 719309,
+      "region": "Farm"
+    },
+    "Harvest Eggplant": {
+      "code": 719310,
+      "region": "Farm"
+    },
+    "Harvest Fairy Rose": {
+      "code": 719311,
+      "region": "Farm"
+    },
+    "Harvest Garlic": {
+      "code": 719312,
+      "region": "Farm"
+    },
+    "Harvest Grape": {
+      "code": 719313,
+      "region": "Farm"
+    },
+    "Harvest Green Bean": {
+      "code": 719314,
+      "region": "Farm"
+    },
+    "Harvest Hops": {
+      "code": 719315,
+      "region": "Farm"
+    },
+    "Harvest Hot Pepper": {
+      "code": 719316,
+      "region": "Farm"
+    },
+    "Harvest Kale": {
+      "code": 719317,
+      "region": "Farm"
+    },
+    "Harvest Melon": {
+      "code": 719318,
+      "region": "Farm"
+    },
+    "Harvest Parsnip": {
+      "code": 719319,
+      "region": "Farm"
+    },
+    "Harvest Poppy": {
+      "code": 719320,
+      "region": "Farm"
+    },
+    "Harvest Potato": {
+      "code": 719321,
+      "region": "Farm"
+    },
+    "Harvest Pumpkin": {
+      "code": 719322,
+      "region": "Farm"
+    },
+    "Harvest Radish": {
+      "code": 719323,
+      "region": "Farm"
+    },
+    "Harvest Red Cabbage": {
+      "code": 719324,
+      "region": "Farm"
+    },
+    "Harvest Rhubarb": {
+      "code": 719325,
+      "region": "Farm"
+    },
+    "Harvest Starfruit": {
+      "code": 719326,
+      "region": "Farm"
+    },
+    "Harvest Strawberry": {
+      "code": 719327,
+      "region": "Farm"
+    },
+    "Harvest Summer Spangle": {
+      "code": 719328,
+      "region": "Farm"
+    },
+    "Harvest Sunflower": {
+      "code": 719329,
+      "region": "Farm"
+    },
+    "Harvest Tomato": {
+      "code": 719330,
+      "region": "Farm"
+    },
+    "Harvest Tulip": {
+      "code": 719331,
+      "region": "Farm"
+    },
+    "Harvest Unmilled Rice": {
+      "code": 719332,
+      "region": "Farm"
+    },
+    "Harvest Wheat": {
+      "code": 719333,
+      "region": "Farm"
+    },
+    "Harvest Yam": {
+      "code": 719334,
+      "region": "Farm"
+    },
+    "Harvest Cactus Fruit": {
+      "code": 719335,
+      "region": "Farm"
+    },
+    "Harvest Pineapple": {
+      "code": 719336,
+      "region": "Farm"
+    },
+    "Harvest Taro Root": {
+      "code": 719337,
+      "region": "Farm"
+    },
+    "Harvest Sweet Gem Berry": {
+      "code": 719338,
+      "region": "Farm"
+    },
+    "Harvest Apple": {
+      "code": 719339,
+      "region": "Farm"
+    },
+    "Harvest Apricot": {
+      "code": 719340,
+      "region": "Farm"
+    },
+    "Harvest Cherry": {
+      "code": 719341,
+      "region": "Farm"
+    },
+    "Harvest Orange": {
+      "code": 719342,
+      "region": "Farm"
+    },
+    "Harvest Pomegranate": {
+      "code": 719343,
+      "region": "Farm"
+    },
+    "Harvest Peach": {
+      "code": 719344,
+      "region": "Farm"
+    },
+    "Harvest Banana": {
+      "code": 719345,
+      "region": "Farm"
+    },
+    "Harvest Mango": {
+      "code": 719346,
+      "region": "Farm"
     },
     "Level 1 Luck": {
       "code": 722001,
@@ -4276,7 +4464,7 @@
       "code": 722519,
       "region": "Stardew Valley"
     },
-    "Analyze all Eldritch School Locations": {
+    "Analyze All Eldritch School Locations": {
       "code": 722520,
       "region": "Stardew Valley"
     },
