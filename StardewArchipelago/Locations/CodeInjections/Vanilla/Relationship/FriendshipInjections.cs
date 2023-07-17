@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Netcode;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Stardew;
+using StardewArchipelago.Textures;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Characters;
@@ -181,7 +182,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
         {
             var heartNumber = heartIndex + 1;
             var imageSize = 24;
-            var textureName = ArchipelagoTextures.BLUE;
+            var textureName = ArchipelagoTextures.RED;
             var scale = 1f;
 
             var positionX = socialPage.xPositionOnScreen + 320 - 2 + heartIndex * 32;

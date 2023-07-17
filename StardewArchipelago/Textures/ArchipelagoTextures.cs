@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
 using StardewValley;
 
-namespace StardewArchipelago.Archipelago
+namespace StardewArchipelago.Textures
 {
     public static class ArchipelagoTextures
     {
@@ -16,9 +16,10 @@ namespace StardewArchipelago.Archipelago
         public const string WHITE = "white";
         public const string BLUE = "blue";
         public const string BLACK = "black";
+        public const string RED = "red";
         public const string PLEADING = "pleading";
 
-        public static readonly string[] ValidLogos = { COLOR, WHITE, BLUE, BLACK, PLEADING };
+        public static readonly string[] ValidLogos = { COLOR, WHITE, BLUE, BLACK, RED, PLEADING };
 
         public static Texture2D GetColoredLogo(IModHelper modHelper, int size, string color)
         {
