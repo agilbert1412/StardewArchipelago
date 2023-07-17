@@ -105,6 +105,7 @@ namespace StardewArchipelago
             //_helper.ConsoleCommands.Add("test_sendalllocations", "Tests if every AP item in the stardew_valley_location_table json file are supported by the mod", _tester.TestSendAllLocations);
             // _helper.ConsoleCommands.Add("load_entrances", "Loads the entrances file", (_, _) => _entranceRandomizer.LoadTransports());
             // _helper.ConsoleCommands.Add("save_entrances", "Saves the entrances file", (_, _) => EntranceInjections.SaveNewEntrancesToFile());
+            _helper.ConsoleCommands.Add("export_shippables", "Export all currently loaded shippable items", this.ExportShippables);
             _helper.ConsoleCommands.Add("teleport", "Runs whatever is currently in the debug method", this.DebugMethod);
 #endif
         }
@@ -415,6 +416,11 @@ namespace StardewArchipelago
             {
                 State.SeasonsOrder[currentSeasonNumber] = season;
             }
+        }
+
+        private void ExportShippables(string arg1, string[] arg2)
+        {
+            _stardewItemManager.ExportAllItemsMatching(x => x.canBeShipped(), "shippables.json");
         }
     }
 }
