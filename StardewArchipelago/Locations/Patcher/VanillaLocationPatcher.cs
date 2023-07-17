@@ -80,6 +80,10 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(typeof(CommunityCenter), nameof(CommunityCenter.checkAction)),
                 prefix: new HarmonyMethod(typeof(CommunityCenterInjections), nameof(CommunityCenterInjections.CheckAction_BulletinBoardNoRequirements_Prefix))
             );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(JunimoNoteMenu), nameof(JunimoNoteMenu.getRewardNameForArea)),
+                prefix: new HarmonyMethod(typeof(CommunityCenterInjections), nameof(CommunityCenterInjections.GetRewardNameForArea_ScoutRoomRewards_Prefix))
+            );
         }
 
         private void ReplaceCommunityCenterAreasWithChecks()
