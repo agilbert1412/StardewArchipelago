@@ -58,7 +58,7 @@ namespace StardewArchipelago.Locations.GingerIsland.Parrots
         private static void AddVolcanoBridgeParrot(IslandLocation __instance)
         {
             __instance.parrotUpgradePerches.Add(new ParrotUpgradePerch(__instance,
-                new Point(28, 39),
+                new Point(27, 39),
                 new Rectangle(28, 34, 5, 4),
                 5,
                 PurchaseVolcanoBridgeParrot,
@@ -83,7 +83,7 @@ namespace StardewArchipelago.Locations.GingerIsland.Parrots
                 _modHelper.Reflection.GetField<Point>(typeof(VolcanoDungeon), "shortcutOutPosition");
             var shortcutOutPosition = shortcutOutPositionField.GetValue();
             __instance.parrotUpgradePerches.Add(new ParrotUpgradePerch(__instance,
-                new Point(shortcutOutPosition.X, shortcutOutPosition.Y),
+                new Point(shortcutOutPosition.X + 1, shortcutOutPosition.Y),
                 new Rectangle(shortcutOutPosition.X - 1, shortcutOutPosition.Y - 1, 3, 3),
                 5,
                 PurchaseVolcanoExitShortcutParrot,
