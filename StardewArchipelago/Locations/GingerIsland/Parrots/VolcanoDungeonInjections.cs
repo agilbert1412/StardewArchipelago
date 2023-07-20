@@ -58,7 +58,7 @@ namespace StardewArchipelago.Locations.GingerIsland.Parrots
         private static void AddVolcanoBridgeParrot(IslandLocation __instance)
         {
             __instance.parrotUpgradePerches.Add(new ParrotUpgradePerch(__instance,
-                new Point(27, 39),
+                new Point(28, 39),
                 new Rectangle(28, 34, 5, 4),
                 5,
                 PurchaseVolcanoBridgeParrot,
