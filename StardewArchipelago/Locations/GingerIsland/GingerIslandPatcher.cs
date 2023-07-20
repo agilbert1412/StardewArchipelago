@@ -87,6 +87,11 @@ namespace StardewArchipelago.Locations.GingerIsland
                 original: AccessTools.Method(typeof(IslandWest), nameof(IslandWest.ApplyFarmHouseRestore)),
                 prefix: new HarmonyMethod(typeof(IslandWestInjections), nameof(IslandWestInjections.ApplyFarmHouseRestore_RestoreOnlyCorrectParts_Prefix))
             );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(IslandNorth), nameof(IslandNorth.explosionAt)),
+                prefix: new HarmonyMethod(typeof(IslandNorthInjections), nameof(IslandNorthInjections.ExplosionAt_CheckProfessorSnailLocation_Prefix))
+            );
         }
 
         private void ReplaceFieldOfficeWithChecks()

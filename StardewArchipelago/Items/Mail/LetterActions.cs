@@ -473,6 +473,9 @@ namespace StardewArchipelago.Items.Mail
                 case "VolcanoShortcutOut":
                     OpenVolcanoExitShortcut();
                     return;
+                case "ProfessorSnailCave":
+                    OpenProfessorSnailCave();
+                    return;
             }
         }
 
@@ -587,7 +590,14 @@ namespace StardewArchipelago.Items.Mail
             Game1.addMailForTomorrow("Island_VolcanoShortcutOut", true, true);
             var shortcutOutUnlockedField = _modHelper.Reflection.GetField<NetBool>(volcanoDungeon, "shortcutOutUnlocked");
             shortcutOutUnlockedField.GetValue().Value = true;
+        }
 
+        private void OpenProfessorSnailCave()
+        {
+            var islandNorth = FindLocation<IslandNorth>(_islandNorth);
+
+            islandNorth.caveOpened.Value = true;
+            Game1.addMailForTomorrow("islandNorthCaveOpened", true, true);
         }
 
         private void ExecuteTrap(string trapName)

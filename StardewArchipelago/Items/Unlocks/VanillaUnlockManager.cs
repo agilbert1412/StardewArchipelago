@@ -118,6 +118,7 @@ namespace StardewArchipelago.Items.Unlocks
             _unlockables.Add("Parrot Express", RepairParrotExpress);
             _unlockables.Add("Volcano Bridge", ConstructVolcanoBridge);
             _unlockables.Add("Volcano Exit Shortcut", OpenVolcanoExitShortcut);
+            _unlockables.Add("Open Professor Snail Cave", OpenProfessorSnailCave);
         }
 
         private void RegisterSpecialItems()
@@ -215,6 +216,11 @@ namespace StardewArchipelago.Items.Unlocks
         private LetterActionAttachment OpenVolcanoExitShortcut(ReceivedItem receivedItem)
         {
             return new LetterActionAttachment(receivedItem, LetterActionsKeys.IslandUnlock, "VolcanoShortcutOut");
+        }
+
+        private LetterActionAttachment OpenProfessorSnailCave(ReceivedItem receivedItem)
+        {
+            return new LetterActionAttachment(receivedItem, LetterActionsKeys.IslandUnlock, "ProfessorSnailCave");
         }
 
         private LetterActionAttachment GetNewBabyLetter(ReceivedItem receivedItem)
