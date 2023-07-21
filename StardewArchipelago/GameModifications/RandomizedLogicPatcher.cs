@@ -42,6 +42,7 @@ namespace StardewArchipelago.GameModifications
             AchievementInjections.Initialize(monitor, _archipelago);
             EntranceInjections.Initialize(monitor, _archipelago, entranceManager);
             ForestInjections.Initialize(monitor, _archipelago);
+            MountainInjections.Initialize(monitor, _archipelago);
             SeedShopsInjections.Initialize(monitor, helper, archipelago, locationChecker);
             LostAndFoundInjections.Initialize(monitor, archipelago);
             TVInjections.Initialize(monitor, archipelago);
@@ -58,6 +59,7 @@ namespace StardewArchipelago.GameModifications
             PatchGrandpaNote();
             PatchDebris();
             PatchForest();
+            PatchMountain();
             PatchEntrances();
             PatchSeasons();
             PatchSeedShops();
@@ -154,6 +156,14 @@ namespace StardewArchipelago.GameModifications
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Forest), "isWizardHouseUnlocked"),
                 prefix: new HarmonyMethod(typeof(ForestInjections), nameof(ForestInjections.IsWizardHouseUnlocked_UnlockAtRatProblem_Prefix))
+            );
+        }
+
+        private void PatchMountain()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Mountain), nameof(Mountain.ApplyTreehouseIfNecessary)),
+                prefix: new HarmonyMethod(typeof(MountainInjections), nameof(MountainInjections.ApplyTreehouseIfNecessary_ApplyTreeHouseIfReceivedApItem_Prefix))
             );
         }
 

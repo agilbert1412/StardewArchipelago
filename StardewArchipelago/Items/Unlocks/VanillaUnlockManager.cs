@@ -21,6 +21,7 @@ namespace StardewArchipelago.Items.Unlocks
         public const string QI_WALNUT_ROOM = "Qi Walnut Room";
         public const string PIERRE_STOCKLIST = "Pierre's Missing Stocklist";
         public const string ADVENTURE_GUILD = "Adventurer's Guild";
+        public const string TREEHOUSE = "Treehouse";
         private Dictionary<string, Func<ReceivedItem, LetterAttachment>> _unlockables;
 
         public VanillaUnlockManager()
@@ -119,6 +120,7 @@ namespace StardewArchipelago.Items.Unlocks
             _unlockables.Add("Volcano Bridge", ConstructVolcanoBridge);
             _unlockables.Add("Volcano Exit Shortcut", OpenVolcanoExitShortcut);
             _unlockables.Add("Open Professor Snail Cave", OpenProfessorSnailCave);
+            _unlockables.Add(TREEHOUSE, ConstructTreeHouse);
         }
 
         private void RegisterSpecialItems()
@@ -221,6 +223,11 @@ namespace StardewArchipelago.Items.Unlocks
         private LetterActionAttachment OpenProfessorSnailCave(ReceivedItem receivedItem)
         {
             return new LetterActionAttachment(receivedItem, LetterActionsKeys.IslandUnlock, "ProfessorSnailCave");
+        }
+
+        private LetterActionAttachment ConstructTreeHouse(ReceivedItem receivedItem)
+        {
+            return new LetterActionAttachment(receivedItem, LetterActionsKeys.IslandUnlock, TREEHOUSE);
         }
 
         private LetterActionAttachment GetNewBabyLetter(ReceivedItem receivedItem)

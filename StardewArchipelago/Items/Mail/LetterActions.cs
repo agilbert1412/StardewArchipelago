@@ -476,6 +476,9 @@ namespace StardewArchipelago.Items.Mail
                 case "ProfessorSnailCave":
                     OpenProfessorSnailCave();
                     return;
+                case VanillaUnlockManager.TREEHOUSE:
+                    ConstructTreeHouse();
+                    return;
             }
         }
 
@@ -484,6 +487,7 @@ namespace StardewArchipelago.Items.Mail
         private const string _islandNorth = "IslandNorth";
         private const string _islandWest = "IslandWest";
         private const string _volcanoDungeon = "VolcanoDungeon0";
+        private const string _mountain = "Mountain";
 
         private static T FindLocation<T>(string locationName)
         {
@@ -598,6 +602,12 @@ namespace StardewArchipelago.Items.Mail
 
             islandNorth.caveOpened.Value = true;
             Game1.addMailForTomorrow("islandNorthCaveOpened", true, true);
+        }
+
+        private void ConstructTreeHouse()
+        {
+            var mountain = FindLocation<Mountain>(_mountain);
+            mountain.ApplyTreehouseIfNecessary();
         }
 
         private void ExecuteTrap(string trapName)
