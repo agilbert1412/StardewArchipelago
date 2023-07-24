@@ -100,7 +100,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 var lowestLevelReachedField = _helper.Reflection.GetField<int>(deepWoodsState, "lowestLevelReached");
                 
                 lowestLevelReachedField.SetValue(10 * _archipelago.GetReceivedItemCount(WOODS_OBELISK_SIGILS));
-                var levelIndexedAt1 = level + 1;
+                var levelIndexedAt1 = level - 1;
 
                 if (levelIndexedAt1 % LEVEL_STEP != 0)
                 {
