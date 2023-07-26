@@ -1,17 +1,17 @@
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants;
 using StardewValley;
 
 namespace StardewArchipelago.GameModifications.Modded
 {
     public class ModifiedVillagerEventChecker
     {
-        private const string JUNA_MOD = "Juna - Roommate NPC";
         private const string JUNA_MAIL_ONE = "JunaWizardletter2";
         private const string JUNA_MAIL_TWO = "JunaWizardletter4";
 
         public void CheckJunaHearts(ArchipelagoClient _archipelago)
         {
-            if (!_archipelago.SlotData.Mods.HasMod(JUNA_MOD))
+            if (!_archipelago.SlotData.Mods.HasMod(ModNames.JUNA))
             {
                 return;
             }
