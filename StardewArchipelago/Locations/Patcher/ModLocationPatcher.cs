@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
+using StardewArchipelago.GameModifications.CodeInjections.Modded;
 using StardewArchipelago.Locations.CodeInjections.Modded;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Locations.GingerIsland;
@@ -47,6 +48,8 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(spaceCoreType, "AddExperience"),
                 prefix: new HarmonyMethod(typeof(SkillInjections), nameof(SkillInjections.AddExperience_ArchipelagoModExperience_Prefix))
             );
+
+            InjectSocializingExperienceMultiplier();
         }
 
         private void InjectSpaceCoreSkillsPage()
@@ -67,12 +70,47 @@ namespace StardewArchipelago.Locations.Patcher
             );
         }
 
+        private void InjectSocializingExperienceMultiplier()
+        {
+            if (!_archipelago.SlotData.Mods.HasMod(ModNames.SOCIALIZING))
+            {
+                return;
+            }
+
+            var socializingConfigType = AccessTools.TypeByName("SocializingSkill.Config");
+            _harmony.Patch(
+                original: AccessTools.PropertyGetter(socializingConfigType, "ExperienceFromTalking"),
+                postfix: new HarmonyMethod(typeof(SocializingConfigCodeInjections), nameof(SocializingConfigCodeInjections.ExperienceFromTalking_APMultiplier_Postfix))
+            );
+            _harmony.Patch(
+                original: AccessTools.PropertyGetter(socializingConfigType, "ExperienceFromGifts"),
+                postfix: new HarmonyMethod(typeof(SocializingConfigCodeInjections), nameof(SocializingConfigCodeInjections.ExperienceFromGifts_APMultiplier_Postfix))
+            );
+            _harmony.Patch(
+                original: AccessTools.PropertyGetter(socializingConfigType, "ExperienceFromEvents"),
+                postfix: new HarmonyMethod(typeof(SocializingConfigCodeInjections), nameof(SocializingConfigCodeInjections.ExperienceFromEvents_APMultiplier_Postfix))
+            );
+            _harmony.Patch(
+                original: AccessTools.PropertyGetter(socializingConfigType, "ExperienceFromQuests"),
+                postfix: new HarmonyMethod(typeof(SocializingConfigCodeInjections), nameof(SocializingConfigCodeInjections.ExperienceFromQuests_APMultiplier_Postfix))
+            );
+            _harmony.Patch(
+                original: AccessTools.PropertyGetter(socializingConfigType, "LovedGiftExpMultiplier"),
+                postfix: new HarmonyMethod(typeof(SocializingConfigCodeInjections), nameof(SocializingConfigCodeInjections.LovedGiftExpMultiplier_APMultiplier_Postfix))
+            );
+            _harmony.Patch(
+                original: AccessTools.PropertyGetter(socializingConfigType, "BirthdayGiftExpMultiplier"),
+                postfix: new HarmonyMethod(typeof(SocializingConfigCodeInjections), nameof(SocializingConfigCodeInjections.BirthdayGiftExpMultiplier_APMultiplier_Postfix))
+            );
+        }
+
         private void AddDeepWoodsModInjections()
         {
             if (!_archipelago.SlotData.Mods.HasMod(ModNames.DEEP_WOODS))
             {
                 return;
             }
+
             var _deepWoodsType = AccessTools.TypeByName("DeepWoodsMod.DeepWoods");
             var _enterDirectionType = AccessTools.TypeByName("DeepWoodsMod.DeepWoodsEnterExit+EnterDirection");
             var constructorParameterTypes = new[] { _deepWoodsType, typeof(int), _enterDirectionType };
