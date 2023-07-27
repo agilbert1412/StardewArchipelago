@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using StardewArchipelago.Archipelago;
 using StardewValley;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
@@ -26,6 +27,21 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
             RequiresGingerIsland = requiresGingerIsland;
             RequiresDwarfLanguage = requiresDwarfLanguage;
             Child = child;
+        }
+
+        public int ShuffledUpTo(ArchipelagoClient archipelago)
+        {
+            const int maxHeart = 14;
+            for (var i = maxHeart; i > 0; i--)
+            {
+                var location = string.Format(FriendshipInjections.FRIENDSANITY_PATTERN, ArchipelagoName, i);
+                if (archipelago.LocationExists(location))
+                {
+                    return i;
+                }
+            }
+
+            return 0;
         }
     }
 }

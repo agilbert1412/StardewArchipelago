@@ -106,7 +106,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
                 var archipelagoHeartItems = _archipelago.GetReceivedItemCount(string.Format(HEARTS_PATTERN, friend.ArchipelagoName));
                 var receivedHearts = archipelagoHeartItems * _archipelago.SlotData.FriendsanityHeartSize;
 
-                var maxShuffled = ShuffledUpTo(friend);
+                var maxShuffled = friend.ShuffledUpTo(_archipelago);
                 if (receivedHearts > maxShuffled)
                 {
                     receivedHearts = maxShuffled;
@@ -158,7 +158,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
                 var name = __instance.names[i] as string;
                 var friend = _friends.GetFriend(name);
                 var apPoints = (int)GetFriendshipPoints(friend.StardewName);
-                var maxShuffled = ShuffledUpTo(friend);
+                var maxShuffled = friend.ShuffledUpTo(_archipelago);
                 var heartSize = _archipelago.SlotData.FriendsanityHeartSize;
                 var maxHeartForCurrentRelation = GetMaximumHeartsWithRelationState(friend.StardewName);
                 var apHearts = apPoints / POINTS_PER_HEART;
@@ -278,7 +278,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
 
                 var archipelagoHeartItems = _archipelago.GetReceivedItemCount(string.Format(HEARTS_PATTERN, petFriend.ArchipelagoName));
                 var receivedHearts = archipelagoHeartItems * _archipelago.SlotData.FriendsanityHeartSize;
-                var maxShuffled = ShuffledUpTo(petFriend);
+                var maxShuffled = petFriend.ShuffledUpTo(_archipelago);
                 if (receivedHearts > maxShuffled)
                 {
                     receivedHearts = maxShuffled;
@@ -445,50 +445,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
         private static bool NpcIsSpouse(Farmer farmer, string npcName)
         {
             return farmer.spouse != null && npcName.Equals(farmer.spouse);
-        }
-
-        private static int ShuffledUpTo(ArchipelagoFriend friend)
-        {
-            if (_archipelago.SlotData.ExcludeGingerIsland && friend.RequiresGingerIsland)
-            {
-                return 0;
-            }
-
-            if (friend.Child)
-            {
-                return 0;
-            }
-            
-            switch (_archipelago.SlotData.Friendsanity)
-            {
-                case Friendsanity.None:
-                    return 0;
-                case Friendsanity.Bachelors:
-                    return friend.Bachelor ? 8 : 0;
-                case Friendsanity.StartingNpcs:
-                    if (friend.Pet)
-                    {
-                        return 5;
-                    }
-
-                    return _notImmediatelyAccessible.Contains(friend.StardewName) ? 0 : friend.Bachelor ? 8 : 10;
-                case Friendsanity.All:
-                    if (friend.Pet)
-                    {
-                        return 5;
-                    }
-
-                    return friend.Bachelor ? 8 : 10;
-                case Friendsanity.AllWithMarriage:
-                    if (friend.Pet)
-                    {
-                        return 5;
-                    }
-
-                    return friend.Bachelor ? 14 : 10;
-            }
-
-            return 0;
         }
 
         private static double GetMultipliedFriendship(int amount)
