@@ -79,6 +79,10 @@ namespace StardewArchipelago.GameModifications
                 original: AccessTools.Method(typeof(Game1), nameof(Game1.getSteamAchievement)),
                 prefix: new HarmonyMethod(typeof(AchievementInjections), nameof(AchievementInjections.GetSteamAchievement_DisableUndeservedAchievements_Prefix))
             );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Stats), nameof(Stats.checkForMoneyAchievements)),
+                prefix: new HarmonyMethod(typeof(AchievementInjections), nameof(AchievementInjections.CheckForMoneyAchievements_GrantMoneyAchievementsFairly_Prefix))
+            );
         }
 
         private void PatchMineMaxFloorReached()

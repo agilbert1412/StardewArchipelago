@@ -2,6 +2,7 @@
 using System.Linq;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Extensions;
 using StardewArchipelago.Stardew;
 using StardewValley;
 using StardewValley.Buildings;
@@ -38,7 +39,7 @@ namespace StardewArchipelago.GameModifications
         private void GivePlayerStartingMoney()
         {
             var startingMoney = _archipelago.SlotData.StartingMoney;
-            var isUnlimitedMoney = startingMoney < 0;
+            var isUnlimitedMoney = startingMoney.IsUnlimited();
             if (isUnlimitedMoney)
             {
                 startingMoney = UNLIMITED_MONEY_AMOUNT;
