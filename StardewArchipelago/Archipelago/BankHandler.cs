@@ -8,7 +8,7 @@ namespace StardewArchipelago.Archipelago
 {
     public class BankHandler
     {
-        private const string BANKING_KEY = "EnergyLink";
+        // private const string BANKING_KEY = "EnergyLink";
         private const string BANKING_TEAM_KEY = "EnergyLink{0}";
         private const string DEPOSIT_COMMAND = "Deposit";
         private const string WITHDRAW_COMMAND = "Withdraw";
@@ -147,7 +147,8 @@ namespace StardewArchipelago.Archipelago
 
         private BigInteger GetBankJoulesAmount()
         {
-            var realAmountJoules = _archipelago.ReadBigIntegerFromDataStorage(Scope.Global, BANKING_KEY);
+            var bankingKey = string.Format(BANKING_TEAM_KEY, _archipelago.GetTeam());
+            var realAmountJoules = _archipelago.ReadBigIntegerFromDataStorage(Scope.Global, bankingKey);
             if (realAmountJoules == null)
             {
                 return 0;
@@ -158,18 +159,20 @@ namespace StardewArchipelago.Archipelago
 
         private void AddToBank(int amountToAdd)
         {
+            var bankingKey = string.Format(BANKING_TEAM_KEY, _archipelago.GetTeam());
             var currentAmountJoules = GetBankJoulesAmount();
             var amountToAddJoules = MoneyToJoules(amountToAdd);
             var bankAmountAfterOperation = currentAmountJoules + amountToAddJoules;
-            _archipelago.SetBigIntegerDataStorage(Scope.Global, BANKING_KEY, bankAmountAfterOperation);
+            _archipelago.SetBigIntegerDataStorage(Scope.Global, bankingKey, bankAmountAfterOperation);
         }
 
         private void RemoveFromBank(int amountToRemove)
         {
+            var bankingKey = string.Format(BANKING_TEAM_KEY, _archipelago.GetTeam());
             var currentAmountJoules = GetBankJoulesAmount();
             var amountToRemoveJoules = MoneyToJoules(amountToRemove);
             var bankAmountAfterOperation = currentAmountJoules - amountToRemoveJoules;
-            _archipelago.SetBigIntegerDataStorage(Scope.Global, BANKING_KEY, bankAmountAfterOperation);
+            _archipelago.SetBigIntegerDataStorage(Scope.Global, bankingKey, bankAmountAfterOperation);
         }
 
         private BigInteger MoneyToJoules(BigInteger money)

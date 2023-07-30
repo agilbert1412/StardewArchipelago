@@ -277,6 +277,13 @@ namespace StardewArchipelago.Archipelago
             _session.Locations.CompleteLocationChecks(locationIds);
         }
 
+        public PlayerInfo CurrentPlayer => _session.Players.AllPlayers.FirstOrDefault(x => x.Slot == _session.ConnectionInfo.Slot);
+
+        public int GetTeam()
+        {
+            return _session.ConnectionInfo.Team;
+        }
+
         public string GetPlayerName(int playerId)
         {
             return _session.Players.GetPlayerName(playerId) ?? "Archipelago";
