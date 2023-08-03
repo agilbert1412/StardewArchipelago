@@ -87,16 +87,4 @@
     <Folder Include="Test\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="ContentPatcher">
-      <HintPath>..\..\..\..\Programs\Steam\steamapps\common\Stardew Valley\Mods - AP fully modded\ContentPatcher\ContentPatcher.dll</HintPath>
-    </Reference>
-    <Reference Include="DeepWoodsMod">
-      <HintPath>..\..\..\..\Programs\Steam\steamapps\common\Stardew Valley\Mods - AP fully modded\DeepWoodsMod\DeepWoodsMod.dll</HintPath>
-    </Reference>
-    <Reference Include="SocializingSkill">
-      <HintPath>..\..\..\..\Programs\Steam\steamapps\common\Stardew Valley\Mods - AP fully modded\SocializingSkill\SocializingSkill.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
 </Project>
