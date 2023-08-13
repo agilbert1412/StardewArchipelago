@@ -342,7 +342,7 @@ namespace StardewArchipelago.GameModifications
 
         private void PatchMixedSeeds()
         {
-            if (_archipelago.SlotData.SeedShuffle == SeedShuffle.Disabled)
+            if (_archipelago.SlotData.Cropsanity == Cropsanity.Disabled)
             {
                 return;
             }

@@ -96,7 +96,7 @@ namespace StardewArchipelago.GameModifications
 
         private string GetStartingSeedsForThisSeason()
         {
-            if (_archipelago.SlotData.SeedShuffle == SeedShuffle.Shuffled)
+            if (_archipelago.SlotData.Cropsanity == Cropsanity.Shuffled)
             {
                 return "Mixed Seeds";
             }
