@@ -49,6 +49,7 @@ namespace StardewArchipelago.GameModifications
             ProfitInjections.Initialize(monitor, archipelago);
             QuestLogInjections.Initialize(monitor, archipelago);
             WorldChangeEventInjections.Initialize(monitor);
+            CropInjections.Initialize(monitor, archipelago, stardewItemManager);
         }
 
         public void PatchAllGameLogic()
@@ -66,7 +67,8 @@ namespace StardewArchipelago.GameModifications
             PatchJodiFishQuest();
             PatchQuestLog();
             PatchWorldChangedEvent();
-            PatchLostAndFoundBox();
+
+            PatchMixedSeeds();            PatchLostAndFoundBox();
             PatchTvChannels();
             PatchCleanupBeforeSave();
             PatchProfitMargin();
@@ -335,6 +337,19 @@ namespace StardewArchipelago.GameModifications
             _harmony.Patch(
                 original: AccessTools.Method(typeof(WorldChangeEvent), nameof(WorldChangeEvent.setUp)),
                 prefix: new HarmonyMethod(typeof(WorldChangeEventInjections), nameof(WorldChangeEventInjections.SetUp_MakeSureEventsAreNotDuplicated_Prefix))
+            );
+        }
+
+        private void PatchMixedSeeds()
+        {
+            if (_archipelago.SlotData.SeedShuffle == SeedShuffle.Disabled)
+            {
+                return;
+            }
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Crop), nameof(Crop.getRandomLowGradeCropForThisSeason)),
+                prefix: new HarmonyMethod(typeof(CropInjections), nameof(CropInjections.GetRandomLowGradeCropForThisSeason_OnlyUnlockedCrops_Prefix))
             );
         }
 
