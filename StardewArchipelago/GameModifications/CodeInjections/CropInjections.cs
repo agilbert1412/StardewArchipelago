@@ -35,7 +35,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         {
             try
             {
-                var receivedSeeds = _archipelago.GetAllReceivedItems().Select(x => x.ItemName).Where(x => x.EndsWith("Seeds") || x.EndsWith("Starter"));
+                var receivedSeeds = _archipelago.GetAllReceivedItems().Select(x => x.ItemName).Where(x => (x.EndsWith("Seeds") || x.EndsWith("Starter")) && _stardewItemManager.ItemExists(x));
                 var seedItems = receivedSeeds.Select(x => _stardewItemManager.GetItemByName(x).PrepareForGivingToFarmer());
                 var location = Game1.currentLocation;
                 var seedsInfo = Game1.content.Load<Dictionary<int, string>>("Data\\Crops");
