@@ -19,7 +19,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         private const int FALL_SEEDS = 497;
         private const int WINTER_SEEDS = 498;
 
-        private static readonly string[] _illegalSeeds = { "Ancient Seeds" };
+        private static readonly string[] _overpoweredSeeds = { "Ancient Seeds", "Rare Seed" };
 
         private static IMonitor _monitor;
         private static ArchipelagoClient _archipelago;
@@ -37,7 +37,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         {
             try
             {
-                var receivedSeeds = _archipelago.GetAllReceivedItems().Select(x => x.ItemName).Where(x => (x.EndsWith("Seeds") || x.EndsWith("Starter")) && _stardewItemManager.ItemExists(x) && !_illegalSeeds.Contains(x, StringComparer.InvariantCultureIgnoreCase));
+                var receivedSeeds = _archipelago.GetAllReceivedItems().Select(x => x.ItemName).Where(x => (x.EndsWith("Seeds") || x.EndsWith("Starter") || x.EndsWith("Seed") || x.EndsWith("Bean")) && _stardewItemManager.ItemExists(x));
                 var seedItems = receivedSeeds.Select(x => _stardewItemManager.GetItemByName(x).PrepareForGivingToFarmer());
                 var location = Game1.currentLocation;
                 var seedsInfo = Game1.content.Load<Dictionary<int, string>>("Data\\Crops");
@@ -57,8 +57,25 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     return __result == -1; // run original logic only if I couldn't give good seeds
                 }
 
-                var randomIndex = Game1.random.Next(seedsICanPlantHere.Length);
-                var randomSeed = seedsICanPlantHere[randomIndex];
+                var weightedSeeds = new List<Item>();
+                foreach (var seed in seedsICanPlantHere)
+                {
+                    if (_overpoweredSeeds.Contains(seed.Name))
+                    {
+                        weightedSeeds.Add(seed);
+                    }
+                    else if (SeedRegrows(seed, seedsInfo))
+                    {
+                        weightedSeeds.AddRange(Enumerable.Repeat(seed, 10));
+                    }
+                    else
+                    {
+                        weightedSeeds.AddRange(Enumerable.Repeat(seed, 100));
+                    }
+                }
+
+                var randomIndex = Game1.random.Next(weightedSeeds.Count);
+                var randomSeed = weightedSeeds[randomIndex];
                 __result = randomSeed.ParentSheetIndex;
                 return false; // don't run original logic
             }
@@ -83,6 +100,16 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
             var seedSeasons = seedsInfo[x.ParentSheetIndex].Split('/')[1].Split(' ');
             return seedSeasons.Contains(season, StringComparer.CurrentCultureIgnoreCase);
+        }
+
+        private static bool SeedRegrows(Item x, Dictionary<int, string> seedsInfo)
+        {
+            if (!seedsInfo.ContainsKey(x.ParentSheetIndex))
+            {
+                return false;
+            }
+
+            return int.Parse(seedsInfo[x.ParentSheetIndex].Split('/')[4]) != -1;
         }
     }
 }
