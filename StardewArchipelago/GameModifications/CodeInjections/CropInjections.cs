@@ -19,6 +19,8 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         private const int FALL_SEEDS = 497;
         private const int WINTER_SEEDS = 498;
 
+        private static readonly string[] _illegalSeeds = { "Ancient Seeds" };
+
         private static IMonitor _monitor;
         private static ArchipelagoClient _archipelago;
         private static StardewItemManager _stardewItemManager;
@@ -35,7 +37,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         {
             try
             {
-                var receivedSeeds = _archipelago.GetAllReceivedItems().Select(x => x.ItemName).Where(x => (x.EndsWith("Seeds") || x.EndsWith("Starter")) && _stardewItemManager.ItemExists(x));
+                var receivedSeeds = _archipelago.GetAllReceivedItems().Select(x => x.ItemName).Where(x => (x.EndsWith("Seeds") || x.EndsWith("Starter")) && _stardewItemManager.ItemExists(x) && !_illegalSeeds.Contains(x, StringComparer.InvariantCultureIgnoreCase));
                 var seedItems = receivedSeeds.Select(x => _stardewItemManager.GetItemByName(x).PrepareForGivingToFarmer());
                 var location = Game1.currentLocation;
                 var seedsInfo = Game1.content.Load<Dictionary<int, string>>("Data\\Crops");
@@ -78,6 +80,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             {
                 return true;
             }
+
             var seedSeasons = seedsInfo[x.ParentSheetIndex].Split('/')[1].Split(' ');
             return seedSeasons.Contains(season, StringComparer.CurrentCultureIgnoreCase);
         }
