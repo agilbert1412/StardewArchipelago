@@ -8,12 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Archipelago\Gifting\**" />
-    <EmbeddedResource Remove="Archipelago\Gifting\**" />
-    <None Remove="Archipelago\Gifting\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="..\.editorconfig" Link=".editorconfig" />
   </ItemGroup>
 
