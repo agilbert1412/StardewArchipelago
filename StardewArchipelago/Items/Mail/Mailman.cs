@@ -192,6 +192,7 @@ namespace StardewArchipelago.Items.Mail
             "Find enclosed your prescription {0}. Remember to always follow the instructions on the bottle.^If you experience nausea, headaches or bouts of desire to go to Burger King, please consult your physician.^^Brought to you by {1} Pharmacies",
             "So, hear me out, I know you wanted a cool sword, but I got you this {0} instead. It was free, found it on the road by {2}. Cheers!^^    -{1}",
             "Hopefully, this {0} will convince you to leave the Burger King...^^    -{1}",
+            "Here, have this letter.^^    -{1}^^^^^^^^^PS: also a {0} k thx bye"
         };
     }
 }

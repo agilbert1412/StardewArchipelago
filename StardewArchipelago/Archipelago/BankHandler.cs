@@ -13,7 +13,7 @@ namespace StardewArchipelago.Archipelago
         private const string DEPOSIT_COMMAND = "Deposit";
         private const string WITHDRAW_COMMAND = "Withdraw";
         private const int MAX_DISPLAY_MONEY = 100000000; // 100 Millions
-        private const int EXCHANGE_RATE = 10000000; // To be adjusted based on feedback (pun intended)
+        public const int EXCHANGE_RATE = 10000000; // To be adjusted based on feedback (pun intended)
 
         public ArchipelagoClient _archipelago;
 

@@ -32,6 +32,7 @@ namespace StardewArchipelago.Archipelago
 
         private Action _itemReceivedFunction;
 
+        public ArchipelagoSession Session => _session;
         public bool IsConnected { get; private set; }
         public SlotData SlotData { get; private set; }
         public Dictionary<string, ScoutedLocation> ScoutedLocations { get; set; }

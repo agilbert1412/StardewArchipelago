@@ -58,6 +58,11 @@ namespace StardewArchipelago.Stardew
             return _objectsById.ContainsKey(itemId);
         }
 
+        public bool ObjectExists(string itemName)
+        {
+            return _objectsByName.ContainsKey(itemName);
+        }
+
         public StardewItem GetItemByName(string itemName)
         {
             if (_objectsByName.ContainsKey(itemName))
@@ -101,6 +106,16 @@ namespace StardewArchipelago.Stardew
             }
 
             throw new ArgumentException($"Item not found: {itemId}");
+        }
+
+        public StardewObject GetObjectByName(string itemName)
+        {
+            if (_objectsByName.ContainsKey(itemName))
+            {
+                return _objectsByName[itemName];
+            }
+
+            throw new ArgumentException($"Item not found: {itemName}");
         }
 
         public BigCraftable GetBigCraftableById(int itemId)

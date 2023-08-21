@@ -4,11 +4,12 @@ using Archipelago.MultiClient.Net.Enums;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Stardew;
+using StardewModdingAPI;
 using StardewValley;
 
-namespace StardewArchipelago.Archipelago
+namespace StardewArchipelago.Archipelago.Gifting
 {
-    public class GiftHandler
+    public class GiftHandler : IGiftHandler
     {
         private const string gift_key_pattern = "StardewGift {0}";
 
@@ -21,7 +22,7 @@ namespace StardewArchipelago.Archipelago
         {
         }
 
-        public void Initialize(StardewItemManager itemManager, Mailman mail, ArchipelagoClient archipelago)
+        public void Initialize(IMonitor monitor, ArchipelagoClient archipelago, StardewItemManager itemManager, Mailman mail)
         {
             _itemManager = itemManager;
             _mail = mail;

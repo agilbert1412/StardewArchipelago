@@ -3,6 +3,7 @@ using System.Linq;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Archipelago.Gifting;
 using StardewArchipelago.Constants;
 using StardewArchipelago.GameModifications;
 using StardewArchipelago.GameModifications.CodeInjections;
@@ -42,7 +43,7 @@ namespace StardewArchipelago
         private AdvancedOptionsManager _advancedOptionsManager;
         private Mailman _mail;
         private ChatForwarder _chatForwarder;
-        private GiftHandler _giftHandler;
+        private IGiftHandler _giftHandler;
         private BundleReader _bundleReader;
         private ItemManager _itemManager;
         private RandomizedLogicPatcher _logicPatcher;
@@ -228,7 +229,7 @@ namespace StardewArchipelago
             _mailPatcher = new MailPatcher(Monitor, _harmony, _archipelago, _locationChecker, new LetterActions(_helper, _mail, _archipelago, _itemManager.TrapManager));
             _locationsPatcher = new LocationPatcher(Monitor, _helper, _harmony, _archipelago, _locationChecker, _bundleReader, _stardewItemManager);
             _chatForwarder.ListenToChatMessages();
-            _giftHandler.Initialize(_stardewItemManager, _mail, _archipelago);
+            _giftHandler.Initialize(Monitor, _archipelago, _stardewItemManager, _mail);
             _logicPatcher.PatchAllGameLogic();
             _mailPatcher.PatchMailBoxForApItems();
             _archipelago.SlotData.Bundles.ReplaceAllBundles();
