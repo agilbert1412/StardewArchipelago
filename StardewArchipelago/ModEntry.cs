@@ -106,7 +106,7 @@ namespace StardewArchipelago
             // _helper.ConsoleCommands.Add("load_entrances", "Loads the entrances file", (_, _) => _entranceRandomizer.LoadTransports());
             // _helper.ConsoleCommands.Add("save_entrances", "Saves the entrances file", (_, _) => EntranceInjections.SaveNewEntrancesToFile());
             _helper.ConsoleCommands.Add("export_shippables", "Export all currently loaded shippable items", this.ExportShippables);
-            _helper.ConsoleCommands.Add("teleport", "Runs whatever is currently in the debug method", this.DebugMethod);
+            _helper.ConsoleCommands.Add("debug", "Runs whatever is currently in the debug method", this.DebugMethod);
 #endif
         }
 
@@ -375,7 +375,7 @@ namespace StardewArchipelago
 
         private void DebugMethod(string arg1, string[] arg2)
         {
-            _itemManager.ItemParser.TrapManager.TeleportRandomly();
+            _itemManager.ItemParser.TrapManager.ShuffleInventory();
         }
 
         public bool ArchipelagoConnect(string ip, int port, string slot, string password, out string errorMessage)
