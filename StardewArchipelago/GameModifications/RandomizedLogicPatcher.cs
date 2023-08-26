@@ -50,6 +50,7 @@ namespace StardewArchipelago.GameModifications
             QuestLogInjections.Initialize(monitor, archipelago);
             WorldChangeEventInjections.Initialize(monitor);
             CropInjections.Initialize(monitor, archipelago, stardewItemManager);
+            VoidMayoInjections.Initialize(monitor);
         }
 
         public void PatchAllGameLogic()
@@ -67,11 +68,12 @@ namespace StardewArchipelago.GameModifications
             PatchJodiFishQuest();
             PatchQuestLog();
             PatchWorldChangedEvent();
-
-            PatchMixedSeeds();            PatchLostAndFoundBox();
+            PatchLostAndFoundBox();
+            PatchMixedSeeds();            
             PatchTvChannels();
             PatchCleanupBeforeSave();
             PatchProfitMargin();
+            PatchVoidMayo();
             _startingResources.GivePlayerStartingResources();
         }
 
@@ -379,6 +381,14 @@ namespace StardewArchipelago.GameModifications
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Object), nameof(Object.sellToStorePrice)),
                 postfix: new HarmonyMethod(typeof(ProfitInjections), nameof(ProfitInjections.SellToStorePrice_ApplyProfitMargin_Postfix))
+            );
+        }
+
+        private void PatchVoidMayo()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.getFish)),
+                prefix: new HarmonyMethod(typeof(VoidMayoInjections), nameof(VoidMayoInjections.GetFish_FishVoidMayo_PreFix))
             );
         }
     }
