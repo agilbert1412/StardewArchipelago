@@ -1,23 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using StardewArchipelago.Stardew;
-
-namespace StardewArchipelago.Archipelago.Gifting
+﻿namespace StardewArchipelago.Archipelago.Gifting
 {
     public class ItemAmount
     {
-        public StardewItem Item { get; set; }
+        public string ItemName { get; set; }
         public int Amount { get; set; }
 
-        public ItemAmount(StardewItem item, int amount)
+        public ItemAmount(string itemName, int amount)
         {
-            Item = item;
+            ItemName = itemName;
             Amount = amount;
         }
 
-        public static implicit operator ItemAmount((StardewItem, int) tuple) => new(tuple.Item1, tuple.Item2);
+        public static implicit operator ItemAmount((string, int) tuple) => new(tuple.Item1, tuple.Item2);
     }
 }

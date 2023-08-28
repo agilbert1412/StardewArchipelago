@@ -32,26 +32,49 @@ namespace StardewArchipelago.Archipelago.Gifting
         public void ReceiveAllGifts()
         {
             var gifts = _giftService.GetAllGiftsAndEmptyGiftbox();
+            if (!gifts.Any())
+            {
+                return;
+            }
 
+            var giftItems = new Dictionary<(string, string), int>();
+            var giftIds = new Dictionary<Guid, (string, string)>();
             foreach (var (id, gift) in gifts)
             {
-                ReceiveGiftTomorrow(gift);
+                ParseGift(gift, giftItems, giftIds);
+            }
+
+            foreach (var ((itemName, senderName), amount) in giftItems)
+            {
+                var relatedGiftIds = giftIds.Where(x => x.Value == (itemName, senderName)).Select(x => x.Key);
+                var mailKey = GetMailKey(relatedGiftIds);
+                var firstGift = gifts[relatedGiftIds.First()];
+                var senderGame = _archipelago.GetPlayerGame(senderName);
+                var item = _itemManager.GetItemByName(itemName);
+                var embed = GetEmbed(item, amount);
+                _mail.SendArchipelagoGiftMail(mailKey, firstGift.Item.Name, senderName, senderGame, embed);
             }
         }
 
-        private void ReceiveGiftTomorrow(Gift gift)
+        private void ParseGift(Gift gift, Dictionary<(string, string), int> giftItems, Dictionary<Guid, (string, string)> giftIds)
         {
             if (!_giftProcessor.TryMakeStardewItem(gift, out var item, out var amount))
             {
                 if (!gift.IsRefund)
                 {
                     _giftService.RefundGift(gift);
+                    return;
                 }
             }
-            
-            var mailKey = GetMailKey(gift);
-            var embed = GetEmbed(item, amount);
-            _mail.SendArchipelagoGiftMail(mailKey, gift.SenderName, embed);
+
+            var key = (item, gift.SenderName);
+            if (!giftItems.ContainsKey(key))
+            {
+                giftItems.Add(key, 0);
+            }
+
+            giftItems[key] += amount;
+            giftIds.Add(gift.ID, key);
         }
 
         private string GetEmbed(StardewItem item, int amount)
@@ -64,9 +87,9 @@ namespace StardewArchipelago.Archipelago.Gifting
             return $"%item object {item.Id} {amount} %%";
         }
 
-        private string GetMailKey(Gift gift)
+        private string GetMailKey(IEnumerable<Guid> ids)
         {
-            return $"APGift;{gift.ID}";
+            return $"APGift;{string.Join(";", ids)}";
         }
     }
 }

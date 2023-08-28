@@ -57,13 +57,19 @@ namespace StardewArchipelago.Archipelago.Gifting
                 return false;
             }
 
-            var giftPrefix = $"{ChatForwarder.COMMAND_PREFIX}gift ";
-            if (!message.StartsWith(giftPrefix))
+            var giftPrefix = $"{ChatForwarder.COMMAND_PREFIX}gift";
+            var giftPrefixWithSpace = $"{giftPrefix} ";
+            if (!message.StartsWith(giftPrefixWithSpace))
             {
+                if (message.StartsWith(giftPrefix))
+                {
+                    Game1.chatBox?.addMessage($"Usage: !!gift [slotName]", Color.Gold);
+                    return true;
+                }
                 return false;
             }
 
-            var receiverSlotName = message.Substring(giftPrefix.Length);
+            var receiverSlotName = message.Substring(giftPrefixWithSpace.Length);
 #if RELEASE
             if (receiverSlotName == _archipelago.SlotData.SlotName)
             {

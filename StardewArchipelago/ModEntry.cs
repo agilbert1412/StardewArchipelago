@@ -107,7 +107,7 @@ namespace StardewArchipelago
             // _helper.ConsoleCommands.Add("load_entrances", "Loads the entrances file", (_, _) => _entranceRandomizer.LoadTransports());
             // _helper.ConsoleCommands.Add("save_entrances", "Saves the entrances file", (_, _) => EntranceInjections.SaveNewEntrancesToFile());
             _helper.ConsoleCommands.Add("export_shippables", "Export all currently loaded shippable items", this.ExportShippables);
-            _helper.ConsoleCommands.Add("debug", "Runs whatever is currently in the debug method", this.DebugMethod);
+            _helper.ConsoleCommands.Add("debug_method", "Runs whatever is currently in the debug method", this.DebugMethod);
 #endif
         }
 
@@ -125,7 +125,7 @@ namespace StardewArchipelago
             _multiSleep = new MultiSleep(Monitor, _helper, _harmony);
             _advancedOptionsManager = new AdvancedOptionsManager(this, _harmony, _archipelago);
             _advancedOptionsManager.InjectArchipelagoAdvancedOptions();
-            _giftHandler = new GiftHandler();
+            _giftHandler = new CrossGiftHandler();
             SkillInjections.ResetSkillExperience();
             FriendshipInjections.ResetArchipelagoFriendshipPoints();
         }

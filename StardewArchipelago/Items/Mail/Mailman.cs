@@ -43,10 +43,10 @@ namespace StardewArchipelago.Items.Mail
             SendMail(mailKey + "%&NL&%");
         }
 
-        public void SendArchipelagoGiftMail(string mailKey, string findingPlayer, string attachmentEmbedString)
+        public void SendArchipelagoGiftMail(string mailKey, string itemName, string senderName, string senderGame, string attachmentEmbedString)
         {
             var mailContentTemplate = GetRandomApMailGiftString();
-            var mailContent = string.Format(mailContentTemplate, findingPlayer, attachmentEmbedString);
+            var mailContent = string.Format(mailContentTemplate, itemName, senderName, senderGame, attachmentEmbedString);
             GenerateMail(mailKey, mailContent);
             SendMail(mailKey);
         }
@@ -121,14 +121,14 @@ namespace StardewArchipelago.Items.Mail
         private string GetRandomApMailGiftString()
         {
             var chosenString = ApGiftStrings[_random.Next(0, ApGiftStrings.Length)];
-            chosenString += "{1}[#]Archipelago Item";
+            chosenString += "{3}[#]Archipelago Gift"; // Argument {3} is the embed
             return chosenString;
         }
 
         private string GetRandomApMailString()
         {
             var chosenString = ApMailStrings[_random.Next(0, ApMailStrings.Length)];
-            chosenString += "{3}[#]Archipelago Item";
+            chosenString += "{3}[#]Archipelago Item"; // Argument {3} is the embed
             return chosenString;
         }
 
@@ -155,14 +155,17 @@ namespace StardewArchipelago.Items.Mail
             }
         }
 
-        // 0: Sender
-        // 1: Embed
+        // 0: Item Name
+        // 1: Sender Name
+        // 2: Sender Game
+        // 3: Embed
         private static readonly string[] ApGiftStrings = {
-            "It's dangerous to go alone. Take this!^^    -{0}",
-            "Hopefully, this will convince you to leave the Burger King...^^    -{0}",
-            "Here you go!^^    -{0}",
-            "I thought you could use this^^    -{0}",
-            "I heard you wanted that?^^    -{0}",
+            "It's dangerous to go alone. Take this!^^    -{1} from {2}",
+            "Hopefully, this {0} will convince you to leave the Burger King...^^    -{1} from {2}",
+            "Here you go!^^    -{1} from {2}",
+            "I thought you could use this {0} from {2}^^    -{1}",
+            "I heard you wanted a {0}?^I found one in {2}^^    -{1}",
+            "Greetings from {2}^^I got a {0} for you!^^    -{1}",
         };
 
         // 0: Item

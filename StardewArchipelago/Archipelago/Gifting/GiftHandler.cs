@@ -157,7 +157,7 @@ namespace StardewArchipelago.Archipelago.Gifting
             var letterEmbedString = $"%item {itemType} {parsedItem.Id} {amount} %%";
 
             var mailKey = giftString.Replace(" ", "_");
-            _mail.SendArchipelagoGiftMail(mailKey, senderName, letterEmbedString);
+            _mail.SendArchipelagoGiftMail(mailKey, itemName, senderName, ArchipelagoClient.GAME_NAME, letterEmbedString);
         }
     }
 }

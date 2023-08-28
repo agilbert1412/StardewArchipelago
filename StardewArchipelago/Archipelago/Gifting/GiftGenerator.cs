@@ -13,6 +13,8 @@ namespace StardewArchipelago.Archipelago.Gifting
 {
     public class GiftGenerator
     {
+        private const double DEFAULT_BUFF_DURATION = 120;
+
         private StardewItemManager _itemManager;
 
         public GiftGenerator(StardewItemManager itemManager)
@@ -41,9 +43,143 @@ namespace StardewArchipelago.Archipelago.Gifting
             return true;
         }
 
-        private GiftTrait[] GenerateGiftTraits(Object giftObject)
+        private GiftTrait[] GenerateGiftTraits(Item giftObject)
         {
-            return Array.Empty<GiftTrait>();
+            var traits = new List<GiftTrait>();
+
+            var objectInfo = Game1.objectInformation[giftObject.ParentSheetIndex].Split('/');
+            var edibility = objectInfo[2];
+            if (Convert.ToInt32(edibility) > 0)
+            {
+                traits.AddRange(GetConsumableTraits(objectInfo));
+            }
+
+            traits.AddRange(GetCategoryTraits(objectInfo));
+
+            return traits.ToArray();
         }
+
+        private IEnumerable<GiftTrait> GetConsumableTraits(string[] objectInfo)
+        {
+            yield return CreateTrait(GiftFlag.Consumable);
+            var foodOrDrink = objectInfo[6];
+            if (foodOrDrink.Equals("food", StringComparison.InvariantCultureIgnoreCase))
+            {
+                yield return CreateTrait(GiftFlag.Food);
+            }
+
+            if (foodOrDrink.Equals("drink", StringComparison.InvariantCultureIgnoreCase))
+            {
+                yield return CreateTrait(GiftFlag.Drink);
+            }
+
+            var buffs = objectInfo.Length > 7 ? objectInfo[7].Split(' ').Select(int.Parse).ToArray() : Enumerable.Repeat(0, 12).ToArray();
+            var buffDuration = double.Parse(objectInfo[8]) / DEFAULT_BUFF_DURATION;
+
+            foreach (var buffTrait in GetBuffTraits(buffs, buffDuration)) yield return buffTrait;
+        }
+
+        private IEnumerable<GiftTrait> GetBuffTraits(int[] buffs, double buffDuration)
+        {
+            if (buffDuration <= 0)
+            {
+                yield break;
+            }
+
+            for (var i = 0; i < buffs.Length; i++)
+            {
+                if (_buffFlags.ContainsKey(i) && buffs[i] > 0)
+                {
+                    yield return CreateTrait(_buffFlags[i], buffDuration, buffs[i]);
+                }
+            }
+        }
+
+        private IEnumerable<GiftTrait> GetCategoryTraits(string[] objectInfo)
+        {
+            if (objectInfo.Length < 4)
+            {
+                yield break;
+            }
+
+            var typeAndCategory = objectInfo[3].Split(" ");
+
+            if (typeAndCategory.Length < 1)
+            {
+                yield break;
+            }
+
+            var categoryName = "";
+            if (typeAndCategory.Length > 1)
+            {
+                var category = int.Parse(typeAndCategory[1]);
+                categoryName = _categoryFlags[category];
+                yield return CreateTrait(categoryName);
+            }
+
+            var type = typeAndCategory[0];
+            if (type != categoryName && !string.IsNullOrWhiteSpace(type))
+            {
+                yield return CreateTrait(categoryName);
+            }
+        }
+
+        private GiftTrait CreateTrait(string trait, double duration = 1.0, double quality = 1.0)
+        {
+            return new GiftTrait(trait, duration, quality);
+        }
+
+        private static readonly Dictionary<int, string> _buffFlags = new()
+        {
+            // { ConsumableBuff.FARMING, GiftFlag.Farming },
+            { ConsumableBuff.FISHING, GiftFlag.Fish },
+            { ConsumableBuff.MINING, GiftFlag.Tool },
+            { ConsumableBuff.DIGGING, GiftFlag.Tool },
+            // { ConsumableBuff.LUCK, GiftFlag.Luck },
+            // { ConsumableBuff.FORAGING, GiftFlag.Foraging },
+            // { ConsumableBuff.CRAFTING, GiftFlag.Crafting },
+            { ConsumableBuff.MAX_ENERGY, GiftFlag.Mana },
+            // { ConsumableBuff.MAGNETISM, GiftFlag.Magnetism },
+            { ConsumableBuff.SPEED, GiftFlag.Speed },
+            { ConsumableBuff.DEFENSE, GiftFlag.Armor },
+            { ConsumableBuff.ATTACK, GiftFlag.Weapon },
+        };
+
+        private static readonly Dictionary<int, string> _categoryFlags = new()
+        {
+            //{ Category.GEM, GiftFlag.Gem },
+            { Category.FISH, GiftFlag.Fish },
+            //{ Category.EGG, GiftFlag.Egg },
+            //{ Category.MILK, GiftFlag.Milk },
+            //{ Category.COOKING, GiftFlag.Cooking },
+            //{ Category.CRAFTING, GiftFlag.Crafting },
+            //{ Category.BIG_CRAFTABLE, GiftFlag.BigCraftable },
+            //{ Category.MINERAL, GiftFlag.Mineral },
+            //{ Category.MEAT, GiftFlag.Meat },
+            { Category.METAL, GiftFlag.Metal },
+            { Category.BUILDING, GiftFlag.Material },
+            //{ Category.SELL_AT_PIERRE, GiftFlag.SellAtPierre },
+            //{ Category.SELL_AT_PIERRE_AND_MARNIE, GiftFlag.SellAtPierreAndMarnie },
+            //{ Category.FERTILIZER, GiftFlag.Fertilizer },
+            //{ Category.TRASH, GiftFlag.Trash },
+            //{ Category.BAIT, GiftFlag.Bait },
+            //{ Category.TACKLE, GiftFlag.Tackle },
+            //{ Category.SELL_AT_FISH_SHOP, GiftFlag.SellAtFishShop },
+            //{ Category.FURNITURE, GiftFlag.Furniture },
+            //{ Category.INGREDIENT, GiftFlag.Ingredient },
+            //{ Category.ARTISAN_GOOD, GiftFlag.ArtisanGood },
+            //{ Category.SYRUP, GiftFlag.Syrup },
+            { Category.MONSTER_LOOT, GiftFlag.Monster },
+            { Category.EQUIPMENT, GiftFlag.Armor },
+            { Category.SEED, GiftFlag.Seed },
+            //{ Category.VEGETABLE, GiftFlag.Vegetable },
+            //{ Category.FRUIT, GiftFlag.Fruit },
+            //{ Category.FLOWER, GiftFlag.Flower },
+            //{ Category.FORAGE, GiftFlag.Forage },
+            //{ Category.HAT, GiftFlag.Cosmetic },
+            { Category.RING, GiftFlag.Armor },
+            { Category.WEAPON, GiftFlag.Weapon },
+            { Category.TOOL, GiftFlag.Tool },
+        };
     }
 }

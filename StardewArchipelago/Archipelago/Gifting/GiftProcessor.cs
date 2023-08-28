@@ -24,13 +24,14 @@ namespace StardewArchipelago.Archipelago.Gifting
             _archipelago = archipelago;
             _itemManager = itemManager;
             InitializeSpecialItems();
+            InitializeRecognizedTraits();
         }
 
-        public bool TryMakeStardewItem(Gift gift, out StardewItem item, out int amount)
+        public bool TryMakeStardewItem(Gift gift, out string itemName, out int amount)
         {
             if (_itemManager.ObjectExists(gift.Item.Name))
             {
-                item = _itemManager.GetObjectByName(gift.Item.Name);
+                itemName = gift.Item.Name;
                 amount = gift.Item.Amount;
                 return true;
             }
@@ -39,7 +40,7 @@ namespace StardewArchipelago.Archipelago.Gifting
             if (_specialItems.ContainsKey(capitalizedName))
             {
                 var specialItem = _specialItems[capitalizedName](gift.Item.Amount);
-                item = specialItem.Item;
+                itemName = specialItem.ItemName;
                 amount = specialItem.Amount;
                 return true;
             }
@@ -55,7 +56,7 @@ namespace StardewArchipelago.Archipelago.Gifting
 
                     var traitsByName = gift.Traits.ToDictionary(t => t.Trait, t => t);
                     var itemAmount = itemFunction(gift.Item.Amount, traitsByName);
-                    item = itemAmount.Item;
+                    itemName = itemAmount.ItemName;
                     amount = itemAmount.Amount;
                     return true;
                 }
@@ -65,13 +66,13 @@ namespace StardewArchipelago.Archipelago.Gifting
             {
                 if (_itemManager.ObjectExists(trait.Trait))
                 {
-                    item = _itemManager.GetObjectByName(trait.Trait);
+                    itemName = trait.Trait;
                     amount = (int)Math.Round(trait.Quality * gift.Item.Amount);
                     return true;
                 }
             }
 
-            item = null;
+            itemName = null;
             amount = 0;
             return false;
         }
@@ -79,16 +80,19 @@ namespace StardewArchipelago.Archipelago.Gifting
         private void InitializeSpecialItems()
         {
             _specialItems = new Dictionary<string, Func<int, ItemAmount>>();
-            _specialItems.Add("Tree", (amount) => (_itemManager.GetItemByName("Wood"), amount * 15));
-            _specialItems.Add("Boulder", (amount) => (_itemManager.GetItemByName("Stone"), amount * 15));
-            _specialItems.Add("Rock", (amount) => (_itemManager.GetItemByName("Stone"), amount * 2));
-            _specialItems.Add("Vine", (amount) => (_itemManager.GetItemByName("Fiber"), amount * 2));
+            _specialItems.Add("Tree", (amount) => ("Wood", amount * 15));
+            _specialItems.Add("Lumber", (amount) => ("Hardwood", amount * 15));
+            _specialItems.Add("Boulder", (amount) => ("Stone", amount * 15));
+            _specialItems.Add("Rock", (amount) => ("Stone", amount * 2));
+            _specialItems.Add("Vine", (amount) => ("Fiber", amount * 2));
         }
 
         private void InitializeRecognizedTraits()
         {
             _recognizedTraits = new Dictionary<int, Dictionary<string[], Func<int, Dictionary<string, GiftTrait>, ItemAmount>>>();
             InitializeSingleRecognizedTraits();
+            InitializeDualRecognizedTraits();
+            InitializeTrioRecognizedTraits();
         }
 
         private void InitializeTrioRecognizedTraits()
@@ -109,7 +113,7 @@ namespace StardewArchipelago.Archipelago.Gifting
             var singleRecognizedTraits = new Dictionary<string[], Func<int, Dictionary<string, GiftTrait>, ItemAmount>>();
 
             singleRecognizedTraits.Add(new[] {GiftFlag.Speed}, MakeCoffee);
-            singleRecognizedTraits.Add(new[] {"Fan"}, (amount, _) => (_itemManager.GetItemByName("Ornamental Fan"), amount));
+            singleRecognizedTraits.Add(new[] {"Fan"}, (amount, _) => ("Ornamental Fan", amount));
 
             _recognizedTraits.Add(1, singleRecognizedTraits);
         }
@@ -118,7 +122,7 @@ namespace StardewArchipelago.Archipelago.Gifting
         {
             var speedTrait = traits[GiftFlag.Speed];
             var totalSpeed = speedTrait.Duration + speedTrait.Quality - 1;
-            return totalSpeed >= 3 ? (_itemManager.GetItemByName("Triple Shot Espresso"), (int)Math.Round(amount * (totalSpeed / 3))) : (_itemManager.GetItemByName("Coffee"), (int)Math.Round(amount * totalSpeed));
+            return totalSpeed >= 3 ? ("Triple Shot Espresso", (int)Math.Round(amount * (totalSpeed / 3))) : ("Coffee", (int)Math.Round(amount * totalSpeed));
         }
     }
 }

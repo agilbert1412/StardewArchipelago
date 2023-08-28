@@ -30,6 +30,12 @@ namespace StardewArchipelago.Archipelago.Gifting
 
         public void SendGift(string slotName)
         {
+            if (!_archipelago.PlayerExists(slotName))
+            {
+                Game1.chatBox?.addMessage($"Could not find player named {slotName}", Color.Gold);
+                return;
+            }
+
             var giftObject = Game1.player.ActiveObject;
             if (!_giftGenerator.TryCreateGiftItem(Game1.player.ActiveObject, out var giftItem, out var giftTraits))
             {
