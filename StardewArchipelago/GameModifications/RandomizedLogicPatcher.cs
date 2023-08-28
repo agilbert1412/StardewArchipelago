@@ -47,7 +47,7 @@ namespace StardewArchipelago.GameModifications
             LostAndFoundInjections.Initialize(monitor, archipelago);
             TVInjections.Initialize(monitor, archipelago);
             ProfitInjections.Initialize(monitor, archipelago);
-            QuestLogInjections.Initialize(monitor, archipelago);
+            QuestLogInjections.Initialize(monitor, archipelago, locationChecker);
             WorldChangeEventInjections.Initialize(monitor);
             CropInjections.Initialize(monitor, archipelago, stardewItemManager);
             VoidMayoInjections.Initialize(monitor);
@@ -331,6 +331,11 @@ namespace StardewArchipelago.GameModifications
             _harmony.Patch(
                 original: AccessTools.Constructor(typeof(QuestLog)),
                 postfix: new HarmonyMethod(typeof(QuestLogInjections), nameof(QuestLogInjections.Constructor_MakeQuestsNonCancellable_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Farmer), nameof(Farmer.foundArtifact)),
+                postfix: new HarmonyMethod(typeof(QuestLogInjections), nameof(QuestLogInjections.FoundArtifact_StartArchaeologyIfMissed_Postfix))
             );
         }
 
