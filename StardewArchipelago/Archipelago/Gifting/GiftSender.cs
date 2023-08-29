@@ -17,7 +17,7 @@ namespace StardewArchipelago.Archipelago.Gifting
         private ArchipelagoClient _archipelago;
         private StardewItemManager _itemManager;
         private IGiftingService _giftService;
-        private GiftGenerator _giftGenerator;
+        internal GiftGenerator GiftGenerator { get; }
 
         public GiftSender(IMonitor monitor, ArchipelagoClient archipelago, StardewItemManager itemManager, IGiftingService giftService)
         {
@@ -25,7 +25,7 @@ namespace StardewArchipelago.Archipelago.Gifting
             _archipelago = archipelago;
             _itemManager = itemManager;
             _giftService = giftService;
-            _giftGenerator = new GiftGenerator(_itemManager);
+            GiftGenerator = new GiftGenerator(_itemManager);
         }
 
         public void SendGift(string slotName)
@@ -37,7 +37,7 @@ namespace StardewArchipelago.Archipelago.Gifting
             }
 
             var giftObject = Game1.player.ActiveObject;
-            if (!_giftGenerator.TryCreateGiftItem(Game1.player.ActiveObject, out var giftItem, out var giftTraits))
+            if (!GiftGenerator.TryCreateGiftItem(Game1.player.ActiveObject, out var giftItem, out var giftTraits))
             {
                 // TryCreateGiftItem will log the reason if it fails
                 return;

@@ -124,6 +124,11 @@ namespace StardewArchipelago.Archipelago.Gifting
             ReceiveGiftsTomorrow(aliasGiftKey);
         }
 
+        public void ExportAllGifts(string filePath)
+        {
+            throw new NotImplementedException();
+        }
+
         private void ReceiveGiftsTomorrow(string giftKey)
         {
             if (!_archipelago.StringExistsInDataStorage(Scope.Game, giftKey))

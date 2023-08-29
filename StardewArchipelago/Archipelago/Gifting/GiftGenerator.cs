@@ -47,6 +47,11 @@ namespace StardewArchipelago.Archipelago.Gifting
         {
             var traits = new List<GiftTrait>();
 
+            if (!Game1.objectInformation.ContainsKey(giftObject.ParentSheetIndex))
+            {
+                return traits.ToArray();
+            }
+
             var objectInfo = Game1.objectInformation[giftObject.ParentSheetIndex].Split('/');
             var edibility = objectInfo[2];
             if (Convert.ToInt32(edibility) > 0)
@@ -62,6 +67,11 @@ namespace StardewArchipelago.Archipelago.Gifting
         private IEnumerable<GiftTrait> GetConsumableTraits(string[] objectInfo)
         {
             yield return CreateTrait(GiftFlag.Consumable);
+            if (objectInfo.Length < 7)
+            {
+                yield break;
+            }
+
             var foodOrDrink = objectInfo[6];
             if (foodOrDrink.Equals("food", StringComparison.InvariantCultureIgnoreCase))
             {
@@ -73,8 +83,13 @@ namespace StardewArchipelago.Archipelago.Gifting
                 yield return CreateTrait(GiftFlag.Drink);
             }
 
-            var buffs = objectInfo.Length > 7 ? objectInfo[7].Split(' ').Select(int.Parse).ToArray() : Enumerable.Repeat(0, 12).ToArray();
-            var buffDuration = double.Parse(objectInfo[8]) / DEFAULT_BUFF_DURATION;
+            if (objectInfo.Length < 8)
+            {
+                yield break;
+            }
+
+            var buffs = objectInfo[7].Split(' ').Select(int.Parse).ToArray();
+            var buffDuration = (objectInfo.Length > 8 ? double.Parse(objectInfo[8]) : 120) / DEFAULT_BUFF_DURATION;
 
             foreach (var buffTrait in GetBuffTraits(buffs, buffDuration)) yield return buffTrait;
         }
@@ -113,14 +128,28 @@ namespace StardewArchipelago.Archipelago.Gifting
             if (typeAndCategory.Length > 1)
             {
                 var category = int.Parse(typeAndCategory[1]);
-                categoryName = _categoryFlags[category];
-                yield return CreateTrait(categoryName);
+                if (_categoryFlags.ContainsKey(category))
+                {
+                    categoryName = _categoryFlags[category];
+                    if (!string.IsNullOrWhiteSpace(categoryName))
+                    {
+                        yield return CreateTrait(categoryName);
+                    }
+                }
             }
 
             var type = typeAndCategory[0];
             if (type != categoryName && !string.IsNullOrWhiteSpace(type))
             {
-                yield return CreateTrait(categoryName);
+                if (_typeFlags.ContainsKey(type))
+                {
+                    type = _typeFlags[type];
+                }
+
+                if (!string.IsNullOrWhiteSpace(type))
+                {
+                    yield return CreateTrait(type);
+                }
             }
         }
 
@@ -180,6 +209,13 @@ namespace StardewArchipelago.Archipelago.Gifting
             { Category.RING, GiftFlag.Armor },
             { Category.WEAPON, GiftFlag.Weapon },
             { Category.TOOL, GiftFlag.Tool },
+        };
+
+        private static readonly Dictionary<string, string> _typeFlags = new()
+        {
+            { "Arch", "Artifact" },
+            { "Basic", "" },
+            { "Minerals", "Mineral" },
         };
     }
 }

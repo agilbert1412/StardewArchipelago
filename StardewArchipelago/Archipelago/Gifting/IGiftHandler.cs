@@ -9,5 +9,6 @@ namespace StardewArchipelago.Archipelago.Gifting
         void Initialize(IMonitor monitor, ArchipelagoClient archipelago, StardewItemManager itemManager, Mailman mail);
         bool HandleGiftItemCommand(string message);
         void ReceiveAllGiftsTomorrow();
+        void ExportAllGifts(string filePath);
     }
 }

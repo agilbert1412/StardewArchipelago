@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Archipelago.Gifting.Net;
 using Microsoft.Xna.Framework;
+using Newtonsoft.Json;
 using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
+using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Archipelago.Gifting
 {
@@ -89,6 +92,35 @@ namespace StardewArchipelago.Archipelago.Gifting
             }
 
             _giftReceiver.ReceiveAllGifts();
+        }
+
+        public void ExportAllGifts(string filePath)
+        {
+            var allItems = _itemManager.GetAllItems();
+
+            var items = new Dictionary<string, GiftTrait[]>();
+            foreach (var item in allItems)
+            {
+                var stardewItem = item.PrepareForGivingToFarmer();
+                if (stardewItem is not Object stardewObject)
+                {
+                    continue;
+                }
+
+                if (!_giftSender.GiftGenerator.TryCreateGiftItem(stardewObject, out var giftItem, out var traits))
+                {
+                    continue;
+                }
+
+                if (items.ContainsKey(giftItem.Name))
+                {
+                    continue;
+                }
+                items.Add(giftItem.Name, traits);
+            }
+
+            var objectsAsJson = JsonConvert.SerializeObject(items);
+            File.WriteAllText(filePath, objectsAsJson);
         }
     }
 }

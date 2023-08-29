@@ -33,6 +33,18 @@ namespace StardewArchipelago.Stardew
             InitializeData();
         }
 
+        public List<StardewItem> GetAllItems()
+        {
+            var allItems = new List<StardewItem>();
+            allItems.AddRange(_objectsByName.Values);
+            allItems.AddRange(_bigCraftablesByName.Values);
+            allItems.AddRange(_bootsByName.Values);
+            allItems.AddRange(_furnitureByName.Values);
+            allItems.AddRange(_hatsByName.Values);
+            allItems.AddRange(_weaponsByName.Values);
+            return allItems;
+        }
+
         public bool ItemExists(string itemName)
         {
             return _objectsByName.ContainsKey(itemName) || 
