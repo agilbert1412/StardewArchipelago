@@ -51,6 +51,12 @@ namespace StardewArchipelago.Archipelago
             }
 
             var bankCommandParts = bankCommand.Split(" ");
+#if DEBUG
+            if (bankCommandParts[0] == "reset")
+            {
+                HandleResetCommand();
+            }
+#endif
 
             if (bankCommandParts.Length != 2)
             {
@@ -72,6 +78,17 @@ namespace StardewArchipelago.Archipelago
 
             PrintUsageRules();
             return true;
+        }
+
+        private void HandleResetCommand()
+        {
+#if RELEASE
+    return;
+#endif
+            var bankingKey = string.Format(BANKING_TEAM_KEY, _archipelago.GetTeam());
+            _archipelago.SetBigIntegerDataStorage(Scope.Global, bankingKey, 0);
+
+            Game1.chatBox?.addMessage($"You have successfully reset your bank account to {0}$", Color.Gold);
         }
 
         private void HandleDepositCommand(string amount)
