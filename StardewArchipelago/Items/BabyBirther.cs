@@ -17,8 +17,8 @@ namespace StardewArchipelago.Items
         {
             "Albrekka", "Alchav", "axe_y", "beauxq", "Berserker", "Black Sliver", "blastron", "BootsinSoots", "CaitSith2", "Captain Canadia", "Celeste", "Damocles",
             "dewin", "el_", "Espeon", "eudaimonistic", "Exempt-Medic", "Farrak Kilhn", "Figment", "Fly Sniper",
-            "Frazzleduck", "Heinermann", "JaredWeakStrike", "Jarno", "jat2980", "Jouramie", "Justice", "Kaito Kid",
-            "KelioMZX", "KittyAshy", "Kono Tyran", "lordlou", "Magnemania", "Marech", "Mati", "Mav", "mewlif", "N00byKing", "Phar",
+            "Frazzleduck", "Heinermann", "Ishigh", "JaredWeakStrike", "Jarno", "jat2980", "Jouramie", "Justice", "Kaito Kid",
+            "KelioMZX", "KittyAshy", "Kono Tyran", "lordlou", "Magnemania", "Marech", "Mati", "Mav", "MeleneV", "mewlif", "N00byKing", "Phar",
             "PoryGone", "ProfBytes", "RaspberrySpaceJam", "Rosalie", "Salzkorn", "Scipio", "Sneaki", "Snow", "SunnyBat",
             "TheCondor", "toaster", "Trev", "Violet", "Yellow_Meep", "zig", "Ziktofel",
         };

@@ -21,7 +21,10 @@ namespace StardewArchipelago.Items.Unlocks
         public const string QI_WALNUT_ROOM = "Qi Walnut Room";
         public const string PIERRE_STOCKLIST = "Pierre's Missing Stocklist";
         public const string ADVENTURE_GUILD = "Adventurer's Guild";
+        public const string ISLAND_FARMHOUSE = "Island Farmhouse";
+        public const string ISLAND_MAILBOX = "Island Mailbox";
         public const string TREEHOUSE = "Treehouse";
+
         private Dictionary<string, Func<ReceivedItem, LetterAttachment>> _unlockables;
 
         public VanillaUnlockManager()
@@ -114,8 +117,8 @@ namespace StardewArchipelago.Items.Unlocks
             _unlockables.Add("Island Trader", RestoreIslandTrader);
             _unlockables.Add("Island Resort", RepairResort);
             _unlockables.Add("Farm Obelisk", CreateFarmObelisk);
-            _unlockables.Add("Island Mailbox", RepairIslandMailbox);
-            _unlockables.Add("Island Farmhouse", RepairIslandFarmhouse);
+            _unlockables.Add(ISLAND_MAILBOX, RepairIslandMailbox);
+            _unlockables.Add(ISLAND_FARMHOUSE, RepairIslandFarmhouse);
             _unlockables.Add("Parrot Express", RepairParrotExpress);
             _unlockables.Add("Volcano Bridge", ConstructVolcanoBridge);
             _unlockables.Add("Volcano Exit Shortcut", OpenVolcanoExitShortcut);

@@ -4,7 +4,6 @@ using HarmonyLib;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.Gifting;
-using StardewArchipelago.Constants;
 using StardewArchipelago.GameModifications;
 using StardewArchipelago.GameModifications.CodeInjections;
 using StardewArchipelago.GameModifications.EntranceRandomizer;
@@ -23,7 +22,6 @@ using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Locations;
-using StardewValley.Menus;
 using StardewArchipelago.GameModifications.Modded;
 
 namespace StardewArchipelago
@@ -129,6 +127,8 @@ namespace StardewArchipelago
             _giftHandler = new CrossGiftHandler();
             SkillInjections.ResetSkillExperience();
             FriendshipInjections.ResetArchipelagoFriendshipPoints();
+
+            IslandWestMapInjections.PatchMapInjections(Monitor, _helper, _harmony);
         }
 
         private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
@@ -333,9 +333,6 @@ namespace StardewArchipelago
         private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
         {
             _archipelago.APUpdate();
-            // var methods = _harmony.GetPatchedMethods().ToList();
-            // _entranceManager.RegisterAllEntrances();
-            // _entranceManager.SetEntranceRandomizerSettings(_archipelago.SlotData);
         }
 
         private void OnReturnedToTitle(object sender, ReturnedToTitleEventArgs e)
