@@ -68,7 +68,7 @@ namespace StardewArchipelago.Items.Mail
             string embedString)
         {
             var mailContentTemplate = GetRandomApMailString();
-            var mailContent = string.Format(mailContentTemplate, apItemName, findingPlayer, locationName, embedString);
+            var mailContent = string.Format(mailContentTemplate, apItemName, findingPlayer, locationName, embedString, Game1.player.farmName.Value);
             GenerateMail(mailKey, mailContent);
         }
 
@@ -172,7 +172,8 @@ namespace StardewArchipelago.Items.Mail
         // 1: Sender
         // 2: Location
         // 3: Embed
-        private static readonly string[] ApMailStrings = {
+        // 4: Farm Name
+        private readonly string[] ApMailStrings = {
             "Hey @, I was at {2}, minding my own business, and there I found a {0}.^I thought you would make better use of it than I ever could.^^    -{1}",
             "I found a {0} in {2}.^Enjoy!^^    -{1}",
             "There was a {0} in my {2}.^Do you think you can make it useful?^^    -{1}",
@@ -195,7 +196,10 @@ namespace StardewArchipelago.Items.Mail
             "Find enclosed your prescription {0}. Remember to always follow the instructions on the bottle.^If you experience nausea, headaches or bouts of desire to go to Burger King, please consult your physician.^^Brought to you by {1} Pharmacies",
             "So, hear me out, I know you wanted a cool sword, but I got you this {0} instead. It was free, found it on the road by {2}. Cheers!^^    -{1}",
             "Hopefully, this {0} will convince you to leave the Burger King...^^    -{1}",
-            "Here, have this letter.^^    -{1}^^^^^^^^^PS: also a {0} k thx bye"
+            "Here, have this letter.^^    -{1}^^^^^^^^^PS: also a {0} k thx bye",
+            "I have something here for you. Your father wanted you to have this when you were old enough, but your uncle wouldn't allow it. He feared you  might follow old {1} on some damned-fool idealistic crusade like your father did. Your father's {0}. This is the weapon of a Jedi Knight. An elegant weapon, for a more civilized age.",
+            "{1}^Incoming Trade Offer:^^I Receive: Your Undying Love and Affection^^You receive: {0}",
+            "Grandpa's {0}^He's gone to stay with the dwarves. He's left you {4}, along with all of his possessions. The {0} is yours now. Keep it secret. Keep it safe"
         };
     }
 }
