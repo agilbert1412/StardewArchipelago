@@ -110,7 +110,7 @@ namespace StardewArchipelago.Archipelago
             ToolProgression = GetSlotSetting(TOOL_PROGRESSION_KEY, ToolProgression.Progressive);
             ElevatorProgression = GetSlotSetting(ELEVATOR_PROGRESSION_KEY, ElevatorProgression.ProgressiveFromPreviousFloor);
             SkillProgression = GetSlotSetting(SKILLS_PROGRESSION_KEY, SkillsProgression.Progressive);
-            BuildingProgression = GetSlotSetting(BUILDING_PROGRESSION_KEY, BuildingProgression.Shuffled);
+            BuildingProgression = GetSlotSetting(BUILDING_PROGRESSION_KEY, BuildingProgression.Progressive);
             FestivalLocations = GetSlotSetting(FESTIVAL_OBJECTIVES_KEY, FestivalLocations.Easy);
             ArcadeMachineLocations = GetSlotSetting(ARCADE_MACHINES_KEY, ArcadeLocations.FullShuffling);
             SpecialOrderLocations = GetSlotSetting(SPECIAL_ORDERS_KEY, SpecialOrderLocations.BoardOnly);
@@ -224,10 +224,13 @@ namespace StardewArchipelago.Archipelago
         ProgressiveEarlyBackpack = 2
     }
 
+    [Flags]
     public enum ToolProgression
     {
-        Vanilla = 0,
-        Progressive = 1,
+        Vanilla = 0b0001,
+        Progressive = 0b0010,
+        Cheap = 0b0100,
+        VeryCheap = 0b1000,
     }
 
     public enum ElevatorProgression
@@ -243,11 +246,14 @@ namespace StardewArchipelago.Archipelago
         Progressive = 1,
     }
 
+    [Flags]
     public enum BuildingProgression
     {
-        Vanilla = 0,
-        Shuffled = 1,
-        ShuffledEarlyShippingBin = 2
+        Vanilla = 0b00001,
+        Progressive = 0b00010,
+        EarlyShippingBin = 0b00100,
+        Cheap = 0b01000,
+        VeryCheap = 0b10000,
     }
 
     public enum FestivalLocations

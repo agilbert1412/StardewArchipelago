@@ -143,6 +143,7 @@ namespace StardewArchipelago.GameModifications
         private void RemoveShippingBin()
         {
             if (_archipelago.SlotData.BuildingProgression == BuildingProgression.Vanilla || _archipelago.HasReceivedItem("Shipping Bin"))
+            if (!_archipelago.SlotData.BuildingProgression.HasFlag(BuildingProgression.Progressive))
             {
                 return;
             }

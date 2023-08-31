@@ -137,7 +137,7 @@ namespace StardewArchipelago.Locations.Patcher
                 prefix: new HarmonyMethod(typeof(ScytheInjections), nameof(ScytheInjections.PerformAction_GoldenScythe_Prefix))
             );
 
-            if (_archipelago.SlotData.ToolProgression == ToolProgression.Vanilla)
+            if (!_archipelago.SlotData.ToolProgression.HasFlag(ToolProgression.Progressive))
             {
                 return;
             }
@@ -150,7 +150,7 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void ReplaceFishingRodsWithChecks()
         {
-            if (_archipelago.SlotData.ToolProgression == ToolProgression.Vanilla)
+            if (!_archipelago.SlotData.ToolProgression.HasFlag(ToolProgression.Progressive))
             {
                 return;
             }
@@ -353,7 +353,7 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void ReplaceCarpenterBuildingsWithChecks()
         {
-            if (_archipelago.SlotData.BuildingProgression == BuildingProgression.Vanilla)
+            if (!_archipelago.SlotData.BuildingProgression.HasFlag(BuildingProgression.Progressive))
             {
                 return;
             }
