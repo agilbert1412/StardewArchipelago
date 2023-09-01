@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Extensions;
+using StardewArchipelago.GameModifications.CodeInjections;
 using StardewArchipelago.Stardew;
 using StardewValley;
 using StardewValley.Buildings;
@@ -145,14 +146,9 @@ namespace StardewArchipelago.GameModifications
             }
 
             var farm = Game1.getFarm();
-            ShippingBin shippingBin = null;
-            foreach (var building in Game1.getFarm().buildings)
+            if (!FarmInjections.TryFindShippingBin(farm, out var shippingBin))
             {
-                if (building is ShippingBin bin)
-                {
-                    shippingBin = bin;
-                    break;
-                }
+                return;
             }
 
             shippingBin.BeforeDemolish();
