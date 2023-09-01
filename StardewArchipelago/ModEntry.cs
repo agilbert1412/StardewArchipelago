@@ -302,21 +302,10 @@ namespace StardewArchipelago
             }
             _appearanceRandomizer.ShuffleCharacterAppearances();
             _entranceManager.ResetCheckedEntrancesToday(_archipelago.SlotData);
-
-            DoBugsCleanup();
         }
 
         private void DoBugsCleanup()
         {
-            if (_archipelago.HasReceivedItem("Dark Talisman"))
-            {
-                Game1.player.hasDarkTalisman = true;
-            }
-
-            if (_archipelago.HasReceivedItem("Key To The Town"))
-            {
-                Game1.player.HasTownKey = true;
-            }
         }
 
         private void OnDayEnding(object sender, DayEndingEventArgs e)
