@@ -149,7 +149,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
                     return true; // run original logic
                 }
 
-                if (!_locationChecker.IsLocationMissingAndExists(DARK_TALISMAN) && __instance.isTileLocationTotallyClearAndPlaceable(31, 5))
+                if (_locationChecker.IsLocationNotChecked(DARK_TALISMAN) && __instance.isTileLocationTotallyClearAndPlaceable(31, 5))
                 {
                     __instance.overlayObjects.Add(new Vector2(31f, 5f), new Chest(0, new List<Item>()
                     {
