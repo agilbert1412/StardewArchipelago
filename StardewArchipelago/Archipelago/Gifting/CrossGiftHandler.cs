@@ -86,7 +86,7 @@ namespace StardewArchipelago.Archipelago.Gifting
 
         public void ReceiveAllGiftsTomorrow()
         {
-            if (_archipelago == null || !_archipelago.SlotData.Gifting)
+            if (_archipelago == null || !_archipelago.SlotData.Gifting || !_archipelago.MakeSureConnected())
             {
                 return;
             }
