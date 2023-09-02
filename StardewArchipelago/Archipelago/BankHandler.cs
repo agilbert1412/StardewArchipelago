@@ -9,7 +9,7 @@ namespace StardewArchipelago.Archipelago
     public class BankHandler
     {
         // private const string BANKING_KEY = "EnergyLink";
-        private const string BANKING_TEAM_KEY = "EnergyLink{0}";
+        public const string BANKING_TEAM_KEY = "EnergyLink{0}";
         private const string DEPOSIT_COMMAND = "Deposit";
         private const string WITHDRAW_COMMAND = "Withdraw";
         private const int MAX_DISPLAY_MONEY = 100000000; // 100 Millions
@@ -140,16 +140,17 @@ namespace StardewArchipelago.Archipelago
             Game1.chatBox?.addMessage($"Thank you for using Joja Capital", Color.Gold);
         }
 
-        private void PrintCurrentBalance(int currentBankAmount = -1)
+        private void PrintCurrentBalance()
         {
-            if (currentBankAmount < 0)
-            {
-                currentBankAmount = GetBankMoneyAmount();
-            }
+            PrintCurrentBalance(GetBankMoneyAmount());
+        }
+
+        private void PrintCurrentBalance(BigInteger currentBankAmount)
+        {
             Game1.chatBox?.addMessage($"Current Balance: {currentBankAmount}$", Color.Gold);
         }
 
-        private int GetBankMoneyAmount()
+        private BigInteger GetBankMoneyAmount()
         {
             var realAmountJoules = GetBankJoulesAmount();
 
@@ -159,7 +160,7 @@ namespace StardewArchipelago.Archipelago
                 return MAX_DISPLAY_MONEY;
             }
 
-            return (int)convertedAmount;
+            return convertedAmount;
         }
 
         private BigInteger GetBankJoulesAmount()
@@ -183,7 +184,7 @@ namespace StardewArchipelago.Archipelago
             _archipelago.SetBigIntegerDataStorage(Scope.Global, bankingKey, bankAmountAfterOperation);
         }
 
-        private void RemoveFromBank(int amountToRemove)
+        private void RemoveFromBank(BigInteger amountToRemove)
         {
             var bankingKey = string.Format(BANKING_TEAM_KEY, _archipelago.GetTeam());
             var currentAmountJoules = GetBankJoulesAmount();
