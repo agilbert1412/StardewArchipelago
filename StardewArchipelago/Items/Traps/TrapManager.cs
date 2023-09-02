@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Archipelago.MultiClient.Net.Enums;
 using Microsoft.Xna.Framework;
 using Netcode;
@@ -167,21 +168,22 @@ namespace StardewArchipelago.Items.Traps
 
         private void ChargeTaxes()
         {
-            var taxRate = _difficultyBalancer.TaxRates[_archipelago.SlotData.TrapItemsDifficulty];
+            var difficulty = _archipelago.SlotData.TrapItemsDifficulty;
+            var taxRate = _difficultyBalancer.TaxRates[difficulty];
             var player = Game1.player;
             var currentMoney = player.Money;
             var tax = (int)(currentMoney * taxRate);
             Game1.player.addUnearnedMoney(tax * -1);
-            if (_archipelago.SlotData.TrapItemsDifficulty == TrapItemsDifficulty.Nightmare)
+            if (difficulty == TrapItemsDifficulty.Nightmare)
             {
-                RemoveTaxTrapFromBank();
+                RemoveTaxTrapFromBankAsync().FireAndForget();
             }
         }
 
-        public void RemoveTaxTrapFromBank()
+        public async Task RemoveTaxTrapFromBankAsync()
         {
             var bankingKey = string.Format(BankHandler.BANKING_TEAM_KEY, _archipelago.GetTeam());
-            var currentAmountJoules = _archipelago.ReadBigIntegerFromDataStorage(Scope.Global, bankingKey);
+            var currentAmountJoules = await _archipelago.ReadBigIntegerFromDataStorageAsync(Scope.Global, bankingKey);
             if (currentAmountJoules == null || currentAmountJoules <= 0)
             {
                 return;

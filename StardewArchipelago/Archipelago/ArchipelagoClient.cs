@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Threading.Tasks;
 using Archipelago.MultiClient.Net;
 using Archipelago.MultiClient.Net.BounceFeatures.DeathLink;
 using Archipelago.MultiClient.Net.Enums;
@@ -421,7 +422,27 @@ namespace StardewArchipelago.Archipelago
             }
             catch (Exception ex)
             {
-                _console.Log($"Error Reading BigInteger from DataStorage key [{key}]. Value: {value}");
+                _console.Log($"Error Reading BigInteger from DataStorage key [{key}]. Value: {value}", LogLevel.Error);
+                return null;
+            }
+        }
+
+        public async Task<BigInteger?> ReadBigIntegerFromDataStorageAsync(Scope scope, string key)
+        {
+            if (!MakeSureConnected())
+            {
+                return null;
+            }
+
+            var value = _session.DataStorage[scope, key];
+            try
+            {
+                var integerValue = await value.GetAsync<BigInteger>();
+                return integerValue;
+            }
+            catch (Exception ex)
+            {
+                _console.Log($"Error Async Reading BigInteger from DataStorage key [{key}]. Value: {value}", LogLevel.Error);
                 return null;
             }
         }

@@ -35,7 +35,7 @@ namespace StardewArchipelago.Archipelago
                 return false;
             }
 
-            if (!_archipelago.SlotData.Banking) // Did I enable that feature?
+            if (!_archipelago.SlotData.Banking || !_archipelago.MakeSureConnected()) // Did I enable that feature?
             {
                 Game1.chatBox?.addMessage($"Your archipelago slot does not have a Joja Capital account", Color.Gold);
                 return true;
