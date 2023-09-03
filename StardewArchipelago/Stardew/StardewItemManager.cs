@@ -310,7 +310,7 @@ namespace StardewArchipelago.Stardew
         {
             _weaponsById = new Dictionary<int, StardewWeapon>();
             _weaponsByName = new Dictionary<string, StardewWeapon>();
-            var allWeaponsInformation = (IDictionary<int, string>)Game1.content.Load<Dictionary<int, string>>("Data\\Weapons");
+            var allWeaponsInformation = (IDictionary<int, string>)Game1.content.Load<Dictionary<int, string>>("Data\\weapons");
             foreach (var (id, weaponsInfo) in allWeaponsInformation)
             {
                 var weapon = ParseStardewWeaponData(id, weaponsInfo);
