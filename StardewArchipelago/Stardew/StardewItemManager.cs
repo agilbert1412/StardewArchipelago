@@ -291,7 +291,7 @@ namespace StardewArchipelago.Stardew
         {
             _hatsById = new Dictionary<int, StardewHat>();
             _hatsByName = new Dictionary<string, StardewHat>();
-            var allHatsInformation = (IDictionary<int, string>)Game1.content.Load<Dictionary<int, string>>("Data\\Hats");
+            var allHatsInformation = (IDictionary<int, string>)Game1.content.Load<Dictionary<int, string>>("Data\\hats");
             foreach (var (id, hatInfo) in allHatsInformation)
             {
                 var hat = ParseStardewHatData(id, hatInfo);
