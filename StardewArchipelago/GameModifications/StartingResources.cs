@@ -31,9 +31,9 @@ namespace StardewArchipelago.GameModifications
             if (Game1.Date.TotalDays == 0)
             {
                 GivePlayerQuickStart();
-                RemoveShippingBin();
             }
 
+            RemoveShippingBin();
             SendGilTelephoneLetter();
         }
 
@@ -140,7 +140,7 @@ namespace StardewArchipelago.GameModifications
 
         private void RemoveShippingBin()
         {
-            if (_archipelago.SlotData.BuildingProgression == BuildingProgression.Vanilla)
+            if (_archipelago.SlotData.BuildingProgression == BuildingProgression.Vanilla || _archipelago.HasReceivedItem("Shipping Bin"))
             {
                 return;
             }

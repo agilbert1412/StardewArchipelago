@@ -193,6 +193,11 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     return;
                 }
 
+                if (!_archipelago.HasReceivedItem("Shipping Bin"))
+                {
+                    return;
+                }
+
                 var farm = Game1.getFarm();
                 if (TryFindShippingBin(farm, out _))
                 {
