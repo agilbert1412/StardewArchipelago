@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
@@ -157,6 +158,8 @@ namespace StardewArchipelago
             State.SeasonsOrder = new List<string>();
             State.SeasonsOrder.Add(_seasonsRandomizer.GetFirstSeason());
             SeasonsRandomizer.SetSeason(State.SeasonsOrder.Last());
+
+            DebugAssertStateValues(State);
             _helper.Data.WriteSaveData(AP_DATA_KEY, State);
             _helper.Data.WriteSaveData(AP_EXPERIENCE_KEY, SkillInjections.GetArchipelagoExperience());
             _helper.Data.WriteSaveData(AP_FRIENDSHIP_KEY, FriendshipInjections.GetArchipelagoFriendshipPoints());
@@ -174,9 +177,21 @@ namespace StardewArchipelago
             State.LocationsScouted = _archipelago.ScoutedLocations;
             State.LettersGenerated = _mail.GetAllLettersGenerated();
             // _state.SeasonOrder should be fine?
+
+            DebugAssertStateValues(State);
             _helper.Data.WriteSaveData(AP_DATA_KEY, State);
             _helper.Data.WriteSaveData(AP_EXPERIENCE_KEY, SkillInjections.GetArchipelagoExperience());
             _helper.Data.WriteSaveData(AP_FRIENDSHIP_KEY, FriendshipInjections.GetArchipelagoFriendshipPoints());
+        }
+
+        private void DebugAssertStateValues(ArchipelagoStateDto state)
+        {
+            if (state.APConnectionInfo == null)
+            {
+                Monitor.Log(
+                    $"About to write Archipelago State data, but the connectionInfo is null! This should never happen. Please contact KaitoKid and describe what you did last so it can be investigated.",
+                    LogLevel.Error);
+            }
         }
 
         private void OnSaved(object sender, SavedEventArgs e)
@@ -203,12 +218,6 @@ namespace StardewArchipelago
             _questCleaner = new QuestCleaner();
             _villagerEvents = new ModifiedVillagerEventChecker();
 
-
-            if (State.APConnectionInfo == null)
-            {
-                return;
-            }
-
             if (!_archipelago.IsConnected)
             {
                 if (_apConnectionOverride != null)
@@ -216,7 +225,17 @@ namespace StardewArchipelago
                     State.APConnectionInfo = _apConnectionOverride;
                     _apConnectionOverride = null;
                 }
-                _archipelago.Connect(State.APConnectionInfo, out var errorMessage);
+
+                var errorMessage = "";
+                if (State.APConnectionInfo == null)
+                {
+                    errorMessage =
+                        $"The game being loaded has no connection information.{Environment.NewLine}Please use the connect_override command to input connection fields before loading it";
+                }
+                else
+                {
+                    _archipelago.Connect(State.APConnectionInfo, out errorMessage);
+                }
 
                 if (!_archipelago.IsConnected)
                 {
