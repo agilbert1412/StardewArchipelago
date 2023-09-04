@@ -42,41 +42,44 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 var location = Game1.currentLocation;
                 var seedsInfo = Game1.content.Load<Dictionary<int, string>>("Data\\Crops");
 
-                var seedsICanPlantHere = seedItems.Where(x => SeedCanBePlantedHere(x, location, season, seedsInfo)).ToArray();
+                var seedsICanPlantHere = seedItems.Where(x => SeedCanBePlantedHere(x, location, season, seedsInfo)).ToList();
 
-                if (!seedsICanPlantHere.Any())
+                switch (season)
                 {
-                    __result = season switch
-                    {
-                        "spring" => SPRING_SEEDS,
-                        "summer" => SUMMER_SEEDS,
-                        "fall" => FALL_SEEDS,
-                        "winter" => WINTER_SEEDS,
-                        _ => -1
-                    };
-                    return __result == -1; // run original logic only if I couldn't give good seeds
+                    case "spring":
+                        seedsICanPlantHere.Add(_stardewItemManager.GetItemByName("Spring Seeds").PrepareForGivingToFarmer());
+                        break;
+                    case "summer":
+                        seedsICanPlantHere.Add(_stardewItemManager.GetItemByName("Summer Seeds").PrepareForGivingToFarmer());
+                        break;
+                    case "fall":
+                        seedsICanPlantHere.Add(_stardewItemManager.GetItemByName("Fall Seeds").PrepareForGivingToFarmer());
+                        break;
+                    case "winter":
+                        seedsICanPlantHere.Add(_stardewItemManager.GetItemByName("Winter Seeds").PrepareForGivingToFarmer());
+                        break;
                 }
 
-                var weightedSeeds = new List<Item>();
+                var weightedSeeds = new List<int>();
                 foreach (var seed in seedsICanPlantHere)
                 {
                     if (_overpoweredSeeds.Contains(seed.Name))
                     {
-                        weightedSeeds.Add(seed);
+                        weightedSeeds.Add(seed.ParentSheetIndex);
                     }
                     else if (SeedRegrows(seed, seedsInfo))
                     {
-                        weightedSeeds.AddRange(Enumerable.Repeat(seed, 10));
+                        weightedSeeds.AddRange(Enumerable.Repeat(seed.ParentSheetIndex, 10));
                     }
                     else
                     {
-                        weightedSeeds.AddRange(Enumerable.Repeat(seed, 100));
+                        weightedSeeds.AddRange(Enumerable.Repeat(seed.ParentSheetIndex, 100));
                     }
                 }
 
                 var randomIndex = Game1.random.Next(weightedSeeds.Count);
                 var randomSeed = weightedSeeds[randomIndex];
-                __result = randomSeed.ParentSheetIndex;
+                __result = randomSeed;
                 return false; // don't run original logic
             }
             catch (Exception ex)
