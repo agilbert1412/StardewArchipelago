@@ -222,6 +222,11 @@ namespace StardewArchipelago.Locations.Patcher
             );
 
             _harmony.Patch(
+                original: AccessTools.Method(typeof(Utility), nameof(Utility.getQuestOfTheDay)),
+                prefix:new HarmonyMethod(typeof(QuestInjections), nameof(QuestInjections.GetQuestOfTheDay_BalanceQuests_Prefix))
+            );
+
+            _harmony.Patch(
                 original: AccessTools.Method(typeof(Mountain), nameof(Mountain.checkAction)),
                 prefix: new HarmonyMethod(typeof(QuestInjections), nameof(QuestInjections.CheckAction_AdventurerGuild_Prefix))
             );
