@@ -144,6 +144,7 @@ namespace StardewArchipelago.GameModifications
         {
             if (_archipelago.SlotData.BuildingProgression == BuildingProgression.Vanilla || _archipelago.HasReceivedItem("Shipping Bin"))
             if (!_archipelago.SlotData.BuildingProgression.HasFlag(BuildingProgression.Progressive))
+            if (!_archipelago.SlotData.BuildingProgression.HasFlag(BuildingProgression.Progressive) || _archipelago.HasReceivedItem("Shipping Bin"))
             {
                 return;
             }

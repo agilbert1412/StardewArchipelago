@@ -188,12 +188,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         {
             try
             {
-                if (_archipelago.SlotData.BuildingProgression != BuildingProgression.ShuffledEarlyShippingBin)
-                {
-                    return;
-                }
-
-                if (!_archipelago.HasReceivedItem("Shipping Bin"))
+                if (!_archipelago.SlotData.BuildingProgression.HasFlag(BuildingProgression.EarlyShippingBin) || !_archipelago.HasReceivedItem("Shipping Bin"))
                 {
                     return;
                 }
