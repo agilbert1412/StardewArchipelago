@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
@@ -11,11 +12,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
     public static class ShippingInjections
     {
         private static IMonitor _monitor;
+        private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
 
-        public static void Initialize(IMonitor monitor, LocationChecker locationChecker)
+        public static void Initialize(IMonitor monitor, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             _monitor = monitor;
+            _archipelago = archipelago;
             _locationChecker = locationChecker;
         }
 
@@ -82,7 +85,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 {
                     name = _renamedItems[shippedItem.ParentSheetIndex];
                 }
-                _locationChecker.AddCheckedLocation($"Shipsanity: {name}");
+
+                var apLocation = $"Shipsanity: {name}";
+                if (_archipelago.GetLocationId(apLocation) > -1)
+                {
+                    _locationChecker.AddCheckedLocation(apLocation);
+                }
+                else
+                {
+                    _monitor.Log($"Unrecognized Shipsanity Location: {name} [{shippedItem.ParentSheetIndex}]", LogLevel.Error);
+                }
             }
         }
 
