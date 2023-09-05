@@ -29,6 +29,8 @@ namespace StardewArchipelago.Archipelago
         private const string HELP_WANTED_LOCATIONS_KEY = "help_wanted_locations";
         private const string FISHSANITY_KEY = "fishsanity";
         private const string MUSEUMSANITY_KEY = "museumsanity";
+        private const string MONSTERSANITY_KEY = "monstersanity";
+        private const string SHIPSANITY_KEY = "shipsanity";
         private const string FRIENDSANITY_KEY = "friendsanity";
         private const string FRIENDSANITY_HEART_SIZE_KEY = "friendsanity_heart_size";
         private const string EXCLUDE_GINGER_ISLAND_KEY = "exclude_ginger_island";
@@ -72,6 +74,8 @@ namespace StardewArchipelago.Archipelago
         public int HelpWantedLocationNumber { get; private set; }
         public Fishsanity Fishsanity { get; private set; }
         public Museumsanity Museumsanity { get; private set; }
+        public Monstersanity Monstersanity { get; private set; }
+        public Shipsanity Shipsanity { get; private set; }
         public Friendsanity Friendsanity { get; private set; }
         public int FriendsanityHeartSize { get; private set; }
         public bool ExcludeGingerIsland { get; private set; }
@@ -117,6 +121,8 @@ namespace StardewArchipelago.Archipelago
             HelpWantedLocationNumber = GetSlotSetting(HELP_WANTED_LOCATIONS_KEY, 0);
             Fishsanity = GetSlotSetting(FISHSANITY_KEY, Fishsanity.None);
             Museumsanity = GetSlotSetting(MUSEUMSANITY_KEY, Museumsanity.None);
+            Monstersanity = GetSlotSetting(MONSTERSANITY_KEY, Monstersanity.None);
+            Shipsanity = GetSlotSetting(SHIPSANITY_KEY, Shipsanity.None);
             Friendsanity = GetSlotSetting(FRIENDSANITY_KEY, Friendsanity.None);
             FriendsanityHeartSize = GetSlotSetting(FRIENDSANITY_HEART_SIZE_KEY, 4);
             ExcludeGingerIsland = GetSlotSetting(EXCLUDE_GINGER_ISLAND_KEY, true);
@@ -296,6 +302,28 @@ namespace StardewArchipelago.Archipelago
         Milestones = 1,
         RandomSelection = 2,
         All = 3,
+    }
+
+    public enum Monstersanity
+    {
+        None = 0,
+        OnePerCategory = 1,
+        OnePerMonster = 2,
+        Goals = 3,
+        ShortGoals = 4,
+        VeryShortGoals = 5,
+        ProgressiveGoals = 6,
+        SplitGoals = 7
+    }
+
+    public enum Shipsanity
+    {
+        None = 0,
+        Crops = 1,
+        Fish = 3,
+        FullShipment = 5,
+        FullShipmentWithFish = 7,
+        Everything = 9,
     }
 
     public enum Friendsanity

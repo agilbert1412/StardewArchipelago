@@ -64,6 +64,7 @@ namespace StardewArchipelago.Locations.Patcher
             ReplaceSpecialOrdersWithChecks();
             ReplaceChildrenWithChecks();
             _gingerIslandPatcher.PatchGingerIslandLocations();
+            AddShipsanityLocations();
         }
 
         private void ReplaceCommunityCenterBundlesWithChecks()
@@ -722,6 +723,19 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony.Patch(
                 original: AccessTools.Method(typeof(FruitTree), nameof(FruitTree.shake)),
                 prefix: new HarmonyMethod(typeof(CropsanityInjections), nameof(CropsanityInjections.Shake_CheckCropsanityFruitTreeLocation_Prefix))
+            );
+        }
+
+        private void AddShipsanityLocations()
+        {
+            if (_archipelago.SlotData.Shipsanity == Shipsanity.None)
+            {
+                return;
+            }
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Game1), "_newDayAfterFade"),
+                postfix: new HarmonyMethod(typeof(ShippingInjections), nameof(ShippingInjections.NewDayAfterFade_CheckShipsanityLocations_Prefix))
             );
         }
 

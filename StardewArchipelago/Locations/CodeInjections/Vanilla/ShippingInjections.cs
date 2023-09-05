@@ -1,0 +1,96 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using StardewModdingAPI;
+using StardewValley;
+using StardewValley.Locations;
+using StardewValley.Objects;
+
+namespace StardewArchipelago.Locations.CodeInjections.Vanilla
+{
+    public static class ShippingInjections
+    {
+        private static IMonitor _monitor;
+        private static LocationChecker _locationChecker;
+
+        public static void Initialize(IMonitor monitor, LocationChecker locationChecker)
+        {
+            _monitor = monitor;
+            _locationChecker = locationChecker;
+        }
+
+        // private static IEnumerator<int> _newDayAfterFade()
+        public static bool NewDayAfterFade_CheckShipsanityLocations_Prefix(ref IEnumerator<int> __result)
+        {
+            try
+            {
+                var allShippedItems = GetAllItemsShippedToday();
+                CheckAllShipsanityLocations(allShippedItems);
+                
+                return true; // run original logic
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(NewDayAfterFade_CheckShipsanityLocations_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
+        }
+
+        private static List<Item> GetAllItemsShippedToday()
+        {
+            var allShippedItems = new List<Item>();
+            allShippedItems.AddRange(Game1.getFarm().getShippingBin(Game1.player));
+            foreach (var gameLocation in GetAllGameLocations())
+            {
+                foreach (var locationObject in gameLocation.Objects.Values)
+                {
+                    if (locationObject is not Chest { SpecialChestType: Chest.SpecialChestTypes.MiniShippingBin } chest)
+                    {
+                        continue;
+                    }
+
+                    allShippedItems.AddRange(chest.items);
+                }
+            }
+
+            return allShippedItems;
+        }
+
+        private static IEnumerable<GameLocation> GetAllGameLocations()
+        {
+            foreach (var location in Game1.locations)
+            {
+                yield return location;
+                if (location is not BuildableGameLocation buildableLocation)
+                {
+                    continue;
+                }
+
+                foreach (var building in buildableLocation.buildings.Where(building => building.indoors.Value != null))
+                {
+                    yield return building.indoors.Value;
+                }
+            }
+        }
+
+        private static void CheckAllShipsanityLocations(IEnumerable<Item> allShippedItems)
+        {
+            foreach (var shippedItem in allShippedItems)
+            {
+                var name = shippedItem.Name;
+                if (_renamedItems.ContainsKey(shippedItem.ParentSheetIndex))
+                {
+                    name = _renamedItems[shippedItem.ParentSheetIndex];
+                }
+                _locationChecker.AddCheckedLocation($"Shipsanity: {name}");
+            }
+        }
+
+        private static readonly Dictionary<int, string> _renamedItems = new()
+        {
+            { 180, "Egg (Brown)" },
+            { 182, "Large Egg (Brown)" },
+            { 438, "Large Goat Milk" },
+        };
+    }
+}
