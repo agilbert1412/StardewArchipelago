@@ -103,9 +103,14 @@ namespace StardewArchipelago.Archipelago.Gifting
 
             for (var i = 0; i < buffs.Length; i++)
             {
-                if (_buffFlags.ContainsKey(i) && buffs[i] > 0)
+                if (!_buffFlags.ContainsKey(i) || buffs[i] <= 0)
                 {
-                    yield return CreateTrait(_buffFlags[i], buffDuration, buffs[i]);
+                    continue;
+                }
+
+                foreach (var buffFlag in _buffFlags[i])
+                {
+                    yield return CreateTrait(buffFlag, buffDuration, buffs[i]);
                 }
             }
         }
@@ -123,17 +128,19 @@ namespace StardewArchipelago.Archipelago.Gifting
             {
                 yield break;
             }
-
-            var categoryName = "";
+            
             if (typeAndCategory.Length > 1)
             {
                 var category = int.Parse(typeAndCategory[1]);
                 if (_categoryFlags.ContainsKey(category))
                 {
-                    categoryName = _categoryFlags[category];
-                    if (!string.IsNullOrWhiteSpace(categoryName))
+                    var categoryNames = _categoryFlags[category];
+                    foreach (var categoryName in categoryNames)
                     {
-                        yield return CreateTrait(categoryName);
+                        if (!string.IsNullOrWhiteSpace(categoryName))
+                        {
+                            yield return CreateTrait(categoryName);
+                        }
                     }
                 }
             }
@@ -158,57 +165,57 @@ namespace StardewArchipelago.Archipelago.Gifting
             return new GiftTrait(trait, duration, quality);
         }
 
-        private static readonly Dictionary<int, string> _buffFlags = new()
+        private static readonly Dictionary<int, string[]> _buffFlags = new()
         {
-            // { ConsumableBuff.FARMING, GiftFlag.Farming },
-            { ConsumableBuff.FISHING, GiftFlag.Fish },
-            { ConsumableBuff.MINING, GiftFlag.Tool },
-            { ConsumableBuff.DIGGING, GiftFlag.Tool },
-            // { ConsumableBuff.LUCK, GiftFlag.Luck },
-            // { ConsumableBuff.FORAGING, GiftFlag.Foraging },
-            // { ConsumableBuff.CRAFTING, GiftFlag.Crafting },
-            { ConsumableBuff.MAX_ENERGY, GiftFlag.Mana },
-            // { ConsumableBuff.MAGNETISM, GiftFlag.Magnetism },
-            { ConsumableBuff.SPEED, GiftFlag.Speed },
-            { ConsumableBuff.DEFENSE, GiftFlag.Armor },
-            { ConsumableBuff.ATTACK, GiftFlag.Weapon },
+            // { ConsumableBuff.FARMING, new[] {GiftFlag.Farming}},
+            { ConsumableBuff.FISHING, new[] { GiftFlag.Fish } },
+            { ConsumableBuff.MINING, new[] { GiftFlag.Tool } },
+            { ConsumableBuff.DIGGING, new[] { GiftFlag.Tool } },
+            // { ConsumableBuff.LUCK, new[] {GiftFlag.Luck}},
+            // { ConsumableBuff.FORAGING, new[] {GiftFlag.Foraging}},
+            // { ConsumableBuff.CRAFTING, new[] {GiftFlag.Crafting}},
+            { ConsumableBuff.MAX_ENERGY, new[] { GiftFlag.Mana } },
+            // { ConsumableBuff.MAGNETISM, new[] {GiftFlag.Magnetism}},
+            { ConsumableBuff.SPEED, new[] { GiftFlag.Speed } },
+            { ConsumableBuff.DEFENSE, new[] { GiftFlag.Armor } },
+            { ConsumableBuff.ATTACK, new[] { GiftFlag.Weapon } },
         };
 
-        private static readonly Dictionary<int, string> _categoryFlags = new()
+        private static readonly Dictionary<int, string[]> _categoryFlags = new()
         {
-            //{ Category.GEM, GiftFlag.Gem },
-            { Category.FISH, GiftFlag.Fish },
-            //{ Category.EGG, GiftFlag.Egg },
-            //{ Category.MILK, GiftFlag.Milk },
-            //{ Category.COOKING, GiftFlag.Cooking },
-            //{ Category.CRAFTING, GiftFlag.Crafting },
-            //{ Category.BIG_CRAFTABLE, GiftFlag.BigCraftable },
-            //{ Category.MINERAL, GiftFlag.Mineral },
-            //{ Category.MEAT, GiftFlag.Meat },
-            { Category.METAL, GiftFlag.Metal },
-            { Category.BUILDING, GiftFlag.Material },
-            //{ Category.SELL_AT_PIERRE, GiftFlag.SellAtPierre },
-            //{ Category.SELL_AT_PIERRE_AND_MARNIE, GiftFlag.SellAtPierreAndMarnie },
-            //{ Category.FERTILIZER, GiftFlag.Fertilizer },
-            //{ Category.TRASH, GiftFlag.Trash },
-            //{ Category.BAIT, GiftFlag.Bait },
-            //{ Category.TACKLE, GiftFlag.Tackle },
-            //{ Category.SELL_AT_FISH_SHOP, GiftFlag.SellAtFishShop },
-            //{ Category.FURNITURE, GiftFlag.Furniture },
-            //{ Category.INGREDIENT, GiftFlag.Ingredient },
-            //{ Category.ARTISAN_GOOD, GiftFlag.ArtisanGood },
-            //{ Category.SYRUP, GiftFlag.Syrup },
-            { Category.MONSTER_LOOT, GiftFlag.Monster },
-            { Category.EQUIPMENT, GiftFlag.Armor },
-            { Category.SEED, GiftFlag.Seed },
-            //{ Category.VEGETABLE, GiftFlag.Vegetable },
-            //{ Category.FRUIT, GiftFlag.Fruit },
-            //{ Category.FLOWER, GiftFlag.Flower },
-            //{ Category.FORAGE, GiftFlag.Forage },
-            //{ Category.HAT, GiftFlag.Cosmetic },
-            { Category.RING, GiftFlag.Armor },
-            { Category.WEAPON, GiftFlag.Weapon },
-            { Category.TOOL, GiftFlag.Tool },
+            { Category.GEM, new[] { "Gem" } },
+            { Category.FISH, new[] { GiftFlag.Fish } },
+            { Category.EGG, new[] { GiftFlag.Egg } },
+            //{ Category.MILK, new[] {GiftFlag.Milk}},
+            { Category.COOKING, new[] { "Cooking" } },
+            //{ Category.CRAFTING, new[] {GiftFlag.Crafting}},
+            //{ Category.BIG_CRAFTABLE, new[] {GiftFlag.BigCraftable}},
+            { Category.MINERAL, new[] { "Mineral" } },
+            { Category.MEAT, new[] { GiftFlag.Meat } },
+            { Category.METAL, new[] { GiftFlag.Metal } },
+            { Category.BUILDING, new[] { GiftFlag.Material } },
+            //{ Category.SELL_AT_PIERRE, new[] {GiftFlag.SellAtPierre}},
+            //{ Category.SELL_AT_PIERRE_AND_MARNIE, new[] {GiftFlag.SellAtPierreAndMarnie}},
+            //{ Category.FERTILIZER, new[] {GiftFlag.Fertilizer}},
+            //{ Category.TRASH, new[] {GiftFlag.Trash}},
+            //{ Category.BAIT, new[] {GiftFlag.Bait}},
+            //{ Category.TACKLE, new[] {GiftFlag.Tackle}},
+            //{ Category.SELL_AT_FISH_SHOP, new[] {GiftFlag.SellAtFishShop}},
+            //{ Category.FURNITURE, new[] {GiftFlag.Furniture}},
+            //{ Category.INGREDIENT, new[] {GiftFlag.Ingredient}},
+            //{ Category.ARTISAN_GOOD, new[] {GiftFlag.ArtisanGood}},
+            //{ Category.SYRUP, new[] {GiftFlag.Syrup}},
+            { Category.MONSTER_LOOT, new[] { GiftFlag.Monster } },
+            { Category.EQUIPMENT, new[] { GiftFlag.Armor } },
+            { Category.SEED, new[] { GiftFlag.Seed } },
+            { Category.VEGETABLE, new[] { GiftFlag.Vegetable } },
+            { Category.FRUIT, new[] { GiftFlag.Fruit } },
+            { Category.FLOWER, new[] { "Flower" } },
+            //{ Category.FORAGE, new[] {GiftFlag.Forage}},
+            { Category.HAT, new[] { "Cosmetic", "Hat" } },
+            { Category.RING, new[] { GiftFlag.Armor } },
+            { Category.WEAPON, new[] { GiftFlag.Weapon } },
+            { Category.TOOL, new[] { GiftFlag.Tool } },
         };
 
         private static readonly Dictionary<string, string> _typeFlags = new()
