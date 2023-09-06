@@ -76,7 +76,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
         }
 
-        private static void CheckAllShipsanityLocations(IEnumerable<Item> allShippedItems)
+        private static void CheckAllShipsanityLocations(List<Item> allShippedItems)
         {
             foreach (var shippedItem in allShippedItems)
             {

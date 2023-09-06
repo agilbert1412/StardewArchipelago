@@ -56,7 +56,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             catch (Exception ex)
             {
                 _monitor.Log($"Failed in {nameof(ResetLocalState_GuildMemberOnlyIfReceived_Postfix)}:\n{ex}", LogLevel.Error);
-                throw;
+                return;
             }
         }
 
@@ -105,7 +105,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 _monitor.Log($"Failed in {nameof(TelephoneAdventureGuild_AddReceivedWeapons_Prefix)}:\n{ex}",
                     LogLevel.Error);
-                throw;
+                return true; // run original logic
             }
         }
 
