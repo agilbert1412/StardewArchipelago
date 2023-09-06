@@ -1,5 +1,10 @@
-﻿using System.Text;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using Force.DeepCloner;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants;
 using StardewModdingAPI;
 using StardewValley;
 
@@ -7,55 +12,140 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
 {
     public class MonsterKillList
     {
-        private static IMonitor _monitor;
-        private static IModHelper _modHelper;
-        private static ArchipelagoClient _archipelago;
-        private static LocationChecker _locationChecker;
+        private const string MONSTER_LINE_FORMAT = "Strings\\Locations:AdventureGuild_KillList_{0}";
+        private const string MONSTER_HEADER = "Strings\\Locations:AdventureGuild_KillList_Header";
+        private const string MONSTER_FOOTER = "Strings\\Locations:AdventureGuild_KillList_Footer";
+        
+        private ArchipelagoClient _archipelago;
 
-        public MonsterKillList(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public readonly Dictionary<string, string[]> MonstersByCategory = new()
         {
-            _monitor = monitor;
-            _modHelper = modHelper;
+            { MonsterCategory.SLIMES, new[] { MonsterName.GREEN_SLIME, MonsterName.FROST_JELLY, MonsterName.SLUDGE, MonsterName.TIGER_SLIME } },
+            { MonsterCategory.VOID_SPIRITS, new[] { MonsterName.SHADOW_SHAMAN, MonsterName.SHADOW_BRUTE, MonsterName.SHADOW_SNIPER } },
+            { MonsterCategory.BATS, new[] { MonsterName.BAT, MonsterName.FROST_BAT, MonsterName.LAVA_BAT, MonsterName.IRIDIUM_BAT } },
+            { MonsterCategory.SKELETONS, new[] { MonsterName.SKELETON, MonsterName.SKELETON_MAGE } },
+            { MonsterCategory.CAVE_INSECTS, new[] { MonsterName.GRUB, MonsterName.FLY, MonsterName.BUG } },
+            { MonsterCategory.DUGGIES, new[] { MonsterName.DUGGY, MonsterName.MAGMA_DUGGY } },
+            { MonsterCategory.DUST_SPRITES, new[] { MonsterName.DUST_SPRITE } },
+            { MonsterCategory.ROCK_CRABS, new[] { MonsterName.ROCK_CRAB, MonsterName.LAVA_CRAB, MonsterName.IRIDIUM_CRAB } },
+            { MonsterCategory.MUMMIES, new[] { MonsterName.MUMMY } },
+            { MonsterCategory.PEPPER_REX, new[] { MonsterName.PEPPER_REX } },
+            { MonsterCategory.SERPENTS, new[] { MonsterName.SERPENT, MonsterName.ROYAL_SERPENT } },
+            { MonsterCategory.SERPENTS, new[] { MonsterName.MAGMA_SPRITE, MonsterName.MAGMA_SPARKER } },
+        };
+        public readonly Dictionary<string, int> DefaultMonsterGoals = new()
+        {
+            { MonsterCategory.SLIMES, 1000 },
+            { MonsterCategory.VOID_SPIRITS, 150 },
+            { MonsterCategory.BATS, 200 },
+            { MonsterCategory.SKELETONS, 50 },
+            { MonsterCategory.CAVE_INSECTS, 125 },
+            { MonsterCategory.DUGGIES, 30 },
+            { MonsterCategory.DUST_SPRITES, 500 },
+            { MonsterCategory.ROCK_CRABS, 60 },
+            { MonsterCategory.MUMMIES, 100 },
+            { MonsterCategory.PEPPER_REX, 50 },
+            { MonsterCategory.SERPENTS, 250 },
+            { MonsterCategory.MAGMA_SPRITES, 150 },
+        };
+
+        public Dictionary<string, int> MonsterGoals { get; private set; }
+        public Dictionary<string, string> MonsterCategories { get; private set; }
+
+        public MonsterKillList(ArchipelagoClient archipelago)
+        {
             _archipelago = archipelago;
-            _locationChecker = locationChecker;
+            MonsterCategories = new Dictionary<string, string>();
+            foreach (var (category, monsters) in MonstersByCategory)
+            {
+                foreach (var monster in monsters)
+                {
+                    MonsterCategories.Add(monster, category);
+                }
+            }
+            GenerateGoals();
+        }
+
+        private void GenerateGoals()
+        {
+            switch (_archipelago.SlotData.Monstersanity)
+            {
+                case Monstersanity.None:
+                    MonsterGoals = DefaultMonsterGoals.DeepClone();
+                    return;
+                case Monstersanity.OnePerCategory:
+                    MonsterGoals = DefaultMonsterGoals.ToDictionary(x => x.Key, _ => 1);
+                    return;
+                case Monstersanity.OnePerMonster:
+                    MonsterGoals = MonstersByCategory.SelectMany(x => x.Value).ToDictionary(x => x, _ => 1);
+                    return;
+                case Monstersanity.Goals:
+                    MonsterGoals = DefaultMonsterGoals.DeepClone();
+                    return;
+                case Monstersanity.ShortGoals:
+                    MonsterGoals = DefaultMonsterGoals.ToDictionary(x => x.Key, x => (int)(x.Value * 0.4));
+                    return;
+                case Monstersanity.VeryShortGoals:
+                    MonsterGoals = DefaultMonsterGoals.ToDictionary(x => x.Key, x => (int)(x.Value * 0.1));
+                    return;
+                case Monstersanity.ProgressiveGoals:
+                    MonsterGoals = DefaultMonsterGoals.DeepClone();
+                    return;
+                case Monstersanity.SplitGoals:
+                    MonsterGoals = GenerateSplitGoals();
+                    return;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        private Dictionary<string, int> GenerateSplitGoals()
+        {
+            var goals = new Dictionary<string, int>();
+            foreach (var (category, killsRequired) in DefaultMonsterGoals)
+            {
+                var monstersInCategory = MonstersByCategory[category];
+                var killsPerMonster = killsRequired / monstersInCategory.Length;
+                foreach (var monster in monstersInCategory)
+                {
+                    goals.Add(monster, killsPerMonster);
+                }
+            }
+
+            return goals;
         }
 
         public string GetKillListLetterContent()
         {
+            var header = Game1.content.LoadString(MONSTER_HEADER).Replace('\n', '^') + "^";
+            var footer = Game1.content.LoadString(MONSTER_FOOTER).Replace('\n', '^');
+
             var stringBuilder = new StringBuilder();
-            stringBuilder.Append(Game1.content.LoadString("Strings\\Locations:AdventureGuild_KillList_Header").Replace('\n', '^') + "^");
-            int killCount1 = Game1.stats.getMonstersKilled("Green Slime") + Game1.stats.getMonstersKilled("Frost Jelly") + Game1.stats.getMonstersKilled("Sludge") + Game1.stats.getMonstersKilled("Tiger Slime");
-            int killCount2 = Game1.stats.getMonstersKilled("Shadow Guy") + Game1.stats.getMonstersKilled("Shadow Shaman") + Game1.stats.getMonstersKilled("Shadow Brute") + Game1.stats.getMonstersKilled("Shadow Sniper");
-            int killCount3 = Game1.stats.getMonstersKilled("Skeleton") + Game1.stats.getMonstersKilled("Skeleton Mage");
-            int killCount4 = Game1.stats.getMonstersKilled("Rock Crab") + Game1.stats.getMonstersKilled("Lava Crab") + Game1.stats.getMonstersKilled("Iridium Crab");
-            int killCount5 = Game1.stats.getMonstersKilled("Grub") + Game1.stats.getMonstersKilled("Fly") + Game1.stats.getMonstersKilled("Bug");
-            int killCount6 = Game1.stats.getMonstersKilled("Bat") + Game1.stats.getMonstersKilled("Frost Bat") + Game1.stats.getMonstersKilled("Lava Bat") + Game1.stats.getMonstersKilled("Iridium Bat");
-            int killCount7 = Game1.stats.getMonstersKilled("Duggy") + Game1.stats.getMonstersKilled("Magma Duggy");
-            int monstersKilled1 = Game1.stats.getMonstersKilled("Dust Spirit");
-            int monstersKilled2 = Game1.stats.getMonstersKilled("Mummy");
-            int monstersKilled3 = Game1.stats.getMonstersKilled("Pepper Rex");
-            int killCount8 = Game1.stats.getMonstersKilled("Serpent") + Game1.stats.getMonstersKilled("Royal Serpent");
-            int killCount9 = Game1.stats.getMonstersKilled("Magma Sprite") + Game1.stats.getMonstersKilled("Magma Sparker");
-            stringBuilder.Append(GetKillListLine("Slimes", killCount1, 1000));
-            stringBuilder.Append(GetKillListLine("VoidSpirits", killCount2, 150));
-            stringBuilder.Append(GetKillListLine("Bats", killCount6, 200));
-            stringBuilder.Append(GetKillListLine("Skeletons", killCount3, 50));
-            stringBuilder.Append(GetKillListLine("CaveInsects", killCount5, 125));
-            stringBuilder.Append(GetKillListLine("Duggies", killCount7, 30));
-            stringBuilder.Append(GetKillListLine("DustSprites", monstersKilled1, 500));
-            stringBuilder.Append(GetKillListLine("RockCrabs", killCount4, 60));
-            stringBuilder.Append(GetKillListLine("Mummies", monstersKilled2, 100));
-            stringBuilder.Append(GetKillListLine("PepperRex", monstersKilled3, 50));
-            stringBuilder.Append(GetKillListLine("Serpent", killCount8, 250));
-            stringBuilder.Append(GetKillListLine("MagmaSprite", killCount9, 150));
-            stringBuilder.Append(Game1.content.LoadString("Strings\\Locations:AdventureGuild_KillList_Footer").Replace('\n', '^'));
+            stringBuilder.Append(header);
+
+            foreach (var (monster, killsRequired) in MonsterGoals)
+            {
+                var killCount = MonstersByCategory.ContainsKey(monster) ? GetMonstersKilled(monster) : GetMonstersKilledInCategory(monster);
+                var killListLine = GetKillListLine(monster, killCount, killsRequired);
+                stringBuilder.Append(killListLine);
+            }
+
+            stringBuilder.Append(footer);
             return stringBuilder.ToString();
+        }
+
+        public int GetMonstersKilledInCategory(string category)
+        {
+            return MonstersByCategory[category].Sum(GetMonstersKilled);
+        }
+
+        public int GetMonstersKilled(string monster)
+        {
+            return Game1.stats.getMonstersKilled(monster);
         }
 
         private string GetKillListLine(string monsterType, int killCount, int target)
         {
-            const string monsterFormat = "Strings\\Locations:AdventureGuild_KillList_{0}";
-            var monsterTypeDisplayText = Game1.content.LoadString(string.Format(monsterFormat, monsterType));
             var lineFormat = Game1.content.LoadString("Strings\\Locations:AdventureGuild_KillList_LineFormat");
             if (killCount <= 0)
             {
@@ -67,7 +157,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
                 lineFormat = Game1.content.LoadString("Strings\\Locations:AdventureGuild_KillList_LineFormat_OverTarget");
             }
             
-            var line = string.Format(lineFormat, killCount, target, monsterTypeDisplayText) + "^";
+            var line = string.Format(lineFormat, killCount, target, monsterType) + "^";
             return line;
         }
     }

@@ -66,6 +66,7 @@ namespace StardewArchipelago.Locations.Patcher
             ReplaceChildrenWithChecks();
             _gingerIslandPatcher.PatchGingerIslandLocations();
             AddShipsanityLocations();
+            PatchMonstersanity();
         }
 
         private void ReplaceCommunityCenterBundlesWithChecks()
@@ -736,7 +737,25 @@ namespace StardewArchipelago.Locations.Patcher
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Game1), "_newDayAfterFade"),
-                postfix: new HarmonyMethod(typeof(ShippingInjections), nameof(ShippingInjections.NewDayAfterFade_CheckShipsanityLocations_Prefix))
+                prefix: new HarmonyMethod(typeof(ShippingInjections), nameof(ShippingInjections.NewDayAfterFade_CheckShipsanityLocations_Prefix))
+            );
+        }
+
+        private void PatchMonstersanity()
+        {
+            if (_archipelago.SlotData.Monstersanity == Monstersanity.None)
+            {
+                return;
+            }
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(AdventureGuild), nameof(AdventureGuild.showMonsterKillList)),
+                prefix: new HarmonyMethod(typeof(MonsterSlayerInjections), nameof(MonsterSlayerInjections.ShowMonsterKillList_CustomListFromAP_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Stats), nameof(Stats.monstersKilled)),
+                postfix: new HarmonyMethod(typeof(MonsterSlayerInjections), nameof(MonsterSlayerInjections.MonsterKilled_SendMonstersanityCheck_Postfix))
             );
         }
 
