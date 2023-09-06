@@ -199,7 +199,7 @@ namespace StardewArchipelago.Goals
 
         public static void CheckPerfectionGoalCompletion()
         {
-            if (!_archipelago.IsConnected || _archipelago.SlotData.Goal != Goal.GreatestWalnutHunter)
+            if (!_archipelago.IsConnected || _archipelago.SlotData.Goal != Goal.Perfection)
             {
                 return;
             }
