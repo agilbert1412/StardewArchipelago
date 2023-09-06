@@ -23,6 +23,10 @@
         public const string GiveRing = "GiveRing";
         public const string GiveBoots = "GiveBoots";
         public const string GiveMeleeWeapon = "GiveMeleeWeapon";
+        public const string GiveWeapon = "GiveWeapon";
+        public const string GiveSword = "GiveSword";
+        public const string GiveClub = "GiveClub";
+        public const string GiveDagger = "GiveDagger";
         public const string GiveSlingshot = "GiveSlingshot";
         public const string GiveBed = "GiveBed";
         public const string GiveFishTank = "GiveFishTank";

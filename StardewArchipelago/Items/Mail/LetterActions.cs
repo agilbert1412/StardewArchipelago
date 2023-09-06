@@ -13,6 +13,8 @@ using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
 using Object = StardewValley.Object;
 using StardewArchipelago.Items.Unlocks;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
+using StardewArchipelago.Stardew;
 
 namespace StardewArchipelago.Items.Mail
 {
@@ -20,16 +22,18 @@ namespace StardewArchipelago.Items.Mail
     {
         private readonly IModHelper _modHelper;
         private readonly Mailman _mail;
+        private ArchipelagoClient _archipelago;
+        private WeaponsManager _weaponsManager;
         private readonly TrapManager _trapManager;
         private readonly BabyBirther _babyBirther;
         private Dictionary<string, Action<string>> _letterActions;
-        private ArchipelagoClient _archipelago;
 
-        public LetterActions(IModHelper modHelper, Mailman mail, ArchipelagoClient archipelago, TrapManager trapManager)
+        public LetterActions(IModHelper modHelper, Mailman mail, ArchipelagoClient archipelago, WeaponsManager weaponsManager, TrapManager trapManager)
         {
             _modHelper = modHelper;
             _mail = mail;
             _archipelago = archipelago;
+            _weaponsManager = weaponsManager;
             _trapManager = trapManager;
             _babyBirther = new BabyBirther();
             _letterActions = new Dictionary<string, Action<string>>();
@@ -54,6 +58,10 @@ namespace StardewArchipelago.Items.Mail
             _letterActions.Add(LetterActionsKeys.GiveRing, ReceiveRing);
             _letterActions.Add(LetterActionsKeys.GiveBoots, ReceiveBoots);
             _letterActions.Add(LetterActionsKeys.GiveMeleeWeapon, ReceiveMeleeWeapon);
+            _letterActions.Add(LetterActionsKeys.GiveWeapon, (_) => GetWeaponOfNextTier());
+            _letterActions.Add(LetterActionsKeys.GiveSword, (_) => GetSwordOfNextTier());
+            _letterActions.Add(LetterActionsKeys.GiveClub, (_) => GetClubOfNextTier());
+            _letterActions.Add(LetterActionsKeys.GiveDagger, (_) => GetDaggerOfNextTier());
             _letterActions.Add(LetterActionsKeys.GiveSlingshot, ReceiveSlingshot);
             _letterActions.Add(LetterActionsKeys.GiveBed, ReceiveBed);
             _letterActions.Add(LetterActionsKeys.GiveFishTank, ReceiveFishTank);
@@ -626,6 +634,61 @@ namespace StardewArchipelago.Items.Mail
             }
 
             _trapManager.TryExecuteTrapImmediately(trapName);
+        }
+
+        private void GetWeaponOfNextTier()
+        {
+            GetProgressiveEquipmentOfNextTier(VanillaUnlockManager.PROGRESSIVE_WEAPON, _weaponsManager.WeaponsByTier);
+        }
+
+        private void GetSwordOfNextTier()
+        {
+            GetProgressiveEquipmentOfNextTier(VanillaUnlockManager.PROGRESSIVE_SWORD, _weaponsManager.WeaponsByCategoryByTier[WeaponsManager.TYPE_SWORD]);
+        }
+
+        private void GetClubOfNextTier()
+        {
+            GetProgressiveEquipmentOfNextTier(VanillaUnlockManager.PROGRESSIVE_CLUB, _weaponsManager.WeaponsByCategoryByTier[WeaponsManager.TYPE_CLUB]);
+        }
+
+        private void GetDaggerOfNextTier()
+        {
+            GetProgressiveEquipmentOfNextTier(VanillaUnlockManager.PROGRESSIVE_DAGGER, _weaponsManager.WeaponsByCategoryByTier[WeaponsManager.TYPE_DAGGER]);
+        }
+
+        private void GetBootsOfNextTier()
+        {
+            GetProgressiveEquipmentOfNextTier(VanillaUnlockManager.PROGRESSIVE_BOOTS, _weaponsManager.BootsByTier);
+        }
+
+        private void GetProgressiveEquipmentOfNextTier(string apUnlock, Dictionary<int, List<StardewItem>> equipmentsByTier)
+        {
+            // This includes the current letter due to the timing of this patch
+            var tier = _mail.OpenedMailsContainingKey(apUnlock);
+            tier = Math.Max(1, Math.Min(5, tier));
+
+            var equipmentsOfTier = equipmentsByTier[tier];
+            if (!equipmentsOfTier.Any())
+            {
+                while (tier > 1 && !equipmentsOfTier.Any())
+                {
+                    tier--;
+                    equipmentsOfTier = equipmentsByTier[tier];
+                }
+
+                if (!equipmentsOfTier.Any())
+                {
+                    return;
+                }
+            }
+
+            var chosenEquipmentIndex = Game1.random.Next(0, equipmentsOfTier.Count);
+            var chosenEquipment = equipmentsOfTier[chosenEquipmentIndex];
+
+            var equipmentToGive = chosenEquipment.PrepareForGivingToFarmer();
+
+            Game1.player.holdUpItemThenMessage(equipmentToGive);
+            Game1.player.addItemByMenuIfNecessary(equipmentToGive);
         }
     }
 }

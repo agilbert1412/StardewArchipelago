@@ -162,6 +162,11 @@ namespace StardewArchipelago.Stardew
             throw new ArgumentException($"Item not found: {itemId}");
         }
 
+        public StardewBoots[] GetAllBoots()
+        {
+            return _bootsByName.Values.ToArray();
+        }
+
         public StardewFurniture GetFurnitureById(int itemId)
         {
             if (_furnitureById.ContainsKey(itemId))
@@ -182,14 +187,29 @@ namespace StardewArchipelago.Stardew
             throw new ArgumentException($"Item not found: {itemId}");
         }
 
-        public StardewWeapon GetWeaponById(int itemId)
+        public StardewWeapon GetWeaponById(int weaponId)
         {
-            if (_weaponsById.ContainsKey(itemId))
+            if (_weaponsById.ContainsKey(weaponId))
             {
-                return _weaponsById[itemId];
+                return _weaponsById[weaponId];
             }
 
-            throw new ArgumentException($"Item not found: {itemId}");
+            throw new ArgumentException($"Weapon not found: {weaponId}");
+        }
+
+        public StardewWeapon GetWeaponByName(string weaponName)
+        {
+            if (_weaponsByName.ContainsKey(weaponName))
+            {
+                return _weaponsByName[weaponName];
+            }
+
+            throw new ArgumentException($"Weapon not found: {weaponName}");
+        }
+
+        public StardewWeapon[] GetAllWeapons()
+        {
+            return _weaponsByName.Values.ToArray();
         }
 
         private void InitializeData()

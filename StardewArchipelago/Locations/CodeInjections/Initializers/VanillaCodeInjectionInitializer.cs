@@ -13,6 +13,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
     public static class VanillaCodeInjectionInitializer
     {
         public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, BundleReader bundleReader, LocationChecker locationChecker, StardewItemManager itemManager, ArchipelagoStateDto archipelagoState)
+        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, BundleReader bundleReader, LocationChecker locationChecker, StardewItemManager itemManager, WeaponsManager weaponsManager)
         {
             var shopReplacer = new ShopReplacer(monitor, modHelper, archipelago, locationChecker);
             BackpackInjections.Initialize(monitor, archipelago, locationChecker);
@@ -27,7 +28,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             CarpenterInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             WizardInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             IsolatedEventInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
-            AdventurerGuildInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
+            AdventurerGuildInjections.Initialize(monitor, modHelper, archipelago, locationChecker, weaponsManager);
             ArcadeMachineInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             TravelingMerchantInjections.Initialize(monitor, modHelper, archipelago, locationChecker, archipelagoState);
             FishingInjections.Initialize(monitor, modHelper, archipelago, locationChecker, itemManager);

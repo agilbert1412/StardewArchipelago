@@ -24,6 +24,7 @@ using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Locations;
 using StardewArchipelago.GameModifications.Modded;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
 
 namespace StardewArchipelago
 {
@@ -249,8 +250,9 @@ namespace StardewArchipelago
             }
 
             _itemManager = new ItemManager(_helper, _archipelago, _stardewItemManager, _mail, tileChooser, State.ItemsReceived);
-            _mailPatcher = new MailPatcher(Monitor, _harmony, _archipelago, _locationChecker, new LetterActions(_helper, _mail, _archipelago, _itemManager.TrapManager));
-            _locationsPatcher = new LocationPatcher(Monitor, _helper, _harmony, _archipelago, _locationChecker, _bundleReader, _stardewItemManager, State);
+            var weaponsManager = new WeaponsManager(_stardewItemManager);
+            _mailPatcher = new MailPatcher(Monitor, _harmony, _archipelago, _locationChecker, new LetterActions(_helper, _mail, _archipelago, weaponsManager, _itemManager.TrapManager));
+            _locationsPatcher = new LocationPatcher(Monitor, _helper, _harmony, _archipelago, _locationChecker, _bundleReader, _stardewItemManager, weaponsManager);
             _chatForwarder.ListenToChatMessages();
             _giftHandler.Initialize(Monitor, _archipelago, _stardewItemManager, _mail);
             _logicPatcher.PatchAllGameLogic();

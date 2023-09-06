@@ -42,6 +42,11 @@ namespace StardewArchipelago.Stardew
             return new MeleeWeapon(Id);
         }
 
+        public override Item PrepareForRecovery()
+        {
+            return new MeleeWeaponToRecover(Id);
+        }
+
         public override void GiveToFarmer(Farmer farmer, int amount = 1)
         {
             var weapon = PrepareForGivingToFarmer();

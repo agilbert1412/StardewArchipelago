@@ -442,7 +442,7 @@ namespace StardewArchipelago.Locations.Patcher
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.answerDialogueAction)),
-                prefix: new HarmonyMethod(typeof(AdventurerGuildInjections), nameof(AdventurerGuildInjections.TelephoneAdventureGuild_AddReceivedWeapons_Prefix))
+                prefix: new HarmonyMethod(typeof(AdventurerGuildInjections), nameof(AdventurerGuildInjections.TelephoneAdventureGuild_AddReceivedEquipments_Prefix))
             );
 
             _harmony.Patch(

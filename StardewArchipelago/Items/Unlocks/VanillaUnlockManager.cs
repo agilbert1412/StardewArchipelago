@@ -24,6 +24,11 @@ namespace StardewArchipelago.Items.Unlocks
         public const string ISLAND_FARMHOUSE = "Island Farmhouse";
         public const string ISLAND_MAILBOX = "Island Mailbox";
         public const string TREEHOUSE = "Treehouse";
+        public const string PROGRESSIVE_WEAPON = "Progressive Weapon";
+        public const string PROGRESSIVE_SWORD = "Progressive Sword";
+        public const string PROGRESSIVE_CLUB = "Progressive Club";
+        public const string PROGRESSIVE_DAGGER = "Progressive Dagger";
+        public const string PROGRESSIVE_BOOTS = "Progressive Boots";
 
         private Dictionary<string, Func<ReceivedItem, LetterAttachment>> _unlockables;
 
@@ -39,6 +44,7 @@ namespace StardewArchipelago.Items.Unlocks
             RegisterIsolatedEventsItems();
             RegisterGingerIslandRepairs();
             RegisterSpecialItems();
+            RegisterEquipment();
         }
 
         public bool IsUnlock(string unlockName)
@@ -135,6 +141,15 @@ namespace StardewArchipelago.Items.Unlocks
         private void RegisterMineElevators()
         {
             _unlockables.Add(PROGRESSIVE_MINE_ELEVATOR_AP_NAME, SendProgressiveMineElevatorLetter);
+        }
+
+        private void RegisterEquipment()
+        {
+            _unlockables.Add(PROGRESSIVE_WEAPON, SendProgressiveWeaponLetter);
+            _unlockables.Add(PROGRESSIVE_SWORD, SendProgressiveSwordLetter);
+            _unlockables.Add(PROGRESSIVE_CLUB, SendProgressiveClubLetter);
+            _unlockables.Add(PROGRESSIVE_DAGGER, SendProgressiveDaggerLetter);
+            _unlockables.Add(PROGRESSIVE_BOOTS, SendProgressiveBootsLetter);
         }
 
         private LetterVanillaAttachment RepairBridge(ReceivedItem receivedItem)
@@ -408,6 +423,31 @@ namespace StardewArchipelago.Items.Unlocks
         {
             var experienceForLevelUp = farmer.GetExperienceToNextLevel(skill);
             farmer.AddExperience(skill, experienceForLevelUp);
+        }
+
+        private LetterActionAttachment SendProgressiveWeaponLetter(ReceivedItem receivedItem)
+        {
+            return new LetterActionAttachment(receivedItem, LetterActionsKeys.GiveWeapon);
+        }
+
+        private LetterActionAttachment SendProgressiveSwordLetter(ReceivedItem receivedItem)
+        {
+            return new LetterActionAttachment(receivedItem, LetterActionsKeys.GiveSword);
+        }
+
+        private LetterActionAttachment SendProgressiveClubLetter(ReceivedItem receivedItem)
+        {
+            return new LetterActionAttachment(receivedItem, LetterActionsKeys.GiveClub);
+        }
+
+        private LetterActionAttachment SendProgressiveDaggerLetter(ReceivedItem receivedItem)
+        {
+            return new LetterActionAttachment(receivedItem, LetterActionsKeys.GiveDagger);
+        }
+
+        private LetterActionAttachment SendProgressiveBootsLetter(ReceivedItem receivedItem)
+        {
+            return new LetterActionAttachment(receivedItem, LetterActionsKeys.GiveBoots);
         }
     }
 }
