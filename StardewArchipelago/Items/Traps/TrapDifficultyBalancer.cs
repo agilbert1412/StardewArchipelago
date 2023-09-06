@@ -156,7 +156,7 @@ namespace StardewArchipelago.Items.Traps
         SameMap,
         SameMapOrHome,
         PelicanTown,
-        Anywhere
+        Anywhere,
     }
 
     public enum CrowTargets
@@ -181,6 +181,6 @@ namespace StardewArchipelago.Items.Traps
         Soil = 1,
         Crops = 2,
         CropsIncludingInside = 3,
-        CropsIncludingWateringCan = 4
+        CropsIncludingWateringCan = 4,
     }
 }

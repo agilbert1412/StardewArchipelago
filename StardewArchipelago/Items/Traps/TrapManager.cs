@@ -295,7 +295,7 @@ namespace StardewArchipelago.Items.Traps
                 {
                     layerDepth = 1f,
                     delayBeforeAnimationStart = num * 25,
-                    motion = new Vector2(-0.25f, 0.0f)
+                    motion = new Vector2(-0.25f, 0.0f),
                 });
                 ++num;
             }

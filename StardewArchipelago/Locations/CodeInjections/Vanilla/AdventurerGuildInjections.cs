@@ -78,7 +78,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 {
                     VanillaUnlockManager.PROGRESSIVE_WEAPON, VanillaUnlockManager.PROGRESSIVE_SWORD,
                     VanillaUnlockManager.PROGRESSIVE_CLUB, VanillaUnlockManager.PROGRESSIVE_DAGGER,
-                    VanillaUnlockManager.PROGRESSIVE_BOOTS
+                    VanillaUnlockManager.PROGRESSIVE_BOOTS,
                 };
 
                 var seed = (int)(Game1.uniqueIDForThisGame + Game1.stats.DaysPlayed);
@@ -185,7 +185,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             var shoes = new[]
             {
                 Sneakers, LeatherBoots, WorkBoots, TundraBoots, ThermalBoots, CombatBoots, FirewalkerBoots, DarkBoots,
-                SpaceBoots, CrystalShoes
+                SpaceBoots, CrystalShoes,
             };
             AddItemsToShop(adventureShopStock, shoes);
         }

@@ -63,12 +63,24 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 {
                     _monitor.Log($"Unrecognized Fishsanity Location: {fishName} [{index}]", LogLevel.Error);
                 }
-
-                GoalCodeInjection.CheckMasterAnglerGoalCompletion();
             }
             catch (Exception ex)
             {
                 _monitor.Log($"Failed in {nameof(CaughtFish_Fishsanity_Postfix)}:\n{ex}", LogLevel.Error);
+                return;
+            }
+        }
+
+        public static void CaughtFish_CheckGoalCompletion_Postfix(Farmer __instance, int index, int size,
+            bool from_fish_pond, int numberCaught, ref bool __result)
+        {
+            try
+            {
+                GoalCodeInjection.CheckMasterAnglerGoalCompletion();
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(CaughtFish_CheckGoalCompletion_Postfix)}:\n{ex}", LogLevel.Error);
                 return;
             }
         }

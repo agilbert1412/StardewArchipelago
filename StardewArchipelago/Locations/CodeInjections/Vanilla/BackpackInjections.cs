@@ -147,7 +147,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     new Response[2]
                     {
                         responsePurchaseLevel1,
-                        responseDontPurchase
+                        responseDontPurchase,
                     }, "Backpack");
             }
             else if (_locationChecker.IsLocationNotChecked(DELUXE_PACK) && numReceivedBackpacks >= 1)
@@ -157,7 +157,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     new Response[2]
                     {
                         responsePurchaseLevel2,
-                        responseDontPurchase
+                        responseDontPurchase,
                     }, "Backpack");
             }
             else if (_archipelago.SlotData.Mods.HasMod(ModNames.BIGGER_BACKPACK) && _locationChecker.IsLocationMissingAndExists(PREMIUM_PACK) && numReceivedBackpacks >= 2)

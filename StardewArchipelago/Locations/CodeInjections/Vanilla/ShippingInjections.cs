@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Goals;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
@@ -36,6 +37,21 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 _monitor.Log($"Failed in {nameof(NewDayAfterFade_CheckShipsanityLocations_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
+            }
+        }
+
+        // private static IEnumerator<int> _newDayAfterFade()
+        public static void NewDayAfterFade_CheckGoalCompletion_Postfix(ref IEnumerator<int> __result)
+        {
+            try
+            {
+                GoalCodeInjection.CheckFullShipmentGoalCompletion();
+                return;
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(NewDayAfterFade_CheckGoalCompletion_Postfix)}:\n{ex}", LogLevel.Error);
+                return;
             }
         }
 

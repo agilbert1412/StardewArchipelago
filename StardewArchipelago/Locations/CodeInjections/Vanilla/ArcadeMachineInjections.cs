@@ -64,7 +64,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private static readonly string[] JOTPK_ALL_LOCATIONS =
         {
             JOTPK_BOOTS_1, JOTPK_BOOTS_2, JOTPK_GUN_1, JOTPK_GUN_2, JOTPK_GUN_3, JOTPK_SUPER_GUN, JOTPK_AMMO_1,
-            JOTPK_AMMO_2, JOTPK_AMMO_3, JOTPK_COWBOY_1, JOTPK_COWBOY_2, JOTPK_VICTORY
+            JOTPK_AMMO_2, JOTPK_AMMO_3, JOTPK_COWBOY_1, JOTPK_COWBOY_2, JOTPK_VICTORY,
         };
 
         private static IMonitor _monitor;

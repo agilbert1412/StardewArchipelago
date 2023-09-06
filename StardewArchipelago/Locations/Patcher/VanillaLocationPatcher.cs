@@ -533,6 +533,14 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void AddFishsanityLocations()
         {
+            if (_archipelago.SlotData.Goal == Goal.MasterAngler)
+            {
+                _harmony.Patch(
+                    original: AccessTools.Method(typeof(Farmer), nameof(Farmer.caughtFish)),
+                    postfix: new HarmonyMethod(typeof(FishingInjections), nameof(FishingInjections.CaughtFish_CheckGoalCompletion_Postfix))
+                );
+            }
+
             if (_archipelago.SlotData.Fishsanity == Fishsanity.None)
             {
                 return;
@@ -546,6 +554,14 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void AddMuseumsanityLocations()
         {
+            if (_archipelago.SlotData.Goal == Goal.MasterAngler)
+            {
+                _harmony.Patch(
+                    original: AccessTools.Method(typeof(LibraryMuseum), nameof(LibraryMuseum.getRewardsForPlayer)),
+                    postfix: new HarmonyMethod(typeof(MuseumInjections), nameof(MuseumInjections.GetRewardsForPlayer_CheckGoalCompletion_Postfix))
+                );
+            }
+
             if (_archipelago.SlotData.Museumsanity == Museumsanity.None)
             {
                 return;
@@ -730,6 +746,14 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void AddShipsanityLocations()
         {
+            if (_archipelago.SlotData.Goal == Goal.FullShipment)
+            {
+                _harmony.Patch(
+                    original: AccessTools.Method(typeof(Game1), "_newDayAfterFade"),
+                    prefix: new HarmonyMethod(typeof(ShippingInjections), nameof(ShippingInjections.NewDayAfterFade_CheckGoalCompletion_Postfix))
+                );
+            }
+
             if (_archipelago.SlotData.Shipsanity == Shipsanity.None)
             {
                 return;
@@ -743,6 +767,14 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void PatchMonstersanity()
         {
+            if (_archipelago.SlotData.Goal == Goal.ProtectorOfTheValley)
+            {
+                _harmony.Patch(
+                    original: AccessTools.Method(typeof(Stats), nameof(Stats.monstersKilled)),
+                    postfix: new HarmonyMethod(typeof(MonsterSlayerInjections), nameof(MonsterSlayerInjections.MonsterKilled_CheckGoalCompletion_Postfix))
+                );
+            }
+
             if (_archipelago.SlotData.Monstersanity == Monstersanity.None)
             {
                 return;

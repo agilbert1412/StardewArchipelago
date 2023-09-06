@@ -25,7 +25,7 @@ namespace StardewArchipelago.Stardew
 
         private List<int> _priorityIds = new List<int>()
         {
-            390
+            390,
         };
 
         public Dictionary<int, string> ItemSuffixes = new Dictionary<int, string>()

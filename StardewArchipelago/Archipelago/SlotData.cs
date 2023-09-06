@@ -227,7 +227,7 @@ namespace StardewArchipelago.Archipelago
     {
         Vanilla = 0,
         Progressive = 1,
-        ProgressiveEarlyBackpack = 2
+        ProgressiveEarlyBackpack = 2,
     }
 
     [Flags]
@@ -313,7 +313,7 @@ namespace StardewArchipelago.Archipelago
         ShortGoals = 4,
         VeryShortGoals = 5,
         ProgressiveGoals = 6,
-        SplitGoals = 7
+        SplitGoals = 7,
     }
 
     public enum Shipsanity
@@ -356,6 +356,8 @@ namespace StardewArchipelago.Archipelago
         CompleteCollection = 5,
         FullHouse = 6,
         GreatestWalnutHunter = 7,
+        ProtectorOfTheValley = 8,
+        FullShipment = 9,
         Perfection = 25,
     }
 

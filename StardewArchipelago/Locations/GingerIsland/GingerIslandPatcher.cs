@@ -26,7 +26,7 @@ namespace StardewArchipelago.Locations.GingerIsland
             _parrotReplacers = new IParrotReplacer[]
             {
                 new IslandHutInjections(), new IslandNorthInjections(),
-                new IslandSouthInjections(), new IslandWestInjections()
+                new IslandSouthInjections(), new IslandWestInjections(),
             };
         }
 

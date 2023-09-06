@@ -110,7 +110,7 @@ namespace StardewArchipelago.GameModifications
                 "summer" => "Wheat Seeds",
                 "fall" => "Bok Choy Seeds",
                 "winter" => "Winter Seeds",
-                _ => "Mixed Seeds"
+                _ => "Mixed Seeds",
             };
         }
 
@@ -136,7 +136,7 @@ namespace StardewArchipelago.GameModifications
 
             farmhouse.objects.Add(emptySpot, new Chest(0, new List<Item>()
             {
-                itemToGift
+                itemToGift,
             }, emptySpot, true));
         }
 

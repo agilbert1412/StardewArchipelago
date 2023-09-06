@@ -35,7 +35,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
                 {
                     1 => TYPE_DAGGER,
                     2 => TYPE_CLUB,
-                    _ => TYPE_SWORD
+                    _ => TYPE_SWORD,
                 };
 
                 var tier = (int)(weaponLevel / WEAPON_LEVELS_PER_TIER);

@@ -191,7 +191,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 stock.Add(new StardewValley.Object(GRASS_STARTER, 1, true), new int[2]
                 {
                     1000,
-                    1
+                    1,
                 });
             }
         }
@@ -239,19 +239,19 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             stock.Add(key1, new int[2]
             {
                 key1.salePrice(),
-                int.MaxValue
+                int.MaxValue,
             });
             var key2 = new Wallpaper(random.Next(56), true);
             stock.Add(key2, new int[2]
             {
                 key2.salePrice(),
-                int.MaxValue
+                int.MaxValue,
             });
             var key3 = new Furniture(1308, Vector2.Zero);
             stock.Add(key3, new int[2]
             {
                 key3.salePrice(),
-                int.MaxValue
+                int.MaxValue,
             });
         }
 
@@ -282,7 +282,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 stock.Add(itemToBuyBack, new int[2]
                 {
                     buyBackPrice,
-                    itemToBuyBack.Stack
+                    itemToBuyBack.Stack,
                 });
             }
         }
@@ -371,7 +371,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             stock.Add(item, new int[2]
             {
                 price,
-                howManyInStock
+                howManyInStock,
             });
         }
 
@@ -478,7 +478,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             stock.Add(item, new int[2]
             {
                 price,
-                int.MaxValue
+                int.MaxValue,
             });
         }
 

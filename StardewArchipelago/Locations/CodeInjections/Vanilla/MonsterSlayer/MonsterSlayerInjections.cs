@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Goals;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
@@ -84,11 +85,29 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(ShowMonsterKillList_CustomListFromAP_Prefix)}:\n{ex}",
+                _monitor.Log($"Failed in {nameof(MonsterKilled_SendMonstersanityCheck_Postfix)}:\n{ex}",
                     LogLevel.Error);
                 return;
             }
         }
+
+        // public void monsterKilled(string name)
+        public static void MonsterKilled_CheckGoalCompletion_Postfix(Stats __instance, string name)
+        {
+            try
+            {
+                GoalCodeInjection.CheckProtectorOfTheValleyGoalCompletion();
+                return;
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(MonsterKilled_CheckGoalCompletion_Postfix)}:\n{ex}",
+                    LogLevel.Error);
+                return;
+            }
+        }
+
+
 
         private static void CheckLocationIfEnoughMonstersInCategory(string category)
         {

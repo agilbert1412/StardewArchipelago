@@ -112,7 +112,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 "end",
                 "position",
                 "43",
-                "36"
+                "36",
             }, Game1.currentLocation);
         }
 

@@ -34,7 +34,7 @@ namespace StardewArchipelago.Items
             var baby = new Child(babyName, babyGender, babyColor, Game1.player)
             {
                 Age = 0,
-                Position = new Vector2(16f, 4f) * 64f + new Vector2(0.0f, -24f)
+                Position = new Vector2(16f, 4f) * 64f + new Vector2(0.0f, -24f),
             };
             Utility.getHomeOfFarmer(Game1.player).characters.Add(baby);
             Game1.playSound("smallSelect");

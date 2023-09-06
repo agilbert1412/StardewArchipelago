@@ -253,7 +253,7 @@ namespace StardewArchipelago.Archipelago
 
             var packet = new SayPacket()
             {
-                Text = text
+                Text = text,
             };
 
             _session.Socket.SendPacket(packet);

@@ -153,10 +153,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
                 {
                     __instance.overlayObjects.Add(new Vector2(31f, 5f), new Chest(0, new List<Item>()
                     {
-                        new SpecialItem(6)
+                        new SpecialItem(6),
                     }, new Vector2(31f, 5f))
                     {
-                        Tint = Color.Gray
+                        Tint = Color.Gray,
                     });
                 }
                    

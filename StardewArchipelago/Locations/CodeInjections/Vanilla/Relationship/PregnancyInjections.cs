@@ -93,7 +93,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
 
                 Response[] answerChoices1 = {
                     new("Yes", Game1.content.LoadString("Strings\\Events:HaveBabyAnswer_Yes")),
-                    new("Not", Game1.content.LoadString("Strings\\Events:HaveBabyAnswer_No"))
+                    new("Not", Game1.content.LoadString("Strings\\Events:HaveBabyAnswer_No")),
                 };
                 string question;
 
