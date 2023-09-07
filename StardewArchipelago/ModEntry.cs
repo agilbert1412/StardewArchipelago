@@ -126,6 +126,7 @@ namespace StardewArchipelago
             _advancedOptionsManager = new AdvancedOptionsManager(this, _harmony, _archipelago);
             _advancedOptionsManager.InjectArchipelagoAdvancedOptions();
             _giftHandler = new CrossGiftHandler();
+            _villagerEvents = new ModifiedVillagerEventChecker();
             SkillInjections.ResetSkillExperience();
             FriendshipInjections.ResetArchipelagoFriendshipPoints();
 
@@ -216,7 +217,6 @@ namespace StardewArchipelago
             var tileChooser = new TileChooser();
             _chatForwarder = new ChatForwarder(Monitor, _helper, _harmony, _archipelago, _giftHandler, tileChooser);
             _questCleaner = new QuestCleaner();
-            _villagerEvents = new ModifiedVillagerEventChecker();
 
             if (!_archipelago.IsConnected)
             {
