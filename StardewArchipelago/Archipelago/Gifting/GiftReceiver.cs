@@ -63,8 +63,9 @@ namespace StardewArchipelago.Archipelago.Gifting
                 if (!gift.IsRefund)
                 {
                     _giftService.RefundGift(gift);
-                    return;
                 }
+
+                return;
             }
 
             var key = (item, gift.SenderName);

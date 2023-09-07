@@ -28,7 +28,7 @@ namespace StardewArchipelago.Archipelago.Gifting
             GiftGenerator = new GiftGenerator(_itemManager);
         }
 
-        public void SendGift(string slotName)
+        public void SendGift(string slotName, bool isTrap)
         {
             if (!_archipelago.PlayerExists(slotName))
             {
@@ -37,7 +37,7 @@ namespace StardewArchipelago.Archipelago.Gifting
             }
 
             var giftObject = Game1.player.ActiveObject;
-            if (!GiftGenerator.TryCreateGiftItem(Game1.player.ActiveObject, out var giftItem, out var giftTraits))
+            if (!GiftGenerator.TryCreateGiftItem(Game1.player.ActiveObject, isTrap, out var giftItem, out var giftTraits))
             {
                 // TryCreateGiftItem will log the reason if it fails
                 return;

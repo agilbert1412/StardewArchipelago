@@ -61,8 +61,11 @@ namespace StardewArchipelago.Archipelago.Gifting
             }
 
             var giftPrefix = $"{ChatForwarder.COMMAND_PREFIX}gift";
+            var trapPrefix = $"{ChatForwarder.COMMAND_PREFIX}trap";
             var giftPrefixWithSpace = $"{giftPrefix} ";
-            if (!message.StartsWith(giftPrefixWithSpace))
+            var trapPrefixWithSpace = $"{trapPrefix} ";
+            var isTrap = message.StartsWith(trapPrefixWithSpace);
+            if (!message.StartsWith(giftPrefixWithSpace) && !isTrap)
             {
                 if (message.StartsWith(giftPrefix))
                 {
@@ -72,7 +75,7 @@ namespace StardewArchipelago.Archipelago.Gifting
                 return false;
             }
 
-            var receiverSlotName = message.Substring(giftPrefixWithSpace.Length);
+            var receiverSlotName = isTrap ? message[trapPrefixWithSpace.Length..] : message[giftPrefixWithSpace.Length..];
 #if RELEASE
             if (receiverSlotName == _archipelago.SlotData.SlotName)
             {
@@ -80,7 +83,7 @@ namespace StardewArchipelago.Archipelago.Gifting
                 return true;
             }
 #endif
-            _giftSender.SendGift(receiverSlotName);
+            _giftSender.SendGift(receiverSlotName, isTrap);
             return true;
         }
 
@@ -107,7 +110,7 @@ namespace StardewArchipelago.Archipelago.Gifting
                     continue;
                 }
 
-                if (!_giftSender.GiftGenerator.TryCreateGiftItem(stardewObject, out var giftItem, out var traits))
+                if (!_giftSender.GiftGenerator.TryCreateGiftItem(stardewObject, false, out var giftItem, out var traits))
                 {
                     continue;
                 }

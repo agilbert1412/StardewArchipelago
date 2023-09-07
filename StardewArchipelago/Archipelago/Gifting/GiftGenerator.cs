@@ -22,7 +22,7 @@ namespace StardewArchipelago.Archipelago.Gifting
             _itemManager = itemManager;
         }
 
-        public bool TryCreateGiftItem(Object giftObject, out GiftItem giftItem, out GiftTrait[] traits)
+        public bool TryCreateGiftItem(Object giftObject, bool isTrap, out GiftItem giftItem, out GiftTrait[] traits)
         {
             giftItem = null;
             traits = null;
@@ -39,13 +39,18 @@ namespace StardewArchipelago.Archipelago.Gifting
             }
 
             giftItem = new GiftItem(giftObject.Name, giftObject.Stack, giftObject.salePrice() * BankHandler.EXCHANGE_RATE);
-            traits = GenerateGiftTraits(giftObject);
+            traits = GenerateGiftTraits(giftObject, isTrap);
             return true;
         }
 
-        private GiftTrait[] GenerateGiftTraits(Item giftObject)
+        private GiftTrait[] GenerateGiftTraits(Item giftObject, bool isTrap)
         {
             var traits = new List<GiftTrait>();
+
+            if (isTrap)
+            {
+                traits.Add(new GiftTrait(GiftFlag.Trap, 1, 1));
+            }
 
             if (!Game1.objectInformation.ContainsKey(giftObject.ParentSheetIndex))
             {
@@ -128,13 +133,14 @@ namespace StardewArchipelago.Archipelago.Gifting
             {
                 yield break;
             }
-            
+
+            var categoryNames = Array.Empty<string>();
             if (typeAndCategory.Length > 1)
             {
                 var category = int.Parse(typeAndCategory[1]);
                 if (_categoryFlags.ContainsKey(category))
                 {
-                    var categoryNames = _categoryFlags[category];
+                    categoryNames = _categoryFlags[category];
                     foreach (var categoryName in categoryNames)
                     {
                         if (!string.IsNullOrWhiteSpace(categoryName))
@@ -146,17 +152,19 @@ namespace StardewArchipelago.Archipelago.Gifting
             }
 
             var type = typeAndCategory[0];
-            if (type != categoryName && !string.IsNullOrWhiteSpace(type))
+            if (categoryNames.Contains(type) || string.IsNullOrWhiteSpace(type))
             {
-                if (_typeFlags.ContainsKey(type))
-                {
-                    type = _typeFlags[type];
-                }
+                yield break;
+            }
 
-                if (!string.IsNullOrWhiteSpace(type))
-                {
-                    yield return CreateTrait(type);
-                }
+            if (_typeFlags.ContainsKey(type))
+            {
+                type = _typeFlags[type];
+            }
+
+            if (!string.IsNullOrWhiteSpace(type))
+            {
+                yield return CreateTrait(type);
             }
         }
 
