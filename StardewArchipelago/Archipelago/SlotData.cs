@@ -291,11 +291,10 @@ namespace StardewArchipelago.Archipelago
     [Flags]
     public enum BuildingProgression
     {
-        Vanilla = 0b00001,
-        Progressive = 0b00010,
-        EarlyShippingBin = 0b00100,
-        Cheap = 0b01000,
-        VeryCheap = 0b10000,
+        Progressive = 0b0001,
+        EarlyShippingBin = 0b0010,
+        Cheap = 0b0100,
+        VeryCheap = 0b1000,
     }
 
     public enum FestivalLocations

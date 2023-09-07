@@ -362,16 +362,22 @@ namespace StardewArchipelago.Locations.Patcher
         private void ReplaceCarpenterBuildingsWithChecks()
         {
             _harmony.Patch(
-                original: AccessTools.Method(typeof(BluePrint), nameof(BluePrint.consumeResources)),
-                prefix: new HarmonyMethod(typeof(CarpenterInjections), nameof(CarpenterInjections.ConsumeResources_CheaperInAP_Prefix))
+                original: AccessTools.Constructor(typeof(BluePrint), new[]{typeof(string)}),
+                postfix: new HarmonyMethod(typeof(CarpenterInjections), nameof(CarpenterInjections.BluePrintConstructor_CheaperInAP_Postfix))
             );
 
             if (!_archipelago.SlotData.BuildingProgression.HasFlag(BuildingProgression.Progressive))
             {
                 _harmony.Patch(
+                    original: AccessTools.Method(typeof(GameLocation), "houseUpgradeOffer"),
+                    prefix: new HarmonyMethod(typeof(CarpenterInjections), nameof(CarpenterInjections.HouseUpgradeOffer_OfferCheaperUpgrade_Prefix))
+                );
+
+                _harmony.Patch(
                     original: AccessTools.Method(typeof(GameLocation), "houseUpgradeAccept"),
                     prefix: new HarmonyMethod(typeof(CarpenterInjections), nameof(CarpenterInjections.HouseUpgradeAccept_CheaperInAP_Prefix))
                 );
+
                 return;
             }
 
@@ -800,7 +806,7 @@ namespace StardewArchipelago.Locations.Patcher
             );
 
             _harmony.Patch(
-                original: AccessTools.Method(typeof(Stats), nameof(Stats.monstersKilled)),
+                original: AccessTools.Method(typeof(Stats), nameof(Stats.monsterKilled)),
                 postfix: new HarmonyMethod(typeof(MonsterSlayerInjections), nameof(MonsterSlayerInjections.MonsterKilled_SendMonstersanityCheck_Postfix))
             );
         }

@@ -28,7 +28,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
         }
 
         // public void showMonsterKillList()
-        public static bool ShowMonsterKillList_CustomListFromAP_Prefix(AdventureGuild __instance, ref bool __result)
+        public static bool ShowMonsterKillList_CustomListFromAP_Prefix(AdventureGuild __instance)
         {
             try
             {

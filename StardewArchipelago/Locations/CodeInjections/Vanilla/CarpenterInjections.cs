@@ -112,27 +112,29 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
         }
 
-        // public void consumeResources()
-        public static bool ConsumeResources_CheaperInAP_Prefix(BluePrint __instance)
+        // public BluePrint(string name)
+        public static void BluePrintConstructor_CheaperInAP_Postfix(BluePrint __instance, string name)
         {
             try
             {
                 var priceMultiplier = _archipelago.SlotData.BuildingPriceMultiplier;
-                foreach (var (item, quantity) in __instance.itemsRequired)
+                foreach (var itemId in __instance.itemsRequired.Keys.ToArray())
                 {
+                    var quantity = __instance.itemsRequired[itemId];
                     var modifiedQuantity = (int)(quantity * priceMultiplier);
-                    Game1.player.consumeObject(item, modifiedQuantity);
+                    __instance.itemsRequired[itemId] = modifiedQuantity;
                 }
 
-                var price = (int)(__instance.moneyRequired * priceMultiplier);
-                Game1.player.Money -= price;
+                var price = __instance.moneyRequired;
+                var modifiedPrice = (int)(price * priceMultiplier);
+                __instance.moneyRequired = modifiedPrice;
 
-                return false; // don't run original logic
+                return;
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(AnswerDialogueAction_CarpenterConstruct_Prefix)}:\n{ex}", LogLevel.Error);
-                return true; // run original logic
+                _monitor.Log($"Failed in {nameof(BluePrintConstructor_CheaperInAP_Postfix)}:\n{ex}", LogLevel.Error);
+                return;
             }
         }
 
@@ -148,6 +150,45 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 _monitor.Log($"Failed in {nameof(GetCarpenterStock_PurchasableChecks_Postfix)}:\n{ex}", LogLevel.Error);
                 return;
+            }
+        }
+
+        public static bool HouseUpgradeOffer_OfferCheaperUpgrade_Prefix(GameLocation __instance)
+        {
+            try
+            {
+                var text = "";
+                var priceMultiplier = _archipelago.SlotData.BuildingPriceMultiplier;
+                if (Math.Abs(priceMultiplier - 1.0) < 0.001)
+                {
+                    return true; // run original logic
+                }
+
+                switch (Game1.player.HouseUpgradeLevel)
+                {
+                    case 0:
+                        text = Game1.parseText(Game1.content.LoadString("Strings\\Locations:ScienceHouse_Carpenter_UpgradeHouse1"));
+                        text = text.Replace("10,000", $"{(int)(10000 * priceMultiplier)}")
+                                   .Replace("450", $"{(int)(450 * priceMultiplier)}");
+                        break;
+                    case 1:
+                        text = Game1.parseText(Game1.content.LoadString("Strings\\Locations:ScienceHouse_Carpenter_UpgradeHouse2"));
+                        text = text.Replace("50,000", $"{(int)(50000 * priceMultiplier)}")
+                                   .Replace("150", $"{(int)(150 * priceMultiplier)}");
+                        break;
+                    case 2:
+                        text = Game1.parseText(Game1.content.LoadString("Strings\\Locations:ScienceHouse_Carpenter_UpgradeHouse3"));
+                        text = text.Replace("100,000", $"{(int)(100000 * priceMultiplier)}");
+                        break;
+                }
+
+                __instance.createQuestionDialogue(text, __instance.createYesNoResponses(), "upgrade");
+                return false; // don't run original logic
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(HouseUpgradeOffer_OfferCheaperUpgrade_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
             }
         }
 

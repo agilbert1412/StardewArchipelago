@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using StardewArchipelago.Stardew;
 using StardewValley.Objects;
 using StardewValley.Tools;
@@ -29,7 +30,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
             var weapons = itemManager.GetAllWeapons();
             foreach (var weapon in weapons)
             {
-                var stardewWeapon = weapon.PrepareForGivingToFarmer() as MeleeWeapon;
+                if (weapon.PrepareForGivingToFarmer() is not MeleeWeapon stardewWeapon)
+                {
+                    continue;
+                }
+
                 var weaponLevel = stardewWeapon.getItemLevel();
                 var type = weapon.Type switch
                 {
@@ -38,7 +43,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
                     _ => TYPE_SWORD,
                 };
 
-                var tier = (int)(weaponLevel / WEAPON_LEVELS_PER_TIER);
+                var tier = (int)(weaponLevel / WEAPON_LEVELS_PER_TIER) + 1;
+                Debug.Assert(tier is >= 1 and <= 5);
                 AddToWeapons(weapon, type, tier);
             }
         }
