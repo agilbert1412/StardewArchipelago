@@ -141,7 +141,7 @@ namespace StardewArchipelago.Locations.Patcher
             );
 
             _harmony.Patch(
-                original: AccessTools.Method(typeof(Utility.), nameof(Utility.getBlacksmithUpgradeStock)),
+                original: AccessTools.Method(typeof(Utility), nameof(Utility.getBlacksmithUpgradeStock)),
                 postfix: new HarmonyMethod(typeof(ToolInjections), nameof(ToolInjections.GetBlacksmithUpgradeStock_PriceReductionFromAp_Postfix))
             );
 
