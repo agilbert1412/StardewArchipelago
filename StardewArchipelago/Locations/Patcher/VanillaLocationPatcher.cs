@@ -140,6 +140,11 @@ namespace StardewArchipelago.Locations.Patcher
                 prefix: new HarmonyMethod(typeof(ScytheInjections), nameof(ScytheInjections.PerformAction_GoldenScythe_Prefix))
             );
 
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Utility.), nameof(Utility.getBlacksmithUpgradeStock)),
+                postfix: new HarmonyMethod(typeof(ToolInjections), nameof(ToolInjections.GetBlacksmithUpgradeStock_PriceReductionFromAp_Postfix))
+            );
+
             if (!_archipelago.SlotData.ToolProgression.HasFlag(ToolProgression.Progressive))
             {
                 return;
@@ -153,6 +158,11 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void ReplaceFishingRodsWithChecks()
         {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Utility), nameof(Utility.getFishShopStock)),
+                prefix: new HarmonyMethod(typeof(FishingRodInjections), nameof(FishingRodInjections.GetFishShopStock_Prefix))
+            );
+
             if (!_archipelago.SlotData.ToolProgression.HasFlag(ToolProgression.Progressive))
             {
                 return;
@@ -166,11 +176,6 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Event), nameof(Event.command_awardFestivalPrize)),
                 prefix: new HarmonyMethod(typeof(FishingRodInjections), nameof(FishingRodInjections.AwardFestivalPrize_BambooPole_Prefix))
-            );
-
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(Utility), nameof(Utility.getFishShopStock)),
-                prefix: new HarmonyMethod(typeof(FishingRodInjections), nameof(FishingRodInjections.GetFishShopStock_Prefix))
             );
         }
 
@@ -356,8 +361,17 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void ReplaceCarpenterBuildingsWithChecks()
         {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(BluePrint), nameof(BluePrint.consumeResources)),
+                prefix: new HarmonyMethod(typeof(CarpenterInjections), nameof(CarpenterInjections.ConsumeResources_CheaperInAP_Prefix))
+            );
+
             if (!_archipelago.SlotData.BuildingProgression.HasFlag(BuildingProgression.Progressive))
             {
+                _harmony.Patch(
+                    original: AccessTools.Method(typeof(GameLocation), "houseUpgradeAccept"),
+                    prefix: new HarmonyMethod(typeof(CarpenterInjections), nameof(CarpenterInjections.HouseUpgradeAccept_CheaperInAP_Prefix))
+                );
                 return;
             }
 
@@ -368,6 +382,11 @@ namespace StardewArchipelago.Locations.Patcher
             );
 
             _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.answerDialogueAction)),
+                prefix: new HarmonyMethod(typeof(CarpenterInjections), nameof(CarpenterInjections.AnswerDialogueAction_CarpenterConstruct_Prefix))
+            );
+
+            _harmony.Patch(
                 original: AccessTools.Method(typeof(GameLocation), "houseUpgradeOffer"),
                 prefix: new HarmonyMethod(typeof(CarpenterInjections), nameof(CarpenterInjections.HouseUpgradeOffer_OfferFreeUpgrade_Prefix))
             );
@@ -375,11 +394,6 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony.Patch(
                 original: AccessTools.Method(typeof(GameLocation), "houseUpgradeAccept"),
                 prefix: new HarmonyMethod(typeof(CarpenterInjections), nameof(CarpenterInjections.HouseUpgradeAccept_FreeFromAP_Prefix))
-            );
-
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.answerDialogueAction)),
-                prefix: new HarmonyMethod(typeof(CarpenterInjections), nameof(CarpenterInjections.AnswerDialogueAction_CarpenterConstruct_Prefix))
             );
 
             _harmony.Patch(

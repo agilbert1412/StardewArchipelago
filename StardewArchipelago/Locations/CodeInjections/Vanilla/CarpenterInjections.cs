@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using Archipelago.MultiClient.Net.Models;
+using Netcode;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
 using StardewArchipelago.GameModifications.Buildings;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.BellsAndWhistles;
 using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
@@ -106,6 +108,30 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             catch (Exception ex)
             {
                 _monitor.Log($"Failed in {nameof(CreateQuestionDialogue_CarpenterDialogOptions_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
+        }
+
+        // public void consumeResources()
+        public static bool ConsumeResources_CheaperInAP_Prefix(BluePrint __instance)
+        {
+            try
+            {
+                var priceMultiplier = _archipelago.SlotData.BuildingPriceMultiplier;
+                foreach (var (item, quantity) in __instance.itemsRequired)
+                {
+                    var modifiedQuantity = (int)(quantity * priceMultiplier);
+                    Game1.player.consumeObject(item, modifiedQuantity);
+                }
+
+                var price = (int)(__instance.moneyRequired * priceMultiplier);
+                Game1.player.Money -= price;
+
+                return false; // don't run original logic
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(AnswerDialogueAction_CarpenterConstruct_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
             }
         }
@@ -247,6 +273,78 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
         }
 
+        public static bool HouseUpgradeAccept_CheaperInAP_Prefix(GameLocation __instance)
+        {
+            try
+            {
+                var priceMultiplier = _archipelago.SlotData.BuildingPriceMultiplier;
+                if (Math.Abs(priceMultiplier - 1.0) < 0.001)
+                {
+                    return true; // run original logic
+                }
+
+                switch (Game1.player.HouseUpgradeLevel)
+                {
+                    case 0:
+                        var price1 = (int)(10000 * priceMultiplier);
+                        var woodAmount = (int)(450 * priceMultiplier);
+                        if (Game1.player.Money >= price1 && Game1.player.hasItemInInventory(388, woodAmount))
+                        {
+                            Game1.player.daysUntilHouseUpgrade.Value = 3;
+                            Game1.player.Money -= price1;
+                            Game1.player.removeItemsFromInventory(388, woodAmount);
+                            Game1.getCharacterFromName("Robin").setNewDialogue(Game1.content.LoadString("Data\\ExtraDialogue:Robin_HouseUpgrade_Accepted"));
+                            Game1.drawDialogue(Game1.getCharacterFromName("Robin"));
+                            break;
+                        }
+                        if (Game1.player.Money < price1)
+                        {
+                            Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\UI:NotEnoughMoney3"));
+                            break;
+                        }
+                        Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\Locations:ScienceHouse_Carpenter_NotEnoughWood1"));
+                        break;
+                    case 1:
+                        var price2 = (int)(50000 * priceMultiplier);
+                        var hardwoodAmount = (int)(150 * priceMultiplier);
+                        if (Game1.player.Money >= price2 && Game1.player.hasItemInInventory(709, hardwoodAmount))
+                        {
+                            Game1.player.daysUntilHouseUpgrade.Value = 3;
+                            Game1.player.Money -= price2;
+                            Game1.player.removeItemsFromInventory(709, hardwoodAmount);
+                            Game1.getCharacterFromName("Robin").setNewDialogue(Game1.content.LoadString("Data\\ExtraDialogue:Robin_HouseUpgrade_Accepted"));
+                            Game1.drawDialogue(Game1.getCharacterFromName("Robin"));
+                            break;
+                        }
+                        if (Game1.player.Money < price2)
+                        {
+                            Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\UI:NotEnoughMoney3"));
+                            break;
+                        }
+                        Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\Locations:ScienceHouse_Carpenter_NotEnoughWood2"));
+                        break;
+                    case 2:
+                        var price3 = (int)(100000 * priceMultiplier);
+                        if (Game1.player.Money >= price3)
+                        {
+                            Game1.player.daysUntilHouseUpgrade.Value = 3;
+                            Game1.player.Money -= price3;
+                            Game1.getCharacterFromName("Robin").setNewDialogue(Game1.content.LoadString("Data\\ExtraDialogue:Robin_HouseUpgrade_Accepted"));
+                            Game1.drawDialogue(Game1.getCharacterFromName("Robin"));
+                            break;
+                        }
+                        Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\UI:NotEnoughMoney3"));
+                        break;
+                }
+                return false; // don't run original logic
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(HouseUpgradeAccept_CheaperInAP_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
+        }
+
         private static Dictionary<ISalable, int[]> GetCarpenterBuildingsAPLocations()
         {
             var carpenterAPStock = new Dictionary<ISalable, int[]>();
@@ -298,13 +396,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 return;
             }
 
-            var purchasableCheck = new PurchaseableArchipelagoLocation(houseUpgradeName, locationName, _modHelper, _locationChecker, _archipelago, myActiveHints);
-            foreach (var material in materials)
-            {
-                purchasableCheck.AddMaterialRequirement(material);
-            }
-
-            stock.Add(purchasableCheck, new[] { price, 1 });
+            AddToStock(stock, houseUpgradeName, price, materials, locationName);
         }
 
         private static void AddArchipelagoLocationToStock(this Dictionary<ISalable, int[]> stock, string buildingName, int price, Item[] materials, Hint[] myActiveHints, string requiredBuilding = null)
@@ -324,13 +416,22 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 }
             }
 
+            AddToStock(stock, buildingName, price, materials, locationName);
+        }
+
+        private static void AddToStock(Dictionary<ISalable, int[]> stock, string locationDisplayName, int price, Item[] materials, string locationName)
+        {
+            var priceMultiplier = _archipelago.SlotData.BuildingPriceMultiplier;
+            var purchasableCheck =
+                new PurchaseableArchipelagoLocation(locationDisplayName, locationName, _modHelper, _locationChecker, _archipelago);
             var purchasableCheck = new PurchaseableArchipelagoLocation(buildingName, locationName, _modHelper, _locationChecker, _archipelago, myActiveHints);
             foreach (var material in materials)
             {
+                material.Stack = (int)(material.Stack * priceMultiplier);
                 purchasableCheck.AddMaterialRequirement(material);
             }
 
-            stock.Add(purchasableCheck, new[] { price, 1 });
+            stock.Add(purchasableCheck, new[] { (int)(price * priceMultiplier), 1 });
         }
 
         public static bool HasReceivedBuilding(string buildingName, out string senderName)

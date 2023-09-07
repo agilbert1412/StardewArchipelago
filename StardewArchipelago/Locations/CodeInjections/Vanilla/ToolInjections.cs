@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Archipelago.MultiClient.Net.Models;
+using System.Linq;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Items.Unlocks;
 using StardewModdingAPI;
@@ -37,10 +38,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
                 __result = true;
 
-                var utilityPriceForToolMethod =
-                    _modHelper.Reflection.GetMethod(typeof(Utility), "priceForToolUpgradeLevel");
-                var indexOfExtraMaterialForToolMethod =
-                    _modHelper.Reflection.GetMethod(typeof(Utility), "indexOfExtraMaterialForToolUpgrade");
+                var utilityPriceForToolMethod = _modHelper.Reflection.GetMethod(typeof(Utility), "priceForToolUpgradeLevel");
+                var indexOfExtraMaterialForToolMethod = _modHelper.Reflection.GetMethod(typeof(Utility), "indexOfExtraMaterialForToolUpgrade");
 
                 var myActiveHints = _archipelago.GetMyActiveHints();
                 var blacksmithUpgradeStock = new Dictionary<ISalable, int[]>();
@@ -64,6 +63,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private static void AddToolUpgradeToStock(string toolGenericName, Dictionary<ISalable, int[]> blacksmithUpgradeStock, 
             IReflectedMethod utilityPriceForToolMethod, IReflectedMethod indexOfExtraMaterialForToolMethod, Hint[] myActiveHints)
         {
+            var priceMultiplier = _archipelago.SlotData.ToolPriceMultiplier;
             for (var upgradeLevel = 1; upgradeLevel < 5; upgradeLevel++)
             {
                 if (!ShouldShowToolUpgradeInShop(toolGenericName, upgradeLevel))
@@ -82,12 +82,43 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     priceForUpgrade /= 2;
                 }
 
-                blacksmithUpgradeStock.Add(toolApLocation, new int[3]
+                priceForUpgrade = (int)(priceForUpgrade * priceMultiplier);
+
+                blacksmithUpgradeStock.Add(toolApLocation, new int[4]
                 {
                     priceForUpgrade,
                     1,
                     indexOfExtraMaterialForToolMethod.Invoke<int>(upgradeLevel),
+                    (int)(5 * priceMultiplier),
                 });
+            }
+        }
+
+        // public static Dictionary<ISalable, int[]> getBlacksmithUpgradeStock(Farmer who)
+        public static void GetBlacksmithUpgradeStock_PriceReductionFromAp_Postfix(Farmer who, ref Dictionary<ISalable, int[]> __result)
+        {
+            try
+            {
+                var priceMultiplier = _archipelago.SlotData.ToolPriceMultiplier;
+                foreach (var resultKey in __result.Keys.ToArray())
+                {
+                    var prices = __result[resultKey];
+                    var newPrices = new int[4]
+                    {
+                        (int)(prices[0] * priceMultiplier),
+                        prices[1],
+                        prices[2],
+                        (int)(5 * priceMultiplier),
+                    };
+                    __result[resultKey] = newPrices;
+                }
+
+                return;
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(GetBlacksmithUpgradeStock_PriceReductionFromAp_Postfix)}:\n{ex}", LogLevel.Error);
+                return;
             }
         }
 

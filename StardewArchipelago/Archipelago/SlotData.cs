@@ -197,6 +197,42 @@ namespace StardewArchipelago.Archipelago
             _console.Log($"SlotData did not contain expected key: \"{key}\"", LogLevel.Warn);
             return defaultValue;
         }
+
+        public double ToolPriceMultiplier
+        {
+            get
+            {
+                if (ToolProgression.HasFlag(ToolProgression.VeryCheap))
+                {
+                    return 0.2;
+                }
+
+                if (ToolProgression.HasFlag(ToolProgression.Cheap))
+                {
+                    return 0.4;
+                }
+
+                return 1;
+            }
+        }
+
+        public double BuildingPriceMultiplier
+        {
+            get
+            {
+                if (BuildingProgression.HasFlag(BuildingProgression.VeryCheap))
+                {
+                    return 0.2;
+                }
+
+                if (BuildingProgression.HasFlag(BuildingProgression.Cheap))
+                {
+                    return 0.5;
+                }
+
+                return 1;
+            }
+        }
     }
 
     public enum EntranceRandomization
@@ -233,10 +269,10 @@ namespace StardewArchipelago.Archipelago
     [Flags]
     public enum ToolProgression
     {
-        Vanilla = 0b0001,
-        Progressive = 0b0010,
-        Cheap = 0b0100,
-        VeryCheap = 0b1000,
+        // Vanilla = 0b000,
+        Progressive = 0b001,
+        Cheap = 0b010,
+        VeryCheap = 0b100,
     }
 
     public enum ElevatorProgression
