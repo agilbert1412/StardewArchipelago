@@ -160,6 +160,11 @@ namespace StardewArchipelago.Items.Traps
 
         private void AddDebuff(Buffs whichBuff, BuffDuration duration)
         {
+            if (duration == BuffDuration.Zero)
+            {
+                return;
+            }
+
             var debuff = new Buff((int)whichBuff);
             debuff.millisecondsDuration = (int)duration;
             debuff.totalMillisecondsDuration = (int)duration;

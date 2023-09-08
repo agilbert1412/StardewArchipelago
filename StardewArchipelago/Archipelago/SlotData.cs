@@ -75,7 +75,7 @@ namespace StardewArchipelago.Archipelago
         public Friendsanity Friendsanity { get; private set; }
         public int FriendsanityHeartSize { get; private set; }
         public bool ExcludeGingerIsland { get; private set; }
-        public TrapItemsDifficulty TrapItemsDifficulty { get; private set; }
+        public TrapItemsDifficulty TrapItemsDifficulty { get; set; }
         public bool EnableMultiSleep { get; private set; }
         public int MultiSleepCostPerDay { get; private set; }
         public double ExperienceMultiplier { get; private set; }

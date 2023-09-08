@@ -13,6 +13,7 @@ namespace StardewArchipelago.Serialization
         public List<string> SeasonsOrder { get; set; }
         public AppearanceRandomization? AppearanceRandomizerOverride { get; set; }
         public bool HideEmptyArchipelagoLetters { get; set; }
+        public TrapItemsDifficulty? TrapDifficultyOverride { get; set; }
 
         public ArchipelagoStateDto()
         {
@@ -23,6 +24,7 @@ namespace StardewArchipelago.Serialization
             SeasonsOrder = new List<string>();
             AppearanceRandomizerOverride = null;
             HideEmptyArchipelagoLetters = false;
+            TrapDifficultyOverride = null;
         }
     }
 }

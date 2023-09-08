@@ -158,6 +158,7 @@ namespace StardewArchipelago
 
             _seasonsRandomizer = new SeasonsRandomizer(Monitor, _helper, _archipelago, State);
             State.AppearanceRandomizerOverride = null;
+            State.TrapDifficultyOverride = null;
             State.SeasonsOrder = new List<string>();
             State.SeasonsOrder.Add(_seasonsRandomizer.GetFirstSeason());
             SeasonsRandomizer.SetSeason(State.SeasonsOrder.Last());
@@ -321,6 +322,10 @@ namespace StardewArchipelago
             {
                 _archipelago.SlotData.AppearanceRandomization = State.AppearanceRandomizerOverride.Value;
             }
+            if (State.TrapDifficultyOverride != null)
+            {
+                _archipelago.SlotData.TrapItemsDifficulty = State.TrapDifficultyOverride.Value;
+            }
             _appearanceRandomizer.ShuffleCharacterAppearances();
             _entranceManager.ResetCheckedEntrancesToday(_archipelago.SlotData);
         }
@@ -443,7 +448,27 @@ namespace StardewArchipelago
 
         private void OverrideTrapDifficulty(string arg1, string[] arg2)
         {
-            Monitor.Log($"This command is not implemented yet", LogLevel.Info);
+            if (_archipelago == null || State == null || !_archipelago.MakeSureConnected(0))
+            {
+                Monitor.Log($"This command can only be used from in-game, when connected to Archipelago", LogLevel.Info);
+                return;
+            }
+
+            if (arg2.Length < 1)
+            {
+                Monitor.Log($"Choose one of the following difficulties: [NoTraps, Easy, Medium, Hard, Hell, Nightmare].", LogLevel.Info);
+                return;
+            }
+
+            var difficulty = arg2[0];
+            if (!Enum.TryParse<TrapItemsDifficulty>(difficulty, true, out var difficultyOverride))
+            {
+                Monitor.Log($"Choose one of the following difficulties: [NoTraps, Easy, Medium, Hard, Hell, Nightmare].", LogLevel.Info);
+                return;
+            }
+
+            State.TrapDifficultyOverride = difficultyOverride;
+            Monitor.Log($"Trap Difficulty set to [{difficultyOverride}]. Change will be saved next time you sleep", LogLevel.Info);
         }
     }
 }
