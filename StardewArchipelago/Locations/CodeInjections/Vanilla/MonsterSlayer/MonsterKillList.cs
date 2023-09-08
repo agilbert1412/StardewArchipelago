@@ -31,7 +31,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
             { MonsterCategory.MUMMIES, new[] { MonsterName.MUMMY } },
             { MonsterCategory.PEPPER_REX, new[] { MonsterName.PEPPER_REX } },
             { MonsterCategory.SERPENTS, new[] { MonsterName.SERPENT, MonsterName.ROYAL_SERPENT } },
-            { MonsterCategory.SERPENTS, new[] { MonsterName.MAGMA_SPRITE, MonsterName.MAGMA_SPARKER } },
+            { MonsterCategory.MAGMA_SPRITES, new[] { MonsterName.MAGMA_SPRITE, MonsterName.MAGMA_SPARKER } },
         };
         public readonly Dictionary<string, int> DefaultMonsterGoals = new()
         {
@@ -125,7 +125,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
 
             foreach (var (monster, killsRequired) in MonsterGoals)
             {
-                var killCount = MonstersByCategory.ContainsKey(monster) ? GetMonstersKilled(monster) : GetMonstersKilledInCategory(monster);
+                var killCount = MonstersByCategory.ContainsKey(monster) ? GetMonstersKilledInCategory(monster) : GetMonstersKilled(monster);
                 var killListLine = GetKillListLine(monster, killCount, killsRequired);
                 stringBuilder.Append(killListLine);
             }
