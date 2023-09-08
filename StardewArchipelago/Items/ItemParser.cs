@@ -50,9 +50,8 @@ namespace StardewArchipelago.Items
                 var resourcePackItem = GetResourcePackItem(stardewItemName);
                 return resourcePackItem.GetAsLetter(receivedItem, resourcePackAmount);
             }
-
-            var itemIsFriendshipBonus = TryParseFriendshipBonus(receivedItem.ItemName, out var numberOfPoints);
-            if (itemIsFriendshipBonus)
+            
+            if (TryParseFriendshipBonus(receivedItem.ItemName, out var numberOfPoints))
             {
                 return new LetterActionAttachment(receivedItem, LetterActionsKeys.Friendship, numberOfPoints.ToString());
             }

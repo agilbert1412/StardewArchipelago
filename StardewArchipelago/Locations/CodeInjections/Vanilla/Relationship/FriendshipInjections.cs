@@ -307,6 +307,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
                 //  Checks if actual name is a value in the dictionary and updates if necessary.
                 var name = n.Name;
                 var friend = _friends.GetFriend(name);
+                if (friend == null)
+                {
+                    return false; // don't run original logic
+                }
+
                 var canCommunicateWithNpc = !friend.RequiresDwarfLanguage || __instance.canUnderstandDwarves;
                 if (amount > 0 && !canCommunicateWithNpc)
                 {
