@@ -97,6 +97,9 @@ namespace StardewArchipelago
 
 
             _helper.ConsoleCommands.Add("connect_override", $"Overrides your next connection to Archipelago. {CONNECT_SYNTAX}", this.OnCommandConnectToArchipelago);
+            _helper.ConsoleCommands.Add("export_all_gifts", "Export all currently loaded giftable items and their traits", this.ExportGifts);
+            _helper.ConsoleCommands.Add("deathlink", "Override the deathlink setting", this.OverrideDeathlink);
+            _helper.ConsoleCommands.Add("trap_difficulty", "Override the trap difficulty setting", this.OverrideTrapDifficulty);
 
 #if DEBUG
             _helper.ConsoleCommands.Add("connect", $"Connect to Archipelago. {CONNECT_SYNTAX}", this.OnCommandConnectToArchipelago);
@@ -106,7 +109,6 @@ namespace StardewArchipelago
             // _helper.ConsoleCommands.Add("load_entrances", "Loads the entrances file", (_, _) => _entranceRandomizer.LoadTransports());
             // _helper.ConsoleCommands.Add("save_entrances", "Saves the entrances file", (_, _) => EntranceInjections.SaveNewEntrancesToFile());
             _helper.ConsoleCommands.Add("export_shippables", "Export all currently loaded shippable items", this.ExportShippables);
-            _helper.ConsoleCommands.Add("export_all_gifts", "Export all currently loaded giftable items and their traits", this.ExportGifts);
             _helper.ConsoleCommands.Add("debug_method", "Runs whatever is currently in the debug method", this.DebugMethod);
 #endif
         }
@@ -432,6 +434,16 @@ namespace StardewArchipelago
         private void ExportGifts(string arg1, string[] arg2)
         {
             _giftHandler.ExportAllGifts("gifts.json");
+        }
+
+        private void OverrideDeathlink(string arg1, string[] arg2)
+        {
+            _archipelago?.ToggleDeathlink();
+        }
+
+        private void OverrideTrapDifficulty(string arg1, string[] arg2)
+        {
+            Monitor.Log($"This command is not implemented yet", LogLevel.Info);
         }
     }
 }

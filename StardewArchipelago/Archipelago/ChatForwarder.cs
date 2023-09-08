@@ -247,17 +247,6 @@ namespace StardewArchipelago.Archipelago
             return true;
         }
 
-        private static bool HandleDeathlinkCommand(string message)
-        {
-            if (message != $"{COMMAND_PREFIX}deathlink")
-            {
-                return false;
-            }
-
-            _archipelago.ToggleDeathlink();
-            return true;
-        }
-
         private static bool HandleHideEmptyLettersCommand(string message)
         {
             if (message != $"{COMMAND_PREFIX}letters")
