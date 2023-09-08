@@ -76,7 +76,7 @@ namespace StardewArchipelago.Items.Mail
             var numberOfPoints = int.Parse(friendshipPoints);
             foreach (var npc in farmer.friendshipData.Keys)
             {
-                farmer.changeFriendship(numberOfPoints, Game1.getCharacterFromName(npc));
+                farmer.changeFriendship((int)(numberOfPoints / _archipelago.SlotData.FriendshipMultiplier), Game1.getCharacterFromName(npc));
             }
         }
 
