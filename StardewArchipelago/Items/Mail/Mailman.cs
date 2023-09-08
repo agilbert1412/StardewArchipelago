@@ -166,6 +166,12 @@ namespace StardewArchipelago.Items.Mail
             "I thought you could use this {0} from {2}^^    -{1}",
             "I heard you wanted a {0}?^I found one in {2}^^    -{1}",
             "Greetings from {2}^^I got a {0} for you!^^    -{1}",
+            "I can't carry {0} for you, but I can carry you!^^    -{1} from {2}",
+            "May your {0} be laid under an enchantment of surpassing excellence for seven years!^^    -{1} from {2}",
+            "There's some good in this world, Mr. @. And it's worth fighting for.^^    -{1} from {2}",
+            "Take this {0}. It contains the Light of Earendil, our most beloved star.^^May it be a light to you in dark places, when all other lights go out.^^    -{1} from {2}",
+            "You had {0} on the shopping list right? Picked it up for you^^    -{1} from {2}",
+            "It's not too late for Christmas in July right? Here, I got you a {0}, I know you have been looking for it.^^    -{1} from {2}",
         };
 
         // 0: Item
@@ -199,7 +205,9 @@ namespace StardewArchipelago.Items.Mail
             "Here, have this letter.^^    -{1}^^^^^^^^^PS: also a {0} k thx bye",
             "I have something here for you. Your father wanted you to have this when you were old enough, but your uncle wouldn't allow it. He feared you  might follow old {1} on some damned-fool idealistic crusade like your father did. Your father's {0}. This is the weapon of a Jedi Knight. An elegant weapon, for a more civilized age.",
             "{1}^Incoming Trade Offer:^^I Receive: Your Undying Love and Affection^^You receive: {0}",
-            "Grandpa's {0}^He's gone to stay with the dwarves. He's left you {4}, along with all of his possessions. The {0} is yours now. Keep it secret. Keep it safe"
+            "Grandpa's {0}^He's gone to stay with the dwarves. He's left you {4}, along with all of his possessions. The {0} is yours now. Keep it secret. Keep it safe",
+            "Dear valued customer.^Joja Online is proud to introduce our new line of innovative products! To celebrate, please enjoy this free sample of {1}'s™️ {0}, made with the finest ingredients from local farmers and artisans from {2}! Now available in the Joja Online shop!",
+            "Dear valued customer,^We are sorry to hear that your package was lost in transit through Jojamart Prime. Find enclosed your replacement {0}. {1} will be appropriately disciplined for their negligence.^Have a wonderful day!"
         };
     }
 }
