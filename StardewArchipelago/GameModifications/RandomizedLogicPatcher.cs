@@ -355,8 +355,8 @@ namespace StardewArchipelago.GameModifications
             }
 
             _harmony.Patch(
-                original: AccessTools.Method(typeof(Crop), nameof(Crop.getRandomLowGradeCropForThisSeason)),
-                prefix: new HarmonyMethod(typeof(CropInjections), nameof(CropInjections.GetRandomLowGradeCropForThisSeason_OnlyUnlockedCrops_Prefix))
+                original: AccessTools.Constructor(typeof(Crop), new[] { typeof(int), typeof(int), typeof(int)}),
+                prefix: new HarmonyMethod(typeof(CropInjections), nameof(CropInjections.CropConstructor_WildSeedsBecomesUnlockedCrop_Prefix))
             );
         }
 
