@@ -141,9 +141,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 WoodenBlade, IronDirk, WindSpire, Femur, SteelSmallsword, WoodClub, ElfBlade, SilverSaber, PirateSword,
                 CrystalDagger, Cutlass, IronEdge, BurglarsShank, WoodMallet, Claymore, TemplarsBlade, Kudgel,
                 ShadowDagger, ObsidianEdge, TemperedBroadsword, WickedKris, BoneSword, OssifiedBlade, SteelFalchion,
-                TheSlammer, LavaKatana, GalaxySword, GalaxyDagger, GalaxyHammer
+                TheSlammer, LavaKatana, // No Galaxy Weapons here
             };
             AddItemsToShop(adventureShopStock, weapons);
+            AddGalaxyWeaponsToShopIfReceivedAny(adventureShopStock);
         }
 
         private static void AddShoes(Dictionary<ISalable, int[]> adventureShopStock)
@@ -245,14 +246,35 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
         }
 
-        private static void AddItemsToShop(Dictionary<ISalable, int[]> adventureShopStock, KeyValuePair<ISalable, int[]>[] items)
+        private static void AddItemsToShop(Dictionary<ISalable, int[]> adventureShopStock)
+        {
+            var galaxyWeapons = new[] { GalaxySword, GalaxyDagger, GalaxyHammer };
+            if (!galaxyWeapons.Any(weapon => _archipelago.HasReceivedItem(weapon.Key.Name)))
+            {
+                return;
+            }
+
+            foreach (var (item, price) in galaxyWeapons)
+            {
+                adventureShopStock.Add(item, price);
+            }
+        }
+
+        private static void AddItemToStockIfReceived(Dictionary<ISalable, int[]> adventureShopStock, ISalable item, int[] price)
+        {
+            if (!_archipelago.HasReceivedItem(item.Name))
+            {
+                return;
+            }
+
+            adventureShopStock.Add(item, price);
+        }
+
+        private static void AddGalaxyWeaponsToShopIfReceivedAny(Dictionary<ISalable, int[]> adventureShopStock, KeyValuePair<ISalable, int[]>[] items)
         {
             foreach (var (item, price) in items)
             {
-                if (_archipelago.HasReceivedItem(item.Name))
-                {
-                    adventureShopStock.Add(item, price);
-                }
+                AddItemToStockIfReceived(adventureShopStock, item, price);
             }
         }
 
