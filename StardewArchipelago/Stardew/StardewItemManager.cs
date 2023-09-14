@@ -518,7 +518,7 @@ namespace StardewArchipelago.Stardew
                 {
                     continue;
                 }
-
+                
                 yield return name;
             }
         }
