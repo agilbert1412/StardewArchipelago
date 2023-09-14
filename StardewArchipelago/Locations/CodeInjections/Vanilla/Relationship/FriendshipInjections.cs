@@ -62,6 +62,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
             _hintedFriendshipLocations = Array.Empty<string>();
         }
 
+        private static IReflectedField<NetInt> GetPrivatePointsField(Friendship friendship)
+        {
+            return _helper.Reflection.GetField<NetInt>(friendship, "points");
+        }
+
         public static Dictionary<string, int> GetArchipelagoFriendshipPoints()
         {
             return _friendshipPoints.ToDictionary(x => x.Key, x => (int)Math.Round(x.Value));
@@ -103,27 +108,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
                     return true; // run original logic
                 }
 
-                var archipelagoHeartItems = _archipelago.GetReceivedItemCount(string.Format(HEARTS_PATTERN, friend.ArchipelagoName));
-                var receivedHearts = archipelagoHeartItems * _archipelago.SlotData.FriendsanityHeartSize;
-
-                var maxShuffled = friend.ShuffledUpTo(_archipelago);
-                if (receivedHearts > maxShuffled)
-                {
-                    receivedHearts = maxShuffled;
-                }
-
-                var friendshipPoints = receivedHearts * POINTS_PER_HEART;
-                friendshipPoints = GetBoundedToCurrentRelationState(friendshipPoints, friend.StardewName);
-                if (receivedHearts >= maxShuffled)
-                {
-                    var earnedPoints = (int)GetFriendshipPoints(friend.StardewName);
-                    var earnedPointsAboveMaxShuffled = Math.Max(0, earnedPoints - (maxShuffled * POINTS_PER_HEART));
-                    friendshipPoints += earnedPointsAboveMaxShuffled;
-                }
+                var friendshipPoints = GetEffectiveFriendshipPoints(friend);
+                SetBackendFriendshipPoints(__instance, friendshipPoints);
 
                 __result = friendshipPoints;
-                var pointsField = _helper.Reflection.GetField<NetInt>(__instance, "points");
-                pointsField.GetValue().Value = friendshipPoints;
                 return false; // don't run original logic
             }
             catch (Exception ex)
@@ -131,6 +119,36 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
                 _monitor.Log($"Failed in {nameof(GetPoints_ArchipelagoHearts_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
             }
+        }
+
+        private static void SetBackendFriendshipPoints(Friendship __instance, int friendshipPoints)
+        {
+            var pointsField = GetPrivatePointsField(__instance);
+            pointsField.GetValue().Value = friendshipPoints;
+        }
+
+        private static int GetEffectiveFriendshipPoints(ArchipelagoFriend friend)
+        {
+            var archipelagoHeartItems =
+                _archipelago.GetReceivedItemCount(string.Format(HEARTS_PATTERN, friend.ArchipelagoName));
+            var receivedHearts = archipelagoHeartItems * _archipelago.SlotData.FriendsanityHeartSize;
+
+            var maxShuffled = friend.ShuffledUpTo(_archipelago);
+            if (receivedHearts > maxShuffled)
+            {
+                receivedHearts = maxShuffled;
+            }
+
+            var friendshipPoints = receivedHearts * POINTS_PER_HEART;
+            friendshipPoints = GetBoundedToCurrentRelationState(friendshipPoints, friend.StardewName);
+            if (receivedHearts >= maxShuffled)
+            {
+                var earnedPoints = (int)GetFriendshipPoints(friend.StardewName);
+                var earnedPointsAboveMaxShuffled = Math.Max(0, earnedPoints - (maxShuffled * POINTS_PER_HEART));
+                friendshipPoints += earnedPointsAboveMaxShuffled;
+            }
+
+            return friendshipPoints;
         }
 
         // public SocialPage(int x, int y, int width, int height)
@@ -353,6 +371,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
                     Game1.debugOutput = "Tried to change friendship for a friend that wasn't there.";
                 }
 
+
+                var effectiveFriendshipPoints = GetEffectiveFriendshipPoints(friend);
+                SetBackendFriendshipPoints(__instance.friendshipData[friend.StardewName], effectiveFriendshipPoints);
                 Game1.stats.checkForFriendshipAchievements();
 
                 return false; // don't run original logic
