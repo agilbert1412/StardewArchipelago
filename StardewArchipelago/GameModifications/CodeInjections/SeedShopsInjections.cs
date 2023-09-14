@@ -305,6 +305,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         {
             var priceMultiplier = 2.0;
             var item = new StardewValley.Object(Vector2.Zero, itemId, 1);
+            var maxAmount = 20;
 
             if (basePrice == -1)
             {
@@ -316,15 +317,28 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 priceMultiplier *= Game1.MasterPlayer.difficultyModifier;
             }
 
+            var hasStocklist = Game1.MasterPlayer.hasOrWillReceiveMail("PierreStocklist");
             if (itemSeason != null && itemSeason != Game1.currentSeason)
             {
-                if (!Game1.MasterPlayer.hasOrWillReceiveMail("PierreStocklist"))
+                if (!hasStocklist)
                 {
                     return;
                 }
 
                 priceMultiplier *= 1.5f;
             }
+
+            if (hasStocklist)
+            {
+                maxAmount *= 2;
+            }
+
+            if (Game1.player.hasCompletedCommunityCenter())
+            {
+                maxAmount *= 2;
+                priceMultiplier *= 1.5f;
+            }
+
             var price = (int)(basePrice * priceMultiplier);
             if (itemSeason != null)
             {
@@ -346,7 +360,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             if (howManyInStock == -1)
             {
                 var random = new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame / 2 + itemId);
-                howManyInStock = random.Next(20);
+                howManyInStock = random.Next(maxAmount);
                 if (howManyInStock < 5)
                 {
                     return;
