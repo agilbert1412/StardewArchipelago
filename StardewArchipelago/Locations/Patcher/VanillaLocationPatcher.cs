@@ -67,6 +67,7 @@ namespace StardewArchipelago.Locations.Patcher
             _gingerIslandPatcher.PatchGingerIslandLocations();
             AddShipsanityLocations();
             PatchMonstersanity();
+            AddCooksanityLocations();
         }
 
         private void ReplaceCommunityCenterBundlesWithChecks()
@@ -809,6 +810,32 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(typeof(Stats), nameof(Stats.monsterKilled)),
                 postfix: new HarmonyMethod(typeof(MonsterSlayerInjections), nameof(MonsterSlayerInjections.MonsterKilled_SendMonstersanityCheck_Postfix))
             );
+        }
+
+        private void AddCooksanityLocations()
+        {
+            if (_archipelago.SlotData.Cooksanity == Cooksanity.None)
+            {
+                return;
+            }
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Farmer), nameof(Farmer.cookedRecipe)),
+                postfix: new HarmonyMethod(typeof(CookingInjections), nameof(CookingInjections.CookedRecipe_CheckCooksanityLocation_Postfix))
+            );
+        }
+
+        private void AddChefsanityLocations()
+        {
+            if (_archipelago.SlotData.Cooksanity == Cooksanity.None)
+            {
+                return;
+            }
+
+            /*_harmony.Patch(
+                original: AccessTools.Method(typeof(Farmer), nameof(Farmer.cookedRecipe)),
+                postfix: new HarmonyMethod(typeof(CookingInjections), nameof(CookingInjections.CookedRecipe_CheckCooksanityLocation_Postfix))
+            );*/
         }
 
     }

@@ -40,6 +40,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             InitializeFestivalPatches(monitor, modHelper, archipelago, locationChecker, shopReplacer);
             ShippingInjections.Initialize(monitor, archipelago, locationChecker);
             MonsterSlayerInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
+            CookingInjections.Initialize(monitor, archipelago, locationChecker, itemManager);
         }
 
         private static void InitializeFestivalPatches(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago,

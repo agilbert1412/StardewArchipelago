@@ -31,6 +31,8 @@ namespace StardewArchipelago.Archipelago
         private const string MUSEUMSANITY_KEY = "museumsanity";
         private const string MONSTERSANITY_KEY = "monstersanity";
         private const string SHIPSANITY_KEY = "shipsanity";
+        private const string COOKSANITY_KEY = "cooksanity";
+        private const string CHEFSANITY_KEY = "chefsanity";
         private const string FRIENDSANITY_KEY = "friendsanity";
         private const string FRIENDSANITY_HEART_SIZE_KEY = "friendsanity_heart_size";
         private const string EXCLUDE_GINGER_ISLAND_KEY = "exclude_ginger_island";
@@ -76,6 +78,8 @@ namespace StardewArchipelago.Archipelago
         public Museumsanity Museumsanity { get; private set; }
         public Monstersanity Monstersanity { get; private set; }
         public Shipsanity Shipsanity { get; private set; }
+        public Cooksanity Cooksanity { get; private set; }
+        public Chefsanity Chefsanity { get; private set; }
         public Friendsanity Friendsanity { get; private set; }
         public int FriendsanityHeartSize { get; private set; }
         public bool ExcludeGingerIsland { get; private set; }
@@ -123,6 +127,8 @@ namespace StardewArchipelago.Archipelago
             Museumsanity = GetSlotSetting(MUSEUMSANITY_KEY, Museumsanity.None);
             Monstersanity = GetSlotSetting(MONSTERSANITY_KEY, Monstersanity.None);
             Shipsanity = GetSlotSetting(SHIPSANITY_KEY, Shipsanity.None);
+            Cooksanity = GetSlotSetting(COOKSANITY_KEY, Cooksanity.None);
+            Chefsanity = GetSlotSetting(CHEFSANITY_KEY, Chefsanity.Vanilla);
             Friendsanity = GetSlotSetting(FRIENDSANITY_KEY, Friendsanity.None);
             FriendsanityHeartSize = GetSlotSetting(FRIENDSANITY_HEART_SIZE_KEY, 4);
             ExcludeGingerIsland = GetSlotSetting(EXCLUDE_GINGER_ISLAND_KEY, true);
@@ -361,6 +367,24 @@ namespace StardewArchipelago.Archipelago
         Everything = 9,
     }
 
+    public enum Cooksanity
+    {
+        None = 0,
+        QueenOfSauce = 1,
+        All = 2,
+    }
+
+    [Flags]
+    public enum Chefsanity
+    {
+        Vanilla = 0b0000,
+        QueenOfSauce = 0b0001,
+        Purchases = 0b0010,
+        Friendship = 0b0100,
+        Skills = 0b1000,
+        All = QueenOfSauce | Purchases | Friendship | Skills,
+    }
+
     public enum Friendsanity
     {
         None = 0,
@@ -393,6 +417,7 @@ namespace StardewArchipelago.Archipelago
         GreatestWalnutHunter = 7,
         ProtectorOfTheValley = 8,
         FullShipment = 9,
+        GourmetChef = 10,
         Perfection = 25,
     }
 
