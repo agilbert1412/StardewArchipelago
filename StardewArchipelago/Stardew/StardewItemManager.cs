@@ -337,9 +337,14 @@ namespace StardewArchipelago.Stardew
             var displayName = fields[4];
             var description = fields[5];
 
-            if (id == 126)
+            if (id == 126) // The green strange doll
             {
                 name += " (Green)";
+            }
+
+            if (id == 180 || id == 182) // The Brown eggs
+            {
+                name += " (Brown)";
             }
 
 
