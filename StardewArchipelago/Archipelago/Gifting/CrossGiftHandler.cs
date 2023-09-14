@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Archipelago.Gifting.Net;
+using Archipelago.Gifting.Net.Service;
+using Archipelago.Gifting.Net.Traits;
 using Microsoft.Xna.Framework;
 using Newtonsoft.Json;
 using StardewArchipelago.Items.Mail;
@@ -20,7 +17,7 @@ namespace StardewArchipelago.Archipelago.Gifting
         private static readonly string[] _desiredTraits = new[]
         {
             GiftFlag.Speed, GiftFlag.Wood, GiftFlag.Stone, GiftFlag.Consumable, GiftFlag.Food, GiftFlag.Drink,
-            GiftFlag.Fish, GiftFlag.Heal, GiftFlag.Metal, GiftFlag.Seed
+            GiftFlag.Fish, GiftFlag.Heal, GiftFlag.Metal, GiftFlag.Seed,
         };
 
         private static IMonitor _monitor;

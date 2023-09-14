@@ -286,9 +286,9 @@ namespace StardewArchipelago.Archipelago
             return _session.ConnectionInfo.Team;
         }
 
-        public string GetPlayerName(int playerId)
+        public string GetPlayerName(int playerSlot)
         {
-            return _session.Players.GetPlayerName(playerId) ?? "Archipelago";
+            return _session.Players.GetPlayerName(playerSlot) ?? "Archipelago";
         }
 
         public string GetPlayerAlias(string playerName)
@@ -320,6 +320,12 @@ namespace StardewArchipelago.Archipelago
                 player = _session.Players.AllPlayers.FirstOrDefault(x => x.Alias == playerName);
             }
 
+            return player?.Game;
+        }
+
+        public string GetPlayerGame(int playerSlot)
+        {
+            var player = _session.Players.AllPlayers.FirstOrDefault(x => x.Slot == playerSlot);
             return player?.Game;
         }
 

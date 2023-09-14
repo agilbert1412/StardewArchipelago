@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Archipelago.Gifting.Net;
+using Archipelago.Gifting.Net.Service;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
@@ -13,19 +10,17 @@ namespace StardewArchipelago.Archipelago.Gifting
 {
     public class GiftSender
     {
-        private  IMonitor _monitor;
-        private ArchipelagoClient _archipelago;
-        private StardewItemManager _itemManager;
-        private IGiftingService _giftService;
+        private readonly IMonitor _monitor;
+        private readonly ArchipelagoClient _archipelago;
+        private readonly IGiftingService _giftService;
         internal GiftGenerator GiftGenerator { get; }
 
         public GiftSender(IMonitor monitor, ArchipelagoClient archipelago, StardewItemManager itemManager, IGiftingService giftService)
         {
             _monitor = monitor;
             _archipelago = archipelago;
-            _itemManager = itemManager;
             _giftService = giftService;
-            GiftGenerator = new GiftGenerator(_itemManager);
+            GiftGenerator = new GiftGenerator(itemManager);
         }
 
         public void SendGift(string slotName, bool isTrap)
