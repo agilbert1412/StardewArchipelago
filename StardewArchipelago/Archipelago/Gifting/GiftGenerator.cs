@@ -154,14 +154,14 @@ namespace StardewArchipelago.Archipelago.Gifting
             }
 
             var type = typeAndCategory[0];
+            if (ReplaceFlags.ContainsKey(type))
+            {
+                type = ReplaceFlags[type];
+            }
+
             if (categoryNames.Contains(type) || string.IsNullOrWhiteSpace(type))
             {
                 yield break;
-            }
-
-            if (_typeFlags.ContainsKey(type))
-            {
-                type = _typeFlags[type];
             }
 
             if (!string.IsNullOrWhiteSpace(type))
@@ -228,11 +228,12 @@ namespace StardewArchipelago.Archipelago.Gifting
             { Category.TOOL, new[] { GiftFlag.Tool } },
         };
 
-        private static readonly Dictionary<string, string> _typeFlags = new()
+        private static readonly Dictionary<string, string> ReplaceFlags = new()
         {
             { "Arch", "Artifact" },
             { "Basic", "" },
             { "Minerals", "Mineral" },
+            { "Seeds", GiftFlag.Seed },
         };
     }
 }
