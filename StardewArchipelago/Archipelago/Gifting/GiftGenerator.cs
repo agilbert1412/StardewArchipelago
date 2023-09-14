@@ -30,14 +30,17 @@ namespace StardewArchipelago.Archipelago.Gifting
                 Game1.chatBox?.addMessage($"You must hold an item in your hand to gift it", Color.Gold);
                 return false;
             }
-            
-            if (!_itemManager.ObjectExists(giftObject.Name) || giftObject.questItem.Value)
+
+            var name = _itemManager.NormalizeName(giftObject.ParentSheetIndex, giftObject.Name);
+
+            if (!_itemManager.ObjectExists(name) || giftObject.questItem.Value)
             {
-                Game1.chatBox?.addMessage($"{giftObject.Name} cannot be gifted to other players", Color.Gold);
+                Game1.chatBox?.addMessage($"{name} cannot be gifted to other players", Color.Gold);
                 return false;
             }
 
-            giftItem = new GiftItem(giftObject.Name, giftObject.Stack, giftObject.salePrice() * BankHandler.EXCHANGE_RATE);
+
+            giftItem = new GiftItem(name, giftObject.Stack, giftObject.salePrice() * BankHandler.EXCHANGE_RATE);
             traits = GenerateGiftTraits(giftObject, isTrap);
             return true;
         }

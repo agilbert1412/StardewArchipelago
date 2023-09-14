@@ -28,6 +28,13 @@ namespace StardewArchipelago.Stardew
             390
         };
 
+        public Dictionary<int, string> ItemSuffixes = new Dictionary<int, string>()
+        {
+            {126, " (Green)"},
+            {180, " (Brown)"},
+            {182, " (Brown)"},
+        };
+
         public StardewItemManager()
         {
             InitializeData();
@@ -72,7 +79,12 @@ namespace StardewArchipelago.Stardew
 
         public bool ObjectExists(string itemName)
         {
-            return _objectsByName.ContainsKey(itemName);
+            if (_objectsByName.ContainsKey(itemName))
+            {
+                return true;
+            }
+
+            return false; // This is where I should do something about complex items like wines and such
         }
 
         public StardewItem GetItemByName(string itemName)
@@ -325,7 +337,7 @@ namespace StardewArchipelago.Stardew
             }
         }
 
-        private static StardewObject ParseStardewObjectData(int id, string objectInfo)
+        private StardewObject ParseStardewObjectData(int id, string objectInfo)
         {
             var fields = objectInfo.Split("/");
             var name = fields[0];
@@ -337,16 +349,7 @@ namespace StardewArchipelago.Stardew
             var displayName = fields[4];
             var description = fields[5];
 
-            if (id == 126) // The green strange doll
-            {
-                name += " (Green)";
-            }
-
-            if (id == 180 || id == 182) // The Brown eggs
-            {
-                name += " (Brown)";
-            }
-
+            name = NormalizeName(id, name);
 
             if (objectType == "Ring")
             {
@@ -354,6 +357,16 @@ namespace StardewArchipelago.Stardew
             }
 
             return new StardewObject(id, name, sellPrice, edibility, objectType, category, displayName, description);
+        }
+
+        public string NormalizeName(int id, string name)
+        {
+            if (ItemSuffixes.ContainsKey(id))
+            {
+                name += ItemSuffixes[id];
+            }
+
+            return name;
         }
 
         private static BigCraftable ParseStardewBigCraftableData(int id, string objectInfo)
