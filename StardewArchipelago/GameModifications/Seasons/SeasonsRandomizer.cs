@@ -78,6 +78,7 @@ namespace StardewArchipelago.GameModifications.Seasons
             {
                 SetSeason(_state.SeasonsOrder.Last());
                 Game1.dayOfMonth = 1;
+                Game1.addKentIfNecessary();
                 return false; // don't run original logic
             }
             catch (Exception ex)

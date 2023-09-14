@@ -51,6 +51,7 @@ namespace StardewArchipelago.GameModifications
             WorldChangeEventInjections.Initialize(monitor);
             CropInjections.Initialize(monitor, archipelago, stardewItemManager);
             VoidMayoInjections.Initialize(monitor);
+            KentInjections.Initialize(monitor, archipelago);
         }
 
         public void PatchAllGameLogic()
@@ -74,6 +75,7 @@ namespace StardewArchipelago.GameModifications
             PatchCleanupBeforeSave();
             PatchProfitMargin();
             PatchVoidMayo();
+            PatchKent();
             _startingResources.GivePlayerStartingResources();
         }
 
@@ -394,6 +396,14 @@ namespace StardewArchipelago.GameModifications
             _harmony.Patch(
                 original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.getFish)),
                 prefix: new HarmonyMethod(typeof(VoidMayoInjections), nameof(VoidMayoInjections.GetFish_FishVoidMayo_PreFix))
+            );
+        }
+
+        private void PatchKent()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Game1), nameof(Game1.addKentIfNecessary)),
+                prefix: new HarmonyMethod(typeof(KentInjections), nameof(KentInjections.AddKentIfNecessary_ConsiderSeasonsRandomizer_Prefix))
             );
         }
     }
