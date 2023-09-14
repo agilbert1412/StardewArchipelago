@@ -52,6 +52,7 @@ namespace StardewArchipelago.GameModifications
             CropInjections.Initialize(monitor, archipelago, stardewItemManager);
             VoidMayoInjections.Initialize(monitor);
             KentInjections.Initialize(monitor, archipelago);
+            GoldenEggInjections.Initialize(monitor, archipelago);
         }
 
         public void PatchAllGameLogic()
@@ -76,6 +77,7 @@ namespace StardewArchipelago.GameModifications
             PatchProfitMargin();
             PatchVoidMayo();
             PatchKent();
+            PatchGoldenEgg();
             _startingResources.GivePlayerStartingResources();
         }
 
@@ -404,6 +406,14 @@ namespace StardewArchipelago.GameModifications
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Game1), nameof(Game1.addKentIfNecessary)),
                 prefix: new HarmonyMethod(typeof(KentInjections), nameof(KentInjections.AddKentIfNecessary_ConsiderSeasonsRandomizer_Prefix))
+            );
+        }
+
+        private void PatchGoldenEgg()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Utility), nameof(Utility.getAnimalShopStock)),
+                prefix: new HarmonyMethod(typeof(GoldenEggInjections), nameof(GoldenEggInjections.GetAnimalShopStock_GoldenEggIfReceived_Postfix))
             );
         }
     }
