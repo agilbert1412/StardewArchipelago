@@ -280,6 +280,14 @@ namespace StardewArchipelago.Items.Mail
                 }
             }
 
+            foreach (var junimoChestItem in Game1.player.team.junimoChest)
+            {
+                if (TryUpgradeCorrectTool(toolName, junimoChestItem, out upgradedTool))
+                {
+                    return true;
+                }
+            }
+
             upgradedTool = null;
             return false;
         }
