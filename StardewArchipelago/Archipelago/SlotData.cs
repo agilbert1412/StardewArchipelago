@@ -162,7 +162,28 @@ namespace StardewArchipelago.Archipelago
 
         private bool GetSlotSetting(string key, bool defaultValue)
         {
-            return _slotDataFields.ContainsKey(key) && _slotDataFields[key] != null ? (bool)_slotDataFields[key] : GetSlotDefaultValue(key, defaultValue);
+            if (_slotDataFields.ContainsKey(key) && _slotDataFields[key] != null && _slotDataFields[key] is bool boolValue)
+            {
+                return boolValue;
+            }
+            if (_slotDataFields[key] is string strValue && bool.TryParse(strValue, out var parsedValue))
+            {
+                return parsedValue;
+            }
+            if (_slotDataFields[key] is int intValue)
+            {
+                return intValue != 0;
+            }
+            if (_slotDataFields[key] is long longValue)
+            {
+                return longValue != 0;
+            }
+            if (_slotDataFields[key] is short shortValue)
+            {
+                return shortValue != 0;
+            }
+
+            return GetSlotDefaultValue(key, defaultValue);
         }
 
         private T GetSlotDefaultValue<T>(string key, T defaultValue)
