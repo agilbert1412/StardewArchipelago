@@ -215,7 +215,10 @@ namespace StardewArchipelago.Archipelago
                 case "hobo":
                     return "Linus";
                 case "josh":
+                case "himbo":
                     return "Alex";
+                case "bimbo":
+                    return "Haley";
                 case "bestgirl":
                     return "Abigail";
                 case "gilf":
@@ -226,6 +229,8 @@ namespace StardewArchipelago.Archipelago
                     return "Maru";
                 case "emo":
                     return "Sebastian";
+                case "chicken":
+                    return "Harvey";
                 default:
                     return Utility.capitalizeFirstLetter(enteredName);
             }
