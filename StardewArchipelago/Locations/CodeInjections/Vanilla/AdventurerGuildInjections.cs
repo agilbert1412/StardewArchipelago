@@ -246,17 +246,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
         }
 
-        private static void AddItemsToShop(Dictionary<ISalable, int[]> adventureShopStock)
+        private static void AddItemsToShop(Dictionary<ISalable, int[]> adventureShopStock, KeyValuePair<ISalable, int[]>[] items)
         {
-            var galaxyWeapons = new[] { GalaxySword, GalaxyDagger, GalaxyHammer };
-            if (!galaxyWeapons.Any(weapon => _archipelago.HasReceivedItem(weapon.Key.Name)))
+            foreach (var (item, price) in items)
             {
-                return;
-            }
-
-            foreach (var (item, price) in galaxyWeapons)
-            {
-                adventureShopStock.Add(item, price);
+                AddItemToStockIfReceived(adventureShopStock, item, price);
             }
         }
 
@@ -270,11 +264,17 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             adventureShopStock.Add(item, price);
         }
 
-        private static void AddGalaxyWeaponsToShopIfReceivedAny(Dictionary<ISalable, int[]> adventureShopStock, KeyValuePair<ISalable, int[]>[] items)
+        private static void AddGalaxyWeaponsToShopIfReceivedAny(Dictionary<ISalable, int[]> adventureShopStock)
         {
-            foreach (var (item, price) in items)
+            var galaxyWeapons = new[] { GalaxySword, GalaxyDagger, GalaxyHammer };
+            if (!galaxyWeapons.Any(weapon => _archipelago.HasReceivedItem(weapon.Key.Name)))
             {
-                AddItemToStockIfReceived(adventureShopStock, item, price);
+                return;
+            }
+
+            foreach (var (item, price) in galaxyWeapons)
+            {
+                adventureShopStock.Add(item, price);
             }
         }
 
