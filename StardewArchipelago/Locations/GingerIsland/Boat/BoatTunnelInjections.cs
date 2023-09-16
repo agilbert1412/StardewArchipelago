@@ -270,12 +270,6 @@ namespace StardewArchipelago.Locations.GingerIsland.Boat
                     return;
                 }
 
-                var boatPosition = __instance.GetBoatPosition();
-                // private Texture2D boatTexture;
-                var boatTextureField = _modHelper.Reflection.GetField<Texture2D>(__instance, "boatTexture");
-                var boatTexture = boatTextureField.GetValue();
-                b.Draw(boatTexture, Game1.GlobalToLocal(boatPosition), new Microsoft.Xna.Framework.Rectangle(4, 259, 156, 122), Color.White, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, boatPosition.Y / 10000f);
-                b.Draw(boatTexture, Game1.GlobalToLocal(new Vector2(6f, 9f) * 64f + new Vector2(0.0f, (int)__instance._plankPosition) * 4f), new Microsoft.Xna.Framework.Rectangle(128, 176, 17, 33), Color.White, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, (float)((512.0 + __instance._plankPosition * 4.0) / 10000.0));
                 if (Game1.eventUp)
                 {
                     return;
