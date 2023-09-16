@@ -71,6 +71,7 @@ namespace StardewArchipelago.Items.Mail
             _letterActions.Add(LetterActionsKeys.IslandUnlock, PerformParrotUpgrade);
             _letterActions.Add(LetterActionsKeys.SpawnBaby, (_) => _babyBirther.SpawnNewBaby());
             _letterActions.Add(LetterActionsKeys.Trap, ExecuteTrap);
+            _letterActions.Add(LetterActionsKeys.LearnCookingRecipe, LearnCookingRecipe);
         }
 
         public void ExecuteLetterAction(string key, string parameter)
@@ -689,6 +690,11 @@ namespace StardewArchipelago.Items.Mail
 
             Game1.player.holdUpItemThenMessage(equipmentToGive);
             Game1.player.addItemByMenuIfNecessary(equipmentToGive);
+        }
+
+        private void LearnCookingRecipe(string recipeItemName)
+        {
+            Game1.player.cookingRecipes.Add(recipeItemName, 0);
         }
     }
 }

@@ -68,9 +68,8 @@ namespace StardewArchipelago.Items
 
             if (receivedItem.ItemName.EndsWith(RECIPE_SUFFIX))
             {
-                var itemOfRecipe =
-                    receivedItem.ItemName.Substring(0, receivedItem.ItemName.Length - RECIPE_SUFFIX.Length);
-                return new LetterCraftingRecipeAttachment(receivedItem, itemOfRecipe);
+                var itemOfRecipe = receivedItem.ItemName.Substring(0, receivedItem.ItemName.Length - RECIPE_SUFFIX.Length);
+                return _itemManager.GetRecipeByName(itemOfRecipe).GetAsLetter(receivedItem);
             }
 
             if (_itemManager.ItemExists(receivedItem.ItemName))

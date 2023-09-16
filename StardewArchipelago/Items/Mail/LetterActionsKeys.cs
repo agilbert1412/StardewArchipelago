@@ -36,5 +36,6 @@
         public const string IslandUnlock = "IslandUnlock";
         public const string SpawnBaby = "SpawnBaby";
         public const string Trap = "Trap";
+        public const string LearnCookingRecipe = "LearnCookingRecipe";
     }
 }
