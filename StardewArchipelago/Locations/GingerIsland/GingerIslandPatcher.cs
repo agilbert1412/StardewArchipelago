@@ -63,6 +63,11 @@ namespace StardewArchipelago.Locations.GingerIsland
                 original: AccessTools.Method(typeof(BoatTunnel), nameof(BoatTunnel.answerDialogue)),
                 prefix: new HarmonyMethod(typeof(BoatTunnelInjections), nameof(BoatTunnelInjections.AnswerDialogue_BoatRepairAndUsage_Prefix))
             );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(BoatTunnel), nameof(BoatTunnel.draw)),
+                postfix: new HarmonyMethod(typeof(BoatTunnelInjections), nameof(BoatTunnelInjections.Draw_DrawBoatSectionsBasedOnTasksCompleted_Postfix))
+            );
         }
 
         private void ReplaceParrotsWithChecks()
