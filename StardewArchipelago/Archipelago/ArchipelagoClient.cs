@@ -207,7 +207,7 @@ namespace StardewArchipelago.Archipelago
             var fullMessage = string.Join(" ", message.Parts.Select(str => str.Text));
             _console.Log(fullMessage, LogLevel.Info);
 
-            fullMessage = fullMessage.Replace("<3", "<");
+            fullMessage = fullMessage.TurnHeartsIntoStardewHearts();
 
             switch (message)
             {
