@@ -5,7 +5,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Netcode;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Stardew;
 using StardewArchipelago.Textures;
 using StardewModdingAPI;
 using StardewValley;

@@ -68,6 +68,7 @@ namespace StardewArchipelago.Locations.Patcher
             AddShipsanityLocations();
             PatchMonstersanity();
             AddCooksanityLocations();
+            AddChefsanityLocations();
         }
 
         private void ReplaceCommunityCenterBundlesWithChecks()
@@ -827,15 +828,38 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void AddChefsanityLocations()
         {
-            if (_archipelago.SlotData.Cooksanity == Cooksanity.None)
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(TV), "getWeeklyRecipe"),
+                prefix: new HarmonyMethod(typeof(QueenOfSauceInjections), nameof(QueenOfSauceInjections.GetWeeklyRecipe_UseArchipelagoSchedule_Prefix))
+            );
+
+            if (_archipelago.SlotData.Chefsanity.HasFlag(Chefsanity.Purchases))
             {
-                return;
+                _harmony.Patch(
+                    original: AccessTools.Method(typeof(Utility), nameof(Utility.getSaloonStock)),
+                    prefix: new HarmonyMethod(typeof(RecipePurchaseInjections), nameof(RecipePurchaseInjections.GetSaloonStock_ReplaceRecipesWithChefsanityChecks_Prefix))
+                );
+
+                _harmony.Patch(
+                    original: AccessTools.Method(typeof(IslandSouth), nameof(IslandSouth.checkAction)),
+                    prefix: new HarmonyMethod(typeof(RecipePurchaseInjections), nameof(RecipePurchaseInjections.CheckAction_ReplaceTropicalCurryWithChefsanityCheck_Prefix))
+                );
+
+                _harmony.Patch(
+                    original: AccessTools.Method(typeof(IslandNorth), nameof(IslandNorth.getIslandMerchantTradeStock)),
+                    prefix: new HarmonyMethod(typeof(RecipePurchaseInjections), nameof(RecipePurchaseInjections.GetIslandMerchantTradeStock_ReplaceBananaPuddingWithChefsanityCheck_Prefix))
+                );
+
+                _harmony.Patch(
+                    original: AccessTools.Method(typeof(VolcanoDungeon), nameof(VolcanoDungeon.checkAction)),
+                    prefix: new HarmonyMethod(typeof(RecipePurchaseInjections), nameof(RecipePurchaseInjections.CheckAction_ReplaceGingerAleWithChefsanityCheck_Prefix))
+                );
             }
 
-            /*_harmony.Patch(
-                original: AccessTools.Method(typeof(Farmer), nameof(Farmer.cookedRecipe)),
-                postfix: new HarmonyMethod(typeof(CookingInjections), nameof(CookingInjections.CookedRecipe_CheckCooksanityLocation_Postfix))
-            );*/
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(CraftingRecipe), nameof(CraftingRecipe.InitShared)),
+                postfix: new HarmonyMethod(typeof(RecipeDataInjections), nameof(RecipeDataInjections.InitShared_RemoveSkillAndFriendshipLearnConditions_Postfix))
+            );
         }
 
     }

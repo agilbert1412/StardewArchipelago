@@ -10,7 +10,6 @@ using StardewValley.Menus;
 using StardewValley.Objects;
 using StardewValley.Tools;
 using xTile.Dimensions;
-using xTile.Tiles;
 using Rectangle = xTile.Dimensions.Rectangle;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla

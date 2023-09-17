@@ -8,7 +8,6 @@ using StardewArchipelago.Constants;
 using StardewArchipelago.GameModifications.Buildings;
 using StardewModdingAPI;
 using StardewValley;
-using StardewValley.BellsAndWhistles;
 using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla

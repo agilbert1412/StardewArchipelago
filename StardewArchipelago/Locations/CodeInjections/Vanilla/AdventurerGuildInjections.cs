@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Items.Unlocks;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
 using StardewArchipelago.Stardew;

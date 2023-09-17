@@ -380,9 +380,9 @@ namespace StardewArchipelago.Archipelago
         Vanilla = 0b0000,
         QueenOfSauce = 0b0001,
         Purchases = 0b0010,
-        Friendship = 0b0100,
-        Skills = 0b1000,
-        All = QueenOfSauce | Purchases | Friendship | Skills,
+        Skills = 0b0100,
+        Friendship = 0b1000,
+        All = QueenOfSauce | Purchases | Skills | Friendship,
     }
 
     public enum Friendsanity

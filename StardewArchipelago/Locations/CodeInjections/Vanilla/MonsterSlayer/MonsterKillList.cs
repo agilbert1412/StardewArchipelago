@@ -5,7 +5,6 @@ using System.Text;
 using Force.DeepCloner;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
-using StardewModdingAPI;
 using StardewValley;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer

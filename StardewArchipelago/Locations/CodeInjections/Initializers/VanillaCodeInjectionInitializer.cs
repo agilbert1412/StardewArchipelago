@@ -7,13 +7,13 @@ using StardewArchipelago.Locations.CodeInjections.Vanilla.Quests;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
 using StardewArchipelago.Serialization;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
+using StardewArchipelago.Serialization;
 
 namespace StardewArchipelago.Locations.CodeInjections.Initializers
 {
     public static class VanillaCodeInjectionInitializer
     {
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, BundleReader bundleReader, LocationChecker locationChecker, StardewItemManager itemManager, ArchipelagoStateDto archipelagoState)
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, BundleReader bundleReader, LocationChecker locationChecker, StardewItemManager itemManager, WeaponsManager weaponsManager)
+        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, ArchipelagoStateDto state, BundleReader bundleReader, LocationChecker locationChecker, StardewItemManager itemManager, WeaponsManager weaponsManager)
         {
             var shopReplacer = new ShopReplacer(monitor, modHelper, archipelago, locationChecker);
             BackpackInjections.Initialize(monitor, archipelago, locationChecker);
@@ -41,6 +41,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             ShippingInjections.Initialize(monitor, archipelago, locationChecker);
             MonsterSlayerInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             CookingInjections.Initialize(monitor, archipelago, locationChecker, itemManager);
+            QueenOfSauceInjections.Initialize(monitor, modHelper, archipelago, state, locationChecker, itemManager);
+            RecipePurchaseInjections.Initialize(monitor, modHelper, archipelago, locationChecker, itemManager);
+            RecipeDataInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
         }
 
         private static void InitializeFestivalPatches(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago,

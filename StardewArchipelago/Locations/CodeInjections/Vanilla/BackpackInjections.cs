@@ -1,6 +1,5 @@
 ﻿using System;
 using StardewArchipelago.Archipelago;
-using HarmonyLib;
 using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Constants;
 using StardewModdingAPI;
