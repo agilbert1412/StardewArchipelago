@@ -860,7 +860,14 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(typeof(CraftingRecipe), nameof(CraftingRecipe.InitShared)),
                 postfix: new HarmonyMethod(typeof(RecipeDataInjections), nameof(RecipeDataInjections.InitShared_RemoveSkillAndFriendshipLearnConditions_Postfix))
             );
-        }
 
+            if (_archipelago.SlotData.Chefsanity.HasFlag(Chefsanity.Skills))
+            {
+                _harmony.Patch(
+                    original: AccessTools.Constructor(typeof(LevelUpMenu), new []{typeof(int), typeof(int)}),
+                    prefix: new HarmonyMethod(typeof(RecipeLevelUpInjections), nameof(RecipeLevelUpInjections.LevelUpMenuConstructor_SendSkillRecipeChecks_Postfix))
+                );
+            }
+        }
     }
 }

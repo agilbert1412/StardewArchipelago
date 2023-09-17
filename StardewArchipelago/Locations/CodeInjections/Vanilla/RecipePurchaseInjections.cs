@@ -18,7 +18,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
     public static class RecipePurchaseInjections
     {
-        private const string CHEFSANITY_LOCATION_PREFIX = "Learn Recipe ";
+        public const string CHEFSANITY_LOCATION_PREFIX = "Learn Recipe ";
 
         private static IMonitor _monitor;
         private static IModHelper _helper;

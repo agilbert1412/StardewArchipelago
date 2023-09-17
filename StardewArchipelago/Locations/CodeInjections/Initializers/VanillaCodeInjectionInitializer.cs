@@ -44,6 +44,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             QueenOfSauceInjections.Initialize(monitor, modHelper, archipelago, state, locationChecker, itemManager);
             RecipePurchaseInjections.Initialize(monitor, modHelper, archipelago, locationChecker, itemManager);
             RecipeDataInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
+            RecipeLevelUpInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
         }
 
         private static void InitializeFestivalPatches(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago,
