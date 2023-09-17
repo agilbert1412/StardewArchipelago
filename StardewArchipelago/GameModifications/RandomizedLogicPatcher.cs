@@ -46,6 +46,7 @@ namespace StardewArchipelago.GameModifications
             SeedShopsInjections.Initialize(monitor, helper, archipelago, locationChecker);
             LostAndFoundInjections.Initialize(monitor, archipelago);
             TVInjections.Initialize(monitor, archipelago);
+            LivinOffTheLandInjections.Initialize(monitor, archipelago);
             ProfitInjections.Initialize(monitor, archipelago);
             QuestLogInjections.Initialize(monitor, archipelago, locationChecker);
             WorldChangeEventInjections.Initialize(monitor);
@@ -369,6 +370,11 @@ namespace StardewArchipelago.GameModifications
             _harmony.Patch(
                 original: AccessTools.Method(typeof(TV), nameof(TV.checkForAction)),
                 prefix: new HarmonyMethod(typeof(TVInjections), nameof(TVInjections.CheckForAction_TVChannels_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(TV), "getTodaysTip"),
+                prefix: new HarmonyMethod(typeof(LivinOffTheLandInjections), nameof(LivinOffTheLandInjections.GetTodaysTip_CustomLivinOffTheLand_Prefix))
             );
         }
 

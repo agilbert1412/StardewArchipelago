@@ -374,8 +374,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             var chosenApItem = apItems[random.Next(0, apItems.Count)];
 
             var scamName = _merchantApItemNames[random.Next(0, _merchantApItemNames.Length)];
-            var apLocation =
-                new PurchaseableArchipelagoLocation(scamName, chosenApItem, _modHelper, _locationChecker, _archipelago);
+            var myActiveHints = _archipelago.GetMyActiveHints();
+            var apLocation = new PurchaseableArchipelagoLocation(scamName, chosenApItem, _modHelper, _locationChecker, _archipelago, myActiveHints);
             var price = ModifyPrice(_merchantPrices[random.Next(0, _merchantPrices.Length)], priceMultiplier);
 
             currentStock.Add(apLocation, new[] { price, 1 });

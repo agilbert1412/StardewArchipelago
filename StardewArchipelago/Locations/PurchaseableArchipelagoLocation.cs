@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Archipelago.MultiClient.Net.Models;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Textures;
 using StardewModdingAPI;
 using StardewValley;
+using Color = Microsoft.Xna.Framework.Color;
 
 namespace StardewArchipelago.Locations
 {
@@ -25,7 +27,7 @@ namespace StardewArchipelago.Locations
 
         public string ApLocationName { get; }
 
-        public PurchaseableArchipelagoLocation(string locationDisplayName, string apLocationName, IModHelper modHelper, LocationChecker locationChecker, ArchipelagoClient archipelago, Action purchaseCallback = null)
+        public PurchaseableArchipelagoLocation(string locationDisplayName, string apLocationName, IModHelper modHelper, LocationChecker locationChecker, ArchipelagoClient archipelago, Hint[] myActiveHints, Action purchaseCallback = null)
         {
             var prefix = locationDisplayName.Length < 18 ? ARCHIPELAGO_PREFIX : ARCHIPELAGO_SHORT_PREFIX;
             _locationDisplayName = $"{prefix}{locationDisplayName}";
@@ -36,8 +38,7 @@ namespace StardewArchipelago.Locations
             _extraMaterialsRequired = new List<Item>();
             _purchaseCallBack = purchaseCallback;
 
-            var hints = archipelago.GetHints().Where(x => !x.Found && archipelago.GetPlayerName(x.FindingPlayer) == archipelago.SlotData.SlotName);
-            var isHinted = hints.Any(hint => archipelago.GetLocationName(hint.LocationId).Equals(apLocationName, StringComparison.OrdinalIgnoreCase));
+            var isHinted = myActiveHints.Any(hint => archipelago.GetLocationName(hint.LocationId).Equals(apLocationName, StringComparison.OrdinalIgnoreCase));
             var desiredTextureName = isHinted ? ArchipelagoTextures.PLEADING : ArchipelagoTextures.COLOR;
             _archipelagoTexture = ArchipelagoTextures.GetColoredLogo(modHelper, 48, desiredTextureName);
         }

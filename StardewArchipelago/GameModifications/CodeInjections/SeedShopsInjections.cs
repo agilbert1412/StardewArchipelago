@@ -635,9 +635,10 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
                 if (_locationChecker.IsLocationMissingAndExists(FestivalLocationNames.STRAWBERRY_SEEDS))
                 {
+                    var myActiveHints = _archipelago.GetMyActiveHints();
                     var strawberrySeedsApItem =
                         new PurchaseableArchipelagoLocation(salableObject.Name, FestivalLocationNames.STRAWBERRY_SEEDS,
-                            _modHelper, _locationChecker, _archipelago);
+                            _modHelper, _locationChecker, _archipelago, myActiveHints);
                     __instance.itemPriceAndStock.Add(strawberrySeedsApItem, new[] { 1000, 1 });
                     __instance.forSale.Add(strawberrySeedsApItem);
                 }

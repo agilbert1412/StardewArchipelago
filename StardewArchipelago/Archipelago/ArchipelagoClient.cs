@@ -551,6 +551,11 @@ namespace StardewArchipelago.Archipelago
             return hintTask.Result;
         }
 
+        public Hint[] GetMyActiveHints()
+        {
+            return GetHints().Where(x => !x.Found && GetPlayerName(x.FindingPlayer) == SlotData.SlotName).ToArray();
+        }
+
         public void ReportGoalCompletion()
         {
             if (!MakeSureConnected())

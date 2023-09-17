@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Archipelago.MultiClient.Net.Models;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
 using StardewArchipelago.GameModifications.Buildings;
@@ -249,39 +250,40 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private static Dictionary<ISalable, int[]> GetCarpenterBuildingsAPLocations()
         {
             var carpenterAPStock = new Dictionary<ISalable, int[]>();
+            var myActiveHints = _archipelago.GetMyActiveHints();
 
-            carpenterAPStock.AddArchipelagoHouseLocationToStock(BUILDING_HOUSE_KITCHEN, 10000, new[] { Wood(450) });
-            carpenterAPStock.AddArchipelagoHouseLocationToStock(BUILDING_HOUSE_KIDS_ROOM, 50000, new[] { Hardwood(150) }, 1);
-            carpenterAPStock.AddArchipelagoHouseLocationToStock(BUILDING_HOUSE_CELLAR, 100000, new Item[0], 2);
+            carpenterAPStock.AddArchipelagoHouseLocationToStock(BUILDING_HOUSE_KITCHEN, 10000, new[] { Wood(450) }, myActiveHints);
+            carpenterAPStock.AddArchipelagoHouseLocationToStock(BUILDING_HOUSE_KIDS_ROOM, 50000, new[] { Hardwood(150) }, myActiveHints, 1);
+            carpenterAPStock.AddArchipelagoHouseLocationToStock(BUILDING_HOUSE_CELLAR, 100000, new Item[0], myActiveHints, 2);
 
-            carpenterAPStock.AddArchipelagoLocationToStock(BUILDING_COOP, 4000, new[] { Wood(300), Stone(100) });
-            carpenterAPStock.AddArchipelagoLocationToStock(BUILDING_BIG_COOP, 10000, new[] { Wood(400), Stone(150) }, BUILDING_COOP);
-            carpenterAPStock.AddArchipelagoLocationToStock(BUILDING_DELUXE_COOP, 20000, new[] { Wood(500), Stone(200) }, BUILDING_BIG_COOP);
+            carpenterAPStock.AddArchipelagoLocationToStock(BUILDING_COOP, 4000, new[] { Wood(300), Stone(100) }, myActiveHints);
+            carpenterAPStock.AddArchipelagoLocationToStock(BUILDING_BIG_COOP, 10000, new[] { Wood(400), Stone(150) }, myActiveHints, BUILDING_COOP);
+            carpenterAPStock.AddArchipelagoLocationToStock(BUILDING_DELUXE_COOP, 20000, new[] { Wood(500), Stone(200) }, myActiveHints, BUILDING_BIG_COOP);
 
-            carpenterAPStock.AddArchipelagoLocationToStock(BUILDING_BARN, 6000, new[] { Wood(350), Stone(150) });
-            carpenterAPStock.AddArchipelagoLocationToStock(BUILDING_BIG_BARN, 12000, new[] { Wood(400), Stone(200) }, BUILDING_BARN);
-            carpenterAPStock.AddArchipelagoLocationToStock(BUILDING_DELUXE_BARN, 25000, new[] { Wood(500), Stone(300) }, BUILDING_BIG_BARN);
+            carpenterAPStock.AddArchipelagoLocationToStock(BUILDING_BARN, 6000, new[] { Wood(350), Stone(150) }, myActiveHints);
+            carpenterAPStock.AddArchipelagoLocationToStock(BUILDING_BIG_BARN, 12000, new[] { Wood(400), Stone(200) }, myActiveHints, BUILDING_BARN);
+            carpenterAPStock.AddArchipelagoLocationToStock(BUILDING_DELUXE_BARN, 25000, new[] { Wood(500), Stone(300) }, myActiveHints, BUILDING_BIG_BARN);
 
-            carpenterAPStock.AddArchipelagoLocationToStock(BUILDING_FISH_POND, 5000, new[] { Stone(100), Seaweed(5), GreenAlgae(5) });
-            carpenterAPStock.AddArchipelagoLocationToStock(BUILDING_MILL, 2500, new[] { Stone(50), Wood(150), Cloth(4) });
+            carpenterAPStock.AddArchipelagoLocationToStock(BUILDING_FISH_POND, 5000, new[] { Stone(100), Seaweed(5), GreenAlgae(5) }, myActiveHints);
+            carpenterAPStock.AddArchipelagoLocationToStock(BUILDING_MILL, 2500, new[] { Stone(50), Wood(150), Cloth(4) }, myActiveHints);
 
-            carpenterAPStock.AddArchipelagoLocationToStock(BUILDING_SHED, 15000, new[] { Wood(300) });
-            carpenterAPStock.AddArchipelagoLocationToStock(BUILDING_BIG_SHED, 20000, new[] { Wood(550), Stone(300) }, BUILDING_SHED);
+            carpenterAPStock.AddArchipelagoLocationToStock(BUILDING_SHED, 15000, new[] { Wood(300) }, myActiveHints);
+            carpenterAPStock.AddArchipelagoLocationToStock(BUILDING_BIG_SHED, 20000, new[] { Wood(550), Stone(300) }, myActiveHints, BUILDING_SHED);
 
-            carpenterAPStock.AddArchipelagoLocationToStock(BUILDING_SILO, 100, new[] { Stone(100), Clay(10), CopperBar(5) });
-            carpenterAPStock.AddArchipelagoLocationToStock(BUILDING_SLIME_HUTCH, 10000, new[] { Stone(500), RefinedQuartz(10), IridiumBar(1) });
-            carpenterAPStock.AddArchipelagoLocationToStock(BUILDING_STABLE, 10000, new[] { Hardwood(100), IronBar(5) });
-            carpenterAPStock.AddArchipelagoLocationToStock(BUILDING_WELL, 1000, new[] { Stone(75) });
-            carpenterAPStock.AddArchipelagoLocationToStock(BUILDING_SHIPPING_BIN, 250, new[] { Wood(150) });
+            carpenterAPStock.AddArchipelagoLocationToStock(BUILDING_SILO, 100, new[] { Stone(100), Clay(10), CopperBar(5) }, myActiveHints);
+            carpenterAPStock.AddArchipelagoLocationToStock(BUILDING_SLIME_HUTCH, 10000, new[] { Stone(500), RefinedQuartz(10), IridiumBar(1) }, myActiveHints);
+            carpenterAPStock.AddArchipelagoLocationToStock(BUILDING_STABLE, 10000, new[] { Hardwood(100), IronBar(5) }, myActiveHints);
+            carpenterAPStock.AddArchipelagoLocationToStock(BUILDING_WELL, 1000, new[] { Stone(75) }, myActiveHints);
+            carpenterAPStock.AddArchipelagoLocationToStock(BUILDING_SHIPPING_BIN, 250, new[] { Wood(150) }, myActiveHints);
             if (_archipelago.SlotData.Mods.HasMod(ModNames.TRACTOR))
             {
-                carpenterAPStock.AddArchipelagoLocationToStock(BUILDING_TRACTOR_GARAGE, 150000, new[] { IronBar(20), IridiumBar(5), BatteryPack(5) });
+                carpenterAPStock.AddArchipelagoLocationToStock(BUILDING_TRACTOR_GARAGE, 150000, new[] { IronBar(20), IridiumBar(5), BatteryPack(5) }, myActiveHints);
             }
 
             return carpenterAPStock;
         }
 
-        private static void AddArchipelagoHouseLocationToStock(this Dictionary<ISalable, int[]> stock, string houseUpgradeName, int price, Item[] materials, int requiredHouseUpgrade = 0)
+        private static void AddArchipelagoHouseLocationToStock(this Dictionary<ISalable, int[]> stock, string houseUpgradeName, int price, Item[] materials, Hint[] myActiveHints, int requiredHouseUpgrade = 0)
         {
             var locationName = string.Format(BUILDING_BLUEPRINT_LOCATION_NAME, houseUpgradeName);
             if (_locationChecker.IsLocationChecked(locationName))
@@ -296,7 +298,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 return;
             }
 
-            var purchasableCheck = new PurchaseableArchipelagoLocation(houseUpgradeName, locationName, _modHelper, _locationChecker, _archipelago);
+            var purchasableCheck = new PurchaseableArchipelagoLocation(houseUpgradeName, locationName, _modHelper, _locationChecker, _archipelago, myActiveHints);
             foreach (var material in materials)
             {
                 purchasableCheck.AddMaterialRequirement(material);
@@ -305,7 +307,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             stock.Add(purchasableCheck, new[] { price, 1 });
         }
 
-        private static void AddArchipelagoLocationToStock(this Dictionary<ISalable, int[]> stock, string buildingName, int price, Item[] materials, string requiredBuilding = null)
+        private static void AddArchipelagoLocationToStock(this Dictionary<ISalable, int[]> stock, string buildingName, int price, Item[] materials, Hint[] myActiveHints, string requiredBuilding = null)
         {
             var locationName = string.Format(BUILDING_BLUEPRINT_LOCATION_NAME, buildingName);
             if (_locationChecker.IsLocationChecked(locationName))
@@ -322,7 +324,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 }
             }
 
-            var purchasableCheck = new PurchaseableArchipelagoLocation(buildingName, locationName, _modHelper, _locationChecker, _archipelago);
+            var purchasableCheck = new PurchaseableArchipelagoLocation(buildingName, locationName, _modHelper, _locationChecker, _archipelago, myActiveHints);
             foreach (var material in materials)
             {
                 purchasableCheck.AddMaterialRequirement(material);
