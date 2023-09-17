@@ -84,7 +84,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
         private static void AddLivingOffTheLandChannel(string dayOfWeek, List<Response> channelsList)
         {
-            if (!dayOfWeek.Equals("Mon") && !dayOfWeek.Equals("Thu"))
+            if (!dayOfWeek.Equals("Mon") && !dayOfWeek.Equals("Thu") && !dayOfWeek.Equals("Tue") && !dayOfWeek.Equals("Fri"))
             {
                 return;
             }
