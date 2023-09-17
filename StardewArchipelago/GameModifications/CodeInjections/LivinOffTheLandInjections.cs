@@ -43,7 +43,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 var tipIndex = random.Next(validTips.Length);
                 var tip = validTips[tipIndex];
 
-                if (_myActiveHints.Any())
+                if (_myActiveHints.Any() && tip.Contains("{0}"))
                 {
                     var hintIndex = random.Next(_myActiveHints.Length);
                     var hint = _myActiveHints[hintIndex];
