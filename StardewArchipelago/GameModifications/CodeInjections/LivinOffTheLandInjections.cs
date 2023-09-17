@@ -38,7 +38,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
                 _myActiveHints = _archipelago.GetMyActiveHints();
                 var validTips = ArchipelagoTips.Keys.Where(x => ArchipelagoTips[x]()).ToArray();
-                var seed = Game1.uniqueIDForThisGame + Game1.stats.DaysPlayed + (ulong)(Game1.ticks % 100);
+                var seed = Game1.uniqueIDForThisGame + Game1.stats.DaysPlayed;//  + (ulong)(Game1.ticks % 100);
                 var random = new Random((int)seed);
                 var tipIndex = random.Next(validTips.Length);
                 var tip = validTips[tipIndex];
