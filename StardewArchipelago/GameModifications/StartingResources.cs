@@ -69,7 +69,7 @@ namespace StardewArchipelago.GameModifications
                 return;
             }
 
-            var chest = _stardewItemManager.GetItemByName("Chest").PrepareForGivingToFarmer(1);
+            var chest = _stardewItemManager.GetItemByName("Chest").PrepareForGivingToFarmer(4);
             var iridiumBand = _stardewItemManager.GetItemByName("Iridium Band").PrepareForGivingToFarmer(4);
             var qualitySprinklers = _stardewItemManager.GetItemByName("Quality Sprinkler").PrepareForGivingToFarmer(4);
             var autoPetters = _stardewItemManager.GetItemByName("Auto-Petter").PrepareForGivingToFarmer(2);
