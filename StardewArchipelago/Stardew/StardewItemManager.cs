@@ -556,7 +556,7 @@ namespace StardewArchipelago.Stardew
             var yieldItemId = int.Parse(yieldField[0]);
             var yieldAmount = yieldField.Length > 1 ? int.Parse(yieldField[1]) : 1;
             var unlockConditions = fields[3];
-            var displayName = fields[4];
+            var displayName = fields.Length > 4 ? fields[4] : recipeName;
 
             var cookingRecipe = new StardewCookingRecipe(recipeName, ingredients, yieldItemId, yieldAmount, unlockConditions, displayName);
             return cookingRecipe;
@@ -575,9 +575,9 @@ namespace StardewArchipelago.Stardew
             var yieldField = fields[2].Split(" ");
             var yieldItemId = int.Parse(yieldField[0]);
             var yieldAmount = yieldField.Length > 1 ? int.Parse(yieldField[1]) : 1;
-            var bigCraftable = bool.Parse(fields[3]);
+            var bigCraftable = fields[3];
             var unlockConditions = fields[4];
-            var displayName = fields[5];
+            var displayName = fields.Length > 5 ? fields[5] : recipeName;
 
             var craftingRecipe = new StardewCraftingRecipe(recipeName, ingredients, yieldItemId, yieldAmount, bigCraftable, unlockConditions, displayName);
             return craftingRecipe;

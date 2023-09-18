@@ -55,7 +55,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     Utility.AddStock(saloonStock, Game1.dishOfTheDay.getOne() as Object, Game1.dishOfTheDay.Price, Game1.dishOfTheDay.Stack);
                 }
 
-                Game1.player.team.synchronizedShopStock.UpdateLocalStockWithSyncedQuanitities(SynchronizedShopStock.SynchedShop.Saloon, saloonStock);
+                // Game1.player.team.synchronizedShopStock.UpdateLocalStockWithSyncedQuanitities(SynchronizedShopStock.SynchedShop.Saloon, saloonStock);
                 if (Game1.player.activeDialogueEvents.ContainsKey("willyCrabs"))
                 {
                     Utility.AddStock(saloonStock, new Object(Vector2.Zero, 732, int.MaxValue));

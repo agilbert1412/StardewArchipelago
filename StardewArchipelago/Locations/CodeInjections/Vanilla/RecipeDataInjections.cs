@@ -33,7 +33,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             try
             {
                 RemoveCookingRecipeLearnConditions();
-                RemoveCraftingRecipeLearnConditions();
+                // RemoveCraftingRecipeLearnConditions();
                 return;
             }
             catch (Exception ex)

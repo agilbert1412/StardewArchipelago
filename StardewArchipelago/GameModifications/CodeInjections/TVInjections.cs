@@ -110,7 +110,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
         private static void AddQueenOfSauceChannel(string str, List<Response> channelsList)
         {
-            if (!str.Equals("Sun"))
+            if (!str.Equals("Sun") && !str.Equals("Sat"))
             {
                 return;
             }

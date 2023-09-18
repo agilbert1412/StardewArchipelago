@@ -29,6 +29,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private static LocationChecker _locationChecker;
         private static StardewItemManager _itemManager;
 
+        private static Dictionary<long, int> _recipeChoiceCache;
+
         public static void Initialize(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, StardewItemManager itemManager)
         {
             _monitor = monitor;
@@ -37,6 +39,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             _state = state;
             _locationChecker = locationChecker;
             _itemManager = itemManager;
+            _recipeChoiceCache = new Dictionary<long, int>();
         }
 
         // protected virtual string[] getWeeklyRecipe()
@@ -44,30 +47,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             try
             {
-                var season = Game1.currentSeason;
-                var year = (int)((Game1.stats.DaysPlayed / 112) % 2); // 0 is year1, 1 is year2
-                var week = (int)(Game1.stats.DaysPlayed % 28 / 7); // 0-3
-                var dayShortName = Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth);
-                var isRerunDay = dayShortName.Equals(RERUN_DAY);
-                
                 var cookingRecipes = Game1.temporaryContent.Load<Dictionary<string, string>>("Data\\TV\\CookingChannel");
-                int recipeWeek;
-                if (isRerunDay)
-                {
-                    recipeWeek = PickRerunRecipe(cookingRecipes, week);
-                }
-                else
-                {
-                    if (dayShortName.Equals(INVERSE_DAY))
-                    {
-                        year = 1 - year; // On Saturday, we play the opposite year's recipe
-                    }
+                var recipeWeek = PickRecipeWeekToTeach(cookingRecipes);
 
-                    var currentSeasonOffset = Array.IndexOf(SeasonsRandomizer.ValidSeasons, season.ToCapitalized());
-                    recipeWeek = year * 16 + 1; // There are 32 recipes. Year 1 is 1-16, Year 2 is 17-32
-                    recipeWeek += (currentSeasonOffset * 4); // 4 per month
-                    recipeWeek += week; // 1 per week
-                }
 
                 var recipeInfo = cookingRecipes[recipeWeek.ToString()].Split('/');
                 var recipeName = recipeInfo[0];
@@ -91,6 +73,39 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 _monitor.Log($"Failed in {nameof(GetWeeklyRecipe_UseArchipelagoSchedule_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
             }
+        }
+
+        private static int PickRecipeWeekToTeach(Dictionary<string, string> cookingRecipes)
+        {
+            if (_recipeChoiceCache.ContainsKey(Game1.stats.DaysPlayed))
+            {
+                return _recipeChoiceCache[Game1.stats.DaysPlayed];
+            }
+
+            var season = Game1.currentSeason;
+            var year = (int)((Game1.stats.DaysPlayed / 112) % 2); // 0 is year1, 1 is year2
+            var week = (int)((Game1.stats.DaysPlayed - 1) % 28 / 7); // 0-3
+            var dayShortName = Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth);
+            var isRerunDay = dayShortName.Equals(RERUN_DAY);
+            if (isRerunDay)
+            {
+                var rerunWeek = PickRerunRecipe(cookingRecipes, week);
+                _recipeChoiceCache.Add(Game1.stats.DaysPlayed, rerunWeek);
+                return rerunWeek;
+            }
+
+            if (dayShortName.Equals(INVERSE_DAY))
+            {
+                year = 1 - year; // On Saturday, we play the opposite year's recipe
+            }
+
+            var currentSeasonOffset = Array.IndexOf(SeasonsRandomizer.ValidSeasons, season.ToCapitalized());
+            var recipeWeek = year * 16 + 1; // There are 32 recipes. Year 1 is 1-16, Year 2 is 17-32
+            recipeWeek += (currentSeasonOffset * 4); // 4 per month
+            recipeWeek += week; // 1 per week
+
+            _recipeChoiceCache.Add(Game1.stats.DaysPlayed, recipeWeek);
+            return recipeWeek;
         }
 
         private static string[] GetQueenOfSauceTvText(string recipeName, string recipeDetails, string[] recipeInfo)

@@ -39,7 +39,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private static void SendSkillRecipeChecks(Skill skill, int level)
         {
             SendSkillCookingRecipeChecks(skill, level);
-            SendSkillCraftingRecipeChecks(skill, level);
+            // SendSkillCraftingRecipeChecks(skill, level);
         }
 
         private static void SendSkillCookingRecipeChecks(Skill skill, int level)
