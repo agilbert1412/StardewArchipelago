@@ -456,14 +456,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 }
             }
 
-            AddToStock(stock, buildingName, price, materials, locationName);
+            AddToStock(stock, buildingName, price, materials, locationName, myActiveHints);
         }
 
-        private static void AddToStock(Dictionary<ISalable, int[]> stock, string locationDisplayName, int price, Item[] materials, string locationName)
+        private static void AddToStock(Dictionary<ISalable, int[]> stock, string locationDisplayName, int price, Item[] materials, string locationName, Hint[] myActiveHints)
         {
             var priceMultiplier = _archipelago.SlotData.BuildingPriceMultiplier;
             var purchasableCheck =
-                new PurchaseableArchipelagoLocation(locationDisplayName, locationName, _modHelper, _locationChecker, _archipelago);
+                new PurchaseableArchipelagoLocation(locationDisplayName, locationName, _modHelper, _locationChecker, _archipelago, myActiveHints);
             var purchasableCheck = new PurchaseableArchipelagoLocation(buildingName, locationName, _modHelper, _locationChecker, _archipelago, myActiveHints);
             foreach (var material in materials)
             {

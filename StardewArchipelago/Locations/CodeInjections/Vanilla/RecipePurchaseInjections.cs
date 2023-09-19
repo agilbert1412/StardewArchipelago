@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Archipelago.MultiClient.Net.Models;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Serialization;
@@ -48,7 +49,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 Utility.AddStock(saloonStock, new Object(Vector2.Zero, 206, int.MaxValue));
                 Utility.AddStock(saloonStock, new Object(Vector2.Zero, 395, int.MaxValue));
 
-                AddArchipelagoRecipesToSaloonStock(saloonStock);
+                var myActiveHints = _archipelago.GetMyActiveHints();
+                AddArchipelagoRecipesToSaloonStock(saloonStock, myActiveHints);
 
                 if (Game1.dishOfTheDay.Stack > 0 && !Utility.getForbiddenDishesOfTheDay().Contains<int>(Game1.dishOfTheDay.ParentSheetIndex))
                 {
@@ -96,7 +98,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 mangoWine.preservedParentSheetIndex.Value = mango.ParentSheetIndex;
                 mangoWine.Quality = 2;
                 Utility.AddStock(islandResortStock, mangoWine, 2500);
-                AddArchipelagoRecipeItem(islandResortStock, "Tropical Curry", 2000);
+                var myActiveHints = _archipelago.GetMyActiveHints();
+                AddArchipelagoRecipeItem(islandResortStock, "Tropical Curry", 2000, myActiveHints);
 
                 Game1.activeClickableMenu = new ShopMenu(islandResortStock, who: "Gus", context: "ResortBar");
                 
@@ -193,9 +196,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 var luauSkirt = new Clothing(7);
                 islandMerchantStock.Add(luauSkirt, new[] { 0, int.MaxValue, 830, 50, });
 
-
-
-                AddBananaPuddingToStock(islandMerchantStock);
+                var myActiveHints = _archipelago.GetMyActiveHints();
+                AddBananaPuddingToStock(islandMerchantStock, myActiveHints);
 
                 if (!Game1.player.cookingRecipes.ContainsKey("Deluxe Retaining Soil"))
                 {
@@ -250,7 +252,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     Utility.AddStock(dwarfStock, new Object(886, 1, true), 5000);
                 }
 
-                AddGingerAleToStock(dwarfStock);
+                var myActiveHints = _archipelago.GetMyActiveHints();
+                AddGingerAleToStock(dwarfStock, myActiveHints);
 
                 Game1.activeClickableMenu = new ShopMenu(dwarfStock, who: "VolcanoShop", context: "VolcanoShop");
 
@@ -264,12 +267,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
         }
 
-        private static void AddBananaPuddingToStock(Dictionary<ISalable, int[]> stock)
+        private static void AddBananaPuddingToStock(Dictionary<ISalable, int[]> stock, Hint[] myActiveHints)
         {
             const string bananaPudding = "Banana Pudding";
             if (_archipelago.SlotData.Chefsanity.HasFlag(Chefsanity.Purchases))
             {
-                AddArchipelagoRecipeItem(stock, bananaPudding, 0, 881, 30);
+                AddArchipelagoRecipeItem(stock, bananaPudding, 0, myActiveHints, 881, 30);
                 return;
             }
 
@@ -280,12 +283,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
         }
 
-        private static void AddGingerAleToStock(Dictionary<ISalable, int[]> stock)
+        private static void AddGingerAleToStock(Dictionary<ISalable, int[]> stock, Hint[] myActiveHints)
         {
             const string gingerAle = "Ginger Ale";
             if (_archipelago.SlotData.Chefsanity.HasFlag(Chefsanity.Purchases))
             {
-                AddArchipelagoRecipeItem(stock, gingerAle, 1000);
+                AddArchipelagoRecipeItem(stock, gingerAle, 1000, myActiveHints);
                 return;
             }
 
@@ -295,25 +298,25 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
         }
 
-        private static void AddArchipelagoRecipesToSaloonStock(Dictionary<ISalable, int[]> saloonStock)
+        private static void AddArchipelagoRecipesToSaloonStock(Dictionary<ISalable, int[]> saloonStock, Hint[] myActiveHints)
         {
-            AddArchipelagoRecipeItem(saloonStock, "Hashbrowns", 50);
-            AddArchipelagoRecipeItem(saloonStock, "Omelet", 100);
-            AddArchipelagoRecipeItem(saloonStock, "Pancakes", 100);
-            AddArchipelagoRecipeItem(saloonStock, "Bread", 100);
-            AddArchipelagoRecipeItem(saloonStock, "Tortilla", 100);
-            AddArchipelagoRecipeItem(saloonStock, "Pizza", 150);
-            AddArchipelagoRecipeItem(saloonStock, "Maki Roll", 300);
+            AddArchipelagoRecipeItem(saloonStock, "Hashbrowns", 50, myActiveHints);
+            AddArchipelagoRecipeItem(saloonStock, "Omelet", 100, myActiveHints);
+            AddArchipelagoRecipeItem(saloonStock, "Pancakes", 100, myActiveHints);
+            AddArchipelagoRecipeItem(saloonStock, "Bread", 100, myActiveHints);
+            AddArchipelagoRecipeItem(saloonStock, "Tortilla", 100, myActiveHints);
+            AddArchipelagoRecipeItem(saloonStock, "Pizza", 150, myActiveHints);
+            AddArchipelagoRecipeItem(saloonStock, "Maki Roll", 300, myActiveHints);
 
             if (_archipelago.SlotData.Chefsanity.HasFlag(Chefsanity.Friendship))
             {
-                AddArchipelagoRecipeItem(saloonStock, "Cookies", 300);
+                AddArchipelagoRecipeItem(saloonStock, "Cookies", 300, myActiveHints);
             }
 
-            AddArchipelagoRecipeItem(saloonStock, "Triple Shot Espresso", 5000);
+            AddArchipelagoRecipeItem(saloonStock, "Triple Shot Espresso", 5000, myActiveHints);
         }
 
-        private static void AddArchipelagoRecipeItem(Dictionary<ISalable, int[]> stock, string name, int moneyPrice, int itemPriceId = -1, int itemPriceAmount = 0)
+        private static void AddArchipelagoRecipeItem(Dictionary<ISalable, int[]> stock, string name, int moneyPrice, Hint[] myActiveHints, int itemPriceId = -1, int itemPriceAmount = 0)
         {
             var location = $"{CHEFSANITY_LOCATION_PREFIX}{name}";
             if (!_locationChecker.IsLocationMissingAndExists(location))
@@ -322,7 +325,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
 
             var recipeName = $"{name} Recipe";
-            var recipeApItem = new PurchaseableArchipelagoLocation(recipeName, location, _helper, _locationChecker, _archipelago);
+            var recipeApItem = new PurchaseableArchipelagoLocation(recipeName, location, _helper, _locationChecker, _archipelago, myActiveHints);
             var prices = (itemPriceId > -1 && itemPriceAmount > 0) ? new[] { moneyPrice, 1, itemPriceId, itemPriceAmount, } : new[] { moneyPrice, 1 };
             stock.Add(recipeApItem, prices);
         }
