@@ -34,15 +34,15 @@ namespace StardewArchipelago.Archipelago.Gifting
         {
             return ItemName.GetHashCode() ^ SenderSlot ^ SenderName.GetHashCode();
         }
-
+        
         public static bool operator ==(ReceivedGift obj1, ReceivedGift obj2)
         {
-            if (obj1 == null && obj2 == null)
+            if (obj1 is null && obj2 is null)
             {
                 return true;
             }
 
-            if (obj1 == null || obj2 == null)
+            if (obj1 is null || obj2 is null)
             {
                 return false;
             }
