@@ -231,6 +231,10 @@ namespace StardewArchipelago.Stardew
 
                 _objectsById.Add(id, stardewItem);
                 _objectsByName.Add(stardewItem.Name, stardewItem);
+                if (stardewItem.Name == "Cookie")
+                {
+                    _objectsByName.Add("Cookies", stardewItem);
+                }
             }
         }
 

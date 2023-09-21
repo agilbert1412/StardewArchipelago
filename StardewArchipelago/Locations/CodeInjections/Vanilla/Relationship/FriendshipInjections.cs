@@ -12,16 +12,19 @@ using StardewValley;
 using StardewValley.Characters;
 using StardewValley.Locations;
 using StardewValley.Menus;
+using StardewValley.Objects;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
 {
     public static class FriendshipInjections
     {
         private const int AUTO_PETTER = 272;
+        private const int AUTO_GRABBER = 165;
         private const int DECAY_SPOUSE = -20;
         private const int DECAY_PARTNER = -8;
         private const int DECAY_OTHER = -2;
         private const int AUTOPET_POINTS = 5;
+        private const int DECAY_GRAB = -20;
         private const int POINTS_PER_HEART = 250;
         private const int POINTS_PER_PET_HEART = 200;
         private const string HEARTS_PATTERN = "{0} <3";
@@ -36,18 +39,20 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
         private static IModHelper _helper;
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
+        private static VillagerGrabber _grabber;
         private static Friends _friends;
         private static Dictionary<string, double> _friendshipPoints = new();
         private static Dictionary<string, Dictionary<int, Texture2D>> _apLogos;
 
         private static string[] _hintedFriendshipLocations;
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager itemManager)
         {
             _monitor = monitor;
             _helper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
+            _grabber = new VillagerGrabber(itemManager);
             _friends = new Friends();
             _apLogos = new Dictionary<string, Dictionary<int, Texture2D>>();
 
@@ -423,6 +428,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
             }
 
             AutoPetNpc(farmer, npcName, npc);
+            AutoGrabNpc(farmer, npcName, npc);
 
             if (farmer.hasPlayerTalkedToNPC(npcName))
             {
@@ -433,7 +439,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
             const int bachelorNoDecayThreshold = 2000;
             const int nonBachelorNoDecayThreshold = 2500;
             var earnedPoints = GetFriendshipPoints(npcName);
-
+            
             if (NpcIsSpouse(farmer, npcName))
             {
                 farmer.changeFriendship(DECAY_SPOUSE, npc);
@@ -461,6 +467,41 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
 
                 farmer.friendshipData[npcName].TalkedToToday = true;
                 farmer.changeFriendship(AUTOPET_POINTS, npc);
+            }
+        }
+
+        private static void AutoGrabNpc(Farmer farmer, string npcName, NPC npc)
+        {
+            if (!_grabber.GrabberItems.ContainsKey(npcName) || !_grabber.GrabberItems[npcName].Any())
+            {
+                return;
+            }
+
+            var npcLocation = npc.currentLocation;
+            var seed = Game1.uniqueIDForThisGame + Game1.stats.DaysPlayed;
+            var random = new Random((int)seed);
+            foreach (var (_, objectInSameRoom) in npcLocation.Objects.Pairs)
+            {
+                if (objectInSameRoom == null || !objectInSameRoom.bigCraftable.Value || 
+                    objectInSameRoom.ParentSheetIndex != AUTO_GRABBER || objectInSameRoom.heldObject.Value is not Chest chest)
+                {
+                    continue;
+                }
+
+                var hearts = farmer.friendshipData[npcName].Points / 250;
+                var chanceOfProduction = (double)hearts / 28.0;
+                if (random.NextDouble() > chanceOfProduction)
+                {
+                    continue;
+                }
+
+                var possibleItems = _grabber.GrabberItems[npcName];
+                var index = random.Next(0, possibleItems.Count);
+                var item = possibleItems.Keys.ElementAt(index);
+                var amount = possibleItems[item];
+                var stardewItem = item.PrepareForGivingToFarmer(amount);
+                chest.addItem(stardewItem);
+                farmer.changeFriendship(DECAY_GRAB, npc);
             }
         }
 
