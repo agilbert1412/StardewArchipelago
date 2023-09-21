@@ -13,6 +13,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private const int GREEN_ALGAE = 153;
         private const int WHITE_ALGAE = 157;
         private const int SEAWEED = 152;
+        private const int ORNATE_NECKLACE = 191;
         private const int GOLDEN_WALNUT = 73;
         private const int SECRET_NOTE = 79;
         private const int FOSSILIZED_SPINE = 821;
@@ -22,8 +23,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
         private static readonly int[] _fishsanityExceptions = new[]
         {
-            GREEN_ALGAE, WHITE_ALGAE, SEAWEED, GOLDEN_WALNUT, SECRET_NOTE, FOSSILIZED_SPINE, SNAKE_SKULL, JOURNAL_SCRAP,
-            QI_BEAN
+            GREEN_ALGAE, WHITE_ALGAE, SEAWEED, ORNATE_NECKLACE, GOLDEN_WALNUT, SECRET_NOTE, FOSSILIZED_SPINE, SNAKE_SKULL, JOURNAL_SCRAP,
+            QI_BEAN,
         };
         private const string FISHSANITY_PREFIX = "Fishsanity: ";
 
@@ -42,8 +43,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             _itemManager = itemManager;
         }
 
-        public static void CaughtFish_Fishsanity_Postfix(Farmer __instance, int index, int size,
-            bool from_fish_pond, int numberCaught, ref bool __result)
+        public static void CaughtFish_Fishsanity_Postfix(Farmer __instance, int index, int size, bool from_fish_pond, int numberCaught, ref bool __result)
         {
             try
             {
