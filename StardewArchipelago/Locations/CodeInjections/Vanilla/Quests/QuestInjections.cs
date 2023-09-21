@@ -5,6 +5,7 @@ using Archipelago.MultiClient.Net.Models;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Items.Unlocks;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
@@ -264,9 +265,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
             for (var groupNumber = 1; groupNumber <= numberOfSteps; groupNumber++)
             {
                 AddWeightedItemDeliveries(groupNumber, hints, remainingHelpWantedQuests);
-                AddWeightedHelpWanted(groupNumber, FISHING, hints, remainingHelpWantedQuests);
+                AddWeightedFishing(groupNumber, hints, remainingHelpWantedQuests);
                 AddWeightedHelpWanted(groupNumber, GATHERING, hints, remainingHelpWantedQuests);
-                AddWeightedHelpWanted(groupNumber, SLAY_MONSTERS, hints, remainingHelpWantedQuests);
+                AddWeightedSlaying(groupNumber, hints, remainingHelpWantedQuests);
             }
 
             return remainingHelpWantedQuests;
@@ -278,6 +279,26 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
             {
                 AddWeightedHelpWanted(groupNumber + delivery, ITEM_DELIVERY, hints, remainingHelpWantedQuests);
             }
+        }
+
+        private static void AddWeightedFishing(int groupNumber, Hint[] hints, List<string> remainingHelpWantedQuests)
+        {
+            if (!_archipelago.HasReceivedItem(VanillaUnlockManager.PROGRESSIVE_FISHING_ROD_AP_NAME))
+            {
+                return;
+            }
+
+            AddWeightedHelpWanted(groupNumber, FISHING, hints, remainingHelpWantedQuests);
+        }
+
+        private static void AddWeightedSlaying(int groupNumber, Hint[] hints, List<string> remainingHelpWantedQuests)
+        {
+            if (Game1.stats.monstersKilled < 10)
+            {
+                return;
+            }
+
+            AddWeightedHelpWanted(groupNumber, SLAY_MONSTERS, hints, remainingHelpWantedQuests);
         }
 
         private static void AddWeightedHelpWanted(int questNumber, string questType, Hint[] hints, List<string> remainingHelpWantedQuests)
