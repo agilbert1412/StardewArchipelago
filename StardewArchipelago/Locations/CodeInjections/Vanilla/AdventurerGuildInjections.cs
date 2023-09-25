@@ -109,6 +109,18 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
         }
 
+        public static void RemoveExtraItemsFromItemsLostLastDeath()
+        {
+            foreach (var lostItem in Game1.player.itemsLostLastDeath.ToArray())
+            {
+                if (lostItem is not MeleeWeaponToRecover)
+                {
+                    continue;
+                }
+
+                Game1.player.itemsLostLastDeath.Remove(lostItem);
+            }
+        }
 
         public static bool GetAdventureShopStock_ShopBasedOnReceivedItems_Prefix(
             ref Dictionary<ISalable, int[]> __result)
