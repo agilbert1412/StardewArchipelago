@@ -63,6 +63,8 @@ namespace StardewArchipelago.GameModifications
             RemoveGiftBoxes(farmhouse);
             var seeds = _stardewItemManager.GetItemByName(GetStartingSeedsForThisSeason()).PrepareForGivingToFarmer(15);
             CreateGiftBoxItemInEmptySpot(farmhouse, seeds);
+            var telephone = _stardewItemManager.GetItemByName("Telephone").PrepareForGivingToFarmer(1);
+            CreateGiftBoxItemInEmptySpot(farmhouse, telephone);
 
             if (!_archipelago.SlotData.QuickStart)
             {
@@ -70,7 +72,7 @@ namespace StardewArchipelago.GameModifications
             }
 
             var chest = _stardewItemManager.GetItemByName("Chest").PrepareForGivingToFarmer(4);
-            var iridiumBand = _stardewItemManager.GetItemByName("Iridium Band").PrepareForGivingToFarmer(4);
+            var iridiumBand = _stardewItemManager.GetItemByName("Iridium Band").PrepareForGivingToFarmer(1);
             var qualitySprinklers = _stardewItemManager.GetItemByName("Quality Sprinkler").PrepareForGivingToFarmer(4);
             var autoPetters = _stardewItemManager.GetItemByName("Auto-Petter").PrepareForGivingToFarmer(2);
             var autoGrabbers = _stardewItemManager.GetItemByName("Auto-Grabber").PrepareForGivingToFarmer(2);
