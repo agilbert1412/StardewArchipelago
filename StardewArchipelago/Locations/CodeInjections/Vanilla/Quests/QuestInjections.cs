@@ -61,9 +61,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
                 }
 
                 // Item Delivery: __instance.dailyQuest == true and questType == 3 [Chance: 40 / 65]
-                // Copper Ores: Daily True, Type 10 [Chance: 8 / 65]
-                // Slay Monsters: Daily True, Type 4 [Chance: 10 / 65]
-                // Catch fish: Daily Trye, Type 7 [Chance: 7 / 65]
+                // Copper Ores: Daily True, Type 1
+                // Slay Monsters: Daily True, Type 4
+                // Catch fish: Daily True, Type 7
                 if (__instance.dailyQuest.Value)
                 {
                     var isArchipelago = true;
@@ -163,6 +163,18 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
 
         public static bool CheckDailyQuestLocation(string locationName, int max)
         {
+            if (GetNextDailyQuestLocation(locationName, max, out var nextQuestLocationName))
+            {
+                _locationChecker.AddCheckedLocation(nextQuestLocationName);
+                return true;
+            }
+
+            return false;
+        }
+
+        private static bool GetNextDailyQuestLocation(string locationName, int max, out string nextLocationName)
+        {
+            nextLocationName = string.Empty;
             var nextLocationNumber = 1;
             while (nextLocationNumber <= max)
             {
@@ -179,7 +191,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
                     continue;
                 }
 
-                _locationChecker.AddCheckedLocation(fullName);
+                nextLocationName = fullName;
                 return true;
             }
 
