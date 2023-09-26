@@ -33,6 +33,7 @@ namespace StardewArchipelago.Archipelago
         private const string SHIPSANITY_KEY = "shipsanity";
         private const string COOKSANITY_KEY = "cooksanity";
         private const string CHEFSANITY_KEY = "chefsanity";
+        private const string CRAFTSANITY_KEY = "craftsanity";
         private const string FRIENDSANITY_KEY = "friendsanity";
         private const string FRIENDSANITY_HEART_SIZE_KEY = "friendsanity_heart_size";
         private const string EXCLUDE_GINGER_ISLAND_KEY = "exclude_ginger_island";
@@ -80,6 +81,7 @@ namespace StardewArchipelago.Archipelago
         public Shipsanity Shipsanity { get; private set; }
         public Cooksanity Cooksanity { get; private set; }
         public Chefsanity Chefsanity { get; private set; }
+        public Craftsanity Craftsanity { get; private set; }
         public Friendsanity Friendsanity { get; private set; }
         public int FriendsanityHeartSize { get; private set; }
         public bool ExcludeGingerIsland { get; private set; }
@@ -129,6 +131,7 @@ namespace StardewArchipelago.Archipelago
             Shipsanity = GetSlotSetting(SHIPSANITY_KEY, Shipsanity.None);
             Cooksanity = GetSlotSetting(COOKSANITY_KEY, Cooksanity.None);
             Chefsanity = GetSlotSetting(CHEFSANITY_KEY, Chefsanity.Vanilla);
+            Craftsanity = GetSlotSetting(CRAFTSANITY_KEY, Craftsanity.None);
             Friendsanity = GetSlotSetting(FRIENDSANITY_KEY, Friendsanity.None);
             FriendsanityHeartSize = GetSlotSetting(FRIENDSANITY_HEART_SIZE_KEY, 4);
             ExcludeGingerIsland = GetSlotSetting(EXCLUDE_GINGER_ISLAND_KEY, true);
@@ -383,6 +386,12 @@ namespace StardewArchipelago.Archipelago
         Skills = 0b0100,
         Friendship = 0b1000,
         All = QueenOfSauce | Purchases | Skills | Friendship,
+    }
+
+    public enum Craftsanity
+    {
+        None = 0,
+        All = 1,
     }
 
     public enum Friendsanity
