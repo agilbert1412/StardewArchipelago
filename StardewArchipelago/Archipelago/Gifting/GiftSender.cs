@@ -84,7 +84,7 @@ namespace StardewArchipelago.Archipelago.Gifting
             catch (Exception ex)
             {
                 _monitor.Log($"Unknown error occurred while attempting to process gift command.{Environment.NewLine}Message: {ex.Message}{Environment.NewLine}StackTrace: {ex.StackTrace}");
-                Game1.chatBox?.addMessage($"Could complete gifting operation. Check SMAPI for error details.", Color.Red);
+                Game1.chatBox?.addMessage($"Could not complete gifting operation. Check SMAPI for error details.", Color.Red);
                 return;
             }
         }
