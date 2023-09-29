@@ -46,6 +46,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             RecipeDataInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             RecipeLevelUpInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             RecipeFriendshipInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
+            CraftingInjections.Initialize(monitor, modHelper, archipelago, locationChecker, itemManager);
         }
 
         private static void InitializeFestivalPatches(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago,

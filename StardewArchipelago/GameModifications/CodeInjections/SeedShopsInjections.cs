@@ -186,14 +186,35 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         private static void AddGrassStarterToPierreStock(Dictionary<ISalable, int[]> stock)
         {
             AddToPierreStock(stock, GRASS_STARTER);
-            if (!Game1.player.craftingRecipes.ContainsKey("Grass Starter"))
+
+            ISalable grassStarterRecipe;
+            if (_archipelago.SlotData.Craftsanity == Craftsanity.None)
             {
-                stock.Add(new StardewValley.Object(GRASS_STARTER, 1, true), new int[2]
+                if (Game1.player.craftingRecipes.ContainsKey("Grass Starter"))
                 {
-                    1000,
-                    1,
-                });
+                    return;
+                }
+
+                grassStarterRecipe = new Object(GRASS_STARTER, 1, true);
             }
+            else
+            {
+                var location = "Grass Starter Recipe";
+                if (!_locationChecker.IsLocationMissingAndExists(location))
+                {
+                    return;
+                }
+
+                var activeHints = _archipelago.GetMyActiveHints();
+                grassStarterRecipe = new PurchaseableArchipelagoLocation(location, location,
+                    _modHelper, _locationChecker, _archipelago, activeHints);
+            }
+
+            stock.Add(grassStarterRecipe, new int[2]
+            {
+                1000,
+                1,
+            });
         }
 
         private static void AddCookingIngredientsToPierreStock(Dictionary<ISalable, int[]> stock)

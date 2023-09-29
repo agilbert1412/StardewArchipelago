@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Microsoft.Xna.Framework;
 using Netcode;
 using StardewArchipelago.Archipelago;
@@ -92,6 +93,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 var livesLeftField = _helper.Reflection.GetField<int>(__instance, "livesLeft");
                 var livesLeft = livesLeftField.GetValue();
+
                 if (livesLeft != 3 || !new_game)
                 {
                     return;

@@ -69,6 +69,7 @@ namespace StardewArchipelago.Locations.Patcher
             PatchMonstersanity();
             AddCooksanityLocations();
             AddChefsanityLocations();
+            AddCraftsanityLocations();
         }
 
         private void ReplaceCommunityCenterBundlesWithChecks()
@@ -833,6 +834,11 @@ namespace StardewArchipelago.Locations.Patcher
                 prefix: new HarmonyMethod(typeof(QueenOfSauceInjections), nameof(QueenOfSauceInjections.GetWeeklyRecipe_UseArchipelagoSchedule_Prefix))
             );
 
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(VolcanoDungeon), nameof(VolcanoDungeon.checkAction)),
+                prefix: new HarmonyMethod(typeof(RecipePurchaseInjections), nameof(RecipePurchaseInjections.CheckAction_ReplaceVolcanoDwarfRecipesWithChecks_Prefix))
+            );
+
             if (_archipelago.SlotData.Chefsanity.HasFlag(Chefsanity.Purchases))
             {
                 _harmony.Patch(
@@ -849,11 +855,6 @@ namespace StardewArchipelago.Locations.Patcher
                     original: AccessTools.Method(typeof(IslandNorth), nameof(IslandNorth.getIslandMerchantTradeStock)),
                     prefix: new HarmonyMethod(typeof(RecipePurchaseInjections), nameof(RecipePurchaseInjections.GetIslandMerchantTradeStock_ReplaceBananaPuddingWithChefsanityCheck_Prefix))
                 );
-
-                _harmony.Patch(
-                    original: AccessTools.Method(typeof(VolcanoDungeon), nameof(VolcanoDungeon.checkAction)),
-                    prefix: new HarmonyMethod(typeof(RecipePurchaseInjections), nameof(RecipePurchaseInjections.CheckAction_ReplaceGingerAleWithChefsanityCheck_Prefix))
-                );
             }
 
             _harmony.Patch(
@@ -869,6 +870,34 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony.Patch(
                 original: AccessTools.Method(typeof(NPC), nameof(NPC.grantConversationFriendship)),
                 prefix: new HarmonyMethod(typeof(RecipeFriendshipInjections), nameof(RecipeFriendshipInjections.GrantConversationFriendship_SendFriendshipRecipeChecks_Postfix))
+            );
+        }
+
+        private void AddCraftsanityLocations()
+        {
+            if (_archipelago.SlotData.Craftsanity == Craftsanity.None)
+            {
+                return;
+            }
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Stats), nameof(Stats.checkForCraftingAchievements)),
+                postfix: new HarmonyMethod(typeof(CraftingInjections), nameof(CraftingInjections.CheckForCraftingAchievements_CheckCraftsanityLocation_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Utility), nameof(Utility.getCarpenterStock)),
+                postfix: new HarmonyMethod(typeof(CraftingInjections), nameof(CraftingInjections.GetCarpenterStock_PurchasableRecipeChecks_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Utility), nameof(Utility.getDwarfShopStock)),
+                postfix: new HarmonyMethod(typeof(CraftingInjections), nameof(CraftingInjections.GetDwarfShopStock_PurchasableRecipeChecks_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Sewer), nameof(Sewer.getShadowShopStock)),
+                postfix: new HarmonyMethod(typeof(CraftingInjections), nameof(CraftingInjections.GetShadowShopStock_PurchasableRecipeChecks_Postfix))
             );
         }
     }
