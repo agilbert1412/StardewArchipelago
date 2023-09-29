@@ -663,7 +663,7 @@ namespace StardewArchipelago.Locations.Patcher
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(ShopMenu), nameof(ShopMenu.update)),
-                postfix: new HarmonyMethod(typeof(FlowerDanceInjections), nameof(FlowerDanceInjections.Update_HandleRarecrow5FirstTimeOnly_Postfix))
+                postfix: new HarmonyMethod(typeof(FlowerDanceInjections), nameof(FlowerDanceInjections.Update_HandleFlowerDanceShopFirstTimeOnly_Postfix))
             );
 
             _harmony.Patch(
@@ -699,7 +699,7 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony.Patch(
                 original: AccessTools.Method(typeof(ShopMenu), nameof(ShopMenu.update)),
                 postfix: new HarmonyMethod(typeof(SpiritEveInjections),
-                    nameof(SpiritEveInjections.Update_HandleRarecrow2FirstTimeOnly_Postfix))
+                    nameof(SpiritEveInjections.Update_HandleSpiritEveShopFirstTimeOnly_Postfix))
             );
 
             _harmony.Patch(
