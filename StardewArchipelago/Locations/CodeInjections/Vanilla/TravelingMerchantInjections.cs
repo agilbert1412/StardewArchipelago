@@ -213,20 +213,20 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     var chosenArtifactOrMineral = GetRandomArtifactOrMineral(random, allHintedDonatableItems);
                     _flairOverride.Add(chosenArtifactOrMineral, allHintedDonatableItemsWithFlair[chosenArtifactOrMineral]);
                     var price = (int)(chosenArtifactOrMineral.salePrice() * priceMultiplier);
-                    stock.Add(chosenArtifactOrMineral, new[] { price, 1 });
+                    stock.TryAdd(chosenArtifactOrMineral, new[] { price, 1 });
                 }
                 else if (allMissingDonatableItems.Any() && choice < 0.50)
                 {
                     priceMultiplier *= 2;
                     var chosenArtifactOrMineral = GetRandomArtifactOrMineral(random, allMissingDonatableItems);
                     var price = (int)(chosenArtifactOrMineral.salePrice() * priceMultiplier);
-                    stock.Add(chosenArtifactOrMineral, new[] { price, 1 });
+                    stock.TryAdd(chosenArtifactOrMineral, new[] { price, 1 });
                 }
                 else
                 {
                     var chosenArtifactOrMineral = GetRandomArtifactOrMineral(random, allDonatableItems);
                     var price = (int)(chosenArtifactOrMineral.salePrice() * priceMultiplier);
-                    stock.Add(chosenArtifactOrMineral, new[] { price, 1 });
+                    stock.TryAdd(chosenArtifactOrMineral, new[] { price, 1 });
                 }
             }
         }
