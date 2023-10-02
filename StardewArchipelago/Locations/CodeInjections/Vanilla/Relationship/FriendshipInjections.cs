@@ -24,7 +24,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
         private const int DECAY_PARTNER = -8;
         private const int DECAY_OTHER = -2;
         private const int AUTOPET_POINTS = 5;
-        private const int DECAY_GRAB = -20;
+        private const int DECAY_GRAB = -4;
         private const int POINTS_PER_HEART = 250;
         private const int POINTS_PER_PET_HEART = 200;
         private const string HEARTS_PATTERN = "{0} <3";
@@ -488,6 +488,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
                     continue;
                 }
 
+                farmer.changeFriendship(DECAY_GRAB, npc);
                 var hearts = farmer.friendshipData[npcName].Points / 250;
                 var chanceOfProduction = (double)hearts / 28.0;
                 if (random.NextDouble() > chanceOfProduction)
@@ -501,7 +502,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
                 var amount = possibleItems[item];
                 var stardewItem = item.PrepareForGivingToFarmer(amount);
                 chest.addItem(stardewItem);
-                farmer.changeFriendship(DECAY_GRAB, npc);
             }
         }
 
