@@ -51,6 +51,33 @@ namespace StardewArchipelago.Locations.Festival
             }
         }
 
+        // public void setUpPlayerControlSequence(string id)
+        public static void SetUpPlayerControlSequence_ChooseSecretSantaTarget_Postfix(Event __instance, string id)
+        {
+            try
+            {
+                if (id != "christmas" || __instance.secretSantaRecipient == null)
+                {
+                    return;
+                }
+
+                var farmId = Game1.uniqueIDForThisGame / 2;
+                var monthId = Game1.stats.DaysPlayed % 28;
+                var seed = (int)farmId + monthId + (int)Game1.player.UniqueMultiplayerID;
+                var r = new Random((int)seed);
+                __instance.secretSantaRecipient = Utility.getRandomTownNPC(r);
+                while (__instance.mySecretSanta == null || __instance.mySecretSanta.Equals((object)__instance.secretSantaRecipient) || __instance.mySecretSanta.isDivorcedFrom(__instance.farmer))
+                    __instance.mySecretSanta = Utility.getRandomTownNPC(r);
+                Game1.debugOutput = "Secret Santa Recipient: " + __instance.secretSantaRecipient.Name + "  My Secret Santa: " + __instance.mySecretSanta.Name;
+                return;
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(SetUpPlayerControlSequence_ChooseSecretSantaTarget_Postfix)}:\n{ex}", LogLevel.Error);
+                return;
+            }
+        }
+
         // public bool chooseResponse(Response response)
         public static void ChooseResponse_LegendOfTheWinterStar_Postfix(Dialogue __instance, Response response, ref bool __result)
         {

@@ -594,6 +594,11 @@ namespace StardewArchipelago.Locations.Patcher
                 postfix: new HarmonyMethod(typeof(BeachNightMarketInjections), nameof(BeachNightMarketInjections.GetMagicShopStock_UniqueItemsAndSeeds_Postfix))
             );
 
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Event), nameof(Event.setUpPlayerControlSequence)),
+                postfix: new HarmonyMethod(typeof(WinterStarInjections), nameof(WinterStarInjections.SetUpPlayerControlSequence_ChooseSecretSantaTarget_Postfix))
+            );
+
             if (_archipelago.SlotData.FestivalLocations == FestivalLocations.Vanilla)
             {
                 return;
