@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework;
 using StardewArchipelago.Extensions;
 using StardewValley;
 using StardewValley.Objects;
+using StardewValley.Tools;
 using xTile.Dimensions;
 
 namespace StardewArchipelago.Items.Traps
@@ -79,6 +80,11 @@ namespace StardewArchipelago.Items.Traps
                 if (player.Items.Count > i && player.Items[i] != null)
                 {
                     item = player.Items[i];
+                }
+
+                if (item is FishingRod rod && (rod.isReeling || rod.isFishing || rod.pullingOutOfWater))
+                {
+                    continue;
                 }
 
                 var slot = new ItemSlot(player.Items, i);

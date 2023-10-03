@@ -52,6 +52,26 @@ namespace StardewArchipelago.Items.Traps
         private readonly MonsterSpawner _monsterSpawner;
         private readonly InventoryShuffler _inventoryShuffler;
         private Dictionary<string, Action> _traps;
+        private static readonly Dictionary<string, Func<bool>> _trapInstantExecutionConditions = new()
+        {
+            {BURNT, () => true},
+            {DARKNESS, () => true},
+            {FROZEN, () => true},
+            {JINXED, () => true},
+            {NAUSEATED, () => true},
+            {SLIMED, () => true},
+            {WEAKNESS, () => true},
+            {TAXES, () => true},
+            {RANDOM_TELEPORT, () => !Game1.eventUp},
+            {CROWS, () => true},
+            {MONSTERS, () => true},
+            // {ENTRANCE_RESHUFFLE, () => true};
+            {DEBRIS, () => true},
+            {SHUFFLE, () => true},
+            // {WINTER, () => true},
+            {PARIAH, () => true},
+            {DROUGHT, () => true},
+        };
 
         public TrapManager(IModHelper helper, ArchipelagoClient archipelago, TileChooser tileChooser)
         {
@@ -77,7 +97,7 @@ namespace StardewArchipelago.Items.Traps
 
         public bool TryExecuteTrapImmediately(string trapName)
         {
-            if (Game1.player.currentLocation is FarmHouse or IslandFarmHouse || Game1.eventUp || Game1.fadeToBlack) // || Game1.currentMinigame != null || Game1.isWarping || Game1.killScreen)
+            if (Game1.player.currentLocation is FarmHouse or IslandFarmHouse) // || Game1.eventUp || Game1.fadeToBlack || Game1.currentMinigame != null || Game1.isWarping || Game1.killScreen)
             {
                 return false;
             }
