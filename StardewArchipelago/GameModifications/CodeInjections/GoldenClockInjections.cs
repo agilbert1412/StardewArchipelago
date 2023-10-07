@@ -1,0 +1,44 @@
+﻿using System;
+using Microsoft.Xna.Framework;
+using StardewArchipelago.Archipelago;
+using StardewArchipelago.Extensions;
+using StardewModdingAPI;
+using StardewValley;
+using StardewValley.Buildings;
+
+namespace StardewArchipelago.GameModifications.CodeInjections
+{
+    public static class GoldenClockInjections
+    {
+        private static IMonitor _monitor;
+        private static ArchipelagoClient _archipelago;
+
+        public static void Initialize(IMonitor monitor, ArchipelagoClient archipelago)
+        {
+            _monitor = monitor;
+            _archipelago = archipelago;
+        }
+
+        // public virtual bool doAction(Vector2 tileLocation, Farmer who)
+        public static void DoAction_GoldenClockIncreaseTime_Postfix(Building __instance, Vector2 tileLocation, Farmer who, ref bool __result)
+        {
+            try
+            {
+                if (Game1.MasterPlayer != who || 
+                    !__instance.buildingType.Value.Equals("Gold Clock") ||
+                    __instance.isTilePassable(tileLocation))
+                {
+                    return;
+                }
+
+                Game1.performTenMinuteClockUpdate();
+                return;
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(DoAction_GoldenClockIncreaseTime_Postfix)}:\n{ex}", LogLevel.Error);
+                return;
+            }
+        }
+    }
+}
