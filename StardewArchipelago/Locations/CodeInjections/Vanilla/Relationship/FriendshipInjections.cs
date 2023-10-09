@@ -502,6 +502,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
                 var amount = possibleItems[item];
                 var stardewItem = item.PrepareForGivingToFarmer(amount);
                 chest.addItem(stardewItem);
+                objectInSameRoom.showNextIndex.Value = true;
             }
         }
 
