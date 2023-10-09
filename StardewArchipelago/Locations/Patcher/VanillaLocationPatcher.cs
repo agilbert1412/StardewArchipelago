@@ -677,6 +677,21 @@ namespace StardewArchipelago.Locations.Patcher
             );
 
             _harmony.Patch(
+                original: AccessTools.Method(typeof(BeachNightMarket), nameof(BeachNightMarket.draw)),
+                prefix: new HarmonyMethod(typeof(BeachNightMarketInjections), nameof(BeachNightMarketInjections.Draw_DontDrawOriginalPainting_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(BeachNightMarket), nameof(BeachNightMarket.draw)),
+                postfix: new HarmonyMethod(typeof(BeachNightMarketInjections), nameof(BeachNightMarketInjections.Draw_DrawCorrectPainting_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(BeachNightMarket), nameof(BeachNightMarket.checkAction)),
+                prefix: new HarmonyMethod(typeof(BeachNightMarketInjections), nameof(BeachNightMarketInjections.CheckAction_LupiniPainting_Prefix))
+            );
+
+            _harmony.Patch(
                 original: AccessTools.Method(typeof(BeachNightMarket), nameof(BeachNightMarket.answerDialogueAction)),
                 prefix: new HarmonyMethod(typeof(BeachNightMarketInjections), nameof(BeachNightMarketInjections.AnswerDialogueAction_LupiniPainting_Prefix))
             );

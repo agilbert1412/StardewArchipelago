@@ -15,15 +15,15 @@ namespace StardewArchipelago.Locations.Festival
         private static IModHelper _modHelper;
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
-        private static ShopReplacer _shopReplacer;
+        private static Random _lastProvidedRandom;
+        private static Random _random = null;
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker, ShopReplacer shopReplacer)
+        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             _monitor = monitor;
             _modHelper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
-            _shopReplacer = shopReplacer;
         }
 
         // public void chooseSecretSantaGift(Item i, Farmer who)
@@ -54,7 +54,7 @@ namespace StardewArchipelago.Locations.Festival
         }
 
         // public static NPC getRandomTownNPC()
-        public static bool GetRandomTownNPC_ChooseActualRandom_Prefix(Random r, ref NPC __result)
+        public static bool GetRandomTownNPC_ChooseActualRandom_Prefix(ref NPC __result)
         {
             try
             {
@@ -73,9 +73,14 @@ namespace StardewArchipelago.Locations.Festival
         {
             try
             {
-                var seed = (int)Game1.uniqueIDForThisGame + (int)(Game1.stats.DaysPlayed % 28);
-                var random = new Random(seed);
-                __result = GetRandomTownNpc(random);
+                if (_random == null || !ReferenceEquals(_lastProvidedRandom, r))
+                {
+                    var seed = (int)Game1.uniqueIDForThisGame + (int)(Game1.stats.DaysPlayed % 28);
+                    _random = new Random(seed);
+                    _lastProvidedRandom = r;
+                }
+
+                __result = GetRandomTownNpc(_random);
                 return false; // don't run original logic
             }
             catch (Exception ex)
