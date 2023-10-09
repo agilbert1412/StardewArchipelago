@@ -132,6 +132,11 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             return _archipelago.SlotData.Friendsanity != Friendsanity.None;
         }
 
+        private static bool HasArcadeMachinesShuffled()
+        {
+            return _archipelago.SlotData.ArcadeMachineLocations == ArcadeLocations.FullShuffling;
+        }
+
         private static bool HasEntranceRandomizer()
         {
             return _archipelago.SlotData.EntranceRandomization != EntranceRandomization.Disabled;
