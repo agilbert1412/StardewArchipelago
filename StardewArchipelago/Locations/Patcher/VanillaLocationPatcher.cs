@@ -595,8 +595,13 @@ namespace StardewArchipelago.Locations.Patcher
             );
 
             _harmony.Patch(
-                original: AccessTools.Method(typeof(Event), nameof(Event.setUpPlayerControlSequence)),
-                postfix: new HarmonyMethod(typeof(WinterStarInjections), nameof(WinterStarInjections.SetUpPlayerControlSequence_ChooseSecretSantaTarget_Postfix))
+                original: AccessTools.Method(typeof(Utility), nameof(Utility.getRandomTownNPC), Type.EmptyTypes),
+                prefix: new HarmonyMethod(typeof(WinterStarInjections), nameof(WinterStarInjections.GetRandomTownNPC_ChooseActualRandom_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Utility), nameof(Utility.getRandomTownNPC), new[] { typeof(Random) }),
+                prefix: new HarmonyMethod(typeof(WinterStarInjections), nameof(WinterStarInjections.GetRandomTownNPC_ChooseSecretSantaTarget_Prefix))
             );
 
             if (_archipelago.SlotData.FestivalLocations == FestivalLocations.Vanilla)

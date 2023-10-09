@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
@@ -51,31 +53,56 @@ namespace StardewArchipelago.Locations.Festival
             }
         }
 
-        // public void setUpPlayerControlSequence(string id)
-        public static void SetUpPlayerControlSequence_ChooseSecretSantaTarget_Postfix(Event __instance, string id)
+        // public static NPC getRandomTownNPC()
+        public static bool GetRandomTownNPC_ChooseActualRandom_Prefix(Random r, ref NPC __result)
         {
             try
             {
-                if (id != "christmas" || __instance.secretSantaRecipient == null)
-                {
-                    return;
-                }
-
-                var farmId = Game1.uniqueIDForThisGame / 2;
-                var monthId = Game1.stats.DaysPlayed % 28;
-                var seed = (int)farmId + monthId + (int)Game1.player.UniqueMultiplayerID;
-                var r = new Random((int)seed);
-                __instance.secretSantaRecipient = Utility.getRandomTownNPC(r);
-                while (__instance.mySecretSanta == null || __instance.mySecretSanta.Equals((object)__instance.secretSantaRecipient) || __instance.mySecretSanta.isDivorcedFrom(__instance.farmer))
-                    __instance.mySecretSanta = Utility.getRandomTownNPC(r);
-                Game1.debugOutput = "Secret Santa Recipient: " + __instance.secretSantaRecipient.Name + "  My Secret Santa: " + __instance.mySecretSanta.Name;
-                return;
+                __result = GetRandomTownNpc(Game1.random);
+                return false; // don't run original logic
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(SetUpPlayerControlSequence_ChooseSecretSantaTarget_Postfix)}:\n{ex}", LogLevel.Error);
-                return;
+                _monitor.Log($"Failed in {nameof(GetRandomTownNPC_ChooseActualRandom_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
             }
+        }
+
+        // public static NPC getRandomTownNPC(Random r)
+        public static bool GetRandomTownNPC_ChooseSecretSantaTarget_Prefix(Random r, ref NPC __result)
+        {
+            try
+            {
+                var seed = (int)Game1.uniqueIDForThisGame + (int)(Game1.stats.DaysPlayed % 28);
+                var random = new Random(seed);
+                __result = GetRandomTownNpc(random);
+                return false; // don't run original logic
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(GetRandomTownNPC_ChooseSecretSantaTarget_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
+        }
+
+        private static NPC GetRandomTownNpc(Random random)
+        {
+            var npcNames = Game1.content.Load<Dictionary<string, string>>("Data\\NPCDispositions").Keys.ToArray();
+            var illegalTargets = new[]
+            {
+                "Wizard", "Krobus", "Sandy", "Dwarf", "Marlon", "Leo",
+            };
+            
+            string chosenName;
+            do
+            {
+                var index = random.Next(npcNames.Length);
+                chosenName = npcNames[index];
+
+            } while (illegalTargets.Contains(chosenName));
+
+            var chosenNpc = Game1.getCharacterFromName(chosenName);
+            return chosenNpc;
         }
 
         // public bool chooseResponse(Response response)
