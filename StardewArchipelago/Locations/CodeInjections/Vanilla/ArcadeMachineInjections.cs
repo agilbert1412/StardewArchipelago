@@ -284,67 +284,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
         }
 
+        private static int _coinsLastTick = -1;
         public static void Tick_Shopping_PostFix(AbigailGame __instance, GameTime time, ref bool __result)
         {
             try
             {
-                if (__instance.runSpeedLevel != _bootsLevel)
-                {
-                    switch (_bootsItemOffered)
-                    {
-                        case BOOTS_1:
-                            _locationChecker.AddCheckedLocation(JOTPK_BOOTS_1);
-                            break;
-                        case BOOTS_2:
-                            _locationChecker.AddCheckedLocation(JOTPK_BOOTS_2);
-                            break;
-                    }
-
-                    AssignStartingEquipment(__instance);
-                    return;
-                }
-
-                var instanceGun = __instance.fireSpeedLevel + (__instance.spreadPistol ? 1 : 0);
-                if (instanceGun != _gunLevel)
-                {
-                    switch (_gunItemOffered)
-                    {
-                        case GUN_1:
-                            _locationChecker.AddCheckedLocation(JOTPK_GUN_1);
-                            break;
-                        case GUN_2:
-                            _locationChecker.AddCheckedLocation(JOTPK_GUN_2);
-                            break;
-                        case GUN_3:
-                            _locationChecker.AddCheckedLocation(JOTPK_GUN_3);
-                            break;
-                        case SUPER_GUN:
-                            _locationChecker.AddCheckedLocation(JOTPK_SUPER_GUN);
-                            break;
-                    }
-
-                    AssignStartingEquipment(__instance);
-                    return;
-                }
-
-                if (__instance.ammoLevel != _ammoLevel)
-                {
-                    switch (_ammoItemOffered)
-                    {
-                        case AMMO_1:
-                            _locationChecker.AddCheckedLocation(JOTPK_AMMO_1);
-                            break;
-                        case AMMO_2:
-                            _locationChecker.AddCheckedLocation(JOTPK_AMMO_2);
-                            break;
-                        case AMMO_3:
-                            _locationChecker.AddCheckedLocation(JOTPK_AMMO_3);
-                            break;
-                    }
-
-                    AssignStartingEquipment(__instance);
-                    return;
-                }
+                if (CheckBootsPurchaseLocation(__instance)) return;
+                if (CheckSuperGunPurchaseLocation(__instance)) return;
+                if (CheckAmmoPurchaseLocation(__instance)) return;
 
                 return;
             }
@@ -353,6 +300,91 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 _monitor.Log($"Failed in {nameof(Tick_Shopping_PostFix)}:\n{ex}", LogLevel.Error);
                 return;
             }
+            finally
+            {
+                _coinsLastTick = __instance.coins;
+            }
+        }
+
+        private static bool CheckBootsPurchaseLocation(AbigailGame __instance)
+        {
+            if (__instance.runSpeedLevel == _bootsLevel)
+            {
+                return false;
+            }
+
+            switch (_bootsItemOffered)
+            {
+                case BOOTS_1:
+                    _locationChecker.AddCheckedLocation(JOTPK_BOOTS_1);
+                    break;
+                case BOOTS_2:
+                    _locationChecker.AddCheckedLocation(JOTPK_BOOTS_2);
+                    break;
+            }
+
+            AssignStartingEquipment(__instance);
+            return true;
+
+        }
+
+        private static bool CheckSuperGunPurchaseLocation(AbigailGame __instance)
+        {
+            if (__instance.coins == _coinsLastTick - 99) // This is the only way I found to detect the purchase of the super gun check
+            {
+                _locationChecker.AddCheckedLocation(JOTPK_SUPER_GUN);
+                AssignStartingEquipment(__instance);
+            }
+
+            var instanceGun = __instance.fireSpeedLevel + (__instance.spreadPistol ? 1 : 0);
+            if (instanceGun == _gunLevel)
+            {
+                return false;
+            }
+
+            switch (_gunItemOffered)
+            {
+                case GUN_1:
+                    _locationChecker.AddCheckedLocation(JOTPK_GUN_1);
+                    break;
+                case GUN_2:
+                    _locationChecker.AddCheckedLocation(JOTPK_GUN_2);
+                    break;
+                case GUN_3:
+                    _locationChecker.AddCheckedLocation(JOTPK_GUN_3);
+                    break;
+                case SUPER_GUN:
+                    _locationChecker.AddCheckedLocation(JOTPK_SUPER_GUN);
+                    break;
+            }
+
+            AssignStartingEquipment(__instance);
+            return true;
+
+        }
+
+        private static bool CheckAmmoPurchaseLocation(AbigailGame __instance)
+        {
+            if (__instance.ammoLevel == _ammoLevel)
+            {
+                return false;
+            }
+
+            switch (_ammoItemOffered)
+            {
+                case AMMO_1:
+                    _locationChecker.AddCheckedLocation(JOTPK_AMMO_1);
+                    break;
+                case AMMO_2:
+                    _locationChecker.AddCheckedLocation(JOTPK_AMMO_2);
+                    break;
+                case AMMO_3:
+                    _locationChecker.AddCheckedLocation(JOTPK_AMMO_3);
+                    break;
+            }
+
+            AssignStartingEquipment(__instance);
+            return true;
         }
 
         public static void AbigailGameCtor_Equipments_Postfix(AbigailGame __instance, bool playingWithAbby)
@@ -392,6 +424,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             __instance.spreadPistol = _gunLevel == 4;
             __instance.ammoLevel = _ammoLevel;
             __instance.bulletDamage = 1 + _ammoLevel;
+
+            __instance.coins = 99;
 
             _bootsItemOffered = -1;
             _gunItemOffered = -1;
