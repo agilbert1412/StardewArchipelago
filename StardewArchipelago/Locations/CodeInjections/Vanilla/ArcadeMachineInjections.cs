@@ -425,8 +425,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             __instance.ammoLevel = _ammoLevel;
             __instance.bulletDamage = 1 + _ammoLevel;
 
-            __instance.coins = 99;
-
             _bootsItemOffered = -1;
             _gunItemOffered = -1;
             _ammoItemOffered = -1;
