@@ -99,14 +99,15 @@ namespace StardewArchipelago.Locations.Festival
             };
             
             string chosenName;
+            NPC chosenNpc;
             do
             {
                 var index = random.Next(npcNames.Length);
                 chosenName = npcNames[index];
+                chosenNpc = Game1.getCharacterFromName(chosenName);
 
-            } while (illegalTargets.Contains(chosenName));
+            } while (illegalTargets.Contains(chosenName) || chosenNpc == null);
 
-            var chosenNpc = Game1.getCharacterFromName(chosenName);
             return chosenNpc;
         }
 
