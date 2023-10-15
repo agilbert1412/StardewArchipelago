@@ -440,11 +440,6 @@ namespace StardewArchipelago.GameModifications
 
         private void PatchDebugMethods()
         {
-            _harmony.Patch(
-                original: AccessTools.Constructor(typeof(LetterViewerMenu), new[] { typeof(string), typeof(string), typeof(bool) }),
-                prefix: new HarmonyMethod(typeof(DebugPatchInjections), nameof(DebugPatchInjections.LetterViewerMenuConstructor_AddLog_Prefix)),
-                postfix: new HarmonyMethod(typeof(DebugPatchInjections), nameof(DebugPatchInjections.LetterViewerMenuConstructor_AddLog_Postfix))
-            );
         }
     }
 }

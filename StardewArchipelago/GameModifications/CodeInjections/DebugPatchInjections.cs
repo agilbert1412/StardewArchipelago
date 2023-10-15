@@ -19,35 +19,5 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             _monitor = monitor;
             _archipelago = archipelago;
         }
-
-        // public LetterViewerMenu(string mail, string mailTitle, bool fromCollection = false)
-        public static bool LetterViewerMenuConstructor_AddLog_Prefix(LetterViewerMenu __instance, string mail, string mailTitle, bool fromCollection)
-        {
-            try
-            {
-                _monitor.Log($"About to open a Letter. [mailTitle: {mailTitle}, fromCollection: {fromCollection}, mailText: {mail}]");
-                return true; // run original logic
-            }
-            catch (Exception ex)
-            {
-                _monitor.Log($"Failed in {nameof(LetterViewerMenuConstructor_AddLog_Prefix)}:\n{ex}", LogLevel.Error);
-                return true; // run original logic
-            }
-        }
-
-        // public LetterViewerMenu(string mail, string mailTitle, bool fromCollection = false)
-        public static void LetterViewerMenuConstructor_AddLog_Postfix(LetterViewerMenu __instance, string mail, string mailTitle, bool fromCollection)
-        {
-            try
-            {
-                _monitor.Log($"Finished opening letter. [mailTitle: {mailTitle}, fromCollection: {fromCollection}, mailText: {mail}]");
-                return;
-            }
-            catch (Exception ex)
-            {
-                _monitor.Log($"Failed in {nameof(LetterViewerMenuConstructor_AddLog_Postfix)}:\n{ex}", LogLevel.Error);
-                return;
-            }
-        }
     }
 }
