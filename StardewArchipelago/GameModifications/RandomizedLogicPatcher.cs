@@ -56,6 +56,8 @@ namespace StardewArchipelago.GameModifications
             KentInjections.Initialize(monitor, archipelago);
             GoldenEggInjections.Initialize(monitor, archipelago);
             GoldenClockInjections.Initialize(monitor, archipelago);
+
+            DebugPatchInjections.Initialize(monitor, archipelago);
         }
 
         public void PatchAllGameLogic()
@@ -83,6 +85,8 @@ namespace StardewArchipelago.GameModifications
             PatchGoldenEgg();
             PatchGoldenClock();
             _startingResources.GivePlayerStartingResources();
+
+            PatchDebugMethods();
         }
 
         private void PatchAchievements()
@@ -431,6 +435,15 @@ namespace StardewArchipelago.GameModifications
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Building), nameof(Building.doAction)),
                 postfix: new HarmonyMethod(typeof(GoldenClockInjections), nameof(GoldenClockInjections.DoAction_GoldenClockIncreaseTime_Postfix))
+            );
+        }
+
+        private void PatchDebugMethods()
+        {
+            _harmony.Patch(
+                original: AccessTools.Constructor(typeof(LetterViewerMenu), new[] { typeof(string), typeof(string), typeof(bool) }),
+                prefix: new HarmonyMethod(typeof(DebugPatchInjections), nameof(DebugPatchInjections.LetterViewerMenuConstructor_AddLog_Prefix)),
+                postfix: new HarmonyMethod(typeof(DebugPatchInjections), nameof(DebugPatchInjections.LetterViewerMenuConstructor_AddLog_Postfix))
             );
         }
     }
