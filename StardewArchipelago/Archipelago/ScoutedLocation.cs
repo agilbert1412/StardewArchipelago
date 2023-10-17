@@ -26,9 +26,14 @@ namespace StardewArchipelago.Archipelago
             Classification = classification;
         }
 
+        public string GetItemName()
+        {
+            return ItemName.TurnHeartsIntoStardewHearts();
+        }
+
         public override string ToString()
         {
-            return $"{PlayerName}'s {ItemName.TurnHeartsIntoStardewHearts()}";
+            return $"{PlayerName}'s {GetItemName()}";
         }
 
         public static string GenericItemName()

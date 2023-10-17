@@ -21,6 +21,7 @@ namespace StardewArchipelago.Locations.CodeInjections
             VolcanoDungeonInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             CalderaInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             FieldOfficeInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
+            IslandLocationInjections.Initialize(monitor, modHelper, archipelago);
         }
     }
 }
