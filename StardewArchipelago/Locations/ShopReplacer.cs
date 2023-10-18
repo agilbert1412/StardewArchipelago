@@ -36,7 +36,7 @@ namespace StardewArchipelago.Locations
             var shouldRemoveOriginal = true;
             if (IsRarecrow(salableObject))
             {
-                var apName = BigCraftable.ConvertToRarecrowAPName(salableObject.Name, salableObject.getDescription());
+                var apName = BigCraftable.ConvertToApName(salableObject);
                 shouldRemoveOriginal = !_archipelago.HasReceivedItem(apName);
             }
             ReplaceShopItem(itemPriceAndStock, itemOnSale, apLocation, shouldRemoveOriginal, myActiveHints);
