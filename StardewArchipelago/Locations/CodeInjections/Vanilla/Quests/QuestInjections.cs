@@ -205,11 +205,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
                 var questId = Convert.ToInt32(split[1]);
                 var quest = Quest.getQuestFromId(questId);
                 var questName = quest.GetName();
-                if (_ignoredQuests.Contains(questName))
+                var englishQuestName = GetQuestEnglishName(questId, questName);
+                if (_ignoredQuests.Contains(englishQuestName))
                 {
                     return;
                 }
-                _locationChecker.AddCheckedLocation(questName);
+                _locationChecker.AddCheckedLocation(englishQuestName);
 
                 return;
             }
