@@ -5,12 +5,13 @@ using StardewArchipelago.Stardew;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Quests;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
+using StardewArchipelago.Serialization;
 
 namespace StardewArchipelago.Locations.CodeInjections.Initializers
 {
     public static class VanillaCodeInjectionInitializer
     {
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, BundleReader bundleReader, LocationChecker locationChecker, StardewItemManager itemManager)
+        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, BundleReader bundleReader, LocationChecker locationChecker, StardewItemManager itemManager, ArchipelagoStateDto archipelagoState)
         {
             var shopReplacer = new ShopReplacer(monitor, modHelper, archipelago, locationChecker);
             BackpackInjections.Initialize(monitor, archipelago, locationChecker);
@@ -27,7 +28,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             IsolatedEventInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             AdventurerGuildInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             ArcadeMachineInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
-            TravelingMerchantInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
+            TravelingMerchantInjections.Initialize(monitor, modHelper, archipelago, locationChecker, archipelagoState);
             FishingInjections.Initialize(monitor, modHelper, archipelago, locationChecker, itemManager);
             MuseumInjections.Initialize(monitor, modHelper, archipelago, locationChecker, itemManager);
             FriendshipInjections.Initialize(monitor, modHelper, archipelago, locationChecker, itemManager);

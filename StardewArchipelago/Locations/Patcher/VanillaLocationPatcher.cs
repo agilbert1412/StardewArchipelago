@@ -523,8 +523,8 @@ namespace StardewArchipelago.Locations.Patcher
             );
 
             _harmony.Patch(
-                original: AccessTools.Method(typeof(Utility), "generateLocalTravelingMerchantStock"),
-                postfix: new HarmonyMethod(typeof(TravelingMerchantInjections), nameof(TravelingMerchantInjections.GenerateLocalTravelingMerchantStock_APStock_Postfix))
+                original: AccessTools.Method(typeof(Utility), nameof(Utility.getTravelingMerchantStock)),
+                prefix: new HarmonyMethod(typeof(TravelingMerchantInjections), nameof(TravelingMerchantInjections.GetTravelingMerchantStock_APStock_Prefix))
             );
         }
 

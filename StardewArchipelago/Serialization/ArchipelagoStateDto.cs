@@ -14,7 +14,7 @@ namespace StardewArchipelago.Serialization
         public AppearanceRandomization? AppearanceRandomizerOverride { get; set; }
         public bool HideEmptyArchipelagoLetters { get; set; }
         public TrapItemsDifficulty? TrapDifficultyOverride { get; set; }
-        // public Dictionary<string, int> TravelingMerchantPurchases { get; set; }
+        public int TravelingMerchantPurchases { get; set; }
 
         public ArchipelagoStateDto()
         {
@@ -26,7 +26,7 @@ namespace StardewArchipelago.Serialization
             AppearanceRandomizerOverride = null;
             HideEmptyArchipelagoLetters = false;
             TrapDifficultyOverride = null;
-            // TravelingMerchantPurchases = new Dictionary<string, int>();
+            TravelingMerchantPurchases = 0;
         }
     }
 }

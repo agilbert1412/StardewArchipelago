@@ -9,6 +9,7 @@ using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Locations.Festival;
 using StardewArchipelago.Locations.GingerIsland;
 using StardewArchipelago.Locations.GingerIsland.Boat;
+using StardewArchipelago.Serialization;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
@@ -27,9 +28,9 @@ namespace StardewArchipelago.Locations.Patcher
     {
         private List<ILocationPatcher> _patchers;
 
-        public LocationPatcher(IMonitor monitor, IModHelper modHelper, Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker, BundleReader bundleReader, StardewItemManager itemManager)
+        public LocationPatcher(IMonitor monitor, IModHelper modHelper, Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker, BundleReader bundleReader, StardewItemManager itemManager, ArchipelagoStateDto archipelagoState)
         {
-            CodeInjectionInitializer.Initialize(monitor, modHelper, archipelago, bundleReader, locationChecker, itemManager);
+            CodeInjectionInitializer.Initialize(monitor, modHelper, archipelago, bundleReader, locationChecker, itemManager, archipelagoState);
             _patchers = new List<ILocationPatcher>();
             _patchers.Add(new VanillaLocationPatcher(monitor, modHelper, harmony, archipelago, locationChecker));
             if (archipelago.SlotData.Mods.IsModded)

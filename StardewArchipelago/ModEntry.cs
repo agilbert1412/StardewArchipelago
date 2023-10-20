@@ -250,7 +250,7 @@ namespace StardewArchipelago
 
             _itemManager = new ItemManager(_helper, _archipelago, _stardewItemManager, _mail, tileChooser, State.ItemsReceived);
             _mailPatcher = new MailPatcher(Monitor, _harmony, _archipelago, _locationChecker, new LetterActions(_helper, _mail, _archipelago, _itemManager.TrapManager));
-            _locationsPatcher = new LocationPatcher(Monitor, _helper, _harmony, _archipelago, _locationChecker, _bundleReader, _stardewItemManager);
+            _locationsPatcher = new LocationPatcher(Monitor, _helper, _harmony, _archipelago, _locationChecker, _bundleReader, _stardewItemManager, State);
             _chatForwarder.ListenToChatMessages();
             _giftHandler.Initialize(Monitor, _archipelago, _stardewItemManager, _mail);
             _logicPatcher.PatchAllGameLogic();
