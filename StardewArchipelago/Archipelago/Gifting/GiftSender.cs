@@ -42,9 +42,10 @@ namespace StardewArchipelago.Archipelago.Gifting
                 }
 
                 var isValidRecipient = _giftService.CanGiftToPlayer(slotName, giftTraits.Select(x => x.Trait));
+                var giftOrTrap = isTrap ? "trap" : "gift";
                 if (!isValidRecipient)
                 {
-                    Game1.chatBox?.addMessage($"{slotName} cannot receive this gift", Color.Gold);
+                    Game1.chatBox?.addMessage($"{slotName} cannot receive this {giftOrTrap}", Color.Gold);
                     return;
                 }
 
@@ -55,8 +56,7 @@ namespace StardewArchipelago.Archipelago.Gifting
                 if (Game1.player.Money < tax)
                 {
                     Game1.chatBox?.addMessage($"You cannot afford Joja Prime for this item", Color.Gold);
-                    Game1.chatBox?.addMessage(
-                        $"The tax is {taxRate * 100}% of the item's value of {itemValue}g, so you must pay {tax}g to gift it",
+                    Game1.chatBox?.addMessage($"The tax is {taxRate * 100}% of the item's value of {itemValue}g, so you must pay {tax}g to send it",
                         Color.Gold);
                     return;
                 }
@@ -64,19 +64,19 @@ namespace StardewArchipelago.Archipelago.Gifting
 
                 var success = _giftService.SendGift(giftItem, giftTraits, slotName, out var giftId);
                 _monitor.Log(
-                    $"Sending gift of {giftItem.Amount} {giftItem.Name} to {slotName} with {giftTraits.Length} traits. [ID: {giftId}]",
+                    $"Sending {giftOrTrap} of {giftItem.Amount} {giftItem.Name} to {slotName} with {giftTraits.Length} traits. [ID: {giftId}]",
                     LogLevel.Info);
                 if (!success)
                 {
                     _monitor.Log($"Gift Failed to send properly", LogLevel.Error);
-                    Game1.chatBox?.addMessage($"Unknown Error occurred while sending gift.", Color.Red);
+                    Game1.chatBox?.addMessage($"Unknown Error occurred while sending {giftOrTrap}.", Color.Red);
                     return;
                 }
 
                 Game1.player.ActiveObject = null;
                 Game1.player.Money -= tax;
                 Game1.chatBox?.addMessage(
-                    $"{slotName} will receive your gift of {giftItem.Amount} {giftItem.Name} within 1 business day",
+                    $"{slotName} will receive your {giftOrTrap} of {giftItem.Amount} {giftItem.Name} within 1 business day",
                     Color.Gold);
                 Game1.chatBox?.addMessage($"You have been charged a tax of {tax}g", Color.Gold);
                 Game1.chatBox?.addMessage($"Thank you for using Joja Prime", Color.Gold);
