@@ -75,7 +75,7 @@ namespace StardewArchipelago.Locations.Festival
             {
                 if (_random == null || !ReferenceEquals(_lastProvidedRandom, r))
                 {
-                    var seed = (int)Game1.uniqueIDForThisGame + (int)(Game1.stats.DaysPlayed % 28);
+                    var seed = (int)Game1.uniqueIDForThisGame + (int)(Game1.stats.DaysPlayed / 28);
                     _random = new Random(seed);
                     _lastProvidedRandom = r;
                 }
