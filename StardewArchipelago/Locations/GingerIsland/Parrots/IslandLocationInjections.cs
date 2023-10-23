@@ -1,9 +1,7 @@
 ﻿using System;
-using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
 using StardewValley;
-using StardewValley.BellsAndWhistles;
 using StardewValley.Locations;
 using xTile.Dimensions;
 

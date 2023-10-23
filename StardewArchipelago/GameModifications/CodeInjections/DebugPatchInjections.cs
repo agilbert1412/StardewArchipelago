@@ -1,11 +1,5 @@
-﻿using System;
-using Microsoft.Xna.Framework;
-using StardewArchipelago.Archipelago;
-using StardewArchipelago.Extensions;
+﻿using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
-using StardewValley;
-using StardewValley.Buildings;
-using StardewValley.Menus;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
 {

@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Extensions;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Buildings;

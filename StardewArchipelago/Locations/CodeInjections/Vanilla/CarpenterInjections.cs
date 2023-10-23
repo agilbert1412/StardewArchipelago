@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Archipelago.MultiClient.Net.Models;
-using Netcode;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
 using StardewArchipelago.GameModifications.Buildings;
@@ -436,7 +435,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 return;
             }
 
-            AddToStock(stock, houseUpgradeName, price, materials, locationName);
+            AddToStock(stock, houseUpgradeName, price, materials, locationName, myActiveHints);
         }
 
         private static void AddArchipelagoLocationToStock(this Dictionary<ISalable, int[]> stock, string buildingName, int price, Item[] materials, Hint[] myActiveHints, string requiredBuilding = null)
@@ -462,9 +461,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private static void AddToStock(Dictionary<ISalable, int[]> stock, string locationDisplayName, int price, Item[] materials, string locationName, Hint[] myActiveHints)
         {
             var priceMultiplier = _archipelago.SlotData.BuildingPriceMultiplier;
-            var purchasableCheck =
-                new PurchaseableArchipelagoLocation(locationDisplayName, locationName, _modHelper, _locationChecker, _archipelago, myActiveHints);
-            var purchasableCheck = new PurchaseableArchipelagoLocation(buildingName, locationName, _modHelper, _locationChecker, _archipelago, myActiveHints);
+            var purchasableCheck = new PurchaseableArchipelagoLocation(locationDisplayName, locationName, _modHelper, _locationChecker, _archipelago, myActiveHints);
             foreach (var material in materials)
             {
                 material.Stack = (int)(material.Stack * priceMultiplier);

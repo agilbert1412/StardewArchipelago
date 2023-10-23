@@ -1,6 +1,4 @@
-﻿using StardewValley.Locations;
-
-namespace StardewArchipelago.Locations.GingerIsland.Parrots
+﻿namespace StardewArchipelago.Locations.GingerIsland.Parrots
 {
     public interface IParrotReplacer
     {

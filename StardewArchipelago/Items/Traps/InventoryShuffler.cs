@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using HarmonyLib;
-using Microsoft.Xna.Framework;
 using StardewArchipelago.Extensions;
 using StardewValley;
 using StardewValley.Objects;
 using StardewValley.Tools;
-using xTile.Dimensions;
 
 namespace StardewArchipelago.Items.Traps
 {

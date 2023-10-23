@@ -33,14 +33,9 @@ namespace StardewArchipelago.Locations
                 return;
             }
             
-            var apName = salableObject.Name;
-            if (IsRarecrow(salableObject))
-            {
-                dsavar apName = BigCraftable.ConvertToApName(salableObject);
-                shouldRemoveOriginal = !_archipelago.HasReceivedItem(apName);
-                apName = BigCraftable.ConvertToRarecrowAPName(salableObject.Name, salableObject.getDescription());
-            }
+            var apName = BigCraftable.ConvertToApName(salableObject);
             var shouldRemoveOriginal = !_archipelago.HasReceivedItem(apName);
+
             ReplaceShopItem(itemPriceAndStock, itemOnSale, apLocation, shouldRemoveOriginal, myActiveHints);
         }
 

@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using StardewArchipelago.Archipelago;
+﻿using StardewArchipelago.Archipelago;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
 using StardewArchipelago.Serialization;
 using StardewModdingAPI;

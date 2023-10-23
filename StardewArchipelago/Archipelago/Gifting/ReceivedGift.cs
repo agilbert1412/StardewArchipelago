@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace StardewArchipelago.Archipelago.Gifting
+﻿namespace StardewArchipelago.Archipelago.Gifting
 {
     internal class ReceivedGift
     {

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
 using StardewValley;
-using StardewValley.Menus;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {

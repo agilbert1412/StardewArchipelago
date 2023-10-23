@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using StardewArchipelago.Extensions;
 using StardewValley;
 using xTile.Dimensions;
