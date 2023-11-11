@@ -426,7 +426,7 @@ namespace StardewArchipelago.GameModifications
         {
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Utility), nameof(Utility.getAnimalShopStock)),
-                prefix: new HarmonyMethod(typeof(GoldenEggInjections), nameof(GoldenEggInjections.GetAnimalShopStock_GoldenEggIfReceived_Postfix))
+                postfix: new HarmonyMethod(typeof(GoldenEggInjections), nameof(GoldenEggInjections.GetAnimalShopStock_GoldenEggIfReceived_Postfix))
             );
         }
 
