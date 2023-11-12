@@ -192,7 +192,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                                 order.Value.Repeatable == "True")
                 .Where(order => order.Value.Duration != "Month" || Game1.dayOfMonth <= 16)
                 .Where(order => CheckTags(order.Value.RequiredTags))
-                .Where(order => Game1.player.team.specialOrders.All(x => x.questKey.Value != order.Key));
+                .Where(order => Game1.player.team.specialOrders.All(x => x.questKey.Value != order.Key))
+                .Where(order => _archipelago.HasReceivedItem("Progressive Fishing Rod") || _archipelago.SlotData.ToolProgression == ToolProgression.Vanilla || !order.Value.Name.StartsWith("Demetrius"));
             return specialOrdersThatCanBeStartedToday;
         }
 
