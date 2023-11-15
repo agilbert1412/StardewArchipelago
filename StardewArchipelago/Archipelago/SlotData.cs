@@ -152,7 +152,7 @@ namespace StardewArchipelago.Archipelago
             AppearanceRandomizationDaily = false; // GetSlotSetting(RANDOMIZE_NPC_APPEARANCES_DAILY_KEY, false);
             var modsString = GetSlotSetting(MOD_LIST_KEY, "");
             var mods = JsonConvert.DeserializeObject<List<string>>(modsString);
-            Mods = new ModsManager(mods);
+            Mods = new ModsManager(_console, mods);
         }
 
         private T GetSlotSetting<T>(string key, T defaultValue) where T : struct, Enum, IConvertible

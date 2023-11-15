@@ -277,7 +277,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 }
 
                 var archipelagoItem = new TravelingMerchantItem(item, _archipelagoState);
-                stock.Add(archipelagoItem, stock[salable]);
+                stock.Add(archipelagoItem, new []{ stock[salable][0], 1 });
                 stock.Remove(salable);
             }
         }
