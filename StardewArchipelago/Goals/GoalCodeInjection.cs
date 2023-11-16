@@ -2,9 +2,11 @@
 using StardewModdingAPI;
 using StardewValley;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using StardewArchipelago.Locations;
 using StardewValley.Locations;
+using StardewValley.Menus;
 
 namespace StardewArchipelago.Goals
 {
@@ -226,6 +228,36 @@ namespace StardewArchipelago.Goals
             _archipelago.ReportGoalCompletion();
         }
 
+        public static void CheckGourmetChefGoalCompletion()
+        {
+            if (!_archipelago.IsConnected || _archipelago.SlotData.Goal != Goal.GourmetChef)
+            {
+                return;
+            }
+
+            if (!HasCookedAllRecipes())
+            {
+                return;
+            }
+
+            _archipelago.ReportGoalCompletion();
+        }
+
+        public static void CheckCraftMasterGoalCompletion()
+        {
+            if (!_archipelago.IsConnected || _archipelago.SlotData.Goal != Goal.CraftMaster)
+            {
+                return;
+            }
+
+            if (!HasCraftedAllRecipes())
+            {
+                return;
+            }
+
+            _archipelago.ReportGoalCompletion();
+        }
+
         public static void CheckPerfectionGoalCompletion()
         {
             if (!_archipelago.IsConnected || _archipelago.SlotData.Goal != Goal.Perfection)
@@ -287,6 +319,54 @@ namespace StardewArchipelago.Goals
             }
         }
 
+        private static bool HasCookedAllRecipes()
+        {
+            var allRecipes = Game1.content.Load<Dictionary<string, string>>("Data\\CookingRecipes");
+            foreach (var (recipeName, recipe) in allRecipes)
+            {
+                if (!Game1.player.cookingRecipes.ContainsKey(recipeName))
+                {
+                    return false;
+                }
+
+                var recipeId = Convert.ToInt32(recipe.Split('/')[2].Split(' ')[0]);
+                if (!Game1.player.recipesCooked.ContainsKey(recipeId))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private static bool HasCraftedAllRecipes()
+        {
+            var allRecipes = Game1.content.Load<Dictionary<string, string>>("Data\\CraftingRecipes");
+            foreach (var recipe in allRecipes.Keys)
+            {
+                if (!Game1.player.craftingRecipes.ContainsKey(recipe) || Game1.player.craftingRecipes[recipe] <= 0)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        // private void clickCraftingRecipe(ClickableTextureComponent c, bool playSound = true)
+        public static void ClickCraftingRecipe_CraftMasterGoal_Postfix(CraftingPage __instance, ClickableTextureComponent c, bool playSound)
+        {
+            try
+            {
+                CheckCraftMasterGoalCompletion();
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(ClickCraftingRecipe_CraftMasterGoal_Postfix)}:\n{ex}", LogLevel.Error);
+                return;
+            }
+        }
+
         // public static float percentGameComplete()
         public static void PercentGameComplete_PerfectionGoal_Postfix(ref float __result)
         {
@@ -320,6 +400,8 @@ namespace StardewArchipelago.Goals
                 Goal.GreatestWalnutHunter => "Find all 130 Golden Walnuts",
                 Goal.ProtectorOfTheValley => "Complete all the monster slaying goals",
                 Goal.FullShipment => "Ship every item",
+                Goal.GourmetChef => "Cook every recipe",
+                Goal.CraftMaster => "Craft every item",
                 Goal.Perfection => "Achieve Perfection",
                 _ => throw new NotImplementedException(),
             };
@@ -340,6 +422,8 @@ namespace StardewArchipelago.Goals
                 Goal.GreatestWalnutHunter => "Prove your worth to an old friend of mine, and become the greatest walnut hunter",
                 Goal.ProtectorOfTheValley => "Make sure the valley is safe for generations to come, by slaying all the monsters",
                 Goal.FullShipment => "Contribute to the local economy and market, by shipping as many things as you can",
+                Goal.GourmetChef => "Become a world-class chef, learn and cook all the recipes you can find",
+                Goal.CraftMaster => "Get used to making things with your hands, and craft as many items as you can",
                 Goal.Perfection => "For a fulfilling life, you need to do a lot of everything. Leave no loose ends",
                 _ => throw new NotImplementedException(),
             };

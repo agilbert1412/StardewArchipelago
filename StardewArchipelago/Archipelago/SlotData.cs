@@ -422,6 +422,7 @@ namespace StardewArchipelago.Archipelago
         ProtectorOfTheValley = 8,
         FullShipment = 9,
         GourmetChef = 10,
+        CraftMaster = 11,
         Perfection = 25,
     }
 

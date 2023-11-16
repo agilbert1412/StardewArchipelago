@@ -5,6 +5,7 @@ using StardewArchipelago.Locations;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
+using StardewValley.Menus;
 
 namespace StardewArchipelago.Goals
 {
@@ -60,6 +61,12 @@ namespace StardewArchipelago.Goals
                 case Goal.FullShipment:
                     GoalCodeInjection.CheckFullShipmentGoalCompletion();
                     return;
+                case Goal.GourmetChef:
+                    GoalCodeInjection.CheckGourmetChefGoalCompletion();
+                    return;
+                case Goal.CraftMaster:
+                    GoalCodeInjection.CheckCraftMasterGoalCompletion();
+                    return;
                 case Goal.Perfection:
                     GoalCodeInjection.CheckPerfectionGoalCompletion();
                     return;
@@ -100,6 +107,12 @@ namespace StardewArchipelago.Goals
                 case Goal.FullShipment:
                     // Gets tested when Shipping an item
                     return;
+                case Goal.GourmetChef:
+                    // Gets tested when Cooking a recipe
+                    return;
+                case Goal.CraftMaster:
+                    InjectCraftMasterGoalMethods();
+                    return;
                 case Goal.Perfection:
                     InjectPerfectionGoalMethods();
                     return;
@@ -129,6 +142,14 @@ namespace StardewArchipelago.Goals
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Farmer), nameof(Farmer.foundWalnut)),
                 postfix: new HarmonyMethod(typeof(GoalCodeInjection), nameof(GoalCodeInjection.FounddWalnut_WalnutHunterGoal_Postfix))
+            );
+        }
+
+        private void InjectCraftMasterGoalMethods()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(CraftingPage), "clickCraftingRecipe"),
+                postfix: new HarmonyMethod(typeof(GoalCodeInjection), nameof(GoalCodeInjection.ClickCraftingRecipe_CraftMasterGoal_Postfix))
             );
         }
 
