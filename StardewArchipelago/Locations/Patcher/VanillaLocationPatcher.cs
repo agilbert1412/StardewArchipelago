@@ -64,8 +64,7 @@ namespace StardewArchipelago.Locations.Patcher
             AddShipsanityLocations();
             PatchMonstersanity();
             AddCooksanityLocations();
-            AddChefsanityLocations();
-            AddCraftsanityLocations();
+            PatchChefAndCraftsanity();
         }
 
         private void ReplaceCommunityCenterBundlesWithChecks()
@@ -823,7 +822,22 @@ namespace StardewArchipelago.Locations.Patcher
             );
         }
 
-        private void AddChefsanityLocations()
+        private void PatchChefAndCraftsanity()
+        {
+            PatchStartingRecipes();
+            PatchChefsanity();
+            PatchCraftsanity();
+        }
+
+        private void PatchStartingRecipes()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Farmer), "farmerInit"),
+                postfix: new HarmonyMethod(typeof(StartingRecipesInjections), nameof(StartingRecipesInjections.FarmerInit_RemoveStartingRecipes_Postfix))
+            );
+        }
+
+        private void PatchChefsanity()
         {
             _harmony.Patch(
                 original: AccessTools.Method(typeof(TV), "getWeeklyRecipe"),
@@ -869,7 +883,7 @@ namespace StardewArchipelago.Locations.Patcher
             );
         }
 
-        private void AddCraftsanityLocations()
+        private void PatchCraftsanity()
         {
             if (_archipelago.SlotData.Craftsanity == Craftsanity.None)
             {
