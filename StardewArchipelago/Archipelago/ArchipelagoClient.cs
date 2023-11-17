@@ -595,6 +595,16 @@ namespace StardewArchipelago.Archipelago
             return _session.Locations.AllLocations.Contains(id);
         }
 
+        public IReadOnlyCollection<long> GetAllMissingLocations()
+        {
+            if (!MakeSureConnected())
+            {
+                return new List<long>();
+            }
+
+            return _session.Locations.AllMissingLocations;
+        }
+
         public long GetLocationId(string locationName, string gameName = GAME_NAME)
         {
             if (!MakeSureConnected())

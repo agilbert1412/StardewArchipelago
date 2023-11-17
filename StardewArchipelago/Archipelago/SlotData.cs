@@ -423,6 +423,9 @@ namespace StardewArchipelago.Archipelago
         FullShipment = 9,
         GourmetChef = 10,
         CraftMaster = 11,
+        Legend = 12,
+        MysteryOfTheStardrops = 13,
+        Allsanity = 24,
         Perfection = 25,
     }
 

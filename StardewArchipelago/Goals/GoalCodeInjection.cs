@@ -258,6 +258,51 @@ namespace StardewArchipelago.Goals
             _archipelago.ReportGoalCompletion();
         }
 
+        public static void CheckLegendGoalCompletion()
+        {
+            if (!_archipelago.IsConnected || _archipelago.SlotData.Goal != Goal.Legend)
+            {
+                return;
+            }
+
+            if (Game1.player.totalMoneyEarned < 10000000)
+            {
+                return;
+            }
+
+            _archipelago.ReportGoalCompletion();
+        }
+
+        public static void CheckMysteryOfTheStardropsGoalCompletion()
+        {
+            if (!_archipelago.IsConnected || _archipelago.SlotData.Goal != Goal.MysteryOfTheStardrops)
+            {
+                return;
+            }
+
+            if (!Game1.player.mailReceived.Contains("gotMaxStamina"))
+            {
+                return;
+            }
+
+            _archipelago.ReportGoalCompletion();
+        }
+
+        public static void CheckAllsanityGoalCompletion()
+        {
+            if (!_archipelago.IsConnected || _archipelago.SlotData.Goal != Goal.Allsanity)
+            {
+                return;
+            }
+
+            if (_locationChecker.GetAllMissingLocations().Any())
+            {
+                return;
+            }
+
+            _archipelago.ReportGoalCompletion();
+        }
+
         public static void CheckPerfectionGoalCompletion()
         {
             if (!_archipelago.IsConnected || _archipelago.SlotData.Goal != Goal.Perfection)
@@ -367,6 +412,45 @@ namespace StardewArchipelago.Goals
             }
         }
 
+        // public uint totalMoneyEarned
+        public static void TotalMoneyEarned_CheckLegendGoalCompletion_Postfix(Farmer __instance, uint value)
+        {
+            try
+            {
+                CheckLegendGoalCompletion();
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(TotalMoneyEarned_CheckLegendGoalCompletion_Postfix)}:\n{ex}", LogLevel.Error);
+                return;
+            }
+        }
+
+        // public static bool foundAllStardrops(Farmer who = null)
+        public static void FoundAllStardrops_CheckStardropsGoalCompletion_Postfix(Farmer who, ref bool __result)
+        {
+            try
+            {
+                if (who.MaxStamina < 508)
+                {
+                    return;
+                }
+
+                who.ClearBuffs();
+                if (who.MaxStamina < 508)
+                {
+                    return;
+                }
+
+                _archipelago.ReportGoalCompletion();
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(FoundAllStardrops_CheckStardropsGoalCompletion_Postfix)}:\n{ex}", LogLevel.Error);
+                return;
+            }
+        }
+
         // public static float percentGameComplete()
         public static void PercentGameComplete_PerfectionGoal_Postfix(ref float __result)
         {
@@ -402,6 +486,9 @@ namespace StardewArchipelago.Goals
                 Goal.FullShipment => "Ship every item",
                 Goal.GourmetChef => "Cook every recipe",
                 Goal.CraftMaster => "Craft every item",
+                Goal.Legend => "Earn 10 000 000g",
+                Goal.MysteryOfTheStardrops => "Obtain all stardrops",
+                Goal.Allsanity => "Complete every Archipelago check",
                 Goal.Perfection => "Achieve Perfection",
                 _ => throw new NotImplementedException(),
             };
@@ -424,6 +511,9 @@ namespace StardewArchipelago.Goals
                 Goal.FullShipment => "Contribute to the local economy and market, by shipping as many things as you can",
                 Goal.GourmetChef => "Become a world-class chef, learn and cook all the recipes you can find",
                 Goal.CraftMaster => "Get used to making things with your hands, and craft as many items as you can",
+                Goal.Legend => "Nothing beats cold hard cash. Become rich enough, and buy your happiness",
+                Goal.MysteryOfTheStardrops => "A healthy body is a healthy mind. Get in shape by increasing your energy to the maximum.",
+                Goal.Allsanity => "You cannot leave anyone stranded in a Burger King. Leave no loose ends",
                 Goal.Perfection => "For a fulfilling life, you need to do a lot of everything. Leave no loose ends",
                 _ => throw new NotImplementedException(),
             };

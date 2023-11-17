@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Goals;
 using StardewModdingAPI;
 
 namespace StardewArchipelago.Locations
@@ -38,6 +39,11 @@ namespace StardewArchipelago.Locations
             return _archipelago.LocationExists(locationName) && IsLocationNotChecked(locationName);
         }
 
+        public IReadOnlyCollection<long> GetAllMissingLocations()
+        {
+            return _archipelago.GetAllMissingLocations();
+        }
+        
         public void AddCheckedLocation(string locationName)
         {
             if (_checkedLocations.ContainsKey(locationName))
@@ -54,6 +60,7 @@ namespace StardewArchipelago.Locations
 
             _checkedLocations.Add(locationName, locationId);
             SendAllLocationChecks();
+            GoalCodeInjection.CheckAllsanityGoalCompletion();
         }
 
         public void SendAllLocationChecks()
