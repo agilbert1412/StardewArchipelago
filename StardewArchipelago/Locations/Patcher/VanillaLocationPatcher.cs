@@ -336,6 +336,11 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void ReplaceChildrenWithChecks()
         {
+            if (_archipelago.SlotData.Friendsanity == Friendsanity.None)
+            {
+                return;
+            }
+
             _harmony.Patch(
                 original: AccessTools.Method(typeof(NPC), nameof(NPC.canGetPregnant)),
                 prefix: new HarmonyMethod(typeof(PregnancyInjections), nameof(PregnancyInjections.CanGetPregnant_ShuffledPregnancies_Prefix))
