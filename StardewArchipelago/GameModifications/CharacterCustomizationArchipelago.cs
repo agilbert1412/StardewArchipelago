@@ -138,6 +138,11 @@ namespace StardewArchipelago.GameModifications
             base.receiveKeyPress(key);
         }
 
+        public override void RefreshFarmTypeButtons()
+        {
+            farmTypeButtons.Clear();
+        }
+
         private void SetupArchipelagoFieldsPositions()
         {
             var xOffset = xPositionOnScreen + spaceToClearSideBorder + borderWidth;
