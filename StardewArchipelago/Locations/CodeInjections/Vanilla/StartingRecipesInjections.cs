@@ -1,19 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Archipelago.MultiClient.Net.Models;
-using Microsoft.Xna.Framework;
 using Netcode;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
-using StardewValley.Locations;
-using StardewValley.Menus;
 using StardewValley.Network;
-using StardewValley.Objects;
-using xTile.Dimensions;
-using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {

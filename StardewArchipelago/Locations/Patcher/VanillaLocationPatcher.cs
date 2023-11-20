@@ -65,6 +65,7 @@ namespace StardewArchipelago.Locations.Patcher
             PatchMonstersanity();
             AddCooksanityLocations();
             PatchChefAndCraftsanity();
+            PatchKrobusShop();
         }
 
         private void ReplaceCommunityCenterBundlesWithChecks()
@@ -340,6 +341,11 @@ namespace StardewArchipelago.Locations.Patcher
             {
                 return;
             }
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(NPC), nameof(NPC.checkAction)),
+                prefix: new HarmonyMethod(typeof(SpouseInjections), nameof(SpouseInjections.CheckAction_SpouseStardrop_Prefix))
+            );
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(NPC), nameof(NPC.canGetPregnant)),
@@ -913,6 +919,14 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Sewer), nameof(Sewer.getShadowShopStock)),
                 postfix: new HarmonyMethod(typeof(CraftingInjections), nameof(CraftingInjections.GetShadowShopStock_PurchasableRecipeChecks_Postfix))
+            );
+        }
+
+        private void PatchKrobusShop()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Sewer), nameof(Sewer.getShadowShopStock)),
+                postfix: new HarmonyMethod(typeof(KrobusShopInjections), nameof(KrobusShopInjections.GetShadowShopStock_StardropCheck_Postfix))
             );
         }
     }

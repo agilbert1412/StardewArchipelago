@@ -34,6 +34,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             MuseumInjections.Initialize(monitor, modHelper, archipelago, locationChecker, itemManager);
             FriendshipInjections.Initialize(monitor, modHelper, archipelago, locationChecker, itemManager);
             SpecialOrderInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
+            SpouseInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             PregnancyInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             CropsanityInjections.Initialize(monitor, archipelago, locationChecker, itemManager);
             InitializeFestivalPatches(monitor, modHelper, archipelago, locationChecker, shopReplacer);
@@ -46,6 +47,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             RecipeLevelUpInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             RecipeFriendshipInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             CraftingInjections.Initialize(monitor, modHelper, archipelago, locationChecker, itemManager);
+            KrobusShopInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
         }
 
         private static void InitializeFestivalPatches(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker, ShopReplacer shopReplacer)
