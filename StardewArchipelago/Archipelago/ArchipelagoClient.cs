@@ -283,12 +283,22 @@ namespace StardewArchipelago.Archipelago
 
         public int GetTeam()
         {
+            if (!MakeSureConnected())
+            {
+                return -1;
+            }
+
             return _session.ConnectionInfo.Team;
         }
 
         public string GetPlayerName(int playerSlot)
         {
-            return _session.Players.GetPlayerName(playerSlot) ?? "Archipelago";
+            if (!MakeSureConnected())
+            {
+                return "Archipelago Player";
+            }
+
+            return _session.Players.GetPlayerName(playerSlot) ?? "Archipelago Player";
         }
 
         public string GetPlayerAlias(string playerName)
@@ -309,11 +319,21 @@ namespace StardewArchipelago.Archipelago
 
         public bool PlayerExists(string playerName)
         {
+            if (!MakeSureConnected())
+            {
+                return false;
+            }
+
             return _session.Players.AllPlayers.Any(x => x.Name == playerName) || _session.Players.AllPlayers.Any(x => x.Alias == playerName);
         }
 
         public string GetPlayerGame(string playerName)
         {
+            if (!MakeSureConnected())
+            {
+                return null;
+            }
+
             var player = _session.Players.AllPlayers.FirstOrDefault(x => x.Name == playerName);
             if (player == null)
             {
@@ -325,6 +345,11 @@ namespace StardewArchipelago.Archipelago
 
         public string GetPlayerGame(int playerSlot)
         {
+            if (!MakeSureConnected())
+            {
+                return null;
+            }
+
             var player = _session.Players.AllPlayers.FirstOrDefault(x => x.Slot == playerSlot);
             return player?.Game;
         }
@@ -553,6 +578,11 @@ namespace StardewArchipelago.Archipelago
 
         public Hint[] GetMyActiveHints()
         {
+            if (!MakeSureConnected())
+            {
+                return Array.Empty<Hint>();
+            }
+
             return GetHints().Where(x => !x.Found && GetPlayerName(x.FindingPlayer) == SlotData.SlotName).ToArray();
         }
 
