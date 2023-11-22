@@ -93,13 +93,15 @@ namespace StardewArchipelago.Archipelago
             }
             catch (Exception e)
             {
-                result = new LoginFailure(e.GetBaseException().Message);
+                var message = e.GetBaseException().Message;
+                result = new LoginFailure(message);
+                _console.Log($"An error occured trying to connect to archipelago. Message: {message}", LogLevel.Error);
             }
 
             if (!result.Successful)
             {
                 var failure = (LoginFailure)result;
-                errorMessage = $"Failed to Connect to {_connectionInfo.HostUrl}:{_connectionInfo.Port} as {_connectionInfo.SlotName}:";
+                errorMessage = $"Failed to Connect to {_connectionInfo?.HostUrl}:{_connectionInfo?.Port} as {_connectionInfo?.SlotName}:";
                 foreach (var error in failure.Errors)
                 {
                     errorMessage += $"\n    {error}";
