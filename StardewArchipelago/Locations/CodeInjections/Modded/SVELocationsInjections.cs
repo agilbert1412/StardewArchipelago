@@ -89,7 +89,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             }
         }
 
-//Locations to be added as checks
     public static bool CheckForAction_LanceChest_Prefix(Chest __instance, Farmer who, bool justCheckingForActivity, ref bool __result)
         {
             try
@@ -128,6 +127,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             }
         }        
 
+    // There's an alternative Rusty Key event that's added from Marlon by being friends with him.
     public static bool SkipEvent_AlternativeRustyKey_Prefix(Event __instance)
         {
             try
@@ -196,18 +196,19 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(SkipEvent_AlternativeRustyKey_Prefix)}:\n{ex}", LogLevel.Error);
+                _monitor.Log($"Failed in {nameof(SkipEvent_ReleaseMorris_Postfix)}:\n{ex}", LogLevel.Error);
                 return; // run original logic
             }
         }
 
         public static void SVEEventInitializer()
         {
-            VillagerInitializer();
-            WarpInitializer();
+            ViewableCutsceneInitializer();
+            LockedCutsceneInitializer();
         }
 
-        public static void VillagerInitializer()
+        // Some events we want to see, so this will let them play out, so we make up AP event scene requirements.
+        public static void ViewableCutsceneInitializer()
         {
             var farm_events = Game1.content.Load<Dictionary<string, string>>("Data\\Events\\Farm");
             var farmhouse_events = Game1.content.Load<Dictionary<string, string>>("Data\\Events\\FarmHouse");
@@ -217,13 +218,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             var newMorganRule = "5978924/e " + MORGAN_EVENT.ToString(); //Only shows up if AP event plays
             var morganEvent = farm_events[oldMorganRule];
             var applesEvent = farmhouse_events[oldApplesRule];
+            var scarlettEvent = 
             farm_events.Remove(oldMorganRule);
             farmhouse_events.Remove(oldApplesRule);
             farm_events[newMorganRule] = morganEvent;
             farmhouse_events[newApplesRule] = applesEvent;
         }    
-        // Force every warp to have itself as a prerequisite (so AP items can only unlock them)
-        public static void WarpInitializer()
+        // Otherwise, we should just lock the events out of being seen at all.
+        public static void LockedCutsceneInitializer()
         {
             var currentEventData = new Dictionary<string, string>();
             string mapName;
@@ -242,10 +244,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 {
                     string[] totalEventKey = eventKey.Split("/");
                     eventID = totalEventKey[1];
+                    // Sometimes, CP has not added the cutscene to the event list yet due to its dynamic adding methods...
                     if(!currentEventData.ContainsKey(eventKey))
                     {
+                        // ... so just add a dummy event if that's the case to make sure its locked and move on to the next event.
                         currentEventData[eventKey] = "continue/-200 -200 0/Lewis -10 -10 0/pause 50/end";
                     }
+                    // Everything exists now, so just make the requirement for the event itself.
                     newEventKey = eventKey + "/e " + eventID;
                     eventData = currentEventData[eventKey];
                     currentEventData.Remove(eventKey);
@@ -265,15 +270,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         public const string LANCE_CHEST = "Lance's Diamond Wand";
         public const string RUSTY_KEY_ALT = "Rusty Key";
         private static readonly Dictionary<string, string[]> warpKeys = new(){ // Contains the original event requirements to be edited
-            { "IslandWest", new[]{"65360191/f Lance 2000"}},
-            { "FarmHouseFarmRune", new[]{"908074/e 908072/t 600 630"}},
-            { "FarmHouseOutpostRune", new[]{"908078/e 908072/t 600 2400"}},
-            { "Backwoods", new[]{"908072/e 908071"}},
+            { "IslandWest", new[]{"65360191/f Lance 2000"}}, // Lance giving you the Fable Reef Warp
+            { "FarmHouseFarmRune", new[]{"908074/e 908072/t 600 630"}}, // Unlocking the Farm Rune
+            { "FarmHouseOutpostRune", new[]{"908078/e 908072/t 600 2400"}}, // Unlocking Galmoran Outpost
+            { "Backwoods", new[]{"908072/e 908071"}}, // Unlocking Wizard Rune
             { "Custom_AdventurerSummit", new[]{"908073/e 908072/z winter/t 600 1900/w sunny", "908073/e 908072/z winter/t 1910 2400/w sunny", 
-            "908073/e 908072/z winter/w rainy", "908073/e 908072/z spring/z summer/z fall"}},
-            { "Custom_AuroraVineyard", new[]{"908075/e 908072", "908075/e 908072/f Apples 10"}},
-            { "Custom_SpriteSpring2", new[]{"908076/e 908072"}},
-            { "Custom_JunimoWoods", new[]{"908077/e 908072"}},
+            "908073/e 908072/z winter/w rainy", "908073/e 908072/z spring/z summer/z fall"}}, // Unlocking Summit Rune
+            { "Custom_AuroraVineyard", new[]{"908075/e 908072", "908075/e 908072/f Apples 10"}}, // Unlocking Vineyard Rune
+            { "Custom_SpriteSpring2", new[]{"908076/e 908072"}}, // Unlocking Springs Rune
+            { "Custom_JunimoWoods", new[]{"908077/e 908072"}}, // Unlocking Junimo Rune
+            { "Town", new[]{"3691371"}} // The initializer for Scarlett to be a villager.
         };
     }
 }
