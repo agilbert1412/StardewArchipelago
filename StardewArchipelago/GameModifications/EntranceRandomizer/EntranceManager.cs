@@ -376,13 +376,8 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
 
         private static readonly Dictionary<string, Dictionary<string,string>> _modifiedAliases = new()
         {
-            { "Stardew Valley Expanded", _sveAliases
+            { "Stardew Valley Expanded", new(){{"WizardHouseBasement", "Custom_WizardBasement"}}
             }
-        };
-
-        private static readonly Dictionary<string, string> _sveAliases = new()
-        {
-            {"WizardHouseBasement", "Custom_WizardBasement"}
         };
     }
 
