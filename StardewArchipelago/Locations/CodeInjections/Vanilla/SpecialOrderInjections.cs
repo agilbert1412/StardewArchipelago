@@ -6,15 +6,20 @@ using Microsoft.Xna.Framework.Content;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Extensions;
 using StardewArchipelago.Items.Unlocks;
+using StardewArchipelago.Constants;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.GameData;
+using System.Xml.Schema;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
     public class SpecialOrderInjections
     {
         private static string[] _ignoredSpecialOrders {get; set;}
+        private static string[] _vanillaSpecialOrderReward = new[]{ //Exists temporarily to avoid removing mail rewards
+            "Grandpa's Shed", "Aurora Vineyard"
+        };
         private static IMonitor _monitor;
         private static IModHelper _modHelper;
         private static ArchipelagoClient _archipelago;
@@ -59,7 +64,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
                 // Remove vanilla rewards if the player has not received the check.
                 // We will keep vanilla rewards for repeated orders
-                if (_locationChecker.IsLocationMissingAndExists(specialOrderName))
+                if (_locationChecker.IsLocationMissingAndExists(specialOrderName) & !_vanillaSpecialOrderReward.Contains(specialOrderName))
                 {
                     __result.rewards.Clear();
                 }
@@ -267,6 +272,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             var specialOrderStrings = _englishContentManager.Load<Dictionary<string, string>>("Strings\\SpecialOrderStrings");
             questNameKey = questNameKey.Trim();
             int startIndex;
+            string thisString;
             do
             {
                 startIndex = questNameKey.LastIndexOf('[');
@@ -276,7 +282,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     if (num == -1)
                         return questNameKey;
                     var str1 = questNameKey.Substring(startIndex + 1, num - startIndex - 1);
-                    var thisString = specialOrderStrings[str1];
+                    if (specialOrderStrings.ContainsKey(str1)) 
+                        thisString = specialOrderStrings[str1];
+                    else
+                        thisString = SpecialOrderNames.Mods[str1];
                     questNameKey = questNameKey.Remove(startIndex, num - startIndex + 1);
                     questNameKey = questNameKey.Insert(startIndex, thisString);
                 }
