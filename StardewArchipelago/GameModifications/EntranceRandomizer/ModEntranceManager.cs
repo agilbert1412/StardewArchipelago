@@ -84,7 +84,8 @@ public class ModEntranceManager
             { "Marlon's Boat", "Custom_AdventurersSummit"},
             { "Forest West", "Custom_ForestWest"},
             { "First Slash Hallway", "Custom_FirstSlashHallway"},
-            { "First Slash Spare Bedroom", "Custom_FirstSlashGuestRoom"}
+            { "First Slash Spare Bedroom", "Custom_FirstSlashGuestRoom"},
+            { "Sprite Spring Cave", "Custom_SpriteSpringCave"}
     };
     private static readonly Dictionary<string, string> _locationEugene = new()
     {
