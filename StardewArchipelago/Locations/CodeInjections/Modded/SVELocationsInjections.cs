@@ -226,12 +226,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         public static void WarpInitializer()
         {
             var currentEventData = new Dictionary<string, string>();
-            var mapName = "";
-            var eventData = "";
-            var newEventKey = "";
-            var appendedRequirement = "";
-            var totalEventKey = Array.Empty<string>();
-            var eventID = "";
+            string mapName;
+            string eventData;
+            string newEventKey;
+            string eventID;
             foreach( var kvp in warpKeys)
             {
                 mapName = kvp.Key;
@@ -241,14 +239,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 }
                 currentEventData = Game1.content.Load<Dictionary<string, string>>("Data\\Events\\" + mapName);
                 foreach( var eventKey in kvp.Value)
-                {   
-                    totalEventKey = eventKey.Split("/");
+                {
+                    string[] totalEventKey = eventKey.Split("/");
                     eventID = totalEventKey[1];
                     if(!currentEventData.ContainsKey(eventKey))
                     {
                         currentEventData[eventKey] = "continue/-200 -200 0/Lewis -10 -10 0/pause 50/end";
                     }
-                    newEventKey = eventKey + "/e " + appendedRequirement;
+                    newEventKey = eventKey + "/e " + eventID;
                     eventData = currentEventData[eventKey];
                     currentEventData.Remove(eventKey);
                     currentEventData[newEventKey] = eventData;
