@@ -11,7 +11,6 @@ namespace StardewArchipelago.Items.Mail
 
         public void ModLetters(Dictionary<string, Action<string>> letterActions)
         {
-            
             letterActions.Add(LetterActionsKeys.DiamondWand, (_) => ReceiveDiamondWand());
         }
 
