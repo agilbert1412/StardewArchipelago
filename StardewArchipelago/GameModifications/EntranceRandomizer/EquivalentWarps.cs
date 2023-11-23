@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using StardewValley;
 
@@ -13,6 +13,9 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
         private const string trailerBig = "Trailer_Big";
         private const string beach = "Beach";
         private const string beachNightMarket = "BeachNightMarket";
+        private const string wizardBasementSVE = "Custom_WizardBasement";
+        private const string grandpaShedClear = "Custom_GrandpasShedCleared";
+        private const string grandpaShedFinish = "Custom_GrandpasShed";
         private static string[] _jojaMartLocations = { jojaMart, abandonedJojaMart, movieTheater };
         private static string[] _trailerLocations = { trailer, trailerBig };
         private static string[] _beachLocations = { beach, beachNightMarket };

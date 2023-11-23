@@ -13,7 +13,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             VanillaCodeInjectionInitializer.Initialize(monitor, modHelper, archipelago, state, locationChecker, itemManager, weaponsManager);
             if (archipelago.SlotData.Mods.IsModded)
             {
-                ModCodeInjectionInitializer.Initialize(monitor, modHelper, archipelago, locationChecker);
+                ModCodeInjectionInitializer.Initialize(monitor, modHelper, archipelago, locationChecker, shopReplacer);
             }
         }
     }

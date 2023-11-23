@@ -323,11 +323,6 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void ReplaceSpecialOrdersWithChecks()
         {
-            if (_archipelago.SlotData.SpecialOrderLocations == SpecialOrderLocations.Disabled)
-            {
-                return;
-            }
-
             _harmony.Patch(
                 original: AccessTools.Method(typeof(SpecialOrder), nameof(SpecialOrder.IsSpecialOrdersBoardUnlocked)),
                 prefix: new HarmonyMethod(typeof(SpecialOrderInjections), nameof(SpecialOrderInjections.IsSpecialOrdersBoardUnlocked_UnlockBasedOnApItem_Prefix))

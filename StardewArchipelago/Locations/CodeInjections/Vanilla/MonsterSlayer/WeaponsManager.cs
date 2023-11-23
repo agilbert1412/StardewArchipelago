@@ -44,7 +44,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
                 };
 
                 var tier = (int)(weaponLevel / WEAPON_LEVELS_PER_TIER) + 1;
-                Debug.Assert(tier is >= 1 and <= 5);
                 AddToWeapons(weapon, type, tier);
             }
         }

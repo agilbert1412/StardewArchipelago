@@ -10,13 +10,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
     {
         static ArchipelagoClient _archipelago;
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker, ShopReplacer shopReplacer)
         {
             _archipelago = archipelago;
-            InitializeModdedContent(monitor, modHelper, archipelago, locationChecker);
+            InitializeModdedContent(monitor, modHelper, archipelago, locationChecker, shopReplacer);
         }
 
-        private static void InitializeModdedContent(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        private static void InitializeModdedContent(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker, ShopReplacer shopReplacer)
         {
             if (_archipelago.SlotData.Mods.HasMod(ModNames.DEEP_WOODS))
             {
@@ -41,6 +41,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             if (archipelago.SlotData.Mods.ModIsInstalledAndLoaded(modHelper, "SpaceCore"))
             {
                 NewSkillsPageInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
+            }
+            if (archipelago.SlotData.Mods.HasMod(ModNames.SVE))
+            {
+                SVELocationsInjections.Initialize(monitor, modHelper, archipelago, locationChecker, shopReplacer);
             }
         }
     }

@@ -14,11 +14,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
     public class SpecialOrderInjections
     {
-        private static readonly string[] _ignoredSpecialOrders =
-        {
-            // Add ignored orders here
-        };
-
+        private static string[] _ignoredSpecialOrders {get; set;}
         private static IMonitor _monitor;
         private static IModHelper _modHelper;
         private static ArchipelagoClient _archipelago;
@@ -32,6 +28,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             _archipelago = archipelago;
             _locationChecker = locationChecker;
             _englishContentManager = new ContentManager(Game1.game1.Content.ServiceProvider, Game1.game1.Content.RootDirectory);
+            _ignoredSpecialOrders = archipelago.SlotData.ExcludedOrdersData;
         }
 
         // public static bool IsSpecialOrdersBoardUnlocked()
@@ -139,6 +136,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             try
             {
+                if (_archipelago.SlotData.SpecialOrderLocations == SpecialOrderLocations.Disabled)
+            {
+                return true; //run original logic;
+            }
                 UpdateAvailableSpecialOrdersBasedOnApState(force_refresh);
                 return false; // don't run original logic;
             }

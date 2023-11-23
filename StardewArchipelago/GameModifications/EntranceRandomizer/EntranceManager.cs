@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -63,6 +63,12 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             if (slotData.EntranceRandomization == EntranceRandomization.Disabled)
             {
                 return;
+            }
+
+            ModEntranceManager.IncludeModLocationAlias(_locationAliases, slotData);
+            foreach( var kvp in _aliasesRemoveSpaces) // to keep the 's and space rules at the bottom
+            {
+                _locationAliases.Add(kvp.Key, kvp.Value);
             }
 
             foreach (var (originalEntrance, replacementEntrance) in slotData.ModifiedEntrances)
@@ -266,7 +272,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             return (split[0], split[1]);
         }
 
-        private static string TurnAliased(string key)
+        private string TurnAliased(string key)
         {
             if (key.Contains(TRANSITIONAL_STRING))
             {
@@ -279,11 +285,11 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             }
 
             var modifiedString = TurnAliased(key, _locationAliases);
-
+            //modifiedString = ModTurnAliased(key, modifiedString);
             return modifiedString;
         }
 
-        private static string TurnAliased(string key, Dictionary<string, string> aliases)
+        private string TurnAliased(string key, Dictionary<string, string> aliases)
         {
             var modifiedString = key;
             foreach (var (oldString, newString) in aliases)
@@ -300,13 +306,25 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             return modifiedString;
         }
 
+        /*private static string ModTurnAliased(string key, string modifiedString)
+        {
+            foreach( var mod in _modifiedAliases)
+            {
+                if (_modsManager.HasMod(mod.Key))
+                {
+                    modifiedString = TurnAliased(key, _modifiedAliases[mod.Key]);
+                }
+            }
+            return modifiedString;
+        }*/
+
         private static readonly Dictionary<string, string> _entranceAliases = new()
         {
             { "SebastianRoom to ScienceHouse|6|24", "SebastianRoom to ScienceHouse" }, // LockedDoorWarp 6 24 ScienceHouse 900 2000S–
             { "ScienceHouse|6|24 to SebastianRoom", "ScienceHouse to SebastianRoom" }, // LockedDoorWarp 6 24 ScienceHouse 900 2000S–
         };
 
-        private static readonly Dictionary<string, string> _locationAliases = new()
+        private Dictionary<string, string> _locationAliases = new()
         {
             { "Mayor's Manor", "ManorHouse" },
             { "Pierre's General Store", "SeedShop" },
@@ -348,17 +366,23 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Professor Snail Cave", "IslandNorthCave1"},
             { "Qi Walnut Room", "QiNutRoom" },
             { "Mutant Bug Lair", "BugLand"},
-            { "Eugene's Garden", "Custom_EugeneNPC_EugeneHouse" },
-            { "Eugene's Bedroom", "Custom_EugeneNPC_EugeneRoom" },
-            { "Deep Woods House", "DeepWoodsMaxHouse" },
-            { "Alec's Pet Shop", "Custom_AlecsPetShop" },
-            { "Alec's Bedroom", "Custom_AlecsRoom" },
-            { "Juna's Cave", "Custom_JunaNPC_JunaCave" },
-            { "Jasper's Bedroom", "Custom_LK_Museum2" },
-            { "Ayeisha's Mail Van", "Custom_AyeishaVanRoad" },
-            { "Yoba's Clearing", "Custom_Woods3" },
+        };
+
+        private Dictionary<string, string> _aliasesRemoveSpaces = new()
+        {
             { "'s", "" },
             { " ", "" },
+        };
+
+        private static readonly Dictionary<string, Dictionary<string,string>> _modifiedAliases = new()
+        {
+            { "Stardew Valley Expanded", _sveAliases
+            }
+        };
+
+        private static readonly Dictionary<string, string> _sveAliases = new()
+        {
+            {"WizardHouseBasement", "Custom_WizardBasement"}
         };
     }
 

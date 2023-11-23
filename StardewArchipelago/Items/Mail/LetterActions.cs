@@ -36,6 +36,7 @@ namespace StardewArchipelago.Items.Mail
             _weaponsManager = weaponsManager;
             _trapManager = trapManager;
             _babyBirther = new BabyBirther();
+            var _modLetters = new ModLetterActions();
             _letterActions = new Dictionary<string, Action<string>>();
             _letterActions.Add(LetterActionsKeys.Friendship, IncreaseFriendshipWithEveryone);
             _letterActions.Add(LetterActionsKeys.Backpack, (_) => IncreaseBackpackLevel());

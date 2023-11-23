@@ -48,6 +48,7 @@ namespace StardewArchipelago.Archipelago
         private const string SEED_KEY = "seed";
         private const string MODIFIED_BUNDLES_KEY = "modified_bundles";
         private const string MODIFIED_ENTRANCES_KEY = "randomized_entrances";
+        private const string EXCLUDED_SPECIAL_ORDERS = "excluded_special_orders";
         // private const string RANDOMIZE_NPC_APPEARANCES_KEY = "randomize_appearances";
         // private const string RANDOMIZE_NPC_APPEARANCES_DAILY_KEY = "randomize_appearances_daily";
         private const string MULTIWORLD_VERSION_KEY = "client_version";
@@ -99,6 +100,7 @@ namespace StardewArchipelago.Archipelago
         public Dictionary<string, string> ModifiedEntrances { get; set; }
         public AppearanceRandomization AppearanceRandomization { get; set; }
         public bool AppearanceRandomizationDaily { get; set; }
+        public string[] ExcludedOrdersData {get; set;}
         public ModsManager Mods { get; set; }
 
         public SlotData(string slotName, Dictionary<string, object> slotDataFields, IMonitor console)
@@ -146,6 +148,8 @@ namespace StardewArchipelago.Archipelago
             Seed = GetSlotSetting(SEED_KEY, "");
             MultiworldVersion = GetSlotSetting(MULTIWORLD_VERSION_KEY, "");
             BundlesData = GetSlotSetting(MODIFIED_BUNDLES_KEY, "");
+            var excludedOrdersStringData = GetSlotSetting(EXCLUDED_SPECIAL_ORDERS, "");
+            ExcludedOrdersData = JsonConvert.DeserializeObject<string[]>(excludedOrdersStringData);
             var newEntrancesStringData = GetSlotSetting(MODIFIED_ENTRANCES_KEY, "");
             ModifiedEntrances = JsonConvert.DeserializeObject<Dictionary<string, string>>(newEntrancesStringData);
             AppearanceRandomization = AppearanceRandomization.Disabled; // GetSlotSetting(RANDOMIZE_NPC_APPEARANCES_KEY, AppearanceRandomization.Disabled);

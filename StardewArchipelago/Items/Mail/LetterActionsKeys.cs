@@ -38,5 +38,7 @@
         public const string Trap = "Trap";
         public const string LearnCookingRecipe = "LearnCookingRecipe";
         public const string MovieTheater = "Repair Movie Theater";
+        public const string DiamondWand = "Diamond Wand";
+        public const string MorganInvitation = "Morgan's Schooling";
     }
 }

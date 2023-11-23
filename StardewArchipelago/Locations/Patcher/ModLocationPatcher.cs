@@ -1,4 +1,7 @@
 ﻿using HarmonyLib;
+using System.Collections.Generic;
+using System;
+
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
 using StardewArchipelago.GameModifications.CodeInjections.Modded;
@@ -7,6 +10,9 @@ using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Locations.GingerIsland;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Menus;
+using StardewValley.Objects;
+
 
 namespace StardewArchipelago.Locations.Patcher
 {
@@ -32,6 +38,7 @@ namespace StardewArchipelago.Locations.Patcher
             AddDeepWoodsModInjections();
             AddMagicModInjections();
             AddSkullCavernElevatorModInjections();
+            AddSVEModInjections();
         }
 
         private void AddModSkillInjections()
@@ -232,6 +239,54 @@ namespace StardewArchipelago.Locations.Patcher
                 original: myElevatorMenuWithScrollBarConstructor,
                 prefix: new HarmonyMethod(typeof(SkullCavernInjections), nameof(SkullCavernInjections.MyElevatorMenuConstructor_SkullCavernElevator_Prefix)),
                 postfix: new HarmonyMethod(typeof(SkullCavernInjections), nameof(SkullCavernInjections.MyElevatorMenuConstructor_SkullCavernElevator_Postfix))
+            );
+        }
+
+        private void AddSVEModInjections()
+        {
+            if (!_archipelago.SlotData.Mods.HasMod(ModNames.SVE))
+            {
+                return;
+            }
+
+            var shopMenuParameterTypes = new[]
+            {
+                typeof(Dictionary<ISalable, int[]>), typeof(int), typeof(string),
+                typeof(Func<ISalable, Farmer, int, bool>), typeof(Func<ISalable, bool>), typeof(string)
+            };
+
+            if (_archipelago.SlotData.Chefsanity.Equals(3) | _archipelago.SlotData.Chefsanity.Equals(2) | _archipelago.SlotData.Chefsanity.Equals(15))
+            {
+                _harmony.Patch(
+                    original: AccessTools.Constructor(typeof(ShopMenu), shopMenuParameterTypes),
+                    prefix: new HarmonyMethod(typeof(SVELocationsInjections), nameof(SVELocationsInjections.ShopMenu_BearShop_Prefix))
+                );
+            }
+            
+
+             _harmony.Patch(
+                original: AccessTools.Constructor(typeof(ShopMenu), shopMenuParameterTypes),
+                prefix: new HarmonyMethod(typeof(SVELocationsInjections), nameof(SVELocationsInjections.ShopMenu_AlesiaShop_Prefix))
+            );
+
+           _harmony.Patch(
+                original: AccessTools.Constructor(typeof(ShopMenu), shopMenuParameterTypes),
+                prefix: new HarmonyMethod(typeof(SVELocationsInjections), nameof(SVELocationsInjections.ShopMenu_IssacShop_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Chest), nameof(Chest.checkForAction)),
+                prefix: new HarmonyMethod(typeof(SVELocationsInjections), nameof(SVELocationsInjections.CheckForAction_LanceChest_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Event), nameof(Event.skipEvent)),
+                prefix: new HarmonyMethod(typeof(SVELocationsInjections), nameof(SVELocationsInjections.SkipEvent_AlternativeRustyKey_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Event), nameof(Event.skipEvent)),
+                postfix: new HarmonyMethod(typeof(SVELocationsInjections), nameof(SVELocationsInjections.SkipEvent_ReleaseMorris_Postfix))
             );
         }
     }
