@@ -2,6 +2,7 @@
 using HarmonyLib;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.CC;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Quests;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
@@ -72,7 +73,15 @@ namespace StardewArchipelago.Locations.Patcher
         {
             _harmony.Patch(
                 original: AccessTools.Method(typeof(JunimoNoteMenu), nameof(JunimoNoteMenu.checkForRewards)),
-                postfix: new HarmonyMethod(typeof(CommunityCenterInjections), nameof(CommunityCenterInjections.CheckForRewards_PostFix))
+                postfix: new HarmonyMethod(typeof(JunimoNoteMenuInjections), nameof(JunimoNoteMenuInjections.CheckForRewards_SendBundleChecks_PostFix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(JunimoNoteMenu), nameof(JunimoNoteMenu.getRewardNameForArea)),
+                prefix: new HarmonyMethod(typeof(JunimoNoteMenuInjections), nameof(JunimoNoteMenuInjections.GetRewardNameForArea_ScoutRoomRewards_Prefix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(JunimoNoteMenu), nameof(JunimoNoteMenu.setUpMenu)),
+                postfix: new HarmonyMethod(typeof(JunimoNoteMenuInjections), nameof(JunimoNoteMenuInjections.SetupMenu_AddTextureOverrides_Postfix))
             );
             _harmony.Patch(
                 original: AccessTools.Method(typeof(CommunityCenter), nameof(CommunityCenter.shouldNoteAppearInArea)),
@@ -83,8 +92,8 @@ namespace StardewArchipelago.Locations.Patcher
                 prefix: new HarmonyMethod(typeof(CommunityCenterInjections), nameof(CommunityCenterInjections.CheckAction_BulletinBoardNoRequirements_Prefix))
             );
             _harmony.Patch(
-                original: AccessTools.Method(typeof(JunimoNoteMenu), nameof(JunimoNoteMenu.getRewardNameForArea)),
-                prefix: new HarmonyMethod(typeof(CommunityCenterInjections), nameof(CommunityCenterInjections.GetRewardNameForArea_ScoutRoomRewards_Prefix))
+                original: AccessTools.Method(typeof(CommunityCenter), "checkForMissedRewards"),
+                prefix: new HarmonyMethod(typeof(CommunityCenterInjections), nameof(CommunityCenterInjections.CheckForMissedRewards_Dont_Prefix))
             );
         }
 

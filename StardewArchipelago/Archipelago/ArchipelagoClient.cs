@@ -13,6 +13,7 @@ using Archipelago.MultiClient.Net.Packets;
 using HarmonyLib;
 using Newtonsoft.Json.Linq;
 using StardewArchipelago.Extensions;
+using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
 using Color = Microsoft.Xna.Framework.Color;

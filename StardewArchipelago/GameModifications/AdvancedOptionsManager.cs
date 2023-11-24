@@ -18,7 +18,7 @@ namespace StardewArchipelago.GameModifications
         public AdvancedOptionsManager(ModEntry modEntry, IMonitor console, Harmony harmony, ArchipelagoClient archipelago)
         {
             _modEntry = modEntry;
-            _console = console
+            _console = console;
             _harmony = harmony;
             _archipelago = archipelago;
         }

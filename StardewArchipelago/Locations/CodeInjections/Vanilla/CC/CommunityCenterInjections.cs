@@ -10,7 +10,7 @@ using StardewValley.Locations;
 using StardewValley.Menus;
 using xTile.Dimensions;
 
-namespace StardewArchipelago.Locations.CodeInjections.Vanilla
+namespace StardewArchipelago.Locations.CodeInjections.Vanilla.CC
 {
     public static class CommunityCenterInjections
     {
@@ -20,21 +20,17 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         public const string AP_LOCATION_BOILER_ROOM = "Complete Boiler Room";
         public const string AP_LOCATION_VAULT = "Complete Vault";
         public const string AP_LOCATION_BULLETIN_BOARD = "Complete Bulletin Board";
+        public const string AP_LOCATION_ABANDONED_JOJA_MART = "The Missing Bundle";
 
         private static IMonitor _monitor;
         private static ArchipelagoClient _archipelago;
-        private static BundleReader _bundleReader;
         private static LocationChecker _locationChecker;
 
-        public static Dictionary<string, string> BundleNames;
-
-        public static void Initialize(IMonitor monitor, ArchipelagoClient archipelago, BundleReader bundleReader, LocationChecker locationChecker)
+        public static void Initialize(IMonitor monitor, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             _monitor = monitor;
             _archipelago = archipelago;
-            _bundleReader = bundleReader;
             _locationChecker = locationChecker;
-            BundleNames = new Dictionary<string, string>();
         }
 
         public static bool DoAreaCompleteReward_AreaLocations_Prefix(CommunityCenter __instance, int whichArea)
@@ -84,35 +80,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 _monitor.Log($"Failed in {nameof(DoAreaCompleteReward_AreaLocations_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
-            }
-        }
-
-        public static void CheckForRewards_PostFix(JunimoNoteMenu __instance)
-        {
-            try
-            {
-                var bundleStates = _bundleReader.ReadCurrentBundleStates();
-                var completedBundleNames = bundleStates.Where(x => x.IsCompleted).Select(x => x.RelatedBundle.BundleName);
-                foreach (var completedBundleName in completedBundleNames)
-                {
-                    var bundleNameLocation = completedBundleName;
-                    if (BundleNames.ContainsKey(bundleNameLocation))
-                    {
-                        bundleNameLocation = BundleNames[bundleNameLocation];
-                    }
-                    _locationChecker.AddCheckedLocation(bundleNameLocation + " Bundle");
-                }
-
-                var communityCenter = Game1.locations.OfType<CommunityCenter>().First();
-                var bundleRewardsDictionary = communityCenter.bundleRewards;
-                foreach (var bundleRewardKey in bundleRewardsDictionary.Keys)
-                {
-                    bundleRewardsDictionary[bundleRewardKey] = false;
-                }
-            }
-            catch (Exception ex)
-            {
-                _monitor.Log($"Failed in {nameof(CheckForRewards_PostFix)}:\n{ex}", LogLevel.Error);
             }
         }
 
@@ -181,45 +148,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
         }
 
-        // public string getRewardNameForArea(int whichArea)
-        public static bool GetRewardNameForArea_ScoutRoomRewards_Prefix(JunimoNoteMenu __instance, int whichArea, ref string __result)
+        // private void checkForMissedRewards()
+        public static bool CheckForMissedRewards_Dont_Prefix(CommunityCenter __instance)
         {
             try
             {
-                var apAreaToScout = "???";
-                switch ((Area)whichArea)
-                {
-                    case Area.Pantry:
-                        apAreaToScout = AP_LOCATION_PANTRY;
-                        break;
-                    case Area.CraftsRoom:
-                        apAreaToScout = AP_LOCATION_CRAFTS_ROOM;
-                        break;
-                    case Area.FishTank:
-                        apAreaToScout = AP_LOCATION_FISH_TANK;
-                        break;
-                    case Area.BoilerRoom:
-                        apAreaToScout = AP_LOCATION_BOILER_ROOM;
-                        break;
-                    case Area.Vault:
-                        apAreaToScout = AP_LOCATION_VAULT;
-                        break;
-                    case Area.Bulletin:
-                        apAreaToScout = AP_LOCATION_BULLETIN_BOARD;
-                        break;
-                    default:
-                        __result = "???";
-                        return false; // don't run original logic
-                }
-
-                var scoutedItem = _archipelago.ScoutSingleLocation(apAreaToScout);
-                var rewardText = $"Reward: {scoutedItem.PlayerName}'s {scoutedItem.GetItemName()}";
-                __result = rewardText;
                 return false; // don't run original logic
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(GetRewardNameForArea_ScoutRoomRewards_Prefix)}:\n{ex}", LogLevel.Error);
+                _monitor.Log($"Failed in {nameof(CheckForMissedRewards_Dont_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
             }
         }

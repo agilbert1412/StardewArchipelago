@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using StardewArchipelago.Bundles;
+using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 
 namespace StardewArchipelago.Archipelago
@@ -93,7 +95,7 @@ namespace StardewArchipelago.Archipelago
         public bool DeathLink { get; private set; }
         public string Seed { get; private set; }
         public string MultiworldVersion { get; private set; }
-        public BundlesManager Bundles { get; set; }
+        public string BundlesData { get; set; }
         public Dictionary<string, string> ModifiedEntrances { get; set; }
         public AppearanceRandomization AppearanceRandomization { get; set; }
         public bool AppearanceRandomizationDaily { get; set; }
@@ -143,9 +145,7 @@ namespace StardewArchipelago.Archipelago
             DeathLink = GetSlotSetting(DEATH_LINK_KEY, false);
             Seed = GetSlotSetting(SEED_KEY, "");
             MultiworldVersion = GetSlotSetting(MULTIWORLD_VERSION_KEY, "");
-            var newBundleStringData = GetSlotSetting(MODIFIED_BUNDLES_KEY, "");
-            var bundlesData = JsonConvert.DeserializeObject<Dictionary<string, string>>(newBundleStringData);
-            Bundles = new BundlesManager(bundlesData);
+            BundlesData = GetSlotSetting(MODIFIED_BUNDLES_KEY, "");
             var newEntrancesStringData = GetSlotSetting(MODIFIED_ENTRANCES_KEY, "");
             ModifiedEntrances = JsonConvert.DeserializeObject<Dictionary<string, string>>(newEntrancesStringData);
             AppearanceRandomization = AppearanceRandomization.Disabled; // GetSlotSetting(RANDOMIZE_NPC_APPEARANCES_KEY, AppearanceRandomization.Disabled);
