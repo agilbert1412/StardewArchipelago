@@ -149,7 +149,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.CC
         }
 
         // private void checkForMissedRewards()
-        public static bool CheckForMissedRewards_Dont_Prefix(CommunityCenter __instance)
+        public static bool CheckForMissedRewards_DontBother_Prefix(CommunityCenter __instance)
         {
             try
             {
@@ -157,7 +157,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.CC
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(CheckForMissedRewards_Dont_Prefix)}:\n{ex}", LogLevel.Error);
+                _monitor.Log($"Failed in {nameof(CheckForMissedRewards_DontBother_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
             }
         }

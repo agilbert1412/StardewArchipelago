@@ -1,19 +1,25 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Netcode;
 using Newtonsoft.Json;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.CC;
 using StardewArchipelago.Stardew;
+using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Network;
 
 namespace StardewArchipelago.Bundles
 {
     public class BundlesManager
     {
+        private IModHelper _modHelper;
         private static Dictionary<string, string> _vanillaBundleData;
         private Dictionary<string, string> _currentBundlesData;
         private BundleRooms BundleRooms { get; }
 
-        public BundlesManager(StardewItemManager itemManager, string bundlesJson)
+        public BundlesManager(IModHelper modHelper, StardewItemManager itemManager, string bundlesJson)
         {
+            _modHelper = modHelper;
             var bundlesDictionary = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, Dictionary<string, string>>>>(bundlesJson);
             BundleRooms = new BundleRooms(itemManager, bundlesDictionary);
             _vanillaBundleData = Game1.content.LoadBase<Dictionary<string, string>>("Data\\Bundles");
@@ -22,7 +28,19 @@ namespace StardewArchipelago.Bundles
 
         public void ReplaceAllBundles()
         {
-            Game1.netWorldState.Value.SetBundleData(_currentBundlesData);
+            if (Game1.netWorldState.Value is not NetWorldState worldState)
+            {
+                throw new InvalidCastException($"World State was unexpected type: {Game1.netWorldState.GetType()}");
+            }
+
+            // private readonly NetStringDictionary<string, NetString> netBundleData = new NetStringDictionary<string, NetString>();
+            /*var netBundleDataField = _modHelper.Reflection.GetField<NetStringDictionary<string, NetString>>(worldState, "netBundleData");
+            var netBundleData = netBundleDataField.GetValue();
+            netBundleData.Clear();
+            worldState.Bundles.Clear();
+            worldState.BundleRewards.Clear();
+            worldState.BundleData.Clear();
+            worldState.SetBundleData(_currentBundlesData);*/
         }
     }
 }

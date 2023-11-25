@@ -89,7 +89,7 @@ namespace StardewArchipelago.GameModifications
                 ForceGameSeedToArchipelagoProvidedSeed();
                 ForceFarmTypeToArchipelagoProvidedFarm();
                 Game1.bundleType = Game1.BundleType.Default;
-                Game1.game1.SetNewGameOption<bool>("YearOneCompletable", true);
+                Game1.game1.SetNewGameOption<bool>("YearOneCompletable", false);
 
                 return true; // run original logic
             }

@@ -8,14 +8,15 @@ using StardewArchipelago.Stardew;
 using StardewArchipelago.Textures;
 using StardewModdingAPI;
 using StardewValley;
-using StardewValley.BellsAndWhistles;
 using StardewValley.Locations;
 using StardewValley.Menus;
+using Bundle = StardewValley.Menus.Bundle;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.CC
 {
     public static class JunimoNoteMenuInjections
     {
+        private const int REMIXED_BUNDLE_INDEX_THRESHOLD = 37;
         private const int CUSTOM_BUNDLE_INDEX_THRESHOLD = 100;
 
         private static IMonitor _monitor;
@@ -71,13 +72,23 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.CC
         {
             try
             {
+                var remixedBundlesTexture = Game1.temporaryContent.Load<Texture2D>("LooseSprites\\JunimoNote");
                 foreach (var bundle in __instance.bundles)
                 {
                     var textureOverride = BundleIcons.GetBundleIcon(_modHelper, bundle.name);
                     if (textureOverride == null)
                     {
+                        if (bundle.bundleIndex < REMIXED_BUNDLE_INDEX_THRESHOLD)
+                        {
+                            bundle.bundleTextureOverride = null;
+                            bundle.bundleTextureIndexOverride = -1;
+                            continue;
+                        }
+
                         if (bundle.bundleIndex < CUSTOM_BUNDLE_INDEX_THRESHOLD)
                         {
+                            bundle.bundleTextureOverride = remixedBundlesTexture;
+                            bundle.bundleTextureIndexOverride = bundle.bundleIndex;
                             continue;
                         }
 
