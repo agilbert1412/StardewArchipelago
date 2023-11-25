@@ -17,16 +17,17 @@ namespace StardewArchipelago.Bundles
         {
             NumberRequired = int.Parse(bundleContent[NUMBER_REQUIRED_KEY]);
             Items = new List<BundleItem>();
-            foreach (var (itemName, itemDetails) in bundleContent)
+            foreach (var (key, itemDetails) in bundleContent)
             {
-                if (itemName == NUMBER_REQUIRED_KEY)
+                if (key == NUMBER_REQUIRED_KEY)
                 {
                     continue;
                 }
 
-                var splitDetails = itemDetails.Split(' ');
-                var amount = int.Parse(splitDetails[0]);
-                var quality = splitDetails[splitDetails.Length - 2];
+                var itemFields = itemDetails.Split("|");
+                var itemName = itemFields[0];
+                var amount = int.Parse(itemFields[1]);
+                var quality = itemFields[2].Split(" ")[0];
                 var bundleItem = new BundleItem(itemManager, itemName, amount, quality);
                 Items.Add(bundleItem);
             }

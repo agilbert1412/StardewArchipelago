@@ -36,6 +36,11 @@ namespace StardewArchipelago.Stardew
 
         private bool IsBundleComplete(CommunityCenter communityCenter, int bundleId)
         {
+            if (_bundleToArea[bundleId] == Area.Vault)
+            {
+                return communityCenter.bundles[bundleId][0];
+            }
+
             return communityCenter.isBundleComplete(bundleId);
         }
 

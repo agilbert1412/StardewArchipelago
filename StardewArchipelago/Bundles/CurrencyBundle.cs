@@ -15,19 +15,16 @@ namespace StardewArchipelago.Bundles
 
         public CurrencyBundle(string roomName, string bundleName, Dictionary<string, string> bundleContent) : base(roomName, bundleName)
         {
-            RoomName = roomName;
-            Name = bundleName;
-
-            foreach (var (currency, details) in bundleContent)
+            foreach (var (key, itemDetails) in bundleContent)
             {
-                if (currency == NUMBER_REQUIRED_KEY)
+                if (key == NUMBER_REQUIRED_KEY)
                 {
                     continue;
                 }
-
-                Currency = currency;
-                var splitDetails = details.Split(' ');
-                Amount = int.Parse(splitDetails[0]);
+                
+                var itemFields = itemDetails.Split("|");
+                Currency = itemFields[0];
+                Amount = int.Parse(itemFields[1]);
                 return;
             }
         }
@@ -42,12 +39,12 @@ namespace StardewArchipelago.Bundles
             return "";
         }
 
-        public static readonly Dictionary<string, int> CurrencyIds = new Dictionary<string, int>()
+        public static readonly Dictionary<string, int> CurrencyIds = new()
         {
             {"Money", -1}, 
-            {"Star Token", -2},
+            // {"Star Token", -2},
             {"Qi Coin", -3},
-            {"Golden Walnut", -4},
+            // {"Golden Walnut", -4},
             {"Qi Gem", -5}
         };
     }

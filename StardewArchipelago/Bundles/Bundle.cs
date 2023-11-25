@@ -39,7 +39,7 @@ namespace StardewArchipelago.Bundles
 
         public static Bundle Parse(StardewItemManager itemManager, string name, string bundleName, Dictionary<string, string> bundleContent)
         {
-            if (bundleContent.Count() == 2 && bundleContent.Keys.Any(x => CurrencyBundle.CurrencyIds.Keys.Contains(x)))
+            if (bundleContent.Count() == 2 && bundleContent.Values.Any(x => CurrencyBundle.CurrencyIds.Keys.Contains(x.Split("|")[0])))
             {
                 return new CurrencyBundle(name, bundleName, bundleContent);
             }

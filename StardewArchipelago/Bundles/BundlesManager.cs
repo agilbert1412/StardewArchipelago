@@ -34,13 +34,13 @@ namespace StardewArchipelago.Bundles
             }
 
             // private readonly NetStringDictionary<string, NetString> netBundleData = new NetStringDictionary<string, NetString>();
-            /*var netBundleDataField = _modHelper.Reflection.GetField<NetStringDictionary<string, NetString>>(worldState, "netBundleData");
+            var netBundleDataField = _modHelper.Reflection.GetField<NetStringDictionary<string, NetString>>(worldState, "netBundleData");
             var netBundleData = netBundleDataField.GetValue();
             netBundleData.Clear();
             worldState.Bundles.Clear();
             worldState.BundleRewards.Clear();
             worldState.BundleData.Clear();
-            worldState.SetBundleData(_currentBundlesData);*/
+            worldState.SetBundleData(_currentBundlesData);
         }
     }
 }
