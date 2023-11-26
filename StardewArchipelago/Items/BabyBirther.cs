@@ -16,7 +16,7 @@ namespace StardewArchipelago.Items
         private static readonly string[] _babyNames = new[]
         {
             "Albrekka", "Alchav", "Angela", "axe_y", "beauxq", "Berserker", "Black Sliver", "blastron", "BootsinSoots", "CaitSith2", "Captain Canadia", "Celeste", "Damocles",
-            "dewin", "el_", "Espeon", "eudaimonistic", "Exempt-Medic", "Farrak Kilhn", "Figment", "Fly Sniper",
+            "dewin", "el_", "emmalution", "Espeon", "eudaimonistic", "Exempt-Medic", "Farrak Kilhn", "Figment", "Fly Sniper",
             "Frazzleduck", "Heinermann", "Ishigh", "JaredWeakStrike", "Jarno", "jat2980", "Jouramie", "Justice", "Kaito Kid",
             "KelioMZX", "KittyAshy", "Kono Tyran", "Lady Redacted", "lordlou", "Magnemania", "Marech", "Margot", "Mati", "Mav", "MeleneV", "mewlif", "N00byKing"/*, "NinoKito"*/, "Phar",
             "PoryGone", "ProfBytes", "RaspberrySpaceJam", "Rosalie", "Salzkorn", "SamanthaCoffin", "Scipio", "Sneaki", "Snow", "SunnyBat",
