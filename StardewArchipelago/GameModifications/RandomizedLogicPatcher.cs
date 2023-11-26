@@ -39,7 +39,7 @@ namespace StardewArchipelago.GameModifications
             AchievementInjections.Initialize(monitor, _archipelago);
             EntranceInjections.Initialize(monitor, _archipelago, entranceManager);
             ForestInjections.Initialize(monitor, _archipelago);
-            MountainInjections.Initialize(monitor, _archipelago);
+            MountainInjections.Initialize(monitor, helper, _archipelago);
             SeedShopsInjections.Initialize(monitor, helper, archipelago, locationChecker);
             LostAndFoundInjections.Initialize(monitor, archipelago);
             TVInjections.Initialize(monitor, archipelago);
@@ -181,6 +181,12 @@ namespace StardewArchipelago.GameModifications
                 original: AccessTools.Method(typeof(Mountain), nameof(Mountain.ApplyTreehouseIfNecessary)),
                 prefix: new HarmonyMethod(typeof(MountainInjections), nameof(MountainInjections.ApplyTreehouseIfNecessary_ApplyTreeHouseIfReceivedApItem_Prefix))
             );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Mountain), nameof(Mountain.DayUpdate)),
+                postfix: new HarmonyMethod(typeof(MountainInjections), nameof(MountainInjections.DayUpdate_RailroadDependsOnApItem_Postfix))
+            );
+            MountainInjections.SetRailroadBlockedBasedOnArchipelagoItem((Mountain)Game1.getLocationFromName("Mountain"));
         }
 
         private void PatchEntrances()
