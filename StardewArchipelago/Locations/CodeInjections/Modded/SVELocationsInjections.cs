@@ -2,9 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Stardew;
+using StardewArchipelago.GameModifications.CodeInjections;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Locations;
 using StardewValley.Menus;
 using Object = StardewValley.Object;
 using StardewValley.Objects;
@@ -21,6 +22,26 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         public const string MORRIS_FRIENDSHIP = "Friendsanity: Morris {0} <3";
         public const int AURORA_EVENT = 658059254;
         public const int MORGAN_EVENT = 658078924;
+        private const int JOJA_COLA = 167;
+        private const string BEAR_ITEM_1 = "Learn Recipe Baked Berry Oatmeal";
+        private const string BEAR_ITEM_2 = "Learn Recipe Flower Cookie";
+        private const string ALESIA_ITEM = "Alesia: Tempered Galaxy Dagger";
+        private const string ISSAC_ITEM_1 = "Issac: Tempered Galaxy Sword";
+        private const string ISSAC_ITEM_2 = "Issac: Tempered Galaxy Hammer";
+        private const string LANCE_CHEST = "Lance's Diamond Wand";
+        private const string RUSTY_KEY_ALT = "Rusty Key";
+        private static readonly Dictionary<string, string[]> warpKeys = new(){ // Contains the original event requirements to be edited
+            { "IslandWest", new[]{"65360191/f Lance 2000"}}, // Lance giving you the Fable Reef Warp
+            { "FarmHouseFarmRune", new[]{"908074/e 908072/t 600 630"}}, // Unlocking the Farm Rune
+            { "FarmHouseOutpostRune", new[]{"908078/e 908072/t 600 2400"}}, // Unlocking Galmoran Outpost
+            { "Backwoods", new[]{"908072/e 908071"}}, // Unlocking Wizard Rune
+            { "Custom_AdventurerSummit", new[]{"908073/e 908072/z winter/t 600 1900/w sunny", "908073/e 908072/z winter/t 1910 2400/w sunny", 
+            "908073/e 908072/z winter/w rainy", "908073/e 908072/z spring/z summer/z fall"}}, // Unlocking Summit Rune
+            { "Custom_AuroraVineyard", new[]{"908075/e 908072", "908075/e 908072/f Apples 10"}}, // Unlocking Vineyard Rune
+            { "Custom_SpriteSpring2", new[]{"908076/e 908072"}}, // Unlocking Springs Rune
+            { "Custom_JunimoWoods", new[]{"908077/e 908072"}}, // Unlocking Junimo Rune
+            { "Town", new[]{"3691371"}} // The initializer for Scarlett to be a villager.
+        };
 
         public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker, ShopReplacer shopReplacer)
         {
@@ -78,7 +99,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 foreach (var salableItem in itemPriceAndStock.Keys.ToArray())
                 {
                     _shopReplacer.ReplaceShopItem(itemPriceAndStock, salableItem, ISSAC_ITEM_1, (Object item) =>  item.Name == "Tempered Galaxy Sword", myActiveHints);
-                    _shopReplacer.ReplaceShopItem(itemPriceAndStock, salableItem, ISSAC_ITEM_1, (Object item) =>  item.Name == "Tempered Galaxy Hammer", myActiveHints);
+                    _shopReplacer.ReplaceShopItem(itemPriceAndStock, salableItem, ISSAC_ITEM_2, (Object item) =>  item.Name == "Tempered Galaxy Hammer", myActiveHints);
                 }
                 return true; //  run original logic
             }
@@ -224,26 +245,21 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             farm_events[newMorganRule] = morganEvent;
             farmhouse_events[newApplesRule] = applesEvent;
         }    
-        // Otherwise, we should just lock the events out of being seen at all.
+        // Otherwise, we should just lock the events out of being seen at all and simply toggled by eventSeen.
         public static void LockedCutsceneInitializer()
         {
-            var currentEventData = new Dictionary<string, string>();
-            string mapName;
-            string eventData;
-            string newEventKey;
-            string eventID;
             foreach( var kvp in warpKeys)
             {
-                mapName = kvp.Key;
+                var mapName = kvp.Key;
                 if(kvp.Key.Contains("FarmHouse"))
                 {
                     mapName = "FarmHouse";
                 }
-                currentEventData = Game1.content.Load<Dictionary<string, string>>("Data\\Events\\" + mapName);
+                var currentEventData = Game1.content.Load<Dictionary<string, string>>("Data\\Events\\" + mapName);
                 foreach( var eventKey in kvp.Value)
                 {
                     string[] totalEventKey = eventKey.Split("/");
-                    eventID = totalEventKey[1];
+                    var eventID = totalEventKey[0];
                     // Sometimes, CP has not added the cutscene to the event list yet due to its dynamic adding methods...
                     if(!currentEventData.ContainsKey(eventKey))
                     {
@@ -251,35 +267,39 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                         currentEventData[eventKey] = "continue/-200 -200 0/Lewis -10 -10 0/pause 50/end";
                     }
                     // Everything exists now, so just make the requirement for the event itself.
-                    newEventKey = eventKey + "/e " + eventID;
-                    eventData = currentEventData[eventKey];
+                    var newEventKey = eventKey + "/e " + eventID;
+                    var eventData = currentEventData[eventKey];
                     currentEventData.Remove(eventKey);
                     currentEventData[newEventKey] = eventData;
                 }
             }
-
-
         }
 
-//Table of Names
-        public const string BEAR_ITEM_1 = "Learn Recipe Baked Berry Oatmeal";
-        public const string BEAR_ITEM_2 = "Learn Recipe Flower Cookie";
-        public const string ALESIA_ITEM = "Alesia: Tempered Galaxy Dagger";
-        public const string ISSAC_ITEM_1 = "Issac: Tempered Galaxy Sword";
-        public const string ISSAC_ITEM_2 = "Issac: Tempered Galaxy Hammer";
-        public const string LANCE_CHEST = "Lance's Diamond Wand";
-        public const string RUSTY_KEY_ALT = "Rusty Key";
-        private static readonly Dictionary<string, string[]> warpKeys = new(){ // Contains the original event requirements to be edited
-            { "IslandWest", new[]{"65360191/f Lance 2000"}}, // Lance giving you the Fable Reef Warp
-            { "FarmHouseFarmRune", new[]{"908074/e 908072/t 600 630"}}, // Unlocking the Farm Rune
-            { "FarmHouseOutpostRune", new[]{"908078/e 908072/t 600 2400"}}, // Unlocking Galmoran Outpost
-            { "Backwoods", new[]{"908072/e 908071"}}, // Unlocking Wizard Rune
-            { "Custom_AdventurerSummit", new[]{"908073/e 908072/z winter/t 600 1900/w sunny", "908073/e 908072/z winter/t 1910 2400/w sunny", 
-            "908073/e 908072/z winter/w rainy", "908073/e 908072/z spring/z summer/z fall"}}, // Unlocking Summit Rune
-            { "Custom_AuroraVineyard", new[]{"908075/e 908072", "908075/e 908072/f Apples 10"}}, // Unlocking Vineyard Rune
-            { "Custom_SpriteSpring2", new[]{"908076/e 908072"}}, // Unlocking Springs Rune
-            { "Custom_JunimoWoods", new[]{"908077/e 908072"}}, // Unlocking Junimo Rune
-            { "Town", new[]{"3691371"}} // The initializer for Scarlett to be a villager.
-        };
+        // Done as JojaMart was changed to be two different shop tenders (Claire and Martin); just force every shop in Joja to be the same.
+        public static bool ShopMenu_ForceJojaShop_Prefix(ShopMenu __instance, ref Dictionary<ISalable, int[]> itemPriceAndStock, int currency = 0, string who = null, Func<ISalable, Farmer, int, bool> on_purchase = null, Func<ISalable, bool> on_sell = null, string context = null)
+        {
+            try
+            {
+                if (Game1.currentLocation is JojaMart)
+                {
+                    var jojaStock = new Dictionary<ISalable, int[]>();
+                    SeedShopsInjections.AddToJojaStock(jojaStock, JOJA_COLA, false, 75, 6);
+                    SeedShopsInjections.AddJojaFurnitureToShop(jojaStock);
+                    SeedShopsInjections.AddSeedsToJojaStock(jojaStock);
+                    SeedShopsInjections.AddGrassStarterToJojaStock(jojaStock);
+                    SeedShopsInjections.AddCookingIngredientsToJojaStock(jojaStock);
+
+                    itemPriceAndStock = jojaStock;
+                    return true; // run original logic
+                }
+                return true; // Run original logic
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(ShopMenu_ForceJojaShop_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic   
+            }
+
+        }
     }
 }

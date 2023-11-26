@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -66,6 +66,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             }
 
             ModEntranceManager.IncludeModLocationAlias(_locationAliases, slotData);
+            ModEntranceManager.IncludeModEntranceAlias(_entranceAliases, slotData);
             foreach( var kvp in _aliasesRemoveSpaces) // to keep the 's and space rules at the bottom
             {
                 _locationAliases.Add(kvp.Key, kvp.Value);

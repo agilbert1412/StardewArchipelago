@@ -15,6 +15,10 @@ public class ModEntranceManager
     {
     };
 
+    private static readonly Dictionary<string, Dictionary<string, string>> _entranceMods = new()
+    {
+    };
+
     public static void IncludeModLocationAlias(Dictionary<string, string> aliases, SlotData slotData)
     {
         CompleteModLocations();
@@ -34,6 +38,21 @@ public class ModEntranceManager
         }
     }
 
+    public static void IncludeModEntranceAlias(Dictionary<string, string> aliases, SlotData slotData)
+    {
+        CompleteModEntrances();
+        foreach (var mod in _entranceMods)
+        {
+            if (slotData.Mods.HasMod(mod.Key))
+            {
+                foreach (var kvp in mod.Value)
+                {
+                    aliases.Add(kvp.Key, kvp.Value);
+                }
+            }
+        }
+    }
+
     private static void CompleteModLocations()
     {
         _locationMods[ModNames.ALEC] = _locationAlec;
@@ -46,10 +65,20 @@ public class ModEntranceManager
         _locationMods[ModNames.YOBA] = _locationYoba;
     }
 
+    private static void CompleteModEntrances()
+    {
+        _entranceMods[ModNames.SVE] = _entranceSVE;
+    }
+
+        private static readonly Dictionary<string, string> _entranceSVE = new()
+        {
+            { "Custom_GrandpaShedOutside|10|10 to Custom_GrandpaShedRuins", "SebastianRoom to ScienceHouse" },
+            { "Custom_GrandpaShedOutside|10|10 to Custom_GrandpaShedRuins", "ScienceHouse to SebastianRoom" },
+        };
 
     private static readonly Dictionary<string, string> _locationSVE = new()
     {
-            { "Grandpa's Shed Interior", "Custom_GrandpasShed"},
+            { "Grandpa's Shed Interior", "Custom_GrandpasShedRuins"},
             { "Grandpa's Shed Upstairs", "Custom_GrandpasShedGreenhouse"},
             { "Grandpa's Shed", "Custom_GrandpasShedOutside"},
             { "Marnie's Shed", "Custom_MarnieShed"},
@@ -66,16 +95,16 @@ public class ModEntranceManager
             { "First Slash Guild", "Custom_FirstSlashGuild"},
             { "Highlands Cavern", "Custom_HighlandsCavern"},
             { "Highlands", "Custom_Highlands"},
-            { "Drawf Prison", "Custom_HighlandsCavernPrison"},
-            { "Lance's House Ladder", "Custom_Highlands|30|30"},
-            { "Lance's House Main", "Custom_HighlandsOutpost"},
+            { "Dwarf Prison", "Custom_Highlands"},
+            { "Lance's House Ladder", "Custom_HighlandsOutpost|30|30"},
+            { "Lance's House Main", "Custom_HighlandsOutpost|20|41"},
             { "Aurora Vineyard Basement", "Custom_ApplesRoom"},
             { "Aurora Vineyard", "Custom_AuroraVineyard"},
+            { "Sprite Spring Cave", "Custom_SpriteSpringCave"},
             { "Sprite Spring", "Custom_SpriteSpring2"},
             { "Junimo Woods", "Custom_JunimoWoods"},
             { "Badlands Entrance", "Custom_DesertRailway"},
             { "Enchanted Grove", "Custom_EnchantedGrove"},
-            { "Galmoran Outpost Roof", "Custom_CastleVillageOutpost|31|27"},
             { "Galmoran Outpost", "Custom_CastleVillageOutpost"},
             { "Crimson Badlands", "Custom_CrimsonBadlands"},
             { "Badlands Cave", "Custom_TreasureCave"},
@@ -85,7 +114,6 @@ public class ModEntranceManager
             { "Forest West", "Custom_ForestWest"},
             { "First Slash Hallway", "Custom_FirstSlashHallway"},
             { "First Slash Spare Bedroom", "Custom_FirstSlashGuestRoom"},
-            { "Sprite Spring Cave", "Custom_SpriteSpringCave"}
     };
     private static readonly Dictionary<string, string> _locationEugene = new()
     {
