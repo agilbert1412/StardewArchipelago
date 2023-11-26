@@ -21,7 +21,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         private const string ANALYZE_BUFF_AP_LOCATION = "Analyze All Life School Locations";
         private const string ANALYZE_SHOCKWAVE_AP_LOCATION = "Analyze: Shockwave";
         private const string ANALYZE_FIREBALL_AP_LOCATION = "Analyze: Fireball";
-        private const string ANALYZE_FROSTBITE_AP_LOCATION = "Analyze: Frostbite";
+        private const string ANALYZE_FROSTBOLT_AP_LOCATION = "Analyze: Frostbolt";
         private const string ANALYZE_TELEPORT_AP_LOCATION = "Analyze All Elemental School Locations";
         private const string ANALYZE_LANTERN_AP_LOCATION = "Analyze: Lantern";
         private const string ANALYZE_TENDRILS_AP_LOCATION = "Analyze: Tendrils";
@@ -125,7 +125,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                     else if (index == FIRE_QUARTZ)
                         spellsLearned.Add(ANALYZE_FIREBALL_AP_LOCATION);
                     else if (index == ICE_PIP)
-                        spellsLearned.Add(ANALYZE_FROSTBITE_AP_LOCATION);
+                        spellsLearned.Add(ANALYZE_FROSTBOLT_AP_LOCATION);
                 }
             }
         }
@@ -207,7 +207,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         private static bool KnowsAllElementalSpells()
         {
             if (_locationChecker.IsLocationChecked(ANALYZE_FIREBALL_AP_LOCATION)
-            && _locationChecker.IsLocationChecked(ANALYZE_FROSTBITE_AP_LOCATION)
+            && _locationChecker.IsLocationChecked(ANALYZE_FROSTBOLT_AP_LOCATION)
             && _locationChecker.IsLocationChecked(ANALYZE_DESCEND_AP_LOCATION))
             {
                 return true;
