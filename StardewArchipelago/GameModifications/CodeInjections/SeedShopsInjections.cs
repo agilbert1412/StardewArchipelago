@@ -396,7 +396,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             });
         }
 
-        private static void AddSeedsToJojaStock(Dictionary<ISalable, int[]> stock)
+        public static void AddSeedsToJojaStock(Dictionary<ISalable, int[]> stock)
         {
             AddSpringSeedsToJojaStock(stock);
             AddSummerSeedsToJojaStock(stock);
@@ -461,12 +461,12 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             }
         }
 
-        private static void AddGrassStarterToJojaStock(Dictionary<ISalable, int[]> stock)
+        public static void AddGrassStarterToJojaStock(Dictionary<ISalable, int[]> stock)
         {
             AddToJojaStock(stock, GRASS_STARTER);
         }
 
-        private static void AddCookingIngredientsToJojaStock(Dictionary<ISalable, int[]> stock)
+        public static void AddCookingIngredientsToJojaStock(Dictionary<ISalable, int[]> stock)
         {
             AddToJojaStock(stock, SUGAR, packSize: 20);
             AddToJojaStock(stock, WHEAT_FLOUR, packSize: 20);
@@ -475,7 +475,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             AddToJojaStock(stock, VINEGAR, packSize: 20);
         }
 
-        private static void AddToJojaStock(
+        public static void AddToJojaStock(
             Dictionary<ISalable, int[]> stock,
             int itemId,
             bool isSeed = false,
@@ -594,7 +594,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             sandyStock.Add(item, new[] { price, stack });
         }
 
-        private static void AddJojaFurnitureToShop(Dictionary<ISalable, int[]> stock)
+        public static void AddJojaFurnitureToShop(Dictionary<ISalable, int[]> stock)
         {
             var key1 = new Wallpaper(21);
             key1.Stack = int.MaxValue;
