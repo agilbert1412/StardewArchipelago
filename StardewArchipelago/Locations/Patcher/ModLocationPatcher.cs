@@ -146,6 +146,7 @@ namespace StardewArchipelago.Locations.Patcher
             }
 
             var _deepWoodsType = AccessTools.TypeByName("DeepWoodsMod.DeepWoods");
+            var _swordType = AccessTools.TypeByName("DeepWoodsMod.ExcaliburStone");
             var _enterDirectionType = AccessTools.TypeByName("DeepWoodsMod.DeepWoodsEnterExit+EnterDirection");
             var constructorParameterTypes = new[] { _deepWoodsType, typeof(int), _enterDirectionType };
             var _unicornType = AccessTools.TypeByName("DeepWoodsMod.Unicorn");
@@ -155,6 +156,10 @@ namespace StardewArchipelago.Locations.Patcher
             var _fountainType = AccessTools.TypeByName("DeepWoodsMod.HealingFountain");
             var _infestedType = AccessTools.TypeByName("DeepWoodsMod.InfestedTree");
 
+            _harmony.Patch(
+                original: AccessTools.Method(_swordType, "performUseAction"),
+                prefix: new HarmonyMethod(typeof(DeepWoodsModInjections), nameof(DeepWoodsModInjections.PerformUseAction_ExcaliburLocation_Prefix))
+            );
             _harmony.Patch(
                 original: AccessTools.Method(_unicornType, "checkAction"),
                 prefix: new HarmonyMethod(typeof(DeepWoodsModInjections), nameof(DeepWoodsModInjections.CheckAction_PetUnicornLocation_Prefix))
@@ -272,6 +277,11 @@ namespace StardewArchipelago.Locations.Patcher
            _harmony.Patch(
                 original: AccessTools.Constructor(typeof(ShopMenu), shopMenuParameterTypes),
                 prefix: new HarmonyMethod(typeof(SVELocationsInjections), nameof(SVELocationsInjections.ShopMenu_IssacShop_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Constructor(typeof(ShopMenu), shopMenuParameterTypes),
+                prefix: new HarmonyMethod(typeof(SVELocationsInjections), nameof(SVELocationsInjections.ShopMenu_ForceJojaShop_Prefix))
             );
 
             _harmony.Patch(
