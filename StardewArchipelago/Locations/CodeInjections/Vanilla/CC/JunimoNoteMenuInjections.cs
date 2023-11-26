@@ -190,7 +190,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.CC
                 }
                 else
                 {
-                    Game1.specialCurrencyDisplay.ShowCurrency((string)null);
+                    Game1.specialCurrencyDisplay.ShowCurrency(null);
                     return;
                 }
 
