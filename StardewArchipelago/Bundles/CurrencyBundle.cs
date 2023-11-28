@@ -42,9 +42,9 @@ namespace StardewArchipelago.Bundles
         public static readonly Dictionary<string, int> CurrencyIds = new()
         {
             {"Money", -1}, 
-            // {"Star Token", -2},
+            {"Star Token", -2},
             {"Qi Coin", -3},
-            // {"Golden Walnut", -4},
+            {"Golden Walnut", -4},
             {"Qi Gem", -5}
         };
     }
