@@ -172,6 +172,10 @@ namespace StardewArchipelago.Items.Mail
             "Take this {0}. It contains the Light of Earendil, our most beloved star.^^May it be a light to you in dark places, when all other lights go out.^^    -{1} from {2}",
             "You had {0} on the shopping list right? Picked it up for you^^    -{1} from {2}",
             "It's not too late for Christmas in July right? Here, I got you a {0}, I know you have been looking for it.^^    -{1} from {2}",
+            "I hope it's summer, cause I got you this {0} for the Luau^^    -{1} from {2}",
+            "I hear you need something for you 'secret friend' this winter and boy do I have the perfect item for you: {0}. No need to thank me, I'm sure it's exactly what you needed.^^    -{1} from {2}",
+            "You still need one more item for your grange display at the Fair, right? Here's your winner: a freshly caught {0}, straight from the {2} seas.^^    -{1}",
+            "I know you've been trying hard to win over a partner for the Flower Dance. This {0} is sure to win over your crush. I just know they'll love it.^^    -{1} from {2}",
         };
 
         // 0: Item
@@ -215,6 +219,19 @@ namespace StardewArchipelago.Items.Mail
             "Hey, Pierre sent me this {0}, but I can't stand the things. So now it's yours.^^    -{1}",
             "I couldn't get Oak's Parcel back from the thieves, but hopefully you can put {0} to good use instead^^    -{1}",
             "You should show this {0} to Mati, I bet she didn't even know it existed!^^    -{1}",
+            "Try putting this {0} in the Luau soup!^^    -{1}",
+            "I'm entrusting you with this {0}. I know you'll treat it well. See to it that it makes it to the destination^^    -{1}",
+            "Hi, I work for one of Joja's competitors, the up and coming {2} Mart! We sell a variety of goods and services. Here, I'd like you to have this {0} as a promotional item! A {0} can be used at any time, so it's even more useful than a Pokemon Center! Have a nice day and please stop by sometime.^^    -{1}",
+            "Here take this {0}! It's comfy and easy to wear!^^    -{1}",
+            "{0} at {2}?^^Archipelago was a mistake.^^    -{1}",
+            "Who ordered the {0} from {2}? Oh, you did.^^    -{1}",
+            "I sold my best podracer for this {0}. You're free now^^    -{1}",
+            "The {2} animal shelter didn't have any cats, so I got you a {0} out of their dumpster instead.^^    -{1}",
+            "{1} went on vacation to {2}and all they came back with was {0}",
+            "Hey, have you heard about the legendary power of the {0}? They say if you share it with someone you really care for, it binds you together forever and ever, through eternity.^^    -{1}",
+            "The {0} is a tool that can unlock any lock, whether on a door, a chest, or a heart. It is a powerful weapon that chooses it's owner. It did not choose me.^^It chose you.^^    -{1}",
+            "You must use the {0} to defeat the darkness",
+            "Have you ever heard the story of {0}?  I thought not.  It's not a story {1} would tell you.",
         };
     }
 }
