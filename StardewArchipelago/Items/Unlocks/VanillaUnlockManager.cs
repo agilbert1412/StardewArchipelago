@@ -29,6 +29,7 @@ namespace StardewArchipelago.Items.Unlocks
         public const string PROGRESSIVE_CLUB = "Progressive Club";
         public const string PROGRESSIVE_DAGGER = "Progressive Dagger";
         public const string PROGRESSIVE_BOOTS = "Progressive Footwear";
+        public const string PROGRESSIVE_THEATER = "Progressive Movie Theater";
 
         private Dictionary<string, Func<ReceivedItem, LetterAttachment>> _unlockables;
 
@@ -64,7 +65,7 @@ namespace StardewArchipelago.Items.Unlocks
             _unlockables.Add("Glittering Boulder Removed", RemoveGlitteringBoulder);
             _unlockables.Add("Minecarts Repair", RepairMinecarts);
             _unlockables.Add("Bus Repair", RepairBus);
-            // _unlockables.Add("Movie Theater", BuildMovieTheater);
+            _unlockables.Add(PROGRESSIVE_THEATER, RepairMovieTheater);
         }
 
         private void RegisterPlayerImprovement()
@@ -175,6 +176,11 @@ namespace StardewArchipelago.Items.Unlocks
         private LetterVanillaAttachment RepairBus(ReceivedItem receivedItem)
         {
             return new LetterVanillaAttachment(receivedItem, "ccVault", true);
+        }
+
+        private LetterActionAttachment RepairMovieTheater(ReceivedItem receivedItem)
+        {
+            return new LetterActionAttachment(receivedItem, LetterActionsKeys.MovieTheater);
         }
 
         private LetterVanillaAttachment RepairBoat(ReceivedItem receivedItem)
