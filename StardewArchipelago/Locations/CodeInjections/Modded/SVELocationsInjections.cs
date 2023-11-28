@@ -40,7 +40,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             { "Custom_AuroraVineyard", new[]{"908075/e 908072", "908075/e 908072/f Apples 10"}}, // Unlocking Vineyard Rune
             { "Custom_SpriteSpring2", new[]{"908076/e 908072"}}, // Unlocking Springs Rune
             { "Custom_JunimoWoods", new[]{"908077/e 908072"}}, // Unlocking Junimo Rune
-            { "Town", new[]{"3691371"}} // The initializer for Scarlett to be a villager.
+            { "Town", new[]{"3691371"}}, // The initializer for Scarlett to be a villager.
         };
 
         public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker, ShopReplacer shopReplacer)

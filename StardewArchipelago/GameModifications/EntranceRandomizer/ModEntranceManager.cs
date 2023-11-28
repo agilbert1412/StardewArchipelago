@@ -11,70 +11,13 @@ using StardewValley;
 public class ModEntranceManager
 {
 
-    private static readonly Dictionary<string, Dictionary<string, string>> _locationMods = new()
-    {
+    public static List<string> GrandpaShedEdgeCase = new(){
+        "Custom_GrandpasShed to Custom_GrandpasShedGreenhouse", "Custom_GrandpasShedGreenhouse to Custom_GrandpasShed"
     };
 
-    private static readonly Dictionary<string, Dictionary<string, string>> _entranceMods = new()
+    private static readonly Dictionary<string, string> _entranceSVE = new()
     {
     };
-
-    public static void IncludeModLocationAlias(Dictionary<string, string> aliases, SlotData slotData)
-    {
-        CompleteModLocations();
-        foreach (var mod in _locationMods)
-        {
-            if (slotData.Mods.HasMod(mod.Key))
-            {
-                foreach (var kvp in mod.Value)
-                {
-                    aliases.Add(kvp.Key, kvp.Value);
-                }
-                if (mod.Key == ModNames.SVE)
-                {
-                    aliases["Wizard Basement"] = "Custom_WizardBasement";
-                }
-            }
-        }
-    }
-
-    public static void IncludeModEntranceAlias(Dictionary<string, string> aliases, SlotData slotData)
-    {
-        CompleteModEntrances();
-        foreach (var mod in _entranceMods)
-        {
-            if (slotData.Mods.HasMod(mod.Key))
-            {
-                foreach (var kvp in mod.Value)
-                {
-                    aliases.Add(kvp.Key, kvp.Value);
-                }
-            }
-        }
-    }
-
-    private static void CompleteModLocations()
-    {
-        _locationMods[ModNames.ALEC] = _locationAlec;
-        _locationMods[ModNames.AYEISHA] = _locationAyeisha;
-        _locationMods[ModNames.DEEP_WOODS] =_locationDeepWoods;
-        _locationMods[ModNames.EUGENE] = _locationEugene;
-        _locationMods[ModNames.JASPER] = _locationJasper;
-        _locationMods[ModNames.JUNA] = _locationJuna;
-        _locationMods[ModNames.SVE] = _locationSVE;
-        _locationMods[ModNames.YOBA] = _locationYoba;
-    }
-
-    private static void CompleteModEntrances()
-    {
-        _entranceMods[ModNames.SVE] = _entranceSVE;
-    }
-
-        private static readonly Dictionary<string, string> _entranceSVE = new()
-        {
-            { "Custom_GrandpaShedOutside|10|10 to Custom_GrandpaShedRuins", "SebastianRoom to ScienceHouse" },
-            { "Custom_GrandpaShedOutside|10|10 to Custom_GrandpaShedRuins", "ScienceHouse to SebastianRoom" },
-        };
 
     private static readonly Dictionary<string, string> _locationSVE = new()
     {
@@ -93,18 +36,24 @@ public class ModEntranceManager
             { "Shearwater Bridge", "Custom_ShearwaterBridge"},
             { "Fable Reef", "Custom_FableReef"},
             { "First Slash Guild", "Custom_FirstSlashGuild"},
-            { "Highlands Cavern", "Custom_HighlandsCavern"},
             { "Highlands", "Custom_Highlands"},
-            { "Dwarf Prison", "Custom_Highlands"},
-            { "Lance's House Ladder", "Custom_HighlandsOutpost|30|30"},
-            { "Lance's House Main", "Custom_HighlandsOutpost|20|41"},
+            { "Lance's House Ladder", "Custom_HighlandsOutpost|12|5"},
+            { "Lance's House Main", "Custom_HighlandsOutpost|7|9"},
             { "Aurora Vineyard Basement", "Custom_ApplesRoom"},
             { "Aurora Vineyard", "Custom_AuroraVineyard"},
             { "Sprite Spring Cave", "Custom_SpriteSpringCave"},
             { "Sprite Spring", "Custom_SpriteSpring2"},
+            { "Lost Woods", "Custom_JunimoWoods|37|2"},
             { "Junimo Woods", "Custom_JunimoWoods"},
             { "Badlands Entrance", "Custom_DesertRailway"},
             { "Enchanted Grove", "Custom_EnchantedGrove"},
+            { "Grove Aurora Vineyard Warp", "Custom_EnchantedGrove|20|41"},
+            { "Grove Junimo Woods Warp", "Custom_EnchantedGrove|40|41"},
+            { "Grove Outpost Warp", "Custom_EnchantedGrove|40|10"},
+            { "Grove Farm Warp", "Custom_EnchantedGrove|30|14"},
+            { "Grove Wizard Warp", "Custom_EnchantedGrove|17|25"},
+            { "Grove Adventurer's Guild Warp", "Custom_EnchantedGrove|43|25"},
+            { "Grove Sprite Spring Warp", "Custom_EnchantedGrove|20|10"},
             { "Galmoran Outpost", "Custom_CastleVillageOutpost"},
             { "Crimson Badlands", "Custom_CrimsonBadlands"},
             { "Badlands Cave", "Custom_TreasureCave"},
@@ -113,7 +62,9 @@ public class ModEntranceManager
             { "Marlon's Boat", "Custom_AdventurersSummit"},
             { "Forest West", "Custom_ForestWest"},
             { "First Slash Hallway", "Custom_FirstSlashHallway"},
-            { "First Slash Spare Bedroom", "Custom_FirstSlashGuestRoom"},
+            { "First Slash Spare Room", "Custom_FirstSlashGuestRoom"},
+            { "Grampleton Suburbs", "Custom_GrampletonSuburbs"},
+            { "Scarlett's House", "Custom_ScarlettHouse"}
     };
     private static readonly Dictionary<string, string> _locationEugene = new()
     {
@@ -151,5 +102,67 @@ public class ModEntranceManager
     {
         { "Yoba's Clearing", "Custom_Woods3" },
     };                
+
+    private static readonly Dictionary<string, Dictionary<string, string>> _locationMods = new()
+    {
+        { ModNames.ALEC, _locationAlec },
+        { ModNames.AYEISHA, _locationAyeisha },
+        { ModNames.DEEP_WOODS, _locationDeepWoods },
+        { ModNames.EUGENE, _locationEugene },
+        { ModNames.JASPER, _locationJasper },
+        { ModNames.JUNA, _locationJuna },
+        { ModNames.SVE, _locationSVE },
+        { ModNames.YOBA, _locationYoba },
+    };
+
+    private static readonly Dictionary<string, Dictionary<string, string>> _entranceMods = new()
+    {
+        {ModNames.SVE, _entranceSVE}
+    };
+
+    public static void IncludeModLocationAlias(Dictionary<string, string> aliases, SlotData slotData)
+    {
+        foreach (var mod in _locationMods)
+        {
+            if (slotData.Mods.HasMod(mod.Key))
+            {
+                foreach (var kvp in mod.Value)
+                {
+                    aliases.Add(kvp.Key, kvp.Value);
+                }
+                if (mod.Key == ModNames.SVE)
+                {
+                    aliases["Wizard Basement"] = "Custom_WizardBasement";
+                }
+            }
+        }
+    }
+
+    public static void IncludeModEntranceAlias(Dictionary<string, string> aliases, SlotData slotData)
+    {
+        foreach (var mod in _entranceMods)
+        {
+            if (slotData.Mods.HasMod(mod.Key))
+            {
+                foreach (var kvp in mod.Value)
+                {
+                    aliases.Add(kvp.Key, kvp.Value);
+                }
+            }
+        }
+    }
+
+    public static bool CheckForGrandpasShedGreenhouseEdgeCase(string currentLocationName, string locationRequestName)
+    {
+        var case1 = currentLocationName == "Custom_GrandpasShed" & locationRequestName == "Custom_GrandpasShedGreenhouse";
+        var case2 = locationRequestName == "Custom_GrandpasShed" & currentLocationName == "Custom_GrandpasShedGreenhouse";
+        if (case1 | case2)
+        {
+            return true;
+        }
+        return false;
+
+    }
+
             
 }

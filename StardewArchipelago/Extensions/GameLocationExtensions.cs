@@ -26,6 +26,15 @@ namespace StardewArchipelago.Extensions
             {new WarpRequest(Game1.getLocationRequest("WizardHouse"), 4, 5, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("WizardHouseBasement"), 4, 4, FacingDirection.Down)},
             {new WarpRequest(Game1.getLocationRequest("IslandWest"), 77, 40, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("IslandFarmhouse"), 14, 17, FacingDirection.Down)},
             {new WarpRequest(Game1.getLocationRequest("DeepWoods"), 20, 6, FacingDirection.Up), new WarpRequest(Game1.getLocationRequest("DeepWoodsMaxHouse"), 19, 24, FacingDirection.Up)},
+            {new WarpRequest(Game1.getLocationRequest("Custom_SpriteSpring2"), 31, 10, FacingDirection.Up), new WarpRequest(Game1.getLocationRequest("Custom_SpriteSpringCave"), 10, 14, FacingDirection.Up)},
+            {new WarpRequest(Game1.getLocationRequest("Custom_GrandpasShedRuins"), 15, 16, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("Custom_GrandpasShedOutside"), 22, 17, FacingDirection.Down)},
+            {new WarpRequest(Game1.getLocationRequest("Custom_GrandpasShed"), 15, 16, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("Custom_GrandpasShedOutside"), 22, 17, FacingDirection.Down)},
+            {new WarpRequest(Game1.getLocationRequest("Custom_GrandpasShedRuins"), 25, 14, FacingDirection.Up), new WarpRequest(Game1.getLocationRequest("Custom_GrandpasShedGreenhouse"), 30, 16, FacingDirection.Down)},
+            {new WarpRequest(Game1.getLocationRequest("Backwoods"), 21, 1, FacingDirection.Up), new WarpRequest(Game1.getLocationRequest("Custom_EnchantedGrove"), 30, 32, FacingDirection.Up)},
+            {new WarpRequest(Game1.getLocationRequest("Custom_EnchantedGrove"), 40, 10, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("Custom_GalmoranOutpost"), 39, 36, FacingDirection.Down)},
+            {new WarpRequest(Game1.getLocationRequest("Custom_EnchantedGrove"), 40, 41, FacingDirection.Up), new WarpRequest(Game1.getLocationRequest("Custom_JunimoForest"), 31, 97, FacingDirection.Down)},
+            {new WarpRequest(Game1.getLocationRequest("Custom_EnchantedGrove"), 20, 41, FacingDirection.Up), new WarpRequest(Game1.getLocationRequest("Custom_ApplesRoom"), 2, 9, FacingDirection.Down)},
+
         };
 
         private static IEnumerable<string> GetValidDestinationNames(string destinationName, EquivalentWarps equivalentAreas)

@@ -149,8 +149,13 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
         public bool TryGetEntranceReplacement(string currentLocationName, string locationRequestName, Point targetPosition, out WarpRequest warpRequest)
         {
             warpRequest = null;
-            var defaultCurrentLocationName = _equivalentAreas.GetDefaultEquivalentEntrance(currentLocationName);
-            var defaultLocationRequestName = _equivalentAreas.GetDefaultEquivalentEntrance(locationRequestName);
+            var defaultCurrentLocationName = currentLocationName;
+            var defaultLocationRequestName = locationRequestName;
+            if (!ModEntranceManager.CheckForGrandpasShedGreenhouseEdgeCase(currentLocationName, locationRequestName))
+            {
+                defaultCurrentLocationName = _equivalentAreas.GetDefaultEquivalentEntrance(currentLocationName);
+                defaultLocationRequestName = _equivalentAreas.GetDefaultEquivalentEntrance(locationRequestName);
+            }
             targetPosition = targetPosition.CheckSpecialVolcanoEdgeCaseWarp(defaultLocationRequestName);
             var key = GetKeys(defaultCurrentLocationName, defaultLocationRequestName, targetPosition);
             if (!TryGetModifiedWarpName(key, out var desiredWarpName))
@@ -158,7 +163,10 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
                 return false;
             }
 
-            var correctDesiredWarpName = _equivalentAreas.GetCorrectEquivalentEntrance(desiredWarpName);
+            var correctDesiredWarpName = desiredWarpName;
+            if (!ModEntranceManager.GrandpaShedEdgeCase.Contains(desiredWarpName))
+                correctDesiredWarpName =_equivalentAreas.GetCorrectEquivalentEntrance(desiredWarpName);
+
             if (_checkedEntrancesToday.Contains(correctDesiredWarpName))
             {
                 if (generatedWarps.ContainsKey(correctDesiredWarpName))

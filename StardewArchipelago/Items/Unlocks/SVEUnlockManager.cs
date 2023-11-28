@@ -19,12 +19,14 @@ namespace StardewArchipelago.Items.Unlocks
         public const string JUNIMO_RUNES_AP_NAME = "Nexus: Junimo Woods Runes";
         public const string OUTPOST_RUNES_AP_NAME = "Nexus: Outpost Runes";
         public const string FARM_RUNES_AP_NAME = "Nexus: Farm Runes";
+        public const string WIZARD_RUNES_AP_NAME = "Nexus: Wizard Runes";
         public const string AURORA_RUNES_AP_NAME = "Nexus: Aurora Vineyard Runes";
         public const string FABLE_REEF_AP_NAME = "Fable Reef Portal";
         public const string AURORA_VINEYARD_TABLET_AP_NAME = "Aurora Vineyard Tablet";
         public const string SCARLETT_JOB_OFFER = "Scarlett's Job Offer";
         public const string MORGAN_SCHOOLING = "Morgan's Schooling";
         public const int MAIN_NEXUS_EVENT = 908071;
+        public const int WIZARD_RUNES_EVENT = 908072;
         public const int GUILD_RUNES_EVENT = 908073;
         public const int FARM_RUNES_EVENT = 908074;
         public const int AURORA_RUNES_EVENT = 908075;
@@ -75,6 +77,7 @@ namespace StardewArchipelago.Items.Unlocks
         private void RegisterPlayerWarps()
         {
             _unlockables.Add(GUILD_RUNES_AP_NAME, SendGuildRunes);
+            _unlockables.Add(WIZARD_RUNES_AP_NAME, SendWizardRunes);
             _unlockables.Add(SPRITE_RUNES_AP_NAME, SendSpriteSpringRunes);
             _unlockables.Add(JUNIMO_RUNES_AP_NAME, SendJunimoWoodsRunes);
             _unlockables.Add(AURORA_RUNES_AP_NAME, SendAuroraRunes);
@@ -112,6 +115,12 @@ namespace StardewArchipelago.Items.Unlocks
         private LetterEventSeenAttachment SendJunimoWoodsRunes(ReceivedItem receivedItem)
         {
             var events = new List<int> {MAIN_NEXUS_EVENT, JUNIMO_RUNES_EVENT};
+            return new LetterEventSeenAttachment(receivedItem, events);
+        }
+
+        private LetterEventSeenAttachment SendWizardRunes(ReceivedItem receivedItem)
+        {
+            var events = WIZARD_RUNES_EVENT;
             return new LetterEventSeenAttachment(receivedItem, events);
         }
 
