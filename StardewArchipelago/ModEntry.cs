@@ -126,7 +126,7 @@ namespace StardewArchipelago
             _harmony.UnpatchAll(ModManifest.UniqueID);
             SeasonsRandomizer.ResetMailKeys();
             _multiSleep = new MultiSleep(Monitor, _helper, _harmony);
-            _advancedOptionsManager = new AdvancedOptionsManager(this, Monitor, _harmony, _archipelago);
+            _advancedOptionsManager = new AdvancedOptionsManager(this, Monitor, _helper, _harmony, _archipelago);
             _advancedOptionsManager.InjectArchipelagoAdvancedOptions();
             _giftHandler = new CrossGiftHandler();
             _villagerEvents = new ModifiedVillagerEventChecker();
