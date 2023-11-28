@@ -73,11 +73,26 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             }
         }
 
-        public static void SetRailroadBlockedBasedOnArchipelagoItem(Mountain __instance)
+        // protected override void resetSharedState()
+        public static void ResetSharedState_RailroadDependsOnApItem_Postfix(Mountain __instance)
+        {
+            try
+            {
+                SetRailroadBlockedBasedOnArchipelagoItem(__instance);
+                return;
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(ResetSharedState_RailroadDependsOnApItem_Postfix)}:\n{ex}", LogLevel.Error);
+                return;
+            }
+        }
+
+        public static void SetRailroadBlockedBasedOnArchipelagoItem(Mountain mountain)
         {
             // private readonly NetBool railroadAreaBlocked = new NetBool(Game1.stats.DaysPlayed < 31U);
-            var railroadAreaBlockedField = _modHelper.Reflection.GetField<NetBool>(__instance, "railroadAreaBlocked");
-            railroadAreaBlockedField.GetValue().Value = _archipelago.HasReceivedItem(RAILROAD_BOULDER_ITEM);
+            var railroadAreaBlockedField = _modHelper.Reflection.GetField<NetBool>(mountain, "railroadAreaBlocked");
+            railroadAreaBlockedField.GetValue().Value = !_archipelago.HasReceivedItem(RAILROAD_BOULDER_ITEM);
         }
     }
 }

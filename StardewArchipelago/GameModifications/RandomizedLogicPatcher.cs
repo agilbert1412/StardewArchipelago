@@ -186,6 +186,12 @@ namespace StardewArchipelago.GameModifications
                 original: AccessTools.Method(typeof(Mountain), nameof(Mountain.DayUpdate)),
                 postfix: new HarmonyMethod(typeof(MountainInjections), nameof(MountainInjections.DayUpdate_RailroadDependsOnApItem_Postfix))
             );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Mountain), "resetSharedState"),
+                postfix: new HarmonyMethod(typeof(MountainInjections), nameof(MountainInjections.ResetSharedState_RailroadDependsOnApItem_Postfix))
+            );
+
             MountainInjections.SetRailroadBlockedBasedOnArchipelagoItem((Mountain)Game1.getLocationFromName("Mountain"));
         }
 
