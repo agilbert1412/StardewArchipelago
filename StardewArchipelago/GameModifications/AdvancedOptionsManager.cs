@@ -12,13 +12,15 @@ namespace StardewArchipelago.GameModifications
     {
         private static ModEntry _modEntry;
         private static IMonitor _console;
+        private static IModHelper _modHelper;
         private Harmony _harmony;
         private static ArchipelagoClient _archipelago;
 
-        public AdvancedOptionsManager(ModEntry modEntry, IMonitor console, Harmony harmony, ArchipelagoClient archipelago)
+        public AdvancedOptionsManager(ModEntry modEntry, IMonitor console, IModHelper modHelper, Harmony harmony, ArchipelagoClient archipelago)
         {
             _modEntry = modEntry;
             _console = console;
+            _modHelper = modHelper;
             _harmony = harmony;
             _archipelago = archipelago;
         }
@@ -139,7 +141,7 @@ namespace StardewArchipelago.GameModifications
                     return;
                 }
 
-                var apCharacterMenu = new CharacterCustomizationArchipelago(characterMenu);
+                var apCharacterMenu = new CharacterCustomizationArchipelago(characterMenu, _modHelper);
                 TitleMenu.subMenu = apCharacterMenu;
             }
             catch (Exception ex)
