@@ -83,7 +83,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     continue;
                 }
 
-                _locationChecker.AddCheckedLocation($"{RecipePurchaseInjections.CHEFSANITY_LOCATION_PREFIX}{recipeName}");
+                _locationChecker.AddCheckedLocation($"{recipeName}{RecipePurchaseInjections.CHEFSANITY_LOCATION_SUFFIX}");
             }
         }
 
