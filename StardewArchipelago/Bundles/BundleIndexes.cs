@@ -61,7 +61,7 @@ namespace StardewArchipelago.Bundles
 
             {"Orchard", 254},
             {"Island Crops", 255},
-            {"Agronomist", 256},
+            {"Agronomist's", 256},
 
             {"Tackle", 257},
             {"Recycling", 258},
@@ -161,7 +161,7 @@ namespace StardewArchipelago.Bundles
 
             {"Orchard", BUNDLE_RED},
             {"Island Crops", BUNDLE_YELLOW},
-            {"Agronomist", 256},
+            {"Agronomist's", 256},
 
             {"Tackle", BUNDLE_YELLOW},
             {"Recycling", BUNDLE_GREEN},
