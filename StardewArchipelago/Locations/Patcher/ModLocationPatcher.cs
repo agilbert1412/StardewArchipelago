@@ -54,7 +54,15 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(spaceCoreType, "AddExperience"),
                 prefix: new HarmonyMethod(typeof(SkillInjections), nameof(SkillInjections.AddExperience_ArchipelagoModExperience_Prefix))
             );
+            if (_archipelago.SlotData.Mods.HasMod(ModNames.MAGIC))
+            {
+                _harmony.Patch(
+                    original: AccessTools.Method(typeof(ShopMenu), nameof(ShopMenu.update)),
+                    postfix: new HarmonyMethod(typeof(MagicModInjections), nameof(MagicModInjections.Update_MarlonShopReplacer_Postfix))
+            );
 
+            }
+                
             InjectSocializingExperienceMultiplier();
             InjectArchaeologyExperienceMultiplier();
         }
@@ -259,24 +267,10 @@ namespace StardewArchipelago.Locations.Patcher
                 typeof(Func<ISalable, Farmer, int, bool>), typeof(Func<ISalable, bool>), typeof(string)
             };
 
-            if (_archipelago.SlotData.Chefsanity.HasFlag(Chefsanity.Purchases) | _archipelago.SlotData.Chefsanity.HasFlag(Chefsanity.All))
-            {
-                _harmony.Patch(
+            _harmony.Patch(
                 original: AccessTools.Method(typeof(ShopMenu), nameof(ShopMenu.update)),
-                postfix: new HarmonyMethod(typeof(SVELocationsInjections), nameof(SVELocationsInjections.Update_BearShop_Postfix))
-                );
-            }
-
-             _harmony.Patch(
-                original: AccessTools.Method(typeof(ShopMenu), nameof(ShopMenu.update)),
-                postfix: new HarmonyMethod(typeof(SVELocationsInjections), nameof(SVELocationsInjections.Update_HandleAlesiaIG_Postfix))
+                postfix: new HarmonyMethod(typeof(SVELocationsInjections), nameof(SVELocationsInjections.Update_ShopReplacer_Postfix))
             );
-
-           _harmony.Patch(
-                original: AccessTools.Method(typeof(ShopMenu), nameof(ShopMenu.update)),
-                postfix: new HarmonyMethod(typeof(SVELocationsInjections), nameof(SVELocationsInjections.Update_HandleIssacIG_Postfix))
-            );
-
 
             _harmony.Patch(
                 original: AccessTools.Constructor(typeof(ShopMenu), shopMenuParameterTypes),

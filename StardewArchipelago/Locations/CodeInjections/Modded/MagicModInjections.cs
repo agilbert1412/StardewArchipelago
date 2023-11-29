@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI;
+using StardewValley.Menus;
 using StardewArchipelago.Archipelago;
 using StardewValley;
 
@@ -10,6 +11,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
 {
     public static class MagicModInjections
     {
+        
         private const string ANALYZE_BLINK_AP_LOCATION = "Analyze All Toil School Locations";
         private const string ANALYZE_SPIRIT_AP_LOCATION = "Analyze All Eldritch School Locations";
         private const string ANALYZE_CLEARDEBRIS_AP_LOCATION = "Analyze: Clear Debris";
@@ -31,6 +33,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         private const string ANALYZE_LUCKSTEAL_AP_LOCATION = "Analyze: Lucksteal";
         private const string ANALYZE_BLOODMANA_AP_LOCATION = "Analyze: Bloodmana";
         private const string ANALYZE_REWIND_AP_LOCATION = "Analyze Every Magic School Location";
+        private const string MARLON_RECIPE_1 = "Travel Core Recipe";
+        private const string MARLON_RECIPE_2 = "Magic Elixir Recipe";
 
         private const int COFFEE = 395;
         private const int LIFE_ELIXIR = 773;
@@ -44,14 +48,17 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         private static IModHelper _helper;
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
+        private static ShopReplacer _shopReplacer;
+        private static ShopMenu _lastShopMenuUpdated = null;
 
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker, ShopReplacer shopReplacer)
         {
             _monitor = monitor;
             _helper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
+            _shopReplacer = shopReplacer;
         }
 
         // internal class AnalyzeSpell : Spell
@@ -94,6 +101,36 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 return true; //Run original logic
             }
             
+        }
+
+        public static void Update_MarlonShopReplacer_Postfix(ShopMenu __instance, GameTime time)
+            {
+            try
+            {
+                // We only run this once for each menu
+                if (_lastShopMenuUpdated == __instance)
+                {
+                    return;
+                }
+
+                _lastShopMenuUpdated = __instance;
+                var myActiveHints = _archipelago.GetMyActiveHints();
+                foreach (var salableItem in __instance.itemPriceAndStock.Keys.ToArray())
+                {
+                    if (_archipelago.SlotData.Craftsanity.HasFlag(Craftsanity.All))
+                    {
+                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, MARLON_RECIPE_1, item => item.isRecipe && item.Name.Contains("Magic Elixir"), myActiveHints);
+                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, MARLON_RECIPE_2, item => item.isRecipe && item.Name.Contains("Travel Core"), myActiveHints);
+                    }
+                }
+                __instance.forSale = __instance.itemPriceAndStock.Keys.ToList();
+                return; //  run original logic
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(Update_MarlonShopReplacer_Postfix)}:\n{ex}", LogLevel.Error);
+                return; // run original logic
+            }
         }
 
         private static void CheckItemAnalyzeLocations(Farmer player, List<string> spellsLearned)
