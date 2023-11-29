@@ -15,7 +15,8 @@ using Microsoft.Xna.Framework;
 
 namespace StardewArchipelago.Locations.CodeInjections.Modded
 {
-    public class SVELocationsInjections{
+    public class SVELocationsInjections
+    {
         private static IMonitor _monitor;
         private static IModHelper _modHelper;
         private static ArchipelagoClient _archipelago;
@@ -45,17 +46,25 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         private const string LANCE_CHEST = "Lance's Diamond Wand";
         private const string RUSTY_KEY_ALT = "Rusty Key";
         private static ShopMenu _lastShopMenuUpdated = null;
-        private static readonly Dictionary<string, string[]> warpKeys = new(){ // Contains the original event requirements to be edited
-            { "IslandWest", new[]{"65360191/f Lance 2000"}}, // Lance giving you the Fable Reef Warp
-            { "FarmHouseFarmRune", new[]{"908074/e 908072/t 600 630"}}, // Unlocking the Farm Rune
-            { "FarmHouseOutpostRune", new[]{"908078/e 908072/t 600 2400"}}, // Unlocking Galmoran Outpost
-            { "Backwoods", new[]{"908072/e 908071"}}, // Unlocking Wizard Rune
-            { "Custom_AdventurerSummit", new[]{"908073/e 908072/z winter/t 600 1900/w sunny", "908073/e 908072/z winter/t 1910 2400/w sunny", 
-            "908073/e 908072/z winter/w rainy", "908073/e 908072/z spring/z summer/z fall"}}, // Unlocking Summit Rune
-            { "Custom_AuroraVineyard", new[]{"908075/e 908072", "908075/e 908072/f Apples 10"}}, // Unlocking Vineyard Rune
-            { "Custom_SpriteSpring2", new[]{"908076/e 908072"}}, // Unlocking Springs Rune
-            { "Custom_JunimoWoods", new[]{"908077/e 908072"}}, // Unlocking Junimo Rune
-            { "Town", new[]{"3691371"}}, // The initializer for Scarlett to be a villager.
+
+        private static readonly Dictionary<string, string[]> warpKeys = new()
+        {
+            // Contains the original event requirements to be edited
+            { "IslandWest", new[] { "65360191/f Lance 2000" } }, // Lance giving you the Fable Reef Warp
+            { "FarmHouseFarmRune", new[] { "908074/e 908072/t 600 630" } }, // Unlocking the Farm Rune
+            { "FarmHouseOutpostRune", new[] { "908078/e 908072/t 600 2400" } }, // Unlocking Galmoran Outpost
+            { "Backwoods", new[] { "908072/e 908071" } }, // Unlocking Wizard Rune
+            {
+                "Custom_AdventurerSummit", new[]
+                {
+                    "908073/e 908072/z winter/t 600 1900/w sunny", "908073/e 908072/z winter/t 1910 2400/w sunny",
+                    "908073/e 908072/z winter/w rainy", "908073/e 908072/z spring/z summer/z fall"
+                }
+            }, // Unlocking Summit Rune
+            { "Custom_AuroraVineyard", new[] { "908075/e 908072", "908075/e 908072/f Apples 10" } }, // Unlocking Vineyard Rune
+            { "Custom_SpriteSpring2", new[] { "908076/e 908072" } }, // Unlocking Springs Rune
+            { "Custom_JunimoWoods", new[] { "908077/e 908072" } }, // Unlocking Junimo Rune
+            { "Town", new[] { "3691371" } }, // The initializer for Scarlett to be a villager.
         };
 
         public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker, ShopReplacer shopReplacer)
@@ -69,11 +78,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         }
 
 
-    
 
-    // Unique Shop Locations
-    public static void Update_ShopReplacer_Postfix(ShopMenu __instance, GameTime time)
-            {
+
+        // Unique Shop Locations
+        public static void Update_ShopReplacer_Postfix(ShopMenu __instance, GameTime time)
+        {
             try
             {
                 // We only run this once for each menu
@@ -86,32 +95,50 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 var myActiveHints = _archipelago.GetMyActiveHints();
                 foreach (var salableItem in __instance.itemPriceAndStock.Keys.ToArray())
                 {
-                    
-                    _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, ALESIA_ITEM, (Item item) =>  item.Name == "Tempered Galaxy Dagger", myActiveHints);
-                    _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, ISSAC_ITEM_1, (Item item) =>  item.Name == "Tempered Galaxy Sword", myActiveHints);
-                    _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, ISSAC_ITEM_2, (Item item) =>  item.Name == "Tempered Galaxy Hammer", myActiveHints);
+
+                    _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, ALESIA_ITEM, item => item.Name == "Tempered Galaxy Dagger",
+                        myActiveHints);
+                    _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, ISSAC_ITEM_1, item => item.Name == "Tempered Galaxy Sword",
+                        myActiveHints);
+                    _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, ISSAC_ITEM_2, item => item.Name == "Tempered Galaxy Hammer",
+                        myActiveHints);
 
                     if (_archipelago.SlotData.Craftsanity.HasFlag(Craftsanity.All))
                     {
-                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, ALESIA_RECIPE_1, item => item.isRecipe && item.Name.Contains("Haste Elixir"), myActiveHints);
-                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, ALESIA_RECIPE_2, item => item.isRecipe && item.Name.Contains("Armor Elixir"), myActiveHints);
-                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, ISSAC_RECIPE, item => item.isRecipe && item.Name.Contains("Hero Elixir"), myActiveHints);
+                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, ALESIA_RECIPE_1,
+                            item => item.IsRecipe && item.Name.Contains("Haste Elixir"), myActiveHints);
+                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, ALESIA_RECIPE_2,
+                            item => item.IsRecipe && item.Name.Contains("Armor Elixir"), myActiveHints);
+                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, ISSAC_RECIPE,
+                            item => item.IsRecipe && item.Name.Contains("Hero Elixir"), myActiveHints);
                     }
+
                     if (_archipelago.SlotData.Chefsanity.HasFlag(Chefsanity.Purchases))
                     {
-                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, GUS_RECIPE_1, item => item.isRecipe && item.Name.Contains("Big Bark Burger"), myActiveHints);
-                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, GUS_RECIPE_2, item => item.isRecipe && item.Name.Contains("Glazed Butterfish"), myActiveHints);
-                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, GUS_RECIPE_3, item => item.isRecipe && item.Name.Contains("Mixed Berry Pie"), myActiveHints);
-                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, BEAR_ITEM_1, item => item.Name.Contains("Baked Berry Oatmeal"), myActiveHints);
-                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, BEAR_ITEM_2, item => item.IsRecipe && item.Name.Contains("Flower Cookie"), myActiveHints);
-                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, MARLON_RECIPE_1, item => item.isRecipe && item.Name.Contains("Frog Legs"), myActiveHints);
-                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, MARLON_RECIPE_2, item => item.isRecipe && item.Name.Contains("Mushroom Berry Rice"), myActiveHints);
-                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, WILLY_RECIPE, item => item.isRecipe && item.Name.Contains("Seaweed Salad"), myActiveHints);
-                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, KROBUS_RECIPE_1, item => item.isRecipe && item.Name.Contains("Void Delight"), myActiveHints);
-                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, KROBUS_RECIPE_2, item => item.isRecipe && item.Name.Contains("Void Salmon Sushi"), myActiveHints);
+                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, GUS_RECIPE_1,
+                            item => item.IsRecipe && item.Name.Contains("Big Bark Burger"), myActiveHints);
+                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, GUS_RECIPE_2,
+                            item => item.IsRecipe && item.Name.Contains("Glazed Butterfish"), myActiveHints);
+                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, GUS_RECIPE_3,
+                            item => item.IsRecipe && item.Name.Contains("Mixed Berry Pie"), myActiveHints);
+                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, BEAR_ITEM_1,
+                            item => item.IsRecipe && item.Name.Contains("Baked Berry Oatmeal"), myActiveHints);
+                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, BEAR_ITEM_2,
+                            item => item.IsRecipe && item.Name.Contains("Flower Cookie"), myActiveHints);
+                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, MARLON_RECIPE_1,
+                            item => item.IsRecipe && item.Name.Contains("Frog Legs"), myActiveHints);
+                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, MARLON_RECIPE_2,
+                            item => item.IsRecipe && item.Name.Contains("Mushroom Berry Rice"), myActiveHints);
+                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, WILLY_RECIPE,
+                            item => item.IsRecipe && item.Name.Contains("Seaweed Salad"), myActiveHints);
+                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, KROBUS_RECIPE_1,
+                            item => item.IsRecipe && item.Name.Contains("Void Delight"), myActiveHints);
+                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, KROBUS_RECIPE_2,
+                            item => item.IsRecipe && item.Name.Contains("Void Salmon Sushi"), myActiveHints);
 
                     }
                 }
+
                 __instance.forSale = __instance.itemPriceAndStock.Keys.ToList();
                 return; //  run original logic
             }
@@ -123,7 +150,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         }
 
 
-    public static bool CheckForAction_LanceChest_Prefix(Chest __instance, Farmer who, bool justCheckingForActivity, ref bool __result)
+        public static bool CheckForAction_LanceChest_Prefix(Chest __instance, Farmer who, bool justCheckingForActivity, ref bool __result)
         {
             try
             {
@@ -142,7 +169,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                     __instance.GetMutex().RequestLock(() => __instance.openChestEvent.Fire());
                 else
                     __instance.performOpenChest();
-                
+
                 var obj = __instance.items[0];
                 __instance.items[0] = null;
                 __instance.items.RemoveAt(0);
@@ -159,10 +186,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 _monitor.Log($"Failed in {nameof(CheckForAction_LanceChest_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
             }
-        }        
+        }
 
-    // There's an alternative Rusty Key event that's added from Marlon by being friends with him.
-    public static bool SkipEvent_AlternativeRustyKey_Prefix(Event __instance)
+        // There's an alternative Rusty Key event that's added from Marlon by being friends with him.
+        public static bool SkipEvent_AlternativeRustyKey_Prefix(Event __instance)
         {
             try
             {
@@ -199,7 +226,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 Game1.pauseTime = 0.0f;
 
                 _locationChecker.AddCheckedLocation(RUSTY_KEY_ALT);
-                
+
                 Game1.player.Position = new Vector2(-9999f, -99999f);
                 __instance.endBehaviors(new string[1] { "end" }, Game1.currentLocation);
                 return false; // don't run original logic
@@ -223,6 +250,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 {
                     return;
                 }
+
                 var railroadBoulderOrder = SpecialOrder.GetSpecialOrder("Clint2", null);
                 railroadBoulderOrder.questKey = railroadKey;
                 Game1.player.team.specialOrders.Add(railroadBoulderOrder);
@@ -277,33 +305,36 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             var newMorganRule = "5978924/e " + MORGAN_EVENT.ToString(); //Only shows up if AP event plays
             var morganEvent = farm_events[oldMorganRule];
             var applesEvent = farmhouse_events[oldApplesRule];
-            var scarlettEvent = 
-            farm_events.Remove(oldMorganRule);
+            var scarlettEvent =
+                farm_events.Remove(oldMorganRule);
             farmhouse_events.Remove(oldApplesRule);
             farm_events[newMorganRule] = morganEvent;
             farmhouse_events[newApplesRule] = applesEvent;
-        }    
+        }
+
         // Otherwise, we should just lock the events out of being seen at all and simply toggled by eventSeen.
         public static void LockedCutsceneInitializer()
         {
-            foreach( var kvp in warpKeys)
+            foreach (var kvp in warpKeys)
             {
                 var mapName = kvp.Key;
-                if(kvp.Key.Contains("FarmHouse"))
+                if (kvp.Key.Contains("FarmHouse"))
                 {
                     mapName = "FarmHouse";
                 }
+
                 var currentEventData = Game1.content.Load<Dictionary<string, string>>("Data\\Events\\" + mapName);
-                foreach( var eventKey in kvp.Value)
+                foreach (var eventKey in kvp.Value)
                 {
                     string[] totalEventKey = eventKey.Split("/");
                     var eventID = totalEventKey[0];
                     // Sometimes, CP has not added the cutscene to the event list yet due to its dynamic adding methods...
-                    if(!currentEventData.ContainsKey(eventKey))
+                    if (!currentEventData.ContainsKey(eventKey))
                     {
                         // ... so just add a dummy event if that's the case to make sure its locked and move on to the next event.
                         currentEventData[eventKey] = "continue/-200 -200 0/Lewis -10 -10 0/pause 50/end";
                     }
+
                     // Everything exists now, so just make the requirement for the event itself.
                     var newEventKey = eventKey + "/e " + eventID;
                     var eventData = currentEventData[eventKey];
@@ -322,7 +353,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         }
 
         // Done as JojaMart was changed to be two different shop tenders (Claire and Martin); just force every shop in Joja to be the same.
-        public static bool ShopMenu_ForceJojaShop_Prefix(ShopMenu __instance, ref Dictionary<ISalable, int[]> itemPriceAndStock, int currency = 0, string who = null, Func<ISalable, Farmer, int, bool> on_purchase = null, Func<ISalable, bool> on_sell = null, string context = null)
+        public static bool ShopMenu_ForceJojaShop_Prefix(ShopMenu __instance, ref Dictionary<ISalable, int[]> itemPriceAndStock, int currency = 0, string who = null,
+            Func<ISalable, Farmer, int, bool> on_purchase = null, Func<ISalable, bool> on_sell = null, string context = null)
         {
             try
             {
@@ -338,6 +370,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                     itemPriceAndStock = jojaStock;
                     return true; // run original logic
                 }
+
                 return true; // Run original logic
             }
             catch (Exception ex)
