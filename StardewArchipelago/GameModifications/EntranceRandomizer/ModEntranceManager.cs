@@ -1,33 +1,25 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
-using StardewArchipelago.Extensions;
-using StardewModdingAPI;
-using StardewValley;
 
-public class ModEntranceManager
+namespace StardewArchipelago.GameModifications.EntranceRandomizer
 {
-
-    public static List<string> GrandpaShedEdgeCase = new(){
-        "Custom_GrandpasShed to Custom_GrandpasShedGreenhouse", "Custom_GrandpasShedGreenhouse to Custom_GrandpasShed"
-    };
-
-    private static readonly Dictionary<string, string> _entranceSVE = new()
+    public class ModEntranceManager
     {
-    };
 
-    private static readonly Dictionary<string, string> _locationSVE = new()
-    {
+        public static List<string> GrandpaShedEdgeCase = new(){
+            "Custom_GrandpasShed to Custom_GrandpasShedGreenhouse", "Custom_GrandpasShedGreenhouse to Custom_GrandpasShed"
+        };
+
+        private static readonly Dictionary<string, string> _locationSVE = new()
+        {
             { "Grandpa's Shed Interior", "Custom_GrandpasShedRuins"},
             { "Grandpa's Shed Upstairs", "Custom_GrandpasShedGreenhouse"},
             { "Grandpa's Shed", "Custom_GrandpasShedOutside"},
             { "Marnie's Shed", "Custom_MarnieShed"},
             { "Fairhaven Farm Cellar", "Custom_AndyCellar"},
             { "Fairhaven Farm", "Custom_AndyHouse"},
-            { "Blue Moon Vineyard", "Custom_BlueMoonVineyard"},
             { "Sophia's House", "Custom_SophiaHouse"},
             { "Sophia's Cellar", "Custom_SophiaCellar"},
             { "Jenkins' Residence", "Custom_JenkinsHouse"},
@@ -39,8 +31,6 @@ public class ModEntranceManager
             { "Highlands", "Custom_Highlands"},
             { "Lance's House Ladder", "Custom_HighlandsOutpost|12|5"},
             { "Lance's House Main", "Custom_HighlandsOutpost|7|9"},
-            { "Aurora Vineyard Basement", "Custom_ApplesRoom"},
-            { "Aurora Vineyard", "Custom_AuroraVineyard"},
             { "Sprite Spring Cave", "Custom_SpriteSpringCave"},
             { "Sprite Spring", "Custom_SpriteSpring2"},
             { "Lost Woods", "Custom_JunimoWoods|37|2"},
@@ -54,6 +44,9 @@ public class ModEntranceManager
             { "Grove Wizard Warp", "Custom_EnchantedGrove|17|25"},
             { "Grove Adventurer's Guild Warp", "Custom_EnchantedGrove|43|25"},
             { "Grove Sprite Spring Warp", "Custom_EnchantedGrove|20|10"},
+            { "Aurora Vineyard Basement", "Custom_ApplesRoom"},
+            { "Blue Moon Vineyard", "Custom_BlueMoonVineyard"},
+            { "Aurora Vineyard", "Custom_AuroraVineyard"},
             { "Galmoran Outpost", "Custom_CastleVillageOutpost"},
             { "Crimson Badlands", "Custom_CrimsonBadlands"},
             { "Badlands Cave", "Custom_TreasureCave"},
@@ -64,105 +57,83 @@ public class ModEntranceManager
             { "First Slash Hallway", "Custom_FirstSlashHallway"},
             { "First Slash Spare Room", "Custom_FirstSlashGuestRoom"},
             { "Grampleton Suburbs", "Custom_GrampletonSuburbs"},
-            { "Scarlett's House", "Custom_ScarlettHouse"}
-    };
-    private static readonly Dictionary<string, string> _locationEugene = new()
-    {
-        { "Eugene's Garden", "Custom_EugeneNPC_EugeneHouse" },
-        { "Eugene's Bedroom", "Custom_EugeneNPC_EugeneRoom" },
-    };
+            { "Scarlett's House", "Custom_ScarlettHouse"},
+            {"Wizard Basement", "Custom_WizardBasement"}
+        };
+        private static readonly Dictionary<string, string> _locationEugene = new()
+        {
+            { "Eugene's Garden", "Custom_EugeneNPC_EugeneHouse" },
+            { "Eugene's Bedroom", "Custom_EugeneNPC_EugeneRoom" },
+        };
 
-    private static readonly Dictionary<string, string> _locationDeepWoods = new()
-    {
-        { "Deep Woods House", "DeepWoodsMaxHouse" },
-    };
+        private static readonly Dictionary<string, string> _locationDeepWoods = new()
+        {
+            { "Deep Woods House", "DeepWoodsMaxHouse" },
+        };
 
-    private static readonly Dictionary<string, string> _locationAlec = new()
-    {
-        { "Alec's Pet Shop", "Custom_AlecsPetShop" },
-        { "Alec's Bedroom", "Custom_AlecsRoom" },
-    };
+        private static readonly Dictionary<string, string> _locationAlec = new()
+        {
+            { "Alec's Pet Shop", "Custom_AlecsPetShop" },
+            { "Alec's Bedroom", "Custom_AlecsRoom" },
+        };
 
-    private static readonly Dictionary<string, string> _locationJuna = new()
-    {
-        { "Juna's Cave", "Custom_JunaNPC_JunaCave" },
-    };
+        private static readonly Dictionary<string, string> _locationJuna = new()
+        {
+            { "Juna's Cave", "Custom_JunaNPC_JunaCave" },
+        };
 
-    private static readonly Dictionary<string, string> _locationAyeisha = new()
-    {
-        { "Ayeisha's Mail Van", "Custom_AyeishaVanRoad" },
-    };
+        private static readonly Dictionary<string, string> _locationAyeisha = new()
+        {
+            { "Ayeisha's Mail Van", "Custom_AyeishaVanRoad" },
+        };
 
-    private static readonly Dictionary<string, string> _locationJasper = new()
-    {
-        { "Jasper's Bedroom", "Custom_LK_Museum2" },
-    };
+        private static readonly Dictionary<string, string> _locationJasper = new()
+        {
+            { "Jasper's Bedroom", "Custom_LK_Museum2" },
+        };
     
-    private static readonly Dictionary<string, string> _locationYoba = new()
-    {
-        { "Yoba's Clearing", "Custom_Woods3" },
-    };                
-
-    private static readonly Dictionary<string, Dictionary<string, string>> _locationMods = new()
-    {
-        { ModNames.ALEC, _locationAlec },
-        { ModNames.AYEISHA, _locationAyeisha },
-        { ModNames.DEEP_WOODS, _locationDeepWoods },
-        { ModNames.EUGENE, _locationEugene },
-        { ModNames.JASPER, _locationJasper },
-        { ModNames.JUNA, _locationJuna },
-        { ModNames.SVE, _locationSVE },
-        { ModNames.YOBA, _locationYoba },
-    };
-
-    private static readonly Dictionary<string, Dictionary<string, string>> _entranceMods = new()
-    {
-        {ModNames.SVE, _entranceSVE}
-    };
-
-    public static void IncludeModLocationAlias(Dictionary<string, string> aliases, SlotData slotData)
-    {
-        foreach (var mod in _locationMods)
+        private static readonly Dictionary<string, string> _locationYoba = new()
         {
-            if (slotData.Mods.HasMod(mod.Key))
+            { "Yoba's Clearing", "Custom_Woods3" },
+        };                
+
+        private static readonly Dictionary<string, Dictionary<string, string>> _locationAliasesByMod = new()
+        {
+            { ModNames.ALEC, _locationAlec },
+            { ModNames.AYEISHA, _locationAyeisha },
+            { ModNames.DEEP_WOODS, _locationDeepWoods },
+            { ModNames.EUGENE, _locationEugene },
+            { ModNames.JASPER, _locationJasper },
+            { ModNames.JUNA, _locationJuna },
+            { ModNames.SVE, _locationSVE },
+            { ModNames.YOBA, _locationYoba },
+        };
+
+        public Dictionary<string, string> GetModLocationAliases(SlotData slotData)
+        {
+            var modLocationAliases = new Dictionary<string, string>();
+            foreach (var (_, locationAliases) in _locationAliasesByMod.Where(x => slotData.Mods.HasMod(x.Key)))
             {
-                foreach (var kvp in mod.Value)
+                foreach (var (key, value) in locationAliases)
                 {
-                    aliases.Add(kvp.Key, kvp.Value);
-                }
-                if (mod.Key == ModNames.SVE)
-                {
-                    aliases["Wizard Basement"] = "Custom_WizardBasement";
+                    modLocationAliases.Add(key, value);
                 }
             }
-        }
-    }
 
-    public static void IncludeModEntranceAlias(Dictionary<string, string> aliases, SlotData slotData)
-    {
-        foreach (var mod in _entranceMods)
+            return modLocationAliases;
+        }
+         
+        public static bool CheckForGrandpasShedGreenhouseEdgeCase(string currentLocationName, string locationRequestName)
         {
-            if (slotData.Mods.HasMod(mod.Key))
+            var case1 = currentLocationName == "Custom_GrandpasShed" && locationRequestName == "Custom_GrandpasShedGreenhouse";
+            var case2 = locationRequestName == "Custom_GrandpasShed" && currentLocationName == "Custom_GrandpasShedGreenhouse";
+            if (case1 || case2)
             {
-                foreach (var kvp in mod.Value)
-                {
-                    aliases.Add(kvp.Key, kvp.Value);
-                }
+                return true;
             }
+            return false;
         }
-    }
-
-    public static bool CheckForGrandpasShedGreenhouseEdgeCase(string currentLocationName, string locationRequestName)
-    {
-        var case1 = currentLocationName == "Custom_GrandpasShed" & locationRequestName == "Custom_GrandpasShedGreenhouse";
-        var case2 = locationRequestName == "Custom_GrandpasShed" & currentLocationName == "Custom_GrandpasShedGreenhouse";
-        if (case1 | case2)
-        {
-            return true;
-        }
-        return false;
-
-    }
 
             
+    }
 }

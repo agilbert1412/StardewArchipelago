@@ -64,10 +64,10 @@ namespace StardewArchipelago.Extensions
             var warpPoints = new List<Point>();
             foreach (var destinationName in validDestinationNames)
             {
+                warpPoints.AddRange(GetAllActionWarpsTo(origin, destinationName).Select(x => new Point(x.Key.X, x.Key.Y)));
                 warpPoints.AddRange(GetAllTouchWarpsTo(origin, destinationName).Select(warp => new Point(warp.X, warp.Y)));
                 warpPoints.AddRange(GetAllTouchActionWarpsTo(origin, destinationName).Select(x => new Point(x.Key.X, x.Key.Y)));
                 warpPoints.AddRange(GetDoorWarpPoints(origin, destinationName));
-                warpPoints.AddRange(GetAllActionWarpsTo(origin, destinationName).Select(x => new Point(x.Key.X, x.Key.Y)));
                 warpPoints.AddRange(GetSpecialTriggerWarps(origin, destinationName).Keys);
             }
 
@@ -83,6 +83,14 @@ namespace StardewArchipelago.Extensions
         {
             foreach (var destinationName in validDestinationNames)
             {
+                foreach (var (warp, target) in GetAllActionWarpsTo(origin, destinationName))
+                {
+                    if (warp.X == warpPointLocation.X && warp.Y == warpPointLocation.Y)
+                    {
+                        return new Point(target.X, target.Y);
+                    }
+                }
+
                 foreach (var warp in GetAllTouchWarpsTo(origin, destinationName))
                 {
                     if (warp.X == warpPointLocation.X && warp.Y == warpPointLocation.Y)
@@ -102,14 +110,6 @@ namespace StardewArchipelago.Extensions
                 if (TryGetDoorWarpPointTarget(origin, warpPointLocation, destinationName, out var warpPointTarget))
                 {
                     return warpPointTarget;
-                }
-
-                foreach (var (warp, target) in GetAllActionWarpsTo(origin, destinationName))
-                {
-                    if (warp.X == warpPointLocation.X && warp.Y == warpPointLocation.Y)
-                    {
-                        return new Point(target.X, target.Y);
-                    }
                 }
 
                 foreach (var (warp, warpTarget) in GetSpecialTriggerWarps(origin, destinationName))

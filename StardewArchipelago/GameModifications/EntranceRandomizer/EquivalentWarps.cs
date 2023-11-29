@@ -59,7 +59,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
                 return beach;
             }
 
-            if (IsGrandpShed(entrance, out _))
+            if (IsGrandpaShed(entrance, out _))
             {
                 return grandpaShedRuins;
             }
@@ -94,7 +94,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
                 return beachCorrectEntrance;
             }
 
-            if (IsGrandpShed(entrance, out var shedCorrectEntrance))
+            if (IsGrandpaShed(entrance, out var shedCorrectEntrance))
             {
                 return shedCorrectEntrance;
             }
@@ -178,7 +178,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             return false;
         }
 
-        private bool IsGrandpShed(string area, out string correctArea)
+        private bool IsGrandpaShed(string area, out string correctArea)
         {
             foreach (var shedLocations in _grandpaShedLocations)
             {
