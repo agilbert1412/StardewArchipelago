@@ -259,7 +259,7 @@ namespace StardewArchipelago.Locations.Patcher
                 typeof(Func<ISalable, Farmer, int, bool>), typeof(Func<ISalable, bool>), typeof(string)
             };
 
-            if (_archipelago.SlotData.Chefsanity.Equals(3) | _archipelago.SlotData.Chefsanity.Equals(2) | _archipelago.SlotData.Chefsanity.Equals(15))
+            if (_archipelago.SlotData.Chefsanity.HasFlag(Chefsanity.Purchases) | _archipelago.SlotData.Chefsanity.HasFlag(Chefsanity.All))
             {
                 _harmony.Patch(
                 original: AccessTools.Method(typeof(ShopMenu), nameof(ShopMenu.update)),

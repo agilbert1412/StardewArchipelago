@@ -4,6 +4,7 @@ using System.Linq;
 using Archipelago.MultiClient.Net.Models;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
@@ -46,6 +47,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 Utility.AddStock(saloonStock, new Object(Vector2.Zero, 224, int.MaxValue));
                 Utility.AddStock(saloonStock, new Object(Vector2.Zero, 206, int.MaxValue));
                 Utility.AddStock(saloonStock, new Object(Vector2.Zero, 395, int.MaxValue));
+                if (_archipelago.SlotData.Mods.HasMod(ModNames.SVE))
+                {
+                    var objectData = Game1.content.Load<Dictionary<int, string>>("Data\\ObjectInformation");
+                    var chickenEntry = objectData.FirstOrDefault(x => x.Value.Contains("Grampleton Orange Chicken"));
+                    var chickenID = chickenEntry.Key;
+                    Utility.AddStock(saloonStock, new Object(Vector2.Zero, chickenID, int.MaxValue));
+                }
 
                 var myActiveHints = _archipelago.GetMyActiveHints();
                 AddArchipelagoRecipesToSaloonStock(saloonStock, myActiveHints);
@@ -323,6 +331,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
 
             AddArchipelagoCookingRecipeItem(saloonStock, "Triple Shot Espresso", 5000, myActiveHints);
+            if (_archipelago.SlotData.Mods.HasMod(ModNames.SVE))
+            {
+                AddArchipelagoCookingRecipeItem(saloonStock, "Big Bark Burger", 400, myActiveHints);
+                AddArchipelagoCookingRecipeItem(saloonStock, "Glazed Butterfish", 800, myActiveHints);
+                AddArchipelagoCookingRecipeItem(saloonStock, "Mixed Berry Pie", 250, myActiveHints);
+            }
         }
 
         private static void AddArchipelagoCraftingRecipeItem(Dictionary<ISalable, int[]> stock, string name, int moneyPrice, Hint[] myActiveHints, int itemPriceId = -1, int itemPriceAmount = 0)

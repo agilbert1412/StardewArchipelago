@@ -29,6 +29,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         private const string BEAR_ITEM_1 = "Learn Recipe Baked Berry Oatmeal";
         private const string BEAR_ITEM_2 = "Learn Recipe Flower Cookie";
         private const string ALESIA_ITEM = "Purchase Tempered Galaxy Dagger";
+        private const string ALESIA_RECIPE_1 = "Learn Recipe Haste Elixir";
+        private const string ALESIA_RECIPE_2 = "Learn Recipe Armor Elixir";
+        private const string ISSAC_RECIPE = "Learn Recipe Hero Elixir";
         private const string ISSAC_ITEM_1 = "Purchase Tempered Galaxy Sword";
         private const string ISSAC_ITEM_2 = "Purchase Tempered Galaxy Hammer";
         private const string LANCE_CHEST = "Lance's Diamond Wand";
@@ -58,22 +61,22 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
 
 // Unique Shop Locations
     private static ShopMenu _lastShopMenuUpdated = null;
-    public static void Update_BearShop_Postfix(ShopMenu __instance, ref Dictionary<ISalable, int[]> itemPriceAndStock, int currency = 0, string who = null, Func<ISalable, Farmer, int, bool> on_purchase = null, Func<ISalable, bool> on_sell = null, string context = null)
-        {
+    public static void Update_BearShop_Postfix(ShopMenu __instance, GameTime time)
+            {
             try
             {
                 // We only run this once for each menu
-                if (_lastShopMenuUpdated == __instance || __instance.currency != 0)
+                if (_lastShopMenuUpdated == __instance)
                 {
                     return;
                 }
 
                 _lastShopMenuUpdated = __instance;
                 var myActiveHints = _archipelago.GetMyActiveHints();
-                foreach (var salableItem in itemPriceAndStock.Keys.ToArray())
+                foreach (var salableItem in __instance.itemPriceAndStock.Keys.ToArray())
                 {
-                    _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, BEAR_ITEM_1, (Object item) =>  item.Name == "Baked Berry Oatmeal Recipe", myActiveHints);
-                    _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, BEAR_ITEM_2, (Object item) => item.Name == "Flower Cookie Recipe", myActiveHints);
+                    _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, BEAR_ITEM_1, item => item.Name.Contains("Baked Berry Oatmeal"), myActiveHints);
+                    _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, BEAR_ITEM_2, item => item.IsRecipe && item.Name.Contains("Flower Cookie"), myActiveHints);
                 }
                 __instance.forSale = __instance.itemPriceAndStock.Keys.ToList();
                 return; //  run original logic
@@ -90,7 +93,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             try
             {
                 // We only run this once for each menu
-                if (_lastShopMenuUpdated == __instance || __instance.currency != 0)
+                if (_lastShopMenuUpdated == __instance)
                 {
                     return;
                 }
@@ -99,7 +102,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 var myActiveHints = _archipelago.GetMyActiveHints();
                 foreach (var salableItem in __instance.itemPriceAndStock.Keys.ToArray())
                 {
-                    _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, ALESIA_ITEM, (Object item) =>  item.Name == "Tempered Galaxy Dagger", myActiveHints);
+                    _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, ALESIA_ITEM, (Item item) =>  item.Name == "Tempered Galaxy Dagger", myActiveHints);
+                    if (_archipelago.SlotData.Craftsanity.HasFlag(Craftsanity.All))
+                    {
+                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, ALESIA_RECIPE_1, item => item.isRecipe && item.Name.Contains("Haste Elixir"), myActiveHints);
+                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, ALESIA_RECIPE_2, item => item.isRecipe && item.Name.Contains("Armor Elixir"), myActiveHints);
+                    }
                 }
 
                 __instance.forSale = __instance.itemPriceAndStock.Keys.ToList();
@@ -117,7 +125,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             try
             {
                 // We only run this once for each menu
-                if (_lastShopMenuUpdated == __instance || __instance.currency != 0)
+                if (_lastShopMenuUpdated == __instance)
                 {
                     return;
                 }
@@ -128,6 +136,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 {
                     _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, ISSAC_ITEM_1, (Item item) =>  item.Name == "Tempered Galaxy Sword", myActiveHints);
                     _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, ISSAC_ITEM_2, (Item item) =>  item.Name == "Tempered Galaxy Hammer", myActiveHints);
+                    if (_archipelago.SlotData.Craftsanity.HasFlag(Craftsanity.All))
+                    {
+                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, ISSAC_RECIPE, item => item.isRecipe && item.Name.Contains("Hero Elixir"), myActiveHints);
+
+                    }
                 }
 
                 __instance.forSale = __instance.itemPriceAndStock.Keys.ToList();
