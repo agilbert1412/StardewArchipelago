@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Archipelago.MultiClient.Net.Models;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
@@ -57,14 +58,33 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             try
             {
                 var craftedRecipes = Game1.player.craftingRecipes;
+                string recipeName;
                 foreach (var recipe in craftedRecipes.Keys)
                 {
                     if (craftedRecipes[recipe] <= 0)
                     {
                         continue;
                     }
+                    recipeName = recipe;
+                    if (recipeName.Contains("moonslime.excavation."))  //We need the display name because Archaeology is like that.
+                    {
+                        if (ArchaeologyCraftNames.ArchaeologyBigCraftables.Contains(recipeName))
+                        {
+                            var craftableData = Game1.content.Load<Dictionary<int, string>>("Data\\BigCraftablesInformation");
+                            var productEntry = craftableData.FirstOrDefault(x => x.Value.Contains(recipeName));
+                            var productInfo = productEntry.Value.Split("/");
+                            recipeName = productInfo.Last();
+                        }
+                        else
+                        {
+                            var objectData = Game1.content.Load<Dictionary<int, string>>("Data\\ObjectInformation");
+                            var productEntry = objectData.FirstOrDefault(x => x.Value.Contains(recipeName));
+                            var productInfo = productEntry.Value.Split("/");
+                            recipeName = productInfo[4];
+                        }  
+                    }
 
-                    var location = $"{CRAFTING_LOCATION_PREFIX}{recipe}";
+                    var location = $"{CRAFTING_LOCATION_PREFIX}{recipeName}";
                     _locationChecker.AddCheckedLocation(location);
                 }
                 

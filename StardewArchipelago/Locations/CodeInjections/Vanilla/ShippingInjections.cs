@@ -101,6 +101,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 {
                     name = _renamedItems[shippedItem.ParentSheetIndex];
                 }
+                if (name.Contains("moonslime.excavation."))
+                {
+                    name = shippedItem.DisplayName;  //Temporary fix; will break for chinese speaking players only atm
+                }
 
                 var apLocation = $"Shipsanity: {name}";
                 if (_archipelago.GetLocationId(apLocation) > -1)
