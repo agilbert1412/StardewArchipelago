@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
 using StardewValley;
+using StardewArchipelago.GameModifications;
 using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Stardew
@@ -220,6 +221,7 @@ namespace StardewArchipelago.Stardew
 
         public StardewRecipe GetRecipeByName(string recipeName)
         {
+            recipeName = ModArchaeologyNameFixer.EnglishDisplayNametoName(recipeName);
             if (_cookingRecipesByName.ContainsKey(recipeName))
             {
                 return _cookingRecipesByName[recipeName];
