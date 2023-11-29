@@ -28,6 +28,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         private const string WOODS_OBELISK_SIGILS = "Progressive Woods Obelisk Sigils";
         private const string WOODS_DEPTH_LOCATION = "The Deep Woods: Depth {0}";
         private const string EXCALIBUR_FAIL = "With only {0}/7 Luck, {1}/40 total base skills and {2}/3 pendants, it won't budge.";
+        private const string EXCALIBUR_WIN = "{0} has been freed from the stone.  You are worthy.";
         private const int LEVEL_STEP = 10;
         private static IMonitor _monitor;
         private static IModHelper _helper;
@@ -72,7 +73,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                     && pendantCommunity >= 1)
                 {
                     Game1.playSound("yoba");
+                    var swordItem = _archipelago.ScoutSingleLocation(EXCALIBUR_AP_LOCATION).itemName;
+                    if (swordItem.Length > 20)
+                    {
+                        swordItem = swordItem.Substring(0, 20) //Lets make it readable for the Archipidle enjoyers.
+                    }
                     _locationChecker.AddCheckedLocation(EXCALIBUR_AP_LOCATION);
+                    Game1.showRedMessage(string.Format(EXCALIBUR_WIN, swordItem));
                     swordPulledOut.Value = true;
                 }
                 else
