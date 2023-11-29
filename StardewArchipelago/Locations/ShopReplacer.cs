@@ -59,6 +59,16 @@ namespace StardewArchipelago.Locations
             ReplaceShopItem(itemPriceAndStock, itemOnSale, apLocation, true, myActiveHints);
         }
 
+        public void ReplaceShopItem(Dictionary<ISalable, int[]> itemPriceAndStock, ISalable itemOnSale, string apLocation, Func<Item, bool> conditionToMeet, Hint[] myActiveHints)
+        {
+            if (itemOnSale is not Item salableItem || !conditionToMeet(salableItem))
+            {
+                return;
+            }
+
+            ReplaceShopItem(itemPriceAndStock, itemOnSale, apLocation, true, myActiveHints);
+        }
+
         private void ReplaceShopItem(Dictionary<ISalable, int[]> itemPriceAndStock, ISalable itemOnSale, string apLocationName, bool removeOriginal, Hint[] myActiveHints)
         {
             var itemPrice = itemPriceAndStock[itemOnSale][0];

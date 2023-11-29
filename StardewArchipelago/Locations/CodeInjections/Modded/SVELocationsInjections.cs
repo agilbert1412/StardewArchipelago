@@ -1,4 +1,6 @@
 using System;
+using HarmonyLib;
+using Netcode;
 using System.Collections.Generic;
 using System.Linq;
 using StardewArchipelago.Archipelago;
@@ -26,9 +28,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         private const int JOJA_COLA = 167;
         private const string BEAR_ITEM_1 = "Learn Recipe Baked Berry Oatmeal";
         private const string BEAR_ITEM_2 = "Learn Recipe Flower Cookie";
-        private const string ALESIA_ITEM = "Alesia: Tempered Galaxy Dagger";
-        private const string ISSAC_ITEM_1 = "Issac: Tempered Galaxy Sword";
-        private const string ISSAC_ITEM_2 = "Issac: Tempered Galaxy Hammer";
+        private const string ALESIA_ITEM = "Purchase Tempered Galaxy Dagger";
+        private const string ISSAC_ITEM_1 = "Purchase Tempered Galaxy Sword";
+        private const string ISSAC_ITEM_2 = "Purchase Tempered Galaxy Hammer";
         private const string LANCE_CHEST = "Lance's Diamond Wand";
         private const string RUSTY_KEY_ALT = "Rusty Key";
         private static readonly Dictionary<string, string[]> warpKeys = new(){ // Contains the original event requirements to be edited
@@ -55,59 +57,86 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         }
 
 // Unique Shop Locations
-    public static bool ShopMenu_BearShop_Prefix(ShopMenu __instance, ref Dictionary<ISalable, int[]> itemPriceAndStock, int currency = 0, string who = null, Func<ISalable, Farmer, int, bool> on_purchase = null, Func<ISalable, bool> on_sell = null, string context = null)
+    private static ShopMenu _lastShopMenuUpdated = null;
+    public static void Update_BearShop_Postfix(ShopMenu __instance, ref Dictionary<ISalable, int[]> itemPriceAndStock, int currency = 0, string who = null, Func<ISalable, Farmer, int, bool> on_purchase = null, Func<ISalable, bool> on_sell = null, string context = null)
         {
             try
             {
+                // We only run this once for each menu
+                if (_lastShopMenuUpdated == __instance || __instance.currency != 0)
+                {
+                    return;
+                }
+
+                _lastShopMenuUpdated = __instance;
                 var myActiveHints = _archipelago.GetMyActiveHints();
                 foreach (var salableItem in itemPriceAndStock.Keys.ToArray())
                 {
-                    _shopReplacer.ReplaceShopItem(itemPriceAndStock, salableItem, BEAR_ITEM_1, (Object item) =>  item.Name == "Baked Berry Oatmeal Recipe", myActiveHints);
-                    _shopReplacer.ReplaceShopItem(itemPriceAndStock, salableItem, BEAR_ITEM_2, (Object item) => item.Name == "Flower Cookie Recipe", myActiveHints);
+                    _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, BEAR_ITEM_1, (Object item) =>  item.Name == "Baked Berry Oatmeal Recipe", myActiveHints);
+                    _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, BEAR_ITEM_2, (Object item) => item.Name == "Flower Cookie Recipe", myActiveHints);
                 }
-                return true; //  run original logic
+                __instance.forSale = __instance.itemPriceAndStock.Keys.ToList();
+                return; //  run original logic
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(ShopMenu_BearShop_Prefix)}:\n{ex}", LogLevel.Error);
-                return true; // run original logic
+                _monitor.Log($"Failed in {nameof(Update_BearShop_Postfix)}:\n{ex}", LogLevel.Error);
+                return; // run original logic
             }
         }
 
-        public static bool ShopMenu_AlesiaShop_Prefix(ShopMenu __instance, ref Dictionary<ISalable, int[]> itemPriceAndStock, int currency = 0, string who = null, Func<ISalable, Farmer, int, bool> on_purchase = null, Func<ISalable, bool> on_sell = null, string context = null)
+        public static void Update_HandleAlesiaIG_Postfix(ShopMenu __instance, GameTime time)
         {
             try
             {
-                var myActiveHints = _archipelago.GetMyActiveHints();
-                foreach (var salableItem in itemPriceAndStock.Keys.ToArray())
+                // We only run this once for each menu
+                if (_lastShopMenuUpdated == __instance || __instance.currency != 0)
                 {
-                    _shopReplacer.ReplaceShopItem(itemPriceAndStock, salableItem, ALESIA_ITEM, (Object item) =>  item.Name == "Tempered Galaxy Dagger", myActiveHints);
+                    return;
                 }
-                return true; //  run original logic
+
+                _lastShopMenuUpdated = __instance;
+                var myActiveHints = _archipelago.GetMyActiveHints();
+                foreach (var salableItem in __instance.itemPriceAndStock.Keys.ToArray())
+                {
+                    _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, ALESIA_ITEM, (Object item) =>  item.Name == "Tempered Galaxy Dagger", myActiveHints);
+                }
+
+                __instance.forSale = __instance.itemPriceAndStock.Keys.ToList();
+                return;
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(ShopMenu_AlesiaShop_Prefix)}:\n{ex}", LogLevel.Error);
-                return true; // run original logic
+                _monitor.Log($"Failed in {nameof(Update_HandleAlesiaIG_Postfix)}:\n{ex}", LogLevel.Error);
+                return;
             }
         }
 
-            public static bool ShopMenu_IssacShop_Prefix(ShopMenu __instance, ref Dictionary<ISalable, int[]> itemPriceAndStock, int currency = 0, string who = null, Func<ISalable, Farmer, int, bool> on_purchase = null, Func<ISalable, bool> on_sell = null, string context = null)
+        public static void Update_HandleIssacIG_Postfix(ShopMenu __instance, GameTime time)
         {
             try
             {
-                var myActiveHints = _archipelago.GetMyActiveHints();
-                foreach (var salableItem in itemPriceAndStock.Keys.ToArray())
+                // We only run this once for each menu
+                if (_lastShopMenuUpdated == __instance || __instance.currency != 0)
                 {
-                    _shopReplacer.ReplaceShopItem(itemPriceAndStock, salableItem, ISSAC_ITEM_1, (Object item) =>  item.Name == "Tempered Galaxy Sword", myActiveHints);
-                    _shopReplacer.ReplaceShopItem(itemPriceAndStock, salableItem, ISSAC_ITEM_2, (Object item) =>  item.Name == "Tempered Galaxy Hammer", myActiveHints);
+                    return;
                 }
-                return true; //  run original logic
+
+                _lastShopMenuUpdated = __instance;
+                var myActiveHints = _archipelago.GetMyActiveHints();
+                foreach (var salableItem in __instance.itemPriceAndStock.Keys.ToArray())
+                {
+                    _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, ISSAC_ITEM_1, (Item item) =>  item.Name == "Tempered Galaxy Sword", myActiveHints);
+                    _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, ISSAC_ITEM_2, (Item item) =>  item.Name == "Tempered Galaxy Hammer", myActiveHints);
+                }
+
+                __instance.forSale = __instance.itemPriceAndStock.Keys.ToList();
+                return;
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(ShopMenu_IssacShop_Prefix)}:\n{ex}", LogLevel.Error);
-                return true; // run original logic
+                _monitor.Log($"Failed in {nameof(Update_HandleIssacIG_Postfix)}:\n{ex}", LogLevel.Error);
+                return;
             }
         }
 

@@ -263,21 +263,21 @@ namespace StardewArchipelago.Locations.Patcher
             if (_archipelago.SlotData.Chefsanity.Equals(3) | _archipelago.SlotData.Chefsanity.Equals(2) | _archipelago.SlotData.Chefsanity.Equals(15))
             {
                 _harmony.Patch(
-                    original: AccessTools.Constructor(typeof(ShopMenu), shopMenuParameterTypes),
-                    prefix: new HarmonyMethod(typeof(SVELocationsInjections), nameof(SVELocationsInjections.ShopMenu_BearShop_Prefix))
+                original: AccessTools.Method(typeof(ShopMenu), nameof(ShopMenu.update)),
+                postfix: new HarmonyMethod(typeof(SVELocationsInjections), nameof(SVELocationsInjections.Update_BearShop_Postfix))
                 );
             }
-            
 
              _harmony.Patch(
-                original: AccessTools.Constructor(typeof(ShopMenu), shopMenuParameterTypes),
-                prefix: new HarmonyMethod(typeof(SVELocationsInjections), nameof(SVELocationsInjections.ShopMenu_AlesiaShop_Prefix))
+                original: AccessTools.Method(typeof(ShopMenu), nameof(ShopMenu.update)),
+                postfix: new HarmonyMethod(typeof(SVELocationsInjections), nameof(SVELocationsInjections.Update_HandleAlesiaIG_Postfix))
             );
 
            _harmony.Patch(
-                original: AccessTools.Constructor(typeof(ShopMenu), shopMenuParameterTypes),
-                prefix: new HarmonyMethod(typeof(SVELocationsInjections), nameof(SVELocationsInjections.ShopMenu_IssacShop_Prefix))
+                original: AccessTools.Method(typeof(ShopMenu), nameof(ShopMenu.update)),
+                postfix: new HarmonyMethod(typeof(SVELocationsInjections), nameof(SVELocationsInjections.Update_HandleIssacIG_Postfix))
             );
+
 
             _harmony.Patch(
                 original: AccessTools.Constructor(typeof(ShopMenu), shopMenuParameterTypes),
