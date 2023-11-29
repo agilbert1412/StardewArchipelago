@@ -37,6 +37,5 @@
         public const string SpawnBaby = "SpawnBaby";
         public const string Trap = "Trap";
         public const string LearnCookingRecipe = "LearnCookingRecipe";
-        public const string MovieTheater = "Repair Movie Theater";
     }
 }

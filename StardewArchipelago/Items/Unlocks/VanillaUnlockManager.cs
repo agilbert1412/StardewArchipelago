@@ -65,7 +65,6 @@ namespace StardewArchipelago.Items.Unlocks
             _unlockables.Add("Glittering Boulder Removed", RemoveGlitteringBoulder);
             _unlockables.Add("Minecarts Repair", RepairMinecarts);
             _unlockables.Add("Bus Repair", RepairBus);
-            _unlockables.Add(PROGRESSIVE_THEATER, RepairMovieTheater);
         }
 
         private void RegisterPlayerImprovement()
@@ -176,11 +175,6 @@ namespace StardewArchipelago.Items.Unlocks
         private LetterVanillaAttachment RepairBus(ReceivedItem receivedItem)
         {
             return new LetterVanillaAttachment(receivedItem, "ccVault", true);
-        }
-
-        private LetterActionAttachment RepairMovieTheater(ReceivedItem receivedItem)
-        {
-            return new LetterActionAttachment(receivedItem, LetterActionsKeys.MovieTheater);
         }
 
         private LetterVanillaAttachment RepairBoat(ReceivedItem receivedItem)

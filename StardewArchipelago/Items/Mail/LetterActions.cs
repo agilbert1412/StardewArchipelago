@@ -72,7 +72,6 @@ namespace StardewArchipelago.Items.Mail
             _letterActions.Add(LetterActionsKeys.SpawnBaby, (_) => _babyBirther.SpawnNewBaby());
             _letterActions.Add(LetterActionsKeys.Trap, ExecuteTrap);
             _letterActions.Add(LetterActionsKeys.LearnCookingRecipe, LearnCookingRecipe);
-            _letterActions.Add(LetterActionsKeys.MovieTheater, (_) => RepairMovieTheater());
         }
 
         public void ExecuteLetterAction(string key, string parameter)
@@ -696,18 +695,6 @@ namespace StardewArchipelago.Items.Mail
         private void LearnCookingRecipe(string recipeItemName)
         {
             Game1.player.cookingRecipes.Add(recipeItemName, 0);
-        }
-
-        private void RepairMovieTheater()
-        {
-            const int brokenJojamartDoorId = 191393;
-            if (!Game1.player.eventsSeen.Contains(brokenJojamartDoorId))
-            {
-                Game1.player.eventsSeen.Add(brokenJojamartDoorId);
-                return;
-            }
-
-            Game1.player.mailReceived.Add("ccMovieTheater");
         }
     }
 }
