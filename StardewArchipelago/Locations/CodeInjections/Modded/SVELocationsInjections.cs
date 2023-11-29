@@ -3,6 +3,7 @@ using HarmonyLib;
 using Netcode;
 using System.Collections.Generic;
 using System.Linq;
+using Archipelago.MultiClient.Net.Models;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.GameModifications.CodeInjections;
 using StardewModdingAPI;
@@ -27,25 +28,33 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         public const int AURORA_EVENT = 658059254;
         public const int MORGAN_EVENT = 658078924;
         private const int JOJA_COLA = 167;
-        private const string BEAR_ITEM_1 = "Learn Recipe Baked Berry Oatmeal";
-        private const string BEAR_ITEM_2 = "Learn Recipe Flower Cookie";
-        private const string ALESIA_ITEM = "Purchase Tempered Galaxy Dagger";
-        private const string ALESIA_RECIPE_1 = "Haste Elixir Recipe";
-        private const string ALESIA_RECIPE_2 = "Armor Elixir Recipe";
-        private const string ISSAC_RECIPE = "Hero Elixir Recipe";
-        private const string ISSAC_ITEM_1 = "Purchase Tempered Galaxy Sword";
-        private const string ISSAC_ITEM_2 = "Purchase Tempered Galaxy Hammer";
-        private const string GUS_RECIPE_1 = "Learn Recipe Big Bark Burger";
-        private const string GUS_RECIPE_2 = "Learn Recipe Glazed Butterfish";
-        private const string GUS_RECIPE_3 = "Learn Recipe Mixed Berry Pie";
-        private const string MARLON_RECIPE_1 = "Learn Recipe Frog Legs";
-        private const string MARLON_RECIPE_2 = "Learn Recipe Mushroom Berry Rice";
-        private const string WILLY_RECIPE = "Learn Recipe Seaweed Salad";
-        private const string KROBUS_RECIPE_1 = "Learn Recipe Void Delight";
-        private const string KROBUS_RECIPE_2 = "Learn Recipe Void Salmon Sushi";
+        private const string ALESIA_DAGGER = "Purchase Tempered Galaxy Dagger";
+        private const string ISAAC_SWORD = "Purchase Tempered Galaxy Sword";
+        private const string ISAAC_HAMMER = "Purchase Tempered Galaxy Hammer";
         private const string LANCE_CHEST = "Lance's Diamond Wand";
         private const string RUSTY_KEY_ALT = "Rusty Key";
         private static ShopMenu _lastShopMenuUpdated = null;
+
+        private static readonly string[] craftsanityRecipes = new[]
+        {
+            "Haste Elixir",
+            "Armor Elixir",
+            "Hero Elixir",
+        };
+
+        private static readonly string[] chefsanityRecipes = new[]
+        {
+            "Big Bark Burger",
+            "Glazed Butterfish",
+            "Mixed Berry Pie",
+            "Baked Berry Oatmeal",
+            "Flower Cookie",
+            "Frog Legs",
+            "Mushroom Berry Rice",
+            "Seaweed Salad",
+            "Void Delight",
+            "Void Salmon Sushi",
+        };
 
         private static readonly Dictionary<string, string[]> warpKeys = new()
         {
@@ -95,48 +104,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 var myActiveHints = _archipelago.GetMyActiveHints();
                 foreach (var salableItem in __instance.itemPriceAndStock.Keys.ToArray())
                 {
-
-                    _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, ALESIA_ITEM, item => item.Name == "Tempered Galaxy Dagger",
-                        myActiveHints);
-                    _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, ISSAC_ITEM_1, item => item.Name == "Tempered Galaxy Sword",
-                        myActiveHints);
-                    _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, ISSAC_ITEM_2, item => item.Name == "Tempered Galaxy Hammer",
-                        myActiveHints);
-
-                    if (_archipelago.SlotData.Craftsanity.HasFlag(Craftsanity.All))
-                    {
-                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, ALESIA_RECIPE_1,
-                            item => item.IsRecipe && item.Name.Contains("Haste Elixir"), myActiveHints);
-                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, ALESIA_RECIPE_2,
-                            item => item.IsRecipe && item.Name.Contains("Armor Elixir"), myActiveHints);
-                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, ISSAC_RECIPE,
-                            item => item.IsRecipe && item.Name.Contains("Hero Elixir"), myActiveHints);
-                    }
-
-                    if (_archipelago.SlotData.Chefsanity.HasFlag(Chefsanity.Purchases))
-                    {
-                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, GUS_RECIPE_1,
-                            item => item.IsRecipe && item.Name.Contains("Big Bark Burger"), myActiveHints);
-                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, GUS_RECIPE_2,
-                            item => item.IsRecipe && item.Name.Contains("Glazed Butterfish"), myActiveHints);
-                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, GUS_RECIPE_3,
-                            item => item.IsRecipe && item.Name.Contains("Mixed Berry Pie"), myActiveHints);
-                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, BEAR_ITEM_1,
-                            item => item.IsRecipe && item.Name.Contains("Baked Berry Oatmeal"), myActiveHints);
-                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, BEAR_ITEM_2,
-                            item => item.IsRecipe && item.Name.Contains("Flower Cookie"), myActiveHints);
-                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, MARLON_RECIPE_1,
-                            item => item.IsRecipe && item.Name.Contains("Frog Legs"), myActiveHints);
-                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, MARLON_RECIPE_2,
-                            item => item.IsRecipe && item.Name.Contains("Mushroom Berry Rice"), myActiveHints);
-                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, WILLY_RECIPE,
-                            item => item.IsRecipe && item.Name.Contains("Seaweed Salad"), myActiveHints);
-                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, KROBUS_RECIPE_1,
-                            item => item.IsRecipe && item.Name.Contains("Void Delight"), myActiveHints);
-                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, KROBUS_RECIPE_2,
-                            item => item.IsRecipe && item.Name.Contains("Void Salmon Sushi"), myActiveHints);
-
-                    }
+                    ReplaceTemperedGalaxyWeapons(__instance, salableItem, myActiveHints);
+                    ReplaceCraftsanityRecipes(__instance, salableItem, myActiveHints);
+                    ReplaceChefsanityRecipes(__instance, salableItem, myActiveHints);
                 }
 
                 __instance.forSale = __instance.itemPriceAndStock.Keys.ToList();
@@ -146,6 +116,39 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             {
                 _monitor.Log($"Failed in {nameof(Update_ShopReplacer_Postfix)}:\n{ex}", LogLevel.Error);
                 return; // run original logic
+            }
+        }
+
+        private static void ReplaceTemperedGalaxyWeapons(ShopMenu shopMenu, ISalable salableItem, Hint[] myActiveHints)
+        {
+            _shopReplacer.ReplaceShopItem(shopMenu.itemPriceAndStock, salableItem, ALESIA_DAGGER, "Tempered Galaxy Dagger", myActiveHints);
+            _shopReplacer.ReplaceShopItem(shopMenu.itemPriceAndStock, salableItem, ISAAC_SWORD, "Tempered Galaxy Sword", myActiveHints);
+            _shopReplacer.ReplaceShopItem(shopMenu.itemPriceAndStock, salableItem, ISAAC_HAMMER, "Tempered Galaxy Hammer", myActiveHints);
+        }
+
+        private static void ReplaceCraftsanityRecipes(ShopMenu shopMenu, ISalable salableItem, Hint[] myActiveHints)
+        {
+            if (!_archipelago.SlotData.Craftsanity.HasFlag(Craftsanity.All))
+            {
+                return;
+            }
+
+            foreach (var recipeItem in craftsanityRecipes)
+            {
+                _shopReplacer.ReplaceShopRecipe(shopMenu.itemPriceAndStock, salableItem, $"{recipeItem} Recipe", recipeItem, myActiveHints);
+            }
+        }
+
+        private static void ReplaceChefsanityRecipes(ShopMenu shopMenu, ISalable salableItem, Hint[] myActiveHints)
+        {
+            if (!_archipelago.SlotData.Chefsanity.HasFlag(Chefsanity.Purchases))
+            {
+                return;
+            }
+
+            foreach (var recipeItem in chefsanityRecipes)
+            {
+                _shopReplacer.ReplaceShopRecipe(shopMenu.itemPriceAndStock, salableItem, $"Learn Recipe {recipeItem}", recipeItem, myActiveHints);
             }
         }
 

@@ -26,6 +26,11 @@ namespace StardewArchipelago.Locations
             _locationChecker = locationChecker;
         }
 
+        public void ReplaceShopRecipe(Dictionary<ISalable, int[]> itemPriceAndStock, ISalable itemOnSale, string apLocation, string recipeItemName, Hint[] myActiveHints)
+        {
+            ReplaceShopItem(itemPriceAndStock, itemOnSale, apLocation, item => item.IsRecipe && item.Name.Contains(recipeItemName), myActiveHints);
+        }
+
         public void ReplaceShopItem(Dictionary<ISalable, int[]> itemPriceAndStock, ISalable itemOnSale, string apLocation, Func<Object, bool> conditionToMeet, Hint[] myActiveHints)
         {
             if (itemOnSale is not Object salableObject || !conditionToMeet(salableObject))
@@ -57,6 +62,11 @@ namespace StardewArchipelago.Locations
             }
 
             ReplaceShopItem(itemPriceAndStock, itemOnSale, apLocation, true, myActiveHints);
+        }
+
+        public void ReplaceShopItem(Dictionary<ISalable, int[]> itemPriceAndStock, ISalable itemOnSale, string apLocation, string itemName, Hint[] myActiveHints)
+        {
+            ReplaceShopItem(itemPriceAndStock, itemOnSale, apLocation, item => item.Name == itemName, myActiveHints);
         }
 
         public void ReplaceShopItem(Dictionary<ISalable, int[]> itemPriceAndStock, ISalable itemOnSale, string apLocation, Func<Item, bool> conditionToMeet, Hint[] myActiveHints)
