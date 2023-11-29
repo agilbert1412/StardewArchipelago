@@ -93,22 +93,22 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
 
                     if (_archipelago.SlotData.Craftsanity.HasFlag(Craftsanity.All))
                     {
-                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, ALESIA_RECIPE_1, item => item.isRecipe && item.Name.Contains("Haste Elixir"), myActiveHints);
-                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, ALESIA_RECIPE_2, item => item.isRecipe && item.Name.Contains("Armor Elixir"), myActiveHints);
-                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, ISSAC_RECIPE, item => item.isRecipe && item.Name.Contains("Hero Elixir"), myActiveHints);
+                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, ALESIA_RECIPE_1, item => item.IsRecipe && item.Name.Equals("Haste Elixir"), myActiveHints);
+                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, ALESIA_RECIPE_2, item => item.IsRecipe && item.Name.Equals("Armor Elixir"), myActiveHints);
+                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, ISSAC_RECIPE, item => item.IsRecipe && item.Name.Equals("Hero Elixir"), myActiveHints);
                     }
                     if (_archipelago.SlotData.Chefsanity.HasFlag(Chefsanity.Purchases))
                     {
-                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, GUS_RECIPE_1, item => item.isRecipe && item.Name.Contains("Big Bark Burger"), myActiveHints);
-                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, GUS_RECIPE_2, item => item.isRecipe && item.Name.Contains("Glazed Butterfish"), myActiveHints);
-                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, GUS_RECIPE_3, item => item.isRecipe && item.Name.Contains("Mixed Berry Pie"), myActiveHints);
-                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, BEAR_ITEM_1, item => item.Name.Contains("Baked Berry Oatmeal"), myActiveHints);
-                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, BEAR_ITEM_2, item => item.IsRecipe && item.Name.Contains("Flower Cookie"), myActiveHints);
-                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, MARLON_RECIPE_1, item => item.isRecipe && item.Name.Contains("Frog Legs"), myActiveHints);
-                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, MARLON_RECIPE_2, item => item.isRecipe && item.Name.Contains("Mushroom Berry Rice"), myActiveHints);
-                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, WILLY_RECIPE, item => item.isRecipe && item.Name.Contains("Seaweed Salad"), myActiveHints);
-                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, KROBUS_RECIPE_1, item => item.isRecipe && item.Name.Contains("Void Delight"), myActiveHints);
-                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, KROBUS_RECIPE_2, item => item.isRecipe && item.Name.Contains("Void Salmon Sushi"), myActiveHints);
+                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, GUS_RECIPE_1, item => item.IsRecipe && item.Name.Equals("Big Bark Burger"), myActiveHints);
+                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, GUS_RECIPE_2, item => item.IsRecipe && item.Name.Equals("Glazed Butterfish"), myActiveHints);
+                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, GUS_RECIPE_3, item => item.IsRecipe && item.Name.Equals("Mixed Berry Pie"), myActiveHints);
+                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, BEAR_ITEM_1, item => item.IsRecipe && item.Name.Equals("Baked Berry Oatmeal"), myActiveHints);
+                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, BEAR_ITEM_2, item => item.IsRecipe && item.Name.Equals("Flower Cookie"), myActiveHints);
+                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, MARLON_RECIPE_1, item => item.IsRecipe && item.Name.Equals("Frog Legs"), myActiveHints);
+                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, MARLON_RECIPE_2, item => item.IsRecipe && item.Name.Equals("Mushroom Berry Rice"), myActiveHints);
+                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, WILLY_RECIPE, item => item.IsRecipe && item.Name.Equals("Seaweed Salad"), myActiveHints);
+                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, KROBUS_RECIPE_1, item => item.IsRecipe && item.Name.Equals("Void Delight"), myActiveHints);
+                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, KROBUS_RECIPE_2, item => item.IsRecipe && item.Name.Equals("Void Salmon Sushi"), myActiveHints);
 
                     }
                 }
