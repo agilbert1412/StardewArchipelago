@@ -1,6 +1,7 @@
 ﻿using System;
 using StardewArchipelago.Locations;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.CC;
+using StardewArchipelago.Locations.CodeInjections.Modded;
 using StardewModdingAPI;
 using StardewValley;
 
@@ -37,7 +38,8 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     __instance.hasOrWillReceiveMail("apccBoilerRoom") &&
                     __instance.hasOrWillReceiveMail("apccVault") &&
                     __instance.hasOrWillReceiveMail("apccBulletin");
-
+                SVELocationsInjections.ReleaseMorrisWhenCommunityCenter(allAreasCompleteAccordingToAp && allAreasCompleteLocally);
+                
                 __result = allAreasCompleteAccordingToAp && allAreasCompleteLocally;
 
                 return false;// don't run original logic

@@ -228,7 +228,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         {
             try
             {
-                if (__instance.id != 191393)
+                if (!completionLogic)
                 {
                     return; // run original logic
                 }
@@ -242,7 +242,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(SkipEvent_ReleaseMorris_Postfix)}:\n{ex}", LogLevel.Error);
+                _monitor.Log($"Failed in {nameof(ReleaseMorrisWhenCommunityCenter)}:\n{ex}", LogLevel.Error);
                 return; // run original logic
             }
         }
