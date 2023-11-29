@@ -119,8 +119,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 {
                     if (_archipelago.SlotData.Craftsanity.HasFlag(Craftsanity.All))
                     {
-                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, MARLON_RECIPE_1, item => item.isRecipe && item.Name.Contains("Magic Elixir"), myActiveHints);
-                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, MARLON_RECIPE_2, item => item.isRecipe && item.Name.Contains("Travel Core"), myActiveHints);
+                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, MARLON_RECIPE_1, item => item.IsRecipe && item.Name.Equals("Magic Elixir"), myActiveHints);
+                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, MARLON_RECIPE_2, item => item.IsRecipe && item.Name.Equals("Travel Core"), myActiveHints);
                     }
                 }
                 __instance.forSale = __instance.itemPriceAndStock.Keys.ToList();

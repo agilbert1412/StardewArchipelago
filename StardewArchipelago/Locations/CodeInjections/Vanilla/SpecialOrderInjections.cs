@@ -16,7 +16,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
     public class SpecialOrderInjections
     {
-        private static string[] _ignoredSpecialOrders {get; set;}
         private static string[] _vanillaSpecialOrderReward = new[]{ //Exists temporarily to avoid removing mail rewards
             "Grandpa's Shed", "Aurora Vineyard", "Monster Crops"
         };
@@ -33,7 +32,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             _archipelago = archipelago;
             _locationChecker = locationChecker;
             _englishContentManager = new ContentManager(Game1.game1.Content.ServiceProvider, Game1.game1.Content.RootDirectory);
-            _ignoredSpecialOrders = archipelago.SlotData.ExcludedOrdersData;
         }
 
         // public static bool IsSpecialOrdersBoardUnlocked()
@@ -57,7 +55,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             try
             {
                 var specialOrderName = __result.GetName();
-                if (_ignoredSpecialOrders.Contains(specialOrderName))
+                if (!_archipelago.LocationExists(specialOrderName))
                 {
                     return;
                 }
@@ -86,7 +84,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 }
 
                 var specialOrderName = GetEnglishQuestName(__instance.questName.Value);
-                if (_ignoredSpecialOrders.Contains(specialOrderName))
+                if (!_archipelago.LocationExists(specialOrderName))
                 {
                     return;
                 }

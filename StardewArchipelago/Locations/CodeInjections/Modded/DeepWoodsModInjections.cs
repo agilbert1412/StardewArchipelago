@@ -27,7 +27,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         private const string DEINFEST_AP_LOCATION = "Purify an Infested Lichtung";
         private const string WOODS_OBELISK_SIGILS = "Progressive Woods Obelisk Sigils";
         private const string WOODS_DEPTH_LOCATION = "The Deep Woods: Depth {0}";
-        private const string EXCALIBUR_FAIL = "With only {0}/50 total skills and {1}/3 pendants, it won't budge";
+        private const string EXCALIBUR_FAIL = "With only {0}/7 Luck, {1}/40 total base skills and {2}/3 pendants, it won't budge.";
+        private const string EXCALIBUR_WIN = "{0} has been freed from the stone.  You are worthy.";
         private const int LEVEL_STEP = 10;
         private static IMonitor _monitor;
         private static IModHelper _helper;
@@ -55,6 +56,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             {
                 var swordPulledOutField = _helper.Reflection.GetField<NetBool>(__instance, "swordPulledOut");
                 var swordPulledOut = swordPulledOutField.GetValue();
+                var playerLuck = Game1.player.LuckLevel;
                 var totalSkill = Game1.player.MiningLevel + Game1.player.ForagingLevel + Game1.player.FishingLevel + Game1.player.FarmingLevel + Game1.player.CombatLevel;
                 var pendantElders = _archipelago.GetReceivedItemCount(PENDANT_ELDERS_ITEM);
                 var pendantDepths = _archipelago.GetReceivedItemCount(PENDANT_DEPTHS_ITEM);
@@ -71,13 +73,19 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                     && pendantCommunity >= 1)
                 {
                     Game1.playSound("yoba");
+                    var swordItem = _archipelago.ScoutSingleLocation(EXCALIBUR_AP_LOCATION).itemName;
+                    if (swordItem.Length > 20)
+                    {
+                        swordItem = swordItem.Substring(0, 20) //Lets make it readable for the Archipidle enjoyers.
+                    }
                     _locationChecker.AddCheckedLocation(EXCALIBUR_AP_LOCATION);
+                    Game1.showRedMessage(string.Format(EXCALIBUR_WIN, swordItem));
                     swordPulledOut.Value = true;
                 }
                 else
                 {
                     Game1.playSound("thudStep");
-                    Game1.showRedMessage(string.Format(EXCALIBUR_FAIL, totalSkill, totalPendant));
+                    Game1.showRedMessage(string.Format(EXCALIBUR_FAIL, playerLuck, totalSkill, totalPendant));
                 }
                 return false; //don't run original logic
             }
