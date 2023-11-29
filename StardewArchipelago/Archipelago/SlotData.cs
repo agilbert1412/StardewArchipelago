@@ -148,8 +148,6 @@ namespace StardewArchipelago.Archipelago
             Seed = GetSlotSetting(SEED_KEY, "");
             MultiworldVersion = GetSlotSetting(MULTIWORLD_VERSION_KEY, "");
             BundlesData = GetSlotSetting(MODIFIED_BUNDLES_KEY, "");
-            var excludedOrdersStringData = GetSlotSetting(EXCLUDED_SPECIAL_ORDERS, "");
-            ExcludedOrdersData = JsonConvert.DeserializeObject<string[]>(excludedOrdersStringData);
             var newEntrancesStringData = GetSlotSetting(MODIFIED_ENTRANCES_KEY, "");
             ModifiedEntrances = JsonConvert.DeserializeObject<Dictionary<string, string>>(newEntrancesStringData);
             AppearanceRandomization = AppearanceRandomization.Disabled; // GetSlotSetting(RANDOMIZE_NPC_APPEARANCES_KEY, AppearanceRandomization.Disabled);
