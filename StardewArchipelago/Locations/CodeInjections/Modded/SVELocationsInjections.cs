@@ -148,7 +148,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
 
             foreach (var recipeItem in chefsanityRecipes)
             {
-                _shopReplacer.ReplaceShopRecipe(shopMenu.itemPriceAndStock, salableItem, $"Learn Recipe {recipeItem}", recipeItem, myActiveHints);
+                _shopReplacer.ReplaceShopRecipe(shopMenu.itemPriceAndStock, salableItem, $"{recipeItem} Recipe", recipeItem, myActiveHints);
             }
         }
 
