@@ -24,7 +24,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             }
             if (_archipelago.SlotData.Mods.HasMod(ModNames.MAGIC))
             {
-                MagicModInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
+                MagicModInjections.Initialize(monitor, modHelper, archipelago, locationChecker, shopReplacer);
             }
             if (_archipelago.SlotData.Mods.HasMod(ModNames.SOCIALIZING))
             {

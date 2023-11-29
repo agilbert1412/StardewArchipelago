@@ -29,13 +29,22 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         private const string BEAR_ITEM_1 = "Learn Recipe Baked Berry Oatmeal";
         private const string BEAR_ITEM_2 = "Learn Recipe Flower Cookie";
         private const string ALESIA_ITEM = "Purchase Tempered Galaxy Dagger";
-        private const string ALESIA_RECIPE_1 = "Learn Recipe Haste Elixir";
-        private const string ALESIA_RECIPE_2 = "Learn Recipe Armor Elixir";
-        private const string ISSAC_RECIPE = "Learn Recipe Hero Elixir";
+        private const string ALESIA_RECIPE_1 = "Haste Elixir Recipe";
+        private const string ALESIA_RECIPE_2 = "Armor Elixir Recipe";
+        private const string ISSAC_RECIPE = "Hero Elixir Recipe";
         private const string ISSAC_ITEM_1 = "Purchase Tempered Galaxy Sword";
         private const string ISSAC_ITEM_2 = "Purchase Tempered Galaxy Hammer";
+        private const string GUS_RECIPE_1 = "Learn Recipe Big Bark Burger";
+        private const string GUS_RECIPE_2 = "Learn Recipe Glazed Butterfish";
+        private const string GUS_RECIPE_3 = "Learn Recipe Mixed Berry Pie";
+        private const string MARLON_RECIPE_1 = "Learn Recipe Frog Legs";
+        private const string MARLON_RECIPE_2 = "Learn Recipe Mushroom Berry Rice";
+        private const string WILLY_RECIPE = "Learn Recipe Seaweed Salad";
+        private const string KROBUS_RECIPE_1 = "Learn Recipe Void Delight";
+        private const string KROBUS_RECIPE_2 = "Learn Recipe Void Salmon Sushi";
         private const string LANCE_CHEST = "Lance's Diamond Wand";
         private const string RUSTY_KEY_ALT = "Rusty Key";
+        private static ShopMenu _lastShopMenuUpdated = null;
         private static readonly Dictionary<string, string[]> warpKeys = new(){ // Contains the original event requirements to be edited
             { "IslandWest", new[]{"65360191/f Lance 2000"}}, // Lance giving you the Fable Reef Warp
             { "FarmHouseFarmRune", new[]{"908074/e 908072/t 600 630"}}, // Unlocking the Farm Rune
@@ -59,9 +68,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             SVEEventInitializer();
         }
 
-// Unique Shop Locations
-    private static ShopMenu _lastShopMenuUpdated = null;
-    public static void Update_BearShop_Postfix(ShopMenu __instance, GameTime time)
+
+    
+
+    // Unique Shop Locations
+    public static void Update_ShopReplacer_Postfix(ShopMenu __instance, GameTime time)
             {
             try
             {
@@ -75,83 +86,42 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 var myActiveHints = _archipelago.GetMyActiveHints();
                 foreach (var salableItem in __instance.itemPriceAndStock.Keys.ToArray())
                 {
-                    _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, BEAR_ITEM_1, item => item.Name.Contains("Baked Berry Oatmeal"), myActiveHints);
-                    _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, BEAR_ITEM_2, item => item.IsRecipe && item.Name.Contains("Flower Cookie"), myActiveHints);
+                    
+                    _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, ALESIA_ITEM, (Item item) =>  item.Name == "Tempered Galaxy Dagger", myActiveHints);
+                    _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, ISSAC_ITEM_1, (Item item) =>  item.Name == "Tempered Galaxy Sword", myActiveHints);
+                    _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, ISSAC_ITEM_2, (Item item) =>  item.Name == "Tempered Galaxy Hammer", myActiveHints);
+
+                    if (_archipelago.SlotData.Craftsanity.HasFlag(Craftsanity.All))
+                    {
+                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, ALESIA_RECIPE_1, item => item.isRecipe && item.Name.Contains("Haste Elixir"), myActiveHints);
+                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, ALESIA_RECIPE_2, item => item.isRecipe && item.Name.Contains("Armor Elixir"), myActiveHints);
+                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, ISSAC_RECIPE, item => item.isRecipe && item.Name.Contains("Hero Elixir"), myActiveHints);
+                    }
+                    if (_archipelago.SlotData.Chefsanity.HasFlag(Chefsanity.Purchases))
+                    {
+                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, GUS_RECIPE_1, item => item.isRecipe && item.Name.Contains("Big Bark Burger"), myActiveHints);
+                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, GUS_RECIPE_2, item => item.isRecipe && item.Name.Contains("Glazed Butterfish"), myActiveHints);
+                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, GUS_RECIPE_3, item => item.isRecipe && item.Name.Contains("Mixed Berry Pie"), myActiveHints);
+                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, BEAR_ITEM_1, item => item.Name.Contains("Baked Berry Oatmeal"), myActiveHints);
+                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, BEAR_ITEM_2, item => item.IsRecipe && item.Name.Contains("Flower Cookie"), myActiveHints);
+                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, MARLON_RECIPE_1, item => item.isRecipe && item.Name.Contains("Frog Legs"), myActiveHints);
+                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, MARLON_RECIPE_2, item => item.isRecipe && item.Name.Contains("Mushroom Berry Rice"), myActiveHints);
+                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, WILLY_RECIPE, item => item.isRecipe && item.Name.Contains("Seaweed Salad"), myActiveHints);
+                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, KROBUS_RECIPE_1, item => item.isRecipe && item.Name.Contains("Void Delight"), myActiveHints);
+                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, KROBUS_RECIPE_2, item => item.isRecipe && item.Name.Contains("Void Salmon Sushi"), myActiveHints);
+
+                    }
                 }
                 __instance.forSale = __instance.itemPriceAndStock.Keys.ToList();
                 return; //  run original logic
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(Update_BearShop_Postfix)}:\n{ex}", LogLevel.Error);
+                _monitor.Log($"Failed in {nameof(Update_ShopReplacer_Postfix)}:\n{ex}", LogLevel.Error);
                 return; // run original logic
             }
         }
 
-        public static void Update_HandleAlesiaIG_Postfix(ShopMenu __instance, GameTime time)
-        {
-            try
-            {
-                // We only run this once for each menu
-                if (_lastShopMenuUpdated == __instance)
-                {
-                    return;
-                }
-
-                _lastShopMenuUpdated = __instance;
-                var myActiveHints = _archipelago.GetMyActiveHints();
-                foreach (var salableItem in __instance.itemPriceAndStock.Keys.ToArray())
-                {
-                    _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, ALESIA_ITEM, (Item item) =>  item.Name == "Tempered Galaxy Dagger", myActiveHints);
-                    if (_archipelago.SlotData.Craftsanity.HasFlag(Craftsanity.All))
-                    {
-                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, ALESIA_RECIPE_1, item => item.isRecipe && item.Name.Contains("Haste Elixir"), myActiveHints);
-                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, ALESIA_RECIPE_2, item => item.isRecipe && item.Name.Contains("Armor Elixir"), myActiveHints);
-                    }
-                }
-
-                __instance.forSale = __instance.itemPriceAndStock.Keys.ToList();
-                return;
-            }
-            catch (Exception ex)
-            {
-                _monitor.Log($"Failed in {nameof(Update_HandleAlesiaIG_Postfix)}:\n{ex}", LogLevel.Error);
-                return;
-            }
-        }
-
-        public static void Update_HandleIssacIG_Postfix(ShopMenu __instance, GameTime time)
-        {
-            try
-            {
-                // We only run this once for each menu
-                if (_lastShopMenuUpdated == __instance)
-                {
-                    return;
-                }
-
-                _lastShopMenuUpdated = __instance;
-                var myActiveHints = _archipelago.GetMyActiveHints();
-                foreach (var salableItem in __instance.itemPriceAndStock.Keys.ToArray())
-                {
-                    _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, ISSAC_ITEM_1, (Item item) =>  item.Name == "Tempered Galaxy Sword", myActiveHints);
-                    _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, ISSAC_ITEM_2, (Item item) =>  item.Name == "Tempered Galaxy Hammer", myActiveHints);
-                    if (_archipelago.SlotData.Craftsanity.HasFlag(Craftsanity.All))
-                    {
-                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, ISSAC_RECIPE, item => item.isRecipe && item.Name.Contains("Hero Elixir"), myActiveHints);
-
-                    }
-                }
-
-                __instance.forSale = __instance.itemPriceAndStock.Keys.ToList();
-                return;
-            }
-            catch (Exception ex)
-            {
-                _monitor.Log($"Failed in {nameof(Update_HandleIssacIG_Postfix)}:\n{ex}", LogLevel.Error);
-                return;
-            }
-        }
 
     public static bool CheckForAction_LanceChest_Prefix(Chest __instance, Farmer who, bool justCheckingForActivity, ref bool __result)
         {

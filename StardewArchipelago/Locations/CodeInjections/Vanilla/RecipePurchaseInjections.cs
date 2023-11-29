@@ -329,14 +329,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 AddArchipelagoCookingRecipeItem(saloonStock, "Cookies", 300, myActiveHints);
             }
-
-            AddArchipelagoCookingRecipeItem(saloonStock, "Triple Shot Espresso", 5000, myActiveHints);
-            if (_archipelago.SlotData.Mods.HasMod(ModNames.SVE))
-            {
-                AddArchipelagoCookingRecipeItem(saloonStock, "Big Bark Burger", 400, myActiveHints);
-                AddArchipelagoCookingRecipeItem(saloonStock, "Glazed Butterfish", 800, myActiveHints);
-                AddArchipelagoCookingRecipeItem(saloonStock, "Mixed Berry Pie", 250, myActiveHints);
-            }
         }
 
         private static void AddArchipelagoCraftingRecipeItem(Dictionary<ISalable, int[]> stock, string name, int moneyPrice, Hint[] myActiveHints, int itemPriceId = -1, int itemPriceAmount = 0)
