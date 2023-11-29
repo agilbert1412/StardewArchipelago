@@ -17,7 +17,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         private const string PENDANT_DEPTHS_ITEM = "Pendant of Depths";
         private const string PENDANT_COMMUNITY_ITEM = "Pendant of Community";
         private const string PENDANT_ELDERS_ITEM = "Pendant of Elders";
-        private const string EXCALIBUR_AP_LOCATION = "Become Worthy of Excalibur";
+        private const string EXCALIBUR_AP_LOCATION = "The Sword in the Stone";
         private const string MEET_UNICORN_AP_LOCATION = "Pet the Deep Woods Unicorn";
         private const string DESTROY_HOUSE_AP_LOCATION = "Breaking Up Deep Woods Gingerbread House";
         private const string DESTROY_TREE_AP_LOCATION = "Chop Down a Deep Woods Iridium Tree";
@@ -57,29 +57,33 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 var swordPulledOutField = _helper.Reflection.GetField<NetBool>(__instance, "swordPulledOut");
                 var swordPulledOut = swordPulledOutField.GetValue();
                 var playerLuck = Game1.player.LuckLevel;
+                playerLuck = Math.Min(playerLuck, 7);
                 var totalSkill = Game1.player.MiningLevel + Game1.player.ForagingLevel + Game1.player.FishingLevel + Game1.player.FarmingLevel + Game1.player.CombatLevel;
+                totalSkill = Math.Min(totalSkill, 40);
                 var pendantElders = _archipelago.GetReceivedItemCount(PENDANT_ELDERS_ITEM);
+                pendantElders = Math.Min(pendantElders, 1);
                 var pendantDepths = _archipelago.GetReceivedItemCount(PENDANT_DEPTHS_ITEM);
+                pendantDepths = Math.Min(pendantDepths, 1);
                 var pendantCommunity = _archipelago.GetReceivedItemCount(PENDANT_COMMUNITY_ITEM);
+                pendantCommunity = Math.Min(pendantCommunity, 1);
                 var totalPendant = pendantCommunity + pendantDepths + pendantElders;
                 if (swordPulledOut.Value)
                     return false; //don't run original logic
 
-                if (Game1.player.DailyLuck >= 0.07f
-                    && Game1.player.LuckLevel >= 7
-                    && totalSkill >= 40
-                    && pendantElders >= 1
-                    && pendantDepths >= 1
-                    && pendantCommunity >= 1)
+                if (Game1.player.LuckLevel == 7
+                    && totalSkill == 40
+                    && pendantElders == 1
+                    && pendantDepths == 1
+                    && pendantCommunity == 1)
                 {
                     Game1.playSound("yoba");
-                    var swordItem = _archipelago.ScoutSingleLocation(EXCALIBUR_AP_LOCATION).itemName;
+                    var swordItem = _archipelago.ScoutSingleLocation(EXCALIBUR_AP_LOCATION).ItemName;
                     if (swordItem.Length > 20)
                     {
-                        swordItem = swordItem.Substring(0, 20) //Lets make it readable for the Archipidle enjoyers.
+                        swordItem = swordItem.Substring(0, 20); //Lets make it readable for the Archipidle enjoyers.
                     }
                     _locationChecker.AddCheckedLocation(EXCALIBUR_AP_LOCATION);
-                    Game1.showRedMessage(string.Format(EXCALIBUR_WIN, swordItem));
+                    Game1.addHUDMessage(new HUDMessage(string.Format(EXCALIBUR_WIN, swordItem)) { noIcon = true });
                     swordPulledOut.Value = true;
                 }
                 else
