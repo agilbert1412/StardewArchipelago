@@ -19,6 +19,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
         private static ShopReplacer _shopReplacer;
+        private static NetString railroadKey = new NetString("Clint2Again");
         public const string MORRIS_FRIENDSHIP = "Friendsanity: Morris {0} <3";
         public const int AURORA_EVENT = 658059254;
         public const int MORGAN_EVENT = 658078924;
@@ -199,7 +200,31 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             }
         }
 
-        public static void SkipEvent_ReleaseMorris_Postfix(Event __instance)
+        public static void ResetLocalState_PlayCutsceneIfConditionsAreMet_Postfix(GameLocation __instance)
+        {
+            try
+            {
+                var railroadBoulderID = 8050108;
+                var iridiumBombID = 8050109;
+                var bombBeforeQuest = Game1.player.eventsSeen.Contains(railroadBoulderID) & Game1.player.eventsSeen.Contains(iridiumBombID);
+                if (!Game1.player.hasSkullKey || !bombBeforeQuest)
+                {
+                    return;
+                }
+                var railroadBoulderOrder = SpecialOrder.GetSpecialOrder("Clint2", null);
+                railroadBoulderOrder.questKey = railroadKey;
+                Game1.player.team.specialOrders.Add(railroadBoulderOrder);
+
+                return;
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(ResetLocalState_PlayCutsceneIfConditionsAreMet_Postfix)}:\n{ex}", LogLevel.Error);
+                return;
+            }
+        }
+
+        public static void ReleaseMorrisWhenCommunityCenter(bool completionLogic)
         {
             try
             {
@@ -226,6 +251,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         {
             ViewableCutsceneInitializer();
             LockedCutsceneInitializer();
+            AppendMadeUpOrder();
         }
 
         // Some events we want to see, so this will let them play out, so we make up AP event scene requirements.
@@ -273,6 +299,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                     currentEventData[newEventKey] = eventData;
                 }
             }
+        }
+
+        private static void AppendMadeUpOrder()
+        {
+            var getsveOrderType = AccessTools.TypeByName("HarmonyPatch_UntimedSpecialOrders");
+            var specialOrderKeysType = _modHelper.Reflection.GetField<List<string>>(getsveOrderType, "SpecialOrderKeys");
+            var specialOrderKeys = specialOrderKeysType.GetValue();
+            specialOrderKeys.Add("Clint2Again");
         }
 
         // Done as JojaMart was changed to be two different shop tenders (Claire and Martin); just force every shop in Joja to be the same.

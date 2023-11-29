@@ -1,4 +1,4 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 using System.Collections.Generic;
 using System;
 
@@ -296,7 +296,7 @@ namespace StardewArchipelago.Locations.Patcher
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Event), nameof(Event.skipEvent)),
-                postfix: new HarmonyMethod(typeof(SVELocationsInjections), nameof(SVELocationsInjections.SkipEvent_ReleaseMorris_Postfix))
+                postfix: new HarmonyMethod(typeof(SVELocationsInjections), nameof(SVELocationsInjections.ResetLocalState_PlayCutsceneIfConditionsAreMet_Postfix))
             );
         }
     }

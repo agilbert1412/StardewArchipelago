@@ -103,7 +103,7 @@ namespace StardewArchipelago.Items.Unlocks
 
         private LetterVanillaAttachment SendIridiumBomb(ReceivedItem receivedItem)
         {
-            return new LetterVanillaAttachment(receivedItem, "RailroadBoulderRemove", true);
+            return new LetterVanillaAttachment(receivedItem, "RailroadBoulderRemoved", true);
         }
 
         private LetterEventSeenAttachment SendSpriteSpringRunes(ReceivedItem receivedItem)
