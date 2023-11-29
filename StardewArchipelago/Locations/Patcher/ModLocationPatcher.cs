@@ -1,4 +1,4 @@
-using HarmonyLib;
+﻿using HarmonyLib;
 using System.Collections.Generic;
 using System;
 
@@ -21,7 +21,6 @@ namespace StardewArchipelago.Locations.Patcher
         private readonly ArchipelagoClient _archipelago;
         private readonly Harmony _harmony;
         private readonly IModHelper _modHelper;
-        private readonly GingerIslandPatcher _gingerIslandPatcher;
         private ModsManager _modsManager;
 
         public ModLocationPatcher(Harmony harmony, IModHelper modHelper, ArchipelagoClient archipelago)

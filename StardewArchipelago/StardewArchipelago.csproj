@@ -4,6 +4,7 @@
     <TargetFramework>net5.0</TargetFramework>
     <ApplicationManifest>manifest.json</ApplicationManifest>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <GamePath>/mnt/Game Collection/SteamLibrary/steamapps/common/Stardew Valley</GamePath>
     <EnableHarmony>true</EnableHarmony>
   </PropertyGroup>
 
