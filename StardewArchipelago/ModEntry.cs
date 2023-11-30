@@ -249,7 +249,7 @@ namespace StardewArchipelago
             }
 
             _itemManager = new ItemManager(_helper, _archipelago, _stardewItemManager, _mail, tileChooser, State.ItemsReceived);
-            var weaponsManager = new WeaponsManager(_stardewItemManager);
+            var weaponsManager = new WeaponsManager(_stardewItemManager, _archipelago.SlotData.Mods);
             _mailPatcher = new MailPatcher(Monitor, _harmony, _archipelago, _locationChecker, new LetterActions(_helper, _mail, _archipelago, weaponsManager, _itemManager.TrapManager));
             var bundlesManager = new BundlesManager(_helper, _stardewItemManager, _archipelago.SlotData.BundlesData);
             bundlesManager.ReplaceAllBundles();

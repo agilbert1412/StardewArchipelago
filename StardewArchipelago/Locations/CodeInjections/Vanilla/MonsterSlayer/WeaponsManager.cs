@@ -1,5 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
+using System.Linq;
+using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants;
 using StardewArchipelago.Stardew;
 using StardewValley.Objects;
 using StardewValley.Tools;
@@ -12,13 +17,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
         public const string TYPE_CLUB = "Club";
         public const string TYPE_DAGGER = "Dagger";
         private const double WEAPON_LEVELS_PER_TIER = 3.5;
+        private ModsManager _modsManager;
 
         public Dictionary<string, Dictionary<int, List<StardewItem>>> WeaponsByCategoryByTier { get; private set; }
         public Dictionary<int, List<StardewItem>> WeaponsByTier { get; private set; }
         public Dictionary<int, List<StardewItem>> BootsByTier { get; private set; }
 
-        public WeaponsManager(StardewItemManager itemManager)
+        public WeaponsManager(StardewItemManager itemManager, ModsManager modsManager)
         {
+            _modsManager = modsManager;
             InitializeWeapons(itemManager);
             InitializeBoots(itemManager);
         }
