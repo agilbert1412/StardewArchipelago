@@ -74,10 +74,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         }
 
         // public LevelUpMenu(string skillName, int level)
-        public static void SkillLevelUpMenuConstructor_SendModdedSkillRecipeChecks_Postfix(IClickableMenu __instance, string skillName, int level)
+        /*public static void SkillLevelUpMenuConstructor_SendModdedSkillRecipeChecks_Postfix(IClickableMenu __instance, string skillName, int level)
         {
             try
             {
+                var newCraftingRecipesField = _helper.Reflection.GetField<List<CraftingRecipe>>(__instance, "newCraftingRecipes");
+                var newCraftingRecipes = newCraftingRecipesField.GetValue();
                 var skillActualName = skillName.Split('.').Last().Replace("Skill", "");
                 var skill = Enum.Parse<Skill>(skillActualName);
                 SendModdedSkillRecipeChecks(skill, level);
@@ -92,7 +94,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
         private static void SendModdedSkillRecipeChecks(Skill skill, int level)
         {
-            //SendModdecSkillCookingRecipeChecks(skill, level);  Not really relevant to make yet, but it'd be here.
             SendModdedSkillCraftingRecipeChecks(skill, level);
         }
 
@@ -117,7 +118,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     _locationChecker.AddCheckedLocation($"{skillRecipe}{RecipePurchaseInjections.CHEFSANITY_LOCATION_SUFFIX}");
                 }
             }
-        }
+        }*/
 
         private static readonly Dictionary<Skill, Dictionary<int, string[]>> _cookingRecipesBySkill = new()
         {
@@ -155,7 +156,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             },
         };
 
-        private static readonly Dictionary<Skill, Dictionary<int, string[]>> _craftingRecipesBySkill = new()
+        /*private static readonly Dictionary<Skill, Dictionary<int, string[]>> _craftingRecipesBySkill = new()
         {
             {
                 Skill.Excavation, new Dictionary<int, string[]>()
@@ -170,6 +171,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     { 9, new[] { "Dwarf Gadget: Infinite Volcano Simulation" } },
                 }
             },
-        };
+        };*/
     }
 }

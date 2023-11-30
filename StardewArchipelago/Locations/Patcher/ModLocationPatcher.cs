@@ -61,10 +61,10 @@ namespace StardewArchipelago.Locations.Patcher
                     postfix: new HarmonyMethod(typeof(MagicModInjections), nameof(MagicModInjections.Update_MarlonShopReplacer_Postfix))
             );
             }
-            _harmony.Patch(
+            /*_harmony.Patch(
                 original: AccessTools.Constructor(_spaceCoreInterfaceType, new[] {typeof(string), typeof(int)}),
                 postfix: new HarmonyMethod(typeof(RecipeLevelUpInjections), nameof(RecipeLevelUpInjections.SkillLevelUpMenuConstructor_SendModdedSkillRecipeChecks_Postfix))
-            );
+            );*/
                 
             InjectSocializingExperienceMultiplier();
             InjectArchaeologyExperienceMultiplier();
