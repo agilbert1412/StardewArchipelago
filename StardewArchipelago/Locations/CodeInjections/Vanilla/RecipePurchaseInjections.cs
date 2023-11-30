@@ -17,7 +17,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
     public static class RecipePurchaseInjections
     {
-        public const string CHEFSANITY_LOCATION_PREFIX = "Learn Recipe ";
+        public const string CHEFSANITY_LOCATION_SUFFIX = " Recipe";
 
         private static IMonitor _monitor;
         private static IModHelper _helper;
@@ -338,14 +338,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
         private static void AddArchipelagoCookingRecipeItem(Dictionary<ISalable, int[]> stock, string name, int moneyPrice, Hint[] myActiveHints, int itemPriceId = -1, int itemPriceAmount = 0)
         {
-            var location = $"{CHEFSANITY_LOCATION_PREFIX}{name}";
+            var location = $"{name}{CHEFSANITY_LOCATION_SUFFIX}";
             if (!_locationChecker.IsLocationMissingAndExists(location))
             {
                 return;
             }
 
-            var recipeName = $"{name} Recipe";
-            AddArchipelagoRecipeItem(stock, recipeName, location, moneyPrice, myActiveHints, itemPriceId, itemPriceAmount);
+            AddArchipelagoRecipeItem(stock, location, location, moneyPrice, myActiveHints, itemPriceId, itemPriceAmount);
         }
 
         private static void AddArchipelagoRecipeItem(Dictionary<ISalable, int[]> stock, string displayName, string locationName, int moneyPrice, Hint[] myActiveHints, int itemPriceId = -1, int itemPriceAmount = 0)

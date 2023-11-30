@@ -266,7 +266,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             return (split[0], split[1]);
         }
 
-        private static string TurnAliased(string key)
+        private string TurnAliased(string key)
         {
             if (key.Contains(TRANSITIONAL_STRING))
             {
@@ -283,11 +283,12 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             return modifiedString;
         }
 
-        private static string TurnAliased(string key, Dictionary<string, string> aliases)
+        private string TurnAliased(string key, Dictionary<string, string> aliases)
         {
             var modifiedString = key;
-            foreach (var (oldString, newString) in aliases)
+            foreach (var oldString in aliases.Keys.OrderByDescending(x => x.Length))
             {
+                var newString = aliases[oldString];
                 var customizedNewString = newString;
                 if (customizedNewString.Contains("{0}"))
                 {

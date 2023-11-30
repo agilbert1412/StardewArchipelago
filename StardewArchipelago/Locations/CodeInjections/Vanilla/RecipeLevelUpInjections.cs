@@ -60,7 +60,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 var skillRecipesAtLevel = skillRecipes[i];
                 foreach (var skillRecipe in skillRecipesAtLevel)
                 {
-                    _locationChecker.AddCheckedLocation($"{RecipePurchaseInjections.CHEFSANITY_LOCATION_PREFIX}{skillRecipe}");
+                    _locationChecker.AddCheckedLocation($"{skillRecipe}{RecipePurchaseInjections.CHEFSANITY_LOCATION_SUFFIX}");
                 }
             }
         }

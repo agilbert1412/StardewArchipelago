@@ -19,8 +19,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private const string INVERSE_DAY = "Sat";
         private const string ALREADY_KNOWN_KEY = "Strings\\StringsFromCSFiles:TV.cs.13151";
         private const string NEW_RECIPE_LEARNED_KEY = "Strings\\StringsFromCSFiles:TV.cs.13153";
-        
-        private const string CHEFSANITY_LOCATION_PREFIX = "Learn Recipe ";
+
+        private const string CHEFSANITY_LOCATION_SUFFIX = " Recipe";
 
         private static IMonitor _monitor;
         private static IModHelper _helper;
@@ -58,7 +58,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
                 if (_archipelago.SlotData.Chefsanity.HasFlag(Chefsanity.QueenOfSauce))
                 {
-                    _locationChecker.AddCheckedLocation($"{CHEFSANITY_LOCATION_PREFIX}{recipeName}");
+                    _locationChecker.AddCheckedLocation($"{recipeName}{CHEFSANITY_LOCATION_SUFFIX}");
                 }
                 else if (!Game1.player.cookingRecipes.ContainsKey(recipeName))
                 {
@@ -177,7 +177,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             List<int> missingRerunRecipes;
             if (_archipelago.SlotData.Chefsanity.HasFlag(Chefsanity.QueenOfSauce))
             {
-                missingRerunRecipes = allRerunRecipes.Where(x => _locationChecker.IsLocationNotChecked($"{CHEFSANITY_LOCATION_PREFIX}{GetRecipeName(cookingRecipes, x)}")).ToList();
+                missingRerunRecipes = allRerunRecipes.Where(x => _locationChecker.IsLocationNotChecked($"{GetRecipeName(cookingRecipes, x)}{CHEFSANITY_LOCATION_SUFFIX}")).ToList();
             }
             else
             {
