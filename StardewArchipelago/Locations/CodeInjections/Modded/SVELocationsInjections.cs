@@ -28,9 +28,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         public const int AURORA_EVENT = 658059254;
         public const int MORGAN_EVENT = 658078924;
         private const int JOJA_COLA = 167;
-        private const string ALESIA_DAGGER = "Purchase Tempered Galaxy Dagger";
-        private const string ISAAC_SWORD = "Purchase Tempered Galaxy Sword";
-        private const string ISAAC_HAMMER = "Purchase Tempered Galaxy Hammer";
+        private const string ALESIA_DAGGER = "Tempered Galaxy Dagger";
+        private const string ISAAC_SWORD = "Tempered Galaxy Sword";
+        private const string ISAAC_HAMMER = "Tempered Galaxy Hammer";
         private const string LANCE_CHEST = "Lance's Diamond Wand";
         private const string RUSTY_KEY_ALT = "Rusty Key";
         private static ShopMenu _lastShopMenuUpdated = null;
@@ -64,7 +64,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             { "FarmHouseOutpostRune", new[] { "908078/e 908072/t 600 2400" } }, // Unlocking Galmoran Outpost
             { "Backwoods", new[] { "908072/e 908071" } }, // Unlocking Wizard Rune
             {
-                "Custom_AdventurerSummit", new[]
+                "Custom_AdventurerSummit_Runes", new[]
                 {
                     "908073/e 908072/z winter/t 600 1900/w sunny", "908073/e 908072/z winter/t 1910 2400/w sunny",
                     "908073/e 908072/z winter/w rainy", "908073/e 908072/z spring/z summer/z fall"
@@ -74,6 +74,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             { "Custom_SpriteSpring2", new[] { "908076/e 908072" } }, // Unlocking Springs Rune
             { "Custom_JunimoWoods", new[] { "908077/e 908072" } }, // Unlocking Junimo Rune
             { "Town", new[] { "3691371" } }, // The initializer for Scarlett to be a villager.
+            // Event where Marlon gives the player a second Rusty Key.
+            { "Custom_AdventurerSummit_MarlonAltKeyEvent", new[] { "1090501/e 1000034/k 1090502/f MarlonFay 1250", "1090501/e 1000034/k 1090502/b 1"}}
         };
 
         public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker, ShopReplacer shopReplacer)
@@ -191,57 +193,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             }
         }
 
-        // There's an alternative Rusty Key event that's added from Marlon by being friends with him.
-        public static bool SkipEvent_AlternativeRustyKey_Prefix(Event __instance)
-        {
-            try
-            {
-                if (__instance.id != 1090501)
-                {
-                    return true; // run original logic
-                }
-
-
-                if (__instance.playerControlSequence)
-                {
-                    __instance.EndPlayerControlSequence();
-                }
-
-                Game1.playSound("drumkit6");
-
-                var actorPositionsAfterMoveField = _modHelper.Reflection.GetField<Dictionary<string, Vector3>>(__instance, "actorPositionsAfterMove");
-                actorPositionsAfterMoveField.GetValue().Clear();
-
-                foreach (var actor in __instance.actors)
-                {
-                    var ignoreStopAnimation = actor.Sprite.ignoreStopAnimation;
-                    actor.Sprite.ignoreStopAnimation = true;
-                    actor.Halt();
-                    actor.Sprite.ignoreStopAnimation = ignoreStopAnimation;
-                    __instance.resetDialogueIfNecessary(actor);
-                }
-
-                __instance.farmer.Halt();
-                __instance.farmer.ignoreCollisions = false;
-                Game1.exitActiveMenu();
-                Game1.dialogueUp = false;
-                Game1.dialogueTyping = false;
-                Game1.pauseTime = 0.0f;
-
-                _locationChecker.AddCheckedLocation(RUSTY_KEY_ALT);
-
-                Game1.player.Position = new Vector2(-9999f, -99999f);
-                __instance.endBehaviors(new string[1] { "end" }, Game1.currentLocation);
-                return false; // don't run original logic
-
-            }
-            catch (Exception ex)
-            {
-                _monitor.Log($"Failed in {nameof(SkipEvent_AlternativeRustyKey_Prefix)}:\n{ex}", LogLevel.Error);
-                return true; // run original logic
-            }
-        }
-
         public static void ResetLocalState_PlayCutsceneIfConditionsAreMet_Postfix(GameLocation __instance)
         {
             try
@@ -324,6 +275,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 if (kvp.Key.Contains("FarmHouse"))
                 {
                     mapName = "FarmHouse";
+                }
+
+                if (kvp.Key.Contains("Custom_AdventurerSummit"))
+                {
+                    mapName = "Custom_AdventurerSummit";
                 }
 
                 var currentEventData = Game1.content.Load<Dictionary<string, string>>("Data\\Events\\" + mapName);
