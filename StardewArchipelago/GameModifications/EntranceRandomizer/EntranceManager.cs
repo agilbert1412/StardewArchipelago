@@ -158,6 +158,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             var defaultLocationRequestName = _equivalentAreas.GetDefaultEquivalentEntrance(locationRequestName);
             targetPosition = targetPosition.CheckSpecialVolcanoEdgeCaseWarp(defaultLocationRequestName);
             var key = GetKeys(defaultCurrentLocationName, defaultLocationRequestName, targetPosition);
+            // return false;
             if (!TryGetModifiedWarpName(key, out var desiredWarpName))
             {
                 return false;
@@ -299,8 +300,9 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
         private string TurnAliased(string key, Dictionary<string, string> aliases)
         {
             var modifiedString = key;
-            foreach (var (oldString, newString) in aliases)
+            foreach (var oldString in aliases.Keys.OrderByDescending(x => x.Length))
             {
+                var newString = aliases[oldString];
                 var customizedNewString = newString;
                 if (customizedNewString.Contains("{0}"))
                 {
@@ -312,18 +314,6 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
 
             return modifiedString;
         }
-
-        /*private static string ModTurnAliased(string key, string modifiedString)
-        {
-            foreach( var mod in _modifiedAliases)
-            {
-                if (_modsManager.HasMod(mod.Key))
-                {
-                    modifiedString = TurnAliased(key, _modifiedAliases[mod.Key]);
-                }
-            }
-            return modifiedString;
-        }*/
 
         private static readonly Dictionary<string, string> _entranceAliases = new()
         {
