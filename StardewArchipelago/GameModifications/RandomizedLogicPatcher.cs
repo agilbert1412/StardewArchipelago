@@ -40,6 +40,7 @@ namespace StardewArchipelago.GameModifications
             EntranceInjections.Initialize(monitor, _archipelago, entranceManager);
             ForestInjections.Initialize(monitor, _archipelago);
             MountainInjections.Initialize(monitor, helper, _archipelago);
+            TheaterInjections.Initialize(monitor, helper, archipelago);
             SeedShopsInjections.Initialize(monitor, helper, archipelago, locationChecker);
             LostAndFoundInjections.Initialize(monitor, archipelago);
             TVInjections.Initialize(monitor, archipelago);
@@ -63,6 +64,7 @@ namespace StardewArchipelago.GameModifications
             PatchDefinitionOfCommunityCenterComplete();
             PatchGrandpaNote();
             PatchDebris();
+            PatchTown();
             PatchForest();
             PatchMountain();
             PatchEntrances();
@@ -164,6 +166,20 @@ namespace StardewArchipelago.GameModifications
             _harmony.Patch(
                 original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.spawnWeedsAndStones)),
                 prefix: new HarmonyMethod(typeof(FarmInjections), nameof(FarmInjections.SpawnWeedsAndStones_ConsiderUserPreference_PreFix))
+            );
+        }
+
+        private void PatchTown()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Utility), nameof(Utility.pickFarmEvent)),
+                postfix: new HarmonyMethod(typeof(TheaterInjections), nameof(TheaterInjections.PickFarmEvent_BreakJojaDoor_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Town), nameof(Town.MakeMapModifications)),
+                prefix: new HarmonyMethod(typeof(TheaterInjections), nameof(TheaterInjections.MakeMapModifications_JojamartAndTheater_Prefix)),
+                postfix: new HarmonyMethod(typeof(TheaterInjections), nameof(TheaterInjections.MakeMapModifications_JojamartAndTheater_Postfix))
             );
         }
 

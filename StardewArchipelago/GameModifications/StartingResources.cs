@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Extensions;
 using StardewArchipelago.GameModifications.CodeInjections;
+using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Stardew;
 using StardewValley;
 using StardewValley.Locations;
@@ -17,11 +18,13 @@ namespace StardewArchipelago.GameModifications
         private const int MINIMUM_UNLIMITED_MONEY = 1000000;
         private ArchipelagoClient _archipelago;
         private StardewItemManager _stardewItemManager;
+        private StartingRecipes _startingRecipes;
 
         public StartingResources(ArchipelagoClient archipelago, StardewItemManager stardewItemManager)
         {
             _archipelago = archipelago;
             _stardewItemManager = stardewItemManager;
+            _startingRecipes = new StartingRecipes(archipelago);
         }
 
         public void GivePlayerStartingResources()
@@ -34,6 +37,7 @@ namespace StardewArchipelago.GameModifications
 
             RemoveShippingBin();
             SendGilTelephoneLetter();
+            _startingRecipes.SynchronizeStartingRecipes(Game1.player);
         }
 
         private void GivePlayerStartingMoney()
