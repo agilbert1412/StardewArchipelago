@@ -37,7 +37,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 var friendship = who.friendshipData[__instance.Name];
                 var currentHearts = friendship.Points / 250;
                 CheckCookingRecipeLocations(__instance.Name, currentHearts);
-                // CheckCraftingRecipeLocations(__instance.Name, currentHearts);
+                CheckCraftingRecipeLocations(__instance.Name, currentHearts);
 
                 return;
             }
@@ -89,7 +89,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
         private static void CheckCraftingRecipeLocations(string friendName, int currentHearts)
         {
-            throw new NotImplementedException();
+            // There are no crafting recipe learning checks yet
         }
     }
 }

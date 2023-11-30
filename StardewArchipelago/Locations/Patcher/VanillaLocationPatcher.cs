@@ -887,11 +887,6 @@ namespace StardewArchipelago.Locations.Patcher
                     prefix: new HarmonyMethod(typeof(RecipePurchaseInjections), nameof(RecipePurchaseInjections.GetIslandMerchantTradeStock_ReplaceBananaPuddingWithChefsanityCheck_Prefix))
                 );
             }
-
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(CraftingRecipe), nameof(CraftingRecipe.InitShared)),
-                postfix: new HarmonyMethod(typeof(RecipeDataInjections), nameof(RecipeDataInjections.InitShared_RemoveSkillAndFriendshipLearnConditions_Postfix))
-            );
             
             _harmony.Patch(
                 original: AccessTools.Constructor(typeof(LevelUpMenu), new []{typeof(int), typeof(int)}),

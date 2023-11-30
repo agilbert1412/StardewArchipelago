@@ -39,7 +39,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private static void SendSkillRecipeChecks(Skill skill, int level)
         {
             SendSkillCookingRecipeChecks(skill, level);
-            // SendSkillCraftingRecipeChecks(skill, level);
+            SendSkillCraftingRecipeChecks(skill, level);
         }
 
         private static void SendSkillCookingRecipeChecks(Skill skill, int level)
@@ -67,7 +67,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
         private static void SendSkillCraftingRecipeChecks(Skill skill, int level)
         {
-            throw new NotImplementedException();
+            // There are no skill crafting recipe learning checks yet
         }
 
         private static readonly Dictionary<Skill, Dictionary<int, string[]>> _cookingRecipesBySkill = new()

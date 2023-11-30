@@ -26,6 +26,7 @@ namespace StardewArchipelago.GameModifications
         private readonly ArchipelagoClient _archipelago;
         private readonly StardewItemManager _stardewItemManager;
         private readonly StartingResources _startingResources;
+        private readonly RecipeDataRemover _recipeDataRemover;
 
         public RandomizedLogicPatcher(IMonitor monitor, IModHelper helper, Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager stardewItemManager, EntranceManager entranceManager)
         {
@@ -33,6 +34,7 @@ namespace StardewArchipelago.GameModifications
             _archipelago = archipelago;
             _stardewItemManager = stardewItemManager;
             _startingResources = new StartingResources(_archipelago, _stardewItemManager);
+            _recipeDataRemover = new RecipeDataRemover(monitor, helper, archipelago);
             MineshaftLogicInjections.Initialize(monitor);
             CommunityCenterLogicInjections.Initialize(monitor, locationChecker);
             FarmInjections.Initialize(monitor, _archipelago);
@@ -82,6 +84,7 @@ namespace StardewArchipelago.GameModifications
             PatchKent();
             PatchGoldenEgg();
             PatchGoldenClock();
+            PatchRecipes();
             _startingResources.GivePlayerStartingResources();
 
             PatchDebugMethods();
@@ -475,6 +478,11 @@ namespace StardewArchipelago.GameModifications
                 original: AccessTools.Method(typeof(Building), nameof(Building.doAction)),
                 postfix: new HarmonyMethod(typeof(GoldenClockInjections), nameof(GoldenClockInjections.DoAction_GoldenClockIncreaseTime_Postfix))
             );
+        }
+
+        private void PatchRecipes()
+        {
+            _recipeDataRemover.RemoveSkillAndFriendshipLearnConditions();
         }
 
         private void PatchDebugMethods()
