@@ -694,7 +694,7 @@ namespace StardewArchipelago.Items.Mail
 
         private void LearnCookingRecipe(string recipeItemName)
         {
-            Game1.player.cookingRecipes.Add(recipeItemName, 0);
+            Game1.player.cookingRecipes.Add(recipeItemName.Replace("_", " "), 0);
         }
     }
 }

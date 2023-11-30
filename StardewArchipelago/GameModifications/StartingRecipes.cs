@@ -1,44 +1,26 @@
-﻿using System;
-using Netcode;
+﻿using Netcode;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Stardew;
-using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Network;
 
-namespace StardewArchipelago.Locations.CodeInjections.Vanilla
+namespace StardewArchipelago.GameModifications
 {
-    public static class StartingRecipesInjections
+    public class StartingRecipes
     {
-        private static IMonitor _monitor;
-        private static IModHelper _helper;
         private static ArchipelagoClient _archipelago;
-        private static StardewItemManager _itemManager;
 
-        public static void Initialize(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago, StardewItemManager itemManager)
+        public StartingRecipes(ArchipelagoClient archipelago)
         {
-            _monitor = monitor;
-            _helper = helper;
             _archipelago = archipelago;
-            _itemManager = itemManager;
         }
 
-        // private void farmerInit()
-        public static void FarmerInit_RemoveStartingRecipes_Postfix(Farmer __instance)
+        public void SynchronizeStartingRecipes(Farmer farmer)
         {
-            try
-            {
-                SynchronizeStartingCraftingRecipesWithArchipelago(__instance);
-                SynchronizeStartingCookingRecipesWithArchipelago(__instance);
-            }
-            catch (Exception ex)
-            {
-                _monitor.Log($"Failed in {nameof(FarmerInit_RemoveStartingRecipes_Postfix)}:\n{ex}", LogLevel.Error);
-                return;
-            }
+            SynchronizeStartingCraftingRecipesWithArchipelago(farmer);
+            SynchronizeStartingCookingRecipesWithArchipelago(farmer);
         }
 
-        private static void SynchronizeStartingCraftingRecipesWithArchipelago(Farmer __instance)
+        private void SynchronizeStartingCraftingRecipesWithArchipelago(Farmer __instance)
         {
             if (_archipelago.SlotData.Craftsanity == Craftsanity.None)
             {
@@ -60,7 +42,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             SynchronizeStartingRecipesWithArchipelago(startingCraftingRecipes, __instance.craftingRecipes);
         }
 
-        private static void SynchronizeStartingCookingRecipesWithArchipelago(Farmer __instance)
+        private void SynchronizeStartingCookingRecipesWithArchipelago(Farmer __instance)
         {
             if (_archipelago.SlotData.Chefsanity == Chefsanity.Vanilla)
             {
@@ -73,7 +55,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             SynchronizeStartingRecipesWithArchipelago(startingCookingRecipes, __instance.cookingRecipes);
         }
 
-        private static void SynchronizeStartingRecipesWithArchipelago(string[] startingRecipes, NetStringDictionary<int, NetInt> knownRecipes)
+        private void SynchronizeStartingRecipesWithArchipelago(string[] startingRecipes, NetStringDictionary<int, NetInt> knownRecipes)
         {
             foreach (var startingRecipe in startingRecipes)
             {
@@ -81,7 +63,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
         }
 
-        private static void SynchronizeStartingRecipeWithArchipelago(NetStringDictionary<int, NetInt> knownRecipes, string startingRecipe)
+        private void SynchronizeStartingRecipeWithArchipelago(NetStringDictionary<int, NetInt> knownRecipes, string startingRecipe)
         {
             var knowsRecipe = knownRecipes.ContainsKey(startingRecipe);
             var shouldKnowRecipe = _archipelago.HasReceivedItem($"{startingRecipe} Recipe");

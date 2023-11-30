@@ -854,17 +854,8 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void PatchChefAndCraftsanity()
         {
-            PatchStartingRecipes();
             PatchChefsanity();
             PatchCraftsanity();
-        }
-
-        private void PatchStartingRecipes()
-        {
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(Farmer), "farmerInit"),
-                postfix: new HarmonyMethod(typeof(StartingRecipesInjections), nameof(StartingRecipesInjections.FarmerInit_RemoveStartingRecipes_Postfix))
-            );
         }
 
         private void PatchChefsanity()

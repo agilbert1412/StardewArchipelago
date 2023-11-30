@@ -29,7 +29,6 @@ namespace StardewArchipelago.Items.Unlocks
         public const string PROGRESSIVE_CLUB = "Progressive Club";
         public const string PROGRESSIVE_DAGGER = "Progressive Dagger";
         public const string PROGRESSIVE_BOOTS = "Progressive Footwear";
-        public const string PROGRESSIVE_THEATER = "Progressive Movie Theater";
 
         private Dictionary<string, Func<ReceivedItem, LetterAttachment>> _unlockables;
 
