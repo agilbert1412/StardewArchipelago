@@ -15,6 +15,7 @@ using Object = StardewValley.Object;
 using StardewArchipelago.Items.Unlocks;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
 using StardewArchipelago.Stardew;
+using StardewArchipelago.GameModifications;
 
 namespace StardewArchipelago.Items.Mail
 {
@@ -73,6 +74,7 @@ namespace StardewArchipelago.Items.Mail
             _letterActions.Add(LetterActionsKeys.SpawnBaby, (_) => _babyBirther.SpawnNewBaby());
             _letterActions.Add(LetterActionsKeys.Trap, ExecuteTrap);
             _letterActions.Add(LetterActionsKeys.LearnCookingRecipe, LearnCookingRecipe);
+            _letterActions.Add(LetterActionsKeys.LearnSpecialCraftingRecipe, LearnSpecialCraftingRecipe);
         }
 
         public void ExecuteLetterAction(string key, string parameter)
@@ -696,6 +698,11 @@ namespace StardewArchipelago.Items.Mail
         private void LearnCookingRecipe(string recipeItemName)
         {
             Game1.player.cookingRecipes.Add(recipeItemName.Replace("_", " "), 0);
+        }
+        private void LearnSpecialCraftingRecipe(string recipeItemName)
+        {
+            var actualCraftingName = ModArchaeologyNameFixer.EnglishDisplayNametoName(recipeItemName.Replace("_", " "));
+            Game1.player.craftingRecipes.Add(actualCraftingName, 0);
         }
     }
 }

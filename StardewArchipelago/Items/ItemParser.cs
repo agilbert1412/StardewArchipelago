@@ -1,5 +1,7 @@
 ﻿using System;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants;
+using StardewArchipelago.GameModifications;
 using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Items.Traps;
 using StardewArchipelago.Items.Unlocks;
@@ -64,6 +66,12 @@ namespace StardewArchipelago.Items
             if (_unlockManager.IsUnlock(receivedItem.ItemName))
             {
                 return _unlockManager.PerformUnlockAsLetter(receivedItem);
+            }
+
+            if (receivedItem.ItemName.EndsWith(RECIPE_SUFFIX) && ArchaeologyCraftNames.CraftNames.ContainsValue(receivedItem.ItemName.Substring(0, receivedItem.ItemName.Length - RECIPE_SUFFIX.Length)))
+            {
+                var itemOfRecipe = receivedItem.ItemName.Substring(0, receivedItem.ItemName.Length - RECIPE_SUFFIX.Length);
+                return new LetterActionAttachment(receivedItem, LetterActionsKeys.LearnSpecialCraftingRecipe, itemOfRecipe);
             }
 
             if (receivedItem.ItemName.EndsWith(RECIPE_SUFFIX))

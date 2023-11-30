@@ -48,10 +48,10 @@ namespace StardewArchipelago.Locations.Patcher
             {
                 return;
             }
-
-            var spaceCoreType = AccessTools.TypeByName("SpaceCore.Skills");
+            var _spaceCoreInterfaceType = AccessTools.TypeByName("SpaceCore.Interface.SkillLevelUpMenu");
+            var spaceCoreSkillsType = AccessTools.TypeByName("SpaceCore.Skills");
             _harmony.Patch(
-                original: AccessTools.Method(spaceCoreType, "AddExperience"),
+                original: AccessTools.Method(spaceCoreSkillsType, "AddExperience"),
                 prefix: new HarmonyMethod(typeof(SkillInjections), nameof(SkillInjections.AddExperience_ArchipelagoModExperience_Prefix))
             );
             if (_archipelago.SlotData.Mods.HasMod(ModNames.MAGIC))
@@ -60,8 +60,11 @@ namespace StardewArchipelago.Locations.Patcher
                     original: AccessTools.Method(typeof(ShopMenu), nameof(ShopMenu.update)),
                     postfix: new HarmonyMethod(typeof(MagicModInjections), nameof(MagicModInjections.Update_MarlonShopReplacer_Postfix))
             );
-
             }
+            _harmony.Patch(
+                original: AccessTools.Constructor(_spaceCoreInterfaceType, new[] {typeof(string), typeof(int)}),
+                postfix: new HarmonyMethod(typeof(RecipeLevelUpInjections), nameof(RecipeLevelUpInjections.SkillLevelUpMenuConstructor_SendModdedSkillRecipeChecks_Postfix))
+            );
                 
             InjectSocializingExperienceMultiplier();
             InjectArchaeologyExperienceMultiplier();
