@@ -177,6 +177,21 @@ namespace StardewArchipelago.GameModifications
             );
 
             _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.MakeMapModifications)),
+                prefix: new HarmonyMethod(typeof(TheaterInjections), nameof(TheaterInjections.MakeMapModifications_PlaceMissingBundleNote_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.checkTileIndexAction)),
+                prefix: new HarmonyMethod(typeof(TheaterInjections), nameof(TheaterInjections.CheckTileIndexAction_InteractWithMissingBundleNote_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(AbandonedJojaMart), "doRestoreAreaCutscene"),
+                prefix: new HarmonyMethod(typeof(TheaterInjections), nameof(TheaterInjections.DoRestoreAreaCutscene_InteractWithMissingBundleNote_Prefix))
+            );
+
+            _harmony.Patch(
                 original: AccessTools.Method(typeof(Town), nameof(Town.MakeMapModifications)),
                 prefix: new HarmonyMethod(typeof(TheaterInjections), nameof(TheaterInjections.MakeMapModifications_JojamartAndTheater_Prefix)),
                 postfix: new HarmonyMethod(typeof(TheaterInjections), nameof(TheaterInjections.MakeMapModifications_JojamartAndTheater_Postfix))
