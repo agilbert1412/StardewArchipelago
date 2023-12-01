@@ -335,7 +335,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Bus Tunnel", "Tunnel" },
             { "Carpenter Shop", "ScienceHouse|6|24" }, // LockedDoorWarp 6 24 ScienceHouse 900 2000S–
             { "Maru's Room", "ScienceHouse|3|8" }, // LockedDoorWarp 3 8 ScienceHouse 900 2000 Maru 500N
-            { "Adventurer", "Adventure" },
+            { "Adventurer's Guild", "AdventureGuild" },
             { "Willy's Fish Shop", "FishShop" },
             { "Museum", "ArchaeologyHouse" },
             { "Wizard Basement", "WizardHouseBasement"},

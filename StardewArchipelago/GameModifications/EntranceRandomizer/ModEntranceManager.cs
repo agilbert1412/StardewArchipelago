@@ -39,7 +39,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Grove Outpost Warp", "Custom_EnchantedGrove|40|10" },
             { "Grove Farm Warp", "Custom_EnchantedGrove|30|14" },
             { "Grove Wizard Warp", "Custom_EnchantedGrove|17|25" },
-            { "Grove Adventurer's Guild Warp", "Custom_EnchantedGrove|43|25" },
+            { "Grove Guild Warp", "Custom_EnchantedGrove|43|25" },
             { "Grove Sprite Spring Warp", "Custom_EnchantedGrove|20|10" },
             { "Sprite Spring Cave", "Custom_SpriteSpringCave" },
             { "Sprite Spring", "Custom_SpriteSpring2" },
@@ -51,14 +51,14 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Crimson Badlands", "Custom_CrimsonBadlands" },
             { "Badlands Cave", "Custom_TreasureCave" },
             { "Susan's House", "Custom_SusanHouse" },
-            { "Adventurer's Guild Summit", "Custom_AdventurerSummit" },
-            { "Marlon's Boat", "Custom_AdventurersSummit" },
+            { "Guild Summit", "Custom_AdventurerSummit" },
             { "Forest West", "Custom_ForestWest" },
             { "First Slash Hallway", "Custom_FirstSlashHallway" },
             { "First Slash Spare Room", "Custom_FirstSlashGuestRoom" },
             { "Grampleton Suburbs", "Custom_GrampletonSuburbs" },
             { "Scarlett's House", "Custom_ScarlettHouse" },
             { "Wizard Basement", "Custom_WizardBasement" },
+            { "Witch's Attic", "Custom_Alecto_WitchHutUpstairs"},
         };
 
         private static readonly Dictionary<string, string> _locationEugene = new()
