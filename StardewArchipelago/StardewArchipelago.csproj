@@ -4,8 +4,8 @@
     <TargetFramework>net5.0</TargetFramework>
     <ApplicationManifest>manifest.json</ApplicationManifest>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <GamePath>/mnt/Game Collection/SteamLibrary/steamapps/common/Stardew Valley</GamePath>
     <EnableHarmony>true</EnableHarmony>
+    <GamePath>/mnt/Game Collection/SteamLibrary/steamapps/common/Stardew Valley</GamePath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -97,36 +97,6 @@
     <None Update="Textures\Archipelago\48x48 white icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Textures\Bundles\cinder_shard_bundle.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Textures\Bundles\desert_foraging_bundle.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Textures\Bundles\gamblers_bundle.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Textures\Bundles\island_foraging_bundle.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Textures\Bundles\legendary_fish_bundle.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Textures\Bundles\mines_foraging_bundle.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Textures\Bundles\qis_helper_bundle.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Textures\Bundles\quality_foraging_bundle.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Textures\Bundles\summer_pattern.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Textures\Bundles\walnut_hunter_bundle.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
   <ItemGroup>
@@ -135,8 +105,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="ExcavationSkill">
-      <HintPath>..\..\..\..\Programs\Steam\steamapps\common\Stardew Valley\Mods\ExcavationSkill\ExcavationSkill.dll</HintPath>
+    <Reference Include="ContentPatcher">
+      <HintPath>..\..\..\..\Programs\Steam\steamapps\common\Stardew Valley\Mods - AP fully modded\ContentPatcher\ContentPatcher.dll</HintPath>
+    </Reference>
+    <Reference Include="DeepWoodsMod">
+      <HintPath>..\..\..\..\Programs\Steam\steamapps\common\Stardew Valley\Mods - AP fully modded\DeepWoodsMod\DeepWoodsMod.dll</HintPath>
+    </Reference>
+    <Reference Include="SocializingSkill">
+      <HintPath>..\..\..\..\Programs\Steam\steamapps\common\Stardew Valley\Mods - AP fully modded\SocializingSkill\SocializingSkill.dll</HintPath>
     </Reference>
   </ItemGroup>
 
