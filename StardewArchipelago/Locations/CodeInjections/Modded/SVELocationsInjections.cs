@@ -10,7 +10,6 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Menus;
-using Object = StardewValley.Object;
 using StardewValley.Objects;
 using Microsoft.Xna.Framework;
 
@@ -303,6 +302,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             }
         }
 
+        // Railroad Boulder Special Order won't load if Iridium Bomb is sent early, so we duplicate it so the player gets it.
         private static void AppendMadeUpOrder()
         {
             var getsveOrderType = AccessTools.TypeByName("HarmonyPatch_UntimedSpecialOrders");

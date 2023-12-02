@@ -38,6 +38,23 @@ namespace StardewArchipelago.Locations.Patcher
             AddMagicModInjections();
             AddSkullCavernElevatorModInjections();
             AddSVEModInjections();
+            AddModdedEventInjections();
+        }
+
+        private void AddModdedEventInjections()
+        {
+            if (!_modsManager.HasMod(ModNames.DISTANT))
+            {
+                return;
+            }
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Event), nameof(Event.skipEvent)),
+                prefix: new HarmonyMethod(typeof(ModdedEventInjections), nameof(ModdedEventInjections.SkipEvent_ReplaceRecipe_Prefix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Game1), "performWarpFarmer"),
+                postfix: new HarmonyMethod(typeof(ModdedEventInjections), nameof(ModdedEventInjections.PerformWarpFarmer_CheckForStrayRecipe_Postfix))
+            );
         }
 
         private void AddModSkillInjections()

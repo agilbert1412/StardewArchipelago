@@ -94,7 +94,6 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             { "We got a letter from a folk all the way back in {2}. They recommend completing a... '{0}'?. I don't know what that is, but apparently, it's great! You should really get on that!", HasActiveHints },
             { "...and that folks is how an ol' goblin changed my friend's life around.  Who knew a crayfish dish would be the thing to do it!  I say pay it forward.  Who knows, even goblins might teach ya a thing or two!", HasDistantLands},
             { "Now here's an odd rumor from an ol' miss up in Grampleton.  Mystics capable of turning the weave so thoroughly you can even hear their whispers over the radio!  Might help in a pinch I say!", HasMagic},
-            
         };  
 
         private static bool Always()

@@ -1,4 +1,8 @@
-﻿using StardewArchipelago.Archipelago;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using StardewValley;
+using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
 using StardewArchipelago.Constants;
 using StardewArchipelago.GameModifications.CodeInjections.Modded;
@@ -45,6 +49,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             if (archipelago.SlotData.Mods.HasMod(ModNames.SVE))
             {
                 SVELocationsInjections.Initialize(monitor, modHelper, archipelago, locationChecker, shopReplacer);
+            }
+            if (archipelago.SlotData.Mods.HasMod(ModNames.DISTANT)) // Only mod for now that needs it.
+
+            {
+                ModdedEventInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             }
         }
     }

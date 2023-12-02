@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants;
 using StardewArchipelago.Locations;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Locations.Festival;
@@ -512,6 +513,16 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 AddSeedToSandyStock(sandyStock, RHUBARB_SEEDS);
                 AddSeedToSandyStock(sandyStock, STARFRUIT_SEEDS);
                 AddSeedToSandyStock(sandyStock, BEET_SEEDS);
+                if (_archipelago.SlotData.Mods.HasMod(ModNames.DISTANT))
+                {
+                    var voidMintIdentifier = "1 2 2 3 2/spring summer fall/109/"; //Done as modded seeds have variable ID but use ID in dictionary
+                    var vileAncientIdentifier = "2 7 7 7 5/spring summer fall/108/";
+                    var cropList = Game1.content.Load<Dictionary<int, string>>("Data\\Crops");
+                    var voidMintSeeds = cropList.FirstOrDefault(x => x.Value.Contains(voidMintIdentifier)).Key;
+                    var vileAncientFruitSeeds = cropList.FirstOrDefault(x => x.Value.Contains(vileAncientIdentifier)).Key;
+                    AddSeedToSandyStock(sandyStock, voidMintSeeds);
+                    AddSeedToSandyStock(sandyStock, vileAncientFruitSeeds);
+                }
                 Random random = new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame / 2);
                 AddSandyRotatingStock(sandyStock, random);
                 AddSandyPermanentCosmetics(sandyStock, random);
