@@ -133,12 +133,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
 
             OnCheckRecipeLocation(__instance.id, cookingEvent);
 
-            __instance.endBehaviors(new string[4]
+            __instance.endBehaviors(new string[1]
             {
-                "end",
-                "position",
-                "10",
-                "10",
+                "end"
             }, Game1.currentLocation);
         }
 
