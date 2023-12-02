@@ -52,8 +52,12 @@ namespace StardewArchipelago.Locations.Patcher
                 prefix: new HarmonyMethod(typeof(ModdedEventInjections), nameof(ModdedEventInjections.SkipEvent_ReplaceRecipe_Prefix))
             );
             _harmony.Patch(
-                original: AccessTools.Method(typeof(Game1), "performWarpFarmer"),
-                postfix: new HarmonyMethod(typeof(ModdedEventInjections), nameof(ModdedEventInjections.PerformWarpFarmer_CheckForStrayRecipe_Postfix))
+                original: AccessTools.Method(typeof(Event), nameof(Event.command_addCookingRecipe)),
+                prefix: new HarmonyMethod(typeof(ModdedEventInjections), nameof(ModdedEventInjections.AddCookingRecipe_CheckForStrayRecipe_Prefix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Event), nameof(Event.command_addCraftingRecipe)),
+                prefix: new HarmonyMethod(typeof(ModdedEventInjections), nameof(ModdedEventInjections.AddCraftingRecipe_CheckForStrayRecipe_Prefix))
             );
         }
 

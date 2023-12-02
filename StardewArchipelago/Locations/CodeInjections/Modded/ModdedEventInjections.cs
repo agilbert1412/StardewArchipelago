@@ -38,43 +38,46 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             _archipelago = archipelago;
             _locationChecker = locationChecker;
         }
-    
-// Hacky, but a workaround from modifying the addcookingRecipe commands as the events warp you.
-public static void PerformWarpFarmer_CheckForStrayRecipe_Postfix(ref LocationRequest locationRequest, ref int tileX,
-            ref int tileY, ref int facingDirectionAfterWarp)
+
+        public static bool AddCookingRecipe_CheckForStrayRecipe_Prefix(Event __instance, GameLocation location, GameTime time, string[] split)
         {
             try
             {
-                foreach (KeyValuePair<int, string> recipeEvent in eventCooking)
+                if (!_archipelago.SlotData.Chefsanity.HasFlag(Chefsanity.Friendship) || !eventCooking.Keys.Contains(__instance.id))
                 {
-                    
-                    var recipeName = recipeEvent.Value; 
-                    if ( _archipelago.SlotData.Chefsanity.HasFlag(Chefsanity.Friendship) &&
-                    Game1.player.cookingRecipes.ContainsKey(recipeName)
-                   )
-                    {
-                        if (_archipelago.GetReceivedItemCount($"{recipeName}{RECIPE_SUFFIX}") <= 0)
-                        {
-                            Game1.player.cookingRecipes.Remove(recipeName);
-                        }
-                        _locationChecker.AddCheckedLocation($"{recipeEvent.Value}{RECIPE_SUFFIX}");
-                    }
-                    if ( _archipelago.SlotData.Craftsanity.HasFlag(Craftsanity.All) &&
-                    Game1.player.craftingRecipes.ContainsKey(recipeName)
-                   )
-                    {
-                        if (_archipelago.GetReceivedItemCount($"{recipeName}{RECIPE_SUFFIX}") <= 0)
-                        {
-                            Game1.player.craftingRecipes.Remove(recipeName);
-                        }
-                        _locationChecker.AddCheckedLocation($"{recipeEvent.Value}{RECIPE_SUFFIX}");
-                    }
+                    return true;
                 }
+
+                _locationChecker.AddCheckedLocation($"{eventCooking[__instance.id]}{RECIPE_SUFFIX}");
+                __instance.CurrentCommand++;
+                return false; // don't run original logic
+
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(PerformWarpFarmer_CheckForStrayRecipe_Postfix)}:\n{ex}", LogLevel.Error);
-                return; // run original logic
+                _monitor.Log($"Failed in {nameof(AddCookingRecipe_CheckForStrayRecipe_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
+        }
+
+        public static bool AddCraftingRecipe_CheckForStrayRecipe_Prefix(Event __instance, GameLocation location, GameTime time, string[] split)
+        {
+            try
+            {
+                if (!_archipelago.SlotData.Craftsanity.HasFlag(Craftsanity.All) || !eventCooking.Keys.Contains(__instance.id))
+                {
+                    return true;
+                }
+
+                _locationChecker.AddCheckedLocation($"{eventCooking[__instance.id]}{RECIPE_SUFFIX}");
+                __instance.CurrentCommand++;
+                return false; // don't run original logic
+
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(AddCraftingRecipe_CheckForStrayRecipe_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
             }
         }
 
