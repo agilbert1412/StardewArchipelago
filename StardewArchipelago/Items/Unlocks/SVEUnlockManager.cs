@@ -120,7 +120,7 @@ namespace StardewArchipelago.Items.Unlocks
 
         private LetterEventSeenAttachment SendWizardRunes(ReceivedItem receivedItem)
         {
-            var events = WIZARD_RUNES_EVENT;
+            var events = new List<int> {MAIN_NEXUS_EVENT, WIZARD_RUNES_EVENT};
             return new LetterEventSeenAttachment(receivedItem, events);
         }
 
