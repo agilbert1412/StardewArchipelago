@@ -6,6 +6,7 @@ using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
 using StardewArchipelago.GameModifications.CodeInjections.Modded;
 using StardewArchipelago.Locations.CodeInjections.Modded;
+using StardewArchipelago.Locations.CodeInjections.Modded.SVE;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Locations.GingerIsland;
 using StardewModdingAPI;
@@ -285,6 +286,11 @@ namespace StardewArchipelago.Locations.Patcher
                 return;
             }
 
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(ShopMenu), nameof(ShopMenu.update)),
+                postfix: new HarmonyMethod(typeof(SVEShopInjections), nameof(SVEShopInjections.Update_ReplaceSVEShopChecks_Postfix))
+            );
+
             var shopMenuParameterTypes = new[]
             {
                 typeof(Dictionary<ISalable, int[]>), typeof(int), typeof(string),
@@ -292,23 +298,18 @@ namespace StardewArchipelago.Locations.Patcher
             };
 
             _harmony.Patch(
-                original: AccessTools.Method(typeof(ShopMenu), nameof(ShopMenu.update)),
-                postfix: new HarmonyMethod(typeof(SVELocationsInjections), nameof(SVELocationsInjections.Update_ShopReplacer_Postfix))
-            );
-
-            _harmony.Patch(
                 original: AccessTools.Constructor(typeof(ShopMenu), shopMenuParameterTypes),
-                prefix: new HarmonyMethod(typeof(SVELocationsInjections), nameof(SVELocationsInjections.ShopMenu_ForceJojaShop_Prefix))
+                prefix: new HarmonyMethod(typeof(SVEShopInjections), nameof(SVEShopInjections.Constructor_MakeBothJojaShopsTheSame_Prefix))
             );
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Chest), nameof(Chest.checkForAction)),
-                prefix: new HarmonyMethod(typeof(SVELocationsInjections), nameof(SVELocationsInjections.CheckForAction_LanceChest_Prefix))
+                prefix: new HarmonyMethod(typeof(SVECutsceneInjections), nameof(SVECutsceneInjections.CheckForAction_LanceChest_Prefix))
             );
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Event), nameof(Event.skipEvent)),
-                postfix: new HarmonyMethod(typeof(SVELocationsInjections), nameof(SVELocationsInjections.ResetLocalState_PlayCutsceneIfConditionsAreMet_Postfix))
+                postfix: new HarmonyMethod(typeof(SVECutsceneInjections), nameof(SVECutsceneInjections.ResetLocalState_PlayRailroadBoulderCutsceneIfConditionsAreMet_Postfix))
             );
         }
     }
