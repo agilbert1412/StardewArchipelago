@@ -7,6 +7,7 @@ using Archipelago.MultiClient.Net.Models;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.GameModifications.CodeInjections;
 using StardewModdingAPI;
+using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Menus;
@@ -59,7 +60,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         {
             // Contains the original event requirements to be edited
             { "IslandWest", new[] { "65360191/f Lance 2000" } }, // Lance giving you the Fable Reef Warp
-            { "FarmHouseFarmRune", new[] { "908074/e 908072/t 600 630" } }, // Unlocking the Farm Rune
+            { "FarmHouseFarmRune", new[] { "908074/e 908072/t 600 630", "908074/t 600 2600" } }, // Unlocking the Farm Rune
             { "FarmHouseOutpostRune", new[] { "908078/e 908072/t 600 2400" } }, // Unlocking Galmoran Outpost
             { "Backwoods", new[] { "908072/e 908071" } }, // Unlocking Wizard Rune
             {
@@ -77,6 +78,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             { "Custom_AdventurerSummit", new[] { "1090501/e 1000034/k 1090502/f MarlonFay 1250", "1090501/e 1000034/k 1090502/b 1"}}
         };
 
+        private static readonly List<int> eventIDs = new()
+        {
+            908074, 908075, 908076, 908077, 908078
+        };
+
         public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker, ShopReplacer shopReplacer)
         {
             _monitor = monitor;
@@ -86,9 +92,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             _shopReplacer = shopReplacer;
             SVEEventInitializer();
         }
-
-
-
 
         // Unique Shop Locations
         public static void Update_ShopReplacer_Postfix(ShopMenu __instance, GameTime time)
@@ -220,7 +223,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         public static void SVEEventInitializer()
         {
             ViewableCutsceneInitializer();
-            LockedCutsceneInitializer();
             AppendMadeUpOrder();
         }
 
@@ -243,7 +245,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         }
 
         // Otherwise, we should just lock the events out of being seen at all and simply toggled by eventSeen.
-        public static void LockedCutsceneInitializer()
+        public static void LockedCutsceneInitializer(WarpedEventArgs e)
         {
             foreach (var kvp in warpKeys)
             {
@@ -257,7 +259,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 {
                     mapName = "Custom_AdventurerSummit";
                 }
-
                 var currentEventData = Game1.content.Load<Dictionary<string, string>>("Data\\Events\\" + mapName);
                 foreach (var eventKey in kvp.Value)
                 {
