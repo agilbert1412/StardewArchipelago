@@ -19,7 +19,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         private static Dictionary<string, string[]> Total_Events = new(){
 
         };
-        private const string DUMMY_EVENT_DATA = "continue/-200 -200 0/Lewis -10 -10 0/pause 50/end";
         private static readonly string RECIPE_SUFFIX = " Recipe";
         private static readonly Dictionary<int, string> eventCooking = new(){
             {181091234, "Mushroom Kebab"},
@@ -98,8 +97,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                     // Sometimes, CP has not added the cutscene to the event list yet due to its dynamic adding methods...
                     if (!currentMapEventData.ContainsKey(eventKey))
                     {
-                        // ... so just add a dummy event if that's the case to make sure its locked and move on to the next event.
-                        currentMapEventData[eventKey] = DUMMY_EVENT_DATA;
+                        continue;
                     }
 
                     // Everything exists now, so just make the requirement for the event itself.
