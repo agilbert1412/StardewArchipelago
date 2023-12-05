@@ -12,6 +12,7 @@ using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Objects;
 using Microsoft.Xna.Framework;
+using StardewArchipelago.Goals;
 
 namespace StardewArchipelago.Locations.CodeInjections.Modded
 {
@@ -23,7 +24,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         private static LocationChecker _locationChecker;
         private static ShopReplacer _shopReplacer;
         private static NetString railroadKey = new NetString("Clint2Again");
-        public const string MORRIS_FRIENDSHIP = "Friendsanity: Morris {0} <3";
         public const int AURORA_EVENT = 658059254;
         public const int MORGAN_EVENT = 658078924;
         private const int JOJA_COLA = 167;
@@ -214,29 +214,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             {
                 _monitor.Log($"Failed in {nameof(ResetLocalState_PlayCutsceneIfConditionsAreMet_Postfix)}:\n{ex}", LogLevel.Error);
                 return;
-            }
-        }
-
-        public static void ReleaseMorrisWhenCommunityCenter(bool completionLogic)
-        {
-            try
-            {
-                if (!completionLogic)
-                {
-                    return; // run original logic
-                }
-
-                for (var i = 1; i <= 10; i++)
-                {
-                    _locationChecker.AddCheckedLocation(string.Format(MORRIS_FRIENDSHIP, i));
-                }
-
-
-            }
-            catch (Exception ex)
-            {
-                _monitor.Log($"Failed in {nameof(ReleaseMorrisWhenCommunityCenter)}:\n{ex}", LogLevel.Error);
-                return; // run original logic
             }
         }
 

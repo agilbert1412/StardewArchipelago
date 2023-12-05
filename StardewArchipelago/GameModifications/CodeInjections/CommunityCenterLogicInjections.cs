@@ -38,7 +38,6 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     __instance.hasOrWillReceiveMail("apccBoilerRoom") &&
                     __instance.hasOrWillReceiveMail("apccVault") &&
                     __instance.hasOrWillReceiveMail("apccBulletin");
-                SVELocationsInjections.ReleaseMorrisWhenCommunityCenter(allAreasCompleteAccordingToAp && allAreasCompleteLocally);
                 
                 __result = allAreasCompleteAccordingToAp && allAreasCompleteLocally;
 

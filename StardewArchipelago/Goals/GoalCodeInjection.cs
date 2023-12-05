@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using StardewArchipelago.Locations;
+using StardewArchipelago.Stardew;
 using StardewValley.Locations;
 using StardewValley.Menus;
 
@@ -18,13 +19,15 @@ namespace StardewArchipelago.Goals
         private static IModHelper _modHelper;
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
+        private static BundleReader _bundleReader;
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker, BundleReader bundleReader)
         {
             _monitor = monitor;
             _modHelper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
+            _bundleReader = bundleReader;
         }
 
         public static void CheckCommunityCenterGoalCompletion()
@@ -33,9 +36,8 @@ namespace StardewArchipelago.Goals
             {
                 return;
             }
-
-            var communityCenter = Game1.locations.OfType<CommunityCenter>().First();
-            if (!communityCenter.areAllAreasComplete())
+            
+            if (!_bundleReader.IsCommunityCenterComplete())
             {
                 return;
             }
