@@ -21,20 +21,27 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
         private static IModHelper _modHelper;
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
-        private const string RAILROAD_KEY = "Clint2Again";
         private const int AURORA_EVENT = 658059254;
         private const int MORGAN_EVENT = 658078924;
+        private const string RAILROAD_KEY = "Clint2Again";
         private const int RAILROAD_BOULDER_ID = 8050108;
         private const int IRIDIUM_BOMB_ID = 8050109;
         private const string LANCE_CHEST = "Lance's Diamond Wand";
-        private const string DUMMY_EVENT_DATA = "continue/-200 -200 0/Lewis -10 -10 0/pause 50/end";
         private static ShopMenu _lastShopMenuUpdated = null;
 
-        private static readonly Dictionary<string, string[]> WarpKeys = new()
+        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        {
+            _monitor = monitor;
+            _modHelper = modHelper;
+            _archipelago = archipelago;
+            _locationChecker = locationChecker;
+        }
+        
+        public static readonly Dictionary<string, string[]> SVE_Events = new()
         {
             // Contains the original event requirements to be edited
             { "IslandWest", new[] { "65360191/f Lance 2000" } }, // Lance giving you the Fable Reef Warp
-            { "FarmHouseFarmRune", new[] { "908074/e 908072/t 600 630" } }, // Unlocking the Farm Rune
+            { "FarmHouseFarmRune", new[] { "908074/e 908072/t 600 630", "908074/t 600 2600" } }, // Unlocking the Farm Rune
             { "FarmHouseOutpostRune", new[] { "908078/e 908072/t 600 2400" } }, // Unlocking Galmoran Outpost
             { "Backwoods", new[] { "908072/e 908071" } }, // Unlocking Wizard Rune
             { "AdventureGuild", new[] { "908073/e 908072/z winter/t 600 1900/w sunny", "908073/e 908072/z winter/t 1910 2400/w sunny", "908073/e 908072/z winter/w rainy", "908073/e 908072/z spring/z summer/z fall" } }, // Unlocking Summit Rune
@@ -46,15 +53,20 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
             { "Custom_AdventurerSummit", new[] { "1090501/e 1000034/k 1090502/f MarlonFay 1250", "1090501/e 1000034/k 1090502/b 1"}}
         };
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void SVE_ReplaceViewableCutscenes(Dictionary<string, string> farmEvents, Dictionary<string, string> farmhouseEvents)
         {
-            _monitor = monitor;
-            _modHelper = modHelper;
-            _archipelago = archipelago;
-            _locationChecker = locationChecker;
-            InitializeSVEEvents();
+            var oldApplesRule = "77759254/e 191393/e 1000037/j 138/t 600 630/H";
+            var newApplesRule = $"77759254/e {AURORA_EVENT}"; //Only shows up if AP event plays
+            var oldMorganRule = "5978924/y 3/d Mon Tue/e 1724095";
+            var newMorganRule = $"5978924/e {MORGAN_EVENT}"; //Only shows up if AP event plays
+            var morganEvent = farmEvents[oldMorganRule];
+            var applesEvent = farmhouseEvents[oldApplesRule];
+            farmEvents.Remove(oldMorganRule);
+            farmhouseEvents.Remove(oldApplesRule);
+            farmEvents[newMorganRule] = morganEvent;
+            farmhouseEvents[newApplesRule] = applesEvent;
         }
-        
+
         public static bool CheckForAction_LanceChest_Prefix(Chest __instance, Farmer who, bool justCheckingForActivity, ref bool __result)
         {
             try
@@ -117,65 +129,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
             }
         }
 
-        public static void InitializeSVEEvents()
-        {
-            ReplaceViewableCutscenes();
-            ReplaceLockedCutscenes();
-            AppendFakeClintBoulderSpecialOrderKey();
-        }
 
-        // Some events we want to see, so this will let them play out, so we make up AP event scene requirements.
-        public static void ReplaceViewableCutscenes()
-        {
-            var farmEvents = Game1.content.Load<Dictionary<string, string>>("Data\\Events\\Farm");
-            var farmhouseEvents = Game1.content.Load<Dictionary<string, string>>("Data\\Events\\FarmHouse");
-            var oldApplesRule = "77759254/e 191393/e 1000037/j 138/t 600 630/H";
-            var newApplesRule = $"77759254/e {AURORA_EVENT}"; //Only shows up if AP event plays
-            var oldMorganRule = "5978924/y 3/d Mon Tue/e 1724095";
-            var newMorganRule = $"5978924/e {MORGAN_EVENT}"; //Only shows up if AP event plays
-            var morganEvent = farmEvents[oldMorganRule];
-            var applesEvent = farmhouseEvents[oldApplesRule];
-            farmEvents.Remove(oldMorganRule);
-            farmhouseEvents.Remove(oldApplesRule);
-            farmEvents[newMorganRule] = morganEvent;
-            farmhouseEvents[newApplesRule] = applesEvent;
-        }
-
-        // Otherwise, we should just lock the events out of being seen at all and simply toggled by eventSeen.
-        public static void ReplaceLockedCutscenes()
-        {
-            foreach (var (eventMapName, eventKeys) in WarpKeys)
-            {
-                var mapName = eventMapName;
-                if (mapName.Contains("FarmHouse"))
-                {
-                    mapName = "FarmHouse";
-                }
-
-                if (mapName.Contains("Custom_AdventurerSummit"))
-                {
-                    mapName = "Custom_AdventurerSummit";
-                }
-
-                var currentMapEventData = Game1.content.Load<Dictionary<string, string>>("Data\\Events\\" + mapName);
-                foreach (var eventKey in eventKeys)
-                {
-                    var eventID = eventKey.Split("/")[0];
-                    // Sometimes, CP has not added the cutscene to the event list yet due to its dynamic adding methods...
-                    if (!currentMapEventData.ContainsKey(eventKey))
-                    {
-                        // ... so just add a dummy event if that's the case to make sure its locked and move on to the next event.
-                        currentMapEventData[eventKey] = DUMMY_EVENT_DATA;
-                    }
-
-                    // Everything exists now, so just make the requirement for the event itself.
-                    var newEventKey = eventKey + "/e " + eventID;
-                    var eventData = currentMapEventData[eventKey];
-                    currentMapEventData.Remove(eventKey);
-                    currentMapEventData[newEventKey] = eventData;
-                }
-            }
-        }
 
         // Railroad Boulder Special Order won't load if Iridium Bomb is sent early, so we duplicate it so the player gets it.
         private static void AppendFakeClintBoulderSpecialOrderKey()
