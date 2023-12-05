@@ -19,9 +19,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             ToolInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             ScytheInjections.Initialize(monitor, locationChecker);
             FishingRodInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
-            CommunityCenterInjections.Initialize(monitor, archipelago, locationChecker);
             var bundleReader = new BundleReader();
-            JunimoNoteMenuInjections.Initialize(monitor, modHelper, archipelago, bundleReader, locationChecker);
+            CommunityCenterInjections.Initialize(monitor, archipelago, locationChecker, bundleReader);
+            JunimoNoteMenuInjections.Initialize(monitor, modHelper, archipelago, locationChecker, bundleReader);
             MineshaftInjections.Initialize(monitor, archipelago, locationChecker);
             SkillInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             QuestInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
