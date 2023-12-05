@@ -213,7 +213,8 @@ namespace StardewArchipelago
             _itemPatcher = new ItemPatcher(Monitor, _helper, _harmony, _archipelago);
             _goalManager = new GoalManager(Monitor, _helper, _harmony, _archipelago, _locationChecker);
             _entranceManager = new EntranceManager(Monitor);
-            _logicPatcher = new RandomizedLogicPatcher(Monitor, _helper, _harmony, _archipelago, _locationChecker, _stardewItemManager, _entranceManager);
+            var shopStockGenerator = new ShopStockGenerator(Monitor, _helper, _archipelago, _locationChecker);
+            _logicPatcher = new RandomizedLogicPatcher(Monitor, _helper, _harmony, _archipelago, _locationChecker, _stardewItemManager, _entranceManager, shopStockGenerator);
             _jojaDisabler = new JojaDisabler(Monitor, _helper, _harmony);
             _seasonsRandomizer = new SeasonsRandomizer(Monitor, _helper, _archipelago, State);
             _appearanceRandomizer = new AppearanceRandomizer(Monitor, _archipelago);
@@ -253,7 +254,7 @@ namespace StardewArchipelago
             _mailPatcher = new MailPatcher(Monitor, _harmony, _archipelago, _locationChecker, new LetterActions(_helper, _mail, _archipelago, weaponsManager, _itemManager.TrapManager));
             var bundlesManager = new BundlesManager(_helper, _stardewItemManager, _archipelago.SlotData.BundlesData);
             bundlesManager.ReplaceAllBundles();
-            _locationsPatcher = new LocationPatcher(Monitor, _helper, _harmony, _archipelago, State, _locationChecker, _stardewItemManager, weaponsManager);
+            _locationsPatcher = new LocationPatcher(Monitor, _helper, _harmony, _archipelago, State, _locationChecker, _stardewItemManager, weaponsManager, shopStockGenerator);
             _chatForwarder.ListenToChatMessages();
             _giftHandler.Initialize(Monitor, _archipelago, _stardewItemManager, _mail);
             _logicPatcher.PatchAllGameLogic();
