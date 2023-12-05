@@ -1,4 +1,5 @@
 ﻿using StardewArchipelago.Archipelago;
+using StardewArchipelago.Goals;
 using StardewArchipelago.Locations.Festival;
 using StardewModdingAPI;
 using StardewArchipelago.Stardew;
@@ -20,6 +21,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             ScytheInjections.Initialize(monitor, locationChecker);
             FishingRodInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             var bundleReader = new BundleReader();
+            GoalCodeInjection.Initialize(monitor, modHelper, archipelago, locationChecker, bundleReader);
             CommunityCenterInjections.Initialize(monitor, archipelago, locationChecker, bundleReader);
             JunimoNoteMenuInjections.Initialize(monitor, modHelper, archipelago, locationChecker, bundleReader);
             MineshaftInjections.Initialize(monitor, archipelago, locationChecker);

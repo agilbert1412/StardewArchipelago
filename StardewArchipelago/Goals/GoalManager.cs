@@ -2,6 +2,7 @@
 using HarmonyLib;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Locations;
+using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
@@ -24,7 +25,6 @@ namespace StardewArchipelago.Goals
             _harmony = harmony;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
-            GoalCodeInjection.Initialize(_monitor, _modHelper, _archipelago, _locationChecker);
         }
 
         public void CheckGoalCompletion()
