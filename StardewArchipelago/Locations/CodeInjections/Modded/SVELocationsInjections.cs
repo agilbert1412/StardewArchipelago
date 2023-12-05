@@ -63,7 +63,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             { "FarmHouseOutpostRune", new[] { "908078/e 908072/t 600 2400" } }, // Unlocking Galmoran Outpost
             { "Backwoods", new[] { "908072/e 908071" } }, // Unlocking Wizard Rune
             {
-                "Custom_AdventurerSummit_Runes", new[]
+                "AdventureGuild", new[]
                 {
                     "908073/e 908072/z winter/t 600 1900/w sunny", "908073/e 908072/z winter/t 1910 2400/w sunny",
                     "908073/e 908072/z winter/w rainy", "908073/e 908072/z spring/z summer/z fall"
@@ -74,7 +74,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             { "Custom_JunimoWoods", new[] { "908077/e 908072" } }, // Unlocking Junimo Rune
             { "Town", new[] { "3691371" } }, // The initializer for Scarlett to be a villager.
             // Event where Marlon gives the player a second Rusty Key.
-            { "Custom_AdventurerSummit_MarlonAltKeyEvent", new[] { "1090501/e 1000034/k 1090502/f MarlonFay 1250", "1090501/e 1000034/k 1090502/b 1"}}
+            { "Custom_AdventurerSummit", new[] { "1090501/e 1000034/k 1090502/f MarlonFay 1250", "1090501/e 1000034/k 1090502/b 1"}}
         };
 
         public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker, ShopReplacer shopReplacer)
