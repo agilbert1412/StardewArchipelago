@@ -1,5 +1,8 @@
 ﻿using System;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants;
+using StardewArchipelago.GameModifications;
+using StardewArchipelago.GameModifications.Modded;
 using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Items.Traps;
 using StardewArchipelago.Items.Unlocks;
@@ -18,11 +21,15 @@ namespace StardewArchipelago.Items
         private UnlockManager _unlockManager;
         private TrapManager _trapManager;
 
+        // When More mods start to need name mapping, we can make a generic version of this
+        private ArchaeologyNameMapper _nameMapper;
+
         public ItemParser(IModHelper helper, ArchipelagoClient archipelago, StardewItemManager itemManager, TileChooser tileChooser)
         {
             _itemManager = itemManager;
             _unlockManager = new UnlockManager(archipelago);
             _trapManager = new TrapManager(helper, archipelago, tileChooser);
+            _nameMapper = new ArchaeologyNameMapper();
         }
 
         public TrapManager TrapManager => _trapManager;
@@ -68,7 +75,11 @@ namespace StardewArchipelago.Items
 
             if (receivedItem.ItemName.EndsWith(RECIPE_SUFFIX))
             {
-                var itemOfRecipe = receivedItem.ItemName.Substring(0, receivedItem.ItemName.Length - RECIPE_SUFFIX.Length);
+                var itemOfRecipe = receivedItem.ItemName[..^RECIPE_SUFFIX.Length];
+                if (_nameMapper.RecipeNeedsMapping(itemOfRecipe))
+                {
+                    return new LetterActionAttachment(receivedItem, LetterActionsKeys.LearnSpecialCraftingRecipe, itemOfRecipe);
+                }
                 return _itemManager.GetRecipeByName(itemOfRecipe).GetAsLetter(receivedItem);
             }
 

@@ -4,6 +4,7 @@ using System.Linq;
 using Archipelago.MultiClient.Net.Models;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
@@ -46,6 +47,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 Utility.AddStock(saloonStock, new Object(Vector2.Zero, 224, int.MaxValue));
                 Utility.AddStock(saloonStock, new Object(Vector2.Zero, 206, int.MaxValue));
                 Utility.AddStock(saloonStock, new Object(Vector2.Zero, 395, int.MaxValue));
+                AddModdedRecipesToStock(saloonStock);
 
                 var myActiveHints = _archipelago.GetMyActiveHints();
                 AddArchipelagoRecipesToSaloonStock(saloonStock, myActiveHints);
@@ -69,6 +71,24 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 _monitor.Log($"Failed in {nameof(GetSaloonStock_ReplaceRecipesWithChefsanityChecks_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
             }
+        }
+
+        private static void AddModdedRecipesToStock(Dictionary<ISalable, int[]> saloonStock)
+        {
+            AddSVERecipesToStock(saloonStock);
+        }
+
+        private static void AddSVERecipesToStock(Dictionary<ISalable, int[]> saloonStock)
+        {
+            if (!_archipelago.SlotData.Mods.HasMod(ModNames.SVE))
+            {
+                return;
+            }
+
+            var objectData = Game1.content.Load<Dictionary<int, string>>("Data\\ObjectInformation");
+            var chickenEntry = objectData.FirstOrDefault(x => x.Value.Contains("Grampleton Orange Chicken"));
+            var chickenID = chickenEntry.Key;
+            Utility.AddStock(saloonStock, new Object(Vector2.Zero, chickenID, int.MaxValue));
         }
 
         // public override bool checkAction(Location tileLocation, xTile.Dimensions.Rectangle viewport, Farmer who)
@@ -321,7 +341,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 AddArchipelagoCookingRecipeItem(saloonStock, "Cookies", 300, myActiveHints);
             }
-
             AddArchipelagoCookingRecipeItem(saloonStock, "Triple Shot Espresso", 5000, myActiveHints);
         }
 
@@ -343,7 +362,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 return;
             }
-
+          
             AddArchipelagoRecipeItem(stock, location, location, moneyPrice, myActiveHints, itemPriceId, itemPriceAmount);
         }
 

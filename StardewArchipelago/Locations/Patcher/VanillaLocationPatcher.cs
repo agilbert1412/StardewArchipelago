@@ -323,16 +323,6 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void ReplaceSpecialOrdersWithChecks()
         {
-            if (_archipelago.SlotData.SpecialOrderLocations == SpecialOrderLocations.Disabled)
-            {
-                return;
-            }
-
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(SpecialOrder), nameof(SpecialOrder.IsSpecialOrdersBoardUnlocked)),
-                prefix: new HarmonyMethod(typeof(SpecialOrderInjections), nameof(SpecialOrderInjections.IsSpecialOrdersBoardUnlocked_UnlockBasedOnApItem_Prefix))
-            );
-
             _harmony.Patch(
                 original: AccessTools.Method(typeof(SpecialOrder), nameof(SpecialOrder.GetSpecialOrder)),
                 postfix: new HarmonyMethod(typeof(SpecialOrderInjections), nameof(SpecialOrderInjections.GetSpecialOrder_ArchipelagoReward_Postfix))
@@ -348,9 +338,19 @@ namespace StardewArchipelago.Locations.Patcher
                 prefix: new HarmonyMethod(typeof(SpecialOrderInjections), nameof(SpecialOrderInjections.SetDuration_UseCorrectDateWithSeasonRandomizer_Prefix))
             );
 
+            if (_archipelago.SlotData.SpecialOrderLocations == SpecialOrderLocations.Disabled)
+            {
+                return;
+            }
+
             _harmony.Patch(
                 original: AccessTools.Method(typeof(SpecialOrder), nameof(SpecialOrder.UpdateAvailableSpecialOrders)),
                 prefix: new HarmonyMethod(typeof(SpecialOrderInjections), nameof(SpecialOrderInjections.UpdateAvailableSpecialOrders_ChangeFrequencyToBeLessRng_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(SpecialOrder), nameof(SpecialOrder.IsSpecialOrdersBoardUnlocked)),
+                prefix: new HarmonyMethod(typeof(SpecialOrderInjections), nameof(SpecialOrderInjections.IsSpecialOrdersBoardUnlocked_UnlockBasedOnApItem_Prefix))
             );
         }
 

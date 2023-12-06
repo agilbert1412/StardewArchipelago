@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Goals;
+using StardewArchipelago.Locations.Modded.SVE;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Menus;
 using xTile.Dimensions;
+using Bundle = StardewArchipelago.Stardew.Bundle;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.CC
 {
@@ -25,12 +27,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.CC
         private static IMonitor _monitor;
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
+        private static FriendshipReleaser _friendshipReleaser;
 
-        public static void Initialize(IMonitor monitor, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(IMonitor monitor, ArchipelagoClient archipelago, LocationChecker locationChecker, BundleReader bundleReader)
         {
             _monitor = monitor;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
+            _friendshipReleaser = new FriendshipReleaser(locationChecker, bundleReader);
         }
 
         public static bool DoAreaCompleteReward_AreaLocations_Prefix(CommunityCenter __instance, int whichArea)
@@ -77,6 +81,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.CC
                 }
 
                 _locationChecker.AddCheckedLocation(AreaAPLocationName);
+                _friendshipReleaser.ReleaseMorrisHeartsIfNeeded();
                 GoalCodeInjection.CheckCommunityCenterGoalCompletion();
 
                 return false; // don't run original logic

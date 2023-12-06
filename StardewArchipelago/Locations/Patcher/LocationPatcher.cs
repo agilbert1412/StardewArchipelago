@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using HarmonyLib;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.GameModifications;
 using StardewArchipelago.Locations.CodeInjections.Initializers;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
 using StardewArchipelago.Serialization;
@@ -13,9 +14,9 @@ namespace StardewArchipelago.Locations.Patcher
     {
         private List<ILocationPatcher> _patchers;
 
-        public LocationPatcher(IMonitor monitor, IModHelper modHelper, Harmony harmony, ArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, StardewItemManager itemManager, WeaponsManager weaponsManager)
+        public LocationPatcher(IMonitor monitor, IModHelper modHelper, Harmony harmony, ArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, StardewItemManager itemManager, WeaponsManager weaponsManager, ShopStockGenerator shopStockGenerator)
         {
-            CodeInjectionInitializer.Initialize(monitor, modHelper, archipelago, state, locationChecker, itemManager, weaponsManager);
+            CodeInjectionInitializer.Initialize(monitor, modHelper, archipelago, state, locationChecker, itemManager, weaponsManager, shopStockGenerator);
             _patchers = new List<ILocationPatcher>();
             _patchers.Add(new VanillaLocationPatcher(monitor, modHelper, harmony, archipelago, locationChecker));
             if (archipelago.SlotData.Mods.IsModded)

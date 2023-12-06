@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Archipelago.MultiClient.Net.Models;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
 using Object = StardewValley.Object;
+using StardewArchipelago.GameModifications.Modded;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -40,15 +42,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private static IModHelper _helper;
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
-        private static StardewItemManager _itemManager;
+        private static ArchaeologyNameMapper _nameMapper;
 
-        public static void Initialize(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager itemManager)
+        public static void Initialize(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             _monitor = monitor;
             _helper = helper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
-            _itemManager = itemManager;
+            _nameMapper = new ArchaeologyNameMapper();
         }
 
         // public void checkForCraftingAchievements()
@@ -63,8 +65,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     {
                         continue;
                     }
+                    var recipeName = _nameMapper.GetEnglishName(recipe); //Archaeology names are iffy
 
-                    var location = $"{CRAFTING_LOCATION_PREFIX}{recipe}";
+                    var location = $"{CRAFTING_LOCATION_PREFIX}{recipeName}";
                     _locationChecker.AddCheckedLocation(location);
                 }
                 

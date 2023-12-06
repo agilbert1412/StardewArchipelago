@@ -16,6 +16,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
 
         private readonly IMonitor _monitor;
         private readonly EquivalentWarps _equivalentAreas;
+        private readonly ModEntranceManager _modEntranceManager;
 
         private Dictionary<string, string> _modifiedEntrances;
         private HashSet<string> _checkedEntrancesToday;
@@ -25,6 +26,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
         {
             _monitor = monitor;
             _equivalentAreas = new EquivalentWarps();
+            _modEntranceManager = new ModEntranceManager();
             generatedWarps = new Dictionary<string, WarpRequest>(StringComparer.OrdinalIgnoreCase);
         }
 
@@ -63,6 +65,16 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             if (slotData.EntranceRandomization == EntranceRandomization.Disabled)
             {
                 return;
+            }
+
+            foreach (var (locationName, locationAlias)  in _modEntranceManager.GetModLocationAliases(slotData))
+            {
+                _locationAliases[locationName] = locationAlias;
+            }
+            
+            foreach( var kvp in _aliasesRemoveSpaces) // to keep the 's and space rules at the bottom
+            {
+                _locationAliases.Add(kvp.Key, kvp.Value);
             }
 
             foreach (var (originalEntrance, replacementEntrance) in slotData.ModifiedEntrances)
@@ -146,12 +158,14 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             var defaultLocationRequestName = _equivalentAreas.GetDefaultEquivalentEntrance(locationRequestName);
             targetPosition = targetPosition.CheckSpecialVolcanoEdgeCaseWarp(defaultLocationRequestName);
             var key = GetKeys(defaultCurrentLocationName, defaultLocationRequestName, targetPosition);
+            // return false;
             if (!TryGetModifiedWarpName(key, out var desiredWarpName))
             {
                 return false;
             }
+            
+            var correctDesiredWarpName =_equivalentAreas.GetCorrectEquivalentEntrance(desiredWarpName);
 
-            var correctDesiredWarpName = _equivalentAreas.GetCorrectEquivalentEntrance(desiredWarpName);
             if (_checkedEntrancesToday.Contains(correctDesiredWarpName))
             {
                 if (generatedWarps.ContainsKey(correctDesiredWarpName))
@@ -279,7 +293,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             }
 
             var modifiedString = TurnAliased(key, _locationAliases);
-
+            //modifiedString = ModTurnAliased(key, modifiedString);
             return modifiedString;
         }
 
@@ -307,7 +321,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "ScienceHouse|6|24 to SebastianRoom", "ScienceHouse to SebastianRoom" }, // LockedDoorWarp 6 24 ScienceHouse 900 2000S–
         };
 
-        private static readonly Dictionary<string, string> _locationAliases = new()
+        private Dictionary<string, string> _locationAliases = new()
         {
             { "Mayor's Manor", "ManorHouse" },
             { "Pierre's General Store", "SeedShop" },
@@ -321,7 +335,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Bus Tunnel", "Tunnel" },
             { "Carpenter Shop", "ScienceHouse|6|24" }, // LockedDoorWarp 6 24 ScienceHouse 900 2000S–
             { "Maru's Room", "ScienceHouse|3|8" }, // LockedDoorWarp 3 8 ScienceHouse 900 2000 Maru 500N
-            { "Adventurer", "Adventure" },
+            { "Adventurer's Guild", "AdventureGuild" },
             { "Willy's Fish Shop", "FishShop" },
             { "Museum", "ArchaeologyHouse" },
             { "Wizard Basement", "WizardHouseBasement"},
@@ -349,17 +363,18 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Professor Snail Cave", "IslandNorthCave1"},
             { "Qi Walnut Room", "QiNutRoom" },
             { "Mutant Bug Lair", "BugLand"},
-            { "Eugene's Garden", "Custom_EugeneNPC_EugeneHouse" },
-            { "Eugene's Bedroom", "Custom_EugeneNPC_EugeneRoom" },
-            { "Deep Woods House", "DeepWoodsMaxHouse" },
-            { "Alec's Pet Shop", "Custom_AlecsPetShop" },
-            { "Alec's Bedroom", "Custom_AlecsRoom" },
-            { "Juna's Cave", "Custom_JunaNPC_JunaCave" },
-            { "Jasper's Bedroom", "Custom_LK_Museum2" },
-            { "Ayeisha's Mail Van", "Custom_AyeishaVanRoad" },
-            { "Yoba's Clearing", "Custom_Woods3" },
+        };
+
+        private Dictionary<string, string> _aliasesRemoveSpaces = new()
+        {
             { "'s", "" },
             { " ", "" },
+        };
+
+        private static readonly Dictionary<string, Dictionary<string,string>> _modifiedAliases = new()
+        {
+            { "Stardew Valley Expanded", new(){{"WizardHouseBasement", "Custom_WizardBasement"}}
+            }
         };
     }
 

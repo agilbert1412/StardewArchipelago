@@ -133,10 +133,4 @@
     <Folder Include="Test\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="ExcavationSkill">
-      <HintPath>..\..\..\..\Programs\Steam\steamapps\common\Stardew Valley\Mods\ExcavationSkill\ExcavationSkill.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
 </Project>

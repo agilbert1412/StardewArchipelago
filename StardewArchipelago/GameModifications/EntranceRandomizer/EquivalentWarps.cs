@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using StardewValley;
 
@@ -13,15 +13,19 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
         private const string trailerBig = "Trailer_Big";
         private const string beach = "Beach";
         private const string beachNightMarket = "BeachNightMarket";
+        private const string grandpaShedRuins = "Custom_GrandpasShedRuins";
+        private const string grandpaShedFinish = "Custom_GrandpasShed";
         private static string[] _jojaMartLocations = { jojaMart, abandonedJojaMart, movieTheater };
         private static string[] _trailerLocations = { trailer, trailerBig };
         private static string[] _beachLocations = { beach, beachNightMarket };
+        private static string[] _grandpaShedLocations = { grandpaShedRuins, grandpaShedFinish };
 
         public List<string[]> EquivalentAreas = new()
         {
             _jojaMartLocations,
             _trailerLocations,
             _beachLocations,
+            _grandpaShedLocations,
         };
 
         public EquivalentWarps()
@@ -55,6 +59,11 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
                 return beach;
             }
 
+            if (IsGrandpaShed(entrance, out _))
+            {
+                return grandpaShedRuins;
+            }
+
             return entrance;
         }
 
@@ -83,6 +92,11 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             if (IsBeach(entrance, out var beachCorrectEntrance))
             {
                 return beachCorrectEntrance;
+            }
+
+            if (IsGrandpaShed(entrance, out var shedCorrectEntrance))
+            {
+                return shedCorrectEntrance;
             }
 
             return entrance;
@@ -157,6 +171,29 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
                 }
 
                 correctArea = area.Replace(beachLocations, beach);
+                return true;
+            }
+
+            correctArea = area;
+            return false;
+        }
+
+        private bool IsGrandpaShed(string area, out string correctArea)
+        {
+            foreach (var shedLocations in _grandpaShedLocations)
+            {
+                if (!area.Equals(shedLocations, StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                if (Game1.MasterPlayer.mailReceived.Contains("ShedRepaired"))
+                {
+                    correctArea = area.Replace(shedLocations, grandpaShedFinish);
+                    return true;
+                }
+
+                correctArea = area.Replace(shedLocations, grandpaShedRuins);
                 return true;
             }
 

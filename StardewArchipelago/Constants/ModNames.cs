@@ -23,5 +23,8 @@
         public const string TRACTOR = "Tractor Mod";
         public const string WELLWICK = "'Prophet' Wellwick";
         public const string YOBA = "Custom NPC - Yoba";
+        public const string SVE = "Stardew Valley Expanded";
+        public const string ALECTO = "Alecto the Witch";
+        public const string DISTANT_LANDS = "Distant Lands - Witch Swamp Overhaul";
     }
 }

@@ -24,16 +24,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.CC
         private static IMonitor _monitor;
         private static IModHelper _modHelper;
         private static ArchipelagoClient _archipelago;
-        private static BundleReader _bundleReader;
         private static LocationChecker _locationChecker;
+        private static BundleReader _bundleReader;
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, BundleReader bundleReader, LocationChecker locationChecker)
+        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker, BundleReader bundleReader)
         {
             _monitor = monitor;
             _modHelper = modHelper;
             _archipelago = archipelago;
-            _bundleReader = bundleReader;
             _locationChecker = locationChecker;
+            _bundleReader = bundleReader;
         }
 
         // public void checkForRewards()
