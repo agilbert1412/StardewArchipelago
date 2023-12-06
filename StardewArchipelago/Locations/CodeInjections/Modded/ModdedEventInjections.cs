@@ -13,10 +13,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
 {
     public static class ModdedEventInjections
     {
-        private static readonly Dictionary<string, string[]> Base_Events = new(){
+        private static readonly Dictionary<string, string[]> Base_Static_Events = new(){
 
         };
-        private static Dictionary<string, string[]> Total_Events = new(){
+        private static readonly Dictionary<string, string[]> Total_Static_Events = new(){
+
+        };
+        private static readonly Dictionary<string, string[]> Base_OnWarped_Events = new(){
+
+        };
+        public static Dictionary<string, string[]> Total_OnWarped_Events = new(){
 
         };
         private static readonly string RECIPE_SUFFIX = " Recipe";
@@ -46,68 +52,59 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             _archipelago = archipelago;
             _locationChecker = locationChecker;
             GenerateEventKeys();
-        }
-        
-        public static void InitializeSVEEvents()
-        {
-            ReplaceViewableCutscenes();
-            ReplaceLockedCutscenes();
-        }
-
-        // Some events we want to see, so this will let them play out, so we make up AP event scene requirements.
-        public static void ReplaceViewableCutscenes()
-        {
-            var farmEvents = Game1.content.Load<Dictionary<string, string>>("Data\\Events\\Farm");
-            var farmhouseEvents = Game1.content.Load<Dictionary<string, string>>("Data\\Events\\FarmHouse");
-            SVECutsceneInjections.SVE_ReplaceViewableCutscenes(farmEvents, farmhouseEvents);
+            ReplaceCutscenes(Total_Static_Events);
+            ReplaceCutscenes(Total_OnWarped_Events);
         }
 
         public static void GenerateEventKeys()
         {
-            foreach (var (eventMapName, eventKeys) in Base_Events)
+            foreach (var (eventMapName, eventKeys) in Base_OnWarped_Events)
             {
-                Total_Events[eventMapName] = eventKeys;
+                Total_OnWarped_Events[eventMapName] = eventKeys;
             }
-            foreach (var (eventMapName, eventKeys) in SVECutsceneInjections.SVE_Events)
+            foreach (var (eventMapName, eventKeys) in SVECutsceneInjections.SVE_OnWarped_Events)
             {
-                Total_Events[eventMapName] = eventKeys;
+                Total_OnWarped_Events[eventMapName] = eventKeys;
+            }
+            foreach (var (eventMapName, eventKeys) in Base_Static_Events)
+            {
+                Total_Static_Events[eventMapName] = eventKeys;
+            }
+            foreach (var (eventMapName, eventKeys) in SVECutsceneInjections.SVE_Static_Events)
+            {
+                Total_Static_Events[eventMapName] = eventKeys;
             }
         }
 
-        // Otherwise, we should just lock the events out of being seen at all and simply toggled by eventSeen.
-        public static void ReplaceLockedCutscenes()
+        // These events only require to load at initialization due to lack of "When" requirements from CP.
+        public static void ReplaceCutscenes(Dictionary<string, string[]> events)
         {
-            foreach (var (eventMapName, eventKeys) in Total_Events)
+            foreach (var (eventMapName, eventKeys) in events)
             {
-                var mapName = eventMapName;
-                if (mapName.Contains("FarmHouse"))
-                {
-                    mapName = "FarmHouse";
-                }
-
-                if (mapName.Contains("Custom_AdventurerSummit"))
-                {
-                    mapName = "Custom_AdventurerSummit";
-                }
-
+                var mapKey = eventMapName.Split("|");
+                var mapName = mapKey[0];
+                var eventID = mapKey[1];
                 var currentMapEventData = Game1.content.Load<Dictionary<string, string>>("Data\\Events\\" + mapName);
                 foreach (var eventKey in eventKeys)
                 {
-                    var eventID = eventKey.Split("/")[0];
-                    // Sometimes, CP has not added the cutscene to the event list yet due to its dynamic adding methods...
+                    
+                    var newEventKey = "";
+                    if (eventID == "")
+                        eventID = eventKey.Split("/")[0];
+                    // If CP does not add the event yet, continue.
                     if (!currentMapEventData.ContainsKey(eventKey))
                     {
                         continue;
                     }
-
-                    // Everything exists now, so just make the requirement for the event itself.
-                    var newEventKey = eventKey + "/e " + eventID;
+                    // Append self-reference as requirement, or AP oriented event key.
+                    newEventKey = eventKey + "/e " + eventID;
                     var eventData = currentMapEventData[eventKey];
                     currentMapEventData.Remove(eventKey);
                     currentMapEventData[newEventKey] = eventData;
                 }
             }
         }
+
         public static bool AddCookingRecipe_CheckForStrayRecipe_Prefix(Event __instance, GameLocation location, GameTime time, string[] split)
         {
             try

@@ -281,7 +281,7 @@ namespace StardewArchipelago
 
         private void OnWarped(object sender, WarpedEventArgs e)
         {
-            ModdedEventInjections.ReplaceLockedCutscenes();
+            ModdedEventInjections.ReplaceCutscenes(ModdedEventInjections.Total_OnWarped_Events);
         }
 
         private void ReadPersistentArchipelagoData()
