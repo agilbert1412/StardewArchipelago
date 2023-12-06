@@ -361,7 +361,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 return;
             }
-            
+          
             AddArchipelagoRecipeItem(stock, location, location, moneyPrice, myActiveHints, itemPriceId, itemPriceAmount);
         }
 

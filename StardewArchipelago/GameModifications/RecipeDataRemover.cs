@@ -1,55 +1,45 @@
 ﻿using System;
 using System.Linq;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Locations;
 using StardewModdingAPI;
 using StardewValley;
 
-namespace StardewArchipelago.Locations.CodeInjections.Vanilla
+namespace StardewArchipelago.GameModifications
 {
-    public static class RecipeDataInjections
+    public class RecipeDataRemover
     {
-        private static IMonitor _monitor;
-        private static IModHelper _helper;
-        private static ArchipelagoClient _archipelago;
-        private static LocationChecker _locationChecker;
+        private IMonitor _monitor;
+        private IModHelper _helper;
+        private ArchipelagoClient _archipelago;
 
-        public static void Initialize(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public RecipeDataRemover(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago)
         {
             _monitor = monitor;
             _helper = helper;
             _archipelago = archipelago;
-            _locationChecker = locationChecker;
         }
 
         // public static void InitShared()
-        public static void InitShared_RemoveSkillAndFriendshipLearnConditions_Postfix()
+        public void RemoveSkillAndFriendshipLearnConditions()
         {
-            try
-            {
-                RemoveCookingRecipeLearnConditions();
-                // RemoveCraftingRecipeLearnConditions();
-                return;
-            }
-            catch (Exception ex)
-            {
-                _monitor.Log($"Failed in {nameof(InitShared_RemoveSkillAndFriendshipLearnConditions_Postfix)}:\n{ex}", LogLevel.Error);
-                return;
-            }
+            RemoveCookingRecipeLearnConditions();
+            RemoveCraftingRecipeLearnConditions();
         }
 
-        private static void RemoveCookingRecipeLearnConditions()
+        private void RemoveCookingRecipeLearnConditions()
         {
             RemoveCookingRecipesSkillsLearnConditions();
             RemoveCookingRecipesFriendshipLearnConditions();
         }
 
-        private static void RemoveCraftingRecipeLearnConditions()
+        private void RemoveCraftingRecipeLearnConditions()
         {
             RemoveCraftingRecipesSkillsLearnConditions();
             RemoveCraftingRecipesFriendshipLearnConditions();
         }
 
-        private static void RemoveCookingRecipesSkillsLearnConditions()
+        private void RemoveCookingRecipesSkillsLearnConditions()
         {
             if (!_archipelago.SlotData.Chefsanity.HasFlag(Chefsanity.Skills))
             {
@@ -62,7 +52,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 var recipeFields = recipeData.Split("/");
                 var recipeUnlockCondition = recipeFields[3];
                 var unlockConditionParts = recipeUnlockCondition.Split(" ");
-                if (unlockConditionParts.Length < 2 || (unlockConditionParts.Length >= 3 && unlockConditionParts[0] != "s"))
+                if (unlockConditionParts.Length < 2 || unlockConditionParts.Length >= 3 && unlockConditionParts[0] != "s")
                 {
                     continue;
                 }
@@ -72,7 +62,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
         }
 
-        private static void RemoveCookingRecipesFriendshipLearnConditions()
+        private void RemoveCookingRecipesFriendshipLearnConditions()
         {
             if (!_archipelago.SlotData.Chefsanity.HasFlag(Chefsanity.Friendship))
             {
@@ -95,14 +85,24 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
         }
 
-        private static void RemoveCraftingRecipesSkillsLearnConditions()
+        private void RemoveCraftingRecipesSkillsLearnConditions()
         {
-            throw new NotImplementedException();
+            if (_archipelago.SlotData.Craftsanity == Craftsanity.None)
+            {
+                return;
+            }
+
+            // This is not necessary, we let players learn recipes through level ups
         }
 
-        private static void RemoveCraftingRecipesFriendshipLearnConditions()
+        private void RemoveCraftingRecipesFriendshipLearnConditions()
         {
-            throw new NotImplementedException();
+            if (_archipelago.SlotData.Craftsanity == Craftsanity.None)
+            {
+                return;
+            }
+
+            // This is not necessary, we let players learn recipes through friendships
         }
     }
 }
