@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Runtime;
 using HarmonyLib;
 using Microsoft.Xna.Framework.Content;
 using StardewArchipelago.Archipelago;
@@ -52,6 +53,7 @@ namespace StardewArchipelago.GameModifications
             WorldChangeEventInjections.Initialize(monitor);
             CropInjections.Initialize(monitor, archipelago, stardewItemManager);
             VoidMayoInjections.Initialize(monitor);
+            LegendaryFishInjections.Initialize(monitor);
             KentInjections.Initialize(monitor, archipelago);
             GoldenEggInjections.Initialize(monitor, archipelago);
             GoldenClockInjections.Initialize(monitor, archipelago);
@@ -84,6 +86,7 @@ namespace StardewArchipelago.GameModifications
             PatchKent();
             PatchGoldenEgg();
             PatchGoldenClock();
+            PatchLegendaryFish();
             PatchRecipes();
             _startingResources.GivePlayerStartingResources();
 
@@ -477,6 +480,30 @@ namespace StardewArchipelago.GameModifications
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Building), nameof(Building.doAction)),
                 postfix: new HarmonyMethod(typeof(GoldenClockInjections), nameof(GoldenClockInjections.DoAction_GoldenClockIncreaseTime_Postfix))
+            );
+        }
+
+        private void PatchLegendaryFish()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Beach), nameof(Beach.getFish)),
+                prefix: new HarmonyMethod(typeof(LegendaryFishInjections), nameof(LegendaryFishInjections.GetFish_CrimsonfishAtBeach_PreFix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Town), nameof(Town.getFish)),
+                prefix: new HarmonyMethod(typeof(LegendaryFishInjections), nameof(LegendaryFishInjections.GetFish_AnglerInTown_PreFix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Mountain), nameof(Mountain.getFish)),
+                prefix: new HarmonyMethod(typeof(LegendaryFishInjections), nameof(LegendaryFishInjections.GetFish_LegendAtMountain_PreFix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Forest), nameof(Forest.getFish)),
+                prefix: new HarmonyMethod(typeof(LegendaryFishInjections), nameof(LegendaryFishInjections.GetFish_GlacierfishInForest_PreFix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Sewer), nameof(Sewer.getFish)),
+                prefix: new HarmonyMethod(typeof(LegendaryFishInjections), nameof(LegendaryFishInjections.GetFish_MutantCarpInSewer_PreFix))
             );
         }
 
