@@ -59,14 +59,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             try
             {
                 var craftedRecipes = Game1.player.craftingRecipes;
-                string recipeName;
                 foreach (var recipe in craftedRecipes.Keys)
                 {
                     if (craftedRecipes[recipe] <= 0)
                     {
                         continue;
                     }
-                    recipeName = _nameMapper.GetEnglishName(recipe); //Archaeology names are iffy
+                    var recipeName = _nameMapper.GetEnglishName(recipe); //Archaeology names are iffy
 
                     var location = $"{CRAFTING_LOCATION_PREFIX}{recipeName}";
                     _locationChecker.AddCheckedLocation(location);
