@@ -142,11 +142,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             try
             {
-                if (_archipelago.SlotData.SpecialOrderLocations == SpecialOrderLocations.Disabled)
-                {
-                    return true; //run original logic;
-                }
-
                 UpdateAvailableSpecialOrdersBasedOnApState(force_refresh);
                 return false; // don't run original logic;
             }

@@ -37,10 +37,10 @@ namespace StardewArchipelago.Locations.Patcher
             AddMagicModInjections();
             AddSkullCavernElevatorModInjections();
             AddSVEModInjections();
-            AddModdedEventInjections();
+            AddDistantLandsEventInjections();
         }
 
-        private void AddModdedEventInjections()
+        private void AddDistantLandsEventInjections()
         {
             if (!_modsManager.HasMod(ModNames.DISTANT_LANDS))
             {
