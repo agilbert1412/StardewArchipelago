@@ -35,6 +35,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
             _modHelper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
+            AppendFakeClintBoulderSpecialOrderKey();
         }
         //Format is Map|NewEventID(Optional)|Name
         public static readonly Dictionary<string, string[]> SVE_Static_Events = new()
