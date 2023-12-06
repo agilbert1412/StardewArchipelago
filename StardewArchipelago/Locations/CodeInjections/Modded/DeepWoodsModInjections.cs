@@ -118,7 +118,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 lowestLevelReachedField.SetValue(10 * _archipelago.GetReceivedItemCount(WOODS_OBELISK_SIGILS));
                 var levelIndexedAt1 = level - 1;
 
-                if (levelIndexedAt1 % LEVEL_STEP != 0 | levelIndexedAt1 == 0)
+                if (levelIndexedAt1 % LEVEL_STEP != 0 || levelIndexedAt1 == 0)
                 {
                     return;
                 }
