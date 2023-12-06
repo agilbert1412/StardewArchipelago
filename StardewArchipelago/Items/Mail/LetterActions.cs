@@ -15,7 +15,7 @@ using Object = StardewValley.Object;
 using StardewArchipelago.Items.Unlocks;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
 using StardewArchipelago.Stardew;
-using StardewArchipelago.GameModifications;
+using StardewArchipelago.GameModifications.Modded;
 
 namespace StardewArchipelago.Items.Mail
 {
@@ -699,10 +699,13 @@ namespace StardewArchipelago.Items.Mail
         {
             Game1.player.cookingRecipes.Add(recipeItemName.Replace("_", " "), 0);
         }
+
         private void LearnSpecialCraftingRecipe(string recipeItemName)
         {
-            var actualCraftingName = ModArchaeologyNameFixer.EnglishDisplayNametoName(recipeItemName.Replace("_", " "));
-            Game1.player.craftingRecipes.Add(actualCraftingName, 0);
+            // When more mods start to need name mapping, we can make a generic version of this
+            var nameMapper = new ArchaeologyNameMapper();
+            var internalName = nameMapper.GetInternalName(recipeItemName.Replace("_", " "));
+            Game1.player.craftingRecipes.Add(internalName, 0);
         }
     }
 }

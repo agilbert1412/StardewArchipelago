@@ -4,13 +4,16 @@ using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
 using StardewValley;
-using StardewArchipelago.GameModifications;
 using Object = StardewValley.Object;
+using StardewArchipelago.GameModifications.Modded;
 
 namespace StardewArchipelago.Stardew
 {
     public class StardewItemManager
     {
+        // When More mods start to need name mapping, we can make a generic version of this
+        private ArchaeologyNameMapper _nameMapper;
+
         private Dictionary<int, StardewObject> _objectsById;
         private Dictionary<string, StardewObject> _objectsByName;
         private Dictionary<int, BigCraftable> _bigCraftablesById;
@@ -49,6 +52,7 @@ namespace StardewArchipelago.Stardew
 
         public StardewItemManager()
         {
+            _nameMapper = new ArchaeologyNameMapper();
             InitializeData();
         }
 
@@ -221,7 +225,7 @@ namespace StardewArchipelago.Stardew
 
         public StardewRecipe GetRecipeByName(string recipeName)
         {
-            recipeName = ModArchaeologyNameFixer.EnglishDisplayNametoName(recipeName);
+            recipeName = _nameMapper.GetInternalName(recipeName);
             if (_cookingRecipesByName.ContainsKey(recipeName))
             {
                 return _cookingRecipesByName[recipeName];
