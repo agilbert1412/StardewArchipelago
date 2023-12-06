@@ -31,7 +31,7 @@ namespace StardewArchipelago
     {
         public static ModEntry Instance;
 
-        private const string CONNECT_SYNTAX = "Syntax: connect ip:port slot password";
+        private const string CONNECT_SYNTAX = "Syntax: connect_override ip:port slot password";
         private const string AP_DATA_KEY = "ArchipelagoData";
         private const string AP_EXPERIENCE_KEY = "ArchipelagoSkillsExperience";
         private const string AP_FRIENDSHIP_KEY = "ArchipelagoFriendshipPoints";
