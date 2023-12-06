@@ -48,6 +48,7 @@ namespace StardewArchipelago.Locations.Patcher
             {
                 return;
             }
+
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Event), nameof(Event.skipEvent)),
                 prefix: new HarmonyMethod(typeof(ModdedEventInjections), nameof(ModdedEventInjections.SkipEvent_ReplaceRecipe_Prefix))
