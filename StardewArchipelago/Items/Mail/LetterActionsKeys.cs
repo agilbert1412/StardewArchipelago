@@ -40,6 +40,5 @@
         public const string LearnSpecialCraftingRecipe = "LearnSpecialCraftingRecipe"; // used if the item's name has underscores
         public const string MovieTheater = "Repair Movie Theater";
         public const string DiamondWand = "Diamond Wand";
-        public const string MorganInvitation = "Morgan's Schooling";
     }
 }
