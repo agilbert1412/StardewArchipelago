@@ -44,7 +44,7 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void AddModdedEventInjections()
         {
-            if (!_modsManager.HasMod(ModNames.DISTANT))
+            if (!_modsManager.HasMod(ModNames.DISTANT_LANDS))
             {
                 return;
             }

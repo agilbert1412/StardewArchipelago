@@ -54,7 +54,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
                 SVEShopInjections.Initialize(monitor, modHelper, archipelago, locationChecker, shopReplacer, shopStockGenerator);
             }
 
-            if (archipelago.SlotData.Mods.HasMod(ModNames.DISTANT)) // Only mod for now that needs it.
+            if (archipelago.SlotData.Mods.HasMod(ModNames.DISTANT_LANDS)) // Only mod for now that needs it.
             {
                 ModdedEventInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             }

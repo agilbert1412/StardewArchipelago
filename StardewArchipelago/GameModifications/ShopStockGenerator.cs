@@ -474,7 +474,7 @@ namespace StardewArchipelago.GameModifications
 
         private void AddSandyDistantLandsStock(Dictionary<ISalable, int[]> sandyStock)
         {
-            if (!_archipelago.SlotData.Mods.HasMod(ModNames.DISTANT))
+            if (!_archipelago.SlotData.Mods.HasMod(ModNames.DISTANT_LANDS))
             {
                 return;
             }
