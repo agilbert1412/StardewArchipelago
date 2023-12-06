@@ -16,9 +16,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
     public class SpecialOrderInjections
     {
-        private static string[] _vanillaSpecialOrderReward = new[]{ //Exists temporarily to avoid removing mail rewards
+        private static string[] _vanillaSpecialOrderReward = new[]
+        {
+            //Exists temporarily to avoid removing mail rewards
             "Grandpa's Shed", "Aurora Vineyard", "Monster Crops"
         };
+
         private static IMonitor _monitor;
         private static IModHelper _modHelper;
         private static ArchipelagoClient _archipelago;
@@ -139,10 +142,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             try
             {
-                if (_archipelago.SlotData.SpecialOrderLocations == SpecialOrderLocations.Disabled)
-            {
-                return true; //run original logic;
-            }
                 UpdateAvailableSpecialOrdersBasedOnApState(force_refresh);
                 return false; // don't run original logic;
             }
@@ -187,7 +186,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             AddTwoOrdersToBoard(specialOrdersForQi, hints, random);
         }
 
-        private static IEnumerable<KeyValuePair<string, SpecialOrderData>> FilterToSpecialOrdersThatCanBeStartedToday(Dictionary<string, SpecialOrderData> allSpecialOrdersData)
+        private static IEnumerable<KeyValuePair<string, SpecialOrderData>> FilterToSpecialOrdersThatCanBeStartedToday(
+            Dictionary<string, SpecialOrderData> allSpecialOrdersData)
         {
             var specialOrdersThatCanBeStartedToday = allSpecialOrdersData
                 .Where(order => !Game1.player.team.completedSpecialOrders.ContainsKey(order.Key) ||
@@ -195,7 +195,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 .Where(order => order.Value.Duration != "Month" || Game1.dayOfMonth <= 16)
                 .Where(order => CheckTags(order.Value.RequiredTags))
                 .Where(order => Game1.player.team.specialOrders.All(x => x.questKey.Value != order.Key))
-                .Where(order => !_archipelago.SlotData.ToolProgression.HasFlag(ToolProgression.Progressive) || !order.Key.StartsWith("Demetrius") || _archipelago.HasReceivedItem("Progressive Fishing Rod"));
+                .Where(order => !_archipelago.SlotData.ToolProgression.HasFlag(ToolProgression.Progressive) || !order.Key.StartsWith("Demetrius") ||
+                                _archipelago.HasReceivedItem("Progressive Fishing Rod"));
             return specialOrdersThatCanBeStartedToday;
         }
 
@@ -221,7 +222,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             return SpecialOrder.CheckTags(requiredTag);
         }
 
-        private static Dictionary<string, SpecialOrder> CreateSpecialOrderInstancesForType(IEnumerable<KeyValuePair<string, SpecialOrderData>> specialOrdersThatCanBeStartedToday, string orderType, Random random)
+        private static Dictionary<string, SpecialOrder> CreateSpecialOrderInstancesForType(
+            IEnumerable<KeyValuePair<string, SpecialOrderData>> specialOrdersThatCanBeStartedToday, string orderType, Random random)
         {
             var specialOrders = specialOrdersThatCanBeStartedToday
                 .Where(order => order.Value.OrderType == orderType)
@@ -253,6 +255,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 allOrdersOrdered.AddRange(specialOrdersNeverCompletedBefore);
             }
+
             if (allOrdersOrdered.Count < 2)
             {
                 allOrdersOrdered.AddRange(allSpecialOrders);
@@ -270,7 +273,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             var specialOrderStrings = _englishContentManager.Load<Dictionary<string, string>>("Strings\\SpecialOrderStrings");
             questNameKey = questNameKey.Trim();
             int startIndex;
-            string thisString;
             do
             {
                 startIndex = questNameKey.LastIndexOf('[');
@@ -278,17 +280,17 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 {
                     var num = questNameKey.IndexOf(']', startIndex);
                     if (num == -1)
+                    {
                         return questNameKey;
+                    }
+
                     var str1 = questNameKey.Substring(startIndex + 1, num - startIndex - 1);
-                    if (specialOrderStrings.ContainsKey(str1)) 
-                        thisString = specialOrderStrings[str1];
-                    else
-                        thisString = SpecialOrderNames.Mods[str1];
+                    var thisString = specialOrderStrings.ContainsKey(str1) ? specialOrderStrings[str1] : SpecialOrderNames.Mods[str1];
                     questNameKey = questNameKey.Remove(startIndex, num - startIndex + 1);
                     questNameKey = questNameKey.Insert(startIndex, thisString);
                 }
-            }
-            while (startIndex >= 0);
+            } while (startIndex >= 0);
+
             return questNameKey;
         }
     }

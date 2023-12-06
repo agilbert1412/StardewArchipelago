@@ -69,6 +69,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.CC
                         AreaAPLocationName = AP_LOCATION_BULLETIN_BOARD;
                         mailToSend = "apccBulletin";
                         break;
+                    case Area.AbandonedJojaMart:
+                        AreaAPLocationName = AP_LOCATION_ABANDONED_JOJA_MART;
+                        mailToSend = "apccMovieTheater";
+                        break;
                 }
 
                 if (!Game1.player.mailReceived.Contains(mailToSend))
@@ -114,13 +118,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.CC
                         __result = !Game1.player.hasOrWillReceiveMail("apccBulletin"); // _locationChecker.IsLocationNotChecked(AP_LOCATION_BULLETIN_BOARD);
                         return false; // don't run original logic
                     case Area.AbandonedJojaMart:
-                        if (Utility.HasAnyPlayerSeenEvent(191393))
-                        {
-                            __result = true;
-                            return false; // don't run original logic
-                        }
-
-                        break;
+                        __result = !Game1.player.hasOrWillReceiveMail("apccMovieTheater"); // _locationChecker.IsLocationNotChecked(AP_LOCATION_BULLETIN_BOARD);
+                        return false; // don't run original logic
                 }
                 __result = false;
                 return false; // don't run original logic

@@ -47,7 +47,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             CookingInjections.Initialize(monitor, archipelago, locationChecker, itemManager);
             QueenOfSauceInjections.Initialize(monitor, modHelper, archipelago, state, locationChecker, itemManager);
             RecipePurchaseInjections.Initialize(monitor, modHelper, archipelago, locationChecker, itemManager);
-            RecipeDataInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             RecipeLevelUpInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             RecipeFriendshipInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             CraftingInjections.Initialize(monitor, modHelper, archipelago, locationChecker);

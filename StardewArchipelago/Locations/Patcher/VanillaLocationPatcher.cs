@@ -324,11 +324,6 @@ namespace StardewArchipelago.Locations.Patcher
         private void ReplaceSpecialOrdersWithChecks()
         {
             _harmony.Patch(
-                original: AccessTools.Method(typeof(SpecialOrder), nameof(SpecialOrder.IsSpecialOrdersBoardUnlocked)),
-                prefix: new HarmonyMethod(typeof(SpecialOrderInjections), nameof(SpecialOrderInjections.IsSpecialOrdersBoardUnlocked_UnlockBasedOnApItem_Prefix))
-            );
-
-            _harmony.Patch(
                 original: AccessTools.Method(typeof(SpecialOrder), nameof(SpecialOrder.GetSpecialOrder)),
                 postfix: new HarmonyMethod(typeof(SpecialOrderInjections), nameof(SpecialOrderInjections.GetSpecialOrder_ArchipelagoReward_Postfix))
             );
@@ -343,9 +338,19 @@ namespace StardewArchipelago.Locations.Patcher
                 prefix: new HarmonyMethod(typeof(SpecialOrderInjections), nameof(SpecialOrderInjections.SetDuration_UseCorrectDateWithSeasonRandomizer_Prefix))
             );
 
+            if (_archipelago.SlotData.SpecialOrderLocations == SpecialOrderLocations.Disabled)
+            {
+                return;
+            }
+
             _harmony.Patch(
                 original: AccessTools.Method(typeof(SpecialOrder), nameof(SpecialOrder.UpdateAvailableSpecialOrders)),
                 prefix: new HarmonyMethod(typeof(SpecialOrderInjections), nameof(SpecialOrderInjections.UpdateAvailableSpecialOrders_ChangeFrequencyToBeLessRng_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(SpecialOrder), nameof(SpecialOrder.IsSpecialOrdersBoardUnlocked)),
+                prefix: new HarmonyMethod(typeof(SpecialOrderInjections), nameof(SpecialOrderInjections.IsSpecialOrdersBoardUnlocked_UnlockBasedOnApItem_Prefix))
             );
         }
 
@@ -882,11 +887,6 @@ namespace StardewArchipelago.Locations.Patcher
                     prefix: new HarmonyMethod(typeof(RecipePurchaseInjections), nameof(RecipePurchaseInjections.GetIslandMerchantTradeStock_ReplaceBananaPuddingWithChefsanityCheck_Prefix))
                 );
             }
-
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(CraftingRecipe), nameof(CraftingRecipe.InitShared)),
-                postfix: new HarmonyMethod(typeof(RecipeDataInjections), nameof(RecipeDataInjections.InitShared_RemoveSkillAndFriendshipLearnConditions_Postfix))
-            );
             
             _harmony.Patch(
                 original: AccessTools.Constructor(typeof(LevelUpMenu), new []{typeof(int), typeof(int)}),

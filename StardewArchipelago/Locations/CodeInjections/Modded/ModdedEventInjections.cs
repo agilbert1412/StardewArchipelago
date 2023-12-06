@@ -13,30 +13,41 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
 {
     public static class ModdedEventInjections
     {
-        private static readonly Dictionary<string, string[]> Base_Static_Events = new(){
+        private static readonly Dictionary<string, string[]> Base_Static_Events = new()
+        {
 
         };
-        private static readonly Dictionary<string, string[]> Total_Static_Events = new(){
+
+        private static readonly Dictionary<string, string[]> Total_Static_Events = new()
+        {
 
         };
-        private static readonly Dictionary<string, string[]> Base_OnWarped_Events = new(){
+
+        private static readonly Dictionary<string, string[]> Base_OnWarped_Events = new()
+        {
 
         };
-        public static Dictionary<string, string[]> Total_OnWarped_Events = new(){
+
+        public static Dictionary<string, string[]> Total_OnWarped_Events = new()
+        {
 
         };
+
         private static readonly string RECIPE_SUFFIX = " Recipe";
-        private static readonly Dictionary<int, string> eventCooking = new(){
-            {181091234, "Mushroom Kebab"},
-            {181091246, "Crayfish Soup"},
-            {181091247, "Pemmican"},
-            {181091261, "Void Mint Tea"}, //Alecto
-            {181091262, "Void Mint Tea"}, //Wizard
+
+        private static readonly Dictionary<int, string> eventCooking = new()
+        {
+            { 181091234, "Mushroom Kebab" },
+            { 181091246, "Crayfish Soup" },
+            { 181091247, "Pemmican" },
+            { 181091261, "Void Mint Tea" }, //Alecto
+            { 181091262, "Void Mint Tea" }, //Wizard
         };
 
-        private static readonly Dictionary<int, string> eventCrafting = new(){
-            {181091237, "Ginger Tincture"}, //Alecto
-            {1810912313, "Ginger Tincture"}, //Wizard
+        private static readonly Dictionary<int, string> eventCrafting = new()
+        {
+            { 181091237, "Ginger Tincture" }, //Alecto
+            { 1810912313, "Ginger Tincture" }, //Wizard
         };
 
         private static IMonitor _monitor;
@@ -62,14 +73,17 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             {
                 Total_OnWarped_Events[eventMapName] = eventKeys;
             }
+
             foreach (var (eventMapName, eventKeys) in SVECutsceneInjections.SVE_OnWarped_Events)
             {
                 Total_OnWarped_Events[eventMapName] = eventKeys;
             }
+
             foreach (var (eventMapName, eventKeys) in Base_Static_Events)
             {
                 Total_Static_Events[eventMapName] = eventKeys;
             }
+
             foreach (var (eventMapName, eventKeys) in SVECutsceneInjections.SVE_Static_Events)
             {
                 Total_Static_Events[eventMapName] = eventKeys;
@@ -87,7 +101,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 var currentMapEventData = Game1.content.Load<Dictionary<string, string>>("Data\\Events\\" + mapName);
                 foreach (var eventKey in eventKeys)
                 {
-                    
+
                     var newEventKey = "";
                     if (eventID == "")
                         eventID = eventKey.Split("/")[0];
@@ -96,6 +110,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                     {
                         continue;
                     }
+
                     // Append self-reference as requirement, or AP oriented event key.
                     newEventKey = eventKey + "/e " + eventID;
                     var eventData = currentMapEventData[eventKey];
@@ -157,6 +172,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 {
                     return true; // run original logic
                 }
+
                 var cookingEvent = cookingEvents.Contains(__instance.id);
                 SkipRecipeEventArchipelago(__instance, cookingEvent);
                 return false; // don't run original logic
@@ -217,6 +233,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 {
                     Game1.player.cookingRecipes.Remove(eventName);
                 }
+
                 return;
 
             }
@@ -232,6 +249,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 }
 
             }
+
             return;
         }
 
