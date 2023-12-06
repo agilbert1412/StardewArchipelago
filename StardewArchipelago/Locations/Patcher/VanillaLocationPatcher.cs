@@ -297,6 +297,11 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void ReplaceSpecialOrdersWithChecks()
         {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(SpecialOrder), nameof(SpecialOrder.SetDuration)),
+                prefix: new HarmonyMethod(typeof(SpecialOrderInjections), nameof(SpecialOrderInjections.SetDuration_UseCorrectDateWithSeasonRandomizer_Prefix))
+            );
+
             if (_archipelago.SlotData.SpecialOrderLocations == SpecialOrderLocations.Disabled)
             {
                 return;
@@ -315,11 +320,6 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony.Patch(
                 original: AccessTools.Method(typeof(SpecialOrder), nameof(SpecialOrder.CheckCompletion)),
                 postfix: new HarmonyMethod(typeof(SpecialOrderInjections), nameof(SpecialOrderInjections.CheckCompletion_ArchipelagoReward_Postfix))
-            );
-
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(SpecialOrder), nameof(SpecialOrder.SetDuration)),
-                prefix: new HarmonyMethod(typeof(SpecialOrderInjections), nameof(SpecialOrderInjections.SetDuration_UseCorrectDateWithSeasonRandomizer_Prefix))
             );
 
             _harmony.Patch(
