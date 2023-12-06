@@ -6,27 +6,22 @@ namespace StardewArchipelago.Items.Mail
 {
     public class LetterEventSeenAttachment : LetterInformationAttachment
     {
-        public List<int> EventToMarkAsSeen { get; private set; }
+        public List<int> EventsToMarkAsSeen { get; private set; }
 
         protected override bool IsEmptyLetter => true;
 
-        public LetterEventSeenAttachment(ReceivedItem apItem, int eventToMarkAsSeen) : base(apItem)
+        public LetterEventSeenAttachment(ReceivedItem apItem, int eventToMarkAsSeen) : this(apItem, new List<int> { eventToMarkAsSeen })
         {
-            EventToMarkAsSeen = new List<int> {eventToMarkAsSeen};
         }
 
         public LetterEventSeenAttachment(ReceivedItem apItem, List<int> eventsToMarkAsSeen) : base(apItem)
         {
-            EventToMarkAsSeen = eventsToMarkAsSeen;
+            EventsToMarkAsSeen = eventsToMarkAsSeen;
         }
 
         public override void SendToPlayer(Mailman mailman)
         {
-            foreach (var eventToSee in EventToMarkAsSeen)
-            {
-                Game1.player.eventsSeen.Add(eventToSee);
-            }
-            
+            Game1.player.eventsSeen.AddRange(EventsToMarkAsSeen);
             base.SendToPlayer(mailman);
         }
     }
