@@ -450,16 +450,7 @@ namespace StardewArchipelago.GameModifications
                 AddSeedToSandyStock(sandyStock, ShopItemIds.RHUBARB_SEEDS);
                 AddSeedToSandyStock(sandyStock, ShopItemIds.STARFRUIT_SEEDS);
                 AddSeedToSandyStock(sandyStock, ShopItemIds.BEET_SEEDS);
-                if (_archipelago.SlotData.Mods.HasMod(ModNames.DISTANT))
-                {
-                    var voidMintIdentifier = "1 2 2 3 2/spring summer fall/109/"; //Done as modded seeds have variable ID but use ID in dictionary
-                    var vileAncientIdentifier = "2 7 7 7 5/spring summer fall/108/";
-                    var cropList = Game1.content.Load<Dictionary<int, string>>("Data\\Crops");
-                    var voidMintSeeds = cropList.FirstOrDefault(x => x.Value.Contains(voidMintIdentifier)).Key;
-                    var vileAncientFruitSeeds = cropList.FirstOrDefault(x => x.Value.Contains(vileAncientIdentifier)).Key;
-                    AddSeedToSandyStock(sandyStock, voidMintSeeds);
-                    AddSeedToSandyStock(sandyStock, vileAncientFruitSeeds);
-                }
+                AddSandyModdedStock(sandyStock);
                 var random = new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame / 2);
                 AddSandyRotatingStock(sandyStock, random);
                 AddSandyPermanentCosmetics(sandyStock, random);
@@ -474,6 +465,27 @@ namespace StardewArchipelago.GameModifications
                 _monitor.Log($"Failed in {nameof(GetSandyLimitedStock)}:\n{ex}", LogLevel.Error);
                 return null;
             }
+        }
+
+        private void AddSandyModdedStock(Dictionary<ISalable, int[]> sandyStock)
+        {
+            AddSandyDistantLandsStock(sandyStock);
+        }
+
+        private void AddSandyDistantLandsStock(Dictionary<ISalable, int[]> sandyStock)
+        {
+            if (!_archipelago.SlotData.Mods.HasMod(ModNames.DISTANT_LANDS))
+            {
+                return;
+            }
+
+            var voidMintIdentifier = "1 2 2 3 2/spring summer fall/109/"; //Done as modded seeds have variable ID but use ID in dictionary
+            var vileAncientIdentifier = "2 7 7 7 5/spring summer fall/108/";
+            var cropList = Game1.content.Load<Dictionary<int, string>>("Data\\Crops");
+            var voidMintSeeds = cropList.FirstOrDefault(x => x.Value.Contains(voidMintIdentifier)).Key;
+            var vileAncientFruitSeeds = cropList.FirstOrDefault(x => x.Value.Contains(vileAncientIdentifier)).Key;
+            AddSeedToSandyStock(sandyStock, voidMintSeeds);
+            AddSeedToSandyStock(sandyStock, vileAncientFruitSeeds);
         }
 
         private static void AddSandyRotatingStock(Dictionary<ISalable, int[]> sandyStock, Random random)

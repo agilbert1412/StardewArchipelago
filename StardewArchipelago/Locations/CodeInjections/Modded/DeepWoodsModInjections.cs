@@ -56,25 +56,22 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             {
                 var swordPulledOutField = _helper.Reflection.GetField<NetBool>(__instance, "swordPulledOut");
                 var swordPulledOut = swordPulledOutField.GetValue();
+                if (swordPulledOut.Value)
+                    return false; //don't run original logic
+
                 var playerLuck = Game1.player.LuckLevel;
                 playerLuck = Math.Min(playerLuck, 7);
                 var totalSkill = Game1.player.MiningLevel + Game1.player.ForagingLevel + Game1.player.FishingLevel + Game1.player.FarmingLevel + Game1.player.CombatLevel;
                 totalSkill = Math.Min(totalSkill, 40);
-                var pendantElders = _archipelago.GetReceivedItemCount(PENDANT_ELDERS_ITEM);
-                pendantElders = Math.Min(pendantElders, 1);
-                var pendantDepths = _archipelago.GetReceivedItemCount(PENDANT_DEPTHS_ITEM);
-                pendantDepths = Math.Min(pendantDepths, 1);
-                var pendantCommunity = _archipelago.GetReceivedItemCount(PENDANT_COMMUNITY_ITEM);
-                pendantCommunity = Math.Min(pendantCommunity, 1);
-                var totalPendant = pendantCommunity + pendantDepths + pendantElders;
-                if (swordPulledOut.Value)
-                    return false; //don't run original logic
+                var hasPendantElders = _archipelago.HasReceivedItem(PENDANT_ELDERS_ITEM);
+                var hasPendantDepths = _archipelago.HasReceivedItem(PENDANT_DEPTHS_ITEM);
+                var hasPendantCommunity = _archipelago.HasReceivedItem(PENDANT_COMMUNITY_ITEM);
 
                 if (Game1.player.LuckLevel == 7
                     && totalSkill == 40
-                    && pendantElders == 1
-                    && pendantDepths == 1
-                    && pendantCommunity == 1)
+                    && hasPendantElders
+                    && hasPendantDepths
+                    && hasPendantCommunity)
                 {
                     Game1.playSound("yoba");
                     var swordItem = _archipelago.ScoutSingleLocation(EXCALIBUR_AP_LOCATION).ItemName;
@@ -85,12 +82,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                     _locationChecker.AddCheckedLocation(EXCALIBUR_AP_LOCATION);
                     Game1.addHUDMessage(new HUDMessage(string.Format(EXCALIBUR_WIN, swordItem)) { noIcon = true });
                     swordPulledOut.Value = true;
+                    return false; //don't run original logic
                 }
-                else
-                {
-                    Game1.playSound("thudStep");
-                    Game1.showRedMessage(string.Format(EXCALIBUR_FAIL, playerLuck, totalSkill, totalPendant));
-                }
+
+                Game1.playSound("thudStep");
+                var totalPendants = BoolToInt(hasPendantCommunity) + BoolToInt(hasPendantDepths) + BoolToInt(hasPendantElders);
+                Game1.showRedMessage(string.Format(EXCALIBUR_FAIL, playerLuck, totalSkill, totalPendants));
                 return false; //don't run original logic
             }
             catch (Exception ex)
@@ -98,6 +95,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 _monitor.Log($"Failed in {nameof(PerformUseAction_ExcaliburLocation_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; //run original logic
             }
+        }
+
+        private static int BoolToInt(bool value)
+        {
+            return value ? 1 : 0;
         }
 
         //public class DeepWoods
@@ -116,7 +118,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 lowestLevelReachedField.SetValue(10 * _archipelago.GetReceivedItemCount(WOODS_OBELISK_SIGILS));
                 var levelIndexedAt1 = level - 1;
 
-                if (levelIndexedAt1 % LEVEL_STEP != 0 | levelIndexedAt1 == 0)
+                if (levelIndexedAt1 % LEVEL_STEP != 0 || levelIndexedAt1 == 0)
                 {
                     return;
                 }

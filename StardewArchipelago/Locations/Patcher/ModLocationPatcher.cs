@@ -44,10 +44,11 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void AddModdedEventInjections()
         {
-            if (!_modsManager.HasMod(ModNames.DISTANT))
+            if (!_modsManager.HasMod(ModNames.DISTANT_LANDS))
             {
                 return;
             }
+
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Event), nameof(Event.skipEvent)),
                 prefix: new HarmonyMethod(typeof(ModdedEventInjections), nameof(ModdedEventInjections.SkipEvent_ReplaceRecipe_Prefix))
@@ -80,7 +81,7 @@ namespace StardewArchipelago.Locations.Patcher
             {
                 _harmony.Patch(
                     original: AccessTools.Method(typeof(ShopMenu), nameof(ShopMenu.update)),
-                    postfix: new HarmonyMethod(typeof(MagicModInjections), nameof(MagicModInjections.Update_MarlonShopReplacer_Postfix))
+                    postfix: new HarmonyMethod(typeof(MagicModInjections), nameof(MagicModInjections.Update_ReplaceMarlonRecipes_Postfix))
             );
             }
             /*_harmony.Patch(

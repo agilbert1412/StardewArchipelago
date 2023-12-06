@@ -183,7 +183,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
         private static bool HasDistantLands()
         {
-            return _archipelago.SlotData.Mods.HasMod(ModNames.DISTANT);
+            return _archipelago.SlotData.Mods.HasMod(ModNames.DISTANT_LANDS);
         }
 
         private static bool HasMagic()
