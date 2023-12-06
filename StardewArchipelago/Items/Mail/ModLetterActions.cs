@@ -8,8 +8,7 @@ namespace StardewArchipelago.Items.Mail
 {
     public class ModLetterActions
     {
-
-        public void ModLetters(Dictionary<string, Action<string>> letterActions)
+        public void AddModLetterActions(Dictionary<string, Action<string>> letterActions)
         {
             letterActions.Add(LetterActionsKeys.DiamondWand, (_) => ReceiveDiamondWand());
         }

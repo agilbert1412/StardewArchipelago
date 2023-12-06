@@ -37,7 +37,7 @@ namespace StardewArchipelago.Items.Mail
             _weaponsManager = weaponsManager;
             _trapManager = trapManager;
             _babyBirther = new BabyBirther();
-            var _modLetters = new ModLetterActions();
+            var modLetterActions = new ModLetterActions();
             _letterActions = new Dictionary<string, Action<string>>();
             _letterActions.Add(LetterActionsKeys.Friendship, IncreaseFriendshipWithEveryone);
             _letterActions.Add(LetterActionsKeys.Backpack, (_) => IncreaseBackpackLevel());
@@ -75,7 +75,7 @@ namespace StardewArchipelago.Items.Mail
             _letterActions.Add(LetterActionsKeys.Trap, ExecuteTrap);
             _letterActions.Add(LetterActionsKeys.LearnCookingRecipe, LearnCookingRecipe);
             _letterActions.Add(LetterActionsKeys.LearnSpecialCraftingRecipe, LearnSpecialCraftingRecipe);
-            _modLetters.ModLetters(_letterActions);
+            modLetterActions.AddModLetterActions(_letterActions);
         }
 
         public void ExecuteLetterAction(string key, string parameter)
