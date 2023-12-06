@@ -341,6 +341,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 AddArchipelagoCookingRecipeItem(saloonStock, "Cookies", 300, myActiveHints);
             }
+            AddArchipelagoCookingRecipeItem(saloonStock, "Triple Shot Espresso", 5000, myActiveHints);
         }
 
         private static void AddArchipelagoCraftingRecipeItem(Dictionary<ISalable, int[]> stock, string name, int moneyPrice, Hint[] myActiveHints, int itemPriceId = -1, int itemPriceAmount = 0)
