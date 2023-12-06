@@ -278,7 +278,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             var specialOrderStrings = _englishContentManager.Load<Dictionary<string, string>>("Strings\\SpecialOrderStrings");
             questNameKey = questNameKey.Trim();
             int startIndex;
-            string thisString;
             do
             {
                 startIndex = questNameKey.LastIndexOf('[');
@@ -286,12 +285,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 {
                     var num = questNameKey.IndexOf(']', startIndex);
                     if (num == -1)
+                    {
                         return questNameKey;
+                    }
+
                     var str1 = questNameKey.Substring(startIndex + 1, num - startIndex - 1);
-                    if (specialOrderStrings.ContainsKey(str1))
-                        thisString = specialOrderStrings[str1];
-                    else
-                        thisString = SpecialOrderNames.Mods[str1];
+                    var thisString = specialOrderStrings.ContainsKey(str1) ? specialOrderStrings[str1] : SpecialOrderNames.Mods[str1];
                     questNameKey = questNameKey.Remove(startIndex, num - startIndex + 1);
                     questNameKey = questNameKey.Insert(startIndex, thisString);
                 }
