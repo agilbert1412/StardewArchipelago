@@ -103,7 +103,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             
         }
 
-        public static void Update_MarlonShopReplacer_Postfix(ShopMenu __instance, GameTime time)
+        public static void Update_ReplaceMarlonRecipes_Postfix(ShopMenu __instance, GameTime time)
             {
             try
             {
@@ -114,21 +114,24 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 }
 
                 _lastShopMenuUpdated = __instance;
+                if (!_archipelago.SlotData.Craftsanity.HasFlag(Craftsanity.All))
+                {
+                    return;
+                }
+
                 var myActiveHints = _archipelago.GetMyActiveHints();
                 foreach (var salableItem in __instance.itemPriceAndStock.Keys.ToArray())
                 {
-                    if (_archipelago.SlotData.Craftsanity.HasFlag(Craftsanity.All))
-                    {
-                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, MARLON_RECIPE_1, item => item.IsRecipe && item.Name.Equals("Magic Elixir"), myActiveHints);
-                        _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, MARLON_RECIPE_2, item => item.IsRecipe && item.Name.Equals("Travel Core"), myActiveHints);
-                    }
+                    _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, MARLON_RECIPE_1, "Magic Elixir", myActiveHints);
+                    _shopReplacer.ReplaceShopRecipe(__instance.itemPriceAndStock, salableItem, MARLON_RECIPE_2, "Travel Core", myActiveHints);
                 }
+
                 __instance.forSale = __instance.itemPriceAndStock.Keys.ToList();
                 return; //  run original logic
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(Update_MarlonShopReplacer_Postfix)}:\n{ex}", LogLevel.Error);
+                _monitor.Log($"Failed in {nameof(Update_ReplaceMarlonRecipes_Postfix)}:\n{ex}", LogLevel.Error);
                 return; // run original logic
             }
         }
