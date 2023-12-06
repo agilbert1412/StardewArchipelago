@@ -75,6 +75,7 @@ namespace StardewArchipelago.Items.Mail
             _letterActions.Add(LetterActionsKeys.Trap, ExecuteTrap);
             _letterActions.Add(LetterActionsKeys.LearnCookingRecipe, LearnCookingRecipe);
             _letterActions.Add(LetterActionsKeys.LearnSpecialCraftingRecipe, LearnSpecialCraftingRecipe);
+            _modLetters.ModLetters(_letterActions);
         }
 
         public void ExecuteLetterAction(string key, string parameter)
