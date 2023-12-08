@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using HarmonyLib;
 using Newtonsoft.Json;
 using StardewArchipelago.Bundles;
 using StardewArchipelago.Stardew;
@@ -23,7 +24,7 @@ namespace StardewArchipelago.Archipelago
         private const string FESTIVAL_OBJECTIVES_KEY = "festival_locations";
         private const string ARCADE_MACHINES_KEY = "arcade_machine_locations";
         private const string SPECIAL_ORDERS_KEY = "special_order_locations";
-        private const string HELP_WANTED_LOCATIONS_KEY = "help_wanted_locations";
+        private const string QUEST_LOCATIONS_KEY = "quest_locations";
         private const string FISHSANITY_KEY = "fishsanity";
         private const string MUSEUMSANITY_KEY = "museumsanity";
         private const string MONSTERSANITY_KEY = "monstersanity";
@@ -71,7 +72,7 @@ namespace StardewArchipelago.Archipelago
         public FestivalLocations FestivalLocations { get; private set; }
         public ArcadeLocations ArcadeMachineLocations { get; private set; }
         public SpecialOrderLocations SpecialOrderLocations { get; private set; }
-        public int HelpWantedLocationNumber { get; private set; }
+        public QuestLocations QuestLocations { get; private set; }
         public Fishsanity Fishsanity { get; private set; }
         public Museumsanity Museumsanity { get; private set; }
         public Monstersanity Monstersanity { get; private set; }
@@ -121,7 +122,7 @@ namespace StardewArchipelago.Archipelago
             FestivalLocations = GetSlotSetting(FESTIVAL_OBJECTIVES_KEY, FestivalLocations.Easy);
             ArcadeMachineLocations = GetSlotSetting(ARCADE_MACHINES_KEY, ArcadeLocations.FullShuffling);
             SpecialOrderLocations = GetSlotSetting(SPECIAL_ORDERS_KEY, SpecialOrderLocations.BoardOnly);
-            HelpWantedLocationNumber = GetSlotSetting(HELP_WANTED_LOCATIONS_KEY, 0);
+            QuestLocations = new QuestLocations(GetSlotSetting(QUEST_LOCATIONS_KEY, 0));
             Fishsanity = GetSlotSetting(FISHSANITY_KEY, Fishsanity.None);
             Museumsanity = GetSlotSetting(MUSEUMSANITY_KEY, Museumsanity.None);
             Monstersanity = GetSlotSetting(MONSTERSANITY_KEY, Monstersanity.None);
@@ -321,6 +322,18 @@ namespace StardewArchipelago.Archipelago
         Disabled = 0,
         BoardOnly = 1,
         BoardAndQi = 2,
+    }
+
+    public class QuestLocations
+    {
+        private readonly int _value;
+        public bool StoryQuestsEnabled => _value >= 0;
+        public int HelpWantedNumber => Math.Max(0, _value);
+
+        internal QuestLocations(int value)
+        {
+            _value = value;
+        }
     }
 
     public enum Fishsanity

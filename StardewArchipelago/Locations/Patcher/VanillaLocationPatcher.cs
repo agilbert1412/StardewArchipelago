@@ -238,6 +238,16 @@ namespace StardewArchipelago.Locations.Patcher
         private void ReplaceQuestsWithChecks()
         {
             _harmony.Patch(
+                original: AccessTools.Method(typeof(Railroad), "resetLocalState"),
+                prefix: new HarmonyMethod(typeof(DarkTalismanInjections), nameof(DarkTalismanInjections.ResetLocalState_PlayCutsceneIfConditionsAreMet_Postfix))
+            );
+
+            if (!_archipelago.SlotData.QuestLocations.StoryQuestsEnabled)
+            {
+                return;
+            }
+
+            _harmony.Patch(
                 original: AccessTools.Method(typeof(Quest), nameof(Quest.questComplete)),
                 prefix: new HarmonyMethod(typeof(QuestInjections), nameof(QuestInjections.QuestComplete_LocationInsteadOfReward_Prefix))
             );
@@ -250,11 +260,6 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Utility), nameof(Utility.getQuestOfTheDay)),
                 prefix:new HarmonyMethod(typeof(QuestInjections), nameof(QuestInjections.GetQuestOfTheDay_BalanceQuests_Prefix))
-            );
-
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(Mountain), nameof(Mountain.checkAction)),
-                prefix: new HarmonyMethod(typeof(QuestInjections), nameof(QuestInjections.CheckAction_AdventurerGuild_Prefix))
             );
 
             _harmony.Patch(
@@ -301,10 +306,6 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(typeof(NPC), "performRemoveHenchman"),
                 prefix: new HarmonyMethod(typeof(DarkTalismanInjections), nameof(DarkTalismanInjections.PerformRemoveHenchman_CheckGoblinProblemLocation_Postfix))
             );
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(Railroad), "resetLocalState"),
-                prefix: new HarmonyMethod(typeof(DarkTalismanInjections), nameof(DarkTalismanInjections.ResetLocalState_PlayCutsceneIfConditionsAreMet_Postfix))
-            ); 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.setUpLocationSpecificFlair)),
                 prefix: new HarmonyMethod(typeof(DarkTalismanInjections), nameof(DarkTalismanInjections.SetUpLocationSpecificFlair_BuglandChest_Prefix))

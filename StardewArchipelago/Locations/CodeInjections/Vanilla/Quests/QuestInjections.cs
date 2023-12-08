@@ -107,8 +107,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
 
         private static int GetNumberOfHelpWantedGroups()
         {
-            var numberOfSteps = _archipelago.SlotData.HelpWantedLocationNumber / 7;
-            if (_archipelago.SlotData.HelpWantedLocationNumber % 7 > 0)
+            var numberOfSteps = _archipelago.SlotData.QuestLocations.HelpWantedNumber / 7;
+            if (_archipelago.SlotData.QuestLocations.HelpWantedNumber % 7 > 0)
             {
                 numberOfSteps++;
             }
@@ -328,47 +328,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
         private static string GetHelpWantedLocationName(string type, int number)
         {
             return $"{string.Format(HELP_WANTED, type)} {number}";
-        }
-
-        public static bool CheckAction_AdventurerGuild_Prefix(Mountain __instance, Location tileLocation, xTile.Dimensions.Rectangle viewport, Farmer who, ref bool __result)
-        {
-            try
-            {
-                var tile = __instance.map.GetLayer("Buildings").Tiles[tileLocation];
-                if (tile == null || tile.TileIndex != 1136)
-                {
-                    return true; // run original logic
-                }
-
-                if (!who.mailReceived.Contains("guildMember"))
-                {
-                    Game1.drawLetterMessage(Game1.content.LoadString("Strings\\Locations:Mountain_AdventurersGuildNote").Replace('\n', '^'));
-                    __result = true;
-                    return false; // don't run original logic
-                }
-
-                string action = null;
-                //var tile = __instance.map.GetLayer("Buildings").PickTile(new Location(tileLocation.X * 64, tileLocation.Y * 64), viewport.Size);
-                PropertyValue propertyValue;
-                tile.Properties.TryGetValue("Action", out propertyValue);
-                if (propertyValue != null)
-                    action = propertyValue.ToString();
-                if (action == null)
-                {
-                    action = __instance.doesTileHaveProperty(tileLocation.X, tileLocation.Y, "Action", "Buildings");
-                }
-                if (action != null)
-                {
-                    __result = __instance.performAction(action, who, tileLocation);
-                }
-
-                return false; // don't run original logic
-            }
-            catch (Exception ex)
-            {
-                _monitor.Log($"Failed in {nameof(CheckAction_AdventurerGuild_Prefix)}:\n{ex}", LogLevel.Error);
-                return true; // run original logic
-            }
         }
 
         public static bool PerformAction_MysteriousQiLumberPile_Prefix(GameLocation __instance, string action, Farmer who, Location tileLocation, ref bool __result)
