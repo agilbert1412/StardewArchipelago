@@ -667,6 +667,11 @@ namespace StardewArchipelago.Locations.Patcher
                 prefix: new HarmonyMethod(typeof(WinterStarInjections), nameof(WinterStarInjections.GetRandomTownNPC_ChooseSecretSantaTarget_Prefix))
             );
 
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Event), nameof(Event.forceEndFestival)),
+                postfix: new HarmonyMethod(typeof(FairInjections), nameof(FairInjections.ForceEndFestival_KeepStarTokens_Postfix))
+            );
+
             if (_archipelago.SlotData.FestivalLocations == FestivalLocations.Vanilla)
             {
                 return;
