@@ -44,7 +44,6 @@ namespace StardewArchipelago.Items.Mail
             _letterActions.Add(LetterActionsKeys.DwarvishTranslationGuide, (_) => ReceiveDwarvishTranslationGuide());
             _letterActions.Add(LetterActionsKeys.SkullKey, (_) => ReceiveSkullKey());
             _letterActions.Add(LetterActionsKeys.RustyKey, (_) => ReceiveRustyKey());
-            _letterActions.Add(LetterActionsKeys.AdventurerGuild, (_) => ReceiveAdventurerGuild());
             _letterActions.Add(LetterActionsKeys.ClubCard, (_) => ReceiveClubCard());
             _letterActions.Add(LetterActionsKeys.MagnifyingGlass, (_) => ReceiveMagnifyingGlass());
             _letterActions.Add(LetterActionsKeys.IridiumSnakeMilk, (_) => ReceiveIridiumSnakeMilk());
@@ -176,11 +175,6 @@ namespace StardewArchipelago.Items.Mail
         public void ReceiveKeyToTheTown()
         {
             Game1.player.HasTownKey = true;
-        }
-
-        private void ReceiveAdventurerGuild()
-        {
-            Game1.player.mailReceived.Add("guildMember");
         }
 
         private void ReceiveGoldenScythe()

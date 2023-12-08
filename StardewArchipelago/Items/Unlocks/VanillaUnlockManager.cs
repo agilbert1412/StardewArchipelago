@@ -20,7 +20,6 @@ namespace StardewArchipelago.Items.Unlocks
         public const string SPECIAL_ORDER_BOARD_AP_NAME = "Special Order Board";
         public const string QI_WALNUT_ROOM = "Qi Walnut Room";
         public const string PIERRE_STOCKLIST = "Pierre's Missing Stocklist";
-        public const string ADVENTURE_GUILD = "Adventurer's Guild";
         public const string ISLAND_FARMHOUSE = "Island Farmhouse";
         public const string ISLAND_MAILBOX = "Island Mailbox";
         public const string TREEHOUSE = "Treehouse";
@@ -73,8 +72,7 @@ namespace StardewArchipelago.Items.Unlocks
             _unlockables.Add("Dwarvish Translation Guide", SendDwarvishTranslationGuideLetter);
             _unlockables.Add("Skull Key", SendSkullKeyLetter);
             _unlockables.Add("Rusty Key", SendRustyKeyLetter);
-
-            _unlockables.Add(ADVENTURE_GUILD, SendAdventurerGuildLetter);
+            
             _unlockables.Add("Club Card", SendClubCardLetter);
             _unlockables.Add("Magnifying Glass", SendMagnifyingGlassLetter);
             _unlockables.Add("Iridium Snake Milk", SendIridiumSnakeMilkLetter);
@@ -280,11 +278,6 @@ namespace StardewArchipelago.Items.Unlocks
         private LetterActionAttachment SendRustyKeyLetter(ReceivedItem receivedItem)
         {
             return new LetterActionAttachment(receivedItem, LetterActionsKeys.RustyKey);
-        }
-
-        private LetterActionAttachment SendAdventurerGuildLetter(ReceivedItem receivedItem)
-        {
-            return new LetterActionAttachment(receivedItem, LetterActionsKeys.AdventurerGuild);
         }
 
         private LetterActionAttachment SendClubCardLetter(ReceivedItem receivedItem)

@@ -31,36 +31,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             _weaponsManager = weaponsManager;
         }
 
-        // protected override void resetLocalState()
-        public static void ResetLocalState_GuildMemberOnlyIfReceived_Postfix(AdventureGuild __instance)
-        {
-            try
-            {
-                const string guildMemberLetter = "guildMember";
-                var hasLetter = Game1.player.mailReceived.Contains(guildMemberLetter);
-                var deservesLetter = _archipelago.HasReceivedItem(VanillaUnlockManager.ADVENTURE_GUILD);
-
-                if (hasLetter == deservesLetter)
-                {
-                    return;
-                }
-
-                if (hasLetter)
-                {
-                    Game1.player.mailReceived.Remove(guildMemberLetter);
-                }
-                else
-                {
-                    Game1.player.mailReceived.Add(guildMemberLetter);
-                }
-            }
-            catch (Exception ex)
-            {
-                _monitor.Log($"Failed in {nameof(ResetLocalState_GuildMemberOnlyIfReceived_Postfix)}:\n{ex}", LogLevel.Error);
-                return;
-            }
-        }
-
         // public virtual bool answerDialogueAction(string questionAndAnswer, string[] questionParams)
         public static bool TelephoneAdventureGuild_AddReceivedEquipments_Prefix(GameLocation __instance, string questionAndAnswer, string[] questionParams, bool __result)
         {
