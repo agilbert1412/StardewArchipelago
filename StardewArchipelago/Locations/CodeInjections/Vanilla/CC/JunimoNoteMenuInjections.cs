@@ -97,6 +97,17 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.CC
                             continue;
                         }
 
+                        var bundleIndexString = bundle.bundleIndex.ToString();
+                        if (bundleIndexString.Length == 4)
+                        {
+                            if (TryGetMoneyBundleName(bundleIndexString, out var moneyBundleName))
+                            {
+                                bundle.bundleTextureOverride = BundleIcons.GetBundleIcon(_modHelper, moneyBundleName);
+                                bundle.bundleTextureIndexOverride = 0;
+                                continue;
+                            }
+                        }
+
                         textureOverride = ArchipelagoTextures.GetColoredLogo(_modHelper, 32, ArchipelagoTextures.COLOR);
                     }
 
@@ -110,6 +121,28 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.CC
             {
                 _monitor.Log($"Failed in {nameof(SetupMenu_AddTextureOverrides_Postfix)}:\n{ex}", LogLevel.Error);
                 return;
+            }
+        }
+
+        private static bool TryGetMoneyBundleName(string bundleIndexString, out string moneyBundleName)
+        {
+            switch (bundleIndexString[..2])
+            {
+                case "23":
+                    moneyBundleName = "money_cheap";
+                    return true;
+                case "24":
+                    moneyBundleName = "money_medium";
+                    return true;
+                case "25":
+                    moneyBundleName = "money_expensive";
+                    return true;
+                case "26":
+                    moneyBundleName = "money_rich";
+                    return true;
+                default:
+                    moneyBundleName = "";
+                    return false;
             }
         }
 
