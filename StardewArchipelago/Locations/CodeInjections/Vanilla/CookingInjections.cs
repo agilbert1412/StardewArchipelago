@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
@@ -36,6 +37,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
                 var cookedItem = _itemManager.GetObjectById(index);
                 var cookedItemName = cookedItem.Name;
+                if (_renamedItems.ContainsKey(index))
+                {
+                    cookedItemName = _renamedItems[index];
+                }
                 var apLocation = $"{COOKING_LOCATION_PREFIX}{cookedItemName}";
                 if (_archipelago.GetLocationId(apLocation) > -1)
                 {
@@ -52,5 +57,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 return;
             }
         }
+
+        private static readonly Dictionary<int, string> _renamedItems = new()
+        {
+            { 223, "Cookies" },
+        };
     }
 }

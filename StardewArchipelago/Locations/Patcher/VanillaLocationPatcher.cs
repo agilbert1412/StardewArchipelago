@@ -823,6 +823,11 @@ namespace StardewArchipelago.Locations.Patcher
                     original: AccessTools.Method(typeof(Stats), nameof(Stats.monstersKilled)),
                     postfix: new HarmonyMethod(typeof(MonsterSlayerInjections), nameof(MonsterSlayerInjections.MonsterKilled_CheckGoalCompletion_Postfix))
                 );
+
+                _harmony.Patch(
+                    original: AccessTools.Method(typeof(AdventureGuild), nameof(AdventureGuild.areAllMonsterSlayerQuestsComplete)),
+                    prefix: new HarmonyMethod(typeof(MonsterSlayerInjections), nameof(MonsterSlayerInjections.AreAllMonsterSlayerQuestsComplete_ExcludeGingerIsland_Prefix))
+                );
             }
 
             if (_archipelago.SlotData.Monstersanity == Monstersanity.None)
@@ -907,6 +912,11 @@ namespace StardewArchipelago.Locations.Patcher
             {
                 return;
             }
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Event), nameof(Event.command_addCraftingRecipe)),
+                prefix: new HarmonyMethod(typeof(CraftingInjections), nameof(CraftingInjections.CommandAddCraftingRecipe_SkipLearning_Prefix))
+            );
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Stats), nameof(Stats.checkForCraftingAchievements)),

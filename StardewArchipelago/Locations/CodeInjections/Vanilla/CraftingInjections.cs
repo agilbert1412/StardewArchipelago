@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Archipelago.MultiClient.Net.Models;
+using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Stardew;
@@ -80,6 +81,26 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
         }
 
+        // public virtual void command_addCraftingRecipe(GameLocation location, GameTime time, string[] split)
+        public static bool CommandAddCraftingRecipe_SkipLearning_Prefix(Event __instance, GameLocation location, GameTime time, string[] split)
+        {
+            try
+            {
+                if (!__instance.eventCommands[__instance.CurrentCommand].Contains("Furnace"))
+                {
+                    return true; // run original logic
+                }
+
+                ++__instance.CurrentCommand;
+                return false; // don't run original logic
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(CommandAddCraftingRecipe_SkipLearning_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
+        }
+
         // public static Dictionary<ISalable, int[]> getCarpenterStock()
         public static void GetCarpenterStock_PurchasableRecipeChecks_Postfix(ref Dictionary<ISalable, int[]> __result)
         {
@@ -155,7 +176,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(GetDwarfShopStock_PurchasableRecipeChecks_Postfix)}:\n{ex}", LogLevel.Error);
+                _monitor.Log($"Failed in {nameof(GetDesertMerchantTradeStock_PurchasableRecipeChecks_Postfix)}:\n{ex}", LogLevel.Error);
                 return;
             }
         }
