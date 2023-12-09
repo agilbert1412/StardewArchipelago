@@ -141,6 +141,25 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
         }
 
+        // public static Dictionary<ISalable, int[]> getDesertMerchantTradeStock(Farmer who)
+        public static void GetDesertMerchantTradeStock_PurchasableRecipeChecks_Postfix(Farmer who, ref Dictionary<ISalable, int[]> __result)
+        {
+            try
+            {
+                RemoveRecipesFromStock(__result);
+
+                var activeHints = _archipelago.GetMyActiveHints();
+                AddTradeRecipeCheckToStock(__result, "Warp Totem: Desert", 337, 10, activeHints);
+
+                return;
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(GetDwarfShopStock_PurchasableRecipeChecks_Postfix)}:\n{ex}", LogLevel.Error);
+                return;
+            }
+        }
+
         private static void RemoveRecipesFromStock(Dictionary<ISalable, int[]> stock)
         {
             foreach (var salable in stock.Keys.ToArray())
@@ -166,6 +185,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
         private static void AddRecipeCheckToStock(Dictionary<ISalable, int[]> stock, string recipeName, int price, Hint[] activeHints)
         {
+            AddRecipeCheckToStock(stock, recipeName, new[] { price, 1 }, activeHints);
+        }
+
+        private static void AddTradeRecipeCheckToStock(Dictionary<ISalable, int[]> stock, string recipeName, int tradeItem, int tradeAmount, Hint[] activeHints)
+        {
+            AddRecipeCheckToStock(stock, recipeName, new[] { 0, 1, tradeItem, tradeAmount }, activeHints);
+        }
+
+        private static void AddRecipeCheckToStock(Dictionary<ISalable, int[]> stock, string recipeName, int[] price, Hint[] activeHints)
+        {
             var apLocation = $"{recipeName} Recipe";
             if (!_locationChecker.IsLocationMissingAndExists(apLocation))
             {
@@ -173,7 +202,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
 
             var purchasableCheck = new PurchaseableArchipelagoLocation(recipeName, apLocation, _helper, _locationChecker, _archipelago, activeHints);
-            stock.Add(purchasableCheck, new[] { price, 1 });
+            stock.Add(purchasableCheck, price);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Cryptography;
 using HarmonyLib;
 using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Archipelago;
@@ -925,6 +926,11 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Sewer), nameof(Sewer.getShadowShopStock)),
                 postfix: new HarmonyMethod(typeof(CraftingInjections), nameof(CraftingInjections.GetShadowShopStock_PurchasableRecipeChecks_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Desert), nameof(Desert.getDesertMerchantTradeStock)),
+                postfix: new HarmonyMethod(typeof(CraftingInjections), nameof(CraftingInjections.GetDesertMerchantTradeStock_PurchasableRecipeChecks_Postfix))
             );
         }
 
