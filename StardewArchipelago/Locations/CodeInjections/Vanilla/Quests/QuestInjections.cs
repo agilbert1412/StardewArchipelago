@@ -287,9 +287,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
 
         private static void AddWeightedItemDeliveries(int groupNumber, Hint[] hints, List<string> remainingHelpWantedQuests)
         {
+            const int itemDeliveryMultiplier = 4;
+            var offset = ((groupNumber - 1) * itemDeliveryMultiplier) + 1;
             for (var delivery = 0; delivery < 4; delivery++)
             {
-                AddWeightedHelpWanted(groupNumber + delivery, ITEM_DELIVERY, hints, remainingHelpWantedQuests);
+                AddWeightedHelpWanted(offset + delivery, ITEM_DELIVERY, hints, remainingHelpWantedQuests);
             }
         }
 
