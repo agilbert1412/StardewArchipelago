@@ -103,12 +103,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             foreach (var lostItem in Game1.player.itemsLostLastDeath.ToArray())
             {
-                if (lostItem is not MeleeWeaponToRecover)
+                if (lostItem is MeleeWeaponToRecover || lostItem is BootsToRecover)
                 {
-                    continue;
+                    Game1.player.itemsLostLastDeath.Remove(lostItem);
                 }
-
-                Game1.player.itemsLostLastDeath.Remove(lostItem);
             }
         }
 

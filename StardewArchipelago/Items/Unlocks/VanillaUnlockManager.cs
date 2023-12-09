@@ -439,7 +439,7 @@ namespace StardewArchipelago.Items.Unlocks
 
         private LetterActionAttachment SendProgressiveBootsLetter(ReceivedItem receivedItem)
         {
-            return new LetterActionAttachment(receivedItem, LetterActionsKeys.GiveBoots);
+            return new LetterActionAttachment(receivedItem, LetterActionsKeys.GiveProgressiveBoots);
         }
     }
 }

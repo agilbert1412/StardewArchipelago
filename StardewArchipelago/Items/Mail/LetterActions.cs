@@ -57,12 +57,13 @@ namespace StardewArchipelago.Items.Mail
             _letterActions.Add(LetterActionsKeys.ReturnScepter, (_) => GetReturnScepter());
             _letterActions.Add(LetterActionsKeys.GiveBigCraftable, ReceiveBigCraftable);
             _letterActions.Add(LetterActionsKeys.GiveRing, ReceiveRing);
-            _letterActions.Add(LetterActionsKeys.GiveBoots, ReceiveBoots);
+            _letterActions.Add(LetterActionsKeys.GiveSpecificBoots, ReceiveBoots);
             _letterActions.Add(LetterActionsKeys.GiveMeleeWeapon, ReceiveMeleeWeapon);
             _letterActions.Add(LetterActionsKeys.GiveWeapon, (_) => GetWeaponOfNextTier());
             _letterActions.Add(LetterActionsKeys.GiveSword, (_) => GetSwordOfNextTier());
             _letterActions.Add(LetterActionsKeys.GiveClub, (_) => GetClubOfNextTier());
             _letterActions.Add(LetterActionsKeys.GiveDagger, (_) => GetDaggerOfNextTier());
+            _letterActions.Add(LetterActionsKeys.GiveProgressiveBoots, (_) => GetBootsOfNextTier());
             _letterActions.Add(LetterActionsKeys.GiveSlingshot, ReceiveSlingshot);
             _letterActions.Add(LetterActionsKeys.GiveBed, ReceiveBed);
             _letterActions.Add(LetterActionsKeys.GiveFishTank, ReceiveFishTank);
