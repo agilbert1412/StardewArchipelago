@@ -244,7 +244,7 @@ namespace StardewArchipelago.Extensions
             var propertyString = propertyValue.ToString();
             var touchActionParts = propertyString.Split(' ');
             var touchAction = touchActionParts[0];
-            if (!touchAction.Contains("Warp") || touchActionParts.Length < 4)
+            if (touchActionParts.Length < 4 || (!touchAction.Contains("Warp") && !touchAction.Contains("LoadMap")))
             {
                 warpPoint = Point.Zero;
                 return false;
