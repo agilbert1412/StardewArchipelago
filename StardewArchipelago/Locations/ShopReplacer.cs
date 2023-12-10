@@ -39,7 +39,7 @@ namespace StardewArchipelago.Locations
             }
             
             var apName = BigCraftable.ConvertToApName(salableObject);
-            var shouldRemoveOriginal = !_archipelago.HasReceivedItem(apName);
+            var shouldRemoveOriginal = apName == "Stardrop" || !_archipelago.HasReceivedItem(apName);
 
             ReplaceShopItem(itemPriceAndStock, itemOnSale, apLocation, shouldRemoveOriginal, myActiveHints);
         }
