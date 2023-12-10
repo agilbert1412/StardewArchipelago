@@ -192,12 +192,17 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.CC
             }
         }
 
+        // private bool specificBundlePage;
+        private static IReflectedField<bool> _specificBundlePageField;
+
         // public override void draw(SpriteBatch b)
         public static void Draw_AddCurrencyBoxes_Postfix(JunimoNoteMenu __instance, SpriteBatch b)
         {
             try
             {
-                if (__instance.purchaseButton == null || !Game1.player.hasOrWillReceiveMail("canReadJunimoText"))
+                var specificBundlePageField = _modHelper.Reflection.GetField<bool>(__instance, "specificBundlePage");
+                var specificBundlePage = specificBundlePageField.GetValue();
+                if (!specificBundlePage || !Game1.player.hasOrWillReceiveMail("canReadJunimoText"))
                 {
                     Game1.specialCurrencyDisplay.ShowCurrency(null);
                     return;
