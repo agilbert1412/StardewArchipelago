@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
 using StardewValley;
@@ -64,7 +65,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 }
 
                 var unlockConditions = recipeFields[3];
-                var unlockConditionFields = unlockConditions.Split(" ");
+                var unlockConditionFields = unlockConditions.Split(":").Last().Split(" ");
                 if (unlockConditionFields.Length != 3 ||
                     !unlockConditionFields[0].Equals("f", StringComparison.InvariantCultureIgnoreCase))
                 {

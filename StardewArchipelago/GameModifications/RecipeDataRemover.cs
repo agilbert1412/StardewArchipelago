@@ -80,7 +80,7 @@ namespace StardewArchipelago.GameModifications
                     continue;
                 }
 
-                var modifiedRecipe = recipeData.Replace(recipeUnlockCondition, "none");
+                var modifiedRecipe = recipeData.Replace(recipeUnlockCondition, $"none:{recipeUnlockCondition}");
                 CraftingRecipe.cookingRecipes[recipeName] = modifiedRecipe;
             }
         }
