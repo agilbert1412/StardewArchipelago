@@ -199,6 +199,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.CC
             {
                 if (__instance.purchaseButton == null || !Game1.player.hasOrWillReceiveMail("canReadJunimoText"))
                 {
+                    Game1.specialCurrencyDisplay.ShowCurrency(null);
                     return;
                 }
 
@@ -260,7 +261,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.CC
             Game1.drawWithBorder(tokenAmount.ToString() ?? "", Color.Black, Color.White, new Vector2(72f, (float)(21 + (LocalizedContentManager.CurrentLanguageCode == LocalizedContentManager.LanguageCode.en ? 8 : (LocalizedContentManager.CurrentLanguageLatin ? 16 : 8)))), 0.0f, 1f, 1f, false);
             //if (Game1.activeClickableMenu == null)
             //{
-            Game1.dayTimeMoneyBox.drawMoneyBox(spriteBatch, Game1.dayTimeMoneyBox.xPositionOnScreen, 4);
+            // Game1.dayTimeMoneyBox.drawMoneyBox(spriteBatch, Game1.dayTimeMoneyBox.xPositionOnScreen, 4);
             //}
             spriteBatch.End();
             Game1.PopUIMode();
