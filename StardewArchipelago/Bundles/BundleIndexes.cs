@@ -72,7 +72,7 @@ namespace StardewArchipelago.Bundles
             {"Rain Fishing", 263},
             {"Legendary Fish", 266},
             {"Island Fish", 267},
-            {"Master Baiter", 12},
+            {"Master Baiter", 268},
 
             {"Bartender's", 277},
 

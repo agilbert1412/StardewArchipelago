@@ -126,6 +126,9 @@
     <None Update="Textures\Bundles\legendary_fish_bundle.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Textures\Bundles\master_baiter_bundle.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Textures\Bundles\mines_foraging_bundle.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -165,5 +168,4 @@
     <Folder Include="GameModifications\CustomOptions\" />
     <Folder Include="Test\" />
   </ItemGroup>
-
 </Project>
