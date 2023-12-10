@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Extensions;
 using StardewArchipelago.Items.Mail;
-using StardewModdingAPI.Events;
 
 namespace StardewArchipelago.Items.Unlocks
 {

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Constants;
 using StardewArchipelago.Goals;
 using StardewModdingAPI;
 using StardewValley;

@@ -4,8 +4,6 @@ using System.Linq;
 using Archipelago.MultiClient.Net.Models;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Constants;
-using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
 using Object = StardewValley.Object;

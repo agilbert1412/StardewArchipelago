@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Netcode;
 using Newtonsoft.Json;
-using StardewArchipelago.Locations.CodeInjections.Vanilla.CC;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;

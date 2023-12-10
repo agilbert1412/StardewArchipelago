@@ -1,7 +1,5 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Locations;
 using StardewModdingAPI;
 using StardewValley;
 

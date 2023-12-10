@@ -14,7 +14,6 @@ using StardewValley.Objects;
 using StardewValley.Quests;
 using StardewValley.TerrainFeatures;
 using xTile.Dimensions;
-using xTile.ObjectModel;
 using Object = StardewValley.Object;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
 

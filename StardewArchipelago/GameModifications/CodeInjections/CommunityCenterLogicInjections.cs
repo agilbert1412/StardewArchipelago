@@ -1,7 +1,6 @@
 ﻿using System;
 using StardewArchipelago.Locations;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.CC;
-using StardewArchipelago.Locations.CodeInjections.Modded;
 using StardewModdingAPI;
 using StardewValley;
 

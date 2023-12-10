@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Goals;
 using StardewArchipelago.Locations.Modded.SVE;
@@ -8,9 +6,7 @@ using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
-using StardewValley.Menus;
 using xTile.Dimensions;
-using Bundle = StardewArchipelago.Stardew.Bundle;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.CC
 {

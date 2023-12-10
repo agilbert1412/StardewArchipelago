@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Security.Cryptography;
 using HarmonyLib;
 using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Archipelago;

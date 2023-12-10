@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using Microsoft.Xna.Framework.Graphics;
-using StardewArchipelago.Bundles;
 using StardewModdingAPI;
 using StardewValley;
 

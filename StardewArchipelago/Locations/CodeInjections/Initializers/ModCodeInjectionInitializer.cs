@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using StardewValley;
-using StardewArchipelago.Archipelago;
+﻿using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
 using StardewArchipelago.Constants;
 using StardewArchipelago.GameModifications;

@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using HarmonyLib;
 using Newtonsoft.Json;
-using StardewArchipelago.Bundles;
-using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 
 namespace StardewArchipelago.Archipelago

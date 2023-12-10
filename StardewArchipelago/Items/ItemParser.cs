@@ -1,8 +1,6 @@
 ﻿using System;
 using HarmonyLib;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Constants;
-using StardewArchipelago.GameModifications;
 using StardewArchipelago.GameModifications.Modded;
 using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Items.Traps;

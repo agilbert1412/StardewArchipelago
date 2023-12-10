@@ -6,8 +6,6 @@ using StardewModdingAPI;
 using StardewArchipelago.Archipelago;
 using StardewValley;
 using StardewArchipelago.Locations.CodeInjections.Modded.SVE;
-using System.Diagnostics.Tracing;
-using Archipelago.MultiClient.Net.Packets;
 
 namespace StardewArchipelago.Locations.CodeInjections.Modded
 {

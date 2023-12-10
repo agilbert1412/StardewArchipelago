@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Extensions;
 using StardewArchipelago.GameModifications.CodeInjections;
-using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Stardew;
 using StardewValley;
 using StardewValley.Locations;

@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Archipelago.MultiClient.Net.Enums;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
-using Netcode;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Extensions;
 using StardewArchipelago.GameModifications;
@@ -76,7 +75,7 @@ namespace StardewArchipelago.Items.Traps
             _traps = new Dictionary<string, Action>();
             RegisterTraps();
             harmony.Patch(
-                original: AccessTools.Method(typeof(ObjToStr), nameof(Object.salePrice)),
+                original: AccessTools.Method(typeof(Object), nameof(Object.salePrice)),
                 prefix: new HarmonyMethod(typeof(TrapManager), nameof(SalePrice_GetCorrectInflation_Prefix))
             );
         }
