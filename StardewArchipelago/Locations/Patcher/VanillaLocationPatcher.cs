@@ -69,6 +69,7 @@ namespace StardewArchipelago.Locations.Patcher
             AddCooksanityLocations();
             PatchChefAndCraftsanity();
             PatchKrobusShop();
+            PatchFarmcave();
         }
 
         private void ReplaceCommunityCenterBundlesWithChecks()
@@ -954,6 +955,14 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Sewer), nameof(Sewer.getShadowShopStock)),
                 postfix: new HarmonyMethod(typeof(KrobusShopInjections), nameof(KrobusShopInjections.GetShadowShopStock_StardropCheck_Postfix))
+            );
+        }
+
+        private void PatchFarmcave()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Event), nameof(Event.answerDialogue)),
+                prefix: new HarmonyMethod(typeof(FarmCaveInjections), nameof(FarmCaveInjections.AnswerDialogue_SendFarmCaveCheck_Prefix))
             );
         }
     }

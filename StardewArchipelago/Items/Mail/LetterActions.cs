@@ -52,6 +52,8 @@ namespace StardewArchipelago.Items.Mail
             _letterActions.Add(LetterActionsKeys.GoldenScythe, (_) => ReceiveGoldenScythe());
             _letterActions.Add(LetterActionsKeys.PierreStocklist, (_) => ReceivePierreStocklist());
             _letterActions.Add(LetterActionsKeys.BeachBridge, (_) => RepairBeachBridge());
+            _letterActions.Add(LetterActionsKeys.FruitBats, (_) => SetupFruitBats());
+            _letterActions.Add(LetterActionsKeys.MushroomBoxes, (_) => SetupMushroomBoxes());
             _letterActions.Add(LetterActionsKeys.ProgressiveTool, ReceiveProgressiveTool);
             _letterActions.Add(LetterActionsKeys.FishingRod, (_) => GetFishingRodOfNextLevel());
             _letterActions.Add(LetterActionsKeys.ReturnScepter, (_) => GetReturnScepter());
@@ -200,6 +202,17 @@ namespace StardewArchipelago.Items.Mail
             var beach = Game1.getLocationFromName("Beach") as Beach;
             beach.bridgeFixed.Value = true;
             Beach.fixBridge(beach);
+        }
+
+        private void SetupFruitBats()
+        {
+            Game1.MasterPlayer.caveChoice.Value = 1;
+        }
+
+        private void SetupMushroomBoxes()
+        {
+            var farmCave = Game1.getLocationFromName("FarmCave") as FarmCave;
+            farmCave.setUpMushroomHouse();
         }
 
         private void ReceiveProgressiveTool(string toolGenericName)

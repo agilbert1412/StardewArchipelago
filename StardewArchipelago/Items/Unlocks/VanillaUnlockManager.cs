@@ -17,6 +17,8 @@ namespace StardewArchipelago.Items.Unlocks
         public const string RETURN_SCEPTER_AP_NAME = "Return Scepter";
         public const string GOLDEN_SCYTHE_AP_NAME = "Golden Scythe";
         public const string BEACH_BRIDGE_AP_NAME = "Beach Bridge";
+        public const string FRUIT_BATS = "Fruit Bats";
+        public const string MUSHROOM_BOXES = "Mushroom Boxes";
         public const string SPECIAL_ORDER_BOARD_AP_NAME = "Special Order Board";
         public const string QI_WALNUT_ROOM = "Qi Walnut Room";
         public const string PIERRE_STOCKLIST = "Pierre's Missing Stocklist";
@@ -109,6 +111,8 @@ namespace StardewArchipelago.Items.Unlocks
         private void RegisterIsolatedEventsItems()
         {
             _unlockables.Add(BEACH_BRIDGE_AP_NAME, SendBeachBridgeLetter);
+            _unlockables.Add(FRUIT_BATS, SendFruitBatsLetter);
+            _unlockables.Add(MUSHROOM_BOXES, SendMushroomBoxesLetter);
         }
 
         private void RegisterGingerIslandRepairs()
@@ -319,6 +323,16 @@ namespace StardewArchipelago.Items.Unlocks
         private LetterActionAttachment SendBeachBridgeLetter(ReceivedItem receivedItem)
         {
             return new LetterActionAttachment(receivedItem, LetterActionsKeys.BeachBridge);
+        }
+
+        private LetterActionAttachment SendFruitBatsLetter(ReceivedItem receivedItem)
+        {
+            return new LetterActionAttachment(receivedItem, LetterActionsKeys.FruitBats);
+        }
+
+        private LetterActionAttachment SendMushroomBoxesLetter(ReceivedItem receivedItem)
+        {
+            return new LetterActionAttachment(receivedItem, LetterActionsKeys.MushroomBoxes);
         }
 
         private LetterActionAttachment SendProgressiveAxeLetter(ReceivedItem receivedItem)
