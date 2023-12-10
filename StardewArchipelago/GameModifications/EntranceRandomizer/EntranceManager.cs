@@ -336,7 +336,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Mayor's Manor", "ManorHouse" },
             { "Pierre's General Store", "SeedShop" },
             { "Clint's Blacksmith", "Blacksmith" },
-            { "AlexHouse", "JoshHouse" },
+            { "Alex's House", "JoshHouse" },
             { "Tunnel Entrance", "Backwoods" },
             { "Marnie's Ranch", "AnimalShop" },
             { "Leah's Cottage", "LeahHouse" },
