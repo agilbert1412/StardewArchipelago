@@ -227,7 +227,7 @@ namespace StardewArchipelago.Items.Mail
             "Who ordered the {0} from {2}? Oh, you did.^^    -{1}",
             "I sold my best podracer for this {0}. You're free now^^    -{1}",
             "The {2} animal shelter didn't have any cats, so I got you a {0} out of their dumpster instead.^^    -{1}",
-            "{1} went on vacation to {2}and all they came back with was {0}",
+            "{1} went on vacation to {2} and all they came back with was {0}",
             "Hey, have you heard about the legendary power of the {0}? They say if you share it with someone you really care for, it binds you together forever and ever, through eternity.^^    -{1}",
             "The {0} is a tool that can unlock any lock, whether on a door, a chest, or a heart. It is a powerful weapon that chooses it's owner. It did not choose me.^^It chose you.^^    -{1}",
             "You must use the {0} to defeat the darkness",
