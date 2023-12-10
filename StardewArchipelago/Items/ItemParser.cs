@@ -1,4 +1,5 @@
 ﻿using System;
+using HarmonyLib;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
 using StardewArchipelago.GameModifications;
@@ -23,12 +24,12 @@ namespace StardewArchipelago.Items
 
         // When More mods start to need name mapping, we can make a generic version of this
         private ArchaeologyNameMapper _nameMapper;
-
-        public ItemParser(IModHelper helper, ArchipelagoClient archipelago, StardewItemManager itemManager, TileChooser tileChooser)
+        
+        public ItemParser(IMonitor monitor, IModHelper helper, Harmony harmony, ArchipelagoClient archipelago, StardewItemManager itemManager, TileChooser tileChooser, BabyBirther babyBirther)
         {
             _itemManager = itemManager;
             _unlockManager = new UnlockManager(archipelago);
-            _trapManager = new TrapManager(helper, archipelago, tileChooser);
+            _trapManager = new TrapManager(monitor, helper, harmony, archipelago, tileChooser, babyBirther);
             _nameMapper = new ArchaeologyNameMapper();
         }
 

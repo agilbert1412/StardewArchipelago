@@ -143,6 +143,76 @@ namespace StardewArchipelago.Items.Traps
             {TrapItemsDifficulty.Hell, DroughtTarget.CropsIncludingInside},
             {TrapItemsDifficulty.Nightmare, DroughtTarget.CropsIncludingWateringCan},
         };
+
+        public Dictionary<TrapItemsDifficulty, TimeFliesDuration> TimeFliesDurations = new()
+        {
+            {TrapItemsDifficulty.NoTraps, TimeFliesDuration.Zero},
+            {TrapItemsDifficulty.Easy, TimeFliesDuration.OneHour},
+            {TrapItemsDifficulty.Medium, TimeFliesDuration.TwoHours},
+            {TrapItemsDifficulty.Hard, TimeFliesDuration.SixHours},
+            {TrapItemsDifficulty.Hell, TimeFliesDuration.TwelveHours},
+            {TrapItemsDifficulty.Nightmare, TimeFliesDuration.TwoDays},
+        };
+
+        public Dictionary<TrapItemsDifficulty, int> NumberOfBabies = new()
+        {
+            {TrapItemsDifficulty.NoTraps, 0},
+            {TrapItemsDifficulty.Easy, 4},
+            {TrapItemsDifficulty.Medium, 8},
+            {TrapItemsDifficulty.Hard, 16},
+            {TrapItemsDifficulty.Hell, 32},
+            {TrapItemsDifficulty.Nightmare, 128},
+        };
+
+        public Dictionary<TrapItemsDifficulty, int> MeowBarkNumber = new()
+        {
+            {TrapItemsDifficulty.NoTraps, 0},
+            {TrapItemsDifficulty.Easy, 4},
+            {TrapItemsDifficulty.Medium, 8},
+            {TrapItemsDifficulty.Hard, 16},
+            {TrapItemsDifficulty.Hell, 32},
+            {TrapItemsDifficulty.Nightmare, 128},
+        };
+
+        public Dictionary<TrapItemsDifficulty, int> DepressionTrapDays = new()
+        {
+            {TrapItemsDifficulty.NoTraps, 0},
+            {TrapItemsDifficulty.Easy, 2},
+            {TrapItemsDifficulty.Medium, 3},
+            {TrapItemsDifficulty.Hard, 7},
+            {TrapItemsDifficulty.Hell, 14},
+            {TrapItemsDifficulty.Nightmare, 28},
+        };
+
+        public Dictionary<TrapItemsDifficulty, int> UngrowthDays = new()
+        {
+            {TrapItemsDifficulty.NoTraps, 0},
+            {TrapItemsDifficulty.Easy, 1},
+            {TrapItemsDifficulty.Medium, 2},
+            {TrapItemsDifficulty.Hard, 4},
+            {TrapItemsDifficulty.Hell, 8},
+            {TrapItemsDifficulty.Nightmare, 14},
+        };
+
+        public Dictionary<TrapItemsDifficulty, double> InflationAmount = new()
+        {
+            {TrapItemsDifficulty.NoTraps, 0},
+            {TrapItemsDifficulty.Easy, 1.2},
+            {TrapItemsDifficulty.Medium, 1.4}, // Vanilla Inflation at Clint's after a year is equivalent to 2 traps
+            {TrapItemsDifficulty.Hard, 2.25}, // Vanilla Inflation at Robin's after a year is equivalent to 2 traps
+            {TrapItemsDifficulty.Hell, 3.5},
+            {TrapItemsDifficulty.Nightmare, 5},
+        };
+
+        public Dictionary<TrapItemsDifficulty, int> ExplosionSize = new()
+        {
+            {TrapItemsDifficulty.NoTraps, 0},
+            {TrapItemsDifficulty.Easy, 1},
+            {TrapItemsDifficulty.Medium, 3}, // Cherry Bomb
+            {TrapItemsDifficulty.Hard, 5}, // Bomb
+            {TrapItemsDifficulty.Hell, 7}, // Mega Bomb
+            {TrapItemsDifficulty.Nightmare, 15}, // Good luck!
+        };
     }
 
     public enum TeleportDestination
@@ -178,5 +248,15 @@ namespace StardewArchipelago.Items.Traps
         Crops = 2,
         CropsIncludingInside = 3,
         CropsIncludingWateringCan = 4,
+    }
+
+    public enum TimeFliesDuration
+    {
+        Zero = 0,
+        OneHour = 6,
+        TwoHours = 12,
+        SixHours = 36,
+        TwelveHours = 72,
+        TwoDays = 240,
     }
 }

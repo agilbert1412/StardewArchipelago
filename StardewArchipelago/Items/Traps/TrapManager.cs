@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Archipelago.MultiClient.Net.Enums;
+using HarmonyLib;
 using Microsoft.Xna.Framework;
+using Netcode;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Extensions;
+using StardewArchipelago.GameModifications;
 using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
@@ -16,6 +20,7 @@ using StardewValley.Locations;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
+using Object = StardewValley.Object;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace StardewArchipelago.Items.Traps
@@ -39,45 +44,41 @@ namespace StardewArchipelago.Items.Traps
         private const string WINTER = "Temporary Winter";
         private const string PARIAH = "Pariah";
         private const string DROUGHT = "Drought";
+        private const string TIME_FLIES = "Time Flies";
+        private const string BABIES = "Babies";
+        private const string MEOW = "Meow";
+        private const string BARK = "Bark";
+        private const string DEPRESSION = "Depression";
+        private const string UNGROWTH = "Benjamin Budton";
+        private const string INFLATION = "Inflation";
+        private const string BOMB = "Bomb";
 
+        private static IMonitor _monitor;
         private readonly IModHelper _helper;
-        private readonly ArchipelagoClient _archipelago;
-        private readonly TrapDifficultyBalancer _difficultyBalancer;
+        private static ArchipelagoClient _archipelago;
+        private static TrapDifficultyBalancer _difficultyBalancer;
         private readonly TileChooser _tileChooser;
         private readonly MonsterSpawner _monsterSpawner;
+        private readonly BabyBirther _babyBirther;
         private readonly InventoryShuffler _inventoryShuffler;
         private Dictionary<string, Action> _traps;
-        private static readonly Dictionary<string, Func<bool>> _trapInstantExecutionConditions = new()
-        {
-            {BURNT, () => true},
-            {DARKNESS, () => true},
-            {FROZEN, () => true},
-            {JINXED, () => true},
-            {NAUSEATED, () => true},
-            {SLIMED, () => true},
-            {WEAKNESS, () => true},
-            {TAXES, () => true},
-            {RANDOM_TELEPORT, () => !Game1.eventUp},
-            {CROWS, () => true},
-            {MONSTERS, () => true},
-            // {ENTRANCE_RESHUFFLE, () => true};
-            {DEBRIS, () => true},
-            {SHUFFLE, () => true},
-            // {WINTER, () => true},
-            {PARIAH, () => true},
-            {DROUGHT, () => true},
-        };
 
-        public TrapManager(IModHelper helper, ArchipelagoClient archipelago, TileChooser tileChooser)
+        public TrapManager(IMonitor monitor, IModHelper helper, Harmony harmony, ArchipelagoClient archipelago, TileChooser tileChooser, BabyBirther babyBirther)
         {
+            _monitor = monitor;
             _helper = helper;
             _archipelago = archipelago;
             _difficultyBalancer = new TrapDifficultyBalancer();
             _tileChooser = tileChooser;
             _monsterSpawner = new MonsterSpawner(_tileChooser);
+            _babyBirther = babyBirther;
             _inventoryShuffler = new InventoryShuffler();
             _traps = new Dictionary<string, Action>();
             RegisterTraps();
+            harmony.Patch(
+                original: AccessTools.Method(typeof(ObjToStr), nameof(Object.salePrice)),
+                prefix: new HarmonyMethod(typeof(TrapManager), nameof(SalePrice_GetCorrectInflation_Prefix))
+            );
         }
 
         public bool IsTrap(string unlockName)
@@ -92,7 +93,8 @@ namespace StardewArchipelago.Items.Traps
 
         public bool TryExecuteTrapImmediately(string trapName)
         {
-            if (Game1.player.currentLocation is FarmHouse or IslandFarmHouse) // || Game1.eventUp || Game1.fadeToBlack || Game1.currentMinigame != null || Game1.isWarping || Game1.killScreen)
+            if (Game1.player.currentLocation is FarmHouse
+                or IslandFarmHouse) // || Game1.eventUp || Game1.fadeToBlack || Game1.currentMinigame != null || Game1.isWarping || Game1.killScreen)
             {
                 return false;
             }
@@ -120,7 +122,21 @@ namespace StardewArchipelago.Items.Traps
             // _traps.Add(WINTER, );
             _traps.Add(PARIAH, SendDislikedGiftToEveryone);
             _traps.Add(DROUGHT, PerformDroughtTrap);
+            _traps.Add(TIME_FLIES, SkipTimeForward);
+            _traps.Add(BABIES, SpawnTemporaryBabies);
+            _traps.Add(MEOW, PlayMeows);
+            _traps.Add(BARK, PlayBarks);
+            _traps.Add(DEPRESSION, ForceNextMultisleep);
+            _traps.Add(UNGROWTH, UngrowCrops);
+            _traps.Add(INFLATION, ActivateInflation);
+            _traps.Add(BOMB, Explode);
 
+            RegisterTrapsWithDifferentSpace();
+            RegisterTrapsWithTrapSuffix();
+        }
+
+        private void RegisterTrapsWithDifferentSpace()
+        {
             foreach (var trapName in _traps.Keys.ToArray())
             {
                 var differentSpacedTrapName = trapName.Replace(" ", "_");
@@ -128,6 +144,15 @@ namespace StardewArchipelago.Items.Traps
                 {
                     _traps.Add(differentSpacedTrapName, _traps[trapName]);
                 }
+            }
+        }
+
+        private void RegisterTrapsWithTrapSuffix()
+        {
+            foreach (var trapName in _traps.Keys.ToArray())
+            {
+                var trapWithSuffix = $"{trapName} Trap";
+                _traps.Add(trapWithSuffix, _traps[trapName]);
             }
         }
 
@@ -233,6 +258,7 @@ namespace StardewArchipelago.Items.Traps
                     {
                         validMaps.Add(Game1.player.currentLocation);
                     }
+
                     break;
                 case TeleportDestination.PelicanTown:
                     validMaps.AddRange(Game1.locations.Where(x => x is not IslandLocation));
@@ -267,9 +293,12 @@ namespace StardewArchipelago.Items.Traps
             var farmer = Game1.player;
             var multiplayerField = _helper.Reflection.GetField<Multiplayer>(typeof(Game1), "multiplayer");
             var multiplayer = multiplayerField.GetValue();
-            for (int index = 0; index < 12; ++index)
+            for (var index = 0; index < 12; ++index)
             {
-                multiplayer.broadcastSprites(farmer.currentLocation, new TemporaryAnimatedSprite(354, Game1.random.Next(25, 75), 6, 1, new Vector2(Game1.random.Next((int)farmer.position.X - 256, (int)farmer.position.X + 192), Game1.random.Next((int)farmer.position.Y - 256, (int)farmer.position.Y + 192)), false, Game1.random.NextDouble() < 0.5));
+                multiplayer.broadcastSprites(farmer.currentLocation,
+                    new TemporaryAnimatedSprite(354, Game1.random.Next(25, 75), 6, 1,
+                        new Vector2(Game1.random.Next((int)farmer.position.X - 256, (int)farmer.position.X + 192),
+                            Game1.random.Next((int)farmer.position.Y - 256, (int)farmer.position.Y + 192)), false, Game1.random.NextDouble() < 0.5));
             }
 
             Game1.currentLocation.playSound("wand");
@@ -286,12 +315,13 @@ namespace StardewArchipelago.Items.Traps
             var num = 0;
             for (var x1 = farmer.getTileX() + 8; x1 >= farmer.getTileX() - 8; --x1)
             {
-                multiplayer.broadcastSprites(farmer.currentLocation, new TemporaryAnimatedSprite(6, new Vector2(x1, farmer.getTileY()) * 64f, Color.White, animationInterval: 50f)
-                {
-                    layerDepth = 1f,
-                    delayBeforeAnimationStart = num * 25,
-                    motion = new Vector2(-0.25f, 0.0f),
-                });
+                multiplayer.broadcastSprites(farmer.currentLocation,
+                    new TemporaryAnimatedSprite(6, new Vector2(x1, farmer.getTileY()) * 64f, Color.White, animationInterval: 50f)
+                    {
+                        layerDepth = 1f,
+                        delayBeforeAnimationStart = num * 25,
+                        motion = new Vector2(-0.25f, 0.0f),
+                    });
                 ++num;
             }
         }
@@ -422,7 +452,7 @@ namespace StardewArchipelago.Items.Traps
             {
                 locations.Add(currentLocation);
             }
-            
+
             var amountOfDebris = _difficultyBalancer.AmountOfDebris[_archipelago.SlotData.TrapItemsDifficulty];
             var amountOfDebrisPerLocation = amountOfDebris / locations.Count;
             foreach (var gameLocation in locations)
@@ -555,6 +585,193 @@ namespace StardewArchipelago.Items.Traps
                     }
                 }
             }
+        }
+
+        private void SkipTimeForward()
+        {
+            var timeToSkip = (int)_difficultyBalancer.TimeFliesDurations[_archipelago.SlotData.TrapItemsDifficulty];
+            if (timeToSkip > 120)
+            {
+                MultiSleep.DaysToSkip = (timeToSkip / 120) - 1;
+                Game1.player.startToPassOut();
+                return;
+            }
+
+            for (var i = 0; i < timeToSkip; i++)
+            {
+                Game1.performTenMinuteClockUpdate();
+            }
+        }
+
+        private void SpawnTemporaryBabies()
+        {
+            var numberBabies = _difficultyBalancer.NumberOfBabies[_archipelago.SlotData.TrapItemsDifficulty];
+            for (var i = 0; i < numberBabies; i++)
+            {
+                _babyBirther.SpawnTemporaryBaby(i);
+            }
+        }
+
+        private void PlayMeows()
+        {
+            var numberOfMeows = _difficultyBalancer.MeowBarkNumber[_archipelago.SlotData.TrapItemsDifficulty];
+            PlaySoundsAsync(numberOfMeows, "cat").FireAndForget();
+        }
+
+        private void PlayBarks()
+        {
+            var numberOfMeows = _difficultyBalancer.MeowBarkNumber[_archipelago.SlotData.TrapItemsDifficulty];
+            PlaySoundsAsync(numberOfMeows, "dog_bark").FireAndForget();
+        }
+
+        private async Task PlaySoundsAsync(int numberOfSounds, string sound)
+        {
+            for (var i = 0; i < numberOfSounds; i++)
+            {
+                await Task.Run(() => Thread.Sleep(2000));
+                Game1.playSound(sound);
+            }
+        }
+
+        private void ForceNextMultisleep()
+        {
+            var daysToSkip = _difficultyBalancer.DepressionTrapDays[_archipelago.SlotData.TrapItemsDifficulty];
+            MultiSleep.DaysToSkip = daysToSkip;
+        }
+
+        private void UngrowCrops()
+        {
+            var ungrowthDays = _difficultyBalancer.UngrowthDays[_archipelago.SlotData.TrapItemsDifficulty];
+            var hoeDirts = GetAllHoeDirt(DroughtTarget.CropsIncludingInside);
+            foreach (var hoeDirt in hoeDirts)
+            {
+                var crop = hoeDirt.crop;
+                if (crop == null)
+                {
+                    continue;
+                }
+
+                if (crop.fullyGrown.Value)
+                {
+                    crop.fullyGrown.Set(false);
+                }
+
+                crop.dayOfCurrentPhase.Set(crop.dayOfCurrentPhase.Value - ungrowthDays);
+                while (crop.dayOfCurrentPhase.Value < 0)
+                {
+                    if (crop.currentPhase.Value <= 0)
+                    {
+                        break;
+                    }
+
+                    crop.currentPhase.Set(crop.currentPhase.Value - 1);
+                    var phaseDays = crop.phaseDays[crop.currentPhase.Value];
+                    crop.dayOfCurrentPhase.Set(crop.dayOfCurrentPhase.Value + phaseDays);
+                }
+
+                if (crop.dayOfCurrentPhase.Value < 0)
+                {
+                    crop.dayOfCurrentPhase.Set(0);
+                }
+            }
+        }
+
+        private void ActivateInflation()
+        {
+            Game1.player.RemoveMail("spring_1_2");
+            Game1.player.mailForTomorrow.Add("spring_1_2");
+        }
+
+        // public override int salePrice()
+        public static bool SalePrice_GetCorrectInflation_Prefix(Object __instance, ref int __result)
+        {
+            try
+            {
+                switch (__instance.ParentSheetIndex)
+                {
+                    case 378:
+                        __result = GetInflatedPrice(80);
+                        return false; // don't run original logic
+                    case 380:
+                        __result = GetInflatedPrice(150);
+                        return false; // don't run original logic
+                    case 382:
+                        __result = GetInflatedPrice(120);
+                        return false; // don't run original logic
+                    case 384:
+                        __result = GetInflatedPrice(350);
+                        return false; // don't run original logic
+                    case 388:
+                        __result = GetInflatedPrice(10);
+                        return false; // don't run original logic
+                    case 390:
+                        __result = GetInflatedPrice(20);
+                        return false; // don't run original logic
+                    default:
+                        return true; // run original logic
+                }
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(SalePrice_GetCorrectInflation_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
+        }
+
+        private static int GetInflatedPrice(int price)
+        {
+            var inflationRate = _difficultyBalancer.InflationAmount[_archipelago.SlotData.TrapItemsDifficulty];
+            var totalInflation = inflationRate * _archipelago.GetReceivedItemCount("Inflation Trap");
+            return (int)(price * totalInflation);
+        }
+
+        private void Explode()
+        {
+            var explosionRadius = _difficultyBalancer.ExplosionSize[_archipelago.SlotData.TrapItemsDifficulty];
+
+            var location = Game1.player.currentLocation;
+            var tile = Game1.player.getTileLocation();
+            var x = tile.X * 64;
+            var y = tile.Y * 64;
+            // protected internal static Multiplayer multiplayer = new Multiplayer();
+            var multiplayerField = _helper.Reflection.GetField<Multiplayer>(typeof(Game1), "multiplayer");
+            var multiplayer = multiplayerField.GetValue();
+            var parentSheetIndex = 287;
+            if (explosionRadius < 5)
+            {
+                parentSheetIndex = 286;
+            }
+            if (explosionRadius > 5)
+            {
+                parentSheetIndex = 288;
+            }
+
+            var randomId = Game1.random.Next();
+            location.playSound("thudStep");
+            var bombSprite = new TemporaryAnimatedSprite(parentSheetIndex, 100f, 1, 24, tile * 64f, true, false, location, Game1.player)
+            {
+                shakeIntensity = 0.5f,
+                shakeIntensityChange = 1f / 500f,
+                extraInfoForEndBehavior = randomId,
+                endFunction = location.removeTemporarySpritesWithID,
+                bombRadius = explosionRadius,
+            };
+            multiplayer.broadcastSprites(location, bombSprite);
+            multiplayer.broadcastSprites(location, new TemporaryAnimatedSprite("LooseSprites\\Cursors", new Rectangle(598, 1279, 3, 4), 53f, 5, 9, tile * 64f + new Vector2(5f, 3f) * 4f, true, false, (y + 7) / 10000f, 0.0f, Color.Yellow, 4f, 0.0f, 0.0f, 0.0f)
+            {
+                id = randomId
+            });
+            multiplayer.broadcastSprites(location, new TemporaryAnimatedSprite("LooseSprites\\Cursors", new Rectangle(598, 1279, 3, 4), 53f, 5, 9, tile * 64f + new Vector2(5f, 3f) * 4f, true, true, (y + 7) / 10000f, 0.0f, Color.Orange, 4f, 0.0f, 0.0f, 0.0f)
+            {
+                delayBeforeAnimationStart = 50,
+                id = randomId
+            });
+            multiplayer.broadcastSprites(location, new TemporaryAnimatedSprite("LooseSprites\\Cursors", new Rectangle(598, 1279, 3, 4), 53f, 5, 9, tile * 64f + new Vector2(5f, 3f) * 4f, true, false, (y + 7) / 10000f, 0.0f, Color.White, 3f, 0.0f, 0.0f, 0.0f)
+            {
+                delayBeforeAnimationStart = 100,
+                id = randomId
+            });
+            location.netAudio.StartPlaying("fuse");
         }
     }
 }

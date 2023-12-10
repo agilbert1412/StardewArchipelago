@@ -29,14 +29,14 @@ namespace StardewArchipelago.Items.Mail
         private readonly BabyBirther _babyBirther;
         private Dictionary<string, Action<string>> _letterActions;
 
-        public LetterActions(IModHelper modHelper, Mailman mail, ArchipelagoClient archipelago, WeaponsManager weaponsManager, TrapManager trapManager)
+        public LetterActions(IModHelper modHelper, Mailman mail, ArchipelagoClient archipelago, WeaponsManager weaponsManager, TrapManager trapManager, BabyBirther babyBirther)
         {
             _modHelper = modHelper;
             _mail = mail;
             _archipelago = archipelago;
             _weaponsManager = weaponsManager;
             _trapManager = trapManager;
-            _babyBirther = new BabyBirther();
+            _babyBirther = babyBirther;
             var modLetterActions = new ModLetterActions();
             _letterActions = new Dictionary<string, Action<string>>();
             _letterActions.Add(LetterActionsKeys.Friendship, IncreaseFriendshipWithEveryone);

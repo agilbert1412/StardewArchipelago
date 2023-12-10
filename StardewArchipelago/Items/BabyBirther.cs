@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Goals;
+using StardewArchipelago.Items.Traps;
 using StardewValley;
 using StardewValley.Characters;
 
@@ -46,6 +47,24 @@ namespace StardewArchipelago.Items
                 spouse.shouldSayMarriageDialogue.Value = true;
                 spouse.currentMarriageDialogue.Insert(0, new MarriageDialogueReference("Data\\ExtraDialogue", "NewChild_Adoption", true, babyName));
             }
+        }
+
+        public void SpawnTemporaryBaby(int seedOffset)
+        {
+            var seed = (int)(Game1.uniqueIDForThisGame + Game1.stats.DaysPlayed) + seedOffset;
+            var random = new Random(seed);
+            var babyGender = random.NextDouble() < 0.5;
+            var babyColor = random.NextDouble() < 0.5;
+            var babyName = ChooseBabyName(random);
+
+            var currentMap = Game1.currentLocation;
+            var tile = currentMap.getRandomTile();
+            var age = random.Next(4);
+            var baby = new TemporaryBaby(babyName, babyGender, babyColor, Game1.player, age)
+            {
+                Position = tile,
+            };
+            Game1.currentLocation.characters.Add(baby);
         }
 
         private string ChooseBabyName(Random random)
