@@ -71,11 +71,6 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             {
                 _locationAliases[locationName] = locationAlias;
             }
-            
-            foreach( var kvp in _aliasesRemoveSpaces) // to keep the 's and space rules at the bottom
-            {
-                _locationAliases.Add(kvp.Key, kvp.Value);
-            }
 
             foreach (var (originalEntrance, replacementEntrance) in slotData.ModifiedEntrances)
             {
@@ -288,16 +283,16 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
                 var aliased1 = TurnAliased(parts[0]);
                 var aliased2 = TurnAliased(parts[1]);
                 var newEntrance = $"{aliased1}{TRANSITIONAL_STRING}{aliased2}";
-                var newEntranceAliased = TurnAliased(newEntrance, _entranceAliases);
+                var newEntranceAliased = TurnAliased(newEntrance, _entranceAliases, false);
                 return newEntranceAliased;
             }
 
-            var modifiedString = TurnAliased(key, _locationAliases);
+            var modifiedString = TurnAliased(TurnAliased(key, _locationAliases, false), _locationsSingleWordAliases, true);
             //modifiedString = ModTurnAliased(key, modifiedString);
             return modifiedString;
         }
 
-        private string TurnAliased(string key, Dictionary<string, string> aliases)
+        private string TurnAliased(string key, Dictionary<string, string> aliases, bool singleWord)
         {
             var modifiedString = key;
             foreach (var oldString in aliases.Keys.OrderByDescending(x => x.Length))
@@ -309,7 +304,22 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
                     customizedNewString = string.Format(newString, Game1.player.isMale ? "Mens" : "Womens");
                 }
 
-                modifiedString = modifiedString.Replace(oldString, customizedNewString);
+                if (singleWord)
+                {
+                    modifiedString = modifiedString.Replace(oldString, customizedNewString);
+                }
+                else
+                {
+                    if (modifiedString.Contains(oldString) && !modifiedString.Equals(oldString))
+                    {
+                        // throw new ArgumentException($"This string is a partial replacement! {oldString}");
+                    }
+
+                    if (modifiedString.Equals(oldString))
+                    {
+                        modifiedString = customizedNewString;
+                    }
+                }
             }
 
             return modifiedString;
@@ -326,11 +336,11 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Mayor's Manor", "ManorHouse" },
             { "Pierre's General Store", "SeedShop" },
             { "Clint's Blacksmith", "Blacksmith" },
-            { "Alex", "Josh" },
+            { "AlexHouse", "JoshHouse" },
             { "Tunnel Entrance", "Backwoods" },
             { "Marnie's Ranch", "AnimalShop" },
-            { "Cottage", "House" },
-            { "Tower", "House" },
+            { "Leah's Cottage", "LeahHouse" },
+            { "Wizard Tower", "WizardHouse" },
             { "Sewers", "Sewer" },
             { "Bus Tunnel", "Tunnel" },
             { "Carpenter Shop", "ScienceHouse|6|24" }, // LockedDoorWarp 6 24 ScienceHouse 900 2000S–
@@ -365,7 +375,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Mutant Bug Lair", "BugLand"},
         };
 
-        private Dictionary<string, string> _aliasesRemoveSpaces = new()
+        private Dictionary<string, string> _locationsSingleWordAliases = new()
         {
             { "'s", "" },
             { " ", "" },
