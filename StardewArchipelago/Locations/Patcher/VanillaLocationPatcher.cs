@@ -704,6 +704,11 @@ namespace StardewArchipelago.Locations.Patcher
             );
 
             _harmony.Patch(
+                original: AccessTools.Method(typeof(ShopMenu), nameof(ShopMenu.update)),
+                postfix: new HarmonyMethod(typeof(MoonlightJelliesInjections), nameof(MoonlightJelliesInjections.Update_HandleMoonlightJelliesShopFirstTimeOnly_Postfix))
+            );
+
+            _harmony.Patch(
                 original: AccessTools.Method(typeof(StrengthGame), nameof(StrengthGame.update)),
                 prefix: new HarmonyMethod(typeof(FairInjections), nameof(FairInjections.StrengthGameUpdate_StrongEnough_Prefix))
             );
