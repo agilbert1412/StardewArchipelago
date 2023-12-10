@@ -180,6 +180,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
             {
                 var name = __instance.names[i] as string;
                 var friend = _friends.GetFriend(name);
+                if (friend == null)
+                {
+                    return;
+                }
                 var apPoints = (int)GetFriendshipPoints(friend.StardewName);
                 var maxShuffled = friend.ShuffledUpTo(_archipelago);
                 var heartSize = _archipelago.SlotData.FriendsanityHeartSize;

@@ -130,8 +130,8 @@ namespace StardewArchipelago.Items.Traps
             _traps.Add(INFLATION, ActivateInflation);
             _traps.Add(BOMB, Explode);
 
-            RegisterTrapsWithDifferentSpace();
             RegisterTrapsWithTrapSuffix();
+            RegisterTrapsWithDifferentSpace();
         }
 
         private void RegisterTrapsWithDifferentSpace()
@@ -720,7 +720,7 @@ namespace StardewArchipelago.Items.Traps
         private static int GetInflatedPrice(int price)
         {
             var inflationRate = _difficultyBalancer.InflationAmount[_archipelago.SlotData.TrapItemsDifficulty];
-            var totalInflation = inflationRate * _archipelago.GetReceivedItemCount("Inflation Trap");
+            var totalInflation = Math.Pow(inflationRate, _archipelago.GetReceivedItemCount("Inflation Trap"));
             return (int)(price * totalInflation);
         }
 
