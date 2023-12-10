@@ -60,15 +60,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                         continue;
                     }
 
-                    var candidates = equipmentApItem switch
-                    {
-                        VanillaUnlockManager.PROGRESSIVE_WEAPON => _weaponsManager.WeaponsByTier[received],
-                        VanillaUnlockManager.PROGRESSIVE_SWORD => _weaponsManager.WeaponsByCategoryByTier[WeaponsManager.TYPE_SWORD][received],
-                        VanillaUnlockManager.PROGRESSIVE_CLUB => _weaponsManager.WeaponsByCategoryByTier[WeaponsManager.TYPE_CLUB][received],
-                        VanillaUnlockManager.PROGRESSIVE_DAGGER => _weaponsManager.WeaponsByCategoryByTier[WeaponsManager.TYPE_DAGGER][received],
-                        VanillaUnlockManager.PROGRESSIVE_BOOTS => _weaponsManager.BootsByTier[received],
-                        _ => new List<StardewItem>(),
-                    };
+                    var candidates = GetRecoveryCandidates(equipmentApItem, received);
 
                     if (!candidates.Any())
                     {
@@ -97,6 +89,35 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     LogLevel.Error);
                 return true; // run original logic
             }
+        }
+
+        private static List<StardewItem> GetRecoveryCandidates(string equipmentApItem, int tier)
+        {
+            var candidates = equipmentApItem switch
+            {
+                VanillaUnlockManager.PROGRESSIVE_WEAPON => GetRecoveryCandidates(_weaponsManager.WeaponsByTier, tier),
+                VanillaUnlockManager.PROGRESSIVE_SWORD => GetRecoveryCandidates(_weaponsManager.WeaponsByCategoryByTier[WeaponsManager.TYPE_SWORD], tier),
+                VanillaUnlockManager.PROGRESSIVE_CLUB => GetRecoveryCandidates(_weaponsManager.WeaponsByCategoryByTier[WeaponsManager.TYPE_CLUB], tier),
+                VanillaUnlockManager.PROGRESSIVE_DAGGER => GetRecoveryCandidates(_weaponsManager.WeaponsByCategoryByTier[WeaponsManager.TYPE_DAGGER], tier),
+                VanillaUnlockManager.PROGRESSIVE_BOOTS => GetRecoveryCandidates(_weaponsManager.BootsByTier, tier),
+                _ => new List<StardewItem>(),
+            };
+            return candidates;
+        }
+
+        private static List<StardewItem> GetRecoveryCandidates(Dictionary<int, List<StardewItem>> itemsByTier, int tier)
+        {
+            if (tier <= 0)
+            {
+                return new List<StardewItem>();
+            }
+
+            if (!itemsByTier.ContainsKey(tier) || !itemsByTier[tier].Any())
+            {
+                return GetRecoveryCandidates(itemsByTier, tier - 1);
+            }
+
+            return itemsByTier[tier];
         }
 
         public static void RemoveExtraItemsFromItemsLostLastDeath()
