@@ -10,6 +10,8 @@ namespace StardewArchipelago.Stardew
 {
     public class BigCraftable : StardewItem
     {
+        public const string BIG_CRAFTABLE_SEPARATOR = ":";
+
         public int Edibility { get; private set; }
         public string ObjectType { get; private set; }
         public string Category { get; private set; }
@@ -83,7 +85,7 @@ namespace StardewArchipelago.Stardew
 
         public override LetterAttachment GetAsLetter(ReceivedItem receivedItem, int amount = 1)
         {
-            return new LetterActionAttachment(receivedItem, LetterActionsKeys.GiveBigCraftable, Id.ToString());
+            return new LetterActionAttachment(receivedItem, LetterActionsKeys.GiveBigCraftable, $"{Id}{BIG_CRAFTABLE_SEPARATOR}{amount}");
         }
     }
 }

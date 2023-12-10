@@ -376,11 +376,13 @@ namespace StardewArchipelago.Items.Mail
             Game1.player.addItemByMenuIfNecessary(itemToAdd);
         }
 
-        private void ReceiveBigCraftable(string bigCraftableId)
+        private void ReceiveBigCraftable(string bigCraftableIdAndAmount)
         {
-            var id = int.Parse(bigCraftableId);
+            var parts = bigCraftableIdAndAmount.Split(BigCraftable.BIG_CRAFTABLE_SEPARATOR);
+            var id = int.Parse(parts[0]);
+            var amount = parts.Length > 1 ? int.Parse(parts[1]) : 1;
             var bigCraftable = new Object(Vector2.Zero, id);
-            bigCraftable.Stack = 1;
+            bigCraftable.Stack = amount;
             ReceiveItem(bigCraftable);
         }
 
