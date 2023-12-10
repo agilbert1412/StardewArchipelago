@@ -29,6 +29,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Fable Reef", "Custom_FableReef" },
             { "First Slash Guild", "Custom_FirstSlashGuild" },
             { "Highlands Outside", "Custom_Highlands" },
+            { "Highlands Cavern", "Custom_HighlandsCavern"},
             { "Lance's House Ladder", "Custom_HighlandsOutpost|12|5" },
             { "Lance's House Main", "Custom_HighlandsOutpost|7|9" },
             { "Lost Woods", "Custom_JunimoWoods|37|2" },
