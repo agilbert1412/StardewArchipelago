@@ -672,13 +672,13 @@ namespace StardewArchipelago.Items.Traps
                 crop.dayOfCurrentPhase.Set(crop.dayOfCurrentPhase.Value - ungrowthDays);
                 while (crop.dayOfCurrentPhase.Value < 0)
                 {
-                    if (crop.currentPhase.Value <= 0)
+                    if (crop.currentPhase.Value <= 0 || crop.currentPhase.Value >= crop.phaseDays.Count)
                     {
                         break;
                     }
 
-                    crop.currentPhase.Set(crop.currentPhase.Value - 1);
                     var phaseDays = crop.phaseDays[crop.currentPhase.Value];
+                    crop.currentPhase.Set(crop.currentPhase.Value - 1);
                     crop.dayOfCurrentPhase.Set(crop.dayOfCurrentPhase.Value + phaseDays);
                 }
 
