@@ -58,11 +58,11 @@ namespace StardewArchipelago.Bundles
 
         private static void RestoreBundleState(NetWorldState worldState, Dictionary<int, bool[]> bundlesState)
         {
-            foreach (var (key, values) in worldState.Bundles.Pairs.ToArray())
+            foreach (var (key, values) in bundlesState)
             {
-                if (bundlesState.ContainsKey(key))
+                if (worldState.Bundles.ContainsKey(key))
                 {
-                    worldState.Bundles[key] = bundlesState[key];
+                    worldState.Bundles[key] = values;
                 }
             }
         }
