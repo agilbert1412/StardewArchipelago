@@ -825,7 +825,7 @@ namespace StardewArchipelago.Locations.Patcher
             if (_archipelago.SlotData.Goal == Goal.ProtectorOfTheValley)
             {
                 _harmony.Patch(
-                    original: AccessTools.Method(typeof(Stats), nameof(Stats.monstersKilled)),
+                    original: AccessTools.Method(typeof(Stats), nameof(Stats.monsterKilled)),
                     postfix: new HarmonyMethod(typeof(MonsterSlayerInjections), nameof(MonsterSlayerInjections.MonsterKilled_CheckGoalCompletion_Postfix))
                 );
 
