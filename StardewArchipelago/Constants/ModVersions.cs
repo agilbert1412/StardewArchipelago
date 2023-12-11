@@ -29,7 +29,7 @@ namespace StardewArchipelago.Constants
             { ModNames.YOBA, "1.0.0"},
             { ModNames.SVE, "1.14.24"},
             { ModNames.ALECTO, "1.1.7"},
-            { ModNames.DISTANT_LANDS, "1.0.5"}
+            { ModNames.DISTANT_LANDS, "1.0.7"}
         };
 }
 }
