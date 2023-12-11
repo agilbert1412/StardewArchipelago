@@ -5,6 +5,7 @@ using HarmonyLib;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Goals;
 using StardewArchipelago.Locations;
+using StardewArchipelago.Serialization;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
@@ -17,14 +18,16 @@ namespace StardewArchipelago.Items.Mail
         private readonly Harmony _harmony;
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
+        private static ArchipelagoStateDto _state;
         private static LetterActions _letterActions;
 
-        public MailPatcher(IMonitor monitor, Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker, LetterActions letterActions)
+        public MailPatcher(IMonitor monitor, Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker, ArchipelagoStateDto state, LetterActions letterActions)
         {
             _monitor = monitor;
             _harmony = harmony;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
+            _state = state;
             _letterActions = letterActions;
         }
 
@@ -108,9 +111,16 @@ namespace StardewArchipelago.Items.Mail
                     return true; // run original logic
                 }
 
+                var mailData = Game1.content.Load<Dictionary<string, string>>("Data\\mail");
+                if (!mailData.ContainsKey(nextLetter))
+                {
+                    mailData.Add(nextLetter, _state.LettersGenerated[nextLetter]);
+                }
+
                 // We force add the letter because it can contain custom content that can be then considered "to not be remembered" by the base game.
                 // So if it's an ap letter, always remember it
                 Game1.player.mailReceived.Add(nextLetter);
+
                 return true; // run original logic
             }
             catch (Exception ex)

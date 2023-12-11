@@ -182,7 +182,6 @@ namespace StardewArchipelago
             State.ItemsReceived = _itemManager.GetAllItemsAlreadyProcessed();
             State.LocationsChecked = _locationChecker.GetAllLocationsAlreadyChecked();
             State.LocationsScouted = _archipelago.ScoutedLocations;
-            State.LettersGenerated = _mail.GetAllLettersGenerated();
             // _state.SeasonOrder should be fine?
 
             DebugAssertStateValues(State);
@@ -199,6 +198,13 @@ namespace StardewArchipelago
                     $"About to write Archipelago State data, but the connectionInfo is null! This should never happen. Please contact KaitoKid and describe what you did last so it can be investigated.",
                     LogLevel.Error);
             }
+
+            if (state.LettersGenerated == null || !state.LettersGenerated.Any())
+            {
+                Monitor.Log(
+                    $"About to write Archipelago State data, but the there are no custom letters! This should never happen. Please contact KaitoKid and describe what you did last so it can be investigated.",
+                    LogLevel.Error);
+            }
         }
 
         private void OnSaved(object sender, SavedEventArgs e)
@@ -210,7 +216,7 @@ namespace StardewArchipelago
             ReadPersistentArchipelagoData();
 
             _stardewItemManager = new StardewItemManager();
-            _mail = new Mailman(State.LettersGenerated);
+            _mail = new Mailman(State);
             _locationChecker = new LocationChecker(Monitor, _archipelago, State.LocationsChecked);
             _itemPatcher = new ItemPatcher(Monitor, _helper, _harmony, _archipelago);
             _goalManager = new GoalManager(Monitor, _helper, _harmony, _archipelago, _locationChecker);
@@ -254,7 +260,7 @@ namespace StardewArchipelago
             var babyBirther = new BabyBirther();
             _itemManager = new ItemManager(Monitor, _helper, _harmony, _archipelago, _stardewItemManager, _mail, tileChooser, babyBirther, State.ItemsReceived);
             var weaponsManager = new WeaponsManager(_stardewItemManager, _archipelago.SlotData.Mods);
-            _mailPatcher = new MailPatcher(Monitor, _harmony, _archipelago, _locationChecker, new LetterActions(_helper, _mail, _archipelago, weaponsManager, _itemManager.TrapManager, babyBirther));
+            _mailPatcher = new MailPatcher(Monitor, _harmony, _archipelago, _locationChecker, State, new LetterActions(_helper, _mail, _archipelago, weaponsManager, _itemManager.TrapManager, babyBirther));
             var bundlesManager = new BundlesManager(_helper, _stardewItemManager, _archipelago.SlotData.BundlesData);
             bundlesManager.ReplaceAllBundles();
             _locationsPatcher = new LocationPatcher(Monitor, _helper, _harmony, _archipelago, State, _locationChecker, _stardewItemManager, weaponsManager, shopStockGenerator);

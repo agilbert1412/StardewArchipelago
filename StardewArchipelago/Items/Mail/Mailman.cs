@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Force.DeepCloner;
+using StardewArchipelago.Serialization;
 using StardewValley;
 
 namespace StardewArchipelago.Items.Mail
@@ -10,12 +11,12 @@ namespace StardewArchipelago.Items.Mail
         private static readonly Random _random = new Random();
         private bool _sendForTomorrow = true;
 
-        private Dictionary<string, string> _lettersGenerated;
+        private ArchipelagoStateDto _state;
 
-        public Mailman(Dictionary<string, string> lettersGenerated)
+        public Mailman(ArchipelagoStateDto state)
         {
-            _lettersGenerated = lettersGenerated.DeepClone();
-            foreach (var (mailKey, mailContent) in lettersGenerated)
+            _state = state;
+            foreach (var (mailKey, mailContent) in _state.LettersGenerated)
             {
                 var mailData = Game1.content.Load<Dictionary<string, string>>("Data\\mail");
                 mailData[mailKey] = mailContent;
@@ -77,13 +78,13 @@ namespace StardewArchipelago.Items.Mail
             mailContent = mailContent.Replace("<3", "<");
             var mailData = Game1.content.Load<Dictionary<string, string>>("Data\\mail");
             mailData[mailKey] = mailContent;
-            if (_lettersGenerated.ContainsKey(mailKey))
+            if (_state.LettersGenerated.ContainsKey(mailKey))
             {
-                _lettersGenerated[mailKey] = mailContent;
+                _state.LettersGenerated[mailKey] = mailContent;
             }
             else
             {
-                _lettersGenerated.Add(mailKey, mailContent);
+                _state.LettersGenerated.Add(mailKey, mailContent);
             }
         }
 
@@ -101,11 +102,6 @@ namespace StardewArchipelago.Items.Mail
             }
 
             return numberReceived;
-        }
-
-        public Dictionary<string, string> GetAllLettersGenerated()
-        {
-            return _lettersGenerated.DeepClone();
         }
 
         public void SendToday()
