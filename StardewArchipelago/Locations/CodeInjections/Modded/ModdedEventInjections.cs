@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants;
 using StardewValley;
 using StardewArchipelago.Locations.CodeInjections.Modded.SVE;
 
@@ -72,20 +73,24 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 Total_OnWarped_Events[eventMapName] = eventKeys;
             }
 
-            foreach (var (eventMapName, eventKeys) in SVECutsceneInjections.SVE_OnWarped_Events)
-            {
-                Total_OnWarped_Events[eventMapName] = eventKeys;
-            }
-
             foreach (var (eventMapName, eventKeys) in Base_Static_Events)
             {
                 Total_Static_Events[eventMapName] = eventKeys;
             }
 
-            foreach (var (eventMapName, eventKeys) in SVECutsceneInjections.SVE_Static_Events)
+            if (_archipelago.SlotData.Mods.HasMod(ModNames.SVE))
             {
-                Total_Static_Events[eventMapName] = eventKeys;
+                foreach (var (eventMapName, eventKeys) in SVECutsceneInjections.SVE_OnWarped_Events)
+                {
+                    Total_OnWarped_Events[eventMapName] = eventKeys;
+                }
+
+                foreach (var (eventMapName, eventKeys) in SVECutsceneInjections.SVE_Static_Events)
+                {
+                    Total_Static_Events[eventMapName] = eventKeys;
+                }
             }
+            
         }
 
         // These events only require to load at initialization due to lack of "When" requirements from CP.
