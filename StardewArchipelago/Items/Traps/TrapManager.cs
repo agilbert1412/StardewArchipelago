@@ -78,6 +78,20 @@ namespace StardewArchipelago.Items.Traps
                 original: AccessTools.Method(typeof(Object), nameof(Object.salePrice)),
                 prefix: new HarmonyMethod(typeof(TrapManager), nameof(SalePrice_GetCorrectInflation_Prefix))
             );
+            InitializeTemporaryBaby(monitor, helper, harmony);
+        }
+
+        private void InitializeTemporaryBaby(IMonitor monitor, IModHelper helper, Harmony harmony)
+        {
+            TemporaryBaby.Initialize(monitor, helper);
+            harmony.Patch(
+                original: AccessTools.Method(typeof(Child), nameof(Child.tenMinuteUpdate)),
+                prefix: new HarmonyMethod(typeof(TemporaryBaby), nameof(TemporaryBaby.ChildTenMinuteUpdate_MoveBabiesAnywhere_Prefix))
+            );
+            harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performTenMinuteUpdate)),
+                prefix: new HarmonyMethod(typeof(TemporaryBaby), nameof(TemporaryBaby.GameLocationPerformTenMinuteUpdate_MoveBabiesAnywhere_Prefix))
+            );
         }
 
         public bool IsTrap(string unlockName)
