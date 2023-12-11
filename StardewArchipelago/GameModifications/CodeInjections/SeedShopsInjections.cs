@@ -44,7 +44,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     var pierre = __instance.getCharacterFromName("Pierre");
                     if (pierre != null && pierre.getTileLocation().Equals(new Vector2(4f, 17f)) && Game1.player.getTileY() > pierre.getTileY())
                     {
-                        Game1.activeClickableMenu = new ShopMenu(_shopStockGenerator.GetPierreShopStock(seedShop), who: "Pierre", on_purchase: _shopStockGenerator.PierrePersistentStock.OnPurchase);
+                        ActivatePierreShopMenu(seedShop);
                         __result = true;
                         return false; // don't run original logic
                     }
@@ -52,7 +52,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     if (pierre == null && Game1.IsVisitingIslandToday("Pierre"))
                     {
                         Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\Locations:SeedShop_MoneyBox"));
-                        Game1.afterDialogues = () => Game1.activeClickableMenu = new ShopMenu(_shopStockGenerator.GetPierreShopStock(seedShop), who: "Pierre", on_purchase: _shopStockGenerator.PierrePersistentStock.OnPurchase);
+                        Game1.afterDialogues = () => ActivatePierreShopMenu(seedShop);
                         __result = true;
                         return false; // don't run original logic
                     }
@@ -82,6 +82,12 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 _monitor.Log($"Failed in {nameof(OpenShopMenu_PierreAndSandyPersistentEvent_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
             }
+        }
+
+        private static void ActivatePierreShopMenu(SeedShop seedShop)
+        {
+            Game1.activeClickableMenu = new ShopMenu(_shopStockGenerator.GetPierreShopStock(seedShop), who: "Pierre",
+                on_purchase: _shopStockGenerator.PierrePersistentStock.OnPurchase);
         }
 
 
