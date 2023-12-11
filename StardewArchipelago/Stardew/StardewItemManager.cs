@@ -50,6 +50,14 @@ namespace StardewArchipelago.Stardew
             new List<string> { "Cookie", "Cookies" },
         };
 
+        public Dictionary<string, string> RecipeNameAliases = new()
+        {
+            {"Cheese Cauli.", "Cheese Cauliflower"},
+            {"Dish o' The Sea", "Dish O' The Sea"},
+            {"Eggplant Parm.", "Eggplant Parmesan"},
+            {"Cran. Sauce", "Cranberry Sauce"},
+        };
+
         public StardewItemManager()
         {
             _nameMapper = new ArchaeologyNameMapper();
@@ -425,6 +433,10 @@ namespace StardewArchipelago.Stardew
                 }
 
                 _cookingRecipesByName.Add(recipe.ItemName, recipe);
+                if (RecipeNameAliases.ContainsKey(recipe.ItemName))
+                {
+                    _cookingRecipesByName.Add(RecipeNameAliases[recipe.ItemName], recipe);
+                }
             }
         }
 
