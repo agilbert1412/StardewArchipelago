@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Netcode;
 using Newtonsoft.Json;
 using StardewArchipelago.Stardew;
@@ -36,10 +37,34 @@ namespace StardewArchipelago.Bundles
             var netBundleDataField = _modHelper.Reflection.GetField<NetStringDictionary<string, NetString>>(worldState, "netBundleData");
             var netBundleData = netBundleDataField.GetValue();
             netBundleData.Clear();
+            var bundlesState = BackupBundleState(worldState);
             worldState.Bundles.Clear();
             worldState.BundleRewards.Clear();
             worldState.BundleData.Clear();
             worldState.SetBundleData(_currentBundlesData);
+            RestoreBundleState(worldState, bundlesState);
+        }
+
+        private static Dictionary<int, bool[]> BackupBundleState(NetWorldState worldState)
+        {
+            var bundlesState = new Dictionary<int, bool[]>();
+            foreach (var (key, values) in worldState.Bundles.Pairs)
+            {
+                bundlesState.Add(key, values);
+            }
+
+            return bundlesState;
+        }
+
+        private static void RestoreBundleState(NetWorldState worldState, Dictionary<int, bool[]> bundlesState)
+        {
+            foreach (var (key, values) in worldState.Bundles.Pairs.ToArray())
+            {
+                if (bundlesState.ContainsKey(key))
+                {
+                    worldState.Bundles[key] = bundlesState[key];
+                }
+            }
         }
     }
 }
