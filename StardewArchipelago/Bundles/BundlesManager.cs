@@ -62,7 +62,8 @@ namespace StardewArchipelago.Bundles
             {
                 if (worldState.Bundles.ContainsKey(key))
                 {
-                    worldState.Bundles[key] = values;
+                    worldState.Bundles.Remove(key);
+                    worldState.Bundles.Add(key, values);
                 }
             }
         }
