@@ -282,8 +282,6 @@ namespace StardewArchipelago.GameModifications
                 original: AccessTools.Method(typeof(Game1), nameof(Game1.getWeatherModificationsForDate)),
                 prefix: new HarmonyMethod(typeof(SeasonsRandomizer), nameof(SeasonsRandomizer.GetWeatherModificationsForDate_UseCorrectDates_Prefix))
             );
-
-            SeasonsRandomizer.ChangeMailKeysBasedOnSeasonsToDaysElapsed();
         }
 
         private void PatchSeedShops()
