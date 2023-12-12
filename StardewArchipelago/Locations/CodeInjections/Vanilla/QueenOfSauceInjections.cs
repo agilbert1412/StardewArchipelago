@@ -46,6 +46,22 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             try
             {
+                if (__instance == null)
+                {
+                    return false; // don't run original logic
+                }
+
+                // private TemporaryAnimatedSprite screen;
+                var screenField = _helper.Reflection.GetField<TemporaryAnimatedSprite>(__instance, "screen");
+
+                // private int currentChannel;
+                var currentChannelField = _helper.Reflection.GetField<int>(__instance, "currentChannel");
+
+                if (screenField.GetValue() == null || currentChannelField.GetValue() != 5)
+                {
+                    return false; // don't run original logic
+                }
+
                 var cookingRecipes = Game1.temporaryContent.Load<Dictionary<string, string>>("Data\\TV\\CookingChannel");
                 var recipeWeek = PickRecipeWeekToTeach(cookingRecipes);
 
