@@ -801,23 +801,37 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void AddShipsanityLocations()
         {
-            if (_archipelago.SlotData.Goal == Goal.FullShipment)
-            {
-                _harmony.Patch(
-                    original: AccessTools.Method(typeof(Game1), "_newDayAfterFade"),
-                    postfix: new HarmonyMethod(typeof(ShippingInjections), nameof(ShippingInjections.NewDayAfterFade_CheckGoalCompletion_Postfix))
-                );
-            }
+            var shouldPostfix = _archipelago.SlotData.Goal == Goal.FullShipment;
+            var shouldPrefix = _archipelago.SlotData.Shipsanity != Shipsanity.None;
 
-            if (_archipelago.SlotData.Shipsanity == Shipsanity.None)
+            if (!shouldPrefix && !shouldPostfix)
             {
                 return;
             }
 
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(Game1), "_newDayAfterFade"),
-                prefix: new HarmonyMethod(typeof(ShippingInjections), nameof(ShippingInjections.NewDayAfterFade_CheckShipsanityLocations_Prefix))
-            );
+            var original = AccessTools.Method(typeof(Game1), "_newDayAfterFade");
+            if (shouldPrefix && shouldPostfix)
+            {
+                _harmony.Patch(
+                    original: original,
+                    prefix: new HarmonyMethod(typeof(ShippingInjections), nameof(ShippingInjections.NewDayAfterFade_CheckShipsanityLocations_Prefix)),
+                    postfix: new HarmonyMethod(typeof(ShippingInjections), nameof(ShippingInjections.NewDayAfterFade_CheckGoalCompletion_Postfix))
+                );
+            }
+            else if (shouldPrefix)
+            {
+                _harmony.Patch(
+                    original: original,
+                    prefix: new HarmonyMethod(typeof(ShippingInjections), nameof(ShippingInjections.NewDayAfterFade_CheckShipsanityLocations_Prefix))
+                );
+            }
+            else
+            {
+                _harmony.Patch(
+                    original: original,
+                    postfix: new HarmonyMethod(typeof(ShippingInjections), nameof(ShippingInjections.NewDayAfterFade_CheckGoalCompletion_Postfix))
+                );
+            }
         }
 
         private void PatchMonstersanity()
