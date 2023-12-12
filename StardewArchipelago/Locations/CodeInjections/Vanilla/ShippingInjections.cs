@@ -7,6 +7,7 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Objects;
+using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -98,15 +99,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             foreach (var shippedItem in allShippedItems)
             {
-                var name = shippedItem.Name;
-                if (_renamedItems.ContainsKey(shippedItem.ParentSheetIndex))
-                {
-                    name = _renamedItems[shippedItem.ParentSheetIndex];
-                }
-                if (name.Contains("moonslime.excavation."))
-                {
-                    name = shippedItem.DisplayName;  //Temporary fix; will break for chinese speaking players only atm
-                }
+                var name = GetShippedItemName(shippedItem);
 
                 var apLocation = $"Shipsanity: {name}";
                 if (_archipelago.GetLocationId(apLocation) > -1)
@@ -118,6 +111,51 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     _monitor.Log($"Unrecognized Shipsanity Location: {name} [{shippedItem.ParentSheetIndex}]", LogLevel.Error);
                 }
             }
+        }
+
+        private static string GetShippedItemName(Item shippedItem)
+        {
+            var name = shippedItem.Name;
+            if (_renamedItems.ContainsKey(shippedItem.ParentSheetIndex))
+            {
+                name = _renamedItems[shippedItem.ParentSheetIndex];
+            }
+
+            if (name.Contains("moonslime.excavation."))
+            {
+                name = shippedItem.DisplayName; //Temporary fix; will break for chinese speaking players only atm
+            }
+
+            if (shippedItem is not Object shippedObject)
+            {
+                return name;
+            }
+
+            if (name.Contains("Honey")) // Honey is a weird special case that can be wild...
+            {
+                return "Honey";
+            }
+
+            if (shippedObject.preserve.Value.HasValue)
+            {
+                switch (shippedObject.preserve.Value.GetValueOrDefault())
+                {
+                    case Object.PreserveType.Wine:
+                        return "Wine";
+                    case Object.PreserveType.Jelly:
+                        return "Jelly";
+                    case Object.PreserveType.Pickle:
+                        return "Pickle";
+                    case Object.PreserveType.Juice:
+                        return "Juice";
+                    case Object.PreserveType.Roe:
+                        return "Roe";
+                    case Object.PreserveType.AgedRoe:
+                        return "Aged Roe";
+                }
+            }
+
+            return name;
         }
 
         private static readonly Dictionary<int, string> _renamedItems = new()
