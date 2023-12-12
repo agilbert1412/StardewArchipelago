@@ -87,7 +87,7 @@ namespace StardewArchipelago.Locations
                 itemPriceAndStock.Remove(itemOnSale);
             }
 
-            if (_locationChecker.IsLocationChecked(apLocationName))
+            if (!_locationChecker.IsLocationMissingAndExists(apLocationName))
             {
                 return;
             }
