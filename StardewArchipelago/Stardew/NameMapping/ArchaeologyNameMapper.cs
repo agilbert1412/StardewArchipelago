@@ -1,9 +1,9 @@
 using System.Linq;
 using System.Collections.Generic;
 
-namespace StardewArchipelago.GameModifications.Modded
+namespace StardewArchipelago.Stardew.NameMapping
 {
-    public class ArchaeologyNameMapper
+    public class ArchaeologyNameMapper : INameMapper
     {
         private static Dictionary<string, string> InternalToEnglishNamesMap = new(){
             {"moonslime.excavation.ancient_battery", "Ancient Battery Production Station"},

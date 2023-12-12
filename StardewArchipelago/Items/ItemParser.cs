@@ -1,11 +1,11 @@
 ﻿using System;
 using HarmonyLib;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.GameModifications.Modded;
 using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Items.Traps;
 using StardewArchipelago.Items.Unlocks;
 using StardewArchipelago.Stardew;
+using StardewArchipelago.Stardew.NameMapping;
 using StardewModdingAPI;
 
 namespace StardewArchipelago.Items
@@ -21,14 +21,14 @@ namespace StardewArchipelago.Items
         private TrapManager _trapManager;
 
         // When More mods start to need name mapping, we can make a generic version of this
-        private ArchaeologyNameMapper _nameMapper;
+        private CompoundNameMapper _nameMapper;
         
         public ItemParser(IMonitor monitor, IModHelper helper, Harmony harmony, ArchipelagoClient archipelago, StardewItemManager itemManager, TileChooser tileChooser, BabyBirther babyBirther)
         {
             _itemManager = itemManager;
             _unlockManager = new UnlockManager(archipelago);
             _trapManager = new TrapManager(monitor, helper, harmony, archipelago, tileChooser, babyBirther);
-            _nameMapper = new ArchaeologyNameMapper();
+            _nameMapper = new CompoundNameMapper(archipelago.SlotData);
         }
 
         public TrapManager TrapManager => _trapManager;
