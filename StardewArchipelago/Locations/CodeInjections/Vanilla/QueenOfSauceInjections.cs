@@ -105,8 +105,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             if (isRerunDay)
             {
                 var rerunWeek = PickRerunRecipe(cookingRecipes, week);
-                _recipeChoiceCache.Add(Game1.stats.DaysPlayed, rerunWeek);
-                return rerunWeek;
+                if (rerunWeek != -1)
+                {
+                    _recipeChoiceCache.Add(Game1.stats.DaysPlayed, rerunWeek);
+                    return rerunWeek;
+                }
             }
 
             if (dayShortName.Equals(INVERSE_DAY))
@@ -154,6 +157,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             var missingRerunRecipes = GetMissingRerunRecipes(cookingRecipes, allRerunRecipes);
             var seed = (int)(Game1.uniqueIDForThisGame + Game1.stats.DaysPlayed);
             var random = new Random(seed);
+            if (!missingRerunRecipes.Any())
+            {
+                return -1;
+            }
             var rerunRecipe = missingRerunRecipes[random.Next(missingRerunRecipes.Count)];
             return rerunRecipe;
         }
