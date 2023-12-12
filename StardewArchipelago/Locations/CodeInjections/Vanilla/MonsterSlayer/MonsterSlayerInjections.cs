@@ -144,6 +144,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
 
         private static void CheckLocationIfEnoughMonstersInCategory(string category)
         {
+            if (string.IsNullOrWhiteSpace(category))
+            {
+                return;
+            }
+
             var amountNeeded = _killList.MonsterGoals[category];
             if (_killList.GetMonstersKilledInCategory(category) >= amountNeeded)
             {
@@ -153,6 +158,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
 
         private static void CheckLocationIfEnoughMonsters(string monster)
         {
+            if (string.IsNullOrWhiteSpace(monster))
+            {
+                return;
+            }
+
             var amountNeeded = _killList.MonsterGoals[monster];
             if (_killList.GetMonstersKilled(monster) >= amountNeeded)
             {
@@ -162,6 +172,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
 
         private static void CheckLocationIfEnoughMonstersInProgressiveCategory(string category)
         {
+            if (string.IsNullOrWhiteSpace(category))
+            {
+                return;
+            }
+
             var lastAmountNeeded = _killList.MonsterGoals[category];
             var progressiveStep = lastAmountNeeded / 5;
             var monstersKilled = _killList.GetMonstersKilledInCategory(category);
