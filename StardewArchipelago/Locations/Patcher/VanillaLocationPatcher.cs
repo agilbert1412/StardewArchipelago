@@ -805,7 +805,7 @@ namespace StardewArchipelago.Locations.Patcher
             {
                 _harmony.Patch(
                     original: AccessTools.Method(typeof(Game1), "_newDayAfterFade"),
-                    prefix: new HarmonyMethod(typeof(ShippingInjections), nameof(ShippingInjections.NewDayAfterFade_CheckGoalCompletion_Postfix))
+                    postfix: new HarmonyMethod(typeof(ShippingInjections), nameof(ShippingInjections.NewDayAfterFade_CheckGoalCompletion_Postfix))
                 );
             }
 

@@ -28,7 +28,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             try
             {
+                _monitor.Log($"Currently attempting to check shipsanity locations for the current day", LogLevel.Info);
                 var allShippedItems = GetAllItemsShippedToday();
+                _monitor.Log($"{allShippedItems.Count} items shipped", LogLevel.Info);
                 CheckAllShipsanityLocations(allShippedItems);
                 
                 return true; // run original logic
