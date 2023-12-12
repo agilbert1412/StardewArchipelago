@@ -27,6 +27,11 @@ namespace StardewArchipelago.GameModifications
 
         private void CleanInitiation(Quest quest)
         {
+            if (Game1.player.mailReceived.Contains("guildMember"))
+            {
+                return;
+            }
+
             Game1.player.mailReceived.Add("guildMember");
         }
 
