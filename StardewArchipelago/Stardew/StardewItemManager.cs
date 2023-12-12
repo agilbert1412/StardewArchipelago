@@ -56,6 +56,7 @@ namespace StardewArchipelago.Stardew
             {"Dish o' The Sea", "Dish O' The Sea"},
             {"Eggplant Parm.", "Eggplant Parmesan"},
             {"Cran. Sauce", "Cranberry Sauce"},
+            {"Vegetable Stew", "Vegetable Medley"},
         };
 
         public StardewItemManager()
