@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using HarmonyLib;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
@@ -150,6 +151,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
 
         public static void ChangeScheduleForMovie()
         {
+            if (!_archipelago.SlotData.Mods.HasMod(ModNames.SVE))
+            {
+                return;
+            }
             if (_archipelago.GetReceivedItemCount("Progressive Movie Theater") >= 2)
             {
                 string[] charactersToModify = {"Claire", "Martin"};
