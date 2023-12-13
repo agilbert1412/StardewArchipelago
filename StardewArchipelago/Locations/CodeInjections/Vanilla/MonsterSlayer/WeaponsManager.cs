@@ -17,12 +17,23 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
         public Dictionary<string, Dictionary<int, List<StardewItem>>> WeaponsByCategoryByTier { get; private set; }
         public Dictionary<int, List<StardewItem>> WeaponsByTier { get; private set; }
         public Dictionary<int, List<StardewItem>> BootsByTier { get; private set; }
+        public Dictionary<int, List<StardewItem>> SlingshotsByTier { get; private set; }
 
         public WeaponsManager(StardewItemManager itemManager, ModsManager modsManager)
         {
             _modsManager = modsManager;
             InitializeWeapons(itemManager);
             InitializeBoots(itemManager);
+            InitializeSlingshots(itemManager);
+        }
+
+        private void InitializeSlingshots(StardewItemManager itemManager)
+        {
+            SlingshotsByTier = new Dictionary<int, List<StardewItem>>()
+            {
+                { 1, new List<StardewItem> { itemManager.GetWeaponByName("Slingshot") } },
+                { 2, new List<StardewItem> { itemManager.GetWeaponByName("Master Slingshot") } }
+            };
         }
 
         private void InitializeWeapons(StardewItemManager itemManager)

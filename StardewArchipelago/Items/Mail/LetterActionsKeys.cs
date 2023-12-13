@@ -28,6 +28,7 @@
         public const string GiveClub = "GiveClub";
         public const string GiveDagger = "GiveDagger";
         public const string GiveSlingshot = "GiveSlingshot";
+        public const string GiveProgressiveSlingshot = "GiveProgressiveSlingshot";
         public const string GiveBed = "GiveBed";
         public const string GiveFishTank = "GiveFishTank";
         public const string GiveTV = "GiveTV";

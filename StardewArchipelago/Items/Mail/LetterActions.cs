@@ -68,6 +68,7 @@ namespace StardewArchipelago.Items.Mail
             _letterActions.Add(LetterActionsKeys.GiveDagger, (_) => GetDaggerOfNextTier());
             _letterActions.Add(LetterActionsKeys.GiveProgressiveBoots, (_) => GetBootsOfNextTier());
             _letterActions.Add(LetterActionsKeys.GiveSlingshot, ReceiveSlingshot);
+            _letterActions.Add(LetterActionsKeys.GiveProgressiveSlingshot, (_) => GetSlingshotOfNextTier());
             _letterActions.Add(LetterActionsKeys.GiveBed, ReceiveBed);
             _letterActions.Add(LetterActionsKeys.GiveFishTank, ReceiveFishTank);
             _letterActions.Add(LetterActionsKeys.GiveTV, ReceiveTV);
@@ -675,6 +676,11 @@ namespace StardewArchipelago.Items.Mail
         private void GetBootsOfNextTier()
         {
             GetProgressiveEquipmentOfNextTier(VanillaUnlockManager.PROGRESSIVE_BOOTS, _weaponsManager.BootsByTier);
+        }
+
+        private void GetSlingshotOfNextTier()
+        {
+            GetProgressiveEquipmentOfNextTier(VanillaUnlockManager.PROGRESSIVE_SLINGSHOT, _weaponsManager.SlingshotsByTier);
         }
 
         private void GetProgressiveEquipmentOfNextTier(string apUnlock, Dictionary<int, List<StardewItem>> equipmentsByTier)

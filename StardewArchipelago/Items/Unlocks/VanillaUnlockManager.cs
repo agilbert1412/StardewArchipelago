@@ -30,6 +30,7 @@ namespace StardewArchipelago.Items.Unlocks
         public const string PROGRESSIVE_CLUB = "Progressive Club";
         public const string PROGRESSIVE_DAGGER = "Progressive Dagger";
         public const string PROGRESSIVE_BOOTS = "Progressive Footwear";
+        public const string PROGRESSIVE_SLINGSHOT = "Progressive Slingshot";
 
         private Dictionary<string, Func<ReceivedItem, LetterAttachment>> _unlockables;
 
@@ -151,6 +152,7 @@ namespace StardewArchipelago.Items.Unlocks
             _unlockables.Add(PROGRESSIVE_CLUB, SendProgressiveClubLetter);
             _unlockables.Add(PROGRESSIVE_DAGGER, SendProgressiveDaggerLetter);
             _unlockables.Add(PROGRESSIVE_BOOTS, SendProgressiveBootsLetter);
+            _unlockables.Add(PROGRESSIVE_SLINGSHOT, SendProgressiveSlingshotLetter);
         }
 
         private LetterVanillaAttachment RepairBridge(ReceivedItem receivedItem)
@@ -454,6 +456,11 @@ namespace StardewArchipelago.Items.Unlocks
         private LetterActionAttachment SendProgressiveBootsLetter(ReceivedItem receivedItem)
         {
             return new LetterActionAttachment(receivedItem, LetterActionsKeys.GiveProgressiveBoots);
+        }
+
+        private LetterActionAttachment SendProgressiveSlingshotLetter(ReceivedItem receivedItem)
+        {
+            return new LetterActionAttachment(receivedItem, LetterActionsKeys.GiveProgressiveSlingshot);
         }
     }
 }
