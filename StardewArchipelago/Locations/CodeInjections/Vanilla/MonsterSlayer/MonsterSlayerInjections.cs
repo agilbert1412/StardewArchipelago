@@ -27,6 +27,23 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
             _killList = new MonsterKillList(_archipelago);
         }
 
+        // private void gil()
+        public static bool Gil_NoMonsterSlayerRewards_Prefix(AdventureGuild __instance)
+        {
+            try
+            {
+                // private NPC Gil
+                var gilField = _modHelper.Reflection.GetField<NPC>(__instance, "Gil");
+                Game1.drawDialogue(gilField.GetValue(), Game1.content.LoadString("Characters\\Dialogue\\Gil:Snoring"));
+                return false; // don't run original logic
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(Gil_NoMonsterSlayerRewards_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
+        }
+
         // public static bool areAllMonsterSlayerQuestsComplete()
         public static bool AreAllMonsterSlayerQuestsComplete_ExcludeGingerIsland_Prefix(ref bool __result)
         {

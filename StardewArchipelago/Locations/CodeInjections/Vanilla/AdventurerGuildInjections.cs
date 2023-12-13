@@ -131,8 +131,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
         }
 
-        public static bool GetAdventureShopStock_ShopBasedOnReceivedItems_Prefix(
-            ref Dictionary<ISalable, int[]> __result)
+        public static bool GetAdventureShopStock_ShopBasedOnReceivedItems_Prefix(ref Dictionary<ISalable, int[]> __result)
         {
             try
             {

@@ -855,6 +855,11 @@ namespace StardewArchipelago.Locations.Patcher
             }
 
             _harmony.Patch(
+                original: AccessTools.Method(typeof(AdventureGuild), "gil"),
+                prefix: new HarmonyMethod(typeof(MonsterSlayerInjections), nameof(MonsterSlayerInjections.Gil_NoMonsterSlayerRewards_Prefix))
+            );
+
+            _harmony.Patch(
                 original: AccessTools.Method(typeof(AdventureGuild), nameof(AdventureGuild.showMonsterKillList)),
                 prefix: new HarmonyMethod(typeof(MonsterSlayerInjections), nameof(MonsterSlayerInjections.ShowMonsterKillList_CustomListFromAP_Prefix))
             );
