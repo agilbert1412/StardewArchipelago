@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.Gifting;
 using StardewArchipelago.Bundles;
+using StardewArchipelago.Constants;
 using StardewArchipelago.GameModifications;
 using StardewArchipelago.GameModifications.CodeInjections;
 using StardewArchipelago.GameModifications.EntranceRandomizer;
@@ -15,6 +16,7 @@ using StardewArchipelago.Items;
 using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Items.Traps;
 using StardewArchipelago.Locations;
+using StardewArchipelago.Locations.CodeInjections.Modded.SVE;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
 using StardewArchipelago.Locations.Patcher;
@@ -282,6 +284,11 @@ namespace StardewArchipelago
                 _multiSleep.InjectMultiSleepOption(_archipelago.SlotData);
                 TravelingMerchantInjections.UpdateTravelingMerchantForToday(Game1.getLocationFromName("Forest") as Forest, Game1.dayOfMonth);
                 SeasonsRandomizer.ChangeMailKeysBasedOnSeasonsToDaysElapsed();
+                if (_archipelago.SlotData.Mods.HasMod(ModNames.SVE) && !Game1.player.mailReceived.Contains("GuntherUnlocked"))
+                {
+                    Game1.player.mailReceived.Add("GuntherUnlocked");
+                    Game1.player.eventsSeen.Add(103042015);
+                }
 
                 Game1.chatBox?.addMessage($"Connected to Archipelago as {_archipelago.SlotData.SlotName}. Type !!help for client commands", Color.Green);
 
@@ -360,6 +367,7 @@ namespace StardewArchipelago
             }
             _appearanceRandomizer.ShuffleCharacterAppearances();
             _entranceManager.ResetCheckedEntrancesToday(_archipelago.SlotData);
+            SVECutsceneInjections.ChangeScheduleForMovie();
         }
 
         private void DoBugsCleanup()
