@@ -216,13 +216,13 @@ namespace StardewArchipelago
             try
             {
                 ReadPersistentArchipelagoData();
-
+                
                 _stardewItemManager = new StardewItemManager();
                 _mail = new Mailman(State);
                 _locationChecker = new LocationChecker(Monitor, _archipelago, State.LocationsChecked);
                 _itemPatcher = new ItemPatcher(Monitor, _helper, _harmony, _archipelago);
                 _goalManager = new GoalManager(Monitor, _helper, _harmony, _archipelago, _locationChecker);
-                _entranceManager = new EntranceManager(Monitor);
+                _entranceManager = new EntranceManager(Monitor, _archipelago);
                 var shopStockGenerator = new ShopStockGenerator(Monitor, _helper, _archipelago, _locationChecker);
                 _logicPatcher = new RandomizedLogicPatcher(Monitor, _helper, _harmony, _archipelago, _locationChecker, _stardewItemManager, _entranceManager,
                     shopStockGenerator);
@@ -232,7 +232,7 @@ namespace StardewArchipelago
                 var tileChooser = new TileChooser();
                 _chatForwarder = new ChatForwarder(Monitor, _helper, _harmony, _archipelago, _giftHandler, tileChooser);
                 _questCleaner = new QuestCleaner();
-
+                
                 if (!_archipelago.IsConnected)
                 {
                     if (_apConnectionOverride != null)

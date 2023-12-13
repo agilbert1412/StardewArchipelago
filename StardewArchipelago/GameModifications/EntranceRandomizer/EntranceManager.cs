@@ -22,10 +22,10 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
         private HashSet<string> _checkedEntrancesToday;
         private Dictionary<string, WarpRequest> generatedWarps;
 
-        public EntranceManager(IMonitor monitor)
+        public EntranceManager(IMonitor monitor, ArchipelagoClient archipelago)
         {
             _monitor = monitor;
-            _equivalentAreas = new EquivalentWarps();
+            _equivalentAreas = new EquivalentWarps(archipelago);
             _modEntranceManager = new ModEntranceManager();
             generatedWarps = new Dictionary<string, WarpRequest>(StringComparer.OrdinalIgnoreCase);
         }
