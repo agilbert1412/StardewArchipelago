@@ -11,7 +11,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 {
     public class TheaterInjections
     {
-        private const string MOVIE_THEATER_ITEM = "Progressive Movie Theater";
+        public const string MOVIE_THEATER_ITEM = "Progressive Movie Theater";
         private const string MOVIE_THEATER_MAIL = "ccMovieTheater";
         private const string ABANDONED_JOJA_MART = "AbandonedJojaMart";
         private const string MOVIE_THEATER = "MovieTheater";

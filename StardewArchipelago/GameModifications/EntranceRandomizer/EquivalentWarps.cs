@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+using StardewArchipelago.Archipelago;
+using StardewArchipelago.GameModifications.CodeInjections;
+using StardewArchipelago.Items.Unlocks;
 using StardewValley;
 
 namespace StardewArchipelago.GameModifications.EntranceRandomizer
@@ -28,8 +31,11 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             _grandpaShedLocations,
         };
 
-        public EquivalentWarps()
+        private ArchipelagoClient _archipelago;
+
+        public EquivalentWarps(ArchipelagoClient archipelago)
         {
+            _archipelago = archipelago;
         }
 
         public string GetDefaultEquivalentEntrance(string entrance)
@@ -111,14 +117,15 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
                     continue;
                 }
 
-                if (Utility.doesMasterPlayerHaveMailReceivedButNotMailForTomorrow("ccMovieTheater"))
+                var numberOfTheaters = _archipelago.GetReceivedItemCount(TheaterInjections.MOVIE_THEATER_ITEM);
+
+                if (numberOfTheaters >= 2)
                 {
                     correctArea = area.Replace(jojaMartLocation, movieTheater);
                     return true;
                 }
-
-                const int brokenJojaDoorEventId = 191393;
-                if (Utility.HasAnyPlayerSeenEvent(brokenJojaDoorEventId))
+                
+                if (numberOfTheaters >= 1)
                 {
                     correctArea = area.Replace(jojaMartLocation, abandonedJojaMart);
                     return true;
