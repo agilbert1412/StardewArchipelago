@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants;
 using StardewModdingAPI;
 using StardewValley;
 
@@ -84,8 +85,25 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     continue;
                 }
 
-                _locationChecker.AddCheckedLocation($"{recipeName}{RecipePurchaseInjections.CHEFSANITY_LOCATION_SUFFIX}");
+                var aliasedRecipeName = GetAliased(recipeName);
+
+                _locationChecker.AddCheckedLocation($"{aliasedRecipeName}{RecipePurchaseInjections.CHEFSANITY_LOCATION_SUFFIX}");
             }
+        }
+
+        private static string GetAliased(string recipeName)
+        {
+            var aliasedRecipeName = recipeName;
+
+            foreach (var (internalName, realName) in NameAliases.RecipeNameAliases)
+            {
+                if (aliasedRecipeName.Contains(internalName))
+                {
+                    aliasedRecipeName = aliasedRecipeName.Replace(internalName, realName);
+                }
+            }
+
+            return aliasedRecipeName;
         }
 
         private static void CheckCraftingRecipeLocations(string friendName, int currentHearts)
