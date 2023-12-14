@@ -4,6 +4,7 @@ using System.Linq;
 using HarmonyLib;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
+using StardewArchipelago.GameModifications.CodeInjections;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
@@ -55,27 +56,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
             { "Farm||GroveInitialize", new[] {"908070/t 600 900"}},
             { $"Farm|{MORGAN_EVENT}|MorganEntry", new [] {"5978924/y 3/d Mon Tue/e 1724095", "5978924/y 3/d Mon Tue/e 1724095/t 600 2600"} },
             { "Farm|GuntherRustyKey", new[] {"103042015/e 295672/t 600 700/H"}}
-        };
-
-        private static readonly Dictionary<string, string> _claireScheduleWhenMovies = new(){
-            {"Mon", "0 Custom_Claire_WarpRoom 1 3 3/650 Town 92 44 2/850 MovieTheater 7 5 2 Claire_Blink/2130 BusStop 12 8 0/2340 Custom_DayEnd_WarpRoom 3 3 0"},
-            {"Wed", "0 Custom_Claire_WarpRoom 1 3 3/650 Town 92 44 2/850 MovieTheater 7 5 2 Claire_Blink/2130 BusStop 12 8 0/2340 Custom_DayEnd_WarpRoom 3 3 0"},
-            {"Thu", "0 Custom_Claire_WarpRoom 1 3 3/650 Town 92 44 2/850 MovieTheater 7 5 2 Claire_Blink/2130 BusStop 12 8 0/2340 Custom_DayEnd_WarpRoom 3 3 0"},
-            {"Fri", "0 Custom_Claire_WarpRoom 1 3 3/650 Town 92 44 2/850 MovieTheater 7 5 2 Claire_Blink/2130 BusStop 12 8 0/2340 Custom_DayEnd_WarpRoom 3 3 0"},
-            {"Sun", "0 Custom_Claire_WarpRoom 1 3 3/650 Town 92 44 2/850 MovieTheater 7 5 2 Claire_Blink/2130 BusStop 12 8 0/2340 Custom_DayEnd_WarpRoom 3 3 0"},
-            {"Sat", "0 Custom_Claire_WarpRoom 1 3 3"},
-            {"spring", "0 Custom_Claire_WarpRoom 1 3 3"}
-        };
-
-        private static readonly Dictionary<string, string> _martinScheduleWhenMovies = new(){
-            {"Tue", "0 Custom_Martin_WarpRoom 1 3 3/650 Town 92 44 2/850 MovieTheater 7 5 2 Martin_Blink/1530 BusStop 12 8 0/1740 Custom_DayEnd_WarpRoom 3 3 0"},
-            {"Sat", "0 Custom_Martin_WarpRoom 1 3 3/650 Town 92 44 2/850 MovieTheater 7 5 2 Martin_Blink/2130 BusStop 12 8 0/2340 Custom_DayEnd_WarpRoom 3 3 0"},
-            {"spring", "0 Custom_Martin_WarpRoom 1 3 3"}
-        };
-
-        private static readonly Dictionary<string, Dictionary<string, string>> characterToSchedule = new(){
-            {"Claire", _claireScheduleWhenMovies},
-            {"Martin", _martinScheduleWhenMovies}
         };
 
         public static bool CheckForAction_LanceChest_Prefix(Chest __instance, Farmer who, bool justCheckingForActivity, ref bool __result)
@@ -147,29 +127,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
             var specialOrderKeysField = _modHelper.Reflection.GetField<List<string>>(untimedSpecialOrdersType, "SpecialOrderKeys");
             var specialOrderKeys = specialOrderKeysField.GetValue();
             specialOrderKeys.Add("Clint2Again");
-        }
-
-        public static void ChangeScheduleForMovie()
-        {
-            if (!_archipelago.SlotData.Mods.HasMod(ModNames.SVE))
-            {
-                return;
-            }
-            if (_archipelago.GetReceivedItemCount("Progressive Movie Theater") >= 2)
-            {
-                string[] charactersToModify = {"Claire", "Martin"};
-                foreach(var name in charactersToModify)
-                {
-                    var schedules = Game1.content.Load<Dictionary<string, string>>($"Characters\\Schedules\\{name}");
-                    foreach (KeyValuePair<string, string> day in schedules)
-                    {
-                        if (characterToSchedule[name].Keys.Contains(day.Key))
-                        {
-                            schedules[day.Key] = characterToSchedule[name][day.Key];
-                        }
-                    }
-                }              
-            }
         }
     }
 }

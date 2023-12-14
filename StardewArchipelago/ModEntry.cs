@@ -64,6 +64,7 @@ namespace StardewArchipelago
         private EntranceManager _entranceManager;
         private NightShippingBehaviors _shippingBehaviors;
 
+        private CallableModData _callableModData;
         private ModifiedVillagerEventChecker _villagerEvents;
 
         public ArchipelagoStateDto State { get; set; }
@@ -283,13 +284,9 @@ namespace StardewArchipelago
                 _jojaDisabler.DisableJojaMembership();
                 _multiSleep.InjectMultiSleepOption(_archipelago.SlotData);
                 TravelingMerchantInjections.UpdateTravelingMerchantForToday(Game1.getLocationFromName("Forest") as Forest, Game1.dayOfMonth);
-                SeasonsRandomizer.ChangeMailKeysBasedOnSeasonsToDaysElapsed();
-                if (_archipelago.SlotData.Mods.HasMod(ModNames.SVE) && !Game1.player.mailReceived.Contains("GuntherUnlocked"))
-                {
-                    Game1.player.mailReceived.Add("GuntherUnlocked");
-                    Game1.player.eventsSeen.Add(103042015);
-                }
-
+                SeasonsRandomizer.ChangeMailKeysBasedOnSeasonsToDaysElapsed();        
+                _callableModData = new CallableModData();
+                _callableModData.Initialize(Monitor, _archipelago);
                 Game1.chatBox?.addMessage($"Connected to Archipelago as {_archipelago.SlotData.SlotName}. Type !!help for client commands", Color.Green);
 
             }
@@ -309,7 +306,7 @@ namespace StardewArchipelago
 
         private void OnWarped(object sender, WarpedEventArgs e)
         {
-            ModdedEventInjections.ReplaceCutscenes(ModdedEventInjections.Total_OnWarped_Events);
+            _callableModData.ReplaceCutscenes(CallableModData.Total_OnWarped_Events);
         }
 
         private void ReadPersistentArchipelagoData()
@@ -367,7 +364,6 @@ namespace StardewArchipelago
             }
             _appearanceRandomizer.ShuffleCharacterAppearances();
             _entranceManager.ResetCheckedEntrancesToday(_archipelago.SlotData);
-            SVECutsceneInjections.ChangeScheduleForMovie();
         }
 
         private void DoBugsCleanup()
