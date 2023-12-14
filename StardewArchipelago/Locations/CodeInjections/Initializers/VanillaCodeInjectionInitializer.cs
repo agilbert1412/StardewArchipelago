@@ -42,7 +42,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             PregnancyInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             CropsanityInjections.Initialize(monitor, archipelago, locationChecker, itemManager);
             InitializeFestivalPatches(monitor, modHelper, archipelago, state, locationChecker, shopReplacer);
-            ShippingInjections.Initialize(monitor, archipelago, locationChecker);
             MonsterSlayerInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             CookingInjections.Initialize(monitor, archipelago, locationChecker, itemManager);
             QueenOfSauceInjections.Initialize(monitor, modHelper, archipelago, state, locationChecker, itemManager);

@@ -60,6 +60,7 @@ namespace StardewArchipelago
         private AppearanceRandomizer _appearanceRandomizer;
         private QuestCleaner _questCleaner;
         private EntranceManager _entranceManager;
+        private NightShippingBehaviors _shippingBehaviors;
 
         private ModifiedVillagerEventChecker _villagerEvents;
 
@@ -267,8 +268,8 @@ namespace StardewArchipelago
                     new LetterActions(_helper, _mail, _archipelago, weaponsManager, _itemManager.TrapManager, babyBirther));
                 var bundlesManager = new BundlesManager(_helper, _stardewItemManager, _archipelago.SlotData.BundlesData);
                 bundlesManager.ReplaceAllBundles();
-                _locationsPatcher = new LocationPatcher(Monitor, _helper, _harmony, _archipelago, State, _locationChecker, _stardewItemManager, weaponsManager,
-                    shopStockGenerator);
+                _locationsPatcher = new LocationPatcher(Monitor, _helper, _harmony, _archipelago, State, _locationChecker, _stardewItemManager, weaponsManager, shopStockGenerator);
+                _shippingBehaviors = new NightShippingBehaviors(Monitor, _archipelago, _locationChecker);
                 _chatForwarder.ListenToChatMessages();
                 _giftHandler.Initialize(Monitor, _archipelago, _stardewItemManager, _mail);
                 _logicPatcher.PatchAllGameLogic();
@@ -370,6 +371,7 @@ namespace StardewArchipelago
             _giftHandler.ReceiveAllGiftsTomorrow();
             _villagerEvents.CheckJunaHearts(_archipelago);
             AdventurerGuildInjections.RemoveExtraItemsFromItemsLostLastDeath();
+            _shippingBehaviors.CheckShipsanityLocationsBeforeSleep();
         }
 
         private void OnTimeChanged(object sender, TimeChangedEventArgs e)

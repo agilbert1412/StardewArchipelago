@@ -11,13 +11,13 @@ using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
-    public static class ShippingInjections
+    public class NightShippingBehaviors
     {
-        private static IMonitor _monitor;
-        private static ArchipelagoClient _archipelago;
-        private static LocationChecker _locationChecker;
+        private IMonitor _monitor;
+        private ArchipelagoClient _archipelago;
+        private LocationChecker _locationChecker;
 
-        public static void Initialize(IMonitor monitor, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public NightShippingBehaviors(IMonitor monitor, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             _monitor = monitor;
             _archipelago = archipelago;
@@ -25,36 +25,23 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         }
 
         // private static IEnumerator<int> _newDayAfterFade()
-        public static bool NewDayAfterFade_CheckShipsanityLocations_Prefix(ref IEnumerator<int> __result)
+        public void CheckShipsanityLocationsBeforeSleep()
         {
             try
             {
+                if (_archipelago.SlotData.Shipsanity == Shipsanity.None)
+                {
+                    return;
+                }
+
                 _monitor.Log($"Currently attempting to check shipsanity locations for the current day", LogLevel.Info);
                 var allShippedItems = GetAllItemsShippedToday();
                 _monitor.Log($"{allShippedItems.Count} items shipped", LogLevel.Info);
                 CheckAllShipsanityLocations(allShippedItems);
-                
-                return true; // run original logic
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(NewDayAfterFade_CheckShipsanityLocations_Prefix)}:\n{ex}", LogLevel.Error);
-                return true; // run original logic
-            }
-        }
-
-        // private static IEnumerator<int> _newDayAfterFade()
-        public static void NewDayAfterFade_CheckGoalCompletion_Postfix(ref IEnumerator<int> __result)
-        {
-            try
-            {
-                GoalCodeInjection.CheckFullShipmentGoalCompletion();
-                return;
-            }
-            catch (Exception ex)
-            {
-                _monitor.Log($"Failed in {nameof(NewDayAfterFade_CheckGoalCompletion_Postfix)}:\n{ex}", LogLevel.Error);
-                return;
+                _monitor.Log($"Failed in {nameof(CheckShipsanityLocationsBeforeSleep)}:\n{ex}", LogLevel.Error);
             }
         }
 
@@ -95,7 +82,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
         }
 
-        private static void CheckAllShipsanityLocations(List<Item> allShippedItems)
+        private void CheckAllShipsanityLocations(List<Item> allShippedItems)
         {
             foreach (var shippedItem in allShippedItems)
             {
