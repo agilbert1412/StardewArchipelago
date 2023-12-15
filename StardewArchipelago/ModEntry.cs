@@ -285,8 +285,7 @@ namespace StardewArchipelago
                 _multiSleep.InjectMultiSleepOption(_archipelago.SlotData);
                 TravelingMerchantInjections.UpdateTravelingMerchantForToday(Game1.getLocationFromName("Forest") as Forest, Game1.dayOfMonth);
                 SeasonsRandomizer.ChangeMailKeysBasedOnSeasonsToDaysElapsed();
-                _callableModData = new CallableModData();
-                CallableModData.Initialize(Monitor, _archipelago, _callableModData);
+                _callableModData = new CallableModData(Monitor, _archipelago);
                 Game1.chatBox?.addMessage($"Connected to Archipelago as {_archipelago.SlotData.SlotName}. Type !!help for client commands", Color.Green);
 
             }

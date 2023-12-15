@@ -11,13 +11,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
     public static class ModCodeInjectionInitializer
     {
         static ArchipelagoClient _archipelago;
-        private static CallableModData _conditionInitializer;
 
         public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker, ShopReplacer shopReplacer, ShopStockGenerator shopStockGenerator)
         {
             _archipelago = archipelago;
-            _conditionInitializer = new CallableModData();
-            CallableModData.Initialize(monitor, archipelago, _conditionInitializer);
             InitializeModdedContent(monitor, modHelper, archipelago, locationChecker, shopReplacer, shopStockGenerator);
         }
 
