@@ -658,40 +658,55 @@ namespace StardewArchipelago.Items.Traps
             var hoeDirts = GetAllHoeDirt(DroughtTarget.CropsIncludingInside);
             foreach (var hoeDirt in hoeDirts)
             {
-                var crop = hoeDirt.crop;
-                if (crop == null)
-                {
-                    continue;
-                }
-
-                if (crop.fullyGrown.Value)
-                {
-                    crop.fullyGrown.Set(false);
-                }
-
-                crop.dayOfCurrentPhase.Set(crop.dayOfCurrentPhase.Value - ungrowthDays);
-                while (crop.dayOfCurrentPhase.Value < 0)
-                {
-                    if (crop.currentPhase.Value <= 0)
-                    {
-                        break;
-                    }
-
-                    if (crop.currentPhase.Value > crop.phaseDays.Count)
-                    {
-                        crop.currentPhase.Set(crop.phaseDays.Count);
-                    }
-
-                    crop.currentPhase.Set(crop.currentPhase.Value - 1);
-                    var phaseDays = crop.phaseDays[crop.currentPhase.Value];
-                    crop.dayOfCurrentPhase.Set(crop.dayOfCurrentPhase.Value + phaseDays);
-                }
-
-                if (crop.dayOfCurrentPhase.Value < 0)
-                {
-                    crop.dayOfCurrentPhase.Set(0);
-                }
+                UngrowCrop(hoeDirt.crop, ungrowthDays);
             }
+        }
+
+        private void UngrowCrop(Crop crop, int days)
+        {
+            if (crop == null)
+            {
+                return;
+            }
+
+            if (crop.fullyGrown.Value)
+            {
+                crop.fullyGrown.Set(false);
+            }
+
+            var dayOfCurrentPhase = crop.dayOfCurrentPhase.Value;
+            var currentPhase = crop.currentPhase.Value;
+            var daysPerPhase = crop.phaseDays.ToList();
+
+            dayOfCurrentPhase -= days;
+
+            while (dayOfCurrentPhase < 0)
+            {
+                if (currentPhase <= 0 || !daysPerPhase.Any())
+                {
+                    break;
+                }
+
+                if (currentPhase > daysPerPhase.Count)
+                {
+                    currentPhase = daysPerPhase.Count;
+                }
+
+                currentPhase -= 1;
+                var daysInCurrentPhase = daysPerPhase[currentPhase];
+                dayOfCurrentPhase += daysInCurrentPhase;
+            }
+
+            if (dayOfCurrentPhase < 0)
+            {
+                dayOfCurrentPhase = 0;
+            }
+
+            crop.currentPhase.Set(currentPhase);
+            crop.dayOfCurrentPhase.Set(dayOfCurrentPhase);
+            // private Vector2 tilePosition;
+            var tilePositionField = _helper.Reflection.GetField<Vector2>(crop, "tilePosition");
+            crop.updateDrawMath(tilePositionField.GetValue());
         }
 
         private void ActivateInflation()
