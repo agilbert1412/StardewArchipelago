@@ -371,7 +371,7 @@ namespace StardewArchipelago
             _giftHandler.ReceiveAllGiftsTomorrow();
             _villagerEvents.CheckJunaHearts(_archipelago);
             AdventurerGuildInjections.RemoveExtraItemsFromItemsLostLastDeath();
-            _shippingBehaviors.CheckShipsanityLocationsBeforeSleep();
+            _shippingBehaviors?.CheckShipsanityLocationsBeforeSleep();
         }
 
         private void OnTimeChanged(object sender, TimeChangedEventArgs e)

@@ -201,6 +201,16 @@ namespace StardewArchipelago.GameModifications
                 prefix: new HarmonyMethod(typeof(TheaterInjections), nameof(TheaterInjections.MakeMapModifications_JojamartAndTheater_Prefix)),
                 postfix: new HarmonyMethod(typeof(TheaterInjections), nameof(TheaterInjections.MakeMapModifications_JojamartAndTheater_Postfix))
             );
+
+            //_harmony.Patch(
+            //    original: AccessTools.Method(typeof(NPC), "changeScheduleForLocationAccessibility"),
+            //    prefix: new HarmonyMethod(typeof(TheaterInjections), nameof(TheaterInjections.ChangeScheduleForLocationAccessibility_JojamartAndTheater_Prefix))
+            //);
+
+            //_harmony.Patch(
+            //    original: AccessTools.Method(typeof(NPC), nameof(NPC.parseMasterSchedule)),
+            //    prefix: new HarmonyMethod(typeof(TheaterInjections), nameof(TheaterInjections.ParseMasterSchedule_JojamartAndTheater_Prefix))
+            //);
         }
 
         private void PatchForest()
