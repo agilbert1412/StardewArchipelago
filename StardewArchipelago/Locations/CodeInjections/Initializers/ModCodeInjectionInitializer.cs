@@ -17,7 +17,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
         {
             _archipelago = archipelago;
             _conditionInitializer = new CallableModData();
-            _conditionInitializer.Initialize(monitor, archipelago);
+            CallableModData.Initialize(monitor, archipelago, _conditionInitializer);
             InitializeModdedContent(monitor, modHelper, archipelago, locationChecker, shopReplacer, shopStockGenerator);
         }
 

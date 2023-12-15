@@ -56,15 +56,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         };
 
 
-        public void Initialize(IMonitor monitor, ArchipelagoClient archipelago)
+        public static void Initialize(IMonitor monitor, ArchipelagoClient archipelago, CallableModData _callable)
         {
             _monitor = monitor;
             _archipelago = archipelago;
             GenerateEventKeys();
-            ReplaceCutscenes(Total_Static_Events);
-            ReplaceCutscenes(Total_OnWarped_Events);
-            GuntherInitializer();
-            ChangeScheduleForMovie();
+            _callable.ReplaceCutscenes(Total_Static_Events);
+            _callable.ReplaceCutscenes(Total_OnWarped_Events);
+            _callable.GuntherInitializer();
+            _callable.ChangeScheduleForMovie();
             
         }
 
