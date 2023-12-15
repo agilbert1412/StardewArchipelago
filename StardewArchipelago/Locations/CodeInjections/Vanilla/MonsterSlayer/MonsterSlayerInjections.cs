@@ -161,7 +161,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
 
         private static void CheckLocationIfEnoughMonstersInCategory(string category)
         {
-            if (string.IsNullOrWhiteSpace(category))
+            if (string.IsNullOrWhiteSpace(category) || !_killList.MonsterGoals.ContainsKey(category))
             {
                 return;
             }
@@ -175,7 +175,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
 
         private static void CheckLocationIfEnoughMonsters(string monster)
         {
-            if (string.IsNullOrWhiteSpace(monster))
+            if (string.IsNullOrWhiteSpace(monster) || !_killList.MonsterGoals.ContainsKey(monster))
             {
                 return;
             }
@@ -189,7 +189,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
 
         private static void CheckLocationIfEnoughMonstersInProgressiveCategory(string category)
         {
-            if (string.IsNullOrWhiteSpace(category))
+            if (string.IsNullOrWhiteSpace(category) || !_killList.MonsterGoals.ContainsKey(category))
             {
                 return;
             }
@@ -240,7 +240,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
             }
             else
             {
-                _monitor.Log($"Tried to check a monster slayer goal, but it doesn't exist! [{apLocation}]", LogLevel.Error);
+                _monitor.Log($"Tried to check a monster slayer goal, but it doesn't exist! [{apLocation}]", LogLevel.Info);
             }
         }
     }
