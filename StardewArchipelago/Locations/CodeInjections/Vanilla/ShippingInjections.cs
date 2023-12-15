@@ -132,7 +132,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     case Object.PreserveType.Jelly:
                         return "Jelly";
                     case Object.PreserveType.Pickle:
-                        return "Pickle";
+                        return "Pickles";
                     case Object.PreserveType.Juice:
                         return "Juice";
                     case Object.PreserveType.Roe:
