@@ -36,23 +36,28 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         private static IMonitor _monitor;
         private static ArchipelagoClient _archipelago;
 
-        private static readonly Dictionary<string, string> _claireScheduleWhenMovies = new(){
-            {"Mon", "0 Custom_Claire_WarpRoom 1 3 3/650 Town 92 44 2/850 MovieTheater 7 5 2 Claire_Blink/2130 BusStop 12 8 0/2340 Custom_DayEnd_WarpRoom 3 3 0"},
-            {"Wed", "0 Custom_Claire_WarpRoom 1 3 3/650 Town 92 44 2/850 MovieTheater 7 5 2 Claire_Blink/2130 BusStop 12 8 0/2340 Custom_DayEnd_WarpRoom 3 3 0"},
-            {"Thu", "0 Custom_Claire_WarpRoom 1 3 3/650 Town 92 44 2/850 MovieTheater 7 5 2 Claire_Blink/2130 BusStop 12 8 0/2340 Custom_DayEnd_WarpRoom 3 3 0"},
-            {"Fri", "0 Custom_Claire_WarpRoom 1 3 3/650 Town 92 44 2/850 MovieTheater 7 5 2 Claire_Blink/2130 BusStop 12 8 0/2340 Custom_DayEnd_WarpRoom 3 3 0"},
-            {"Sun", "0 Custom_Claire_WarpRoom 1 3 3/650 Town 92 44 2/850 MovieTheater 7 5 2 Claire_Blink/2130 BusStop 12 8 0/2340 Custom_DayEnd_WarpRoom 3 3 0"},
-            {"Sat", "0 Custom_Claire_WarpRoom 1 3 3"},
-            {"spring", "0 Custom_Claire_WarpRoom 1 3 3"}
+        private static readonly Dictionary<string, string> _claireScheduleWhenMovies = new()
+        {
+            { "Mon", "0 Custom_Claire_WarpRoom 1 3 3/650 Town 92 44 2/850 MovieTheater 7 5 2 Claire_Blink/2130 BusStop 12 8 0/2340 Custom_DayEnd_WarpRoom 3 3 0" },
+            { "Wed", "0 Custom_Claire_WarpRoom 1 3 3/650 Town 92 44 2/850 MovieTheater 7 5 2 Claire_Blink/2130 BusStop 12 8 0/2340 Custom_DayEnd_WarpRoom 3 3 0" },
+            { "Thu", "0 Custom_Claire_WarpRoom 1 3 3/650 Town 92 44 2/850 MovieTheater 7 5 2 Claire_Blink/2130 BusStop 12 8 0/2340 Custom_DayEnd_WarpRoom 3 3 0" },
+            { "Fri", "0 Custom_Claire_WarpRoom 1 3 3/650 Town 92 44 2/850 MovieTheater 7 5 2 Claire_Blink/2130 BusStop 12 8 0/2340 Custom_DayEnd_WarpRoom 3 3 0" },
+            { "Sun", "0 Custom_Claire_WarpRoom 1 3 3/650 Town 92 44 2/850 MovieTheater 7 5 2 Claire_Blink/2130 BusStop 12 8 0/2340 Custom_DayEnd_WarpRoom 3 3 0" },
+            { "Sat", "0 Custom_Claire_WarpRoom 1 3 3" },
+            { "spring", "0 Custom_Claire_WarpRoom 1 3 3" }
         };
-        private static readonly Dictionary<string, string> _martinScheduleWhenMovies = new(){
-            {"Tue", "0 Custom_Martin_WarpRoom 1 3 3/650 Town 92 44 2/850 MovieTheater 7 5 2 Martin_Blink/1530 BusStop 12 8 0/1740 Custom_DayEnd_WarpRoom 3 3 0"},
-            {"Sat", "0 Custom_Martin_WarpRoom 1 3 3/650 Town 92 44 2/850 MovieTheater 7 5 2 Martin_Blink/2130 BusStop 12 8 0/2340 Custom_DayEnd_WarpRoom 3 3 0"},
-            {"spring", "0 Custom_Martin_WarpRoom 1 3 3"}
+
+        private static readonly Dictionary<string, string> _martinScheduleWhenMovies = new()
+        {
+            { "Tue", "0 Custom_Martin_WarpRoom 1 3 3/650 Town 92 44 2/850 MovieTheater 7 5 2 Martin_Blink/1530 BusStop 12 8 0/1740 Custom_DayEnd_WarpRoom 3 3 0" },
+            { "Sat", "0 Custom_Martin_WarpRoom 1 3 3/650 Town 92 44 2/850 MovieTheater 7 5 2 Martin_Blink/2130 BusStop 12 8 0/2340 Custom_DayEnd_WarpRoom 3 3 0" },
+            { "spring", "0 Custom_Martin_WarpRoom 1 3 3" }
         };
-        private static readonly Dictionary<string, Dictionary<string, string>> characterToSchedule = new(){
-            {"Claire", _claireScheduleWhenMovies},
-            {"Martin", _martinScheduleWhenMovies}
+
+        private static readonly Dictionary<string, Dictionary<string, string>> characterToSchedule = new()
+        {
+            { "Claire", _claireScheduleWhenMovies },
+            { "Martin", _martinScheduleWhenMovies }
         };
 
 
@@ -93,7 +98,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             }
 
         }
-        
+
         public void ReplaceAllOnWarpedEvents()
         {
             ReplaceCutscenes(Total_OnWarped_Events);
@@ -131,19 +136,20 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
 
         public void ChangeScheduleForMovie()
         {
-            if (!_archipelago.SlotData.Mods.HasMod(ModNames.SVE) && !(_archipelago.GetReceivedItemCount(TheaterInjections.MOVIE_THEATER_ITEM) < 2))
+            if (!_archipelago.SlotData.Mods.HasMod(ModNames.SVE) || _archipelago.GetReceivedItemCount(TheaterInjections.MOVIE_THEATER_ITEM) < 2)
             {
                 return;
             }
-                foreach(var name in characterToSchedule.Keys)
+
+            foreach (var name in characterToSchedule.Keys)
+            {
+                var loaded_schedules = Game1.content.Load<Dictionary<string, string>>($"Characters\\Schedules\\{name}");
+                var modified_schedules = characterToSchedule[name];
+                foreach (var day in modified_schedules)
                 {
-                    var loaded_schedules = Game1.content.Load<Dictionary<string, string>>($"Characters\\Schedules\\{name}");
-                    var modified_schedules = characterToSchedule[name];
-                    foreach (var day in modified_schedules)
-                    {
-                        loaded_schedules[day.Key] = characterToSchedule[name][day.Key];
-                    }
-                }              
+                    loaded_schedules[day.Key] = characterToSchedule[name][day.Key];
+                }
+            }
         }
 
         public void GuntherInitializer()
