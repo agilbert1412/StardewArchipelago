@@ -43,6 +43,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
             WeaponsByCategoryByTier = new Dictionary<string, Dictionary<int, List<StardewItem>>>();
             WeaponsByTier = new Dictionary<int, List<StardewItem>>();
             WeaponsByTierAndType = new Dictionary<string, Dictionary<StardewWeapon, int>>();
+            var totalProgressiveWeapons = _modsManager.HasMod(ModNames.SVE) ? 6:5;
             var weapons = itemManager.GetAllWeapons();
             foreach (var weapon in weapons)
             {
@@ -69,18 +70,17 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
             {
                 var typeWeapons = weapon.Value.OrderBy(kvp => kvp.Value);
                 var typeWeaponCount = typeWeapons.Count();
-                var totalProgressiveWeapons = (_modsManager.HasMod(ModNames.SVE) ? 6:5);
-                var countByTier = typeWeaponCount / totalProgressiveWeapons + 1;
+                var countByTier = typeWeaponCount / totalProgressiveWeapons;
                 var tier = 0;
                 for (var j = 1; j <= totalProgressiveWeapons; j++)
                 {
                     var startingValue = tier * countByTier;
+                    if (j == totalProgressiveWeapons && typeWeaponCount % totalProgressiveWeapons != 0)
+                    {
+                        countByTier = typeWeaponCount - totalProgressiveWeapons * countByTier;
+                    }
                     for (var i = 1; i <= countByTier; i++)
                     {
-                        if (i + startingValue > typeWeaponCount)
-                        {
-                            break;
-                        }
                         var currentWeapon = typeWeapons.ElementAt(i + startingValue - 1);
                         AddToWeapons(currentWeapon.Key, weapon.Key, tier);
                     }
