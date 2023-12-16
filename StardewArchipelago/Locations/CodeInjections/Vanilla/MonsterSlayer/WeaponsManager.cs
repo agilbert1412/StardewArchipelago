@@ -74,7 +74,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
             var weaponsCountInEachTier = new List<int> { };
             foreach (var weight in weightList)
             {
-                weaponsCountInEachTier.Add((weight * numberOfWeapons) / weightTotal);
+                weaponsCountInEachTier.Add((int)Math.Round(((double)weight * numberOfWeapons) / weightTotal));
             }
 
             return weaponsCountInEachTier;
@@ -82,9 +82,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
 
         private static void AddRoundingErrorIntoThirdEntry(List<int> weaponsCountInEachTier, int numberOfWeapons)
         {
-            if (weaponsCountInEachTier.Sum() < numberOfWeapons)
+            var sum = weaponsCountInEachTier.Sum();
+            if (sum < numberOfWeapons)
             {
-                weaponsCountInEachTier[2] += numberOfWeapons - weaponsCountInEachTier.Sum();
+                weaponsCountInEachTier[2] += numberOfWeapons - sum;
+            }
+            else if (sum > numberOfWeapons)
+            {
+                weaponsCountInEachTier[2] -= sum - numberOfWeapons;
             }
         }
 
@@ -114,7 +119,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
             var weaponLevelsByCategory = new Dictionary<string, Dictionary<StardewWeapon, int>>();
             foreach (var weapon in weapons)
             {
-                if (weapon.PrepareForGivingToFarmer() is not MeleeWeapon stardewWeapon)
+                if (weapon.PrepareForGivingToFarmer() is not MeleeWeapon stardewWeapon || stardewWeapon.Name.Contains("Scythe"))
                 {
                     continue;
                 }

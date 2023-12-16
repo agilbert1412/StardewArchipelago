@@ -260,12 +260,9 @@ namespace StardewArchipelago.GameModifications
             // Game1: private static void newSeason()
             // Game1: public static void NewDay(float timeToPause)
 
-            var original = AccessTools.Method(typeof(Game1), nameof(Game1.NewDay));
-            var prefix = new HarmonyMethod(typeof(SeasonsRandomizer), nameof(SeasonsRandomizer.NewDay_SeasonChoice_Prefix));
-
             _harmony.Patch(
-                original: original,
-                prefix: prefix
+                original: AccessTools.Method(typeof(Game1), nameof(Game1.NewDay)),
+                prefix: new HarmonyMethod(typeof(SeasonsRandomizer), nameof(SeasonsRandomizer.NewDay_SeasonChoice_Prefix))
             );
 
             _harmony.Patch(
