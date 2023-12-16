@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants;
 using StardewArchipelago.Stardew;
 using StardewValley.Objects;
 using StardewValley.Tools;
@@ -11,10 +13,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
         public const string TYPE_SWORD = "Sword";
         public const string TYPE_CLUB = "Club";
         public const string TYPE_DAGGER = "Dagger";
-        private const double WEAPON_LEVELS_PER_TIER = 3.5;
         private ModsManager _modsManager;
 
         public Dictionary<string, Dictionary<int, List<StardewItem>>> WeaponsByCategoryByTier { get; private set; }
+        public Dictionary<string, Dictionary<StardewWeapon, int>> WeaponsByTierAndType {get; private set; }
         public Dictionary<int, List<StardewItem>> WeaponsByTier { get; private set; }
         public Dictionary<int, List<StardewItem>> BootsByTier { get; private set; }
         public Dictionary<int, List<StardewItem>> SlingshotsByTier { get; private set; }
@@ -40,6 +42,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
         {
             WeaponsByCategoryByTier = new Dictionary<string, Dictionary<int, List<StardewItem>>>();
             WeaponsByTier = new Dictionary<int, List<StardewItem>>();
+            WeaponsByTierAndType = new Dictionary<string, Dictionary<StardewWeapon, int>>();
             var weapons = itemManager.GetAllWeapons();
             foreach (var weapon in weapons)
             {
@@ -56,8 +59,33 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
                     _ => TYPE_SWORD,
                 };
 
-                var tier = (int)(weaponLevel / WEAPON_LEVELS_PER_TIER) + 1;
-                AddToWeapons(weapon, type, tier);
+                if (!WeaponsByTierAndType.ContainsKey(type))
+            {
+                WeaponsByTierAndType.Add(type, new Dictionary<StardewWeapon, int>());
+            }
+                WeaponsByTierAndType[type][weapon] = weaponLevel;
+            }
+            foreach (var weapon in WeaponsByTierAndType)
+            {
+                var typeWeapons = weapon.Value.OrderBy(kvp => kvp.Value);
+                var typeWeaponCount = typeWeapons.Count();
+                var totalProgressiveWeapons = (_modsManager.HasMod(ModNames.SVE) ? 6:5);
+                var countByTier = typeWeaponCount / totalProgressiveWeapons + 1;
+                var tier = 0;
+                for (var j = 1; j <= totalProgressiveWeapons; j++)
+                {
+                    var startingValue = tier * countByTier;
+                    for (var i = 1; i <= countByTier; i++)
+                    {
+                        if (i + startingValue > typeWeaponCount)
+                        {
+                            break;
+                        }
+                        var currentWeapon = typeWeapons.ElementAt(i + startingValue - 1);
+                        AddToWeapons(currentWeapon.Key, weapon.Key, tier);
+                    }
+                    tier += 1;
+                }
             }
         }
 
