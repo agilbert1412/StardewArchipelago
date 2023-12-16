@@ -360,3 +360,4 @@ src/SampleMod.csproj
 StardewArchipelago/.vscode/launch.json
 src/manifest.json
 StardewArchipelago/.vscode/tasks.json
+.vscode/launch.json
