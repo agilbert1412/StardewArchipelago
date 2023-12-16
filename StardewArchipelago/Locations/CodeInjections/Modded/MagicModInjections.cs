@@ -126,8 +126,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 var myActiveHints = _archipelago.GetMyActiveHints();
                 foreach (var salableItem in __instance.itemPriceAndStock.Keys.ToArray())
                 {
-                    _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, MARLON_RECIPE_1, "Magic Elixir", myActiveHints);
-                    _shopReplacer.ReplaceShopRecipe(__instance.itemPriceAndStock, salableItem, MARLON_RECIPE_2, "Travel Core", myActiveHints);
+                    _shopReplacer.ReplaceShopRecipe(__instance.itemPriceAndStock, salableItem, MARLON_RECIPE_2, "Magic Elixir", myActiveHints);
+                    _shopReplacer.ReplaceShopRecipe(__instance.itemPriceAndStock, salableItem, MARLON_RECIPE_1, "Travel Core", myActiveHints);
                 }
 
                 __instance.forSale = __instance.itemPriceAndStock.Keys.ToList();

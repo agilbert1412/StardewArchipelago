@@ -61,68 +61,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             _modHelper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
-            GenerateEventKeys();
-            ReplaceCutscenes(Total_Static_Events);
-            ReplaceCutscenes(Total_OnWarped_Events);
         }
-
-        public static void GenerateEventKeys()
-        {
-            foreach (var (eventMapName, eventKeys) in Base_OnWarped_Events)
-            {
-                Total_OnWarped_Events[eventMapName] = eventKeys;
-            }
-
-            foreach (var (eventMapName, eventKeys) in Base_Static_Events)
-            {
-                Total_Static_Events[eventMapName] = eventKeys;
-            }
-
-            if (_archipelago.SlotData.Mods.HasMod(ModNames.SVE))
-            {
-                foreach (var (eventMapName, eventKeys) in SVECutsceneInjections.SVE_OnWarped_Events)
-                {
-                    Total_OnWarped_Events[eventMapName] = eventKeys;
-                }
-
-                foreach (var (eventMapName, eventKeys) in SVECutsceneInjections.SVE_Static_Events)
-                {
-                    Total_Static_Events[eventMapName] = eventKeys;
-                }
-            }
-            
-        }
-
-        // These events only require to load at initialization due to lack of "When" requirements from CP.
-        public static void ReplaceCutscenes(Dictionary<string, string[]> events)
-        {
-            foreach (var (eventMapName, eventKeys) in events)
-            {
-                var mapKey = eventMapName.Split("|");
-                var mapName = mapKey[0];
-                var eventID = mapKey[1];
-                var currentMapEventData = Game1.content.Load<Dictionary<string, string>>("Data\\Events\\" + mapName);
-                foreach (var eventKey in eventKeys)
-                {
-
-                    var newEventKey = "";
-                    if (eventID == "")
-                        eventID = eventKey.Split("/")[0];
-                    // If CP does not add the event yet, continue.
-                    if (!currentMapEventData.ContainsKey(eventKey))
-                    {
-                        continue;
-                    }
-
-                    // Append self-reference as requirement, or AP oriented event key.
-                    newEventKey = eventKey + "/e " + eventID;
-                    var eventData = currentMapEventData[eventKey];
-                    currentMapEventData.Remove(eventKey);
-                    currentMapEventData[newEventKey] = eventData;
-                }
-            }
-        }
-
+        
         public static bool AddCookingRecipe_CheckForStrayRecipe_Prefix(Event __instance, GameLocation location, GameTime time, string[] split)
         {
             try

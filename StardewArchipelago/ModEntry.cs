@@ -15,6 +15,7 @@ using StardewArchipelago.Items;
 using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Items.Traps;
 using StardewArchipelago.Locations;
+using StardewArchipelago.Locations.CodeInjections.Modded.SVE;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
 using StardewArchipelago.Locations.Patcher;
@@ -62,6 +63,7 @@ namespace StardewArchipelago
         private EntranceManager _entranceManager;
         private NightShippingBehaviors _shippingBehaviors;
 
+        private CallableModData _callableModData;
         private ModifiedVillagerEventChecker _villagerEvents;
 
         public ArchipelagoStateDto State { get; set; }
@@ -282,7 +284,7 @@ namespace StardewArchipelago
                 _multiSleep.InjectMultiSleepOption(_archipelago.SlotData);
                 TravelingMerchantInjections.UpdateTravelingMerchantForToday(Game1.getLocationFromName("Forest") as Forest, Game1.dayOfMonth);
                 SeasonsRandomizer.ChangeMailKeysBasedOnSeasonsToDaysElapsed();
-
+                _callableModData = new CallableModData(Monitor, _archipelago);
                 Game1.chatBox?.addMessage($"Connected to Archipelago as {_archipelago.SlotData.SlotName}. Type !!help for client commands", Color.Green);
 
             }
@@ -302,7 +304,7 @@ namespace StardewArchipelago
 
         private void OnWarped(object sender, WarpedEventArgs e)
         {
-            ModdedEventInjections.ReplaceCutscenes(ModdedEventInjections.Total_OnWarped_Events);
+            _callableModData.ReplaceAllOnWarpedEvents();
         }
 
         private void ReadPersistentArchipelagoData()

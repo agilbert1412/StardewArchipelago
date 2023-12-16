@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using HarmonyLib;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants;
+using StardewArchipelago.GameModifications.CodeInjections;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
@@ -52,7 +54,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
             { "Town|Scarlett", new[] { "3691371" } },
             { "Custom_AdventurerSummit||RustyKey", new[] { "1090501/e 1000034/k 1090502/f MarlonFay 1250", "1090501/e 1000034/k 1090502/b 1"}},
             { "Farm||GroveInitialize", new[] {"908070/t 600 900"}},
-            { $"Farm|{MORGAN_EVENT}|MorganEntry", new [] {"5978924/y 3/d Mon Tue/e 1724095", "5978924/y 3/d Mon Tue/e 1724095/t 600 2600"} }
+            { $"Farm|{MORGAN_EVENT}|MorganEntry", new [] {"5978924/y 3/d Mon Tue/e 1724095", "5978924/y 3/d Mon Tue/e 1724095/t 600 2600"} },
+            { "Farm|GuntherRustyKey", new[] {"103042015/e 295672/t 600 700/H"}}
         };
 
         public static bool CheckForAction_LanceChest_Prefix(Chest __instance, Farmer who, bool justCheckingForActivity, ref bool __result)
@@ -116,8 +119,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
                 return;
             }
         }
-
-
 
         // Railroad Boulder Special Order won't load if Iridium Bomb is sent early, so we duplicate it so the player gets it.
         private static void AppendFakeClintBoulderSpecialOrderKey()
