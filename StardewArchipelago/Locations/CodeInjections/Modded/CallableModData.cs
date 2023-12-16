@@ -91,11 +91,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                     Total_Static_Events[eventMapName] = eventKeys;
                 }
             }
-            
+
+        }
+        
+        public void ReplaceAllOnWarpedEvents()
+        {
+            ReplaceCutscenes(Total_OnWarped_Events);
         }
 
         // These events only require to load at initialization due to lack of "When" requirements from CP.
-        public void ReplaceCutscenes(Dictionary<string, string[]> events)
+        private void ReplaceCutscenes(Dictionary<string, string[]> events)
         {
             foreach (var (eventMapName, eventKeys) in events)
             {

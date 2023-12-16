@@ -304,7 +304,7 @@ namespace StardewArchipelago
 
         private void OnWarped(object sender, WarpedEventArgs e)
         {
-            _callableModData.ReplaceCutscenes(CallableModData.Total_OnWarped_Events);
+            _callableModData.ReplaceAllOnWarpedEvents();
         }
 
         private void ReadPersistentArchipelagoData()
