@@ -49,7 +49,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     return;
                 }
 
-                if (Game1.random.NextDouble() > 0.02)
+                if (Game1.random.NextDouble() > 0.4)
                 {
                     return;
                 }
