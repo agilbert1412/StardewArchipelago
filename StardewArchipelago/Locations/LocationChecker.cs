@@ -123,5 +123,10 @@ namespace StardewArchipelago.Locations
                 _checkedLocations.Remove(location);
             }
         }
+
+        public bool IsAnyLocationNotChecked(string filter)
+        {
+            return _archipelago.Session.Locations.AllMissingLocations.Select(_archipelago.GetLocationName).Any(x => x.Contains(filter));
+        }
     }
 }

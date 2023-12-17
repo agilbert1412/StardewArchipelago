@@ -53,6 +53,7 @@ namespace StardewArchipelago.GameModifications
             CropInjections.Initialize(monitor, archipelago, stardewItemManager);
             VoidMayoInjections.Initialize(monitor);
             LegendaryFishInjections.Initialize(monitor);
+            SecretNoteInjections.Initialize(monitor, archipelago, locationChecker);
             KentInjections.Initialize(monitor, archipelago);
             GoldenEggInjections.Initialize(monitor, archipelago);
             GoldenClockInjections.Initialize(monitor, archipelago);
@@ -86,6 +87,7 @@ namespace StardewArchipelago.GameModifications
             PatchGoldenEgg();
             PatchGoldenClock();
             PatchLegendaryFish();
+            PatchSecretNotes();
             PatchRecipes();
             _startingResources.GivePlayerStartingResources();
 
@@ -508,6 +510,14 @@ namespace StardewArchipelago.GameModifications
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Sewer), nameof(Sewer.getFish)),
                 prefix: new HarmonyMethod(typeof(LegendaryFishInjections), nameof(LegendaryFishInjections.GetFish_MutantCarpInSewer_PreFix))
+            );
+        }
+
+        private void PatchSecretNotes()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.tryToCreateUnseenSecretNote)),
+                postfix: new HarmonyMethod(typeof(SecretNoteInjections), nameof(SecretNoteInjections.TryToCreateUnseenSecretNote_AllowSecretNotesIfStillNeedToShipThem_Postfix))
             );
         }
 

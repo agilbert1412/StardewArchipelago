@@ -118,9 +118,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 return name;
             }
 
-            if (name.Contains("Honey")) // Honey is a weird special case that can be wild...
+            foreach (var simplifiedName in _simplifiedNames)
             {
-                return "Honey";
+                if (name.Contains(simplifiedName))
+                {
+                    return simplifiedName;
+                }
             }
 
             if (shippedObject.preserve.Value.HasValue)
@@ -151,6 +154,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             { 182, "Large Egg (Brown)" },
             { 438, "Large Goat Milk" },
             { 223, "Cookies" },
+        };
+
+        private static readonly List<string> _simplifiedNames = new()
+        {
+            "Honey",
+            "Secret Note",
         };
     }
 }
