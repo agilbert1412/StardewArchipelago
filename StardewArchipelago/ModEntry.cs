@@ -28,6 +28,7 @@ using StardewValley.Locations;
 using StardewArchipelago.GameModifications.Modded;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
 using StardewArchipelago.Locations.CodeInjections.Modded;
+using StardewArchipelago.Constants;
 
 namespace StardewArchipelago
 {
@@ -285,6 +286,7 @@ namespace StardewArchipelago
                 TravelingMerchantInjections.UpdateTravelingMerchantForToday(Game1.getLocationFromName("Forest") as Forest, Game1.dayOfMonth);
                 SeasonsRandomizer.ChangeMailKeysBasedOnSeasonsToDaysElapsed();
                 _callableModData = new CallableModData(Monitor, _archipelago);
+                DoBugsCleanup();
                 Game1.chatBox?.addMessage($"Connected to Archipelago as {_archipelago.SlotData.SlotName}. Type !!help for client commands", Color.Green);
 
             }
@@ -368,6 +370,18 @@ namespace StardewArchipelago
 
         private void DoBugsCleanup()
         {
+            // Fix to remove dupes in Railroad Boulder
+            if (!_archipelago.SlotData.Mods.HasMod(ModNames.SVE))
+            {
+                return;
+            }
+            var railroadBoulderOrder = SpecialOrder.GetSpecialOrder("Clint2", null);
+            var railroadDupeCount = Game1.player.team.specialOrders.Count(x => x.questKey.Value.Equals("Clint2Again"));
+            while (railroadDupeCount > 1)
+            {
+                Game1.player.team.specialOrders.Remove(railroadBoulderOrder);
+                railroadDupeCount -= 1;
+            }
         }
 
         private void OnDayEnding(object sender, DayEndingEventArgs e)
