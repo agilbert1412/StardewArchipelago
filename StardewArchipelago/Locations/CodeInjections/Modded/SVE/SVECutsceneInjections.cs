@@ -96,27 +96,25 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
             }
         }
 
-        public static void ResetLocalState_PlayRailroadBoulderCutsceneIfConditionsAreMet_Postfix(GameLocation __instance)
+        public static bool EndBehaviors_AddRailroadBoulderIfIridiumBomb_Prefix(string[] split, Event __instance)
         {
             try
             {
-                var bombBeforeQuest = Game1.player.eventsSeen.Contains(RAILROAD_BOULDER_ID) && Game1.player.eventsSeen.Contains(IRIDIUM_BOMB_ID);
-                if (!Game1.player.hasSkullKey || !bombBeforeQuest)
+                if (__instance.id != RAILROAD_BOULDER_ID || !Game1.player.mailReceived.Contains("RailroadBoulderRemoved"))
                 {
-                    return;
+                    return true;
                 }
-
-                // Add a fake Special Order for Clint's boulder destruction because the real one gets removed by SVE when the actual boulder is removed
+                //Change the key so it doesn't get deleted
                 var railroadBoulderOrder = SpecialOrder.GetSpecialOrder("Clint2", null);
                 railroadBoulderOrder.questKey.Value = RAILROAD_KEY;
                 Game1.player.team.specialOrders.Add(railroadBoulderOrder);
 
-                return;
+                return true;
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(ResetLocalState_PlayRailroadBoulderCutsceneIfConditionsAreMet_Postfix)}:\n{ex}", LogLevel.Error);
-                return;
+                _monitor.Log($"Failed in {nameof(EndBehaviors_AddRailroadBoulderIfIridiumBomb_Prefix)}:\n{ex}", LogLevel.Error);
+                return true;
             }
         }
 

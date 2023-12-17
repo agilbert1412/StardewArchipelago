@@ -1,10 +1,12 @@
-﻿using StardewArchipelago.Archipelago;
+﻿using System.Linq;
+using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
 using StardewArchipelago.Constants;
 using StardewArchipelago.GameModifications;
 using StardewArchipelago.GameModifications.CodeInjections.Modded;
 using StardewArchipelago.Locations.CodeInjections.Modded;
 using StardewArchipelago.Locations.CodeInjections.Modded.SVE;
+using StardewValley;
 
 namespace StardewArchipelago.Locations.CodeInjections.Initializers
 {
@@ -16,6 +18,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
         {
             _archipelago = archipelago;
             InitializeModdedContent(monitor, modHelper, archipelago, locationChecker, shopReplacer, shopStockGenerator);
+            // Fix to remove dupes in Railroad Boulder
+            var railroadBoulderOrder = SpecialOrder.GetSpecialOrder("Clint2", null);
+            var railroadDupeCount = Game1.player.team.specialOrders.Count(x => x.questKey.Value.Equals("Clint2Again"));
+            while (railroadDupeCount > 1)
+            {
+                Game1.player.team.specialOrders.Remove(railroadBoulderOrder);
+                railroadDupeCount -= 1;
+            }
         }
 
         private static void InitializeModdedContent(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker, ShopReplacer shopReplacer, ShopStockGenerator shopStockGenerator)
