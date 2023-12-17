@@ -307,7 +307,7 @@ namespace StardewArchipelago.Locations.Patcher
             );
 
             _harmony.Patch(
-                original: AccessTools.Method(typeof(Event), nameof(Event.skipEvent)),
+                original: AccessTools.Method(typeof(Event), nameof(Event.endBehaviors)),
                 prefix: new HarmonyMethod(typeof(SVECutsceneInjections), nameof(SVECutsceneInjections.EndBehaviors_AddRailroadBoulderIfIridiumBomb_Prefix))
             );
         }
