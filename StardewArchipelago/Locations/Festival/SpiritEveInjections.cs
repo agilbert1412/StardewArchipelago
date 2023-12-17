@@ -80,7 +80,7 @@ namespace StardewArchipelago.Locations.Festival
                 foreach (var salableItem in __instance.itemPriceAndStock.Keys.ToArray())
                 {
                     _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, FestivalLocationNames.RARECROW_2, item => _shopReplacer.IsRarecrow(item, 2), myActiveHints);
-                    _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, FestivalLocationNames.JACK_O_LANTERN_RECIPE, item => item.IsRecipe && item.Name.Equals("Jack-O-Lantern", StringComparison.InvariantCultureIgnoreCase), myActiveHints);
+                    _shopReplacer.ReplaceShopRecipe(__instance.itemPriceAndStock, salableItem, FestivalLocationNames.JACK_O_LANTERN_RECIPE, "Jack-O-Lantern", myActiveHints);
                 }
 
                 __instance.forSale = __instance.itemPriceAndStock.Keys.ToList();
