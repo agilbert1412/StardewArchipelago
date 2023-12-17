@@ -54,10 +54,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             { "spring", "0 Custom_Martin_WarpRoom 1 3 3" }
         };
 
+        private static readonly Dictionary<string, string> _marlonNeedsSpringIGuess = new()
+        {
+            { "spring", "610 AdventureGuild 4 11 2"}
+        };
+
         private static readonly Dictionary<string, Dictionary<string, string>> characterToSchedule = new()
         {
             { "Claire", _claireScheduleWhenMovies },
-            { "Martin", _martinScheduleWhenMovies }
+            { "Martin", _martinScheduleWhenMovies },
+            { "MarlonFay", _marlonNeedsSpringIGuess }
         };
 
 
@@ -69,7 +75,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             ReplaceCutscenes(Total_Static_Events);
             ReplaceCutscenes(Total_OnWarped_Events);
             GuntherInitializer();
-            ChangeScheduleForMovie();
+            ChangeSchedules();
         }
 
         private static void GenerateEventKeys()
@@ -134,7 +140,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             }
         }
 
-        public void ChangeScheduleForMovie()
+        public void ChangeSchedules()
         {
             if (!_archipelago.SlotData.Mods.HasMod(ModNames.SVE) || _archipelago.GetReceivedItemCount(TheaterInjections.MOVIE_THEATER_ITEM) < 2)
             {
