@@ -67,6 +67,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 if (_locationChecker.IsLocationMissingAndExists(specialOrderName) & !_vanillaSpecialOrderReward.Contains(specialOrderName))
                 {
                     __result.rewards.Clear();
+                    Game1.player.team.specialOrders.Remove(__result); // Might as well, and it cleans up SVE special orders.
                 }
             }
             catch (Exception ex)
