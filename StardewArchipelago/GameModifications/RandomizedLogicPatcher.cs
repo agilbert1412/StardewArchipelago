@@ -204,10 +204,10 @@ namespace StardewArchipelago.GameModifications
                 postfix: new HarmonyMethod(typeof(TheaterInjections), nameof(TheaterInjections.MakeMapModifications_JojamartAndTheater_Postfix))
             );
 
-            //_harmony.Patch(
-            //    original: AccessTools.Method(typeof(NPC), "changeScheduleForLocationAccessibility"),
-            //    prefix: new HarmonyMethod(typeof(TheaterInjections), nameof(TheaterInjections.ChangeScheduleForLocationAccessibility_JojamartAndTheater_Prefix))
-            //);
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(NPC), "changeScheduleForLocationAccessibility"),
+                prefix: new HarmonyMethod(typeof(TheaterInjections), nameof(TheaterInjections.ChangeScheduleForLocationAccessibility_JojamartAndTheater_Prefix))
+            );
 
             //_harmony.Patch(
             //    original: AccessTools.Method(typeof(NPC), nameof(NPC.parseMasterSchedule)),

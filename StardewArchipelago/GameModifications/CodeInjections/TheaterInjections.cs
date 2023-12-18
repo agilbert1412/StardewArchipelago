@@ -232,46 +232,57 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             }
         }
 
-        //// private bool changeScheduleForLocationAccessibility(ref string locationName, ref int tileX, ref int tileY, ref int facingDirection)
-        //public static bool ChangeScheduleForLocationAccessibility_JojamartAndTheater_Prefix(NPC __instance, ref string locationName, ref int tileX, ref int tileY, ref int facingDirection, ref bool __result)
-        //{
-        //    try
-        //    {
-        //        if (locationName is "Railroad" or "CommunityCenter")
-        //        {
-        //            return true; // run original logic
-        //        }
+        public static void UpdateScheduleForEveryone()
+        {
+            foreach (var character in Utility.getAllCharacters())
+            {
+                if (!character.isVillager())
+                {
+                    character.dayUpdate(Game1.dayOfMonth);
+                }
+            }
+        }
 
-        //        if (locationName != "JojaMart" || !_archipelago.HasReceivedItem(MOVIE_THEATER_ITEM))
-        //        {
-        //            // no fallback
-        //            __result = false;
-        //            return false; // don't run original logic
-        //        }
+        // private bool changeScheduleForLocationAccessibility(ref string locationName, ref int tileX, ref int tileY, ref int facingDirection)
+        public static bool ChangeScheduleForLocationAccessibility_JojamartAndTheater_Prefix(NPC __instance, ref string locationName, ref int tileX, ref int tileY, ref int facingDirection, ref bool __result)
+        {
+            try
+            {
+                if (locationName is "Railroad" or "CommunityCenter")
+                {
+                    return true; // run original logic
+                }
 
-        //        if (!__instance.hasMasterScheduleEntry(locationName + "_Replacement"))
-        //        {
-        //            // Fallback on the default schedule
-        //            __result = true;
-        //            return false; // don't run original logic
-        //        }
+                if (locationName != "JojaMart" || !_archipelago.HasReceivedItem(MOVIE_THEATER_ITEM))
+                {
+                    // no fallback
+                    __result = false;
+                    return false; // don't run original logic
+                }
 
-        //        string[] strArray = __instance.getMasterScheduleEntry(locationName + "_Replacement").Split(' ');
-        //        locationName = strArray[0];
-        //        tileX = Convert.ToInt32(strArray[1]);
-        //        tileY = Convert.ToInt32(strArray[2]);
-        //        facingDirection = Convert.ToInt32(strArray[3]);
+                if (!__instance.hasMasterScheduleEntry(locationName + "_Replacement"))
+                {
+                    // Fallback on the default schedule
+                    __result = true;
+                    return false; // don't run original logic
+                }
 
-        //        // no fallback
-        //        __result = false;
-        //        return false; // don't run original logic
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _monitor.Log($"Failed in {nameof(ChangeScheduleForLocationAccessibility_JojamartAndTheater_Prefix)}:\n{ex}", LogLevel.Error);
-        //        return true; // run original logic
-        //    }
-        //}
+                string[] strArray = __instance.getMasterScheduleEntry(locationName + "_Replacement").Split(' ');
+                locationName = strArray[0];
+                tileX = Convert.ToInt32(strArray[1]);
+                tileY = Convert.ToInt32(strArray[2]);
+                facingDirection = Convert.ToInt32(strArray[3]);
+
+                // no fallback
+                __result = false;
+                return false; // don't run original logic
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(ChangeScheduleForLocationAccessibility_JojamartAndTheater_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
+        }
 
         //// public Dictionary<int, SchedulePathDescription> parseMasterSchedule(string rawData)
         //public static bool ParseMasterSchedule_JojamartAndTheater_Prefix(NPC __instance, string rawData, ref Dictionary<int, SchedulePathDescription> __result)

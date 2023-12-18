@@ -362,6 +362,7 @@ namespace StardewArchipelago
             }
             _appearanceRandomizer.ShuffleCharacterAppearances();
             _entranceManager.ResetCheckedEntrancesToday(_archipelago.SlotData);
+            TheaterInjections.UpdateScheduleForEveryone();
             DoBugsCleanup();
         }
 
