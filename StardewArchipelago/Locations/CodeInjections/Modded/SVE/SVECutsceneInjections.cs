@@ -58,6 +58,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
             { "Farm|GuntherRustyKey", new[] {"103042015/e 295672/t 600 700/H"}}
         };
 
+        // public override bool checkForAction(Farmer who, bool justCheckingForActivity = false)
         public static bool CheckForAction_LanceChest_Prefix(Chest __instance, Farmer who, bool justCheckingForActivity, ref bool __result)
         {
             try
@@ -96,25 +97,26 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
             }
         }
 
+        // public void endBehaviors(string[] split, GameLocation location)
         public static bool EndBehaviors_AddRailroadBoulderIfIridiumBomb_Prefix(string[] split, Event __instance)
         {
             try
             {
                 if (__instance.id != RAILROAD_BOULDER_ID || !Game1.player.mailReceived.Contains("RailroadBoulderRemoved"))
                 {
-                    return true;
+                    return true; // run original logic
                 }
                 //Change the key so it doesn't get deleted
                 var railroadBoulderOrder = SpecialOrder.GetSpecialOrder("Clint2", null);
                 railroadBoulderOrder.questKey.Value = RAILROAD_KEY;
                 Game1.player.team.specialOrders.Add(railroadBoulderOrder);
 
-                return true;
+                return true; // run original logic
             }
             catch (Exception ex)
             {
                 _monitor.Log($"Failed in {nameof(EndBehaviors_AddRailroadBoulderIfIridiumBomb_Prefix)}:\n{ex}", LogLevel.Error);
-                return true;
+                return true; // run original logic
             }
         }
 
