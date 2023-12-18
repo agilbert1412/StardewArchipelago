@@ -31,9 +31,7 @@ namespace StardewArchipelago.Stardew
 
             if (Name == "Rarecrow")
             {
-                var pattern = @"\((\d) of \d\)"; // (# of 8)
-                var match = Regex.Match(Description, pattern);
-                var rarecrowNumber = match.Groups[1].Value;
+                var rarecrowNumber = GetRarecrowNumber(id);
                 Name += $" #{rarecrowNumber}";
             }
         }
@@ -51,7 +49,19 @@ namespace StardewArchipelago.Stardew
 
         private static int GetRarecrowNumber(Object salableItem)
         {
-            return salableItem.ParentSheetIndex switch
+            try
+            {
+                return GetRarecrowNumber(salableItem.ParentSheetIndex);
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException($"{salableItem.Name} is not a recognized rarecrow!")
+            }
+        }
+
+        private static int GetRarecrowNumber(int id)
+        {
+            return id switch
             {
                 110 => 1,
                 113 => 2,
@@ -61,7 +71,7 @@ namespace StardewArchipelago.Stardew
                 138 => 6,
                 139 => 7,
                 140 => 8,
-                _ => throw new ArgumentException($"{salableItem.Name} is not a recognized rarecrow!")
+                _ => throw new ArgumentException($"{id} is not a recognized rarecrow!")
             };
         }
 
