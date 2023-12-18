@@ -5,6 +5,7 @@ using Archipelago.Gifting.Net.Gifts;
 using Archipelago.Gifting.Net.Service;
 using Archipelago.Gifting.Net.Traits;
 using Microsoft.Xna.Framework;
+using StardewArchipelago.Constants;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
@@ -56,9 +57,7 @@ namespace StardewArchipelago.Archipelago.Gifting
                 var tax = GetTaxForItem(giftObject, out var itemValue);
                 if (Game1.player.Money < tax)
                 {
-                    Game1.chatBox?.addMessage($"You cannot afford Joja Prime for this item", Color.Gold);
-                    Game1.chatBox?.addMessage($"The tax is {_archipelago.SlotData.BankTax * 100}% of the item's value of {itemValue}g, so you must pay {tax}g to send it",
-                        Color.Gold);
+                    GiveCantAffordTaxFeedbackToPlayer(itemValue, tax);
                     return;
                 }
 
@@ -78,8 +77,7 @@ namespace StardewArchipelago.Archipelago.Gifting
                 Game1.chatBox?.addMessage(
                     $"{slotName} will receive your {giftOrTrap} of {giftItem.Amount} {giftItem.Name} within 1 business day",
                     Color.Gold);
-                Game1.chatBox?.addMessage($"You have been charged a tax of {tax}g", Color.Gold);
-                Game1.chatBox?.addMessage($"Thank you for using {GetDeliveryCompanyName()}", Color.Gold);
+                GiveTaxFeedbackToPlayer(tax);
             }
             catch (Exception ex)
             {
@@ -97,7 +95,7 @@ namespace StardewArchipelago.Archipelago.Gifting
         private int GetTaxForItem(Object giftObject, out int itemValue)
         {
             itemValue = giftObject.Price * giftObject.Stack;
-            var tax = (int)Math.Round(_archipelago.SlotData.BankTax * itemValue);
+            var tax = (int)Math.Round(GetTaxRate() * itemValue);
             return tax;
         }
 
@@ -115,8 +113,7 @@ namespace StardewArchipelago.Archipelago.Gifting
             }
 
             Game1.player.Money = Math.Max(0, Game1.player.Money - totalTax);
-            Game1.chatBox?.addMessage($"You have been charged a tax of {totalTax}g", Color.Gold);
-            Game1.chatBox?.addMessage($"Thank you for using {GetDeliveryCompanyName()}", Color.Gold);
+            GiveTaxFeedbackToPlayer(totalTax);
 
             return objectsFailedToSend;
         }
@@ -150,11 +147,6 @@ namespace StardewArchipelago.Archipelago.Gifting
             }
         }
 
-        private string GetDeliveryCompanyName()
-        {
-            return "Joja Prime";
-        }
-
         public List<string> GetAllPlayersThatCanReceiveGift(Object giftObject)
         {
             var validTargets = new List<string>();
@@ -178,6 +170,58 @@ namespace StardewArchipelago.Archipelago.Gifting
             }
 
             return validTargets;
+        }
+
+        private double GetTaxRate()
+        {
+            if (_archipelago.SlotData.Mods.HasMod(ModNames.AYEISHA) && IsAyeishaHere(out var ayeisha))
+            {
+                return 0.25 - (Game1.player.getFriendshipHeartLevelForNPC(ayeisha.Name) * 0.025);
+            }
+
+            return 0.25;
+        }
+
+        private bool IsAyeishaHere(out NPC ayeisha)
+        {
+            foreach (var character in Game1.currentLocation.characters)
+            {
+                if (character.Name.Contains("Ayeisha", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    ayeisha = character;
+                    return true;
+                }
+            }
+
+            ayeisha = null;
+            return false;
+        }
+
+        private void GiveTaxFeedbackToPlayer(int tax)
+        {
+            if (_archipelago.SlotData.Mods.HasMod(ModNames.AYEISHA) && IsAyeishaHere(out var ayeisha))
+            {
+                ayeisha.setNewDialogue($"Sure, I'll deliver that package! It'll reach the recipient tomorrow! That'll cost you {tax}g");
+                Game1.drawDialogue(ayeisha);
+                return;
+            }
+
+            Game1.chatBox?.addMessage($"You have been charged a tax of {tax}g", Color.Gold);
+            Game1.chatBox?.addMessage($"Thank you for using Joja Prime", Color.Gold);
+        }
+
+        private void GiveCantAffordTaxFeedbackToPlayer(int itemValue, int tax, double taxRate)
+        {
+            if (_archipelago.SlotData.Mods.HasMod(ModNames.AYEISHA) && IsAyeishaHere(out var ayeisha))
+            {
+                ayeisha.setNewDialogue($"Sorry {Game1.player.Name}, but it costs {tax}g to deliver this...");
+                Game1.drawDialogue(ayeisha);
+                return;
+            }
+
+            Game1.chatBox?.addMessage($"You cannot afford tax for this item", Color.Gold);
+            Game1.chatBox?.addMessage($"The tax is {taxRate * 100}% of the item's value of {itemValue}g, so you must pay {tax}g to send it",
+                Color.Gold);
         }
     }
 }

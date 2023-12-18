@@ -89,7 +89,6 @@ namespace StardewArchipelago.Archipelago
         public bool QuickStart { get; private set; }
         public bool Gifting { get; private set; }
         public bool Banking { get; private set; }
-        public double BankTax { get; private set; }
         public bool DeathLink { get; private set; }
         public string Seed { get; private set; }
         public string MultiworldVersion { get; private set; }
@@ -139,7 +138,6 @@ namespace StardewArchipelago.Archipelago
             QuickStart = GetSlotSetting(QUICK_START_KEY, false);
             Gifting = GetSlotSetting(GIFTING_KEY, true);
             Banking = true;
-            BankTax = 25 / 100.0;
             DeathLink = GetSlotSetting(DEATH_LINK_KEY, false);
             Seed = GetSlotSetting(SEED_KEY, "");
             MultiworldVersion = GetSlotSetting(MULTIWORLD_VERSION_KEY, "");
