@@ -130,6 +130,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
         }
 
         // Railroad Boulder Special Order won't load if Iridium Bomb is sent early, so we duplicate it so the player gets it.
+        // private static void UpdateSpecialOrders()
         public static bool UpdateSpecialOrders_StopDeletingSpecialOrders_Prefix()
         {
             try
