@@ -98,7 +98,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
 
             foreach (var (shopIdentification, recipes) in craftsanityRecipes)
             {
-                if (shopIdentification.IsCorrectShop(shopMenu))
+                if (!shopIdentification.IsCorrectShop(shopMenu))
                 {
                     continue;
                 }
@@ -118,7 +118,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
 
             foreach (var (shopIdentification, recipes) in chefsanityRecipes)
             {
-                if (shopIdentification.IsCorrectShop(shopMenu))
+                if (!shopIdentification.IsCorrectShop(shopMenu))
                 {
                     continue;
                 }
