@@ -100,7 +100,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.CC
                         var bundleIndexString = bundle.bundleIndex.ToString();
                         if (bundleIndexString.Length == 4)
                         {
-                            if (TryGetMoneyBundleName(bundleIndexString, out var moneyBundleName))
+                            if (TryGetBundleName(bundleIndexString, out var moneyBundleName))
                             {
                                 bundle.bundleTextureOverride = BundleIcons.GetBundleIcon(_modHelper, moneyBundleName);
                                 bundle.bundleTextureIndexOverride = 0;
@@ -124,7 +124,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.CC
             }
         }
 
-        private static bool TryGetMoneyBundleName(string bundleIndexString, out string moneyBundleName)
+        private static bool TryGetBundleName(string bundleIndexString, out string moneyBundleName)
         {
             switch (bundleIndexString[..2])
             {
