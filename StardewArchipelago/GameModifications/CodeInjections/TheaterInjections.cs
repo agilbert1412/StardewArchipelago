@@ -236,7 +236,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         {
             foreach (var character in Utility.getAllCharacters())
             {
-                if (!character.isVillager())
+                if (character.isVillager())
                 {
                     character.dayUpdate(Game1.dayOfMonth);
                 }
