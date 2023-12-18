@@ -13,6 +13,7 @@ namespace StardewArchipelago.Archipelago
         private const string DEPOSIT_COMMAND = "Deposit";
         private const string WITHDRAW_COMMAND = "Withdraw";
         private const int MAX_DISPLAY_MONEY = 100000000; // 100 Millions
+        private const double BANK_TAX = 0.25;
         public static readonly BigInteger EXCHANGE_RATE = 10000000; // To be adjusted based on feedback (pun intended)
 
         public ArchipelagoClient _archipelago;
@@ -105,7 +106,7 @@ namespace StardewArchipelago.Archipelago
                 return;
             }
 
-            var tax = (int)Math.Round(amountToDeposit * _archipelago.SlotData.BankTax);
+            var tax = (int)Math.Round(amountToDeposit * BANK_TAX);
             var realDepositAmount = amountToDeposit - tax;
             AddToBank(realDepositAmount);
             Game1.player.Money -= amountToDeposit;

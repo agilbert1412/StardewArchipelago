@@ -54,10 +54,10 @@ namespace StardewArchipelago.Archipelago.Gifting
                     return;
                 }
 
-                var tax = GetTaxForItem(giftObject, out var itemValue);
+                var tax = GetTaxForItem(giftObject, out var itemValue, out var taxRate);
                 if (Game1.player.Money < tax)
                 {
-                    GiveCantAffordTaxFeedbackToPlayer(itemValue, tax);
+                    GiveCantAffordTaxFeedbackToPlayer(itemValue, tax, taxRate);
                     return;
                 }
 
@@ -74,10 +74,8 @@ namespace StardewArchipelago.Archipelago.Gifting
 
                 Game1.player.ActiveObject = null;
                 Game1.player.Money -= tax;
-                Game1.chatBox?.addMessage(
-                    $"{slotName} will receive your {giftOrTrap} of {giftItem.Amount} {giftItem.Name} within 1 business day",
-                    Color.Gold);
-                GiveTaxFeedbackToPlayer(tax);
+                GiveJojaPrimeInformationToPlayer(slotName, giftOrTrap, giftItem);
+                GiveTaxFeedbackToPlayer(slotName, tax);
             }
             catch (Exception ex)
             {
@@ -89,13 +87,14 @@ namespace StardewArchipelago.Archipelago.Gifting
 
         private int GetTaxForItem(Object giftObject)
         {
-            return GetTaxForItem(giftObject, out _);
+            return GetTaxForItem(giftObject, out _, out _);
         }
 
-        private int GetTaxForItem(Object giftObject, out int itemValue)
+        private int GetTaxForItem(Object giftObject, out int itemValue, out double taxRate)
         {
             itemValue = giftObject.Price * giftObject.Stack;
-            var tax = (int)Math.Round(GetTaxRate() * itemValue);
+            taxRate = GetTaxRate();
+            var tax = (int)Math.Round(taxRate * itemValue);
             return tax;
         }
 
@@ -113,7 +112,7 @@ namespace StardewArchipelago.Archipelago.Gifting
             }
 
             Game1.player.Money = Math.Max(0, Game1.player.Money - totalTax);
-            GiveTaxFeedbackToPlayer(totalTax);
+            GiveTaxFeedbackToPlayer(null, totalTax);
 
             return objectsFailedToSend;
         }
@@ -184,6 +183,12 @@ namespace StardewArchipelago.Archipelago.Gifting
 
         private bool IsAyeishaHere(out NPC ayeisha)
         {
+            if (!_archipelago.SlotData.Mods.HasMod(ModNames.AYEISHA))
+            {
+                ayeisha = null;
+                return false;
+            }
+
             foreach (var character in Game1.currentLocation.characters)
             {
                 if (character.Name.Contains("Ayeisha", StringComparison.InvariantCultureIgnoreCase))
@@ -197,11 +202,22 @@ namespace StardewArchipelago.Archipelago.Gifting
             return false;
         }
 
-        private void GiveTaxFeedbackToPlayer(int tax)
+        private void GiveJojaPrimeInformationToPlayer(string recipient, string giftOrTrap, GiftItem giftItem)
         {
-            if (_archipelago.SlotData.Mods.HasMod(ModNames.AYEISHA) && IsAyeishaHere(out var ayeisha))
+            if (IsAyeishaHere(out _))
             {
-                ayeisha.setNewDialogue($"Sure, I'll deliver that package! It'll reach the recipient tomorrow! That'll cost you {tax}g");
+                return;
+            }
+
+            Game1.chatBox?.addMessage($"{recipient} will receive your {giftOrTrap} of {giftItem.Amount} {giftItem.Name} within 1 business day", Color.Gold);
+        }
+
+        private void GiveTaxFeedbackToPlayer(string recipient, int tax)
+        {
+            if (IsAyeishaHere(out var ayeisha))
+            {
+                var tomorrowSentence = recipient == null ? $"It'll get there tomorrow!" : $"It'll reach {recipient} tomorrow!";
+                ayeisha.setNewDialogue($"Sure, I'll deliver that package! {tomorrowSentence} That'll cost you {tax}g.");
                 Game1.drawDialogue(ayeisha);
                 return;
             }
@@ -212,7 +228,7 @@ namespace StardewArchipelago.Archipelago.Gifting
 
         private void GiveCantAffordTaxFeedbackToPlayer(int itemValue, int tax, double taxRate)
         {
-            if (_archipelago.SlotData.Mods.HasMod(ModNames.AYEISHA) && IsAyeishaHere(out var ayeisha))
+            if (IsAyeishaHere(out var ayeisha))
             {
                 ayeisha.setNewDialogue($"Sorry {Game1.player.Name}, but it costs {tax}g to deliver this...");
                 Game1.drawDialogue(ayeisha);
