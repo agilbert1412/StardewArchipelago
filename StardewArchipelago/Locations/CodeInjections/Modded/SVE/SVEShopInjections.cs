@@ -24,23 +24,19 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
         private const string ISAAC_SWORD = "Tempered Galaxy Sword";
         private const string ISAAC_HAMMER = "Tempered Galaxy Hammer";
 
-        private static readonly string[] craftsanityRecipes = {
-            "Haste Elixir",
-            "Armor Elixir",
-            "Hero Elixir",
+        private static readonly Dictionary<ShopIdentification, PricedItem[]> craftsanityRecipes = new()
+        {
+            { new ShopIdentification("Custom_CastleVillageOutpost", "Alesia"), new[] { new PricedItem("Haste Elixir", 35000), new PricedItem("Armor Elixir", 50000) } },
+            { new ShopIdentification("Custom_CastleVillageOutpost", "Isaac"), new[] { new PricedItem("Hero Elixir", 65000) } },
         };
 
-        private static readonly string[] chefsanityRecipes = {
-            "Big Bark Burger",
-            "Glazed Butterfish",
-            "Mixed Berry Pie",
-            "Baked Berry Oatmeal",
-            "Flower Cookie",
-            "Frog Legs",
-            "Mushroom Berry Rice",
-            "Seaweed Salad",
-            "Void Delight",
-            "Void Salmon Sushi",
+        private static readonly Dictionary<ShopIdentification, PricedItem[]> chefsanityRecipes = new()
+        {
+            { new ShopIdentification("Saloon"), new[] { new PricedItem("Big Bark Burger", 5500), new PricedItem("Glazed Butterfish", 4000), new PricedItem("Mixed Berry Pie", 3500) } },
+            { new ShopIdentification("Custom_ForestWest"), new[] { new PricedItem("Baked Berry Oatmeal", 12500), new PricedItem("Flower Cookie", 8750) } },
+            { new ShopIdentification("AdventureGuild"), new[] { new PricedItem("Frog Legs", 2000), new PricedItem("Mushroom Berry Rice", 1500) } },
+            { new ShopIdentification("FishShop"), new[] { new PricedItem("Seaweed Salad", 1250) } },
+            { new ShopIdentification("Sewer"), new[] { new PricedItem("Void Delight", 5000), new PricedItem("Void Salmon Sushi", 5000) } },
         };
 
         public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker, ShopReplacer shopReplacer, ShopStockGenerator shopStockGenerator)
@@ -71,9 +67,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
                 foreach (var salableItem in __instance.itemPriceAndStock.Keys.ToArray())
                 {
                     ReplaceTemperedGalaxyWeapons(__instance, salableItem, myActiveHints);
-                    ReplaceCraftsanityRecipes(__instance, salableItem, myActiveHints);
-                    ReplaceChefsanityRecipes(__instance, salableItem, myActiveHints);
                 }
+
+                ReplaceCraftsanityRecipes(__instance, myActiveHints);
+                ReplaceChefsanityRecipes(__instance, myActiveHints);
 
                 __instance.forSale = __instance.itemPriceAndStock.Keys.ToList();
                 return; //  run original logic
@@ -92,29 +89,44 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
             _shopReplacer.ReplaceShopItem(shopMenu.itemPriceAndStock, salableItem, ISAAC_HAMMER, "Tempered Galaxy Hammer", myActiveHints);
         }
 
-        private static void ReplaceCraftsanityRecipes(ShopMenu shopMenu, ISalable salableItem, Hint[] myActiveHints)
+        private static void ReplaceCraftsanityRecipes(ShopMenu shopMenu, Hint[] myActiveHints)
         {
             if (!_archipelago.SlotData.Craftsanity.HasFlag(Craftsanity.All))
             {
                 return;
             }
 
-            foreach (var recipeItem in craftsanityRecipes)
+            foreach (var (shopIdentification, recipes) in craftsanityRecipes)
             {
-                _shopReplacer.ReplaceShopRecipe(shopMenu.itemPriceAndStock, salableItem, $"{recipeItem} Recipe", recipeItem, myActiveHints);
+                if (shopIdentification.IsCorrectShop(shopMenu))
+                {
+                    continue;
+                }
+                foreach (var recipe in recipes)
+                {
+                    _shopReplacer.PlaceShopRecipeCheck(shopMenu.itemPriceAndStock, $"{recipe.ItemName} Recipe", recipe.ItemName, myActiveHints, recipe.Price);
+                }
             }
         }
 
-        private static void ReplaceChefsanityRecipes(ShopMenu shopMenu, ISalable salableItem, Hint[] myActiveHints)
+        private static void ReplaceChefsanityRecipes(ShopMenu shopMenu, Hint[] myActiveHints)
         {
             if (!_archipelago.SlotData.Chefsanity.HasFlag(Chefsanity.Purchases))
             {
                 return;
             }
 
-            foreach (var recipeItem in chefsanityRecipes)
+            foreach (var (shopIdentification, recipes) in chefsanityRecipes)
             {
-                _shopReplacer.ReplaceShopRecipe(shopMenu.itemPriceAndStock, salableItem, $"{recipeItem} Recipe", recipeItem, myActiveHints);
+                if (shopIdentification.IsCorrectShop(shopMenu))
+                {
+                    continue;
+                }
+
+                foreach (var recipe in recipes)
+                {
+                    _shopReplacer.PlaceShopRecipeCheck(shopMenu.itemPriceAndStock, $"{recipe.ItemName} Recipe", recipe.ItemName, myActiveHints, recipe.Price);
+                }
             }
         }
 
