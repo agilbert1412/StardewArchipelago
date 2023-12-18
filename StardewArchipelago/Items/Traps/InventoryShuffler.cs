@@ -1,15 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using StardewArchipelago.Archipelago.Gifting;
 using StardewArchipelago.Extensions;
 using StardewValley;
 using StardewValley.Objects;
 using StardewValley.Tools;
+using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Items.Traps
 {
     public class InventoryShuffler
     {
+        private const double GIFTING_RATE = 0.20;
+
         private class ItemSlot
         {
             public IList<Item> Inventory { get; set; }
@@ -33,6 +37,12 @@ namespace StardewArchipelago.Items.Traps
 
         private const int CRAFTING_CATEGORY = -9;
         private const string CRAFTING_TYPE = "Crafting";
+        private GiftSender _giftSender;
+
+        public InventoryShuffler(GiftSender giftSender)
+        {
+            _giftSender = giftSender;
+        }
 
         public void ShuffleInventories(ShuffleInventoryTarget targets)
         {
@@ -44,14 +54,20 @@ namespace StardewArchipelago.Items.Traps
             var slotsToShuffle = new Dictionary<ItemSlot, Item>();
 
             AddItemSlotsFromPlayerInventory(slotsToShuffle, targets == ShuffleInventoryTarget.Hotbar);
-            if (targets == ShuffleInventoryTarget.InventoryAndChests)
+            if (targets >= ShuffleInventoryTarget.InventoryAndChests)
             {
                 AddItemSlotsFromChestsInEntireWorld(slotsToShuffle);
             }
 
+            var random = new Random((int)(Game1.uniqueIDForThisGame + Game1.stats.DaysPlayed));
+
+            if (targets >= ShuffleInventoryTarget.InventoryAndChestsAndFriends)
+            {
+                SendRandomGifts(slotsToShuffle, random, GIFTING_RATE);
+            }
+
             var allSlots = slotsToShuffle.Keys.ToList();
             var allItems = slotsToShuffle.Values.ToList();
-            var random = new Random((int)(Game1.uniqueIDForThisGame + Game1.stats.DaysPlayed));
             var allItemsShuffled = allItems.Shuffle(random);
 
             for (var i = 0; i < allSlots.Count; i++)
@@ -62,6 +78,48 @@ namespace StardewArchipelago.Items.Traps
             foreach (var chest in FindAllChests())
             {
                 chest.clearNulls();
+            }
+        }
+
+        private void SendRandomGifts(Dictionary<ItemSlot, Item> slotsToShuffle, Random random, double giftingRate)
+        {
+            var giftsToSend = new Dictionary<string, List<Object>>();
+            var slotsToClear = new Dictionary<Object, ItemSlot>();
+
+            foreach (var (itemSlot, item) in slotsToShuffle)
+            {
+                if (item is not Object objectToGift || random.NextDouble() > giftingRate)
+                {
+                    continue;
+                }
+
+                var validTargets = _giftSender.GetAllPlayersThatCanReceiveGift(objectToGift);
+                if (validTargets == null || !validTargets.Any())
+                {
+                    continue;
+                }
+
+                var chosenTarget = validTargets[random.Next(validTargets.Count)];
+                if (!giftsToSend.ContainsKey(chosenTarget))
+                {
+                    giftsToSend.Add(chosenTarget, new List<Object>());
+                }
+
+                giftsToSend[chosenTarget].Add(objectToGift);
+                slotsToClear.Add(objectToGift, itemSlot);
+            }
+
+            var failedToSendGifts = _giftSender.SendShuffleGifts(giftsToSend);
+
+            foreach (var (gift, slot) in slotsToClear)
+            {
+                if (failedToSendGifts.Contains(gift))
+                {
+                    continue;
+                }
+
+                slotsToShuffle.Remove(slot);
+                slot.SetItem(null);
             }
         }
 

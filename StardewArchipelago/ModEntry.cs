@@ -265,7 +265,8 @@ namespace StardewArchipelago
                 }
 
                 var babyBirther = new BabyBirther();
-                _itemManager = new ItemManager(Monitor, _helper, _harmony, _archipelago, _stardewItemManager, _mail, tileChooser, babyBirther, State.ItemsReceived);
+                _giftHandler.Initialize(Monitor, _archipelago, _stardewItemManager, _mail);
+                _itemManager = new ItemManager(Monitor, _helper, _harmony, _archipelago, _stardewItemManager, _mail, tileChooser, babyBirther, _giftHandler.Sender, State.ItemsReceived);
                 var weaponsManager = new WeaponsManager(_stardewItemManager, _archipelago.SlotData.Mods);
                 _mailPatcher = new MailPatcher(Monitor, _harmony, _archipelago, _locationChecker, State,
                     new LetterActions(_helper, _mail, _archipelago, weaponsManager, _itemManager.TrapManager, babyBirther));
@@ -274,7 +275,6 @@ namespace StardewArchipelago
                 _locationsPatcher = new LocationPatcher(Monitor, _helper, _harmony, _archipelago, State, _locationChecker, _stardewItemManager, weaponsManager, shopStockGenerator);
                 _shippingBehaviors = new NightShippingBehaviors(Monitor, _archipelago, _locationChecker);
                 _chatForwarder.ListenToChatMessages();
-                _giftHandler.Initialize(Monitor, _archipelago, _stardewItemManager, _mail);
                 _logicPatcher.PatchAllGameLogic();
                 _mailPatcher.PatchMailBoxForApItems();
                 _entranceManager.SetEntranceRandomizerSettings(_archipelago.SlotData);

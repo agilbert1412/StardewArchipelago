@@ -108,7 +108,7 @@ namespace StardewArchipelago.Items.Traps
             {TrapItemsDifficulty.Medium, ShuffleInventoryTarget.FullInventory},
             {TrapItemsDifficulty.Hard, ShuffleInventoryTarget.FullInventory},
             {TrapItemsDifficulty.Hell, ShuffleInventoryTarget.InventoryAndChests},
-            {TrapItemsDifficulty.Nightmare, ShuffleInventoryTarget.InventoryAndChests},
+            {TrapItemsDifficulty.Nightmare, ShuffleInventoryTarget.InventoryAndChestsAndFriends},
         };
 
         // TODO: Figure out a way to have different difficulties for temporary winter
@@ -239,6 +239,7 @@ namespace StardewArchipelago.Items.Traps
         Hotbar,
         FullInventory,
         InventoryAndChests,
+        InventoryAndChestsAndFriends,
     }
 
     public enum DroughtTarget

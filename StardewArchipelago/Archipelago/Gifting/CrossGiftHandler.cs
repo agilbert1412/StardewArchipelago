@@ -28,6 +28,8 @@ namespace StardewArchipelago.Archipelago.Gifting
         private GiftSender _giftSender;
         private GiftReceiver _giftReceiver;
 
+        public GiftSender Sender => _giftSender;
+
         public CrossGiftHandler()
         {
         }

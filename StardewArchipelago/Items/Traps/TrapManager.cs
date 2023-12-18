@@ -7,6 +7,7 @@ using Archipelago.MultiClient.Net.Enums;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Archipelago.Gifting;
 using StardewArchipelago.Extensions;
 using StardewArchipelago.GameModifications;
 using StardewArchipelago.Items.Mail;
@@ -62,7 +63,7 @@ namespace StardewArchipelago.Items.Traps
         private readonly InventoryShuffler _inventoryShuffler;
         private Dictionary<string, Action> _traps;
 
-        public TrapManager(IMonitor monitor, IModHelper helper, Harmony harmony, ArchipelagoClient archipelago, TileChooser tileChooser, BabyBirther babyBirther)
+        public TrapManager(IMonitor monitor, IModHelper helper, Harmony harmony, ArchipelagoClient archipelago, TileChooser tileChooser, BabyBirther babyBirther, GiftSender giftSender)
         {
             _monitor = monitor;
             _helper = helper;
@@ -71,7 +72,7 @@ namespace StardewArchipelago.Items.Traps
             _tileChooser = tileChooser;
             _monsterSpawner = new MonsterSpawner(_tileChooser);
             _babyBirther = babyBirther;
-            _inventoryShuffler = new InventoryShuffler();
+            _inventoryShuffler = new InventoryShuffler(giftSender);
             _traps = new Dictionary<string, Action>();
             RegisterTraps();
             harmony.Patch(

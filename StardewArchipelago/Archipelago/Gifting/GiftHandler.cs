@@ -18,6 +18,8 @@ namespace StardewArchipelago.Archipelago.Gifting
         private Mailman _mail;
         private Random _random;
 
+        public GiftSender Sender => throw new NotImplementedException();
+
         public GiftHandler()
         {
         }
