@@ -1,5 +1,6 @@
 ﻿using Netcode;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Locations;
 using StardewValley;
 using StardewValley.Network;
 
@@ -7,11 +8,13 @@ namespace StardewArchipelago.GameModifications
 {
     public class StartingRecipes
     {
-        private static ArchipelagoClient _archipelago;
+        private ArchipelagoClient _archipelago;
+        private LocationChecker _locationChecker;
 
-        public StartingRecipes(ArchipelagoClient archipelago)
+        public StartingRecipes(ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             _archipelago = archipelago;
+            _locationChecker = locationChecker;
         }
 
         public void SynchronizeStartingRecipes(Farmer farmer)
@@ -69,6 +72,10 @@ namespace StardewArchipelago.GameModifications
             var shouldKnowRecipe = _archipelago.HasReceivedItem($"{startingRecipe} Recipe");
             if (knowsRecipe == shouldKnowRecipe)
             {
+                if (knowsRecipe && (_locationChecker.IsLocationMissingAndExists($"Craft {startingRecipe}") || _locationChecker.IsLocationMissingAndExists($"Cook {startingRecipe}")))
+                {
+                    knownRecipes[startingRecipe] = 0;
+                }
                 return;
             }
 
