@@ -376,6 +376,11 @@ namespace StardewArchipelago
             }
             var railroadBoulderOrder = SpecialOrder.GetSpecialOrder("Clint2", null);
             var railroadDupeCount = Game1.player.team.specialOrders.Count(x => x.questKey.Value.Equals("Clint2Again"));
+            if (railroadDupeCount <= 1)
+            {
+                return;
+            }
+            railroadBoulderOrder.questKey.Value = "Clint2Again";
             while (railroadDupeCount > 1)
             {
                 Game1.player.team.specialOrders.Remove(railroadBoulderOrder);
