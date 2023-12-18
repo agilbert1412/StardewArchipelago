@@ -24,6 +24,17 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
         private const int RAILROAD_BOULDER_ID = 8050108;
         private const int IRIDIUM_BOMB_ID = 8050109;
         private const string LANCE_CHEST = "Lance's Diamond Wand";
+        private static readonly Dictionary<int, string> sveEventSpecialOrders = new(){
+            {8050108, "Clint2"},
+            {2551994, "Clint3"},
+            {8033859, "Lewis2"},
+            {2554903, "Robin3"},
+            {2554928, "Robin4"},
+            {7775926, "Apples"},
+            {65360183, "MarlonFay2"},
+            {65360186, "Lance"},
+            {1090506, "Krobus"}
+        };
         private static ShopMenu _lastShopMenuUpdated = null;
 
         public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
@@ -32,7 +43,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
             _modHelper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
-            AppendFakeClintBoulderSpecialOrderKey();
         }
         //Format is Map|NewEventID(Optional)|Name
         public static readonly Dictionary<string, string[]> SVE_Static_Events = new()
@@ -98,35 +108,39 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
         }
 
         // public void endBehaviors(string[] split, GameLocation location)
-        public static bool EndBehaviors_AddRailroadBoulderIfIridiumBomb_Prefix(string[] split, Event __instance)
+        public static bool EndBehaviors_AddSpecialOrderAfterEvent_Prefix(string[] split, Event __instance)
         {
             try
             {
-                if (__instance.id != RAILROAD_BOULDER_ID || !Game1.player.mailReceived.Contains("RailroadBoulderRemoved"))
+                if (!sveEventSpecialOrders.ContainsKey(__instance.id))
                 {
                     return true; // run original logic
                 }
                 //Change the key so it doesn't get deleted
-                var railroadBoulderOrder = SpecialOrder.GetSpecialOrder("Clint2", null);
-                railroadBoulderOrder.questKey.Value = RAILROAD_KEY;
-                Game1.player.team.specialOrders.Add(railroadBoulderOrder);
+                var specialOrder = SpecialOrder.GetSpecialOrder(sveEventSpecialOrders[__instance.id], null);
+                Game1.player.team.specialOrders.Add(specialOrder);
 
                 return true; // run original logic
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(EndBehaviors_AddRailroadBoulderIfIridiumBomb_Prefix)}:\n{ex}", LogLevel.Error);
+                _monitor.Log($"Failed in {nameof(EndBehaviors_AddSpecialOrderAfterEvent_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
             }
         }
 
         // Railroad Boulder Special Order won't load if Iridium Bomb is sent early, so we duplicate it so the player gets it.
-        private static void AppendFakeClintBoulderSpecialOrderKey()
+        public static bool UpdateSpecialOrders_StopDeletingSpecialOrders_Prefix()
         {
-            var untimedSpecialOrdersType = AccessTools.TypeByName("HarmonyPatch_UntimedSpecialOrders");
-            var specialOrderKeysField = _modHelper.Reflection.GetField<List<string>>(untimedSpecialOrdersType, "SpecialOrderKeys");
-            var specialOrderKeys = specialOrderKeysField.GetValue();
-            specialOrderKeys.Add("Clint2Again");
+            try
+            {
+                return false; // we're not using this, its too strict.
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(UpdateSpecialOrders_StopDeletingSpecialOrders_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
         }
     }
 }
