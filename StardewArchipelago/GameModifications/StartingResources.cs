@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Extensions;
 using StardewArchipelago.GameModifications.CodeInjections;
+using StardewArchipelago.Locations;
 using StardewArchipelago.Stardew;
 using StardewValley;
 using StardewValley.Locations;
@@ -19,11 +20,11 @@ namespace StardewArchipelago.GameModifications
         private StardewItemManager _stardewItemManager;
         private StartingRecipes _startingRecipes;
 
-        public StartingResources(ArchipelagoClient archipelago, StardewItemManager stardewItemManager)
+        public StartingResources(ArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager stardewItemManager)
         {
             _archipelago = archipelago;
             _stardewItemManager = stardewItemManager;
-            _startingRecipes = new StartingRecipes(archipelago);
+            _startingRecipes = new StartingRecipes(archipelago, locationChecker);
         }
 
         public void GivePlayerStartingResources()

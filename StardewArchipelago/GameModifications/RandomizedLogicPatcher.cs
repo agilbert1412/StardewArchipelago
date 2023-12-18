@@ -33,7 +33,7 @@ namespace StardewArchipelago.GameModifications
             _harmony = harmony;
             _archipelago = archipelago;
             _stardewItemManager = stardewItemManager;
-            _startingResources = new StartingResources(_archipelago, _stardewItemManager);
+            _startingResources = new StartingResources(_archipelago, locationChecker, _stardewItemManager);
             _recipeDataRemover = new RecipeDataRemover(monitor, helper, archipelago);
             MineshaftLogicInjections.Initialize(monitor);
             CommunityCenterLogicInjections.Initialize(monitor, locationChecker);
