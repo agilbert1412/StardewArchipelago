@@ -58,6 +58,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
             { "Farm|GuntherRustyKey", new[] {"103042015/e 295672/t 600 700/H"}}
         };
 
+        // public override bool checkForAction(Farmer who, bool justCheckingForActivity = false)
         public static bool CheckForAction_LanceChest_Prefix(Chest __instance, Farmer who, bool justCheckingForActivity, ref bool __result)
         {
             try
@@ -96,27 +97,26 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
             }
         }
 
-        public static void ResetLocalState_PlayRailroadBoulderCutsceneIfConditionsAreMet_Postfix(GameLocation __instance)
+        // public void endBehaviors(string[] split, GameLocation location)
+        public static bool EndBehaviors_AddRailroadBoulderIfIridiumBomb_Prefix(string[] split, Event __instance)
         {
             try
             {
-                var bombBeforeQuest = Game1.player.eventsSeen.Contains(RAILROAD_BOULDER_ID) && Game1.player.eventsSeen.Contains(IRIDIUM_BOMB_ID);
-                if (!Game1.player.hasSkullKey || !bombBeforeQuest)
+                if (__instance.id != RAILROAD_BOULDER_ID || !Game1.player.mailReceived.Contains("RailroadBoulderRemoved"))
                 {
-                    return;
+                    return true; // run original logic
                 }
-
-                // Add a fake Special Order for Clint's boulder destruction because the real one gets removed by SVE when the actual boulder is removed
+                //Change the key so it doesn't get deleted
                 var railroadBoulderOrder = SpecialOrder.GetSpecialOrder("Clint2", null);
                 railroadBoulderOrder.questKey.Value = RAILROAD_KEY;
                 Game1.player.team.specialOrders.Add(railroadBoulderOrder);
 
-                return;
+                return true; // run original logic
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(ResetLocalState_PlayRailroadBoulderCutsceneIfConditionsAreMet_Postfix)}:\n{ex}", LogLevel.Error);
-                return;
+                _monitor.Log($"Failed in {nameof(EndBehaviors_AddRailroadBoulderIfIridiumBomb_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
             }
         }
 
