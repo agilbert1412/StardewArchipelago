@@ -72,7 +72,7 @@ namespace StardewArchipelago.Items.Traps
             _tileChooser = tileChooser;
             _monsterSpawner = new MonsterSpawner(_tileChooser);
             _babyBirther = babyBirther;
-            _inventoryShuffler = new InventoryShuffler(giftSender);
+            _inventoryShuffler = new InventoryShuffler(monitor, giftSender);
             _traps = new Dictionary<string, Action>();
             RegisterTraps();
             harmony.Patch(
