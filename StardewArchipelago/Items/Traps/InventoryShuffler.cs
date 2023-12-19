@@ -93,7 +93,7 @@ namespace StardewArchipelago.Items.Traps
                     continue;
                 }
 
-                var validTargets = _giftSender.GetAllPlayersThatCanReceiveGift(objectToGift);
+                var validTargets = _giftSender.GetAllPlayersThatCanReceiveShuffledItems(objectToGift);
                 if (validTargets == null || !validTargets.Any())
                 {
                     continue;

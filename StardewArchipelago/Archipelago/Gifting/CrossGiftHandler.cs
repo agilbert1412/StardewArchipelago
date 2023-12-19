@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices;
 using Archipelago.Gifting.Net.Service;
 using Archipelago.Gifting.Net.Traits;
 using Microsoft.Xna.Framework;
@@ -110,7 +111,7 @@ namespace StardewArchipelago.Archipelago.Gifting
                     continue;
                 }
 
-                if (!_giftSender.GiftGenerator.TryCreateGiftItem(stardewObject, false, out var giftItem, out var traits))
+                if (!_giftSender.GiftGenerator.TryCreateGiftItem(stardewObject, false, out var giftItem, out var traits, out _))
                 {
                     continue;
                 }

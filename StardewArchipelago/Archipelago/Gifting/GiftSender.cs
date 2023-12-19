@@ -39,10 +39,9 @@ namespace StardewArchipelago.Archipelago.Gifting
                 }
 
                 var giftObject = Game1.player.ActiveObject;
-                if (!GiftGenerator.TryCreateGiftItem(Game1.player.ActiveObject, isTrap, out var giftItem,
-                        out var giftTraits))
+                if (!GiftGenerator.TryCreateGiftItem(Game1.player.ActiveObject, isTrap, out var giftItem, out var giftTraits, out var errorMessage))
                 {
-                    // TryCreateGiftItem will log the reason if it fails
+                    Game1.chatBox?.addMessage(errorMessage, Color.Gold);
                     return;
                 }
 
@@ -122,7 +121,7 @@ namespace StardewArchipelago.Archipelago.Gifting
             tax = 0;
             try
             {
-                if (!GiftGenerator.TryCreateGiftItem(giftObject, false, out var giftItem, out var giftTraits))
+                if (!GiftGenerator.TryCreateGiftItem(giftObject, false, out var giftItem, out var giftTraits, out _))
                 {
                     objectsFailedToSend.Add(giftObject);
                     return;
@@ -146,26 +145,22 @@ namespace StardewArchipelago.Archipelago.Gifting
             }
         }
 
-        public List<string> GetAllPlayersThatCanReceiveGift(Object giftObject)
+        public List<string> GetAllPlayersThatCanReceiveShuffledItems(Object giftObject)
         {
             var validTargets = new List<string>();
-            if (!GiftGenerator.TryCreateGiftItem(giftObject, false, out var giftItem, out var giftTraits))
+            if (!GiftGenerator.TryCreateGiftItem(giftObject, false, out var giftItem, out var giftTraits, out _))
             {
                 return validTargets;
             }
 
             foreach (var player in _archipelago.Session.Players.AllPlayers)
             {
-                if (player.Slot == _archipelago.CurrentPlayer.Slot)
+                if (player.Slot == _archipelago.CurrentPlayer.Slot || player.Game != _archipelago.CurrentPlayer.Game)
                 {
                     continue;
                 }
 
-                var isValidRecipient = _giftService.CanGiftToPlayer(player.Name, giftTraits.Select(x => x.Trait));
-                if (isValidRecipient)
-                {
-                    validTargets.Add(player.Name);
-                }
+                validTargets.Add(player.Name);
             }
 
             return validTargets;
