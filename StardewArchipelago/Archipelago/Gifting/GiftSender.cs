@@ -183,11 +183,12 @@ namespace StardewArchipelago.Archipelago.Gifting
 
         private bool IsAyeishaHere(out NPC ayeisha)
         {
-            if (!_archipelago.SlotData.Mods.HasMod(ModNames.AYEISHA))
-            {
-                ayeisha = null;
-                return false;
-            }
+            // I'd like this interaction to work even if Ayeisha is installed as unsupported
+            //if (!_archipelago.SlotData.Mods.HasMod(ModNames.AYEISHA))
+            //{
+            //    ayeisha = null;
+            //    return false;
+            //}
 
             foreach (var character in Game1.currentLocation.characters)
             {
