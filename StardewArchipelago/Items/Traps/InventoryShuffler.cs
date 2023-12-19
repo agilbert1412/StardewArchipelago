@@ -61,6 +61,11 @@ namespace StardewArchipelago.Items.Traps
             if (targets >= ShuffleInventoryTarget.InventoryAndChests)
             {
                 AddItemSlotsFromChestsInEntireWorld(slotsToShuffle);
+                if (targets >= ShuffleInventoryTarget.InventoryAndChestsAndFriends)
+                {
+                    AddItemSlotsFromFridges(slotsToShuffle);
+                    // AddItemSlotsFromJunimoChest(slotsToShuffle);
+                }
             }
 
             var random = new Random((int)(Game1.uniqueIDForThisGame + Game1.stats.DaysPlayed));
@@ -155,8 +160,6 @@ namespace StardewArchipelago.Items.Traps
             {
                 AddItemSlotsFromChest(slotsToShuffle, chest);
             }
-            AddItemSlotsFromFridges(slotsToShuffle);
-            // AddItemSlotsFromJunimoChest(slotsToShuffle);
         }
 
         private static IEnumerable<Chest> FindAllChests()
