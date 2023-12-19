@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using StardewArchipelago.Archipelago.Gifting;
 using StardewArchipelago.Extensions;
+using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Locations;
 using StardewValley.Objects;
 using StardewValley.Tools;
 using Object = StardewValley.Object;
@@ -37,10 +39,12 @@ namespace StardewArchipelago.Items.Traps
 
         private const int CRAFTING_CATEGORY = -9;
         private const string CRAFTING_TYPE = "Crafting";
+        private IMonitor _monitor;
         private GiftSender _giftSender;
 
-        public InventoryShuffler(GiftSender giftSender)
+        public InventoryShuffler(IMonitor monitor, GiftSender giftSender)
         {
+            _monitor = monitor;
             _giftSender = giftSender;
         }
 
@@ -145,12 +149,14 @@ namespace StardewArchipelago.Items.Traps
             }
         }
 
-        private static void AddItemSlotsFromChestsInEntireWorld(Dictionary<ItemSlot, Item> slotsToShuffle)
+        private void AddItemSlotsFromChestsInEntireWorld(Dictionary<ItemSlot, Item> slotsToShuffle)
         {
             foreach (var chest in FindAllChests())
             {
                 AddItemSlotsFromChest(slotsToShuffle, chest);
             }
+            AddItemSlotsFromFridges(slotsToShuffle);
+            // AddItemSlotsFromJunimoChest(slotsToShuffle);
         }
 
         private static IEnumerable<Chest> FindAllChests()
@@ -192,6 +198,81 @@ namespace StardewArchipelago.Items.Traps
 
                 var slot = new ItemSlot(chest.items, i);
                 slotsToShuffle.Add(slot, item);
+            }
+        }
+
+        private void AddItemSlotsFromFridges(Dictionary<ItemSlot, Item> slotsToShuffle)
+        {
+            AddItemSlotsFromFridge(slotsToShuffle);
+            AddItemSlotsFromIslandFridge(slotsToShuffle);
+        }
+
+        private void AddItemSlotsFromFridge(Dictionary<ItemSlot, Item> slotsToShuffle)
+        {
+            try
+            {
+                if (Game1.getLocationFromName("FarmHouse") is not FarmHouse location)
+                {
+                    return;
+                }
+
+                var fridge = location.fridge.Value;
+                if (fridge == null)
+                {
+                    return;
+                }
+
+                AddItemSlotsFromChest(slotsToShuffle, fridge);
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log("Could not find a fridge in the farmhouse", LogLevel.Warn);
+            }
+        }
+
+        private void AddItemSlotsFromIslandFridge(Dictionary<ItemSlot, Item> slotsToShuffle)
+        {
+            try
+            {
+                if (Game1.getLocationFromName("IslandFarmHouse") is not IslandFarmHouse location)
+                {
+                    return;
+                }
+
+                var fridge = location.fridge.Value;
+                if (fridge == null)
+                {
+                    return;
+                }
+
+                AddItemSlotsFromChest(slotsToShuffle, fridge);
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log("Could not find a fridge in the island farmhouse", LogLevel.Warn);
+            }
+        }
+
+        private void AddItemSlotsFromJunimoChest(Dictionary<ItemSlot, Item> slotsToShuffle)
+        {
+            try
+            {
+                var capacity = Game1.player.team.junimoChest.Count;
+                for (var i = 0; i < capacity; i++)
+                {
+                    Item item = null;
+                    if (Game1.player.team.junimoChest.Count > i && Game1.player.team.junimoChest[i] != null)
+                    {
+                        item = Game1.player.team.junimoChest[i];
+                    }
+
+                    var slot = new ItemSlot(Game1.player.team.junimoChest, i);
+                    slotsToShuffle.Add(slot, item);
+                }
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log("Could not update the junimo chest properly", LogLevel.Warn);
             }
         }
     }
