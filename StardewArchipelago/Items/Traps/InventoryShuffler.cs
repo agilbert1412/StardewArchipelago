@@ -14,7 +14,7 @@ namespace StardewArchipelago.Items.Traps
 {
     public class InventoryShuffler
     {
-        private const double GIFTING_RATE = 0.20;
+        private const double GIFTING_RATE = 0.25;
 
         private class ItemSlot
         {
@@ -175,7 +175,7 @@ namespace StardewArchipelago.Items.Traps
             {
                 foreach (var (tile, gameObject) in gameLocation.Objects.Pairs)
                 {
-                    if (gameObject is not Chest { SpecialChestType: Chest.SpecialChestTypes.None, Category: CRAFTING_CATEGORY, Type: CRAFTING_TYPE } chest || chest.giftbox.Value)
+                    if (gameObject is not Chest { SpecialChestType: Chest.SpecialChestTypes.None or Chest.SpecialChestTypes.AutoLoader, Category: CRAFTING_CATEGORY, Type: CRAFTING_TYPE } chest || chest.giftbox.Value)
                     {
                         continue;
                     }
