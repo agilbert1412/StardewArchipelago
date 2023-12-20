@@ -1,13 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using HarmonyLib;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.GameModifications.CodeInjections;
 using StardewArchipelago.GameModifications.EntranceRandomizer;
 using StardewArchipelago.GameModifications.Seasons;
+using StardewArchipelago.GameModifications.Tooltips;
 using StardewArchipelago.Locations;
 using StardewArchipelago.Stardew;
+using StardewArchipelago.Stardew.NameMapping;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Buildings;
@@ -28,22 +33,22 @@ namespace StardewArchipelago.GameModifications
         private readonly StartingResources _startingResources;
         private readonly RecipeDataRemover _recipeDataRemover;
 
-        public RandomizedLogicPatcher(IMonitor monitor, IModHelper helper, Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager stardewItemManager, EntranceManager entranceManager, ShopStockGenerator shopStockGenerator)
+        public RandomizedLogicPatcher(IMonitor monitor, IModHelper modHelper, Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager stardewItemManager, EntranceManager entranceManager, ShopStockGenerator shopStockGenerator, NameSimplifier nameSimplifier)
         {
             _harmony = harmony;
             _archipelago = archipelago;
             _stardewItemManager = stardewItemManager;
             _startingResources = new StartingResources(_archipelago, locationChecker, _stardewItemManager);
-            _recipeDataRemover = new RecipeDataRemover(monitor, helper, archipelago);
+            _recipeDataRemover = new RecipeDataRemover(monitor, modHelper, archipelago);
             MineshaftLogicInjections.Initialize(monitor);
             CommunityCenterLogicInjections.Initialize(monitor, locationChecker);
             FarmInjections.Initialize(monitor, _archipelago);
             AchievementInjections.Initialize(monitor, _archipelago);
             EntranceInjections.Initialize(monitor, _archipelago, entranceManager);
             ForestInjections.Initialize(monitor, _archipelago);
-            MountainInjections.Initialize(monitor, helper, _archipelago);
-            TheaterInjections.Initialize(monitor, helper, archipelago);
-            SeedShopsInjections.Initialize(monitor, helper, archipelago, locationChecker, shopStockGenerator);
+            MountainInjections.Initialize(monitor, modHelper, _archipelago);
+            TheaterInjections.Initialize(monitor, modHelper, archipelago);
+            SeedShopsInjections.Initialize(monitor, modHelper, archipelago, locationChecker, shopStockGenerator);
             LostAndFoundInjections.Initialize(monitor, archipelago);
             TVInjections.Initialize(monitor, archipelago);
             LivinOffTheLandInjections.Initialize(monitor, archipelago);
@@ -57,6 +62,7 @@ namespace StardewArchipelago.GameModifications
             KentInjections.Initialize(monitor, archipelago);
             GoldenEggInjections.Initialize(monitor, archipelago);
             GoldenClockInjections.Initialize(monitor, archipelago);
+            ItemTooltipInjections.Initialize(monitor, modHelper, archipelago, locationChecker, nameSimplifier);
 
             DebugPatchInjections.Initialize(monitor, archipelago);
         }
@@ -89,6 +95,7 @@ namespace StardewArchipelago.GameModifications
             PatchLegendaryFish();
             PatchSecretNotes();
             PatchRecipes();
+            PatchItemTooltips();
             _startingResources.GivePlayerStartingResources();
 
             PatchDebugMethods();
@@ -524,6 +531,20 @@ namespace StardewArchipelago.GameModifications
         private void PatchRecipes()
         {
             _recipeDataRemover.RemoveSkillAndFriendshipLearnConditions();
+        }
+
+        private void PatchItemTooltips()
+        {
+            var parameters = new[]
+                { typeof(SpriteBatch), typeof(Vector2), typeof(float), typeof(float), typeof(float), typeof(StackDrawType), typeof(Color), typeof(bool) };
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Object), nameof(Object.drawInMenu), parameters),
+                postfix: new HarmonyMethod(typeof(ItemTooltipInjections), nameof(ItemTooltipInjections.DrawInMenu_AddArchipelagoLogoIfNeeded_Postfix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Object), nameof(Object.getDescription)),
+                postfix: new HarmonyMethod(typeof(ItemTooltipInjections), nameof(ItemTooltipInjections.GetDescription_AddMissingChecks_Postfix))
+            );
         }
 
         private void PatchDebugMethods()

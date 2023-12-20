@@ -36,6 +36,9 @@
     <None Update="Textures\Archipelago\12x12 blue icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Textures\Archipelago\5x5 color icon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Textures\Archipelago\12x12 color icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

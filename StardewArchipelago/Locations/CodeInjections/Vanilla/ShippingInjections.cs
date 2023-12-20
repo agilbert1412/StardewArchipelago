@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Goals;
+using StardewArchipelago.Stardew.NameMapping;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
@@ -17,12 +18,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private IMonitor _monitor;
         private ArchipelagoClient _archipelago;
         private LocationChecker _locationChecker;
+        private NameSimplifier _nameSimplifier;
 
-        public NightShippingBehaviors(IMonitor monitor, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public NightShippingBehaviors(IMonitor monitor, ArchipelagoClient archipelago, LocationChecker locationChecker, NameSimplifier nameSimplifier)
         {
             _monitor = monitor;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
+            _nameSimplifier = nameSimplifier;
         }
 
         // private static IEnumerator<int> _newDayAfterFade()
@@ -87,7 +90,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             foreach (var shippedItem in allShippedItems)
             {
-                var name = GetShippedItemName(shippedItem);
+                var name = _nameSimplifier.GetSimplifiedName(shippedItem);
 
                 var apLocation = $"Shipsanity: {name}";
                 if (_archipelago.GetLocationId(apLocation) > -1)
@@ -100,73 +103,5 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 }
             }
         }
-
-        private static string GetShippedItemName(Item shippedItem)
-        {
-            var name = shippedItem.Name;
-            if (_renamedItems.ContainsKey(shippedItem.ParentSheetIndex))
-            {
-                name = _renamedItems[shippedItem.ParentSheetIndex];
-            }
-
-            if (name.Contains("moonslime.excavation."))
-            {
-                TextInfo ti = CultureInfo.CurrentCulture.TextInfo;
-                var displayName = ti.ToTitleCase(shippedItem.DisplayName.Replace("Woooden", "Wooden"));
-                if (name.Contains("strange_doll_green"))
-                {
-                    displayName += " (Green)";
-                }
-                name = displayName;
-            }
-
-            if (shippedItem is not Object shippedObject)
-            {
-                return name;
-            }
-
-            foreach (var simplifiedName in _simplifiedNames)
-            {
-                if (name.Contains(simplifiedName))
-                {
-                    return simplifiedName;
-                }
-            }
-
-            if (shippedObject.preserve.Value.HasValue)
-            {
-                switch (shippedObject.preserve.Value.GetValueOrDefault())
-                {
-                    case Object.PreserveType.Wine:
-                        return "Wine";
-                    case Object.PreserveType.Jelly:
-                        return "Jelly";
-                    case Object.PreserveType.Pickle:
-                        return "Pickles";
-                    case Object.PreserveType.Juice:
-                        return "Juice";
-                    case Object.PreserveType.Roe:
-                        return "Roe";
-                    case Object.PreserveType.AgedRoe:
-                        return "Aged Roe";
-                }
-            }
-
-            return name;
-        }
-
-        private static readonly Dictionary<int, string> _renamedItems = new()
-        {
-            { 180, "Egg (Brown)" },
-            { 182, "Large Egg (Brown)" },
-            { 438, "Large Goat Milk" },
-            { 223, "Cookies" },
-        };
-
-        private static readonly List<string> _simplifiedNames = new()
-        {
-            "Honey",
-            "Secret Note",
-        };
     }
 }
