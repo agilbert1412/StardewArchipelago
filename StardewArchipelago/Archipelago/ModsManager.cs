@@ -77,6 +77,33 @@ namespace StardewArchipelago.Archipelago
             return valid;
         }
 
+        public bool IsPatcherStateCorrect(IModHelper modHelper, out string errorMessage)
+        {
+            var loadedModData = modHelper.ModRegistry.GetAll().ToList();
+            errorMessage = $"The slot you are connecting to requires a content patcher,\r\n mod, but not all expected mods are installed and active.";
+            var valid = true;
+            foreach (var modName in _activeMods)
+            {
+                if (!ModVersions.CPVersions.ContainsKey(modName))
+                {
+                    continue;
+                }
+                var contentName = ModVersions.CPVersions[modName].Keys.First();
+                var contentVersion = ModVersions.CPVersions[modName].Values.First();
+                if (IsModActiveAndCorrectVersion(loadedModData, contentName, contentVersion, out var existingVersion))
+                {
+                    continue;
+                }
+
+                valid = false;
+                errorMessage += $"{Environment.NewLine}\tMod: {contentName}, expected version: {contentVersion}, current Version: {existingVersion}";
+
+            }
+
+            return valid;
+
+        }
+
         private static bool IsModActiveAndCorrectVersion(List<IModInfo> loadedModData, string desiredModName, string desiredVersion, out string existingVersion)
         {
             var normalizedDesiredModName = GetNormalizedModName(desiredModName);

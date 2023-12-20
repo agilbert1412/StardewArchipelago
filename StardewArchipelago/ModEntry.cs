@@ -380,6 +380,21 @@ namespace StardewArchipelago
                 Game1.player.team.specialOrders.Remove(railroadBoulderOrder);
                 railroadDupeCount -= 1;
             }
+            // Async Fix for the change from eventsSeen to mailReceived checks.
+            var deprecatedEvents = new Dictionary<int, string>(){{658059254, "apAuroraVineyard"}, {658078924, "apMorganSchooling"}};
+            foreach (var (id, mail) in deprecatedEvents)
+            {
+                if (Game1.player.eventsSeen.Contains(id))
+                {
+                    Game1.player.eventsSeen.Remove(id);
+                    Game1.player.mailReceived.Add(mail);
+                }
+            }
+            // Async fix for the change in call to fix Morris/Claire/Martin
+            if (!Game1.player.mailReceived.Contains("apAbandonedJojaMart") && _archipelago.HasReceivedItem("Progressive Movie Theater"))
+            {
+                Game1.player.mailReceived.Add("apAbandonedJojaMart");
+            }
         }
 
         private void OnDayEnding(object sender, DayEndingEventArgs e)

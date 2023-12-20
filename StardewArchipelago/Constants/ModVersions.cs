@@ -31,5 +31,11 @@ namespace StardewArchipelago.Constants
             { ModNames.ALECTO, "1.1.7"},
             { ModNames.DISTANT_LANDS, "1.0.7"}
         };
+
+        public static readonly Dictionary<string, Dictionary<string, string>> CPVersions = new(){
+            { ModNames.SVE, new(){{ ModNames.AP_SVE, "1.0.0" }} },
+            { ModNames.ALECTO, new(){{ ModNames.AP_ALECTO, "1.0.0" }} },
+            { ModNames.JASPER, new(){{ ModNames.AP_JASPER, "1.0.0"}} }
+        };
 }
 }
