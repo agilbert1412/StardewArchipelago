@@ -44,30 +44,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
             _archipelago = archipelago;
             _locationChecker = locationChecker;
         }
-        //Format is Map|NewEventID(Optional)|Name
-        public static readonly Dictionary<string, string[]> SVE_Static_Events = new()
-        {
-            { $"FarmHouse|{AURORA_EVENT}|VineyardEvent", new[] {" 77759254/e 191393/e 1000037/j 138/t 600 630/H "}},
-            { "AdventureGuild||GuildRunes", new[] { "908073/e 908072/z winter/t 600 1900/w sunny", "908073/e 908072/z winter/t 1910 2400/w sunny", "908073/e 908072/z winter/w rainy", "908073/e 908072/z spring/z summer/z fall" } }, // Unlocking Summit Rune
-        };
-
-        public static readonly Dictionary<string, string[]> SVE_OnWarped_Events = new()
-        {
-            // Contains the original event requirements to be edited
-            { "IslandWest||LanceEvent", new[] { "65360191/f Lance 2000" } },
-            { "FarmHouse||FarmRune", new[] { "908074/e 908072/t 600 630", "908074/t 600 2600" } },
-            { "FarmHouse||OutpostRune", new[] { "908078/e 908072/t 600 2400" } },
-            { "Backwoods||WizardRune", new[] { "908072/e 908071" } },
-            { "Custom_AuroraVineyard||VineyardRune", new[] { "908075/e 908072", "908075/e 908072/f Apples 10" } },
-            { "Custom_SpriteSpring2||SpringRunes", new[] { "908076/e 908072" } },
-            { "Custom_JunimoWoods||JunimoRunes", new[] { "908077/e 908072" } },
-            { "Town|Scarlett", new[] { "3691371" } },
-            { "Custom_AdventurerSummit||RustyKey", new[] { "1090501/e 1000034/k 1090502/f MarlonFay 1250", "1090501/e 1000034/k 1090502/b 1"}},
-            { "Farm||GroveInitialize", new[] {"908070/t 600 900"}},
-            { $"Farm|{MORGAN_EVENT}|MorganEntry", new [] {"5978924/y 3/d Mon Tue/e 1724095", "5978924/y 3/d Mon Tue/e 1724095/t 600 2600"} },
-            { "Farm|GuntherRustyKey", new[] {"103042015/e 295672/t 600 700/H"}}
-        };
-
+        
         // public override bool checkForAction(Farmer who, bool justCheckingForActivity = false)
         public static bool CheckForAction_LanceChest_Prefix(Chest __instance, Farmer who, bool justCheckingForActivity, ref bool __result)
         {
