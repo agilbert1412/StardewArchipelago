@@ -100,7 +100,6 @@ namespace StardewArchipelago
             _helper.Events.GameLoop.DayStarted += this.OnDayStarted;
             _helper.Events.GameLoop.DayEnding += this.OnDayEnding;
             _helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
-            _helper.Events.Player.Warped += this.OnWarped;
 
 
             _helper.ConsoleCommands.Add("connect_override", $"Overrides your next connection to Archipelago. {CONNECT_SYNTAX}", this.OnCommandConnectToArchipelago);
@@ -301,11 +300,6 @@ namespace StardewArchipelago
             Monitor.Log("You are not allowed to load a save without connecting to Archipelago", LogLevel.Error);
             // TitleMenu.subMenu = previousMenu;
             Game1.ExitToTitle();
-        }
-
-        private void OnWarped(object sender, WarpedEventArgs e)
-        {
-            _callableModData.ReplaceAllOnWarpedEvents();
         }
 
         private void ReadPersistentArchipelagoData()
