@@ -26,5 +26,9 @@
         public const string SVE = "Stardew Valley Expanded";
         public const string ALECTO = "Alecto the Witch";
         public const string DISTANT_LANDS = "Distant Lands - Witch Swamp Overhaul";
+
+        public const string AP_SVE = "StardewArchipelago - Stardew Valley Expanded";
+        public const string AP_ALECTO = "StardewArchipelago - Alecto the Witch";
+        public const string AP_JASPER = "StardewArchipelago - Professor Jasper Thomas";
     }
 }

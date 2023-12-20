@@ -100,7 +100,6 @@ namespace StardewArchipelago
             _helper.Events.GameLoop.DayStarted += this.OnDayStarted;
             _helper.Events.GameLoop.DayEnding += this.OnDayEnding;
             _helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
-            _helper.Events.Player.Warped += this.OnWarped;
 
 
             _helper.ConsoleCommands.Add("connect_override", $"Overrides your next connection to Archipelago. {CONNECT_SYNTAX}", this.OnCommandConnectToArchipelago);
@@ -303,11 +302,6 @@ namespace StardewArchipelago
             Game1.ExitToTitle();
         }
 
-        private void OnWarped(object sender, WarpedEventArgs e)
-        {
-            _callableModData.ReplaceAllOnWarpedEvents();
-        }
-
         private void ReadPersistentArchipelagoData()
         {
             var state = _helper.Data.ReadSaveData<ArchipelagoStateDto>(AP_DATA_KEY);
@@ -385,6 +379,21 @@ namespace StardewArchipelago
             {
                 Game1.player.team.specialOrders.Remove(railroadBoulderOrder);
                 railroadDupeCount -= 1;
+            }
+            // Async Fix for the change from eventsSeen to mailReceived checks.
+            var deprecatedEvents = new Dictionary<int, string>(){{658059254, "apAuroraVineyard"}, {658078924, "apMorganSchooling"}};
+            foreach (var (id, mail) in deprecatedEvents)
+            {
+                if (Game1.player.eventsSeen.Contains(id))
+                {
+                    Game1.player.eventsSeen.Remove(id);
+                    Game1.player.mailReceived.Add(mail);
+                }
+            }
+            // Async fix for the change in call to fix Morris/Claire/Martin
+            if (!Game1.player.mailReceived.Contains("apAbandonedJojaMart") && _archipelago.HasReceivedItem("Progressive Movie Theater"))
+            {
+                Game1.player.mailReceived.Add("apAbandonedJojaMart");
             }
         }
 

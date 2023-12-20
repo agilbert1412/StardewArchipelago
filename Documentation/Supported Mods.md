@@ -43,6 +43,8 @@ Custom NPCs:
 - [Custom NPC - Riley](https://www.nexusmods.com/stardewvalley/mods/5811), by SG, Version 1.2.2
 - [Alecto the Witch](https://www.nexusmods.com/stardewvalley/mods/10671), by zoedoll, Version 1.1.7
 
+In addition, a [Content Patcher mod](https://github.com/Witchybun/SDV-Randomizer-Content-Patcher/releases) may be required for the mod to properly function alongside your game.  Include these alongside StardewArchipelago.
+
 ## How to add supported mods to my Archipelago slot?
 
 To include supported mods in your multiworld slot, you need to include a section in your yaml settings called "mods".

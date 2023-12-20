@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Goals;
@@ -110,7 +111,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
             if (name.Contains("moonslime.excavation."))
             {
-                name = shippedItem.DisplayName; //Temporary fix; will break for chinese speaking players only atm
+                TextInfo ti = CultureInfo.CurrentCulture.TextInfo;
+                name = ti.ToTitleCase(shippedItem.DisplayName.Replace("Woooden", "Wooden"));
             }
 
             if (shippedItem is not Object shippedObject)

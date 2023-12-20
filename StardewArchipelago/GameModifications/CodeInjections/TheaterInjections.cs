@@ -194,6 +194,10 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     {
                         __instance.crackOpenAbandonedJojaMartDoor();
                     }
+                    if (!Game1.player.mailReceived.Contains(string.Join("ap",ABANDONED_JOJA_MART)))
+                    {
+                        Game1.player.mailReceived.Add("apAbandonedJojaMart");
+                    }
                 }
                 else
                 {

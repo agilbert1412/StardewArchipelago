@@ -167,16 +167,16 @@ namespace StardewArchipelago.Items.Unlocks
             return new LetterEventSeenAttachment(receivedItem, events);
         }
 
-        private LetterEventSeenAttachment SendJunimoNote(ReceivedItem receivedItem)
+        private LetterVanillaAttachment SendJunimoNote(ReceivedItem receivedItem)
         {
-            var events = AURORA_EVENT;
-            return new LetterEventSeenAttachment(receivedItem, events);
+            var vineyard = "apAuroraVineyard";
+            return new LetterVanillaAttachment(receivedItem, vineyard, true);
         }
 
-        private LetterEventSeenAttachment SendAcceptanceLetter(ReceivedItem receivedItem)
+        private LetterVanillaAttachment SendAcceptanceLetter(ReceivedItem receivedItem)
         {
-            var events = MORGAN_EVENT;
-            return new LetterEventSeenAttachment(receivedItem, events);
+            var school = "apMorganSchooling";
+            return new LetterVanillaAttachment(receivedItem, school, true);
         }
     }
 }
