@@ -88,15 +88,14 @@ namespace StardewArchipelago.Archipelago
                 {
                     continue;
                 }
-                var contentName = ModVersions.CPVersions[modName].Keys.First();
-                var contentVersion = ModVersions.CPVersions[modName].Values.First();
-                if (IsModActiveAndCorrectVersion(loadedModData, contentName, contentVersion, out var existingVersion))
+                var requirement = ModVersions.CPVersions[modName];
+                if (IsModActiveAndCorrectVersion(loadedModData, requirement.ContentPatcherMod, requirement.ContentPatcherVersion, out var existingVersion))
                 {
                     continue;
                 }
 
                 valid = false;
-                errorMessage += $"{Environment.NewLine}\tMod: {contentName}, expected version: {contentVersion}, current Version: {existingVersion}";
+                errorMessage += $"{Environment.NewLine}\tMod: {requirement.ContentPatcherMod}, expected version: {requirement.ContentPatcherVersion}, current Version: {existingVersion}";
 
             }
 

@@ -32,10 +32,21 @@ namespace StardewArchipelago.Constants
             { ModNames.DISTANT_LANDS, "1.0.7"}
         };
 
-        public static readonly Dictionary<string, Dictionary<string, string>> CPVersions = new(){
-            { ModNames.SVE, new(){{ ModNames.AP_SVE, "1.0.0" }} },
-            { ModNames.ALECTO, new(){{ ModNames.AP_ALECTO, "1.0.0" }} },
-            { ModNames.JASPER, new(){{ ModNames.AP_JASPER, "1.0.0"}} }
+        public class ContentPatcherRequirement{
+            public string ContentPatcherMod {get; private set;}
+            public string ContentPatcherVersion {get; private set;}
+
+            public ContentPatcherRequirement(string patchName, string patchVersion)
+            {
+                ContentPatcherMod = patchName;
+                ContentPatcherVersion = patchVersion;
+            }
+        }
+
+        public static readonly Dictionary<string, ContentPatcherRequirement> CPVersions = new(){
+            {ModNames.SVE, new ContentPatcherRequirement(ModNames.AP_SVE, "1.0.0")},
+            {ModNames.ALECTO, new ContentPatcherRequirement(ModNames.AP_ALECTO, "1.0.0")},
+            {ModNames.JASPER, new ContentPatcherRequirement(ModNames.AP_JASPER, "1.0.0")}
         };
 }
 }
