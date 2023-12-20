@@ -112,7 +112,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             if (name.Contains("moonslime.excavation."))
             {
                 TextInfo ti = CultureInfo.CurrentCulture.TextInfo;
-                name = ti.ToTitleCase(shippedItem.DisplayName.Replace("Woooden", "Wooden"));
+                var displayName = ti.ToTitleCase(shippedItem.DisplayName.Replace("Woooden", "Wooden"));
+                if (name.Contains("strange_doll_green"))
+                {
+                    displayName += " (Green)";
+                }
+                name = displayName;
             }
 
             if (shippedItem is not Object shippedObject)
