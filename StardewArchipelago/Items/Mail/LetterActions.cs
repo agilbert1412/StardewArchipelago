@@ -715,7 +715,13 @@ namespace StardewArchipelago.Items.Mail
 
         private void LearnCookingRecipe(string recipeItemName)
         {
-            Game1.player.cookingRecipes.Add(recipeItemName.Replace("_", " "), 0);
+            var realRecipeName = recipeItemName.Replace("_", " ");
+            if (Game1.player.cookingRecipes.ContainsKey(realRecipeName))
+            {
+                Game1.player.cookingRecipes[realRecipeName] = 0;
+                return;
+            }
+            Game1.player.cookingRecipes.Add(realRecipeName, 0);
         }
 
         private void LearnSpecialCraftingRecipe(string recipeItemName)
@@ -723,6 +729,11 @@ namespace StardewArchipelago.Items.Mail
             // When more mods start to need name mapping, we can make a generic version of this
             var nameMapper = new CompoundNameMapper(_archipelago.SlotData);
             var internalName = nameMapper.GetInternalName(recipeItemName.Replace("_", " "));
+            if (Game1.player.craftingRecipes.ContainsKey(internalName))
+            {
+                Game1.player.craftingRecipes[internalName] = 0;
+                return;
+            }
             Game1.player.craftingRecipes.Add(internalName, 0);
         }
     }
