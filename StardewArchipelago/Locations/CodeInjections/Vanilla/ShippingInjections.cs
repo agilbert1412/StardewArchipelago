@@ -110,7 +110,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
             if (name.Contains("moonslime.excavation."))
             {
-                name = shippedItem.DisplayName; //Temporary fix; will break for chinese speaking players only atm
+                name = shippedItem.DisplayName.Replace("Woooden", "Wooden"); //Temporary fix; will break for chinese speaking players only atm
             }
 
             if (shippedItem is not Object shippedObject)
