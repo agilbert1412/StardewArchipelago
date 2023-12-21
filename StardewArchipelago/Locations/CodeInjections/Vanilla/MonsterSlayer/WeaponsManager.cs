@@ -18,8 +18,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
 
         private Dictionary<int, List<int>> _weaponWeightsByNumberOfTiers = new()
         {
-            { 5, new List<int> { 2, 2, 3, 2, 2 } },
-            { 6, new List<int> { 2, 2, 3, 3, 2, 2 } }
+            { 5, new List<int> { 4, 3, 2, 2, 2 } },
+            { 6, new List<int> { 4, 3, 2, 2, 2, 2 } }
         };
 
         public Dictionary<string, Dictionary<int, List<StardewItem>>> WeaponsByCategoryByTier { get; private set; }
@@ -125,6 +125,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
                 }
 
                 var weaponLevel = stardewWeapon.getItemLevel();
+                if (stardewWeapon.speed.Value > 100)
+                {
+                    weaponLevel = weaponLevel / 2;
+                }
                 var type = weapon.Type switch
                 {
                     1 => TYPE_DAGGER,
