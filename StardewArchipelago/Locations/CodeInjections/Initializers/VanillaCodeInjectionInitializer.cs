@@ -24,7 +24,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             GoalCodeInjection.Initialize(monitor, modHelper, archipelago, locationChecker, bundleReader);
             CommunityCenterInjections.Initialize(monitor, archipelago, locationChecker, bundleReader);
             JunimoNoteMenuInjections.Initialize(monitor, modHelper, archipelago, state, locationChecker, bundleReader);
-            MineshaftInjections.Initialize(monitor, archipelago, locationChecker);
+            MineshaftInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             SkillInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             QuestInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             DarkTalismanInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
