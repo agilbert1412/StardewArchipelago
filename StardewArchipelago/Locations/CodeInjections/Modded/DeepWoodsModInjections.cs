@@ -47,8 +47,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             _locationChecker = locationChecker;
         }
 
-        // Future Goal; Currently Unimplemented - Albrekka
-        //public class ExcaliburStone : LargeTerrainFeature
         //public override bool performUseAction(Vector2 tileLocation, GameLocation location)
         public static bool PerformUseAction_ExcaliburLocation_Prefix(LargeTerrainFeature __instance, Vector2 tileLocation, GameLocation location, bool __result)
         {
@@ -103,8 +101,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         }
 
         //public class DeepWoods
-        //public DeepWoods(DeepWoods parent, int level, EnterDirection enterDir)
-        public static void Constructor_WoodsDepthChecker_Postfix(GameLocation __instance, int level, Enum enterDir)
+        //public DeepWoods(DeepWoods parent, int level, EnterDirection enterDir, bool spawnedFromObelisk)
+        public static void Constructor_WoodsDepthChecker_Postfix(GameLocation __instance, int level, Enum enterDir, bool spawnedFromObelisk)
         {
             try
             {

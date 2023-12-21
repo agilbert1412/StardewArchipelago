@@ -179,7 +179,7 @@ namespace StardewArchipelago.Locations.Patcher
             var _deepWoodsType = AccessTools.TypeByName("DeepWoodsMod.DeepWoods");
             var _swordType = AccessTools.TypeByName("DeepWoodsMod.ExcaliburStone");
             var _enterDirectionType = AccessTools.TypeByName("DeepWoodsMod.DeepWoodsEnterExit+EnterDirection");
-            var constructorParameterTypes = new[] { _deepWoodsType, typeof(int), _enterDirectionType };
+            var constructorParameterTypes = new[] { _deepWoodsType, typeof(int), _enterDirectionType, typeof(bool) };
             var _unicornType = AccessTools.TypeByName("DeepWoodsMod.Unicorn");
             var _gingerbreadType = AccessTools.TypeByName("DeepWoodsMod.GingerBreadHouse");
             var _iridiumtreeType = AccessTools.TypeByName("DeepWoodsMod.IridiumTree");
