@@ -687,26 +687,16 @@ namespace StardewArchipelago.Items.Mail
         {
             // This includes the current letter due to the timing of this patch
             var tier = _mail.OpenedMailsContainingKey(apUnlock);
-            tier = Math.Max(1, Math.Min(5, tier));
+            tier = Math.Max(1, tier);
 
-            var equipmentsOfTier = equipmentsByTier[tier];
-            if (!equipmentsOfTier.Any())
+            while (!equipmentsByTier.ContainsKey(tier) || !equipmentsByTier[tier].Any())
             {
-                while (tier > 1 && !equipmentsOfTier.Any())
-                {
-                    tier--;
-                    equipmentsOfTier = equipmentsByTier[tier];
-                }
-
-                if (!equipmentsOfTier.Any())
-                {
-                    return;
-                }
+                tier--;
             }
 
+            var equipmentsOfTier = equipmentsByTier[tier];
             var chosenEquipmentIndex = Game1.random.Next(0, equipmentsOfTier.Count);
             var chosenEquipment = equipmentsOfTier[chosenEquipmentIndex];
-
             var equipmentToGive = chosenEquipment.PrepareForGivingToFarmer();
 
             Game1.player.holdUpItemThenMessage(equipmentToGive);

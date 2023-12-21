@@ -54,7 +54,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 var random = new Random(seed);
                 foreach (var equipmentApItem in equipmentsToRecover)
                 {
-                    var received = Math.Min(5, _archipelago.GetReceivedItemCount(equipmentApItem));
+                    var received = Math.Min(6, _archipelago.GetReceivedItemCount(equipmentApItem));
                     if (received <= 0)
                     {
                         continue;
