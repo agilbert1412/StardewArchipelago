@@ -19,7 +19,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             ScytheInjections.Initialize(monitor, locationChecker);
             FishingRodInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             CommunityCenterInjections.Initialize(monitor, archipelago, bundleReader, locationChecker);
-            MineshaftInjections.Initialize(monitor, archipelago, locationChecker);
+            MineshaftInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             SkillInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             QuestInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             DarkTalismanInjections.Initialize(monitor, modHelper, archipelago, locationChecker);

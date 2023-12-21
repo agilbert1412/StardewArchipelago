@@ -173,6 +173,11 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void ReplaceElevatorsWithChecks()
         {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(MineElevatorMenu), nameof(MineElevatorMenu.draw), new[] { typeof(SpriteBatch) }),
+                postfix: new HarmonyMethod(typeof(MineshaftInjections), nameof(MineshaftInjections.Draw_AddArchipelagoIndicators_Postfix))
+            );
+
             if (_archipelago.SlotData.ElevatorProgression == ElevatorProgression.Vanilla)
             {
                 return;

@@ -340,7 +340,7 @@ namespace StardewArchipelago.Items.Mail
         private void GetFishingRodOfNextLevel()
         {
             // This includes the current letter due to the timing of this patch
-            var numberOfPreviousFishingRodLetters = _mail.OpenedMailsContainingKey(VanillaUnlockManager.PROGRESSIVE_FISHING_ROD_AP_NAME);
+            var numberOfPreviousFishingRodLetters = _mail.OpenedMailsContainingKey(VanillaUnlockManager.PROGRESSIVE_FISHING_ROD);
 
             // received 1 -> training rod [1]
             // received 2 -> bamboo [0]

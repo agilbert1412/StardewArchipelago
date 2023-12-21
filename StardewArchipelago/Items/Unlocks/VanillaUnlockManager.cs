@@ -12,8 +12,8 @@ namespace StardewArchipelago.Items.Unlocks
     public class VanillaUnlockManager : IUnlockManager
     {
         public const string PROGRESSIVE_TOOL_AP_PREFIX = "Progressive ";
-        public const string PROGRESSIVE_MINE_ELEVATOR_AP_NAME = "Progressive Mine Elevator";
-        public const string PROGRESSIVE_FISHING_ROD_AP_NAME = "Progressive Fishing Rod";
+        public const string PROGRESSIVE_MINE_ELEVATOR = "Progressive Mine Elevator";
+        public const string PROGRESSIVE_FISHING_ROD = "Progressive Fishing Rod";
         public const string RETURN_SCEPTER_AP_NAME = "Return Scepter";
         public const string GOLDEN_SCYTHE_AP_NAME = "Golden Scythe";
         public const string BEACH_BRIDGE_AP_NAME = "Beach Bridge";
@@ -93,7 +93,7 @@ namespace StardewArchipelago.Items.Unlocks
             _unlockables.Add($"{PROGRESSIVE_TOOL_AP_PREFIX}Hoe", SendProgressiveHoeLetter);
             _unlockables.Add($"{PROGRESSIVE_TOOL_AP_PREFIX}Watering Can", SendProgressiveWateringCanLetter);
             _unlockables.Add($"{PROGRESSIVE_TOOL_AP_PREFIX}Trash Can", SendProgressiveTrashCanLetter);
-            _unlockables.Add(PROGRESSIVE_FISHING_ROD_AP_NAME, SendProgressiveFishingRodLetter);
+            _unlockables.Add(PROGRESSIVE_FISHING_ROD, SendProgressiveFishingRodLetter);
             _unlockables.Add(RETURN_SCEPTER_AP_NAME, SendReturnScepterLetter);
         }
 
@@ -134,7 +134,7 @@ namespace StardewArchipelago.Items.Unlocks
 
         private void RegisterMineElevators()
         {
-            _unlockables.Add(PROGRESSIVE_MINE_ELEVATOR_AP_NAME, SendProgressiveMineElevatorLetter);
+            _unlockables.Add(PROGRESSIVE_MINE_ELEVATOR, SendProgressiveMineElevatorLetter);
         }
 
         private LetterVanillaAttachment RepairBridge(ReceivedItem receivedItem)
