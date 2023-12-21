@@ -59,7 +59,15 @@ namespace StardewArchipelago.Locations
 
             if (locationId == -1)
             {
-                _monitor.Log($"Location \"{locationName}\" could not be converted to an Archipelago id", LogLevel.Error);
+                var alternateName = GetAllLocationsNotChecked().FirstOrDefault(x => x.Equals(locationName, StringComparison.InvariantCultureIgnoreCase));
+                if (alternateName == null)
+                {
+                    _monitor.Log($"Location \"{locationName}\" could not be converted to an Archipelago id", LogLevel.Error);
+                    return;
+                }
+
+                locationId = _archipelago.GetLocationId(alternateName);
+                _monitor.Log($"Location \"{locationName}\" not found, checking location \"{alternateName}\" instead", LogLevel.Warn);
             }
 
             _checkedLocations.Add(locationName, locationId);
