@@ -38,6 +38,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
             { new ShopIdentification("FishShop"), new[] { new PricedItem("Seaweed Salad", 1250) } },
             { new ShopIdentification("Sewer"), new[] { new PricedItem("Void Delight", 5000), new PricedItem("Void Salmon Sushi", 5000) } },
             { new ShopIdentification("ResortBar"), new[] { new PricedItem("Big Bark Burger", 5500), new PricedItem("Glazed Butterfish", 4000), new PricedItem("Mixed Berry Pie", 3500) } },
+            { new ShopIdentification("FarmHouse", "Marlon"), new[] { new PricedItem("Frog Legs", 2000), new PricedItem("Mushroom Berry Rice", 1500) } },
         };
 
         public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker, ShopReplacer shopReplacer, ShopStockGenerator shopStockGenerator)
