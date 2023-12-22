@@ -28,6 +28,7 @@ namespace StardewArchipelago.Items.Mail
         private WeaponsManager _weaponsManager;
         private readonly TrapManager _trapManager;
         private readonly BabyBirther _babyBirther;
+        private readonly ToolUpgrader _toolUpgrader;
         private Dictionary<string, Action<string>> _letterActions;
 
         public LetterActions(IModHelper modHelper, Mailman mail, ArchipelagoClient archipelago, WeaponsManager weaponsManager, TrapManager trapManager, BabyBirther babyBirther)
@@ -38,6 +39,7 @@ namespace StardewArchipelago.Items.Mail
             _weaponsManager = weaponsManager;
             _trapManager = trapManager;
             _babyBirther = babyBirther;
+            _toolUpgrader = new ToolUpgrader();
             var modLetterActions = new ModLetterActions();
             _letterActions = new Dictionary<string, Action<string>>();
             _letterActions.Add(LetterActionsKeys.Friendship, IncreaseFriendshipWithEveryone);
@@ -225,7 +227,7 @@ namespace StardewArchipelago.Items.Mail
                 return;
             }
 
-            var upgradedTool = UpgradeToolInEntireWorld(toolGenericName);
+            var upgradedTool = _toolUpgrader.UpgradeToolInEntireWorld(toolGenericName);
 
             if (upgradedTool == null)
             {
@@ -233,150 +235,6 @@ namespace StardewArchipelago.Items.Mail
             }
 
             Game1.player.holdUpItemThenMessage(upgradedTool);
-        }
-
-        private static Tool UpgradeToolInEntireWorld(string toolGenericName)
-        {
-            var player = Game1.player;
-            var toolName = toolGenericName.Replace(" ", "_");
-            if (TryUpgradeToolInInventory(player, toolName, out var upgradedTool))
-            {
-                return upgradedTool;
-            }
-
-            if (TryUpgradeToolInChests(toolName, out upgradedTool))
-            {
-                return upgradedTool;
-            }
-
-            if (TryUpgradeToolInLostAndFoundBox(player, toolName, out upgradedTool))
-            {
-                return upgradedTool;
-            }
-
-            return null;
-        }
-
-        private static bool TryUpgradeToolInInventory(Farmer player, string toolName, out Tool upgradedTool)
-        {
-            foreach (var playerItem in player.Items)
-            {
-                if (TryUpgradeCorrectTool(toolName, playerItem, out upgradedTool))
-                {
-                    return true;
-                }
-            }
-
-            upgradedTool = null;
-            return false;
-        }
-
-        private static bool TryUpgradeToolInChests(string toolName, out Tool upgradedTool)
-        {
-            var locations = Game1.locations.ToList();
-
-            foreach (var building in Game1.getFarm().buildings)
-            {
-                if (building?.indoors.Value == null)
-                {
-                    continue;
-                }
-                locations.Add(building.indoors.Value);
-            }
-
-            foreach (var gameLocation in locations)
-            {
-                foreach (var (tile, gameObject) in gameLocation.Objects.Pairs)
-                {
-                    if (gameObject is not Chest chest)
-                    {
-                        continue;
-                    }
-
-                    foreach (var chestItem in chest.items)
-                    {
-                        if (TryUpgradeCorrectTool(toolName, chestItem, out upgradedTool))
-                        {
-                            return true;
-                        }
-                    }
-                }
-            }
-
-            foreach (var junimoChestItem in Game1.player.team.junimoChest)
-            {
-                if (TryUpgradeCorrectTool(toolName, junimoChestItem, out upgradedTool))
-                {
-                    return true;
-                }
-            }
-
-            foreach (var junimoChestItem in Game1.player.team.junimoChest)
-            {
-                if (TryUpgradeCorrectTool(toolName, junimoChestItem, out upgradedTool))
-                {
-                    return true;
-                }
-            }
-
-
-            if (Game1.getLocationFromName("FarmHouse") is FarmHouse farmHouse)
-            {
-                foreach (var fridgeItem in farmHouse.fridge.Value.items)
-                {
-                    if (TryUpgradeCorrectTool(toolName, fridgeItem, out upgradedTool))
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            if (Game1.getLocationFromName("IslandFarmHouse") is IslandFarmHouse islandHouse)
-            {
-                foreach (var fridgeItem in islandHouse.fridge.Value.items)
-                {
-                    if (TryUpgradeCorrectTool(toolName, fridgeItem, out upgradedTool))
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            upgradedTool = null;
-            return false;
-        }
-
-        private static bool TryUpgradeToolInLostAndFoundBox(Farmer player, string toolName, out Tool upgradedTool)
-        {
-            foreach (var lostAndFoundItem in player.team.returnedDonations)
-            {
-                if (TryUpgradeCorrectTool(toolName, lostAndFoundItem, out upgradedTool))
-                {
-                    return true;
-                }
-            }
-
-            upgradedTool = null;
-            return false;
-        }
-
-        private static bool TryUpgradeCorrectTool(string toolName, Item item, out Tool upgradedTool)
-        {
-            if (item is not Tool toolToUpgrade || !toolToUpgrade.Name.Replace(" ", "_").Contains(toolName))
-            {
-                upgradedTool = null;
-                return false;
-            }
-
-            if (toolToUpgrade.UpgradeLevel < 4)
-            {
-                toolToUpgrade.UpgradeLevel++;
-            }
-
-            {
-                upgradedTool = toolToUpgrade;
-                return true;
-            }
         }
 
         private static void ReceiveTrashCanUpgrade()
