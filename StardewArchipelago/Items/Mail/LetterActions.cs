@@ -311,6 +311,37 @@ namespace StardewArchipelago.Items.Mail
                 }
             }
 
+            foreach (var junimoChestItem in Game1.player.team.junimoChest)
+            {
+                if (TryUpgradeCorrectTool(toolName, junimoChestItem, out upgradedTool))
+                {
+                    return true;
+                }
+            }
+
+
+            if (Game1.getLocationFromName("FarmHouse") is FarmHouse farmHouse)
+            {
+                foreach (var fridgeItem in farmHouse.fridge.Value.items)
+                {
+                    if (TryUpgradeCorrectTool(toolName, fridgeItem, out upgradedTool))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            if (Game1.getLocationFromName("IslandFarmHouse") is IslandFarmHouse islandHouse)
+            {
+                foreach (var fridgeItem in islandHouse.fridge.Value.items)
+                {
+                    if (TryUpgradeCorrectTool(toolName, fridgeItem, out upgradedTool))
+                    {
+                        return true;
+                    }
+                }
+            }
+
             upgradedTool = null;
             return false;
         }
