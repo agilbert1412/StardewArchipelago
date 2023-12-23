@@ -9,7 +9,7 @@ namespace StardewArchipelago.Stardew.NameMapping
             {"Wild Seeds (Sp)", "Spring Seeds"},
             {"Wild Seeds (Su)", "Summer Seeds"},
             {"Wild Seeds (Fa)", "Fall Seeds"},
-            {"Wild Seeds (Winter)", "Winter Seeds"},
+            {"Wild Seeds (Wi)", "Winter Seeds"},
         };
 
         private static readonly Dictionary<string, string> _englishToInternalNames =
