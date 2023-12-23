@@ -68,6 +68,8 @@ namespace StardewArchipelago.Stardew.NameMapping
 
         private static readonly Dictionary<int, string> _renamedItems = new()
         {
+            { 126, "Strange Doll (Green)"},
+            { 180, "Egg (Brown)" },
             { 180, "Egg (Brown)" },
             { 182, "Large Egg (Brown)" },
             { 438, "Large Goat Milk" },
