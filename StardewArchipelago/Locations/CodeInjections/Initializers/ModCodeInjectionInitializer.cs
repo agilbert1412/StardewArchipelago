@@ -58,6 +58,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             {
                 ModdedEventInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             }
+            if (archipelago.SlotData.Mods.HasMod(ModNames.BOARDING_HOUSE))
+            {
+                BoardingHouseInjections.Initialize(monitor, locationChecker);
+            }
         }
     }
 }

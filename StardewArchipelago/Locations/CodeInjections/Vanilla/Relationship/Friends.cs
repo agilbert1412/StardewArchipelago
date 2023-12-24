@@ -11,6 +11,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
 
         private static Dictionary<string, string> _stardewNameToArchipelagoName = new Dictionary<string, string>{
             {"MisterGinger", "Mr. Ginger"}, {"MarlonFay", "Marlon"}, {"GuntherSilvian", "Gunther"}, {"MorrisTod", "Morris"},
+            {"HatMouseLacey", "Lacey"}
         };
 
         private List<ArchipelagoFriend> _friends;
