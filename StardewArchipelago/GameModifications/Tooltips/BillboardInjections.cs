@@ -106,7 +106,7 @@ namespace StardewArchipelago.GameModifications.Tooltips
 
                     foreach (var location in missingFestivalChecks)
                     {
-                        hoverText = hoverText + $"{Environment.NewLine}{location.TurnHeartsIntoStardewHearts()}";
+                        hoverText = hoverText + $"{Environment.NewLine}{location}";
                     }
 
                     foreach (var location in missingNpcChecks)
