@@ -46,6 +46,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Modded
 
         private static ShopMenu _lastShopMenuUpdated = null;
         
+        // public override void update(GameTime time)
         public static void Update_JunimoWoodsAPShop_Postfix(ShopMenu __instance, GameTime time)
         {
             try
