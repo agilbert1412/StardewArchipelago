@@ -10,6 +10,7 @@ using StardewArchipelago.Constants;
 using StardewArchipelago.GameModifications.CodeInjections;
 using StardewArchipelago.GameModifications.CodeInjections.Modded;
 using StardewArchipelago.GameModifications.EntranceRandomizer;
+using StardewArchipelago.GameModifications.Modded;
 using StardewArchipelago.GameModifications.Seasons;
 using StardewArchipelago.GameModifications.Tooltips;
 using StardewArchipelago.Locations;
@@ -36,7 +37,7 @@ namespace StardewArchipelago.GameModifications
         private readonly StartingResources _startingResources;
         private readonly RecipeDataRemover _recipeDataRemover;
 
-        public RandomizedLogicPatcher(IMonitor monitor, IModHelper modHelper, Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager stardewItemManager, EntranceManager entranceManager, ShopStockGenerator shopStockGenerator, NameSimplifier nameSimplifier, Friends friends)
+        public RandomizedLogicPatcher(IMonitor monitor, IModHelper modHelper, Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager stardewItemManager, EntranceManager entranceManager, ShopStockGenerator shopStockGenerator, NameSimplifier nameSimplifier, JunimoShopGenerator junimoShopGenerator, Friends friends)
         {
             _harmony = harmony;
             _archipelago = archipelago;
@@ -68,7 +69,7 @@ namespace StardewArchipelago.GameModifications
             ItemTooltipInjections.Initialize(monitor, modHelper, archipelago, locationChecker, nameSimplifier);
             BillboardInjections.Initialize(monitor, modHelper, archipelago, locationChecker, friends);
 
-            JunimoShopInjections.Initialize(monitor, modHelper, archipelago, shopStockGenerator, _stardewItemManager);
+            JunimoShopInjections.Initialize(monitor, modHelper, archipelago, shopStockGenerator, _stardewItemManager, junimoShopGenerator);
 
             DebugPatchInjections.Initialize(monitor, archipelago);
         }

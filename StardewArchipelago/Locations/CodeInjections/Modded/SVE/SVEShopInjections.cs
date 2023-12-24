@@ -5,6 +5,7 @@ using Archipelago.MultiClient.Net.Models;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.GameModifications;
+using StardewArchipelago.GameModifications.Modded;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
@@ -20,9 +21,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
         private static LocationChecker _locationChecker;
         private static ShopReplacer _shopReplacer;
         private static ShopStockGenerator _shopStockGenerator;
+        private static JunimoShopGenerator _junimoShopGenerator;
         private const string ALESIA_DAGGER = "Tempered Galaxy Dagger";
         private const string ISAAC_SWORD = "Tempered Galaxy Sword";
         private const string ISAAC_HAMMER = "Tempered Galaxy Hammer";
+        private const string BEAR_KNOWLEDGE = "Bear's Knowledge";
 
         private static readonly Dictionary<ShopIdentification, PricedItem[]> craftsanityRecipes = new()
         {
@@ -46,8 +49,22 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
             },
         };
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago,
-            LocationChecker locationChecker, ShopReplacer shopReplacer, ShopStockGenerator shopStockGenerator)
+        private static readonly Dictionary<string, Item> seasonalBerry = new(){
+            {"spring", new StardewValley.Object(Vector2.Zero, 296, 1)},
+            {"summer", new StardewValley.Object(Vector2.Zero, 396, 1)},
+            {"fall", new StardewValley.Object(Vector2.Zero, 410, 1)},
+            {"winter", new StardewValley.Object(Vector2.Zero, 414, 1)}
+        };
+
+        private static readonly Dictionary<string, Item> seasonalBerry = new(){
+            {"spring", new StardewValley.Object(Vector2.Zero, 296, 1)},
+            {"summer", new StardewValley.Object(Vector2.Zero, 396, 1)},
+            {"fall", new StardewValley.Object(Vector2.Zero, 410, 1)},
+            {"winter", new StardewValley.Object(Vector2.Zero, 414, 1)}
+        };
+
+        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, 
+        LocationChecker locationChecker, ShopReplacer shopReplacer, ShopStockGenerator shopStockGenerator, JunimoShopGenerator junimoShopGenerator)
         {
             _monitor = monitor;
             _modHelper = modHelper;
@@ -55,6 +72,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
             _locationChecker = locationChecker;
             _shopReplacer = shopReplacer;
             _shopStockGenerator = shopStockGenerator;
+            _junimoShopGenerator = junimoShopGenerator;
         }
 
         private static ShopMenu _lastShopMenuUpdated = null;
@@ -82,7 +100,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
 
                 ReplaceCraftsanityRecipes(__instance, myActiveHints);
                 ReplaceChefsanityRecipes(__instance, myActiveHints);
-
+                
+                if (__instance.storeContext == "Custom_ForestWest")
+                {
+                    MakeBearBarter(__instance);
+                }
                 __instance.forSale = __instance.itemPriceAndStock.Keys.ToList();
                 return; //  run original logic
             }
@@ -155,6 +177,42 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
                 {
                     _shopReplacer.PlaceShopRecipeCheck(shopMenu.itemPriceAndStock, $"{recipe.ItemName} Recipe", recipe.ItemName, myActiveHints, recipe.Price);
                 }
+            }
+        }
+
+        private static void MakeBearBarter(ShopMenu shopMenu)
+        {
+            var stock = shopMenu.itemPriceAndStock;
+            var hasKnowledge = _archipelago.HasReceivedItem(BEAR_KNOWLEDGE);
+            foreach (var item in stock)
+            {
+            var random = new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame / 2 + item.Key.salePrice());
+            var itemToTrade = _junimoShopGenerator.BerryItems.ElementAt(random.Next(_junimoShopGenerator.BerryItems.Count));
+            if (item.Key.DisplayName.Contains("Baked Berry Oatmeal") || item.Key.DisplayName.Contains("Flower Cookie")) // Since these are AP locations, for logic's sake only use seasonal berries
+            {
+                var isOatmeal = item.Key.DisplayName.Contains("Baked Berry Oatmeal");
+                var berry = seasonalBerry[Game1.currentSeason];
+                var berryRate = JunimoShopGenerator.ExchangeRate(isOatmeal ? 12500 : 8750 , berry.salePrice() * (hasKnowledge ? 3 : 1));
+                stock[item.Key] = new int[4]
+                {
+                    0,
+                    int.MaxValue,
+                    seasonalBerry[Game1.currentSeason].ParentSheetIndex,
+                    (int) Math.Pow(berryRate[1] / berryRate[0], 0.75)
+                };
+                continue;
+            }
+            var itemToTradeTotal = JunimoShopGenerator.ExchangeRate(item.Key.salePrice(), itemToTrade.Value * (hasKnowledge ? 3 : 1));
+            
+            item.Key.Stack = itemToTradeTotal[0];
+            
+            stock[item.Key] = new int[4]
+            {
+                0,
+                int.MaxValue,
+                itemToTrade.Key.Id,
+                itemToTradeTotal[1],
+            };
             }
         }
 

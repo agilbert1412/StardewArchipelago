@@ -32,14 +32,14 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Modded
             {"Legend", "Blue"}, {"Prismatic Shard", "Grey"}, {"Dinosaur Egg", "Red"}, {"Ancient Seeds", "Yellow"}
         };
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, ShopStockGenerator shopStockGenerator, StardewItemManager stardewItemManager)
+        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, ShopStockGenerator shopStockGenerator, StardewItemManager stardewItemManager, JunimoShopGenerator junimoShopGenerator)
         {
             _monitor = monitor;
             _modHelper = modHelper;
             _archipelago = archipelago;
             _shopStockGenerator = shopStockGenerator;
             _stardewItemManager = stardewItemManager;
-            _junimoShopGenerator = new JunimoShopGenerator(archipelago, shopStockGenerator, stardewItemManager);
+            _junimoShopGenerator = junimoShopGenerator;
         }
 
 

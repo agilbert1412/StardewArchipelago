@@ -38,6 +38,7 @@ namespace StardewArchipelago.GameModifications.Modded
             "color_red", "color_pink", "color_dark_pink", "color_salmon"
         };
         private Dictionary<int, int> YellowItems { get; set; }
+        public Dictionary<StardewItem, int> BerryItems {get; set; }
         private static readonly List<string> YellowColors = new()
         {
             "color_yellow", "color_gold", "color_sand", "color_dark_yellow"
@@ -83,6 +84,7 @@ namespace StardewArchipelago.GameModifications.Modded
             YellowItems = new Dictionary<int, int>();
             GreyItems = new Dictionary<int, int>();
             RedItems = new Dictionary<int, int>();
+            BerryItems = new Dictionary<StardewItem, int>();
             var objectContextTags = Game1.content.Load<Dictionary<string, string>>("Data\\ObjectContextTags");
             var objectInformation = Game1.content.Load<Dictionary<int, string>>("Data\\ObjectInformation");
 
@@ -92,8 +94,13 @@ namespace StardewArchipelago.GameModifications.Modded
                 if (!_stardewItemManager.ItemExists(contextItem.Key))
                     continue;
                 var item = _stardewItemManager.GetItemByName(contextItem.Key);
+                var type = objectInformation[item.Id].Split("/")[3];
                 if (item.SellPrice <= 1)
                     continue;
+                if ((item.Name.Contains("Berry") || item.Name.Contains("berry")) && !item.Name.Contains("Joja") && type.Contains("Basic"))
+                {
+                    BerryItems[item] = item.SellPrice;
+                }
                 if (IsColor(itemContext, "blue") && !itemContext.Contains("fish") && !itemContext.Contains("marine"))
                 {
                     
@@ -105,11 +112,11 @@ namespace StardewArchipelago.GameModifications.Modded
                     YellowItems[item.Id] = item.SellPrice;
                     continue;
                 }
-                if (IsColor(itemContext, "grey") && !objectInformation[item.Id].Split("/")[3].Contains("Minerals"))
+                if (IsColor(itemContext, "grey") && !type.Contains("Minerals"))
                 {
                     GreyItems[item.Id] = item.SellPrice;
                 }
-                if (IsColor(itemContext, "red") && !objectInformation[item.Id].Split("/")[3].Contains("Arch"))
+                if (IsColor(itemContext, "red") && !type.Contains("Arch"))
                 {
                     RedItems[item.Id] = item.SellPrice;
                 }
@@ -200,7 +207,7 @@ namespace StardewArchipelago.GameModifications.Modded
                 return;
             }
             var itemToTrade = JunimoVendors[color].ColorItems.ElementAt(random.Next(JunimoVendors[color].ColorItems.Count));
-            var itemToTradeTotal = ExchangeRate(item, itemToTrade.Value);
+            var itemToTradeTotal = ExchangeRate(item.salePrice(), itemToTrade.Value);
             
             item.Stack = itemToTradeTotal[0];
             
@@ -214,24 +221,24 @@ namespace StardewArchipelago.GameModifications.Modded
         }
 
         // Lets just say they no currency good cuz Junimo
-        private static int[] ExchangeRate(Item soldItem, int wantedItem)
+        public static int[] ExchangeRate(int soldItem, int wantedItem)
         {
-            if (soldItem.salePrice() > wantedItem && soldItem.salePrice() % wantedItem == 0)
-                return new int[2]{1, soldItem.salePrice() / wantedItem};
-            if (soldItem.salePrice() <= wantedItem &&  wantedItem % soldItem.salePrice() == 0)
-                return new int[2]{wantedItem / soldItem.salePrice(), 1};
-            var gcd = Gcd(soldItem.salePrice(), wantedItem);
-            var lcm = soldItem.salePrice() * wantedItem / gcd;
-            var requestCount = lcm/soldItem.salePrice();
+            if (soldItem > wantedItem && soldItem % wantedItem == 0)
+                return new int[2]{1, soldItem / wantedItem};
+            if (soldItem <= wantedItem &&  wantedItem % soldItem == 0)
+                return new int[2]{wantedItem / soldItem, 1};
+            var gcd = Gcd(soldItem, wantedItem);
+            var lcm = soldItem * wantedItem / gcd;
+            var requestCount = lcm/soldItem;
             var offerCount = lcm/wantedItem;
 
             var applesHearts = 0;
             if (Game1.player.friendshipData.ContainsKey("Apples"))
                 applesHearts = Game1.player.friendshipData["Apples"].Points / 250; // Get discount from being friends with Apples
             if (offerCount == 1)
-                requestCount = (int) Math.Min(1, requestCount * (1 + applesHearts * 0.05f));
+                requestCount = (int)( requestCount * (1 + applesHearts * 0.05f));
             else
-                offerCount = (int) Math.Min(1, offerCount * (1 - applesHearts * 0.05f));
+                offerCount = (int) Math.Max(1, offerCount * (1 - applesHearts * 0.05f));
 
             var lowestTrade = 5; // This is for us to change if we want to move this value around easily in testing
             if (Math.Min(requestCount, offerCount) > lowestTrade)
