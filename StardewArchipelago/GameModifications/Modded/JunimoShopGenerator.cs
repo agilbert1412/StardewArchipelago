@@ -195,7 +195,7 @@ namespace StardewArchipelago.GameModifications.Modded
             }
 
             var random = new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame / 2 + itemId);
-            if (random.NextDouble() < 0.7)
+            if (random.NextDouble() < 0.4)
             {
                 return;
             }
