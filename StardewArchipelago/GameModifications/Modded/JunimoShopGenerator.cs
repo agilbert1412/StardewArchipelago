@@ -84,6 +84,7 @@ namespace StardewArchipelago.GameModifications.Modded
             GreyItems = new Dictionary<int, int>();
             RedItems = new Dictionary<int, int>();
             var objectContextTags = Game1.content.Load<Dictionary<string, string>>("Data\\ObjectContextTags");
+            var objectInformation = Game1.content.Load<Dictionary<int, string>>("Data\\ObjectInformation");
 
             foreach (var contextItem in objectContextTags)
             {
@@ -104,11 +105,11 @@ namespace StardewArchipelago.GameModifications.Modded
                     YellowItems[item.Id] = item.SellPrice;
                     continue;
                 }
-                if (IsColor(itemContext, "grey"))
+                if (IsColor(itemContext, "grey") && !objectInformation[item.Id].Split("/")[3].Contains("Minerals"))
                 {
                     GreyItems[item.Id] = item.SellPrice;
                 }
-                if (IsColor(itemContext, "red"))
+                if (IsColor(itemContext, "red") && !objectInformation[item.Id].Split("/")[3].Contains("Arch"))
                 {
                     RedItems[item.Id] = item.SellPrice;
                 }
@@ -268,27 +269,26 @@ namespace StardewArchipelago.GameModifications.Modded
 
         private Dictionary<ISalable, int[]> GenerateMuseumItemsForJunimoStock(string color, Dictionary<ISalable, int[]> stock)
         {
-            var type = "";
-            if (color == "Grey")
+            var isGrey = color == "Grey";
+            var artifactsFound = Game1.player.archaeologyFound.Keys;
+            var mineralsFound = Game1.player.mineralsFound.Keys;
+            if (isGrey)
             {
-                type = "Mineral";
+                foreach (var museumitemId in mineralsFound)
+                {
+                    AddToJunimoStock(stock, museumitemId, color, false);
+                }
             }
             else
             {
-                type = "Arch";
-            }
-            var libraryMuseum = Game1.getLocationFromName("ArchaeologyHouse") as  LibraryMuseum;
-            var museumItems = new HashSet<int>(libraryMuseum.museumPieces.Values);
-            var objectInformation = Game1.content.Load<Dictionary<int, string>>("Data\\ObjectInformation");
-            foreach (var museumitemId in museumItems)
-            {
-                var itemType = objectInformation[museumitemId].Split("/")[3];
-                if (!itemType.Contains(type))
+                foreach (var museumitemId in artifactsFound)
                 {
-                    continue;
+                    if (museumitemId == 102) //No lost books smh get out
+                        continue;
+                    AddToJunimoStock(stock, museumitemId, color, false);
                 }
-                AddToJunimoStock(stock, museumitemId, color, false);
             }
+
             return stock;
         }
 
