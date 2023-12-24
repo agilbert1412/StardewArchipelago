@@ -6,7 +6,9 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants;
 using StardewArchipelago.GameModifications.CodeInjections;
+using StardewArchipelago.GameModifications.CodeInjections.Modded;
 using StardewArchipelago.GameModifications.EntranceRandomizer;
 using StardewArchipelago.GameModifications.Seasons;
 using StardewArchipelago.GameModifications.Tooltips;
@@ -66,6 +68,8 @@ namespace StardewArchipelago.GameModifications
             ItemTooltipInjections.Initialize(monitor, modHelper, archipelago, locationChecker, nameSimplifier);
             BillboardInjections.Initialize(monitor, modHelper, archipelago, locationChecker, friends);
 
+            JunimoShopInjections.Initialize(monitor, modHelper, archipelago, shopStockGenerator, _stardewItemManager);
+
             DebugPatchInjections.Initialize(monitor, archipelago);
         }
 
@@ -99,6 +103,8 @@ namespace StardewArchipelago.GameModifications
             PatchRecipes();
             PatchTooltips();
             _startingResources.GivePlayerStartingResources();
+
+            PatchJunimoShops();
 
             PatchDebugMethods();
         }
@@ -558,6 +564,19 @@ namespace StardewArchipelago.GameModifications
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Billboard), nameof(Billboard.performHoverAction)),
                 postfix: new HarmonyMethod(typeof(BillboardInjections), nameof(BillboardInjections.PerformHoverAction_AddArchipelagoChecksToTooltips_Postfix))
+            );
+        }
+
+        private void PatchJunimoShops()
+        {
+            if (!_archipelago.SlotData.Mods.HasMod(ModNames.SVE))
+            {
+                return;
+            }
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(ShopMenu), nameof(ShopMenu.update)),
+                postfix: new HarmonyMethod(typeof(JunimoShopInjections), nameof(JunimoShopInjections.Update_JunimoWoodsAPShop_Postfix))
             );
         }
 
