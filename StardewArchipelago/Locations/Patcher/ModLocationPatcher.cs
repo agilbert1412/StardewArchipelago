@@ -38,6 +38,7 @@ namespace StardewArchipelago.Locations.Patcher
             AddSkullCavernElevatorModInjections();
             AddSVEModInjections();
             AddDistantLandsEventInjections();
+            AddBoardingHouseInjections();
         }
 
         private void AddDistantLandsEventInjections()
@@ -315,6 +316,19 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony.Patch(
                 original: AccessTools.Method(specialOrderAfterEventsType, "UpdateSpecialOrders"),
                 prefix: new HarmonyMethod(typeof(SVECutsceneInjections), nameof(SVECutsceneInjections.UpdateSpecialOrders_StopDeletingSpecialOrders_Prefix))
+            );
+        }
+
+        private void AddBoardingHouseInjections()
+        {
+            if (!_archipelago.SlotData.Mods.HasMod(ModNames.BOARDING_HOUSE))
+            {
+                return;
+            }
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Chest), nameof(Chest.checkForAction)),
+                prefix: new HarmonyMethod(typeof(BoardingHouseInjections), nameof(BoardingHouseInjections.CheckForAction_TreasureChestLocation_Prefix))
             );
         }
     }
