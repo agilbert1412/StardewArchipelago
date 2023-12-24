@@ -45,6 +45,11 @@ namespace StardewArchipelago.GameModifications
             return stock;
         }
 
+        public Dictionary<ISalable, int[]> GetPierreShopStockForAnyShopMenu() // Useful if new shops act like Pierre.
+        {
+            return GeneratePierreStock();
+        }
+
         private Dictionary<ISalable, int[]> GeneratePierreStock()
         {
             var stock = new Dictionary<ISalable, int[]>();
