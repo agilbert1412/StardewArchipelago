@@ -55,8 +55,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         private static readonly Dictionary<ShopIdentification, PricedItem[]> craftsanityRecipes = new()
         {
             { new ShopIdentification("AdventureGuild", "Marlon"), new[] { new PricedItem("Magic Elixir", 3000), new PricedItem("Travel Charm", 250) } },
-            { new ShopIdentification("FarmHouse", "Marlon"), new[] { new PricedItem("Magic Elixir", 3000), new PricedItem("Travel Charm", 250) } },
-        };
+                    };
 
 
         public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker, ShopReplacer shopReplacer)
@@ -145,7 +144,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 {
                     return;
                 }
-
+                if (__instance.storeContext == "FarmHouse")
+                {
+                    foreach ( var (salable, array) in __instance.itemPriceAndStock)
+                    {
+                        if (salable.Name.Contains("Magic Elixir") || salable.Name.Contains("Travel Core"))
+                        {
+                            __instance.itemPriceAndStock.Remove(salable);
+                        }
+                    }
+                }
                 _lastShopMenuUpdated = __instance;
                 var myActiveHints = _archipelago.GetMyActiveHints();
                 ReplaceCraftsanityRecipes(__instance, myActiveHints);
