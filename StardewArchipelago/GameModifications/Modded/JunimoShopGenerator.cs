@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Xml.Schema;
 using Microsoft.Xna.Framework;
+using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Stardew;
 using StardewValley;
@@ -13,6 +14,7 @@ namespace StardewArchipelago.GameModifications.Modded
 {
     public class JunimoShopGenerator
     {
+        private ArchipelagoClient _archipelago;
         private ShopStockGenerator _shopStockGenerator;
         private StardewItemManager _stardewItemManager;
         private PersistentStock BluePersistentStock { get; }
@@ -56,8 +58,9 @@ namespace StardewArchipelago.GameModifications.Modded
             }
         }
 
-        public JunimoShopGenerator(ShopStockGenerator shopStockGenerator, StardewItemManager stardewItemManager)
+        public JunimoShopGenerator(ArchipelagoClient archipelago, ShopStockGenerator shopStockGenerator, StardewItemManager stardewItemManager)
         {
+            _archipelago = archipelago;
             _shopStockGenerator = shopStockGenerator;
             _stardewItemManager = stardewItemManager;
             RedPersistentStock = new PersistentStock();
@@ -88,7 +91,7 @@ namespace StardewArchipelago.GameModifications.Modded
                 if (!_stardewItemManager.ItemExists(contextItem.Key))
                     continue;
                 var item = _stardewItemManager.GetItemByName(contextItem.Key);
-                if (item.SellPrice == 1)
+                if (item.SellPrice <= 1)
                     continue;
                 if (IsColor(itemContext, "blue") && !itemContext.Contains("fish") && !itemContext.Contains("marine"))
                 {
@@ -167,12 +170,19 @@ namespace StardewArchipelago.GameModifications.Modded
             return stock;
         }
 
-        private static void AddToJunimoStock(
+        private void AddToJunimoStock(
             Dictionary<ISalable, int[]> stock,
             int itemId,
             string color,
+            bool seed,
             string[] itemSeason = null)
         {
+            var itemName = _stardewItemManager.GetObjectById(itemId).Name;
+            if (seed == true && _archipelago.SlotData.Cropsanity == Cropsanity.Shuffled && !_archipelago.HasReceivedItem(itemName))
+            {
+                return;
+            }
+            
             var item = new StardewValley.Object(Vector2.Zero, itemId, 1);
 
             if (itemSeason != null)
@@ -230,7 +240,7 @@ namespace StardewArchipelago.GameModifications.Modded
             return new int[2]{requestCount, offerCount};
         }
 
-        private static Dictionary<ISalable, int[]> GenerateBlueJunimoStock(Dictionary<ISalable, int[]> stock)
+        private Dictionary<ISalable, int[]> GenerateBlueJunimoStock(Dictionary<ISalable, int[]> stock)
         {
             var fishData = Game1.content.Load<Dictionary<int, string>>("Data\\Fish");
             foreach (var fish in Game1.player.fishCaught.Keys)
@@ -246,12 +256,12 @@ namespace StardewArchipelago.GameModifications.Modded
                 {
                     fishSeasons = fishData[fish].Split("/")[6].Split(" ");
                 }
-                AddToJunimoStock(stock, fish, "Blue", fishSeasons);
+                AddToJunimoStock(stock, fish, "Blue", false, fishSeasons);
             }
             return stock;
         }
 
-        private static Dictionary<ISalable, int[]> GenerateMuseumItemsForJunimoStock(string color, Dictionary<ISalable, int[]> stock)
+        private Dictionary<ISalable, int[]> GenerateMuseumItemsForJunimoStock(string color, Dictionary<ISalable, int[]> stock)
         {
             var type = "";
             if (color == "Grey")
@@ -272,7 +282,7 @@ namespace StardewArchipelago.GameModifications.Modded
                 {
                     continue;
                 }
-                AddToJunimoStock(stock, museumitemId, color);
+                AddToJunimoStock(stock, museumitemId, color, false);
             }
             return stock;
         }
@@ -304,66 +314,91 @@ namespace StardewArchipelago.GameModifications.Modded
             return r;
         }
 
-        private static void AddSeedsToYellowStock(Dictionary<ISalable, int[]> stock)
+        private void AddSeedsToYellowStock(Dictionary<ISalable, int[]> stock)
         {
             AddSpringSeedsToYellowStock(stock);
             AddSummerSeedsToYellowStock(stock);
             AddFallSeedsToYellowStock(stock);
+            AddSaplingsToShop(stock);
+            AddToJunimoStock(stock, ShopItemIds.RHUBARB_SEEDS, "Yellow", true);
+            AddToJunimoStock(stock, ShopItemIds.STARFRUIT_SEEDS, "Yellow", true);
+            AddToJunimoStock(stock, ShopItemIds.BEET_SEEDS, "Yellow", true);
+            AddJunimoModdedStock(stock);
         }
 
-        private static void AddSpringSeedsToYellowStock(Dictionary<ISalable, int[]> stock)
+        private void AddSpringSeedsToYellowStock(Dictionary<ISalable, int[]> stock)
         {
-            AddToJunimoStock(stock, ShopItemIds.PARSNIP_SEEDS, "Yellow", spring);
-            AddToJunimoStock(stock, ShopItemIds.BEAN_STARTER, "Yellow", spring);
-            AddToJunimoStock(stock, ShopItemIds.CAULIFLOWER_SEEDS, "Yellow", spring);
-            AddToJunimoStock(stock, ShopItemIds.POTATO_SEEDS, "Yellow", spring);
-            AddToJunimoStock(stock, ShopItemIds.TULIP_BULB, "Yellow", spring);
-            AddToJunimoStock(stock, ShopItemIds.KALE_SEEDS, "Yellow", spring);
-            AddToJunimoStock(stock, ShopItemIds.JAZZ_SEEDS, "Yellow", spring);
-            AddToJunimoStock(stock, ShopItemIds.GARLIC_SEEDS, "Yellow", spring);
-            AddToJunimoStock(stock, ShopItemIds.RICE_SHOOT, "Yellow", spring);
+            AddToJunimoStock(stock, ShopItemIds.PARSNIP_SEEDS, "Yellow", true, spring);
+            AddToJunimoStock(stock, ShopItemIds.BEAN_STARTER, "Yellow", true, spring);
+            AddToJunimoStock(stock, ShopItemIds.CAULIFLOWER_SEEDS, "Yellow", true, spring);
+            AddToJunimoStock(stock, ShopItemIds.POTATO_SEEDS, "Yellow", true, spring);
+            AddToJunimoStock(stock, ShopItemIds.TULIP_BULB, "Yellow", true, spring);
+            AddToJunimoStock(stock, ShopItemIds.KALE_SEEDS, "Yellow", true, spring);
+            AddToJunimoStock(stock, ShopItemIds.JAZZ_SEEDS, "Yellow", true, spring);
+            AddToJunimoStock(stock, ShopItemIds.GARLIC_SEEDS, "Yellow", true, spring);
+            AddToJunimoStock(stock, ShopItemIds.RICE_SHOOT, "Yellow", true, spring);
         }
 
-        private static void AddSummerSeedsToYellowStock(Dictionary<ISalable, int[]> stock)
+        private void AddSummerSeedsToYellowStock(Dictionary<ISalable, int[]> stock)
         {
-            AddToJunimoStock(stock, ShopItemIds.MELON_SEEDS, "Yellow", summer);
-            AddToJunimoStock(stock, ShopItemIds.TOMATO_SEEDS, "Yellow", summer);
-            AddToJunimoStock(stock, ShopItemIds.BLUEBERRY_SEEDS, "Yellow", summer);
-            AddToJunimoStock(stock, ShopItemIds.PEPPER_SEEDS, "Yellow", summer);
-            AddToJunimoStock(stock, ShopItemIds.WHEAT_SEEDS, "Yellow", summer);
-            AddToJunimoStock(stock, ShopItemIds.RADISH_SEEDS, "Yellow", summer);
-            AddToJunimoStock(stock, ShopItemIds.POPPY_SEEDS, "Yellow", summer);
-            AddToJunimoStock(stock, ShopItemIds.SPANGLE_SEEDS, "Yellow", summer);
-            AddToJunimoStock(stock, ShopItemIds.HOPS_STARTER, "Yellow", summer);
-            AddToJunimoStock(stock, ShopItemIds.CORN_SEEDS, "Yellow", summer);
-            AddToJunimoStock(stock, ShopItemIds.SUNFLOWER_SEEDS, "Yellow", summer);
-            AddToJunimoStock(stock, ShopItemIds.RED_CABBAGE_SEEDS, "Yellow", summer);
+            AddToJunimoStock(stock, ShopItemIds.MELON_SEEDS, "Yellow", true, summer);
+            AddToJunimoStock(stock, ShopItemIds.TOMATO_SEEDS, "Yellow", true, summer);
+            AddToJunimoStock(stock, ShopItemIds.BLUEBERRY_SEEDS, "Yellow", true, summer);
+            AddToJunimoStock(stock, ShopItemIds.PEPPER_SEEDS, "Yellow", true, summer);
+            AddToJunimoStock(stock, ShopItemIds.WHEAT_SEEDS, "Yellow", true, summer);
+            AddToJunimoStock(stock, ShopItemIds.RADISH_SEEDS, "Yellow", true, summer);
+            AddToJunimoStock(stock, ShopItemIds.POPPY_SEEDS, "Yellow", true, summer);
+            AddToJunimoStock(stock, ShopItemIds.SPANGLE_SEEDS, "Yellow", true, summer);
+            AddToJunimoStock(stock, ShopItemIds.HOPS_STARTER, "Yellow", true, summer);
+            AddToJunimoStock(stock, ShopItemIds.CORN_SEEDS, "Yellow", true, summer);
+            AddToJunimoStock(stock, ShopItemIds.SUNFLOWER_SEEDS, "Yellow", true, summer);
+            AddToJunimoStock(stock, ShopItemIds.RED_CABBAGE_SEEDS, "Yellow", true, summer);
         }
 
-        private static void AddFallSeedsToYellowStock(Dictionary<ISalable, int[]> stock)
+        private void AddFallSeedsToYellowStock(Dictionary<ISalable, int[]> stock)
         {
-            AddToJunimoStock(stock, ShopItemIds.PUMPKIN_SEEDS, "Yellow", fall);
-            AddToJunimoStock(stock, ShopItemIds.CORN_SEEDS, "Yellow", fall);
-            AddToJunimoStock(stock, ShopItemIds.EGGPLANT_SEEDS, "Yellow", fall);
-            AddToJunimoStock(stock, ShopItemIds.BOK_CHOY_SEEDS, "Yellow", fall);
-            AddToJunimoStock(stock, ShopItemIds.YAM_SEEDS, "Yellow", fall);
-            AddToJunimoStock(stock, ShopItemIds.CRANBERRY_SEEDS, "Yellow", fall);
-            AddToJunimoStock(stock, ShopItemIds.WHEAT_SEEDS, "Yellow", fall);
-            AddToJunimoStock(stock, ShopItemIds.SUNFLOWER_SEEDS, "Yellow", fall);
-            AddToJunimoStock(stock, ShopItemIds.FAIRY_SEEDS, "Yellow", fall);
-            AddToJunimoStock(stock, ShopItemIds.AMARANTH_SEEDS, "Yellow", fall);
-            AddToJunimoStock(stock, ShopItemIds.GRAPE_STARTER, "Yellow", fall);
-            AddToJunimoStock(stock, ShopItemIds.ARTICHOKE_SEEDS, "Yellow", fall);
+            AddToJunimoStock(stock, ShopItemIds.PUMPKIN_SEEDS, "Yellow", true, fall);
+            AddToJunimoStock(stock, ShopItemIds.CORN_SEEDS, "Yellow", true, fall);
+            AddToJunimoStock(stock, ShopItemIds.EGGPLANT_SEEDS, "Yellow", true, fall);
+            AddToJunimoStock(stock, ShopItemIds.BOK_CHOY_SEEDS, "Yellow", true, fall);
+            AddToJunimoStock(stock, ShopItemIds.YAM_SEEDS, "Yellow", true, fall);
+            AddToJunimoStock(stock, ShopItemIds.CRANBERRY_SEEDS, "Yellow", true, fall);
+            AddToJunimoStock(stock, ShopItemIds.WHEAT_SEEDS, "Yellow", true, fall);
+            AddToJunimoStock(stock, ShopItemIds.SUNFLOWER_SEEDS, "Yellow", true, fall);
+            AddToJunimoStock(stock, ShopItemIds.FAIRY_SEEDS, "Yellow", true, fall);
+            AddToJunimoStock(stock, ShopItemIds.AMARANTH_SEEDS, "Yellow", true, fall);
+            AddToJunimoStock(stock, ShopItemIds.GRAPE_STARTER, "Yellow", true, fall);
+            AddToJunimoStock(stock, ShopItemIds.ARTICHOKE_SEEDS, "Yellow", true, fall);
         }
-                private static void AddSaplingsToShop(Dictionary<ISalable, int[]> stock)
+        private void AddSaplingsToShop(Dictionary<ISalable, int[]> stock)
         {
-            AddToJunimoStock(stock, ShopItemIds.CHERRY_SAPLING, "Yellow");
-            AddToJunimoStock(stock, ShopItemIds.APRICOT_SAPLING, "Yellow");
-            AddToJunimoStock(stock, ShopItemIds.ORANGE_SAPLING, "Yellow");
-            AddToJunimoStock(stock, ShopItemIds.PEACH_SAPLING, "Yellow");
-            AddToJunimoStock(stock, ShopItemIds.POMEGRANATE_SAPLING, "Yellow");
-            AddToJunimoStock(stock, ShopItemIds.APPLE_SAPLING, "Yellow");
+            AddToJunimoStock(stock, ShopItemIds.CHERRY_SAPLING, "Yellow", true);
+            AddToJunimoStock(stock, ShopItemIds.APRICOT_SAPLING, "Yellow", true);
+            AddToJunimoStock(stock, ShopItemIds.ORANGE_SAPLING, "Yellow", true);
+            AddToJunimoStock(stock, ShopItemIds.PEACH_SAPLING, "Yellow", true);
+            AddToJunimoStock(stock, ShopItemIds.POMEGRANATE_SAPLING, "Yellow", true);
+            AddToJunimoStock(stock, ShopItemIds.APPLE_SAPLING, "Yellow", true);
         }
 
+        private void AddJunimoModdedStock(Dictionary<ISalable, int[]> stock)
+        {
+            AddJunimoDistantLandsStock(stock);
+        }
+
+        private void AddJunimoDistantLandsStock(Dictionary<ISalable, int[]> stock)
+        {
+            if (!_archipelago.SlotData.Mods.HasMod(ModNames.DISTANT_LANDS))
+            {
+                return;
+            }
+
+            var voidMintIdentifier = "1 2 2 3 2/spring summer fall/109/"; //Done as modded seeds have variable ID but use ID in dictionary
+            var vileAncientIdentifier = "2 7 7 7 5/spring summer fall/108/";
+            var cropList = Game1.content.Load<Dictionary<int, string>>("Data\\Crops");
+            var voidMintSeeds = cropList.FirstOrDefault(x => x.Value.Contains(voidMintIdentifier)).Key;
+            var vileAncientFruitSeeds = cropList.FirstOrDefault(x => x.Value.Contains(vileAncientIdentifier)).Key;
+            AddToJunimoStock(stock, voidMintSeeds, "Yellow", true);
+            AddToJunimoStock(stock, vileAncientFruitSeeds, "Yellow", true);
+        }
     }
 }

@@ -39,7 +39,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Modded
             _archipelago = archipelago;
             _shopStockGenerator = shopStockGenerator;
             _stardewItemManager = stardewItemManager;
-            _junimoShopGenerator = new JunimoShopGenerator(shopStockGenerator, stardewItemManager);
+            _junimoShopGenerator = new JunimoShopGenerator(archipelago, shopStockGenerator, stardewItemManager);
         }
 
 
