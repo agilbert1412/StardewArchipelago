@@ -25,7 +25,7 @@ namespace StardewArchipelago.GameModifications.Modded
         private Dictionary<int, int> BlueItems { get; set; }
         private static readonly List<string> BlueColors = new()
         {
-            "color_blue", "color_aquamarine", "color_dark_blue", "color_cyan", "color_light_cyan"
+            "color_blue", "color_aquamarine", "color_dark_blue", "color_cyan", "color_light_cyan", "color_dark_cyan"
         };
         private Dictionary<int, int> GreyItems { get; set; }
         private static readonly List<string> GreyColors = new()
@@ -35,12 +35,12 @@ namespace StardewArchipelago.GameModifications.Modded
         private Dictionary<int, int> RedItems { get; set; }
         private static readonly List<string> RedColors = new()
         {
-            "color_red", "color_pink", "color_dark_pink"
+            "color_red", "color_pink", "color_dark_pink", "color_salmon"
         };
         private Dictionary<int, int> YellowItems { get; set; }
         private static readonly List<string> YellowColors = new()
         {
-            "color_yellow", "color_gold", "color_sand"
+            "color_yellow", "color_gold", "color_sand", "color_dark_yellow"
         };
         private static readonly string[] spring = new string[]{"spring"};
         private static readonly string[] summer = new string[]{"summer"};
