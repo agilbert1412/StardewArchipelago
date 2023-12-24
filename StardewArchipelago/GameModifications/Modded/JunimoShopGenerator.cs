@@ -200,11 +200,7 @@ namespace StardewArchipelago.GameModifications.Modded
             }
             var itemToTrade = JunimoVendors[color].ColorItems.ElementAt(random.Next(JunimoVendors[color].ColorItems.Count));
             var itemToTradeTotal = ExchangeRate(item, itemToTrade.Value);
-
-            if (Game1.player.hasCompletedCommunityCenter())
-            {
-                itemToTradeTotal[1] = Math.Min(1, 4* itemToTradeTotal[1] / 5);
-            }
+            
             item.Stack = itemToTradeTotal[0];
             
             stock.Add(item, new int[4]
@@ -227,6 +223,15 @@ namespace StardewArchipelago.GameModifications.Modded
             var lcm = soldItem.salePrice() * wantedItem / gcd;
             var requestCount = lcm/soldItem.salePrice();
             var offerCount = lcm/wantedItem;
+
+            var applesHearts = 0;
+            if (Game1.player.friendshipData.ContainsKey("Apples"))
+                applesHearts = Game1.player.friendshipData["Apples"].Points / 250; // Get discount from being friends with Apples
+            if (offerCount == 1)
+                requestCount = (int) Math.Min(1, requestCount * (1 + applesHearts * 0.05f));
+            else
+                offerCount = (int) Math.Min(1, offerCount * (1 - applesHearts * 0.05f));
+
             var lowestTrade = 5; // This is for us to change if we want to move this value around easily in testing
             if (Math.Min(requestCount, offerCount) > lowestTrade)
             {
