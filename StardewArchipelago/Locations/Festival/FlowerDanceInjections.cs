@@ -40,7 +40,7 @@ namespace StardewArchipelago.Locations.Festival
                     return;
                 }
 
-                _locationChecker.AddCheckedLocation(FestivalLocationNames.FLOWER_DANCE);
+                _locationChecker.AddCheckedLocation(FestivalLocationNames.DANCE_WITH_SOMEONE);
                 return;
             }
             catch (Exception ex)

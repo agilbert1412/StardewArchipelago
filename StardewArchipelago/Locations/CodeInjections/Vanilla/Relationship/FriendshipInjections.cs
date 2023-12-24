@@ -39,21 +39,21 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
         private static IModHelper _helper;
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
-        private static VillagerGrabber _grabber;
         private static Friends _friends;
+        private static VillagerGrabber _grabber;
         private static Dictionary<string, double> _friendshipPoints = new();
         private static Dictionary<string, Dictionary<int, Texture2D>> _apLogos;
 
         private static string[] _hintedFriendshipLocations;
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager itemManager)
+        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker, Friends friends, StardewItemManager itemManager)
         {
             _monitor = monitor;
             _helper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
+            _friends = friends;
             _grabber = new VillagerGrabber(itemManager);
-            _friends = new Friends();
             _apLogos = new Dictionary<string, Dictionary<int, Texture2D>>();
 
             foreach (var logoName in ArchipelagoTextures.ValidLogos)

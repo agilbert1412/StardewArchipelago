@@ -14,7 +14,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
 {
     public static class VanillaCodeInjectionInitializer
     {
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, StardewItemManager itemManager, WeaponsManager weaponsManager, ShopReplacer shopReplacer)
+        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, StardewItemManager itemManager, WeaponsManager weaponsManager, ShopReplacer shopReplacer, Friends friends)
         {
             BackpackInjections.Initialize(monitor, archipelago, locationChecker);
             ToolInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
@@ -36,7 +36,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             TravelingMerchantInjections.Initialize(monitor, modHelper, archipelago, locationChecker, state);
             FishingInjections.Initialize(monitor, modHelper, archipelago, locationChecker, itemManager);
             MuseumInjections.Initialize(monitor, modHelper, archipelago, locationChecker, itemManager);
-            FriendshipInjections.Initialize(monitor, modHelper, archipelago, locationChecker, itemManager);
+            FriendshipInjections.Initialize(monitor, modHelper, archipelago, locationChecker, friends, itemManager);
             SpecialOrderInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             SpouseInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             PregnancyInjections.Initialize(monitor, modHelper, archipelago, locationChecker);

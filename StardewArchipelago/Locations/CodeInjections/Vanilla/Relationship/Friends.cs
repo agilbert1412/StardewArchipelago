@@ -53,7 +53,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
 
         public ArchipelagoFriend GetFriend(string name)
         {
-            if (name == null)
+            if (string.IsNullOrWhiteSpace(name))
             {
                 return null;
             }
@@ -66,7 +66,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
                     friend = TryFindKidWithThatName(name);
                     if (friend == null)
                     {
-                        return null;
+                        return GetFriend(name.Substring(0, name.Length - 1));
                     }
                 }
 

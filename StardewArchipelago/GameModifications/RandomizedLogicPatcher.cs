@@ -11,6 +11,7 @@ using StardewArchipelago.GameModifications.EntranceRandomizer;
 using StardewArchipelago.GameModifications.Seasons;
 using StardewArchipelago.GameModifications.Tooltips;
 using StardewArchipelago.Locations;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
 using StardewArchipelago.Stardew;
 using StardewArchipelago.Stardew.NameMapping;
 using StardewModdingAPI;
@@ -33,7 +34,7 @@ namespace StardewArchipelago.GameModifications
         private readonly StartingResources _startingResources;
         private readonly RecipeDataRemover _recipeDataRemover;
 
-        public RandomizedLogicPatcher(IMonitor monitor, IModHelper modHelper, Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager stardewItemManager, EntranceManager entranceManager, ShopStockGenerator shopStockGenerator, NameSimplifier nameSimplifier)
+        public RandomizedLogicPatcher(IMonitor monitor, IModHelper modHelper, Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager stardewItemManager, EntranceManager entranceManager, ShopStockGenerator shopStockGenerator, NameSimplifier nameSimplifier, Friends friends)
         {
             _harmony = harmony;
             _archipelago = archipelago;
@@ -63,6 +64,7 @@ namespace StardewArchipelago.GameModifications
             GoldenEggInjections.Initialize(monitor, archipelago);
             GoldenClockInjections.Initialize(monitor, archipelago);
             ItemTooltipInjections.Initialize(monitor, modHelper, archipelago, locationChecker, nameSimplifier);
+            BillboardInjections.Initialize(monitor, modHelper, archipelago, locationChecker, friends);
 
             DebugPatchInjections.Initialize(monitor, archipelago);
         }
@@ -95,7 +97,7 @@ namespace StardewArchipelago.GameModifications
             PatchLegendaryFish();
             PatchSecretNotes();
             PatchRecipes();
-            PatchItemTooltips();
+            PatchTooltips();
             _startingResources.GivePlayerStartingResources();
 
             PatchDebugMethods();
@@ -533,17 +535,29 @@ namespace StardewArchipelago.GameModifications
             _recipeDataRemover.RemoveSkillAndFriendshipLearnConditions();
         }
 
-        private void PatchItemTooltips()
+        private void PatchTooltips()
         {
-            var parameters = new[]
+            var objectDrawParameters = new[]
                 { typeof(SpriteBatch), typeof(Vector2), typeof(float), typeof(float), typeof(float), typeof(StackDrawType), typeof(Color), typeof(bool) };
             _harmony.Patch(
-                original: AccessTools.Method(typeof(Object), nameof(Object.drawInMenu), parameters),
+                original: AccessTools.Method(typeof(Object), nameof(Object.drawInMenu), objectDrawParameters),
                 postfix: new HarmonyMethod(typeof(ItemTooltipInjections), nameof(ItemTooltipInjections.DrawInMenu_AddArchipelagoLogoIfNeeded_Postfix))
             );
+
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Object), nameof(Object.getDescription)),
                 postfix: new HarmonyMethod(typeof(ItemTooltipInjections), nameof(ItemTooltipInjections.GetDescription_AddMissingChecks_Postfix))
+            );
+
+            var billboardDrawParameters = new[] { typeof(SpriteBatch) };
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Billboard), nameof(Billboard.draw), billboardDrawParameters),
+                postfix: new HarmonyMethod(typeof(BillboardInjections), nameof(BillboardInjections.Draw_AddArchipelagoIndicators_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Billboard), nameof(Billboard.performHoverAction)),
+                postfix: new HarmonyMethod(typeof(BillboardInjections), nameof(BillboardInjections.PerformHoverAction_AddArchipelagoChecksToTooltips_Postfix))
             );
         }
 
