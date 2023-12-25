@@ -37,7 +37,7 @@ namespace StardewArchipelago.GameModifications
         private readonly StartingResources _startingResources;
         private readonly RecipeDataRemover _recipeDataRemover;
 
-        public RandomizedLogicPatcher(IMonitor monitor, IModHelper modHelper, Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager stardewItemManager, EntranceManager entranceManager, ShopStockGenerator shopStockGenerator, NameSimplifier nameSimplifier, JunimoShopGenerator junimoShopGenerator, Friends friends)
+        public RandomizedLogicPatcher(IMonitor monitor, IModHelper modHelper, Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager stardewItemManager, EntranceManager entranceManager, ShopStockGenerator shopStockGenerator, JunimoShopGenerator junimoShopGenerator, NameSimplifier nameSimplifier, Friends friends)
         {
             _harmony = harmony;
             _archipelago = archipelago;
