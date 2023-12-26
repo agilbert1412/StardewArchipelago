@@ -14,7 +14,6 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
 
         private static readonly Dictionary<string, string> _locationSVE = new()
         {
-            { "Willy's Bedroom", "Custom_WillyRoom" },
             { "Grandpa's Shed Interior", "Custom_GrandpasShedRuins" },
             { "Grandpa's Shed Upstairs", "Custom_GrandpasShedGreenhouse" },
             { "Grandpa's Shed", "Custom_GrandpasShedOutside" },
