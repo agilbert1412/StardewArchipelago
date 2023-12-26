@@ -103,11 +103,13 @@ namespace StardewArchipelago.Archipelago.Gifting
             var totalTax = 0;
             foreach (var (player, gifts) in targets)
             {
+                _monitor.Log($"Attempting to send {gifts.Count} gifts to {player}", LogLevel.Info);
                 foreach (var giftObject in gifts)
                 {
                     TrySendShuffleGift(giftObject, player, objectsFailedToSend, out var tax);
                     totalTax += tax;
                 }
+                _monitor.Log($"Finished sending {gifts.Count} gifts to {player}", LogLevel.Info);
             }
 
             Game1.player.Money = Math.Max(0, Game1.player.Money - totalTax);
@@ -128,6 +130,13 @@ namespace StardewArchipelago.Archipelago.Gifting
                 }
 
                 giftTraits = giftTraits.Append(new GiftTrait("Shuffle", 1, 1)).ToArray();
+
+                if (!_archipelago.MakeSureConnected())
+                {
+                    objectsFailedToSend.Add(giftObject);
+                    return;
+                }
+
                 var success = _giftService.SendGift(giftItem, giftTraits, player, out var giftId);
                 if (!success)
                 {
@@ -145,17 +154,24 @@ namespace StardewArchipelago.Archipelago.Gifting
             }
         }
 
-        public List<string> GetAllPlayersThatCanReceiveShuffledItems(Object giftObject)
+        public bool CanGiftObject(Object giftObject)
+        {
+            return GiftGenerator.TryCreateGiftItem(giftObject, false, out _, out _, out _);
+        }
+
+        public List<string> GetAllPlayersThatCanReceiveShuffledItems()
         {
             var validTargets = new List<string>();
-            if (!GiftGenerator.TryCreateGiftItem(giftObject, false, out var giftItem, out var giftTraits, out _))
+
+            var currentPlayer = _archipelago.GetCurrentPlayer();
+            if (currentPlayer == null)
             {
                 return validTargets;
             }
 
-            foreach (var player in _archipelago.Session.Players.AllPlayers)
+            foreach (var player in _archipelago.GetAllPlayers())
             {
-                if (player.Slot == _archipelago.CurrentPlayer.Slot || player.Game != _archipelago.CurrentPlayer.Game)
+                if (player.Slot == currentPlayer.Slot || player.Game != currentPlayer.Game)
                 {
                     continue;
                 }

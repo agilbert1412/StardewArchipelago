@@ -57,6 +57,8 @@ namespace StardewArchipelago.Items.Traps
 
             var slotsToShuffle = new Dictionary<ItemSlot, Item>();
 
+            _monitor.Log($"Executing a Shuffle Trap...", LogLevel.Info);
+
             AddItemSlotsFromPlayerInventory(slotsToShuffle, targets == ShuffleInventoryTarget.Hotbar);
             if (targets >= ShuffleInventoryTarget.InventoryAndChests)
             {
@@ -68,6 +70,8 @@ namespace StardewArchipelago.Items.Traps
                 }
             }
 
+            var numberItemsToShuffle = slotsToShuffle.Count;
+            _monitor.Log($"Found {numberItemsToShuffle} items to shuffle", LogLevel.Info);
             var random = new Random((int)(Game1.uniqueIDForThisGame + Game1.stats.DaysPlayed));
 
             if (targets >= ShuffleInventoryTarget.InventoryAndChestsAndFriends)
@@ -75,9 +79,12 @@ namespace StardewArchipelago.Items.Traps
                 SendRandomGifts(slotsToShuffle, random, GIFTING_RATE);
             }
 
+            _monitor.Log($"Sent {numberItemsToShuffle - slotsToShuffle.Count} items as random gifts", LogLevel.Info);
             var allSlots = slotsToShuffle.Keys.ToList();
             var allItems = slotsToShuffle.Values.ToList();
             var allItemsShuffled = allItems.Shuffle(random);
+
+            _monitor.Log($"Shuffling the remaining {slotsToShuffle.Count} items locally", LogLevel.Info);
 
             for (var i = 0; i < allSlots.Count; i++)
             {
@@ -88,22 +95,26 @@ namespace StardewArchipelago.Items.Traps
             {
                 chest.clearNulls();
             }
+
+            _monitor.Log($"Finished the shuffle trap!", LogLevel.Info);
         }
 
         private void SendRandomGifts(Dictionary<ItemSlot, Item> slotsToShuffle, Random random, double giftingRate)
         {
             var giftsToSend = new Dictionary<string, List<Object>>();
             var slotsToClear = new Dictionary<Object, ItemSlot>();
+            var validTargets = _giftSender.GetAllPlayersThatCanReceiveShuffledItems();
 
+            if (validTargets == null || !validTargets.Any())
+            {
+                _monitor.Log($"Found no players to gift to", LogLevel.Info);
+                return;
+            }
+
+            _monitor.Log($"Found {validTargets.Count} players that can receive random gifts!", LogLevel.Info);
             foreach (var (itemSlot, item) in slotsToShuffle)
             {
-                if (item is not Object objectToGift || random.NextDouble() > giftingRate)
-                {
-                    continue;
-                }
-
-                var validTargets = _giftSender.GetAllPlayersThatCanReceiveShuffledItems(objectToGift);
-                if (validTargets == null || !validTargets.Any())
+                if (item is not Object objectToGift || !_giftSender.CanGiftObject(objectToGift) || random.NextDouble() > giftingRate)
                 {
                     continue;
                 }
@@ -114,11 +125,14 @@ namespace StardewArchipelago.Items.Traps
                     giftsToSend.Add(chosenTarget, new List<Object>());
                 }
 
+                _monitor.Log($"{chosenTarget} has been chosen as a recipient for {objectToGift.Stack} {objectToGift.Name}", LogLevel.Info);
                 giftsToSend[chosenTarget].Add(objectToGift);
                 slotsToClear.Add(objectToGift, itemSlot);
             }
 
             var failedToSendGifts = _giftSender.SendShuffleGifts(giftsToSend);
+
+            _monitor.Log($"Finished sending gifts, {failedToSendGifts.Count} failed to send and will stay local", LogLevel.Info);
 
             foreach (var (gift, slot) in slotsToClear)
             {
