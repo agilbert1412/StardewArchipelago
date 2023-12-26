@@ -584,6 +584,11 @@ namespace StardewArchipelago.GameModifications
                 original: AccessTools.Method(typeof(ShopMenu), nameof(ShopMenu.update)),
                 prefix: new HarmonyMethod(typeof(JunimoShopInjections), nameof(JunimoShopInjections.Update_JunimoWoodsAPShop_Prefix))
             );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.answerDialogueAction)),
+                prefix: new HarmonyMethod(typeof(JunimoShopInjections), nameof(JunimoShopInjections.AnswerDialogueAction_Junimoshop_Prefix))
+            );
         }
 
         private void PatchDebugMethods()

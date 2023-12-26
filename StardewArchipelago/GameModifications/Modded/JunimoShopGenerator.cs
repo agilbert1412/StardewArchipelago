@@ -52,7 +52,7 @@ namespace StardewArchipelago.GameModifications.Modded
         {
             "color_orange", "color_dark_orange", "color_dark_brown", "color_brown", "color_copper"
         };
-        private Dictionary<int, int> PurpleItems {get; set; }
+        public Dictionary<int, int> PurpleItems {get; set; }
         private static readonly List<string> PurpleColors = new()
         {
             "color_purple", "color_dark_purple", "color_dark_pink", "color_pale_violet_red", "color_iridium"
@@ -92,7 +92,7 @@ namespace StardewArchipelago.GameModifications.Modded
             var redVendor = new JunimoVendor(RedPersistentStock, RedItems);
             var orangeVendor = new JunimoVendor(OrangePersistentStock, OrangeItems);
             JunimoVendors = new Dictionary<string, JunimoVendor>(){
-                {"Blue", blueVendor}, {"Yellow", yellowVendor}, {"Grey", greyVendor}, {"Red", redVendor}, {"Orange", orangeVendor}
+                {"Blue", blueVendor}, {"Yellow", yellowVendor}, {"Grey", greyVendor}, {"Red", redVendor}, {"Orange", orangeVendor}, 
             };
         }
 
@@ -147,7 +147,7 @@ namespace StardewArchipelago.GameModifications.Modded
                     OrangeItems[item.Id] = item.SellPrice;
                     continue;
                 }
-                if (IsColor(itemContext, "purple"))
+                if (IsColor(itemContext, "purple") && type.Contains("Basic"))
                 {
                     PurpleItems[item.Id] = item.SellPrice;
                     continue;
@@ -289,37 +289,6 @@ namespace StardewArchipelago.GameModifications.Modded
             return stock;
         }
 
-        private static class PurpleJunimo
-        {
-            public static readonly string Question = "Me love purple thing-a-ma-bobs!  Could give VERY special gift!  You want?";
-            public static readonly Response Money = new("Weird yellow rocks?", "Purchase ({0} {1})");
-            public static readonly int MoneyAmount = 100000;
-            public static readonly Response Dewdrop = new("Blue tasty under pretty tree!", "Purchase ({0} {1})");
-            public static readonly Response Friendship = new("Kiss many people on forehead!", "Purchase ({0} {1})");
-            public static readonly int FriendshipValuePer = 200;
-            public static readonly int FriendshipAmount = 50;
-            public static readonly Response Deathlink = new("Help everyone sleep tight...?", "Purchase ({0} {1})");
-            public static readonly Response Nothing = new("No", "Not Now");
-        }
-
-        public void PurpleJunimoSpecialShop(NPC junimo)
-        {
-            var junimoWoods = junimo.currentLocation;
-            junimoWoods.createQuestionDialogue(
-                    PurpleJunimo.Question,
-                    new Response[5]
-                    {
-                        PurpleJunimo.Money,
-                        PurpleJunimo.Dewdrop,
-                        PurpleJunimo.Friendship,
-                        PurpleJunimo.Deathlink,
-                        PurpleJunimo.Nothing
-                    }, "PurpleJunimoVendor");
-
-            return;
-
-        }
-
         private void AddToJunimoStock(
             Dictionary<ISalable, int[]> stock,
             StardewItem stardewItem,
@@ -353,13 +322,13 @@ namespace StardewArchipelago.GameModifications.Modded
             });
         }
 
-        // May be useful one day, just not now
         /*private void AddToJunimoStock(
             Dictionary<ISalable, int[]> stock,
             string itemName,
-            string color)
+            string color,
+            int uniquePrice)
         {
-            AddToJunimoStock(stock, _stardewItemManager.GetItemByName(itemName), color, null);
+            AddToJunimoStock(stock, _stardewItemManager.GetItemByName(itemName), color, null, 0.4, uniquePrice);
         }*/
 
         private void AddToJunimoStock(

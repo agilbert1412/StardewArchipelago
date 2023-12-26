@@ -404,7 +404,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
                 {
                     PerformFriendshipDecay(__instance, npcName);
                 }
-
+                if (Game1.player.hasOrWillReceiveMail("purpleJunimoKiss"))
+                foreach (var friendship in Game1.player.friendshipData.Keys)
+                    {
+                        var friend = Game1.getCharacterFromName(friendship);
+                        Game1.player.changeFriendship(100, friend);
+                }
+                Game1.player.RemoveMail("purpleJunimoKiss");
                 var date = new WorldDate(Game1.Date);
                 ++date.TotalDays;
                 __instance.updateFriendshipGifts(date);
