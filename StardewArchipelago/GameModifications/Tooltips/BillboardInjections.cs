@@ -127,7 +127,7 @@ namespace StardewArchipelago.GameModifications.Tooltips
 
         private static IEnumerable<string> GetMissingFestivalChecks(string festivalName, int day)
         {
-            if (Game1.currentSeason.Equals("winter") && day >= 15 && day <= 17)
+            if (Game1.currentSeason.Equals("winter") && day >= 14 && day <= 16)
             {
                 var festivalDay = FestivalLocationNames.NIGHT_MARKET_ALL;
                 foreach (var location in FestivalLocationNames.LocationsByFestival[festivalDay])
@@ -138,15 +138,15 @@ namespace StardewArchipelago.GameModifications.Tooltips
                     }
                 }
 
-                if (day == 15)
+                if (day == 14)
                 {
                     festivalDay = FestivalLocationNames.NIGHT_MARKET_15;
                 }
-                else if (day == 16)
+                else if (day == 15)
                 {
                     festivalDay = FestivalLocationNames.NIGHT_MARKET_16;
                 }
-                else if (day == 17)
+                else if (day == 16)
                 {
                     festivalDay = FestivalLocationNames.NIGHT_MARKET_17;
                 }
