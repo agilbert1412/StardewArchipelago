@@ -56,13 +56,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
             {"winter", new StardewValley.Object(Vector2.Zero, 414, 1)}
         };
 
-        private static readonly Dictionary<string, Item> seasonalBerry = new(){
-            {"spring", new StardewValley.Object(Vector2.Zero, 296, 1)},
-            {"summer", new StardewValley.Object(Vector2.Zero, 396, 1)},
-            {"fall", new StardewValley.Object(Vector2.Zero, 410, 1)},
-            {"winter", new StardewValley.Object(Vector2.Zero, 414, 1)}
-        };
-
         public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, 
         LocationChecker locationChecker, ShopReplacer shopReplacer, ShopStockGenerator shopStockGenerator, JunimoShopGenerator junimoShopGenerator)
         {
