@@ -200,7 +200,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Modded
                 {
                     DaJunimo.setNewDialogue($"I will tonight!  Yay!");
                     Game1.drawDialogue(DaJunimo);
-                    if (Game1.player.hasOrWillReceiveMail("purpleJunimoKiss"))
+                    if (Game1.player.mailReceived.Contains("purpleJunimoKiss"))
                     {
                         DaJunimo.setNewDialogue($"You want me to kiss them TWICE?!  Wowie, but sorry!");
                         return false;
