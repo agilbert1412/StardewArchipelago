@@ -405,6 +405,11 @@ namespace StardewArchipelago.GameModifications
                 postfix: new HarmonyMethod(typeof(QuestLogInjections), nameof(QuestLogInjections.Constructor_MakeQuestsNonCancellable_Postfix))
             );
 
+            if (!_archipelago.SlotData.QuestLocations.StoryQuestsEnabled)
+            {
+                return;
+            }
+
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Farmer), nameof(Farmer.foundArtifact)),
                 postfix: new HarmonyMethod(typeof(QuestLogInjections), nameof(QuestLogInjections.FoundArtifact_StartArchaeologyIfMissed_Postfix))
