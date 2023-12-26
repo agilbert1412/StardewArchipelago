@@ -20,6 +20,7 @@ General:
 - [Bigger Backpack](https://www.nexusmods.com/stardewvalley/mods/1845), by spacechase0, Version 6.0.0
 - [Tractor Mod](https://www.nexusmods.com/stardewvalley/mods/1401), by Pathoschild, Version 4.16.5
 - [Distant Lands - Witch Swamp Overhaul](https://www.nexusmods.com/stardewvalley/mods/18109), by Aimon111, Version 1.0.7
+- [Custom Boarding House and Bus Stop Extension](https://www.nexusmods.com/stardewvalley/mods/4120), by TrentXV, Version 4.0.15
 
 Skills:
 - [Magic](https://www.nexusmods.com/stardewvalley/mods/2007), by spacechase0, Version 0.8.2
@@ -42,6 +43,7 @@ Custom NPCs:
 - [Ayeisha - The Postal Worker (Custom NPC)](https://www.nexusmods.com/stardewvalley/mods/6427), by TheLimeyDragon, Version 0.6.2-alpha
 - [Custom NPC - Riley](https://www.nexusmods.com/stardewvalley/mods/5811), by SG, Version 1.2.2
 - [Alecto the Witch](https://www.nexusmods.com/stardewvalley/mods/10671), by zoedoll, Version 1.1.7
+- [Hat Mouse Lacey](https://www.nexusmods.com/stardewvalley/mods/18177), by ichortower, Version 1.1.2
 
 In addition, a [Content Patcher mod](https://github.com/Witchybun/SDV-Randomizer-Content-Patcher/releases) may be required for the mod to properly function alongside your game.  Include these alongside StardewArchipelago.
 
