@@ -28,6 +28,10 @@ namespace StardewArchipelago.Stardew.NameMapping
                 {
                     displayName += " (Green)";
                 }
+                if (name.Contains("trilobite")) // Temporary fix.
+                {
+                    displayName += " Fossil";
+                }
                 name = displayName;
             }
 
