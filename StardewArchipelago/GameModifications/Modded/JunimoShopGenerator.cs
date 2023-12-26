@@ -6,9 +6,12 @@ using System.Xml.Schema;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
+using StardewArchipelago.Extensions;
+using StardewArchipelago.Locations;
 using StardewArchipelago.Stardew;
 using StardewValley;
 using StardewValley.Locations;
+using StardewValley.Menus;
 
 namespace StardewArchipelago.GameModifications.Modded
 {
@@ -21,6 +24,7 @@ namespace StardewArchipelago.GameModifications.Modded
         private PersistentStock GreyPersistentStock { get; }
         private PersistentStock YellowPersistentStock { get; }
         private PersistentStock RedPersistentStock { get; }
+        private PersistentStock OrangePersistentStock {get; }
         private static Dictionary<string, JunimoVendor> JunimoVendors { get; set; }
         private Dictionary<int, int> BlueItems { get; set; }
         private static readonly List<string> BlueColors = new()
@@ -38,11 +42,22 @@ namespace StardewArchipelago.GameModifications.Modded
             "color_red", "color_pink", "color_dark_pink", "color_salmon"
         };
         private Dictionary<int, int> YellowItems { get; set; }
-        public Dictionary<StardewItem, int> BerryItems {get; set; }
         private static readonly List<string> YellowColors = new()
         {
             "color_yellow", "color_gold", "color_sand", "color_dark_yellow"
         };
+        private Dictionary<int, int> OrangeItems { get; set; }
+
+        private static readonly List<string> OrangeColors = new()
+        {
+            "color_orange", "color_dark_orange", "color_dark_brown", "color_brown", "color_copper"
+        };
+        private Dictionary<int, int> PurpleItems {get; set; }
+        private static readonly List<string> PurpleColors = new()
+        {
+            "color_purple", "color_dark_purple", "color_dark_pink", "color_pale_violet_red", "color_iridium"
+        };
+        public Dictionary<StardewItem, int> BerryItems {get; set; }
         private static readonly string[] spring = new string[]{"spring"};
         private static readonly string[] summer = new string[]{"summer"};
         private static readonly string[] fall = new string[]{"fall"};
@@ -59,7 +74,8 @@ namespace StardewArchipelago.GameModifications.Modded
             }
         }
 
-        public JunimoShopGenerator(ArchipelagoClient archipelago, ShopStockGenerator shopStockGenerator, StardewItemManager stardewItemManager)
+        public JunimoShopGenerator(
+            ArchipelagoClient archipelago, ShopStockGenerator shopStockGenerator, StardewItemManager stardewItemManager)
         {
             _archipelago = archipelago;
             _shopStockGenerator = shopStockGenerator;
@@ -68,25 +84,29 @@ namespace StardewArchipelago.GameModifications.Modded
             GreyPersistentStock = new PersistentStock();
             BluePersistentStock = new PersistentStock();
             YellowPersistentStock = new PersistentStock();
-            GenerateColoredItems();
+            OrangePersistentStock = new PersistentStock();
+            GenerateItems();
             var blueVendor = new JunimoVendor(BluePersistentStock, BlueItems);
             var yellowVendor = new JunimoVendor(YellowPersistentStock, YellowItems);
             var greyVendor = new JunimoVendor(GreyPersistentStock, GreyItems);
             var redVendor = new JunimoVendor(RedPersistentStock, RedItems);
+            var orangeVendor = new JunimoVendor(OrangePersistentStock, OrangeItems);
             JunimoVendors = new Dictionary<string, JunimoVendor>(){
-                {"Blue", blueVendor}, {"Yellow", yellowVendor}, {"Grey", greyVendor}, {"Red", redVendor}
+                {"Blue", blueVendor}, {"Yellow", yellowVendor}, {"Grey", greyVendor}, {"Red", redVendor}, {"Orange", orangeVendor}
             };
         }
 
-        public void GenerateColoredItems()
+        public void GenerateItems()
         {
             BlueItems = new Dictionary<int, int>();
             YellowItems = new Dictionary<int, int>();
             GreyItems = new Dictionary<int, int>();
             RedItems = new Dictionary<int, int>();
+            OrangeItems = new Dictionary<int, int>();
+            PurpleItems = new Dictionary<int, int>();
             BerryItems = new Dictionary<StardewItem, int>();
-            var objectContextTags = Game1.content.Load<Dictionary<string, string>>("Data\\ObjectContextTags");
-            var objectInformation = Game1.content.Load<Dictionary<int, string>>("Data\\ObjectInformation");
+            var objectContextTags = Game1.objectContextTags;
+            var objectInformation = Game1.objectInformation;
 
             foreach (var contextItem in objectContextTags)
             {
@@ -97,7 +117,7 @@ namespace StardewArchipelago.GameModifications.Modded
                 var type = objectInformation[item.Id].Split("/")[3];
                 if (item.SellPrice <= 1)
                     continue;
-                if ((item.Name.Contains("Berry") || item.Name.Contains("berry")) && !item.Name.Contains("Joja") && type.Contains("Basic"))
+                if ((item.Name.Contains("Berry") || item.Name.Contains("berry")) && !item.Name.Contains("Joja") && itemContext.Contains("seeds"))
                 {
                     BerryItems[item] = item.SellPrice;
                 }
@@ -115,10 +135,22 @@ namespace StardewArchipelago.GameModifications.Modded
                 if (IsColor(itemContext, "grey") && !type.Contains("Minerals"))
                 {
                     GreyItems[item.Id] = item.SellPrice;
+                    continue;
                 }
                 if (IsColor(itemContext, "red") && !type.Contains("Arch"))
                 {
                     RedItems[item.Id] = item.SellPrice;
+                    continue;
+                }
+                if (IsColor(itemContext, "orange") && !itemContext.Contains("cooking"))
+                {
+                    OrangeItems[item.Id] = item.SellPrice;
+                    continue;
+                }
+                if (IsColor(itemContext, "purple"))
+                {
+                    PurpleItems[item.Id] = item.SellPrice;
+                    continue;
                 }
             }
         }
@@ -141,22 +173,30 @@ namespace StardewArchipelago.GameModifications.Modded
             {
                 return GreyColors.Any(x => itemContext.Contains(x));
             }
+            if (color == "orange")
+            {
+                return OrangeColors.Any(x => itemContext.Contains(x));
+            }
+            if (color == "purple")
+            {
+                return PurpleColors.Any(x => itemContext.Contains(x));
+            }
             return false;
         }
 
-        public Dictionary<ISalable, int[]> GetJunimoShopStock(string color)
+        public Dictionary<ISalable, int[]> GetJunimoShopStock(string color, Dictionary<ISalable, int[]> oldStock)
         {
             var stockAlreadyExists = JunimoVendors[color].JunimoPersistentStock.TryGetStockForToday(out var stock);
             if (!stockAlreadyExists)
             {
-                stock = GenerateJunimoStock(color);
+                stock = GenerateJunimoStock(color, oldStock);
                 JunimoVendors[color].JunimoPersistentStock.SetStockForToday(stock);
             }
 
             return stock;
         }
 
-        private Dictionary<ISalable, int[]> GenerateJunimoStock(string color)
+        private Dictionary<ISalable, int[]> GenerateJunimoStock(string color, Dictionary<ISalable, int[]> oldStock)
         {
             var stock = new Dictionary<ISalable, int[]>();
             if (color == "Blue")
@@ -175,82 +215,11 @@ namespace StardewArchipelago.GameModifications.Modded
             {
                 AddSeedsToYellowStock(stock);
             }
+            if (color == "Orange")
+            {
+                GenerateOrangeJunimoStock(stock, oldStock);
+            }
             return stock;
-        }
-
-        private void AddToJunimoStock(
-            Dictionary<ISalable, int[]> stock,
-            int itemId,
-            string color,
-            bool seed,
-            string[] itemSeason = null)
-        {
-            var itemName = _stardewItemManager.GetObjectById(itemId).Name;
-            if (seed == true && _archipelago.SlotData.Cropsanity == Cropsanity.Shuffled && !_archipelago.HasReceivedItem(itemName))
-            {
-                return;
-            }
-            
-            var item = new StardewValley.Object(Vector2.Zero, itemId, 1);
-
-            if (itemSeason != null)
-            {
-                if (!itemSeason.Contains(Game1.currentSeason))
-                {
-                    return;
-                }
-            }
-
-            var random = new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame / 2 + itemId);
-            if (random.NextDouble() < 0.4)
-            {
-                return;
-            }
-            var itemToTrade = JunimoVendors[color].ColorItems.ElementAt(random.Next(JunimoVendors[color].ColorItems.Count));
-            var itemToTradeTotal = ExchangeRate(item.salePrice(), itemToTrade.Value);
-            
-            item.Stack = itemToTradeTotal[0];
-            
-            stock.Add(item, new int[4]
-            {
-                0,
-                int.MaxValue,
-                itemToTrade.Key,
-                itemToTradeTotal[1],
-            });
-        }
-
-        // Lets just say they no currency good cuz Junimo
-        public static int[] ExchangeRate(int soldItem, int wantedItem)
-        {
-            if (soldItem > wantedItem && soldItem % wantedItem == 0)
-                return new int[2]{1, soldItem / wantedItem};
-            if (soldItem <= wantedItem &&  wantedItem % soldItem == 0)
-                return new int[2]{wantedItem / soldItem, 1};
-            var gcd = Gcd(soldItem, wantedItem);
-            var lcm = soldItem * wantedItem / gcd;
-            var requestCount = lcm/soldItem;
-            var offerCount = lcm/wantedItem;
-
-            var applesHearts = 0;
-            if (Game1.player.friendshipData.ContainsKey("Apples"))
-                applesHearts = Game1.player.friendshipData["Apples"].Points / 250; // Get discount from being friends with Apples
-            if (offerCount == 1)
-                requestCount = (int)( requestCount * (1 + applesHearts * 0.05f));
-            else
-                offerCount = (int) Math.Max(1, offerCount * (1 - applesHearts * 0.05f));
-
-            var lowestTrade = 5; // This is for us to change if we want to move this value around easily in testing
-            if (Math.Min(requestCount, offerCount) > lowestTrade)
-            {
-                var closestTen = (int) Math.Pow(lowestTrade, (int) ( Math.Log10(Math.Min(requestCount, offerCount)) / Math.Log10(lowestTrade) ) );
-                requestCount /= closestTen;
-                offerCount /= closestTen;
-                requestCount /= Gcd(requestCount, offerCount); // Due to the rounding we may find the two aren't relatively prime anymore
-                offerCount /= Gcd(requestCount, offerCount);
-            }
-            
-            return new int[2]{requestCount, offerCount};
         }
 
         private Dictionary<ISalable, int[]> GenerateBlueJunimoStock(Dictionary<ISalable, int[]> stock)
@@ -299,31 +268,154 @@ namespace StardewArchipelago.GameModifications.Modded
             return stock;
         }
 
-        private static int Gcd(int val1, int val2)
+        private Dictionary<ISalable, int[]> GenerateOrangeJunimoStock(Dictionary<ISalable, int[]> stock, Dictionary<ISalable, int[]> oldStock)
         {
-            var a = Math.Max(val1, val2);
-            var b = Math.Min(val1, val2);
-            var r = a % b;
-            if ( r == 0)
+            var random = new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame / 2 + Game1.currentGameTime.ElapsedGameTime.Seconds);
+            var dailyDecor = new List<ISalable>();
+            for (var i = 0; i < 2; i++) // Allow these to still exist; just not all of them all the time
             {
-                if (val1 > val2)
+                dailyDecor.Add(oldStock.ElementAt(random.Next(oldStock.Count)).Key);
+            }
+            foreach (var item in dailyDecor) 
+            {
+                var shopItem = _stardewItemManager.GetItemByName(item.Name);
+                AddToJunimoStock(stock, shopItem, "Orange", "BigCraftable", 0, item.salePrice());
+            }
+            var cookedRecipes = Game1.player.recipesCooked.Keys;
+            foreach (var recipe in cookedRecipes)
+            {
+                AddToJunimoStock(stock, recipe, "Orange", false);
+            }
+            return stock;
+        }
+
+        private static class PurpleJunimo
+        {
+            public static readonly string Question = "Me love purple thing-a-ma-bobs!  Could give VERY special gift!  You want?";
+            public static readonly Response Money = new("Weird yellow rocks?", "Purchase ({0} {1})");
+            public static readonly int MoneyAmount = 100000;
+            public static readonly Response Dewdrop = new("Blue tasty under pretty tree!", "Purchase ({0} {1})");
+            public static readonly Response Friendship = new("Kiss many people on forehead!", "Purchase ({0} {1})");
+            public static readonly int FriendshipValuePer = 200;
+            public static readonly int FriendshipAmount = 50;
+            public static readonly Response Deathlink = new("Help everyone sleep tight...?", "Purchase ({0} {1})");
+            public static readonly Response Nothing = new("No", "Not Now");
+        }
+
+        public void PurpleJunimoSpecialShop(NPC junimo)
+        {
+            var junimoWoods = junimo.currentLocation;
+            junimoWoods.createQuestionDialogue(
+                    PurpleJunimo.Question,
+                    new Response[5]
+                    {
+                        PurpleJunimo.Money,
+                        PurpleJunimo.Dewdrop,
+                        PurpleJunimo.Friendship,
+                        PurpleJunimo.Deathlink,
+                        PurpleJunimo.Nothing
+                    }, "PurpleJunimoVendor");
+
+            return;
+
+        }
+
+        private void AddToJunimoStock(
+            Dictionary<ISalable, int[]> stock,
+            StardewItem stardewItem,
+            string color,
+            string category = null,
+            double failRate = 0.4,
+            int uniquePrice = -1)
+        {
+            
+            var itemName = stardewItem.Name;
+            var item = new StardewValley.Object(Vector2.Zero, stardewItem.Id, 1);
+            if (category == "BigCraftable")
+                item = new StardewValley.Object(Vector2.Zero, stardewItem.Id);
+
+            var random = new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame / 2 + stardewItem.Id);
+            if (random.NextDouble() < failRate)
+            {
+                return;
+            }
+            var itemToTrade = JunimoVendors[color].ColorItems.ElementAt(random.Next(JunimoVendors[color].ColorItems.Count));
+            var itemToTradeTotal = ExchangeRate(Math.Max(uniquePrice, item.salePrice()), itemToTrade.Value);
+
+            item.Stack = itemToTradeTotal[0];
+
+            stock.Add(item, new int[4]
+            {
+                0,
+                int.MaxValue,
+                itemToTrade.Key,
+                itemToTradeTotal[1],
+            });
+        }
+
+        // May be useful one day, just not now
+        /*private void AddToJunimoStock(
+            Dictionary<ISalable, int[]> stock,
+            string itemName,
+            string color)
+        {
+            AddToJunimoStock(stock, _stardewItemManager.GetItemByName(itemName), color, null);
+        }*/
+
+        private void AddToJunimoStock(
+            Dictionary<ISalable, int[]> stock,
+            int itemId,
+            string color,
+            bool seed,
+            string[] itemSeason = null)
+        {
+            var itemName = _stardewItemManager.GetObjectById(itemId).Name;
+            if (seed == true && _archipelago.SlotData.Cropsanity == Cropsanity.Shuffled && !_archipelago.HasReceivedItem(itemName))
+            {
+                return;
+            }
+            if (itemSeason != null)
+            {
+                if (!itemSeason.Contains(Game1.currentSeason))
                 {
-                    return val2;
-                }
-                else
-                {
-                    return val1;
+                    return;
                 }
             }
-            while (r != 0)
+            AddToJunimoStock(stock, _stardewItemManager.GetItemByName(itemName), color, null);
+        }
+
+
+        // Lets just say they no currency good cuz Junimo
+        public static int[] ExchangeRate(int soldItem, int wantedItem)
+        {
+            if (soldItem > wantedItem && soldItem % wantedItem == 0)
+                return new int[2]{1, soldItem / wantedItem};
+            if (soldItem <= wantedItem &&  wantedItem % soldItem == 0)
+                return new int[2]{wantedItem / soldItem, 1};
+            var gcd = Gcd(soldItem, wantedItem);
+            var lcm = soldItem * wantedItem / gcd;
+            var requestCount = lcm/soldItem;
+            var offerCount = lcm/wantedItem;
+
+            var applesHearts = 0;
+            if (Game1.player.friendshipData.ContainsKey("Apples"))
+                applesHearts = Game1.player.friendshipData["Apples"].Points / 250; // Get discount from being friends with Apples
+            if (offerCount == 1)
+                requestCount = (int)( requestCount * (1 + applesHearts * 0.05f));
+            else
+                offerCount = (int) Math.Max(1, offerCount * (1 - applesHearts * 0.05f));
+
+            var lowestTrade = 5; // This is for us to change if we want to move this value around easily in testing
+            if (Math.Min(requestCount, offerCount) > lowestTrade)
             {
-                a = b;
-                b = r;
-                if (a % b == 0)
-                    break;
-                r = a % b;
+                var closestTen = (int) Math.Pow(lowestTrade, (int) ( Math.Log10(Math.Min(requestCount, offerCount)) / Math.Log10(lowestTrade) ) );
+                requestCount /= closestTen;
+                offerCount /= closestTen;
+                requestCount /= Gcd(requestCount, offerCount); // Due to the rounding we may find the two aren't relatively prime anymore
+                offerCount /= Gcd(requestCount, offerCount);
             }
-            return r;
+            
+            return new int[2]{requestCount, offerCount};
         }
 
         private void AddSeedsToYellowStock(Dictionary<ISalable, int[]> stock)
@@ -411,6 +503,33 @@ namespace StardewArchipelago.GameModifications.Modded
             var vileAncientFruitSeeds = cropList.FirstOrDefault(x => x.Value.Contains(vileAncientIdentifier)).Key;
             AddToJunimoStock(stock, voidMintSeeds, "Yellow", true);
             AddToJunimoStock(stock, vileAncientFruitSeeds, "Yellow", true);
+        }
+
+        private static int Gcd(int val1, int val2) //Seemingly no basic method outside of BigInteger?
+        {
+            var a = Math.Max(val1, val2);
+            var b = Math.Min(val1, val2);
+            var r = a % b;
+            if ( r == 0)
+            {
+                if (val1 > val2)
+                {
+                    return val2;
+                }
+                else
+                {
+                    return val1;
+                }
+            }
+            while (r != 0)
+            {
+                a = b;
+                b = r;
+                if (a % b == 0)
+                    break;
+                r = a % b;
+            }
+            return r;
         }
     }
 }

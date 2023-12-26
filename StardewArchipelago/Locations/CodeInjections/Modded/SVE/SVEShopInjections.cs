@@ -188,7 +188,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
             {
             var random = new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame / 2 + item.Key.salePrice());
             var itemToTrade = _junimoShopGenerator.BerryItems.ElementAt(random.Next(_junimoShopGenerator.BerryItems.Count));
-            if (item.Key.DisplayName.Contains("Baked Berry Oatmeal") || item.Key.DisplayName.Contains("Flower Cookie")) // Since these are AP locations, for logic's sake only use seasonal berries
+            if ((item.Key.DisplayName.Contains("Baked Berry Oatmeal") || item.Key.DisplayName.Contains("Flower Cookie")) && _archipelago.SlotData.Chefsanity == Chefsanity.Purchases) // Since these are AP locations, for logic's sake only use seasonal berries
             {
                 var isOatmeal = item.Key.DisplayName.Contains("Baked Berry Oatmeal");
                 var berry = seasonalBerry[Game1.currentSeason];
