@@ -176,12 +176,12 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Modded
                     Game1.drawDialogue(DaJunimo);
                     return false;
                 }
-                Game1.player.removeItemsFromInventory(checkOffer.OfferedItem.Id, checkOffer.Amount);
                 if (answer == "Money")
                 {
                     DaJunimo.setNewDialogue($"Oh very nice, have yellow rocks I found!  You like?");
                     Game1.drawDialogue(DaJunimo);
                     Game1.player.Money += 50000;
+                    Game1.player.removeItemsFromInventory(checkOffer.OfferedItem.Id, checkOffer.Amount);
                     return false;
                 }
                 if (answer == "Dewdrop")
@@ -193,13 +193,20 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Modded
                     Game1.player.addItemByMenuIfNecessaryElseHoldUp(dewdropBerry);
                     DaJunimo.setNewDialogue($"Awh okay I was gonna sleep with it, but here you go!");
                     Game1.drawDialogue(DaJunimo);
+                    Game1.player.removeItemsFromInventory(checkOffer.OfferedItem.Id, checkOffer.Amount);
                     return false;
                 }
                 if (answer == "Friendship")
                 {
                     DaJunimo.setNewDialogue($"I will tonight!  Yay!");
                     Game1.drawDialogue(DaJunimo);
+                    if (Game1.player.hasOrWillReceiveMail("purpleJunimoKiss"))
+                    {
+                        DaJunimo.setNewDialogue($"You want me to kiss them TWICE?!  Wowie, but sorry!");
+                        return false;
+                    }
                     Game1.player.mailReceived.Add("purpleJunimoKiss");
+                    Game1.player.removeItemsFromInventory(checkOffer.OfferedItem.Id, checkOffer.Amount);
                     return false;
                 }
 
