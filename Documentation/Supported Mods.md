@@ -20,7 +20,7 @@ General:
 - [Bigger Backpack](https://www.nexusmods.com/stardewvalley/mods/1845), by spacechase0, Version 6.0.0
 - [Tractor Mod](https://www.nexusmods.com/stardewvalley/mods/1401), by Pathoschild, Version 4.16.5
 - [Distant Lands - Witch Swamp Overhaul](https://www.nexusmods.com/stardewvalley/mods/18109), by Aimon111, Version 1.0.7
-- [Custom Boarding House and Bus Stop Extension](https://www.nexusmods.com/stardewvalley/mods/4120), by TrentXV, Version 4.0.15
+- [Boarding House and Bus Stop Extension](https://www.nexusmods.com/stardewvalley/mods/4120), by TrentXV, Version 4.0.15
 
 Skills:
 - [Magic](https://www.nexusmods.com/stardewvalley/mods/2007), by spacechase0, Version 0.8.2
