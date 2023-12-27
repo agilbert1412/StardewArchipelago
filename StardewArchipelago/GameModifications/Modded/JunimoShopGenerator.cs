@@ -117,7 +117,7 @@ namespace StardewArchipelago.GameModifications.Modded
                 var type = objectInformation[item.Id].Split("/")[3];
                 if (item.SellPrice <= 1)
                     continue;
-                if ((item.Name.Contains("Berry") || item.Name.Contains("berry")) && !item.Name.Contains("Joja") && itemContext.Contains("seeds"))
+                if ((item.Name.Contains("Berry") || item.Name.Contains("berry")) && !item.Name.Contains("Joja") && !itemContext.Contains("cooking") && !itemContext.Contains("Seeds"))
                 {
                     BerryItems[item] = item.SellPrice;
                 }

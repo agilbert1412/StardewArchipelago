@@ -22,7 +22,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Modded
         private static JunimoShopGenerator _junimoShopGenerator;
         private static readonly string Question = "Me love purple thing-a-ma-bobs!  Could give VERY special gift!  You want?";
         private static readonly string Money = "Weird yellow rocks for {0} {1}.";
-        private static readonly string Dewdrop = "Blue tasty under pretty tree for {0} {1}.";
+        private static readonly string Dewdrop = "Blue tasties under pretty tree for {0} {1}.";
         private static readonly string Friendship = "Kiss many people on forehead for {0} {1}.";
         private static readonly Response Nothing = new("No", "Nothing for now!");
         private static Dictionary<string, PurpleJunimo> PurpleJunimoOptions {get; set;}
@@ -120,7 +120,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Modded
             var friendsMet = Game1.player.friendshipData.Count();
             var fakeStock = new Dictionary<string, int>(){
                 {"Money", 10000},
-                {"Dewdrop", 500},
+                {"Dewdrop", 2500},
                 {"Friendship", 200 * friendsMet}
             };
             PurpleJunimoOptions = new Dictionary<string, PurpleJunimo>();
@@ -188,7 +188,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Modded
                 {
                     var itemList = Game1.objectInformation;
                     var dewdropBerryId = itemList.First(x => x.Value.Split("/")[0] == "Dewdrop Berry");
-                    var dewdropBerry = new StardewValley.Object(dewdropBerryId.Key, 1);
+                    var dewdropBerry = new StardewValley.Object(dewdropBerryId.Key, 5);
                     Game1.player.holdUpItemThenMessage(dewdropBerry);
                     Game1.player.addItemByMenuIfNecessaryElseHoldUp(dewdropBerry);
                     DaJunimo.setNewDialogue($"Awh okay I was gonna sleep with it, but here you go!");
@@ -198,13 +198,15 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Modded
                 }
                 if (answer == "Friendship")
                 {
-                    DaJunimo.setNewDialogue($"I will tonight!  Yay!");
-                    Game1.drawDialogue(DaJunimo);
+                    
                     if (Game1.player.mailReceived.Contains("purpleJunimoKiss"))
                     {
                         DaJunimo.setNewDialogue($"You want me to kiss them TWICE?!  Wowie, but sorry!");
+                        Game1.drawDialogue(DaJunimo);
                         return false;
                     }
+                    DaJunimo.setNewDialogue($"I will tonight!  Yay!");
+                    Game1.drawDialogue(DaJunimo);
                     Game1.player.mailReceived.Add("purpleJunimoKiss");
                     Game1.player.removeItemsFromInventory(checkOffer.OfferedItem.Id, checkOffer.Amount);
                     return false;
