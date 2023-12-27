@@ -15,15 +15,22 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
 
         private List<ArchipelagoFriend> _friends;
         private Dictionary<string, ArchipelagoFriend> _friendsByName;
+        private int _lastRefreshDay;
 
         public Friends()
         {
-            InitializeFriends();
+            _lastRefreshDay = -1;
+            RefreshFriends();
             _friendsByName = new Dictionary<string, ArchipelagoFriend>();
         }
 
-        private void InitializeFriends()
+        private void RefreshFriends()
         {
+            if (Game1.stats.DaysPlayed == _lastRefreshDay)
+            {
+                return;
+            }
+
             _friends = new List<ArchipelagoFriend>();
             var npcs = Game1.content.Load<Dictionary<string, string>>("Data\\NPCDispositions");
             foreach (var (name, npcInfo) in npcs)
@@ -38,6 +45,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
                 var friend = new ArchipelagoFriend(name, apName, datable, false, spawnsOnIsland, name.Contains("Dwarf"), false);
                 _friends.Add(friend);
             }
+
+            _lastRefreshDay = (int)Game1.stats.DaysPlayed;
         }
 
         private bool IsIslandLocation(string spawnLocation)
@@ -60,6 +69,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
 
             if (!_friendsByName.ContainsKey(name))
             {
+                RefreshFriends();
                 var friend = _friends.FirstOrDefault(x => x.StardewName == name || x.ArchipelagoName == name);
                 if (friend == null)
                 {
