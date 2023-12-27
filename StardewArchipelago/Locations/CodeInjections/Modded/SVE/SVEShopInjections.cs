@@ -32,16 +32,22 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
 
         private static readonly Dictionary<ShopIdentification, PricedItem[]> chefsanityRecipes = new()
         {
-            { new ShopIdentification("Saloon"), new[] { new PricedItem("Big Bark Burger", 5500), new PricedItem("Glazed Butterfish", 4000), new PricedItem("Mixed Berry Pie", 3500) } },
+            {
+                new ShopIdentification("Saloon"),
+                new[] { new PricedItem("Big Bark Burger", 5500), new PricedItem("Glazed Butterfish", 4000), new PricedItem("Mixed Berry Pie", 3500) }
+            },
             { new ShopIdentification("Custom_ForestWest"), new[] { new PricedItem("Baked Berry Oatmeal", 12500), new PricedItem("Flower Cookie", 8750) } },
             { new ShopIdentification("AdventureGuild"), new[] { new PricedItem("Frog Legs", 2000), new PricedItem("Mushroom Berry Rice", 1500) } },
             { new ShopIdentification("FishShop"), new[] { new PricedItem("Seaweed Salad", 1250) } },
             { new ShopIdentification("Sewer"), new[] { new PricedItem("Void Delight", 5000), new PricedItem("Void Salmon Sushi", 5000) } },
-            { new ShopIdentification("ResortBar"), new[] { new PricedItem("Big Bark Burger", 5500), new PricedItem("Glazed Butterfish", 4000), new PricedItem("Mixed Berry Pie", 3500) } },
+            {
+                new ShopIdentification("ResortBar"),
+                new[] { new PricedItem("Big Bark Burger", 5500), new PricedItem("Glazed Butterfish", 4000), new PricedItem("Mixed Berry Pie", 3500) }
+            },
         };
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, 
-        LocationChecker locationChecker, ShopReplacer shopReplacer, ShopStockGenerator shopStockGenerator)
+        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago,
+            LocationChecker locationChecker, ShopReplacer shopReplacer, ShopStockGenerator shopStockGenerator)
         {
             _monitor = monitor;
             _modHelper = modHelper;
@@ -66,16 +72,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
 
                 _lastShopMenuUpdated = __instance;
 
-                if (__instance.storeContext == "FarmHouse")
-                {
-                    foreach ( var (salable, array) in __instance.itemPriceAndStock)
-                    {
-                        if (salable.Name.Contains("Frog Leg"))
-                        {
-                            __instance.itemPriceAndStock.Remove(salable);
-                        }
-                    }
-                }
+                RemoveSaloonRecipesFromPhone(__instance);
+
                 var myActiveHints = _archipelago.GetMyActiveHints();
                 foreach (var salableItem in __instance.itemPriceAndStock.Keys.ToArray())
                 {
@@ -92,6 +90,22 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
             {
                 _monitor.Log($"Failed in {nameof(Update_ReplaceSVEShopChecks_Postfix)}:\n{ex}", LogLevel.Error);
                 return; // run original logic
+            }
+        }
+
+        private static void RemoveSaloonRecipesFromPhone(ShopMenu shopMenu)
+        {
+            if (shopMenu.storeContext == "Saloon")
+            {
+                return;
+            }
+
+            foreach (var salable in shopMenu.itemPriceAndStock.Keys.ToArray())
+            {
+                if (salable.Name.Contains("Frog Leg"))
+                {
+                    shopMenu.itemPriceAndStock.Remove(salable);
+                }
             }
         }
 
@@ -115,6 +129,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
                 {
                     continue;
                 }
+
                 foreach (var recipe in recipes)
                 {
                     _shopReplacer.PlaceShopRecipeCheck(shopMenu.itemPriceAndStock, $"{recipe.ItemName} Recipe", recipe.ItemName, myActiveHints, recipe.Price);
@@ -146,7 +161,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
 
         // Done as JojaMart was changed to be two different shop tenders (Claire and Martin); just force every shop in Joja to be the same.
         // public ShopMenu(Dictionary<ISalable, int[]> itemPriceAndStock, int currency = 0, string who = null, Func<ISalable, Farmer, int, bool> on_purchase = null, Func<ISalable, bool> on_sell = null, string context = null)
-        public static bool Constructor_MakeBothJojaShopsTheSame_Prefix(ShopMenu __instance, ref Dictionary<ISalable, int[]> itemPriceAndStock, int currency, string who, Func<ISalable, Farmer, int, bool> on_purchase, Func<ISalable, bool> on_sell, string context)
+        public static bool Constructor_MakeBothJojaShopsTheSame_Prefix(ShopMenu __instance, ref Dictionary<ISalable, int[]> itemPriceAndStock, int currency, string who,
+            Func<ISalable, Farmer, int, bool> on_purchase, Func<ISalable, bool> on_sell, string context)
         {
             try
             {

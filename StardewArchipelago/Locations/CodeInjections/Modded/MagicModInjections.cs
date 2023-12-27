@@ -55,7 +55,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         private static readonly Dictionary<ShopIdentification, PricedItem[]> craftsanityRecipes = new()
         {
             { new ShopIdentification("AdventureGuild", "Marlon"), new[] { new PricedItem("Magic Elixir", 3000), new PricedItem("Travel Charm", 250) } },
-                    };
+        };
 
 
         public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker, ShopReplacer shopReplacer)
@@ -127,6 +127,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 {
                     continue;
                 }
+
                 foreach (var recipe in recipes)
                 {
                     _shopReplacer.PlaceShopRecipeCheck(shopMenu.itemPriceAndStock, $"{recipe.ItemName} Recipe", recipe.ItemName, myActiveHints, recipe.Price);
@@ -144,16 +145,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 {
                     return;
                 }
-                if (__instance.storeContext == "FarmHouse")
-                {
-                    foreach ( var (salable, array) in __instance.itemPriceAndStock)
-                    {
-                        if (salable.Name.Contains("Magic Elixir") || salable.Name.Contains("Travel Core"))
-                        {
-                            __instance.itemPriceAndStock.Remove(salable);
-                        }
-                    }
-                }
+
+                RemoveGuildRecipesFromPhone(__instance);
+
                 _lastShopMenuUpdated = __instance;
                 var myActiveHints = _archipelago.GetMyActiveHints();
                 ReplaceCraftsanityRecipes(__instance, myActiveHints);
@@ -167,6 +161,23 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 return; // run original logic
             }
         }
+
+        private static void RemoveGuildRecipesFromPhone(ShopMenu shopMenu)
+        {
+            if (shopMenu.storeContext == "AdventureGuild")
+            {
+                return;
+            }
+
+            foreach (var salable in shopMenu.itemPriceAndStock.Keys.ToArray())
+            {
+                if (salable.Name.Contains("Magic Elixir") || salable.Name.Contains("Travel Core"))
+                {
+                    shopMenu.itemPriceAndStock.Remove(salable);
+                }
+            }
+        }
+
         private static void CheckItemAnalyzeLocations(Farmer player, List<string> spellsLearned)
         {
             if (player.CurrentTool != null)
