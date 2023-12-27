@@ -591,6 +591,7 @@ namespace StardewArchipelago.Items.Traps
             if (timeToSkip > 120)
             {
                 MultiSleep.DaysToSkip = (timeToSkip / 120) - 1;
+                Game1.timeOfDay = 2800;
                 Game1.player.startToPassOut();
                 return;
             }
