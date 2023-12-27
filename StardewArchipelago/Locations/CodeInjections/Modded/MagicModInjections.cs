@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Archipelago.MultiClient.Net.Models;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI;
@@ -50,6 +51,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         private static LocationChecker _locationChecker;
         private static ShopReplacer _shopReplacer;
         private static ShopMenu _lastShopMenuUpdated = null;
+
+        private static readonly Dictionary<ShopIdentification, PricedItem[]> craftsanityRecipes = new()
+        {
+            { new ShopIdentification("AdventureGuild", "Marlon"), new[] { new PricedItem("Magic Elixir", 3000), new PricedItem("Travel Charm", 250) } },
+                    };
 
 
         public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker, ShopReplacer shopReplacer)
@@ -107,36 +113,60 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
 
         }
 
-        public static void Update_ReplaceMarlonRecipes_Postfix(ShopMenu __instance, GameTime time)
+
+        private static void ReplaceCraftsanityRecipes(ShopMenu shopMenu, Hint[] myActiveHints)
+        {
+            if (!_archipelago.SlotData.Craftsanity.HasFlag(Craftsanity.All))
+            {
+                return;
+            }
+
+            foreach (var (shopIdentification, recipes) in craftsanityRecipes)
+            {
+                if (!shopIdentification.IsCorrectShop(shopMenu))
+                {
+                    continue;
+                }
+                foreach (var recipe in recipes)
+                {
+                    _shopReplacer.PlaceShopRecipeCheck(shopMenu.itemPriceAndStock, $"{recipe.ItemName} Recipe", recipe.ItemName, myActiveHints, recipe.Price);
+                }
+            }
+        }
+
+        // public override void update(GameTime time)
+        public static void Update_ReplaceMarlonShopChecks_Postfix(ShopMenu __instance, GameTime time)
         {
             try
             {
                 // We only run this once for each menu
-                if (_lastShopMenuUpdated == __instance || __instance.storeContext != "AdventureGuild")
+                if (_lastShopMenuUpdated == __instance)
                 {
                     return;
                 }
-
+                if (__instance.storeContext == "FarmHouse")
+                {
+                    foreach ( var (salable, array) in __instance.itemPriceAndStock)
+                    {
+                        if (salable.Name.Contains("Magic Elixir") || salable.Name.Contains("Travel Core"))
+                        {
+                            __instance.itemPriceAndStock.Remove(salable);
+                        }
+                    }
+                }
                 _lastShopMenuUpdated = __instance;
-                if (!_archipelago.SlotData.Craftsanity.HasFlag(Craftsanity.All))
-                {
-                    return;
-                }
-
                 var myActiveHints = _archipelago.GetMyActiveHints();
-                _shopReplacer.PlaceShopRecipeCheck(__instance.itemPriceAndStock, MARLON_RECIPE_2, "Magic Elixir", myActiveHints, new[] { 3000, 1 });
-                _shopReplacer.PlaceShopRecipeCheck(__instance.itemPriceAndStock, MARLON_RECIPE_1, "Travel Core", myActiveHints, new []{250, 1});
+                ReplaceCraftsanityRecipes(__instance, myActiveHints);
 
                 __instance.forSale = __instance.itemPriceAndStock.Keys.ToList();
                 return; //  run original logic
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(Update_ReplaceMarlonRecipes_Postfix)}:\n{ex}", LogLevel.Error);
+                _monitor.Log($"Failed in {nameof(Update_ReplaceMarlonShopChecks_Postfix)}:\n{ex}", LogLevel.Error);
                 return; // run original logic
             }
         }
-
         private static void CheckItemAnalyzeLocations(Farmer player, List<string> spellsLearned)
         {
             if (player.CurrentTool != null)

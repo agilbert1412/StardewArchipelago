@@ -37,9 +37,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
             { new ShopIdentification("AdventureGuild"), new[] { new PricedItem("Frog Legs", 2000), new PricedItem("Mushroom Berry Rice", 1500) } },
             { new ShopIdentification("FishShop"), new[] { new PricedItem("Seaweed Salad", 1250) } },
             { new ShopIdentification("Sewer"), new[] { new PricedItem("Void Delight", 5000), new PricedItem("Void Salmon Sushi", 5000) } },
+            { new ShopIdentification("ResortBar"), new[] { new PricedItem("Big Bark Burger", 5500), new PricedItem("Glazed Butterfish", 4000), new PricedItem("Mixed Berry Pie", 3500) } },
         };
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker, ShopReplacer shopReplacer, ShopStockGenerator shopStockGenerator)
+        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, 
+        LocationChecker locationChecker, ShopReplacer shopReplacer, ShopStockGenerator shopStockGenerator)
         {
             _monitor = monitor;
             _modHelper = modHelper;
@@ -63,6 +65,17 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
                 }
 
                 _lastShopMenuUpdated = __instance;
+
+                if (__instance.storeContext == "FarmHouse")
+                {
+                    foreach ( var (salable, array) in __instance.itemPriceAndStock)
+                    {
+                        if (salable.Name.Contains("Frog Leg"))
+                        {
+                            __instance.itemPriceAndStock.Remove(salable);
+                        }
+                    }
+                }
                 var myActiveHints = _archipelago.GetMyActiveHints();
                 foreach (var salableItem in __instance.itemPriceAndStock.Keys.ToArray())
                 {
@@ -151,7 +164,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
                 _monitor.Log($"Failed in {nameof(Constructor_MakeBothJojaShopsTheSame_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic   
             }
-
         }
     }
 }
