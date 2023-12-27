@@ -103,13 +103,13 @@ namespace StardewArchipelago.Archipelago.Gifting
             var totalTax = 0;
             foreach (var (player, gifts) in targets)
             {
-                _monitor.Log($"Attempting to send {gifts.Count} gifts to {player}", LogLevel.Info);
+                _monitor.Log($"Attempting to send {gifts.Count} gifts to {player}", LogLevel.Trace);
                 foreach (var giftObject in gifts)
                 {
                     TrySendShuffleGift(giftObject, player, objectsFailedToSend, out var tax);
                     totalTax += tax;
                 }
-                _monitor.Log($"Finished sending {gifts.Count} gifts to {player}", LogLevel.Info);
+                _monitor.Log($"Finished sending {gifts.Count} gifts to {player}", LogLevel.Trace);
             }
 
             Game1.player.Money = Math.Max(0, Game1.player.Money - totalTax);
