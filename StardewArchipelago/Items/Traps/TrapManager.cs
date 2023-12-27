@@ -60,6 +60,7 @@ namespace StardewArchipelago.Items.Traps
         private readonly TileChooser _tileChooser;
         private readonly MonsterSpawner _monsterSpawner;
         private readonly BabyBirther _babyBirther;
+        private readonly DebrisSpawner _debrisSpawner;
         private readonly InventoryShuffler _inventoryShuffler;
         private Dictionary<string, Action> _traps;
 
@@ -72,6 +73,7 @@ namespace StardewArchipelago.Items.Traps
             _tileChooser = tileChooser;
             _monsterSpawner = new MonsterSpawner(_tileChooser);
             _babyBirther = babyBirther;
+            _debrisSpawner = new DebrisSpawner(monitor, archipelago, _difficultyBalancer);
             _inventoryShuffler = new InventoryShuffler(monitor, giftSender);
             _traps = new Dictionary<string, Action>();
             RegisterTraps();
@@ -131,7 +133,7 @@ namespace StardewArchipelago.Items.Traps
             _traps.Add(CROWS, SendCrows);
             _traps.Add(MONSTERS, SpawnMonsters);
             // _traps.Add(ENTRANCE_RESHUFFLE, );
-            _traps.Add(DEBRIS, CreateDebris);
+            _traps.Add(DEBRIS, _debrisSpawner.CreateDebris);
             _traps.Add(SHUFFLE, ShuffleInventory);
             // _traps.Add(WINTER, );
             _traps.Add(PARIAH, SendDislikedGiftToEveryone);
@@ -454,36 +456,6 @@ namespace StardewArchipelago.Items.Traps
             for (var i = 0; i < numberMonsters; i++)
             {
                 _monsterSpawner.SpawnOneMonster(Game1.player.currentLocation);
-            }
-        }
-
-        private void CreateDebris()
-        {
-            var farm = Game1.getFarm();
-            var hasGoldenClock = farm.isBuildingConstructed("Gold Clock");
-            var currentLocation = Game1.player.currentLocation;
-            var locations = new List<GameLocation>();
-            if (!hasGoldenClock)
-            {
-                locations.Add(farm);
-            }
-            if (currentLocation != farm)
-            {
-                locations.Add(currentLocation);
-            }
-
-            if (!locations.Any())
-            {
-                locations.Add(Game1.getLocationFromName("Town"));
-                locations.Add(Game1.getLocationFromName("BusStop"));
-                locations.Add(Game1.getLocationFromName("Mountain"));
-            }
-
-            var amountOfDebris = _difficultyBalancer.AmountOfDebris[_archipelago.SlotData.TrapItemsDifficulty];
-            var amountOfDebrisPerLocation = amountOfDebris / locations.Count;
-            foreach (var gameLocation in locations)
-            {
-                gameLocation.spawnWeedsAndStones(amountOfDebrisPerLocation);
             }
         }
 

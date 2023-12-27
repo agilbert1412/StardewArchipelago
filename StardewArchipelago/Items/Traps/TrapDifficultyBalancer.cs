@@ -94,11 +94,11 @@ namespace StardewArchipelago.Items.Traps
         public Dictionary<TrapItemsDifficulty, int> AmountOfDebris = new()
         {
             {TrapItemsDifficulty.NoTraps, 0},
-            {TrapItemsDifficulty.Easy, 25},
+            {TrapItemsDifficulty.Easy, 20},
             {TrapItemsDifficulty.Medium, 50},
-            {TrapItemsDifficulty.Hard, 100},
-            {TrapItemsDifficulty.Hell, 200},
-            {TrapItemsDifficulty.Nightmare, 400},
+            {TrapItemsDifficulty.Hard, 200},
+            {TrapItemsDifficulty.Hell, 400},
+            {TrapItemsDifficulty.Nightmare, 800},
         };
 
         public Dictionary<TrapItemsDifficulty, ShuffleInventoryTarget> ShuffleInventoryTargets = new()
