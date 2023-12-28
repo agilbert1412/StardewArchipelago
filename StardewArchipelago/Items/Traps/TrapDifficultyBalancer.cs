@@ -51,10 +51,10 @@ namespace StardewArchipelago.Items.Traps
         public Dictionary<TrapItemsDifficulty, double> CrowAttackRate = new()
         {
             {TrapItemsDifficulty.NoTraps, 0},
-            {TrapItemsDifficulty.Easy, 0.1},
-            {TrapItemsDifficulty.Medium, 0.25},
-            {TrapItemsDifficulty.Hard, 0.5},
-            {TrapItemsDifficulty.Hell, 0.75},
+            {TrapItemsDifficulty.Easy, 0.05},
+            {TrapItemsDifficulty.Medium, 0.1},
+            {TrapItemsDifficulty.Hard, 0.25},
+            {TrapItemsDifficulty.Hell, 0.60},
             {TrapItemsDifficulty.Nightmare, 1},
         };
 
