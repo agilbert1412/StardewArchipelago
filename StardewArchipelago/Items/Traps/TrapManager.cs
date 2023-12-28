@@ -374,8 +374,8 @@ namespace StardewArchipelago.Items.Traps
                 return;
             }
 
-            var islandSouth = Game1.getLocationFromName("IslandSouth");
-            SendCrowsForLocation(islandSouth, crowRate);
+            var islandWest = Game1.getLocationFromName("IslandWest");
+            SendCrowsForLocation(islandWest, crowRate);
 
             if (crowTargets == CrowTargets.Island)
             {
