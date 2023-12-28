@@ -53,7 +53,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
             _archipelago = archipelago;
             _locationChecker = locationChecker;
             _friends = friends;
-            _grabber = new VillagerGrabber(itemManager);
+            _grabber = new VillagerGrabber(archipelago, itemManager);
             _apLogos = new Dictionary<string, Dictionary<int, Texture2D>>();
 
             foreach (var logoName in ArchipelagoTextures.ValidLogos)
