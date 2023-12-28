@@ -26,6 +26,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
         private const string ISAAC_SWORD = "Tempered Galaxy Sword";
         private const string ISAAC_HAMMER = "Tempered Galaxy Hammer";
         private const string BEAR_KNOWLEDGE = "Bear's Knowledge";
+        private const int OATMEAL_PRICE = 12500;
+        private const int COOKIE_PRICE = 8750;
 
         private static readonly Dictionary<ShopIdentification, PricedItem[]> craftsanityRecipes = new()
         {
@@ -57,7 +59,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
         };
 
         public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, 
-        LocationChecker locationChecker, ShopReplacer shopReplacer, ShopStockGenerator shopStockGenerator, JunimoShopGenerator junimoShopGenerator)
+                                      LocationChecker locationChecker, ShopReplacer shopReplacer, ShopStockGenerator shopStockGenerator, JunimoShopGenerator junimoShopGenerator)
         {
             _monitor = monitor;
             _modHelper = modHelper;
@@ -177,25 +179,27 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
         {
             var stock = shopMenu.itemPriceAndStock;
             var hasKnowledge = _archipelago.HasReceivedItem(BEAR_KNOWLEDGE);
+            var berryItems = _junimoShopGenerator.BerryItems.Keys.ToList();
             foreach (var item in stock)
             {
                 var random = new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame / 2 + item.Key.salePrice());
-                var itemToTrade = _junimoShopGenerator.BerryItems.ElementAt(random.Next(_junimoShopGenerator.BerryItems.Count));
-                if ((item.Key.DisplayName.Contains("Baked Berry Oatmeal") || item.Key.DisplayName.Contains("Flower Cookie")) && _archipelago.SlotData.Chefsanity == Chefsanity.Purchases) // Since these are AP locations, for logic's sake only use seasonal berries
+                var randomBerryItem = berryItems[random.Next(berryItems.Count)];
+                var randomBerryValue = _junimoShopGenerator.BerryItems[randomBerryItem];
+                if ((item.Key.Name.Contains("Baked Berry Oatmeal") || item.Key.Name.Contains("Flower Cookie")) && _archipelago.SlotData.Chefsanity == Chefsanity.Purchases) // Since these are AP locations, for logic's sake only use seasonal berries
                 {
-                    var isOatmeal = item.Key.DisplayName.Contains("Baked Berry Oatmeal");
-                    var berry = seasonalBerry[Game1.currentSeason];
-                    var berryRate = JunimoShopGenerator.ExchangeRate(isOatmeal ? 12500 : 8750, berry.salePrice() * (hasKnowledge ? 3 : 1));
+                    var isOatmeal = item.Key.Name.Contains("Baked Berry Oatmeal");
+                    var logicalBerry = seasonalBerry[Game1.currentSeason];
+                    var logicalBerryRate = _junimoShopGenerator.ExchangeRate(isOatmeal ? OATMEAL_PRICE : COOKIE_PRICE, logicalBerry.salePrice() * (hasKnowledge ? 3 : 1));
                     stock[item.Key] = new int[4]
                     {
                     0,
                     int.MaxValue,
                     seasonalBerry[Game1.currentSeason].ParentSheetIndex,
-                    (int) Math.Pow(berryRate[1] / berryRate[0], 0.75)
+                    _junimoShopGenerator.ValueOfOneItemWithWeight(logicalBerryRate, 0.75)
                     };
                     continue;
                 }
-                var itemToTradeTotal = JunimoShopGenerator.ExchangeRate(item.Key.salePrice(), itemToTrade.Value * (hasKnowledge ? 3 : 1));
+                var itemToTradeTotal = _junimoShopGenerator.ExchangeRate(item.Key.salePrice(), randomBerryValue * (hasKnowledge ? 3 : 1));
 
                 item.Key.Stack = itemToTradeTotal[0];
 
@@ -203,7 +207,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
                 {
                 0,
                 int.MaxValue,
-                itemToTrade.Key.Id,
+                randomBerryItem.Id,
                 itemToTradeTotal[1],
                 };
             }

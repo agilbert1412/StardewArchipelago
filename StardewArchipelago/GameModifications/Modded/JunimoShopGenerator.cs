@@ -271,10 +271,11 @@ namespace StardewArchipelago.GameModifications.Modded
         private Dictionary<ISalable, int[]> GenerateOrangeJunimoStock(Dictionary<ISalable, int[]> stock, Dictionary<ISalable, int[]> oldStock)
         {
             var random = new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame / 2 + Game1.currentGameTime.ElapsedGameTime.Seconds);
+            var totalDecor = oldStock.Keys.ToList();
             var dailyDecor = new List<ISalable>();
             for (var i = 0; i < 2; i++) // Allow these to still exist; just not all of them all the time
             {
-                dailyDecor.Add(oldStock.ElementAt(random.Next(oldStock.Count)).Key);
+                dailyDecor.Add(totalDecor[random.Next(oldStock.Count)]);
             }
             foreach (var item in dailyDecor) 
             {
@@ -301,24 +302,27 @@ namespace StardewArchipelago.GameModifications.Modded
             var itemName = stardewItem.Name;
             var item = new StardewValley.Object(Vector2.Zero, stardewItem.Id, 1);
             if (category == "BigCraftable")
-                item = new StardewValley.Object(Vector2.Zero, stardewItem.Id);
-
+                {
+                    item = new StardewValley.Object(Vector2.Zero, stardewItem.Id);
+                }
             var random = new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame / 2 + stardewItem.Id);
             if (random.NextDouble() < failRate)
             {
                 return;
             }
-            var itemToTrade = JunimoVendors[color].ColorItems.ElementAt(random.Next(JunimoVendors[color].ColorItems.Count));
-            var itemToTradeTotal = ExchangeRate(Math.Max(uniquePrice, item.salePrice()), itemToTrade.Value);
+            var colorItems = JunimoVendors[color].ColorItems.Keys.ToList();
+            var randomColorItem = colorItems[random.Next(colorItems.Count)];
+            var randomColorValue = JunimoVendors[color].ColorItems[randomColorItem];
+            var colorItemExchangeRate = ExchangeRate(Math.Max(uniquePrice, item.salePrice()), randomColorValue);
 
-            item.Stack = itemToTradeTotal[0];
+            item.Stack = colorItemExchangeRate[0];
 
             stock.Add(item, new int[4]
             {
                 0,
                 int.MaxValue,
-                itemToTrade.Key,
-                itemToTradeTotal[1],
+                randomColorItem,
+                colorItemExchangeRate[1],
             });
         }
 
@@ -335,56 +339,90 @@ namespace StardewArchipelago.GameModifications.Modded
             Dictionary<ISalable, int[]> stock,
             int itemId,
             string color,
-            bool seed,
+            bool isSeed,
             string[] itemSeason = null)
         {
-            var itemName = _stardewItemManager.GetObjectById(itemId).Name;
-            if (seed == true && _archipelago.SlotData.Cropsanity == Cropsanity.Shuffled && !_archipelago.HasReceivedItem(itemName))
+            var item = _stardewItemManager.GetObjectById(itemId);
+            if (isSeed == true && _archipelago.SlotData.Cropsanity == Cropsanity.Shuffled && !_archipelago.HasReceivedItem(item.Name))
             {
                 return;
             }
-            if (itemSeason != null)
+            if (itemSeason != null && !itemSeason.Contains(Game1.currentSeason))
             {
-                if (!itemSeason.Contains(Game1.currentSeason))
-                {
-                    return;
-                }
+                return;
             }
-            AddToJunimoStock(stock, _stardewItemManager.GetItemByName(itemName), color, null);
+            AddToJunimoStock(stock, item, color, null);
         }
 
-
-        // Lets just say they no currency good cuz Junimo
-        public static int[] ExchangeRate(int soldItem, int wantedItem)
+        public int[] ExchangeRate(int soldItemValue, int requestedItemValue)
         {
-            if (soldItem > wantedItem && soldItem % wantedItem == 0)
-                return new int[2]{1, soldItem / wantedItem};
-            if (soldItem <= wantedItem &&  wantedItem % soldItem == 0)
-                return new int[2]{wantedItem / soldItem, 1};
-            var gcd = GreatestCommonDivisor(soldItem, wantedItem);
-            var lcm = soldItem * wantedItem / gcd;
-            var requestCount = lcm/soldItem;
-            var offerCount = lcm/wantedItem;
+            if (IsOnePriceAMultipleOfOther(soldItemValue, requestedItemValue, out var exchangeRate))
+                {
+                    return exchangeRate;
+                }
+            var greatestCommonDivisor = GreatestCommonDivisor(soldItemValue, requestedItemValue);
+            var leastCommonMultiple = soldItemValue * requestedItemValue / greatestCommonDivisor;
+            var soldItemCount = leastCommonMultiple/soldItemValue;
+            var requestedItemCount = leastCommonMultiple/requestedItemValue;
 
+            var applesDiscount = GiveApplesFriendshipDiscount(soldItemCount, requestedItemCount);
+            soldItemCount = applesDiscount[0];
+            requestedItemCount = applesDiscount[1];
+
+            var lowestCount = 5; // This is for us to change if we want to move this value around easily in testing
+            var finalCounts = MakeMinimalCountBelowGivenCount(soldItemCount, requestedItemCount, lowestCount);
+            
+            return finalCounts;
+        }
+
+        private bool IsOnePriceAMultipleOfOther(int soldItemValue, int requestedItemValue, out int[] exchangeRate)
+        {
+            exchangeRate = null;
+            if (soldItemValue > requestedItemValue && soldItemValue % requestedItemValue == 0)    
+                {
+                    exchangeRate = new int[2]{1, soldItemValue / requestedItemValue};
+                    return true;
+                }
+            if (soldItemValue <= requestedItemValue &&  requestedItemValue % soldItemValue == 0)
+                {
+                    exchangeRate = new int[2]{requestedItemValue / soldItemValue, 1};
+                    return true;
+                }
+                
+            return false;
+        }
+
+        private int[] GiveApplesFriendshipDiscount(int soldItemCount, int requestedItemCount)
+        {
             var applesHearts = 0;
             if (Game1.player.friendshipData.ContainsKey("Apples"))
-                applesHearts = Game1.player.friendshipData["Apples"].Points / 250; // Get discount from being friends with Apples
-            if (offerCount == 1)
-                requestCount = (int)( requestCount * (1 + applesHearts * 0.05f));
+                {
+                    applesHearts = Game1.player.friendshipData["Apples"].Points / 250; // Get discount from being friends with Apples
+                }
+            if (requestedItemCount == 1)
+                {
+                    soldItemCount = (int)(soldItemCount * (1 + applesHearts * 0.05f));
+                }
             else
-                offerCount = (int) Math.Max(1, offerCount * (1 - applesHearts * 0.05f));
+                {
+                    requestedItemCount = (int)Math.Max(1, requestedItemCount * (1 - applesHearts * 0.05f));
+                }
+            return new int[2]{soldItemCount, requestedItemCount};
 
-            var lowestTrade = 5; // This is for us to change if we want to move this value around easily in testing
-            if (Math.Min(requestCount, offerCount) > lowestTrade)
+        }
+
+        private int[] MakeMinimalCountBelowGivenCount(int soldItemCount, int requestedItemCount, int givenCount)
+        {
+            if (Math.Min(soldItemCount, requestedItemCount) > givenCount)
             {
-                var closestTen = (int) Math.Pow(lowestTrade, (int) ( Math.Log10(Math.Min(requestCount, offerCount)) / Math.Log10(lowestTrade) ) );
-                requestCount /= closestTen;
-                offerCount /= closestTen;
-                requestCount /= GreatestCommonDivisor(requestCount, offerCount); // Due to the rounding we may find the two aren't relatively prime anymore
-                offerCount /= GreatestCommonDivisor(requestCount, offerCount);
+                var closestCount = (int)Math.Pow(givenCount, (int)(Math.Log10(Math.Min(soldItemCount, requestedItemCount)) / Math.Log10(givenCount)));
+                soldItemCount /= closestCount;
+                requestedItemCount /= closestCount;
+                var greatestCommonDivisor = GreatestCommonDivisor(soldItemCount, requestedItemCount); // Due to the rounding we may find the two aren't relatively prime anymore
+                soldItemCount /= greatestCommonDivisor;
+                requestedItemCount /= greatestCommonDivisor;
             }
-            
-            return new int[2]{requestCount, offerCount};
+            return new int[2]{soldItemCount, requestedItemCount};
         }
 
         private void AddSeedsToYellowStock(Dictionary<ISalable, int[]> stock)
@@ -472,6 +510,11 @@ namespace StardewArchipelago.GameModifications.Modded
             var vileAncientFruitSeeds = cropList.FirstOrDefault(x => x.Value.Contains(vileAncientIdentifier)).Key;
             AddToJunimoStock(stock, voidMintSeeds, "Yellow", true);
             AddToJunimoStock(stock, vileAncientFruitSeeds, "Yellow", true);
+        }
+
+        public int ValueOfOneItemWithWeight(int[] offerRatio, double weight)
+        {
+            return (int) Math.Pow(offerRatio[1] / offerRatio[0], weight);
         }
 
         private static int GreatestCommonDivisor(int firstValue, int secondValue) //Seemingly no basic method outside of BigInteger?

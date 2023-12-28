@@ -125,19 +125,19 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Modded
                 {"Friendship", 200 * friendsMet}
             };
             PurpleJunimoOptions = new Dictionary<string, PurpleJunimo>();
-            var randomSeed = 0;
+            var purpleItems = _junimoShopGenerator.PurpleItems.Keys.ToList();
+            var currentWeek = (int)(Game1.stats.daysPlayed / 7) + 1;
+            var random = new Random((int)Game1.uniqueIDForThisGame / 2 + currentWeek);
             foreach (var item in fakeStock)
             {
-                var currentMonth = (int)(Game1.stats.daysPlayed / 28) + 1;
-                var random = new Random((int)Game1.uniqueIDForThisGame / 2 + currentMonth + randomSeed);
-                var itemToTrade = _junimoShopGenerator.PurpleItems.ElementAt(random.Next(_junimoShopGenerator.PurpleItems.Count));
-                var stardewItem = _stardewItemManager.GetObjectById(itemToTrade.Key);
-                var itemToTradeTotal = JunimoShopGenerator.ExchangeRate(item.Value, itemToTrade.Value);
+                var randomPurpleItem = purpleItems[random.Next(purpleItems.Count)];
+                var randomPurpleItemValue = _junimoShopGenerator.PurpleItems[randomPurpleItem];
+                var stardewItem = _stardewItemManager.GetObjectById(randomPurpleItem);
+                var purpleExchangeRate = _junimoShopGenerator.ExchangeRate(item.Value, randomPurpleItemValue);
                 PurpleJunimoOptions[item.Key] = new PurpleJunimo(){
                     OfferedItem = stardewItem,
-                    Amount = Math.Max(itemToTradeTotal[1] / itemToTradeTotal[0], 1),
+                    Amount = Math.Max(purpleExchangeRate[1] / purpleExchangeRate[0], 1),
                 };
-                randomSeed += 1;
             }
             junimoWoods.createQuestionDialogue(
                     Question,
