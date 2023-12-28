@@ -646,6 +646,12 @@ namespace StardewArchipelago.Items.Traps
             {
                 UngrowCrop(hoeDirt.crop, ungrowthDays);
             }
+
+            var fruitTrees = GetAllFruitTrees();
+            foreach (var fruitTree in fruitTrees)
+            {
+                UngrowFruitTree(fruitTree, ungrowthDays * 2);
+            }
         }
 
         private void UngrowCrop(Crop crop, int days)
@@ -791,6 +797,27 @@ namespace StardewArchipelago.Items.Traps
                 id = randomId
             });
             location.netAudio.StartPlaying("fuse");
+        }
+
+        private IEnumerable<FruitTree> GetAllFruitTrees()
+        {
+            foreach (var gameLocation in Game1.locations)
+            {
+                foreach (var terrainFeature in gameLocation.terrainFeatures.Values)
+                {
+                    if (terrainFeature is not FruitTree fruitTree)
+                    {
+                        continue;
+                    }
+
+                    yield return fruitTree;
+                }
+            }
+        }
+
+        private void UngrowFruitTree(FruitTree fruitTree, int days)
+        {
+            fruitTree.daysUntilMature.Value += days;
         }
     }
 }
