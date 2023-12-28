@@ -21,7 +21,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
 
             AddGrabberItem("Abigail", new[] { "Amethyst", "Pumpkin" });
             AddGrabberItem("Alex", new[] { "Complete Breakfast", "Egg", "Egg (Brown)" });
-            AddGrabberItem("Caroline", new[] { "Cauliflower", "Potato", "Parsnip" });
+            AddGrabberItem("Caroline", new[] { "Cauliflower", "Potato", "Parsnip", "Tea Set" });
             AddGrabberItem("Clint", new[] { "Copper Bar", "Iron Bar", "Gold Bar" });
             AddGrabberItem("Demetrius", new[] { "Nautilus Shell", "Rainbow Shell", "Bream", "Amethyst" });
             AddGrabberItem("Dwarf", new[] { "Omni Geode", "Dwarf Scroll I", "Dwarf Scroll II", "Dwarf Scroll III", "Dwarf Scroll IV" });

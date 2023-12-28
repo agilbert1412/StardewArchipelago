@@ -30,6 +30,7 @@ namespace StardewArchipelago.Locations
         {
             var prefix = locationDisplayName.Length < 18 ? ARCHIPELAGO_PREFIX : ARCHIPELAGO_SHORT_PREFIX;
             _locationDisplayName = $"{prefix}{locationDisplayName}";
+            Name = _locationDisplayName;
             ApLocationName = apLocationName;
             var scoutedLocation = archipelago.ScoutSingleLocation(ApLocationName);
             _description = scoutedLocation == null ? ScoutedLocation.GenericItemName() : scoutedLocation.ToString();
