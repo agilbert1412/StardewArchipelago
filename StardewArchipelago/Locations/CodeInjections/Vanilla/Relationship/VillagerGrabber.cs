@@ -90,7 +90,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
             AddGrabberItem("Scarlett", new[] { "Goat Cheese", "Duck Feather", "Cherry", "Maple Syrup", "Honey", "Chocolate Cake", "Pink Cake", "Jade", "Glazed Yams" });
             AddGrabberItem("Sophia", new[] { "Fairy Rose", "Fairy Stone", "Grampleton Orange Chicken", "Puppyfish", "Wine", "Blue Moon Wine", "Grape", "Aged Blue Moon Wine" });
             AddGrabberItem("Susan", new[] { "Pancakes", "Chocolate Cake", "Pink Cake", "Cookie", "Pumpkin Pie", "Rhubarb Pie", "Blueberry Tart", "Ice Cream", "Blackberry Cobbler", "Cranberry Candy", "Red Plate" });
-            AddGrabberItem("Victor", new[] { "Spaghetti", "Battery Pack", "Duck Feather", "	Lunarite", "Blue Moon Wine", "Aged Blue Moon Wine", "Butterfish" });
+            AddGrabberItem("Victor", new[] { "Spaghetti", "Battery Pack", "Duck Feather", "Blue Moon Wine", "Aged Blue Moon Wine", "Butterfish" });
         }
 
         private void InitializeJunaGrabberItems(ArchipelagoClient archipelago)
