@@ -63,8 +63,8 @@ namespace StardewArchipelago.Items.Traps
         {
             {TrapItemsDifficulty.NoTraps, CrowTargets.None},
             {TrapItemsDifficulty.Easy, CrowTargets.Farm},
-            {TrapItemsDifficulty.Medium, CrowTargets.Island},
-            {TrapItemsDifficulty.Hard, CrowTargets.Island},
+            {TrapItemsDifficulty.Medium, CrowTargets.Outside},
+            {TrapItemsDifficulty.Hard, CrowTargets.Outside},
             {TrapItemsDifficulty.Hell, CrowTargets.Everywhere},
             {TrapItemsDifficulty.Nightmare, CrowTargets.Everywhere},
         };
@@ -241,7 +241,7 @@ namespace StardewArchipelago.Items.Traps
     {
         None,
         Farm,
-        Island,
+        Outside,
         Everywhere,
     }
 
