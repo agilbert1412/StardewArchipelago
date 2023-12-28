@@ -81,12 +81,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
             AddGrabberItem("Andy", new[] { "Beer", "Mead", "Pale Ale", "Farmer's Lunch", "Butterfish", "Blackberry Cobbler" });
             AddGrabberItem("Apples", new[] { "Starfruit" });
             AddGrabberItem("Claire", new[] { "Green Tea", "Energy Tonic", "Sunflower", "Bruschetta", "Apricot", "Ocean Stone", "Glazed Butterfish" });
-            AddGrabberItem("Gunther", new[] { "Bean Hotpot", "Petrified Slime", "Salmon Dinner", "Elvish Jewelry", "Ornamental Fan", "Dinosaur Egg", "Rare Disc", "Ancient Sword", "Dwarvish Helm", "Dwarf Gadget", "Golden Mask", "Golden Relic", "Star Shards" });
+            AddGrabberItem("Gunther", new[] { "Bean Hotpot", "Petrified Slime", "Salmon Dinner", "Elvish Jewelry", "Ornamental Fan", "Dinosaur Egg", "Rare Disc", "Ancient Sword", "Dwarvish Helm", "Dwarf Gadget", "Star Shards" });
             AddGrabberItem("Lance", new[] { "Aged Blue Moon Wine", "Daggerfish", "Galaxy Soul", "Gemfish", "Golden Pumpkin", "Green Mushroom", "Monster Mushroom", "Swirl Stone", "Torpedo Trout", "Tropical Curry", "Void Shard", "Ornate Treasure Chest" });
             AddGrabberItem("Martin", new[] { "Juice", "Ice Cream", "Big Bark Burger" });
             AddGrabberItem("Morgan", new[] { "Iridium Bar", "Void Egg", "Void Mayonnaise", "Frog", "Kittyfish" });
             AddGrabberItem("Morris", new[] { "Lobster Bisque", "Chowder", "Truffle Oil", "Star Shards", "Aged Blue Moon Wine" });
-            AddGrabberItem("Olivia", new[] { "Wine", "Chowder", "Chocolate Cake", "	Golden Mask", "Golden Relic", "Blue Moon Wine", "Aged Blue Moon Wine" });
+            AddGrabberItem("Olivia", new[] { "Wine", "Chowder", "Chocolate Cake", "Blue Moon Wine", "Aged Blue Moon Wine" });
             AddGrabberItem("Scarlett", new[] { "Goat Cheese", "Duck Feather", "Cherry", "Maple Syrup", "Honey", "Chocolate Cake", "Pink Cake", "Jade", "Glazed Yams" });
             AddGrabberItem("Sophia", new[] { "Fairy Rose", "Fairy Stone", "Grampleton Orange Chicken", "Puppyfish", "Wine", "Blue Moon Wine", "Grape", "Aged Blue Moon Wine" });
             AddGrabberItem("Susan", new[] { "Pancakes", "Chocolate Cake", "Pink Cake", "Cookie", "Pumpkin Pie", "Rhubarb Pie", "Blueberry Tart", "Ice Cream", "Blackberry Cobbler", "Cranberry Candy", "Red Plate" });
