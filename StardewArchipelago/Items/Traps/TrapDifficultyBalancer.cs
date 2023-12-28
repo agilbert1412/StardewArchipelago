@@ -73,6 +73,8 @@ namespace StardewArchipelago.Items.Traps
             {TrapItemsDifficulty.Nightmare, CrowTargets.Everywhere},
         };
 
+        public const double SCARECROW_EFFICIENCY = 0.40;
+
 
         public Dictionary<TrapItemsDifficulty, int> NumberOfMonsters = new()
         {
