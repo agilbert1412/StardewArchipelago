@@ -415,6 +415,16 @@ namespace StardewArchipelago.Items.Traps
 
                 yield return new KeyValuePair<Vector2, HoeDirt>(cropPosition, dirt);
             }
+
+            foreach (var (cropPosition, gameObject) in location.Objects.Pairs)
+            {
+                if (gameObject is not IndoorPot gardenPot || gardenPot.hoeDirt.Value.crop == null || gardenPot.hoeDirt.Value.crop.currentPhase.Value <= 1)
+                {
+                    continue;
+                }
+
+                yield return new KeyValuePair<Vector2, HoeDirt>(cropPosition, gardenPot.hoeDirt.Value);
+            }
         }
 
         private static int GetCropVulnerability(GameLocation farm, List<Vector2> scarecrowPositions, Vector2 cropPosition)
