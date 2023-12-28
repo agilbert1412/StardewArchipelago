@@ -361,7 +361,7 @@ namespace StardewArchipelago.GameModifications.Modded
                 return new int[2]{1, soldItem / wantedItem};
             if (soldItem <= wantedItem &&  wantedItem % soldItem == 0)
                 return new int[2]{wantedItem / soldItem, 1};
-            var gcd = Gcd(soldItem, wantedItem);
+            var gcd = GreatestCommonDivisor(soldItem, wantedItem);
             var lcm = soldItem * wantedItem / gcd;
             var requestCount = lcm/soldItem;
             var offerCount = lcm/wantedItem;
@@ -380,8 +380,8 @@ namespace StardewArchipelago.GameModifications.Modded
                 var closestTen = (int) Math.Pow(lowestTrade, (int) ( Math.Log10(Math.Min(requestCount, offerCount)) / Math.Log10(lowestTrade) ) );
                 requestCount /= closestTen;
                 offerCount /= closestTen;
-                requestCount /= Gcd(requestCount, offerCount); // Due to the rounding we may find the two aren't relatively prime anymore
-                offerCount /= Gcd(requestCount, offerCount);
+                requestCount /= GreatestCommonDivisor(requestCount, offerCount); // Due to the rounding we may find the two aren't relatively prime anymore
+                offerCount /= GreatestCommonDivisor(requestCount, offerCount);
             }
             
             return new int[2]{requestCount, offerCount};
@@ -474,31 +474,28 @@ namespace StardewArchipelago.GameModifications.Modded
             AddToJunimoStock(stock, vileAncientFruitSeeds, "Yellow", true);
         }
 
-        private static int Gcd(int val1, int val2) //Seemingly no basic method outside of BigInteger?
+        private static int GreatestCommonDivisor(int firstValue, int secondValue) //Seemingly no basic method outside of BigInteger?
         {
-            var a = Math.Max(val1, val2);
-            var b = Math.Min(val1, val2);
-            var r = a % b;
-            if ( r == 0)
+            var largestValue = Math.Max(firstValue, secondValue);
+            var lowestValue = Math.Min(firstValue, secondValue);
+            var remainder = largestValue % lowestValue;
+            if ( remainder == 0)
             {
-                if (val1 > val2)
+                if (firstValue > secondValue)
                 {
-                    return val2;
+                    return secondValue;
                 }
-                else
-                {
-                    return val1;
-                }
+                return firstValue;
             }
-            while (r != 0)
+            while (remainder != 0)
             {
-                a = b;
-                b = r;
-                if (a % b == 0)
+                largestValue = lowestValue;
+                lowestValue = remainder;
+                if (largestValue % lowestValue == 0)
                     break;
-                r = a % b;
+                remainder = largestValue % lowestValue;
             }
-            return r;
+            return remainder;
         }
     }
 }
