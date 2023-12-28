@@ -65,6 +65,7 @@ namespace StardewArchipelago
         private EntranceManager _entranceManager;
         private NightShippingBehaviors _shippingBehaviors;
 
+        private ModRandomizedLogicPatcher _modLogicPatcher;
         private CallableModData _callableModData;
         private ModifiedVillagerEventChecker _villagerEvents;
 
@@ -232,6 +233,7 @@ namespace StardewArchipelago
                 var nameSimplifier = new NameSimplifier();
                 var friends = new Friends();
                 _logicPatcher = new RandomizedLogicPatcher(Monitor, _helper, _harmony, _archipelago, _locationChecker, _stardewItemManager, _entranceManager, shopStockGenerator, junimoShopGenerator, nameSimplifier, friends);
+                _modLogicPatcher = new ModRandomizedLogicPatcher(Monitor, _helper, _harmony, _archipelago, shopStockGenerator, _stardewItemManager, junimoShopGenerator);
                 _jojaDisabler = new JojaDisabler(Monitor, _helper, _harmony);
                 _seasonsRandomizer = new SeasonsRandomizer(Monitor, _helper, _archipelago, State);
                 _appearanceRandomizer = new AppearanceRandomizer(Monitor, _archipelago);
@@ -278,6 +280,7 @@ namespace StardewArchipelago
                 _shippingBehaviors = new NightShippingBehaviors(Monitor, _archipelago, _locationChecker, nameSimplifier);
                 _chatForwarder.ListenToChatMessages();
                 _logicPatcher.PatchAllGameLogic();
+                _modLogicPatcher.PatchAllModGameLogic();
                 _mailPatcher.PatchMailBoxForApItems();
                 _entranceManager.SetEntranceRandomizerSettings(_archipelago.SlotData);
                 _locationsPatcher.ReplaceAllLocationsRewardsWithChecks();

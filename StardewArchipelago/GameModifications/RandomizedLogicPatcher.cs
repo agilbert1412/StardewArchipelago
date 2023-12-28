@@ -69,8 +69,6 @@ namespace StardewArchipelago.GameModifications
             ItemTooltipInjections.Initialize(monitor, modHelper, archipelago, locationChecker, nameSimplifier);
             BillboardInjections.Initialize(monitor, modHelper, archipelago, locationChecker, friends);
 
-            JunimoShopInjections.Initialize(monitor, modHelper, archipelago, shopStockGenerator, _stardewItemManager, junimoShopGenerator);
-
             DebugPatchInjections.Initialize(monitor, archipelago);
         }
 
@@ -104,8 +102,6 @@ namespace StardewArchipelago.GameModifications
             PatchRecipes();
             PatchTooltips();
             _startingResources.GivePlayerStartingResources();
-
-            PatchJunimoShops();
 
             PatchDebugMethods();
         }
@@ -570,24 +566,6 @@ namespace StardewArchipelago.GameModifications
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Billboard), nameof(Billboard.performHoverAction)),
                 postfix: new HarmonyMethod(typeof(BillboardInjections), nameof(BillboardInjections.PerformHoverAction_AddArchipelagoChecksToTooltips_Postfix))
-            );
-        }
-
-        private void PatchJunimoShops()
-        {
-            if (!_archipelago.SlotData.Mods.HasMod(ModNames.SVE))
-            {
-                return;
-            }
-
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(ShopMenu), nameof(ShopMenu.update)),
-                prefix: new HarmonyMethod(typeof(JunimoShopInjections), nameof(JunimoShopInjections.Update_JunimoWoodsAPShop_Prefix))
-            );
-
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.answerDialogueAction)),
-                prefix: new HarmonyMethod(typeof(JunimoShopInjections), nameof(JunimoShopInjections.AnswerDialogueAction_Junimoshop_Prefix))
             );
         }
 
