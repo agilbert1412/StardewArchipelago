@@ -8,6 +8,7 @@ using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Characters;
 using StardewValley.Menus;
 
 namespace StardewArchipelago.GameModifications.CodeInjections.Modded
@@ -231,6 +232,11 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Modded
                     foreach (var friendship in Game1.player.friendshipData.Keys)
                     {
                         var friend = Game1.getCharacterFromName(friendship);
+                        var npc = friend ?? Game1.getCharacterFromName<Child>(friendship, false);
+                        if (npc == null)
+                        {
+                            continue;
+                        }
                         Game1.player.changeFriendship(100, friend);
                     }
                     Game1.player.mailReceived.Remove("purpleJunimoKiss");
