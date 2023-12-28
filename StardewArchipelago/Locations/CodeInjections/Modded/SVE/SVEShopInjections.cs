@@ -179,33 +179,33 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
             var hasKnowledge = _archipelago.HasReceivedItem(BEAR_KNOWLEDGE);
             foreach (var item in stock)
             {
-            var random = new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame / 2 + item.Key.salePrice());
-            var itemToTrade = _junimoShopGenerator.BerryItems.ElementAt(random.Next(_junimoShopGenerator.BerryItems.Count));
-            if ((item.Key.DisplayName.Contains("Baked Berry Oatmeal") || item.Key.DisplayName.Contains("Flower Cookie")) && _archipelago.SlotData.Chefsanity == Chefsanity.Purchases) // Since these are AP locations, for logic's sake only use seasonal berries
-            {
-                var isOatmeal = item.Key.DisplayName.Contains("Baked Berry Oatmeal");
-                var berry = seasonalBerry[Game1.currentSeason];
-                var berryRate = JunimoShopGenerator.ExchangeRate(isOatmeal ? 12500 : 8750 , berry.salePrice() * (hasKnowledge ? 3 : 1));
-                stock[item.Key] = new int[4]
+                var random = new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame / 2 + item.Key.salePrice());
+                var itemToTrade = _junimoShopGenerator.BerryItems.ElementAt(random.Next(_junimoShopGenerator.BerryItems.Count));
+                if ((item.Key.DisplayName.Contains("Baked Berry Oatmeal") || item.Key.DisplayName.Contains("Flower Cookie")) && _archipelago.SlotData.Chefsanity == Chefsanity.Purchases) // Since these are AP locations, for logic's sake only use seasonal berries
                 {
+                    var isOatmeal = item.Key.DisplayName.Contains("Baked Berry Oatmeal");
+                    var berry = seasonalBerry[Game1.currentSeason];
+                    var berryRate = JunimoShopGenerator.ExchangeRate(isOatmeal ? 12500 : 8750, berry.salePrice() * (hasKnowledge ? 3 : 1));
+                    stock[item.Key] = new int[4]
+                    {
                     0,
                     int.MaxValue,
                     seasonalBerry[Game1.currentSeason].ParentSheetIndex,
                     (int) Math.Pow(berryRate[1] / berryRate[0], 0.75)
-                };
-                continue;
-            }
-            var itemToTradeTotal = JunimoShopGenerator.ExchangeRate(item.Key.salePrice(), itemToTrade.Value * (hasKnowledge ? 3 : 1));
-            
-            item.Key.Stack = itemToTradeTotal[0];
-            
-            stock[item.Key] = new int[4]
-            {
+                    };
+                    continue;
+                }
+                var itemToTradeTotal = JunimoShopGenerator.ExchangeRate(item.Key.salePrice(), itemToTrade.Value * (hasKnowledge ? 3 : 1));
+
+                item.Key.Stack = itemToTradeTotal[0];
+
+                stock[item.Key] = new int[4]
+                {
                 0,
                 int.MaxValue,
                 itemToTrade.Key.Id,
                 itemToTradeTotal[1],
-            };
+                };
             }
         }
 
