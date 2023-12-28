@@ -109,7 +109,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Modded
             }
         }
 
-                private class PurpleJunimo
+        private class PurpleJunimo
         {
             public StardewItem OfferedItem {get; set;}
             public int Amount {get; set;}
