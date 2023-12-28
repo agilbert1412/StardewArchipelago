@@ -220,5 +220,28 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Modded
                 return true; // run original logic
             }
         }
+
+        // public void resetFriendshipsForNewDay()
+        public static void ResetFriendshipsForNewDay_KissForeheads_Postfix(Farmer __instance)
+        {
+            try
+            {
+                if (Game1.player.mailReceived.Contains("purpleJunimoKiss"))
+                {
+                    foreach (var friendship in Game1.player.friendshipData.Keys)
+                    {
+                        var friend = Game1.getCharacterFromName(friendship);
+                        Game1.player.changeFriendship(100, friend);
+                    }
+                    Game1.player.mailReceived.Remove("purpleJunimoKiss");
+                }
+                return; // don't run original logic
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(ResetFriendshipsForNewDay_KissForeheads_Postfix)}:\n{ex}", LogLevel.Error);
+                return; // run original logic
+            }
+        }
     }
 }

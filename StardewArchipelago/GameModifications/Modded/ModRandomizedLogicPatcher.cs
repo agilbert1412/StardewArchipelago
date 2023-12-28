@@ -64,6 +64,11 @@ namespace StardewArchipelago.GameModifications.Modded
                 original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.answerDialogueAction)),
                 prefix: new HarmonyMethod(typeof(JunimoShopInjections), nameof(JunimoShopInjections.AnswerDialogueAction_Junimoshop_Prefix))
             );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Farmer), nameof(Farmer.resetFriendshipsForNewDay)),
+                postfix: new HarmonyMethod(typeof(JunimoShopInjections), nameof(JunimoShopInjections.ResetFriendshipsForNewDay_KissForeheads_Postfix))
+            );
         }
     }
 }
