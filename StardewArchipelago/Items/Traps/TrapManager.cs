@@ -647,10 +647,11 @@ namespace StardewArchipelago.Items.Traps
                 UngrowCrop(hoeDirt.crop, ungrowthDays);
             }
 
+            var treeUngrowthDays = _difficultyBalancer.TreeUngrowthDays[_archipelago.SlotData.TrapItemsDifficulty];
             var fruitTrees = GetAllFruitTrees();
             foreach (var fruitTree in fruitTrees)
             {
-                UngrowFruitTree(fruitTree, ungrowthDays * 2);
+                UngrowFruitTree(fruitTree, treeUngrowthDays);
             }
         }
 

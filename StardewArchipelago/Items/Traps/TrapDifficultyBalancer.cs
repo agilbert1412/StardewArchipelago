@@ -194,6 +194,16 @@ namespace StardewArchipelago.Items.Traps
             {TrapItemsDifficulty.Nightmare, 14},
         };
 
+        public Dictionary<TrapItemsDifficulty, int> TreeUngrowthDays = new()
+        {
+            {TrapItemsDifficulty.NoTraps, 0},
+            {TrapItemsDifficulty.Easy, 2},
+            {TrapItemsDifficulty.Medium, 4},
+            {TrapItemsDifficulty.Hard, 7},
+            {TrapItemsDifficulty.Hell, 21},
+            {TrapItemsDifficulty.Nightmare, 56},
+        };
+
         public Dictionary<TrapItemsDifficulty, double> InflationAmount = new()
         {
             {TrapItemsDifficulty.NoTraps, 0},
