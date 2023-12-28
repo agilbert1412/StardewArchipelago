@@ -154,7 +154,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Modded
             return;
 
         }
-        
+
         public static bool AnswerDialogueAction_Junimoshop_Prefix(GameLocation __instance, string questionAndAnswer, string[] questionParams, ref bool __result)
         {
             try
@@ -179,37 +179,17 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Modded
                 }
                 if (answer == "Money")
                 {
-                    DaJunimo.setNewDialogue($"Oh very nice, have yellow rocks I found!  You like?");
-                    Game1.drawDialogue(DaJunimo);
-                    Game1.player.Money += 50000;
-                    Game1.player.removeItemsFromInventory(checkOffer.OfferedItem.Id, checkOffer.Amount);
+                    PurpleJunimoMoney(checkOffer);
                     return false;
                 }
                 if (answer == "Dewdrop")
                 {
-                    var itemList = Game1.objectInformation;
-                    var dewdropBerryId = itemList.First(x => x.Value.Split("/")[0] == "Dewdrop Berry");
-                    var dewdropBerry = new StardewValley.Object(dewdropBerryId.Key, 5);
-                    Game1.player.holdUpItemThenMessage(dewdropBerry);
-                    Game1.player.addItemByMenuIfNecessaryElseHoldUp(dewdropBerry);
-                    DaJunimo.setNewDialogue($"Awh okay I was gonna sleep with it, but here you go!");
-                    Game1.drawDialogue(DaJunimo);
-                    Game1.player.removeItemsFromInventory(checkOffer.OfferedItem.Id, checkOffer.Amount);
+                    PurpleJunimoDewdrop(checkOffer);
                     return false;
                 }
                 if (answer == "Friendship")
                 {
-                    
-                    if (Game1.player.mailReceived.Contains("purpleJunimoKiss"))
-                    {
-                        DaJunimo.setNewDialogue($"You want me to kiss them TWICE?!  Wowie, but sorry!");
-                        Game1.drawDialogue(DaJunimo);
-                        return false;
-                    }
-                    DaJunimo.setNewDialogue($"I will tonight!  Yay!");
-                    Game1.drawDialogue(DaJunimo);
-                    Game1.player.mailReceived.Add("purpleJunimoKiss");
-                    Game1.player.removeItemsFromInventory(checkOffer.OfferedItem.Id, checkOffer.Amount);
+                    PurpleJunimoKiss(checkOffer);
                     return false;
                 }
 
@@ -220,6 +200,40 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Modded
                 _monitor.Log($"Failed in {nameof(AnswerDialogueAction_Junimoshop_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
             }
+        }
+
+        private static void PurpleJunimoMoney(PurpleJunimo purpleJunimoOffer)
+        {
+            DaJunimo.setNewDialogue($"Oh very nice, have yellow rocks I found!  You like?");
+            Game1.drawDialogue(DaJunimo);
+            Game1.player.Money += 50000;
+            Game1.player.removeItemsFromInventory(purpleJunimoOffer.OfferedItem.Id, purpleJunimoOffer.Amount);
+        }
+
+        private static void PurpleJunimoDewdrop(PurpleJunimo purpleJunimoOffer)
+        {
+            var itemList = Game1.objectInformation;
+            var dewdropBerryId = itemList.First(x => x.Value.Split("/")[0] == "Dewdrop Berry");
+            var dewdropBerry = new StardewValley.Object(dewdropBerryId.Key, 5);
+            Game1.player.holdUpItemThenMessage(dewdropBerry);
+            Game1.player.addItemByMenuIfNecessaryElseHoldUp(dewdropBerry);
+            DaJunimo.setNewDialogue($"Awh okay I was gonna sleep with it, but here you go!");
+            Game1.drawDialogue(DaJunimo);
+            Game1.player.removeItemsFromInventory(purpleJunimoOffer.OfferedItem.Id, purpleJunimoOffer.Amount);
+        }
+
+        private static void PurpleJunimoKiss(PurpleJunimo purpleJunimoOffer)
+        {
+            if (Game1.player.mailReceived.Contains("purpleJunimoKiss"))
+                    {
+                        DaJunimo.setNewDialogue($"You want me to kiss them TWICE?!  Wowie, but sorry!");
+                        Game1.drawDialogue(DaJunimo);
+                        return;
+                    }
+                    DaJunimo.setNewDialogue($"I will tonight!  Yay!");
+                    Game1.drawDialogue(DaJunimo);
+                    Game1.player.mailReceived.Add("purpleJunimoKiss");
+                    Game1.player.removeItemsFromInventory(purpleJunimoOffer.OfferedItem.Id, purpleJunimoOffer.Amount);
         }
 
         // public void resetFriendshipsForNewDay()
