@@ -3,22 +3,23 @@ using System.Linq;
 using System.Collections.Generic;
 using StardewValley;
 using StardewValley.Tools;
+using StardewArchipelago.Stardew;
 
 namespace StardewArchipelago.Items.Mail
 {
     public class ModLetterActions
     {
-        public void AddModLetterActions(Dictionary<string, Action<string>> letterActions)
+        
+        public void AddModLetterActions(Dictionary<string, Action<string>> letterActions, StardewItemManager _stardewItemManager)
         {
-            letterActions.Add(LetterActionsKeys.DiamondWand, (_) => ReceiveDiamondWand());
+            letterActions.Add(LetterActionsKeys.DiamondWand, (_) => ReceiveDiamondWand(_stardewItemManager));
         }
 
-        private void ReceiveDiamondWand()
+        private void ReceiveDiamondWand(StardewItemManager _stardewItemManager)
         {
             Game1.playSound("parry");
-            var weaponData = Game1.content.Load<Dictionary<int, string>>("Data\\weapons");
-            var id = weaponData.FirstOrDefault(x => x.Value.Contains("Diamond Wand"));
-            var diamondWand = new MeleeWeapon(id.Key);
+            var diamondWandId = _stardewItemManager.GetWeaponByName("Diamond Wand").Id;
+            var diamondWand = new MeleeWeapon(diamondWandId);
             Game1.player.holdUpItemThenMessage(diamondWand);
             Game1.player.addItemByMenuIfNecessary(diamondWand);
         } 

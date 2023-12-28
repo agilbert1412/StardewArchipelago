@@ -503,11 +503,8 @@ namespace StardewArchipelago.GameModifications.Modded
                 return;
             }
 
-            var voidMintIdentifier = "1 2 2 3 2/spring summer fall/109/"; //Done as modded seeds have variable ID but use ID in dictionary
-            var vileAncientIdentifier = "2 7 7 7 5/spring summer fall/108/";
-            var cropList = Game1.content.Load<Dictionary<int, string>>("Data\\Crops");
-            var voidMintSeeds = cropList.FirstOrDefault(x => x.Value.Contains(voidMintIdentifier)).Key;
-            var vileAncientFruitSeeds = cropList.FirstOrDefault(x => x.Value.Contains(vileAncientIdentifier)).Key;
+            var voidMintSeeds = _stardewItemManager.GetItemByName("Void Mint Seeds").Id;
+            var vileAncientFruitSeeds = _stardewItemManager.GetItemByName("Vile Ancient Fruit Seeds").Id;
             AddToJunimoStock(stock, voidMintSeeds, "Yellow", true);
             AddToJunimoStock(stock, vileAncientFruitSeeds, "Yellow", true);
         }

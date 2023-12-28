@@ -212,9 +212,8 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Modded
 
         private static void PurpleJunimoDewdrop(PurpleJunimo purpleJunimoOffer)
         {
-            var itemList = Game1.objectInformation;
-            var dewdropBerryId = itemList.First(x => x.Value.Split("/")[0] == "Dewdrop Berry");
-            var dewdropBerry = new StardewValley.Object(dewdropBerryId.Key, 5);
+            var dewdropBerryId = _stardewItemManager.GetItemByName("Dewdrop Berry").Id;
+            var dewdropBerry = new StardewValley.Object(dewdropBerryId, 5);
             Game1.player.holdUpItemThenMessage(dewdropBerry);
             Game1.player.addItemByMenuIfNecessaryElseHoldUp(dewdropBerry);
             DaJunimo.setNewDialogue($"Awh okay I was gonna sleep with it, but here you go!");

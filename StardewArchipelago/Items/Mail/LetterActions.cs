@@ -31,7 +31,7 @@ namespace StardewArchipelago.Items.Mail
         private readonly ToolUpgrader _toolUpgrader;
         private Dictionary<string, Action<string>> _letterActions;
 
-        public LetterActions(IModHelper modHelper, Mailman mail, ArchipelagoClient archipelago, WeaponsManager weaponsManager, TrapManager trapManager, BabyBirther babyBirther)
+        public LetterActions(IModHelper modHelper, Mailman mail, ArchipelagoClient archipelago, WeaponsManager weaponsManager, TrapManager trapManager, BabyBirther babyBirther, StardewItemManager _stardewItemManager)
         {
             _modHelper = modHelper;
             _mail = mail;
@@ -81,7 +81,7 @@ namespace StardewArchipelago.Items.Mail
             _letterActions.Add(LetterActionsKeys.Trap, ExecuteTrap);
             _letterActions.Add(LetterActionsKeys.LearnCookingRecipe, LearnCookingRecipe);
             _letterActions.Add(LetterActionsKeys.LearnSpecialCraftingRecipe, LearnSpecialCraftingRecipe);
-            modLetterActions.AddModLetterActions(_letterActions);
+            modLetterActions.AddModLetterActions(_letterActions, _stardewItemManager);
         }
 
         public void ExecuteLetterAction(string key, string parameter)
