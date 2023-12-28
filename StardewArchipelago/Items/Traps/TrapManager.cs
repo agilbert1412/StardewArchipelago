@@ -399,16 +399,28 @@ namespace StardewArchipelago.Items.Traps
                     continue;
                 }
 
-                var vulnerable = IsCropVulnerable(map, cropPosition, scarecrowPositions);
-
-                if (!vulnerable && Game1.random.NextDouble() > 0.25)
+                if (IsCropDefended(map, scarecrowPositions, cropPosition))
                 {
-                    continue; // Scarecrow give 75% protection
+                    continue;
                 }
 
                 crop.destroyCrop(crop.currentTileLocation, true, map);
                 map.critters.Add(new Crow((int)crop.currentTileLocation.X, (int)crop.currentTileLocation.Y));
             }
+        }
+
+        private static bool IsCropDefended(GameLocation map, List<Vector2> scarecrowPositions, Vector2 cropPosition)
+        {
+            var vulnerability = GetCropVulnerability(map, scarecrowPositions, cropPosition);
+            for (var i = 0; i < vulnerability; i++)
+            {
+                if (Game1.random.NextDouble() < TrapDifficultyBalancer.SCARECROW_EFFICIENCY)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private static List<Vector2> GetScarecrowPositions(GameLocation farm)
@@ -438,24 +450,19 @@ namespace StardewArchipelago.Items.Traps
             }
         }
 
-        private static bool IsCropVulnerable(GameLocation location, Vector2 cropPosition, List<Vector2> scarecrowPositions)
+        private static int GetCropVulnerability(GameLocation farm, List<Vector2> scarecrowPositions, Vector2 cropPosition)
         {
-            var isVulnerable = IsCropVulnerable(location, scarecrowPositions, cropPosition);
-            return isVulnerable;
-        }
-
-        private static bool IsCropVulnerable(GameLocation farm, List<Vector2> scarecrowPositions, Vector2 cropPosition)
-        {
+            var numberOfDefendingScarecrows = 0;
             foreach (var scarecrowPosition in scarecrowPositions)
             {
                 var radiusForScarecrow = farm.objects[scarecrowPosition].GetRadiusForScarecrow();
                 if (Vector2.Distance(scarecrowPosition, cropPosition) < radiusForScarecrow)
                 {
-                    return false;
+                    numberOfDefendingScarecrows++;
                 }
             }
 
-            return true;
+            return numberOfDefendingScarecrows;
         }
 
         private void SpawnMonsters()
