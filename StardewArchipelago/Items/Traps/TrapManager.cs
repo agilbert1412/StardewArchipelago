@@ -326,23 +326,31 @@ namespace StardewArchipelago.Items.Traps
                 return;
             }
 
-            var farm = Game1.getFarm();
-            SendCrowsForLocation(farm, crowRate);
             if (crowTargets == CrowTargets.Farm)
             {
+                var farm = Game1.getFarm();
+                SendCrowsForLocation(farm, crowRate);
                 return;
             }
 
-            var islandWest = Game1.getLocationFromName("IslandWest");
-            SendCrowsForLocation(islandWest, crowRate);
-
-            if (crowTargets == CrowTargets.Island)
+            if (crowTargets == CrowTargets.Outside)
             {
+                foreach (var gameLocation in Game1.locations)
+                {
+                    if (!gameLocation.IsOutdoors)
+                    {
+                        continue;
+                    }
+
+                    SendCrowsForLocation(gameLocation, crowRate);
+                }
                 return;
             }
 
-            var greenHouse = Game1.getLocationFromName("Greenhouse");
-            SendCrowsForLocation(greenHouse, crowRate);
+            foreach (var gameLocation in Game1.locations)
+            {
+                SendCrowsForLocation(gameLocation, crowRate);
+            }
         }
 
         private static void SendCrowsForLocation(GameLocation map, double crowRate)
