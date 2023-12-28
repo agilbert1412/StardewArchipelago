@@ -389,16 +389,25 @@ namespace StardewArchipelago.Items.Traps
         private static void SendCrowsForLocation(GameLocation map, double crowRate)
         {
             var scarecrowPositions = GetScarecrowPositions(map);
-            var vulnerableCrops = GetAllVulnerableCrops(map, scarecrowPositions);
-            var numberCrowsToSend = vulnerableCrops.Count * crowRate;
+            var crops = GetAllCrops(map);
             map.critters ??= new List<Critter>();
-            for (var index1 = 0; index1 < numberCrowsToSend; ++index1)
+            foreach (var (cropPosition, crop) in crops)
             {
-                var chosenIndex = Game1.random.Next(vulnerableCrops.Count);
-                var cropToEat = vulnerableCrops[chosenIndex];
-                vulnerableCrops.RemoveAt(chosenIndex);
-                cropToEat.destroyCrop(cropToEat.currentTileLocation, true, map);
-                map.critters.Add(new Crow((int)cropToEat.currentTileLocation.X, (int)cropToEat.currentTileLocation.Y));
+                var roll = Game1.random.NextDouble();
+                if (roll > crowRate)
+                {
+                    continue;
+                }
+
+                var vulnerable = IsCropVulnerable(map, cropPosition, scarecrowPositions);
+
+                if (!vulnerable && Game1.random.NextDouble() > 0.25)
+                {
+                    continue; // Scarecrow give 75% protection
+                }
+
+                crop.destroyCrop(crop.currentTileLocation, true, map);
+                map.critters.Add(new Crow((int)crop.currentTileLocation.X, (int)crop.currentTileLocation.Y));
             }
         }
 
@@ -416,24 +425,23 @@ namespace StardewArchipelago.Items.Traps
             return scarecrowPositions;
         }
 
-        private static List<HoeDirt> GetAllVulnerableCrops(GameLocation farm, List<Vector2> scarecrowPositions)
+        private static IEnumerable<KeyValuePair<Vector2, HoeDirt>> GetAllCrops(GameLocation location)
         {
-            var vulnerableCrops = new List<HoeDirt>();
-            foreach (var (cropPosition, cropTile) in farm.terrainFeatures.Pairs)
+            foreach (var (cropPosition, cropTile) in location.terrainFeatures.Pairs)
             {
                 if (cropTile is not HoeDirt dirt || dirt.crop == null || dirt.crop.currentPhase.Value <= 1)
                 {
                     continue;
                 }
 
-                var isVulnerable = IsCropVulnerable(farm, scarecrowPositions, cropPosition);
-                if (isVulnerable)
-                {
-                    vulnerableCrops.Add(dirt);
-                }
+                yield return new KeyValuePair<Vector2, HoeDirt>(cropPosition, dirt);
             }
+        }
 
-            return vulnerableCrops;
+        private static bool IsCropVulnerable(GameLocation location, Vector2 cropPosition, List<Vector2> scarecrowPositions)
+        {
+            var isVulnerable = IsCropVulnerable(location, scarecrowPositions, cropPosition);
+            return isVulnerable;
         }
 
         private static bool IsCropVulnerable(GameLocation farm, List<Vector2> scarecrowPositions, Vector2 cropPosition)
