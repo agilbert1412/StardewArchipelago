@@ -20,6 +20,11 @@ namespace StardewArchipelago.Stardew.NameMapping
                 name = _renamedItems[item.ParentSheetIndex];
             }
 
+            foreach (var (oldChar, newChar) in _simplifiedChars)
+            {
+                name = name.Replace(oldChar, newChar);
+            }
+
             if (name.Contains("moonslime.excavation."))
             {
                 TextInfo ti = CultureInfo.CurrentCulture.TextInfo;
@@ -83,6 +88,12 @@ namespace StardewArchipelago.Stardew.NameMapping
         {
             "Honey",
             "Secret Note",
+        };
+
+        private static readonly Dictionary<string, string> _simplifiedChars = new()
+        {
+            {"ñ", "n"},
+            {"Ñ", "N"},
         };
     }
 }
