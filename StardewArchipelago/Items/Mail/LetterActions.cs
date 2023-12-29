@@ -494,8 +494,6 @@ namespace StardewArchipelago.Items.Mail
 
         private static void RepairParrotExpress()
         {
-            var islandWest = FindLocation<IslandWest>(_islandWest);
-
             Game1.addMailForTomorrow("Island_UpgradeParrotPlatform", true, true);
             Game1.netWorldState.Value.ParrotPlatformsUnlocked.Value = true;
         }
