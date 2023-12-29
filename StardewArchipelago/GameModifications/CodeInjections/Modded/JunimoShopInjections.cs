@@ -122,19 +122,19 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Modded
             var fakeStock = new Dictionary<string, int>(){
                 {"Money", 10000},
                 {"Dewdrop", 2500},
-                {"Friendship", 200 * friendsMet}
+                {"Friendship", 75 * friendsMet}
             };
             PurpleJunimoOptions = new Dictionary<string, PurpleJunimo>();
             var purpleItems = _junimoShopGenerator.PurpleItems.Keys.ToList();
             var currentWeek = (int)(Game1.stats.daysPlayed / 7) + 1;
             var random = new Random((int)Game1.uniqueIDForThisGame / 2 + currentWeek);
-            foreach (var item in fakeStock)
+            foreach (var (item, price) in fakeStock)
             {
                 var randomPurpleItem = purpleItems[random.Next(purpleItems.Count)];
                 var randomPurpleItemValue = _junimoShopGenerator.PurpleItems[randomPurpleItem];
                 var stardewItem = _stardewItemManager.GetObjectById(randomPurpleItem);
-                var purpleExchangeRate = _junimoShopGenerator.ExchangeRate(item.Value, randomPurpleItemValue);
-                PurpleJunimoOptions[item.Key] = new PurpleJunimo(){
+                var purpleExchangeRate = _junimoShopGenerator.ExchangeRate(price, randomPurpleItemValue);
+                PurpleJunimoOptions[item] = new PurpleJunimo(){
                     OfferedItem = stardewItem,
                     Amount = Math.Max(purpleExchangeRate[1] / purpleExchangeRate[0], 1),
                 };
