@@ -29,7 +29,7 @@ namespace StardewArchipelago.Textures
             var relativePathToTexture = Path.Combine(currentModFolder, texturesFolder, texture);
             if (!File.Exists(relativePathToTexture))
             {
-                throw new InvalidOperationException($"Could not find texture {texture}");
+                return null;
             }
 
             return Texture2D.FromFile(service.GraphicsDevice, relativePathToTexture);

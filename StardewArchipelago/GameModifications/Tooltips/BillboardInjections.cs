@@ -75,7 +75,7 @@ namespace StardewArchipelago.GameModifications.Tooltips
             var festivalName = calendarDays[i].name;
             var birthdayName = calendarDays[i].hoverText;
 
-            if (!GetMissingFestivalChecks(festivalName, i).Any() && !GetMissingNpcChecks(birthdayName).Any())
+            if (!GetMissingFestivalChecks(festivalName, i).Any() && !GetMissingNpcChecks(birthdayName).Any() && !GetMissingTravelingCartChecks(i).Any())
             {
                 return;
             }
@@ -97,7 +97,7 @@ namespace StardewArchipelago.GameModifications.Tooltips
             }
 
             var calendarDayPosition = new Vector2(calendarDays[i].bounds.X, calendarDays[i].bounds.Y);
-            var logoPosition = calendarDayPosition + new Vector2(4, calendarDays[i].bounds.Height - 12 - 4);
+            var logoPosition = calendarDayPosition + new Vector2(4, calendarDays[i].bounds.Height - 24 - 4);
             var sourceRectangle = new Rectangle(0, 0, 12, 12);
             b.Draw(_travelingMerchantIcon, logoPosition, sourceRectangle, Color.White, 0f, Vector2.Zero, 2f, SpriteEffects.None, 1f);
         }
