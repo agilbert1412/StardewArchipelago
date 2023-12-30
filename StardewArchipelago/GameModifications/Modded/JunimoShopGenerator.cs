@@ -24,7 +24,7 @@ namespace StardewArchipelago.GameModifications.Modded
         private PersistentStock GreyPersistentStock { get; }
         private PersistentStock YellowPersistentStock { get; }
         private PersistentStock RedPersistentStock { get; }
-        private PersistentStock OrangePersistentStock {get; }
+        private PersistentStock OrangePersistentStock { get; }
         private static Dictionary<string, JunimoVendor> JunimoVendors { get; set; }
         private Dictionary<int, int> BlueItems { get; set; }
         private static readonly List<string> BlueColors = new()
@@ -52,20 +52,20 @@ namespace StardewArchipelago.GameModifications.Modded
         {
             "color_orange", "color_dark_orange", "color_dark_brown", "color_brown", "color_copper"
         };
-        public Dictionary<int, int> PurpleItems {get; set; }
+        public Dictionary<int, int> PurpleItems { get; set; }
         private static readonly List<string> PurpleColors = new()
         {
             "color_purple", "color_dark_purple", "color_dark_pink", "color_pale_violet_red", "color_iridium"
         };
-        public Dictionary<StardewItem, int> BerryItems {get; set; }
-        private static readonly string[] spring = new string[]{"spring"};
-        private static readonly string[] summer = new string[]{"summer"};
-        private static readonly string[] fall = new string[]{"fall"};
+        public Dictionary<StardewItem, int> BerryItems { get; set; }
+        private static readonly string[] spring = new string[] { "spring" };
+        private static readonly string[] summer = new string[] { "summer" };
+        private static readonly string[] fall = new string[] { "fall" };
 
         private class JunimoVendor
         {
-            public PersistentStock JunimoPersistentStock {get; private set;}
-            public Dictionary<int, int> ColorItems {get; private set;}
+            public PersistentStock JunimoPersistentStock { get; private set; }
+            public Dictionary<int, int> ColorItems { get; private set; }
 
             public JunimoVendor(PersistentStock junimoPersistentStock, Dictionary<int, int> colorItems)
             {
@@ -92,7 +92,7 @@ namespace StardewArchipelago.GameModifications.Modded
             var redVendor = new JunimoVendor(RedPersistentStock, RedItems);
             var orangeVendor = new JunimoVendor(OrangePersistentStock, OrangeItems);
             JunimoVendors = new Dictionary<string, JunimoVendor>(){
-                {"Blue", blueVendor}, {"Yellow", yellowVendor}, {"Grey", greyVendor}, {"Red", redVendor}, {"Orange", orangeVendor}, 
+                {"Blue", blueVendor}, {"Yellow", yellowVendor}, {"Grey", greyVendor}, {"Red", redVendor}, {"Orange", orangeVendor},
             };
         }
 
@@ -123,7 +123,6 @@ namespace StardewArchipelago.GameModifications.Modded
                 }
                 if (IsColor(itemContext, "blue") && !itemContext.Contains("fish") && !itemContext.Contains("marine"))
                 {
-                    
                     BlueItems[item.Id] = item.SellPrice;
                     continue;
                 }
@@ -271,13 +270,13 @@ namespace StardewArchipelago.GameModifications.Modded
         private Dictionary<ISalable, int[]> GenerateOrangeJunimoStock(Dictionary<ISalable, int[]> stock, Dictionary<ISalable, int[]> oldStock)
         {
             var random = new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame / 2 + Game1.currentGameTime.ElapsedGameTime.Seconds);
-            var totalDecor = oldStock.Keys.ToList();
+            var totalDecor = oldStock.Keys.ToArray();
             var dailyDecor = new List<ISalable>();
             for (var i = 0; i < 2; i++) // Allow these to still exist; just not all of them all the time
             {
-                dailyDecor.Add(totalDecor[random.Next(oldStock.Count)]);
+                dailyDecor.Add(totalDecor[random.Next(totalDecor.Length)]);
             }
-            foreach (var item in dailyDecor) 
+            foreach (var item in dailyDecor)
             {
                 var shopItem = _stardewItemManager.GetItemByName(item.Name);
                 AddToJunimoStock(stock, shopItem, "Orange", "BigCraftable", 0, item.salePrice());
@@ -298,13 +297,12 @@ namespace StardewArchipelago.GameModifications.Modded
             double failRate = 0.4,
             int uniquePrice = -1)
         {
-            
             var itemName = stardewItem.Name;
             var item = new StardewValley.Object(Vector2.Zero, stardewItem.Id, 1);
             if (category == "BigCraftable")
-                {
-                    item = new StardewValley.Object(Vector2.Zero, stardewItem.Id);
-                }
+            {
+                item = new StardewValley.Object(Vector2.Zero, stardewItem.Id);
+            }
             var random = new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame / 2 + stardewItem.Id);
             if (random.NextDouble() < failRate)
             {
@@ -343,7 +341,7 @@ namespace StardewArchipelago.GameModifications.Modded
             string[] itemSeason = null)
         {
             var item = _stardewItemManager.GetObjectById(itemId);
-            if (isSeed == true && _archipelago.SlotData.Cropsanity == Cropsanity.Shuffled && !_archipelago.HasReceivedItem(item.Name))
+            if (isSeed && _archipelago.SlotData.Cropsanity == Cropsanity.Shuffled && !_archipelago.HasReceivedItem(item.Name))
             {
                 return;
             }
@@ -357,13 +355,13 @@ namespace StardewArchipelago.GameModifications.Modded
         public int[] ExchangeRate(int soldItemValue, int requestedItemValue)
         {
             if (IsOnePriceAMultipleOfOther(soldItemValue, requestedItemValue, out var exchangeRate))
-                {
-                    return exchangeRate;
-                }
+            {
+                return exchangeRate;
+            }
             var greatestCommonDivisor = GreatestCommonDivisor(soldItemValue, requestedItemValue);
             var leastCommonMultiple = soldItemValue * requestedItemValue / greatestCommonDivisor;
-            var soldItemCount = leastCommonMultiple/soldItemValue;
-            var requestedItemCount = leastCommonMultiple/requestedItemValue;
+            var soldItemCount = leastCommonMultiple / soldItemValue;
+            var requestedItemCount = leastCommonMultiple / requestedItemValue;
 
             var applesDiscount = GiveApplesFriendshipDiscount(soldItemCount, requestedItemCount);
             soldItemCount = applesDiscount[0];
@@ -371,24 +369,23 @@ namespace StardewArchipelago.GameModifications.Modded
 
             var lowestCount = 5; // This is for us to change if we want to move this value around easily in testing
             var finalCounts = MakeMinimalCountBelowGivenCount(soldItemCount, requestedItemCount, lowestCount);
-            
             return finalCounts;
         }
 
         private bool IsOnePriceAMultipleOfOther(int soldItemValue, int requestedItemValue, out int[] exchangeRate)
         {
             exchangeRate = null;
-            if (soldItemValue > requestedItemValue && soldItemValue % requestedItemValue == 0)    
-                {
-                    exchangeRate = new int[2]{1, soldItemValue / requestedItemValue};
-                    return true;
-                }
-            if (soldItemValue <= requestedItemValue &&  requestedItemValue % soldItemValue == 0)
-                {
-                    exchangeRate = new int[2]{requestedItemValue / soldItemValue, 1};
-                    return true;
-                }
-                
+            if (soldItemValue > requestedItemValue && soldItemValue % requestedItemValue == 0)
+            {
+                exchangeRate = new int[2] { 1, soldItemValue / requestedItemValue };
+                return true;
+            }
+            if (soldItemValue <= requestedItemValue && requestedItemValue % soldItemValue == 0)
+            {
+                exchangeRate = new int[2] { requestedItemValue / soldItemValue, 1 };
+                return true;
+            }
+
             return false;
         }
 
@@ -396,18 +393,18 @@ namespace StardewArchipelago.GameModifications.Modded
         {
             var applesHearts = 0;
             if (Game1.player.friendshipData.ContainsKey("Apples"))
-                {
-                    applesHearts = Game1.player.friendshipData["Apples"].Points / 250; // Get discount from being friends with Apples
-                }
+            {
+                applesHearts = Game1.player.friendshipData["Apples"].Points / 250; // Get discount from being friends with Apples
+            }
             if (requestedItemCount == 1)
-                {
-                    soldItemCount = (int)(soldItemCount * (1 + applesHearts * 0.05f));
-                }
+            {
+                soldItemCount = (int)(soldItemCount * (1 + applesHearts * 0.05f));
+            }
             else
-                {
-                    requestedItemCount = (int)Math.Max(1, requestedItemCount * (1 - applesHearts * 0.05f));
-                }
-            return new int[2]{soldItemCount, requestedItemCount};
+            {
+                requestedItemCount = (int)Math.Max(1, requestedItemCount * (1 - applesHearts * 0.05f));
+            }
+            return new int[2] { soldItemCount, requestedItemCount };
 
         }
 
@@ -422,7 +419,7 @@ namespace StardewArchipelago.GameModifications.Modded
                 soldItemCount /= greatestCommonDivisor;
                 requestedItemCount /= greatestCommonDivisor;
             }
-            return new int[2]{soldItemCount, requestedItemCount};
+            return new int[2] { soldItemCount, requestedItemCount };
         }
 
         private void AddSeedsToYellowStock(Dictionary<ISalable, int[]> stock)
@@ -481,6 +478,7 @@ namespace StardewArchipelago.GameModifications.Modded
             AddToJunimoStock(stock, ShopItemIds.GRAPE_STARTER, "Yellow", true, fall);
             AddToJunimoStock(stock, ShopItemIds.ARTICHOKE_SEEDS, "Yellow", true, fall);
         }
+        
         private void AddSaplingsToShop(Dictionary<ISalable, int[]> stock)
         {
             AddToJunimoStock(stock, ShopItemIds.CHERRY_SAPLING, "Yellow", true);
@@ -511,7 +509,7 @@ namespace StardewArchipelago.GameModifications.Modded
 
         public int ValueOfOneItemWithWeight(int[] offerRatio, double weight)
         {
-            return (int) Math.Pow(offerRatio[1] / offerRatio[0], weight);
+            return (int)Math.Pow(offerRatio[1] / offerRatio[0], weight);
         }
 
         private static int GreatestCommonDivisor(int firstValue, int secondValue) //Seemingly no basic method outside of BigInteger?
@@ -519,13 +517,9 @@ namespace StardewArchipelago.GameModifications.Modded
             var largestValue = Math.Max(firstValue, secondValue);
             var lowestValue = Math.Min(firstValue, secondValue);
             var remainder = largestValue % lowestValue;
-            if ( remainder == 0)
+            if (remainder == 0)
             {
-                if (firstValue > secondValue)
-                {
-                    return secondValue;
-                }
-                return firstValue;
+                return lowestValue;
             }
             while (remainder != 0)
             {
