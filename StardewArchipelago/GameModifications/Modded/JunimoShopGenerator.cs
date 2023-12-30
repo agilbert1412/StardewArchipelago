@@ -269,22 +269,10 @@ namespace StardewArchipelago.GameModifications.Modded
 
         private Dictionary<ISalable, int[]> GenerateOrangeJunimoStock(Dictionary<ISalable, int[]> stock, Dictionary<ISalable, int[]> oldStock)
         {
-            var random = new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame / 2 + Game1.currentGameTime.ElapsedGameTime.Seconds);
-            var totalDecor = oldStock.Keys.ToArray();
-            var dailyDecor = new List<ISalable>();
-            for (var i = 0; i < 2; i++) // Allow these to still exist; just not all of them all the time
-            {
-                dailyDecor.Add(totalDecor[random.Next(totalDecor.Length)]);
-            }
-            foreach (var item in dailyDecor)
+            foreach (var (item, value) in oldStock)
             {
                 var shopItem = _stardewItemManager.GetItemByName(item.Name);
-                AddToJunimoStock(stock, shopItem, "Orange", "BigCraftable", 0, item.salePrice());
-            }
-            var cookedRecipes = Game1.player.recipesCooked.Keys;
-            foreach (var recipe in cookedRecipes)
-            {
-                AddToJunimoStock(stock, recipe, "Orange", false);
+                AddToJunimoStock(stock, shopItem, "Orange", "BigCraftable", 0, value[0]);
             }
             return stock;
         }
@@ -478,7 +466,7 @@ namespace StardewArchipelago.GameModifications.Modded
             AddToJunimoStock(stock, ShopItemIds.GRAPE_STARTER, "Yellow", true, fall);
             AddToJunimoStock(stock, ShopItemIds.ARTICHOKE_SEEDS, "Yellow", true, fall);
         }
-        
+
         private void AddSaplingsToShop(Dictionary<ISalable, int[]> stock)
         {
             AddToJunimoStock(stock, ShopItemIds.CHERRY_SAPLING, "Yellow", true);
