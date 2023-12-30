@@ -179,13 +179,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
         {
             var stock = shopMenu.itemPriceAndStock;
             var hasKnowledge = _archipelago.HasReceivedItem(BEAR_KNOWLEDGE);
-            var berryItems = _junimoShopGenerator.BerryItems.Keys.ToList();
+            var berryItems = _junimoShopGenerator.BerryItems.Keys.ToArray();
+            var random = new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame / 2);
+
             foreach (var item in stock)
             {
-                var random = new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame / 2 + item.Key.salePrice());
-                var randomBerryItem = berryItems[random.Next(berryItems.Count)];
+                var randomBerryItem = berryItems[random.Next(berryItems.Length)];
                 var randomBerryValue = _junimoShopGenerator.BerryItems[randomBerryItem];
-                if ((item.Key.Name.Contains("Baked Berry Oatmeal") || item.Key.Name.Contains("Flower Cookie")) && _archipelago.SlotData.Chefsanity == Chefsanity.Purchases) // Since these are AP locations, for logic's sake only use seasonal berries
+                if (_archipelago.SlotData.Chefsanity.HasFlag(Chefsanity.Purchases) && (item.Key.Name.Contains("Baked Berry Oatmeal") || item.Key.Name.Contains("Flower Cookie"))) // Since these are AP locations, for logic's sake only use seasonal berries
                 {
                     var isOatmeal = item.Key.Name.Contains("Baked Berry Oatmeal");
                     var logicalBerry = seasonalBerry[Game1.currentSeason];
