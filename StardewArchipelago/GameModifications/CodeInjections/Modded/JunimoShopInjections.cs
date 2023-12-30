@@ -26,11 +26,11 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Modded
         private static readonly string Dewdrop = "Blue tasties under pretty tree for {0} {1}.";
         private static readonly string Friendship = "Kiss many people on forehead for {0} {1}.";
         private static readonly Response Nothing = new("No", "Nothing for now!");
-        private static Dictionary<string, PurpleJunimo> PurpleJunimoOptions {get; set;}
+        private static Dictionary<string, PurpleJunimo> PurpleJunimoOptions { get; set; }
         private static NPC DaJunimo = new();
         private static readonly string _junimoDialogueKey = "PurpleJunimoVendor";
 
-        
+
         private static readonly List<string> _junimoFirstItems = new(){
             "Legend", "Prismatic Shard", "Ancient Seeds", "Dinosaur Egg", "Tiny Crop (stage 1)", "Super Starfruit", "Magic Bait"
         };
@@ -43,7 +43,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Modded
             {"Blue", "I hab fish! You \ngive blue pretty?"}
 
         };
-        private static readonly Dictionary<string, string> _firstItemToColor= new(){
+        private static readonly Dictionary<string, string> _firstItemToColor = new(){
             {"Legend", "Blue"}, {"Prismatic Shard", "Grey"}, {"Dinosaur Egg", "Red"}, {"Ancient Seeds", "Yellow"},
             {"Tiny Crop (stage 1)", "Orange"}, {"Super Starfruit", "Purple"}, {"Magic Bait", "Purple"}
         };
@@ -61,7 +61,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Modded
 
 
         private static ShopMenu _lastShopMenuUpdated = null;
-        
+
         // public override void update(GameTime time)
         public static bool Update_JunimoWoodsAPShop_Prefix(ShopMenu __instance, GameTime time)
         {
@@ -111,8 +111,8 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Modded
 
         private class PurpleJunimo
         {
-            public StardewItem OfferedItem {get; set;}
-            public int Amount {get; set;}
+            public StardewItem OfferedItem { get; set; }
+            public int Amount { get; set; }
         }
 
         public static void PurpleJunimoSpecialShop()
@@ -125,16 +125,17 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Modded
                 {"Friendship", 75 * friendsMet}
             };
             PurpleJunimoOptions = new Dictionary<string, PurpleJunimo>();
-            var purpleItems = _junimoShopGenerator.PurpleItems.Keys.ToList();
+            var purpleItems = _junimoShopGenerator.PurpleItems.Keys.ToArray();
             var currentWeek = (int)(Game1.stats.daysPlayed / 7) + 1;
             var random = new Random((int)Game1.uniqueIDForThisGame / 2 + currentWeek);
             foreach (var (item, price) in fakeStock)
             {
-                var randomPurpleItem = purpleItems[random.Next(purpleItems.Count)];
+                var randomPurpleItem = purpleItems[random.Next(purpleItems.Length)];
                 var randomPurpleItemValue = _junimoShopGenerator.PurpleItems[randomPurpleItem];
                 var stardewItem = _stardewItemManager.GetObjectById(randomPurpleItem);
                 var purpleExchangeRate = _junimoShopGenerator.ExchangeRate(price, randomPurpleItemValue);
-                PurpleJunimoOptions[item] = new PurpleJunimo(){
+                PurpleJunimoOptions[item] = new PurpleJunimo()
+                {
                     OfferedItem = stardewItem,
                     Amount = Math.Max(purpleExchangeRate[1] / purpleExchangeRate[0], 1),
                 };
@@ -224,15 +225,15 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Modded
         private static void PurpleJunimoKiss(PurpleJunimo purpleJunimoOffer)
         {
             if (Game1.player.mailReceived.Contains("purpleJunimoKiss"))
-                    {
-                        DaJunimo.setNewDialogue($"You want me to kiss them TWICE?!  Wowie, but sorry!");
-                        Game1.drawDialogue(DaJunimo);
-                        return;
-                    }
-                    DaJunimo.setNewDialogue($"I will tonight!  Yay!");
-                    Game1.drawDialogue(DaJunimo);
-                    Game1.player.mailReceived.Add("purpleJunimoKiss");
-                    Game1.player.removeItemsFromInventory(purpleJunimoOffer.OfferedItem.Id, purpleJunimoOffer.Amount);
+            {
+                DaJunimo.setNewDialogue($"You want me to kiss them TWICE?!  Wowie, but sorry!");
+                Game1.drawDialogue(DaJunimo);
+                return;
+            }
+            DaJunimo.setNewDialogue($"I will tonight!  Yay!");
+            Game1.drawDialogue(DaJunimo);
+            Game1.player.mailReceived.Add("purpleJunimoKiss");
+            Game1.player.removeItemsFromInventory(purpleJunimoOffer.OfferedItem.Id, purpleJunimoOffer.Amount);
         }
 
         // public void resetFriendshipsForNewDay()
@@ -240,26 +241,26 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Modded
         {
             try
             {
-                if (Game1.player.mailReceived.Contains("purpleJunimoKiss"))
+                if (!Game1.player.mailReceived.Contains("purpleJunimoKiss"))
                 {
-                    foreach (var friendship in Game1.player.friendshipData.Keys)
-                    {
-                        var friend = Game1.getCharacterFromName(friendship);
-                        var npc = friend ?? Game1.getCharacterFromName<Child>(friendship, false);
-                        if (npc == null)
-                        {
-                            continue;
-                        }
-                        Game1.player.changeFriendship(100, friend);
-                    }
-                    Game1.player.mailReceived.Remove("purpleJunimoKiss");
+                    return;
                 }
-                return; // don't run original logic
+                foreach (var friendship in Game1.player.friendshipData.Keys)
+                {
+                    var friend = Game1.getCharacterFromName(friendship);
+                    var npc = friend ?? Game1.getCharacterFromName<Child>(friendship, false);
+                    if (npc == null)
+                    {
+                        continue;
+                    }
+                    Game1.player.changeFriendship(100, friend);
+                }
+                return;
             }
             catch (Exception ex)
             {
                 _monitor.Log($"Failed in {nameof(ResetFriendshipsForNewDay_KissForeheads_Postfix)}:\n{ex}", LogLevel.Error);
-                return; // run original logic
+                return;
             }
         }
     }
