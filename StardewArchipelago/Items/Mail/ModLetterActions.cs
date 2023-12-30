@@ -9,8 +9,13 @@ namespace StardewArchipelago.Items.Mail
 {
     public class ModLetterActions
     {
+        private StardewItemManager _stardewItemManager;
         
-        public void AddModLetterActions(Dictionary<string, Action<string>> letterActions, StardewItemManager _stardewItemManager)
+        public ModLetterActions(StardewItemManager stardewItemManager)
+        {
+            _stardewItemManager = stardewItemManager;
+        }
+        public void AddModLetterActions(Dictionary<string, Action<string>> letterActions)
         {
             letterActions.Add(LetterActionsKeys.DiamondWand, (_) => ReceiveDiamondWand(_stardewItemManager));
         }
