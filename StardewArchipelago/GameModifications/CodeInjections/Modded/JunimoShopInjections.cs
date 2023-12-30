@@ -36,7 +36,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Modded
         };
 
         private static readonly Dictionary<string, string> _junimoPhrase = new(){
-            {"Orange", "Look! Me gib tasty \nfor orange thing!" },
+            {"Orange", "Look! Me gib pretty \nfor orange thing!" },
             {"Red", "Give old things \nfor red gubbins!"},
             {"Grey", "I trade rocks for \n grey what's-its!"},
             {"Yellow", "I hab seeds, gib \nyellow gubbins!"},
