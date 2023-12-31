@@ -209,11 +209,11 @@ namespace StardewArchipelago.Items.Traps
         public Dictionary<TrapItemsDifficulty, double> InflationAmount = new()
         {
             {TrapItemsDifficulty.NoTraps, 0},
-            {TrapItemsDifficulty.Easy, 1.2},
-            {TrapItemsDifficulty.Medium, 1.4}, // Vanilla Inflation at Clint's after a year is equivalent to 2 traps
-            {TrapItemsDifficulty.Hard, 2.25}, // Vanilla Inflation at Robin's after a year is equivalent to 2 traps
-            {TrapItemsDifficulty.Hell, 3.5},
-            {TrapItemsDifficulty.Nightmare, 5},
+            {TrapItemsDifficulty.Easy, 1.1},
+            {TrapItemsDifficulty.Medium, 1.25}, // Vanilla Inflation at Clint's after a year is equivalent to 2 traps
+            {TrapItemsDifficulty.Hard, 1.75},
+            {TrapItemsDifficulty.Hell, 2.25}, // Vanilla Inflation at Robin's after a year is equivalent to 2 traps
+            {TrapItemsDifficulty.Nightmare, 3},
         };
 
         public Dictionary<TrapItemsDifficulty, int> ExplosionSize = new()
