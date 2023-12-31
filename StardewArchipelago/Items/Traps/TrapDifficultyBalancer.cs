@@ -103,14 +103,24 @@ namespace StardewArchipelago.Items.Traps
             {TrapItemsDifficulty.Nightmare, 800},
         };
 
-        public Dictionary<TrapItemsDifficulty, ShuffleInventoryTarget> ShuffleInventoryTargets = new()
+        public Dictionary<TrapItemsDifficulty, double> ShuffleRate = new()
         {
-            {TrapItemsDifficulty.NoTraps, ShuffleInventoryTarget.None},
-            {TrapItemsDifficulty.Easy, ShuffleInventoryTarget.Hotbar},
-            {TrapItemsDifficulty.Medium, ShuffleInventoryTarget.FullInventory},
-            {TrapItemsDifficulty.Hard, ShuffleInventoryTarget.FullInventory},
-            {TrapItemsDifficulty.Hell, ShuffleInventoryTarget.InventoryAndChests},
-            {TrapItemsDifficulty.Nightmare, ShuffleInventoryTarget.InventoryAndChestsAndFriends},
+            {TrapItemsDifficulty.NoTraps, 0},
+            {TrapItemsDifficulty.Easy, 0.05},
+            {TrapItemsDifficulty.Medium, 0.1},
+            {TrapItemsDifficulty.Hard, 0.2},
+            {TrapItemsDifficulty.Hell, 0.4},
+            {TrapItemsDifficulty.Nightmare, 0.8},
+        };
+
+        public Dictionary<TrapItemsDifficulty, double> ShuffleRateToFriends = new()
+        {
+            {TrapItemsDifficulty.NoTraps, 0},
+            {TrapItemsDifficulty.Easy, 0},
+            {TrapItemsDifficulty.Medium, 0},
+            {TrapItemsDifficulty.Hard, 0},
+            {TrapItemsDifficulty.Hell, 0.05},
+            {TrapItemsDifficulty.Nightmare, 0.25},
         };
 
         // TODO: Figure out a way to have different difficulties for temporary winter

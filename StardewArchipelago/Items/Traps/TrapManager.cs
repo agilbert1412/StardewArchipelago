@@ -494,8 +494,9 @@ namespace StardewArchipelago.Items.Traps
 
         public void ShuffleInventory()
         {
-            var targets = _difficultyBalancer.ShuffleInventoryTargets[_archipelago.SlotData.TrapItemsDifficulty];
-            _inventoryShuffler.ShuffleInventories(targets);
+            var rate = _difficultyBalancer.ShuffleRate[_archipelago.SlotData.TrapItemsDifficulty];
+            var rateToFriends = _difficultyBalancer.ShuffleRateToFriends[_archipelago.SlotData.TrapItemsDifficulty];
+            _inventoryShuffler.ShuffleInventories(rate, rateToFriends);
         }
 
         private void SendDislikedGiftToEveryone()

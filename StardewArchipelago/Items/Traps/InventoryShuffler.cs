@@ -48,9 +48,9 @@ namespace StardewArchipelago.Items.Traps
             _giftSender = giftSender;
         }
 
-        public void ShuffleInventories(ShuffleInventoryTarget targets)
+        public void ShuffleInventories(double rate, double rateAsGifts)
         {
-            if (targets == ShuffleInventoryTarget.None)
+            if (rate <= 0)
             {
                 return;
             }
@@ -59,27 +59,22 @@ namespace StardewArchipelago.Items.Traps
 
             _monitor.Log($"Executing a Shuffle Trap...", LogLevel.Debug);
 
-            AddItemSlotsFromPlayerInventory(slotsToShuffle, targets == ShuffleInventoryTarget.Hotbar);
-            if (targets >= ShuffleInventoryTarget.InventoryAndChests)
-            {
-                AddItemSlotsFromChestsInEntireWorld(slotsToShuffle);
-                if (targets >= ShuffleInventoryTarget.InventoryAndChestsAndFriends)
-                {
-                    AddItemSlotsFromFridges(slotsToShuffle);
-                    // AddItemSlotsFromJunimoChest(slotsToShuffle);
-                }
-            }
+            AddItemSlotsFromPlayerInventory(slotsToShuffle);
+            AddItemSlotsFromChestsInEntireWorld(slotsToShuffle);
+            AddItemSlotsFromFridges(slotsToShuffle);
+            // AddItemSlotsFromJunimoChest(slotsToShuffle);
 
             var numberItemsToShuffle = slotsToShuffle.Count;
             _monitor.Log($"Found {numberItemsToShuffle} items to shuffle", LogLevel.Debug);
             var random = new Random((int)(Game1.uniqueIDForThisGame + Game1.stats.DaysPlayed));
 
-            if (targets >= ShuffleInventoryTarget.InventoryAndChestsAndFriends)
+            if (rateAsGifts > 0)
             {
-                SendRandomGifts(slotsToShuffle, random, GIFTING_RATE);
+                SendRandomGifts(slotsToShuffle, random, rate * rateAsGifts);
             }
 
             _monitor.Log($"Sent {numberItemsToShuffle - slotsToShuffle.Count} items as random gifts", LogLevel.Debug);
+            slotsToShuffle = slotsToShuffle.Where(x => random.NextDouble() < rate).ToDictionary(x => x.Key, x => x.Value);
             var allSlots = slotsToShuffle.Keys.ToList();
             var allItems = slotsToShuffle.Values.ToList();
             var allItemsShuffled = allItems.Shuffle(random);
@@ -146,11 +141,10 @@ namespace StardewArchipelago.Items.Traps
             }
         }
 
-        private static void AddItemSlotsFromPlayerInventory(Dictionary<ItemSlot, Item> slotsToShuffle, bool hotbarOnly)
+        private static void AddItemSlotsFromPlayerInventory(Dictionary<ItemSlot, Item> slotsToShuffle)
         {
             var player = Game1.player;
-            var maxSlot = hotbarOnly ? 12 : player.MaxItems;
-            for (var i = 0; i < maxSlot; i++)
+            for (var i = 0; i < player.MaxItems; i++)
             {
                 Item item = null;
                 if (player.Items.Count > i && player.Items[i] != null)
