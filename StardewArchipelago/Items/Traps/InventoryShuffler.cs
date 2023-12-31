@@ -234,7 +234,7 @@ namespace StardewArchipelago.Items.Traps
                 }
 
                 var fridge = location.fridge.Value;
-                if (fridge == null)
+                if (fridge == null || fridge.items.All(x => x == null))
                 {
                     return;
                 }
@@ -257,7 +257,7 @@ namespace StardewArchipelago.Items.Traps
                 }
 
                 var fridge = location.fridge.Value;
-                if (fridge == null)
+                if (fridge == null || fridge.items.All(x => x == null))
                 {
                     return;
                 }
