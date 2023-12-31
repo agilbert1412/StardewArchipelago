@@ -117,6 +117,9 @@
     <None Update="Textures\Bundles\cinder_shard_bundle.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Textures\Bundles\deep_fishing_bundle.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Textures\Bundles\demolition_bundle.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -156,10 +159,16 @@
     <None Update="Textures\Bundles\orchard_bundle.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Textures\Bundles\paleontologist_bundle.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Textures\Bundles\qis_helper_bundle.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Textures\Bundles\quality_foraging_bundle.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Textures\Bundles\slime_farmer_bundle.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Textures\Bundles\summer-foraging.png">
