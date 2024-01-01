@@ -404,7 +404,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
                 {
                     PerformFriendshipDecay(__instance, npcName);
                 }
-
                 var date = new WorldDate(Game1.Date);
                 ++date.TotalDays;
                 __instance.updateFriendshipGifts(date);

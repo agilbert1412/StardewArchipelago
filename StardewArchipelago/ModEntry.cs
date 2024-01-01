@@ -65,6 +65,7 @@ namespace StardewArchipelago
         private EntranceManager _entranceManager;
         private NightShippingBehaviors _shippingBehaviors;
 
+        private ModRandomizedLogicPatcher _modLogicPatcher;
         private CallableModData _callableModData;
         private ModifiedVillagerEventChecker _villagerEvents;
 
@@ -228,9 +229,11 @@ namespace StardewArchipelago
                 _goalManager = new GoalManager(Monitor, _helper, _harmony, _archipelago, _locationChecker);
                 _entranceManager = new EntranceManager(Monitor, _archipelago);
                 var shopStockGenerator = new ShopStockGenerator(Monitor, _helper, _archipelago, _locationChecker);
+                var junimoShopGenerator = new JunimoShopGenerator(_archipelago, shopStockGenerator, _stardewItemManager);
                 var nameSimplifier = new NameSimplifier();
                 var friends = new Friends();
-                _logicPatcher = new RandomizedLogicPatcher(Monitor, _helper, _harmony, _archipelago, _locationChecker, _stardewItemManager, _entranceManager, shopStockGenerator, nameSimplifier, friends);
+                _logicPatcher = new RandomizedLogicPatcher(Monitor, _helper, _harmony, _archipelago, _locationChecker, _stardewItemManager, _entranceManager, shopStockGenerator, junimoShopGenerator, nameSimplifier, friends);
+                _modLogicPatcher = new ModRandomizedLogicPatcher(Monitor, _helper, _harmony, _archipelago, shopStockGenerator, _stardewItemManager, junimoShopGenerator);
                 _jojaDisabler = new JojaDisabler(Monitor, _helper, _harmony);
                 _seasonsRandomizer = new SeasonsRandomizer(Monitor, _helper, _archipelago, State);
                 _appearanceRandomizer = new AppearanceRandomizer(Monitor, _archipelago);
@@ -270,13 +273,14 @@ namespace StardewArchipelago
                 _itemManager = new ItemManager(Monitor, _helper, _harmony, _archipelago, _stardewItemManager, _mail, tileChooser, babyBirther, _giftHandler.Sender, State.ItemsReceived);
                 var weaponsManager = new WeaponsManager(_stardewItemManager, _archipelago.SlotData.Mods);
                 _mailPatcher = new MailPatcher(Monitor, _harmony, _archipelago, _locationChecker, State,
-                    new LetterActions(_helper, _mail, _archipelago, weaponsManager, _itemManager.TrapManager, babyBirther));
+                    new LetterActions(_helper, _mail, _archipelago, weaponsManager, _itemManager.TrapManager, babyBirther, _stardewItemManager));
                 var bundlesManager = new BundlesManager(_helper, _stardewItemManager, _archipelago.SlotData.BundlesData);
                 bundlesManager.ReplaceAllBundles();
-                _locationsPatcher = new LocationPatcher(Monitor, _helper, _harmony, _archipelago, State, _locationChecker, _stardewItemManager, weaponsManager, shopStockGenerator, friends);
+                _locationsPatcher = new LocationPatcher(Monitor, _helper, _harmony, _archipelago, State, _locationChecker, _stardewItemManager, weaponsManager, shopStockGenerator, junimoShopGenerator, friends);
                 _shippingBehaviors = new NightShippingBehaviors(Monitor, _archipelago, _locationChecker, nameSimplifier);
                 _chatForwarder.ListenToChatMessages();
                 _logicPatcher.PatchAllGameLogic();
+                _modLogicPatcher.PatchAllModGameLogic();
                 _mailPatcher.PatchMailBoxForApItems();
                 _entranceManager.SetEntranceRandomizerSettings(_archipelago.SlotData);
                 _locationsPatcher.ReplaceAllLocationsRewardsWithChecks();
