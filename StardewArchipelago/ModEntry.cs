@@ -376,15 +376,14 @@ namespace StardewArchipelago
             }
             var railroadBoulderOrder = SpecialOrder.GetSpecialOrder("Clint2", null);
             var railroadDupeCount = Game1.player.team.specialOrders.Count(x => x.questKey.Value.Equals("Clint2Again"));
-            if (railroadDupeCount <= 1)
+            if (railroadDupeCount > 1)
             {
-                return;
-            }
-            railroadBoulderOrder.questKey.Value = "Clint2Again";
-            while (railroadDupeCount > 1)
-            {
-                Game1.player.team.specialOrders.Remove(railroadBoulderOrder);
-                railroadDupeCount -= 1;
+                railroadBoulderOrder.questKey.Value = "Clint2Again";
+                while (railroadDupeCount > 1)
+                {
+                    Game1.player.team.specialOrders.Remove(railroadBoulderOrder);
+                    railroadDupeCount -= 1;
+                }
             }
             // Async Fix for the change from eventsSeen to mailReceived checks.
             var deprecatedEvents = new Dictionary<int, string>(){{658059254, "apAuroraVineyard"}, {658078924, "apMorganSchooling"}};
@@ -404,7 +403,7 @@ namespace StardewArchipelago
             if ((Game1.player.eventsSeen.Contains(181091237) || Game1.player.eventsSeen.Contains(1810912313)) && !_archipelago.HasReceivedItem("Ginger Tincture Recipe"))
             {
                 Game1.player.craftingRecipes.Remove("Ginger Tincture");
-                _locationChecker.AddCheckedLocation("Ginger Island Tincture");
+                _locationChecker.AddCheckedLocation("Ginger Tincture Recipe");
             }
         }
 
