@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
 using StardewValley.Menus;
@@ -75,8 +76,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             try
             {
-                var skillActualName = skillName.Split('.')[^1].Replace("Skill", "");
-                var skill = Enum.Parse<Skill>(skillActualName);
+                var skillActualName = skillName.Split('.').Last().Replace("Skill", "");
+                var skillCheck = Enum.TryParse<Skill>(skillActualName, out var skill);
+                if (!skillCheck)
+                {
+                    return;
+                }
                 SendSkillRecipeChecks(skill, level);
                 return;
             }
