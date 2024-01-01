@@ -255,6 +255,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Modded
                     }
                     Game1.player.changeFriendship(100, friend);
                 }
+                Game1.player.mailReceived.Remove("purpleJunimoKiss");
                 return;
             }
             catch (Exception ex)
