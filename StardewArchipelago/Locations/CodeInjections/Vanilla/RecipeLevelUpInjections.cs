@@ -71,15 +71,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         }
 
         // public LevelUpMenu(string skillName, int level)
-        /*public static void SkillLevelUpMenuConstructor_SendModdedSkillRecipeChecks_Postfix(IClickableMenu __instance, string skillName, int level)
+        public static void SkillLevelUpMenuConstructor_SendModdedSkillRecipeChecks_Postfix(IClickableMenu __instance, string skillName, int level)
         {
             try
             {
-                var newCraftingRecipesField = _helper.Reflection.GetField<List<CraftingRecipe>>(__instance, "newCraftingRecipes");
-                var newCraftingRecipes = newCraftingRecipesField.GetValue();
-                var skillActualName = skillName.Split('.').Last().Replace("Skill", "");
+                var skillActualName = skillName.Split('.')[^1].Replace("Skill", "");
                 var skill = Enum.Parse<Skill>(skillActualName);
-                SendModdedSkillRecipeChecks(skill, level);
+                SendSkillRecipeChecks(skill, level);
                 return;
             }
             catch (Exception ex)
@@ -88,34 +86,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 return;
             }
         }
-
-        private static void SendModdedSkillRecipeChecks(Skill skill, int level)
-        {
-            SendModdedSkillCraftingRecipeChecks(skill, level);
-        }
-
-        private static void SendModdedSkillCraftingRecipeChecks(Skill skill, int level)
-        {
-            if (!_archipelago.SlotData.Craftsanity.HasFlag(Craftsanity.All) || !_craftingRecipesBySkill.ContainsKey(skill))
-            {
-                return;
-            }
-
-            var skillRecipes = _craftingRecipesBySkill[skill];
-            for (var i = 0; i <= level; i++)
-            {
-                if (!skillRecipes.ContainsKey(i))
-                {
-                    continue;
-                }
-
-                var skillRecipesAtLevel = skillRecipes[i];
-                foreach (var skillRecipe in skillRecipesAtLevel)
-                {
-                    _locationChecker.AddCheckedLocation($"{skillRecipe}{RecipePurchaseInjections.CHEFSANITY_LOCATION_SUFFIX}");
-                }
-            }
-        }*/
 
         private static readonly Dictionary<Skill, Dictionary<int, string[]>> _cookingRecipesBySkill = new()
         {
@@ -151,6 +121,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     { 9, new[] { "Squid Ink Ravioli" } },
                 }
             },
+            {
+                Skill.Luck, new Dictionary<int, string[]>()
+                {
+                    { 8, new[] { "Lucky Lunch" } }
+                }
+            }
         };
 
         /*private static readonly Dictionary<Skill, Dictionary<int, string[]>> _craftingRecipesBySkill = new()
