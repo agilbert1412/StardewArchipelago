@@ -401,6 +401,11 @@ namespace StardewArchipelago
             {
                 Game1.player.mailReceived.Add("apAbandonedJojaMart");
             }
+            if ((Game1.player.eventsSeen.Contains(181091237) || Game1.player.eventsSeen.Contains(1810912313)) && !_archipelago.HasReceivedItem("Ginger Tincture Recipe"))
+            {
+                Game1.player.craftingRecipes.Remove("Ginger Tincture");
+                _locationChecker.AddCheckedLocation("Ginger Island Tincture");
+            }
         }
 
         private void OnDayEnding(object sender, DayEndingEventArgs e)

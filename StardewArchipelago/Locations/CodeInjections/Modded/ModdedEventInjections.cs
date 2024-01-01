@@ -88,7 +88,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         {
             try
             {
-                if (!_archipelago.SlotData.Craftsanity.HasFlag(Craftsanity.All) || !eventCooking.Keys.Contains(__instance.id))
+                if (!_archipelago.SlotData.Craftsanity.HasFlag(Craftsanity.All) || !eventCrafting.Keys.Contains(__instance.id))
                 {
                     return true;
                 }
