@@ -35,7 +35,7 @@ namespace StardewArchipelago.Stardew.NameMapping
                 }
                 if (name.Contains("trilobite")) // Temporary fix.
                 {
-                    displayName += " Fossil";
+                    displayName -= " Fossil";
                 }
                 name = displayName;
             }
