@@ -369,10 +369,10 @@ namespace StardewArchipelago
 
         private void DoBugsCleanup()
         {
-            if (_archipelago.SlotData.Mods.HasMod(ModNames.LUCK) && Game1.player.LuckLevel >= 8 && !_locationChecker.IsLocationChecked("Lucky Lunch Recipe"))
+            if (_archipelago.SlotData.Mods.HasMod(ModNames.LUCK) && Game1.player.LuckLevel >= 8 && !_locationChecker.IsLocationMissingAndExists("Lucky Lunch Recipe"))
             {
                 _locationChecker.AddCheckedLocation("Lucky Lunch Recipe");
-                if (!_archipelago.HasReceivedItem("Lucky Lunch Recipe"))
+                if (_archipelago.SlotData.Chefsanity.HasFlag(Chefsanity.Skills) && !_archipelago.HasReceivedItem("Lucky Lunch Recipe"))
                 {
                     Game1.player.cookingRecipes.Remove("Lucky Lunch");
                 }
