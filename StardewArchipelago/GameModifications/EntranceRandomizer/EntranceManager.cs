@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Extensions;
+using StardewArchipelago.Serialization;
 using StardewModdingAPI;
 using StardewValley;
 
@@ -17,16 +18,18 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
         private readonly IMonitor _monitor;
         private readonly EquivalentWarps _equivalentAreas;
         private readonly ModEntranceManager _modEntranceManager;
+        private readonly ArchipelagoStateDto _state;
 
         public Dictionary<string, string> ModifiedEntrances { get; private set; }
         private HashSet<string> _checkedEntrancesToday;
         private Dictionary<string, WarpRequest> generatedWarps;
 
-        public EntranceManager(IMonitor monitor, ArchipelagoClient archipelago)
+        public EntranceManager(IMonitor monitor, ArchipelagoClient archipelago, ArchipelagoStateDto state)
         {
             _monitor = monitor;
             _equivalentAreas = new EquivalentWarps(archipelago);
             _modEntranceManager = new ModEntranceManager();
+            _state = state;
             generatedWarps = new Dictionary<string, WarpRequest>(StringComparer.OrdinalIgnoreCase);
         }
 
@@ -182,6 +185,10 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
                 if (ModifiedEntrances.ContainsKey(key))
                 {
                     desiredWarpName = ModifiedEntrances[key];
+                    if (!_state.EntrancesTraversed.Contains(key))
+                    {
+                        _state.EntrancesTraversed.Add(key);
+                    }
                     return true;
                 }
             }

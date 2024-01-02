@@ -227,12 +227,12 @@ namespace StardewArchipelago
                 _locationChecker = new LocationChecker(Monitor, _archipelago, State.LocationsChecked);
                 _itemPatcher = new ItemPatcher(Monitor, _helper, _harmony, _archipelago);
                 _goalManager = new GoalManager(Monitor, _helper, _harmony, _archipelago, _locationChecker);
-                _entranceManager = new EntranceManager(Monitor, _archipelago);
+                _entranceManager = new EntranceManager(Monitor, _archipelago, State);
                 var shopStockGenerator = new ShopStockGenerator(Monitor, _helper, _archipelago, _locationChecker);
                 var junimoShopGenerator = new JunimoShopGenerator(_archipelago, shopStockGenerator, _stardewItemManager);
                 var nameSimplifier = new NameSimplifier();
                 var friends = new Friends();
-                _logicPatcher = new RandomizedLogicPatcher(Monitor, _helper, _harmony, _archipelago, _locationChecker, _stardewItemManager, _entranceManager, shopStockGenerator, junimoShopGenerator, nameSimplifier, friends);
+                _logicPatcher = new RandomizedLogicPatcher(Monitor, _helper, _harmony, _archipelago, _locationChecker, _stardewItemManager, _entranceManager, shopStockGenerator, nameSimplifier, friends, State);
                 _modLogicPatcher = new ModRandomizedLogicPatcher(Monitor, _helper, _harmony, _archipelago, shopStockGenerator, _stardewItemManager, junimoShopGenerator);
                 _jojaDisabler = new JojaDisabler(Monitor, _helper, _harmony);
                 _seasonsRandomizer = new SeasonsRandomizer(Monitor, _helper, _archipelago, State);
