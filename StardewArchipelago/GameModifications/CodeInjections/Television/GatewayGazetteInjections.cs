@@ -15,7 +15,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
     {
         private const int GAZETTE_CHANNEL = 1492;
         private const string GAZETTE_INTRO =
-            "Welcome back to the Gateway Gazette! The weekly show where brave adventurers explore the strange topology of the world around us!";
+            "Welcome back to the Gateway Gazette! The bi-weekly show where brave adventurers explore the strange topology of the world around us!";
         private const string GAZETTE_EPISODE =
             "On today's episode, our agent {0} has traversed from {1} and discovered... {2}! They came back safe and sound to share this wonderful knowledge with us!";
 
@@ -134,7 +134,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
                     do
                     {
                         friendlyMapName = friendlyMapName.Remove(i, 1);
-                    } while (i < friendlyMapName.Length && char.IsDigit(friendlyMapName[i]))
+                    } while (i < friendlyMapName.Length && char.IsDigit(friendlyMapName[i]));
                 }
             }
             return friendlyMapName;
