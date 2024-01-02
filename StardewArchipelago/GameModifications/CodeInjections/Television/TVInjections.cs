@@ -50,7 +50,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
                 AddQueenOfSauceChannels(dayOfWeek, channelsList);
                 AddSinisterTvChannel(who, channelsList);
                 AddFishingChannel(channelsList);
-                AddGatewayGazetteChannel(channelsList);
+                AddGatewayGazetteChannel(dayOfWeek, channelsList);
                 AddTurnOffTvChannel(channelsList);
                 Game1.currentLocation.createQuestionDialogue(Game1.content.LoadString("Strings\\StringsFromCSFiles:TV.cs.13120"), channelsList.ToArray(), __instance.selectChannel);
                 Game1.player.Halt();
@@ -100,29 +100,29 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
             channelsList.Add(CreateTvChannelLocalizedDialogue("Livin'", "Strings\\StringsFromCSFiles:TV.cs.13111"));
         }
 
-        private static void AddQueenOfSauceChannels(string str, List<Response> channelsList)
+        private static void AddQueenOfSauceChannels(string dayOfWeek, List<Response> channelsList)
         {
             if (!_archipelago.HasReceivedItem(AP_QUEEN_OF_SAUCE))
             {
                 return;
             }
 
-            AddQueenOfSauceChannel(str, channelsList);
-            AddQueenOfSauceRerunChannel(str, channelsList);
+            AddQueenOfSauceChannel(dayOfWeek, channelsList);
+            AddQueenOfSauceRerunChannel(dayOfWeek, channelsList);
         }
 
-        private static void AddQueenOfSauceChannel(string str, List<Response> channelsList)
+        private static void AddQueenOfSauceChannel(string dayOfWeek, List<Response> channelsList)
         {
-            if (!str.Equals("Sun"))
+            if (!dayOfWeek.Equals("Sun"))
             {
                 return;
             }
             channelsList.Add(CreateTvChannelLocalizedDialogue("The", "Strings\\StringsFromCSFiles:TV.cs.13114"));
         }
 
-        private static void AddQueenOfSauceRerunChannel(string str, List<Response> channelsList)
+        private static void AddQueenOfSauceRerunChannel(string dayOfWeek, List<Response> channelsList)
         {
-            if (!str.Equals("Wed") || Game1.stats.DaysPlayed <= 7U)
+            if (!dayOfWeek.Equals("Wed") || Game1.stats.DaysPlayed <= 7U)
             {
                 return;
             }
@@ -155,9 +155,11 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
             channelsList.Add(CreateTvChannelLocalizedDialogue("Fishing", "Strings\\StringsFromCSFiles:TV_Fishing_Channel"));
         }
 
-        private static void AddGatewayGazetteChannel(List<Response> channelsList)
+        private static void AddGatewayGazetteChannel(string dayOfWeek, List<Response> channelsList)
         {
-            if (!_archipelago.HasReceivedItem(AP_GATEWAY_GAZETTE))
+            if (!_archipelago.HasReceivedItem(AP_GATEWAY_GAZETTE) ||
+                _archipelago.SlotData.EntranceRandomization is EntranceRandomization.Disabled or EntranceRandomization.Chaos ||
+                (!dayOfWeek.Equals("Mon") && !dayOfWeek.Equals("Fri")))
             {
                 // return;
             }

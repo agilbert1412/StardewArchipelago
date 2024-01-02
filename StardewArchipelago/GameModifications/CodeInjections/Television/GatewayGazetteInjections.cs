@@ -82,6 +82,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
                 if (screenOverlayField.GetValue() == null)
                 {
                     PlayGazetteEpisode(__instance);
+                    screenOverlayField.SetValue(new TemporaryAnimatedSprite { alpha = 1E-07f });
                 }
                 else
                 {
@@ -101,17 +102,42 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
             var random = new Random((int)(Game1.uniqueIDForThisGame + Game1.stats.DaysPlayed));
             var agentName = Community.AllNames[random.Next(Community.AllNames.Length)];
             var entrancesNotChecked = _entranceManager.ModifiedEntrances.Keys.Where(x => !_state.EntrancesTraversed.Contains(x)).ToArray();
+            if (!entrancesNotChecked.Any())
+            {
+                entrancesNotChecked = _entranceManager.ModifiedEntrances.Keys.ToArray();
+            }
             var entranceToReveal = entrancesNotChecked[random.Next(entrancesNotChecked.Length)];
+            var friendlyEntranceName = GetFriendlyMapName(entranceToReveal);
             var destinationInternalName = _entranceManager.ModifiedEntrances[entranceToReveal];
             var destinationFriendlyName = GetFriendlyDestinationName(destinationInternalName);
-            Game1.drawObjectDialogue(Game1.parseText(string.Format(GAZETTE_EPISODE, agentName, entranceToReveal, destinationFriendlyName)));
+            Game1.drawObjectDialogue(Game1.parseText(string.Format(GAZETTE_EPISODE, agentName, friendlyEntranceName, destinationFriendlyName)));
             Game1.afterDialogues = __instance.proceedToNextScene;
         }
 
         private static string GetFriendlyDestinationName(string destinationInternalName)
         {
-            var destinationFriendlyName = destinationInternalName.Split(EntranceManager.TRANSITIONAL_STRING).Last().Split(" ").Last().Split("|").First();
-            return destinationFriendlyName;
+            var friendlyDestinationName = destinationInternalName.Split(EntranceManager.TRANSITIONAL_STRING).Last().Split(" ").Last().Split("|").First();
+            return GetFriendlyMapName(friendlyDestinationName);
+        }
+
+        private static string GetFriendlyMapName(string mapName)
+        {
+            var friendlyMapName = mapName.Replace("Custom_", "");
+            for (var i = friendlyMapName.Length - 1; i > 0; i--)
+            {
+                if (char.IsUpper(friendlyMapName[i]) && char.IsLetter(friendlyMapName[i]) && !char.IsWhiteSpace(friendlyMapName[i - 1]))
+                {
+                    friendlyMapName = friendlyMapName.Insert(i, " ");
+                }
+                if (friendlyMapName[i] == '|')
+                {
+                    do
+                    {
+                        friendlyMapName = friendlyMapName.Remove(i, 1);
+                    } while (i < friendlyMapName.Length && char.IsDigit(friendlyMapName[i]))
+                }
+            }
+            return friendlyMapName;
         }
 
         private static void SetGazetteScreen(TV __instance)
