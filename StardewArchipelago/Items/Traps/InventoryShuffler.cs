@@ -14,8 +14,6 @@ namespace StardewArchipelago.Items.Traps
 {
     public class InventoryShuffler
     {
-        private const double GIFTING_RATE = 0.25;
-
         private class ItemSlot
         {
             public IList<Item> Inventory { get; set; }
