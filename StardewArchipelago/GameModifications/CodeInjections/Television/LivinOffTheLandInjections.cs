@@ -87,6 +87,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
             { "Being friendly is generally a good thing, but you don't want to be taken advantage of either. Don't bother being too much more friendly to someone who isn't reciprocating yet. Give them time, I'm sure you'll be best buddies in a jiffy!", HasFriendsanity },
             { "Most bars have old-timey video games in available in them. These old games often contain cheat codes, but can only be used once you beat the game once. So you don't need to go back to do everything you missed, a simple command will do the trick!", HasArcadeMachinesShuffled },
             { "Don't forget to never judge a book by its cover. Sometimes, even the most unassuming of doors can hide an extremely valuable interior. It's always worth a knock!", HasEntranceRandomizer },
+            { "I heard a new show started airing recently. Tune in on Mondays and Fridays for... 'The Gateway Gazette'? I wonder what that's about...", HasNonChaosEntranceRandomizer },
             { "Life offers many doors, but some days, you might walk into one, and it's just a closet. Don't sweat it! Self care sometimes means going back to bed and calling it a day.", HasChaosEntranceRandomizer },
             { "Farmers don't always have it easy, so we need to stick together! Sending a gift to a farmer, even one far away, can do wonders to build community and make their day better! Just remember there's a fee - worth it for the smiles it brings!", HasGifting },
             { "If you have a friend who needs to do a lot of running around, you can give them a coffee. I'm sure they'll appreciate the speed boost!", HasGifting },
@@ -141,6 +142,11 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
         private static bool HasEntranceRandomizer()
         {
             return _archipelago.SlotData.EntranceRandomization != EntranceRandomization.Disabled;
+        }
+
+        private static bool HasNonChaosEntranceRandomizer()
+        {
+            return HasEntranceRandomizer() && _archipelago.SlotData.EntranceRandomization != EntranceRandomization.Chaos;
         }
 
         private static bool HasChaosEntranceRandomizer()
