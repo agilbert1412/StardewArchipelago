@@ -49,7 +49,8 @@ namespace StardewArchipelago.GameModifications.Tooltips
             try
             {
                 // private bool dailyQuestBoard;
-                if (_modHelper.Reflection.GetField<bool>(__instance, "dailyQuestBoard").GetValue())
+                var dailyQuestBoard = _modHelper.Reflection.GetField<bool>(__instance, "dailyQuestBoard").GetValue();
+                if (dailyQuestBoard)
                 {
                     return;
                 }
