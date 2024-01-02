@@ -212,8 +212,8 @@ namespace StardewArchipelago
             _locationChecker = new LocationChecker(Monitor, _archipelago, State.LocationsChecked);
             _itemPatcher = new ItemPatcher(Monitor, _helper, _harmony, _archipelago);
             _goalManager = new GoalManager(Monitor, _helper, _harmony, _archipelago, _locationChecker);
-            _entranceManager = new EntranceManager(Monitor);
-            _logicPatcher = new RandomizedLogicPatcher(Monitor, _helper, _harmony, _archipelago, _locationChecker, _stardewItemManager, _entranceManager);
+            _entranceManager = new EntranceManager(Monitor, State);
+            _logicPatcher = new RandomizedLogicPatcher(Monitor, _helper, _harmony, _archipelago, _locationChecker, _stardewItemManager, _entranceManager, State);
             _jojaDisabler = new JojaDisabler(Monitor, _helper, _harmony);
             _seasonsRandomizer = new SeasonsRandomizer(Monitor, _helper, _archipelago, State);
             _appearanceRandomizer = new AppearanceRandomizer(Monitor, _archipelago);

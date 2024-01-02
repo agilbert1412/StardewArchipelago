@@ -33,7 +33,7 @@ namespace StardewArchipelago.GameModifications
         private readonly StardewItemManager _stardewItemManager;
         private readonly StartingResources _startingResources;
 
-        public RandomizedLogicPatcher(IMonitor monitor, IModHelper modHelper, Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager stardewItemManager, EntranceManager entranceManager, ShopStockGenerator shopStockGenerator, NameSimplifier nameSimplifier, Friends friends, ArchipelagoStateDto state)
+        public RandomizedLogicPatcher(IMonitor monitor, IModHelper modHelper, Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager stardewItemManager, EntranceManager entranceManager, ArchipelagoStateDto state)
         {
             _harmony = harmony;
             _archipelago = archipelago;
@@ -46,7 +46,7 @@ namespace StardewArchipelago.GameModifications
             EntranceInjections.Initialize(monitor, _archipelago, entranceManager);
             ForestInjections.Initialize(monitor, _archipelago);
             MountainInjections.Initialize(monitor, _archipelago);
-            SeedShopsInjections.Initialize(monitor, helper, archipelago, locationChecker);
+            SeedShopsInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             LostAndFoundInjections.Initialize(monitor, archipelago);
             InitializeTVInjections(monitor, modHelper, archipelago, entranceManager, state);
             ProfitInjections.Initialize(monitor, archipelago);
