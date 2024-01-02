@@ -5,7 +5,7 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Objects;
 
-namespace StardewArchipelago.GameModifications.CodeInjections
+namespace StardewArchipelago.GameModifications.CodeInjections.Television
 {
     internal class TVInjections
     {
@@ -14,7 +14,9 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         private const string AP_LIVING_OFF_THE_LAND = "Livin' Off The Land";
         private const string AP_QUEEN_OF_SAUCE = "The Queen of Sauce";
         private const string AP_FISHING = "Fishing Information Broadcasting Service";
+        private const string AP_GATEWAY_GAZETTE = "The Gateway Gazette";
         private const string AP_SINISTER_SIGNAL = "Sinister Signal";
+        public const string GATEWAY_GAZETTE_KEY = "GatewayGazette";
 
         private static IMonitor _monitor;
         private static ArchipelagoClient _archipelago;
@@ -44,6 +46,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 AddQueenOfSauceChannels(dayOfWeek, channelsList);
                 AddSinisterTvChannel(who, channelsList);
                 AddFishingChannel(channelsList);
+                AddGatewayGazetteChannel(channelsList);
                 AddTurnOffTvChannel(channelsList);
                 Game1.currentLocation.createQuestionDialogue(Game1.content.LoadString("Strings\\StringsFromCSFiles:TV.cs.13120"), channelsList.ToArray(), __instance.selectChannel);
                 Game1.player.Halt();
@@ -75,7 +78,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 return;
             }
 
-            channelsList.Add(CreateTvChannelLocalizedDialogue("Fortune","Strings\\StringsFromCSFiles:TV.cs.13107"));
+            channelsList.Add(CreateTvChannelLocalizedDialogue("Fortune", "Strings\\StringsFromCSFiles:TV.cs.13107"));
         }
 
         private static void AddLivingOffTheLandChannel(string dayOfWeek, List<Response> channelsList)
@@ -146,6 +149,16 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             }
 
             channelsList.Add(CreateTvChannelLocalizedDialogue("Fishing", "Strings\\StringsFromCSFiles:TV_Fishing_Channel"));
+        }
+
+        private static void AddGatewayGazetteChannel(List<Response> channelsList)
+        {
+            if (!_archipelago.HasReceivedItem(AP_GATEWAY_GAZETTE))
+            {
+                // return;
+            }
+
+            channelsList.Add(CreateTvChannelDialogue(GATEWAY_GAZETTE_KEY, AP_GATEWAY_GAZETTE));
         }
 
         private static void AddTurnOffTvChannel(List<Response> channelsList)

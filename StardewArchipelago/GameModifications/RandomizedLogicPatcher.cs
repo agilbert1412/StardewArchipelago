@@ -9,6 +9,7 @@ using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
 using StardewArchipelago.GameModifications.CodeInjections;
 using StardewArchipelago.GameModifications.CodeInjections.Modded;
+using StardewArchipelago.GameModifications.CodeInjections.Television;
 using StardewArchipelago.GameModifications.EntranceRandomizer;
 using StardewArchipelago.GameModifications.Modded;
 using StardewArchipelago.GameModifications.Seasons;
