@@ -124,6 +124,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
                 return true; // run original logic
             }
         }
+
+        // Original method runs on SaveLoaded, OnWarped, TimeChanged
         // private static void FixMonsterSlayerQuest()
         public static void FixMonsterSlayerQuest_IncludeReleaseofGoals_Postfix()
         {
