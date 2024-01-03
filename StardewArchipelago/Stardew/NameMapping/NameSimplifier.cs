@@ -88,6 +88,7 @@ namespace StardewArchipelago.Stardew.NameMapping
         {
             "Honey",
             "Secret Note",
+            "Journal Scrap",
         };
 
         private static readonly Dictionary<string, string> _simplifiedChars = new()
