@@ -24,6 +24,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
         private const int RAILROAD_BOULDER_ID = 8050108;
         private const int IRIDIUM_BOMB_ID = 8050109;
         private const string LANCE_CHEST = "Lance's Diamond Wand";
+        private const string MONSTER_ERADICATION_AP_PREFIX = "Monster Eradication: ";
+        private static readonly List<string> voidSpirits = new(){
+            MonsterName.SHADOW_BRUTE, MonsterName.SHADOW_GUY, MonsterName.SHADOW_SHAMAN, MonsterName.SHADOW_SNIPER
+            };
         private static readonly Dictionary<int, string> sveEventSpecialOrders = new(){
             {8050108, "Clint2"},
             {2551994, "Clint3"},
@@ -118,6 +122,26 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
             {
                 _monitor.Log($"Failed in {nameof(UpdateSpecialOrders_StopDeletingSpecialOrders_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
+            }
+        }
+        // private static void FixMonsterSlayerQuest()
+        public static void FixMonsterSlayerQuest_IncludeReleaseofGoals_Postfix()
+        {
+            try
+            {
+                foreach (var voidSpirit in voidSpirits)
+                {
+                    var locationName = $"{MONSTER_ERADICATION_AP_PREFIX}{voidSpirit}";
+                    if (_locationChecker.IsLocationMissingAndExists(locationName))
+                    {
+                        _locationChecker.AddCheckedLocation(locationName);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(FixMonsterSlayerQuest_IncludeReleaseofGoals_Postfix)}:\n{ex}", LogLevel.Error);
+                return;
             }
         }
     }

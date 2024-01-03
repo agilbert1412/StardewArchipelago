@@ -413,6 +413,10 @@ namespace StardewArchipelago
                 Game1.player.craftingRecipes.Remove("Ginger Tincture");
                 _locationChecker.AddCheckedLocation("Ginger Tincture Recipe");
             }
+            if (_archipelago.HasReceivedItem("Krobus' Protection") && !Game1.player.mailReceived.Contains("GaveVoidSouls"))
+            {
+                Game1.player.mailReceived.Add("GaveVoidSouls");
+            }
         }
 
         private void OnDayEnding(object sender, DayEndingEventArgs e)
