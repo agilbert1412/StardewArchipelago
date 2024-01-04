@@ -249,9 +249,8 @@ namespace StardewArchipelago.Items.Traps
             {
                 return;
             }
-
-            var halfAmountJoules = currentAmountJoules.Value / 2;
-            _archipelago.SetBigIntegerDataStorage(Scope.Global, bankingKey, halfAmountJoules);
+            
+            _archipelago.DivideBigIntegerDataStorage(Scope.Global, bankingKey, 2);
         }
 
         public void TeleportRandomly()

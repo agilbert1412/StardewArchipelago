@@ -31,6 +31,7 @@ namespace StardewArchipelago.Archipelago
         private DeathManager _deathManager;
         private ArchipelagoConnectionInfo _connectionInfo;
         private IManifest _modManifest;
+        private IDataStorageWrapper<BigInteger> _bigIntegerDataStorage;
 
         private Action _itemReceivedFunction;
 
@@ -151,6 +152,8 @@ namespace StardewArchipelago.Archipelago
             _session.Socket.ErrorReceived += SessionErrorReceived;
             _session.Socket.SocketClosed += SessionSocketClosed;
 
+            _bigIntegerDataStorage = new BigIntegerDataStorageWrapper(_console, _session);
+
             InitializeDeathLink();
             // MultiRandom = new Random(SlotData.Seed);
         }
@@ -206,8 +209,7 @@ namespace StardewArchipelago.Archipelago
 
         private void InitSession(ArchipelagoConnectionInfo connectionInfo)
         {
-            _session = ArchipelagoSessionFactory.CreateSession(connectionInfo.HostUrl,
-                connectionInfo.Port);
+            _session = ArchipelagoSessionFactory.CreateSession(connectionInfo.HostUrl, connectionInfo.Port);
             _connectionInfo = connectionInfo;
         }
 
@@ -367,73 +369,6 @@ namespace StardewArchipelago.Archipelago
             return game != null && game == GAME_NAME;
         }
 
-        public const string STRING_DATA_STORAGE_DELIMITER = "|||";
-        public void AddToStringDataStorage(Scope scope, string key, string value)
-        {
-            if (!MakeSureConnected())
-            {
-                return;
-            }
-
-            var existingValue = ReadStringFromDataStorage(scope, key);
-            if (string.IsNullOrWhiteSpace(existingValue))
-            {
-                _session.DataStorage[scope, key] = value;
-            }
-            else
-            {
-                _session.DataStorage[scope, key] = existingValue + STRING_DATA_STORAGE_DELIMITER + value;
-            }
-        }
-
-        public void SetStringDataStorage(Scope scope, string key, string value)
-        {
-            if (!MakeSureConnected())
-            {
-                return;
-            }
-
-            _session.DataStorage[scope, key] = value;
-        }
-
-        public bool StringExistsInDataStorage(Scope scope, string key)
-        {
-            if (!MakeSureConnected())
-            {
-                return false;
-            }
-
-            var value = _session.DataStorage[scope, key];
-            return !string.IsNullOrWhiteSpace(value.To<string>());
-        }
-
-        public string ReadStringFromDataStorage(Scope scope, string key)
-        {
-            if (!MakeSureConnected())
-            {
-                return null;
-            }
-
-            var value = _session.DataStorage[scope, key];
-            var stringValue = value.To<string>();
-            if (string.IsNullOrWhiteSpace(stringValue))
-            {
-                return null;
-            }
-
-            return stringValue;
-        }
-
-        public void RemoveStringFromDataStorage(Scope scope, string key)
-        {
-            if (!MakeSureConnected())
-            {
-                return;
-            }
-
-            _session.DataStorage[scope, key] = "";
-        }
-
         public void SetBigIntegerDataStorage(Scope scope, string key, BigInteger value)
         {
             if (!MakeSureConnected())
@@ -441,8 +376,7 @@ namespace StardewArchipelago.Archipelago
                 return;
             }
 
-            var token = JToken.FromObject(value);
-            _session.DataStorage[scope, key] = token;
+            _bigIntegerDataStorage.Set(scope, key, value);
         }
 
         public BigInteger? ReadBigIntegerFromDataStorage(Scope scope, string key)
@@ -452,17 +386,7 @@ namespace StardewArchipelago.Archipelago
                 return null;
             }
 
-            var value = _session.DataStorage[scope, key];
-            try
-            {
-                var integerValue = value.To<BigInteger>();
-                return integerValue;
-            }
-            catch (Exception ex)
-            {
-                _console.Log($"Error Reading BigInteger from DataStorage key [{key}]. Value: {value}", LogLevel.Error);
-                return null;
-            }
+            return _bigIntegerDataStorage.Read(scope, key);
         }
 
         public async Task<BigInteger?> ReadBigIntegerFromDataStorageAsync(Scope scope, string key)
@@ -472,17 +396,52 @@ namespace StardewArchipelago.Archipelago
                 return null;
             }
 
-            var value = _session.DataStorage[scope, key];
-            try
+            return await _bigIntegerDataStorage.ReadAsync(scope, key);
+        }
+
+        public bool AddBigIntegerDataStorage(Scope scope, string key, int amount)
+        {
+            if (!MakeSureConnected())
             {
-                var integerValue = await value.GetAsync<BigInteger>();
-                return integerValue;
+                return false;
             }
-            catch (Exception ex)
+
+            return _bigIntegerDataStorage.Add(scope, key, amount);
+        }
+
+        public bool SubtractBigIntegerDataStorage(Scope scope, string key, int amount)
+        {
+            if (!MakeSureConnected())
             {
-                _console.Log($"Error Async Reading BigInteger from DataStorage key [{key}]. Value: {value}", LogLevel.Error);
-                return null;
+                return false;
             }
+
+            return _bigIntegerDataStorage.Subtract(scope, key, amount);
+        }
+
+        public bool MultiplyBigIntegerDataStorage(Scope scope, string key, int multiple)
+        {
+            if (!MakeSureConnected())
+            {
+                return false;
+            }
+
+            return _bigIntegerDataStorage.Multiply(scope, key, multiple);
+        }
+
+        public bool DivideBigIntegerDataStorage(Scope scope, string key, int divisor)
+        {
+            if (!MakeSureConnected())
+            {
+                return false;
+            }
+
+            if (divisor != 2)
+            {
+                throw new NotImplementedException($"Can't divide DataStorage by {divisor} yet.");
+            }
+
+            return _bigIntegerDataStorage.DivideByTwo(scope, key);
         }
 
         public Dictionary<string, long> GetAllCheckedLocations()
@@ -801,6 +760,7 @@ namespace StardewArchipelago.Archipelago
                 _session.Socket.DisconnectAsync();
             }
             _session = null;
+            _bigIntegerDataStorage = null;
             IsConnected = false;
         }
 
