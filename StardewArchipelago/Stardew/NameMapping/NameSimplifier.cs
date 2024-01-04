@@ -37,6 +37,10 @@ namespace StardewArchipelago.Stardew.NameMapping
                 {
                     displayName = displayName.Replace("Trilobite Fossil", "Trilobite");
                 }
+                if (displayName.Contains("Rusty Sur"))
+                {
+                    displayName = displayName.Replace("Sur", "Spur");
+                }
                 name = displayName;
             }
 
