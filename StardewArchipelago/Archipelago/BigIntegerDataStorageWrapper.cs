@@ -67,7 +67,7 @@ namespace StardewArchipelago.Archipelago
             }
         }
 
-        public bool Add(Scope scope, string key, int amount)
+        public bool Add(Scope scope, string key, long amount)
         {
             try
             {
@@ -81,11 +81,18 @@ namespace StardewArchipelago.Archipelago
             }
         }
 
-        public bool Subtract(Scope scope, string key, int amount)
+        public bool Subtract(Scope scope, string key, long amount, bool dontGoBelowZero)
         {
             try
             {
-                _session.DataStorage[scope, key] -= amount;
+                if (dontGoBelowZero)
+                {
+                    _session.DataStorage[scope, key] = (_session.DataStorage[scope, key] - amount) + Operation.Max(0);
+                }
+                else
+                {
+                    _session.DataStorage[scope, key] -= amount;
+                }
                 return true;
             }
             catch (Exception ex)
