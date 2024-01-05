@@ -26,7 +26,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
         private const string LANCE_CHEST = "Lance's Diamond Wand";
         private const string MONSTER_ERADICATION_AP_PREFIX = "Monster Eradication: ";
         private static readonly List<string> voidSpirits = new(){
-            MonsterName.SHADOW_BRUTE, MonsterName.SHADOW_GUY, MonsterName.SHADOW_SHAMAN, MonsterName.SHADOW_SNIPER
+            MonsterName.SHADOW_BRUTE, MonsterName.SHADOW_SHAMAN, MonsterName.SHADOW_SNIPER, MonsterCategory.VOID_SPIRITS,
+            string.Join("30 ",MonsterCategory.VOID_SPIRITS), string.Join("60 ",MonsterCategory.VOID_SPIRITS), 
+            string.Join("90 ",MonsterCategory.VOID_SPIRITS), string.Join("120 ",MonsterCategory.VOID_SPIRITS)
             };
         private static readonly Dictionary<int, string> sveEventSpecialOrders = new(){
             {8050108, "Clint2"},
