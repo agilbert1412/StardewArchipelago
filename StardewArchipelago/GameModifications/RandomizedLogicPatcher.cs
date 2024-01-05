@@ -69,6 +69,7 @@ namespace StardewArchipelago.GameModifications
             GoldenClockInjections.Initialize(monitor, archipelago);
             ItemTooltipInjections.Initialize(monitor, modHelper, archipelago, locationChecker, nameSimplifier);
             BillboardInjections.Initialize(monitor, modHelper, archipelago, locationChecker, friends);
+            SpecialOrderBoardInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
 
             DebugPatchInjections.Initialize(monitor, archipelago);
         }
@@ -581,15 +582,20 @@ namespace StardewArchipelago.GameModifications
                 postfix: new HarmonyMethod(typeof(ItemTooltipInjections), nameof(ItemTooltipInjections.GetDescription_AddMissingChecks_Postfix))
             );
 
-            var billboardDrawParameters = new[] { typeof(SpriteBatch) };
+            var boardDrawParameters = new[] { typeof(SpriteBatch) };
             _harmony.Patch(
-                original: AccessTools.Method(typeof(Billboard), nameof(Billboard.draw), billboardDrawParameters),
+                original: AccessTools.Method(typeof(Billboard), nameof(Billboard.draw), boardDrawParameters),
                 postfix: new HarmonyMethod(typeof(BillboardInjections), nameof(BillboardInjections.Draw_AddArchipelagoIndicators_Postfix))
             );
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Billboard), nameof(Billboard.performHoverAction)),
                 postfix: new HarmonyMethod(typeof(BillboardInjections), nameof(BillboardInjections.PerformHoverAction_AddArchipelagoChecksToTooltips_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(SpecialOrdersBoard), nameof(SpecialOrdersBoard.draw), boardDrawParameters),
+                postfix: new HarmonyMethod(typeof(SpecialOrderBoardInjections), nameof(SpecialOrderBoardInjections.Draw_AddArchipelagoIndicators_Postfix))
             );
         }
 

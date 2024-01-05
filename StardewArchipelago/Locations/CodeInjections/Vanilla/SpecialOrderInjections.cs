@@ -56,7 +56,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             try
             {
-                var specialOrderName = __result.GetName();
+                var specialOrderName = GetEnglishQuestName(__result.questName.Value);
                 if (!_archipelago.LocationExists(specialOrderName))
                 {
                     return;
