@@ -316,6 +316,13 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(specialOrderAfterEventsType, "UpdateSpecialOrders"),
                 prefix: new HarmonyMethod(typeof(SVECutsceneInjections), nameof(SVECutsceneInjections.UpdateSpecialOrders_StopDeletingSpecialOrders_Prefix))
             );
+
+            var disableShadowAttacksType = AccessTools.TypeByName("DisableShadowAttacks");
+
+            _harmony.Patch(
+                original: AccessTools.Method(disableShadowAttacksType, "FixMonsterSlayerQuest"),
+                postfix: new HarmonyMethod(typeof(SVECutsceneInjections), nameof(SVECutsceneInjections.FixMonsterSlayerQuest_IncludeReleaseofGoals_Postfix))
+            );
         }
     }
 }
