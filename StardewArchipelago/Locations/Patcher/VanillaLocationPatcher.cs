@@ -683,6 +683,11 @@ namespace StardewArchipelago.Locations.Patcher
             }
 
             _harmony.Patch(
+                original: AccessTools.Method(typeof(ShopMenu), nameof(ShopMenu.update)),
+                postfix: new HarmonyMethod(typeof(EggFestivalInjections), nameof(EggFestivalInjections.Update_AddStrawberrySeedsCheck_Postfix))
+            );
+
+            _harmony.Patch(
                 original: AccessTools.Method(typeof(Event), nameof(Event.command_awardFestivalPrize)),
                 prefix: new HarmonyMethod(typeof(EggFestivalInjections), nameof(EggFestivalInjections.AwardFestivalPrize_Strawhat_Prefix))
             );
