@@ -106,9 +106,9 @@ namespace StardewArchipelago.Items.Traps
         public Dictionary<TrapItemsDifficulty, double> ShuffleRate = new()
         {
             {TrapItemsDifficulty.NoTraps, 0},
-            {TrapItemsDifficulty.Easy, 0.05},
-            {TrapItemsDifficulty.Medium, 0.1},
-            {TrapItemsDifficulty.Hard, 0.2},
+            {TrapItemsDifficulty.Easy, 0.02},
+            {TrapItemsDifficulty.Medium, 0.05},
+            {TrapItemsDifficulty.Hard, 0.15},
             {TrapItemsDifficulty.Hell, 0.4},
             {TrapItemsDifficulty.Nightmare, 0.8},
         };
