@@ -73,7 +73,7 @@ namespace StardewArchipelago.Locations.Festival
             try
             {
                 // We only run this once for each menu
-                if (_lastShopMenuUpdated == __instance || !Game1.CurrentEvent.isSpecificFestival("spring13"))
+                if (_lastShopMenuUpdated == __instance || Game1.CurrentEvent == null ||!Game1.CurrentEvent.isSpecificFestival("spring13"))
                 {
                     return;
                 }
