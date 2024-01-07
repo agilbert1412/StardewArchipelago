@@ -95,7 +95,6 @@ namespace StardewArchipelago.Locations.Festival
                 var strawberrySeedsApItem = new PurchaseableArchipelagoLocation("Strawberry Seeds", FestivalLocationNames.STRAWBERRY_SEEDS, _modHelper, _locationChecker, _archipelago, myActiveHints);
                 __instance.itemPriceAndStock.Add(strawberrySeedsApItem, new[] { 1000, 1 });
                 __instance.forSale.Add(strawberrySeedsApItem);
-
                 return;
             }
             catch (Exception ex)
