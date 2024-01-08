@@ -85,7 +85,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
 
                 _lastShopMenuUpdated = __instance;
 
-                RemoveSaloonRecipesFromPhone(__instance);
+                RemoveGuildRecipesFromPhone(__instance);
 
                 var myActiveHints = _archipelago.GetMyActiveHints();
                 foreach (var salableItem in __instance.itemPriceAndStock.Keys.ToArray())
@@ -110,16 +110,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
             }
         }
 
-        private static void RemoveSaloonRecipesFromPhone(ShopMenu shopMenu)
+        private static void RemoveGuildRecipesFromPhone(ShopMenu shopMenu)
         {
-            if (shopMenu.storeContext == "Saloon")
+            if (shopMenu.storeContext == "AdventureGuild")
             {
                 return;
             }
 
             foreach (var salable in shopMenu.itemPriceAndStock.Keys.ToArray())
             {
-                if (salable.Name.Contains("Frog Leg"))
+                if (salable.Name.Contains("Frog Leg") || salable.Name.Contains("Mushroom Berry Rice"))
                 {
                     shopMenu.itemPriceAndStock.Remove(salable);
                 }
@@ -128,6 +128,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
 
         private static void ReplaceTemperedGalaxyWeapons(ShopMenu shopMenu, ISalable salableItem, Hint[] myActiveHints)
         {
+            if (shopMenu.storeContext != "Custom_CastleVillageOutpost")
+            {
+                return;
+            }
+            
             _shopReplacer.ReplaceShopItem(shopMenu.itemPriceAndStock, salableItem, ALESIA_DAGGER, "Tempered Galaxy Dagger", myActiveHints);
             _shopReplacer.ReplaceShopItem(shopMenu.itemPriceAndStock, salableItem, ISAAC_SWORD, "Tempered Galaxy Sword", myActiveHints);
             _shopReplacer.ReplaceShopItem(shopMenu.itemPriceAndStock, salableItem, ISAAC_HAMMER, "Tempered Galaxy Hammer", myActiveHints);
