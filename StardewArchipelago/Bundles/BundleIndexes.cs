@@ -174,7 +174,6 @@ namespace StardewArchipelago.Bundles
             {"Slime Farmer", BUNDLE_GREEN},
 
             {"Tackle", BUNDLE_YELLOW},
-            {"Recycling", BUNDLE_GREEN},
             {"Spring Fishing", BUNDLE_GREEN},
             {"Summer Fishing", BUNDLE_YELLOW},
             {"Fall Fishing", BUNDLE_ORANGE},
