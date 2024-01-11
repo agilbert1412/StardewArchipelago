@@ -213,7 +213,7 @@ namespace StardewArchipelago.GameModifications.Tooltips
                 var festivalDay = FestivalLocationNames.NIGHT_MARKET_ALL;
                 foreach (var location in FestivalLocationNames.LocationsByFestival[festivalDay])
                 {
-                    if (_locationChecker.IsLocationMissingAndExists(location))
+                    if (_locationChecker.IsLocationMissing(location))
                     {
                         yield return location;
                     }
@@ -234,7 +234,7 @@ namespace StardewArchipelago.GameModifications.Tooltips
 
                 foreach (var location in FestivalLocationNames.LocationsByFestival[festivalDay])
                 {
-                    if (_locationChecker.IsLocationMissingAndExists(location))
+                    if (_locationChecker.IsLocationMissing(location))
                     {
                         yield return location;
                     }
@@ -251,7 +251,7 @@ namespace StardewArchipelago.GameModifications.Tooltips
             var festivalLocations = FestivalLocationNames.LocationsByFestival[festivalName];
             foreach (var location in festivalLocations)
             {
-                if (_locationChecker.IsLocationMissingAndExists(location))
+                if (_locationChecker.IsLocationMissing(location))
                 {
                     yield return location;
                 }

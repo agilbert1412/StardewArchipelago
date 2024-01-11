@@ -249,7 +249,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 return;
             }
 
-            if (!_locationChecker.IsLocationMissingAndExists(AP_WEDDING_RING_RECIPE))
+            if (!_locationChecker.IsLocationMissing(AP_WEDDING_RING_RECIPE))
             {
                 return;
             }

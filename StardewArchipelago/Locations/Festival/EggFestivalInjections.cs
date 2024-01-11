@@ -79,7 +79,7 @@ namespace StardewArchipelago.Locations.Festival
                 }
 
                 _lastShopMenuUpdated = __instance;
-                if (!_locationChecker.IsLocationMissingAndExists(FestivalLocationNames.STRAWBERRY_SEEDS))
+                if (!_locationChecker.IsLocationMissing(FestivalLocationNames.STRAWBERRY_SEEDS))
                 {
                     return;
                 }

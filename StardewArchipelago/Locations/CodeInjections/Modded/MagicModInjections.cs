@@ -92,7 +92,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 }
 
                 CheckTileAnalyzeLocations(player, spellsLearned, targetX, targetY);
-                if (spellsLearned.Any(spell => _locationChecker.IsLocationMissingAndExists(spell)))
+                if (spellsLearned.Any(spell => _locationChecker.IsLocationMissing(spell)))
                 {
                     Game1.playSound("secret1");
                 }

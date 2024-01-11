@@ -132,7 +132,7 @@ namespace StardewArchipelago.GameModifications
             else
             {
                 var location = "Grass Starter Recipe";
-                if (!_locationChecker.IsLocationMissingAndExists(location))
+                if (!_locationChecker.IsLocationMissing(location))
                 {
                     return;
                 }

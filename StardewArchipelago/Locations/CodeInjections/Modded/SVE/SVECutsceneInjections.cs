@@ -136,7 +136,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
                 foreach (var voidSpirit in voidSpirits)
                 {
                     var locationName = $"{MONSTER_ERADICATION_AP_PREFIX}{voidSpirit}";
-                    if (_locationChecker.IsLocationMissingAndExists(locationName))
+                    if (_locationChecker.IsLocationMissing(locationName))
                     {
                         _locationChecker.AddCheckedLocation(locationName);
                     }

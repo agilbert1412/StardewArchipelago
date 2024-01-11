@@ -315,7 +315,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             {
                 __result = true;
                 
-                if (_locationChecker.IsLocationMissingAndExists(FOUNTAIN_DRINK_LOCATION))
+                if (_locationChecker.IsLocationMissing(FOUNTAIN_DRINK_LOCATION))
                 {
                     var apMessage = "You drink the water... it tastes like a stale Burger King Meal...?";
                     _locationChecker.AddCheckedLocation(FOUNTAIN_DRINK_LOCATION);

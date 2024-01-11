@@ -129,7 +129,7 @@ namespace StardewArchipelago.Locations
 
         private void AddArchipelagoCheckToStock(Dictionary<ISalable, int[]> itemPriceAndStock, string apLocationName, Hint[] myActiveHints, int[] itemPrice)
         {
-            if (!_locationChecker.IsLocationMissingAndExists(apLocationName))
+            if (!_locationChecker.IsLocationMissing(apLocationName))
             {
                 return;
             }

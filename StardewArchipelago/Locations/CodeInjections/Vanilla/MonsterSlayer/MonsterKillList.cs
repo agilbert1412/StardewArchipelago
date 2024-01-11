@@ -97,18 +97,23 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
                     throw new ArgumentOutOfRangeException();
             }
 
-            if (!_archipelago.SlotData.ExcludeGingerIsland)
+            if (_archipelago.SlotData.ExcludeGingerIsland)
             {
-                return;
+                MonsterGoals.Remove(MonsterCategory.MAGMA_SPRITES);
+                MonsterGoals.Remove(MonsterName.MAGMA_SPRITE);
+                MonsterGoals.Remove(MonsterName.MAGMA_SPARKER);
+                MonsterGoals.Remove(MonsterName.ROYAL_SERPENT);
+                MonsterGoals.Remove(MonsterName.SKELETON_MAGE);
+                MonsterGoals.Remove(MonsterName.SHADOW_SNIPER);
+                MonsterGoals.Remove(MonsterName.TIGER_SLIME);
             }
 
-            MonsterGoals.Remove(MonsterCategory.MAGMA_SPRITES);
-            MonsterGoals.Remove(MonsterName.MAGMA_SPRITE);
-            MonsterGoals.Remove(MonsterName.MAGMA_SPARKER);
-            MonsterGoals.Remove(MonsterName.ROYAL_SERPENT);
-            MonsterGoals.Remove(MonsterName.SKELETON_MAGE);
-            MonsterGoals.Remove(MonsterName.SHADOW_SNIPER);
-            MonsterGoals.Remove(MonsterName.TIGER_SLIME);
+            if (_archipelago.SlotData.SpecialOrderLocations != SpecialOrderLocations.BoardAndQi)
+            {
+                MonsterGoals.Remove(MonsterName.ROYAL_SERPENT);
+                MonsterGoals.Remove(MonsterName.SKELETON_MAGE);
+                MonsterGoals.Remove(MonsterName.SHADOW_SNIPER);
+            }
         }
 
         private Dictionary<string, int> GenerateSplitGoals()

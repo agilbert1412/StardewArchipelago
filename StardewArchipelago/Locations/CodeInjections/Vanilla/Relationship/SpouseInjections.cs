@@ -51,7 +51,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
 
                 var friendshipData = who.friendshipData[npcName];
 
-                if (__instance.Sprite.CurrentAnimation != null || friendshipData.Points < 3125 || !_locationChecker.IsLocationMissingAndExists(SPOUSE_STARDROP))
+                if (__instance.Sprite.CurrentAnimation != null || friendshipData.Points < 3125 || !_locationChecker.IsLocationMissing(SPOUSE_STARDROP))
                 {
                     return true; // run original logic
                 }

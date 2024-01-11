@@ -312,7 +312,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
         private static void AddWeightedHelpWanted(int questNumber, string questType, Hint[] hints, List<string> remainingHelpWantedQuests)
         {
             var location = GetHelpWantedLocationName(questType, questNumber);
-            if (!_locationChecker.IsLocationMissingAndExists(location))
+            if (!_locationChecker.IsLocationMissing(location))
             {
                 return;
             }

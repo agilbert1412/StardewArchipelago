@@ -215,7 +215,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private static void AddRecipeCheckToStock(Dictionary<ISalable, int[]> stock, string recipeName, int[] price, Hint[] activeHints)
         {
             var apLocation = $"{recipeName} Recipe";
-            if (!_locationChecker.IsLocationMissingAndExists(apLocation))
+            if (!_locationChecker.IsLocationMissing(apLocation))
             {
                 return;
             }

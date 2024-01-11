@@ -38,7 +38,7 @@ namespace StardewArchipelago.Locations
             return !IsLocationChecked(locationName);
         }
 
-        public bool IsLocationMissingAndExists(string locationName)
+        public bool IsLocationMissing(string locationName)
         {
             return _archipelago.LocationExists(locationName) && IsLocationNotChecked(locationName);
         }
