@@ -192,20 +192,20 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
 
         private bool IsBeach(string area, out string correctArea)
         {
-            foreach (var beachLocations in _beachLocations)
+            foreach (var beachLocation in _beachLocations)
             {
-                if (!area.Equals(beachLocations, StringComparison.OrdinalIgnoreCase))
+                if (!area.Equals(beachLocation, StringComparison.OrdinalIgnoreCase))
                 {
                     continue;
                 }
 
                 if (Game1.dayOfMonth >= 15 && Game1.dayOfMonth <= 17 && Game1.currentSeason.Equals("winter", StringComparison.OrdinalIgnoreCase))
                 {
-                    correctArea = area.Replace(beachLocations, beachNightMarket);
+                    correctArea = area.Replace(beachLocation, beachNightMarket);
                     return true;
                 }
 
-                correctArea = area.Replace(beachLocations, beach);
+                correctArea = area.Replace(beachLocation, beach);
                 return true;
             }
 
@@ -215,20 +215,20 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
 
         private bool IsGrandpaShed(string area, out string correctArea)
         {
-            foreach (var shedLocations in _grandpaShedLocations)
+            foreach (var shedLocation in _grandpaShedLocations)
             {
-                if (!area.Equals(shedLocations, StringComparison.OrdinalIgnoreCase))
+                if (!area.Equals(shedLocation, StringComparison.OrdinalIgnoreCase))
                 {
                     continue;
                 }
 
                 if (Game1.MasterPlayer.mailReceived.Contains("ShedRepaired"))
                 {
-                    correctArea = area.Replace(shedLocations, grandpaShedFinish);
+                    correctArea = area.Replace(shedLocation, grandpaShedFinish);
                     return true;
                 }
 
-                correctArea = area.Replace(shedLocations, grandpaShedRuins);
+                correctArea = area.Replace(shedLocation, grandpaShedRuins);
                 return true;
             }
 
@@ -238,20 +238,20 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
 
         private bool IsAuroraVineyard(string area, out string correctArea)
         {
-            foreach (var auroraVineyardLocations in _auroraVineyardLocations)
+            foreach (var auroraVineyardLocation in _auroraVineyardLocations)
             {
-                if (!area.Equals(auroraVineyardLocations, StringComparison.OrdinalIgnoreCase))
+                if (!area.Equals(auroraVineyardLocation, StringComparison.OrdinalIgnoreCase))
                 {
                     continue;
                 }
 
                 if (Game1.MasterPlayer.mailReceived.Contains("PlayerWantsAuroraVineyard"))
                 {
-                    correctArea = area.Replace(auroraVineyardLocations, auroraVineyardRefurbished);
+                    correctArea = area.Replace(auroraVineyardLocation, auroraVineyardRefurbished);
                     return true;
                 }
 
-                correctArea = area.Replace(auroraVineyardLocations, auroraVineyard);
+                correctArea = area.Replace(auroraVineyardLocation, auroraVineyard);
                 return true;
             }
 
@@ -261,20 +261,20 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
 
         private bool IsAuroraVineyardCellar(string area, out string correctArea)
         {
-            foreach (var auroraVineyardCellarLocations in _auroraVineyardCellarLocations)
+            foreach (var auroraVineyardCellarLocation in _auroraVineyardCellarLocations)
             {
-                if (!area.Equals(auroraVineyardCellarLocations, StringComparison.OrdinalIgnoreCase))
+                if (!area.Equals(auroraVineyardCellarLocation, StringComparison.OrdinalIgnoreCase))
                 {
                     continue;
                 }
 
                 if (Game1.MasterPlayer.mailReceived.Contains("PlayerWantsAuroraVineyard"))
                 {
-                    correctArea = area.Replace(auroraVineyardCellarLocations, auroraVineyardCellarRefurbished);
+                    correctArea = area.Replace(auroraVineyardCellarLocation, auroraVineyardCellarRefurbished);
                     return true;
                 }
 
-                correctArea = area.Replace(auroraVineyardCellarLocations, auroraVineyardCellar);
+                correctArea = area.Replace(auroraVineyardCellarLocation, auroraVineyardCellar);
                 return true;
             }
 
