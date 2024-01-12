@@ -28,7 +28,7 @@
         public const string DISTANT_LANDS = "Distant Lands - Witch Swamp Overhaul";
 
         public const string AP_SVE = "StardewAP - SVE Patch";
-        public const string AP_ALECTO = "StardewAP - Alecto the Witch Patch";
-        public const string AP_JASPER = "StardewAP - Professor Jasper Thomas Patch";
+        public const string AP_ALECTO = "StardewAP - Alecto Patch";
+        public const string AP_JASPER = "StardewAP - Jasper Patch";
     }
 }
