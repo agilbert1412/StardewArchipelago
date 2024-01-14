@@ -77,7 +77,7 @@ namespace StardewArchipelago.Items.Traps
             var allItems = slotsToShuffle.Values.ToList();
             var allItemsShuffled = allItems.Shuffle(random);
 
-            _monitor.Log($"Shuffling the remaining {slotsToShuffle.Count} items locally", LogLevel.Debug);
+            _monitor.Log($"Shuffling {slotsToShuffle.Count} items locally", LogLevel.Debug);
 
             for (var i = 0; i < allSlots.Count; i++)
             {
