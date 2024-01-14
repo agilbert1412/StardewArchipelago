@@ -69,9 +69,9 @@ namespace StardewArchipelago.Items.Traps
             if (rateAsGifts > 0)
             {
                 SendRandomGifts(slotsToShuffle, random, rate * rateAsGifts);
+                _monitor.Log($"Sent {numberItemsToShuffle - slotsToShuffle.Count} items as random gifts", LogLevel.Debug);
             }
 
-            _monitor.Log($"Sent {numberItemsToShuffle - slotsToShuffle.Count} items as random gifts", LogLevel.Debug);
             slotsToShuffle = slotsToShuffle.Where(x => random.NextDouble() < rate).ToDictionary(x => x.Key, x => x.Value);
             var allSlots = slotsToShuffle.Keys.ToList();
             var allItems = slotsToShuffle.Values.ToList();
