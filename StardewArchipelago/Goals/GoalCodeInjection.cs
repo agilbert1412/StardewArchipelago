@@ -423,22 +423,26 @@ namespace StardewArchipelago.Goals
 
         private static bool HasCookedAllRecipes()
         {
+            var numberOfUnavailableRecipes = _archipelago.SlotData.ExcludeGingerIsland ? 5 : 0;
             var allRecipes = Game1.content.Load<Dictionary<string, string>>("Data\\CookingRecipes");
+            var numberOfMissedRecipes = 0;
             foreach (var (recipeName, recipe) in allRecipes)
             {
                 if (!Game1.player.cookingRecipes.ContainsKey(recipeName))
                 {
-                    return false;
+                    numberOfMissedRecipes++;
+                    continue;
                 }
 
                 var recipeId = Convert.ToInt32(recipe.Split('/')[2].Split(' ')[0]);
                 if (!Game1.player.recipesCooked.ContainsKey(recipeId))
                 {
-                    return false;
+                    numberOfMissedRecipes++;
+                    continue;
                 }
             }
 
-            return true;
+            return numberOfMissedRecipes <= numberOfUnavailableRecipes;
         }
 
         private static bool HasCraftedAllRecipes()
