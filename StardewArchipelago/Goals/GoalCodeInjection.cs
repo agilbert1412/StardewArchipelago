@@ -443,10 +443,17 @@ namespace StardewArchipelago.Goals
 
         private static bool HasCraftedAllRecipes()
         {
+            var numberOfUnavailableRecipes = _archipelago.SlotData.ExcludeGingerIsland ? 8 : 0;
             var allRecipes = Game1.content.Load<Dictionary<string, string>>("Data\\CraftingRecipes");
+            var numberOfMissedRecipes = 0;
             foreach (var recipe in allRecipes.Keys)
             {
                 if (!Game1.player.craftingRecipes.ContainsKey(recipe) || Game1.player.craftingRecipes[recipe] <= 0)
+                {
+                    numberOfMissedRecipes++;
+                }
+
+                if (numberOfMissedRecipes > numberOfUnavailableRecipes)
                 {
                     return false;
                 }
