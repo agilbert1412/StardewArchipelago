@@ -12,6 +12,7 @@ using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
 using StardewArchipelago.Stardew;
 using StardewValley.Locations;
 using StardewValley.Menus;
+using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Goals
 {
@@ -249,7 +250,7 @@ namespace StardewArchipelago.Goals
 
             if (_archipelago.SlotData.Shipsanity == Shipsanity.None)
             {
-                if (!Utility.hasFarmerShippedAllItems())
+                if (!HasShippedAllItems())
                 {
                     return;
                 }
@@ -419,6 +420,29 @@ namespace StardewArchipelago.Goals
                 _monitor.Log($"Failed in {nameof(FoundWalnut_WalnutHunterGoal_Postfix)}:\n{ex}", LogLevel.Error);
                 return;
             }
+        }
+
+        private static bool HasShippedAllItems()
+        {
+            var numberOfUnavailableItems = _archipelago.SlotData.ExcludeGingerIsland ? 10 : 0;
+            var numberOfMissedItems = 0;
+            foreach (var objectInformation in Game1.objectInformation)
+            {
+                var category = objectInformation.Value.Split('/')[3];
+                if (!category.Contains("Arch") && !category.Contains("Fish") && !category.Contains("Mineral") && !category.Substring(category.Length - 3).Equals("-2") && !category.Contains("Cooking") && !category.Substring(category.Length - 3).Equals("-7") && Object.isPotentialBasicShippedCategory(objectInformation.Key, category.Substring(category.Length - 3)))
+                {
+                    if (!Game1.player.basicShipped.ContainsKey(objectInformation.Key))
+                    {
+                        numberOfMissedItems++;
+                    }
+
+                    if (numberOfMissedItems > numberOfUnavailableItems)
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
         }
 
         private static bool HasCookedAllRecipes()
