@@ -60,7 +60,8 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Grampleton Suburbs", "Custom_GrampletonSuburbs" },
             { "Scarlett's House", "Custom_ScarlettHouse" },
             { "Wizard Basement", "Custom_WizardBasement" },
-            { "Witch's Attic", "Custom_Alecto_WitchHutUpstairs"},
+            { "Willy's Bedroom", "Custom_WillyRoom"},
+            { "Gunther's Bedroom", "Custom_GunthersRoom"}
         };
 
         private static readonly Dictionary<string, string> _locationEugene = new()
@@ -100,6 +101,11 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Yoba's Clearing", "Custom_Woods3" },
         };                
 
+        private static readonly Dictionary<string, string> _locationAlecto = new()
+        {
+            { "Witch's Attic", "Custom_Alecto_WitchHutUpstairs"},
+        };
+
         private static readonly Dictionary<string, Dictionary<string, string>> _locationAliasesByMod = new()
         {
             { ModNames.ALEC, _locationAlec },
@@ -110,6 +116,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { ModNames.JUNA, _locationJuna },
             { ModNames.SVE, _locationSVE },
             { ModNames.YOBA, _locationYoba },
+            { ModNames.ALECTO, _locationAlecto },
         };
 
         public Dictionary<string, string> GetModLocationAliases(SlotData slotData)
