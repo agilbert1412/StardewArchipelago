@@ -299,7 +299,7 @@ namespace StardewArchipelago.GameModifications.Modded
             var colorItems = JunimoVendors[color].ColorItems.Keys.ToList();
             var randomColorItem = colorItems[random.Next(colorItems.Count)];
             var randomColorValue = JunimoVendors[color].ColorItems[randomColorItem];
-            var colorItemExchangeRate = ExchangeRate(Math.Max(uniquePrice, item.salePrice()), randomColorValue);
+            var colorItemExchangeRate = ExchangeRate(Math.Max(uniquePrice, item.salePrice()), (int) 0.8*randomColorValue);
 
             item.Stack = colorItemExchangeRate[0];
 
