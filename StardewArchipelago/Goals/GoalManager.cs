@@ -158,7 +158,7 @@ namespace StardewArchipelago.Goals
         {
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Farmer), nameof(Farmer.foundWalnut)),
-                postfix: new HarmonyMethod(typeof(GoalCodeInjection), nameof(GoalCodeInjection.FounddWalnut_WalnutHunterGoal_Postfix))
+                postfix: new HarmonyMethod(typeof(GoalCodeInjection), nameof(GoalCodeInjection.FoundWalnut_WalnutHunterGoal_Postfix))
             );
         }
 

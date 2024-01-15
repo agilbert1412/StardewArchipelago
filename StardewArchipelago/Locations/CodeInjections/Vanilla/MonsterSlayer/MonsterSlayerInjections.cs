@@ -10,7 +10,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
 {
     public static class MonsterSlayerInjections
     {
-        private const string MONSTER_ERADICATION_AP_PREFIX = "Monster Eradication: ";
+        public const string MONSTER_ERADICATION_AP_PREFIX = "Monster Eradication: ";
 
         private static IMonitor _monitor;
         private static IModHelper _modHelper;

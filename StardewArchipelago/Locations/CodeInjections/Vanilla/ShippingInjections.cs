@@ -15,6 +15,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
     public class NightShippingBehaviors
     {
+        public const string SHIPSANITY_PREFIX = "Shipsanity: ";
+
         private IMonitor _monitor;
         private ArchipelagoClient _archipelago;
         private LocationChecker _locationChecker;
@@ -92,7 +94,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 var name = _nameSimplifier.GetSimplifiedName(shippedItem);
 
-                var apLocation = $"Shipsanity: {name}";
+                var apLocation = $"{SHIPSANITY_PREFIX}{name}";
                 if (_archipelago.GetLocationId(apLocation) > -1)
                 {
                     _locationChecker.AddCheckedLocation(apLocation);

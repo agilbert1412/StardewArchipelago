@@ -13,7 +13,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
     public static class CraftingInjections
     {
-        private const string CRAFTING_LOCATION_PREFIX = "Craft ";
+        public const string CRAFTING_LOCATION_PREFIX = "Craft ";
 
         private static Dictionary<string, int> _carpenterRecipes = new()
         {

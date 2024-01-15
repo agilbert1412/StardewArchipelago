@@ -7,6 +7,8 @@ using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework.Audio;
 using StardewArchipelago.Locations;
+using StardewArchipelago.Locations.CodeInjections.Vanilla;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
 using StardewArchipelago.Stardew;
 using StardewValley.Locations;
 using StardewValley.Menus;
@@ -110,16 +112,27 @@ namespace StardewArchipelago.Goals
                 return;
             }
 
-            CheckMasterAnglerWithoutIslandFish();
-            if (!Game1.player.hasOrWillReceiveMail(MASTER_ANGLER_LETTER))
+            if (_archipelago.SlotData.Fishsanity == Fishsanity.None)
             {
-                return;
+                SendMasterAnglerLetterExcludingIsland();
+                if (!Game1.player.hasOrWillReceiveMail(MASTER_ANGLER_LETTER))
+                {
+                    return;
+                }
+
+            }
+            else
+            {
+                if (_locationChecker.IsAnyLocationNotCheckedStartingWith(FishingInjections.FISHSANITY_PREFIX))
+                {
+                    return;
+                }
             }
 
             _archipelago.ReportGoalCompletion();
         }
 
-        private static void CheckMasterAnglerWithoutIslandFish()
+        private static void SendMasterAnglerLetterExcludingIsland()
         {
             if (!_archipelago.SlotData.ExcludeGingerIsland || Game1.player.hasOrWillReceiveMail(MASTER_ANGLER_LETTER))
             {
@@ -209,9 +222,19 @@ namespace StardewArchipelago.Goals
                 return;
             }
 
-            if (!AdventureGuild.areAllMonsterSlayerQuestsComplete())
+            if (_archipelago.SlotData.Monstersanity == Monstersanity.None)
             {
-                return;
+                if (!AdventureGuild.areAllMonsterSlayerQuestsComplete())
+                {
+                    return;
+                }
+            }
+            else
+            {
+                if (_locationChecker.IsAnyLocationNotCheckedStartingWith(MonsterSlayerInjections.MONSTER_ERADICATION_AP_PREFIX))
+                {
+                    return;
+                }
             }
 
             _archipelago.ReportGoalCompletion();
@@ -224,9 +247,19 @@ namespace StardewArchipelago.Goals
                 return;
             }
 
-            if (!Utility.hasFarmerShippedAllItems())
+            if (_archipelago.SlotData.Shipsanity == Shipsanity.None)
             {
-                return;
+                if (!Utility.hasFarmerShippedAllItems())
+                {
+                    return;
+                }
+            }
+            else
+            {
+                if (_locationChecker.IsAnyLocationNotCheckedStartingWith(NightShippingBehaviors.SHIPSANITY_PREFIX))
+                {
+                    return;
+                }
             }
 
             _archipelago.ReportGoalCompletion();
@@ -239,9 +272,19 @@ namespace StardewArchipelago.Goals
                 return;
             }
 
-            if (!HasCookedAllRecipes())
+            if (_archipelago.SlotData.Cooksanity == Cooksanity.None)
             {
-                return;
+                if (!HasCookedAllRecipes())
+                {
+                    return;
+                }
+            }
+            else
+            {
+                if (_locationChecker.IsAnyLocationNotCheckedStartingWith(CookingInjections.COOKING_LOCATION_PREFIX))
+                {
+                    return;
+                }
             }
 
             _archipelago.ReportGoalCompletion();
@@ -254,9 +297,19 @@ namespace StardewArchipelago.Goals
                 return;
             }
 
-            if (!HasCraftedAllRecipes())
+            if (_archipelago.SlotData.Craftsanity == Craftsanity.None)
             {
-                return;
+                if (!HasCraftedAllRecipes())
+                {
+                    return;
+                }
+            }
+            else
+            {
+                if (_locationChecker.IsAnyLocationNotCheckedStartingWith(CraftingInjections.CRAFTING_LOCATION_PREFIX))
+                {
+                    return;
+                }
             }
 
             _archipelago.ReportGoalCompletion();
@@ -355,7 +408,7 @@ namespace StardewArchipelago.Goals
         }
 
         // public void foundWalnut(int stack = 1)
-        public static void FounddWalnut_WalnutHunterGoal_Postfix(Farmer __instance, int stack)
+        public static void FoundWalnut_WalnutHunterGoal_Postfix(Farmer __instance, int stack)
         {
             try
             {
@@ -363,7 +416,7 @@ namespace StardewArchipelago.Goals
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(FounddWalnut_WalnutHunterGoal_Postfix)}:\n{ex}", LogLevel.Error);
+                _monitor.Log($"Failed in {nameof(FoundWalnut_WalnutHunterGoal_Postfix)}:\n{ex}", LogLevel.Error);
                 return;
             }
         }

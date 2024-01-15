@@ -154,6 +154,11 @@ namespace StardewArchipelago.Locations
             return GetAllLocationsNotChecked().Where(x => x.Contains(filter, StringComparison.InvariantCultureIgnoreCase));
         }
 
+        public IEnumerable<string> GetAllLocationsNotCheckedStartingWith(string prefix)
+        {
+            return GetAllLocationsNotChecked().Where(x => x.StartsWith(prefix, StringComparison.InvariantCultureIgnoreCase));
+        }
+
         public string[] GetAllLocationsNotCheckedContainingWord(string wordFilter)
         {
             if (_wordFilterCache.ContainsKey(wordFilter))
@@ -169,6 +174,11 @@ namespace StardewArchipelago.Locations
         public bool IsAnyLocationNotChecked(string filter)
         {
             return GetAllLocationsNotChecked(filter).Any();
+        }
+
+        public bool IsAnyLocationNotCheckedStartingWith(string prefix)
+        {
+            return GetAllLocationsNotCheckedStartingWith(prefix).Any();
         }
 
         private static IEnumerable<string> FilterLocationsForWord(IEnumerable<string> locations, string filterWord)
