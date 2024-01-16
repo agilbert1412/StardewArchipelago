@@ -8,7 +8,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
 
     public class SpouseInjections
     {
-        private const string SPOUSE_STARDROP = "Have a Baby";
+        private const string SPOUSE_STARDROP = "Spouse Stardrop";
 
         private static IMonitor _monitor;
         private static IModHelper _helper;
