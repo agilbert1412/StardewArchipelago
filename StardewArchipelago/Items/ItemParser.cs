@@ -1,4 +1,5 @@
 ﻿using System;
+using HarmonyLib;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Items.Traps;
@@ -18,11 +19,11 @@ namespace StardewArchipelago.Items
         private UnlockManager _unlockManager;
         private TrapManager _trapManager;
 
-        public ItemParser(IModHelper helper, ArchipelagoClient archipelago, StardewItemManager itemManager, TileChooser tileChooser)
+        public ItemParser(IModHelper helper, Harmony harmony, ArchipelagoClient archipelago, StardewItemManager itemManager, TileChooser tileChooser)
         {
             _itemManager = itemManager;
             _unlockManager = new UnlockManager(archipelago);
-            _trapManager = new TrapManager(helper, archipelago, tileChooser);
+            _trapManager = new TrapManager(helper, harmony, archipelago, tileChooser);
         }
 
         public TrapManager TrapManager => _trapManager;

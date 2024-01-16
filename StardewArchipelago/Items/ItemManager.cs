@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using HarmonyLib;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Items.Traps;
@@ -17,10 +18,10 @@ namespace StardewArchipelago.Items
         private Mailman _mail;
         private HashSet<ReceivedItem> _itemsAlreadyProcessed;
 
-        public ItemManager(IModHelper helper, ArchipelagoClient archipelago, StardewItemManager itemManager, Mailman mail, TileChooser tileChooser, IEnumerable<ReceivedItem> itemsAlreadyProcessed)
+        public ItemManager(IModHelper helper, Harmony harmony, ArchipelagoClient archipelago, StardewItemManager itemManager, Mailman mail, TileChooser tileChooser, IEnumerable<ReceivedItem> itemsAlreadyProcessed)
         {
             _archipelago = archipelago;
-            _itemParser = new ItemParser(helper, archipelago, itemManager, tileChooser);
+            _itemParser = new ItemParser(helper, harmony, archipelago, itemManager, tileChooser);
             _mail = mail;
             _itemsAlreadyProcessed = itemsAlreadyProcessed.ToHashSet();
         }

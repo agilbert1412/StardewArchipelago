@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Archipelago.MultiClient.Net.Enums;
+using HarmonyLib;
 using Microsoft.Xna.Framework;
 using Netcode;
 using StardewArchipelago.Archipelago;
@@ -16,6 +17,7 @@ using StardewValley;
 using StardewValley.BellsAndWhistles;
 using StardewValley.Characters;
 using StardewValley.Locations;
+using StardewValley.Menus;
 using StardewValley.Monsters;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
@@ -46,6 +48,7 @@ namespace StardewArchipelago.Items.Traps
         private const string DROUGHT = "Drought";
 
         private readonly IModHelper _helper;
+        private readonly Harmony _harmony;
         private readonly ArchipelagoClient _archipelago;
         private readonly TrapDifficultyBalancer _difficultyBalancer;
         private readonly TileChooser _tileChooser;
@@ -73,9 +76,10 @@ namespace StardewArchipelago.Items.Traps
             {DROUGHT, () => true},
         };
 
-        public TrapManager(IModHelper helper, ArchipelagoClient archipelago, TileChooser tileChooser)
+        public TrapManager(IModHelper helper, Harmony harmony, ArchipelagoClient archipelago, TileChooser tileChooser)
         {
             _helper = helper;
+            _harmony = harmony;
             _archipelago = archipelago;
             _difficultyBalancer = new TrapDifficultyBalancer();
             _tileChooser = tileChooser;
@@ -83,6 +87,11 @@ namespace StardewArchipelago.Items.Traps
             _inventoryShuffler = new InventoryShuffler();
             _traps = new Dictionary<string, Action>();
             RegisterTraps();
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(BuffsDisplay), nameof(BuffsDisplay.clearAllBuffs)),
+                prefix: new HarmonyMethod(typeof(TrapManager), nameof(ClearAllBuffs_ClearOtherBuffs_Prefix))
+            );
         }
 
         public bool IsTrap(string unlockName)
@@ -591,6 +600,25 @@ namespace StardewArchipelago.Items.Traps
                         yield return wateringCan;
                     }
                 }
+            }
+        }
+
+        // public void clearAllBuffs()
+        public bool ClearAllBuffs_ClearOtherBuffs_Prefix(BuffsDisplay __instance)
+        {
+            try
+            {
+                foreach (var otherBuff in __instance.otherBuffs)
+                {
+                    otherBuff.removeBuff();
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                // _monitor.Log($"Failed in {nameof(ClearAllBuffs_ClearOtherBuffs_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
             }
         }
     }
