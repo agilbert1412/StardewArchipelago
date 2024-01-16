@@ -106,7 +106,6 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
         {
             { "Witch's Attic", "Custom_Alecto_WitchHutUpstairs"},
         };
-        };
 
         private static readonly Dictionary<string, string> _locationLacey = new()
         {
