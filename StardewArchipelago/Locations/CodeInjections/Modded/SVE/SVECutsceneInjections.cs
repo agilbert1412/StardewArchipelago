@@ -25,6 +25,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
         private const int IRIDIUM_BOMB_ID = 8050109;
         private const string LANCE_CHEST = "Lance's Diamond Wand";
         private const string MONSTER_ERADICATION_AP_PREFIX = "Monster Eradication: ";
+        private static readonly Dictionary<BundlePrice, string> VineyardPrices = new(){
+            { BundlePrice.Minimum, "Zygote" }, { BundlePrice.VeryCheap, "Baby" },
+            { BundlePrice.Cheap, "Oomfie" }, { BundlePrice.Expensive, "Adult" },
+            { BundlePrice.VeryExpensive, "Boomer" }, { BundlePrice.Maximum, "EldritchHorror" },
+        };
         private const string DEINFEST_AP_LOCATION = "Purify an Infested Lichtung";
         private static readonly List<string> voidSpirits = new(){
             MonsterName.SHADOW_BRUTE, MonsterName.SHADOW_SHAMAN, MonsterName.SHADOW_SNIPER, MonsterCategory.VOID_SPIRITS,
@@ -101,7 +106,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
                     return true; // run original logic
                 }
                 //Change the key so it doesn't get deleted
-                var specialOrder = SpecialOrder.GetSpecialOrder(sveEventSpecialOrders[__instance.id], null);
+                var eventsKey = sveEventSpecialOrders[__instance.id];
+                if (eventsKey == "Apples") // Changes apples quest with one relevant to bundle price
+                {
+                    eventsKey = AuroraVineyardMatchesBundles();
+                }
+                var specialOrder = SpecialOrder.GetSpecialOrder(eventsKey, null);
                 Game1.player.team.specialOrders.Add(specialOrder);
 
                 return true; // run original logic
@@ -156,6 +166,17 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
                 _monitor.Log($"Failed in {nameof(FixMonsterSlayerQuest_IncludeReleaseofGoals_Postfix)}:\n{ex}", LogLevel.Error);
                 return;
             }
+        }
+
+        public static string AuroraVineyardMatchesBundles()
+        {
+            
+            var bundlesPrice = _archipelago.SlotData.BundlePrice;
+            if (bundlesPrice.HasFlag(BundlePrice.Normal))
+            {
+                return "Apples";
+            }
+            return string.Join("Apples", VineyardPrices[bundlesPrice]);
         }
     }
 }

@@ -43,6 +43,7 @@ namespace StardewArchipelago.Archipelago
         private const string GIFTING_KEY = "gifting";
         private const string BANKING_KEY = "banking";
         private const string BANK_TAX_KEY = "bank_tax";
+        private const string BUNDLE_PRICE_KEY = "bundle_price";
         private const string DEATH_LINK_KEY = "death_link";
         private const string SEED_KEY = "seed";
         private const string MODIFIED_BUNDLES_KEY = "modified_bundles";
@@ -88,6 +89,7 @@ namespace StardewArchipelago.Archipelago
         public double ExperienceMultiplier { get; private set; }
         public double FriendshipMultiplier { get; private set; }
         public DebrisMultiplier DebrisMultiplier { get; private set; }
+        public BundlePrice BundlePrice { get; private set; }
         public bool QuickStart { get; private set; }
         public bool Gifting { get; private set; }
         public bool Banking { get; private set; }
@@ -138,6 +140,7 @@ namespace StardewArchipelago.Archipelago
             ExperienceMultiplier = GetSlotSetting(EXPERIENCE_MULTIPLIER_KEY, 100) / 100.0;
             FriendshipMultiplier = GetSlotSetting(FRIENDSHIP_MULTIPLIER_KEY, 100) / 100.0;
             DebrisMultiplier = GetSlotSetting(DEBRIS_MULTIPLIER_KEY, DebrisMultiplier.HalfDebris);
+            BundlePrice = GetSlotSetting(BUNDLE_PRICE_KEY, BundlePrice.Normal);
             QuickStart = GetSlotSetting(QUICK_START_KEY, false);
             Gifting = GetSlotSetting(GIFTING_KEY, true);
             Banking = true;
@@ -465,5 +468,16 @@ namespace StardewArchipelago.Archipelago
         Villagers = 1,
         All = 2,
         Chaos = 3,
+    }
+
+    public enum BundlePrice
+    {
+        Minimum = 0,
+        VeryCheap = 1,
+        Cheap = 2,
+        Normal = 3,
+        Expensive = 4,
+        VeryExpensive = 5,
+        Maximum = 6,
     }
 }
