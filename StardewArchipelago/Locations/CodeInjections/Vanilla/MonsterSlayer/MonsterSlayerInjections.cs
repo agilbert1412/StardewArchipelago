@@ -18,13 +18,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
         private static LocationChecker _locationChecker;
         private static MonsterKillList _killList;
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker, MonsterKillList killList)
         {
             _monitor = monitor;
             _modHelper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
-            _killList = new MonsterKillList(_archipelago);
+            _killList = killList;
         }
 
         // private void gil()

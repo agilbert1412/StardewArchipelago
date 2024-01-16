@@ -25,14 +25,16 @@ namespace StardewArchipelago.Goals
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
         private static BundleReader _bundleReader;
+        private static MonsterKillList _killList;
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker, BundleReader bundleReader)
+        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker, BundleReader bundleReader, MonsterKillList killList)
         {
             _monitor = monitor;
             _modHelper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
             _bundleReader = bundleReader;
+            _killList = killList;
         }
 
         public static void CheckCommunityCenterGoalCompletion()
@@ -225,7 +227,7 @@ namespace StardewArchipelago.Goals
 
             if (_archipelago.SlotData.Monstersanity == Monstersanity.None)
             {
-                if (!AdventureGuild.areAllMonsterSlayerQuestsComplete())
+                if (!_killList.AreAllGoalsComplete())
                 {
                     return;
                 }

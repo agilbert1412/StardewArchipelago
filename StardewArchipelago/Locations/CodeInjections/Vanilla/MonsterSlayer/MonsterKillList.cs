@@ -132,6 +132,25 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
             return goals;
         }
 
+        public bool AreAllGoalsComplete()
+        {
+            foreach (var (monster, killsRequired) in MonsterGoals)
+            {
+                if (!IsGoalComplete(monster, killsRequired))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public bool IsGoalComplete(string monsterOrCategory, int killsRequired)
+        {
+            var killCount = GetKillCount(monsterOrCategory);
+            return killCount >= killsRequired;
+        }
+
         public string GetKillListLetterContent()
         {
             var header = Game1.content.LoadString(MONSTER_HEADER).Replace('\n', '^') + "^";
@@ -142,13 +161,18 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
 
             foreach (var (monster, killsRequired) in MonsterGoals)
             {
-                var killCount = MonstersByCategory.ContainsKey(monster) ? GetMonstersKilledInCategory(monster) : GetMonstersKilled(monster);
+                var killCount = GetKillCount(monster);
                 var killListLine = GetKillListLine(monster, killCount, killsRequired);
                 stringBuilder.Append(killListLine);
             }
 
             stringBuilder.Append(footer);
             return stringBuilder.ToString();
+        }
+
+        private int GetKillCount(string monster)
+        {
+            return MonstersByCategory.ContainsKey(monster) ? GetMonstersKilledInCategory(monster) : GetMonstersKilled(monster);
         }
 
         public int GetMonstersKilledInCategory(string category)
