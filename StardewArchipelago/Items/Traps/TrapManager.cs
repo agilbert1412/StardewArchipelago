@@ -161,7 +161,7 @@ namespace StardewArchipelago.Items.Traps
             AddDebuff(Buffs.Frozen, duration);
         }
 
-        private void AddJinxedDebuff()
+        public void AddJinxedDebuff()
         {
             AddDebuff(Buffs.EvilEye);
         }
@@ -604,7 +604,7 @@ namespace StardewArchipelago.Items.Traps
         }
 
         // public void clearAllBuffs()
-        public bool ClearAllBuffs_ClearOtherBuffs_Prefix(BuffsDisplay __instance)
+        public static bool ClearAllBuffs_ClearOtherBuffs_Prefix(BuffsDisplay __instance)
         {
             try
             {

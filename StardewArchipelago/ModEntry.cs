@@ -387,11 +387,6 @@ namespace StardewArchipelago
             _itemManager?.ReceiveAllNewItems(true);
         }
 
-        private void DebugMethod(string arg1, string[] arg2)
-        {
-            _itemManager.ItemParser.TrapManager.ShuffleInventory();
-        }
-
         public bool ArchipelagoConnect(string ip, int port, string slot, string password, out string errorMessage)
         {
             var apConnection = new ArchipelagoConnectionInfo(ip, port, slot, null, password);
@@ -470,6 +465,11 @@ namespace StardewArchipelago
 
             State.TrapDifficultyOverride = difficultyOverride;
             Monitor.Log($"Trap Difficulty set to [{difficultyOverride}]. Change will be saved next time you sleep", LogLevel.Info);
+        }
+
+        private void DebugMethod(string arg1, string[] arg2)
+        {
+            _itemManager.ItemParser.TrapManager.AddJinxedDebuff();
         }
     }
 }
