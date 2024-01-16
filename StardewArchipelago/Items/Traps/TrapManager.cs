@@ -17,6 +17,7 @@ using StardewValley;
 using StardewValley.BellsAndWhistles;
 using StardewValley.Characters;
 using StardewValley.Locations;
+using StardewValley.Menus;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
@@ -55,6 +56,7 @@ namespace StardewArchipelago.Items.Traps
 
         private static IMonitor _monitor;
         private readonly IModHelper _helper;
+        private readonly Harmony _harmony;
         private static ArchipelagoClient _archipelago;
         private static TrapDifficultyBalancer _difficultyBalancer;
         private readonly TileChooser _tileChooser;
@@ -68,6 +70,7 @@ namespace StardewArchipelago.Items.Traps
         {
             _monitor = monitor;
             _helper = helper;
+            _harmony = harmony;
             _archipelago = archipelago;
             _difficultyBalancer = new TrapDifficultyBalancer();
             _tileChooser = tileChooser;
@@ -77,7 +80,12 @@ namespace StardewArchipelago.Items.Traps
             _inventoryShuffler = new InventoryShuffler(monitor, giftSender);
             _traps = new Dictionary<string, Action>();
             RegisterTraps();
-            harmony.Patch(
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(BuffsDisplay), nameof(BuffsDisplay.clearAllBuffs)),
+                prefix: new HarmonyMethod(typeof(TrapManager), nameof(ClearAllBuffs_ClearOtherBuffs_Prefix))
+            );
+            _harmony.Patch(
                 original: AccessTools.Method(typeof(Object), nameof(Object.salePrice)),
                 prefix: new HarmonyMethod(typeof(TrapManager), nameof(SalePrice_GetCorrectInflation_Prefix))
             );
@@ -188,7 +196,7 @@ namespace StardewArchipelago.Items.Traps
             AddDebuff(Buffs.Frozen, duration);
         }
 
-        private void AddJinxedDebuff()
+        public void AddJinxedDebuff()
         {
             AddDebuff(Buffs.EvilEye);
         }
@@ -852,6 +860,25 @@ namespace StardewArchipelago.Items.Traps
         private void UngrowFruitTree(FruitTree fruitTree, int days)
         {
             fruitTree.daysUntilMature.Value += days;
+        }
+
+        // public void clearAllBuffs()
+        public static bool ClearAllBuffs_ClearOtherBuffs_Prefix(BuffsDisplay __instance)
+        {
+            try
+            {
+                foreach (var otherBuff in __instance.otherBuffs)
+                {
+                    otherBuff.removeBuff();
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(ClearAllBuffs_ClearOtherBuffs_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
         }
     }
 }
