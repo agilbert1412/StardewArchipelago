@@ -67,7 +67,8 @@ namespace StardewArchipelago.Archipelago
 
             if (!IsMultiworldVersionSupported())
             {
-                errorMessage = $"This Multiworld has been created for StardewArchipelago version {SlotData.MultiworldVersion},\nbut this is StardewArchipelago version {_modManifest.Version}.\nPlease update to a compatible mod version.";
+                var genericVersion = SlotData.MultiworldVersion.Replace("0", "x");
+                errorMessage = $"This Multiworld has been created for StardewArchipelago version {genericVersion},\nbut this is StardewArchipelago version {_modManifest.Version}.\nPlease update to a compatible mod version.";
                 DisconnectPermanently();
                 return;
             }
