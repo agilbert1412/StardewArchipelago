@@ -21,6 +21,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private ArchipelagoClient _archipelago;
         private LocationChecker _locationChecker;
         private NameSimplifier _nameSimplifier;
+        private List<string> IgnoredShipments = new(){
+            //  For items that could be shipped, but are too easily softlockable to be reasonably shipped, to avoid errors
+            "Galmoran Gem"
+        };
 
         public NightShippingBehaviors(IMonitor monitor, ArchipelagoClient archipelago, LocationChecker locationChecker, NameSimplifier nameSimplifier)
         {
@@ -93,7 +97,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             foreach (var shippedItem in allShippedItems)
             {
                 var name = _nameSimplifier.GetSimplifiedName(shippedItem);
-
+                if (IgnoredShipments.Contains(name))
+                {
+                    continue;
+                }
                 var apLocation = $"{SHIPSANITY_PREFIX}{name}";
                 if (_archipelago.GetLocationId(apLocation) > -1)
                 {
