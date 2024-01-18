@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Archipelago.MultiClient.Net.Models;
 using HarmonyLib;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
 using StardewArchipelago.GameModifications.CodeInjections;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.GameData;
 using StardewValley.Menus;
 using StardewValley.Objects;
 
