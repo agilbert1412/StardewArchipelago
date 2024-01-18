@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using HarmonyLib;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.Gifting;
@@ -47,6 +48,7 @@ namespace StardewArchipelago.Items
         public LetterAttachment ProcessItemAsLetter(ReceivedItem receivedItem)
         {
             var itemIsResourcePack = TryParseResourcePack(receivedItem.ItemName, out var stardewItemName, out var resourcePackAmount);
+            var itemName = receivedItem.ItemName;
             if (itemIsResourcePack)
             {
                 if (stardewItemName == "Money")
@@ -56,6 +58,11 @@ namespace StardewArchipelago.Items
 
                 var resourcePackItem = GetResourcePackItem(stardewItemName);
                 return resourcePackItem.GetAsLetter(receivedItem, resourcePackAmount);
+            }
+
+            if (ArchaeologyNameMapper.InternalToEnglishNamesMap.Values.Contains(receivedItem.ItemName))
+            {
+                itemName = ArchaeologyNameMapper.InternalToEnglishNamesMap.First(x => x.Value.Equals(itemName)).Key;
             }
             
             if (TryParseFriendshipBonus(receivedItem.ItemName, out var numberOfPoints))
@@ -83,9 +90,9 @@ namespace StardewArchipelago.Items
                 return _itemManager.GetRecipeByName(itemOfRecipe).GetAsLetter(receivedItem);
             }
 
-            if (_itemManager.ItemExists(receivedItem.ItemName))
+            if (_itemManager.ItemExists(itemName))
             {
-                var singleItem = GetSingleItem(receivedItem.ItemName);
+                var singleItem = GetSingleItem(itemName);
                 return singleItem.GetAsLetter(receivedItem);
             }
 
