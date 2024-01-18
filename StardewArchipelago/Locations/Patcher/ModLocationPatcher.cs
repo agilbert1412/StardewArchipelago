@@ -337,6 +337,10 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(typeof(Chest), nameof(Chest.checkForAction)),
                 prefix: new HarmonyMethod(typeof(BoardingHouseInjections), nameof(BoardingHouseInjections.CheckForAction_TreasureChestLocation_Prefix))
             );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(ShopMenu), nameof(ShopMenu.update)),
+                postfix: new HarmonyMethod(typeof(BoardingHouseInjections), nameof(BoardingHouseInjections.Update_ReplaceDwarfShopChecks_Postfix))
+            );
         }
     }
 }

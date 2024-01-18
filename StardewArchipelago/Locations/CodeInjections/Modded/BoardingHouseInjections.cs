@@ -11,6 +11,8 @@ using StardewValley.Characters;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 using System.Collections.Generic;
+using StardewValley.Menus;
+using Archipelago.MultiClient.Net.Models;
 
 namespace StardewArchipelago.Locations.CodeInjections.Modded
 {
@@ -29,27 +31,89 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             {"Custom_BoardingHouse_AbandonedMine3", CHEST_3}, {"Custom_BoardingHouse_AbandonedMine4", CHEST_4},
             {"Custom_BoardingHouse_AbandonedMine5", CHEST_5},
         };
+
+        private static readonly Dictionary<ShopIdentification, PricedItem[]> craftsanityRecipes = new()
+        {
+            { new ShopIdentification("Mine", "Dwarf"), new[] { new PricedItem("Pterodactyl Skeleton L", 5000), new PricedItem("Pterodactyl Skeleton M", 5000),
+            new PricedItem("Pterodactyl Skeleton R", 5000), new PricedItem("T-Rex Skeleton L", 5000), new PricedItem("T-Rex Skeleton M", 5000),
+            new PricedItem("T-Rex Skeleton R", 5000), new PricedItem("Neanderthal Skeleton", 5000) } },
+        };
+
         private static IMonitor _monitor;
         private static LocationChecker _locationChecker;
+        private static ArchipelagoClient _archipelago;
+        private static ShopReplacer _shopReplacer;
+        private static ShopMenu _lastShopMenuUpdated = null;
 
-        public static void Initialize(IMonitor monitor, LocationChecker locationChecker)
+        public static void Initialize(IMonitor monitor, LocationChecker locationChecker, ArchipelagoClient archipelago, ShopReplacer shopReplacer)
         {
             _monitor = monitor;
             _locationChecker = locationChecker;
+            _archipelago = archipelago;
+            _shopReplacer = shopReplacer;
         }
         
+        // public override void update(GameTime time)
+        public static void Update_ReplaceDwarfShopChecks_Postfix(ShopMenu __instance, GameTime time)
+        {
+            try
+            {
+                // We only run this once for each menu
+                if (_lastShopMenuUpdated == __instance)
+                {
+                    return;
+                }
+
+                _lastShopMenuUpdated = __instance;
+                var myActiveHints = _archipelago.GetMyActiveHints();
+                ReplaceCraftsanityRecipes(__instance, myActiveHints);
+
+                __instance.forSale = __instance.itemPriceAndStock.Keys.ToList();
+                return; //  run original logic
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(Update_ReplaceDwarfShopChecks_Postfix)}:\n{ex}", LogLevel.Error);
+                return; // run original logic
+            }
+        }
+
+
+        private static void ReplaceCraftsanityRecipes(ShopMenu shopMenu, Hint[] myActiveHints)
+        {
+            if (!_archipelago.SlotData.Craftsanity.HasFlag(Craftsanity.All))
+            {
+                return;
+            }
+
+            foreach (var (shopIdentification, recipes) in craftsanityRecipes)
+            {
+                if (!shopIdentification.IsCorrectShop(shopMenu))
+                {
+                    continue;
+                }
+
+                foreach (var recipe in recipes)
+                {
+                    _shopReplacer.PlaceShopRecipeCheck(shopMenu.itemPriceAndStock, $"{recipe.ItemName} Recipe", recipe.ItemName, myActiveHints, recipe.Price);
+                }
+            }
+        }
+
         public static bool CheckForAction_TreasureChestLocation_Prefix(Chest __instance, Farmer who, bool justCheckingForActivity, ref bool __result)
         {
             try
             {
                 var playerLocation = Game1.player.currentLocation.Name;
                 if (justCheckingForActivity || !abandonedMines.Keys.Contains(playerLocation))
-                    return false; //don't run original logic
-                if (__instance.items.Count <= 0)
+                {
+                    return true; //run original logic
+                }
+                var currentChest = abandonedMines[playerLocation];
+                if (__instance.items.Count <= 0 || _locationChecker.IsLocationChecked(currentChest))
                 {
                     return true; // run original logic
                 }
-                var currentChest = abandonedMines[playerLocation];
                 who.currentLocation.playSound("openChest");
                 if (__instance.synchronized.Value)
                     __instance.GetMutex().RequestLock(() => __instance.openChestEvent.Fire());

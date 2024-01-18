@@ -41,6 +41,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             { 181091247, "Pemmican" },
             { 181091261, "Void Mint Tea" }, //Alecto
             { 181091262, "Void Mint Tea" }, //Wizard
+            { 44120020, "Special Pumpkin Soup" },
         };
 
         private static readonly Dictionary<int, string> eventCrafting = new()
