@@ -17,8 +17,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
     {
         private static string[] _vanillaSpecialOrderReward = new[]
         {
-            //Exists temporarily to avoid removing mail rewards
-            "Grandpa's Shed", "Aurora Vineyard", "Monster Crops"
+            //Exists to avoid removing mail rewards
+            "Aurora Vineyard", "Monster Crops"
         };
 
         private static IMonitor _monitor;
