@@ -65,8 +65,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 var hasPendantDepths = _archipelago.HasReceivedItem(PENDANT_DEPTHS_ITEM);
                 var hasPendantCommunity = _archipelago.HasReceivedItem(PENDANT_COMMUNITY_ITEM);
 
-                if (Game1.player.LuckLevel == 7
-                    && totalSkill == 40
+                if (Game1.player.LuckLevel >= 7
+                    && totalSkill >= 40
                     && hasPendantElders
                     && hasPendantDepths
                     && hasPendantCommunity)
