@@ -52,6 +52,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             _nameMapper = new CompoundNameMapper(archipelago.SlotData);
         }
 
+        public static readonly List<string> IgnoredCraftables = new(){
+            // Some crafts should be ignored due to general ridiculousness of obtaining in a randomizer
+            "Restore Prismatic Shard", "Restore Golden Mask", "Restore Ancient Sword", "Restore Ancient Doll", "Restore Chipped Amphora"
+        };
+
         // public void checkForCraftingAchievements()
         public static void CheckForCraftingAchievements_CheckCraftsanityLocation_Postfix(Stats __instance)
         {
@@ -65,7 +70,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                         continue;
                     }
                     var recipeName = _nameMapper.GetEnglishName(recipe); // Some names are iffy
-
+                    if (IgnoredCraftables.Contains(recipeName))
+                    {
+                        continue;
+                    }
                     var location = $"{CRAFTING_LOCATION_PREFIX}{recipeName}";
                     _locationChecker.AddCheckedLocation(location);
                 }

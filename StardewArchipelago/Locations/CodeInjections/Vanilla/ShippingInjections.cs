@@ -23,7 +23,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private NameSimplifier _nameSimplifier;
         private List<string> IgnoredShipments = new(){
             //  For items that could be shipped, but are too easily softlockable to be reasonably shipped, to avoid errors
-            "Galmoran Gem"
+            "Galmoran Gem", "Ancient Hilt", "Ancient Blade", "Ancient Doll Legs", "Ancient Doll Body", "Prismatic Shard Piece 3", 
+            "Mask Piece 1", "Mask Piece 2", "Mask Piece 3", "Prismatic Shard Piece 1", "Prismatic Shard Piece 2", "Prismatic Shard Piece 4", 
+            "Chipped Amphora Piece 1", "Chipped Amphora Piece 2", 
         };
 
         public NightShippingBehaviors(IMonitor monitor, ArchipelagoClient archipelago, LocationChecker locationChecker, NameSimplifier nameSimplifier)
