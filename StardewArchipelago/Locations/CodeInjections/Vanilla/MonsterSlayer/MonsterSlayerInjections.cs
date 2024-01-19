@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Linq;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants;
 using StardewArchipelago.Goals;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
+using StardewValley.Monsters;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
 {
@@ -135,6 +137,30 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
             {
                 _monitor.Log($"Failed in {nameof(MonsterKilled_CheckGoalCompletion_Postfix)}:\n{ex}",
                     LogLevel.Error);
+                return;
+            }
+        }
+
+        // public string Name { get; set; }
+        public static void GetName_SkeletonMage_Postfix(Character __instance, ref string __result)
+        {
+            try
+            {
+                if (!__result.Equals(MonsterName.SKELETON) || __instance is not Skeleton skeleton)
+                {
+                    return;
+                }
+
+                if (skeleton.isMage.Value)
+                {
+                    __result = MonsterName.SKELETON_MAGE;
+                }
+
+                return;
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(GetName_SkeletonMage_Postfix)}:\n{ex}", LogLevel.Error);
                 return;
             }
         }

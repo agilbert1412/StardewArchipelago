@@ -823,6 +823,11 @@ namespace StardewArchipelago.Locations.Patcher
                 );
             }
 
+            _harmony.Patch(
+                original: AccessTools.PropertyGetter(typeof(Character), nameof(Character.Name)),
+                postfix: new HarmonyMethod(typeof(MonsterSlayerInjections), nameof(MonsterSlayerInjections.GetName_SkeletonMage_Postfix))
+            );
+
             if (_archipelago.SlotData.Monstersanity == Monstersanity.None)
             {
                 return;
