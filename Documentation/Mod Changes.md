@@ -28,6 +28,9 @@ For the sake of aligning several mods with the randomizer, certain modifications
 - In addition, several shops barter, instead of trade in money.  This includes the Bear Shop, and the Junimos.  The Junimo barter using random items of the same color as them, and the bear trades in berries.
 - Normally, Morris leaves Pelican Town upon completing the community center.  While this is still true, it is not tied to the item Progressive Movie Theater.  If these are acquired, instead of Morris move into Jojamart, he will sit at a nearby bench to be accessible and avoid errors.
 
+## Boarding House and Bus Stop Extension
+- The mod introduces the ability to 'restore' certain artifacts that you can find in the abandoned mine.  These craftables are not included in craftsanity, and the resulting pieces are not considered for shipsanity.
+
 ## Magic
 
 - Learning a spell is a location, and a spell is an item, save the original starting spells one would get from this mod.
