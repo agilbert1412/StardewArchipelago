@@ -28,7 +28,6 @@ namespace StardewArchipelago.GameModifications.Tooltips
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
         private static Texture2D _bigArchipelagoIcon;
-        private static Texture2D _mediumArchipelagoIcon;
 
         public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
@@ -39,7 +38,6 @@ namespace StardewArchipelago.GameModifications.Tooltips
 
             var desiredTextureName = ArchipelagoTextures.COLOR;
             _bigArchipelagoIcon = ArchipelagoTextures.GetColoredLogo(modHelper, 48, desiredTextureName);
-            _mediumArchipelagoIcon = ArchipelagoTextures.GetColoredLogo(modHelper, 32, desiredTextureName);
         }
 
         // public override void draw(SpriteBatch spriteBatch)

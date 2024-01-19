@@ -29,7 +29,6 @@ namespace StardewArchipelago.GameModifications.Tooltips
         private static LocationChecker _locationChecker;
         private static Friends _friends;
         private static Texture2D _bigArchipelagoIcon;
-        private static Texture2D _mediumArchipelagoIcon;
         private static Texture2D _miniArchipelagoIcon;
         private static Texture2D _travelingMerchantIcon;
 
@@ -43,7 +42,6 @@ namespace StardewArchipelago.GameModifications.Tooltips
 
             var desiredTextureName = ArchipelagoTextures.COLOR;
             _bigArchipelagoIcon = ArchipelagoTextures.GetColoredLogo(modHelper, 48, desiredTextureName);
-            _mediumArchipelagoIcon = ArchipelagoTextures.GetColoredLogo(modHelper, 32, desiredTextureName);
             _miniArchipelagoIcon = ArchipelagoTextures.GetColoredLogo(modHelper, 24, desiredTextureName);
             _travelingMerchantIcon = TexturesLoader.GetTexture(modHelper, "traveling_merchant.png");
         }
