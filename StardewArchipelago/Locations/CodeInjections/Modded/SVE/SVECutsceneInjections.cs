@@ -38,6 +38,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
             string.Join("30 ",MonsterCategory.VOID_SPIRITS), string.Join("60 ",MonsterCategory.VOID_SPIRITS), 
             string.Join("90 ",MonsterCategory.VOID_SPIRITS), string.Join("120 ",MonsterCategory.VOID_SPIRITS)
             };
+        private const string DEINFEST_AP_LOCATION = "Purify an Infested Lichtung";
         private static readonly Dictionary<int, string> sveEventSpecialOrders = new(){
             {8050108, "Clint2"},
             {2551994, "Clint3"},
