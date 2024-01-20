@@ -377,6 +377,10 @@ namespace StardewArchipelago
                     Game1.player.cookingRecipes.Remove("Lucky Lunch");
                 }
             }
+            if (_archipelago.HasReceivedItem("Magic Elixir Recipe") & !Game1.player.cookingRecipes.ContainsKey("Magic Elixir"))
+            {
+                Game1.player.cookingRecipes.Add("Magic Elixir", 0); // Its a cooking recipe.
+            }
             // Fix to remove dupes in Railroad Boulder
             if (!_archipelago.SlotData.Mods.HasMod(ModNames.SVE))
             {

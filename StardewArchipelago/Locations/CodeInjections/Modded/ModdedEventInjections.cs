@@ -93,7 +93,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                     return true;
                 }
 
-                _locationChecker.AddCheckedLocation($"{eventCooking[__instance.id]}{RECIPE_SUFFIX}");
+                _locationChecker.AddCheckedLocation($"{eventCrafting[__instance.id]}{RECIPE_SUFFIX}");
                 __instance.CurrentCommand++;
                 return false; // don't run original logic
 
