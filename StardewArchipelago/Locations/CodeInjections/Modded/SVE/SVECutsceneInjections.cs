@@ -25,6 +25,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
         private const int IRIDIUM_BOMB_ID = 8050109;
         private const string LANCE_CHEST = "Lance's Diamond Wand";
         private const string MONSTER_ERADICATION_AP_PREFIX = "Monster Eradication: ";
+        private const string DEINFEST_AP_LOCATION = "Purify an Infested Lichtung";
         private static readonly List<string> voidSpirits = new(){
             MonsterName.SHADOW_BRUTE, MonsterName.SHADOW_SHAMAN, MonsterName.SHADOW_SNIPER, MonsterCategory.VOID_SPIRITS,
             string.Join("30 ",MonsterCategory.VOID_SPIRITS), string.Join("60 ",MonsterCategory.VOID_SPIRITS), 
@@ -133,12 +134,20 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
         {
             try
             {
+                if (!Game1.player.eventsSeen.Contains(1090508))
+                {
+                    return;
+                }
                 foreach (var voidSpirit in voidSpirits)
                 {
                     var locationName = $"{MONSTER_ERADICATION_AP_PREFIX}{voidSpirit}";
                     if (_locationChecker.IsLocationMissing(locationName))
                     {
                         _locationChecker.AddCheckedLocation(locationName);
+                    }
+                    if (_locationChecker.IsLocationMissing(DEINFEST_AP_LOCATION)) // Temp, as Void Spirits are on these maps
+                    {
+                        _locationChecker.AddCheckedLocation(DEINFEST_AP_LOCATION);
                     }
                 }
             }

@@ -65,8 +65,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 var hasPendantDepths = _archipelago.HasReceivedItem(PENDANT_DEPTHS_ITEM);
                 var hasPendantCommunity = _archipelago.HasReceivedItem(PENDANT_COMMUNITY_ITEM);
 
-                if (Game1.player.LuckLevel == 7
-                    && totalSkill == 40
+                if (Game1.player.LuckLevel >= 7
+                    && totalSkill >= 40
                     && hasPendantElders
                     && hasPendantDepths
                     && hasPendantCommunity)
@@ -112,6 +112,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 var deepWoodsStateProperty = deepWoodsSettingsType.GetProperty("DeepWoodsState", BindingFlags.Public | BindingFlags.Static);
                 var deepWoodsState = deepWoodsStateProperty.GetValue(null);
                 var lowestLevelReachedField = _helper.Reflection.GetField<int>(deepWoodsState, "lowestLevelReached");
+                
+                if (_archipelago.GetReceivedItemCount(WOODS_OBELISK_SIGILS) >= 10 && lowestLevelReachedField.GetValue() >= 100)
+                {
+                    return; //let the player gain these floors on their own since they've "collected" the floors already
+                }
                 
                 lowestLevelReachedField.SetValue(10 * _archipelago.GetReceivedItemCount(WOODS_OBELISK_SIGILS));
                 var levelIndexedAt1 = level - 1;

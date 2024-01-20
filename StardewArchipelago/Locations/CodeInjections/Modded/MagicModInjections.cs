@@ -54,7 +54,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
 
         private static readonly Dictionary<ShopIdentification, PricedItem[]> craftsanityRecipes = new()
         {
-            { new ShopIdentification("AdventureGuild", "Marlon"), new[] { new PricedItem("Magic Elixir", 3000), new PricedItem("Travel Charm", 250) } },
+            { new ShopIdentification("AdventureGuild", "Marlon"), new[] { new PricedItem("Magic Elixir", 3000), new PricedItem("Travel Core", 250) } },
         };
 
 
