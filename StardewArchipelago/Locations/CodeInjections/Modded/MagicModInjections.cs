@@ -225,9 +225,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             var tile = player.currentLocation.map.GetLayer("Buildings").Tiles[(int)tilePos.X, (int)tilePos.Y];
             if (tile != null && tile.TileIndex == MINE_LADDER)
                 spellsLearned.Add(ANALYZE_DESCEND_AP_LOCATION);
-            if (player.currentLocation is Farm farm)
+            if (player.currentLocation is Farm farm || player.currentLocation.Name.Contains("DeepWoods"))
             {
-                foreach (var clump in farm.resourceClumps)
+                foreach (var clump in player.currentLocation.resourceClumps)
                 {
                     if (clump.parentSheetIndex.Value == CROP_TILE &&
                         new Rectangle((int)clump.tile.Value.X, (int)clump.tile.Value.Y, clump.width.Value, clump.height.Value).Contains((int)tilePos.X, (int)tilePos.Y))
