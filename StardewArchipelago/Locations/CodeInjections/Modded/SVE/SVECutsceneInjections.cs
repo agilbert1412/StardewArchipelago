@@ -32,7 +32,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
             { BundlePrice.Cheap, "Oomfie" }, { BundlePrice.Expensive, "Adult" },
             { BundlePrice.VeryExpensive, "Boomer" }, { BundlePrice.Maximum, "EldritchHorror" },
         };
-        private const string DEINFEST_AP_LOCATION = "Purify an Infested Lichtung";
         private static readonly List<string> voidSpirits = new(){
             MonsterName.SHADOW_BRUTE, MonsterName.SHADOW_SHAMAN, MonsterName.SHADOW_SNIPER, MonsterCategory.VOID_SPIRITS,
             string.Join("30 ",MonsterCategory.VOID_SPIRITS), string.Join("60 ",MonsterCategory.VOID_SPIRITS), 

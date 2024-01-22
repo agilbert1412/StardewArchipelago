@@ -14,9 +14,9 @@ namespace StardewArchipelago.Items.Unlocks
         public const string KITTYFISH_SPELL_AP_NAME = "Kittyfish Spell";
         public const string GUILD_RUNES_AP_NAME = "Nexus: Adventurer's Guild Runes";
         public const string SPRITE_RUNES_AP_NAME = "Nexus: Sprite Spring Runes";
-        public const string JUNIMO_RUNES_AP_NAME = "Nexus: Junimo and Outpost Runes";
+        public const string JUNIMO_RUNES_AP_NAME = "Nexus: Junimo Woods Runes";
         public const string OUTPOST_RUNES_AP_NAME = "Nexus: Outpost Runes";
-        public const string FARM_RUNES_AP_NAME = "Nexus: Farm and Wizard Runes";
+        public const string FARM_RUNES_AP_NAME = "Nexus: Farm Runes";
         public const string WIZARD_RUNES_AP_NAME = "Nexus: Wizard Runes";
         public const string AURORA_RUNES_AP_NAME = "Nexus: Aurora Vineyard Runes";
         public const string FABLE_REEF_AP_NAME = "Fable Reef Portal";
