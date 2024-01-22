@@ -111,7 +111,7 @@
     <None Update="Textures\Bundles\bartenders_bundle.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Textures\Bundles\beach_foraging.png">
+    <None Update="Textures\Bundles\beach_foraging_bundle.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Textures\Bundles\carnival_bundle.png">
@@ -133,6 +133,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Textures\Bundles\island_crops_bundle.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Textures\Bundles\island_fish_bundle.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Textures\Bundles\island_foraging_bundle.png">
@@ -174,10 +177,7 @@
     <None Update="Textures\Bundles\slime_farmer_bundle.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Textures\Bundles\summer-foraging.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Textures\Bundles\summer_pattern.png">
+    <None Update="Textures\Bundles\summer_foraging_bundle.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Textures\Bundles\tackle_bundle.png">
