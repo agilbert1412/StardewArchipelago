@@ -555,7 +555,8 @@ namespace StardewArchipelago.GameModifications
 
             var random = new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame / 2 + itemId);
             var priceMultiplier = 1.0;
-            var howManyInStock = GetVillagerMaxAmountAndPrice(null, false, ref priceMultiplier);
+            var maxStock = GetVillagerMaxAmountAndPrice(null, false, ref priceMultiplier);
+            var howManyInStock = random.Next(maxStock);
             if (howManyInStock < 5)
             {
                 return;
