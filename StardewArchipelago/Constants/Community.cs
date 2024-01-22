@@ -17,7 +17,7 @@ namespace StardewArchipelago.Constants
             "KelioMZX", "KittyAshy", "Kono Tyran", "Lady Redacted", "lordlou", "Magnemania", "Marech", "Margot", "Mati", "Mav", "MeleneV", "mewlif",
             "Noca", "N00byKing"/*, "NinoKito"*/, "Phar",
             "PoryGone", "ProfBytes", "RaspberrySpaceJam", "Rosalie", "Salzkorn", "SamanthaCoffin", "Scipio", "Sneaki", "Snow", "Sraw", "SunnyBat",
-            "TheCondor", "toaster", "Trev", "Violet", "WhySoThirstyy", "Yellow_Meep", "zig", "Ziktofel",
+            "TheCondor", "TheHaboo", "toaster", "Trev", "Violet", "WhySoThirstyy", "Yellow_Meep", "zig", "Ziktofel",
         };
     }
 }
