@@ -4,6 +4,8 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
+using StardewArchipelago.GameModifications.CodeInjections;
+using StardewArchipelago.Items.Unlocks;
 using StardewArchipelago.Locations;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewModdingAPI;
@@ -63,14 +65,14 @@ namespace StardewArchipelago.GameModifications
             return stock;
         }
 
-        private static void AddSeedsToPierreStock(Dictionary<ISalable, int[]> stock)
+        private void AddSeedsToPierreStock(Dictionary<ISalable, int[]> stock)
         {
             AddSpringSeedsToPierreStock(stock);
             AddSummerSeedsToPierreStock(stock);
             AddFallSeedsToPierreStock(stock);
         }
 
-        private static void AddSpringSeedsToPierreStock(Dictionary<ISalable, int[]> stock)
+        private void AddSpringSeedsToPierreStock(Dictionary<ISalable, int[]> stock)
         {
             AddToPierreStock(stock, ShopItemIds.PARSNIP_SEEDS, true, itemSeason: "spring");
             AddToPierreStock(stock, ShopItemIds.BEAN_STARTER, true, itemSeason: "spring");
@@ -83,7 +85,7 @@ namespace StardewArchipelago.GameModifications
             AddToPierreStock(stock, ShopItemIds.RICE_SHOOT, true, itemSeason: "spring");
         }
 
-        private static void AddSummerSeedsToPierreStock(Dictionary<ISalable, int[]> stock)
+        private void AddSummerSeedsToPierreStock(Dictionary<ISalable, int[]> stock)
         {
             AddToPierreStock(stock, ShopItemIds.MELON_SEEDS, true, itemSeason: "summer");
             AddToPierreStock(stock, ShopItemIds.TOMATO_SEEDS, true, itemSeason: "summer");
@@ -99,7 +101,7 @@ namespace StardewArchipelago.GameModifications
             AddToPierreStock(stock, ShopItemIds.RED_CABBAGE_SEEDS, true, itemSeason: "summer");
         }
 
-        private static void AddFallSeedsToPierreStock(Dictionary<ISalable, int[]> stock)
+        private void AddFallSeedsToPierreStock(Dictionary<ISalable, int[]> stock)
         {
             AddToPierreStock(stock, ShopItemIds.PUMPKIN_SEEDS, true, itemSeason: "fall");
             AddToPierreStock(stock, ShopItemIds.CORN_SEEDS, true, itemSeason: "fall");
@@ -148,7 +150,7 @@ namespace StardewArchipelago.GameModifications
             });
         }
 
-        private static void AddCookingIngredientsToPierreStock(Dictionary<ISalable, int[]> stock)
+        private void AddCookingIngredientsToPierreStock(Dictionary<ISalable, int[]> stock)
         {
             AddToPierreStock(stock, ShopItemIds.SUGAR);
             AddToPierreStock(stock, ShopItemIds.WHEAT_FLOUR);
@@ -157,7 +159,7 @@ namespace StardewArchipelago.GameModifications
             AddToPierreStock(stock, ShopItemIds.VINEGAR);
         }
 
-        private static void AddFertilizersToShop(Dictionary<ISalable, int[]> stock)
+        private void AddFertilizersToShop(Dictionary<ISalable, int[]> stock)
         {
             if ((int)Game1.stats.DaysPlayed < 15)
             {
@@ -207,7 +209,7 @@ namespace StardewArchipelago.GameModifications
             });
         }
 
-        private static void AddSaplingsToShop(Dictionary<ISalable, int[]> stock)
+        private void AddSaplingsToShop(Dictionary<ISalable, int[]> stock)
         {
             AddToPierreStock(stock, ShopItemIds.CHERRY_SAPLING, false, 1700, howManyInStock: 1);
             AddToPierreStock(stock, ShopItemIds.APRICOT_SAPLING, false, 1000, howManyInStock: 1);
@@ -239,7 +241,7 @@ namespace StardewArchipelago.GameModifications
             }
         }
 
-        private static void AddBouquetToShop(Dictionary<ISalable, int[]> stock)
+        private void AddBouquetToShop(Dictionary<ISalable, int[]> stock)
         {
             if (Game1.player.hasAFriendWithHeartLevel(8, true))
             {
@@ -247,7 +249,7 @@ namespace StardewArchipelago.GameModifications
             }
         }
 
-        private static void AddToPierreStock(
+        private void AddToPierreStock(
             Dictionary<ISalable, int[]> stock,
             int itemId,
             bool isSeed = false,
@@ -257,12 +259,11 @@ namespace StardewArchipelago.GameModifications
         {
             var priceMultiplier = 2.0;
             var item = new StardewValley.Object(Vector2.Zero, itemId, 1);
-            var maxAmount = 20;
 
             if (basePrice == -1)
             {
                 basePrice = item.salePrice();
-                priceMultiplier = 1f;
+                priceMultiplier = 1.0;
             }
             else if (item.isSapling())
             {
@@ -270,26 +271,12 @@ namespace StardewArchipelago.GameModifications
             }
 
             var hasStocklist = Game1.MasterPlayer.hasOrWillReceiveMail("PierreStocklist");
-            if (itemSeason != null && itemSeason != Game1.currentSeason)
+            if (itemSeason != null && itemSeason != Game1.currentSeason && !hasStocklist)
             {
-                if (!hasStocklist)
-                {
-                    return;
-                }
-
-                priceMultiplier *= 1.5f;
+                return;
             }
 
-            if (hasStocklist)
-            {
-                maxAmount *= 2;
-            }
-
-            if (Game1.player.hasCompletedCommunityCenter())
-            {
-                maxAmount *= 2;
-                priceMultiplier *= 1.5f;
-            }
+            var maxAmount = GetVillagerMaxAmountAndPrice(itemSeason, hasStocklist, ref priceMultiplier);
 
             var price = (int)(basePrice * priceMultiplier);
             if (itemSeason != null)
@@ -325,6 +312,29 @@ namespace StardewArchipelago.GameModifications
                 price,
                 howManyInStock,
             });
+        }
+
+        private int GetVillagerMaxAmountAndPrice(string itemSeason, bool hasStocklist, ref double priceMultiplier)
+        {
+            var maxAmount = 20;
+            if (itemSeason != null && itemSeason != Game1.currentSeason)
+            {
+                priceMultiplier *= 1.5;
+            }
+
+            if (hasStocklist)
+            {
+                maxAmount *= 2;
+            }
+
+            var numberMovieTheater = _archipelago.GetReceivedItemCount(TheaterInjections.MOVIE_THEATER_ITEM);
+            if (Game1.player.hasCompletedCommunityCenter())
+            {
+                maxAmount *= (int)Math.Pow(2, numberMovieTheater);
+                priceMultiplier *= (int)Math.Pow(1.5f, numberMovieTheater);
+            }
+
+            return maxAmount;
         }
 
         public Dictionary<ISalable, int[]> GetJojaStock()
@@ -538,13 +548,14 @@ namespace StardewArchipelago.GameModifications
             AddToSandyStock(sandyStock, new Furniture(ShopItemIds.WALL_CACTUS, Vector2.Zero), 700);
         }
 
-        private static void AddSeedToSandyStock(Dictionary<ISalable, int[]> sandyStock, int itemId, int price = -1)
+        private void AddSeedToSandyStock(Dictionary<ISalable, int[]> sandyStock, int itemId, int price = -1)
         {
             var sendingPlayerName = "";
             var item = new Object(itemId, int.MaxValue);
 
             var random = new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame / 2 + itemId);
-            var howManyInStock = random.Next(20);
+            var priceMultiplier = 1.0;
+            var howManyInStock = GetVillagerMaxAmountAndPrice(null, false, ref priceMultiplier);
             if (howManyInStock < 5)
             {
                 return;
