@@ -34,6 +34,11 @@ namespace StardewArchipelago.Items
         {
             try
             {
+                if (Game1.eventUp && Game1.CurrentEvent is { isFestival: false })
+                {
+                    return;
+                }
+
                 var baseCoefficient = 1.0f;
                 var totalCoefficient = baseCoefficient + (0.25f * _numberOfSpeedBonuses);
 
