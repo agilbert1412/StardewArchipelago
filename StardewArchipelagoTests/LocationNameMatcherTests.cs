@@ -21,7 +21,7 @@ namespace StardewArchipelagoTests
         [TestCase("Hardwood", new[] { "Shipsanity: Hardwood" }, new[] { "Robin's Project" }, TestName = "Hardwood")]
         [TestCase("Tomato", new[] { "Harvest Tomato", "Shipsanity: Tomato" }, new string[0], TestName = "Tomato")]
         [TestCase("Wizard", new[] { "Friendsanity: Wizard 4 <3" }, new string[0], TestName = "Wizard")]
-        [TestCase("Apple", new[] { "Harvest Apple" }, new string[0], TestName = "Apple")]
+        [TestCase("Apple", new[] { "Harvest Apple" }, new[] { "Friendsanity: Apples 1 <3" }, TestName = "Apple")]
         [TestCase("Apples", new[] { "Friendsanity: Apples 10 <3" }, new[] { "Harvest Apple" }, TestName = "Apples")]
         public void GetAllLocationsContainingWordTruePositivesTest(string itemName, string[] locationsMatching, string[] locationsNotMatching)
         {
@@ -39,7 +39,6 @@ namespace StardewArchipelagoTests
         [TestCase("Snail", new[] { "Open Professor Snail Cave" }, TestName = "Professor Snail Cave")]
         [TestCase("Stone", new[] { "Shipsanity: Swirl Stone", "Smashing Stone" }, TestName = "Swirl Stone")]
         [TestCase("Hardwood", new[] { "Shipsanity: Hardwood Display: Amphibian Fossil", "Shipsanity: Wooden Display: Dinosaur Egg", "Craft Hardwood Preservation Chamber", "Craft Hardwood Display", "Shipsanity: Hardwood Fence" }, TestName = "Hardwood Displays")]
-        [TestCase("Apple", new[] { "Friendsanity: Apples 1 <3" }, TestName = "Apple not Apples")]
         public void GetAllLocationsContainingWordFalsePositivesTest(string itemName, string[] locationsNotMatching)
         {
             // Arrange
