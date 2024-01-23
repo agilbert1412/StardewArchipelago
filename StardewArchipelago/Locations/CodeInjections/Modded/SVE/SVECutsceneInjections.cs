@@ -25,7 +25,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
         private const string RAILROAD_KEY = "Clint2Again";
         private const int RAILROAD_BOULDER_ID = 8050108;
         private const int IRIDIUM_BOMB_ID = 8050109;
-        private const string LANCE_CHEST = "Lance's Diamond Wand";
+        private const string LANCE_CHEST_LOCATION = "Monster Crops";
         private const string MONSTER_ERADICATION_AP_PREFIX = "Monster Eradication: ";
         private static readonly Dictionary<BundlePrice, string> VineyardPrices = new(){
             { BundlePrice.Minimum, "Zygote" }, { BundlePrice.VeryCheap, "Baby" },
@@ -85,7 +85,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
                 __instance.items.RemoveAt(0);
                 __result = true;
 
-                _locationChecker.AddCheckedLocation(LANCE_CHEST);
+                _locationChecker.AddCheckedLocation(LANCE_CHEST_LOCATION);
 
                 return false; // don't run original logic
 

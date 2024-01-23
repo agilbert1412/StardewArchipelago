@@ -43,11 +43,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             { 181091262, "Void Mint Tea" }, //Wizard
             { 44120020, "Special Pumpkin Soup" },
         };
-
         private static readonly Dictionary<int, string> eventCrafting = new()
         {
             { 181091237, "Ginger Tincture" }, //Alecto
             { 1810912313, "Ginger Tincture" }, //Wizard
+        };
+        private static readonly List<int> questEventsWithRecipes = new()
+        {
+            181091246, 44120020, 181091237, 1810912313
         };
 
         private static IMonitor _monitor;
@@ -68,12 +71,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         {
             try
             {
-                if (!_archipelago.SlotData.Chefsanity.HasFlag(Chefsanity.Friendship) || !eventCooking.Keys.Contains(__instance.id))
+                var isEventChefsanityLocation = _archipelago.SlotData.Chefsanity.HasFlag(Chefsanity.Friendship) && eventCooking.Keys.Contains(__instance.id);
+                var isRecipeFromQuest = _archipelago.SlotData.QuestLocations.StoryQuestsEnabled && questEventsWithRecipes.Contains(__instance.id);
+                if (!isRecipeFromQuest && !isEventChefsanityLocation)
                 {
                     return true;
                 }
-
-                _locationChecker.AddCheckedLocation($"{eventCooking[__instance.id]}{RECIPE_SUFFIX}");
+                if (!isRecipeFromQuest)
+                {
+                    _locationChecker.AddCheckedLocation($"{eventCooking[__instance.id]}{RECIPE_SUFFIX}");
+                }
                 __instance.CurrentCommand++;
                 return false; // don't run original logic
 
@@ -89,12 +96,18 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         {
             try
             {
-                if (!_archipelago.SlotData.Craftsanity.HasFlag(Craftsanity.All) || !eventCrafting.Keys.Contains(__instance.id))
+                var isEventCraftsanityLocation = _archipelago.SlotData.Craftsanity.HasFlag(Craftsanity.All) && eventCrafting.Keys.Contains(__instance.id);
+                var isRecipeFromQuest = _archipelago.SlotData.QuestLocations.StoryQuestsEnabled && questEventsWithRecipes.Contains(__instance.id);
+
+                if (!isRecipeFromQuest && !isEventCraftsanityLocation)
                 {
                     return true;
                 }
 
-                _locationChecker.AddCheckedLocation($"{eventCrafting[__instance.id]}{RECIPE_SUFFIX}");
+                if (!isRecipeFromQuest)
+                {
+                    _locationChecker.AddCheckedLocation($"{eventCrafting[__instance.id]}{RECIPE_SUFFIX}");
+                }
                 __instance.CurrentCommand++;
                 return false; // don't run original logic
 
