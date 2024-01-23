@@ -61,7 +61,6 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Grampleton Suburbs", "Custom_GrampletonSuburbs" },
             { "Scarlett's House", "Custom_ScarlettHouse" },
             { "Wizard Basement", "Custom_WizardBasement" },
-            { "Willy's Bedroom", "Custom_WillyRoom"},
             { "Gunther's Bedroom", "Custom_GunthersRoom"}
         };
 
@@ -130,7 +129,8 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Lost Valley Ruins - First House", "Custom_BoardingHouse_Ruins_House1" },
             { "Lost Valley Ruins - Second House", "Custom_BoardingHouse_Ruins_House2" },
             { "Lost Valley Ruins", "Custom_BoardingHouse_Ruins" },
-            { "Buffalo's Ranch", "Custom_BoardingHouse_BuffalosRanch" }
+            { "Buffalo's Ranch", "Custom_BoardingHouse_BuffalosRanch" },
+            { "Lost Valley Minecart", "Custom_BoardingHouse_TheLostValley|3|22" }
 
 
         };                
