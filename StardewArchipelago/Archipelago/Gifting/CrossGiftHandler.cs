@@ -28,6 +28,7 @@ namespace StardewArchipelago.Archipelago.Gifting
         private IGiftingService _giftService;
         private GiftSender _giftSender;
         private GiftReceiver _giftReceiver;
+        private List<string> _sentGiftIds = new();
 
         public GiftSender Sender => _giftSender;
 
@@ -47,8 +48,8 @@ namespace StardewArchipelago.Archipelago.Gifting
             _mail = mail;
             _archipelago = archipelago;
             _giftService = new GiftingService(archipelago.Session);
-            _giftSender = new GiftSender(_monitor, _archipelago, _itemManager, _giftService);
-            _giftReceiver = new GiftReceiver(_monitor, _archipelago, _giftService, _itemManager, _mail);
+            _giftSender = new GiftSender(_monitor, _archipelago, _itemManager, _giftService, this);
+            _giftReceiver = new GiftReceiver(_monitor, _archipelago, _giftService, this, _itemManager, _mail);
 
             _giftService.OpenGiftBox(true, _desiredTraits);
         }
@@ -125,6 +126,30 @@ namespace StardewArchipelago.Archipelago.Gifting
 
             var objectsAsJson = JsonConvert.SerializeObject(items);
             File.WriteAllText(filePath, objectsAsJson);
+        }
+
+        public void SetGiftIDList(List<string> apGifts) {
+            if (apGifts == null)
+            {
+                _sentGiftIds = new List<string>();
+                return;
+            }
+            _sentGiftIds = apGifts.ToList();
+        }
+        
+        public void AddGiftIDToList(string giftId) {
+            if (!_sentGiftIds.Contains(giftId))
+            {
+                _sentGiftIds.Add(giftId);
+            }
+        }
+        
+        public bool OwnPlayerSentGift(giftId) {
+            return _sentGiftIds.Contains(giftId);
+        }
+        
+        public List<string> GetGiftIDList() {
+            return _sentGiftIds.ToList();
         }
     }
 }

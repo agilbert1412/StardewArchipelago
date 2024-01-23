@@ -1,4 +1,5 @@
-﻿using StardewArchipelago.Items.Mail;
+﻿using System.Collections.Generic;
+using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 
@@ -11,5 +12,9 @@ namespace StardewArchipelago.Archipelago.Gifting
         bool HandleGiftItemCommand(string message);
         void ReceiveAllGiftsTomorrow();
         void ExportAllGifts(string filePath);
+        void SetGiftIDList(List<string> apGifts);
+        void AddGiftIDToList(string giftId);
+        bool OwnPlayerSentGift(giftId);
+        List<string> GetGiftIDList();
     }
 }
