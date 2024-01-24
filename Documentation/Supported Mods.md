@@ -51,8 +51,7 @@ To include supported mods in your multiworld slot, you need to include a section
 This section must be an array with the **exact** names of every mod you wish to include. Any improperly typed mod name will be ignored.
 ![image](https://i.imgur.com/uOHtXmU.png)
 
-If that doesn't work, try typing your mod list like this: 
-![image](https://i.imgur.com/fjhl2Ml.png)
+If manually typing your mods list isn't working, try going to the [weighted settings page](https://archipelago.gg/weighted-options) and selecting stardew and then leaving all the other settings and check off the boxes for the mods you want. Export the settings, and copy paste the result into your own yaml file. 
 
 These mods will then be included in the multiworld generation, and considered in logic. For example, the Magic mod includes a spell that allow a player to teleport, and, if included, teleporting can be required to reach checks.
 
