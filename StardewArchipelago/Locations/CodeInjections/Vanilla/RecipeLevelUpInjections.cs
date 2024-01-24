@@ -80,6 +80,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 var skillCheck = Enum.TryParse<Skill>(skillActualName, out var skill);
                 if (!skillCheck)
                 {
+                    _monitor.Log($"Leveled up unrecognized Skill: {skillActualName} [{skillName}]", LogLevel.Error);
                     return;
                 }
                 SendSkillRecipeChecks(skill, level);
