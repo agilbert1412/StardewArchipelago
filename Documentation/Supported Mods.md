@@ -51,6 +51,9 @@ To include supported mods in your multiworld slot, you need to include a section
 This section must be an array with the **exact** names of every mod you wish to include. Any improperly typed mod name will be ignored.
 ![image](https://i.imgur.com/uOHtXmU.png)
 
+If that doesn't work, try typing your mod list like this: 
+![image](https://i.imgur.com/fjhl2Ml.png)
+
 These mods will then be included in the multiworld generation, and considered in logic. For example, the Magic mod includes a spell that allow a player to teleport, and, if included, teleporting can be required to reach checks.
 
 As previously mentioned, the generator and the StardewArchipelago client are designed and tested for a very specific version of any supported mod. When installing them, you must choose the correct version, or you will not be able to play.
