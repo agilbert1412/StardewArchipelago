@@ -108,7 +108,7 @@ namespace StardewArchipelago.Goals
             _archipelago.ReportGoalCompletion();
         }
 
-        public static void CheckMasterAnglerGoalCompletion(bool vanillaGoal)
+        public static void CheckMasterAnglerGoalCompletion(bool vanillaGoal = false)
         {
             if (!_archipelago.IsConnected || _archipelago.SlotData.Goal != Goal.MasterAngler)
             {
@@ -218,7 +218,7 @@ namespace StardewArchipelago.Goals
             _archipelago.ReportGoalCompletion();
         }
 
-        public static void CheckProtectorOfTheValleyGoalCompletion(bool vanillaGoal)
+        public static void CheckProtectorOfTheValleyGoalCompletion(bool vanillaGoal = false)
         {
             if (!_archipelago.IsConnected || _archipelago.SlotData.Goal != Goal.ProtectorOfTheValley)
             {
