@@ -108,14 +108,14 @@ namespace StardewArchipelago.Goals
             _archipelago.ReportGoalCompletion();
         }
 
-        public static void CheckMasterAnglerGoalCompletion()
+        public static void CheckMasterAnglerGoalCompletion(bool vanillaGoal)
         {
             if (!_archipelago.IsConnected || _archipelago.SlotData.Goal != Goal.MasterAngler)
             {
                 return;
             }
 
-            if (_archipelago.SlotData.Fishsanity == Fishsanity.None)
+            if (vanillaGoal || _archipelago.SlotData.Fishsanity == Fishsanity.None)
             {
                 SendMasterAnglerLetterExcludingIsland();
                 if (!Game1.player.hasOrWillReceiveMail(MASTER_ANGLER_LETTER))
@@ -218,14 +218,14 @@ namespace StardewArchipelago.Goals
             _archipelago.ReportGoalCompletion();
         }
 
-        public static void CheckProtectorOfTheValleyGoalCompletion()
+        public static void CheckProtectorOfTheValleyGoalCompletion(bool vanillaGoal)
         {
             if (!_archipelago.IsConnected || _archipelago.SlotData.Goal != Goal.ProtectorOfTheValley)
             {
                 return;
             }
 
-            if (_archipelago.SlotData.Monstersanity == Monstersanity.None)
+            if (vanillaGoal || _archipelago.SlotData.Monstersanity == Monstersanity.None)
             {
                 if (!_killList.AreAllGoalsComplete())
                 {
@@ -243,14 +243,14 @@ namespace StardewArchipelago.Goals
             _archipelago.ReportGoalCompletion();
         }
 
-        public static void CheckFullShipmentGoalCompletion()
+        public static void CheckFullShipmentGoalCompletion(bool vanillaGoal)
         {
             if (!_archipelago.IsConnected || _archipelago.SlotData.Goal != Goal.FullShipment)
             {
                 return;
             }
 
-            if (_archipelago.SlotData.Shipsanity == Shipsanity.None)
+            if (vanillaGoal || _archipelago.SlotData.Shipsanity == Shipsanity.None)
             {
                 if (!HasShippedAllItems())
                 {

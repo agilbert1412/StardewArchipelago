@@ -238,7 +238,7 @@ namespace StardewArchipelago
                 _seasonsRandomizer = new SeasonsRandomizer(Monitor, _helper, _archipelago, State);
                 _appearanceRandomizer = new AppearanceRandomizer(Monitor, _archipelago);
                 var tileChooser = new TileChooser();
-                _chatForwarder = new ChatForwarder(Monitor, _helper, _harmony, _archipelago, _giftHandler, tileChooser);
+                _chatForwarder = new ChatForwarder(Monitor, _helper, _harmony, _archipelago, _giftHandler, _goalManager, tileChooser);
                 _questCleaner = new QuestCleaner();
                 
                 if (!_archipelago.IsConnected)
