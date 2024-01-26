@@ -301,6 +301,11 @@ namespace StardewArchipelago.Archipelago
             return _session.ConnectionInfo.Team;
         }
 
+        public string GetPlayerName()
+        {
+            return GetPlayerName(_session.ConnectionInfo.Slot);
+        }
+
         public string GetPlayerName(int playerSlot)
         {
             if (!MakeSureConnected())

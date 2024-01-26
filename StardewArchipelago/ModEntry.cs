@@ -117,6 +117,7 @@ namespace StardewArchipelago
             // _helper.ConsoleCommands.Add("load_entrances", "Loads the entrances file", (_, _) => _entranceRandomizer.LoadTransports());
             // _helper.ConsoleCommands.Add("save_entrances", "Saves the entrances file", (_, _) => EntranceInjections.SaveNewEntrancesToFile());
             _helper.ConsoleCommands.Add("export_shippables", "Export all currently loaded shippable items", this.ExportShippables);
+            _helper.ConsoleCommands.Add("release_slot", "Release the current slot completely", this.ReleaseSlot);
             _helper.ConsoleCommands.Add("debug_method", "Runs whatever is currently in the debug method", this.DebugMethod);
 #endif
         }
@@ -528,6 +529,30 @@ namespace StardewArchipelago
         {
             _stardewItemManager.ExportAllItemsMatching(x => x.canBeShipped(), "shippables.json");
         }
+
+#if DEBUG
+
+        private void ReleaseSlot(string arg1, string[] arg2)
+        {
+            if (!_archipelago.IsConnected || !Game1.hasLoadedGame || arg2.Length < 1)
+            {
+                return;
+            }
+
+            var slotName = arg2[0];
+
+            if (slotName != _archipelago.GetPlayerName() || slotName != Game1.player.Name)
+            {
+                return;
+            }
+
+            foreach (var missingLocation in _locationChecker.GetAllMissingLocationNames())
+            {
+                _locationChecker.AddCheckedLocation(missingLocation);
+            }
+        }
+
+#endif
 
         private void ExportGifts(string arg1, string[] arg2)
         {

@@ -49,7 +49,12 @@ namespace StardewArchipelago.Locations
         {
             return _archipelago.GetAllMissingLocations();
         }
-        
+
+        public IReadOnlyCollection<string> GetAllMissingLocationNames()
+        {
+            return _archipelago.GetAllMissingLocations().Select(x => _archipelago.GetLocationName(x)).ToArray();
+        }
+
         public void AddCheckedLocation(string locationName)
         {
             if (_checkedLocations.ContainsKey(locationName))
