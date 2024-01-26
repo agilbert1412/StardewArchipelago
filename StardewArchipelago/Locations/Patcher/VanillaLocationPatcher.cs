@@ -683,6 +683,11 @@ namespace StardewArchipelago.Locations.Patcher
             }
 
             _harmony.Patch(
+                original: AccessTools.Method(typeof(Utility), nameof(Utility.getQiShopStock)),
+                postfix: new HarmonyMethod(typeof(CasinoInjections), nameof(CasinoInjections.GetQiShopStock_AlienRarecrowCheck_Postfix))
+            );
+
+            _harmony.Patch(
                 original: AccessTools.Method(typeof(ShopMenu), nameof(ShopMenu.update)),
                 postfix: new HarmonyMethod(typeof(EggFestivalInjections), nameof(EggFestivalInjections.Update_AddStrawberrySeedsCheck_Postfix))
             );
