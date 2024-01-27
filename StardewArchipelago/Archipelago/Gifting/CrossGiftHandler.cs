@@ -78,13 +78,7 @@ namespace StardewArchipelago.Archipelago.Gifting
             }
 
             var receiverSlotName = isTrap ? message[trapPrefixWithSpace.Length..] : message[giftPrefixWithSpace.Length..];
-#if RELEASE
-            if (receiverSlotName == _archipelago.SlotData.SlotName)
-            {
-                Game1.chatBox?.addMessage($"You cannot send yourself a gift", Color.Gold);
-                return true;
-            }
-#endif
+
             _giftSender.SendGift(receiverSlotName, isTrap);
             return true;
         }
@@ -134,7 +128,7 @@ namespace StardewArchipelago.Archipelago.Gifting
                 _sentGiftIds = new List<string>();
                 return;
             }
-            _sentGiftIds = apGifts.ToList();
+            _sentGiftIds = new List<string>(apGifts);
         }
         
         public void AddGiftIDToList(string giftId) {
@@ -144,12 +138,12 @@ namespace StardewArchipelago.Archipelago.Gifting
             }
         }
         
-        public bool OwnPlayerSentGift(giftId) {
+        public bool OwnPlayerSentGift(string giftId) {
             return _sentGiftIds.Contains(giftId);
         }
         
         public List<string> GetGiftIDList() {
-            return _sentGiftIds.ToList();
+            return _sentGiftIds;
         }
     }
 }
