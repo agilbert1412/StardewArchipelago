@@ -191,30 +191,34 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
             {
                 var randomBerryItem = berryItems[random.Next(berryItems.Length)];
                 var randomBerryValue = _junimoShopGenerator.BerryItems[randomBerryItem];
-                if (_archipelago.SlotData.Chefsanity.HasFlag(Chefsanity.Purchases) && (item.Key.Name.Contains("Baked Berry Oatmeal") || item.Key.Name.Contains("Flower Cookie"))) // Since these are AP locations, for logic's sake only use seasonal berries
+                var itemToTradeTotal = _junimoShopGenerator.ExchangeRate(item.Key.salePrice(), randomBerryValue * (hasKnowledge ? 3 : 1));
+                if (item.Key.Name.Contains("Baked Berry Oatmeal") || item.Key.Name.Contains("Flower Cookie")) // Since these are AP locations, for logic's sake only use seasonal berries
                 {
                     var isOatmeal = item.Key.Name.Contains("Baked Berry Oatmeal");
                     var logicalBerry = seasonalBerry[Game1.currentSeason];
                     var logicalBerryRate = _junimoShopGenerator.ExchangeRate(isOatmeal ? OATMEAL_PRICE : COOKIE_PRICE, logicalBerry.salePrice() * (hasKnowledge ? 3 : 1));
+                    var rateForChefsanity = _archipelago.SlotData.Chefsanity.HasFlag(Chefsanity.Purchases) ? logicalBerryRate : itemToTradeTotal;
+                    var itemForSale = _archipelago.SlotData.Chefsanity.HasFlag(Chefsanity.Purchases) ? seasonalBerry[Game1.currentSeason].ParentSheetIndex : randomBerryItem.Id;
+                    item.Key.Stack = 1;
+
                     stock[item.Key] = new int[4]
                     {
-                    0,
-                    int.MaxValue,
-                    seasonalBerry[Game1.currentSeason].ParentSheetIndex,
-                    _junimoShopGenerator.ValueOfOneItemWithWeight(logicalBerryRate, 0.75)
+                        0,
+                        int.MaxValue,
+                        itemForSale,
+                        _junimoShopGenerator.ValueOfOneItemWithWeight(rateForChefsanity, 0.75)
                     };
                     continue;
-                }
-                var itemToTradeTotal = _junimoShopGenerator.ExchangeRate(item.Key.salePrice(), randomBerryValue * (hasKnowledge ? 3 : 1));
 
+                }
                 item.Key.Stack = itemToTradeTotal[0];
 
                 stock[item.Key] = new int[4]
                 {
-                0,
-                int.MaxValue,
-                randomBerryItem.Id,
-                itemToTradeTotal[1],
+                    0,
+                    int.MaxValue,
+                    randomBerryItem.Id,
+                    itemToTradeTotal[1],
                 };
             }
         }
