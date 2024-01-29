@@ -479,21 +479,8 @@ namespace StardewArchipelago.GameModifications.Modded
 
         private void AddJunimoModdedStock(Dictionary<ISalable, int[]> stock)
         {
-            AddJunimoDistantLandsStock(stock);
         }
 
-        private void AddJunimoDistantLandsStock(Dictionary<ISalable, int[]> stock)
-        {
-            if (!_archipelago.SlotData.Mods.HasMod(ModNames.DISTANT_LANDS))
-            {
-                return;
-            }
-
-            var voidMintSeeds = _stardewItemManager.GetItemByName("Void Mint Seeds").Id;
-            var vileAncientFruitSeeds = _stardewItemManager.GetItemByName("Vile Ancient Fruit Seeds").Id;
-            AddToJunimoStock(stock, voidMintSeeds, "Yellow", true);
-            AddToJunimoStock(stock, vileAncientFruitSeeds, "Yellow", true);
-        }
 
         public int ValueOfOneItemWithWeight(int[] offerRatio, double weight)
         {
