@@ -53,6 +53,7 @@ namespace StardewArchipelago.Items.Traps
                 return;
             }
 
+            var groupsToShuffle = new List<Dictionary<ItemSlot, Item>>();
             var slotsToShuffle = new Dictionary<ItemSlot, Item>();
 
             _monitor.Log($"Executing a Shuffle Trap...", LogLevel.Debug);
