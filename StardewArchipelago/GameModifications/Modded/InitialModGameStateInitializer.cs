@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using StardewModdingAPI;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
@@ -6,12 +5,12 @@ using StardewValley;
 
 namespace StardewArchipelago.Locations.CodeInjections.Modded
 {
-    public class CallableModData
+    public class InitialModGameStateInitializer
     {
         private static IMonitor _monitor;
         private static ArchipelagoClient _archipelago;
 
-        public CallableModData(IMonitor monitor, ArchipelagoClient archipelago)
+        public InitialModGameStateInitializer(IMonitor monitor, ArchipelagoClient archipelago)
         {
             _monitor = monitor;
             _archipelago = archipelago;
