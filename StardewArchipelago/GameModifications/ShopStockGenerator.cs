@@ -465,7 +465,6 @@ namespace StardewArchipelago.GameModifications
                 AddSeedToSandyStock(sandyStock, ShopItemIds.RHUBARB_SEEDS);
                 AddSeedToSandyStock(sandyStock, ShopItemIds.STARFRUIT_SEEDS);
                 AddSeedToSandyStock(sandyStock, ShopItemIds.BEET_SEEDS);
-                AddSandyModdedStock(sandyStock);
                 var random = new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame / 2);
                 AddSandyRotatingStock(sandyStock, random);
                 AddSandyPermanentCosmetics(sandyStock, random);
@@ -481,11 +480,6 @@ namespace StardewArchipelago.GameModifications
                 return null;
             }
         }
-
-        private void AddSandyModdedStock(Dictionary<ISalable, int[]> sandyStock)
-        {
-        }
-
 
 
         private static void AddSandyRotatingStock(Dictionary<ISalable, int[]> sandyStock, Random random)
