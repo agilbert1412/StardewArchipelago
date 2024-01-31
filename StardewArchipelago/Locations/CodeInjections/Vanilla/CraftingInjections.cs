@@ -8,6 +8,7 @@ using StardewModdingAPI;
 using StardewValley;
 using Object = StardewValley.Object;
 using StardewArchipelago.Stardew.NameMapping;
+using StardewArchipelago.Locations.CodeInjections.Modded;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -42,20 +43,17 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
         private static CompoundNameMapper _nameMapper;
+        private static List<string> _moddedIgnoredCraftables;
 
-        public static void Initialize(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago, LocationChecker locationChecker, ModdedListsAndDictionaries moddedListsAndDictionaries)
         {
             _monitor = monitor;
             _helper = helper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
             _nameMapper = new CompoundNameMapper(archipelago.SlotData);
+            _moddedIgnoredCraftables = moddedListsAndDictionaries.IgnoredCraftablesModded;
         }
-
-        public static readonly List<string> IgnoredCraftables = new(){
-            // Some crafts should be ignored due to general ridiculousness of obtaining in a randomizer
-            "Restore Prismatic Shard", "Restore Golden Mask", "Restore Ancient Sword", "Restore Ancient Doll", "Restore Chipped Amphora"
-        };
 
         // public void checkForCraftingAchievements()
         public static void CheckForCraftingAchievements_CheckCraftsanityLocation_Postfix(Stats __instance)
@@ -70,7 +68,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                         continue;
                     }
                     var recipeName = _nameMapper.GetEnglishName(recipe); // Some names are iffy
-                    if (IgnoredCraftables.Contains(recipeName))
+                    if (_moddedIgnoredCraftables.Contains(recipeName))
                     {
                         continue;
                     }

@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Content;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Items.Unlocks;
+using StardewArchipelago.Locations.CodeInjections.Modded;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
@@ -22,9 +23,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
 {
     public static class QuestInjections
     {
-        private static readonly string[] _ignoredQuests = {
+        private static List<string> _ignoredQuests = new(){
             "To The Beach", "Explore The Mine", "Deeper In The Mine", "To The Bottom?", "The Mysterious Qi",
-            "A Winter Mystery", "Cryptic Note", "Dark Talisman", "Goblin Problem", "Transgressions"
+            "A Winter Mystery", "Cryptic Note", "Dark Talisman", "Goblin Problem"
         };
 
         private static IMonitor _monitor;
@@ -32,14 +33,17 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
         private static ContentManager _englishContentManager;
+        private static List<string> _ignoredQuestsModded;
 
-        public static void Initialize(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago, LocationChecker locationChecker, ModdedListsAndDictionaries moddedListsAndDictionaries)
         {
             _monitor = monitor;
             _helper = helper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
             _englishContentManager = new ContentManager(Game1.game1.Content.ServiceProvider, Game1.game1.Content.RootDirectory);
+            _ignoredQuestsModded = moddedListsAndDictionaries.IgnoredQuestsModded;
+            UpdateIgnoredQuestList();
         }
 
         public static bool QuestComplete_LocationInsteadOfReward_Prefix(Quest __instance)
@@ -621,6 +625,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
                     LogLevel.Error);
                 return true; // run original logic
             }
+        }
+
+        private static void UpdateIgnoredQuestList()
+        {
+            _ignoredQuests.AddRange(_ignoredQuestsModded);
         }
     }
 }

@@ -5,7 +5,7 @@ namespace StardewArchipelago.Stardew.NameMapping
 {
     public class ArchaeologyNameMapper : INameMapper
     {
-        public static readonly Dictionary<string, string> InternalToEnglishNamesMap = new(){
+        private static Dictionary<string, string> InternalToEnglishNamesMap = new(){
             {"moonslime.excavation.ancient_battery", "Ancient Battery Production Station"},
             {"moonslime.excavation.glass_bazier", "Glass Bazier"},
             {"moonslime.excavation.grinder", "Grinder"},

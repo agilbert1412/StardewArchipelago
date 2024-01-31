@@ -10,30 +10,27 @@ using StardewArchipelago.Constants;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.GameData;
+using StardewArchipelago.Locations.CodeInjections.Modded;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
     public class SpecialOrderInjections
     {
-        private static string[] _vanillaSpecialOrderReward = new[]
-        {
-            //Exists to avoid removing mail rewards
-            "Aurora Vineyard", "Monster Crops"
-        };
-
         private static IMonitor _monitor;
         private static IModHelper _modHelper;
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
         private static ContentManager _englishContentManager;
+        private static List<string> _ignoredSpecialOrdersModded;
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker, ModdedListsAndDictionaries moddedListsAndDictionaries)
         {
             _monitor = monitor;
             _modHelper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
             _englishContentManager = new ContentManager(Game1.game1.Content.ServiceProvider, Game1.game1.Content.RootDirectory);
+            _ignoredSpecialOrdersModded = moddedListsAndDictionaries.IgnoredSpecialOrdersModded;
         }
 
         // public static bool IsSpecialOrdersBoardUnlocked()
@@ -64,7 +61,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
                 // Remove vanilla rewards if the player has not received the check.
                 // We will keep vanilla rewards for repeated orders
-                if (_locationChecker.IsLocationMissing(specialOrderName) & !_vanillaSpecialOrderReward.Contains(specialOrderName))
+                if (_locationChecker.IsLocationMissing(specialOrderName) & !_ignoredSpecialOrdersModded.Contains(specialOrderName))
                 {
                     __result.rewards.Clear();
                     Game1.player.team.specialOrders.Remove(__result); // Might as well, and it cleans up SVE special orders.

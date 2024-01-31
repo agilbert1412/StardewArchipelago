@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using HarmonyLib;
 using StardewArchipelago.Archipelago;
@@ -6,6 +7,7 @@ using StardewArchipelago.Archipelago.Gifting;
 using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Items.Traps;
 using StardewArchipelago.Items.Unlocks;
+using StardewArchipelago.Locations.CodeInjections.Modded;
 using StardewArchipelago.Stardew;
 using StardewArchipelago.Stardew.NameMapping;
 using StardewModdingAPI;
@@ -24,13 +26,15 @@ namespace StardewArchipelago.Items
 
         // When More mods start to need name mapping, we can make a generic version of this
         private CompoundNameMapper _nameMapper;
+        private Dictionary<string,string> _archaeologyNameToDisplayName;
         
-        public ItemParser(IMonitor monitor, IModHelper helper, Harmony harmony, ArchipelagoClient archipelago, StardewItemManager itemManager, TileChooser tileChooser, BabyBirther babyBirther, GiftSender giftSender)
+        public ItemParser(IMonitor monitor, IModHelper helper, Harmony harmony, ArchipelagoClient archipelago, StardewItemManager itemManager, TileChooser tileChooser, BabyBirther babyBirther, GiftSender giftSender, ModdedListsAndDictionaries moddedListsAndDictionaries)
         {
             _itemManager = itemManager;
             _unlockManager = new UnlockManager(archipelago);
             _trapManager = new TrapManager(monitor, helper, harmony, archipelago, tileChooser, babyBirther, giftSender);
             _nameMapper = new CompoundNameMapper(archipelago.SlotData);
+            _archaeologyNameToDisplayName = moddedListsAndDictionaries.ArchaeologyNameToDisplayName;
         }
 
         public TrapManager TrapManager => _trapManager;
@@ -60,9 +64,9 @@ namespace StardewArchipelago.Items
                 return resourcePackItem.GetAsLetter(receivedItem, resourcePackAmount);
             }
 
-            if (ArchaeologyNameMapper.InternalToEnglishNamesMap.Values.Contains(receivedItem.ItemName))
+            if (_archaeologyNameToDisplayName.Values.Contains(receivedItem.ItemName))
             {
-                itemName = ArchaeologyNameMapper.InternalToEnglishNamesMap.First(x => x.Value.Equals(itemName)).Key;
+                itemName = _archaeologyNameToDisplayName.First(x => x.Value.Equals(itemName)).Key;
             }
             
             if (TryParseFriendshipBonus(receivedItem.ItemName, out var numberOfPoints))

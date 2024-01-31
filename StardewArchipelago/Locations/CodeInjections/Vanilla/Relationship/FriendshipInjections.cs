@@ -31,10 +31,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
         private const string HEARTS_PATTERN = "{0} <3";
         public const string FRIENDSANITY_PATTERN = "Friendsanity: {0} {1} <3";
 
-        private static string[] _notImmediatelyAccessible = new[]
+        private static List<string> _notImmediatelyAccessible = new()
         {
-            "Leo", "Krobus", "Dwarf", "Sandy", "Kent", "Yoba", "Lance", "Apples", "Scarlett", "Morgan", "Zic", "Alecto", "Gunther",
-            "Marlon", "Gregory"
+            "Leo", "Krobus", "Dwarf", "Sandy", "Kent"
         };
 
         private static IMonitor _monitor;

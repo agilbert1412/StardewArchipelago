@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Goals;
+using StardewArchipelago.Locations.CodeInjections.Modded;
 using StardewArchipelago.Stardew.NameMapping;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Objects;
-using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -21,19 +19,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private ArchipelagoClient _archipelago;
         private LocationChecker _locationChecker;
         private NameSimplifier _nameSimplifier;
-        private List<string> IgnoredShipments = new(){
-            //  For items that could be shipped, but are too easily softlockable to be reasonably shipped, to avoid errors
-            "Galmoran Gem", "Ancient Hilt", "Ancient Blade", "Ancient Doll Legs", "Ancient Doll Body", "Prismatic Shard Piece 3", 
-            "Mask Piece 1", "Mask Piece 2", "Mask Piece 3", "Prismatic Shard Piece 1", "Prismatic Shard Piece 2", "Prismatic Shard Piece 4", 
-            "Chipped Amphora Piece 1", "Chipped Amphora Piece 2", 
-        };
+        private List<string> _moddedIgnoredShippables;
 
-        public NightShippingBehaviors(IMonitor monitor, ArchipelagoClient archipelago, LocationChecker locationChecker, NameSimplifier nameSimplifier)
+        public NightShippingBehaviors(IMonitor monitor, ArchipelagoClient archipelago, LocationChecker locationChecker, NameSimplifier nameSimplifier, ModdedListsAndDictionaries moddedListsAndDictionaries)
         {
             _monitor = monitor;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
             _nameSimplifier = nameSimplifier;
+            _moddedIgnoredShippables = moddedListsAndDictionaries.IgnoredModShipments;
         }
 
         // private static IEnumerator<int> _newDayAfterFade()
@@ -99,7 +93,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             foreach (var shippedItem in allShippedItems)
             {
                 var name = _nameSimplifier.GetSimplifiedName(shippedItem);
-                if (IgnoredShipments.Contains(name))
+                if (_moddedIgnoredShippables.Contains(name))
                 {
                     continue;
                 }

@@ -66,8 +66,9 @@ namespace StardewArchipelago
         private NightShippingBehaviors _shippingBehaviors;
 
         private ModRandomizedLogicPatcher _modLogicPatcher;
-        private CallableModData _callableModData;
+        private InitialModGameStateInitializer _callableModData;
         private ModifiedVillagerEventChecker _villagerEvents;
+        private ModdedListsAndDictionaries _moddedListsAndDictionaries;
 
         public ArchipelagoStateDto State { get; set; }
         private ArchipelagoConnectionInfo _apConnectionOverride;
@@ -271,14 +272,15 @@ namespace StardewArchipelago
 
                 var babyBirther = new BabyBirther();
                 _giftHandler.Initialize(Monitor, _archipelago, _stardewItemManager, _mail);
-                _itemManager = new ItemManager(Monitor, _helper, _harmony, _archipelago, _stardewItemManager, _mail, tileChooser, babyBirther, _giftHandler.Sender, State.ItemsReceived);
+                _itemManager = new ItemManager(Monitor, _helper, _harmony, _archipelago, _stardewItemManager, _mail, tileChooser, babyBirther, _giftHandler.Sender, State.ItemsReceived, _moddedListsAndDictionaries);
                 var weaponsManager = new WeaponsManager(_stardewItemManager, _archipelago.SlotData.Mods);
                 _mailPatcher = new MailPatcher(Monitor, _harmony, _archipelago, _locationChecker, State,
                     new LetterActions(_helper, _mail, _archipelago, weaponsManager, _itemManager.TrapManager, babyBirther, _stardewItemManager));
                 var bundlesManager = new BundlesManager(_helper, _stardewItemManager, _archipelago.SlotData.BundlesData);
                 bundlesManager.ReplaceAllBundles();
+                _moddedListsAndDictionaries = new ModdedListsAndDictionaries();
                 _locationsPatcher = new LocationPatcher(Monitor, _helper, _harmony, _archipelago, State, _locationChecker, _stardewItemManager, weaponsManager, shopStockGenerator, junimoShopGenerator, friends);
-                _shippingBehaviors = new NightShippingBehaviors(Monitor, _archipelago, _locationChecker, nameSimplifier);
+                _shippingBehaviors = new NightShippingBehaviors(Monitor, _archipelago, _locationChecker, nameSimplifier, _moddedListsAndDictionaries);
                 _chatForwarder.ListenToChatMessages();
                 _logicPatcher.PatchAllGameLogic();
                 _modLogicPatcher.PatchAllModGameLogic();
@@ -291,7 +293,7 @@ namespace StardewArchipelago
                 _multiSleep.InjectMultiSleepOption(_archipelago.SlotData);
                 TravelingMerchantInjections.UpdateTravelingMerchantForToday(Game1.getLocationFromName("Forest") as Forest, Game1.dayOfMonth);
                 SeasonsRandomizer.ChangeMailKeysBasedOnSeasonsToDaysElapsed();
-                _callableModData = new CallableModData(Monitor, _archipelago);
+                _callableModData = new InitialModGameStateInitializer(Monitor, _archipelago);
                 Game1.chatBox?.addMessage($"Connected to Archipelago as {_archipelago.SlotData.SlotName}. Type !!help for client commands", Color.Green);
 
             }
