@@ -61,6 +61,7 @@ namespace StardewArchipelago.Archipelago
         public FarmType FarmType { get; private set; }
         public int StartingMoney { get; private set; }
         public double ProfitMargin { get; private set; }
+        public string BundlesData { get; set; }
         public EntranceRandomization EntranceRandomization { get; private set; }
         public SeasonRandomization SeasonRandomization { get; private set; }
         public Cropsanity Cropsanity { get; private set; }
@@ -96,7 +97,6 @@ namespace StardewArchipelago.Archipelago
         public bool DeathLink { get; private set; }
         public string Seed { get; private set; }
         public string MultiworldVersion { get; private set; }
-        public string BundlesData { get; set; }
         public Dictionary<string, string> ModifiedEntrances { get; set; }
         public AppearanceRandomization AppearanceRandomization { get; set; }
         public bool AppearanceRandomizationDaily { get; set; }
@@ -112,6 +112,7 @@ namespace StardewArchipelago.Archipelago
             FarmType = GetSlotSetting(FARM_TYPE_KEY, FarmType.Standard);
             StartingMoney = GetSlotSetting(STARTING_MONEY_KEY, 500);
             ProfitMargin = GetSlotSetting(PROFIT_MARGIN_KEY, 100) / 100.0;
+            BundlesData = GetSlotSetting(MODIFIED_BUNDLES_KEY, "");
             EntranceRandomization = GetSlotSetting(ENTRANCE_RANDOMIZATION_KEY, EntranceRandomization.Disabled);
             SeasonRandomization = GetSlotSetting(SEASON_RANDOMIZATION_KEY, SeasonRandomization.Disabled);
             Cropsanity = GetSlotSetting(CROPSANITY_KEY, Cropsanity.Disabled);
@@ -147,7 +148,6 @@ namespace StardewArchipelago.Archipelago
             DeathLink = GetSlotSetting(DEATH_LINK_KEY, false);
             Seed = GetSlotSetting(SEED_KEY, "");
             MultiworldVersion = GetSlotSetting(MULTIWORLD_VERSION_KEY, "");
-            BundlesData = GetSlotSetting(MODIFIED_BUNDLES_KEY, "");
             var newEntrancesStringData = GetSlotSetting(MODIFIED_ENTRANCES_KEY, "");
             ModifiedEntrances = JsonConvert.DeserializeObject<Dictionary<string, string>>(newEntrancesStringData);
             AppearanceRandomization = AppearanceRandomization.Disabled; // GetSlotSetting(RANDOMIZE_NPC_APPEARANCES_KEY, AppearanceRandomization.Disabled);
