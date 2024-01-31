@@ -1,0 +1,49 @@
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using StardewValley;
+
+namespace StardewArchipelago.Items.Traps.Shuffle
+{
+    public class InventoryContent : IEnumerable<KeyValuePair<ItemSlot, Item>>
+    {
+        public Dictionary<ItemSlot, Item> Content { get; set; }
+        public int Count => Content.Count;
+
+        public InventoryContent()
+        {
+            Content = new Dictionary<ItemSlot, Item>();
+        }
+
+        public InventoryContent(Dictionary<ItemSlot, Item> content)
+        {
+            Content = content;
+        }
+
+        public void Add(ItemSlot slot, Item item)
+        {
+            Content.Add(slot, item);
+        }
+
+        public bool Any()
+        {
+            return Content.Any();
+        }
+
+        public bool All(Func<KeyValuePair<ItemSlot, Item>, bool> condition)
+        {
+            return Content.All(condition);
+        }
+
+        public IEnumerator<KeyValuePair<ItemSlot, Item>> GetEnumerator()
+        {
+            return Content.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+    }
+}

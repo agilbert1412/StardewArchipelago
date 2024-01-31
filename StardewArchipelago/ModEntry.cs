@@ -591,7 +591,7 @@ namespace StardewArchipelago
 
         private void DebugMethod(string arg1, string[] arg2)
         {
-            _itemManager.ItemParser.TrapManager.AddJinxedDebuff();
+            _itemManager.ItemParser.TrapManager.ShuffleInventory();
         }
     }
 }
