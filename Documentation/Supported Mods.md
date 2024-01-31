@@ -51,8 +51,6 @@ To include supported mods in your multiworld slot, you need to include a section
 This section must be an array with the **exact** names of every mod you wish to include. Any improperly typed mod name will be ignored.
 ![image](https://i.imgur.com/uOHtXmU.png)
 
-Alternatively, the [weighted settings page](https://archipelago.gg/weighted-options) is another option available to add mods to your yaml file. First, click the link. In the section titled **Game Select**, drag the slider beside **Stardew Valley** to 1. Next, scroll down to the secton titled **Mods**. There, you will find a series of checkboxes. Check the checkboxes beside the name of the mods that you'd like to include in your yaml file. Lastly, click the **export settings** button at the bottom of the page, which will download the yaml file to your computer. Open that yaml file in your preferred text editor, and look for the section titled **Mods**. Select that entire section, and copy it to your clipboard. Then, if you haven't already done so, open your yaml file that you'd like to include the mods in, and paste what you've just copied over into it. Make sure that you select over the pre-existing mods category that is included by default by the website. This is the most important step. Ensure you **save** the file to wherever you'd like to save it to. For good measure, open the saved file again to make sure that it saved properly. You've now added mods to your yaml file! 
-
 These mods will then be included in the multiworld generation, and considered in logic. For example, the Magic mod includes a spell that allow a player to teleport, and, if included, teleporting can be required to reach checks.
 
 As previously mentioned, the generator and the StardewArchipelago client are designed and tested for a very specific version of any supported mod. When installing them, you must choose the correct version, or you will not be able to play.
@@ -62,6 +60,9 @@ Most mods also have dependencies to some library/utility mods. You will need to 
 
 If you can load the supported mod on the correct version, the exact version of a dependency is not important.
 
+## Having trouble with the YAML syntax?
+
+Alternatively, the [weighted settings page](https://archipelago.gg/weighted-options) is another option available to add mods to your yaml file. First, click the link. In the section titled **Game Select**, drag the slider beside **Stardew Valley** to 1. Next, scroll down to the secton titled **Mods**. There, you will find a series of checkboxes. Check the checkboxes beside the name of the mods that you'd like to include in your yaml file. Lastly, click the **export settings** button at the bottom of the page, which will download the yaml file to your computer. Open that yaml file in your preferred text editor, and look for the section titled **Mods**. Select that entire section, and copy it to your clipboard. Then, if you haven't already done so, open your yaml file that you'd like to include the mods in, and paste what you've just copied over into it. Make sure that you select over the pre-existing mods category that is included by default by the website. This is the most important step. Ensure you **save** the file to wherever you'd like to save it to. For good measure, open the saved file again to make sure that it saved properly. You've now added mods to your yaml file! 
 
 ## Bug Reports
 
