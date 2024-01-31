@@ -1,14 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Archipelago.MultiClient.Net.Models;
-using HarmonyLib;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
-using StardewArchipelago.GameModifications.CodeInjections;
 using StardewModdingAPI;
 using StardewValley;
-using StardewValley.GameData;
 using StardewValley.Menus;
 using StardewValley.Objects;
 
@@ -29,9 +25,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
         private const string MONSTER_ERADICATION_AP_PREFIX = "Monster Eradication: ";
         private static readonly Dictionary<BundlePrice, string> VineyardPrices = new(){
             { BundlePrice.Minimum, "Zygote" }, { BundlePrice.VeryCheap, "Baby" },
-            { BundlePrice.Cheap, "Oomfie" }, { BundlePrice.Expensive, "Adult" },
+            { BundlePrice.Cheap, "Oomfie" }, { BundlePrice.Normal, "" }, { BundlePrice.Expensive, "Adult" },
             { BundlePrice.VeryExpensive, "Boomer" }, { BundlePrice.Maximum, "EldritchHorror" },
         };
+        private const string APPLES_NAME = "Apples";
         private static readonly List<string> voidSpirits = new(){
             MonsterName.SHADOW_BRUTE, MonsterName.SHADOW_SHAMAN, MonsterName.SHADOW_SNIPER, MonsterCategory.VOID_SPIRITS,
             string.Join("30 ",MonsterCategory.VOID_SPIRITS), string.Join("60 ",MonsterCategory.VOID_SPIRITS), 
@@ -109,7 +106,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
                 }
                 //Change the key so it doesn't get deleted
                 var eventsKey = sveEventSpecialOrders[__instance.id];
-                if (eventsKey == "Apples") // Changes apples quest with one relevant to bundle price
+                if (eventsKey == APPLES_NAME) // Changes apples quest with one relevant to bundle price
                 {
                     eventsKey = AuroraVineyardMatchesBundles();
                 }
@@ -174,11 +171,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
         {
             
             var bundlesPrice = _archipelago.SlotData.BundlePrice;
-            if (bundlesPrice.HasFlag(BundlePrice.Normal))
-            {
-                return "Apples";
-            }
-            return string.Join("Apples", VineyardPrices[bundlesPrice]);
+            return string.Join(APPLES_NAME, VineyardPrices[bundlesPrice]);
         }
     }
 }
