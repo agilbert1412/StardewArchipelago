@@ -24,9 +24,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
         private const string LANCE_CHEST_LOCATION = "Monster Crops";
         private const string MONSTER_ERADICATION_AP_PREFIX = "Monster Eradication: ";
         private static readonly Dictionary<BundlePrice, string> VineyardPrices = new(){
-            { BundlePrice.Minimum, "Zygote" }, { BundlePrice.VeryCheap, "Baby" },
-            { BundlePrice.Cheap, "Oomfie" }, { BundlePrice.Normal, "" }, { BundlePrice.Expensive, "Adult" },
-            { BundlePrice.VeryExpensive, "Boomer" }, { BundlePrice.Maximum, "EldritchHorror" },
+            { BundlePrice.Minimum, "ApplesZygote" }, { BundlePrice.VeryCheap, "ApplesBaby" },
+            { BundlePrice.Cheap, "ApplesOomfie" }, { BundlePrice.Normal, "Apples" }, { BundlePrice.Expensive, "ApplesAdult" },
+            { BundlePrice.VeryExpensive, "ApplesBoomer" }, { BundlePrice.Maximum, "ApplesEldritchHorror" },
         };
         private const string APPLES_NAME = "Apples";
         private static readonly List<string> voidSpirits = new(){
@@ -171,7 +171,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
         {
             
             var bundlesPrice = _archipelago.SlotData.BundlePrice;
-            return string.Join(APPLES_NAME, VineyardPrices[bundlesPrice]);
+            return VineyardPrices[bundlesPrice];
         }
     }
 }
