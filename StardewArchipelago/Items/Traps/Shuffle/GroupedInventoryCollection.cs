@@ -19,6 +19,11 @@ namespace StardewArchipelago.Items.Traps.Shuffle
             }
         }
 
+        public InventoryContent GetTotalContent()
+        {
+            return new InventoryContent(InventoryGroups.SelectMany(x => x.GetTotalContent()));
+        }
+
         public void Add(InventoryCollection inventoryGroup)
         {
             InventoryGroups.Add(inventoryGroup);

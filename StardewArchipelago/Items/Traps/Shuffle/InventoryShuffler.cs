@@ -44,22 +44,23 @@ namespace StardewArchipelago.Items.Traps.Shuffle
 
             var numberInventoriesToShuffle = groupsToShuffle.Count;
             var numberItemsToShuffle = groupsToShuffle.Sum(x => x.Content.Count);
-            _monitor.Log($"Found {numberInventoriesToShuffle} inventories to shuffle, containing a total of {numberItemsToShuffle} items", LogLevel.Debug);
+            _monitor.Log($"Found {numberInventoriesToShuffle} inventoryGroups to shuffle, containing a total of {numberItemsToShuffle} items", LogLevel.Debug);
 
             var mergedGroups = MergeGroups(groupsToShuffle, targets);
-            _monitor.Log($"Separated inventories in {mergedGroups.Count} groups to shuffle among themselves", LogLevel.Debug);
+            _monitor.Log($"Separated inventoryGroups in {mergedGroups.Count} groups to shuffle among themselves", LogLevel.Debug);
 
             var random = new Random((int)(Game1.uniqueIDForThisGame + Game1.stats.DaysPlayed));
+
+            if (rateAsGifts > 0)
+            {
+                var numberItemsSent = SendRandomGifts(mergedGroups, random, rate * rateAsGifts);
+                _monitor.Log($"Sent {numberItemsSent} items as random gifts", LogLevel.Debug);
+            }
+
             foreach (var groupToShuffle in mergedGroups)
             {
                 var slotsToShuffle = groupToShuffle.SelectMany(x => x.Content.Content).ToDictionary(x => x.Key, x => x.Value);
-                _monitor.Log($"Shuffling a group of {groupToShuffle.Inventories.Count} inventories on map {groupToShuffle.Inventories.First().Info.Map} with {slotsToShuffle.Count} items...", LogLevel.Debug);
-                if (rateAsGifts > 0)
-                {
-                    SendRandomGifts(slotsToShuffle, random, rate * rateAsGifts);
-                    _monitor.Log($"Sent {numberItemsToShuffle - slotsToShuffle.Count} items as random gifts", LogLevel.Debug);
-                }
-
+                _monitor.Log($"Shuffling a group of {groupToShuffle.Inventories.Count} inventoryGroups on map {groupToShuffle.Inventories.First().Info.Map} with {slotsToShuffle.Count} items...", LogLevel.Debug);
                 slotsToShuffle = slotsToShuffle.Where(x => random.NextDouble() < rate).ToDictionary(x => x.Key, x => x.Value);
                 var allSlots = slotsToShuffle.Keys.ToList();
                 var allItems = slotsToShuffle.Values.ToList();
@@ -152,51 +153,93 @@ namespace StardewArchipelago.Items.Traps.Shuffle
             groupedInventories.Add(mergedInventory);
         }
 
-        private void SendRandomGifts(IDictionary<ItemSlot, Item> slotsToShuffle, Random random, double giftingRate)
+        private int SendRandomGifts(GroupedInventoryCollection inventoryGroups, Random random, double giftingRate)
         {
-            var giftsToSend = new Dictionary<string, List<Object>>();
-            var slotsToClear = new Dictionary<Object, ItemSlot>();
             var validTargets = _giftSender.GetAllPlayersThatCanReceiveShuffledItems();
 
             if (validTargets == null || !validTargets.Any())
             {
                 _monitor.Log($"Found no players to gift to", LogLevel.Debug);
-                return;
+                return 0;
             }
 
             _monitor.Log($"Found {validTargets.Count} players that can receive random gifts!", LogLevel.Debug);
-            foreach (var (itemSlot, item) in slotsToShuffle)
-            {
-                if (item is not Object objectToGift || !_giftSender.CanGiftObject(objectToGift) || random.NextDouble() > giftingRate)
-                {
-                    continue;
-                }
-
-                var chosenTarget = validTargets[random.Next(validTargets.Count)];
-                if (!giftsToSend.ContainsKey(chosenTarget))
-                {
-                    giftsToSend.Add(chosenTarget, new List<Object>());
-                }
-
-                _monitor.Log($"{chosenTarget} has been chosen as a recipient for {objectToGift.Stack} {objectToGift.Name}", LogLevel.Trace);
-                giftsToSend[chosenTarget].Add(objectToGift);
-                slotsToClear.Add(objectToGift, itemSlot);
-            }
+            var giftsToSend = SelectGiftingTargets(inventoryGroups, random, giftingRate, validTargets, out var slotsToClear);
 
             var failedToSendGifts = _giftSender.SendShuffleGifts(giftsToSend);
+            if (failedToSendGifts.Any())
+            {
+                _monitor.Log($"Finished sending gifts, {failedToSendGifts.Count} failed to send and will stay local", LogLevel.Debug);
+            }
+            else
+            {
+                _monitor.Log($"Finished sending gifts", LogLevel.Debug);
+            }
 
-            _monitor.Log($"Finished sending gifts, {failedToSendGifts.Count} failed to send and will stay local", LogLevel.Debug);
+            RemoveGiftedItemsFromPoolToShuffle(inventoryGroups, slotsToClear, failedToSendGifts);
+            return giftsToSend.Sum(x => x.Value.Count) - failedToSendGifts.Count;
+        }
 
+        private Dictionary<string, List<Object>> SelectGiftingTargets(GroupedInventoryCollection inventoryGroups, Random random, double giftingRate, List<string> validTargets, out Dictionary<Object, ItemSlot> slotsToClear)
+        {
+            var giftsToSend = new Dictionary<string, List<Object>>();
+            slotsToClear = new Dictionary<Object, ItemSlot>();
+            foreach (var inventoryGroup in inventoryGroups)
+            {
+                foreach (var inventory in inventoryGroup)
+                {
+                    foreach (var (itemSlot, item) in inventory.Content)
+                    {
+                        if (item is not Object objectToGift || !_giftSender.CanGiftObject(objectToGift) || random.NextDouble() > giftingRate)
+                        {
+                            continue;
+                        }
+
+                        var chosenTarget = validTargets[random.Next(validTargets.Count)];
+                        if (!giftsToSend.ContainsKey(chosenTarget))
+                        {
+                            giftsToSend.Add(chosenTarget, new List<Object>());
+                        }
+
+                        _monitor.Log($"{chosenTarget} has been chosen as a recipient for {objectToGift.Stack} {objectToGift.Name}", LogLevel.Trace);
+                        giftsToSend[chosenTarget].Add(objectToGift);
+                        slotsToClear.Add(objectToGift, itemSlot);
+                    }
+                }
+            }
+
+            return giftsToSend;
+        }
+
+        private static void RemoveGiftedItemsFromPoolToShuffle(GroupedInventoryCollection inventoryGroups, Dictionary<Object, ItemSlot> slotsToClear, List<Object> failedToSendGifts)
+        {
             foreach (var (gift, slot) in slotsToClear)
             {
-                if (failedToSendGifts.Contains(gift))
-                {
-                    continue;
-                }
-
-                slotsToShuffle.Remove(slot);
-                slot.SetItem(null);
+                RemoveGiftedItemFromPoolToShuffle(inventoryGroups, failedToSendGifts, gift, slot);
             }
+        }
+
+        private static void RemoveGiftedItemFromPoolToShuffle(GroupedInventoryCollection inventoryGroups, List<Object> failedToSendGifts, Object gift, ItemSlot slot)
+        {
+            if (failedToSendGifts.Contains(gift))
+            {
+                return;
+            }
+
+            foreach (var inventoryGroup in inventoryGroups)
+            {
+                foreach (var inventory in inventoryGroup)
+                {
+                    if (inventory.Content.ContainsKey(slot))
+                    {
+                        inventory.Content.Remove(slot);
+                        slot.SetItem(null);
+                        return;
+                    }
+                }
+            }
+
+            slot.SetItem(null);
         }
 
         private static Inventory GetItemSlotsFromPlayerInventory()

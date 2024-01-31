@@ -21,6 +21,10 @@ namespace StardewArchipelago.Items.Traps.Shuffle
             Content = content;
         }
 
+        public InventoryContent(IEnumerable<KeyValuePair<ItemSlot, Item>> content) : this(content.ToDictionary(x => x.Key, x => x.Value))
+        {
+        }
+
         public void Add(ItemSlot slot, Item item)
         {
             Content.Add(slot, item);
@@ -44,6 +48,16 @@ namespace StardewArchipelago.Items.Traps.Shuffle
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+
+        public bool ContainsKey(ItemSlot slot)
+        {
+            return Content.ContainsKey(slot);
+        }
+
+        public void Remove(ItemSlot slot)
+        {
+            Content.Remove(slot);
         }
     }
 }

@@ -25,6 +25,11 @@ namespace StardewArchipelago.Items.Traps.Shuffle
             Inventories = new List<Inventory>(inventories);
         }
 
+        public InventoryContent GetTotalContent()
+        {
+            return new InventoryContent(Inventories.SelectMany(x => x.Content.Content));
+        }
+
         public void Add(Inventory inventoryInfo)
         {
             Inventories.Add(inventoryInfo);
