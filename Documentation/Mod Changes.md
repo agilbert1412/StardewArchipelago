@@ -14,7 +14,7 @@ For the sake of aligning several mods with the randomizer, certain modifications
     - To minimize using similar text as known events in SVE, most Claire/Martin events post-Jojamart are in their Jojamart state, due to them being tied to community center completion.
     - Scarlett becoming friendable is no longer tied to Sophia's 8 heart event, to avoid making Sophia's hearts too valuable.  This is now an item: Scarlett's Job Offer.
     - Morgan becoming the Wizard's student is no longer a Year Three event, as we want to avoid time only dependent events.  Them coming to Pelican Town is now an item: Morgan's Schooling.
-- Most quest rewards are split from their rewards, such as:
+- Most quest are split from their rewards, such as:
     - Void Soul Retrieval reward is now an item, so the cutscene given for completion does not trigger without it.
     - Grandpa's Shed dropbox is moved outside the building, and now repairing the building is an item.
     - Marlon's Boat Paddle is the item reward for Marlon's Boat, which lets you go to the Highlands.
