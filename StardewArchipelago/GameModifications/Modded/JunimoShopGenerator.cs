@@ -1,17 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Xml.Schema;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
-using StardewArchipelago.Extensions;
-using StardewArchipelago.Locations;
 using StardewArchipelago.Stardew;
 using StardewValley;
-using StardewValley.Locations;
-using StardewValley.Menus;
 
 namespace StardewArchipelago.GameModifications.Modded
 {
@@ -298,18 +292,23 @@ namespace StardewArchipelago.GameModifications.Modded
             }
             var colorItems = JunimoVendors[color].ColorItems.Keys.ToList();
             var randomColorItem = colorItems[random.Next(colorItems.Count)];
-            var randomColorValue = JunimoVendors[color].ColorItems[randomColorItem];
-            var colorItemExchangeRate = ExchangeRate(Math.Max(uniquePrice, item.salePrice()), (int) 0.8*randomColorValue);
+            var randomColorValue = 0.8*JunimoVendors[color].ColorItems[randomColorItem];
+            var colorItemExchangeRate = ExchangeRate(Math.Max(uniquePrice, item.salePrice()), (int) randomColorValue);
 
-            item.Stack = colorItemExchangeRate[0];
+            StockListing(item, stock, colorItemExchangeRate[0], randomColorItem, colorItemExchangeRate[1]);
+        }
 
-            stock.Add(item, new int[4]
+        private static void StockListing(ISalable item, Dictionary<ISalable, int[]> stock, int stackSize, int itemForSaleId, int value)
+        {
+            item.Stack = stackSize;
+
+                stock[item] = new int[4]
             {
                 0,
                 int.MaxValue,
-                randomColorItem,
-                colorItemExchangeRate[1],
-            });
+                itemForSaleId,
+                value
+            };
         }
 
         /*private void AddToJunimoStock(

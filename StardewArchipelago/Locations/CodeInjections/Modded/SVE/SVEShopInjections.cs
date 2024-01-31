@@ -199,28 +199,25 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
                     var logicalBerryRate = _junimoShopGenerator.ExchangeRate(isOatmeal ? OATMEAL_PRICE : COOKIE_PRICE, logicalBerry.salePrice() * (hasKnowledge ? 3 : 1));
                     var rateForChefsanity = _archipelago.SlotData.Chefsanity.HasFlag(Chefsanity.Purchases) ? logicalBerryRate : itemToTradeTotal;
                     var itemForSale = _archipelago.SlotData.Chefsanity.HasFlag(Chefsanity.Purchases) ? seasonalBerry[Game1.currentSeason].ParentSheetIndex : randomBerryItem.Id;
-                    item.Key.Stack = 1;
-
-                    stock[item.Key] = new int[4]
-                    {
-                        0,
-                        int.MaxValue,
-                        itemForSale,
-                        _junimoShopGenerator.ValueOfOneItemWithWeight(rateForChefsanity, 0.75)
-                    };
+                    StockListing(item.Key, stock, 1, itemForSale, _junimoShopGenerator.ValueOfOneItemWithWeight(rateForChefsanity, 0.75));
                     continue;
 
                 }
-                item.Key.Stack = itemToTradeTotal[0];
-
-                stock[item.Key] = new int[4]
-                {
-                    0,
-                    int.MaxValue,
-                    randomBerryItem.Id,
-                    itemToTradeTotal[1],
-                };
+                StockListing(item.Key, stock, itemToTradeTotal[0], randomBerryItem.Id, itemToTradeTotal[1]);
             }
+        }
+
+        private static void StockListing(ISalable item, Dictionary<ISalable, int[]> stock, int stackSize, int itemForSaleId, int value)
+        {
+            item.Stack = stackSize;
+
+                stock[item] = new int[4]
+            {
+                0,
+                int.MaxValue,
+                itemForSaleId,
+                value
+            };
         }
 
 
