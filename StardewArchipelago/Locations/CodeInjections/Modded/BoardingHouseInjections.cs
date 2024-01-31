@@ -117,9 +117,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 var obj = __instance.items[0];
                 __instance.items[0] = null;
                 __instance.items.RemoveAt(0);
-                __result = true;
                 _locationChecker.AddCheckedLocation(currentChest);
                 Game1.playSound("openChest");
+                __result = true;
                 return false; //don't run original logic (first chest is a check)
 
             }
