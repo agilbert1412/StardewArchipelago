@@ -105,8 +105,8 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
 
         private void SwapFarmhouseEntranceWithAnotherEmptyAreaEntrance(SlotData slotData)
         {
-            var outsideAreas = new[] { "Town", "Mountain", "Farm", "Forest", "BusStop", "Desert", "Beach" };
-            AddOutsideModEntrancesToOutsideAreas(slotData, outsideAreas);
+            var outsideAreas = new List<string>() { "Town", "Mountain", "Farm", "Forest", "BusStop", "Desert", "Beach" };
+            outsideAreas.AddRange(AddOutsideModEntrancesToOutsideAreas(slotData, outsideAreas));
             var random = new Random(int.Parse(slotData.Seed));
             var chosenEntrance = "";
             var replacementIsOutside = false;
@@ -121,20 +121,20 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             SwapTwoEntrances(ModifiedEntrances, chosenEntrance, FARM_TO_FARMHOUSE);
         }
 
-        private void AddOutsideModEntrancesToOutsideAreas(SlotData slotData, string[] outsideAreas)
+        private IEnumerable<string> AddOutsideModEntrancesToOutsideAreas(SlotData slotData, List<string> outsideAreas)
         {
-            var moddedAreas = outsideAreas.ToList();
+            List<string> modifiedAreas = new(){};
             if (slotData.Mods.HasMod(ModNames.SVE))
             {
                 var sveAreas = new List<string>{ "Custom_ForestWest", "Custom_BlueMoonVineyard" };
-                moddedAreas.AddRange(sveAreas);
+                modifiedAreas.AddRange(sveAreas);
             }
             if (slotData.Mods.HasMod(ModNames.BOARDING_HOUSE))
             {
                 var boardingAreas = new List<string>{ "Custom_BoardingHouse_BackwoodsPlateau" };
-                moddedAreas.AddRange(boardingAreas);
+                modifiedAreas.AddRange(boardingAreas);
             }
-            moddedAreas.ToArray();
+            return modifiedAreas;
         }
 
         private static void SwapTwoEntrances(Dictionary<string, string> entrances, string entrance1, string entrance2)
