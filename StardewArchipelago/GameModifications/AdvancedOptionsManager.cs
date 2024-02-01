@@ -70,6 +70,11 @@ namespace StardewArchipelago.GameModifications
         {
             try
             {
+                if (__instance?.advancedOptionsButton == null)
+                {
+                    return;
+                }
+
                 __instance.advancedOptionsButton.visible = false;
             }
             catch (Exception ex)
