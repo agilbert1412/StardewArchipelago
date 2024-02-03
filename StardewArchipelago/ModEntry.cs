@@ -272,14 +272,14 @@ namespace StardewArchipelago
 
                 var babyBirther = new BabyBirther();
                 _giftHandler.Initialize(Monitor, _archipelago, _stardewItemManager, _mail);
+                _moddedListsAndDictionaries = new ModdedListsAndDictionaries();
                 _itemManager = new ItemManager(Monitor, _helper, _harmony, _archipelago, _stardewItemManager, _mail, tileChooser, babyBirther, _giftHandler.Sender, State.ItemsReceived, _moddedListsAndDictionaries);
                 var weaponsManager = new WeaponsManager(_stardewItemManager, _archipelago.SlotData.Mods);
                 _mailPatcher = new MailPatcher(Monitor, _harmony, _archipelago, _locationChecker, State,
                     new LetterActions(_helper, _mail, _archipelago, weaponsManager, _itemManager.TrapManager, babyBirther, _stardewItemManager));
                 var bundlesManager = new BundlesManager(_helper, _stardewItemManager, _archipelago.SlotData.BundlesData);
                 bundlesManager.ReplaceAllBundles();
-                _moddedListsAndDictionaries = new ModdedListsAndDictionaries();
-                _locationsPatcher = new LocationPatcher(Monitor, _helper, _harmony, _archipelago, State, _locationChecker, _stardewItemManager, weaponsManager, shopStockGenerator, junimoShopGenerator, friends);
+                _locationsPatcher = new LocationPatcher(Monitor, _helper, _harmony, _archipelago, State, _locationChecker, _stardewItemManager, weaponsManager, shopStockGenerator, junimoShopGenerator, friends, _moddedListsAndDictionaries);
                 _shippingBehaviors = new NightShippingBehaviors(Monitor, _archipelago, _locationChecker, nameSimplifier, _moddedListsAndDictionaries);
                 _chatForwarder.ListenToChatMessages();
                 _logicPatcher.PatchAllGameLogic();
