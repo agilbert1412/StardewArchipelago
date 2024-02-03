@@ -64,7 +64,7 @@ namespace StardewArchipelago
         private NightShippingBehaviors _shippingBehaviors;
 
         private ModRandomizedLogicPatcher _modLogicPatcher;
-        private InitialModGameStateInitializer _callableModData;
+        private InitialModGameStateInitializer _modStateInitializer;
         private ModifiedVillagerEventChecker _villagerEvents;
 
         public ArchipelagoStateDto State { get; set; }
@@ -289,7 +289,7 @@ namespace StardewArchipelago
                 _multiSleep.InjectMultiSleepOption(_archipelago.SlotData);
                 TravelingMerchantInjections.UpdateTravelingMerchantForToday(Game1.getLocationFromName("Forest") as Forest, Game1.dayOfMonth);
                 SeasonsRandomizer.ChangeMailKeysBasedOnSeasonsToDaysElapsed();
-                _callableModData = new InitialModGameStateInitializer(Monitor, _archipelago);
+                _modStateInitializer = new InitialModGameStateInitializer(Monitor, _archipelago);
                 Game1.chatBox?.addMessage($"Connected to Archipelago as {_archipelago.SlotData.SlotName}. Type !!help for client commands", Color.Green);
 
             }
