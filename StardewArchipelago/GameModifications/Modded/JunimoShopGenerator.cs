@@ -302,7 +302,7 @@ namespace StardewArchipelago.GameModifications.Modded
         {
             item.Stack = stackSize;
 
-                stock[item] = new int[4]
+            stock[item] = new int[4]
             {
                 0,
                 int.MaxValue,
