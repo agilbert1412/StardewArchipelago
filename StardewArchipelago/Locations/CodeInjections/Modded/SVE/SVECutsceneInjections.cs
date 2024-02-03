@@ -108,7 +108,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
                 var eventsKey = sveEventSpecialOrders[__instance.id];
                 if (eventsKey == APPLES_NAME) // Changes apples quest with one relevant to bundle price
                 {
-                    eventsKey = AuroraVineyardMatchesBundles();
+                    eventsKey = GetAuroraVineyardPricedEventKey();
                 }
                 var specialOrder = SpecialOrder.GetSpecialOrder(eventsKey, null);
                 Game1.player.team.specialOrders.Add(specialOrder);
@@ -167,7 +167,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
             }
         }
 
-        public static string AuroraVineyardMatchesBundles()
+        public static string GetAuroraVineyardPricedEventKey()
         {
             
             var bundlesPrice = _archipelago.SlotData.BundlePrice;
