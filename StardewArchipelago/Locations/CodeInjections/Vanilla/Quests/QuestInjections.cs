@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
+using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.Items.Unlocks;
 using StardewArchipelago.Locations.CodeInjections.Modded;
 using StardewModdingAPI;
@@ -33,16 +34,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
         private static ContentManager _englishContentManager;
-        private static List<string> _ignoredQuestsModded;
 
-        public static void Initialize(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago, LocationChecker locationChecker, ModdedListsAndDictionaries moddedListsAndDictionaries)
+        public static void Initialize(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             _monitor = monitor;
             _helper = helper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
             _englishContentManager = new ContentManager(Game1.game1.Content.ServiceProvider, Game1.game1.Content.RootDirectory);
-            _ignoredQuestsModded = moddedListsAndDictionaries.IgnoredQuestsModded;
             UpdateIgnoredQuestList();
         }
 
@@ -629,7 +628,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
 
         private static void UpdateIgnoredQuestList()
         {
-            _ignoredQuests.AddRange(_ignoredQuestsModded);
+            _ignoredQuests.AddRange(IgnoredModdedStrings.Quests);
         }
     }
 }

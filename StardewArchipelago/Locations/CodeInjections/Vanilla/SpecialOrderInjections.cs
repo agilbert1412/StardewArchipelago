@@ -11,6 +11,7 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.GameData;
 using StardewArchipelago.Locations.CodeInjections.Modded;
+using StardewArchipelago.Constants.Modded;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -21,16 +22,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
         private static ContentManager _englishContentManager;
-        private static List<string> _ignoredSpecialOrdersModded;
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker, ModdedListsAndDictionaries moddedListsAndDictionaries)
+        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             _monitor = monitor;
             _modHelper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
             _englishContentManager = new ContentManager(Game1.game1.Content.ServiceProvider, Game1.game1.Content.RootDirectory);
-            _ignoredSpecialOrdersModded = moddedListsAndDictionaries.IgnoredSpecialOrdersModded;
         }
 
         // public static bool IsSpecialOrdersBoardUnlocked()
@@ -61,7 +60,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
                 // Remove vanilla rewards if the player has not received the check.
                 // We will keep vanilla rewards for repeated orders
-                if (_locationChecker.IsLocationMissing(specialOrderName) & !_ignoredSpecialOrdersModded.Contains(specialOrderName))
+                if (_locationChecker.IsLocationMissing(specialOrderName) & !IgnoredModdedStrings.SpecialOrders.Contains(specialOrderName))
                 {
                     __result.rewards.Clear();
                     Game1.player.team.specialOrders.Remove(__result); // Might as well, and it cleans up SVE special orders.

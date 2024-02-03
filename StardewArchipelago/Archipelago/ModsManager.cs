@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using StardewArchipelago.Constants;
+using StardewArchipelago.Constants.Modded;
 using StardewModdingAPI;
 
 namespace StardewArchipelago.Archipelago

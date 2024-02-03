@@ -13,7 +13,7 @@ using StardewArchipelago.Stardew;
 using StardewValley.Locations;
 using StardewValley.Menus;
 using Object = StardewValley.Object;
-using StardewArchipelago.Constants;
+using StardewArchipelago.Constants.Modded;
 
 namespace StardewArchipelago.Goals
 {

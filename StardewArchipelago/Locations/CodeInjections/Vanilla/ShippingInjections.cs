@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.Locations.CodeInjections.Modded;
 using StardewArchipelago.Stardew.NameMapping;
 using StardewModdingAPI;
@@ -19,15 +20,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private ArchipelagoClient _archipelago;
         private LocationChecker _locationChecker;
         private NameSimplifier _nameSimplifier;
-        private List<string> _moddedIgnoredShippables;
 
-        public NightShippingBehaviors(IMonitor monitor, ArchipelagoClient archipelago, LocationChecker locationChecker, NameSimplifier nameSimplifier, ModdedListsAndDictionaries moddedListsAndDictionaries)
+        public NightShippingBehaviors(IMonitor monitor, ArchipelagoClient archipelago, LocationChecker locationChecker, NameSimplifier nameSimplifier)
         {
             _monitor = monitor;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
             _nameSimplifier = nameSimplifier;
-            _moddedIgnoredShippables = moddedListsAndDictionaries.IgnoredModShipments;
         }
 
         // private static IEnumerator<int> _newDayAfterFade()
@@ -93,7 +92,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             foreach (var shippedItem in allShippedItems)
             {
                 var name = _nameSimplifier.GetSimplifiedName(shippedItem);
-                if (_moddedIgnoredShippables.Contains(name))
+                if (IgnoredModdedStrings.Shipments.Contains(name))
                 {
                     continue;
                 }

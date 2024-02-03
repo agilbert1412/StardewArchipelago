@@ -9,6 +9,7 @@ using StardewValley;
 using Object = StardewValley.Object;
 using StardewArchipelago.Stardew.NameMapping;
 using StardewArchipelago.Locations.CodeInjections.Modded;
+using StardewArchipelago.Constants.Modded;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -43,16 +44,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
         private static CompoundNameMapper _nameMapper;
-        private static List<string> _moddedIgnoredCraftables;
 
-        public static void Initialize(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago, LocationChecker locationChecker, ModdedListsAndDictionaries moddedListsAndDictionaries)
+        public static void Initialize(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             _monitor = monitor;
             _helper = helper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
             _nameMapper = new CompoundNameMapper(archipelago.SlotData);
-            _moddedIgnoredCraftables = moddedListsAndDictionaries.IgnoredCraftablesModded;
         }
 
         // public void checkForCraftingAchievements()
@@ -68,7 +67,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                         continue;
                     }
                     var recipeName = _nameMapper.GetEnglishName(recipe); // Some names are iffy
-                    if (_moddedIgnoredCraftables.Contains(recipeName))
+                    if (IgnoredModdedStrings.Craftables.Contains(recipeName))
                     {
                         continue;
                     }

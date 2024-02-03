@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Constants;
+using StardewArchipelago.Constants.Modded;
 
 namespace StardewArchipelago.GameModifications.EntranceRandomizer
 {

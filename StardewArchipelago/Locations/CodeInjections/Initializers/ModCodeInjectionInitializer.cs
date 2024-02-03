@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
-using StardewArchipelago.Constants;
+using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.GameModifications;
 using StardewArchipelago.GameModifications.CodeInjections.Modded;
 using StardewArchipelago.Locations.CodeInjections.Modded;

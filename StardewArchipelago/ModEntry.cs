@@ -15,7 +15,6 @@ using StardewArchipelago.Items;
 using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Items.Traps;
 using StardewArchipelago.Locations;
-using StardewArchipelago.Locations.CodeInjections.Modded.SVE;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
 using StardewArchipelago.Locations.Patcher;
@@ -28,7 +27,6 @@ using StardewValley.Locations;
 using StardewArchipelago.GameModifications.Modded;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
 using StardewArchipelago.Locations.CodeInjections.Modded;
-using StardewArchipelago.Constants;
 using StardewArchipelago.Stardew.NameMapping;
 
 namespace StardewArchipelago
@@ -68,7 +66,6 @@ namespace StardewArchipelago
         private ModRandomizedLogicPatcher _modLogicPatcher;
         private InitialModGameStateInitializer _callableModData;
         private ModifiedVillagerEventChecker _villagerEvents;
-        private ModdedListsAndDictionaries _moddedListsAndDictionaries;
 
         public ArchipelagoStateDto State { get; set; }
         private ArchipelagoConnectionInfo _apConnectionOverride;
@@ -272,15 +269,14 @@ namespace StardewArchipelago
 
                 var babyBirther = new BabyBirther();
                 _giftHandler.Initialize(Monitor, _archipelago, _stardewItemManager, _mail);
-                _moddedListsAndDictionaries = new ModdedListsAndDictionaries();
-                _itemManager = new ItemManager(Monitor, _helper, _harmony, _archipelago, _stardewItemManager, _mail, tileChooser, babyBirther, _giftHandler.Sender, State.ItemsReceived, _moddedListsAndDictionaries);
+                _itemManager = new ItemManager(Monitor, _helper, _harmony, _archipelago, _stardewItemManager, _mail, tileChooser, babyBirther, _giftHandler.Sender, State.ItemsReceived);
                 var weaponsManager = new WeaponsManager(_stardewItemManager, _archipelago.SlotData.Mods);
                 _mailPatcher = new MailPatcher(Monitor, _harmony, _archipelago, _locationChecker, State,
                     new LetterActions(_helper, _mail, _archipelago, weaponsManager, _itemManager.TrapManager, babyBirther, _stardewItemManager));
                 var bundlesManager = new BundlesManager(_helper, _stardewItemManager, _archipelago.SlotData.BundlesData);
                 bundlesManager.ReplaceAllBundles();
-                _locationsPatcher = new LocationPatcher(Monitor, _helper, _harmony, _archipelago, State, _locationChecker, _stardewItemManager, weaponsManager, shopStockGenerator, junimoShopGenerator, friends, _moddedListsAndDictionaries);
-                _shippingBehaviors = new NightShippingBehaviors(Monitor, _archipelago, _locationChecker, nameSimplifier, _moddedListsAndDictionaries);
+                _locationsPatcher = new LocationPatcher(Monitor, _helper, _harmony, _archipelago, State, _locationChecker, _stardewItemManager, weaponsManager, shopStockGenerator, junimoShopGenerator, friends);
+                _shippingBehaviors = new NightShippingBehaviors(Monitor, _archipelago, _locationChecker, nameSimplifier);
                 _chatForwarder.ListenToChatMessages();
                 _logicPatcher.PatchAllGameLogic();
                 _modLogicPatcher.PatchAllModGameLogic();
