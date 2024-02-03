@@ -62,6 +62,7 @@ namespace StardewArchipelago.Archipelago
         public int StartingMoney { get; private set; }
         public double ProfitMargin { get; private set; }
         public string BundlesData { get; set; }
+        public BundlePrice BundlePrice { get; private set; }
         public EntranceRandomization EntranceRandomization { get; private set; }
         public SeasonRandomization SeasonRandomization { get; private set; }
         public Cropsanity Cropsanity { get; private set; }
@@ -90,7 +91,6 @@ namespace StardewArchipelago.Archipelago
         public double ExperienceMultiplier { get; private set; }
         public double FriendshipMultiplier { get; private set; }
         public DebrisMultiplier DebrisMultiplier { get; private set; }
-        public BundlePrice BundlePrice { get; private set; }
         public bool QuickStart { get; private set; }
         public bool Gifting { get; private set; }
         public bool Banking { get; private set; }
