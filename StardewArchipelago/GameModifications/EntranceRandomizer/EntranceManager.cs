@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -106,7 +106,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
         private void SwapFarmhouseEntranceWithAnotherEmptyAreaEntrance(SlotData slotData)
         {
             var outsideAreas = new List<string>() { "Town", "Mountain", "Farm", "Forest", "BusStop", "Desert", "Beach" };
-            outsideAreas.AddRange(AddOutsideModEntrancesToOutsideAreas(slotData, outsideAreas));
+            outsideAreas.AddRange(IncludeOutsideModEntrancesToOutsideAreas(slotData));
             var random = new Random(int.Parse(slotData.Seed));
             var chosenEntrance = "";
             var replacementIsOutside = false;
@@ -121,20 +121,17 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             SwapTwoEntrances(ModifiedEntrances, chosenEntrance, FARM_TO_FARMHOUSE);
         }
 
-        private IEnumerable<string> AddOutsideModEntrancesToOutsideAreas(SlotData slotData, List<string> outsideAreas)
+        private IEnumerable<string> IncludeOutsideModEntrancesToOutsideAreas(SlotData slotData)
         {
-            List<string> modifiedAreas = new(){};
             if (slotData.Mods.HasMod(ModNames.SVE))
             {
-                var sveAreas = new List<string>{ "Custom_ForestWest", "Custom_BlueMoonVineyard" };
-                modifiedAreas.AddRange(sveAreas);
+                yield return "Custom_ForestWest"; 
+                yield return "Custom_BlueMoonVineyard";
             }
             if (slotData.Mods.HasMod(ModNames.BOARDING_HOUSE))
             {
-                var boardingAreas = new List<string>{ "Custom_BoardingHouse_BackwoodsPlateau" };
-                modifiedAreas.AddRange(boardingAreas);
+                yield return "Custom_BoardingHouse_BackwoodsPlateau";
             }
-            return modifiedAreas;
         }
 
         private static void SwapTwoEntrances(Dictionary<string, string> entrances, string entrance1, string entrance2)
