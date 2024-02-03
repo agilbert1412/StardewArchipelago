@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using HarmonyLib;
@@ -50,7 +50,7 @@ namespace StardewArchipelago.Items
         public LetterAttachment ProcessItemAsLetter(ReceivedItem receivedItem)
         {
             var itemIsResourcePack = TryParseResourcePack(receivedItem.ItemName, out var stardewItemName, out var resourcePackAmount);
-            var itemName = receivedItem.ItemName;
+            var itemName = _nameMapper.GetInternalName(receivedItem.ItemName);
             if (itemIsResourcePack)
             {
                 if (stardewItemName == "Money")
@@ -60,11 +60,6 @@ namespace StardewArchipelago.Items
 
                 var resourcePackItem = GetResourcePackItem(stardewItemName);
                 return resourcePackItem.GetAsLetter(receivedItem, resourcePackAmount);
-            }
-
-            if (_archaeologyNameToDisplayName.Keys.Contains(itemName))
-            {
-                itemName = _archaeologyNameToDisplayName[itemName];
             }
             
             if (TryParseFriendshipBonus(receivedItem.ItemName, out var numberOfPoints))
@@ -118,7 +113,8 @@ namespace StardewArchipelago.Items
                 return false;
             }
 
-            stardewItemName = apItemName.Substring(apItemName.IndexOf(" ", StringComparison.Ordinal) + 1);
+            var originalItemName = apItemName.Substring(apItemName.IndexOf(" ", StringComparison.Ordinal) + 1);
+            stardewItemName = _nameMapper.GetInternalName(originalItemName);
             return true;
         }
 
@@ -158,10 +154,8 @@ namespace StardewArchipelago.Items
             // Sometimes an item is plural because it's a resource pack, but the item is registered with a singular name in-game
             // So I try the alternate version before giving up
             var isPlural = stardewItemName.EndsWith('s');
-            var isArchaeologyItem = _archaeologyNameToDisplayName.Keys.Contains(stardewItemName);
-            var versionButToggleS = isPlural ? stardewItemName.Substring(0, stardewItemName.Length - 1) : stardewItemName + "s";
-            var finalVersion = isArchaeologyItem ? _archaeologyNameToDisplayName[stardewItemName] : versionButToggleS;
-            return _itemManager.GetItemByName(finalVersion);
+            var otherVersion = isPlural ? stardewItemName.Substring(0, stardewItemName.Length - 1) : stardewItemName + "s";
+            return _itemManager.GetItemByName(otherVersion);
         }
     }
 }
