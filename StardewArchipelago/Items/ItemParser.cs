@@ -34,7 +34,7 @@ namespace StardewArchipelago.Items
             _unlockManager = new UnlockManager(archipelago);
             _trapManager = new TrapManager(monitor, helper, harmony, archipelago, tileChooser, babyBirther, giftSender);
             _nameMapper = new CompoundNameMapper(archipelago.SlotData);
-            _archaeologyNameToDisplayName = moddedListsAndDictionaries.ArchaeologyNameToDisplayName;
+            _archaeologyNameToDisplayName = moddedListsAndDictionaries.ArchaeologyAPNametoActualName;
         }
 
         public TrapManager TrapManager => _trapManager;
@@ -64,9 +64,9 @@ namespace StardewArchipelago.Items
                 return resourcePackItem.GetAsLetter(receivedItem, resourcePackAmount);
             }
 
-            if (_archaeologyNameToDisplayName.Values.Contains(receivedItem.ItemName))
+            if (_archaeologyNameToDisplayName.Keys.Contains(itemName))
             {
-                itemName = _archaeologyNameToDisplayName.First(x => x.Value.Equals(itemName)).Key;
+                itemName = _archaeologyNameToDisplayName[itemName];
             }
             
             if (TryParseFriendshipBonus(receivedItem.ItemName, out var numberOfPoints))
@@ -160,8 +160,10 @@ namespace StardewArchipelago.Items
             // Sometimes an item is plural because it's a resource pack, but the item is registered with a singular name in-game
             // So I try the alternate version before giving up
             var isPlural = stardewItemName.EndsWith('s');
-            var otherVersion = isPlural ? stardewItemName.Substring(0, stardewItemName.Length - 1) : stardewItemName + "s";
-            return _itemManager.GetItemByName(otherVersion);
+            var isArchaeologyItem = _archaeologyNameToDisplayName.Keys.Contains(stardewItemName);
+            var versionButToggleS = isPlural ? stardewItemName.Substring(0, stardewItemName.Length - 1) : stardewItemName + "s";
+            var finalVersion = isArchaeologyItem ? _archaeologyNameToDisplayName[stardewItemName] : versionButToggleS;
+            return _itemManager.GetItemByName(finalVersion);
         }
     }
 }
