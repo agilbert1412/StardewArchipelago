@@ -50,7 +50,6 @@ namespace StardewArchipelago.Items
         public LetterAttachment ProcessItemAsLetter(ReceivedItem receivedItem)
         {
             var itemIsResourcePack = TryParseResourcePack(receivedItem.ItemName, out var stardewItemName, out var resourcePackAmount);
-            var itemName = _nameMapper.GetInternalName(receivedItem.ItemName);
             if (itemIsResourcePack)
             {
                 if (stardewItemName == "Money")
@@ -87,6 +86,7 @@ namespace StardewArchipelago.Items
                 return _itemManager.GetRecipeByName(itemOfRecipe).GetAsLetter(receivedItem);
             }
 
+            var itemName = _nameMapper.GetInternalName(receivedItem.ItemName);
             if (_itemManager.ItemExists(itemName))
             {
                 var singleItem = GetSingleItem(itemName);

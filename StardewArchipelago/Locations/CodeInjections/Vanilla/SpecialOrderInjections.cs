@@ -60,7 +60,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
                 // Remove vanilla rewards if the player has not received the check.
                 // We will keep vanilla rewards for repeated orders
-                if (_locationChecker.IsLocationMissing(specialOrderName) & !IgnoredModdedStrings.SpecialOrders.Contains(specialOrderName))
+                if (_locationChecker.IsLocationMissing(specialOrderName) && !IgnoredModdedStrings.SpecialOrders.Contains(specialOrderName))
                 {
                     __result.rewards.Clear();
                     Game1.player.team.specialOrders.Remove(__result); // Might as well, and it cleans up SVE special orders.
