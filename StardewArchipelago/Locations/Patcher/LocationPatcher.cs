@@ -4,6 +4,7 @@ using StardewArchipelago.Archipelago;
 using StardewArchipelago.GameModifications;
 using StardewArchipelago.GameModifications.Modded;
 using StardewArchipelago.Locations.CodeInjections.Initializers;
+using StardewArchipelago.Locations.CodeInjections.Modded;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
 using StardewArchipelago.Serialization;

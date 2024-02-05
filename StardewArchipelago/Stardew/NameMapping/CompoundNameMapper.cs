@@ -1,7 +1,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Constants;
+using StardewArchipelago.Constants.Modded;
 
 namespace StardewArchipelago.Stardew.NameMapping
 {

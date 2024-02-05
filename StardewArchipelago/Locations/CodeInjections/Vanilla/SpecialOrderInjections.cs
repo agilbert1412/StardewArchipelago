@@ -10,17 +10,13 @@ using StardewArchipelago.Constants;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.GameData;
+using StardewArchipelago.Locations.CodeInjections.Modded;
+using StardewArchipelago.Constants.Modded;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
     public class SpecialOrderInjections
     {
-        private static string[] _vanillaSpecialOrderReward = new[]
-        {
-            //Exists temporarily to avoid removing mail rewards
-            "Grandpa's Shed", "Aurora Vineyard", "Monster Crops"
-        };
-
         private static IMonitor _monitor;
         private static IModHelper _modHelper;
         private static ArchipelagoClient _archipelago;
@@ -64,7 +60,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
                 // Remove vanilla rewards if the player has not received the check.
                 // We will keep vanilla rewards for repeated orders
-                if (_locationChecker.IsLocationMissing(specialOrderName) & !_vanillaSpecialOrderReward.Contains(specialOrderName))
+                if (_locationChecker.IsLocationMissing(specialOrderName) && !IgnoredModdedStrings.SpecialOrders.Contains(specialOrderName))
                 {
                     __result.rewards.Clear();
                     Game1.player.team.specialOrders.Remove(__result); // Might as well, and it cleans up SVE special orders.

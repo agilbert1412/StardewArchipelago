@@ -112,6 +112,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 var deepWoodsStateProperty = deepWoodsSettingsType.GetProperty("DeepWoodsState", BindingFlags.Public | BindingFlags.Static);
                 var deepWoodsState = deepWoodsStateProperty.GetValue(null);
                 var lowestLevelReachedField = _helper.Reflection.GetField<int>(deepWoodsState, "lowestLevelReached");
+
+                if (_archipelago.GetReceivedItemCount(WOODS_OBELISK_SIGILS) >= 10 && lowestLevelReachedField.GetValue() >= 100)
+                {
+                    return; //let the player gain these floors on their own since they've "collected" the floors already
+                }
                 
                 if (_archipelago.GetReceivedItemCount(WOODS_OBELISK_SIGILS) >= 10 && lowestLevelReachedField.GetValue() >= 100)
                 {

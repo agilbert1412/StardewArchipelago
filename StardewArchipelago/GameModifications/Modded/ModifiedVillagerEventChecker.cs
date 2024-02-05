@@ -1,5 +1,5 @@
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Constants;
+using StardewArchipelago.Constants.Modded;
 using StardewValley;
 
 namespace StardewArchipelago.GameModifications.Modded

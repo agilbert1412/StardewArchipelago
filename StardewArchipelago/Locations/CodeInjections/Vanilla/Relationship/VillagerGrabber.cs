@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Constants;
+using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.Stardew;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship

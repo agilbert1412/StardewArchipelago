@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using HarmonyLib;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.Gifting;
 using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Items.Traps;
 using StardewArchipelago.Items.Unlocks;
+using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.Stardew;
 using StardewArchipelago.Stardew.NameMapping;
 using StardewModdingAPI;
@@ -83,9 +86,10 @@ namespace StardewArchipelago.Items
                 return _itemManager.GetRecipeByName(itemOfRecipe).GetAsLetter(receivedItem);
             }
 
-            if (_itemManager.ItemExists(receivedItem.ItemName))
+            var itemName = _nameMapper.GetInternalName(receivedItem.ItemName);
+            if (_itemManager.ItemExists(itemName))
             {
-                var singleItem = GetSingleItem(receivedItem.ItemName);
+                var singleItem = GetSingleItem(itemName);
                 return singleItem.GetAsLetter(receivedItem);
             }
 
@@ -109,7 +113,8 @@ namespace StardewArchipelago.Items
                 return false;
             }
 
-            stardewItemName = apItemName.Substring(apItemName.IndexOf(" ", StringComparison.Ordinal) + 1);
+            var originalItemName = apItemName.Substring(apItemName.IndexOf(" ", StringComparison.Ordinal) + 1);
+            stardewItemName = _nameMapper.GetInternalName(originalItemName);
             return true;
         }
 
