@@ -110,7 +110,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             try
             {
                 var cookingEvents = eventCooking.Keys;
-                var craftingEvents = eventCooking.Keys;
+                var craftingEvents = eventCrafting.Keys;
                 if (!craftingEvents.Contains(__instance.id) && !cookingEvents.Contains(__instance.id))
                 {
                     return true; // run original logic
