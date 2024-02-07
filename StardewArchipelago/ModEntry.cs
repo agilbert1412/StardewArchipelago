@@ -413,6 +413,7 @@ namespace StardewArchipelago
             var slot = arg2[1];
             var password = arg2.Length >= 3 ? arg2[2] : "";
             _apConnectionOverride = new ArchipelagoConnectionInfo(ip, port, slot, null, password);
+            Monitor.Log($"Your next connection attempt will instead use {ip}:{port} on slot {slot}.", LogLevel.Info);
         }
 
         private void OnCommandDisconnectFromArchipelago(string arg1, string[] arg2)
