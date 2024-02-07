@@ -155,7 +155,13 @@ namespace StardewArchipelago.Items
             // So I try the alternate version before giving up
             var isPlural = stardewItemName.EndsWith('s');
             var otherVersion = isPlural ? stardewItemName.Substring(0, stardewItemName.Length - 1) : stardewItemName + "s";
-            return _itemManager.GetItemByName(otherVersion);
+
+            if (_itemManager.ItemExists(stardewItemName))
+            {
+                return _itemManager.GetItemByName(stardewItemName);
+            }
+
+            return _itemManager.GetItemByName("Fall Seeds");
         }
     }
 }

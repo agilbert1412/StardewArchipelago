@@ -66,12 +66,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     {
                         continue;
                     }
-                    var recipeName = _nameMapper.GetEnglishName(recipe); // Some names are iffy
-                    if (IgnoredModdedStrings.Craftables.Contains(recipeName))
+                    var itemName = _nameMapper.GetItemName(recipe); // Some names are iffy
+                    if (IgnoredModdedStrings.Craftables.Contains(itemName))
                     {
                         continue;
                     }
-                    var location = $"{CRAFTING_LOCATION_PREFIX}{recipeName}";
+                    var location = $"{CRAFTING_LOCATION_PREFIX}{itemName}";
                     _locationChecker.AddCheckedLocation(location);
                 }
                 
