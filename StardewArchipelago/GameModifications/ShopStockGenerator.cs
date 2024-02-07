@@ -328,11 +328,8 @@ namespace StardewArchipelago.GameModifications
             }
 
             var numberMovieTheater = _archipelago.GetReceivedItemCount(TheaterInjections.MOVIE_THEATER_ITEM);
-            if (Game1.player.hasCompletedCommunityCenter())
-            {
-                maxAmount *= (int)Math.Pow(2, numberMovieTheater);
-                priceMultiplier *= (int)Math.Pow(1.5f, numberMovieTheater);
-            }
+            maxAmount *= (int)Math.Pow(2, numberMovieTheater);
+            priceMultiplier *= (int)Math.Pow(1.5f, numberMovieTheater);
 
             return maxAmount;
         }
