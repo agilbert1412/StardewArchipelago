@@ -6,7 +6,6 @@ using StardewModdingAPI;
 using StardewArchipelago.Stardew;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
 using StardewArchipelago.GameModifications.Modded;
-using StardewArchipelago.Locations.CodeInjections.Modded;
 
 namespace StardewArchipelago.Locations.CodeInjections.Initializers
 {

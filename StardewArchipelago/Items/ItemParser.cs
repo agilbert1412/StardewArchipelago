@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using HarmonyLib;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.Gifting;
 using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Items.Traps;
 using StardewArchipelago.Items.Unlocks;
-using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.Stardew;
 using StardewArchipelago.Stardew.NameMapping;
 using StardewModdingAPI;

@@ -9,7 +9,6 @@ using StardewArchipelago.Locations.CodeInjections.Vanilla.Quests;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
 using StardewArchipelago.Serialization;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
-using StardewArchipelago.Locations.CodeInjections.Modded;
 
 namespace StardewArchipelago.Locations.CodeInjections.Initializers
 {

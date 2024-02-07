@@ -5,7 +5,6 @@ using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.Gifting;
 using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Items.Traps;
-using StardewArchipelago.Locations.CodeInjections.Modded;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 

@@ -10,7 +10,6 @@ using StardewArchipelago.Constants;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.GameData;
-using StardewArchipelago.Locations.CodeInjections.Modded;
 using StardewArchipelago.Constants.Modded;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla

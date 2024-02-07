@@ -1,13 +1,10 @@
-﻿using System.Linq;
-using StardewArchipelago.Archipelago;
+﻿using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
 using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.GameModifications;
 using StardewArchipelago.GameModifications.CodeInjections.Modded;
 using StardewArchipelago.Locations.CodeInjections.Modded;
 using StardewArchipelago.Locations.CodeInjections.Modded.SVE;
-using StardewValley;
-using StardewArchipelago.Items;
 using StardewArchipelago.GameModifications.Modded;
 
 namespace StardewArchipelago.Locations.CodeInjections.Initializers

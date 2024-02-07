@@ -8,7 +8,6 @@ using StardewModdingAPI;
 using StardewValley;
 using Object = StardewValley.Object;
 using StardewArchipelago.Stardew.NameMapping;
-using StardewArchipelago.Locations.CodeInjections.Modded;
 using StardewArchipelago.Constants.Modded;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla

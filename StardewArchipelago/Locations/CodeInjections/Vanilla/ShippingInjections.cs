@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Modded;
-using StardewArchipelago.Locations.CodeInjections.Modded;
 using StardewArchipelago.Stardew.NameMapping;
 using StardewModdingAPI;
 using StardewValley;

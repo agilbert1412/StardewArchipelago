@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Archipelago.Gifting.Net.Gifts;
 using Archipelago.Gifting.Net.Traits;
-using Microsoft.Xna.Framework;
 using StardewArchipelago.Stardew;
 using StardewValley;
 using Object = StardewValley.Object;

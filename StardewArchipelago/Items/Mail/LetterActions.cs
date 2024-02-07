@@ -15,7 +15,6 @@ using Object = StardewValley.Object;
 using StardewArchipelago.Items.Unlocks;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
 using StardewArchipelago.Stardew;
-using StardewArchipelago.GameModifications.Modded;
 using StardewArchipelago.Stardew.NameMapping;
 
 namespace StardewArchipelago.Items.Mail

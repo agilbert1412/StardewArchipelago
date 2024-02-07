@@ -8,7 +8,6 @@ using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.Items.Unlocks;
-using StardewArchipelago.Locations.CodeInjections.Modded;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
