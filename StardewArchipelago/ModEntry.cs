@@ -15,6 +15,7 @@ using StardewArchipelago.Items;
 using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Items.Traps;
 using StardewArchipelago.Locations;
+using StardewArchipelago.Locations.CodeInjections.Modded.SVE;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
 using StardewArchipelago.Locations.Patcher;
@@ -27,6 +28,7 @@ using StardewValley.Locations;
 using StardewArchipelago.GameModifications.Modded;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
 using StardewArchipelago.Locations.CodeInjections.Modded;
+using StardewArchipelago.Constants;
 using StardewArchipelago.Stardew.NameMapping;
 
 namespace StardewArchipelago
@@ -39,6 +41,7 @@ namespace StardewArchipelago
         private const string AP_DATA_KEY = "ArchipelagoData";
         private const string AP_EXPERIENCE_KEY = "ArchipelagoSkillsExperience";
         private const string AP_FRIENDSHIP_KEY = "ArchipelagoFriendshipPoints";
+        private const string AP_GIFT_IDS_KEY = "ArchipelagoGiftIDStorage";
 
         private IModHelper _helper;
         private Harmony _harmony;
@@ -64,7 +67,7 @@ namespace StardewArchipelago
         private NightShippingBehaviors _shippingBehaviors;
 
         private ModRandomizedLogicPatcher _modLogicPatcher;
-        private InitialModGameStateInitializer _modStateInitializer;
+        private CallableModData _callableModData;
         private ModifiedVillagerEventChecker _villagerEvents;
 
         public ArchipelagoStateDto State { get; set; }
@@ -115,7 +118,6 @@ namespace StardewArchipelago
             // _helper.ConsoleCommands.Add("load_entrances", "Loads the entrances file", (_, _) => _entranceRandomizer.LoadTransports());
             // _helper.ConsoleCommands.Add("save_entrances", "Saves the entrances file", (_, _) => EntranceInjections.SaveNewEntrancesToFile());
             _helper.ConsoleCommands.Add("export_shippables", "Export all currently loaded shippable items", this.ExportShippables);
-            _helper.ConsoleCommands.Add("release_slot", "Release the current slot completely", this.ReleaseSlot);
             _helper.ConsoleCommands.Add("debug_method", "Runs whatever is currently in the debug method", this.DebugMethod);
 #endif
         }
@@ -174,6 +176,7 @@ namespace StardewArchipelago
             _helper.Data.WriteSaveData(AP_DATA_KEY, State);
             _helper.Data.WriteSaveData(AP_EXPERIENCE_KEY, SkillInjections.GetArchipelagoExperience());
             _helper.Data.WriteSaveData(AP_FRIENDSHIP_KEY, FriendshipInjections.GetArchipelagoFriendshipPoints());
+            _helper.Data.WriteSaveData(AP_GIFT_IDS_KEY, _giftHandler.GetGiftIDList());
         }
 
         private void OnSaveCreated(object sender, SaveCreatedEventArgs e)
@@ -192,6 +195,7 @@ namespace StardewArchipelago
             _helper.Data.WriteSaveData(AP_DATA_KEY, State);
             _helper.Data.WriteSaveData(AP_EXPERIENCE_KEY, SkillInjections.GetArchipelagoExperience());
             _helper.Data.WriteSaveData(AP_FRIENDSHIP_KEY, FriendshipInjections.GetArchipelagoFriendshipPoints());
+            _helper.Data.WriteSaveData(AP_GIFT_IDS_KEY, _giftHandler.GetGiftIDList());
         }
 
         private void DebugAssertStateValues(ArchipelagoStateDto state)
@@ -237,7 +241,7 @@ namespace StardewArchipelago
                 _seasonsRandomizer = new SeasonsRandomizer(Monitor, _helper, _archipelago, State);
                 _appearanceRandomizer = new AppearanceRandomizer(Monitor, _archipelago);
                 var tileChooser = new TileChooser();
-                _chatForwarder = new ChatForwarder(Monitor, _helper, _harmony, _archipelago, _giftHandler, _goalManager, tileChooser);
+                _chatForwarder = new ChatForwarder(Monitor, _helper, _harmony, _archipelago, _giftHandler, tileChooser);
                 _questCleaner = new QuestCleaner();
                 
                 if (!_archipelago.IsConnected)
@@ -289,7 +293,7 @@ namespace StardewArchipelago
                 _multiSleep.InjectMultiSleepOption(_archipelago.SlotData);
                 TravelingMerchantInjections.UpdateTravelingMerchantForToday(Game1.getLocationFromName("Forest") as Forest, Game1.dayOfMonth);
                 SeasonsRandomizer.ChangeMailKeysBasedOnSeasonsToDaysElapsed();
-                _modStateInitializer = new InitialModGameStateInitializer(Monitor, _archipelago);
+                _callableModData = new CallableModData(Monitor, _archipelago);
                 Game1.chatBox?.addMessage($"Connected to Archipelago as {_archipelago.SlotData.SlotName}. Type !!help for client commands", Color.Green);
 
             }
@@ -321,6 +325,9 @@ namespace StardewArchipelago
 
             var apFriendship = _helper.Data.ReadSaveData<Dictionary<string, int>>(AP_FRIENDSHIP_KEY);
             FriendshipInjections.SetArchipelagoFriendshipPoints(apFriendship);
+
+            var apGifts = _helper.Data.ReadSaveData<List<string>>(AP_GIFT_IDS_KEY);
+            _giftHandler.SetGiftIDList(apGifts);
         }
 
         private void OnDayStarted(object sender, DayStartedEventArgs e)
@@ -368,7 +375,65 @@ namespace StardewArchipelago
 
         private void DoBugsCleanup()
         {
-
+            if (_archipelago.SlotData.Mods.HasMod(ModNames.LUCK) && Game1.player.LuckLevel >= 8 && _locationChecker.IsLocationMissing("Lucky Lunch Recipe"))
+            {
+                _locationChecker.AddCheckedLocation("Lucky Lunch Recipe");
+                if (_archipelago.SlotData.Chefsanity.HasFlag(Chefsanity.Skills) && !_archipelago.HasReceivedItem("Lucky Lunch Recipe") && Game1.player.cookingRecipes.ContainsKey("Lucky Lunch"))
+                {
+                    Game1.player.cookingRecipes.Remove("Lucky Lunch");
+                }
+            }
+            if (_archipelago.SlotData.Mods.HasMod(ModNames.MAGIC))
+            {
+                if (_archipelago.HasReceivedItem("Magic Elixir Recipe") & !Game1.player.cookingRecipes.ContainsKey("Magic Elixir"))
+                {
+                    Game1.player.cookingRecipes.Add("Magic Elixir", 0); // Its a cooking recipe.
+                }
+                var magicElixir = _stardewItemManager.GetItemByName("Magic Elixir").Id;
+                if (Game1.player.recipesCooked.ContainsKey(magicElixir))
+                {
+                    _locationChecker.AddCheckedLocation("Craft Magic Elixir"); // If you cooked it just relog.
+                }
+            }
+            // Fix to remove dupes in Railroad Boulder
+            if (_archipelago.SlotData.Mods.HasMod(ModNames.SVE))
+            {
+                var railroadBoulderOrder = SpecialOrder.GetSpecialOrder("Clint2", null);
+                var railroadDupeCount = Game1.player.team.specialOrders.Count(x => x.questKey.Value.Equals("Clint2Again"));
+                if (railroadDupeCount > 1)
+                {
+                    railroadBoulderOrder.questKey.Value = "Clint2Again";
+                    while (railroadDupeCount > 1)
+                    {
+                        Game1.player.team.specialOrders.Remove(railroadBoulderOrder);
+                        railroadDupeCount -= 1;
+                    }
+                }
+                // Async Fix for the change from eventsSeen to mailReceived checks.
+                var deprecatedEvents = new Dictionary<int, string>() { { 658059254, "apAuroraVineyard" }, { 658078924, "apMorganSchooling" } };
+                foreach (var (id, mail) in deprecatedEvents)
+                {
+                    if (Game1.player.eventsSeen.Contains(id))
+                    {
+                        Game1.player.eventsSeen.Remove(id);
+                        Game1.player.mailReceived.Add(mail);
+                    }
+                }
+                // Async fix for the change in call to fix Morris/Claire/Martin
+                if (!Game1.player.mailReceived.Contains("apAbandonedJojaMart") && _archipelago.HasReceivedItem("Progressive Movie Theater"))
+                {
+                    Game1.player.mailReceived.Add("apAbandonedJojaMart");
+                }
+                if ((Game1.player.eventsSeen.Contains(181091237) || Game1.player.eventsSeen.Contains(1810912313)) && !_archipelago.HasReceivedItem("Ginger Tincture Recipe"))
+                {
+                    Game1.player.craftingRecipes.Remove("Ginger Tincture");
+                    _locationChecker.AddCheckedLocation("Ginger Tincture Recipe");
+                }
+                if (_archipelago.HasReceivedItem("Krobus' Protection") && !Game1.player.mailReceived.Contains("GaveVoidSouls"))
+                {
+                    Game1.player.mailReceived.Add("GaveVoidSouls");
+                }
+            }
         }
 
         private void OnDayEnding(object sender, DayEndingEventArgs e)
@@ -470,30 +535,6 @@ namespace StardewArchipelago
             _stardewItemManager.ExportAllItemsMatching(x => x.canBeShipped(), "shippables.json");
         }
 
-#if DEBUG
-
-        private void ReleaseSlot(string arg1, string[] arg2)
-        {
-            if (!_archipelago.IsConnected || !Game1.hasLoadedGame || arg2.Length < 1)
-            {
-                return;
-            }
-
-            var slotName = arg2[0];
-
-            if (slotName != _archipelago.GetPlayerName() || slotName != Game1.player.Name)
-            {
-                return;
-            }
-
-            foreach (var missingLocation in _locationChecker.GetAllMissingLocationNames())
-            {
-                _locationChecker.AddCheckedLocation(missingLocation);
-            }
-        }
-
-#endif
-
         private void ExportGifts(string arg1, string[] arg2)
         {
             _giftHandler.ExportAllGifts("gifts.json");
@@ -531,7 +572,7 @@ namespace StardewArchipelago
 
         private void DebugMethod(string arg1, string[] arg2)
         {
-            _itemManager.ItemParser.TrapManager.ShuffleInventory();
+            _itemManager.ItemParser.TrapManager.AddJinxedDebuff();
         }
     }
 }

@@ -13,15 +13,17 @@ namespace StardewArchipelago.Archipelago.Gifting
         private IMonitor _monitor;
         private ArchipelagoClient _archipelago;
         private IGiftingService _giftService;
+        private HashSet<string> _sentGiftIds;
         private StardewItemManager _itemManager;
         private Mailman _mail;
         private GiftProcessor _giftProcessor;
 
-        public GiftReceiver(IMonitor monitor, ArchipelagoClient archipelago, IGiftingService giftService, StardewItemManager itemManager, Mailman mail)
+        public GiftReceiver(IMonitor monitor, ArchipelagoClient archipelago, IGiftingService giftService,HashSet<string> sentGiftIds, StardewItemManager itemManager, Mailman mail)
         {
             _monitor = monitor;
             _archipelago = archipelago;
             _giftService = giftService;
+            _sentGiftIds = sentGiftIds;
             _itemManager = itemManager;
             _mail = mail;
             _giftProcessor = new GiftProcessor(monitor, archipelago, itemManager);
@@ -29,7 +31,7 @@ namespace StardewArchipelago.Archipelago.Gifting
 
         public void ReceiveAllGifts()
         {
-            var gifts = _giftService.GetAllGiftsAndEmptyGiftbox();
+            var gifts = _giftService.CheckGiftBox();
             if (!gifts.Any())
             {
                 return;
@@ -37,10 +39,16 @@ namespace StardewArchipelago.Archipelago.Gifting
 
             var giftAmounts = new Dictionary<ReceivedGift, int>();
             var giftIds = new Dictionary<string, ReceivedGift>();
+            var giftsToRemove = new HashSet<string>();
             foreach (var (id, gift) in gifts)
             {
-                ParseGift(gift, giftAmounts, giftIds);
+                if (!_sentGiftIds.Contains(id))
+                {
+                    giftsToRemove.Add(id);
+                    ParseGift(gift, giftAmounts, giftIds);
+                }
             }
+            _giftService.RemoveGiftsFromGiftBox(giftsToRemove);
 
             foreach (var (receivedGift, amount) in giftAmounts)
             {

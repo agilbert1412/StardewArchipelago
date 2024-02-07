@@ -28,6 +28,7 @@ namespace StardewArchipelago.Archipelago.Gifting
         private IGiftingService _giftService;
         private GiftSender _giftSender;
         private GiftReceiver _giftReceiver;
+        private HashSet<string> _sentGiftIds = new();
 
         public GiftSender Sender => _giftSender;
 
@@ -47,8 +48,8 @@ namespace StardewArchipelago.Archipelago.Gifting
             _mail = mail;
             _archipelago = archipelago;
             _giftService = new GiftingService(archipelago.Session);
-            _giftSender = new GiftSender(_monitor, _archipelago, _itemManager, _giftService);
-            _giftReceiver = new GiftReceiver(_monitor, _archipelago, _giftService, _itemManager, _mail);
+            _giftSender = new GiftSender(_monitor, _archipelago, _itemManager, _giftService, _sentGiftIds);
+            _giftReceiver = new GiftReceiver(_monitor, _archipelago, _giftService, _sentGiftIds, _itemManager, _mail);
 
             _giftService.OpenGiftBox(true, _desiredTraits);
         }
@@ -77,13 +78,7 @@ namespace StardewArchipelago.Archipelago.Gifting
             }
 
             var receiverSlotName = isTrap ? message[trapPrefixWithSpace.Length..] : message[giftPrefixWithSpace.Length..];
-#if RELEASE
-            if (receiverSlotName == _archipelago.SlotData.SlotName)
-            {
-                Game1.chatBox?.addMessage($"You cannot send yourself a gift", Color.Gold);
-                return true;
-            }
-#endif
+
             _giftSender.SendGift(receiverSlotName, isTrap);
             return true;
         }
@@ -125,6 +120,21 @@ namespace StardewArchipelago.Archipelago.Gifting
 
             var objectsAsJson = JsonConvert.SerializeObject(items);
             File.WriteAllText(filePath, objectsAsJson);
+        }
+
+        public void SetGiftIDList(HashSet<string> apGifts)
+        {
+            if (apGifts == null)
+            {
+                _sentGiftIds = new HashSet<string>();
+                return;
+            }
+            _sentGiftIds = new HashSet<string>(apGifts);
+        }
+        
+        public HashSet<string> GetGiftIDList()
+        {
+            return _sentGiftIds;
         }
     }
 }
