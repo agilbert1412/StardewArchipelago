@@ -122,7 +122,7 @@ namespace StardewArchipelago.Archipelago.Gifting
             File.WriteAllText(filePath, objectsAsJson);
         }
 
-        public void SetGiftIDList(HashSet<string> apGifts)
+        public void SetGiftIDList(ICollection<string> apGifts)
         {
             if (apGifts == null)
             {

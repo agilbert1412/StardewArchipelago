@@ -13,12 +13,12 @@ namespace StardewArchipelago.Archipelago.Gifting
         private IMonitor _monitor;
         private ArchipelagoClient _archipelago;
         private IGiftingService _giftService;
-        private HashSet<string> _sentGiftIds;
+        private ICollection<string> _sentGiftIds;
         private StardewItemManager _itemManager;
         private Mailman _mail;
         private GiftProcessor _giftProcessor;
 
-        public GiftReceiver(IMonitor monitor, ArchipelagoClient archipelago, IGiftingService giftService,HashSet<string> sentGiftIds, StardewItemManager itemManager, Mailman mail)
+        public GiftReceiver(IMonitor monitor, ArchipelagoClient archipelago, IGiftingService giftService,ICollection<string> sentGiftIds, StardewItemManager itemManager, Mailman mail)
         {
             _monitor = monitor;
             _archipelago = archipelago;

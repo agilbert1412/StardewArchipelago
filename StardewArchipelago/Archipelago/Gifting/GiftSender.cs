@@ -18,10 +18,10 @@ namespace StardewArchipelago.Archipelago.Gifting
         private readonly IMonitor _monitor;
         private readonly ArchipelagoClient _archipelago;
         private readonly IGiftingService _giftService;
-        private HashSet<string> _sentGiftIds;
+        private ICollection<string> _sentGiftIds;
         internal GiftGenerator GiftGenerator { get; }
 
-        public GiftSender(IMonitor monitor, ArchipelagoClient archipelago, StardewItemManager itemManager, IGiftingService giftService, HashSet<string> sentGiftIds)
+        public GiftSender(IMonitor monitor, ArchipelagoClient archipelago, StardewItemManager itemManager, IGiftingService giftService, ICollection<string> sentGiftIds)
         {
             _monitor = monitor;
             _archipelago = archipelago;
