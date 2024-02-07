@@ -39,14 +39,16 @@ namespace StardewArchipelago.Archipelago.Gifting
 
             var giftAmounts = new Dictionary<ReceivedGift, int>();
             var giftIds = new Dictionary<string, ReceivedGift>();
+            var giftsToRemove = new HashSet<string>();
             foreach (var (id, gift) in gifts)
             {
                 if (!_sentGiftIds.Contains(id))
                 {
-                    _giftService.RemoveGiftFromGiftBox(id);
+                    giftsToRemove.Add(id);
                     ParseGift(gift, giftAmounts, giftIds);
                 }
             }
+            _giftService.RemoveGiftsFromGiftBox(giftsToRemove);
 
             foreach (var (receivedGift, amount) in giftAmounts)
             {
