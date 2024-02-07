@@ -12,9 +12,7 @@ namespace StardewArchipelago.Archipelago.Gifting
         bool HandleGiftItemCommand(string message);
         void ReceiveAllGiftsTomorrow();
         void ExportAllGifts(string filePath);
-        void SetGiftIDList(List<string> apGifts);
-        void AddGiftIDToList(string giftId);
-        bool OwnPlayerSentGift(string giftId);
-        List<string> GetGiftIDList();
+        void SetGiftIDList(HashSet<string> apGifts);
+        HashSet<string> GetGiftIDList();
     }
 }

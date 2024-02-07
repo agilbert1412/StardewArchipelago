@@ -18,15 +18,15 @@ namespace StardewArchipelago.Archipelago.Gifting
         private readonly IMonitor _monitor;
         private readonly ArchipelagoClient _archipelago;
         private readonly IGiftingService _giftService;
-        private readonly IGiftHandler _giftHandler;
+        private HashSet<string> _sentGiftIds;
         internal GiftGenerator GiftGenerator { get; }
 
-        public GiftSender(IMonitor monitor, ArchipelagoClient archipelago, StardewItemManager itemManager, IGiftingService giftService, IGiftHandler giftHandler)
+        public GiftSender(IMonitor monitor, ArchipelagoClient archipelago, StardewItemManager itemManager, IGiftingService giftService, HashSet<string> sentGiftIds)
         {
             _monitor = monitor;
             _archipelago = archipelago;
             _giftService = giftService;
-            _giftHandler = giftHandler;
+            _sentGiftIds = sentGiftIds;
             GiftGenerator = new GiftGenerator(itemManager);
         }
 
@@ -72,7 +72,7 @@ namespace StardewArchipelago.Archipelago.Gifting
                     Game1.chatBox?.addMessage($"Unknown Error occurred while sending {giftOrTrap}.", Color.Red);
                     return;
                 }
-                _giftHandler.AddGiftIDToList(giftId);
+                _sentGiftIds.Add(giftId);
 
                 Game1.player.ActiveObject = null;
                 Game1.player.Money -= tax;

@@ -13,17 +13,17 @@ namespace StardewArchipelago.Archipelago.Gifting
         private IMonitor _monitor;
         private ArchipelagoClient _archipelago;
         private IGiftingService _giftService;
-        private IGiftHandler _giftHandler;
+        private HashSet<string> _sentGiftIds;
         private StardewItemManager _itemManager;
         private Mailman _mail;
         private GiftProcessor _giftProcessor;
 
-        public GiftReceiver(IMonitor monitor, ArchipelagoClient archipelago, IGiftingService giftService,IGiftHandler giftHandler, StardewItemManager itemManager, Mailman mail)
+        public GiftReceiver(IMonitor monitor, ArchipelagoClient archipelago, IGiftingService giftService,HashSet<string> sentGiftIds, StardewItemManager itemManager, Mailman mail)
         {
             _monitor = monitor;
             _archipelago = archipelago;
             _giftService = giftService;
-            _giftHandler = giftHandler;
+            _sentGiftIds = sentGiftIds;
             _itemManager = itemManager;
             _mail = mail;
             _giftProcessor = new GiftProcessor(monitor, archipelago, itemManager);
@@ -41,7 +41,7 @@ namespace StardewArchipelago.Archipelago.Gifting
             var giftIds = new Dictionary<string, ReceivedGift>();
             foreach (var (id, gift) in gifts)
             {
-                if(!_giftHandler.OwnPlayerSentGift(id))
+                if (!_sentGiftIds.Contains(id))
                 {
                     _giftService.RemoveGiftFromGiftBox(id);
                     ParseGift(gift, giftAmounts, giftIds);
