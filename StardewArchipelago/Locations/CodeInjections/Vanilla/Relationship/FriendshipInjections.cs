@@ -525,7 +525,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
         {
             farmer.changeFriendship(DECAY_GRAB, npc);
             var hearts = farmer.friendshipData[friendName].Points / 250;
-            var chanceOfProduction = (hearts / 28.0) * chanceMultiplier;
+            var chanceOfProduction = (hearts / 56.0) * chanceMultiplier;
             if (random.NextDouble() > chanceOfProduction)
             {
                 return;
