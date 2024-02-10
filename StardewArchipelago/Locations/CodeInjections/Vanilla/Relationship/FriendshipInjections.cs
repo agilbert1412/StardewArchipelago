@@ -25,7 +25,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
         private const int DECAY_PARTNER = -8;
         private const int DECAY_OTHER = -2;
         private const int AUTOPET_POINTS = 5;
-        private const int DECAY_GRAB = -10;
+        private const int DECAY_GRAB = -12;
         private const int POINTS_PER_HEART = 250;
         private const int POINTS_PER_PET_HEART = 200;
         private const string HEARTS_PATTERN = "{0} <3";
