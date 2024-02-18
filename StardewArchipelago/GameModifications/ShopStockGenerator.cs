@@ -442,6 +442,12 @@ namespace StardewArchipelago.GameModifications
             int packSize = 50)
         {
             var priceMultiplier = 1.0;
+
+            if (!ModEntry.Instance.Config.EnableSeedShopOverhaul)
+            {
+                packSize = 1;
+            }
+
             var item = new StardewValley.Object(Vector2.Zero, itemId, packSize);
 
             if (basePrice == -1)
