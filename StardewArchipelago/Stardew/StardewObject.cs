@@ -8,12 +8,12 @@ namespace StardewArchipelago.Stardew
     {
         public int Edibility { get; private set; }
         public string Type { get; private set; }
-        public string Category { get; private set; }
+        public int Category { get; private set; }
         public string Misc1 { get; private set; }
         public string Misc2 { get; private set; }
         public string BuffDuration { get; private set; }
 
-        public StardewObject(int id, string name, int sellPrice, int edibility, string type, string category, string displayName, string description, string misc1 = "", string misc2 = "", string buffDuration = "")
+        public StardewObject(string id, string name, int sellPrice, int edibility, string type, int category, string displayName, string description, string misc1 = "", string misc2 = "", string buffDuration = "")
         : base(id, name, sellPrice, displayName, description)
         {
             Edibility = edibility;
