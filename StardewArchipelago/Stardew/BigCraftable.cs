@@ -10,27 +10,21 @@ namespace StardewArchipelago.Stardew
     public class BigCraftable : StardewItem
     {
         public const string BIG_CRAFTABLE_SEPARATOR = ":";
-
-        public int Edibility { get; private set; }
-        public string ObjectType { get; private set; }
-        public string Category { get; private set; }
+        
         public bool Outdoors { get; private set; }
         public bool Indoors { get; private set; }
         public int Fragility { get; private set; }
 
-        public BigCraftable(int id, string name, int sellPrice, int edibility, string objectType, string category, string description, bool outdoors, bool indoors, int fragility, string displayName)
+        public BigCraftable(string id, string name, int sellPrice, string description, bool outdoors, bool indoors, int fragility, string displayName)
         : base(id, name, sellPrice, displayName, description)
         {
-            Edibility = edibility;
-            ObjectType = objectType;
-            Category = category;
             Outdoors = outdoors;
             Indoors = indoors;
             Fragility = fragility;
 
             if (Name == "Rarecrow")
             {
-                var rarecrowNumber = GetRarecrowNumber(id);
+                var rarecrowNumber = GetRarecrowNumber(int.Parse(id));
                 Name += $" #{rarecrowNumber}";
             }
         }
