@@ -7,8 +7,8 @@ using StardewArchipelago.Locations;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Textures;
 using StardewModdingAPI;
-using StardewValley;
 using StardewValley.Menus;
+using StardewValley.SpecialOrders;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace StardewArchipelago.GameModifications.Tooltips
