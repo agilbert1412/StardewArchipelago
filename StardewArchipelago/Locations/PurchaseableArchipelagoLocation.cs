@@ -57,7 +57,7 @@ namespace StardewArchipelago.Locations
         {
             foreach (var item in _extraMaterialsRequired)
             {
-                if (!who.hasItemInInventory(item.ParentSheetIndex, item.Stack))
+                if (who.Items.CountId(item.QualifiedItemId) < item.Stack)
                 {
                     return false;
                 }
@@ -66,11 +66,11 @@ namespace StardewArchipelago.Locations
             return true;
         }
 
-        public override bool actionWhenPurchased()
+        public override bool actionWhenPurchased(string shopId)
         {
             foreach (var item in _extraMaterialsRequired)
             {
-                Game1.player.removeItemsFromInventory(item.ParentSheetIndex, item.Stack);
+                Game1.player.Items.ReduceId(item.QualifiedItemId, item.Stack);
             }
             _locationChecker.AddCheckedLocation(LocationName);
             _purchaseCallBack?.Invoke();
@@ -103,27 +103,18 @@ namespace StardewArchipelago.Locations
             return false;
         }
 
-        public override Item getOne()
-        {
-            return this;
-        }
-
         public override int maximumStackSize()
         {
             return 1;
         }
 
-        public override int addToStack(Item stack)
+        protected override Item GetOneNew()
         {
-            return 1;
+            return this;
         }
 
-        public override string DisplayName
-        {
-            get => _locationDisplayName;
-            set => _locationDisplayName = value;
-        }
+        public override string DisplayName => _locationDisplayName;
 
-        public override int Stack { get; set; }
+        public override string TypeDefinitionId => "(AP)";
     }
 }
