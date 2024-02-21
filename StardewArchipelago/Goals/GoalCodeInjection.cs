@@ -451,7 +451,7 @@ namespace StardewArchipelago.Goals
         private static bool HasCookedAllRecipes()
         {
             var numberOfUnavailableRecipes = _archipelago.SlotData.ExcludeGingerIsland ? 5 : 0;
-            var allRecipes = Game1.content.Load<Dictionary<string, string>>("Data\\CookingRecipes");
+            var allRecipes = DataLoader.CookingRecipes(Game1.content);
             var numberOfMissedRecipes = 0;
             foreach (var (recipeName, recipe) in allRecipes)
             {
@@ -476,7 +476,7 @@ namespace StardewArchipelago.Goals
         {
             var numberOfUnavailableRecipes = _archipelago.SlotData.ExcludeGingerIsland ? 8 : 0;
             numberOfUnavailableRecipes += _archipelago.SlotData.Mods.HasMod(ModNames.BOARDING_HOUSE) ? 5 : 0; // Restore crafts are ignored
-            var allRecipes = Game1.content.Load<Dictionary<string, string>>("Data\\CraftingRecipes");
+            var allRecipes = DataLoader.CraftingRecipes(Game1.content);
             var numberOfMissedRecipes = 0;
             foreach (var recipe in allRecipes.Keys)
             {

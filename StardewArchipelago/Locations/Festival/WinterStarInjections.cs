@@ -92,7 +92,7 @@ namespace StardewArchipelago.Locations.Festival
 
         private static NPC GetRandomTownNpc(Random random)
         {
-            var npcNames = Game1.content.Load<Dictionary<string, string>>("Data\\NPCDispositions").Keys.ToArray();
+            var npcNames = DataLoader.Characters(Game1.content).Keys.ToArray();
             var illegalTargets = new[]
             {
                 "Wizard", "Krobus", "Sandy", "Dwarf", "Marlon", "Leo",
