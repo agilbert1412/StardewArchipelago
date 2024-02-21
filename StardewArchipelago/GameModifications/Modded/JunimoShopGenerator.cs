@@ -217,7 +217,7 @@ namespace StardewArchipelago.GameModifications.Modded
 
         private Dictionary<ISalable, int[]> GenerateBlueJunimoStock(Dictionary<ISalable, int[]> stock)
         {
-            var fishData = Game1.content.Load<Dictionary<int, string>>("Data\\Fish");
+            var fishData = DataLoader.Fish(Game1.content);
             foreach (var fish in Game1.player.fishCaught.Keys)
             {
                 string[] fishSeasons = null;

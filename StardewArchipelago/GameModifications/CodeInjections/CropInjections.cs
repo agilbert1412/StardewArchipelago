@@ -56,9 +56,9 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 _stardewItemManager.ItemExists(x));
             var seedItems = receivedSeeds.Select(x => _stardewItemManager.GetItemByName(x).PrepareForGivingToFarmer());
             var location = Game1.currentLocation;
-            var seedsInfo = Game1.content.Load<Dictionary<int, string>>("Data\\Crops");
+            var cropData = DataLoader.Crops(Game1.content);
 
-            var seedsICanPlantHere = seedItems.Where(x => SeedCanBePlantedHere(x, location, season, seedsInfo)).ToList();
+            var seedsICanPlantHere = seedItems.Where(x => SeedCanBePlantedHere(x, location, season, cropData)).ToList();
 
             switch (season)
             {
@@ -83,7 +83,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 {
                     weightedSeeds.Add(seed.ParentSheetIndex);
                 }
-                else if (SeedRegrows(seed, seedsInfo))
+                else if (SeedRegrows(seed, cropData))
                 {
                     weightedSeeds.AddRange(Enumerable.Repeat(seed.ParentSheetIndex, 10));
                 }

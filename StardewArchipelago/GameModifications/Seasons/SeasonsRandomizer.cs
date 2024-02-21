@@ -260,7 +260,7 @@ namespace StardewArchipelago.GameModifications.Seasons
 
         public static void ChangeMailKeysBasedOnSeasonsToDaysElapsed()
         {
-            var mailData = Game1.content.Load<Dictionary<string, string>>("Data\\mail");
+            var mailData = DataLoader.Mail(Game1.content);
             foreach (var originalKey in _alternateMailKeys.Keys)
             {
                 if (mailData.ContainsKey(originalKey))
@@ -273,7 +273,7 @@ namespace StardewArchipelago.GameModifications.Seasons
 
         public static void ResetMailKeys()
         {
-            var mailData = Game1.content.Load<Dictionary<string, string>>("Data\\mail");
+            var mailData = DataLoader.Mail(Game1.content);
             foreach (var modifiedKey in _alternateMailKeys.Values)
             {
                 if (mailData.ContainsKey(modifiedKey))
@@ -288,7 +288,7 @@ namespace StardewArchipelago.GameModifications.Seasons
         public static void SendMailHardcodedForToday()
         {
             GetVanillaValues(out var totalDays, out var year, out var seasonNumber, out var _);
-            var mailData = Game1.content.Load<Dictionary<string, string>>("Data\\mail");
+            var mailData = DataLoader.Mail(Game1.content);
             SendMailForCurrentDateSpecificYear(year, Game1.currentSeason, mailData);
             SendMailForCurrentTotalDaysElapsed(year, mailData);
         }

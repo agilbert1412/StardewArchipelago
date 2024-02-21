@@ -317,7 +317,7 @@ namespace StardewArchipelago.Stardew
         {
             _bootsById = new Dictionary<int, StardewBoots>();
             _bootsByName = new Dictionary<string, StardewBoots>();
-            var allBootsInformation = (IDictionary<int, string>)Game1.content.Load<Dictionary<int, string>>("Data\\Boots");
+            var allBootsInformation = DataLoader.Boots(Game1.content);
             foreach (var (id, bootsInfo) in allBootsInformation)
             {
                 var boots = ParseStardewBootsData(id, bootsInfo);
@@ -336,7 +336,7 @@ namespace StardewArchipelago.Stardew
         {
             _furnitureById = new Dictionary<int, StardewFurniture>();
             _furnitureByName = new Dictionary<string, StardewFurniture>();
-            var allFurnitureInformation = (IDictionary<int, string>)Game1.content.Load<Dictionary<int, string>>("Data\\Furniture");
+            var allFurnitureInformation = DataLoader.Furniture(Game1.content);
             foreach (var (id, furnitureInfo) in allFurnitureInformation)
             {
                 var furniture = ParseStardewFurnitureData(id, furnitureInfo);
@@ -363,7 +363,7 @@ namespace StardewArchipelago.Stardew
         {
             _hatsById = new Dictionary<int, StardewHat>();
             _hatsByName = new Dictionary<string, StardewHat>();
-            var allHatsInformation = (IDictionary<int, string>)Game1.content.Load<Dictionary<int, string>>("Data\\hats");
+            var allHatsInformation = DataLoader.Hats(Game1.content);
             foreach (var (id, hatInfo) in allHatsInformation)
             {
                 var hat = ParseStardewHatData(id, hatInfo);
@@ -382,7 +382,7 @@ namespace StardewArchipelago.Stardew
         {
             _weaponsById = new Dictionary<int, StardewWeapon>();
             _weaponsByName = new Dictionary<string, StardewWeapon>();
-            var allWeaponsInformation = Game1.content.Load<Dictionary<int, string>>("Data\\weapons");
+            var allWeaponsInformation = DataLoader.Weapons(Game1.content);
             foreach (var (id, weaponsInfo) in allWeaponsInformation)
             {
                 var weapon = ParseStardewWeaponData(id, weaponsInfo);
@@ -400,7 +400,7 @@ namespace StardewArchipelago.Stardew
         private void InitializeCookingRecipes()
         {
             _cookingRecipesByName = new Dictionary<string, StardewCookingRecipe>();
-            var allCookingInformation = Game1.content.Load<Dictionary<string, string>>("Data\\CookingRecipes");
+            var allCookingInformation = DataLoader.CookingRecipes(Game1.content);
             foreach (var (recipeName, recipeInfo) in allCookingInformation)
             {
                 var recipe = ParseStardewCookingRecipeData(recipeName, recipeInfo);
@@ -421,7 +421,7 @@ namespace StardewArchipelago.Stardew
         private void InitializeCraftingRecipes()
         {
             _craftingRecipesByName = new Dictionary<string, StardewCraftingRecipe>();
-            var allCraftingInformation = Game1.content.Load<Dictionary<string, string>>("Data\\CraftingRecipes");
+            var allCraftingInformation = DataLoader.CraftingRecipes(Game1.content);
             foreach (var (recipeName, recipeInfo) in allCraftingInformation)
             {
                 var recipe = ParseStardewCraftingRecipeData(recipeName, recipeInfo);

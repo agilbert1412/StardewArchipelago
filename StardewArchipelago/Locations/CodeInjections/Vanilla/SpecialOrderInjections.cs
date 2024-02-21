@@ -188,7 +188,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             Game1.player.team.availableSpecialOrders.Clear();
             Game1.player.team.acceptedSpecialOrderTypes.Clear();
             var random = new Random((int)Game1.uniqueIDForThisGame + (int)(Game1.stats.DaysPlayed * 1.2999999523162842));
-            var allSpecialOrdersData = Game1.content.Load<Dictionary<string, SpecialOrderData>>("Data\\SpecialOrders");
+            var allSpecialOrdersData = DataLoader.SpecialOrders(Game1.content);
             var specialOrdersThatCanBeStartedToday = FilterToSpecialOrdersThatCanBeStartedToday(allSpecialOrdersData);
             var specialOrdersForBoard = CreateSpecialOrderInstancesForType(specialOrdersThatCanBeStartedToday, "", random);
             var specialOrdersForQi = CreateSpecialOrderInstancesForType(specialOrdersThatCanBeStartedToday, "Qi", random);

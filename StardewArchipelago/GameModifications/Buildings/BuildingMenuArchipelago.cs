@@ -86,8 +86,8 @@ namespace StardewArchipelago.GameModifications.Buildings
         public List<BluePrint> FullBlueprintData()
         {
             var fullBlueprintData = new List<BluePrint>();
-            var rawBlueprintData = Game1.content.Load<Dictionary<string, string>>("Data\\blueprints");
-            foreach (var blueprintPair in rawBlueprintData)
+            var rawBuildingsData = DataLoader.Buildings(Game1.content);
+            foreach (var blueprintPair in rawBuildingsData)
             {
                 if (ExcludedBuildings.Contains(blueprintPair.Key))
                 {
