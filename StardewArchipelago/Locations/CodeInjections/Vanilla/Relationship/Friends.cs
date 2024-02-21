@@ -29,7 +29,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
             }
 
             _friends = new List<ArchipelagoFriend>();
-            var npcs = Game1.content.Load<Dictionary<string, string>>("Data\\NPCDispositions");
+            var npcs = DataLoader.Characters(Game1.content);
             foreach (var (name, npcInfo) in npcs)
             {
                 var villagerInfoParts = npcInfo.Split('/');

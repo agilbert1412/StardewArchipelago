@@ -23,6 +23,7 @@ using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Network;
 using StardewValley.Objects;
+using xTile.Dimensions;
 using Object = StardewValley.Object;
 
 namespace StardewArchipelago.GameModifications
@@ -141,7 +142,8 @@ namespace StardewArchipelago.GameModifications
                 prefix: new HarmonyMethod(typeof(CommunityCenterLogicInjections), nameof(CommunityCenterLogicInjections.HasCompletedCommunityCenter_CheckGameStateInsteadOfLetters_Prefix))
             );
 
-            var townEvents = Game1.content.Load<Dictionary<string, string>>("Data\\Events\\Town");
+            var town = Game1.getLocationFromName("Town");
+            town.TryGetLocationEvents(out var assetName, out var townEvents);
             var communityCenterCeremonyEventKey = "";
             var communityCenterCeremonyEventValue = "";
 

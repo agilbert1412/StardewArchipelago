@@ -23,7 +23,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             _archipelago = archipelago;
             _locationChecker = locationChecker;
 
-            _allRecipes = Game1.content.Load<Dictionary<string, string>>("Data\\CookingRecipes");
+            _allRecipes = DataLoader.CookingRecipes(Game1.content);
         }
 
         // public void grantConversationFriendship(Farmer who, int amount = 20)

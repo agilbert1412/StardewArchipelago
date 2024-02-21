@@ -17,7 +17,7 @@ namespace StardewArchipelago.Items.Mail
             _state = state;
             foreach (var (mailKey, mailContent) in _state.LettersGenerated)
             {
-                var mailData = Game1.content.Load<Dictionary<string, string>>("Data\\mail");
+                var mailData = DataLoader.Mail(Game1.content);
                 mailData[mailKey] = mailContent;
             }
         }
@@ -75,7 +75,7 @@ namespace StardewArchipelago.Items.Mail
         public void GenerateMail(string mailKey, string mailContent)
         {
             mailContent = mailContent.Replace("<3", "<");
-            var mailData = Game1.content.Load<Dictionary<string, string>>("Data\\mail");
+            var mailData = DataLoader.Mail(Game1.content);
             mailData[mailKey] = mailContent;
             if (_state.LettersGenerated.ContainsKey(mailKey))
             {

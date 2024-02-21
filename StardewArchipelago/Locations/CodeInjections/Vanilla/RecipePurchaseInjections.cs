@@ -85,7 +85,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 return;
             }
 
-            var objectData = Game1.content.Load<Dictionary<int, string>>("Data\\ObjectInformation");
+            var objectData = DataLoader.Objects(Game1.content);
             var chickenEntry = objectData.FirstOrDefault(x => x.Value.Contains("Grampleton Orange Chicken"));
             var chickenID = chickenEntry.Key;
             Utility.AddStock(saloonStock, new Object(Vector2.Zero, chickenID, int.MaxValue));
