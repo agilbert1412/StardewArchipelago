@@ -10,7 +10,7 @@ namespace StardewArchipelago.Stardew
         public int AddedImmunity { get; }
         public int ColorIndex { get; }
 
-        public StardewBoots(int id, string name, int sellPrice, string description, int addedDefense, int addedImmunity, int colorIndex, string displayName)
+        public StardewBoots(string id, string name, int sellPrice, string description, int addedDefense, int addedImmunity, int colorIndex, string displayName)
         : base(id, name, sellPrice, displayName, description)
         {
             AddedDefense = addedDefense;

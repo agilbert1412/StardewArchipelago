@@ -20,7 +20,7 @@ namespace StardewArchipelago.Stardew
         public double CriticalChance { get; }
         public double CriticalDamage { get; }
 
-        public StardewWeapon(int id, string name, string description, int minDamage, int maxDamage, double knockBack, double speed, double addedPrecision, double addedDefence, int type, int baseMineLevel, int minMineLevel, double addedAoe, double criticalChance, double criticalDamage, string displayName)
+        public StardewWeapon(string id, string name, string description, int minDamage, int maxDamage, double knockBack, double speed, double addedPrecision, double addedDefence, int type, int baseMineLevel, int minMineLevel, double addedAoe, double criticalChance, double criticalDamage, string displayName)
         : base(id, name, /* TODO */1, displayName, description)
         {
             MinDamage = minDamage;

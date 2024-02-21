@@ -9,7 +9,7 @@ namespace StardewArchipelago.Stardew
         public string SkipHairDraw { get; }
         public bool IgnoreHairstyleOffset { get; }
 
-        public StardewHat(int id, string name, string description, string skipHairDraw, bool ignoreHairstyleOffset, string displayName)
+        public StardewHat(string id, string name, string description, string skipHairDraw, bool ignoreHairstyleOffset, string displayName)
         : base(id, name, 0, displayName, description)
         {
         }

@@ -27,7 +27,9 @@ namespace StardewArchipelago.Stardew
         public bool IsTV => Type.Contains(TYPE_TV, StringComparison.OrdinalIgnoreCase) ||
                              Name.Contains(TYPE_TV, StringComparison.OrdinalIgnoreCase);
 
-        public StardewFurniture(int id, string name, string type, string tilesheetSize, string boundingBoxSize, string rotations, string price, string displayName, string placementRestriction): base(id, name, 0, displayName, "")
+        public bool IsLupiniPainting => int.TryParse(Id, out var numericId) && numericId % 2 == 0 && numericId >= 1838 && numericId <= 1854;
+
+        public StardewFurniture(string id, string name, string type, string tilesheetSize, string boundingBoxSize, string rotations, string price, string displayName, string placementRestriction): base(id, name, 0, displayName, "")
         {
             Type = type;
             TilesheetSize = tilesheetSize;
