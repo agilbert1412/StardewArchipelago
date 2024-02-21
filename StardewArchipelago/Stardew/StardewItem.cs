@@ -1,4 +1,5 @@
-﻿using StardewArchipelago.Archipelago;
+﻿using System.Diagnostics;
+using StardewArchipelago.Archipelago;
 using StardewArchipelago.Items.Mail;
 using StardewValley;
 
@@ -6,14 +7,15 @@ namespace StardewArchipelago.Stardew
 {
     public abstract class StardewItem
     {
-        public int Id { get; private set; }
+        public string Id { get; private set; }
         public string Name { get; protected set; }
         public int SellPrice { get; private set; }
         public string DisplayName { get; private set; }
         public string Description { get; private set; }
 
-        public StardewItem(int id, string name, int sellPrice, string displayName, string description)
+        public StardewItem(string id, string name, int sellPrice, string displayName, string description)
         {
+            Debug.Assert(int.TryParse(id, out _));
             Id = id;
             Name = name;
             SellPrice = sellPrice;
@@ -31,7 +33,7 @@ namespace StardewArchipelago.Stardew
 
         public override string ToString()
         {
-            return $"{Name} [{Id}]";
+            return $"{Name} [{Id} | {QualifiedId}]";
         }
     }
 }
