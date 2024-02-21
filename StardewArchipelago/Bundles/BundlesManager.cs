@@ -21,7 +21,7 @@ namespace StardewArchipelago.Bundles
             _modHelper = modHelper;
             var bundlesDictionary = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, Dictionary<string, string>>>>(bundlesJson);
             BundleRooms = new BundleRooms(itemManager, bundlesDictionary);
-            _vanillaBundleData = Game1.content.LoadBase<Dictionary<string, string>>("Data\\Bundles");
+            _vanillaBundleData = DataLoader.Bundles(Game1.content);
             _currentBundlesData = BundleRooms.ToStardewStrings();
         }
 
