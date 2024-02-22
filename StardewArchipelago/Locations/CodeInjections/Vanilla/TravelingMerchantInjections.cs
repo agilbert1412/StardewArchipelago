@@ -240,7 +240,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     return;
                 }
 
-                var weddingRingRecipe = new Object(801, 1, true);
+                var weddingRingRecipe = new Object("801", 1, true);
                 stock.Add(weddingRingRecipe, new int[2]
                 {
                     500,
@@ -400,8 +400,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             for (var i = 50; i < 600; i++)
             {
-                var item = new Object(i, 1);
-                if (item != null && item.Type != null && (item.Type.Equals("Arch") || item.Type.Equals("Minerals")))
+                var item = new Object(i.ToString(), 1);
+                if (item.Type != null && (item.Type.Equals("Arch") || item.Type.Equals("Minerals")))
                 {
                     yield return item;
                 }
@@ -410,10 +410,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
         private static IEnumerable<Object> GetAllMissingDonatableItems(IEnumerable<Object> allDonatableItems)
         {
-            var museum = Game1.getLocationFromName("ArchaeologyHouse") as LibraryMuseum;
             foreach (var donatableItem in allDonatableItems)
             {
-                if (museum.museumAlreadyHasArtifact(donatableItem.ParentSheetIndex) && !_locationChecker.GetAllLocationsNotCheckedContainingWord(donatableItem.Name).Any())
+                if (LibraryMuseum.HasDonatedArtifact(donatableItem.QualifiedItemId) && !_locationChecker.GetAllLocationsNotCheckedContainingWord(donatableItem.Name).Any())
                 {
                     continue;
                 }
