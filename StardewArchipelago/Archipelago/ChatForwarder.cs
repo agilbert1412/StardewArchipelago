@@ -303,10 +303,10 @@ namespace StardewArchipelago.Archipelago
                 return false;
             }
 
-            var currentSetting = ModEntry.Instance.State.HideEmptyArchipelagoLetters;
+            var currentSetting = ModEntry.Instance.Config.HideEmptyArchipelagoLetters;
             var newSetting = !currentSetting;
             var status = newSetting ? "hidden" : "visible";
-            ModEntry.Instance.State.HideEmptyArchipelagoLetters = newSetting;
+            ModEntry.Instance.Config.HideEmptyArchipelagoLetters = newSetting;
             Game1.chatBox?.addMessage($"Empty archipelago letters are now {status}. Changes will take effect when opening your mailbox", Color.Gold);
             return true;
         }
