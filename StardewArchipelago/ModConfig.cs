@@ -18,7 +18,7 @@
         /// <summary>
         /// When the archipelago icon shows up in-game, two version of the icons are available.
         /// The default are the "flat" icons, that come from Archipelago itself and are used in many games
-        /// The Custom ones are made by candycaneanniahlator and are intended to ressemble the Stardew Valley style
+        /// The Custom ones are made by candycaneannihalator and are intended to ressemble the Stardew Valley style
         /// </summary>
         public bool UseCustomArchipelagoIcons { get; set; } = false;
     }
