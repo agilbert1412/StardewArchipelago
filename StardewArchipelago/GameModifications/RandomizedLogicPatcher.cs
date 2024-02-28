@@ -19,6 +19,7 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Events;
+using StardewValley.GameData.Locations;
 using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Network;
@@ -107,6 +108,7 @@ namespace StardewArchipelago.GameModifications
             PatchGoldenClock();
             PatchZeldaAnimations();
             PatchLegendaryFish();
+            MakeLegendaryFishReCatchable();
             PatchSecretNotes();
             PatchRecipes();
             PatchTooltips();
@@ -553,27 +555,16 @@ namespace StardewArchipelago.GameModifications
         }
 
         private void PatchLegendaryFish()
+        private void MakeLegendaryFishReCatchable()
         {
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(Beach), nameof(Beach.getFish)),
-                prefix: new HarmonyMethod(typeof(LegendaryFishInjections), nameof(LegendaryFishInjections.GetFish_CrimsonfishAtBeach_PreFix))
-            );
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(Town), nameof(Town.getFish)),
-                prefix: new HarmonyMethod(typeof(LegendaryFishInjections), nameof(LegendaryFishInjections.GetFish_AnglerInTown_PreFix))
-            );
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(Mountain), nameof(Mountain.getFish)),
-                prefix: new HarmonyMethod(typeof(LegendaryFishInjections), nameof(LegendaryFishInjections.GetFish_LegendAtMountain_PreFix))
-            );
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(Forest), nameof(Forest.getFish)),
-                prefix: new HarmonyMethod(typeof(LegendaryFishInjections), nameof(LegendaryFishInjections.GetFish_GlacierfishInForest_PreFix))
-            );
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(Sewer), nameof(Sewer.getFish)),
-                prefix: new HarmonyMethod(typeof(LegendaryFishInjections), nameof(LegendaryFishInjections.GetFish_MutantCarpInSewer_PreFix))
-            );
+            var locationsData = DataLoader.Locations(Game1.content);
+            foreach (var (location, data) in locationsData)
+            {
+                foreach (var spawnFishData in data.Fish)
+                {
+                    spawnFishData.CatchLimit = -1;
+                }
+            }
         }
 
         private void PatchSecretNotes()
