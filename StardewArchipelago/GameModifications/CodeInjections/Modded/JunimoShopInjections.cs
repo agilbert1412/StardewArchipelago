@@ -66,40 +66,41 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Modded
         {
             try
             {
-                // We only run this once for each menu
-                if (__instance.storeContext != "Custom_JunimoWoods")
-                {
-                    return true;
-                }
-                var firstItemForSale = "";
-                if (__instance.forSale.Count == 0) // in case the shop is emptied on a second pass
-                {
-                    firstItemForSale = "";
-                }
-                else
-                {
-                    firstItemForSale = __instance.forSale.First().Name; // Fighting CP moment
-                }
-                if (!_junimoFirstItems.Contains(firstItemForSale) && _lastShopMenuUpdated == __instance)
-                {
-                    return true;
-                }
-                _lastShopMenuUpdated = __instance;
-                var color = _firstItemToColor[firstItemForSale];
-                if (color == "Purple")
-                {
-                    var purpleJunimo = __instance.portraitPerson;
-                    __instance.exitThisMenuNoSound();
-                    DaJunimo = purpleJunimo;
-                    DaJunimo.Name = "Purple Junimo";
-                    DaJunimo.displayName = "Purple Junimo";
-                    PurpleJunimoSpecialShop();
-                    return true;
-                }
-                __instance.itemPriceAndStock = _junimoShopGenerator.GetJunimoShopStock(color, __instance.itemPriceAndStock);
-                __instance.forSale = __instance.itemPriceAndStock.Keys.ToList();
-                __instance.potraitPersonDialogue = _junimoPhrase[color];
-                return true; //  run original logic
+                throw new NotImplementedException($"{nameof(Update_JunimoWoodsAPShop_Prefix)} was not updated for Stardew 1.6 yet");
+                //// We only run this once for each menu
+                //if (__instance.storeContext != "Custom_JunimoWoods")
+                //{
+                //    return true;
+                //}
+                //var firstItemForSale = "";
+                //if (__instance.forSale.Count == 0) // in case the shop is emptied on a second pass
+                //{
+                //    firstItemForSale = "";
+                //}
+                //else
+                //{
+                //    firstItemForSale = __instance.forSale.First().Name; // Fighting CP moment
+                //}
+                //if (!_junimoFirstItems.Contains(firstItemForSale) && _lastShopMenuUpdated == __instance)
+                //{
+                //    return true;
+                //}
+                //_lastShopMenuUpdated = __instance;
+                //var color = _firstItemToColor[firstItemForSale];
+                //if (color == "Purple")
+                //{
+                //    var purpleJunimo = __instance.portraitPerson;
+                //    __instance.exitThisMenuNoSound();
+                //    DaJunimo = purpleJunimo;
+                //    DaJunimo.Name = "Purple Junimo";
+                //    DaJunimo.displayName = "Purple Junimo";
+                //    PurpleJunimoSpecialShop();
+                //    return true;
+                //}
+                //__instance.itemPriceAndStock = _junimoShopGenerator.GetJunimoShopStock(color, __instance.itemPriceAndStock);
+                //__instance.forSale = __instance.itemPriceAndStock.Keys.ToList();
+                //__instance.potraitPersonDialogue = _junimoPhrase[color];
+                //return true; //  run original logic
             }
             catch (Exception ex)
             {
@@ -116,84 +117,86 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Modded
 
         public static void PurpleJunimoSpecialShop()
         {
-            var junimoWoods = Game1.player.currentLocation;
-            var friendsMet = Game1.player.friendshipData.Count();
-            var fakeStock = new Dictionary<string, int>(){
-                {"Money", 10000},
-                {"Dewdrop", 2500},
-                {"Friendship", 75 * friendsMet}
-            };
-            PurpleJunimoOptions = new Dictionary<string, PurpleJunimo>();
-            var purpleItems = _junimoShopGenerator.PurpleItems.Keys.ToArray();
-            var currentWeek = (int)(Game1.stats.daysPlayed / 7) + 1;
-            var random = new Random((int)Game1.uniqueIDForThisGame / 2 + currentWeek);
-            foreach (var (item, price) in fakeStock)
-            {
-                var randomPurpleItem = purpleItems[random.Next(purpleItems.Length)];
-                var randomPurpleItemValue = _junimoShopGenerator.PurpleItems[randomPurpleItem];
-                var stardewItem = _stardewItemManager.GetObjectById(randomPurpleItem);
-                var purpleExchangeRate = _junimoShopGenerator.ExchangeRate(price, randomPurpleItemValue);
-                PurpleJunimoOptions[item] = new PurpleJunimo()
-                {
-                    OfferedItem = stardewItem,
-                    Amount = Math.Max(purpleExchangeRate[1] / purpleExchangeRate[0], 1),
-                };
-            }
-            junimoWoods.createQuestionDialogue(
-                    Question,
-                    new Response[4]
-                    {
-                        new("Money", string.Format(Money, PurpleJunimoOptions["Money"].Amount.ToString(), PurpleJunimoOptions["Money"].OfferedItem.Name)),
-                        new("Dewdrop", string.Format(Dewdrop, PurpleJunimoOptions["Dewdrop"].Amount.ToString(), PurpleJunimoOptions["Dewdrop"].OfferedItem.Name)),
-                        new("Friendship", string.Format(Friendship, PurpleJunimoOptions["Friendship"].Amount.ToString(), PurpleJunimoOptions["Friendship"].OfferedItem.Name)),
-                                                Nothing
+            throw new NotImplementedException($"{nameof(PurpleJunimoSpecialShop)} was not updated for Stardew 1.6 yet");
+            //var junimoWoods = Game1.player.currentLocation;
+            //var friendsMet = Game1.player.friendshipData.Count();
+            //var fakeStock = new Dictionary<string, int>(){
+            //    {"Money", 10000},
+            //    {"Dewdrop", 2500},
+            //    {"Friendship", 75 * friendsMet}
+            //};
+            //PurpleJunimoOptions = new Dictionary<string, PurpleJunimo>();
+            //var purpleItems = _junimoShopGenerator.PurpleItems.Keys.ToArray();
+            //var currentWeek = (int)(Game1.stats.daysPlayed / 7) + 1;
+            //var random = new Random((int)Game1.uniqueIDForThisGame / 2 + currentWeek);
+            //foreach (var (item, price) in fakeStock)
+            //{
+            //    var randomPurpleItem = purpleItems[random.Next(purpleItems.Length)];
+            //    var randomPurpleItemValue = _junimoShopGenerator.PurpleItems[randomPurpleItem];
+            //    var stardewItem = _stardewItemManager.GetObjectById(randomPurpleItem);
+            //    var purpleExchangeRate = _junimoShopGenerator.ExchangeRate(price, randomPurpleItemValue);
+            //    PurpleJunimoOptions[item] = new PurpleJunimo()
+            //    {
+            //        OfferedItem = stardewItem,
+            //        Amount = Math.Max(purpleExchangeRate[1] / purpleExchangeRate[0], 1),
+            //    };
+            //}
+            //junimoWoods.createQuestionDialogue(
+            //        Question,
+            //        new Response[4]
+            //        {
+            //            new("Money", string.Format(Money, PurpleJunimoOptions["Money"].Amount.ToString(), PurpleJunimoOptions["Money"].OfferedItem.Name)),
+            //            new("Dewdrop", string.Format(Dewdrop, PurpleJunimoOptions["Dewdrop"].Amount.ToString(), PurpleJunimoOptions["Dewdrop"].OfferedItem.Name)),
+            //            new("Friendship", string.Format(Friendship, PurpleJunimoOptions["Friendship"].Amount.ToString(), PurpleJunimoOptions["Friendship"].OfferedItem.Name)),
+            //                                    Nothing
 
-                    }, _junimoDialogueKey);
+            //        }, _junimoDialogueKey);
 
 
-            return;
-
+            //return;
         }
 
         public static bool AnswerDialogueAction_Junimoshop_Prefix(GameLocation __instance, string questionAndAnswer, string[] questionParams, ref bool __result)
         {
             try
             {
-                if (!questionAndAnswer.StartsWith(_junimoDialogueKey))
-                {
-                    return true; // run original logic
-                }
-                var answer = questionAndAnswer.Split("_")[1];
-                if (answer == "No")
-                {
-                    DaJunimo.setNewDialogue($"Okie dokie, you know where to find me!  Eheh!");
-                    Game1.drawDialogue(DaJunimo);
-                    return false;
-                }
-                var checkOffer = PurpleJunimoOptions[answer];
-                if (!Game1.player.hasItemInInventory(checkOffer.OfferedItem.Id, checkOffer.Amount))
-                {
-                    DaJunimo.setNewDialogue($"You no have thing, sorry!  Check later!");
-                    Game1.drawDialogue(DaJunimo);
-                    return false;
-                }
-                if (answer == "Money")
-                {
-                    PurpleJunimoMoney(checkOffer);
-                    return false;
-                }
-                if (answer == "Dewdrop")
-                {
-                    PurpleJunimoDewdrop(checkOffer);
-                    return false;
-                }
-                if (answer == "Friendship")
-                {
-                    PurpleJunimoKiss(checkOffer);
-                    return false;
-                }
+                throw new NotImplementedException($"{nameof(AnswerDialogueAction_Junimoshop_Prefix)} was not updated for Stardew 1.6 yet");
 
-                return false; // don't run original logic
+                //if (!questionAndAnswer.StartsWith(_junimoDialogueKey))
+                //{
+                //    return true; // run original logic
+                //}
+                //var answer = questionAndAnswer.Split("_")[1];
+                //if (answer == "No")
+                //{
+                //    DaJunimo.setNewDialogue($"Okie dokie, you know where to find me!  Eheh!");
+                //    Game1.drawDialogue(DaJunimo);
+                //    return false;
+                //}
+                //var checkOffer = PurpleJunimoOptions[answer];
+                //if (!Game1.player.hasItemInInventory(checkOffer.OfferedItem.Id, checkOffer.Amount))
+                //{
+                //    DaJunimo.setNewDialogue($"You no have thing, sorry!  Check later!");
+                //    Game1.drawDialogue(DaJunimo);
+                //    return false;
+                //}
+                //if (answer == "Money")
+                //{
+                //    PurpleJunimoMoney(checkOffer);
+                //    return false;
+                //}
+                //if (answer == "Dewdrop")
+                //{
+                //    PurpleJunimoDewdrop(checkOffer);
+                //    return false;
+                //}
+                //if (answer == "Friendship")
+                //{
+                //    PurpleJunimoKiss(checkOffer);
+                //    return false;
+                //}
+
+                //return false; // don't run original logic
             }
             catch (Exception ex)
             {
@@ -207,7 +210,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Modded
             DaJunimo.setNewDialogue($"Oh very nice, have yellow rocks I found!  You like?");
             Game1.drawDialogue(DaJunimo);
             Game1.player.Money += 50000;
-            Game1.player.removeItemsFromInventory(purpleJunimoOffer.OfferedItem.Id, purpleJunimoOffer.Amount);
+            Game1.player.Items.ReduceId(purpleJunimoOffer.OfferedItem.Id, purpleJunimoOffer.Amount);
         }
 
         private static void PurpleJunimoDewdrop(PurpleJunimo purpleJunimoOffer)
@@ -218,7 +221,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Modded
             Game1.player.addItemByMenuIfNecessaryElseHoldUp(dewdropBerry);
             DaJunimo.setNewDialogue($"Awh okay I was gonna sleep with it, but here you go!");
             Game1.drawDialogue(DaJunimo);
-            Game1.player.removeItemsFromInventory(purpleJunimoOffer.OfferedItem.Id, purpleJunimoOffer.Amount);
+            Game1.player.Items.ReduceId(purpleJunimoOffer.OfferedItem.Id, purpleJunimoOffer.Amount);
         }
 
         private static void PurpleJunimoKiss(PurpleJunimo purpleJunimoOffer)
@@ -232,7 +235,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Modded
             DaJunimo.setNewDialogue($"I will tonight!  Yay!");
             Game1.drawDialogue(DaJunimo);
             Game1.player.mailReceived.Add("purpleJunimoKiss");
-            Game1.player.removeItemsFromInventory(purpleJunimoOffer.OfferedItem.Id, purpleJunimoOffer.Amount);
+            Game1.player.Items.ReduceId(purpleJunimoOffer.OfferedItem.Id, purpleJunimoOffer.Amount);
         }
 
         // public void resetFriendshipsForNewDay()
