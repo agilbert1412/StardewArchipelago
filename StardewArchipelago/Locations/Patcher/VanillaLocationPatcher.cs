@@ -395,10 +395,7 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void ReplaceCarpenterBuildingsWithChecks()
         {
-            _harmony.Patch(
-                original: AccessTools.Constructor(typeof(BluePrint), new[]{typeof(string)}),
-                postfix: new HarmonyMethod(typeof(CarpenterInjections), nameof(CarpenterInjections.BluePrintConstructor_CheaperInAP_Postfix))
-            );
+            MakeAllBuildingsCheaper();
 
             if (!_archipelago.SlotData.BuildingProgression.HasFlag(BuildingProgression.Progressive))
             {
@@ -440,6 +437,23 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(typeof(Utility), nameof(Utility.getCarpenterStock)),
                 postfix: new HarmonyMethod(typeof(CarpenterInjections), nameof(CarpenterInjections.GetCarpenterStock_PurchasableChecks_Postfix))
             );
+        }
+
+        private void MakeAllBuildingsCheaper()
+        {
+            var priceMultiplier = _archipelago.SlotData.BuildingPriceMultiplier;
+            foreach (var (id, data) in Game1.buildingData)
+            {
+                foreach (var material in data.BuildMaterials)
+                {
+                    var modifiedQuantity = Math.Max(1, (int)(material.Amount * priceMultiplier));
+                    material.Amount = modifiedQuantity;
+                }
+
+                var price = data.BuildCost;
+                var modifiedPrice = (int)(price * priceMultiplier);
+                data.BuildCost = modifiedPrice;
+            }
         }
 
         private void ReplaceWizardBuildingsWithChecks()
@@ -490,8 +504,8 @@ namespace StardewArchipelago.Locations.Patcher
         private void PatchAdventurerGuildShop()
         {
             _harmony.Patch(
-                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.answerDialogueAction)),
-                prefix: new HarmonyMethod(typeof(AdventurerGuildInjections), nameof(AdventurerGuildInjections.TelephoneAdventureGuild_AddReceivedEquipments_Prefix))
+                original: AccessTools.Method(typeof(Utility), nameof(Utility.TryOpenShopMenu)),
+                prefix: new HarmonyMethod(typeof(AdventurerGuildInjections), nameof(AdventurerGuildInjections.TryOpenShopMenu_AddReceivedEquipmentsToGuildRecovery_Prefix))
             );
 
             _harmony.Patch(

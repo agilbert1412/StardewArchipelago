@@ -5,13 +5,14 @@ using Archipelago.Gifting.Net.Gifts;
 using Archipelago.Gifting.Net.Traits;
 using StardewArchipelago.Stardew;
 using StardewValley;
+using StardewValley.GameData.Objects;
 using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Archipelago.Gifting
 {
     public class GiftGenerator
     {
-        private const double DEFAULT_BUFF_DURATION = 120;
+        private const int DEFAULT_BUFF_DURATION = 120;
 
         private StardewItemManager _itemManager;
 
@@ -31,7 +32,7 @@ namespace StardewArchipelago.Archipelago.Gifting
                 return false;
             }
 
-            var name = _itemManager.NormalizeName(giftObject.ParentSheetIndex, giftObject.Name);
+            var name = _itemManager.NormalizeName(giftObject.ItemId, giftObject.Name);
 
             if (!_itemManager.ObjectExists(name) || giftObject.questItem.Value)
             {
@@ -55,13 +56,13 @@ namespace StardewArchipelago.Archipelago.Gifting
                 traits.Add(new GiftTrait(GiftFlag.Trap, 1, 1));
             }
 
-            if (!Game1.objectInformation.ContainsKey(giftObject.ParentSheetIndex))
+            if (!Game1.objectData.ContainsKey(giftObject.QualifiedItemId))
             {
                 return traits.ToArray();
             }
 
-            var objectInfo = Game1.objectInformation[giftObject.ParentSheetIndex].Split('/');
-            var edibility = objectInfo[2];
+            var objectInfo = Game1.objectData[giftObject.QualifiedItemId];
+            var edibility = objectInfo.Edibility;
             if (Convert.ToInt32(edibility) > 0)
             {
                 traits.AddRange(GetConsumableTraits(objectInfo));
@@ -72,89 +73,88 @@ namespace StardewArchipelago.Archipelago.Gifting
             return traits.ToArray();
         }
 
-        private IEnumerable<GiftTrait> GetConsumableTraits(string[] objectInfo)
+        private IEnumerable<GiftTrait> GetConsumableTraits(ObjectData objectInfo)
         {
             yield return CreateTrait(GiftFlag.Consumable);
-            if (objectInfo.Length < 7)
+            
+            if (objectInfo.IsDrink)
             {
-                yield break;
+                yield return CreateTrait(GiftFlag.Drink);
             }
-
-            var foodOrDrink = objectInfo[6];
-            if (foodOrDrink.Equals("food", StringComparison.InvariantCultureIgnoreCase))
+            else
             {
                 yield return CreateTrait(GiftFlag.Food);
             }
 
-            if (foodOrDrink.Equals("drink", StringComparison.InvariantCultureIgnoreCase))
-            {
-                yield return CreateTrait(GiftFlag.Drink);
-            }
+            var buffsData = objectInfo.Buff;
+            var buffDuration = buffsData.Duration / DEFAULT_BUFF_DURATION;
 
-            if (objectInfo.Length < 8)
-            {
-                yield break;
-            }
-
-            var buffs = objectInfo[7].Split(' ').Select(int.Parse).ToArray();
-            var buffDuration = (objectInfo.Length > 8 ? double.Parse(objectInfo[8]) : 120) / DEFAULT_BUFF_DURATION;
-
-            foreach (var buffTrait in GetBuffTraits(buffs, buffDuration)) yield return buffTrait;
+            foreach (var buffTrait in GetBuffTraits(buffsData, buffDuration)) yield return buffTrait;
         }
 
-        private IEnumerable<GiftTrait> GetBuffTraits(int[] buffs, double buffDuration)
+        private IEnumerable<GiftTrait> GetBuffTraits(ObjectBuffData buffData, double buffDuration)
         {
             if (buffDuration <= 0)
             {
                 yield break;
             }
 
-            for (var i = 0; i < buffs.Length; i++)
-            {
-                if (!_buffFlags.ContainsKey(i) || buffs[i] <= 0)
-                {
-                    continue;
-                }
+            var effects = DataLoader.Buffs(Game1.content)[buffData.BuffId].Effects;
 
-                foreach (var buffFlag in _buffFlags[i])
-                {
-                    yield return CreateTrait(buffFlag, buffDuration, buffs[i]);
-                }
+            if (effects.FishingLevel != 0)
+            {
+                yield return CreateTrait(GiftFlag.Fish, buffDuration, effects.FishingLevel);
+            }
+
+            if (effects.MiningLevel != 0)
+            {
+                yield return CreateTrait(GiftFlag.Tool, buffDuration, effects.MiningLevel);
+            }
+
+            if (effects.ForagingLevel != 0)
+            {
+                yield return CreateTrait(GiftFlag.Tool, buffDuration, effects.ForagingLevel);
+            }
+
+            if (effects.MaxStamina != 0)
+            {
+                yield return CreateTrait(GiftFlag.Mana, buffDuration, effects.MaxStamina);
+            }
+
+            if (effects.Speed != 0)
+            {
+                yield return CreateTrait(GiftFlag.Speed, buffDuration, effects.Speed);
+            }
+
+            if (effects.Defense != 0)
+            {
+                yield return CreateTrait(GiftFlag.Armor, buffDuration, effects.Defense);
+            }
+
+            if (effects.Attack != 0)
+            {
+                yield return CreateTrait(GiftFlag.Weapon, buffDuration, effects.Attack);
             }
         }
 
-        private IEnumerable<GiftTrait> GetCategoryTraits(string[] objectInfo)
+        private IEnumerable<GiftTrait> GetCategoryTraits(ObjectData objectInfo)
         {
-            if (objectInfo.Length < 4)
-            {
-                yield break;
-            }
-
-            var typeAndCategory = objectInfo[3].Split(" ");
-
-            if (typeAndCategory.Length < 1)
-            {
-                yield break;
-            }
+            var type = objectInfo.Type;
+            var category = objectInfo.Category;
 
             var categoryNames = Array.Empty<string>();
-            if (typeAndCategory.Length > 1)
+            if (_categoryFlags.ContainsKey(category))
             {
-                var category = int.Parse(typeAndCategory[1]);
-                if (_categoryFlags.ContainsKey(category))
+                categoryNames = _categoryFlags[category];
+                foreach (var categoryName in categoryNames)
                 {
-                    categoryNames = _categoryFlags[category];
-                    foreach (var categoryName in categoryNames)
+                    if (!string.IsNullOrWhiteSpace(categoryName))
                     {
-                        if (!string.IsNullOrWhiteSpace(categoryName))
-                        {
-                            yield return CreateTrait(categoryName);
-                        }
+                        yield return CreateTrait(categoryName);
                     }
                 }
             }
-
-            var type = typeAndCategory[0];
+            
             if (ReplaceFlags.ContainsKey(type))
             {
                 type = ReplaceFlags[type];
@@ -175,22 +175,6 @@ namespace StardewArchipelago.Archipelago.Gifting
         {
             return new GiftTrait(trait, duration, quality);
         }
-
-        private static readonly Dictionary<int, string[]> _buffFlags = new()
-        {
-            // { ConsumableBuff.FARMING, new[] {GiftFlag.Farming}},
-            { ConsumableBuff.FISHING, new[] { GiftFlag.Fish } },
-            { ConsumableBuff.MINING, new[] { GiftFlag.Tool } },
-            { ConsumableBuff.DIGGING, new[] { GiftFlag.Tool } },
-            // { ConsumableBuff.LUCK, new[] {GiftFlag.Luck}},
-            // { ConsumableBuff.FORAGING, new[] {GiftFlag.Foraging}},
-            // { ConsumableBuff.CRAFTING, new[] {GiftFlag.Crafting}},
-            { ConsumableBuff.MAX_ENERGY, new[] { GiftFlag.Mana } },
-            // { ConsumableBuff.MAGNETISM, new[] {GiftFlag.Magnetism}},
-            { ConsumableBuff.SPEED, new[] { GiftFlag.Speed } },
-            { ConsumableBuff.DEFENSE, new[] { GiftFlag.Armor } },
-            { ConsumableBuff.ATTACK, new[] { GiftFlag.Weapon } },
-        };
 
         private static readonly Dictionary<int, string[]> _categoryFlags = new()
         {
