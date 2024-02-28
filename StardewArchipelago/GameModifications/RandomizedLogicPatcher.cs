@@ -558,12 +558,9 @@ namespace StardewArchipelago.GameModifications
         private void MakeLegendaryFishReCatchable()
         {
             var locationsData = DataLoader.Locations(Game1.content);
-            foreach (var (location, data) in locationsData)
+            foreach (var spawnFishData in locationsData.SelectMany(x => x.Value.Fish))
             {
-                foreach (var spawnFishData in data.Fish)
-                {
-                    spawnFishData.CatchLimit = -1;
-                }
+                spawnFishData.CatchLimit = -1;
             }
         }
 
