@@ -69,7 +69,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     return true; // run original logic
                 }
 
-                Game1.player.removeItemsFromInventory(388, 300);
+                Game1.player.Items.ReduceId(388, 300);
                 _locationChecker.AddCheckedLocation(BEACH_BRIDGE_AP_LOCATION);
                 __result = true;
                 return false; // don't run original logic

@@ -129,7 +129,7 @@ namespace StardewArchipelago.Locations.GingerIsland.Boat
 
         private static void DonateBatteries()
         {
-            Game1.player.removeItemsFromInventory(StardewId.BATTERY_PACK, 5);
+            Game1.player.Items.ReduceId(StardewId.BATTERY_PACK, 5);
             DelayedAction.playSoundAfterDelay("openBox", 600);
             Game1.addMailForTomorrow(MAIL_FIXED_BOAT_TICKET_MACHINE, true, true);
             _locationChecker.AddCheckedLocation(AP_TICKET_MACHINE);
@@ -137,7 +137,7 @@ namespace StardewArchipelago.Locations.GingerIsland.Boat
 
         private static void DonateHardwood()
         {
-            Game1.player.removeItemsFromInventory(StardewId.HARDWOOD, 200);
+            Game1.player.Items.ReduceId(StardewId.HARDWOOD, 200);
             DelayedAction.playSoundAfterDelay("Ship", 600);
             Game1.addMailForTomorrow(MAIL_FIXED_BOAT_HULL, true, true);
             _locationChecker.AddCheckedLocation(AP_BOAT_HULL);
@@ -145,7 +145,7 @@ namespace StardewArchipelago.Locations.GingerIsland.Boat
 
         private static void DonateIridium()
         {
-            Game1.player.removeItemsFromInventory(StardewId.IRIDIUM_BAR, 5);
+            Game1.player.Items.ReduceId(StardewId.IRIDIUM_BAR, 5);
             DelayedAction.playSoundAfterDelay("clank", 600);
             DelayedAction.playSoundAfterDelay("clank", 1200);
             DelayedAction.playSoundAfterDelay("clank", 1800);
