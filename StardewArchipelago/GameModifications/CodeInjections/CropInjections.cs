@@ -5,6 +5,7 @@ using StardewArchipelago.Archipelago;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.GameData.Crops;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
 {
@@ -38,7 +39,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     return true; // run original logic
                 }
 
-                var randomSeed = GetWeigthedRandomUnlockedCrop(Game1.currentSeason);
+                var randomSeed = GetWeigthedRandomUnlockedCrop(Game1.season);
                 seedIndex = randomSeed;
                 return true; // run original logic
             }
@@ -49,7 +50,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             }
         }
 
-        private static int GetWeigthedRandomUnlockedCrop(string season)
+        private static int GetWeigthedRandomUnlockedCrop(Season season)
         {
             var receivedSeeds = _archipelago.GetAllReceivedItems().Select(x => x.ItemName).Where(x =>
                 (x.EndsWith("Seeds") || x.EndsWith("Starter") || x.EndsWith("Seed") || x.EndsWith("Bean")) &&
@@ -62,16 +63,16 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
             switch (season)
             {
-                case "spring":
+                case Season.Spring:
                     seedsICanPlantHere.Add(_stardewItemManager.GetItemByName("Spring Seeds").PrepareForGivingToFarmer());
                     break;
-                case "summer":
+                case Season.Summer:
                     seedsICanPlantHere.Add(_stardewItemManager.GetItemByName("Summer Seeds").PrepareForGivingToFarmer());
                     break;
-                case "fall":
+                case Season.Fall:
                     seedsICanPlantHere.Add(_stardewItemManager.GetItemByName("Fall Seeds").PrepareForGivingToFarmer());
                     break;
-                case "winter":
+                case Season.Winter:
                     seedsICanPlantHere.Add(_stardewItemManager.GetItemByName("Winter Seeds").PrepareForGivingToFarmer());
                     break;
             }
@@ -98,9 +99,9 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             return randomSeed;
         }
 
-        private static bool SeedCanBePlantedHere(Item x, GameLocation location, string season, Dictionary<int, string> seedsInfo)
+        private static bool SeedCanBePlantedHere(Item x, GameLocation location, Season season, Dictionary<string, CropData> cropData)
         {
-            if (!seedsInfo.ContainsKey(x.ParentSheetIndex))
+            if (!cropData.ContainsKey(x.QualifiedItemId))
             {
                 return false;
             }
@@ -110,18 +111,18 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 return true;
             }
 
-            var seedSeasons = seedsInfo[x.ParentSheetIndex].Split('/')[1].Split(' ');
-            return seedSeasons.Contains(season, StringComparer.CurrentCultureIgnoreCase);
+            var seedSeasons = cropData[x.QualifiedItemId].Seasons;
+            return seedSeasons.Contains(season);
         }
 
-        private static bool SeedRegrows(Item x, Dictionary<int, string> seedsInfo)
+        private static bool SeedRegrows(Item x, Dictionary<string, CropData> cropData)
         {
-            if (!seedsInfo.ContainsKey(x.ParentSheetIndex))
+            if (!cropData.ContainsKey(x.QualifiedItemId))
             {
                 return false;
             }
 
-            return int.Parse(seedsInfo[x.ParentSheetIndex].Split('/')[4]) != -1;
+            return cropData[x.QualifiedItemId].RegrowDays != -1;
         }
     }
 }
