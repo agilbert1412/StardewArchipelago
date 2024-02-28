@@ -136,7 +136,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     var clump = farm.resourceClumps[i];
                     if (Game1.random.NextDouble() > chanceOfStaying)
                     {
-                        farm.removeEverythingFromThisTile((int)clump.tile.X, (int)clump.tile.Y);
+                        farm.removeEverythingFromThisTile((int)clump.Tile.X, (int)clump.Tile.Y);
                     }
                 }
 
