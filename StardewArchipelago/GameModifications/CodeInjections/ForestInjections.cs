@@ -8,7 +8,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 {
     public class ForestInjections
     {
-        private const int RAT_PROBLEM_ID = 26;
+        private const string RAT_PROBLEM_ID = "26";
 
         private static IMonitor _monitor;
         private static ArchipelagoClient _archipelago;

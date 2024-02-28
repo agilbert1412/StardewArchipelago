@@ -33,7 +33,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     return;
                 }
 
-                __result.Add(new Object(928, 1), new int[]
+                __result.Add(new Object("928", 1), new int[]
                 {
                     100000,
                     int.MaxValue,
