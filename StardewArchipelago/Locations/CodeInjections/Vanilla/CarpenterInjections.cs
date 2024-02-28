@@ -36,7 +36,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
         public const string BUILDING_SHIPPING_BIN = "Shipping Bin";
 
-        public const string BUILDING_TRACTOR_GARAGE = "Tractor Garage";
+        public const string TRACTOR_GARAGE_ID = "Pathoschild.TractorMod_Stable";
+        public const string TRACTOR_GARAGE_NAME = "Tractor Garage";
 
         public const string BUILDING_BLUEPRINT_LOCATION_NAME = "{0} Blueprint";
 
@@ -53,28 +54,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             _locationChecker = locationChecker;
         }
 
-        public static bool AnswerDialogueAction_CarpenterConstruct_Prefix(GameLocation __instance, string questionAndAnswer, string[] questionParams, ref bool __result)
-        {
-            try
-            {
-                if (questionAndAnswer != "carpenter_Construct")
-                {
-                    return true; // run original logic
-                }
-
-                __result = true;
-
-                Game1.activeClickableMenu = new CarpenterMenuArchipelago(_modHelper, _archipelago);
-
-                return false; // don't run original logic
-            }
-            catch (Exception ex)
-            {
-                _monitor.Log($"Failed in {nameof(AnswerDialogueAction_CarpenterConstruct_Prefix)}:\n{ex}", LogLevel.Error);
-                return true; // run original logic
-            }
-        }
-
+        // public void createQuestionDialogue(string question, Response[] answerChoices, string dialogKey)
         public static bool CreateQuestionDialogue_CarpenterDialogOptions_Prefix(GameLocation __instance, string question, Response[] answerChoices, string dialogKey)
         {
             try
@@ -83,10 +63,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 {
                     return true; // run original logic
                 }
-
-                var carpenterMenu = new CarpenterMenuArchipelago(_modHelper, _archipelago);
-                var carpenterBlueprints = carpenterMenu.GetAvailableBlueprints();
-
+                
+                var carpenterBlueprints = CarpenterMenuInjections.GetAvailableBlueprints("Robin");
                 if (!carpenterBlueprints.Any())
                 {
                     answerChoices = answerChoices.Where(x => x.responseKey != "Construct").ToArray();
@@ -99,7 +77,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 }
 
                 __instance.lastQuestionKey = dialogKey;
-                Game1.drawObjectQuestionDialogue(question, answerChoices.ToList());
+                Game1.drawObjectQuestionDialogue(question, answerChoices);
 
                 return false; // don't run original logic
             }
@@ -109,33 +87,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 return true; // run original logic
             }
         }
-
-        // public BluePrint(string name)
-        public static void BluePrintConstructor_CheaperInAP_Postfix(BluePrint __instance, string name)
-        {
-            try
-            {
-                var priceMultiplier = _archipelago.SlotData.BuildingPriceMultiplier;
-                foreach (var itemId in __instance.itemsRequired.Keys.ToArray())
-                {
-                    var quantity = __instance.itemsRequired[itemId];
-                    var modifiedQuantity = Math.Max(1, (int)(quantity * priceMultiplier));
-                    __instance.itemsRequired[itemId] = modifiedQuantity;
-                }
-
-                var price = __instance.moneyRequired;
-                var modifiedPrice = (int)(price * priceMultiplier);
-                __instance.moneyRequired = modifiedPrice;
-
-                return;
-            }
-            catch (Exception ex)
-            {
-                _monitor.Log($"Failed in {nameof(BluePrintConstructor_CheaperInAP_Postfix)}:\n{ex}", LogLevel.Error);
-                return;
-            }
-        }
-
+        
         public static void GetCarpenterStock_PurchasableChecks_Postfix(ref Dictionary<ISalable, int[]> __result)
         {
             try
@@ -241,10 +193,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private static string GetChildRoomDialogue()
         {
             var player = Game1.player;
-            if (!player.isMarried() && !player.isEngaged())
+            if (!player.isMarriedOrRoommates() && !player.isEngaged())
             {
-                var who = player.friendshipData.Keys.Where(name => player.friendshipData[name].IsDating()).OrderByDescending(name => player.friendshipData[name].Points)
-                    .FirstOrDefault();
+                var who = player.friendshipData.Keys.Where(name => player.friendshipData[name].IsDating()).MaxBy(name => player.friendshipData[name].Points);
 
                 if (who == null)
                 {
@@ -255,7 +206,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
 
             var frienshipNature = player.friendshipData[player.spouse];
-            var spouse = Game1.getCharacterFromName(player.spouse, true, true);
+            var spouse = Game1.getCharacterFromName(player.spouse, true);
 
 
             if (player.isEngaged())
@@ -327,11 +278,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     case 0:
                         var price1 = (int)(10000 * priceMultiplier);
                         var woodAmount = Math.Max(1, (int)(450 * priceMultiplier));
-                        if (Game1.player.Money >= price1 && Game1.player.hasItemInInventory(388, woodAmount))
+                        if (Game1.player.Money >= price1 && Game1.player.Items.ContainsId("388", woodAmount))
                         {
                             Game1.player.daysUntilHouseUpgrade.Value = 3;
                             Game1.player.Money -= price1;
-                            Game1.player.removeItemsFromInventory(388, woodAmount);
+                            Game1.player.Items.ReduceId("388", woodAmount);
                             Game1.getCharacterFromName("Robin").setNewDialogue(Game1.content.LoadString("Data\\ExtraDialogue:Robin_HouseUpgrade_Accepted"));
                             Game1.drawDialogue(Game1.getCharacterFromName("Robin"));
                             break;
@@ -346,11 +297,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     case 1:
                         var price2 = (int)(50000 * priceMultiplier);
                         var hardwoodAmount = Math.Max(1, (int)(150 * priceMultiplier));
-                        if (Game1.player.Money >= price2 && Game1.player.hasItemInInventory(709, hardwoodAmount))
+                        if (Game1.player.Money >= price2 && Game1.player.Items.ContainsId("709", hardwoodAmount))
                         {
                             Game1.player.daysUntilHouseUpgrade.Value = 3;
                             Game1.player.Money -= price2;
-                            Game1.player.removeItemsFromInventory(709, hardwoodAmount);
+                            Game1.player.Items.ReduceId("709", hardwoodAmount);
                             Game1.getCharacterFromName("Robin").setNewDialogue(Game1.content.LoadString("Data\\ExtraDialogue:Robin_HouseUpgrade_Accepted"));
                             Game1.drawDialogue(Game1.getCharacterFromName("Robin"));
                             break;
@@ -414,7 +365,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             carpenterAPStock.AddArchipelagoLocationToStock(BUILDING_SHIPPING_BIN, 250, new[] { Wood(150) }, myActiveHints);
             if (_archipelago.SlotData.Mods.HasMod(ModNames.TRACTOR))
             {
-                carpenterAPStock.AddArchipelagoLocationToStock(BUILDING_TRACTOR_GARAGE, 150000, new[] { IronBar(20), IridiumBar(5), BatteryPack(5) }, myActiveHints);
+                carpenterAPStock.AddArchipelagoLocationToStock(TRACTOR_GARAGE_NAME, 150000, new[] { IronBar(20), IridiumBar(5), BatteryPack(5) }, myActiveHints);
             }
 
             return carpenterAPStock;
@@ -573,7 +524,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
         private static Item StardewObject(int id, int amount)
         {
-            return new Object(id, amount);
+            return new Object(id.ToString(), amount);
         }
     }
 }

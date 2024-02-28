@@ -11,6 +11,9 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.GameData;
 using StardewArchipelago.Constants.Modded;
+using StardewValley.GameData.SpecialOrders;
+using StardewValley.SpecialOrders;
+using StardewValley.SpecialOrders.Rewards;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -94,7 +97,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             try
             {
-                if (__instance.questState.Value != SpecialOrder.QuestState.Complete)
+                if (__instance.questState.Value != SpecialOrderStatus.Complete)
                 {
                     return;
                 }
@@ -114,7 +117,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         }
 
         // public virtual void SetDuration(SpecialOrder.QuestDuration duration)
-        public static bool SetDuration_UseCorrectDateWithSeasonRandomizer_Prefix(SpecialOrder __instance, SpecialOrder.QuestDuration duration)
+        public static bool SetDuration_UseCorrectDateWithSeasonRandomizer_Prefix(SpecialOrder __instance, QuestDuration duration)
         {
             try
             {
@@ -122,21 +125,21 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 var today = Game1.Date.TotalDays;
                 switch (duration)
                 {
-                    case SpecialOrder.QuestDuration.Week:
+                    case QuestDuration.Week:
                         // worldDate = new WorldDate(Game1.year, Game1.currentSeason, (Game1.dayOfMonth - 1) / 7 * 7);
                         __instance.dueDate.Value = today + (7 - Game1.dayOfMonth % 7) + 1;
                         break;
-                    case SpecialOrder.QuestDuration.Month:
+                    case QuestDuration.Month:
                         __instance.dueDate.Value = today + (28 - Game1.dayOfMonth) + 1;
                         break;
-                    case SpecialOrder.QuestDuration.TwoWeeks:
+                    case QuestDuration.TwoWeeks:
                         // worldDate = new WorldDate(Game1.year, Game1.currentSeason, (Game1.dayOfMonth - 1) / 7 * 7);
                         __instance.dueDate.Value = today + (14 - Game1.dayOfMonth % 7) + 1;
                         break;
-                    case SpecialOrder.QuestDuration.TwoDays:
+                    case QuestDuration.TwoDays:
                         __instance.dueDate.Value = today + 2;
                         break;
-                    case SpecialOrder.QuestDuration.ThreeDays:
+                    case QuestDuration.ThreeDays:
                         __instance.dueDate.Value = today + 3;
                         break;
                 }
@@ -167,16 +170,17 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
         private static void UpdateAvailableSpecialOrdersBasedOnApState(bool force_refresh)
         {
-            if (Game1.player.team.availableSpecialOrders != null)
+            if (Game1.player.team.availableSpecialOrders­ is null)
             {
-                foreach (var availableSpecialOrder in Game1.player.team.availableSpecialOrders)
+                return;
+            }
+
+            foreach (var availableSpecialOrder in Game1.player.team.availableSpecialOrders)
+            {
+                if (availableSpecialOrder.questDuration.Value is QuestDuration.TwoDays or QuestDuration.ThreeDays &&
+                    !Game1.player.team.acceptedSpecialOrderTypes.Contains(availableSpecialOrder.orderType.Value))
                 {
-                    if ((availableSpecialOrder.questDuration.Value == SpecialOrder.QuestDuration.TwoDays ||
-                         availableSpecialOrder.questDuration.Value == SpecialOrder.QuestDuration.ThreeDays) &&
-                        !Game1.player.team.acceptedSpecialOrderTypes.Contains(availableSpecialOrder.orderType.Value))
-                    {
-                        availableSpecialOrder.SetDuration((SpecialOrder.QuestDuration)availableSpecialOrder.questDuration);
-                    }
+                    availableSpecialOrder.SetDuration(availableSpecialOrder.questDuration.Value);
                 }
             }
 
@@ -203,9 +207,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             Dictionary<string, SpecialOrderData> allSpecialOrdersData)
         {
             var specialOrdersThatCanBeStartedToday = allSpecialOrdersData
-                .Where(order => !Game1.player.team.completedSpecialOrders.ContainsKey(order.Key) ||
-                                order.Value.Repeatable == "True")
-                .Where(order => order.Value.Duration != "Month" || Game1.dayOfMonth <= 16)
+                .Where(order => !Game1.player.team.completedSpecialOrders.Contains(order.Key) || order.Value.Repeatable)
+                .Where(order => order.Value.Duration != QuestDuration.Month || Game1.dayOfMonth <= 16)
                 .Where(order => CheckTags(order.Value.RequiredTags))
                 .Where(order => Game1.player.team.specialOrders.All(x => x.questKey.Value != order.Key))
                 .Where(order => !_archipelago.SlotData.ToolProgression.HasFlag(ToolProgression.Progressive) || !order.Key.StartsWith("Demetrius") ||

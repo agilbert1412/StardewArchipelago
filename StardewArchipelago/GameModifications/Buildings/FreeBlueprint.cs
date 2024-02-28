@@ -1,21 +1,20 @@
-﻿using StardewValley;
+﻿using Force.DeepCloner;
+using StardewValley;
+using StardewValley.GameData.Buildings;
+using StardewValley.Menus;
 
 namespace StardewArchipelago.GameModifications.Buildings
 {
-    public class FreeBlueprint : BluePrint
+    public class FreeBlueprint : CarpenterMenu.BlueprintEntry
     {
-        public FreeBlueprint(string name, string sendingPlayerName) : base(name)
+        public FreeBlueprint(int index, string id, BuildingData data, string skinId, string sendingPlayerName) : base(index, id, data, skinId)
         {
-            itemsRequired.Clear();
-            moneyRequired = 0;
-            displayName = $"Free {displayName}";
-            description = $"A gift from {sendingPlayerName}. {description}";
-        }
 
-        public void SetDisplayFields(string displayName, string description, string sendingPlayerName)
-        {
-            this.displayName = $"Free {displayName}";
-            this.description = $"A gift from {sendingPlayerName}. {description}";
+            var freeBuildingData = data.DeepClone();
+            freeBuildingData.BuildCost = 0;
+            freeBuildingData.BuildMaterials.Clear();
+            freeBuildingData.Name = $"Free {data.Name}";
+            freeBuildingData.Description = $"A gift from {sendingPlayerName}. {data.Description}";
         }
     }
 }

@@ -31,12 +31,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             _weaponsManager = weaponsManager;
         }
 
-        // public virtual bool answerDialogueAction(string questionAndAnswer, string[] questionParams)
-        public static bool TelephoneAdventureGuild_AddReceivedEquipments_Prefix(GameLocation __instance, string questionAndAnswer, string[] questionParams, bool __result)
+        // public static bool TryOpenShopMenu(string shopId, string ownerName, bool playOpenSound = true)
+        public static bool TryOpenShopMenu_AddReceivedEquipmentsToGuildRecovery_Prefix(string shopId, string ownerName, bool playOpenSound, bool __result)
         {
             try
             {
-                if (questionAndAnswer != "telephone_AdventureGuild")
+                if (shopId != "AdventureGuildRecovery" || ownerName != "Marlon")
                 {
                     return true; // run original logic
                 }
@@ -85,7 +85,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(TelephoneAdventureGuild_AddReceivedEquipments_Prefix)}:\n{ex}",
+                _monitor.Log($"Failed in {nameof(TryOpenShopMenu_AddReceivedEquipmentsToGuildRecovery_Prefix)}:\n{ex}",
                     LogLevel.Error);
                 return true; // run original logic
             }
@@ -284,6 +284,36 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             adventureShopStock.Add(item, price);
         }
 
+        private static KeyValuePair<ISalable, int[]> CreateWithPrice(ISalable item, int price)
+        {
+            return new(item, new[] { price, int.MaxValue });
+        }
+
+        private static KeyValuePair<ISalable, int[]> CreateWeapon(int weaponId, int price)
+        {
+            return CreateWithPrice(new MeleeWeapon(weaponId.ToString()), price);
+        }
+
+        private static KeyValuePair<ISalable, int[]> CreateBoots(int bootsId, int price)
+        {
+            return CreateWithPrice(new Boots(bootsId.ToString()), price);
+        }
+
+        private static KeyValuePair<ISalable, int[]> CreateRing(int ringId, int price)
+        {
+            return CreateWithPrice(new Ring(ringId.ToString()), price);
+        }
+
+        private static KeyValuePair<ISalable, int[]> CreateSlingshot(int slingshotId, int price)
+        {
+            return CreateWithPrice(new Slingshot(slingshotId.ToString()), price);
+        }
+
+        private static KeyValuePair<ISalable, int[]> CreateHat(int hatId, int price)
+        {
+            return CreateWithPrice(new Hat(hatId.ToString()), price);
+        }
+
         private static void AddGalaxyWeaponsToShopIfReceivedAny(Dictionary<ISalable, int[]> adventureShopStock)
         {
             var galaxyWeapons = new[] { GalaxySword, GalaxyDagger, GalaxyHammer };
@@ -298,64 +328,64 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
         }
 
-        private static readonly KeyValuePair<ISalable, int[]> WoodenBlade = new(new MeleeWeapon(12), new[] { 250, int.MaxValue });
-        private static readonly KeyValuePair<ISalable, int[]> IronDirk = new(new MeleeWeapon(17), new[] { 500, int.MaxValue });
-        private static readonly KeyValuePair<ISalable, int[]> WindSpire = new(new MeleeWeapon(22), new[] { 500, int.MaxValue });
-        private static readonly KeyValuePair<ISalable, int[]> Femur = new(new MeleeWeapon(31), new[] { 500, int.MaxValue });
-        private static readonly KeyValuePair<ISalable, int[]> SteelSmallsword = new(new MeleeWeapon(11), new[] { 600, int.MaxValue });
-        private static readonly KeyValuePair<ISalable, int[]> WoodClub = new(new MeleeWeapon(24), new[] { 600, int.MaxValue });
-        private static readonly KeyValuePair<ISalable, int[]> ElfBlade = new(new MeleeWeapon(20), new[] { 600, int.MaxValue });
-        private static readonly KeyValuePair<ISalable, int[]> SilverSaber = new(new MeleeWeapon(1), new[] { 750, int.MaxValue });
-        private static readonly KeyValuePair<ISalable, int[]> PirateSword = new(new MeleeWeapon(43), new[] { 850, int.MaxValue });
-        private static readonly KeyValuePair<ISalable, int[]> CrystalDagger = new(new MeleeWeapon(21), new[] { 1500, int.MaxValue });
-        private static readonly KeyValuePair<ISalable, int[]> Cutlass = new(new MeleeWeapon(44), new[] { 1500, int.MaxValue });
-        private static readonly KeyValuePair<ISalable, int[]> IronEdge = new(new MeleeWeapon(6), new[] { 1500, int.MaxValue });
-        private static readonly KeyValuePair<ISalable, int[]> BurglarsShank = new(new MeleeWeapon(18), new[] { 1500, int.MaxValue });
-        private static readonly KeyValuePair<ISalable, int[]> WoodMallet = new(new MeleeWeapon(27), new[] { 2000, int.MaxValue });
-        private static readonly KeyValuePair<ISalable, int[]> Claymore = new(new MeleeWeapon(10), new[] { 2000, int.MaxValue });
-        private static readonly KeyValuePair<ISalable, int[]> TemplarsBlade = new(new MeleeWeapon(7), new[] { 4000, int.MaxValue });
-        private static readonly KeyValuePair<ISalable, int[]> Kudgel = new(new MeleeWeapon(46), new[] { 4000, int.MaxValue });
-        private static readonly KeyValuePair<ISalable, int[]> ShadowDagger = new(new MeleeWeapon(19), new[] { 2000, int.MaxValue });
-        private static readonly KeyValuePair<ISalable, int[]> ObsidianEdge = new(new MeleeWeapon(8), new[] { 6000, int.MaxValue });
-        private static readonly KeyValuePair<ISalable, int[]> TemperedBroadsword = new(new MeleeWeapon(52), new[] { 6000, int.MaxValue });
-        private static readonly KeyValuePair<ISalable, int[]> WickedKris = new(new MeleeWeapon(45), new[] { 6000, int.MaxValue });
-        private static readonly KeyValuePair<ISalable, int[]> BoneSword = new(new MeleeWeapon(5), new[] { 6000, int.MaxValue });
-        private static readonly KeyValuePair<ISalable, int[]> OssifiedBlade = new(new MeleeWeapon(60), new[] { 6000, int.MaxValue });
-        private static readonly KeyValuePair<ISalable, int[]> SteelFalchion = new(new MeleeWeapon(50), new[] { 9000, int.MaxValue });
-        private static readonly KeyValuePair<ISalable, int[]> TheSlammer = new(new MeleeWeapon(28), new[] { 9000, int.MaxValue });
-        private static readonly KeyValuePair<ISalable, int[]> LavaKatana = new(new MeleeWeapon(9), new[] { 25000, int.MaxValue });
-        private static readonly KeyValuePair<ISalable, int[]> GalaxySword = new(new MeleeWeapon(4), new[] { 50000, int.MaxValue });
-        private static readonly KeyValuePair<ISalable, int[]> GalaxyDagger = new(new MeleeWeapon(23), new[] { 35000, int.MaxValue });
-        private static readonly KeyValuePair<ISalable, int[]> GalaxyHammer = new(new MeleeWeapon(29), new[] { 75000, int.MaxValue });
-        private static readonly KeyValuePair<ISalable, int[]> Sneakers = new(new Boots(504), new[] { 500, int.MaxValue });
-        private static readonly KeyValuePair<ISalable, int[]> LeatherBoots = new(new Boots(506), new[] { 500, int.MaxValue });
-        private static readonly KeyValuePair<ISalable, int[]> WorkBoots = new(new Boots(507), new[] { 500, int.MaxValue });
-        private static readonly KeyValuePair<ISalable, int[]> TundraBoots = new(new Boots(509), new[] { 750, int.MaxValue });
-        private static readonly KeyValuePair<ISalable, int[]> ThermalBoots = new(new Boots(510), new[] { 1000, int.MaxValue });
-        private static readonly KeyValuePair<ISalable, int[]> CombatBoots = new(new Boots(508), new[] { 1250, int.MaxValue });
-        private static readonly KeyValuePair<ISalable, int[]> FirewalkerBoots = new(new Boots(512), new[] { 2000, int.MaxValue });
-        private static readonly KeyValuePair<ISalable, int[]> DarkBoots = new(new Boots(511), new[] { 2500, int.MaxValue });
-        private static readonly KeyValuePair<ISalable, int[]> SpaceBoots = new(new Boots(514), new[] { 5000, int.MaxValue });
-        private static readonly KeyValuePair<ISalable, int[]> CrystalShoes = new(new Boots(878), new[] { 5000, int.MaxValue });
-        private static readonly KeyValuePair<ISalable, int[]> AmethystRing = new(new Ring(529), new[] { 1000, int.MaxValue });
-        private static readonly KeyValuePair<ISalable, int[]> TopazRing = new(new Ring(530), new[] { 1000, int.MaxValue });
-        private static readonly KeyValuePair<ISalable, int[]> AquamarineRing = new(new Ring(531), new[] { 2500, int.MaxValue });
-        private static readonly KeyValuePair<ISalable, int[]> JadeRing = new(new Ring(532), new[] { 2500, int.MaxValue });
-        private static readonly KeyValuePair<ISalable, int[]> EmeraldRing = new(new Ring(533), new[] { 5000, int.MaxValue });
-        private static readonly KeyValuePair<ISalable, int[]> RubyRing = new(new Ring(534), new[] { 5000, int.MaxValue });
-        private static readonly KeyValuePair<ISalable, int[]> Slingshot = new(new Slingshot(32), new[] { 500, int.MaxValue });
-        private static readonly KeyValuePair<ISalable, int[]> MasterSlingshot = new(new Slingshot(33), new[] { 1000, int.MaxValue });
-        private static readonly KeyValuePair<ISalable, int[]> ExplosiveAmmo = new(new Object(441, int.MaxValue), new[] { 300, int.MaxValue });
-        private static readonly KeyValuePair<ISalable, int[]> SlimeCharmerRing = new(new Ring(520), new[] { 25000, int.MaxValue });
-        private static readonly KeyValuePair<ISalable, int[]> SavageRing = new(new Ring(523), new[] { 25000, int.MaxValue });
-        private static readonly KeyValuePair<ISalable, int[]> BurglarsRing = new(new Ring(526), new[] { 20000, int.MaxValue });
-        private static readonly KeyValuePair<ISalable, int[]> VampireRing = new(new Ring(522), new[] { 15000, int.MaxValue });
-        private static readonly KeyValuePair<ISalable, int[]> CrabshellRing = new(new Ring(810), new[] { 15000, int.MaxValue });
-        private static readonly KeyValuePair<ISalable, int[]> NapalmRing = new(new Ring(811), new[] { 30000, int.MaxValue });
-        private static readonly KeyValuePair<ISalable, int[]> SkeletonMask = new(new Hat(8), new[] { 20000, int.MaxValue });
-        private static readonly KeyValuePair<ISalable, int[]> HardHat = new(new Hat(27), new[] { 20000, int.MaxValue });
-        private static readonly KeyValuePair<ISalable, int[]> ArcaneHat = new(new Hat(60), new[] { 20000, int.MaxValue });
-        private static readonly KeyValuePair<ISalable, int[]> KnightsHelmet = new(new Hat(50), new[] { 20000, int.MaxValue });
-        private static readonly KeyValuePair<ISalable, int[]> InsectHead = new(new MeleeWeapon(13), new[] { 10000, int.MaxValue });
+        private static readonly KeyValuePair<ISalable, int[]> WoodenBlade = CreateWeapon(12, 250);
+        private static readonly KeyValuePair<ISalable, int[]> IronDirk = CreateWeapon(17, 500);
+        private static readonly KeyValuePair<ISalable, int[]> WindSpire = CreateWeapon(22, 500);
+        private static readonly KeyValuePair<ISalable, int[]> Femur = CreateWeapon(31, 500);
+        private static readonly KeyValuePair<ISalable, int[]> SteelSmallsword = CreateWeapon(11, 600);
+        private static readonly KeyValuePair<ISalable, int[]> WoodClub = CreateWeapon(24, 600);
+        private static readonly KeyValuePair<ISalable, int[]> ElfBlade = CreateWeapon(20, 600);
+        private static readonly KeyValuePair<ISalable, int[]> SilverSaber = CreateWeapon(1, 750);
+        private static readonly KeyValuePair<ISalable, int[]> PirateSword = CreateWeapon(43, 850);
+        private static readonly KeyValuePair<ISalable, int[]> CrystalDagger = CreateWeapon(21, 1500);
+        private static readonly KeyValuePair<ISalable, int[]> Cutlass = CreateWeapon(44, 1500);
+        private static readonly KeyValuePair<ISalable, int[]> IronEdge = CreateWeapon(6, 1500);
+        private static readonly KeyValuePair<ISalable, int[]> BurglarsShank = CreateWeapon(18, 1500);
+        private static readonly KeyValuePair<ISalable, int[]> WoodMallet = CreateWeapon(27, 2000);
+        private static readonly KeyValuePair<ISalable, int[]> Claymore = CreateWeapon(10, 2000);
+        private static readonly KeyValuePair<ISalable, int[]> TemplarsBlade = CreateWeapon(7, 4000);
+        private static readonly KeyValuePair<ISalable, int[]> Kudgel = CreateWeapon(46, 4000);
+        private static readonly KeyValuePair<ISalable, int[]> ShadowDagger = CreateWeapon(19, 2000);
+        private static readonly KeyValuePair<ISalable, int[]> ObsidianEdge = CreateWeapon(8, 6000);
+        private static readonly KeyValuePair<ISalable, int[]> TemperedBroadsword = CreateWeapon(52, 6000);
+        private static readonly KeyValuePair<ISalable, int[]> WickedKris = CreateWeapon(45, 6000);
+        private static readonly KeyValuePair<ISalable, int[]> BoneSword = CreateWeapon(5, 6000);
+        private static readonly KeyValuePair<ISalable, int[]> OssifiedBlade = CreateWeapon(60, 6000);
+        private static readonly KeyValuePair<ISalable, int[]> SteelFalchion = CreateWeapon(50, 9000);
+        private static readonly KeyValuePair<ISalable, int[]> TheSlammer = CreateWeapon(28, 9000);
+        private static readonly KeyValuePair<ISalable, int[]> LavaKatana = CreateWeapon(9, 25000);
+        private static readonly KeyValuePair<ISalable, int[]> GalaxySword = CreateWeapon(4, 50000);
+        private static readonly KeyValuePair<ISalable, int[]> GalaxyDagger = CreateWeapon(23, 35000);
+        private static readonly KeyValuePair<ISalable, int[]> GalaxyHammer = CreateWeapon(29, 75000);
+        private static readonly KeyValuePair<ISalable, int[]> Sneakers = CreateBoots(504, 500);
+        private static readonly KeyValuePair<ISalable, int[]> LeatherBoots = CreateBoots(506, 500);
+        private static readonly KeyValuePair<ISalable, int[]> WorkBoots = CreateBoots(507, 500);
+        private static readonly KeyValuePair<ISalable, int[]> TundraBoots = CreateBoots(509, 750);
+        private static readonly KeyValuePair<ISalable, int[]> ThermalBoots = CreateBoots(510, 1000);
+        private static readonly KeyValuePair<ISalable, int[]> CombatBoots = CreateBoots(508, 1250);
+        private static readonly KeyValuePair<ISalable, int[]> FirewalkerBoots = CreateBoots(512, 2000);
+        private static readonly KeyValuePair<ISalable, int[]> DarkBoots = CreateBoots(511, 2500);
+        private static readonly KeyValuePair<ISalable, int[]> SpaceBoots = CreateBoots(514, 5000);
+        private static readonly KeyValuePair<ISalable, int[]> CrystalShoes = CreateBoots(878, 5000);
+        private static readonly KeyValuePair<ISalable, int[]> AmethystRing = CreateRing(529, 1000);
+        private static readonly KeyValuePair<ISalable, int[]> TopazRing = CreateRing(530, 1000);
+        private static readonly KeyValuePair<ISalable, int[]> AquamarineRing = CreateRing(531, 2500);
+        private static readonly KeyValuePair<ISalable, int[]> JadeRing = CreateRing(532, 2500);
+        private static readonly KeyValuePair<ISalable, int[]> EmeraldRing = CreateRing(533, 5000);
+        private static readonly KeyValuePair<ISalable, int[]> RubyRing = CreateRing(534, 5000);
+        private static readonly KeyValuePair<ISalable, int[]> Slingshot = CreateSlingshot(32, 500);
+        private static readonly KeyValuePair<ISalable, int[]> MasterSlingshot = CreateSlingshot(33, 1000);
+        private static readonly KeyValuePair<ISalable, int[]> ExplosiveAmmo = CreateWithPrice(new Object("441", int.MaxValue), 300);
+        private static readonly KeyValuePair<ISalable, int[]> SlimeCharmerRing = CreateRing(520, 25000);
+        private static readonly KeyValuePair<ISalable, int[]> SavageRing = CreateRing(523, 25000);
+        private static readonly KeyValuePair<ISalable, int[]> BurglarsRing = CreateRing(526, 20000);
+        private static readonly KeyValuePair<ISalable, int[]> VampireRing = CreateRing(522, 15000);
+        private static readonly KeyValuePair<ISalable, int[]> CrabshellRing = CreateRing(810, 15000);
+        private static readonly KeyValuePair<ISalable, int[]> NapalmRing = CreateRing(811, 30000);
+        private static readonly KeyValuePair<ISalable, int[]> SkeletonMask = CreateHat(8, 20000);
+        private static readonly KeyValuePair<ISalable, int[]> HardHat = CreateHat(27, 20000);
+        private static readonly KeyValuePair<ISalable, int[]> ArcaneHat = CreateHat(60, 20000);
+        private static readonly KeyValuePair<ISalable, int[]> KnightsHelmet = CreateHat(50, 20000);
+        private static readonly KeyValuePair<ISalable, int[]> InsectHead = CreateWeapon(13, 10000);
     }
 }

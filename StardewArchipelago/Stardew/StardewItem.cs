@@ -33,7 +33,7 @@ namespace StardewArchipelago.Stardew
 
         public override string ToString()
         {
-            return $"{Name} [{Id} | {QualifiedId}]";
+            return $"{Name} [{Id}]";
         }
     }
 }
