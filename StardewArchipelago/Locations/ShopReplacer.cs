@@ -26,7 +26,7 @@ namespace StardewArchipelago.Locations
             _locationChecker = locationChecker;
         }
 
-        public void PlaceShopRecipeCheck(Dictionary<ISalable, int[]> itemPriceAndStock, string apLocation, string recipeItemName, Hint[] myActiveHints, int[] price, bool removeOriginal = true)
+        public void PlaceShopRecipeCheck(Dictionary<ISalable, ItemStockInformation> itemPriceAndStock, string apLocation, string recipeItemName, Hint[] myActiveHints, ItemStockInformation price, bool removeOriginal = true)
         {
             if (removeOriginal)
             {
@@ -36,7 +36,7 @@ namespace StardewArchipelago.Locations
             AddArchipelagoCheckToStock(itemPriceAndStock, apLocation, myActiveHints, price);
         }
 
-        private static void RemoveShopRecipe(Dictionary<ISalable, int[]> itemPriceAndStock, string recipeItemName)
+        private static void RemoveShopRecipe(Dictionary<ISalable, ItemStockInformation> itemPriceAndStock, string recipeItemName)
         {
             foreach (var itemOnSale in itemPriceAndStock.Keys.ToArray())
             {
@@ -49,7 +49,7 @@ namespace StardewArchipelago.Locations
             }
         }
 
-        public void ReplaceShopItem(Dictionary<ISalable, int[]> itemPriceAndStock, string apLocation, Func<Object, bool> conditionToMeet, Hint[] myActiveHints)
+        public void ReplaceShopItem(Dictionary<ISalable, ItemStockInformation> itemPriceAndStock, string apLocation, Func<Object, bool> conditionToMeet, Hint[] myActiveHints)
         {
             foreach (var itemOnSale in itemPriceAndStock.Keys.ToArray())
             {
@@ -63,7 +63,7 @@ namespace StardewArchipelago.Locations
             }
         }
 
-        public void ReplaceShopItem(Dictionary<ISalable, int[]> itemPriceAndStock, ISalable itemOnSale, string apLocation, Func<Object, bool> conditionToMeet, Hint[] myActiveHints)
+        public void ReplaceShopItem(Dictionary<ISalable, ItemStockInformation> itemPriceAndStock, ISalable itemOnSale, string apLocation, Func<Object, bool> conditionToMeet, Hint[] myActiveHints)
         {
             if (itemOnSale is not Object salableObject || !conditionToMeet(salableObject))
             {
@@ -73,7 +73,7 @@ namespace StardewArchipelago.Locations
             ReplaceShopItem(itemPriceAndStock, itemOnSale, apLocation, myActiveHints, salableObject);
         }
 
-        private void ReplaceShopItem(Dictionary<ISalable, int[]> itemPriceAndStock, ISalable itemOnSale, string apLocation, Hint[] myActiveHints, Object salableObject)
+        private void ReplaceShopItem(Dictionary<ISalable, ItemStockInformation> itemPriceAndStock, ISalable itemOnSale, string apLocation, Hint[] myActiveHints, Object salableObject)
         {
             var apName = BigCraftable.ConvertToApName(salableObject);
             var shouldRemoveOriginal = apName == "Stardrop" || !_archipelago.HasReceivedItem(apName);
@@ -81,7 +81,7 @@ namespace StardewArchipelago.Locations
             ReplaceShopItem(itemPriceAndStock, itemOnSale, apLocation, shouldRemoveOriginal, myActiveHints);
         }
 
-        public void ReplaceShopItem(Dictionary<ISalable, int[]> itemPriceAndStock, ISalable itemOnSale, string apLocation, Func<Furniture, bool> conditionToMeet, Hint[] myActiveHints)
+        public void ReplaceShopItem(Dictionary<ISalable, ItemStockInformation> itemPriceAndStock, ISalable itemOnSale, string apLocation, Func<Furniture, bool> conditionToMeet, Hint[] myActiveHints)
         {
             if (itemOnSale is not Furniture salableFurniture || !conditionToMeet(salableFurniture))
             {
@@ -91,7 +91,7 @@ namespace StardewArchipelago.Locations
             ReplaceShopItem(itemPriceAndStock, itemOnSale, apLocation, true, myActiveHints);
         }
 
-        public void ReplaceShopItem(Dictionary<ISalable, int[]> itemPriceAndStock, ISalable itemOnSale, string apLocation, Func<Hat, bool> conditionToMeet, Hint[] myActiveHints)
+        public void ReplaceShopItem(Dictionary<ISalable, ItemStockInformation> itemPriceAndStock, ISalable itemOnSale, string apLocation, Func<Hat, bool> conditionToMeet, Hint[] myActiveHints)
         {
             if (itemOnSale is not Hat salableHat || !conditionToMeet(salableHat))
             {
@@ -101,12 +101,12 @@ namespace StardewArchipelago.Locations
             ReplaceShopItem(itemPriceAndStock, itemOnSale, apLocation, true, myActiveHints);
         }
 
-        public void ReplaceShopItem(Dictionary<ISalable, int[]> itemPriceAndStock, ISalable itemOnSale, string apLocation, string itemName, Hint[] myActiveHints)
+        public void ReplaceShopItem(Dictionary<ISalable, ItemStockInformation> itemPriceAndStock, ISalable itemOnSale, string apLocation, string itemName, Hint[] myActiveHints)
         {
             ReplaceShopItem(itemPriceAndStock, itemOnSale, apLocation, item => item.Name == itemName, myActiveHints);
         }
 
-        public void ReplaceShopItem(Dictionary<ISalable, int[]> itemPriceAndStock, ISalable itemOnSale, string apLocation, Func<Item, bool> conditionToMeet, Hint[] myActiveHints)
+        public void ReplaceShopItem(Dictionary<ISalable, ItemStockInformation> itemPriceAndStock, ISalable itemOnSale, string apLocation, Func<Item, bool> conditionToMeet, Hint[] myActiveHints)
         {
             if (itemOnSale is not Item salableItem || !conditionToMeet(salableItem))
             {
@@ -116,18 +116,19 @@ namespace StardewArchipelago.Locations
             ReplaceShopItem(itemPriceAndStock, itemOnSale, apLocation, true, myActiveHints);
         }
 
-        private void ReplaceShopItem(Dictionary<ISalable, int[]> itemPriceAndStock, ISalable itemOnSale, string apLocationName, bool removeOriginal, Hint[] myActiveHints)
+        private void ReplaceShopItem(Dictionary<ISalable, ItemStockInformation> itemPriceAndStock, ISalable itemOnSale, string apLocationName, bool removeOriginal, Hint[] myActiveHints)
         {
-            var itemPrice = itemPriceAndStock[itemOnSale][0];
+            var itemPrice = itemPriceAndStock[itemOnSale].Price;
             if (removeOriginal)
             {
                 itemPriceAndStock.Remove(itemOnSale);
             }
 
-            AddArchipelagoCheckToStock(itemPriceAndStock, apLocationName, myActiveHints, new[] { itemPrice, 1 });
+            var itemStockInfo = new ItemStockInformation(itemPrice, 1);
+            AddArchipelagoCheckToStock(itemPriceAndStock, apLocationName, myActiveHints, itemStockInfo);
         }
 
-        private void AddArchipelagoCheckToStock(Dictionary<ISalable, int[]> itemPriceAndStock, string apLocationName, Hint[] myActiveHints, int[] itemPrice)
+        private void AddArchipelagoCheckToStock(Dictionary<ISalable, ItemStockInformation> itemPriceAndStock, string apLocationName, Hint[] myActiveHints, ItemStockInformation itemStockInfo)
         {
             if (!_locationChecker.IsLocationMissing(apLocationName))
             {
@@ -140,7 +141,7 @@ namespace StardewArchipelago.Locations
             }
 
             var purchaseableLocation = new PurchaseableArchipelagoLocation(apLocationName, _monitor, _modHelper, _locationChecker, _archipelago, myActiveHints);
-            itemPriceAndStock.Add(purchaseableLocation, itemPrice);
+            itemPriceAndStock.Add(purchaseableLocation, itemStockInfo);
         }
 
         private bool IsRarecrow(Object item)
