@@ -510,8 +510,8 @@ namespace StardewArchipelago.GameModifications
         private void PatchKent()
         {
             _harmony.Patch(
-                original: AccessTools.Method(typeof(Game1), nameof(Game1.addKentIfNecessary)),
-                prefix: new HarmonyMethod(typeof(KentInjections), nameof(KentInjections.AddKentIfNecessary_ConsiderSeasonsRandomizer_Prefix))
+                original: AccessTools.Method(typeof(Game1), nameof(Game1.AddCharacterIfNecessary)),
+                prefix: new HarmonyMethod(typeof(KentInjections), nameof(KentInjections.AddCharacterIfNecessary_ConsiderSeasonsRandomizerForKent_Prefix))
             );
         }
 
