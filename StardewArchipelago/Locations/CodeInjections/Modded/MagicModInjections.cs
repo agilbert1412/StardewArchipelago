@@ -164,7 +164,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
 
         private static void RemoveGuildRecipesFromPhone(ShopMenu shopMenu)
         {
-            if (shopMenu.storeContext == "AdventureGuild")
+            if (shopMenu.ShopId == "AdventureShop")
             {
                 return;
             }
@@ -230,7 +230,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 foreach (var clump in player.currentLocation.resourceClumps)
                 {
                     if (clump.parentSheetIndex.Value == CROP_TILE &&
-                        new Rectangle((int)clump.tile.Value.X, (int)clump.tile.Value.Y, clump.width.Value, clump.height.Value).Contains((int)tilePos.X, (int)tilePos.Y))
+                        new Rectangle((int)clump.Tile.X, (int)clump.Tile.Y, clump.width.Value, clump.height.Value).Contains((int)tilePos.X, (int)tilePos.Y))
                         spellsLearned.Add(ANALYZE_METEOR_AP_LOCATION);
                 }
             }
