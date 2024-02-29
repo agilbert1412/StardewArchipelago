@@ -16,6 +16,7 @@ using StardewArchipelago.Serialization;
 using StardewArchipelago.Stardew;
 using StardewArchipelago.Stardew.NameMapping;
 using StardewModdingAPI;
+using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Events;
@@ -32,17 +33,21 @@ namespace StardewArchipelago.GameModifications
     public class RandomizedLogicPatcher
     {
         private readonly Harmony _harmony;
+        private readonly IModHelper _helper;
         private readonly ArchipelagoClient _archipelago;
         private readonly StardewItemManager _stardewItemManager;
         private readonly StartingResources _startingResources;
+        private readonly ShopStockGenerator _shopStockGenerator;
         private readonly RecipeDataRemover _recipeDataRemover;
 
         public RandomizedLogicPatcher(IMonitor monitor, IModHelper modHelper, Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager stardewItemManager, EntranceManager entranceManager, ShopStockGenerator shopStockGenerator, NameSimplifier nameSimplifier, Friends friends, ArchipelagoStateDto state)
         {
             _harmony = harmony;
+            _helper = modHelper;
             _archipelago = archipelago;
             _stardewItemManager = stardewItemManager;
             _startingResources = new StartingResources(_archipelago, locationChecker, _stardewItemManager);
+            _shopStockGenerator = shopStockGenerator;
             _recipeDataRemover = new RecipeDataRemover(monitor, modHelper, archipelago);
             MineshaftLogicInjections.Initialize(monitor);
             CommunityCenterLogicInjections.Initialize(monitor, locationChecker);
@@ -60,7 +65,6 @@ namespace StardewArchipelago.GameModifications
             WorldChangeEventInjections.Initialize(monitor);
             CropInjections.Initialize(monitor, archipelago, stardewItemManager);
             VoidMayoInjections.Initialize(monitor);
-            LegendaryFishInjections.Initialize(monitor);
             SecretNoteInjections.Initialize(monitor, archipelago, locationChecker);
             KentInjections.Initialize(monitor, archipelago);
             GoldenEggInjections.Initialize(monitor, archipelago);
@@ -109,12 +113,19 @@ namespace StardewArchipelago.GameModifications
             PatchZeldaAnimations();
             PatchLegendaryFish();
             MakeLegendaryFishReCatchable();
+            MakeLegendaryFishRecatchable();
             PatchSecretNotes();
             PatchRecipes();
             PatchTooltips();
             _startingResources.GivePlayerStartingResources();
 
             PatchDebugMethods();
+        }
+
+        public void CleanEvents()
+        {
+            CleanLegendaryFishRecatchableEvent();
+            UnpatchSeedShops();
         }
 
         private void PatchAchievements()
@@ -319,20 +330,12 @@ namespace StardewArchipelago.GameModifications
 
         private void PatchSeedShops()
         {
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.openShopMenu)),
-                prefix: new HarmonyMethod(typeof(SeedShopsInjections), nameof(SeedShopsInjections.OpenShopMenu_PierreAndSandyPersistentEvent_Prefix))
-            );
+            _helper.Events.Content.AssetRequested += _shopStockGenerator.OnSeedShopStockRequested;
+        }
 
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(Utility), nameof(Utility.getJojaStock)),
-                prefix: new HarmonyMethod(typeof(SeedShopsInjections), nameof(SeedShopsInjections.GetJojaStock_FullCostco_Prefix))
-            );
-
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(ShopMenu), nameof(ShopMenu.update)),
-                postfix: new HarmonyMethod(typeof(SeedShopsInjections), nameof(SeedShopsInjections.Update_SeedShuffleFirstTimeOnly_Postfix))
-            );
+        private void UnpatchSeedShops()
+        {
+            _helper.Events.Content.AssetRequested -= _shopStockGenerator.OnSeedShopStockRequested;
         }
 
         private const int FISH_CASSEROLE_QUEST_ID = 22;
@@ -556,12 +559,32 @@ namespace StardewArchipelago.GameModifications
 
         private void PatchLegendaryFish()
         private void MakeLegendaryFishReCatchable()
+        private void MakeLegendaryFishRecatchable()
         {
-            var locationsData = DataLoader.Locations(Game1.content);
-            foreach (var spawnFishData in locationsData.SelectMany(x => x.Value.Fish))
+            _helper.Events.Content.AssetRequested += this.OnFishAssetRequested;
+        }
+
+        private void CleanLegendaryFishRecatchableEvent()
+        {
+            _helper.Events.Content.AssetRequested -= this.OnFishAssetRequested;
+        }
+
+        private void OnFishAssetRequested(object? sender, AssetRequestedEventArgs e)
+        {
+            if (!e.NameWithoutLocale.IsEquivalentTo("Data/Locations"))
             {
-                spawnFishData.CatchLimit = -1;
+                return;
             }
+
+            e.Edit(asset =>
+                {
+                    var locationsData = asset.AsDictionary<string, LocationData>().Data;
+
+                    foreach (var spawnFishData in locationsData.Values.SelectMany(p => p.Fish))
+                        spawnFishData.CatchLimit = -1;
+                },
+                AssetEditPriority.Late
+            );
         }
 
         private void PatchSecretNotes()
