@@ -96,6 +96,7 @@ namespace StardewArchipelago.GameModifications
                     }
 
                     item.AvailableStock = todayStock;
+                    item.AvailableStockLimit = LimitedStockMode.Global;
                 }
 
                 if (isPierre && priceMultiplier != 1.0f)
