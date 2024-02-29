@@ -14,12 +14,17 @@ namespace StardewArchipelago.GameModifications.Modded
         private ArchipelagoClient _archipelago;
         private ShopStockGenerator _shopStockGenerator;
         private StardewItemManager _stardewItemManager;
-        private PersistentStock BluePersistentStock { get; }
-        private PersistentStock GreyPersistentStock { get; }
-        private PersistentStock YellowPersistentStock { get; }
-        private PersistentStock RedPersistentStock { get; }
-        private PersistentStock OrangePersistentStock { get; }
-        private static Dictionary<string, JunimoVendor> JunimoVendors { get; set; }
+
+        // Persistent Stock no longer exists, because the new modding API stuff allows for making a persistent stock using a single parameter
+        // Furthermore, it also allows for very easy and customizable Bartering, so I think like 99% of this file will be gone once you're done with it
+        // I'm commenting it all out for now
+
+        //private PersistentStock BluePersistentStock { get; }
+        //private PersistentStock GreyPersistentStock { get; }
+        //private PersistentStock YellowPersistentStock { get; }
+        //private PersistentStock RedPersistentStock { get; }
+        //private PersistentStock OrangePersistentStock { get; }
+        //private static Dictionary<string, JunimoVendor> JunimoVendors { get; set; }
         private Dictionary<int, int> BlueItems { get; set; }
         private static readonly List<string> BlueColors = new()
         {
@@ -56,96 +61,98 @@ namespace StardewArchipelago.GameModifications.Modded
         private static readonly string[] summer = new string[] { "summer" };
         private static readonly string[] fall = new string[] { "fall" };
 
-        private class JunimoVendor
-        {
-            public PersistentStock JunimoPersistentStock { get; private set; }
-            public Dictionary<int, int> ColorItems { get; private set; }
+        //private class JunimoVendor
+        //{
+        //    public PersistentStock JunimoPersistentStock { get; private set; }
+        //    public Dictionary<int, int> ColorItems { get; private set; }
 
-            public JunimoVendor(PersistentStock junimoPersistentStock, Dictionary<int, int> colorItems)
-            {
-                JunimoPersistentStock = junimoPersistentStock;
-                ColorItems = colorItems;
-            }
-        }
+        //    public JunimoVendor(PersistentStock junimoPersistentStock, Dictionary<int, int> colorItems)
+        //    {
+        //        JunimoPersistentStock = junimoPersistentStock;
+        //        ColorItems = colorItems;
+        //    }
+        //}
 
         public JunimoShopGenerator(
             ArchipelagoClient archipelago, ShopStockGenerator shopStockGenerator, StardewItemManager stardewItemManager)
         {
-            _archipelago = archipelago;
-            _shopStockGenerator = shopStockGenerator;
-            _stardewItemManager = stardewItemManager;
-            RedPersistentStock = new PersistentStock();
-            GreyPersistentStock = new PersistentStock();
-            BluePersistentStock = new PersistentStock();
-            YellowPersistentStock = new PersistentStock();
-            OrangePersistentStock = new PersistentStock();
-            GenerateItems();
-            var blueVendor = new JunimoVendor(BluePersistentStock, BlueItems);
-            var yellowVendor = new JunimoVendor(YellowPersistentStock, YellowItems);
-            var greyVendor = new JunimoVendor(GreyPersistentStock, GreyItems);
-            var redVendor = new JunimoVendor(RedPersistentStock, RedItems);
-            var orangeVendor = new JunimoVendor(OrangePersistentStock, OrangeItems);
-            JunimoVendors = new Dictionary<string, JunimoVendor>(){
-                {"Blue", blueVendor}, {"Yellow", yellowVendor}, {"Grey", greyVendor}, {"Red", redVendor}, {"Orange", orangeVendor},
-            };
+            throw new Exception($"{nameof(JunimoShopGenerator)} is not ready for 1.6; Look at my comment at the beginning of the file");
+            //_archipelago = archipelago;
+            //_shopStockGenerator = shopStockGenerator;
+            //_stardewItemManager = stardewItemManager;
+            //RedPersistentStock = new PersistentStock();
+            //GreyPersistentStock = new PersistentStock();
+            //BluePersistentStock = new PersistentStock();
+            //YellowPersistentStock = new PersistentStock();
+            //OrangePersistentStock = new PersistentStock();
+            //GenerateItems();
+            //var blueVendor = new JunimoVendor(BluePersistentStock, BlueItems);
+            //var yellowVendor = new JunimoVendor(YellowPersistentStock, YellowItems);
+            //var greyVendor = new JunimoVendor(GreyPersistentStock, GreyItems);
+            //var redVendor = new JunimoVendor(RedPersistentStock, RedItems);
+            //var orangeVendor = new JunimoVendor(OrangePersistentStock, OrangeItems);
+            //JunimoVendors = new Dictionary<string, JunimoVendor>(){
+            //    {"Blue", blueVendor}, {"Yellow", yellowVendor}, {"Grey", greyVendor}, {"Red", redVendor}, {"Orange", orangeVendor},
+            //};
         }
 
         public void GenerateItems()
         {
-            BlueItems = new Dictionary<int, int>();
-            YellowItems = new Dictionary<int, int>();
-            GreyItems = new Dictionary<int, int>();
-            RedItems = new Dictionary<int, int>();
-            OrangeItems = new Dictionary<int, int>();
-            PurpleItems = new Dictionary<int, int>();
-            BerryItems = new Dictionary<StardewItem, int>();
-            var objectContextTags = Game1.objectContextTags;
-            var objectInformation = Game1.objectInformation;
+            throw new Exception($"{nameof(GenerateItems)} is not ready for 1.6; Look at my comment at the beginning of the file");
+            //BlueItems = new Dictionary<int, int>();
+            //YellowItems = new Dictionary<int, int>();
+            //GreyItems = new Dictionary<int, int>();
+            //RedItems = new Dictionary<int, int>();
+            //OrangeItems = new Dictionary<int, int>();
+            //PurpleItems = new Dictionary<int, int>();
+            //BerryItems = new Dictionary<StardewItem, int>();
+            //var objectContextTags = Game1.objectContextTags;
+            //var objectInformation = Game1.objectInformation;
 
-            foreach (var contextItem in objectContextTags)
-            {
-                var itemContext = contextItem.Value;
-                if (!_stardewItemManager.ItemExists(contextItem.Key))
-                    continue;
-                var item = _stardewItemManager.GetItemByName(contextItem.Key);
-                var type = objectInformation[item.Id].Split("/")[3];
-                if (item.SellPrice <= 1)
-                    continue;
-                if ((item.Name.Contains("Berry") || item.Name.Contains("berry")) && !item.Name.Contains("Joja") && !itemContext.Contains("cooking") && !itemContext.Contains("Seeds"))
-                {
-                    BerryItems[item] = item.SellPrice;
-                }
-                if (IsColor(itemContext, "blue") && !itemContext.Contains("fish") && !itemContext.Contains("marine"))
-                {
-                    BlueItems[item.Id] = item.SellPrice;
-                    continue;
-                }
-                if (IsColor(itemContext, "yellow"))
-                {
-                    YellowItems[item.Id] = item.SellPrice;
-                    continue;
-                }
-                if (IsColor(itemContext, "grey") && !type.Contains("Minerals"))
-                {
-                    GreyItems[item.Id] = item.SellPrice;
-                    continue;
-                }
-                if (IsColor(itemContext, "red") && !type.Contains("Arch"))
-                {
-                    RedItems[item.Id] = item.SellPrice;
-                    continue;
-                }
-                if (IsColor(itemContext, "orange") && !itemContext.Contains("cooking"))
-                {
-                    OrangeItems[item.Id] = item.SellPrice;
-                    continue;
-                }
-                if (IsColor(itemContext, "purple") && type.Contains("Basic"))
-                {
-                    PurpleItems[item.Id] = item.SellPrice;
-                    continue;
-                }
-            }
+            //foreach (var contextItem in objectContextTags)
+            //{
+            //    var itemContext = contextItem.Value;
+            //    if (!_stardewItemManager.ItemExists(contextItem.Key))
+            //        continue;
+            //    var item = _stardewItemManager.GetItemByName(contextItem.Key);
+            //    var type = objectInformation[item.Id].Split("/")[3];
+            //    if (item.SellPrice <= 1)
+            //        continue;
+            //    if ((item.Name.Contains("Berry") || item.Name.Contains("berry")) && !item.Name.Contains("Joja") && !itemContext.Contains("cooking") && !itemContext.Contains("Seeds"))
+            //    {
+            //        BerryItems[item] = item.SellPrice;
+            //    }
+            //    if (IsColor(itemContext, "blue") && !itemContext.Contains("fish") && !itemContext.Contains("marine"))
+            //    {
+            //        BlueItems[item.Id] = item.SellPrice;
+            //        continue;
+            //    }
+            //    if (IsColor(itemContext, "yellow"))
+            //    {
+            //        YellowItems[item.Id] = item.SellPrice;
+            //        continue;
+            //    }
+            //    if (IsColor(itemContext, "grey") && !type.Contains("Minerals"))
+            //    {
+            //        GreyItems[item.Id] = item.SellPrice;
+            //        continue;
+            //    }
+            //    if (IsColor(itemContext, "red") && !type.Contains("Arch"))
+            //    {
+            //        RedItems[item.Id] = item.SellPrice;
+            //        continue;
+            //    }
+            //    if (IsColor(itemContext, "orange") && !itemContext.Contains("cooking"))
+            //    {
+            //        OrangeItems[item.Id] = item.SellPrice;
+            //        continue;
+            //    }
+            //    if (IsColor(itemContext, "purple") && type.Contains("Basic"))
+            //    {
+            //        PurpleItems[item.Id] = item.SellPrice;
+            //        continue;
+            //    }
+            //}
         }
 
         private static bool IsColor(string itemContext, string color)
@@ -179,14 +186,15 @@ namespace StardewArchipelago.GameModifications.Modded
 
         public Dictionary<ISalable, int[]> GetJunimoShopStock(string color, Dictionary<ISalable, int[]> oldStock)
         {
-            var stockAlreadyExists = JunimoVendors[color].JunimoPersistentStock.TryGetStockForToday(out var stock);
-            if (!stockAlreadyExists)
-            {
-                stock = GenerateJunimoStock(color, oldStock);
-                JunimoVendors[color].JunimoPersistentStock.SetStockForToday(stock);
-            }
+            throw new Exception($"{nameof(GetJunimoShopStock)} is not ready for 1.6; Look at my comment at the beginning of the file");
+            //var stockAlreadyExists = JunimoVendors[color].JunimoPersistentStock.TryGetStockForToday(out var stock);
+            //if (!stockAlreadyExists)
+            //{
+            //    stock = GenerateJunimoStock(color, oldStock);
+            //    JunimoVendors[color].JunimoPersistentStock.SetStockForToday(stock);
+            //}
 
-            return stock;
+            //return stock;
         }
 
         private Dictionary<ISalable, int[]> GenerateJunimoStock(string color, Dictionary<ISalable, int[]> oldStock)
@@ -217,48 +225,50 @@ namespace StardewArchipelago.GameModifications.Modded
 
         private Dictionary<ISalable, int[]> GenerateBlueJunimoStock(Dictionary<ISalable, int[]> stock)
         {
-            var fishData = DataLoader.Fish(Game1.content);
-            foreach (var fish in Game1.player.fishCaught.Keys)
-            {
-                string[] fishSeasons = null;
-                if (!fishData.ContainsKey(fish))
-                {
-                    continue; // Some things you fish up aren't fish; ignore em
-                }
-                if (fish == 153 || fish == 157 || fish == 152) // We algae haters keep scrollin
-                    continue;
-                if (fishData[fish].Split("/")[1] != "trap")
-                {
-                    fishSeasons = fishData[fish].Split("/")[6].Split(" ");
-                }
-                AddToJunimoStock(stock, fish, "Blue", false, fishSeasons);
-            }
-            return stock;
+            throw new Exception($"{nameof(GenerateBlueJunimoStock)} is not ready for 1.6; Look at my comment at the beginning of the file");
+            //var fishData = DataLoader.Fish(Game1.content);
+            //foreach (var fish in Game1.player.fishCaught.Keys)
+            //{
+            //    string[] fishSeasons = null;
+            //    if (!fishData.ContainsKey(fish))
+            //    {
+            //        continue; // Some things you fish up aren't fish; ignore em
+            //    }
+            //    if (fish == 153 || fish == 157 || fish == 152) // We algae haters keep scrollin
+            //        continue;
+            //    if (fishData[fish].Split("/")[1] != "trap")
+            //    {
+            //        fishSeasons = fishData[fish].Split("/")[6].Split(" ");
+            //    }
+            //    AddToJunimoStock(stock, fish, "Blue", false, fishSeasons);
+            //}
+            //return stock;
         }
 
         private Dictionary<ISalable, int[]> GenerateMuseumItemsForJunimoStock(string color, Dictionary<ISalable, int[]> stock)
         {
-            var isGrey = color == "Grey";
-            var artifactsFound = Game1.player.archaeologyFound.Keys;
-            var mineralsFound = Game1.player.mineralsFound.Keys;
-            if (isGrey)
-            {
-                foreach (var museumitemId in mineralsFound)
-                {
-                    AddToJunimoStock(stock, museumitemId, color, false);
-                }
-            }
-            else
-            {
-                foreach (var museumitemId in artifactsFound)
-                {
-                    if (museumitemId == 102) //No lost books smh get out
-                        continue;
-                    AddToJunimoStock(stock, museumitemId, color, false);
-                }
-            }
+            throw new Exception($"{nameof(GenerateMuseumItemsForJunimoStock)} is not ready for 1.6; Look at my comment at the beginning of the file");
+            //var isGrey = color == "Grey";
+            //var artifactsFound = Game1.player.archaeologyFound.Keys;
+            //var mineralsFound = Game1.player.mineralsFound.Keys;
+            //if (isGrey)
+            //{
+            //    foreach (var museumitemId in mineralsFound)
+            //    {
+            //        AddToJunimoStock(stock, museumitemId, color, false);
+            //    }
+            //}
+            //else
+            //{
+            //    foreach (var museumitemId in artifactsFound)
+            //    {
+            //        if (museumitemId == 102) //No lost books smh get out
+            //            continue;
+            //        AddToJunimoStock(stock, museumitemId, color, false);
+            //    }
+            //}
 
-            return stock;
+            //return stock;
         }
 
         private Dictionary<ISalable, int[]> GenerateOrangeJunimoStock(Dictionary<ISalable, int[]> stock, Dictionary<ISalable, int[]> oldStock)
@@ -279,23 +289,24 @@ namespace StardewArchipelago.GameModifications.Modded
             double failRate = 0.4,
             int uniquePrice = -1)
         {
-            var itemName = stardewItem.Name;
-            var item = new StardewValley.Object(Vector2.Zero, stardewItem.Id, 1);
-            if (category == "BigCraftable")
-            {
-                item = new StardewValley.Object(Vector2.Zero, stardewItem.Id);
-            }
-            var random = new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame / 2 + stardewItem.Id);
-            if (random.NextDouble() < failRate)
-            {
-                return;
-            }
-            var colorItems = JunimoVendors[color].ColorItems.Keys.ToList();
-            var randomColorItem = colorItems[random.Next(colorItems.Count)];
-            var randomColorValue = 0.8*JunimoVendors[color].ColorItems[randomColorItem];
-            var colorItemExchangeRate = ExchangeRate(Math.Max(uniquePrice, item.salePrice()), (int) randomColorValue);
+            throw new Exception($"{nameof(AddToJunimoStock)} is not ready for 1.6; Look at my comment at the beginning of the file");
+            //var itemName = stardewItem.Name;
+            //var item = new StardewValley.Object(Vector2.Zero, stardewItem.Id, 1);
+            //if (category == "BigCraftable")
+            //{
+            //    item = new StardewValley.Object(Vector2.Zero, stardewItem.Id);
+            //}
+            //var random = new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame / 2 + stardewItem.Id);
+            //if (random.NextDouble() < failRate)
+            //{
+            //    return;
+            //}
+            //var colorItems = JunimoVendors[color].ColorItems.Keys.ToList();
+            //var randomColorItem = colorItems[random.Next(colorItems.Count)];
+            //var randomColorValue = 0.8*JunimoVendors[color].ColorItems[randomColorItem];
+            //var colorItemExchangeRate = ExchangeRate(Math.Max(uniquePrice, item.salePrice()), (int) randomColorValue);
 
-            StockListing(item, stock, colorItemExchangeRate[0], randomColorItem, colorItemExchangeRate[1]);
+            //StockListing(item, stock, colorItemExchangeRate[0], randomColorItem, colorItemExchangeRate[1]);
         }
 
         private static void StockListing(ISalable item, Dictionary<ISalable, int[]> stock, int stackSize, int itemForSaleId, int value)
@@ -327,16 +338,17 @@ namespace StardewArchipelago.GameModifications.Modded
             bool isSeed,
             string[] itemSeason = null)
         {
-            var item = _stardewItemManager.GetObjectById(itemId);
-            if (isSeed && _archipelago.SlotData.Cropsanity == Cropsanity.Shuffled && !_archipelago.HasReceivedItem(item.Name))
-            {
-                return;
-            }
-            if (itemSeason != null && !itemSeason.Contains(Game1.currentSeason))
-            {
-                return;
-            }
-            AddToJunimoStock(stock, item, color, null);
+            throw new Exception($"{nameof(AddToJunimoStock)} is not ready for 1.6; Look at my comment at the beginning of the file");
+            //var item = _stardewItemManager.GetObjectById(itemId);
+            //if (isSeed && _archipelago.SlotData.Cropsanity == Cropsanity.Shuffled && !_archipelago.HasReceivedItem(item.Name))
+            //{
+            //    return;
+            //}
+            //if (itemSeason != null && !itemSeason.Contains(Game1.currentSeason))
+            //{
+            //    return;
+            //}
+            //AddToJunimoStock(stock, item, color, null);
         }
 
         public int[] ExchangeRate(int soldItemValue, int requestedItemValue)
@@ -411,69 +423,74 @@ namespace StardewArchipelago.GameModifications.Modded
 
         private void AddSeedsToYellowStock(Dictionary<ISalable, int[]> stock)
         {
-            AddSpringSeedsToYellowStock(stock);
-            AddSummerSeedsToYellowStock(stock);
-            AddFallSeedsToYellowStock(stock);
-            AddSaplingsToShop(stock);
-            AddToJunimoStock(stock, ShopItemIds.RHUBARB_SEEDS, "Yellow", true);
-            AddToJunimoStock(stock, ShopItemIds.STARFRUIT_SEEDS, "Yellow", true);
-            AddToJunimoStock(stock, ShopItemIds.BEET_SEEDS, "Yellow", true);
-            AddJunimoModdedStock(stock);
+            throw new Exception($"{nameof(AddSeedsToYellowStock)} is not ready for 1.6; Look at my comment at the beginning of the file");
+            //AddSpringSeedsToYellowStock(stock);
+            //AddSummerSeedsToYellowStock(stock);
+            //AddFallSeedsToYellowStock(stock);
+            //AddSaplingsToShop(stock);
+            //AddToJunimoStock(stock, ShopItemIds.RHUBARB_SEEDS, "Yellow", true);
+            //AddToJunimoStock(stock, ShopItemIds.STARFRUIT_SEEDS, "Yellow", true);
+            //AddToJunimoStock(stock, ShopItemIds.BEET_SEEDS, "Yellow", true);
+            //AddJunimoModdedStock(stock);
         }
 
         private void AddSpringSeedsToYellowStock(Dictionary<ISalable, int[]> stock)
         {
-            AddToJunimoStock(stock, ShopItemIds.PARSNIP_SEEDS, "Yellow", true, spring);
-            AddToJunimoStock(stock, ShopItemIds.BEAN_STARTER, "Yellow", true, spring);
-            AddToJunimoStock(stock, ShopItemIds.CAULIFLOWER_SEEDS, "Yellow", true, spring);
-            AddToJunimoStock(stock, ShopItemIds.POTATO_SEEDS, "Yellow", true, spring);
-            AddToJunimoStock(stock, ShopItemIds.TULIP_BULB, "Yellow", true, spring);
-            AddToJunimoStock(stock, ShopItemIds.KALE_SEEDS, "Yellow", true, spring);
-            AddToJunimoStock(stock, ShopItemIds.JAZZ_SEEDS, "Yellow", true, spring);
-            AddToJunimoStock(stock, ShopItemIds.GARLIC_SEEDS, "Yellow", true, spring);
-            AddToJunimoStock(stock, ShopItemIds.RICE_SHOOT, "Yellow", true, spring);
+            throw new Exception($"{nameof(AddSpringSeedsToYellowStock)} is not ready for 1.6; Look at my comment at the beginning of the file");
+            //AddToJunimoStock(stock, ShopItemIds.PARSNIP_SEEDS, "Yellow", true, spring);
+            //AddToJunimoStock(stock, ShopItemIds.BEAN_STARTER, "Yellow", true, spring);
+            //AddToJunimoStock(stock, ShopItemIds.CAULIFLOWER_SEEDS, "Yellow", true, spring);
+            //AddToJunimoStock(stock, ShopItemIds.POTATO_SEEDS, "Yellow", true, spring);
+            //AddToJunimoStock(stock, ShopItemIds.TULIP_BULB, "Yellow", true, spring);
+            //AddToJunimoStock(stock, ShopItemIds.KALE_SEEDS, "Yellow", true, spring);
+            //AddToJunimoStock(stock, ShopItemIds.JAZZ_SEEDS, "Yellow", true, spring);
+            //AddToJunimoStock(stock, ShopItemIds.GARLIC_SEEDS, "Yellow", true, spring);
+            //AddToJunimoStock(stock, ShopItemIds.RICE_SHOOT, "Yellow", true, spring);
         }
 
         private void AddSummerSeedsToYellowStock(Dictionary<ISalable, int[]> stock)
         {
-            AddToJunimoStock(stock, ShopItemIds.MELON_SEEDS, "Yellow", true, summer);
-            AddToJunimoStock(stock, ShopItemIds.TOMATO_SEEDS, "Yellow", true, summer);
-            AddToJunimoStock(stock, ShopItemIds.BLUEBERRY_SEEDS, "Yellow", true, summer);
-            AddToJunimoStock(stock, ShopItemIds.PEPPER_SEEDS, "Yellow", true, summer);
-            AddToJunimoStock(stock, ShopItemIds.WHEAT_SEEDS, "Yellow", true, summer);
-            AddToJunimoStock(stock, ShopItemIds.RADISH_SEEDS, "Yellow", true, summer);
-            AddToJunimoStock(stock, ShopItemIds.POPPY_SEEDS, "Yellow", true, summer);
-            AddToJunimoStock(stock, ShopItemIds.SPANGLE_SEEDS, "Yellow", true, summer);
-            AddToJunimoStock(stock, ShopItemIds.HOPS_STARTER, "Yellow", true, summer);
-            AddToJunimoStock(stock, ShopItemIds.CORN_SEEDS, "Yellow", true, summer);
-            AddToJunimoStock(stock, ShopItemIds.SUNFLOWER_SEEDS, "Yellow", true, summer);
-            AddToJunimoStock(stock, ShopItemIds.RED_CABBAGE_SEEDS, "Yellow", true, summer);
+            throw new Exception($"{nameof(AddSummerSeedsToYellowStock)} is not ready for 1.6; Look at my comment at the beginning of the file");
+            //AddToJunimoStock(stock, ShopItemIds.MELON_SEEDS, "Yellow", true, summer);
+            //AddToJunimoStock(stock, ShopItemIds.TOMATO_SEEDS, "Yellow", true, summer);
+            //AddToJunimoStock(stock, ShopItemIds.BLUEBERRY_SEEDS, "Yellow", true, summer);
+            //AddToJunimoStock(stock, ShopItemIds.PEPPER_SEEDS, "Yellow", true, summer);
+            //AddToJunimoStock(stock, ShopItemIds.WHEAT_SEEDS, "Yellow", true, summer);
+            //AddToJunimoStock(stock, ShopItemIds.RADISH_SEEDS, "Yellow", true, summer);
+            //AddToJunimoStock(stock, ShopItemIds.POPPY_SEEDS, "Yellow", true, summer);
+            //AddToJunimoStock(stock, ShopItemIds.SPANGLE_SEEDS, "Yellow", true, summer);
+            //AddToJunimoStock(stock, ShopItemIds.HOPS_STARTER, "Yellow", true, summer);
+            //AddToJunimoStock(stock, ShopItemIds.CORN_SEEDS, "Yellow", true, summer);
+            //AddToJunimoStock(stock, ShopItemIds.SUNFLOWER_SEEDS, "Yellow", true, summer);
+            //AddToJunimoStock(stock, ShopItemIds.RED_CABBAGE_SEEDS, "Yellow", true, summer);
         }
 
         private void AddFallSeedsToYellowStock(Dictionary<ISalable, int[]> stock)
         {
-            AddToJunimoStock(stock, ShopItemIds.PUMPKIN_SEEDS, "Yellow", true, fall);
-            AddToJunimoStock(stock, ShopItemIds.CORN_SEEDS, "Yellow", true, fall);
-            AddToJunimoStock(stock, ShopItemIds.EGGPLANT_SEEDS, "Yellow", true, fall);
-            AddToJunimoStock(stock, ShopItemIds.BOK_CHOY_SEEDS, "Yellow", true, fall);
-            AddToJunimoStock(stock, ShopItemIds.YAM_SEEDS, "Yellow", true, fall);
-            AddToJunimoStock(stock, ShopItemIds.CRANBERRY_SEEDS, "Yellow", true, fall);
-            AddToJunimoStock(stock, ShopItemIds.WHEAT_SEEDS, "Yellow", true, fall);
-            AddToJunimoStock(stock, ShopItemIds.SUNFLOWER_SEEDS, "Yellow", true, fall);
-            AddToJunimoStock(stock, ShopItemIds.FAIRY_SEEDS, "Yellow", true, fall);
-            AddToJunimoStock(stock, ShopItemIds.AMARANTH_SEEDS, "Yellow", true, fall);
-            AddToJunimoStock(stock, ShopItemIds.GRAPE_STARTER, "Yellow", true, fall);
-            AddToJunimoStock(stock, ShopItemIds.ARTICHOKE_SEEDS, "Yellow", true, fall);
+            throw new Exception($"{nameof(AddFallSeedsToYellowStock)} is not ready for 1.6; Look at my comment at the beginning of the file");
+            //AddToJunimoStock(stock, ShopItemIds.PUMPKIN_SEEDS, "Yellow", true, fall);
+            //AddToJunimoStock(stock, ShopItemIds.CORN_SEEDS, "Yellow", true, fall);
+            //AddToJunimoStock(stock, ShopItemIds.EGGPLANT_SEEDS, "Yellow", true, fall);
+            //AddToJunimoStock(stock, ShopItemIds.BOK_CHOY_SEEDS, "Yellow", true, fall);
+            //AddToJunimoStock(stock, ShopItemIds.YAM_SEEDS, "Yellow", true, fall);
+            //AddToJunimoStock(stock, ShopItemIds.CRANBERRY_SEEDS, "Yellow", true, fall);
+            //AddToJunimoStock(stock, ShopItemIds.WHEAT_SEEDS, "Yellow", true, fall);
+            //AddToJunimoStock(stock, ShopItemIds.SUNFLOWER_SEEDS, "Yellow", true, fall);
+            //AddToJunimoStock(stock, ShopItemIds.FAIRY_SEEDS, "Yellow", true, fall);
+            //AddToJunimoStock(stock, ShopItemIds.AMARANTH_SEEDS, "Yellow", true, fall);
+            //AddToJunimoStock(stock, ShopItemIds.GRAPE_STARTER, "Yellow", true, fall);
+            //AddToJunimoStock(stock, ShopItemIds.ARTICHOKE_SEEDS, "Yellow", true, fall);
         }
 
         private void AddSaplingsToShop(Dictionary<ISalable, int[]> stock)
         {
-            AddToJunimoStock(stock, ShopItemIds.CHERRY_SAPLING, "Yellow", true);
-            AddToJunimoStock(stock, ShopItemIds.APRICOT_SAPLING, "Yellow", true);
-            AddToJunimoStock(stock, ShopItemIds.ORANGE_SAPLING, "Yellow", true);
-            AddToJunimoStock(stock, ShopItemIds.PEACH_SAPLING, "Yellow", true);
-            AddToJunimoStock(stock, ShopItemIds.POMEGRANATE_SAPLING, "Yellow", true);
-            AddToJunimoStock(stock, ShopItemIds.APPLE_SAPLING, "Yellow", true);
+            throw new Exception($"{nameof(AddSaplingsToShop)} is not ready for 1.6; Look at my comment at the beginning of the file");
+            //AddToJunimoStock(stock, ShopItemIds.CHERRY_SAPLING, "Yellow", true);
+            //AddToJunimoStock(stock, ShopItemIds.APRICOT_SAPLING, "Yellow", true);
+            //AddToJunimoStock(stock, ShopItemIds.ORANGE_SAPLING, "Yellow", true);
+            //AddToJunimoStock(stock, ShopItemIds.PEACH_SAPLING, "Yellow", true);
+            //AddToJunimoStock(stock, ShopItemIds.POMEGRANATE_SAPLING, "Yellow", true);
+            //AddToJunimoStock(stock, ShopItemIds.APPLE_SAPLING, "Yellow", true);
         }
 
         private void AddJunimoModdedStock(Dictionary<ISalable, int[]> stock)
