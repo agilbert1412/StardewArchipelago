@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Constants;
 using StardewValley.Objects;
 
 namespace StardewArchipelago.GameModifications.CodeInjections.Television
@@ -128,7 +129,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
         private static void AddSinisterTvChannel(Farmer who, List<Response> channelsList)
         {
             if (Game1.currentSeason != "fall" || Game1.Date.DayOfMonth != 26 ||
-                Game1.stats.getStat("childrenTurnedToDoves") <= 0U || who.mailReceived.Contains("cursed_doll"))
+                Game1.stats.Get(StatKeys.ChildrenTurnedToDoves) <= 0U || who.mailReceived.Contains("cursed_doll"))
             {
                 return;
             }
