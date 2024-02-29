@@ -15,7 +15,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         private const string MOVIE_THEATER_MAIL = "ccMovieTheater";
         private const string ABANDONED_JOJA_MART = "AbandonedJojaMart";
         private const string MOVIE_THEATER = "MovieTheater";
-        private const int CC_EVENT_ID = 191393;
+        private const string CC_EVENT_ID = "191393";
         private static IMonitor _monitor;
         private static IModHelper _modHelper;
         private static ArchipelagoClient _archipelago;
@@ -238,7 +238,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             {
                 if (character.isVillager())
                 {
-                    character.Schedule = character.getSchedule(Game1.dayOfMonth);
+                    character.TryLoadSchedule();
                 }
             }
         }
