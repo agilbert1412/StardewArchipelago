@@ -96,7 +96,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     return false; // don't run original logic
                 }
 
-                if (who.hasItemInInventory(388, 300))
+                if (who.Items.ContainsId("388", 300))
                 {
                     __instance.createQuestionDialogue(
                         Game1.content.LoadString("Strings\\Locations:Beach_FixBridge_Question"),

@@ -8,6 +8,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 {
     internal class VoidMayoInjections
     {
+        private const string VOID_MAYONNAISE = "(O)308";
         private static IMonitor _monitor;
 
         public static void Initialize(IMonitor monitor)
@@ -20,9 +21,9 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         {
             try
             {
-                if (__instance.Name.Equals("WitchSwamp") && Game1.random.NextDouble() < 0.25 && !Game1.player.hasItemInInventory(308, 1))
+                if (__instance.Name.Equals("WitchSwamp") && Game1.random.NextDouble() < 0.25 && !Game1.player.Items.ContainsId(VOID_MAYONNAISE, 1))
                 {
-                    __result = new Object(308, 1);
+                    __result = new Object(VOID_MAYONNAISE, 1);
                     return false; // don't run original logic
                 }
 
