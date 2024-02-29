@@ -161,7 +161,7 @@ namespace StardewArchipelago.Locations.GingerIsland.Boat
                 Game1.addMailForTomorrow(MAIL_FIXED_BOAT_TICKET_MACHINE, true, true);
             }
 
-            if (!ticketMachineFixed && player.hasItemInInventory(StardewId.BATTERY_PACK, 5))
+            if (!ticketMachineFixed && player.Items.ContainsId(StardewId.BATTERY_PACK, 5))
             {
                 __instance.createQuestionDialogue(Game1.content.LoadString("Strings\\Locations:BoatTunnel_DonateBatteries"),
                     __instance.createYesNoResponses(), "WillyBoatDonateBatteries");
@@ -217,7 +217,7 @@ namespace StardewArchipelago.Locations.GingerIsland.Boat
                 return;
             }
 
-            if (player.hasItemInInventory(StardewId.HARDWOOD, 200))
+            if (player.Items.ContainsId(StardewId.HARDWOOD, 200))
             {
                 __instance.createQuestionDialogue(
                     Game1.content.LoadString("Strings\\Locations:BoatTunnel_DonateHardwood"),
@@ -240,7 +240,7 @@ namespace StardewArchipelago.Locations.GingerIsland.Boat
                 return;
             }
 
-            if (player.hasItemInInventory(StardewId.IRIDIUM_BAR, 5))
+            if (player.Items.ContainsId(StardewId.IRIDIUM_BAR, 5))
             {
                 __instance.createQuestionDialogue(
                     Game1.content.LoadString("Strings\\Locations:BoatTunnel_DonateIridium"),
