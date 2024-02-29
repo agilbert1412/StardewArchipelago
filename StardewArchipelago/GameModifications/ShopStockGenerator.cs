@@ -31,7 +31,6 @@ namespace StardewArchipelago.GameModifications
         private IModHelper _modHelper;
         private ArchipelagoClient _archipelago;
         private LocationChecker _locationChecker;
-        public PersistentStock PierrePersistentStock { get; }
 
         public ShopStockGenerator(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
@@ -39,7 +38,6 @@ namespace StardewArchipelago.GameModifications
             _modHelper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
-            PierrePersistentStock = new PersistentStock();
         }
 
         public void OnSeedShopStockRequested(object sender, AssetRequestedEventArgs e)

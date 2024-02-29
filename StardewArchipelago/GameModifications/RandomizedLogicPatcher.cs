@@ -57,7 +57,6 @@ namespace StardewArchipelago.GameModifications
             ForestInjections.Initialize(monitor, _archipelago);
             MountainInjections.Initialize(monitor, modHelper, _archipelago);
             TheaterInjections.Initialize(monitor, modHelper, archipelago);
-            SeedShopsInjections.Initialize(monitor, modHelper, archipelago, locationChecker, shopStockGenerator);
             LostAndFoundInjections.Initialize(monitor, archipelago);
             InitializeTVInjections(monitor, modHelper, archipelago, entranceManager, state);
             ProfitInjections.Initialize(monitor, archipelago);
