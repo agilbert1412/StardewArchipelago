@@ -337,10 +337,10 @@ namespace StardewArchipelago.Items.Traps
             DelayedAction.fadeAfterDelay(() => AfterTeleport(farmer, locationName, tile), 1000);
             new Rectangle(farmer.GetBoundingBox().X, farmer.GetBoundingBox().Y, 64, 64).Inflate(192, 192);
             var num = 0;
-            for (var x1 = farmer.getTileX() + 8; x1 >= farmer.getTileX() - 8; --x1)
+            for (var x1 = farmer.Tile.X + 8; x1 >= farmer.Tile.X - 8; --x1)
             {
                 multiplayer.broadcastSprites(farmer.currentLocation,
-                    new TemporaryAnimatedSprite(6, new Vector2(x1, farmer.getTileY()) * 64f, Color.White, animationInterval: 50f)
+                    new TemporaryAnimatedSprite(6, new Vector2(x1, farmer.Tile.Y) * 64f, Color.White, animationInterval: 50f)
                     {
                         layerDepth = 1f,
                         delayBeforeAnimationStart = num * 25,
