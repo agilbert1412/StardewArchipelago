@@ -125,6 +125,7 @@ namespace StardewArchipelago.GameModifications
         {
             CleanLegendaryFishRecatchableEvent();
             UnpatchSeedShops();
+            UnpatchJodiFishQuest();
         }
 
         private void PatchAchievements()
@@ -337,23 +338,49 @@ namespace StardewArchipelago.GameModifications
             _helper.Events.Content.AssetRequested -= _shopStockGenerator.OnSeedShopStockRequested;
         }
 
-        private const int FISH_CASSEROLE_QUEST_ID = 22;
+        private const string FISH_CASSEROLE_QUEST_ID = "22";
 
         private void PatchJodiFishQuest()
+        {
+            _helper.Events.Content.AssetRequested += this.FishCasseroleEventRequested;
+        }
+
+        private void UnpatchJodiFishQuest()
+        {
+            _helper.Events.Content.AssetRequested -= this.FishCasseroleEventRequested;
+        }
+
+        private void FishCasseroleEventRequested(object sender, AssetRequestedEventArgs e)
         {
             if (_archipelago.SlotData.EntranceRandomization == EntranceRandomization.Disabled)
             {
                 return;
             }
 
-            ChangeFishCasseroleEventTriggerTimes();
-            ChangeFishCasseroleQuestText();
+            var isSamHouse = e.NameWithoutLocale.IsEquivalentTo("Data/Events/SamHouse");
+            var isQuests = e.NameWithoutLocale.IsEquivalentTo("Data/Quests");
+
+            if (!isSamHouse && !isQuests)
+            {
+                return;
+            }
+
+            if (isSamHouse)
+            {
+                e.Edit(ChangeFishCasseroleEventTriggerTimes, AssetEditPriority.Late);
+            }
+
+            if (isQuests)
+            {
+                e.Edit(ChangeFishCasseroleQuestText, AssetEditPriority.Late);
+            }
+            
             RefreshFishCasseroleQuestIfAlreadyHasIt();
         }
 
-        private static void ChangeFishCasseroleEventTriggerTimes()
+        private static void ChangeFishCasseroleEventTriggerTimes(IAssetData asset)
         {
-            var jodiHouseEvents = Game1.content.Load<Dictionary<string, string>>("Data\\Events\\SamHouse");
+            var jodiHouseEvents = asset.AsDictionary<string, string>().Data;
             const string originalTimeRequired = "1800 1950";
             const string newTimeRequired = "1200 2250";
             var eventsToFix = new HashSet<string>();
@@ -377,15 +404,9 @@ namespace StardewArchipelago.GameModifications
             }
         }
 
-        private static void ChangeFishCasseroleQuestText()
+        private static void ChangeFishCasseroleQuestText(IAssetData asset)
         {
-            ChangeFishCasseroleQuestText(Game1.content);
-            ChangeFishCasseroleQuestText(Game1.temporaryContent);
-        }
-
-        private static void ChangeFishCasseroleQuestText(ContentManager contentManager)
-        {
-            var quests = contentManager.Load<Dictionary<int, string>>("Data\\Quests");
+            var quests = asset.AsDictionary<string, string>().Data;
             var fishQuest = quests[FISH_CASSEROLE_QUEST_ID];
             var modifiedFishQuest = fishQuest.Replace("dinner at 7:00 PM.", "dinner.")
                 .Replace("bass at 7:00 PM.", "bass in the afternoon.");
