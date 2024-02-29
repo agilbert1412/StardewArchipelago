@@ -174,7 +174,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Modded
                 //    return false;
                 //}
                 //var checkOffer = PurpleJunimoOptions[answer];
-                //if (!Game1.player.hasItemInInventory(checkOffer.OfferedItem.Id, checkOffer.Amount))
+                //if (!Game1.player.Items.ContainsId(checkOffer.OfferedItem.Id, checkOffer.Amount))
                 //{
                 //    DaJunimo.setNewDialogue($"You no have thing, sorry!  Check later!");
                 //    Game1.drawDialogue(DaJunimo);
