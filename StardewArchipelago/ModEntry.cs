@@ -29,6 +29,7 @@ using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
 using StardewArchipelago.Locations.CodeInjections.Modded;
 using StardewArchipelago.Stardew.NameMapping;
 using StardewArchipelago.Integrations.GenericModConfigMenu;
+using StardewValley.Internal;
 
 namespace StardewArchipelago
 {
@@ -124,6 +125,13 @@ namespace StardewArchipelago
             _helper.ConsoleCommands.Add("release_slot", "Release the current slot completely", this.ReleaseSlot);
             _helper.ConsoleCommands.Add("debug_method", "Runs whatever is currently in the debug method", this.DebugMethod);
 #endif
+
+            ItemQueryResolver.Register(PurchaseableArchipelagoLocation.PURCHASEABLE_AP_LOCATION_ID, PurchasableAPLocationQueryDelegate);
+        }
+
+        private IEnumerable<ItemQueryResult> PurchasableAPLocationQueryDelegate(string key, string arguments, ItemQueryContext context, bool avoidrepeat, HashSet<string> avoiditemids, Action<string, string> logerror)
+        {
+            return PurchaseableArchipelagoLocation.Create(arguments, Helper, _locationChecker, _archipelago, _archipelago.GetMyActiveHints());
         }
 
         private void ResetArchipelago()
@@ -136,6 +144,7 @@ namespace StardewArchipelago
             State = new ArchipelagoStateDto();
 
             _harmony.UnpatchAll(ModManifest.UniqueID);
+            _locationsPatcher.CleanEvents();
             _logicPatcher.CleanEvents();
             SeasonsRandomizer.ResetMailKeys();
             _multiSleep = new MultiSleep(Monitor, _helper, _harmony);
