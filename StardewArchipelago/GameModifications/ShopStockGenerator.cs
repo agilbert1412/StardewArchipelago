@@ -138,9 +138,10 @@ namespace StardewArchipelago.GameModifications
             AddToJojaShop(shopData, ShopItemIds.OIL, 20);
             AddToJojaShop(shopData, ShopItemIds.VINEGAR, 20);
 
+            var itemsData = DataLoader.Objects(Game1.content);
             foreach (var item in shopData.Items)
             {
-                var itemData = DataLoader.Objects(Game1.content)[item.ItemId];
+                var itemData = itemsData[item.ItemId];
                 item.AvailableStock = -1;
                 item.AvoidRepeat = true;
                 if (item.MinStack == -1)

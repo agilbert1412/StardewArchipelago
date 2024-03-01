@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Reflection;
 using Archipelago.MultiClient.Net.Models;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -9,12 +10,17 @@ using StardewArchipelago.Archipelago;
 using StardewArchipelago.Textures;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Internal;
+using xTile.Dimensions;
 using Color = Microsoft.Xna.Framework.Color;
+using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace StardewArchipelago.Locations
 {
     internal class PurchaseableArchipelagoLocation : Item
     {
+        public static readonly string PURCHASEABLE_AP_LOCATION_ID = $"{ModEntry.Instance.ModManifest.UniqueID}.{nameof(PurchaseableArchipelagoLocation)}";
+
         private const string ARCHIPELAGO_PREFIX = "Archipelago: ";
         private const string ARCHIPELAGO_SHORT_PREFIX = "AP: ";
         private Texture2D _archipelagoTexture;
@@ -23,7 +29,6 @@ namespace StardewArchipelago.Locations
         private string _description;
         private LocationChecker _locationChecker;
         private List<Item> _extraMaterialsRequired;
-        private Action _purchaseCallBack;
 
         public string LocationName { get; }
 
@@ -41,7 +46,6 @@ namespace StardewArchipelago.Locations
             _description = scoutedLocation == null ? ScoutedLocation.GenericItemName() : scoutedLocation.ToString();
             _locationChecker = locationChecker;
             _extraMaterialsRequired = new List<Item>();
-            _purchaseCallBack = purchaseCallback;
 
             var isHinted = myActiveHints.Any(hint => archipelago.GetLocationName(hint.LocationId).Equals(locationName, StringComparison.OrdinalIgnoreCase));
             var desiredTextureName = isHinted ? ArchipelagoTextures.PLEADING : ArchipelagoTextures.COLOR;
@@ -73,7 +77,6 @@ namespace StardewArchipelago.Locations
                 Game1.player.Items.ReduceId(item.QualifiedItemId, item.Stack);
             }
             _locationChecker.AddCheckedLocation(LocationName);
-            _purchaseCallBack?.Invoke();
             return true;
         }
 
@@ -116,5 +119,20 @@ namespace StardewArchipelago.Locations
         public override string DisplayName => _locationDisplayName;
 
         public override string TypeDefinitionId => "(AP)";
+
+        public static IEnumerable<ItemQueryResult> Create(string locationName, IModHelper modHelper, LocationChecker locationChecker, ArchipelagoClient archipelago, Hint[] myActiveHints)
+        {
+            if (string.IsNullOrWhiteSpace(locationName))
+            {
+                throw new ArgumentException($"Could not create {nameof(PurchaseableArchipelagoLocation)} because there was no provided location name");
+            }
+
+            if (locationChecker.IsLocationMissing(locationName))
+            {
+                return new ItemQueryResult[] { new(new PurchaseableArchipelagoLocation(locationName.Trim(), modHelper, locationChecker, archipelago, myActiveHints)) };
+            }
+
+            return Enumerable.Empty<ItemQueryResult>();
+        }
     }
 }

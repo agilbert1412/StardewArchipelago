@@ -29,6 +29,7 @@ namespace StardewArchipelago.Locations.Patcher
         private readonly Harmony _harmony;
         private readonly IModHelper _modHelper;
         private readonly GingerIslandPatcher _gingerIslandPatcher;
+        private readonly RecipePurchaseStockModifier _recipePurchaseStockModifier;
 
         public VanillaLocationPatcher(IMonitor monitor, IModHelper modHelper, Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
@@ -36,6 +37,7 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony = harmony;
             _modHelper = modHelper;
             _gingerIslandPatcher = new GingerIslandPatcher(monitor, _modHelper, _harmony, _archipelago, locationChecker);
+            _recipePurchaseStockModifier = new RecipePurchaseStockModifier(monitor, modHelper, archipelago);
         }
 
         public void ReplaceAllLocationsRewardsWithChecks()
@@ -68,6 +70,11 @@ namespace StardewArchipelago.Locations.Patcher
             PatchChefAndCraftsanity();
             PatchKrobusShop();
             PatchFarmcave();
+        }
+
+        public void CleanEvents()
+        {
+            CleanChefsanityEvents();
         }
 
         private void ReplaceCommunityCenterBundlesWithChecks()
@@ -893,29 +900,8 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(typeof(TV), "getWeeklyRecipe"),
                 prefix: new HarmonyMethod(typeof(QueenOfSauceInjections), nameof(QueenOfSauceInjections.GetWeeklyRecipe_UseArchipelagoSchedule_Prefix))
             );
-
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(VolcanoDungeon), nameof(VolcanoDungeon.checkAction)),
-                prefix: new HarmonyMethod(typeof(RecipePurchaseInjections), nameof(RecipePurchaseInjections.CheckAction_ReplaceVolcanoDwarfRecipesWithChecks_Prefix))
-            );
-
-            if (_archipelago.SlotData.Chefsanity.HasFlag(Chefsanity.Purchases))
-            {
-                _harmony.Patch(
-                    original: AccessTools.Method(typeof(Utility), nameof(Utility.getSaloonStock)),
-                    prefix: new HarmonyMethod(typeof(RecipePurchaseInjections), nameof(RecipePurchaseInjections.GetSaloonStock_ReplaceRecipesWithChefsanityChecks_Prefix))
-                );
-
-                _harmony.Patch(
-                    original: AccessTools.Method(typeof(IslandSouth), nameof(IslandSouth.checkAction)),
-                    prefix: new HarmonyMethod(typeof(RecipePurchaseInjections), nameof(RecipePurchaseInjections.CheckAction_ReplaceTropicalCurryWithChefsanityCheck_Prefix))
-                );
-
-                _harmony.Patch(
-                    original: AccessTools.Method(typeof(IslandNorth), nameof(IslandNorth.getIslandMerchantTradeStock)),
-                    prefix: new HarmonyMethod(typeof(RecipePurchaseInjections), nameof(RecipePurchaseInjections.GetIslandMerchantTradeStock_ReplaceBananaPuddingWithChefsanityCheck_Prefix))
-                );
-            }
+            
+            _modHelper.Events.Content.AssetRequested += _recipePurchaseStockModifier.OnRecipeShopStockRequested;
             
             _harmony.Patch(
                 original: AccessTools.Constructor(typeof(LevelUpMenu), new []{typeof(int), typeof(int)}),
@@ -926,6 +912,11 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(typeof(NPC), nameof(NPC.grantConversationFriendship)),
                 prefix: new HarmonyMethod(typeof(RecipeFriendshipInjections), nameof(RecipeFriendshipInjections.GrantConversationFriendship_SendFriendshipRecipeChecks_Postfix))
             );
+        }
+
+        private void CleanChefsanityEvents()
+        {
+            _modHelper.Events.Content.AssetRequested -= _recipePurchaseStockModifier.OnRecipeShopStockRequested;
         }
 
         private void PatchCraftsanity()
