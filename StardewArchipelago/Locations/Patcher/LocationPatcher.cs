@@ -35,5 +35,12 @@ namespace StardewArchipelago.Locations.Patcher
             }
         }
 
+        public void CleanEvents()
+        {
+            foreach (var patcher in _patchers)
+            {
+                patcher.CleanEvents();
+            }
+        }
     }
 }

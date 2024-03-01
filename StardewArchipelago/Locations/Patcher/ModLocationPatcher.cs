@@ -41,6 +41,10 @@ namespace StardewArchipelago.Locations.Patcher
             AddBoardingHouseInjections();
         }
 
+        public void CleanEvents()
+        {
+        }
+
         private void AddDistantLandsEventInjections()
         {
             if (!_modsManager.HasMod(ModNames.DISTANT_LANDS))

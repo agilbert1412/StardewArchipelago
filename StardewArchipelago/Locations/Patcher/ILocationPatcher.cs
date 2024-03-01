@@ -3,5 +3,6 @@
     public interface ILocationPatcher
     {
         void ReplaceAllLocationsRewardsWithChecks();
+        void CleanEvents();
     }
 }
