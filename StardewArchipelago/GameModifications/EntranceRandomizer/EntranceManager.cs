@@ -241,7 +241,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
         private static List<string> GetKeys(string currentLocationName, string locationRequestName,
             Point targetPosition)
         {
-            var currentPosition = Game1.player.getTileLocationPoint();
+            var currentPosition = Game1.player.TilePoint;
             var currentPositions = new List<Point>();
             var targetPositions = new List<Point>();
             for (var x = -1; x <= 1; x++)
