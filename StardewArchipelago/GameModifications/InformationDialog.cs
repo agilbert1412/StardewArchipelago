@@ -24,7 +24,7 @@ namespace StardewArchipelago.GameModifications
         {
             onClickOk = onClickOkBehavior ?? CloseDialog;
             onClose = onCloseBehavior;
-            var titleSafeArea = Game1.graphics.GraphicsDevice.Viewport.GetTitleSafeArea();
+            var titleSafeArea = Game1.graphics.GraphicsDevice.Viewport.TitleSafeArea;
             this.message = Game1.parseText(message, Game1.dialogueFont, Math.Min(titleSafeArea.Width - 64, width));
             okButton = new ClickableTextureComponent("OK", new Rectangle(xPositionOnScreen + width - borderWidth - spaceToClearSideBorder - 128 - 4, yPositionOnScreen + height - borderWidth - spaceToClearTopBorder + 21, 64, 64), null, null, Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 46), 1f);
             okButton.myID = 101;
