@@ -301,7 +301,7 @@ namespace StardewArchipelago.Items.Traps
                 chosenLocation = validMaps[Game1.random.Next(validMaps.Count)];
                 if (destination == TeleportDestination.Nearby)
                 {
-                    chosenTile = _tileChooser.GetRandomTileInbounds(chosenLocation, Game1.player.getTileLocationPoint(), 20);
+                    chosenTile = _tileChooser.GetRandomTileInbounds(chosenLocation, Game1.player.TilePoint, 20);
                 }
                 else
                 {
