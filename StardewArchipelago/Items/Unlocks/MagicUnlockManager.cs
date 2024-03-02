@@ -208,9 +208,10 @@ namespace StardewArchipelago.Items.Unlocks
                 var learnSpellMethod = AccessTools.Method(spellBookType, "LearnSpell", learnSpellArgTypes);
                 object[] learnSpellArgs = { spellName, 0, false };
                 learnSpellMethod.Invoke(spellBook, learnSpellArgs);
-                if (!farmer.eventsSeen.Contains(90001))
+                const string magicEventId = "90001";
+                if (!farmer.eventsSeen.Contains(magicEventId))
                 {
-                    farmer.eventsSeen.Add(90001);
+                    farmer.eventsSeen.Add(magicEventId);
                 }
             }
         }
