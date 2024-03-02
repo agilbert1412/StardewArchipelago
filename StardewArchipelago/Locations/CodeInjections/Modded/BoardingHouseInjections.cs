@@ -105,7 +105,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                     return true; //run original logic
                 }
                 var currentChest = abandonedMines[playerLocation];
-                if (__instance.items.Count <= 0 || _locationChecker.IsLocationChecked(currentChest))
+                if (__instance.Items.Count <= 0 || _locationChecker.IsLocationChecked(currentChest))
                 {
                     return true; // run original logic
                 }
@@ -114,9 +114,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                     __instance.GetMutex().RequestLock(() => __instance.openChestEvent.Fire());
                 else
                     __instance.performOpenChest();
-                var obj = __instance.items[0];
-                __instance.items[0] = null;
-                __instance.items.RemoveAt(0);
+                var obj = __instance.Items[0];
+                __instance.Items[0] = null;
+                __instance.Items.RemoveAt(0);
                 _locationChecker.AddCheckedLocation(currentChest);
                 Game1.playSound("openChest");
                 __result = true;
