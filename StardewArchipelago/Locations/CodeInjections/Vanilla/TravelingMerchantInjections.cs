@@ -43,7 +43,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
         private static ArchipelagoStateDto _archipelagoState;
-        private static PersistentStock _persistentStock;
 
         private static Dictionary<ISalable, string> _flairOverride;
 
@@ -54,7 +53,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             _archipelago = archipelago;
             _locationChecker = locationChecker;
             _archipelagoState = archipelagoState;
-            _persistentStock = new PersistentStock();
             _flairOverride = new Dictionary<ISalable, string>();
         }
 

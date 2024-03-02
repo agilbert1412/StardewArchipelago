@@ -214,31 +214,33 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(DeleteStartingDebris)}:\n{ex}", LogLevel.Error);
+                _monitor.Log($"Failed in {nameof(PlaceEarlyShippingBin)}:\n{ex}", LogLevel.Error);
                 return;
             }
         }
 
         private static void ConstructStarterShippingBin(Farm farm)
         {
-            var blueprint = new BluePrint("Shipping Bin");
-            var tileLocation = farm.GetStarterShippingBinLocation();
-            var shippingBin = new ShippingBin(blueprint, tileLocation);
-            for (var y = 0; y < blueprint.tilesHeight; ++y)
+            var blueprint = "Shipping Bin";
+            var tile = farm.GetStarterShippingBinLocation();
+            for (var x = 0; x < 2; x++)
             {
-                for (var x = 0; x < blueprint.tilesWidth; ++x)
+                var isBuildable = farm.isBuildable(new Vector2(tile.X + x, tile.Y)) ;
+                if (!isBuildable)
                 {
-                    var isBuildable = !farm.isTileOccupiedForPlacement(tileLocation, null) && 
-                                      farm.GetFurnitureAt(tileLocation) == null;
-                    if (!isBuildable)
-                    {
-                        return;
-                    }
+                    return;
                 }
             }
 
-            farm.buildings.Add(shippingBin);
+            foreach (var building in farm.buildings)
+            {
+                if (building.buildingType.Value == blueprint)
+                    return;
+            }
+
+            var shippingBin = Building.CreateInstanceFromId(blueprint, tile);
             shippingBin.load();
+            farm.buildings.Add(shippingBin);
         }
 
         public static bool TryFindShippingBin(Farm farm, out ShippingBin shippingBin)
@@ -266,10 +268,18 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 }
 
                 const string forcedPetName = "alwaysintreble";
-                Pet pet = Game1.player.catPerson ? new Cat(68, 13, Game1.player.whichPetBreed) : new Dog(68, 13, Game1.player.whichPetBreed);
+                var pet = new Pet(68, 13, Game1.player.whichPetBreed, Game1.player.whichPetType);
                 pet.warpToFarmHouse(Game1.player);
                 pet.Name = forcedPetName;
                 pet.displayName = pet.Name;
+                foreach (var building in Game1.getFarm().buildings)
+                {
+                    if (building is PetBowl petBowl && !petBowl.HasPet())
+                    {
+                        petBowl.AssignPet(pet);
+                        break;
+                    }
+                }
                 Game1.player.RemoveMail("rejectedPet");
 
                 const string forcedPetMailKey = "petOverride";
