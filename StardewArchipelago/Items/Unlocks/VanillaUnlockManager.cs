@@ -377,7 +377,7 @@ namespace StardewArchipelago.Items.Unlocks
             foreach (var farmer in Game1.getAllFarmers())
             {
                 GiveExperienceToNextLevel(farmer, Skill.Farming);
-                farmer.FarmingLevel = farmer.farmingLevel.Value + 1;
+                farmer.farmingLevel.Value++;
                 farmer.newLevels.Add(new Point((int)Skill.Farming, farmer.farmingLevel.Value));
             }
             return new LetterInformationAttachment(receivedItem);
@@ -388,7 +388,7 @@ namespace StardewArchipelago.Items.Unlocks
             foreach (var farmer in Game1.getAllFarmers())
             {
                 GiveExperienceToNextLevel(farmer, Skill.Fishing);
-                farmer.FishingLevel = farmer.fishingLevel.Value + 1;
+                farmer.fishingLevel.Value++;
                 farmer.newLevels.Add(new Point((int)Skill.Fishing, farmer.fishingLevel.Value));
             }
             return new LetterInformationAttachment(receivedItem);
@@ -399,7 +399,7 @@ namespace StardewArchipelago.Items.Unlocks
             foreach (var farmer in Game1.getAllFarmers())
             {
                 GiveExperienceToNextLevel(farmer, Skill.Foraging);
-                farmer.ForagingLevel = farmer.foragingLevel.Value + 1;
+                farmer.foragingLevel.Value++;
                 farmer.newLevels.Add(new Point((int)Skill.Foraging, farmer.foragingLevel.Value));
             }
             return new LetterInformationAttachment(receivedItem);
@@ -410,7 +410,7 @@ namespace StardewArchipelago.Items.Unlocks
             foreach (var farmer in Game1.getAllFarmers())
             {
                 GiveExperienceToNextLevel(farmer, Skill.Mining);
-                farmer.MiningLevel = farmer.miningLevel.Value + 1;
+                farmer.miningLevel.Value++;
                 farmer.newLevels.Add(new Point((int)Skill.Mining, farmer.miningLevel.Value));
             }
             return new LetterInformationAttachment(receivedItem);
@@ -421,7 +421,7 @@ namespace StardewArchipelago.Items.Unlocks
             foreach (var farmer in Game1.getAllFarmers())
             {
                 GiveExperienceToNextLevel(farmer, Skill.Combat);
-                farmer.CombatLevel = farmer.combatLevel.Value + 1;
+                farmer.combatLevel.Value++;
                 farmer.newLevels.Add(new Point((int)Skill.Combat, farmer.combatLevel.Value));
             }
             return new LetterInformationAttachment(receivedItem);
