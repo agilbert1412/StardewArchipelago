@@ -173,7 +173,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             try
             {
-                if (Game1.stats.daysPlayed != _dayLastUpdateBackpackDisplay)
+                if (Game1.stats.DaysPlayed != _dayLastUpdateBackpackDisplay)
                 {
                     UpdateMaxItemsForBackpackDisplay();
                 }
