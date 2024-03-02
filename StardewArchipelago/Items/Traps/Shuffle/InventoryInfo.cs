@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using StardewValley;
 
 namespace StardewArchipelago.Items.Traps.Shuffle
 {
@@ -9,10 +8,10 @@ namespace StardewArchipelago.Items.Traps.Shuffle
         public string Map { get; set; }
         public Vector2 Tile { get; set; }
 
-        public IList<Item> Content { get; set; }
+        public StardewValley.Inventories.Inventory Content { get; set; }
         public int Capacity { get; set; }
 
-        public InventoryInfo(string map, Vector2 tile, IList<Item> content, int capacity)
+        public InventoryInfo(string map, Vector2 tile, StardewValley.Inventories.Inventory content, int capacity)
         {
             Map = map;
             Tile = tile;
