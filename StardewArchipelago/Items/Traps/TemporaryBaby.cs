@@ -5,6 +5,7 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Characters;
 using StardewValley.Locations;
+using StardewValley.Pathfinding;
 
 namespace StardewArchipelago.Items.Traps
 {
