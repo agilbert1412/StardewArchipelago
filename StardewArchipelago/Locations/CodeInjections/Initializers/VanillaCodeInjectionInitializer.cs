@@ -30,7 +30,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             QuestInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             DarkTalismanInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             CarpenterInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
-            CarpenterMenuInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
+            CarpenterMenuInjections.Initialize(monitor, modHelper, archipelago);
             WizardInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             IsolatedEventInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             AdventurerGuildInjections.Initialize(monitor, modHelper, archipelago, locationChecker, weaponsManager);
@@ -47,7 +47,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             MonsterSlayerInjections.Initialize(monitor, modHelper, archipelago, locationChecker, killList);
             CookingInjections.Initialize(monitor, archipelago, locationChecker, itemManager);
             QueenOfSauceInjections.Initialize(monitor, modHelper, archipelago, state, locationChecker, itemManager);
-            RecipePurchaseInjections.Initialize(monitor, modHelper, archipelago, locationChecker, itemManager);
             RecipeLevelUpInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             RecipeFriendshipInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             CraftingInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
