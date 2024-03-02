@@ -51,15 +51,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
             },
         };
 
-        private static readonly Dictionary<string, Item> seasonalBerry = new(){
-            {"spring", new StardewValley.Object(Vector2.Zero, 296, 1)},
-            {"summer", new StardewValley.Object(Vector2.Zero, 396, 1)},
-            {"fall", new StardewValley.Object(Vector2.Zero, 410, 1)},
-            {"winter", new StardewValley.Object(Vector2.Zero, 414, 1)}
+        private static readonly Dictionary<string, Item> seasonalBerry = new()
+        {
+            { "spring", new StardewValley.Object("296", 1) },
+            { "summer", new StardewValley.Object("396", 1) },
+            { "fall", new StardewValley.Object("410", 1) },
+            { "winter", new StardewValley.Object("414", 1) }
         };
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, 
-                                      LocationChecker locationChecker, ShopReplacer shopReplacer, ShopStockGenerator shopStockGenerator, JunimoShopGenerator junimoShopGenerator)
+        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago,
+            LocationChecker locationChecker, ShopReplacer shopReplacer, ShopStockGenerator shopStockGenerator, JunimoShopGenerator junimoShopGenerator)
         {
             _monitor = monitor;
             _modHelper = modHelper;
@@ -95,11 +96,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
 
                 ReplaceCraftsanityRecipes(__instance, myActiveHints);
                 ReplaceChefsanityRecipes(__instance, myActiveHints);
-                
-                if (__instance.storeContext == "Custom_ForestWest")
+
+                if (__instance.ShopId == "Custom_ForestWest")
                 {
                     MakeBearBarter(__instance);
                 }
+
                 __instance.forSale = __instance.itemPriceAndStock.Keys.ToList();
                 return; //  run original logic
             }
@@ -112,7 +114,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
 
         private static void RemoveGuildRecipesFromPhone(ShopMenu shopMenu)
         {
-            if (shopMenu.storeContext == "AdventureGuild")
+            if (shopMenu.ShopId == "AdventureGuild")
             {
                 return;
             }
@@ -128,11 +130,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
 
         private static void ReplaceTemperedGalaxyWeapons(ShopMenu shopMenu, ISalable salableItem, Hint[] myActiveHints)
         {
-            if (shopMenu.storeContext != "Custom_CastleVillageOutpost")
+            if (shopMenu.ShopId != "Custom_CastleVillageOutpost")
             {
                 return;
             }
-            
+
             _shopReplacer.ReplaceShopItem(shopMenu.itemPriceAndStock, salableItem, ALESIA_DAGGER, "Tempered Galaxy Dagger", myActiveHints);
             _shopReplacer.ReplaceShopItem(shopMenu.itemPriceAndStock, salableItem, ISAAC_SWORD, "Tempered Galaxy Sword", myActiveHints);
             _shopReplacer.ReplaceShopItem(shopMenu.itemPriceAndStock, salableItem, ISAAC_HAMMER, "Tempered Galaxy Hammer", myActiveHints);
@@ -182,42 +184,48 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
 
         private static void MakeBearBarter(ShopMenu shopMenu)
         {
-            var stock = shopMenu.itemPriceAndStock;
-            var hasKnowledge = _archipelago.HasReceivedItem(BEAR_KNOWLEDGE);
-            var berryItems = _junimoShopGenerator.BerryItems.Keys.ToArray();
-            var random = new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame / 2);
+            throw new Exception($"{nameof(MakeBearBarter)} is not ready for 1.6");
+            //var stock = shopMenu.itemPriceAndStock;
+            //var hasKnowledge = _archipelago.HasReceivedItem(BEAR_KNOWLEDGE);
+            //var berryItems = _junimoShopGenerator.BerryItems.Keys.ToArray();
+            //var random = new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame / 2);
 
-            foreach (var item in stock)
-            {
-                var randomBerryItem = berryItems[random.Next(berryItems.Length)];
-                var randomBerryValue = _junimoShopGenerator.BerryItems[randomBerryItem];
-                var itemToTradeTotal = _junimoShopGenerator.ExchangeRate(item.Key.salePrice(), randomBerryValue * (hasKnowledge ? 3 : 1));
-                if (item.Key.Name.Contains("Baked Berry Oatmeal") || item.Key.Name.Contains("Flower Cookie")) // Since these are AP locations, for logic's sake only use seasonal berries
-                {
-                    var isOatmeal = item.Key.Name.Contains("Baked Berry Oatmeal");
-                    var logicalBerry = seasonalBerry[Game1.currentSeason];
-                    var logicalBerryRate = _junimoShopGenerator.ExchangeRate(isOatmeal ? OATMEAL_PRICE : COOKIE_PRICE, logicalBerry.salePrice() * (hasKnowledge ? 3 : 1));
-                    var rateForChefsanity = _archipelago.SlotData.Chefsanity.HasFlag(Chefsanity.Purchases) ? logicalBerryRate : itemToTradeTotal;
-                    var itemForSale = _archipelago.SlotData.Chefsanity.HasFlag(Chefsanity.Purchases) ? seasonalBerry[Game1.currentSeason].ParentSheetIndex : randomBerryItem.Id;
-                    StockListing(item.Key, stock, 1, itemForSale, _junimoShopGenerator.ValueOfOneItemWithWeight(rateForChefsanity, 0.75));
-                    continue;
+            //foreach (var item in stock)
+            //{
+            //    var randomBerryItem = berryItems[random.Next(berryItems.Length)];
+            //    var randomBerryValue = _junimoShopGenerator.BerryItems[randomBerryItem];
+            //    var itemToTradeTotal = _junimoShopGenerator.ExchangeRate(item.Key.salePrice(), randomBerryValue * (hasKnowledge ? 3 : 1));
+            //    if (item.Key.Name.Contains("Baked Berry Oatmeal") ||
+            //        item.Key.Name.Contains("Flower Cookie")) // Since these are AP locations, for logic's sake only use seasonal berries
+            //    {
+            //        var isOatmeal = item.Key.Name.Contains("Baked Berry Oatmeal");
+            //        var logicalBerry = seasonalBerry[Game1.currentSeason];
+            //        var logicalBerryRate = _junimoShopGenerator.ExchangeRate(isOatmeal ? OATMEAL_PRICE : COOKIE_PRICE, logicalBerry.salePrice() * (hasKnowledge ? 3 : 1));
+            //        var rateForChefsanity = _archipelago.SlotData.Chefsanity.HasFlag(Chefsanity.Purchases) ? logicalBerryRate : itemToTradeTotal;
+            //        var itemForSale = _archipelago.SlotData.Chefsanity.HasFlag(Chefsanity.Purchases)
+            //            ? seasonalBerry[Game1.currentSeason].QualifiedItemId
+            //            : randomBerryItem.Id;
+            //        StockListing(item.Key, stock, 1, itemForSale, _junimoShopGenerator.ValueOfOneItemWithWeight(rateForChefsanity, 0.75));
+            //        continue;
 
-                }
-                StockListing(item.Key, stock, itemToTradeTotal[0], randomBerryItem.Id, itemToTradeTotal[1]);
-            }
+            //    }
+
+            //    StockListing(item.Key, stock, itemToTradeTotal[0], randomBerryItem.Id, itemToTradeTotal[1]);
+            //}
         }
 
-        private static void StockListing(ISalable item, Dictionary<ISalable, int[]> stock, int stackSize, int itemForSaleId, int value)
+        private static void StockListing(ISalable item, Dictionary<ISalable, ItemStockInformation> stock, int stackSize, int itemForSaleId, int value)
         {
             item.Stack = stackSize;
 
-                stock[item] = new int[4]
-            {
-                0,
-                int.MaxValue,
-                itemForSaleId,
-                value
-            };
+            throw new Exception($"{nameof(StockListing)} is not ready for 1.6");
+            //stock[item] = new int[4]
+            //{
+            //    0,
+            //    int.MaxValue,
+            //    itemForSaleId,
+            //    value
+            //};
         }
 
 
@@ -228,13 +236,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
         {
             try
             {
-                if (Game1.currentLocation is not JojaMart)
-                {
-                    return true; // Run original logic
-                }
+                // GetJojaStock doesn't exist anymore, with the new shops data structure. Not sure what you want to do here. If we're lucky, maybe you don't need to do anything?
+                throw new Exception($"{nameof(MakeBearBarter)} is not ready for 1.6");
+                //if (Game1.currentLocation is not JojaMart)
+                //{
+                //    return true; // Run original logic
+                //}
 
-                itemPriceAndStock = _shopStockGenerator.GetJojaStock();
-                return true; // run original logic
+                //itemPriceAndStock = _shopStockGenerator.GetJojaStock();
+                //return true; // run original logic
 
             }
             catch (Exception ex)
