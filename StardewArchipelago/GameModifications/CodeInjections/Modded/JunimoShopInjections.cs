@@ -127,7 +127,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Modded
             //};
             //PurpleJunimoOptions = new Dictionary<string, PurpleJunimo>();
             //var purpleItems = _junimoShopGenerator.PurpleItems.Keys.ToArray();
-            //var currentWeek = (int)(Game1.stats.daysPlayed / 7) + 1;
+            //var currentWeek = (int)(Game1.stats.DaysPlayed / 7) + 1;
             //var random = new Random((int)Game1.uniqueIDForThisGame / 2 + currentWeek);
             //foreach (var (item, price) in fakeStock)
             //{
