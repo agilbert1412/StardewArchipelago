@@ -81,11 +81,7 @@ namespace StardewArchipelago.Items.Traps
             _inventoryShuffler = new InventoryShuffler(monitor, giftSender);
             _traps = new Dictionary<string, Action>();
             RegisterTraps();
-
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(BuffsDisplay), nameof(BuffsDisplay.clearAllBuffs)),
-                prefix: new HarmonyMethod(typeof(TrapManager), nameof(ClearAllBuffs_ClearOtherBuffs_Prefix))
-            );
+            
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Object), nameof(Object.salePrice)),
                 prefix: new HarmonyMethod(typeof(TrapManager), nameof(SalePrice_GetCorrectInflation_Prefix))
@@ -230,10 +226,10 @@ namespace StardewArchipelago.Items.Traps
                 return;
             }
 
-            var debuff = new Buff((int)whichBuff);
+            var debuff = new Buff(((int)whichBuff).ToString());
             debuff.millisecondsDuration = (int)duration;
             debuff.totalMillisecondsDuration = (int)duration;
-            Game1.buffsDisplay.addOtherBuff(debuff);
+            Game1.player.applyBuff(debuff);
         }
 
         private void ChargeTaxes()
@@ -420,8 +416,8 @@ namespace StardewArchipelago.Items.Traps
                     continue;
                 }
 
-                crop.destroyCrop(crop.currentTileLocation, true, map);
-                map.critters.Add(new Crow((int)crop.currentTileLocation.X, (int)crop.currentTileLocation.Y));
+                crop.destroyCrop(true);
+                map.critters.Add(new Crow((int)crop.Tile.X, (int)crop.Tile.Y));
             }
         }
 
@@ -615,7 +611,7 @@ namespace StardewArchipelago.Items.Traps
                         continue;
                     }
 
-                    foreach (var chestItem in chest.items)
+                    foreach (var chestItem in chest.Items)
                     {
                         if (chestItem is not WateringCan wateringCan)
                         {
@@ -799,7 +795,7 @@ namespace StardewArchipelago.Items.Traps
             var explosionRadius = _difficultyBalancer.ExplosionSize[_archipelago.SlotData.TrapItemsDifficulty];
 
             var location = Game1.player.currentLocation;
-            var tile = Game1.player.getTileLocation();
+            var tile = Game1.player.Tile;
             var x = tile.X * 64;
             var y = tile.Y * 64;
             // protected internal static Multiplayer multiplayer = new Multiplayer();
@@ -862,25 +858,6 @@ namespace StardewArchipelago.Items.Traps
         private void UngrowFruitTree(FruitTree fruitTree, int days)
         {
             fruitTree.daysUntilMature.Value += days;
-        }
-
-        // public void clearAllBuffs()
-        public static bool ClearAllBuffs_ClearOtherBuffs_Prefix(BuffsDisplay __instance)
-        {
-            try
-            {
-                foreach (var otherBuff in __instance.otherBuffs)
-                {
-                    otherBuff.removeBuff();
-                }
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                _monitor.Log($"Failed in {nameof(ClearAllBuffs_ClearOtherBuffs_Prefix)}:\n{ex}", LogLevel.Error);
-                return true; // run original logic
-            }
         }
     }
 }
