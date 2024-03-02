@@ -12,7 +12,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
 
-        private const int BEAR_KNOWLEDGE_EVENT_ID = 2120303;
+        private const string BEAR_KNOWLEDGE_EVENT_ID = "2120303";
         private const string BEAR_KNOWLEDGE = "Bear's Knowledge";
 
         private static bool? _hasTrulySeenBearKnowledgeEvent = null;
