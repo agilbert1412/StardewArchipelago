@@ -66,7 +66,7 @@ namespace StardewArchipelago.Items
                         continue;
                     }
 
-                    foreach (var chestItem in chest.items)
+                    foreach (var chestItem in chest.Items)
                     {
                         if (TryUpgradeCorrectTool(toolName, chestItem, out upgradedTool))
                         {
@@ -76,26 +76,10 @@ namespace StardewArchipelago.Items
                 }
             }
 
-            foreach (var junimoChestItem in Game1.player.team.junimoChest)
-            {
-                if (TryUpgradeCorrectTool(toolName, junimoChestItem, out upgradedTool))
-                {
-                    return true;
-                }
-            }
-
-            foreach (var junimoChestItem in Game1.player.team.junimoChest)
-            {
-                if (TryUpgradeCorrectTool(toolName, junimoChestItem, out upgradedTool))
-                {
-                    return true;
-                }
-            }
-
 
             if (Game1.getLocationFromName("FarmHouse") is FarmHouse farmHouse)
             {
-                foreach (var fridgeItem in farmHouse.fridge.Value.items)
+                foreach (var fridgeItem in farmHouse.GetFridge(false).Items)
                 {
                     if (TryUpgradeCorrectTool(toolName, fridgeItem, out upgradedTool))
                     {
@@ -106,7 +90,7 @@ namespace StardewArchipelago.Items
 
             if (Game1.getLocationFromName("IslandFarmHouse") is IslandFarmHouse islandHouse)
             {
-                foreach (var fridgeItem in islandHouse.fridge.Value.items)
+                foreach (var fridgeItem in islandHouse.GetFridge(false).Items)
                 {
                     if (TryUpgradeCorrectTool(toolName, fridgeItem, out upgradedTool))
                     {
