@@ -85,11 +85,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     return true; // run original logic
                 }
 
-                Game1.player.completeQuest(18);
+                Game1.player.completeQuest("18");
                 Game1.getSteamAchievement("Achievement_TheBottom");
                 var chestPosition = new Vector2(9f, 9f);
                 var items = new List<Item>();
-                items.Add(new MeleeWeapon(8));
+                items.Add(new MeleeWeapon("8"));
                 __instance.overlayObjects[chestPosition] = new Chest(0, items, chestPosition)
                 {
                     Tint = Color.Pink,

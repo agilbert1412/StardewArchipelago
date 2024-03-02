@@ -140,13 +140,13 @@ namespace StardewArchipelago.Items.Mail
         {
             Game1.player.canUnderstandDwarves = true;
             Game1.playSound("fireball");
-            Game1.player.holdUpItemThenMessage(new StardewValley.Object(326, 1));
+            Game1.player.holdUpItemThenMessage(new Object("326", 1));
         }
 
         private void ReceiveSkullKey()
         {
             Game1.player.hasSkullKey = true;
-            Game1.player.addQuest(19);
+            Game1.player.addQuest("19");
             Game1.player.holdUpItemThenMessage(new SpecialItem(4));
         }
 
@@ -186,7 +186,7 @@ namespace StardewArchipelago.Items.Mail
         private void ReceiveGoldenScythe()
         {
             Game1.playSound("parry");
-            var goldenScythe = new MeleeWeapon(53);
+            var goldenScythe = new MeleeWeapon("53");
             Game1.player.holdUpItemThenMessage(goldenScythe);
             Game1.player.addItemByMenuIfNecessary(goldenScythe);
         }
@@ -194,7 +194,7 @@ namespace StardewArchipelago.Items.Mail
         private void ReceivePierreStocklist()
         {
             Game1.addMailForTomorrow("gotMissingStocklist", true, true);
-            var stocklist = new Object(897, 1);
+            var stocklist = new Object("897", 1);
             stocklist.questItem.Value = true;
             Game1.player.holdUpItemThenMessage(stocklist);
             Game1.player.addItemByMenuIfNecessary(stocklist);
@@ -240,11 +240,10 @@ namespace StardewArchipelago.Items.Mail
         {
             Game1.player.trashCanLevel++;
             Game1.player.trashCanLevel = Math.Max(1, Math.Min(4, Game1.player.trashCanLevel));
-            var trashCanToHoldUp = new GenericTool("Trash Can",
-                Game1.content.LoadString("Strings\\StringsFromCSFiles:TrashCan_Description",
-                    ((Game1.player.trashCanLevel * 15).ToString() ?? "")), Game1.player.trashCanLevel,
-                12 + Game1.player.trashCanLevel, 12 + Game1.player.trashCanLevel);
-            trashCanToHoldUp.upgradeLevel.Value = Game1.player.trashCanLevel;
+            var trashCanToHoldUp = new GenericTool
+            {
+                UpgradeLevel = Game1.player.trashCanLevel,
+            };
             Game1.player.holdUpItemThenMessage(trashCanToHoldUp);
         }
 
@@ -282,7 +281,7 @@ namespace StardewArchipelago.Items.Mail
         private void ReceiveBigCraftable(string bigCraftableIdAndAmount)
         {
             var parts = bigCraftableIdAndAmount.Split(BigCraftable.BIG_CRAFTABLE_SEPARATOR);
-            var id = int.Parse(parts[0]);
+            var id = parts[0];
             var amount = parts.Length > 1 ? int.Parse(parts[1]) : 1;
             var bigCraftable = new Object(Vector2.Zero, id);
             bigCraftable.Stack = amount;
@@ -291,56 +290,56 @@ namespace StardewArchipelago.Items.Mail
 
         private void ReceiveRing(string ringId)
         {
-            var id = int.Parse(ringId);
+            var id = ringId;
             var ring = new Ring(id);
             ReceiveItem(ring);
         }
 
         private void ReceiveBoots(string bootsId)
         {
-            var id = int.Parse(bootsId);
+            var id = bootsId;
             var boots = new Boots(id);
             ReceiveItem(boots);
         }
 
         private void ReceiveMeleeWeapon(string weaponId)
         {
-            var id = int.Parse(weaponId);
+            var id = weaponId;
             var weapon = new MeleeWeapon(id);
             ReceiveItem(weapon);
         }
 
         private void ReceiveSlingshot(string slingshotId)
         {
-            var id = int.Parse(slingshotId);
+            var id = slingshotId;
             var slingshot = new Slingshot(id);
             ReceiveItem(slingshot);
         }
 
         private void ReceiveBed(string furnitureId)
         {
-            var id = int.Parse(furnitureId);
+            var id = furnitureId;
             var furniture = new BedFurniture(id, Vector2.Zero);
             ReceiveItem(furniture);
         }
 
         private void ReceiveFishTank(string furnitureId)
         {
-            var id = int.Parse(furnitureId);
+            var id = furnitureId;
             var furniture = new FishTankFurniture(id, Vector2.Zero);
             ReceiveItem(furniture);
         }
 
         private void ReceiveTV(string furnitureId)
         {
-            var id = int.Parse(furnitureId);
+            var id = furnitureId;
             var furniture = new TV(id, Vector2.Zero);
             ReceiveItem(furniture);
         }
 
         private void ReceiveFurniture(string furnitureId)
         {
-            var id = int.Parse(furnitureId);
+            var id = furnitureId;
             var furniture = new Furniture(id, Vector2.Zero);
             ReceiveItem(furniture);
         }
@@ -352,7 +351,7 @@ namespace StardewArchipelago.Items.Mail
 
         private void ReceiveHat(string hatId)
         {
-            var id = int.Parse(hatId);
+            var id = hatId;
             var hat = new Hat(id);
             ReceiveItem(hat);
         }
@@ -494,7 +493,7 @@ namespace StardewArchipelago.Items.Mail
         private static void RepairParrotExpress()
         {
             Game1.addMailForTomorrow("Island_UpgradeParrotPlatform", true, true);
-            Game1.netWorldState.Value.ParrotPlatformsUnlocked.Value = true;
+            Game1.netWorldState.Value.ParrotPlatformsUnlocked = true;
         }
 
         private void ConstructVolcanoBridge()
