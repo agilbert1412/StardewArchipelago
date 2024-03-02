@@ -24,19 +24,19 @@ namespace StardewArchipelago.Items.Unlocks
         public const string GRANDPA_SHED_AP_NAME = "Grandpa's Shed";
         public const string SCARLETT_JOB_OFFER = "Scarlett's Job Offer";
         public const string MORGAN_SCHOOLING = "Morgan's Schooling";
-        public const int MAIN_NEXUS_EVENT = 908071;
-        public const int WIZARD_RUNES_EVENT = 908072;
-        public const int GUILD_RUNES_EVENT = 908073;
-        public const int FARM_RUNES_EVENT = 908074;
-        public const int AURORA_RUNES_EVENT = 908075;
-        public const int SPRITE_RUNES_EVENT = 908076;
-        public const int JUNIMO_RUNES_EVENT = 908077;
-        public const int OUTPOST_RUNES_EVENT = 908078;
-        public const int LANCE_WARP_EVENT = 65360191;
-        public const int KITTYFISH_EVENT = 69069247;
-        public const int SCARLETT_EVENT = 3691371;
-        public const int AURORA_EVENT = 658059254;
-        public const int MORGAN_EVENT = 658078924;
+        public const string MAIN_NEXUS_EVENT = "908071";
+        public const string WIZARD_RUNES_EVENT = "908072";
+        public const string GUILD_RUNES_EVENT = "908073";
+        public const string FARM_RUNES_EVENT = "908074";
+        public const string AURORA_RUNES_EVENT = "908075";
+        public const string SPRITE_RUNES_EVENT = "908076";
+        public const string JUNIMO_RUNES_EVENT = "908077";
+        public const string OUTPOST_RUNES_EVENT = "908078";
+        public const string LANCE_WARP_EVENT = "65360191";
+        public const string KITTYFISH_EVENT = "69069247";
+        public const string SCARLETT_EVENT = "3691371";
+        public const string AURORA_EVENT = "658059254";
+        public const string MORGAN_EVENT = "658078924";
 
         private Dictionary<string, Func<ReceivedItem, LetterAttachment>> _unlockables;
         
@@ -113,44 +113,38 @@ namespace StardewArchipelago.Items.Unlocks
 
         private LetterEventSeenAttachment SendSpriteSpringRunes(ReceivedItem receivedItem)
         {
-            var events = new List<int> {MAIN_NEXUS_EVENT, SPRITE_RUNES_EVENT};
+            var events = new List<string> {MAIN_NEXUS_EVENT, SPRITE_RUNES_EVENT};
             return new LetterEventSeenAttachment(receivedItem, events);
         }
 
         private LetterEventSeenAttachment SendJunimoRunes(ReceivedItem receivedItem)
         {
-            var events = new List<int> {MAIN_NEXUS_EVENT, JUNIMO_RUNES_EVENT};
-            return new LetterEventSeenAttachment(receivedItem, events);
+            return new LetterEventSeenAttachment(receivedItem, new[] { MAIN_NEXUS_EVENT, JUNIMO_RUNES_EVENT });
         }
 
         private LetterEventSeenAttachment SendOutpostRunes(ReceivedItem receivedItem)
         {
-            var events = new List<int> {MAIN_NEXUS_EVENT, OUTPOST_RUNES_EVENT};
-            return new LetterEventSeenAttachment(receivedItem, events);
+            return new LetterEventSeenAttachment(receivedItem, new[]{ MAIN_NEXUS_EVENT, OUTPOST_RUNES_EVENT });
         }
 
         private LetterEventSeenAttachment SendGuildRunes(ReceivedItem receivedItem)
         {
-            var events = new List<int> {MAIN_NEXUS_EVENT, GUILD_RUNES_EVENT};
-            return new LetterEventSeenAttachment(receivedItem, events);
+            return new LetterEventSeenAttachment(receivedItem, new[] { MAIN_NEXUS_EVENT, GUILD_RUNES_EVENT });
         }
 
         private LetterEventSeenAttachment SendAuroraRunes(ReceivedItem receivedItem)
         {
-            var events = new List<int> {MAIN_NEXUS_EVENT, AURORA_RUNES_EVENT};
-            return new LetterEventSeenAttachment(receivedItem, events);
+            return new LetterEventSeenAttachment(receivedItem, new[] { MAIN_NEXUS_EVENT, AURORA_RUNES_EVENT });
         }
 
         private LetterEventSeenAttachment SendFarmRunes(ReceivedItem receivedItem)
         {
-            var events = new List<int> {MAIN_NEXUS_EVENT, FARM_RUNES_EVENT};
-            return new LetterEventSeenAttachment(receivedItem, events);
+            return new LetterEventSeenAttachment(receivedItem, new[] { MAIN_NEXUS_EVENT, FARM_RUNES_EVENT });
         }
 
         private LetterEventSeenAttachment SendWizardRunes(ReceivedItem receivedItem)
         {
-            var events = new List<int> {MAIN_NEXUS_EVENT, WIZARD_RUNES_EVENT};
-            return new LetterEventSeenAttachment(receivedItem, events);
+            return new LetterEventSeenAttachment(receivedItem, new[] { MAIN_NEXUS_EVENT, WIZARD_RUNES_EVENT });
         }
 
         private LetterEventSeenAttachment SendLancePortal(ReceivedItem receivedItem)
