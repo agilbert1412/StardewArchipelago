@@ -225,7 +225,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
 
             Game1.flashAlpha = 1f;
-            Game1.player.holdUpItemThenMessage(new MeleeWeapon(4));
+            Game1.player.holdUpItemThenMessage(new MeleeWeapon("4"));
             Game1.player.reduceActiveItemByOne();
             _locationChecker.AddCheckedLocation(GALAXY_SWORD_SHRINE_AP_LOCATION);
 
