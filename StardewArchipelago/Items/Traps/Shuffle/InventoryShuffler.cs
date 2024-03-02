@@ -263,7 +263,7 @@ namespace StardewArchipelago.Items.Traps.Shuffle
                 inventorySlots.Add(slot, item);
             }
 
-            var inventoryInfo = new InventoryInfo(player.currentLocation.Name, player.getTileLocation(), player.Items, player.MaxItems);
+            var inventoryInfo = new InventoryInfo(player.currentLocation.Name, player.Tile, player.Items, player.MaxItems);
             return new Inventory(inventoryInfo, inventorySlots);
         }
 
@@ -299,7 +299,7 @@ namespace StardewArchipelago.Items.Traps.Shuffle
                         continue;
                     }
 
-                    allChests.Add(new InventoryInfo(gameLocation.Name, tile, chest.items, chest.GetActualCapacity()), chest);
+                    allChests.Add(new InventoryInfo(gameLocation.Name, tile, chest.Items, chest.GetActualCapacity()), chest);
                 }
             }
 
@@ -343,12 +343,12 @@ namespace StardewArchipelago.Items.Traps.Shuffle
                 }
 
                 var fridge = location.fridge.Value;
-                if (fridge == null || fridge.items.All(x => x == null))
+                if (fridge == null || fridge.Items.All(x => x == null))
                 {
                     return null;
                 }
 
-                var info = new InventoryInfo(location.Name, fridge.TileLocation, fridge.items, fridge.GetActualCapacity());
+                var info = new InventoryInfo(location.Name, fridge.TileLocation, fridge.Items, fridge.GetActualCapacity());
                 var fridgeSlots = GetItemSlotsFromChest(info);
                 return new Inventory(info, fridgeSlots);
             }
@@ -369,45 +369,18 @@ namespace StardewArchipelago.Items.Traps.Shuffle
                 }
 
                 var fridge = location.fridge.Value;
-                if (fridge == null || fridge.items.All(x => x == null))
+                if (fridge == null || fridge.Items.All(x => x == null))
                 {
                     return null;
                 }
 
-                var info = new InventoryInfo(location.Name, fridge.TileLocation, fridge.items, fridge.GetActualCapacity());
+                var info = new InventoryInfo(location.Name, fridge.TileLocation, fridge.Items, fridge.GetActualCapacity());
                 var fridgeSlots = GetItemSlotsFromChest(info);
                 return new Inventory(info, fridgeSlots);
             }
             catch (Exception ex)
             {
                 _monitor.Log("Could not find a fridge in the island farmhouse", LogLevel.Warn);
-                return null;
-            }
-        }
-
-        private InventoryContent GetItemSlotsFromJunimoChest()
-        {
-            try
-            {
-                var inventorySlots = new InventoryContent();
-                var capacity = Game1.player.team.junimoChest.Count;
-                for (var i = 0; i < capacity; i++)
-                {
-                    Item item = null;
-                    if (Game1.player.team.junimoChest.Count > i && Game1.player.team.junimoChest[i] != null)
-                    {
-                        item = Game1.player.team.junimoChest[i];
-                    }
-
-                    var slot = new ItemSlot(Game1.player.team.junimoChest, i);
-                    inventorySlots.Add(slot, item);
-                }
-
-                return inventorySlots;
-            }
-            catch (Exception ex)
-            {
-                _monitor.Log("Could not update the junimo chest properly", LogLevel.Warn);
                 return null;
             }
         }
