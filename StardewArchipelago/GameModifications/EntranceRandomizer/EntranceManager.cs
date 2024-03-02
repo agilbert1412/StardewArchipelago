@@ -327,7 +327,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
                 var customizedNewString = newString;
                 if (customizedNewString.Contains("{0}"))
                 {
-                    customizedNewString = string.Format(newString, Game1.player.isMale ? "Mens" : "Womens");
+                    customizedNewString = string.Format(newString, Game1.player.Gender == Gender.Male ? "Mens" : "Womens");
                 }
 
                 if (singleWord)
