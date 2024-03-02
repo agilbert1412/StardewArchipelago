@@ -52,18 +52,19 @@ namespace StardewArchipelago.Locations.Patcher
                 return;
             }
 
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(Event), nameof(Event.skipEvent)),
-                prefix: new HarmonyMethod(typeof(ModdedEventInjections), nameof(ModdedEventInjections.SkipEvent_ReplaceRecipe_Prefix))
-            );
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(Event), nameof(Event.command_addCookingRecipe)),
-                prefix: new HarmonyMethod(typeof(ModdedEventInjections), nameof(ModdedEventInjections.AddCookingRecipe_CheckForStrayRecipe_Prefix))
-            );
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(Event), nameof(Event.command_addCraftingRecipe)),
-                prefix: new HarmonyMethod(typeof(ModdedEventInjections), nameof(ModdedEventInjections.AddCraftingRecipe_CheckForStrayRecipe_Prefix))
-            );
+            throw new Exception($"{nameof(AddDistantLandsEventInjections)} is not ready for 1.6");
+            //_harmony.Patch(
+            //    original: AccessTools.Method(typeof(Event), nameof(Event.skipEvent)),
+            //    prefix: new HarmonyMethod(typeof(ModdedEventInjections), nameof(ModdedEventInjections.SkipEvent_ReplaceRecipe_Prefix))
+            //);
+            //_harmony.Patch(
+            //    original: AccessTools.Method(typeof(Event), nameof(Event.command_addCookingRecipe)),
+            //    prefix: new HarmonyMethod(typeof(ModdedEventInjections), nameof(ModdedEventInjections.AddCookingRecipe_CheckForStrayRecipe_Prefix))
+            //);
+            //_harmony.Patch(
+            //    original: AccessTools.Method(typeof(Event), nameof(Event.command_addCraftingRecipe)),
+            //    prefix: new HarmonyMethod(typeof(ModdedEventInjections), nameof(ModdedEventInjections.AddCraftingRecipe_CheckForStrayRecipe_Prefix))
+            //);
         }
 
         private void AddModSkillInjections()
