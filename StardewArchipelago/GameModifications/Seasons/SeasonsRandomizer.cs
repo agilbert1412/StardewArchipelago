@@ -68,7 +68,11 @@ namespace StardewArchipelago.GameModifications.Seasons
         {
             Game1.currentSeason = season.ToLower();
             Game1.setGraphicsForSeason();
-            Utility.ForAllLocations(l => l.seasonUpdate(Game1.GetSeasonForLocation(l)));
+            Utility.ForEachLocation(location =>
+            {
+                location.seasonUpdate();
+                return true;
+            });
         }
 
         // private static void newSeason()
@@ -78,7 +82,7 @@ namespace StardewArchipelago.GameModifications.Seasons
             {
                 SetSeason(_state.SeasonsOrder.Last());
                 Game1.dayOfMonth = 1;
-                Game1.addKentIfNecessary();
+                Game1.AddCharacterIfNecessary("Kent");
                 return false; // don't run original logic
             }
             catch (Exception ex)
