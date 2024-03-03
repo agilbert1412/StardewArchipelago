@@ -44,7 +44,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             try
             {
                 var rewards = new List<Item>();
-                var museumItems = new HashSet<int>(__instance.museumPieces.Values);
+                var museumItems = new HashSet<string>(__instance.museumPieces.Values);
                 var numberOfMuseumItemsMethod =
                     _modHelper.Reflection.GetMethod(__instance, "numberOfMuseumItemsOfType");
                 var numberOfArtifactsDonated = numberOfMuseumItemsMethod.Invoke<int>("Arch");
@@ -99,10 +99,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             SendLetterForTotal(who, "museum50", totalNumberDonated, 50);
             if (totalNumberDonated >= 60)
             {
-                if (!Game1.player.eventsSeen.Contains(295672))
-                    Game1.player.eventsSeen.Add(295672);
-                if (!Game1.player.eventsSeen.Contains(66))
-                    Game1.player.eventsSeen.Add(66);
+                Game1.player.eventsSeen.Add("295672");
+                Game1.player.eventsSeen.Add("66");
             }
 
             SendLetterForTotal(who, "museum70", totalNumberDonated, 70);
@@ -143,21 +141,21 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
         }
 
-        private static void CheckSpecialCollections(HashSet<int> museumItems)
+        private static void CheckSpecialCollections(HashSet<string> museumItems)
         {
             if (_archipelago.SlotData.Museumsanity != Museumsanity.Milestones)
             {
                 return;
             }
 
-            CheckSpecialCollection(museumItems, new[] { 96, 97, 98, 99 }, MUSEUMSANITY_DWARF_SCROLLS);
-            CheckSpecialCollection(museumItems, new[] { 114 }, MUSEUMSANITY_ANCIENT_SEED);
-            CheckSpecialCollection(museumItems, new[] { 579, 581, 582 }, MUSEUMSANITY_SKELETON_FRONT);
-            CheckSpecialCollection(museumItems, new[] { 583, 584 }, MUSEUMSANITY_SKELETON_MIDDLE);
-            CheckSpecialCollection(museumItems, new[] { 580, 585 }, MUSEUMSANITY_SKELETON_BACK);
+            CheckSpecialCollection(museumItems, new[] { "96", "97", "98", "99" }, MUSEUMSANITY_DWARF_SCROLLS);
+            CheckSpecialCollection(museumItems, new[] { "114" }, MUSEUMSANITY_ANCIENT_SEED);
+            CheckSpecialCollection(museumItems, new[] { "579", "581", "582" }, MUSEUMSANITY_SKELETON_FRONT);
+            CheckSpecialCollection(museumItems, new[] { "583", "584" }, MUSEUMSANITY_SKELETON_MIDDLE);
+            CheckSpecialCollection(museumItems, new[] { "580", "585" }, MUSEUMSANITY_SKELETON_BACK);
         }
 
-        private static void CheckSpecialCollection(HashSet<int> museumItems, int[] requiredItems, string apSubLocation)
+        private static void CheckSpecialCollection(HashSet<string> museumItems, string[] requiredItems, string apSubLocation)
         {
             if (requiredItems.All(museumItems.Contains))
             {
@@ -169,7 +167,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
         }
 
-        private static void CheckSpecificItems(HashSet<int> museumItems)
+        private static void CheckSpecificItems(HashSet<string> museumItems)
         {
             if (_archipelago.SlotData.Museumsanity == Museumsanity.Milestones)
             {
