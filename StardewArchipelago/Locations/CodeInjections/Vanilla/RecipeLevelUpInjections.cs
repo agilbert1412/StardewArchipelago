@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants.Locations;
 using StardewModdingAPI;
 using StardewValley.Menus;
 
@@ -61,7 +62,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 var skillRecipesAtLevel = skillRecipes[i];
                 foreach (var skillRecipe in skillRecipesAtLevel)
                 {
-                    _locationChecker.AddCheckedLocation($"{skillRecipe}{RecipePurchaseInjections.CHEFSANITY_LOCATION_SUFFIX}");
+                    _locationChecker.AddCheckedLocation($"{skillRecipe}{Suffix.CHEFSANITY}");
                 }
             }
         }
