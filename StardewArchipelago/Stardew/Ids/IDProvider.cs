@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Reflection;
 using StardewArchipelago.Locations;
 
-namespace StardewArchipelago.Stardew.ItemIds
+namespace StardewArchipelago.Stardew.Ids
 {
     public static class IDProvider
     {

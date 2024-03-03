@@ -3,7 +3,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Stardew;
-using StardewArchipelago.Stardew.ItemIds;
+using StardewArchipelago.Stardew.Ids.Vanilla;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Characters;
@@ -15,7 +15,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
     {
         private static readonly string[] _cropsanityExceptions = new[]
         {
-            BaseGameItemIds.WEEDS, BaseGameItemIds.SPRING_ONION, BaseGameItemIds.ANCIENT_FRUIT, BaseGameItemIds.FIBER, BaseGameItemIds.QI_FRUIT
+            ItemIds.WEEDS, ItemIds.SPRING_ONION, ItemIds.ANCIENT_FRUIT, ItemIds.FIBER, ItemIds.QI_FRUIT
         };
 
         private static IMonitor _monitor;
@@ -43,9 +43,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
                 var itemId = __instance.indexOfHarvest.Value;
 
-                if (itemId == BaseGameItemIds.SUNFLOWER_SEEDS)
+                if (itemId == ItemIds.SUNFLOWER_SEEDS)
                 {
-                    itemId = BaseGameItemIds.SUNFLOWER; // Sunflower instead of sunflower seeds
+                    itemId = ItemIds.SUNFLOWER; // Sunflower instead of sunflower seeds
                 }
 
                 if (!_itemManager.ObjectExists(itemId))

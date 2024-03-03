@@ -3,7 +3,7 @@ using System.Linq;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Goals;
 using StardewArchipelago.Stardew;
-using StardewArchipelago.Stardew.ItemIds;
+using StardewArchipelago.Stardew.Ids.Vanilla;
 using StardewModdingAPI;
 using StardewValley;
 
@@ -13,15 +13,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
     {
         private static readonly string[] _fishedTrash = new[]
         {
-            BaseGameItemIds.JOJA_COLA, BaseGameItemIds.TRASH, BaseGameItemIds.DRIFTWOOD,
-            BaseGameItemIds.BROKEN_GLASSES, BaseGameItemIds.BROKEN_CD, BaseGameItemIds.SOGGY_NEWSPAPER,
+            ItemIds.JOJA_COLA, ItemIds.TRASH, ItemIds.DRIFTWOOD,
+            ItemIds.BROKEN_GLASSES, ItemIds.BROKEN_CD, ItemIds.SOGGY_NEWSPAPER,
         };
 
         private static readonly string[] _fishsanityExceptions = new[]
         {
-            BaseGameItemIds.GREEN_ALGAE, BaseGameItemIds.WHITE_ALGAE, BaseGameItemIds.SEAWEED, BaseGameItemIds.ORNATE_NECKLACE, BaseGameItemIds.GOLDEN_WALNUT, 
-            BaseGameItemIds.SECRET_NOTE, BaseGameItemIds.FOSSILIZED_SPINE, BaseGameItemIds.PEARL, BaseGameItemIds.SNAKE_SKULL, BaseGameItemIds.JOURNAL_SCRAP,
-            BaseGameItemIds.QI_BEAN,
+            ItemIds.GREEN_ALGAE, ItemIds.WHITE_ALGAE, ItemIds.SEAWEED, ItemIds.ORNATE_NECKLACE, ItemIds.GOLDEN_WALNUT, 
+            ItemIds.SECRET_NOTE, ItemIds.FOSSILIZED_SPINE, ItemIds.PEARL, ItemIds.SNAKE_SKULL, ItemIds.JOURNAL_SCRAP,
+            ItemIds.QI_BEAN,
         };
         public const string FISHSANITY_PREFIX = "Fishsanity: ";
 
