@@ -42,6 +42,7 @@ namespace StardewArchipelago.Locations.Festival
         public const string RARECROW_7 = "Rarecrow #7 (Tanuki)";
         public const string RARECROW_8 = "Rarecrow #8 (Tribal Mask)";
         public const string RARECROW_3 = "Rarecrow #3 (Alien)";
+        public const string RARECROW_6 = "Rarecrow #6 (Dwarf)";
         public const string LUPINI_YEAR_1_PAINTING_1 = "Lupini: Red Eagle";
         public const string LUPINI_YEAR_1_PAINTING_2 = "Lupini: Portrait Of A Mermaid";
         public const string LUPINI_YEAR_1_PAINTING_3 = "Lupini: Solar Kingdom";

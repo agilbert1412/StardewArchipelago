@@ -16,12 +16,12 @@ namespace StardewArchipelago.GameModifications.Modded
         private readonly ArchipelagoClient _archipelago;
         private readonly StardewItemManager _stardewItemManager;
 
-        public ModRandomizedLogicPatcher(IMonitor monitor, IModHelper modHelper, Harmony harmony, ArchipelagoClient archipelago, ShopStockGenerator shopStockGenerator, StardewItemManager stardewItemManager, JunimoShopGenerator junimoShopGenerator)
+        public ModRandomizedLogicPatcher(IMonitor monitor, IModHelper modHelper, Harmony harmony, ArchipelagoClient archipelago, SeedShopStockModifier seedShopStockModifier, StardewItemManager stardewItemManager, JunimoShopGenerator junimoShopGenerator)
         {
             _harmony = harmony;
             _archipelago = archipelago;
             _stardewItemManager = stardewItemManager;
-            JunimoShopInjections.Initialize(monitor, modHelper, archipelago, shopStockGenerator, _stardewItemManager, junimoShopGenerator);
+            JunimoShopInjections.Initialize(monitor, modHelper, archipelago, seedShopStockModifier, _stardewItemManager, junimoShopGenerator);
 
         }
 

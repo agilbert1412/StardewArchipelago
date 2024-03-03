@@ -12,7 +12,7 @@ namespace StardewArchipelago.GameModifications.Modded
     public class JunimoShopGenerator
     {
         private ArchipelagoClient _archipelago;
-        private ShopStockGenerator _shopStockGenerator;
+        private SeedShopStockModifier _seedShopStockModifier;
         private StardewItemManager _stardewItemManager;
 
         // Persistent Stock no longer exists, because the new modding API stuff allows for making a persistent stock using a single parameter
@@ -74,11 +74,11 @@ namespace StardewArchipelago.GameModifications.Modded
         //}
 
         public JunimoShopGenerator(
-            ArchipelagoClient archipelago, ShopStockGenerator shopStockGenerator, StardewItemManager stardewItemManager)
+            ArchipelagoClient archipelago, SeedShopStockModifier seedShopStockModifier, StardewItemManager stardewItemManager)
         {
             throw new Exception($"{nameof(JunimoShopGenerator)} is not ready for 1.6; Look at my comment at the beginning of the file");
             //_archipelago = archipelago;
-            //_shopStockGenerator = shopStockGenerator;
+            //_seedShopStockModifier = seedShopStockModifier;
             //_stardewItemManager = stardewItemManager;
             //RedPersistentStock = new PersistentStock();
             //GreyPersistentStock = new PersistentStock();

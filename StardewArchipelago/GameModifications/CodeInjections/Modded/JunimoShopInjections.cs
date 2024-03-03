@@ -17,7 +17,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Modded
         private static IMonitor _monitor;
         private static IModHelper _modHelper;
         private static ArchipelagoClient _archipelago;
-        private static ShopStockGenerator _shopStockGenerator;
+        private static SeedShopStockModifier _seedShopStockModifier;
         private static StardewItemManager _stardewItemManager;
         private static JunimoShopGenerator _junimoShopGenerator;
         private static readonly string Question = "Me love purple thing-a-ma-bobs!  Could give VERY special gift!  You want?";
@@ -47,12 +47,12 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Modded
             {"Tiny Crop (stage 1)", "Orange"}, {"Super Starfruit", "Purple"}, {"Magic Bait", "Purple"}
         };
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, ShopStockGenerator shopStockGenerator, StardewItemManager stardewItemManager, JunimoShopGenerator junimoShopGenerator)
+        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, SeedShopStockModifier seedShopStockModifier, StardewItemManager stardewItemManager, JunimoShopGenerator junimoShopGenerator)
         {
             _monitor = monitor;
             _modHelper = modHelper;
             _archipelago = archipelago;
-            _shopStockGenerator = shopStockGenerator;
+            _seedShopStockModifier = seedShopStockModifier;
             _stardewItemManager = stardewItemManager;
             _junimoShopGenerator = junimoShopGenerator;
         }
