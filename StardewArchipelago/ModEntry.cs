@@ -261,7 +261,7 @@ namespace StardewArchipelago
                 _itemPatcher = new ItemPatcher(Monitor, _helper, _harmony, _archipelago);
                 _goalManager = new GoalManager(Monitor, _helper, _harmony, _archipelago, _locationChecker);
                 _entranceManager = new EntranceManager(Monitor, _archipelago, State);
-                var shopStockGenerator = new ShopStockGenerator(Monitor, _helper, _archipelago, _locationChecker);
+                var shopStockGenerator = new SeedShopStockModifier(Monitor, _helper, _archipelago, _locationChecker);
                 var junimoShopGenerator = new JunimoShopGenerator(_archipelago, shopStockGenerator, _stardewItemManager);
                 var nameSimplifier = new NameSimplifier();
                 var friends = new Friends();

@@ -37,17 +37,17 @@ namespace StardewArchipelago.GameModifications
         private readonly ArchipelagoClient _archipelago;
         private readonly StardewItemManager _stardewItemManager;
         private readonly StartingResources _startingResources;
-        private readonly ShopStockGenerator _shopStockGenerator;
+        private readonly SeedShopStockModifier _seedShopStockModifier;
         private readonly RecipeDataRemover _recipeDataRemover;
 
-        public RandomizedLogicPatcher(IMonitor monitor, IModHelper modHelper, Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager stardewItemManager, EntranceManager entranceManager, ShopStockGenerator shopStockGenerator, NameSimplifier nameSimplifier, Friends friends, ArchipelagoStateDto state)
+        public RandomizedLogicPatcher(IMonitor monitor, IModHelper modHelper, Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager stardewItemManager, EntranceManager entranceManager, SeedShopStockModifier seedShopStockModifier, NameSimplifier nameSimplifier, Friends friends, ArchipelagoStateDto state)
         {
             _harmony = harmony;
             _helper = modHelper;
             _archipelago = archipelago;
             _stardewItemManager = stardewItemManager;
             _startingResources = new StartingResources(_archipelago, locationChecker, _stardewItemManager);
-            _shopStockGenerator = shopStockGenerator;
+            _seedShopStockModifier = seedShopStockModifier;
             _recipeDataRemover = new RecipeDataRemover(monitor, modHelper, archipelago);
             MineshaftLogicInjections.Initialize(monitor);
             CommunityCenterLogicInjections.Initialize(monitor, locationChecker);
@@ -330,12 +330,12 @@ namespace StardewArchipelago.GameModifications
 
         private void PatchSeedShops()
         {
-            _helper.Events.Content.AssetRequested += _shopStockGenerator.OnSeedShopStockRequested;
+            _helper.Events.Content.AssetRequested += _seedShopStockModifier.OnSeedShopStockRequested;
         }
 
         private void UnpatchSeedShops()
         {
-            _helper.Events.Content.AssetRequested -= _shopStockGenerator.OnSeedShopStockRequested;
+            _helper.Events.Content.AssetRequested -= _seedShopStockModifier.OnSeedShopStockRequested;
         }
 
         private const string FISH_CASSEROLE_QUEST_ID = "22";
