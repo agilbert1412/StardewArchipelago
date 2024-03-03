@@ -30,12 +30,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
 
             _friends = new List<ArchipelagoFriend>();
             var npcs = DataLoader.Characters(Game1.content);
-            foreach (var (name, npcInfo) in npcs)
+            foreach (var (name, npcData) in npcs)
             {
-                var villagerInfoParts = npcInfo.Split('/');
-                var gender = villagerInfoParts[4];
-                var datable = villagerInfoParts[5] == "datable";
-                var spawnLocation = villagerInfoParts[10].Split(" ")[0];
+                var gender = npcData.Gender;
+                var datable = npcData.CanBeRomanced;
+                var spawnLocation = npcData.HomeRegion;
                 var spawnsOnIsland = IsIslandLocation(spawnLocation);
                 var apName = NameAliases.NPCNameAliases.ContainsKey(name) ? NameAliases.NPCNameAliases[name] : name;
 
