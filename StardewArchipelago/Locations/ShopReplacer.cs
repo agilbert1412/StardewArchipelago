@@ -143,32 +143,5 @@ namespace StardewArchipelago.Locations
             var purchaseableLocation = new PurchaseableArchipelagoLocation(apLocationName, _monitor, _modHelper, _locationChecker, _archipelago, myActiveHints);
             itemPriceAndStock.Add(purchaseableLocation, itemStockInfo);
         }
-
-        private bool IsRarecrow(Object item)
-        {
-            return item.IsScarecrow() &&
-                   item.Name == "Rarecrow";
-        }
-
-        public bool IsRarecrow(Object item, int rarecrowNumber)
-        {
-            if (!IsRarecrow(item))
-            {
-                return false;
-            }
-
-            return rarecrowNumber switch
-            {
-                1 => item.ParentSheetIndex == 110,
-                2 => item.ParentSheetIndex == 113,
-                3 => item.ParentSheetIndex == 126,
-                4 => item.ParentSheetIndex == 136,
-                5 => item.ParentSheetIndex == 137,
-                6 => item.ParentSheetIndex == 138,
-                7 => item.ParentSheetIndex == 139,
-                8 => item.ParentSheetIndex == 140,
-                _ => false,
-            };
-        }
     }
 }

@@ -16,8 +16,6 @@ namespace StardewArchipelago.Locations.Festival
 {
     public class BeachNightMarketInjections
     {
-        private const int CATEGORY_SEEDS = -74;
-
         private static IMonitor _monitor;
         private static IModHelper _modHelper;
         private static ArchipelagoClient _archipelago;
@@ -31,45 +29,6 @@ namespace StardewArchipelago.Locations.Festival
             _archipelago = archipelago;
             _locationChecker = locationChecker;
             _shopReplacer = shopReplacer;
-        }
-
-        // public Dictionary<ISalable, int[]> geMagicShopStock()
-        public static void GetMagicShopStock_UniqueItemsAndSeeds_Postfix(ShopMenu __instance, ref Dictionary<ISalable, int[]> __result)
-        {
-            try
-            {
-                var myActiveHints = _archipelago.GetMyActiveHints();
-                foreach (var salableItem in __result.Keys.ToArray())
-                {
-                    if (salableItem is not Item)
-                    {
-                        continue;
-                    }
-
-                    if (_archipelago.SlotData.FestivalLocations == FestivalLocations.Vanilla)
-                    {
-                        continue;
-                    }
-
-                    _shopReplacer.ReplaceShopItem(__result, salableItem, FestivalLocationNames.RARECROW_7, item => _shopReplacer.IsRarecrow(item, 7), myActiveHints);
-                    _shopReplacer.ReplaceShopItem(__result, salableItem, FestivalLocationNames.RARECROW_8, item => _shopReplacer.IsRarecrow(item, 8), myActiveHints);
-
-                    if (_archipelago.SlotData.FestivalLocations != FestivalLocations.Hard)
-                    {
-                        continue;
-                    }
-
-                    _shopReplacer.ReplaceShopItem(__result, salableItem, FestivalLocationNames.CONE_HAT, item => item.which.Value == 39, myActiveHints);
-                    _shopReplacer.ReplaceShopItem(__result, salableItem, FestivalLocationNames.IRIDIUM_FIREPLACE, (Furniture item) => item.ParentSheetIndex == 1796, myActiveHints);
-                }
-
-                return;
-            }
-            catch (Exception ex)
-            {
-                _monitor.Log($"Failed in {nameof(GetMagicShopStock_UniqueItemsAndSeeds_Postfix)}:\n{ex}", LogLevel.Error);
-                return;
-            }
         }
 
         // public override void draw(SpriteBatch b)

@@ -1,30 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.GameModifications.CodeInjections;
 using StardewArchipelago.Locations;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
-using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.GameData;
 using StardewValley.GameData.Shops;
-using StardewValley.Locations;
-using StardewValley.Objects;
-using StardewValley.Util;
-using Object = StardewValley.Object;
 
 namespace StardewArchipelago.GameModifications
 {
-    public class ShopStockGenerator
+    public class SeedShopStockModifier
     {
-        private const int CATEGORY_SEEDS = -74;
-        private const int STRAWBERRY_SEEDS = 745;
-        private const int MIXED_SEEDS = 770;
         private const float JOJA_PRICE_MULTIPLIER = 0.8f;
 
         private IMonitor _monitor;
@@ -32,7 +22,7 @@ namespace StardewArchipelago.GameModifications
         private ArchipelagoClient _archipelago;
         private LocationChecker _locationChecker;
 
-        public ShopStockGenerator(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public SeedShopStockModifier(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             _monitor = monitor;
             _modHelper = modHelper;
@@ -189,7 +179,7 @@ namespace StardewArchipelago.GameModifications
                     continue;
                 }
 
-                if (itemData.Category != CATEGORY_SEEDS || itemData.Name == "Mixed Seeds")
+                if (itemData.Category != Category.SEEDS || itemData.Name == "Mixed Seeds")
                 {
                     continue;
                 }
