@@ -48,7 +48,7 @@ namespace StardewArchipelago.Items.Unlocks
             {
                 var experienceForLevelUp = farmer.GetExperienceToNextLevel(Skill.Luck);
                 farmer.AddExperience(Skill.Luck, experienceForLevelUp);
-                farmer.LuckLevel = farmer.luckLevel.Value + 1;
+                farmer.luckLevel.Value++;
                 farmer.newLevels.Add(new Point((int)Skill.Luck, farmer.luckLevel.Value));
             }
             return new LetterInformationAttachment(receivedItem);
