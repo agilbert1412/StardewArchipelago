@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Constants;
+using StardewArchipelago.Constants.Locations;
+using StardewArchipelago.Constants.Vanilla;
 using StardewModdingAPI;
 using StardewValley;
 
@@ -87,7 +88,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
                 var aliasedRecipeName = GetAliased(recipeName);
 
-                _locationChecker.AddCheckedLocation($"{aliasedRecipeName}{RecipePurchaseInjections.CHEFSANITY_LOCATION_SUFFIX}");
+                _locationChecker.AddCheckedLocation($"{aliasedRecipeName}{Suffix.CHEFSANITY}");
             }
         }
 

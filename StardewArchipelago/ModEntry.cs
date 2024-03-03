@@ -27,10 +27,10 @@ using StardewValley.Locations;
 using StardewArchipelago.GameModifications.Modded;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
 using StardewArchipelago.Locations.CodeInjections.Modded;
-using StardewArchipelago.Stardew.Ids;
 using StardewArchipelago.Stardew.NameMapping;
 using StardewValley.Delegates;
 using StardewValley.Internal;
+using StardewArchipelago.Constants;
 
 namespace StardewArchipelago
 {

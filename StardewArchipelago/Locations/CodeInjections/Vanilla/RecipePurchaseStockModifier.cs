@@ -5,6 +5,8 @@ using Archipelago.MultiClient.Net.Models;
 using Force.DeepCloner;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants;
+using StardewArchipelago.Constants.Locations;
 using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
@@ -21,8 +23,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
     public class RecipePurchaseStockModifier
     {
-        public const string CHEFSANITY_LOCATION_SUFFIX = " Recipe";
-
         private static IMonitor _monitor;
         private static IModHelper _helper;
         private static ArchipelagoClient _archipelago;
@@ -77,8 +77,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     continue;
                 }
 
-                var location = $"{itemData.Name}{CHEFSANITY_LOCATION_SUFFIX}";
-                var id = $"{PurchaseableArchipelagoLocation.PURCHASEABLE_AP_LOCATION_ID} {location}";
+                var location = $"{itemData.Name}{Suffix.CHEFSANITY}";
+                var id = $"{IDProvider.PURCHASEABLE_AP_LOCATION} {location}";
                 var shopItem = item.DeepClone();
                 shopItem.Id = id;
                 shopItem.ItemId = id;

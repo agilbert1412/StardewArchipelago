@@ -13,15 +13,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
     {
         private static readonly string[] _fishedTrash = new[]
         {
-            ItemIds.JOJA_COLA, ItemIds.TRASH, ItemIds.DRIFTWOOD,
-            ItemIds.BROKEN_GLASSES, ItemIds.BROKEN_CD, ItemIds.SOGGY_NEWSPAPER,
+            ObjectIds.JOJA_COLA, ObjectIds.TRASH, ObjectIds.DRIFTWOOD,
+            ObjectIds.BROKEN_GLASSES, ObjectIds.BROKEN_CD, ObjectIds.SOGGY_NEWSPAPER,
         };
 
         private static readonly string[] _fishsanityExceptions = new[]
         {
-            ItemIds.GREEN_ALGAE, ItemIds.WHITE_ALGAE, ItemIds.SEAWEED, ItemIds.ORNATE_NECKLACE, ItemIds.GOLDEN_WALNUT, 
-            ItemIds.SECRET_NOTE, ItemIds.FOSSILIZED_SPINE, ItemIds.PEARL, ItemIds.SNAKE_SKULL, ItemIds.JOURNAL_SCRAP,
-            ItemIds.QI_BEAN,
+            ObjectIds.GREEN_ALGAE, ObjectIds.WHITE_ALGAE, ObjectIds.SEAWEED, ObjectIds.ORNATE_NECKLACE, ObjectIds.GOLDEN_WALNUT, 
+            ObjectIds.SECRET_NOTE, ObjectIds.FOSSILIZED_SPINE, ObjectIds.PEARL, ObjectIds.SNAKE_SKULL, ObjectIds.JOURNAL_SCRAP,
+            ObjectIds.QI_BEAN,
         };
         public const string FISHSANITY_PREFIX = "Fishsanity: ";
 

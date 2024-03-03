@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using StardewArchipelago.Locations;
 
-namespace StardewArchipelago.Stardew.Ids
+namespace StardewArchipelago.Constants
 {
     public static class IDProvider
     {

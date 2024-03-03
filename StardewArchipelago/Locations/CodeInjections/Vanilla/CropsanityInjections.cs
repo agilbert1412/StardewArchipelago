@@ -15,7 +15,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
     {
         private static readonly string[] _cropsanityExceptions = new[]
         {
-            ItemIds.WEEDS, ItemIds.SPRING_ONION, ItemIds.ANCIENT_FRUIT, ItemIds.FIBER, ItemIds.QI_FRUIT
+            ObjectIds.WEEDS, ObjectIds.SPRING_ONION, ObjectIds.ANCIENT_FRUIT, ObjectIds.FIBER, ObjectIds.QI_FRUIT
         };
 
         private static IMonitor _monitor;
@@ -43,9 +43,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
                 var itemId = __instance.indexOfHarvest.Value;
 
-                if (itemId == ItemIds.SUNFLOWER_SEEDS)
+                if (itemId == ObjectIds.SUNFLOWER_SEEDS)
                 {
-                    itemId = ItemIds.SUNFLOWER; // Sunflower instead of sunflower seeds
+                    itemId = ObjectIds.SUNFLOWER; // Sunflower instead of sunflower seeds
                 }
 
                 if (!_itemManager.ObjectExists(itemId))

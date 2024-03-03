@@ -1,4 +1,4 @@
-﻿namespace StardewArchipelago.Constants
+﻿namespace StardewArchipelago.Constants.Vanilla
 {
     public class DailyQuest
     {

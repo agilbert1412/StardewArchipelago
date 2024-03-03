@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Constants;
+using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.GameModifications.CodeInjections;
 using StardewArchipelago.Locations;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
@@ -122,21 +122,21 @@ namespace StardewArchipelago.GameModifications
 
             if (Game1.player.friendshipData.ContainsKey("Sandy"))
             {
-                AddToJojaShop(shopData, ShopItemIds.RHUBARB_SEEDS);
-                AddToJojaShop(shopData, ShopItemIds.STARFRUIT_SEEDS);
-                AddToJojaShop(shopData, ShopItemIds.BEET_SEEDS);
+                AddToJojaShop(shopData, QualifiedItemIds.RHUBARB_SEEDS);
+                AddToJojaShop(shopData, QualifiedItemIds.STARFRUIT_SEEDS);
+                AddToJojaShop(shopData, QualifiedItemIds.BEET_SEEDS);
             }
 
             if (TravelingMerchantInjections.HasAnyTravelingMerchantDay())
             {
-                AddToJojaShop(shopData, ShopItemIds.RARE_SEED, 10, 1000);
+                AddToJojaShop(shopData, QualifiedItemIds.RARE_SEED, 10, 1000);
             }
             
-            AddToJojaShop(shopData, ShopItemIds.SUGAR, 20);
-            AddToJojaShop(shopData, ShopItemIds.WHEAT_FLOUR, 20);
-            AddToJojaShop(shopData, ShopItemIds.RICE, 20);
-            AddToJojaShop(shopData, ShopItemIds.OIL, 20);
-            AddToJojaShop(shopData, ShopItemIds.VINEGAR, 20);
+            AddToJojaShop(shopData, QualifiedItemIds.SUGAR, 20);
+            AddToJojaShop(shopData, QualifiedItemIds.WHEAT_FLOUR, 20);
+            AddToJojaShop(shopData, QualifiedItemIds.RICE, 20);
+            AddToJojaShop(shopData, QualifiedItemIds.OIL, 20);
+            AddToJojaShop(shopData, QualifiedItemIds.VINEGAR, 20);
 
             var itemsData = DataLoader.Objects(Game1.content);
             foreach (var item in shopData.Items)

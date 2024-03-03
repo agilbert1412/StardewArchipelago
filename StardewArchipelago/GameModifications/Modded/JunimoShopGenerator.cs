@@ -428,69 +428,69 @@ namespace StardewArchipelago.GameModifications.Modded
             //AddSummerSeedsToYellowStock(stock);
             //AddFallSeedsToYellowStock(stock);
             //AddSaplingsToShop(stock);
-            //AddToJunimoStock(stock, ShopItemIds.RHUBARB_SEEDS, "Yellow", true);
-            //AddToJunimoStock(stock, ShopItemIds.STARFRUIT_SEEDS, "Yellow", true);
-            //AddToJunimoStock(stock, ShopItemIds.BEET_SEEDS, "Yellow", true);
+            //AddToJunimoStock(stock, QualifiedItemIds.RHUBARB_SEEDS, "Yellow", true);
+            //AddToJunimoStock(stock, QualifiedItemIds.STARFRUIT_SEEDS, "Yellow", true);
+            //AddToJunimoStock(stock, QualifiedItemIds.BEET_SEEDS, "Yellow", true);
             //AddJunimoModdedStock(stock);
         }
 
         private void AddSpringSeedsToYellowStock(Dictionary<ISalable, int[]> stock)
         {
             throw new Exception($"{nameof(AddSpringSeedsToYellowStock)} is not ready for 1.6; Look at my comment at the beginning of the file");
-            //AddToJunimoStock(stock, ShopItemIds.PARSNIP_SEEDS, "Yellow", true, spring);
-            //AddToJunimoStock(stock, ShopItemIds.BEAN_STARTER, "Yellow", true, spring);
-            //AddToJunimoStock(stock, ShopItemIds.CAULIFLOWER_SEEDS, "Yellow", true, spring);
-            //AddToJunimoStock(stock, ShopItemIds.POTATO_SEEDS, "Yellow", true, spring);
-            //AddToJunimoStock(stock, ShopItemIds.TULIP_BULB, "Yellow", true, spring);
-            //AddToJunimoStock(stock, ShopItemIds.KALE_SEEDS, "Yellow", true, spring);
-            //AddToJunimoStock(stock, ShopItemIds.JAZZ_SEEDS, "Yellow", true, spring);
-            //AddToJunimoStock(stock, ShopItemIds.GARLIC_SEEDS, "Yellow", true, spring);
-            //AddToJunimoStock(stock, ShopItemIds.RICE_SHOOT, "Yellow", true, spring);
+            //AddToJunimoStock(stock, QualifiedItemIds.PARSNIP_SEEDS, "Yellow", true, spring);
+            //AddToJunimoStock(stock, QualifiedItemIds.BEAN_STARTER, "Yellow", true, spring);
+            //AddToJunimoStock(stock, QualifiedItemIds.CAULIFLOWER_SEEDS, "Yellow", true, spring);
+            //AddToJunimoStock(stock, QualifiedItemIds.POTATO_SEEDS, "Yellow", true, spring);
+            //AddToJunimoStock(stock, QualifiedItemIds.TULIP_BULB, "Yellow", true, spring);
+            //AddToJunimoStock(stock, QualifiedItemIds.KALE_SEEDS, "Yellow", true, spring);
+            //AddToJunimoStock(stock, QualifiedItemIds.JAZZ_SEEDS, "Yellow", true, spring);
+            //AddToJunimoStock(stock, QualifiedItemIds.GARLIC_SEEDS, "Yellow", true, spring);
+            //AddToJunimoStock(stock, QualifiedItemIds.RICE_SHOOT, "Yellow", true, spring);
         }
 
         private void AddSummerSeedsToYellowStock(Dictionary<ISalable, int[]> stock)
         {
             throw new Exception($"{nameof(AddSummerSeedsToYellowStock)} is not ready for 1.6; Look at my comment at the beginning of the file");
-            //AddToJunimoStock(stock, ShopItemIds.MELON_SEEDS, "Yellow", true, summer);
-            //AddToJunimoStock(stock, ShopItemIds.TOMATO_SEEDS, "Yellow", true, summer);
-            //AddToJunimoStock(stock, ShopItemIds.BLUEBERRY_SEEDS, "Yellow", true, summer);
-            //AddToJunimoStock(stock, ShopItemIds.PEPPER_SEEDS, "Yellow", true, summer);
-            //AddToJunimoStock(stock, ShopItemIds.WHEAT_SEEDS, "Yellow", true, summer);
-            //AddToJunimoStock(stock, ShopItemIds.RADISH_SEEDS, "Yellow", true, summer);
-            //AddToJunimoStock(stock, ShopItemIds.POPPY_SEEDS, "Yellow", true, summer);
-            //AddToJunimoStock(stock, ShopItemIds.SPANGLE_SEEDS, "Yellow", true, summer);
-            //AddToJunimoStock(stock, ShopItemIds.HOPS_STARTER, "Yellow", true, summer);
-            //AddToJunimoStock(stock, ShopItemIds.CORN_SEEDS, "Yellow", true, summer);
-            //AddToJunimoStock(stock, ShopItemIds.SUNFLOWER_SEEDS, "Yellow", true, summer);
-            //AddToJunimoStock(stock, ShopItemIds.RED_CABBAGE_SEEDS, "Yellow", true, summer);
+            //AddToJunimoStock(stock, QualifiedItemIds.MELON_SEEDS, "Yellow", true, summer);
+            //AddToJunimoStock(stock, QualifiedItemIds.TOMATO_SEEDS, "Yellow", true, summer);
+            //AddToJunimoStock(stock, QualifiedItemIds.BLUEBERRY_SEEDS, "Yellow", true, summer);
+            //AddToJunimoStock(stock, QualifiedItemIds.PEPPER_SEEDS, "Yellow", true, summer);
+            //AddToJunimoStock(stock, QualifiedItemIds.WHEAT_SEEDS, "Yellow", true, summer);
+            //AddToJunimoStock(stock, QualifiedItemIds.RADISH_SEEDS, "Yellow", true, summer);
+            //AddToJunimoStock(stock, QualifiedItemIds.POPPY_SEEDS, "Yellow", true, summer);
+            //AddToJunimoStock(stock, QualifiedItemIds.SPANGLE_SEEDS, "Yellow", true, summer);
+            //AddToJunimoStock(stock, QualifiedItemIds.HOPS_STARTER, "Yellow", true, summer);
+            //AddToJunimoStock(stock, QualifiedItemIds.CORN_SEEDS, "Yellow", true, summer);
+            //AddToJunimoStock(stock, QualifiedItemIds.SUNFLOWER_SEEDS, "Yellow", true, summer);
+            //AddToJunimoStock(stock, QualifiedItemIds.RED_CABBAGE_SEEDS, "Yellow", true, summer);
         }
 
         private void AddFallSeedsToYellowStock(Dictionary<ISalable, int[]> stock)
         {
             throw new Exception($"{nameof(AddFallSeedsToYellowStock)} is not ready for 1.6; Look at my comment at the beginning of the file");
-            //AddToJunimoStock(stock, ShopItemIds.PUMPKIN_SEEDS, "Yellow", true, fall);
-            //AddToJunimoStock(stock, ShopItemIds.CORN_SEEDS, "Yellow", true, fall);
-            //AddToJunimoStock(stock, ShopItemIds.EGGPLANT_SEEDS, "Yellow", true, fall);
-            //AddToJunimoStock(stock, ShopItemIds.BOK_CHOY_SEEDS, "Yellow", true, fall);
-            //AddToJunimoStock(stock, ShopItemIds.YAM_SEEDS, "Yellow", true, fall);
-            //AddToJunimoStock(stock, ShopItemIds.CRANBERRY_SEEDS, "Yellow", true, fall);
-            //AddToJunimoStock(stock, ShopItemIds.WHEAT_SEEDS, "Yellow", true, fall);
-            //AddToJunimoStock(stock, ShopItemIds.SUNFLOWER_SEEDS, "Yellow", true, fall);
-            //AddToJunimoStock(stock, ShopItemIds.FAIRY_SEEDS, "Yellow", true, fall);
-            //AddToJunimoStock(stock, ShopItemIds.AMARANTH_SEEDS, "Yellow", true, fall);
-            //AddToJunimoStock(stock, ShopItemIds.GRAPE_STARTER, "Yellow", true, fall);
-            //AddToJunimoStock(stock, ShopItemIds.ARTICHOKE_SEEDS, "Yellow", true, fall);
+            //AddToJunimoStock(stock, QualifiedItemIds.PUMPKIN_SEEDS, "Yellow", true, fall);
+            //AddToJunimoStock(stock, QualifiedItemIds.CORN_SEEDS, "Yellow", true, fall);
+            //AddToJunimoStock(stock, QualifiedItemIds.EGGPLANT_SEEDS, "Yellow", true, fall);
+            //AddToJunimoStock(stock, QualifiedItemIds.BOK_CHOY_SEEDS, "Yellow", true, fall);
+            //AddToJunimoStock(stock, QualifiedItemIds.YAM_SEEDS, "Yellow", true, fall);
+            //AddToJunimoStock(stock, QualifiedItemIds.CRANBERRY_SEEDS, "Yellow", true, fall);
+            //AddToJunimoStock(stock, QualifiedItemIds.WHEAT_SEEDS, "Yellow", true, fall);
+            //AddToJunimoStock(stock, QualifiedItemIds.SUNFLOWER_SEEDS, "Yellow", true, fall);
+            //AddToJunimoStock(stock, QualifiedItemIds.FAIRY_SEEDS, "Yellow", true, fall);
+            //AddToJunimoStock(stock, QualifiedItemIds.AMARANTH_SEEDS, "Yellow", true, fall);
+            //AddToJunimoStock(stock, QualifiedItemIds.GRAPE_STARTER, "Yellow", true, fall);
+            //AddToJunimoStock(stock, QualifiedItemIds.ARTICHOKE_SEEDS, "Yellow", true, fall);
         }
 
         private void AddSaplingsToShop(Dictionary<ISalable, int[]> stock)
         {
             throw new Exception($"{nameof(AddSaplingsToShop)} is not ready for 1.6; Look at my comment at the beginning of the file");
-            //AddToJunimoStock(stock, ShopItemIds.CHERRY_SAPLING, "Yellow", true);
-            //AddToJunimoStock(stock, ShopItemIds.APRICOT_SAPLING, "Yellow", true);
-            //AddToJunimoStock(stock, ShopItemIds.ORANGE_SAPLING, "Yellow", true);
-            //AddToJunimoStock(stock, ShopItemIds.PEACH_SAPLING, "Yellow", true);
-            //AddToJunimoStock(stock, ShopItemIds.POMEGRANATE_SAPLING, "Yellow", true);
-            //AddToJunimoStock(stock, ShopItemIds.APPLE_SAPLING, "Yellow", true);
+            //AddToJunimoStock(stock, QualifiedItemIds.CHERRY_SAPLING, "Yellow", true);
+            //AddToJunimoStock(stock, QualifiedItemIds.APRICOT_SAPLING, "Yellow", true);
+            //AddToJunimoStock(stock, QualifiedItemIds.ORANGE_SAPLING, "Yellow", true);
+            //AddToJunimoStock(stock, QualifiedItemIds.PEACH_SAPLING, "Yellow", true);
+            //AddToJunimoStock(stock, QualifiedItemIds.POMEGRANATE_SAPLING, "Yellow", true);
+            //AddToJunimoStock(stock, QualifiedItemIds.APPLE_SAPLING, "Yellow", true);
         }
 
         private void AddJunimoModdedStock(Dictionary<ISalable, int[]> stock)
