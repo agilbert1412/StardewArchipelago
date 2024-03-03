@@ -14,11 +14,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
     public static class FishingRodInjections
     {
-        private const string PROGRESSIVE_FISHING_ROD = "Progressive Fishing Rod";
-        private const string TRAINING_ROD = "Purchase Training Rod";
-        private const string FIBERGLASS_ROD = "Purchase Fiberglass Rod";
-        private const string IRIDIUM_ROD = "Purchase Iridium Rod";
-
         private static IMonitor _monitor;
         private static IModHelper _modHelper;
         private static ArchipelagoClient _archipelago;
@@ -115,28 +110,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 "43",
                 "36",
             }, Game1.currentLocation);
-        }
-
-        public static bool GetFishShopStock_Prefix(Farmer who, ref Dictionary<ISalable, int[]> __result)
-        {
-            try
-            {
-                var fishShopStock = new Dictionary<ISalable, int[]>();
-                AddFishingObjects(fishShopStock);
-                AddFishingToolsAPLocations(fishShopStock);
-                AddFishingTools(fishShopStock);
-                AddFishingFurniture(fishShopStock);
-                AddItemsFromPlayerToSell(fishShopStock);
-                __result = fishShopStock;
-
-                return false; // don't run original logic
-
-            }
-            catch (Exception ex)
-            {
-                _monitor.Log($"Failed in {nameof(GetFishShopStock_Prefix)}:\n{ex}", LogLevel.Error);
-                return true; // run original logic
-            }
         }
 
         private static void OnCheckBambooPoleLocation()

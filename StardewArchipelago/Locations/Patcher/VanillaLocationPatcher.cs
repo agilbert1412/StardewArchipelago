@@ -29,6 +29,7 @@ namespace StardewArchipelago.Locations.Patcher
         private readonly Harmony _harmony;
         private readonly IModHelper _modHelper;
         private readonly GingerIslandPatcher _gingerIslandPatcher;
+        private readonly FishingRodStockModifier _fishingRodStockModifier;
         private readonly RecipePurchaseStockModifier _recipePurchaseStockModifier;
 
         public VanillaLocationPatcher(IMonitor monitor, IModHelper modHelper, Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker)
@@ -37,6 +38,7 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony = harmony;
             _modHelper = modHelper;
             _gingerIslandPatcher = new GingerIslandPatcher(monitor, _modHelper, _harmony, _archipelago, locationChecker);
+            _fishingRodStockModifier = new FishingRodStockModifier(monitor, modHelper, archipelago);
             _recipePurchaseStockModifier = new RecipePurchaseStockModifier(monitor, modHelper, archipelago);
         }
 
@@ -48,7 +50,7 @@ namespace StardewArchipelago.Locations.Patcher
             ReplaceMineshaftChestsWithChecks();
             ReplaceElevatorsWithChecks();
             ReplaceToolUpgradesWithChecks();
-            ReplaceFishingRodsWithChecks();
+            PatchFishingRods();
             ReplaceSkillsWithChecks();
             ReplaceQuestsWithChecks();
             ReplaceCarpenterBuildingsWithChecks();
@@ -74,6 +76,7 @@ namespace StardewArchipelago.Locations.Patcher
 
         public void CleanEvents()
         {
+            CleanFishingRodEvents();
             CleanChefsanityEvents();
         }
 
@@ -181,17 +184,14 @@ namespace StardewArchipelago.Locations.Patcher
             );
         }
 
-        private void ReplaceFishingRodsWithChecks()
+        private void PatchFishingRods()
         {
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(Utility), nameof(Utility.getFishShopStock)),
-                prefix: new HarmonyMethod(typeof(FishingRodInjections), nameof(FishingRodInjections.GetFishShopStock_Prefix))
-            );
-
             if (!_archipelago.SlotData.ToolProgression.HasFlag(ToolProgression.Progressive))
             {
                 return;
             }
+
+            _modHelper.Events.Content.AssetRequested += _fishingRodStockModifier.OnFishingRodShopStockRequested;
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Event), nameof(Event.skipEvent)),
@@ -202,6 +202,11 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(typeof(Event), nameof(Event.command_awardFestivalPrize)),
                 prefix: new HarmonyMethod(typeof(FishingRodInjections), nameof(FishingRodInjections.AwardFestivalPrize_BambooPole_Prefix))
             );
+        }
+
+        private void CleanFishingRodEvents()
+        {
+            _modHelper.Events.Content.AssetRequested -= _fishingRodStockModifier.OnFishingRodShopStockRequested;
         }
 
         private void ReplaceElevatorsWithChecks()
