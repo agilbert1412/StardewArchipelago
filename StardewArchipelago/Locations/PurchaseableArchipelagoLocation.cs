@@ -19,8 +19,6 @@ namespace StardewArchipelago.Locations
 {
     internal class PurchaseableArchipelagoLocation : Item
     {
-        public static readonly string PURCHASEABLE_AP_LOCATION_ID = $"{ModEntry.Instance.ModManifest.UniqueID}.{nameof(PurchaseableArchipelagoLocation)}";
-
         private const string ARCHIPELAGO_PREFIX = "Archipelago: ";
         private const string ARCHIPELAGO_SHORT_PREFIX = "AP: ";
         private Texture2D _archipelagoTexture;
