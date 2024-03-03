@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Stardew.Ids.Vanilla;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
@@ -32,20 +33,18 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
         {
             try
             {
-                var darkTalismanEventId = 529952;
-                if (!Game1.player.hasRustyKey || Game1.currentLocation is not Railroad || Game1.eventUp || __instance.currentEvent != null || Game1.farmEvent != null || Game1.player.eventsSeen.Contains(darkTalismanEventId))
+                if (!Game1.player.hasRustyKey || Game1.currentLocation is not Railroad || Game1.eventUp || __instance.currentEvent != null || Game1.farmEvent != null || Game1.player.eventsSeen.Contains(EventIds.DARK_TALISMAN))
+                {
+                    return;
+                }
+                
+                if (!__instance.TryGetLocationEvents(out _, out var locationEvents))
                 {
                     return;
                 }
 
-                var locationEvents = __instance.GetLocationEvents();
-                if (locationEvents == null)
-                {
-                    return;
-                }
-
-                var darkTalismanEventKey = $"{darkTalismanEventId}/C";
-                var darkTalismanEvent = new Event(locationEvents[darkTalismanEventKey], darkTalismanEventId);
+                var darkTalismanEventKey = $"{EventIds.DARK_TALISMAN}/C";
+                var darkTalismanEvent = new Event(locationEvents[darkTalismanEventKey]);
                 __instance.currentEvent = darkTalismanEvent;
                 __instance.startEvent(__instance.currentEvent);
                 return;
@@ -67,7 +66,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
                     return true; // run original logic
                 }
 
-                if (__instance.items.Count <= 0)
+                if (__instance.Items.Count <= 0)
                 {
                     return true; // run original logic
                 }
@@ -82,9 +81,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
                     __instance.performOpenChest();
                 }
 
-                var obj = __instance.items[0];
-                __instance.items[0] = null;
-                __instance.items.RemoveAt(0);
+                var obj = __instance.Items[0];
+                __instance.Items[0] = null;
+                __instance.Items.RemoveAt(0);
                 __result = true;
 
                 _locationChecker.AddCheckedLocation(DARK_TALISMAN);
@@ -145,9 +144,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
                     return true; // run original logic
                 }
 
-                if (_locationChecker.IsLocationNotChecked(DARK_TALISMAN) && __instance.isTileLocationTotallyClearAndPlaceable(31, 5))
+                if (_locationChecker.IsLocationNotChecked(DARK_TALISMAN) && __instance.IsTileOccupiedBy(new Vector2(31, 5)))
                 {
-                    __instance.overlayObjects.Add(new Vector2(31f, 5f), new Chest(0, new List<Item>()
+                    __instance.overlayObjects.Add(new Vector2(31f, 5f), new Chest(new List<Item>()
                     {
                         new SpecialItem(6),
                     }, new Vector2(31f, 5f))
