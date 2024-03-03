@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace StardewArchipelago.Stardew.ItemIds
+﻿namespace StardewArchipelago.Stardew.Ids.Vanilla
 {
-    public static class BaseGameItemIds
+    public static class ItemIds
     {
         public const string WEEDS = "0";
 

@@ -8,7 +8,7 @@ using StardewArchipelago.Archipelago;
 using StardewArchipelago.Bundles;
 using StardewArchipelago.Serialization;
 using StardewArchipelago.Stardew;
-using StardewArchipelago.Stardew.ItemIds;
+using StardewArchipelago.Stardew.Ids;
 using StardewArchipelago.Textures;
 using StardewModdingAPI;
 using StardewValley;
