@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Force.DeepCloner;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Constants;
+using StardewArchipelago.Constants.Vanilla;
 using StardewValley;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
