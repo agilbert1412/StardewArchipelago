@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants.Locations;
 using StardewArchipelago.Extensions;
 using StardewArchipelago.GameModifications.Seasons;
 using StardewArchipelago.Serialization;
@@ -72,7 +73,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
                 if (_archipelago.SlotData.Chefsanity.HasFlag(Chefsanity.QueenOfSauce))
                 {
-                    _locationChecker.AddCheckedLocation($"{recipeName}{CHEFSANITY_LOCATION_SUFFIX}");
+                    _locationChecker.AddCheckedLocation($"{recipeName}{Suffix.CHEFSANITY}");
                 }
                 else if (!Game1.player.cookingRecipes.ContainsKey(recipeName))
                 {
@@ -219,7 +220,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             List<int> missingRerunRecipes;
             if (_archipelago.SlotData.Chefsanity.HasFlag(Chefsanity.QueenOfSauce))
             {
-                missingRerunRecipes = allRerunRecipes.Where(x => _locationChecker.IsLocationNotChecked($"{GetRecipeName(cookingRecipes, x)}{CHEFSANITY_LOCATION_SUFFIX}")).ToList();
+                missingRerunRecipes = allRerunRecipes.Where(x => _locationChecker.IsLocationNotChecked($"{GetRecipeName(cookingRecipes, x)}{Suffix.CHEFSANITY}")).ToList();
             }
             else
             {
