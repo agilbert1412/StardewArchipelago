@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Stardew;
+using StardewArchipelago.Stardew.ItemIds;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Characters;
@@ -12,15 +13,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
     public static class CropsanityInjections
     {
-        private const int WEEDS = 0;
-        private const int SPRING_ONION = 399;
-        private const int ANCIENT_FRUIT = 454;
-        private const int FIBER = 771;
-        private const int QI_FRUIT = 889;
-
-        private static readonly int[] _cropsanityExceptions = new[]
+        private static readonly string[] _cropsanityExceptions = new[]
         {
-            WEEDS, SPRING_ONION, ANCIENT_FRUIT, FIBER, QI_FRUIT
+            BaseGameItemIds.WEEDS, BaseGameItemIds.SPRING_ONION, BaseGameItemIds.ANCIENT_FRUIT, BaseGameItemIds.FIBER, BaseGameItemIds.QI_FRUIT
         };
 
         private static IMonitor _monitor;
@@ -48,9 +43,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
                 var itemId = __instance.indexOfHarvest.Value;
 
-                if (itemId == 431)
+                if (itemId == BaseGameItemIds.SUNFLOWER_SEEDS)
                 {
-                    itemId = 421; // Sunflower instead of sunflower seeds
+                    itemId = BaseGameItemIds.SUNFLOWER; // Sunflower instead of sunflower seeds
                 }
 
                 if (!_itemManager.ObjectExists(itemId))
@@ -85,28 +80,21 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             try
             {
-                if (__instance.fruitsOnTree.Value <= 0)
+                if (!__instance.fruit.Any())
                 {
                     return true; // run original logic
                 }
 
-                var itemId = __instance.indexOfFruit.Value;
-                if (!_itemManager.ObjectExists(itemId))
-                {
-                    _monitor.Log($"Unrecognized Cropsanity Tree Fruit: [{itemId}]", LogLevel.Error);
-                    return true; // run original logic
-                }
-
-                var item = _itemManager.GetObjectById(itemId);
-                var apLocation = $"Harvest {item.Name}";
+                var fruit = __instance.fruit.First();
+                var apLocation = $"Harvest {fruit.Name}";
 
                 if (_archipelago.GetLocationId(apLocation) > -1)
                 {
                     _locationChecker.AddCheckedLocation(apLocation);
                 }
-                else // if (!_cropsanityExceptions.Contains(itemId))
+                else
                 {
-                    _monitor.Log($"Unrecognized Cropsanity Tree Fruit Location: {item.Name} [{itemId}]", LogLevel.Error);
+                    _monitor.Log($"Unrecognized Cropsanity Tree Fruit Location: {fruit.Name} [{fruit.ItemId}]", LogLevel.Error);
                 }
 
                 return true; // run original logic
