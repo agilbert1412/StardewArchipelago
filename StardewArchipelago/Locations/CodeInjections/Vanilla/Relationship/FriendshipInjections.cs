@@ -9,6 +9,7 @@ using StardewArchipelago.Stardew;
 using StardewArchipelago.Textures;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Buildings;
 using StardewValley.Characters;
 using StardewValley.Locations;
 using StardewValley.Menus;
@@ -179,8 +180,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
         {
             try
             {
-                var name = __instance.names[i] as string;
-                var friend = _friends.GetFriend(name);
+                var socialEntry = __instance.SocialEntries[i];
+                var friend = _friends.GetFriend(socialEntry.InternalName);
                 if (friend == null)
                 {
                     return;
@@ -289,7 +290,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
 
                 var wasPet = __instance.grantedFriendshipForPet.Value;
                 var farm = __instance.currentLocation as Farm;
-                var wasWatered = farm?.petBowlWatered?.Value ?? false;
+                var petBowl = farm?.getBuildingByType(nameof(PetBowl)) as PetBowl;
+                var wasWatered = petBowl?.watered?.Value ?? false;
                 var pointIncrease = (wasPet ? 12 : 0) + (wasWatered ? 6 : 0);
                 var multipliedPointIncrease = GetMultipliedFriendship(pointIncrease);
 
@@ -302,7 +304,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
                 {
                     _locationChecker.AddCheckedLocation(string.Format(FRIENDSANITY_PATTERN, petFriend.ArchipelagoName, i));
                 }
-                farm?.petBowlWatered?.Set(false);
+                petBowl?.watered?.Set(false);
 
                 var archipelagoHeartItems = _archipelago.GetReceivedItemCount(string.Format(HEARTS_PATTERN, petFriend.ArchipelagoName));
                 var receivedHearts = archipelagoHeartItems * _archipelago.SlotData.FriendsanityHeartSize;
