@@ -174,12 +174,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 //    _locationChecker.AddCheckedLocation(MEET_UNICORN_AP_LOCATION);
                 //}
 
-                //l.playSoundAt("achievement", __instance.getTileLocation());
-                //l.playSoundAt("healSound", __instance.getTileLocation());
-                //l.playSoundAt("reward", __instance.getTileLocation());
-                //l.playSoundAt("secret1", __instance.getTileLocation());
-                //l.playSoundAt("shiny4", __instance.getTileLocation());
-                //l.playSoundAt("yoba", __instance.getTileLocation());
+                //l.playSoundAt("achievement", __instance.Tile);
+                //l.playSoundAt("healSound", __instance.Tile);
+                //l.playSoundAt("reward", __instance.Tile);
+                //l.playSoundAt("secret1", __instance.Tile);
+                //l.playSoundAt("shiny4", __instance.Tile);
+                //l.playSoundAt("yoba", __instance.Tile);
 
                 //return false; // don't run original logic
             }
@@ -214,8 +214,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 //            __instance.farmerPassesThrough = true;
                 //            Game1.player.team.sharedDailyLuck.Value = -0.12;
                 //            farmer.addedLuckLevel.Value = Math.Min(-10, farmer.addedLuckLevel.Value);
-                //            __instance.currentLocation.playSoundAt("thunder_small", __instance.getTileLocation());
-                //            __instance.currentLocation.playSoundAt("ghost", __instance.getTileLocation());
+                //            __instance.currentLocation.playSoundAt("thunder_small", __instance.Tile);
+                //            __instance.currentLocation.playSoundAt("ghost", __instance.Tile);
                 //            Game1.isRaining = true;
                 //            Game1.isLightning = true;
                 //            Game1.changeMusicTrack("rain");
