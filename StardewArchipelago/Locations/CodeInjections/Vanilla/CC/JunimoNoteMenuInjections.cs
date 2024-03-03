@@ -8,6 +8,7 @@ using StardewArchipelago.Archipelago;
 using StardewArchipelago.Bundles;
 using StardewArchipelago.Serialization;
 using StardewArchipelago.Stardew;
+using StardewArchipelago.Stardew.ItemIds;
 using StardewArchipelago.Textures;
 using StardewModdingAPI;
 using StardewValley;
@@ -219,25 +220,25 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.CC
                 var currentPageBundleField = _modHelper.Reflection.GetField<Bundle>(__instance, "currentPageBundle");
                 var currentPageBundle = currentPageBundleField.GetValue();
                 var ingredient = currentPageBundle.ingredients.Last();
-                var ingredientIndex = ingredient.index;
-                if (ingredientIndex >= -1)
+                var ingredientId = ingredient.id;
+                if (ingredientId == IDProvider.MONEY)
                 {
                     return;
                 }
                 
                 var amountText = $"{ingredient.stack}";
 
-                if (ingredientIndex == CurrencyBundle.CurrencyIds["Qi Gem"])
+                if (ingredientId == IDProvider.QI_GEM)
                 {
                     Game1.specialCurrencyDisplay.ShowCurrency("qiGems");
                     amountText += " Qi Gems";
                 }
-                else if (ingredientIndex == CurrencyBundle.CurrencyIds["Qi Coin"])
+                else if (ingredientId == IDProvider.QI_COIN)
                 {
                     SpriteText.drawStringWithScrollBackground(b, Game1.player.clubCoins.ToString(), 64, 16);
                     amountText += " Qi Coins";
                 }
-                else if (ingredientIndex == CurrencyBundle.CurrencyIds["Star Token"])
+                else if (ingredientId == IDProvider.STAR_TOKEN)
                 {
                     DrawStarTokenCurrency();
                     amountText += " Star Tokens";
@@ -301,8 +302,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.CC
                 var currentPageBundle = currentPageBundleField.GetValue();
 
                 var ingredient = currentPageBundle.ingredients.Last();
-                var currency = ingredient.index;
-                if (currency == -1)
+                var currency = ingredient.id;
+                if (currency == IDProvider.MONEY)
                 {
                     return true; // run original logic
                 }
@@ -319,19 +320,19 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.CC
 
         private static void TryPurchaseCurrentBundle(JunimoNoteMenu junimoNote, BundleIngredientDescription ingredient, Bundle currentPageBundle)
         {
-            if (ingredient.index == CurrencyBundle.CurrencyIds["Qi Gem"])
+            if (ingredient.id == IDProvider.QI_GEM)
             {
                 TryPurchaseCurrentBundleWithQiGems(junimoNote, ingredient, currentPageBundle);
                 return;
             }
 
-            if (ingredient.index == CurrencyBundle.CurrencyIds["Qi Coin"])
+            if (ingredient.id == IDProvider.QI_COIN)
             {
                 TryPurchaseCurrentBundleWithQiCoins(junimoNote, ingredient, currentPageBundle);
                 return;
             }
 
-            if (ingredient.index == CurrencyBundle.CurrencyIds["Star Token"])
+            if (ingredient.id == IDProvider.STAR_TOKEN)
             {
                 TryPurchaseCurrentBundleWithStarTokens(junimoNote, ingredient, currentPageBundle);
                 return;
