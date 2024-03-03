@@ -96,7 +96,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
                 {
                     question = orderBabyQuestion;
                 }
-                else if (npc.Gender == FEMALE)
+                else if (npc.Gender == Gender.Female)
                 {
                     question = npcGiveBirthQuestion;
                 }
