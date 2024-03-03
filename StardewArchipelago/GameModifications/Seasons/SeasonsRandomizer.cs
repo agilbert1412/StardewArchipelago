@@ -210,7 +210,7 @@ namespace StardewArchipelago.GameModifications.Seasons
             {
                 var chosenWeather = (Weather) default_weather;
                 int num = date.TotalDays - Game1.Date.TotalDays;
-                var currentSeason = Game1.currentSeason;
+                var currentSeason = Game1.season;
                 if (date.DayOfMonth == 1 || (long)Game1.stats.DaysPlayed + (long)num <= 4L)
                 {
                     chosenWeather = Weather.Sunny;
@@ -221,7 +221,7 @@ namespace StardewArchipelago.GameModifications.Seasons
                     chosenWeather = Weather.Rain;
                 }
 
-                if (currentSeason.Equals("summer") && date.DayOfMonth % 13 == 0)
+                if (currentSeason == Season.Summer && date.DayOfMonth % 13 == 0)
                 {
                     chosenWeather = Weather.Lightning;
                 }
@@ -231,7 +231,7 @@ namespace StardewArchipelago.GameModifications.Seasons
                     chosenWeather = Weather.Festival;
                 }
 
-                if (currentSeason.Equals("winter") && date.DayOfMonth >= 14 && date.DayOfMonth <= 16)
+                if (currentSeason == Season.Winter && date.DayOfMonth >= 14 && date.DayOfMonth <= 16)
                 {
                     chosenWeather = Weather.Sunny;
                 }
