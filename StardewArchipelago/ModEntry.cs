@@ -27,8 +27,10 @@ using StardewValley.Locations;
 using StardewArchipelago.GameModifications.Modded;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
 using StardewArchipelago.Locations.CodeInjections.Modded;
+using StardewArchipelago.Stardew.Ids;
 using StardewArchipelago.Stardew.NameMapping;
 using StardewArchipelago.Integrations.GenericModConfigMenu;
+using StardewValley.Delegates;
 using StardewValley.Internal;
 
 namespace StardewArchipelago
@@ -126,12 +128,30 @@ namespace StardewArchipelago
             _helper.ConsoleCommands.Add("debug_method", "Runs whatever is currently in the debug method", this.DebugMethod);
 #endif
 
-            ItemQueryResolver.Register(PurchaseableArchipelagoLocation.PURCHASEABLE_AP_LOCATION_ID, PurchasableAPLocationQueryDelegate);
+            ItemQueryResolver.Register(IDProvider.PURCHASEABLE_AP_LOCATION, PurchasableAPLocationQueryDelegate);
+            GameStateQuery.Register(GameStateConditionProvider.HAS_RECEIVED_ITEM, HasReceivedItemQueryDelegate);
         }
 
         private IEnumerable<ItemQueryResult> PurchasableAPLocationQueryDelegate(string key, string arguments, ItemQueryContext context, bool avoidrepeat, HashSet<string> avoiditemids, Action<string, string> logerror)
         {
             return PurchaseableArchipelagoLocation.Create(arguments, Helper, _locationChecker, _archipelago, _archipelago.GetMyActiveHints());
+        }
+
+        private bool HasReceivedItemQueryDelegate(string[] query, GameStateQueryContext context)
+        {
+            if (!query.Any())
+            {
+                return false;
+            }
+
+            var itemName = query[0];
+            if (query.Length < 2)
+            {
+                return _archipelago.HasReceivedItem(itemName);
+            }
+
+            var amount = int.Parse(query[1]);
+            return _archipelago.GetReceivedItemCount(itemName) >= amount;
         }
 
         private void ResetArchipelago()
