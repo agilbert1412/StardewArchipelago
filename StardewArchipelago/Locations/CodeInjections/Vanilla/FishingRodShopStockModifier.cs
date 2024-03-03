@@ -13,27 +13,20 @@ using StardewValley.GameData.Tools;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
-    public class FishingRodStockModifier
+    public class FishingRodShopStockModifier : ShopStockModifier
     {
-        private static IMonitor _monitor;
-        private static IModHelper _helper;
-        private static ArchipelagoClient _archipelago;
-
-        public FishingRodStockModifier(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago)
+        public FishingRodShopStockModifier(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago) : base(monitor, helper, archipelago)
         {
-            _monitor = monitor;
-            _helper = helper;
-            _archipelago = archipelago;
         }
 
-        public void OnFishingRodShopStockRequested(object sender, AssetRequestedEventArgs e)
+        public override void OnShopStockRequested(object sender, AssetRequestedEventArgs e)
         {
             if (!_archipelago.SlotData.ToolProgression.HasFlag(ToolProgression.Progressive))
             {
                 return;
             }
 
-            if (!e.NameWithoutLocale.IsEquivalentTo("Data/Shops"))
+            if (!AssetIsShops(e))
             {
                 return;
             }
@@ -61,29 +54,19 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
                 var toolData = toolsData[item.ItemId];
                 var existingConditions = item.Condition.Split(",", StringSplitOptions.RemoveEmptyEntries);
-                if (existingConditions.Length > 1)
-                {
-                    continue;
-                }
-
-                AddArchipelagoCondition(item, toolData, existingConditions);
                 var apShopitem = CreateEquivalentArchipelagoLocation(item, toolData);
                 fishShopData.Items.Add(apShopitem);
+                AddArchipelagoCondition(item, toolData, existingConditions);
             }
         }
 
-        private static ShopItemData CreateEquivalentArchipelagoLocation(ShopItemData item, ToolData toolData)
+        private ShopItemData CreateEquivalentArchipelagoLocation(ShopItemData item, ToolData toolData)
         {
             var location = $"Purchase {toolData.Name}";
-            var id = $"{IDProvider.PURCHASEABLE_AP_LOCATION} {location}";
-            var apShopItem = item.DeepClone();
-            apShopItem.Id = id;
-            apShopItem.ItemId = id;
-            apShopItem.AvailableStock = 1;
-            return apShopItem;
+            return CreateArchipelagoLocation(item, location);
         }
 
-        private static void AddArchipelagoCondition(ShopItemData shopItem, ToolData toolData, string[] existingConditions)
+        private void AddArchipelagoCondition(ShopItemData shopItem, ToolData toolData, string[] existingConditions)
         {
             var amount = toolData.UpgradeLevel;
             // For some reason, the training rod is 1 and the bamboo pole is 0
@@ -92,12 +75,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 amount = 1 - toolData.UpgradeLevel;
             }
 
-            var apCondition = GameStateConditionProvider.CreateHasReceivedItemCondition("Progressive Fishing Rod", amount);
-            var newConditions = new List<string>();
-            newConditions.AddRange(existingConditions);
-            newConditions.Add(apCondition);
-
-            shopItem.Condition = string.Join(',', newConditions);
+            AddArchipelagoCondition(shopItem, existingConditions, "Progressive Fishing Rod", amount);
         }
     }
 }

@@ -66,34 +66,5 @@ namespace StardewArchipelago.Locations.Festival
                 return true; // run original logic
             }
         }
-
-        private static ShopMenu _lastShopMenuUpdated = null;
-        // public override void update(GameTime time)
-        public static void Update_HandleRarecrow4FirstTimeOnly_Postfix(ShopMenu __instance, GameTime time)
-        {
-            try
-            {
-                // We only run this once for each menu
-                if (_lastShopMenuUpdated == __instance)
-                {
-                    return;
-                }
-
-                _lastShopMenuUpdated = __instance;
-                var myActiveHints = _archipelago.GetMyActiveHints();
-                foreach (var salableItem in __instance.itemPriceAndStock.Keys.ToArray())
-                {
-                    _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, FestivalLocationNames.RARECROW_4, item => _shopReplacer.IsRarecrow(item, 4), myActiveHints);
-                }
-
-                __instance.forSale = __instance.itemPriceAndStock.Keys.ToList();
-                return;
-            }
-            catch (Exception ex)
-            {
-                _monitor.Log($"Failed in {nameof(Update_HandleRarecrow4FirstTimeOnly_Postfix)}:\n{ex}", LogLevel.Error);
-                return;
-            }
-        }
     }
 }

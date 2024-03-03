@@ -20,7 +20,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
         private static ShopReplacer _shopReplacer;
-        private static ShopStockGenerator _shopStockGenerator;
+        private static SeedShopStockModifier _seedShopStockModifier;
         private static JunimoShopGenerator _junimoShopGenerator;
         private const string ALESIA_DAGGER = "Tempered Galaxy Dagger";
         private const string ISAAC_SWORD = "Tempered Galaxy Sword";
@@ -60,14 +60,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
         };
 
         public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago,
-            LocationChecker locationChecker, ShopReplacer shopReplacer, ShopStockGenerator shopStockGenerator, JunimoShopGenerator junimoShopGenerator)
+            LocationChecker locationChecker, ShopReplacer shopReplacer, SeedShopStockModifier seedShopStockModifier, JunimoShopGenerator junimoShopGenerator)
         {
             _monitor = monitor;
             _modHelper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
             _shopReplacer = shopReplacer;
-            _shopStockGenerator = shopStockGenerator;
+            _seedShopStockModifier = seedShopStockModifier;
             _junimoShopGenerator = junimoShopGenerator;
         }
 
@@ -243,7 +243,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
                 //    return true; // Run original logic
                 //}
 
-                //itemPriceAndStock = _shopStockGenerator.GetJojaStock();
+                //itemPriceAndStock = _seedShopStockModifier.GetJojaStock();
                 //return true; // run original logic
 
             }
