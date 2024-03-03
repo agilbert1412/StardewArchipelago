@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
-using StardewArchipelago.Constants;
+using StardewArchipelago.Constants.Vanilla;
 using StardewValley;
 using StardewValley.GameData.BigCraftables;
 using StardewValley.GameData.Objects;

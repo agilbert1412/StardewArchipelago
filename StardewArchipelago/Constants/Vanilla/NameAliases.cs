@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace StardewArchipelago.Constants
+namespace StardewArchipelago.Constants.Vanilla
 {
     public static class NameAliases
     {

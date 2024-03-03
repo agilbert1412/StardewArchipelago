@@ -19,7 +19,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private const string INVERSE_DAY = "Sat";
         private const string ALREADY_KNOWN_KEY = "Strings\\StringsFromCSFiles:TV.cs.13151";
         private const string NEW_RECIPE_LEARNED_KEY = "Strings\\StringsFromCSFiles:TV.cs.13153";
-        private const string CHEFSANITY_LOCATION_SUFFIX = " Recipe";
 
         private static IMonitor _monitor;
         private static IModHelper _helper;
