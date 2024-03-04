@@ -45,7 +45,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     return true; // run original logic
                 }
 
-                if (__instance.items.Count <= 0)
+                if (__instance.Items.Count <= 0)
                 {
                     return true; // run original logic
                 }
@@ -57,9 +57,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     __instance.performOpenChest();
 
                 Game1.mine.chestConsumed();
-                var obj = __instance.items[0];
-                __instance.items[0] = null;
-                __instance.items.RemoveAt(0);
+                var obj = __instance.Items[0];
+                __instance.Items[0] = null;
+                __instance.Items.RemoveAt(0);
                 __result = true;
                 
                 _locationChecker.AddCheckedLocation(string.Format(TREASURE_LOCATION, Game1.mine.mineLevel));
@@ -88,7 +88,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 var chestPosition = new Vector2(9f, 9f);
                 var items = new List<Item>();
                 items.Add(new MeleeWeapon("8"));
-                __instance.overlayObjects[chestPosition] = new Chest(0, items, chestPosition)
+                __instance.overlayObjects[chestPosition] = new Chest(items, chestPosition)
                 {
                     Tint = Color.Pink,
                 };
