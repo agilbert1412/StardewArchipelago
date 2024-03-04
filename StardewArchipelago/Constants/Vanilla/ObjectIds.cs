@@ -13,6 +13,7 @@
         public const string BARBED_HOOK = "691";
         public const string BASIC_FERTILIZER = "368";
         public const string BASIC_RETAINING_SOIL = "370";
+        public const string BATTERY_PACK = "787";
         public const string BEAN_STARTER = "473";
         public const string BEET_SEEDS = "494";
         public const string BLUEBERRY_SEEDS = "481";
@@ -43,8 +44,10 @@
         public const string GRAPE_STARTER = "301";
         public const string GRASS_STARTER = "297";
         public const string GREEN_ALGAE = "153";
+        public const string HARDWOOD = "709";
         public const string HOPS_STARTER = "302";
         public const string HYPER_SPEED_GRO = "918";
+        public const string IRIDIUM_BAR = "337";
         public const string JAZZ_SEEDS = "429";
         public const string JOJA_COLA = "167";
         public const string JOURNAL_SCRAP = "842";
