@@ -33,7 +33,7 @@ namespace StardewArchipelago.Locations.GingerIsland.VolcanoForge
                     return true; // run original logic
                 }
 
-                if (__instance.items.Count <= 0)
+                if (__instance.Items.Count <= 0)
                 {
                     return true; // run original logic
                 }
@@ -44,12 +44,13 @@ namespace StardewArchipelago.Locations.GingerIsland.VolcanoForge
                 else
                     __instance.performOpenChest();
                 
-                var obj = __instance.items[0];
-                __instance.items[0] = null;
-                __instance.items.RemoveAt(0);
+                var obj = __instance.Items[0];
+                __instance.Items[0] = null;
+                __instance.Items.RemoveAt(0);
                 __result = true;
 
                 _locationChecker.AddCheckedLocation($"Volcano Caldera Treasure");
+                Game1.player.mailReceived.Add("CalderaTreasure");
 
                 return false; // don't run original logic
 
