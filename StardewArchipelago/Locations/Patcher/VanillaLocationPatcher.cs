@@ -434,8 +434,8 @@ namespace StardewArchipelago.Locations.Patcher
             );
 
             _harmony.Patch(
-                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.answerDialogueAction)),
-                prefix: new HarmonyMethod(typeof(CarpenterInjections), nameof(CarpenterInjections.AnswerDialogueAction_CarpenterConstruct_Prefix))
+                original: AccessTools.Constructor(typeof(CarpenterMenu), new Type[] { typeof(string), typeof(GameLocation) }),
+                prefix: new HarmonyMethod(typeof(CarpenterMenuInjections), nameof(CarpenterMenuInjections.Constructor_SetupArchipelagoBlueprints_Postfix))
             );
 
             _harmony.Patch(
@@ -456,6 +456,7 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void MakeAllBuildingsCheaper()
         {
+            // This probably doesn't work through caching...
             var priceMultiplier = _archipelago.SlotData.BuildingPriceMultiplier;
             foreach (var (id, data) in Game1.buildingData)
             {

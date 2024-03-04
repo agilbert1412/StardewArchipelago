@@ -31,7 +31,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             _locationChecker = locationChecker;
         }
 
-        public static bool PerformAction_WizardBook_Prefix(GameLocation __instance, string action, Farmer who, Location tileLocation, ref bool __result)
+        // public virtual bool performAction(string[] action, Farmer who, Location tileLocation)
+        public static bool PerformAction_WizardBook_Prefix(GameLocation __instance, string[] action, Farmer who, Location tileLocation, ref bool __result)
         {
             try
             {
@@ -39,20 +40,19 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 {
                     return true; // run original logic
                 }
-                var words = action.Split(' ');
-                var firstWord = words[0];
+                var firstWord = action[0];
 
                 if (firstWord != "WizardBook")
                 {
                     return true; // run original logic
                 }
 
-                var wizardMenu = new WizardMenuArchipelago(_modHelper, _archipelago);
-                var wizardBlueprints = wizardMenu.GetAvailableBlueprints();
+                var builder = "Wizard";
+                var blueprints = CarpenterMenuInjections.GetAvailableBlueprints(builder);
 
-                if (wizardBlueprints.Any())
+                if (blueprints != null && blueprints.Any())
                 {
-                    Game1.activeClickableMenu = wizardMenu;
+                    __instance.ShowConstructOptions(builder);
                 }
 
                 __result = true;
