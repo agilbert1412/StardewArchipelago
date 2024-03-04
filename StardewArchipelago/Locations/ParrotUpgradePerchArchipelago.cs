@@ -43,7 +43,7 @@ namespace StardewArchipelago.Locations
                     Game1.playSound("parrot_squawk");
                 }
 
-                if (Game1.netWorldState.Value.GoldenWalnuts.Value >= requiredNuts.Value)
+                if (Game1.netWorldState.Value.GoldenWalnuts >= requiredNuts.Value)
                 {
                     gameLocation.createQuestionDialogue(upgradeMessageFormatted, gameLocation.createYesNoResponses(), "UpgradePerch_" + upgradeName.Value);
                 }
@@ -52,7 +52,7 @@ namespace StardewArchipelago.Locations
                     Game1.drawDialogueNoTyping(upgradeMessageFormatted);
                 }
             }
-            else if (Game1.netWorldState.Value.GoldenWalnuts.Value >= requiredNuts.Value)
+            else if (Game1.netWorldState.Value.GoldenWalnuts >= requiredNuts.Value)
             {
                 AttemptConstruction();
             }
