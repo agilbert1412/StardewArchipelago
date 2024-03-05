@@ -17,7 +17,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
         public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, StardewItemManager itemManager, WeaponsManager weaponsManager, ShopReplacer shopReplacer, Friends friends)
         {
             BackpackInjections.Initialize(monitor, archipelago, locationChecker);
-            ToolInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
+            ToolShopStockModifier.Initialize(monitor, modHelper, archipelago, locationChecker);
             ScytheInjections.Initialize(monitor, locationChecker);
             FishingRodInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             var bundleReader = new BundleReader();

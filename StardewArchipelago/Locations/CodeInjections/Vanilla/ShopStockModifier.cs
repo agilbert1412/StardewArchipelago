@@ -35,6 +35,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             apShopItem.Id = id;
             apShopItem.ItemId = id;
             apShopItem.AvailableStock = 1;
+            apShopItem.IsRecipe = false;
             return apShopItem;
         }
 

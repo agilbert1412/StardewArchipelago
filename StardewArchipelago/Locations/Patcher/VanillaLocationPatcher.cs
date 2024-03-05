@@ -29,6 +29,7 @@ namespace StardewArchipelago.Locations.Patcher
         private readonly Harmony _harmony;
         private readonly IModHelper _modHelper;
         private readonly GingerIslandPatcher _gingerIslandPatcher;
+        private readonly ToolShopStockModifier _toolUpgradesShopStockModifier;
         private readonly FishingRodShopStockModifier _fishingRodShopStockModifier;
         private readonly FestivalShopStockModifier _festivalShopStockModifier;
         private readonly RecipePurchaseStockModifier _recipePurchaseStockModifier;
@@ -39,6 +40,7 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony = harmony;
             _modHelper = modHelper;
             _gingerIslandPatcher = new GingerIslandPatcher(monitor, _modHelper, _harmony, _archipelago, locationChecker);
+            _toolUpgradesShopStockModifier = new ToolShopStockModifier(monitor, modHelper, archipelago);
             _fishingRodShopStockModifier = new FishingRodShopStockModifier(monitor, modHelper, archipelago);
             _festivalShopStockModifier = new FestivalShopStockModifier(monitor, modHelper, archipelago);
             _recipePurchaseStockModifier = new RecipePurchaseStockModifier(monitor, modHelper, archipelago);
@@ -78,6 +80,7 @@ namespace StardewArchipelago.Locations.Patcher
 
         public void CleanEvents()
         {
+            CleanToolEvents();
             CleanFishingRodEvents();
             CleanFestivalEvents();
             CleanChefsanityEvents();
@@ -171,20 +174,12 @@ namespace StardewArchipelago.Locations.Patcher
                 prefix: new HarmonyMethod(typeof(ScytheInjections), nameof(ScytheInjections.PerformAction_GoldenScythe_Prefix))
             );
 
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(Utility), nameof(Utility.getBlacksmithUpgradeStock)),
-                postfix: new HarmonyMethod(typeof(ToolInjections), nameof(ToolInjections.GetBlacksmithUpgradeStock_PriceReductionFromAp_Postfix))
-            );
+            _modHelper.Events.Content.AssetRequested += _toolUpgradesShopStockModifier.OnShopStockRequested;
+        }
 
-            if (!_archipelago.SlotData.ToolProgression.HasFlag(ToolProgression.Progressive))
-            {
-                return;
-            }
-
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.answerDialogueAction)),
-                prefix: new HarmonyMethod(typeof(ToolInjections), nameof(ToolInjections.AnswerDialogueAction_ToolUpgrade_Prefix))
-            );
+        private void CleanToolEvents()
+        {
+            _modHelper.Events.Content.AssetRequested -= _toolUpgradesShopStockModifier.OnShopStockRequested;
         }
 
         private void PatchFishingRods()
