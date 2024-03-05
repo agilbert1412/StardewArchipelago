@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace StardewArchipelago.Constants.Locations
 {
-    public static class Suffix
+    internal class Prefix
     {
-        public const string CHEFSANITY = " Recipe";
-        public const string UPGRADE = " Upgrade";
+        public const string PROGRESSIVE = "Progressive ";
     }
 }
