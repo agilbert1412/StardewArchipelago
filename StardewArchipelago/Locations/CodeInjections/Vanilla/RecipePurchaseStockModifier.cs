@@ -21,20 +21,16 @@ using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
-    public class RecipePurchaseStockModifier
+    public class RecipePurchaseStockModifier : ShopStockModifier
     {
-        private static IMonitor _monitor;
-        private static IModHelper _helper;
-        private static ArchipelagoClient _archipelago;
-
-        public RecipePurchaseStockModifier(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago)
+        public RecipePurchaseStockModifier(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago) : base(monitor, helper, archipelago)
         {
             _monitor = monitor;
             _helper = helper;
             _archipelago = archipelago;
         }
 
-        public void OnRecipeShopStockRequested(object sender, AssetRequestedEventArgs e)
+        public override void OnShopStockRequested(object sender, AssetRequestedEventArgs e)
         {
             if (!_archipelago.SlotData.Chefsanity.HasFlag(Chefsanity.Purchases))
             {
@@ -78,15 +74,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 }
 
                 var location = $"{itemData.Name}{Suffix.CHEFSANITY}";
-                var id = $"{IDProvider.PURCHASEABLE_AP_LOCATION} {location}";
-                var shopItem = item.DeepClone();
-                shopItem.Id = id;
-                shopItem.ItemId = id;
-                shopItem.AvailableStock = 1;
-                shopItem.IsRecipe = false;
-                shopData.Items.Add(shopItem);
-
+                var apShopItem = CreateArchipelagoLocation(item, location);
                 shopData.Items.RemoveAt(i);
+                shopData.Items.Insert(i, apShopItem);
             }
         }
     }
