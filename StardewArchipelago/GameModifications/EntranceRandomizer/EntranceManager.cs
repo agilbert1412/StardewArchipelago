@@ -176,6 +176,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             // return false;
             if (!TryGetModifiedWarpName(key, out var desiredWarpName))
             {
+                _monitor.Log($"Tried to find warp from {currentLocationName} but found none.  Giving default warp.", LogLevel.Error);
                 return false;
             }
             
@@ -188,10 +189,10 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
                     warpRequest = generatedWarps[correctDesiredWarpName];
                     return true;
                 }
-
+                _monitor.Log($"Desired warp {correctDesiredWarpName} was checked, but not generated.", LogLevel.Error);
                 return false;
             }
-
+            
             return TryFindWarpToDestination(correctDesiredWarpName, out warpRequest);
         }
 
