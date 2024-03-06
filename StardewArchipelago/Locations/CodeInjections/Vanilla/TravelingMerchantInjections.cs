@@ -8,6 +8,8 @@ using StardewArchipelago.GameModifications;
 using StardewArchipelago.Serialization;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Delegates;
+using StardewValley.Internal;
 using StardewValley.Locations;
 using StardewValley.Menus;
 using xTile.Dimensions;
@@ -99,9 +101,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     Game1.drawObjectDialogue("The traveling merchant isn't here today.");
                     return false; // don't run original logic
                 }
-
-                Game1.activeClickableMenu = new ShopMenu(Utility.getTravelingMerchantStock((int)((long)Game1.uniqueIDForThisGame + Game1.stats.DaysPlayed)), who: "TravelerNightMarket", on_purchase: Utility.onTravelingMerchantShopPurchase);
-                return false; // don't run original logic
+                
+                return true; // run original logic
             }
             catch (Exception ex)
             {
@@ -184,51 +185,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             return "Sweety, will you please buy something? I have a family to feed";
         }
 
-        // public static Dictionary<ISalable, int[]> getTravelingMerchantStock(int seed)
-        public static bool GetTravelingMerchantStock_APStock_Prefix(int seed, ref Dictionary<ISalable, int[]> __result)
-        {
-            try
-            {
-                var stock = GetTravelingMerchantShopStock(seed);
-
-                __result = stock;
-                return false; // don't run original logic
-            }
-            catch (Exception ex)
-            {
-                _monitor.Log($"Failed in {nameof(GetTravelingMerchantStock_APStock_Prefix)}:\n{ex}", LogLevel.Error);
-                return true; // run original logic
-            }
-        }
-
-        private static Dictionary<ISalable, int[]> GetTravelingMerchantShopStock(int seed)
-        {
-            var stockAlreadyExists = _persistentStock.TryGetStockForToday(out var stock);
-            if (stockAlreadyExists)
-            {
-                return stock;
-            }
-
-            var generateLocalTravelingMerchantStockMethod = _modHelper.Reflection.GetMethod(typeof(Utility), "generateLocalTravelingMerchantStock");
-            stock = generateLocalTravelingMerchantStockMethod.Invoke<Dictionary<ISalable, int[]>>(seed);
-
-            AddWeddingRingRecipeToStock(stock);
-
-            var priceUpgrades = _archipelago.GetReceivedItemCount(AP_MERCHANT_DISCOUNT);
-            var priceMultiplier = BASE_PRICE - (priceUpgrades * DISCOUNT_PER_UPGRADE);
-            var random = new Random(seed);
-
-            var itemsToRemove = ChooseItemsToRemove(stock, random);
-
-            AddMetalDetectorItems(stock, seed);
-            AdjustPrices(stock, priceMultiplier);
-            AddApStock(stock, random, priceMultiplier);
-            RemoveItemsFromStock(stock, itemsToRemove);
-            _persistentStock.SetStockForToday(stock);
-
-            return stock;
-        }
-
         private static void AddWeddingRingRecipeToStock(Dictionary<ISalable, int[]> stock)
         {
             if (_archipelago.SlotData.Craftsanity == Craftsanity.None)
@@ -259,60 +215,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 1
             });
         }
-
-        private static List<ISalable> ChooseItemsToRemove(Dictionary<ISalable, int[]> stock, Random random)
-        {
-            var stockUpgrades = _archipelago.GetReceivedItemCount(AP_MERCHANT_STOCK);
-            var chanceForExclusiveItemToRemain = GetChanceForExclusiveStockItemToRemain(stockUpgrades);
-            var chanceForRandomItemToRemain = GetChanceForRandomStockItemToRemain(stockUpgrades);
-
-            var itemsToRemove = new List<ISalable>();
-            foreach (var item in stock.Keys.ToArray())
-            {
-                var itemIsExclusive = _exclusiveStock.Contains(item.Name);
-                var randomRoll = random.NextDouble();
-                if (itemIsExclusive)
-                {
-                    RemoveExclusiveItemBasedOnStockSize(randomRoll, chanceForExclusiveItemToRemain, itemsToRemove, item);
-                }
-                else
-                {
-                    HandleRandomItemBasedOnStockSize(stock, randomRoll, chanceForRandomItemToRemain, itemsToRemove, item);
-                }
-            }
-
-            return itemsToRemove;
-        }
-
-        private static void RemoveExclusiveItemBasedOnStockSize(double randomRoll, double chanceForExclusiveItemToRemain,
-            List<ISalable> itemsToRemove, ISalable item)
-        {
-            if (randomRoll > chanceForExclusiveItemToRemain)
-            {
-                itemsToRemove.Add(item);
-            }
-        }
-
-        private static void HandleRandomItemBasedOnStockSize(Dictionary<ISalable, int[]> stock, double randomRoll,
-            double chanceForRandomItemToRemain, List<ISalable> itemsToRemove, ISalable salable)
-        {
-            if (randomRoll > chanceForRandomItemToRemain)
-            {
-                itemsToRemove.Add(salable);
-            }
-            else
-            {
-                if (salable is not Item item)
-                {
-                    return;
-                }
-
-                var archipelagoItem = new TravelingMerchantItem(item, _archipelagoState);
-                stock.Add(archipelagoItem, new []{ stock[salable][0], 1 });
-                stock.Remove(salable);
-            }
-        }
-
+        
         private static void AdjustPrices(Dictionary<ISalable, int[]> stock, double priceMultiplier)
         {
             foreach (var (item, prices) in stock)
@@ -321,16 +224,40 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
         }
 
-        private static void RemoveItemsFromStock(Dictionary<ISalable, int[]> stock, List<ISalable> itemsToRemove)
+        public static bool ShouldExclusiveStockItemRemain(string[] query, GameStateQueryContext context)
         {
-            foreach (var itemToRemove in itemsToRemove)
+            if (!ArgUtility.TryGet(query, 1, out var key, out var error))
             {
-                stock.Remove(itemToRemove);
-                if (_flairOverride.ContainsKey(itemToRemove))
-                {
-                    _flairOverride.Remove(itemToRemove);
-                }
+                return GameStateQuery.Helpers.ErrorResult(query, error);
             }
+
+            if (!Utility.TryCreateIntervalRandom("day", key, out var random, out error))
+            {
+                return GameStateQuery.Helpers.ErrorResult(query, error);
+            }
+
+            var stockUpgrades = _archipelago.GetReceivedItemCount(AP_MERCHANT_STOCK);
+            query[2] = $"{GetChanceForExclusiveStockItemToRemain(stockUpgrades)}";
+
+            return GameStateQuery.Helpers.RandomImpl(random, query, 2);
+        }
+
+        public static bool ShouldRandomStockItemRemain(string[] query, GameStateQueryContext context)
+        {
+            if (!ArgUtility.TryGet(query, 1, out var key, out var error))
+            {
+                return GameStateQuery.Helpers.ErrorResult(query, error);
+            }
+
+            if (!Utility.TryCreateIntervalRandom("day", key, out var random, out error))
+            {
+                return GameStateQuery.Helpers.ErrorResult(query, error);
+            }
+
+            var stockUpgrades = _archipelago.GetReceivedItemCount(AP_MERCHANT_STOCK);
+            query[2] = $"{GetChanceForRandomStockItemToRemain(stockUpgrades)}";
+
+            return GameStateQuery.Helpers.RandomImpl(random, query, 2);
         }
 
         private static double GetChanceForExclusiveStockItemToRemain(int stockUpgrades)
@@ -351,14 +278,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             return BASE_STOCK + stockFromApItems + stockFromChecks - stockReductionFromPurchases;
         }
 
-        private static void AddMetalDetectorItems(Dictionary<ISalable, int[]> stock, int seed)
+        public static IEnumerable<ItemQueryResult> CreateMetalDetectorItems(string key, string arguments, ItemQueryContext context, bool avoidrepeat, HashSet<string> avoiditemids, Action<string, string> logerror)
         {
             _flairOverride.Clear();
             var metalDetectorUpgrades = _archipelago.GetReceivedItemCount(AP_METAL_DETECTOR);
             if (metalDetectorUpgrades < 1)
             {
-                return;
+                yield break;
             }
+
 
             var allDonatableItems = GetAllDonatableItems().ToList();
             var allMissingDonatableItems = GetAllMissingDonatableItems(allDonatableItems).ToList();
@@ -367,7 +295,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
             for (var i = 0; i < metalDetectorUpgrades; i++)
             {
-                var random = new Random(seed + i);
+                var random = new Random((int)(Game1.startingGameSeed ?? 0) + (int)Game1.stats.DaysPlayed + i);
                 var choice = random.NextDouble();
                 var priceMultiplier = _merchantArtifactPriceMultipliers[random.Next(0, _merchantArtifactPriceMultipliers.Length)];
                 if (allHintedDonatableItems.Any() && choice < 0.25)
@@ -376,20 +304,35 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     var chosenArtifactOrMineral = GetRandomArtifactOrMineral(random, allHintedDonatableItems);
                     _flairOverride.Add(chosenArtifactOrMineral, allHintedDonatableItemsWithFlair[chosenArtifactOrMineral]);
                     var price = (int)(chosenArtifactOrMineral.salePrice() * priceMultiplier);
-                    stock.TryAdd(chosenArtifactOrMineral, new[] { price, 1 });
+                    yield return new ItemQueryResult(chosenArtifactOrMineral)
+                    {
+                        OverrideBasePrice = price,
+                        OverrideShopAvailableStock = 1,
+                        OverrideStackSize = 1,
+                    };
                 }
                 else if (allMissingDonatableItems.Any() && choice < 0.50)
                 {
                     priceMultiplier *= 2;
                     var chosenArtifactOrMineral = GetRandomArtifactOrMineral(random, allMissingDonatableItems);
                     var price = (int)(chosenArtifactOrMineral.salePrice() * priceMultiplier);
-                    stock.TryAdd(chosenArtifactOrMineral, new[] { price, 1 });
+                    yield return new ItemQueryResult(chosenArtifactOrMineral)
+                    {
+                        OverrideBasePrice = price,
+                        OverrideShopAvailableStock = 1,
+                        OverrideStackSize = 1,
+                    };
                 }
                 else
                 {
                     var chosenArtifactOrMineral = GetRandomArtifactOrMineral(random, allDonatableItems);
                     var price = (int)(chosenArtifactOrMineral.salePrice() * priceMultiplier);
-                    stock.TryAdd(chosenArtifactOrMineral, new[] { price, 1 });
+                    yield return new ItemQueryResult(chosenArtifactOrMineral)
+                    {
+                        OverrideBasePrice = price,
+                        OverrideShopAvailableStock = 1,
+                        OverrideStackSize = 1,
+                    };
                 }
             }
         }
@@ -512,7 +455,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             return false;
         }
 
-        private static void AddApStock(Dictionary<ISalable, int[]> currentStock, Random random, double priceMultiplier)
+        public static IEnumerable<ItemQueryResult> CreateDailyCheck(string key, string arguments, ItemQueryContext context, bool avoidrepeat, HashSet<string> avoiditemids, Action<string, string> logerror)
         {
             var dayOfWeek = Days.GetDayOfWeekName(Game1.dayOfMonth);
             var apItems = new List<string>();
@@ -530,17 +473,23 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
             if (!apItems.Any())
             {
-                return;
+                yield break;
             }
 
+            var random = new Random((int)(Game1.startingGameSeed ?? 0) + (int)Game1.stats.DaysPlayed);
             var chosenApItem = apItems[random.Next(0, apItems.Count)];
 
             var scamName = _merchantApItemNames[random.Next(0, _merchantApItemNames.Length)];
             var myActiveHints = _archipelago.GetMyActiveHints();
             var apLocation = new PurchaseableArchipelagoLocation(scamName, chosenApItem, _monitor, _modHelper, _locationChecker, _archipelago, myActiveHints);
-            var price = ModifyPrice(_merchantPrices[random.Next(0, _merchantPrices.Length)], priceMultiplier);
+            var price = _merchantPrices[random.Next(0, _merchantPrices.Length)];
 
-            currentStock.Add(apLocation, new[] { price, 1 });
+            yield return new ItemQueryResult(apLocation)
+            {
+                OverrideBasePrice = price,
+                OverrideStackSize = 1,
+                OverrideShopAvailableStock = 1,
+            };
         }
 
         private static readonly double[] _merchantArtifactPriceMultipliers = new[] // Strong odds of a price slightly above the normal, small odds of significantly cheaper or significantly more expensive
