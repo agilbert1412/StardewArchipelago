@@ -7,6 +7,8 @@ namespace StardewArchipelago.Constants
     public static class GameStateConditionProvider
     {
         public static readonly string HAS_RECEIVED_ITEM = CreateId("HasReceivedItem");
+        public static readonly string CART_RANDOM_ITEM_STOCK_CHANCE = CreateId("TRAVELING_CART_RANDOM_ITEM_STOCK_CHANCE");
+        public static readonly string CART_EXCLUSIVE_ITEM_STOCK_CHANCE = CreateId("TRAVELING_CART_EXCLUSIVE_ITEM_STOCK_CHANCE");
 
         public static string CreateHasReceivedItemCondition(string itemName, int amount = 1)
         {

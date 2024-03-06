@@ -129,7 +129,11 @@ namespace StardewArchipelago
 #endif
 
             ItemQueryResolver.Register(IDProvider.PURCHASEABLE_AP_LOCATION, PurchasableAPLocationQueryDelegate);
+            ItemQueryResolver.Register(IDProvider.METAL_DETECTOR_ITEMS, TravelingMerchantInjections.CreateMetalDetectorItems);
+            ItemQueryResolver.Register(IDProvider.TRAVELING_CART_DAILY_CHECK, TravelingMerchantInjections.CreateDailyCheck);
             GameStateQuery.Register(GameStateConditionProvider.HAS_RECEIVED_ITEM, HasReceivedItemQueryDelegate);
+            GameStateQuery.Register(GameStateConditionProvider.CART_RANDOM_ITEM_STOCK_CHANCE, TravelingMerchantInjections.ShouldRandomStockItemRemain);
+            GameStateQuery.Register(GameStateConditionProvider.CART_EXCLUSIVE_ITEM_STOCK_CHANCE, TravelingMerchantInjections.ShouldExclusiveStockItemRemain);
         }
 
         private IEnumerable<ItemQueryResult> PurchasableAPLocationQueryDelegate(string key, string arguments, ItemQueryContext context, bool avoidrepeat, HashSet<string> avoiditemids, Action<string, string> logerror)
