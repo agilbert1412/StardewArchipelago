@@ -22,27 +22,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
     public class TravelingMerchantShopStockModifier : ShopStockModifier
     {
-        private const double BASE_STOCK = 0.1;
-        private const double STOCK_AMOUNT_PER_UPGRADE_FOR_EXCLUSIVE_ITEMS = 0.15;
-        private const double STOCK_AMOUNT_PER_UPGRADE_FOR_RANDOM_ITEMS = 0.1;
-        private const double STOCK_AMOUNT_PER_ONE_PERCENT_CHECKS_FOR_RANDOM_ITEMS = 0.01;
-        private const double STOCK_AMOUNT_REDUCTION_PER_PURCHASE = 0.1;
-
-        // 0.1 + (6 * 0.1) + (100 * 0.05)
-        // 10% + 60% + 100% = 6
-
-        private const double BASE_PRICE = 1.4;
-        private const double DISCOUNT_PER_UPGRADE = 0.1;
-        public const string AP_MERCHANT_DAYS = "Traveling Merchant: {0}"; // 7, One for each day
-        private const string AP_MERCHANT_STOCK = "Traveling Merchant Stock Size"; // 10% base size, 6 upgrades of 15% each
-        private const string AP_MERCHANT_DISCOUNT = "Traveling Merchant Discount"; // Base Price 140%, 8 x 10% discount
-        private const string AP_MERCHANT_LOCATION = "Traveling Merchant {0} Item {1}";
-        private const string AP_METAL_DETECTOR = "Traveling Merchant Metal Detector"; // Base Price 140%, 8 x 10% discount
-        private const string AP_WEDDING_RING_RECIPE = "Wedding Ring Recipe";
-
-        private static readonly string[] _exclusiveStock = new[]
-            { "Rare Seed", "Rarecrow", "Coffee Bean", "Wedding Ring Recipe" };
-        
         private static LocationChecker _locationChecker;
         private static ArchipelagoStateDto _archipelagoState;
 
@@ -67,7 +46,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     var shopsData = asset.AsDictionary<string, ShopData>().Data;
                     var cartShopData = shopsData["Traveler"];
                     AddStockSizeConditions(cartShopData);
-                    AddStockSizeTriggers(cartShopData);
                     AddMetalDetectorItems(cartShopData);
                     AddChecks(cartShopData);
                     AdjustPrices(cartShopData);
@@ -92,14 +70,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 }
                 shopItemData.PerItemCondition = string.Join(", ", conditions);
             }
-        }
-
-        private void AddStockSizeTriggers(ShopData cartShopData)
-        {
-            var randomObjects = cartShopData.Items.First(x => x.Id == "RandomObjects");
-            var randomObjectsWithTrigger = randomObjects.DeepClone();
-            randomObjectsWithTrigger.Id = "RandomObjectsWithArchipelagoTrigger";
-            randomObjectsWithTrigger.ItemId = randomObjects.ItemId.Replace("RANDOM");
         }
 
         private void AddMetalDetectorItems(ShopData cartShopData)
