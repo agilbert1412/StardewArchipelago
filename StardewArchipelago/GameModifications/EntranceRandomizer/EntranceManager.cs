@@ -222,7 +222,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
 
             if (!locationOriginName.TryGetClosestWarpPointTo(ref locationDestinationName, _equivalentAreas, out var locationOrigin, out var warpPoint))
             {
-                _monitor.Log($"Could not find closest warp for {desiredWarpKey}, returning a null warpRequest.");
+                _monitor.Log($"Could not find closest warp for {desiredWarpKey}, returning a null warpRequest.", LogLevel.Error);
                 warpRequest = null;
                 return false;
             }
