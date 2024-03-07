@@ -479,7 +479,7 @@ namespace StardewArchipelago.GameModifications
             );
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Farmer), nameof(Farmer.addItemToInventory),
-                    new[] { typeof(Item), typeof(List<Item>) }),
+                    new[] { typeof(Item), typeof(int) }),
                 postfix: new HarmonyMethod(typeof(ZeldaAnimationInjections),
                     nameof(ZeldaAnimationInjections.AddItemToInventory_Position_PrankDay_Postfix))
             );
