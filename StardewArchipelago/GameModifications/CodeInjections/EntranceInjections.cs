@@ -56,7 +56,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 {
                     if (replacedWarp is null)
                     {
-                        _monitor.Log($"The replaced warp is null, meaning its likely the warp could not be found.");
+                        _monitor.Log($"The replaced warp is null, meaning its likely the warp could not be found.", LogLevel.Error);
                     }
                 }
                 return true; // run original logic
