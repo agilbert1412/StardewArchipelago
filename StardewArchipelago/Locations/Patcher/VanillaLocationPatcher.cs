@@ -13,6 +13,7 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Characters;
 using StardewValley.Events;
+using StardewValley.Internal;
 using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Minigames;
@@ -600,8 +601,8 @@ namespace StardewArchipelago.Locations.Patcher
             );
 
             _harmony.Patch(
-                original: AccessTools.Method(typeof(Utility), nameof(Utility.getTravelingMerchantStock)),
-                prefix: new HarmonyMethod(typeof(TravelingMerchantInjections), nameof(TravelingMerchantInjections.GetTravelingMerchantStock_APStock_Prefix))
+                original: AccessTools.Method(typeof(ItemQueryResolver.DefaultResolvers), nameof(ItemQueryResolver.DefaultResolvers.RANDOM_ITEMS)),
+                postfix: new HarmonyMethod(typeof(TravelingMerchantInjections), nameof(TravelingMerchantInjections.RANDOM_ITEMS_MakeItemsWithPurchaseTriggers_Postfix))
             );
         }
 

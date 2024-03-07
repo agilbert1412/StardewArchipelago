@@ -10,19 +10,14 @@ namespace StardewArchipelago.GameModifications
     internal class TravelingMerchantItem : ISalable
     {
         private bool _hasBeenPurchasedAlready;
-        private Item _stardewItem;
+        private ISalable _stardewItem;
         private ArchipelagoStateDto _archipelagoState;
 
-        public TravelingMerchantItem(Item stardewItem, ArchipelagoStateDto archipelagoState)
+        public TravelingMerchantItem(ISalable stardewItem, ArchipelagoStateDto archipelagoState)
         {
             _hasBeenPurchasedAlready = false;
             _stardewItem = stardewItem;
             _archipelagoState = archipelagoState;
-        }
-
-        public bool appliesProfitMargins()
-        {
-            return _stardewItem.appliesProfitMargins();
         }
 
         public bool actionWhenPurchased(string shopId)
@@ -43,12 +38,6 @@ namespace StardewArchipelago.GameModifications
             return _stardewItem.ShouldDrawIcon();
         }
 
-        public void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, StackDrawType drawStackNumber, Color color,
-            bool drawShadow)
-        {
-            _stardewItem.drawInMenu(spriteBatch, location, scaleSize, transparency, layerDepth, drawStackNumber, color, drawShadow);
-        }
-
         public string getDescription()
         {
             return _stardewItem.getDescription();
@@ -57,6 +46,17 @@ namespace StardewArchipelago.GameModifications
         public int maximumStackSize()
         {
             return _stardewItem.maximumStackSize();
+        }
+
+        public bool appliesProfitMargins()
+        {
+            return _stardewItem.appliesProfitMargins();
+        }
+
+        public void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, StackDrawType drawStackNumber, Color color,
+            bool drawShadow)
+        {
+            _stardewItem.drawInMenu(spriteBatch, location, scaleSize, transparency, layerDepth, drawStackNumber, color, drawShadow);
         }
 
         public int addToStack(Item stack)

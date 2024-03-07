@@ -37,9 +37,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private const string AP_METAL_DETECTOR = "Traveling Merchant Metal Detector"; // Base Price 140%, 8 x 10% discount
         private const string AP_WEDDING_RING_RECIPE = "Wedding Ring Recipe";
 
-        private static readonly string[] _exclusiveStock = new[]
-            { "Rare Seed", "Rarecrow", "Coffee Bean", "Wedding Ring Recipe" };
-
         private static IMonitor _monitor;
         private static IModHelper _modHelper;
         private static ArchipelagoClient _archipelago;
@@ -183,6 +180,28 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
 
             return "Sweety, will you please buy something? I have a family to feed";
+        }
+
+        // public static IEnumerable<ItemQueryResult> RANDOM_ITEMS(string key, string arguments, ItemQueryContext context, bool avoidRepeat, HashSet<string> avoidItemIds, Action<string, string> logError)
+
+        public static void RANDOM_ITEMS_MakeItemsWithPurchaseTriggers_Postfix(string key, string arguments, ItemQueryContext context, bool avoidRepeat, HashSet<string> avoidItemIds, Action<string, string> logError, IEnumerable<ItemQueryResult> __result)
+        {
+            try
+            {
+                var customItems = new List<ItemQueryResult>();
+                foreach (var itemQueryResult in __result)
+                {
+                    var archipelagoItem = new TravelingMerchantItem(itemQueryResult.Item, _archipelagoState);
+                    itemQueryResult.Item = archipelagoItem;
+                }
+
+                return;
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(RANDOM_ITEMS_MakeItemsWithPurchaseTriggers_Postfix)}:\n{ex}", LogLevel.Error);
+                return;
+            }
         }
 
         private static void AddWeddingRingRecipeToStock(Dictionary<ISalable, int[]> stock)
