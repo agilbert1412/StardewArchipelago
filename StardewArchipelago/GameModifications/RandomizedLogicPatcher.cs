@@ -39,6 +39,7 @@ namespace StardewArchipelago.GameModifications
         private readonly StartingResources _startingResources;
         private readonly SeedShopStockModifier _seedShopStockModifier;
         private readonly RecipeDataRemover _recipeDataRemover;
+        private readonly AnimalShopStockModifier _animalShopStockModifier;
 
         public RandomizedLogicPatcher(IMonitor monitor, IModHelper modHelper, Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager stardewItemManager, EntranceManager entranceManager, SeedShopStockModifier seedShopStockModifier, NameSimplifier nameSimplifier, Friends friends, ArchipelagoStateDto state)
         {
@@ -66,7 +67,7 @@ namespace StardewArchipelago.GameModifications
             VoidMayoInjections.Initialize(monitor);
             SecretNoteInjections.Initialize(monitor, archipelago, locationChecker);
             KentInjections.Initialize(monitor, archipelago);
-            GoldenEggInjections.Initialize(monitor, archipelago);
+            _animalShopStockModifier = new AnimalShopStockModifier(monitor, modHelper, archipelago);
             GoldenClockInjections.Initialize(monitor, archipelago);
             ZeldaAnimationInjections.Initialize(monitor, archipelago);
             ItemTooltipInjections.Initialize(monitor, modHelper, archipelago, locationChecker, nameSimplifier);
@@ -126,6 +127,7 @@ namespace StardewArchipelago.GameModifications
             CleanLegendaryFishRecatchableEvent();
             UnpatchSeedShops();
             UnpatchJodiFishQuest();
+            CleanGoldenEggEvent();
         }
 
         private void PatchAchievements()
@@ -542,10 +544,12 @@ namespace StardewArchipelago.GameModifications
 
         private void PatchGoldenEgg()
         {
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(Utility), nameof(Utility.getAnimalShopStock)),
-                postfix: new HarmonyMethod(typeof(GoldenEggInjections), nameof(GoldenEggInjections.GetAnimalShopStock_GoldenEggIfReceived_Postfix))
-            );
+            _helper.Events.Content.AssetRequested += _animalShopStockModifier.OnShopStockRequested;
+        }
+
+        private void CleanGoldenEggEvent()
+        {
+            _helper.Events.Content.AssetRequested -= _animalShopStockModifier.OnShopStockRequested;
         }
 
         private void PatchGoldenClock()

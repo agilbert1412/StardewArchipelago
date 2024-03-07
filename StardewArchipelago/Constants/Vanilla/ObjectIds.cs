@@ -105,6 +105,6 @@
         public const string WHITE_ALGAE = "157";
         public const string WINTER_SEEDS = "498";
         public const string YAM_SEEDS = "492";
-
+        public const string GOLDEN_EGG = "928";
     }
 }
