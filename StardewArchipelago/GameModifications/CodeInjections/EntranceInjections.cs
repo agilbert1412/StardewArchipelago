@@ -51,14 +51,6 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             catch (Exception ex)
             {
                 _monitor.Log($"Failed in {nameof(PerformWarpFarmer_EntranceRandomization_Prefix)}:\n{ex}", LogLevel.Error);
-                var targetPosition = new Point(tileX, tileY);
-                if (_entranceManager.TryGetEntranceReplacement(Game1.currentLocation.Name, locationRequest.Name, targetPosition, out var replacedWarp))
-                {
-                    if (replacedWarp is null)
-                    {
-                        _monitor.Log($"The replaced warp is null, meaning its likely the warp could not be found.", LogLevel.Error);
-                    }
-                }
                 return true; // run original logic
             }
         }

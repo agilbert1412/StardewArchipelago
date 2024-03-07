@@ -176,7 +176,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             // return false;
             if (!TryGetModifiedWarpName(key, out var desiredWarpName))
             {
-                _monitor.Log($"Tried to find warp from {currentLocationName} but found none.  Giving default warp.", LogLevel.Error);
+                _monitor.Log($"Tried to find warp from {currentLocationName} but found none.  Giving default warp.", LogLevel.Trace);
                 return false;
             }
             
@@ -189,10 +189,10 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
                     warpRequest = generatedWarps[correctDesiredWarpName];
                     return true;
                 }
-                _monitor.Log($"Desired warp {correctDesiredWarpName} was checked, but not generated.", LogLevel.Error);
+                _monitor.Log($"Desired warp {correctDesiredWarpName} was checked, but not generated.", LogLevel.Trace);
                 return false;
             }
-            
+
             return TryFindWarpToDestination(correctDesiredWarpName, out warpRequest);
         }
 
@@ -222,6 +222,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
 
             if (!locationOriginName.TryGetClosestWarpPointTo(ref locationDestinationName, _equivalentAreas, out var locationOrigin, out var warpPoint))
             {
+                _monitor.Log($"Could not find closest warp for {desiredWarpKey}, returning a null warpRequest.");
                 warpRequest = null;
                 return false;
             }
