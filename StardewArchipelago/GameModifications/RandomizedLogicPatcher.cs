@@ -57,6 +57,7 @@ namespace StardewArchipelago.GameModifications
             KentInjections.Initialize(monitor, archipelago);
             GoldenEggInjections.Initialize(monitor, archipelago);
             GoldenClockInjections.Initialize(monitor, archipelago);
+            ZeldaAnimationInjections.Initialize(monitor, archipelago);
 
             DebugPatchInjections.Initialize(monitor, archipelago);
         }
@@ -93,6 +94,7 @@ namespace StardewArchipelago.GameModifications
             PatchKent();
             PatchGoldenEgg();
             PatchGoldenClock();
+            PatchZeldaAnimations();
             _startingResources.GivePlayerStartingResources();
 
             PatchDebugMethods();
@@ -459,6 +461,14 @@ namespace StardewArchipelago.GameModifications
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Building), nameof(Building.doAction)),
                 postfix: new HarmonyMethod(typeof(GoldenClockInjections), nameof(GoldenClockInjections.DoAction_GoldenClockIncreaseTime_Postfix))
+            );
+        }
+
+        private void PatchZeldaAnimations()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Farmer), nameof(Farmer.holdUpItemThenMessage)),
+                postfix: new HarmonyMethod(typeof(ZeldaAnimationInjections), nameof(ZeldaAnimationInjections.HoldUpItemThenMessage_SkipBasedOnConfig_Prefix))
             );
         }
 

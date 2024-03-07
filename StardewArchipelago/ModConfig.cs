@@ -14,5 +14,10 @@
         /// Examples include NPC Hearts, Seasons, Carpenter building unlocks, etc
         /// </summary>
         public bool HideEmptyArchipelagoLetters { get; set; } = false;
+
+        /// <summary>
+        /// Skips all Zelda-style animations where the character holds an item above their head
+        /// </summary>
+        public bool SkipHoldUpAnimations { get; set; } = false;
     }
 }
