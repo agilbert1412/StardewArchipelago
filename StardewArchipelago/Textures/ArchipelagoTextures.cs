@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
 
@@ -20,20 +21,20 @@ namespace StardewArchipelago.Textures
 
         public static readonly string[] ValidLogos = { COLOR, WHITE, BLUE, BLACK, RED, PLEADING };
 
-        public static Texture2D GetColoredLogo(IModHelper modHelper, int size, string color, string preferredIconSet = null)
+        public static Texture2D GetArchipelagoLogo(IMonitor monitor, IModHelper modHelper, int size, string color, string preferredIconSet = null)
         {
             var archipelagoFolder = "Archipelago";
             preferredIconSet = GetChosenIconSet(preferredIconSet);
             var fileName = $"{size}x{size} {color} icon.png";
             var relativePathToTexture = Path.Combine(archipelagoFolder, preferredIconSet, fileName);
-            var texture = TexturesLoader.GetTexture(modHelper, relativePathToTexture);
+            var texture = TexturesLoader.GetTexture(monitor, modHelper, relativePathToTexture);
             if (texture == null)
             {
                 // Let's try to get the icon from the other set
                 preferredIconSet = GetOtherIconSet(preferredIconSet);
                 fileName = $"{size}x{size} {color} icon.png";
                 relativePathToTexture = Path.Combine(archipelagoFolder, preferredIconSet, fileName);
-                texture = TexturesLoader.GetTexture(modHelper, relativePathToTexture);
+                texture = TexturesLoader.GetTexture(monitor, modHelper, relativePathToTexture);
                 if (texture == null)
                 {
                     throw new InvalidOperationException($"Could not find texture {fileName}");

@@ -138,7 +138,7 @@ namespace StardewArchipelago.GameModifications
                 }
 
                 var activeHints = _archipelago.GetMyActiveHints();
-                grassStarterRecipe = new PurchaseableArchipelagoLocation(location, location, _modHelper, _locationChecker, _archipelago, activeHints);
+                grassStarterRecipe = new PurchaseableArchipelagoLocation(location, location, _monitor, _modHelper, _locationChecker, _archipelago, activeHints);
             }
 
             stock.Add(grassStarterRecipe, new int[2]
