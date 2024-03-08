@@ -106,7 +106,7 @@ namespace StardewArchipelago
 
 
             _helper.ConsoleCommands.Add("connect_override", $"Overrides your next connection to Archipelago. {CONNECT_SYNTAX}", this.OnCommandConnectToArchipelago);
-            _helper.ConsoleCommands.Add("seed_shops_override", "Override the deathlink setting", this.OverrideSeedShops);
+            _helper.ConsoleCommands.Add("seed_shops_override", "Override the seeds shop setting", this.OverrideSeedShops);
             _helper.ConsoleCommands.Add("export_all_gifts", "Export all currently loaded giftable items and their traits", this.ExportGifts);
             _helper.ConsoleCommands.Add("deathlink", "Override the deathlink setting", this.OverrideDeathlink);
             _helper.ConsoleCommands.Add("trap_difficulty", "Override the trap difficulty setting", this.OverrideTrapDifficulty);

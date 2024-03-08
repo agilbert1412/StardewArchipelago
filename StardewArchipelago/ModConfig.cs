@@ -21,5 +21,10 @@
         /// The Custom ones are made by candycaneannihalator and are intended to ressemble the Stardew Valley style
         /// </summary>
         public bool UseCustomArchipelagoIcons { get; set; } = false;
+
+        /// <summary>
+        /// Skips all Zelda-style animations where the character holds an item above their head
+        /// </summary>
+        public bool SkipHoldUpAnimations { get; set; } = false;
     }
 }
