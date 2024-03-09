@@ -25,14 +25,18 @@ namespace StardewArchipelago.Locations.Festival
             _locationChecker = locationChecker;
         }
 
-        // public virtual void command_awardFestivalPrize(GameLocation location, GameTime time, string[] split)
-        public static bool AwardFestivalPrize_Strawhat_Prefix(Event __instance, GameLocation location, GameTime time, string[] split)
+        // public static void AwardFestivalPrize(Event @event, string[] args, EventContext context)
+        public static bool AwardFestivalPrize_Strawhat_Prefix(Event @event, string[] args, EventContext context)
         {
             try
             {
-                var festivalWinnersField = _modHelper.Reflection.GetField<HashSet<long>>(__instance, "festivalWinners");
+                // private HashSet<long> festivalWinners = new HashSet<long>();
+                var festivalWinnersField = _modHelper.Reflection.GetField<HashSet<long>>(@event, "festivalWinners");
+
+                // private Dictionary<string, string> festivalData;
+                var festivalDataField = _modHelper.Reflection.GetField<Dictionary<string, string>>(@event, "festivalData");
+
                 var festivalWinners = festivalWinnersField.GetValue();
-                var festivalDataField = _modHelper.Reflection.GetField<Dictionary<string, string>>(__instance, "festivalData");
                 var festivalData = festivalDataField.GetValue();
 
                 if (festivalWinners == null || festivalData == null)
@@ -55,7 +59,7 @@ namespace StardewArchipelago.Locations.Festival
                 }
 
                 Game1.player.mailReceived.Add("Egg Festival");
-                __instance.CurrentCommand += 2;
+                @event.CurrentCommand += 2;
 
                 return false; // don't run original logic
             }
