@@ -195,11 +195,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
             return false;
         }
 
-        public static void Command_RemoveQuest_CheckLocation_Postfix(Event __instance, GameLocation location, GameTime time, string[] split)
+        // public static void RemoveQuest(Event @event, string[] args, EventContext context)
+        public static void RemoveQuest_CheckLocation_Postfix(Event @event, string[] args, EventContext context)
         {
             try
             {
-                var questId = split[1];
+                var questId = args[1];
                 var quest = Quest.getQuestFromId(questId);
                 var questName = quest.GetName();
                 var englishQuestName = GetQuestEnglishName(questId, questName);
@@ -213,7 +214,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(Command_RemoveQuest_CheckLocation_Postfix)}:\n{ex}", LogLevel.Error);
+                _monitor.Log($"Failed in {nameof(RemoveQuest_CheckLocation_Postfix)}:\n{ex}", LogLevel.Error);
                 return;
             }
         }
@@ -589,38 +590,40 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
             }
         }
 
-        public static bool Command_AwardFestivalPrize_QiMilk_Prefix(Event __instance, GameLocation location,
-            GameTime time, string[] split)
+        // public static void AwardFestivalPrize(Event @event, string[] args, EventContext context)
+        public static bool AwardFestivalPrize_QiMilk_Prefix(Event @event, string[] args, EventContext context)
         {
             try
             {
-                if (split.Length < 2)
+                if (args.Length < 2)
                 {
                     return true; // run original logic
                 }
-                var lower = split[1].ToLower();
-                if (lower != "qimilk")
+                var prize = args[1];
+                if (!prize.Equals("qimilk", StringComparison.InvariantCultureIgnoreCase))
                 {
                     return true; // run original logic
                 }
+
+                _locationChecker.AddCheckedLocation("Cryptic Note");
 
                 if (!Game1.player.mailReceived.Contains("qiCave"))
                 {
-                    _locationChecker.AddCheckedLocation("Cryptic Note");
                     Game1.player.mailReceived.Add("qiCave");
-
-                    if (_archipelago.SlotData.Goal == Goal.CrypticNote)
-                    {
-                        _archipelago.ReportGoalCompletion();
-                    }
                 }
-                ++__instance.CurrentCommand;
+
+                if (_archipelago.SlotData.Goal == Goal.CrypticNote)
+                {
+                    _archipelago.ReportGoalCompletion();
+                }
+
+                ++@event.CurrentCommand;
 
                 return false; // don't run original logic
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(Command_AwardFestivalPrize_QiMilk_Prefix)}:\n{ex}",
+                _monitor.Log($"Failed in {nameof(AwardFestivalPrize_QiMilk_Prefix)}:\n{ex}",
                     LogLevel.Error);
                 return true; // run original logic
             }

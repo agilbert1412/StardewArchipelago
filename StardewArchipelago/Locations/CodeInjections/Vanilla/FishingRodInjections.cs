@@ -47,12 +47,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
         }
 
-        public static bool AwardFestivalPrize_BambooPole_Prefix(Event __instance, GameLocation location, GameTime time, string[] split)
+        // public static void AwardFestivalPrize(Event @event, string[] args, EventContext context)
+        public static bool AwardFestivalPrize_BambooPole_Prefix(Event @event, string[] args, EventContext context)
         {
             try
             {
-                var festivalWinnersField = _modHelper.Reflection.GetField<HashSet<long>>(__instance, "festivalWinners");
-                if (__instance.id != EventIds.BAMBOO_POLE || festivalWinnersField.GetValue().Contains(Game1.player.UniqueMultiplayerID) || split.Length <= 1 || split[1].ToLower() != "rod")
+                var festivalWinnersField = _modHelper.Reflection.GetField<HashSet<long>>(@event, "festivalWinners");
+                if (@event.id != EventIds.BAMBOO_POLE || args.Length <= 1 || args[1].ToLower() != "rod")
                 {
                     return true; // run original logic
                 }
@@ -60,8 +61,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 OnCheckBambooPoleLocation();
 
                 if (Game1.activeClickableMenu == null)
-                    __instance.CurrentCommand++;
-                __instance.CurrentCommand++;
+                    @event.CurrentCommand++;
+                @event.CurrentCommand++;
 
                 return false; // don't run original logic
 
@@ -73,29 +74,29 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
         }
 
-        private static void SkipBambooPoleEventArchipelago(Event __instance)
+        private static void SkipBambooPoleEventArchipelago(Event bambooPoleEvent)
         {
-            if (__instance.playerControlSequence)
+            if (bambooPoleEvent.playerControlSequence)
             {
-                __instance.EndPlayerControlSequence();
+                bambooPoleEvent.EndPlayerControlSequence();
             }
 
             Game1.playSound("drumkit6");
 
-            var actorPositionsAfterMoveField = _modHelper.Reflection.GetField<Dictionary<string, Vector3>>(__instance, "actorPositionsAfterMove");
+            var actorPositionsAfterMoveField = _modHelper.Reflection.GetField<Dictionary<string, Vector3>>(bambooPoleEvent, "actorPositionsAfterMove");
             actorPositionsAfterMoveField.GetValue().Clear();
 
-            foreach (var actor in __instance.actors)
+            foreach (var actor in bambooPoleEvent.actors)
             {
                 var ignoreStopAnimation = actor.Sprite.ignoreStopAnimation;
                 actor.Sprite.ignoreStopAnimation = true;
                 actor.Halt();
                 actor.Sprite.ignoreStopAnimation = ignoreStopAnimation;
-                __instance.resetDialogueIfNecessary(actor);
+                bambooPoleEvent.resetDialogueIfNecessary(actor);
             }
 
-            __instance.farmer.Halt();
-            __instance.farmer.ignoreCollisions = false;
+            bambooPoleEvent.farmer.Halt();
+            bambooPoleEvent.farmer.ignoreCollisions = false;
             Game1.exitActiveMenu();
             Game1.dialogueUp = false;
             Game1.dialogueTyping = false;
@@ -103,7 +104,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
             OnCheckBambooPoleLocation();
 
-            __instance.endBehaviors(new string[4]
+            bambooPoleEvent.endBehaviors(new string[4]
             {
                 "end",
                 "position",
