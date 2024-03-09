@@ -73,20 +73,18 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             }
         }
 
-        private static void DoZeldaAnimation(Farmer farmer,Item item, bool showMessage)
+        private static void DoZeldaAnimation(Farmer farmer, Item item, bool showMessage)
         {
             farmer.completelyStopAnimatingOrDoingAction();
             if (showMessage)
                 DelayedAction.playSoundAfterDelay("getNewSpecialItem", 750);
             farmer.faceDirection(2);
             farmer.freezePause = 4000;
-            farmer.FarmerSprite.animateOnce(new FarmerSprite.AnimationFrame[3]
+            farmer.FarmerSprite.animateOnce(new FarmerSprite.AnimationFrame[]
             {
                 new(57, 0),
-                new(57, 2500, false, false, Farmer.showHoldingItem),
-                showMessage ?
-                    new FarmerSprite.AnimationFrame((short) farmer.FarmerSprite.CurrentFrame, 500, false, false, Farmer.showReceiveNewItemMessage, true) :
-                    new FarmerSprite.AnimationFrame((short) farmer.FarmerSprite.CurrentFrame, 500, false, false)
+                new(57, 2500, false, false, who => Farmer.showHoldingItem(who, item)),
+                showMessage ? new FarmerSprite.AnimationFrame((short) farmer.FarmerSprite.CurrentFrame, 500, false, false, who => Farmer.showReceiveNewItemMessage(who, item), true) : new FarmerSprite.AnimationFrame((short) farmer.FarmerSprite.CurrentFrame, 500, false, false)
             });
             farmer.mostRecentlyGrabbedItem = item;
             farmer.canMove = false;
