@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection.Metadata;
 using HarmonyLib;
 using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Archipelago;
@@ -489,7 +490,7 @@ namespace StardewArchipelago.Locations.Patcher
                 prefix: new HarmonyMethod(typeof(IsolatedEventInjections), nameof(IsolatedEventInjections.SkipEvent_RustySword_Prefix))
             );
             _harmony.Patch(
-                original: AccessTools.Method(typeof(Event), nameof(Event.command_awardFestivalPrize)),
+                original: AccessTools.Method(typeof(Event), nameof(Event.DefaultCommands.AwardFestivalPrize)),
                 prefix: new HarmonyMethod(typeof(IsolatedEventInjections), nameof(IsolatedEventInjections.AwardFestivalPrize_RustySword_Prefix))
             );
             _harmony.Patch(
