@@ -490,7 +490,7 @@ namespace StardewArchipelago.Locations.Patcher
                 prefix: new HarmonyMethod(typeof(IsolatedEventInjections), nameof(IsolatedEventInjections.SkipEvent_RustySword_Prefix))
             );
             _harmony.Patch(
-                original: AccessTools.Method(typeof(Event), nameof(Event.DefaultCommands.AwardFestivalPrize)),
+                original: AccessTools.Method(typeof(Event.DefaultCommands), nameof(Event.DefaultCommands.AwardFestivalPrize)),
                 prefix: new HarmonyMethod(typeof(IsolatedEventInjections), nameof(IsolatedEventInjections.AwardFestivalPrize_RustySword_Prefix))
             );
             _harmony.Patch(
@@ -713,7 +713,7 @@ namespace StardewArchipelago.Locations.Patcher
             }
 
             _harmony.Patch(
-                original: AccessTools.Method(typeof(Event), nameof(Event.command_awardFestivalPrize)),
+                original: AccessTools.Method(typeof(Event.DefaultCommands), nameof(Event.DefaultCommands.AwardFestivalPrize)),
                 prefix: new HarmonyMethod(typeof(EggFestivalInjections), nameof(EggFestivalInjections.AwardFestivalPrize_Strawhat_Prefix))
             );
 
@@ -723,7 +723,7 @@ namespace StardewArchipelago.Locations.Patcher
             );
 
             _harmony.Patch(
-                original: AccessTools.Method(typeof(Event), nameof(Event.command_switchEvent)),
+                original: AccessTools.Method(typeof(Event.DefaultCommands), nameof(Event.DefaultCommands.SwitchEvent)),
                 postfix: new HarmonyMethod(typeof(LuauInjections), nameof(LuauInjections.SwitchEvent_GovernorReactionToSoup_Postfix))
             );
 
