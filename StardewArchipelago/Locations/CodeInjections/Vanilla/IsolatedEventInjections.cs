@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Items.Unlocks;
+using StardewArchipelago.Stardew.Ids.Vanilla;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.GameData;
@@ -19,7 +20,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         public const string BEACH_BRIDGE_AP_LOCATION = "Beach Bridge Repair";
         public const string GALAXY_SWORD_SHRINE_AP_LOCATION = "Galaxy Sword Shrine";
         public const string RUSTY_SWORD_AP_LOCATION = "The Mines Entrance Cutscene";
-        public const string RUSTY_SWORD_EVENT_ID = "100162";
 
         private static IMonitor _monitor;
         private static IModHelper _helper;
@@ -243,7 +243,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             try
             {
-                if (__instance.id != RUSTY_SWORD_EVENT_ID)
+                if (__instance.id != EventIds.RUSTY_SWORD_EVENT_ID)
                 {
                     return true; // run original logic
                 }
@@ -289,20 +289,19 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
         }
 
-        public static bool AwardFestivalPrize_RustySword_Prefix(Event __instance, GameLocation location, GameTime time, string[] split)
+        // public static void AwardFestivalPrize(Event @event, string[] args, EventContext context)
+        public static bool AwardFestivalPrize_RustySword_Prefix(Event @event, string[] args, EventContext context)
         {
             try
             {
-                var festivalWinnersField = _helper.Reflection.GetField<HashSet<long>>(__instance, "festivalWinners");
-                if (__instance.id != RUSTY_SWORD_EVENT_ID || festivalWinnersField.GetValue().Contains(Game1.player.UniqueMultiplayerID) || split.Length <= 1 ||
-                    split[1].ToLower() != "sword")
+                if (@event.id != EventIds.RUSTY_SWORD_EVENT_ID)
                 {
                     return true; // run original logic
                 }
 
                 if (Game1.activeClickableMenu == null)
-                    __instance.CurrentCommand++;
-                __instance.CurrentCommand++;
+                    @event.CurrentCommand++;
+                @event.CurrentCommand++;
 
                 _locationChecker.AddCheckedLocation(RUSTY_SWORD_AP_LOCATION);
                 return false; // don't run original logic
