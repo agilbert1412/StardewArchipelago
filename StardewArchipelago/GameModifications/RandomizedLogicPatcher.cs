@@ -111,8 +111,6 @@ namespace StardewArchipelago.GameModifications
             PatchGoldenEgg();
             PatchGoldenClock();
             PatchZeldaAnimations();
-            PatchLegendaryFish();
-            MakeLegendaryFishReCatchable();
             MakeLegendaryFishRecatchable();
             PatchSecretNotes();
             PatchRecipes();
@@ -580,9 +578,6 @@ namespace StardewArchipelago.GameModifications
                     nameof(ZeldaAnimationInjections.AddItemToInventory_Position_PrankDay_Postfix))
             );
         }
-
-        private void PatchLegendaryFish()
-        private void MakeLegendaryFishReCatchable()
         private void MakeLegendaryFishRecatchable()
         {
             _helper.Events.Content.AssetRequested += this.OnFishAssetRequested;
