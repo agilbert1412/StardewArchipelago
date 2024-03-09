@@ -21,12 +21,13 @@ namespace StardewArchipelago.Locations
     {
         private const string ARCHIPELAGO_PREFIX = "Archipelago: ";
         private const string ARCHIPELAGO_SHORT_PREFIX = "AP: ";
+        public const string EXTRA_MATERIALS_KEY = "Extra Materials";
         private Texture2D _archipelagoTexture;
 
         private string _locationDisplayName;
         private string _description;
         private LocationChecker _locationChecker;
-        private List<Item> _extraMaterialsRequired;
+        private Dictionary<string, int> _extraMaterialsRequired;
 
         public string LocationName { get; }
 
@@ -43,23 +44,23 @@ namespace StardewArchipelago.Locations
             var scoutedLocation = archipelago.ScoutSingleLocation(LocationName);
             _description = scoutedLocation == null ? ScoutedLocation.GenericItemName() : scoutedLocation.ToString();
             _locationChecker = locationChecker;
-            _extraMaterialsRequired = new List<Item>();
+            _extraMaterialsRequired = new Dictionary<string, int>();
 
             var isHinted = myActiveHints.Any(hint => archipelago.GetLocationName(hint.LocationId).Equals(locationName, StringComparison.OrdinalIgnoreCase));
             var desiredTextureName = isHinted ? ArchipelagoTextures.PLEADING : ArchipelagoTextures.COLOR;
             _archipelagoTexture = ArchipelagoTextures.GetArchipelagoLogo(monitor, modHelper, 48, desiredTextureName);
         }
 
-        public void AddMaterialRequirement(Item requiredItem)
+        public void AddMaterialRequirement(string id, int amount)
         {
-            _extraMaterialsRequired.Add(requiredItem);
+            _extraMaterialsRequired.Add(id, amount);
         }
 
         public override bool CanBuyItem(Farmer who)
         {
-            foreach (var item in _extraMaterialsRequired)
+            foreach (var (id, amount) in _extraMaterialsRequired)
             {
-                if (who.Items.CountId(item.QualifiedItemId) < item.Stack)
+                if (who.Items.CountId(id) < amount)
                 {
                     return false;
                 }
@@ -70,9 +71,9 @@ namespace StardewArchipelago.Locations
 
         public override bool actionWhenPurchased(string shopId)
         {
-            foreach (var item in _extraMaterialsRequired)
+            foreach (var (id, amount) in _extraMaterialsRequired)
             {
-                Game1.player.Items.ReduceId(item.QualifiedItemId, item.Stack);
+                Game1.player.Items.ReduceId(id, amount);
             }
             _locationChecker.AddCheckedLocation(LocationName);
             return true;
@@ -91,9 +92,9 @@ namespace StardewArchipelago.Locations
         public override string getDescription()
         {
             var descriptionWithExtraMaterials = $"{_description}{Environment.NewLine}";
-            foreach (var material in _extraMaterialsRequired)
+            foreach (var (id, amount) in _extraMaterialsRequired)
             {
-                descriptionWithExtraMaterials += $"{Environment.NewLine}{material.Stack} {material.DisplayName}";
+                descriptionWithExtraMaterials += $"{Environment.NewLine}{amount} {DataLoader.Objects(Game1.content)[id].DisplayName}";
             }
 
             return descriptionWithExtraMaterials;
@@ -118,7 +119,8 @@ namespace StardewArchipelago.Locations
 
         public override string TypeDefinitionId => "(AP)";
 
-        public static IEnumerable<ItemQueryResult> Create(string locationName, IModHelper modHelper, LocationChecker locationChecker, ArchipelagoClient archipelago, Hint[] myActiveHints)
+        public static IEnumerable<ItemQueryResult> Create(string locationName, IModHelper modHelper, LocationChecker locationChecker, ArchipelagoClient archipelago,
+            Dictionary<string, object> contextCustomFields, Hint[] myActiveHints)
         {
             if (string.IsNullOrWhiteSpace(locationName))
             {
@@ -127,7 +129,19 @@ namespace StardewArchipelago.Locations
 
             if (locationChecker.IsLocationMissing(locationName))
             {
-                return new ItemQueryResult[] { new(new PurchaseableArchipelagoLocation(locationName.Trim(), modHelper, locationChecker, archipelago, myActiveHints)) };
+                var purchaseableCheck = new PurchaseableArchipelagoLocation(locationName.Trim(), modHelper, locationChecker, archipelago, myActiveHints);
+                if (contextCustomFields != null && contextCustomFields.ContainsKey(EXTRA_MATERIALS_KEY))
+                {
+                    var extraMaterialsString = (string)contextCustomFields[EXTRA_MATERIALS_KEY];
+                    foreach (var extraMaterialString in extraMaterialsString.Split(",", StringSplitOptions.RemoveEmptyEntries))
+                    {
+                        var extraMaterialFields = extraMaterialString.Split(":");
+                        var materialId = extraMaterialFields[0];
+                        var materialAmount = int.Parse(extraMaterialFields[1]);
+                        purchaseableCheck.AddMaterialRequirement(materialId, materialAmount);
+                    }
+                }
+                return new ItemQueryResult[] { new(purchaseableCheck) };
             }
 
             return Enumerable.Empty<ItemQueryResult>();

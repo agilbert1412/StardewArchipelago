@@ -33,6 +33,7 @@ namespace StardewArchipelago.Locations.Patcher
         private readonly GingerIslandPatcher _gingerIslandPatcher;
         private readonly ToolShopStockModifier _toolUpgradesShopStockModifier;
         private readonly FishingRodShopStockModifier _fishingRodShopStockModifier;
+        private readonly CarpenterShopStockModifier _carpenterShopStockModifier;
         private readonly FestivalShopStockModifier _festivalShopStockModifier;
         private readonly RecipePurchaseStockModifier _recipePurchaseStockModifier;
 
@@ -44,6 +45,7 @@ namespace StardewArchipelago.Locations.Patcher
             _gingerIslandPatcher = new GingerIslandPatcher(monitor, _modHelper, _harmony, _archipelago, locationChecker);
             _toolUpgradesShopStockModifier = new ToolShopStockModifier(monitor, modHelper, archipelago);
             _fishingRodShopStockModifier = new FishingRodShopStockModifier(monitor, modHelper, archipelago);
+            _carpenterShopStockModifier = new CarpenterShopStockModifier(monitor, modHelper, archipelago);
             _festivalShopStockModifier = new FestivalShopStockModifier(monitor, modHelper, archipelago);
             _recipePurchaseStockModifier = new RecipePurchaseStockModifier(monitor, modHelper, archipelago);
         }
@@ -84,6 +86,7 @@ namespace StardewArchipelago.Locations.Patcher
         {
             CleanToolEvents();
             CleanFishingRodEvents();
+            CleanCarpenterShopEvents();
             CleanFestivalEvents();
             CleanChefsanityEvents();
         }
@@ -445,10 +448,12 @@ namespace StardewArchipelago.Locations.Patcher
                 prefix: new HarmonyMethod(typeof(CarpenterInjections), nameof(CarpenterInjections.HouseUpgradeAccept_FreeFromAP_Prefix))
             );
 
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(Utility), nameof(Utility.getCarpenterStock)),
-                postfix: new HarmonyMethod(typeof(CarpenterInjections), nameof(CarpenterInjections.GetCarpenterStock_PurchasableChecks_Postfix))
-            );
+            _modHelper.Events.Content.AssetRequested += _carpenterShopStockModifier.OnShopStockRequested;
+        }
+
+        private void CleanCarpenterShopEvents()
+        {
+            _modHelper.Events.Content.AssetRequested -= _carpenterShopStockModifier.OnShopStockRequested;
         }
 
         private void MakeAllBuildingsCheaper()
