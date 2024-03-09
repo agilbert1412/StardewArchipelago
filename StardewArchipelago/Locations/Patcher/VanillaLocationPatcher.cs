@@ -19,6 +19,7 @@ using StardewValley.Menus;
 using StardewValley.Minigames;
 using StardewValley.Objects;
 using StardewValley.Quests;
+using StardewValley.SpecialOrders;
 using StardewValley.TerrainFeatures;
 using Object = StardewValley.Object;
 
@@ -198,7 +199,7 @@ namespace StardewArchipelago.Locations.Patcher
             );
 
             _harmony.Patch(
-                original: AccessTools.Method(typeof(Event), nameof(Event.command_awardFestivalPrize)),
+                original: AccessTools.Method(typeof(Event.DefaultCommands), nameof(Event.DefaultCommands.AwardFestivalPrize)),
                 prefix: new HarmonyMethod(typeof(FishingRodInjections), nameof(FishingRodInjections.AwardFestivalPrize_BambooPole_Prefix))
             );
         }
@@ -269,8 +270,8 @@ namespace StardewArchipelago.Locations.Patcher
             );
 
             _harmony.Patch(
-                original: AccessTools.Method(typeof(Event), nameof(Event.command_removeQuest)),
-                postfix: new HarmonyMethod(typeof(QuestInjections), nameof(QuestInjections.Command_RemoveQuest_CheckLocation_Postfix))
+                original: AccessTools.Method(typeof(Event.DefaultCommands), nameof(Event.DefaultCommands.RemoveQuest)),
+                postfix: new HarmonyMethod(typeof(QuestInjections), nameof(QuestInjections.RemoveQuest_CheckLocation_Postfix))
             );
 
             _harmony.Patch(
@@ -301,8 +302,8 @@ namespace StardewArchipelago.Locations.Patcher
             );
 
             _harmony.Patch(
-                original: AccessTools.Method(typeof(Event), nameof(Event.command_awardFestivalPrize)),
-                prefix: new HarmonyMethod(typeof(QuestInjections), nameof(QuestInjections.Command_AwardFestivalPrize_QiMilk_Prefix))
+                original: AccessTools.Method(typeof(Event.DefaultCommands), nameof(Event.DefaultCommands.AwardFestivalPrize)),
+                prefix: new HarmonyMethod(typeof(QuestInjections), nameof(QuestInjections.AwardFestivalPrize_QiMilk_Prefix))
             );
 
             ReplaceDarkTalismanQuestsWithChecks();
