@@ -1,7 +1,6 @@
 ﻿using System;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
-using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley.GameData.Shops;
