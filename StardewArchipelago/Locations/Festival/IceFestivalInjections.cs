@@ -26,14 +26,14 @@ namespace StardewArchipelago.Locations.Festival
             _shopReplacer = shopReplacer;
         }
 
-        // public virtual void command_awardFestivalPrize(GameLocation location, GameTime time, string[] split)
-        public static bool AwardFestivalPrize_FishingCompetition_Prefix(Event __instance, GameLocation location, GameTime time, string[] split)
+        // public static void AwardFestivalPrize(Event @event, string[] args, EventContext context)
+        public static bool AwardFestivalPrize_FishingCompetition_Prefix(Event @event, string[] args, EventContext context)
         {
             try
             {
-                var festivalWinnersField = _modHelper.Reflection.GetField<HashSet<long>>(__instance, "festivalWinners");
+                var festivalWinnersField = _modHelper.Reflection.GetField<HashSet<long>>(@event, "festivalWinners");
                 var festivalWinners = festivalWinnersField.GetValue();
-                var festivalDataField = _modHelper.Reflection.GetField<Dictionary<string, string>>(__instance, "festivalData");
+                var festivalDataField = _modHelper.Reflection.GetField<Dictionary<string, string>>(@event, "festivalData");
                 var festivalData = festivalDataField.GetValue();
 
                 if (festivalWinners == null || festivalData == null)
@@ -56,7 +56,7 @@ namespace StardewArchipelago.Locations.Festival
                 }
 
                 Game1.player.mailReceived.Add("Ice Festival");
-                __instance.CurrentCommand += 2;
+                @event.CurrentCommand += 2;
 
                 return false; // don't run original logic
             }
