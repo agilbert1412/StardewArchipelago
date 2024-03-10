@@ -21,7 +21,7 @@ namespace StardewArchipelago.GameModifications.Modded
             _harmony = harmony;
             _archipelago = archipelago;
             _stardewItemManager = stardewItemManager;
-            if (!_archipelago.SlotData.Mods.HasMod(ModNames.SVE))
+            if (_archipelago.SlotData.Mods.HasMod(ModNames.SVE))
             {
                 JunimoShopInjections.Initialize(monitor, modHelper, archipelago, seedShopStockModifier, _stardewItemManager);
             }
