@@ -31,7 +31,7 @@ namespace StardewArchipelago.Bundles
                 var numberRequiredItemsWithSeparator = bundle.GetNumberRequiredItemsWithSeparator();
 
                 var key = $"{Name}/{spriteIndex}";
-                var value = $"{nameWithoutBundle}//{itemsString}/{colorIndex}{numberRequiredItemsWithSeparator}";
+                var value = $"{nameWithoutBundle}//{itemsString}/{colorIndex}{numberRequiredItemsWithSeparator}/{nameWithoutBundle}";
 
 
                 stardewStrings.Add(key, value);

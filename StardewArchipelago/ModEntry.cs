@@ -56,6 +56,7 @@ namespace StardewArchipelago
         private WeaponsManager _weaponsManager;
         private RandomizedLogicPatcher _logicPatcher;
         private MailPatcher _mailPatcher;
+        private BundlesManager _bundlesManager;
         private LocationChecker _locationChecker;
         private LocationPatcher _locationsPatcher;
         private ItemPatcher _itemPatcher;
@@ -177,6 +178,8 @@ namespace StardewArchipelago
             _harmony.UnpatchAll(ModManifest.UniqueID);
             _locationsPatcher?.CleanEvents();
             _logicPatcher?.CleanEvents();
+            _bundlesManager?.CleanEvents();
+            _bundlesManager = null;
             SeasonsRandomizer.ResetMailKeys();
             _multiSleep = new MultiSleep(Monitor, _helper, _harmony);
             _advancedOptionsManager = new AdvancedOptionsManager(this, Monitor, _helper, _harmony, _archipelago);
