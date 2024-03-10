@@ -468,8 +468,8 @@ namespace StardewArchipelago.GameModifications
             }
 
             _harmony.Patch(
-                original: AccessTools.Constructor(typeof(Crop), new[] { typeof(int), typeof(int), typeof(int)}),
-                prefix: new HarmonyMethod(typeof(CropInjections), nameof(CropInjections.CropConstructor_WildSeedsBecomesUnlockedCrop_Prefix))
+                original: AccessTools.Method(typeof(Crop), nameof(Crop.ResolveSeedId)),
+                prefix: new HarmonyMethod(typeof(CropInjections), nameof(CropInjections.ResolveSeedId_WildSeedsBecomesUnlockedCrop_Prefix))
             );
         }
 
