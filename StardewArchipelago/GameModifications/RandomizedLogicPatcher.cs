@@ -2,7 +2,6 @@
 using System.Linq;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.GameModifications.CodeInjections;
@@ -25,7 +24,6 @@ using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Network;
 using StardewValley.Objects;
-using xTile.Dimensions;
 using Object = StardewValley.Object;
 
 namespace StardewArchipelago.GameModifications

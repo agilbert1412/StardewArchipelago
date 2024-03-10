@@ -1,22 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Archipelago.MultiClient.Net.Models;
-using Force.DeepCloner;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
-using StardewArchipelago.Constants.Vanilla;
-using StardewArchipelago.GameModifications;
 using StardewArchipelago.Serialization;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.GameData;
 using StardewValley.GameData.Shops;
-using StardewValley.Locations;
-using StardewValley.Menus;
-using xTile.Dimensions;
-using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {

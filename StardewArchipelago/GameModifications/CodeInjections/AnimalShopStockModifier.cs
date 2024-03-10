@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using StardewArchipelago.Archipelago;
+﻿using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
-using StardewValley;
 using StardewValley.GameData.Shops;
-using Object = StardewValley.Object;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
 {

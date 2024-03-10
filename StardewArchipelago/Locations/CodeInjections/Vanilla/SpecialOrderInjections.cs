@@ -8,7 +8,6 @@ using StardewArchipelago.Extensions;
 using StardewArchipelago.Items.Unlocks;
 using StardewModdingAPI;
 using StardewValley;
-using StardewValley.GameData;
 using StardewArchipelago.Constants.Modded;
 using StardewValley.GameData.SpecialOrders;
 using StardewValley.SpecialOrders;

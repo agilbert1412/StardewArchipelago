@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Bundles;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Serialization;
 using StardewArchipelago.Stardew;

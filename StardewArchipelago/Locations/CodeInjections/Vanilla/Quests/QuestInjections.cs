@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using Archipelago.MultiClient.Net.Models;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.Constants.Vanilla;

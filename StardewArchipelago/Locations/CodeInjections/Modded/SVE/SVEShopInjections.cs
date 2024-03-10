@@ -8,7 +8,6 @@ using StardewArchipelago.GameModifications;
 using StardewArchipelago.GameModifications.Modded;
 using StardewModdingAPI;
 using StardewValley;
-using StardewValley.Locations;
 using StardewValley.Menus;
 
 namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
