@@ -42,12 +42,12 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             }
         }
 
-        // public void foundArtifact(int index, int number)
-        public static void FoundArtifact_StartArchaeologyIfMissed_Postfix(Farmer __instance, int index, int number)
+        // public void foundArtifact(string itemId, int number)
+        public static void FoundArtifact_StartArchaeologyIfMissed_Postfix(Farmer __instance, string itemId, int number)
         {
             try
             {
-                if (index == 102 || _locationChecker.IsLocationChecked(ARCHAEOLOGY_QUEST_NAME) || __instance.hasQuest(ARCHAEOLOGY_QUEST_ID))
+                if (itemId == "102" || _locationChecker.IsLocationChecked(ARCHAEOLOGY_QUEST_NAME) || __instance.hasQuest(ARCHAEOLOGY_QUEST_ID))
                 {
                     return;
                 }

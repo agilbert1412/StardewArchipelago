@@ -28,29 +28,29 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             _archipelago = archipelago;
             _stardewItemManager = stardewItemManager;
         }
-        
-        // public Crop(int seedIndex, int tileX, int tileY)
-        public static bool CropConstructor_WildSeedsBecomesUnlockedCrop_Prefix(Crop __instance, ref int seedIndex, int tileX, int tileY)
+
+        // public static string ResolveSeedId(string itemId, GameLocation location)
+        public static bool ResolveSeedId_WildSeedsBecomesUnlockedCrop_Prefix(string itemId, GameLocation location, ref string __result)
         {
             try
             {
-                if (seedIndex != 770)
+                if (itemId != "770")
                 {
                     return true; // run original logic
                 }
 
                 var randomSeed = GetWeigthedRandomUnlockedCrop(Game1.season);
-                seedIndex = randomSeed;
+                __result = randomSeed;
                 return true; // run original logic
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(CropConstructor_WildSeedsBecomesUnlockedCrop_Prefix)}:\n{ex}", LogLevel.Error);
+                _monitor.Log($"Failed in {nameof(ResolveSeedId_WildSeedsBecomesUnlockedCrop_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
             }
         }
 
-        private static int GetWeigthedRandomUnlockedCrop(Season season)
+        private static string GetWeigthedRandomUnlockedCrop(Season season)
         {
             var receivedSeeds = _archipelago.GetAllReceivedItems().Select(x => x.ItemName).Where(x =>
                 (x.EndsWith("Seeds") || x.EndsWith("Starter") || x.EndsWith("Seed") || x.EndsWith("Bean")) &&
@@ -77,20 +77,20 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     break;
             }
 
-            var weightedSeeds = new List<int>();
+            var weightedSeeds = new List<string>();
             foreach (var seed in seedsICanPlantHere)
             {
                 if (_overpoweredSeeds.Contains(seed.Name))
                 {
-                    weightedSeeds.Add(seed.ParentSheetIndex);
+                    weightedSeeds.Add(seed.ItemId);
                 }
                 else if (SeedRegrows(seed, cropData))
                 {
-                    weightedSeeds.AddRange(Enumerable.Repeat(seed.ParentSheetIndex, 10));
+                    weightedSeeds.AddRange(Enumerable.Repeat(seed.ItemId, 10));
                 }
                 else
                 {
-                    weightedSeeds.AddRange(Enumerable.Repeat(seed.ParentSheetIndex, 100));
+                    weightedSeeds.AddRange(Enumerable.Repeat(seed.ItemId, 100));
                 }
             }
 
