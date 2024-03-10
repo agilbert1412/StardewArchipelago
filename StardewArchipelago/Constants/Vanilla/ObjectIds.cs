@@ -101,6 +101,7 @@
         public const string TROUT_SOUP = "219";
         public const string TULIP_BULB = "427";
         public const string VINEGAR = "419";
+        public const string VOID_MAYONNAISE = "308";
         public const string WEEDS = "0";
         public const string WHEAT_FLOUR = "246";
         public const string WHEAT_SEEDS = "483";
