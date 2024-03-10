@@ -35,8 +35,11 @@ namespace StardewArchipelago.Locations.Patcher
         private readonly ToolShopStockModifier _toolUpgradesShopStockModifier;
         private readonly FishingRodShopStockModifier _fishingRodShopStockModifier;
         private readonly CarpenterShopStockModifier _carpenterShopStockModifier;
+        private readonly CarpenterBuildingsModifier _carpenterBuildingsModifier;
         private readonly FestivalShopStockModifier _festivalShopStockModifier;
-        private readonly RecipePurchaseStockModifier _recipePurchaseStockModifier;
+        private readonly CookingRecipePurchaseStockModifier _cookingRecipePurchaseStockModifier;
+        private readonly CraftingRecipePurchaseStockModifier _craftingRecipePurchaseStockModifier;
+        private readonly KrobusStockModifier _krobusStockModifier;
 
         public VanillaLocationPatcher(IMonitor monitor, IModHelper modHelper, Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
@@ -47,8 +50,11 @@ namespace StardewArchipelago.Locations.Patcher
             _toolUpgradesShopStockModifier = new ToolShopStockModifier(monitor, modHelper, archipelago);
             _fishingRodShopStockModifier = new FishingRodShopStockModifier(monitor, modHelper, archipelago);
             _carpenterShopStockModifier = new CarpenterShopStockModifier(monitor, modHelper, archipelago);
+            _carpenterBuildingsModifier = new CarpenterBuildingsModifier(monitor, modHelper, archipelago);
             _festivalShopStockModifier = new FestivalShopStockModifier(monitor, modHelper, archipelago);
-            _recipePurchaseStockModifier = new RecipePurchaseStockModifier(monitor, modHelper, archipelago);
+            _cookingRecipePurchaseStockModifier = new CookingRecipePurchaseStockModifier(monitor, modHelper, archipelago);
+            _craftingRecipePurchaseStockModifier = new CraftingRecipePurchaseStockModifier(monitor, modHelper, archipelago);
+            _krobusStockModifier = new KrobusStockModifier(monitor, modHelper, archipelago);
         }
 
         public void ReplaceAllLocationsRewardsWithChecks()
@@ -62,7 +68,7 @@ namespace StardewArchipelago.Locations.Patcher
             PatchFishingRods();
             ReplaceSkillsWithChecks();
             ReplaceQuestsWithChecks();
-            ReplaceCarpenterBuildingsWithChecks();
+            PatchCarpenter();
             ReplaceWizardBuildingsWithChecks();
             ReplaceIsolatedEventsWithChecks();
             PatchAdventurerGuildShop();
@@ -87,9 +93,11 @@ namespace StardewArchipelago.Locations.Patcher
         {
             CleanToolEvents();
             CleanFishingRodEvents();
-            CleanCarpenterShopEvents();
+            CleanCarpenterEvents();
             CleanFestivalEvents();
             CleanChefsanityEvents();
+            CleanCraftsanityEvents();
+            CleanKrobusEvents();
         }
 
         private void ReplaceCommunityCenterBundlesWithChecks()
@@ -409,9 +417,10 @@ namespace StardewArchipelago.Locations.Patcher
             );
         }
 
-        private void ReplaceCarpenterBuildingsWithChecks()
+        private void PatchCarpenter()
         {
-            MakeAllBuildingsCheaper();
+            _modHelper.Events.Content.AssetRequested += _carpenterShopStockModifier.OnShopStockRequested;
+            _modHelper.Events.Content.AssetRequested += _carpenterBuildingsModifier.OnBuildingsRequested;
 
             if (!_archipelago.SlotData.BuildingProgression.HasFlag(BuildingProgression.Progressive))
             {
@@ -448,31 +457,12 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(typeof(GameLocation), "houseUpgradeAccept"),
                 prefix: new HarmonyMethod(typeof(CarpenterInjections), nameof(CarpenterInjections.HouseUpgradeAccept_FreeFromAP_Prefix))
             );
-
-            _modHelper.Events.Content.AssetRequested += _carpenterShopStockModifier.OnShopStockRequested;
         }
 
-        private void CleanCarpenterShopEvents()
+        private void CleanCarpenterEvents()
         {
             _modHelper.Events.Content.AssetRequested -= _carpenterShopStockModifier.OnShopStockRequested;
-        }
-
-        private void MakeAllBuildingsCheaper()
-        {
-            // This probably doesn't work through caching...
-            var priceMultiplier = _archipelago.SlotData.BuildingPriceMultiplier;
-            foreach (var (id, data) in Game1.buildingData)
-            {
-                foreach (var material in data.BuildMaterials)
-                {
-                    var modifiedQuantity = Math.Max(1, (int)(material.Amount * priceMultiplier));
-                    material.Amount = modifiedQuantity;
-                }
-
-                var price = data.BuildCost;
-                var modifiedPrice = (int)(price * priceMultiplier);
-                data.BuildCost = modifiedPrice;
-            }
+            _modHelper.Events.Content.AssetRequested -= _carpenterBuildingsModifier.OnBuildingsRequested;
         }
 
         private void ReplaceWizardBuildingsWithChecks()
@@ -883,7 +873,7 @@ namespace StardewArchipelago.Locations.Patcher
                 prefix: new HarmonyMethod(typeof(QueenOfSauceInjections), nameof(QueenOfSauceInjections.GetWeeklyRecipe_UseArchipelagoSchedule_Prefix))
             );
             
-            _modHelper.Events.Content.AssetRequested += _recipePurchaseStockModifier.OnRecipeShopStockRequested;
+            _modHelper.Events.Content.AssetRequested += _cookingRecipePurchaseStockModifier.OnShopStockRequested;
             
             _harmony.Patch(
                 original: AccessTools.Constructor(typeof(LevelUpMenu), new []{typeof(int), typeof(int)}),
@@ -898,45 +888,32 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void CleanChefsanityEvents()
         {
-            _modHelper.Events.Content.AssetRequested -= _recipePurchaseStockModifier.OnRecipeShopStockRequested;
+            _modHelper.Events.Content.AssetRequested -= _cookingRecipePurchaseStockModifier.OnShopStockRequested;
         }
 
         private void PatchCraftsanity()
         {
+            _modHelper.Events.Content.AssetRequested += _craftingRecipePurchaseStockModifier.OnShopStockRequested;
+
             if (_archipelago.SlotData.Craftsanity == Craftsanity.None)
             {
                 return;
             }
 
             _harmony.Patch(
-                original: AccessTools.Method(typeof(Event), nameof(Event.command_addCraftingRecipe)),
-                prefix: new HarmonyMethod(typeof(CraftingInjections), nameof(CraftingInjections.CommandAddCraftingRecipe_SkipLearning_Prefix))
+                original: AccessTools.Method(typeof(Event.DefaultCommands), nameof(Event.DefaultCommands.AddCraftingRecipe)),
+                prefix: new HarmonyMethod(typeof(CraftingInjections), nameof(CraftingInjections.AddCraftingRecipe_SkipLearning_Prefix))
             );
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Stats), nameof(Stats.checkForCraftingAchievements)),
                 postfix: new HarmonyMethod(typeof(CraftingInjections), nameof(CraftingInjections.CheckForCraftingAchievements_CheckCraftsanityLocation_Postfix))
             );
+        }
 
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(Utility), nameof(Utility.getCarpenterStock)),
-                postfix: new HarmonyMethod(typeof(CraftingInjections), nameof(CraftingInjections.GetCarpenterStock_PurchasableRecipeChecks_Postfix))
-            );
-
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(Utility), nameof(Utility.getDwarfShopStock)),
-                postfix: new HarmonyMethod(typeof(CraftingInjections), nameof(CraftingInjections.GetDwarfShopStock_PurchasableRecipeChecks_Postfix))
-            );
-
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(Sewer), nameof(Sewer.getShadowShopStock)),
-                postfix: new HarmonyMethod(typeof(CraftingInjections), nameof(CraftingInjections.GetShadowShopStock_PurchasableRecipeChecks_Postfix))
-            );
-
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(Desert), nameof(Desert.getDesertMerchantTradeStock)),
-                postfix: new HarmonyMethod(typeof(CraftingInjections), nameof(CraftingInjections.GetDesertMerchantTradeStock_PurchasableRecipeChecks_Postfix))
-            );
+        private void CleanCraftsanityEvents()
+        {
+            _modHelper.Events.Content.AssetRequested -= _craftingRecipePurchaseStockModifier.OnShopStockRequested;
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(IslandNorth), nameof(IslandNorth.getIslandMerchantTradeStock)),
@@ -946,10 +923,12 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void PatchKrobusShop()
         {
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(Sewer), nameof(Sewer.getShadowShopStock)),
-                postfix: new HarmonyMethod(typeof(KrobusShopInjections), nameof(KrobusShopInjections.GetShadowShopStock_StardropCheck_Postfix))
-            );
+            _modHelper.Events.Content.AssetRequested += _krobusStockModifier.OnShopStockRequested;
+        }
+
+        private void CleanKrobusEvents()
+        {
+            _modHelper.Events.Content.AssetRequested -= _krobusStockModifier.OnShopStockRequested;
         }
 
         private void PatchFarmcave()
