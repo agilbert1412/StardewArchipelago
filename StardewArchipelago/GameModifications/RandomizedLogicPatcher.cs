@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
@@ -62,7 +63,6 @@ namespace StardewArchipelago.GameModifications
             QuestLogInjections.Initialize(monitor, archipelago, locationChecker);
             WorldChangeEventInjections.Initialize(monitor);
             CropInjections.Initialize(monitor, archipelago, stardewItemManager);
-            VoidMayoInjections.Initialize(monitor);
             SecretNoteInjections.Initialize(monitor, archipelago, locationChecker);
             KentInjections.Initialize(monitor, archipelago);
             _animalShopStockModifier = new AnimalShopStockModifier(monitor, modHelper, archipelago);
@@ -123,6 +123,7 @@ namespace StardewArchipelago.GameModifications
             CleanLegendaryFishRecatchableEvent();
             UnpatchSeedShops();
             UnpatchJodiFishQuest();
+            UnpatchVoidMayo();
             CleanGoldenEggEvent();
         }
 
@@ -524,9 +525,41 @@ namespace StardewArchipelago.GameModifications
 
         private void PatchVoidMayo()
         {
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.getFish)),
-                prefix: new HarmonyMethod(typeof(VoidMayoInjections), nameof(VoidMayoInjections.GetFish_FishVoidMayo_PreFix))
+            _helper.Events.Content.AssetRequested += this.RemoveVoidMayoHenchmanCondition;
+        }
+
+        private void UnpatchVoidMayo()
+        {
+            _helper.Events.Content.AssetRequested -= this.RemoveVoidMayoHenchmanCondition;
+        }
+
+        private void RemoveVoidMayoHenchmanCondition(object sender, AssetRequestedEventArgs e)
+        {
+            if (!e.NameWithoutLocale.IsEquivalentTo("Data/Locations"))
+            {
+                return;
+            }
+
+            e.Edit(asset =>
+                {
+                    const string henchmanCondition = "!PLAYER_HAS_MAIL Host henchmanGone";
+                    var locationsData = asset.AsDictionary<string, LocationData>().Data;
+                    foreach (var (locationName, locationData) in locationsData)
+                    {
+                        foreach (var spawnFishData in locationData.Fish)
+                        {
+                            if (!spawnFishData.Condition.Contains(henchmanCondition, StringComparison.InvariantCultureIgnoreCase))
+                            {
+                                continue;
+                            }
+
+                            var parts = spawnFishData.Condition.Split(',').ToList();
+                            parts = parts.Where(x => !x.Contains(henchmanCondition, StringComparison.InvariantCultureIgnoreCase)).ToList();
+                            spawnFishData.Condition = string.Join(',', parts);
+                        }
+                    }
+                },
+                AssetEditPriority.Late
             );
         }
 
