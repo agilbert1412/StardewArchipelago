@@ -200,28 +200,27 @@ namespace StardewArchipelago.GameModifications.Seasons
             }
         }
 
-        // public static int getWeatherModificationsForDate(WorldDate date, int default_weather)
-        public static bool GetWeatherModificationsForDate_UseCorrectDates_Prefix(WorldDate date, int default_weather,
-            ref int __result)
+        // public static string getWeatherModificationsForDate(WorldDate date, string default_weather)
+        public static bool GetWeatherModificationsForDate_UseCorrectDates_Prefix(WorldDate date, string default_weather, ref string __result)
         {
             try
             {
-                var chosenWeather = (Weather) default_weather;
-                int num = date.TotalDays - Game1.Date.TotalDays;
+                var chosenWeather = default_weather;
+                var num = date.TotalDays - Game1.Date.TotalDays;
                 var currentSeason = Game1.season;
-                if (date.DayOfMonth == 1 || (long)Game1.stats.DaysPlayed + (long)num <= 4L)
+                if (date.DayOfMonth == 1 || Game1.stats.DaysPlayed + num <= 4L)
                 {
-                    chosenWeather = Weather.Sunny;
+                    chosenWeather = Weather.Sun;
                 }
 
-                if ((long)Game1.stats.DaysPlayed + (long)num == 3L)
+                if (Game1.stats.DaysPlayed + num == 3L)
                 {
                     chosenWeather = Weather.Rain;
                 }
 
                 if (currentSeason == Season.Summer && date.DayOfMonth % 13 == 0)
                 {
-                    chosenWeather = Weather.Lightning;
+                    chosenWeather = Weather.Storm;
                 }
 
                 if (Utility.isFestivalDay(date.DayOfMonth, currentSeason))
@@ -229,12 +228,25 @@ namespace StardewArchipelago.GameModifications.Seasons
                     chosenWeather = Weather.Festival;
                 }
 
-                if (currentSeason == Season.Winter && date.DayOfMonth >= 14 && date.DayOfMonth <= 16)
+                foreach (var passiveFestivalData in DataLoader.PassiveFestivals(Game1.content).Values)
                 {
-                    chosenWeather = Weather.Sunny;
+                    if (date.DayOfMonth < passiveFestivalData.StartDay || date.DayOfMonth > passiveFestivalData.EndDay || date.Season != passiveFestivalData.Season ||
+                        !GameStateQuery.CheckConditions(passiveFestivalData.Condition) || passiveFestivalData.MapReplacements == null)
+                    {
+                        continue;
+                    }
+                    foreach (var key in passiveFestivalData.MapReplacements.Keys)
+                    {
+                        var locationFromName = Game1.getLocationFromName(key);
+                        if (locationFromName != null && locationFromName.InValleyContext())
+                        {
+                            chosenWeather = Weather.Sun;
+                            break;
+                        }
+                    }
                 }
 
-                __result = (int)chosenWeather;
+                __result = chosenWeather;
                 return false; // don't run original logic
             }
             catch (Exception ex)
@@ -364,16 +376,13 @@ namespace StardewArchipelago.GameModifications.Seasons
             seasonName = SeasonsRandomizer.ValidSeasons[seasonNumber];
             year = year + 1;
         }
-    }
 
-    public enum Weather
-    {
-        Sunny = 0,
-        Rain = 1,
-        Debris = 2,
-        Lightning = 3,
-        Festival = 4,
-        Snow = 5,
-        Wedding = 6,
+        private static class Weather
+        {
+            public const string Sun = "Sun";
+            public const string Rain = "Rain";
+            public const string Storm = "Storm";
+            public const string Festival = "Festival";
+        }
     }
 }
