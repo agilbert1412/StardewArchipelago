@@ -58,11 +58,6 @@ namespace StardewArchipelago.Stardew
             return new StardewValley.Objects.Furniture(Id, Vector2.Zero);
         }
 
-        public override Item PrepareForRecovery()
-        {
-            throw new NotImplementedException();
-        }
-
         public override void GiveToFarmer(Farmer farmer, int amount = 1)
         {
             var furniture = PrepareForGivingToFarmer();
@@ -87,6 +82,11 @@ namespace StardewArchipelago.Stardew
             }
             
             return new LetterActionAttachment(receivedItem, LetterActionsKeys.GiveFurniture, Id.ToString());
+        }
+
+        public override string GetQualifiedId()
+        {
+            return $"(F){Id}";
         }
     }
 }
