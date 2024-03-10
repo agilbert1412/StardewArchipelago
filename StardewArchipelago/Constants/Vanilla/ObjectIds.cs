@@ -40,6 +40,7 @@
         public const string FIBER_SEEDS = "885";
         public const string FOSSILIZED_SPINE = "821";
         public const string GARLIC_SEEDS = "476";
+        public const string GOLDEN_EGG = "928";
         public const string GOLDEN_WALNUT = "73";
         public const string GRAPE_STARTER = "301";
         public const string GRASS_STARTER = "297";
@@ -87,6 +88,7 @@
         public const string SPINNER = "686";
         public const string SPRING_ONION = "399";
         public const string SPRING_SEEDS = "495";
+        public const string STARDROP = "434";
         public const string STARFRUIT_SEEDS = "486";
         public const string SUGAR = "245";
         public const string SUMMER_SEEDS = "496";
@@ -105,6 +107,5 @@
         public const string WHITE_ALGAE = "157";
         public const string WINTER_SEEDS = "498";
         public const string YAM_SEEDS = "492";
-        public const string GOLDEN_EGG = "928";
     }
 }

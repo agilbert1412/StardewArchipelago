@@ -94,9 +94,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
                     ReplaceTemperedGalaxyWeapons(__instance, salableItem, myActiveHints);
                 }
 
-                ReplaceCraftsanityRecipes(__instance, myActiveHints);
-                ReplaceChefsanityRecipes(__instance, myActiveHints);
-
                 if (__instance.ShopId == "Custom_ForestWest")
                 {
                     MakeBearBarter(__instance);
@@ -138,48 +135,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
             _shopReplacer.ReplaceShopItem(shopMenu.itemPriceAndStock, salableItem, ALESIA_DAGGER, "Tempered Galaxy Dagger", myActiveHints);
             _shopReplacer.ReplaceShopItem(shopMenu.itemPriceAndStock, salableItem, ISAAC_SWORD, "Tempered Galaxy Sword", myActiveHints);
             _shopReplacer.ReplaceShopItem(shopMenu.itemPriceAndStock, salableItem, ISAAC_HAMMER, "Tempered Galaxy Hammer", myActiveHints);
-        }
-
-        private static void ReplaceCraftsanityRecipes(ShopMenu shopMenu, Hint[] myActiveHints)
-        {
-            if (!_archipelago.SlotData.Craftsanity.HasFlag(Craftsanity.All))
-            {
-                return;
-            }
-
-            foreach (var (shopIdentification, recipes) in craftsanityRecipes)
-            {
-                if (!shopIdentification.IsCorrectShop(shopMenu))
-                {
-                    continue;
-                }
-
-                foreach (var recipe in recipes)
-                {
-                    _shopReplacer.PlaceShopRecipeCheck(shopMenu.itemPriceAndStock, $"{recipe.ItemName} Recipe", recipe.ItemName, myActiveHints, recipe.Price);
-                }
-            }
-        }
-
-        private static void ReplaceChefsanityRecipes(ShopMenu shopMenu, Hint[] myActiveHints)
-        {
-            if (!_archipelago.SlotData.Chefsanity.HasFlag(Chefsanity.Purchases))
-            {
-                return;
-            }
-
-            foreach (var (shopIdentification, recipes) in chefsanityRecipes)
-            {
-                if (!shopIdentification.IsCorrectShop(shopMenu))
-                {
-                    continue;
-                }
-
-                foreach (var recipe in recipes)
-                {
-                    _shopReplacer.PlaceShopRecipeCheck(shopMenu.itemPriceAndStock, $"{recipe.ItemName} Recipe", recipe.ItemName, myActiveHints, recipe.Price);
-                }
-            }
         }
 
         private static void MakeBearBarter(ShopMenu shopMenu)

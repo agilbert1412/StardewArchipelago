@@ -62,6 +62,7 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string SPANGLE_SEEDS = QualifiedObjectId(ObjectIds.SPANGLE_SEEDS);
         public static readonly string SPEED_GRO = QualifiedObjectId(ObjectIds.SPEED_GRO);
         public static readonly string SPRING_SEEDS = QualifiedObjectId(ObjectIds.SPRING_SEEDS);
+        public static readonly string STARDROP = QualifiedObjectId(ObjectIds.STARDROP);
         public static readonly string STARFRUIT_SEEDS = QualifiedObjectId(ObjectIds.STARFRUIT_SEEDS);
         public static readonly string SUGAR = QualifiedObjectId(ObjectIds.SUGAR);
         public static readonly string SUMMER_SEEDS = QualifiedObjectId(ObjectIds.SUMMER_SEEDS);

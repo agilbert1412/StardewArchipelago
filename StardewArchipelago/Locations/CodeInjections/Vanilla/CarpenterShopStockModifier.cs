@@ -65,6 +65,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
         private void AddChecks(ShopData cartShopData)
         {
+            if (!_archipelago.SlotData.BuildingProgression.HasFlag(BuildingProgression.Progressive))
+            {
+                return;
+            }
+
             AddCheckToStock(cartShopData, BUILDING_HOUSE_KITCHEN, 10000, new[] { Wood(450) }, GetFarmhouseRequirementCondition(0));
             AddCheckToStock(cartShopData, BUILDING_HOUSE_KIDS_ROOM, 50000, new[] { Hardwood(150) }, GetFarmhouseRequirementCondition(1));
             AddCheckToStock(cartShopData, BUILDING_HOUSE_CELLAR, 100000, Array.Empty<Item>(), GetFarmhouseRequirementCondition(2));
