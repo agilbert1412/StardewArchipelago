@@ -29,11 +29,6 @@ namespace StardewArchipelago.Stardew
             return new Object(Id, amount);
         }
 
-        public override Item PrepareForRecovery()
-        {
-            throw new System.NotImplementedException();
-        }
-
         public override void GiveToFarmer(Farmer farmer, int amount = 1)
         {
             var item = PrepareForGivingToFarmer(amount);
@@ -43,6 +38,11 @@ namespace StardewArchipelago.Stardew
         public override LetterAttachment GetAsLetter(ReceivedItem receivedItem, int amount = 1)
         {
             return new LetterItemAttachment(receivedItem, this, amount);
+        }
+
+        public override string GetQualifiedId()
+        {
+            return $"(O){Id}";
         }
     }
 }

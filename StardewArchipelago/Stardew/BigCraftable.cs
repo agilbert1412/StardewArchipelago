@@ -75,11 +75,6 @@ namespace StardewArchipelago.Stardew
             return bigCraftable;
         }
 
-        public override Item PrepareForRecovery()
-        {
-            throw new NotImplementedException();
-        }
-
         public override void GiveToFarmer(Farmer farmer, int amount = 1)
         {
             var bigCraftable = PrepareForGivingToFarmer();
@@ -89,6 +84,11 @@ namespace StardewArchipelago.Stardew
         public override LetterAttachment GetAsLetter(ReceivedItem receivedItem, int amount = 1)
         {
             return new LetterActionAttachment(receivedItem, LetterActionsKeys.GiveBigCraftable, $"{Id}{BIG_CRAFTABLE_SEPARATOR}{amount}");
+        }
+
+        public override string GetQualifiedId()
+        {
+            return $"(BC){Id}";
         }
     }
 }

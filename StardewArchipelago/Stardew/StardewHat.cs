@@ -19,11 +19,6 @@ namespace StardewArchipelago.Stardew
             return new StardewValley.Objects.Hat(Id);
         }
 
-        public override Item PrepareForRecovery()
-        {
-            throw new System.NotImplementedException();
-        }
-
         public override void GiveToFarmer(Farmer farmer, int amount = 1)
         {
             var boots = PrepareForGivingToFarmer();
@@ -33,6 +28,11 @@ namespace StardewArchipelago.Stardew
         public override LetterAttachment GetAsLetter(ReceivedItem receivedItem, int amount = 1)
         {
             return new LetterActionAttachment(receivedItem, LetterActionsKeys.GiveHat, Id.ToString());
+        }
+
+        public override string GetQualifiedId()
+        {
+            return $"(H){Id}";
         }
     }
 }
