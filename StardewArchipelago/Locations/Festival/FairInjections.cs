@@ -76,38 +76,6 @@ namespace StardewArchipelago.Locations.Festival
             }
         }
 
-        private static ShopMenu _lastShopMenuUpdated = null;
-        // public override void update(GameTime time)
-        public static void Update_HandleFairItemsFirstTimeOnly_Postfix(ShopMenu __instance, GameTime time)
-        {
-            try
-            {
-                // We only run this once for each menu
-                if (_lastShopMenuUpdated == __instance || __instance.currency != 1)
-                {
-                    return;
-                }
-
-                _lastShopMenuUpdated = __instance;
-                var myActiveHints = _archipelago.GetMyActiveHints();
-                foreach (var salableItem in __instance.itemPriceAndStock.Keys.ToArray())
-                {
-                    _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, FestivalLocationNames.RARECROW_1, item => _shopReplacer.IsRarecrow(item, 1), myActiveHints);
-                    _shopReplacer.ReplaceShopItem(__instance.itemPriceAndStock, salableItem, FestivalLocationNames.FAIR_STARDROP, (Object item) => item.ParentSheetIndex == 434, myActiveHints);
-                }
-
-                __instance.forSale = __instance.itemPriceAndStock.Keys.ToList();
-                return;
-            }
-            catch (Exception ex)
-            {
-                _monitor.Log($"Failed in {nameof(Update_HandleFairItemsFirstTimeOnly_Postfix)}:\n{ex}", LogLevel.Error);
-                return;
-            }
-        }
-
-
-
         // public void forceEndFestival(Farmer who)
         public static void ForceEndFestival_KeepStarTokens_Postfix(Event __instance, Farmer who)
         {
