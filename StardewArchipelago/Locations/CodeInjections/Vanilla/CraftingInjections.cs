@@ -83,22 +83,22 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
         }
 
-        // public virtual void command_addCraftingRecipe(GameLocation location, GameTime time, string[] split)
-        public static bool CommandAddCraftingRecipe_SkipLearning_Prefix(Event __instance, GameLocation location, GameTime time, string[] split)
+        // public static void AddCraftingRecipe(Event @event, string[] args, EventContext context)
+        public static bool AddCraftingRecipe_SkipLearning_Prefix(Event @event, string[] args, EventContext context)
         {
             try
             {
-                if (!__instance.eventCommands[__instance.CurrentCommand].Contains("Furnace"))
+                if (!@event.eventCommands[@event.CurrentCommand].Contains("Furnace"))
                 {
                     return true; // run original logic
                 }
 
-                ++__instance.CurrentCommand;
+                ++@event.CurrentCommand;
                 return false; // don't run original logic
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(CommandAddCraftingRecipe_SkipLearning_Prefix)}:\n{ex}", LogLevel.Error);
+                _monitor.Log($"Failed in {nameof(AddCraftingRecipe_SkipLearning_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
             }
         }
