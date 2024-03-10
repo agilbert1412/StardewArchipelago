@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.Stardew;
+using StardewValley;
+using StardewValley.Internal;
 using StardewValley.Objects;
 using StardewValley.Tools;
 
@@ -11,9 +14,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
 {
     public class WeaponsManager
     {
+        public const string TYPE_WEAPON = "Weapon";
         public const string TYPE_SWORD = "Sword";
         public const string TYPE_CLUB = "Club";
         public const string TYPE_DAGGER = "Dagger";
+        private readonly ArchipelagoClient _archipelago;
         private ModsManager _modsManager;
 
         private Dictionary<int, List<int>> _weaponWeightsByNumberOfTiers = new()
@@ -22,32 +27,182 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
             { 6, new List<int> { 4, 3, 2, 2, 2, 2 } }
         };
 
-        public Dictionary<string, Dictionary<int, List<StardewItem>>> WeaponsByCategoryByTier { get; private set; }
-        public Dictionary<int, List<StardewItem>> WeaponsByTier { get; private set; }
-        public Dictionary<int, List<StardewItem>> BootsByTier { get; private set; }
-        public Dictionary<int, List<StardewItem>> SlingshotsByTier { get; private set; }
+        public Dictionary<string, Dictionary<int, List<StardewWeapon>>> WeaponsByCategoryByTier { get; private set; }
+        public Dictionary<int, List<StardewBoots>> BootsByTier { get; private set; }
+        public Dictionary<int, List<StardewWeapon>> SlingshotsByTier { get; private set; }
+        public List<StardewRing> Rings { get; private set; }
 
-        public WeaponsManager(StardewItemManager itemManager, ModsManager modsManager)
+        public WeaponsManager(ArchipelagoClient _archipelago, StardewItemManager itemManager, ModsManager modsManager)
         {
             _modsManager = modsManager;
             InitializeWeapons(itemManager);
             InitializeBoots(itemManager);
             InitializeSlingshots(itemManager);
+            InitializeRings(itemManager);
+        }
+
+        public IEnumerable<ItemQueryResult> GetEquipmentsForSale(string arguments, ItemQueryContext context)
+        {
+            var priceMultiplier = GetPriceMultiplier(arguments, out var shouldOfferAllEquipments);
+            var itemsToSell = new List<ItemQueryResult>();
+            var random = new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame);
+            foreach (var (category, weaponsByTier) in WeaponsByCategoryByTier)
+            {
+                itemsToSell.AddRange(GetWeaponsToSell($"Progressive {category}", weaponsByTier, shouldOfferAllEquipments, priceMultiplier, random));
+            }
+
+            itemsToSell.AddRange(GetBootsToSell(shouldOfferAllEquipments, priceMultiplier, random));
+            itemsToSell.AddRange(GetSlingshotsToSell(shouldOfferAllEquipments, priceMultiplier, random));
+            if (shouldOfferAllEquipments)
+            {
+                itemsToSell.AddRange(GetRingsToSell());
+            }
+
+            return itemsToSell;
+        }
+
+        private static double GetPriceMultiplier(string arguments, out bool all)
+        {
+            var priceMultiplier = 1.0;
+            all = false;
+            var splitArguments = arguments.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            if (splitArguments.Length > 1)
+            {
+                if (splitArguments[1] == IDProvider.ARCHIPELAGO_EQUIPMENTS_SALE)
+                {
+                    priceMultiplier = 2.0;
+                    all = true;
+                }
+
+                if (splitArguments[1] == IDProvider.ARCHIPELAGO_EQUIPMENTS_RECOVERY)
+                {
+                    priceMultiplier = 4.0;
+                    all = false;
+                }
+            }
+
+            return priceMultiplier;
+        }
+
+        private IEnumerable<ItemQueryResult> GetWeaponsToSell(string archipelagoItemName, Dictionary<int, List<StardewWeapon>> weaponsByTier, bool shouldOfferAllEquipments, double priceMultiplier, Random random)
+        {
+            var receivedTier = _archipelago.GetReceivedItemCount(archipelagoItemName);
+            for (var i = 1; i <= weaponsByTier.Keys.Max(); i++)
+            {
+                var weaponsInTier = weaponsByTier.ContainsKey(i) ? weaponsByTier[i] : new List<StardewWeapon>();
+                var randomWeaponIndex = random.Next(weaponsInTier.Count);
+                for (var index = 0; index < weaponsInTier.Count; index++)
+                {
+                    var weaponToSell = weaponsInTier[index];
+                    if (!shouldOfferAllEquipments && !_archipelago.HasReceivedItem(weaponToSell.Name))
+                    {
+                        if (i != receivedTier || i != randomWeaponIndex)
+                        {
+                            continue;
+                        }
+                    }
+
+                    var shopItem = weaponToSell.PrepareForGivingToFarmer();
+                    yield return new ItemQueryResult(shopItem)
+                    {
+                        OverrideBasePrice = (int)Math.Round(weaponToSell.SellPrice * priceMultiplier),
+                        OverrideStackSize = 1,
+                        OverrideShopAvailableStock = 1,
+                    };
+                }
+            }
+        }
+
+        private IEnumerable<ItemQueryResult> GetBootsToSell(bool shouldOfferAllEquipments, double priceMultiplier, Random random)
+        {
+            var receivedTier = _archipelago.GetReceivedItemCount("Progressive Boots");
+            for (var i = 1; i <= BootsByTier.Keys.Max(); i++)
+            {
+                var bootsInTier = BootsByTier.ContainsKey(i) ? BootsByTier[i] : new List<StardewBoots>();
+                var randomBootsIndex = random.Next(bootsInTier.Count);
+                for (var index = 0; index < bootsInTier.Count; index++)
+                {
+                    var bootsToSell = bootsInTier[index];
+                    if (!shouldOfferAllEquipments && !_archipelago.HasReceivedItem(bootsToSell.Name))
+                    {
+                        if (i != receivedTier || i != randomBootsIndex)
+                        {
+                            continue;
+                        }
+                    }
+
+                    var shopItem = bootsToSell.PrepareForGivingToFarmer();
+                    yield return new ItemQueryResult(shopItem)
+                    {
+                        OverrideBasePrice = (int)Math.Round(bootsToSell.SellPrice * priceMultiplier),
+                        OverrideStackSize = 1,
+                        OverrideShopAvailableStock = 1,
+                    };
+                }
+            }
+        }
+
+        private IEnumerable<ItemQueryResult> GetSlingshotsToSell(bool shouldOfferAllEquipments, double priceMultiplier, Random random)
+        {
+            var receivedTier = _archipelago.GetReceivedItemCount("Progressive Slingshot");
+            for (var i = 1; i <= SlingshotsByTier.Keys.Max(); i++)
+            {
+                var slingShotsInTier = SlingshotsByTier.ContainsKey(i) ? SlingshotsByTier[i] : new List<StardewWeapon>();
+                var randomSlingshotIndex = random.Next(slingShotsInTier.Count);
+                for (var index = 0; index < slingShotsInTier.Count; index++)
+                {
+                    var slingshotToSell = slingShotsInTier[index];
+                    if (!shouldOfferAllEquipments && !_archipelago.HasReceivedItem(slingshotToSell.Name))
+                    {
+                        if (i != receivedTier || i != randomSlingshotIndex)
+                        {
+                            continue;
+                        }
+                    }
+
+                    var shopItem = slingshotToSell.PrepareForGivingToFarmer();
+                    yield return new ItemQueryResult(shopItem)
+                    {
+                        OverrideBasePrice = (int)Math.Round(slingshotToSell.SellPrice * priceMultiplier),
+                        OverrideStackSize = 1,
+                        OverrideShopAvailableStock = 1,
+                    };
+                }
+            }
+        }
+
+        private IEnumerable<ItemQueryResult> GetRingsToSell()
+        {
+            foreach (var stardewRing in Rings)
+            {
+                if (!_archipelago.HasReceivedItem(stardewRing.Name))
+                {
+                    continue;
+                }
+
+
+                var shopItem = stardewRing.PrepareForGivingToFarmer();
+                yield return new ItemQueryResult(shopItem)
+                {
+                    OverrideBasePrice = stardewRing.SellPrice,
+                    OverrideStackSize = 1,
+                    OverrideShopAvailableStock = 1,
+                };
+            }
         }
 
         private void InitializeSlingshots(StardewItemManager itemManager)
         {
-            SlingshotsByTier = new Dictionary<int, List<StardewItem>>()
+            SlingshotsByTier = new Dictionary<int, List<StardewWeapon>>()
             {
-                { 1, new List<StardewItem> { itemManager.GetWeaponByName("Slingshot") } },
-                { 2, new List<StardewItem> { itemManager.GetWeaponByName("Master Slingshot") } }
+                { 1, new List<StardewWeapon> { itemManager.GetWeaponByName("Slingshot") } },
+                { 2, new List<StardewWeapon> { itemManager.GetWeaponByName("Master Slingshot") } }
             };
         }
 
         private void InitializeWeapons(StardewItemManager itemManager)
         {
-            WeaponsByCategoryByTier = new Dictionary<string, Dictionary<int, List<StardewItem>>>();
-            WeaponsByTier = new Dictionary<int, List<StardewItem>>();
+            WeaponsByCategoryByTier = new Dictionary<string, Dictionary<int, List<StardewWeapon>>>();
             var numberOfTiers = GetExpectedProgressiveWeapons();
             var weightList = _weaponWeightsByNumberOfTiers[numberOfTiers];
             var weightTotal = weightList.Sum();
@@ -154,28 +309,28 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
 
         private void AddToWeapons(StardewWeapon weapon, string category, int tier)
         {
-            if (!WeaponsByTier.ContainsKey(tier))
-            {
-                WeaponsByTier.Add(tier, new List<StardewItem>());
-            }
-
             if (!WeaponsByCategoryByTier.ContainsKey(category))
             {
-                WeaponsByCategoryByTier.Add(category, new Dictionary<int, List<StardewItem>>());
+                WeaponsByCategoryByTier.Add(category, new Dictionary<int, List<StardewWeapon>>());
             }
 
             if (!WeaponsByCategoryByTier[category].ContainsKey(tier))
             {
-                WeaponsByCategoryByTier[category].Add(tier, new List<StardewItem>());
+                WeaponsByCategoryByTier[category].Add(tier, new List<StardewWeapon>());
+            }
+            
+            WeaponsByCategoryByTier[category][tier].Add(weapon);
+            if (category == TYPE_WEAPON)
+            {
+                return;
             }
 
-            WeaponsByTier[tier].Add(weapon);
-            WeaponsByCategoryByTier[category][tier].Add(weapon);
+            AddToWeapons(weapon, TYPE_WEAPON, tier);
         }
 
         private void InitializeBoots(StardewItemManager itemManager)
         {
-            BootsByTier = new Dictionary<int, List<StardewItem>>();
+            BootsByTier = new Dictionary<int, List<StardewBoots>>();
             var boots = itemManager.GetAllBoots();
             foreach (var boot in boots)
             {
@@ -192,17 +347,22 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
                 AddToBoots(boot, tier);
             }
 
-            BootsByTier.Add(5, new List<StardewItem>());
+            BootsByTier.Add(5, new List<StardewBoots>());
         }
 
         private void AddToBoots(StardewBoots boot, int tier)
         {
             if (!BootsByTier.ContainsKey(tier))
             {
-                BootsByTier.Add(tier, new List<StardewItem>());
+                BootsByTier.Add(tier, new List<StardewBoots>());
             }
 
             BootsByTier[tier].Add(boot);
+        }
+
+        private void InitializeRings(StardewItemManager itemManager)
+        {
+            Rings = new List<StardewRing>(itemManager.GetAllRings());
         }
     }
 }

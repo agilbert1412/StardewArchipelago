@@ -1,0 +1,69 @@
+﻿using System;
+using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
+using StardewModdingAPI;
+using StardewModdingAPI.Events;
+using StardewValley.GameData.Shops;
+
+namespace StardewArchipelago.Locations.CodeInjections.Vanilla
+{
+    public class AdventureGuildShopStockModifier : ShopStockModifier
+    {
+        public AdventureGuildShopStockModifier(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago) : base(monitor, modHelper, archipelago)
+        {
+        }
+
+        public override void OnShopStockRequested(object sender, AssetRequestedEventArgs e)
+        {
+            if (!AssetIsShops(e))
+            {
+                return;
+            }
+
+            e.Edit(asset =>
+                {
+                    var shopsData = asset.AsDictionary<string, ShopData>().Data;
+                    var adventureShop = shopsData["AdventureShop"];
+                    var adventureRecovery = shopsData["AdventureGuildRecovery"];
+                    AddAllWeaponsWithReceivedConditions(adventureShop);
+                    AddRandomWeaponRecoveries(adventureRecovery);
+                },
+                AssetEditPriority.Late
+            );
+        }
+
+        private void AddAllWeaponsWithReceivedConditions(ShopData adventureShop)
+        {
+            for (var i = adventureShop.Items.Count - 1; i >= 0; i--)
+            {
+                var item = adventureShop.Items[i];
+                if (!item.Id.StartsWith("(W)", StringComparison.InvariantCultureIgnoreCase) && !item.Id.StartsWith("(B)", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    continue;
+                }
+
+                adventureShop.Items.RemoveAt(i);
+            }
+
+            var shopEquipments = new ShopItemData()
+            {
+                Id = IDProvider.ARCHIPELAGO_EQUIPMENTS,
+                ItemId = $"{IDProvider.ARCHIPELAGO_EQUIPMENTS} {IDProvider.ARCHIPELAGO_EQUIPMENTS_SALE}",
+                AvoidRepeat = true,
+            };
+            adventureShop.Items.Add(shopEquipments);
+        }
+
+        private void AddRandomWeaponRecoveries(ShopData adventureRecovery)
+        {
+            var shopEquipmentRecoveries = new ShopItemData()
+            {
+                Id = IDProvider.ARCHIPELAGO_EQUIPMENTS,
+                ItemId = $"{IDProvider.ARCHIPELAGO_EQUIPMENTS} {IDProvider.ARCHIPELAGO_EQUIPMENTS_RECOVERY}",
+                AvoidRepeat = true,
+            };
+            adventureRecovery.Items.Add(shopEquipmentRecoveries);
+        }
+    }
+}

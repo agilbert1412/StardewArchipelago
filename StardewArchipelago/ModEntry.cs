@@ -53,6 +53,7 @@ namespace StardewArchipelago
         private ChatForwarder _chatForwarder;
         private IGiftHandler _giftHandler;
         private ItemManager _itemManager;
+        private WeaponsManager _weaponsManager;
         private RandomizedLogicPatcher _logicPatcher;
         private MailPatcher _mailPatcher;
         private LocationChecker _locationChecker;
@@ -131,6 +132,7 @@ namespace StardewArchipelago
             ItemQueryResolver.Register(IDProvider.PURCHASEABLE_AP_LOCATION, PurchasableAPLocationQueryDelegate);
             ItemQueryResolver.Register(IDProvider.METAL_DETECTOR_ITEMS, TravelingMerchantInjections.CreateMetalDetectorItems);
             ItemQueryResolver.Register(IDProvider.TRAVELING_CART_DAILY_CHECK, TravelingMerchantInjections.CreateDailyCheck);
+            ItemQueryResolver.Register(IDProvider.ARCHIPELAGO_EQUIPMENTS, AdventureGuildEquipmentsQueryDelegate);
             GameStateQuery.Register(GameStateConditionProvider.HAS_RECEIVED_ITEM, HasReceivedItemQueryDelegate);
             GameStateQuery.Register(GameStateConditionProvider.CART_RANDOM_ITEM_STOCK_CHANCE, TravelingMerchantInjections.ShouldRandomStockItemRemain);
             GameStateQuery.Register(GameStateConditionProvider.CART_EXCLUSIVE_ITEM_STOCK_CHANCE, TravelingMerchantInjections.ShouldExclusiveStockItemRemain);
@@ -139,6 +141,11 @@ namespace StardewArchipelago
         private IEnumerable<ItemQueryResult> PurchasableAPLocationQueryDelegate(string key, string arguments, ItemQueryContext context, bool avoidrepeat, HashSet<string> avoiditemids, Action<string, string> logerror)
         {
             return PurchaseableArchipelagoLocation.Create(arguments, Helper, _locationChecker, _archipelago, context.CustomFields, _archipelago.GetMyActiveHints());
+        }
+
+        private IEnumerable<ItemQueryResult> AdventureGuildEquipmentsQueryDelegate(string key, string arguments, ItemQueryContext context, bool avoidrepeat, HashSet<string> avoiditemids, Action<string, string> logerror)
+        {
+            return _weaponsManager.GetEquipmentsForSale(arguments, context);
         }
 
         private bool HasReceivedItemQueryDelegate(string[] query, GameStateQueryContext context)
@@ -459,7 +466,6 @@ namespace StardewArchipelago
         {
             _giftHandler.ReceiveAllGiftsTomorrow();
             _villagerEvents.CheckJunaHearts(_archipelago);
-            AdventurerGuildInjections.RemoveExtraItemsFromItemsLostLastDeath();
             _shippingBehaviors?.CheckShipsanityLocationsBeforeSleep();
         }
 
