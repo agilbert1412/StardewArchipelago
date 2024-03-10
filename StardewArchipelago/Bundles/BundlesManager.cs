@@ -4,6 +4,7 @@ using Netcode;
 using Newtonsoft.Json;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
+using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Network;
 
@@ -12,7 +13,6 @@ namespace StardewArchipelago.Bundles
     public class BundlesManager
     {
         private IModHelper _modHelper;
-        private static Dictionary<string, string> _vanillaBundleData;
         private Dictionary<string, string> _currentBundlesData;
         private BundleRooms BundleRooms { get; }
 
@@ -21,8 +21,33 @@ namespace StardewArchipelago.Bundles
             _modHelper = modHelper;
             var bundlesDictionary = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, Dictionary<string, string>>>>(bundlesJson);
             BundleRooms = new BundleRooms(itemManager, bundlesDictionary);
-            _vanillaBundleData = DataLoader.Bundles(Game1.content);
             _currentBundlesData = BundleRooms.ToStardewStrings();
+            _modHelper.Events.Content.AssetRequested += OnBundlesRequested;
+        }
+
+        public void CleanEvents()
+        {
+            _modHelper.Events.Content.AssetRequested -= OnBundlesRequested;
+        }
+
+        private void OnBundlesRequested(object sender, AssetRequestedEventArgs e)
+        {
+            if (!e.NameWithoutLocale.IsEquivalentTo("Data/Bundles"))
+            {
+                return;
+            }
+
+            e.Edit(asset =>
+                {
+                    var bundlesData = asset.AsDictionary<string, string>().Data;
+                    bundlesData.Clear();
+                    foreach (var (key, value) in _currentBundlesData)
+                    {
+                        bundlesData.Add(key, value);
+                    }
+                },
+                AssetEditPriority.Late
+            );
         }
 
         public void ReplaceAllBundles()
