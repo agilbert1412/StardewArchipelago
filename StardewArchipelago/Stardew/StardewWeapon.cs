@@ -1,4 +1,5 @@
-﻿using StardewArchipelago.Archipelago;
+﻿using System.Reflection.Metadata.Ecma335;
+using StardewArchipelago.Archipelago;
 using StardewArchipelago.Items.Mail;
 using StardewValley;
 using StardewValley.Tools;
@@ -42,11 +43,6 @@ namespace StardewArchipelago.Stardew
             return new MeleeWeapon(Id);
         }
 
-        public override Item PrepareForRecovery()
-        {
-            return new MeleeWeaponToRecover(Id);
-        }
-
         public override void GiveToFarmer(Farmer farmer, int amount = 1)
         {
             var weapon = PrepareForGivingToFarmer();
@@ -71,6 +67,11 @@ namespace StardewArchipelago.Stardew
                 2 => "Club",
                 _ => "Sword",
             };
+        }
+
+        public override string GetQualifiedId()
+        {
+            return $"(W){Id}";
         }
     }
 }

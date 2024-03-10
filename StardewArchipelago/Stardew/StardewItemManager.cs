@@ -233,6 +233,11 @@ namespace StardewArchipelago.Stardew
             return _weaponsByName.Values.ToArray();
         }
 
+        public StardewRing[] GetAllRings()
+        {
+            return _objectsByName.Values.OfType<StardewRing>().ToArray();
+        }
+
         private void InitializeData()
         {
             InitializeObjects();
