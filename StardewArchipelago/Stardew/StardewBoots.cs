@@ -23,11 +23,6 @@ namespace StardewArchipelago.Stardew
             return new StardewValley.Objects.Boots(Id);
         }
 
-        public override Item PrepareForRecovery()
-        {
-            return new BootsToRecover(Id);
-        }
-
         public override void GiveToFarmer(Farmer farmer, int amount = 1)
         {
             var boots = PrepareForGivingToFarmer();
@@ -37,6 +32,11 @@ namespace StardewArchipelago.Stardew
         public override LetterAttachment GetAsLetter(ReceivedItem receivedItem, int amount = 1)
         {
             return new LetterActionAttachment(receivedItem, LetterActionsKeys.GiveSpecificBoots, Id.ToString());
+        }
+
+        public override string GetQualifiedId()
+        {
+            return $"(B){Id}";
         }
     }
 }
