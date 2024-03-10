@@ -75,19 +75,17 @@ namespace StardewArchipelago.GameModifications.Seasons
             });
         }
 
-        // private static void newSeason()
-        public static bool NewSeason_UsePredefinedChoice_Prefix()
+        // private static void OnNewSeason()
+        public static bool OnNewSeason_UsePredefinedChoice_Prefix()
         {
             try
             {
                 SetSeason(_state.SeasonsOrder.Last());
-                Game1.dayOfMonth = 1;
-                Game1.AddCharacterIfNecessary("Kent");
                 return false; // don't run original logic
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(NewSeason_UsePredefinedChoice_Prefix)}:\n{ex}", LogLevel.Error);
+                _monitor.Log($"Failed in {nameof(OnNewSeason_UsePredefinedChoice_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
             }
         }

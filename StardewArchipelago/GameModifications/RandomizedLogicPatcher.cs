@@ -301,8 +301,8 @@ namespace StardewArchipelago.GameModifications
             );
 
             _harmony.Patch(
-                original: AccessTools.Method(typeof(Game1), "newSeason"),
-                prefix: new HarmonyMethod(typeof(SeasonsRandomizer), nameof(SeasonsRandomizer.NewSeason_UsePredefinedChoice_Prefix))
+                original: AccessTools.Method(typeof(Game1), "OnNewSeason"),
+                prefix: new HarmonyMethod(typeof(SeasonsRandomizer), nameof(SeasonsRandomizer.OnNewSeason_UsePredefinedChoice_Prefix))
             );
 
             _harmony.Patch(
