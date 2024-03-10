@@ -46,14 +46,14 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Modded
             {"Tiny Crop (stage 1)", "Orange"}, {"Super Starfruit", "Purple"}, {"Magic Bait", "Purple"}
         };
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, SeedShopStockModifier seedShopStockModifier, StardewItemManager stardewItemManager, JunimoShopGenerator junimoShopGenerator)
+        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, SeedShopStockModifier seedShopStockModifier, StardewItemManager stardewItemManager)
         {
             _monitor = monitor;
             _modHelper = modHelper;
             _archipelago = archipelago;
             _seedShopStockModifier = seedShopStockModifier;
             _stardewItemManager = stardewItemManager;
-            _junimoShopGenerator = junimoShopGenerator;
+            _junimoShopGenerator = new JunimoShopGenerator(_archipelago, seedShopStockModifier, _stardewItemManager);
         }
 
 

@@ -35,8 +35,8 @@ namespace StardewArchipelago.GameModifications
         private void InjectAdvancedOptionsRemoval()
         {
             _harmony.Patch(
-                original: AccessTools.Method(typeof(CharacterCustomization), "setUpPositions"),
-                postfix: new HarmonyMethod(typeof(AdvancedOptionsManager), nameof(SetUpPositions_RemoveAdvancedOptionsButton_Postfix))
+                original: AccessTools.Method(typeof(CharacterCustomization), "ResetComponents"),
+                postfix: new HarmonyMethod(typeof(AdvancedOptionsManager), nameof(ResetComponents_RemoveAdvancedOptionsButton_Postfix))
             );
         }
 
@@ -66,7 +66,8 @@ namespace StardewArchipelago.GameModifications
             );
         }
 
-        public static void SetUpPositions_RemoveAdvancedOptionsButton_Postfix(CharacterCustomization __instance)
+        // private void ResetComponents()
+        public static void ResetComponents_RemoveAdvancedOptionsButton_Postfix(CharacterCustomization __instance)
         {
             try
             {
@@ -79,7 +80,7 @@ namespace StardewArchipelago.GameModifications
             }
             catch (Exception ex)
             {
-                _modEntry.Monitor.Log($"Failed in {nameof(SetUpPositions_RemoveAdvancedOptionsButton_Postfix)}:\n{ex}", LogLevel.Error);
+                _modEntry.Monitor.Log($"Failed in {nameof(ResetComponents_RemoveAdvancedOptionsButton_Postfix)}:\n{ex}", LogLevel.Error);
                 return;
             }
         }
