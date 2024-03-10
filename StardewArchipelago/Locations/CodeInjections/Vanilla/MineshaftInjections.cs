@@ -130,12 +130,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
         }
 
-        public static bool PerformAction_LoadElevatorMenu_Prefix(GameLocation __instance, string action, Farmer who,
-            Location tileLocation, ref bool __result)
+        // public virtual bool performAction(string[] action, Farmer who, Location tileLocation)
+        public static bool PerformAction_LoadElevatorMenu_Prefix(GameLocation __instance, string[] action, Farmer who, Location tileLocation, ref bool __result)
         {
             try
             {
-                if (action == null || !who.IsLocalPlayer || action.Split(' ')[0] != "MineElevator")
+                if (action == null || !who.IsLocalPlayer || action[0] != "MineElevator")
                 {
                     return true; // run original logic
                 }
