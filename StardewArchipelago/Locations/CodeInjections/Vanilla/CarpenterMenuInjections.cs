@@ -5,7 +5,6 @@ using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
-using Microsoft.Xna.Framework;
 using StardewValley.Buildings;
 using StardewValley.GameData.Buildings;
 using StardewArchipelago.GameModifications.Buildings;

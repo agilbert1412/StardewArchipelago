@@ -1,6 +1,5 @@
 ﻿using System;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Constants.Locations;
 using StardewArchipelago.Constants.Vanilla;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;

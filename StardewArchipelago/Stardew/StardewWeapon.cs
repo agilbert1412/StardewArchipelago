@@ -1,5 +1,4 @@
-﻿using System.Reflection.Metadata.Ecma335;
-using StardewArchipelago.Archipelago;
+﻿using StardewArchipelago.Archipelago;
 using StardewArchipelago.Items.Mail;
 using StardewValley;
 using StardewValley.Tools;

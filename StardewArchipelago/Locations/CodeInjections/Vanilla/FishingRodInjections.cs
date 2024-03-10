@@ -2,13 +2,9 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Items.Unlocks;
 using StardewArchipelago.Stardew.Ids.Vanilla;
 using StardewModdingAPI;
 using StardewValley;
-using StardewValley.Locations;
-using StardewValley.Objects;
-using StardewValley.Tools;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {

@@ -2,7 +2,6 @@
 using StardewModdingAPI;
 using StardewValley;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework.Audio;
@@ -12,7 +11,6 @@ using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
 using StardewArchipelago.Stardew;
 using StardewValley.Locations;
 using StardewValley.Menus;
-using Object = StardewValley.Object;
 using StardewArchipelago.Constants.Modded;
 
 namespace StardewArchipelago.Goals
