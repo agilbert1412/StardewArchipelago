@@ -70,6 +70,7 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string TOMATO_SEEDS = QualifiedObjectId(ObjectIds.TOMATO_SEEDS);
         public static readonly string TULIP_BULB = QualifiedObjectId(ObjectIds.TULIP_BULB);
         public static readonly string VINEGAR = QualifiedObjectId(ObjectIds.VINEGAR);
+        public static readonly string VOID_MAYONNAISE = QualifiedObjectId(ObjectIds.VOID_MAYONNAISE);
         public static readonly string WALL_CACTUS = "(F)2655";
         public static readonly string WHEAT_FLOUR = QualifiedObjectId(ObjectIds.WHEAT_FLOUR);
         public static readonly string WHEAT_SEEDS = QualifiedObjectId(ObjectIds.WHEAT_SEEDS);
