@@ -14,11 +14,11 @@ namespace StardewArchipelago.Locations
     {
         private string _sound;
 
-        public SoundPurchaseableArchipelagoLocation(string locationName, IModHelper modHelper, LocationChecker locationChecker, ArchipelagoClient archipelago, Hint[] myActiveHints, string sound) : this(locationName, locationName, modHelper, locationChecker, archipelago, myActiveHints, sound)
+        public SoundPurchaseableArchipelagoLocation(string locationName, IMonitor monitor, IModHelper modHelper, LocationChecker locationChecker, ArchipelagoClient archipelago, Hint[] myActiveHints, string sound) : this(locationName, locationName, monitor, modHelper, locationChecker, archipelago, myActiveHints, sound)
         {
         }
 
-        public SoundPurchaseableArchipelagoLocation(string locationDisplayName, string locationName, IModHelper modHelper, LocationChecker locationChecker, ArchipelagoClient archipelago, Hint[] myActiveHints, string sound) : base(locationDisplayName, locationName, modHelper, locationChecker, archipelago, myActiveHints)
+        public SoundPurchaseableArchipelagoLocation(string locationDisplayName, string locationName, IMonitor monitor, IModHelper modHelper, LocationChecker locationChecker, ArchipelagoClient archipelago, Hint[] myActiveHints, string sound) : base(locationDisplayName, locationName, monitor, modHelper, locationChecker, archipelago, myActiveHints)
         {
             _sound = sound;
         }

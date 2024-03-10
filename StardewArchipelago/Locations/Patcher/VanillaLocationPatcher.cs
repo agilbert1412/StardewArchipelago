@@ -733,11 +733,6 @@ namespace StardewArchipelago.Locations.Patcher
             );
 
             _harmony.Patch(
-                original: AccessTools.Method(typeof(ShopMenu), nameof(ShopMenu.update)),
-                postfix: new HarmonyMethod(typeof(FairInjections), nameof(FairInjections.Update_HandleFairItemsFirstTimeOnly_Postfix))
-            );
-
-            _harmony.Patch(
                 original: AccessTools.Method(typeof(Chest), nameof(Chest.checkForAction)),
                 prefix: new HarmonyMethod(typeof(SpiritEveInjections), nameof(SpiritEveInjections.CheckForAction_SpiritEveChest_Prefix))
             );

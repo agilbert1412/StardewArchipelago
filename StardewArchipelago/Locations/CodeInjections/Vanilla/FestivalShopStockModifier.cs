@@ -107,8 +107,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
                 if (objectData.Category == Category.SEEDS && objectData.Name == "Strawberry Seeds")
                 {
-                    locationName = "Egg Festival: Strawberry Seeds";
+                    locationName = FestivalLocationNames.STRAWBERRY_SEEDS;
                     itemName = "Strawberry Seeds";
+                    return true;
+                }
+
+                if (objectData.Name == "Stardrop" && item.Condition.Contains("PLAYER_HAS_MAIL Current CF_Fair"))
+                {
+                    locationName = FestivalLocationNames.FAIR_STARDROP;
+                    itemName = objectData.Name;
                     return true;
                 }
 
