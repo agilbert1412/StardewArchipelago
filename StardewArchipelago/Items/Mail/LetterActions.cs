@@ -540,7 +540,7 @@ namespace StardewArchipelago.Items.Mail
 
         private void GetWeaponOfNextTier()
         {
-            GetProgressiveEquipmentOfNextTier(VanillaUnlockManager.PROGRESSIVE_WEAPON, _weaponsManager.WeaponsByTier);
+            GetProgressiveEquipmentOfNextTier(VanillaUnlockManager.PROGRESSIVE_WEAPON, _weaponsManager.WeaponsByCategoryByTier[WeaponsManager.TYPE_WEAPON]);
         }
 
         private void GetSwordOfNextTier()

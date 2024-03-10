@@ -119,7 +119,7 @@ namespace StardewArchipelago.Locations
 
         public override string TypeDefinitionId => "(AP)";
 
-        public static IEnumerable<ItemQueryResult> Create(string locationName, IModHelper modHelper, LocationChecker locationChecker, ArchipelagoClient archipelago,
+        public static IEnumerable<ItemQueryResult> Create(string locationName, IMonitor monitor, IModHelper modHelper, LocationChecker locationChecker, ArchipelagoClient archipelago,
             Dictionary<string, object> contextCustomFields, Hint[] myActiveHints)
         {
             if (string.IsNullOrWhiteSpace(locationName))
@@ -129,7 +129,7 @@ namespace StardewArchipelago.Locations
 
             if (locationChecker.IsLocationMissing(locationName))
             {
-                var purchaseableCheck = new PurchaseableArchipelagoLocation(locationName.Trim(), modHelper, locationChecker, archipelago, myActiveHints);
+                var purchaseableCheck = new PurchaseableArchipelagoLocation(locationName.Trim(), monitor, modHelper, locationChecker, archipelago, myActiveHints);
                 if (contextCustomFields != null && contextCustomFields.ContainsKey(EXTRA_MATERIALS_KEY))
                 {
                     var extraMaterialsString = (string)contextCustomFields[EXTRA_MATERIALS_KEY];
