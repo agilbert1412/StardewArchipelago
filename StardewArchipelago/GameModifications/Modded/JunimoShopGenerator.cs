@@ -71,8 +71,7 @@ namespace StardewArchipelago.GameModifications.Modded
         //    }
         //}
 
-        public JunimoShopGenerator(
-            ArchipelagoClient archipelago, SeedShopStockModifier seedShopStockModifier, StardewItemManager stardewItemManager)
+        public JunimoShopGenerator(ArchipelagoClient archipelago, SeedShopStockModifier seedShopStockModifier, StardewItemManager stardewItemManager)
         {
             throw new Exception($"{nameof(JunimoShopGenerator)} is not ready for 1.6; Look at my comment at the beginning of the file");
             //_archipelago = archipelago;
