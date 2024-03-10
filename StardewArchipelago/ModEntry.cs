@@ -175,8 +175,8 @@ namespace StardewArchipelago
             State = new ArchipelagoStateDto();
 
             _harmony.UnpatchAll(ModManifest.UniqueID);
-            _locationsPatcher.CleanEvents();
-            _logicPatcher.CleanEvents();
+            _locationsPatcher?.CleanEvents();
+            _logicPatcher?.CleanEvents();
             SeasonsRandomizer.ResetMailKeys();
             _multiSleep = new MultiSleep(Monitor, _helper, _harmony);
             _advancedOptionsManager = new AdvancedOptionsManager(this, Monitor, _helper, _harmony, _archipelago);
