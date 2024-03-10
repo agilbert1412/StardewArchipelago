@@ -36,6 +36,7 @@ namespace StardewArchipelago.Locations.Patcher
         private readonly FishingRodShopStockModifier _fishingRodShopStockModifier;
         private readonly CarpenterShopStockModifier _carpenterShopStockModifier;
         private readonly CarpenterBuildingsModifier _carpenterBuildingsModifier;
+        private readonly AdventureGuildShopStockModifier _guildShopStockModifier;
         private readonly FestivalShopStockModifier _festivalShopStockModifier;
         private readonly CookingRecipePurchaseStockModifier _cookingRecipePurchaseStockModifier;
         private readonly CraftingRecipePurchaseStockModifier _craftingRecipePurchaseStockModifier;
@@ -51,6 +52,7 @@ namespace StardewArchipelago.Locations.Patcher
             _fishingRodShopStockModifier = new FishingRodShopStockModifier(monitor, modHelper, archipelago);
             _carpenterShopStockModifier = new CarpenterShopStockModifier(monitor, modHelper, archipelago);
             _carpenterBuildingsModifier = new CarpenterBuildingsModifier(monitor, modHelper, archipelago);
+            _guildShopStockModifier = new AdventureGuildShopStockModifier(monitor, modHelper, archipelago);
             _festivalShopStockModifier = new FestivalShopStockModifier(monitor, modHelper, archipelago);
             _cookingRecipePurchaseStockModifier = new CookingRecipePurchaseStockModifier(monitor, modHelper, archipelago);
             _craftingRecipePurchaseStockModifier = new CraftingRecipePurchaseStockModifier(monitor, modHelper, archipelago);
@@ -94,6 +96,7 @@ namespace StardewArchipelago.Locations.Patcher
             CleanToolEvents();
             CleanFishingRodEvents();
             CleanCarpenterEvents();
+            CleanAdventureGuildEvents();
             CleanFestivalEvents();
             CleanChefsanityEvents();
             CleanCraftsanityEvents();
@@ -512,15 +515,12 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void PatchAdventurerGuildShop()
         {
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(Utility), nameof(Utility.TryOpenShopMenu)),
-                prefix: new HarmonyMethod(typeof(AdventurerGuildInjections), nameof(AdventurerGuildInjections.TryOpenShopMenu_AddReceivedEquipmentsToGuildRecovery_Prefix))
-            );
+            _modHelper.Events.Content.AssetRequested += _guildShopStockModifier.OnShopStockRequested;
+        }
 
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(Utility), nameof(Utility.getAdventureShopStock)),
-                prefix: new HarmonyMethod(typeof(AdventurerGuildInjections), nameof(AdventurerGuildInjections.GetAdventureShopStock_ShopBasedOnReceivedItems_Prefix))
-            );
+        private void CleanAdventureGuildEvents()
+        {
+            _modHelper.Events.Content.AssetRequested -= _guildShopStockModifier.OnShopStockRequested;
         }
 
         private void ReplaceArcadeMachinesWithChecks()
