@@ -27,9 +27,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
             { 6, new List<int> { 4, 3, 2, 2, 2, 2 } }
         };
 
-        public Dictionary<string, Dictionary<int, List<StardewWeapon>>> WeaponsByCategoryByTier { get; private set; }
-        public Dictionary<int, List<StardewBoots>> BootsByTier { get; private set; }
-        public Dictionary<int, List<StardewWeapon>> SlingshotsByTier { get; private set; }
+        public Dictionary<string, Dictionary<int, List<StardewItem>>> WeaponsByCategoryByTier { get; private set; }
+        public Dictionary<int, List<StardewItem>> BootsByTier { get; private set; }
+        public Dictionary<int, List<StardewItem>> SlingshotsByTier { get; private set; }
         public List<StardewRing> Rings { get; private set; }
 
         public WeaponsManager(ArchipelagoClient _archipelago, StardewItemManager itemManager, ModsManager modsManager)
@@ -84,12 +84,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
             return priceMultiplier;
         }
 
-        private IEnumerable<ItemQueryResult> GetWeaponsToSell(string archipelagoItemName, Dictionary<int, List<StardewWeapon>> weaponsByTier, bool shouldOfferAllEquipments, double priceMultiplier, Random random)
+        private IEnumerable<ItemQueryResult> GetWeaponsToSell(string archipelagoItemName, Dictionary<int, List<StardewItem>> weaponsByTier, bool shouldOfferAllEquipments, double priceMultiplier, Random random)
         {
             var receivedTier = _archipelago.GetReceivedItemCount(archipelagoItemName);
             for (var i = 1; i <= weaponsByTier.Keys.Max(); i++)
             {
-                var weaponsInTier = weaponsByTier.ContainsKey(i) ? weaponsByTier[i] : new List<StardewWeapon>();
+                var weaponsInTier = weaponsByTier.ContainsKey(i) ? weaponsByTier[i] : new List<StardewItem>();
                 var randomWeaponIndex = random.Next(weaponsInTier.Count);
                 for (var index = 0; index < weaponsInTier.Count; index++)
                 {
@@ -118,7 +118,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
             var receivedTier = _archipelago.GetReceivedItemCount("Progressive Boots");
             for (var i = 1; i <= BootsByTier.Keys.Max(); i++)
             {
-                var bootsInTier = BootsByTier.ContainsKey(i) ? BootsByTier[i] : new List<StardewBoots>();
+                var bootsInTier = BootsByTier.ContainsKey(i) ? BootsByTier[i] : new List<StardewItem>();
                 var randomBootsIndex = random.Next(bootsInTier.Count);
                 for (var index = 0; index < bootsInTier.Count; index++)
                 {
@@ -147,7 +147,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
             var receivedTier = _archipelago.GetReceivedItemCount("Progressive Slingshot");
             for (var i = 1; i <= SlingshotsByTier.Keys.Max(); i++)
             {
-                var slingShotsInTier = SlingshotsByTier.ContainsKey(i) ? SlingshotsByTier[i] : new List<StardewWeapon>();
+                var slingShotsInTier = SlingshotsByTier.ContainsKey(i) ? SlingshotsByTier[i] : new List<StardewItem>();
                 var randomSlingshotIndex = random.Next(slingShotsInTier.Count);
                 for (var index = 0; index < slingShotsInTier.Count; index++)
                 {
@@ -193,16 +193,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
 
         private void InitializeSlingshots(StardewItemManager itemManager)
         {
-            SlingshotsByTier = new Dictionary<int, List<StardewWeapon>>()
+            SlingshotsByTier = new Dictionary<int, List<StardewItem>>()
             {
-                { 1, new List<StardewWeapon> { itemManager.GetWeaponByName("Slingshot") } },
-                { 2, new List<StardewWeapon> { itemManager.GetWeaponByName("Master Slingshot") } }
+                { 1, new List<StardewItem> { itemManager.GetWeaponByName("Slingshot") } },
+                { 2, new List<StardewItem> { itemManager.GetWeaponByName("Master Slingshot") } }
             };
         }
 
         private void InitializeWeapons(StardewItemManager itemManager)
         {
-            WeaponsByCategoryByTier = new Dictionary<string, Dictionary<int, List<StardewWeapon>>>();
+            WeaponsByCategoryByTier = new Dictionary<string, Dictionary<int, List<StardewItem>>>();
             var numberOfTiers = GetExpectedProgressiveWeapons();
             var weightList = _weaponWeightsByNumberOfTiers[numberOfTiers];
             var weightTotal = weightList.Sum();
@@ -311,12 +311,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
         {
             if (!WeaponsByCategoryByTier.ContainsKey(category))
             {
-                WeaponsByCategoryByTier.Add(category, new Dictionary<int, List<StardewWeapon>>());
+                WeaponsByCategoryByTier.Add(category, new Dictionary<int, List<StardewItem>>());
             }
 
             if (!WeaponsByCategoryByTier[category].ContainsKey(tier))
             {
-                WeaponsByCategoryByTier[category].Add(tier, new List<StardewWeapon>());
+                WeaponsByCategoryByTier[category].Add(tier, new List<StardewItem>());
             }
             
             WeaponsByCategoryByTier[category][tier].Add(weapon);
@@ -330,7 +330,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
 
         private void InitializeBoots(StardewItemManager itemManager)
         {
-            BootsByTier = new Dictionary<int, List<StardewBoots>>();
+            BootsByTier = new Dictionary<int, List<StardewItem>>();
             var boots = itemManager.GetAllBoots();
             foreach (var boot in boots)
             {
@@ -347,14 +347,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
                 AddToBoots(boot, tier);
             }
 
-            BootsByTier.Add(5, new List<StardewBoots>());
+            BootsByTier.Add(5, new List<StardewItem>());
         }
 
         private void AddToBoots(StardewBoots boot, int tier)
         {
             if (!BootsByTier.ContainsKey(tier))
             {
-                BootsByTier.Add(tier, new List<StardewBoots>());
+                BootsByTier.Add(tier, new List<StardewItem>());
             }
 
             BootsByTier[tier].Add(boot);
