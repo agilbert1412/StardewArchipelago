@@ -21,6 +21,7 @@ using StardewValley.Objects;
 using StardewValley.Quests;
 using StardewValley.SpecialOrders;
 using StardewValley.TerrainFeatures;
+using xTile.Dimensions;
 using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Locations.Patcher
@@ -154,8 +155,9 @@ namespace StardewArchipelago.Locations.Patcher
                 return;
             }
 
+            var performActionArgumentTypes = new[] { typeof(string[]), typeof(Farmer), typeof(Location) };
             _harmony.Patch(
-                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performAction)),
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performAction), performActionArgumentTypes),
                 prefix: new HarmonyMethod(typeof(BackpackInjections), nameof(BackpackInjections.PerformAction_BuyBackpack_Prefix))
             );
 
@@ -185,8 +187,9 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void ReplaceToolUpgradesWithChecks()
         {
+            var performActionArgumentTypes = new[] { typeof(string[]), typeof(Farmer), typeof(Location) };
             _harmony.Patch(
-                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performAction)),
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performAction), performActionArgumentTypes),
                 prefix: new HarmonyMethod(typeof(ScytheInjections), nameof(ScytheInjections.PerformAction_GoldenScythe_Prefix))
             );
 
@@ -239,8 +242,10 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(typeof(Game1), nameof(Game1.enterMine)),
                 postfix: new HarmonyMethod(typeof(MineshaftInjections), nameof(MineshaftInjections.EnterMine_SendElevatorCheck_PostFix))
             );
+
+            var performActionArgumentTypes = new[] { typeof(string[]), typeof(Farmer), typeof(Location) };
             _harmony.Patch(
-                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performAction)),
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performAction), performActionArgumentTypes),
                 prefix: new HarmonyMethod(typeof(MineshaftInjections), nameof(MineshaftInjections.PerformAction_LoadElevatorMenu_Prefix))
             );
             _harmony.Patch(
@@ -293,8 +298,9 @@ namespace StardewArchipelago.Locations.Patcher
                 prefix:new HarmonyMethod(typeof(QuestInjections), nameof(QuestInjections.GetQuestOfTheDay_BalanceQuests_Prefix))
             );
 
+            var performActionArgumentTypes = new[] { typeof(string[]), typeof(Farmer), typeof(Location) };
             _harmony.Patch(
-                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performAction)),
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performAction), performActionArgumentTypes),
                 prefix: new HarmonyMethod(typeof(QuestInjections), nameof(QuestInjections.PerformAction_MysteriousQiLumberPile_Prefix))
             );
 
@@ -469,8 +475,9 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void ReplaceWizardBuildingsWithChecks()
         {
+            var performActionArgumentTypes = new[] { typeof(string[]), typeof(Farmer), typeof(Location) };
             _harmony.Patch(
-                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performAction)),
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performAction), performActionArgumentTypes),
                 prefix: new HarmonyMethod(typeof(WizardInjections), nameof(WizardInjections.PerformAction_WizardBook_Prefix))
             );
         }

@@ -330,7 +330,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
             return $"{string.Format(DailyQuest.HELP_WANTED, type)} {number}";
         }
 
-        public static bool PerformAction_MysteriousQiLumberPile_Prefix(GameLocation __instance, string action, Farmer who, Location tileLocation, ref bool __result)
+        // public virtual bool performAction(string[] action, Farmer who, Location tileLocation)
+        public static bool PerformAction_MysteriousQiLumberPile_Prefix(GameLocation __instance, string[] action, Farmer who, Location tileLocation, ref bool __result)
         {
             try
             {
@@ -338,9 +339,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
                 {
                     return true; // run original logic
                 }
-
-                var actionWords = action.Split(' ');
-                var actionFirstWord = actionWords[0];
+                
+                var actionFirstWord = action[0];
 
                 if (actionFirstWord != "LumberPile" || who.hasOrWillReceiveMail("TH_LumberPile") || !who.hasOrWillReceiveMail("TH_SandDragon"))
                 {
