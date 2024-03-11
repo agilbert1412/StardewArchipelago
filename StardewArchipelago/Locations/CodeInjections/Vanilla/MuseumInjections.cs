@@ -38,8 +38,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             _itemManager = itemManager;
         }
 
-        public static bool GetRewardsForPlayer_Museumsanity_Prefix(LibraryMuseum __instance, Farmer who,
-            ref List<Item> __result)
+        // public List<Item> getRewardsForPlayer(Farmer player)
+        public static bool GetRewardsForPlayer_Museumsanity_Prefix(LibraryMuseum __instance, Farmer player, ref List<Item> __result)
         {
             try
             {
@@ -51,7 +51,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 var numberOfMineralsDonated = numberOfMuseumItemsMethod.Invoke<int>("Minerals");
                 var totalNumberDonated = numberOfArtifactsDonated + numberOfMineralsDonated;
 
-                SendSpecialMuseumLetters(who, totalNumberDonated);
+                SendSpecialMuseumLetters(player, totalNumberDonated);
                 CheckMilestones(numberOfArtifactsDonated, numberOfMineralsDonated, totalNumberDonated);
                 CheckSpecialCollections(museumItems);
                 CheckSpecificItems(museumItems);
