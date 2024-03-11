@@ -4,6 +4,7 @@ namespace StardewArchipelago.Constants.Vanilla
 {
     internal class QualifiedItemIds
     {
+        public static readonly string PRISMATIC_SHARD = QualifiedObjectId(ObjectIds.PRISMATIC_SHARD);
         public static readonly string AMARANTH_SEEDS = QualifiedObjectId(ObjectIds.AMARANTH_SEEDS);
         public static readonly string ANCIENT_SEEDS = QualifiedObjectId(ObjectIds.ANCIENT_SEEDS);
         public static readonly string APPLE_SAPLING = QualifiedObjectId(ObjectIds.APPLE_SAPLING);
