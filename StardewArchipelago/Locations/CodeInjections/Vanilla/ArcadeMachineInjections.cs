@@ -393,7 +393,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             return true;
         }
 
-        public static void AbigailGameCtor_Equipments_Postfix(AbigailGame __instance, bool playingWithAbby)
+        // public AbigailGame(NPC abigail = null)
+        public static void AbigailGameCtor_Equipments_Postfix(AbigailGame __instance, NPC abigail)
         {
             try
             {
