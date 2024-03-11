@@ -75,8 +75,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
         }
 
-        // public virtual void shake(Vector2 tileLocation, bool doEvenIfStillShaking, GameLocation location)
-        public static bool Shake_CheckCropsanityFruitTreeLocation_Prefix(FruitTree __instance, Vector2 tileLocation, bool doEvenIfStillShaking, GameLocation location)
+        // public virtual void shake(Vector2 tileLocation, bool doEvenIfStillShaking)
+        public static bool Shake_CheckCropsanityFruitTreeLocation_Prefix(FruitTree __instance, Vector2 tileLocation, bool doEvenIfStillShaking)
         {
             try
             {
