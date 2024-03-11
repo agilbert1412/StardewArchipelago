@@ -34,8 +34,9 @@ namespace StardewArchipelago.GameModifications
 
             _multiSleepPrice = slotData.MultiSleepCostPerDay;
 
+            var performTouchActionParameters = new[] { typeof(string[]), typeof(Vector2) };
             _harmony.Patch(
-                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performTouchAction)),
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performTouchAction), performTouchActionParameters),
                 prefix: new HarmonyMethod(typeof(MultiSleep), nameof(MultiSleep.PerformTouchAction_Sleep_Prefix))
             );
 
@@ -45,11 +46,12 @@ namespace StardewArchipelago.GameModifications
             );
         }
 
-        public static bool PerformTouchAction_Sleep_Prefix(GameLocation __instance, string fullActionString, Vector2 playerStandingPosition)
+        // public virtual void performTouchAction(string[] action, Vector2 playerStandingPosition)
+        public static bool PerformTouchAction_Sleep_Prefix(GameLocation __instance, string[] action, Vector2 playerStandingPosition)
         {
             try
             {
-                var actionStringFirstWord = fullActionString.Split(' ')[0];
+                var actionStringFirstWord = action[0];
 
                 if (Game1.eventUp || actionStringFirstWord != "Sleep" || Game1.newDay || !Game1.shouldTimePass() || !Game1.player.hasMoved || Game1.player.passedOut)
                 {
