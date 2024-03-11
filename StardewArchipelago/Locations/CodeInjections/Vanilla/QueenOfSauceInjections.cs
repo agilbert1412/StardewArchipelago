@@ -62,11 +62,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     return false; // don't run original logic
                 }
 
-                var cookingRecipes = Game1.temporaryContent.Load<Dictionary<string, string>>("Data\\TV\\CookingChannel");
-                var recipeWeek = PickRecipeWeekToTeach(cookingRecipes);
+                var cookingChannelData = DataLoader.Tv_CookingChannel(Game1.temporaryContent);
+                var recipeWeek = PickRecipeWeekToTeach(cookingChannelData);
 
 
-                var recipeInfo = cookingRecipes[recipeWeek.ToString()].Split('/');
+                var recipeInfo = cookingChannelData[recipeWeek.ToString()].Split('/');
                 var recipeName = recipeInfo[0];
                 var recipeDetails = recipeInfo[1];
                 var tvText = GetQueenOfSauceTvText(recipeName, recipeDetails, recipeInfo);
@@ -128,8 +128,17 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
         public static void GetCurrentDateComponents(int daysPlayed, out int year, out int week)
         {
-            year = (int)(((daysPlayed - 1) / 112) % 2); // 0 is year1, 1 is year2
-            week = (int)((daysPlayed - 1) % 28 / 7); // 0-3
+            const int oneWeek = 7;
+            const int oneMonth = oneWeek * 4;
+            const int oneYear = oneMonth * 4;
+            const int twoYears = oneYear * 2;
+            while (daysPlayed < 1)
+            {
+                daysPlayed = daysPlayed + twoYears;
+            }
+            daysPlayed = (daysPlayed - 1) % twoYears;
+            year = (int)(((daysPlayed) / oneYear) % 2); // 0 is year1, 1 is year2
+            week = (int)((daysPlayed) % oneMonth / oneWeek) + 1; // 0-3
         }
 
         private static string[] GetQueenOfSauceTvText(string recipeName, string recipeDetails, string[] recipeInfo)

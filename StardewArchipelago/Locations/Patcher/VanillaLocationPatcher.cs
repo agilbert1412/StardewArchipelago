@@ -868,7 +868,7 @@ namespace StardewArchipelago.Locations.Patcher
         private void PatchChefsanity()
         {
             _harmony.Patch(
-                original: AccessTools.Method(typeof(TV), "getWeeklyRecipe"),
+                original: AccessTools.Method(typeof(TV), "getWeeklyRecipe", Type.EmptyTypes),
                 prefix: new HarmonyMethod(typeof(QueenOfSauceInjections), nameof(QueenOfSauceInjections.GetWeeklyRecipe_UseArchipelagoSchedule_Prefix))
             );
             

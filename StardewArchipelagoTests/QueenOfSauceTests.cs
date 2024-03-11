@@ -10,23 +10,23 @@ namespace StardewArchipelagoTests
         {
         }
 
-        [TestCase(0, 0, 0)]
-        [TestCase(1, 0, 0)]
-        [TestCase(6, 0, 0)]
+        [TestCase(0, 1, 4)]
+        [TestCase(1, 0, 1)]
+        [TestCase(6, 0, 1)]
         [TestCase(7, 0, 1)]
-        [TestCase(8, 0, 1)]
-        [TestCase(13, 0, 1)]
+        [TestCase(8, 0, 2)]
+        [TestCase(13, 0, 2)]
         [TestCase(14, 0, 2)]
-        [TestCase(15, 0, 2)]
-        [TestCase(20, 0, 2)]
+        [TestCase(15, 0, 3)]
+        [TestCase(20, 0, 3)]
         [TestCase(21, 0, 3)]
-        [TestCase(22, 0, 3)]
-        [TestCase(27, 0, 3)]
+        [TestCase(22, 0, 4)]
+        [TestCase(27, 0, 4)]
         [TestCase(28, 0, 4)]
-        [TestCase(29, 0, 0)]
+        [TestCase(29, 0, 1)]
         [TestCase(111, 0, 4)]
         [TestCase(112, 0, 4)]
-        [TestCase(113, 1, 0)]
+        [TestCase(113, 1, 1)]
         public void GetCurrentDateComponents(int daysPlayed, int expectedYear, int expectedWeek)
         {
             // Arrange
