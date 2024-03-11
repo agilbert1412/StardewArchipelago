@@ -635,7 +635,7 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void AddMuseumsanityLocations()
         {
-            if (_archipelago.SlotData.Goal == Goal.MasterAngler)
+            if (_archipelago.SlotData.Goal == Goal.CompleteCollection)
             {
                 _harmony.Patch(
                     original: AccessTools.Method(typeof(LibraryMuseum), nameof(LibraryMuseum.getRewardsForPlayer)),
