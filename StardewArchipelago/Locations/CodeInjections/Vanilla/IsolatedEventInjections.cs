@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Items.Unlocks;
 using StardewArchipelago.Stardew.Ids.Vanilla;
 using StardewModdingAPI;
@@ -196,7 +197,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     return actionFirstWord != "legendarySword"; // run original logic only if it's something other than the shrine
                 }
 
-                if (Game1.player.ActiveObject?.QualifiedItemId == "(O)74")
+                if (Game1.player.ActiveObject?.QualifiedItemId == QualifiedItemIds.PRISMATIC_SHARD)
                 {
                     Game1.player.Halt();
                     Game1.player.faceDirection(2);
