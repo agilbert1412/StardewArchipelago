@@ -569,7 +569,7 @@ namespace StardewArchipelago.Locations.Patcher
                 postfix: new HarmonyMethod(typeof(ArcadeMachineInjections), nameof(ArcadeMachineInjections.UpdateFruitsSummary_ExtraLives_Postfix))
             );
 
-            var desiredAbigailGameCtorParameters = new[] { typeof(bool) };
+            var desiredAbigailGameCtorParameters = new[] { typeof(NPC) };
             _harmony.Patch(
                 original: AccessTools.Constructor(typeof(AbigailGame), desiredAbigailGameCtorParameters),
                 postfix: new HarmonyMethod(typeof(ArcadeMachineInjections), nameof(ArcadeMachineInjections.AbigailGameCtor_Equipments_Postfix))
