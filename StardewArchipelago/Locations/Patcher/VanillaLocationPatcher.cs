@@ -690,15 +690,10 @@ namespace StardewArchipelago.Locations.Patcher
         private void PatchFestivals()
         {
             _modHelper.Events.Content.AssetRequested += _festivalShopStockModifier.OnShopStockRequested;
-
+            
             _harmony.Patch(
-                original: AccessTools.Method(typeof(Utility), nameof(Utility.getRandomTownNPC), Type.EmptyTypes),
-                prefix: new HarmonyMethod(typeof(WinterStarInjections), nameof(WinterStarInjections.GetRandomTownNPC_ChooseActualRandom_Prefix))
-            );
-
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(Utility), nameof(Utility.getRandomTownNPC), new[] { typeof(Random) }),
-                prefix: new HarmonyMethod(typeof(WinterStarInjections), nameof(WinterStarInjections.GetRandomTownNPC_ChooseSecretSantaTarget_Prefix))
+                original: AccessTools.Method(typeof(Utility), nameof(Utility.GetRandomWinterStarParticipant)),
+                prefix: new HarmonyMethod(typeof(WinterStarInjections), nameof(WinterStarInjections.GetRandomWinterStarParticipant_ChooseBasedOnMonthNotYear_Prefix))
             );
 
             _harmony.Patch(
