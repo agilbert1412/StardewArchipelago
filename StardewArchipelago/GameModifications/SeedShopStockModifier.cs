@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Vanilla;
@@ -131,7 +132,12 @@ namespace StardewArchipelago.GameModifications
             var itemsData = DataLoader.Objects(Game1.content);
             foreach (var item in shopData.Items)
             {
-                var itemData = itemsData[item.ItemId];
+                if (!QualifiedItemIds.IsObject(item.ItemId))
+                {
+                    continue;
+                }
+
+                var itemData = itemsData[QualifiedItemIds.UnqualifyId(item.ItemId)];
                 item.AvailableStock = -1;
                 item.AvoidRepeat = true;
                 if (item.MinStack == -1)
@@ -140,6 +146,10 @@ namespace StardewArchipelago.GameModifications
                 }
                 
                 item.PriceModifierMode = QuantityModifier.QuantityModifierMode.Stack;
+                if (item.PriceModifiers == null)
+                {
+                    item.PriceModifiers = new List<QuantityModifier>();
+                }
                 item.PriceModifiers.Add(new QuantityModifier() { Amount = JOJA_PRICE_MULTIPLIER, Id = "Archipelago.SeedShopOverhaul", Modification = QuantityModifier.ModificationType.Multiply });
                 item.Condition = null;
             }
