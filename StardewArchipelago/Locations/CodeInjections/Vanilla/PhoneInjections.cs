@@ -48,7 +48,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                         Game1.DrawDialogue(character, "Strings\\Characters:Phone_Marlon_Open");
                         Game1.afterDialogues += () =>
                         {
-                            var equipmentsToRecover = _weaponsManager.GetEquipmentsForSale($"{IDProvider.ARCHIPELAGO_EQUIPMENTS} {IDProvider.ARCHIPELAGO_EQUIPMENTS_RECOVERY}");
+                            var equipmentsToRecover = _weaponsManager.GetEquipmentsForSale(IDProvider.ARCHIPELAGO_EQUIPMENTS_RECOVERY);
                             if (equipmentsToRecover.Any())
                             {
                                 Game1.player.forceCanMove();

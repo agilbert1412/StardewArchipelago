@@ -79,9 +79,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
             {
                 return;
             }
-
-            var toolsData = Game1.toolData;
-            toolShopData.Items.Clear();
+            
             foreach (var toolShopItem in toolShopData.Items)
             {
                 toolShopItem.Price = (int)Math.Round(toolShopItem.Price * priceMultiplier);
