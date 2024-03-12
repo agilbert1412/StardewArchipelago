@@ -10,7 +10,7 @@ using StardewValley;
 using StardewValley.GameData.Shops;
 using Object = StardewValley.Object;
 
-namespace StardewArchipelago.Locations.CodeInjections.Vanilla
+namespace StardewArchipelago.Locations.ShopStockModifiers
 {
     public class CarpenterShopStockModifier : ShopStockModifier
     {

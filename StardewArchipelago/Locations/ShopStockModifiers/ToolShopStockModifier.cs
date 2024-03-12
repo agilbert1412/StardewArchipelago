@@ -8,7 +8,7 @@ using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.GameData.Shops;
 
-namespace StardewArchipelago.Locations.CodeInjections.Vanilla
+namespace StardewArchipelago.Locations.ShopStockModifiers
 {
     public class ToolShopStockModifier : ShopStockModifier
     {
@@ -54,7 +54,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     var toolId = $"{Materials.MaterialNames[i]}{toolName.Replace(" ", "")}";
 
                     var toolData = toolsData[toolId];
-                    
+
                     var apShopItem = new ShopItemData()
                     {
                         Id = id,

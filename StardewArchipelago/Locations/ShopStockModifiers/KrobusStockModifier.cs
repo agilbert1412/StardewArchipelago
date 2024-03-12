@@ -6,7 +6,7 @@ using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.GameData.Shops;
 
-namespace StardewArchipelago.Locations.CodeInjections.Vanilla
+namespace StardewArchipelago.Locations.ShopStockModifiers
 {
     public class KrobusStockModifier : ShopStockModifier
     {
@@ -45,7 +45,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 {
                     continue;
                 }
-                
+
                 var apShopItem = CreateArchipelagoLocation(item, krobusStardropLocationName);
                 shopData.Items.RemoveAt(i);
                 shopData.Items.Insert(i, apShopItem);

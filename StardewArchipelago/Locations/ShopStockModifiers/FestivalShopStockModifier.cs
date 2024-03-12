@@ -8,7 +8,7 @@ using StardewValley;
 using StardewValley.GameData.BigCraftables;
 using StardewValley.GameData.Shops;
 
-namespace StardewArchipelago.Locations.CodeInjections.Vanilla
+namespace StardewArchipelago.Locations.ShopStockModifiers
 {
     public class FestivalShopStockModifier : ShopStockModifier
     {
@@ -50,7 +50,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 {
                     continue;
                 }
-                
+
                 var existingConditions = item.Condition.Split(",", StringSplitOptions.RemoveEmptyEntries);
                 var apShopitem = CreateArchipelagoLocation(item, locationName);
                 shopData.Items.Add(apShopitem);
@@ -81,7 +81,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     return true;
                 }
 
-                if (IsRarecrow(item.ItemId, bigCraftableData, out int rarecrowNumber))
+                if (IsRarecrow(item.ItemId, bigCraftableData, out var rarecrowNumber))
                 {
                     GetRarecrowCheckName(rarecrowNumber, out locationName, out itemName);
                     return true;
