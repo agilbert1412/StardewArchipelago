@@ -1,9 +1,20 @@
-﻿using StardewArchipelago.Stardew.Ids.Vanilla;
+﻿using System;
+using StardewArchipelago.Stardew.Ids.Vanilla;
 
 namespace StardewArchipelago.Constants.Vanilla
 {
     internal class QualifiedItemIds
     {
+        public const string OBJECT_QUALIFIER = "(O)";
+        public const string BIG_CRAFTABLE_QUALIFIER = "(BC)";
+        public const string FURNITURE_QUALIFIER = "(F)";
+        public const string WEAPON_QUALIFIER = "(W)";
+
+        private static readonly string[] ALL_QUALIFIERS = new[]
+        {
+            OBJECT_QUALIFIER, BIG_CRAFTABLE_QUALIFIER, FURNITURE_QUALIFIER, WEAPON_QUALIFIER,
+        };
+
         public static readonly string PRISMATIC_SHARD = QualifiedObjectId(ObjectIds.PRISMATIC_SHARD);
         public static readonly string AMARANTH_SEEDS = QualifiedObjectId(ObjectIds.AMARANTH_SEEDS);
         public static readonly string ANCIENT_SEEDS = QualifiedObjectId(ObjectIds.ANCIENT_SEEDS);
@@ -80,7 +91,38 @@ namespace StardewArchipelago.Constants.Vanilla
 
         private static string QualifiedObjectId(string objectId)
         {
-            return $"(O){objectId}";
+            return $"{OBJECT_QUALIFIER}{objectId}";
+        }
+
+        public static string UnqualifyId(string id)
+        {
+            return UnqualifyId(id, out _);
+        }
+
+        public static string UnqualifyId(string id, out string removedQualifier)
+        {
+            foreach (var qualifier in ALL_QUALIFIERS)
+            {
+                if (!IsType(id, qualifier))
+                {
+                    continue;
+                }
+
+                removedQualifier = id[..qualifier.Length];
+                return id[qualifier.Length..];
+            }
+
+            throw new ArgumentException($"Tried to unqualify Id '{id}', but couldn't figure out the qualifier!");
+        }
+
+        public static bool IsObject(string itemId)
+        {
+            return IsType(itemId, OBJECT_QUALIFIER);
+        }
+
+        private static bool IsType(string itemId, string qualifier)
+        {
+            return itemId.StartsWith(qualifier, StringComparison.InvariantCultureIgnoreCase);
         }
     }
 }
