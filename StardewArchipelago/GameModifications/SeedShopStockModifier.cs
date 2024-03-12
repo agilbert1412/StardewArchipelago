@@ -78,7 +78,7 @@ namespace StardewArchipelago.GameModifications
                 var priceMultiplier = 1.0f;
                 if (item.AvailableStock == -1)
                 {
-                    var random = new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame / 2 + item.ItemId.GetHashCode());
+                    var random = new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame / 2 + item.GetHashCode());
                     var maxAmount = GetVillagerMaxAmountAndPrice(item.Condition, hasStocklist && isPierre, ref priceMultiplier);
                     var todayStock = random.Next(maxAmount);
                     if (todayStock < 5)
@@ -93,10 +93,14 @@ namespace StardewArchipelago.GameModifications
                 if (isPierre && priceMultiplier != 1.0f)
                 {
                     item.PriceModifierMode = QuantityModifier.QuantityModifierMode.Stack;
+                    if (item.PriceModifiers == null)
+                    {
+                        item.PriceModifiers = new List<QuantityModifier>();
+                    }
                     item.PriceModifiers.Add(new QuantityModifier() { Amount = priceMultiplier, Id = "Archipelago.SeedShopOverhaul", Modification = QuantityModifier.ModificationType.Multiply });
                 }
 
-                if (item.Condition.Contains("YEAR 2"))
+                if (item.Condition != null && item.Condition.Contains("YEAR 2"))
                 {
                     item.Condition = string.Join(", ", item.Condition.Split(",").Select(x => x.Trim()).Where(x => !x.Contains("YEAR 2")));
                 }
@@ -129,7 +133,7 @@ namespace StardewArchipelago.GameModifications
             AddToJojaShop(shopData, QualifiedItemIds.OIL, 20);
             AddToJojaShop(shopData, QualifiedItemIds.VINEGAR, 20);
 
-            var itemsData = DataLoader.Objects(Game1.content);
+            var objectsData = DataLoader.Objects(Game1.content);
             foreach (var item in shopData.Items)
             {
                 if (!QualifiedItemIds.IsObject(item.ItemId))
@@ -137,7 +141,7 @@ namespace StardewArchipelago.GameModifications
                     continue;
                 }
 
-                var itemData = itemsData[QualifiedItemIds.UnqualifyId(item.ItemId)];
+                var itemData = objectsData[QualifiedItemIds.UnqualifyId(item.ItemId)];
                 item.AvailableStock = -1;
                 item.AvoidRepeat = true;
                 if (item.MinStack == -1)
@@ -181,13 +185,16 @@ namespace StardewArchipelago.GameModifications
                 return;
             }
 
+            var itemsData = DataLoader.Objects(Game1.content);
             for (var i = shopData.Items.Count - 1; i >= 0; i--)
             {
                 var item = shopData.Items[i];
-                if (!DataLoader.Objects(Game1.content).TryGetValue(item.ItemId, out var itemData))
+                if (!QualifiedItemIds.IsObject(item.ItemId))
                 {
                     continue;
                 }
+
+                var itemData = itemsData[QualifiedItemIds.UnqualifyId(item.ItemId)];
 
                 if (itemData.Category != Category.SEEDS || itemData.Name == "Mixed Seeds")
                 {

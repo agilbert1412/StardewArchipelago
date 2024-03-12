@@ -60,7 +60,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
 
         private bool IsItemKnownAsACheck(ShopItemData item, out string locationName, out string itemName)
         {
-            if (_archipelago.LocationExists(item.ObjectInternalName))
+            if (_archipelago.LocationExists(item.ObjectInternalName) || _archipelago.LocationExists(item.ItemId))
             {
                 locationName = item.ObjectInternalName;
                 itemName = item.ObjectInternalName;
@@ -69,6 +69,10 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
 
             locationName = null;
             itemName = null;
+            if (item.ItemId == null)
+            {
+                return false;
+            }
 
             var bigCraftablesData = DataLoader.BigCraftables(Game1.content);
             if (bigCraftablesData.ContainsKey(item.ItemId))

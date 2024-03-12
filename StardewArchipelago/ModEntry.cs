@@ -156,13 +156,8 @@ namespace StardewArchipelago
                 return false;
             }
 
-            var itemName = query[0];
-            if (query.Length < 2)
-            {
-                return _archipelago.HasReceivedItem(itemName);
-            }
-
             var amount = int.Parse(query[1]);
+            var itemName = string.Join(' ', query.Skip(2));
             return _archipelago.GetReceivedItemCount(itemName) >= amount;
         }
 
