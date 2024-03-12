@@ -66,20 +66,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
         {
             var priceMultiplier = 1.0;
             all = false;
-            var splitArguments = arguments.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-            if (splitArguments.Length > 1)
+            if (arguments == IDProvider.ARCHIPELAGO_EQUIPMENTS_SALE)
             {
-                if (splitArguments[1] == IDProvider.ARCHIPELAGO_EQUIPMENTS_SALE)
-                {
-                    priceMultiplier = 2.0;
-                    all = true;
-                }
+                priceMultiplier = 2.0;
+                all = true;
+            }
 
-                if (splitArguments[1] == IDProvider.ARCHIPELAGO_EQUIPMENTS_RECOVERY)
-                {
-                    priceMultiplier = 4.0;
-                    all = false;
-                }
+            if (arguments == IDProvider.ARCHIPELAGO_EQUIPMENTS_RECOVERY)
+            {
+                priceMultiplier = 4.0;
+                all = false;
             }
 
             return priceMultiplier;
@@ -97,7 +93,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
                     var weaponToSell = weaponsInTier[index];
                     if (!shouldOfferAllEquipments && !_archipelago.HasReceivedItem(weaponToSell.Name))
                     {
-                        if (i != receivedTier || i != randomWeaponIndex)
+                        if (i != receivedTier || index != randomWeaponIndex)
                         {
                             continue;
                         }
@@ -106,7 +102,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
                     var shopItem = weaponToSell.PrepareForGivingToFarmer();
                     yield return new ItemQueryResult(shopItem)
                     {
-                        OverrideBasePrice = (int)Math.Round(weaponToSell.SellPrice * priceMultiplier),
+                        OverrideBasePrice = (int)Math.Round(shopItem.salePrice() * priceMultiplier),
                         OverrideStackSize = 1,
                         OverrideShopAvailableStock = 1,
                     };
