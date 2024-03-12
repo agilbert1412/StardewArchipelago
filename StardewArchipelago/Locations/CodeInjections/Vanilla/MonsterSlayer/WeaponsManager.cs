@@ -32,8 +32,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
         public Dictionary<int, List<StardewItem>> SlingshotsByTier { get; private set; }
         public List<StardewRing> Rings { get; private set; }
 
-        public WeaponsManager(ArchipelagoClient _archipelago, StardewItemManager itemManager, ModsManager modsManager)
+        public WeaponsManager(ArchipelagoClient archipelago, StardewItemManager itemManager, ModsManager modsManager)
         {
+            _archipelago = archipelago;
             _modsManager = modsManager;
             InitializeWeapons(itemManager);
             InitializeBoots(itemManager);

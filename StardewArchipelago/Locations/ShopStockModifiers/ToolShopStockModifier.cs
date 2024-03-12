@@ -51,7 +51,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
                     var requiredItem = $"{Prefix.PROGRESSIVE}{toolName}";
                     var requiredAmount = i - 1;
                     var id = $"{IDProvider.PURCHASEABLE_AP_LOCATION} {locationName}";
-                    var toolId = $"{Materials.MaterialNames[i]}{toolName.Replace(" ", "")}";
+                    var toolId = $"{Materials.InternalMaterialNames[i]}{toolName.Replace(" ", "")}";
 
                     var toolData = toolsData[toolId];
 
