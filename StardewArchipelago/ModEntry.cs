@@ -146,7 +146,7 @@ namespace StardewArchipelago
 
         private IEnumerable<ItemQueryResult> AdventureGuildEquipmentsQueryDelegate(string key, string arguments, ItemQueryContext context, bool avoidrepeat, HashSet<string> avoiditemids, Action<string, string> logerror)
         {
-            return _weaponsManager.GetEquipmentsForSale(arguments, context);
+            return _weaponsManager.GetEquipmentsForSale(arguments);
         }
 
         private bool HasReceivedItemQueryDelegate(string[] query, GameStateQueryContext context)

@@ -10,6 +10,7 @@ using StardewArchipelago.Locations.CodeInjections.Vanilla.Quests;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
 using StardewArchipelago.Locations.Festival;
 using StardewArchipelago.Locations.GingerIsland;
+using StardewArchipelago.Locations.ShopStockModifiers;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Characters;
@@ -524,6 +525,11 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void PatchAdventurerGuildShop()
         {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(DefaultPhoneHandler), nameof(DefaultPhoneHandler.CallAdventureGuild)),
+                prefix: new HarmonyMethod(typeof(PhoneInjections), nameof(PhoneInjections.CallAdventureGuild_AllowRecovery_Prefix))
+            );
+
             _modHelper.Events.Content.AssetRequested += _guildShopStockModifier.OnShopStockRequested;
         }
 

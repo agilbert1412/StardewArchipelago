@@ -10,7 +10,7 @@ using StardewValley;
 using StardewValley.GameData;
 using StardewValley.GameData.Shops;
 
-namespace StardewArchipelago.Locations.CodeInjections.Vanilla
+namespace StardewArchipelago.Locations.ShopStockModifiers
 {
     public class TravelingMerchantShopStockModifier : ShopStockModifier
     {

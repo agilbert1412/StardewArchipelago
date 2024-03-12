@@ -7,7 +7,7 @@ using StardewValley;
 using StardewValley.GameData.Shops;
 using StardewValley.GameData.Tools;
 
-namespace StardewArchipelago.Locations.CodeInjections.Vanilla
+namespace StardewArchipelago.Locations.ShopStockModifiers
 {
     public class FishingRodShopStockModifier : ShopStockModifier
     {
