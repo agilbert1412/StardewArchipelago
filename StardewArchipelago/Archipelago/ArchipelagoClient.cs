@@ -586,7 +586,7 @@ namespace StardewArchipelago.Archipelago
 
         public bool LocationExists(string locationName)
         {
-            if (!MakeSureConnected())
+            if (locationName == null || !MakeSureConnected())
             {
                 return false;
             }

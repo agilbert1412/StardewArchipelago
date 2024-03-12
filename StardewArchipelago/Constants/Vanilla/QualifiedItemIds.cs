@@ -122,6 +122,11 @@ namespace StardewArchipelago.Constants.Vanilla
 
         private static bool IsType(string itemId, string qualifier)
         {
+            if (string.IsNullOrWhiteSpace(itemId))
+            {
+                return false;
+            }
+
             return itemId.StartsWith(qualifier, StringComparison.InvariantCultureIgnoreCase);
         }
     }

@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Locations;
+using StardewArchipelago.Constants.Vanilla;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -50,11 +51,16 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
                 return;
             }
 
-            var itemsData = DataLoader.Objects(Game1.content);
+            var objectsData = DataLoader.Objects(Game1.content);
             for (var i = shopData.Items.Count - 1; i >= 0; i--)
             {
                 var item = shopData.Items[i];
-                var itemData = itemsData[item.ItemId];
+                if (!QualifiedItemIds.IsObject(item.ItemId))
+                {
+                    continue;
+                }
+
+                var itemData = objectsData[QualifiedItemIds.UnqualifyId(item.ItemId)];
                 if (!item.IsRecipe || !CraftingRecipe.cookingRecipes.ContainsKey(itemData.Name))
                 {
                     continue;
