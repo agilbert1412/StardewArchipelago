@@ -1,15 +1,16 @@
-﻿using StardewArchipelago.Archipelago;
+﻿using System.Linq;
+using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Locations;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.GameData.Shops;
 
-namespace StardewArchipelago.Locations.CodeInjections.Vanilla
+namespace StardewArchipelago.Locations.ShopStockModifiers
 {
-    public class CraftingRecipePurchaseStockModifier : ShopStockModifier
+    public class CookingRecipePurchaseStockModifier : ShopStockModifier
     {
-        public CraftingRecipePurchaseStockModifier(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago) : base(monitor, helper, archipelago)
+        public CookingRecipePurchaseStockModifier(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago) : base(monitor, helper, archipelago)
         {
             _monitor = monitor;
             _helper = helper;
@@ -18,7 +19,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
         public override void OnShopStockRequested(object sender, AssetRequestedEventArgs e)
         {
-            if (_archipelago.SlotData.Craftsanity == Craftsanity.None)
+            if (!_archipelago.SlotData.Chefsanity.HasFlag(Chefsanity.Purchases))
             {
                 return;
             }
@@ -34,26 +35,32 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
                     foreach (var (shopId, shopData) in shopsData)
                     {
-                        ReplaceCraftingRecipesWithCraftsanityChecks(shopId, shopData);
+                        ReplaceCookingRecipesWithChefsanityChecks(shopId, shopData);
                     }
                 },
                 AssetEditPriority.Late
             );
         }
 
-        private void ReplaceCraftingRecipesWithCraftsanityChecks(string shopId, ShopData shopData)
+        private void ReplaceCookingRecipesWithChefsanityChecks(string shopId, ShopData shopData)
         {
+            string[] shopsWithRecipes = { "Saloon", "ResortBar", "IslandTrade", "VolcanoShop" };
+            if (!shopsWithRecipes.Contains(shopId))
+            {
+                return;
+            }
+
             var itemsData = DataLoader.Objects(Game1.content);
             for (var i = shopData.Items.Count - 1; i >= 0; i--)
             {
                 var item = shopData.Items[i];
                 var itemData = itemsData[item.ItemId];
-                if (!item.IsRecipe || !CraftingRecipe.craftingRecipes.ContainsKey(itemData.Name))
+                if (!item.IsRecipe || !CraftingRecipe.cookingRecipes.ContainsKey(itemData.Name))
                 {
                     continue;
                 }
 
-                var location = $"{itemData.Name}{Suffix.CRAFTSANITY}";
+                var location = $"{itemData.Name}{Suffix.CHEFSANITY}";
                 var apShopItem = CreateArchipelagoLocation(item, location);
                 shopData.Items.RemoveAt(i);
                 shopData.Items.Insert(i, apShopItem);

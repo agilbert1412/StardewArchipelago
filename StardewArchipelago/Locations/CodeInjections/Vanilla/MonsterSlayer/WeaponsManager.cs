@@ -41,7 +41,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
             InitializeRings(itemManager);
         }
 
-        public IEnumerable<ItemQueryResult> GetEquipmentsForSale(string arguments, ItemQueryContext context)
+        public IEnumerable<ItemQueryResult> GetEquipmentsForSale(string arguments)
         {
             var priceMultiplier = GetPriceMultiplier(arguments, out var shouldOfferAllEquipments);
             var itemsToSell = new List<ItemQueryResult>();
