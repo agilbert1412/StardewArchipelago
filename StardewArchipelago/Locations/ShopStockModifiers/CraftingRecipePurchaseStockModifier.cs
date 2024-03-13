@@ -1,6 +1,7 @@
 ﻿using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Locations;
 using StardewArchipelago.Constants.Vanilla;
+using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -10,11 +11,14 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
 {
     public class CraftingRecipePurchaseStockModifier : ShopStockModifier
     {
-        public CraftingRecipePurchaseStockModifier(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago) : base(monitor, helper, archipelago)
+        private StardewItemManager _stardewItemManager;
+
+        public CraftingRecipePurchaseStockModifier(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago, StardewItemManager stardewItemManager) : base(monitor, helper, archipelago)
         {
             _monitor = monitor;
             _helper = helper;
             _archipelago = archipelago;
+            _stardewItemManager = stardewItemManager;
         }
 
         public override void OnShopStockRequested(object sender, AssetRequestedEventArgs e)
@@ -44,22 +48,22 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
 
         private void ReplaceCraftingRecipesWithCraftsanityChecks(string shopId, ShopData shopData)
         {
-            var objectsData = DataLoader.Objects(Game1.content);
             for (var i = shopData.Items.Count - 1; i >= 0; i--)
             {
                 var item = shopData.Items[i];
-                if (!QualifiedItemIds.IsObject(item.ItemId))
+
+                if (!item.IsRecipe)
                 {
                     continue;
                 }
 
-                var itemData = objectsData[QualifiedItemIds.UnqualifyId(item.ItemId)];
-                if (!item.IsRecipe || !CraftingRecipe.craftingRecipes.ContainsKey(itemData.Name))
+                var stardewItem = _stardewItemManager.GetItemByQualifiedId(item.ItemId);
+                if (!CraftingRecipe.craftingRecipes.ContainsKey(stardewItem.Name))
                 {
                     continue;
                 }
 
-                var location = $"{itemData.Name}{Suffix.CRAFTSANITY}";
+                var location = $"{stardewItem.Name}{Suffix.CRAFTSANITY}";
                 var apShopItem = CreateArchipelagoLocation(item, location);
                 shopData.Items.RemoveAt(i);
                 shopData.Items.Insert(i, apShopItem);

@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Items.Mail;
 using StardewValley;
 
@@ -86,7 +87,7 @@ namespace StardewArchipelago.Stardew
 
         public override string GetQualifiedId()
         {
-            return $"(F){Id}";
+            return $"{QualifiedItemIds.FURNITURE_QUALIFIER}{Id}";
         }
     }
 }

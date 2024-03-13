@@ -14,6 +14,7 @@ namespace StardewArchipelago.Stardew
 {
     public class StardewItemManager
     {
+        private Dictionary<string, StardewItem> _itemsByQualifiedId;
         private Dictionary<string, StardewObject> _objectsById;
         private Dictionary<string, StardewObject> _objectsByName;
         private Dictionary<string, BigCraftable> _bigCraftablesById;
@@ -46,16 +47,9 @@ namespace StardewArchipelago.Stardew
             InitializeData();
         }
 
-        public List<StardewItem> GetAllItems()
+        public IEnumerable<StardewItem> GetAllItems()
         {
-            var allItems = new List<StardewItem>();
-            allItems.AddRange(_objectsByName.Values);
-            allItems.AddRange(_bigCraftablesByName.Values);
-            allItems.AddRange(_bootsByName.Values);
-            allItems.AddRange(_furnitureByName.Values);
-            allItems.AddRange(_hatsByName.Values);
-            allItems.AddRange(_weaponsByName.Values);
-            return allItems;
+            return _itemsByQualifiedId.Values;
         }
 
         public bool ItemExists(string itemName)
@@ -76,6 +70,11 @@ namespace StardewArchipelago.Stardew
                    _furnitureById.ContainsKey(itemId) ||
                    _hatsById.ContainsKey(itemId) ||
                    _weaponsById.ContainsKey(itemId);
+        }
+
+        public StardewItem GetItemByQualifiedId(string itemId)
+        {
+            return _itemsByQualifiedId.ContainsKey(itemId) ? _itemsByQualifiedId[itemId] : null;
         }
 
         public bool ObjectExistByIds(string itemId)
@@ -240,6 +239,7 @@ namespace StardewArchipelago.Stardew
 
         private void InitializeData()
         {
+            _itemsByQualifiedId = new Dictionary<string, StardewItem>();
             InitializeObjects();
             InitializeBigCraftables();
             InitializeBoots();
@@ -278,6 +278,7 @@ namespace StardewArchipelago.Stardew
                 }
 
                 _objectsById.Add(id, stardewItem);
+                _itemsByQualifiedId.Add(stardewItem.GetQualifiedId(), stardewItem);
                 AddItemAndAliasesToNamesDictionary(stardewItem);
             }
         }
@@ -318,6 +319,7 @@ namespace StardewArchipelago.Stardew
 
                 _bigCraftablesById.Add(id, bigCraftable);
                 _bigCraftablesByName.Add(bigCraftable.Name, bigCraftable);
+                _itemsByQualifiedId.Add(bigCraftable.GetQualifiedId(), bigCraftable);
             }
         }
 
@@ -337,6 +339,7 @@ namespace StardewArchipelago.Stardew
 
                 _bootsById.Add(id, boots);
                 _bootsByName.Add(boots.Name, boots);
+                _itemsByQualifiedId.Add(boots.GetQualifiedId(), boots);
             }
         }
 
@@ -364,6 +367,8 @@ namespace StardewArchipelago.Stardew
                         _furnitureByName.Add($"Lupini: {furniture.Name.Substring(1, furniture.Name.Length - 2)}", furniture);
                     }
                 }
+
+                _itemsByQualifiedId.Add(furniture.GetQualifiedId(), furniture);
             }
         }
 
@@ -383,6 +388,7 @@ namespace StardewArchipelago.Stardew
 
                 _hatsById.Add(id, hat);
                 _hatsByName.Add(hat.Name, hat);
+                _itemsByQualifiedId.Add(hat.GetQualifiedId(), hat);
             }
         }
 
@@ -402,6 +408,7 @@ namespace StardewArchipelago.Stardew
 
                 _weaponsById.Add(id, weapon);
                 _weaponsByName.Add(weapon.Name, weapon);
+                _itemsByQualifiedId.Add(weapon.GetQualifiedId(), weapon);
             }
         }
 

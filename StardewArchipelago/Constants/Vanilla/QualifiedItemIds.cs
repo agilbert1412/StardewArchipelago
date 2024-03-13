@@ -9,10 +9,11 @@ namespace StardewArchipelago.Constants.Vanilla
         public const string BIG_CRAFTABLE_QUALIFIER = "(BC)";
         public const string FURNITURE_QUALIFIER = "(F)";
         public const string WEAPON_QUALIFIER = "(W)";
+        public const string BOOTS_QUALIFIER = "(B)";
 
         private static readonly string[] ALL_QUALIFIERS = new[]
         {
-            OBJECT_QUALIFIER, BIG_CRAFTABLE_QUALIFIER, FURNITURE_QUALIFIER, WEAPON_QUALIFIER,
+            OBJECT_QUALIFIER, BIG_CRAFTABLE_QUALIFIER, FURNITURE_QUALIFIER, WEAPON_QUALIFIER, BOOTS_QUALIFIER,
         };
 
         public static readonly string PRISMATIC_SHARD = QualifiedObjectId(ObjectIds.PRISMATIC_SHARD);

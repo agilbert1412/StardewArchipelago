@@ -11,6 +11,7 @@ using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
 using StardewArchipelago.Locations.Festival;
 using StardewArchipelago.Locations.GingerIsland;
 using StardewArchipelago.Locations.ShopStockModifiers;
+using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Characters;
@@ -44,7 +45,7 @@ namespace StardewArchipelago.Locations.Patcher
         private readonly CraftingRecipePurchaseStockModifier _craftingRecipePurchaseStockModifier;
         private readonly KrobusStockModifier _krobusStockModifier;
 
-        public VanillaLocationPatcher(IMonitor monitor, IModHelper modHelper, Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public VanillaLocationPatcher(IMonitor monitor, IModHelper modHelper, Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager stardewItemManager)
         {
             _archipelago = archipelago;
             _harmony = harmony;
@@ -56,8 +57,8 @@ namespace StardewArchipelago.Locations.Patcher
             _carpenterBuildingsModifier = new CarpenterBuildingsModifier(monitor, modHelper, archipelago);
             _guildShopStockModifier = new AdventureGuildShopStockModifier(monitor, modHelper, archipelago);
             _festivalShopStockModifier = new FestivalShopStockModifier(monitor, modHelper, archipelago);
-            _cookingRecipePurchaseStockModifier = new CookingRecipePurchaseStockModifier(monitor, modHelper, archipelago);
-            _craftingRecipePurchaseStockModifier = new CraftingRecipePurchaseStockModifier(monitor, modHelper, archipelago);
+            _cookingRecipePurchaseStockModifier = new CookingRecipePurchaseStockModifier(monitor, modHelper, archipelago, stardewItemManager);
+            _craftingRecipePurchaseStockModifier = new CraftingRecipePurchaseStockModifier(monitor, modHelper, archipelago, stardewItemManager);
             _krobusStockModifier = new KrobusStockModifier(monitor, modHelper, archipelago);
         }
 
