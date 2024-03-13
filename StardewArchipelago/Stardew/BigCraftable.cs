@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Items.Mail;
 using StardewValley;
 using Object = StardewValley.Object;
@@ -88,7 +89,7 @@ namespace StardewArchipelago.Stardew
 
         public override string GetQualifiedId()
         {
-            return $"(BC){Id}";
+            return $"{QualifiedItemIds.BIG_CRAFTABLE_QUALIFIER}{Id}";
         }
     }
 }

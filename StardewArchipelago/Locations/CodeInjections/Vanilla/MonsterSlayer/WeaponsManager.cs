@@ -44,17 +44,17 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
 
         public IEnumerable<ItemQueryResult> GetEquipmentsForSale(string arguments)
         {
-            var priceMultiplier = GetPriceMultiplier(arguments, out var shouldOfferAllEquipments);
+            var priceMultiplier = GetPriceMultiplier(arguments, out var isRecovery);
             var itemsToSell = new List<ItemQueryResult>();
             var random = new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame);
             foreach (var (category, weaponsByTier) in WeaponsByCategoryByTier)
             {
-                itemsToSell.AddRange(GetWeaponsToSell($"Progressive {category}", weaponsByTier, shouldOfferAllEquipments, priceMultiplier, random));
+                itemsToSell.AddRange(GetWeaponsToSell($"Progressive {category}", weaponsByTier, isRecovery, priceMultiplier, random));
             }
 
-            itemsToSell.AddRange(GetBootsToSell(shouldOfferAllEquipments, priceMultiplier, random));
-            itemsToSell.AddRange(GetSlingshotsToSell(shouldOfferAllEquipments, priceMultiplier, random));
-            if (shouldOfferAllEquipments)
+            itemsToSell.AddRange(GetBootsToSell(isRecovery, priceMultiplier, random));
+            itemsToSell.AddRange(GetSlingshotsToSell(isRecovery, priceMultiplier, random));
+            if (isRecovery)
             {
                 itemsToSell.AddRange(GetRingsToSell());
             }
@@ -62,26 +62,26 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
             return itemsToSell;
         }
 
-        private static double GetPriceMultiplier(string arguments, out bool all)
+        private static double GetPriceMultiplier(string arguments, out bool isRecovery)
         {
             var priceMultiplier = 1.0;
-            all = false;
+            isRecovery = true;
             if (arguments == IDProvider.ARCHIPELAGO_EQUIPMENTS_SALE)
             {
                 priceMultiplier = 2.0;
-                all = true;
+                isRecovery = false;
             }
 
             if (arguments == IDProvider.ARCHIPELAGO_EQUIPMENTS_RECOVERY)
             {
                 priceMultiplier = 4.0;
-                all = false;
+                isRecovery = true;
             }
 
             return priceMultiplier;
         }
 
-        private IEnumerable<ItemQueryResult> GetWeaponsToSell(string archipelagoItemName, Dictionary<int, List<StardewItem>> weaponsByTier, bool shouldOfferAllEquipments, double priceMultiplier, Random random)
+        private IEnumerable<ItemQueryResult> GetWeaponsToSell(string archipelagoItemName, Dictionary<int, List<StardewItem>> weaponsByTier, bool isRecovery, double priceMultiplier, Random random)
         {
             var receivedTier = _archipelago.GetReceivedItemCount(archipelagoItemName);
             for (var i = 1; i <= weaponsByTier.Keys.Max(); i++)
@@ -91,15 +91,23 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
                 for (var index = 0; index < weaponsInTier.Count; index++)
                 {
                     var weaponToSell = weaponsInTier[index];
-                    if (!shouldOfferAllEquipments && !_archipelago.HasReceivedItem(weaponToSell.Name))
+
+                    var isWeaponAllowed = i <= receivedTier || _archipelago.HasReceivedItem(weaponToSell.Name);
+                    if (!isWeaponAllowed)
                     {
-                        if (i != receivedTier || index != randomWeaponIndex)
-                        {
-                            continue;
-                        }
+                        continue;
+                    }
+
+                    if (isRecovery && (i != receivedTier || index != randomWeaponIndex))
+                    {
+                        continue;
                     }
 
                     var shopItem = weaponToSell.PrepareForGivingToFarmer();
+                    if (isRecovery)
+                    {
+                        shopItem.isLostItem = true;
+                    }
                     yield return new ItemQueryResult(shopItem)
                     {
                         OverrideBasePrice = (int)Math.Round(shopItem.salePrice() * priceMultiplier),
@@ -110,7 +118,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
             }
         }
 
-        private IEnumerable<ItemQueryResult> GetBootsToSell(bool shouldOfferAllEquipments, double priceMultiplier, Random random)
+        private IEnumerable<ItemQueryResult> GetBootsToSell(bool isRecovery, double priceMultiplier, Random random)
         {
             var receivedTier = _archipelago.GetReceivedItemCount("Progressive Boots");
             for (var i = 1; i <= BootsByTier.Keys.Max(); i++)
@@ -120,15 +128,23 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
                 for (var index = 0; index < bootsInTier.Count; index++)
                 {
                     var bootsToSell = bootsInTier[index];
-                    if (!shouldOfferAllEquipments && !_archipelago.HasReceivedItem(bootsToSell.Name))
+
+                    var isBootsAllowed = i <= receivedTier || _archipelago.HasReceivedItem(bootsToSell.Name);
+                    if (!isBootsAllowed)
                     {
-                        if (i != receivedTier || i != randomBootsIndex)
-                        {
-                            continue;
-                        }
+                        continue;
+                    }
+
+                    if (isRecovery && (i != receivedTier || index != randomBootsIndex))
+                    {
+                        continue;
                     }
 
                     var shopItem = bootsToSell.PrepareForGivingToFarmer();
+                    if (isRecovery)
+                    {
+                        shopItem.isLostItem = true;
+                    }
                     yield return new ItemQueryResult(shopItem)
                     {
                         OverrideBasePrice = (int)Math.Round(bootsToSell.SellPrice * priceMultiplier),
@@ -139,7 +155,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
             }
         }
 
-        private IEnumerable<ItemQueryResult> GetSlingshotsToSell(bool shouldOfferAllEquipments, double priceMultiplier, Random random)
+        private IEnumerable<ItemQueryResult> GetSlingshotsToSell(bool isRecovery, double priceMultiplier, Random random)
         {
             var receivedTier = _archipelago.GetReceivedItemCount("Progressive Slingshot");
             for (var i = 1; i <= SlingshotsByTier.Keys.Max(); i++)
@@ -149,15 +165,23 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
                 for (var index = 0; index < slingShotsInTier.Count; index++)
                 {
                     var slingshotToSell = slingShotsInTier[index];
-                    if (!shouldOfferAllEquipments && !_archipelago.HasReceivedItem(slingshotToSell.Name))
+
+                    var isBootsAllowed = i <= receivedTier || _archipelago.HasReceivedItem(slingshotToSell.Name);
+                    if (!isBootsAllowed)
                     {
-                        if (i != receivedTier || i != randomSlingshotIndex)
-                        {
-                            continue;
-                        }
+                        continue;
+                    }
+
+                    if (isRecovery && (i != receivedTier || index != randomSlingshotIndex))
+                    {
+                        continue;
                     }
 
                     var shopItem = slingshotToSell.PrepareForGivingToFarmer();
+                    if (isRecovery)
+                    {
+                        shopItem.isLostItem = true;
+                    }
                     yield return new ItemQueryResult(shopItem)
                     {
                         OverrideBasePrice = (int)Math.Round(slingshotToSell.SellPrice * priceMultiplier),
