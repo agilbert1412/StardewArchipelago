@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.GameData.Buildings;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -37,6 +39,21 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 if (Game1.player.HouseUpgradeLevel >= receivedHouseUpgrades)
                 {
                     answerChoices = answerChoices.Where(x => x.responseKey != "Upgrade").ToArray();
+                }
+
+                var canConstructAnyBuilding = false;
+                foreach (var (_, buildingData) in Game1.buildingData)
+                {
+                    if (buildingData.Builder.Equals("Robin", StringComparison.InvariantCultureIgnoreCase) && GameStateQuery.CheckConditions(buildingData.BuildCondition))
+                    {
+                        canConstructAnyBuilding = true;
+                        break;
+                    }
+                }
+
+                if (!canConstructAnyBuilding)
+                {
+                    answerChoices = answerChoices.Where(x => x.responseKey != "Construct").ToArray();
                 }
 
                 __instance.lastQuestionKey = dialogKey;
