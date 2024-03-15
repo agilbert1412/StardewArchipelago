@@ -54,51 +54,54 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
             e.Edit(asset =>
                 {
                     var shopsData = asset.AsDictionary<string, ShopData>().Data;
-                    var cartShopData = shopsData["Carpenter"];
-                    AddChecks(cartShopData);
+                    var carpenterShopData = shopsData["Carpenter"];
+                    AddChecks(carpenterShopData);
                 },
                 AssetEditPriority.Late
             );
         }
 
-        private void AddChecks(ShopData cartShopData)
+        private void AddChecks(ShopData carpenterShopData)
         {
             if (!_archipelago.SlotData.BuildingProgression.HasFlag(BuildingProgression.Progressive))
             {
                 return;
             }
 
-            AddCheckToStock(cartShopData, BUILDING_HOUSE_KITCHEN, 10000, new[] { Wood(450) }, GetFarmhouseRequirementCondition(0));
-            AddCheckToStock(cartShopData, BUILDING_HOUSE_KIDS_ROOM, 50000, new[] { Hardwood(150) }, GetFarmhouseRequirementCondition(1));
-            AddCheckToStock(cartShopData, BUILDING_HOUSE_CELLAR, 100000, Array.Empty<Item>(), GetFarmhouseRequirementCondition(2));
+            var checksToAdd = new List<ShopItemData>();
 
-            AddCheckToStock(cartShopData, BUILDING_COOP, 4000, new[] { Wood(300), Stone(100) });
-            AddCheckToStock(cartShopData, BUILDING_BIG_COOP, 10000, new[] { Wood(400), Stone(150) }, GetBuildingRequirementCondition(BUILDING_COOP));
-            AddCheckToStock(cartShopData, BUILDING_DELUXE_COOP, 20000, new[] { Wood(500), Stone(200) }, GetBuildingRequirementCondition(BUILDING_BIG_COOP));
+            AddCheckToStock(checksToAdd, BUILDING_HOUSE_KITCHEN, 10000, new[] { Wood(450) }, GetFarmhouseRequirementCondition(0));
+            AddCheckToStock(checksToAdd, BUILDING_HOUSE_KIDS_ROOM, 50000, new[] { Hardwood(150) }, GetFarmhouseRequirementCondition(1));
+            AddCheckToStock(checksToAdd, BUILDING_HOUSE_CELLAR, 100000, Array.Empty<Item>(), GetFarmhouseRequirementCondition(2));
 
-            AddCheckToStock(cartShopData, BUILDING_BARN, 6000, new[] { Wood(350), Stone(150) });
-            AddCheckToStock(cartShopData, BUILDING_BIG_BARN, 12000, new[] { Wood(400), Stone(200) }, GetBuildingRequirementCondition(BUILDING_BARN));
-            AddCheckToStock(cartShopData, BUILDING_DELUXE_BARN, 25000, new[] { Wood(500), Stone(300) }, GetBuildingRequirementCondition(BUILDING_BIG_BARN));
+            AddCheckToStock(checksToAdd, BUILDING_COOP, 4000, new[] { Wood(300), Stone(100) });
+            AddCheckToStock(checksToAdd, BUILDING_BIG_COOP, 10000, new[] { Wood(400), Stone(150) }, GetBuildingRequirementCondition(BUILDING_COOP));
+            AddCheckToStock(checksToAdd, BUILDING_DELUXE_COOP, 20000, new[] { Wood(500), Stone(200) }, GetBuildingRequirementCondition(BUILDING_BIG_COOP));
 
-            AddCheckToStock(cartShopData, BUILDING_FISH_POND, 5000, new[] { Stone(200), Seaweed(5), GreenAlgae(5) });
-            AddCheckToStock(cartShopData, BUILDING_MILL, 2500, new[] { Stone(50), Wood(150), Cloth(4) });
+            AddCheckToStock(checksToAdd, BUILDING_BARN, 6000, new[] { Wood(350), Stone(150) });
+            AddCheckToStock(checksToAdd, BUILDING_BIG_BARN, 12000, new[] { Wood(400), Stone(200) }, GetBuildingRequirementCondition(BUILDING_BARN));
+            AddCheckToStock(checksToAdd, BUILDING_DELUXE_BARN, 25000, new[] { Wood(500), Stone(300) }, GetBuildingRequirementCondition(BUILDING_BIG_BARN));
 
-            AddCheckToStock(cartShopData, BUILDING_SHED, 15000, new[] { Wood(300) });
-            AddCheckToStock(cartShopData, BUILDING_BIG_SHED, 20000, new[] { Wood(550), Stone(300) }, GetBuildingRequirementCondition(BUILDING_SHED));
+            AddCheckToStock(checksToAdd, BUILDING_FISH_POND, 5000, new[] { Stone(200), Seaweed(5), GreenAlgae(5) });
+            AddCheckToStock(checksToAdd, BUILDING_MILL, 2500, new[] { Stone(50), Wood(150), Cloth(4) });
 
-            AddCheckToStock(cartShopData, BUILDING_SILO, 100, new[] { Stone(100), Clay(10), CopperBar(5) });
-            AddCheckToStock(cartShopData, BUILDING_SLIME_HUTCH, 10000, new[] { Stone(500), RefinedQuartz(10), IridiumBar(1) });
-            AddCheckToStock(cartShopData, BUILDING_STABLE, 10000, new[] { Hardwood(100), IronBar(5) });
-            AddCheckToStock(cartShopData, BUILDING_WELL, 1000, new[] { Stone(75) });
-            AddCheckToStock(cartShopData, BUILDING_SHIPPING_BIN, 250, new[] { Wood(150) });
+            AddCheckToStock(checksToAdd, BUILDING_SHED, 15000, new[] { Wood(300) });
+            AddCheckToStock(checksToAdd, BUILDING_BIG_SHED, 20000, new[] { Wood(550), Stone(300) }, GetBuildingRequirementCondition(BUILDING_SHED));
+
+            AddCheckToStock(checksToAdd, BUILDING_SILO, 100, new[] { Stone(100), Clay(10), CopperBar(5) });
+            AddCheckToStock(checksToAdd, BUILDING_SLIME_HUTCH, 10000, new[] { Stone(500), RefinedQuartz(10), IridiumBar(1) });
+            AddCheckToStock(checksToAdd, BUILDING_STABLE, 10000, new[] { Hardwood(100), IronBar(5) });
+            AddCheckToStock(checksToAdd, BUILDING_WELL, 1000, new[] { Stone(75) });
+            AddCheckToStock(checksToAdd, BUILDING_SHIPPING_BIN, 250, new[] { Wood(150) });
             if (_archipelago.SlotData.Mods.HasMod(ModNames.TRACTOR))
             {
-                AddCheckToStock(cartShopData, TRACTOR_GARAGE_NAME, 150000, new[] { IronBar(20), IridiumBar(5), BatteryPack(5) });
+                AddCheckToStock(checksToAdd, TRACTOR_GARAGE_NAME, 150000, new[] { IronBar(20), IridiumBar(5), BatteryPack(5) });
             }
 
+            carpenterShopData.Items.InsertRange(0, checksToAdd);
         }
 
-        private void AddCheckToStock(ShopData cartShopData, string buildingName, int price, Item[] materials, string condition = null)
+        private void AddCheckToStock(List<ShopItemData> shopItems, string buildingName, int price, Item[] materials, string condition = null)
         {
             var locationName = string.Format(BUILDING_BLUEPRINT_LOCATION_NAME, buildingName);
             var id = $"{IDProvider.PURCHASEABLE_AP_LOCATION} {locationName}";
@@ -123,7 +126,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
                 Condition = condition
             };
 
-            cartShopData.Items.Add(blueprintCheck);
+            shopItems.Add(blueprintCheck);
         }
 
         private static string GetFarmhouseRequirementCondition(int level)
