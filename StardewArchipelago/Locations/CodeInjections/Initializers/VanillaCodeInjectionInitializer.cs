@@ -29,8 +29,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             QuestInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             DarkTalismanInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             CarpenterInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
-            CarpenterMenuInjections.Initialize(monitor, modHelper, archipelago);
-            WizardInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             IsolatedEventInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             PhoneInjections.Initialize(monitor, modHelper, archipelago, weaponsManager);
             ArcadeMachineInjections.Initialize(monitor, modHelper, archipelago, locationChecker);

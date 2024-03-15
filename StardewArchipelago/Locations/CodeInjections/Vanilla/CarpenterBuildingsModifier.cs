@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Force.DeepCloner;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley.GameData.Buildings;
@@ -9,6 +12,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
     public class CarpenterBuildingsModifier
     {
+        private static readonly string[] _progressiveBuildings = new[] { "Coop", "Barn", "Shed" };
+
         protected static IMonitor _monitor;
         protected static IModHelper _helper;
         protected static ArchipelagoClient _archipelago;
@@ -31,6 +36,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 {
                     var buildingsData = asset.AsDictionary<string, BuildingData>().Data;
                     ChangePrices(buildingsData);
+                    AddFreeBuildings(buildingsData);
                 },
                 AssetEditPriority.Late
             );
@@ -54,6 +60,54 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     buildingMaterial.Amount = amount;
                 }
             }
+        }
+
+        private void AddFreeBuildings(IDictionary<string, BuildingData> buildingsData)
+        {
+            var priceMultiplier = _archipelago.SlotData.BuildingPriceMultiplier;
+            if (priceMultiplier - 1.0 < double.Epsilon)
+            {
+                return;
+            }
+
+            foreach (var buildingName in buildingsData.Keys.ToArray())
+            {
+                var buildingData = buildingsData[buildingName];
+
+                var freebuildingData = buildingData.DeepClone();
+                var archipelagoCondition = GetReceivedBuildingCondition(buildingName);
+                var hasBuildingCondition = GameStateConditionProvider.CreateHasBuildingAnywhereCondition(buildingName, true);
+                var doesNotHaveBuildingCondition = GameStateConditionProvider.CreateHasBuildingAnywhereCondition(buildingName, false);
+
+                freebuildingData.BuildCost = 0;
+                freebuildingData.BuildMaterials.Clear();
+                freebuildingData.Description = $"A gift from a friend. {freebuildingData.Description}";
+                freebuildingData.BuildCondition = $"{archipelagoCondition}, {doesNotHaveBuildingCondition}";
+                buildingData.BuildCondition = $"{archipelagoCondition}, {hasBuildingCondition}";
+
+                buildingsData.Add($"Free {buildingName}", freebuildingData);
+            }
+        }
+
+        private static string GetReceivedBuildingCondition(string buildingName)
+        {
+            var itemName = buildingName;
+            var amount = 1;
+            if (buildingName.StartsWith("Big ", StringComparison.InvariantCultureIgnoreCase))
+            {
+                amount = 2;
+                itemName = $"Progressive {itemName}";
+            }
+            else if (buildingName.StartsWith("Deluxe ", StringComparison.InvariantCultureIgnoreCase))
+            {
+                amount = 3;
+                itemName = $"Progressive {itemName}";
+            }
+            else if (_progressiveBuildings.Contains(buildingName))
+            {
+                itemName = $"Progressive {itemName}";
+            }
+            return GameStateConditionProvider.CreateHasReceivedItemCondition(itemName, amount);
         }
     }
 }

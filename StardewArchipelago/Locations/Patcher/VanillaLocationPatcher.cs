@@ -74,7 +74,6 @@ namespace StardewArchipelago.Locations.Patcher
             ReplaceSkillsWithChecks();
             ReplaceQuestsWithChecks();
             PatchCarpenter();
-            ReplaceWizardBuildingsWithChecks();
             ReplaceIsolatedEventsWithChecks();
             PatchAdventurerGuildShop();
             ReplaceArcadeMachinesWithChecks();
@@ -455,11 +454,6 @@ namespace StardewArchipelago.Locations.Patcher
             );
 
             _harmony.Patch(
-                original: AccessTools.Constructor(typeof(CarpenterMenu), new Type[] { typeof(string), typeof(GameLocation) }),
-                prefix: new HarmonyMethod(typeof(CarpenterMenuInjections), nameof(CarpenterMenuInjections.Constructor_SetupArchipelagoBlueprints_Postfix))
-            );
-
-            _harmony.Patch(
                 original: AccessTools.Method(typeof(GameLocation), "houseUpgradeOffer"),
                 prefix: new HarmonyMethod(typeof(CarpenterInjections), nameof(CarpenterInjections.HouseUpgradeOffer_OfferFreeUpgrade_Prefix))
             );
@@ -474,15 +468,6 @@ namespace StardewArchipelago.Locations.Patcher
         {
             _modHelper.Events.Content.AssetRequested -= _carpenterShopStockModifier.OnShopStockRequested;
             _modHelper.Events.Content.AssetRequested -= _carpenterBuildingsModifier.OnBuildingsRequested;
-        }
-
-        private void ReplaceWizardBuildingsWithChecks()
-        {
-            var performActionArgumentTypes = new[] { typeof(string[]), typeof(Farmer), typeof(Location) };
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performAction), performActionArgumentTypes),
-                prefix: new HarmonyMethod(typeof(WizardInjections), nameof(WizardInjections.PerformAction_WizardBook_Prefix))
-            );
         }
 
         private void ReplaceIsolatedEventsWithChecks()

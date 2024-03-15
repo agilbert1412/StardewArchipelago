@@ -10,10 +10,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
     {
         public const string BUILDING_PROGRESSIVE_HOUSE = "Progressive House";
 
-        public const string BUILDING_COOP = "Coop";
-        public const string BUILDING_BARN = "Barn";
-        public const string BUILDING_SHED = "Shed";
-
         private static IMonitor _monitor;
         private static IModHelper _modHelper;
         private static ArchipelagoClient _archipelago;
@@ -35,12 +31,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 if (dialogKey != "carpenter")
                 {
                     return true; // run original logic
-                }
-                
-                var carpenterBlueprints = CarpenterMenuInjections.GetAvailableBlueprints("Robin");
-                if (!carpenterBlueprints.Any())
-                {
-                    answerChoices = answerChoices.Where(x => x.responseKey != "Construct").ToArray();
                 }
 
                 var receivedHouseUpgrades = _archipelago.GetReceivedItemCount(BUILDING_PROGRESSIVE_HOUSE);
@@ -291,46 +281,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 _monitor.Log($"Failed in {nameof(HouseUpgradeAccept_CheaperInAP_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
             }
-        }
-
-        public static bool HasReceivedBuilding(string buildingName, out string senderName)
-        {
-            if (buildingName == "TractorGarage")
-            {
-                buildingName = "Tractor Garage";
-            }
-            senderName = "";
-            var numberRequired = 1;
-
-            var bigPrefix = "Big ";
-            if (buildingName­.StartsWith(bigPrefix))
-            {
-                numberRequired = 2;
-                buildingName = buildingName.Substring(bigPrefix.Length);
-            }
-
-            var deluxePrefix = "Deluxe ";
-            if (buildingName­.StartsWith(deluxePrefix))
-            {
-                numberRequired = 3;
-                buildingName = buildingName.Substring(deluxePrefix.Length);
-            }
-
-            if (buildingName == BUILDING_COOP || buildingName == BUILDING_BARN || buildingName == BUILDING_SHED)
-            {
-                buildingName = $"Progressive {buildingName}";
-            }
-
-            var numberReceived = _archipelago.GetReceivedItemCount(buildingName);
-
-            var hasReceivedEnough = numberReceived >= numberRequired;
-            if (!hasReceivedEnough)
-            {
-                return false;
-            }
-
-            senderName = _archipelago.GetAllReceivedItems().Last(x => x.ItemName == buildingName).PlayerName;
-            return true;
         }
     }
 }
