@@ -45,7 +45,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private void ChangePrices(IDictionary<string, BuildingData> buildingsData)
         {
             var priceMultiplier = _archipelago.SlotData.BuildingPriceMultiplier;
-            if (priceMultiplier - 1.0 < double.Epsilon)
+            if (Math.Abs(priceMultiplier - 1.0) < double.Epsilon)
             {
                 return;
             }
@@ -54,6 +54,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 var finalCost = (int)(buildingData.BuildCost * priceMultiplier);
                 buildingData.BuildCost = finalCost;
+                if (buildingData.BuildMaterials == null)
+                {
+                    continue;
+                }
+
                 foreach (var buildingMaterial in buildingData.BuildMaterials)
                 {
                     var amount = Math.Max(1, (int)(buildingMaterial.Amount * priceMultiplier));
@@ -64,12 +69,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
         private void AddFreeBuildings(IDictionary<string, BuildingData> buildingsData)
         {
-            var priceMultiplier = _archipelago.SlotData.BuildingPriceMultiplier;
-            if (priceMultiplier - 1.0 < double.Epsilon)
-            {
-                return;
-            }
-
             foreach (var buildingName in buildingsData.Keys.ToArray())
             {
                 var buildingData = buildingsData[buildingName];
@@ -80,7 +79,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 var doesNotHaveBuildingCondition = GameStateConditionProvider.CreateHasBuildingAnywhereCondition(buildingName, false);
 
                 freebuildingData.BuildCost = 0;
-                freebuildingData.BuildMaterials.Clear();
+                freebuildingData.BuildMaterials?.Clear();
                 freebuildingData.Description = $"A gift from a friend. {freebuildingData.Description}";
                 freebuildingData.BuildCondition = $"{archipelagoCondition}, {doesNotHaveBuildingCondition}";
                 buildingData.BuildCondition = $"{archipelagoCondition}, {hasBuildingCondition}";

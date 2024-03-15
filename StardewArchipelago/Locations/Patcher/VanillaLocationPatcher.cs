@@ -431,6 +431,7 @@ namespace StardewArchipelago.Locations.Patcher
         {
             _modHelper.Events.Content.AssetRequested += _carpenterShopStockModifier.OnShopStockRequested;
             _modHelper.Events.Content.AssetRequested += _carpenterBuildingsModifier.OnBuildingsRequested;
+            _modHelper.GameContent.InvalidateCache("Data/Buildings");
 
             if (!_archipelago.SlotData.BuildingProgression.HasFlag(BuildingProgression.Progressive))
             {
