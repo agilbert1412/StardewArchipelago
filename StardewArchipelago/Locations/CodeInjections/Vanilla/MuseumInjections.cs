@@ -45,11 +45,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 var rewards = new List<Item>();
                 var museumItems = new HashSet<string>(__instance.museumPieces.Values);
-                var numberOfMuseumItemsMethod =
-                    _modHelper.Reflection.GetMethod(__instance, "numberOfMuseumItemsOfType");
-                var numberOfArtifactsDonated = numberOfMuseumItemsMethod.Invoke<int>("Arch");
-                var numberOfMineralsDonated = numberOfMuseumItemsMethod.Invoke<int>("Minerals");
-                var totalNumberDonated = numberOfArtifactsDonated + numberOfMineralsDonated;
+                var museumRewardData = DataLoader.MuseumRewards(Game1.content);
+                var donatedItemsByTag = __instance.GetDonatedByContextTag(museumRewardData);
+                var numberOfArtifactsDonated = donatedItemsByTag["item_type_arch"];
+                var numberOfMineralsDonated = donatedItemsByTag["item_type_minerals"];
+                var totalNumberDonated = donatedItemsByTag[""];
 
                 SendSpecialMuseumLetters(player, totalNumberDonated);
                 CheckMilestones(numberOfArtifactsDonated, numberOfMineralsDonated, totalNumberDonated);

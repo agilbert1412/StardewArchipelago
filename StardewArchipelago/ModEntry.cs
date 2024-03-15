@@ -141,6 +141,7 @@ namespace StardewArchipelago
 
         private IEnumerable<ItemQueryResult> PurchasableAPLocationQueryDelegate(string key, string arguments, ItemQueryContext context, bool avoidrepeat, HashSet<string> avoiditemids, Action<string, string> logerror)
         {
+            var customFields = context.CustomFields;
             return PurchaseableArchipelagoLocation.Create(arguments, Monitor, Helper, _locationChecker, _archipelago, context.CustomFields, _archipelago.GetMyActiveHints());
         }
 
