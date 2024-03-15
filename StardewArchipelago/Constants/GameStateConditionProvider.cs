@@ -20,6 +20,15 @@ namespace StardewArchipelago.Constants
             return CreateCondition(HAS_RECEIVED_ITEM, arguments);
         }
 
+        public static string CreateHasBuildingAnywhereCondition(string buildingName, bool hasBuilding)
+        {
+            if (hasBuilding)
+            {
+                return $"BUILDINGS_CONSTRUCTED ALL {buildingName} 1";
+            }
+            return $"BUILDINGS_CONSTRUCTED ALL {buildingName} 0 0";
+        }
+
         public static string CreateCondition(string condition, string[] arguments)
         {
             return !arguments.Any() ? condition : $"{condition} {string.Join(' ', arguments)}";
