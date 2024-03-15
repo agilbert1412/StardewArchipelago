@@ -30,7 +30,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             try
             {
-                if (dialogKey != "carpenter")
+                if (dialogKey != "carpenter" && (dialogKey != "telephone" || answerChoices.All(x => x.responseKey != "Carpenter_BuildingCost")))
                 {
                     return true; // run original logic
                 }
@@ -53,7 +53,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
                 if (!canConstructAnyBuilding)
                 {
-                    answerChoices = answerChoices.Where(x => x.responseKey != "Construct").ToArray();
+                    answerChoices = answerChoices.Where(x => x.responseKey != "Construct" && x.responseKey != "Carpenter_BuildingCost").ToArray();
                 }
 
                 __instance.lastQuestionKey = dialogKey;

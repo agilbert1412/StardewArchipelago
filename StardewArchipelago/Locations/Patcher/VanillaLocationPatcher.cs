@@ -433,6 +433,12 @@ namespace StardewArchipelago.Locations.Patcher
             _modHelper.Events.Content.AssetRequested += _carpenterBuildingsModifier.OnBuildingsRequested;
             _modHelper.GameContent.InvalidateCache("Data/Buildings");
 
+            var performActionArgumentTypes = new[] { typeof(string[]), typeof(Farmer), typeof(Location) };
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performAction), performActionArgumentTypes),
+                prefix: new HarmonyMethod(typeof(WizardBookInjections), nameof(WizardBookInjections.PerformAction_WizardBook_Prefix))
+            );
+
             if (!_archipelago.SlotData.BuildingProgression.HasFlag(BuildingProgression.Progressive))
             {
                 _harmony.Patch(
