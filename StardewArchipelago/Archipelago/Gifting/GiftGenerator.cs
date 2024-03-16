@@ -86,10 +86,15 @@ namespace StardewArchipelago.Archipelago.Gifting
                 yield return CreateTrait(GiftFlag.Food);
             }
 
-            var buffsData = objectInfo.Buff;
-            var buffDuration = buffsData.Duration / DEFAULT_BUFF_DURATION;
-
-            foreach (var buffTrait in GetBuffTraits(buffsData, buffDuration)) yield return buffTrait;
+            var buffsData = objectInfo.Buffs;
+            foreach (var buffData in buffsData)
+            {
+                var buffDuration = buffData.Duration / DEFAULT_BUFF_DURATION;
+                foreach (var buffTrait in GetBuffTraits(buffData, buffDuration))
+                {
+                    yield return buffTrait;
+                }
+            }
         }
 
         private IEnumerable<GiftTrait> GetBuffTraits(ObjectBuffData buffData, double buffDuration)
