@@ -4,6 +4,7 @@ using System.Linq;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Modded;
+using StardewArchipelago.Constants.Vanilla;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -153,7 +154,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
         private string GetMaterialString(ISalable material, double priceMultiplier)
         {
             var amount = Math.Max(1, (int)(material.Stack * priceMultiplier));
-            return $"{material.QualifiedItemId}:{amount}";
+            return $"{QualifiedItemIds.UnqualifyId(material.QualifiedItemId)}:{amount}";
         }
 
         private static Item Wood(int amount)

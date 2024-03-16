@@ -24,7 +24,36 @@ namespace StardewArchipelago.Locations
         private string _locationDisplayName;
         private string _description;
         private LocationChecker _locationChecker;
+
         private Dictionary<string, int> _extraMaterialsRequired;
+
+        private Dictionary<string, int> ExtraMaterialsRequired
+        {
+            get
+            {
+                if (_extraMaterialsRequired != null)
+                {
+                    return _extraMaterialsRequired;
+                }
+
+                _extraMaterialsRequired = new Dictionary<string, int>();
+                if (modData == null || !modData.ContainsKey(EXTRA_MATERIALS_KEY))
+                {
+                    return _extraMaterialsRequired;
+                }
+
+                var extraMaterialsString = modData[EXTRA_MATERIALS_KEY];
+                foreach (var extraMaterialString in extraMaterialsString.Split(",", StringSplitOptions.RemoveEmptyEntries))
+                {
+                    var extraMaterialFields = extraMaterialString.Split(":");
+                    var materialId = extraMaterialFields[0];
+                    var materialAmount = int.Parse(extraMaterialFields[1]);
+                    _extraMaterialsRequired.Add(materialId, materialAmount);
+                }
+
+                return _extraMaterialsRequired;
+            }
+        }
 
         public string LocationName { get; }
 
@@ -41,21 +70,15 @@ namespace StardewArchipelago.Locations
             var scoutedLocation = archipelago.ScoutSingleLocation(LocationName);
             _description = scoutedLocation == null ? ScoutedLocation.GenericItemName() : scoutedLocation.ToString();
             _locationChecker = locationChecker;
-            _extraMaterialsRequired = new Dictionary<string, int>();
 
             var isHinted = myActiveHints.Any(hint => archipelago.GetLocationName(hint.LocationId).Equals(locationName, StringComparison.OrdinalIgnoreCase));
             var desiredTextureName = isHinted ? ArchipelagoTextures.PLEADING : ArchipelagoTextures.COLOR;
             _archipelagoTexture = ArchipelagoTextures.GetArchipelagoLogo(monitor, modHelper, 48, desiredTextureName);
         }
 
-        public void AddMaterialRequirement(string id, int amount)
-        {
-            _extraMaterialsRequired.Add(id, amount);
-        }
-
         public override bool CanBuyItem(Farmer who)
         {
-            foreach (var (id, amount) in _extraMaterialsRequired)
+            foreach (var (id, amount) in ExtraMaterialsRequired)
             {
                 if (who.Items.CountId(id) < amount)
                 {
@@ -68,7 +91,7 @@ namespace StardewArchipelago.Locations
 
         public override bool actionWhenPurchased(string shopId)
         {
-            foreach (var (id, amount) in _extraMaterialsRequired)
+            foreach (var (id, amount) in ExtraMaterialsRequired)
             {
                 Game1.player.Items.ReduceId(id, amount);
             }
@@ -89,7 +112,7 @@ namespace StardewArchipelago.Locations
         public override string getDescription()
         {
             var descriptionWithExtraMaterials = $"{_description}{Environment.NewLine}";
-            foreach (var (id, amount) in _extraMaterialsRequired)
+            foreach (var (id, amount) in ExtraMaterialsRequired)
             {
                 descriptionWithExtraMaterials += $"{Environment.NewLine}{amount} {DataLoader.Objects(Game1.content)[id].DisplayName}";
             }
@@ -127,17 +150,6 @@ namespace StardewArchipelago.Locations
             if (locationChecker.IsLocationMissing(locationName))
             {
                 var purchaseableCheck = new PurchaseableArchipelagoLocation(locationName.Trim(), monitor, modHelper, locationChecker, archipelago, myActiveHints);
-                if (contextCustomFields != null && contextCustomFields.ContainsKey(EXTRA_MATERIALS_KEY))
-                {
-                    var extraMaterialsString = (string)contextCustomFields[EXTRA_MATERIALS_KEY];
-                    foreach (var extraMaterialString in extraMaterialsString.Split(",", StringSplitOptions.RemoveEmptyEntries))
-                    {
-                        var extraMaterialFields = extraMaterialString.Split(":");
-                        var materialId = extraMaterialFields[0];
-                        var materialAmount = int.Parse(extraMaterialFields[1]);
-                        purchaseableCheck.AddMaterialRequirement(materialId, materialAmount);
-                    }
-                }
                 return new ItemQueryResult[] { new(purchaseableCheck) };
             }
 
