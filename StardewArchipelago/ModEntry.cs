@@ -451,6 +451,7 @@ namespace StardewArchipelago
             _appearanceRandomizer.ShuffleCharacterAppearances();
             _entranceManager.ResetCheckedEntrancesToday(_archipelago.SlotData);
             TheaterInjections.UpdateScheduleForEveryone();
+            Helper.GameContent.InvalidateCache("Data/Shops"); // This should be reworked someday
             DoBugsCleanup();
 
             _hintHelper.GiveHintTip(_archipelago.Session);
