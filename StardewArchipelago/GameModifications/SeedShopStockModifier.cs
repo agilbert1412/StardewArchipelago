@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
@@ -10,7 +9,6 @@ using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
-using StardewValley.GameData;
 using StardewValley.GameData.Shops;
 
 namespace StardewArchipelago.GameModifications
@@ -46,7 +44,7 @@ namespace StardewArchipelago.GameModifications
                     foreach (var (shopId, shopData) in shopsData)
                     {
                         OverhaulSeedAmounts(shopId, shopData);
-                        FilterUnlockedSeeds(shopId, shopData);
+                        FilterUnlockedSeeds(shopData);
                     }
                 },
                 AssetEditPriority.Late
@@ -74,8 +72,9 @@ namespace StardewArchipelago.GameModifications
 
             var hasStocklist = Game1.MasterPlayer.hasOrWillReceiveMail("PierreStocklist");
 
-            foreach (var item in shopData.Items)
+            for (var i = shopData.Items.Count; i >= 0; i--)
             {
+                var item = shopData.Items[i];
                 var priceMultiplier = 1.0f;
                 if (item.AvailableStock == -1)
                 {
@@ -84,27 +83,24 @@ namespace StardewArchipelago.GameModifications
                     var todayStock = random.Next(maxAmount);
                     if (todayStock < 5)
                     {
-                        todayStock = 0;
+                        shopData.Items.RemoveAt(i);
+                        continue;
                     }
 
                     item.AvailableStock = todayStock;
                     item.AvailableStockLimit = LimitedStockMode.Global;
                 }
 
-                if (isPierre && priceMultiplier != 1.0f)
+                if (isPierre)
                 {
-                    item.PriceModifierMode = QuantityModifier.QuantityModifierMode.Stack;
-                    if (item.PriceModifiers == null)
-                    {
-                        item.PriceModifiers = new List<QuantityModifier>();
-                    }
-                    item.PriceModifiers.Add(new QuantityModifier() { Amount = priceMultiplier, Id = "Archipelago.SeedShopOverhaul", Modification = QuantityModifier.ModificationType.Multiply });
+                    item.Price = (int)Math.Round(item.Price * priceMultiplier);
                 }
 
                 if (item.Condition != null && item.Condition.Contains("YEAR 2"))
                 {
                     item.Condition = string.Join(", ", item.Condition.Split(",").Select(x => x.Trim()).Where(x => !x.Contains("YEAR 2")));
                 }
+
                 item.AvoidRepeat = true;
             }
         }
@@ -151,12 +147,7 @@ namespace StardewArchipelago.GameModifications
                     item.Price *= item.MinStack;
                 }
                 
-                item.PriceModifierMode = QuantityModifier.QuantityModifierMode.Stack;
-                if (item.PriceModifiers == null)
-                {
-                    item.PriceModifiers = new List<QuantityModifier>();
-                }
-                item.PriceModifiers.Add(new QuantityModifier() { Amount = JOJA_PRICE_MULTIPLIER, Id = "Archipelago.SeedShopOverhaul", Modification = QuantityModifier.ModificationType.Multiply });
+                item.Price = (int)Math.Round(item.Price * JOJA_PRICE_MULTIPLIER);
                 item.Condition = null;
             }
         }
@@ -180,7 +171,7 @@ namespace StardewArchipelago.GameModifications
             shopData.Items.Add(item);
         }
 
-        private void FilterUnlockedSeeds(string shopId, ShopData shopData)
+        private void FilterUnlockedSeeds(ShopData shopData)
         {
             if (_archipelago.SlotData.Cropsanity != Cropsanity.Shuffled)
             {
