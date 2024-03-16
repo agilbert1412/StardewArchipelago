@@ -72,7 +72,7 @@ namespace StardewArchipelago.GameModifications
 
             var hasStocklist = Game1.MasterPlayer.hasOrWillReceiveMail("PierreStocklist");
 
-            for (var i = shopData.Items.Count; i >= 0; i--)
+            for (var i = shopData.Items.Count - 1; i >= 0; i--)
             {
                 var item = shopData.Items[i];
                 var priceMultiplier = 1.0f;
