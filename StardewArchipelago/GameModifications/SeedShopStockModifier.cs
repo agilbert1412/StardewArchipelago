@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.GameModifications.CodeInjections;
 using StardewArchipelago.Locations;
@@ -65,12 +66,12 @@ namespace StardewArchipelago.GameModifications
 
         private void OverhaulSmallBusinessSeeds(string shopId, ShopData shopData)
         {
-            if (shopId != "SeedShop" && shopId != "Sandy")
+            var isPierre = shopId == "SeedShop";
+            if (!isPierre && shopId != "Sandy")
             {
                 return;
             }
 
-            var isPierre = shopId == "SeedShop";
             var hasStocklist = Game1.MasterPlayer.hasOrWillReceiveMail("PierreStocklist");
 
             foreach (var item in shopData.Items)
@@ -147,6 +148,7 @@ namespace StardewArchipelago.GameModifications
                 if (item.MinStack == -1)
                 {
                     item.MinStack = itemData.Name.Contains("cola", StringComparison.InvariantCultureIgnoreCase) ? 6 : 50;
+                    item.Price *= item.MinStack;
                 }
                 
                 item.PriceModifierMode = QuantityModifier.QuantityModifierMode.Stack;
@@ -201,10 +203,10 @@ namespace StardewArchipelago.GameModifications
                     continue;
                 }
 
-                if (!_archipelago.HasReceivedItem(itemData.Name))
-                {
-                    shopData.Items.RemoveAt(i);
-                }
+                item.Condition ??= "";
+                var conditions = item.Condition.Split(",").Select(x => x.Trim()).ToList();
+                conditions.Add(GameStateConditionProvider.CreateHasReceivedItemCondition(itemData.Name));
+                item.Condition = string.Join(", ", conditions);
             }
         }
 
