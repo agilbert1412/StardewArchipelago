@@ -122,8 +122,9 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
                 Price = finalPrice,
                 IsRecipe = false,
                 MaxItems = 1,
-                CustomFields = customFields,
-                Condition = condition
+                Condition = condition,
+                ModData = customFields,
+                CustomFields = customFields
             };
 
             shopItems.Add(blueprintCheck);
