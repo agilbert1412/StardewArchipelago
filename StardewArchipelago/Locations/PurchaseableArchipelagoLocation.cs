@@ -114,7 +114,7 @@ namespace StardewArchipelago.Locations
             var descriptionWithExtraMaterials = $"{_description}{Environment.NewLine}";
             foreach (var (id, amount) in ExtraMaterialsRequired)
             {
-                descriptionWithExtraMaterials += $"{Environment.NewLine}{amount} {DataLoader.Objects(Game1.content)[id].DisplayName}";
+                descriptionWithExtraMaterials += $"{Environment.NewLine}{amount} {DataLoader.Objects(Game1.content)[id].Name}";
             }
 
             return descriptionWithExtraMaterials;
