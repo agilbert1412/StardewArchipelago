@@ -23,6 +23,8 @@ namespace StardewArchipelago.Bundles
             BundleRooms = new BundleRooms(itemManager, bundlesDictionary);
             _currentBundlesData = BundleRooms.ToStardewStrings();
             _modHelper.Events.Content.AssetRequested += OnBundlesRequested;
+            modHelper.GameContent.InvalidateCache("Data/Bundles");
+            ReplaceAllBundles();
         }
 
         public void CleanEvents()
@@ -52,7 +54,7 @@ namespace StardewArchipelago.Bundles
 
         public void ReplaceAllBundles()
         {
-            if (Game1.netWorldState.Value is not NetWorldState worldState)
+            if (Game1.netWorldState.Value is not { } worldState)
             {
                 throw new InvalidCastException($"World State was unexpected type: {Game1.netWorldState.GetType()}");
             }
@@ -60,6 +62,24 @@ namespace StardewArchipelago.Bundles
             // private readonly NetStringDictionary<string, NetString> netBundleData = new NetStringDictionary<string, NetString>();
             var netBundleDataField = _modHelper.Reflection.GetField<NetStringDictionary<string, NetString>>(worldState, "netBundleData");
             var netBundleData = netBundleDataField.GetValue();
+
+            // protected bool _bundleDataDirty;
+            var _bundleDataDirtyField = _modHelper.Reflection.GetField<bool>(worldState, "_bundleDataDirty");
+            var _bundleDataDirty = _bundleDataDirtyField.GetValue();
+
+            // protected Dictionary<string, string> _bundleData;
+            var _bundleDataField = _modHelper.Reflection.GetField<Dictionary<string, string>>(worldState, "_bundleData");
+            var _bundleData = new Dictionary<string, string>();
+
+            worldState.SetBundleData(DataLoader.Bundles(Game1.content));
+            _bundleDataDirtyField.SetValue(false);
+            foreach (var key in netBundleData.Keys)
+            {
+                _bundleData[key] = netBundleData[key];
+            }
+            _bundleDataField.SetValue(_bundleData);
+            worldState.UpdateBundleDisplayNames();
+
             netBundleData.Clear();
             var bundlesState = BackupBundleState(worldState);
             worldState.Bundles.Clear();
