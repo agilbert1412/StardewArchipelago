@@ -141,11 +141,6 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(typeof(CommunityCenter), "checkForMissedRewards"),
                 prefix: new HarmonyMethod(typeof(CommunityCenterInjections), nameof(CommunityCenterInjections.CheckForMissedRewards_DontBother_Prefix))
             );
-
-            _harmony.Patch(
-                original: AccessTools.Constructor(typeof(Bundle), new []{typeof(int), typeof(string), typeof(bool[]), typeof(Point), typeof(string), typeof(JunimoNoteMenu)}),
-                prefix: new HarmonyMethod(typeof(JunimoNoteMenuInjections), nameof(JunimoNoteMenuInjections.BundleConstructor_Debug_Prefix))
-            );
         }
 
         private void ReplaceCommunityCenterAreasWithChecks()
