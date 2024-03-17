@@ -44,6 +44,6 @@ namespace StardewArchipelago.Bundles
         }
 
         public abstract string GetItemsString();
-        public abstract string GetNumberRequiredItemsWithSeparator();
+        public abstract string GetNumberRequiredItems();
     }
 }
