@@ -39,14 +39,14 @@ namespace StardewArchipelago.Bundles
             return itemsString.Trim();
         }
 
-        public override string GetNumberRequiredItemsWithSeparator()
+        public override string GetNumberRequiredItems()
         {
             if (NumberRequired == Items.Count)
             {
                 return "";
             }
 
-            return $"/{NumberRequired}";
+            return $"{NumberRequired}";
         }
     }
 }
