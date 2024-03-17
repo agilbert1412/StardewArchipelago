@@ -28,7 +28,7 @@ namespace StardewArchipelago.Bundles
             return $"{CurrencyIds[Currency]} {Amount} {Amount}";
         }
 
-        public override string GetNumberRequiredItemsWithSeparator()
+        public override string GetNumberRequiredItems()
         {
             return "";
         }

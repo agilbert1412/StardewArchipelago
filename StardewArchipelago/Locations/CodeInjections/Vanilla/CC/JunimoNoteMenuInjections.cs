@@ -198,6 +198,92 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.CC
             }
         }
 
+        // public Bundle(int bundleIndex, string rawBundleInfo, bool[] completedIngredientsList, Point position, string textureName, JunimoNoteMenu menu)
+        public static bool BundleConstructor_Debug_Prefix(Bundle __instance, int bundleIndex, string rawBundleInfo, bool[] completedIngredientsList, Point position, string textureName, JunimoNoteMenu menu)
+        {
+            try
+            {
+                if (menu.fromGameMenu)
+                {
+                    __instance.depositsAllowed = false;
+                }
+
+                __instance.bundleIndex = bundleIndex;
+                var array = rawBundleInfo.Split('/');
+                __instance.name = array[0];
+                __instance.label = array[6];
+                __instance.rewardDescription = array[1];
+                if (!string.IsNullOrWhiteSpace(array[5]))
+                {
+                    try
+                    {
+                        var strArray = array[5].Split(':', 2);
+                        if (strArray.Length == 2)
+                        {
+                            __instance.bundleTextureOverride = Game1.content.Load<Texture2D>(strArray[0]);
+                            __instance.bundleTextureIndexOverride = int.Parse(strArray[1]);
+                        }
+                        else
+                        {
+                            __instance.bundleTextureIndexOverride = int.Parse(array[5]);
+                        }
+                    }
+                    catch
+                    {
+                        __instance.bundleTextureOverride = (Texture2D)null;
+                        __instance.bundleTextureIndexOverride = -1;
+                    }
+                }
+                var strArray1 = ArgUtility.SplitBySpace(array[2]);
+                __instance.complete = true;
+                __instance.ingredients = new List<BundleIngredientDescription>();
+                var num = 0;
+                for (var index = 0; index < strArray1.Length; index += 3)
+                {
+                    __instance.ingredients.Add(new BundleIngredientDescription(strArray1[index], Convert.ToInt32(strArray1[index + 1]), Convert.ToInt32(strArray1[index + 2]), completedIngredientsList[index / 3]));
+                    if (!completedIngredientsList[index / 3])
+                    {
+                        __instance.complete = false;
+                    }
+                    else
+                    {
+                        ++num;
+                    }
+                }
+                __instance.bundleColor = Convert.ToInt32(array[3]);
+                __instance.numberOfIngredientSlots = ArgUtility.GetInt(array, 4, __instance.ingredients.Count);
+                if (num >= __instance.numberOfIngredientSlots)
+                {
+                    __instance.complete = true;
+                }
+
+                __instance.sprite = new TemporaryAnimatedSprite(textureName, new Rectangle(__instance.bundleColor * 256 % 512, 244 + __instance.bundleColor * 256 / 512 * 16, 16, 16), 70f, 3, 99999, new Vector2((float)__instance.bounds.X, (float)__instance.bounds.Y), false, false, 0.8f, 0.0f, Color.White, 4f, 0.0f, 0.0f, 0.0f)
+                {
+                    pingPong = true
+                };
+                __instance.sprite.paused = true;
+                __instance.sprite.sourceRect.X += __instance.sprite.sourceRect.Width;
+                if (__instance.name.ToLower().Contains(Game1.currentSeason) && !__instance.complete)
+                {
+                    __instance.shake();
+                }
+
+                if (!__instance.complete)
+                {
+                    return false; // don't run original logic
+                }
+
+                __instance.completionAnimation(menu, false);
+
+                return false; // don't run original logic
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(BundleConstructor_Debug_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
+        }
+
         // private bool specificBundlePage;
         private static IReflectedField<bool> _specificBundlePageField;
 

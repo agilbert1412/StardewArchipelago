@@ -25,6 +25,7 @@ using StardewValley.Quests;
 using StardewValley.SpecialOrders;
 using StardewValley.TerrainFeatures;
 using xTile.Dimensions;
+using Bundle = StardewValley.Menus.Bundle;
 using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Locations.Patcher
@@ -139,6 +140,11 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony.Patch(
                 original: AccessTools.Method(typeof(CommunityCenter), "checkForMissedRewards"),
                 prefix: new HarmonyMethod(typeof(CommunityCenterInjections), nameof(CommunityCenterInjections.CheckForMissedRewards_DontBother_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Constructor(typeof(Bundle), new []{typeof(int), typeof(string), typeof(bool[]), typeof(Point), typeof(string), typeof(JunimoNoteMenu)}),
+                prefix: new HarmonyMethod(typeof(JunimoNoteMenuInjections), nameof(JunimoNoteMenuInjections.BundleConstructor_Debug_Prefix))
             );
         }
 
