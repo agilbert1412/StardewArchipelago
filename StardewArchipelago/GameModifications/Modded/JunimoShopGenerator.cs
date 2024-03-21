@@ -336,7 +336,7 @@ namespace StardewArchipelago.GameModifications.Modded
             string[] itemSeason = null)
         {
             throw new Exception($"{nameof(AddToJunimoStock)} is not ready for 1.6; Look at my comment at the beginning of the file");
-            //var item = _stardewItemManager.GetObjectById(itemId);
+            //var item = _stardewItemManager.GetObjectById(yieldItemId);
             //if (isSeed && _archipelago.SlotData.Cropsanity == Cropsanity.Shuffled && !_archipelago.HasReceivedItem(item.Name))
             //{
             //    return;

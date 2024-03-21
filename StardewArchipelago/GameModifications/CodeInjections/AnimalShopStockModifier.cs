@@ -2,6 +2,7 @@
 using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Locations.ShopStockModifiers;
+using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley.GameData.Shops;
@@ -10,7 +11,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 {
     public class AnimalShopStockModifier : ShopStockModifier
     {
-        public AnimalShopStockModifier(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago) : base(monitor, helper, archipelago)
+        public AnimalShopStockModifier(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago, StardewItemManager stardewItemManager) : base(monitor, helper, archipelago, stardewItemManager)
         {
         }
 

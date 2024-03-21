@@ -11,14 +11,8 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
 {
     public class CraftingRecipePurchaseStockModifier : ShopStockModifier
     {
-        private StardewItemManager _stardewItemManager;
-
-        public CraftingRecipePurchaseStockModifier(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago, StardewItemManager stardewItemManager) : base(monitor, helper, archipelago)
+        public CraftingRecipePurchaseStockModifier(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago, StardewItemManager stardewItemManager) : base(monitor, helper, archipelago, stardewItemManager)
         {
-            _monitor = monitor;
-            _helper = helper;
-            _archipelago = archipelago;
-            _stardewItemManager = stardewItemManager;
         }
 
         public override void OnShopStockRequested(object sender, AssetRequestedEventArgs e)

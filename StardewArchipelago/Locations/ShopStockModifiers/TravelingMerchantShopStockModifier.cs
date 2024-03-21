@@ -4,6 +4,7 @@ using System.Linq;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Serialization;
+using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -14,16 +15,8 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
 {
     public class TravelingMerchantShopStockModifier : ShopStockModifier
     {
-        private static LocationChecker _locationChecker;
-        private static ArchipelagoStateDto _archipelagoState;
-
-        private static Dictionary<ISalable, string> _flairOverride;
-
-        public TravelingMerchantShopStockModifier(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker, ArchipelagoStateDto archipelagoState) : base(monitor, modHelper, archipelago)
+        public TravelingMerchantShopStockModifier(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, StardewItemManager stardewItemManager) : base(monitor, modHelper, archipelago, stardewItemManager)
         {
-            _locationChecker = locationChecker;
-            _archipelagoState = archipelagoState;
-            _flairOverride = new Dictionary<ISalable, string>();
         }
 
         public override void OnShopStockRequested(object sender, AssetRequestedEventArgs e)

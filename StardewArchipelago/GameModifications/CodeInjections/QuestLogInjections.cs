@@ -42,7 +42,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             }
         }
 
-        // public void foundArtifact(string itemId, int number)
+        // public void foundArtifact(string yieldItemId, int number)
         public static void FoundArtifact_StartArchaeologyIfMissed_Postfix(Farmer __instance, string itemId, int number)
         {
             try

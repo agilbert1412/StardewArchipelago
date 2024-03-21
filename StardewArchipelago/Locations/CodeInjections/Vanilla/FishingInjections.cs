@@ -40,7 +40,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             _itemManager = itemManager;
         }
 
-        // public bool caughtFish(string itemId, int size, bool from_fish_pond = false, int numberCaught = 1)
+        // public bool caughtFish(string yieldItemId, int size, bool from_fish_pond = false, int numberCaught = 1)
         public static void CaughtFish_Fishsanity_Postfix(Farmer __instance, string itemId, int size, bool from_fish_pond, int numberCaught, ref bool __result)
         {
             try

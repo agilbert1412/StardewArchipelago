@@ -1,18 +1,19 @@
 ﻿using System;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Locations.Festival;
+using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.GameData.BigCraftables;
 using StardewValley.GameData.Shops;
+using Category = StardewArchipelago.Constants.Vanilla.Category;
 
 namespace StardewArchipelago.Locations.ShopStockModifiers
 {
     public class FestivalShopStockModifier : ShopStockModifier
     {
-        public FestivalShopStockModifier(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago) : base(monitor, modHelper, archipelago)
+        public FestivalShopStockModifier(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, StardewItemManager stardewItemManager) : base(monitor, modHelper, archipelago, stardewItemManager)
         {
         }
 

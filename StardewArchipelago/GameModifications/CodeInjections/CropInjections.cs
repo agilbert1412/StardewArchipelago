@@ -29,7 +29,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             _stardewItemManager = stardewItemManager;
         }
 
-        // public static string ResolveSeedId(string itemId, GameLocation location)
+        // public static string ResolveSeedId(string yieldItemId, GameLocation location)
         public static bool ResolveSeedId_WildSeedsBecomesUnlockedCrop_Prefix(string itemId, GameLocation location, ref string __result)
         {
             try

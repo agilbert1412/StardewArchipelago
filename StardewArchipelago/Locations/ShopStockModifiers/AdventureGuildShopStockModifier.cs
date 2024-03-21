@@ -1,6 +1,7 @@
 ﻿using System;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
+using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley.GameData.Shops;
@@ -9,7 +10,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
 {
     public class AdventureGuildShopStockModifier : ShopStockModifier
     {
-        public AdventureGuildShopStockModifier(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago) : base(monitor, modHelper, archipelago)
+        public AdventureGuildShopStockModifier(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, StardewItemManager stardewItemManager) : base(monitor, modHelper, archipelago, stardewItemManager)
         {
         }
 

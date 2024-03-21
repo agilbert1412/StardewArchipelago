@@ -1,6 +1,7 @@
 ﻿using System;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Vanilla;
+using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -10,7 +11,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
 {
     public class KrobusStockModifier : ShopStockModifier
     {
-        public KrobusStockModifier(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago) : base(monitor, helper, archipelago)
+        public KrobusStockModifier(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago, StardewItemManager stardewItemManager) : base(monitor, helper, archipelago, stardewItemManager)
         {
             _monitor = monitor;
             _helper = helper;

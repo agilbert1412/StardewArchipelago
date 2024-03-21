@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Force.DeepCloner;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
+using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley.GameData.Shops;
@@ -10,15 +12,17 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
 {
     public abstract class ShopStockModifier
     {
-        protected static IMonitor _monitor;
-        protected static IModHelper _helper;
-        protected static ArchipelagoClient _archipelago;
+        protected IMonitor _monitor;
+        protected IModHelper _helper;
+        protected ArchipelagoClient _archipelago;
+        protected StardewItemManager _stardewItemManager;
 
-        public ShopStockModifier(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago)
+        public ShopStockModifier(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago, StardewItemManager stardewItemManager)
         {
             _monitor = monitor;
             _helper = helper;
             _archipelago = archipelago;
+            _stardewItemManager = stardewItemManager;
         }
 
         public abstract void OnShopStockRequested(object sender, AssetRequestedEventArgs e);
@@ -36,6 +40,12 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
             apShopItem.ItemId = id;
             apShopItem.AvailableStock = 1;
             apShopItem.IsRecipe = false;
+
+            if (apShopItem.Price <= 0 && string.IsNullOrWhiteSpace(apShopItem.TradeItemId))
+            {
+                apShopItem.Price = _stardewItemManager.GetItemByQualifiedId(item.ItemId)?.SellPrice ?? throw new Exception($"Could not find price for purchasable location {location}");
+            }
+
             return apShopItem;
         }
 

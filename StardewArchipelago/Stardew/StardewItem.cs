@@ -15,7 +15,7 @@ namespace StardewArchipelago.Stardew
 
         public StardewItem(string id, string name, int sellPrice, string displayName, string description)
         {
-            Debug.Assert(int.TryParse(id, out _));
+            // Debug.Assert(int.TryParse(id, out _));
             Id = id;
             Name = name;
             SellPrice = sellPrice;

@@ -52,15 +52,15 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony = harmony;
             _modHelper = modHelper;
             _gingerIslandPatcher = new GingerIslandPatcher(monitor, _modHelper, _harmony, _archipelago, locationChecker);
-            _toolUpgradesShopStockModifier = new ToolShopStockModifier(monitor, modHelper, archipelago);
-            _fishingRodShopStockModifier = new FishingRodShopStockModifier(monitor, modHelper, archipelago);
-            _carpenterShopStockModifier = new CarpenterShopStockModifier(monitor, modHelper, archipelago);
+            _toolUpgradesShopStockModifier = new ToolShopStockModifier(monitor, modHelper, archipelago, stardewItemManager);
+            _fishingRodShopStockModifier = new FishingRodShopStockModifier(monitor, modHelper, archipelago, stardewItemManager);
+            _carpenterShopStockModifier = new CarpenterShopStockModifier(monitor, modHelper, archipelago, stardewItemManager);
             _carpenterBuildingsModifier = new CarpenterBuildingsModifier(monitor, modHelper, archipelago);
-            _guildShopStockModifier = new AdventureGuildShopStockModifier(monitor, modHelper, archipelago);
-            _festivalShopStockModifier = new FestivalShopStockModifier(monitor, modHelper, archipelago);
+            _guildShopStockModifier = new AdventureGuildShopStockModifier(monitor, modHelper, archipelago, stardewItemManager);
+            _festivalShopStockModifier = new FestivalShopStockModifier(monitor, modHelper, archipelago, stardewItemManager);
             _cookingRecipePurchaseStockModifier = new CookingRecipePurchaseStockModifier(monitor, modHelper, archipelago, stardewItemManager);
             _craftingRecipePurchaseStockModifier = new CraftingRecipePurchaseStockModifier(monitor, modHelper, archipelago, stardewItemManager);
-            _krobusStockModifier = new KrobusStockModifier(monitor, modHelper, archipelago);
+            _krobusStockModifier = new KrobusStockModifier(monitor, modHelper, archipelago, stardewItemManager);
         }
 
         public void ReplaceAllLocationsRewardsWithChecks()
