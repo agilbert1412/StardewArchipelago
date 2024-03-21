@@ -65,7 +65,7 @@ namespace StardewArchipelago.GameModifications
             CropInjections.Initialize(monitor, archipelago, stardewItemManager);
             SecretNoteInjections.Initialize(monitor, archipelago, locationChecker);
             KentInjections.Initialize(monitor, archipelago);
-            _animalShopStockModifier = new AnimalShopStockModifier(monitor, modHelper, archipelago);
+            _animalShopStockModifier = new AnimalShopStockModifier(monitor, modHelper, archipelago, stardewItemManager);
             GoldenClockInjections.Initialize(monitor, archipelago);
             ZeldaAnimationInjections.Initialize(monitor, archipelago);
             ItemTooltipInjections.Initialize(monitor, modHelper, config, archipelago, locationChecker, nameSimplifier);

@@ -1,6 +1,7 @@
 ﻿
 using System;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -11,7 +12,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
 {
     public class FishingRodShopStockModifier : ShopStockModifier
     {
-        public FishingRodShopStockModifier(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago) : base(monitor, helper, archipelago)
+        public FishingRodShopStockModifier(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago, StardewItemManager stardewItemManager) : base(monitor, helper, archipelago, stardewItemManager)
         {
         }
 
@@ -43,7 +44,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
             for (var i = fishShopData.Items.Count - 1; i >= 0; i--)
             {
                 var item = fishShopData.Items[i];
-                if (!toolsData.ContainsKey(item.ItemId))
+                if (item.ItemId == null || !toolsData.ContainsKey(item.ItemId))
                 {
                     continue;
                 }
