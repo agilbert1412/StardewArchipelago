@@ -24,7 +24,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             _itemManager = itemManager;
         }
 
-        // public void cookedRecipe(string itemId)
+        // public void cookedRecipe(string yieldItemId)
         public static void CookedRecipe_CheckCooksanityLocation_Postfix(Farmer __instance, string itemId)
         {
             try

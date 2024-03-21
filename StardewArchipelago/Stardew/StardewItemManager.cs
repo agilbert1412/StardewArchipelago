@@ -574,14 +574,14 @@ namespace StardewArchipelago.Stardew
         {
             var fields = recipeInfo.Split("/");
             var ingredientsField = fields[0].Split(" ");
-            var ingredients = new Dictionary<int, int>();
+            var ingredients = new Dictionary<string, int>();
             for (var i = 0; i < ingredientsField.Length - 1; i += 2)
             {
-                ingredients.Add(int.Parse(ingredientsField[i]), int.Parse(ingredientsField[i+1]));
+                ingredients.Add(ingredientsField[i], int.Parse(ingredientsField[i+1]));
             }
             var unusedField = fields[1];
             var yieldField = fields[2].Split(" ");
-            var yieldItemId = int.Parse(yieldField[0]);
+            var yieldItemId = yieldField[0];
             var yieldAmount = yieldField.Length > 1 ? int.Parse(yieldField[1]) : 1;
             var unlockConditions = fields[3];
             var displayName = fields.Length > 4 ? fields[4] : recipeName;
@@ -594,14 +594,14 @@ namespace StardewArchipelago.Stardew
         {
             var fields = recipeInfo.Split("/");
             var ingredientsField = fields[0].Split(" ");
-            var ingredients = new Dictionary<int, int>();
+            var ingredients = new Dictionary<string, int>();
             for (var i = 0; i < ingredientsField.Length - 1; i += 2)
             {
-                ingredients.Add(int.Parse(ingredientsField[i]), int.Parse(ingredientsField[i + 1]));
+                ingredients.Add(ingredientsField[i], int.Parse(ingredientsField[i + 1]));
             }
             var unusedField = fields[1];
             var yieldField = fields[2].Split(" ");
-            var yieldItemId = int.Parse(yieldField[0]);
+            var yieldItemId = yieldField[0];
             var yieldAmount = yieldField.Length > 1 ? int.Parse(yieldField[1]) : 1;
             var bigCraftable = fields[3];
             var unlockConditions = fields[4];

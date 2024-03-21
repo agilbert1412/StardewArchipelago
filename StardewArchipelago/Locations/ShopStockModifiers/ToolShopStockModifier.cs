@@ -3,6 +3,7 @@ using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Locations;
 using StardewArchipelago.Constants.Vanilla;
+using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -12,7 +13,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
 {
     public class ToolShopStockModifier : ShopStockModifier
     {
-        public ToolShopStockModifier(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago) : base(monitor, modHelper, archipelago)
+        public ToolShopStockModifier(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, StardewItemManager stardewItemManager) : base(monitor, modHelper, archipelago, stardewItemManager)
         {
         }
 

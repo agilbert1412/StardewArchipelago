@@ -151,12 +151,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
         }
 
-        // public static void UpdateAvailableSpecialOrders(bool force_refresh)
-        public static bool UpdateAvailableSpecialOrders_ChangeFrequencyToBeLessRng_Prefix(bool force_refresh)
+        // public static void UpdateAvailableSpecialOrders(string orderType, bool forceRefresh)
+        public static bool UpdateAvailableSpecialOrders_ChangeFrequencyToBeLessRng_Prefix(string orderType, bool forceRefresh)
         {
             try
             {
-                UpdateAvailableSpecialOrdersBasedOnApState(force_refresh);
+                UpdateAvailableSpecialOrdersBasedOnApState(forceRefresh);
                 return false; // don't run original logic;
             }
             catch (Exception ex)
