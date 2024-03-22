@@ -1,5 +1,8 @@
-﻿using System.Linq;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using StardewValley;
+using StardewValley.Inventories;
 using StardewValley.Locations;
 using StardewValley.Objects;
 
@@ -12,7 +15,7 @@ namespace StardewArchipelago.Items
         {
             var player = Game1.player;
             var toolName = toolGenericName.Replace(" ", "_");
-            if (TryUpgradeToolInInventory(player, toolName, out var upgradedTool))
+            if (TryUpgradeToolInInventory(player.Items, toolName, out var upgradedTool))
             {
                 return upgradedTool;
             }
@@ -30,12 +33,13 @@ namespace StardewArchipelago.Items
             return null;
         }
 
-        private static bool TryUpgradeToolInInventory(Farmer player, string toolName, out Tool upgradedTool)
+        private static bool TryUpgradeToolInInventory(IList<Item> inventory, string toolName, out Tool upgradedTool)
         {
-            foreach (var playerItem in player.Items)
+            for (var i = 0; i < inventory.Count; i++)
             {
-                if (TryUpgradeCorrectTool(toolName, playerItem, out upgradedTool))
+                if (TryUpgradeCorrectTool(toolName, inventory[i], out upgradedTool))
                 {
+                    inventory[i] = upgradedTool;
                     return true;
                 }
             }
@@ -66,12 +70,9 @@ namespace StardewArchipelago.Items
                         continue;
                     }
 
-                    foreach (var chestItem in chest.Items)
+                    if (TryUpgradeToolInInventory(chest.Items, toolName, out upgradedTool))
                     {
-                        if (TryUpgradeCorrectTool(toolName, chestItem, out upgradedTool))
-                        {
-                            return true;
-                        }
+                        return true;
                     }
                 }
             }
@@ -79,23 +80,17 @@ namespace StardewArchipelago.Items
 
             if (Game1.getLocationFromName("FarmHouse") is FarmHouse farmHouse)
             {
-                foreach (var fridgeItem in farmHouse.GetFridge(false).Items)
+                if (TryUpgradeToolInInventory(farmHouse.GetFridge(false).Items, toolName, out upgradedTool))
                 {
-                    if (TryUpgradeCorrectTool(toolName, fridgeItem, out upgradedTool))
-                    {
-                        return true;
-                    }
+                    return true;
                 }
             }
 
             if (Game1.getLocationFromName("IslandFarmHouse") is IslandFarmHouse islandHouse)
             {
-                foreach (var fridgeItem in islandHouse.GetFridge(false).Items)
+                if (TryUpgradeToolInInventory(islandHouse.GetFridge(false).Items, toolName, out upgradedTool))
                 {
-                    if (TryUpgradeCorrectTool(toolName, fridgeItem, out upgradedTool))
-                    {
-                        return true;
-                    }
+                    return true;
                 }
             }
 
@@ -105,12 +100,9 @@ namespace StardewArchipelago.Items
 
         private static bool TryUpgradeToolInLostAndFoundBox(Farmer player, string toolName, out Tool upgradedTool)
         {
-            foreach (var lostAndFoundItem in player.team.returnedDonations)
+            if (TryUpgradeToolInInventory(player.team.returnedDonations, toolName, out upgradedTool))
             {
-                if (TryUpgradeCorrectTool(toolName, lostAndFoundItem, out upgradedTool))
-                {
-                    return true;
-                }
+                return true;
             }
 
             upgradedTool = null;
@@ -125,15 +117,17 @@ namespace StardewArchipelago.Items
                 return false;
             }
 
-            if (toolToUpgrade.UpgradeLevel < 4)
+            foreach (var (toolId, toolData) in Game1.toolData)
             {
-                toolToUpgrade.UpgradeLevel++;
+                if (toolData.ConventionalUpgradeFrom == item.QualifiedItemId)
+                {
+                    upgradedTool = (Tool)ItemRegistry.Create("(T)" + toolId);
+                    return true;
+                }
             }
 
-            {
-                upgradedTool = toolToUpgrade;
-                return true;
-            }
+            upgradedTool = null;
+            return false;
         }
     }
 }
