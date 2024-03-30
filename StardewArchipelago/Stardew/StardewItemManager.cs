@@ -137,14 +137,14 @@ namespace StardewArchipelago.Stardew
             throw new ArgumentException($"Item not found: {itemId}");
         }
 
-        public StardewObject GetObjectByName(string itemName)
+        public StardewObject GetObjectByName(string objectExists)
         {
-            if (_objectsByName.ContainsKey(itemName))
+            if (_objectsByName.ContainsKey(objectExists))
             {
-                return _objectsByName[itemName];
+                return _objectsByName[objectExists];
             }
 
-            throw new ArgumentException($"Item not found: {itemName}");
+            throw new ArgumentException($"Item not found: {objectExists}");
         }
 
         public BigCraftable GetBigCraftableById(string itemId)
@@ -281,6 +281,8 @@ namespace StardewArchipelago.Stardew
                 _itemsByQualifiedId.Add(stardewItem.GetQualifiedId(), stardewItem);
                 AddItemAndAliasesToNamesDictionary(stardewItem);
             }
+
+            AddFlavorsToNamesDictionary();
         }
 
         private void AddItemAndAliasesToNamesDictionary(StardewObject stardewItem)
@@ -301,6 +303,19 @@ namespace StardewArchipelago.Stardew
             }
 
             _objectsByName.Add(stardewItem.Name, stardewItem);
+        }
+
+        private void AddFlavorsToNamesDictionary()
+        {
+            foreach (var name in _objectsByName.Keys.ToArray())
+            {
+                if (!_objectsByName[name].IsFlavorable)
+                {
+                    continue;
+                }
+
+                int a = 5;
+            }
         }
 
         private void InitializeBigCraftables()
