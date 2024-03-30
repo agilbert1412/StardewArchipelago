@@ -10,19 +10,15 @@ namespace StardewArchipelago.Stardew
         public int Edibility { get; private set; }
         public string Type { get; private set; }
         public int Category { get; private set; }
-        public string Misc1 { get; private set; }
-        public string Misc2 { get; private set; }
-        public string BuffDuration { get; private set; }
+        public bool IsFlavorable { get; private set; }
 
-        public StardewObject(string id, string name, int sellPrice, int edibility, string type, int category, string displayName, string description, string misc1 = "", string misc2 = "", string buffDuration = "")
+        public StardewObject(string id, string name, int sellPrice, int edibility, string type, int category, string displayName, string description, bool isFlavorable = false)
         : base(id, name, sellPrice, displayName, description)
         {
             Edibility = edibility;
             Type = type;
             Category = category;
-            Misc1 = misc1;
-            Misc2 = misc2;
-            BuffDuration = buffDuration;
+            IsFlavorable = isFlavorable;
         }
 
         public override Item PrepareForGivingToFarmer(int amount = 1)
