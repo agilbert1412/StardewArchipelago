@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection.Metadata.Ecma335;
+using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
 using StardewValley;
@@ -75,11 +75,13 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             }
         }
 
-        private static void DoZeldaAnimation(Farmer farmer,Item item, bool showMessage)
+        private static void DoZeldaAnimation(Farmer farmer, Item item, bool showMessage)
         {
             farmer.completelyStopAnimatingOrDoingAction();
             if (showMessage)
+            {
                 DelayedAction.playSoundAfterDelay("getNewSpecialItem", 750);
+            }
             farmer.faceDirection(2);
             farmer.freezePause = 4000;
             farmer.FarmerSprite.animateOnce(new FarmerSprite.AnimationFrame[3]
@@ -92,6 +94,10 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             });
             farmer.mostRecentlyGrabbedItem = item;
             farmer.canMove = false;
+            if (Game1.random.NextDouble() < 0.05)
+            {
+                Game1.chatBox.addMessage("April's Fool!", Color.Gold);
+            }
         }
 
         public static bool IsPrankDay()
@@ -108,11 +114,29 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         {
             if (IsPrankDay())
             {
-                _shouldPrankOnFishDay = !_shouldPrankOnFishDay;
+                if (_shouldPrankOnFishDay)
+                {
+                    _shouldPrankOnFishDay = false;
+                    Game1.chatBox.addMessage("Oh, the fun's already over?", Color.Gold);
+                }
+                else
+                {
+                    _shouldPrankOnFishDay = true;
+                    Game1.chatBox.addMessage("Welcome back", Color.Gold);
+                }
             }
             else
             {
-                _shouldPrankOnOtherDays = !_shouldPrankOnOtherDays;
+                if (_shouldPrankOnOtherDays)
+                {
+                    _shouldPrankOnOtherDays = false;
+                    Game1.chatBox.addMessage("That's what I thought.", Color.Gold);
+                }
+                else
+                {
+                    _shouldPrankOnOtherDays = true;
+                    Game1.chatBox.addMessage("Really? You actually like this?", Color.Gold);
+                }
             }
         }
     }
