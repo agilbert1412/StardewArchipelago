@@ -5,6 +5,7 @@ using HarmonyLib;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago.Gifting;
 using StardewArchipelago.GameModifications;
+using StardewArchipelago.GameModifications.CodeInjections;
 using StardewArchipelago.Goals;
 using StardewArchipelago.Items.Traps;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
@@ -159,6 +160,12 @@ namespace StardewArchipelago.Archipelago
                 return true;
             }
 
+            if (HandlePrankCommand(messageLower))
+            {
+                _lastCommand = message;
+                return true;
+            }
+
             if (HandleHelpCommand(messageLower))
             {
                 return true;
@@ -293,6 +300,17 @@ namespace StardewArchipelago.Archipelago
             }
 
             _archipelago.Sync();
+            return true;
+        }
+
+        private static bool HandlePrankCommand(string message)
+        {
+            if (message != $"{COMMAND_PREFIX}fish" && message != $"{COMMAND_PREFIX}prank" && message != $"{COMMAND_PREFIX}stop")
+            {
+                return false;
+            }
+
+            ZeldaAnimationInjections.TogglePrank();
             return true;
         }
 

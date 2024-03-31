@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.Xna.Framework;
+using System.Reflection.Metadata.Ecma335;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Extensions;
 using StardewModdingAPI;
 using StardewValley;
-using StardewValley.Buildings;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
 {
@@ -13,11 +11,15 @@ namespace StardewArchipelago.GameModifications.CodeInjections
     {
         private static IMonitor _monitor;
         private static ArchipelagoClient _archipelago;
+        private static bool _shouldPrankOnFishDay;
+        private static bool _shouldPrankOnOtherDays;
 
         public static void Initialize(IMonitor monitor, ArchipelagoClient archipelago)
         {
             _monitor = monitor;
             _archipelago = archipelago;
+            _shouldPrankOnFishDay = true;
+            _shouldPrankOnOtherDays = false;
         }
 
         // public void holdUpItemThenMessage(Item item, bool showMessage = true)
@@ -26,7 +28,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             try
             {
                 // We skip this whole method when skipping hold up animations is true
-                return !ModEntry.Instance.Config.SkipHoldUpAnimations && !IsPrankDay();
+                return !ModEntry.Instance.Config.SkipHoldUpAnimations || ShouldPrank();
             }
             catch (Exception ex)
             {
@@ -40,7 +42,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         {
             try
             {
-                if (!IsPrankDay())
+                if (!ShouldPrank())
                 {
                     return;
                 }
@@ -59,7 +61,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         {
             try
             {
-                if (!IsPrankDay())
+                if (!ShouldPrank())
                 {
                     return;
                 }
@@ -92,9 +94,26 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             farmer.canMove = false;
         }
 
-        private static bool IsPrankDay()
+        public static bool IsPrankDay()
         {
             return DateTime.Now.Month == 4 && DateTime.Now.Day == 1;
+        }
+
+        internal static bool ShouldPrank()
+        {
+            return IsPrankDay() ? _shouldPrankOnFishDay : _shouldPrankOnOtherDays;
+        }
+
+        internal static void TogglePrank()
+        {
+            if (IsPrankDay())
+            {
+                _shouldPrankOnFishDay = !_shouldPrankOnFishDay;
+            }
+            else
+            {
+                _shouldPrankOnOtherDays = !_shouldPrankOnOtherDays;
+            }
         }
     }
 }
