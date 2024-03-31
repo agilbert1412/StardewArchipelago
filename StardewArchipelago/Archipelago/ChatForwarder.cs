@@ -255,7 +255,10 @@ namespace StardewArchipelago.Archipelago
 
         private static bool HandlePrankCommand(string message)
         {
-            if (message != $"{COMMAND_PREFIX}fish" && message != $"{COMMAND_PREFIX}prank" && message != $"{COMMAND_PREFIX}stop")
+            if (message != $"{COMMAND_PREFIX}fish" &&
+                message != $"{COMMAND_PREFIX}prank" &&
+                message != $"{COMMAND_PREFIX}stop" &&
+                message != $"{COMMAND_PREFIX}zelda")
             {
                 return false;
             }
