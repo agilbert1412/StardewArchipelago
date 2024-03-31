@@ -308,7 +308,12 @@ namespace StardewArchipelago.Archipelago
             if (message != $"{COMMAND_PREFIX}fish" &&
                 message != $"{COMMAND_PREFIX}prank" &&
                 message != $"{COMMAND_PREFIX}stop" &&
-                message != $"{COMMAND_PREFIX}zelda")
+                message != $"{COMMAND_PREFIX}zelda" &&
+                message != $"{COMMAND_PREFIX}april" &&
+                message != $"{COMMAND_PREFIX}fool" &&
+                message != $"{COMMAND_PREFIX}fools" &&
+                message != $"{COMMAND_PREFIX}aprilfool" &&
+                message != $"{COMMAND_PREFIX}aprilsfool")
             {
                 return false;
             }
