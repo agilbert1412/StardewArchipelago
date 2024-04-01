@@ -47,7 +47,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     return;
                 }
 
-                DoZeldaAnimation(__instance, item, true);
+                DoPrankZeldaAnimation(__instance, item, true);
             }
             catch (Exception ex)
             {
@@ -66,7 +66,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     return;
                 }
 
-                DoZeldaAnimation(__instance, item, true);
+                DoPrankZeldaAnimation(__instance, item, true);
             }
             catch (Exception ex)
             {
@@ -75,8 +75,13 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             }
         }
 
-        private static void DoZeldaAnimation(Farmer farmer, Item item, bool showMessage)
+        private static void DoPrankZeldaAnimation(Farmer farmer, Item item, bool showMessage)
         {
+            if (Game1.random.NextDouble() > 0.05)
+            {
+                return;
+            }
+
             farmer.completelyStopAnimatingOrDoingAction();
             if (showMessage)
             {
@@ -94,9 +99,10 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             });
             farmer.mostRecentlyGrabbedItem = item;
             farmer.canMove = false;
-            if (Game1.random.NextDouble() < 0.05)
+
+            if (Game1.random.NextDouble() < 0.2)
             {
-                Game1.chatBox.addMessage("April's Fool!", Color.Gold);
+                Game1.chatBox.addMessage("April's Fool! use !!fool to disable", Color.Gold);
             }
         }
 
