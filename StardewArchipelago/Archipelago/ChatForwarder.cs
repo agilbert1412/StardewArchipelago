@@ -137,7 +137,6 @@ namespace StardewArchipelago.Archipelago
 
             if (HandlePrankCommand(messageLower))
             {
-                _lastCommand = message;
                 return true;
             }
 
