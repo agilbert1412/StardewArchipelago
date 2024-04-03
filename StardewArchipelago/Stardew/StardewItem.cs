@@ -8,7 +8,7 @@ namespace StardewArchipelago.Stardew
     public abstract class StardewItem
     {
         public string Id { get; private set; }
-        public virtual string Name { get; protected set; }
+        public string Name { get; protected set; }
         public int SellPrice { get; private set; }
         public string DisplayName { get; private set; }
         public string Description { get; private set; }

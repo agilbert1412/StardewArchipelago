@@ -20,11 +20,11 @@ namespace StardewArchipelago.Bundles
         {
             _modHelper = modHelper;
             var bundlesDictionary = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, Dictionary<string, string>>>>(bundlesJson);
-            //BundleRooms = new BundleRooms(itemManager, bundlesDictionary);
-            //_currentBundlesData = BundleRooms.ToStardewStrings();
-            //_modHelper.Events.Content.AssetRequested += OnBundlesRequested;
-            //modHelper.GameContent.InvalidateCache("Data/Bundles");
-            //ReplaceAllBundles();
+            BundleRooms = new BundleRooms(itemManager, bundlesDictionary);
+            _currentBundlesData = BundleRooms.ToStardewStrings();
+            _modHelper.Events.Content.AssetRequested += OnBundlesRequested;
+            modHelper.GameContent.InvalidateCache("Data/Bundles");
+            ReplaceAllBundles();
         }
 
         public void CleanEvents()
