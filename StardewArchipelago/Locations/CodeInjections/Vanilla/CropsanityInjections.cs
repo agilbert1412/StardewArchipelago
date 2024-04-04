@@ -36,7 +36,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             try
             {
-                if (!__result && !__instance.fullyGrown.Value)
+                if (!__result && !__instance.fullyGrown.Value || __instance.indexOfHarvest.Value == null)
                 {
                     return;
                 }

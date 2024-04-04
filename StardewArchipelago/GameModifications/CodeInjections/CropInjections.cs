@@ -41,7 +41,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
                 var randomSeed = GetWeigthedRandomUnlockedCrop(Game1.season);
                 __result = randomSeed;
-                return true; // run original logic
+                return false; // don't run original logic
             }
             catch (Exception ex)
             {
@@ -101,7 +101,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
         private static bool SeedCanBePlantedHere(Item x, GameLocation location, Season season, Dictionary<string, CropData> cropData)
         {
-            if (!cropData.ContainsKey(x.QualifiedItemId))
+            if (!cropData.ContainsKey(x.ItemId))
             {
                 return false;
             }
@@ -111,18 +111,18 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 return true;
             }
 
-            var seedSeasons = cropData[x.QualifiedItemId].Seasons;
+            var seedSeasons = cropData[x.ItemId].Seasons;
             return seedSeasons.Contains(season);
         }
 
         private static bool SeedRegrows(Item x, Dictionary<string, CropData> cropData)
         {
-            if (!cropData.ContainsKey(x.QualifiedItemId))
+            if (!cropData.ContainsKey(x.ItemId))
             {
                 return false;
             }
 
-            return cropData[x.QualifiedItemId].RegrowDays != -1;
+            return cropData[x.ItemId].RegrowDays != -1;
         }
     }
 }
