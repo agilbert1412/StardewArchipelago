@@ -48,7 +48,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     itemId = ObjectIds.SUNFLOWER; // Sunflower instead of sunflower seeds
                 }
 
-                if (!_itemManager.ObjectExistById(itemId))
+                if (!_itemManager.ObjectExistsById(itemId))
                 {
                     _monitor.Log($"Unrecognized Cropsanity Crop: [{itemId}]", LogLevel.Error);
                     return;
