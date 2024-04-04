@@ -117,7 +117,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
         {
             var englishQuests = DataLoader.Quests(_englishContentManager);
 
-            if (!englishQuests.ContainsKey(questId))
+            if (string.IsNullOrWhiteSpace(questId) || !englishQuests.ContainsKey(questId))
             {
                 return defaultName;
             }
