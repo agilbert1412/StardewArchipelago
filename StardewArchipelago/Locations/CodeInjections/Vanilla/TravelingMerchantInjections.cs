@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Archipelago.MultiClient.Net.Models;
+using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.GameModifications;
@@ -14,6 +15,7 @@ using StardewValley.Locations;
 using StardewValley.Menus;
 using xTile.Dimensions;
 using Object = StardewValley.Object;
+using Rectangle = xTile.Dimensions.Rectangle;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -108,28 +110,25 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
         }
 
-        public static void UpdateTravelingMerchantForToday(Forest __instance, int dayOfMonth)
+        public static void UpdateTravelingMerchantForToday(Forest forest, int dayOfMonth)
         {
             if (IsTravelingMerchantDay(dayOfMonth, out _))
             {
-                __instance.travelingMerchantDay = true;
-                __instance.travelingMerchantBounds.Add(new Microsoft.Xna.Framework.Rectangle(1472, 640, 492, 116));
-                __instance.travelingMerchantBounds.Add(new Microsoft.Xna.Framework.Rectangle(1652, 744, 76, 48));
-                __instance.travelingMerchantBounds.Add(new Microsoft.Xna.Framework.Rectangle(1812, 744, 104, 48));
-                foreach (var travelingMerchantBound in __instance.travelingMerchantBounds)
+                forest.travelingMerchantDay = true;
+                var merchantCartTile = forest.GetTravelingMerchantCartTile();
+                forest.travelingMerchantBounds.Clear();
+                forest.travelingMerchantBounds.Add(new Microsoft.Xna.Framework.Rectangle(merchantCartTile.X * 64, merchantCartTile.Y * 64, 492, 116));
+                forest.travelingMerchantBounds.Add(new Microsoft.Xna.Framework.Rectangle(merchantCartTile.X * 64 + 180, merchantCartTile.Y * 64 + 104, 76, 48));
+                forest.travelingMerchantBounds.Add(new Microsoft.Xna.Framework.Rectangle(merchantCartTile.X * 64 + 340, merchantCartTile.Y * 64 + 104, 104, 48));
+                foreach (var travelingMerchantBound in forest.travelingMerchantBounds)
                 {
-                    Utility.clearObjectsInArea(travelingMerchantBound, __instance);
-                }
-
-                if (Game1.IsMasterGame && Game1.netWorldState.Value.VisitsUntilY1Guarantee >= 0 && (dayOfMonth % 7 % 5 != 0))
-                {
-                    --Game1.netWorldState.Value.VisitsUntilY1Guarantee;
+                    Utility.clearObjectsInArea(travelingMerchantBound, (GameLocation)forest);
                 }
             }
             else
             {
-                __instance.travelingMerchantBounds.Clear();
-                __instance.travelingMerchantDay = false;
+                forest.travelingMerchantDay = false;
+                forest.travelingMerchantBounds.Clear();
             }
         }
 
