@@ -1,10 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.GameModifications.EntranceRandomizer;
 using StardewValley;
 using StardewValley.Locations;
+using StardewValley.Buildings;
 using xTile.ObjectModel;
 
 namespace StardewArchipelago.Extensions
@@ -91,6 +92,8 @@ namespace StardewArchipelago.Extensions
             warpPoints.AddRange(GetAllTouchWarpsTo(origin, destinationName).Select(warp => new Point(warp.X, warp.Y)));
             warpPoints.AddRange(GetAllTouchActionWarpsTo(origin, destinationName).Select(x => new Point(x.Key.X, x.Key.Y)));
             warpPoints.AddRange(GetDoorWarpPoints(origin, destinationName));
+            warpPoints.AddRange(GetBuildingWarpPoints(origin, destinationName));
+
             return warpPoints.Distinct().ToList();
         }
 
@@ -137,6 +140,14 @@ namespace StardewArchipelago.Extensions
                     if (warp.X == warpPointLocation.X && warp.Y == warpPointLocation.Y)
                     {
                         return new Point(warpTarget.X, warpTarget.Y);
+                    }
+                }
+
+                foreach (var warp in GetBuildingWarpPoints(origin, destinationName))
+                {
+                    if (warp.X == warpPointLocation.X && warp.Y == warpPointLocation.Y)
+                    {
+                        return warp;
                     }
                 }
             }
@@ -301,6 +312,18 @@ namespace StardewArchipelago.Extensions
                 if (pair.Value.Equals(destinationName, StringComparison.OrdinalIgnoreCase))
                 {
                     yield return pair.Key;
+                }
+            }
+        }
+
+        private static IEnumerable<Point> GetBuildingWarpPoints(GameLocation origin, string destinationName)
+        {
+            foreach (Building building in origin.buildings)
+            {
+                GameLocation buildingInterior = building.GetIndoors();
+                if (buildingInterior != null)
+                {
+                    yield return building.getPointForHumanDoor();
                 }
             }
         }
