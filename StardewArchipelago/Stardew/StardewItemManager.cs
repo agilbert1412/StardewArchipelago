@@ -77,7 +77,7 @@ namespace StardewArchipelago.Stardew
             return _itemsByQualifiedId.ContainsKey(itemId) ? _itemsByQualifiedId[itemId] : null;
         }
 
-        public bool ObjectExistByIds(string itemId)
+        public bool ObjectExistById(string itemId)
         {
             return _objectsById.ContainsKey(itemId);
         }
