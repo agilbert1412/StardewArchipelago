@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Goals;
 using StardewArchipelago.Stardew;
 using StardewArchipelago.Stardew.Ids.Vanilla;
@@ -13,15 +14,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
     {
         private static readonly string[] _fishedTrash = new[]
         {
-            ObjectIds.JOJA_COLA, ObjectIds.TRASH, ObjectIds.DRIFTWOOD,
-            ObjectIds.BROKEN_GLASSES, ObjectIds.BROKEN_CD, ObjectIds.SOGGY_NEWSPAPER,
+            QualifiedItemIds.JOJA_COLA, QualifiedItemIds.TRASH, QualifiedItemIds.DRIFTWOOD,
+            QualifiedItemIds.BROKEN_GLASSES, QualifiedItemIds.BROKEN_CD, QualifiedItemIds.SOGGY_NEWSPAPER,
         };
 
         private static readonly string[] _fishsanityExceptions = new[]
         {
-            ObjectIds.GREEN_ALGAE, ObjectIds.WHITE_ALGAE, ObjectIds.SEAWEED, ObjectIds.ORNATE_NECKLACE, ObjectIds.GOLDEN_WALNUT, 
-            ObjectIds.SECRET_NOTE, ObjectIds.FOSSILIZED_SPINE, ObjectIds.PEARL, ObjectIds.SNAKE_SKULL, ObjectIds.JOURNAL_SCRAP,
-            ObjectIds.QI_BEAN,
+            QualifiedItemIds.GREEN_ALGAE, QualifiedItemIds.WHITE_ALGAE, QualifiedItemIds.SEAWEED, QualifiedItemIds.ORNATE_NECKLACE,
+            QualifiedItemIds.GOLDEN_WALNUT, QualifiedItemIds.SECRET_NOTE, QualifiedItemIds.FOSSILIZED_SPINE, QualifiedItemIds.PEARL,
+            QualifiedItemIds.SNAKE_SKULL, QualifiedItemIds.JOURNAL_SCRAP, QualifiedItemIds.QI_BEAN,
         };
         public const string FISHSANITY_PREFIX = "Fishsanity: ";
 
@@ -40,17 +41,18 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             _itemManager = itemManager;
         }
 
-        // public bool caughtFish(string yieldItemId, int size, bool from_fish_pond = false, int numberCaught = 1)
+        // public bool caughtFish(string itemId, int size, bool from_fish_pond = false, int numberCaught = 1)
         public static void CaughtFish_Fishsanity_Postfix(Farmer __instance, string itemId, int size, bool from_fish_pond, int numberCaught, ref bool __result)
         {
             try
             {
-                if (from_fish_pond || (IsFishedTrash(itemId)) || !_itemManager.ObjectExists(itemId))
+                // itemId is qualified
+                if (from_fish_pond || (IsFishedTrash(itemId)) || !_itemManager.ItemExistsByQualifiedId(itemId))
                 {
                     return;
                 }
 
-                var fish = _itemManager.GetObjectById(itemId);
+                var fish = _itemManager.GetItemByQualifiedId(itemId);
                 var fishName = fish.Name;
                 var apLocation = $"{FISHSANITY_PREFIX}{fishName}";
                 if (_archipelago.GetLocationId(apLocation) > -1)

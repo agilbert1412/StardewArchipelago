@@ -72,12 +72,17 @@ namespace StardewArchipelago.Stardew
                    _weaponsById.ContainsKey(itemId);
         }
 
+        public bool ItemExistsByQualifiedId(string itemId)
+        {
+            return _itemsByQualifiedId.ContainsKey(itemId);
+        }
+
         public StardewItem GetItemByQualifiedId(string itemId)
         {
             return _itemsByQualifiedId.ContainsKey(itemId) ? _itemsByQualifiedId[itemId] : null;
         }
 
-        public bool ObjectExistById(string itemId)
+        public bool ObjectExistsById(string itemId)
         {
             return _objectsById.ContainsKey(itemId);
         }

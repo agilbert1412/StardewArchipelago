@@ -89,6 +89,22 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string WHEAT_SEEDS = QualifiedObjectId(ObjectIds.WHEAT_SEEDS);
         public static readonly string WINTER_SEEDS = QualifiedObjectId(ObjectIds.WINTER_SEEDS);
         public static readonly string YAM_SEEDS = QualifiedObjectId(ObjectIds.YAM_SEEDS);
+        public static readonly string TRASH = QualifiedObjectId(ObjectIds.TRASH);
+        public static readonly string DRIFTWOOD = QualifiedObjectId(ObjectIds.DRIFTWOOD);
+        public static readonly string BROKEN_GLASSES = QualifiedObjectId(ObjectIds.BROKEN_GLASSES);
+        public static readonly string BROKEN_CD = QualifiedObjectId(ObjectIds.BROKEN_CD);
+        public static readonly string SOGGY_NEWSPAPER = QualifiedObjectId(ObjectIds.SOGGY_NEWSPAPER);
+        public static readonly string GREEN_ALGAE = QualifiedObjectId(ObjectIds.GREEN_ALGAE);
+        public static readonly string WHITE_ALGAE = QualifiedObjectId(ObjectIds.WHITE_ALGAE);
+        public static readonly string SEAWEED = QualifiedObjectId(ObjectIds.SEAWEED);
+        public static readonly string ORNATE_NECKLACE = QualifiedObjectId(ObjectIds.ORNATE_NECKLACE);
+        public static readonly string GOLDEN_WALNUT = QualifiedObjectId(ObjectIds.GOLDEN_WALNUT);
+        public static readonly string SECRET_NOTE = QualifiedObjectId(ObjectIds.SECRET_NOTE);
+        public static readonly string FOSSILIZED_SPINE = QualifiedObjectId(ObjectIds.FOSSILIZED_SPINE);
+        public static readonly string PEARL = QualifiedObjectId(ObjectIds.PEARL);
+        public static readonly string SNAKE_SKULL = QualifiedObjectId(ObjectIds.SNAKE_SKULL);
+        public static readonly string JOURNAL_SCRAP = QualifiedObjectId(ObjectIds.JOURNAL_SCRAP);
+        public static readonly string QI_BEAN = QualifiedObjectId(ObjectIds.QI_BEAN);
 
         private static string QualifiedObjectId(string objectId)
         {
