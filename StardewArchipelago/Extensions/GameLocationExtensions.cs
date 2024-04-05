@@ -5,7 +5,6 @@ using Microsoft.Xna.Framework;
 using StardewArchipelago.GameModifications.EntranceRandomizer;
 using StardewValley;
 using StardewValley.Locations;
-using StardewValley.Buildings;
 using xTile.ObjectModel;
 
 namespace StardewArchipelago.Extensions
@@ -92,8 +91,7 @@ namespace StardewArchipelago.Extensions
             warpPoints.AddRange(GetAllTouchWarpsTo(origin, destinationName).Select(warp => new Point(warp.X, warp.Y)));
             warpPoints.AddRange(GetAllTouchActionWarpsTo(origin, destinationName).Select(x => new Point(x.Key.X, x.Key.Y)));
             warpPoints.AddRange(GetDoorWarpPoints(origin, destinationName));
-            warpPoints.AddRange(GetBuildingWarpPoints(origin, destinationName));
-
+            warpPoints.AddRange(GetBuildingWarps(origin).Select(x => new Point(x.Key.X, x.Key.Y)));
             return warpPoints.Distinct().ToList();
         }
 
@@ -143,11 +141,11 @@ namespace StardewArchipelago.Extensions
                     }
                 }
 
-                foreach (var warp in GetBuildingWarpPoints(origin, destinationName))
+                foreach (var (warp, warpTarget) in GetBuildingWarps(origin))
                 {
                     if (warp.X == warpPointLocation.X && warp.Y == warpPointLocation.Y)
                     {
-                        return warp;
+                        return new Point(warpTarget.X, warpTarget.Y);
                     }
                 }
             }
@@ -316,18 +314,6 @@ namespace StardewArchipelago.Extensions
             }
         }
 
-        private static IEnumerable<Point> GetBuildingWarpPoints(GameLocation origin, string destinationName)
-        {
-            foreach (Building building in origin.buildings)
-            {
-                GameLocation buildingInterior = building.GetIndoors();
-                if (buildingInterior != null)
-                {
-                    yield return building.getPointForHumanDoor();
-                }
-            }
-        }
-
         private static bool TryGetDoorWarpPointTarget(GameLocation origin, Point warpPointLocation, string targetDestinationName, out Point warpPointTarget)
         {
             foreach (var (warpPoint, destinationName) in origin.doors.Pairs)
@@ -396,6 +382,29 @@ namespace StardewArchipelago.Extensions
             }
 
             return specialTriggerWarps;
+        }
+
+        private static Dictionary<Point, Point> GetBuildingWarps(GameLocation origin)
+        {
+            var buildingWarps = new Dictionary<Point, Point>();
+            foreach (var building in origin.buildings)
+            {
+                var interior = building.GetIndoors();
+                if (interior == null)
+                {
+                    continue;
+                }
+
+                foreach (var warp in interior.warps)
+                {
+                    if (warp.TargetName == origin.Name)
+                    {
+                        buildingWarps.Add(new Point(warp.TargetX, warp.TargetY), new Point(warp.X, warp.Y));
+                    }
+                }
+            }
+
+            return buildingWarps;
         }
 
         public static Point GetClosestWarpPointTo(this GameLocation origin, string destinationName, Point currentLocation)
