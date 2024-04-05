@@ -57,16 +57,18 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             _flairOverride = new Dictionary<ISalable, string>();
         }
 
-        public static void DayUpdate_IsTravelingMerchantDay_Postfix(Forest __instance, int dayOfMonth)
+        // public bool ShouldTravelingMerchantVisitToday()
+        public static bool ShouldTravelingMerchantVisitToday_ArchipelagoDays_Prefix(Forest __instance, ref bool __result)
         {
             try
             {
-                UpdateTravelingMerchantForToday(__instance, dayOfMonth);
+                __result = IsTravelingMerchantDay(Game1.dayOfMonth);
+                return false; // don't run original logic
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(DayUpdate_IsTravelingMerchantDay_Postfix)}:\n{ex}", LogLevel.Error);
-                return;
+                _monitor.Log($"Failed in {nameof(ShouldTravelingMerchantVisitToday_ArchipelagoDays_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
             }
         }
 
@@ -92,8 +94,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     return false; // don't run original logic
                 }
 
-                var isTravelingMerchantDay =
-                    IsTravelingMerchantDay(Game1.dayOfMonth, out var sendingPlayer);
+                var isTravelingMerchantDay = IsTravelingMerchantDay(Game1.dayOfMonth);
 
                 if (!isTravelingMerchantDay)
                 {
@@ -107,28 +108,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 _monitor.Log($"Failed in {nameof(NightMarketCheckAction_IsTravelingMerchantDay_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
-            }
-        }
-
-        public static void UpdateTravelingMerchantForToday(Forest forest, int dayOfMonth)
-        {
-            if (IsTravelingMerchantDay(dayOfMonth, out _))
-            {
-                forest.travelingMerchantDay = true;
-                var merchantCartTile = forest.GetTravelingMerchantCartTile();
-                forest.travelingMerchantBounds.Clear();
-                forest.travelingMerchantBounds.Add(new Microsoft.Xna.Framework.Rectangle(merchantCartTile.X * 64, merchantCartTile.Y * 64, 492, 116));
-                forest.travelingMerchantBounds.Add(new Microsoft.Xna.Framework.Rectangle(merchantCartTile.X * 64 + 180, merchantCartTile.Y * 64 + 104, 76, 48));
-                forest.travelingMerchantBounds.Add(new Microsoft.Xna.Framework.Rectangle(merchantCartTile.X * 64 + 340, merchantCartTile.Y * 64 + 104, 104, 48));
-                foreach (var travelingMerchantBound in forest.travelingMerchantBounds)
-                {
-                    Utility.clearObjectsInArea(travelingMerchantBound, (GameLocation)forest);
-                }
-            }
-            else
-            {
-                forest.travelingMerchantDay = false;
-                forest.travelingMerchantBounds.Clear();
             }
         }
 
@@ -446,16 +425,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             return (int)Math.Round(price * priceMultiplier, MidpointRounding.ToEven);
         }
 
-        public static bool IsTravelingMerchantDay(int dayOfMonth, out string playerName)
+        public static bool IsTravelingMerchantDay(int dayOfMonth)
+        {
+            return IsTravelingMerchantDay(dayOfMonth, out _);
+        }
+
+        public static bool IsTravelingMerchantDay(int dayOfMonth, out string sendingPlayerName)
         {
             var dayOfWeek = Days.GetDayOfWeekName(dayOfMonth);
             var requiredAPItemToSeeMerchantToday = string.Format(AP_MERCHANT_DAYS, dayOfWeek);
-            var hasReceivedToday = _archipelago.HasReceivedItem(requiredAPItemToSeeMerchantToday, out playerName);
-            if (!hasReceivedToday)
-            {
-                // Scout the salable
-            }
-
+            var hasReceivedToday = _archipelago.HasReceivedItem(requiredAPItemToSeeMerchantToday, out sendingPlayerName);
             return hasReceivedToday;
         }
 
