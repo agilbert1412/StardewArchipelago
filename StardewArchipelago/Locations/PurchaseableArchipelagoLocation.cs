@@ -18,6 +18,7 @@ namespace StardewArchipelago.Locations
     {
         private const string ARCHIPELAGO_PREFIX = "Archipelago: ";
         private const string ARCHIPELAGO_SHORT_PREFIX = "AP: ";
+        private const string ARCHIPELAGO_NO_PREFIX = "";
         public const string EXTRA_MATERIALS_KEY = "Extra Materials";
         private Texture2D _archipelagoTexture;
 
@@ -63,7 +64,7 @@ namespace StardewArchipelago.Locations
 
         public PurchaseableArchipelagoLocation(string locationDisplayName, string locationName, IMonitor monitor, IModHelper modHelper, LocationChecker locationChecker, ArchipelagoClient archipelago, Hint[] myActiveHints, Action purchaseCallback = null)
         {
-            var prefix = locationDisplayName.Length < 18 ? ARCHIPELAGO_PREFIX : ARCHIPELAGO_SHORT_PREFIX;
+            var prefix = locationDisplayName.Length < 18 ? ARCHIPELAGO_PREFIX : ARCHIPELAGO_NO_PREFIX;
             _locationDisplayName = $"{prefix}{locationDisplayName}";
             Name = _locationDisplayName;
             LocationName = locationName;
