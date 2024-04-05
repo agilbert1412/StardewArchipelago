@@ -27,13 +27,14 @@ namespace StardewArchipelago.Stardew
         {
             var communityCenter = GetCommunityCenter();
             var completedBundles = new List<string>();
-            foreach (var (key, bundleName) in Game1.netWorldState.Value.BundleData)
+            foreach (var (key, bundleData) in Game1.netWorldState.Value.BundleData)
             {
                 var splitKey = key.Split('/');
                 var bundleId = Convert.ToInt32(splitKey[1]);
                 var isCompleted = IsBundleComplete(communityCenter, bundleId);
                 if (isCompleted)
                 {
+                    var bundleName = bundleData.Split("/").First();
                     completedBundles.Add(bundleName);
                 }
             }
