@@ -34,7 +34,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
         {
             try
             {
-                Game1.DrawDialogue(__instance.Gil, Game1.content.LoadString("Characters\\Dialogue\\Gil:Snoring"));
+                Game1.DrawDialogue(__instance.Gil, "Characters\\Dialogue\\Gil:Snoring");
                 return false; // don't run original logic
             }
             catch (Exception ex)
