@@ -591,7 +591,7 @@ namespace StardewArchipelago.Locations.Patcher
         {
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Forest), nameof(Forest.ShouldTravelingMerchantVisitToday)),
-                postfix: new HarmonyMethod(typeof(TravelingMerchantInjections), nameof(TravelingMerchantInjections.ShouldTravelingMerchantVisitToday_ArchipelagoDays_Prefix))
+                prefix: new HarmonyMethod(typeof(TravelingMerchantInjections), nameof(TravelingMerchantInjections.ShouldTravelingMerchantVisitToday_ArchipelagoDays_Prefix))
             );
 
             _harmony.Patch(

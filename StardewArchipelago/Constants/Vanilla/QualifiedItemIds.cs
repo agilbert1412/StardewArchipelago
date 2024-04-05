@@ -1,5 +1,6 @@
 ﻿using System;
 using StardewArchipelago.Stardew.Ids.Vanilla;
+using StardewModdingAPI;
 
 namespace StardewArchipelago.Constants.Vanilla
 {
@@ -10,10 +11,11 @@ namespace StardewArchipelago.Constants.Vanilla
         public const string FURNITURE_QUALIFIER = "(F)";
         public const string WEAPON_QUALIFIER = "(W)";
         public const string BOOTS_QUALIFIER = "(B)";
+        public const string TOOLS_QUALIFIER = "(T)";
 
         private static readonly string[] ALL_QUALIFIERS = new[]
         {
-            OBJECT_QUALIFIER, BIG_CRAFTABLE_QUALIFIER, FURNITURE_QUALIFIER, WEAPON_QUALIFIER, BOOTS_QUALIFIER,
+            OBJECT_QUALIFIER, BIG_CRAFTABLE_QUALIFIER, FURNITURE_QUALIFIER, WEAPON_QUALIFIER, BOOTS_QUALIFIER, TOOLS_QUALIFIER,
         };
 
         public static readonly string AMARANTH_SEEDS = QualifiedObjectId(ObjectIds.AMARANTH_SEEDS);
@@ -120,6 +122,12 @@ namespace StardewArchipelago.Constants.Vanilla
 
         public static string UnqualifyId(string id, out string removedQualifier)
         {
+            removedQualifier = string.Empty;
+            if (id == null)
+            {
+                return null;
+            }
+
             foreach (var qualifier in ALL_QUALIFIERS)
             {
                 if (!IsType(id, qualifier))
@@ -131,7 +139,12 @@ namespace StardewArchipelago.Constants.Vanilla
                 return id[qualifier.Length..];
             }
 
-            throw new ArgumentException($"Tried to unqualify Id '{id}', but couldn't figure out the qualifier!");
+            if (id.StartsWith("("))
+            {
+                ModEntry.Instance.Monitor.Log($"Tried to unqualify Id '{id}', but couldn't figure out the qualifier!", LogLevel.Debug);
+            }
+
+            return id;
         }
 
         public static bool IsObject(string itemId)

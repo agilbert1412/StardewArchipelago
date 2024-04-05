@@ -1,6 +1,7 @@
 ﻿
 using System;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -12,6 +13,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
 {
     public class FishingRodShopStockModifier : ShopStockModifier
     {
+
         public FishingRodShopStockModifier(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago, StardewItemManager stardewItemManager) : base(monitor, helper, archipelago, stardewItemManager)
         {
         }
@@ -44,35 +46,43 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
             for (var i = fishShopData.Items.Count - 1; i >= 0; i--)
             {
                 var item = fishShopData.Items[i];
-                if (item.ItemId == null || !toolsData.ContainsKey(item.ItemId))
+                var unqualifiedId = QualifiedItemIds.UnqualifyId(item.ItemId);
+                if (unqualifiedId == null || !toolsData.ContainsKey(unqualifiedId))
                 {
                     continue;
                 }
 
-                var toolData = toolsData[item.ItemId];
-                var existingConditions = item.Condition.Split(",", StringSplitOptions.RemoveEmptyEntries);
-                var apShopitem = CreateEquivalentArchipelagoLocation(item, toolData);
-                fishShopData.Items.Add(apShopitem);
-                AddArchipelagoCondition(item, toolData, existingConditions);
+                var toolData = toolsData[unqualifiedId];
+                CreateEquivalentArchipelagoLocation(fishShopData, item, toolData);
+                ReplaceWithArchipelagoCondition(item, toolData);
             }
         }
 
-        private ShopItemData CreateEquivalentArchipelagoLocation(ShopItemData item, ToolData toolData)
+        private void CreateEquivalentArchipelagoLocation(ShopData fishShopData, ShopItemData item, ToolData toolData)
         {
             var location = $"Purchase {toolData.Name}";
-            return CreateArchipelagoLocation(item, location);
+            if (_archipelago.LocationExists(location))
+            {
+                fishShopData.Items.Insert(fishShopData.Items.IndexOf(item), CreateArchipelagoLocation(item, location));
+            }
         }
 
-        private void AddArchipelagoCondition(ShopItemData shopItem, ToolData toolData, string[] existingConditions)
+        private void ReplaceWithArchipelagoCondition(ShopItemData shopItem, ToolData toolData)
         {
-            var amount = toolData.UpgradeLevel;
+            var amount = toolData.UpgradeLevel + 1;
             // For some reason, the training rod is 1 and the bamboo pole is 0
             if (toolData.UpgradeLevel <= 1)
             {
-                amount = 1 - toolData.UpgradeLevel;
+                amount = 2 - toolData.UpgradeLevel;
             }
 
-            AddArchipelagoCondition(shopItem, existingConditions, "Progressive Fishing Rod", amount);
+            var toolName = toolData.Name;
+            if (toolData.ClassName == "FishingRod")
+            {
+                toolName = "Fishing Rod";
+            }
+
+            ReplaceWithArchipelagoCondition(shopItem, $"Progressive {toolName}", amount);
         }
     }
 }
