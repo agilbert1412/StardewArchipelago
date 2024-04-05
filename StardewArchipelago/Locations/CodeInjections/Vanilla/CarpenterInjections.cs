@@ -206,6 +206,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             return "";
         }
 
+        // private void houseUpgradeAccept()
         public static bool HouseUpgradeAccept_FreeFromAP_Prefix(GameLocation __instance)
         {
             try
@@ -217,7 +218,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 }
 
                 Game1.player.daysUntilHouseUpgrade.Value = 3;
-                Game1.getCharacterFromName("Robin").setNewDialogue(Game1.content.LoadString("Data\\ExtraDialogue:Robin_HouseUpgrade_Accepted"));
+                Game1.RequireCharacter("Robin").setNewDialogue("Data\\ExtraDialogue:Robin_HouseUpgrade_Accepted");
                 Game1.drawDialogue(Game1.getCharacterFromName("Robin"));
                 return false; // don't run original logic
             }
@@ -248,7 +249,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                             Game1.player.daysUntilHouseUpgrade.Value = 3;
                             Game1.player.Money -= price1;
                             Game1.player.Items.ReduceId("388", woodAmount);
-                            Game1.getCharacterFromName("Robin").setNewDialogue(Game1.content.LoadString("Data\\ExtraDialogue:Robin_HouseUpgrade_Accepted"));
+                            Game1.RequireCharacter("Robin").setNewDialogue("Data\\ExtraDialogue:Robin_HouseUpgrade_Accepted");
                             Game1.drawDialogue(Game1.getCharacterFromName("Robin"));
                             break;
                         }
@@ -267,7 +268,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                             Game1.player.daysUntilHouseUpgrade.Value = 3;
                             Game1.player.Money -= price2;
                             Game1.player.Items.ReduceId("709", hardwoodAmount);
-                            Game1.getCharacterFromName("Robin").setNewDialogue(Game1.content.LoadString("Data\\ExtraDialogue:Robin_HouseUpgrade_Accepted"));
+                            Game1.RequireCharacter("Robin").setNewDialogue("Data\\ExtraDialogue:Robin_HouseUpgrade_Accepted");
                             Game1.drawDialogue(Game1.getCharacterFromName("Robin"));
                             break;
                         }
@@ -284,7 +285,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                         {
                             Game1.player.daysUntilHouseUpgrade.Value = 3;
                             Game1.player.Money -= price3;
-                            Game1.getCharacterFromName("Robin").setNewDialogue(Game1.content.LoadString("Data\\ExtraDialogue:Robin_HouseUpgrade_Accepted"));
+                            Game1.RequireCharacter("Robin").setNewDialogue("Data\\ExtraDialogue:Robin_HouseUpgrade_Accepted");
                             Game1.drawDialogue(Game1.getCharacterFromName("Robin"));
                             break;
                         }
