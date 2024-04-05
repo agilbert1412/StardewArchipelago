@@ -16,6 +16,7 @@
         public const string BATTERY_PACK = "787";
         public const string BEAN_STARTER = "473";
         public const string BEET_SEEDS = "494";
+        public const string BLACKBERRY = "410";
         public const string BLUEBERRY_SEEDS = "481";
         public const string BOK_CHOY_SEEDS = "491";
         public const string BOUQUET = "458";
@@ -68,6 +69,7 @@
         public const string POMEGRANATE_SAPLING = "632";
         public const string POPPY_SEEDS = "453";
         public const string POTATO_SEEDS = "475";
+        public const string PRISMATIC_SHARD = "74";
         public const string PUMPKIN_SEEDS = "490";
         public const string QI_BEAN = "890";
         public const string QI_FRUIT = "889";
@@ -79,6 +81,7 @@
         public const string RHUBARB_SEEDS = "478";
         public const string RICE = "423";
         public const string RICE_SHOOT = "273";
+        public const string SALMONBERRY = "296";
         public const string SEAWEED = "152";
         public const string SECRET_NOTE = "79";
         public const string SNAKE_SKULL = "825";
@@ -108,6 +111,5 @@
         public const string WHITE_ALGAE = "157";
         public const string WINTER_SEEDS = "498";
         public const string YAM_SEEDS = "492";
-        public const string PRISMATIC_SHARD = "74";
     }
 }
