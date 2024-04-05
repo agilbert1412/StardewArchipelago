@@ -354,11 +354,9 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void PatchSkillsPage()
         {
-            var desiredSkillsPageCtorParameters = new[] { typeof(int), typeof(int), typeof(int), typeof(int) };
             _harmony.Patch(
-                original: AccessTools.Constructor(typeof(SkillsPage), desiredSkillsPageCtorParameters),
-                postfix: new HarmonyMethod(typeof(QuestInjections),
-                    nameof(QuestInjections.SkillsPageCtor_BearKnowledge_Postfix))
+                original: AccessTools.Method(typeof(PowersTab), nameof(PowersTab.populateClickableComponentList)),
+                postfix: new HarmonyMethod(typeof(QuestInjections), nameof(QuestInjections.PopulateClickableComponentList_BearKnowledge_Postfix))
             );
         }
 

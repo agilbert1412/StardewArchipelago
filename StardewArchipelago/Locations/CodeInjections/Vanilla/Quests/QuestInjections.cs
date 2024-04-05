@@ -5,6 +5,7 @@ using System.Linq;
 using Archipelago.MultiClient.Net.Models;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Items.Unlocks;
@@ -517,42 +518,34 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
             }
         }
 
-        public static void SkillsPageCtor_BearKnowledge_Postfix(SkillsPage __instance, int x, int y, int width, int height)
+        // public override void populateClickableComponentList()
+        public static void PopulateClickableComponentList_BearKnowledge_Postfix(PowersTab __instance)
         {
             try
             {
-                const int bearKnowledgeIndex = 8;
-                var x1 = __instance.xPositionOnScreen + IClickableMenu.spaceToClearSideBorder + 80;
-                var y1 = __instance.yPositionOnScreen + IClickableMenu.spaceToClearTopBorder + (int)(height / 2.0) + 80;
-                if (_archipelago.HasReceivedItem("Bear's Knowledge"))
+                var hasBearKnowledge = _archipelago.HasReceivedItem(APItem.BEARS_KNOWLEDGE);
+                foreach (var powersLine in __instance.powers)
                 {
-                    var textureComponent = new ClickableTextureComponent("", new Rectangle(x1 + 544, y1, 64, 64), null, Game1.content.LoadString("Strings\\Objects:BearPaw"), Game1.mouseCursors, new Rectangle(192, 336, 16, 16), 4f, true);
-                    textureComponent.myID = 10208;
-                    textureComponent.rightNeighborID = -99998;
-                    textureComponent.leftNeighborID = -99998;
-                    textureComponent.upNeighborID = 4;
-                    __instance.specialItems[bearKnowledgeIndex] = textureComponent;
-                }
-                else
-                {
-                    __instance.specialItems[bearKnowledgeIndex] = null;
-                }
+                    foreach (var powerComponent in powersLine)
+                    {
+                        // I couldn't really find a better way to identify this icon uniquely.
+                        // Ideally, in the long term, the condition should be changed in the Data itself, instead of this jank patching.
+                        if (powerComponent.sourceRect.X != 192 || powerComponent.sourceRect.Y != 336)
+                        {
+                            continue;
+                        }
 
-
-                var num1 = 680 / __instance.specialItems.Count;
-                for (var index = 0; index < __instance.specialItems.Count; ++index)
-                {
-                    if (__instance.specialItems[index] != null)
-                        __instance.specialItems[index].bounds.X = x1 + index * num1;
+                        // drawShadow is poorly named. If drawShadow, then it's "real", otherwise it's a black outline.
+                        powerComponent.drawShadow = hasBearKnowledge;
+                        return;
+                    }
                 }
-                ClickableComponent.SetUpNeighbors(__instance.specialItems, 4);
-                ClickableComponent.ChainNeighborsLeftRight(__instance.specialItems);
 
                 return;
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(SkillsPageCtor_BearKnowledge_Postfix)}:\n{ex}", LogLevel.Error);
+                _monitor.Log($"Failed in {nameof(PopulateClickableComponentList_BearKnowledge_Postfix)}:\n{ex}", LogLevel.Error);
                 return;
             }
         }
@@ -561,13 +554,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
         {
             try
             {
-                if (__instance.ParentSheetIndex != 296 && __instance.ParentSheetIndex != 410)
+                if (__instance.QualifiedItemId != QualifiedItemIds.SALMONBERRY && __instance.QualifiedItemId != QualifiedItemIds.BLACKBERRY)
                 {
                     return;
                 }
 
                 var hasSeenBearEvent = Game1.player.eventsSeen.Contains(EventIds.BEAR_KNOWLEDGE_EVENT);
-                var hasReceivedBearKnowledge = _archipelago.HasReceivedItem("Bear's Knowledge");
+                var hasReceivedBearKnowledge = _archipelago.HasReceivedItem(APItem.BEARS_KNOWLEDGE);
                 if (hasSeenBearEvent == hasReceivedBearKnowledge)
                 {
                     return;
