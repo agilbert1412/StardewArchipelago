@@ -22,6 +22,11 @@ namespace StardewArchipelago.Constants
 
         public static string CreateHasBuildingAnywhereCondition(string buildingName, bool hasBuilding)
         {
+            if (buildingName.Contains(" "))
+            {
+                buildingName = $"\"{buildingName}\"";
+            }
+
             if (hasBuilding)
             {
                 return $"BUILDINGS_CONSTRUCTED ALL {buildingName} 1";
