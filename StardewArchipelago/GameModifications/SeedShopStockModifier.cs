@@ -144,20 +144,30 @@ namespace StardewArchipelago.GameModifications
                 if (item.MinStack == -1)
                 {
                     item.MinStack = itemData.Name.Contains("cola", StringComparison.InvariantCultureIgnoreCase) ? 6 : 50;
-                    item.Price *= item.MinStack;
                 }
-                
+
+                if (item.Price == -1)
+                {
+                    item.Price = itemData.Price * item.MinStack;
+                }
+
                 item.Price = (int)Math.Round(item.Price * JOJA_PRICE_MULTIPLIER);
                 item.Condition = null;
             }
         }
 
-        private void AddToJojaShop(ShopData shopData, string itemId, int stack = -1, int price = -1)
+        private void AddToJojaShop(ShopData shopData, string itemId, int stack = -1, int pricePerUnit = -1)
         {
             var existingItem = shopData.Items.Find(x => x.ItemId.Equals(itemId, StringComparison.InvariantCultureIgnoreCase));
             if (existingItem != null)
             {
                 shopData.Items.Remove(existingItem);
+            }
+
+            var price = pricePerUnit;
+            if (pricePerUnit > 0 && stack > 0)
+            {
+                price = stack * pricePerUnit;
             }
             var item = new ShopItemData()
             {
