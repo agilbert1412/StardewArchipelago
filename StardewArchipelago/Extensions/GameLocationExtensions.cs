@@ -91,7 +91,7 @@ namespace StardewArchipelago.Extensions
             warpPoints.AddRange(GetAllTouchWarpsTo(origin, destinationName).Select(warp => new Point(warp.X, warp.Y)));
             warpPoints.AddRange(GetAllTouchActionWarpsTo(origin, destinationName).Select(x => new Point(x.Key.X, x.Key.Y)));
             warpPoints.AddRange(GetDoorWarpPoints(origin, destinationName));
-            warpPoints.AddRange(GetBuildingWarps(origin).Select(x => new Point(x.Key.X, x.Key.Y)));
+            warpPoints.AddRange(GetBuildingWarps(origin, destinationName).Select(x => new Point(x.Key.X, x.Key.Y)));
             return warpPoints.Distinct().ToList();
         }
 
@@ -141,7 +141,7 @@ namespace StardewArchipelago.Extensions
                     }
                 }
 
-                foreach (var (warp, warpTarget) in GetBuildingWarps(origin))
+                foreach (var (warp, warpTarget) in GetBuildingWarps(origin, destinationName))
                 {
                     if (warp.X == warpPointLocation.X && warp.Y == warpPointLocation.Y)
                     {
@@ -384,13 +384,17 @@ namespace StardewArchipelago.Extensions
             return specialTriggerWarps;
         }
 
-        private static Dictionary<Point, Point> GetBuildingWarps(GameLocation origin)
+        private static Dictionary<Point, Point> GetBuildingWarps(GameLocation origin, string destinationName)
         {
             var buildingWarps = new Dictionary<Point, Point>();
             foreach (var building in origin.buildings)
             {
                 var interior = building.GetIndoors();
                 if (interior == null)
+                {
+                    continue;
+                }
+                if (!interior.Name.Equals(destinationName, StringComparison.OrdinalIgnoreCase))
                 {
                     continue;
                 }
