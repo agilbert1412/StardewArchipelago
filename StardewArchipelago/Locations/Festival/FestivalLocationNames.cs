@@ -1,17 +1,18 @@
 ﻿using System.Collections.Generic;
+using StardewValley;
 
 namespace StardewArchipelago.Locations.Festival
 {
     public class FestivalLocationNames
     {
-        public const string EGG_FESTIVAL = "Egg Festival";
-        public const string FLOWER_DANCE = "Flower Dance";
-        public const string LUAU = "Luau";
-        public const string MOONLIGHT_JELLIES = "Dance Of The Moonlight Jellies";
-        public const string FAIR = "Stardew Valley Fair";
-        public const string SPIRIT_EVE = "Spirit's Eve";
-        public const string FESTIVAL_OF_ICE = "Festival of Ice";
-        public const string FEAST_OF_THE_WINTER_STAR = "Feast of the Winter Star";
+        public static readonly string EGG_FESTIVAL = FestivalIdentifier(Season.Spring, 13);
+        public static readonly string FLOWER_DANCE = FestivalIdentifier(Season.Spring, 24);
+        public static readonly string LUAU = FestivalIdentifier(Season.Summer, 11);
+        public static readonly string MOONLIGHT_JELLIES = FestivalIdentifier(Season.Summer, 28);
+        public static readonly string FAIR = FestivalIdentifier(Season.Fall, 16);
+        public static readonly string SPIRIT_EVE = FestivalIdentifier(Season.Fall, 27);
+        public static readonly string FESTIVAL_OF_ICE = FestivalIdentifier(Season.Winter, 8);
+        public static readonly string FEAST_OF_THE_WINTER_STAR = FestivalIdentifier(Season.Winter, 25);
         public const string NIGHT_MARKET_ALL = "Night Market All";
         public const string NIGHT_MARKET_15 = "Night Market 15";
         public const string NIGHT_MARKET_16 = "Night Market 16";
@@ -70,5 +71,10 @@ namespace StardewArchipelago.Locations.Festival
             {NIGHT_MARKET_16, new[]{ LUPINI_YEAR_1_PAINTING_2, LUPINI_YEAR_2_PAINTING_2, LUPINI_YEAR_3_PAINTING_2 } },
             {NIGHT_MARKET_17, new[]{ LUPINI_YEAR_1_PAINTING_3, LUPINI_YEAR_2_PAINTING_3, LUPINI_YEAR_3_PAINTING_3 } },
         };
+
+        public static string FestivalIdentifier(Season season, int day)
+        {
+            return $"{season} {day}";
+        }
     }
 }
