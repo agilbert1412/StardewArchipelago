@@ -11,6 +11,7 @@ using StardewValley.Objects;
 using StardewValley.Tools;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Modded;
+using StardewArchipelago.Constants.Vanilla;
 using Object = StardewValley.Object;
 using StardewArchipelago.Items.Unlocks;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
@@ -238,13 +239,28 @@ namespace StardewArchipelago.Items.Mail
 
         private static void ReceiveTrashCanUpgrade()
         {
-            Game1.player.trashCanLevel++;
-            Game1.player.trashCanLevel = Math.Max(1, Math.Min(4, Game1.player.trashCanLevel));
-            var trashCanToHoldUp = new GenericTool
+            var currentTrashCanLevel = Game1.player.trashCanLevel;
+            foreach (var (toolKey, toolData) in Game1.toolData)
             {
-                UpgradeLevel = Game1.player.trashCanLevel,
-            };
-            Game1.player.holdUpItemThenMessage(trashCanToHoldUp);
+                if (!toolKey.Contains(Tools.TRASH_CAN.Replace(" ", "")) || !toolData.UpgradeFrom.Any())
+                {
+                    continue;
+                }
+
+                var upgradeFrom = toolData.UpgradeFrom.First();
+                var condition = upgradeFrom.Condition;
+                var fields = condition.Split(" ");
+                var level = int.Parse(fields.Last());
+                if (level != currentTrashCanLevel)
+                {
+                    continue;
+                }
+
+                Game1.player.trashCanLevel = Math.Max(1, Math.Min(4, currentTrashCanLevel + 1));
+                var trashCanToHoldUp = ItemRegistry.Create("(T)" + toolKey);
+                Game1.player.holdUpItemThenMessage(trashCanToHoldUp);
+                return;
+            }
         }
 
         private void GetFishingRodOfNextLevel()
