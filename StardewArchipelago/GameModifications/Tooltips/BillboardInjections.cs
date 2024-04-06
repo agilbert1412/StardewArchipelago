@@ -195,17 +195,17 @@ namespace StardewArchipelago.GameModifications.Tooltips
 
                     foreach (var location in missingFestivalChecks)
                     {
-                        hoverText += $"{Environment.NewLine} - {location}";
+                        hoverText += $"{Environment.NewLine}- {location}";
                     }
 
                     foreach (var location in missingNpcChecks)
                     {
-                        hoverText += $"{Environment.NewLine} - {location.TurnHeartsIntoStardewHearts()}";
+                        hoverText += $"{Environment.NewLine}- {location.TurnHeartsIntoStardewHearts()}";
                     }
 
                     foreach (var location in missingCartChecks)
                     {
-                        hoverText += $"{Environment.NewLine} - {location}";
+                        hoverText += $"{Environment.NewLine}- {location}";
                     }
                 }
 
