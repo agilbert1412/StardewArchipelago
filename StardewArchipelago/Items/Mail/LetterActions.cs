@@ -272,18 +272,32 @@ namespace StardewArchipelago.Items.Mail
             // received 2 -> bamboo [0]
             // received 3 -> fiberglass [2]
             // received 4 -> iridium [3]
+            // received 5 -> advanced iridium [4]
 
-            numberOfPreviousFishingRodLetters = Math.Max(1, Math.Min(4, numberOfPreviousFishingRodLetters));
+            numberOfPreviousFishingRodLetters = Math.Max(1, Math.Min(5, numberOfPreviousFishingRodLetters));
             var upgradeLevel = numberOfPreviousFishingRodLetters - 1;
             if (upgradeLevel < 2)
             {
                 upgradeLevel = 1 - upgradeLevel;
             }
 
-            var itemToAdd = new FishingRod(upgradeLevel);
+            foreach (var (toolKey, toolData) in Game1.toolData)
+            {
+                if (!toolData.ClassName.Equals(Tools.FISHING_ROD))
+                {
+                    continue;
+                }
 
-            Game1.player.holdUpItemThenMessage(itemToAdd);
-            Game1.player.addItemByMenuIfNecessary(itemToAdd);
+                if (toolData.UpgradeLevel != upgradeLevel)
+                {
+                    continue;
+                }
+
+                var itemToAdd = ItemRegistry.Create("(T)" + toolKey);
+                Game1.player.holdUpItemThenMessage(itemToAdd);
+                Game1.player.addItemByMenuIfNecessary(itemToAdd);
+                return;
+            }
         }
 
         private void GetReturnScepter()
