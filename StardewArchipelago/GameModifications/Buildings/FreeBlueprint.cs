@@ -8,7 +8,6 @@ namespace StardewArchipelago.GameModifications.Buildings
     {
         public FreeBlueprint(int index, string id, BuildingData data, string skinId, string sendingPlayerName) : base(index, id, data, skinId)
         {
-
             var freeBuildingData = data.DeepClone();
             freeBuildingData.BuildCost = 0;
             freeBuildingData.BuildMaterials.Clear();

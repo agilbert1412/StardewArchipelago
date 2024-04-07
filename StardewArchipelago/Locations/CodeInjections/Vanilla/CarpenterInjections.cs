@@ -5,6 +5,7 @@ using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.GameData.Buildings;
+using StardewValley.Menus;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -23,6 +24,25 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             _modHelper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
+        }
+
+        // public BlueprintEntry(int index, string id, BuildingData data, string skinId)
+        public static bool BlueprintEntryConstructor_IfFreeMakeTheIdCorrect_Prefix(CarpenterMenu.BlueprintEntry __instance, int index, ref string id, BuildingData data, string skinId)
+        {
+            try
+            {
+                const string freePrefix = "Free ";
+                if (id.StartsWith(freePrefix))
+                {
+                    id = id.Substring(freePrefix.Length);
+                }
+                return true; // run original logic
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(BlueprintEntryConstructor_IfFreeMakeTheIdCorrect_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
         }
 
         // public void createQuestionDialogue(string question, Response[] answerChoices, string dialogKey)
