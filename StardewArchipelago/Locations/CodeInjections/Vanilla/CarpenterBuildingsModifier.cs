@@ -45,14 +45,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private void ChangePrices(IDictionary<string, BuildingData> buildingsData)
         {
             var priceMultiplier = _archipelago.SlotData.BuildingPriceMultiplier;
-            if (Math.Abs(priceMultiplier - 1.0) < double.Epsilon)
+            if (Math.Abs(priceMultiplier - 1.0) < 0.01)
             {
                 return;
             }
 
             foreach (var (_, buildingData) in buildingsData)
             {
-                var finalCost = (int)(buildingData.BuildCost * priceMultiplier);
+                var finalCost = (int)Math.Round(buildingData.BuildCost * priceMultiplier);
                 buildingData.BuildCost = finalCost;
                 if (buildingData.BuildMaterials == null)
                 {
@@ -61,7 +61,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
                 foreach (var buildingMaterial in buildingData.BuildMaterials)
                 {
-                    var amount = Math.Max(1, (int)(buildingMaterial.Amount * priceMultiplier));
+                    var amount = Math.Max(1, (int)Math.Round(buildingMaterial.Amount * priceMultiplier));
                     buildingMaterial.Amount = amount;
                 }
             }
