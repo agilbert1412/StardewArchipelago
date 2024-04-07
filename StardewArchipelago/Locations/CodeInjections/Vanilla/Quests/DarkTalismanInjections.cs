@@ -44,9 +44,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
                 }
 
                 var darkTalismanEventKey = $"{EventIds.DARK_TALISMAN}/C";
-                var darkTalismanEvent = new Event(locationEvents[darkTalismanEventKey]);
-                __instance.currentEvent = darkTalismanEvent;
-                __instance.startEvent(__instance.currentEvent);
+                var darkTalismanEvent = new Event(locationEvents[darkTalismanEventKey], null, EventIds.DARK_TALISMAN, Game1.player);
+                __instance.startEvent(darkTalismanEvent);
                 return;
             }
             catch (Exception ex)
