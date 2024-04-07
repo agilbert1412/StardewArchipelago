@@ -110,7 +110,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
                     }
                     yield return new ItemQueryResult(shopItem)
                     {
-                        OverrideBasePrice = (int)Math.Round(shopItem.salePrice() * priceMultiplier),
+                        OverrideBasePrice = (int)Math.Round(i * 500 * priceMultiplier),
                         OverrideStackSize = 1,
                         OverrideShopAvailableStock = 1,
                     };
@@ -166,8 +166,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
                 {
                     var slingshotToSell = slingShotsInTier[index];
 
-                    var isBootsAllowed = i <= receivedTier || _archipelago.HasReceivedItem(slingshotToSell.Name);
-                    if (!isBootsAllowed)
+                    var isSlingshotAllowed = i <= receivedTier || _archipelago.HasReceivedItem(slingshotToSell.Name);
+                    if (!isSlingshotAllowed)
                     {
                         continue;
                     }
@@ -184,7 +184,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
                     }
                     yield return new ItemQueryResult(shopItem)
                     {
-                        OverrideBasePrice = (int)Math.Round(slingshotToSell.SellPrice * priceMultiplier),
+                        OverrideBasePrice = (int)Math.Round(shopItem.salePrice() * priceMultiplier),
                         OverrideStackSize = 1,
                         OverrideShopAvailableStock = 1,
                     };
