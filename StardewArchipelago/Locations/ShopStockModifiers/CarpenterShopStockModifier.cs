@@ -154,7 +154,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
 
         private string GetMaterialString(ISalable material, double priceMultiplier)
         {
-            var amount = Math.Max(1, (int)(material.Stack * priceMultiplier));
+            var amount = Math.Max(1, (int)Math.Round(material.Stack * priceMultiplier));
             return $"{QualifiedItemIds.UnqualifyId(material.QualifiedItemId)}:{amount}";
         }
 

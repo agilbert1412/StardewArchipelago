@@ -16,6 +16,7 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Characters;
 using StardewValley.Events;
+using StardewValley.GameData.Buildings;
 using StardewValley.Internal;
 using StardewValley.Locations;
 using StardewValley.Menus;
@@ -436,6 +437,12 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony.Patch(
                 original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performAction), performActionArgumentTypes),
                 prefix: new HarmonyMethod(typeof(WizardBookInjections), nameof(WizardBookInjections.PerformAction_WizardBook_Prefix))
+            );
+            
+            var blueprintEntryParameters = new[] { typeof(int), typeof(string), typeof(BuildingData), typeof(string) };
+            _harmony.Patch(
+                original: AccessTools.Constructor(typeof(CarpenterMenu.BlueprintEntry), blueprintEntryParameters),
+                prefix: new HarmonyMethod(typeof(CarpenterInjections), nameof(CarpenterInjections.BlueprintEntryConstructor_IfFreeMakeTheIdCorrect_Prefix))
             );
 
             if (!_archipelago.SlotData.BuildingProgression.HasFlag(BuildingProgression.Progressive))
