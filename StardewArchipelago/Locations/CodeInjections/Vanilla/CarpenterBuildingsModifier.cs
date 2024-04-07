@@ -69,6 +69,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
         private void AddFreeBuildings(IDictionary<string, BuildingData> buildingsData)
         {
+            if (!_archipelago.SlotData.BuildingProgression.HasFlag(BuildingProgression.Progressive))
+            {
+                return;
+            }
+
             foreach (var buildingName in buildingsData.Keys.ToArray())
             {
                 var buildingData = buildingsData[buildingName];
