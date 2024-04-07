@@ -195,13 +195,13 @@ namespace StardewArchipelago.Locations.GingerIsland.Boat
             if (Game1.content.GetCurrentLanguage() == LocalizedContentManager.LanguageCode.es)
             {
                 __instance.createQuestionDialogueWithCustomWidth(
-                    Game1.content.LoadString("Strings\\Locations:BoatTunnel_BuyTicket",
+                    Game1.content.LoadString("Strings\\Locations:BuyTicket",
                         __instance.TicketPrice), __instance.createYesNoResponses(), "Boat");
                 return;
             }
 
             __instance.createQuestionDialogue(
-                Game1.content.LoadString("Strings\\Locations:BoatTunnel_BuyTicket",
+                Game1.content.LoadString("Strings\\Locations:BuyTicket",
                     __instance.TicketPrice), __instance.createYesNoResponses(), "Boat");
         }
 
