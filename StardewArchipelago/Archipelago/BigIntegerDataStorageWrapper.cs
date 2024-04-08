@@ -64,11 +64,23 @@ namespace StardewArchipelago.Archipelago
             }
         }
 
-        public bool Add(Scope scope, string key, long amount)
+        public bool Add(Scope scope, string key, BigInteger amount)
         {
             try
             {
-                _session.DataStorage[scope, key] += amount;
+                _session.Socket.SendPacket(
+                    new EnergyLinkSetPacket
+                    {
+                        Key = key,
+                        DefaultValue = 0,
+                        Slot = _session.ConnectionInfo.Slot,
+                        Operations = new OperationSpecification[]
+                        {
+                            new() { OperationType = OperationType.Add, Value = JToken.Parse(amount.ToString()) }
+                        }
+                    }
+ 				);
+
                 return true;
             }
             catch (Exception ex)
@@ -78,18 +90,28 @@ namespace StardewArchipelago.Archipelago
             }
         }
 
-        public bool Subtract(Scope scope, string key, long amount, bool dontGoBelowZero)
+        public bool Subtract(Scope scope, string key, BigInteger amount, bool dontGoBelowZero)
         {
             try
             {
+	            var operations = new List<OperationSpecification>
+	            {
+		            new() { OperationType = OperationType.Add, Value = JToken.Parse("-" + amount) }
+	            };
+
                 if (dontGoBelowZero)
-                {
-                    _session.DataStorage[scope, key] = (_session.DataStorage[scope, key] - amount) + Operation.Max(0);
-                }
-                else
-                {
-                    _session.DataStorage[scope, key] -= amount;
-                }
+                    operations.Add(new() { OperationType = OperationType.Max, Value = 0 });
+
+                _session.Socket.SendPacket(
+                    new EnergyLinkSetPacket
+                    {
+                        Key = key,
+                        DefaultValue = 0,
+                        Slot = _session.ConnectionInfo.Slot,
+                        Operations = operations.ToArray()
+                    }
+                );
+
                 return true;
             }
             catch (Exception ex)
@@ -127,4 +149,11 @@ namespace StardewArchipelago.Archipelago
             }
         }
     }
+
+    class EnergyLinkSetPacket : SetPacket
+    {
+        [JsonProperty("slot")]
+        public int Slot { get; set; }
+    }
+
 }
