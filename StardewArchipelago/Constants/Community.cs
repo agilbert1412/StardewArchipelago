@@ -10,8 +10,8 @@
             "Frazzleduck", "Heinermann", "Ishigh", "JaredWeakStrike", "Jarno", "jat2980", "jennnifer", "Jouramie", "Justice", "Kaito Kid",
             "KelioMZX", "KittyAshy", "Kono Tyran", "Lady Redacted", "lordlou", "Magnemania", "Marech", "Margot", "Mati", "Mav", "MeleneV", "mewlif",
             "Noca", "N00byKing"/*, "NinoKito"*/, "Phar",
-            "PoryGone", "ProfBytes", "RaspberrySpaceJam", "Rosalie", "Salzkorn", "SamanthaCoffin", "Scipio", "Sneaki", "Snow", "Sraw", "SunnyBat",
-            "TheCondor", "TheHaboo", "toaster", "Trev", "Violet", "WhySoThirstyy", "Yellow_Meep", "zig", "Ziktofel",
+            "PoryGone", "ProfBytes", "RaspberrySpaceJam", "Rosalie", "Salzkorn", "SamanthaCoffin", "Scipio", "Smorgasbord", "Sneaki", "Snow", "Sraw", "SunnyBat",
+            "TheCondor", "TheHaboo", "TheRedWolfe", "toaster", "Trev", "Violet", "WhySoThirstyy", "Yellow_Meep", "zig", "Ziktofel",
         };
     }
 }
