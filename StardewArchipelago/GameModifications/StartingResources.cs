@@ -18,13 +18,11 @@ namespace StardewArchipelago.GameModifications
         private const int MINIMUM_UNLIMITED_MONEY = 1000000;
         private ArchipelagoClient _archipelago;
         private StardewItemManager _stardewItemManager;
-        private StartingRecipes _startingRecipes;
 
         public StartingResources(ArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager stardewItemManager)
         {
             _archipelago = archipelago;
             _stardewItemManager = stardewItemManager;
-            _startingRecipes = new StartingRecipes(archipelago, locationChecker);
         }
 
         public void GivePlayerStartingResources()
@@ -37,7 +35,6 @@ namespace StardewArchipelago.GameModifications
 
             RemoveShippingBin();
             SendGilTelephoneLetter();
-            _startingRecipes.SynchronizeStartingRecipes(Game1.player);
         }
 
         private void GivePlayerStartingMoney()
