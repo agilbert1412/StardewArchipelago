@@ -14,17 +14,17 @@ namespace StardewArchipelago.Constants.Vanilla
         public const string TOOLS_QUALIFIER = "(T)";
         public const string HAT_QUALIFIER = "(H)";
         public const string SHIRT_QUALIFIER = "(S)";
-        public const string TR_QUALIFIER = "(TR)";
+        public const string TRINKET_QUALIFIER = "(TR)";
         public const string WALLPAPER_QUALIFIER = "(WP)";
         public const string FLOORPAPER_QUALIFIER = "(FL)";
         public const string PANTS_QUALIFIER = "(P)";
-        public const string M_QUALIFIER = "(M)";
-        public const string ZERO_QUALIFIER = "(0)";
+        public const string MANNEQUIN_QUALIFIER = "(M)";
+        public const string ZERO_QUALIFIER = "(0)"; // This apparently is a typo in the base game, and should be (O) [Object]
 
         private static readonly string[] ALL_QUALIFIERS = new[]
         {
             OBJECT_QUALIFIER, BIG_CRAFTABLE_QUALIFIER, FURNITURE_QUALIFIER, WEAPON_QUALIFIER, BOOTS_QUALIFIER, TOOLS_QUALIFIER, HAT_QUALIFIER,
-            SHIRT_QUALIFIER, TR_QUALIFIER, WALLPAPER_QUALIFIER, FLOORPAPER_QUALIFIER, PANTS_QUALIFIER, M_QUALIFIER, ZERO_QUALIFIER,
+            SHIRT_QUALIFIER, TRINKET_QUALIFIER, WALLPAPER_QUALIFIER, FLOORPAPER_QUALIFIER, PANTS_QUALIFIER, MANNEQUIN_QUALIFIER, ZERO_QUALIFIER,
         };
 
         public static readonly string AMARANTH_SEEDS = QualifiedObjectId(ObjectIds.AMARANTH_SEEDS);
