@@ -3,6 +3,7 @@ using HarmonyLib;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.GameModifications;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.CC;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
@@ -878,7 +879,7 @@ namespace StardewArchipelago.Locations.Patcher
             );
             
             _modHelper.Events.Content.AssetRequested += _cookingRecipePurchaseStockModifier.OnShopStockRequested;
-            
+
             _harmony.Patch(
                 original: AccessTools.Constructor(typeof(LevelUpMenu), new []{typeof(int), typeof(int)}),
                 prefix: new HarmonyMethod(typeof(RecipeLevelUpInjections), nameof(RecipeLevelUpInjections.LevelUpMenuConstructor_SendSkillRecipeChecks_Postfix))

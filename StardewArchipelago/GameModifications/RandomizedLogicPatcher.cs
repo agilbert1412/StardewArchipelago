@@ -647,7 +647,17 @@ namespace StardewArchipelago.GameModifications
 
         private void PatchRecipes()
         {
-            _recipeDataRemover.RemoveSkillAndFriendshipLearnConditions();
+            _helper.Events.Content.AssetRequested += _recipeDataRemover.OnCookingRecipesRequested;
+            _helper.Events.Content.AssetRequested += _recipeDataRemover.OnCraftingRecipesRequested;
+
+            _helper.GameContent.InvalidateCache("Data/CookingRecipes");
+            _helper.GameContent.InvalidateCache("Data/CraftingRecipes");
+        }
+
+        private void UnPatchRecipes()
+        {
+            _helper.Events.Content.AssetRequested -= _recipeDataRemover.OnCookingRecipesRequested;
+            _helper.Events.Content.AssetRequested -= _recipeDataRemover.OnCraftingRecipesRequested;
         }
 
         private void PatchTooltips()
