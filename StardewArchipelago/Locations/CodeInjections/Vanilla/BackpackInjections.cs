@@ -53,7 +53,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 _maxItemsForBackpackDisplay = 48;
             }
-            
+
             _dayLastUpdateBackpackDisplay = Game1.stats.DaysPlayed;
         }
 
@@ -111,7 +111,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 {
                     return true; // run original logic
                 }
-                
+
                 var actionName = action[0];
                 if (actionName == "BuyBackpack")
                 {
@@ -191,8 +191,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 _monitor.Log($"Failed in {nameof(Draw_SeedShopBackpack_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
             }
-        }        
-        
+        }
+
         // public override void draw(SpriteBatch b)
         public static void Draw_SeedShopBackpack_Postfix(SeedShop __instance, SpriteBatch b)
         {

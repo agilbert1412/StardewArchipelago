@@ -18,7 +18,7 @@ namespace StardewArchipelago.Items.Unlocks
             if (archipelago.SlotData.Mods.HasModdedSkill())
             {
                 _specificUnlockManagers.Add(new ModSkillUnlockManager());
-                
+
             }
             if (archipelago.SlotData.Mods.HasMod(ModNames.MAGIC))
             {

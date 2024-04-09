@@ -136,7 +136,7 @@ namespace StardewArchipelago.GameModifications
                 }
             }
 
-            farmhouse.objects.Add(emptySpot, new Chest(new List<Item>{ itemToGift}, emptySpot, true));
+            farmhouse.objects.Add(emptySpot, new Chest(new List<Item> { itemToGift }, emptySpot, true));
         }
 
         private void RemoveShippingBin()

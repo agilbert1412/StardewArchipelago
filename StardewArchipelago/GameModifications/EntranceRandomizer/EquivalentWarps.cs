@@ -151,7 +151,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
                     correctArea = area.Replace(jojaMartLocation, movieTheater);
                     return true;
                 }
-                
+
                 if (numberOfTheaters >= 1)
                 {
                     correctArea = area.Replace(jojaMartLocation, abandonedJojaMart);

@@ -263,7 +263,7 @@ namespace StardewArchipelago
             try
             {
                 ReadPersistentArchipelagoData();
-                
+
                 _stardewItemManager = new StardewItemManager();
                 _mail = new Mailman(State);
                 _locationChecker = new LocationChecker(Monitor, _archipelago, State.LocationsChecked);
@@ -280,7 +280,7 @@ namespace StardewArchipelago
                 var tileChooser = new TileChooser();
                 _chatForwarder = new ChatForwarder(Monitor, _helper, _harmony, _archipelago, _giftHandler, _goalManager, tileChooser);
                 _questCleaner = new QuestCleaner();
-                
+
                 if (!_archipelago.IsConnected)
                 {
                     if (_apConnectionOverride != null)
@@ -494,7 +494,7 @@ namespace StardewArchipelago
             }
 
             var season = arg2[0];
-            var currentSeasonNumber = (int) Game1.stats.DaysPlayed / 28;
+            var currentSeasonNumber = (int)Game1.stats.DaysPlayed / 28;
             if (State.SeasonsOrder.Count <= currentSeasonNumber)
             {
                 State.SeasonsOrder.Add(season);
@@ -511,7 +511,6 @@ namespace StardewArchipelago
         }
 
 #if DEBUG
-
         private void ReleaseSlot(string arg1, string[] arg2)
         {
             if (!_archipelago.IsConnected || !Game1.hasLoadedGame || arg2.Length < 1)

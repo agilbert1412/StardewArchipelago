@@ -52,7 +52,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
                 {
                     continue;
                 }
-                
+
                 var apShopitem = CreateArchipelagoLocation(item, locationName);
                 shopData.Items.Insert(i, apShopitem);
                 ReplaceWithArchipelagoCondition(item, itemName);

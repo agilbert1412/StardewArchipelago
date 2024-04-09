@@ -23,7 +23,7 @@ namespace StardewArchipelago.GameModifications
         private ClickableComponent passwordLabel;
 
         public CharacterCustomizationArchipelago(CharacterCustomization parent, IModHelper modHelper)
-        :base(parent.source)
+            : base(parent.source)
         {
             height += 48;
             SetupArchipelagoFieldsPositions();

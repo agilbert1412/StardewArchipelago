@@ -29,7 +29,7 @@ namespace StardewArchipelago.Locations.GingerIsland.Parrots
         {
             _islandLocation = (IslandHut)Game1.getLocationFromName("IslandHut");
         }
-        
+
         public void ReplaceParrots()
         {
             _islandLocation.parrotUpgradePerches.Clear();

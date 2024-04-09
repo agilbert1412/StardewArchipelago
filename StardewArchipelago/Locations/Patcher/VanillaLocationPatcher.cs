@@ -300,7 +300,7 @@ namespace StardewArchipelago.Locations.Patcher
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Utility), nameof(Utility.getQuestOfTheDay)),
-                prefix:new HarmonyMethod(typeof(QuestInjections), nameof(QuestInjections.GetQuestOfTheDay_BalanceQuests_Prefix))
+                prefix: new HarmonyMethod(typeof(QuestInjections), nameof(QuestInjections.GetQuestOfTheDay_BalanceQuests_Prefix))
             );
 
             var performActionArgumentTypes = new[] { typeof(string[]), typeof(Farmer), typeof(Location) };
@@ -351,7 +351,7 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony.Patch(
                 original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.setUpLocationSpecificFlair)),
                 prefix: new HarmonyMethod(typeof(DarkTalismanInjections), nameof(DarkTalismanInjections.SetUpLocationSpecificFlair_BuglandChest_Prefix))
-            ); 
+            );
         }
 
         private void PatchSkillsPage()
@@ -439,7 +439,7 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performAction), performActionArgumentTypes),
                 prefix: new HarmonyMethod(typeof(WizardBookInjections), nameof(WizardBookInjections.PerformAction_WizardBook_Prefix))
             );
-            
+
             var blueprintEntryParameters = new[] { typeof(int), typeof(string), typeof(BuildingData), typeof(string) };
             _harmony.Patch(
                 original: AccessTools.Constructor(typeof(CarpenterMenu.BlueprintEntry), blueprintEntryParameters),
@@ -696,7 +696,7 @@ namespace StardewArchipelago.Locations.Patcher
         private void PatchFestivals()
         {
             _modHelper.Events.Content.AssetRequested += _festivalShopStockModifier.OnShopStockRequested;
-            
+
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Utility), nameof(Utility.GetRandomWinterStarParticipant)),
                 prefix: new HarmonyMethod(typeof(WinterStarInjections), nameof(WinterStarInjections.GetRandomWinterStarParticipant_ChooseBasedOnMonthNotYear_Prefix))
@@ -877,14 +877,14 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(typeof(TV), "getWeeklyRecipe", Type.EmptyTypes),
                 prefix: new HarmonyMethod(typeof(QueenOfSauceInjections), nameof(QueenOfSauceInjections.GetWeeklyRecipe_UseArchipelagoSchedule_Prefix))
             );
-            
+
             _modHelper.Events.Content.AssetRequested += _cookingRecipePurchaseStockModifier.OnShopStockRequested;
 
             _harmony.Patch(
-                original: AccessTools.Constructor(typeof(LevelUpMenu), new []{typeof(int), typeof(int)}),
+                original: AccessTools.Constructor(typeof(LevelUpMenu), new[] { typeof(int), typeof(int) }),
                 prefix: new HarmonyMethod(typeof(RecipeLevelUpInjections), nameof(RecipeLevelUpInjections.LevelUpMenuConstructor_SendSkillRecipeChecks_Postfix))
             );
-        
+
             _harmony.Patch(
                 original: AccessTools.Method(typeof(NPC), nameof(NPC.grantConversationFriendship)),
                 prefix: new HarmonyMethod(typeof(RecipeFriendshipInjections), nameof(RecipeFriendshipInjections.GrantConversationFriendship_SendFriendshipRecipeChecks_Postfix))

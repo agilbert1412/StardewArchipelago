@@ -13,7 +13,7 @@ namespace StardewArchipelagoTests
             _locationNameMatcher = new LocationNameMatcher();
         }
 
-        [TestCase("Snail", new[]{"Shipsanity: Snail", "Fishsanity: Snail"}, new[] { "Escargot", "Nail" }, TestName = "Snail")]
+        [TestCase("Snail", new[] { "Shipsanity: Snail", "Fishsanity: Snail" }, new[] { "Escargot", "Nail" }, TestName = "Snail")]
         [TestCase("Stone", new[] { "Shipsanity: Stone" }, new[] { "Shipsanity: Wood", "Explore Stonehenge" }, TestName = "Stone")]
         [TestCase("Wood", new[] { "Shipsanity: Wood" }, new[] { "Shipsanity: Hardwood", "Craft Wooden Display" }, TestName = "Wood")]
         [TestCase("Juice", new[] { "Shipsanity: Juice" }, new string[0], TestName = "Juice")]
@@ -50,7 +50,7 @@ namespace StardewArchipelagoTests
             matches.Should().NotBeNull();
             matches.Should().BeEmpty();
         }
-        
+
         [TestCase("Juice", new[] { "Pam Needs Juice" }, TestName = "Pam Juice")]
         [TestCase("Tomato", new[] { "Shipsanity: Tomato Seeds" }, TestName = "Tomato Seeds")]
         [TestCase("Wizard", new[] { "Meet The Wizard" }, TestName = "Meet the Wizard")]

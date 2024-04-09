@@ -46,7 +46,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 return true; // run original logic;
             }
         }
-        
+
         // public static SpecialOrder GetSpecialOrder(string key, int? generation_seed)
         public static void GetSpecialOrder_ArchipelagoReward_Postfix(string key, int? generation_seed, ref SpecialOrder __result)
         {

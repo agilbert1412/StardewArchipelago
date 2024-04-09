@@ -33,7 +33,7 @@ namespace StardewArchipelago.Locations.GingerIsland.WalnutRoom
                 {
                     return true; // run original logic
                 }
-                
+
                 if (_archipelago.HasReceivedItem(VanillaUnlockManager.QI_WALNUT_ROOM))
                 {
                     Game1.playSound("doorClose");

@@ -39,7 +39,7 @@ namespace StardewArchipelago.Items.Unlocks
         public const string MORGAN_EVENT = "658078924";
 
         private Dictionary<string, Func<ReceivedItem, LetterAttachment>> _unlockables;
-        
+
         public bool IsUnlock(string unlockName)
         {
             return _unlockables.ContainsKey(unlockName);
@@ -113,7 +113,7 @@ namespace StardewArchipelago.Items.Unlocks
 
         private LetterEventSeenAttachment SendSpriteSpringRunes(ReceivedItem receivedItem)
         {
-            var events = new List<string> {MAIN_NEXUS_EVENT, SPRITE_RUNES_EVENT};
+            var events = new List<string> { MAIN_NEXUS_EVENT, SPRITE_RUNES_EVENT };
             return new LetterEventSeenAttachment(receivedItem, events);
         }
 
@@ -124,7 +124,7 @@ namespace StardewArchipelago.Items.Unlocks
 
         private LetterEventSeenAttachment SendOutpostRunes(ReceivedItem receivedItem)
         {
-            return new LetterEventSeenAttachment(receivedItem, new[]{ MAIN_NEXUS_EVENT, OUTPOST_RUNES_EVENT });
+            return new LetterEventSeenAttachment(receivedItem, new[] { MAIN_NEXUS_EVENT, OUTPOST_RUNES_EVENT });
         }
 
         private LetterEventSeenAttachment SendGuildRunes(ReceivedItem receivedItem)

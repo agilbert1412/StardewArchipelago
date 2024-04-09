@@ -55,7 +55,7 @@ namespace StardewArchipelago.GameModifications
                 }
 
                 __result = true;
-                return false;  // don't run original logic
+                return false; // don't run original logic
             }
             catch (Exception ex)
             {

@@ -37,7 +37,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
                 {
                     return;
                 }
-                
+
                 if (!__instance.TryGetLocationEvents(out _, out var locationEvents))
                 {
                     return;
@@ -153,7 +153,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
                         Tint = Color.Gray,
                     });
                 }
-                   
+
                 foreach (var character in __instance.characters)
                 {
                     if (character is Grub grub)

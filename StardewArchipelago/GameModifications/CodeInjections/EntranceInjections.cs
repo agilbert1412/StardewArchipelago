@@ -76,7 +76,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             }
 
             if (!locationRequest.Location.Name.StartsWith("BathHouse_", StringComparison.OrdinalIgnoreCase) ||
-                 !locationRequest.Location.Name.EndsWith("Locker", StringComparison.OrdinalIgnoreCase))
+                !locationRequest.Location.Name.EndsWith("Locker", StringComparison.OrdinalIgnoreCase))
             {
                 return false;
             }

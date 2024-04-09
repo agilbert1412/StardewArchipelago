@@ -55,7 +55,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(NewSkillsPageCtor_BearKnowledgeEvent_Prefix)}:\n{ex}", LogLevel.Error); return true; // run original logic
+                _monitor.Log($"Failed in {nameof(NewSkillsPageCtor_BearKnowledgeEvent_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
 
             }
         }

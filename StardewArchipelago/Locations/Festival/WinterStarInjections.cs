@@ -37,13 +37,13 @@ namespace StardewArchipelago.Locations.Festival
                 }
 
                 var recipient = __instance.getActorByName(__instance.secretSantaRecipient.Name);
-                var taste = (GiftTaste) recipient.getGiftTasteForThisItem(gift);
+                var taste = (GiftTaste)recipient.getGiftTasteForThisItem(gift);
 
                 if (_archipelago.SlotData.FestivalLocations != FestivalLocations.Hard || taste == GiftTaste.Love)
                 {
                     _locationChecker.AddCheckedLocation(FestivalLocationNames.SECRET_SANTA);
                 }
-                
+
                 return true; // run original logic
             }
             catch (Exception ex)

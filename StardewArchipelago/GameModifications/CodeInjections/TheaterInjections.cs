@@ -154,7 +154,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 // Game1.player.freezePause = 1000;
                 var junimoNotePoint = GetMissingBundleTile(__instance);
                 DelayedAction.removeTileAfterDelay(junimoNotePoint.X, junimoNotePoint.Y, 100, Game1.currentLocation, "Buildings");
-                
+
                 Game1.addMailForTomorrow("apccMovieTheater", true, true);
                 return false; // don't run original logic
             }
@@ -190,7 +190,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     {
                         __instance.crackOpenAbandonedJojaMartDoor();
                     }
-                    if (!Game1.player.mailReceived.Contains(string.Join("ap",ABANDONED_JOJA_MART)))
+                    if (!Game1.player.mailReceived.Contains(string.Join("ap", ABANDONED_JOJA_MART)))
                     {
                         Game1.player.mailReceived.Add("apAbandonedJojaMart");
                     }

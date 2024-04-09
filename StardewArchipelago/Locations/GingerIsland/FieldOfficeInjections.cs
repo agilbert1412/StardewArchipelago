@@ -19,7 +19,7 @@ namespace StardewArchipelago.Locations.GingerIsland
             _archipelago = archipelago;
             _locationChecker = locationChecker;
         }
-        
+
         // public static void AddCraftingRecipe(Event @event, string[] args, EventContext context)
         public static bool AddCraftingRecipe_OstrichIncubator_Prefix(Event @event, string[] args, EventContext context)
         {
@@ -34,7 +34,7 @@ namespace StardewArchipelago.Locations.GingerIsland
                 {
                     return true; // run original logic
                 }
-                
+
                 _locationChecker.AddCheckedLocation("Complete Island Field Office");
                 ++@event.CurrentCommand;
                 return false; // don't run original logic

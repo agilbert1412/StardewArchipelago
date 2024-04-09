@@ -25,12 +25,12 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
             }
 
             e.Edit(asset =>
-            {
-                var shopsData = asset.AsDictionary<string, ShopData>().Data;
-                var toolShopData = shopsData["ClintUpgrade"];
-                ReplaceToolUpgradesWithApChecks(toolShopData);
-                MakeEverythingCheaper(toolShopData);
-            },
+                {
+                    var shopsData = asset.AsDictionary<string, ShopData>().Data;
+                    var toolShopData = shopsData["ClintUpgrade"];
+                    ReplaceToolUpgradesWithApChecks(toolShopData);
+                    MakeEverythingCheaper(toolShopData);
+                },
                 AssetEditPriority.Late
             );
         }
@@ -80,7 +80,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
             {
                 return;
             }
-            
+
             foreach (var toolShopItem in toolShopData.Items)
             {
                 toolShopItem.Price = (int)Math.Round(toolShopItem.Price * priceMultiplier);

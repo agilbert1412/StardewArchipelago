@@ -28,7 +28,7 @@ namespace StardewArchipelago.GameModifications.Seasons
             _archipelago = archipelago;
             _state = state;
         }
-        
+
         public string GetFirstSeason()
         {
             return GetUnlockedSeasons()[0];
@@ -258,18 +258,18 @@ namespace StardewArchipelago.GameModifications.Seasons
 
         private static readonly Dictionary<string, string> _alternateMailKeys = new()
         {
-            {"spring_2_1", "year_1_day_2"},
-            {"spring_6_2", "spring_6_1"},
-            {"spring_15_2", "spring_16_1"},
-            {"spring_21_2", "spring_21_1"},
-            {"summer_3_1", "year_1_day_31"},
-            {"summer_6_2", "summer_6_1"},
-            {"summer_21_2", "summer_21_1"},
-            {"fall_6_2", "fall_6_1"},
-            {"fall_19_2", "fall_20_1"},
-            {"winter_5_2", "winter_5_1"},
-            {"winter_13_2", "winter_13_1"},
-            {"winter_19_2", "winter_19_1"},
+            { "spring_2_1", "year_1_day_2" },
+            { "spring_6_2", "spring_6_1" },
+            { "spring_15_2", "spring_16_1" },
+            { "spring_21_2", "spring_21_1" },
+            { "summer_3_1", "year_1_day_31" },
+            { "summer_6_2", "summer_6_1" },
+            { "summer_21_2", "summer_21_1" },
+            { "fall_6_2", "fall_6_1" },
+            { "fall_19_2", "fall_20_1" },
+            { "winter_5_2", "winter_5_1" },
+            { "winter_13_2", "winter_13_1" },
+            { "winter_19_2", "winter_19_1" },
         };
 
         public static void ChangeMailKeysBasedOnSeasonsToDaysElapsed()

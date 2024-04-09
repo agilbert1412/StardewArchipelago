@@ -27,7 +27,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 {
                     return true; // run original logic
                 }
-                
+
                 var actionName = action[0];
                 if (actionName == "GoldenScythe")
                 {

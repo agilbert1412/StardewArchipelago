@@ -275,7 +275,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
             for (var tier = 0; tier < numberOfTiers; tier++)
             {
                 var countInThisTier = weaponsCountInEachTier[tier];
-                PlaceWeaponsInTier(weaponsSortedByStrength, category, countInThisTier, placedWeaponsCount, tier+1);
+                PlaceWeaponsInTier(weaponsSortedByStrength, category, countInThisTier, placedWeaponsCount, tier + 1);
 
                 placedWeaponsCount += countInThisTier;
             }
@@ -339,7 +339,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
             {
                 WeaponsByCategoryByTier[category].Add(tier, new List<StardewItem>());
             }
-            
+
             WeaponsByCategoryByTier[category][tier].Add(weapon);
             if (category == TYPE_WEAPON)
             {

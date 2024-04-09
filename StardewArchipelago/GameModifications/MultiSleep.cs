@@ -64,7 +64,7 @@ namespace StardewArchipelago.GameModifications
                     new Response("Many", "Sleep for multiple days").SetHotKey(Keys.U),
                     new Response("No", Game1.content.LoadString("Strings\\Lexicon:QuestionDialogue_No")).SetHotKey(Keys.Escape),
                 };
-                
+
                 __instance.createQuestionDialogue(Game1.content.LoadString("Strings\\Locations:FarmHouse_Bed_GoToSleep"), possibleResponses, "Sleep", null);
                 return false; // don't run original logic
             }

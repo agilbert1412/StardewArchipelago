@@ -197,7 +197,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.CC
                 return true; // run original logic
             }
         }
-        
+
         // private bool specificBundlePage;
         private static IReflectedField<bool> _specificBundlePageField;
 
@@ -223,7 +223,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.CC
                 {
                     return;
                 }
-                
+
                 var amountText = $"{ingredient.stack}";
 
                 if (ingredientId == IDProvider.QI_GEM)
@@ -305,7 +305,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.CC
                 {
                     return true; // run original logic
                 }
-                
+
                 TryPurchaseCurrentBundle(__instance, ingredient, currentPageBundle);
                 return false; // don't run original logic
             }

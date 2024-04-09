@@ -80,7 +80,7 @@ namespace StardewArchipelago.Items.Traps
             _inventoryShuffler = new InventoryShuffler(monitor, giftSender);
             _traps = new Dictionary<string, Action>();
             RegisterTraps();
-            
+
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Object), nameof(Object.salePrice)),
                 prefix: new HarmonyMethod(typeof(TrapManager), nameof(SalePrice_GetCorrectInflation_Prefix))
@@ -253,7 +253,7 @@ namespace StardewArchipelago.Items.Traps
             {
                 return;
             }
-            
+
             _archipelago.DivideBigIntegerDataStorage(Scope.Global, bankingKey, 2);
         }
 

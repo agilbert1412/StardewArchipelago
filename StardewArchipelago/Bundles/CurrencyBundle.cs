@@ -16,7 +16,7 @@ namespace StardewArchipelago.Bundles
                 {
                     continue;
                 }
-                
+
                 var itemFields = itemDetails.Split("|");
                 Currency = itemFields[0];
                 Amount = int.Parse(itemFields[1]);
@@ -36,11 +36,11 @@ namespace StardewArchipelago.Bundles
 
         public static readonly Dictionary<string, string> CurrencyIds = new()
         {
-            {"Money", IDProvider.MONEY}, 
-            {"Star Token", IDProvider.STAR_TOKEN},
-            {"Qi Coin", IDProvider.QI_COIN},
+            { "Money", IDProvider.MONEY },
+            { "Star Token", IDProvider.STAR_TOKEN },
+            { "Qi Coin", IDProvider.QI_COIN },
             // {"Golden Walnut", IDProvider.GOLDEN_WALNUT},
-            {"Qi Gem", IDProvider.QI_GEM}
+            { "Qi Gem", IDProvider.QI_GEM }
         };
     }
 }
