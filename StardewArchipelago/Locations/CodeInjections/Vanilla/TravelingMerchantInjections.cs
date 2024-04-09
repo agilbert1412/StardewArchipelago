@@ -181,37 +181,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 return;
             }
         }
-
-        private static void AddWeddingRingRecipeToStock(Dictionary<ISalable, int[]> stock)
-        {
-            if (_archipelago.SlotData.Craftsanity == Craftsanity.None)
-            {
-                if (Game1.player.craftingRecipes.ContainsKey("Wedding Ring"))
-                {
-                    return;
-                }
-
-                var weddingRingRecipe = new Object("801", 1, true);
-                stock.Add(weddingRingRecipe, new int[2]
-                {
-                    500,
-                    1
-                });
-                return;
-            }
-
-            if (!_locationChecker.IsLocationMissing(AP_WEDDING_RING_RECIPE))
-            {
-                return;
-            }
-            var activeHints = _archipelago.GetMyActiveHints();
-            var weddingRingRecipeCheck = new PurchaseableArchipelagoLocation(AP_WEDDING_RING_RECIPE, _monitor, _modHelper, _locationChecker, _archipelago, activeHints);
-            stock.Add(weddingRingRecipeCheck, new int[2]
-            {
-                500,
-                1
-            });
-        }
         
         private static void AdjustPrices(Dictionary<ISalable, int[]> stock, double priceMultiplier)
         {
