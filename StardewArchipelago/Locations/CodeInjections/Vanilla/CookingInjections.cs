@@ -29,7 +29,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             try
             {
-                if (!_itemManager.ObjectExists(itemId))
+                if (!_itemManager.ObjectExistsById(itemId))
                 {
                     _monitor.Log($"Unrecognized cooked recipe: {itemId}", LogLevel.Warn);
                     return;
