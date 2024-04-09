@@ -101,7 +101,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     Game1.drawObjectDialogue("The traveling merchant isn't here today.");
                     return false; // don't run original logic
                 }
-                
+
                 return true; // run original logic
             }
             catch (Exception ex)
@@ -181,7 +181,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 return;
             }
         }
-        
+
         private static void AdjustPrices(Dictionary<ISalable, int[]> stock, double priceMultiplier)
         {
             foreach (var (item, prices) in stock)

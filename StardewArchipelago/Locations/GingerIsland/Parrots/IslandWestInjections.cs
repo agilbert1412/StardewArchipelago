@@ -62,12 +62,12 @@ namespace StardewArchipelago.Locations.GingerIsland.Parrots
         {
             return _locationChecker.IsLocationChecked(AP_FARM_OBELISK_PARROT);
         }
-        
+
         private static void AddMailboxParrot(IslandLocation islandWest)
         {
             islandWest.parrotUpgradePerches.Add(new ParrotUpgradePerchArchipelago(AP_MAILBOX_PARROT, _archipelago, islandWest,
                 new Point(81, 40),
-                new Rectangle(80, 39, 3, 2), 
+                new Rectangle(80, 39, 3, 2),
                 5,
                 PurchaseMailboxParrot,
                 IsMailboxParrotPurchased,
@@ -84,7 +84,7 @@ namespace StardewArchipelago.Locations.GingerIsland.Parrots
         {
             return _locationChecker.IsLocationChecked(AP_MAILBOX_PARROT);
         }
-        
+
         private static void AddFarmhouseParrot(IslandLocation islandWest)
         {
             islandWest.parrotUpgradePerches.Add(new ParrotUpgradePerchArchipelago(AP_FARMHOUSE_PARROT, _archipelago, islandWest,
@@ -105,7 +105,7 @@ namespace StardewArchipelago.Locations.GingerIsland.Parrots
         {
             return _locationChecker.IsLocationChecked(AP_FARMHOUSE_PARROT);
         }
-        
+
         private static void AddParrotExpressParrot(IslandLocation islandWest)
         {
             islandWest.parrotUpgradePerches.Add(new ParrotUpgradePerchArchipelago(AP_PARROT_EXPRESS_PARROT, _archipelago, islandWest,

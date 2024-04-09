@@ -11,13 +11,13 @@ namespace StardewArchipelago.Stardew
     public class BigCraftable : StardewItem
     {
         public const string BIG_CRAFTABLE_SEPARATOR = ":";
-        
+
         public bool Outdoors { get; private set; }
         public bool Indoors { get; private set; }
         public int Fragility { get; private set; }
 
         public BigCraftable(string id, string name, int sellPrice, string description, bool outdoors, bool indoors, int fragility, string displayName)
-        : base(id, name, sellPrice, displayName, description)
+            : base(id, name, sellPrice, displayName, description)
         {
             Outdoors = outdoors;
             Indoors = indoors;

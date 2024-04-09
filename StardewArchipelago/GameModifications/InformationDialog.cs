@@ -17,10 +17,10 @@ namespace StardewArchipelago.GameModifications
         private bool active = true;
 
         public InformationDialog(
-          string message,
-          ConfirmationDialog.behavior onClickOkBehavior = null,
-          ConfirmationDialog.behavior onCloseBehavior = null)
-          : base(Game1.uiViewport.Width / 2 - (int)Game1.dialogueFont.MeasureString(message).X / 2 - borderWidth, Game1.uiViewport.Height / 2 - (int)Game1.dialogueFont.MeasureString(message).Y / 2, (int)Game1.dialogueFont.MeasureString(message).X + borderWidth * 2, (int)Game1.dialogueFont.MeasureString(message).Y + borderWidth * 2 + 160)
+            string message,
+            ConfirmationDialog.behavior onClickOkBehavior = null,
+            ConfirmationDialog.behavior onCloseBehavior = null)
+            : base(Game1.uiViewport.Width / 2 - (int)Game1.dialogueFont.MeasureString(message).X / 2 - borderWidth, Game1.uiViewport.Height / 2 - (int)Game1.dialogueFont.MeasureString(message).Y / 2, (int)Game1.dialogueFont.MeasureString(message).X + borderWidth * 2, (int)Game1.dialogueFont.MeasureString(message).Y + borderWidth * 2 + 160)
         {
             onClickOk = onClickOkBehavior ?? CloseDialog;
             onClose = onCloseBehavior;

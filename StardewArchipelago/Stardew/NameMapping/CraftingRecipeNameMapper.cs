@@ -5,11 +5,12 @@ namespace StardewArchipelago.Stardew.NameMapping
 {
     public class CraftingRecipeNameMapper : IRecipeNameMapper
     {
-        private static readonly Dictionary<string, string> _recipeToItemNames = new(){
-            {"Wild Seeds (Sp)", "Spring Seeds"},
-            {"Wild Seeds (Su)", "Summer Seeds"},
-            {"Wild Seeds (Fa)", "Fall Seeds"},
-            {"Wild Seeds (Wi)", "Winter Seeds"},
+        private static readonly Dictionary<string, string> _recipeToItemNames = new()
+        {
+            { "Wild Seeds (Sp)", "Spring Seeds" },
+            { "Wild Seeds (Su)", "Summer Seeds" },
+            { "Wild Seeds (Fa)", "Fall Seeds" },
+            { "Wild Seeds (Wi)", "Winter Seeds" },
         };
 
         private static readonly Dictionary<string, string> _itemToRecipeNames =

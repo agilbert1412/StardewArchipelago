@@ -146,7 +146,7 @@ namespace StardewArchipelago.Archipelago
         private void InitializeAfterConnection()
         {
             IsConnected = true;
-			
+
             _session.Items.ItemReceived += OnItemReceived;
             _session.MessageLog.OnMessageReceived += OnMessageReceived;
             _session.Socket.ErrorReceived += SessionErrorReceived;
@@ -276,7 +276,7 @@ namespace StardewArchipelago.Archipelago
             {
                 return;
             }
-            
+
             _itemReceivedFunction();
         }
 
@@ -597,7 +597,7 @@ namespace StardewArchipelago.Archipelago
             {
                 return _localDataPackage.GetLocalLocationName(locationId);
             }
-            
+
             var locationName = _session.Locations.GetLocationNameFromId(locationId);
             if (string.IsNullOrWhiteSpace(locationName))
             {
@@ -651,7 +651,7 @@ namespace StardewArchipelago.Archipelago
                 return _localDataPackage.GetLocalItemName(itemId);
             }
 
-            var itemName =  _session.Items.GetItemName(itemId);
+            var itemName = _session.Items.GetItemName(itemId);
             if (string.IsNullOrWhiteSpace(itemName))
             {
                 itemName = _localDataPackage.GetLocalItemName(itemId);
@@ -829,7 +829,7 @@ namespace StardewArchipelago.Archipelago
             Game1.chatBox?.addMessage("Reconnection attempt successful!", Color.Green);
             return IsConnected;
         }
-        
+
         public void APUpdate()
         {
             MakeSureConnected(60);

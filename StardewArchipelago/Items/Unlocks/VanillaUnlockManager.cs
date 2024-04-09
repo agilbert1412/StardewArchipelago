@@ -77,7 +77,7 @@ namespace StardewArchipelago.Items.Unlocks
             _unlockables.Add("Dwarvish Translation Guide", SendDwarvishTranslationGuideLetter);
             _unlockables.Add("Skull Key", SendSkullKeyLetter);
             _unlockables.Add("Rusty Key", SendRustyKeyLetter);
-            
+
             _unlockables.Add("Club Card", SendClubCardLetter);
             _unlockables.Add("Magnifying Glass", SendMagnifyingGlassLetter);
             _unlockables.Add("Iridium Snake Milk", SendIridiumSnakeMilkLetter);

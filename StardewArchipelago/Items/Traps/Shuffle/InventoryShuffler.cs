@@ -89,7 +89,7 @@ namespace StardewArchipelago.Items.Traps.Shuffle
             {
                 return groupedInventories;
             }
-            
+
             while (TryGetOneMergeCandidate(targets, groupedInventories, out var mergeIndex1, out var mergeIndex2))
             {
                 MergeGroups(groupedInventories, mergeIndex1, mergeIndex2);

@@ -62,7 +62,7 @@ namespace StardewArchipelago.Locations.GingerIsland.Boat
                     __result = true;
                     return false; // don't run original logic
                 }
-                
+
                 return true; // run original logic
             }
             catch (Exception ex)
@@ -180,7 +180,7 @@ namespace StardewArchipelago.Locations.GingerIsland.Boat
                 Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\Locations:BoatTunnel_DonateBatteriesHint"));
                 return;
             }
-            
+
             // Maybe could hint where the boat repair is?
         }
 
@@ -224,7 +224,7 @@ namespace StardewArchipelago.Locations.GingerIsland.Boat
                     __instance.createYesNoResponses(), "WillyBoatDonateHardwood");
                 return;
             }
-            
+
             Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\Locations:BoatTunnel_DonateHardwoodHint"));
         }
 

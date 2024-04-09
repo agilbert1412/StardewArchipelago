@@ -4,7 +4,7 @@
     {
         public const string Friendship = "Friendship";
         public const string Backpack = "Backpack";
-        public const string SkullKey = "SkullKey"; 
+        public const string SkullKey = "SkullKey";
         public const string DwarvishTranslationGuide = "DwarvishTranslationGuide";
         public const string RustyKey = "RustyKey";
         public const string ClubCard = "ClubCard";

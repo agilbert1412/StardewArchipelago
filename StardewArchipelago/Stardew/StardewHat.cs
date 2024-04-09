@@ -10,7 +10,7 @@ namespace StardewArchipelago.Stardew
         public bool IgnoreHairstyleOffset { get; }
 
         public StardewHat(string id, string name, string description, string skipHairDraw, bool ignoreHairstyleOffset, string displayName)
-        : base(id, name, 0, displayName, description)
+            : base(id, name, 0, displayName, description)
         {
         }
 

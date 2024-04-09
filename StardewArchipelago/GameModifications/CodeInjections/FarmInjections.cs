@@ -225,7 +225,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             var tile = farm.GetStarterShippingBinLocation();
             for (var x = 0; x < 2; x++)
             {
-                var isBuildable = farm.isBuildable(new Vector2(tile.X + x, tile.Y)) ;
+                var isBuildable = farm.isBuildable(new Vector2(tile.X + x, tile.Y));
                 if (!isBuildable)
                 {
                     return;
@@ -286,10 +286,10 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 const string forcedPetMailTitle = "Don't dodge destiny";
                 var animalType = Game1.player.catPerson ? "cat" : "dog";
                 var scoutedInfo = GetScoutedInfoForPet();
-                var forcedPetMailContent = $"I heard you rejected this poor {animalType} that she brought you.^" + 
-                                                    "Look kid, you and I both know you'll need it down the line.^" +
-                                                    $"{scoutedInfo}^" +
-                                                    $"  Your friend, Mr. Qi[#]{forcedPetMailTitle}";
+                var forcedPetMailContent = $"I heard you rejected this poor {animalType} that she brought you.^" +
+                                           "Look kid, you and I both know you'll need it down the line.^" +
+                                           $"{scoutedInfo}^" +
+                                           $"  Your friend, Mr. Qi[#]{forcedPetMailTitle}";
 
                 mailman.GenerateMail(forcedPetMailKey, forcedPetMailContent);
                 mailman.SendMail(forcedPetMailKey);

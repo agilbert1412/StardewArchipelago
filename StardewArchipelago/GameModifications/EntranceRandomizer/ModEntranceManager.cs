@@ -8,7 +8,8 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
     public class ModEntranceManager
     {
 
-        public static List<string> GrandpaShedEdgeCase = new(){
+        public static List<string> GrandpaShedEdgeCase = new()
+        {
             "Custom_GrandpasShed to Custom_GrandpasShedGreenhouse", "Custom_GrandpasShedGreenhouse to Custom_GrandpasShed"
         };
 
@@ -30,8 +31,8 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Fable Reef", "Custom_FableReef" },
             { "First Slash Guild", "Custom_FirstSlashGuild" },
             { "Highlands Outside", "Custom_Highlands" },
-            { "Highlands Cavern", "Custom_HighlandsCavern"},
-            { "Highlands Cavern Prison", "Custom_HighlandsCavernPrison"},
+            { "Highlands Cavern", "Custom_HighlandsCavern" },
+            { "Highlands Cavern Prison", "Custom_HighlandsCavernPrison" },
             { "Lance's House Ladder", "Custom_HighlandsOutpost|12|5" },
             { "Lance's House Main", "Custom_HighlandsOutpost|7|9" },
             { "Lost Woods", "Custom_JunimoWoods|37|2" },
@@ -61,7 +62,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Grampleton Suburbs", "Custom_GrampletonSuburbs" },
             { "Scarlett's House", "Custom_ScarlettHouse" },
             { "Wizard Basement", "Custom_WizardBasement" },
-            { "Gunther's Bedroom", "Custom_GunthersRoom"}
+            { "Gunther's Bedroom", "Custom_GunthersRoom" }
         };
 
         private static readonly Dictionary<string, string> _locationEugene = new()
@@ -95,26 +96,26 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
         {
             { "Jasper's Bedroom", "Custom_LK_Museum2" },
         };
-    
+
         private static readonly Dictionary<string, string> _locationYoba = new()
         {
             { "Yoba's Clearing", "Custom_Woods3" },
-        };                
+        };
 
         private static readonly Dictionary<string, string> _locationAlecto = new()
         {
-            { "Witch's Attic", "Custom_Alecto_WitchHutUpstairs"},
+            { "Witch's Attic", "Custom_Alecto_WitchHutUpstairs" },
         };
 
         private static readonly Dictionary<string, string> _locationLacey = new()
         {
-            { "Mouse House", "Custom_HatMouseLacey_MouseHouse"}
+            { "Mouse House", "Custom_HatMouseLacey_MouseHouse" }
         };
 
         private static readonly Dictionary<string, string> _locationBoardingHouse = new()
         {
             { "Boarding House Outside", "Custom_BoardingHouse_BackwoodsPlateau" },
-            { "Boarding House - First Floor", "Custom_BoardingHouse_BoardingHouse"},
+            { "Boarding House - First Floor", "Custom_BoardingHouse_BoardingHouse" },
             { "Boarding House - Second Floor", "Custom_BoardingHouse_BoardingHouse2" },
             { "Abandoned Mines - 1A", "Custom_BoardingHouse_AbandonedMine1A" },
             { "Abandoned Mines - 1B", "Custom_BoardingHouse_AbandonedMine1B" },
@@ -133,7 +134,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Lost Valley Minecart", "Custom_BoardingHouse_TheLostValley|3|22" }
 
 
-        };                
+        };
 
         private static readonly Dictionary<string, Dictionary<string, string>> _locationAliasesByMod = new()
         {
@@ -163,7 +164,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
 
             return modLocationAliases;
         }
-         
+
         public static bool CheckForGrandpasShedGreenhouseEdgeCase(string currentLocationName, string locationRequestName)
         {
             var case1 = currentLocationName == "Custom_GrandpasShed" && locationRequestName == "Custom_GrandpasShedGreenhouse";
@@ -175,6 +176,6 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             return false;
         }
 
-            
+
     }
 }

@@ -8,7 +8,7 @@ namespace StardewArchipelago.Stardew
     public class StardewSlingshot : StardewWeapon
     {
         public StardewSlingshot(string id, string name, string description, int minDamage, int maxDamage, double knockBack, double speed, double addedPrecision, double addedDefence, int type, int baseMineLevel, int minMineLevel, double addedAoe, double criticalChance, double criticalDamage, string displayName)
-        : base(id, name, description, minDamage, maxDamage, knockBack, speed, addedPrecision, addedDefence, type, baseMineLevel, minMineLevel, addedAoe, criticalChance, criticalDamage, displayName)
+            : base(id, name, description, minDamage, maxDamage, knockBack, speed, addedPrecision, addedDefence, type, baseMineLevel, minMineLevel, addedAoe, criticalChance, criticalDamage, displayName)
         {
         }
 

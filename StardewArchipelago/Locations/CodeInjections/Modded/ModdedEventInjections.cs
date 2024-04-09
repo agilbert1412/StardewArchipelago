@@ -51,7 +51,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             _archipelago = archipelago;
             _locationChecker = locationChecker;
         }
-        
+
         public static bool AddCookingRecipe_CheckForStrayRecipe_Prefix(Event __instance, GameLocation location, GameTime time, string[] split)
         {
             try

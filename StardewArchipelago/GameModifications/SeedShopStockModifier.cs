@@ -123,7 +123,7 @@ namespace StardewArchipelago.GameModifications
             {
                 AddToJojaShop(shopData, QualifiedItemIds.RARE_SEED, 10, 1000);
             }
-            
+
             AddToJojaShop(shopData, QualifiedItemIds.SUGAR, 20);
             AddToJojaShop(shopData, QualifiedItemIds.WHEAT_FLOUR, 20);
             AddToJojaShop(shopData, QualifiedItemIds.RICE, 20);

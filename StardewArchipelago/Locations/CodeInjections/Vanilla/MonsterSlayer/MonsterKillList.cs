@@ -14,7 +14,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
         private const string MONSTER_LINE_FORMAT = "Strings\\Locations:AdventureGuild_KillList_{0}";
         private const string MONSTER_HEADER = "Strings\\Locations:AdventureGuild_KillList_Header";
         private const string MONSTER_FOOTER = "Strings\\Locations:AdventureGuild_KillList_Footer";
-        
+
         private ArchipelagoClient _archipelago;
 
         public readonly Dictionary<string, string[]> MonstersByCategory = new()
@@ -197,7 +197,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
             {
                 lineFormat = Game1.content.LoadString("Strings\\Locations:AdventureGuild_KillList_LineFormat_OverTarget");
             }
-            
+
             var line = string.Format(lineFormat, killCount, target, monsterType) + "^";
             return line;
         }

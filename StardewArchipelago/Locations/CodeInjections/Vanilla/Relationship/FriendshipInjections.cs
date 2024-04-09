@@ -239,7 +239,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
                 {
                     textureName = ArchipelagoTextures.PLEADING;
                 }
-                else if(heartIndex >= maxHeartForCurrentRelation)
+                else if (heartIndex >= maxHeartForCurrentRelation)
                 {
                     textureName = ArchipelagoTextures.BLACK;
                 }
@@ -452,7 +452,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
             const int bachelorNoDecayThreshold = 2000;
             const int nonBachelorNoDecayThreshold = 2500;
             var earnedPoints = GetFriendshipPoints(npcName);
-            
+
             if (NpcIsSpouse(farmer, npcName))
             {
                 farmer.changeFriendship(DECAY_SPOUSE, npc);

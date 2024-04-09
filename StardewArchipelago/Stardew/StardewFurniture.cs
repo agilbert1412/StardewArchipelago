@@ -26,11 +26,11 @@ namespace StardewArchipelago.Stardew
         public bool IsFishTank => Type.Equals(TYPE_FISHTANK, StringComparison.OrdinalIgnoreCase);
 
         public bool IsTV => Type.Contains(TYPE_TV, StringComparison.OrdinalIgnoreCase) ||
-                             Name.Contains(TYPE_TV, StringComparison.OrdinalIgnoreCase);
+                            Name.Contains(TYPE_TV, StringComparison.OrdinalIgnoreCase);
 
         public bool IsLupiniPainting => int.TryParse(Id, out var numericId) && numericId % 2 == 0 && numericId >= 1838 && numericId <= 1854;
 
-        public StardewFurniture(string id, string name, string type, string tilesheetSize, string boundingBoxSize, string rotations, string price, string displayName, string placementRestriction): base(id, name, 0, displayName, "")
+        public StardewFurniture(string id, string name, string type, string tilesheetSize, string boundingBoxSize, string rotations, string price, string displayName, string placementRestriction) : base(id, name, 0, displayName, "")
         {
             Type = type;
             TilesheetSize = tilesheetSize;
@@ -81,7 +81,7 @@ namespace StardewArchipelago.Stardew
             {
                 return new LetterActionAttachment(receivedItem, LetterActionsKeys.GiveTV, Id.ToString());
             }
-            
+
             return new LetterActionAttachment(receivedItem, LetterActionsKeys.GiveFurniture, Id.ToString());
         }
 

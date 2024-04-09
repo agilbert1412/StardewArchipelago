@@ -20,18 +20,24 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         private const string CHEST_3 = "Abandoned Treasure - Floor 3";
         private const string CHEST_4 = "Abandoned Treasure - Floor 4";
         private const string CHEST_5 = "Abandoned Treasure - Floor 5";
-        private static readonly Dictionary<string, string> abandonedMines = new(){
-            {"Custom_BoardingHouse_AbandonedMine1A", CHEST_1A}, {"Custom_BoardingHouse_AbandonedMine1B", CHEST_1B}, 
-            {"Custom_BoardingHouse_AbandonedMine2A", CHEST_2A}, {"Custom_BoardingHouse_AbandonedMine2B", CHEST_2B}, 
-            {"Custom_BoardingHouse_AbandonedMine3", CHEST_3}, {"Custom_BoardingHouse_AbandonedMine4", CHEST_4},
-            {"Custom_BoardingHouse_AbandonedMine5", CHEST_5},
+        private static readonly Dictionary<string, string> abandonedMines = new()
+        {
+            { "Custom_BoardingHouse_AbandonedMine1A", CHEST_1A }, { "Custom_BoardingHouse_AbandonedMine1B", CHEST_1B },
+            { "Custom_BoardingHouse_AbandonedMine2A", CHEST_2A }, { "Custom_BoardingHouse_AbandonedMine2B", CHEST_2B },
+            { "Custom_BoardingHouse_AbandonedMine3", CHEST_3 }, { "Custom_BoardingHouse_AbandonedMine4", CHEST_4 },
+            { "Custom_BoardingHouse_AbandonedMine5", CHEST_5 },
         };
 
         private static readonly Dictionary<ShopIdentification, PricedItem[]> craftsanityRecipes = new()
         {
-            { new ShopIdentification("Mine", "Dwarf"), new[] { new PricedItem("Pterodactyl Skeleton L", 5000), new PricedItem("Pterodactyl Skeleton M", 5000),
-            new PricedItem("Pterodactyl Skeleton R", 5000), new PricedItem("T-Rex Skeleton L", 5000), new PricedItem("T-Rex Skeleton M", 5000),
-            new PricedItem("T-Rex Skeleton R", 5000), new PricedItem("Neanderthal Skeleton", 5000) } },
+            {
+                new ShopIdentification("Mine", "Dwarf"), new[]
+                {
+                    new PricedItem("Pterodactyl Skeleton L", 5000), new PricedItem("Pterodactyl Skeleton M", 5000),
+                    new PricedItem("Pterodactyl Skeleton R", 5000), new PricedItem("T-Rex Skeleton L", 5000), new PricedItem("T-Rex Skeleton M", 5000),
+                    new PricedItem("T-Rex Skeleton R", 5000), new PricedItem("Neanderthal Skeleton", 5000)
+                }
+            },
         };
 
         private static IMonitor _monitor;
@@ -47,7 +53,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             _archipelago = archipelago;
             _shopReplacer = shopReplacer;
         }
-        
+
         // public override void update(GameTime time)
         public static void Update_ReplaceDwarfShopChecks_Postfix(ShopMenu __instance, GameTime time)
         {

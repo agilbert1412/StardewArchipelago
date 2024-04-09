@@ -186,7 +186,7 @@ namespace StardewArchipelago.Archipelago
             {
                 return false;
             }
-            
+
 
             return TryHandleCommand(_lastCommand);
         }

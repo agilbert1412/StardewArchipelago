@@ -1,21 +1,21 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <ApplicationManifest>manifest.json</ApplicationManifest>
-    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <EnableHarmony>true</EnableHarmony>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ApplicationManifest>manifest.json</ApplicationManifest>
+        <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+        <EnableHarmony>true</EnableHarmony>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <None Include="..\.editorconfig" Link=".editorconfig" />
-  </ItemGroup>
+    <ItemGroup>
+        <None Include="..\.editorconfig" Link=".editorconfig"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Archipelago.Gifting.Net" Version="0.2.5" />
-    <PackageReference Include="Archipelago.MultiClient.Net" Version="5.0.6" />
-    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="4.1.1" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Archipelago.Gifting.Net" Version="0.2.5"/>
+        <PackageReference Include="Archipelago.MultiClient.Net" Version="5.0.6"/>
+        <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="4.1.1"/>
+    </ItemGroup>
 
   <ItemGroup>
     <None Update="IdTables\stardew_valley_item_table.json">
@@ -293,8 +293,8 @@
     </None>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="GameModifications\CustomOptions\" />
-    <Folder Include="Test\" />
-  </ItemGroup>
+    <ItemGroup>
+        <Folder Include="GameModifications\CustomOptions\"/>
+        <Folder Include="Test\"/>
+    </ItemGroup>
 </Project>

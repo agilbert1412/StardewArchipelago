@@ -153,7 +153,8 @@ namespace StardewArchipelago.Items.Mail
         // 1: Sender Name
         // 2: Sender Game
         // 3: Embed
-        private static readonly string[] ApGiftStrings = {
+        private static readonly string[] ApGiftStrings =
+        {
             "It's dangerous to go alone. Take this!^^    -{1} from {2}",
             "Hopefully, this {0} will convince you to leave the Burger King...^^    -{1} from {2}",
             "Here you go!^^    -{1} from {2}",
@@ -177,7 +178,8 @@ namespace StardewArchipelago.Items.Mail
         // 2: Location
         // 3: Embed
         // 4: Farm Name
-        private readonly string[] ApMailStrings = {
+        private readonly string[] ApMailStrings =
+        {
             "Hey @, I was at {2}, minding my own business, and there I found a {0}.^I thought you would make better use of it than I ever could.^^    -{1}",
             "I found a {0} in {2}.^Enjoy!^^    -{1}",
             "There was a {0} in my {2}.^Do you think you can make it useful?^^    -{1}",

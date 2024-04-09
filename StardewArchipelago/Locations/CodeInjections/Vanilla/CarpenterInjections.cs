@@ -104,7 +104,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     case 0:
                         text = Game1.parseText(Game1.content.LoadString("Strings\\Locations:ScienceHouse_Carpenter_UpgradeHouse1"));
                         text = text.Replace("10,000", $"{(int)Math.Round(10000 * priceMultiplier)}")
-                                   .Replace("450", $"{Math.Max(1, (int)Math.Round(450 * priceMultiplier))}");
+                            .Replace("450", $"{Math.Max(1, (int)Math.Round(450 * priceMultiplier))}");
                         break;
                     case 1:
                         var priceGold = (int)Math.Round(50000 * priceMultiplier);
