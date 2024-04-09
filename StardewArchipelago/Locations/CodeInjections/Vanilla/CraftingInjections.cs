@@ -50,7 +50,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     var location = $"{CRAFTING_LOCATION_PREFIX}{itemName}";
                     _locationChecker.AddCheckedLocation(location);
                 }
-                
+
                 return;
             }
             catch (Exception ex)

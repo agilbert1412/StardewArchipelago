@@ -43,7 +43,7 @@ namespace StardewArchipelago.Locations.GingerIsland.VolcanoForge
                     __instance.GetMutex().RequestLock(() => __instance.openChestEvent.Fire());
                 else
                     __instance.performOpenChest();
-                
+
                 var obj = __instance.Items[0];
                 __instance.Items[0] = null;
                 __instance.Items.RemoveAt(0);

@@ -29,21 +29,24 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Modded
         private static readonly string _junimoDialogueKey = "PurpleJunimoVendor";
 
 
-        private static readonly List<string> _junimoFirstItems = new(){
+        private static readonly List<string> _junimoFirstItems = new()
+        {
             "Legend", "Prismatic Shard", "Ancient Seeds", "Dinosaur Egg", "Tiny Crop (stage 1)", "Super Starfruit", "Magic Bait"
         };
 
-        private static readonly Dictionary<string, string> _junimoPhrase = new(){
-            {"Orange", "Look! Me gib pretty \nfor orange thing!" },
-            {"Red", "Give old things \nfor red gubbins!"},
-            {"Grey", "I trade rocks for \n grey what's-its!"},
-            {"Yellow", "I hab seeds, gib \nyellow gubbins!"},
-            {"Blue", "I hab fish! You \ngive blue pretty?"}
+        private static readonly Dictionary<string, string> _junimoPhrase = new()
+        {
+            { "Orange", "Look! Me gib pretty \nfor orange thing!" },
+            { "Red", "Give old things \nfor red gubbins!" },
+            { "Grey", "I trade rocks for \n grey what's-its!" },
+            { "Yellow", "I hab seeds, gib \nyellow gubbins!" },
+            { "Blue", "I hab fish! You \ngive blue pretty?" }
 
         };
-        private static readonly Dictionary<string, string> _firstItemToColor = new(){
-            {"Legend", "Blue"}, {"Prismatic Shard", "Grey"}, {"Dinosaur Egg", "Red"}, {"Ancient Seeds", "Yellow"},
-            {"Tiny Crop (stage 1)", "Orange"}, {"Super Starfruit", "Purple"}, {"Magic Bait", "Purple"}
+        private static readonly Dictionary<string, string> _firstItemToColor = new()
+        {
+            { "Legend", "Blue" }, { "Prismatic Shard", "Grey" }, { "Dinosaur Egg", "Red" }, { "Ancient Seeds", "Yellow" },
+            { "Tiny Crop (stage 1)", "Orange" }, { "Super Starfruit", "Purple" }, { "Magic Bait", "Purple" }
         };
 
         public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, SeedShopStockModifier seedShopStockModifier, StardewItemManager stardewItemManager)

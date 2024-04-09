@@ -24,7 +24,7 @@ namespace StardewArchipelago.Items
 
         // When More mods start to need name mapping, we can make a generic version of this
         private CompoundNameMapper _nameMapper;
-        
+
         public ItemParser(IMonitor monitor, IModHelper helper, Harmony harmony, ArchipelagoClient archipelago, StardewItemManager itemManager, TileChooser tileChooser, BabyBirther babyBirther, GiftSender giftSender)
         {
             _monitor = monitor;
@@ -62,7 +62,7 @@ namespace StardewArchipelago.Items
                     return resourcePackItem.GetAsLetter(receivedItem, resourcePackAmount);
                 }
             }
-            
+
             if (TryParseFriendshipBonus(receivedItem.ItemName, out var numberOfPoints))
             {
                 return new LetterActionAttachment(receivedItem, LetterActionsKeys.Friendship, numberOfPoints.ToString());

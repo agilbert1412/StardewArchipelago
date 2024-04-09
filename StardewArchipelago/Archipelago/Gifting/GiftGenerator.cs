@@ -76,7 +76,7 @@ namespace StardewArchipelago.Archipelago.Gifting
         private IEnumerable<GiftTrait> GetConsumableTraits(ObjectData objectInfo)
         {
             yield return CreateTrait(GiftFlag.Consumable);
-            
+
             if (objectInfo.IsDrink)
             {
                 yield return CreateTrait(GiftFlag.Drink);
@@ -159,7 +159,7 @@ namespace StardewArchipelago.Archipelago.Gifting
                     }
                 }
             }
-            
+
             if (ReplaceFlags.ContainsKey(type))
             {
                 type = ReplaceFlags[type];

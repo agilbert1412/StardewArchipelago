@@ -16,21 +16,21 @@ namespace StardewArchipelago.Constants.Vanilla
 
         public static Dictionary<string, string> RecipeNameAliases = new()
         {
-            {"Cheese Cauli.", "Cheese Cauliflower"},
-            {"Dish o' The Sea", "Dish O' The Sea"},
-            {"Eggplant Parm.", "Eggplant Parmesan"},
-            {"Cran. Sauce", "Cranberry Sauce"},
-            {"Vegetable Stew", "Vegetable Medley"},
+            { "Cheese Cauli.", "Cheese Cauliflower" },
+            { "Dish o' The Sea", "Dish O' The Sea" },
+            { "Eggplant Parm.", "Eggplant Parmesan" },
+            { "Cran. Sauce", "Cranberry Sauce" },
+            { "Vegetable Stew", "Vegetable Medley" },
         };
 
         public static Dictionary<string, string> NPCNameAliases = new()
         {
-            {"MisterGinger", "Mr. Ginger"}, 
-            {"MarlonFay", "Marlon"}, 
-            {"GuntherSilvian", "Gunther"}, 
-            {"MorrisTod", "Morris"},
-            {"HatMouseLacey", "Lacey"}, 
-            {"Goblin", "Zic"}
+            { "MisterGinger", "Mr. Ginger" },
+            { "MarlonFay", "Marlon" },
+            { "GuntherSilvian", "Gunther" },
+            { "MorrisTod", "Morris" },
+            { "HatMouseLacey", "Lacey" },
+            { "Goblin", "Zic" }
         };
     }
 }

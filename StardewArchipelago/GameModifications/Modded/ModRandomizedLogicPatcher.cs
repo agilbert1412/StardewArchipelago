@@ -1,4 +1,3 @@
-
 using HarmonyLib;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Modded;

@@ -25,7 +25,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
 {
     public static class QuestInjections
     {
-        private static List<string> _ignoredQuests = new(){
+        private static List<string> _ignoredQuests = new()
+        {
             "To The Beach", "Explore The Mine", "Deeper In The Mine", "To The Bottom?", "The Mysterious Qi",
             "A Winter Mystery", "Cryptic Note", "Dark Talisman", "Goblin Problem"
         };
@@ -340,7 +341,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
                 {
                     return true; // run original logic
                 }
-                
+
                 var actionFirstWord = action[0];
 
                 if (actionFirstWord != "LumberPile" || who.hasOrWillReceiveMail("TH_LumberPile") || !who.hasOrWillReceiveMail("TH_SandDragon"))

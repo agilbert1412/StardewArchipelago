@@ -544,7 +544,7 @@ namespace StardewArchipelago
             }
 
             var season = arg2[0];
-            var currentSeasonNumber = (int) Game1.stats.DaysPlayed / 28;
+            var currentSeasonNumber = (int)Game1.stats.DaysPlayed / 28;
             if (State.SeasonsOrder.Count <= currentSeasonNumber)
             {
                 State.SeasonsOrder.Add(season);
@@ -561,7 +561,6 @@ namespace StardewArchipelago
         }
 
 #if DEBUG
-
         private void ReleaseSlot(string arg1, string[] arg2)
         {
             if (!_archipelago.IsConnected || !Game1.hasLoadedGame || arg2.Length < 1)

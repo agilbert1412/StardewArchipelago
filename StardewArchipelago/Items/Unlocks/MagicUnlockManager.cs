@@ -121,19 +121,19 @@ namespace StardewArchipelago.Items.Unlocks
         {
             ReceiveSpell("elemental:descend");
             return new LetterInformationAttachment(receivedItem);
-        }       
+        }
 
         private LetterAttachment SendFireballSpell(ReceivedItem receivedItem)
         {
             ReceiveSpell("elemental:fireball");
             return new LetterInformationAttachment(receivedItem);
-        }   
+        }
 
         private LetterAttachment SendFrostbiteSpell(ReceivedItem receivedItem)
         {
             ReceiveSpell("elemental:frostbite");
             return new LetterInformationAttachment(receivedItem);
-        }   
+        }
 
         private LetterAttachment SendTeleportSpell(ReceivedItem receivedItem)
         {

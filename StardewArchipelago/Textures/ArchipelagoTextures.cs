@@ -45,7 +45,7 @@ namespace StardewArchipelago.Textures
 
         private static string GetPreferredIconSet()
         {
-            return ModEntry.Instance.Config.UseCustomArchipelagoIcons? ICON_SET_CUSTOM : ICON_SET_ORIGINAL;
+            return ModEntry.Instance.Config.UseCustomArchipelagoIcons ? ICON_SET_CUSTOM : ICON_SET_ORIGINAL;
         }
 
         private static string GetChosenIconSet(string iconSet)

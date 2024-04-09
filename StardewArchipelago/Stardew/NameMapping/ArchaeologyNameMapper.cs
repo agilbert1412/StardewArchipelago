@@ -5,19 +5,20 @@ namespace StardewArchipelago.Stardew.NameMapping
 {
     public class ArchaeologyNameMapper : INameMapper, IRecipeNameMapper
     {
-        private static readonly Dictionary<string, string> ArchaeologyToEnglishNamesMap = new(){
-            {"moonslime.excavation.ancient_battery", "Ancient Battery Production Station"},
-            {"moonslime.excavation.glass_bazier", "Glass Bazier"},
-            {"moonslime.excavation.grinder", "Grinder"},
-            {"moonslime.excavation.preservation_chamber", "Preservation Chamber"},
-            {"moonslime.excavation.h_preservation_chamber", "Hardwood Preservation Chamber"},
-            {"moonslime.excavation.glass_fence", "Glass Fence"},
-            {"moonslime.excavation.dummy_path_bone", "Bone Path"},
-            {"moonslime.excavation.dummy_path_glass", "Glass Path"},
-            {"moonslime.excavation.dummy_water_strainer", "Water Shifter"},
-            {"moonslime.excavation.h_display", "Hardwood Display"},
-            {"moonslime.excavation.w_display", "Wooden Display"},
-            {"moonslime.excavation.totem_volcano_warp", "Dwarf Gadget: Infinite Volcano Simulation"}
+        private static readonly Dictionary<string, string> ArchaeologyToEnglishNamesMap = new()
+        {
+            { "moonslime.excavation.ancient_battery", "Ancient Battery Production Station" },
+            { "moonslime.excavation.glass_bazier", "Glass Bazier" },
+            { "moonslime.excavation.grinder", "Grinder" },
+            { "moonslime.excavation.preservation_chamber", "Preservation Chamber" },
+            { "moonslime.excavation.h_preservation_chamber", "Hardwood Preservation Chamber" },
+            { "moonslime.excavation.glass_fence", "Glass Fence" },
+            { "moonslime.excavation.dummy_path_bone", "Bone Path" },
+            { "moonslime.excavation.dummy_path_glass", "Glass Path" },
+            { "moonslime.excavation.dummy_water_strainer", "Water Shifter" },
+            { "moonslime.excavation.h_display", "Hardwood Display" },
+            { "moonslime.excavation.w_display", "Wooden Display" },
+            { "moonslime.excavation.totem_volcano_warp", "Dwarf Gadget: Infinite Volcano Simulation" }
         };
 
         private static readonly Dictionary<string, string> EnglishToArchaeologyNamesMap = ArchaeologyToEnglishNamesMap.ToDictionary(x => x.Value, x => x.Key);

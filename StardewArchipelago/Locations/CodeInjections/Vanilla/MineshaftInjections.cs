@@ -63,7 +63,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 __instance.Items[0] = null;
                 __instance.Items.RemoveAt(0);
                 __result = true;
-                
+
                 _locationChecker.AddCheckedLocation(string.Format(TREASURE_LOCATION, Game1.mine.mineLevel));
 
                 return false; // don't run original logic
@@ -225,7 +225,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     var origin = new Vector2(8f, 8f);
                     b.Draw(_miniArchipelagoIcon, position, sourceRectangle, color, 0.0f, origin, 1f, SpriteEffects.None, 0.86f);
                 }
-                
+
                 return;
             }
             catch (Exception ex)

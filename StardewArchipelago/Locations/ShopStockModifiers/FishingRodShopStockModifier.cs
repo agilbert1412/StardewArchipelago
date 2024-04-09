@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Stardew;

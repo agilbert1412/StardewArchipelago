@@ -16,15 +16,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         public const string JK_VICTORY = "Junimo Kart: Sunset Speedway (Victory)";
         private static readonly Dictionary<int, string> JK_LEVEL_LOCATIONS = new Dictionary<int, string>()
         {
-            {0, "Junimo Kart: Crumble Cavern"},
-            {1, "Junimo Kart: Slippery Slopes"},
-            {8, "Junimo Kart: Secret Level"},
-            {2, "Junimo Kart: The Gem Sea Giant"},
-            {5, "Junimo Kart: Slomp's Stomp"},
-            {3, "Junimo Kart: Ghastly Galleon"},
-            {9, "Junimo Kart: Glowshroom Grotto"},
-            {4, "Junimo Kart: Red Hot Rollercoaster"},
-            {6, JK_VICTORY},
+            { 0, "Junimo Kart: Crumble Cavern" },
+            { 1, "Junimo Kart: Slippery Slopes" },
+            { 8, "Junimo Kart: Secret Level" },
+            { 2, "Junimo Kart: The Gem Sea Giant" },
+            { 5, "Junimo Kart: Slomp's Stomp" },
+            { 3, "Junimo Kart: Ghastly Galleon" },
+            { 9, "Junimo Kart: Glowshroom Grotto" },
+            { 4, "Junimo Kart: Red Hot Rollercoaster" },
+            { 6, JK_VICTORY },
         };
 
         private const string JOTPK_BOOTS_1 = "JotPK: Boots 1";

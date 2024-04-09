@@ -15,7 +15,7 @@ namespace StardewArchipelago.Stardew
         public string BuffDuration { get; private set; }
 
         public StardewObject(string id, string name, int sellPrice, int edibility, string type, int category, string displayName, string description, string misc1 = "", string misc2 = "", string buffDuration = "")
-        : base(id, name, sellPrice, displayName, description)
+            : base(id, name, sellPrice, displayName, description)
         {
             Edibility = edibility;
             Type = type;

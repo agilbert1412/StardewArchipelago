@@ -37,9 +37,9 @@ namespace StardewArchipelago.Stardew
 
         public Dictionary<string, string> ItemSuffixes = new Dictionary<string, string>()
         {
-            {"126", " (Green)"},
-            {"180", " (Brown)"},
-            {"182", " (Brown)"},
+            { "126", " (Green)" },
+            { "180", " (Brown)" },
+            { "182", " (Brown)" },
         };
 
         public StardewItemManager()
@@ -54,7 +54,7 @@ namespace StardewArchipelago.Stardew
 
         public bool ItemExists(string itemName)
         {
-            return _objectsByName.ContainsKey(itemName) || 
+            return _objectsByName.ContainsKey(itemName) ||
                    _bigCraftablesByName.ContainsKey(itemName) ||
                    _bootsByName.ContainsKey(itemName) ||
                    _furnitureByName.ContainsKey(itemName) ||
@@ -582,7 +582,7 @@ namespace StardewArchipelago.Stardew
             var ingredients = new Dictionary<string, int>();
             for (var i = 0; i < ingredientsField.Length - 1; i += 2)
             {
-                ingredients.Add(ingredientsField[i], int.Parse(ingredientsField[i+1]));
+                ingredients.Add(ingredientsField[i], int.Parse(ingredientsField[i + 1]));
             }
             var unusedField = fields[1];
             var yieldField = fields[2].Split(" ");
@@ -645,7 +645,7 @@ namespace StardewArchipelago.Stardew
                 {
                     continue;
                 }
-                
+
                 yield return name;
             }
         }

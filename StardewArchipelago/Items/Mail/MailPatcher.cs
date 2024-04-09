@@ -173,7 +173,7 @@ namespace StardewArchipelago.Items.Mail
                 {
                     return true; // run original logic
                 }
-                
+
                 var nextLetter = mailbox.First();
                 if (!nextLetter.Equals(GoalCodeInjection.MASTER_ANGLER_LETTER))
                 {

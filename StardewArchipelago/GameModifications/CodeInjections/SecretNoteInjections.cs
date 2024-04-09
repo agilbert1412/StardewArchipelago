@@ -38,7 +38,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 {
                     return;
                 }
-                
+
                 if (who.secretNotesSeen.Count < MAX_SECRET_NOTES || who.Items.ContainsId(SECRET_NOTE_ID))
                 {
                     return;
@@ -55,7 +55,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     return;
                 }
 
-                var secretNoteNumber = Game1.random.Next(1, MAX_SECRET_NOTES+1);
+                var secretNoteNumber = Game1.random.Next(1, MAX_SECRET_NOTES + 1);
                 var secretNote = new Object(SECRET_NOTE_ID, 1);
                 secretNote.name = secretNote.name + " #" + secretNoteNumber;
                 __result = secretNote;

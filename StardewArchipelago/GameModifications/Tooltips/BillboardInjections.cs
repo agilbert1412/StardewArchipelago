@@ -114,7 +114,7 @@ namespace StardewArchipelago.GameModifications.Tooltips
             var birthdays = billBoard.GetBirthdays();
             for (var i = 0; i < calendarDays.Count; i++)
             {
-                var birthdaysToday = birthdays.GetValueOrDefault(i+1) ?? new List<NPC>();
+                var birthdaysToday = birthdays.GetValueOrDefault(i + 1) ?? new List<NPC>();
                 DrawAPIconIfNeeded(birthdaysToday, spriteBatch, calendarDays, i);
                 DrawTravelingMerchantIconIfNeeded(spriteBatch, calendarDays, i);
             }

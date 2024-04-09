@@ -78,8 +78,7 @@ namespace StardewArchipelago.Items
                         babyName += " ";
                     }
                 }
-            }
-            while (npcNames.Contains(babyName));
+            } while (npcNames.Contains(babyName));
 
             return babyName;
         }

@@ -100,7 +100,7 @@ namespace StardewArchipelago.GameModifications
             PatchQuestLog();
             PatchWorldChangedEvent();
             PatchLostAndFoundBox();
-            PatchMixedSeeds();            
+            PatchMixedSeeds();
             PatchTvChannels();
             PatchCleanupBeforeSave();
             PatchProfitMargin();
@@ -373,7 +373,7 @@ namespace StardewArchipelago.GameModifications
             {
                 e.Edit(ChangeFishCasseroleQuestText, AssetEditPriority.Late);
             }
-            
+
             RefreshFishCasseroleQuestIfAlreadyHasIt();
         }
 

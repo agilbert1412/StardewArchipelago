@@ -71,7 +71,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
                 return;
             }
 
-            foreach (var (locationName, locationAlias)  in _modEntranceManager.GetModLocationAliases(slotData))
+            foreach (var (locationName, locationAlias) in _modEntranceManager.GetModLocationAliases(slotData))
             {
                 _locationAliases[locationName] = locationAlias;
             }
@@ -110,11 +110,11 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             var random = new Random(int.Parse(slotData.Seed));
             var chosenEntrance = "";
             var replacementIsOutside = false;
-            
+
             while (!replacementIsOutside)
             {
                 chosenEntrance = ModifiedEntrances.Keys.ToArray()[random.Next(ModifiedEntrances.Keys.Count)];
-                var barredEntranceRule = !chosenEntrance.Contains("67|17")  &&  !chosenEntrance.Contains("SpriteSpring");
+                var barredEntranceRule = !chosenEntrance.Contains("67|17") && !chosenEntrance.Contains("SpriteSpring");
                 replacementIsOutside = outsideAreas.Contains(chosenEntrance.Split(TRANSITIONAL_STRING)[0]) && barredEntranceRule; // 67|17 is Quarry Mine
             }
 
@@ -125,7 +125,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
         {
             if (slotData.Mods.HasMod(ModNames.SVE))
             {
-                yield return "Custom_ForestWest"; 
+                yield return "Custom_ForestWest";
                 yield return "Custom_BlueMoonVineyard";
             }
             if (slotData.Mods.HasMod(ModNames.BOARDING_HOUSE))
@@ -179,8 +179,8 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
                 _monitor.Log($"Tried to find warp from {currentLocationName} but found none.  Giving default warp.", LogLevel.Trace);
                 return false;
             }
-            
-            var correctDesiredWarpName =_equivalentAreas.GetCorrectEquivalentEntrance(desiredWarpName);
+
+            var correctDesiredWarpName = _equivalentAreas.GetCorrectEquivalentEntrance(desiredWarpName);
 
             if (_checkedEntrancesToday.Contains(correctDesiredWarpName))
             {
@@ -374,9 +374,9 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Adventurer's Guild", "AdventureGuild" },
             { "Willy's Fish Shop", "FishShop" },
             { "Museum", "ArchaeologyHouse" },
-            { "Wizard Basement", "WizardHouseBasement"},
+            { "Wizard Basement", "WizardHouseBasement" },
             { "The Mines", "Mine|18|13" }, // 54 4 Mine 18 13
-            { "Quarry Mine Entrance", "Mine|67|17" },  // 103 15 Mine 67 17
+            { "Quarry Mine Entrance", "Mine|67|17" }, // 103 15 Mine 67 17
             { "Quarry", "Mountain" },
             { "Shipwreck", "CaptainRoom" },
             { "Gourmand Cave", "IslandFarmcave" },
@@ -396,9 +396,9 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Volcano Entrance", "VolcanoDungeon0|31|53" },
             { "Volcano River", "VolcanoDungeon0|6|49" },
             { "Secret Beach", "IslandNorth|12|31" },
-            { "Professor Snail Cave", "IslandNorthCave1"},
+            { "Professor Snail Cave", "IslandNorthCave1" },
             { "Qi Walnut Room", "QiNutRoom" },
-            { "Mutant Bug Lair", "BugLand"},
+            { "Mutant Bug Lair", "BugLand" },
         };
 
         private Dictionary<string, string> _locationsSingleWordAliases = new()
@@ -407,9 +407,10 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { " ", "" },
         };
 
-        private static readonly Dictionary<string, Dictionary<string,string>> _modifiedAliases = new()
+        private static readonly Dictionary<string, Dictionary<string, string>> _modifiedAliases = new()
         {
-            { "Stardew Valley Expanded", new(){{"WizardHouseBasement", "Custom_WizardBasement"}}
+            {
+                "Stardew Valley Expanded", new() { { "WizardHouseBasement", "Custom_WizardBasement" } }
             }
         };
     }

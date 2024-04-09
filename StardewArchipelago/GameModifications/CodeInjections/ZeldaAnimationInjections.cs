@@ -98,7 +98,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             {
                 new(57, 0),
                 new(57, 2500, false, false, who => Farmer.showHoldingItem(who, item)),
-                showMessage ? new FarmerSprite.AnimationFrame((short) farmer.FarmerSprite.CurrentFrame, 500, false, false, who => Farmer.showReceiveNewItemMessage(who, item), true) : new FarmerSprite.AnimationFrame((short) farmer.FarmerSprite.CurrentFrame, 500, false, false)
+                showMessage ? new FarmerSprite.AnimationFrame((short)farmer.FarmerSprite.CurrentFrame, 500, false, false, who => Farmer.showReceiveNewItemMessage(who, item), true) : new FarmerSprite.AnimationFrame((short)farmer.FarmerSprite.CurrentFrame, 500, false, false)
             });
             farmer.mostRecentlyGrabbedItem = item;
             farmer.canMove = false;

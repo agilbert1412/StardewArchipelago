@@ -16,7 +16,7 @@ namespace StardewArchipelago.Constants
                 return string.Empty;
             }
 
-            var arguments = new[] { amount.ToString(), itemName,  };
+            var arguments = new[] { amount.ToString(), itemName, };
             return CreateCondition(HAS_RECEIVED_ITEM, arguments);
         }
 

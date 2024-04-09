@@ -18,7 +18,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             _monitor = monitor;
             _archipelago = archipelago;
         }
-        
+
         public static bool IsWizardHouseUnlocked_UnlockAtRatProblem_Prefix(Forest __instance, ref bool __result)
         {
             try
