@@ -193,9 +193,9 @@ namespace StardewArchipelago.Items.Mail
         private static void ReplaceStardropWithSeafoamPudding()
         {
             const string stardropText = "stardrop";
-            const string stardropItemText = "%item object 434 1 %%";
+            const string stardropItemText = "%item id (O)434 1 %%";
             const string puddingText = "pudding";
-            const string seafoamPuddingItemText = "%item object 265 10 %%";
+            const string seafoamPuddingItemText = "%item id (O)265 10 %%";
 
             var mailContent = DataLoader.Mail(Game1.content);
             var masterAnglerLetterContent = mailContent[GoalCodeInjection.MASTER_ANGLER_LETTER];
