@@ -16,6 +16,9 @@ namespace StardewArchipelago.Locations
 {
     internal class PurchaseableArchipelagoLocation : Item
     {
+        private static Hint[] _activeHints;
+        private static uint _lastTimeUpdatedActiveHints;
+
         private const string ARCHIPELAGO_PREFIX = "Archipelago: ";
         private const string ARCHIPELAGO_SHORT_PREFIX = "AP: ";
         private const string ARCHIPELAGO_NO_PREFIX = "";
@@ -141,7 +144,7 @@ namespace StardewArchipelago.Locations
         public override string TypeDefinitionId => "(AP)";
 
         public static IEnumerable<ItemQueryResult> Create(string locationName, IMonitor monitor, IModHelper modHelper, LocationChecker locationChecker, ArchipelagoClient archipelago,
-            Dictionary<string, object> contextCustomFields, Hint[] myActiveHints)
+            Dictionary<string, object> contextCustomFields)
         {
             if (string.IsNullOrWhiteSpace(locationName))
             {
@@ -150,11 +153,22 @@ namespace StardewArchipelago.Locations
 
             if (locationChecker.IsLocationMissing(locationName))
             {
-                var purchaseableCheck = new PurchaseableArchipelagoLocation(locationName.Trim(), monitor, modHelper, locationChecker, archipelago, myActiveHints);
+                var currentTime = GetUniqueTimeIdentifier();
+                if (currentTime != _lastTimeUpdatedActiveHints || _activeHints == null)
+                {
+                    _activeHints = archipelago.GetMyActiveHints();
+                    _lastTimeUpdatedActiveHints = currentTime;
+                }
+                var purchaseableCheck = new PurchaseableArchipelagoLocation(locationName.Trim(), monitor, modHelper, locationChecker, archipelago, _activeHints);
                 return new ItemQueryResult[] { new(purchaseableCheck) };
             }
 
             return Enumerable.Empty<ItemQueryResult>();
+        }
+
+        private static uint GetUniqueTimeIdentifier()
+        {
+            return (Game1.stats.DaysPlayed * 3000) + (uint)Game1.timeOfDay;
         }
     }
 }
