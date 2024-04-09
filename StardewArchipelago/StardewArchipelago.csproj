@@ -267,6 +267,9 @@
     <None Update="Textures\Bundles\quality_foraging_bundle.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Textures\Bundles\rain_fishing_bundle.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Textures\Bundles\recycling_bundle.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
