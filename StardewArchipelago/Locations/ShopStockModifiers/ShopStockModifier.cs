@@ -49,16 +49,6 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
             return apShopItem;
         }
 
-        protected void AddArchipelagoCondition(ShopItemData shopItem, string[] existingConditions, string item, int amount = 1)
-        {
-            var apCondition = GameStateConditionProvider.CreateHasReceivedItemCondition(item, amount);
-            var newConditions = new List<string>();
-            newConditions.AddRange(existingConditions);
-            newConditions.Add(apCondition);
-
-            shopItem.Condition = string.Join(',', newConditions);
-        }
-
         protected void ReplaceWithArchipelagoCondition(ShopItemData shopItem, string item, int amount = 1)
         {
             shopItem.Condition = GameStateConditionProvider.CreateHasReceivedItemCondition(item, amount);
