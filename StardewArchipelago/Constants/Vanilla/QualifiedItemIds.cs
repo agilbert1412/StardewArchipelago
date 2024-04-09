@@ -12,10 +12,11 @@ namespace StardewArchipelago.Constants.Vanilla
         public const string WEAPON_QUALIFIER = "(W)";
         public const string BOOTS_QUALIFIER = "(B)";
         public const string TOOLS_QUALIFIER = "(T)";
+        public const string HAT_QUALIFIER = "(H)";
 
         private static readonly string[] ALL_QUALIFIERS = new[]
         {
-            OBJECT_QUALIFIER, BIG_CRAFTABLE_QUALIFIER, FURNITURE_QUALIFIER, WEAPON_QUALIFIER, BOOTS_QUALIFIER, TOOLS_QUALIFIER,
+            OBJECT_QUALIFIER, BIG_CRAFTABLE_QUALIFIER, FURNITURE_QUALIFIER, WEAPON_QUALIFIER, BOOTS_QUALIFIER, TOOLS_QUALIFIER, HAT_QUALIFIER,
         };
 
         public static readonly string AMARANTH_SEEDS = QualifiedObjectId(ObjectIds.AMARANTH_SEEDS);
@@ -150,6 +151,21 @@ namespace StardewArchipelago.Constants.Vanilla
         public static bool IsObject(string itemId)
         {
             return IsType(itemId, OBJECT_QUALIFIER);
+        }
+
+        public static bool IsBigCraftable(string itemId)
+        {
+            return IsType(itemId, BIG_CRAFTABLE_QUALIFIER);
+        }
+
+        public static bool IsHat(string itemId)
+        {
+            return IsType(itemId, HAT_QUALIFIER);
+        }
+
+        public static bool IsFurniture(string itemId)
+        {
+            return IsType(itemId, FURNITURE_QUALIFIER);
         }
 
         private static bool IsType(string itemId, string qualifier)
