@@ -227,6 +227,7 @@ namespace StardewArchipelago.Items.Mail
             "The {0} is a tool that can unlock any lock, whether on a door, a chest, or a heart. It is a powerful weapon that chooses it's owner. It did not choose me.^^It chose you.^^    -{1}",
             "You must use the {0} to defeat the darkness",
             "Have you ever heard the story of {0}?  I thought not.  It's not a story {1} would tell you.",
+			"OR, hear me out, we just collect random {0} people say from Discord and compile them into a massive string library so that every letter is interesting and unique so people don't feel annoyed having to read them^^    -{Madolinn}"
         };
     }
 }
