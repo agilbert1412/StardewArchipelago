@@ -96,16 +96,18 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private static string GetReceivedBuildingCondition(string buildingName)
         {
             var itemName = buildingName;
+            const string bigPrefix = "Big ";
+            const string deluxePrefix = "Deluxe ";
             var amount = 1;
-            if (buildingName.StartsWith("Big ", StringComparison.InvariantCultureIgnoreCase))
+            if (buildingName.StartsWith(bigPrefix, StringComparison.InvariantCultureIgnoreCase))
             {
                 amount = 2;
-                itemName = $"Progressive {itemName}";
+                itemName = $"Progressive {itemName[bigPrefix.Length..]}";
             }
-            else if (buildingName.StartsWith("Deluxe ", StringComparison.InvariantCultureIgnoreCase))
+            else if (buildingName.StartsWith(deluxePrefix, StringComparison.InvariantCultureIgnoreCase))
             {
                 amount = 3;
-                itemName = $"Progressive {itemName}";
+                itemName = $"Progressive {itemName[deluxePrefix.Length..]}";
             }
             else if (_progressiveBuildings.Contains(buildingName))
             {
