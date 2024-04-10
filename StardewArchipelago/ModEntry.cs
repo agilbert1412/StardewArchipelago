@@ -32,6 +32,7 @@ using StardewArchipelago.Integrations.GenericModConfigMenu;
 using StardewValley.Delegates;
 using StardewValley.Internal;
 using StardewArchipelago.Constants;
+using StardewValley.Triggers;
 
 namespace StardewArchipelago
 {
@@ -135,8 +136,8 @@ namespace StardewArchipelago
             ItemQueryResolver.Register(IDProvider.TRAVELING_CART_DAILY_CHECK, TravelingMerchantInjections.CreateDailyCheck);
             ItemQueryResolver.Register(IDProvider.ARCHIPELAGO_EQUIPMENTS, AdventureGuildEquipmentsQueryDelegate);
             GameStateQuery.Register(GameStateConditionProvider.HAS_RECEIVED_ITEM, HasReceivedItemQueryDelegate);
-            GameStateQuery.Register(GameStateConditionProvider.CART_RANDOM_ITEM_STOCK_CHANCE, TravelingMerchantInjections.ShouldRandomStockItemRemain);
-            GameStateQuery.Register(GameStateConditionProvider.CART_EXCLUSIVE_ITEM_STOCK_CHANCE, TravelingMerchantInjections.ShouldExclusiveStockItemRemain);
+            GameStateQuery.Register(GameStateConditionProvider.HAS_STOCK_SIZE, TravelingMerchantInjections.HasStockSizeQueryDelegate);
+            TriggerActionManager.RegisterAction(TriggerActionProvider.TRAVELING_MERCHANT_PURCHASE, TravelingMerchantInjections.OnPurchasedRandomItem);
         }
 
         private IEnumerable<ItemQueryResult> PurchasableAPLocationQueryDelegate(string key, string arguments, ItemQueryContext context, bool avoidrepeat, HashSet<string> avoiditemids, Action<string, string> logerror)

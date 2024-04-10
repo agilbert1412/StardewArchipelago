@@ -6,8 +6,7 @@ namespace StardewArchipelago.Constants
     public static class GameStateConditionProvider
     {
         public static readonly string HAS_RECEIVED_ITEM = CreateId("HasReceivedItem");
-        public static readonly string CART_RANDOM_ITEM_STOCK_CHANCE = CreateId("TRAVELING_CART_RANDOM_ITEM_STOCK_CHANCE");
-        public static readonly string CART_EXCLUSIVE_ITEM_STOCK_CHANCE = CreateId("TRAVELING_CART_EXCLUSIVE_ITEM_STOCK_CHANCE");
+        public static readonly string HAS_STOCK_SIZE = CreateId("HasCartStockSize");
 
         public static string CreateHasReceivedItemCondition(string itemName, int amount = 1)
         {
@@ -32,6 +31,12 @@ namespace StardewArchipelago.Constants
                 return $"BUILDINGS_CONSTRUCTED ALL {buildingName} 1";
             }
             return $"BUILDINGS_CONSTRUCTED ALL {buildingName} 0 0";
+        }
+
+        public static string CreateHasStockSizeCondition(double minimumStock)
+        {
+            var arguments = new[] { minimumStock.ToString(), };
+            return CreateCondition(HAS_STOCK_SIZE, arguments);
         }
 
         public static string CreateCondition(string condition, string[] arguments)

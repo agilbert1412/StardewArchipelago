@@ -28,8 +28,6 @@ namespace StardewArchipelago.GameModifications
             }
 
             _hasBeenPurchasedAlready = true;
-            _archipelagoState.TravelingMerchantPurchases++;
-            TravelingMerchantInjections.SetTravelingMerchantFlair(Game1.activeClickableMenu as ShopMenu);
             return _stardewItem.actionWhenPurchased(shopId);
         }
 

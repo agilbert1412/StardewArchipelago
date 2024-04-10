@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Force.DeepCloner;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Serialization;
@@ -30,29 +31,34 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
                 {
                     var shopsData = asset.AsDictionary<string, ShopData>().Data;
                     var cartShopData = shopsData["Traveler"];
-                    AddStockSizeConditions(cartShopData);
+                    SetUpRandomItemsStockSize(cartShopData);
                     AddMetalDetectorItems(cartShopData);
                     AddChecks(cartShopData);
                 },
                 AssetEditPriority.Late
             );
         }
-
-        private void AddStockSizeConditions(ShopData cartShopData)
+        private void SetUpRandomItemsStockSize(ShopData cartShopData)
         {
-            foreach (var shopItemData in cartShopData.Items)
+            for (var i = 0; i < cartShopData.Items.Count; i++)
             {
-                var initialPerItemCondition = shopItemData.PerItemCondition;
-                var conditions = initialPerItemCondition.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim()).ToList();
-                if (shopItemData.Id == "RandomObjects")
+                var item = cartShopData.Items[i];
+                if (item.Id != "RandomObjects" || item.ItemId != "RANDOM_ITEMS (O) 2 789 @requirePrice @isRandomSale" || item.MaxItems <= 1 || !string.IsNullOrWhiteSpace(item.Condition))
                 {
-                    conditions.Add($"{GameStateConditionProvider.CART_RANDOM_ITEM_STOCK_CHANCE} cart_random_items 1.0");
+                    continue;
                 }
-                else
+
+                cartShopData.Items.RemoveAt(i);
+
+                for (var numberItems = 0; numberItems < item.MaxItems; numberItems++)
                 {
-                    conditions.Add($"{GameStateConditionProvider.CART_EXCLUSIVE_ITEM_STOCK_CHANCE} cart_exclusive_items 1.0");
+                    var newItem = item.DeepClone();
+                    newItem.Id = $"RandomObjects[{i}]";
+                    newItem.MaxItems = 1;
+                    newItem.Condition = GameStateConditionProvider.CreateHasStockSizeCondition(numberItems);
+                    newItem.ActionsOnPurchase = new List<string> { TriggerActionProvider.TRAVELING_MERCHANT_PURCHASE };
+                    cartShopData.Items.Insert(i+numberItems, newItem);
                 }
-                shopItemData.PerItemCondition = string.Join(", ", conditions);
             }
         }
 

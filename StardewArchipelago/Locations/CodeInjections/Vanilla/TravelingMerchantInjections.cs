@@ -10,6 +10,7 @@ using StardewArchipelago.Serialization;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Delegates;
+using StardewValley.GameData.Shops;
 using StardewValley.Internal;
 using StardewValley.Locations;
 using StardewValley.Menus;
@@ -21,11 +22,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
     public class TravelingMerchantInjections
     {
-        private const double BASE_STOCK = 0.1;
-        private const double STOCK_AMOUNT_PER_UPGRADE_FOR_EXCLUSIVE_ITEMS = 0.15;
-        private const double STOCK_AMOUNT_PER_UPGRADE_FOR_RANDOM_ITEMS = 0.1;
-        private const double STOCK_AMOUNT_PER_ONE_PERCENT_CHECKS_FOR_RANDOM_ITEMS = 0.01;
-        private const double STOCK_AMOUNT_REDUCTION_PER_PURCHASE = 0.1;
+        private const double BASE_STOCK = 1;
+        private const double STOCK_AMOUNT_PER_UPGRADE_FOR_RANDOM_ITEMS = 1;
+        private const double STOCK_AMOUNT_PER_ONE_PERCENT_CHECKS_FOR_RANDOM_ITEMS = 0.1;
+        private const double STOCK_AMOUNT_REDUCTION_PER_PURCHASE = 1;
 
         // 0.1 + (6 * 0.1) + (100 * 0.05)
         // 10% + 60% + 100% = 6
@@ -108,11 +108,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
         }
 
-        public static void SetUpShopOwner_TravelingMerchantApFlair_Postfix(ShopMenu __instance, string who)
+        // public void SetUpShopOwner(ShopOwnerData ownerData, NPC owner = null)
+        public static void SetUpShopOwner_TravelingMerchantApFlair_Postfix(ShopMenu __instance, ShopOwnerData ownerData, NPC owner)
         {
             try
             {
-                if (who != "Traveler" || !IsTravelingMerchantDay(Game1.dayOfMonth, out var playerName))
+                if (__instance.ShopId != "Traveler" || !IsTravelingMerchantDay(Game1.dayOfMonth, out var playerName))
                 {
                     return;
                 }
@@ -133,102 +134,68 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 return;
             }
 
-            var currentStockSize = GetChanceForRandomStockItemToRemain(_archipelago.GetReceivedItemCount(AP_MERCHANT_STOCK));
+            var currentStockSize = GetRandomItemStockSize(_archipelago.GetReceivedItemCount(AP_MERCHANT_STOCK));
             var day = Days.GetDayOfWeekName(Game1.dayOfMonth);
             var locationName = Game1.currentLocation is Forest ? "Cindersap Forest" : "the Beach Night Market";
             var text = _flairOverride.Any() ? _flairOverride.Values.First() : GetFlairForToday(playerName, locationName, day, currentStockSize);
-            var prettyStockSize = (int)(currentStockSize * 100);
+            var prettyStockSize = (int)(currentStockSize * 10);
             text += $"{Environment.NewLine}Stock: {prettyStockSize}%";
             travelingMerchantShopMenu.potraitPersonDialogue = Game1.parseText(text, Game1.dialogueFont, 304);
         }
 
         private static string GetFlairForToday(string playerName, string locationName, string day, double currentStockSize)
         {
-            if (currentStockSize < 0.2)
+            if (currentStockSize < 2)
             {
                 return $"I'm sorry I don't have much to offer. Maybe do something else in the meantime?";
             }
 
-            if (currentStockSize < 0.95)
+            if (currentStockSize < 9.5)
             {
                 return playerName == null || locationName == null || day == null ? "I got lots of good stuff for sale!" : $"{playerName} recommended that I visit {locationName} on {day}s.";
             }
 
             return "Sweety, will you please buy something? I have a family to feed";
         }
-
-        // public static IEnumerable<ItemQueryResult> RANDOM_ITEMS(string key, string arguments, ItemQueryContext context, bool avoidRepeat, HashSet<string> avoidItemIds, Action<string, string> logError)
-
-        public static void RANDOM_ITEMS_MakeItemsWithPurchaseTriggers_Postfix(string key, string arguments, ItemQueryContext context, bool avoidRepeat, HashSet<string> avoidItemIds, Action<string, string> logError, IEnumerable<ItemQueryResult> __result)
+        
+        public static bool OnPurchasedRandomItem(string[] args, TriggerActionContext context, out string error)
         {
-            try
-            {
-                var customItems = new List<ItemQueryResult>();
-                foreach (var itemQueryResult in __result)
-                {
-                    var archipelagoItem = new TravelingMerchantItem(itemQueryResult.Item, _archipelagoState);
-                    itemQueryResult.Item = archipelagoItem;
-                }
+            _archipelagoState.TravelingMerchantPurchases++;
+            SetTravelingMerchantFlair(Game1.activeClickableMenu as ShopMenu);
 
-                return;
-            }
-            catch (Exception ex)
-            {
-                _monitor.Log($"Failed in {nameof(RANDOM_ITEMS_MakeItemsWithPurchaseTriggers_Postfix)}:\n{ex}", LogLevel.Error);
-                return;
-            }
+            error = string.Empty;
+            return true;
         }
 
-        private static void AdjustPrices(Dictionary<ISalable, int[]> stock, double priceMultiplier)
+        public static bool HasStockSizeQueryDelegate(string[] query, GameStateQueryContext context)
         {
-            foreach (var (item, prices) in stock)
+            if (!Utility.TryCreateIntervalRandom("day", string.Join(" ", query), out var random, out var error))
             {
-                prices[0] = ModifyPrice(prices[0], priceMultiplier);
-            }
-        }
-
-        public static bool ShouldExclusiveStockItemRemain(string[] query, GameStateQueryContext context)
-        {
-            if (!ArgUtility.TryGet(query, 1, out var key, out var error))
-            {
-                return GameStateQuery.Helpers.ErrorResult(query, error);
-            }
-
-            if (!Utility.TryCreateIntervalRandom("day", key, out var random, out error))
-            {
-                return GameStateQuery.Helpers.ErrorResult(query, error);
+                return false;
             }
 
             var stockUpgrades = _archipelago.GetReceivedItemCount(AP_MERCHANT_STOCK);
-            query[2] = $"{GetChanceForExclusiveStockItemToRemain(stockUpgrades)}";
+            var currentStockSize = GetRandomItemStockSize(stockUpgrades);
 
-            return GameStateQuery.Helpers.RandomImpl(random, query, 2);
-        }
+            var minimumStockSize = double.Parse(query[1]);
 
-        public static bool ShouldRandomStockItemRemain(string[] query, GameStateQueryContext context)
-        {
-            if (!ArgUtility.TryGet(query, 1, out var key, out var error))
+            if (currentStockSize < minimumStockSize)
             {
-                return GameStateQuery.Helpers.ErrorResult(query, error);
+                return false;
+            }
+            if (currentStockSize > minimumStockSize + 1)
+            {
+                return true;
             }
 
-            if (!Utility.TryCreateIntervalRandom("day", key, out var random, out error))
-            {
-                return GameStateQuery.Helpers.ErrorResult(query, error);
-            }
+            var chanceToRemain = currentStockSize - minimumStockSize;
 
-            var stockUpgrades = _archipelago.GetReceivedItemCount(AP_MERCHANT_STOCK);
-            query[2] = $"{GetChanceForRandomStockItemToRemain(stockUpgrades)}";
+            var shouldRemain = random.NextDouble() < chanceToRemain;
+            return shouldRemain;
 
-            return GameStateQuery.Helpers.RandomImpl(random, query, 2);
         }
 
-        private static double GetChanceForExclusiveStockItemToRemain(int stockUpgrades)
-        {
-            return BASE_STOCK + (stockUpgrades * STOCK_AMOUNT_PER_UPGRADE_FOR_EXCLUSIVE_ITEMS);
-        }
-
-        private static double GetChanceForRandomStockItemToRemain(int stockUpgrades)
+        private static double GetRandomItemStockSize(int stockUpgrades)
         {
             double checksCompleted = _archipelago.Session.Locations.AllLocationsChecked.Count;
             double totalChecks = _archipelago.Session.Locations.AllLocations.Count;
@@ -384,11 +351,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             var chosenObject = allDonatableItems[chosenIndex];
             allDonatableItems.RemoveAt(chosenIndex);
             return chosenObject;
-        }
-
-        private static int ModifyPrice(int price, double priceMultiplier)
-        {
-            return (int)Math.Round(price * priceMultiplier, MidpointRounding.ToEven);
         }
 
         public static bool IsTravelingMerchantDay(int dayOfMonth)

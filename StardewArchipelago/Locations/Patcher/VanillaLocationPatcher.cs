@@ -611,13 +611,8 @@ namespace StardewArchipelago.Locations.Patcher
             );
 
             _harmony.Patch(
-                original: AccessTools.Method(typeof(ShopMenu), nameof(ShopMenu.setUpShopOwner)),
+                original: AccessTools.Method(typeof(ShopMenu), nameof(ShopMenu.SetUpShopOwner)),
                 postfix: new HarmonyMethod(typeof(TravelingMerchantInjections), nameof(TravelingMerchantInjections.SetUpShopOwner_TravelingMerchantApFlair_Postfix))
-            );
-
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(ItemQueryResolver.DefaultResolvers), nameof(ItemQueryResolver.DefaultResolvers.RANDOM_ITEMS)),
-                postfix: new HarmonyMethod(typeof(TravelingMerchantInjections), nameof(TravelingMerchantInjections.RANDOM_ITEMS_MakeItemsWithPurchaseTriggers_Postfix))
             );
 
             _modHelper.Events.Content.AssetRequested += _travelingMerchantShopStockModifier.OnShopStockRequested;
