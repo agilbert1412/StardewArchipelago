@@ -33,7 +33,6 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
                     AddStockSizeConditions(cartShopData);
                     AddMetalDetectorItems(cartShopData);
                     AddChecks(cartShopData);
-                    AdjustPrices(cartShopData);
                 },
                 AssetEditPriority.Late
             );
@@ -82,24 +81,6 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
                 MaxItems = 1,
             };
             cartShopData.Items.Add(metalDetector);
-        }
-
-        private void AdjustPrices(ShopData cartShopData)
-        {
-            cartShopData.PriceModifierMode = QuantityModifier.QuantityModifierMode.Stack;
-            //cartShopData.PriceModifiers.Add(new QuantityModifier()
-            //{
-            //    Id = IDProvider.TRAVELING_CART_DISCOUNTS,
-            //    Amount = 
-            //});
-            //foreach (var itemShopData in cartShopData.Items)
-            //{
-            //    if (itemShopData.Price > 0)
-            //    {
-
-            //    }
-            //}
-            throw new NotImplementedException();
         }
     }
 }

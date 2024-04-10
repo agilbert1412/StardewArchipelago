@@ -43,6 +43,7 @@ namespace StardewArchipelago.Locations.Patcher
         private readonly CarpenterShopStockModifier _carpenterShopStockModifier;
         private readonly CarpenterBuildingsModifier _carpenterBuildingsModifier;
         private readonly AdventureGuildShopStockModifier _guildShopStockModifier;
+        private readonly TravelingMerchantShopStockModifier _travelingMerchantShopStockModifier;
         private readonly FestivalShopStockModifier _festivalShopStockModifier;
         private readonly CookingRecipePurchaseStockModifier _cookingRecipePurchaseStockModifier;
         private readonly CraftingRecipePurchaseStockModifier _craftingRecipePurchaseStockModifier;
@@ -59,6 +60,7 @@ namespace StardewArchipelago.Locations.Patcher
             _carpenterShopStockModifier = new CarpenterShopStockModifier(monitor, modHelper, archipelago, stardewItemManager);
             _carpenterBuildingsModifier = new CarpenterBuildingsModifier(monitor, modHelper, archipelago);
             _guildShopStockModifier = new AdventureGuildShopStockModifier(monitor, modHelper, archipelago, stardewItemManager);
+            _travelingMerchantShopStockModifier = new TravelingMerchantShopStockModifier(monitor, modHelper, archipelago, stardewItemManager);
             _festivalShopStockModifier = new FestivalShopStockModifier(monitor, modHelper, archipelago, stardewItemManager);
             _cookingRecipePurchaseStockModifier = new CookingRecipePurchaseStockModifier(monitor, modHelper, archipelago, stardewItemManager);
             _craftingRecipePurchaseStockModifier = new CraftingRecipePurchaseStockModifier(monitor, modHelper, archipelago, stardewItemManager);
@@ -102,6 +104,7 @@ namespace StardewArchipelago.Locations.Patcher
             CleanFishingRodEvents();
             CleanCarpenterEvents();
             CleanAdventureGuildEvents();
+            CleanTravelingMerchantEvents();
             CleanFestivalEvents();
             CleanChefsanityEvents();
             CleanCraftsanityEvents();
@@ -616,6 +619,13 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(typeof(ItemQueryResolver.DefaultResolvers), nameof(ItemQueryResolver.DefaultResolvers.RANDOM_ITEMS)),
                 postfix: new HarmonyMethod(typeof(TravelingMerchantInjections), nameof(TravelingMerchantInjections.RANDOM_ITEMS_MakeItemsWithPurchaseTriggers_Postfix))
             );
+
+            _modHelper.Events.Content.AssetRequested += _travelingMerchantShopStockModifier.OnShopStockRequested;
+        }
+
+        private void CleanTravelingMerchantEvents()
+        {
+            _modHelper.Events.Content.AssetRequested -= _travelingMerchantShopStockModifier.OnShopStockRequested;
         }
 
         private void AddFishsanityLocations()

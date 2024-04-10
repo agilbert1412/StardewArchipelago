@@ -29,12 +29,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
         // 0.1 + (6 * 0.1) + (100 * 0.05)
         // 10% + 60% + 100% = 6
-
-        private const double BASE_PRICE = 1.4;
-        private const double DISCOUNT_PER_UPGRADE = 0.1;
+        
         public const string AP_MERCHANT_DAYS = "Traveling Merchant: {0}"; // 7, One for each day
         private const string AP_MERCHANT_STOCK = "Traveling Merchant Stock Size"; // 10% base size, 6 upgrades of 15% each
-        private const string AP_MERCHANT_DISCOUNT = "Traveling Merchant Discount"; // Base Price 140%, 8 x 10% discount
         private const string AP_MERCHANT_LOCATION = "Traveling Merchant {0} Item {1}";
         private const string AP_METAL_DETECTOR = "Traveling Merchant Metal Detector"; // Base Price 140%, 8 x 10% discount
         private const string AP_WEDDING_RING_RECIPE = "Wedding Ring Recipe";
