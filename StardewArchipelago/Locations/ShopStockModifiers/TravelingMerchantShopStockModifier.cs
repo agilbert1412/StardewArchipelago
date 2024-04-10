@@ -53,7 +53,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
                 for (var numberItems = 0; numberItems < item.MaxItems; numberItems++)
                 {
                     var newItem = item.DeepClone();
-                    newItem.Id = $"RandomObjects[{i}]";
+                    newItem.Id = $"RandomObjects[{numberItems}]";
                     newItem.MaxItems = 1;
                     newItem.Condition = GameStateConditionProvider.CreateHasStockSizeCondition(numberItems);
                     newItem.ActionsOnPurchase = new List<string> { TriggerActionProvider.TRAVELING_MERCHANT_PURCHASE };

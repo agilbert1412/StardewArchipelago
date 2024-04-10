@@ -160,11 +160,18 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         
         public static bool OnPurchasedRandomItem(string[] args, TriggerActionContext context, out string error)
         {
-            _archipelagoState.TravelingMerchantPurchases++;
-            SetTravelingMerchantFlair(Game1.activeClickableMenu as ShopMenu);
-
-            error = string.Empty;
-            return true;
+            try
+            {
+                _archipelagoState.TravelingMerchantPurchases++;
+                SetTravelingMerchantFlair(Game1.activeClickableMenu as ShopMenu);
+                error = string.Empty;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                error = $"{ex.Message}{Environment.NewLine}{ex.StackTrace}";
+                return false;
+            }
         }
 
         public static bool HasStockSizeQueryDelegate(string[] query, GameStateQueryContext context)

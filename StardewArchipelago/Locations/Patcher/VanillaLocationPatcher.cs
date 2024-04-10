@@ -912,7 +912,7 @@ namespace StardewArchipelago.Locations.Patcher
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Event.DefaultCommands), nameof(Event.DefaultCommands.AddCraftingRecipe)),
-                prefix: new HarmonyMethod(typeof(CraftingInjections), nameof(CraftingInjections.AddCraftingRecipe_SkipLearning_Prefix))
+                prefix: new HarmonyMethod(typeof(CraftingInjections), nameof(CraftingInjections.AddCraftingRecipe_SkipLearningFurnace_Prefix))
             );
 
             _harmony.Patch(
