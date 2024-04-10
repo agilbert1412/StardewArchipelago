@@ -65,11 +65,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             try
             {
-                if (!@event.eventCommands[@event.CurrentCommand].Contains("Furnace"))
-                {
-                    return true; // run original logic
-                }
-
                 ++@event.CurrentCommand;
                 return false; // don't run original logic
             }
