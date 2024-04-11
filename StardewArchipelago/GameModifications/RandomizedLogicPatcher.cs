@@ -486,7 +486,7 @@ namespace StardewArchipelago.GameModifications
                 prefix: new HarmonyMethod(typeof(LivinOffTheLandInjections), nameof(LivinOffTheLandInjections.GetTodaysTip_CustomLivinOffTheLand_Prefix))
             );
 
-            if (_archipelago.SlotData.EntranceRandomization is EntranceRandomization.Disabled or EntranceRandomization.Chaos)
+            if (_archipelago.SlotData.EntranceRandomization is EntranceRandomization.Disabled)
             {
                 return;
             }

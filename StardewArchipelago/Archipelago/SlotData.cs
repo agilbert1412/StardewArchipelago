@@ -323,6 +323,7 @@ namespace StardewArchipelago.Archipelago
     {
         Vanilla = 0,
         Progressive = 1,
+        ProgressiveWithMasteries = 2,
     }
 
     [Flags]

@@ -154,10 +154,10 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
 
         private static void AddGatewayGazetteChannel(string dayOfWeek, List<Response> channelsList)
         {
-            var hasWrongEntranceRando = _archipelago.SlotData.EntranceRandomization is EntranceRandomization.Disabled or EntranceRandomization.Chaos;
+            var hasWrongEntranceRando = _archipelago.SlotData.EntranceRandomization is EntranceRandomization.Disabled;
             var hasWrongDay = !dayOfWeek.Equals("Mon") && !dayOfWeek.Equals("Fri");
             var missingChannel = !_archipelago.HasReceivedItem(AP_GATEWAY_GAZETTE);
-            if (hasWrongEntranceRando || hasWrongDay) //  || missingChannel)
+            if (hasWrongEntranceRando || hasWrongDay || missingChannel)
             {
                 return;
             }
