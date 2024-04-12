@@ -403,7 +403,7 @@ namespace StardewArchipelago.Archipelago
             return await _bigIntegerDataStorage.ReadAsync(scope, key);
         }
 
-        public bool AddBigIntegerDataStorage(Scope scope, string key, long amount)
+        public bool AddBigIntegerDataStorage(Scope scope, string key, BigInteger amount)
         {
             if (!MakeSureConnected())
             {
@@ -413,7 +413,7 @@ namespace StardewArchipelago.Archipelago
             return _bigIntegerDataStorage.Add(scope, key, amount);
         }
 
-        public bool SubtractBigIntegerDataStorage(Scope scope, string key, long amount, bool dontGoBelowZero)
+        public bool SubtractBigIntegerDataStorage(Scope scope, string key, BigInteger amount, bool dontGoBelowZero)
         {
             if (!MakeSureConnected())
             {
