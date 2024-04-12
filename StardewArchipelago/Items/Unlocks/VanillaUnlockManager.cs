@@ -377,7 +377,8 @@ namespace StardewArchipelago.Items.Unlocks
         private LetterAttachment SendProgressiveFarmingLevel(ReceivedItem receivedItem)
         {
             const Skill skill = Skill.Farming;
-            var receivedLevels = _archipelago.GetReceivedItemCount($"{skill} Level");
+            var apItem = $"{skill} Level";
+            var receivedLevels = _archipelago.GetReceivedItemCount(apItem);
             foreach (var farmer in Game1.getAllFarmers())
             {
                 var currentLevel = farmer.farmingLevel.Value;
@@ -398,7 +399,8 @@ namespace StardewArchipelago.Items.Unlocks
         private LetterAttachment SendProgressiveFishingLevel(ReceivedItem receivedItem)
         {
             const Skill skill = Skill.Fishing;
-            var receivedLevels = _archipelago.GetReceivedItemCount($"{skill} Level");
+            var apItem = $"{skill} Level";
+            var receivedLevels = _archipelago.GetReceivedItemCount(apItem);
             foreach (var farmer in Game1.getAllFarmers())
             {
                 var currentLevel = farmer.fishingLevel.Value;
@@ -419,7 +421,8 @@ namespace StardewArchipelago.Items.Unlocks
         private LetterAttachment SendProgressiveForagingLevel(ReceivedItem receivedItem)
         {
             const Skill skill = Skill.Foraging;
-            var receivedLevels = _archipelago.GetReceivedItemCount($"{skill} Level");
+            var apItem = $"{skill} Level";
+            var receivedLevels = _archipelago.GetReceivedItemCount(apItem);
             foreach (var farmer in Game1.getAllFarmers())
             {
                 var currentLevel = farmer.foragingLevel.Value;
@@ -440,7 +443,8 @@ namespace StardewArchipelago.Items.Unlocks
         private LetterAttachment SendProgressiveMiningLevel(ReceivedItem receivedItem)
         {
             const Skill skill = Skill.Mining;
-            var receivedLevels = _archipelago.GetReceivedItemCount($"{skill} Level");
+            var apItem = $"{skill} Level";
+            var receivedLevels = _archipelago.GetReceivedItemCount(apItem);
             foreach (var farmer in Game1.getAllFarmers())
             {
                 var currentLevel = farmer.miningLevel.Value;
@@ -461,7 +465,8 @@ namespace StardewArchipelago.Items.Unlocks
         private LetterAttachment SendProgressiveCombatLevel(ReceivedItem receivedItem)
         {
             const Skill skill = Skill.Combat;
-            var receivedLevels = _archipelago.GetReceivedItemCount($"{skill} Level");
+            var apItem = $"{skill} Level";
+            var receivedLevels = _archipelago.GetReceivedItemCount(apItem);
             foreach (var farmer in Game1.getAllFarmers())
             {
                 var currentLevel = farmer.combatLevel.Value;
