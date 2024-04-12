@@ -476,8 +476,7 @@ namespace StardewArchipelago.Archipelago
                 var playerName = GetPlayerName(apItem.Player);
                 var locationName = GetLocationName(apItem.Location) ?? "Thin air";
 
-                var receivedItem = new ReceivedItem(locationName, itemName, playerName, apItem.Location, apItem.Item,
-                    apItem.Player, itemIndex);
+                var receivedItem = new ReceivedItem(locationName, itemName, playerName, apItem.Location, apItem.Item, apItem.Player, itemIndex);
 
                 allReceivedItems.Add(receivedItem);
             }
