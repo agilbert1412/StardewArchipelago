@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Numerics;
 using System.Threading.Tasks;
 using Archipelago.MultiClient.Net;
@@ -286,7 +287,25 @@ namespace StardewArchipelago.Archipelago
                 return;
             }
 
-            _session.Locations.CompleteLocationChecks(locationIds);
+            _session.Locations.CompleteLocationChecksAsync(locationIds);
+
+            var hintCost = _session.RoomState.HintCost;
+            if (hintCost <= 0)
+            {
+                hintCost = (int)Math.Max(0M,
+                    _session.Locations.AllLocations.Count * 0.01M *
+                    _session.RoomState.HintCostPercentage);
+
+                if (hintCost <= 0)
+                {
+                    return;
+                }
+            }
+
+            if (_session?.RoomState != null && _session.RoomState.HintPoints == hintCost)
+            {
+                Game1.chatBox?.addMessage($"You can now afford a hint. Syntax: '!hint [itemName]'", Color.Gold);
+            }
         }
 
         public int GetTeam()
