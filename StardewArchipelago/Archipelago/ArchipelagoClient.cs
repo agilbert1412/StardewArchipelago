@@ -289,6 +289,11 @@ namespace StardewArchipelago.Archipelago
 
             _session.Locations.CompleteLocationChecksAsync(locationIds);
 
+            if (_session?.RoomState == null)
+            {
+                return;
+            }
+
             var hintCost = _session.RoomState.HintCost;
             if (hintCost <= 0)
             {
@@ -302,7 +307,7 @@ namespace StardewArchipelago.Archipelago
                 }
             }
 
-            if (_session?.RoomState != null && _session.RoomState.HintPoints == hintCost)
+            if (_session.RoomState.HintPoints == hintCost)
             {
                 Game1.chatBox?.addMessage($"You can now afford a hint. Syntax: '!hint [itemName]'", Color.Gold);
             }
