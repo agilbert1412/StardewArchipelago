@@ -442,6 +442,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
                 return;
             }
 
+            if (ModEntry.Instance.Config.DisableFriendshipDecay)
+            {
+                return;
+            }
+
             const int bachelorNoDecayThreshold = 2000;
             const int nonBachelorNoDecayThreshold = 2500;
             var earnedPoints = GetFriendshipPoints(npcName);
