@@ -4,7 +4,6 @@
     <TargetFramework>net5.0</TargetFramework>
     <ApplicationManifest>manifest.json</ApplicationManifest>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <GamePath>/mnt/Games and Media Collection/StardewBackup</GamePath>
     <EnableHarmony>true</EnableHarmony>
   </PropertyGroup>
 
