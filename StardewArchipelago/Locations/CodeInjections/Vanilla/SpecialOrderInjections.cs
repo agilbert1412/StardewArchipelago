@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using Archipelago.MultiClient.Net.Models;
 using Microsoft.Xna.Framework.Content;
+using Netcode;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Extensions;
 using StardewArchipelago.Items.Unlocks;
 using StardewModdingAPI;
 using StardewValley;
 using StardewArchipelago.Constants.Modded;
+using StardewValley.Extensions;
 using StardewValley.GameData.SpecialOrders;
 using StardewValley.SpecialOrders;
 using StardewValley.SpecialOrders.Rewards;
@@ -134,6 +136,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                         // worldDate = new WorldDate(Game1.year, Game1.currentSeason, (Game1.dayOfMonth - 1) / 7 * 7);
                         __instance.dueDate.Value = today + (14 - Game1.dayOfMonth % 7) + 1;
                         break;
+                    case QuestDuration.OneDay:
+                        __instance.dueDate.Value = today + 1;
+                        break;
                     case QuestDuration.TwoDays:
                         __instance.dueDate.Value = today + 2;
                         break;
@@ -156,58 +161,75 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             try
             {
-                UpdateAvailableSpecialOrdersBasedOnApState(forceRefresh);
+                // Let the game pick festival orders, they aren't checks anyway, right?
+                if (orderType.Equals("DesertFestivalMarlon", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    SetDurationOfSpecialOrders(Game1.player.team.availableSpecialOrders);
+                    return true; // run original logic
+                }
+
+                UpdateAvailableSpecialOrdersBasedOnApState(orderType, forceRefresh);
                 return false; // don't run original logic;
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(IsSpecialOrdersBoardUnlocked_UnlockBasedOnApItem_Prefix)}:\n{ex}", LogLevel.Error);
+                _monitor.Log($"Failed in {nameof(UpdateAvailableSpecialOrders_ChangeFrequencyToBeLessRng_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic;
             }
         }
 
-        private static void UpdateAvailableSpecialOrdersBasedOnApState(bool force_refresh)
+        private static void UpdateAvailableSpecialOrdersBasedOnApState(string orderType, bool forceRefresh)
         {
             if (Game1.player.team.availableSpecialOrders­ is null)
             {
                 return;
             }
 
-            foreach (var availableSpecialOrder in Game1.player.team.availableSpecialOrders)
+            SetDurationOfSpecialOrders(Game1.player.team.availableSpecialOrders);
+
+            if (!forceRefresh)
             {
-                if (availableSpecialOrder.questDuration.Value is QuestDuration.TwoDays or QuestDuration.ThreeDays &&
+                if (Game1.player.team.availableSpecialOrders.Any(availableSpecialOrder => availableSpecialOrder.orderType.Value == orderType))
+                {
+                    return;
+                }
+            }
+
+            SpecialOrder.RemoveAllSpecialOrders(orderType);
+
+            var random = Utility.CreateRandom((double)Game1.uniqueIDForThisGame, (double)Game1.stats.DaysPlayed * 1.3);
+            var allSpecialOrdersData = DataLoader.SpecialOrders(Game1.content);
+            var specialOrdersThatCanBeStartedToday = FilterToSpecialOrdersThatCanBeStartedToday(allSpecialOrdersData, orderType);
+
+            var specialOrderInstances = CreateSpecialOrderInstancesForType(specialOrdersThatCanBeStartedToday, orderType, random);
+
+            var hints = _archipelago.GetHints().Where(x => !x.Found && _archipelago.GetPlayerName(x.FindingPlayer) == _archipelago.SlotData.SlotName).ToArray();
+
+            ChooseTwoOrders(specialOrderInstances, hints, random);
+        }
+        private static void SetDurationOfSpecialOrders(IEnumerable<SpecialOrder> specialOrders)
+        {
+            foreach (var availableSpecialOrder in specialOrders)
+            {
+                if (availableSpecialOrder.questDuration.Value is QuestDuration.OneDay or QuestDuration.TwoDays or QuestDuration.ThreeDays &&
                     !Game1.player.team.acceptedSpecialOrderTypes.Contains(availableSpecialOrder.orderType.Value))
                 {
                     availableSpecialOrder.SetDuration(availableSpecialOrder.questDuration.Value);
                 }
             }
-
-            if (Game1.player.team.availableSpecialOrders.Count > 0 && !force_refresh)
-            {
-                return;
-            }
-
-            Game1.player.team.availableSpecialOrders.Clear();
-            Game1.player.team.acceptedSpecialOrderTypes.Clear();
-            var random = new Random((int)Game1.uniqueIDForThisGame + (int)(Game1.stats.DaysPlayed * 1.2999999523162842));
-            var allSpecialOrdersData = DataLoader.SpecialOrders(Game1.content);
-            var specialOrdersThatCanBeStartedToday = FilterToSpecialOrdersThatCanBeStartedToday(allSpecialOrdersData);
-            var specialOrdersForBoard = CreateSpecialOrderInstancesForType(specialOrdersThatCanBeStartedToday, "", random);
-            var specialOrdersForQi = CreateSpecialOrderInstancesForType(specialOrdersThatCanBeStartedToday, "Qi", random);
-
-            var hints = _archipelago.GetHints().Where(x => !x.Found && _archipelago.GetPlayerName(x.FindingPlayer) == _archipelago.SlotData.SlotName).ToArray();
-
-            AddTwoOrdersToBoard(specialOrdersForBoard, hints, random);
-            AddTwoOrdersToBoard(specialOrdersForQi, hints, random);
         }
 
         private static IEnumerable<KeyValuePair<string, SpecialOrderData>> FilterToSpecialOrdersThatCanBeStartedToday(
-            Dictionary<string, SpecialOrderData> allSpecialOrdersData)
+            Dictionary<string, SpecialOrderData> allSpecialOrdersData, string specialOrderType)
         {
+            // A lot of this code is duplicated from SpecialOrder.CanStartOrderNow(orderId, order)
+            // But I need to do something special with CheckTags so I had to split it and run it on my own
             var specialOrdersThatCanBeStartedToday = allSpecialOrdersData
-                .Where(order => !Game1.player.team.completedSpecialOrders.Contains(order.Key) || order.Value.Repeatable)
-                .Where(order => order.Value.Duration != QuestDuration.Month || Game1.dayOfMonth <= 16)
+                .Where(order => order.Value.OrderType == specialOrderType)
+                .Where(order => order.Value.Repeatable || !Game1.MasterPlayer.team.completedSpecialOrders.Contains(order.Key))
+                .Where(order => Game1.dayOfMonth < 16 || order.Value.Duration != QuestDuration.Month)
                 .Where(order => CheckTags(order.Value.RequiredTags))
+                .Where(order => GameStateQuery.CheckConditions(order.Value.Condition))
                 .Where(order => Game1.player.team.specialOrders.All(x => x.questKey.Value != order.Key))
                 .Where(order => !_archipelago.SlotData.ToolProgression.HasFlag(ToolProgression.Progressive) || !order.Key.StartsWith("Demetrius") ||
                                 _archipelago.HasReceivedItem("Progressive Fishing Rod"));
@@ -216,24 +238,28 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
         private static bool CheckTags(string requiredTags)
         {
-            var splitTags = requiredTags.Split(",");
-            var allowed = true;
-            foreach (var tag in splitTags)
+            if (requiredTags == null)
             {
-                allowed = allowed & CheckTag(tag.Trim());
+                return true;
             }
 
-            return allowed;
+            var splitTags = requiredTags.Split(",").Select(x => x.Trim()).Where(x => x.Length > 0);
+            if (splitTags.Any(tag => !CheckIslandTagArchipelago(tag)))
+            {
+                return false;
+            }
+
+            return SpecialOrder.CheckTags(requiredTags);
         }
 
-        private static bool CheckTag(string requiredTag)
+        private static bool CheckIslandTagArchipelago(string requiredTag)
         {
-            if (requiredTag.Equals("island", StringComparison.OrdinalIgnoreCase))
+            if (requiredTag.Equals("island", StringComparison.InvariantCultureIgnoreCase))
             {
                 return _archipelago.HasReceivedItem("Island Obelisk") || _archipelago.HasReceivedItem("Boat Repair");
             }
 
-            return SpecialOrder.CheckTags(requiredTag);
+            return true;
         }
 
         private static Dictionary<string, SpecialOrder> CreateSpecialOrderInstancesForType(
@@ -246,7 +272,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             return specialOrders;
         }
 
-        private static void AddTwoOrdersToBoard(Dictionary<string, SpecialOrder> specialOrders,
+        private static void ChooseTwoOrders(Dictionary<string, SpecialOrder> specialOrders,
             Hint[] hints, Random random)
         {
             var allSpecialOrders = specialOrders.Select(x => x.Key).ToList();
