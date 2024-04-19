@@ -6,10 +6,13 @@ using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.GameModifications.CodeInjections;
 using StardewArchipelago.Locations;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
+using StardewArchipelago.Stardew;
+using StardewArchipelago.Stardew.Ids.Vanilla;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.GameData.Shops;
+using Category = StardewArchipelago.Constants.Vanilla.Category;
 
 namespace StardewArchipelago.GameModifications
 {
@@ -21,13 +24,15 @@ namespace StardewArchipelago.GameModifications
         private IModHelper _modHelper;
         private ArchipelagoClient _archipelago;
         private LocationChecker _locationChecker;
+        private StardewItemManager _stardewItemManager;
 
-        public SeedShopStockModifier(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public SeedShopStockModifier(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager stardewItemManager)
         {
             _monitor = monitor;
             _modHelper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
+            _stardewItemManager = stardewItemManager;
         }
 
         public void OnSeedShopStockRequested(object sender, AssetRequestedEventArgs e)
@@ -76,19 +81,9 @@ namespace StardewArchipelago.GameModifications
             {
                 var item = shopData.Items[i];
                 var priceMultiplier = 1.0f;
-                if (item.AvailableStock == -1)
+                if (!SetSmallBusinessStock(shopData, item, hasStocklist, isPierre, i, ref priceMultiplier))
                 {
-                    var random = new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame / 2 + item.GetHashCode());
-                    var maxAmount = GetVillagerMaxAmountAndPrice(item.Condition, hasStocklist && isPierre, ref priceMultiplier);
-                    var todayStock = random.Next(maxAmount);
-                    if (todayStock < 5)
-                    {
-                        shopData.Items.RemoveAt(i);
-                        continue;
-                    }
-
-                    item.AvailableStock = todayStock;
-                    item.AvailableStockLimit = LimitedStockMode.Global;
+                    continue;
                 }
 
                 if (isPierre)
@@ -96,13 +91,50 @@ namespace StardewArchipelago.GameModifications
                     item.Price = (int)Math.Round(item.Price * priceMultiplier);
                 }
 
-                if (item.Condition != null && item.Condition.Contains("YEAR 2"))
-                {
-                    item.Condition = string.Join(", ", item.Condition.Split(",").Select(x => x.Trim()).Where(x => !x.Contains("YEAR 2")));
-                }
+                RemoveCondition(item, "YEAR 2");
+                RemoveCondition(item, "DAYS_PLAYED 15");
 
                 item.AvoidRepeat = true;
             }
+        }
+        private static void RemoveCondition(ShopItemData item, string condition)
+        {
+            if (item.Condition != null && item.Condition.Contains(condition))
+            {
+                item.Condition = string.Join(", ", item.Condition.Split(",").Select(x => x.Trim()).Where(x => !x.Contains(condition)));
+            }
+        }
+        private bool SetSmallBusinessStock(ShopData shopData, ShopItemData shopItem, bool hasStocklist, bool isPierre, int i, ref float priceMultiplier)
+        {
+            if (shopItem.AvailableStock != -1 || shopItem.IsRecipe)
+            {
+                return true;
+            }
+
+            if (!_stardewItemManager.ObjectExistsById(shopItem.ItemId))
+            {
+                return true;
+            }
+
+            var stardewItem = _stardewItemManager.GetObjectById(shopItem.ItemId);
+            if (stardewItem.Id == ObjectIds.BOUQUET)
+            {
+                return true;
+            }
+
+            var random = new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame / 2 + shopItem.GetHashCode());
+            var maxAmount = GetVillagerMaxAmountAndPrice(shopItem.Condition, hasStocklist && isPierre, ref priceMultiplier);
+            var todayStock = random.Next(maxAmount);
+            if (todayStock < 5)
+            {
+                shopData.Items.RemoveAt(i);
+                return false; // Don't run the rest of the code
+            }
+
+            shopItem.AvailableStock = todayStock;
+            shopItem.AvailableStockLimit = LimitedStockMode.Global;
+
+            return true;
         }
 
         private void OverhaulBigCorporationSeeds(string shopId, ShopData shopData)
