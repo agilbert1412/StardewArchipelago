@@ -132,11 +132,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
         private static void OriginalQuestCompleteCode(Quest __instance)
         {
             __instance.completed.Value = true;
+            Game1.player.currentLocation?.customQuestCompleteBehavior(__instance.id.Value);
             if (__instance.nextQuests.Count > 0)
             {
-                foreach (var nextQuest in __instance.nextQuests.Where(string.IsNullOrEmpty))
+                foreach (var nextQuest in __instance.nextQuests.Where(x => !string.IsNullOrEmpty(x)))
                 {
-                    Game1.player.questLog.Add(Quest.getQuestFromId(nextQuest));
+                    Game1.player.addQuest(nextQuest);
                 }
 
                 Game1.addHUDMessage(new HUDMessage(Game1.content.LoadString("Strings\\StringsFromCSFiles:Quest.cs.13636"), 2));
@@ -151,6 +152,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
             }
 
             Game1.dayTimeMoneyBox.questsDirty = true;
+            Game1.player.autoGenerateActiveDialogueEvent("questComplete_" + __instance.id.Value);
         }
 
         private static bool CheckDailyQuestLocationOfType(string typeApName, int max)
