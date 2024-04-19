@@ -8,6 +8,7 @@ using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Monsters;
 using StardewValley.Objects;
+using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
 {
@@ -55,6 +56,44 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
             }
         }
 
+        // public void setUpLocationSpecificFlair()
+        public static bool SetUpLocationSpecificFlair_CreateBuglandChest_Prefix(GameLocation __instance)
+        {
+            try
+            {
+                if (!__instance.Name.Equals("BugLand") || __instance is not BugLand bugLand)
+                {
+                    return true; // run original logic
+                }
+
+                if (!_locationChecker.IsLocationMissing(DARK_TALISMAN) && __instance.CanItemBePlacedHere(new Vector2(31f, 5f)))
+                {
+                    __instance.overlayObjects.Add(new Vector2(31f, 5f), new Chest(new List<Item>(), new Vector2(31f, 5f))
+                    {
+                        Tint = Color.Gray,
+                    });
+                }
+                foreach (var monster in __instance.characters)
+                {
+                    if (monster is Grub grub)
+                    {
+                        grub.setHard();
+                    }
+                    if (monster is Fly fly)
+                    {
+                        fly.setHard();
+                    }
+                }
+
+                return false; // don't run original logic
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(SetUpLocationSpecificFlair_CreateBuglandChest_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
+        }
+
         // public override bool checkForAction(Farmer who, bool justCheckingForActivity = false)
         public static bool CheckForAction_BuglandChest_Prefix(Chest __instance, Farmer who, bool justCheckingForActivity, ref bool __result)
         {
@@ -80,9 +119,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
                     __instance.performOpenChest();
                 }
 
-                var obj = __instance.Items[0];
-                __instance.Items[0] = null;
-                __instance.Items.RemoveAt(0);
+                while (__instance.Items.Count > 0)
+                {
+                    __instance.Items[0] = null;
+                    __instance.Items.RemoveAt(0);
+                }
+
                 __result = true;
 
                 _locationChecker.AddCheckedLocation(DARK_TALISMAN);
@@ -132,47 +174,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
                 return;
             }
         }
-
-        // public void setUpLocationSpecificFlair()
-        public static bool SetUpLocationSpecificFlair_BuglandChest_Prefix(GameLocation __instance)
-        {
-            try
-            {
-                if (!__instance.Name.Equals("BugLand"))
-                {
-                    return true; // run original logic
-                }
-
-                if (_locationChecker.IsLocationNotChecked(DARK_TALISMAN) && __instance.IsTileOccupiedBy(new Vector2(31, 5)))
-                {
-                    __instance.overlayObjects.Add(new Vector2(31f, 5f), new Chest(new List<Item>()
-                    {
-                        new SpecialItem(6),
-                    }, new Vector2(31f, 5f))
-                    {
-                        Tint = Color.Gray,
-                    });
-                }
-
-                foreach (var character in __instance.characters)
-                {
-                    if (character is Grub grub)
-                    {
-                        grub.setHard();
-                    }
-                    else if (character is Fly fly)
-                    {
-                        fly.setHard();
-                    }
-                }
-
-                return false; // don't run original logic
-            }
-            catch (Exception ex)
-            {
-                _monitor.Log($"Failed in {nameof(SetUpLocationSpecificFlair_BuglandChest_Prefix)}:\n{ex}", LogLevel.Error);
-                return true; // run original logic
-            }
-        }
+        
     }
 }

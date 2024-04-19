@@ -353,7 +353,7 @@ namespace StardewArchipelago.Locations.Patcher
             );
             _harmony.Patch(
                 original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.setUpLocationSpecificFlair)),
-                prefix: new HarmonyMethod(typeof(DarkTalismanInjections), nameof(DarkTalismanInjections.SetUpLocationSpecificFlair_BuglandChest_Prefix))
+                prefix: new HarmonyMethod(typeof(DarkTalismanInjections), nameof(DarkTalismanInjections.SetUpLocationSpecificFlair_CreateBuglandChest_Prefix))
             );
         }
 
