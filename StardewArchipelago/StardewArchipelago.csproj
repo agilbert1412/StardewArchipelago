@@ -8,13 +8,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <None Include="..\.editorconfig" Link=".editorconfig"/>
+        <None Include="..\.editorconfig" Link=".editorconfig" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Archipelago.Gifting.Net" Version="0.2.5"/>
-        <PackageReference Include="Archipelago.MultiClient.Net" Version="5.0.6"/>
-        <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="4.1.1"/>
+        <PackageReference Include="Archipelago.Gifting.Net" Version="0.2.5" />
+        <PackageReference Include="Archipelago.MultiClient.Net" Version="5.0.6" />
+        <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="4.1.1" />
     </ItemGroup>
 
   <ItemGroup>
@@ -300,7 +300,8 @@
   </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="GameModifications\CustomOptions\"/>
-        <Folder Include="Test\"/>
+        <Folder Include="GameModifications\Buildings\" />
+        <Folder Include="GameModifications\CustomOptions\" />
+        <Folder Include="Test\" />
     </ItemGroup>
 </Project>
