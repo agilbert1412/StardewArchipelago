@@ -97,6 +97,7 @@ namespace StardewArchipelago.GameModifications
                 item.AvoidRepeat = true;
             }
         }
+
         private static void RemoveCondition(ShopItemData item, string condition)
         {
             if (item.Condition != null && item.Condition.Contains(condition))
@@ -104,6 +105,7 @@ namespace StardewArchipelago.GameModifications
                 item.Condition = string.Join(", ", item.Condition.Split(",").Select(x => x.Trim()).Where(x => !x.Contains(condition)));
             }
         }
+
         private bool SetSmallBusinessStock(ShopData shopData, ShopItemData shopItem, bool hasStocklist, bool isPierre, int i, ref float priceMultiplier)
         {
             if (shopItem.AvailableStock != -1 || shopItem.IsRecipe)
@@ -156,6 +158,14 @@ namespace StardewArchipelago.GameModifications
                 AddToJojaShop(shopData, QualifiedItemIds.RARE_SEED, 10, 1000);
             }
 
+            // Seeds that Joja doesn't have in vanilla
+            AddToJojaShop(shopData, QualifiedItemIds.GARLIC_SEEDS);
+            AddToJojaShop(shopData, QualifiedItemIds.RICE_SHOOT);
+            AddToJojaShop(shopData, QualifiedItemIds.BLUEBERRY_SEEDS);
+            AddToJojaShop(shopData, QualifiedItemIds.RED_CABBAGE_SEEDS);
+            AddToJojaShop(shopData, QualifiedItemIds.ARTICHOKE_SEEDS);
+
+            // Overwrite these with the new version, stacked
             AddToJojaShop(shopData, QualifiedItemIds.SUGAR, 20);
             AddToJojaShop(shopData, QualifiedItemIds.WHEAT_FLOUR, 20);
             AddToJojaShop(shopData, QualifiedItemIds.RICE, 20);
