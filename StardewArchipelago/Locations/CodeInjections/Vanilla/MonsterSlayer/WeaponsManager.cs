@@ -184,7 +184,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
                     }
                     yield return new ItemQueryResult(shopItem)
                     {
-                        OverrideBasePrice = (int)Math.Round(shopItem.salePrice() * priceMultiplier),
+                        OverrideBasePrice = (int)Math.Round(((StardewSlingshot)slingshotToSell).GetDefaultSalePrice() * priceMultiplier),
                         OverrideStackSize = 1,
                         OverrideShopAvailableStock = 1,
                     };
