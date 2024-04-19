@@ -55,6 +55,11 @@ namespace StardewArchipelago.Stardew
 
         public bool ItemExists(string itemName)
         {
+            if (string.IsNullOrWhiteSpace(itemName))
+            {
+                return false;
+            }
+
             return _objectsByName.ContainsKey(itemName) ||
                    _bigCraftablesByName.ContainsKey(itemName) ||
                    _bootsByName.ContainsKey(itemName) ||
@@ -65,6 +70,11 @@ namespace StardewArchipelago.Stardew
 
         public bool ItemExistsById(string itemId)
         {
+            if (string.IsNullOrWhiteSpace(itemId))
+            {
+                return false;
+            }
+
             return _objectsById.ContainsKey(itemId) ||
                    _bigCraftablesById.ContainsKey(itemId) ||
                    _bootsById.ContainsKey(itemId) ||
@@ -75,6 +85,11 @@ namespace StardewArchipelago.Stardew
 
         public bool ItemExistsByQualifiedId(string itemId)
         {
+            if (string.IsNullOrWhiteSpace(itemId))
+            {
+                return false;
+            }
+
             return _itemsByQualifiedId.ContainsKey(itemId);
         }
 
@@ -85,11 +100,21 @@ namespace StardewArchipelago.Stardew
 
         public bool ObjectExistsById(string itemId)
         {
+            if (string.IsNullOrWhiteSpace(itemId))
+            {
+                return false;
+            }
+
             return _objectsById.ContainsKey(itemId);
         }
 
         public bool ObjectExists(string itemName)
         {
+            if (string.IsNullOrWhiteSpace(itemName))
+            {
+                return false;
+            }
+
             if (_objectsByName.ContainsKey(itemName))
             {
                 return true;
