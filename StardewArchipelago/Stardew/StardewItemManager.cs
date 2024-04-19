@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
 using StardewArchipelago.Constants.Vanilla;
+using StardewArchipelago.Stardew.Ids.Vanilla;
 using StardewValley;
 using StardewValley.GameData.BigCraftables;
 using StardewValley.GameData.Objects;
@@ -566,7 +567,7 @@ namespace StardewArchipelago.Stardew
             {
                 return new StardewSlingshot(id, name, description, minDamage, maxDamage, knockBack, speed,
                     precision, defence, type, mineBaseLevel, mineMinLevel, areaOfEffect, criticalChance,
-                    criticalDamage, displayName);
+                    criticalDamage, displayName, id == WeaponIds.SLINGSHOT ? 500 : (id == WeaponIds.MASTER_SLINGSHOT ? 1000 : 2000));
             }
 
             var meleeWeapon = new StardewWeapon(id, name, description, minDamage, maxDamage, knockBack, speed,
