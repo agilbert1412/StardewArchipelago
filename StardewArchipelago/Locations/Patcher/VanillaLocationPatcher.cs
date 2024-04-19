@@ -924,11 +924,6 @@ namespace StardewArchipelago.Locations.Patcher
         private void CleanCraftsanityEvents()
         {
             _modHelper.Events.Content.AssetRequested -= _craftingRecipePurchaseStockModifier.OnShopStockRequested;
-
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(IslandNorth), nameof(IslandNorth.getIslandMerchantTradeStock)),
-                postfix: new HarmonyMethod(typeof(CraftingInjections), nameof(CraftingInjections.GetIslandMerchantTradeStock_ReplaceDeluxeRetainingSoilWithCraftsanityCheck_Postfix))
-            );
         }
 
         private void PatchKrobusShop()
