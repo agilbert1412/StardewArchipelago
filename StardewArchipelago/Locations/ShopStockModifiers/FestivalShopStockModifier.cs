@@ -110,14 +110,14 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
                 if (objectData.Category == Category.SEEDS && objectData.Name == "Strawberry Seeds")
                 {
                     locationName = FestivalLocationNames.STRAWBERRY_SEEDS;
-                    itemName = "Strawberry Seeds";
+                    itemName = string.Empty;
                     return true;
                 }
 
                 if (objectData.Name == "Stardrop" && item.Condition.Contains("PLAYER_HAS_MAIL Current CF_Fair"))
                 {
                     locationName = FestivalLocationNames.FAIR_STARDROP;
-                    itemName = objectData.Name;
+                    itemName = string.Empty;
                     return true;
                 }
 
