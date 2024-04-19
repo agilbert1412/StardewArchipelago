@@ -18,7 +18,7 @@ namespace StardewArchipelago.Textures
         public const string ICON_SET_CUSTOM = "Custom";
         public const string ICON_SET_ORIGINAL = "Original";
 
-        public static readonly string[] ValidLogos = { COLOR, WHITE, BLUE, BLACK, RED, PLEADING };
+        public static readonly string[] ValidLogos = { COLOR, WHITE, BLACK, RED, PLEADING };
 
         public static Texture2D GetArchipelagoLogo(IMonitor monitor, IModHelper modHelper, int size, string color, string preferredIconSet = null)
         {
@@ -26,7 +26,7 @@ namespace StardewArchipelago.Textures
             preferredIconSet = GetChosenIconSet(preferredIconSet);
             var fileName = $"{size}x{size} {color} icon.png";
             var relativePathToTexture = Path.Combine(archipelagoFolder, preferredIconSet, fileName);
-            var texture = TexturesLoader.GetTexture(monitor, modHelper, relativePathToTexture);
+            var texture = TexturesLoader.GetTexture(monitor, modHelper, relativePathToTexture, LogLevel.Trace);
             if (texture == null)
             {
                 // Let's try to get the icon from the other set
