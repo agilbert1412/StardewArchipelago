@@ -81,8 +81,7 @@ namespace StardewArchipelago.GameModifications
             for (var i = shopData.Items.Count - 1; i >= 0; i--)
             {
                 var item = shopData.Items[i];
-                var priceMultiplier = 1.0f;
-                if (!SetSmallBusinessStock(shopData, item, hasStocklist, isPierre, i, ref priceMultiplier))
+                if (!SetSmallBusinessStock(shopData, item, hasStocklist, isPierre, i, out var priceMultiplier))
                 {
                     continue;
                 }
@@ -107,19 +106,22 @@ namespace StardewArchipelago.GameModifications
             }
         }
 
-        private bool SetSmallBusinessStock(ShopData shopData, ShopItemData shopItem, bool hasStocklist, bool isPierre, int i, ref float priceMultiplier)
+        private bool SetSmallBusinessStock(ShopData shopData, ShopItemData shopItem, bool hasStocklist, bool isPierre, int i, out float priceMultiplier)
         {
+            priceMultiplier = 1.0f;
             if (shopItem.AvailableStock != -1 || shopItem.IsRecipe)
             {
                 return true;
             }
 
-            if (!_stardewItemManager.ObjectExistsById(shopItem.ItemId))
+            var objectId = QualifiedItemIds.UnqualifyId(shopItem.ItemId);
+
+            if (!_stardewItemManager.ObjectExistsById(objectId))
             {
                 return true;
             }
 
-            var stardewItem = _stardewItemManager.GetObjectById(shopItem.ItemId);
+            var stardewItem = _stardewItemManager.GetObjectById(objectId);
             if (stardewItem.Id == ObjectIds.BOUQUET)
             {
                 return true;
@@ -134,7 +136,7 @@ namespace StardewArchipelago.GameModifications
                 return false; // Don't run the rest of the code
             }
 
-            shopItem.AvailableStock = todayStock;
+            shopItem.AvailableStock = stardewItem.Name.Contains("Sapling", StringComparison.InvariantCultureIgnoreCase) ? 1 : todayStock;
             shopItem.AvailableStockLimit = LimitedStockMode.Global;
 
             return true;
