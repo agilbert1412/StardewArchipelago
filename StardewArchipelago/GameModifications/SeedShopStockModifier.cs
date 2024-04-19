@@ -70,7 +70,8 @@ namespace StardewArchipelago.GameModifications
         private void OverhaulSmallBusinessSeeds(string shopId, ShopData shopData)
         {
             var isPierre = shopId == "SeedShop";
-            if (!isPierre && shopId != "Sandy")
+            var isSandy = shopId == "Sandy";
+            if (!isPierre && !isSandy)
             {
                 return;
             }
