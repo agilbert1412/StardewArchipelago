@@ -54,7 +54,6 @@ namespace StardewArchipelago.GameModifications
 
         private void GivePlayerQuickStart()
         {
-
             if (Game1.getLocationFromName("FarmHouse") is not FarmHouse farmhouse)
             {
                 return;
@@ -136,7 +135,7 @@ namespace StardewArchipelago.GameModifications
                 }
             }
 
-            farmhouse.objects.Add(emptySpot, new Chest(new List<Item> { itemToGift }, emptySpot, true));
+            farmhouse.objects.Add(emptySpot, new Chest(new List<Item> { itemToGift }, emptySpot, true, giftboxIsStarterGift: true));
         }
 
         private void RemoveShippingBin()
