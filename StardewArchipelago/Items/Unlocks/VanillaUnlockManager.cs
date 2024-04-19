@@ -390,7 +390,7 @@ namespace StardewArchipelago.Items.Unlocks
                 }
 
                 GiveExperienceToNextLevel(farmer, skill);
-                farmer.FarmingLevel = newLevel;
+                farmer.farmingLevel.Value = newLevel;
                 farmer.newLevels.Add(new Point((int)skill, newLevel));
             }
             return new LetterInformationAttachment(receivedItem);
@@ -412,7 +412,7 @@ namespace StardewArchipelago.Items.Unlocks
                 }
 
                 GiveExperienceToNextLevel(farmer, skill);
-                farmer.FishingLevel = newLevel;
+                farmer.fishingLevel.Value = newLevel;
                 farmer.newLevels.Add(new Point((int)skill, newLevel));
             }
             return new LetterInformationAttachment(receivedItem);
@@ -434,7 +434,7 @@ namespace StardewArchipelago.Items.Unlocks
                 }
 
                 GiveExperienceToNextLevel(farmer, skill);
-                farmer.ForagingLevel = newLevel;
+                farmer.foragingLevel.Value = newLevel;
                 farmer.newLevels.Add(new Point((int)skill, newLevel));
             }
             return new LetterInformationAttachment(receivedItem);
@@ -456,7 +456,7 @@ namespace StardewArchipelago.Items.Unlocks
                 }
 
                 GiveExperienceToNextLevel(farmer, skill);
-                farmer.MiningLevel = newLevel;
+                farmer.miningLevel.Value = newLevel;
                 farmer.newLevels.Add(new Point((int)skill, newLevel));
             }
             return new LetterInformationAttachment(receivedItem);
@@ -478,7 +478,7 @@ namespace StardewArchipelago.Items.Unlocks
                 }
 
                 GiveExperienceToNextLevel(farmer, skill);
-                farmer.CombatLevel = newLevel;
+                farmer.combatLevel.Value = newLevel;
                 farmer.newLevels.Add(new Point((int)skill, newLevel));
             }
             return new LetterInformationAttachment(receivedItem);
