@@ -33,6 +33,7 @@ using StardewValley.Delegates;
 using StardewValley.Internal;
 using StardewArchipelago.Constants;
 using StardewValley.Triggers;
+using StardewArchipelago.Integrations.GenericModConfigMenu;
 
 namespace StardewArchipelago
 {
