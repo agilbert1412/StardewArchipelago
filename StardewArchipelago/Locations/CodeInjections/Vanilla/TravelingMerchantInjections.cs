@@ -164,7 +164,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 _archipelagoState.TravelingMerchantPurchases++;
                 SetTravelingMerchantFlair(Game1.activeClickableMenu as ShopMenu);
-                error = string.Empty;
+                error = null;
                 return true;
             }
             catch (Exception ex)
