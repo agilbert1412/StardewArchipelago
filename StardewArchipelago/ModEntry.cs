@@ -32,6 +32,7 @@ using StardewValley.Delegates;
 using StardewValley.Internal;
 using StardewArchipelago.Constants;
 using StardewValley.Triggers;
+using StardewArchipelago.Integrations.GenericModConfigMenu;
 
 namespace StardewArchipelago
 {
@@ -189,6 +190,7 @@ namespace StardewArchipelago
         private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
         {
             ResetArchipelago();
+            ResetModIntegrations();
         }
 
         private void OnSaveCreating(object sender, SaveCreatingEventArgs e)
@@ -533,6 +535,11 @@ namespace StardewArchipelago
         }
 
 #endif
+        private void ResetModIntegrations()
+        {
+            var GenericModConfigMenu = new GenericModConfig(this);
+            GenericModConfigMenu.RegisterConfig();
+        }
 
         private void OverrideSeedShops(string arg1, string[] arg2)
         {
