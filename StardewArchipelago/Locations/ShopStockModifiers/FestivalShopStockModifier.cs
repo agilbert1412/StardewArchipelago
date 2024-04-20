@@ -59,6 +59,14 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
             }
         }
 
+        /// <summary>
+        /// Checks if a shop item in a festival should be an Archipelago check
+        /// </summary>
+        /// <param name="item">The shop item</param>
+        /// <param name="locationName">The location name to create a check for</param>
+        /// <param name="itemName">the item required for the original item to show up in the shop alongside the check
+        /// If the item should always be there, returns string.empty. If the item should never be there, this will be an invalid item name</param>
+        /// <returns>true if this should be a check, false if not</returns>
         private bool IsItemKnownAsACheck(ShopItemData item, out string locationName, out string itemName)
         {
             if (_archipelago.LocationExists(item.ObjectInternalName) || _archipelago.LocationExists(item.ItemId))
@@ -117,7 +125,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
                 if (objectData.Name == "Stardrop" && item.Condition.Contains("PLAYER_HAS_MAIL Current CF_Fair"))
                 {
                     locationName = FestivalLocationNames.FAIR_STARDROP;
-                    itemName = string.Empty;
+                    itemName = "Fair Stardrop (not purchaseable)";
                     return true;
                 }
 
