@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using Archipelago.MultiClient.Net.Models;
+using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
 using StardewValley;
 using Object = StardewValley.Object;
 using StardewArchipelago.Stardew.NameMapping;
 using StardewArchipelago.Constants.Modded;
+using StardewArchipelago.Stardew.Ids.Vanilla;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -78,6 +80,59 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 _monitor.Log($"Failed in {nameof(AddCraftingRecipe_SkipLearningFurnace_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
             }
+        }
+
+        // public void skipEvent()
+        public static bool SkipEvent_FurnaceRecipe_Prefix(Event __instance)
+        {
+            try
+            {
+                if (__instance.id != EventIds.FURNACE_RECIPE)
+                {
+                    return true; // run original logic
+                }
+
+                SkipFurnaceRecipeEventArchipelago(__instance);
+                return false; // don't run original logic
+
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(SkipEvent_FurnaceRecipe_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
+        }
+        private static void SkipFurnaceRecipeEventArchipelago(Event furnaceEvent)
+        {
+            if (furnaceEvent.playerControlSequence)
+            {
+                furnaceEvent.EndPlayerControlSequence();
+            }
+
+            Game1.playSound("drumkit6");
+
+            var actorPositionsAfterMoveField = _helper.Reflection.GetField<Dictionary<string, Vector3>>(furnaceEvent, "actorPositionsAfterMove");
+            actorPositionsAfterMoveField.GetValue().Clear();
+
+            foreach (var actor in furnaceEvent.actors)
+            {
+                var ignoreStopAnimation = actor.Sprite.ignoreStopAnimation;
+                actor.Sprite.ignoreStopAnimation = true;
+                actor.Halt();
+                actor.Sprite.ignoreStopAnimation = ignoreStopAnimation;
+                furnaceEvent.resetDialogueIfNecessary(actor);
+            }
+
+            furnaceEvent.farmer.Halt();
+            furnaceEvent.farmer.ignoreCollisions = false;
+            Game1.exitActiveMenu();
+            Game1.dialogueUp = false;
+            Game1.dialogueTyping = false;
+            Game1.pauseTime = 0.0f;
+
+            // Game1.player.craftingRecipes.TryAdd("Furnace", 0);
+            Game1.player.addQuest("11");
+            furnaceEvent.endBehaviors();
         }
     }
 }

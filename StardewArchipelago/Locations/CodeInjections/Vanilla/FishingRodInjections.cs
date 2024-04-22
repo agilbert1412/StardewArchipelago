@@ -23,6 +23,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             _locationChecker = locationChecker;
         }
 
+        // public void skipEvent()
         public static bool SkipEvent_BambooPole_Prefix(Event __instance)
         {
             try

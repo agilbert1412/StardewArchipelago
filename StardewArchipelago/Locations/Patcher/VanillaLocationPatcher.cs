@@ -916,6 +916,11 @@ namespace StardewArchipelago.Locations.Patcher
             );
 
             _harmony.Patch(
+                original: AccessTools.Method(typeof(Event.DefaultCommands), nameof(Event.skipEvent)),
+                prefix: new HarmonyMethod(typeof(CraftingInjections), nameof(CraftingInjections.SkipEvent_FurnaceRecipe_Prefix))
+            );
+
+            _harmony.Patch(
                 original: AccessTools.Method(typeof(Stats), nameof(Stats.checkForCraftingAchievements)),
                 postfix: new HarmonyMethod(typeof(CraftingInjections), nameof(CraftingInjections.CheckForCraftingAchievements_CheckCraftsanityLocation_Postfix))
             );
