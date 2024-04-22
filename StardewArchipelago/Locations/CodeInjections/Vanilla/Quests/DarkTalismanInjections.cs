@@ -66,9 +66,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
                     return true; // run original logic
                 }
 
-                if (!_locationChecker.IsLocationMissing(DARK_TALISMAN) && __instance.CanItemBePlacedHere(new Vector2(31f, 5f)))
+                if (_locationChecker.IsLocationMissing(DARK_TALISMAN) && __instance.CanItemBePlacedHere(new Vector2(31f, 5f)))
                 {
-                    __instance.overlayObjects.Add(new Vector2(31f, 5f), new Chest(new List<Item>(), new Vector2(31f, 5f))
+                    __instance.overlayObjects.Add(new Vector2(31f, 5f), new Chest(new List<Item>()
+                    {
+                        new SpecialItem(6)
+                    }, new Vector2(31f, 5f))
                     {
                         Tint = Color.Gray,
                     });
