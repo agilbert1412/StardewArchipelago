@@ -894,6 +894,21 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(typeof(NPC), nameof(NPC.grantConversationFriendship)),
                 prefix: new HarmonyMethod(typeof(RecipeFriendshipInjections), nameof(RecipeFriendshipInjections.GrantConversationFriendship_SendFriendshipRecipeChecks_Postfix))
             );
+
+            if (!_archipelago.SlotData.Chefsanity.HasFlag(Chefsanity.Friendship))
+            {
+                return;
+            }
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Event.DefaultCommands), nameof(Event.DefaultCommands.AddCookingRecipe)),
+                prefix: new HarmonyMethod(typeof(RecipeFriendshipInjections), nameof(RecipeFriendshipInjections.AddCookingRecipe_SkipLearningCookies_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Event), nameof(Event.skipEvent)),
+                prefix: new HarmonyMethod(typeof(RecipeFriendshipInjections), nameof(RecipeFriendshipInjections.SkipEvent_CookiesRecipe_Prefix))
+            );
         }
 
         private void CleanChefsanityEvents()

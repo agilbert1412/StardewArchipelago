@@ -102,6 +102,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 return true; // run original logic
             }
         }
+
         private static void SkipFurnaceRecipeEventArchipelago(Event furnaceEvent)
         {
             if (furnaceEvent.playerControlSequence)
