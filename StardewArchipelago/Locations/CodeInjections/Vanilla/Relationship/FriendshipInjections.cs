@@ -407,7 +407,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
                 var random = new Random((int)seed);
                 foreach (var npcName in __instance.friendshipData.Keys)
                 {
-                    PerformFriendshipDecay(__instance, npcName, random);
+                    PerformFriendshipChanges(__instance, npcName, random);
                 }
                 var date = new WorldDate(Game1.Date);
                 ++date.TotalDays;
@@ -421,23 +421,22 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
             }
         }
 
-        private static void PerformFriendshipDecay(Farmer farmer, string npcName, Random random)
+        private static void PerformFriendshipChanges(Farmer farmer, string npcName, Random random)
         {
-            var isSingleBachelor = false;
-            var npc = Game1.getCharacterFromName(npcName) ?? Game1.getCharacterFromName<Child>(npcName, false);
-            if (npc == null)
+            if (!TryGetNpc(npcName, out var npc))
             {
                 return;
             }
 
-            if (npc.datable.Value && !farmer.friendshipData[npcName].IsDating() && !npc.isMarried())
-            {
-                isSingleBachelor = true;
-            }
+            var isSingleBachelor = IsSingleBachelor(farmer, npcName, npc);
 
             AutoPetNpc(farmer, npcName, npc);
             AutoGrabNpc(farmer, npcName, npc, random);
+            DecayNpc(farmer, npcName, npc, isSingleBachelor);
+        }
 
+        private static void DecayNpc(Farmer farmer, string npcName, NPC npc, bool isSingleBachelor)
+        {
             if (farmer.hasPlayerTalkedToNPC(npcName))
             {
                 farmer.friendshipData[npcName].TalkedToToday = false;
@@ -449,6 +448,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
                 return;
             }
 
+            DoDecay(farmer, npcName, npc, isSingleBachelor);
+        }
+
+        private static void DoDecay(Farmer farmer, string npcName, NPC npc, bool isSingleBachelor)
+        {
             const int bachelorNoDecayThreshold = 2000;
             const int nonBachelorNoDecayThreshold = 2500;
             var earnedPoints = GetFriendshipPoints(npcName);
@@ -466,6 +470,18 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
             {
                 farmer.changeFriendship(DECAY_OTHER, npc);
             }
+        }
+
+        private static bool IsSingleBachelor(Farmer farmer, string npcName, NPC npc)
+        {
+            var isSingleBachelor = npc.datable.Value && !farmer.friendshipData[npcName].IsDating() && !npc.isMarried();
+            return isSingleBachelor;
+        }
+
+        private static bool TryGetNpc(string npcName, out NPC npc)
+        {
+            npc = Game1.getCharacterFromName(npcName) ?? Game1.getCharacterFromName<Child>(npcName, false);
+            return npc != null;
         }
 
         private static void AutoPetNpc(Farmer farmer, string npcName, NPC npc)
