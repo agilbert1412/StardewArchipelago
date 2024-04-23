@@ -287,29 +287,9 @@ namespace StardewArchipelago.Archipelago
                 return;
             }
 
-            _session.Locations.CompleteLocationChecksAsync(locationIds);
-
-            if (_session?.RoomState == null)
+            _session.Locations.CompleteLocationChecksAsync(locationIds); if (_session?.RoomState == null)
             {
                 return;
-            }
-
-            var hintCost = _session.RoomState.HintCost;
-            if (hintCost <= 0)
-            {
-                hintCost = (int)Math.Max(0M,
-                    _session.Locations.AllLocations.Count * 0.01M *
-                    _session.RoomState.HintCostPercentage);
-
-                if (hintCost <= 0)
-                {
-                    return;
-                }
-            }
-
-            if (_session.RoomState.HintPoints == hintCost)
-            {
-                Game1.chatBox?.addMessage($"You can now afford a hint. Syntax: '!hint [itemName]'", Color.Gold);
             }
         }
 

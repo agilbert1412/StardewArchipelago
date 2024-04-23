@@ -63,6 +63,7 @@ namespace StardewArchipelago
         private QuestCleaner _questCleaner;
         private EntranceManager _entranceManager;
         private NightShippingBehaviors _shippingBehaviors;
+        private HintHelper _hintHelper;
 
         private ModRandomizedLogicPatcher _modLogicPatcher;
         private InitialModGameStateInitializer _modStateInitializer;
@@ -294,6 +295,7 @@ namespace StardewArchipelago
                 TravelingMerchantInjections.UpdateTravelingMerchantForToday(Game1.getLocationFromName("Forest") as Forest, Game1.dayOfMonth);
                 SeasonsRandomizer.ChangeMailKeysBasedOnSeasonsToDaysElapsed();
                 _modStateInitializer = new InitialModGameStateInitializer(Monitor, _archipelago);
+                _hintHelper = new HintHelper();
                 Game1.chatBox?.addMessage($"Connected to Archipelago as {_archipelago.SlotData.SlotName}. Type !!help for client commands", Color.Green);
 
             }
@@ -368,6 +370,8 @@ namespace StardewArchipelago
             _entranceManager.ResetCheckedEntrancesToday(_archipelago.SlotData);
             TheaterInjections.UpdateScheduleForEveryone();
             DoBugsCleanup();
+
+            _hintHelper.GiveHintTip(_archipelago.Session);
         }
 
         private void DoBugsCleanup()
