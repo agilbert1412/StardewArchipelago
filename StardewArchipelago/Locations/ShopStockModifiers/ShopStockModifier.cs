@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Force.DeepCloner;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
@@ -43,6 +44,11 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
             if (apShopItem.Price <= 0 && string.IsNullOrWhiteSpace(apShopItem.TradeItemId))
             {
                 apShopItem.Price = _stardewItemManager.GetItemByQualifiedId(item.ItemId)?.SellPrice ?? throw new Exception($"Could not find price for purchasable location {location}");
+            }
+
+            if (!string.IsNullOrWhiteSpace(apShopItem.Condition))
+            {
+                apShopItem.Condition = string.Join(',', apShopItem.Condition.Split(',').Where(x => !x.Contains(GameStateConditionProvider.HAS_RECEIVED_ITEM)));
             }
 
             return apShopItem;

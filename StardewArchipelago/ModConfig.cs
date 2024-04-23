@@ -34,9 +34,9 @@
         public bool SkipHoldUpAnimations { get; set; } = false;
 
         /// <summary>
-        ///     Disables decaying of friendship points
-        ///     On friendsanity, this applies to earned points
-        ///     Outside of friendsanity, this applies to real points (hearts)
+        ///     Disables decaying of friendship points.
+        ///     On friendsanity, this applies to earned points.
+        ///     Outside of friendsanity, this applies to real points (hearts).
         /// </summary>
         public bool DisableFriendshipDecay { get; set; } = false;
 
