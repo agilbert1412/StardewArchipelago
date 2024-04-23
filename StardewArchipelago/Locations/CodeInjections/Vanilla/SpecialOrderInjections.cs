@@ -159,10 +159,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             try
             {
-                // Let the game pick festival orders, they aren't checks anyway, right?
-                if (orderType.Equals("DesertFestivalMarlon", StringComparison.InvariantCultureIgnoreCase))
+                if (Game1.player.team.availableSpecialOrders­ is null)
                 {
-                    SetDurationOfSpecialOrders(Game1.player.team.availableSpecialOrders);
+                    return true; // run original logic
+                }
+
+                SetDurationOfSpecialOrders(Game1.player.team.availableSpecialOrders);
+
+                // Let the game pick festival orders, they aren't checks anyway, right?
+                if (orderType.Equals("DesertFestivalMarlon", StringComparison.InvariantCultureIgnoreCase) || _archipelago.SlotData.SpecialOrderLocations == SpecialOrderLocations.Disabled)
+                {
                     return true; // run original logic
                 }
 
@@ -178,12 +184,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
         private static void UpdateAvailableSpecialOrdersBasedOnApState(string orderType, bool forceRefresh)
         {
-            if (Game1.player.team.availableSpecialOrders­ is null)
-            {
-                return;
-            }
-
-            SetDurationOfSpecialOrders(Game1.player.team.availableSpecialOrders);
 
             if (!forceRefresh)
             {
