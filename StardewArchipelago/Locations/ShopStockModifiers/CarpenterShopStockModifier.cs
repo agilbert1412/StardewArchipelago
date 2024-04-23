@@ -114,7 +114,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
 
             var customFields = new Dictionary<string, string>()
             {
-                { PurchaseableArchipelagoLocation.EXTRA_MATERIALS_KEY, materialsString }
+                { PurchaseableArchipelagoLocation.EXTRA_MATERIALS_KEY, materialsString },
             };
             var blueprintCheck = new ShopItemData()
             {
@@ -126,7 +126,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
                 MaxItems = 1,
                 Condition = condition,
                 ModData = customFields,
-                CustomFields = customFields
+                CustomFields = customFields,
             };
 
             shopItems.Add(blueprintCheck);

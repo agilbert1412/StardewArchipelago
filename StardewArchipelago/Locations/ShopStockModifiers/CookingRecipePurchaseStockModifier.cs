@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Locations;
-using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;

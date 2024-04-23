@@ -1,11 +1,11 @@
 ﻿using StardewArchipelago.Archipelago;
 using StardewArchipelago.GameModifications;
-using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
-using StardewArchipelago.Serialization;
-using StardewModdingAPI;
-using StardewArchipelago.Stardew;
-using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
 using StardewArchipelago.GameModifications.Modded;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
+using StardewArchipelago.Serialization;
+using StardewArchipelago.Stardew;
+using StardewModdingAPI;
 
 namespace StardewArchipelago.Locations.CodeInjections.Initializers
 {

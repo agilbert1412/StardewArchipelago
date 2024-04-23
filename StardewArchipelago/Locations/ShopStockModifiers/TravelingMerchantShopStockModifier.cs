@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using Force.DeepCloner;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
-using StardewArchipelago.Serialization;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
-using StardewValley;
-using StardewValley.GameData;
 using StardewValley.GameData.Shops;
 
 namespace StardewArchipelago.Locations.ShopStockModifiers
@@ -57,7 +52,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
                     newItem.MaxItems = 1;
                     newItem.Condition = GameStateConditionProvider.CreateHasStockSizeCondition(numberItems);
                     newItem.ActionsOnPurchase = new List<string> { TriggerActionProvider.TRAVELING_MERCHANT_PURCHASE };
-                    cartShopData.Items.Insert(i+numberItems, newItem);
+                    cartShopData.Items.Insert(i + numberItems, newItem);
                 }
             }
         }

@@ -69,7 +69,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 {
                     return;
                 }
-                
+
                 var secretNote = ItemRegistry.Create<Object>(itemId);
                 __result = secretNote;
                 return;

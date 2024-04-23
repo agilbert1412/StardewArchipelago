@@ -8,7 +8,6 @@ using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
-using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Archipelago.Gifting
 {

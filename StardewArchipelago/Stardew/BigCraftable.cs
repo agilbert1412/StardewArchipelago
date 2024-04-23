@@ -65,7 +65,7 @@ namespace StardewArchipelago.Stardew
                 138 => 6,
                 139 => 7,
                 140 => 8,
-                _ => throw new ArgumentException($"{id} is not a recognized rarecrow!")
+                _ => throw new ArgumentException($"{id} is not a recognized rarecrow!"),
             };
         }
 

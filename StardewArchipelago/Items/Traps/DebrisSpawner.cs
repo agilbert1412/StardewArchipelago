@@ -4,7 +4,6 @@ using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.TerrainFeatures;
-using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Items.Traps
 {

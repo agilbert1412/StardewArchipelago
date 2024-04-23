@@ -47,7 +47,7 @@ namespace StardewArchipelago.GameModifications
         {
             if (key == Keys.None)
                 return;
-            if (Game1.options.doesInputListContain(Game1.options.menuButton, key) && this.readyToClose())
+            if (Game1.options.doesInputListContain(Game1.options.menuButton, key) && readyToClose())
             {
                 CloseDialog(Game1.player);
                 return;

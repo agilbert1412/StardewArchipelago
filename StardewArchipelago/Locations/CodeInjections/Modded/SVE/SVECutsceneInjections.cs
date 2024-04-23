@@ -31,7 +31,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
         {
             MonsterName.SHADOW_BRUTE, MonsterName.SHADOW_SHAMAN, MonsterName.SHADOW_SNIPER, MonsterCategory.VOID_SPIRITS,
             string.Join("30 ", MonsterCategory.VOID_SPIRITS), string.Join("60 ", MonsterCategory.VOID_SPIRITS),
-            string.Join("90 ", MonsterCategory.VOID_SPIRITS), string.Join("120 ", MonsterCategory.VOID_SPIRITS)
+            string.Join("90 ", MonsterCategory.VOID_SPIRITS), string.Join("120 ", MonsterCategory.VOID_SPIRITS),
         };
 
         private const string DEINFEST_AP_LOCATION = "Purify an Infested Lichtung";
@@ -46,7 +46,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
             { "7775926", "Apples" },
             { "65360183", "MarlonFay2" },
             { "65360186", "Lance" },
-            { "1090506", "Krobus" }
+            { "1090506", "Krobus" },
         };
 
         private static ShopMenu _lastShopMenuUpdated = null;

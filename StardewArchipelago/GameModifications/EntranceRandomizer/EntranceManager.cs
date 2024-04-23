@@ -411,7 +411,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
         {
             {
                 "Stardew Valley Expanded", new() { { "WizardHouseBasement", "Custom_WizardBasement" } }
-            }
+            },
         };
     }
 

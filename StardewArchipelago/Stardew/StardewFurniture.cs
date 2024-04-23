@@ -4,6 +4,7 @@ using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Items.Mail;
 using StardewValley;
+using StardewValley.Objects;
 
 namespace StardewArchipelago.Stardew
 {
@@ -43,20 +44,20 @@ namespace StardewArchipelago.Stardew
         {
             if (IsBed)
             {
-                return new StardewValley.Objects.BedFurniture(Id, Vector2.Zero);
+                return new BedFurniture(Id, Vector2.Zero);
             }
 
             if (IsFishTank)
             {
-                return new StardewValley.Objects.FishTankFurniture(Id, Vector2.Zero);
+                return new FishTankFurniture(Id, Vector2.Zero);
             }
 
             if (IsTV)
             {
-                return new StardewValley.Objects.TV(Id, Vector2.Zero);
+                return new TV(Id, Vector2.Zero);
             }
 
-            return new StardewValley.Objects.Furniture(Id, Vector2.Zero);
+            return new Furniture(Id, Vector2.Zero);
         }
 
         public override void GiveToFarmer(Farmer farmer, int amount = 1)

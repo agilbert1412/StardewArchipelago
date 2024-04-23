@@ -1,9 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Serialization;
 using StardewValley;
-using StardewValley.Menus;
 
 namespace StardewArchipelago.GameModifications
 {

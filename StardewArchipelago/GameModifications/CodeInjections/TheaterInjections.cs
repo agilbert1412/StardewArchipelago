@@ -176,7 +176,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             {
                 if (_archipelago.GetReceivedItemCount(MOVIE_THEATER_ITEM) >= 2)
                 {
-                    var rectangle = new Microsoft.Xna.Framework.Rectangle(84, 41, 27, 15);
+                    var rectangle = new Rectangle(84, 41, 27, 15);
                     __instance.ApplyMapOverride("Town-Theater", rectangle, rectangle);
                     return true; // run original logic
                 }
@@ -267,7 +267,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     return false; // don't run original logic
                 }
 
-                string[] strArray = __instance.getMasterScheduleEntry(locationName + "_Replacement").Split(' ');
+                var strArray = __instance.getMasterScheduleEntry(locationName + "_Replacement").Split(' ');
                 locationName = strArray[0];
                 tileX = Convert.ToInt32(strArray[1]);
                 tileY = Convert.ToInt32(strArray[2]);

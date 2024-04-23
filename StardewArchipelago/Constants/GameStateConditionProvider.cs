@@ -15,7 +15,7 @@ namespace StardewArchipelago.Constants
                 return string.Empty;
             }
 
-            var arguments = new[] { amount.ToString(), itemName, };
+            var arguments = new[] { amount.ToString(), itemName };
             return CreateCondition(HAS_RECEIVED_ITEM, arguments);
         }
 
@@ -35,7 +35,7 @@ namespace StardewArchipelago.Constants
 
         public static string CreateHasStockSizeCondition(double minimumStock)
         {
-            var arguments = new[] { minimumStock.ToString(), };
+            var arguments = new[] { minimumStock.ToString() };
             return CreateCondition(HAS_STOCK_SIZE, arguments);
         }
 

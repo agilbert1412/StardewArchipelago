@@ -37,12 +37,12 @@ namespace StardewArchipelago.GameModifications
             var performTouchActionParameters = new[] { typeof(string[]), typeof(Vector2) };
             _harmony.Patch(
                 original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performTouchAction), performTouchActionParameters),
-                prefix: new HarmonyMethod(typeof(MultiSleep), nameof(MultiSleep.PerformTouchAction_Sleep_Prefix))
+                prefix: new HarmonyMethod(typeof(MultiSleep), nameof(PerformTouchAction_Sleep_Prefix))
             );
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.answerDialogueAction)),
-                prefix: new HarmonyMethod(typeof(MultiSleep), nameof(MultiSleep.AnswerDialogueAction_SleepMany_Prefix))
+                prefix: new HarmonyMethod(typeof(MultiSleep), nameof(AnswerDialogueAction_SleepMany_Prefix))
             );
         }
 

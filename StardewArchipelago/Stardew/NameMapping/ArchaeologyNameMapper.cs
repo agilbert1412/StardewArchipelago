@@ -1,5 +1,5 @@
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace StardewArchipelago.Stardew.NameMapping
 {
@@ -18,7 +18,7 @@ namespace StardewArchipelago.Stardew.NameMapping
             { "moonslime.excavation.dummy_water_strainer", "Water Shifter" },
             { "moonslime.excavation.h_display", "Hardwood Display" },
             { "moonslime.excavation.w_display", "Wooden Display" },
-            { "moonslime.excavation.totem_volcano_warp", "Dwarf Gadget: Infinite Volcano Simulation" }
+            { "moonslime.excavation.totem_volcano_warp", "Dwarf Gadget: Infinite Volcano Simulation" },
         };
 
         private static readonly Dictionary<string, string> EnglishToArchaeologyNamesMap = ArchaeologyToEnglishNamesMap.ToDictionary(x => x.Value, x => x.Key);

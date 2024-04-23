@@ -12,7 +12,7 @@ using StardewValley.Menus;
 using StardewValley.Objects;
 using StardewValley.Tools;
 using xTile.Dimensions;
-using Rectangle = Microsoft.Xna.Framework.Rectangle;
+using Rectangle = xTile.Dimensions.Rectangle;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -154,7 +154,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
         }
 
-        public static bool CheckAction_LoadElevatorMenu_Prefix(MineShaft __instance, Location tileLocation, xTile.Dimensions.Rectangle viewport, Farmer who, ref bool __result)
+        public static bool CheckAction_LoadElevatorMenu_Prefix(MineShaft __instance, Location tileLocation, Rectangle viewport, Farmer who, ref bool __result)
         {
             try
             {
@@ -220,7 +220,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
                     var buttonLocation = new Vector2(button.bounds.X, button.bounds.Y);
                     var position = buttonLocation + new Vector2(12f, 12f);
-                    var sourceRectangle = new Rectangle(0, 0, 12, 12);
+                    var sourceRectangle = new Microsoft.Xna.Framework.Rectangle(0, 0, 12, 12);
                     var color = Color.White;
                     var origin = new Vector2(8f, 8f);
                     b.Draw(_miniArchipelagoIcon, position, sourceRectangle, color, 0.0f, origin, 1f, SpriteEffects.None, 0.86f);

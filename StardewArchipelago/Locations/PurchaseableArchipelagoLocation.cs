@@ -10,7 +10,6 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Internal;
 using Color = Microsoft.Xna.Framework.Color;
-using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace StardewArchipelago.Locations
 {

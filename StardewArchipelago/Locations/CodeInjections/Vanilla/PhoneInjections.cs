@@ -2,11 +2,7 @@
 using System.Linq;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
-using StardewArchipelago.Goals;
-using StardewArchipelago.Items.Unlocks;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
-using StardewArchipelago.Stardew;
-using StardewArchipelago.Stardew.Ids.Vanilla;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Objects;
@@ -38,7 +34,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 DelayedAction.functionAfterDelay(() =>
                 {
                     Game1.playSound("bigSelect");
-                    NPC character = Game1.getCharacterFromName("Marlon");
+                    var character = Game1.getCharacterFromName("Marlon");
                     if (Game1.player.mailForTomorrow.Contains("MarlonRecovery"))
                     {
                         Game1.DrawDialogue(character, "Strings\\Characters:Phone_Marlon_AlreadyRecovering");

@@ -1,6 +1,7 @@
 ﻿using StardewArchipelago.Archipelago;
 using StardewArchipelago.Items.Mail;
 using StardewValley;
+using StardewValley.Objects;
 
 namespace StardewArchipelago.Stardew
 {
@@ -16,7 +17,7 @@ namespace StardewArchipelago.Stardew
 
         public override Item PrepareForGivingToFarmer(int amount = 1)
         {
-            return new StardewValley.Objects.Hat(Id);
+            return new Hat(Id);
         }
 
         public override void GiveToFarmer(Farmer farmer, int amount = 1)

@@ -31,12 +31,12 @@ namespace StardewArchipelago.Stardew
         private Dictionary<string, StardewCookingRecipe> _cookingRecipesByName;
         private Dictionary<string, StardewCraftingRecipe> _craftingRecipesByName;
 
-        private List<string> _priorityIds = new List<string>()
+        private List<string> _priorityIds = new()
         {
             "390",
         };
 
-        public Dictionary<string, string> ItemSuffixes = new Dictionary<string, string>()
+        public Dictionary<string, string> ItemSuffixes = new()
         {
             { "126", " (Green)" },
             { "180", " (Brown)" },
@@ -642,7 +642,7 @@ namespace StardewArchipelago.Stardew
             return craftingRecipe;
         }
 
-        public void ExportAllItemsMatching(Func<Object, bool> condition, string filePath)
+        public void ExportAllItemsMatching(System.Func<Object, bool> condition, string filePath)
         {
             var objectsToExport = new List<string>();
 
@@ -657,7 +657,7 @@ namespace StardewArchipelago.Stardew
             File.WriteAllText(filePath, objectsAsJson);
         }
 
-        private IEnumerable<string> GetObjectsToExport<T>(Func<Object, bool> condition, Dictionary<string, T> objectsByName) where T : StardewItem
+        private IEnumerable<string> GetObjectsToExport<T>(System.Func<Object, bool> condition, Dictionary<string, T> objectsByName) where T : StardewItem
         {
             foreach (var (name, svItem) in objectsByName)
             {

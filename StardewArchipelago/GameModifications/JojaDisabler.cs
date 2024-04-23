@@ -23,7 +23,7 @@ namespace StardewArchipelago.GameModifications
         {
             _harmony.Patch(
                 original: AccessTools.Method(typeof(JojaMart), nameof(JojaMart.answerDialogue)),
-                prefix: new HarmonyMethod(typeof(JojaDisabler), nameof(JojaDisabler.AnswerDialogue_JojaMembershipPurchase_Prefix))
+                prefix: new HarmonyMethod(typeof(JojaDisabler), nameof(AnswerDialogue_JojaMembershipPurchase_Prefix))
             );
         }
 

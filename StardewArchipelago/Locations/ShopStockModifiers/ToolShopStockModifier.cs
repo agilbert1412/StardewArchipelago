@@ -65,7 +65,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
                         Price = toolData.SalePrice,
                         TradeItemId = GetToolUpgradeConventionalTradeItem(i),
                         TradeItemAmount = 5,
-                        Condition = GameStateConditionProvider.CreateHasReceivedItemCondition(requiredItem, requiredAmount)
+                        Condition = GameStateConditionProvider.CreateHasReceivedItemCondition(requiredItem, requiredAmount),
                     };
 
                     toolShopData.Items.Add(apShopItem);

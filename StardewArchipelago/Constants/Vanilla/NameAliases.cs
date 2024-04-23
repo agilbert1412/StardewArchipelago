@@ -30,7 +30,7 @@ namespace StardewArchipelago.Constants.Vanilla
             { "GuntherSilvian", "Gunther" },
             { "MorrisTod", "Morris" },
             { "HatMouseLacey", "Lacey" },
-            { "Goblin", "Zic" }
+            { "Goblin", "Zic" },
         };
     }
 }

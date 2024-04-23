@@ -49,7 +49,7 @@ namespace StardewArchipelago.Locations
             }
         }
 
-        public void ReplaceShopItem(Dictionary<ISalable, ItemStockInformation> itemPriceAndStock, string apLocation, Func<Object, bool> conditionToMeet, Hint[] myActiveHints)
+        public void ReplaceShopItem(Dictionary<ISalable, ItemStockInformation> itemPriceAndStock, string apLocation, System.Func<Object, bool> conditionToMeet, Hint[] myActiveHints)
         {
             foreach (var itemOnSale in itemPriceAndStock.Keys.ToArray())
             {
@@ -63,7 +63,7 @@ namespace StardewArchipelago.Locations
             }
         }
 
-        public void ReplaceShopItem(Dictionary<ISalable, ItemStockInformation> itemPriceAndStock, ISalable itemOnSale, string apLocation, Func<Object, bool> conditionToMeet, Hint[] myActiveHints)
+        public void ReplaceShopItem(Dictionary<ISalable, ItemStockInformation> itemPriceAndStock, ISalable itemOnSale, string apLocation, System.Func<Object, bool> conditionToMeet, Hint[] myActiveHints)
         {
             if (itemOnSale is not Object salableObject || !conditionToMeet(salableObject))
             {

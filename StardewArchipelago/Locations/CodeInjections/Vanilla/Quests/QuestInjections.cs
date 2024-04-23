@@ -19,7 +19,6 @@ using StardewValley.Quests;
 using StardewValley.TerrainFeatures;
 using xTile.Dimensions;
 using Object = StardewValley.Object;
-using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
 {
@@ -28,7 +27,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
         private static List<string> _ignoredQuests = new()
         {
             "To The Beach", "Explore The Mine", "Deeper In The Mine", "To The Bottom?", "The Mysterious Qi",
-            "A Winter Mystery", "Cryptic Note", "Dark Talisman", "Goblin Problem"
+            "A Winter Mystery", "Cryptic Note", "Dark Talisman", "Goblin Problem",
         };
 
         private static IMonitor _monitor;

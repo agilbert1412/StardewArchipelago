@@ -3,7 +3,6 @@ using HarmonyLib;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.GameModifications;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.CC;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
@@ -18,7 +17,6 @@ using StardewValley;
 using StardewValley.Characters;
 using StardewValley.Events;
 using StardewValley.GameData.Buildings;
-using StardewValley.Internal;
 using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Minigames;
@@ -27,7 +25,6 @@ using StardewValley.Quests;
 using StardewValley.SpecialOrders;
 using StardewValley.TerrainFeatures;
 using xTile.Dimensions;
-using Bundle = StardewValley.Menus.Bundle;
 using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Locations.Patcher

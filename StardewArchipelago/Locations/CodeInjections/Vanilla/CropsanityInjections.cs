@@ -15,7 +15,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
     {
         private static readonly string[] _cropsanityExceptions = new[]
         {
-            ObjectIds.WEEDS, ObjectIds.SPRING_ONION, ObjectIds.ANCIENT_FRUIT, ObjectIds.FIBER, ObjectIds.QI_FRUIT
+            ObjectIds.WEEDS, ObjectIds.SPRING_ONION, ObjectIds.ANCIENT_FRUIT, ObjectIds.FIBER, ObjectIds.QI_FRUIT,
         };
 
         private static IMonitor _monitor;

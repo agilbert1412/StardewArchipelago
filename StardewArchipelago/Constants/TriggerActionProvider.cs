@@ -1,12 +1,11 @@
-﻿using System.Linq;
-using System.Reflection;
+﻿using System.Reflection;
 
 namespace StardewArchipelago.Constants
 {
     public static class TriggerActionProvider
     {
         public static readonly string TRAVELING_MERCHANT_PURCHASE = CreateId("TravelingMerchantPurchase");
-        
+
 
         private static string CreateId(string name)
         {

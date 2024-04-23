@@ -4,7 +4,7 @@ namespace StardewArchipelago.Constants.Modded
 {
     public class ModVersions
     {
-        public static readonly Dictionary<string, string> Versions = new Dictionary<string, string>()
+        public static readonly Dictionary<string, string> Versions = new()
         {
             { ModNames.ALEC, "2.1.0" },
             { ModNames.ARCHAEOLOGY, "1.6.0" },
@@ -31,7 +31,7 @@ namespace StardewArchipelago.Constants.Modded
             { ModNames.ALECTO, "1.1.8" },
             { ModNames.DISTANT_LANDS, "1.0.8" },
             { ModNames.LACEY, "1.1.3" },
-            { ModNames.BOARDING_HOUSE, "4.0.16" }
+            { ModNames.BOARDING_HOUSE, "4.0.16" },
         };
 
         public class ContentPatcherRequirement
@@ -49,7 +49,7 @@ namespace StardewArchipelago.Constants.Modded
         public static readonly Dictionary<string, ContentPatcherRequirement> CPVersions = new()
         {
             { ModNames.SVE, new ContentPatcherRequirement(ModNames.AP_SVE, "1.1.0") },
-            { ModNames.JASPER, new ContentPatcherRequirement(ModNames.AP_JASPER, "1.0.0") }
+            { ModNames.JASPER, new ContentPatcherRequirement(ModNames.AP_JASPER, "1.0.0") },
         };
     }
 }

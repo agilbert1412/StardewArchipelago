@@ -6,34 +6,33 @@ using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.Gifting;
 using StardewArchipelago.Bundles;
+using StardewArchipelago.Constants;
 using StardewArchipelago.GameModifications;
 using StardewArchipelago.GameModifications.CodeInjections;
 using StardewArchipelago.GameModifications.EntranceRandomizer;
+using StardewArchipelago.GameModifications.Modded;
 using StardewArchipelago.GameModifications.Seasons;
 using StardewArchipelago.Goals;
+using StardewArchipelago.Integrations.GenericModConfigMenu;
 using StardewArchipelago.Items;
 using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Items.Traps;
 using StardewArchipelago.Locations;
+using StardewArchipelago.Locations.CodeInjections.Modded;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
 using StardewArchipelago.Locations.Patcher;
 using StardewArchipelago.Serialization;
 using StardewArchipelago.Stardew;
+using StardewArchipelago.Stardew.NameMapping;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
-using StardewValley.Locations;
-using StardewArchipelago.GameModifications.Modded;
-using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
-using StardewArchipelago.Locations.CodeInjections.Modded;
-using StardewArchipelago.Stardew.NameMapping;
 using StardewArchipelago.Integrations.GenericModConfigMenu;
 using StardewValley.Delegates;
 using StardewValley.Internal;
-using StardewArchipelago.Constants;
 using StardewValley.Triggers;
-using StardewArchipelago.Integrations.GenericModConfigMenu;
 
 namespace StardewArchipelago
 {
@@ -92,44 +91,44 @@ namespace StardewArchipelago
         /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
-            this.Config = this.Helper.ReadConfig<ModConfig>();
+            Config = Helper.ReadConfig<ModConfig>();
 
             _apConnectionOverride = null;
 
             _helper = helper;
-            _harmony = new Harmony(this.ModManifest.UniqueID);
+            _harmony = new Harmony(ModManifest.UniqueID);
 
             _archipelago = new ArchipelagoClient(Monitor, _helper, _harmony, OnItemReceived, ModManifest);
 
-            _helper.Events.GameLoop.GameLaunched += this.OnGameLaunched;
-            _helper.Events.GameLoop.SaveCreating += this.OnSaveCreating;
-            _helper.Events.GameLoop.SaveCreated += this.OnSaveCreated;
-            _helper.Events.GameLoop.Saving += this.OnSaving;
-            _helper.Events.GameLoop.Saved += this.OnSaved;
-            _helper.Events.GameLoop.SaveLoaded += this.OnSaveLoaded;
-            _helper.Events.GameLoop.TimeChanged += this.OnTimeChanged;
-            _helper.Events.GameLoop.UpdateTicked += this.OnUpdateTicked;
-            _helper.Events.GameLoop.DayStarted += this.OnDayStarted;
-            _helper.Events.GameLoop.DayEnding += this.OnDayEnding;
-            _helper.Events.GameLoop.ReturnedToTitle += this.OnReturnedToTitle;
+            _helper.Events.GameLoop.GameLaunched += OnGameLaunched;
+            _helper.Events.GameLoop.SaveCreating += OnSaveCreating;
+            _helper.Events.GameLoop.SaveCreated += OnSaveCreated;
+            _helper.Events.GameLoop.Saving += OnSaving;
+            _helper.Events.GameLoop.Saved += OnSaved;
+            _helper.Events.GameLoop.SaveLoaded += OnSaveLoaded;
+            _helper.Events.GameLoop.TimeChanged += OnTimeChanged;
+            _helper.Events.GameLoop.UpdateTicked += OnUpdateTicked;
+            _helper.Events.GameLoop.DayStarted += OnDayStarted;
+            _helper.Events.GameLoop.DayEnding += OnDayEnding;
+            _helper.Events.GameLoop.ReturnedToTitle += OnReturnedToTitle;
 
 
-            _helper.ConsoleCommands.Add("connect_override", $"Overrides your next connection to Archipelago. {CONNECT_SYNTAX}", this.OnCommandConnectToArchipelago);
-            _helper.ConsoleCommands.Add("seed_shops_override", "Override the seeds shop setting", this.OverrideSeedShops);
-            _helper.ConsoleCommands.Add("export_all_gifts", "Export all currently loaded giftable items and their traits", this.ExportGifts);
-            _helper.ConsoleCommands.Add("deathlink", "Override the deathlink setting", this.OverrideDeathlink);
-            _helper.ConsoleCommands.Add("trap_difficulty", "Override the trap difficulty setting", this.OverrideTrapDifficulty);
+            _helper.ConsoleCommands.Add("connect_override", $"Overrides your next connection to Archipelago. {CONNECT_SYNTAX}", OnCommandConnectToArchipelago);
+            _helper.ConsoleCommands.Add("seed_shops_override", "Override the seeds shop setting", OverrideSeedShops);
+            _helper.ConsoleCommands.Add("export_all_gifts", "Export all currently loaded giftable items and their traits", ExportGifts);
+            _helper.ConsoleCommands.Add("deathlink", "Override the deathlink setting", OverrideDeathlink);
+            _helper.ConsoleCommands.Add("trap_difficulty", "Override the trap difficulty setting", OverrideTrapDifficulty);
 
 #if DEBUG
-            _helper.ConsoleCommands.Add("connect", $"Connect to Archipelago. {CONNECT_SYNTAX}", this.OnCommandConnectToArchipelago);
-            _helper.ConsoleCommands.Add("disconnect", $"Disconnects from Archipelago. {CONNECT_SYNTAX}", this.OnCommandDisconnectFromArchipelago);
-            _helper.ConsoleCommands.Add("set_next_season", "Sets the next season to a chosen value", this.SetNextSeason);
+            _helper.ConsoleCommands.Add("connect", $"Connect to Archipelago. {CONNECT_SYNTAX}", OnCommandConnectToArchipelago);
+            _helper.ConsoleCommands.Add("disconnect", $"Disconnects from Archipelago. {CONNECT_SYNTAX}", OnCommandDisconnectFromArchipelago);
+            _helper.ConsoleCommands.Add("set_next_season", "Sets the next season to a chosen value", SetNextSeason);
             //_helper.ConsoleCommands.Add("test_sendalllocations", "Tests if every AP item in the stardew_valley_location_table json file are supported by the mod", _tester.TestSendAllLocations);
             // _helper.ConsoleCommands.Add("load_entrances", "Loads the entrances file", (_, _) => _entranceRandomizer.LoadTransports());
             // _helper.ConsoleCommands.Add("save_entrances", "Saves the entrances file", (_, _) => EntranceInjections.SaveNewEntrancesToFile());
-            _helper.ConsoleCommands.Add("export_shippables", "Export all currently loaded shippable items", this.ExportShippables);
-            _helper.ConsoleCommands.Add("release_slot", "Release the current slot completely", this.ReleaseSlot);
-            _helper.ConsoleCommands.Add("debug_method", "Runs whatever is currently in the debug method", this.DebugMethod);
+            _helper.ConsoleCommands.Add("export_shippables", "Export all currently loaded shippable items", ExportShippables);
+            _helper.ConsoleCommands.Add("release_slot", "Release the current slot completely", ReleaseSlot);
+            _helper.ConsoleCommands.Add("debug_method", "Runs whatever is currently in the debug method", DebugMethod);
 #endif
 
             ItemQueryResolver.Register(IDProvider.PURCHASEABLE_AP_LOCATION, PurchasableAPLocationQueryDelegate);

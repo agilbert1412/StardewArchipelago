@@ -1,17 +1,17 @@
-﻿using StardewArchipelago.Archipelago;
-using StardewModdingAPI;
-using StardewValley;
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework.Audio;
+using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.Locations;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
 using StardewArchipelago.Stardew;
+using StardewModdingAPI;
+using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Menus;
-using StardewArchipelago.Constants.Modded;
 
 namespace StardewArchipelago.Goals
 {
@@ -59,9 +59,9 @@ namespace StardewArchipelago.Goals
             }
 
             var farm = Game1.getFarm();
-            int candlesFromScore = Utility.getGrandpaCandlesFromScore(Utility.getGrandpaScore());
+            var candlesFromScore = Utility.getGrandpaCandlesFromScore(Utility.getGrandpaScore());
             farm.grandpaScore.Value = candlesFromScore;
-            for (int index = 0; index < candlesFromScore; ++index)
+            for (var index = 0; index < candlesFromScore; ++index)
             {
                 DelayedAction.playSoundAfterDelay("fireball", 100 * index);
             }

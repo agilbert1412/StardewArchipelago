@@ -341,12 +341,12 @@ namespace StardewArchipelago.GameModifications
 
         private void PatchJodiFishQuest()
         {
-            _helper.Events.Content.AssetRequested += this.FishCasseroleEventRequested;
+            _helper.Events.Content.AssetRequested += FishCasseroleEventRequested;
         }
 
         private void UnpatchJodiFishQuest()
         {
-            _helper.Events.Content.AssetRequested -= this.FishCasseroleEventRequested;
+            _helper.Events.Content.AssetRequested -= FishCasseroleEventRequested;
         }
 
         private void FishCasseroleEventRequested(object sender, AssetRequestedEventArgs e)
@@ -525,12 +525,12 @@ namespace StardewArchipelago.GameModifications
 
         private void PatchVoidMayo()
         {
-            _helper.Events.Content.AssetRequested += this.RemoveVoidMayoHenchmanCondition;
+            _helper.Events.Content.AssetRequested += RemoveVoidMayoHenchmanCondition;
         }
 
         private void UnpatchVoidMayo()
         {
-            _helper.Events.Content.AssetRequested -= this.RemoveVoidMayoHenchmanCondition;
+            _helper.Events.Content.AssetRequested -= RemoveVoidMayoHenchmanCondition;
         }
 
         private void RemoveVoidMayoHenchmanCondition(object sender, AssetRequestedEventArgs e)
@@ -611,12 +611,12 @@ namespace StardewArchipelago.GameModifications
         }
         private void MakeLegendaryFishRecatchable()
         {
-            _helper.Events.Content.AssetRequested += this.OnFishAssetRequested;
+            _helper.Events.Content.AssetRequested += OnFishAssetRequested;
         }
 
         private void CleanLegendaryFishRecatchableEvent()
         {
-            _helper.Events.Content.AssetRequested -= this.OnFishAssetRequested;
+            _helper.Events.Content.AssetRequested -= OnFishAssetRequested;
         }
 
         private void OnFishAssetRequested(object? sender, AssetRequestedEventArgs e)

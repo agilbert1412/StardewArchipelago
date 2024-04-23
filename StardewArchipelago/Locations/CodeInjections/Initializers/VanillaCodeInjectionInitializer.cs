@@ -1,14 +1,14 @@
 ﻿using StardewArchipelago.Archipelago;
 using StardewArchipelago.Goals;
-using StardewArchipelago.Locations.Festival;
-using StardewModdingAPI;
-using StardewArchipelago.Stardew;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.CC;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Quests;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
+using StardewArchipelago.Locations.Festival;
 using StardewArchipelago.Serialization;
-using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
+using StardewArchipelago.Stardew;
+using StardewModdingAPI;
 
 namespace StardewArchipelago.Locations.CodeInjections.Initializers
 {

@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using StardewModdingAPI;
 using StardewArchipelago.Archipelago;
+using StardewModdingAPI;
 using StardewValley;
 
 namespace StardewArchipelago.Locations.CodeInjections.Modded
@@ -35,7 +35,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         };
         private static readonly List<string> questEventsWithRecipes = new()
         {
-            CRAYFISH_SOUP_EVENT, SPECIAL_PUMPKIN_SOUP_EVENT, GINGER_TINCTURE_ALECTO_EVENT, GINGER_TINCTURE_WIZARD_EVENT
+            CRAYFISH_SOUP_EVENT, SPECIAL_PUMPKIN_SOUP_EVENT, GINGER_TINCTURE_ALECTO_EVENT, GINGER_TINCTURE_WIZARD_EVENT,
         };
 
         private static IMonitor _monitor;
@@ -162,7 +162,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
 
             __instance.endBehaviors(new string[1]
             {
-                "end"
+                "end",
             }, Game1.currentLocation);
         }
 

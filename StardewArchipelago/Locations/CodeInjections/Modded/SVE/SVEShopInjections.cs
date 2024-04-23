@@ -9,6 +9,7 @@ using StardewArchipelago.GameModifications.Modded;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
+using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
 {
@@ -52,10 +53,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
 
         private static readonly Dictionary<string, Item> seasonalBerry = new()
         {
-            { "spring", new StardewValley.Object("296", 1) },
-            { "summer", new StardewValley.Object("396", 1) },
-            { "fall", new StardewValley.Object("410", 1) },
-            { "winter", new StardewValley.Object("414", 1) }
+            { "spring", new Object("296", 1) },
+            { "summer", new Object("396", 1) },
+            { "fall", new Object("410", 1) },
+            { "winter", new Object("414", 1) },
         };
 
         public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago,

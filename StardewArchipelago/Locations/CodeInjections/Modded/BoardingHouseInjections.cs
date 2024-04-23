@@ -1,13 +1,13 @@
 using System;
-using System.Linq;
-using Microsoft.Xna.Framework;
-using StardewModdingAPI;
-using StardewArchipelago.Archipelago;
-using StardewValley;
-using StardewValley.Objects;
 using System.Collections.Generic;
-using StardewValley.Menus;
+using System.Linq;
 using Archipelago.MultiClient.Net.Models;
+using Microsoft.Xna.Framework;
+using StardewArchipelago.Archipelago;
+using StardewModdingAPI;
+using StardewValley;
+using StardewValley.Menus;
+using StardewValley.Objects;
 
 namespace StardewArchipelago.Locations.CodeInjections.Modded
 {
@@ -35,7 +35,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 {
                     new PricedItem("Pterodactyl Skeleton L", 5000), new PricedItem("Pterodactyl Skeleton M", 5000),
                     new PricedItem("Pterodactyl Skeleton R", 5000), new PricedItem("T-Rex Skeleton L", 5000), new PricedItem("T-Rex Skeleton M", 5000),
-                    new PricedItem("T-Rex Skeleton R", 5000), new PricedItem("Neanderthal Skeleton", 5000)
+                    new PricedItem("T-Rex Skeleton R", 5000), new PricedItem("Neanderthal Skeleton", 5000),
                 }
             },
         };

@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.Xna.Framework;
 using HarmonyLib;
+using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Extensions;
 using StardewArchipelago.Items.Mail;
-using StardewValley;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
+using StardewValley;
 
 namespace StardewArchipelago.Items.Unlocks
 {

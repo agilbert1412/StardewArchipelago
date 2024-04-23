@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;

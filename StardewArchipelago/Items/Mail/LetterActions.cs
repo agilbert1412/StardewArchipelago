@@ -1,22 +1,22 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Netcode;
+using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants.Modded;
+using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Items.Traps;
+using StardewArchipelago.Items.Unlocks;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
+using StardewArchipelago.Stardew;
+using StardewArchipelago.Stardew.NameMapping;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Objects;
 using StardewValley.Tools;
-using StardewArchipelago.Archipelago;
-using StardewArchipelago.Constants.Modded;
-using StardewArchipelago.Constants.Vanilla;
 using Object = StardewValley.Object;
-using StardewArchipelago.Items.Unlocks;
-using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
-using StardewArchipelago.Stardew;
-using StardewArchipelago.Stardew.NameMapping;
 
 namespace StardewArchipelago.Items.Mail
 {

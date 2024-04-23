@@ -24,7 +24,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
         private Dictionary<int, List<int>> _weaponWeightsByNumberOfTiers = new()
         {
             { 5, new List<int> { 4, 3, 2, 2, 2 } },
-            { 6, new List<int> { 4, 3, 2, 2, 2, 2 } }
+            { 6, new List<int> { 4, 3, 2, 2, 2, 2 } },
         };
 
         public Dictionary<string, Dictionary<int, List<StardewItem>>> WeaponsByCategoryByTier { get; private set; }
@@ -217,7 +217,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
             SlingshotsByTier = new Dictionary<int, List<StardewItem>>()
             {
                 { 1, new List<StardewItem> { itemManager.GetWeaponByName("Slingshot") } },
-                { 2, new List<StardewItem> { itemManager.GetWeaponByName("Master Slingshot") } }
+                { 2, new List<StardewItem> { itemManager.GetWeaponByName("Master Slingshot") } },
             };
         }
 

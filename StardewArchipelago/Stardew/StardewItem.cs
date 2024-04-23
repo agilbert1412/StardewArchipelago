@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using StardewArchipelago.Archipelago;
+﻿using StardewArchipelago.Archipelago;
 using StardewArchipelago.Items.Mail;
 using StardewValley;
 

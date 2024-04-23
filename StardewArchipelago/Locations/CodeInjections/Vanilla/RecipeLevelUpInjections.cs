@@ -131,9 +131,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 Skill.Luck, new Dictionary<int, string[]>()
                 {
-                    { 8, new[] { "Lucky Lunch" } }
+                    { 8, new[] { "Lucky Lunch" } },
                 }
-            }
+            },
         };
 
         /*private static readonly Dictionary<Skill, Dictionary<int, string[]>> _craftingRecipesBySkill = new()

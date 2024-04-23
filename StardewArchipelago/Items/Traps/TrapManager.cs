@@ -22,7 +22,6 @@ using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
 using Object = StardewValley.Object;
-using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace StardewArchipelago.Items.Traps
 {
@@ -820,17 +819,17 @@ namespace StardewArchipelago.Items.Traps
             multiplayer.broadcastSprites(location, bombSprite);
             multiplayer.broadcastSprites(location, new TemporaryAnimatedSprite("LooseSprites\\Cursors", new Rectangle(598, 1279, 3, 4), 53f, 5, 9, tile * 64f + new Vector2(5f, 3f) * 4f, true, false, (y + 7) / 10000f, 0.0f, Color.Yellow, 4f, 0.0f, 0.0f, 0.0f)
             {
-                id = randomId
+                id = randomId,
             });
             multiplayer.broadcastSprites(location, new TemporaryAnimatedSprite("LooseSprites\\Cursors", new Rectangle(598, 1279, 3, 4), 53f, 5, 9, tile * 64f + new Vector2(5f, 3f) * 4f, true, true, (y + 7) / 10000f, 0.0f, Color.Orange, 4f, 0.0f, 0.0f, 0.0f)
             {
                 delayBeforeAnimationStart = 50,
-                id = randomId
+                id = randomId,
             });
             multiplayer.broadcastSprites(location, new TemporaryAnimatedSprite("LooseSprites\\Cursors", new Rectangle(598, 1279, 3, 4), 53f, 5, 9, tile * 64f + new Vector2(5f, 3f) * 4f, true, false, (y + 7) / 10000f, 0.0f, Color.White, 3f, 0.0f, 0.0f, 0.0f)
             {
                 delayBeforeAnimationStart = 100,
-                id = randomId
+                id = randomId,
             });
             location.netAudio.StartPlaying("fuse");
         }

@@ -373,7 +373,7 @@ namespace StardewArchipelago.GameModifications.Seasons
             year = (totalDays / 112);
             var daysThisYear = totalDays - (year * 112);
             seasonNumber = daysThisYear / 28;
-            seasonName = SeasonsRandomizer.ValidSeasons[seasonNumber];
+            seasonName = ValidSeasons[seasonNumber];
             year = year + 1;
         }
 

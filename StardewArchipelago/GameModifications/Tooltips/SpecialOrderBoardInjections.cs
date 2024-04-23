@@ -9,7 +9,6 @@ using StardewArchipelago.Textures;
 using StardewModdingAPI;
 using StardewValley.Menus;
 using StardewValley.SpecialOrders;
-using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace StardewArchipelago.GameModifications.Tooltips
 {

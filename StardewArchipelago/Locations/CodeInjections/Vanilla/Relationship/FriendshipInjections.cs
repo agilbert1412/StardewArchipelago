@@ -34,7 +34,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
 
         private static List<string> _notImmediatelyAccessible = new()
         {
-            "Leo", "Krobus", "Dwarf", "Sandy", "Kent"
+            "Leo", "Krobus", "Dwarf", "Sandy", "Kent",
         };
 
         private static IMonitor _monitor;

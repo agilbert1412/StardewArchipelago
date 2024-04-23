@@ -3,15 +3,15 @@
     public class ModConfig
     {
         /// <summary>
-        /// When enabled, Pierre and Sandy sell limited stocks of seeds.
-        /// Jojamart sells cheaper seeds, but forces you to purchase large packs instead of one at a time
+        ///     When enabled, Pierre and Sandy sell limited stocks of seeds.
+        ///     Jojamart sells cheaper seeds, but forces you to purchase large packs instead of one at a time
         /// </summary>
         public bool EnableSeedShopOverhaul { get; set; } = true;
 
         /// <summary>
-        /// Automatically hides the archipelago letters that are "empty".
-        /// A letter is considered empty when it contains neither a physical item, nor a code snippet to run
-        /// Examples include NPC Hearts, Seasons, Carpenter building unlocks, etc
+        ///     Automatically hides the archipelago letters that are "empty".
+        ///     A letter is considered empty when it contains neither a physical item, nor a code snippet to run
+        ///     Examples include NPC Hearts, Seasons, Carpenter building unlocks, etc
         /// </summary>
         public bool HideEmptyArchipelagoLetters { get; set; } = false;
 
@@ -29,14 +29,14 @@
         public bool UseCustomArchipelagoIcons { get; set; } = false;
 
         /// <summary>
-        /// Skips all Zelda-style animations where the character holds an item above their head
+        ///     Skips all Zelda-style animations where the character holds an item above their head
         /// </summary>
         public bool SkipHoldUpAnimations { get; set; } = false;
 
         /// <summary>
-        /// Disables decaying of friendship points
-        /// On friendsanity, this applies to earned points
-        /// Outside of friendsanity, this applies to real points (hearts)
+        ///     Disables decaying of friendship points
+        ///     On friendsanity, this applies to earned points
+        ///     Outside of friendsanity, this applies to real points (hearts)
         /// </summary>
         public bool DisableFriendshipDecay { get; set; } = false;
 

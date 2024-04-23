@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
+using StardewArchipelago.Stardew;
 using StardewValley;
 using StardewValley.Tools;
-using StardewArchipelago.Stardew;
 
 namespace StardewArchipelago.Items.Mail
 {

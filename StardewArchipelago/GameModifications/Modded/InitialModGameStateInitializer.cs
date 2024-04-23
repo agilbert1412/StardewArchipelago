@@ -1,6 +1,6 @@
-using StardewModdingAPI;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Modded;
+using StardewModdingAPI;
 using StardewValley;
 
 namespace StardewArchipelago.Locations.CodeInjections.Modded

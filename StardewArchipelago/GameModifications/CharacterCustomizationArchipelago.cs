@@ -102,9 +102,9 @@ namespace StardewArchipelago.GameModifications
         public override void performHoverAction(int x, int y)
         {
             base.performHoverAction(x, y);
-            this.IpAddressTextBox.Hover(x, y);
-            this.SlotNameTextBox.Hover(x, y);
-            this.PasswordTextBox.Hover(x, y);
+            IpAddressTextBox.Hover(x, y);
+            SlotNameTextBox.Hover(x, y);
+            PasswordTextBox.Hover(x, y);
         }
 
         public override void receiveLeftClick(int x, int y, bool playSound = true)

@@ -60,7 +60,7 @@ namespace StardewArchipelago.Locations.Festival
         {
             { EGG_FESTIVAL, new[] { EGG_HUNT, STRAWBERRY_SEEDS } },
             { FLOWER_DANCE, new[] { DANCE_WITH_SOMEONE, RARECROW_5, TUB_O_FLOWERS_RECIPE } },
-            { LUAU, new[] { LUAU_SOUP, } },
+            { LUAU, new[] { LUAU_SOUP } },
             { MOONLIGHT_JELLIES, new[] { WATCH_MOONLIGHT_JELLIES, MOONLIGHT_JELLIES_BANNER, STARPORT_DECAL } },
             { FAIR, new[] { STRENGTH_GAME, RARECROW_1, FAIR_STARDROP, GRANGE_DISPLAY } },
             { SPIRIT_EVE, new[] { GOLDEN_PUMPKIN, RARECROW_2, JACK_O_LANTERN_RECIPE } },

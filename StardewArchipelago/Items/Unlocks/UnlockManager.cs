@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Constants.Modded;
+using StardewArchipelago.Items.Mail;
 
 namespace StardewArchipelago.Items.Unlocks
 {

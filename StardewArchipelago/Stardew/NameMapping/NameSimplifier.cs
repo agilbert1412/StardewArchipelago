@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using StardewValley;
-using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Stardew.NameMapping
 {
@@ -27,7 +26,7 @@ namespace StardewArchipelago.Stardew.NameMapping
 
             if (name.Contains("moonslime.excavation."))
             {
-                TextInfo ti = CultureInfo.CurrentCulture.TextInfo;
+                var ti = CultureInfo.CurrentCulture.TextInfo;
                 var displayName = ti.ToTitleCase(item.DisplayName);
                 if (name.Contains("strange_doll_green"))
                 {

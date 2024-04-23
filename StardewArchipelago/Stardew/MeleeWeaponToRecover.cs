@@ -27,13 +27,13 @@ namespace StardewArchipelago.Stardew
         {
             var realWeapon = new MeleeWeapon(_weaponId);
             // Game1.player.itemsLostLastDeath.Clear(); No need to clear it
-            this.isLostItem = false;
+            isLostItem = false;
             Game1.player.recoveredItem = realWeapon;
             Game1.player.mailReceived.Remove("MarlonRecovery");
             Game1.addMailForTomorrow("MarlonRecovery");
             Game1.playSound("newArtifact");
             Game1.exitActiveMenu();
-            var isStack = this.Stack > 1;
+            var isStack = Stack > 1;
             var dialogueKey = isStack ? "Strings\\StringsFromCSFiles:ItemRecovery_Engaged_Stack" : "Strings\\StringsFromCSFiles:ItemRecovery_Engaged";
             var marlon = Game1.getCharacterFromName("Marlon");
             Game1.DrawDialogue(marlon, dialogueKey, Lexicon.makePlural(realWeapon.DisplayName, !isStack));

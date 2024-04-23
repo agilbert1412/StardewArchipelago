@@ -8,7 +8,6 @@ using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Monsters;
 using StardewValley.Objects;
-using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
 {
@@ -70,7 +69,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
                 {
                     __instance.overlayObjects.Add(new Vector2(31f, 5f), new Chest(new List<Item>()
                     {
-                        new SpecialItem(6)
+                        new SpecialItem(6),
                     }, new Vector2(31f, 5f))
                     {
                         Tint = Color.Gray,
@@ -177,6 +176,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
                 return;
             }
         }
-        
+
     }
 }

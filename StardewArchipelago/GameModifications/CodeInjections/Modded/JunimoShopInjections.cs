@@ -8,6 +8,7 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Characters;
 using StardewValley.Menus;
+using Object = StardewValley.Object;
 
 namespace StardewArchipelago.GameModifications.CodeInjections.Modded
 {
@@ -31,7 +32,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Modded
 
         private static readonly List<string> _junimoFirstItems = new()
         {
-            "Legend", "Prismatic Shard", "Ancient Seeds", "Dinosaur Egg", "Tiny Crop (stage 1)", "Super Starfruit", "Magic Bait"
+            "Legend", "Prismatic Shard", "Ancient Seeds", "Dinosaur Egg", "Tiny Crop (stage 1)", "Super Starfruit", "Magic Bait",
         };
 
         private static readonly Dictionary<string, string> _junimoPhrase = new()
@@ -40,13 +41,13 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Modded
             { "Red", "Give old things \nfor red gubbins!" },
             { "Grey", "I trade rocks for \n grey what's-its!" },
             { "Yellow", "I hab seeds, gib \nyellow gubbins!" },
-            { "Blue", "I hab fish! You \ngive blue pretty?" }
+            { "Blue", "I hab fish! You \ngive blue pretty?" },
 
         };
         private static readonly Dictionary<string, string> _firstItemToColor = new()
         {
             { "Legend", "Blue" }, { "Prismatic Shard", "Grey" }, { "Dinosaur Egg", "Red" }, { "Ancient Seeds", "Yellow" },
-            { "Tiny Crop (stage 1)", "Orange" }, { "Super Starfruit", "Purple" }, { "Magic Bait", "Purple" }
+            { "Tiny Crop (stage 1)", "Orange" }, { "Super Starfruit", "Purple" }, { "Magic Bait", "Purple" },
         };
 
         public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, SeedShopStockModifier seedShopStockModifier, StardewItemManager stardewItemManager)
@@ -218,7 +219,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Modded
         private static void PurpleJunimoDewdrop(PurpleJunimo purpleJunimoOffer)
         {
             var dewdropBerryId = _stardewItemManager.GetItemByName("Dewdrop Berry").Id;
-            var dewdropBerry = new StardewValley.Object(dewdropBerryId, 5);
+            var dewdropBerry = new Object(dewdropBerryId, 5);
             Game1.player.holdUpItemThenMessage(dewdropBerry);
             Game1.player.addItemByMenuIfNecessaryElseHoldUp(dewdropBerry);
             DaJunimo.setNewDialogue($"Awh okay I was gonna sleep with it, but here you go!");

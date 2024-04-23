@@ -10,7 +10,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
 
         public static List<string> GrandpaShedEdgeCase = new()
         {
-            "Custom_GrandpasShed to Custom_GrandpasShedGreenhouse", "Custom_GrandpasShedGreenhouse to Custom_GrandpasShed"
+            "Custom_GrandpasShed to Custom_GrandpasShedGreenhouse", "Custom_GrandpasShedGreenhouse to Custom_GrandpasShed",
         };
 
         private static readonly Dictionary<string, string> _locationSVE = new()
@@ -62,7 +62,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Grampleton Suburbs", "Custom_GrampletonSuburbs" },
             { "Scarlett's House", "Custom_ScarlettHouse" },
             { "Wizard Basement", "Custom_WizardBasement" },
-            { "Gunther's Bedroom", "Custom_GunthersRoom" }
+            { "Gunther's Bedroom", "Custom_GunthersRoom" },
         };
 
         private static readonly Dictionary<string, string> _locationEugene = new()
@@ -109,7 +109,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
 
         private static readonly Dictionary<string, string> _locationLacey = new()
         {
-            { "Mouse House", "Custom_HatMouseLacey_MouseHouse" }
+            { "Mouse House", "Custom_HatMouseLacey_MouseHouse" },
         };
 
         private static readonly Dictionary<string, string> _locationBoardingHouse = new()
@@ -131,7 +131,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Lost Valley Ruins - Second House", "Custom_BoardingHouse_Ruins_House2" },
             { "Lost Valley Ruins", "Custom_BoardingHouse_Ruins" },
             { "Buffalo's Ranch", "Custom_BoardingHouse_BuffalosRanch" },
-            { "Lost Valley Minecart", "Custom_BoardingHouse_TheLostValley|3|22" }
+            { "Lost Valley Minecart", "Custom_BoardingHouse_TheLostValley|3|22" },
 
 
         };

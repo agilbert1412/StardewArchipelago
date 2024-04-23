@@ -14,7 +14,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private const string JK_EXTRA_LIFE = "Junimo Kart: Extra Life";
 
         public const string JK_VICTORY = "Junimo Kart: Sunset Speedway (Victory)";
-        private static readonly Dictionary<int, string> JK_LEVEL_LOCATIONS = new Dictionary<int, string>()
+        private static readonly Dictionary<int, string> JK_LEVEL_LOCATIONS = new()
         {
             { 0, "Junimo Kart: Crumble Cavern" },
             { 1, "Junimo Kart: Slippery Slopes" },

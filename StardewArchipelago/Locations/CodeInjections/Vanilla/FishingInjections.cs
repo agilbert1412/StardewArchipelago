@@ -4,7 +4,6 @@ using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Goals;
 using StardewArchipelago.Stardew;
-using StardewArchipelago.Stardew.Ids.Vanilla;
 using StardewModdingAPI;
 using StardewValley;
 

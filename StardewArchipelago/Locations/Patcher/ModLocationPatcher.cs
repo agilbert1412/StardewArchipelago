@@ -1,6 +1,6 @@
-﻿using HarmonyLib;
+﻿using System;
 using System.Collections.Generic;
-using System;
+using HarmonyLib;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.GameModifications.CodeInjections.Modded;
@@ -11,7 +11,6 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
 using StardewValley.Objects;
-
 
 namespace StardewArchipelago.Locations.Patcher
 {
@@ -299,7 +298,7 @@ namespace StardewArchipelago.Locations.Patcher
             var shopMenuParameterTypes = new[]
             {
                 typeof(Dictionary<ISalable, int[]>), typeof(int), typeof(string),
-                typeof(Func<ISalable, Farmer, int, bool>), typeof(Func<ISalable, bool>), typeof(string)
+                typeof(Func<ISalable, Farmer, int, bool>), typeof(Func<ISalable, bool>), typeof(string),
             };
 
             _harmony.Patch(

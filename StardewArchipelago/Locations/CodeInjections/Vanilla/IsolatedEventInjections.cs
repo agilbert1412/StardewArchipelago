@@ -12,6 +12,7 @@ using StardewValley.GameData;
 using StardewValley.Locations;
 using StardewValley.Tools;
 using xTile.Dimensions;
+using Rectangle = xTile.Dimensions.Rectangle;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -35,7 +36,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             _locationChecker = locationChecker;
         }
 
-        public static bool CheckAction_OldMasterCanolli_Prefix(Woods __instance, Location tileLocation, xTile.Dimensions.Rectangle viewport, Farmer who, ref bool __result)
+        public static bool CheckAction_OldMasterCanolli_Prefix(Woods __instance, Location tileLocation, Rectangle viewport, Farmer who, ref bool __result)
         {
             try
             {
@@ -84,7 +85,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
         }
 
-        public static bool CheckAction_BeachBridge_Prefix(Beach __instance, Location tileLocation, xTile.Dimensions.Rectangle viewport, Farmer who, ref bool __result)
+        public static bool CheckAction_BeachBridge_Prefix(Beach __instance, Location tileLocation, Rectangle viewport, Farmer who, ref bool __result)
         {
             try
             {

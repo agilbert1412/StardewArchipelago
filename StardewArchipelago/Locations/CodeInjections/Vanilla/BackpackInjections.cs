@@ -1,6 +1,6 @@
 ﻿using System;
-using StardewArchipelago.Archipelago;
 using Microsoft.Xna.Framework.Graphics;
+using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Modded;
 using StardewModdingAPI;
 using StardewValley;
@@ -161,9 +161,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             else if (_archipelago.SlotData.Mods.HasMod(ModNames.BIGGER_BACKPACK) && _locationChecker.IsLocationMissing(PREMIUM_PACK) && numReceivedBackpacks >= 2)
             {
-                Response yes = new Response("Purchase", "Purchase (50,000g)");
-                Response no = new Response("Not", Game1.content.LoadString("Strings\\Locations:SeedShop_BuyBackpack_ResponseNo"));
-                Response[] resps = new Response[] { yes, no };
+                var yes = new Response("Purchase", "Purchase (50,000g)");
+                var no = new Response("Not", Game1.content.LoadString("Strings\\Locations:SeedShop_BuyBackpack_ResponseNo"));
+                var resps = new Response[] { yes, no };
                 __instance.createQuestionDialogue("Backpack Upgrade -- 48 slots", resps, "Backpack");
             }
         }

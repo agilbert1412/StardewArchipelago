@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Archipelago.MultiClient.Net.Models;
-using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Vanilla;
-using StardewArchipelago.GameModifications;
 using StardewArchipelago.Serialization;
 using StardewModdingAPI;
 using StardewValley;
@@ -16,7 +14,6 @@ using StardewValley.Locations;
 using StardewValley.Menus;
 using xTile.Dimensions;
 using Object = StardewValley.Object;
-using Rectangle = xTile.Dimensions.Rectangle;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -29,7 +26,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
         // 0.1 + (6 * 0.1) + (100 * 0.05)
         // 10% + 60% + 100% = 6
-        
+
         public const string AP_MERCHANT_DAYS = "Traveling Merchant: {0}"; // 7, One for each day
         private const string AP_MERCHANT_STOCK = "Traveling Merchant Stock Size"; // 10% base size, 6 upgrades of 15% each
         private const string AP_MERCHANT_LOCATION = "Traveling Merchant {0} Item {1}";
@@ -157,7 +154,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
             return "Sweety, will you please buy something? I have a family to feed";
         }
-        
+
         public static bool OnPurchasedRandomItem(string[] args, TriggerActionContext context, out string error)
         {
             try

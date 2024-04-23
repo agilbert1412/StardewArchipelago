@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using StardewValley;
-using StardewValley.Inventories;
 using StardewValley.Locations;
 using StardewValley.Objects;
 

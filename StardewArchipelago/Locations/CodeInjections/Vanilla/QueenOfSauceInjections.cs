@@ -218,7 +218,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         }
 
         /// <summary>
-        /// Returns all rerun recipes that the player hasn't seen yet, and if they have seen them all, then just returns all rerun recipes so a random can be picked
+        ///     Returns all rerun recipes that the player hasn't seen yet, and if they have seen them all, then just returns all
+        ///     rerun recipes so a random can be picked
         /// </summary>
         private static List<int> GetMissingRerunRecipes(Dictionary<string, string> cookingRecipes, List<int> allRerunRecipes)
         {
