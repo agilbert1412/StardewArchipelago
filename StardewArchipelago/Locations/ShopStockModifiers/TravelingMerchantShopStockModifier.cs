@@ -29,10 +29,12 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
                     SetUpRandomItemsStockSize(cartShopData);
                     AddMetalDetectorItems(cartShopData);
                     AddChecks(cartShopData);
+                    RemoveWeddingRingCondition(cartShopData);
                 },
-                AssetEditPriority.Late
+                AssetEditPriority.Late - 1
             );
         }
+
         private void SetUpRandomItemsStockSize(ShopData cartShopData)
         {
             for (var i = 0; i < cartShopData.Items.Count; i++)
@@ -82,6 +84,20 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
                 MaxItems = 1,
             };
             cartShopData.Items.Add(metalDetector);
+        }
+
+        private void RemoveWeddingRingCondition(ShopData cartShopData)
+        {
+            for (var i = 0; i < cartShopData.Items.Count; i++)
+            {
+                var item = cartShopData.Items[i];
+                if (item.Condition == null)
+                {
+                    continue;
+                }
+                
+                item.Condition = GameStateConditionProvider.RemoveCondition(item.Condition, "IS_MULTIPLAYER");
+            }
         }
     }
 }

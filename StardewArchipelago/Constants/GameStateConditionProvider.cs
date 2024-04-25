@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Reflection;
 
 namespace StardewArchipelago.Constants
@@ -42,6 +43,16 @@ namespace StardewArchipelago.Constants
         public static string CreateCondition(string condition, string[] arguments)
         {
             return !arguments.Any() ? condition : $"{condition} {string.Join(' ', arguments)}";
+        }
+
+        public static string RemoveCondition(string condition, string conditionToRemove)
+        {
+            return FilterCondition(condition, x => !x.Contains(conditionToRemove));
+        }
+
+        public static string FilterCondition(string condition, Func<string, bool> filter)
+        {
+            return string.Join(',', condition.Split(',').Where(filter));
         }
 
         private static string CreateId(string name)
