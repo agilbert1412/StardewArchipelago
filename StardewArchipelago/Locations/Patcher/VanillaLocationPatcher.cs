@@ -274,6 +274,26 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(typeof(Farmer), nameof(Farmer.gainExperience)),
                 prefix: new HarmonyMethod(typeof(SkillInjections), nameof(SkillInjections.GainExperience_ArchipelagoExperience_Prefix))
             );
+
+            if (_archipelago.SlotData.SkillProgression != SkillsProgression.ProgressiveWithMasteries)
+            {
+                return;
+            }
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performAction)),
+                prefix: new HarmonyMethod(typeof(MasteriesInjections), nameof(MasteriesInjections.PerformAction_MasteryCaveInteractions_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(MasteryTrackerMenu), "claimReward"),
+                prefix: new HarmonyMethod(typeof(MasteriesInjections), nameof(MasteriesInjections.ClaimReward_SendMasteryCheck_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.PropertyGetter(typeof(MasteryTrackerMenu), nameof(MasteryTrackerMenu.hasCompletedAllMasteryPlaques)),
+                prefix: new HarmonyMethod(typeof(MasteriesInjections), nameof(MasteriesInjections.HasCompletedAllMasteryPlaques_RelyOnSentChecks_Prefix))
+            );
         }
 
         private void ReplaceQuestsWithChecks()

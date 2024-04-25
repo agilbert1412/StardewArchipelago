@@ -25,7 +25,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             CommunityCenterInjections.Initialize(monitor, archipelago, locationChecker, bundleReader);
             JunimoNoteMenuInjections.Initialize(monitor, modHelper, archipelago, state, locationChecker, bundleReader);
             MineshaftInjections.Initialize(monitor, modHelper, config, archipelago, locationChecker);
-            SkillInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
+            InitializeSkills(monitor, modHelper, archipelago, locationChecker);
             QuestInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             DarkTalismanInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             CarpenterInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
@@ -51,7 +51,19 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             FarmCaveInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
         }
 
-        private static void InitializeFestivalPatches(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker)
+        private static void InitializeSkills(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker)
+        {
+            SkillInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
+            
+            if (archipelago.SlotData.SkillProgression != SkillsProgression.ProgressiveWithMasteries)
+            {
+                return;
+            }
+
+            MasteriesInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
+        }
+
+        private static void InitializeFestivalPatches(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, ShopReplacer shopReplacer)
         {
             EggFestivalInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             FlowerDanceInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
