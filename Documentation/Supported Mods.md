@@ -25,7 +25,7 @@ Skills:
 - [Magic](https://www.nexusmods.com/stardewvalley/mods/2007), by spacechase0, Version 0.8.2
 - [Luck Skill](https://www.nexusmods.com/stardewvalley/mods/521), by spacechase0, Version 1.2.4
 - [Socializing Skill](https://www.nexusmods.com/stardewvalley/mods/14142), by drbirbdev, Version 1.1.5
-- [Archaeology](https://www.nexusmods.com/stardewvalley/mods/15793), by drbirbdev, Version 1.5.0
+- [Archaeology](https://www.nexusmods.com/stardewvalley/mods/15793), by drbirbdev, Version 1.6.0
 - [Cooking Skill](https://www.nexusmods.com/stardewvalley/mods/522), by spacechase0, Version 1.4.5
 - [Binning Skill](https://www.nexusmods.com/stardewvalley/mods/14073), by drbirbdev, Version 1.2.7
 

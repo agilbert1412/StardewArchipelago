@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Numerics;
 using System.Threading.Tasks;
 using Archipelago.MultiClient.Net;
@@ -286,7 +287,10 @@ namespace StardewArchipelago.Archipelago
                 return;
             }
 
-            _session.Locations.CompleteLocationChecks(locationIds);
+            _session.Locations.CompleteLocationChecksAsync(locationIds); if (_session?.RoomState == null)
+            {
+                return;
+            }
         }
 
         public int GetTeam()
@@ -403,7 +407,7 @@ namespace StardewArchipelago.Archipelago
             return await _bigIntegerDataStorage.ReadAsync(scope, key);
         }
 
-        public bool AddBigIntegerDataStorage(Scope scope, string key, long amount)
+        public bool AddBigIntegerDataStorage(Scope scope, string key, BigInteger amount)
         {
             if (!MakeSureConnected())
             {
@@ -413,7 +417,7 @@ namespace StardewArchipelago.Archipelago
             return _bigIntegerDataStorage.Add(scope, key, amount);
         }
 
-        public bool SubtractBigIntegerDataStorage(Scope scope, string key, long amount, bool dontGoBelowZero)
+        public bool SubtractBigIntegerDataStorage(Scope scope, string key, BigInteger amount, bool dontGoBelowZero)
         {
             if (!MakeSureConnected())
             {
@@ -476,8 +480,7 @@ namespace StardewArchipelago.Archipelago
                 var playerName = GetPlayerName(apItem.Player);
                 var locationName = GetLocationName(apItem.Location) ?? "Thin air";
 
-                var receivedItem = new ReceivedItem(locationName, itemName, playerName, apItem.Location, apItem.Item,
-                    apItem.Player, itemIndex);
+                var receivedItem = new ReceivedItem(locationName, itemName, playerName, apItem.Location, apItem.Item, apItem.Player, itemIndex);
 
                 allReceivedItems.Add(receivedItem);
             }

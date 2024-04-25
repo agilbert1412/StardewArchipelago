@@ -27,6 +27,11 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         {
             try
             {
+                if (Game1.isFestival())
+                {
+                    return true;
+                }
+
                 // We skip this whole method when skipping hold up animations is true
                 return !ModEntry.Instance.Config.SkipHoldUpAnimations || ShouldPrank();
             }

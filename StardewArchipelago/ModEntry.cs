@@ -28,6 +28,7 @@ using StardewArchipelago.GameModifications.Modded;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
 using StardewArchipelago.Locations.CodeInjections.Modded;
 using StardewArchipelago.Stardew.NameMapping;
+using StardewArchipelago.Integrations.GenericModConfigMenu;
 
 namespace StardewArchipelago
 {
@@ -63,6 +64,7 @@ namespace StardewArchipelago
         private QuestCleaner _questCleaner;
         private EntranceManager _entranceManager;
         private NightShippingBehaviors _shippingBehaviors;
+        private HintHelper _hintHelper;
 
         private ModRandomizedLogicPatcher _modLogicPatcher;
         private InitialModGameStateInitializer _modStateInitializer;
@@ -149,6 +151,7 @@ namespace StardewArchipelago
         private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
         {
             ResetArchipelago();
+            ResetModIntegrations();
         }
 
         private void OnSaveCreating(object sender, SaveCreatingEventArgs e)
@@ -294,6 +297,7 @@ namespace StardewArchipelago
                 TravelingMerchantInjections.UpdateTravelingMerchantForToday(Game1.getLocationFromName("Forest") as Forest, Game1.dayOfMonth);
                 SeasonsRandomizer.ChangeMailKeysBasedOnSeasonsToDaysElapsed();
                 _modStateInitializer = new InitialModGameStateInitializer(Monitor, _archipelago);
+                _hintHelper = new HintHelper();
                 Game1.chatBox?.addMessage($"Connected to Archipelago as {_archipelago.SlotData.SlotName}. Type !!help for client commands", Color.Green);
 
             }
@@ -368,6 +372,8 @@ namespace StardewArchipelago
             _entranceManager.ResetCheckedEntrancesToday(_archipelago.SlotData);
             TheaterInjections.UpdateScheduleForEveryone();
             DoBugsCleanup();
+
+            _hintHelper.GiveHintTip(_archipelago.Session);
         }
 
         private void DoBugsCleanup()
@@ -498,6 +504,11 @@ namespace StardewArchipelago
         }
 
 #endif
+        private void ResetModIntegrations()
+        {
+            var GenericModConfigMenu = new GenericModConfig(this);
+            GenericModConfigMenu.RegisterConfig();
+        }
 
         private void OverrideSeedShops(string arg1, string[] arg2)
         {
