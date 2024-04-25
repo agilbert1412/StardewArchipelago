@@ -134,7 +134,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
             Game1.player.currentLocation?.customQuestCompleteBehavior(__instance.id.Value);
             if (__instance.nextQuests.Count > 0)
             {
-                foreach (var nextQuest in __instance.nextQuests.Where(x => !string.IsNullOrEmpty(x)))
+                foreach (var nextQuest in __instance.nextQuests.Where(x => !string.IsNullOrEmpty(x) && x != "-1"))
                 {
                     Game1.player.addQuest(nextQuest);
                 }
