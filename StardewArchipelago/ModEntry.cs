@@ -34,6 +34,7 @@ namespace StardewArchipelago
     public class ModEntry : Mod
     {
         public static ModEntry Instance;
+        public ModConfig Config;
 
         private const string CONNECT_SYNTAX = "Syntax: connect_override ip:port slot password";
         private const string AP_DATA_KEY = "ArchipelagoData";
@@ -82,6 +83,8 @@ namespace StardewArchipelago
         /// <param name="helper">Provides simplified APIs for writing mods.</param>
         public override void Entry(IModHelper helper)
         {
+            this.Config = this.Helper.ReadConfig<ModConfig>();
+
             _apConnectionOverride = null;
 
             _helper = helper;
@@ -103,6 +106,7 @@ namespace StardewArchipelago
 
 
             _helper.ConsoleCommands.Add("connect_override", $"Overrides your next connection to Archipelago. {CONNECT_SYNTAX}", this.OnCommandConnectToArchipelago);
+            _helper.ConsoleCommands.Add("seed_shops_override", "Override the seeds shop setting", this.OverrideSeedShops);
             _helper.ConsoleCommands.Add("export_all_gifts", "Export all currently loaded giftable items and their traits", this.ExportGifts);
             _helper.ConsoleCommands.Add("deathlink", "Override the deathlink setting", this.OverrideDeathlink);
             _helper.ConsoleCommands.Add("trap_difficulty", "Override the trap difficulty setting", this.OverrideTrapDifficulty);
@@ -495,9 +499,19 @@ namespace StardewArchipelago
 
 #endif
 
+        private void OverrideSeedShops(string arg1, string[] arg2)
+        {
+            Config.EnableSeedShopOverhaul = !Config.EnableSeedShopOverhaul;
+            Helper.WriteConfig(Config);
+            var enabledText = Config.EnableSeedShopOverhaul ? "enabled" : "disabled";
+            Monitor.Log($"Seed Shop overhaul is now {enabledText}", LogLevel.Info);
+        }
+
         private void ExportGifts(string arg1, string[] arg2)
         {
-            _giftHandler.ExportAllGifts("gifts.json");
+            const string giftsFile = "gifts.json";
+            _giftHandler.ExportAllGifts(giftsFile);
+            Monitor.Log($"Gifts have been exported to {giftsFile}", LogLevel.Info);
         }
 
         private void OverrideDeathlink(string arg1, string[] arg2)

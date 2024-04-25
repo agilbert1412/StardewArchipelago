@@ -3,7 +3,7 @@ using StardewArchipelago.Locations;
 
 namespace StardewArchipelagoTests
 {
-    public class Tests
+    public class LocationNameMatcherTests
     {
         private LocationNameMatcher _locationNameMatcher;
 

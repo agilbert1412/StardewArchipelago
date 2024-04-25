@@ -63,6 +63,7 @@ namespace StardewArchipelago.GameModifications
             KentInjections.Initialize(monitor, archipelago);
             GoldenEggInjections.Initialize(monitor, archipelago);
             GoldenClockInjections.Initialize(monitor, archipelago);
+            ZeldaAnimationInjections.Initialize(monitor, archipelago);
             ItemTooltipInjections.Initialize(monitor, modHelper, archipelago, locationChecker, nameSimplifier);
             BillboardInjections.Initialize(monitor, modHelper, archipelago, locationChecker, friends);
             SpecialOrderBoardInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
@@ -103,6 +104,7 @@ namespace StardewArchipelago.GameModifications
             PatchKent();
             PatchGoldenEgg();
             PatchGoldenClock();
+            PatchZeldaAnimations();
             PatchLegendaryFish();
             PatchSecretNotes();
             PatchRecipes();
@@ -524,6 +526,27 @@ namespace StardewArchipelago.GameModifications
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Building), nameof(Building.doAction)),
                 postfix: new HarmonyMethod(typeof(GoldenClockInjections), nameof(GoldenClockInjections.DoAction_GoldenClockIncreaseTime_Postfix))
+            );
+        }
+
+        private void PatchZeldaAnimations()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Farmer), nameof(Farmer.holdUpItemThenMessage)),
+                prefix: new HarmonyMethod(typeof(ZeldaAnimationInjections),
+                    nameof(ZeldaAnimationInjections.HoldUpItemThenMessage_SkipBasedOnConfig_Prefix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Farmer), nameof(Farmer.addItemToInventory),
+                    new[] { typeof(Item), typeof(List<Item>) }),
+                postfix: new HarmonyMethod(typeof(ZeldaAnimationInjections),
+                    nameof(ZeldaAnimationInjections.AddItemToInventory_AffectedItems_PrankDay_Postfix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Farmer), nameof(Farmer.addItemToInventory),
+                    new[] { typeof(Item), typeof(int) }),
+                postfix: new HarmonyMethod(typeof(ZeldaAnimationInjections),
+                    nameof(ZeldaAnimationInjections.AddItemToInventory_Position_PrankDay_Postfix))
             );
         }
 

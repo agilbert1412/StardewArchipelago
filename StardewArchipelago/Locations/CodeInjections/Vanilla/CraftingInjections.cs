@@ -224,7 +224,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 return;
             }
 
-            var purchasableCheck = new PurchaseableArchipelagoLocation(recipeName, apLocation, _helper, _locationChecker, _archipelago, activeHints);
+            var purchasableCheck = new PurchaseableArchipelagoLocation(recipeName, apLocation, _monitor, _helper, _locationChecker, _archipelago, activeHints);
             stock.Add(purchasableCheck, price);
         }
     }
