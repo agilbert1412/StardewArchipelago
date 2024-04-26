@@ -6,12 +6,14 @@ using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Modded;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Menus;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
 
     public static class SkillInjections
     {
+        private const int MAX_XP_PER_SKILL = 15000;
         private const string _skillLocationName = "Level {0} {1}";
 
         private static readonly Dictionary<Skill, string> _skillToArchipelagoName = new()
@@ -80,6 +82,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             _archipelagoExperience = values.ToDictionary(x => (Skill)x.Key, x => (double)x.Value);
         }
 
+        // public virtual void gainExperience(int which, int howMuch)
         public static bool GainExperience_NormalExperience_Prefix(Farmer __instance, int which, int howMuch)
         {
             try
@@ -90,6 +93,17 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 if (!enabledSkills.Contains(skill) || howMuch <= 0 || !__instance.IsLocalPlayer)
                 {
                     return true; // run original logic
+                }
+
+                if (_archipelagoExperience[skill] >= MAX_XP_PER_SKILL)
+                {
+                    int currentMasteryLevel = MasteryTrackerMenu.getCurrentMasteryLevel();
+                    int num = (int)Game1.stats.Increment("MasteryExp", Math.Max(1, howMuch / 2));
+                    if (MasteryTrackerMenu.getCurrentMasteryLevel() > currentMasteryLevel)
+                    {
+                        Game1.showGlobalMessage(Game1.content.LoadString("Strings\\1_6_Strings:Mastery_newlevel"));
+                        Game1.playSound("newArtifact");
+                    }
                 }
 
                 var experienceAmount = GetMultipliedExperience(howMuch);
@@ -128,10 +142,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 for (var levelUp = oldLevel + 1; levelUp <= newLevel; ++levelUp)
                 {
                     __instance.newLevels.Add(new Point(which, levelUp));
+                    Game1.showGlobalMessage(Game1.content.LoadString("Strings\\1_6_Strings:NewIdeas"));
                 }
 
                 return false; // don't run original logic
-
             }
             catch (Exception ex)
             {
@@ -192,12 +206,23 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
         private static void AddApExperienceAndCheckLocations(Skill skill, int amount)
         {
+            var apSkillName = _skillToArchipelagoName.ContainsKey(skill) ? _skillToArchipelagoName[skill] : skill.ToString();
+            if (_archipelagoExperience[skill] >= MAX_XP_PER_SKILL && _archipelago.GetReceivedItemCount($"{apSkillName} Level") >= 10)
+            {
+                int currentMasteryLevel = MasteryTrackerMenu.getCurrentMasteryLevel();
+                int num = (int)Game1.stats.Increment("MasteryExp", Math.Max(1, amount / 2));
+                if (MasteryTrackerMenu.getCurrentMasteryLevel() > currentMasteryLevel)
+                {
+                    Game1.showGlobalMessage(Game1.content.LoadString("Strings\\1_6_Strings:Mastery_newlevel"));
+                    Game1.playSound("newArtifact");
+                }
+            }
+
             var experienceAmount = GetMultipliedExperience(amount);
             var oldExperienceLevel = _archipelagoExperience[skill];
             var newExperienceLevel = _archipelagoExperience[skill] + experienceAmount;
             _archipelagoExperience[skill] = newExperienceLevel;
             var newLevel = GetLevel(_archipelagoExperience[skill]);
-            var apSkillName = _skillToArchipelagoName.ContainsKey(skill) ? _skillToArchipelagoName[skill] : skill.ToString();
             for (var i = 1; i <= newLevel; i++)
             {
                 var checkedLocation = string.Format(_skillLocationName, i, apSkillName);
@@ -228,7 +253,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 < 4800 => 6,
                 < 6900 => 7,
                 < 10000 => 8,
-                < 15000 => 9,
+                < MAX_XP_PER_SKILL => 9,
                 _ => 10,
             };
         }
@@ -246,7 +271,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 7 => 4800,
                 8 => 6900,
                 9 => 10000,
-                10 => 15000,
+                10 => MAX_XP_PER_SKILL,
                 _ => 0,
             };
         }
