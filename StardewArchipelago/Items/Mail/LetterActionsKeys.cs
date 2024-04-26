@@ -13,6 +13,7 @@
         public const string DarkTalisman = "DarkTalisman";
         public const string KeyToTheTown = "KeyToTheTown";
         public const string GoldenScythe = "GoldenScythe";
+        public const string ProgressiveScythe = "ProgressiveScythe";
         public const string PierreStocklist = "PierreStocklist";
         public const string BeachBridge = "BeachBridge";
         public const string ProgressiveTool = "ProgressiveTool";

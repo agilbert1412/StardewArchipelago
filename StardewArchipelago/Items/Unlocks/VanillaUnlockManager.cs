@@ -15,9 +15,10 @@ namespace StardewArchipelago.Items.Unlocks
         public const string PROGRESSIVE_TOOL_AP_PREFIX = "Progressive ";
         public const string PROGRESSIVE_MINE_ELEVATOR = "Progressive Mine Elevator";
         public const string PROGRESSIVE_FISHING_ROD = "Progressive Fishing Rod";
-        public const string RETURN_SCEPTER_AP_NAME = "Return Scepter";
-        public const string GOLDEN_SCYTHE_AP_NAME = "Golden Scythe";
-        public const string BEACH_BRIDGE_AP_NAME = "Beach Bridge";
+        public const string RETURN_SCEPTER = "Return Scepter";
+        public const string GOLDEN_SCYTHE = "Golden Scythe";
+        public const string PROGRESSIVE_SCYTHE = "Progressive Scythe";
+        public const string BEACH_BRIDGE = "Beach Bridge";
         public const string FRUIT_BATS = "Fruit Bats";
         public const string MUSHROOM_BOXES = "Mushroom Boxes";
         public const string SPECIAL_ORDER_BOARD_AP_NAME = "Special Order Board";
@@ -113,18 +114,19 @@ namespace StardewArchipelago.Items.Unlocks
             _unlockables.Add($"{PROGRESSIVE_TOOL_AP_PREFIX}Watering Can", SendProgressiveWateringCanLetter);
             _unlockables.Add($"{PROGRESSIVE_TOOL_AP_PREFIX}Trash Can", SendProgressiveTrashCanLetter);
             _unlockables.Add(PROGRESSIVE_FISHING_ROD, SendProgressiveFishingRodLetter);
-            _unlockables.Add(RETURN_SCEPTER_AP_NAME, SendReturnScepterLetter);
+            _unlockables.Add(RETURN_SCEPTER, SendReturnScepterLetter);
         }
 
         private void RegisterUniqueItems()
         {
-            _unlockables.Add(GOLDEN_SCYTHE_AP_NAME, SendGoldenScytheLetter);
+            _unlockables.Add(GOLDEN_SCYTHE, SendGoldenScytheLetter); // Deprecated, but kept in case of start inventory
+            _unlockables.Add(PROGRESSIVE_SCYTHE, SendProgressiveScytheLetter);
             _unlockables.Add(PIERRE_STOCKLIST, SendPierreStocklistLetter);
         }
 
         private void RegisterIsolatedEventsItems()
         {
-            _unlockables.Add(BEACH_BRIDGE_AP_NAME, SendBeachBridgeLetter);
+            _unlockables.Add(BEACH_BRIDGE, SendBeachBridgeLetter);
             _unlockables.Add(FRUIT_BATS, SendFruitBatsLetter);
             _unlockables.Add(MUSHROOM_BOXES, SendMushroomBoxesLetter);
         }
@@ -326,8 +328,20 @@ namespace StardewArchipelago.Items.Unlocks
 
         private LetterActionAttachment SendGoldenScytheLetter(ReceivedItem receivedItem)
         {
-            Game1.player.mailReceived.Add("gotGoldenScythe");
+            if (!Game1.player.mailReceived.Contains("gotGoldenScythe"))
+            {
+                Game1.player.mailReceived.Add("gotGoldenScythe");
+            }
             return new LetterActionAttachment(receivedItem, LetterActionsKeys.GoldenScythe);
+        }
+
+        private LetterActionAttachment SendProgressiveScytheLetter(ReceivedItem receivedItem)
+        {
+            if (!Game1.player.mailReceived.Contains("gotGoldenScythe"))
+            {
+                Game1.player.mailReceived.Add("gotGoldenScythe");
+            }
+            return new LetterActionAttachment(receivedItem, LetterActionsKeys.ProgressiveScythe);
         }
 
         private LetterActionAttachment SendPierreStocklistLetter(ReceivedItem receivedItem)

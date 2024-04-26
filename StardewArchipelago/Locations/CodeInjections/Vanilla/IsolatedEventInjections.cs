@@ -131,7 +131,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     return false; // don't run original logic
                 }
 
-                if (_archipelago.HasReceivedItem(VanillaUnlockManager.BEACH_BRIDGE_AP_NAME))
+                if (_archipelago.HasReceivedItem(VanillaUnlockManager.BEACH_BRIDGE))
                 {
                     return true;
                 }

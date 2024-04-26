@@ -53,6 +53,7 @@ namespace StardewArchipelago.Items.Mail
             _letterActions.Add(LetterActionsKeys.DarkTalisman, (_) => ReceiveDarkTalisman());
             _letterActions.Add(LetterActionsKeys.KeyToTheTown, (_) => ReceiveKeyToTheTown());
             _letterActions.Add(LetterActionsKeys.GoldenScythe, (_) => ReceiveGoldenScythe());
+            _letterActions.Add(LetterActionsKeys.ProgressiveScythe, (_) => ReceiveProgressiveScythe());
             _letterActions.Add(LetterActionsKeys.PierreStocklist, (_) => ReceivePierreStocklist());
             _letterActions.Add(LetterActionsKeys.BeachBridge, (_) => RepairBeachBridge());
             _letterActions.Add(LetterActionsKeys.FruitBats, (_) => SetupFruitBats());
@@ -187,9 +188,27 @@ namespace StardewArchipelago.Items.Mail
         private void ReceiveGoldenScythe()
         {
             Game1.playSound("parry");
-            var goldenScythe = new MeleeWeapon("53");
+            var goldenScythe = ItemRegistry.Create("(W)53");
             Game1.player.holdUpItemThenMessage(goldenScythe);
             Game1.player.addItemByMenuIfNecessary(goldenScythe);
+        }
+
+        private void ReceiveProgressiveScythe()
+        {
+            Game1.playSound("parry");
+
+            // This includes the current letter due to the timing of this patch
+            var scytheNumber = _mail.OpenedMailsContainingKey(VanillaUnlockManager.PROGRESSIVE_SCYTHE);
+            scytheNumber = Math.Max(1, Math.Min(2, scytheNumber));
+            var scytheId = "(W)53"; // Golden Scythe
+            if (scytheNumber > 1)
+            {
+                scytheId = "(W)66"; // Iridium Scythe
+            }
+
+            var itemToAdd = ItemRegistry.Create(scytheId);
+            Game1.player.holdUpItemThenMessage(itemToAdd);
+            Game1.player.addItemByMenuIfNecessary(itemToAdd);
         }
 
         private void ReceivePierreStocklist()
