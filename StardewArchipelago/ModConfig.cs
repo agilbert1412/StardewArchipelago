@@ -33,5 +33,27 @@
         /// Outside of friendsanity, this applies to real points (hearts)
         /// </summary>
         public bool DisableFriendshipDecay { get; set; } = false;
+
+        /// <summary>
+        /// Whether to display archipelago icons on the calendar for dates where the player has checks to do
+        /// </summary>
+        public bool ShowCalendarIndicators { get; set; } = true;
+
+        /// <summary>
+        /// Whether to display archipelago icons on the mine elevator menu for floors where the player has checks to do
+        /// </summary>
+        public bool ShowElevatorIndicators { get; set; } = true;
+
+        /// <summary>
+        /// Whether to display archipelago icons on inventory items for items that the player can do checks with
+        /// </summary>
+        public ItemIndicatorPreference ShowItemIndicators { get; set; } = ItemIndicatorPreference.True;
+    }
+
+    public enum ItemIndicatorPreference
+    {
+        False = 0,
+        True = 1,
+        OnlyShipsanity = 2,
     }
 }

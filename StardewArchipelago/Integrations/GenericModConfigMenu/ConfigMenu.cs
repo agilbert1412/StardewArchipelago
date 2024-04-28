@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
@@ -44,6 +45,19 @@ namespace StardewArchipelago.Integrations.GenericModConfigMenu
         /// <param name="tooltip">The tooltip text shown when the cursor hovers on the field, or <c>null</c> to disable the tooltip.</param>
         /// <param name="fieldId">The unique field ID for use with <see cref="OnFieldChanged"/>, or <c>null</c> to auto-generate a randomized ID.</param>
         void AddBoolOption(IManifest mod, Func<bool> getValue, Action<bool> setValue, Func<string> name, Func<string> tooltip = null, string fieldId = null);
+
+        /// <summary>Add an integer option at the current position in the form.</summary>
+        /// <param name="mod">The mod's manifest.</param>
+        /// <param name="getValue">Get the current value from the mod config.</param>
+        /// <param name="setValue">Set a new value in the mod config.</param>
+        /// <param name="name">The label text to show in the form.</param>
+        /// <param name="tooltip">The tooltip text shown when the cursor hovers on the field, or <c>null</c> to disable the tooltip.</param>
+        /// <param name="min">The minimum allowed value, or <c>null</c> to allow any.</param>
+        /// <param name="max">The maximum allowed value, or <c>null</c> to allow any.</param>
+        /// <param name="interval">The interval of values that can be selected.</param>
+        /// <param name="formatValue">Get the display text to show for a value, or <c>null</c> to show the number as-is.</param>
+        /// <param name="fieldId">The unique field ID for use with <see cref="OnFieldChanged"/>, or <c>null</c> to auto-generate a randomized ID.</param>
+        void AddNumberOption(IManifest mod, Func<int> getValue, Action<int> setValue, Func<string> name, Func<string> tooltip = null, int? min = null, int? max = null, int? interval = null, Func<int, string> formatValue = null, string fieldId = null);
 
         /// <summary>Set whether the options registered after this point can only be edited from the title screen.</summary>
         /// <param name="mod">The mod's manifest.</param>
@@ -129,6 +143,45 @@ namespace StardewArchipelago.Integrations.GenericModConfigMenu
                 tooltip: () => "",
                 getValue: () => Config.DisableFriendshipDecay,
                 setValue: (value) => Config.DisableFriendshipDecay = value
+            );
+
+            configMenu.AddBoolOption(
+                mod: ModManifest,
+                name: () => "Disable Friendship Decay",
+                tooltip: () => "",
+                getValue: () => Config.DisableFriendshipDecay,
+                setValue: (value) => Config.DisableFriendshipDecay = value
+            );
+
+            configMenu.AddBoolOption(
+                mod: ModManifest,
+                name: () => "Show Calendar Indicators",
+                tooltip: () => "Whether to display Archipelago indicators on calendar dates with remaining location checks",
+                getValue: () => Config.ShowCalendarIndicators,
+                setValue: (value) => Config.ShowCalendarIndicators = value
+            );
+
+            configMenu.AddBoolOption(
+                mod: ModManifest,
+                name: () => "Show Elevator Indicators",
+                tooltip: () => "Whether to display Archipelago indicators on elevator floors with remaining location checks",
+                getValue: () => Config.ShowElevatorIndicators,
+                setValue: (value) => Config.ShowElevatorIndicators = value
+            );
+
+            var itemIndicatorValues = Enum.GetValues(typeof(ItemIndicatorPreference)).Cast<int>().ToArray();
+            var itemIndicatorMin = itemIndicatorValues.Min();
+            var itemIndicatorMax = itemIndicatorValues.Max();
+            configMenu.AddNumberOption(
+                mod: ModManifest,
+                name: () => "Show Item Indicators",
+                tooltip: () => "Whether to display Archipelago indicators on items with related remaining location checks",
+                min: itemIndicatorMin,
+                max: itemIndicatorMax,
+                interval: 1,
+                getValue: () => (int)Config.ShowItemIndicators,
+                setValue: (value) => Config.ShowItemIndicators = (ItemIndicatorPreference)value,
+                formatValue: (value) => ((ItemIndicatorPreference)value).ToString()
             );
         }
     }
