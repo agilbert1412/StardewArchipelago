@@ -14,7 +14,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
 {
     public static class VanillaCodeInjectionInitializer
     {
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, StardewItemManager itemManager, WeaponsManager weaponsManager, ShopReplacer shopReplacer, Friends friends)
+        public static void Initialize(IMonitor monitor, IModHelper modHelper, ModConfig config, ArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, StardewItemManager itemManager, WeaponsManager weaponsManager, ShopReplacer shopReplacer, Friends friends)
         {
             BackpackInjections.Initialize(monitor, archipelago, locationChecker);
             ToolInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
@@ -25,7 +25,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             GoalCodeInjection.Initialize(monitor, modHelper, archipelago, locationChecker, bundleReader, killList);
             CommunityCenterInjections.Initialize(monitor, archipelago, locationChecker, bundleReader);
             JunimoNoteMenuInjections.Initialize(monitor, modHelper, archipelago, state, locationChecker, bundleReader);
-            MineshaftInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
+            MineshaftInjections.Initialize(monitor, modHelper, config, archipelago, locationChecker);
             SkillInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             QuestInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             DarkTalismanInjections.Initialize(monitor, modHelper, archipelago, locationChecker);

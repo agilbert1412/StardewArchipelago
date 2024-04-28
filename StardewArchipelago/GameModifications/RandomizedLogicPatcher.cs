@@ -35,7 +35,7 @@ namespace StardewArchipelago.GameModifications
         private readonly StartingResources _startingResources;
         private readonly RecipeDataRemover _recipeDataRemover;
 
-        public RandomizedLogicPatcher(IMonitor monitor, IModHelper modHelper, Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager stardewItemManager, EntranceManager entranceManager, ShopStockGenerator shopStockGenerator, NameSimplifier nameSimplifier, Friends friends, ArchipelagoStateDto state)
+        public RandomizedLogicPatcher(IMonitor monitor, IModHelper modHelper, ModConfig config, Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager stardewItemManager, EntranceManager entranceManager, ShopStockGenerator shopStockGenerator, NameSimplifier nameSimplifier, Friends friends, ArchipelagoStateDto state)
         {
             _harmony = harmony;
             _archipelago = archipelago;
@@ -64,8 +64,8 @@ namespace StardewArchipelago.GameModifications
             GoldenEggInjections.Initialize(monitor, archipelago);
             GoldenClockInjections.Initialize(monitor, archipelago);
             ZeldaAnimationInjections.Initialize(monitor, archipelago);
-            ItemTooltipInjections.Initialize(monitor, modHelper, archipelago, locationChecker, nameSimplifier);
-            BillboardInjections.Initialize(monitor, modHelper, archipelago, locationChecker, friends);
+            ItemTooltipInjections.Initialize(monitor, modHelper, config, archipelago, locationChecker, nameSimplifier);
+            BillboardInjections.Initialize(monitor, modHelper, config, archipelago, locationChecker, friends);
             SpecialOrderBoardInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
 
             DebugPatchInjections.Initialize(monitor, archipelago);

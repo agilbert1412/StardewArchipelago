@@ -31,6 +31,9 @@ namespace StardewArchipelago.Locations
             }
 
             var filteredLocations = FilterForWord(GetAllLocationsMatching(allLocations, wordFilter), wordFilter).ToArray();
+            
+
+            
             _wordFilterCache.Add(wordFilter, filteredLocations);
             return filteredLocations;
         }

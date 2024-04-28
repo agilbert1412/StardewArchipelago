@@ -238,7 +238,7 @@ namespace StardewArchipelago
                 var junimoShopGenerator = new JunimoShopGenerator(_archipelago, shopStockGenerator, _stardewItemManager);
                 var nameSimplifier = new NameSimplifier();
                 var friends = new Friends();
-                _logicPatcher = new RandomizedLogicPatcher(Monitor, _helper, _harmony, _archipelago, _locationChecker, _stardewItemManager, _entranceManager, shopStockGenerator, nameSimplifier, friends, State);
+                _logicPatcher = new RandomizedLogicPatcher(Monitor, _helper, Config, _harmony, _archipelago, _locationChecker, _stardewItemManager, _entranceManager, shopStockGenerator, nameSimplifier, friends, State);
                 _modLogicPatcher = new ModRandomizedLogicPatcher(Monitor, _helper, _harmony, _archipelago, shopStockGenerator, _stardewItemManager, junimoShopGenerator);
                 _jojaDisabler = new JojaDisabler(Monitor, _helper, _harmony);
                 _seasonsRandomizer = new SeasonsRandomizer(Monitor, _helper, _archipelago, State);
@@ -282,7 +282,7 @@ namespace StardewArchipelago
                     new LetterActions(_helper, _mail, _archipelago, weaponsManager, _itemManager.TrapManager, babyBirther, _stardewItemManager));
                 var bundlesManager = new BundlesManager(_helper, _stardewItemManager, _archipelago.SlotData.BundlesData);
                 bundlesManager.ReplaceAllBundles();
-                _locationsPatcher = new LocationPatcher(Monitor, _helper, _harmony, _archipelago, State, _locationChecker, _stardewItemManager, weaponsManager, shopStockGenerator, junimoShopGenerator, friends);
+                _locationsPatcher = new LocationPatcher(Monitor, _helper, Config, _harmony, _archipelago, State, _locationChecker, _stardewItemManager, weaponsManager, shopStockGenerator, junimoShopGenerator, friends);
                 _shippingBehaviors = new NightShippingBehaviors(Monitor, _archipelago, _locationChecker, nameSimplifier);
                 _chatForwarder.ListenToChatMessages();
                 _logicPatcher.PatchAllGameLogic();
