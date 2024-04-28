@@ -128,8 +128,17 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
         public static void GetCurrentDateComponents(int daysPlayed, out int year, out int week)
         {
-            year = (int)(((daysPlayed - 1) / 112) % 2); // 0 is year1, 1 is year2
-            week = (int)((daysPlayed - 1) % 28 / 7); // 0-3
+            const int yearLoop = 2;
+            var zeroIndexedDay = daysPlayed - 1;
+            var currentYear = zeroIndexedDay / 112;
+            while (zeroIndexedDay < 0)
+            {
+                zeroIndexedDay += 112;
+                currentYear += 1;
+            }
+            var currentDayOfMonth = zeroIndexedDay % 28;
+            year = currentYear % yearLoop; // 0 is year1, 1 is year2
+            week = currentDayOfMonth / 7; // 0-3
         }
 
         private static string[] GetQueenOfSauceTvText(string recipeName, string recipeDetails, string[] recipeInfo)
