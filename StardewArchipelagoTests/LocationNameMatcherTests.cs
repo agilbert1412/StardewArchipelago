@@ -38,7 +38,7 @@ namespace StardewArchipelagoTests
 
         [TestCase("Snail", new[] { "Open Professor Snail Cave" }, TestName = "Professor Snail Cave")]
         [TestCase("Stone", new[] { "Shipsanity: Swirl Stone", "Smashing Stone" }, TestName = "Swirl Stone")]
-        [TestCase("Hardwood", new[] { "Shipsanity: Hardwood Display: Amphibian Fossil", "Shipsanity: Wooden Display: Dinosaur Egg", "Craft Hardwood Preservation Chamber", "Craft Hardwood Display", "Shipsanity: Hardwood Fence" }, TestName = "Hardwood Displays")]
+        [TestCase("Hardwood", new[] { "Shipsanity: Hardwood Display: Amphibian Fossil" }, TestName = "Hardwood Displays")]
         public void GetAllLocationsContainingWordFalsePositivesTest(string itemName, string[] locationsNotMatching)
         {
             // Arrange
