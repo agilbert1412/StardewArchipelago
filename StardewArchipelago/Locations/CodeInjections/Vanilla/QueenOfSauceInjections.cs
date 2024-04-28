@@ -143,13 +143,19 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
         private static string[] GetQueenOfSauceTvText(string recipeName, string recipeDetails, string[] recipeInfo)
         {
-            var weeklyRecipe = new string[2];
-            weeklyRecipe[0] = recipeDetails;
+            var weeklyRecipe = new List<string>();
+            weeklyRecipe.Add(recipeDetails);
 
             var isEnglish = LocalizedContentManager.CurrentLanguageCode == LocalizedContentManager.LanguageCode.en;
             var alreadyKnowsRecipe = Game1.player.cookingRecipes.ContainsKey(recipeName);
             var alreadyKnownText = Game1.content.LoadString(ALREADY_KNOWN_KEY, recipeName);
             var newRecipeText = Game1.content.LoadString(NEW_RECIPE_LEARNED_KEY, recipeName);
+
+            if (_archipelago.SlotData.Chefsanity.HasFlag(Chefsanity.QueenOfSauce))
+            {
+                return weeklyRecipe.ToArray();
+            }
+
             var recipeLearnedInfoText = alreadyKnowsRecipe ? alreadyKnownText : newRecipeText;
 
             if (!isEnglish)
@@ -162,8 +168,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 recipeLearnedInfoText = alreadyKnowsRecipe ? alreadyKnownText : newRecipeText;
             }
 
-            weeklyRecipe[1] = recipeLearnedInfoText;
-            return weeklyRecipe;
+            weeklyRecipe.Add(recipeLearnedInfoText);
+            return weeklyRecipe.ToArray();
         }
 
         private static int PickRerunRecipe(Dictionary<string, string> cookingRecipes, int currentWeek)
