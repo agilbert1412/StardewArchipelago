@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Locations;
+using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Stardew.NameMapping;
 using StardewArchipelago.Textures;
 using StardewModdingAPI;
@@ -16,15 +18,17 @@ namespace StardewArchipelago.GameModifications.Tooltips
     {
         private static IMonitor _monitor;
         private static IModHelper _modHelper;
+        private static ModConfig _config;
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
         private static NameSimplifier _nameSimplifier;
         private static Texture2D _miniArchipelagoIcon;
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker, NameSimplifier nameSimplifier)
+        public static void Initialize(IMonitor monitor, IModHelper modHelper, ModConfig config, ArchipelagoClient archipelago, LocationChecker locationChecker, NameSimplifier nameSimplifier)
         {
             _monitor = monitor;
             _modHelper = modHelper;
+            _config = config;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
             _nameSimplifier = nameSimplifier;
@@ -38,13 +42,16 @@ namespace StardewArchipelago.GameModifications.Tooltips
         {
             try
             {
-                if (__instance == null)
+                if (__instance == null || _config.ShowItemIndicators == ItemIndicatorPreference.False)
                 {
                     return;
                 }
 
                 var simplifiedName = _nameSimplifier.GetSimplifiedName(__instance);
                 var allUncheckedLocations = _locationChecker.GetAllLocationsNotCheckedContainingWord(simplifiedName);
+
+                allUncheckedLocations = FilterLocationsBasedOnConfig(allUncheckedLocations);
+
                 if (!allUncheckedLocations.Any())
                 {
                     return;
@@ -71,13 +78,16 @@ namespace StardewArchipelago.GameModifications.Tooltips
         {
             try
             {
-                if (__instance == null)
+                if (__instance == null || _config.ShowItemIndicators == ItemIndicatorPreference.False)
                 {
                     return;
                 }
 
                 var simplifiedName = _nameSimplifier.GetSimplifiedName(__instance);
                 var allUncheckedLocations = _locationChecker.GetAllLocationsNotCheckedContainingWord(simplifiedName);
+
+                allUncheckedLocations = FilterLocationsBasedOnConfig(allUncheckedLocations);
+
                 foreach (var uncheckedLocation in allUncheckedLocations)
                 {
                     __result += $"{Environment.NewLine}{uncheckedLocation}";
@@ -90,6 +100,18 @@ namespace StardewArchipelago.GameModifications.Tooltips
                 _monitor.Log($"Failed in {nameof(GetDescription_AddMissingChecks_Postfix)}:\n{ex}", LogLevel.Error);
                 return;
             }
+        }
+
+        private static string[] FilterLocationsBasedOnConfig(string[] allUncheckedLocations)
+        {
+            if (_config.ShowItemIndicators == ItemIndicatorPreference.OnlyShipsanity)
+            {
+                return allUncheckedLocations.Where(x =>
+                    x.Contains(NightShippingBehaviors.SHIPSANITY_PREFIX,
+                        StringComparison.InvariantCultureIgnoreCase)).ToArray();
+            }
+
+            return allUncheckedLocations;
         }
     }
 }

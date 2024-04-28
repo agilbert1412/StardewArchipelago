@@ -22,13 +22,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private const string ELEVATOR_LOCATION = "Floor {0} Elevator";
 
         private static IMonitor _monitor;
+        private static ModConfig _config;
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
         private static Texture2D _miniArchipelagoIcon;
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(IMonitor monitor, IModHelper modHelper, ModConfig config, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             _monitor = monitor;
+            _config = config;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
 
@@ -199,6 +201,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             try
             {
+                if (!_config.ShowElevatorIndicators)
+                {
+                    return;
+                }
+
                 foreach (var button in __instance.elevators)
                 {
                     var floor = Convert.ToInt32(button.name);

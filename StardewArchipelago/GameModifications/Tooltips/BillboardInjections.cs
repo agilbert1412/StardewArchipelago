@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Archipelago;
@@ -23,6 +24,7 @@ namespace StardewArchipelago.GameModifications.Tooltips
     {
         private static IMonitor _monitor;
         private static IModHelper _modHelper;
+        private static ModConfig _config;
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
         private static Friends _friends;
@@ -30,10 +32,11 @@ namespace StardewArchipelago.GameModifications.Tooltips
         private static Texture2D _miniArchipelagoIcon;
         private static Texture2D _travelingMerchantIcon;
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker, Friends friends)
+        public static void Initialize(IMonitor monitor, IModHelper modHelper, ModConfig config, ArchipelagoClient archipelago, LocationChecker locationChecker, Friends friends)
         {
             _monitor = monitor;
             _modHelper = modHelper;
+            _config = config;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
             _friends = friends;
@@ -117,6 +120,11 @@ namespace StardewArchipelago.GameModifications.Tooltips
 
         private static void DrawAPIconIfNeeded(SpriteBatch b, List<ClickableTextureComponent> calendarDays, int i)
         {
+            if (!_config.ShowCalendarIndicators)
+            {
+                return;
+            }
+
             var festivalName = calendarDays[i].name;
             var birthdayName = calendarDays[i].hoverText;
 
@@ -154,6 +162,11 @@ namespace StardewArchipelago.GameModifications.Tooltips
             {
                 // private bool dailyQuestBoard;
                 if (_modHelper.Reflection.GetField<bool>(__instance, "dailyQuestBoard").GetValue())
+                {
+                    return;
+                }
+
+                if (!_config.ShowCalendarIndicators)
                 {
                     return;
                 }
