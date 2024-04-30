@@ -597,6 +597,11 @@ namespace StardewArchipelago.GameModifications
             );
 
             _harmony.Patch(
+                original: AccessTools.Method(typeof(ColoredObject), nameof(ColoredObject.drawInMenu), objectDrawParameters),
+                postfix: new HarmonyMethod(typeof(ItemTooltipInjections), nameof(ItemTooltipInjections.DrawInMenuColored_AddArchipelagoLogoIfNeeded_Postfix))
+            );
+
+            _harmony.Patch(
                 original: AccessTools.Method(typeof(Object), nameof(Object.getDescription)),
                 postfix: new HarmonyMethod(typeof(ItemTooltipInjections), nameof(ItemTooltipInjections.GetDescription_AddMissingChecks_Postfix))
             );

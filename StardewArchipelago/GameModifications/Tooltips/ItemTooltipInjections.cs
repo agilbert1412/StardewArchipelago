@@ -10,6 +10,7 @@ using StardewArchipelago.Stardew.NameMapping;
 using StardewArchipelago.Textures;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Objects;
 using Object = StardewValley.Object;
 
 namespace StardewArchipelago.GameModifications.Tooltips
@@ -42,28 +43,7 @@ namespace StardewArchipelago.GameModifications.Tooltips
         {
             try
             {
-                if (__instance == null || _config.ShowItemIndicators == ItemIndicatorPreference.False)
-                {
-                    return;
-                }
-
-                var simplifiedName = _nameSimplifier.GetSimplifiedName(__instance);
-                var allUncheckedLocations = _locationChecker.GetAllLocationsNotCheckedContainingWord(simplifiedName);
-
-                allUncheckedLocations = FilterLocationsBasedOnConfig(allUncheckedLocations);
-
-                if (!allUncheckedLocations.Any())
-                {
-                    return;
-                }
-
-
-                var position = location + new Vector2(14f, 14f);
-                var sourceRectangle = new Rectangle(0, 0, 12, 12);
-                var transparentColor = color * transparency;
-                var origin = new Vector2(8f, 8f);
-
-                spriteBatch.Draw(_miniArchipelagoIcon, position, sourceRectangle, transparentColor, 0.0f, origin, scaleSize, SpriteEffects.None, layerDepth);
+                ObjectDrawInMenuPostfix(__instance, spriteBatch, location, scaleSize, transparency, layerDepth, color);
                 return;
             }
             catch (Exception ex)
@@ -71,6 +51,50 @@ namespace StardewArchipelago.GameModifications.Tooltips
                 _monitor.Log($"Failed in {nameof(DrawInMenu_AddArchipelagoLogoIfNeeded_Postfix)}:\n{ex}", LogLevel.Error);
                 return;
             }
+        }
+
+        // public abstract void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, StackDrawType drawStackNumber, Color color, bool drawShadow)
+        public static void DrawInMenuColored_AddArchipelagoLogoIfNeeded_Postfix(ColoredObject __instance, SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, StackDrawType drawStackNumber, Color color, bool drawShadow)
+        {
+            try
+            {
+                ObjectDrawInMenuPostfix(__instance, spriteBatch, location, scaleSize, transparency, layerDepth, color);
+                return;
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(DrawInMenuColored_AddArchipelagoLogoIfNeeded_Postfix)}:\n{ex}", LogLevel.Error);
+                return;
+            }
+        }
+
+        private static bool ObjectDrawInMenuPostfix(Object item, SpriteBatch spriteBatch, Vector2 location,
+            float scaleSize, float transparency, float layerDepth, Color color)
+        {
+            if (item == null || _config.ShowItemIndicators == ItemIndicatorPreference.False)
+            {
+                return true;
+            }
+
+            var simplifiedName = _nameSimplifier.GetSimplifiedName(item);
+            var allUncheckedLocations = _locationChecker.GetAllLocationsNotCheckedContainingWord(simplifiedName);
+
+            allUncheckedLocations = FilterLocationsBasedOnConfig(allUncheckedLocations);
+
+            if (!allUncheckedLocations.Any())
+            {
+                return true;
+            }
+
+
+            var position = location + new Vector2(14f, 14f);
+            var sourceRectangle = new Rectangle(0, 0, 12, 12);
+            var transparentColor = color * transparency;
+            var origin = new Vector2(8f, 8f);
+
+            spriteBatch.Draw(_miniArchipelagoIcon, position, sourceRectangle, transparentColor, 0.0f, origin, scaleSize,
+                SpriteEffects.None, layerDepth);
+            return false;
         }
 
         // public override string getDescription()
