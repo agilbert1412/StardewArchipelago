@@ -74,6 +74,8 @@ namespace StardewArchipelago.Bundles
             {"Deep Fishing", 239},
 
             {"Bartender's", 277},
+            {"MinMaxer", 278},
+            {"Clay Farmer", 279},
 
             {"Demolition", 272},
             {"Paleontologist's", 247},
@@ -187,6 +189,8 @@ namespace StardewArchipelago.Bundles
             {"Deep Fishing", BUNDLE_DARK_BLUE},
 
             {"Bartender's", BUNDLE_ORANGE},
+            {"MinMaxer", BUNDLE_DARK_BLUE},
+            {"Clay Farmer", BUNDLE_ORANGE},
 
             {"Demolition", BUNDLE_RED},
             {"Paleontologist's", BUNDLE_ORANGE},
