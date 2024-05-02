@@ -1,7 +1,8 @@
 ﻿using StardewArchipelago.Archipelago;
+using StardewArchipelago.Bundles;
 using StardewArchipelago.Goals;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
-using StardewArchipelago.Locations.CodeInjections.Vanilla.CC;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Quests;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
@@ -14,7 +15,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
 {
     public static class VanillaCodeInjectionInitializer
     {
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ModConfig config, ArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, StardewItemManager itemManager, WeaponsManager weaponsManager, Friends friends)
+        public static void Initialize(IMonitor monitor, IModHelper modHelper, ModConfig config, ArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, StardewItemManager itemManager, WeaponsManager weaponsManager, BundlesManager bundlesManager, ShopReplacer shopReplacer, Friends friends)
         {
             BackpackInjections.Initialize(monitor, archipelago, locationChecker);
             ScytheInjections.Initialize(monitor, locationChecker);
@@ -22,8 +23,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             var bundleReader = new BundleReader();
             var killList = new MonsterKillList(archipelago);
             GoalCodeInjection.Initialize(monitor, modHelper, archipelago, locationChecker, bundleReader, killList);
-            CommunityCenterInjections.Initialize(monitor, archipelago, locationChecker, bundleReader);
-            JunimoNoteMenuInjections.Initialize(monitor, modHelper, archipelago, state, locationChecker, bundleReader);
+            InitializeBundleInjections(monitor, modHelper, archipelago, state, locationChecker, bundlesManager, bundleReader);
             MineshaftInjections.Initialize(monitor, modHelper, config, archipelago, locationChecker);
             InitializeSkills(monitor, modHelper, archipelago, locationChecker);
             QuestInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
@@ -49,6 +49,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             RecipeFriendshipInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             CraftingInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             FarmCaveInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
+        }
+
+        private static void InitializeBundleInjections(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, BundlesManager bundlesManager, BundleReader bundleReader)
+        {
+            CommunityCenterInjections.Initialize(monitor, archipelago, locationChecker, bundleReader);
+            JunimoNoteMenuInjections.Initialize(monitor, modHelper, archipelago, state, locationChecker, bundleReader);
+            RaccoonInjections.Initialize(monitor, modHelper, archipelago, state, locationChecker, bundlesManager);
         }
 
         private static void InitializeSkills(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker)

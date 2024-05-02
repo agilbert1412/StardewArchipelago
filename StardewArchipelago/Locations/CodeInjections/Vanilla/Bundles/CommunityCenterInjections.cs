@@ -8,7 +8,7 @@ using StardewValley;
 using StardewValley.Locations;
 using xTile.Dimensions;
 
-namespace StardewArchipelago.Locations.CodeInjections.Vanilla.CC
+namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 {
     public static class CommunityCenterInjections
     {

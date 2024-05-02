@@ -15,7 +15,7 @@ using StardewValley.Locations;
 using StardewValley.Menus;
 using Bundle = StardewValley.Menus.Bundle;
 
-namespace StardewArchipelago.Locations.CodeInjections.Vanilla.CC
+namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 {
     public static class JunimoNoteMenuInjections
     {
