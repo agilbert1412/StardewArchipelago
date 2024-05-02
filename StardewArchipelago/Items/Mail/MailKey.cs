@@ -69,7 +69,10 @@ namespace StardewArchipelago.Items.Mail
             var letterOpenedAction = splitKey[4];
             var actionParameter = splitKey[5];
             var uniqueId = splitKey[6];
-            var isEmpty = splitKey.Length > 7 && bool.Parse(splitKey[7]);
+            if (splitKey.Length <= 7 || !bool.TryParse(splitKey[7], out var isEmpty))
+            {
+                isEmpty = false;
+            }
 
             mailKey = new MailKey(itemName, playerName, locationName, letterOpenedAction, actionParameter, uniqueId, isEmpty);
             return true;
