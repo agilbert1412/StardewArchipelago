@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants;
 using StardewArchipelago.Extensions;
 using StardewArchipelago.Items.Mail;
+using StardewArchipelago.Locations;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewValley;
 using StardewValley.Constants;
+using StardewValley.Locations;
 
 namespace StardewArchipelago.Items.Unlocks
 {
@@ -35,13 +38,16 @@ namespace StardewArchipelago.Items.Unlocks
         public const string PROGRESSIVE_SLINGSHOT = "Progressive Slingshot";
 
         private ArchipelagoClient _archipelago;
+        private LocationChecker _locationChecker;
         private Dictionary<string, Func<ReceivedItem, LetterAttachment>> _unlockables;
 
-        public VanillaUnlockManager(ArchipelagoClient archipelago)
+        public VanillaUnlockManager(ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             _archipelago = archipelago;
+            _locationChecker = locationChecker;
             _unlockables = new Dictionary<string, Func<ReceivedItem, LetterAttachment>>();
             RegisterCommunityCenterRepairs();
+            RegisterRaccoons();
             RegisterPlayerSkills();
             RegisterPlayerImprovement();
             RegisterProgressiveTools();
@@ -70,6 +76,11 @@ namespace StardewArchipelago.Items.Unlocks
             _unlockables.Add("Glittering Boulder Removed", RemoveGlitteringBoulder);
             _unlockables.Add("Minecarts Repair", RepairMinecarts);
             _unlockables.Add("Bus Repair", RepairBus);
+        }
+
+        private void RegisterRaccoons()
+        {
+            _unlockables.Add(APItem.PROGRESSIVE_RACCOON, SendProgressiveRaccoon);
         }
 
         private void RegisterPlayerImprovement()
@@ -193,6 +204,31 @@ namespace StardewArchipelago.Items.Unlocks
         private LetterVanillaAttachment RepairBus(ReceivedItem receivedItem)
         {
             return new LetterVanillaAttachment(receivedItem, "ccVault", true);
+        }
+
+        private LetterAttachment SendProgressiveRaccoon(ReceivedItem receivedItem)
+        {
+            if (!Game1.MasterPlayer.mailReceived.Contains("raccoonTreeFallen"))
+            {
+                Game1.MasterPlayer.mailReceived.Add("raccoonTreeFallen");
+                return new LetterInformationAttachment(receivedItem);
+            }
+
+            if (_archipelago.SlotData.QuestLocations.StoryQuestsEnabled && !Game1.MasterPlayer.mailReceived.Contains("raccoonMovedIn"))
+            {
+                Game1.MasterPlayer.mailReceived.Add("raccoonMovedIn");
+                var forest = Game1.getLocationFromName("Forest");
+                Forest.fixStump(forest);
+                if (_locationChecker.IsLocationMissing("The Giant Stump") && !Game1.player.hasQuest("134"))
+                {
+                    Game1.player.addQuest("134");
+                    Game1.player.mailReceived.Add("checkedRaccoonStump");
+                }
+                return new LetterInformationAttachment(receivedItem);
+            }
+
+            ++Game1.netWorldState.Value.TimesFedRaccoons;
+            return new LetterInformationAttachment(receivedItem);
         }
 
         private LetterVanillaAttachment RepairBoat(ReceivedItem receivedItem)

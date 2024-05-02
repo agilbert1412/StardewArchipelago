@@ -4,6 +4,7 @@ using System.Linq;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.Items.Mail;
+using StardewArchipelago.Locations;
 
 namespace StardewArchipelago.Items.Unlocks
 {
@@ -11,10 +12,10 @@ namespace StardewArchipelago.Items.Unlocks
     {
         private List<IUnlockManager> _specificUnlockManagers;
 
-        public UnlockManager(ArchipelagoClient archipelago)
+        public UnlockManager(ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             _specificUnlockManagers = new List<IUnlockManager>();
-            _specificUnlockManagers.Add(new VanillaUnlockManager(archipelago));
+            _specificUnlockManagers.Add(new VanillaUnlockManager(archipelago, locationChecker));
             if (archipelago.SlotData.Mods.HasModdedSkill())
             {
                 _specificUnlockManagers.Add(new ModSkillUnlockManager());

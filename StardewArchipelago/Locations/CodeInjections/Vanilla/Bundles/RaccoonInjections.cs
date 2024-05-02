@@ -22,8 +22,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 {
     public static class RaccoonInjections
     {
-        private const string PROGRESSIVE_RACCOON = "Progressive Raccoon";
-
         private static IMonitor _monitor;
         private static IModHelper _modHelper;
         private static ArchipelagoClient _archipelago;
@@ -53,7 +51,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 }
                 else
                 {
-                    var receivedRaccoons = _archipelago.GetReceivedItemCount(PROGRESSIVE_RACCOON);
+                    var receivedRaccoons = _archipelago.GetReceivedItemCount(APItem.PROGRESSIVE_RACCOON);
                     if (!_archipelago.SlotData.QuestLocations.StoryQuestsEnabled)
                     {
                         receivedRaccoons += 1;

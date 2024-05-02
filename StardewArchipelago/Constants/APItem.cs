@@ -2,6 +2,7 @@
 {
     public static class APItem
     {
-        public static string BEARS_KNOWLEDGE = "Bear's Knowledge";
+        public const string BEARS_KNOWLEDGE = "Bear's Knowledge";
+        public const string PROGRESSIVE_RACCOON = "Progressive Raccoon";
     }
 }
