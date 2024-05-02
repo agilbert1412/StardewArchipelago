@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using StardewArchipelago.Constants;
 using StardewArchipelago.Stardew;
 
 namespace StardewArchipelago.Bundles
@@ -23,7 +24,7 @@ namespace StardewArchipelago.Bundles
             var stardewStrings = new Dictionary<string, string>();
             foreach (var (roomName, bundleRoom) in Rooms)
             {
-                if (roomName == "Raccoon Requests")
+                if (roomName == APName.RACCOON_REQUESTS_ROOM)
                 {
                     continue;
                 }
