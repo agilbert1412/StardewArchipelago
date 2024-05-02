@@ -21,8 +21,13 @@ namespace StardewArchipelago.Bundles
         public Dictionary<string, string> ToStardewStrings()
         {
             var stardewStrings = new Dictionary<string, string>();
-            foreach (var (_, bundleRoom) in Rooms)
+            foreach (var (roomName, bundleRoom) in Rooms)
             {
+                if (roomName == "Raccoon Requests")
+                {
+                    continue;
+                }
+
                 foreach (var (key, value) in bundleRoom.ToStardewStrings())
                 {
                     stardewStrings.Add(key, value);

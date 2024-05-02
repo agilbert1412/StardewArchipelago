@@ -48,6 +48,8 @@ namespace StardewArchipelago.Bundles
             { "Master Fisher's", 12 },
             { "Quality Fish", 104 },
             { "Fish Farmer's", 108 },
+            { "Sommelier", 355 },
+            { "Dry", 356 },
 
             { "Beach Foraging", 240 },
             { "Mines Foraging", 241 },
@@ -72,8 +74,14 @@ namespace StardewArchipelago.Bundles
             { "Island Fish", 267 },
             { "Master Baiter", 268 },
             { "Deep Fishing", 239 },
+            { "Fish Smoker", 357 },
 
-            { "Bartender's", 277 },
+            { "Bartender's", 276 },
+            { "Helper's", 351 },
+            { "Spirit's Eve", 352 },
+            { "Winter Star", 353 },
+            { "Calico", 354 },
+            { "Raccoon", 358 },
             {"MinMaxer", 278},
             {"Clay Farmer", 279},
 
@@ -163,6 +171,8 @@ namespace StardewArchipelago.Bundles
             { "Master Fisher's", BUNDLE_RED },
             { "Quality Fish", BUNDLE_RED },
             { "Fish Farmer's", BUNDLE_DARK_BLUE },
+            { "Sommelier", BUNDLE_PURPLE },
+            { "Dry", BUNDLE_ORANGE },
 
             { "Beach Foraging", BUNDLE_LIGHT_BLUE },
             { "Mines Foraging", BUNDLE_PURPLE },
@@ -187,8 +197,15 @@ namespace StardewArchipelago.Bundles
             { "Recycling", BUNDLE_LIGHT_BLUE },
             { "Trash", BUNDLE_RED },
             { "Deep Fishing", BUNDLE_DARK_BLUE },
+            { "Fish Smoker", BUNDLE_RED },
 
             { "Bartender's", BUNDLE_ORANGE },
+            { "Helper's", BUNDLE_RED },
+            { "Spirit's Eve", BUNDLE_ORANGE },
+            { "Winter Star", BUNDLE_RED },
+            { "Calico", BUNDLE_YELLOW },
+            { "Raccoon", BUNDLE_GREEN },
+
             {"MinMaxer", BUNDLE_DARK_BLUE},
             {"Clay Farmer", BUNDLE_ORANGE},
 
