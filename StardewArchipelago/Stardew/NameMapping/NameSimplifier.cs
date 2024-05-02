@@ -8,7 +8,6 @@ namespace StardewArchipelago.Stardew.NameMapping
     {
         public NameSimplifier()
         {
-
         }
 
         public string GetSimplifiedName(Item item)

@@ -49,6 +49,7 @@ namespace StardewArchipelago.Items.Unlocks
         {
             return _unlockables[unlock.ItemName](unlock);
         }
+
         public SVEUnlockManager()
         {
             _unlockables = new Dictionary<string, Func<ReceivedItem, LetterAttachment>>();

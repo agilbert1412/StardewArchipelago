@@ -68,6 +68,7 @@ namespace StardewArchipelago.Locations.Festival
                 return true; // run original logic
             }
         }
+
         private static bool IsWinterStarParticipant(string name, CharacterData data, Func<string, bool> shouldIgnoreNpc)
         {
             if (shouldIgnoreNpc != null && shouldIgnoreNpc(name))

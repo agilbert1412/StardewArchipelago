@@ -291,6 +291,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         }
 
         private static int _coinsLastTick = -1;
+
         public static void Tick_Shopping_PostFix(AbigailGame __instance, GameTime time, ref bool __result)
         {
             try
@@ -331,7 +332,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
             AssignStartingEquipment(__instance);
             return true;
-
         }
 
         private static bool CheckSuperGunPurchaseLocation(AbigailGame __instance)
@@ -366,7 +366,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
             AssignStartingEquipment(__instance);
             return true;
-
         }
 
         private static bool CheckAmmoPurchaseLocation(AbigailGame __instance)

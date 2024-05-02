@@ -459,7 +459,6 @@ namespace StardewArchipelago
 
         private void DoBugsCleanup()
         {
-
         }
 
         private void OnDayEnding(object sender, DayEndingEventArgs e)

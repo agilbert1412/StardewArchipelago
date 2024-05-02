@@ -53,7 +53,6 @@ namespace StardewArchipelago.Locations.GingerIsland.VolcanoForge
                 Game1.player.mailReceived.Add("CalderaTreasure");
 
                 return false; // don't run original logic
-
             }
             catch (Exception ex)
             {

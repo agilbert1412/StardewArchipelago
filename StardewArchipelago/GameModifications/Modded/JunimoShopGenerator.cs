@@ -401,7 +401,6 @@ namespace StardewArchipelago.GameModifications.Modded
                 requestedItemCount = (int)Math.Max(1, requestedItemCount * (1 - applesHearts * 0.05f));
             }
             return new int[2] { soldItemCount, requestedItemCount };
-
         }
 
         private int[] MakeMinimalCountBelowGivenCount(int soldItemCount, int requestedItemCount, int givenCount)

@@ -69,7 +69,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 //}
                 //__instance.CurrentCommand++;
                 //return false; // don't run original logic
-
             }
             catch (Exception ex)
             {
@@ -97,7 +96,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 //}
                 //__instance.CurrentCommand++;
                 //return false; // don't run original logic
-
             }
             catch (Exception ex)
             {
@@ -121,7 +119,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 //var cookingEvent = cookingEvents.Contains(__instance.id);
                 //SkipRecipeEventArchipelago(__instance, cookingEvent);
                 //return false; // don't run original logic
-
             }
             catch (Exception ex)
             {
@@ -180,7 +177,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 }
 
                 return;
-
             }
 
             if (_archipelago.SlotData.Craftsanity.HasFlag(Craftsanity.All))
@@ -192,7 +188,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 {
                     Game1.player.craftingRecipes.Remove(eventName);
                 }
-
             }
 
             return;

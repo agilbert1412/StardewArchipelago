@@ -200,7 +200,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
 
                 //itemPriceAndStock = _seedShopStockModifier.GetJojaStock();
                 //return true; // run original logic
-
             }
             catch (Exception ex)
             {

@@ -10,7 +10,6 @@ namespace StardewArchipelago.Stardew
 
         public BootsToRecover() : base()
         {
-
         }
 
         public BootsToRecover(string bootsId) : base(bootsId)

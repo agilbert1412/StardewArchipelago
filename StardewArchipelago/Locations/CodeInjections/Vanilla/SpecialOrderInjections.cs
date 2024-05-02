@@ -184,7 +184,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
         private static void UpdateAvailableSpecialOrdersBasedOnApState(string orderType, bool forceRefresh)
         {
-
             if (!forceRefresh)
             {
                 if (Game1.player.team.availableSpecialOrders.Any(availableSpecialOrder => availableSpecialOrder.orderType.Value == orderType))
@@ -205,6 +204,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
             ChooseTwoOrders(specialOrderInstances, hints, random);
         }
+
         private static void SetDurationOfSpecialOrders(IEnumerable<SpecialOrder> specialOrders)
         {
             foreach (var availableSpecialOrder in specialOrders)

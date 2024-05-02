@@ -356,7 +356,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
 
                 __result = true;
                 return false; // don't run original logic
-
             }
             catch (Exception ex)
             {

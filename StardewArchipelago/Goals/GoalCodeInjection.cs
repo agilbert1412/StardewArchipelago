@@ -121,7 +121,6 @@ namespace StardewArchipelago.Goals
                 {
                     return;
                 }
-
             }
             else
             {
@@ -480,7 +479,6 @@ namespace StardewArchipelago.Goals
             var numberOfMissedRecipes = 0;
             foreach (var recipe in allRecipes.Keys)
             {
-
                 if (!Game1.player.craftingRecipes.ContainsKey(recipe) || Game1.player.craftingRecipes[recipe] <= 0)
                 {
                     numberOfMissedRecipes++;

@@ -132,8 +132,6 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Lost Valley Ruins", "Custom_BoardingHouse_Ruins" },
             { "Buffalo's Ranch", "Custom_BoardingHouse_BuffalosRanch" },
             { "Lost Valley Minecart", "Custom_BoardingHouse_TheLostValley|3|22" },
-
-
         };
 
         private static readonly Dictionary<string, Dictionary<string, string>> _locationAliasesByMod = new()

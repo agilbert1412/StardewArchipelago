@@ -95,6 +95,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 buildingsData.Add($"Free {buildingName}", freebuildingData);
             }
         }
+
         private static string CreateHasBuildingOrHigherCondition(string buildingName, bool hasBuilding)
         {
             var noBuildingConditions = new List<string>();

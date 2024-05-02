@@ -196,7 +196,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
             var shouldRemain = random.NextDouble() < chanceToRemain;
             return shouldRemain;
-
         }
 
         private static double GetRandomItemStockSize(int stockUpgrades)

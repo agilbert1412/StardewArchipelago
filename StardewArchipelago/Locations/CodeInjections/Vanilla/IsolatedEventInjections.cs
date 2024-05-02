@@ -228,7 +228,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
         private static void CheckGalaxySwordApLocation()
         {
-
             Game1.flashAlpha = 1f;
             Game1.player.holdUpItemThenMessage(new MeleeWeapon("4"));
             Game1.player.reduceActiveItemByOne();
@@ -282,7 +281,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 Game1.player.Position = new Vector2(-9999f, -99999f);
                 __instance.endBehaviors(new string[1] { "end" }, Game1.currentLocation);
                 return false; // don't run original logic
-
             }
             catch (Exception ex)
             {
@@ -307,7 +305,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
                 _locationChecker.AddCheckedLocation(RUSTY_SWORD_AP_LOCATION);
                 return false; // don't run original logic
-
             }
             catch (Exception ex)
             {

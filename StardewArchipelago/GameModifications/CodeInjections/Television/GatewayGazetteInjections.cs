@@ -122,6 +122,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
             Game1.drawObjectDialogue(Game1.parseText(string.Format(GAZETTE_EPISODE, agentName, friendlyEntranceName, destinationFriendlyName)));
             Game1.afterDialogues = tv.proceedToNextScene;
         }
+
         private static void PlayChaosGazetteEpisode(TV tv, Random random)
         {
             var agentName = Community.AllNames[random.Next(Community.AllNames.Length)];

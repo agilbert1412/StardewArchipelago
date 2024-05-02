@@ -286,7 +286,8 @@ namespace StardewArchipelago.Archipelago
                 return;
             }
 
-            _session.Locations.CompleteLocationChecksAsync(locationIds); if (_session?.RoomState == null)
+            _session.Locations.CompleteLocationChecksAsync(locationIds);
+            if (_session?.RoomState == null)
             {
                 return;
             }
@@ -778,6 +779,7 @@ namespace StardewArchipelago.Archipelago
 
         private DateTime _lastConnectFailure;
         private const int THRESHOLD_TO_RETRY_CONNECTION_IN_SECONDS = 15;
+
         public bool MakeSureConnected(int threshold = THRESHOLD_TO_RETRY_CONNECTION_IN_SECONDS)
         {
             if (IsConnected)

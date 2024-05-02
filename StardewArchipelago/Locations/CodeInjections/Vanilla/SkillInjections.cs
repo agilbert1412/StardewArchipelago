@@ -169,7 +169,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 AddApExperienceAndCheckLocations(skill, howMuch);
 
                 return false; // don't run original logic
-
             }
             catch (Exception ex)
             {
@@ -177,6 +176,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 return true; // run original logic
             }
         }
+
         //public class Skills
         //public static void AddExperience( Farmer farmer, string skillName, int amt )
         public static bool AddExperience_ArchipelagoModExperience_Prefix(Farmer farmer, string skillName, int amt)
@@ -194,7 +194,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 AddApExperienceAndCheckLocations(skill, amt);
 
                 return false; // don't run original logic
-
             }
             catch (Exception ex)
             {

@@ -126,7 +126,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 Game1.playSound("openChest");
                 __result = true;
                 return false; //don't run original logic (first chest is a check)
-
             }
             catch (Exception ex)
             {

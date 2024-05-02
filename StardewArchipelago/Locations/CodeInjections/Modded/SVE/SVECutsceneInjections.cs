@@ -90,7 +90,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
                 _locationChecker.AddCheckedLocation(LANCE_CHEST_LOCATION);
 
                 return false; // don't run original logic
-
             }
 
             catch (Exception ex)

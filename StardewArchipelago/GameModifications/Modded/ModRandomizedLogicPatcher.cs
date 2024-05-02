@@ -24,7 +24,6 @@ namespace StardewArchipelago.GameModifications.Modded
             {
                 JunimoShopInjections.Initialize(monitor, modHelper, archipelago, seedShopStockModifier, _stardewItemManager);
             }
-
         }
 
         public void PatchAllModGameLogic()

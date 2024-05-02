@@ -91,7 +91,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
                 SkipFurnaceRecipeEventArchipelago(__instance);
                 return false; // don't run original logic
-
             }
             catch (Exception ex)
             {

@@ -12,7 +12,6 @@ namespace StardewArchipelago.GameModifications
 
         public QuestCleaner()
         {
-
         }
 
         public void CleanQuests(Farmer player)

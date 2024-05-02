@@ -14,6 +14,7 @@ namespace StardewArchipelago.Items.Mail
         {
             _stardewItemManager = stardewItemManager;
         }
+
         public void AddModLetterActions(Dictionary<string, Action<string>> letterActions)
         {
             letterActions.Add(LetterActionsKeys.DiamondWand, (_) => ReceiveDiamondWand(_stardewItemManager));

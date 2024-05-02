@@ -57,7 +57,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             {
                 _monitor.Log($"Failed in {nameof(NewSkillsPageCtor_BearKnowledgeEvent_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
-
             }
         }
 

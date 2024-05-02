@@ -41,7 +41,6 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 __result = allAreasCompleteAccordingToAp && allAreasCompleteLocally;
 
                 return false; // don't run original logic
-
             }
             catch (Exception ex)
             {

@@ -132,7 +132,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
                 _locationChecker.AddCheckedLocation(DARK_TALISMAN);
 
                 return false; // don't run original logic
-
             }
             catch (Exception ex)
             {

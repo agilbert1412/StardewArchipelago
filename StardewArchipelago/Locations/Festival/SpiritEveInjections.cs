@@ -53,7 +53,6 @@ namespace StardewArchipelago.Locations.Festival
                 _locationChecker.AddCheckedLocation(FestivalLocationNames.GOLDEN_PUMPKIN);
 
                 return false; // don't run original logic
-
             }
             catch (Exception ex)
             {

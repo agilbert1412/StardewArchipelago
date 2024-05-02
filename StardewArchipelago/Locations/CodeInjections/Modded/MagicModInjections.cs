@@ -112,7 +112,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 _monitor.Log($"Failed in {nameof(OnCast_AnalyzeGivesLocations_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; //Run original logic
             }
-
         }
 
 
@@ -244,7 +243,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             if (player.currentLocation is MineShaft mineShaft && mineShaft.mineLevel == 100 &&
                 mineShaft.waterTiles[(int)tilePos.X, (int)tilePos.Y])
                 spellsLearned.Add(ANALYZE_BLOODMANA_AP_LOCATION);
-
         }
 
         private static void CheckTotalCheckLocations()

@@ -157,6 +157,7 @@ namespace StardewArchipelago.Locations.Festival
 
             return (int)((Game1.stats.DaysPlayed / 28) % 3) + 1;
         }
+
         public static int GetDayOfNightMarket()
         {
             return (Game1.dayOfMonth % 3) + 1;

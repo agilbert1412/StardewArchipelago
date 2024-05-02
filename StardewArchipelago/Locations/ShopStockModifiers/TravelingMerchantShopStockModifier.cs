@@ -95,7 +95,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
                 {
                     continue;
                 }
-                
+
                 item.Condition = GameStateConditionProvider.RemoveCondition(item.Condition, "IS_MULTIPLAYER");
             }
         }

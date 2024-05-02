@@ -13,6 +13,7 @@ namespace StardewArchipelago.Items.Traps
     {
         private static IMonitor _monitor;
         private static IModHelper _helper;
+
         public static void Initialize(IMonitor monitor, IModHelper helper)
         {
             _monitor = monitor;

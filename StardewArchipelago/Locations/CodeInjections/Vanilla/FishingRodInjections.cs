@@ -35,7 +35,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
                 SkipBambooPoleEventArchipelago(__instance);
                 return false; // don't run original logic
-
             }
             catch (Exception ex)
             {
@@ -62,7 +61,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 @event.CurrentCommand++;
 
                 return false; // don't run original logic
-
             }
             catch (Exception ex)
             {

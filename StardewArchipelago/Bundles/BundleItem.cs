@@ -10,7 +10,7 @@ namespace StardewArchipelago.Bundles
         public int Amount { get; set; }
         public int Quality { get; set; }
         public StardewObject Flavor { get; set; }
-        
+
         public BundleItem(StardewItemManager itemManager, string itemName, int amount, string quality)
         {
             StardewObject = itemManager.GetObjectByName(itemName);

@@ -62,7 +62,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
                 __instance.currentMarriageDialogue.Clear();
                 who.mailReceived.Add("CF_Spouse");
                 return false; // don't run original logic
-
             }
             catch (Exception ex)
             {

@@ -42,7 +42,6 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Modded
             { "Grey", "I trade rocks for \n grey what's-its!" },
             { "Yellow", "I hab seeds, gib \nyellow gubbins!" },
             { "Blue", "I hab fish! You \ngive blue pretty?" },
-
         };
         private static readonly Dictionary<string, string> _firstItemToColor = new()
         {

@@ -609,6 +609,7 @@ namespace StardewArchipelago.GameModifications
                     nameof(ZeldaAnimationInjections.AddItemToInventory_Position_PrankDay_Postfix))
             );
         }
+
         private void MakeLegendaryFishRecatchable()
         {
             _helper.Events.Content.AssetRequested += OnFishAssetRequested;

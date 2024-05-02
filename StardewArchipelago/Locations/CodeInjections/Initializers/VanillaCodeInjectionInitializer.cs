@@ -61,7 +61,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
         private static void InitializeSkills(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker)
         {
             SkillInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
-            
+
             if (archipelago.SlotData.SkillProgression != SkillsProgression.ProgressiveWithMasteries)
             {
                 return;
