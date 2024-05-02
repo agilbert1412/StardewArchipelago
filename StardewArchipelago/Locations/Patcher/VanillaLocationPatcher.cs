@@ -280,8 +280,9 @@ namespace StardewArchipelago.Locations.Patcher
                 return;
             }
 
+            var performActionTypes = new[] { typeof(string[]), typeof(Farmer), typeof(Location) };
             _harmony.Patch(
-                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performAction)),
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performAction), performActionTypes),
                 prefix: new HarmonyMethod(typeof(MasteriesInjections), nameof(MasteriesInjections.PerformAction_MasteryCaveInteractions_Prefix))
             );
 
