@@ -14,7 +14,7 @@ namespace StardewArchipelago.Bundles
     {
         private IModHelper _modHelper;
         private Dictionary<string, string> _currentBundlesData;
-        private BundleRooms BundleRooms { get; }
+        public BundleRooms BundleRooms { get; }
 
         public BundlesManager(IModHelper modHelper, StardewItemManager itemManager, string bundlesJson)
         {

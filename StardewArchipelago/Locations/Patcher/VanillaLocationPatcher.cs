@@ -68,6 +68,7 @@ namespace StardewArchipelago.Locations.Patcher
         {
             ReplaceCommunityCenterBundlesWithChecks();
             ReplaceCommunityCenterAreasWithChecks();
+            ReplaceRaccoonBundlesWithChecks();
             ReplaceBackPackUpgradesWithChecks();
             ReplaceMineshaftChestsWithChecks();
             ReplaceElevatorsWithChecks();
@@ -150,6 +151,14 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony.Patch(
                 original: AccessTools.Method(typeof(CommunityCenter), "doAreaCompleteReward"),
                 prefix: new HarmonyMethod(typeof(CommunityCenterInjections), nameof(CommunityCenterInjections.DoAreaCompleteReward_AreaLocations_Prefix))
+            );
+        }
+
+        private void ReplaceRaccoonBundlesWithChecks()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Raccoon), nameof(Raccoon.activate)),
+                prefix: new HarmonyMethod(typeof(RaccoonInjections), nameof(RaccoonInjections.Activate_DisplayDialogueOrBundle_Prefix))
             );
         }
 

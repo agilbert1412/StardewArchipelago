@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Netcode;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Bundles;
 using StardewArchipelago.Constants;
@@ -22,7 +23,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
     public static class RaccoonInjections
     {
         private const string PROGRESSIVE_RACCOON = "Progressive Raccoon";
-        private const string RACCOON_REQUEST = "Raccoon Request ";
 
         private static IMonitor _monitor;
         private static IModHelper _modHelper;
@@ -117,37 +117,76 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             var wasTalkedToField = _modHelper.Reflection.GetField<bool>(raccoon, "wasTalkedTo");
             wasTalkedToField.SetValue(true);
 
-            var currentRaccoonBundle = GetCurrentRaccoonBundleNumber();
-            if (currentRaccoonBundle <= 0)
+            var currentRaccoonBundleNumber = GetCurrentRaccoonBundleNumber();
+            if (currentRaccoonBundleNumber <= 0)
             {
                 return;
             }
 
-            var ingredients = new List<BundleIngredientDescription>();
-            //var raccoonBundle = _bundlesManager
-            //ingredients.Add(new BundleIngredientDescription("DriedFruit", 1, 0, Game1.netWorldState.Value.raccoonBundles[0], r.ChooseFrom<string>((IList<string>)strArray1[currentRacconBundle])));
+            if (Game1.netWorldState.Value.SeasonOfCurrentRacconBundle != currentRaccoonBundleNumber)
+            {
+                Game1.netWorldState.Value.raccoonBundles.Clear();
+                Game1.netWorldState.Value.SeasonOfCurrentRacconBundle = currentRaccoonBundleNumber;
+            }
 
-            //var whichBundle = timesFedRaccoons < 5 ? timesFedRaccoons % 5 : random.Next(5);
-            //this.addNextIngredient(ingredients, whichBundle, random);
-            //this.addNextIngredient(ingredients, whichBundle, random);
-            //this.addNextIngredient(ingredients, whichBundle, random);
-            //var junimoNoteMenu = new JunimoNoteMenu(new Bundle("Seafood", (string)null, ingredients, new bool[1])
-            //{
-            //    bundleTextureOverride = Game1.content.Load<Texture2D>("LooseSprites\\BundleSprites"),
-            //    bundleTextureIndexOverride = 14 + whichBundle
-            //}, "LooseSprites\\raccoon_bundle_menu");
-            //junimoNoteMenu.onIngredientDeposit = (Action<int>)(x => Game1.netWorldState.Value.raccoonBundles[x] = true);
-            //junimoNoteMenu.onBundleComplete = new Action<JunimoNoteMenu>(this.bundleComplete);
-            //junimoNoteMenu.onScreenSwipeFinished = new Action<JunimoNoteMenu>(this.bundleCompleteAfterSwipe);
-            //junimoNoteMenu.behaviorBeforeCleanup = (Action<IClickableMenu>)(x => this.mutex?.ReleaseLock());
-            //Game1.activeClickableMenu = (IClickableMenu)junimoNoteMenu;
+            var ingredients = new List<BundleIngredientDescription>();
+            var raccoonRequestsRoom = _bundlesManager.BundleRooms.Rooms[APName.RACCOON_REQUESTS_ROOM];
+            var currentRaccoonBundleName = $"{APName.RACCOON_REQUEST_PREFIX}{currentRaccoonBundleNumber}";
+            var raccoonBundle = (ItemBundle)raccoonRequestsRoom.Bundles[currentRaccoonBundleName];
+            for (var i = 0; i < raccoonBundle.Items.Count; i++)
+            {
+                if (Game1.netWorldState.Value.raccoonBundles.Length <= i)
+                {
+                    Game1.netWorldState.Value.raccoonBundles.Add(false);
+                }
+                var bundleItem = raccoonBundle.Items[i];
+                var bundleIngredient = new BundleIngredientDescription(bundleItem.StardewObject.GetQualifiedId(),
+                    bundleItem.Amount, bundleItem.Quality,
+                    Game1.netWorldState.Value.raccoonBundles[i],
+                    bundleItem.Flavor.Id);
+                ingredients.Add(bundleIngredient);
+            }
+
+            var whichBundle = (currentRaccoonBundleNumber - 1) % 5;
+            var raccoonNoteMenu = new JunimoNoteMenu(new Bundle("Seafood", null, ingredients, new bool[1])
+            {
+                bundleTextureOverride = Game1.content.Load<Texture2D>("LooseSprites\\BundleSprites"),
+                bundleTextureIndexOverride = 14 + whichBundle
+            }, "LooseSprites\\raccoon_bundle_menu");
+            raccoonNoteMenu.onIngredientDeposit = x => Game1.netWorldState.Value.raccoonBundles[x] = true;
+            raccoonNoteMenu.onBundleComplete = _ => BundleComplete(raccoon);
+            raccoonNoteMenu.onScreenSwipeFinished = _ => BundleCompleteAfterSwipe(raccoon);
+            raccoonNoteMenu.behaviorBeforeCleanup = _ => raccoon.mutex?.ReleaseLock();
+            Game1.activeClickableMenu = raccoonNoteMenu;
+        }
+
+        // private void bundleComplete(JunimoNoteMenu menu)
+        private static void BundleComplete(Raccoon raccoon)
+        {
+            JunimoNoteMenu.screenSwipe = new ScreenSwipe(1);
+            _locationChecker.AddCheckedLocation($"{APName.RACCOON_REQUEST_PREFIX}{Game1.netWorldState.Value.SeasonOfCurrentRacconBundle}");
+            Game1.netWorldState.Value.SeasonOfCurrentRacconBundle = -1;
+            Game1.netWorldState.Value.raccoonBundles.Clear();
+
+            // private bool wasTalkedTo;
+            var wasTalkedToField = _modHelper.Reflection.GetField<bool>(raccoon, "wasTalkedTo");
+            wasTalkedToField.SetValue(false);
+        }
+
+        // private void bundleCompleteAfterSwipe(JunimoNoteMenu menu)
+        private static void BundleCompleteAfterSwipe(Raccoon raccoon)
+        {
+            Game1.activeClickableMenu = null;
+            raccoon.mutex?.ReleaseLock();
+            Game1.netWorldState.Value.DaysPlayedWhenLastRaccoonBundleWasFinished = Game1.netWorldState.Value.Date.TotalDays;
+            Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\1_6_Strings:Raccoon_receive"));
         }
 
         private static int GetCurrentRaccoonBundleNumber()
         {
             var remainingRacoonBundleNumbers = _locationChecker.GetAllMissingLocationNames()
-                .Where(x => x.StartsWith(RACCOON_REQUEST))
-                .Select(x => int.Parse(x[RACCOON_REQUEST.Length..]));
+                .Where(x => x.StartsWith(APName.RACCOON_REQUEST_PREFIX))
+                .Select(x => int.Parse(x[APName.RACCOON_REQUEST_PREFIX.Length..]));
             if (remainingRacoonBundleNumbers.Any())
             {
                 return remainingRacoonBundleNumbers.Min();
@@ -155,8 +194,5 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
             return -1;
         }
-
-        // private void bundleComplete(JunimoNoteMenu menu)
-        // private void bundleCompleteAfterSwipe(JunimoNoteMenu menu)
     }
 }
