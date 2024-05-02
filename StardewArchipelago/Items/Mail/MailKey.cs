@@ -6,10 +6,11 @@ namespace StardewArchipelago.Items.Mail
     public class MailKey
     {
         private const string AP_PREFIX = "AP";
+        private const string AP_DELIMITER = "|";
         private static Random _random = new Random((int)Game1.uniqueIDForThisGame);
-        public string ItemName { get; set; }
-        public string PlayerName { get; set; }
-        public string LocationName { get; set; }
+        private string ItemName { get; set; }
+        private string PlayerName { get; set; }
+        private string LocationName { get; set; }
         public string LetterOpenedAction { get; set; }
         public string ActionParameter { get; set; }
         private string UniqueId { get; set; }
@@ -22,18 +23,23 @@ namespace StardewArchipelago.Items.Mail
 
         public MailKey(string itemName, string playerName, string locationName, string letterOpenedAction, string actionParameter, string uniqueId, bool isEmpty)
         {
-            ItemName = itemName;
-            PlayerName = playerName;
-            LocationName = locationName;
-            LetterOpenedAction = letterOpenedAction;
-            ActionParameter = actionParameter;
-            UniqueId = uniqueId;
+            ItemName = Sanitize(itemName);
+            PlayerName = Sanitize(playerName);
+            LocationName = Sanitize(locationName);
+            LetterOpenedAction = Sanitize(letterOpenedAction);
+            ActionParameter = Sanitize(actionParameter);
+            UniqueId = Sanitize(uniqueId);
             IsEmpty = isEmpty;
+        }
+
+        private static string Sanitize(string input)
+        {
+            return input.Replace(AP_DELIMITER, "");
         }
 
         public override string ToString()
         {
-            var key = $"{AP_PREFIX}|{ItemName}|{PlayerName}|{LocationName}|{LetterOpenedAction}|{ActionParameter}|{UniqueId}|{IsEmpty}";
+            var key = $"{AP_PREFIX}{AP_DELIMITER}{ItemName}{AP_DELIMITER}{PlayerName}{AP_DELIMITER}{LocationName}{AP_DELIMITER}{LetterOpenedAction}{AP_DELIMITER}{ActionParameter}{AP_DELIMITER}{UniqueId}{AP_DELIMITER}{IsEmpty}";
             var trimmedKey = key.Replace(" ", "_");
             return trimmedKey;
         }
@@ -51,7 +57,7 @@ namespace StardewArchipelago.Items.Mail
                 return false;
             }
 
-            var splitKey = key.Split("|");
+            var splitKey = key.Split(AP_DELIMITER);
             if (splitKey.Length < 7)
             {
                 return false;
@@ -71,7 +77,7 @@ namespace StardewArchipelago.Items.Mail
 
         public static string GetBeginningOfKeyForItem(string itemName)
         {
-            return $"{AP_PREFIX}|{itemName}".Replace(" ", "_");
+            return $"{AP_PREFIX}{AP_DELIMITER}{Sanitize(itemName)}".Replace(" ", "_");
         }
     }
 }
