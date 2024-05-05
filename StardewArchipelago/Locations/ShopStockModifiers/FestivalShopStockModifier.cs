@@ -1,5 +1,6 @@
 ﻿using System;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants.Locations;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Locations.Festival;
 using StardewArchipelago.Stardew;
@@ -86,6 +87,20 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
                 return false;
             }
             var unqualifiedItemId = QualifiedItemIds.UnqualifyId(item.ItemId);
+
+            if (item.IsRecipe)
+            {
+                var stardewItem = _stardewItemManager.GetItemByQualifiedId(item.ItemId);
+                var location = $"{stardewItem.Name}{Suffix.RECIPE}";
+                if (_archipelago.LocationExists(location))
+                {
+                    locationName = location;
+                    itemName = $"{location} (not purchaseable)";
+                    return true;
+                }
+
+                return false;
+            }
 
             var bigCraftablesData = DataLoader.BigCraftables(Game1.content);
             if (QualifiedItemIds.IsBigCraftable(item.ItemId) && bigCraftablesData.ContainsKey(unqualifiedItemId))
