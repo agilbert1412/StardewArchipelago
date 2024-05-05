@@ -10,7 +10,7 @@ namespace StardewArchipelago.Archipelago
     {
 
 
-
-
     }
 }
+
+
