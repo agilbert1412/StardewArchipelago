@@ -53,7 +53,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         private static IModHelper _helper;
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
-        private static ShopReplacer _shopReplacer;
         private static ShopMenu _lastShopMenuUpdated = null;
 
         private static readonly Dictionary<ShopIdentification, PricedItem[]> craftsanityRecipes = new()
@@ -62,13 +61,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         };
 
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker, ShopReplacer shopReplacer)
+        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             _monitor = monitor;
             _helper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
-            _shopReplacer = shopReplacer;
         }
 
         // internal class AnalyzeSpell : Spell
@@ -134,7 +132,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
 
                 foreach (var recipe in recipes)
                 {
-                    _shopReplacer.PlaceShopRecipeCheck(shopMenu.itemPriceAndStock, $"{recipe.ItemName} Recipe", recipe.ItemName, myActiveHints, recipe.Price);
+
+                    throw new Exception($"{nameof(MagicModInjections)}.{nameof(ReplaceCraftsanityRecipes)} attempted to use the now removed ShopReplacer. It needs to be updated for 1.6");
+                    // _shopReplacer.PlaceShopRecipeCheck(shopMenu.itemPriceAndStock, $"{recipe.ItemName} Recipe", recipe.ItemName, myActiveHints, recipe.Price);
                 }
             }
         }

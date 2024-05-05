@@ -14,7 +14,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
 {
     public static class VanillaCodeInjectionInitializer
     {
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ModConfig config, ArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, StardewItemManager itemManager, WeaponsManager weaponsManager, ShopReplacer shopReplacer, Friends friends)
+        public static void Initialize(IMonitor monitor, IModHelper modHelper, ModConfig config, ArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, StardewItemManager itemManager, WeaponsManager weaponsManager, Friends friends)
         {
             BackpackInjections.Initialize(monitor, archipelago, locationChecker);
             ScytheInjections.Initialize(monitor, locationChecker);
@@ -41,7 +41,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             SpouseInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             PregnancyInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             CropsanityInjections.Initialize(monitor, archipelago, locationChecker, itemManager);
-            InitializeFestivalPatches(monitor, modHelper, archipelago, state, locationChecker, shopReplacer);
+            InitializeFestivalPatches(monitor, modHelper, archipelago, state, locationChecker);
             MonsterSlayerInjections.Initialize(monitor, modHelper, archipelago, locationChecker, killList);
             CookingInjections.Initialize(monitor, archipelago, locationChecker, itemManager);
             QueenOfSauceInjections.Initialize(monitor, modHelper, archipelago, state, locationChecker, itemManager);
@@ -51,17 +51,17 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             FarmCaveInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
         }
 
-        private static void InitializeFestivalPatches(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, ShopReplacer shopReplacer)
+        private static void InitializeFestivalPatches(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker)
         {
             EggFestivalInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
-            FlowerDanceInjections.Initialize(monitor, modHelper, archipelago, locationChecker, shopReplacer);
+            FlowerDanceInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             LuauInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
-            MoonlightJelliesInjections.Initialize(monitor, modHelper, archipelago, locationChecker, shopReplacer);
-            FairInjections.Initialize(monitor, modHelper, archipelago, state, locationChecker, shopReplacer);
-            SpiritEveInjections.Initialize(monitor, modHelper, archipelago, locationChecker, shopReplacer);
-            IceFestivalInjections.Initialize(monitor, modHelper, archipelago, locationChecker, shopReplacer);
+            MoonlightJelliesInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
+            FairInjections.Initialize(monitor, modHelper, archipelago, state, locationChecker);
+            SpiritEveInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
+            IceFestivalInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             MermaidHouseInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
-            BeachNightMarketInjections.Initialize(monitor, modHelper, archipelago, locationChecker, shopReplacer);
+            BeachNightMarketInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             WinterStarInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
         }
     }

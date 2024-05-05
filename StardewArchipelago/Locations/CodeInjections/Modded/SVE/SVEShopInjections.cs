@@ -19,7 +19,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
         private static IModHelper _modHelper;
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
-        private static ShopReplacer _shopReplacer;
         private static SeedShopStockModifier _seedShopStockModifier;
         private static JunimoShopGenerator _junimoShopGenerator;
         private const string ALESIA_DAGGER = "Tempered Galaxy Dagger";
@@ -60,13 +59,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
         };
 
         public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago,
-            LocationChecker locationChecker, ShopReplacer shopReplacer, SeedShopStockModifier seedShopStockModifier, JunimoShopGenerator junimoShopGenerator)
+            LocationChecker locationChecker, SeedShopStockModifier seedShopStockModifier, JunimoShopGenerator junimoShopGenerator)
         {
             _monitor = monitor;
             _modHelper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
-            _shopReplacer = shopReplacer;
             _seedShopStockModifier = seedShopStockModifier;
             _junimoShopGenerator = junimoShopGenerator;
         }
@@ -132,9 +130,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
                 return;
             }
 
-            _shopReplacer.ReplaceShopItem(shopMenu.itemPriceAndStock, salableItem, ALESIA_DAGGER, "Tempered Galaxy Dagger", myActiveHints);
-            _shopReplacer.ReplaceShopItem(shopMenu.itemPriceAndStock, salableItem, ISAAC_SWORD, "Tempered Galaxy Sword", myActiveHints);
-            _shopReplacer.ReplaceShopItem(shopMenu.itemPriceAndStock, salableItem, ISAAC_HAMMER, "Tempered Galaxy Hammer", myActiveHints);
+
+            throw new Exception($"{nameof(SVEShopInjections)}.{nameof(ReplaceTemperedGalaxyWeapons)} attempted to use the now removed ShopReplacer. It needs to be updated for 1.6");
+            // _shopReplacer.ReplaceShopItem(shopMenu.itemPriceAndStock, salableItem, ALESIA_DAGGER, "Tempered Galaxy Dagger", myActiveHints);
+            // _shopReplacer.ReplaceShopItem(shopMenu.itemPriceAndStock, salableItem, ISAAC_SWORD, "Tempered Galaxy Sword", myActiveHints);
+            // _shopReplacer.ReplaceShopItem(shopMenu.itemPriceAndStock, salableItem, ISAAC_HAMMER, "Tempered Galaxy Hammer", myActiveHints);
         }
 
         private static void MakeBearBarter(ShopMenu shopMenu)

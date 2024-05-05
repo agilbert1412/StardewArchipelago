@@ -43,15 +43,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         private static IMonitor _monitor;
         private static LocationChecker _locationChecker;
         private static ArchipelagoClient _archipelago;
-        private static ShopReplacer _shopReplacer;
         private static ShopMenu _lastShopMenuUpdated = null;
 
-        public static void Initialize(IMonitor monitor, LocationChecker locationChecker, ArchipelagoClient archipelago, ShopReplacer shopReplacer)
+        public static void Initialize(IMonitor monitor, LocationChecker locationChecker, ArchipelagoClient archipelago)
         {
             _monitor = monitor;
             _locationChecker = locationChecker;
             _archipelago = archipelago;
-            _shopReplacer = shopReplacer;
         }
 
         // public override void update(GameTime time)
@@ -96,7 +94,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
 
                 foreach (var recipe in recipes)
                 {
-                    _shopReplacer.PlaceShopRecipeCheck(shopMenu.itemPriceAndStock, $"{recipe.ItemName} Recipe", recipe.ItemName, myActiveHints, recipe.Price);
+                    throw new Exception($"{nameof(BoardingHouseInjections)}.{nameof(ReplaceCraftsanityRecipes)} attempted to use the now removed ShopReplacer. It needs to be updated for 1.6");
+                    // _shopReplacer.PlaceShopRecipeCheck(shopMenu.itemPriceAndStock, $"{recipe.ItemName} Recipe", recipe.ItemName, myActiveHints, recipe.Price);
                 }
             }
         }
