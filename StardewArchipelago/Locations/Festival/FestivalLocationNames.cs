@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using StardewValley;
 
 namespace StardewArchipelago.Locations.Festival
@@ -69,19 +70,38 @@ namespace StardewArchipelago.Locations.Festival
         public const string DANCE_WITH_SOMEONE = "Dance with someone";
         public const string RARECROW_5 = "Rarecrow #5 (Woman)";
         public const string TUB_O_FLOWERS_RECIPE = "Tub o' Flowers Recipe";
+
         public const string LUAU_SOUP = "Luau Soup";
+
+        public const string TROUT_DERBY_REWARD_1 = "Trout Derby Reward 1";
+        public const string TROUT_DERBY_REWARD_2 = "Trout Derby Reward 2";
+        public const string TROUT_DERBY_REWARD_3 = "Trout Derby Reward 3";
+
         public const string WATCH_MOONLIGHT_JELLIES = "Dance of the Moonlight Jellies";
         public const string MOONLIGHT_JELLIES_BANNER = "Moonlight Jellies Banner";
         public const string STARPORT_DECAL = "Starport Decal";
+
         public const string STRENGTH_GAME = "Smashing Stone";
         public const string GRANGE_DISPLAY = "Grange Display";
         public const string RARECROW_1 = "Rarecrow #1 (Turnip Head)";
         public const string FAIR_STARDROP = "Fair Stardrop";
+
         public const string GOLDEN_PUMPKIN = "Spirit's Eve Maze";
         public const string RARECROW_2 = "Rarecrow #2 (Witch)";
         public const string JACK_O_LANTERN_RECIPE = "Jack-O-Lantern Recipe";
+
         public const string FISHING_COMPETITION = "Win Fishing Competition";
         public const string RARECROW_4 = "Rarecrow #4 (Snowman)";
+
+        public const string SQUIDFEST_DAY_1_COPPER = "SquidFest Day 1 Copper";
+        public const string SQUIDFEST_DAY_1_IRON = "SquidFest Day 1 Iron";
+        public const string SQUIDFEST_DAY_1_GOLD = "SquidFest Day 1 Gold";
+        public const string SQUIDFEST_DAY_1_IRIDIUM = "SquidFest Day 1 Iridium";
+        public const string SQUIDFEST_DAY_2_COPPER = "SquidFest Day 2 Copper";
+        public const string SQUIDFEST_DAY_2_IRON = "SquidFest Day 2 Iron";
+        public const string SQUIDFEST_DAY_2_GOLD = "SquidFest Day 2 Gold";
+        public const string SQUIDFEST_DAY_2_IRIDIUM = "SquidFest Day 2 Iridium";
+
         public const string MERMAID_PEARL = "Mermaid Pearl";
         public const string CONE_HAT = "Cone Hat";
         public const string IRIDIUM_FIREPLACE = "Iridium Fireplace";
@@ -98,18 +118,37 @@ namespace StardewArchipelago.Locations.Festival
         public const string LUPINI_YEAR_3_PAINTING_1 = "Lupini: The Serpent";
         public const string LUPINI_YEAR_3_PAINTING_2 = "Lupini: 'Tropical Fish #173'";
         public const string LUPINI_YEAR_3_PAINTING_3 = "Lupini: Land Of Clay";
+
         public const string LEGEND_OF_THE_WINTER_STAR = "The Legend of the Winter Star";
         public const string SECRET_SANTA = "Secret Santa";
 
         public static readonly Dictionary<string, string[]> LocationsByFestival = new()
         {
             { EGG_FESTIVAL, new[] { EGG_HUNT, STRAWBERRY_SEEDS } },
+            {
+                DESERT_FESTIVAL_ALL, new[]
+                {
+                    CALICO_RACE, MUMMY_MASK, EMILYS_OUTFIT_SERVICES, EARTHY_MOUSSE, SWEET_BEAN_CAKE, SKULL_CAVERN_CASSEROLE, SPICY_TACOS,
+                    MOUNTAIN_CHILI, CRYSTAL_CAKE, CAVE_KEBAB, HOT_LOG, SOUR_SALAD, SUPERFOOD_CAKE, WARRIOR_SMOOTHIE, RUMPLED_FRUIT_SKIN, CALICO_PIZZA,
+                    STUFFED_MUSHROOMS, ELF_QUESADILLA, NACHOS_OF_THE_DESERT, CLOPPINO, RAINFOREST_SHRIMP, SHRIMP_DONUT, SMELL_OF_THE_SEA, DESERT_GUMBO,
+                    FREE_CACTUS, MONSTER_HUNT, DEEP_DIVE, TREASURE_HUNT, TOUCH_A_CALICO_STATUE, REAL_CALICO_EGG_HUNTER, WILLYS_CHALLENGE, DESERT_SCHOLAR,
+                }
+            },
+            { DESERT_FESTIVAL_15, new[] { CALICO_STATUE, } },
+            { DESERT_FESTIVAL_16, Array.Empty<string>() },
+            { DESERT_FESTIVAL_17, new[] { CALICO_STATUE, } },
             { FLOWER_DANCE, new[] { DANCE_WITH_SOMEONE, RARECROW_5, TUB_O_FLOWERS_RECIPE } },
             { LUAU, new[] { LUAU_SOUP } },
+            { TROUT_DERBY_ALL, new[] { TROUT_DERBY_REWARD_1, TROUT_DERBY_REWARD_2, TROUT_DERBY_REWARD_3, } },
+            { TROUT_DERBY_20, Array.Empty<string>() },
+            { TROUT_DERBY_21, Array.Empty<string>() },
             { MOONLIGHT_JELLIES, new[] { WATCH_MOONLIGHT_JELLIES, MOONLIGHT_JELLIES_BANNER, STARPORT_DECAL } },
             { FAIR, new[] { STRENGTH_GAME, RARECROW_1, FAIR_STARDROP, GRANGE_DISPLAY } },
             { SPIRIT_EVE, new[] { GOLDEN_PUMPKIN, RARECROW_2, JACK_O_LANTERN_RECIPE } },
             { FESTIVAL_OF_ICE, new[] { FISHING_COMPETITION, RARECROW_4 } },
+            { SQUIDFEST_ALL, Array.Empty<string>() },
+            { SQUIDFEST_12, new[] { SQUIDFEST_DAY_1_COPPER, SQUIDFEST_DAY_1_IRON, SQUIDFEST_DAY_1_GOLD, SQUIDFEST_DAY_1_IRIDIUM } },
+            { SQUIDFEST_13, new[] { SQUIDFEST_DAY_2_COPPER, SQUIDFEST_DAY_2_IRON, SQUIDFEST_DAY_2_GOLD, SQUIDFEST_DAY_2_IRIDIUM } },
             { FEAST_OF_THE_WINTER_STAR, new[] { LEGEND_OF_THE_WINTER_STAR, SECRET_SANTA } },
             { NIGHT_MARKET_ALL, new[] { MERMAID_PEARL, CONE_HAT, IRIDIUM_FIREPLACE, RARECROW_7, RARECROW_8 } },
             { NIGHT_MARKET_15, new[] { LUPINI_YEAR_1_PAINTING_1, LUPINI_YEAR_2_PAINTING_1, LUPINI_YEAR_3_PAINTING_1 } },
