@@ -57,6 +57,11 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
                 }
 
                 var location = $"{stardewItem.Name}{Suffix.CRAFTSANITY}";
+                if (!_archipelago.LocationExists(location))
+                {
+                    continue;
+                }
+
                 var apShopItem = CreateArchipelagoLocation(item, location);
                 shopData.Items.RemoveAt(i);
                 shopData.Items.Insert(i, apShopItem);
