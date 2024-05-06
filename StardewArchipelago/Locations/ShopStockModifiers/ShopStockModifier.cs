@@ -36,10 +36,11 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
         {
             var id = $"{IDProvider.PURCHASEABLE_AP_LOCATION} {location}";
             var apShopItem = item.DeepClone();
-            apShopItem.Id = id;
+            apShopItem.Id = $"{this.GetType().Name}: {id}";
             apShopItem.ItemId = id;
             apShopItem.AvailableStock = 1;
             apShopItem.IsRecipe = false;
+            apShopItem.AvoidRepeat = true;
 
             if (apShopItem.Price <= 0 && string.IsNullOrWhiteSpace(apShopItem.TradeItemId))
             {

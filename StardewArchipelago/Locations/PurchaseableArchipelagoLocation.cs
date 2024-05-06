@@ -70,6 +70,9 @@ namespace StardewArchipelago.Locations
             _locationDisplayName = $"{prefix}{locationDisplayName}";
             Name = _locationDisplayName;
             LocationName = locationName;
+
+            ItemId = $"{nameof(PurchaseableArchipelagoLocation)}_{LocationName.Replace(" ", "_")}";
+
             var scoutedLocation = archipelago.ScoutSingleLocation(LocationName);
             _description = scoutedLocation == null ? ScoutedLocation.GenericItemName() : scoutedLocation.ToString();
             _locationChecker = locationChecker;
