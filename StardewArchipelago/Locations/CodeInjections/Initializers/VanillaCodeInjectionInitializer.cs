@@ -15,7 +15,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
 {
     public static class VanillaCodeInjectionInitializer
     {
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ModConfig config, ArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, StardewItemManager itemManager, WeaponsManager weaponsManager, BundlesManager bundlesManager, ShopReplacer shopReplacer, Friends friends)
+        public static void Initialize(IMonitor monitor, IModHelper modHelper, ModConfig config, ArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, StardewItemManager itemManager, WeaponsManager weaponsManager, BundlesManager bundlesManager, Friends friends)
         {
             BackpackInjections.Initialize(monitor, archipelago, locationChecker);
             ScytheInjections.Initialize(monitor, locationChecker);
@@ -58,7 +58,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             RaccoonInjections.Initialize(monitor, modHelper, archipelago, state, locationChecker, bundlesManager);
         }
 
-        private static void InitializeSkills(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker)
+        private static void InitializeSkills(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             SkillInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
 
@@ -70,7 +70,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             MasteriesInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
         }
 
-        private static void InitializeFestivalPatches(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, ShopReplacer shopReplacer)
+        private static void InitializeFestivalPatches(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker)
         {
             EggFestivalInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             FlowerDanceInjections.Initialize(monitor, modHelper, archipelago, locationChecker);

@@ -16,7 +16,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             LocationChecker locationChecker, StardewItemManager itemManager, WeaponsManager weaponsManager, BundlesManager bundlesManager,
             SeedShopStockModifier seedShopStockModifier, JunimoShopGenerator junimoShopGenerator, Friends friends)
         {
-            VanillaCodeInjectionInitializer.Initialize(monitor, modHelper, config, archipelago, state, locationChecker, itemManager, weaponsManager, bundlesManager, shopReplacer, friends);
+            VanillaCodeInjectionInitializer.Initialize(monitor, modHelper, config, archipelago, state, locationChecker, itemManager, weaponsManager, bundlesManager, friends);
             if (archipelago.SlotData.Mods.IsModded)
             {
                 ModCodeInjectionInitializer.Initialize(monitor, modHelper, archipelago, locationChecker, seedShopStockModifier, junimoShopGenerator);
