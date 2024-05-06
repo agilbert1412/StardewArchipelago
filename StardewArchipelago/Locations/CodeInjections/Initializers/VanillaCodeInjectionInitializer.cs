@@ -10,6 +10,7 @@ using StardewArchipelago.Locations.Festival;
 using StardewArchipelago.Serialization;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
+using StardewValley.Locations;
 
 namespace StardewArchipelago.Locations.CodeInjections.Initializers
 {
@@ -73,6 +74,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
         private static void InitializeFestivalPatches(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker)
         {
             EggFestivalInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
+            DesertFestivalInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             FlowerDanceInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             LuauInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             MoonlightJelliesInjections.Initialize(monitor, modHelper, archipelago, locationChecker);

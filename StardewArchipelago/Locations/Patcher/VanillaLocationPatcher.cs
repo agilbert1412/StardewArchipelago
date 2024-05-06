@@ -744,26 +744,70 @@ namespace StardewArchipelago.Locations.Patcher
                 return;
             }
 
+            PatchEggFestival();
+            PatchDesertFestival();
+            PatchFlowerDance();
+            PatchLuau();
+            PatchDanceOfTheMoonlightJellies();
+            PatchFair();
+            PatchSpiritsEve();
+            PatchIceFestival();
+            PatchNightMarket();
+            PatchFeastOfTheWinterStar();
+        }
+
+        private void CleanFestivalEvents()
+        {
+            _modHelper.Events.Content.AssetRequested -= _festivalShopStockModifier.OnShopStockRequested;
+        }
+
+        private void PatchEggFestival()
+        {
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Event.DefaultCommands), nameof(Event.DefaultCommands.AwardFestivalPrize)),
                 prefix: new HarmonyMethod(typeof(EggFestivalInjections), nameof(EggFestivalInjections.AwardFestivalPrize_Strawhat_Prefix))
             );
+        }
 
+        private void PatchDesertFestival()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(DesertFestival), nameof(DesertFestival.CollectRacePrizes)),
+                prefix: new HarmonyMethod(typeof(DesertFestivalInjections), nameof(DesertFestivalInjections.CollectRacePrizes_RaceWinner_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(DesertFestival), nameof(DesertFestival.ReceiveMakeOver)),
+                postfix: new HarmonyMethod(typeof(DesertFestivalInjections), nameof(DesertFestivalInjections.ReceiveMakeOver_RaceWinner_Postfix))
+            );
+        }
+
+        private void PatchFlowerDance()
+        {
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Event), nameof(Event.setUpFestivalMainEvent)),
                 postfix: new HarmonyMethod(typeof(FlowerDanceInjections), nameof(FlowerDanceInjections.SetUpFestivalMainEvent_FlowerDance_Postfix))
             );
+        }
 
+        private void PatchLuau()
+        {
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Event.DefaultCommands), nameof(Event.DefaultCommands.SwitchEvent)),
                 postfix: new HarmonyMethod(typeof(LuauInjections), nameof(LuauInjections.SwitchEvent_GovernorReactionToSoup_Postfix))
             );
+        }
 
+        private void PatchDanceOfTheMoonlightJellies()
+        {
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Event), nameof(Event.setUpFestivalMainEvent)),
                 postfix: new HarmonyMethod(typeof(MoonlightJelliesInjections), nameof(MoonlightJelliesInjections.SetUpFestivalMainEvent_MoonlightJellies_Postfix))
             );
+        }
 
+        private void PatchFair()
+        {
             _harmony.Patch(
                 original: AccessTools.Method(typeof(StrengthGame), nameof(StrengthGame.update)),
                 prefix: new HarmonyMethod(typeof(FairInjections), nameof(FairInjections.StrengthGameUpdate_StrongEnough_Prefix))
@@ -773,17 +817,26 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(typeof(Event), nameof(Event.interpretGrangeResults)),
                 postfix: new HarmonyMethod(typeof(FairInjections), nameof(FairInjections.InterpretGrangeResults_Success_Postfix))
             );
+        }
 
+        private void PatchSpiritsEve()
+        {
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Chest), nameof(Chest.checkForAction)),
                 prefix: new HarmonyMethod(typeof(SpiritEveInjections), nameof(SpiritEveInjections.CheckForAction_SpiritEveChest_Prefix))
             );
+        }
 
+        private void PatchIceFestival()
+        {
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Event.DefaultCommands), nameof(Event.DefaultCommands.AwardFestivalPrize)),
                 prefix: new HarmonyMethod(typeof(IceFestivalInjections), nameof(IceFestivalInjections.AwardFestivalPrize_FishingCompetition_Prefix))
             );
+        }
 
+        private void PatchNightMarket()
+        {
             _harmony.Patch(
                 original: AccessTools.Method(typeof(MermaidHouse), nameof(MermaidHouse.playClamTone), new Type[] { typeof(int), typeof(Farmer) }),
                 prefix: new HarmonyMethod(typeof(MermaidHouseInjections), nameof(MermaidHouseInjections.PlayClamTone_SongFinished_Postfix))
@@ -808,7 +861,10 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(typeof(BeachNightMarket), nameof(BeachNightMarket.answerDialogueAction)),
                 prefix: new HarmonyMethod(typeof(BeachNightMarketInjections), nameof(BeachNightMarketInjections.AnswerDialogueAction_LupiniPainting_Prefix))
             );
+        }
 
+        private void PatchFeastOfTheWinterStar()
+        {
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Dialogue), nameof(Dialogue.chooseResponse)),
                 postfix: new HarmonyMethod(typeof(WinterStarInjections), nameof(WinterStarInjections.ChooseResponse_LegendOfTheWinterStar_Postfix))
@@ -818,11 +874,6 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(typeof(Event), nameof(Event.chooseSecretSantaGift)),
                 prefix: new HarmonyMethod(typeof(WinterStarInjections), nameof(WinterStarInjections.ChooseSecretSantaGift_SuccessfulGift_Prefix))
             );
-        }
-
-        private void CleanFestivalEvents()
-        {
-            _modHelper.Events.Content.AssetRequested -= _festivalShopStockModifier.OnShopStockRequested;
         }
 
         private void AddCropSanityLocations()
