@@ -313,15 +313,15 @@ namespace StardewArchipelago.Locations.Patcher
                 prefix: new HarmonyMethod(typeof(DarkTalismanInjections), nameof(DarkTalismanInjections.ResetLocalState_PlayCutsceneIfConditionsAreMet_Postfix))
             );
 
-            if (!_archipelago.SlotData.QuestLocations.StoryQuestsEnabled)
-            {
-                return;
-            }
-
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Quest), nameof(Quest.questComplete)),
                 prefix: new HarmonyMethod(typeof(QuestInjections), nameof(QuestInjections.QuestComplete_LocationInsteadOfReward_Prefix))
             );
+
+            if (!_archipelago.SlotData.QuestLocations.StoryQuestsEnabled)
+            {
+                return;
+            }
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Event.DefaultCommands), nameof(Event.DefaultCommands.RemoveQuest)),
