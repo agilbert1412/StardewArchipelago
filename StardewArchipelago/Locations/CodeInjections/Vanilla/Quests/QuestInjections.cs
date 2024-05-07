@@ -9,6 +9,7 @@ using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Items.Unlocks;
+using StardewArchipelago.Locations.Festival;
 using StardewArchipelago.Stardew.Ids.Vanilla;
 using StardewModdingAPI;
 using StardewValley;
@@ -24,6 +25,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
 {
     public static class QuestInjections
     {
+        private const string DESERT_FESTIVAL_FISHING_QUEST_ID = "98765";
         private static List<string> _ignoredQuests = new()
         {
             "To The Beach", "Explore The Mine", "Deeper In The Mine", "To The Bottom?", "The Mysterious Qi",
@@ -53,6 +55,19 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
                 var questName = __instance.GetName();
                 var englishQuestName = GetQuestEnglishName(__instance.id.Value, questName);
                 if (__instance.completed.Value || _ignoredQuests.Contains(englishQuestName))
+                {
+                    return true; // run original logic
+                }
+
+                if (__instance.id.Value.Equals(DESERT_FESTIVAL_FISHING_QUEST_ID, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    // This one is a quest for some reason
+                    _locationChecker.AddCheckedLocation(FestivalLocationNames.WILLYS_CHALLENGE);
+                    OriginalQuestCompleteCode(__instance);
+                    return false; // don't run original logic
+                }
+
+                if (!_archipelago.SlotData.QuestLocations.StoryQuestsEnabled)
                 {
                     return true; // run original logic
                 }
