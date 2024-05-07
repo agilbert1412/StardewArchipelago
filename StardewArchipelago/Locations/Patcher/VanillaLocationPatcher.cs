@@ -780,6 +780,12 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(typeof(DesertFestival), nameof(DesertFestival.ReceiveMakeOver)),
                 postfix: new HarmonyMethod(typeof(DesertFestivalInjections), nameof(DesertFestivalInjections.ReceiveMakeOver_RaceWinner_Postfix))
             );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(DesertFestival), nameof(DesertFestival.answerDialogueAction)),
+                prefix: new HarmonyMethod(typeof(DesertFestivalInjections), nameof(DesertFestivalInjections.AnswerDialogueAction_CactusMan_Prefix)),
+                postfix: new HarmonyMethod(typeof(DesertFestivalInjections), nameof(DesertFestivalInjections.AnswerDialogueAction_DesertChef_Postfix))
+            );
         }
 
         private void PatchFlowerDance()
