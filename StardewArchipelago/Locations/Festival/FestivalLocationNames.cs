@@ -73,9 +73,10 @@ namespace StardewArchipelago.Locations.Festival
 
         public const string LUAU_SOUP = "Luau Soup";
 
-        public const string TROUT_DERBY_REWARD_1 = "Trout Derby Reward 1";
-        public const string TROUT_DERBY_REWARD_2 = "Trout Derby Reward 2";
-        public const string TROUT_DERBY_REWARD_3 = "Trout Derby Reward 3";
+        public const string TROUT_DERBY_REWARD_PATTERN = "Trout Derby Reward {0}";
+        public static readonly string TROUT_DERBY_REWARD_1 = string.Format(TROUT_DERBY_REWARD_PATTERN, 1);
+        public static readonly string TROUT_DERBY_REWARD_2 = string.Format(TROUT_DERBY_REWARD_PATTERN, 2);
+        public static readonly string TROUT_DERBY_REWARD_3 = string.Format(TROUT_DERBY_REWARD_PATTERN, 3);
 
         public const string WATCH_MOONLIGHT_JELLIES = "Dance of the Moonlight Jellies";
         public const string MOONLIGHT_JELLIES_BANNER = "Moonlight Jellies Banner";

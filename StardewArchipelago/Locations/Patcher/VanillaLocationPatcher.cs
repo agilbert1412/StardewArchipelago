@@ -748,6 +748,7 @@ namespace StardewArchipelago.Locations.Patcher
             PatchDesertFestival();
             PatchFlowerDance();
             PatchLuau();
+            PatchTroutDerby();
             PatchDanceOfTheMoonlightJellies();
             PatchFair();
             PatchSpiritsEve();
@@ -806,6 +807,14 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Event.DefaultCommands), nameof(Event.DefaultCommands.SwitchEvent)),
                 postfix: new HarmonyMethod(typeof(LuauInjections), nameof(LuauInjections.SwitchEvent_GovernorReactionToSoup_Postfix))
+            );
+        }
+
+        private void PatchTroutDerby()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.answerDialogueAction)),
+                prefix: new HarmonyMethod(typeof(TroutDerbyInjections), nameof(TroutDerbyInjections.AnswerDialogueAction_TroutDerbyRewards_Prefix))
             );
         }
 

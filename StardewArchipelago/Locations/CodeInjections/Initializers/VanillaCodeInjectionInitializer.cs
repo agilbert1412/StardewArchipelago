@@ -77,10 +77,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             DesertFestivalInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             FlowerDanceInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             LuauInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
+            TroutDerbyInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             MoonlightJelliesInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             FairInjections.Initialize(monitor, modHelper, archipelago, state, locationChecker);
             SpiritEveInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             IceFestivalInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
+            SquidFestInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             MermaidHouseInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             BeachNightMarketInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             WinterStarInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
