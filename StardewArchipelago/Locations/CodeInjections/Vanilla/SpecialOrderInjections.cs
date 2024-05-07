@@ -74,12 +74,20 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     return;
                 }
 
+                // If the order has already been completed once, we can allow some non-unique rewards only
                 for (var i = __result.rewards.Count - 1; i >= 0; i--)
                 {
                     var reward = __result.rewards[i];
                     if (reward is MoneyReward or GemsReward or FriendshipReward)
                     {
                         continue;
+                    }
+                    if (reward is ObjectReward objectReward)
+                    {
+                        if (objectReward.itemKey.Value == "CalicoEgg")
+                        {
+                            continue;
+                        }
                     }
                     __result.rewards.RemoveAt(i);
                 }

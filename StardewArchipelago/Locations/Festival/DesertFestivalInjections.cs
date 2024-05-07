@@ -76,26 +76,141 @@ namespace StardewArchipelago.Locations.Festival
         }
 
         // public override bool answerDialogueAction(string question_and_answer, string[] question_params)
-        public static bool AnswerDialogueAction_CactusMan_Prefix(DesertFestival __instance, string question_and_answer, string[] question_params, ref bool __result)
+        public static bool AnswerDialogueAction_CactusAndGil_Prefix(DesertFestival __instance, string question_and_answer, string[] question_params, ref bool __result)
         {
             try
             {
-                if (!question_and_answer.Equals("CactusMan_Yes", StringComparison.InvariantCultureIgnoreCase))
+                if (HandleCactusMan(__instance, question_and_answer, ref __result))
                 {
-                    return true; // run original logic
+                    return false; // don't run original logic
                 }
 
-                Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\1_6_Strings:CactusMan_Yes_Intro"));
-                Game1.afterDialogues += () => TryGetFreeCactus(__instance);
+                if (HandleGilRewards(__instance, question_and_answer, ref __result))
+                {
+                    return false; // don't run original logic
+                }
 
-                __result = true;
-                return false; // don't run original logic
+                return true; // run original logic
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(AnswerDialogueAction_CactusMan_Prefix)}:\n{ex}", LogLevel.Error);
-                return true; // run original logic
+                _monitor.Log($"Failed in {nameof(AnswerDialogueAction_CactusAndGil_Prefix)}:\n{ex}", LogLevel.Error);
+                return true;
             }
+        }
+
+        private static bool HandleCactusMan(DesertFestival __instance, string question_and_answer, ref bool __result)
+        {
+            if (!question_and_answer.Equals("CactusMan_Yes", StringComparison.InvariantCultureIgnoreCase))
+            {
+                return false;
+            }
+
+            Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\1_6_Strings:CactusMan_Yes_Intro"));
+            Game1.afterDialogues += () => TryGetFreeCactus(__instance);
+
+            __result = true;
+            return true; // don't run original logic
+        }
+
+        private static bool HandleGilRewards(DesertFestival __instance, string question_and_answer, ref bool __result)
+        {
+            if (!question_and_answer.Equals("Gil_EggRating_Yes", StringComparison.InvariantCultureIgnoreCase))
+            {
+                return false;
+            }
+
+            Game1.player.lastGotPrizeFromGil.Value = Game1.Date;
+            Game1.player.freezePause = 1400;
+            DelayedAction.playSoundAfterDelay("coin", 500);
+            DelayedAction.functionAfterDelay(GetGilReward, 1000);
+
+            __result = true;
+            return true;
+        }
+
+        private static void GetGilReward()
+        {
+            var num = Game1.player.team.highestCalicoEggRatingToday.Value + 1;
+            var eggPrize = 0;
+            Item extraPrize = null;
+            var adventureGuild = (AdventureGuild)Game1.getLocationFromName("AdventureGuild");
+            var gil = adventureGuild.Gil;
+            var isMissing = _locationChecker.IsLocationMissing(FestivalLocationNames.REAL_CALICO_EGG_HUNTER);
+            var earnedCheck = false;
+            switch (num)
+            {
+                case >= 1000:
+                    Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\1_6_Strings:Gil_Rating_1000"));
+                    break;
+                case >= 55:
+                    Game1.DrawDialogue(gil, "Strings\\1_6_Strings:Gil_Rating_50", num);
+                    eggPrize = 500;
+                    extraPrize = new StardewValley.Object("279", 1);
+                    earnedCheck = true;
+                    break;
+                case >= 25:
+                {
+                    Game1.DrawDialogue(gil, "Strings\\1_6_Strings:Gil_Rating_25", num);
+                    eggPrize = 200;
+                    extraPrize = new StardewValley.Object("253", 5);
+                    earnedCheck = true;
+                    break;
+                }
+                case >= 20:
+                    Game1.DrawDialogue(gil, "Strings\\1_6_Strings:Gil_Rating_20to24", num);
+                    eggPrize = 100;
+                    extraPrize = new StardewValley.Object("253", 5);
+                    if (_archipelago.SlotData.FestivalLocations == FestivalLocations.Easy)
+                    {
+                        earnedCheck = true;
+                    }
+                    break;
+                case >= 15:
+                    Game1.DrawDialogue(gil, "Strings\\1_6_Strings:Gil_Rating_15to19", num);
+                    eggPrize = 50;
+                    extraPrize = new StardewValley.Object("253", 3);
+                    if (_archipelago.SlotData.FestivalLocations == FestivalLocations.Easy)
+                    {
+                        earnedCheck = true;
+                    }
+                    break;
+                case >= 10:
+                    Game1.DrawDialogue(gil, "Strings\\1_6_Strings:Gil_Rating_10to14", num);
+                    eggPrize = 25;
+                    extraPrize = new StardewValley.Object("253", 1);
+                    if (_archipelago.SlotData.FestivalLocations == FestivalLocations.Easy)
+                    {
+                        earnedCheck = true;
+                    }
+                    break;
+                case >= 5:
+                    Game1.DrawDialogue(gil, "Strings\\1_6_Strings:Gil_Rating_5to9", num);
+                    eggPrize = 10;
+                    extraPrize = new StardewValley.Object("395", 1);
+                    break;
+                default:
+                    Game1.DrawDialogue(gil, "Strings\\1_6_Strings:Gil_Rating_1to4", num);
+                    eggPrize = 1;
+                    extraPrize = new StardewValley.Object("243", 1);
+                    break;
+            }
+            Game1.afterDialogues = () =>
+            {
+                if (isMissing && earnedCheck)
+                {
+                    _locationChecker.AddCheckedLocation(FestivalLocationNames.REAL_CALICO_EGG_HUNTER);
+                }
+                else
+                {
+                    Game1.player.addItemByMenuIfNecessaryElseHoldUp(new StardewValley.Object("CalicoEgg", eggPrize));
+                    if (extraPrize == null)
+                    {
+                        return;
+                    }
+                    Game1.afterDialogues = () => Game1.player.addItemByMenuIfNecessary(extraPrize);
+                }
+            };
         }
 
         private static void TryGetFreeCactus(DesertFestival desertFestival)
@@ -119,7 +234,6 @@ namespace StardewArchipelago.Locations.Festival
 
         private static void GetFreeCactus(DesertFestival desertFestival, int seed)
         {
-
             var random = Utility.CreateRandom(seed);
             random.Next();
             random.Next();
@@ -177,6 +291,21 @@ namespace StardewArchipelago.Locations.Festival
             var foodPath = $"Strings\\1_6_Strings:Cook_DishNames_{cookIngredient}_{cookSauce}";
             var foodName = _englishContentManager.LoadString(foodPath);
             _locationChecker.AddCheckedLocation(foodName);
+        }
+
+        // private void signalCalicoStatueActivation(int whichEffect)
+        public static void SignalCalicoStatueActivation_DesertChef_Postfix(MineShaft __instance, int whichEffect)
+        {
+            try
+            {
+                _locationChecker.AddCheckedLocation(FestivalLocationNames.TOUCH_A_CALICO_STATUE);
+                return;
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(SignalCalicoStatueActivation_DesertChef_Postfix)}:\n{ex}", LogLevel.Error);
+                return;
+            }
         }
     }
 }

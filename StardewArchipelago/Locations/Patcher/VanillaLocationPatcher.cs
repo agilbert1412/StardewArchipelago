@@ -783,8 +783,13 @@ namespace StardewArchipelago.Locations.Patcher
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(DesertFestival), nameof(DesertFestival.answerDialogueAction)),
-                prefix: new HarmonyMethod(typeof(DesertFestivalInjections), nameof(DesertFestivalInjections.AnswerDialogueAction_CactusMan_Prefix)),
+                prefix: new HarmonyMethod(typeof(DesertFestivalInjections), nameof(DesertFestivalInjections.AnswerDialogueAction_CactusAndGil_Prefix)),
                 postfix: new HarmonyMethod(typeof(DesertFestivalInjections), nameof(DesertFestivalInjections.AnswerDialogueAction_DesertChef_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(MineShaft), "signalCalicoStatueActivation"),
+                postfix: new HarmonyMethod(typeof(DesertFestivalInjections), nameof(DesertFestivalInjections.SignalCalicoStatueActivation_DesertChef_Postfix))
             );
         }
 
