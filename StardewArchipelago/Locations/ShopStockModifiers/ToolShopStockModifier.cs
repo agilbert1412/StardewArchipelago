@@ -49,6 +49,10 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
                 for (var i = 1; i < Materials.MaterialNames.Length; i++)
                 {
                     var locationName = $"{Materials.MaterialNames[i]} {toolName}{Suffix.UPGRADE}";
+                    if (!_archipelago.LocationExists(locationName))
+                    {
+                        continue;
+                    }
                     var requiredItem = $"{Prefix.PROGRESSIVE}{toolName}";
                     var requiredAmount = i - 1;
                     var id = $"{IDProvider.PURCHASEABLE_AP_LOCATION} {locationName}";

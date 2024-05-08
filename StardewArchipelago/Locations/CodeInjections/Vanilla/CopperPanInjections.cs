@@ -8,7 +8,7 @@ using StardewValley;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
-    public static class FishingRodInjections
+    public static class CopperPanInjections
     {
         private static IMonitor _monitor;
         private static IModHelper _modHelper;
@@ -24,36 +24,36 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         }
 
         // public void skipEvent()
-        public static bool SkipEvent_BambooPole_Prefix(Event __instance)
+        public static bool SkipEvent_CopperPan_Prefix(Event __instance)
         {
             try
             {
-                if (__instance.id != EventIds.BAMBOO_POLE)
+                if (__instance.id != EventIds.COPPER_PAN)
                 {
                     return true; // run original logic
                 }
 
-                SkipBambooPoleEventArchipelago(__instance);
+                SkipCopperPanEventArchipelago(__instance);
                 return false; // don't run original logic
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(SkipEvent_BambooPole_Prefix)}:\n{ex}", LogLevel.Error);
+                _monitor.Log($"Failed in {nameof(SkipEvent_CopperPan_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
             }
         }
 
         // public static void AwardFestivalPrize(Event @event, string[] args, EventContext context)
-        public static bool AwardFestivalPrize_BambooPole_Prefix(Event @event, string[] args, EventContext context)
+        public static bool AwardFestivalPrize_CopperPan_Prefix(Event @event, string[] args, EventContext context)
         {
             try
             {
-                if (@event.id != EventIds.BAMBOO_POLE || args.Length <= 1 || args[1].ToLower() != "rod")
+                if (@event.id != EventIds.COPPER_PAN || args.Length <= 1 || args[1].ToLower() != "pan")
                 {
                     return true; // run original logic
                 }
 
-                CheckBambooPoleLocation();
+                CheckCopperPanLocation();
 
                 if (Game1.activeClickableMenu == null)
                     @event.CurrentCommand++;
@@ -63,42 +63,42 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(AwardFestivalPrize_BambooPole_Prefix)}:\n{ex}", LogLevel.Error);
+                _monitor.Log($"Failed in {nameof(AwardFestivalPrize_CopperPan_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
             }
         }
 
-        private static void SkipBambooPoleEventArchipelago(Event bambooPoleEvent)
+        private static void SkipCopperPanEventArchipelago(Event copperPanEvent)
         {
-            if (bambooPoleEvent.playerControlSequence)
+            if (copperPanEvent.playerControlSequence)
             {
-                bambooPoleEvent.EndPlayerControlSequence();
+                copperPanEvent.EndPlayerControlSequence();
             }
 
             Game1.playSound("drumkit6");
 
-            var actorPositionsAfterMoveField = _modHelper.Reflection.GetField<Dictionary<string, Vector3>>(bambooPoleEvent, "actorPositionsAfterMove");
+            var actorPositionsAfterMoveField = _modHelper.Reflection.GetField<Dictionary<string, Vector3>>(copperPanEvent, "actorPositionsAfterMove");
             actorPositionsAfterMoveField.GetValue().Clear();
 
-            foreach (var actor in bambooPoleEvent.actors)
+            foreach (var actor in copperPanEvent.actors)
             {
                 var ignoreStopAnimation = actor.Sprite.ignoreStopAnimation;
                 actor.Sprite.ignoreStopAnimation = true;
                 actor.Halt();
                 actor.Sprite.ignoreStopAnimation = ignoreStopAnimation;
-                bambooPoleEvent.resetDialogueIfNecessary(actor);
+                copperPanEvent.resetDialogueIfNecessary(actor);
             }
 
-            bambooPoleEvent.farmer.Halt();
-            bambooPoleEvent.farmer.ignoreCollisions = false;
+            copperPanEvent.farmer.Halt();
+            copperPanEvent.farmer.ignoreCollisions = false;
             Game1.exitActiveMenu();
             Game1.dialogueUp = false;
             Game1.dialogueTyping = false;
             Game1.pauseTime = 0.0f;
 
-            CheckBambooPoleLocation();
+            CheckCopperPanLocation();
 
-            bambooPoleEvent.endBehaviors(new string[4]
+            copperPanEvent.endBehaviors(new string[4]
             {
                 "end",
                 "position",
@@ -107,9 +107,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }, Game1.currentLocation);
         }
 
-        private static void CheckBambooPoleLocation()
+        private static void CheckCopperPanLocation()
         {
-            _locationChecker.AddCheckedLocation("Bamboo Pole Cutscene");
+            _locationChecker.AddCheckedLocation("Copper Pan Cutscene");
         }
     }
 }

@@ -246,6 +246,15 @@ namespace StardewArchipelago.Items.Mail
                 return;
             }
 
+            // This includes the current letter due to the timing of this patch
+            var numberOfPreviousToolLetters = _mail.OpenedMailsContainingKey($"{VanillaUnlockManager.PROGRESSIVE_TOOL_AP_PREFIX}{toolGenericName}");
+            if (numberOfPreviousToolLetters <= 1 && toolGenericName == "Pan")
+            {
+                var newTool = _toolUpgrader.CreateTool(toolGenericName);
+                Game1.player.holdUpItemThenMessage(newTool);
+                return;
+            }
+
             var upgradedTool = _toolUpgrader.UpgradeToolInEntireWorld(toolGenericName);
 
             if (upgradedTool == null)

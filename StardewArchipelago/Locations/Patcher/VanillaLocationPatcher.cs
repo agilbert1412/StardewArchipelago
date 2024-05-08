@@ -74,6 +74,7 @@ namespace StardewArchipelago.Locations.Patcher
             ReplaceElevatorsWithChecks();
             ReplaceToolUpgradesWithChecks();
             PatchFishingRods();
+            PatchCopperPan();
             ReplaceSkillsWithChecks();
             ReplaceQuestsWithChecks();
             PatchCarpenter();
@@ -157,6 +158,11 @@ namespace StardewArchipelago.Locations.Patcher
         private void ReplaceRaccoonBundlesWithChecks()
         {
             _harmony.Patch(
+                original: AccessTools.Method(typeof(Utility), nameof(Utility.pickFarmEvent)),
+                postfix: new HarmonyMethod(typeof(RaccoonInjections), nameof(RaccoonInjections.PickFarmEvent_DontPickRaccoonStump_Postfix))
+            );
+
+            _harmony.Patch(
                 original: AccessTools.Method(typeof(Raccoon), nameof(Raccoon.activate)),
                 prefix: new HarmonyMethod(typeof(RaccoonInjections), nameof(RaccoonInjections.Activate_DisplayDialogueOrBundle_Prefix))
             );
@@ -232,6 +238,24 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Event.DefaultCommands), nameof(Event.DefaultCommands.AwardFestivalPrize)),
                 prefix: new HarmonyMethod(typeof(FishingRodInjections), nameof(FishingRodInjections.AwardFestivalPrize_BambooPole_Prefix))
+            );
+        }
+
+        private void PatchCopperPan()
+        {
+            if (!_archipelago.SlotData.ToolProgression.HasFlag(ToolProgression.Progressive))
+            {
+                return;
+            }
+            
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Event), nameof(Event.skipEvent)),
+                prefix: new HarmonyMethod(typeof(CopperPanInjections), nameof(CopperPanInjections.SkipEvent_CopperPan_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Event.DefaultCommands), nameof(Event.DefaultCommands.AwardFestivalPrize)),
+                prefix: new HarmonyMethod(typeof(CopperPanInjections), nameof(CopperPanInjections.AwardFestivalPrize_CopperPan_Prefix))
             );
         }
 

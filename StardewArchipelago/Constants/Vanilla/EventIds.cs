@@ -8,5 +8,6 @@
         public const string RUSTY_SWORD_EVENT_ID = "100162";
         public const string FURNACE_RECIPE = "992553";
         public const string COOKIES_RECIPE = "19";
+        public const string COPPER_PAN = "404798";
     }
 }

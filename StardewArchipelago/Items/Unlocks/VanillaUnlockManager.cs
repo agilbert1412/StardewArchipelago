@@ -124,6 +124,7 @@ namespace StardewArchipelago.Items.Unlocks
             _unlockables.Add($"{PROGRESSIVE_TOOL_AP_PREFIX}Hoe", SendProgressiveHoeLetter);
             _unlockables.Add($"{PROGRESSIVE_TOOL_AP_PREFIX}Watering Can", SendProgressiveWateringCanLetter);
             _unlockables.Add($"{PROGRESSIVE_TOOL_AP_PREFIX}Trash Can", SendProgressiveTrashCanLetter);
+            _unlockables.Add($"{PROGRESSIVE_TOOL_AP_PREFIX}Pan", SendProgressivePanLetter);
             _unlockables.Add(PROGRESSIVE_FISHING_ROD, SendProgressiveFishingRodLetter);
             _unlockables.Add(RETURN_SCEPTER, SendReturnScepterLetter);
         }
@@ -423,6 +424,11 @@ namespace StardewArchipelago.Items.Unlocks
         private LetterActionAttachment SendProgressiveTrashCanLetter(ReceivedItem receivedItem)
         {
             return new LetterActionAttachment(receivedItem, LetterActionsKeys.ProgressiveTool, "Trash Can");
+        }
+
+        private LetterActionAttachment SendProgressivePanLetter(ReceivedItem receivedItem)
+        {
+            return new LetterActionAttachment(receivedItem, LetterActionsKeys.ProgressiveTool, "Pan");
         }
 
         private LetterActionAttachment SendProgressiveFishingRodLetter(ReceivedItem receivedItem)

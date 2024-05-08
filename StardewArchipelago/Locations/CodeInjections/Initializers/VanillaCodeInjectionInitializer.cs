@@ -21,6 +21,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             BackpackInjections.Initialize(monitor, archipelago, locationChecker);
             ScytheInjections.Initialize(monitor, locationChecker);
             FishingRodInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
+            CopperPanInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             var bundleReader = new BundleReader();
             var killList = new MonsterKillList(archipelago);
             GoalCodeInjection.Initialize(monitor, modHelper, archipelago, locationChecker, bundleReader, killList);

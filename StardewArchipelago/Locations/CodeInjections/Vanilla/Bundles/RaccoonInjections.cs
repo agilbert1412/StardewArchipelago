@@ -14,6 +14,7 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.BellsAndWhistles;
 using StardewValley.Characters;
+using StardewValley.Events;
 using StardewValley.Locations;
 using StardewValley.Menus;
 using Bundle = StardewValley.Menus.Bundle;
@@ -38,6 +39,35 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             _state = state;
             _locationChecker = locationChecker;
             _bundlesManager = bundlesManager;
+        }
+
+        // public static FarmEvent pickFarmEvent()
+        public static void PickFarmEvent_DontPickRaccoonStump_Postfix(ref FarmEvent __result)
+        {
+            try
+            {
+                if (__result == null || __result is not SoundInTheNightEvent soundInTheNightEvent)
+                {
+                    return;
+                }
+
+                // private readonly NetInt behavior = new NetInt();
+                var behaviorField = _modHelper.Reflection.GetField<NetInt>(soundInTheNightEvent, "behavior");
+                var behavior = behaviorField.GetValue();
+                const int raccoonStumpNightEvent = 5;
+                if (behavior.Value != raccoonStumpNightEvent)
+                {
+                    return;
+                }
+
+                __result = null;
+                return;
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(PickFarmEvent_DontPickRaccoonStump_Postfix)}:\n{ex}", LogLevel.Error);
+                return;
+            }
         }
 
         // public void activate()

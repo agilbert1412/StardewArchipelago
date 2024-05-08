@@ -8,7 +8,6 @@ namespace StardewArchipelago.Items
 {
     public class ToolUpgrader
     {
-
         public Tool UpgradeToolInEntireWorld(string toolGenericName)
         {
             var player = Game1.player;
@@ -31,7 +30,7 @@ namespace StardewArchipelago.Items
             return null;
         }
 
-        private static bool TryUpgradeToolInInventory(IList<Item> inventory, string toolName, out Tool upgradedTool)
+        private bool TryUpgradeToolInInventory(IList<Item> inventory, string toolName, out Tool upgradedTool)
         {
             for (var i = 0; i < inventory.Count; i++)
             {
@@ -46,7 +45,7 @@ namespace StardewArchipelago.Items
             return false;
         }
 
-        private static bool TryUpgradeToolInChests(string toolName, out Tool upgradedTool)
+        private bool TryUpgradeToolInChests(string toolName, out Tool upgradedTool)
         {
             var locations = Game1.locations.ToList();
 
@@ -96,7 +95,7 @@ namespace StardewArchipelago.Items
             return false;
         }
 
-        private static bool TryUpgradeToolInLostAndFoundBox(Farmer player, string toolName, out Tool upgradedTool)
+        private bool TryUpgradeToolInLostAndFoundBox(Farmer player, string toolName, out Tool upgradedTool)
         {
             if (TryUpgradeToolInInventory(player.team.returnedDonations, toolName, out upgradedTool))
             {
@@ -107,7 +106,7 @@ namespace StardewArchipelago.Items
             return false;
         }
 
-        private static bool TryUpgradeCorrectTool(string toolName, Item item, out Tool upgradedTool)
+        private bool TryUpgradeCorrectTool(string toolName, Item item, out Tool upgradedTool)
         {
             if (item is not Tool toolToUpgrade || !toolToUpgrade.Name.Replace(" ", "_").Contains(toolName))
             {
@@ -119,13 +118,18 @@ namespace StardewArchipelago.Items
             {
                 if (toolData.ConventionalUpgradeFrom == item.QualifiedItemId)
                 {
-                    upgradedTool = (Tool)ItemRegistry.Create("(T)" + toolId);
+                    upgradedTool = CreateTool(toolId);
                     return true;
                 }
             }
 
             upgradedTool = null;
             return false;
+        }
+
+        public Tool CreateTool(string toolName)
+        {
+            return (Tool)ItemRegistry.Create("(T)" + toolName);
         }
     }
 }
