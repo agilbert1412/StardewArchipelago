@@ -51,6 +51,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             RecipeFriendshipInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             CraftingInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             FarmCaveInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
+            MysteryBoxInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
         }
 
         private static void InitializeBundleInjections(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, BundlesManager bundlesManager, BundleReader bundleReader)

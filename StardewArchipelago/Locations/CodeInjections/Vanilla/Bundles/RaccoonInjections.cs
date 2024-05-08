@@ -46,7 +46,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         {
             try
             {
-                if (__result == null || __result is not SoundInTheNightEvent soundInTheNightEvent)
+                if (__result is not SoundInTheNightEvent soundInTheNightEvent)
                 {
                     return;
                 }

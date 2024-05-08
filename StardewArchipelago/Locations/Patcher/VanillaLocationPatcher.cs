@@ -95,6 +95,7 @@ namespace StardewArchipelago.Locations.Patcher
             PatchChefAndCraftsanity();
             PatchKrobusShop();
             PatchFarmcave();
+            PatchMysteryBoxes();
         }
 
         public void CleanEvents()
@@ -1092,6 +1093,14 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Event), nameof(Event.answerDialogue)),
                 prefix: new HarmonyMethod(typeof(FarmCaveInjections), nameof(FarmCaveInjections.AnswerDialogue_SendFarmCaveCheck_Prefix))
+            );
+        }
+
+        private void PatchMysteryBoxes()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Utility), nameof(Utility.pickFarmEvent)),
+                postfix: new HarmonyMethod(typeof(MysteryBoxInjections), nameof(MysteryBoxInjections.PickFarmEvent_MrQiPlaneOnlyIfUnlocked_Postfix))
             );
         }
     }
