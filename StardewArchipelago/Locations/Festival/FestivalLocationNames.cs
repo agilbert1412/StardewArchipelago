@@ -102,6 +102,10 @@ namespace StardewArchipelago.Locations.Festival
         public const string SQUIDFEST_DAY_2_IRON = "SquidFest Day 2 Iron";
         public const string SQUIDFEST_DAY_2_GOLD = "SquidFest Day 2 Gold";
         public const string SQUIDFEST_DAY_2_IRIDIUM = "SquidFest Day 2 Iridium";
+        public static readonly string[,] SQUIDFEST_REWARDS = {
+            { SQUIDFEST_DAY_1_COPPER, SQUIDFEST_DAY_1_IRON, SQUIDFEST_DAY_1_GOLD, SQUIDFEST_DAY_1_IRIDIUM },
+            { SQUIDFEST_DAY_2_COPPER, SQUIDFEST_DAY_2_IRON, SQUIDFEST_DAY_2_GOLD, SQUIDFEST_DAY_2_IRIDIUM },
+        };
 
         public const string MERMAID_PEARL = "Mermaid Pearl";
         public const string CONE_HAT = "Cone Hat";

@@ -18,7 +18,6 @@ namespace StardewArchipelago.Locations.Festival
         private static IModHelper _modHelper;
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
-        private static LocalizedContentManager _englishContentManager;
 
         public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
@@ -26,7 +25,6 @@ namespace StardewArchipelago.Locations.Festival
             _modHelper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
-            _englishContentManager = new LocalizedContentManager(Game1.game1.Content.ServiceProvider, Game1.game1.Content.RootDirectory, new CultureInfo("en-US"));
         }
 
         // public virtual bool answerDialogueAction(string questionAndAnswer, string[] questionParams)

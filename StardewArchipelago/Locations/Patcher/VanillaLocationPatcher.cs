@@ -753,6 +753,7 @@ namespace StardewArchipelago.Locations.Patcher
             PatchFair();
             PatchSpiritsEve();
             PatchIceFestival();
+            PatchSquidFest();
             PatchNightMarket();
             PatchFeastOfTheWinterStar();
         }
@@ -852,6 +853,14 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Event.DefaultCommands), nameof(Event.DefaultCommands.AwardFestivalPrize)),
                 prefix: new HarmonyMethod(typeof(IceFestivalInjections), nameof(IceFestivalInjections.AwardFestivalPrize_FishingCompetition_Prefix))
+            );
+        }
+
+        private void PatchSquidFest()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.answerDialogueAction)),
+                prefix: new HarmonyMethod(typeof(SquidFestInjections), nameof(SquidFestInjections.AnswerDialogueAction_SquidFestRewards_Prefix))
             );
         }
 
