@@ -24,35 +24,44 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
         private const string LANCE_CHEST_LOCATION = "Monster Crops";
         private const string MONSTER_ERADICATION_AP_PREFIX = "Monster Eradication: ";
         private const string APPLES_NAME = "Apples";
-        private static readonly List<string> voidSpirits = new(){
-            MonsterName.SHADOW_BRUTE, MonsterName.SHADOW_SHAMAN, MonsterName.SHADOW_SNIPER, MonsterCategory.VOID_SPIRITS,
-            string.Join("30 ",MonsterCategory.VOID_SPIRITS), string.Join("60 ",MonsterCategory.VOID_SPIRITS), 
-            string.Join("90 ",MonsterCategory.VOID_SPIRITS), string.Join("120 ",MonsterCategory.VOID_SPIRITS)
-            };
-        private const string DEINFEST_AP_LOCATION = "Purify an Infested Lichtung";
-        private static readonly Dictionary<int, string> sveEventSpecialOrders = new(){
-            {8050108, "Clint2"},
-            {2551994, "Clint3"},
-            {8033859, "Lewis2"},
-            {2554903, "Robin3"},
-            {2554928, "Robin4"},
-            {7775926, "Apples"},
-            {65360183, "MarlonFay2"},
-            {65360186, "Lance"},
-            {1090506, "Krobus"}
+
+        private static readonly List<string> voidSpirits = new()
+        {
+            MonsterName.SHADOW_BRUTE, MonsterName.SHADOW_SHAMAN, MonsterName.SHADOW_SNIPER,
+            MonsterCategory.VOID_SPIRITS,
+            $"30 {MonsterCategory.VOID_SPIRITS}", $"60 {MonsterCategory.VOID_SPIRITS}",
+            $"90 {MonsterCategory.VOID_SPIRITS}", $"120 {MonsterCategory.VOID_SPIRITS}",
         };
+
+        private const string DEINFEST_AP_LOCATION = "Purify an Infested Lichtung";
+
+        private static readonly Dictionary<int, string> sveEventSpecialOrders = new()
+        {
+            { 8050108, "Clint2" },
+            { 2551994, "Clint3" },
+            { 8033859, "Lewis2" },
+            { 2554903, "Robin3" },
+            { 2554928, "Robin4" },
+            { 7775926, "Apples" },
+            { 65360183, "MarlonFay2" },
+            { 65360186, "Lance" },
+            { 1090506, "Krobus" }
+        };
+
         private static ShopMenu _lastShopMenuUpdated = null;
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago,
+            LocationChecker locationChecker)
         {
             _monitor = monitor;
             _modHelper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
         }
-        
+
         // public override bool checkForAction(Farmer who, bool justCheckingForActivity = false)
-        public static bool CheckForAction_LanceChest_Prefix(Chest __instance, Farmer who, bool justCheckingForActivity, ref bool __result)
+        public static bool CheckForAction_LanceChest_Prefix(Chest __instance, Farmer who, bool justCheckingForActivity,
+            ref bool __result)
         {
             try
             {
@@ -99,6 +108,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
                 {
                     return true; // run original logic
                 }
+
                 //Change the key so it doesn't get deleted
                 var eventsKey = sveEventSpecialOrders[__instance.id];
                 var specialOrder = SpecialOrder.GetSpecialOrder(eventsKey, null);
@@ -108,7 +118,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(EndBehaviors_AddSpecialOrderAfterEvent_Prefix)}:\n{ex}", LogLevel.Error);
+                _monitor.Log($"Failed in {nameof(EndBehaviors_AddSpecialOrderAfterEvent_Prefix)}:\n{ex}",
+                    LogLevel.Error);
                 return true; // run original logic
             }
         }
@@ -123,7 +134,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(UpdateSpecialOrders_StopDeletingSpecialOrders_Prefix)}:\n{ex}", LogLevel.Error);
+                _monitor.Log($"Failed in {nameof(UpdateSpecialOrders_StopDeletingSpecialOrders_Prefix)}:\n{ex}",
+                    LogLevel.Error);
                 return true; // run original logic
             }
         }
@@ -138,6 +150,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
                 {
                     return;
                 }
+
                 foreach (var voidSpirit in voidSpirits)
                 {
                     var locationName = $"{MONSTER_ERADICATION_AP_PREFIX}{voidSpirit}";
@@ -145,7 +158,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
                     {
                         _locationChecker.AddCheckedLocation(locationName);
                     }
-                    if (_locationChecker.IsLocationMissing(DEINFEST_AP_LOCATION)) // Temp, as Void Spirits are on these maps
+
+                    if (_locationChecker.IsLocationMissing(
+                            DEINFEST_AP_LOCATION)) // Temp, as Void Spirits are on these maps
                     {
                         _locationChecker.AddCheckedLocation(DEINFEST_AP_LOCATION);
                     }
@@ -153,7 +168,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(FixMonsterSlayerQuest_IncludeReleaseofGoals_Postfix)}:\n{ex}", LogLevel.Error);
+                _monitor.Log($"Failed in {nameof(FixMonsterSlayerQuest_IncludeReleaseofGoals_Postfix)}:\n{ex}",
+                    LogLevel.Error);
                 return;
             }
         }
