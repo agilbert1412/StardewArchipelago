@@ -9,7 +9,7 @@
             "el_", "emmalution", "Espeon", "eudaimonistic", "Exempt-Medic", "Farrak Kilhn", "Figment",
             "Fly Sniper", "Frazzleduck", "Heinermann", "Ishigh", "JaredWeakStrike", "Jarno", "jat2980",
             "jennnifer", "Jouramie", "Justice", "Kaito Kid", "Kankuro", "KelioMZX", "Kimou00", "KittyAshy",
-            "Kono Tyran", "Lady Redacted", "lordlou", "Madolinn", "Magnemania", "Marech", "Margot",
+            "Kono Tyran", "Lady Redacted", "Liarose", "lordlou", "Madolinn", "Magnemania", "Marech", "Margot",
             "Mati", "Mav", "MeleneV", "mewlif", "Mistik", "Nada", "Noca", "N00byKing"/*, "NinoKito"*/,
             "Phar", "PoryGone", "ProfBytes", "RaspberrySpaceJam", "Rosalie", "Salzkorn", "SamanthaCoffin",
             "Scipio", "Smorgasbord", "Sneaki", "Snow", "Sraw", "SunnyBat", "TheCondor", "TheHaboo",
