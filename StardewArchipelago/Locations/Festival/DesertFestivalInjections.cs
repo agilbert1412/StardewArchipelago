@@ -60,7 +60,7 @@ namespace StardewArchipelago.Locations.Festival
         }
 
         // public virtual void ReceiveMakeOver(int randomSeedOverride = -1)
-        public static void ReceiveMakeOver_RaceWinner_Postfix(DesertFestival __instance, int randomSeedOverride)
+        public static void ReceiveMakeOver_EmilyServices_Postfix(DesertFestival __instance, int randomSeedOverride)
         {
             try
             {
@@ -69,7 +69,7 @@ namespace StardewArchipelago.Locations.Festival
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(ReceiveMakeOver_RaceWinner_Postfix)}:\n{ex}", LogLevel.Error);
+                _monitor.Log($"Failed in {nameof(ReceiveMakeOver_EmilyServices_Postfix)}:\n{ex}", LogLevel.Error);
                 return;
             }
         }

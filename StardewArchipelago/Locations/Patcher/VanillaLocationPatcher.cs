@@ -803,9 +803,10 @@ namespace StardewArchipelago.Locations.Patcher
                 prefix: new HarmonyMethod(typeof(DesertFestivalInjections), nameof(DesertFestivalInjections.CollectRacePrizes_RaceWinner_Prefix))
             );
 
+            var makeoverParameters = new[] { typeof(int) };
             _harmony.Patch(
-                original: AccessTools.Method(typeof(DesertFestival), nameof(DesertFestival.ReceiveMakeOver)),
-                postfix: new HarmonyMethod(typeof(DesertFestivalInjections), nameof(DesertFestivalInjections.ReceiveMakeOver_RaceWinner_Postfix))
+                original: AccessTools.Method(typeof(DesertFestival), nameof(DesertFestival.ReceiveMakeOver), makeoverParameters),
+                postfix: new HarmonyMethod(typeof(DesertFestivalInjections), nameof(DesertFestivalInjections.ReceiveMakeOver_EmilyServices_Postfix))
             );
 
             _harmony.Patch(
