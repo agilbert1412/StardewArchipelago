@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using StardewValley;
 
 namespace StardewArchipelago.Locations.Festival
@@ -14,20 +15,16 @@ namespace StardewArchipelago.Locations.Festival
         public static readonly string SPIRIT_EVE = FestivalIdentifier(Season.Fall, 27);
         public static readonly string FESTIVAL_OF_ICE = FestivalIdentifier(Season.Winter, 8);
         public static readonly string FEAST_OF_THE_WINTER_STAR = FestivalIdentifier(Season.Winter, 25);
-        public const string NIGHT_MARKET_ALL = "Night Market All";
-        public const string NIGHT_MARKET_15 = "Night Market 15";
-        public const string NIGHT_MARKET_16 = "Night Market 16";
-        public const string NIGHT_MARKET_17 = "Night Market 17";
-        public const string DESERT_FESTIVAL_ALL = "Desert Festival All";
-        public const string DESERT_FESTIVAL_15 = "Desert Festival 15";
-        public const string DESERT_FESTIVAL_16 = "Desert Festival 16";
-        public const string DESERT_FESTIVAL_17 = "Desert Festival 17";
-        public const string TROUT_DERBY_ALL = "Trout Derby All";
-        public const string TROUT_DERBY_20 = "Trout Derby 20";
-        public const string TROUT_DERBY_21 = "Trout Derby 21";
-        public const string SQUIDFEST_ALL = "SquidFest All";
-        public const string SQUIDFEST_12 = "SquidFest 12";
-        public const string SQUIDFEST_13 = "SquidFest 13";
+        public static readonly string NIGHT_MARKET_15 = FestivalIdentifier(Season.Winter, 15);
+        public static readonly string NIGHT_MARKET_16 = FestivalIdentifier(Season.Winter, 16);
+        public static readonly string NIGHT_MARKET_17 = FestivalIdentifier(Season.Winter, 17);
+        public static readonly string DESERT_FESTIVAL_15 = FestivalIdentifier(Season.Spring, 17);
+        public static readonly string DESERT_FESTIVAL_16 = FestivalIdentifier(Season.Spring, 17);
+        public static readonly string DESERT_FESTIVAL_17 = FestivalIdentifier(Season.Spring, 17);
+        public static readonly string TROUT_DERBY_20 = FestivalIdentifier(Season.Summer, 20);
+        public static readonly string TROUT_DERBY_21 = FestivalIdentifier(Season.Summer, 21);
+        public static readonly string SQUIDFEST_12 = FestivalIdentifier(Season.Winter, 12);
+        public static readonly string SQUIDFEST_13 = FestivalIdentifier(Season.Winter, 13);
 
 
         public const string EGG_HUNT = "Egg Hunt Victory";
@@ -127,38 +124,37 @@ namespace StardewArchipelago.Locations.Festival
         public const string LEGEND_OF_THE_WINTER_STAR = "The Legend of the Winter Star";
         public const string SECRET_SANTA = "Secret Santa";
 
+        private static readonly string[] DESERT_FESTIVAL_ALL = new[]
+        {
+            CALICO_RACE, MUMMY_MASK, EMILYS_OUTFIT_SERVICES, EARTHY_MOUSSE, SWEET_BEAN_CAKE, SKULL_CAVERN_CASSEROLE, SPICY_TACOS,
+            MOUNTAIN_CHILI, CRYSTAL_CAKE, CAVE_KEBAB, HOT_LOG, SOUR_SALAD, SUPERFOOD_CAKE, WARRIOR_SMOOTHIE, RUMPLED_FRUIT_SKIN, CALICO_PIZZA,
+            STUFFED_MUSHROOMS, ELF_QUESADILLA, NACHOS_OF_THE_DESERT, CLOPPINO, RAINFOREST_SHRIMP, SHRIMP_DONUT, SMELL_OF_THE_SEA, DESERT_GUMBO,
+            FREE_CACTUS, MONSTER_HUNT, DEEP_DIVE, TREASURE_HUNT, TOUCH_A_CALICO_STATUE, REAL_CALICO_EGG_HUNTER, WILLYS_CHALLENGE, DESERT_SCHOLAR,
+        };
+        private static readonly string[] TROUT_DERBY_ALL = new[] { TROUT_DERBY_REWARD_1, TROUT_DERBY_REWARD_2, TROUT_DERBY_REWARD_3, };
+        private static readonly string[] SQUIDFEST_ALL = Array.Empty<string>();
+        private static readonly string[] NIGHT_MARKET_ALL = new[] { MERMAID_PEARL, CONE_HAT, IRIDIUM_FIREPLACE, RARECROW_7, RARECROW_8, };
+
         public static readonly Dictionary<string, string[]> LocationsByFestival = new()
         {
             { EGG_FESTIVAL, new[] { EGG_HUNT, STRAWBERRY_SEEDS } },
-            {
-                DESERT_FESTIVAL_ALL, new[]
-                {
-                    CALICO_RACE, MUMMY_MASK, EMILYS_OUTFIT_SERVICES, EARTHY_MOUSSE, SWEET_BEAN_CAKE, SKULL_CAVERN_CASSEROLE, SPICY_TACOS,
-                    MOUNTAIN_CHILI, CRYSTAL_CAKE, CAVE_KEBAB, HOT_LOG, SOUR_SALAD, SUPERFOOD_CAKE, WARRIOR_SMOOTHIE, RUMPLED_FRUIT_SKIN, CALICO_PIZZA,
-                    STUFFED_MUSHROOMS, ELF_QUESADILLA, NACHOS_OF_THE_DESERT, CLOPPINO, RAINFOREST_SHRIMP, SHRIMP_DONUT, SMELL_OF_THE_SEA, DESERT_GUMBO,
-                    FREE_CACTUS, MONSTER_HUNT, DEEP_DIVE, TREASURE_HUNT, TOUCH_A_CALICO_STATUE, REAL_CALICO_EGG_HUNTER, WILLYS_CHALLENGE, DESERT_SCHOLAR,
-                }
-            },
-            { DESERT_FESTIVAL_15, new[] { CALICO_STATUE, } },
-            { DESERT_FESTIVAL_16, Array.Empty<string>() },
-            { DESERT_FESTIVAL_17, new[] { CALICO_STATUE, } },
+            { DESERT_FESTIVAL_15, DESERT_FESTIVAL_ALL.Union(new[] { CALICO_STATUE, }).ToArray() },
+            { DESERT_FESTIVAL_16, DESERT_FESTIVAL_ALL },
+            { DESERT_FESTIVAL_17, DESERT_FESTIVAL_ALL.Union(new[] { CALICO_STATUE, }).ToArray() },
             { FLOWER_DANCE, new[] { DANCE_WITH_SOMEONE, RARECROW_5, TUB_O_FLOWERS_RECIPE } },
             { LUAU, new[] { LUAU_SOUP } },
-            { TROUT_DERBY_ALL, new[] { TROUT_DERBY_REWARD_1, TROUT_DERBY_REWARD_2, TROUT_DERBY_REWARD_3, } },
-            { TROUT_DERBY_20, Array.Empty<string>() },
-            { TROUT_DERBY_21, Array.Empty<string>() },
+            { TROUT_DERBY_20, TROUT_DERBY_ALL },
+            { TROUT_DERBY_21, TROUT_DERBY_ALL },
             { MOONLIGHT_JELLIES, new[] { WATCH_MOONLIGHT_JELLIES, MOONLIGHT_JELLIES_BANNER, STARPORT_DECAL } },
             { FAIR, new[] { STRENGTH_GAME, RARECROW_1, FAIR_STARDROP, GRANGE_DISPLAY } },
             { SPIRIT_EVE, new[] { GOLDEN_PUMPKIN, RARECROW_2, JACK_O_LANTERN_RECIPE } },
             { FESTIVAL_OF_ICE, new[] { FISHING_COMPETITION, RARECROW_4 } },
-            { SQUIDFEST_ALL, Array.Empty<string>() },
-            { SQUIDFEST_12, new[] { SQUIDFEST_DAY_1_COPPER, SQUIDFEST_DAY_1_IRON, SQUIDFEST_DAY_1_GOLD, SQUIDFEST_DAY_1_IRIDIUM } },
-            { SQUIDFEST_13, new[] { SQUIDFEST_DAY_2_COPPER, SQUIDFEST_DAY_2_IRON, SQUIDFEST_DAY_2_GOLD, SQUIDFEST_DAY_2_IRIDIUM } },
+            { SQUIDFEST_12, SQUIDFEST_ALL.Union(new[] { SQUIDFEST_DAY_1_COPPER, SQUIDFEST_DAY_1_IRON, SQUIDFEST_DAY_1_GOLD, SQUIDFEST_DAY_1_IRIDIUM }).ToArray()  },
+            { SQUIDFEST_13, SQUIDFEST_ALL.Union(new[] { SQUIDFEST_DAY_2_COPPER, SQUIDFEST_DAY_2_IRON, SQUIDFEST_DAY_2_GOLD, SQUIDFEST_DAY_2_IRIDIUM }).ToArray()  },
             { FEAST_OF_THE_WINTER_STAR, new[] { LEGEND_OF_THE_WINTER_STAR, SECRET_SANTA } },
-            { NIGHT_MARKET_ALL, new[] { MERMAID_PEARL, CONE_HAT, IRIDIUM_FIREPLACE, RARECROW_7, RARECROW_8 } },
-            { NIGHT_MARKET_15, new[] { LUPINI_YEAR_1_PAINTING_1, LUPINI_YEAR_2_PAINTING_1, LUPINI_YEAR_3_PAINTING_1 } },
-            { NIGHT_MARKET_16, new[] { LUPINI_YEAR_1_PAINTING_2, LUPINI_YEAR_2_PAINTING_2, LUPINI_YEAR_3_PAINTING_2 } },
-            { NIGHT_MARKET_17, new[] { LUPINI_YEAR_1_PAINTING_3, LUPINI_YEAR_2_PAINTING_3, LUPINI_YEAR_3_PAINTING_3 } },
+            { NIGHT_MARKET_15, NIGHT_MARKET_ALL.Union(new[] { LUPINI_YEAR_1_PAINTING_1, LUPINI_YEAR_2_PAINTING_1, LUPINI_YEAR_3_PAINTING_1 }).ToArray() },
+            { NIGHT_MARKET_16, NIGHT_MARKET_ALL.Union(new[] { LUPINI_YEAR_1_PAINTING_2, LUPINI_YEAR_2_PAINTING_2, LUPINI_YEAR_3_PAINTING_2 }).ToArray() },
+            { NIGHT_MARKET_17, NIGHT_MARKET_ALL.Union(new[] { LUPINI_YEAR_1_PAINTING_3, LUPINI_YEAR_2_PAINTING_3, LUPINI_YEAR_3_PAINTING_3 }).ToArray() },
         };
 
         public static string FestivalIdentifier(Season season, int day)

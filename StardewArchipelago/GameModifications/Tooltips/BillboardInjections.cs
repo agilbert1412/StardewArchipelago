@@ -221,40 +221,6 @@ namespace StardewArchipelago.GameModifications.Tooltips
         {
             var season = Game1.currentSeason;
             var festivalIdentifier = FestivalLocationNames.FestivalIdentifier(Game1.season, day);
-            if (Game1.currentSeason.Equals("winter") && day >= 15 && day <= 17)
-            {
-                var festivalDay = FestivalLocationNames.NIGHT_MARKET_ALL;
-                foreach (var location in FestivalLocationNames.LocationsByFestival[festivalDay])
-                {
-                    if (_locationChecker.IsLocationMissing(location))
-                    {
-                        yield return location;
-                    }
-                }
-
-                if (day == 15)
-                {
-                    festivalDay = FestivalLocationNames.NIGHT_MARKET_15;
-                }
-                else if (day == 16)
-                {
-                    festivalDay = FestivalLocationNames.NIGHT_MARKET_16;
-                }
-                else if (day == 17)
-                {
-                    festivalDay = FestivalLocationNames.NIGHT_MARKET_17;
-                }
-
-                foreach (var location in FestivalLocationNames.LocationsByFestival[festivalDay])
-                {
-                    if (_locationChecker.IsLocationMissing(location))
-                    {
-                        yield return location;
-                    }
-                }
-
-                yield break;
-            }
 
             if (!FestivalLocationNames.LocationsByFestival.ContainsKey(festivalIdentifier))
             {
