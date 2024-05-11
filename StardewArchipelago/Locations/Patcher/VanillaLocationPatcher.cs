@@ -96,6 +96,7 @@ namespace StardewArchipelago.Locations.Patcher
             PatchKrobusShop();
             PatchFarmcave();
             PatchMysteryBoxes();
+            PatchBooks();
         }
 
         public void CleanEvents()
@@ -1102,6 +1103,29 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Utility), nameof(Utility.pickFarmEvent)),
                 postfix: new HarmonyMethod(typeof(MysteryBoxInjections), nameof(MysteryBoxInjections.PickFarmEvent_MrQiPlaneOnlyIfUnlocked_Postfix))
+            );
+        }
+
+        private void PatchBooks()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Object), "readBook"),
+                postfix: new HarmonyMethod(typeof(BookInjections), nameof(BookInjections.ReadBook_Booksanity_Prefix))
+            );
+
+            if (_archipelago.SlotData.Booksanity < Booksanity.All)
+            {
+                return;
+            }
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.readNote)),
+                prefix: new HarmonyMethod(typeof(BookInjections), nameof(BookInjections.ReadNote_BooksanityLostBook_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(LibraryMuseum), "resetLocalState"),
+                prefix: new HarmonyMethod(typeof(BookInjections), nameof(BookInjections.ResetLocalState_BooksanityLostBooks_Prefix))
             );
         }
     }

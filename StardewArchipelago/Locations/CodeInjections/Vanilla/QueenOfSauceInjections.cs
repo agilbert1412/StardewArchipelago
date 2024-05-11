@@ -4,6 +4,7 @@ using System.Linq;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Locations;
 using StardewArchipelago.Extensions;
+using StardewArchipelago.GameModifications.CodeInjections.Television;
 using StardewArchipelago.GameModifications.Seasons;
 using StardewArchipelago.Serialization;
 using StardewArchipelago.Stardew;
@@ -24,20 +25,20 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private static IMonitor _monitor;
         private static IModHelper _helper;
         private static ArchipelagoClient _archipelago;
-        private static ArchipelagoStateDto _state;
         private static LocationChecker _locationChecker;
         private static StardewItemManager _itemManager;
+        private static QueenOfSauceManager _qosManager;
 
         private static Dictionary<long, int> _recipeChoiceCache;
 
-        public static void Initialize(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, StardewItemManager itemManager)
+        public static void Initialize(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager itemManager, QueenOfSauceManager qosManager)
         {
             _monitor = monitor;
             _helper = helper;
             _archipelago = archipelago;
-            _state = state;
             _locationChecker = locationChecker;
             _itemManager = itemManager;
+            _qosManager = qosManager;
             _recipeChoiceCache = new Dictionary<long, int>();
         }
 
@@ -98,7 +99,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
 
             var season = Game1.currentSeason;
-            GetCurrentDateComponents((int)Game1.stats.DaysPlayed, out var year, out var week);
+            _qosManager.GetCurrentDateComponents(out var year, out var week);
 
             var dayShortName = Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth);
             var isRerunDay = dayShortName.Equals(RERUN_DAY);
@@ -124,26 +125,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
             _recipeChoiceCache.Add(Game1.stats.DaysPlayed, recipeWeek);
             return recipeWeek;
-        }
-
-        public static void GetCurrentDateComponents(int daysPlayed, out int year, out int week)
-        {
-
-            const int oneWeek = 7;
-            const int oneMonth = oneWeek * 4;
-            const int oneYear = oneMonth * 4;
-            const int twoYears = oneYear * 2;
-            const int yearLoop = 2;
-            var zeroIndexedDay = daysPlayed - 1;
-            var currentYear = zeroIndexedDay / oneYear;
-            while (zeroIndexedDay < 0)
-            {
-                zeroIndexedDay += oneYear;
-                currentYear += 1;
-            }
-            var currentDayOfMonth = zeroIndexedDay % oneMonth;
-            year = currentYear % yearLoop; // 0 is year1, 1 is year2
-            week = currentDayOfMonth / oneWeek; // 0-3
         }
 
         private static string[] GetQueenOfSauceTvText(string recipeName, string recipeDetails, string[] recipeInfo)
@@ -179,7 +160,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
         private static int PickRerunRecipe(Dictionary<string, string> cookingRecipes, int currentWeek)
         {
-            var allRerunRecipes = GetAllRerunRecipes(currentWeek);
+            var allRerunRecipes = _qosManager.GetAllRerunRecipes(currentWeek);
             var missingRerunRecipes = GetMissingRerunRecipes(cookingRecipes, allRerunRecipes);
             var seed = (int)(Game1.uniqueIDForThisGame + Game1.stats.DaysPlayed);
             var random = new Random(seed);
@@ -189,32 +170,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             var rerunRecipe = missingRerunRecipes[random.Next(missingRerunRecipes.Count)];
             return rerunRecipe;
-        }
-
-        private static List<int> GetAllRerunRecipes(int currentWeek)
-        {
-            var validSeasons = SeasonsRandomizer.ValidSeasons;
-            var validRerunRecipes = new List<int>();
-            var seasonsOrder = _state.SeasonsOrder;
-            for (var seasonIndex = 0; seasonIndex < validSeasons.Length; seasonIndex++)
-            {
-                var season = validSeasons[seasonIndex];
-                if (!seasonsOrder.Contains(season))
-                {
-                    continue;
-                }
-
-                var hasCompletedCurrentSeasonBefore = seasonsOrder.Take(seasonsOrder.Count - 1).Contains(season);
-                var maxWeekSeen = hasCompletedCurrentSeasonBefore ? 4 : currentWeek;
-
-                for (var week = 0; week < maxWeekSeen; week++)
-                {
-                    validRerunRecipes.Add((seasonIndex * 4) + week + 1); // year1
-                    validRerunRecipes.Add((seasonIndex * 4) + week + 16 + 1); // year2
-                }
-            }
-
-            return validRerunRecipes;
         }
 
         /// <summary>

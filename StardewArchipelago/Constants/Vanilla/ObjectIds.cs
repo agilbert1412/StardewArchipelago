@@ -111,5 +111,15 @@
         public const string WHITE_ALGAE = "157";
         public const string WINTER_SEEDS = "498";
         public const string YAM_SEEDS = "492";
+
+        public const string PRICE_CATALOGUE = "Book_PriceCatalogue";
+        public const string ANIMAL_CATALOGUE = "Book_AnimalCatalogue";
+        public const string QUEEN_OF_SAUCE_COOKBOOK = "Book_QueenOfSauce";
+        public const string BOOK_OF_STARS = "PurpleBook";
+
+        public static bool IsSkillBook(string itemId)
+        {
+            return itemId != null && itemId.StartsWith("SkillBook_");
+        }
     }
 }

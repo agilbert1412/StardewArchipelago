@@ -1,5 +1,6 @@
 ﻿using StardewArchipelago.Archipelago;
 using StardewArchipelago.Bundles;
+using StardewArchipelago.GameModifications.CodeInjections.Television;
 using StardewArchipelago.Goals;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
@@ -46,12 +47,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             InitializeFestivalPatches(monitor, modHelper, archipelago, state, locationChecker);
             MonsterSlayerInjections.Initialize(monitor, modHelper, archipelago, locationChecker, killList);
             CookingInjections.Initialize(monitor, archipelago, locationChecker, itemManager);
-            QueenOfSauceInjections.Initialize(monitor, modHelper, archipelago, state, locationChecker, itemManager);
+            var qosManager = new QueenOfSauceManager(state);
+            QueenOfSauceInjections.Initialize(monitor, modHelper, archipelago, locationChecker, itemManager, qosManager);
             RecipeLevelUpInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             RecipeFriendshipInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             CraftingInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             FarmCaveInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             MysteryBoxInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
+            BookInjections.Initialize(monitor, modHelper, archipelago, locationChecker, qosManager);
         }
 
         private static void InitializeBundleInjections(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, BundlesManager bundlesManager, BundleReader bundleReader)

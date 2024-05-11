@@ -32,6 +32,7 @@ namespace StardewArchipelago.Archipelago
         private const string CRAFTSANITY_KEY = "craftsanity";
         private const string FRIENDSANITY_KEY = "friendsanity";
         private const string FRIENDSANITY_HEART_SIZE_KEY = "friendsanity_heart_size";
+        private const string BOOKSANITY_KEY = "booksanity";
         private const string EXCLUDE_GINGER_ISLAND_KEY = "exclude_ginger_island";
         private const string TRAP_ITEMS_KEY = "trap_items";
         private const string MULTI_SLEEP_ENABLED_KEY = "multiple_day_sleep_enabled";
@@ -84,6 +85,7 @@ namespace StardewArchipelago.Archipelago
         public Craftsanity Craftsanity { get; private set; }
         public Friendsanity Friendsanity { get; private set; }
         public int FriendsanityHeartSize { get; private set; }
+        public Booksanity Booksanity { get; private set; }
         public bool ExcludeGingerIsland { get; private set; }
         public TrapItemsDifficulty TrapItemsDifficulty { get; set; }
         public bool EnableMultiSleep { get; private set; }
@@ -134,6 +136,7 @@ namespace StardewArchipelago.Archipelago
             Craftsanity = GetSlotSetting(CRAFTSANITY_KEY, Craftsanity.None);
             Friendsanity = GetSlotSetting(FRIENDSANITY_KEY, Friendsanity.None);
             FriendsanityHeartSize = GetSlotSetting(FRIENDSANITY_HEART_SIZE_KEY, 4);
+            Booksanity = GetSlotSetting(BOOKSANITY_KEY, Booksanity.None);
             ExcludeGingerIsland = GetSlotSetting(EXCLUDE_GINGER_ISLAND_KEY, true);
             TrapItemsDifficulty = GetSlotSetting(TRAP_ITEMS_KEY, TrapItemsDifficulty.Medium);
             EnableMultiSleep = GetSlotSetting(MULTI_SLEEP_ENABLED_KEY, true);
@@ -442,6 +445,14 @@ namespace StardewArchipelago.Archipelago
         StartingNpcs = 3,
         All = 4,
         AllWithMarriage = 5,
+    }
+
+    public enum Booksanity
+    {
+        None = 0,
+        Power = 1,
+        PowerSkill = 2,
+        All = 3,
     }
 
     public enum TrapItemsDifficulty
