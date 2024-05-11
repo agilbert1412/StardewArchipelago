@@ -4,6 +4,7 @@ using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Locations;
+using StardewArchipelago.Stardew.Ids.Vanilla;
 using StardewValley;
 using StardewValley.Locations;
 
@@ -41,6 +42,7 @@ namespace StardewArchipelago.Items.Unlocks.Vanilla
                 new SkillUnlockManager(archipelago),
                 new ToolUnlockManager(),
                 new EquipmentUnlockManager(),
+                new BookUnlockManager(),
             };
         }
 
@@ -268,7 +270,7 @@ namespace StardewArchipelago.Items.Unlocks.Vanilla
 
         private LetterItemIdAttachment SendStardropLetter(ReceivedItem receivedItem)
         {
-            return new LetterItemIdAttachment(receivedItem, 434);
+            return new LetterItemIdAttachment(receivedItem, ObjectIds.STARDROP);
         }
 
         private LetterActionAttachment SendDwarvishTranslationGuideLetter(ReceivedItem receivedItem)

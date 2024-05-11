@@ -142,11 +142,18 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             PlayReadBookAnimation(book, location);
 
-            var locationName = $"Read {book.Name}";
-            if (_locationChecker.IsLocationMissing(locationName))
+            var possibleNames = new[] { book.Name, PowerBooks.BookIdsToNames[book.ItemId] };
+            var isThisBookRandomized = false;
+            foreach (var possibleName in possibleNames)
             {
-                _locationChecker.AddCheckedLocation(locationName);
-                return;
+                var locationName = $"Read {book.Name}";
+                if (_locationChecker.IsLocationMissing(locationName))
+                {
+                    _locationChecker.AddCheckedLocation(locationName);
+                    return;
+                }
+
+                isThisBookRandomized = isThisBookRandomized || _archipelago.LocationExists(locationName);
             }
 
             if (ObjectIds.IsSkillBook(book.ItemId))
@@ -156,7 +163,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
 
             var itemId = book.ItemId;
-            var isThisBookRandomized = _archipelago.LocationExists(locationName);
             var bookHasSubsequentReward = itemId != ObjectIds.PRICE_CATALOGUE && itemId != ObjectIds.ANIMAL_CATALOGUE;
 
             var previousReads = Game1.player.stats.Get(book.itemId.Value);

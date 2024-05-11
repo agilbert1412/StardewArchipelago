@@ -111,11 +111,30 @@
         public const string WHITE_ALGAE = "157";
         public const string WINTER_SEEDS = "498";
         public const string YAM_SEEDS = "492";
-
-        public const string PRICE_CATALOGUE = "Book_PriceCatalogue";
-        public const string ANIMAL_CATALOGUE = "Book_AnimalCatalogue";
+        
         public const string QUEEN_OF_SAUCE_COOKBOOK = "Book_QueenOfSauce";
         public const string BOOK_OF_STARS = "PurpleBook";
+        public const string BOOK_MYSTERIES = "Book_Mystery";
+
+        public const string PRICE_CATALOGUE = "Book_PriceCatalogue";
+        public const string MAPPING_CAVE_SYSTEMS = "Book_Marlon";
+        public const string WAY_OF_THE_WIND_1 = "Book_Speed";
+        public const string WAY_OF_THE_WIND_2 = "Book_Speed2";
+        public const string MONSTER_COMPENDIUM = "Book_Void";
+        public const string FRIENDSHIP_101 = "Book_Friendship";
+        public const string JACK_BE_NIMBLE_JACK_BE_THICK = "Book_Defense";
+        public const string WOODYS_SECRET = "Book_Woodcutting";
+        public const string RACCOON_JOURNAL = "Book_WildSeeds";
+        public const string JEWELS_OF_THE_SEA = "Book_Roe";
+        public const string DWARVISH_SAFETY_MANUAL = "Book_Bombs";
+        public const string THE_ART_O_CRABBING = "Book_Crabbing";
+        public const string THE_ALLEYWAY_BUFFET = "Book_Trash";
+        public const string THE_DIAMOND_HUNTER = "Book_Diamonds";
+        public const string BOOK_OF_MYSTERIES = "Book_Mystery";
+        public const string HORSE_THE_BOOK = "Book_Horse";
+        public const string TREASURE_APPRAISAL_GUIDE = "Book_Artifact";
+        public const string OL_SLITHERLEGS = "Book_Grass";
+        public const string ANIMAL_CATALOGUE = "Animal Catalogue";
 
         public static bool IsSkillBook(string itemId)
         {
