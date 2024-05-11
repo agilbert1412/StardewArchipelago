@@ -198,7 +198,7 @@ namespace StardewArchipelago.Items.Mail
             Game1.playSound("parry");
 
             // This includes the current letter due to the timing of this patch
-            var scytheNumber = _mail.OpenedMailsContainingKey(VanillaUnlockManager.PROGRESSIVE_SCYTHE);
+            var scytheNumber = _mail.OpenedMailsContainingKey(ToolUnlockManager.PROGRESSIVE_SCYTHE);
             scytheNumber = Math.Max(1, Math.Min(2, scytheNumber));
             var scytheId = "(W)53"; // Golden Scythe
             if (scytheNumber > 1)
@@ -247,7 +247,7 @@ namespace StardewArchipelago.Items.Mail
             }
 
             // This includes the current letter due to the timing of this patch
-            var numberOfPreviousToolLetters = _mail.OpenedMailsContainingKey($"{VanillaUnlockManager.PROGRESSIVE_TOOL_AP_PREFIX}{toolGenericName}");
+            var numberOfPreviousToolLetters = _mail.OpenedMailsContainingKey($"{ToolUnlockManager.PROGRESSIVE_TOOL_AP_PREFIX}{toolGenericName}");
             if (numberOfPreviousToolLetters <= 1 && toolGenericName == "Pan")
             {
                 var newTool = _toolUpgrader.CreateTool(toolGenericName);
@@ -294,7 +294,7 @@ namespace StardewArchipelago.Items.Mail
         private void GetFishingRodOfNextLevel()
         {
             // This includes the current letter due to the timing of this patch
-            var numberOfPreviousFishingRodLetters = _mail.OpenedMailsContainingKey(VanillaUnlockManager.PROGRESSIVE_FISHING_ROD);
+            var numberOfPreviousFishingRodLetters = _mail.OpenedMailsContainingKey(ToolUnlockManager.PROGRESSIVE_FISHING_ROD);
 
             // received 1 -> training rod [1]
             // received 2 -> bamboo [0]

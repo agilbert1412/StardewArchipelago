@@ -15,12 +15,7 @@ namespace StardewArchipelago.Items.Unlocks
 {
     public class VanillaUnlockManager : IUnlockManager
     {
-        public const string PROGRESSIVE_TOOL_AP_PREFIX = "Progressive ";
         public const string PROGRESSIVE_MINE_ELEVATOR = "Progressive Mine Elevator";
-        public const string PROGRESSIVE_FISHING_ROD = "Progressive Fishing Rod";
-        public const string RETURN_SCEPTER = "Return Scepter";
-        public const string GOLDEN_SCYTHE = "Golden Scythe";
-        public const string PROGRESSIVE_SCYTHE = "Progressive Scythe";
         public const string BEACH_BRIDGE = "Beach Bridge";
         public const string FRUIT_BATS = "Fruit Bats";
         public const string MUSHROOM_BOXES = "Mushroom Boxes";
@@ -39,25 +34,34 @@ namespace StardewArchipelago.Items.Unlocks
 
         private ArchipelagoClient _archipelago;
         private LocationChecker _locationChecker;
+        private List<IUnlockManager> _childUnlockManagers;
 
         public VanillaUnlockManager(ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             _archipelago = archipelago;
             _locationChecker = locationChecker;
+            _childUnlockManagers = new List<IUnlockManager>()
+            {
+                new SkillUnlockManager(archipelago),
+                new ToolUnlockManager(),
+                new EquipmentUnlockManager(),
+            };
         }
 
         public void RegisterUnlocks(IDictionary<string, Func<ReceivedItem, LetterAttachment>> unlocks)
         {
             RegisterCommunityCenterRepairs(unlocks);
             RegisterRaccoons(unlocks);
-            RegisterPlayerSkills(unlocks);
             RegisterPlayerImprovement(unlocks);
-            RegisterProgressiveTools(unlocks);
             RegisterMineElevators(unlocks);
             RegisterUniqueItems(unlocks);
             RegisterIsolatedEventsItems(unlocks);
             RegisterGingerIslandRepairs(unlocks);
             RegisterSpecialItems(unlocks);
+            foreach (var childUnlockManager in _childUnlockManagers)
+            {
+                childUnlockManager.RegisterUnlocks(unlocks);
+            }
         }
 
         private void RegisterCommunityCenterRepairs(IDictionary<string, Func<ReceivedItem, LetterAttachment>> unlocks)
@@ -89,41 +93,8 @@ namespace StardewArchipelago.Items.Unlocks
             unlocks.Add("Key To The Town", SendKeyToTheTownLetter);
         }
 
-        private void RegisterPlayerSkills(IDictionary<string, Func<ReceivedItem, LetterAttachment>> unlocks)
-        {
-            unlocks.Add($"{Skill.Farming} Level", SendProgressiveFarmingLevel);
-            unlocks.Add($"{Skill.Fishing} Level", SendProgressiveFishingLevel);
-            unlocks.Add($"{Skill.Foraging} Level", SendProgressiveForagingLevel);
-            unlocks.Add($"{Skill.Mining} Level", SendProgressiveMiningLevel);
-            unlocks.Add($"{Skill.Combat} Level", SendProgressiveCombatLevel);
-            RegisterPlayerMasteries(unlocks);
-        }
-
-        private void RegisterPlayerMasteries(IDictionary<string, Func<ReceivedItem, LetterAttachment>> unlocks)
-        {
-            unlocks.Add($"{Skill.Farming} Mastery", SendFarmingMastery);
-            unlocks.Add($"{Skill.Fishing} Mastery", SendFishingMastery);
-            unlocks.Add($"{Skill.Foraging} Mastery", SendForagingMastery);
-            unlocks.Add($"{Skill.Mining} Mastery", SendMiningMastery);
-            unlocks.Add($"{Skill.Combat} Mastery", SendCombatMastery);
-        }
-
-        private void RegisterProgressiveTools(IDictionary<string, Func<ReceivedItem, LetterAttachment>> unlocks)
-        {
-            unlocks.Add($"{PROGRESSIVE_TOOL_AP_PREFIX}Axe", SendProgressiveAxeLetter);
-            unlocks.Add($"{PROGRESSIVE_TOOL_AP_PREFIX}Pickaxe", SendProgressivePickaxeLetter);
-            unlocks.Add($"{PROGRESSIVE_TOOL_AP_PREFIX}Hoe", SendProgressiveHoeLetter);
-            unlocks.Add($"{PROGRESSIVE_TOOL_AP_PREFIX}Watering Can", SendProgressiveWateringCanLetter);
-            unlocks.Add($"{PROGRESSIVE_TOOL_AP_PREFIX}Trash Can", SendProgressiveTrashCanLetter);
-            unlocks.Add($"{PROGRESSIVE_TOOL_AP_PREFIX}Pan", SendProgressivePanLetter);
-            unlocks.Add(PROGRESSIVE_FISHING_ROD, SendProgressiveFishingRodLetter);
-            unlocks.Add(RETURN_SCEPTER, SendReturnScepterLetter);
-        }
-
         private void RegisterUniqueItems(IDictionary<string, Func<ReceivedItem, LetterAttachment>> unlocks)
         {
-            unlocks.Add(GOLDEN_SCYTHE, SendGoldenScytheLetter); // Deprecated, but kept in case of start inventory
-            unlocks.Add(PROGRESSIVE_SCYTHE, SendProgressiveScytheLetter);
             unlocks.Add(PIERRE_STOCKLIST, SendPierreStocklistLetter);
         }
 
@@ -344,24 +315,6 @@ namespace StardewArchipelago.Items.Unlocks
             return new LetterActionAttachment(receivedItem, LetterActionsKeys.KeyToTheTown);
         }
 
-        private LetterActionAttachment SendGoldenScytheLetter(ReceivedItem receivedItem)
-        {
-            if (!Game1.player.mailReceived.Contains("gotGoldenScythe"))
-            {
-                Game1.player.mailReceived.Add("gotGoldenScythe");
-            }
-            return new LetterActionAttachment(receivedItem, LetterActionsKeys.GoldenScythe);
-        }
-
-        private LetterActionAttachment SendProgressiveScytheLetter(ReceivedItem receivedItem)
-        {
-            if (!Game1.player.mailReceived.Contains("gotGoldenScythe"))
-            {
-                Game1.player.mailReceived.Add("gotGoldenScythe");
-            }
-            return new LetterActionAttachment(receivedItem, LetterActionsKeys.ProgressiveScythe);
-        }
-
         private LetterActionAttachment SendPierreStocklistLetter(ReceivedItem receivedItem)
         {
             return new LetterActionAttachment(receivedItem, LetterActionsKeys.PierreStocklist);
@@ -380,242 +333,6 @@ namespace StardewArchipelago.Items.Unlocks
         private LetterActionAttachment SendMushroomBoxesLetter(ReceivedItem receivedItem)
         {
             return new LetterActionAttachment(receivedItem, LetterActionsKeys.MushroomBoxes);
-        }
-
-        private LetterActionAttachment SendProgressiveAxeLetter(ReceivedItem receivedItem)
-        {
-            return new LetterActionAttachment(receivedItem, LetterActionsKeys.ProgressiveTool, "Axe");
-        }
-
-        private LetterActionAttachment SendProgressivePickaxeLetter(ReceivedItem receivedItem)
-        {
-            return new LetterActionAttachment(receivedItem, LetterActionsKeys.ProgressiveTool, "Pickaxe");
-        }
-
-        private LetterActionAttachment SendProgressiveHoeLetter(ReceivedItem receivedItem)
-        {
-            return new LetterActionAttachment(receivedItem, LetterActionsKeys.ProgressiveTool, "Hoe");
-        }
-
-        private LetterActionAttachment SendProgressiveWateringCanLetter(ReceivedItem receivedItem)
-        {
-            return new LetterActionAttachment(receivedItem, LetterActionsKeys.ProgressiveTool, "Watering Can");
-        }
-
-        private LetterActionAttachment SendProgressiveTrashCanLetter(ReceivedItem receivedItem)
-        {
-            return new LetterActionAttachment(receivedItem, LetterActionsKeys.ProgressiveTool, "Trash Can");
-        }
-
-        private LetterActionAttachment SendProgressivePanLetter(ReceivedItem receivedItem)
-        {
-            return new LetterActionAttachment(receivedItem, LetterActionsKeys.ProgressiveTool, "Pan");
-        }
-
-        private LetterActionAttachment SendProgressiveFishingRodLetter(ReceivedItem receivedItem)
-        {
-            return new LetterActionAttachment(receivedItem, LetterActionsKeys.FishingRod);
-        }
-
-        private LetterActionAttachment SendReturnScepterLetter(ReceivedItem receivedItem)
-        {
-            return new LetterActionAttachment(receivedItem, LetterActionsKeys.ReturnScepter);
-        }
-
-        private LetterAttachment SendProgressiveFarmingLevel(ReceivedItem receivedItem)
-        {
-            const Skill skill = Skill.Farming;
-            var apItem = $"{skill} Level";
-            var receivedLevels = _archipelago.GetReceivedItemCount(apItem);
-            foreach (var farmer in Game1.getAllFarmers())
-            {
-                var currentLevel = farmer.farmingLevel.Value;
-                var newLevel = currentLevel + 1;
-                newLevel = Math.Max(0, Math.Min(receivedLevels, newLevel));
-                if (newLevel <= currentLevel)
-                {
-                    continue;
-                }
-
-                GiveExperienceToNextLevel(farmer, skill);
-                farmer.farmingLevel.Value = newLevel;
-                farmer.newLevels.Add(new Point((int)skill, newLevel));
-            }
-            return new LetterInformationAttachment(receivedItem);
-        }
-
-        private LetterAttachment SendProgressiveFishingLevel(ReceivedItem receivedItem)
-        {
-            const Skill skill = Skill.Fishing;
-            var apItem = $"{skill} Level";
-            var receivedLevels = _archipelago.GetReceivedItemCount(apItem);
-            foreach (var farmer in Game1.getAllFarmers())
-            {
-                var currentLevel = farmer.fishingLevel.Value;
-                var newLevel = currentLevel + 1;
-                newLevel = Math.Max(0, Math.Min(receivedLevels, newLevel));
-                if (newLevel <= currentLevel)
-                {
-                    continue;
-                }
-
-                GiveExperienceToNextLevel(farmer, skill);
-                farmer.fishingLevel.Value = newLevel;
-                farmer.newLevels.Add(new Point((int)skill, newLevel));
-            }
-            return new LetterInformationAttachment(receivedItem);
-        }
-
-        private LetterAttachment SendProgressiveForagingLevel(ReceivedItem receivedItem)
-        {
-            const Skill skill = Skill.Foraging;
-            var apItem = $"{skill} Level";
-            var receivedLevels = _archipelago.GetReceivedItemCount(apItem);
-            foreach (var farmer in Game1.getAllFarmers())
-            {
-                var currentLevel = farmer.foragingLevel.Value;
-                var newLevel = currentLevel + 1;
-                newLevel = Math.Max(0, Math.Min(receivedLevels, newLevel));
-                if (newLevel <= currentLevel)
-                {
-                    continue;
-                }
-
-                GiveExperienceToNextLevel(farmer, skill);
-                farmer.foragingLevel.Value = newLevel;
-                farmer.newLevels.Add(new Point((int)skill, newLevel));
-            }
-            return new LetterInformationAttachment(receivedItem);
-        }
-
-        private LetterAttachment SendProgressiveMiningLevel(ReceivedItem receivedItem)
-        {
-            const Skill skill = Skill.Mining;
-            var apItem = $"{skill} Level";
-            var receivedLevels = _archipelago.GetReceivedItemCount(apItem);
-            foreach (var farmer in Game1.getAllFarmers())
-            {
-                var currentLevel = farmer.miningLevel.Value;
-                var newLevel = currentLevel + 1;
-                newLevel = Math.Max(0, Math.Min(receivedLevels, newLevel));
-                if (newLevel <= currentLevel)
-                {
-                    continue;
-                }
-
-                GiveExperienceToNextLevel(farmer, skill);
-                farmer.miningLevel.Value = newLevel;
-                farmer.newLevels.Add(new Point((int)skill, newLevel));
-            }
-            return new LetterInformationAttachment(receivedItem);
-        }
-
-        private LetterAttachment SendProgressiveCombatLevel(ReceivedItem receivedItem)
-        {
-            const Skill skill = Skill.Combat;
-            var apItem = $"{skill} Level";
-            var receivedLevels = _archipelago.GetReceivedItemCount(apItem);
-            foreach (var farmer in Game1.getAllFarmers())
-            {
-                var currentLevel = farmer.combatLevel.Value;
-                var newLevel = currentLevel + 1;
-                newLevel = Math.Max(0, Math.Min(receivedLevels, newLevel));
-                if (newLevel <= currentLevel)
-                {
-                    continue;
-                }
-
-                GiveExperienceToNextLevel(farmer, skill);
-                farmer.combatLevel.Value = newLevel;
-                farmer.newLevels.Add(new Point((int)skill, newLevel));
-            }
-            return new LetterInformationAttachment(receivedItem);
-        }
-
-        private LetterAttachment SendFarmingMastery(ReceivedItem receivedItem)
-        {
-            const Skill skill = Skill.Farming;
-            foreach (var farmer in Game1.getAllFarmers())
-            {
-                AddCraftingRecipes(farmer, new[] { "Statue Of Blessings" });
-                GiveItemsToFarmer(farmer, "(W)66");
-                farmer.stats.Increment(StatKeys.Mastery((int)skill), 1);
-            }
-            return new LetterInformationAttachment(receivedItem);
-        }
-
-        private LetterAttachment SendForagingMastery(ReceivedItem receivedItem)
-        {
-            const Skill skill = Skill.Foraging;
-            foreach (var farmer in Game1.getAllFarmers())
-            {
-                AddCraftingRecipes(farmer, new[] { "Mystic Tree Seed", "Treasure Totem" });
-                farmer.stats.Increment(StatKeys.Mastery((int)skill), 1);
-            }
-            return new LetterInformationAttachment(receivedItem);
-        }
-
-        private LetterAttachment SendFishingMastery(ReceivedItem receivedItem)
-        {
-            const Skill skill = Skill.Fishing;
-            foreach (var farmer in Game1.getAllFarmers())
-            {
-                AddCraftingRecipes(farmer, new[] { "Challenge Bait" });
-                GiveItemsToFarmer(farmer, "(T)AdvancedIridiumRod");
-                farmer.stats.Increment(StatKeys.Mastery((int)skill), 1);
-            }
-            return new LetterInformationAttachment(receivedItem);
-        }
-
-        private LetterAttachment SendMiningMastery(ReceivedItem receivedItem)
-        {
-            const Skill skill = Skill.Mining;
-            foreach (var farmer in Game1.getAllFarmers())
-            {
-                AddCraftingRecipes(farmer, new[] { "Statue Of The Dwarf King", "Heavy Furnace" });
-                farmer.stats.Increment(StatKeys.Mastery((int)skill), 1);
-            }
-            return new LetterInformationAttachment(receivedItem);
-        }
-
-        private LetterAttachment SendCombatMastery(ReceivedItem receivedItem)
-        {
-            const Skill skill = Skill.Combat;
-            foreach (var farmer in Game1.getAllFarmers())
-            {
-                AddCraftingRecipes(farmer, new[] { "Anvil", "Mini-Forge" });
-                Game1.player.stats.Set("trinketSlots", 1);
-                farmer.stats.Increment(StatKeys.Mastery((int)skill), 1);
-            }
-            return new LetterInformationAttachment(receivedItem);
-        }
-
-        private void AddCraftingRecipes(Farmer farmer, IEnumerable<string> recipes)
-        {
-            foreach (var recipe in recipes)
-            {
-                farmer.craftingRecipes.Add(recipe, 0);
-            }
-        }
-
-        private void GiveItemsToFarmer(Farmer farmer, string itemId)
-        {
-            if (_archipelago.SlotData.ToolProgression.HasFlag(ToolProgression.Progressive))
-            {
-                return;
-            }
-
-            var item = ItemRegistry.Create(itemId);
-            if (!farmer.addItemToInventoryBool(item))
-            {
-                Game1.createItemDebris(item, Game1.player.getStandingPosition(), 2);
-            }
-        }
-
-        public void GiveExperienceToNextLevel(Farmer farmer, Skill skill)
-        {
-            var experienceForLevelUp = farmer.GetExperienceToNextLevel(skill);
-            farmer.AddExperience(skill, experienceForLevelUp);
         }
     }
 }

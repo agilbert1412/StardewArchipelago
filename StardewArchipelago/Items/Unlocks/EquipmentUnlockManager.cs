@@ -22,13 +22,8 @@ namespace StardewArchipelago.Items.Unlocks
         public const string PROGRESSIVE_BOOTS = "Progressive Footwear";
         public const string PROGRESSIVE_SLINGSHOT = "Progressive Slingshot";
 
-        private ArchipelagoClient _archipelago;
-        private LocationChecker _locationChecker;
-
-        public EquipmentUnlockManager(ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public EquipmentUnlockManager()
         {
-            _archipelago = archipelago;
-            _locationChecker = locationChecker;
         }
 
         public void RegisterUnlocks(IDictionary<string, Func<ReceivedItem, LetterAttachment>> unlocks)

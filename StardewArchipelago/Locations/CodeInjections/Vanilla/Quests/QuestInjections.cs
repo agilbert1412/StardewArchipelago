@@ -313,7 +313,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
 
         private static void AddWeightedFishing(int groupNumber, Hint[] hints, List<string> remainingHelpWantedQuests)
         {
-            if (!_archipelago.HasReceivedItem(VanillaUnlockManager.PROGRESSIVE_FISHING_ROD))
+            if (!_archipelago.HasReceivedItem(ToolUnlockManager.PROGRESSIVE_FISHING_ROD))
             {
                 return;
             }
