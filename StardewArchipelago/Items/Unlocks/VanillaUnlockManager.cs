@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
-using StardewArchipelago.Extensions;
 using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Locations;
-using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewValley;
-using StardewValley.Constants;
 using StardewValley.Locations;
 
 namespace StardewArchipelago.Items.Unlocks

@@ -1,6 +1,5 @@
 using FluentAssertions;
 using StardewArchipelago.GameModifications.CodeInjections.Television;
-using StardewArchipelago.Locations.CodeInjections.Vanilla;
 
 namespace StardewArchipelagoTests
 {

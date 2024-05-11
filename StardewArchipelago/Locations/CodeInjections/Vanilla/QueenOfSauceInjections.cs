@@ -6,7 +6,6 @@ using StardewArchipelago.Constants.Locations;
 using StardewArchipelago.Extensions;
 using StardewArchipelago.GameModifications.CodeInjections.Television;
 using StardewArchipelago.GameModifications.Seasons;
-using StardewArchipelago.Serialization;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;

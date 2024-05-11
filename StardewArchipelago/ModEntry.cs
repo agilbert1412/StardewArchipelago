@@ -29,7 +29,6 @@ using StardewArchipelago.Stardew.NameMapping;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
-using StardewArchipelago.Integrations.GenericModConfigMenu;
 using StardewValley.Delegates;
 using StardewValley.Internal;
 using StardewValley.Triggers;

@@ -11,7 +11,6 @@ using StardewArchipelago.Locations.Festival;
 using StardewArchipelago.Serialization;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
-using StardewValley.Locations;
 
 namespace StardewArchipelago.Locations.CodeInjections.Initializers
 {

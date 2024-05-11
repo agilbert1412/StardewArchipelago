@@ -1,19 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Xna.Framework.Graphics;
-using Netcode;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Bundles;
-using StardewArchipelago.Constants;
-using StardewArchipelago.Serialization;
 using StardewModdingAPI;
 using StardewValley;
-using StardewValley.BellsAndWhistles;
-using StardewValley.Characters;
 using StardewValley.Events;
-using StardewValley.Menus;
-using Bundle = StardewValley.Menus.Bundle;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
