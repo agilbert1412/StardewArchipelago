@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.Items.Mail;
+using StardewArchipelago.Items.Unlocks.Modded;
+using StardewArchipelago.Items.Unlocks.Vanilla;
 using StardewArchipelago.Locations;
 
 namespace StardewArchipelago.Items.Unlocks
@@ -17,17 +19,10 @@ namespace StardewArchipelago.Items.Unlocks
             _unlockables = new Dictionary<string, Func<ReceivedItem, LetterAttachment>>();
             _specificUnlockManagers = new List<IUnlockManager>();
             _specificUnlockManagers.Add(new VanillaUnlockManager(archipelago, locationChecker));
-            if (archipelago.SlotData.Mods.HasModdedSkill())
+
+            if (archipelago.SlotData.Mods.IsModded)
             {
-                _specificUnlockManagers.Add(new ModSkillUnlockManager());
-            }
-            if (archipelago.SlotData.Mods.HasMod(ModNames.MAGIC))
-            {
-                _specificUnlockManagers.Add(new MagicUnlockManager());
-            }
-            if (archipelago.SlotData.Mods.HasMod(ModNames.SVE))
-            {
-                _specificUnlockManagers.Add(new SVEUnlockManager());
+                _specificUnlockManagers.Add(new ModUnlockManager(archipelago));
             }
 
             RegisterUnlocks();
