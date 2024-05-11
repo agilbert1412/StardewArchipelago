@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Locations;
@@ -117,7 +118,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private static void CallBaseResetLocalState(LibraryMuseum museum)
         {
             // base.resetLocalState();
-            var gameLocationResetLocalStateMethod = typeof(GameLocation).GetMethod("resetLocalState");
+            var gameLocationResetLocalStateMethod = typeof(GameLocation).GetMethod("resetLocalState", BindingFlags.Instance | BindingFlags.NonPublic);
             var functionPointer = gameLocationResetLocalStateMethod.MethodHandle.GetFunctionPointer();
             var baseResetLocalState = (Action)Activator.CreateInstance(typeof(Action), museum, functionPointer);
             baseResetLocalState();

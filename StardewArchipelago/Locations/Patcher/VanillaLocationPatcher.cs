@@ -1110,7 +1110,7 @@ namespace StardewArchipelago.Locations.Patcher
         {
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Object), "readBook"),
-                postfix: new HarmonyMethod(typeof(BookInjections), nameof(BookInjections.ReadBook_Booksanity_Prefix))
+                prefix: new HarmonyMethod(typeof(BookInjections), nameof(BookInjections.ReadBook_Booksanity_Prefix))
             );
 
             if (_archipelago.SlotData.Booksanity < Booksanity.All)

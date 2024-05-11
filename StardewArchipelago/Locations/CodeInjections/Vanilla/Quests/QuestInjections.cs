@@ -59,7 +59,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
                     return true; // run original logic
                 }
 
-                if (__instance.id.Value.Equals(DESERT_FESTIVAL_FISHING_QUEST_ID, StringComparison.InvariantCultureIgnoreCase))
+                if (__instance.id.Value != null && __instance.id.Value.Equals(DESERT_FESTIVAL_FISHING_QUEST_ID, StringComparison.InvariantCultureIgnoreCase))
                 {
                     // This one is a quest for some reason
                     _locationChecker.AddCheckedLocation(FestivalLocationNames.WILLYS_CHALLENGE);
