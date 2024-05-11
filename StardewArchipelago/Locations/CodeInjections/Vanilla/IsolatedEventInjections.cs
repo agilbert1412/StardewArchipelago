@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Vanilla;
-using StardewArchipelago.Items.Unlocks;
+using StardewArchipelago.Items.Unlocks.Vanilla;
 using StardewArchipelago.Stardew.Ids.Vanilla;
 using StardewModdingAPI;
 using StardewValley;

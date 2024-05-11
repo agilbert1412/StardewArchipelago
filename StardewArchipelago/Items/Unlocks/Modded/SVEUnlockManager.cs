@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Items.Mail;
 
-namespace StardewArchipelago.Items.Unlocks
+namespace StardewArchipelago.Items.Unlocks.Modded
 {
     public class SVEUnlockManager : IUnlockManager
     {

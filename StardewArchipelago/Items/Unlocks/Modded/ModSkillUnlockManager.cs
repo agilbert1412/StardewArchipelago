@@ -8,7 +8,7 @@ using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewValley;
 
-namespace StardewArchipelago.Items.Unlocks
+namespace StardewArchipelago.Items.Unlocks.Modded
 {
     public class ModSkillUnlockManager : IUnlockManager
     {

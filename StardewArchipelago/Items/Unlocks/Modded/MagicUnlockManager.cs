@@ -5,7 +5,7 @@ using StardewArchipelago.Archipelago;
 using StardewArchipelago.Items.Mail;
 using StardewValley;
 
-namespace StardewArchipelago.Items.Unlocks
+namespace StardewArchipelago.Items.Unlocks.Modded
 {
     public class MagicUnlockManager : IUnlockManager
     {

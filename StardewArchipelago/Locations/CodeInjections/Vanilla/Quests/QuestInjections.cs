@@ -8,7 +8,7 @@ using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.Constants.Vanilla;
-using StardewArchipelago.Items.Unlocks;
+using StardewArchipelago.Items.Unlocks.Vanilla;
 using StardewArchipelago.Locations.Festival;
 using StardewArchipelago.Stardew.Ids.Vanilla;
 using StardewModdingAPI;

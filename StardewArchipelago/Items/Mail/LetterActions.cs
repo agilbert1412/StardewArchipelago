@@ -7,7 +7,7 @@ using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Items.Traps;
-using StardewArchipelago.Items.Unlocks;
+using StardewArchipelago.Items.Unlocks.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
 using StardewArchipelago.Stardew;
 using StardewArchipelago.Stardew.NameMapping;

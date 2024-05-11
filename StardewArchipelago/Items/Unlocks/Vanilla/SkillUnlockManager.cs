@@ -8,7 +8,7 @@ using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewValley;
 using StardewValley.Constants;
 
-namespace StardewArchipelago.Items.Unlocks
+namespace StardewArchipelago.Items.Unlocks.Vanilla
 {
     public class SkillUnlockManager : IUnlockManager
     {

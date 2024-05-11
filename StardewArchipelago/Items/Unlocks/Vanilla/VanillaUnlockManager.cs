@@ -7,7 +7,7 @@ using StardewArchipelago.Locations;
 using StardewValley;
 using StardewValley.Locations;
 
-namespace StardewArchipelago.Items.Unlocks
+namespace StardewArchipelago.Items.Unlocks.Vanilla
 {
     public class VanillaUnlockManager : IUnlockManager
     {

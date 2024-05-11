@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Items.Mail;
 
-namespace StardewArchipelago.Items.Unlocks
+namespace StardewArchipelago.Items.Unlocks.Vanilla
 {
     public class EquipmentUnlockManager : IUnlockManager
     {
@@ -22,7 +22,7 @@ namespace StardewArchipelago.Items.Unlocks
         {
             RegisterEquipment(unlocks);
         }
-        
+
         private void RegisterEquipment(IDictionary<string, Func<ReceivedItem, LetterAttachment>> unlocks)
         {
             unlocks.Add(PROGRESSIVE_WEAPON, SendProgressiveWeaponLetter);

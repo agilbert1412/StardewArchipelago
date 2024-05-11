@@ -4,7 +4,7 @@ using StardewArchipelago.Archipelago;
 using StardewArchipelago.Items.Mail;
 using StardewValley;
 
-namespace StardewArchipelago.Items.Unlocks
+namespace StardewArchipelago.Items.Unlocks.Vanilla
 {
     public class ToolUnlockManager : IUnlockManager
     {
