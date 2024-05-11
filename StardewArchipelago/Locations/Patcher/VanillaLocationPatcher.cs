@@ -327,7 +327,7 @@ namespace StardewArchipelago.Locations.Patcher
             );
 
             _harmony.Patch(
-                original: AccessTools.PropertyGetter(typeof(MasteryTrackerMenu), nameof(MasteryTrackerMenu.hasCompletedAllMasteryPlaques)),
+                original: AccessTools.Method(typeof(MasteryTrackerMenu), nameof(MasteryTrackerMenu.hasCompletedAllMasteryPlaques)),
                 prefix: new HarmonyMethod(typeof(MasteriesInjections), nameof(MasteriesInjections.HasCompletedAllMasteryPlaques_RelyOnSentChecks_Prefix))
             );
         }
