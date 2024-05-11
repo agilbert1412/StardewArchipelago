@@ -38,58 +38,49 @@ namespace StardewArchipelago.Items.Unlocks
         public const string AURORA_EVENT = "658059254";
         public const string MORGAN_EVENT = "658078924";
 
-        private Dictionary<string, Func<ReceivedItem, LetterAttachment>> _unlockables;
-
-        public bool IsUnlock(string unlockName)
-        {
-            return _unlockables.ContainsKey(unlockName);
-        }
-
-        public LetterAttachment PerformUnlockAsLetter(ReceivedItem unlock)
-        {
-            return _unlockables[unlock.ItemName](unlock);
-        }
-
         public SVEUnlockManager()
         {
-            _unlockables = new Dictionary<string, Func<ReceivedItem, LetterAttachment>>();
-            RegisterSVEUniqueItems();
-            RegisterPlayerWarps();
-            RegisterSVEPlayerImprovement();
-            RegisterSVEVillagerInvitations();
         }
 
-        private void RegisterSVEPlayerImprovement()
+        public void RegisterUnlocks(IDictionary<string, Func<ReceivedItem, LetterAttachment>> unlocks)
         {
-            _unlockables.Add(MARLON_BOAT_PADDLE_AP_NAME, SendMarlonBoat);
-            _unlockables.Add(VOID_SOUL_AP_NAME, SendVoidSoul);
-            _unlockables.Add(IRIDIUM_BOMB_AP_NAME, SendIridiumBomb);
-            _unlockables.Add(KITTYFISH_SPELL_AP_NAME, SendKittyfishSpell);
-            _unlockables.Add(GRANDPA_SHED_AP_NAME, SendGrandpaShed);
+            RegisterSVEUniqueItems(unlocks);
+            RegisterPlayerWarps(unlocks);
+            RegisterSVEPlayerImprovement(unlocks);
+            RegisterSVEVillagerInvitations(unlocks);
         }
 
-        private void RegisterSVEVillagerInvitations()
+        private void RegisterSVEPlayerImprovement(IDictionary<string, Func<ReceivedItem, LetterAttachment>> unlocks)
         {
-            _unlockables.Add(SCARLETT_JOB_OFFER, SendScarlettJobOffer);
-            _unlockables.Add(AURORA_VINEYARD_TABLET_AP_NAME, SendJunimoNote);
-            _unlockables.Add(MORGAN_SCHOOLING, SendAcceptanceLetter);
+            unlocks.Add(MARLON_BOAT_PADDLE_AP_NAME, SendMarlonBoat);
+            unlocks.Add(VOID_SOUL_AP_NAME, SendVoidSoul);
+            unlocks.Add(IRIDIUM_BOMB_AP_NAME, SendIridiumBomb);
+            unlocks.Add(KITTYFISH_SPELL_AP_NAME, SendKittyfishSpell);
+            unlocks.Add(GRANDPA_SHED_AP_NAME, SendGrandpaShed);
         }
 
-        private void RegisterPlayerWarps()
+        private void RegisterSVEVillagerInvitations(IDictionary<string, Func<ReceivedItem, LetterAttachment>> unlocks)
         {
-            _unlockables.Add(GUILD_RUNES_AP_NAME, SendGuildRunes);
-            _unlockables.Add(SPRITE_RUNES_AP_NAME, SendSpriteSpringRunes);
-            _unlockables.Add(JUNIMO_RUNES_AP_NAME, SendJunimoRunes);
-            _unlockables.Add(WIZARD_RUNES_AP_NAME, SendWizardRunes);
-            _unlockables.Add(OUTPOST_RUNES_AP_NAME, SendOutpostRunes);
-            _unlockables.Add(AURORA_RUNES_AP_NAME, SendAuroraRunes);
-            _unlockables.Add(FARM_RUNES_AP_NAME, SendFarmRunes);
-            _unlockables.Add(FABLE_REEF_AP_NAME, SendLancePortal);
+            unlocks.Add(SCARLETT_JOB_OFFER, SendScarlettJobOffer);
+            unlocks.Add(AURORA_VINEYARD_TABLET_AP_NAME, SendJunimoNote);
+            unlocks.Add(MORGAN_SCHOOLING, SendAcceptanceLetter);
         }
 
-        private void RegisterSVEUniqueItems()
+        private void RegisterPlayerWarps(IDictionary<string, Func<ReceivedItem, LetterAttachment>> unlocks)
         {
-            _unlockables.Add(DIAMOND_WAND_AP_NAME, SendDiamondWandLetter);
+            unlocks.Add(GUILD_RUNES_AP_NAME, SendGuildRunes);
+            unlocks.Add(SPRITE_RUNES_AP_NAME, SendSpriteSpringRunes);
+            unlocks.Add(JUNIMO_RUNES_AP_NAME, SendJunimoRunes);
+            unlocks.Add(WIZARD_RUNES_AP_NAME, SendWizardRunes);
+            unlocks.Add(OUTPOST_RUNES_AP_NAME, SendOutpostRunes);
+            unlocks.Add(AURORA_RUNES_AP_NAME, SendAuroraRunes);
+            unlocks.Add(FARM_RUNES_AP_NAME, SendFarmRunes);
+            unlocks.Add(FABLE_REEF_AP_NAME, SendLancePortal);
+        }
+
+        private void RegisterSVEUniqueItems(IDictionary<string, Func<ReceivedItem, LetterAttachment>> unlocks)
+        {
+            unlocks.Add(DIAMOND_WAND_AP_NAME, SendDiamondWandLetter);
         }
 
         private LetterVanillaAttachment SendMarlonBoat(ReceivedItem receivedItem)

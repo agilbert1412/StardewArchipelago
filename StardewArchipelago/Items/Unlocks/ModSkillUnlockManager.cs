@@ -12,27 +12,18 @@ namespace StardewArchipelago.Items.Unlocks
 {
     public class ModSkillUnlockManager : IUnlockManager
     {
-        private Dictionary<string, Func<ReceivedItem, LetterAttachment>> _unlockables;
-
         public ModSkillUnlockManager()
         {
-            _unlockables = new Dictionary<string, Func<ReceivedItem, LetterAttachment>>();
-            _unlockables.Add($"Magic Level", SendProgressiveMagicLevel);
-            _unlockables.Add($"Binning Level", SendProgressiveBinningLevel);
-            _unlockables.Add($"Cooking Level", SendProgressiveCookingLevel);
-            _unlockables.Add($"Luck Level", SendProgressiveLuckLevel);
-            _unlockables.Add($"Archaeology Level", SendProgressiveArchaeologyLevel);
-            _unlockables.Add($"Socializing Level", SendProgressiveSocializingLevel);
         }
 
-        public bool IsUnlock(string unlockName)
+        public void RegisterUnlocks(IDictionary<string, Func<ReceivedItem, LetterAttachment>> unlocks)
         {
-            return _unlockables.ContainsKey(unlockName);
-        }
-
-        public LetterAttachment PerformUnlockAsLetter(ReceivedItem unlock)
-        {
-            return _unlockables[unlock.ItemName](unlock);
+            unlocks.Add($"Magic Level", SendProgressiveMagicLevel);
+            unlocks.Add($"Binning Level", SendProgressiveBinningLevel);
+            unlocks.Add($"Cooking Level", SendProgressiveCookingLevel);
+            unlocks.Add($"Luck Level", SendProgressiveLuckLevel);
+            unlocks.Add($"Archaeology Level", SendProgressiveArchaeologyLevel);
+            unlocks.Add($"Socializing Level", SendProgressiveSocializingLevel);
         }
 
         /*public LetterActionAttachment SendExcalibur(ReceivedItem receivedItem)

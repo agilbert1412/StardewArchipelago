@@ -39,147 +39,128 @@ namespace StardewArchipelago.Items.Unlocks
 
         private ArchipelagoClient _archipelago;
         private LocationChecker _locationChecker;
-        private Dictionary<string, Func<ReceivedItem, LetterAttachment>> _unlockables;
 
         public VanillaUnlockManager(ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             _archipelago = archipelago;
             _locationChecker = locationChecker;
-            _unlockables = new Dictionary<string, Func<ReceivedItem, LetterAttachment>>();
-            RegisterCommunityCenterRepairs();
-            RegisterRaccoons();
-            RegisterPlayerSkills();
-            RegisterPlayerImprovement();
-            RegisterProgressiveTools();
-            RegisterMineElevators();
-            RegisterUniqueItems();
-            RegisterIsolatedEventsItems();
-            RegisterGingerIslandRepairs();
-            RegisterSpecialItems();
-            RegisterEquipment();
         }
 
-        public bool IsUnlock(string unlockName)
+        public void RegisterUnlocks(IDictionary<string, Func<ReceivedItem, LetterAttachment>> unlocks)
         {
-            return _unlockables.ContainsKey(unlockName);
+            RegisterCommunityCenterRepairs(unlocks);
+            RegisterRaccoons(unlocks);
+            RegisterPlayerSkills(unlocks);
+            RegisterPlayerImprovement(unlocks);
+            RegisterProgressiveTools(unlocks);
+            RegisterMineElevators(unlocks);
+            RegisterUniqueItems(unlocks);
+            RegisterIsolatedEventsItems(unlocks);
+            RegisterGingerIslandRepairs(unlocks);
+            RegisterSpecialItems(unlocks);
         }
 
-        public LetterAttachment PerformUnlockAsLetter(ReceivedItem unlock)
+        private void RegisterCommunityCenterRepairs(IDictionary<string, Func<ReceivedItem, LetterAttachment>> unlocks)
         {
-            return _unlockables[unlock.ItemName](unlock);
+            unlocks.Add("Bridge Repair", RepairBridge);
+            unlocks.Add("Greenhouse", RepairGreenHouse);
+            unlocks.Add("Glittering Boulder Removed", RemoveGlitteringBoulder);
+            unlocks.Add("Minecarts Repair", RepairMinecarts);
+            unlocks.Add("Bus Repair", RepairBus);
         }
 
-        private void RegisterCommunityCenterRepairs()
+        private void RegisterRaccoons(IDictionary<string, Func<ReceivedItem, LetterAttachment>> unlocks)
         {
-            _unlockables.Add("Bridge Repair", RepairBridge);
-            _unlockables.Add("Greenhouse", RepairGreenHouse);
-            _unlockables.Add("Glittering Boulder Removed", RemoveGlitteringBoulder);
-            _unlockables.Add("Minecarts Repair", RepairMinecarts);
-            _unlockables.Add("Bus Repair", RepairBus);
+            unlocks.Add(APItem.PROGRESSIVE_RACCOON, SendProgressiveRaccoon);
         }
 
-        private void RegisterRaccoons()
+        private void RegisterPlayerImprovement(IDictionary<string, Func<ReceivedItem, LetterAttachment>> unlocks)
         {
-            _unlockables.Add(APItem.PROGRESSIVE_RACCOON, SendProgressiveRaccoon);
+            unlocks.Add("Progressive Backpack", SendProgressiveBackpackLetter);
+            unlocks.Add("Stardrop", SendStardropLetter);
+            unlocks.Add("Dwarvish Translation Guide", SendDwarvishTranslationGuideLetter);
+            unlocks.Add("Skull Key", SendSkullKeyLetter);
+            unlocks.Add("Rusty Key", SendRustyKeyLetter);
+
+            unlocks.Add("Club Card", SendClubCardLetter);
+            unlocks.Add("Magnifying Glass", SendMagnifyingGlassLetter);
+            unlocks.Add("Iridium Snake Milk", SendIridiumSnakeMilkLetter);
+            unlocks.Add("Dark Talisman", SendDarkTalismanLetter);
+            unlocks.Add("Key To The Town", SendKeyToTheTownLetter);
         }
 
-        private void RegisterPlayerImprovement()
+        private void RegisterPlayerSkills(IDictionary<string, Func<ReceivedItem, LetterAttachment>> unlocks)
         {
-            _unlockables.Add("Progressive Backpack", SendProgressiveBackpackLetter);
-            _unlockables.Add("Stardrop", SendStardropLetter);
-            _unlockables.Add("Dwarvish Translation Guide", SendDwarvishTranslationGuideLetter);
-            _unlockables.Add("Skull Key", SendSkullKeyLetter);
-            _unlockables.Add("Rusty Key", SendRustyKeyLetter);
-
-            _unlockables.Add("Club Card", SendClubCardLetter);
-            _unlockables.Add("Magnifying Glass", SendMagnifyingGlassLetter);
-            _unlockables.Add("Iridium Snake Milk", SendIridiumSnakeMilkLetter);
-            _unlockables.Add("Dark Talisman", SendDarkTalismanLetter);
-            _unlockables.Add("Key To The Town", SendKeyToTheTownLetter);
+            unlocks.Add($"{Skill.Farming} Level", SendProgressiveFarmingLevel);
+            unlocks.Add($"{Skill.Fishing} Level", SendProgressiveFishingLevel);
+            unlocks.Add($"{Skill.Foraging} Level", SendProgressiveForagingLevel);
+            unlocks.Add($"{Skill.Mining} Level", SendProgressiveMiningLevel);
+            unlocks.Add($"{Skill.Combat} Level", SendProgressiveCombatLevel);
+            RegisterPlayerMasteries(unlocks);
         }
 
-        private void RegisterPlayerSkills()
+        private void RegisterPlayerMasteries(IDictionary<string, Func<ReceivedItem, LetterAttachment>> unlocks)
         {
-            _unlockables.Add($"{Skill.Farming} Level", SendProgressiveFarmingLevel);
-            _unlockables.Add($"{Skill.Fishing} Level", SendProgressiveFishingLevel);
-            _unlockables.Add($"{Skill.Foraging} Level", SendProgressiveForagingLevel);
-            _unlockables.Add($"{Skill.Mining} Level", SendProgressiveMiningLevel);
-            _unlockables.Add($"{Skill.Combat} Level", SendProgressiveCombatLevel);
-            RegisterPlayerMasteries();
+            unlocks.Add($"{Skill.Farming} Mastery", SendFarmingMastery);
+            unlocks.Add($"{Skill.Fishing} Mastery", SendFishingMastery);
+            unlocks.Add($"{Skill.Foraging} Mastery", SendForagingMastery);
+            unlocks.Add($"{Skill.Mining} Mastery", SendMiningMastery);
+            unlocks.Add($"{Skill.Combat} Mastery", SendCombatMastery);
         }
 
-        private void RegisterPlayerMasteries()
+        private void RegisterProgressiveTools(IDictionary<string, Func<ReceivedItem, LetterAttachment>> unlocks)
         {
-            _unlockables.Add($"{Skill.Farming} Mastery", SendFarmingMastery);
-            _unlockables.Add($"{Skill.Fishing} Mastery", SendFishingMastery);
-            _unlockables.Add($"{Skill.Foraging} Mastery", SendForagingMastery);
-            _unlockables.Add($"{Skill.Mining} Mastery", SendMiningMastery);
-            _unlockables.Add($"{Skill.Combat} Mastery", SendCombatMastery);
+            unlocks.Add($"{PROGRESSIVE_TOOL_AP_PREFIX}Axe", SendProgressiveAxeLetter);
+            unlocks.Add($"{PROGRESSIVE_TOOL_AP_PREFIX}Pickaxe", SendProgressivePickaxeLetter);
+            unlocks.Add($"{PROGRESSIVE_TOOL_AP_PREFIX}Hoe", SendProgressiveHoeLetter);
+            unlocks.Add($"{PROGRESSIVE_TOOL_AP_PREFIX}Watering Can", SendProgressiveWateringCanLetter);
+            unlocks.Add($"{PROGRESSIVE_TOOL_AP_PREFIX}Trash Can", SendProgressiveTrashCanLetter);
+            unlocks.Add($"{PROGRESSIVE_TOOL_AP_PREFIX}Pan", SendProgressivePanLetter);
+            unlocks.Add(PROGRESSIVE_FISHING_ROD, SendProgressiveFishingRodLetter);
+            unlocks.Add(RETURN_SCEPTER, SendReturnScepterLetter);
         }
 
-        private void RegisterProgressiveTools()
+        private void RegisterUniqueItems(IDictionary<string, Func<ReceivedItem, LetterAttachment>> unlocks)
         {
-            _unlockables.Add($"{PROGRESSIVE_TOOL_AP_PREFIX}Axe", SendProgressiveAxeLetter);
-            _unlockables.Add($"{PROGRESSIVE_TOOL_AP_PREFIX}Pickaxe", SendProgressivePickaxeLetter);
-            _unlockables.Add($"{PROGRESSIVE_TOOL_AP_PREFIX}Hoe", SendProgressiveHoeLetter);
-            _unlockables.Add($"{PROGRESSIVE_TOOL_AP_PREFIX}Watering Can", SendProgressiveWateringCanLetter);
-            _unlockables.Add($"{PROGRESSIVE_TOOL_AP_PREFIX}Trash Can", SendProgressiveTrashCanLetter);
-            _unlockables.Add($"{PROGRESSIVE_TOOL_AP_PREFIX}Pan", SendProgressivePanLetter);
-            _unlockables.Add(PROGRESSIVE_FISHING_ROD, SendProgressiveFishingRodLetter);
-            _unlockables.Add(RETURN_SCEPTER, SendReturnScepterLetter);
+            unlocks.Add(GOLDEN_SCYTHE, SendGoldenScytheLetter); // Deprecated, but kept in case of start inventory
+            unlocks.Add(PROGRESSIVE_SCYTHE, SendProgressiveScytheLetter);
+            unlocks.Add(PIERRE_STOCKLIST, SendPierreStocklistLetter);
         }
 
-        private void RegisterUniqueItems()
+        private void RegisterIsolatedEventsItems(IDictionary<string, Func<ReceivedItem, LetterAttachment>> unlocks)
         {
-            _unlockables.Add(GOLDEN_SCYTHE, SendGoldenScytheLetter); // Deprecated, but kept in case of start inventory
-            _unlockables.Add(PROGRESSIVE_SCYTHE, SendProgressiveScytheLetter);
-            _unlockables.Add(PIERRE_STOCKLIST, SendPierreStocklistLetter);
+            unlocks.Add(BEACH_BRIDGE, SendBeachBridgeLetter);
+            unlocks.Add(FRUIT_BATS, SendFruitBatsLetter);
+            unlocks.Add(MUSHROOM_BOXES, SendMushroomBoxesLetter);
         }
 
-        private void RegisterIsolatedEventsItems()
+        private void RegisterGingerIslandRepairs(IDictionary<string, Func<ReceivedItem, LetterAttachment>> unlocks)
         {
-            _unlockables.Add(BEACH_BRIDGE, SendBeachBridgeLetter);
-            _unlockables.Add(FRUIT_BATS, SendFruitBatsLetter);
-            _unlockables.Add(MUSHROOM_BOXES, SendMushroomBoxesLetter);
+            unlocks.Add("Boat Repair", RepairBoat);
+            unlocks.Add("Island North Turtle", GetLeoTrustAndRemoveNorthernTurtle);
+            unlocks.Add("Island West Turtle", RemoveWesternTurtle);
+            unlocks.Add("Dig Site Bridge", RepairDigSiteBridge);
+            unlocks.Add("Island Trader", RestoreIslandTrader);
+            unlocks.Add("Island Resort", RepairResort);
+            unlocks.Add("Farm Obelisk", CreateFarmObelisk);
+            unlocks.Add(ISLAND_MAILBOX, RepairIslandMailbox);
+            unlocks.Add(ISLAND_FARMHOUSE, RepairIslandFarmhouse);
+            unlocks.Add("Parrot Express", RepairParrotExpress);
+            unlocks.Add("Volcano Bridge", ConstructVolcanoBridge);
+            unlocks.Add("Volcano Exit Shortcut", OpenVolcanoExitShortcut);
+            unlocks.Add("Open Professor Snail Cave", OpenProfessorSnailCave);
+            unlocks.Add(TREEHOUSE, ConstructTreeHouse);
         }
 
-        private void RegisterGingerIslandRepairs()
+        private void RegisterSpecialItems(IDictionary<string, Func<ReceivedItem, LetterAttachment>> unlocks)
         {
-            _unlockables.Add("Boat Repair", RepairBoat);
-            _unlockables.Add("Island North Turtle", GetLeoTrustAndRemoveNorthernTurtle);
-            _unlockables.Add("Island West Turtle", RemoveWesternTurtle);
-            _unlockables.Add("Dig Site Bridge", RepairDigSiteBridge);
-            _unlockables.Add("Island Trader", RestoreIslandTrader);
-            _unlockables.Add("Island Resort", RepairResort);
-            _unlockables.Add("Farm Obelisk", CreateFarmObelisk);
-            _unlockables.Add(ISLAND_MAILBOX, RepairIslandMailbox);
-            _unlockables.Add(ISLAND_FARMHOUSE, RepairIslandFarmhouse);
-            _unlockables.Add("Parrot Express", RepairParrotExpress);
-            _unlockables.Add("Volcano Bridge", ConstructVolcanoBridge);
-            _unlockables.Add("Volcano Exit Shortcut", OpenVolcanoExitShortcut);
-            _unlockables.Add("Open Professor Snail Cave", OpenProfessorSnailCave);
-            _unlockables.Add(TREEHOUSE, ConstructTreeHouse);
+            unlocks.Add("Ugly Baby", GetNewBabyLetter);
+            unlocks.Add("Cute Baby", GetNewBabyLetter);
         }
 
-        private void RegisterSpecialItems()
+        private void RegisterMineElevators(IDictionary<string, Func<ReceivedItem, LetterAttachment>> unlocks)
         {
-            _unlockables.Add("Ugly Baby", GetNewBabyLetter);
-            _unlockables.Add("Cute Baby", GetNewBabyLetter);
-        }
-
-        private void RegisterMineElevators()
-        {
-            _unlockables.Add(PROGRESSIVE_MINE_ELEVATOR, SendProgressiveMineElevatorLetter);
-        }
-
-        private void RegisterEquipment()
-        {
-            _unlockables.Add(PROGRESSIVE_WEAPON, SendProgressiveWeaponLetter);
-            _unlockables.Add(PROGRESSIVE_SWORD, SendProgressiveSwordLetter);
-            _unlockables.Add(PROGRESSIVE_CLUB, SendProgressiveClubLetter);
-            _unlockables.Add(PROGRESSIVE_DAGGER, SendProgressiveDaggerLetter);
-            _unlockables.Add(PROGRESSIVE_BOOTS, SendProgressiveBootsLetter);
-            _unlockables.Add(PROGRESSIVE_SLINGSHOT, SendProgressiveSlingshotLetter);
+            unlocks.Add(PROGRESSIVE_MINE_ELEVATOR, SendProgressiveMineElevatorLetter);
         }
 
         private LetterVanillaAttachment RepairBridge(ReceivedItem receivedItem)
@@ -635,36 +616,6 @@ namespace StardewArchipelago.Items.Unlocks
         {
             var experienceForLevelUp = farmer.GetExperienceToNextLevel(skill);
             farmer.AddExperience(skill, experienceForLevelUp);
-        }
-
-        private LetterActionAttachment SendProgressiveWeaponLetter(ReceivedItem receivedItem)
-        {
-            return new LetterActionAttachment(receivedItem, LetterActionsKeys.GiveWeapon);
-        }
-
-        private LetterActionAttachment SendProgressiveSwordLetter(ReceivedItem receivedItem)
-        {
-            return new LetterActionAttachment(receivedItem, LetterActionsKeys.GiveSword);
-        }
-
-        private LetterActionAttachment SendProgressiveClubLetter(ReceivedItem receivedItem)
-        {
-            return new LetterActionAttachment(receivedItem, LetterActionsKeys.GiveClub);
-        }
-
-        private LetterActionAttachment SendProgressiveDaggerLetter(ReceivedItem receivedItem)
-        {
-            return new LetterActionAttachment(receivedItem, LetterActionsKeys.GiveDagger);
-        }
-
-        private LetterActionAttachment SendProgressiveBootsLetter(ReceivedItem receivedItem)
-        {
-            return new LetterActionAttachment(receivedItem, LetterActionsKeys.GiveProgressiveBoots);
-        }
-
-        private LetterActionAttachment SendProgressiveSlingshotLetter(ReceivedItem receivedItem)
-        {
-            return new LetterActionAttachment(receivedItem, LetterActionsKeys.GiveProgressiveSlingshot);
         }
     }
 }

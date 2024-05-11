@@ -31,42 +31,33 @@ namespace StardewArchipelago.Items.Unlocks
         public const string SPELL_SPIRIT_AP = "Spell: Spirit";
         public const string SPELL_REWIND_AP = "Spell: Rewind";
 
-        private Dictionary<string, Func<ReceivedItem, LetterAttachment>> _unlockables;
-
         public MagicUnlockManager()
         {
-            _unlockables = new Dictionary<string, Func<ReceivedItem, LetterAttachment>>();
-            _unlockables.Add(SPELL_CLEARDEBRIS_AP, SendClearDebrisSpell);
-            _unlockables.Add(SPELL_TILL_AP, SendTillSpell);
-            _unlockables.Add(SPELL_WATER_AP, SendWaterSpell);
-            _unlockables.Add(SPELL_BLINK_AP, SendBlinkSpell);
-            _unlockables.Add(SPELL_EVAC_AP, SendEvacSpell);
-            _unlockables.Add(SPELL_HEAL_AP, SendHealSpell);
-            _unlockables.Add(SPELL_HASTE_AP, SendHasteSpell);
-            _unlockables.Add(SPELL_BUFF_AP, SendBuffSpell);
-            _unlockables.Add(SPELL_DESCEND_AP, SendDescendSpell);
-            _unlockables.Add(SPELL_FROSTBITE_AP, SendFrostbiteSpell);
-            _unlockables.Add(SPELL_FIREBALL_AP, SendFireballSpell);
-            _unlockables.Add(SPELL_TELEPORT_AP, SendTeleportSpell);
-            _unlockables.Add(SPELL_SHOCKWAVE_AP, SendShockwaveSpell);
-            _unlockables.Add(SPELL_TENDRILS_AP, SendTendrilsSpell);
-            _unlockables.Add(SPELL_LANTERN_AP, SendLanternSpell);
-            _unlockables.Add(SPELL_PHOTOSYNTHESIS_AP, SendPhotosynthesisSpell);
-            _unlockables.Add(SPELL_METEOR_AP, SendMeteorSpell);
-            _unlockables.Add(SPELL_BLOODMANA_AP, SendBloodmanaSpell);
-            _unlockables.Add(SPELL_LUCKSTEAL_AP, SendLuckstealSpell);
-            _unlockables.Add(SPELL_SPIRIT_AP, SendSpiritSpell);
-            _unlockables.Add(SPELL_REWIND_AP, SendRewindSpell);
         }
 
-        public bool IsUnlock(string unlockName)
+        public void RegisterUnlocks(IDictionary<string, Func<ReceivedItem, LetterAttachment>> unlocks)
         {
-            return _unlockables.ContainsKey(unlockName);
-        }
-
-        public LetterAttachment PerformUnlockAsLetter(ReceivedItem unlock)
-        {
-            return _unlockables[unlock.ItemName](unlock);
+            unlocks.Add(SPELL_CLEARDEBRIS_AP, SendClearDebrisSpell);
+            unlocks.Add(SPELL_TILL_AP, SendTillSpell);
+            unlocks.Add(SPELL_WATER_AP, SendWaterSpell);
+            unlocks.Add(SPELL_BLINK_AP, SendBlinkSpell);
+            unlocks.Add(SPELL_EVAC_AP, SendEvacSpell);
+            unlocks.Add(SPELL_HEAL_AP, SendHealSpell);
+            unlocks.Add(SPELL_HASTE_AP, SendHasteSpell);
+            unlocks.Add(SPELL_BUFF_AP, SendBuffSpell);
+            unlocks.Add(SPELL_DESCEND_AP, SendDescendSpell);
+            unlocks.Add(SPELL_FROSTBITE_AP, SendFrostbiteSpell);
+            unlocks.Add(SPELL_FIREBALL_AP, SendFireballSpell);
+            unlocks.Add(SPELL_TELEPORT_AP, SendTeleportSpell);
+            unlocks.Add(SPELL_SHOCKWAVE_AP, SendShockwaveSpell);
+            unlocks.Add(SPELL_TENDRILS_AP, SendTendrilsSpell);
+            unlocks.Add(SPELL_LANTERN_AP, SendLanternSpell);
+            unlocks.Add(SPELL_PHOTOSYNTHESIS_AP, SendPhotosynthesisSpell);
+            unlocks.Add(SPELL_METEOR_AP, SendMeteorSpell);
+            unlocks.Add(SPELL_BLOODMANA_AP, SendBloodmanaSpell);
+            unlocks.Add(SPELL_LUCKSTEAL_AP, SendLuckstealSpell);
+            unlocks.Add(SPELL_SPIRIT_AP, SendSpiritSpell);
+            unlocks.Add(SPELL_REWIND_AP, SendRewindSpell);
         }
 
         private LetterAttachment SendClearDebrisSpell(ReceivedItem receivedItem)

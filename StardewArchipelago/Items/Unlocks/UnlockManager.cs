@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.Items.Mail;
@@ -11,9 +10,11 @@ namespace StardewArchipelago.Items.Unlocks
     public class UnlockManager
     {
         private List<IUnlockManager> _specificUnlockManagers;
+        private Dictionary<string, Func<ReceivedItem, LetterAttachment>> _unlockables;
 
         public UnlockManager(ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
+            _unlockables = new Dictionary<string, Func<ReceivedItem, LetterAttachment>>();
             _specificUnlockManagers = new List<IUnlockManager>();
             _specificUnlockManagers.Add(new VanillaUnlockManager(archipelago, locationChecker));
             if (archipelago.SlotData.Mods.HasModdedSkill())
@@ -28,21 +29,28 @@ namespace StardewArchipelago.Items.Unlocks
             {
                 _specificUnlockManagers.Add(new SVEUnlockManager());
             }
+
+            RegisterUnlocks();
+        }
+
+        private void RegisterUnlocks()
+        {
+            foreach (var specificUnlockManager in _specificUnlockManagers)
+            {
+                specificUnlockManager.RegisterUnlocks(_unlockables);
+            }
         }
 
         public bool IsUnlock(string unlockName)
         {
-            return _specificUnlockManagers.Any(specificUnlockManager => specificUnlockManager.IsUnlock(unlockName));
+            return _unlockables.ContainsKey(unlockName);
         }
 
         public LetterAttachment PerformUnlockAsLetter(ReceivedItem unlock)
         {
-            foreach (var specificUnlockManager in _specificUnlockManagers)
+            if (IsUnlock(unlock.ItemName))
             {
-                if (specificUnlockManager.IsUnlock(unlock.ItemName))
-                {
-                    return specificUnlockManager.PerformUnlockAsLetter(unlock);
-                }
+                return _unlockables[unlock.ItemName](unlock);
             }
 
             throw new ArgumentException($"Could not perform unlock '{unlock.ItemName}'");

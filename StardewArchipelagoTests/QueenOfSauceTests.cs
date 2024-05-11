@@ -1,4 +1,5 @@
 using FluentAssertions;
+using StardewArchipelago.GameModifications.CodeInjections.Television;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 
 namespace StardewArchipelagoTests
@@ -27,12 +28,13 @@ namespace StardewArchipelagoTests
         [TestCase(111, 0, 3)]
         [TestCase(112, 0, 3)]
         [TestCase(113, 1, 0)]
-        public void GetCurrentDateComponents(int daysPlayed, int expectedYear, int expectedWeek)
+        public void TestGetCurrentDateComponents(int daysPlayed, int expectedYear, int expectedWeek)
         {
             // Arrange
+            var queenOfSauceManager = new QueenOfSauceManager(null);
 
             // Act
-            QueenOfSauceInjections.GetCurrentDateComponents(daysPlayed, out var year, out var week);
+            queenOfSauceManager.GetCurrentDateComponents(daysPlayed, out var year, out var week);
 
             // Assert
             year.Should().Be(expectedYear);
