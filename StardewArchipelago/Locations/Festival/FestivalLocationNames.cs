@@ -18,8 +18,8 @@ namespace StardewArchipelago.Locations.Festival
         public static readonly string NIGHT_MARKET_15 = FestivalIdentifier(Season.Winter, 15);
         public static readonly string NIGHT_MARKET_16 = FestivalIdentifier(Season.Winter, 16);
         public static readonly string NIGHT_MARKET_17 = FestivalIdentifier(Season.Winter, 17);
-        public static readonly string DESERT_FESTIVAL_15 = FestivalIdentifier(Season.Spring, 17);
-        public static readonly string DESERT_FESTIVAL_16 = FestivalIdentifier(Season.Spring, 17);
+        public static readonly string DESERT_FESTIVAL_15 = FestivalIdentifier(Season.Spring, 15);
+        public static readonly string DESERT_FESTIVAL_16 = FestivalIdentifier(Season.Spring, 16);
         public static readonly string DESERT_FESTIVAL_17 = FestivalIdentifier(Season.Spring, 17);
         public static readonly string TROUT_DERBY_20 = FestivalIdentifier(Season.Summer, 20);
         public static readonly string TROUT_DERBY_21 = FestivalIdentifier(Season.Summer, 21);

@@ -113,7 +113,6 @@
         public const string YAM_SEEDS = "492";
         
         public const string QUEEN_OF_SAUCE_COOKBOOK = "Book_QueenOfSauce";
-        public const string BOOK_OF_STARS = "PurpleBook";
         public const string BOOK_MYSTERIES = "Book_Mystery";
 
         public const string PRICE_CATALOGUE = "Book_PriceCatalogue";
@@ -135,6 +134,13 @@
         public const string TREASURE_APPRAISAL_GUIDE = "Book_Artifact";
         public const string OL_SLITHERLEGS = "Book_Grass";
         public const string ANIMAL_CATALOGUE = "Animal Catalogue";
+
+        public const string BOOK_OF_STARS = "PurpleBook";
+        public const string ALMANAC = "SkillBook_0";
+        public const string WOODCUTTER_WEEKLY = "SkillBook_2";
+        public const string BAIT_AND_BOBBER = "SkillBook_1";
+        public const string MINING_MONTHLY = "SkillBook_3";
+        public const string COMBAT_QUARTERLY = "SkillBook_4";
 
         public static bool IsSkillBook(string itemId)
         {

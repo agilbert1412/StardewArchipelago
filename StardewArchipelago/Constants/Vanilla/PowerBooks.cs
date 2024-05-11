@@ -25,6 +25,13 @@ namespace StardewArchipelago.Constants.Vanilla
         public const string OL_SLITHERLEGS = "Ol' Slitherlegs";
         public const string ANIMAL_CATALOGUE = "Animal Catalogue";
 
+        public const string BOOK_OF_STARS = "Book Of Stars";
+        public const string ALMANAC = "Stardew Valley Almanac";
+        public const string WOODCUTTER_WEEKLY = "Woodcutter's Weekly";
+        public const string BAIT_AND_BOBBER = "Bait And Bobber";
+        public const string MINING_MONTHLY = "Mining Monthly";
+        public const string COMBAT_QUARTERLY = "Combat Quarterly";
+
         public static readonly Dictionary<string, string> BookIdsToNames = new()
         {
             { ObjectIds.PRICE_CATALOGUE, PRICE_CATALOGUE },
@@ -46,6 +53,12 @@ namespace StardewArchipelago.Constants.Vanilla
             { ObjectIds.TREASURE_APPRAISAL_GUIDE, TREASURE_APPRAISAL_GUIDE },
             { ObjectIds.OL_SLITHERLEGS, OL_SLITHERLEGS },
             { ObjectIds.ANIMAL_CATALOGUE, ANIMAL_CATALOGUE },
+            { ObjectIds.BOOK_OF_STARS, BOOK_OF_STARS },
+            { ObjectIds.ALMANAC, ALMANAC },
+            { ObjectIds.WOODCUTTER_WEEKLY, WOODCUTTER_WEEKLY },
+            { ObjectIds.BAIT_AND_BOBBER, BAIT_AND_BOBBER },
+            { ObjectIds.MINING_MONTHLY, MINING_MONTHLY },
+            { ObjectIds.COMBAT_QUARTERLY, COMBAT_QUARTERLY },
         };
 
         public static readonly Dictionary<string, string> BookNamesToIds = new()
@@ -69,6 +82,12 @@ namespace StardewArchipelago.Constants.Vanilla
             { TREASURE_APPRAISAL_GUIDE, ObjectIds.TREASURE_APPRAISAL_GUIDE },
             { OL_SLITHERLEGS, ObjectIds.OL_SLITHERLEGS },
             { ANIMAL_CATALOGUE, ObjectIds.ANIMAL_CATALOGUE },
+            { BOOK_OF_STARS, ObjectIds.BOOK_OF_STARS },
+            { ALMANAC, ObjectIds.ALMANAC },
+            { WOODCUTTER_WEEKLY, ObjectIds.WOODCUTTER_WEEKLY },
+            { BAIT_AND_BOBBER, ObjectIds.BAIT_AND_BOBBER },
+            { MINING_MONTHLY, ObjectIds.MINING_MONTHLY },
+            { COMBAT_QUARTERLY, ObjectIds.COMBAT_QUARTERLY },
         };
 
 
