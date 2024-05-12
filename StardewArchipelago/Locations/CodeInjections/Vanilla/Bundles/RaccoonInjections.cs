@@ -13,6 +13,7 @@ using StardewValley;
 using StardewValley.BellsAndWhistles;
 using StardewValley.Characters;
 using StardewValley.Events;
+using StardewValley.Internal;
 using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Network.NetEvents;
@@ -315,6 +316,44 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
 
             return -1;
+        }
+
+        // public bool IsValidItemForThisIngredientDescription(Item item,BundleIngredientDescription ingredient)
+        public static bool IsValidItemForThisIngredientDescription_TestPatch_Prefix(Bundle __instance, Item item, BundleIngredientDescription ingredient, ref bool __result)
+        {
+            try
+            {
+                if (item == null || ingredient.completed || ingredient.quality > item.Quality)
+                {
+                    __result = false;
+                    return false; // don't run original logic
+                }
+
+                if (ingredient.preservesId != null)
+                {
+                    var flavoredIngredientQuery = "FLAVORED_ITEM " + ingredient.id + " " + ingredient.preservesId;
+                    var queryContext = new ItemQueryContext(Game1.currentLocation, Game1.player, Game1.random);
+                    var resolvedIngredientQueryResult = ItemQueryResolver.TryResolve(flavoredIngredientQuery, queryContext);
+                    var resolvedIngredient = resolvedIngredientQueryResult.FirstOrDefault<ItemQueryResult>()?.Item;
+                    if (resolvedIngredient is StardewValley.Object ingredientObject && item is StardewValley.Object itemObject)
+                    {
+                        var qualifiedIdsMatch = item.QualifiedItemId == ingredientObject.QualifiedItemId;
+                        var preservesIdMatch = ingredient.preservesId.Contains(itemObject.preservedParentSheetIndex);
+                        __result = qualifiedIdsMatch && preservesIdMatch;
+                        return false; // don't run original logic
+                    }
+
+                    __result = false;
+                    return false; // don't run original logic
+                }
+
+                return true; // run original logic
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(IsValidItemForThisIngredientDescription_TestPatch_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
         }
     }
 }

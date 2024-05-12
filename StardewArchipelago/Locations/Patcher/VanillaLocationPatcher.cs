@@ -25,6 +25,7 @@ using StardewValley.Quests;
 using StardewValley.SpecialOrders;
 using StardewValley.TerrainFeatures;
 using xTile.Dimensions;
+using Bundle = StardewValley.Menus.Bundle;
 using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Locations.Patcher
@@ -167,6 +168,11 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Raccoon), nameof(Raccoon.activate)),
                 prefix: new HarmonyMethod(typeof(RaccoonInjections), nameof(RaccoonInjections.Activate_DisplayDialogueOrBundle_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Bundle), nameof(Bundle.IsValidItemForThisIngredientDescription)),
+                prefix: new HarmonyMethod(typeof(RaccoonInjections), nameof(RaccoonInjections.IsValidItemForThisIngredientDescription_TestPatch_Prefix))
             );
 
             if (!_archipelago.SlotData.QuestLocations.StoryQuestsEnabled)
