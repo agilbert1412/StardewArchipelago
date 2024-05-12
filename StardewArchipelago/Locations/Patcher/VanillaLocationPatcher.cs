@@ -168,6 +168,22 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(typeof(Raccoon), nameof(Raccoon.activate)),
                 prefix: new HarmonyMethod(typeof(RaccoonInjections), nameof(RaccoonInjections.Activate_DisplayDialogueOrBundle_Prefix))
             );
+
+            if (!_archipelago.SlotData.QuestLocations.StoryQuestsEnabled)
+            {
+                return;
+            }
+
+            var performActionParameters = new[] { typeof(string[]), typeof(Farmer), typeof(Location) };
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Forest), nameof(Forest.performAction), performActionParameters),
+                prefix: new HarmonyMethod(typeof(RaccoonInjections), nameof(RaccoonInjections.PerformAction_CheckStump_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Forest), nameof(Forest.answerDialogueAction)),
+                prefix: new HarmonyMethod(typeof(RaccoonInjections), nameof(RaccoonInjections.AnswerDialogueAction_FixStump_Prefix))
+            );
         }
 
         private void ReplaceBackPackUpgradesWithChecks()

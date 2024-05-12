@@ -147,7 +147,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             var isThisBookRandomized = false;
             foreach (var possibleName in possibleNames)
             {
-                var locationName = $"Read {book.Name}";
+                var locationName = $"Read {possibleName}";
                 if (_locationChecker.IsLocationMissing(locationName))
                 {
                     _locationChecker.AddCheckedLocation(locationName);

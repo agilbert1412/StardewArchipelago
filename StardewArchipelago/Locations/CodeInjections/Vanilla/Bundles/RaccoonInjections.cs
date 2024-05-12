@@ -7,18 +7,24 @@ using StardewArchipelago.Archipelago;
 using StardewArchipelago.Bundles;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Serialization;
+using StardewArchipelago.Stardew.Ids.Vanilla;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.BellsAndWhistles;
 using StardewValley.Characters;
 using StardewValley.Events;
+using StardewValley.Locations;
 using StardewValley.Menus;
+using StardewValley.Network.NetEvents;
+using xTile.Dimensions;
 using Bundle = StardewValley.Menus.Bundle;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 {
     public static class RaccoonInjections
     {
+        private const string GIANT_STUMP = "The Giant Stump";
+
         private static IMonitor _monitor;
         private static IModHelper _modHelper;
         private static ArchipelagoClient _archipelago;
@@ -64,6 +70,91 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 _monitor.Log($"Failed in {nameof(PickFarmEvent_DontPickRaccoonStump_Postfix)}:\n{ex}", LogLevel.Error);
                 return;
             }
+        }
+
+        // public override bool performAction(string[] action, Farmer who, Location tileLocation)
+        public static bool PerformAction_CheckStump_Prefix(Forest __instance, string[] action, Farmer who, Location tileLocation, ref bool __result)
+        {
+            try
+            {
+                if (action.Length <= 0 || action[0] != "FixRaccoonStump" || !Game1.MasterPlayer.mailReceived.Contains("raccoonTreeFallen"))
+                {
+                    return true; // run original logic
+                }
+
+                if (!_locationChecker.IsLocationMissing(GIANT_STUMP))
+                {
+                    Game1.drawObjectDialogue("Eventually someone will move in...");
+                    __result = true;
+                    return false; // don't run original logic
+                }
+
+                if (who.Items.ContainsId("(O)709", 100))
+                {
+                    __instance.createQuestionDialogue(Game1.content.LoadString("Strings\\1_6_Strings:FixRaccoonStump_Question"), __instance.createYesNoResponses(), "ForestStump");
+                }
+                else
+                {
+                    Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\1_6_Strings:FixRaccoonStump_Hint"));
+                    if (!who.mailReceived.Contains("checkedRaccoonStump"))
+                    {
+                        who.addQuest("134");
+                        who.mailReceived.Add("checkedRaccoonStump");
+                    }
+                }
+
+                __result = true;
+                return false; // don't run original logic
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(PerformAction_CheckStump_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
+        }
+        
+        // public override bool answerDialogueAction(string questionAndAnswer, string[] questionParams)
+        public static bool AnswerDialogueAction_FixStump_Prefix(Forest __instance, string questionAndAnswer, string[] questionParams, ref bool __result)
+        {
+            try
+            {
+                if (questionAndAnswer != "ForestStump_Yes")
+                {
+                    return true; // run original logic
+                }
+
+                if (_locationChecker.IsLocationChecked(GIANT_STUMP))
+                {
+                    __result = true;
+                    return false; // don't run original logic
+                }
+
+                Game1.globalFadeToBlack(() => FadedForStumpFix(__instance));
+                Game1.player.Items.ReduceId("(O)709", 100);
+                __result = true;
+                return false; // don't run original logic
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(AnswerDialogueAction_FixStump_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
+        }
+
+        private static void FadedForStumpFix(Forest forest)
+        {
+            Game1.freezeControls = true;
+            DelayedAction.playSoundAfterDelay("crafting", 1000);
+            DelayedAction.playSoundAfterDelay("crafting", 1500);
+            DelayedAction.playSoundAfterDelay("crafting", 2000);
+            DelayedAction.playSoundAfterDelay("crafting", 2500);
+            DelayedAction.playSoundAfterDelay("axchop", 3000);
+            DelayedAction.playSoundAfterDelay("discoverMineral", 3200);
+            Game1.viewportFreeze = true;
+            Game1.viewport.X = -10000;
+            Game1.pauseThenDoFunction(4000, forest.doneWithStumpFix);
+            _locationChecker.AddCheckedLocation(GIANT_STUMP);
+            Game1.player.team.RequestSetSimpleFlag(SimpleFlagType.HasQuest, PlayerActionTarget.All, QuestIds.GIANT_STUMP, false);
         }
 
         // public void activate()

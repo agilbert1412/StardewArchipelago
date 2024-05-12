@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
+using StardewArchipelago.Constants.Vanilla;
 using StardewValley;
 
 namespace StardewArchipelago.Stardew.NameMapping
@@ -16,6 +17,11 @@ namespace StardewArchipelago.Stardew.NameMapping
             if (item is Object && _renamedObjects.ContainsKey(item.ParentSheetIndex))
             {
                 name = _renamedObjects[item.ParentSheetIndex];
+            }
+
+            if (PowerBooks.BookIdsToNames.ContainsKey(item.ItemId))
+            {
+                name = PowerBooks.BookIdsToNames[item.ItemId];
             }
 
             foreach (var (oldChar, newChar) in _simplifiedChars)
