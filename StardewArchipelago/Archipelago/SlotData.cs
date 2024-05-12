@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 using StardewModdingAPI;
+using StardewValley;
+using StardewValley.GameData;
 
 namespace StardewArchipelago.Archipelago
 {
@@ -111,7 +114,8 @@ namespace StardewArchipelago.Archipelago
             _console = console;
 
             Goal = GetSlotSetting(GOAL_KEY, Goal.CommunityCenter);
-            FarmType = GetSlotSetting(FARM_TYPE_KEY, FarmType.Standard);
+            var farmType = GetSlotSetting(FARM_TYPE_KEY, SupportedFarmType.Standard);
+            FarmType = new FarmType(farmType);
             StartingMoney = GetSlotSetting(STARTING_MONEY_KEY, 500);
             ProfitMargin = GetSlotSetting(PROFIT_MARGIN_KEY, 100) / 100.0;
             BundlesData = GetSlotSetting(MODIFIED_BUNDLES_KEY, "");
@@ -263,8 +267,7 @@ namespace StardewArchipelago.Archipelago
         Allsanity = 24,
         Perfection = 25,
     }
-
-    public enum FarmType
+    public enum SupportedFarmType
     {
         Standard = 0,
         Riverland = 1,
@@ -273,6 +276,52 @@ namespace StardewArchipelago.Archipelago
         Wilderness = 4,
         FourCorners = 5,
         Beach = 6,
+        Meadowlands = 7,
+    }
+
+    public class FarmType
+    {
+        private SupportedFarmType _supportedFarmType;
+
+        internal FarmType(SupportedFarmType supportedFarmType)
+        {
+            _supportedFarmType = supportedFarmType;
+        }
+
+        public SupportedFarmType GetFarmType()
+        {
+            return _supportedFarmType;
+        }
+
+        public int GetWhichFarm()
+        {
+            return (int)_supportedFarmType;
+        }
+
+        public ModFarmType GetWhichModFarm()
+        {
+            switch (_supportedFarmType)
+            {
+                case SupportedFarmType.Meadowlands:
+                    var modFarmTypeList = DataLoader.AdditionalFarms(Game1.content);
+                    return modFarmTypeList.First(x => x.Id.Contains(_supportedFarmType.ToString(), StringComparison.InvariantCultureIgnoreCase));
+                case SupportedFarmType.Standard:
+                case SupportedFarmType.Riverland:
+                case SupportedFarmType.Forest:
+                case SupportedFarmType.HillTop:
+                case SupportedFarmType.Wilderness:
+                case SupportedFarmType.FourCorners:
+                case SupportedFarmType.Beach:
+                    return null;
+                default:
+                    throw new ArgumentOutOfRangeException($"Unrecognized SupportedFarmType Type: {_supportedFarmType}");
+            }
+        }
+
+        public bool GetSpawnMonstersAtNight()
+        {
+            return _supportedFarmType == SupportedFarmType.Wilderness;
+        }
     }
 
     public enum EntranceRandomization

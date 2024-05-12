@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.GameData;
 using StardewValley.Menus;
 
 namespace StardewArchipelago.GameModifications
@@ -118,25 +119,11 @@ namespace StardewArchipelago.GameModifications
 
         private static void ForceFarmTypeToArchipelagoProvidedFarm()
         {
-            var farmTypes = new[]
-            {
-                "Standard Farm", "Riverland Farm", "Forest Farm", "Hill-top Farm", "Wilderness Farm", "Four Corners Farm", "Beach Farm",
-            };
-
-            // To remove once Beta 5 is done
-            for (var i = 0; i < farmTypes.Length; i++)
-            {
-                if (_archipelago.HasReceivedItem(farmTypes[i]))
-                {
-                    Game1.whichFarm = i;
-                    Game1.spawnMonstersAtNight = i == 4;
-                    return;
-                }
-            }
-
             var farmType = _archipelago.SlotData.FarmType;
-            Game1.whichFarm = (int)_archipelago.SlotData.FarmType;
-            Game1.spawnMonstersAtNight = farmType == FarmType.Wilderness;
+            
+            Game1.whichFarm = farmType.GetWhichFarm();
+            Game1.whichModFarm = farmType.GetWhichModFarm();
+            Game1.spawnMonstersAtNight = farmType.GetSpawnMonstersAtNight();
         }
 
         public static void TitleMenuUpdate_ReplaceCharacterMenu_Postfix(TitleMenu __instance, GameTime time)

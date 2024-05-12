@@ -60,8 +60,8 @@ namespace StardewArchipelago.GameModifications
             }
 
             RemoveGiftBoxes(farmhouse);
-            var seeds = _stardewItemManager.GetItemByName(GetStartingSeedsForThisSeason()).PrepareForGivingToFarmer(15);
-            CreateGiftBoxItemInEmptySpot(farmhouse, seeds);
+            var startCrop = _stardewItemManager.GetItemByName(GetStartingCropForThisSeason()).PrepareForGivingToFarmer(15);
+            CreateGiftBoxItemInEmptySpot(farmhouse, startCrop);
             var telephone = _stardewItemManager.GetItemByName("Telephone").PrepareForGivingToFarmer(1);
             CreateGiftBoxItemInEmptySpot(farmhouse, telephone);
             var calendar = _stardewItemManager.GetItemByName("Calendar").PrepareForGivingToFarmer(1);
@@ -98,8 +98,13 @@ namespace StardewArchipelago.GameModifications
             }
         }
 
-        private string GetStartingSeedsForThisSeason()
+        private string GetStartingCropForThisSeason()
         {
+            if (_archipelago.SlotData.FarmType.GetWhichFarm() == (int)SupportedFarmType.Meadowlands)
+            {
+                return "Hay";
+            }
+
             if (_archipelago.SlotData.Cropsanity == Cropsanity.Shuffled)
             {
                 return "Mixed Seeds";
