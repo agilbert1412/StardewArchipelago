@@ -18,6 +18,7 @@ using StardewValley.Menus;
 using StardewValley.Network.NetEvents;
 using xTile.Dimensions;
 using Bundle = StardewValley.Menus.Bundle;
+using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 {
@@ -204,7 +205,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                     }
                     else
                     {
-                        if (raccoonBundleAvailable)
+                        if (!raccoonBundleAvailable)
                         {
                             return false; // don't run original logic
                         }
@@ -240,7 +241,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
             if (Game1.netWorldState.Value.SeasonOfCurrentRacconBundle != currentRaccoonBundleNumber)
             {
-                Game1.netWorldState.Value.raccoonBundles.Clear();
+                _state.CurrentRaccoonBundleStatus.Clear();
                 Game1.netWorldState.Value.SeasonOfCurrentRacconBundle = currentRaccoonBundleNumber;
             }
 
@@ -250,25 +251,31 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             var raccoonBundle = (ItemBundle)raccoonRequestsRoom.Bundles[currentRaccoonBundleName];
             for (var i = 0; i < raccoonBundle.Items.Count; i++)
             {
-                if (Game1.netWorldState.Value.raccoonBundles.Length <= i)
+                if (_state.CurrentRaccoonBundleStatus.Count <= i)
                 {
-                    Game1.netWorldState.Value.raccoonBundles.Add(false);
+                    _state.CurrentRaccoonBundleStatus.Add(false);
                 }
                 var bundleItem = raccoonBundle.Items[i];
-                var bundleIngredient = new BundleIngredientDescription(bundleItem.StardewObject.GetQualifiedId(),
+                var id = bundleItem.Flavor == null ? bundleItem.StardewObject.Id : bundleItem.StardewObject.Name;
+                if (id == "Dried" && bundleItem.Flavor != null)
+                {
+                    id = bundleItem.Flavor.Category == Object.FruitsCategory ? "DriedFruit" : "DriedMushrooms";
+                }
+                var bundleIngredient = new BundleIngredientDescription(id,
                     bundleItem.Amount, bundleItem.Quality,
-                    Game1.netWorldState.Value.raccoonBundles[i],
-                    bundleItem.Flavor.Id);
+                    _state.CurrentRaccoonBundleStatus[i],
+                    bundleItem.Flavor?.Id);
                 ingredients.Add(bundleIngredient);
             }
 
             var whichBundle = (currentRaccoonBundleNumber - 1) % 5;
-            var raccoonNoteMenu = new JunimoNoteMenu(new Bundle("Seafood", null, ingredients, new bool[1])
+            var bundle = new Bundle("Seafood", null, ingredients, new bool[1])
             {
                 bundleTextureOverride = Game1.content.Load<Texture2D>("LooseSprites\\BundleSprites"),
-                bundleTextureIndexOverride = 14 + whichBundle
-            }, "LooseSprites\\raccoon_bundle_menu");
-            raccoonNoteMenu.onIngredientDeposit = x => Game1.netWorldState.Value.raccoonBundles[x] = true;
+                bundleTextureIndexOverride = 14 + whichBundle,
+            };
+            var raccoonNoteMenu = new JunimoNoteMenu(bundle, "LooseSprites\\raccoon_bundle_menu");
+            raccoonNoteMenu.onIngredientDeposit = x => _state.CurrentRaccoonBundleStatus[x] = true;
             raccoonNoteMenu.onBundleComplete = _ => BundleComplete(raccoon);
             raccoonNoteMenu.onScreenSwipeFinished = _ => BundleCompleteAfterSwipe(raccoon);
             raccoonNoteMenu.behaviorBeforeCleanup = _ => raccoon.mutex?.ReleaseLock();
@@ -281,7 +288,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             JunimoNoteMenu.screenSwipe = new ScreenSwipe(1);
             _locationChecker.AddCheckedLocation($"{APName.RACCOON_REQUEST_PREFIX}{Game1.netWorldState.Value.SeasonOfCurrentRacconBundle}");
             Game1.netWorldState.Value.SeasonOfCurrentRacconBundle = -1;
-            Game1.netWorldState.Value.raccoonBundles.Clear();
+            _state.CurrentRaccoonBundleStatus.Clear();
 
             // private bool wasTalkedTo;
             var wasTalkedToField = _modHelper.Reflection.GetField<bool>(raccoon, "wasTalkedTo");

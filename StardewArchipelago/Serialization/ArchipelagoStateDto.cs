@@ -16,6 +16,7 @@ namespace StardewArchipelago.Serialization
         public int TravelingMerchantPurchases { get; set; }
         public int StoredStarTokens { get; set; }
         public List<string> EntrancesTraversed { get; set; }
+        public List<bool> CurrentRaccoonBundleStatus { get; set; }
 
         public ArchipelagoStateDto()
         {
@@ -29,6 +30,7 @@ namespace StardewArchipelago.Serialization
             TravelingMerchantPurchases = 0;
             StoredStarTokens = 0;
             EntrancesTraversed = new List<string>();
+            CurrentRaccoonBundleStatus = new List<bool>();
         }
     }
 }
