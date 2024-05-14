@@ -263,6 +263,21 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(typeof(Event.DefaultCommands), nameof(Event.DefaultCommands.AwardFestivalPrize)),
                 prefix: new HarmonyMethod(typeof(FishingRodInjections), nameof(FishingRodInjections.AwardFestivalPrize_BambooPole_Prefix))
             );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Event), nameof(Event.skipEvent)),
+                prefix: new HarmonyMethod(typeof(FishingRodInjections), nameof(FishingRodInjections.SkipEvent_WillyFishingLesson_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Event.DefaultCommands), nameof(Event.DefaultCommands.AwardFestivalPrize)),
+                prefix: new HarmonyMethod(typeof(FishingRodInjections), nameof(FishingRodInjections.AwardFestivalPrize_WillyFishingLesson_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Event.DefaultCommands), nameof(Event.DefaultCommands.GainSkill)),
+                prefix: new HarmonyMethod(typeof(FishingRodInjections), nameof(FishingRodInjections.GainSkill_WillyFishingLesson_Prefix))
+            );
         }
 
         private void PatchCopperPan()

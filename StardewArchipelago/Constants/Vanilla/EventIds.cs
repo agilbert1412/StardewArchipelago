@@ -9,5 +9,6 @@
         public const string FURNACE_RECIPE = "992553";
         public const string COOKIES_RECIPE = "19";
         public const string COPPER_PAN = "404798";
+        public const string WILLY_FISHING_LESSON = "980559";
     }
 }
