@@ -19,7 +19,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
 
         public override string ToString()
         {
-            return $"WarpRequest(LocationRequest: {LocationRequest}, TileX: {TileX}, TileY: {TileY}, FacingDirectionAfterWarp: {FacingDirectionAfterWarp})"
+            return $"WarpRequest(LocationRequest: {LocationRequest}, TileX: {TileX}, TileY: {TileY}, FacingDirectionAfterWarp: {FacingDirectionAfterWarp})";
         }
     }
 }
