@@ -113,7 +113,7 @@ namespace StardewArchipelago.Locations.Festival
         {
             try
             {
-                if (!__instance.FestivalName.Equals("Stardew Valley Fair"))
+                if (!__instance.isSpecificFestival("fall16"))
                 {
                     return;
                 }
