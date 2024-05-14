@@ -72,7 +72,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
         }
 
-        public static void GetRewardsForPlayer_CheckGoalCompletion_Postfix(LibraryMuseum __instance, Farmer who, ref List<Item> __result)
+        // public List<Item> getRewardsForPlayer(Farmer player)
+        public static void GetRewardsForPlayer_CheckGoalCompletion_Postfix(LibraryMuseum __instance, Farmer player, ref List<Item> __result)
         {
             try
             {
