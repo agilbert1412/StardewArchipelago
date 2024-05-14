@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.GameModifications.EntranceRandomizer;
+using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 using xTile.ObjectModel;
@@ -158,14 +159,26 @@ namespace StardewArchipelago.Extensions
             var warps = new List<Warp>();
             foreach (var warp in origin.warps)
             {
-                if (warp.TargetName.Equals(destinationName, StringComparison.OrdinalIgnoreCase))
+                try
                 {
-                    warps.Add(warp);
+                    if (warp.TargetName.Equals(destinationName, StringComparison.OrdinalIgnoreCase))
+                    {
+                        warps.Add(warp);
+                    }
+                    else if (warp.TargetName == "VolcanoEntrance" && destinationName == "VolcanoDungeon0")
+                    {
+                        var realTargetPoint = new Point(warp.TargetX, warp.TargetY).CheckSpecialVolcanoEdgeCaseWarp(destinationName);
+                        warps.Add(new Warp(warp.X, warp.Y, warp.TargetName, realTargetPoint.X, realTargetPoint.Y, warp.flipFarmer.Value));
+                    }
                 }
-                else if (warp.TargetName == "VolcanoEntrance" && destinationName == "VolcanoDungeon0")
+                catch (Exception ex)
                 {
-                    var realTargetPoint = new Point(warp.TargetX, warp.TargetY).CheckSpecialVolcanoEdgeCaseWarp(destinationName);
-                    warps.Add(new Warp(warp.X, warp.Y, warp.TargetName, realTargetPoint.X, realTargetPoint.Y, warp.flipFarmer.Value));
+                    var currentMethodName = $"{nameof(GameLocationExtensions)}.{nameof(GetAllTouchWarpsTo)}";
+                    var currentMethodCall = $"{currentMethodName}({origin.Name}, {destinationName})";
+                    var currentLoop = $"warp: {warp}";
+                    var currentState = $"{currentMethodCall} => [{currentLoop}]";
+                    var errorMessage = $"Failed in {currentState}:{Environment.NewLine}\t{ex}";
+                    throw new Exception(errorMessage, ex);
                 }
             }
 
@@ -206,15 +219,27 @@ namespace StardewArchipelago.Extensions
             {
                 for (var x = 0; x < backLayer.LayerWidth; x++)
                 {
-                    var tile = backLayer.Tiles[x, y];
-                    if (tile == null || (!tile.TileIndexProperties.TryGetValue("TouchAction", out var propertyValue) && !tile.Properties.TryGetValue("TouchAction", out propertyValue)))
+                    try
                     {
-                        continue;
-                    }
+                        var tile = backLayer.Tiles[x, y];
+                        if (tile == null || (!tile.TileIndexProperties.TryGetValue("TouchAction", out var propertyValue) && !tile.Properties.TryGetValue("TouchAction", out propertyValue)))
+                        {
+                            continue;
+                        }
 
-                    if (TryGetWarpPointFromProperty(destinationName, propertyValue, out var warpPoint))
+                        if (TryGetWarpPointFromProperty(destinationName, propertyValue, out var warpPoint))
+                        {
+                            touchActionWarps.Add(new Point(x, y), warpPoint);
+                        }
+                    }
+                    catch (Exception ex)
                     {
-                        touchActionWarps.Add(new Point(x, y), warpPoint);
+                        var currentMethodName = $"{nameof(GameLocationExtensions)}.{nameof(GetAllTouchActionWarpsTo)}";
+                        var currentMethodCall = $"{currentMethodName}({origin.Name}, {destinationName})";
+                        var currentLoop = $"x: {x}, y: {y}";
+                        var currentState = $"{currentMethodCall} => [{currentLoop}]";
+                        var errorMessage = $"Failed in {currentState}:{Environment.NewLine}\t{ex}";
+                        throw new Exception(errorMessage, ex);
                     }
                 }
             }
@@ -246,15 +271,27 @@ namespace StardewArchipelago.Extensions
             {
                 for (var x = 0; x < buildingsLayer.LayerWidth; x++)
                 {
-                    var tile = buildingsLayer.Tiles[x, y];
-                    if (tile == null || (!tile.TileIndexProperties.TryGetValue("Action", out var propertyValue) && !tile.Properties.TryGetValue("Action", out propertyValue)))
+                    try
                     {
-                        continue;
-                    }
+                        var tile = buildingsLayer.Tiles[x, y];
+                        if (tile == null || (!tile.TileIndexProperties.TryGetValue("Action", out var propertyValue) && !tile.Properties.TryGetValue("Action", out propertyValue)))
+                        {
+                            continue;
+                        }
 
-                    if (TryGetWarpPointFromProperty(destinationName, propertyValue, out var warpPoint))
+                        if (TryGetWarpPointFromProperty(destinationName, propertyValue, out var warpPoint))
+                        {
+                            actionWarps.Add(new Point(x, y), warpPoint);
+                        }
+                    }
+                    catch (Exception ex)
                     {
-                        actionWarps.Add(new Point(x, y), warpPoint);
+                        var currentMethodName = $"{nameof(GameLocationExtensions)}.{nameof(GetAllActionWarpsTo)}";
+                        var currentMethodCall = $"{currentMethodName}({origin.Name}, {destinationName})";
+                        var currentLoop = $"x: {x}, y: {y}";
+                        var currentState = $"{currentMethodCall} => [{currentLoop}]";
+                        var errorMessage = $"Failed in {currentState}:{Environment.NewLine}\t{ex}";
+                        throw new Exception(errorMessage, ex);
                     }
                 }
             }
@@ -306,10 +343,22 @@ namespace StardewArchipelago.Extensions
         {
             foreach (var pair in origin.doors.Pairs)
             {
+                //try
+                //{
                 if (pair.Value.Equals(destinationName, StringComparison.OrdinalIgnoreCase))
                 {
                     yield return pair.Key;
                 }
+                //}
+                //catch (Exception ex)
+                //{
+                //    var currentMethodName = $"{nameof(GameLocationExtensions)}.{nameof(GetDoorWarpPoints)}";
+                //    var currentMethodCall = $"{currentMethodName}({origin.Name}, {destinationName})";
+                //    var currentLoop = $"pair: {pair}";
+                //    var currentState = $"{currentMethodCall} => [{currentLoop}]";
+                //    var errorMessage = $"Failed in {currentState}:{Environment.NewLine}\t{ex}";
+                //    throw new Exception(errorMessage, ex);
+                //}
             }
         }
 
@@ -371,13 +420,25 @@ namespace StardewArchipelago.Extensions
             var specialTriggerWarps = new Dictionary<Point, Point>();
             foreach (var (warp1, warp2) in ExtraWarpsBothWays)
             {
-                if (!warp1.LocationRequest.Name.Equals(origin.Name, StringComparison.OrdinalIgnoreCase) ||
-                    !warp2.LocationRequest.Name.Equals(destinationName, StringComparison.OrdinalIgnoreCase))
+                try
                 {
-                    continue;
-                }
+                    if (!warp1.LocationRequest.Name.Equals(origin.Name, StringComparison.OrdinalIgnoreCase) ||
+                        !warp2.LocationRequest.Name.Equals(destinationName, StringComparison.OrdinalIgnoreCase))
+                    {
+                        continue;
+                    }
 
-                specialTriggerWarps.Add(new Point(warp1.TileX, warp1.TileY), new Point(warp2.TileX, warp2.TileY));
+                    specialTriggerWarps.Add(new Point(warp1.TileX, warp1.TileY), new Point(warp2.TileX, warp2.TileY));
+                }
+                catch (Exception ex)
+                {
+                    var currentMethodName = $"{nameof(GameLocationExtensions)}.{nameof(GetSpecialTriggerWarps)}";
+                    var currentMethodCall = $"{currentMethodName}({origin.Name}, {destinationName})";
+                    var currentLoop = $"warp1: {warp1}, warp2: {warp2}";
+                    var currentState = $"{currentMethodCall} => [{currentLoop}]";
+                    var errorMessage = $"Failed in {currentState}:{Environment.NewLine}\t{ex}";
+                    throw new Exception(errorMessage, ex);
+                }
             }
 
             return specialTriggerWarps;
@@ -388,22 +449,34 @@ namespace StardewArchipelago.Extensions
             var buildingWarps = new Dictionary<Point, Point>();
             foreach (var building in origin.buildings)
             {
-                var interior = building.GetIndoors();
-                if (interior == null)
+                try
                 {
-                    continue;
-                }
-                if (!interior.NameOrUniqueName.Equals(destinationName, StringComparison.OrdinalIgnoreCase))
-                {
-                    continue;
-                }
-
-                foreach (var warp in interior.warps)
-                {
-                    if (warp.TargetName == origin.NameOrUniqueName)
+                    var interior = building.GetIndoors();
+                    if (interior == null)
                     {
-                        buildingWarps.Add(new Point(warp.TargetX, warp.TargetY), new Point(warp.X, warp.Y));
+                        continue;
                     }
+                    if (!interior.NameOrUniqueName.Equals(destinationName, StringComparison.OrdinalIgnoreCase))
+                    {
+                        continue;
+                    }
+
+                    foreach (var warp in interior.warps)
+                    {
+                        if (warp.TargetName == origin.NameOrUniqueName)
+                        {
+                            buildingWarps.Add(new Point(warp.TargetX, warp.TargetY), new Point(warp.X, warp.Y));
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    var currentMethodName = $"{nameof(GameLocationExtensions)}.{nameof(GetBuildingWarps)}";
+                    var currentMethodCall = $"{currentMethodName}({origin.Name}, {destinationName})";
+                    var currentLoop = $"building: {building}";
+                    var currentState = $"{currentMethodCall} => [{currentLoop}]";
+                    var errorMessage = $"Failed in {currentState}:{Environment.NewLine}\t{ex}";
+                    throw new Exception(errorMessage, ex);
                 }
             }
 
