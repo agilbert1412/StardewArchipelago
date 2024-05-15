@@ -272,7 +272,7 @@ namespace StardewArchipelago.Locations.Patcher
                 return;
             }
 
-            _harmony.Patch(
+            /*_harmony.Patch(
                 original: AccessTools.Method(typeof(ShopMenu), nameof(ShopMenu.update)),
                 postfix: new HarmonyMethod(typeof(SVEShopInjections), nameof(SVEShopInjections.Update_ReplaceSVEShopChecks_Postfix))
             );
@@ -286,7 +286,7 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony.Patch(
                 original: AccessTools.Constructor(typeof(ShopMenu), shopMenuParameterTypes),
                 prefix: new HarmonyMethod(typeof(SVEShopInjections), nameof(SVEShopInjections.Constructor_MakeBothJojaShopsTheSame_Prefix))
-            );
+            );*/
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Chest), nameof(Chest.checkForAction)),
@@ -294,7 +294,7 @@ namespace StardewArchipelago.Locations.Patcher
             );
 
             _harmony.Patch(
-                original: AccessTools.Method(typeof(Event), nameof(Event.endBehaviors)),
+                original: AccessTools.Method(typeof(Event), nameof(Event.endBehaviors), parameters: new Type[2]{typeof(string[]), typeof(GameLocation)}),
                 prefix: new HarmonyMethod(typeof(SVECutsceneInjections), nameof(SVECutsceneInjections.EndBehaviors_AddSpecialOrderAfterEvent_Prefix))
             );
             var specialOrderAfterEventsType = AccessTools.TypeByName("AddSpecialOrdersAfterEvents");

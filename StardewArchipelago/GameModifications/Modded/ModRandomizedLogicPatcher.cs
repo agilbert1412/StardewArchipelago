@@ -22,13 +22,13 @@ namespace StardewArchipelago.GameModifications.Modded
             _stardewItemManager = stardewItemManager;
             if (_archipelago.SlotData.Mods.HasMod(ModNames.SVE))
             {
-                JunimoShopInjections.Initialize(monitor, modHelper, archipelago, seedShopStockModifier, _stardewItemManager);
+                //JunimoShopInjections.Initialize(monitor, modHelper, archipelago, seedShopStockModifier, _stardewItemManager);
             }
         }
 
         public void PatchAllModGameLogic()
         {
-            PatchJunimoShops();
+            //PatchJunimoShops();
         }
 
         private void PatchJunimoShops()
