@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
@@ -476,8 +477,8 @@ namespace StardewArchipelago.Archipelago
             for (var itemIndex = 0; itemIndex < apItems.Length; itemIndex++)
             {
                 var apItem = apItems[itemIndex];
-                var itemName = GetItemName(apItem.Item);
-                var playerName = GetPlayerName(apItem.Player);
+                var itemName = GetItemName(apItem.Item) ?? "Error Item";
+                var playerName = GetPlayerName(apItem.Player) ?? "Unknown Player";
                 var locationName = GetLocationName(apItem.Location) ?? "Thin air";
 
                 var receivedItem = new ReceivedItem(locationName, itemName, playerName, apItem.Location, apItem.Item, apItem.Player, itemIndex);
@@ -584,6 +585,11 @@ namespace StardewArchipelago.Archipelago
                 locationName = _localDataPackage.GetLocalLocationName(locationId);
             }
 
+            if (string.IsNullOrWhiteSpace(locationName))
+            {
+                _console.Log($"Failed at getting the location name for location {locationId}. This is probably due to a corrupted datapackage. Unexpected behaviors may follow", LogLevel.Error);
+            }
+
             return locationName;
         }
 
@@ -635,6 +641,11 @@ namespace StardewArchipelago.Archipelago
             if (string.IsNullOrWhiteSpace(itemName))
             {
                 itemName = _localDataPackage.GetLocalItemName(itemId);
+            }
+
+            if (string.IsNullOrWhiteSpace(itemName))
+            {
+                _console.Log($"Failed at getting the item name for item {itemId}. This is probably due to a corrupted datapackage. Unexpected behaviors may follow", LogLevel.Error);
             }
 
             return itemName;
