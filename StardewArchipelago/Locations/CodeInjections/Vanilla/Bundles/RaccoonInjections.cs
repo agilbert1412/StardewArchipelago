@@ -263,6 +263,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 {
                     id = bundleItem.Flavor.Category == Object.FruitsCategory ? "DriedFruit" : "DriedMushroom";
                 }
+                if (id == "Smoked")
+                {
+                    id = "SmokedFish";
+                }
                 var bundleIngredient = new BundleIngredientDescription(id,
                     bundleItem.Amount, bundleItem.Quality,
                     _state.CurrentRaccoonBundleStatus[i],
