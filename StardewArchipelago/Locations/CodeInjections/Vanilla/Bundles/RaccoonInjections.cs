@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Netcode;
 using StardewArchipelago.Archipelago;
@@ -353,6 +354,55 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             {
                 _monitor.Log($"Failed in {nameof(IsValidItemForThisIngredientDescription_TestPatch_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
+            }
+        }
+
+        // public override void draw(SpriteBatch spriteBatch)
+        public static void Draw_TreeStumpFix_Postfix(Forest __instance, SpriteBatch spriteBatch)
+        {
+            try
+            {
+                if (!_locationChecker.IsLocationMissing("The Giant Stump") || !Game1.player.hasQuest(QuestIds.GIANT_STUMP))
+                {
+                    return;
+                }
+
+                var num = (float)(4.0 * Math.Round(Math.Sin(Game1.currentGameTime.TotalGameTime.TotalMilliseconds / 250.0), 2) - 8.0);
+                spriteBatch.Draw(Game1.mouseCursors, Game1.GlobalToLocal(Game1.viewport, new Vector2(3576f, 272f + num)), new Microsoft.Xna.Framework.Rectangle(141, 465, 20, 24), Color.White * 0.75f, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 0.0504009947f);
+                spriteBatch.Draw(Game1.mouseCursors, Game1.GlobalToLocal(Game1.viewport, new Vector2(3616f, 312f + num)), new Microsoft.Xna.Framework.Rectangle(175, 425, 12, 12), Color.White * 0.75f, 0.0f, new Vector2(6f, 6f), 4f, SpriteEffects.None, 0.050409995f);
+                return;
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(Draw_TreeStumpFix_Postfix)}:\n{ex}", LogLevel.Error);
+                return;
+            }
+        }
+
+        // protected override void resetSharedState()
+        public static void ResetSharedState_WalkThroughRaccoons_Postfix(Forest __instance)
+        {
+            try
+            {
+                if (!_locationChecker.IsLocationMissing("The Giant Stump"))
+                {
+                    return;
+                }
+
+                foreach (var character in __instance.characters)
+                {
+                    if (character is Raccoon raccoon)
+                    {
+                        raccoon.farmerPassesThrough = true;
+                    }
+                }
+
+                return;
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(ResetSharedState_WalkThroughRaccoons_Postfix)}:\n{ex}", LogLevel.Error);
+                return;
             }
         }
     }

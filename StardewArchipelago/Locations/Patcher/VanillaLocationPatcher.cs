@@ -26,6 +26,7 @@ using StardewValley.SpecialOrders;
 using StardewValley.TerrainFeatures;
 using xTile.Dimensions;
 using Bundle = StardewValley.Menus.Bundle;
+using JunimoNoteMenu = StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.JunimoNoteMenu;
 using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Locations.Patcher
@@ -175,6 +176,11 @@ namespace StardewArchipelago.Locations.Patcher
                 prefix: new HarmonyMethod(typeof(RaccoonInjections), nameof(RaccoonInjections.IsValidItemForThisIngredientDescription_TestPatch_Prefix))
             );
 
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Forest), "resetSharedState"),
+                postfix: new HarmonyMethod(typeof(RaccoonInjections), nameof(RaccoonInjections.ResetSharedState_WalkThroughRaccoons_Postfix))
+            );
+
             if (!_archipelago.SlotData.QuestLocations.StoryQuestsEnabled)
             {
                 return;
@@ -189,6 +195,11 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Forest), nameof(Forest.answerDialogueAction)),
                 prefix: new HarmonyMethod(typeof(RaccoonInjections), nameof(RaccoonInjections.AnswerDialogueAction_FixStump_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Forest), nameof(Forest.draw)),
+                postfix: new HarmonyMethod(typeof(RaccoonInjections), nameof(RaccoonInjections.Draw_TreeStumpFix_Postfix))
             );
         }
 
