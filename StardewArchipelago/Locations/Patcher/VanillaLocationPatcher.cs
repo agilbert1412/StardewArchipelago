@@ -26,7 +26,6 @@ using StardewValley.SpecialOrders;
 using StardewValley.TerrainFeatures;
 using xTile.Dimensions;
 using Bundle = StardewValley.Menus.Bundle;
-using JunimoNoteMenu = StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.JunimoNoteMenu;
 using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Locations.Patcher

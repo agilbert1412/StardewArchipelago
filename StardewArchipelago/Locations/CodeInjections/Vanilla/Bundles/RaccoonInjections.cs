@@ -261,7 +261,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 var id = bundleItem.Flavor == null ? bundleItem.StardewObject.Id : bundleItem.StardewObject.Name;
                 if (id == "Dried" && bundleItem.Flavor != null)
                 {
-                    id = bundleItem.Flavor.Category == Object.FruitsCategory ? "DriedFruit" : "DriedMushrooms";
+                    id = bundleItem.Flavor.Category == Object.FruitsCategory ? "DriedFruit" : "DriedMushroom";
                 }
                 var bundleIngredient = new BundleIngredientDescription(id,
                     bundleItem.Amount, bundleItem.Quality,
