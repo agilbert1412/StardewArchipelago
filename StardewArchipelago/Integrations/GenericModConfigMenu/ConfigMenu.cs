@@ -147,14 +147,6 @@ namespace StardewArchipelago.Integrations.GenericModConfigMenu
 
             configMenu.AddBoolOption(
                 mod: ModManifest,
-                name: () => "Disable Friendship Decay",
-                tooltip: () => "",
-                getValue: () => Config.DisableFriendshipDecay,
-                setValue: (value) => Config.DisableFriendshipDecay = value
-            );
-
-            configMenu.AddBoolOption(
-                mod: ModManifest,
                 name: () => "Show Calendar Indicators",
                 tooltip: () => "Whether to display Archipelago indicators on calendar dates with remaining location checks",
                 getValue: () => Config.ShowCalendarIndicators,
