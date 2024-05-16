@@ -252,6 +252,7 @@ namespace StardewArchipelago.Items.Mail
             {
                 var newTool = _toolUpgrader.CreateTool(toolGenericName);
                 Game1.player.holdUpItemThenMessage(newTool);
+                Game1.player.addItemByMenuIfNecessary(newTool);
                 return;
             }
 
