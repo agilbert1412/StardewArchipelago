@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants.Vanilla;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Objects;
@@ -22,16 +23,17 @@ namespace StardewArchipelago.Locations.Festival
             _locationChecker = locationChecker;
         }
 
+        // public override bool checkForAction(Farmer who, bool justCheckingForActivity = false)
         public static bool CheckForAction_SpiritEveChest_Prefix(Chest __instance, Farmer who, bool justCheckingForActivity, ref bool __result)
         {
             try
             {
-                if (justCheckingForActivity || __instance.giftbox.Value || __instance.playerChest.Value)
+                if (justCheckingForActivity || __instance.giftbox.Value || __instance.playerChest.Value || !Game1.CurrentEvent.isSpecificFestival("fall27"))
                 {
                     return true; // run original logic
                 }
 
-                if (__instance.Items.Count <= 0 || __instance.Items.Count > 1 || __instance.Items.First().ParentSheetIndex != 373)
+                if (__instance.Items.Count <= 0 || __instance.Items.Count > 1)
                 {
                     return true; // run original logic
                 }
@@ -42,16 +44,18 @@ namespace StardewArchipelago.Locations.Festival
                 else
                     __instance.performOpenChest();
 
-                if (!_archipelago.HasReceivedItem("Golden Pumpkin"))
+                if (_archipelago.HasReceivedItem("Golden Pumpkin"))
                 {
-                    var obj = __instance.Items[0];
-                    __instance.Items[0] = null;
-                    __instance.Items.RemoveAt(0);
-                    __result = true;
+                    __instance.Items[0] = ItemRegistry.Create(QualifiedItemIds.GOLDEN_PUMPKIN);
+                }
+                else
+                {
+                    __instance.Items[0] = ItemRegistry.Create(QualifiedItemIds.PRIZE_TICKET);
                 }
 
                 _locationChecker.AddCheckedLocation(FestivalLocationNames.GOLDEN_PUMPKIN);
 
+                __result = true;
                 return false; // don't run original logic
             }
             catch (Exception ex)

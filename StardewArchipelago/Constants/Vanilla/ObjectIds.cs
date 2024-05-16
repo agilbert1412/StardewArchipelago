@@ -111,7 +111,9 @@
         public const string WHITE_ALGAE = "157";
         public const string WINTER_SEEDS = "498";
         public const string YAM_SEEDS = "492";
-        
+        public const string GOLDEN_PUMPKIN = "373";
+        public const string PRIZE_TICKET = "PrizeTicket";
+
         public const string QUEEN_OF_SAUCE_COOKBOOK = "Book_QueenOfSauce";
         public const string BOOK_MYSTERIES = "Book_Mystery";
 
