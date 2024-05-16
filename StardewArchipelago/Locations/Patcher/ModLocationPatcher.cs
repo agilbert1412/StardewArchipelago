@@ -272,21 +272,16 @@ namespace StardewArchipelago.Locations.Patcher
                 return;
             }
 
-            /*_harmony.Patch(
+            _harmony.Patch(
                 original: AccessTools.Method(typeof(ShopMenu), nameof(ShopMenu.update)),
                 postfix: new HarmonyMethod(typeof(SVEShopInjections), nameof(SVEShopInjections.Update_ReplaceSVEShopChecks_Postfix))
             );
 
-            var shopMenuParameterTypes = new[]
+            /*var shopMenuParameterTypes = new[]
             {
                 typeof(Dictionary<ISalable, int[]>), typeof(int), typeof(string),
                 typeof(Func<ISalable, Farmer, int, bool>), typeof(Func<ISalable, bool>), typeof(string),
-            };
-
-            _harmony.Patch(
-                original: AccessTools.Constructor(typeof(ShopMenu), shopMenuParameterTypes),
-                prefix: new HarmonyMethod(typeof(SVEShopInjections), nameof(SVEShopInjections.Constructor_MakeBothJojaShopsTheSame_Prefix))
-            );*/
+            };*/
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Chest), nameof(Chest.checkForAction)),
