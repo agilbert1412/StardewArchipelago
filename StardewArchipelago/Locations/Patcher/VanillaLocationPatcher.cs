@@ -69,7 +69,6 @@ namespace StardewArchipelago.Locations.Patcher
         {
             ReplaceCommunityCenterBundlesWithChecks();
             ReplaceCommunityCenterAreasWithChecks();
-            ReplaceRaccoonBundlesWithChecks();
             ReplaceBackPackUpgradesWithChecks();
             ReplaceMineshaftChestsWithChecks();
             ReplaceElevatorsWithChecks();
@@ -83,6 +82,7 @@ namespace StardewArchipelago.Locations.Patcher
             PatchAdventurerGuildShop();
             ReplaceArcadeMachinesWithChecks();
             PatchTravelingMerchant();
+            ReplaceRaccoonBundlesWithChecks();
             AddFishsanityLocations();
             AddMuseumsanityLocations();
             PatchFestivals();
