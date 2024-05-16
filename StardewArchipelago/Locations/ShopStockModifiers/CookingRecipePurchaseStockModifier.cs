@@ -42,13 +42,6 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
 
         private void ReplaceCookingRecipesWithChefsanityChecks(string shopId, ShopData shopData)
         {
-            string[] shopsWithRecipes = { "Saloon", "ResortBar", "IslandTrade", "VolcanoShop" };
-            if (!shopsWithRecipes.Contains(shopId))
-            {
-                return;
-            }
-
-            var objectsData = DataLoader.Objects(Game1.content);
             for (var i = shopData.Items.Count - 1; i >= 0; i--)
             {
                 var item = shopData.Items[i];
@@ -59,12 +52,12 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
                 }
 
                 var stardewItem = _stardewItemManager.GetItemByQualifiedId(item.ItemId);
-                if (!CraftingRecipe.cookingRecipes.ContainsKey(stardewItem.Name))
+                var location = $"{stardewItem.Name}{Suffix.CHEFSANITY}";
+                if (!CraftingRecipe.cookingRecipes.ContainsKey(stardewItem.Name) || !_archipelago.LocationExists(location))
                 {
                     continue;
                 }
 
-                var location = $"{stardewItem.Name}{Suffix.CHEFSANITY}";
                 var apShopItem = CreateArchipelagoLocation(item, location);
                 shopData.Items.RemoveAt(i);
                 shopData.Items.Insert(i, apShopItem);
