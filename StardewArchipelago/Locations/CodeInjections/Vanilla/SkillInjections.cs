@@ -206,10 +206,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private static void AddApExperienceAndCheckLocations(Skill skill, int amount)
         {
             var apSkillName = _skillToArchipelagoName.ContainsKey(skill) ? _skillToArchipelagoName[skill] : skill.ToString();
+            var experienceAmount = GetMultipliedExperience(amount);
             if (_archipelagoExperience[skill] >= MAX_XP_PER_SKILL && _archipelago.GetReceivedItemCount($"{apSkillName} Level") >= 10)
             {
                 int currentMasteryLevel = MasteryTrackerMenu.getCurrentMasteryLevel();
-                int num = (int)Game1.stats.Increment("MasteryExp", Math.Max(1, amount / 2));
+                int num = (int)Game1.stats.Increment("MasteryExp", Math.Max(1, (int)Math.Round(experienceAmount / 2)));
                 if (MasteryTrackerMenu.getCurrentMasteryLevel() > currentMasteryLevel)
                 {
                     Game1.showGlobalMessage(Game1.content.LoadString("Strings\\1_6_Strings:Mastery_newlevel"));
@@ -217,7 +218,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 }
             }
 
-            var experienceAmount = GetMultipliedExperience(amount);
             var oldExperienceLevel = _archipelagoExperience[skill];
             var newExperienceLevel = _archipelagoExperience[skill] + experienceAmount;
             _archipelagoExperience[skill] = newExperienceLevel;
