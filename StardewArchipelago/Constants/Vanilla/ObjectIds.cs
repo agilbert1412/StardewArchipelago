@@ -143,6 +143,9 @@
         public const string BAIT_AND_BOBBER = "SkillBook_1";
         public const string MINING_MONTHLY = "SkillBook_3";
         public const string COMBAT_QUARTERLY = "SkillBook_4";
+        public const string SEA_JELLY = "SeaJelly";
+        public const string CAVE_JELLY = "CaveJelly";
+        public const string RIVER_JELLY = "RiverJelly";
 
         public static bool IsSkillBook(string itemId)
         {

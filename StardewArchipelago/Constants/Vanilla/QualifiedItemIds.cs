@@ -120,6 +120,9 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string YAM_SEEDS = QualifiedObjectId(ObjectIds.YAM_SEEDS);
         public static readonly string GOLDEN_PUMPKIN = QualifiedObjectId(ObjectIds.GOLDEN_PUMPKIN);
         public static readonly string PRIZE_TICKET = QualifiedObjectId(ObjectIds.PRIZE_TICKET);
+        public static readonly string SEA_JELLY = QualifiedObjectId(ObjectIds.SEA_JELLY);
+        public static readonly string CAVE_JELLY = QualifiedObjectId(ObjectIds.CAVE_JELLY);
+        public static readonly string RIVER_JELLY = QualifiedObjectId(ObjectIds.RIVER_JELLY);
 
         private static string QualifiedObjectId(string objectId)
         {
