@@ -95,10 +95,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     return true; // run original logic
                 }
 
+                var experienceAmount = GetMultipliedExperience(howMuch);
                 if (_archipelagoExperience[skill] >= MAX_XP_PER_SKILL)
                 {
-                    int currentMasteryLevel = MasteryTrackerMenu.getCurrentMasteryLevel();
-                    int num = (int)Game1.stats.Increment("MasteryExp", Math.Max(1, howMuch / 2));
+                    var currentMasteryLevel = MasteryTrackerMenu.getCurrentMasteryLevel();
+                    Game1.stats.Increment("MasteryExp", Math.Max(1, (int)Math.Round(experienceAmount / 2)));
                     if (MasteryTrackerMenu.getCurrentMasteryLevel() > currentMasteryLevel)
                     {
                         Game1.showGlobalMessage(Game1.content.LoadString("Strings\\1_6_Strings:Mastery_newlevel"));
@@ -106,7 +107,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     }
                 }
 
-                var experienceAmount = GetMultipliedExperience(howMuch);
                 var oldExperienceLevel = _archipelagoExperience[skill];
                 var newExperienceLevel = _archipelagoExperience[skill] + experienceAmount;
                 _archipelagoExperience[skill] = newExperienceLevel;
@@ -209,8 +209,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             var experienceAmount = GetMultipliedExperience(amount);
             if (_archipelagoExperience[skill] >= MAX_XP_PER_SKILL && _archipelago.GetReceivedItemCount($"{apSkillName} Level") >= 10)
             {
-                int currentMasteryLevel = MasteryTrackerMenu.getCurrentMasteryLevel();
-                int num = (int)Game1.stats.Increment("MasteryExp", Math.Max(1, (int)Math.Round(experienceAmount / 2)));
+                var currentMasteryLevel = MasteryTrackerMenu.getCurrentMasteryLevel();
+                Game1.stats.Increment("MasteryExp", Math.Max(1, (int)Math.Round(experienceAmount / 2)));
                 if (MasteryTrackerMenu.getCurrentMasteryLevel() > currentMasteryLevel)
                 {
                     Game1.showGlobalMessage(Game1.content.LoadString("Strings\\1_6_Strings:Mastery_newlevel"));
@@ -218,7 +218,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 }
             }
 
-            var oldExperienceLevel = _archipelagoExperience[skill];
             var newExperienceLevel = _archipelagoExperience[skill] + experienceAmount;
             _archipelagoExperience[skill] = newExperienceLevel;
             var newLevel = GetLevel(_archipelagoExperience[skill]);
