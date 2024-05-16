@@ -123,6 +123,7 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string SEA_JELLY = QualifiedObjectId(ObjectIds.SEA_JELLY);
         public static readonly string CAVE_JELLY = QualifiedObjectId(ObjectIds.CAVE_JELLY);
         public static readonly string RIVER_JELLY = QualifiedObjectId(ObjectIds.RIVER_JELLY);
+        public static readonly string POT_OF_GOLD = QualifiedObjectId(ObjectIds.POT_OF_GOLD);
 
         private static string QualifiedObjectId(string objectId)
         {

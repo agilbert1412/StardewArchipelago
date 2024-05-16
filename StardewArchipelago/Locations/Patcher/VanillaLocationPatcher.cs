@@ -624,6 +624,11 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performTouchAction), performTouchActionArgumentTypes),
                 prefix: new HarmonyMethod(typeof(IsolatedEventInjections), nameof(IsolatedEventInjections.PerformTouchAction_GalaxySwordShrine_Prefix))
             );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Object), nameof(Object.checkForAction)),
+                prefix: new HarmonyMethod(typeof(IsolatedEventInjections), nameof(IsolatedEventInjections.CheckForAction_PotOfGold_Prefix))
+            );
         }
 
         private void PatchAdventurerGuildShop()

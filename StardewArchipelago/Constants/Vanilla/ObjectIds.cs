@@ -146,6 +146,7 @@
         public const string SEA_JELLY = "SeaJelly";
         public const string CAVE_JELLY = "CaveJelly";
         public const string RIVER_JELLY = "RiverJelly";
+        public const string POT_OF_GOLD = "PotOfGold";
 
         public static bool IsSkillBook(string itemId)
         {

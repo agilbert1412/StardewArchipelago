@@ -12,6 +12,7 @@ using StardewValley.GameData;
 using StardewValley.Locations;
 using StardewValley.Tools;
 using xTile.Dimensions;
+using Object = StardewValley.Object;
 using Rectangle = xTile.Dimensions.Rectangle;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
@@ -22,6 +23,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         public const string BEACH_BRIDGE_AP_LOCATION = "Beach Bridge Repair";
         public const string GALAXY_SWORD_SHRINE_AP_LOCATION = "Galaxy Sword Shrine";
         public const string RUSTY_SWORD_AP_LOCATION = "The Mines Entrance Cutscene";
+        public const string POT_OF_GOLD_AP_LOCATION = "Pot Of Gold";
 
         private static IMonitor _monitor;
         private static IModHelper _helper;
@@ -309,6 +311,36 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             catch (Exception ex)
             {
                 _monitor.Log($"Failed in {nameof(AwardFestivalPrize_RustySword_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
+        }
+
+        // public virtual bool checkForAction(Farmer who, bool justCheckingForActivity = false)
+        public static bool CheckForAction_PotOfGold_Prefix(Object __instance, Farmer who, bool justCheckingForActivity, ref bool __result)
+        {
+            try
+            {
+                if (__instance.isTemporarilyInvisible || justCheckingForActivity || __instance.QualifiedItemId != QualifiedItemIds.POT_OF_GOLD)
+                {
+                    return true; // run original logic
+                }
+
+                if (_locationChecker.IsLocationMissing(POT_OF_GOLD_AP_LOCATION))
+                {
+                    Game1.playSound("hammer");
+                    Game1.playSound("moneyDial");
+                    __instance.Location.removeObject(__instance.TileLocation, false);
+                    Utility.addDirtPuffs(__instance.Location, (int)__instance.TileLocation.X, (int)__instance.TileLocation.Y, 1, 1, 3);
+                    Utility.addStarsAndSpirals(__instance.Location, (int)__instance.TileLocation.X, (int)__instance.TileLocation.Y, 1, 1, 100, 30, Color.White);
+                    _locationChecker.AddCheckedLocation(POT_OF_GOLD_AP_LOCATION);
+                    return false; // don't run original logic
+                }
+
+                return true; // run original logic
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(CheckForAction_PotOfGold_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
             }
         }
