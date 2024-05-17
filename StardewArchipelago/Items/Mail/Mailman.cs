@@ -175,7 +175,7 @@ namespace StardewArchipelago.Items.Mail
             "I know you've been trying hard to win over a partner for the Flower Dance. This {0} is sure to win over your crush. I just know they'll love it.^^    -{1} from {2}",
         };
 
-        private const string ApConciseMailString = "{0} from [1] at {2}.";
+        private const string ApConciseMailString = "{0} from {1} at {2}.";
 
         // 0: Item
         // 1: Sender
