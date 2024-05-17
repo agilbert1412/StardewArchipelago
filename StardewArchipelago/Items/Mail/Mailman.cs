@@ -122,7 +122,9 @@ namespace StardewArchipelago.Items.Mail
 
         private string GetRandomApMailString()
         {
-            var chosenString = ApMailStrings[_random.Next(0, ApMailStrings.Length)];
+            var chosenString = ModEntry.Instance.Config.DisableLetterTemplates ?
+                ApConciseMailString:
+                ApMailStrings[_random.Next(0, ApMailStrings.Length)];
             chosenString += "{3}[#]Archipelago Item"; // Argument {3} is the embed
             return chosenString;
         }
@@ -172,6 +174,8 @@ namespace StardewArchipelago.Items.Mail
             "You still need one more item for your grange display at the Fair, right? Here's your winner: a freshly caught {0}, straight from the {2} seas.^^    -{1}",
             "I know you've been trying hard to win over a partner for the Flower Dance. This {0} is sure to win over your crush. I just know they'll love it.^^    -{1} from {2}",
         };
+
+        private const string ApConciseMailString = "{0} from [1] at {2}.";
 
         // 0: Item
         // 1: Sender

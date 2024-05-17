@@ -108,7 +108,7 @@ namespace StardewArchipelago.Integrations.GenericModConfigMenu
             configMenu.AddBoolOption(
                 mod: ModManifest,
                 name: () => "Enable Seed Shop Overhaul",
-                tooltip: () => "",
+                tooltip: () => "Seed shops are rebalanced to be more in line with the lore and intended gameplay design of Archipelago",
                 getValue: () => Config.EnableSeedShopOverhaul,
                 setValue: (value) => Config.EnableSeedShopOverhaul = value
             );
@@ -116,15 +116,23 @@ namespace StardewArchipelago.Integrations.GenericModConfigMenu
             configMenu.AddBoolOption(
                 mod: ModManifest,
                 name: () => "Hide Empty Archipelago Letters",
-                tooltip: () => "",
+                tooltip: () => "Letters that contain neither an item nor an unlock will be skipped, reducing clutter",
                 getValue: () => Config.HideEmptyArchipelagoLetters,
                 setValue: (value) => Config.HideEmptyArchipelagoLetters = value
             );
 
             configMenu.AddBoolOption(
                 mod: ModManifest,
+                name: () => "Disable Letter Templates",
+                tooltip: () => "All Archipelago letters will not use a very short and concise format instead of the funny ones full of fluff",
+                getValue: () => Config.DisableLetterTemplates,
+                setValue: (value) => Config.DisableLetterTemplates = value
+            );
+
+            configMenu.AddBoolOption(
+                mod: ModManifest,
                 name: () => "Use Custom Archipelago Icons",
-                tooltip: () => "",
+                tooltip: () => "Alternate art style for the Archipelago icons used in various places in the mod",
                 getValue: () => Config.UseCustomArchipelagoIcons,
                 setValue: (value) => Config.UseCustomArchipelagoIcons = value
             );
@@ -132,7 +140,7 @@ namespace StardewArchipelago.Integrations.GenericModConfigMenu
             configMenu.AddBoolOption(
                 mod: ModManifest,
                 name: () => "Skip Hold Up Animations",
-                tooltip: () => "",
+                tooltip: () => "Skip all the 'Hold an item above your head' animations",
                 getValue: () => Config.SkipHoldUpAnimations,
                 setValue: (value) => Config.SkipHoldUpAnimations = value
             );
@@ -140,7 +148,7 @@ namespace StardewArchipelago.Integrations.GenericModConfigMenu
             configMenu.AddBoolOption(
                 mod: ModManifest,
                 name: () => "Disable Friendship Decay",
-                tooltip: () => "",
+                tooltip: () => "Friendship points no longer go down when you don't talk to NPCs",
                 getValue: () => Config.DisableFriendshipDecay,
                 setValue: (value) => Config.DisableFriendshipDecay = value
             );
