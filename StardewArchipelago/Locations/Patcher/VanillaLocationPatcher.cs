@@ -674,7 +674,7 @@ namespace StardewArchipelago.Locations.Patcher
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Event), nameof(Event.forceEndFestival)),
-                postfix: new HarmonyMethod(typeof(FairInjections), nameof(FairInjections.ForceEndFestival_KeepStarTokens_Postfix))
+                prefix: new HarmonyMethod(typeof(FairInjections), nameof(FairInjections.ForceEndFestival_KeepStarTokens_Prefix))
             );
 
             if (_archipelago.SlotData.FestivalLocations == FestivalLocations.Vanilla)

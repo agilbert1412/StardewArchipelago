@@ -109,22 +109,22 @@ namespace StardewArchipelago.Locations.Festival
 
 
         // public void forceEndFestival(Farmer who)
-        public static void ForceEndFestival_KeepStarTokens_Postfix(Event __instance, Farmer who)
+        public static bool ForceEndFestival_KeepStarTokens_Prefix(Event __instance, Farmer who)
         {
             try
             {
                 if (!__instance.isSpecificFestival("fall16"))
                 {
-                    return;
+                    return true; // run original logic
                 }
 
                 _state.StoredStarTokens += who.festivalScore;
-                return;
+                return true; // run original logic
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(ForceEndFestival_KeepStarTokens_Postfix)}:\n{ex}", LogLevel.Error);
-                return;
+                _monitor.Log($"Failed in {nameof(ForceEndFestival_KeepStarTokens_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
             }
         }
     }
