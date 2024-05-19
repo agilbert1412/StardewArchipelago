@@ -25,6 +25,7 @@ namespace StardewArchipelago.Locations
             { "Hardwood", new[] { "Hardwood Display" } },
             { "Anchor", new[] { "Boat Anchor" } },
             { "Carp", new[] { "Midnight Carp", "Scorpion Carp", "Mutant Carp" } },
+            { "Salmon", new[] { "Void Salmon", "King Salmon" } },
         };
 
         public LocationNameMatcher()
