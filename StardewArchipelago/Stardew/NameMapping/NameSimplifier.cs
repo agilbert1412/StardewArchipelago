@@ -14,9 +14,9 @@ namespace StardewArchipelago.Stardew.NameMapping
         public string GetSimplifiedName(Item item)
         {
             var name = item.Name;
-            if (item is Object && _renamedObjects.ContainsKey(item.ParentSheetIndex))
+            if (item is Object && _renamedObjects.ContainsKey(item.QualifiedItemId))
             {
-                name = _renamedObjects[item.ParentSheetIndex];
+                name = _renamedObjects[item.QualifiedItemId];
             }
 
             if (PowerBooks.BookIdsToNames.ContainsKey(item.ItemId))
@@ -73,19 +73,27 @@ namespace StardewArchipelago.Stardew.NameMapping
                         return "Roe";
                     case Object.PreserveType.AgedRoe:
                         return "Aged Roe";
+                    case Object.PreserveType.DriedFruit:
+                        return "Dried Fruit";
+                    case Object.PreserveType.DriedMushroom:
+                        return "Dried Mushrooms";
+                    case Object.PreserveType.SmokedFish:
+                        return "Smoked Fish";
+                    case Object.PreserveType.Bait:
+                        return "Targeted Bait";
                 }
             }
 
             return name;
         }
 
-        private static readonly Dictionary<int, string> _renamedObjects = new()
+        private static readonly Dictionary<string, string> _renamedObjects = new()
         {
-            { 126, "Strange Doll (Green)" },
-            { 180, "Egg (Brown)" },
-            { 182, "Large Egg (Brown)" },
-            { 438, "Large Goat Milk" },
-            { 223, "Cookies" },
+            { QualifiedItemIds.STRANGE_DOLL_GREEN, "Strange Doll (Green)" },
+            { QualifiedItemIds.BROWN_EGG, "Egg (Brown)" },
+            { QualifiedItemIds.LARGE_BROWN_EGG, "Large Egg (Brown)" },
+            { QualifiedItemIds.LARGE_GOAT_MILK, "Large Goat Milk" },
+            { QualifiedItemIds.COOKIES, "Cookies" },
         };
 
         private static readonly List<string> _simplifiedNames = new()

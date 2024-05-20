@@ -147,6 +147,14 @@
         public const string CAVE_JELLY = "CaveJelly";
         public const string RIVER_JELLY = "RiverJelly";
         public const string POT_OF_GOLD = "PotOfGold";
+        public const string STRANGE_DOLL_GREEN = "126";
+        public const string BROWN_EGG = "180";
+        public const string LARGE_BROWN_EGG = "182";
+        public const string LARGE_GOAT_MILK = "438";
+        public const string COOKIES = "223";
+        public const string SMOKED_FISH = null;
+        public const string DRIED_FRUIT = null;
+        public const string DRIED_MUSHROOMS = null;
 
         public static bool IsSkillBook(string itemId)
         {

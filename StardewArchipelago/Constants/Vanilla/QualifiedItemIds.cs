@@ -124,9 +124,21 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string CAVE_JELLY = QualifiedObjectId(ObjectIds.CAVE_JELLY);
         public static readonly string RIVER_JELLY = QualifiedObjectId(ObjectIds.RIVER_JELLY);
         public static readonly string POT_OF_GOLD = QualifiedObjectId(ObjectIds.POT_OF_GOLD);
+        public static readonly string STRANGE_DOLL_GREEN = QualifiedObjectId(ObjectIds.STRANGE_DOLL_GREEN);
+        public static readonly string BROWN_EGG = QualifiedObjectId(ObjectIds.BROWN_EGG);
+        public static readonly string LARGE_BROWN_EGG = QualifiedObjectId(ObjectIds.LARGE_BROWN_EGG);
+        public static readonly string LARGE_GOAT_MILK = QualifiedObjectId(ObjectIds.LARGE_GOAT_MILK);
+        public static readonly string COOKIES = QualifiedObjectId(ObjectIds.COOKIES);
+        public static readonly string SMOKED_FISH = QualifiedObjectId(ObjectIds.SMOKED_FISH);
+        public static readonly string DRIED_FRUIT = QualifiedObjectId(ObjectIds.DRIED_FRUIT);
+        public static readonly string DRIED_MUSHROOMS = QualifiedObjectId(ObjectIds.DRIED_MUSHROOMS);
 
         private static string QualifiedObjectId(string objectId)
         {
+            if (objectId == null)
+            {
+                return null;
+            }
             return $"{OBJECT_QUALIFIER}{objectId}";
         }
 
