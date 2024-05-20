@@ -267,6 +267,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 {
                     id = "SmokedFish";
                 }
+                if (id == "Pickles")
+                {
+                    id = "Pickle";
+                }
                 var bundleIngredient = new BundleIngredientDescription(id,
                     bundleItem.Amount, bundleItem.Quality,
                     _state.CurrentRaccoonBundleStatus[i],
@@ -340,10 +344,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                     var queryContext = new ItemQueryContext(Game1.currentLocation, Game1.player, Game1.random);
                     var resolvedIngredientQueryResult = ItemQueryResolver.TryResolve(flavoredIngredientQuery, queryContext);
                     var resolvedIngredient = resolvedIngredientQueryResult.FirstOrDefault<ItemQueryResult>()?.Item;
-                    if (resolvedIngredient is StardewValley.Object ingredientObject && item is StardewValley.Object itemObject)
+                    if (resolvedIngredient is Object ingredientObject && item is Object itemObject && itemObject.preservedParentSheetIndex?.Value != null)
                     {
                         var qualifiedIdsMatch = item.QualifiedItemId == ingredientObject.QualifiedItemId;
-                        var preservesIdMatch = ingredient.preservesId.Contains(itemObject.preservedParentSheetIndex);
+                        var preservesIdMatch = ingredient.preservesId.Contains(itemObject.preservedParentSheetIndex.Value);
                         __result = qualifiedIdsMatch && preservesIdMatch;
                         return false; // don't run original logic
                     }
