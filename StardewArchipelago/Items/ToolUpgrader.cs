@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using StardewValley;
+using StardewValley.Inventories;
 using StardewValley.Locations;
 using StardewValley.Objects;
 
@@ -12,7 +13,7 @@ namespace StardewArchipelago.Items
         {
             var player = Game1.player;
             var toolName = toolGenericName.Replace(" ", "_");
-            if (TryUpgradeToolInInventory(player.Items, toolName, out var upgradedTool))
+            if (TryUpgradeToolInFarmer(player, toolName, out var upgradedTool))
             {
                 return upgradedTool;
             }
@@ -30,6 +31,16 @@ namespace StardewArchipelago.Items
             return null;
         }
 
+        private bool TryUpgradeToolInFarmer(Farmer player, string toolName, out Tool upgradedTool)
+        {
+            if (TryUpgradeToolInInventory(player.Items, toolName, out upgradedTool))
+            {
+                return true;
+            }
+
+            return TryUpgradeHat(player, toolName, out upgradedTool);
+        }
+
         private bool TryUpgradeToolInInventory(IList<Item> inventory, string toolName, out Tool upgradedTool)
         {
             for (var i = 0; i < inventory.Count; i++)
@@ -42,6 +53,26 @@ namespace StardewArchipelago.Items
             }
 
             upgradedTool = null;
+            return false;
+        }
+
+        private bool TryUpgradeHat(Farmer player, string toolName, out Tool upgradedTool)
+        {
+            var currentHat = player.hat?.Value;
+            upgradedTool = null;
+            if (currentHat == null)
+            {
+                return false;
+            }
+
+            var hatInHand = Utility.PerformSpecialItemGrabReplacement(currentHat);
+            if (TryUpgradeCorrectTool(toolName, hatInHand, out upgradedTool))
+            {
+                var upgradedHat = Utility.PerformSpecialItemPlaceReplacement(upgradedTool);
+                player.Equip((Hat)upgradedHat, player.hat);
+                return true;
+            }
+
             return false;
         }
 
