@@ -7,6 +7,8 @@ using StardewArchipelago.GameModifications.CodeInjections.Modded;
 using StardewArchipelago.Locations.CodeInjections.Modded;
 using StardewArchipelago.Locations.CodeInjections.Modded.SVE;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
+using StardewArchipelago.Locations.ShopStockModifiers;
+using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
@@ -21,6 +23,7 @@ namespace StardewArchipelago.Locations.Patcher
         private readonly IMonitor _monitor;
         private readonly IModHelper _modHelper;
         private ModsManager _modsManager;
+        private SVEShopStockModifier _sveShopStockModifier;
 
         public ModLocationPatcher(Harmony harmony, IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago)
         {
@@ -29,6 +32,8 @@ namespace StardewArchipelago.Locations.Patcher
             _monitor = monitor;
             _modHelper = modHelper;
             _modsManager = archipelago.SlotData.Mods;
+            _sveShopStockModifier = new SVEShopStockModifier(monitor, modHelper, archipelago, stardewItemManager);
+
         }
 
         public void ReplaceAllLocationsRewardsWithChecks()
@@ -70,8 +75,6 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void AddModSkillInjections()
         {
-            InjectSpaceCoreSkillsPage();
-
             if (!_modsManager.HasModdedSkill() || _archipelago.SlotData.SkillProgression == SkillsProgression.Vanilla)
             {
                 return;
@@ -99,24 +102,6 @@ namespace StardewArchipelago.Locations.Patcher
 
             InjectSocializingExperienceMultiplier();
             InjectArchaeologyExperienceMultiplier();
-        }
-
-        private void InjectSpaceCoreSkillsPage()
-        {
-            if (!_modsManager.ModIsInstalledAndLoaded(_modHelper, "SpaceCore"))
-            {
-                return;
-            }
-
-            var spaceCoreSkillsPageType = AccessTools.TypeByName("SpaceCore.Interface.NewSkillsPage");
-            var desiredNewSkillsPageCtorParameters = new[] { typeof(int), typeof(int), typeof(int), typeof(int) };
-            _harmony.Patch(
-                original: AccessTools.Constructor(spaceCoreSkillsPageType, desiredNewSkillsPageCtorParameters),
-                prefix: new HarmonyMethod(typeof(NewSkillsPageInjections),
-                    nameof(NewSkillsPageInjections.NewSkillsPageCtor_BearKnowledgeEvent_Prefix)),
-                postfix: new HarmonyMethod(typeof(NewSkillsPageInjections),
-                    nameof(NewSkillsPageInjections.NewSkillsPageCtor_BearKnowledgeEvent_Postfix))
-            );
         }
 
         private void InjectSocializingExperienceMultiplier()
@@ -271,17 +256,6 @@ namespace StardewArchipelago.Locations.Patcher
             {
                 return;
             }
-
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(ShopMenu), nameof(ShopMenu.update)),
-                postfix: new HarmonyMethod(typeof(SVEShopInjections), nameof(SVEShopInjections.Update_ReplaceSVEShopChecks_Postfix))
-            );
-
-            /*var shopMenuParameterTypes = new[]
-            {
-                typeof(Dictionary<ISalable, int[]>), typeof(int), typeof(string),
-                typeof(Func<ISalable, Farmer, int, bool>), typeof(Func<ISalable, bool>), typeof(string),
-            };*/
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Chest), nameof(Chest.checkForAction)),

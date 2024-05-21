@@ -41,6 +41,8 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
 
         private void ReplaceCookingRecipesWithChefsanityChecks(string shopId, ShopData shopData)
         {
+
+            var objectsData = DataLoader.Objects(Game1.content);
             for (var i = shopData.Items.Count - 1; i >= 0; i--)
             {
                 var item = shopData.Items[i];
