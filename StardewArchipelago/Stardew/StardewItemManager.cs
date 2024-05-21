@@ -18,6 +18,7 @@ namespace StardewArchipelago.Stardew
         private Dictionary<string, StardewItem> _itemsByQualifiedId;
         private Dictionary<string, StardewObject> _objectsById;
         private Dictionary<string, StardewObject> _objectsByName;
+        private Dictionary<string, List<StardewObject>> _objectsByColor;
         private Dictionary<string, BigCraftable> _bigCraftablesById;
         private Dictionary<string, BigCraftable> _bigCraftablesByName;
         private Dictionary<string, StardewBoots> _bootsById;
@@ -176,6 +177,16 @@ namespace StardewArchipelago.Stardew
             }
 
             throw new ArgumentException($"Item not found: {itemName}");
+        }
+
+        public List<StardewObject> GetObjectsByColor(string color)
+        {
+            if (_objectsByColor.ContainsKey(color))
+            {
+                return _objectsByColor[color];
+            }
+
+            throw new ArgumentException($"Color not supported: {color}");
         }
 
         public BigCraftable GetBigCraftableById(string itemId)
