@@ -26,6 +26,9 @@ namespace StardewArchipelago.Locations
             { "Anchor", new[] { "Boat Anchor" } },
             { "Carp", new[] { "Midnight Carp", "Scorpion Carp", "Mutant Carp" } },
             { "Salmon", new[] { "Void Salmon", "King Salmon" } },
+            { "Egg", new[] { "Dinosaur Egg", "Golden Egg", "Void Egg", "Thunder Egg" } },
+            { "Clay", new[] { "Land Of Clay" } },
+            { "Slime", new[] { "Slime Hutch" } },
         };
 
         public LocationNameMatcher()
