@@ -268,9 +268,12 @@ namespace StardewArchipelago
 
                     if (!_archipelago.IsConnected)
                     {
-                        State.APConnectionInfo = null;
-                        Game1.activeClickableMenu = new InformationDialog(errorMessage, onCloseBehavior: (_) => OnCloseBehavior());
-                        return;
+                        Game1.activeClickableMenu = new ReconnectDialog(errorMessage, State.APConnectionInfo.HostUrl + ":" + State.APConnectionInfo.Port, (host) =>
+                        {
+                            var ipAndPort = host.Split(":");
+                            _apConnectionOverride = new ArchipelagoConnectionInfo(ipAndPort[0], int.Parse(ipAndPort[1]), State.APConnectionInfo.SlotName, State.APConnectionInfo.DeathLink, State.APConnectionInfo.Password);
+                            OnSaveLoaded(sender, e);
+                        }, (_) => OnCloseBehavior());
                     }
                 }
 
