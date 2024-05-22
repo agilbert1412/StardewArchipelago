@@ -28,7 +28,7 @@ namespace StardewArchipelago.Constants.Modded
             { ModNames.WELLWICK, "1.0.0"},
             { ModNames.YOBA, "1.0.0"},
             { ModNames.SVE, "1.14.24"},
-            { ModNames.ALECTO, "1.1.7"},
+            { ModNames.ALECTO, "1.1.8"},
             { ModNames.DISTANT_LANDS, "1.0.8"},
             { ModNames.LACEY, "1.1.3"},
             { ModNames.BOARDING_HOUSE, "4.0.16"}
