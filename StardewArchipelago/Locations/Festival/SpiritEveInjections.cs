@@ -28,7 +28,7 @@ namespace StardewArchipelago.Locations.Festival
         {
             try
             {
-                if (justCheckingForActivity || __instance.giftbox.Value || __instance.playerChest.Value || !Game1.CurrentEvent.isSpecificFestival("fall27"))
+                if (justCheckingForActivity || __instance.giftbox.Value || __instance.playerChest.Value || Game1.CurrentEvent == null || !Game1.CurrentEvent.isSpecificFestival("fall27"))
                 {
                     return true; // run original logic
                 }
