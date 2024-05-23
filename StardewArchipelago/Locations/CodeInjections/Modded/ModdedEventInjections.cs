@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Delegates;
 
 namespace StardewArchipelago.Locations.CodeInjections.Modded
 {
@@ -52,73 +55,80 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             _locationChecker = locationChecker;
         }
 
-        public static bool AddCookingRecipe_CheckForStrayRecipe_Prefix(Event __instance, GameLocation location, GameTime time, string[] split)
+        //public tryEventCommand(GameLocation location, GameTime time, string[] args)
+        public static bool AddRecipe_CheckForStrayRecipe_Prefix(Event __instance, GameLocation location, GameTime time, string[] args)
         {
             try
             {
-                throw new Exception($"{nameof(AddCookingRecipe_CheckForStrayRecipe_Prefix)} is not ready for 1.6");
-                //var isEventChefsanityLocation = _archipelago.SlotData.Chefsanity.HasFlag(Chefsanity.Friendship) && eventCooking.Keys.Contains(__instance.id);
-                //var isRecipeFromQuest = _archipelago.SlotData.QuestLocations.StoryQuestsEnabled && questEventsWithRecipes.Contains(__instance.id);
-                //if (!isRecipeFromQuest && !isEventChefsanityLocation)
-                //{
-                //    return true;
-                //}
-                //if (!isRecipeFromQuest)
-                //{
-                //    _locationChecker.AddCheckedLocation($"{eventCooking[__instance.id]}{RECIPE_SUFFIX}");
-                //}
-                //__instance.CurrentCommand++;
-                //return false; // don't run original logic
+                string commandName = ArgUtility.Get(args, 0);
+                switch (commandName)
+                {
+                    case "addCraftingRecipe":
+                    {
+                        CheckChefsanityLocation(__instance.id);
+                        __instance.CurrentCommand++;
+                        return false;
+                    }
+                    case "addCookingRecipe":
+                    {
+                        CheckCraftsanityLocation(__instance.id);
+                        __instance.CurrentCommand++;
+                        return false;
+                    }
+                }
+                return true;
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(AddCookingRecipe_CheckForStrayRecipe_Prefix)}:\n{ex}", LogLevel.Error);
+                _monitor.Log($"Failed in {nameof(AddRecipe_CheckForStrayRecipe_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
             }
         }
 
-        public static bool AddCraftingRecipe_CheckForStrayRecipe_Prefix(Event __instance, GameLocation location, GameTime time, string[] split)
+        public static void CheckChefsanityLocation(string id)
         {
-            try
+            var isEventChefsanityLocation = _archipelago.SlotData.Chefsanity.HasFlag(Chefsanity.Friendship) && eventCooking.Keys.Contains(id);
+            var isRecipeFromQuest = _archipelago.SlotData.QuestLocations.StoryQuestsEnabled && questEventsWithRecipes.Contains(id);
+            if (!isRecipeFromQuest && !isEventChefsanityLocation)
             {
-                throw new Exception($"{nameof(AddCraftingRecipe_CheckForStrayRecipe_Prefix)} is not ready for 1.6");
-                //var isEventCraftsanityLocation = _archipelago.SlotData.Craftsanity.HasFlag(Craftsanity.All) && eventCrafting.Keys.Contains(__instance.id);
-                //var isRecipeFromQuest = _archipelago.SlotData.QuestLocations.StoryQuestsEnabled && questEventsWithRecipes.Contains(__instance.id);
-
-                //if (!isRecipeFromQuest && !isEventCraftsanityLocation)
-                //{
-                //    return true;
-                //}
-
-                //if (!isRecipeFromQuest)
-                //{
-                //    _locationChecker.AddCheckedLocation($"{eventCrafting[__instance.id]}{RECIPE_SUFFIX}");
-                //}
-                //__instance.CurrentCommand++;
-                //return false; // don't run original logic
+                return;
             }
-            catch (Exception ex)
+            if (!isRecipeFromQuest)
             {
-                _monitor.Log($"Failed in {nameof(AddCraftingRecipe_CheckForStrayRecipe_Prefix)}:\n{ex}", LogLevel.Error);
-                return true; // run original logic
+                _locationChecker.AddCheckedLocation($"{eventCooking[id]}{RECIPE_SUFFIX}");
             }
+        }
+
+        public static void CheckCraftsanityLocation(string id)
+        {
+            var isEventCraftsanityLocation = _archipelago.SlotData.Craftsanity.HasFlag(Craftsanity.All) && eventCrafting.Keys.Contains(id);
+            var isRecipeFromQuest = _archipelago.SlotData.QuestLocations.StoryQuestsEnabled && questEventsWithRecipes.Contains(id);
+            if (!isRecipeFromQuest && !isEventCraftsanityLocation)
+            {
+                return;
+            }
+
+            if (!isRecipeFromQuest)
+            {
+                _locationChecker.AddCheckedLocation($"{eventCrafting[id]}{RECIPE_SUFFIX}");
+            }
+
         }
 
         public static bool SkipEvent_ReplaceRecipe_Prefix(Event __instance)
         {
             try
             {
-                throw new Exception($"{nameof(SkipEvent_ReplaceRecipe_Prefix)} is not ready for 1.6");
-                //var cookingEvents = eventCooking.Keys;
-                //var craftingEvents = eventCrafting.Keys;
-                //if (!craftingEvents.Contains(__instance.id) && !cookingEvents.Contains(__instance.id))
-                //{
-                //    return true; // run original logic
-                //}
+                var cookingEvents = eventCooking.Keys;
+                var craftingEvents = eventCrafting.Keys;
+                if (!craftingEvents.Contains(__instance.id) && !cookingEvents.Contains(__instance.id))
+                {
+                    return true; // run original logic
+                }
 
-                //var cookingEvent = cookingEvents.Contains(__instance.id);
-                //SkipRecipeEventArchipelago(__instance, cookingEvent);
-                //return false; // don't run original logic
+                var cookingEvent = cookingEvents.Contains(__instance.id);
+                SkipRecipeEventArchipelago(__instance, cookingEvent);
+                return false; // don't run original logic
             }
             catch (Exception ex)
             {
@@ -157,10 +167,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
 
             OnCheckRecipeLocation(__instance.id, cookingEvent);
 
-            __instance.endBehaviors(new string[1]
-            {
-                "end",
-            }, Game1.currentLocation);
+            __instance.endBehaviors();
         }
 
 

@@ -58,19 +58,14 @@ namespace StardewArchipelago.Locations.Patcher
                 return;
             }
 
-            throw new Exception($"{nameof(AddDistantLandsEventInjections)} is not ready for 1.6");
-            //_harmony.Patch(
-            //    original: AccessTools.Method(typeof(Event), nameof(Event.skipEvent)),
-            //    prefix: new HarmonyMethod(typeof(ModdedEventInjections), nameof(ModdedEventInjections.SkipEvent_ReplaceRecipe_Prefix))
-            //);
-            //_harmony.Patch(
-            //    original: AccessTools.Method(typeof(Event), nameof(Event.command_addCookingRecipe)),
-            //    prefix: new HarmonyMethod(typeof(ModdedEventInjections), nameof(ModdedEventInjections.AddCookingRecipe_CheckForStrayRecipe_Prefix))
-            //);
-            //_harmony.Patch(
-            //    original: AccessTools.Method(typeof(Event), nameof(Event.command_addCraftingRecipe)),
-            //    prefix: new HarmonyMethod(typeof(ModdedEventInjections), nameof(ModdedEventInjections.AddCraftingRecipe_CheckForStrayRecipe_Prefix))
-            //);
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Event), nameof(Event.skipEvent)),
+                prefix: new HarmonyMethod(typeof(ModdedEventInjections), nameof(ModdedEventInjections.SkipEvent_ReplaceRecipe_Prefix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Event), nameof(Event.tryEventCommand)),
+                prefix: new HarmonyMethod(typeof(ModdedEventInjections), nameof(ModdedEventInjections.AddRecipe_CheckForStrayRecipe_Prefix))
+            );
         }
 
         private void AddModSkillInjections()
@@ -100,8 +95,8 @@ namespace StardewArchipelago.Locations.Patcher
                 postfix: new HarmonyMethod(typeof(RecipeLevelUpInjections), nameof(RecipeLevelUpInjections.SkillLevelUpMenuConstructor_SendModdedSkillRecipeChecks_Postfix))
             );
 
-            InjectSocializingExperienceMultiplier();
-            InjectArchaeologyExperienceMultiplier();
+            //InjectSocializingExperienceMultiplier();
+            //InjectArchaeologyExperienceMultiplier();
         }
 
         private void InjectSocializingExperienceMultiplier()
