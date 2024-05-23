@@ -15,9 +15,9 @@ namespace StardewArchipelago.Stardew.NameMapping
         public string GetSimplifiedName(Item item)
         {
             var name = item.Name;
-            if (_renamedItems.ContainsKey(item.ParentSheetIndex))
+            if (item is Object && _renamedObjects.ContainsKey(item.ParentSheetIndex))
             {
-                name = _renamedItems[item.ParentSheetIndex];
+                name = _renamedObjects[item.ParentSheetIndex];
             }
 
             foreach (var (oldChar, newChar) in _simplifiedChars)
@@ -75,7 +75,7 @@ namespace StardewArchipelago.Stardew.NameMapping
             return name;
         }
 
-        private static readonly Dictionary<int, string> _renamedItems = new()
+        private static readonly Dictionary<int, string> _renamedObjects = new()
         {
             { 126, "Strange Doll (Green)"},
             { 180, "Egg (Brown)" },
