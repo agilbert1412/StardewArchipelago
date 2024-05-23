@@ -37,10 +37,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             {
                 SkullCavernInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             }
-            if (archipelago.SlotData.Mods.ModIsInstalledAndLoaded(modHelper, "SpaceCore"))
-            {
-                NewSkillsPageInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
-            }
             if (archipelago.SlotData.Mods.HasMod(ModNames.SVE))
             {
                 SVECutsceneInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
