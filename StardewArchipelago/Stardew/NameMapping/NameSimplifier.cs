@@ -29,7 +29,7 @@ namespace StardewArchipelago.Stardew.NameMapping
                 name = name.Replace(oldChar, newChar);
             }
 
-            if (name.Contains("moonslime.excavation."))
+            if (name.Contains("moonslime.Archaeology."))
             {
                 var ti = CultureInfo.CurrentCulture.TextInfo;
                 var displayName = ti.ToTitleCase(item.DisplayName);

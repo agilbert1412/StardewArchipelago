@@ -17,6 +17,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private const int MAX_XP_PER_SKILL = 15000;
         private const string _skillLocationName = "Level {0} {1}";
 
+        private static readonly Dictionary<Skill, string> _skillToArchipelagoName = new()
+        {
+            { Skill.Archaeology, ArchipelagoSkillNames.ARCHAEOLOGY },
+        };
+
         private static readonly Dictionary<Skill, string> _skillToModName = new()
         {
             { Skill.Magic, ModNames.MAGIC }, { Skill.Binning, ModNames.BINNING }, { Skill.Cooking, ModNames.COOKING },

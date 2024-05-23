@@ -28,14 +28,14 @@ namespace StardewArchipelago.Constants.Modded
             { ModNames.SHIKO, "1.1.0" }, // The mod is 1.2.0 but they didn't update the manifest.json
             { ModNames.SKULL_CAVERN_ELEVATOR, "1.6.1" },
             { ModNames.SOCIALIZING, "2.0.6" },
-            { ModNames.SVE, "1.14.24" },
+            { ModNames.SVE, "1.14.44" },
             { ModNames.TRACTOR, "4.19.0" },
             { ModNames.WELLWICK, "1.0.0" },
             { ModNames.YOBA, "1.0.0" },
             { ModNames.SVE, "1.14.44" },
-            { ModNames.ALECTO, "1.1.7" },
-            { ModNames.DISTANT_LANDS, "1.0.8" },
-            { ModNames.LACEY, "1.1.2" },
+            { ModNames.ALECTO, "1.1.10" },
+            { ModNames.DISTANT_LANDS, "2.0.8" },
+            { ModNames.LACEY, "1.2.2" },
             { ModNames.BOARDING_HOUSE, "4.0.16" },
         };
 

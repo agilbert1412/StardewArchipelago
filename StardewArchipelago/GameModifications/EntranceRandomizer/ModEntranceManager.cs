@@ -109,7 +109,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
 
         private static readonly Dictionary<string, string> _locationLacey = new()
         {
-            { "Mouse House", "Custom_HatMouseLacey_MouseHouse" },
+            { "Mouse House", "ichortower.HatMouseLacey_MouseHouse" },
         };
 
         private static readonly Dictionary<string, string> _locationBoardingHouse = new()
