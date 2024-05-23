@@ -227,87 +227,124 @@ namespace StardewArchipelago
             try
             {
                 ReadPersistentArchipelagoData();
-                
-                _stardewItemManager = new StardewItemManager();
-                _mail = new Mailman(State);
-                _locationChecker = new LocationChecker(Monitor, _archipelago, State.LocationsChecked);
-                _itemPatcher = new ItemPatcher(Monitor, _helper, _harmony, _archipelago);
-                _goalManager = new GoalManager(Monitor, _helper, _harmony, _archipelago, _locationChecker);
-                _entranceManager = new EntranceManager(Monitor, _archipelago, State);
-                var shopStockGenerator = new ShopStockGenerator(Monitor, _helper, _archipelago, _locationChecker);
-                var junimoShopGenerator = new JunimoShopGenerator(_archipelago, shopStockGenerator, _stardewItemManager);
-                var nameSimplifier = new NameSimplifier();
-                var friends = new Friends();
-                _logicPatcher = new RandomizedLogicPatcher(Monitor, _helper, Config, _harmony, _archipelago, _locationChecker, _stardewItemManager, _entranceManager, shopStockGenerator, nameSimplifier, friends, State);
-                _modLogicPatcher = new ModRandomizedLogicPatcher(Monitor, _helper, _harmony, _archipelago, shopStockGenerator, _stardewItemManager, junimoShopGenerator);
-                _jojaDisabler = new JojaDisabler(Monitor, _helper, _harmony);
-                _seasonsRandomizer = new SeasonsRandomizer(Monitor, _helper, _archipelago, State);
-                _appearanceRandomizer = new AppearanceRandomizer(Monitor, _archipelago);
-                var tileChooser = new TileChooser();
-                _chatForwarder = new ChatForwarder(Monitor, _helper, _harmony, _archipelago, _giftHandler, _goalManager, tileChooser);
-                _questCleaner = new QuestCleaner();
-                
-                if (!_archipelago.IsConnected)
+
+                if (!AttemptConnectionToArchipelago())
                 {
-                    if (_apConnectionOverride != null)
-                    {
-                        State.APConnectionInfo = _apConnectionOverride;
-                        _apConnectionOverride = null;
-                    }
-
-                    var errorMessage = "";
-                    if (State.APConnectionInfo == null)
-                    {
-                        errorMessage =
-                            $"The game being loaded has no connection information.{Environment.NewLine}Please use the connect_override command to input connection fields before loading it";
-                    }
-                    else
-                    {
-                        _archipelago.Connect(State.APConnectionInfo, out errorMessage);
-                    }
-
-                    if (!_archipelago.IsConnected)
-                    {
-                        Game1.activeClickableMenu = new ReconnectDialog(errorMessage, State.APConnectionInfo.HostUrl + ":" + State.APConnectionInfo.Port, (host) =>
-                        {
-                            var ipAndPort = host.Split(":");
-                            _apConnectionOverride = new ArchipelagoConnectionInfo(ipAndPort[0], int.Parse(ipAndPort[1]), State.APConnectionInfo.SlotName, State.APConnectionInfo.DeathLink, State.APConnectionInfo.Password);
-                            OnSaveLoaded(sender, e);
-                        }, (_) => OnCloseBehavior());
-                    }
+                    return;
                 }
 
-                var babyBirther = new BabyBirther();
-                _giftHandler.Initialize(Monitor, _archipelago, _stardewItemManager, _mail);
-                _itemManager = new ItemManager(Monitor, _helper, _harmony, _archipelago, _stardewItemManager, _mail, tileChooser, babyBirther, _giftHandler.Sender, State.ItemsReceived);
-                var weaponsManager = new WeaponsManager(_stardewItemManager, _archipelago.SlotData.Mods);
-                _mailPatcher = new MailPatcher(Monitor, _harmony, _archipelago, _locationChecker, State,
-                    new LetterActions(_helper, _mail, _archipelago, weaponsManager, _itemManager.TrapManager, babyBirther, _stardewItemManager));
-                var bundlesManager = new BundlesManager(_helper, _stardewItemManager, _archipelago.SlotData.BundlesData);
-                bundlesManager.ReplaceAllBundles();
-                _locationsPatcher = new LocationPatcher(Monitor, _helper, Config, _harmony, _archipelago, State, _locationChecker, _stardewItemManager, weaponsManager, shopStockGenerator, junimoShopGenerator, friends);
-                _shippingBehaviors = new NightShippingBehaviors(Monitor, _archipelago, _locationChecker, nameSimplifier);
-                _chatForwarder.ListenToChatMessages();
-                _logicPatcher.PatchAllGameLogic();
-                _modLogicPatcher.PatchAllModGameLogic();
-                _mailPatcher.PatchMailBoxForApItems();
-                _entranceManager.SetEntranceRandomizerSettings(_archipelago.SlotData);
-                _locationsPatcher.ReplaceAllLocationsRewardsWithChecks();
-                _itemPatcher.PatchApItems();
-                _goalManager.InjectGoalMethods();
-                _jojaDisabler.DisableJojaMembership();
-                _multiSleep.InjectMultiSleepOption(_archipelago.SlotData);
-                TravelingMerchantInjections.UpdateTravelingMerchantForToday(Game1.getLocationFromName("Forest") as Forest, Game1.dayOfMonth);
-                SeasonsRandomizer.ChangeMailKeysBasedOnSeasonsToDaysElapsed();
-                _modStateInitializer = new InitialModGameStateInitializer(Monitor, _archipelago);
-                _hintHelper = new HintHelper();
-                Game1.chatBox?.addMessage($"Connected to Archipelago as {_archipelago.SlotData.SlotName}. Type !!help for client commands", Color.Green);
-
+                InitializeAfterConnection();
             }
             catch (Exception)
             {
                 Game1.chatBox?.addMessage($"A Fatal error has occurred while initializing Archipelago. Check SMAPI for details to report the problem", Color.Red);
                 throw;
+            }
+        }
+
+        private void InitializeAfterConnection()
+        {
+            _stardewItemManager = new StardewItemManager();
+            _mail = new Mailman(State);
+            _locationChecker = new LocationChecker(Monitor, _archipelago, State.LocationsChecked);
+            _itemPatcher = new ItemPatcher(Monitor, _helper, _harmony, _archipelago);
+            _goalManager = new GoalManager(Monitor, _helper, _harmony, _archipelago, _locationChecker);
+            _entranceManager = new EntranceManager(Monitor, _archipelago, State);
+            var shopStockGenerator = new ShopStockGenerator(Monitor, _helper, _archipelago, _locationChecker);
+            var junimoShopGenerator = new JunimoShopGenerator(_archipelago, shopStockGenerator, _stardewItemManager);
+            var nameSimplifier = new NameSimplifier();
+            var friends = new Friends();
+            _logicPatcher = new RandomizedLogicPatcher(Monitor, _helper, Config, _harmony, _archipelago, _locationChecker,
+                _stardewItemManager, _entranceManager, shopStockGenerator, nameSimplifier, friends, State);
+            _modLogicPatcher = new ModRandomizedLogicPatcher(Monitor, _helper, _harmony, _archipelago, shopStockGenerator,
+                _stardewItemManager, junimoShopGenerator);
+            _jojaDisabler = new JojaDisabler(Monitor, _helper, _harmony);
+            _seasonsRandomizer = new SeasonsRandomizer(Monitor, _helper, _archipelago, State);
+            _appearanceRandomizer = new AppearanceRandomizer(Monitor, _archipelago);
+            var tileChooser = new TileChooser();
+            _chatForwarder =
+                new ChatForwarder(Monitor, _helper, _harmony, _archipelago, _giftHandler, _goalManager, tileChooser);
+            _questCleaner = new QuestCleaner();
+
+            var babyBirther = new BabyBirther();
+            _giftHandler.Initialize(Monitor, _archipelago, _stardewItemManager, _mail);
+            _itemManager = new ItemManager(Monitor, _helper, _harmony, _archipelago, _stardewItemManager, _mail, tileChooser,
+                babyBirther, _giftHandler.Sender, State.ItemsReceived);
+            var weaponsManager = new WeaponsManager(_stardewItemManager, _archipelago.SlotData.Mods);
+            _mailPatcher = new MailPatcher(Monitor, _harmony, _archipelago, _locationChecker, State,
+                new LetterActions(_helper, _mail, _archipelago, weaponsManager, _itemManager.TrapManager, babyBirther,
+                    _stardewItemManager));
+            var bundlesManager = new BundlesManager(_helper, _stardewItemManager, _archipelago.SlotData.BundlesData);
+            bundlesManager.ReplaceAllBundles();
+            _locationsPatcher = new LocationPatcher(Monitor, _helper, Config, _harmony, _archipelago, State, _locationChecker,
+                _stardewItemManager, weaponsManager, shopStockGenerator, junimoShopGenerator, friends);
+            _shippingBehaviors = new NightShippingBehaviors(Monitor, _archipelago, _locationChecker, nameSimplifier);
+            _chatForwarder.ListenToChatMessages();
+            _logicPatcher.PatchAllGameLogic();
+            _modLogicPatcher.PatchAllModGameLogic();
+            _mailPatcher.PatchMailBoxForApItems();
+            _entranceManager.SetEntranceRandomizerSettings(_archipelago.SlotData);
+            _locationsPatcher.ReplaceAllLocationsRewardsWithChecks();
+            _itemPatcher.PatchApItems();
+            _goalManager.InjectGoalMethods();
+            _jojaDisabler.DisableJojaMembership();
+            _multiSleep.InjectMultiSleepOption(_archipelago.SlotData);
+            TravelingMerchantInjections.UpdateTravelingMerchantForToday(Game1.getLocationFromName("Forest") as Forest,
+                Game1.dayOfMonth);
+            SeasonsRandomizer.ChangeMailKeysBasedOnSeasonsToDaysElapsed();
+            _modStateInitializer = new InitialModGameStateInitializer(Monitor, _archipelago);
+            _hintHelper = new HintHelper();
+            Game1.chatBox?.addMessage(
+                $"Connected to Archipelago as {_archipelago.SlotData.SlotName}. Type !!help for client commands", Color.Green);
+        }
+
+        private bool AttemptConnectionToArchipelago()
+        {
+            if (_archipelago.IsConnected)
+            {
+                return true;
+            }
+
+            if (_apConnectionOverride != null)
+            {
+                State.APConnectionInfo = _apConnectionOverride;
+                _apConnectionOverride = null;
+            }
+
+            var errorMessage = "";
+            if (State.APConnectionInfo == null)
+            {
+                errorMessage =
+                    $"The game being loaded has no connection information.{Environment.NewLine}Please use the connect_override command to input connection fields before loading it";
+            }
+            else
+            {
+                _archipelago.Connect(State.APConnectionInfo, out errorMessage);
+            }
+
+            if (_archipelago.IsConnected)
+            {
+                return true;
+            }
+
+            OfferRetry(errorMessage);
+            return false;
+        }
+
+        private void OfferRetry(string errorMessage)
+        {
+            var reconnectDialog = new ReconnectDialog(errorMessage, State.APConnectionInfo, 
+                OnClickRetry, (_) => OnCloseBehavior());
+            Game1.activeClickableMenu = reconnectDialog;
+        }
+
+        private void OnClickRetry(string serverAddress)
+        {
+            var ipAndPort = serverAddress.Split(":");
+            _apConnectionOverride = new ArchipelagoConnectionInfo(ipAndPort[0], int.Parse(ipAndPort[1]), State.APConnectionInfo.SlotName, State.APConnectionInfo.DeathLink, State.APConnectionInfo.Password);
+            if (AttemptConnectionToArchipelago())
+            {
+                InitializeAfterConnection();
             }
         }
 

@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using StardewArchipelago.Archipelago;
 using StardewValley;
 using StardewValley.Menus;
 
@@ -20,7 +21,7 @@ namespace StardewArchipelago.GameModifications
 
         public ReconnectDialog(
             string message,
-            string host,
+            ArchipelagoConnectionInfo connectionInfo,
             behavior onClickRetryBehavior,
             behavior onCloseBehavior)
             : base(Game1.uiViewport.Width / 2 - (int)Game1.dialogueFont.MeasureString(message).X / 2 - borderWidth, Game1.uiViewport.Height / 2 - (int)Game1.dialogueFont.MeasureString(message).Y / 2, (int)Game1.dialogueFont.MeasureString(message).X + borderWidth * 2, (int)Game1.dialogueFont.MeasureString(message).Y + borderWidth * 2 + 160)
@@ -31,7 +32,10 @@ namespace StardewArchipelago.GameModifications
             this.message = Game1.parseText(message, Game1.dialogueFont, Math.Min(titleSafeArea.Width - 64, width));
             y = yPositionOnScreen + height - borderWidth - spaceToClearTopBorder + 31;
             hostField = new OptionsTextEntry("", -999, xPositionOnScreen + borderWidth + spaceToClearSideBorder + 250, y);
-            hostField.textBox.Text = host;
+            if (connectionInfo != null)
+            {
+                hostField.textBox.Text = $"{connectionInfo.HostUrl}:{connectionInfo.Port}";
+            }
             retryButton = new ClickableTextureComponent("Retry", new Rectangle(xPositionOnScreen + width - borderWidth - spaceToClearSideBorder - 128 - 4, y, 64, 64), null, null, Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 46), 1f);
             retryButton.myID = 105;
             retryButton.rightNeighborID = 101;
