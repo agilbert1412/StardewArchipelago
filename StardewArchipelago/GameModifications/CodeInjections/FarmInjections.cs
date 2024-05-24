@@ -223,9 +223,12 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         {
             var blueprint = "Shipping Bin";
             var tile = farm.GetStarterShippingBinLocation();
+            var collisionMask = CollisionMask.Buildings | CollisionMask.Characters | CollisionMask.Farmers | CollisionMask.Flooring | CollisionMask.Furniture | CollisionMask.Objects;
             for (var x = 0; x < 2; x++)
             {
-                var isBuildable = farm.isBuildable(new Vector2(tile.X + x, tile.Y));
+                var tileLocation = new Vector2(tile.X + x, tile.Y);
+                var isBuildable = !farm.IsTileOccupiedBy(tileLocation, collisionMask) &&
+                                  farm.GetFurnitureAt(tileLocation) == null;
                 if (!isBuildable)
                 {
                     return;
