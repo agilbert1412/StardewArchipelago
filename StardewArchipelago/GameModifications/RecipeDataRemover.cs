@@ -146,6 +146,8 @@ namespace StardewArchipelago.GameModifications
 
                 var modifiedRecipe = recipeData.Replace(recipeUnlockCondition, $"none:{recipeUnlockCondition}");
                 cookingRecipesData[recipeName] = modifiedRecipe;
+                var npcName = unlockConditionParts[1];
+                Game1.player.RemoveMail($"{npcName}Cooking", true);
             }
         }
 
