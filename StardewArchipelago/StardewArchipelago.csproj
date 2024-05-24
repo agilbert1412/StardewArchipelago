@@ -8,6 +8,12 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Compile Remove="GameModifications\Buildings\**" />
+      <EmbeddedResource Remove="GameModifications\Buildings\**" />
+      <None Remove="GameModifications\Buildings\**" />
+    </ItemGroup>
+
+    <ItemGroup>
         <None Include="..\.editorconfig" Link=".editorconfig" />
     </ItemGroup>
 
@@ -300,7 +306,6 @@
   </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="GameModifications\Buildings\" />
         <Folder Include="GameModifications\CustomOptions\" />
         <Folder Include="Test\" />
     </ItemGroup>
