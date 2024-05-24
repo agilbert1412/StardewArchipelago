@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
 using StardewValley;
@@ -42,6 +43,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
                 if (__result is QiPlaneEvent && !hasUnlockedQiPlane)
                 {
+                    // Don't play that stupid sound. Yes this is jank. No I don't want to rewrite the entirety of Utility.PicKFarmEvent() just for this.
+                    Game1.delayedActions = Game1.delayedActions.Where(x => x.stringData != "planeflyby").ToList();
                     __result = null;
                     return;
                 }
