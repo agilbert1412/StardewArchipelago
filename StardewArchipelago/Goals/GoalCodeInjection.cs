@@ -145,10 +145,10 @@ namespace StardewArchipelago.Goals
             foreach (var (id, objectData) in Game1.objectData)
             {
                 var isFish = objectData.Category == Category.FISH;
-                var numericId = int.Parse(id);
-                var isTrash = (numericId >= 167 && numericId <= 172);
-                var isLegendaryFamily = (numericId >= 898 && numericId <= 902);
-                var isIslandFish = (numericId >= 836 && numericId <= 838);
+                var idIsNumeric = int.TryParse(id, out var numericId);
+                var isTrash = idIsNumeric && (numericId >= 167 && numericId <= 172);
+                var isLegendaryFamily = idIsNumeric && (numericId >= 898 && numericId <= 902);
+                var isIslandFish = idIsNumeric && (numericId >= 836 && numericId <= 838);
                 if (!isFish || isTrash || isLegendaryFamily || isIslandFish)
                 {
                     continue;
