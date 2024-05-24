@@ -71,9 +71,13 @@ namespace StardewArchipelago.Locations.Festival
         public const string LUAU_SOUP = "Luau Soup";
 
         public const string TROUT_DERBY_REWARD_PATTERN = "Trout Derby Reward {0}";
-        public static readonly string TROUT_DERBY_REWARD_1 = string.Format(TROUT_DERBY_REWARD_PATTERN, 1);
-        public static readonly string TROUT_DERBY_REWARD_2 = string.Format(TROUT_DERBY_REWARD_PATTERN, 2);
-        public static readonly string TROUT_DERBY_REWARD_3 = string.Format(TROUT_DERBY_REWARD_PATTERN, 3);
+        public static readonly string[] TROUT_DERBY_REWARDS = new[]
+        {
+            string.Format(TROUT_DERBY_REWARD_PATTERN, 1), string.Format(TROUT_DERBY_REWARD_PATTERN, 2), string.Format(TROUT_DERBY_REWARD_PATTERN, 3),
+            string.Format(TROUT_DERBY_REWARD_PATTERN, 4), string.Format(TROUT_DERBY_REWARD_PATTERN, 5), string.Format(TROUT_DERBY_REWARD_PATTERN, 6),
+            string.Format(TROUT_DERBY_REWARD_PATTERN, 7), string.Format(TROUT_DERBY_REWARD_PATTERN, 8), string.Format(TROUT_DERBY_REWARD_PATTERN, 9),
+            string.Format(TROUT_DERBY_REWARD_PATTERN, 10),
+        };
 
         public const string WATCH_MOONLIGHT_JELLIES = "Dance of the Moonlight Jellies";
         public const string MOONLIGHT_JELLIES_BANNER = "Moonlight Jellies Banner";
@@ -131,7 +135,7 @@ namespace StardewArchipelago.Locations.Festival
             STUFFED_MUSHROOMS, ELF_QUESADILLA, NACHOS_OF_THE_DESERT, CLOPPINO, RAINFOREST_SHRIMP, SHRIMP_DONUT, SMELL_OF_THE_SEA, DESERT_GUMBO,
             FREE_CACTUS, MONSTER_HUNT, DEEP_DIVE, TREASURE_HUNT, TOUCH_A_CALICO_STATUE, REAL_CALICO_EGG_HUNTER, WILLYS_CHALLENGE, DESERT_SCHOLAR,
         };
-        private static readonly string[] TROUT_DERBY_ALL = new[] { TROUT_DERBY_REWARD_1, TROUT_DERBY_REWARD_2, TROUT_DERBY_REWARD_3, };
+        private static readonly string[] TROUT_DERBY_ALL = TROUT_DERBY_REWARDS;
         private static readonly string[] SQUIDFEST_ALL = Array.Empty<string>();
         private static readonly string[] NIGHT_MARKET_ALL = new[] { MERMAID_PEARL, CONE_HAT, IRIDIUM_FIREPLACE, RARECROW_7, RARECROW_8, };
 
