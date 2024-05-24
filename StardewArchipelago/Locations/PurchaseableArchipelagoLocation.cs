@@ -66,7 +66,9 @@ namespace StardewArchipelago.Locations
 
         public PurchaseableArchipelagoLocation(string locationDisplayName, string locationName, IMonitor monitor, IModHelper modHelper, LocationChecker locationChecker, ArchipelagoClient archipelago, Hint[] myActiveHints, Action purchaseCallback = null)
         {
-            var prefix = locationDisplayName.Length < 18 ? ARCHIPELAGO_PREFIX : ARCHIPELAGO_NO_PREFIX;
+            // Prefix removed for now, because the inconsistency makes it ugly
+            // var prefix = locationDisplayName.Length < 18 ? ARCHIPELAGO_PREFIX : ARCHIPELAGO_NO_PREFIX;
+            var prefix = ARCHIPELAGO_NO_PREFIX;
             _locationDisplayName = $"{prefix}{locationDisplayName}";
             Name = _locationDisplayName;
             LocationName = locationName;
