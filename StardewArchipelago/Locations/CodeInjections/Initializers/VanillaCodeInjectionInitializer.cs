@@ -7,6 +7,7 @@ using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Quests;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity;
 using StardewArchipelago.Locations.Festival;
 using StardewArchipelago.Serialization;
 using StardewArchipelago.Stardew;
@@ -54,6 +55,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             FarmCaveInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             MysteryBoxInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             BookInjections.Initialize(monitor, modHelper, archipelago, locationChecker, qosManager);
+            WalnutBushInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
         }
 
         private static void InitializeBundleInjections(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, BundlesManager bundlesManager, BundleReader bundleReader)

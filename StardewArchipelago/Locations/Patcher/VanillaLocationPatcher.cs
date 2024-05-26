@@ -8,6 +8,7 @@ using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Quests;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity;
 using StardewArchipelago.Locations.Festival;
 using StardewArchipelago.Locations.GingerIsland;
 using StardewArchipelago.Locations.ShopStockModifiers;
@@ -98,6 +99,7 @@ namespace StardewArchipelago.Locations.Patcher
             PatchFarmcave();
             PatchMysteryBoxes();
             PatchBooks();
+            PatchWalnuts();
         }
 
         public void CleanEvents()
@@ -1179,6 +1181,17 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(typeof(LibraryMuseum), "resetLocalState"),
                 prefix: new HarmonyMethod(typeof(BookInjections), nameof(BookInjections.ResetLocalState_BooksanityLostBooks_Prefix))
             );
+        }
+
+        private void PatchWalnuts()
+        {
+            if (_archipelago.SlotData.Walnutsanity.HasFlag(Walnutsanity.Bushes))
+            {
+                _harmony.Patch(
+                    original: AccessTools.Method(typeof(Bush), nameof(Bush.GetShakeOffItem)),
+                    prefix: new HarmonyMethod(typeof(WalnutBushInjections), nameof(WalnutBushInjections.GetShakeOffItem_ReplaceWalnutWithCheck_Prefix))
+                );
+            }
         }
     }
 }

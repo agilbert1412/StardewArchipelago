@@ -36,6 +36,7 @@ namespace StardewArchipelago.Archipelago
         private const string FRIENDSANITY_KEY = "friendsanity";
         private const string FRIENDSANITY_HEART_SIZE_KEY = "friendsanity_heart_size";
         private const string BOOKSANITY_KEY = "booksanity";
+        private const string WALNUTSANITY_KEY = "walnutsanity";
         private const string EXCLUDE_GINGER_ISLAND_KEY = "exclude_ginger_island";
         private const string TRAP_ITEMS_KEY = "trap_items";
         private const string MULTI_SLEEP_ENABLED_KEY = "multiple_day_sleep_enabled";
@@ -89,6 +90,7 @@ namespace StardewArchipelago.Archipelago
         public Friendsanity Friendsanity { get; private set; }
         public int FriendsanityHeartSize { get; private set; }
         public Booksanity Booksanity { get; private set; }
+        public Walnutsanity Walnutsanity { get; private set; }
         public bool ExcludeGingerIsland { get; private set; }
         public TrapItemsDifficulty TrapItemsDifficulty { get; set; }
         public bool EnableMultiSleep { get; private set; }
@@ -141,6 +143,7 @@ namespace StardewArchipelago.Archipelago
             Friendsanity = GetSlotSetting(FRIENDSANITY_KEY, Friendsanity.None);
             FriendsanityHeartSize = GetSlotSetting(FRIENDSANITY_HEART_SIZE_KEY, 4);
             Booksanity = GetSlotSetting(BOOKSANITY_KEY, Booksanity.None);
+            Walnutsanity = GetSlotWalnutsanitySetting();
             ExcludeGingerIsland = GetSlotSetting(EXCLUDE_GINGER_ISLAND_KEY, true);
             TrapItemsDifficulty = GetSlotSetting(TRAP_ITEMS_KEY, TrapItemsDifficulty.Medium);
             EnableMultiSleep = GetSlotSetting(MULTI_SLEEP_ENABLED_KEY, true);
@@ -162,6 +165,31 @@ namespace StardewArchipelago.Archipelago
             var modsString = GetSlotSetting(MOD_LIST_KEY, "");
             var mods = JsonConvert.DeserializeObject<List<string>>(modsString);
             Mods = new ModsManager(_console, mods);
+        }
+
+        private Walnutsanity GetSlotWalnutsanitySetting()
+        {
+            var walnutsanityValues = Walnutsanity.None;
+            var walnutsanityJson = GetSlotSetting(WALNUTSANITY_KEY, "");
+            if (string.IsNullOrWhiteSpace(walnutsanityJson))
+            {
+                return walnutsanityValues;
+            }
+            var walnutsanityItems = JsonConvert.DeserializeObject<List<string>>(walnutsanityJson);
+            if (walnutsanityItems == null)
+            {
+                return walnutsanityValues;
+            }
+
+            walnutsanityItems = walnutsanityItems.Select(x => x.Replace(" ", "")).ToList();
+            foreach (var walnutsanityValue in Enum.GetValues<Walnutsanity>())
+            {
+                if (walnutsanityItems.Contains(walnutsanityValue.ToString()))
+                {
+                    walnutsanityValues |= walnutsanityValue;
+                }
+            }
+            return walnutsanityValues;
         }
 
         private T GetSlotSetting<T>(string key, T defaultValue) where T : struct, Enum, IConvertible
@@ -502,6 +530,17 @@ namespace StardewArchipelago.Archipelago
         Power = 1,
         PowerSkill = 2,
         All = 3,
+    }
+
+    [Flags]
+    public enum Walnutsanity
+    {
+        None = 0b0000,
+        Puzzles = 0b0001,
+        Bushes = 0b0010,
+        DigSpots = 0b0100,
+        Repeatables = 0b1000,
+        All = Puzzles | Bushes | DigSpots | Repeatables,
     }
 
     public enum TrapItemsDifficulty
