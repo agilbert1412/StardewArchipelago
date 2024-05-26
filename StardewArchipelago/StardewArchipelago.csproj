@@ -207,6 +207,12 @@
     <None Update="Textures\Bundles\archaeologists_bundle.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Textures\Bundles\bait_bundle.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Textures\Bundles\bait_bundle_worm_bin.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Textures\Bundles\bartenders_bundle.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -222,6 +228,9 @@
     <None Update="Textures\Bundles\clay_farmer_bundle.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Textures\Bundles\clay_farmer_bundle_2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Textures\Bundles\deep_fishing_bundle.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -231,7 +240,13 @@
     <None Update="Textures\Bundles\desert_foraging_bundle.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Textures\Bundles\dried_bundle.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Textures\Bundles\gamblers_bundle.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Textures\Bundles\green_rain_bundle.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Textures\Bundles\island_crops_bundle.png">
@@ -288,6 +303,9 @@
     <None Update="Textures\Bundles\slime_farmer_bundle.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Textures\Bundles\sommelier_bundle.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Textures\Bundles\summer_foraging_bundle.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -298,6 +316,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Textures\Bundles\walnut_hunter_bundle.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Textures\Bundles\wine_rack.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Textures\traveling_merchant.png">
