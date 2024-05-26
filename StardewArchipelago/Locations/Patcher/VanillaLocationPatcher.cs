@@ -1185,6 +1185,15 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void PatchWalnuts()
         {
+
+            if (_archipelago.SlotData.Walnutsanity.HasFlag(Walnutsanity.Puzzles))
+            {
+                _harmony.Patch(
+                    original: AccessTools.Method(typeof(GeodeMenu), nameof(GeodeMenu.receiveLeftClick)),
+                    prefix: new HarmonyMethod(typeof(WalnutPuzzleInjections), nameof(WalnutPuzzleInjections.ReceiveLeftClick_CrackGoldenCoconut_Prefix))
+                );
+            }
+
             if (_archipelago.SlotData.Walnutsanity.HasFlag(Walnutsanity.Bushes))
             {
                 _harmony.Patch(

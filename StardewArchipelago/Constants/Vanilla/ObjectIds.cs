@@ -155,6 +155,7 @@
         public const string SMOKED_FISH = null;
         public const string DRIED_FRUIT = null;
         public const string DRIED_MUSHROOMS = null;
+        public const string GOLDEN_COCONUT = "791";
 
         public static bool IsSkillBook(string itemId)
         {

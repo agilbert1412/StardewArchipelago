@@ -96,6 +96,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
 
         private static void InitializeWalnutsanityInjections(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
+            WalnutPuzzleInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             WalnutBushInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             WalnutRepeatablesInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
         }
