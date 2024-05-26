@@ -44,7 +44,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                     throw new Exception($"Bush '{bushId}' Could not be mapped to an Archipelago location!");
                 }
 
-                __result = $"(AP){IDProvider.AP_LOCATION} {_bushNameMap[bushId]}";
+                __result = IDProvider.CreateApLocationItemId(_bushNameMap[bushId]);
                 return false; // don't run original logic
             }
             catch (Exception ex)

@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Locations.InGameLocations;
 
 namespace StardewArchipelago.Constants
@@ -15,6 +16,12 @@ namespace StardewArchipelago.Constants
         public static readonly string ARCHIPELAGO_EQUIPMENTS = CreateId("ArchipelagoEquipments");
         public const string ARCHIPELAGO_EQUIPMENTS_SALE = "Sale";
         public const string ARCHIPELAGO_EQUIPMENTS_RECOVERY = "Recovery";
+
+
+        public static string CreateApLocationItemId(string locationName)
+        {
+            return $"{QualifiedItemIds.ARCHIPELAGO_QUALIFER}{AP_LOCATION} {locationName}";
+        }
 
         private static string CreateId(string name)
         {

@@ -1185,12 +1185,27 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void PatchWalnuts()
         {
-
             if (_archipelago.SlotData.Walnutsanity.HasFlag(Walnutsanity.Puzzles))
             {
                 _harmony.Patch(
                     original: AccessTools.Method(typeof(GeodeMenu), nameof(GeodeMenu.receiveLeftClick)),
                     prefix: new HarmonyMethod(typeof(WalnutPuzzleInjections), nameof(WalnutPuzzleInjections.ReceiveLeftClick_CrackGoldenCoconut_Prefix))
+                );
+                _harmony.Patch(
+                    original: AccessTools.Method(typeof(IslandEast), nameof(IslandEast.SpawnBananaNutReward)),
+                    prefix: new HarmonyMethod(typeof(WalnutPuzzleInjections), nameof(WalnutPuzzleInjections.SpawnBananaNutReward_CheckInsteadOfNuts_Prefix))
+                );
+                _harmony.Patch(
+                    original: AccessTools.Method(typeof(IslandHut), nameof(IslandHut.SpitTreeNut)),
+                    prefix: new HarmonyMethod(typeof(WalnutPuzzleInjections), nameof(WalnutPuzzleInjections.SpitTreeNut_CheckInsteadOfNut_Prefix))
+                );
+                _harmony.Patch(
+                    original: AccessTools.Method(typeof(IslandShrine), nameof(IslandShrine.OnPuzzleFinish)),
+                    prefix: new HarmonyMethod(typeof(WalnutPuzzleInjections), nameof(WalnutPuzzleInjections.OnPuzzleFinish_CheckInsteadOfNuts_Prefix))
+                );
+                _harmony.Patch(
+                    original: AccessTools.Method(typeof(IslandFarmCave), nameof(IslandFarmCave.GiveReward)),
+                    prefix: new HarmonyMethod(typeof(WalnutPuzzleInjections), nameof(WalnutPuzzleInjections.GiveReward_CheckInsteadOfNuts_Prefix))
                 );
             }
 

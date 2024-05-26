@@ -62,7 +62,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                     if (_archipelago.SlotData.Walnutsanity.HasFlag(Archipelago.Walnutsanity.Repeatables))
                     {
                         var location = $"Fishing Walnut {numberWalnutsFishedSoFar}";
-                        itemToSpawnId = $"(AP){IDProvider.AP_LOCATION} {location}";
+                        itemToSpawnId = IDProvider.CreateApLocationItemId(location);
                     }
 
                     __result = ItemRegistry.Create(itemToSpawnId);

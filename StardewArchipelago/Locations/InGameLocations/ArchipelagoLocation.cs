@@ -5,6 +5,7 @@ using Archipelago.MultiClient.Net.Models;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Textures;
 using StardewModdingAPI;
 using StardewValley;
@@ -116,7 +117,7 @@ namespace StardewArchipelago.Locations.InGameLocations
             return false;
         }
 
-        public override string TypeDefinitionId => "(AP)";
+        public override string TypeDefinitionId => QualifiedItemIds.ARCHIPELAGO_QUALIFER;
 
         public override string DisplayName => _locationDisplayName;
 

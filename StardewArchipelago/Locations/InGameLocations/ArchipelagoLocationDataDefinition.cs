@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
+using StardewArchipelago.Constants.Vanilla;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.BellsAndWhistles;
@@ -36,10 +37,10 @@ namespace StardewArchipelago.Locations.InGameLocations
         }
 
         /// <inheritdoc />
-        public override string Identifier => "(AP)";
+        public override string Identifier => QualifiedItemIds.ARCHIPELAGO_QUALIFER;
 
         /// <inheritdoc />
-        public override string StandardDescriptor => "AP";
+        public override string StandardDescriptor => QualifiedItemIds.ARCHIPELAGO_QUALIFER.Substring(1, 2);
 
         /// <inheritdoc />
         public override IEnumerable<string> GetAllIds() => Enumerable.Empty<string>();
