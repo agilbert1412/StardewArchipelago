@@ -11,22 +11,25 @@ using StardewValley;
 using StardewValley.Internal;
 using Color = Microsoft.Xna.Framework.Color;
 
-namespace StardewArchipelago.Locations
+namespace StardewArchipelago.Locations.InGameLocations
 {
-    internal class PurchaseableArchipelagoLocation : Item
+    internal class ArchipelagoLocation : Item
     {
-        private static Hint[] _activeHints;
-        private static uint _lastTimeUpdatedActiveHints;
-
         private const string ARCHIPELAGO_PREFIX = "Archipelago: ";
         private const string ARCHIPELAGO_SHORT_PREFIX = "AP: ";
         private const string ARCHIPELAGO_NO_PREFIX = "";
         public const string EXTRA_MATERIALS_KEY = "Extra Materials";
+        protected static Hint[] _activeHints;
+        protected static uint _lastTimeUpdatedActiveHints;
+
         private Texture2D _archipelagoTexture;
 
-        private string _locationDisplayName;
+        protected LocationChecker _locationChecker;
+        protected string _locationDisplayName;
+
+        public string LocationName { get; }
+
         private string _description;
-        private LocationChecker _locationChecker;
 
         private Dictionary<string, int> _extraMaterialsRequired;
 
@@ -58,13 +61,12 @@ namespace StardewArchipelago.Locations
             }
         }
 
-        public string LocationName { get; }
-
-        public PurchaseableArchipelagoLocation(string locationName, IMonitor monitor, IModHelper modHelper, LocationChecker locationChecker, ArchipelagoClient archipelago, Hint[] myActiveHints, Action purchaseCallback = null) : this(locationName, locationName, monitor, modHelper, locationChecker, archipelago, myActiveHints, purchaseCallback)
+        public ArchipelagoLocation(string locationName, IMonitor monitor, IModHelper modHelper, LocationChecker locationChecker, ArchipelagoClient archipelago, Hint[] myActiveHints) : this(locationName, locationName, monitor, modHelper, locationChecker, archipelago, myActiveHints)
         {
+
         }
 
-        public PurchaseableArchipelagoLocation(string locationDisplayName, string locationName, IMonitor monitor, IModHelper modHelper, LocationChecker locationChecker, ArchipelagoClient archipelago, Hint[] myActiveHints, Action purchaseCallback = null)
+        public ArchipelagoLocation(string locationDisplayName, string locationName, IMonitor monitor, IModHelper modHelper, LocationChecker locationChecker, ArchipelagoClient archipelago, Hint[] myActiveHints)
         {
             // Prefix removed for now, because the inconsistency makes it ugly
             // var prefix = locationDisplayName.Length < 18 ? ARCHIPELAGO_PREFIX : ARCHIPELAGO_NO_PREFIX;
@@ -72,17 +74,51 @@ namespace StardewArchipelago.Locations
             _locationDisplayName = $"{prefix}{locationDisplayName}";
             Name = _locationDisplayName;
             LocationName = locationName;
+            ItemId = $"{nameof(ArchipelagoLocation)}_{LocationName.Replace(" ", "_")}";
 
-            ItemId = $"{nameof(PurchaseableArchipelagoLocation)}_{LocationName.Replace(" ", "_")}";
-
-            var scoutedLocation = archipelago.ScoutSingleLocation(LocationName);
-            _description = scoutedLocation == null ? ScoutedLocation.GenericItemName() : scoutedLocation.ToString();
             _locationChecker = locationChecker;
 
             var isHinted = myActiveHints.Any(hint => archipelago.GetLocationName(hint.LocationId).Equals(locationName, StringComparison.OrdinalIgnoreCase));
             var desiredTextureName = isHinted ? ArchipelagoTextures.PLEADING : ArchipelagoTextures.COLOR;
             _archipelagoTexture = ArchipelagoTextures.GetArchipelagoLogo(monitor, modHelper, 48, desiredTextureName);
+
+            var scoutedLocation = archipelago.ScoutSingleLocation(LocationName);
+            _description = scoutedLocation == null ? ScoutedLocation.GenericItemName() : scoutedLocation.ToString();
         }
+        
+        public override void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth,
+            StackDrawType drawStackNumber, Color color, bool drawShadow)
+        {
+            var position = location + new Vector2(16f, 16f);
+            var sourceRectangle = new Rectangle(0, 0, 48, 48);
+            var transparentColor = color * transparency;
+            var origin = new Vector2(8f, 8f);
+            spriteBatch.Draw(_archipelagoTexture, position, sourceRectangle, transparentColor, 0.0f, origin, scaleSize, SpriteEffects.None, layerDepth);
+        }
+
+        public override bool isPlaceable()
+        {
+            return false;
+        }
+
+        public override int maximumStackSize()
+        {
+            return 1;
+        }
+
+        protected override Item GetOneNew()
+        {
+            return this;
+        }
+
+        public override bool canBeTrashed()
+        {
+            return false;
+        }
+
+        public override string TypeDefinitionId => "(AP)";
+
+        public override string DisplayName => _locationDisplayName;
 
         public override bool CanBuyItem(Farmer who)
         {
@@ -103,18 +139,13 @@ namespace StardewArchipelago.Locations
             {
                 Game1.player.Items.ReduceId(id, amount);
             }
-            _locationChecker.AddCheckedLocation(LocationName);
+            SendCheck();
             return true;
         }
 
-        public override void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth,
-            StackDrawType drawStackNumber, Color color, bool drawShadow)
+        public void SendCheck()
         {
-            var position = location + new Vector2(16f, 16f);
-            var sourceRectangle = new Rectangle(0, 0, 48, 48);
-            var transparentColor = color * transparency;
-            var origin = new Vector2(8f, 8f);
-            spriteBatch.Draw(_archipelagoTexture, position, sourceRectangle, transparentColor, 0.0f, origin, scaleSize, SpriteEffects.None, layerDepth);
+            _locationChecker.AddCheckedLocation(LocationName);
         }
 
         public override string getDescription()
@@ -128,31 +159,11 @@ namespace StardewArchipelago.Locations
             return descriptionWithExtraMaterials;
         }
 
-        public override bool isPlaceable()
-        {
-            return false;
-        }
-
-        public override int maximumStackSize()
-        {
-            return 1;
-        }
-
-        protected override Item GetOneNew()
-        {
-            return this;
-        }
-
-        public override string DisplayName => _locationDisplayName;
-
-        public override string TypeDefinitionId => "(AP)";
-
-        public static IEnumerable<ItemQueryResult> Create(string locationName, IMonitor monitor, IModHelper modHelper, LocationChecker locationChecker, ArchipelagoClient archipelago,
-            Dictionary<string, object> contextCustomFields)
+        public static IEnumerable<ItemQueryResult> Create(string locationName, IMonitor monitor, IModHelper modHelper, LocationChecker locationChecker, ArchipelagoClient archipelago)
         {
             if (string.IsNullOrWhiteSpace(locationName))
             {
-                throw new ArgumentException($"Could not create {nameof(PurchaseableArchipelagoLocation)} because there was no provided location name");
+                throw new ArgumentException($"Could not create {nameof(ArchipelagoLocation)} because there was no provided location name");
             }
 
             if (locationChecker.IsLocationMissing(locationName))
@@ -163,16 +174,16 @@ namespace StardewArchipelago.Locations
                     _activeHints = archipelago.GetMyActiveHints();
                     _lastTimeUpdatedActiveHints = currentTime;
                 }
-                var purchaseableCheck = new PurchaseableArchipelagoLocation(locationName.Trim(), monitor, modHelper, locationChecker, archipelago, _activeHints);
-                return new ItemQueryResult[] { new(purchaseableCheck) };
+                var item = new ArchipelagoLocation(locationName.Trim(), monitor, modHelper, locationChecker, archipelago, _activeHints);
+                return new ItemQueryResult[] { new(item) };
             }
 
             return Enumerable.Empty<ItemQueryResult>();
         }
 
-        private static uint GetUniqueTimeIdentifier()
+        protected static uint GetUniqueTimeIdentifier()
         {
-            return (Game1.stats.DaysPlayed * 3000) + (uint)Game1.timeOfDay;
+            return Game1.stats.DaysPlayed * 3000 + (uint)Game1.timeOfDay;
         }
     }
 }

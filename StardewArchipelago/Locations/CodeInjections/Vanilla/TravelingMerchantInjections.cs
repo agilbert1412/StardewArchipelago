@@ -13,6 +13,7 @@ using StardewValley.Internal;
 using StardewValley.Locations;
 using StardewValley.Menus;
 using xTile.Dimensions;
+using ArchipelagoLocation = StardewArchipelago.Locations.InGameLocations.ArchipelagoLocation;
 using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
@@ -409,7 +410,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
             var scamName = _merchantApItemNames[random.Next(0, _merchantApItemNames.Length)];
             var myActiveHints = _archipelago.GetMyActiveHints();
-            var apLocation = new PurchaseableArchipelagoLocation(scamName, chosenApItem, _monitor, _modHelper, _locationChecker, _archipelago, myActiveHints);
+            var apLocation = new ArchipelagoLocation(scamName, chosenApItem, _monitor, _modHelper, _locationChecker, _archipelago, myActiveHints);
             var price = _merchantPrices[random.Next(0, _merchantPrices.Length)];
 
             yield return new ItemQueryResult(apLocation)

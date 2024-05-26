@@ -22,6 +22,7 @@ using StardewArchipelago.Locations.CodeInjections.Modded;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
+using StardewArchipelago.Locations.InGameLocations;
 using StardewArchipelago.Locations.Patcher;
 using StardewArchipelago.Serialization;
 using StardewArchipelago.Stardew;
@@ -31,7 +32,9 @@ using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Delegates;
 using StardewValley.Internal;
+using StardewValley.ItemTypeDefinitions;
 using StardewValley.Triggers;
+using ArchipelagoLocation = StardewArchipelago.Locations.InGameLocations.ArchipelagoLocation;
 
 namespace StardewArchipelago
 {
@@ -129,8 +132,9 @@ namespace StardewArchipelago
             _helper.ConsoleCommands.Add("release_slot", "Release the current slot completely", ReleaseSlot);
             _helper.ConsoleCommands.Add("debug_method", "Runs whatever is currently in the debug method", DebugMethod);
 #endif
-
-            ItemQueryResolver.Register(IDProvider.PURCHASEABLE_AP_LOCATION, PurchasableAPLocationQueryDelegate);
+            
+            ItemRegistry.AddTypeDefinition(new ArchipelagoLocationDataDefinition());
+            ItemQueryResolver.Register(IDProvider.AP_LOCATION, PurchasableAPLocationQueryDelegate);
             ItemQueryResolver.Register(IDProvider.METAL_DETECTOR_ITEMS, TravelingMerchantInjections.CreateMetalDetectorItems);
             ItemQueryResolver.Register(IDProvider.TRAVELING_CART_DAILY_CHECK, TravelingMerchantInjections.CreateDailyCheck);
             ItemQueryResolver.Register(IDProvider.ARCHIPELAGO_EQUIPMENTS, AdventureGuildEquipmentsQueryDelegate);
@@ -141,7 +145,7 @@ namespace StardewArchipelago
 
         private IEnumerable<ItemQueryResult> PurchasableAPLocationQueryDelegate(string key, string arguments, ItemQueryContext context, bool avoidrepeat, HashSet<string> avoiditemids, Action<string, string> logerror)
         {
-            return PurchaseableArchipelagoLocation.Create(arguments, Monitor, Helper, _locationChecker, _archipelago, context.CustomFields);
+            return ArchipelagoLocation.Create(arguments, Monitor, Helper, _locationChecker, _archipelago);
         }
 
         private IEnumerable<ItemQueryResult> AdventureGuildEquipmentsQueryDelegate(string key, string arguments, ItemQueryContext context, bool avoidrepeat, HashSet<string> avoiditemids, Action<string, string> logerror)
@@ -292,7 +296,8 @@ namespace StardewArchipelago
             var seedShopStockModifier = new SeedShopStockModifier(Monitor, _helper, _archipelago, _locationChecker, _stardewItemManager);
             var nameSimplifier = new NameSimplifier();
             var friends = new Friends();
-			_logicPatcher = new RandomizedLogicPatcher(Monitor, _helper, Config, _harmony, _archipelago, _locationChecker, _stardewItemManager, _entranceManager, seedShopStockModifier, nameSimplifier, friends, State);
+            ArchipelagoLocationDataDefinition.Initialize(Monitor, _helper, _locationChecker, _archipelago);
+            _logicPatcher = new RandomizedLogicPatcher(Monitor, _helper, Config, _harmony, _archipelago, _locationChecker, _stardewItemManager, _entranceManager, seedShopStockModifier, nameSimplifier, friends, State);
             _jojaDisabler = new JojaDisabler(Monitor, _helper, _harmony);
             _seasonsRandomizer = new SeasonsRandomizer(Monitor, _helper, _archipelago, State);
             _appearanceRandomizer = new AppearanceRandomizer(Monitor, _archipelago);

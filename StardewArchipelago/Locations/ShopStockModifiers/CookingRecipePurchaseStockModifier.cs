@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using StardewArchipelago.Archipelago;
+﻿using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Locations;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;

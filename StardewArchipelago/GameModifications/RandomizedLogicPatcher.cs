@@ -12,6 +12,7 @@ using StardewArchipelago.GameModifications.Seasons;
 using StardewArchipelago.GameModifications.Tooltips;
 using StardewArchipelago.Locations;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
+using StardewArchipelago.Locations.InGameLocations;
 using StardewArchipelago.Serialization;
 using StardewArchipelago.Stardew;
 using StardewArchipelago.Stardew.NameMapping;
@@ -49,6 +50,7 @@ namespace StardewArchipelago.GameModifications
             _startingResources = new StartingResources(_archipelago, locationChecker, _stardewItemManager);
             _seedShopStockModifier = seedShopStockModifier;
             _recipeDataRemover = new RecipeDataRemover(monitor, modHelper, archipelago);
+            ArchipelagoLocationsInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             MineshaftLogicInjections.Initialize(monitor);
             CommunityCenterLogicInjections.Initialize(monitor, locationChecker);
             FarmInjections.Initialize(monitor, _archipelago);
@@ -85,6 +87,7 @@ namespace StardewArchipelago.GameModifications
 
         public void PatchAllGameLogic()
         {
+            PatchPickUpLocation();
             PatchAchievements();
             PatchMineMaxFloorReached();
             PatchDefinitionOfCommunityCenterComplete();
@@ -125,6 +128,14 @@ namespace StardewArchipelago.GameModifications
             UnpatchJodiFishQuest();
             UnpatchVoidMayo();
             CleanGoldenEggEvent();
+        }
+
+        private void PatchPickUpLocation()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Farmer), nameof(Farmer.OnItemReceived)),
+                prefix: new HarmonyMethod(typeof(ArchipelagoLocationsInjections), nameof(ArchipelagoLocationsInjections.OnItemReceived_PickUpACheck_Prefix))
+            );
         }
 
         private void PatchAchievements()

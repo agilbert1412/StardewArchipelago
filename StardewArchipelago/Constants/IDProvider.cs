@@ -1,11 +1,11 @@
 ﻿using System.Reflection;
-using StardewArchipelago.Locations;
+using StardewArchipelago.Locations.InGameLocations;
 
 namespace StardewArchipelago.Constants
 {
     public static class IDProvider
     {
-        public static readonly string PURCHASEABLE_AP_LOCATION = CreateId<PurchaseableArchipelagoLocation>();
+        public static readonly string AP_LOCATION = CreateId<ArchipelagoLocation>();
         public static readonly string MONEY = CreateId("Money");
         public static readonly string QI_GEM = CreateId("QiGem");
         public static readonly string QI_COIN = CreateId("QiCoin");

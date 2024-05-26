@@ -7,7 +7,6 @@ using Microsoft.Xna.Framework.Input;
 using StardewValley;
 using StardewValley.BellsAndWhistles;
 using StardewValley.Extensions;
-using StardewValley.ItemTypeDefinitions;
 using StardewValley.Locations;
 using StardewValley.Menus;
 // ReSharper disable InconsistentNaming

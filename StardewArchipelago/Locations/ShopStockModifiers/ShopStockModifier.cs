@@ -33,7 +33,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
 
         protected ShopItemData CreateArchipelagoLocation(ShopItemData item, string location)
         {
-            var id = $"{IDProvider.PURCHASEABLE_AP_LOCATION} {location}";
+            var id = $"{IDProvider.AP_LOCATION} {location}";
             var apShopItem = item.DeepClone();
             apShopItem.Id = $"{this.GetType().Name}: {id}";
             apShopItem.ItemId = id;

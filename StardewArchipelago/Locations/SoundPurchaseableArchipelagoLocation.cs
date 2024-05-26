@@ -1,11 +1,13 @@
 ﻿using Archipelago.MultiClient.Net.Models;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Locations.InGameLocations;
 using StardewModdingAPI;
 using StardewValley;
+using ArchipelagoLocation = StardewArchipelago.Locations.InGameLocations.ArchipelagoLocation;
 
 namespace StardewArchipelago.Locations
 {
-    internal class SoundPurchaseableArchipelagoLocation : PurchaseableArchipelagoLocation
+    internal class SoundPurchaseableArchipelagoLocation : ArchipelagoLocation
     {
         private string _sound;
 

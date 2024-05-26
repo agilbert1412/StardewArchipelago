@@ -5,11 +5,13 @@ using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.Constants.Vanilla;
+using StardewArchipelago.Locations.InGameLocations;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.GameData.Shops;
+using ArchipelagoLocation = StardewArchipelago.Locations.InGameLocations.ArchipelagoLocation;
 using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Locations.ShopStockModifiers
@@ -106,7 +108,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
         private void AddCheckToStock(List<ShopItemData> shopItems, string buildingName, int price, Item[] materials, string condition = null)
         {
             var locationName = string.Format(BUILDING_BLUEPRINT_LOCATION_NAME, buildingName);
-            var id = $"{IDProvider.PURCHASEABLE_AP_LOCATION} {locationName}";
+            var id = $"{IDProvider.AP_LOCATION} {locationName}";
 
             var priceMultiplier = _archipelago.SlotData.BuildingPriceMultiplier;
             var finalPrice = (int)(price * priceMultiplier);
@@ -114,7 +116,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
 
             var customFields = new Dictionary<string, string>()
             {
-                { PurchaseableArchipelagoLocation.EXTRA_MATERIALS_KEY, materialsString },
+                { ArchipelagoLocation.EXTRA_MATERIALS_KEY, materialsString },
             };
             var blueprintCheck = new ShopItemData()
             {
