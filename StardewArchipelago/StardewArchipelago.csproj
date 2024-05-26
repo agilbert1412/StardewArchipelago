@@ -114,6 +114,12 @@
     <None Update="Textures\Archipelago\Custom\48x48 white icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Textures\Archipelago\Custom\bushipelago_1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Textures\Archipelago\Custom\bushipelago_2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Textures\Archipelago\Original\115x115 pleading icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
