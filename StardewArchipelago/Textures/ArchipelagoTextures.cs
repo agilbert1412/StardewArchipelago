@@ -43,6 +43,28 @@ namespace StardewArchipelago.Textures
             return texture;
         }
 
+        public static Texture2D GetArchipelagoBush(IMonitor monitor, IModHelper modHelper, string preferredIconSet = null)
+        {
+            var archipelagoFolder = "Archipelago";
+            preferredIconSet = GetChosenIconSet(preferredIconSet);
+            var fileName = $"bushipelago_1.png";
+            var relativePathToTexture = Path.Combine(archipelagoFolder, preferredIconSet, fileName);
+            var texture = TexturesLoader.GetTexture(monitor, modHelper, relativePathToTexture, LogLevel.Trace);
+            if (texture == null)
+            {
+                // Let's try to get the icon from the other set
+                preferredIconSet = GetOtherIconSet(preferredIconSet);
+                relativePathToTexture = Path.Combine(archipelagoFolder, preferredIconSet, fileName);
+                texture = TexturesLoader.GetTexture(monitor, modHelper, relativePathToTexture);
+                if (texture == null)
+                {
+                    throw new InvalidOperationException($"Could not find texture {fileName}");
+                }
+            }
+
+            return texture;
+        }
+
         private static string GetPreferredIconSet()
         {
             return ModEntry.Instance.Config.UseCustomArchipelagoIcons ? ICON_SET_CUSTOM : ICON_SET_ORIGINAL;

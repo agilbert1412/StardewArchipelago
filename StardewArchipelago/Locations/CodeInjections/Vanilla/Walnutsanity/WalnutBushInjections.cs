@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
+using StardewArchipelago.Textures;
 using StardewModdingAPI;
 using StardewValley.TerrainFeatures;
 
@@ -13,6 +16,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
         private static IModHelper _helper;
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
+        private static Texture2D _bushtexture;
 
         public static void Initialize(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
@@ -20,6 +24,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             _helper = helper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
+            _bushtexture = ArchipelagoTextures.GetArchipelagoBush(monitor, helper);
         }
 
         // public string GetShakeOffItem()
@@ -45,6 +50,27 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             catch (Exception ex)
             {
                 _monitor.Log($"Failed in {nameof(GetShakeOffItem_ReplaceWalnutWithCheck_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
+        }
+
+        // public void setUpSourceRect()
+        public static bool SetUpSourceRect_UseArchipelagoTexture_Prefix(Bush __instance)
+        {
+            try
+            {
+                if (__instance.size.Value != 4)
+                {
+                    return true; // run original logic
+                }
+
+                Bush.texture = new Lazy<Texture2D>(() => _bushtexture);
+                __instance.sourceRect.Value = new Rectangle(__instance.tileSheetOffset.Value * 32, 0, 32, 32);
+                return false; // don't run original logic
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(SetUpSourceRect_UseArchipelagoTexture_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
             }
         }
