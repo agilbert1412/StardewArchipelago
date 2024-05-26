@@ -55,7 +55,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             FarmCaveInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             MysteryBoxInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             BookInjections.Initialize(monitor, modHelper, archipelago, locationChecker, qosManager);
-            WalnutBushInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
+            InitializeWalnutsanityInjections(monitor, modHelper, archipelago, locationChecker);
         }
 
         private static void InitializeBundleInjections(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, BundlesManager bundlesManager, BundleReader bundleReader)
@@ -92,6 +92,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             MermaidHouseInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             BeachNightMarketInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             WinterStarInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
+        }
+
+        private static void InitializeWalnutsanityInjections(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        {
+            WalnutBushInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
+            WalnutRepeatablesInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
         }
     }
 }

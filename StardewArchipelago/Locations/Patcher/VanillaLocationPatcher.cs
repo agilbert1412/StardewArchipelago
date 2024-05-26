@@ -1192,6 +1192,11 @@ namespace StardewArchipelago.Locations.Patcher
                     prefix: new HarmonyMethod(typeof(WalnutBushInjections), nameof(WalnutBushInjections.GetShakeOffItem_ReplaceWalnutWithCheck_Prefix))
                 );
             }
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(IslandLocation), nameof(IslandLocation.getFish)),
+                prefix: new HarmonyMethod(typeof(WalnutRepeatablesInjections), nameof(WalnutRepeatablesInjections.GetFish_RepeatableWalnut_Prefix))
+            );
         }
     }
 }
