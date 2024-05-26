@@ -412,7 +412,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                     motion = new Vector2(1f, -4f),
                     acceleration = new Vector2(0.0f, 0.1f)
                 });
-                __instance.temporarySprites.Add(new TemporaryAnimatedSprite(50, position + new Vector2((float)Game1.random.Next(-16, 16), (float)Game1.random.Next(-48, 48)), color * 0.75f)
+                __instance.temporarySprites.Add(new TemporaryAnimatedSprite(50, position + new Vector2(Game1.random.Next(-16, 16), Game1.random.Next(-48, 48)), color * 0.75f)
                 {
                     scale = 0.75f,
                     flipped = true,
@@ -420,7 +420,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                     motion = new Vector2(-1f, -4f),
                     acceleration = new Vector2(0.0f, 0.1f)
                 });
-                __instance.temporarySprites.Add(new TemporaryAnimatedSprite(50, position + new Vector2((float)Game1.random.Next(-16, 16), (float)Game1.random.Next(-48, 48)), color * 0.75f)
+                __instance.temporarySprites.Add(new TemporaryAnimatedSprite(50, position + new Vector2(Game1.random.Next(-16, 16), Game1.random.Next(-48, 48)), color * 0.75f)
                 {
                     scale = 0.75f,
                     delayBeforeAnimationStart = 50,
@@ -428,7 +428,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                     motion = new Vector2(1f, -4f),
                     acceleration = new Vector2(0.0f, 0.1f)
                 });
-                __instance.temporarySprites.Add(new TemporaryAnimatedSprite(50, position + new Vector2((float)Game1.random.Next(-16, 16), (float)Game1.random.Next(-48, 48)), color * 0.75f)
+                __instance.temporarySprites.Add(new TemporaryAnimatedSprite(50, position + new Vector2(Game1.random.Next(-16, 16), Game1.random.Next(-48, 48)), color * 0.75f)
                 {
                     scale = 0.75f,
                     flipped = true,
@@ -437,7 +437,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                     motion = new Vector2(-1f, -4f),
                     acceleration = new Vector2(0.0f, 0.1f)
                 });
-                __instance.temporarySprites.Add(new TemporaryAnimatedSprite(50, position + new Vector2((float)Game1.random.Next(-16, 16), (float)Game1.random.Next(-48, 48)), new Color(250, 100, 250) * 0.75f)
+                __instance.temporarySprites.Add(new TemporaryAnimatedSprite(50, position + new Vector2(Game1.random.Next(-16, 16), Game1.random.Next(-48, 48)), new Color(250, 100, 250) * 0.75f)
                 {
                     scale = 0.75f,
                     flipped = true,
@@ -481,7 +481,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                     motion = new Vector2(1f, -4f),
                     acceleration = new Vector2(0.0f, 0.1f)
                 });
-                __instance.temporarySprites.Add(new TemporaryAnimatedSprite(50, new Vector2(8f, 3.3f) * 64f + new Vector2((float)Game1.random.Next(-16, 16), (float)Game1.random.Next(-48, 48)), new Color(0, 220, 150) * 0.75f)
+                __instance.temporarySprites.Add(new TemporaryAnimatedSprite(50, new Vector2(8f, 3.3f) * 64f + new Vector2(Game1.random.Next(-16, 16), Game1.random.Next(-48, 48)), new Color(0, 220, 150) * 0.75f)
                 {
                     scale = 0.75f,
                     flipped = true,
@@ -489,7 +489,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                     motion = new Vector2(-1f, -4f),
                     acceleration = new Vector2(0.0f, 0.1f)
                 });
-                __instance.temporarySprites.Add(new TemporaryAnimatedSprite(50, new Vector2(8.3f, 3.3f) * 64f + new Vector2((float)Game1.random.Next(-16, 16), (float)Game1.random.Next(-48, 48)), new Color(0, 200, 120) * 0.75f)
+                __instance.temporarySprites.Add(new TemporaryAnimatedSprite(50, new Vector2(8.3f, 3.3f) * 64f + new Vector2(Game1.random.Next(-16, 16), Game1.random.Next(-48, 48)), new Color(0, 200, 120) * 0.75f)
                 {
                     scale = 0.75f,
                     delayBeforeAnimationStart = 50,
@@ -497,7 +497,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                     motion = new Vector2(1f, -4f),
                     acceleration = new Vector2(0.0f, 0.1f)
                 });
-                __instance.temporarySprites.Add(new TemporaryAnimatedSprite(50, new Vector2(8f, 3.3f) * 64f + new Vector2((float)Game1.random.Next(-16, 16), (float)Game1.random.Next(-48, 48)), new Color(0, 220, 150) * 0.75f)
+                __instance.temporarySprites.Add(new TemporaryAnimatedSprite(50, new Vector2(8f, 3.3f) * 64f + new Vector2(Game1.random.Next(-16, 16), Game1.random.Next(-48, 48)), new Color(0, 220, 150) * 0.75f)
                 {
                     scale = 0.75f,
                     flipped = true,
@@ -506,7 +506,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                     motion = new Vector2(-1f, -4f),
                     acceleration = new Vector2(0.0f, 0.1f)
                 });
-                __instance.temporarySprites.Add(new TemporaryAnimatedSprite(50, new Vector2(8.5f, 3.3f) * 64f + new Vector2((float)Game1.random.Next(-16, 16), (float)Game1.random.Next(-48, 48)), new Color(0, 250, 180) * 0.75f)
+                __instance.temporarySprites.Add(new TemporaryAnimatedSprite(50, new Vector2(8.5f, 3.3f) * 64f + new Vector2(Game1.random.Next(-16, 16), Game1.random.Next(-48, 48)), new Color(0, 250, 180) * 0.75f)
                 {
                     scale = 0.75f,
                     flipped = true,
@@ -515,7 +515,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                     motion = new Vector2(0.0f, -3f),
                     acceleration = new Vector2(0.0f, 0.1f)
                 });
-                if (Game1.gameMode == (byte)6 || Utility.ShouldIgnoreValueChangeCallback())
+                if (Game1.gameMode == 6 || Utility.ShouldIgnoreValueChangeCallback())
                 {
                     return false; // don't run original logic
                 }
@@ -621,6 +621,134 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             catch (Exception ex)
             {
                 _monitor.Log($"Failed in {nameof(IsCollidingPosition_CheckInsteadOfNut_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
+        }
+
+        // public override Item getFish(float millisecondsAfterNibble, string bait, int waterDepth, Farmer who, double baitPotency, Vector2 bobberTile, string locationName = null)
+        public static bool GetFish_CheckInsteadOfNut_Prefix(IslandSouthEast __instance, float millisecondsAfterNibble, string bait, int waterDepth, Farmer who, double baitPotency, Vector2 bobberTile, string locationName, ref Item __result)
+        {
+            try
+            {
+                if ((int)bobberTile.X < 18 || (int)bobberTile.X > 20 || (int)bobberTile.Y < 20 || (int)bobberTile.Y > 22)
+                {
+                    return true; // run original logic
+                }
+
+                if (!__instance.fishedWalnut.Value)
+                {
+                    Game1.player.team.MarkCollectedNut("StardropPool");
+                    if (!Game1.IsMultiplayer)
+                    {
+                        __instance.fishedWalnut.Value = true;
+                        __result = CreateLocationItem("Starfish Tide Pool");
+                        return false; // don't run original logic
+                    }
+                    __instance.fishWalnutEvent.Fire();
+                }
+
+                __result = null;
+                return false; // don't run original logic
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(GetFish_CheckInsteadOfNut_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
+        }
+
+        // public virtual void OnMermaidPuzzleSuccess()
+        public static bool OnMermaidPuzzleSuccess_CheckInsteadOfNut_Prefix(IslandSouthEast __instance)
+        {
+            try
+            {
+                __instance.currentMermaidAnimation = __instance.mermaidReward;
+                __instance.mermaidFrameTimer = 0.0f;
+                if (Game1.currentLocation == __instance)
+                {
+                    Game1.playSound("yoba");
+                }
+                if (!Game1.IsMasterGame || __instance.mermaidPuzzleFinished.Value)
+                {
+                    return false; // don't run original logic
+                }
+                Game1.player.team.MarkCollectedNut("Mermaid");
+                __instance.mermaidPuzzleFinished.Value = true;
+                CreateLocationDebris("Mermaid Song", new Vector2(32f, 33f) * 64f, __instance);
+
+                return false; // don't run original logic
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(OnMermaidPuzzleSuccess_CheckInsteadOfNut_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
+        }
+
+        // public void QuitGame()
+        public static bool QuitGame_CheckInsteadOfNut_Prefix(Darts __instance)
+        {
+            try
+            {
+                __instance.unload();
+                Game1.playSound("bigDeSelect");
+                Game1.currentMinigame = null;
+                if (__instance.currentGameState != Darts.GameState.GameOver)
+                {
+                    return false; // don't run original logic
+                }
+                if (__instance.points != 0)
+                {
+                    if (Game1.currentLocation is not IslandSouthEastCave)
+                    {
+                        return false; // don't run original logic
+                    }
+                    Game1.drawDialogueNoTyping(Game1.content.LoadString("Strings\\StringsFromMaps:Pirates7_Lose"));
+                    return false; // don't run original logic
+                }
+
+                var isPerfect = __instance.IsPerfectVictory();
+                if (isPerfect)
+                {
+                    Game1.Multiplayer.globalChatInfoMessage("DartsWinPerfect", Game1.player.Name);
+                }
+                else
+                {
+                    Game1.Multiplayer.globalChatInfoMessage("DartsWin", Game1.player.Name, __instance.throwsCount.ToString());
+                }
+                if (Game1.currentLocation is not IslandSouthEastCave)
+                {
+                    return false; // don't run original logic
+                }
+
+                var victoryText = Game1.content.LoadString("Strings\\StringsFromMaps:Pirates7_Win");
+                if (isPerfect)
+                {
+                    victoryText = Game1.content.LoadString("Strings\\StringsFromMaps:Pirates7_Win_Perfect");
+                }
+                victoryText += "#";
+                var numberOfDartNutsAlreadyDropped = Game1.player.team.GetDroppedLimitedNutCount(nameof(Darts));
+                if (__instance.startingDartCount == 20 && numberOfDartNutsAlreadyDropped == 0 || __instance.startingDartCount == 15 && numberOfDartNutsAlreadyDropped == 1 || __instance.startingDartCount == 10 && numberOfDartNutsAlreadyDropped == 2)
+                {
+                    var dialogue = victoryText + Game1.content.LoadString("Strings\\StringsFromMaps:Pirates7_WinPrize");
+                    var dartLocations = new[] { "Pirate Darts 1", "Pirate Darts 2", "Pirate Darts 3" };
+                    var dartLocation = dartLocations[numberOfDartNutsAlreadyDropped];
+                    Game1.afterDialogues += () => CreateLocationDebris(dartLocation, new Vector2(31, 8) * 64f, Game1.currentLocation);
+                    numberOfDartNutsAlreadyDropped++;
+                    Game1.player.team.limitedNutDrops[nameof(Darts)] = numberOfDartNutsAlreadyDropped;
+                    Game1.drawDialogueNoTyping(dialogue);
+                }
+                else
+                {
+                    var dialogue = victoryText + Game1.content.LoadString("Strings\\StringsFromMaps:Pirates7_WinNoPrize");
+                    Game1.drawDialogueNoTyping(dialogue);
+                }
+                
+                return false; // don't run original logic
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(QuitGame_CheckInsteadOfNut_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
             }
         }

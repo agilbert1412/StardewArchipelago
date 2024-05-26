@@ -1252,6 +1252,18 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(typeof(IslandNorth), nameof(IslandNorth.isCollidingPosition)),
                 prefix: new HarmonyMethod(typeof(WalnutPuzzleInjections), nameof(WalnutPuzzleInjections.IsCollidingPosition_CheckInsteadOfNut_Prefix))
             );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(IslandSouthEast), nameof(IslandSouthEast.getFish)),
+                prefix: new HarmonyMethod(typeof(WalnutPuzzleInjections), nameof(WalnutPuzzleInjections.GetFish_CheckInsteadOfNut_Prefix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(IslandSouthEast), nameof(IslandSouthEast.OnMermaidPuzzleSuccess)),
+                prefix: new HarmonyMethod(typeof(WalnutPuzzleInjections), nameof(WalnutPuzzleInjections.OnMermaidPuzzleSuccess_CheckInsteadOfNut_Prefix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Darts), nameof(Darts.QuitGame)),
+                prefix: new HarmonyMethod(typeof(WalnutPuzzleInjections), nameof(WalnutPuzzleInjections.QuitGame_CheckInsteadOfNut_Prefix))
+            );
         }
     }
 }
