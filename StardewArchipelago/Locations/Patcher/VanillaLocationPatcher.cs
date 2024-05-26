@@ -15,6 +15,7 @@ using StardewArchipelago.Locations.ShopStockModifiers;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.BellsAndWhistles;
 using StardewValley.Characters;
 using StardewValley.Events;
 using StardewValley.GameData.Buildings;
@@ -1185,29 +1186,7 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void PatchWalnuts()
         {
-            if (_archipelago.SlotData.Walnutsanity.HasFlag(Walnutsanity.Puzzles))
-            {
-                _harmony.Patch(
-                    original: AccessTools.Method(typeof(GeodeMenu), nameof(GeodeMenu.receiveLeftClick)),
-                    prefix: new HarmonyMethod(typeof(WalnutPuzzleInjections), nameof(WalnutPuzzleInjections.ReceiveLeftClick_CrackGoldenCoconut_Prefix))
-                );
-                _harmony.Patch(
-                    original: AccessTools.Method(typeof(IslandEast), nameof(IslandEast.SpawnBananaNutReward)),
-                    prefix: new HarmonyMethod(typeof(WalnutPuzzleInjections), nameof(WalnutPuzzleInjections.SpawnBananaNutReward_CheckInsteadOfNuts_Prefix))
-                );
-                _harmony.Patch(
-                    original: AccessTools.Method(typeof(IslandHut), nameof(IslandHut.SpitTreeNut)),
-                    prefix: new HarmonyMethod(typeof(WalnutPuzzleInjections), nameof(WalnutPuzzleInjections.SpitTreeNut_CheckInsteadOfNut_Prefix))
-                );
-                _harmony.Patch(
-                    original: AccessTools.Method(typeof(IslandShrine), nameof(IslandShrine.OnPuzzleFinish)),
-                    prefix: new HarmonyMethod(typeof(WalnutPuzzleInjections), nameof(WalnutPuzzleInjections.OnPuzzleFinish_CheckInsteadOfNuts_Prefix))
-                );
-                _harmony.Patch(
-                    original: AccessTools.Method(typeof(IslandFarmCave), nameof(IslandFarmCave.GiveReward)),
-                    prefix: new HarmonyMethod(typeof(WalnutPuzzleInjections), nameof(WalnutPuzzleInjections.GiveReward_CheckInsteadOfNuts_Prefix))
-                );
-            }
+            PatchPuzzleWalnuts();
 
             if (_archipelago.SlotData.Walnutsanity.HasFlag(Walnutsanity.Bushes))
             {
@@ -1220,6 +1199,58 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony.Patch(
                 original: AccessTools.Method(typeof(IslandLocation), nameof(IslandLocation.getFish)),
                 prefix: new HarmonyMethod(typeof(WalnutRepeatablesInjections), nameof(WalnutRepeatablesInjections.GetFish_RepeatableWalnut_Prefix))
+            );
+        }
+
+        private void PatchPuzzleWalnuts()
+        {
+            if (!_archipelago.SlotData.Walnutsanity.HasFlag(Walnutsanity.Puzzles))
+            {
+                return;
+            }
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GeodeMenu), nameof(GeodeMenu.receiveLeftClick)),
+                prefix: new HarmonyMethod(typeof(WalnutPuzzleInjections), nameof(WalnutPuzzleInjections.ReceiveLeftClick_CrackGoldenCoconut_Prefix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(IslandEast), nameof(IslandEast.SpawnBananaNutReward)),
+                prefix: new HarmonyMethod(typeof(WalnutPuzzleInjections), nameof(WalnutPuzzleInjections.SpawnBananaNutReward_CheckInsteadOfNuts_Prefix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(IslandHut), nameof(IslandHut.SpitTreeNut)),
+                prefix: new HarmonyMethod(typeof(WalnutPuzzleInjections), nameof(WalnutPuzzleInjections.SpitTreeNut_CheckInsteadOfNut_Prefix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(IslandShrine), nameof(IslandShrine.OnPuzzleFinish)),
+                prefix: new HarmonyMethod(typeof(WalnutPuzzleInjections), nameof(WalnutPuzzleInjections.OnPuzzleFinish_CheckInsteadOfNuts_Prefix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(IslandFarmCave), nameof(IslandFarmCave.GiveReward)),
+                prefix: new HarmonyMethod(typeof(WalnutPuzzleInjections), nameof(WalnutPuzzleInjections.GiveReward_CheckInsteadOfNuts_Prefix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(SandDuggy), nameof(SandDuggy.OnWhackedChanged)),
+                prefix: new HarmonyMethod(typeof(WalnutPuzzleInjections), nameof(WalnutPuzzleInjections.OnWhackedChanged_CheckInsteadOfNut_Prefix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(IslandWestCave1), nameof(IslandWestCave1.UpdateWhenCurrentLocation)),
+                prefix: new HarmonyMethod(typeof(WalnutPuzzleInjections), nameof(WalnutPuzzleInjections.UpdateWhenCurrentLocation_CheckInsteadOfNuts_Prefix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(IslandFieldOffice), nameof(IslandFieldOffice.plantsRestoredLeft)),
+                prefix: new HarmonyMethod(typeof(WalnutPuzzleInjections), nameof(WalnutPuzzleInjections.ApplyPlantRestoreLeft_CheckInsteadOfNut_Prefix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(IslandFieldOffice), nameof(IslandFieldOffice.plantsRestoredRight)),
+                prefix: new HarmonyMethod(typeof(WalnutPuzzleInjections), nameof(WalnutPuzzleInjections.ApplyPlantRestoreRight_CheckInsteadOfNut_Prefix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(IslandFieldOffice), nameof(IslandFieldOffice.donatePiece)),
+                prefix: new HarmonyMethod(typeof(WalnutPuzzleInjections), nameof(WalnutPuzzleInjections.DonatePiece_CheckInsteadOfNuts_Prefix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(IslandNorth), nameof(IslandNorth.isCollidingPosition)),
+                prefix: new HarmonyMethod(typeof(WalnutPuzzleInjections), nameof(WalnutPuzzleInjections.IsCollidingPosition_CheckInsteadOfNut_Prefix))
             );
         }
     }
