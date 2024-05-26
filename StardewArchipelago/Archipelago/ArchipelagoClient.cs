@@ -546,7 +546,11 @@ namespace StardewArchipelago.Archipelago
             }
 
             var hintTask = _session.DataStorage.GetHintsAsync();
-            hintTask.Wait();
+            hintTask.Wait(2000);
+            if (hintTask == null || hintTask.IsCanceled || hintTask.IsFaulted || !hintTask.IsCompletedSuccessfully)
+            {
+                return Array.Empty<Hint>();
+            }
             return hintTask.Result;
         }
 

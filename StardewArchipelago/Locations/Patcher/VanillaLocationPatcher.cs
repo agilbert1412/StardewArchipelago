@@ -1237,19 +1237,21 @@ namespace StardewArchipelago.Locations.Patcher
                 prefix: new HarmonyMethod(typeof(WalnutPuzzleInjections), nameof(WalnutPuzzleInjections.UpdateWhenCurrentLocation_CheckInsteadOfNuts_Prefix))
             );
             _harmony.Patch(
-                original: AccessTools.Method(typeof(IslandFieldOffice), nameof(IslandFieldOffice.plantsRestoredLeft)),
+                original: AccessTools.Method(typeof(IslandFieldOffice), "ApplyPlantRestoreLeft"),
                 prefix: new HarmonyMethod(typeof(WalnutPuzzleInjections), nameof(WalnutPuzzleInjections.ApplyPlantRestoreLeft_CheckInsteadOfNut_Prefix))
             );
             _harmony.Patch(
-                original: AccessTools.Method(typeof(IslandFieldOffice), nameof(IslandFieldOffice.plantsRestoredRight)),
+                original: AccessTools.Method(typeof(IslandFieldOffice), "ApplyPlantRestoreRight"),
                 prefix: new HarmonyMethod(typeof(WalnutPuzzleInjections), nameof(WalnutPuzzleInjections.ApplyPlantRestoreRight_CheckInsteadOfNut_Prefix))
             );
             _harmony.Patch(
                 original: AccessTools.Method(typeof(IslandFieldOffice), nameof(IslandFieldOffice.donatePiece)),
                 prefix: new HarmonyMethod(typeof(WalnutPuzzleInjections), nameof(WalnutPuzzleInjections.DonatePiece_CheckInsteadOfNuts_Prefix))
             );
+            var isCollidingPositionParameterTypes = new[] { typeof(Microsoft.Xna.Framework.Rectangle), typeof(xTile.Dimensions.Rectangle),
+                typeof(bool), typeof(int), typeof(bool), typeof(Character), typeof(bool), typeof(bool), typeof(bool), typeof(bool) };
             _harmony.Patch(
-                original: AccessTools.Method(typeof(IslandNorth), nameof(IslandNorth.isCollidingPosition)),
+                original: AccessTools.Method(typeof(IslandNorth), nameof(IslandNorth.isCollidingPosition), isCollidingPositionParameterTypes),
                 prefix: new HarmonyMethod(typeof(WalnutPuzzleInjections), nameof(WalnutPuzzleInjections.IsCollidingPosition_CheckInsteadOfNut_Prefix))
             );
             _harmony.Patch(

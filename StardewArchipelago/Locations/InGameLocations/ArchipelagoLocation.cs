@@ -5,16 +5,19 @@ using Archipelago.MultiClient.Net.Models;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Textures;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Internal;
+using StardewValley.Objects;
 using Color = Microsoft.Xna.Framework.Color;
+using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Locations.InGameLocations
 {
-    internal class ArchipelagoLocation : Item
+    internal class ArchipelagoLocation : SpecialItem
     {
         private const string ARCHIPELAGO_PREFIX = "Archipelago: ";
         private const string ARCHIPELAGO_SHORT_PREFIX = "AP: ";
@@ -75,13 +78,14 @@ namespace StardewArchipelago.Locations.InGameLocations
             _locationDisplayName = $"{prefix}{locationDisplayName}";
             Name = _locationDisplayName;
             LocationName = locationName;
-            ItemId = $"{nameof(ArchipelagoLocation)}_{LocationName.Replace(" ", "_")}";
+            ItemId = $"{IDProvider.AP_LOCATION}_{LocationName.Replace(" ", "_")}";
 
             _locationChecker = locationChecker;
 
             var isHinted = myActiveHints.Any(hint => archipelago.GetLocationName(hint.LocationId).Equals(locationName, StringComparison.OrdinalIgnoreCase));
             var desiredTextureName = isHinted ? ArchipelagoTextures.PLEADING : ArchipelagoTextures.COLOR;
             _archipelagoTexture = ArchipelagoTextures.GetArchipelagoLogo(monitor, modHelper, 48, desiredTextureName);
+            
 
             var scoutedLocation = archipelago.ScoutSingleLocation(LocationName);
             _description = scoutedLocation == null ? ScoutedLocation.GenericItemName() : scoutedLocation.ToString();

@@ -22,18 +22,17 @@ namespace StardewArchipelago.Locations.InGameLocations
     /// <summary>Manages the data for archipelago location items.</summary>
     public class ArchipelagoLocationDataDefinition : BaseItemDataDefinition
     {
-
         private static IMonitor _monitor;
         private static IModHelper _modHelper;
-        private static LocationChecker _locationChecker;
         private static ArchipelagoClient _archipelago;
+        private static LocationChecker _locationChecker;
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, LocationChecker locationChecker, ArchipelagoClient archipelago)
+        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             _monitor = monitor;
             _modHelper = modHelper;
-            _locationChecker = locationChecker;
             _archipelago = archipelago;
+            _locationChecker = locationChecker;
         }
 
         /// <inheritdoc />
@@ -55,7 +54,7 @@ namespace StardewArchipelago.Locations.InGameLocations
             {
                 return null;
             }
-            var itemData = new ParsedItemData(this, itemId, 0, "", "", "", "", 0, "", null);
+            var itemData = new ParsedArchipelagoItemData(_monitor, _modHelper, _archipelago, _locationChecker, this, itemId, 0, "", "", "", "", 0, "", null);
             return itemData;
         }
 

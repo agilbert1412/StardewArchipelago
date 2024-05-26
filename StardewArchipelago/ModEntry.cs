@@ -296,7 +296,7 @@ namespace StardewArchipelago
             var seedShopStockModifier = new SeedShopStockModifier(Monitor, _helper, _archipelago, _locationChecker, _stardewItemManager);
             var nameSimplifier = new NameSimplifier();
             var friends = new Friends();
-            ArchipelagoLocationDataDefinition.Initialize(Monitor, _helper, _locationChecker, _archipelago);
+            ArchipelagoLocationDataDefinition.Initialize(Monitor, _helper, _archipelago, _locationChecker);
             _logicPatcher = new RandomizedLogicPatcher(Monitor, _helper, Config, _harmony, _archipelago, _locationChecker, _stardewItemManager, _entranceManager, seedShopStockModifier, nameSimplifier, friends, State);
             _jojaDisabler = new JojaDisabler(Monitor, _helper, _harmony);
             _seasonsRandomizer = new SeasonsRandomizer(Monitor, _helper, _archipelago, State);
