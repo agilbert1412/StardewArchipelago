@@ -78,7 +78,7 @@ namespace StardewArchipelago.Locations.InGameLocations
             _locationDisplayName = $"{prefix}{locationDisplayName}";
             Name = _locationDisplayName;
             LocationName = locationName;
-            ItemId = $"{IDProvider.AP_LOCATION}_{LocationName.Replace(" ", "_")}";
+            ItemId = $"{IDProvider.AP_LOCATION}_{LocationName/*.Replace(" ", "_")*/}";
 
             _locationChecker = locationChecker;
 

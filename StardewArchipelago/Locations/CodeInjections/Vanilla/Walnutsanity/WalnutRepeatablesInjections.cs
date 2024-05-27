@@ -14,6 +14,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
     public static class WalnutRepeatablesInjections
     {
         private const string WALNUT_FISHING_KEY = "IslandFishing";
+        private const double WALNUT_BASE_CHANCE = 0.25;
         private const double INFINITY_WALNUT_CHANCE_REDUCTION = 0.8;
 
         private static IMonitor _monitor;
@@ -41,7 +42,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 double seedC = Game1.uniqueIDForThisGame;
                 var random = Utility.CreateRandom(seedA, seedB, seedC);
                 var roll = random.NextDouble();
-                var chanceRequired = 0.15;
+                var chanceRequired = WALNUT_BASE_CHANCE;
 
                 if (!Game1.player.team.limitedNutDrops.TryGetValue(WALNUT_FISHING_KEY, out var numberWalnutsFishedSoFar))
                 {
