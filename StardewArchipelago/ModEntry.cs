@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using HarmonyLib;
@@ -39,6 +41,8 @@ using StardewValley.Delegates;
 using StardewValley.Internal;
 using StardewValley.TerrainFeatures;
 using StardewValley.Triggers;
+using ArchipelagoLocation = StardewArchipelago.Locations.InGameLocations.ArchipelagoLocation;
+using xTile;
 
 namespace StardewArchipelago
 {
@@ -77,6 +81,7 @@ namespace StardewArchipelago
         private QuestCleaner _questCleaner;
         private EntranceManager _entranceManager;
         private NightShippingBehaviors _shippingBehaviors;
+        private TileSanityManager _tileSanityManager;
         private HintHelper _hintHelper;
 
         private ModRandomizedLogicPatcher _modLogicPatcher;
@@ -139,6 +144,10 @@ namespace StardewArchipelago
             _helper.ConsoleCommands.Add("export_shippables", "Export all currently loaded shippable items", ExportShippables);
             _helper.ConsoleCommands.Add("export_mismatches", "Export all items where Name and DisplayName mismatch which can be shipped", ExportMismatchedItems);
             _helper.ConsoleCommands.Add("release_slot", "Release the current slot completely", ReleaseSlot);
+            _helper.ConsoleCommands.Add("walkable_tiles", "Gets the list of every walkable tile",
+                this.ListWalkableTiles);
+            _helper.ConsoleCommands.Add("walkable_csv", "Gets the csv of every walkable tile",
+                this.ConvertWalkablesToCSV);
             _helper.ConsoleCommands.Add("debug_method", "Runs whatever is currently in the debug method", DebugMethod);
 #endif
 
@@ -340,8 +349,8 @@ namespace StardewArchipelago
             _seasonsRandomizer = new SeasonsRandomizer(_logger, _helper, _archipelago, State);
             _appearanceRandomizer = new AppearanceRandomizer(_logger, _archipelago);
             var tileChooser = new TileChooser();
-            _chatForwarder =
-                new ChatForwarder(_logger, _helper, _harmony, _archipelago, _giftHandler, _goalManager, tileChooser);
+            _tileSanityManager = new TileSanityManager(_harmony, _archipelago, _locationChecker, Monitor);
+            _chatForwarder = new ChatForwarder(_logger, Monitor, _helper, _harmony, _archipelago, _giftHandler, _goalManager, tileChooser, _tileSanityManager);
             _questCleaner = new QuestCleaner();
 
             var babyBirther = new BabyBirther();
@@ -364,7 +373,8 @@ namespace StardewArchipelago
             _jojaDisabler.DisableJojaMembership();
             _multiSleep.InjectMultiSleepOption(_archipelago.SlotData);
             SeasonsRandomizer.ChangeMailKeysBasedOnSeasonsToDaysElapsed();
-            _modStateInitializer = new InitialModGameStateInitializer(_logger, _archipelago);
+            _tileSanityManager.PatchWalk(this.Helper);
+            _modStateInitializer = new InitialModGameStateInitializer(_logger, Monitor, _archipelago);
             _hintHelper = new HintHelper();
             Game1.chatBox?.addMessage(
                 $"Connected to Archipelago as {_archipelago.SlotData.SlotName}. Type !!help for client commands", Color.Green);
@@ -623,6 +633,157 @@ namespace StardewArchipelago
             {
                 _locationChecker.AddCheckedLocation(missingLocation);
             }
+        }
+
+        private void ListWalkableTiles(string arg1, string[] arg2)
+        {
+            Farmer farmer = Game1.player;
+            GameLocation playerCurrentLocation = farmer.currentLocation;
+            List<Vector2> walkables = new();
+            int width = playerCurrentLocation.map.DisplayWidth / 64;
+            int height = playerCurrentLocation.map.DisplayHeight / 64;
+            for (int x = 1; x < width - 1; x++)
+            {
+                for (int y = 1; y < height - 1; y++)
+                {
+                    Vector2 position = new(x, y);
+                    if (playerCurrentLocation.isTilePassable(position))
+                    {
+                        walkables.Add(position);
+                    }
+                }
+            }
+
+            List<Vector2> validatedWalkables = new();
+            List<Vector2> toTest = new();
+            Vector2 point = new(farmer.TilePoint.X, farmer.TilePoint.Y);
+            if (walkables.Contains(point))
+            {
+                walkables.Remove(point);
+                toTest.Add(point);
+            }
+            else
+            {
+                Console.Out.WriteLine("current tile is not walkable");
+                return;
+            }
+            while (toTest.Count > 0)
+            {
+                point = toTest[0];
+                validatedWalkables.Add(point);
+                toTest.RemoveAt(0);
+                point += new Vector2(1, 0);
+                if (walkables.Contains(point))
+                {
+                    walkables.Remove(point);
+                    toTest.Add(point);
+                }
+                point += new Vector2(-1, -1);
+                if (walkables.Contains(point))
+                {
+                    walkables.Remove(point);
+                    toTest.Add(point);
+                }
+                point += new Vector2(-1, 1);
+                if (walkables.Contains(point))
+                {
+                    walkables.Remove(point);
+                    toTest.Add(point);
+                }
+                point += new Vector2(1, 1);
+                if (walkables.Contains(point))
+                {
+                    walkables.Remove(point);
+                    toTest.Add(point);
+                }
+            }
+
+            const string tileFile = "tiles.json";
+            SortedDictionary<string, List<Vector2>> dictionary;
+            if (File.Exists(tileFile))
+            {
+                dictionary =
+                    JsonConvert.DeserializeObject<SortedDictionary<string, List<Vector2>>>(File.ReadAllText(tileFile));
+            }
+            else
+            {
+                dictionary = new SortedDictionary<string, List<Vector2>>();
+            }
+
+            validatedWalkables.Sort(((vector2, vector3) => vector2.X.CompareTo(vector3.X) * 2 + vector2.Y.CompareTo(vector3.Y)));
+            string displayedName;
+            switch (arg2.Length)
+            {
+                case 0:
+                    displayedName = TileSanityManager.GetMapName(farmer);
+                    break;
+                default:
+                    displayedName = arg2[0] switch
+                    {
+                        "0" => string.Join(' ', arg2.Skip(1)),
+                        "1" => playerCurrentLocation.DisplayName,
+                        "2" => playerCurrentLocation.Name,
+                        _ => throw new ArgumentException()
+                    };
+                    break;
+            }
+
+            if (dictionary.ContainsKey(displayedName))
+                dictionary[displayedName] = validatedWalkables;
+            else
+                dictionary.Add(displayedName, validatedWalkables);
+            File.WriteAllText(tileFile, JsonConvert.SerializeObject(dictionary, Formatting.Indented));
+            Console.Out.WriteLine("Finished finding walkable tiles");
+        }
+
+        private void ConvertWalkablesToCSV(string arg1, string[] arg2)
+        {
+            const string tileFile = "tiles.json";
+            var data_dictionary = JsonConvert.DeserializeObject<Dictionary<string, List<Vector2>>>(File.ReadAllText(tileFile));
+
+            var tiles_dictionary = new Dictionary<(string, int, int), bool>();
+            foreach (var (map, tiles) in data_dictionary)
+            {
+                foreach (var (x, y) in tiles)
+                {
+                    tiles_dictionary.Add(((string, int, int))(map, x, y), true);
+                }
+            }
+            foreach (var (map, tiles) in data_dictionary)
+            {
+                foreach (var (x, y) in tiles)
+                {
+                    for (var i = 2; i <= 10; i++)
+                    {
+                        tiles_dictionary.TryAdd(((string, int, int))(map, x / i, y / i), false);
+                    }
+                }
+            }
+
+            var sortedDict = from entry in tiles_dictionary
+                orderby entry.Key.Item1, entry.Key.Item2, entry.Key.Item3
+                select entry;
+
+            const string locationFile = "tilesanity.csv";
+            var id = 20_000;
+            var locationText = "id,region,name,tags,mod_name\n" +
+                               "20000,None,Progressive Tile,NOT_TILE,\n";
+            var previous_map = "";
+            foreach (var ((map, x, y), real) in sortedDict)
+            {
+                if (map != previous_map)
+                {
+                    id += 1_000 - id % 1_000;
+                    previous_map = map;
+                }
+                var name = $"Tilesanity: {map} ({x}-{y})";
+                if (real)
+                    locationText += $"{id++},{map},{name},TILESANITY,\n";
+                else
+                    locationText += $"{id++},{map},{name},\"TILESANITY,NOT_TILE\",\n";
+            }
+            File.WriteAllText(locationFile, locationText);
+            Console.Out.WriteLine("CSV updated");
         }
 
 #endif

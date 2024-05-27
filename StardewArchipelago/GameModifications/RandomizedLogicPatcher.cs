@@ -8,6 +8,7 @@ using StardewArchipelago.Archipelago;
 using StardewArchipelago.GameModifications.CodeInjections;
 using StardewArchipelago.GameModifications.CodeInjections.Bundles;
 using StardewArchipelago.GameModifications.CodeInjections.Television;
+using StardewArchipelago.GameModifications.CodeInjections.Tilesanity;
 using StardewArchipelago.GameModifications.EntranceRandomizer;
 using StardewArchipelago.GameModifications.Seasons;
 using StardewArchipelago.GameModifications.Tooltips;
