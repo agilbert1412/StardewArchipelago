@@ -1200,6 +1200,11 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(typeof(IslandLocation), nameof(IslandLocation.getFish)),
                 prefix: new HarmonyMethod(typeof(WalnutRepeatablesInjections), nameof(WalnutRepeatablesInjections.GetFish_RepeatableWalnut_Prefix))
             );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(HoeDirt), nameof(HoeDirt.performUseAction)),
+                prefix: new HarmonyMethod(typeof(WalnutRepeatablesInjections), nameof(WalnutRepeatablesInjections.PerformUseAction_RepeatableFarmingWalnut_Prefix))
+            );
         }
 
         private void PatchPuzzleWalnuts()
