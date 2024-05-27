@@ -15,7 +15,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
     {
         private const string WALNUT_FISHING_KEY = "IslandFishing";
         private const double WALNUT_BASE_CHANCE = 0.25;
-        private const double INFINITY_WALNUT_CHANCE_REDUCTION = 0.8;
+        private const double INFINITY_WALNUT_CHANCE_REDUCTION = 0.75;
 
         private static IMonitor _monitor;
         private static IModHelper _helper;
