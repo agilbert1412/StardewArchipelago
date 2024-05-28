@@ -1196,15 +1196,7 @@ namespace StardewArchipelago.Locations.Patcher
                 );
             }
 
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(IslandLocation), nameof(IslandLocation.getFish)),
-                prefix: new HarmonyMethod(typeof(WalnutRepeatablesInjections), nameof(WalnutRepeatablesInjections.GetFish_RepeatableWalnut_Prefix))
-            );
-
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(HoeDirt), nameof(HoeDirt.performUseAction)),
-                prefix: new HarmonyMethod(typeof(WalnutRepeatablesInjections), nameof(WalnutRepeatablesInjections.PerformUseAction_RepeatableFarmingWalnut_Prefix))
-            );
+            PatchRepeatableWalnuts();
         }
 
         private void PatchPuzzleWalnuts()
@@ -1270,6 +1262,45 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Darts), nameof(Darts.QuitGame)),
                 prefix: new HarmonyMethod(typeof(WalnutPuzzleInjections), nameof(WalnutPuzzleInjections.QuitGame_CheckInsteadOfNut_Prefix))
+            );
+        }
+
+        private void PatchRepeatableWalnuts()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(IslandLocation), nameof(IslandLocation.getFish)),
+                prefix: new HarmonyMethod(typeof(WalnutRepeatablesInjections), nameof(WalnutRepeatablesInjections.GetFish_RepeatableWalnut_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(HoeDirt), nameof(HoeDirt.performUseAction)),
+                prefix: new HarmonyMethod(typeof(WalnutRepeatablesInjections), nameof(WalnutRepeatablesInjections.PerformUseAction_RepeatableFarmingWalnut_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), "breakStone"),
+                prefix: new HarmonyMethod(typeof(WalnutRepeatablesInjections), nameof(WalnutRepeatablesInjections.BreakStone_RepeatableMusselWalnut_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(VolcanoDungeon), "breakStone"),
+                prefix: new HarmonyMethod(typeof(WalnutRepeatablesInjections), nameof(WalnutRepeatablesInjections.BreakStone_RepeatableVolcanoStoneWalnut_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(VolcanoDungeon), nameof(VolcanoDungeon.monsterDrop)),
+                prefix: new HarmonyMethod(typeof(WalnutRepeatablesInjections), nameof(WalnutRepeatablesInjections.MonsterDrop_RepeatableVolcanoMonsterWalnut_Prefix))
+            );
+
+
+            if (!_archipelago.SlotData.Walnutsanity.HasFlag(Walnutsanity.Repeatables))
+            {
+                return;
+            }
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(FarmerTeam), nameof(FarmerTeam.RequestLimitedNutDrops)),
+                prefix: new HarmonyMethod(typeof(WalnutRepeatablesInjections), nameof(WalnutRepeatablesInjections.RequestLimitedNutDrops_TigerSlimesAndCreatesWalnuts_Prefix))
             );
         }
     }

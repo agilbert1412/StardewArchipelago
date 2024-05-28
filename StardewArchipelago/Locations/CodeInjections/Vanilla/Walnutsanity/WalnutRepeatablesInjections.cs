@@ -4,11 +4,14 @@ using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Vanilla;
+using StardewArchipelago.Stardew.Ids.Vanilla;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.GameData.Crops;
 using StardewValley.Locations;
 using StardewValley.Minigames;
+using StardewValley.Monsters;
+using StardewValley.Network.NetEvents;
 using StardewValley.TerrainFeatures;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
@@ -17,11 +20,29 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
     {
         private const string WALNUT_FISHING_KEY = "IslandFishing";
         private const string WALNUT_FARMING_KEY = "IslandFarming";
+        private const string WALNUT_MUSSEL_KEY = "MusselStone";
+        private const string WALNUT_TIGER_SLIMES_KEY = "TigerSlimeNut";
+        private const string WALNUT_VOLCANO_MINING_KEY = "VolcanoMining";
+        private const string WALNUT_VOLCANO_MONSTER_KEY = "VolcanoMonsterDrop";
+        private const string WALNUT_VOLCANO_BARREL_KEY = "VolcanoBarrel";
+        private const string WALNUT_VOLCANO_COMMON_CHEST_KEY = "VolcanoNormalChest";
+        private const string WALNUT_VOLCANO_RARE_CHEST_KEY = "VolcanoRareChest";
 
         private const double WALNUT_BASE_CHANCE_FISHING = 0.25;
         private const double INFINITY_WALNUT_CHANCE_REDUCTION_FISHING = 0.75;
+
         private const double WALNUT_BASE_CHANCE_FARMING = 0.10;
         private const double INFINITY_WALNUT_CHANCE_REDUCTION_FARMING = 0.75;
+
+        private const double WALNUT_BASE_CHANCE_MUSSEL = 0.15;
+        private const double INFINITY_WALNUT_CHANCE_REDUCTION_MUSSEL = 0.75;
+
+        private const double WALNUT_BASE_CHANCE_VOLCANO_MINING = 0.05;
+        private const double INFINITY_WALNUT_CHANCE_REDUCTION_VOLCANO_MINING = 0.75;
+
+        private const double WALNUT_BASE_CHANCE_VOLCANO_MONSTER = 0.10;
+        private const double INFINITY_WALNUT_CHANCE_REDUCTION_VOLCANO_MONSTER = 0.75;
+
 
         private static IMonitor _monitor;
         private static IModHelper _helper;
@@ -47,45 +68,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 double seedB = Game1.stats.TimesFished;
                 double seedC = Game1.uniqueIDForThisGame;
                 var random = Utility.CreateRandom(seedA, seedB, seedC);
-                var roll = random.NextDouble();
-                var chanceRequired = WALNUT_BASE_CHANCE_FISHING;
 
-                if (!Game1.player.team.limitedNutDrops.TryGetValue(WALNUT_FISHING_KEY, out var numberWalnutsFishedSoFar))
-                {
-                    numberWalnutsFishedSoFar = 0;
-                }
-
-                if (numberWalnutsFishedSoFar < 5)
-                {
-                    if (roll > chanceRequired)
-                    {
-                        __result = CallBaseGetFish(__instance, millisecondsAfterNibble, bait, waterDepth, who, baitPotency, bobberTile, locationName);
-                        return false; // don't run original logic
-                    }
-
-                    numberWalnutsFishedSoFar++;
-                    Game1.player.team.limitedNutDrops[WALNUT_FISHING_KEY] = numberWalnutsFishedSoFar;
-                    var itemToSpawnId = QualifiedItemIds.GOLDEN_WALNUT;
-                    if (_archipelago.SlotData.Walnutsanity.HasFlag(Archipelago.Walnutsanity.Repeatables))
-                    {
-                        var location = $"Fishing Walnut {numberWalnutsFishedSoFar}";
-                        itemToSpawnId = IDProvider.CreateApLocationItemId(location);
-                    }
-
-                    __result = ItemRegistry.Create(itemToSpawnId);
-                    return false; // don't run original logic
-                }
-
-                // We allow the player to get extra walnuts here, but each one is less likely than the last
-                chanceRequired *= Math.Pow(INFINITY_WALNUT_CHANCE_REDUCTION_FISHING, numberWalnutsFishedSoFar);
-                if (roll > chanceRequired)
-                {
-                    __result = CallBaseGetFish(__instance, millisecondsAfterNibble, bait, waterDepth, who, baitPotency, bobberTile, locationName);
-                    return false; // don't run original logic
-                }
-                
-                Game1.player.team.limitedNutDrops[WALNUT_FISHING_KEY] = numberWalnutsFishedSoFar + 1;
-                __result = ItemRegistry.Create(QualifiedItemIds.GOLDEN_WALNUT);
+                var baseFishCallBack = () => CallBaseGetFish(__instance, millisecondsAfterNibble, bait, waterDepth, who, baitPotency, bobberTile, locationName);
+                __result = RollForRepeatableWalnutOrCheck(WALNUT_FISHING_KEY, "Fishing Walnut", random, WALNUT_BASE_CHANCE_FISHING, INFINITY_WALNUT_CHANCE_REDUCTION_FISHING, baseFishCallBack);
                 return false; // don't run original logic
             }
             catch (Exception ex)
@@ -130,43 +115,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
 
                 __instance.destroyCrop(false);
                 __result = true;
-                var roll = Game1.random.NextDouble();
-                var chanceRequired = WALNUT_BASE_CHANCE_FARMING;
 
-                if (!Game1.player.team.limitedNutDrops.TryGetValue(WALNUT_FARMING_KEY, out var numberWalnutsFarmedSoFar))
-                {
-                    numberWalnutsFarmedSoFar = 0;
-                }
-
-                if (numberWalnutsFarmedSoFar < 5)
-                {
-                    if (roll > chanceRequired)
-                    {
-                        return false; // don't run original logic
-                    }
-
-                    numberWalnutsFarmedSoFar++;
-                    Game1.player.team.limitedNutDrops[WALNUT_FARMING_KEY] = numberWalnutsFarmedSoFar;
-                    var itemToSpawnId = QualifiedItemIds.GOLDEN_WALNUT;
-                    if (_archipelago.SlotData.Walnutsanity.HasFlag(Archipelago.Walnutsanity.Repeatables))
-                    {
-                        var location = $"Harvesting Walnut {numberWalnutsFarmedSoFar}";
-                        itemToSpawnId = IDProvider.CreateApLocationItemId(location);
-                    }
-                    
-                    CreateLocationDebris(ItemRegistry.Create(itemToSpawnId), new Vector2(tileLocation.X, tileLocation.Y) * 64f, __instance.Location);
-                    return false; // don't run original logic
-                }
-
-                // We allow the player to get extra walnuts here, but each one is less likely than the last
-                chanceRequired *= Math.Pow(INFINITY_WALNUT_CHANCE_REDUCTION_FARMING, numberWalnutsFarmedSoFar);
-                if (roll > chanceRequired)
-                {
-                    return false; // don't run original logic
-                }
-
-                Game1.player.team.limitedNutDrops[WALNUT_FARMING_KEY] = numberWalnutsFarmedSoFar + 1;
-                CreateLocationDebris(ItemRegistry.Create(QualifiedItemIds.GOLDEN_WALNUT), new Vector2(tileLocation.X, tileLocation.Y) * 64f, __instance.Location);
+                RollForRepeatableWalnutOrCheck(WALNUT_FARMING_KEY, "Harvesting Walnut", __instance.Location, tileLocation.X, tileLocation.Y, Game1.random, WALNUT_BASE_CHANCE_FARMING, INFINITY_WALNUT_CHANCE_REDUCTION_FARMING);
                 return false; // don't run original logic
             }
             catch (Exception ex)
@@ -174,6 +124,212 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 _monitor.Log($"Failed in {nameof(PerformUseAction_RepeatableFarmingWalnut_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
             }
+        }
+
+        // protected virtual bool breakStone(string stoneId, int x, int y, Farmer who, Random random)
+        public static bool BreakStone_RepeatableMusselWalnut_Prefix(GameLocation __instance, string stoneId, int x, int y, Farmer who, Random r, ref bool __result)
+        {
+            try
+            {
+                if (stoneId != ObjectIds.MUSSEL_NODE || __instance is not IslandLocation)
+                {
+                    return true; // run original logic
+                }
+                
+                var farmerId = who != null ? who.UniqueMultiplayerID : 0L;
+                Game1.createMultipleObjectDebris("(O)719", x, y, r.Next(2, 5), farmerId, __instance);
+
+                if (who != null && __instance.HasUnlockedAreaSecretNotes(who) && r.NextDouble() < 3.0 / 400.0)
+                {
+                    var unseenSecretNote = __instance.tryToCreateUnseenSecretNote(who);
+                    if (unseenSecretNote != null)
+                    {
+                        Game1.createItemDebris((Item)unseenSecretNote, new Vector2((float)x + 0.5f, (float)y + 0.75f) * 64f, Game1.player.FacingDirection, __instance);
+                    }
+                }
+                who?.gainExperience(3, 5);
+                __result = true;
+
+                RollForRepeatableWalnutOrCheck(WALNUT_MUSSEL_KEY, "Mussel Node Walnut", __instance, x, y, r, WALNUT_BASE_CHANCE_MUSSEL, INFINITY_WALNUT_CHANCE_REDUCTION_MUSSEL);
+
+                return false; // don't run original logic
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(BreakStone_RepeatableMusselWalnut_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
+        }
+
+        // public void RequestLimitedNutDrops(string key, GameLocation location, int x, int y, int limit, int rewardAmount = 1)
+        // Game1.player.team.RequestLimitedNutDrops("TigerSlimeNut", (GameLocation) this, x, y, 1);
+        public static bool RequestLimitedNutDrops_TigerSlimesAndCreatesWalnuts_Prefix(FarmerTeam __instance, string key, GameLocation location, int x, int y, int limit, int rewardAmount)
+        {
+            try
+            {
+                if (__instance.limitedNutDrops.TryGetValue(key, out var numberAlreadyDropped) && numberAlreadyDropped >= limit)
+                {
+                    return true; // run original logic
+                }
+
+                if (key == WALNUT_TIGER_SLIMES_KEY)
+                {
+                    CreateLocationDebris("Tiger Slime Walnut", new Vector2(x, y), location);
+                    __instance.limitedNutDrops[key] = numberAlreadyDropped + 1;
+                    return false; // don't run original logic
+                }
+
+                if (key == WALNUT_VOLCANO_BARREL_KEY)
+                {
+                    var newNumber = numberAlreadyDropped + 1;
+                    CreateLocationDebris($"Volcano Crates Walnut {newNumber}", new Vector2(x, y), location);
+                    __instance.limitedNutDrops[key] = newNumber;
+                    return false; // don't run original logic
+                }
+
+                if (key == WALNUT_VOLCANO_COMMON_CHEST_KEY)
+                {
+                    CreateLocationDebris("Volcano Common Chest Walnut", new Vector2(x, y), location);
+                    __instance.limitedNutDrops[key] = numberAlreadyDropped + 1;
+                    return false; // don't run original logic
+                }
+
+                if (key == WALNUT_VOLCANO_RARE_CHEST_KEY)
+                {
+                    CreateLocationDebris("Volcano Rare Chest Walnut", new Vector2(x, y), location);
+                    __instance.limitedNutDrops[key] = numberAlreadyDropped + 1;
+                    return false; // don't run original logic
+                }
+
+                return true; // run original logic
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(RequestLimitedNutDrops_TigerSlimesAndCreatesWalnuts_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
+        }
+
+        // protected virtual bool breakStone(string stoneId, int x, int y, Farmer who, Random random)
+        public static bool BreakStone_RepeatableVolcanoStoneWalnut_Prefix(VolcanoDungeon __instance, string stoneId, int x, int y, Farmer who, Random r, ref bool __result)
+        {
+            try
+            {
+                if (who != null && stoneId is "845" or "846" or "847" && Game1.random.NextDouble() < 0.005)
+                {
+                    Game1.createObjectDebris(QualifiedItemIds.MUMMIFIED_BAT, x, y, who.UniqueMultiplayerID, __instance);
+                }
+
+                if (who != null)
+                {
+                    RollForRepeatableWalnutOrCheck(WALNUT_VOLCANO_MINING_KEY, "Volcano Rocks Walnut", __instance, x, y, r, WALNUT_BASE_CHANCE_VOLCANO_MINING, INFINITY_WALNUT_CHANCE_REDUCTION_VOLCANO_MINING);
+                }
+
+                __result = CallBaseBreakStone(__instance, stoneId, x, y, who, r);
+                return false; // don't run original logic
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(BreakStone_RepeatableVolcanoStoneWalnut_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
+        }
+
+        private static bool CallBaseBreakStone(GameLocation gameLocation, string stoneId, int x, int y, Farmer who, Random r)
+        {
+            // base.breakStone(stoneId, x, y, who, r);
+            var gameLocationBreakStoneMethod = typeof(GameLocation).GetMethod("breakStone", BindingFlags.Instance | BindingFlags.NonPublic);
+            var functionPointer = gameLocationBreakStoneMethod.MethodHandle.GetFunctionPointer();
+            var baseBreakStone = (Func<string, int, int, Farmer, Random, bool>)Activator.CreateInstance(
+                typeof(Func<string, int, int, Farmer, Random, bool>),
+                gameLocation, functionPointer);
+            return baseBreakStone(stoneId, x, y, who, r);
+        }
+
+        // public override void monsterDrop(Monster monster, int x, int y, Farmer who)
+        public static bool MonsterDrop_RepeatableVolcanoMonsterWalnut_Prefix(VolcanoDungeon __instance, Monster monster, int x, int y, Farmer who)
+        {
+            try
+            {
+                CallBaseMonsterDrop(__instance, monster, x, y, who);
+                RollForRepeatableWalnutOrCheck(WALNUT_VOLCANO_MONSTER_KEY, "Volcano Monsters Walnut", __instance, x, y, Game1.random, WALNUT_BASE_CHANCE_VOLCANO_MONSTER, INFINITY_WALNUT_CHANCE_REDUCTION_VOLCANO_MONSTER);
+                return false; // don't run original logic
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(MonsterDrop_RepeatableVolcanoMonsterWalnut_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
+        }
+
+        private static void CallBaseMonsterDrop(GameLocation gameLocation, Monster monster, int x, int y, Farmer who)
+        {
+            // public virtual void monsterDrop(Monster monster, int x, int y, Farmer who)
+            var gameLocationMonsterDropMethod = typeof(GameLocation).GetMethod("monsterDrop", BindingFlags.Instance | BindingFlags.NonPublic);
+            var functionPointer = gameLocationMonsterDropMethod.MethodHandle.GetFunctionPointer();
+            var baseMonsterDrop = (Action<Monster, int, int, Farmer>)Activator.CreateInstance(
+                typeof(Action<Monster, int, int, Farmer>),
+                gameLocation, functionPointer);
+            baseMonsterDrop(monster, x, y, who);
+        }
+
+        private static void RollForRepeatableWalnutOrCheck(string walnutKey, string apLocationName, GameLocation gameLocation, int x, int y, Random random, double baseChance, double chanceReduction)
+        {
+            RollForRepeatableWalnutOrCheck(walnutKey, apLocationName, gameLocation, new Vector2(x, y) * 64f, random, baseChance, chanceReduction);
+        }
+
+        private static void RollForRepeatableWalnutOrCheck(string walnutKey, string apLocationName, GameLocation gameLocation, float x, float y, Random random, double baseChance, double chanceReduction)
+        {
+            RollForRepeatableWalnutOrCheck(walnutKey, apLocationName, gameLocation, new Vector2(x, y) * 64f, random, baseChance, chanceReduction);
+        }
+
+        private static void RollForRepeatableWalnutOrCheck(string walnutKey, string apLocationName, GameLocation gameLocation, Vector2 pixelOrigin, Random random, double baseChance, double chanceReduction, Func<Item> failCallback = null)
+        {
+            var itemToSpawn = RollForRepeatableWalnutOrCheck(walnutKey, apLocationName, random, baseChance, chanceReduction, failCallback);
+            if (itemToSpawn != null)
+            {
+                CreateLocationDebris(itemToSpawn, pixelOrigin, gameLocation);
+            }
+        }
+
+        private static Item RollForRepeatableWalnutOrCheck(string walnutKey, string apLocationName, Random random, double baseChance, double chanceReduction, Func<Item> failCallback)
+        {
+            var roll = random.NextDouble();
+            var chanceRequired = baseChance;
+
+            if (!Game1.player.team.limitedNutDrops.TryGetValue(walnutKey, out var numberWalnutsSoFar))
+            {
+                numberWalnutsSoFar = 0;
+            }
+
+            if (numberWalnutsSoFar < 5)
+            {
+                if (roll > chanceRequired)
+                {
+                    return failCallback?.Invoke();
+                }
+
+                numberWalnutsSoFar++;
+                Game1.player.team.limitedNutDrops[walnutKey] = numberWalnutsSoFar;
+                var itemToSpawnId = QualifiedItemIds.GOLDEN_WALNUT;
+                if (_archipelago.SlotData.Walnutsanity.HasFlag(Archipelago.Walnutsanity.Repeatables))
+                {
+                    var location = $"{apLocationName} {numberWalnutsSoFar}";
+                    itemToSpawnId = IDProvider.CreateApLocationItemId(location);
+                }
+                
+                return ItemRegistry.Create(itemToSpawnId);
+            }
+
+            // We allow the player to get extra walnuts here, but each one is less likely than the last
+            chanceRequired *= Math.Pow(chanceReduction, numberWalnutsSoFar);
+            if (roll > chanceRequired)
+            {
+                return failCallback?.Invoke();
+            }
+
+            Game1.player.team.limitedNutDrops[walnutKey] = numberWalnutsSoFar + 1;
+            return ItemRegistry.Create(QualifiedItemIds.GOLDEN_WALNUT);
         }
 
         private static void CreateLocationDebris(string locationName, Vector2 pixelOrigin, GameLocation gameLocation, int direction = 0, int groundLevel = 0)
