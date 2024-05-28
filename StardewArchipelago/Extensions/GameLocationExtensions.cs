@@ -18,7 +18,7 @@ namespace StardewArchipelago.Extensions
             // {new WarpRequest(Game1.getLocationRequest("Town"), , , FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("Trailer_Big"), , , FacingDirection.Up)},
             { new WarpRequest(Game1.getLocationRequest("Town"), 35, 97, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("Sewer"), 16, 11, FacingDirection.Down) },
             { new WarpRequest(Game1.getLocationRequest("Forest"), 94, 100, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("Sewer"), 3, 48, FacingDirection.Up) },
-            { new WarpRequest(Game1.getLocationRequest("Forest"), 101, 71, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("MasteryCave"), 7, 11, FacingDirection.Up) },
+            { new WarpRequest(Game1.getLocationRequest("Forest"), 101, 72, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("MasteryCave"), 7, 11, FacingDirection.Up) },
             { new WarpRequest(Game1.getLocationRequest("Mountain"), 16, 8, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("LeoTreeHouse"), 3, 8, FacingDirection.Up) },
             { new WarpRequest(Game1.getLocationRequest("BeachNightMarket"), 49, 11, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("ElliottHouse"), 3, 9, FacingDirection.Down) },
             { new WarpRequest(Game1.getLocationRequest("BeachNightMarket"), 30, 34, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("FishShop"), 5, 9, FacingDirection.Down) },
