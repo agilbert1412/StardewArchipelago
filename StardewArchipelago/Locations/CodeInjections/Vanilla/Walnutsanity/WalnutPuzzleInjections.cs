@@ -193,7 +193,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             try
             {
                 var gourmandChecks = new[] { "Gourmand Frog Melon", "Gourmand Frog Wheat", "Gourmand Frog Garlic" };
-                CreateLocationDebris(gourmandChecks[__instance.gourmandRequestsFulfilled.Value], new Vector2(24f, 19f) * 64f, __instance, -1);
+                CreateLocationDebris(gourmandChecks[__instance.gourmandRequestsFulfilled.Value], new Vector2(4.5f, 4f) * 64f, __instance, 1);
                 ++__instance.gourmandRequestsFulfilled.Value;
                 Game1.player.team.MarkCollectedNut($"IslandGourmand{__instance.gourmandRequestsFulfilled.Value}");
                 // private NetMutex gourmandMutex
@@ -755,13 +755,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
 
         private static void CreateLocationDebris(string locationName, Vector2 pixelOrigin, GameLocation gameLocation, int direction = 0, int groundLevel = 0)
         {
-            Game1.createItemDebris(CreateLocationItem(locationName), pixelOrigin, direction, gameLocation, groundLevel);
+            var item = CreateLocationItem(locationName);
+            Game1.createItemDebris(item, pixelOrigin, direction, gameLocation, groundLevel);
         }
 
         private static Item CreateLocationItem(string locationName)
         {
             var itemId = IDProvider.CreateApLocationItemId(locationName);
-            return ItemRegistry.Create(itemId);
+            var item = ItemRegistry.Create(itemId);
+            return item;
         }
     }
 }

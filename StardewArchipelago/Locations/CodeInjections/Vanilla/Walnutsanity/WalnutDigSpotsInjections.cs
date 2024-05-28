@@ -61,20 +61,21 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
 
         private static readonly Dictionary<string, string> _digSpotNameMap = new()
         {
-            { "02", "Starfish Triangle" },
-            { "03", "Starfish Diamond" },
-            { "04", "X in the sand" },
-            { "05", "Diamond Of Indents" },
-            { "07", "Diamond Of Pebbles" },
-            { "08", "Big Circle Of Stones" },
-            { "09", "Circle Of Flowers" },
-            { "10", "Small Circle Of Stones" },
-            { "11", "Patch Of Sand" },
-            { "12", "Crooked Circle Of Stones" },
-            { "13", "Arc Of Stones" },
-            { "15", "Northmost Point Circle Of Stones" },
-            { "16", "Diamond Of Yellow Starfish" },
-            { "17", "Pirate Cove Patch Of Sand" },
-        };
+            { "Buried_IslandWest_62_76", "Starfish Triangle" },
+            { "Buried_IslandWest_43_74", "Starfish Diamond" },
+            { "Buried_IslandWest_30_75", "X in the sand" },
+            { "Buried_IslandWest_21_81", "Diamond Of Indents" },
+            { "Buried_IslandWest_39_24", "Diamond Of Pebbles" },
+            { "Buried_IslandWest_88_14", "Circle Of Grass" },
+            { "Buried_IslandNorth_26_81", "Big Circle Of Stones" },
+            { "Buried_IslandNorth_42_77", "Diamond Of Grass" },
+            { "Buried_IslandNorth_57_79", "Small Circle Of Stones" },
+            { "Buried_IslandNorth_62_54", "Patch Of Sand" },
+            { "Buried_IslandNorth_19_39", "Crooked Circle Of Stones" },
+            { "Buried_IslandNorth_54_21", "Arc Of Stones" },
+            { "Buried_IslandNorth_19_13", "Northmost Point Circle Of Stones" },
+            { "Buried_IslandSouthEast_25_17", "Diamond Of Yellow Starfish" },
+            { "Buried_IslandSouthEastCave_36_26", "Pirate Cove Patch Of Sand" },
+        }; // Around the tiger slimes is "Buried_IslandWest_39_24"
     }
 }

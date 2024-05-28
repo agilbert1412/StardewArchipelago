@@ -359,7 +359,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             try
             {
                 CallBaseMonsterDrop(__instance, monster, x, y, who);
-                RollForRepeatableWalnutOrCheck(WALNUT_VOLCANO_MONSTER_KEY, "Volcano Monsters Walnut", __instance, x, y, Game1.random, WALNUT_BASE_CHANCE_VOLCANO_MONSTER, INFINITY_WALNUT_CHANCE_REDUCTION_VOLCANO_MONSTER);
+                RollForRepeatableWalnutOrCheck(WALNUT_VOLCANO_MONSTER_KEY, "Volcano Monsters Walnut", __instance, new Vector2(x, y), Game1.random, WALNUT_BASE_CHANCE_VOLCANO_MONSTER, INFINITY_WALNUT_CHANCE_REDUCTION_VOLCANO_MONSTER);
                 return false; // don't run original logic
             }
             catch (Exception ex)
@@ -372,7 +372,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
         private static void CallBaseMonsterDrop(GameLocation gameLocation, Monster monster, int x, int y, Farmer who)
         {
             // public virtual void monsterDrop(Monster monster, int x, int y, Farmer who)
-            var gameLocationMonsterDropMethod = typeof(GameLocation).GetMethod("monsterDrop", BindingFlags.Instance | BindingFlags.NonPublic);
+            var gameLocationMonsterDropMethod = typeof(GameLocation).GetMethod("monsterDrop", BindingFlags.Instance | BindingFlags.Public);
             var functionPointer = gameLocationMonsterDropMethod.MethodHandle.GetFunctionPointer();
             var baseMonsterDrop = (Action<Monster, int, int, Farmer>)Activator.CreateInstance(
                 typeof(Action<Monster, int, int, Farmer>),
