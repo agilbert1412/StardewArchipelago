@@ -132,7 +132,7 @@ namespace StardewArchipelago
             _helper.ConsoleCommands.Add("release_slot", "Release the current slot completely", ReleaseSlot);
             _helper.ConsoleCommands.Add("debug_method", "Runs whatever is currently in the debug method", DebugMethod);
 #endif
-            
+
             ItemRegistry.AddTypeDefinition(new ArchipelagoLocationDataDefinition());
             ItemQueryResolver.Register(IDProvider.AP_LOCATION, PurchasableAPLocationQueryDelegate);
             ItemQueryResolver.Register(IDProvider.METAL_DETECTOR_ITEMS, TravelingMerchantInjections.CreateMetalDetectorItems);
@@ -307,16 +307,16 @@ namespace StardewArchipelago
             _questCleaner = new QuestCleaner();
 
             var babyBirther = new BabyBirther();
-			_giftHandler.Initialize(Monitor, _archipelago, _stardewItemManager, _mail);
-			_itemManager = new ItemManager(Monitor, _helper, _harmony, _archipelago, _locationChecker, _stardewItemManager, _mail, tileChooser, babyBirther, _giftHandler.Sender, State.ItemsReceived);
-			_weaponsManager = new WeaponsManager(_archipelago, _stardewItemManager, _archipelago.SlotData.Mods);
-			_mailPatcher = new MailPatcher(Monitor, _harmony, _archipelago, _locationChecker, State, new LetterActions(_helper, _mail, _archipelago, _weaponsManager, _itemManager.TrapManager, babyBirther, _stardewItemManager));
-			_bundlesManager = new BundlesManager(_helper, _stardewItemManager, _archipelago.SlotData.BundlesData);
-			_locationsPatcher = new LocationPatcher(Monitor, _helper, Config, _harmony, _archipelago, State, _locationChecker, _stardewItemManager, _weaponsManager, _bundlesManager, seedShopStockModifier, null, friends);
-			_shippingBehaviors = new NightShippingBehaviors(Monitor, _archipelago, _locationChecker, nameSimplifier);
-			_chatForwarder.ListenToChatMessages();
-			_logicPatcher.PatchAllGameLogic();
-			_modLogicPatcher = new ModRandomizedLogicPatcher(Monitor, _helper, _harmony, _archipelago, seedShopStockModifier, _stardewItemManager);
+            _giftHandler.Initialize(Monitor, _archipelago, _stardewItemManager, _mail);
+            _itemManager = new ItemManager(Monitor, _helper, _harmony, _archipelago, _locationChecker, _stardewItemManager, _mail, tileChooser, babyBirther, _giftHandler.Sender, State.ItemsReceived);
+            _weaponsManager = new WeaponsManager(_archipelago, _stardewItemManager, _archipelago.SlotData.Mods);
+            _mailPatcher = new MailPatcher(Monitor, _harmony, _archipelago, _locationChecker, State, new LetterActions(_helper, _mail, _archipelago, _weaponsManager, _itemManager.TrapManager, babyBirther, _stardewItemManager));
+            _bundlesManager = new BundlesManager(_helper, _stardewItemManager, _archipelago.SlotData.BundlesData);
+            _locationsPatcher = new LocationPatcher(Monitor, _helper, Config, _harmony, _archipelago, State, _locationChecker, _stardewItemManager, _weaponsManager, _bundlesManager, seedShopStockModifier, null, friends);
+            _shippingBehaviors = new NightShippingBehaviors(Monitor, _archipelago, _locationChecker, nameSimplifier);
+            _chatForwarder.ListenToChatMessages();
+            _logicPatcher.PatchAllGameLogic();
+            _modLogicPatcher = new ModRandomizedLogicPatcher(Monitor, _helper, _harmony, _archipelago, seedShopStockModifier, _stardewItemManager);
             _modLogicPatcher.PatchAllModGameLogic();
             _mailPatcher.PatchMailBoxForApItems();
             _entranceManager.SetEntranceRandomizerSettings(_archipelago.SlotData);
@@ -367,7 +367,7 @@ namespace StardewArchipelago
 
         private void OfferRetry(string errorMessage)
         {
-            var reconnectDialog = new ReconnectDialog(errorMessage, State.APConnectionInfo, 
+            var reconnectDialog = new ReconnectDialog(errorMessage, State.APConnectionInfo,
                 OnClickRetry, (_) => OnCloseBehavior());
             Game1.activeClickableMenu = reconnectDialog;
         }
