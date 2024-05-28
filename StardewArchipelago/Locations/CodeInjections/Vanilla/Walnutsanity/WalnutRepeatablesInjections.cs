@@ -7,6 +7,7 @@ using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Stardew.Ids.Vanilla;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Enchantments;
 using StardewValley.GameData.Crops;
 using StardewValley.Locations;
 using StardewValley.Minigames;
@@ -122,6 +123,60 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             catch (Exception ex)
             {
                 _monitor.Log($"Failed in {nameof(PerformUseAction_RepeatableFarmingWalnut_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
+        }
+
+        // public override bool performToolAction(Tool t, int damage, Vector2 tileLocation)
+        public static bool PerformToolAction_RepeatableFarmingWalnut_Prefix(HoeDirt __instance, Tool t, int damage, Vector2 tileLocation, ref bool __result)
+        {
+            try
+            {
+                if (__instance.crop == null || __instance.Location is not IslandLocation || !t.isScythe())
+                {
+                    return true; // run original logic
+                }
+
+                var harvestMethod = __instance.crop.GetHarvestMethod();
+                if (harvestMethod != HarvestMethod.Scythe || !__instance.crop.harvest((int)tileLocation.X, (int)tileLocation.Y, __instance, isForcedScytheHarvest:true))
+                {
+                    return true; // run original logic
+                }
+
+                if (__instance.crop.indexOfHarvest.Value == "771" && t.hasEnchantmentOfType<HaymakerEnchantment>())
+                {
+                    for (var index = 0; index < 2; ++index)
+                    {
+                        Game1.createItemDebris(ItemRegistry.Create("(O)771"), new Vector2((float)((double)tileLocation.X * 64.0 + 32.0), (float)((double)tileLocation.Y * 64.0 + 32.0)), -1);
+                    }
+                }
+
+                __instance.destroyCrop(false);
+                if (__instance.crop.dead.Value)
+                {
+                    __instance.destroyCrop(true);
+                }
+
+                if (__instance.crop == null && t.ItemId == "66" && __instance.Location.objects.ContainsKey(tileLocation) && __instance.Location.objects[tileLocation].isForage())
+                {
+                    var @object = __instance.Location.objects[tileLocation];
+                    if (t.getLastFarmerToUse() != null && t.getLastFarmerToUse().professions.Contains(16))
+                    {
+                        @object.Quality = 4;
+                    }
+                    Game1.createItemDebris((Item)@object, new Vector2((float)((double)tileLocation.X * 64.0 + 32.0), (float)((double)tileLocation.Y * 64.0 + 32.0)), -1);
+                    __instance.Location.objects.Remove(tileLocation);
+                }
+
+                __instance.shake((float)Math.PI / 32f, (float)Math.PI / 40f, (double)tileLocation.X * 64.0 < (double)Game1.player.Position.X);
+                __result = false;
+
+                RollForRepeatableWalnutOrCheck(WALNUT_FARMING_KEY, "Harvesting Walnut", __instance.Location, tileLocation.X, tileLocation.Y, Game1.random, WALNUT_BASE_CHANCE_FARMING, INFINITY_WALNUT_CHANCE_REDUCTION_FARMING);
+                return false; // don't run original logic
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(PerformToolAction_RepeatableFarmingWalnut_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
             }
         }

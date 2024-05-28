@@ -1196,6 +1196,7 @@ namespace StardewArchipelago.Locations.Patcher
                 );
             }
 
+            PatchDigSpotWalnuts();
             PatchRepeatableWalnuts();
         }
 
@@ -1265,6 +1266,19 @@ namespace StardewArchipelago.Locations.Patcher
             );
         }
 
+        private void PatchDigSpotWalnuts()
+        {
+            if (!_archipelago.SlotData.Walnutsanity.HasFlag(Walnutsanity.DigSpots))
+            {
+                return;
+            }
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(IslandLocation), nameof(IslandLocation.checkForBuriedItem)),
+                prefix: new HarmonyMethod(typeof(WalnutDigSpotsInjections), nameof(WalnutDigSpotsInjections.CheckForBuriedItem_ReplaceWalnutWithCheck_Prefix))
+            );
+        }
+
         private void PatchRepeatableWalnuts()
         {
             _harmony.Patch(
@@ -1275,6 +1289,11 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony.Patch(
                 original: AccessTools.Method(typeof(HoeDirt), nameof(HoeDirt.performUseAction)),
                 prefix: new HarmonyMethod(typeof(WalnutRepeatablesInjections), nameof(WalnutRepeatablesInjections.PerformUseAction_RepeatableFarmingWalnut_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(HoeDirt), nameof(HoeDirt.performToolAction)),
+                prefix: new HarmonyMethod(typeof(WalnutRepeatablesInjections), nameof(WalnutRepeatablesInjections.PerformToolAction_RepeatableFarmingWalnut_Prefix))
             );
 
             _harmony.Patch(

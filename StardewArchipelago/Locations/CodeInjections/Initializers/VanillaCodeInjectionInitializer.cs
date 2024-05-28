@@ -98,6 +98,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
         {
             WalnutPuzzleInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             WalnutBushInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
+            WalnutDigSpotsInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             WalnutRepeatablesInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
         }
     }
