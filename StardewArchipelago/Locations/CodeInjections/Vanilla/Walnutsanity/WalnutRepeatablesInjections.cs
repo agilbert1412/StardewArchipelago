@@ -26,6 +26,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
         private const string WALNUT_VOLCANO_BARREL_KEY = "VolcanoBarrel";
         private const string WALNUT_VOLCANO_COMMON_CHEST_KEY = "VolcanoNormalChest";
         private const string WALNUT_VOLCANO_RARE_CHEST_KEY = "VolcanoRareChest";
+        private const string WALNUT_JOURNAL_SCRAP_4 = "Island_W_BuriedTreasureNut";
+        private const string WALNUT_JOURNAL_SCRAP_6 = "Island_W_BuriedTreasureNut2";
+        private const string WALNUT_JOURNAL_SCRAP_10 = "Island_N_BuriedTreasureNut";
 
         private const double WALNUT_BASE_CHANCE_FISHING = 0.25;
         private const double INFINITY_WALNUT_CHANCE_REDUCTION_FISHING = 0.75;
@@ -225,33 +228,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                     return true; // run original logic
                 }
 
-                if (key == WALNUT_TIGER_SLIMES_KEY)
+                if (HandleRepeatableWalnuts(__instance, key, location, x, y, numberAlreadyDropped))
                 {
-                    CreateLocationDebris("Tiger Slime Walnut", new Vector2(x, y), location);
-                    __instance.limitedNutDrops[key] = numberAlreadyDropped + 1;
-                    return false; // don't run original logic
+                    return false;
                 }
 
-                if (key == WALNUT_VOLCANO_BARREL_KEY)
+                if (HandleDigSpotWalnuts(__instance, key, location, x, y, numberAlreadyDropped))
                 {
-                    var newNumber = numberAlreadyDropped + 1;
-                    CreateLocationDebris($"Volcano Crates Walnut {newNumber}", new Vector2(x, y), location);
-                    __instance.limitedNutDrops[key] = newNumber;
-                    return false; // don't run original logic
-                }
-
-                if (key == WALNUT_VOLCANO_COMMON_CHEST_KEY)
-                {
-                    CreateLocationDebris("Volcano Common Chest Walnut", new Vector2(x, y), location);
-                    __instance.limitedNutDrops[key] = numberAlreadyDropped + 1;
-                    return false; // don't run original logic
-                }
-
-                if (key == WALNUT_VOLCANO_RARE_CHEST_KEY)
-                {
-                    CreateLocationDebris("Volcano Rare Chest Walnut", new Vector2(x, y), location);
-                    __instance.limitedNutDrops[key] = numberAlreadyDropped + 1;
-                    return false; // don't run original logic
+                    return false;
                 }
 
                 return true; // run original logic
@@ -261,6 +245,76 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 _monitor.Log($"Failed in {nameof(RequestLimitedNutDrops_TigerSlimesAndCreatesWalnuts_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
             }
+        }
+
+        private static bool HandleRepeatableWalnuts(FarmerTeam __instance, string key, GameLocation location, int x, int y, int numberAlreadyDropped)
+        {
+            if (!_archipelago.SlotData.Walnutsanity.HasFlag(Archipelago.Walnutsanity.Repeatables))
+            {
+                return false;
+            }
+
+            if (key == WALNUT_TIGER_SLIMES_KEY)
+            {
+                CreateLocationDebris("Tiger Slime Walnut", new Vector2(x, y), location);
+                __instance.limitedNutDrops[key] = numberAlreadyDropped + 1;
+                return true;
+            }
+
+            if (key == WALNUT_VOLCANO_BARREL_KEY)
+            {
+                var newNumber = numberAlreadyDropped + 1;
+                CreateLocationDebris($"Volcano Crates Walnut {newNumber}", new Vector2(x, y), location);
+                __instance.limitedNutDrops[key] = newNumber;
+                return true;
+            }
+
+            if (key == WALNUT_VOLCANO_COMMON_CHEST_KEY)
+            {
+                CreateLocationDebris("Volcano Common Chest Walnut", new Vector2(x, y), location);
+                __instance.limitedNutDrops[key] = numberAlreadyDropped + 1;
+                return true;
+            }
+
+            if (key == WALNUT_VOLCANO_RARE_CHEST_KEY)
+            {
+                CreateLocationDebris("Volcano Rare Chest Walnut", new Vector2(x, y), location);
+                __instance.limitedNutDrops[key] = numberAlreadyDropped + 1;
+                return true;
+            }
+
+            return false;
+        }
+
+        private static bool HandleDigSpotWalnuts(FarmerTeam __instance, string key, GameLocation location, int x, int y, int numberAlreadyDropped)
+        {
+            if (!_archipelago.SlotData.Walnutsanity.HasFlag(Archipelago.Walnutsanity.DigSpots))
+            {
+                return false;
+            }
+
+            if (key == WALNUT_JOURNAL_SCRAP_4)
+            {
+                CreateLocationDebris("Journal Scrap #4", new Vector2(x, y), location);
+                __instance.limitedNutDrops[key] = numberAlreadyDropped + 1;
+                return true;
+            }
+
+            if (key == WALNUT_JOURNAL_SCRAP_6)
+            {
+                CreateLocationDebris("Journal Scrap #6", new Vector2(x, y), location);
+                __instance.limitedNutDrops[key] = numberAlreadyDropped + 1;
+                return true;
+            }
+
+            if (key == WALNUT_JOURNAL_SCRAP_10)
+            {
+                CreateLocationDebris("Journal Scrap #10", new Vector2(x, y), location);
+                __instance.limitedNutDrops[key] = numberAlreadyDropped + 1;
+                return true;
+            }
+
+            return false;
         }
 
         // protected virtual bool breakStone(string stoneId, int x, int y, Farmer who, Random random)

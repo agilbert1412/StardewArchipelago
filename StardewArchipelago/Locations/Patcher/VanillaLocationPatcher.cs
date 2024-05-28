@@ -1187,17 +1187,27 @@ namespace StardewArchipelago.Locations.Patcher
         private void PatchWalnuts()
         {
             PatchPuzzleWalnuts();
-
-            if (_archipelago.SlotData.Walnutsanity.HasFlag(Walnutsanity.Bushes))
-            {
-                _harmony.Patch(
-                    original: AccessTools.Method(typeof(Bush), nameof(Bush.GetShakeOffItem)),
-                    prefix: new HarmonyMethod(typeof(WalnutBushInjections), nameof(WalnutBushInjections.GetShakeOffItem_ReplaceWalnutWithCheck_Prefix))
-                );
-            }
-
+            PatchBushesWalnuts();
             PatchDigSpotWalnuts();
             PatchRepeatableWalnuts();
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(FarmerTeam), nameof(FarmerTeam.RequestLimitedNutDrops)),
+                prefix: new HarmonyMethod(typeof(WalnutRepeatablesInjections), nameof(WalnutRepeatablesInjections.RequestLimitedNutDrops_TigerSlimesAndCreatesWalnuts_Prefix))
+            );
+        }
+
+        private void PatchBushesWalnuts()
+        {
+            if (!_archipelago.SlotData.Walnutsanity.HasFlag(Walnutsanity.Bushes))
+            {
+                return;
+            }
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Bush), nameof(Bush.GetShakeOffItem)),
+                prefix: new HarmonyMethod(typeof(WalnutBushInjections), nameof(WalnutBushInjections.GetShakeOffItem_ReplaceWalnutWithCheck_Prefix))
+            );
         }
 
         private void PatchPuzzleWalnuts()
@@ -1309,17 +1319,6 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony.Patch(
                 original: AccessTools.Method(typeof(VolcanoDungeon), nameof(VolcanoDungeon.monsterDrop)),
                 prefix: new HarmonyMethod(typeof(WalnutRepeatablesInjections), nameof(WalnutRepeatablesInjections.MonsterDrop_RepeatableVolcanoMonsterWalnut_Prefix))
-            );
-
-
-            if (!_archipelago.SlotData.Walnutsanity.HasFlag(Walnutsanity.Repeatables))
-            {
-                return;
-            }
-
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(FarmerTeam), nameof(FarmerTeam.RequestLimitedNutDrops)),
-                prefix: new HarmonyMethod(typeof(WalnutRepeatablesInjections), nameof(WalnutRepeatablesInjections.RequestLimitedNutDrops_TigerSlimesAndCreatesWalnuts_Prefix))
             );
         }
     }

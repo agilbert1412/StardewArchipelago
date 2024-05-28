@@ -61,12 +61,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
 
         private static readonly Dictionary<string, string> _digSpotNameMap = new()
         {
-            { "01", "Journal Scrap #6" },
             { "02", "Starfish Triangle" },
             { "03", "Starfish Diamond" },
             { "04", "X in the sand" },
             { "05", "Diamond Of Indents" },
-            { "06", "Journal Scrap #4" },
             { "07", "Diamond Of Pebbles" },
             { "08", "Big Circle Of Stones" },
             { "09", "Circle Of Flowers" },
@@ -74,7 +72,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             { "11", "Patch Of Sand" },
             { "12", "Crooked Circle Of Stones" },
             { "13", "Arc Of Stones" },
-            { "14", "Journal Scrap #10" },
             { "15", "Northmost Point Circle Of Stones" },
             { "16", "Diamond Of Yellow Starfish" },
             { "17", "Pirate Cove Patch Of Sand" },
