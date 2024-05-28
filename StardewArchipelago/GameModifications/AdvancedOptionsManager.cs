@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
 using StardewValley;
-using StardewValley.GameData;
 using StardewValley.Menus;
 
 namespace StardewArchipelago.GameModifications

@@ -10,9 +10,7 @@ using StardewValley;
 using StardewValley.Enchantments;
 using StardewValley.GameData.Crops;
 using StardewValley.Locations;
-using StardewValley.Minigames;
 using StardewValley.Monsters;
-using StardewValley.Network.NetEvents;
 using StardewValley.TerrainFeatures;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity

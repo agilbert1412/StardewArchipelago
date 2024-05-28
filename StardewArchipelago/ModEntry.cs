@@ -32,7 +32,6 @@ using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Delegates;
 using StardewValley.Internal;
-using StardewValley.ItemTypeDefinitions;
 using StardewValley.Triggers;
 using ArchipelagoLocation = StardewArchipelago.Locations.InGameLocations.ArchipelagoLocation;
 

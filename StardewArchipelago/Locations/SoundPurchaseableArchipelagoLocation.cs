@@ -1,6 +1,5 @@
 ﻿using Archipelago.MultiClient.Net.Models;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Locations.InGameLocations;
 using StardewModdingAPI;
 using StardewValley;
 using ArchipelagoLocation = StardewArchipelago.Locations.InGameLocations.ArchipelagoLocation;

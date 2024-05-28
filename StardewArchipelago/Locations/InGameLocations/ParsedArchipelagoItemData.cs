@@ -1,23 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using System.Runtime.InteropServices.ComTypes;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Constants;
-using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Textures;
 using StardewModdingAPI;
-using StardewValley;
-using StardewValley.BellsAndWhistles;
-using StardewValley.Extensions;
-using StardewValley.GameData.Objects;
 using StardewValley.ItemTypeDefinitions;
-using StardewValley.Menus;
-using StardewValley.Objects;
-using StardewValley.TokenizableStrings;
 
 namespace StardewArchipelago.Locations.InGameLocations
 {

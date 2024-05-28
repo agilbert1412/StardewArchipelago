@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Items.Unlocks.Modded;
 using StardewArchipelago.Items.Unlocks.Vanilla;

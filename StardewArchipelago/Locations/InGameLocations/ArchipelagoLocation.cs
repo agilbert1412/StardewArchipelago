@@ -13,7 +13,6 @@ using StardewValley;
 using StardewValley.Internal;
 using StardewValley.Objects;
 using Color = Microsoft.Xna.Framework.Color;
-using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Locations.InGameLocations
 {
