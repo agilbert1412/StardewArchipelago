@@ -15,6 +15,7 @@
         public const string GoldenScythe = "GoldenScythe";
         public const string ProgressiveScythe = "ProgressiveScythe";
         public const string PierreStocklist = "PierreStocklist";
+        public const string FreeCactis = "FreeCactis";
         public const string BeachBridge = "BeachBridge";
         public const string ProgressiveTool = "ProgressiveTool";
         public const string FishingRod = "FishingRod";

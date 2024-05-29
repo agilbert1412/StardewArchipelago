@@ -55,6 +55,7 @@ namespace StardewArchipelago.Items.Mail
             _letterActions.Add(LetterActionsKeys.GoldenScythe, (_) => ReceiveGoldenScythe());
             _letterActions.Add(LetterActionsKeys.ProgressiveScythe, (_) => ReceiveProgressiveScythe());
             _letterActions.Add(LetterActionsKeys.PierreStocklist, (_) => ReceivePierreStocklist());
+            _letterActions.Add(LetterActionsKeys.FreeCactis, (_) => ReceiveFreeCactis());
             _letterActions.Add(LetterActionsKeys.BeachBridge, (_) => RepairBeachBridge());
             _letterActions.Add(LetterActionsKeys.FruitBats, (_) => SetupFruitBats());
             _letterActions.Add(LetterActionsKeys.MushroomBoxes, (_) => SetupMushroomBoxes());
@@ -218,6 +219,12 @@ namespace StardewArchipelago.Items.Mail
             stocklist.questItem.Value = true;
             Game1.player.holdUpItemThenMessage(stocklist);
             Game1.player.addItemByMenuIfNecessary(stocklist);
+        }
+
+        private void ReceiveFreeCactis()
+        {
+            var seed = (int)(Game1.player.UniqueMultiplayerID + Game1.stats.DaysPlayed);
+            Game1.player.addItemToInventoryBool(new RandomizedPlantFurniture("FreeCactus", Vector2.Zero, seed));
         }
 
         private void RepairBeachBridge()
@@ -599,32 +606,32 @@ namespace StardewArchipelago.Items.Mail
 
         private void GetWeaponOfNextTier()
         {
-            GetProgressiveEquipmentOfNextTier(VanillaUnlockManager.PROGRESSIVE_WEAPON, _weaponsManager.WeaponsByCategoryByTier[WeaponsManager.TYPE_WEAPON]);
+            GetProgressiveEquipmentOfNextTier(EquipmentUnlockManager.PROGRESSIVE_WEAPON, _weaponsManager.WeaponsByCategoryByTier[WeaponsManager.TYPE_WEAPON]);
         }
 
         private void GetSwordOfNextTier()
         {
-            GetProgressiveEquipmentOfNextTier(VanillaUnlockManager.PROGRESSIVE_SWORD, _weaponsManager.WeaponsByCategoryByTier[WeaponsManager.TYPE_SWORD]);
+            GetProgressiveEquipmentOfNextTier(EquipmentUnlockManager.PROGRESSIVE_SWORD, _weaponsManager.WeaponsByCategoryByTier[WeaponsManager.TYPE_SWORD]);
         }
 
         private void GetClubOfNextTier()
         {
-            GetProgressiveEquipmentOfNextTier(VanillaUnlockManager.PROGRESSIVE_CLUB, _weaponsManager.WeaponsByCategoryByTier[WeaponsManager.TYPE_CLUB]);
+            GetProgressiveEquipmentOfNextTier(EquipmentUnlockManager.PROGRESSIVE_CLUB, _weaponsManager.WeaponsByCategoryByTier[WeaponsManager.TYPE_CLUB]);
         }
 
         private void GetDaggerOfNextTier()
         {
-            GetProgressiveEquipmentOfNextTier(VanillaUnlockManager.PROGRESSIVE_DAGGER, _weaponsManager.WeaponsByCategoryByTier[WeaponsManager.TYPE_DAGGER]);
+            GetProgressiveEquipmentOfNextTier(EquipmentUnlockManager.PROGRESSIVE_DAGGER, _weaponsManager.WeaponsByCategoryByTier[WeaponsManager.TYPE_DAGGER]);
         }
 
         private void GetBootsOfNextTier()
         {
-            GetProgressiveEquipmentOfNextTier(VanillaUnlockManager.PROGRESSIVE_BOOTS, _weaponsManager.BootsByTier);
+            GetProgressiveEquipmentOfNextTier(EquipmentUnlockManager.PROGRESSIVE_BOOTS, _weaponsManager.BootsByTier);
         }
 
         private void GetSlingshotOfNextTier()
         {
-            GetProgressiveEquipmentOfNextTier(VanillaUnlockManager.PROGRESSIVE_SLINGSHOT, _weaponsManager.SlingshotsByTier);
+            GetProgressiveEquipmentOfNextTier(EquipmentUnlockManager.PROGRESSIVE_SLINGSHOT, _weaponsManager.SlingshotsByTier);
         }
 
         private void GetProgressiveEquipmentOfNextTier(string apUnlock, Dictionary<int, List<StardewItem>> equipmentsByTier)

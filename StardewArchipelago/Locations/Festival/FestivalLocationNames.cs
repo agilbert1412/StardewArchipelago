@@ -55,7 +55,7 @@ namespace StardewArchipelago.Locations.Festival
         public const string SHRIMP_DONUT = "Shrimp Donut";
         public const string SMELL_OF_THE_SEA = "Smell Of The Sea";
         public const string DESERT_GUMBO = "Desert Gumbo";
-        public const string FREE_CACTUS = "Free Cactis";
+        public const string FREE_CACTIS = "Free Cactis";
         public const string MONSTER_HUNT = "Monster Hunt";
         public const string DEEP_DIVE = "Deep Dive";
         public const string TREASURE_HUNT = "Treasure Hunt";
@@ -133,7 +133,7 @@ namespace StardewArchipelago.Locations.Festival
             CALICO_RACE, MUMMY_MASK, EMILYS_OUTFIT_SERVICES, EARTHY_MOUSSE, SWEET_BEAN_CAKE, SKULL_CAVERN_CASSEROLE, SPICY_TACOS,
             MOUNTAIN_CHILI, CRYSTAL_CAKE, CAVE_KEBAB, HOT_LOG, SOUR_SALAD, SUPERFOOD_CAKE, WARRIOR_SMOOTHIE, RUMPLED_FRUIT_SKIN, CALICO_PIZZA,
             STUFFED_MUSHROOMS, ELF_QUESADILLA, NACHOS_OF_THE_DESERT, CLOPPINO, RAINFOREST_SHRIMP, SHRIMP_DONUT, SMELL_OF_THE_SEA, DESERT_GUMBO,
-            FREE_CACTUS, MONSTER_HUNT, DEEP_DIVE, TREASURE_HUNT, TOUCH_A_CALICO_STATUE, REAL_CALICO_EGG_HUNTER, WILLYS_CHALLENGE, DESERT_SCHOLAR,
+            FREE_CACTIS, MONSTER_HUNT, DEEP_DIVE, TREASURE_HUNT, TOUCH_A_CALICO_STATUE, REAL_CALICO_EGG_HUNTER, WILLYS_CHALLENGE, DESERT_SCHOLAR,
         };
         private static readonly string[] TROUT_DERBY_ALL = TROUT_DERBY_REWARDS;
         private static readonly string[] SQUIDFEST_ALL = Array.Empty<string>();

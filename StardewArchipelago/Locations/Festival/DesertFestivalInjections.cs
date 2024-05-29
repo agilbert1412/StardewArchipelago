@@ -145,7 +145,7 @@ namespace StardewArchipelago.Locations.Festival
             Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\1_6_Strings:CactusMan_Yes_" + random.Next(1, 6).ToString()));
             Game1.afterDialogues += () =>
             {
-                _locationChecker.AddCheckedLocation(FestivalLocationNames.FREE_CACTUS);
+                _locationChecker.AddCheckedLocation(FestivalLocationNames.FREE_CACTIS);
                 Game1.playSound("coin");
                 Game1.player.mailReceived.Add(desertFestival.GetCactusMail());
 
@@ -155,7 +155,7 @@ namespace StardewArchipelago.Locations.Festival
                 hideCactusEvent.Fire(seed);
 
                 Game1.player.freezePause = 100;
-                if (_archipelago.HasReceivedItem(FestivalLocationNames.FREE_CACTUS))
+                if (_archipelago.HasReceivedItem(FestivalLocationNames.FREE_CACTIS))
                 {
                     Game1.player.addItemToInventoryBool(new RandomizedPlantFurniture("FreeCactus", Vector2.Zero, seed));
                     return;

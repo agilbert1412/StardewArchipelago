@@ -19,15 +19,10 @@ namespace StardewArchipelago.Items.Unlocks.Vanilla
         public const string SPECIAL_ORDER_BOARD_AP_NAME = "Special Order Board";
         public const string QI_WALNUT_ROOM = "Qi Walnut Room";
         public const string PIERRE_STOCKLIST = "Pierre's Missing Stocklist";
+        public const string FREE_CACTIS = "Free Cactis";
         public const string ISLAND_FARMHOUSE = "Island Farmhouse";
         public const string ISLAND_MAILBOX = "Island Mailbox";
         public const string TREEHOUSE = "Treehouse";
-        public const string PROGRESSIVE_WEAPON = "Progressive Weapon";
-        public const string PROGRESSIVE_SWORD = "Progressive Sword";
-        public const string PROGRESSIVE_CLUB = "Progressive Club";
-        public const string PROGRESSIVE_DAGGER = "Progressive Dagger";
-        public const string PROGRESSIVE_BOOTS = "Progressive Footwear";
-        public const string PROGRESSIVE_SLINGSHOT = "Progressive Slingshot";
 
         private ArchipelagoClient _archipelago;
         private LocationChecker _locationChecker;
@@ -94,6 +89,7 @@ namespace StardewArchipelago.Items.Unlocks.Vanilla
         private void RegisterUniqueItems(IDictionary<string, Func<ReceivedItem, LetterAttachment>> unlocks)
         {
             unlocks.Add(PIERRE_STOCKLIST, SendPierreStocklistLetter);
+            unlocks.Add(FREE_CACTIS, SendFreeCactisLetter);
         }
 
         private void RegisterIsolatedEventsItems(IDictionary<string, Func<ReceivedItem, LetterAttachment>> unlocks)
@@ -316,6 +312,11 @@ namespace StardewArchipelago.Items.Unlocks.Vanilla
         private LetterActionAttachment SendPierreStocklistLetter(ReceivedItem receivedItem)
         {
             return new LetterActionAttachment(receivedItem, LetterActionsKeys.PierreStocklist);
+        }
+
+        private LetterActionAttachment SendFreeCactisLetter(ReceivedItem receivedItem)
+        {
+            return new LetterActionAttachment(receivedItem, LetterActionsKeys.FreeCactis);
         }
 
         private LetterActionAttachment SendBeachBridgeLetter(ReceivedItem receivedItem)
