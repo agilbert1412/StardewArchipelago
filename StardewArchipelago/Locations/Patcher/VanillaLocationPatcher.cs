@@ -1208,6 +1208,10 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(typeof(Bush), nameof(Bush.GetShakeOffItem)),
                 prefix: new HarmonyMethod(typeof(WalnutBushInjections), nameof(WalnutBushInjections.GetShakeOffItem_ReplaceWalnutWithCheck_Prefix))
             );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Bush), nameof(Bush.setUpSourceRect)),
+                prefix: new HarmonyMethod(typeof(WalnutBushInjections), nameof(WalnutBushInjections.SetUpSourceRect_UseArchipelagoTexture_Prefix))
+            );
         }
 
         private void PatchPuzzleWalnuts()

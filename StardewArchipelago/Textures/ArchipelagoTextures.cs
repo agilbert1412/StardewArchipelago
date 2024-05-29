@@ -47,7 +47,7 @@ namespace StardewArchipelago.Textures
         {
             var archipelagoFolder = "Archipelago";
             preferredIconSet = GetChosenIconSet(preferredIconSet);
-            var fileName = $"bushipelago_1.png";
+            var fileName = $"walnut-bush.png";
             var relativePathToTexture = Path.Combine(archipelagoFolder, preferredIconSet, fileName);
             var texture = TexturesLoader.GetTexture(monitor, modHelper, relativePathToTexture, LogLevel.Trace);
             if (texture == null)
