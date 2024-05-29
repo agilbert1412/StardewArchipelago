@@ -55,7 +55,7 @@ namespace StardewArchipelago.Locations.Festival
         public const string SHRIMP_DONUT = "Shrimp Donut";
         public const string SMELL_OF_THE_SEA = "Smell Of The Sea";
         public const string DESERT_GUMBO = "Desert Gumbo";
-        public const string FREE_CACTUS = "Free Cactus";
+        public const string FREE_CACTUS = "Free Cactis";
         public const string MONSTER_HUNT = "Monster Hunt";
         public const string DEEP_DIVE = "Deep Dive";
         public const string TREASURE_HUNT = "Treasure Hunt";
