@@ -190,7 +190,7 @@ namespace StardewArchipelago.GameModifications
                 },
                 new()
                 {
-                    Id = "BigCoporationDiscount",
+                    Id = "BigCorporationDiscount",
                     Condition = null,
                     Modification = QuantityModifier.ModificationType.Multiply,
                     Amount = JOJA_PRICE_MULTIPLIER,
