@@ -98,7 +98,7 @@ namespace StardewArchipelago.Locations.Patcher
             PatchChefAndCraftsanity();
             PatchKrobusShop();
             PatchFarmcave();
-            PatchMysteryBoxes();
+            PatchNightWorldEvents();
             PatchBooks();
             PatchWalnuts();
         }
@@ -168,11 +168,6 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void ReplaceRaccoonBundlesWithChecks()
         {
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(Utility), nameof(Utility.pickFarmEvent)),
-                postfix: new HarmonyMethod(typeof(RaccoonInjections), nameof(RaccoonInjections.PickFarmEvent_DontPickRaccoonStump_Postfix))
-            );
-
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Raccoon), nameof(Raccoon.activate)),
                 prefix: new HarmonyMethod(typeof(RaccoonInjections), nameof(RaccoonInjections.Activate_DisplayDialogueOrBundle_Prefix))
@@ -1158,11 +1153,11 @@ namespace StardewArchipelago.Locations.Patcher
             );
         }
 
-        private void PatchMysteryBoxes()
+        private void PatchNightWorldEvents()
         {
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Utility), nameof(Utility.pickFarmEvent)),
-                postfix: new HarmonyMethod(typeof(MysteryBoxInjections), nameof(MysteryBoxInjections.PickFarmEvent_MrQiPlaneOnlyIfUnlocked_Postfix))
+                postfix: new HarmonyMethod(typeof(FarmEventInjections), nameof(FarmEventInjections.PickFarmEvent_MrQiPlaneOnlyIfUnlocked_Postfix))
             );
         }
 

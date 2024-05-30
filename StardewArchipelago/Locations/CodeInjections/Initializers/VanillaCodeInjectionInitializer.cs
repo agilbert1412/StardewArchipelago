@@ -53,7 +53,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             RecipeFriendshipInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             CraftingInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             FarmCaveInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
-            MysteryBoxInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
+            FarmEventInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             BookInjections.Initialize(monitor, modHelper, archipelago, locationChecker, qosManager);
             InitializeWalnutsanityInjections(monitor, modHelper, archipelago, locationChecker);
         }

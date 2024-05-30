@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Events;
@@ -11,7 +12,6 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 {
     public class TheaterInjections
     {
-        public const string MOVIE_THEATER_ITEM = "Progressive Movie Theater";
         private const string MOVIE_THEATER_MAIL = "ccMovieTheater";
         private const string ABANDONED_JOJA_MART = "AbandonedJojaMart";
         private const string MOVIE_THEATER = "MovieTheater";
@@ -27,43 +27,6 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             _monitor = monitor;
             _modHelper = modHelper;
             _archipelago = archipelago;
-        }
-
-        // public static FarmEvent pickFarmEvent()
-        public static void PickFarmEvent_BreakJojaDoor_Postfix(ref FarmEvent __result)
-        {
-            try
-            {
-                if (Game1.weddingToday || __result != null || !_archipelago.HasReceivedItem(MOVIE_THEATER_ITEM))
-                {
-                    return;
-                }
-
-                if ((Game1.isRaining || Game1.isLightning || Game1.IsWinter) && !Game1.MasterPlayer.mailReceived.Contains("abandonedJojaMartAccessible"))
-                {
-                    __result = new WorldChangeEvent(12);
-                    return;
-                }
-
-                if (_archipelago.GetReceivedItemCount(MOVIE_THEATER_ITEM) < 2)
-                {
-                    return;
-                }
-
-                if (!Game1.player.mailReceived.Contains("ccMovieTheater%&NL&%") && !Game1.player.mailReceived.Contains("ccMovieTheater"))
-                {
-                    __result = new WorldChangeEvent(11);
-                    Game1.player.mailReceived.Add("ccMovieTheater");
-                    return;
-                }
-
-                return;
-            }
-            catch (Exception ex)
-            {
-                _monitor.Log($"Failed in {nameof(PickFarmEvent_BreakJojaDoor_Postfix)}:\n{ex}", LogLevel.Error);
-                return;
-            }
         }
 
         // public virtual void MakeMapModifications(bool force = false)
@@ -174,14 +137,14 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         {
             try
             {
-                if (_archipelago.GetReceivedItemCount(MOVIE_THEATER_ITEM) >= 2)
+                if (_archipelago.GetReceivedItemCount(APItem.MOVIE_THEATER) >= 2)
                 {
                     var rectangle = new Rectangle(84, 41, 27, 15);
                     __instance.ApplyMapOverride("Town-Theater", rectangle, rectangle);
                     return true; // run original logic
                 }
 
-                if (_archipelago.GetReceivedItemCount(MOVIE_THEATER_ITEM) >= 1)
+                if (_archipelago.GetReceivedItemCount(APItem.MOVIE_THEATER) >= 1)
                 {
                     // private void showDestroyedJoja()
                     var showDestroyedJojaMethod = _modHelper.Reflection.GetMethod(__instance, "showDestroyedJoja");
@@ -253,7 +216,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     return true; // run original logic
                 }
 
-                if (locationName != "JojaMart" || !_archipelago.HasReceivedItem(MOVIE_THEATER_ITEM))
+                if (locationName != "JojaMart" || !_archipelago.HasReceivedItem(APItem.MOVIE_THEATER))
                 {
                     // no fallback
                     __result = false;
