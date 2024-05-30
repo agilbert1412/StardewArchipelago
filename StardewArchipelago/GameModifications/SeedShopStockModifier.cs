@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
@@ -11,6 +12,7 @@ using StardewArchipelago.Stardew.Ids.Vanilla;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
+using StardewValley.GameData;
 using StardewValley.GameData.Shops;
 using Category = StardewArchipelago.Constants.Vanilla.Category;
 
@@ -175,6 +177,27 @@ namespace StardewArchipelago.GameModifications
             AddToJojaShop(shopData, QualifiedItemIds.OIL, 20);
             AddToJojaShop(shopData, QualifiedItemIds.VINEGAR, 20);
 
+            shopData.PriceModifierMode = QuantityModifier.QuantityModifierMode.Stack;
+            shopData.PriceModifiers = new List<QuantityModifier>()
+            {
+                new()
+                {
+                    Id = "MatchPierre",
+                    Condition = null,
+                    Modification = QuantityModifier.ModificationType.Multiply,
+                    Amount = 2.0f,
+                    RandomAmount = null,
+                },
+                new()
+                {
+                    Id = "BigCoporationDiscount",
+                    Condition = null,
+                    Modification = QuantityModifier.ModificationType.Multiply,
+                    Amount = JOJA_PRICE_MULTIPLIER,
+                    RandomAmount = null,
+                }
+            };
+
             var objectsData = DataLoader.Objects(Game1.content);
             foreach (var item in shopData.Items)
             {
@@ -193,10 +216,10 @@ namespace StardewArchipelago.GameModifications
 
                 if (item.Price == -1)
                 {
-                    item.Price = itemData.Price * item.MinStack;
+                    item.Price = itemData.Price;
                 }
 
-                item.Price = (int)Math.Round(item.Price * JOJA_PRICE_MULTIPLIER);
+                item.Price *= item.MinStack;
                 item.Condition = null;
             }
         }
