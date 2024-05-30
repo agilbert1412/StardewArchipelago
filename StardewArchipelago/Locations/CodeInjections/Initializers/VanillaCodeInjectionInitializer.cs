@@ -62,6 +62,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
         {
             CommunityCenterInjections.Initialize(monitor, archipelago, locationChecker, bundleReader);
             JunimoNoteMenuInjections.Initialize(monitor, modHelper, archipelago, state, locationChecker, bundleReader);
+            BundleInjections.Initialize(monitor, modHelper, archipelago, state, locationChecker, bundlesManager);
             RaccoonInjections.Initialize(monitor, modHelper, archipelago, state, locationChecker, bundlesManager);
         }
 

@@ -152,9 +152,9 @@
         public const string LARGE_BROWN_EGG = "182";
         public const string LARGE_GOAT_MILK = "438";
         public const string COOKIES = "223";
-        public const string SMOKED_FISH = null;
-        public const string DRIED_FRUIT = null;
-        public const string DRIED_MUSHROOMS = null;
+        public const string SMOKED_FISH = "SmokedFish";
+        public const string DRIED_FRUIT = "DriedFruit";
+        public const string DRIED_MUSHROOMS = "DriedMushrooms";
         public const string GOLDEN_COCONUT = "791";
         public const string MUSSEL_NODE = "25";
         public const string MUMMIFIED_BAT = "827";

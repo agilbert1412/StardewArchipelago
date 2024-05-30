@@ -7,15 +7,21 @@ namespace StardewArchipelago.Bundles
     public class BundleRooms
     {
         public Dictionary<string, BundleRoom> Rooms { get; set; }
+        public Dictionary<string, Bundle> BundlesByName { get; set; }
 
         public BundleRooms(StardewItemManager itemManager, Dictionary<string, Dictionary<string, Dictionary<string, string>>> bundlesDictionary)
         {
             Rooms = new Dictionary<string, BundleRoom>();
+            BundlesByName = new Dictionary<string, Bundle>();
 
             foreach (var (roomName, roomBundles) in bundlesDictionary)
             {
                 var room = new BundleRoom(itemManager, roomName, roomBundles);
                 Rooms.Add(roomName, room);
+                foreach (var (name, bundle) in room.Bundles)
+                {
+                    BundlesByName.Add(name, bundle);
+                }
             }
         }
 

@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using StardewArchipelago.Stardew;
+using StardewValley;
+using StardewValley.Menus;
 
 namespace StardewArchipelago.Bundles
 {
@@ -22,6 +24,28 @@ namespace StardewArchipelago.Bundles
         public BundleItem(StardewItemManager itemManager, string itemName, int amount, string quality, string flavorItemName) : this(itemManager, itemName, amount, quality)
         {
             Flavor = itemManager.GetObjectByName(flavorItemName);
+        }
+
+        public BundleIngredientDescription CreateBundleIngredientDescription(bool completed)
+        {
+            var id = Flavor == null ? StardewObject.Id : StardewObject.Name;
+            if (id.StartsWith("Dried") && Flavor != null)
+            {
+                id = Flavor.Category == Object.FruitsCategory ? "DriedFruit" : "DriedMushroom";
+            }
+            if (id.StartsWith("Smoked"))
+            {
+                id = "SmokedFish";
+            }
+            if (id == "Pickles")
+            {
+                id = "Pickle";
+            }
+            var bundleIngredient = new BundleIngredientDescription(id,
+                Amount, Quality,
+                completed,
+                Flavor?.Id);
+            return bundleIngredient;
         }
     }
 }

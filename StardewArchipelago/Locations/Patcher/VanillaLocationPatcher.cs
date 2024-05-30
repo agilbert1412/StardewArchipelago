@@ -151,6 +151,11 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(typeof(CommunityCenter), "checkForMissedRewards"),
                 prefix: new HarmonyMethod(typeof(CommunityCenterInjections), nameof(CommunityCenterInjections.CheckForMissedRewards_DontBother_Prefix))
             );
+            var bundleConstructorArguments = new[] { typeof(int), typeof(string), typeof(bool[]), typeof(Point), typeof(string), typeof(JunimoNoteMenu) };
+            _harmony.Patch(
+                original: AccessTools.Constructor(typeof(Bundle), bundleConstructorArguments),
+                postfix: new HarmonyMethod(typeof(BundleInjections), nameof(BundleInjections.BundleConstructor_GenerateBundleIngredients_Postfix))
+            );
         }
 
         private void ReplaceCommunityCenterAreasWithChecks()
@@ -1211,6 +1216,10 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Bush), nameof(Bush.setUpSourceRect)),
                 prefix: new HarmonyMethod(typeof(WalnutBushInjections), nameof(WalnutBushInjections.SetUpSourceRect_UseArchipelagoTexture_Prefix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Bush), nameof(Bush.draw), new[] { typeof(SpriteBatch) }),
+                prefix: new HarmonyMethod(typeof(WalnutBushInjections), nameof(WalnutBushInjections.Draw_UseArchipelagoTexture_Prefix))
             );
         }
 

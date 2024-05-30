@@ -157,6 +157,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             Game1.viewport.X = -10000;
             Game1.pauseThenDoFunction(4000, forest.doneWithStumpFix);
             _locationChecker.AddCheckedLocation(GIANT_STUMP);
+            forest.stumpFixed.Value = true;
+            Forest.fixStump(forest);
             Game1.player.team.RequestSetSimpleFlag(SimpleFlagType.HasQuest, PlayerActionTarget.All, QuestIds.GIANT_STUMP, false);
         }
 
@@ -257,24 +259,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 {
                     _state.CurrentRaccoonBundleStatus.Add(false);
                 }
-                var bundleItem = raccoonBundle.Items[i];
-                var id = bundleItem.Flavor == null ? bundleItem.StardewObject.Id : bundleItem.StardewObject.Name;
-                if (id == "Dried" && bundleItem.Flavor != null)
+                if (raccoonBundle.Items[i] is null)
                 {
-                    id = bundleItem.Flavor.Category == Object.FruitsCategory ? "DriedFruit" : "DriedMushroom";
+                    throw new ArgumentException($"The raccoon must only have item bundles");
                 }
-                if (id == "Smoked")
-                {
-                    id = "SmokedFish";
-                }
-                if (id == "Pickles")
-                {
-                    id = "Pickle";
-                }
-                var bundleIngredient = new BundleIngredientDescription(id,
-                    bundleItem.Amount, bundleItem.Quality,
-                    _state.CurrentRaccoonBundleStatus[i],
-                    bundleItem.Flavor?.Id);
+                var bundleIngredient = raccoonBundle.Items[i].CreateBundleIngredientDescription(_state.CurrentRaccoonBundleStatus[i]);
                 ingredients.Add(bundleIngredient);
             }
 

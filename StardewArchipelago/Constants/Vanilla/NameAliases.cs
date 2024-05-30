@@ -12,6 +12,9 @@ namespace StardewArchipelago.Constants.Vanilla
             new List<string> { "Large Egg (Brown)", "Large Brown Egg" },
             new List<string> { "Cookie", "Cookies" },
             new List<string> { "Pina Colada", "Piña Colada" },
+            new List<string> { "Dried Fruit", "DriedFruit", "Dried Fruits", "DriedFruits" },
+            new List<string> { "Dried Mushrooms", "DriedMushrooms", "Dried Mushroom", "DriedMushroom" },
+            new List<string> { "Smoked Fish", "SmokedFish", "Smoked" },
         };
 
         public static Dictionary<string, string> RecipeNameAliases = new()

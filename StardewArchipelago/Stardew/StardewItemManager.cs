@@ -318,7 +318,7 @@ namespace StardewArchipelago.Stardew
         {
             foreach (var aliasGroup in NameAliases.ItemNameAliasGroups)
             {
-                if (!aliasGroup.Contains(stardewItem.Name))
+                if (!aliasGroup.Contains(stardewItem.Name) && !aliasGroup.Contains(stardewItem.Id))
                 {
                     continue;
                 }

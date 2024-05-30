@@ -94,6 +94,9 @@ namespace StardewArchipelago.Stardew.NameMapping
             { QualifiedItemIds.LARGE_BROWN_EGG, "Large Egg (Brown)" },
             { QualifiedItemIds.LARGE_GOAT_MILK, "Large Goat Milk" },
             { QualifiedItemIds.COOKIES, "Cookies" },
+            { QualifiedItemIds.DRIED_FRUIT, "Dried Fruit" },
+            { QualifiedItemIds.DRIED_MUSHROOMS, "Dried Mushrooms" },
+            { QualifiedItemIds.SMOKED_FISH, "Smoked Fish" },
         };
 
         private static readonly List<string> _simplifiedNames = new()
