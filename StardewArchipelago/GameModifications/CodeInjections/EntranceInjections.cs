@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.GameModifications.EntranceRandomizer;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.GameData;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
 {
@@ -38,6 +40,18 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 }
 
                 locationRequest.Name = replacedWarp.LocationRequest.Name;
+
+
+                foreach (var activePassiveFestival in Game1.netWorldState.Value.ActivePassiveFestivals)
+                {
+                    if (Utility.TryGetPassiveFestivalData(activePassiveFestival, out var data) &&
+                        Game1.dayOfMonth >= data.StartDay && Game1.dayOfMonth <= data.EndDay && data.Season == Game1.season &&
+                        data.MapReplacements != null && data.MapReplacements.TryGetValue(locationRequest.Name, out var name))
+                    {
+                        locationRequest.Name = name;
+                    }
+                }
+
                 locationRequest.Location = replacedWarp.LocationRequest.Location;
                 locationRequest.IsStructure = replacedWarp.LocationRequest.IsStructure;
                 tileX = replacedWarp.TileX;
