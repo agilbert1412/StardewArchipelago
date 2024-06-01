@@ -131,7 +131,7 @@ namespace StardewArchipelago.Archipelago
             BuildingProgression = GetSlotSetting(BUILDING_PROGRESSION_KEY, BuildingProgression.Progressive);
             FestivalLocations = GetSlotSetting(FESTIVAL_OBJECTIVES_KEY, FestivalLocations.Easy);
             ArcadeMachineLocations = GetSlotSetting(ARCADE_MACHINES_KEY, ArcadeLocations.FullShuffling);
-            SpecialOrderLocations = GetSlotSetting(SPECIAL_ORDERS_KEY, SpecialOrderLocations.BoardOnly);
+            SpecialOrderLocations = GetSlotSetting(SPECIAL_ORDERS_KEY, SpecialOrderLocations.Board);
             QuestLocations = new QuestLocations(GetSlotSetting(QUEST_LOCATIONS_KEY, 0));
             Fishsanity = GetSlotSetting(FISHSANITY_KEY, Fishsanity.None);
             Museumsanity = GetSlotSetting(MUSEUMSANITY_KEY, Museumsanity.None);
@@ -429,11 +429,14 @@ namespace StardewArchipelago.Archipelago
         FullShuffling = 3,
     }
 
+    [Flags]
     public enum SpecialOrderLocations
     {
-        Disabled = 0,
-        BoardOnly = 1,
-        BoardAndQi = 2,
+        Vanilla = 0b0000, // 0
+        Board = 0b0001, // 1
+        Qi = 0b0010, // 2
+        Short = 0b0100, // 4
+        VeryShort = 0b1000, // 8
     }
 
     public class QuestLocations

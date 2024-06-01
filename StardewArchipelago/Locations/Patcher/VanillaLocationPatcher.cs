@@ -490,7 +490,7 @@ namespace StardewArchipelago.Locations.Patcher
                 prefix: new HarmonyMethod(typeof(SpecialOrderInjections), nameof(SpecialOrderInjections.UpdateAvailableSpecialOrders_ChangeFrequencyToBeLessRng_Prefix))
             );
 
-            if (_archipelago.SlotData.SpecialOrderLocations == SpecialOrderLocations.Disabled)
+            if (!_archipelago.SlotData.SpecialOrderLocations.HasFlag(SpecialOrderLocations.Board))
             {
                 return;
             }

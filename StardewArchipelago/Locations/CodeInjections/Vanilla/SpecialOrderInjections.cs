@@ -52,49 +52,83 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             try
             {
-                var specialOrderName = GetEnglishQuestName(__result.questName.Value);
-                if (!_archipelago.LocationExists(specialOrderName))
-                {
-                    return;
-                }
-
-                // Remove vanilla rewards if the player has not received the check.
-                // We will keep vanilla rewards for repeated orders
-                var checkMissing = _locationChecker.IsLocationMissing(specialOrderName);
-                var shouldHaveVanillaRewards = IgnoredModdedStrings.SpecialOrders.Contains(specialOrderName);
-                if (shouldHaveVanillaRewards)
-                {
-                    return;
-                }
-
-                if (checkMissing)
-                {
-                    __result.rewards.Clear();
-                    Game1.player.team.specialOrders.Remove(__result); // Might as well, and it cleans up SVE special orders.
-                    return;
-                }
-
-                // If the order has already been completed once, we can allow some non-unique rewards only
-                for (var i = __result.rewards.Count - 1; i >= 0; i--)
-                {
-                    var reward = __result.rewards[i];
-                    if (reward is MoneyReward or GemsReward or FriendshipReward)
-                    {
-                        continue;
-                    }
-                    if (reward is ObjectReward objectReward)
-                    {
-                        if (objectReward.itemKey.Value == "CalicoEgg")
-                        {
-                            continue;
-                        }
-                    }
-                    __result.rewards.RemoveAt(i);
-                }
+                RemoveObsoleteRewards(__result);
+                AdjustRequirements(__result);
             }
             catch (Exception ex)
             {
                 _monitor.Log($"Failed in {nameof(GetSpecialOrder_ArchipelagoReward_Postfix)}:\n{ex}", LogLevel.Error);
+            }
+        }
+
+        private static void RemoveObsoleteRewards(SpecialOrder specialOrder)
+        {
+            var specialOrderName = GetEnglishQuestName(specialOrder.questName.Value);
+            if (!_archipelago.LocationExists(specialOrderName))
+            {
+                return;
+            }
+
+            // Remove vanilla rewards if the player has not received the check.
+            // We will keep vanilla rewards for repeated orders
+            var checkMissing = _locationChecker.IsLocationMissing(specialOrderName);
+            var shouldHaveVanillaRewards = IgnoredModdedStrings.SpecialOrders.Contains(specialOrderName);
+            if (shouldHaveVanillaRewards)
+            {
+                return;
+            }
+
+            if (checkMissing)
+            {
+                specialOrder.rewards.Clear();
+                Game1.player.team.specialOrders.Remove(specialOrder); // Might as well, and it cleans up SVE special orders.
+                return;
+            }
+
+            // If the order has already been completed once, we can allow some non-unique rewards only
+            for (var i = specialOrder.rewards.Count - 1; i >= 0; i--)
+            {
+                var reward = specialOrder.rewards[i];
+                if (reward is MoneyReward or GemsReward or FriendshipReward)
+                {
+                    continue;
+                }
+                if (reward is ObjectReward objectReward)
+                {
+                    if (objectReward.itemKey.Value == "CalicoEgg")
+                    {
+                        continue;
+                    }
+                }
+                specialOrder.rewards.RemoveAt(i);
+            }
+            return;
+        }
+
+        private static void AdjustRequirements(SpecialOrder specialOrder)
+        {
+            var requirementMultiplier = 1.0;
+            if (_archipelago.SlotData.SpecialOrderLocations.HasFlag(SpecialOrderLocations.VeryShort))
+            {
+                requirementMultiplier = 0.2;
+            }
+            else if (_archipelago.SlotData.SpecialOrderLocations.HasFlag(SpecialOrderLocations.Short))
+            {
+                requirementMultiplier = 0.6;
+            }
+            else
+            {
+                return;
+            }
+
+            foreach (var objective in specialOrder.objectives)
+            {
+                if (objective.maxCount.Value <= 1)
+                {
+                    continue;
+                }
+
+                objective.maxCount.Value = Math.Max(1, (int)Math.Round(objective.maxCount.Value * requirementMultiplier));
             }
         }
 
@@ -175,7 +209,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 SetDurationOfSpecialOrders(Game1.player.team.availableSpecialOrders);
 
                 // Let the game pick festival orders, they aren't checks anyway, right?
-                if (orderType.Equals("DesertFestivalMarlon", StringComparison.InvariantCultureIgnoreCase) || _archipelago.SlotData.SpecialOrderLocations == SpecialOrderLocations.Disabled)
+                if (orderType.Equals("DesertFestivalMarlon", StringComparison.InvariantCultureIgnoreCase) || (!_archipelago.SlotData.SpecialOrderLocations.HasFlag(SpecialOrderLocations.Board) && !_archipelago.SlotData.SpecialOrderLocations.HasFlag(SpecialOrderLocations.Qi)))
                 {
                     return true; // run original logic
                 }
