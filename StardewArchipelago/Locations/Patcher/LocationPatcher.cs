@@ -26,7 +26,7 @@ namespace StardewArchipelago.Locations.Patcher
             _patchers.Add(new VanillaLocationPatcher(monitor, modHelper, harmony, archipelago, locationChecker, itemManager));
             if (archipelago.SlotData.Mods.IsModded)
             {
-                _patchers.Add(new ModLocationPatcher(harmony, modHelper, archipelago));
+                _patchers.Add(new ModLocationPatcher(harmony, monitor, modHelper, archipelago));
             }
         }
 

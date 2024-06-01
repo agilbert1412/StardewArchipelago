@@ -29,10 +29,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             {
                 MagicModInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             }
-            if (_archipelago.SlotData.Mods.HasMod(ModNames.SOCIALIZING))
-            {
-                SocializingConfigCodeInjections.Initialize(monitor, modHelper, archipelago);
-            }
             if (_archipelago.SlotData.Mods.HasMod(ModNames.ARCHAEOLOGY))
             {
                 ArchaeologyConfigCodeInjections.Initialize(monitor, modHelper, archipelago);

@@ -18,13 +18,15 @@ namespace StardewArchipelago.Locations.Patcher
     {
         private readonly ArchipelagoClient _archipelago;
         private readonly Harmony _harmony;
+        private readonly IMonitor _monitor;
         private readonly IModHelper _modHelper;
         private ModsManager _modsManager;
 
-        public ModLocationPatcher(Harmony harmony, IModHelper modHelper, ArchipelagoClient archipelago)
+        public ModLocationPatcher(Harmony harmony, IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago)
         {
             _archipelago = archipelago;
             _harmony = harmony;
+            _monitor = monitor;
             _modHelper = modHelper;
             _modsManager = archipelago.SlotData.Mods;
         }
@@ -121,31 +123,8 @@ namespace StardewArchipelago.Locations.Patcher
                 return;
             }
 
-            var socializingConfigType = AccessTools.TypeByName("SocializingSkill.Config");
-            _harmony.Patch(
-                original: AccessTools.PropertyGetter(socializingConfigType, "ExperienceFromTalking"),
-                postfix: new HarmonyMethod(typeof(SocializingConfigCodeInjections), nameof(SocializingConfigCodeInjections.ExperienceFromTalking_APMultiplier_Postfix))
-            );
-            _harmony.Patch(
-                original: AccessTools.PropertyGetter(socializingConfigType, "ExperienceFromGifts"),
-                postfix: new HarmonyMethod(typeof(SocializingConfigCodeInjections), nameof(SocializingConfigCodeInjections.ExperienceFromGifts_APMultiplier_Postfix))
-            );
-            _harmony.Patch(
-                original: AccessTools.PropertyGetter(socializingConfigType, "ExperienceFromEvents"),
-                postfix: new HarmonyMethod(typeof(SocializingConfigCodeInjections), nameof(SocializingConfigCodeInjections.ExperienceFromEvents_APMultiplier_Postfix))
-            );
-            _harmony.Patch(
-                original: AccessTools.PropertyGetter(socializingConfigType, "ExperienceFromQuests"),
-                postfix: new HarmonyMethod(typeof(SocializingConfigCodeInjections), nameof(SocializingConfigCodeInjections.ExperienceFromQuests_APMultiplier_Postfix))
-            );
-            _harmony.Patch(
-                original: AccessTools.PropertyGetter(socializingConfigType, "LovedGiftExpMultiplier"),
-                postfix: new HarmonyMethod(typeof(SocializingConfigCodeInjections), nameof(SocializingConfigCodeInjections.LovedGiftExpMultiplier_APMultiplier_Postfix))
-            );
-            _harmony.Patch(
-                original: AccessTools.PropertyGetter(socializingConfigType, "BirthdayGiftExpMultiplier"),
-                postfix: new HarmonyMethod(typeof(SocializingConfigCodeInjections), nameof(SocializingConfigCodeInjections.BirthdayGiftExpMultiplier_APMultiplier_Postfix))
-            );
+            var socializingConfigPatcher = new SocializingConfigPatcher(_monitor, _modHelper);
+            socializingConfigPatcher.PatchConfigValues();
         }
 
         private void InjectArchaeologyExperienceMultiplier()
