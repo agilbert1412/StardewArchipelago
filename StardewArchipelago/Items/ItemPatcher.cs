@@ -53,9 +53,11 @@ namespace StardewArchipelago.Items
                 original: AccessTools.Method(typeof(FishingRod), "calculateTimeUntilFishingBite"),
                 postfix: new HarmonyMethod(typeof(PlayerBuffInjections), nameof(PlayerBuffInjections.CalculateTimeUntilFishingBite_AddApBuffs_Postfix))
             );
+            var bobberBarConstructor = AccessTools.Constructor(typeof(BobberBar));
+            var postfix = new HarmonyMethod(typeof(PlayerBuffInjections), nameof(PlayerBuffInjections.BobberBarConstructor_AddApBuffs_Postfix));
             _harmony.Patch(
-                original: AccessTools.Constructor(typeof(BobberBar)),
-                postfix: new HarmonyMethod(typeof(PlayerBuffInjections), nameof(PlayerBuffInjections.BobberBarConstructor_AddApBuffs_Postfix))
+                original: bobberBarConstructor,
+                postfix: postfix
             );
         }
     }
