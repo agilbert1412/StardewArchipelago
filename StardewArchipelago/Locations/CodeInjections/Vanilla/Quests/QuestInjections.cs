@@ -20,6 +20,7 @@ using StardewValley.Quests;
 using StardewValley.TerrainFeatures;
 using xTile.Dimensions;
 using Object = StardewValley.Object;
+using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
 {
@@ -436,79 +437,55 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
 
         private static void ShakeForBushItem(Bush bush, Vector2 tileLocation)
         {
-            var season = bush.Location.GetSeason();
-            var shakeOff = "";
-            if (season != Season.Spring)
-            {
-                if (season == Season.Fall)
-                {
-                    shakeOff = "410";
-                }
-            }
-            else
-            {
-                shakeOff = "296";
-            }
 
-            if (bush.size.Value == 3)
-            {
-                shakeOff = "815";
-            }
-
-            if (bush.size.Value == 4)
-            {
-                shakeOff = "73";
-            }
-
-            if (shakeOff == "")
+            var shakeOffItem = bush.GetShakeOffItem();
+            if (string.IsNullOrWhiteSpace(shakeOffItem))
             {
                 return;
             }
 
             bush.tileSheetOffset.Value = 0;
             bush.setUpSourceRect();
-            var random = new Random((int)tileLocation.X + (int)tileLocation.Y * 5000 + (int)Game1.uniqueIDForThisGame + (int)Game1.stats.DaysPlayed);
-            if (bush.size.Value == 3 || bush.size.Value == 4)
+            switch (bush.size.Value)
             {
-                var num = 1;
-                for (var index = 0; index < num; ++index)
-                {
-                    if (bush.size.Value == 4)
+                case 3:
+                    Game1.createObjectDebris(shakeOffItem, (int)tileLocation.X, (int)tileLocation.Y);
+                    break;
+                case 4:
+                    bush.uniqueSpawnMutex.RequestLock((Action)(() =>
                     {
-                        bush.uniqueSpawnMutex.RequestLock(() =>
+                        Game1.player.team.MarkCollectedNut($"Bush_{bush.Location.Name}_{tileLocation.X}_{tileLocation.Y}");
+                        var obj = ItemRegistry.Create(shakeOffItem);
+                        var boundingBox = bush.getBoundingBox();
+                        var x = (double)boundingBox.Center.X;
+                        boundingBox = bush.getBoundingBox();
+                        var y = (double)(boundingBox.Bottom - 2);
+                        var pixelOrigin = new Vector2((float)x, (float)y);
+                        var location = bush.Location;
+                        boundingBox = bush.getBoundingBox();
+                        var bottom = boundingBox.Bottom;
+                        Game1.createItemDebris(obj, pixelOrigin, 0, location, bottom);
+                    }));
+                    break;
+                default:
+                    var random = Utility.CreateRandom((double)tileLocation.X, (double)tileLocation.Y * 5000.0, (double)Game1.uniqueIDForThisGame, (double)Game1.stats.DaysPlayed);
+                    var howMuch = random.Next(1, 2) + Game1.player.ForagingLevel / 4;
+                    for (var index = 0; index < howMuch; ++index)
+                    {
+                        var obj = ItemRegistry.Create(shakeOffItem);
+                        if (Game1.player.professions.Contains(16))
                         {
-                            Game1.player.team.MarkCollectedNut("Bush_" + bush.Location.Name + "_" + tileLocation.X + "_" + tileLocation.Y);
-                            var @object = new Object(shakeOff, 1);
-                            var boundingBox = bush.getBoundingBox();
-                            var x = (double)boundingBox.Center.X;
-                            boundingBox = bush.getBoundingBox();
-                            var y = (double)(boundingBox.Bottom - 2);
-                            var origin = new Vector2((float)x, (float)y);
-                            var currentLocation = bush.Location;
-                            boundingBox = bush.getBoundingBox();
-                            var bottom = boundingBox.Bottom;
-                            Game1.createItemDebris(@object, origin, 0, currentLocation, bottom);
-                        });
+                            obj.Quality = 4;
+                        }
+                        Game1.createItemDebris(obj, Utility.PointToVector2(bush.getBoundingBox().Center), Game1.random.Next(1, 4));
                     }
-                    else
-                    {
-                        Game1.createObjectDebris(shakeOff, (int)tileLocation.X, (int)tileLocation.Y);
-                    }
-                }
-            }
-            else
-            {
-                var num = random.Next(1, 2) + Game1.player.ForagingLevel / 4;
-                for (var index = 0; index < num; ++index)
-                {
-                    Game1.createItemDebris(new Object(shakeOff, 1, quality: (Game1.player.professions.Contains(16) ? 4 : 0)), Utility.PointToVector2(bush.getBoundingBox().Center), Game1.random.Next(1, 4));
-                }
+                    Game1.player.gainExperience(2, howMuch);
+                    break;
             }
             if (bush.size.Value == 3)
             {
                 return;
             }
-
             DelayedAction.playSoundAfterDelay("leafrustle", 100);
         }
 
