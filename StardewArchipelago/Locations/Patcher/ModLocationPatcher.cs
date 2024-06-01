@@ -134,17 +134,17 @@ namespace StardewArchipelago.Locations.Patcher
                 return;
             }
 
-            var excavationConfigType = AccessTools.TypeByName("ExcavationSkill.Config");
+            var excavationConfigType = AccessTools.TypeByName("ArchaeologySkill.Config");
             _harmony.Patch(
                 original: AccessTools.PropertyGetter(excavationConfigType, "ExperienceFromArtifactSpots"),
                 postfix: new HarmonyMethod(typeof(ArchaeologyConfigCodeInjections), nameof(ArchaeologyConfigCodeInjections.ExperienceFromArtifactSpots_APMultiplier_Postfix))
             );
             _harmony.Patch(
-                original: AccessTools.PropertyGetter(excavationConfigType, "ExperienceFromMinesDigging"),
-                postfix: new HarmonyMethod(typeof(ArchaeologyConfigCodeInjections), nameof(ArchaeologyConfigCodeInjections.ExperienceFromBuriedAndPannedItem_APMultiplier_Postfix))
+                original: AccessTools.PropertyGetter(excavationConfigType, "ExperienceFromPanSpots"),
+                postfix: new HarmonyMethod(typeof(ArchaeologyConfigCodeInjections), nameof(ArchaeologyConfigCodeInjections.ExperienceFromPanSpots_APMultiplier_Postfix))
             );
             _harmony.Patch(
-                original: AccessTools.PropertyGetter(excavationConfigType, "ExperienceFromBuriedAndPannedItem"),
+                original: AccessTools.PropertyGetter(excavationConfigType, "ExperienceFromMinesDigging"),
                 postfix: new HarmonyMethod(typeof(ArchaeologyConfigCodeInjections), nameof(ArchaeologyConfigCodeInjections.ExperienceFromMinesDigging_APMultiplier_Postfix))
             );
             _harmony.Patch(
