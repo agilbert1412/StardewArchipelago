@@ -81,12 +81,14 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
                 RegisterRandomizedEntrance(originalEntrance, replacementEntrance);
             }
 
-            if (slotData.EntranceRandomization == EntranceRandomization.PelicanTown || slotData.EntranceRandomization == EntranceRandomization.NonProgression)
+            if (slotData.EntranceRandomization == EntranceRandomization.PelicanTown || 
+                slotData.EntranceRandomization == EntranceRandomization.NonProgression || 
+                slotData.EntranceRandomization == EntranceRandomization.BuildingsWithoutHouse)
             {
                 return;
             }
 
-            AddFarmhouseToModifiedEntrances();
+            AddFarmhouseToModifiedEntrances(slotData);
 
             if (slotData.EntranceRandomization == EntranceRandomization.Chaos)
             {
@@ -96,7 +98,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             SwapFarmhouseEntranceWithAnotherEmptyAreaEntrance(slotData);
         }
 
-        private void AddFarmhouseToModifiedEntrances()
+        private void AddFarmhouseToModifiedEntrances(SlotData slotData)
         {
             var farmhouseToFarm = ReverseKey(FARM_TO_FARMHOUSE);
             ModifiedEntrances.Add(FARM_TO_FARMHOUSE, FARM_TO_FARMHOUSE);
