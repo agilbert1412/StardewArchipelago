@@ -328,11 +328,6 @@ namespace StardewArchipelago.Stardew
                     _objectsByName.Add(alias, stardewItem);
                 }
 
-                if (!_objectsByName.ContainsKey(stardewItem.Name))
-                {
-                    _objectsByName.Add(stardewItem.Name, stardewItem);
-                }
-
                 return;
             }
 
