@@ -84,6 +84,8 @@ namespace StardewArchipelago.Items.Unlocks.Vanilla
             unlocks.Add("Iridium Snake Milk", SendIridiumSnakeMilkLetter);
             unlocks.Add("Dark Talisman", SendDarkTalismanLetter);
             unlocks.Add("Key To The Town", SendKeyToTheTownLetter);
+
+            unlocks.Add(APItem.HEALTH_BONUS, SendHealthBonusLetter);
         }
 
         private void RegisterUniqueItems(IDictionary<string, Func<ReceivedItem, LetterAttachment>> unlocks)
@@ -265,6 +267,12 @@ namespace StardewArchipelago.Items.Unlocks.Vanilla
         private LetterItemIdAttachment SendStardropLetter(ReceivedItem receivedItem)
         {
             return new LetterItemIdAttachment(receivedItem, ObjectIds.STARDROP);
+        }
+
+        private LetterInformationAttachment SendHealthBonusLetter(ReceivedItem receivedItem)
+        {
+            Game1.player.maxHealth += 10;
+            return new LetterInformationAttachment(receivedItem);
         }
 
         private LetterActionAttachment SendDwarvishTranslationGuideLetter(ReceivedItem receivedItem)

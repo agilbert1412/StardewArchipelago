@@ -339,7 +339,7 @@ namespace StardewArchipelago.Goals
                 return;
             }
 
-            if (!Game1.player.mailReceived.Contains("gotMaxStamina"))
+            if (Game1.player.maxStamina.Value < 508)
             {
                 return;
             }
