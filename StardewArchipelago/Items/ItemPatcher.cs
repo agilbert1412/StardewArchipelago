@@ -1,4 +1,6 @@
-﻿using HarmonyLib;
+﻿using System;
+using System.Collections.Generic;
+using HarmonyLib;
 using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
 using StardewValley;
@@ -53,11 +55,11 @@ namespace StardewArchipelago.Items
                 original: AccessTools.Method(typeof(FishingRod), "calculateTimeUntilFishingBite"),
                 postfix: new HarmonyMethod(typeof(PlayerBuffInjections), nameof(PlayerBuffInjections.CalculateTimeUntilFishingBite_AddApBuffs_Postfix))
             );
-            var bobberBarConstructor = AccessTools.Constructor(typeof(BobberBar));
-            var postfix = new HarmonyMethod(typeof(PlayerBuffInjections), nameof(PlayerBuffInjections.BobberBarConstructor_AddApBuffs_Postfix));
+            
+            var bobberBarContructorParameters = new[] { typeof(string), typeof(float), typeof(bool), typeof(List<string>), typeof(string), typeof(bool), typeof(string), typeof(bool) };
             _harmony.Patch(
-                original: bobberBarConstructor,
-                postfix: postfix
+                original: AccessTools.Constructor(typeof(BobberBar), bobberBarContructorParameters),
+                postfix: new HarmonyMethod(typeof(PlayerBuffInjections), nameof(PlayerBuffInjections.BobberBarConstructor_AddApBuffs_Postfix))
             );
         }
     }
