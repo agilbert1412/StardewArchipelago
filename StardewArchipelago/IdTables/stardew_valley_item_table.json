@@ -374,11 +374,11 @@
         },
         "Movement Speed Bonus": {
             "code": 717109,
-            "classification": "progression"
+            "classification": "useful"
         },
         "Luck Bonus": {
             "code": 717110,
-            "classification": "progression"
+            "classification": "filler"
         },
         "Lava Katana": {
             "code": 717111,
@@ -2000,6 +2000,46 @@
             "code": 717553,
             "classification": "progression"
         },
+        "Damage Bonus": {
+            "code": 717554,
+            "classification": "filler"
+        },
+        "Defense Bonus": {
+            "code": 717555,
+            "classification": "filler"
+        },
+        "Immunity Bonus": {
+            "code": 717556,
+            "classification": "filler"
+        },
+        "Health Bonus": {
+            "code": 717557,
+            "classification": "filler"
+        },
+        "Energy Bonus": {
+            "code": 717558,
+            "classification": "filler"
+        },
+        "Bite Rate Bonus": {
+            "code": 717559,
+            "classification": "filler"
+        },
+        "Fish Trap Bonus": {
+            "code": 717560,
+            "classification": "filler"
+        },
+        "Fishing Bar Size Bonus": {
+            "code": 717561,
+            "classification": "filler"
+        },
+        "Quality Bonus": {
+            "code": 717562,
+            "classification": "filler"
+        },
+        "Glow Bonus": {
+            "code": 717563,
+            "classification": "filler"
+        },
         "Burnt Trap": {
             "code": 721001,
             "classification": "trap"
@@ -3234,7 +3274,7 @@
         },
         "Spell: Till": {
             "code": 727010,
-            "classification": "useful"
+            "classification": "progression"
         },
         "Spell: Water": {
             "code": 727011,
@@ -3246,11 +3286,11 @@
         },
         "Spell: Evac": {
             "code": 727013,
-            "classification": "useful"
+            "classification": "progression"
         },
         "Spell: Haste": {
             "code": 727014,
-            "classification": "useful"
+            "classification": "progression"
         },
         "Spell: Heal": {
             "code": 727015,
@@ -3258,7 +3298,7 @@
         },
         "Spell: Buff": {
             "code": 727016,
-            "classification": "useful"
+            "classification": "progression"
         },
         "Spell: Shockwave": {
             "code": 727017,
@@ -3278,7 +3318,7 @@
         },
         "Spell: Lantern": {
             "code": 727021,
-            "classification": "useful"
+            "classification": "progression"
         },
         "Spell: Tendrils": {
             "code": 727022,
@@ -3286,7 +3326,7 @@
         },
         "Spell: Photosynthesis": {
             "code": 727023,
-            "classification": "useful"
+            "classification": "progression"
         },
         "Spell: Descend": {
             "code": 727024,
@@ -3298,11 +3338,11 @@
         },
         "Spell: Bloodmana": {
             "code": 727026,
-            "classification": "useful"
+            "classification": "progression"
         },
         "Spell: Lucksteal": {
             "code": 727027,
-            "classification": "useful"
+            "classification": "progression"
         },
         "Spell: Spirit": {
             "code": 727028,
@@ -3310,7 +3350,7 @@
         },
         "Spell: Rewind": {
             "code": 727029,
-            "classification": "useful"
+            "classification": "progression"
         },
         "Pendant of Community": {
             "code": 727030,
