@@ -447,7 +447,7 @@ namespace StardewArchipelago
             Helper.GameContent.InvalidateCache("Data/Shops"); // This should be reworked someday
             DoBugsCleanup();
 
-            _hintHelper.GiveHintTip(_archipelago.Session);
+            _hintHelper?.GiveHintTip(_archipelago.Session);
         }
 
         private void DoBugsCleanup()
@@ -628,7 +628,7 @@ namespace StardewArchipelago
 
         private void DebugMethod(string arg1, string[] arg2)
         {
-            _itemManager.ItemParser.TrapManager.ShuffleInventory();
+            ItemRegistry.GetDataOrErrorItem("(W)0");
         }
     }
 }

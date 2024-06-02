@@ -49,7 +49,7 @@ namespace StardewArchipelago.Bundles
             var itemsString = "";
             foreach (var item in Items)
             {
-                itemsString += $" {item.StardewObject.Id} {item.Amount} {item.Quality}";
+                itemsString += $" {item.StardewItem.Id} {item.Amount} {item.Quality}";
             }
 
             return itemsString.Trim();
