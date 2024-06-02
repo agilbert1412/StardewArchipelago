@@ -84,12 +84,12 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
 
         private static readonly Dictionary<string, string> _locationJuna = new()
         {
-            { "Juna's Cave", "Custom_JunaNPC_JunaCave" },
+            { "Juna's Cave", "elhrvy.NPCJuna_JunaCave" },
         };
 
         private static readonly Dictionary<string, string> _locationAyeisha = new()
         {
-            { "Ayeisha's Mail Van", "Custom_AyeishaVanRoad" },
+            { "Ayeisha's Mail Van", "TheLimeyDragon.Ayeisha_AyeishaVanRoad" },
         };
 
         private static readonly Dictionary<string, string> _locationJasper = new()
