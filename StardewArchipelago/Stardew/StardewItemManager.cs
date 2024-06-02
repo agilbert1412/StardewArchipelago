@@ -292,6 +292,7 @@ namespace StardewArchipelago.Stardew
             InitializeWeapons();
             InitializeCookingRecipes();
             InitializeCraftingRecipes();
+            InitializeObjectsByColor();
         }
 
         private void InitializeObjects()
@@ -490,6 +491,11 @@ namespace StardewArchipelago.Stardew
 
                 _craftingRecipesByName.Add(recipe.ItemName, recipe);
             }
+        }
+
+        private void InitializeObjectsByColor()
+        {
+            _objectsByColor = new Dictionary<string, List<StardewObject>>();
         }
 
         private StardewObject ParseStardewObjectData(string id, ObjectData objectData)
