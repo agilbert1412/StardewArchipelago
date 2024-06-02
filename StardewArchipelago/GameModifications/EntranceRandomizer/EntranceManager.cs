@@ -75,7 +75,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             {
                 _locationAliases[locationName] = locationAlias;
             }
-
+            FixInitialEntranceDataGivenMod(slotData);
             foreach (var (originalEntrance, replacementEntrance) in slotData.ModifiedEntrances)
             {
                 RegisterRandomizedEntrance(originalEntrance, replacementEntrance);
@@ -133,6 +133,25 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             if (slotData.Mods.HasMod(ModNames.BOARDING_HOUSE))
             {
                 yield return "Custom_BoardingHouse_BackwoodsPlateau";
+            }
+        }
+
+        private void FixInitialEntranceDataGivenMod(SlotData slotData)
+        {
+            foreach (var (mod, alias) in _modifiedAliases)
+            {
+                if (!slotData.Mods.HasMod(mod))
+                {
+                    return;
+                }
+                foreach (var (name, updatedName) in alias)
+                {
+                    if (!_locationAliases.TryGetValue(name, out var _))
+                    {
+                        continue;
+                    }
+                    _locationAliases[name] = updatedName;
+                }
             }
         }
 
@@ -316,7 +335,6 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             }
 
             var modifiedString = TurnAliased(TurnAliased(key, _locationAliases, false), _locationsSingleWordAliases, true);
-            //modifiedString = ModTurnAliased(key, modifiedString);
             return modifiedString;
         }
 
@@ -412,7 +430,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
         private static readonly Dictionary<string, Dictionary<string, string>> _modifiedAliases = new()
         {
             {
-                "Stardew Valley Expanded", new() { { "WizardHouseBasement", "Custom_WizardBasement" } }
+                "Stardew Valley Expanded", new() { { "Wizard Basement", "Custom_WizardBasement" } }
             },
         };
     }
