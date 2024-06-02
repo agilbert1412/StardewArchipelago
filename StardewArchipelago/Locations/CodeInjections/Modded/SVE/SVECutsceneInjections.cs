@@ -99,8 +99,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
             }
         }
 
-        // public void endBehaviors(string[] split, GameLocation location)
-        public static bool EndBehaviors_AddSpecialOrderAfterEvent_Prefix(string[] args, GameLocation location, Event __instance)
+        // public void endBehaviors(string[] args, GameLocation location)
+        public static bool EndBehaviors_AddSpecialOrderAfterEvent_Prefix(Event __instance, string[] args, GameLocation location)
         {
             try
             {
