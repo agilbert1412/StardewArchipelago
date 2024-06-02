@@ -7,9 +7,9 @@ namespace StardewArchipelago.Constants.Modded
 {
     internal class ModQualifiedItemIds
     {
-        public static readonly string TEMPERED_DAGGER = QualifiedWeaponId("Tempered Galaxy Dagger");
-        public static readonly string TEMPERED_SWORD = QualifiedWeaponId("Tempered Galaxy Sword");
-        public static readonly string TEMPERED_HAMMER = QualifiedWeaponId("Tempered Galaxy Hammer");
+        public static readonly string TEMPERED_DAGGER = QualifiedWeaponId("FlashShifter.StardewValleyExpandedCP_Tempered_Galaxy_Dagger");
+        public static readonly string TEMPERED_SWORD = QualifiedWeaponId("FlashShifter.StardewValleyExpandedCP_Tempered_Galaxy_Sword");
+        public static readonly string TEMPERED_HAMMER = QualifiedWeaponId("FlashShifter.StardewValleyExpandedCP_Tempered_Galaxy_Hammer");
 
         private static string QualifiedObjectId(string objectId)
         {
