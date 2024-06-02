@@ -178,7 +178,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 itemName = $"Progressive {itemName}";
             }
+            else if (_buildingNameReplacements.ContainsKey(buildingName))
+            {
+                itemName = _buildingNameReplacements[buildingName];
+            }
             return GameStateConditionProvider.CreateHasReceivedItemCondition(itemName, amount);
         }
+
+        private static Dictionary<string, string> _buildingNameReplacements = new()
+        {
+            { "Pathoschild.TractorMod_Stable", "Tractor Garage" }
+        };
     }
 }
