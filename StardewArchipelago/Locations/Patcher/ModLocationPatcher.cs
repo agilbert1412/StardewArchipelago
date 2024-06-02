@@ -25,7 +25,7 @@ namespace StardewArchipelago.Locations.Patcher
         private ModsManager _modsManager;
         private SVEShopStockModifier _sveShopStockModifier;
 
-        public ModLocationPatcher(Harmony harmony, IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago)
+        public ModLocationPatcher(Harmony harmony, IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, StardewItemManager stardewItemManager)
         {
             _archipelago = archipelago;
             _harmony = harmony;
