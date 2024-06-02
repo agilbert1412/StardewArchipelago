@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using HarmonyLib;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Modded;
@@ -16,15 +17,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private const int MAX_XP_PER_SKILL = 15000;
         private const string _skillLocationName = "Level {0} {1}";
 
-        private static readonly Dictionary<Skill, string> _skillToArchipelagoName = new()
-        {
-            { Skill.Excavation, ArchipelagoSkillNames.ARCHAEOLOGY },
-        };
-
         private static readonly Dictionary<Skill, string> _skillToModName = new()
         {
             { Skill.Magic, ModNames.MAGIC }, { Skill.Binning, ModNames.BINNING }, { Skill.Cooking, ModNames.COOKING },
-            { Skill.Excavation, ModNames.ARCHAEOLOGY }, { Skill.Socializing, ModNames.SOCIALIZING },
+            { Skill.Archaeology, ModNames.ARCHAEOLOGY }, { Skill.Socializing, ModNames.SOCIALIZING },
         };
 
         private static IMonitor _monitor;
@@ -154,6 +150,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
         }
 
+        [HarmonyPriority(Priority.VeryHigh)]
         public static bool GainExperience_ArchipelagoExperience_Prefix(Farmer __instance, int which, int howMuch)
         {
             try
@@ -178,7 +175,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         }
 
         //public class Skills
-        //public static void AddExperience( Farmer farmer, string skillName, int amt )
+        //public static void AddExperience(Farmer farmer, string skillName, int amt)
         public static bool AddExperience_ArchipelagoModExperience_Prefix(Farmer farmer, string skillName, int amt)
         {
             try
@@ -205,7 +202,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
         private static void AddApExperienceAndCheckLocations(Skill skill, int amount)
         {
-            var apSkillName = _skillToArchipelagoName.ContainsKey(skill) ? _skillToArchipelagoName[skill] : skill.ToString();
+            var apSkillName = skill.ToString();
             var experienceAmount = GetMultipliedExperience(amount);
             if (_archipelagoExperience[skill] >= MAX_XP_PER_SKILL && _archipelago.GetReceivedItemCount($"{apSkillName} Level") >= 10)
             {
@@ -323,7 +320,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
             if (_archipelago.SlotData.Mods.HasMod(ModNames.ARCHAEOLOGY))
             {
-                skills.Add(Skill.Excavation);
+                skills.Add(Skill.Archaeology);
             }
 
             if (_archipelago.SlotData.Mods.HasMod(ModNames.COOKING))
@@ -350,7 +347,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         Luck = 5,
         Magic = 6,
         Socializing = 7,
-        Excavation = 8,
+        Archaeology = 8,
         Binning = 9,
         Cooking = 10,
     }
