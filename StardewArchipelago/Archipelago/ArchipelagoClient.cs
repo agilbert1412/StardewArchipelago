@@ -476,11 +476,11 @@ namespace StardewArchipelago.Archipelago
             for (var itemIndex = 0; itemIndex < apItems.Length; itemIndex++)
             {
                 var apItem = apItems[itemIndex];
-                var itemName = GetItemName(apItem.Item) ?? "Error Item";
+                var itemName = GetItemName(apItem);
                 var playerName = GetPlayerName(apItem.Player) ?? "Unknown Player";
-                var locationName = GetLocationName(apItem.Location) ?? "Thin air";
+                var locationName = GetLocationName(apItem);
 
-                var receivedItem = new ReceivedItem(locationName, itemName, playerName, apItem.Location, apItem.Item, apItem.Player, itemIndex);
+                var receivedItem = new ReceivedItem(locationName, itemName, playerName, apItem.LocationId, apItem.ItemId, apItem.Player, itemIndex);
 
                 allReceivedItems.Add(receivedItem);
             }
@@ -495,8 +495,8 @@ namespace StardewArchipelago.Archipelago
                 return new Dictionary<string, int>();
             }
 
-            var receivedItemsGrouped = _session.Items.AllItemsReceived.GroupBy(x => x.Item);
-            var receivedItemsWithCount = receivedItemsGrouped.ToDictionary(x => GetItemName(x.First().Item), x => x.Count());
+            var receivedItemsGrouped = _session.Items.AllItemsReceived.GroupBy(x => x.ItemName);
+            var receivedItemsWithCount = receivedItemsGrouped.ToDictionary(x => x.Key, x => x.Count());
             return receivedItemsWithCount;
         }
 
@@ -515,7 +515,7 @@ namespace StardewArchipelago.Archipelago
 
             foreach (var receivedItem in _session.Items.AllItemsReceived)
             {
-                if (GetItemName(receivedItem.Item) != itemName)
+                if (GetItemName(receivedItem) != itemName)
                 {
                     continue;
                 }
@@ -534,7 +534,7 @@ namespace StardewArchipelago.Archipelago
                 return 0;
             }
 
-            return _session.Items.AllItemsReceived.Count(x => GetItemName(x.Item) == itemName);
+            return _session.Items.AllItemsReceived.Count(x => GetItemName(x) == itemName);
         }
 
         public Hint[] GetHints()
@@ -575,6 +575,11 @@ namespace StardewArchipelago.Archipelago
             _session.Socket.SendPacket(statusUpdatePacket);
         }
 
+        public string GetLocationName(ItemInfo item)
+        {
+            return item?.LocationName ?? GetLocationName(item.LocationId);
+        }
+
         public string GetLocationName(long locationId)
         {
             if (!MakeSureConnected())
@@ -591,6 +596,7 @@ namespace StardewArchipelago.Archipelago
             if (string.IsNullOrWhiteSpace(locationName))
             {
                 _console.Log($"Failed at getting the location name for location {locationId}. This is probably due to a corrupted datapackage. Unexpected behaviors may follow", LogLevel.Error);
+                return "Thin air";
             }
 
             return locationName;
@@ -633,6 +639,11 @@ namespace StardewArchipelago.Archipelago
             return locationId;
         }
 
+        public string GetItemName(ItemInfo item)
+        {
+            return item?.ItemName ?? GetItemName(item.ItemId);
+        }
+
         public string GetItemName(long itemId)
         {
             if (!MakeSureConnected())
@@ -649,6 +660,7 @@ namespace StardewArchipelago.Archipelago
             if (string.IsNullOrWhiteSpace(itemName))
             {
                 _console.Log($"Failed at getting the item name for item {itemId}. This is probably due to a corrupted datapackage. Unexpected behaviors may follow", LogLevel.Error);
+                return "Error Item";
             }
 
             return itemName;
@@ -699,20 +711,19 @@ namespace StardewArchipelago.Archipelago
                     return null;
                 }
 
-                var locationInfo = ScoutLocation(locationId, createAsHint);
-                if (locationInfo.Locations.Length < 1)
+                var scoutedItemInfo = ScoutLocation(locationId, createAsHint);
+                if (scoutedItemInfo == null)
                 {
                     _console.Log($"Could not scout location \"{locationName}\".");
                     return null;
                 }
-
-                var firstLocationInfo = locationInfo.Locations[0];
-                var itemName = GetItemName(firstLocationInfo.Item);
-                var playerSlotName = _session.Players.GetPlayerName(firstLocationInfo.Player);
-                var classification = GetItemClassification(firstLocationInfo.Flags);
+                
+                var itemName = GetItemName(scoutedItemInfo);
+                var playerSlotName = _session.Players.GetPlayerName(scoutedItemInfo.Player);
+                var classification = GetItemClassification(scoutedItemInfo.Flags);
 
                 var scoutedLocation = new ScoutedLocation(locationName, itemName, playerSlotName, locationId,
-                    firstLocationInfo.Item, firstLocationInfo.Player, classification);
+                    scoutedItemInfo.ItemId, scoutedItemInfo.Player, classification);
 
                 ScoutedLocations.Add(locationName, scoutedLocation);
                 return scoutedLocation;
@@ -742,11 +753,17 @@ namespace StardewArchipelago.Archipelago
             return "Filler";
         }
 
-        private LocationInfoPacket ScoutLocation(long locationId, bool createAsHint)
+        private ScoutedItemInfo ScoutLocation(long locationId, bool createAsHint)
         {
             var scoutTask = _session.Locations.ScoutLocationsAsync(createAsHint, locationId);
             scoutTask.Wait();
-            return scoutTask.Result;
+            var scoutedItems = scoutTask.Result;
+            if (scoutedItems == null || !scoutedItems.Any())
+            {
+                return null;
+            }
+
+            return scoutedItems.First().Value;
         }
 
         private void SessionErrorReceived(Exception e, string message)
