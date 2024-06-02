@@ -194,7 +194,15 @@ namespace StardewArchipelago.Archipelago
 
         private T GetSlotSetting<T>(string key, T defaultValue) where T : struct, Enum, IConvertible
         {
-            return _slotDataFields.ContainsKey(key) ? Enum.Parse<T>(_slotDataFields[key].ToString(), true) : GetSlotDefaultValue(key, defaultValue);
+            if (_slotDataFields.ContainsKey(key))
+            {
+                if (Enum.TryParse<T>(_slotDataFields[key].ToString(), true, out var parsedValue))
+                {
+                    return parsedValue;
+                }
+            }
+
+            return GetSlotDefaultValue(key, defaultValue);
         }
 
         private string GetSlotSetting(string key, string defaultValue)
