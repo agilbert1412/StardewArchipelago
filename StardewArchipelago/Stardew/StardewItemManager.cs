@@ -30,7 +30,32 @@ namespace StardewArchipelago.Stardew
         private Dictionary<string, StardewWeapon> _weaponsById;
         private Dictionary<string, StardewWeapon> _weaponsByName;
         private Dictionary<string, StardewCookingRecipe> _cookingRecipesByName;
-        private Dictionary<string, StardewCraftingRecipe> _craftingRecipesByName;
+        private Dictionary<string, StardewCraftingRecipe> _craftingRecipesByName;        
+        private static readonly List<string> BlueColors = new()
+        {
+            "color_blue", "color_aquamarine", "color_dark_blue", "color_cyan", "color_light_cyan", "color_dark_cyan",
+        };
+        private static readonly List<string> GreyColors = new()
+        {
+            "color_gray", "color_black", "color_poppyseed", "color_dark_gray",
+        };
+        private static readonly List<string> RedColors = new()
+        {
+            "color_red", "color_pink", "color_dark_pink", "color_salmon",
+        };
+        private static readonly List<string> YellowColors = new()
+        {
+            "color_yellow", "color_gold", "color_sand", "color_dark_yellow",
+        };
+
+        private static readonly List<string> OrangeColors = new()
+        {
+            "color_orange", "color_dark_orange", "color_dark_brown", "color_brown", "color_copper",
+        };
+        private static readonly List<string> PurpleColors = new()
+        {
+            "color_purple", "color_dark_purple", "color_dark_pink", "color_pale_violet_red", "color_iridium",
+        };
 
         private List<string> _priorityIds = new()
         {
@@ -292,13 +317,13 @@ namespace StardewArchipelago.Stardew
             InitializeWeapons();
             InitializeCookingRecipes();
             InitializeCraftingRecipes();
-            InitializeObjectsByColor();
         }
 
         private void InitializeObjects()
         {
             _objectsById = new Dictionary<string, StardewObject>();
             _objectsByName = new Dictionary<string, StardewObject>();
+            _objectsByColor = new Dictionary<string, List<StardewObject>>();
             var allObjectData = DataLoader.Objects(Game1.content);
             foreach (var (id, objectData) in allObjectData)
             {
@@ -319,6 +344,8 @@ namespace StardewArchipelago.Stardew
 
                     continue;
                 }
+
+                AddObjectByColor(objectData, stardewItem);
 
                 _objectsById.Add(id, stardewItem);
                 _itemsByQualifiedId.Add(stardewItem.GetQualifiedId(), stardewItem);
@@ -493,9 +520,47 @@ namespace StardewArchipelago.Stardew
             }
         }
 
-        private void InitializeObjectsByColor()
+        private void AddObjectByColor(ObjectData objectData, StardewObject stardewObject)
         {
-            _objectsByColor = new Dictionary<string, List<StardewObject>>();
+            var firstColor = objectData.ContextTags.FirstOrDefault(x => x.Contains("color_"));
+            if (firstColor is null)
+            {
+                return;
+            }
+            else if (BlueColors.Contains(firstColor))
+            {
+                InitializeOrAddColorObject("Blue", stardewObject);
+            }
+            else if (GreyColors.Contains(firstColor))
+            {
+                InitializeOrAddColorObject("Grey", stardewObject);
+            }
+            else if (RedColors.Contains(firstColor))
+            {
+                InitializeOrAddColorObject("Red", stardewObject);
+            }
+            else if (YellowColors.Contains(firstColor))
+            {
+                InitializeOrAddColorObject("Yellow", stardewObject);
+            }
+            else if (OrangeColors.Contains(firstColor))
+            {
+                InitializeOrAddColorObject("Orange", stardewObject);
+            }
+            else if (PurpleColors.Contains(firstColor))
+            {
+                InitializeOrAddColorObject("Purple", stardewObject);
+            }
+
+        }
+
+        private void InitializeOrAddColorObject(string color, StardewObject stardewObject)
+        {
+            if (!_objectsByColor.ContainsKey(color))
+                {
+                    _objectsByColor[color] = new List<StardewObject>();
+                }
+                _objectsByColor[color].Append(stardewObject);
         }
 
         private StardewObject ParseStardewObjectData(string id, ObjectData objectData)
