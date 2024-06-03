@@ -628,7 +628,7 @@ namespace StardewArchipelago
 
         private void DebugMethod(string arg1, string[] arg2)
         {
-            _itemManager.ItemParser.TrapManager.ShuffleInventory();
+            ItemRegistry.GetDataOrErrorItem("(W)0");
         }
     }
 }

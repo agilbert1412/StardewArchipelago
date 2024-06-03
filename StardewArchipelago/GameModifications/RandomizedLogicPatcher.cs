@@ -5,7 +5,9 @@ using HarmonyLib;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants.Locations;
 using StardewArchipelago.GameModifications.CodeInjections;
+using StardewArchipelago.GameModifications.CodeInjections.Bundles;
 using StardewArchipelago.GameModifications.CodeInjections.Television;
 using StardewArchipelago.GameModifications.EntranceRandomizer;
 using StardewArchipelago.GameModifications.Seasons;
@@ -116,6 +118,7 @@ namespace StardewArchipelago.GameModifications
             PatchSecretNotes();
             PatchRecipes();
             PatchTooltips();
+            PatchBundles();
             _startingResources.GivePlayerStartingResources();
 
             PatchDebugMethods();
@@ -700,6 +703,14 @@ namespace StardewArchipelago.GameModifications
             _harmony.Patch(
                 original: AccessTools.Method(typeof(SpecialOrdersBoard), nameof(SpecialOrdersBoard.draw), boardDrawParameters),
                 postfix: new HarmonyMethod(typeof(SpecialOrderBoardInjections), nameof(SpecialOrderBoardInjections.Draw_AddArchipelagoIndicators_Postfix))
+            );
+        }
+
+        private void PatchBundles()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(JunimoNoteMenu), "setUpBundleSpecificPage"),
+                transpiler: new HarmonyMethod(typeof(BundleMenuInjection), nameof(BundleMenuInjection.SkipObjectCheck))
             );
         }
 
