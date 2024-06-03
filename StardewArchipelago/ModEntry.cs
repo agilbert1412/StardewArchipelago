@@ -447,7 +447,7 @@ namespace StardewArchipelago
             Helper.GameContent.InvalidateCache("Data/Shops"); // This should be reworked someday
             DoBugsCleanup();
 
-            _hintHelper?.GiveHintTip(_archipelago.Session);
+            _hintHelper.GiveHintTip(_archipelago.Session);
         }
 
         private void DoBugsCleanup()

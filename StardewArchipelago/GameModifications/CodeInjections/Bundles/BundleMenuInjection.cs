@@ -141,8 +141,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Bundles
 
             var getDataOrErrorItemMethodInfo = AccessTools.Method(typeof(ItemExtensions), nameof(ItemExtensions.HasTypeObject));
 
-            var foundMethod = -2; // -2 = not found, -1 = found, 0 = brfalse line, 1 = call line
-
+            var foundMethod = false;
             Label? label = null;
             var enumerator = instructions.GetEnumerator();
             enumerator.MoveNext();
@@ -150,18 +149,8 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Bundles
             while (enumerator.MoveNext())
             {
                 var newInstruction = enumerator.Current;
-                // The method was just found, we need to ignore the 3 instructions
-                if (foundMethod == 1)
-                {
-                    foundMethod = 0;
-                }
-                else if (foundMethod == 0)
-                {
-                    label = (Label)previousInstruction.operand;
-                    foundMethod = -1;
-                }
                 // Recognize the call of the method
-                else if (!newInstruction.Calls(getDataOrErrorItemMethodInfo))
+                if (!newInstruction.Calls(getDataOrErrorItemMethodInfo))
                 {
                     if (label is not null)
                     {
@@ -171,17 +160,21 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Bundles
                         }
                     }
                     yield return previousInstruction;
+                    previousInstruction = newInstruction;
                 }
                 else
                 {
-                    foundMethod = 1;
+                    foundMethod = true;
+                    enumerator.MoveNext();
+                    label = (Label)enumerator.Current.operand;
+                    enumerator.MoveNext();
+                    previousInstruction = enumerator.Current;
                 }
-                previousInstruction = newInstruction;
             }
             yield return previousInstruction;
             enumerator.Dispose();
 
-            if (foundMethod == -2)
+            if (!foundMethod)
             {
                 _monitor.Log("Community Center couldn't be patched to show anything", LogLevel.Error);
             }
