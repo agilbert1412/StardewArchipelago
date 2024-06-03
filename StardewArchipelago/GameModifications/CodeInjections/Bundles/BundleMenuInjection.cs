@@ -152,6 +152,10 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Bundles
                 // Recognize the call of the method
                 if (newInstruction.Calls(getDataOrErrorItemMethodInfo))
                 {
+                    if (foundMethod) // Second trigger of this method, which means Stardew code added a second unexppected call
+                    {
+                        _monitor.Log("Community Center object checking has been skipped more than once", LogLevel.Error);
+                    }
                     foundMethod = true;
                     enumerator.MoveNext();
                     label = (Label)enumerator.Current.operand;
