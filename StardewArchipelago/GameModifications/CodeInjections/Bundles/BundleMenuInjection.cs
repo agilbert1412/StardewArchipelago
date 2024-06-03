@@ -150,7 +150,15 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Bundles
             {
                 var newInstruction = enumerator.Current;
                 // Recognize the call of the method
-                if (!newInstruction.Calls(getDataOrErrorItemMethodInfo))
+                if (newInstruction.Calls(getDataOrErrorItemMethodInfo))
+                {
+                    foundMethod = true;
+                    enumerator.MoveNext();
+                    label = (Label)enumerator.Current.operand;
+                    enumerator.MoveNext();
+                    previousInstruction = enumerator.Current;
+                }
+                else
                 {
                     if (label is not null)
                     {
@@ -161,14 +169,6 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Bundles
                     }
                     yield return previousInstruction;
                     previousInstruction = newInstruction;
-                }
-                else
-                {
-                    foundMethod = true;
-                    enumerator.MoveNext();
-                    label = (Label)enumerator.Current.operand;
-                    enumerator.MoveNext();
-                    previousInstruction = enumerator.Current;
                 }
             }
             yield return previousInstruction;
