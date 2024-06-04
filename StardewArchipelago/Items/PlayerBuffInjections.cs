@@ -62,7 +62,9 @@ namespace StardewArchipelago.Items
                 }
 
                 var baseCoefficient = 1.0f;
-                var totalCoefficient = baseCoefficient + (0.25f * _numberOfSpeedBonuses);
+                var configValue = ModEntry.Instance.Config.BonusPerMovementSpeed;
+                var valuePerMovementSpeed = 0.05f * configValue;
+                var totalCoefficient = baseCoefficient + (valuePerMovementSpeed * _numberOfSpeedBonuses);
 
                 __result *= totalCoefficient;
                 return;
