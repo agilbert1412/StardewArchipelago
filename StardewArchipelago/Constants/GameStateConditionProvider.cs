@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using StardewValley;
 
 namespace StardewArchipelago.Constants
 {
@@ -38,6 +40,11 @@ namespace StardewArchipelago.Constants
         {
             var arguments = new[] { minimumStock.ToString() };
             return CreateCondition(HAS_STOCK_SIZE, arguments);
+        }
+
+        public static string CreateSeasonsCondition(string[] seasons)
+        {
+            return CreateCondition("SEASON", seasons);
         }
 
         public static string CreateCondition(string condition, string[] arguments)

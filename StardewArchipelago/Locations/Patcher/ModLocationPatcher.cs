@@ -251,6 +251,7 @@ namespace StardewArchipelago.Locations.Patcher
             {
                 return;
             }
+            _modHelper.Events.Content.AssetRequested += _sveShopStockModifier.OnShopStockRequested;
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Chest), nameof(Chest.checkForAction)),

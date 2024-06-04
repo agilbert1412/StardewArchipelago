@@ -5,11 +5,11 @@ using StardewArchipelago.Constants.Vanilla;
 
 namespace StardewArchipelago.Constants.Modded
 {
-    internal class ModQualifiedItemIds
+    internal class ModItemIds
     {
-        public static readonly string TEMPERED_DAGGER = QualifiedWeaponId("FlashShifter.StardewValleyExpandedCP_Tempered_Galaxy_Dagger");
-        public static readonly string TEMPERED_SWORD = QualifiedWeaponId("FlashShifter.StardewValleyExpandedCP_Tempered_Galaxy_Sword");
-        public static readonly string TEMPERED_HAMMER = QualifiedWeaponId("FlashShifter.StardewValleyExpandedCP_Tempered_Galaxy_Hammer");
+        public static readonly string TEMPERED_DAGGER = "FlashShifter.StardewValleyExpandedCP_Tempered_Galaxy_Dagger";
+        public static readonly string TEMPERED_SWORD = "FlashShifter.StardewValleyExpandedCP_Tempered_Galaxy_Sword";
+        public static readonly string TEMPERED_HAMMER = "FlashShifter.StardewValleyExpandedCP_Tempered_Galaxy_Hammer";
 
         private static string QualifiedObjectId(string objectId)
         {

@@ -204,6 +204,11 @@ namespace StardewArchipelago.Stardew
             throw new ArgumentException($"Item not found: {itemName}");
         }
 
+        public List<StardewObject> GetObjectsWithPhrase(string phrase)
+        {
+            return _objectsByName.Where(x=> x.Key.Contains(phrase, StringComparison.OrdinalIgnoreCase)).ToDictionary(x => x.Key, x => x.Value).Values.ToList(); // I do it all for the berry
+        }
+
         public List<StardewObject> GetObjectsByColor(string color)
         {
             if (_objectsByColor.ContainsKey(color))
@@ -522,10 +527,14 @@ namespace StardewArchipelago.Stardew
 
         private void AddObjectByColor(ObjectData objectData, StardewObject stardewObject)
         {
+            if (objectData.ContextTags is null)
+            {
+                return; //Its an object with no tags attached, so wouldn't have a color.
+            }
             var firstColor = objectData.ContextTags.FirstOrDefault(x => x.Contains("color_"));
             if (firstColor is null)
             {
-                return;
+                return; // There was no color tag found; throw it out.
             }
             else if (BlueColors.Contains(firstColor))
             {
@@ -560,7 +569,7 @@ namespace StardewArchipelago.Stardew
                 {
                     _objectsByColor[color] = new List<StardewObject>();
                 }
-                _objectsByColor[color].Append(stardewObject);
+                _objectsByColor[color].Add(stardewObject);
         }
 
         private StardewObject ParseStardewObjectData(string id, ObjectData objectData)
