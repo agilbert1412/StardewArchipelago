@@ -237,7 +237,7 @@ namespace StardewArchipelago.Archipelago
 
                     var color = Color.Gold;
 
-                    fullMessage = FixDatapackageIds(fullMessage);
+                    fullMessage = FixDatapackageIds(itemSendLogMessage, fullMessage);
 
                     Game1.chatBox?.addMessage(fullMessage, color);
                     return;
