@@ -262,8 +262,8 @@ namespace StardewArchipelago.Archipelago
         private string FixDatapackageIds(ItemSendLogMessage itemMessage, string message)
         {
             var item = itemMessage.Item;
-            var itemId = item.ItemId;
-            var itemName = GetItemName(item);
+            var itemId = item.Item;
+            var itemName = GetItemName(itemId);
             var fixedMessage = message.Replace(itemId.ToString(), itemName);
             var words = fixedMessage.Split(" ");
             var changed = false;
