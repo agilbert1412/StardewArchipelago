@@ -16,6 +16,10 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
     {
         private static new ArchipelagoClient _archipelago;
         private static new StardewItemManager _stardewItemManager;
+        private static readonly string SALMONBERRY_ID = "296";
+        private static readonly string BLACKBERRY_ID = "410";
+        private static readonly string SPICEBERRY_ID = "396";
+        private static readonly string CRYSTALFRUIT_ID = "414";
         public SVEShopStockModifier(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago, StardewItemManager stardewItemManager) : base(monitor, helper, archipelago, stardewItemManager)
         {
             _monitor = monitor;
@@ -101,32 +105,33 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
             foreach (var item in shopData.Items)
             {
                 var random = new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame / 2 + item.GetHashCode());
-                var chosenItemGroup = berryItems.FindAll(x => !(x.Name.Contains("Joja") && x.Name.Contains("Seeds")) && x.SellPrice != 0 );
+                var chosenItemGroup = berryItems.FindAll(x => !(x.Name.Contains("Joja") || x.Name.Contains("Seeds")) && x.SellPrice != 0 );
                 var chosenItem = chosenItemGroup[random.Next(chosenItemGroup.Count)];
-                if (item.IsRecipe && _archipelago.SlotData.Cooksanity.HasFlag(Cooksanity.All))
+                var isRecipe = item.ItemId.Contains("Baked Berry Oatmeal") || item.ItemId.Contains("Flower Cookie");
+                if (isRecipe && _archipelago.SlotData.Chefsanity.HasFlag(Chefsanity.Purchases))
                 {
-                    chosenItem = BerryIfCooksanityIsOn();
+                    chosenItem = BerryIfChefsanityIsOn();
                 }
                 newItems.Add(SwapItemToBerryBarter(item, chosenItem));
             }
             shopData.Items = newItems;
         }
 
-        private StardewObject BerryIfCooksanityIsOn()
+        private StardewObject BerryIfChefsanityIsOn()
         {
             if (Game1.season.HasFlag(Season.Spring))
             {
-                return _stardewItemManager.GetObjectById("296");
+                return _stardewItemManager.GetObjectById(SALMONBERRY_ID);
             }
             else if (Game1.season.HasFlag(Season.Summer))
             {
-                return _stardewItemManager.GetObjectById("396");
+                return _stardewItemManager.GetObjectById(SPICEBERRY_ID);
             }
             else if (Game1.season.HasFlag(Season.Fall))
             {
-                return _stardewItemManager.GetObjectById("410");
+                return _stardewItemManager.GetObjectById(BLACKBERRY_ID);
             }
-            return _stardewItemManager.GetObjectById("414");
+            return _stardewItemManager.GetObjectById(CRYSTALFRUIT_ID);
         }
 
         protected ShopItemData SwapItemToBerryBarter(ShopItemData item, StardewObject berryItem)
@@ -134,7 +139,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
             var hasKnowledge = _archipelago.HasReceivedItem("Bear Knowledge");
             var bearShopItem = item.DeepClone();
             bearShopItem.Id = $"{ModEntry.Instance.ModManifest.UniqueID}_{berryItem.Name.Replace(" ", "_")}";
-            var divisorBonus = hasKnowledge ? 2 : 1;
+            var divisorBonus = hasKnowledge ? 10 : 5;
             var chosenItemExchangeRate = ExchangeRate(item.Price / divisorBonus, berryItem.SellPrice);
             bearShopItem.TradeItemId = berryItem.Id;
             bearShopItem.Price = 0;
