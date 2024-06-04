@@ -21,6 +21,7 @@ namespace StardewArchipelago.Archipelago
 {
     public class ArchipelagoClient
     {
+        private const string MISSING_LOCATION_NAME = "Thin Air";
         public const string GAME_NAME = "Stardew Valley";
         private IMonitor _console;
         private IModHelper _modHelper;
@@ -271,7 +272,7 @@ namespace StardewArchipelago.Archipelago
                 if (long.TryParse(words[i], out var id) && words[i].StartsWith("7"))
                 {
                     var locationName = GetLocationName(id);
-                    if (!string.IsNullOrWhiteSpace(locationName) && locationName != words[i])
+                    if (!string.IsNullOrWhiteSpace(locationName) && locationName != words[i] && locationName != MISSING_LOCATION_NAME)
                     {
                         words[i] = locationName;
                         changed = true;
@@ -614,6 +615,12 @@ namespace StardewArchipelago.Archipelago
             if (string.IsNullOrWhiteSpace(locationName))
             {
                 locationName = _localDataPackage.GetLocalLocationName(locationId);
+            }
+
+            if (string.IsNullOrWhiteSpace(locationName))
+            {
+                _console.Log($"Failed at getting the location name for location {locationId}. This is probably due to a corrupted datapackage. Unexpected behaviors may follow", LogLevel.Error);
+                return MISSING_LOCATION_NAME;
             }
 
             return locationName;
