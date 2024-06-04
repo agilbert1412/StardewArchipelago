@@ -139,7 +139,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         /*private static readonly Dictionary<Skill, Dictionary<int, string[]>> _craftingRecipesBySkill = new()
         {
             {
-                Skill.Excavation, new Dictionary<int, string[]>()
+                Skill.Archaeology, new Dictionary<int, string[]>()
                 {
                     { 1, new[] { "Glass Bazier", "Glass Path", "Glass Fence" } },
                     { 2, new[] { "Preservation Chamber", "Wooden Display" } },

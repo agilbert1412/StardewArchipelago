@@ -71,7 +71,7 @@ namespace StardewArchipelago.Items.Unlocks.Modded
 
         private LetterAttachment SendProgressiveArchaeologyLevel(ReceivedItem receivedItem)
         {
-            ReceiveAPLevel("moonslime.Excavation");
+            ReceiveAPLevel("moonslime.Archaeology");
             return new LetterInformationAttachment(receivedItem);
         }
 
