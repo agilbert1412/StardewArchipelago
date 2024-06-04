@@ -345,6 +345,7 @@ namespace StardewArchipelago
             if (AttemptConnectionToArchipelago())
             {
                 InitializeAfterConnection();
+                DoArchipelagoDayStartedProcesses();
             }
         }
 
@@ -373,11 +374,6 @@ namespace StardewArchipelago
 
         private void OnDayStarted(object sender, DayStartedEventArgs e)
         {
-            if (!_archipelago.MakeSureConnected(5))
-            {
-                return;
-            }
-
             SeasonsRandomizer.ChangeMailKeysBasedOnSeasonsToDaysElapsed();
             SeasonsRandomizer.SendMailHardcodedForToday();
 
@@ -389,6 +385,16 @@ namespace StardewArchipelago
             }
 
             _questCleaner.CleanQuests(Game1.player);
+
+            DoArchipelagoDayStartedProcesses();
+        }
+
+        private void DoArchipelagoDayStartedProcesses()
+        {
+            if (!_archipelago.MakeSureConnected(5))
+            {
+                return;
+            }
 
             FarmInjections.DeleteStartingDebris();
             FarmInjections.PlaceEarlyShippingBin();
@@ -404,10 +410,12 @@ namespace StardewArchipelago
             {
                 _archipelago.SlotData.AppearanceRandomization = State.AppearanceRandomizerOverride.Value;
             }
+
             if (State.TrapDifficultyOverride != null)
             {
                 _archipelago.SlotData.TrapItemsDifficulty = State.TrapDifficultyOverride.Value;
             }
+
             _appearanceRandomizer.ShuffleCharacterAppearances();
             _entranceManager.ResetCheckedEntrancesToday(_archipelago.SlotData);
             TheaterInjections.UpdateScheduleForEveryone();
