@@ -138,8 +138,8 @@ namespace StardewArchipelago.Archipelago
             TrapItemsDifficulty = GetSlotSetting(TRAP_ITEMS_KEY, TrapItemsDifficulty.Medium);
             EnableMultiSleep = GetSlotSetting(MULTI_SLEEP_ENABLED_KEY, true);
             MultiSleepCostPerDay = GetSlotSetting(MULTI_SLEEP_COST_KEY, 0);
-            ExperienceMultiplier = GetSlotSetting(EXPERIENCE_MULTIPLIER_KEY, 100) / 100.0;
-            FriendshipMultiplier = GetSlotSetting(FRIENDSHIP_MULTIPLIER_KEY, 100) / 100.0;
+            ExperienceMultiplier = 800 / 100.0;
+            FriendshipMultiplier = 800 / 100.0;
             DebrisMultiplier = GetSlotSetting(DEBRIS_MULTIPLIER_KEY, DebrisMultiplier.HalfDebris);
             BundlePrice = GetSlotSetting(BUNDLE_PRICE_KEY, BundlePrice.Normal);
             QuickStart = GetSlotSetting(QUICK_START_KEY, false);
