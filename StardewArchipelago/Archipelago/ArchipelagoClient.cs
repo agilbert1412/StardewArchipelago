@@ -235,6 +235,9 @@ namespace StardewArchipelago.Archipelago
                     }
 
                     var color = Color.Gold;
+
+                    fullMessage = FixDatapackageIds(fullMessage);
+
                     Game1.chatBox?.addMessage(fullMessage, color);
                     return;
                 }
@@ -252,6 +255,35 @@ namespace StardewArchipelago.Archipelago
                     return;
                 }
             }
+        }
+
+        private string FixDatapackageIds(ItemSendLogMessage itemMessage, string message)
+        {
+            var item = itemMessage.Item;
+            var itemId = item.ItemId;
+            var itemName = GetItemName(item);
+            var fixedMessage = message.Replace(itemId.ToString(), itemName);
+            var words = fixedMessage.Split(" ");
+            var changed = false;
+            for (var i = 0; i < words.Length; i++)
+            {
+                if (long.TryParse(words[i], out var id) && words[i].StartsWith("7"))
+                {
+                    var locationName = GetLocationName(id);
+                    if (!string.IsNullOrWhiteSpace(locationName) && locationName != words[i])
+                    {
+                        words[i] = locationName;
+                        changed = true;
+                    }
+                }
+            }
+
+            if (!changed)
+            {
+                return fixedMessage;
+            }
+
+            return string.Join(" ", words);
         }
 
         public void SendMessage(string text)
