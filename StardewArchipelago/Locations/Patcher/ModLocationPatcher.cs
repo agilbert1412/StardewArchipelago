@@ -137,21 +137,21 @@ namespace StardewArchipelago.Locations.Patcher
                 return;
             }
 
-            var excavationConfigType = AccessTools.TypeByName("ArchaeologySkill.Config");
+            var archaeologyConfigType = AccessTools.TypeByName("ArchaeologySkill.Config");
             _harmony.Patch(
-                original: AccessTools.PropertyGetter(excavationConfigType, "ExperienceFromArtifactSpots"),
+                original: AccessTools.PropertyGetter(archaeologyConfigType, "ExperienceFromArtifactSpots"),
                 postfix: new HarmonyMethod(typeof(ArchaeologyConfigCodeInjections), nameof(ArchaeologyConfigCodeInjections.ExperienceFromArtifactSpots_APMultiplier_Postfix))
             );
             _harmony.Patch(
-                original: AccessTools.PropertyGetter(excavationConfigType, "ExperienceFromPanSpots"),
+                original: AccessTools.PropertyGetter(archaeologyConfigType, "ExperienceFromPanSpots"),
                 postfix: new HarmonyMethod(typeof(ArchaeologyConfigCodeInjections), nameof(ArchaeologyConfigCodeInjections.ExperienceFromPanSpots_APMultiplier_Postfix))
             );
             _harmony.Patch(
-                original: AccessTools.PropertyGetter(excavationConfigType, "ExperienceFromMinesDigging"),
+                original: AccessTools.PropertyGetter(archaeologyConfigType, "ExperienceFromMinesDigging"),
                 postfix: new HarmonyMethod(typeof(ArchaeologyConfigCodeInjections), nameof(ArchaeologyConfigCodeInjections.ExperienceFromMinesDigging_APMultiplier_Postfix))
             );
             _harmony.Patch(
-                original: AccessTools.PropertyGetter(excavationConfigType, "ExperienceFromWaterShifter"),
+                original: AccessTools.PropertyGetter(archaeologyConfigType, "ExperienceFromWaterShifter"),
                 postfix: new HarmonyMethod(typeof(ArchaeologyConfigCodeInjections), nameof(ArchaeologyConfigCodeInjections.ExperienceFromWaterShifter_APMultiplier_Postfix))
             );
         }
