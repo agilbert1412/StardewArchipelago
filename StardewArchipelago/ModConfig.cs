@@ -41,6 +41,12 @@
         public bool DisableFriendshipDecay { get; set; } = false;
 
         /// <summary>
+        /// Amount of speed gained per movement speed bonus received
+        /// Multiplied by 0.05 in-game
+        /// </summary>
+        public int BonusPerMovementSpeed { get; set; } = 5;
+
+        /// <summary>
         /// Whether to display archipelago icons on the calendar for dates where the player has checks to do
         /// </summary>
         public bool ShowCalendarIndicators { get; set; } = true;

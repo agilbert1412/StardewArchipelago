@@ -152,6 +152,18 @@ namespace StardewArchipelago.Integrations.GenericModConfigMenu
                 getValue: () => Config.DisableFriendshipDecay,
                 setValue: (value) => Config.DisableFriendshipDecay = value
             );
+            
+            configMenu.AddNumberOption(
+                mod: ModManifest,
+                name: () => "Bonus Per Movement Speed",
+                tooltip: () => "Speed increase per movement speed bonus received.",
+                min: 0,
+                max: 20,
+                interval: 1,
+                getValue: () => Config.BonusPerMovementSpeed,
+                setValue: (value) => Config.BonusPerMovementSpeed = value,
+                formatValue: (value) => $"{value * 5}%"
+            );
 
             configMenu.AddBoolOption(
                 mod: ModManifest,
