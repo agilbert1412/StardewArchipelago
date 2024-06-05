@@ -411,6 +411,7 @@ namespace StardewArchipelago
             if (AttemptConnectionToArchipelago())
             {
                 InitializeAfterConnection();
+                DoArchipelagoDayStartedProcesses();
             }
         }
 
@@ -439,11 +440,6 @@ namespace StardewArchipelago
 
         private void OnDayStarted(object sender, DayStartedEventArgs e)
         {
-            if (!_archipelago.MakeSureConnected(5))
-            {
-                return;
-            }
-
             SeasonsRandomizer.ChangeMailKeysBasedOnSeasonsToDaysElapsed();
             SeasonsRandomizer.SendMailHardcodedForToday();
 
@@ -455,6 +451,16 @@ namespace StardewArchipelago
             }
 
             _questCleaner.CleanQuests(Game1.player);
+
+            DoArchipelagoDayStartedProcesses();
+        }
+
+        private void DoArchipelagoDayStartedProcesses()
+        {
+            if (!_archipelago.MakeSureConnected(5))
+            {
+                return;
+            }
 
             FarmInjections.DeleteStartingDebris();
             FarmInjections.PlaceEarlyShippingBin();
