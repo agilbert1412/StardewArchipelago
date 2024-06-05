@@ -1,4 +1,6 @@
-﻿namespace StardewArchipelago
+﻿using StardewArchipelago.Archipelago;
+
+namespace StardewArchipelago
 {
     public class ModConfig
     { 
@@ -45,6 +47,21 @@
         /// Multiplied by 0.05 in-game
         /// </summary>
         public int BonusPerMovementSpeed { get; set; } = 5;
+
+        /// <summary>
+        /// Which Item messages should be displayed in the game chatbox
+        /// </summary>
+        public ChatItemsFilter DisplayItemsInChat { get; set; } = ChatItemsFilter.RelatedToMe;
+
+        /// <summary>
+        /// Should the join and leave messages of other players be displayed in the game chatbox
+        /// </summary>
+        public bool EnableConnectionMessages { get; set; } = true;
+
+        /// <summary>
+        /// Should the chat messages of other players be displayed in the game chatbox
+        /// </summary>
+        public bool EnableChatMessages { get; set; } = true;
 
         /// <summary>
         /// Whether to display archipelago icons on the calendar for dates where the player has checks to do

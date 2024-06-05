@@ -225,13 +225,23 @@ namespace StardewArchipelago.Archipelago
             {
                 case ChatLogMessage chatMessage:
                 {
+                    if (!ModEntry.Instance.Config.EnableChatMessages)
+                    {
+                        return;
+                    }
+
                     var color = chatMessage.Player.Name.GetAsBrightColor();
                     Game1.chatBox?.addMessage(fullMessage, color);
                     return;
                 }
                 case ItemSendLogMessage itemSendLogMessage:
                 {
-                    if (!itemSendLogMessage.IsRelatedToActivePlayer)
+                    if (ModEntry.Instance.Config.DisplayItemsInChat == ChatItemsFilter.None)
+                    {
+                        return;
+                    }
+
+                    if (ModEntry.Instance.Config.DisplayItemsInChat == ChatItemsFilter.RelatedToMe && !itemSendLogMessage.IsRelatedToActivePlayer)
                     {
                         return;
                     }
@@ -246,6 +256,19 @@ namespace StardewArchipelago.Archipelago
                 case GoalLogMessage:
                 {
                     var color = Color.Green;
+                    Game1.chatBox?.addMessage(fullMessage, color);
+                    return;
+                }
+                case JoinLogMessage:
+                case LeaveLogMessage:
+                case TagsChangedLogMessage:
+                {
+                    if (!ModEntry.Instance.Config.EnableConnectionMessages)
+                    {
+                        return;
+                    }
+
+                    var color = Color.Gray;
                     Game1.chatBox?.addMessage(fullMessage, color);
                     return;
                 }
