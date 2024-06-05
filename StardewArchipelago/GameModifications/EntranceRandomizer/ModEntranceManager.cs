@@ -11,7 +11,10 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
         public static readonly Dictionary<string, Dictionary<string, string>> AlteredMapNamesFromVanilla = new()
         {
             {
-                "Stardew Valley Expanded", new() { { "Wizard Basement", "Custom_WizardBasement" } }
+                "Stardew Valley Expanded", new() 
+                { 
+                    { "Wizard Basement", "Custom_WizardBasement" },
+                }
             },
         };
 
@@ -70,6 +73,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Scarlett's House", "Custom_ScarlettHouse" },
             { "Wizard Basement", "Custom_WizardBasement" },
             { "Gunther's Bedroom", "Custom_GunthersRoom" },
+            { "Summit", "Custom_SVESummit"}
         };
 
         private static readonly Dictionary<string, string> _locationEugene = new()
