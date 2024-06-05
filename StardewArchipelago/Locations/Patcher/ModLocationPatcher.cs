@@ -23,7 +23,8 @@ namespace StardewArchipelago.Locations.Patcher
         private readonly IMonitor _monitor;
         private readonly IModHelper _modHelper;
         private ModsManager _modsManager;
-        private SVEShopStockModifier _sveShopStockModifier;
+        private TemperedShopStockModifier _temperedShopStockModifier;
+        private BearShopStockModifier _bearShopStockModifier;
 
         public ModLocationPatcher(Harmony harmony, IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, StardewItemManager stardewItemManager)
         {
@@ -32,7 +33,8 @@ namespace StardewArchipelago.Locations.Patcher
             _monitor = monitor;
             _modHelper = modHelper;
             _modsManager = archipelago.SlotData.Mods;
-            _sveShopStockModifier = new SVEShopStockModifier(monitor, modHelper, archipelago, stardewItemManager);
+            _temperedShopStockModifier = new TemperedShopStockModifier(monitor, modHelper, archipelago, stardewItemManager);
+            _bearShopStockModifier = new BearShopStockModifier(monitor, modHelper, archipelago, stardewItemManager);
 
         }
 
@@ -285,12 +287,14 @@ namespace StardewArchipelago.Locations.Patcher
             {
                 return;
             }
-            _modHelper.Events.Content.AssetRequested += _sveShopStockModifier.OnShopStockRequested;
+            _modHelper.Events.Content.AssetRequested += _temperedShopStockModifier.OnShopStockRequested;
+            _modHelper.Events.Content.AssetRequested += _bearShopStockModifier.OnShopStockRequested;
         }
 
         private void UnpatchSVEShops()
         {
-            _modHelper.Events.Content.AssetRequested -= _sveShopStockModifier.OnShopStockRequested;
+            _modHelper.Events.Content.AssetRequested -= _temperedShopStockModifier.OnShopStockRequested;
+            _modHelper.Events.Content.AssetRequested -= _bearShopStockModifier.OnShopStockRequested;
         }
 
         private void AddBoardingHouseInjections()

@@ -5,7 +5,7 @@ using Force.DeepCloner;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Modded;
-using StardewArchipelago.Constants.Vanilla;
+using StardewArchipelago.Locations.ShopStockModifiers;
 using StardewArchipelago.Stardew;
 using StardewArchipelago.Stardew.Ids.Vanilla;
 using StardewModdingAPI;
@@ -13,14 +13,14 @@ using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.GameData.Shops;
 
-namespace StardewArchipelago.Locations.ShopStockModifiers
+namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
 {
-    public class SVEShopStockModifier : ShopStockModifier
+    public class TemperedShopStockModifier : ShopStockModifier
     {
         private static new ArchipelagoClient _archipelago;
         private static new StardewItemManager _stardewItemManager;
         private static readonly string[] _shopsWithTemperedWeapons = new []{"FlashShifter.StardewValleyExpandedCP_AlesiaVendor", "FlashShifter.StardewValleyExpandedCP_IsaacVendor"};
-        public SVEShopStockModifier(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago, StardewItemManager stardewItemManager) : base(monitor, helper, archipelago, stardewItemManager)
+        public TemperedShopStockModifier(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago, StardewItemManager stardewItemManager) : base(monitor, helper, archipelago, stardewItemManager)
         {
             _monitor = monitor;
             _helper = helper;
@@ -38,9 +38,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
             e.Edit(asset =>
                 {
                     var shopsData = asset.AsDictionary<string, ShopData>().Data;
-                    var bearShop = shopsData["FlashShifter.StardewValleyExpandedCP_BearVendor"];
                     ReplaceShopsWithTemperedWeapons(shopsData);
-                    MakeBearBarter(bearShop);
                 },
                 AssetEditPriority.Late
             );
@@ -70,57 +68,6 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
                     }
                 }
             }
-        }
-
-        private void MakeBearBarter(ShopData shopData)
-        {
-            var berryItems = _stardewItemManager.GetObjectsWithPhrase("berry");
-            var newItems = new List<ShopItemData>();
-            var random = new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame / 2 + shopData.GetHashCode());
-            var chosenItemGroup = berryItems.Where(x => !(x.Name.Contains("Joja") || x.Name.Contains("Seeds")) && x.SellPrice != 0 ).ToList();
-            foreach (var item in shopData.Items)
-            {
-                
-                var chosenItem = chosenItemGroup[random.Next(chosenItemGroup.Count)];
-                var isRecipe = item.ItemId.Contains("Baked Berry Oatmeal") || item.ItemId.Contains("Flower Cookie");
-                if (isRecipe && _archipelago.SlotData.Chefsanity.HasFlag(Chefsanity.Purchases))
-                {
-                    chosenItem = BerryIfChefsanityIsOn();
-                }
-                newItems.Add(SwapItemToBerryBarter(item, chosenItem));
-            }
-            shopData.Items = newItems;
-        }
-
-        private StardewObject BerryIfChefsanityIsOn()
-        {
-            if (Game1.season.HasFlag(Season.Spring))
-            {
-                return _stardewItemManager.GetObjectById(ObjectIds.SALMONBERRY);
-            }
-            if (Game1.season.HasFlag(Season.Summer))
-            {
-                return _stardewItemManager.GetObjectById(ObjectIds.SPICE_BERRY);
-            }
-            if (Game1.season.HasFlag(Season.Fall))
-            {
-                return _stardewItemManager.GetObjectById(ObjectIds.BLACKBERRY);
-            }
-            return _stardewItemManager.GetObjectById(ObjectIds.CRYSTAL_FRUIT);
-        }
-
-        protected ShopItemData SwapItemToBerryBarter(ShopItemData item, StardewObject berryItem)
-        {
-            var hasKnowledge = _archipelago.HasReceivedItem("Bear Knowledge");
-            var bearShopItem = item.DeepClone();
-            bearShopItem.Id = IDProvider.CreateId(berryItem.Name.Replace(" ", "_"));
-            var divisorBonus = hasKnowledge ? 10 : 5;
-            var chosenItemExchangeRate = ExchangeRate(item.Price / divisorBonus, berryItem.SellPrice);
-            bearShopItem.TradeItemId = berryItem.Id;
-            bearShopItem.Price = 0;
-            bearShopItem.MinStack = chosenItemExchangeRate[0];
-            bearShopItem.TradeItemAmount = chosenItemExchangeRate[1];
-            return bearShopItem;
         }
 
         public int[] ExchangeRate(int soldItemValue, int requestedItemValue)

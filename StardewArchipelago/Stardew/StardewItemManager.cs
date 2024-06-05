@@ -511,7 +511,7 @@ namespace StardewArchipelago.Stardew
             {
                 return; // There was no color tag found; throw it out.
             }
-            if (firstColor == "color_rainbow")
+            if (firstColor == "color_rainbow" || firstColor == "color_white")
             {
                 InitializeOrAddColorObject("Blue", stardewObject);
                 InitializeOrAddColorObject("Grey", stardewObject);

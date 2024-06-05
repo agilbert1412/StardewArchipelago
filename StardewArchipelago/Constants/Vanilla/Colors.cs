@@ -4,7 +4,8 @@ namespace StardewArchipelago.Constants.Vanilla
 {
     public static class Colors
     {
-        public static readonly Dictionary<string, string> ContextToGeneralColor = new(){
+        public static readonly Dictionary<string, string> ContextToGeneralColor = new()
+        {
             {"color_blue", "Blue"},
             {"color_aquamarine", "Blue"},
             {"color_dark_blue", "Blue"},
@@ -17,7 +18,6 @@ namespace StardewArchipelago.Constants.Vanilla
             {"color_dark_gray", "Grey"},
             {"color_red", "Red"},
             {"color_pink", "Red"},
-            {"color_dark_pink", "Red"},
             {"color_salmon", "Red"},
             {"color_yellow", "Yellow"},
             {"color_gold", "Yellow"},
