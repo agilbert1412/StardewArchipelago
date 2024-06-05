@@ -773,7 +773,7 @@ namespace StardewArchipelago.Archipelago
                     _console.Log($"Could not scout location \"{locationName}\".");
                     return null;
                 }
-                
+
                 var itemName = GetItemName(scoutedItemInfo);
                 var playerSlotName = _session.Players.GetPlayerName(scoutedItemInfo.Player);
                 var classification = GetItemClassification(scoutedItemInfo.Flags);

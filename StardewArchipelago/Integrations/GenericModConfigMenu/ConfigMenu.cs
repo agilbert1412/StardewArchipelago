@@ -163,7 +163,7 @@ namespace StardewArchipelago.Integrations.GenericModConfigMenu
                 getValue: () => Config.DisableFriendshipDecay,
                 setValue: (value) => Config.DisableFriendshipDecay = value
             );
-            
+
             configMenu.AddNumberOption(
                 mod: ModManifest,
                 name: () => "Bonus Per Movement Speed",
