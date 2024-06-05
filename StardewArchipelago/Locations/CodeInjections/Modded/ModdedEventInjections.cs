@@ -98,7 +98,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
 
         public static void CheckCraftsanityLocation(string id)
         {
-            var isEventCraftsanityLocation = _archipelago.SlotData.Craftsanity.HasFlag(Craftsanity.All) && eventCrafting.Keys.Contains(id);
+            var isEventCraftsanityLocation = _archipelago.SlotData.Craftsanity == Craftsanity.All && eventCrafting.Keys.Contains(id);
             var isRecipeFromQuest = _archipelago.SlotData.QuestLocations.StoryQuestsEnabled && questEventsWithRecipes.Contains(id);
             if (!isRecipeFromQuest || !isEventCraftsanityLocation)
             {
@@ -178,7 +178,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 return;
             }
 
-            if (_archipelago.SlotData.Craftsanity.HasFlag(Craftsanity.All))
+            if (_archipelago.SlotData.Craftsanity == Craftsanity.All)
             {
                 var eventName = eventCrafting[eventID];
                 var recipeName = $"{eventName}{RECIPE_SUFFIX}";
@@ -211,7 +211,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 }
                 foreach(KeyValuePair<int, string> eventData in eventCrafting)
                 {
-                    if (__instance.id == eventData.Key && _archipelago.SlotData.Craftsanity.HasFlag(Craftsanity.All))
+                    if (__instance.id == eventData.Key && _archipelago.SlotData.Craftsanity == Craftsanity.All)
                     {
                         var recipeName = $"{eventData.Value}{RECIPE_SUFFIX}";
                         _locationChecker.AddCheckedLocation(recipeName);
