@@ -23,7 +23,7 @@ namespace StardewArchipelago.Constants
             return $"{QualifiedItemIds.ARCHIPELAGO_QUALIFER}{AP_LOCATION} {locationName}";
         }
 
-        private static string CreateId(string name)
+        public static string CreateId(string name)
         {
             return $"{ModEntry.Instance.ModManifest.UniqueID}.{name}";
         }

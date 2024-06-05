@@ -7,6 +7,7 @@ using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Locations.ShopStockModifiers;
 using StardewArchipelago.Stardew;
+using StardewArchipelago.Stardew.Ids.Vanilla;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -79,9 +80,9 @@ namespace StardewArchipelago.GameModifications.Modded
                     fishSeasons = fishData[id].Split("/")[6].Split(" ");
                 }
                 var fishItem = _stardewItemManager.GetObjectById(id);
-                var completeCondition = fishSeasons is not null ? 
-                $"{GameStateConditionProvider.CreateSeasonsCondition(fishSeasons)}, RANDOM 0.4 @addDailyLuck, PLAYER_HAS_CAUGHT_FISH Current {id}" : 
-                "RANDOM 0.4 @addDailyLuck, PLAYER_HAS_CAUGHT_FISH Current {fish.Key}";
+                var conditionIfNotNull = $"{GameStateConditionProvider.CreateSeasonsCondition(fishSeasons)}, RANDOM 0.4 @addDailyLuck, PLAYER_HAS_CAUGHT_FISH Current {id}";
+                var conditionIfNull = $"RANDOM 0.4 @addDailyLuck, PLAYER_HAS_CAUGHT_FISH Current {id}";
+                var completeCondition = fishSeasons is not null ? conditionIfNotNull : conditionIfNull;
                 shopData.Items.Add(CreateJunimoShopItem("Blue", fishItem, completeCondition));
             }
         }
@@ -94,8 +95,6 @@ namespace StardewArchipelago.GameModifications.Modded
             foreach (var rockId in mineralsFound)
             {
                 var mineralItem = _stardewItemManager.GetItemByQualifiedId(QualifiedItemIds.QualifiedObjectId(rockId));
-                if (rockId == "102") //No lost books smh get out
-                    continue;
                 shopData.Items.Add(CreateJunimoShopItem("Grey", mineralItem));
             }
         }
@@ -108,7 +107,7 @@ namespace StardewArchipelago.GameModifications.Modded
             foreach (var archId in artifactsFound)
             {
                 var archaeologyItem = _stardewItemManager.GetItemByQualifiedId(QualifiedItemIds.QualifiedObjectId(archId));
-                if (archId == "102") //No lost books smh get out
+                if (archId == ObjectIds.LOST_BOOK) //No lost books smh get out
                     continue;
                 shopData.Items.Add(CreateJunimoShopItem("Red", archaeologyItem));
             }
@@ -126,16 +125,16 @@ namespace StardewArchipelago.GameModifications.Modded
         private void GeneratePurpleJunimoStock(ShopData shopData)
         {
             shopData.Owners[0].Dialogues[0].Dialogue = _junimoPhrase["Purple"];
-            var itemToKeep = shopData.Items.Where(x => x.ItemId == "FlashShifter.StardewValleyExpandedCP_Super_Starfruit").ToList()[0];
+            var itemToKeep = shopData.Items.First(x => x.ItemId == "FlashShifter.StardewValleyExpandedCP_Super_Starfruit");
             shopData.Items.Clear();
             shopData.Items.Add(CreateJunimoShopItem("Purple", _stardewItemManager.GetObjectById(itemToKeep.Id), itemToKeep.Condition));
             itemToKeep.Condition = null; // The condition is purely for the super starfruit item.  We don't want it on anything else.
             shopData.Items.Add(CreateJunimoShopItem("Purple", _stardewItemManager.GetObjectByName("Magic Rock Candy")));
-            shopData.Items.Add(CreateJunimoShopItem("Purple", _stardewItemManager.GetObjectByName("Dewdrop Berry"), null, 4000));
-            shopData.Items.Add(CreateJunimoShopItem("Purple", _stardewItemManager.GetObjectByName("Qi Gem"), null, 10000));
-            shopData.Items.Add(CreateJunimoShopItem("Purple", _stardewItemManager.GetObjectByName("Calico Egg"), null, 500));
-            shopData.Items.Add(CreateJunimoShopItem("Purple", _stardewItemManager.GetObjectByName("Hardwood"), null, 500));
-            shopData.Items.Add(CreateJunimoShopItem("Purple", _stardewItemManager.GetObjectByName("Tea Set"), null, 100000));
+            shopData.Items.Add(CreateJunimoShopItem("Purple", _stardewItemManager.GetObjectByName("Dewdrop Berry"), overridePrice: 4000));
+            shopData.Items.Add(CreateJunimoShopItem("Purple", _stardewItemManager.GetObjectByName("Qi Gem"), overridePrice: 10000));
+            shopData.Items.Add(CreateJunimoShopItem("Purple", _stardewItemManager.GetObjectByName("Calico Egg"), overridePrice: 500));
+            shopData.Items.Add(CreateJunimoShopItem("Purple", _stardewItemManager.GetObjectByName("Hardwood"), overridePrice: 500));
+            shopData.Items.Add(CreateJunimoShopItem("Purple", _stardewItemManager.GetObjectByName("Tea Set"), overridePrice: 100000));
         }
 
         private void GenerateYellowJunimoStock(ShopData shopData)
@@ -146,33 +145,30 @@ namespace StardewArchipelago.GameModifications.Modded
             AddSummerSeedsToYellowStock(shopData);
             AddFallSeedsToYellowStock(shopData);
             AddSaplingsToShop(shopData);
-            shopData.Items.Add(CreateJunimoSeedItem(QualifiedItemIds.RHUBARB_SEEDS));
-            shopData.Items.Add(CreateJunimoSeedItem(QualifiedItemIds.STARFRUIT_SEEDS));
-            shopData.Items.Add(CreateJunimoSeedItem(QualifiedItemIds.BEET_SEEDS));
+            shopData.Items.Add(CreateJunimoSeedItem(QualifiedItemIds.RHUBARB_SEEDS, spring));
+            shopData.Items.Add(CreateJunimoSeedItem(QualifiedItemIds.STARFRUIT_SEEDS, summer));
+            shopData.Items.Add(CreateJunimoSeedItem(QualifiedItemIds.BEET_SEEDS, fall));
         }
 
         protected ShopItemData CreateJunimoShopItem(string color, StardewItem stardewItem, string condition = null, int overridePrice = 0)
         {
             var junimoShopItem = new ShopItemData();
             var itemPrice = overridePrice == 0 ? stardewItem.SellPrice : overridePrice;
-            junimoShopItem.Id = $"{ModEntry.Instance.ModManifest.UniqueID}_{stardewItem.Name.Replace(" ", "_")}";
+            junimoShopItem.Id = IDProvider.CreateId(stardewItem.Name.Replace(" ", "_"));
             junimoShopItem.ItemId = stardewItem.Id;
             junimoShopItem.AvailableStock = StockBasedOnApplesFriendship();
             junimoShopItem.IsRecipe = false;
             junimoShopItem.AvoidRepeat = true;
             var random = new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame / 2 + stardewItem.GetHashCode());
-            var chosenItemGroup = _stardewItemManager.GetObjectsByColor(color).Where(x => x.SellPrice != 0).ToList();
-            var chosenItem = chosenItemGroup[random.Next(chosenItemGroup.Count)];
-            var chosenItemExchangeRate = ExchangeRate(itemPrice, chosenItem.SellPrice);
+            var chosenItemGroup = _stardewItemManager.GetObjectsByColor(color).Where(x => x.SellPrice > 0).ToArray();
+            var chosenItem = chosenItemGroup[random.Next(chosenItemGroup.Length)];
+            var chosenItemExchangeRate = GetExchangeRate(itemPrice, chosenItem.SellPrice);
             junimoShopItem.TradeItemId = chosenItem.Id;
             junimoShopItem.Price = 0;
             junimoShopItem.MinStack = chosenItemExchangeRate[0];
             junimoShopItem.TradeItemAmount = chosenItemExchangeRate[1];
 
-            if (condition is not null)
-            {
-                junimoShopItem.Condition = condition;
-            }
+            junimoShopItem.Condition = condition;
 
             return junimoShopItem;
         }
@@ -181,18 +177,18 @@ namespace StardewArchipelago.GameModifications.Modded
         protected void SwapJunimoShopItemWithColor(string color, ShopItemData item)
         {
             var random = new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame / 2 + item.GetHashCode());
-            var chosenItemGroup = _stardewItemManager.GetObjectsByColor(color).Where(x => x.SellPrice != 0).ToList();
-            var chosenItem = chosenItemGroup[random.Next(chosenItemGroup.Count)];
-            var chosenItemExchangeRate = ExchangeRate(item.Price, chosenItem.SellPrice);
+            var chosenItemGroup = _stardewItemManager.GetObjectsByColor(color).Where(x => x.SellPrice != 0).ToArray();
+            var chosenItem = chosenItemGroup[random.Next(chosenItemGroup.Length)];
+            var chosenItemExchangeRate = GetExchangeRate(item.Price, chosenItem.SellPrice);
             item.Price = 0;
             item.TradeItemId = chosenItem.Id;
             item.TradeItemAmount = chosenItemExchangeRate[1];
             item.MinStack = chosenItemExchangeRate[0];
         }
 
-        public int[] ExchangeRate(int soldItemValue, int requestedItemValue)
+        public int[] GetExchangeRate(int soldItemValue, int requestedItemValue)
         {
-            if (IsOnePriceAMultipleOfOther(soldItemValue, requestedItemValue, out var exchangeRate))
+            if (TryGetDirectExchangeRate(soldItemValue, requestedItemValue, out var exchangeRate))
             {
                 return exchangeRate;
             }
@@ -210,7 +206,7 @@ namespace StardewArchipelago.GameModifications.Modded
             return finalCounts;
         }
 
-        private bool IsOnePriceAMultipleOfOther(int soldItemValue, int requestedItemValue, out int[] exchangeRate)
+        private bool TryGetDirectExchangeRate(int soldItemValue, int requestedItemValue, out int[] exchangeRate)
         {
             exchangeRate = null;
             if (soldItemValue > requestedItemValue && soldItemValue % requestedItemValue == 0)
@@ -272,7 +268,9 @@ namespace StardewArchipelago.GameModifications.Modded
         private ShopItemData CreateJunimoSeedItem(string qualifiedId, string[] season = null)
         {
             var seedItemName = _stardewItemManager.GetItemByQualifiedId(qualifiedId).Name;
-            var condition = season is not null ? $"{GameStateConditionProvider.CreateSeasonsCondition(season)}, {GameStateConditionProvider.CreateHasReceivedItemCondition(seedItemName)}, RANDOM 0.4 @addDailyLuck" : $"{GameStateConditionProvider.CreateHasReceivedItemCondition(seedItemName)}, RANDOM 0.4 @addDailyLuck";
+            var seasonIsNotNull = $"{GameStateConditionProvider.CreateSeasonsCondition(season)}, {GameStateConditionProvider.CreateHasReceivedItemCondition(seedItemName)}, RANDOM 0.4 @addDailyLuck";
+            var seasonIsNull = $"{GameStateConditionProvider.CreateHasReceivedItemCondition(seedItemName)}, RANDOM 0.4 @addDailyLuck";
+            var condition = season is not null ?  seasonIsNotNull : seasonIsNull;
             return CreateJunimoShopItem("Yellow", _stardewItemManager.GetItemByQualifiedId(qualifiedId), condition);
         }
 

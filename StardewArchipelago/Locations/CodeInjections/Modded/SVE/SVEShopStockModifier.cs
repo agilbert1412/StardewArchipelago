@@ -6,6 +6,7 @@ using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Stardew;
+using StardewArchipelago.Stardew.Ids.Vanilla;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -17,10 +18,6 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
     {
         private static new ArchipelagoClient _archipelago;
         private static new StardewItemManager _stardewItemManager;
-        private static readonly string SALMONBERRY_ID = "296";
-        private static readonly string BLACKBERRY_ID = "410";
-        private static readonly string SPICEBERRY_ID = "396";
-        private static readonly string CRYSTALFRUIT_ID = "414";
         public SVEShopStockModifier(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago, StardewItemManager stardewItemManager) : base(monitor, helper, archipelago, stardewItemManager)
         {
             _monitor = monitor;
@@ -28,14 +25,6 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
             _archipelago = archipelago;
             _stardewItemManager = stardewItemManager;
         }
-
-        /*private static readonly Dictionary<string, Item> seasonalBerry = new()
-        {
-            { "spring", new Object("296", 1) },
-            { "summer", new Object("396", 1) },
-            { "fall", new Object("410", 1) },
-            { "winter", new Object("414", 1) },
-        };*/
 
         public override void OnShopStockRequested(object sender, AssetRequestedEventArgs e)
         {
@@ -123,17 +112,17 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
         {
             if (Game1.season.HasFlag(Season.Spring))
             {
-                return _stardewItemManager.GetObjectById(SALMONBERRY_ID);
+                return _stardewItemManager.GetObjectById(ObjectIds.SALMONBERRY);
             }
             else if (Game1.season.HasFlag(Season.Summer))
             {
-                return _stardewItemManager.GetObjectById(SPICEBERRY_ID);
+                return _stardewItemManager.GetObjectById(ObjectIds.SPICE_BERRY);
             }
             else if (Game1.season.HasFlag(Season.Fall))
             {
-                return _stardewItemManager.GetObjectById(BLACKBERRY_ID);
+                return _stardewItemManager.GetObjectById(ObjectIds.BLACKBERRY);
             }
-            return _stardewItemManager.GetObjectById(CRYSTALFRUIT_ID);
+            return _stardewItemManager.GetObjectById(ObjectIds.CRYSTAL_FRUIT);
         }
 
         protected ShopItemData SwapItemToBerryBarter(ShopItemData item, StardewObject berryItem)
