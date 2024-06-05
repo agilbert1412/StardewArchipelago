@@ -62,15 +62,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
 
         private StardewObject BerryIfChefsanityIsOn()
         {
-            if (Game1.season.HasFlag(Season.Spring))
+            if (Game1.season == Season.Spring)
             {
                 return _stardewItemManager.GetObjectById(ObjectIds.SALMONBERRY);
             }
-            if (Game1.season.HasFlag(Season.Summer))
+            if (Game1.season == Season.Summer)
             {
                 return _stardewItemManager.GetObjectById(ObjectIds.SPICE_BERRY);
             }
-            if (Game1.season.HasFlag(Season.Fall))
+            if (Game1.season == Season.Fall)
             {
                 return _stardewItemManager.GetObjectById(ObjectIds.BLACKBERRY);
             }

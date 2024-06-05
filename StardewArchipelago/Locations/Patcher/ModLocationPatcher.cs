@@ -263,7 +263,7 @@ namespace StardewArchipelago.Locations.Patcher
             );
 
             _harmony.Patch(
-                original: AccessTools.Method(typeof(Event), nameof(Event.endBehaviors), parameters: new Type[2]{typeof(string[]), typeof(GameLocation)}),
+                original: AccessTools.Method(typeof(Event), nameof(Event.endBehaviors), parameters: new []{typeof(string[]), typeof(GameLocation)}),
                 prefix: new HarmonyMethod(typeof(SVECutsceneInjections), nameof(SVECutsceneInjections.EndBehaviors_AddSpecialOrderAfterEvent_Prefix))
             );
             var specialOrderAfterEventsType = AccessTools.TypeByName("AddSpecialOrdersAfterEvents");
