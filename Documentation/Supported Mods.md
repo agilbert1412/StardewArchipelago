@@ -61,6 +61,7 @@ Alternatively, the [weighted settings page](https://archipelago.gg/weighted-opti
 The addition of 1.6 caused a bit of strain for every mod developer, and so not every mod was updated to be compatible with 1.6.
 
 The following mods have technical mod support, but are temporarily deprecated as we wait for them to update.  Do not use them for now:
+- [Boarding House and Bus Stop Extension](https://www.nexusmods.com/stardewvalley/mods/4120) by TrentXV, Version 4.0.16
 - [DeepWoods](https://www.nexusmods.com/stardewvalley/mods/2571), by Max Vollmer, Version 3.1.0-beta
 - [Magic](https://www.nexusmods.com/stardewvalley/mods/2007), by spacechase0, Version 0.8.2
 - [Cooking Skill](https://www.nexusmods.com/stardewvalley/mods/522), by spacechase0, Version 1.4.5
