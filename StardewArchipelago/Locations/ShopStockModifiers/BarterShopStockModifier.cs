@@ -44,7 +44,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
 
         protected void ReplaceCurrencyWithBarterGivenObjects(List<StardewObject> stardewObjects, ShopItemData item, int offeredStock = 1, double discount = 1)
         {
-            var random = new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame / 2 + item.GetHashCode());
+            var random = new Random((int)(Game1.stats.DaysPlayed / 28) + (int)(Game1.uniqueIDForThisGame / 2) + item.GetHashCode());
             var chosenItemGroup = stardewObjects.Where(x => x.SellPrice != 0).ToArray();
             var chosenItem = chosenItemGroup[random.Next(chosenItemGroup.Length)];
             var newPrice = (int)(discount * item.Price);
