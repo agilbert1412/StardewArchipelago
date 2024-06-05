@@ -64,7 +64,7 @@ namespace StardewArchipelago.Locations.Patcher
             );
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Event), nameof(Event.tryEventCommand)),
-                prefix: new HarmonyMethod(typeof(ModdedEventInjections), nameof(ModdedEventInjections.AddRecipe_CheckForStrayRecipe_Prefix))
+                prefix: new HarmonyMethod(typeof(ModdedEventInjections), nameof(ModdedEventInjections.TryEventCommand_CheckForStrayRecipe_Prefix))
             );
         }
 

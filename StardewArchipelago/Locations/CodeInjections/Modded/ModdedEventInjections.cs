@@ -56,7 +56,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         }
 
         //public tryEventCommand(GameLocation location, GameTime time, string[] args)
-        public static bool AddRecipe_CheckForStrayRecipe_Prefix(Event __instance, GameLocation location, GameTime time, string[] args)
+        public static bool TryEventCommand_CheckForStrayRecipe_Prefix(Event __instance, GameLocation location, GameTime time, string[] args)
         {
             try
             {
@@ -80,7 +80,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(AddRecipe_CheckForStrayRecipe_Prefix)}:\n{ex}", LogLevel.Error);
+                _monitor.Log($"Failed in {nameof(TryEventCommand_CheckForStrayRecipe_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
             }
         }
@@ -89,30 +89,22 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         {
             var isEventChefsanityLocation = _archipelago.SlotData.Chefsanity.HasFlag(Chefsanity.Friendship) && eventCooking.Keys.Contains(id);
             var isRecipeFromQuest = _archipelago.SlotData.QuestLocations.StoryQuestsEnabled && questEventsWithRecipes.Contains(id);
-            if (!isRecipeFromQuest && !isEventChefsanityLocation)
+            if (!isRecipeFromQuest || !isEventChefsanityLocation)
             {
                 return;
             }
-            if (!isRecipeFromQuest)
-            {
-                _locationChecker.AddCheckedLocation($"{eventCooking[id]}{RECIPE_SUFFIX}");
-            }
+             _locationChecker.AddCheckedLocation($"{eventCooking[id]}{RECIPE_SUFFIX}");
         }
 
         public static void CheckCraftsanityLocation(string id)
         {
             var isEventCraftsanityLocation = _archipelago.SlotData.Craftsanity.HasFlag(Craftsanity.All) && eventCrafting.Keys.Contains(id);
             var isRecipeFromQuest = _archipelago.SlotData.QuestLocations.StoryQuestsEnabled && questEventsWithRecipes.Contains(id);
-            if (!isRecipeFromQuest && !isEventCraftsanityLocation)
+            if (!isRecipeFromQuest || !isEventCraftsanityLocation)
             {
                 return;
             }
-
-            if (!isRecipeFromQuest)
-            {
-                _locationChecker.AddCheckedLocation($"{eventCrafting[id]}{RECIPE_SUFFIX}");
-            }
-
+            _locationChecker.AddCheckedLocation($"{eventCrafting[id]}{RECIPE_SUFFIX}");
         }
 
         public static bool SkipEvent_ReplaceRecipe_Prefix(Event __instance)
