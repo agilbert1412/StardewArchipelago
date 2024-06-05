@@ -46,7 +46,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
             var discount = BearDiscount();
             var stockCount = BearStockCount();
             var random = new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame / 2 + shopData.GetHashCode());
-            var chosenItemGroup = berryItems.Where(x => !(x.Name.Contains("Joja") || x.Name.Contains("Seeds")) && x.SellPrice != 0 ).ToList();
+            var chosenItemGroup = berryItems.Where(x => !(x.Name.Contains("Joja") || x.Name.Contains("Seeds")) && x.SellPrice > 0 ).ToList();
             foreach (var shopItem in shopData.Items)
             {
                 var isRecipe = shopItem.ItemId.Contains("Baked Berry Oatmeal") || shopItem.ItemId.Contains("Flower Cookie");
