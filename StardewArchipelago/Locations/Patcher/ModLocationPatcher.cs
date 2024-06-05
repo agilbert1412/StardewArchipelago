@@ -7,6 +7,8 @@ using StardewArchipelago.GameModifications.CodeInjections.Modded;
 using StardewArchipelago.Locations.CodeInjections.Modded;
 using StardewArchipelago.Locations.CodeInjections.Modded.SVE;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
+using StardewArchipelago.Locations.ShopStockModifiers;
+using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
@@ -21,14 +23,19 @@ namespace StardewArchipelago.Locations.Patcher
         private readonly IMonitor _monitor;
         private readonly IModHelper _modHelper;
         private ModsManager _modsManager;
+        private TemperedShopStockModifier _temperedShopStockModifier;
+        private BearShopStockModifier _bearShopStockModifier;
 
-        public ModLocationPatcher(Harmony harmony, IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago)
+        public ModLocationPatcher(Harmony harmony, IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, StardewItemManager stardewItemManager)
         {
             _archipelago = archipelago;
             _harmony = harmony;
             _monitor = monitor;
             _modHelper = modHelper;
             _modsManager = archipelago.SlotData.Mods;
+            _temperedShopStockModifier = new TemperedShopStockModifier(monitor, modHelper, archipelago, stardewItemManager);
+            _bearShopStockModifier = new BearShopStockModifier(monitor, modHelper, archipelago, stardewItemManager);
+
         }
 
         public void ReplaceAllLocationsRewardsWithChecks()
@@ -40,10 +47,16 @@ namespace StardewArchipelago.Locations.Patcher
             AddSVEModInjections();
             AddDistantLandsEventInjections();
             AddBoardingHouseInjections();
+            PatchSVEShops();
+            
         }
 
         public void CleanEvents()
         {
+            if (_modsManager.HasMod(ModNames.SVE))
+            {
+                UnpatchSVEShops();
+            }
         }
 
         private void AddDistantLandsEventInjections()
@@ -53,25 +66,18 @@ namespace StardewArchipelago.Locations.Patcher
                 return;
             }
 
-            throw new Exception($"{nameof(AddDistantLandsEventInjections)} is not ready for 1.6");
-            //_harmony.Patch(
-            //    original: AccessTools.Method(typeof(Event), nameof(Event.skipEvent)),
-            //    prefix: new HarmonyMethod(typeof(ModdedEventInjections), nameof(ModdedEventInjections.SkipEvent_ReplaceRecipe_Prefix))
-            //);
-            //_harmony.Patch(
-            //    original: AccessTools.Method(typeof(Event), nameof(Event.command_addCookingRecipe)),
-            //    prefix: new HarmonyMethod(typeof(ModdedEventInjections), nameof(ModdedEventInjections.AddCookingRecipe_CheckForStrayRecipe_Prefix))
-            //);
-            //_harmony.Patch(
-            //    original: AccessTools.Method(typeof(Event), nameof(Event.command_addCraftingRecipe)),
-            //    prefix: new HarmonyMethod(typeof(ModdedEventInjections), nameof(ModdedEventInjections.AddCraftingRecipe_CheckForStrayRecipe_Prefix))
-            //);
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Event), nameof(Event.skipEvent)),
+                prefix: new HarmonyMethod(typeof(ModdedEventInjections), nameof(ModdedEventInjections.SkipEvent_ReplaceRecipe_Prefix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Event), nameof(Event.tryEventCommand)),
+                prefix: new HarmonyMethod(typeof(ModdedEventInjections), nameof(ModdedEventInjections.TryEventCommand_CheckForStrayRecipe_Prefix))
+            );
         }
 
         private void AddModSkillInjections()
         {
-            InjectSpaceCoreSkillsPage();
-
             if (!_modsManager.HasModdedSkill() || _archipelago.SlotData.SkillProgression == SkillsProgression.Vanilla)
             {
                 return;
@@ -99,24 +105,6 @@ namespace StardewArchipelago.Locations.Patcher
 
             InjectSocializingExperienceMultiplier();
             InjectArchaeologyExperienceMultiplier();
-        }
-
-        private void InjectSpaceCoreSkillsPage()
-        {
-            if (!_modsManager.ModIsInstalledAndLoaded(_modHelper, "SpaceCore"))
-            {
-                return;
-            }
-
-            var spaceCoreSkillsPageType = AccessTools.TypeByName("SpaceCore.Interface.NewSkillsPage");
-            var desiredNewSkillsPageCtorParameters = new[] { typeof(int), typeof(int), typeof(int), typeof(int) };
-            _harmony.Patch(
-                original: AccessTools.Constructor(spaceCoreSkillsPageType, desiredNewSkillsPageCtorParameters),
-                prefix: new HarmonyMethod(typeof(NewSkillsPageInjections),
-                    nameof(NewSkillsPageInjections.NewSkillsPageCtor_BearKnowledgeEvent_Prefix)),
-                postfix: new HarmonyMethod(typeof(NewSkillsPageInjections),
-                    nameof(NewSkillsPageInjections.NewSkillsPageCtor_BearKnowledgeEvent_Postfix))
-            );
         }
 
         private void InjectSocializingExperienceMultiplier()
@@ -267,26 +255,7 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void AddSVEModInjections()
         {
-            if (!_archipelago.SlotData.Mods.HasMod(ModNames.SVE))
-            {
-                return;
-            }
-
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(ShopMenu), nameof(ShopMenu.update)),
-                postfix: new HarmonyMethod(typeof(SVEShopInjections), nameof(SVEShopInjections.Update_ReplaceSVEShopChecks_Postfix))
-            );
-
-            var shopMenuParameterTypes = new[]
-            {
-                typeof(Dictionary<ISalable, int[]>), typeof(int), typeof(string),
-                typeof(Func<ISalable, Farmer, int, bool>), typeof(Func<ISalable, bool>), typeof(string),
-            };
-
-            _harmony.Patch(
-                original: AccessTools.Constructor(typeof(ShopMenu), shopMenuParameterTypes),
-                prefix: new HarmonyMethod(typeof(SVEShopInjections), nameof(SVEShopInjections.Constructor_MakeBothJojaShopsTheSame_Prefix))
-            );
+            
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Chest), nameof(Chest.checkForAction)),
@@ -294,7 +263,7 @@ namespace StardewArchipelago.Locations.Patcher
             );
 
             _harmony.Patch(
-                original: AccessTools.Method(typeof(Event), nameof(Event.endBehaviors)),
+                original: AccessTools.Method(typeof(Event), nameof(Event.endBehaviors), parameters: new []{typeof(string[]), typeof(GameLocation)}),
                 prefix: new HarmonyMethod(typeof(SVECutsceneInjections), nameof(SVECutsceneInjections.EndBehaviors_AddSpecialOrderAfterEvent_Prefix))
             );
             var specialOrderAfterEventsType = AccessTools.TypeByName("AddSpecialOrdersAfterEvents");
@@ -310,6 +279,22 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(disableShadowAttacksType, "FixMonsterSlayerQuest"),
                 postfix: new HarmonyMethod(typeof(SVECutsceneInjections), nameof(SVECutsceneInjections.FixMonsterSlayerQuest_IncludeReleaseofGoals_Postfix))
             );
+        }
+
+        private void PatchSVEShops()
+        {
+            if (!_archipelago.SlotData.Mods.HasMod(ModNames.SVE))
+            {
+                return;
+            }
+            _modHelper.Events.Content.AssetRequested += _temperedShopStockModifier.OnShopStockRequested;
+            _modHelper.Events.Content.AssetRequested += _bearShopStockModifier.OnShopStockRequested;
+        }
+
+        private void UnpatchSVEShops()
+        {
+            _modHelper.Events.Content.AssetRequested -= _temperedShopStockModifier.OnShopStockRequested;
+            _modHelper.Events.Content.AssetRequested -= _bearShopStockModifier.OnShopStockRequested;
         }
 
         private void AddBoardingHouseInjections()

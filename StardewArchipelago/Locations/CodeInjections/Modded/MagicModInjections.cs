@@ -117,7 +117,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
 
         private static void ReplaceCraftsanityRecipes(ShopMenu shopMenu, Hint[] myActiveHints)
         {
-            if (!_archipelago.SlotData.Craftsanity.HasFlag(Craftsanity.All))
+            if (_archipelago.SlotData.Craftsanity != Craftsanity.All)
             {
                 return;
             }

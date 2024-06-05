@@ -90,7 +90,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
 
             if (item.IsRecipe)
             {
-                var stardewItem = _stardewItemManager.GetItemByQualifiedId(item.ItemId);
+                var stardewItem = _stardewItemManager.GetItemByQualifiedId(item.ItemId) ?? _stardewItemManager.GetItemByQualifiedId(QualifiedItemIds.QualifiedObjectId(item.ItemId));
                 var location = $"{stardewItem.Name}{Suffix.RECIPE}";
                 if (_archipelago.LocationExists(location))
                 {

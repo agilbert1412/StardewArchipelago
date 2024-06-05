@@ -136,7 +136,7 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string GOLDEN_COCONUT = QualifiedObjectId(ObjectIds.GOLDEN_COCONUT);
         public static readonly string MUMMIFIED_BAT = QualifiedObjectId(ObjectIds.MUMMIFIED_BAT);
 
-        private static string QualifiedObjectId(string objectId)
+        public static string QualifiedObjectId(string objectId)
         {
             if (objectId == null)
             {

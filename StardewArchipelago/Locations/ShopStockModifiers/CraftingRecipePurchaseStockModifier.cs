@@ -1,5 +1,6 @@
 ﻿using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Locations;
+using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -50,7 +51,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
                     continue;
                 }
 
-                var stardewItem = _stardewItemManager.GetItemByQualifiedId(item.ItemId);
+                var stardewItem = _stardewItemManager.GetItemByQualifiedId(item.ItemId) ?? _stardewItemManager.GetItemByQualifiedId(QualifiedItemIds.QualifiedObjectId(item.ItemId));
                 if (!CraftingRecipe.craftingRecipes.ContainsKey(stardewItem.Name))
                 {
                     continue;

@@ -8,6 +8,16 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
     public class ModEntranceManager
     {
 
+        public static readonly Dictionary<string, Dictionary<string, string>> AlteredMapNamesFromVanilla = new()
+        {
+            {
+                "Stardew Valley Expanded", new() 
+                { 
+                    { "Wizard Basement", "Custom_WizardBasement" },
+                }
+            },
+        };
+
         public static List<string> GrandpaShedEdgeCase = new()
         {
             "Custom_GrandpasShed to Custom_GrandpasShedGreenhouse", "Custom_GrandpasShedGreenhouse to Custom_GrandpasShed",
@@ -39,7 +49,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Badlands Entrance", "Custom_DesertRailway" },
             { "Enchanted Grove", "Custom_EnchantedGrove" },
             { "Grove Aurora Vineyard Warp", "Custom_EnchantedGrove|20|41" },
-            { "Grove Junimo Woods Warp", "Custom_EnchantedGrove|40|41" },
+            { "Grove Junimo Woods Warp", "Custom_EnchantedGrove|40|40" },
             { "Grove Outpost Warp", "Custom_EnchantedGrove|40|10" },
             { "Grove Farm Warp", "Custom_EnchantedGrove|30|14" },
             { "Grove Wizard Warp", "Custom_EnchantedGrove|17|25" },
@@ -63,6 +73,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Scarlett's House", "Custom_ScarlettHouse" },
             { "Wizard Basement", "Custom_WizardBasement" },
             { "Gunther's Bedroom", "Custom_GunthersRoom" },
+            { "Summit", "Custom_SVESummit"}
         };
 
         private static readonly Dictionary<string, string> _locationEugene = new()
@@ -109,7 +120,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
 
         private static readonly Dictionary<string, string> _locationLacey = new()
         {
-            { "Mouse House", "Custom_HatMouseLacey_MouseHouse" },
+            { "Mouse House", "ichortower.HatMouseLacey_MouseHouse" },
         };
 
         private static readonly Dictionary<string, string> _locationBoardingHouse = new()

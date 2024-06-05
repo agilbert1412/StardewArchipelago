@@ -139,6 +139,8 @@ namespace StardewArchipelago
             ItemQueryResolver.Register(IDProvider.ARCHIPELAGO_EQUIPMENTS, AdventureGuildEquipmentsQueryDelegate);
             GameStateQuery.Register(GameStateConditionProvider.HAS_RECEIVED_ITEM, HasReceivedItemQueryDelegate);
             GameStateQuery.Register(GameStateConditionProvider.HAS_STOCK_SIZE, TravelingMerchantInjections.HasStockSizeQueryDelegate);
+            GameStateQuery.Register(GameStateConditionProvider.FOUND_ARTIFACT, ArtifactsFoundQueryDelegate);
+            GameStateQuery.Register(GameStateConditionProvider.FOUND_MINERAL, MineralsFoundQueryDelegate);
             TriggerActionManager.RegisterAction(TriggerActionProvider.TRAVELING_MERCHANT_PURCHASE, TravelingMerchantInjections.OnPurchasedRandomItem);
         }
 
@@ -164,6 +166,36 @@ namespace StardewArchipelago
             return _archipelago.GetReceivedItemCount(itemName) >= amount;
         }
 
+        private bool ArtifactsFoundQueryDelegate(string[] query, GameStateQueryContext context)
+        {
+            if (!query.Any())
+            {
+                return false;
+            }
+            var archaeologyFound = Game1.player.archaeologyFound.Keys;
+            var requestedArtifact = query[1];
+            if (!archaeologyFound.Contains(requestedArtifact))
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private bool MineralsFoundQueryDelegate(string[] query, GameStateQueryContext context)
+        {
+            if (!query.Any())
+            {
+                return false;
+            }
+            var mineralsFound = Game1.player.mineralsFound.Keys;
+            var requestedMineral = query[1];
+            if (!mineralsFound.Contains(requestedMineral))
+            {
+                return false;
+            }
+            return true;
+        }
+
         private void ResetArchipelago()
         {
             _archipelago.DisconnectPermanently();
@@ -176,6 +208,7 @@ namespace StardewArchipelago
             _harmony.UnpatchAll(ModManifest.UniqueID);
             _locationsPatcher?.CleanEvents();
             _logicPatcher?.CleanEvents();
+            _modLogicPatcher?.CleanEvents();
             _bundlesManager?.CleanEvents();
             _bundlesManager = null;
             SeasonsRandomizer.ResetMailKeys();
@@ -311,12 +344,12 @@ namespace StardewArchipelago
             _weaponsManager = new WeaponsManager(_archipelago, _stardewItemManager, _archipelago.SlotData.Mods);
             _mailPatcher = new MailPatcher(Monitor, _harmony, _archipelago, _locationChecker, State, new LetterActions(_helper, _mail, _archipelago, _weaponsManager, _itemManager.TrapManager, babyBirther, _stardewItemManager));
             _bundlesManager = new BundlesManager(_helper, _stardewItemManager, _archipelago.SlotData.BundlesData);
-            _locationsPatcher = new LocationPatcher(Monitor, _helper, Config, _harmony, _archipelago, State, _locationChecker, _stardewItemManager, _weaponsManager, _bundlesManager, seedShopStockModifier, null, friends);
+            _locationsPatcher = new LocationPatcher(Monitor, _helper, Config, _harmony, _archipelago, State, _locationChecker, _stardewItemManager, _weaponsManager, _bundlesManager, seedShopStockModifier, friends);
             _shippingBehaviors = new NightShippingBehaviors(Monitor, _archipelago, _locationChecker, nameSimplifier);
             _chatForwarder.ListenToChatMessages();
             _logicPatcher.PatchAllGameLogic();
             _modLogicPatcher = new ModRandomizedLogicPatcher(Monitor, _helper, _harmony, _archipelago, seedShopStockModifier, _stardewItemManager);
-            _modLogicPatcher.PatchAllModGameLogic();
+            _modLogicPatcher.PatchAllGameLogic();
             _mailPatcher.PatchMailBoxForApItems();
             _entranceManager.SetEntranceRandomizerSettings(_archipelago.SlotData);
             _locationsPatcher.ReplaceAllLocationsRewardsWithChecks();
