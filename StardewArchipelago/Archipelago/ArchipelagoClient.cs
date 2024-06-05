@@ -627,7 +627,12 @@ namespace StardewArchipelago.Archipelago
             _session.Socket.SendPacket(statusUpdatePacket);
         }
 
-        public string GetLocationName(long locationId, bool required = true)
+        public string GetLocationName(long locationId)
+        {
+            return GetLocationName(locationId, true);
+        }
+
+        public string GetLocationName(long locationId, bool required)
         {
             if (!MakeSureConnected())
             {
