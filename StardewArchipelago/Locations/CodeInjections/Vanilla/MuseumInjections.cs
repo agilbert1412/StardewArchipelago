@@ -6,7 +6,6 @@ using StardewArchipelago.Goals;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
-using StardewValley.Internal;
 using StardewValley.Locations;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
