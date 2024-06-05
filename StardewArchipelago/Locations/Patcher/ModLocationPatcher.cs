@@ -95,8 +95,8 @@ namespace StardewArchipelago.Locations.Patcher
                 postfix: new HarmonyMethod(typeof(RecipeLevelUpInjections), nameof(RecipeLevelUpInjections.SkillLevelUpMenuConstructor_SendModdedSkillRecipeChecks_Postfix))
             );
 
-            //InjectSocializingExperienceMultiplier();
-            //InjectArchaeologyExperienceMultiplier();
+            InjectSocializingExperienceMultiplier();
+            InjectArchaeologyExperienceMultiplier();
         }
 
         private void InjectSocializingExperienceMultiplier()
