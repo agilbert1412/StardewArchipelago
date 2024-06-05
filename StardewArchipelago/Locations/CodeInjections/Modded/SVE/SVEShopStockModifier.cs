@@ -19,6 +19,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
     {
         private static new ArchipelagoClient _archipelago;
         private static new StardewItemManager _stardewItemManager;
+        private static readonly string[] _shopsWithTemperedWeapons = new []{"FlashShifter.StardewValleyExpandedCP_AlesiaVendor", "FlashShifter.StardewValleyExpandedCP_IsaacVendor"};
         public SVEShopStockModifier(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago, StardewItemManager stardewItemManager) : base(monitor, helper, archipelago, stardewItemManager)
         {
             _monitor = monitor;
@@ -37,54 +38,36 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
             e.Edit(asset =>
                 {
                     var shopsData = asset.AsDictionary<string, ShopData>().Data;
-                    var alesiaShop = shopsData["FlashShifter.StardewValleyExpandedCP_AlesiaVendor"];
-                    var isaacShop = shopsData["FlashShifter.StardewValleyExpandedCP_IsaacVendor"];
                     var bearShop = shopsData["FlashShifter.StardewValleyExpandedCP_BearVendor"];
-                    ReplaceAlesiaShopWithChecks(alesiaShop);
-                    ReplaceIsaacWeaponsWithChecks(isaacShop);
+                    ReplaceShopsWithTemperedWeapons(shopsData);
                     MakeBearBarter(bearShop);
                 },
                 AssetEditPriority.Late
             );
         }
 
-        private void ReplaceAlesiaShopWithChecks(ShopData shopData)
+        private void ReplaceShopsWithTemperedWeapons(IDictionary<string, ShopData> shops)
         {
             const string daggerLocationName = "Tempered Galaxy Dagger";
-            var itemsData = DataLoader.Objects(Game1.content);
-            for (var i = shopData.Items.Count - 1; i >= 0; i--)
-            {
-                var item = shopData.Items[i];
-                if (!item.Id.Equals(ModItemIds.TEMPERED_DAGGER, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    continue;
-                }
-
-                var apShopItem = CreateArchipelagoLocation(item, daggerLocationName);
-                shopData.Items.RemoveAt(i);
-                shopData.Items.Insert(i, apShopItem);
-            }
-        }
-
-        private void ReplaceIsaacWeaponsWithChecks(ShopData shopData)
-        {
             const string swordLocationName = "Tempered Galaxy Sword";
             const string hammerLocationName = "Tempered Galaxy Hammer";
-            var itemsData = DataLoader.Objects(Game1.content);
-            for (var i = shopData.Items.Count - 1; i >= 0; i--)
+            var weaponIdsToLocations = new Dictionary<string, string>(){
+                {ModItemIds.TEMPERED_DAGGER, daggerLocationName},
+                {ModItemIds.TEMPERED_SWORD, swordLocationName},
+                {ModItemIds.TEMPERED_HAMMER, hammerLocationName},
+            };
+            foreach (var shopName in _shopsWithTemperedWeapons)
             {
-                var item = shopData.Items[i];
-                if (item.Id.Equals(ModItemIds.TEMPERED_SWORD, StringComparison.InvariantCultureIgnoreCase))
+                var shopData = shops[shopName];
+                for (var i = shopData.Items.Count - 1; i >=0; i--)
                 {
-                    var apShopItem = CreateArchipelagoLocation(item, swordLocationName);
-                    shopData.Items.RemoveAt(i);
-                    shopData.Items.Insert(i, apShopItem);
-                }
-                else if (item.Id.Equals(ModItemIds.TEMPERED_HAMMER, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    var apShopItem = CreateArchipelagoLocation(item, hammerLocationName);
-                    shopData.Items.RemoveAt(i);
-                    shopData.Items.Insert(i, apShopItem);
+                    var item = shopData.Items[i];
+                    if (weaponIdsToLocations.ContainsKey(item.Id))
+                    {
+                        var apShopItem = CreateArchipelagoLocation(item, weaponIdsToLocations[item.Id]);
+                        shopData.Items.RemoveAt(i);
+                        shopData.Items.Insert(i, apShopItem);
+                    }
                 }
             }
         }
