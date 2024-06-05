@@ -139,6 +139,8 @@ namespace StardewArchipelago
             ItemQueryResolver.Register(IDProvider.ARCHIPELAGO_EQUIPMENTS, AdventureGuildEquipmentsQueryDelegate);
             GameStateQuery.Register(GameStateConditionProvider.HAS_RECEIVED_ITEM, HasReceivedItemQueryDelegate);
             GameStateQuery.Register(GameStateConditionProvider.HAS_STOCK_SIZE, TravelingMerchantInjections.HasStockSizeQueryDelegate);
+            GameStateQuery.Register(GameStateConditionProvider.FOUND_ARTIFACT, ArtifactsFoundQueryDelegate);
+            GameStateQuery.Register(GameStateConditionProvider.FOUND_MINERAL, MineralsFoundQueryDelegate);
             TriggerActionManager.RegisterAction(TriggerActionProvider.TRAVELING_MERCHANT_PURCHASE, TravelingMerchantInjections.OnPurchasedRandomItem);
         }
 
@@ -162,6 +164,36 @@ namespace StardewArchipelago
             var amount = int.Parse(query[1]);
             var itemName = string.Join(' ', query.Skip(2));
             return _archipelago.GetReceivedItemCount(itemName) >= amount;
+        }
+
+        private bool ArtifactsFoundQueryDelegate(string[] query, GameStateQueryContext context)
+        {
+            if (!query.Any())
+            {
+                return false;
+            }
+            var archaeologyFound = Game1.player.archaeologyFound.Keys;
+            var requestedArtifact = query[1];
+            if (!archaeologyFound.Contains(requestedArtifact))
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private bool MineralsFoundQueryDelegate(string[] query, GameStateQueryContext context)
+        {
+            if (!query.Any())
+            {
+                return false;
+            }
+            var mineralsFound = Game1.player.mineralsFound.Keys;
+            var requestedMineral = query[1];
+            if (!mineralsFound.Contains(requestedMineral))
+            {
+                return false;
+            }
+            return true;
         }
 
         private void ResetArchipelago()

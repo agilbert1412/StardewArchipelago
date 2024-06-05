@@ -83,7 +83,7 @@ namespace StardewArchipelago.GameModifications.Modded
                     fishSeasons = fishData[id].Split("/")[6].Split(" ");
                 }
                 var fishItem = _stardewItemManager.GetObjectById(id);
-                var condition = $"RANDOM 0.4 @addDailyLuck, PLAYER_HAS_CAUGHT_FISH Current {id}";
+                var condition = $"SYNCED_RANDOM day junimo_shops 0.4 @addDailyLuck, PLAYER_HAS_CAUGHT_FISH Current {id}";
                 if (fishSeasons is not null)
                 {
                     condition = $"{GameStateConditionProvider.CreateSeasonsCondition(fishSeasons)}, " + condition;
@@ -95,29 +95,27 @@ namespace StardewArchipelago.GameModifications.Modded
         private void GenerateGreyJunimoStock(ShopData shopData, int stockCount, double discount)
         {
             shopData.Owners[0].Dialogues[0].Dialogue = _junimoPhrase["Grey"];
-            var mineralsFound = Game1.player.mineralsFound.Keys;
+            var mineralObjects = _stardewItemManager.GetObjectsByType("Minerals");
             shopData.Items.Clear();
             var greyItems = _stardewItemManager.GetObjectsByColor("Grey");
 
-            foreach (var rockId in mineralsFound)
+            foreach (var rock in mineralObjects)
             {
-                var mineralItem = _stardewItemManager.GetItemByQualifiedId(QualifiedItemIds.QualifiedObjectId(rockId));
-                shopData.Items.Add(CreateBarterItem(greyItems, mineralItem, offeredStock: stockCount, discount: discount));
+                var mineralCondition = $"{GameStateConditionProvider.FOUND_MINERAL} {rock.Id}, SYNCED_RANDOM day junimo_shops 0.4 @addDailyLuck";
+                shopData.Items.Add(CreateBarterItem(greyItems, rock, mineralCondition, offeredStock: stockCount, discount: discount));
             }
         }
 
         private void GenerateRedJunimoStock(ShopData shopData, int stockCount, double discount)
         {
             shopData.Owners[0].Dialogues[0].Dialogue = _junimoPhrase["Red"];
-            var artifactsFound = Game1.player.archaeologyFound.Keys;
+            var artifactObjects = _stardewItemManager.GetObjectsByType("Arch");
             shopData.Items.Clear();
             var redObjects = _stardewItemManager.GetObjectsByColor("Red");
-            foreach (var archId in artifactsFound)
+            foreach (var artifact in artifactObjects)
             {
-                var archaeologyItem = _stardewItemManager.GetItemByQualifiedId(QualifiedItemIds.QualifiedObjectId(archId));
-                if (archId == ObjectIds.LOST_BOOK) //No lost books smh get out
-                    continue;
-                shopData.Items.Add(CreateBarterItem(redObjects, archaeologyItem, offeredStock: stockCount, discount: discount));
+                var artifactCondition = $"{GameStateConditionProvider.FOUND_ARTIFACT} {artifact.Id}, SYNCED_RANDOM day junimo_shops 0.4 @addDailyLuck";
+                shopData.Items.Add(CreateBarterItem(redObjects, artifact, artifactCondition, offeredStock: stockCount, discount: discount));
             }
         }
 
@@ -185,7 +183,7 @@ namespace StardewArchipelago.GameModifications.Modded
         private ShopItemData CreateJunimoSeedItem(List<StardewObject> yellowObjects, string qualifiedId, int stockCount, double discount, string[] season = null)
         {
             var seedItemName = _stardewItemManager.GetItemByQualifiedId(qualifiedId).Name;
-            var condition = $"{GameStateConditionProvider.CreateHasReceivedItemCondition(seedItemName)}, RANDOM 0.4 @addDailyLuck";;
+            var condition = $"{GameStateConditionProvider.CreateHasReceivedItemCondition(seedItemName)}, SYNCED_RANDOM day junimo_shops 0.4 @addDailyLuck";;
             if (season is not null)
             {
                 condition = $"{GameStateConditionProvider.CreateSeasonsCondition(season)}," + condition;

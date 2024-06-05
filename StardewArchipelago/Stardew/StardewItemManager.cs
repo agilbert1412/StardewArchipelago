@@ -19,6 +19,7 @@ namespace StardewArchipelago.Stardew
         private Dictionary<string, StardewObject> _objectsById;
         private Dictionary<string, StardewObject> _objectsByName;
         private Dictionary<string, List<StardewObject>> _objectsByColor;
+        private Dictionary<string, List<StardewObject>> _objectsByType;
         private Dictionary<string, BigCraftable> _bigCraftablesById;
         private Dictionary<string, BigCraftable> _bigCraftablesByName;
         private Dictionary<string, StardewBoots> _bootsById;
@@ -194,6 +195,15 @@ namespace StardewArchipelago.Stardew
             throw new ArgumentException($"Color not supported: {color}");
         }
 
+        public List<StardewObject> GetObjectsByType(string type)
+        {
+            if (_objectsByType.ContainsKey(type))
+            {
+                return _objectsByType[type];
+            }
+            throw new ArgumentException($"Color not supported: {type}");
+        }
+
         public BigCraftable GetBigCraftableById(string itemId)
         {
             if (_bigCraftablesById.ContainsKey(itemId))
@@ -304,6 +314,7 @@ namespace StardewArchipelago.Stardew
             _objectsById = new Dictionary<string, StardewObject>();
             _objectsByName = new Dictionary<string, StardewObject>();
             _objectsByColor = new Dictionary<string, List<StardewObject>>();
+            _objectsByType = new Dictionary<string, List<StardewObject>>();
             var allObjectData = DataLoader.Objects(Game1.content);
             foreach (var (id, objectData) in allObjectData)
             {
@@ -326,6 +337,7 @@ namespace StardewArchipelago.Stardew
                 }
 
                 AddObjectByColor(objectData, stardewItem);
+                AddObjectByType(objectData, stardewItem);
 
                 _objectsById.Add(id, stardewItem);
                 _itemsByQualifiedId.Add(stardewItem.GetQualifiedId(), stardewItem);
@@ -536,6 +548,15 @@ namespace StardewArchipelago.Stardew
                 _objectsByColor[color] = new List<StardewObject>();
             }
             _objectsByColor[color].Add(stardewObject);
+        }
+
+        private void AddObjectByType(ObjectData objectData, StardewObject stardewObject)
+        {
+            if (!_objectsByType.ContainsKey(objectData.Type))
+            {
+                _objectsByType[objectData.Type] = new List<StardewObject>();
+            }
+            _objectsByType[objectData.Type].Add(stardewObject);
         }
 
         private StardewObject ParseStardewObjectData(string id, ObjectData objectData)
