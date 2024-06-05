@@ -89,7 +89,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         {
             var isEventChefsanityLocation = _archipelago.SlotData.Chefsanity.HasFlag(Chefsanity.Friendship) && eventCooking.Keys.Contains(id);
             var isRecipeFromQuest = _archipelago.SlotData.QuestLocations.StoryQuestsEnabled && questEventsWithRecipes.Contains(id);
-            if (!isRecipeFromQuest || !isEventChefsanityLocation)
+            if (isRecipeFromQuest || !isEventChefsanityLocation)
             {
                 return;
             }
@@ -100,7 +100,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         {
             var isEventCraftsanityLocation = _archipelago.SlotData.Craftsanity == Craftsanity.All && eventCrafting.Keys.Contains(id);
             var isRecipeFromQuest = _archipelago.SlotData.QuestLocations.StoryQuestsEnabled && questEventsWithRecipes.Contains(id);
-            if (!isRecipeFromQuest || !isEventCraftsanityLocation)
+            if (isRecipeFromQuest || !isEventCraftsanityLocation)
             {
                 return;
             }
