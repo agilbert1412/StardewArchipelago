@@ -155,9 +155,6 @@ namespace StardewArchipelago.GameModifications.Modded
             AddSummerSeedsToYellowStock(yellowObjects, shopData, stockCount, discount);
             AddFallSeedsToYellowStock(yellowObjects, shopData, stockCount, discount);
             AddSaplingsToShop(yellowObjects, shopData, stockCount, discount);
-            shopData.Items.Add(CreateJunimoSeedItem(yellowObjects, QualifiedItemIds.RHUBARB_SEEDS, stockCount, discount, spring));
-            shopData.Items.Add(CreateJunimoSeedItem(yellowObjects, QualifiedItemIds.STARFRUIT_SEEDS, stockCount, discount, summer));
-            shopData.Items.Add(CreateJunimoSeedItem(yellowObjects, QualifiedItemIds.BEET_SEEDS, stockCount, discount, fall));
         }
 
         private int StockBasedOnApplesFriendship()
@@ -183,10 +180,14 @@ namespace StardewArchipelago.GameModifications.Modded
         private ShopItemData CreateJunimoSeedItem(List<StardewObject> yellowObjects, string qualifiedId, int stockCount, double discount, string[] season = null)
         {
             var seedItemName = _stardewItemManager.GetItemByQualifiedId(qualifiedId).Name;
-            var condition = $"{GameStateConditionProvider.CreateHasReceivedItemCondition(seedItemName)}, SYNCED_RANDOM day junimo_shops 0.4 @addDailyLuck";;
+            var condition = "SYNCED_RANDOM day junimo_shops 0.4 @addDailyLuck";;
             if (season is not null)
             {
-                condition = $"{GameStateConditionProvider.CreateSeasonsCondition(season)}," + condition;
+                condition = $"{GameStateConditionProvider.CreateSeasonsCondition(season)}, " + condition;
+            }
+            if (_archipelago.SlotData.Cropsanity == Cropsanity.Shuffled)
+            {
+                condition = $"{GameStateConditionProvider.CreateHasReceivedItemCondition(seedItemName)}, " + condition;
             }
             return CreateBarterItem(yellowObjects, _stardewItemManager.GetItemByQualifiedId(qualifiedId), condition, offeredStock: stockCount, discount: discount);
         }
@@ -202,6 +203,7 @@ namespace StardewArchipelago.GameModifications.Modded
             shopData.Items.Add(CreateJunimoSeedItem(yellowObjects, QualifiedItemIds.JAZZ_SEEDS, stockCount, discount, spring));
             shopData.Items.Add(CreateJunimoSeedItem(yellowObjects, QualifiedItemIds.GARLIC_SEEDS, stockCount, discount, spring));
             shopData.Items.Add(CreateJunimoSeedItem(yellowObjects, QualifiedItemIds.RICE_SHOOT, stockCount, discount, spring));
+            shopData.Items.Add(CreateJunimoSeedItem(yellowObjects, QualifiedItemIds.RHUBARB_SEEDS, stockCount, discount, spring));
         }
 
         private void AddSummerSeedsToYellowStock(List<StardewObject> yellowObjects, ShopData shopData, int stockCount, double discount)
@@ -218,6 +220,7 @@ namespace StardewArchipelago.GameModifications.Modded
             shopData.Items.Add(CreateJunimoSeedItem(yellowObjects, QualifiedItemIds.CORN_SEEDS, stockCount, discount, summer));
             shopData.Items.Add(CreateJunimoSeedItem(yellowObjects, QualifiedItemIds.SUNFLOWER_SEEDS, stockCount, discount, summer));
             shopData.Items.Add(CreateJunimoSeedItem(yellowObjects, QualifiedItemIds.RED_CABBAGE_SEEDS, stockCount, discount, summer));
+            shopData.Items.Add(CreateJunimoSeedItem(yellowObjects, QualifiedItemIds.STARFRUIT_SEEDS, stockCount, discount, summer));
         }
 
         private void AddFallSeedsToYellowStock(List<StardewObject> yellowObjects, ShopData shopData, int stockCount, double discount)
@@ -234,6 +237,7 @@ namespace StardewArchipelago.GameModifications.Modded
             shopData.Items.Add(CreateJunimoSeedItem(yellowObjects, QualifiedItemIds.AMARANTH_SEEDS, stockCount, discount, fall));
             shopData.Items.Add(CreateJunimoSeedItem(yellowObjects, QualifiedItemIds.GRAPE_STARTER, stockCount, discount, fall));
             shopData.Items.Add(CreateJunimoSeedItem(yellowObjects, QualifiedItemIds.ARTICHOKE_SEEDS, stockCount, discount, fall));
+            shopData.Items.Add(CreateJunimoSeedItem(yellowObjects, QualifiedItemIds.BEET_SEEDS, stockCount, discount, fall));
         }
 
         private void AddSaplingsToShop(List<StardewObject> yellowObjects, ShopData shopData, int stockCount, double discount)
