@@ -26,18 +26,23 @@ namespace StardewArchipelago.GameModifications.Modded
             if (_archipelago.SlotData.Mods.HasMod(ModNames.SVE))
             {
                 _junimoShopStockModifier = new JunimoShopStockModifier(monitor, modHelper, archipelago, _stardewItemManager);
-                PatchJunimoShops();
             }
         }
 
-        private void PatchJunimoShops()
+        public void PatchAllGameLogic()
         {
-            if (!_archipelago.SlotData.Mods.HasMod(ModNames.SVE))
+            if (_archipelago.SlotData.Mods.HasMod(ModNames.SVE))
             {
-                return;
+                _modHelper.Events.Content.AssetRequested += _junimoShopStockModifier.OnShopStockRequested;
             }
+        }
 
-            _modHelper.Events.Content.AssetRequested += _junimoShopStockModifier.OnShopStockRequested;
+        public void CleanEvents()
+        {
+            if (_archipelago.SlotData.Mods.HasMod(ModNames.SVE))
+            {
+                _modHelper.Events.Content.AssetRequested -= _junimoShopStockModifier.OnShopStockRequested;
+            }
         }
     }
 }

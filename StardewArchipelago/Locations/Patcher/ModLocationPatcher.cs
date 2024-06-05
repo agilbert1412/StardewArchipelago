@@ -45,10 +45,16 @@ namespace StardewArchipelago.Locations.Patcher
             AddSVEModInjections();
             AddDistantLandsEventInjections();
             AddBoardingHouseInjections();
+            PatchSVEShops();
+            
         }
 
         public void CleanEvents()
         {
+            if (_modsManager.HasMod(ModNames.SVE))
+            {
+                UnpatchSVEShops();
+            }
         }
 
         private void AddDistantLandsEventInjections()
@@ -247,11 +253,7 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void AddSVEModInjections()
         {
-            if (!_archipelago.SlotData.Mods.HasMod(ModNames.SVE))
-            {
-                return;
-            }
-            _modHelper.Events.Content.AssetRequested += _sveShopStockModifier.OnShopStockRequested;
+            
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Chest), nameof(Chest.checkForAction)),
@@ -275,6 +277,20 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(disableShadowAttacksType, "FixMonsterSlayerQuest"),
                 postfix: new HarmonyMethod(typeof(SVECutsceneInjections), nameof(SVECutsceneInjections.FixMonsterSlayerQuest_IncludeReleaseofGoals_Postfix))
             );
+        }
+
+        private void PatchSVEShops()
+        {
+            if (!_archipelago.SlotData.Mods.HasMod(ModNames.SVE))
+            {
+                return;
+            }
+            _modHelper.Events.Content.AssetRequested += _sveShopStockModifier.OnShopStockRequested;
+        }
+
+        private void UnpatchSVEShops()
+        {
+            _modHelper.Events.Content.AssetRequested -= _sveShopStockModifier.OnShopStockRequested;
         }
 
         private void AddBoardingHouseInjections()

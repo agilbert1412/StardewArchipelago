@@ -176,6 +176,7 @@ namespace StardewArchipelago
             _harmony.UnpatchAll(ModManifest.UniqueID);
             _locationsPatcher?.CleanEvents();
             _logicPatcher?.CleanEvents();
+            _modLogicPatcher?.CleanEvents();
             _bundlesManager?.CleanEvents();
             _bundlesManager = null;
             SeasonsRandomizer.ResetMailKeys();
@@ -316,6 +317,7 @@ namespace StardewArchipelago
             _chatForwarder.ListenToChatMessages();
             _logicPatcher.PatchAllGameLogic();
             _modLogicPatcher = new ModRandomizedLogicPatcher(Monitor, _helper, _harmony, _archipelago, seedShopStockModifier, _stardewItemManager);
+            _modLogicPatcher.PatchAllGameLogic();
             _mailPatcher.PatchMailBoxForApItems();
             _entranceManager.SetEntranceRandomizerSettings(_archipelago.SlotData);
             _locationsPatcher.ReplaceAllLocationsRewardsWithChecks();
