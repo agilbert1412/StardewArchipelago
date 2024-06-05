@@ -71,16 +71,16 @@ namespace StardewArchipelago.GameModifications.Modded
             var fishData = DataLoader.Fish(Game1.content);
             shopData.Items.Clear();
 
-            foreach (var fish in fishData)
+            foreach (var (id, fishInfo) in fishData)
             {
                 string[] fishSeasons = null;
-                if (fishData[fish.Key].Split("/")[1] != "trap")
+                if (fishData[id].Split("/")[1] != "trap")
                 {
-                    fishSeasons = fishData[fish.Key].Split("/")[6].Split(" ");
+                    fishSeasons = fishData[id].Split("/")[6].Split(" ");
                 }
-                var fishItem = _stardewItemManager.GetObjectById(fish.Key);
+                var fishItem = _stardewItemManager.GetObjectById(id);
                 var completeCondition = fishSeasons is not null ? 
-                $"{GameStateConditionProvider.CreateSeasonsCondition(fishSeasons)}, RANDOM 0.4 @addDailyLuck, PLAYER_HAS_CAUGHT_FISH Current {fish.Key}" : 
+                $"{GameStateConditionProvider.CreateSeasonsCondition(fishSeasons)}, RANDOM 0.4 @addDailyLuck, PLAYER_HAS_CAUGHT_FISH Current {id}" : 
                 "RANDOM 0.4 @addDailyLuck, PLAYER_HAS_CAUGHT_FISH Current {fish.Key}";
                 shopData.Items.Add(CreateJunimoShopItem("Blue", fishItem, completeCondition));
             }
