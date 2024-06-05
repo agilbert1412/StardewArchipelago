@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using StardewModdingAPI;
+using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.Integrations.GenericModConfigMenu
 {
@@ -161,6 +162,49 @@ namespace StardewArchipelago.Integrations.GenericModConfigMenu
                 tooltip: () => "Friendship points no longer go down when you don't talk to NPCs",
                 getValue: () => Config.DisableFriendshipDecay,
                 setValue: (value) => Config.DisableFriendshipDecay = value
+            );
+
+            configMenu.AddNumberOption(
+                mod: ModManifest,
+                name: () => "Bonus Per Movement Speed",
+                tooltip: () => "Speed increase per movement speed bonus received.",
+                min: 0,
+                max: 20,
+                interval: 1,
+                getValue: () => Config.BonusPerMovementSpeed,
+                setValue: (value) => Config.BonusPerMovementSpeed = value,
+                formatValue: (value) => $"{value * 5}%"
+            );
+
+            var chatFilterValues = Enum.GetValues(typeof(ChatItemsFilter)).Cast<int>().ToArray();
+            var chatFilterValuesMin = chatFilterValues.Min();
+            var chatFilterValuesMax = chatFilterValues.Max();
+            configMenu.AddNumberOption(
+                mod: ModManifest,
+                name: () => "Display Items In Chat",
+                tooltip: () => "Which items notifications should display in chat",
+                min: chatFilterValuesMin,
+                max: chatFilterValuesMax,
+                interval: 1,
+                getValue: () => (int)Config.DisplayItemsInChat,
+                setValue: (value) => Config.DisplayItemsInChat = (ChatItemsFilter)value,
+                formatValue: (value) => ((ChatItemsFilter)value).ToString()
+            );
+
+            configMenu.AddBoolOption(
+                mod: ModManifest,
+                name: () => "Display Connection Messages",
+                tooltip: () => "Whether to display connection messages in chat when players join or leave",
+                getValue: () => Config.EnableConnectionMessages,
+                setValue: (value) => Config.EnableConnectionMessages = value
+            );
+
+            configMenu.AddBoolOption(
+                mod: ModManifest,
+                name: () => "Display Chat Messages",
+                tooltip: () => "Whether to display chat messages from other players in the multiworld",
+                getValue: () => Config.EnableChatMessages,
+                setValue: (value) => Config.EnableChatMessages = value
             );
 
             configMenu.AddBoolOption(

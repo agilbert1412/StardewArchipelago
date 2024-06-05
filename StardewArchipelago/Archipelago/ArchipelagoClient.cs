@@ -224,13 +224,23 @@ namespace StardewArchipelago.Archipelago
             {
                 case ChatLogMessage chatMessage:
                 {
+                    if (!ModEntry.Instance.Config.EnableChatMessages)
+                    {
+                        return;
+                    }
+
                     var color = chatMessage.Player.Name.GetAsBrightColor();
                     Game1.chatBox?.addMessage(fullMessage, color);
                     return;
                 }
                 case ItemSendLogMessage itemSendLogMessage:
                 {
-                    if (!itemSendLogMessage.IsRelatedToActivePlayer)
+                    if (ModEntry.Instance.Config.DisplayItemsInChat == ChatItemsFilter.None)
+                    {
+                        return;
+                    }
+
+                    if (ModEntry.Instance.Config.DisplayItemsInChat == ChatItemsFilter.RelatedToMe && !itemSendLogMessage.IsRelatedToActivePlayer)
                     {
                         return;
                     }
@@ -245,6 +255,19 @@ namespace StardewArchipelago.Archipelago
                 case GoalLogMessage:
                 {
                     var color = Color.Green;
+                    Game1.chatBox?.addMessage(fullMessage, color);
+                    return;
+                }
+                case JoinLogMessage:
+                case LeaveLogMessage:
+                case TagsChangedLogMessage:
+                {
+                    if (!ModEntry.Instance.Config.EnableConnectionMessages)
+                    {
+                        return;
+                    }
+
+                    var color = Color.Gray;
                     Game1.chatBox?.addMessage(fullMessage, color);
                     return;
                 }
@@ -270,7 +293,7 @@ namespace StardewArchipelago.Archipelago
             {
                 if (long.TryParse(words[i], out var id) && words[i].StartsWith("7"))
                 {
-                    var locationName = GetLocationName(id);
+                    var locationName = GetLocationName(id, false);
                     if (!string.IsNullOrWhiteSpace(locationName) && locationName != words[i] && locationName != MISSING_LOCATION_NAME)
                     {
                         words[i] = locationName;
@@ -510,7 +533,7 @@ namespace StardewArchipelago.Archipelago
             {
                 var apItem = apItems[itemIndex];
                 var itemName = GetItemName(apItem);
-                var playerName = GetPlayerName(apItem.Player) ?? "Unknown Player";
+                var playerName = GetPlayerName(apItem.Player);
                 var locationName = GetLocationName(apItem);
 
                 var receivedItem = new ReceivedItem(locationName, itemName, playerName, apItem.LocationId, apItem.ItemId, apItem.Player, itemIndex);
@@ -610,10 +633,15 @@ namespace StardewArchipelago.Archipelago
 
         public string GetLocationName(ItemInfo item)
         {
-            return item?.LocationName ?? GetLocationName(item.LocationId);
+            return item?.LocationName ?? GetLocationName(item.LocationId, true);
         }
 
         public string GetLocationName(long locationId)
+        {
+            return GetLocationName(locationId, true);
+        }
+
+        public string GetLocationName(long locationId, bool required)
         {
             if (!MakeSureConnected())
             {
@@ -628,7 +656,11 @@ namespace StardewArchipelago.Archipelago
 
             if (string.IsNullOrWhiteSpace(locationName))
             {
-                _console.Log($"Failed at getting the location name for location {locationId}. This is probably due to a corrupted datapackage. Unexpected behaviors may follow", LogLevel.Error);
+                if (required)
+                {
+                    _console.Log($"Failed at getting the location name for location {locationId}. This is probably due to a corrupted datapackage. Unexpected behaviors may follow", LogLevel.Error);
+                }
+
                 return MISSING_LOCATION_NAME;
             }
 
@@ -750,7 +782,7 @@ namespace StardewArchipelago.Archipelago
                     _console.Log($"Could not scout location \"{locationName}\".");
                     return null;
                 }
-                
+
                 var itemName = GetItemName(scoutedItemInfo);
                 var playerSlotName = _session.Players.GetPlayerName(scoutedItemInfo.Player);
                 var classification = GetItemClassification(scoutedItemInfo.Flags);

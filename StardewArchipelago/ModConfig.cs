@@ -1,17 +1,19 @@
-﻿namespace StardewArchipelago
+﻿using StardewArchipelago.Archipelago;
+
+namespace StardewArchipelago
 {
     public class ModConfig
     {
         /// <summary>
-        ///     When enabled, Pierre and Sandy sell limited stocks of seeds.
-        ///     Jojamart sells cheaper seeds, but forces you to purchase large packs instead of one at a time
+        /// When enabled, Pierre and Sandy sell limited stocks of seeds.
+        /// Jojamart sells cheaper seeds, but forces you to purchase large packs instead of one at a time
         /// </summary>
         public bool EnableSeedShopOverhaul { get; set; } = true;
 
         /// <summary>
-        ///     Automatically hides the archipelago letters that are "empty".
-        ///     A letter is considered empty when it contains neither a physical item, nor a code snippet to run
-        ///     Examples include NPC Hearts, Seasons, Carpenter building unlocks, etc
+        /// Automatically hides the archipelago letters that are "empty".
+        /// A letter is considered empty when it contains neither a physical item, nor a code snippet to run
+        /// Examples include NPC Hearts, Seasons, Carpenter building unlocks, etc
         /// </summary>
         public bool HideEmptyArchipelagoLetters { get; set; } = false;
 
@@ -29,16 +31,37 @@
         public bool UseCustomArchipelagoIcons { get; set; } = false;
 
         /// <summary>
-        ///     Skips all Zelda-style animations where the character holds an item above their head
+        /// Skips all Zelda-style animations where the character holds an item above their head
         /// </summary>
         public bool SkipHoldUpAnimations { get; set; } = false;
 
         /// <summary>
-        ///     Disables decaying of friendship points.
-        ///     On friendsanity, this applies to earned points.
-        ///     Outside of friendsanity, this applies to real points (hearts).
+        /// Disables decaying of friendship points.
+        /// On friendsanity, this applies to earned points.
+        /// Outside of friendsanity, this applies to real points (hearts).
         /// </summary>
         public bool DisableFriendshipDecay { get; set; } = false;
+
+        /// <summary>
+        /// Amount of speed gained per movement speed bonus received
+        /// Multiplied by 0.05 in-game
+        /// </summary>
+        public int BonusPerMovementSpeed { get; set; } = 5;
+
+        /// <summary>
+        /// Which Item messages should be displayed in the game chatbox
+        /// </summary>
+        public ChatItemsFilter DisplayItemsInChat { get; set; } = ChatItemsFilter.RelatedToMe;
+
+        /// <summary>
+        /// Should the join and leave messages of other players be displayed in the game chatbox
+        /// </summary>
+        public bool EnableConnectionMessages { get; set; } = true;
+
+        /// <summary>
+        /// Should the chat messages of other players be displayed in the game chatbox
+        /// </summary>
+        public bool EnableChatMessages { get; set; } = true;
 
         /// <summary>
         /// Whether to display archipelago icons on the calendar for dates where the player has checks to do
