@@ -67,13 +67,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                     {
                         CheckCraftsanityLocation(__instance.id);
                         __instance.CurrentCommand++;
-                        return false;
+                        return false; // don't run original logic
                     }
                     case "addCookingRecipe":
                     {
                         CheckChefsanityLocation(__instance.id);
                         __instance.CurrentCommand++;
-                        return false;
+                        return false; // don't run original logic
                     }
                 }
                 return true;

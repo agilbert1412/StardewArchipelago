@@ -75,7 +75,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             {
                 _locationAliases[locationName] = locationAlias;
             }
-            FixInitialEntranceDataGivenMod(slotData);
+            FixInitialEntranceDataGivenMod(slotData.Mods);
             foreach (var (originalEntrance, replacementEntrance) in slotData.ModifiedEntrances)
             {
                 RegisterRandomizedEntrance(originalEntrance, replacementEntrance);
@@ -136,15 +136,15 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             }
         }
 
-        private void FixInitialEntranceDataGivenMod(SlotData slotData)
+        private void FixInitialEntranceDataGivenMod(ModsManager modManager)
         {
-            foreach (var (mod, alias) in _modifiedAliases)
+            foreach (var (mod, aliases) in ModEntranceManager.AlteredMapNamesFromVanilla)
             {
-                if (!slotData.Mods.HasMod(mod))
+                if (!modManager.HasMod(mod))
                 {
                     return;
                 }
-                foreach (var (name, updatedName) in alias)
+                foreach (var (name, updatedName) in aliases)
                 {
                     if (!_locationAliases.TryGetValue(name, out var _))
                     {
@@ -427,12 +427,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { " ", "" },
         };
 
-        private static readonly Dictionary<string, Dictionary<string, string>> _modifiedAliases = new()
-        {
-            {
-                "Stardew Valley Expanded", new() { { "Wizard Basement", "Custom_WizardBasement" } }
-            },
-        };
+
     }
 
     public enum FacingDirection

@@ -8,6 +8,13 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
     public class ModEntranceManager
     {
 
+        public static readonly Dictionary<string, Dictionary<string, string>> AlteredMapNamesFromVanilla = new()
+        {
+            {
+                "Stardew Valley Expanded", new() { { "Wizard Basement", "Custom_WizardBasement" } }
+            },
+        };
+
         public static List<string> GrandpaShedEdgeCase = new()
         {
             "Custom_GrandpasShed to Custom_GrandpasShedGreenhouse", "Custom_GrandpasShedGreenhouse to Custom_GrandpasShed",
