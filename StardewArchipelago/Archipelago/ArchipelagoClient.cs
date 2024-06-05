@@ -293,7 +293,7 @@ namespace StardewArchipelago.Archipelago
             {
                 if (long.TryParse(words[i], out var id) && words[i].StartsWith("7"))
                 {
-                    var locationName = GetLocationName(id);
+                    var locationName = GetLocationName(id, false);
                     if (!string.IsNullOrWhiteSpace(locationName) && locationName != words[i] && locationName != MISSING_LOCATION_NAME)
                     {
                         words[i] = locationName;
@@ -533,7 +533,7 @@ namespace StardewArchipelago.Archipelago
             {
                 var apItem = apItems[itemIndex];
                 var itemName = GetItemName(apItem);
-                var playerName = GetPlayerName(apItem.Player) ?? "Unknown Player";
+                var playerName = GetPlayerName(apItem.Player);
                 var locationName = GetLocationName(apItem);
 
                 var receivedItem = new ReceivedItem(locationName, itemName, playerName, apItem.LocationId, apItem.ItemId, apItem.Player, itemIndex);
@@ -633,10 +633,15 @@ namespace StardewArchipelago.Archipelago
 
         public string GetLocationName(ItemInfo item)
         {
-            return item?.LocationName ?? GetLocationName(item.LocationId);
+            return item?.LocationName ?? GetLocationName(item.LocationId, true);
         }
 
         public string GetLocationName(long locationId)
+        {
+            return GetLocationName(locationId, true);
+        }
+
+        public string GetLocationName(long locationId, bool required)
         {
             if (!MakeSureConnected())
             {
@@ -651,7 +656,11 @@ namespace StardewArchipelago.Archipelago
 
             if (string.IsNullOrWhiteSpace(locationName))
             {
-                _console.Log($"Failed at getting the location name for location {locationId}. This is probably due to a corrupted datapackage. Unexpected behaviors may follow", LogLevel.Error);
+                if (required)
+                {
+                    _console.Log($"Failed at getting the location name for location {locationId}. This is probably due to a corrupted datapackage. Unexpected behaviors may follow", LogLevel.Error);
+                }
+
                 return MISSING_LOCATION_NAME;
             }
 
