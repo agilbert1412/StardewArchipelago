@@ -49,8 +49,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
             { "1090506", "Krobus" },
         };
 
-        private static ShopMenu _lastShopMenuUpdated = null;
-
         public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago,
             LocationChecker locationChecker)
         {
