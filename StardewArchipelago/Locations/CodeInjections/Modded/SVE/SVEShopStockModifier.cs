@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Force.DeepCloner;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Stardew;
@@ -114,11 +115,11 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
             {
                 return _stardewItemManager.GetObjectById(ObjectIds.SALMONBERRY);
             }
-            else if (Game1.season.HasFlag(Season.Summer))
+            if (Game1.season.HasFlag(Season.Summer))
             {
                 return _stardewItemManager.GetObjectById(ObjectIds.SPICE_BERRY);
             }
-            else if (Game1.season.HasFlag(Season.Fall))
+            if (Game1.season.HasFlag(Season.Fall))
             {
                 return _stardewItemManager.GetObjectById(ObjectIds.BLACKBERRY);
             }
@@ -129,7 +130,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
         {
             var hasKnowledge = _archipelago.HasReceivedItem("Bear Knowledge");
             var bearShopItem = item.DeepClone();
-            bearShopItem.Id = $"{ModEntry.Instance.ModManifest.UniqueID}_{berryItem.Name.Replace(" ", "_")}";
+            bearShopItem.Id = IDProvider.CreateId(berryItem.Name.Replace(" ", "_"));
             var divisorBonus = hasKnowledge ? 10 : 5;
             var chosenItemExchangeRate = ExchangeRate(item.Price / divisorBonus, berryItem.SellPrice);
             bearShopItem.TradeItemId = berryItem.Id;
@@ -139,7 +140,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
             return bearShopItem;
         }
 
-    public int[] ExchangeRate(int soldItemValue, int requestedItemValue)
+        public int[] ExchangeRate(int soldItemValue, int requestedItemValue)
         {
             if (IsOnePriceAMultipleOfOther(soldItemValue, requestedItemValue, out var exchangeRate))
             {
