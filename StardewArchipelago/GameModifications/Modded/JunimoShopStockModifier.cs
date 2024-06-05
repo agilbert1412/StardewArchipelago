@@ -86,7 +86,7 @@ namespace StardewArchipelago.GameModifications.Modded
                 var condition = $"SYNCED_RANDOM day junimo_shops 0.4 @addDailyLuck, PLAYER_HAS_CAUGHT_FISH Current {id}";
                 if (fishSeasons is not null)
                 {
-                    condition = $"{GameStateConditionProvider.CreateSeasonsCondition(fishSeasons)}, " + condition;
+                    condition = $"{GameStateConditionProvider.CreateSeasonsCondition(fishSeasons)}, {condition}";
                 }
                 shopData.Items.Add(CreateBarterItem(blueObjects, fishItem, condition, offeredStock: stockCount, discount: discount));
             }
@@ -137,7 +137,6 @@ namespace StardewArchipelago.GameModifications.Modded
             shopData.Items.Clear();
             var purpleObjects = _stardewItemManager.GetObjectsByColor("Purple");
             shopData.Items.Add(CreateBarterItem(purpleObjects, _stardewItemManager.GetObjectById(itemToKeep.Id), itemToKeep.Condition));
-            itemToKeep.Condition = null; // The condition is purely for the super starfruit item.  We don't want it on anything else.
             shopData.Items.Add(CreateBarterItem(purpleObjects, _stardewItemManager.GetObjectByName("Magic Rock Candy")));
             shopData.Items.Add(CreateBarterItem(purpleObjects, _stardewItemManager.GetObjectByName("Dewdrop Berry"), overridePrice: 4000, offeredStock: stockCount, discount: discount));
             shopData.Items.Add(CreateBarterItem(purpleObjects, _stardewItemManager.GetObjectByName("Qi Gem"), overridePrice: 10000, offeredStock: stockCount, discount: discount));
@@ -183,11 +182,11 @@ namespace StardewArchipelago.GameModifications.Modded
             var condition = "SYNCED_RANDOM day junimo_shops 0.4 @addDailyLuck";;
             if (season is not null)
             {
-                condition = $"{GameStateConditionProvider.CreateSeasonsCondition(season)}, " + condition;
+                condition = $"{GameStateConditionProvider.CreateSeasonsCondition(season)}, {condition}";
             }
             if (_archipelago.SlotData.Cropsanity == Cropsanity.Shuffled)
             {
-                condition = $"{GameStateConditionProvider.CreateHasReceivedItemCondition(seedItemName)}, " + condition;
+                condition = $"{GameStateConditionProvider.CreateHasReceivedItemCondition(seedItemName)}, {condition}";
             }
             return CreateBarterItem(yellowObjects, _stardewItemManager.GetItemByQualifiedId(qualifiedId), condition, offeredStock: stockCount, discount: discount);
         }
