@@ -532,10 +532,10 @@ namespace StardewArchipelago.Stardew
         private void InitializeOrAddColorObject(string color, StardewObject stardewObject)
         {
             if (!_objectsByColor.ContainsKey(color))
-                {
-                    _objectsByColor[color] = new List<StardewObject>();
-                }
-                _objectsByColor[color].Add(stardewObject);
+            {
+                _objectsByColor[color] = new List<StardewObject>();
+            }
+            _objectsByColor[color].Add(stardewObject);
         }
 
         private StardewObject ParseStardewObjectData(string id, ObjectData objectData)
