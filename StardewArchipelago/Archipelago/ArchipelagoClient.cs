@@ -294,7 +294,7 @@ namespace StardewArchipelago.Archipelago
             {
                 if (long.TryParse(words[i], out var id) && words[i].StartsWith("7"))
                 {
-                    var locationName = GetLocationName(id);
+                    var locationName = GetLocationName(id, false);
                     if (!string.IsNullOrWhiteSpace(locationName) && locationName != words[i] && locationName != MISSING_LOCATION_NAME)
                     {
                         words[i] = locationName;
@@ -534,7 +534,7 @@ namespace StardewArchipelago.Archipelago
                 var apItem = apItems[itemIndex];
                 var itemName = GetItemName(apItem.Item);
                 var playerName = GetPlayerName(apItem.Player);
-                var locationName = GetLocationName(apItem.Location) ?? "Thin air";
+                var locationName = GetLocationName(apItem.Location);
 
                 var receivedItem = new ReceivedItem(locationName, itemName, playerName, apItem.Location, apItem.Item, apItem.Player, itemIndex);
 
@@ -627,7 +627,7 @@ namespace StardewArchipelago.Archipelago
             _session.Socket.SendPacket(statusUpdatePacket);
         }
 
-        public string GetLocationName(long locationId)
+        public string GetLocationName(long locationId, bool required = true)
         {
             if (!MakeSureConnected())
             {
@@ -642,7 +642,11 @@ namespace StardewArchipelago.Archipelago
 
             if (string.IsNullOrWhiteSpace(locationName))
             {
-                _console.Log($"Failed at getting the location name for location {locationId}. This is probably due to a corrupted datapackage. Unexpected behaviors may follow", LogLevel.Error);
+                if (required)
+                {
+                    _console.Log($"Failed at getting the location name for location {locationId}. This is probably due to a corrupted datapackage. Unexpected behaviors may follow", LogLevel.Error);
+                }
+
                 return MISSING_LOCATION_NAME;
             }
 
