@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Force.DeepCloner;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Modded;
@@ -102,10 +103,11 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
         {
             var berryItems = _stardewItemManager.GetObjectsWithPhrase("berry");
             var newItems = new List<ShopItemData>();
+            var random = new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame / 2 + shopData.GetHashCode());
+            var chosenItemGroup = berryItems.Where(x => !(x.Name.Contains("Joja") || x.Name.Contains("Seeds")) && x.SellPrice != 0 ).ToList();
             foreach (var item in shopData.Items)
             {
-                var random = new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame / 2 + item.GetHashCode());
-                var chosenItemGroup = berryItems.FindAll(x => !(x.Name.Contains("Joja") || x.Name.Contains("Seeds")) && x.SellPrice != 0 );
+                
                 var chosenItem = chosenItemGroup[random.Next(chosenItemGroup.Count)];
                 var isRecipe = item.ItemId.Contains("Baked Berry Oatmeal") || item.ItemId.Contains("Flower Cookie");
                 if (isRecipe && _archipelago.SlotData.Chefsanity.HasFlag(Chefsanity.Purchases))

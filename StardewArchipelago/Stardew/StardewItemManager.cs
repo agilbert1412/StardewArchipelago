@@ -204,9 +204,9 @@ namespace StardewArchipelago.Stardew
             throw new ArgumentException($"Item not found: {itemName}");
         }
 
-        public List<StardewObject> GetObjectsWithPhrase(string phrase)
+        public IEnumerable<StardewObject> GetObjectsWithPhrase(string phrase)
         {
-            return _objectsByName.Where(x=> x.Key.Contains(phrase, StringComparison.OrdinalIgnoreCase)).ToDictionary(x => x.Key, x => x.Value).Values.ToList(); // I do it all for the berry
+            return _objectsByName.Where(x=> x.Key.Contains(phrase, StringComparison.OrdinalIgnoreCase)).Select(x => x.Value); // I do it all for the berry
         }
 
         public List<StardewObject> GetObjectsByColor(string color)
