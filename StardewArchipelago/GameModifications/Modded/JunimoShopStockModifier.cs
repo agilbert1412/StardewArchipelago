@@ -78,9 +78,9 @@ namespace StardewArchipelago.GameModifications.Modded
             foreach (var (id, fishInfo) in fishData)
             {
                 string[] fishSeasons = null;
-                if (fishData[id].Split("/")[1] != "trap")
+                if (fishInfo.Split("/")[1] != "trap")
                 {
-                    fishSeasons = fishData[id].Split("/")[6].Split(" ");
+                    fishSeasons = fishInfo.Split("/")[6].Split(" ");
                 }
                 var fishItem = _stardewItemManager.GetObjectById(id);
                 var condition = $"SYNCED_RANDOM day junimo_shops 0.4 @addDailyLuck, PLAYER_HAS_CAUGHT_FISH Current {id}";
