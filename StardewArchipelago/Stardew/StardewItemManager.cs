@@ -201,7 +201,7 @@ namespace StardewArchipelago.Stardew
             {
                 return _objectsByType[type];
             }
-            throw new ArgumentException($"Color not supported: {type}");
+            throw new ArgumentException($"Type not found: {type}");
         }
 
         public BigCraftable GetBigCraftableById(string itemId)
