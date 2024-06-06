@@ -15,12 +15,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
     {
         public static void Initialize(IMonitor monitor, IModHelper modHelper, ModConfig config, ArchipelagoClient archipelago, ArchipelagoStateDto state,
             LocationChecker locationChecker, StardewItemManager itemManager, WeaponsManager weaponsManager, EntranceManager entranceManager, BundlesManager bundlesManager,
-            SeedShopStockModifier seedShopStockModifier, JunimoShopGenerator junimoShopGenerator, Friends friends)
+            SeedShopStockModifier seedShopStockModifier, Friends friends)
         {
             VanillaCodeInjectionInitializer.Initialize(monitor, modHelper, config, archipelago, state, locationChecker, itemManager, weaponsManager, entranceManager, bundlesManager, friends);
             if (archipelago.SlotData.Mods.IsModded)
             {
-                ModCodeInjectionInitializer.Initialize(monitor, modHelper, archipelago, locationChecker, seedShopStockModifier, junimoShopGenerator);
+                ModCodeInjectionInitializer.Initialize(monitor, modHelper, archipelago, locationChecker, seedShopStockModifier);
             }
         }
     }

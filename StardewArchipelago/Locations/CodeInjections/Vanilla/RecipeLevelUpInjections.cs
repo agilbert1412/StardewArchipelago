@@ -72,7 +72,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             // There are no skill crafting recipe learning checks yet
         }
 
-        // public LevelUpMenu(string skillName, int level)
+        // public SkillLevelUpMenu(string skillName, int level)
         public static void SkillLevelUpMenuConstructor_SendModdedSkillRecipeChecks_Postfix(IClickableMenu __instance, string skillName, int level)
         {
             try

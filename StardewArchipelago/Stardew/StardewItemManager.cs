@@ -18,6 +18,8 @@ namespace StardewArchipelago.Stardew
         private Dictionary<string, StardewItem> _itemsByQualifiedId;
         private Dictionary<string, StardewObject> _objectsById;
         private Dictionary<string, StardewObject> _objectsByName;
+        private Dictionary<string, List<StardewObject>> _objectsByColor;
+        private Dictionary<string, List<StardewObject>> _objectsByType;
         private Dictionary<string, BigCraftable> _bigCraftablesById;
         private Dictionary<string, BigCraftable> _bigCraftablesByName;
         private Dictionary<string, StardewBoots> _bootsById;
@@ -29,7 +31,7 @@ namespace StardewArchipelago.Stardew
         private Dictionary<string, StardewWeapon> _weaponsById;
         private Dictionary<string, StardewWeapon> _weaponsByName;
         private Dictionary<string, StardewCookingRecipe> _cookingRecipesByName;
-        private Dictionary<string, StardewCraftingRecipe> _craftingRecipesByName;
+        private Dictionary<string, StardewCraftingRecipe> _craftingRecipesByName;        
 
         private List<string> _priorityIds = new()
         {
@@ -178,6 +180,30 @@ namespace StardewArchipelago.Stardew
             throw new ArgumentException($"Item not found: {itemName}");
         }
 
+        public IEnumerable<StardewObject> GetObjectsWithPhrase(string phrase)
+        {
+            return _objectsByName.Where(x=> x.Key.Contains(phrase, StringComparison.OrdinalIgnoreCase)).Select(x => x.Value); // I do it all for the berry
+        }
+
+        public List<StardewObject> GetObjectsByColor(string color)
+        {
+            if (_objectsByColor.ContainsKey(color))
+            {
+                return _objectsByColor[color];
+            }
+
+            throw new ArgumentException($"Color not supported: {color}");
+        }
+
+        public List<StardewObject> GetObjectsByType(string type)
+        {
+            if (_objectsByType.ContainsKey(type))
+            {
+                return _objectsByType[type];
+            }
+            throw new ArgumentException($"Type not found: {type}");
+        }
+
         public BigCraftable GetBigCraftableById(string itemId)
         {
             if (_bigCraftablesById.ContainsKey(itemId))
@@ -287,6 +313,8 @@ namespace StardewArchipelago.Stardew
         {
             _objectsById = new Dictionary<string, StardewObject>();
             _objectsByName = new Dictionary<string, StardewObject>();
+            _objectsByColor = new Dictionary<string, List<StardewObject>>();
+            _objectsByType = new Dictionary<string, List<StardewObject>>();
             var allObjectData = DataLoader.Objects(Game1.content);
             foreach (var (id, objectData) in allObjectData)
             {
@@ -307,6 +335,9 @@ namespace StardewArchipelago.Stardew
 
                     continue;
                 }
+
+                AddObjectByColor(objectData, stardewItem);
+                AddObjectByType(objectData, stardewItem);
 
                 _objectsById.Add(id, stardewItem);
                 _itemsByQualifiedId.Add(stardewItem.GetQualifiedId(), stardewItem);
@@ -479,6 +510,53 @@ namespace StardewArchipelago.Stardew
 
                 _craftingRecipesByName.Add(recipe.ItemName, recipe);
             }
+        }
+
+        private void AddObjectByColor(ObjectData objectData, StardewObject stardewObject)
+        {
+            if (objectData.ContextTags is null)
+            {
+                return; //Its an object with no tags attached, so wouldn't have a color.
+            }
+            var firstColor = objectData.ContextTags.FirstOrDefault(x => x.Contains("color_"));
+            if (firstColor is null)
+            {
+                return; // There was no color tag found; throw it out.
+            }
+            if (firstColor == "color_rainbow" || firstColor == "color_white")
+            {
+                InitializeOrAddColorObject("Blue", stardewObject);
+                InitializeOrAddColorObject("Grey", stardewObject);
+                InitializeOrAddColorObject("Red", stardewObject);
+                InitializeOrAddColorObject("Yellow", stardewObject);
+                InitializeOrAddColorObject("Orange", stardewObject);
+                InitializeOrAddColorObject("Purple", stardewObject);
+                return;
+            }
+            if (!Colors.ContextToGeneralColor.TryGetValue(firstColor, out var color))
+            {
+                return; // Not a relevant color
+            }
+            InitializeOrAddColorObject(color, stardewObject);
+
+        }
+
+        private void InitializeOrAddColorObject(string color, StardewObject stardewObject)
+        {
+            if (!_objectsByColor.ContainsKey(color))
+            {
+                _objectsByColor[color] = new List<StardewObject>();
+            }
+            _objectsByColor[color].Add(stardewObject);
+        }
+
+        private void AddObjectByType(ObjectData objectData, StardewObject stardewObject)
+        {
+            if (!_objectsByType.ContainsKey(objectData.Type))
+            {
+                _objectsByType[objectData.Type] = new List<StardewObject>();
+            }
+            _objectsByType[objectData.Type].Add(stardewObject);
         }
 
         private StardewObject ParseStardewObjectData(string id, ObjectData objectData)

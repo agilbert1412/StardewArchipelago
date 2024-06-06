@@ -44,6 +44,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                     throw new Exception($"Dig Spot '{digSpotId}' Could not be mapped to an Archipelago location!");
                 }
 
+                if (!Game1.netWorldState.Value.FoundBuriedNuts.Add(digSpotId))
+                {
+                    return false; // don't run original logic
+                }
+
                 Game1.player.team.MarkCollectedNut(digSpotId);
                 var itemId = IDProvider.CreateApLocationItemId(_digSpotNameMap[digSpotId]);
                 var item = ItemRegistry.Create(itemId);

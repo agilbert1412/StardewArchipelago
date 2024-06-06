@@ -1,5 +1,6 @@
 ﻿using System;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants;
 using StardewModdingAPI;
 using StardewValley;
 
@@ -42,6 +43,51 @@ namespace StardewArchipelago.Locations.InGameLocations
             catch (Exception ex)
             {
                 _monitor.Log($"Failed in {nameof(OnItemReceived_PickUpACheck_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
+        }
+
+        // public bool couldInventoryAcceptThisItem(string id, int stack, int quality = 0)
+        public static bool CouldInventoryAcceptThisItemById_ChecksFlyingAround_Prefix(Farmer __instance, string id, int stack, int quality, ref bool __result)
+        {
+            try
+            {
+                if (id == null)
+                {
+                    return true; // run original logic
+                }
+
+                if (id.Contains(IDProvider.AP_LOCATION, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    __result = true;
+                    return false; // don't run original logic
+                }
+
+                return true; // run original logic
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(CouldInventoryAcceptThisItemById_ChecksFlyingAround_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
+        }
+
+        // public bool couldInventoryAcceptThisItem(Item item)
+        public static bool CouldInventoryAcceptThisItemByItem_ChecksFlyingAround_Prefix(Farmer __instance, Item item, ref bool __result)
+        {
+            try
+            {
+                if (item is ArchipelagoLocation)
+                {
+                    __result = true;
+                    return false; // don't run original logic
+                }
+
+                return true; // run original logic
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(CouldInventoryAcceptThisItemByItem_ChecksFlyingAround_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
             }
         }

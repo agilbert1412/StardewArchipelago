@@ -14,6 +14,7 @@ using StardewArchipelago.GameModifications.Seasons;
 using StardewArchipelago.GameModifications.Tooltips;
 using StardewArchipelago.Locations;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
+using StardewArchipelago.Locations.Festival;
 using StardewArchipelago.Locations.InGameLocations;
 using StardewArchipelago.Serialization;
 using StardewArchipelago.Stardew;
@@ -22,6 +23,7 @@ using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Buildings;
+using StardewValley.Constants;
 using StardewValley.Events;
 using StardewValley.GameData.Locations;
 using StardewValley.Locations;
@@ -138,6 +140,18 @@ namespace StardewArchipelago.GameModifications
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Farmer), nameof(Farmer.OnItemReceived)),
                 prefix: new HarmonyMethod(typeof(ArchipelagoLocationsInjections), nameof(ArchipelagoLocationsInjections.OnItemReceived_PickUpACheck_Prefix))
+            );
+
+            var inventoryIdArguments = new[] { typeof(string), typeof(int), typeof(int) };
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Farmer), nameof(Farmer.couldInventoryAcceptThisItem), inventoryIdArguments),
+                prefix: new HarmonyMethod(typeof(ArchipelagoLocationsInjections), nameof(ArchipelagoLocationsInjections.CouldInventoryAcceptThisItemById_ChecksFlyingAround_Prefix))
+            );
+
+            var inventoryItemArguments = new[] { typeof(Item) };
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Farmer), nameof(Farmer.couldInventoryAcceptThisItem), inventoryItemArguments),
+                prefix: new HarmonyMethod(typeof(ArchipelagoLocationsInjections), nameof(ArchipelagoLocationsInjections.CouldInventoryAcceptThisItemByItem_ChecksFlyingAround_Prefix))
             );
         }
 
@@ -333,6 +347,11 @@ namespace StardewArchipelago.GameModifications
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Game1), nameof(Game1.getWeatherModificationsForDate)),
                 prefix: new HarmonyMethod(typeof(SeasonsRandomizer), nameof(SeasonsRandomizer.GetWeatherModificationsForDate_UseCorrectDates_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(StatKeys), nameof(StatKeys.SquidFestScore)),
+                prefix: new HarmonyMethod(typeof(SquidFestInjections), nameof(SquidFestInjections.SquidFestScore_UseMonthInsteadOfYear_Prefix))
             );
         }
 

@@ -49,8 +49,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
             { "1090506", "Krobus" },
         };
 
-        private static ShopMenu _lastShopMenuUpdated = null;
-
         public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago,
             LocationChecker locationChecker)
         {
@@ -99,8 +97,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
             }
         }
 
-        // public void endBehaviors(string[] split, GameLocation location)
-        public static bool EndBehaviors_AddSpecialOrderAfterEvent_Prefix(string[] split, Event __instance)
+        // public void endBehaviors(string[] args, GameLocation location)
+        public static bool EndBehaviors_AddSpecialOrderAfterEvent_Prefix(Event __instance, string[] args, GameLocation location)
         {
             try
             {

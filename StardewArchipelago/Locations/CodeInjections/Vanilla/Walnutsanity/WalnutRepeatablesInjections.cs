@@ -86,7 +86,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             double baitPotency, Vector2 bobberTile, string locationName)
         {
             // base.resetLocalState();
-            var gameLocationGetFishMethod = typeof(GameLocation).GetMethod("getFish", BindingFlags.Instance | BindingFlags.NonPublic);
+            var gameLocationGetFishMethod = typeof(GameLocation).GetMethod("getFish", BindingFlags.Instance | BindingFlags.Public);
             var functionPointer = gameLocationGetFishMethod.MethodHandle.GetFunctionPointer();
             var baseGetFish = (Func<float, string, int, Farmer, double, Vector2, string, Item>)Activator.CreateInstance(
                 typeof(Func<float, string, int, Farmer, double, Vector2, string, Item>),
@@ -152,11 +152,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                     }
                 }
 
-                __instance.destroyCrop(false);
-                if (__instance.crop.dead.Value)
-                {
-                    __instance.destroyCrop(true);
-                }
+                __instance.destroyCrop(true);
 
                 if (__instance.crop == null && t.ItemId == "66" && __instance.Location.objects.ContainsKey(tileLocation) && __instance.Location.objects[tileLocation].isForage())
                 {

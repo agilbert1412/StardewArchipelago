@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using StardewValley;
 
 namespace StardewArchipelago.Constants
 {
@@ -8,6 +10,8 @@ namespace StardewArchipelago.Constants
     {
         public static readonly string HAS_RECEIVED_ITEM = CreateId("HasReceivedItem");
         public static readonly string HAS_STOCK_SIZE = CreateId("HasCartStockSize");
+        public static readonly string FOUND_ARTIFACT = CreateId("FoundArtifact");
+        public static readonly string FOUND_MINERAL = CreateId("FoundMineral");
 
         public static string CreateHasReceivedItemCondition(string itemName, int amount = 1)
         {
@@ -38,6 +42,21 @@ namespace StardewArchipelago.Constants
         {
             var arguments = new[] { minimumStock.ToString() };
             return CreateCondition(HAS_STOCK_SIZE, arguments);
+        }
+
+        public static string CreateSeasonsCondition(string[] seasons)
+        {
+            return CreateCondition("SEASON", seasons);
+        }
+
+        public static string CreateArtifactsCondition(string[] artifacts)
+        {
+            return CreateCondition(FOUND_ARTIFACT, artifacts);
+        }
+
+        public static string CreateMineralsCondition(string[] minerals)
+        {
+            return CreateCondition(FOUND_MINERAL, minerals);
         }
 
         public static string CreateCondition(string condition, string[] arguments)

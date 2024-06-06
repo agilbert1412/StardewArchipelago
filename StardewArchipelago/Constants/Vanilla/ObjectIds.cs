@@ -158,6 +158,10 @@
         public const string GOLDEN_COCONUT = "791";
         public const string MUSSEL_NODE = "25";
         public const string MUMMIFIED_BAT = "827";
+        public const string LOST_BOOK = "102";
+        public const string SPICE_BERRY = "396";
+        public const string CRYSTAL_FRUIT = "414";
+
 
         public static bool IsSkillBook(string itemId)
         {

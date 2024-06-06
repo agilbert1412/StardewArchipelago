@@ -7,18 +7,18 @@ namespace StardewArchipelago.Stardew.NameMapping
     {
         private static readonly Dictionary<string, string> ArchaeologyToEnglishNamesMap = new()
         {
-            { "moonslime.archaeology.ancient_battery", "Ancient Battery Production Station" },
-            { "moonslime.archaeology.glass_bazier", "Glass Bazier" },
-            { "moonslime.archaeology.grinder", "Grinder" },
-            { "moonslime.archaeology.preservation_chamber", "Preservation Chamber" },
-            { "moonslime.archaeology.h_preservation_chamber", "Hardwood Preservation Chamber" },
-            { "moonslime.archaeology.glass_fence", "Glass Fence" },
-            { "moonslime.archaeology.dummy_path_bone", "Bone Path" },
-            { "moonslime.archaeology.dummy_path_glass", "Glass Path" },
-            { "moonslime.archaeology.dummy_water_strainer", "Water Shifter" },
-            { "moonslime.archaeology.h_display", "Hardwood Display" },
-            { "moonslime.archaeology.w_display", "Wooden Display" },
-            { "moonslime.archaeology.totem_volcano_warp", "Dwarf Gadget: Infinite Volcano Simulation" },
+            { "moonslime.Archaeology.ancient_battery", "Ancient Battery Production Station" },
+            { "moonslime.Archaeology.glass_bazier", "Glass Bazier" },
+            { "moonslime.Archaeology.grinder", "Grinder" },
+            { "moonslime.Archaeology.preservation_chamber", "Preservation Chamber" },
+            { "moonslime.Archaeology.h_preservation_chamber", "Hardwood Preservation Chamber" },
+            { "moonslime.Archaeology.glass_fence", "Glass Fence" },
+            { "moonslime.Archaeology.dummy_path_bone", "Bone Path" },
+            { "moonslime.Archaeology.dummy_path_glass", "Glass Path" },
+            { "moonslime.Archaeology.dummy_water_strainer", "Water Shifter" },
+            { "moonslime.Archaeology.h_display", "Hardwood Display" },
+            { "moonslime.Archaeology.w_display", "Wooden Display" },
+            { "moonslime.Archaeology.totem_volcano_warp", "Dwarf Gadget: Infinite Volcano Simulation" },
         };
 
         private static readonly Dictionary<string, string> EnglishToArchaeologyNamesMap = ArchaeologyToEnglishNamesMap.ToDictionary(x => x.Value, x => x.Key);

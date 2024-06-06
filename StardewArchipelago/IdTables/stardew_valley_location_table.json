@@ -556,6 +556,14 @@
             "code": 717158,
             "region": "Bulletin Board"
         },
+        "Green Rain Bundle": {
+            "code": 717159,
+            "region": "Crafts Room"
+        },
+        "Specific Fishing Bundle": {
+            "code": 717160,
+            "region": "Fish Tank"
+        },
         "The Mines Floor 10 Treasure": {
             "code": 717201,
             "region": "The Mines - Floor 10"
@@ -11604,6 +11612,10 @@
             "code": 724057,
             "region": "Abandoned Mines - 5"
         },
+        "Read Digging Like Worms": {
+            "code": 724351,
+            "region": "Farm"
+        },
         "Cook Magic Elixir": {
             "code": 724401,
             "region": "Farm"
@@ -11632,7 +11644,7 @@
             "code": 724407,
             "region": "Farm"
         },
-        "Craft Glass Bazier": {
+        "Craft Glass Brazier": {
             "code": 724408,
             "region": "Farm"
         },
@@ -11702,6 +11714,26 @@
         },
         "Craft T-Rex Skeleton R": {
             "code": 724425,
+            "region": "Farm"
+        },
+        "Craft Restoration Table": {
+            "code": 724426,
+            "region": "Farm"
+        },
+        "Craft Rusty Path": {
+            "code": 724427,
+            "region": "Farm"
+        },
+        "Craft Rusty Brazier": {
+            "code": 724428,
+            "region": "Farm"
+        },
+        "Craft Lucky Ring": {
+            "code": 724429,
+            "region": "Farm"
+        },
+        "Craft Bone Fence": {
+            "code": 724430,
             "region": "Farm"
         },
         "Magic Elixir Recipe": {
@@ -11884,6 +11916,18 @@
             "code": 724565,
             "region": "Kitchen"
         },
+        "Cook Digger's Delight": {
+            "code": 724566,
+            "region": "Kitchen"
+        },
+        "Cook Rocky Root Coffee": {
+            "code": 724567,
+            "region": "Kitchen"
+        },
+        "Cook Ancient Jello": {
+            "code": 724568,
+            "region": "Kitchen"
+        },
         "Baked Berry Oatmeal Recipe": {
             "code": 724601,
             "region": "Bear Shop"
@@ -11963,6 +12007,18 @@
         "T-Rex Skeleton R Recipe": {
             "code": 724622,
             "region": "Mines Dwarf Shop"
+        },
+        "Digger's Delight Recipe": {
+            "code": 724623,
+            "region": "Farm"
+        },
+        "Rocky Root Coffee Recipe": {
+            "code": 724624,
+            "region": "Farm"
+        },
+        "Ancient Jello Recipe": {
+            "code": 724625,
+            "region": "Farm"
         },
         "Tempered Galaxy Dagger": {
             "code": 724651,
@@ -13038,6 +13094,30 @@
         },
         "Shipsanity: Pterodactyl R Wing Bone": {
             "code": 725237,
+            "region": "Shipping"
+        },
+        "Shipsanity: Scrap Rust": {
+            "code": 725238,
+            "region": "Shipping"
+        },
+        "Shipsanity: Rusty Path": {
+            "code": 725239,
+            "region": "Shipping"
+        },
+        "Shipsanity: Digging Like Worms": {
+            "code": 725240,
+            "region": "Shipping"
+        },
+        "Shipsanity: Digger's Delight": {
+            "code": 725241,
+            "region": "Shipping"
+        },
+        "Shipsanity: Rocky Root Coffee": {
+            "code": 725242,
+            "region": "Shipping"
+        },
+        "Shipsanity: Ancient Jello": {
+            "code": 725243,
             "region": "Shipping"
         }
     }

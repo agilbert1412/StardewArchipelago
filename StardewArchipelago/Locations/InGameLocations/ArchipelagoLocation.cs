@@ -66,7 +66,6 @@ namespace StardewArchipelago.Locations.InGameLocations
 
         public ArchipelagoLocation(string locationName, IMonitor monitor, IModHelper modHelper, LocationChecker locationChecker, ArchipelagoClient archipelago, Hint[] myActiveHints) : this(locationName, locationName, monitor, modHelper, locationChecker, archipelago, myActiveHints)
         {
-
         }
 
         public ArchipelagoLocation(string locationDisplayName, string locationName, IMonitor monitor, IModHelper modHelper, LocationChecker locationChecker, ArchipelagoClient archipelago, Hint[] myActiveHints)

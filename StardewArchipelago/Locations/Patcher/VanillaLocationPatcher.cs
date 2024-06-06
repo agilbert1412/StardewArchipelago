@@ -18,6 +18,7 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.BellsAndWhistles;
 using StardewValley.Characters;
+using StardewValley.Constants;
 using StardewValley.Events;
 using StardewValley.GameData.Buildings;
 using StardewValley.Locations;
