@@ -255,7 +255,10 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void AddSVEModInjections()
         {
-            
+            if (!_archipelago.SlotData.Mods.HasMod(ModNames.SVE))
+            {
+                return;
+            }
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Chest), nameof(Chest.checkForAction)),
