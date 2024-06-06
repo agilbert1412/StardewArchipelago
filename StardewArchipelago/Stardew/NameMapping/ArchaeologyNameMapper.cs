@@ -8,7 +8,7 @@ namespace StardewArchipelago.Stardew.NameMapping
         private static readonly Dictionary<string, string> ArchaeologyToEnglishNamesMap = new()
         {
             { "moonslime.Archaeology.ancient_battery", "Ancient Battery Production Station" },
-            { "moonslime.Archaeology.glass_bazier", "Glass Bazier" },
+            { "moonslime.Archaeology.glass_brazier", "Glass Brazier" },
             { "moonslime.Archaeology.grinder", "Grinder" },
             { "moonslime.Archaeology.preservation_chamber", "Preservation Chamber" },
             { "moonslime.Archaeology.h_preservation_chamber", "Hardwood Preservation Chamber" },
@@ -19,6 +19,15 @@ namespace StardewArchipelago.Stardew.NameMapping
             { "moonslime.Archaeology.h_display", "Hardwood Display" },
             { "moonslime.Archaeology.w_display", "Wooden Display" },
             { "moonslime.Archaeology.totem_volcano_warp", "Dwarf Gadget: Infinite Volcano Simulation" },
+            { "moonslime.Archaeology.restoration_table", "Restoration Table" },
+            { "moonslime.Archaeology.rust_path", "Rusty Path" },
+            { "moonslime.Archaeology.rusty_scrap", "Scrap Rust" },
+            { "moonslime.Archaeology.rust_path", "Rusty Path" },
+            { "moonslime.Archaeology.skill_book", "Digging Like Worms" },
+            { "moonslime.Archaeology.diggers_delight", "Digger's Delight" },
+            { "moonslime.Archaeology.rocky_root", "Rocky Root Coffee" },
+            { "moonslime.Archaeology.ancient_jello", "Ancient Jello" },
+            { "moonslime.Archaeology.rusty_brazier", "Rusty Brazier" },
         };
 
         private static readonly Dictionary<string, string> EnglishToArchaeologyNamesMap = ArchaeologyToEnglishNamesMap.ToDictionary(x => x.Value, x => x.Key);
