@@ -152,11 +152,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                     }
                 }
 
-                __instance.destroyCrop(false);
-                if (__instance.crop.dead.Value)
-                {
-                    __instance.destroyCrop(true);
-                }
+                __instance.destroyCrop(true);
 
                 if (__instance.crop == null && t.ItemId == "66" && __instance.Location.objects.ContainsKey(tileLocation) && __instance.Location.objects[tileLocation].isForage())
                 {
