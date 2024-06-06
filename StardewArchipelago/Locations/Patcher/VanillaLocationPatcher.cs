@@ -651,6 +651,17 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.answerDialogueAction)),
                 prefix: new HarmonyMethod(typeof(PhoneInjections), nameof(PhoneInjections.AnswerDialogueAction_AdventureGuildRecovery_Prefix))
             );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(DefaultPhoneHandler), nameof(DefaultPhoneHandler.CallAnimalShop)),
+                prefix: new HarmonyMethod(typeof(PhoneInjections), nameof(PhoneInjections.CallAnimalShop_CheckEntranceOption_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.answerDialogueAction)),
+                prefix: new HarmonyMethod(typeof(PhoneInjections), nameof(PhoneInjections.AnswerDialogueAction_AnimalShopEntrance_Prefix))
+            );
+
             _modHelper.Events.Content.AssetRequested += _guildShopStockModifier.OnShopStockRequested;
         }
 

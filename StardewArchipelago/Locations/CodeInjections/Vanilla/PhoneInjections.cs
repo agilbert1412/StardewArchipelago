@@ -141,5 +141,72 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             return false;
         }
+
+        public static bool CallAnimalShop_CheckEntranceOption_Prefix(DefaultPhoneHandler __instance)
+        {
+            if (_archipelago.SlotData.EntranceRandomization != EntranceRandomization.Chaos)
+            {
+                return true; //Run original logic
+            }
+
+            GameLocation location = Game1.currentLocation;
+            location.playShopPhoneNumberSounds("AnimalShop");
+            Game1.player.freezePause = 4950;
+            DelayedAction.functionAfterDelay(delegate
+            {
+                Game1.playSound("bigSelect");
+                NPC characterFromName = Game1.getCharacterFromName("Marnie");
+                if (GameLocation.AreStoresClosedForFestival())
+                {
+                    Game1.DrawAnsweringMachineDialogue(characterFromName, "Strings\\Characters:Phone_Marnie_ClosedDay");
+                }
+                else if (characterFromName.ScheduleKey == "fall_18" || characterFromName.ScheduleKey == "winter_18" || characterFromName.ScheduleKey == "Tue" || characterFromName.ScheduleKey == "Mon")
+                {
+                    Game1.DrawAnsweringMachineDialogue(characterFromName, "Strings\\Characters:Phone_Marnie_ClosedDay");
+                }
+                else if (Game1.timeOfDay >= 900 && Game1.timeOfDay < 1600)
+                {
+                    Game1.DrawDialogue(characterFromName, "Strings\\Characters:Phone_Marnie_Open" + ((Game1.random.NextDouble() < 0.01) ? "_Rare" : ""));
+                }
+                else
+                {
+                    Game1.DrawAnsweringMachineDialogue(characterFromName, "Strings\\Characters:Phone_Marnie_Closed");
+                }
+
+                Game1.afterDialogues = (Game1.afterFadeFunction)Delegate.Combine(Game1.afterDialogues, (Game1.afterFadeFunction)delegate
+                {
+                    Response[] answerChoices = new Response[3]
+                    {
+                        new Response("AnimalShopEntrance", "Check Entrance"),
+                        new Response("AnimalShop_CheckAnimalPrices", Game1.content.LoadString("Strings\\Characters:Phone_CheckAnimalPrices")),
+                        new Response("HangUp", Game1.content.LoadString("Strings\\Characters:Phone_HangUp"))
+                    };
+                    location.createQuestionDialogue(Game1.content.LoadString("Strings\\Characters:Phone_SelectOption"), answerChoices, "telephone");
+                });
+            }, 4950);
+            return false;
+        }
+
+        public static bool AnswerDialogueAction_AnimalShopEntrance_Prefix(GameLocation __instance, string questionAndAnswer, string[] questionParams)
+        {
+            if (questionAndAnswer != "telephone_AnimalShopEntrance")
+            {
+                return true;
+            }
+
+            var character = Game1.getCharacterFromName("Marnie");
+            if (GameLocation.AreStoresClosedForFestival() || character.ScheduleKey == "fall_18" || character.ScheduleKey == "winter_18" || character.ScheduleKey == "Tue" || character.ScheduleKey == "Mon" || Game1.timeOfDay <= 900 || Game1.timeOfDay > 1600)
+            {
+                Dialogue locationDialog = new Dialogue(character, "", $"We have currently set up shop at the {_entranceManager.GetCurrentModifiedEntranceTo("AnimalShop")} today. Just come in through the {_entranceManager.GetCurrentModifiedEntranceFrom("AnimalShop")}. Please visit us from 9 AM to 4 PM from Wednesday to Sunday. *Click*");
+                locationDialog.overridePortrait = Game1.temporaryContent.Load<Texture2D>("Portraits\\AnsweringMachine");
+                Game1.DrawDialogue(locationDialog);
+            }
+            else
+            {
+                Dialogue locationDialog = new Dialogue(character, "", $"Oh! Yes, we are set up at the {_entranceManager.GetCurrentModifiedEntranceTo("AnimalShop")} today. Just come in through the {_entranceManager.GetCurrentModifiedEntranceFrom("AnimalShop")}. I hope you will be able to stop by! *Click*");
+                Game1.DrawDialogue(locationDialog);
+            }
+            return false;
+        }
     }
 }
