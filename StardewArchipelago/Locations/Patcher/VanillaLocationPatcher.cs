@@ -673,6 +673,16 @@ namespace StardewArchipelago.Locations.Patcher
                 prefix: new HarmonyMethod(typeof(PhoneInjections), nameof(PhoneInjections.AnswerDialogueAction_BlacksmithEntrance_Prefix))
             );
 
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(DefaultPhoneHandler), nameof(DefaultPhoneHandler.CallCarpenter)),
+                prefix: new HarmonyMethod(typeof(PhoneInjections), nameof(PhoneInjections.CallCarpenter_CheckEntranceOption_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.answerDialogueAction)),
+                prefix: new HarmonyMethod(typeof(PhoneInjections), nameof(PhoneInjections.AnswerDialogueAction_CarpenterEntrance_Prefix))
+            );
+
             _modHelper.Events.Content.AssetRequested += _guildShopStockModifier.OnShopStockRequested;
         }
 
