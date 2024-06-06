@@ -44,7 +44,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 }
 
                 var goldenCoconutLocation = $"Open Golden Coconut";
-                if (Game1.netWorldState.Value.GoldenCoconutCracked && _locationChecker.IsLocationMissing(goldenCoconutLocation))
+                if (Game1.netWorldState.Value.GoldenCoconutCracked)
                 {
                     // Just in case
                     _locationChecker.AddCheckedLocation(goldenCoconutLocation);
