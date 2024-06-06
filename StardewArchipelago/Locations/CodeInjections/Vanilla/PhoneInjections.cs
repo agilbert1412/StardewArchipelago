@@ -76,10 +76,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                         Game1.DrawDialogue(chaosDialog);
                         Game1.afterDialogues += () =>
                         {
-                            Response[] answerChoices = new Response[2]
+                            Response[] answerChoices = new Response[3]
                             {
-                        new Response("AdventureGuildEntrance", "Check Entrance"),
-                        new Response("AdventureGuildRecovery", "Item Recovery")
+                                new Response("AdventureGuildEntrance", "Check Entrance"),
+                                new Response("AdventureGuildRecovery", "Item Recovery"),
+                                new Response("HangUp", Game1.content.LoadString("Strings\\Characters:Phone_HangUp"))
                             };
                             Game1.currentLocation.createQuestionDialogue(Game1.content.LoadString("Strings\\Characters:Phone_SelectOption"), answerChoices, "telephone");
                         };
