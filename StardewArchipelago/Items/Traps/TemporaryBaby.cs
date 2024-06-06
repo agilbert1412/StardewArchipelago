@@ -5,6 +5,7 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Characters;
 using StardewValley.Locations;
+using StardewValley.Pathfinding;
 
 namespace StardewArchipelago.Items.Traps
 {
@@ -12,6 +13,7 @@ namespace StardewArchipelago.Items.Traps
     {
         private static IMonitor _monitor;
         private static IModHelper _helper;
+
         public static void Initialize(IMonitor monitor, IModHelper helper)
         {
             _monitor = monitor;

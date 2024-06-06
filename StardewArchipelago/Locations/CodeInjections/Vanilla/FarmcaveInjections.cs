@@ -25,7 +25,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             try
             {
-
                 if (questionKey != "cave")
                 {
                     return true; // run original logic

@@ -6,7 +6,6 @@ using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.Stardew.NameMapping;
 using StardewModdingAPI;
 using StardewValley;
-using StardewValley.Locations;
 using StardewValley.Objects;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
@@ -62,7 +61,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                         continue;
                     }
 
-                    allShippedItems.AddRange(chest.items);
+                    allShippedItems.AddRange(chest.Items);
                 }
             }
 
@@ -74,12 +73,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             foreach (var location in Game1.locations)
             {
                 yield return location;
-                if (location is not BuildableGameLocation buildableLocation)
+                if (!location.IsBuildableLocation())
                 {
                     continue;
                 }
 
-                foreach (var building in buildableLocation.buildings.Where(building => building.indoors.Value != null))
+                foreach (var building in location.buildings.Where(building => building.indoors.Value != null))
                 {
                     yield return building.indoors.Value;
                 }

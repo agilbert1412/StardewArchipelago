@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Items.Mail;
 using StardewValley;
 using Object = StardewValley.Object;
@@ -11,26 +12,20 @@ namespace StardewArchipelago.Stardew
     {
         public const string BIG_CRAFTABLE_SEPARATOR = ":";
 
-        public int Edibility { get; private set; }
-        public string ObjectType { get; private set; }
-        public string Category { get; private set; }
         public bool Outdoors { get; private set; }
         public bool Indoors { get; private set; }
         public int Fragility { get; private set; }
 
-        public BigCraftable(int id, string name, int sellPrice, int edibility, string objectType, string category, string description, bool outdoors, bool indoors, int fragility, string displayName)
-        : base(id, name, sellPrice, displayName, description)
+        public BigCraftable(string id, string name, int sellPrice, string description, bool outdoors, bool indoors, int fragility, string displayName)
+            : base(id, name, sellPrice, displayName, description)
         {
-            Edibility = edibility;
-            ObjectType = objectType;
-            Category = category;
             Outdoors = outdoors;
             Indoors = indoors;
             Fragility = fragility;
 
             if (Name == "Rarecrow")
             {
-                var rarecrowNumber = GetRarecrowNumber(id);
+                var rarecrowNumber = GetRarecrowNumber(int.Parse(id));
                 Name += $" #{rarecrowNumber}";
             }
         }
@@ -70,7 +65,7 @@ namespace StardewArchipelago.Stardew
                 138 => 6,
                 139 => 7,
                 140 => 8,
-                _ => throw new ArgumentException($"{id} is not a recognized rarecrow!")
+                _ => throw new ArgumentException($"{id} is not a recognized rarecrow!"),
             };
         }
 
@@ -79,11 +74,6 @@ namespace StardewArchipelago.Stardew
             var bigCraftable = new Object(Vector2.Zero, Id);
             bigCraftable.Stack = amount;
             return bigCraftable;
-        }
-
-        public override Item PrepareForRecovery()
-        {
-            throw new NotImplementedException();
         }
 
         public override void GiveToFarmer(Farmer farmer, int amount = 1)
@@ -95,6 +85,11 @@ namespace StardewArchipelago.Stardew
         public override LetterAttachment GetAsLetter(ReceivedItem receivedItem, int amount = 1)
         {
             return new LetterActionAttachment(receivedItem, LetterActionsKeys.GiveBigCraftable, $"{Id}{BIG_CRAFTABLE_SEPARATOR}{amount}");
+        }
+
+        public override string GetQualifiedId()
+        {
+            return $"{QualifiedItemIds.BIG_CRAFTABLE_QUALIFIER}{Id}";
         }
     }
 }

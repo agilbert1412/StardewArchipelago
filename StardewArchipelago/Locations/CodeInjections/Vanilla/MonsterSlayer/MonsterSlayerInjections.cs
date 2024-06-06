@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Constants;
+using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Goals;
 using StardewModdingAPI;
 using StardewValley;
@@ -34,9 +34,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
         {
             try
             {
-                // private NPC Gil
-                var gilField = _modHelper.Reflection.GetField<NPC>(__instance, "Gil");
-                Game1.drawDialogue(gilField.GetValue(), Game1.content.LoadString("Characters\\Dialogue\\Gil:Snoring"));
+                Game1.DrawDialogue(__instance.Gil, "Characters\\Dialogue\\Gil:Snoring");
                 return false; // don't run original logic
             }
             catch (Exception ex)

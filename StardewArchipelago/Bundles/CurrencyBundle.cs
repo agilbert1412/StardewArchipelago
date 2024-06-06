@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using StardewArchipelago.Constants;
 
 namespace StardewArchipelago.Bundles
 {
@@ -15,7 +16,7 @@ namespace StardewArchipelago.Bundles
                 {
                     continue;
                 }
-                
+
                 var itemFields = itemDetails.Split("|");
                 Currency = itemFields[0];
                 Amount = int.Parse(itemFields[1]);
@@ -28,18 +29,18 @@ namespace StardewArchipelago.Bundles
             return $"{CurrencyIds[Currency]} {Amount} {Amount}";
         }
 
-        public override string GetNumberRequiredItemsWithSeparator()
+        public override string GetNumberRequiredItems()
         {
             return "";
         }
 
-        public static readonly Dictionary<string, int> CurrencyIds = new()
+        public static readonly Dictionary<string, string> CurrencyIds = new()
         {
-            {"Money", -1}, 
-            {"Star Token", -2},
-            {"Qi Coin", -3},
-            {"Golden Walnut", -4},
-            {"Qi Gem", -5}
+            { "Money", IDProvider.MONEY },
+            { "Star Token", IDProvider.STAR_TOKEN },
+            { "Qi Coin", IDProvider.QI_COIN },
+            // {"Golden Walnut", IDProvider.GOLDEN_WALNUT},
+            { "Qi Gem", IDProvider.QI_GEM },
         };
     }
 }

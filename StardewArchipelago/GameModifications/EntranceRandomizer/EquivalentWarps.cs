@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants;
 using StardewArchipelago.GameModifications.CodeInjections;
 using StardewValley;
 
@@ -144,14 +145,14 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
                     continue;
                 }
 
-                var numberOfTheaters = _archipelago.GetReceivedItemCount(TheaterInjections.MOVIE_THEATER_ITEM);
+                var numberOfTheaters = _archipelago.GetReceivedItemCount(APItem.MOVIE_THEATER);
 
                 if (numberOfTheaters >= 2)
                 {
                     correctArea = area.Replace(jojaMartLocation, movieTheater);
                     return true;
                 }
-                
+
                 if (numberOfTheaters >= 1)
                 {
                     correctArea = area.Replace(jojaMartLocation, abandonedJojaMart);

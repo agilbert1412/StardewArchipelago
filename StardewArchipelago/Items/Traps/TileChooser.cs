@@ -1,7 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using StardewArchipelago.Extensions;
 using StardewValley;
+using StardewValley.Pathfinding;
 using xTile.Dimensions;
+using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace StardewArchipelago.Items.Traps
 {
@@ -20,9 +22,9 @@ namespace StardewArchipelago.Items.Traps
             var tile = area.getRandomTile();
             var tilePoint = Utility.Vector2ToPoint(tile);
             var tileLocation = new Location(tilePoint.X, tilePoint.Y);
-            while (tilePoint.GetTotalDistance(origin) > maxDistance || area.isTileOccupied(tile) ||
-                   area.isWaterTile(tilePoint.X, tilePoint.Y) || !area.isTileLocationTotallyClearAndPlaceable(tile) ||
-                   !area.isTileLocationOpenIgnoreFrontLayers(tileLocation) || !CanPathFindToAnyWarp(area, tilePoint))
+            while (tilePoint.GetTotalDistance(origin) > maxDistance || area.IsTileOccupiedBy(tile) ||
+                   area.isWaterTile(tilePoint.X, tilePoint.Y) || !area.isTilePassable(tile) ||
+                   !area.isTilePlaceable(tile) || !CanPathFindToAnyWarp(area, tilePoint))
             {
                 tile = area.getRandomTile();
                 tilePoint = Utility.Vector2ToPoint(tile);
@@ -66,7 +68,7 @@ namespace StardewArchipelago.Items.Traps
                 return true;
             }
 
-            if (location.isCollidingPosition(new Microsoft.Xna.Framework.Rectangle(startPoint.X * 64 + 1, startPoint.Y * 64 + 1, 62, 62),
+            if (location.isCollidingPosition(new Rectangle(startPoint.X * 64 + 1, startPoint.Y * 64 + 1, 62, 62),
                     Game1.viewport, true, 0, false, Game1.player, true))
             {
                 return false;

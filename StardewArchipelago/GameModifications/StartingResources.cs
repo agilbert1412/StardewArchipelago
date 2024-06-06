@@ -18,13 +18,11 @@ namespace StardewArchipelago.GameModifications
         private const int MINIMUM_UNLIMITED_MONEY = 1000000;
         private ArchipelagoClient _archipelago;
         private StardewItemManager _stardewItemManager;
-        private StartingRecipes _startingRecipes;
 
         public StartingResources(ArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager stardewItemManager)
         {
             _archipelago = archipelago;
             _stardewItemManager = stardewItemManager;
-            _startingRecipes = new StartingRecipes(archipelago, locationChecker);
         }
 
         public void GivePlayerStartingResources()
@@ -37,7 +35,6 @@ namespace StardewArchipelago.GameModifications
 
             RemoveShippingBin();
             SendGilTelephoneLetter();
-            _startingRecipes.SynchronizeStartingRecipes(Game1.player);
         }
 
         private void GivePlayerStartingMoney()
@@ -57,15 +54,14 @@ namespace StardewArchipelago.GameModifications
 
         private void GivePlayerQuickStart()
         {
-
             if (Game1.getLocationFromName("FarmHouse") is not FarmHouse farmhouse)
             {
                 return;
             }
 
             RemoveGiftBoxes(farmhouse);
-            var seeds = _stardewItemManager.GetItemByName(GetStartingSeedsForThisSeason()).PrepareForGivingToFarmer(15);
-            CreateGiftBoxItemInEmptySpot(farmhouse, seeds);
+            var startCrop = _stardewItemManager.GetItemByName(GetStartingCropForThisSeason()).PrepareForGivingToFarmer(15);
+            CreateGiftBoxItemInEmptySpot(farmhouse, startCrop);
             var telephone = _stardewItemManager.GetItemByName("Telephone").PrepareForGivingToFarmer(1);
             CreateGiftBoxItemInEmptySpot(farmhouse, telephone);
             var calendar = _stardewItemManager.GetItemByName("Calendar").PrepareForGivingToFarmer(1);
@@ -102,8 +98,13 @@ namespace StardewArchipelago.GameModifications
             }
         }
 
-        private string GetStartingSeedsForThisSeason()
+        private string GetStartingCropForThisSeason()
         {
+            if (_archipelago.SlotData.FarmType.GetWhichFarm() == (int)SupportedFarmType.Meadowlands)
+            {
+                return "Hay";
+            }
+
             if (_archipelago.SlotData.Cropsanity == Cropsanity.Shuffled)
             {
                 return "Mixed Seeds";
@@ -139,10 +140,7 @@ namespace StardewArchipelago.GameModifications
                 }
             }
 
-            farmhouse.objects.Add(emptySpot, new Chest(0, new List<Item>()
-            {
-                itemToGift,
-            }, emptySpot, true));
+            farmhouse.objects.Add(emptySpot, new Chest(new List<Item> { itemToGift }, emptySpot, true, giftboxIsStarterGift: true));
         }
 
         private void RemoveShippingBin()

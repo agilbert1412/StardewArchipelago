@@ -9,6 +9,7 @@ using StardewArchipelago.Stardew;
 using StardewArchipelago.Textures;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Buildings;
 using StardewValley.Characters;
 using StardewValley.Locations;
 using StardewValley.Menus;
@@ -33,7 +34,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
 
         private static List<string> _notImmediatelyAccessible = new()
         {
-            "Leo", "Krobus", "Dwarf", "Sandy", "Kent"
+            "Leo", "Krobus", "Dwarf", "Sandy", "Kent",
         };
 
         private static IMonitor _monitor;
@@ -179,8 +180,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
         {
             try
             {
-                var name = __instance.names[i] as string;
-                var friend = _friends.GetFriend(name);
+                var socialEntry = __instance.SocialEntries[i];
+                var friend = _friends.GetFriend(socialEntry.InternalName);
                 if (friend == null)
                 {
                     return;
@@ -238,7 +239,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
                 {
                     textureName = ArchipelagoTextures.PLEADING;
                 }
-                else if(heartIndex >= maxHeartForCurrentRelation)
+                else if (heartIndex >= maxHeartForCurrentRelation)
                 {
                     textureName = ArchipelagoTextures.BLACK;
                 }
@@ -289,7 +290,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
 
                 var wasPet = __instance.grantedFriendshipForPet.Value;
                 var farm = __instance.currentLocation as Farm;
-                var wasWatered = farm?.petBowlWatered?.Value ?? false;
+                var petBowl = farm?.getBuildingByType(nameof(PetBowl)) as PetBowl;
+                var wasWatered = petBowl?.watered?.Value ?? false;
                 var pointIncrease = (wasPet ? 12 : 0) + (wasWatered ? 6 : 0);
                 var multipliedPointIncrease = GetMultipliedFriendship(pointIncrease);
 
@@ -302,7 +304,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
                 {
                     _locationChecker.AddCheckedLocation(string.Format(FRIENDSANITY_PATTERN, petFriend.ArchipelagoName, i));
                 }
-                farm?.petBowlWatered?.Set(false);
+                petBowl?.watered?.Set(false);
 
                 var archipelagoHeartItems = _archipelago.GetReceivedItemCount(string.Format(HEARTS_PATTERN, petFriend.ArchipelagoName));
                 var receivedHearts = archipelagoHeartItems * _archipelago.SlotData.FriendsanityHeartSize;
@@ -405,7 +407,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
                 var random = new Random((int)seed);
                 foreach (var npcName in __instance.friendshipData.Keys)
                 {
-                    PerformFriendshipDecay(__instance, npcName, random);
+                    PerformFriendshipChanges(__instance, npcName, random);
                 }
                 var date = new WorldDate(Game1.Date);
                 ++date.TotalDays;
@@ -419,23 +421,22 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
             }
         }
 
-        private static void PerformFriendshipDecay(Farmer farmer, string npcName, Random random)
+        private static void PerformFriendshipChanges(Farmer farmer, string npcName, Random random)
         {
-            var isSingleBachelor = false;
-            var npc = Game1.getCharacterFromName(npcName) ?? Game1.getCharacterFromName<Child>(npcName, false);
-            if (npc == null)
+            if (!TryGetNpc(npcName, out var npc))
             {
                 return;
             }
 
-            if (npc.datable.Value && !farmer.friendshipData[npcName].IsDating() && !npc.isMarried())
-            {
-                isSingleBachelor = true;
-            }
+            var isSingleBachelor = IsSingleBachelor(farmer, npcName, npc);
 
             AutoPetNpc(farmer, npcName, npc);
             AutoGrabNpc(farmer, npcName, npc, random);
+            DecayNpc(farmer, npcName, npc, isSingleBachelor);
+        }
 
+        private static void DecayNpc(Farmer farmer, string npcName, NPC npc, bool isSingleBachelor)
+        {
             if (farmer.hasPlayerTalkedToNPC(npcName))
             {
                 farmer.friendshipData[npcName].TalkedToToday = false;
@@ -447,10 +448,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
                 return;
             }
 
+            DoDecay(farmer, npcName, npc, isSingleBachelor);
+        }
+
+        private static void DoDecay(Farmer farmer, string npcName, NPC npc, bool isSingleBachelor)
+        {
             const int bachelorNoDecayThreshold = 2000;
             const int nonBachelorNoDecayThreshold = 2500;
             var earnedPoints = GetFriendshipPoints(npcName);
-            
+
             if (NpcIsSpouse(farmer, npcName))
             {
                 farmer.changeFriendship(DECAY_SPOUSE, npc);
@@ -464,6 +470,18 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
             {
                 farmer.changeFriendship(DECAY_OTHER, npc);
             }
+        }
+
+        private static bool IsSingleBachelor(Farmer farmer, string npcName, NPC npc)
+        {
+            var isSingleBachelor = npc.datable.Value && !farmer.friendshipData[npcName].IsDating() && !npc.isMarried();
+            return isSingleBachelor;
+        }
+
+        private static bool TryGetNpc(string npcName, out NPC npc)
+        {
+            npc = Game1.getCharacterFromName(npcName) ?? Game1.getCharacterFromName<Child>(npcName, false);
+            return npc != null;
         }
 
         private static void AutoPetNpc(Farmer farmer, string npcName, NPC npc)
