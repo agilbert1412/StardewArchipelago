@@ -635,13 +635,22 @@ namespace StardewArchipelago.Locations.Patcher
             );
         }
 
-        private void PatchAdventurerGuildShop()
+        private void PatchPhoneCalls()
         {
             _harmony.Patch(
                 original: AccessTools.Method(typeof(DefaultPhoneHandler), nameof(DefaultPhoneHandler.CallAdventureGuild)),
                 prefix: new HarmonyMethod(typeof(PhoneInjections), nameof(PhoneInjections.CallAdventureGuild_AllowRecovery_Prefix))
             );
 
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.answerDialogueAction)),
+                prefix: new HarmonyMethod(typeof(PhoneInjections), nameof(PhoneInjections.AnswerDialogueAction_AdventureGuildEntrance_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.answerDialogueAction)),
+                prefix: new HarmonyMethod(typeof(PhoneInjections), nameof(PhoneInjections.AnswerDialogueAction_AdventureGuildRecovery_Prefix))
+            );
             _modHelper.Events.Content.AssetRequested += _guildShopStockModifier.OnShopStockRequested;
         }
 

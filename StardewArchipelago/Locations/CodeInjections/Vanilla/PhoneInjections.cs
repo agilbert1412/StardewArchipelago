@@ -43,26 +43,45 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 DelayedAction.functionAfterDelay(() =>
                 {
                     Game1.playSound("bigSelect");
-                    var character = Game1.getCharacterFromName("Marlon");
-                    if (Game1.player.mailForTomorrow.Contains("MarlonRecovery"))
+
+                    if (_archipelago.SlotData.EntranceRandomization != EntranceRandomization.Chaos)
                     {
-                        Game1.DrawDialogue(character, "Strings\\Characters:Phone_Marlon_AlreadyRecovering");
+                        var character = Game1.getCharacterFromName("Marlon");
+                        if (Game1.player.mailForTomorrow.Contains("MarlonRecovery"))
+                        {
+                            Game1.DrawDialogue(character, "Strings\\Characters:Phone_Marlon_AlreadyRecovering");
+                        }
+                        else
+                        {
+                            Game1.DrawDialogue(character, "Strings\\Characters:Phone_Marlon_Open");
+                            Game1.afterDialogues += () =>
+                            {
+                                var equipmentsToRecover = _weaponsManager.GetEquipmentsForSale(IDProvider.ARCHIPELAGO_EQUIPMENTS_RECOVERY);
+                                if (equipmentsToRecover.Any())
+                                {
+                                    Game1.player.forceCanMove();
+                                    Utility.TryOpenShopMenu("AdventureGuildRecovery", "Marlon");
+                                }
+                                else
+                                {
+                                    Game1.DrawDialogue(character, "Strings\\Characters:Phone_Marlon_NoDeathItems");
+                                }
+                            };
+                        }
                     }
                     else
                     {
-                        Game1.DrawDialogue(character, "Strings\\Characters:Phone_Marlon_Open");
+                        var character = Game1.getCharacterFromName("Marlon");
+                        Dialogue chaosDialog = new Dialogue(character, "", "Marlon Speaking... Are you lost again? Yes, yes... Tell me what you need.");
+                        Game1.DrawDialogue(chaosDialog);
                         Game1.afterDialogues += () =>
                         {
-                            var equipmentsToRecover = _weaponsManager.GetEquipmentsForSale(IDProvider.ARCHIPELAGO_EQUIPMENTS_RECOVERY);
-                            if (equipmentsToRecover.Any())
+                            Response[] answerChoices = new Response[2]
                             {
-                                Game1.player.forceCanMove();
-                                Utility.TryOpenShopMenu("AdventureGuildRecovery", "Marlon");
-                            }
-                            else
-                            {
-                                Game1.DrawDialogue(character, "Strings\\Characters:Phone_Marlon_NoDeathItems");
-                            }
+                        new Response("AdventureGuildEntrance", "Check Entrance"),
+                        new Response("AdventureGuildRecovery", "Item Recovery")
+                            };
+                            Game1.currentLocation.createQuestionDialogue(Game1.content.LoadString("Strings\\Characters:Phone_SelectOption"), answerChoices, "telephone");
                         };
                     }
                 }, 4950);
@@ -73,6 +92,54 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 _monitor.Log($"Failed in {nameof(CallAdventureGuild_AllowRecovery_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
             }
+        }
+
+        public static bool AnswerDialogueAction_AdventureGuildEntrance_Prefix(GameLocation __instance, string questionAndAnswer, string[] questionParams)
+        {
+            if (questionAndAnswer != "telephone_AdventureGuildEntrance")
+            {
+                return true;
+            }
+
+            var character = Game1.getCharacterFromName("Marlon");
+            Dialogue locationDialog = new Dialogue(character, "", $"We are at the... *checks window*... { _entranceManager.GetCurrentModifiedEntranceTo("AdventureGuild") }.$0#$b#Oh... Come in through the {_entranceManager.GetCurrentModifiedEntranceFrom("AdventureGuild")}. Farewell. *Click*");
+            Game1.DrawDialogue(locationDialog);
+            return false;
+        }
+
+        public static bool AnswerDialogueAction_AdventureGuildRecovery_Prefix(GameLocation __instance, string questionAndAnswer, string[] questionParams)
+        {
+            if (questionAndAnswer != "telephone_AdventureGuildRecovery")
+            {
+                return true;
+            }
+
+            var character = Game1.getCharacterFromName("Marlon");
+            if (Game1.player.mailForTomorrow.Contains("MarlonRecovery"))
+            {
+                Dialogue locationDialog = new Dialogue(character, "", $"Yep, I'm going to fetch your item tonight. You can relax. No need to keep calling! *click*");
+                Game1.DrawDialogue(locationDialog);
+            }
+            else
+            {
+                Dialogue locationDialog = new Dialogue(character, "", $"Yes, yes... I'm willing to fetch it... for a price.");
+                Game1.DrawDialogue(locationDialog);
+                Game1.afterDialogues += () =>
+                {
+                    var equipmentsToRecover = _weaponsManager.GetEquipmentsForSale(IDProvider.ARCHIPELAGO_EQUIPMENTS_RECOVERY);
+                    if (equipmentsToRecover.Any())
+                    {
+                        Game1.player.forceCanMove();
+                        Utility.TryOpenShopMenu("AdventureGuildRecovery", "Marlon");
+                    }
+                    else
+                    {
+                        Dialogue locationDialog = new Dialogue(character, "", "What's that? You haven't lost anything in the mines? Okay. Sounds like you don't need my help, then. Take care. *click*");
+                        Game1.DrawDialogue(locationDialog);
+                    }
+                };
+            }
+            return false;
         }
     }
 }
