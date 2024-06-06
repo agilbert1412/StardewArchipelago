@@ -22,7 +22,6 @@ namespace StardewArchipelago.Stardew.NameMapping
             { "moonslime.Archaeology.restoration_table", "Restoration Table" },
             { "moonslime.Archaeology.rust_path", "Rusty Path" },
             { "moonslime.Archaeology.rusty_scrap", "Scrap Rust" },
-            { "moonslime.Archaeology.rust_path", "Rusty Path" },
             { "moonslime.Archaeology.skill_book", "Digging Like Worms" },
             { "moonslime.Archaeology.diggers_delight", "Digger's Delight" },
             { "moonslime.Archaeology.rocky_root", "Rocky Root Coffee" },
