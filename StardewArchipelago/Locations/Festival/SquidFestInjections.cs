@@ -33,18 +33,17 @@ namespace StardewArchipelago.Locations.Festival
                     return true; // run original logic
                 }
 
-                var lastRewardMailToday = $"GotSquidFestReward_{Game1.year}_{Game1.dayOfMonth}_3";
+                var monthNumber = (int)(Game1.stats.DaysPlayed / 28);
+                var lastRewardMailToday = $"GotSquidFestReward_{monthNumber}_{Game1.dayOfMonth}_3";
                 if (Game1.player.mailReceived.Contains(lastRewardMailToday))
                 {
                     return true; // run original logic
                 }
-
-
                 __result = true;
 
                 var rewardsToGive = new List<string>();
                 var requiredSquidsToday = Game1.dayOfMonth != 12 ? new[] { 2, 5, 7, 10 } : new[] { 1, 3, 5, 8 };
-                var currentSquidScore = (int)Game1.stats.Get(StatKeys.SquidFestScore(Game1.dayOfMonth, (int)Game1.stats.DaysPlayed / 28));
+                var currentSquidScore = (int)Game1.stats.Get(StatKeys.SquidFestScore(Game1.dayOfMonth, monthNumber));
                 var alreadyGotSomeRewards = false;
                 var hasCrabBook = Game1.player.mailReceived.Contains("GotCrabbingBook");
                 if (!hasCrabBook)
@@ -58,7 +57,7 @@ namespace StardewArchipelago.Locations.Festival
                     {
                         break;
                     }
-                    var rewardMail = $"GotSquidFestReward_{Game1.year}_{Game1.dayOfMonth}_{rewardIndex}";
+                    var rewardMail = $"GotSquidFestReward_{monthNumber}_{Game1.dayOfMonth}_{rewardIndex}";
                     if (!Game1.player.mailReceived.Contains(rewardMail))
                     {
                         Game1.player.mailReceived.Add(rewardMail);
@@ -142,11 +141,26 @@ namespace StardewArchipelago.Locations.Festival
                 }
 
                 Game1.drawObjectDialogue(Game1.content.LoadString(alreadyGotSomeRewards ? "Strings\\1_6_Strings:SquidFest_AlreadyGotAvailableRewards" : "Strings\\1_6_Strings:SquidFestBooth_NoRewards"));
-                return false; // run original logic
+                return false; // don't run original logic
             }
             catch (Exception ex)
             {
                 _monitor.Log($"Failed in {nameof(AnswerDialogueAction_SquidFestRewards_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
+        }
+
+        // public static string SquidFestScore(int dayOfMonth, int year)
+        public static bool SquidFestScore_UseMonthInsteadOfYear_Prefix(int dayOfMonth, ref int year, ref string __result)
+        {
+            try
+            {
+                year = (int)(Game1.stats.DaysPlayed / 28);
+                return true; // run original logic
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(SquidFestScore_UseMonthInsteadOfYear_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
             }
         }
