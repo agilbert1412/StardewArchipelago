@@ -139,6 +139,18 @@ namespace StardewArchipelago.GameModifications
                 original: AccessTools.Method(typeof(Farmer), nameof(Farmer.OnItemReceived)),
                 prefix: new HarmonyMethod(typeof(ArchipelagoLocationsInjections), nameof(ArchipelagoLocationsInjections.OnItemReceived_PickUpACheck_Prefix))
             );
+
+            var inventoryIdArguments = new[] { typeof(string), typeof(int), typeof(int) };
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Farmer), nameof(Farmer.couldInventoryAcceptThisItem), inventoryIdArguments),
+                prefix: new HarmonyMethod(typeof(ArchipelagoLocationsInjections), nameof(ArchipelagoLocationsInjections.CouldInventoryAcceptThisItemById_ChecksFlyingAround_Prefix))
+            );
+
+            var inventoryItemArguments = new[] { typeof(Item) };
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Farmer), nameof(Farmer.couldInventoryAcceptThisItem), inventoryItemArguments),
+                prefix: new HarmonyMethod(typeof(ArchipelagoLocationsInjections), nameof(ArchipelagoLocationsInjections.CouldInventoryAcceptThisItemByItem_ChecksFlyingAround_Prefix))
+            );
         }
 
         private void PatchAchievements()
