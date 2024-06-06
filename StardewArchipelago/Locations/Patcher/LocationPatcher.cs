@@ -22,7 +22,7 @@ namespace StardewArchipelago.Locations.Patcher
             LocationChecker locationChecker, StardewItemManager itemManager, WeaponsManager weaponsManager, EntranceManager entranceManager, BundlesManager bundlesManager,
             SeedShopStockModifier seedShopStockModifier, Friends friends)
         {
-            CodeInjectionInitializer.Initialize(monitor, modHelper, config, archipelago, state, locationChecker, itemManager, weaponsManager, entranceManager, bundlesManager, seedShopStockModifier, junimoShopGenerator, friends);
+            CodeInjectionInitializer.Initialize(monitor, modHelper, config, archipelago, state, locationChecker, itemManager, weaponsManager, entranceManager, bundlesManager, seedShopStockModifier, friends);
             _patchers = new List<ILocationPatcher>();
             _patchers.Add(new VanillaLocationPatcher(monitor, modHelper, harmony, archipelago, locationChecker, itemManager));
             if (archipelago.SlotData.Mods.IsModded)
