@@ -137,7 +137,7 @@ namespace StardewArchipelago.GameModifications.Modded
             shopData.Items.Clear();
             var purpleObjects = _stardewItemManager.GetObjectsByColor("Purple");
             shopData.Items.Add(CreateBarterItem(purpleObjects, _stardewItemManager.GetObjectById(itemToKeep.Id), itemToKeep.Condition));
-            shopData.Items.Add(CreateBarterItem(purpleObjects, _stardewItemManager.GetObjectByName("Magic Rock Candy")));
+            shopData.Items.Add(CreateBarterItem(purpleObjects, _stardewItemManager.GetObjectByName("Magic Rock Candy"), offeredStock: stockCount, discount: discount));
             shopData.Items.Add(CreateBarterItem(purpleObjects, _stardewItemManager.GetObjectByName("Dewdrop Berry"), overridePrice: 4000, offeredStock: stockCount, discount: discount));
             shopData.Items.Add(CreateBarterItem(purpleObjects, _stardewItemManager.GetObjectByName("Qi Gem"), overridePrice: 10000, offeredStock: stockCount, discount: discount));
             shopData.Items.Add(CreateBarterItem(purpleObjects, _stardewItemManager.GetObjectByName("Calico Egg"), overridePrice: 500, offeredStock: stockCount, discount: discount));
