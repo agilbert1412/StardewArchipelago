@@ -1,11 +1,18 @@
 ﻿using System;
 using System.Linq;
+using HarmonyLib;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
+using StardewArchipelago.GameModifications;
+using StardewArchipelago.GameModifications.EntranceRandomizer;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Objects;
+using xTile.Dimensions;
+using Microsoft.Xna.Framework;
+using System.Net.NetworkInformation;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -15,13 +22,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private static IModHelper _modHelper;
         private static ArchipelagoClient _archipelago;
         private static WeaponsManager _weaponsManager;
+        private static EntranceManager _entranceManager;
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, WeaponsManager weaponsManager)
+        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, WeaponsManager weaponsManager, EntranceManager entranceManager)
         {
             _monitor = monitor;
             _modHelper = modHelper;
             _archipelago = archipelago;
             _weaponsManager = weaponsManager;
+            _entranceManager = entranceManager;
         }
 
         // public void CallAdventureGuild()

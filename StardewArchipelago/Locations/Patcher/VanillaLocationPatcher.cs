@@ -3,6 +3,7 @@ using HarmonyLib;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.GameModifications;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
@@ -81,7 +82,7 @@ namespace StardewArchipelago.Locations.Patcher
             ReplaceQuestsWithChecks();
             PatchCarpenter();
             ReplaceIsolatedEventsWithChecks();
-            PatchAdventurerGuildShop();
+            PatchPhoneCalls();
             ReplaceArcadeMachinesWithChecks();
             PatchTravelingMerchant();
             ReplaceRaccoonBundlesWithChecks();

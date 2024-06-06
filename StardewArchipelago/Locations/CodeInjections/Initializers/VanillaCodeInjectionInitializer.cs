@@ -1,6 +1,7 @@
 ﻿using StardewArchipelago.Archipelago;
 using StardewArchipelago.Bundles;
 using StardewArchipelago.GameModifications.CodeInjections.Television;
+using StardewArchipelago.GameModifications.EntranceRandomizer;
 using StardewArchipelago.Goals;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
@@ -17,7 +18,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
 {
     public static class VanillaCodeInjectionInitializer
     {
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ModConfig config, ArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, StardewItemManager itemManager, WeaponsManager weaponsManager, BundlesManager bundlesManager, Friends friends)
+        public static void Initialize(IMonitor monitor, IModHelper modHelper, ModConfig config, ArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, StardewItemManager itemManager, WeaponsManager weaponsManager, EntranceManager entranceManager, BundlesManager bundlesManager, Friends friends)
         {
             BackpackInjections.Initialize(monitor, archipelago, locationChecker);
             ScytheInjections.Initialize(monitor, locationChecker);
@@ -34,7 +35,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             CarpenterInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             IsolatedEventInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             WizardBookInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
-            PhoneInjections.Initialize(monitor, modHelper, archipelago, weaponsManager);
+            PhoneInjections.Initialize(monitor, modHelper, archipelago, weaponsManager, entranceManager);
             ArcadeMachineInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             TravelingMerchantInjections.Initialize(monitor, modHelper, archipelago, locationChecker, state);
             FishingInjections.Initialize(monitor, modHelper, archipelago, locationChecker, itemManager);
