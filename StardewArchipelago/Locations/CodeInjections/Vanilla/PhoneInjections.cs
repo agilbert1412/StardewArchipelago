@@ -420,5 +420,116 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             return false;
         }
+
+        public static bool CallSaloon_CheckEntranceOption_Prefix(DefaultPhoneHandler __instance)
+        {
+            if (_archipelago.SlotData.EntranceRandomization != EntranceRandomization.Chaos)
+            {
+                return true; //Run original logic
+            }
+
+            GameLocation location = Game1.currentLocation;
+            location.playShopPhoneNumberSounds("Saloon");
+            Game1.player.freezePause = 4950;
+            DelayedAction.functionAfterDelay(delegate
+            {
+                Game1.playSound("bigSelect");
+                NPC character = Game1.getCharacterFromName("Gus");
+                if (GameLocation.AreStoresClosedForFestival())
+                {
+                    Game1.DrawAnsweringMachineDialogue(character, "Strings\\Characters:Phone_Gus_Festival");
+                }
+                else if (Game1.timeOfDay >= 1200 && Game1.timeOfDay < 2400 && (character.ScheduleKey != "fall_4" || Game1.timeOfDay >= 1700))
+                {
+                    if (Game1.dishOfTheDay == null)
+                    {
+                        Dialogue locationDialog = new Dialogue(character, "", $"Hello,? Hi @! Yes... today's special is: '{Game1.dishOfTheDay.DisplayName}'! Just stop by {_entranceManager.GetCurrentModifiedEntranceTo("Saloon")} in the {_entranceManager.GetCurrentModifiedEntranceFrom("Saloon")}. We're open right now, so feel free to come on in for a taste." +
+                            $"$0#$b# *click*");
+                        Game1.DrawDialogue(locationDialog);
+                    }
+                    else
+                    {
+                        Dialogue locationDialog = new Dialogue(character, "", $"Hello,? Hi @! Yup, we're open right now. Just stop by {_entranceManager.GetCurrentModifiedEntranceTo("Saloon")} in the {_entranceManager.GetCurrentModifiedEntranceFrom("Saloon")}. Hope to see you soon!. *click*");
+                        Game1.DrawDialogue(locationDialog);
+                    }
+                }
+                else if (Game1.dishOfTheDay != null && Game1.timeOfDay < 2400)
+                {
+                    Dialogue locationDialog = new Dialogue(character, "", $"Hello, this is Gus from the Stardrop Saloon. We're currently closed, but please come by later if you'd like to try our daily special, '{Game1.dishOfTheDay.DisplayName}'!" +
+                        $"$0#$b#We are currently located at {_entranceManager.GetCurrentModifiedEntranceTo("Saloon")}, just come in through the {_entranceManager.GetCurrentModifiedEntranceFrom("Saloon")} entrance. *beep*");
+                    locationDialog.overridePortrait = Game1.temporaryContent.Load<Texture2D>("Portraits\\AnsweringMachine");
+                    Game1.DrawDialogue(locationDialog);
+                }
+                else
+                {
+                    Dialogue locationDialog = new Dialogue(character, "", $"Hello, this is Gus from the Stardrop Saloon. We're currently closed. Please stop in between 12PM and 12AM if you would like some of our delicious food and drink." +
+                        $"$0#$b#We are currently located at {_entranceManager.GetCurrentModifiedEntranceTo("Saloon")}, just come in through the {_entranceManager.GetCurrentModifiedEntranceFrom("Saloon")} entrance. *beep*");
+                    locationDialog.overridePortrait = Game1.temporaryContent.Load<Texture2D>("Portraits\\AnsweringMachine");
+                    Game1.DrawDialogue(locationDialog);
+                }
+
+                location.answerDialogueAction("HangUp", Array.Empty<string>());
+            }, 4950);
+            return false;
+        }
+
+        public static bool CallSeedShop_CheckEntranceOption_Prefix(DefaultPhoneHandler __instance)
+        {
+            GameLocation location = Game1.currentLocation;
+            location.playShopPhoneNumberSounds("SeedShop");
+            Game1.player.freezePause = 4950;
+            DelayedAction.functionAfterDelay(delegate
+            {
+                Game1.playSound("bigSelect");
+                NPC characterFromName = Game1.getCharacterFromName("Pierre");
+                string text = Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth);
+                if (GameLocation.AreStoresClosedForFestival())
+                {
+                    Game1.DrawAnsweringMachineDialogue(characterFromName, "Strings\\Characters:Phone_Pierre_Festival");
+                }
+                else if ((Game1.isLocationAccessible("CommunityCenter") || text != "Wed") && Game1.timeOfDay >= 0 && Game1.timeOfDay < 1700)
+                {
+                    Game1.DrawDialogue(characterFromName, "Strings\\Characters:Phone_Pierre_Open" + ((Game1.random.NextDouble() < 0.01) ? "_Rare" : ""));
+                }
+                else
+                {
+                    Game1.DrawAnsweringMachineDialogue(characterFromName, "Strings\\Characters:Phone_Pierre_Closed");
+                }
+
+                Game1.afterDialogues = (Game1.afterFadeFunction)Delegate.Combine(Game1.afterDialogues, (Game1.afterFadeFunction)delegate
+                {
+                    Response[] answerChoices = new Response[3]
+                    {
+                        new Response("SeedShopEntrance", "Check entrance"),
+                        new Response("SeedShop_CheckSeedStock", Game1.content.LoadString("Strings\\Characters:Phone_CheckSeedStock")),
+                        new Response("HangUp", Game1.content.LoadString("Strings\\Characters:Phone_HangUp"))
+                    };
+                    location.createQuestionDialogue(Game1.content.LoadString("Strings\\Characters:Phone_SelectOption"), answerChoices, "telephone");
+                });
+            }, 4950);
+            return false;
+        }
+
+        public static bool AnswerDialogueAction_SeedShopEntrance_Prefix(GameLocation __instance, string questionAndAnswer, string[] questionParams)
+        {
+            if (questionAndAnswer != "telephone_SeedShopEntrance")
+            {
+                return true;
+            }
+
+            var character = Game1.getCharacterFromName("Pierre");
+            if (GameLocation.AreStoresClosedForFestival() || character.ScheduleKey == "Tue" || character.ScheduleKey == "summer_18" || Game1.timeOfDay <= 0 || Game1.timeOfDay > 1700)
+            {
+                Dialogue locationDialog = new Dialogue(character, "", $"We've moved to {_entranceManager.GetCurrentModifiedEntranceTo("ScienceHouse|6|24")}. Come in through the {_entranceManager.GetCurrentModifiedEntranceFrom("ScienceHouse|6|24")}. See you then! *beep*");
+                locationDialog.overridePortrait = Game1.temporaryContent.Load<Texture2D>("Portraits\\AnsweringMachine");
+                Game1.DrawDialogue(locationDialog);
+            }
+            else
+            {
+                Dialogue locationDialog = new Dialogue(character, "", $"Oh yes... We now live in {_entranceManager.GetCurrentModifiedEntranceTo("ScienceHouse|6|24")}. Just use the {_entranceManager.GetCurrentModifiedEntranceFrom("ScienceHouse|6|24")} entrance. Please be sure to check out our deals on seeds and produce! *click*");
+                Game1.DrawDialogue(locationDialog);
+            }
+            return false;
+        }
     }
 }

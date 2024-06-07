@@ -423,6 +423,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Jodi's House", "SamHouse" },
             { "Gem Puzzle", "IslandShrine" },
             { "Ginger Island Jungle", "IslandEast" },
+            { "Leo's Tree House", "LeoTreeHouse" },
         };
 
         public string GetCurrentModifiedEntranceTo(string currentChaosBuilding)
@@ -432,7 +433,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
                 currentChaosBuilding = "WizardHouseBasement";
             }
 
-            string currentEntrance = ModifiedEntrances.FirstOrDefault(e => e.Value.Contains($"to {currentChaosBuilding}")).Key;
+            string currentEntrance = ModifiedEntrances.FirstOrDefault(e => e.Value.Contains($"{currentChaosBuilding} to")).Key;
             currentEntrance = currentEntrance.Split(" to ").Last();
 
             return _locationAliases.FirstOrDefault(k => k.Value == currentEntrance).Key ?? currentEntrance;
@@ -445,7 +446,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
                 currentChaosBuilding = "WizardHouseBasement";
             }
 
-            string currentEntrance = ModifiedEntrances.FirstOrDefault(e => e.Value.Contains($"to {currentChaosBuilding}")).Key;
+            string currentEntrance = ModifiedEntrances.FirstOrDefault(e => e.Value.Contains($"{currentChaosBuilding} to")).Key;
             currentEntrance = currentEntrance.Split(" to ").First();
 
             return _locationAliases.FirstOrDefault(k => k.Value == currentEntrance).Key ?? currentEntrance;
