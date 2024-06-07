@@ -10,7 +10,7 @@ namespace StardewArchipelago.Constants.Modded
             { ModNames.ALECTO, "1.1.10" },
             { ModNames.ARCHAEOLOGY, "2.10.3" },
             { ModNames.AYEISHA, "0.7.3-alpha" },
-            { ModNames.BIGGER_BACKPACK, "7.1.0" },
+            { ModNames.BIGGER_BACKPACK, "7.3.0" },
             { ModNames.BINNING, "2.0.5" },
             //{ ModNames.COOKING, "1.4.5" },
             //{ ModNames.DEEP_WOODS, "3.1.0-beta" },
