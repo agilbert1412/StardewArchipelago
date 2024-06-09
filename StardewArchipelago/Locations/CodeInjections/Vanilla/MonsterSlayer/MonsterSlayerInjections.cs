@@ -144,7 +144,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
         {
             try
             {
-                if (!__result.Equals(MonsterName.SKELETON) || __instance is not Skeleton skeleton)
+                if (__instance is not Skeleton skeleton)
                 {
                     return;
                 }
