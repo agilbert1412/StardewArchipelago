@@ -4,6 +4,8 @@ namespace StardewArchipelago.Constants.Modded
 {
     public class ModVersions
     {
+        public const string WILDCARD = "x";
+
         public static readonly Dictionary<string, string> Versions = new()
         {
             { ModNames.ALEC, "2.2.1" },
@@ -28,7 +30,7 @@ namespace StardewArchipelago.Constants.Modded
             { ModNames.TRACTOR, "4.19.0" },
             //{ ModNames.WELLWICK, "1.0.0" },
             //{ ModNames.YOBA, "1.0.0" },
-            { ModNames.SVE, "1.14.44" },
+            { ModNames.SVE, $"1.14.{WILDCARD}" },
             { ModNames.DISTANT_LANDS, "2.0.8" },
             { ModNames.LACEY, "1.2.2" },
             //{ ModNames.BOARDING_HOUSE, "4.0.16" },

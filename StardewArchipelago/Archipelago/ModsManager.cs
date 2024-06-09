@@ -6,15 +6,18 @@ using StardewModdingAPI;
 
 namespace StardewArchipelago.Archipelago
 {
+
     public class ModsManager
     {
         private IMonitor _monitor;
         private List<string> _activeMods;
+        private VersionValidator _versionValidator;
 
         public ModsManager(IMonitor monitor, List<string> activeMods)
         {
             _monitor = monitor;
             _activeMods = activeMods;
+            _versionValidator = new VersionValidator();
         }
 
         public bool IsModded => _activeMods.Any();
@@ -101,7 +104,7 @@ namespace StardewArchipelago.Archipelago
             return valid;
         }
 
-        private static bool IsModActiveAndCorrectVersion(List<IModInfo> loadedModData, string desiredModName, string desiredVersion, out string existingVersion)
+        private bool IsModActiveAndCorrectVersion(List<IModInfo> loadedModData, string desiredModName, string desiredVersion, out string existingVersion)
         {
             var normalizedDesiredModName = GetNormalizedModName(desiredModName);
             foreach (var modInfo in loadedModData)
@@ -113,12 +116,7 @@ namespace StardewArchipelago.Archipelago
                 }
 
                 existingVersion = modInfo.Manifest.Version.ToString();
-                if (existingVersion.Equals(desiredVersion, StringComparison.OrdinalIgnoreCase))
-                {
-                    return true;
-                }
-
-                return false;
+                return _versionValidator.IsVersionCorrect(existingVersion, desiredVersion);
             }
 
             existingVersion = "[NOT FOUND]";
