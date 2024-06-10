@@ -199,7 +199,7 @@ namespace StardewArchipelago.Items
 
         private static void AddFishingBarBuff(BobberBar bar)
         {
-            var fishingBarSizeIncrease = (10 * _numberOfFishingBarBonuses);
+            var fishingBarSizeIncrease = (4 * _numberOfFishingBarBonuses);
             bar.bobberBarHeight += fishingBarSizeIncrease;
             bar.bobberBarPos = (568 - bar.bobberBarHeight);
         }
