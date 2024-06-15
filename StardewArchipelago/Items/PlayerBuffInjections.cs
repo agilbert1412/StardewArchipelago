@@ -39,17 +39,23 @@ namespace StardewArchipelago.Items
 
         public static void CheckForApBuffs()
         {
-            _numberOfSpeedBonuses = _archipelago.GetReceivedItemCount(APItem.MOVEMENT_SPEED_BONUS);
-            _numberOfLuckBonuses = _archipelago.GetReceivedItemCount(APItem.LUCK_BONUS);
-            _numberOfDamageBonuses = _archipelago.GetReceivedItemCount(APItem.DAMAGE_BONUS);
-            _numberOfDefenseBonuses = _archipelago.GetReceivedItemCount(APItem.DEFENSE_BONUS);
-            _numberOfImmunityBonuses = _archipelago.GetReceivedItemCount(APItem.IMMUNITY_BONUS);
-            _numberOfEnergyBonuses = _archipelago.GetReceivedItemCount(APItem.ENERGY_BONUS);
-            _numberOfBiteRateBonuses = _archipelago.GetReceivedItemCount(APItem.BITE_RATE_BONUS);
-            _numberOfFishTrapBonuses = _archipelago.GetReceivedItemCount(APItem.FISH_TRAP_BONUS);
-            _numberOfFishingBarBonuses = _archipelago.GetReceivedItemCount(APItem.FISHING_BAR_SIZE_BONUS);
-            // _numberOfQualityBonuses = _archipelago.GetReceivedItemCount(APItem.QUALITY_BONUS);
-            // _numberOfGlowBonuses = _archipelago.GetReceivedItemCount(APItem.GLOW_BONUS);
+            _numberOfSpeedBonuses = GetNumberOfBuff(APItem.MOVEMENT_SPEED_BONUS);
+            _numberOfLuckBonuses = GetNumberOfBuff(APItem.LUCK_BONUS, 24); // If the daily luck reaches 0.75, weird shit starts to happen. 24 buffs is 0.6, plus the max daily of 0.1 and the trinket of 0.025 makes 0.725
+            _numberOfDamageBonuses = GetNumberOfBuff(APItem.DAMAGE_BONUS);
+            _numberOfDefenseBonuses = GetNumberOfBuff(APItem.DEFENSE_BONUS);
+            _numberOfImmunityBonuses = GetNumberOfBuff(APItem.IMMUNITY_BONUS);
+            _numberOfEnergyBonuses = GetNumberOfBuff(APItem.ENERGY_BONUS);
+            _numberOfBiteRateBonuses = GetNumberOfBuff(APItem.BITE_RATE_BONUS);
+            _numberOfFishTrapBonuses = GetNumberOfBuff(APItem.FISH_TRAP_BONUS);
+            _numberOfFishingBarBonuses = GetNumberOfBuff(APItem.FISHING_BAR_SIZE_BONUS, 65); // If you max out every possible fishing buff from every source, and add 65 of these, it makes the bar take exactly the whole height of the minigame
+            // _numberOfQualityBonuses = GetNumberOfBuff(APItem.QUALITY_BONUS);
+            // _numberOfGlowBonuses = GetNumberOfBuff(APItem.GLOW_BONUS);
+        }
+
+        private static int GetNumberOfBuff(string buffName, int maximum = int.MaxValue)
+        {
+            var numberReceived = _archipelago.GetReceivedItemCount(buffName);
+            return Math.Min(numberReceived, maximum);
         }
 
         public static void GetMovementSpeed_AddApBuffs_Postfix(Farmer __instance, ref float __result)
