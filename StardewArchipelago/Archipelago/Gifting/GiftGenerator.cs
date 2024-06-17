@@ -56,12 +56,12 @@ namespace StardewArchipelago.Archipelago.Gifting
                 traits.Add(new GiftTrait(GiftFlag.Trap, 1, 1));
             }
 
-            if (!Game1.objectData.ContainsKey(giftObject.QualifiedItemId))
+            if (!Game1.objectData.ContainsKey(giftObject.ItemId))
             {
                 return traits.ToArray();
             }
 
-            var objectInfo = Game1.objectData[giftObject.QualifiedItemId];
+            var objectInfo = Game1.objectData[giftObject.ItemId];
             var edibility = objectInfo.Edibility;
             if (Convert.ToInt32(edibility) > 0)
             {
@@ -87,12 +87,15 @@ namespace StardewArchipelago.Archipelago.Gifting
             }
 
             var buffsData = objectInfo.Buffs;
-            foreach (var buffData in buffsData)
+            if (buffsData is not null)
             {
-                var buffDuration = buffData.Duration / DEFAULT_BUFF_DURATION;
-                foreach (var buffTrait in GetBuffTraits(buffData, buffDuration))
+                foreach (var buffData in buffsData)
                 {
-                    yield return buffTrait;
+                    var buffDuration = buffData.Duration / DEFAULT_BUFF_DURATION;
+                    foreach (var buffTrait in GetBuffTraits(buffData, buffDuration))
+                    {
+                        yield return buffTrait;
+                    }
                 }
             }
         }
@@ -104,7 +107,19 @@ namespace StardewArchipelago.Archipelago.Gifting
                 yield break;
             }
 
-            var effects = DataLoader.Buffs(Game1.content)[buffData.BuffId].Effects;
+            // buffData.BuffId should be used for non-standard, not yet compatible buffs such as Oil of Garlic
+
+            if (buffData.CustomAttributes is null)
+            {
+                yield break;
+            }
+
+            var effects = buffData.CustomAttributes;
+
+            if (effects.FarmingLevel != 0)
+            {
+                yield return CreateTrait(GiftFlag.Tool, buffDuration, effects.FarmingLevel);
+            }
 
             if (effects.FishingLevel != 0)
             {
@@ -119,6 +134,16 @@ namespace StardewArchipelago.Archipelago.Gifting
             if (effects.ForagingLevel != 0)
             {
                 yield return CreateTrait(GiftFlag.Tool, buffDuration, effects.ForagingLevel);
+            }
+            
+            if (effects.LuckLevel != 0)
+            {
+                //yield return CreateTrait(GiftFlag.Luck, buffDuration, effects.LuckLevel);
+            }
+
+            if (effects.MagneticRadius != 0)
+            {
+                //yield return CreateTrait(GiftFlag.Magnet, buffDuration, effects.MagneticRadius);
             }
 
             if (effects.MaxStamina != 0)
