@@ -93,7 +93,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             {
                 return;
             }
-             _locationChecker.AddCheckedLocation($"{eventCooking[id]}{RECIPE_SUFFIX}");
+            _locationChecker.AddCheckedLocation($"{eventCooking[id]}{RECIPE_SUFFIX}");
         }
 
         public static void CheckCraftsanityLocation(string id)
