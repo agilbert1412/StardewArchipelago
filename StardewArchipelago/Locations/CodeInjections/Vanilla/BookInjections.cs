@@ -31,8 +31,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             _locationChecker = locationChecker;
             _qosManager = qosManager;
 
-            // So the rest of the world doesn't try to spawn them
-            Game1.netWorldState.Value.LostBooksFound = 21;
+            if (archipelago.SlotData.Booksanity == Booksanity.All)
+            {
+                // So the rest of the world doesn't try to spawn them
+                Game1.netWorldState.Value.LostBooksFound = 21;
+            }
         }
 
         // protected override void resetLocalState()
