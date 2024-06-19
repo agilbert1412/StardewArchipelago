@@ -159,18 +159,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
                     if (!wasTalkedTo)
                     {
-                        var timesFedRaccoons = Game1.netWorldState.Value.TimesFedRaccoons;
-                        if (timesFedRaccoons >= 5 && raccoonBundleAvailable)
+                        if (raccoonBundleAvailable)
                         {
                             Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\1_6_Strings:Raccoon_intro"));
                         }
-                        else if (timesFedRaccoons > 5 & !raccoonBundleAvailable)
-                        {
-                            Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\1_6_Strings:Raccoon_interim"));
-                        }
                         else
                         {
-                            Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\1_6_Strings:Raccoon_" + (!raccoonBundleAvailable ? "interim_" : "intro_") + timesFedRaccoons));
+                            Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\1_6_Strings:Raccoon_interim"));
                         }
                         if (!raccoonBundleAvailable)
                         {
