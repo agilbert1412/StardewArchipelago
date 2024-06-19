@@ -20,7 +20,10 @@ namespace StardewArchipelago.GameModifications.Modded
         private static readonly string[] spring = new string[]{"spring"};
         private static readonly string[] summer = new string[]{"summer"};
         private static readonly string[] fall = new string[]{"fall"};
+        private static readonly string[] summer_fall = new string[]{"summer", "fall"};
         private static readonly string[] winter = new string[]{"winter"};
+        private static float INITIAL_DISCOUNT = 0.75f;
+        private static float APPLES_DISCOUNT = 0.05f;
 
         private static readonly Dictionary<string, string> _junimoPhrase = new()
         {
@@ -173,7 +176,7 @@ namespace StardewArchipelago.GameModifications.Modded
             {
                 applesHearts = Game1.player.friendshipData["Apples"].Points / 250; // Get discount from being friends with Apples
             }
-            return 1 - applesHearts * 0.05f;
+            return INITIAL_DISCOUNT - applesHearts * APPLES_DISCOUNT;
         }
 
         private ShopItemData CreateJunimoSeedItem(List<StardewObject> yellowObjects, string qualifiedId, int stockCount, double discount, string[] season = null)
@@ -211,13 +214,13 @@ namespace StardewArchipelago.GameModifications.Modded
             shopData.Items.Add(CreateJunimoSeedItem(yellowObjects, QualifiedItemIds.TOMATO_SEEDS, stockCount, discount, summer));
             shopData.Items.Add(CreateJunimoSeedItem(yellowObjects, QualifiedItemIds.BLUEBERRY_SEEDS, stockCount, discount, summer));
             shopData.Items.Add(CreateJunimoSeedItem(yellowObjects, QualifiedItemIds.PEPPER_SEEDS, stockCount, discount, summer));
-            shopData.Items.Add(CreateJunimoSeedItem(yellowObjects, QualifiedItemIds.WHEAT_SEEDS, stockCount, discount, summer));
+            shopData.Items.Add(CreateJunimoSeedItem(yellowObjects, QualifiedItemIds.WHEAT_SEEDS, stockCount, discount, summer_fall));
             shopData.Items.Add(CreateJunimoSeedItem(yellowObjects, QualifiedItemIds.RADISH_SEEDS, stockCount, discount, summer));
             shopData.Items.Add(CreateJunimoSeedItem(yellowObjects, QualifiedItemIds.POPPY_SEEDS, stockCount, discount, summer));
             shopData.Items.Add(CreateJunimoSeedItem(yellowObjects, QualifiedItemIds.SPANGLE_SEEDS, stockCount, discount, summer));
             shopData.Items.Add(CreateJunimoSeedItem(yellowObjects, QualifiedItemIds.HOPS_STARTER, stockCount, discount, summer));
-            shopData.Items.Add(CreateJunimoSeedItem(yellowObjects, QualifiedItemIds.CORN_SEEDS, stockCount, discount, summer));
-            shopData.Items.Add(CreateJunimoSeedItem(yellowObjects, QualifiedItemIds.SUNFLOWER_SEEDS, stockCount, discount, summer));
+            shopData.Items.Add(CreateJunimoSeedItem(yellowObjects, QualifiedItemIds.CORN_SEEDS, stockCount, discount, summer_fall));
+            shopData.Items.Add(CreateJunimoSeedItem(yellowObjects, QualifiedItemIds.SUNFLOWER_SEEDS, stockCount, discount, summer_fall));
             shopData.Items.Add(CreateJunimoSeedItem(yellowObjects, QualifiedItemIds.RED_CABBAGE_SEEDS, stockCount, discount, summer));
             shopData.Items.Add(CreateJunimoSeedItem(yellowObjects, QualifiedItemIds.STARFRUIT_SEEDS, stockCount, discount, summer));
         }
@@ -225,13 +228,10 @@ namespace StardewArchipelago.GameModifications.Modded
         private void AddFallSeedsToYellowStock(List<StardewObject> yellowObjects, ShopData shopData, int stockCount, double discount)
         {
             shopData.Items.Add(CreateJunimoSeedItem(yellowObjects, QualifiedItemIds.PUMPKIN_SEEDS, stockCount, discount, fall));
-            shopData.Items.Add(CreateJunimoSeedItem(yellowObjects, QualifiedItemIds.CORN_SEEDS, stockCount, discount, fall));
             shopData.Items.Add(CreateJunimoSeedItem(yellowObjects, QualifiedItemIds.EGGPLANT_SEEDS, stockCount, discount, fall));
             shopData.Items.Add(CreateJunimoSeedItem(yellowObjects, QualifiedItemIds.BOK_CHOY_SEEDS, stockCount, discount, fall));
             shopData.Items.Add(CreateJunimoSeedItem(yellowObjects, QualifiedItemIds.YAM_SEEDS, stockCount, discount, fall));
             shopData.Items.Add(CreateJunimoSeedItem(yellowObjects, QualifiedItemIds.CRANBERRY_SEEDS, stockCount, discount, fall));
-            shopData.Items.Add(CreateJunimoSeedItem(yellowObjects, QualifiedItemIds.WHEAT_SEEDS, stockCount, discount, fall));
-            shopData.Items.Add(CreateJunimoSeedItem(yellowObjects, QualifiedItemIds.SUNFLOWER_SEEDS, stockCount, discount, fall));
             shopData.Items.Add(CreateJunimoSeedItem(yellowObjects, QualifiedItemIds.FAIRY_SEEDS, stockCount, discount, fall));
             shopData.Items.Add(CreateJunimoSeedItem(yellowObjects, QualifiedItemIds.AMARANTH_SEEDS, stockCount, discount, fall));
             shopData.Items.Add(CreateJunimoSeedItem(yellowObjects, QualifiedItemIds.GRAPE_STARTER, stockCount, discount, fall));
