@@ -639,63 +639,13 @@ namespace StardewArchipelago.Locations.Patcher
         private void PatchPhoneCalls()
         {
             _harmony.Patch(
-                original: AccessTools.Method(typeof(DefaultPhoneHandler), nameof(DefaultPhoneHandler.CallAdventureGuild)),
-                prefix: new HarmonyMethod(typeof(PhoneInjections), nameof(PhoneInjections.CallAdventureGuild_AllowRecovery_Prefix))
+                original: AccessTools.Method(typeof(DefaultPhoneHandler), nameof(DefaultPhoneHandler.TryHandleOutgoingCall)),
+                prefix: new HarmonyMethod(typeof(PhoneInjections), nameof(PhoneInjections.TryHandleOutgoingCall_EntranceRandomizer_Prefix))
             );
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.answerDialogueAction)),
-                prefix: new HarmonyMethod(typeof(PhoneInjections), nameof(PhoneInjections.AnswerDialogueAction_AdventureGuildEntrance_Prefix))
-            );
-
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.answerDialogueAction)),
-                prefix: new HarmonyMethod(typeof(PhoneInjections), nameof(PhoneInjections.AnswerDialogueAction_AdventureGuildRecovery_Prefix))
-            );
-
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(DefaultPhoneHandler), nameof(DefaultPhoneHandler.CallAnimalShop)),
-                prefix: new HarmonyMethod(typeof(PhoneInjections), nameof(PhoneInjections.CallAnimalShop_CheckEntranceOption_Prefix))
-            );
-
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.answerDialogueAction)),
-                prefix: new HarmonyMethod(typeof(PhoneInjections), nameof(PhoneInjections.AnswerDialogueAction_AnimalShopEntrance_Prefix))
-            );
-
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(DefaultPhoneHandler), nameof(DefaultPhoneHandler.CallBlacksmith)),
-                prefix: new HarmonyMethod(typeof(PhoneInjections), nameof(PhoneInjections.CallBlacksmith_CheckEntranceOption_Prefix))
-            );
-
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.answerDialogueAction)),
-                prefix: new HarmonyMethod(typeof(PhoneInjections), nameof(PhoneInjections.AnswerDialogueAction_BlacksmithEntrance_Prefix))
-            );
-
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(DefaultPhoneHandler), nameof(DefaultPhoneHandler.CallCarpenter)),
-                prefix: new HarmonyMethod(typeof(PhoneInjections), nameof(PhoneInjections.CallCarpenter_CheckEntranceOption_Prefix))
-            );
-
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.answerDialogueAction)),
-                prefix: new HarmonyMethod(typeof(PhoneInjections), nameof(PhoneInjections.AnswerDialogueAction_CarpenterEntrance_Prefix))
-            );
-
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(DefaultPhoneHandler), nameof(DefaultPhoneHandler.CallSaloon)),
-                prefix: new HarmonyMethod(typeof(PhoneInjections), nameof(PhoneInjections.CallSaloon_CheckEntranceOption_Prefix))
-            );
-
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(DefaultPhoneHandler), nameof(DefaultPhoneHandler.CallSeedShop)),
-                prefix: new HarmonyMethod(typeof(PhoneInjections), nameof(PhoneInjections.CallSeedShop_CheckEntranceOption_Prefix))
-            );
-
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.answerDialogueAction)),
-                prefix: new HarmonyMethod(typeof(PhoneInjections), nameof(PhoneInjections.AnswerDialogueAction_SeedShopEntrance_Prefix))
+                prefix: new HarmonyMethod(typeof(PhoneInjections), nameof(PhoneInjections.AnswerDialogueAction_EntranceRandomizer_Prefix))
             );
 
             _modHelper.Events.Content.AssetRequested += _guildShopStockModifier.OnShopStockRequested;
