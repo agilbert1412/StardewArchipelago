@@ -521,7 +521,7 @@ namespace StardewArchipelago.Stardew
             var firstColor = objectData.ContextTags.FirstOrDefault(x => x.Contains("color_"));
             if (firstColor is null)
             {
-                return; // There was no color tag found or its from the Joja route; throw it out.
+                return; // There was no color tag found; throw it out.
             }
             if (firstColor == "color_rainbow" || firstColor == "color_white")
             {
