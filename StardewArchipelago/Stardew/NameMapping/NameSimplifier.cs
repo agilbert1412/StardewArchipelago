@@ -29,12 +29,9 @@ namespace StardewArchipelago.Stardew.NameMapping
                 name = name.Replace(oldChar, newChar);
             }
 
-            if (name.Contains("moonslime.Archaeology."))
+            if (item.QualifiedItemId.Contains("moonslime.Archaeology."))
             {
-                var ti = CultureInfo.CurrentCulture.TextInfo;
-                var displayName = ti.ToTitleCase(item.DisplayName);
-                displayName = FixArchaeologyLocationInconsistentNaming(name);
-                name = displayName;
+                name = FixArchaeologyLocationInconsistentNaming(name);
             }
 
             if (item is not Object shippedObject)
