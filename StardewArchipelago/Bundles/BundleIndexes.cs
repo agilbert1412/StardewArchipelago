@@ -76,6 +76,7 @@ namespace StardewArchipelago.Bundles
             { "Master Baiter", 268 },
             { "Deep Fishing", 239 },
             { "Fish Smoker", 357 },
+            { "Specific Fishing", 360 },
 
             { "Bartender's", 276 },
             { "Helper's", 113 },
@@ -204,6 +205,7 @@ namespace StardewArchipelago.Bundles
             { "Trash", BUNDLE_RED },
             { "Deep Fishing", BUNDLE_DARK_BLUE },
             { "Fish Smoker", BUNDLE_RED },
+            { "Specific Fishing", BUNDLE_RED },
 
             { "Bartender's", BUNDLE_ORANGE },
             { "Calico", BUNDLE_YELLOW },

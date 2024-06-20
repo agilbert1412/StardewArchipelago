@@ -36,6 +36,7 @@ namespace StardewArchipelago.Stardew
         private List<string> _priorityIds = new()
         {
             "390",
+            "685",
         };
 
         public Dictionary<string, string> ItemSuffixes = new()
@@ -329,11 +330,8 @@ namespace StardewArchipelago.Stardew
                 {
                     if (_priorityIds.Contains(id))
                     {
-                        _objectsById.Add(id, stardewItem);
                         _objectsByName[stardewItem.Name] = stardewItem;
                     }
-
-                    continue;
                 }
 
                 AddObjectByColor(objectData, stardewItem);
@@ -362,7 +360,7 @@ namespace StardewArchipelago.Stardew
                 return;
             }
 
-            _objectsByName.Add(stardewItem.Name, stardewItem);
+            _objectsByName[stardewItem.Name] = stardewItem;
         }
 
         private void InitializeBigCraftables()
