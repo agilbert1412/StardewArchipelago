@@ -15,6 +15,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
 {
     public class BearShopStockModifier: BarterShopStockModifier
     {
+        private const float INITIAL_DISCOUNT = 0.85f;
+        private const float APPLES_DISCOUNT = 0.05f;
         public BearShopStockModifier(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago, StardewItemManager stardewItemManager) : base(monitor, helper, archipelago, stardewItemManager)
         {
             _monitor = monitor;
@@ -80,13 +82,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
         private double BearDiscount()
         {
             var hasKnowledge = _archipelago.HasReceivedItem("Bear Knowledge");
-            var knowledgeBuff = hasKnowledge ? 0.3f: 0f;
+            var knowledgeBuff = hasKnowledge ? 0.2f: 0f;
             var applesHearts = 0;
             if (Game1.player.friendshipData.ContainsKey("Apples"))
             {
                 applesHearts = Game1.player.friendshipData["Apples"].Points / 250; // Get discount from being friends with Apples
             }
-            return 1 - (knowledgeBuff + applesHearts * 0.05f);
+            return INITIAL_DISCOUNT - (knowledgeBuff + applesHearts * APPLES_DISCOUNT);
         }
 
         private int BearStockCount()

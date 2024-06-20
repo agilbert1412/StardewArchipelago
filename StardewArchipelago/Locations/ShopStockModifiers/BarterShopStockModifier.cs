@@ -86,6 +86,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
         private bool TryGetDirectExchangeRate(int soldItemValue, int requestedItemValue, out int[] exchangeRate)
         {
             exchangeRate = null;
+            soldItemValue = Math.Max(soldItemValue, 1); // Item's value may be so low the discount makes the system round to zero.
             if (soldItemValue > requestedItemValue && soldItemValue % requestedItemValue == 0)
             {
                 exchangeRate = new int[2] { 1, soldItemValue / requestedItemValue };
