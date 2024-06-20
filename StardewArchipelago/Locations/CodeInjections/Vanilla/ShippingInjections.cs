@@ -94,7 +94,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 {
                     continue;
                 }
-                FixArchaeologyLocationInconsistentNaming(name);
+                name = FixArchaeologyLocationInconsistentNaming(name);
                 var apLocation = $"{SHIPSANITY_PREFIX}{name}";
                 if (_archipelago.GetLocationId(apLocation) > -1)
                 {
@@ -107,7 +107,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
         }
 
-        private void FixArchaeologyLocationInconsistentNaming(string itemName)
+        private string FixArchaeologyLocationInconsistentNaming(string itemName)
         {
             itemName = itemName.Replace("Wood Display: ", "Wooden Display: ");
             itemName = itemName.Replace("Strange Doll Green", "Strange Doll (Green)");
@@ -116,6 +116,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 itemName = fixedName;
             }
+            return itemName;
         }
     }
 }
