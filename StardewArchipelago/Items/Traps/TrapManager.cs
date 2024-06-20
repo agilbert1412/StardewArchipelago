@@ -52,6 +52,7 @@ namespace StardewArchipelago.Items.Traps
         private const string UNGROWTH = "Benjamin Budton";
         private const string INFLATION = "Inflation";
         private const string BOMB = "Bomb";
+        private const string NUDGE = "Nudge";
 
         private static IMonitor _monitor;
         private readonly IModHelper _helper;
@@ -149,6 +150,7 @@ namespace StardewArchipelago.Items.Traps
             _traps.Add(UNGROWTH, UngrowCrops);
             _traps.Add(INFLATION, ActivateInflation);
             _traps.Add(BOMB, Explode);
+            _traps.Add(NUDGE, NudgePlayerItems);
 
             RegisterTrapsWithTrapSuffix();
             RegisterTrapsWithDifferentSpace();
@@ -832,6 +834,63 @@ namespace StardewArchipelago.Items.Traps
                 id = randomId,
             });
             location.netAudio.StartPlaying("fuse");
+        }
+
+        private void NudgePlayerItems()
+        {
+            var baseNudgeChance = _difficultyBalancer.NudgeChance[_archipelago.SlotData.TrapItemsDifficulty];
+            var allLocations = Game1.locations.ToList();
+            allLocations.AddRange(Game1.getFarm().buildings.Where(building => building?.indoors.Value != null).Select(building => building.indoors.Value));
+
+            NudgeObjectsEverywhere(allLocations, baseNudgeChance);
+            NudgeBuildings(baseNudgeChance);
+        }
+
+        private static void NudgeObjectsEverywhere(List<GameLocation> allLocations, double baseNudgeChance)
+        {
+            foreach (var gameLocation in allLocations)
+            {
+                NudgeObjectsAtLocation(gameLocation, baseNudgeChance);
+            }
+        }
+
+        private static void NudgeObjectsAtLocation(GameLocation gameLocation, double baseNudgeChance)
+        {
+            foreach (var (tile, gameObject) in gameLocation.Objects.Pairs)
+            {
+                if (gameObject is not Chest chest)
+                {
+                    continue;
+                }
+
+                NudgeChest(chest, baseNudgeChance);
+            }
+        }
+
+        private static void NudgeChest(Chest chest, double baseNudgeChance)
+        {
+            var seed = (int)Game1.stats.DaysPlayed + (int)(chest.TileLocation.X * 77) + (int)(chest.TileLocation.Y * 1933);
+            var random = new Random(seed);
+            var chestNudgeChance = baseNudgeChance;
+            while (random.NextDouble() < chestNudgeChance)
+            {
+                baseNudgeChance /= 2;
+                chest.TryMoveToSafePosition(random.Next(0, 4));
+            }
+        }
+
+        private void NudgeBuildings(double baseNudgeChance)
+        {
+            if (_archipelago.SlotData.TrapItemsDifficulty < TrapItemsDifficulty.Hell)
+            {
+                return;
+            }
+
+            var buildingsNudgeChance = baseNudgeChance / 8;
+            foreach (var building in Game1.getFarm().buildings)
+            {
+                // TODO: Nudge buildings because I'm evil
+            }
         }
 
         private IEnumerable<FruitTree> GetAllFruitTrees()
