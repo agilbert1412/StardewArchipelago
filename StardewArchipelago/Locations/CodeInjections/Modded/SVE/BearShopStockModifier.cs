@@ -82,7 +82,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
         private double BearDiscount()
         {
             var hasKnowledge = _archipelago.HasReceivedItem("Bear Knowledge");
-            var knowledgeBuff = hasKnowledge ? 0.3f: 0f;
+            var knowledgeBuff = hasKnowledge ? 0.2f: 0f;
             var applesHearts = 0;
             if (Game1.player.friendshipData.ContainsKey("Apples"))
             {
