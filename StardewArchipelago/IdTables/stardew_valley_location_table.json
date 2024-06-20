@@ -13119,6 +13119,10 @@
         "Shipsanity: Ancient Jello": {
             "code": 725243,
             "region": "Shipping"
+        },
+        "Shipsanity: Bone Fence": {
+            "code": 725244,
+            "region": "Shipping"
         }
     }
 }

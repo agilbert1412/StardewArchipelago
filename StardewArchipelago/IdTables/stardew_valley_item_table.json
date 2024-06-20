@@ -2140,6 +2140,10 @@
             "code": 721025,
             "classification": "trap"
         },
+        "Nudge Trap": {
+            "code": 721026,
+            "classification": "trap"
+        },
         "Deflation Bonus": {
             "code": 721501,
             "classification": "filler"
