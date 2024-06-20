@@ -519,7 +519,7 @@ namespace StardewArchipelago.Stardew
                 return; //Its an object with no tags attached, so wouldn't have a color.
             }
             var firstColor = objectData.ContextTags.FirstOrDefault(x => x.Contains("color_"));
-            if (firstColor is null || Constants.Modded.IgnoredModdedStrings.JojaRouteSVE.Contains(stardewObject.Name))
+            if (firstColor is null)
             {
                 return; // There was no color tag found or its from the Joja route; throw it out.
             }

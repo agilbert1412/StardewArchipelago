@@ -22,8 +22,8 @@ namespace StardewArchipelago.GameModifications.Modded
         private static readonly string[] fall = new string[]{"fall"};
         private static readonly string[] summer_fall = new string[]{"summer", "fall"};
         private static readonly string[] winter = new string[]{"winter"};
-        private static float INITIAL_DISCOUNT = 0.65f;
-        private static float APPLES_DISCOUNT = 0.05f;
+        private const float INITIAL_DISCOUNT = 0.65f;
+        private const float APPLES_DISCOUNT = 0.05f;
 
         private static readonly Dictionary<string, string> _junimoPhrase = new()
         {
@@ -76,7 +76,7 @@ namespace StardewArchipelago.GameModifications.Modded
             shopData.Owners[0].Dialogues[0].Dialogue = _junimoPhrase["Blue"];
             var fishData = DataLoader.Fish(Game1.content);
             shopData.Items.Clear();
-            var blueObjects = _stardewItemManager.GetObjectsByColor("Blue");
+            var blueObjects = _stardewItemManager.GetObjectsByColor("Blue").Where(x => !Constants.Modded.IgnoredModdedStrings.JojaRouteSVE.Contains(x.Name)).ToList();
 
             foreach (var (id, fishInfo) in fishData)
             {
