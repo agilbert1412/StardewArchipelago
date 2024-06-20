@@ -35,7 +35,7 @@ namespace StardewArchipelago.Constants.Modded
 
         public static readonly List<string> JojaRouteSVE = new()
         {
-            "Razor Trout", "Joja Berry", "Joja Berry Starter", "Joja Veggie", "Joja Veggie Seeds"
+            "Razor Trout", "Joja Berry", "Joja Berry Starter", "Joja Veggie", "Joja Veggie Seeds",
         };
 
     }
