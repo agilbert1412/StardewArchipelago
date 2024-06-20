@@ -738,6 +738,27 @@ namespace StardewArchipelago.Items.Traps
             crop.updateDrawMath(tilePositionField.GetValue());
         }
 
+        private IEnumerable<FruitTree> GetAllFruitTrees()
+        {
+            foreach (var gameLocation in Game1.locations)
+            {
+                foreach (var terrainFeature in gameLocation.terrainFeatures.Values)
+                {
+                    if (terrainFeature is not FruitTree fruitTree)
+                    {
+                        continue;
+                    }
+
+                    yield return fruitTree;
+                }
+            }
+        }
+
+        private void UngrowFruitTree(FruitTree fruitTree, int days)
+        {
+            fruitTree.daysUntilMature.Value += days;
+        }
+
         private void ActivateInflation()
         {
             Game1.player.RemoveMail("spring_1_2");
@@ -891,27 +912,6 @@ namespace StardewArchipelago.Items.Traps
             {
                 // TODO: Nudge buildings because I'm evil
             }
-        }
-
-        private IEnumerable<FruitTree> GetAllFruitTrees()
-        {
-            foreach (var gameLocation in Game1.locations)
-            {
-                foreach (var terrainFeature in gameLocation.terrainFeatures.Values)
-                {
-                    if (terrainFeature is not FruitTree fruitTree)
-                    {
-                        continue;
-                    }
-
-                    yield return fruitTree;
-                }
-            }
-        }
-
-        private void UngrowFruitTree(FruitTree fruitTree, int days)
-        {
-            fruitTree.daysUntilMature.Value += days;
         }
     }
 }
