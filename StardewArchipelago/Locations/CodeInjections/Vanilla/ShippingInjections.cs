@@ -94,7 +94,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 {
                     continue;
                 }
-                name = FixArchaeologyLocationInconsistentNaming(name);
                 var apLocation = $"{SHIPSANITY_PREFIX}{name}";
                 if (_archipelago.GetLocationId(apLocation) > -1)
                 {
@@ -105,18 +104,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     _monitor.Log($"Unrecognized Shipsanity Location: {name} [{shippedItem.ParentSheetIndex}]", LogLevel.Error);
                 }
             }
-        }
-
-        private string FixArchaeologyLocationInconsistentNaming(string itemName)
-        {
-            itemName = itemName.Replace("Wood Display: ", "Wooden Display: ");
-            itemName = itemName.Replace("Strange Doll Green", "Strange Doll (Green)");
-            itemName = itemName.Replace("Strange Doll Yellow", "Strange Doll");
-            if (Constants.Modded.ModItemNameTranslations.ArchaeologyInternalToDisplay.TryGetValue(itemName, out var fixedName))
-            {
-                itemName = fixedName;
-            }
-            return itemName;
         }
     }
 }
