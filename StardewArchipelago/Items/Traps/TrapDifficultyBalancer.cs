@@ -245,6 +245,26 @@ namespace StardewArchipelago.Items.Traps
             { TrapItemsDifficulty.Hell, 7 }, // Mega Bomb
             { TrapItemsDifficulty.Nightmare, 15 }, // Good luck!
         };
+
+        public Dictionary<TrapItemsDifficulty, double> NudgeChance = new()
+        {
+            { TrapItemsDifficulty.NoTraps, 0 },
+            { TrapItemsDifficulty.Easy, 0.1 },
+            { TrapItemsDifficulty.Medium, 0.4 },
+            { TrapItemsDifficulty.Hard, 1 },
+            { TrapItemsDifficulty.Hell, 4 },
+            { TrapItemsDifficulty.Nightmare, 8 },
+        };
+
+        public Dictionary<TrapItemsDifficulty, int> HoardAmount = new()
+        {
+            { TrapItemsDifficulty.NoTraps, 0 },
+            { TrapItemsDifficulty.Easy, 2 },
+            { TrapItemsDifficulty.Medium, 10 },
+            { TrapItemsDifficulty.Hard, 25 },
+            { TrapItemsDifficulty.Hell, 60 },
+            { TrapItemsDifficulty.Nightmare, 200 },
+        };
     }
 
     public enum TeleportDestination
