@@ -360,7 +360,10 @@ namespace StardewArchipelago.Stardew
                 return;
             }
 
-            _objectsByName[stardewItem.Name] = stardewItem;
+            if (!_objectsByName.ContainsKey(stardewItem.Name))
+            {
+                _objectsByName.Add(stardewItem.Name, stardewItem);
+            }
         }
 
         private void InitializeBigCraftables()
