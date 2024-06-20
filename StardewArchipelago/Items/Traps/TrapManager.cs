@@ -18,6 +18,7 @@ using StardewValley;
 using StardewValley.BellsAndWhistles;
 using StardewValley.Characters;
 using StardewValley.Locations;
+using StardewValley.Network.ChestHit;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
@@ -867,7 +868,7 @@ namespace StardewArchipelago.Items.Traps
             NudgeBuildings(baseNudgeChance);
         }
 
-        private static void NudgeObjectsEverywhere(List<GameLocation> allLocations, double baseNudgeChance)
+        private void NudgeObjectsEverywhere(List<GameLocation> allLocations, double baseNudgeChance)
         {
             foreach (var gameLocation in allLocations)
             {
@@ -875,9 +876,9 @@ namespace StardewArchipelago.Items.Traps
             }
         }
 
-        private static void NudgeObjectsAtLocation(GameLocation gameLocation, double baseNudgeChance)
+        private void NudgeObjectsAtLocation(GameLocation gameLocation, double baseNudgeChance)
         {
-            foreach (var (tile, gameObject) in gameLocation.Objects.Pairs)
+            foreach (var gameObject in gameLocation.Objects.Values.ToArray())
             {
                 if (gameObject is not Chest chest)
                 {
@@ -888,15 +889,29 @@ namespace StardewArchipelago.Items.Traps
             }
         }
 
-        private static void NudgeChest(Chest chest, double baseNudgeChance)
+        private void NudgeChest(Chest chest, double baseNudgeChance)
         {
             var seed = (int)Game1.stats.DaysPlayed + (int)(chest.TileLocation.X * 77) + (int)(chest.TileLocation.Y * 1933);
             var random = new Random(seed);
             var chestNudgeChance = baseNudgeChance;
             while (random.NextDouble() < chestNudgeChance)
             {
-                baseNudgeChance /= 2;
-                chest.TryMoveToSafePosition(random.Next(0, 4));
+                chestNudgeChance /= 2;
+                var mutex = chest.GetMutex();
+
+                mutex.RequestLock(() =>
+                {
+                    chest.clearNulls();
+                    var chestTileBefore = chest.TileLocation;
+                    chest.TryMoveToSafePosition(random.Next(0, 4));
+
+                    // internal readonly ChestHitSynchronizer chestHit;
+                    var chestHitField = _helper.Reflection.GetField<ChestHitSynchronizer>(Game1.player.team, "chestHit");
+                    var chestHit = chestHitField.GetValue();
+
+                    chestHit.SignalMove(chest.Location, (int)chestTileBefore.X, (int)chestTileBefore.Y, (int)chest.TileLocation.X, (int)chest.TileLocation.Y);
+                    mutex.ReleaseLock();
+                });
             }
         }
 
