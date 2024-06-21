@@ -26,6 +26,11 @@ namespace StardewArchipelago.Items.Traps
 
         public override void dayUpdate(int dayOfMonth)
         {
+            if (currentLocation?.characters is null || !currentLocation.characters.Any())
+            {
+                return;
+            }
+
             currentLocation.characters.Remove(this);
         }
 
