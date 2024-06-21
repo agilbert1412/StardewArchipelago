@@ -98,7 +98,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
                 var scoutedItem = _archipelago.ScoutSingleLocation(nextBirthLocation);
                 question = string.Format(question, scoutedItem.ItemName, Game1.player.Name);
                 var answerPregnancyQuestionMethod = _helper.Reflection.GetMethod(__instance, "answerPregnancyQuestion");
-                Game1.currentLocation.createQuestionDialogue(question, answerChoices1, (who, answer) => answerPregnancyQuestionMethod.Invoke(who, answer), npc);
+                Game1.currentLocation.createQuestionDialogue(question, answerChoices1, (who, answer) => answerPregnancyQuestionMethod.Invoke(who, answer), spouse);
                 Game1.messagePause = true;
                 __result = false;
                 return false; // don't run original logic
