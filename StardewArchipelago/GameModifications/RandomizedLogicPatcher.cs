@@ -67,6 +67,7 @@ namespace StardewArchipelago.GameModifications
             ItemTooltipInjections.Initialize(monitor, modHelper, config, archipelago, locationChecker, nameSimplifier);
             BillboardInjections.Initialize(monitor, modHelper, config, archipelago, locationChecker, friends);
             SpecialOrderBoardInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
+            CraftingPageInjections.Initialize(monitor, archipelago);
 
             DebugPatchInjections.Initialize(monitor, archipelago);
         }
@@ -109,6 +110,7 @@ namespace StardewArchipelago.GameModifications
             PatchSecretNotes();
             PatchRecipes();
             PatchTooltips();
+            PatchCraftingPage();
             _startingResources.GivePlayerStartingResources();
 
             PatchDebugMethods();
@@ -620,6 +622,14 @@ namespace StardewArchipelago.GameModifications
             _harmony.Patch(
                 original: AccessTools.Method(typeof(SpecialOrdersBoard), nameof(SpecialOrdersBoard.draw), boardDrawParameters),
                 postfix: new HarmonyMethod(typeof(SpecialOrderBoardInjections), nameof(SpecialOrderBoardInjections.Draw_AddArchipelagoIndicators_Postfix))
+            );
+        }
+
+        private void PatchCraftingPage()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(CraftingPage), nameof(CraftingPage.snapToDefaultClickableComponent)),
+                postfix: new HarmonyMethod(typeof(CraftingPageInjections), nameof(CraftingPageInjections.SnapToDefaultClickableComponent_DontCrashIfEmpty_Prefix))
             );
         }
 
