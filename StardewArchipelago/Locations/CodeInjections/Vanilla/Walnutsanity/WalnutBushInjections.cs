@@ -114,7 +114,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
 
         private static bool SetupWalnutsanityBushes(GameLocation gameLocation)
         {
-            if (gameLocation is not IslandLocation)
+            if (gameLocation is not IslandLocation || !_archipelago.SlotData.Walnutsanity.HasFlag(Archipelago.Walnutsanity.Bushes))
             {
                 return true;
             }
