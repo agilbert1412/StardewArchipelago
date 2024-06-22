@@ -123,6 +123,9 @@
     <None Update="Textures\Archipelago\Custom\walnut-bush.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Textures\Archipelago\Custom\walnut_bush.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Textures\Archipelago\Original\115x115 pleading icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
