@@ -166,6 +166,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
 
         private static TemporaryAnimatedSprite CreateGatewayGazetteTvSprite(TV tv)
         {
+            var textureName = "LooseSprites\\Cursors";
             var screenRectangle = new Rectangle(413, 305, 42, 28);
             var interval = 150f;
             var length = 2;
@@ -176,7 +177,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
             var layerDepth = (float)((tv.boundingBox.Bottom - 1) / 10000.0 + 9.9999997473787516E-06);
             var fade = 0.0f;
             var scale = tv.getScreenSizeModifier();
-            var tvSprite = new TemporaryAnimatedSprite("LooseSprites\\Cursors", screenRectangle, interval, length, loops, screenPosition, flicker, flipped, layerDepth, fade,
+            var tvSprite = new TemporaryAnimatedSprite(textureName, screenRectangle, interval, length, loops, screenPosition, flicker, flipped, layerDepth, fade,
                 Color.White, scale, 0.0f, 0.0f, 0.0f);
             return tvSprite;
         }
