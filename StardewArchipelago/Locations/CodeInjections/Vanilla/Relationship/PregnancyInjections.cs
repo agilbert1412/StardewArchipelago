@@ -12,8 +12,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
 
     public class PregnancyInjections
     {
-        private const int MALE = 0;
-        private const int FEMALE = 1;
         private const string FIRST_BABY = "Have a Baby";
         private const string SECOND_BABY = "Have Another Baby";
 
@@ -117,12 +115,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
                 return ORDER_BABY_QUESTION;
             }
 
-            if (spouse.Gender == FEMALE && Game1.player.IsMale)
+            if (spouse.Gender == Gender.Female && Game1.player.IsMale)
             {
                 return NPC_GIVE_BIRTH_QUESTION;
             }
 
-            if (spouse.Gender == MALE && !Game1.player.IsMale)
+            if (spouse.Gender == Gender.Male && !Game1.player.IsMale)
             {
                 return PLAYER_GIVE_BIRTH_QUESTION;
             }
