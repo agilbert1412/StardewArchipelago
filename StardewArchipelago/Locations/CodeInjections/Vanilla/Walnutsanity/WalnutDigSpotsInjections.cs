@@ -17,7 +17,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
         private static IModHelper _helper;
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
-        private static Texture2D _bushtexture;
 
         public static void Initialize(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
@@ -25,7 +24,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             _helper = helper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
-            _bushtexture = ArchipelagoTextures.GetArchipelagoBush(monitor, helper);
         }
 
         // public override string checkForBuriedItem(int xLocation, int yLocation, bool explosion, bool detectOnly, Farmer who)
