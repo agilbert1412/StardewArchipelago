@@ -339,6 +339,18 @@
     <None Update="Textures\Bundles\wine_rack.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Textures\Gazette\gazette_all.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Textures\Gazette\gazette_beach.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Textures\Gazette\gazette_blank.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Textures\Gazette\gazette_railroad.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Textures\traveling_merchant.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -1,10 +1,13 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
 using StardewArchipelago.GameModifications.EntranceRandomizer;
 using StardewArchipelago.Serialization;
+using StardewArchipelago.Textures;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Objects;
@@ -27,6 +30,8 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
         private static EntranceManager _entranceManager;
         private static ArchipelagoStateDto _state;
 
+        private static Texture2D _gazetteTexture;
+
         public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, EntranceManager entranceManager, ArchipelagoStateDto state)
         {
             _monitor = monitor;
@@ -34,6 +39,8 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
             _archipelago = archipelago;
             _entranceManager = entranceManager;
             _state = state;
+
+            _gazetteTexture = TexturesLoader.GetTexture(_monitor, _modHelper, Path.Combine("Gazette", "gazette_all.png"));
         }
 
         private static IReflectedField<int> GetCurrentChannelField(TV tv)
@@ -56,7 +63,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
                 var currentChannelField = GetCurrentChannelField(__instance);
                 currentChannelField.SetValue(GAZETTE_CHANNEL);
 
-                SetGazetteScreen(__instance);
+                SetGazetteIntroScreen(__instance);
 
                 Game1.drawObjectDialogue(Game1.parseText(GAZETTE_INTRO));
                 Game1.afterDialogues = __instance.proceedToNextScene;
@@ -100,7 +107,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
 
         private static void PlayGazetteEpisode(TV tv)
         {
-            SetGazetteScreen(tv);
+            SetGazetteEpisodeScreen(tv);
 
             var random = new Random((int)(Game1.uniqueIDForThisGame + Game1.stats.DaysPlayed));
             if (_archipelago.SlotData.EntranceRandomization == EntranceRandomization.Chaos)
@@ -156,29 +163,37 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
             return friendlyMapName;
         }
 
-        private static void SetGazetteScreen(TV __instance)
+        private static void SetGazetteIntroScreen(TV __instance)
         {
             // private TemporaryAnimatedSprite screen;
             var screenField = _modHelper.Reflection.GetField<TemporaryAnimatedSprite>(__instance, "screen");
-            var tvSprite = CreateGatewayGazetteTvSprite(__instance);
+            var tvSprite = CreateGatewayGazetteTvSprite(__instance, true);
             screenField.SetValue(tvSprite);
         }
 
-        private static TemporaryAnimatedSprite CreateGatewayGazetteTvSprite(TV tv)
+        private static void SetGazetteEpisodeScreen(TV __instance)
         {
-            var textureName = "LooseSprites\\Cursors";
-            var screenRectangle = new Rectangle(413, 305, 42, 28);
-            var interval = 150f;
-            var length = 2;
+            // private TemporaryAnimatedSprite screen;
+            var screenField = _modHelper.Reflection.GetField<TemporaryAnimatedSprite>(__instance, "screen");
+            var tvSprite = CreateGatewayGazetteTvSprite(__instance, false);
+            screenField.SetValue(tvSprite);
+        }
+
+        private static TemporaryAnimatedSprite CreateGatewayGazetteTvSprite(TV tv, bool intro)
+        {
+            var screenRectangle = new Rectangle(intro ? 0 : 42, 0, 42, 28);
+            var interval = 2500f;
+            var length = intro ? 1 : 2;
             var loops = 999999;
             var screenPosition = tv.getScreenPosition();
             var flicker = false;
-            var flipped = true;
+            var flipped = false;
             var layerDepth = (float)((tv.boundingBox.Bottom - 1) / 10000.0 + 9.9999997473787516E-06);
             var fade = 0.0f;
             var scale = tv.getScreenSizeModifier();
-            var tvSprite = new TemporaryAnimatedSprite(textureName, screenRectangle, interval, length, loops, screenPosition, flicker, flipped, layerDepth, fade,
+            var tvSprite = new TemporaryAnimatedSprite(null, screenRectangle, interval, length, loops, screenPosition, flicker, flipped, layerDepth, fade,
                 Color.White, scale, 0.0f, 0.0f, 0.0f);
+            tvSprite.texture = _gazetteTexture;
             return tvSprite;
         }
     }
