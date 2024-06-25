@@ -500,7 +500,7 @@ namespace StardewArchipelago.GameModifications
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Crop), nameof(Crop.ResolveSeedId)),
-                prefix: new HarmonyMethod(typeof(CropInjections), nameof(CropInjections.ResolveSeedId_WildSeedsBecomesUnlockedCrop_Prefix))
+                prefix: new HarmonyMethod(typeof(CropInjections), nameof(CropInjections.ResolveSeedId_MixedSeedsBecomesUnlockedCrop_Prefix))
             );
         }
 

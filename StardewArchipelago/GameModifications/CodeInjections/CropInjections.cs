@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Stardew;
+using StardewArchipelago.Stardew.Ids.Vanilla;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Extensions;
 using StardewValley.GameData.Crops;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
@@ -16,7 +18,12 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         private const int FALL_SEEDS = 497;
         private const int WINTER_SEEDS = 498;
 
-        private static readonly string[] _overpoweredSeeds = { "Ancient Seeds", "Rare Seed" };
+        private static readonly string[] _flowerSeeds =
+        {
+            ObjectIds.TULIP_BULB, ObjectIds.JAZZ_SEEDS, ObjectIds.SPANGLE_SEEDS, ObjectIds.POPPY_SEEDS,
+            ObjectIds.SUNFLOWER_SEEDS, ObjectIds.FAIRY_SEEDS,
+        };
+        private static readonly string[] _overpoweredSeeds = { ObjectIds.ANCIENT_SEEDS, ObjectIds.RARE_SEED };
 
         private static IMonitor _monitor;
         private static ArchipelagoClient _archipelago;
@@ -30,67 +37,90 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         }
 
         // public static string ResolveSeedId(string yieldItemId, GameLocation location)
-        public static bool ResolveSeedId_WildSeedsBecomesUnlockedCrop_Prefix(string itemId, GameLocation location, ref string __result)
+        public static bool ResolveSeedId_MixedSeedsBecomesUnlockedCrop_Prefix(string itemId, GameLocation location, ref string __result)
         {
             try
             {
-                if (itemId != "770")
+                if (itemId == ObjectIds.MIXED_FLOWER_SEEDS)
                 {
-                    return true; // run original logic
+                    var randomSeed = GetWeigthedRandomUnlockedFlower(Game1.season);
+                    __result = randomSeed;
+                    return false; // don't run original logic
                 }
 
-                var randomSeed = GetWeigthedRandomUnlockedCrop(Game1.season);
-                __result = randomSeed;
-                return false; // don't run original logic
+                if (itemId == ObjectIds.MIXED_SEEDS)
+                {
+                    var randomSeed = GetWeigthedRandomUnlockedCrop(Game1.season);
+                    __result = randomSeed;
+                    return false; // don't run original logic
+                }
+
+                return true; // run original logic
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(ResolveSeedId_WildSeedsBecomesUnlockedCrop_Prefix)}:\n{ex}", LogLevel.Error);
+                _monitor.Log($"Failed in {nameof(ResolveSeedId_MixedSeedsBecomesUnlockedCrop_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
             }
         }
 
-        private static string GetWeigthedRandomUnlockedCrop(Season season)
+        private static string GetWeigthedRandomUnlockedFlower(Season season)
         {
-            var receivedSeeds = _archipelago.GetAllReceivedItems().Select(x => x.ItemName).Where(x =>
-                (x.EndsWith("Seeds") || x.EndsWith("Starter") || x.EndsWith("Seed") || x.EndsWith("Bean")) &&
-                _stardewItemManager.ItemExists(x));
-            var seedItems = receivedSeeds.Select(x => _stardewItemManager.GetItemByName(x).PrepareForGivingToFarmer());
+            var flowerCandidates = _flowerSeeds.ToDictionary(x => x, x => _stardewItemManager.GetObjectById(x).PrepareForGivingToFarmer());
             var location = Game1.currentLocation;
             var cropData = DataLoader.Crops(Game1.content);
+            var flowerSeedCandidates = _flowerSeeds.Where(x => SeedCanBePlantedHere(flowerCandidates[x], location, season, cropData) && _archipelago.HasReceivedItem(flowerCandidates[x].Name)).ToArray();
 
-            var seedsICanPlantHere = seedItems.Where(x => SeedCanBePlantedHere(x, location, season, cropData)).ToList();
-
-            switch (season)
+            if (!flowerSeedCandidates.Any())
             {
-                case Season.Spring:
-                    seedsICanPlantHere.Add(_stardewItemManager.GetItemByName("Spring Seeds").PrepareForGivingToFarmer());
-                    break;
-                case Season.Summer:
-                    seedsICanPlantHere.Add(_stardewItemManager.GetItemByName("Summer Seeds").PrepareForGivingToFarmer());
-                    break;
-                case Season.Fall:
-                    seedsICanPlantHere.Add(_stardewItemManager.GetItemByName("Fall Seeds").PrepareForGivingToFarmer());
-                    break;
-                case Season.Winter:
-                    seedsICanPlantHere.Add(_stardewItemManager.GetItemByName("Winter Seeds").PrepareForGivingToFarmer());
-                    break;
+                return ObjectIds.INVALID;
             }
 
+            var randomIndex = Game1.random.Next(flowerSeedCandidates.Length);
+            var randomSeed = flowerSeedCandidates[randomIndex];
+            return randomSeed;
+        }
+
+        private static string GetWeigthedRandomUnlockedCrop(Season season)
+        {
+            var cropData = DataLoader.Crops(Game1.content);
+            var cropCandidates = cropData.ToDictionary(x => x.Key, x => _stardewItemManager.GetObjectById(x.Key).PrepareForGivingToFarmer());
+            var location = Game1.currentLocation;
+            var mixedSeedCandidates = cropData.Where(kvp => !_flowerSeeds.Contains(kvp.Key) && 
+                SeedCanBePlantedHere(cropCandidates[kvp.Key], location, season, cropData) && _archipelago.HasReceivedItem(cropCandidates[kvp.Key].Name))
+                .Select(x => x.Key)
+                .ToList();
+
+            //switch (season)
+            //{
+            //    case Season.Spring:
+            //        seedsICanPlantHere.Add(_stardewItemManager.GetItemByName("Spring Seeds").PrepareForGivingToFarmer());
+            //        break;
+            //    case Season.Summer:
+            //        seedsICanPlantHere.Add(_stardewItemManager.GetItemByName("Summer Seeds").PrepareForGivingToFarmer());
+            //        break;
+            //    case Season.Fall:
+            //        seedsICanPlantHere.Add(_stardewItemManager.GetItemByName("Fall Seeds").PrepareForGivingToFarmer());
+            //        break;
+            //    case Season.Winter:
+            //        seedsICanPlantHere.Add(_stardewItemManager.GetItemByName("Winter Seeds").PrepareForGivingToFarmer());
+            //        break;
+            //}
+
             var weightedSeeds = new List<string>();
-            foreach (var seed in seedsICanPlantHere)
+            foreach (var seed in mixedSeedCandidates)
             {
-                if (_overpoweredSeeds.Contains(seed.Name))
+                if (_overpoweredSeeds.Contains(seed))
                 {
-                    weightedSeeds.Add(seed.ItemId);
+                    weightedSeeds.Add(seed);
                 }
                 else if (SeedRegrows(seed, cropData))
                 {
-                    weightedSeeds.AddRange(Enumerable.Repeat(seed.ItemId, 10));
+                    weightedSeeds.AddRange(Enumerable.Repeat(seed, 10));
                 }
                 else
                 {
-                    weightedSeeds.AddRange(Enumerable.Repeat(seed.ItemId, 100));
+                    weightedSeeds.AddRange(Enumerable.Repeat(seed, 100));
                 }
             }
 
@@ -115,14 +145,14 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             return seedSeasons.Contains(season);
         }
 
-        private static bool SeedRegrows(Item x, Dictionary<string, CropData> cropData)
+        private static bool SeedRegrows(string seedId, Dictionary<string, CropData> cropData)
         {
-            if (!cropData.ContainsKey(x.ItemId))
+            if (!cropData.ContainsKey(seedId))
             {
                 return false;
             }
 
-            return cropData[x.ItemId].RegrowDays != -1;
+            return cropData[seedId].RegrowDays != -1;
         }
     }
 }
