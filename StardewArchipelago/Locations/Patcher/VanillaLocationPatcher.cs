@@ -3,6 +3,7 @@ using HarmonyLib;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.GameModifications;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
@@ -82,7 +83,7 @@ namespace StardewArchipelago.Locations.Patcher
             ReplaceQuestsWithChecks();
             PatchCarpenter();
             ReplaceIsolatedEventsWithChecks();
-            PatchAdventurerGuildShop();
+            PatchPhoneCalls();
             ReplaceArcadeMachinesWithChecks();
             PatchTravelingMerchant();
             ReplaceRaccoonBundlesWithChecks();
@@ -635,11 +636,16 @@ namespace StardewArchipelago.Locations.Patcher
             );
         }
 
-        private void PatchAdventurerGuildShop()
+        private void PatchPhoneCalls()
         {
             _harmony.Patch(
-                original: AccessTools.Method(typeof(DefaultPhoneHandler), nameof(DefaultPhoneHandler.CallAdventureGuild)),
-                prefix: new HarmonyMethod(typeof(PhoneInjections), nameof(PhoneInjections.CallAdventureGuild_AllowRecovery_Prefix))
+                original: AccessTools.Method(typeof(DefaultPhoneHandler), nameof(DefaultPhoneHandler.TryHandleOutgoingCall)),
+                prefix: new HarmonyMethod(typeof(PhoneInjections), nameof(PhoneInjections.TryHandleOutgoingCall_EntranceRandomizer_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.answerDialogueAction)),
+                prefix: new HarmonyMethod(typeof(PhoneInjections), nameof(PhoneInjections.AnswerDialogueAction_EntranceRandomizer_Prefix))
             );
 
             _modHelper.Events.Content.AssetRequested += _guildShopStockModifier.OnShopStockRequested;
