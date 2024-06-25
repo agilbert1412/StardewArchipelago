@@ -234,6 +234,9 @@
     <None Update="Textures\Bundles\beach_foraging_bundle.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Textures\Bundles\calico_bundle.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Textures\Bundles\carnival_bundle.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -256,6 +259,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Textures\Bundles\dried_bundle.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Textures\Bundles\dry_bundle.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Textures\Bundles\fish_smoker_bundle.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Textures\Bundles\gamblers_bundle.png">
