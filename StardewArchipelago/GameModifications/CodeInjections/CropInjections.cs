@@ -91,21 +91,21 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 .Select(x => x.Key)
                 .ToList();
 
-            //switch (season)
-            //{
-            //    case Season.Spring:
-            //        seedsICanPlantHere.Add(_stardewItemManager.GetItemByName("Spring Seeds").PrepareForGivingToFarmer());
-            //        break;
-            //    case Season.Summer:
-            //        seedsICanPlantHere.Add(_stardewItemManager.GetItemByName("Summer Seeds").PrepareForGivingToFarmer());
-            //        break;
-            //    case Season.Fall:
-            //        seedsICanPlantHere.Add(_stardewItemManager.GetItemByName("Fall Seeds").PrepareForGivingToFarmer());
-            //        break;
-            //    case Season.Winter:
-            //        seedsICanPlantHere.Add(_stardewItemManager.GetItemByName("Winter Seeds").PrepareForGivingToFarmer());
-            //        break;
-            //}
+            switch (season)
+            {
+                case Season.Spring:
+                    mixedSeedCandidates.Add(_stardewItemManager.GetItemByName("Spring Seeds").Id);
+                    break;
+                case Season.Summer:
+                    mixedSeedCandidates.Add(_stardewItemManager.GetItemByName("Summer Seeds").Id);
+                    break;
+                case Season.Fall:
+                    mixedSeedCandidates.Add(_stardewItemManager.GetItemByName("Fall Seeds").Id);
+                    break;
+                case Season.Winter:
+                    mixedSeedCandidates.Add(_stardewItemManager.GetItemByName("Winter Seeds").Id);
+                    break;
+            }
 
             var weightedSeeds = new List<string>();
             foreach (var seed in mixedSeedCandidates)
