@@ -3208,7 +3208,7 @@
             "code": 722272,
             "classification": "useful"
         },
-        "Mystery Box": {
+        "Resource Pack: 4 Mystery Box": {
             "code": 722273,
             "classification": "filler"
         },
@@ -3221,7 +3221,7 @@
             "classification": "filler"
         },
         "Resource Pack: 2 Triple Shot Espresso": {
-            "code": 722276,
+            "code": 722288,
             "classification": "filler"
         },
         "Dish O' The Sea": {
@@ -3238,6 +3238,46 @@
         },
         "Treasure Chest": {
             "code": 722280,
+            "classification": "filler"
+        },
+        "Resource Pack: 15 Mixed Seeds": {
+            "code": 722281,
+            "classification": "filler"
+        },
+        "Resource Pack: 15 Mixed Flower Seeds": {
+            "code": 722282,
+            "classification": "filler"
+        },
+        "Resource Pack: 5 Cherry Bomb": {
+            "code": 722283,
+            "classification": "filler"
+        },
+        "Resource Pack: 3 Bomb": {
+            "code": 722284,
+            "classification": "filler"
+        },
+        "Resource Pack: 2 Mega Bomb": {
+            "code": 722285,
+            "classification": "filler"
+        },
+        "Resource Pack: 2 Life Elixir": {
+            "code": 722286,
+            "classification": "filler"
+        },
+        "Resource Pack: 5 Coffee": {
+            "code": 722287,
+            "classification": "filler"
+        },
+        "Prismatic Shard": {
+            "code": 722289,
+            "classification": "filler"
+        },
+        "Stardrop Tea": {
+            "code": 722290,
+            "classification": "filler"
+        },
+        "Resource Pack: 2 Artifact Trove": {
+            "code": 722291,
             "classification": "filler"
         },
         "Luck Level": {
