@@ -132,7 +132,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     return;
                 }
 
-                __result = ItemRegistry.Create(r.NextBool() ? QualifiedItemIds.MIXED_SEEDS : QualifiedItemIds.MIXED_FLOWER_SEEDS);
+                __result = ItemRegistry.Create(r.NextBool() ? QualifiedItemIds.MIXED_SEEDS : QualifiedItemIds.MIXED_FLOWER_SEEDS, __result.Stack);
                 return;
             }
             catch (Exception ex)
