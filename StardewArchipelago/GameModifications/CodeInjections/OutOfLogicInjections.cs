@@ -4,18 +4,14 @@ using System.Linq;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Stardew;
-using StardewArchipelago.Stardew.Ids.Vanilla;
 using StardewModdingAPI;
 using StardewValley;
-using StardewValley.Constants;
-using StardewValley.Extensions;
-using StardewValley.GameData.Crops;
 using StardewValley.Objects;
 using Category = StardewArchipelago.Stardew.Category;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
 {
-    public class TicketsAndBoxesInjections
+    public class OutOfLogicInjections
     {
         private const int MAX_DEPTH = 10;
 

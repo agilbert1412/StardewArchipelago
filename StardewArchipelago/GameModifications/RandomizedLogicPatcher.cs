@@ -748,12 +748,12 @@ namespace StardewArchipelago.GameModifications
         {
             _harmony.Patch(
                 original: AccessTools.Method(typeof(PrizeTicketMenu), nameof(PrizeTicketMenu.getPrizeItem)),
-                postfix: new HarmonyMethod(typeof(TicketsAndBoxesInjections), nameof(TicketsAndBoxesInjections.GetPrizeItem_SkipOutOfLogicPrizeTickets_Postfix))
+                postfix: new HarmonyMethod(typeof(OutOfLogicInjections), nameof(OutOfLogicInjections.GetPrizeItem_SkipOutOfLogicPrizeTickets_Postfix))
             );
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Utility), nameof(Utility.getTreasureFromGeode)),
-                postfix: new HarmonyMethod(typeof(TicketsAndBoxesInjections), nameof(TicketsAndBoxesInjections.GetTreasureFromGeode_MysteryBoxesGiveReceivedItems_Postfix))
+                postfix: new HarmonyMethod(typeof(OutOfLogicInjections), nameof(OutOfLogicInjections.GetTreasureFromGeode_MysteryBoxesGiveReceivedItems_Postfix))
             );
         }
 
