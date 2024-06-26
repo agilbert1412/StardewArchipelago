@@ -123,6 +123,7 @@ namespace StardewArchipelago.GameModifications
             PatchTooltips();
             PatchBundles();
             PatchCraftingPage();
+            PatchMysteryBoxesAndPrizeTickets();
             _startingResources.GivePlayerStartingResources();
 
             PatchDebugMethods();
@@ -740,6 +741,19 @@ namespace StardewArchipelago.GameModifications
             _harmony.Patch(
                 original: AccessTools.Method(typeof(CraftingPage), nameof(CraftingPage.snapToDefaultClickableComponent)),
                 prefix: new HarmonyMethod(typeof(CraftingPageInjections), nameof(CraftingPageInjections.SnapToDefaultClickableComponent_DontCrashIfEmpty_Prefix))
+            );
+        }
+
+        private void PatchMysteryBoxesAndPrizeTickets()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(PrizeTicketMenu), nameof(PrizeTicketMenu.getPrizeItem)),
+                postfix: new HarmonyMethod(typeof(TicketsAndBoxesInjections), nameof(TicketsAndBoxesInjections.GetPrizeItem_SkipOutOfLogicPrizeTickets_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Utility), nameof(Utility.getTreasureFromGeode)),
+                postfix: new HarmonyMethod(typeof(TicketsAndBoxesInjections), nameof(TicketsAndBoxesInjections.GetTreasureFromGeode_MysteryBoxesGiveReceivedItems_Postfix))
             );
         }
 

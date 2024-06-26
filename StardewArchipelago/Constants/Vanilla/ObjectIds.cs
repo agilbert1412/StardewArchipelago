@@ -43,6 +43,10 @@
         public const string DELUXE_FERTILIZER = "919";
         public const string DELUXE_RETAINING_SOIL = "920";
         public const string DELUXE_SPEED_GRO = "466";
+        public const string ARTIFACT_TROVE = "275";
+        public const string BOMB = "287";
+        public const string CHERRY_BOMB = "286";
+        public const string DIAMOND = "72";
         public const string DRESSED_SPINNER = "687";
         public const string DRIED_FRUIT = "DriedFruit";
         public const string DRIED_MUSHROOMS = "DriedMushrooms";
@@ -58,6 +62,7 @@
         public const string GARLIC_SEEDS = "476";
         public const string GOLDEN_COCONUT = "791";
         public const string GOLDEN_EGG = "928";
+        public const string GOLDEN_MYSTERY_BOX = "GoldenMysteryBox";
         public const string GOLDEN_PUMPKIN = "373";
         public const string GOLDEN_WALNUT = "73";
         public const string GRAPE_STARTER = "301";
@@ -69,6 +74,7 @@
         public const string HYPER_SPEED_GRO = "918";
         public const string INVALID = "-1";
         public const string IRIDIUM_BAR = "337";
+        public const string IRIDIUM_SPRINKLER = "645";
         public const string JACK_BE_NIMBLE_JACK_BE_THICK = "Book_Defense";
         public const string JAZZ_SEEDS = "429";
         public const string JEWELS_OF_THE_SEA = "Book_Roe";
@@ -79,9 +85,11 @@
         public const string LARGE_GOAT_MILK = "438";
         public const string LEAD_BOBBER = "692";
         public const string LOST_BOOK = "102";
+        public const string MAGIC_ROCK_CANDY = "279";
         public const string MAGNET = "703";
         public const string MANGO_SAPLING = "835";
         public const string MAPPING_CAVE_SYSTEMS = "Book_Marlon";
+        public const string MEGA_BOMB = "288";
         public const string MELON_SEEDS = "479";
         public const string MINING_MONTHLY = "SkillBook_3";
         public const string MIXED_FLOWER_SEEDS = "MixedFlowerSeeds";
@@ -89,8 +97,10 @@
         public const string MONSTER_COMPENDIUM = "Book_Void";
         public const string MUMMIFIED_BAT = "827";
         public const string MUSSEL_NODE = "25";
+        public const string MYSTERY_BOX = "MysteryBox";
         public const string OIL = "247";
         public const string OL_SLITHERLEGS = "Book_Grass";
+        public const string OMNI_GEODE = "749";
         public const string ORANGE_SAPLING = "630";
         public const string ORNATE_NECKLACE = "191";
         public const string PARSNIP_SEEDS = "472";
@@ -110,6 +120,7 @@
         public const string QI_FRUIT = "889";
         public const string QUALITY_FERTILIZER = "369";
         public const string QUALITY_RETAINING_SOIL = "371";
+        public const string QUALITY_SPRINKLER = "621";
         public const string QUEEN_OF_SAUCE_COOKBOOK = "Book_QueenOfSauce";
         public const string RACCOON_JOURNAL = "Book_WildSeeds";
         public const string RADISH_SEEDS = "484";
@@ -132,8 +143,11 @@
         public const string SPINNER = "686";
         public const string SPRING_ONION = "399";
         public const string SPRING_SEEDS = "495";
+        public const string SPRINKLER = "599";
         public const string STARDROP = "434";
+        public const string STARDROP_TEA = "StardropTea";
         public const string STARFRUIT_SEEDS = "486";
+        public const string STONE = "390";
         public const string STRANGE_DOLL_GREEN = "126";
         public const string SUGAR = "245";
         public const string SUMMER_SEEDS = "496";
