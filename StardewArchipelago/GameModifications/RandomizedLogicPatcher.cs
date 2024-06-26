@@ -755,6 +755,11 @@ namespace StardewArchipelago.GameModifications
                 original: AccessTools.Method(typeof(Utility), nameof(Utility.getTreasureFromGeode)),
                 postfix: new HarmonyMethod(typeof(OutOfLogicInjections), nameof(OutOfLogicInjections.GetTreasureFromGeode_MysteryBoxesGiveReceivedItems_Postfix))
             );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Utility), nameof(Utility.getRaccoonSeedForCurrentTimeOfYear)),
+                postfix: new HarmonyMethod(typeof(OutOfLogicInjections), nameof(OutOfLogicInjections.GetRaccoonSeedForCurrentTimeOfYear_MysteryBoxesGiveReceivedItems_Postfix))
+            );
         }
 
         private void PatchDebugMethods()

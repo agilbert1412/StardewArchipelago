@@ -6,6 +6,7 @@ using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Extensions;
 using StardewValley.Objects;
 using Category = StardewArchipelago.Stardew.Category;
 
@@ -57,7 +58,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(GetPrizeItem_SkipOutOfLogicPrizeTickets_Postfix)} (Depth: {_depth}):\n{ex}", LogLevel.Error);
+                _monitor.Log($"Failed in {nameof(GetPrizeItem_SkipOutOfLogicPrizeTickets_Postfix)}:\n{ex}", LogLevel.Error);
                 return;
             }
         }
@@ -117,6 +118,26 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             {
                 _depth = 0;
                 _monitor.Log($"Failed in {nameof(GetTreasureFromGeode_MysteryBoxesGiveReceivedItems_Postfix)} (Depth: {_depth}):\n{ex}", LogLevel.Error);
+                return;
+            }
+        }
+
+        // public static Item getRaccoonSeedForCurrentTimeOfYear(Farmer who, Random r, int stackOverride = -1)
+        public static void GetRaccoonSeedForCurrentTimeOfYear_MysteryBoxesGiveReceivedItems_Postfix(Farmer who, Random r, int stackOverride, ref Item __result)
+        {
+            try
+            {
+                if (__result == null || _archipelago.SlotData.Cropsanity == Cropsanity.Disabled || _archipelago.HasReceivedItem(__result.Name))
+                {
+                    return;
+                }
+
+                __result = ItemRegistry.Create(r.NextBool() ? QualifiedItemIds.MIXED_SEEDS : QualifiedItemIds.MIXED_FLOWER_SEEDS);
+                return;
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(GetRaccoonSeedForCurrentTimeOfYear_MysteryBoxesGiveReceivedItems_Postfix)}:\n{ex}", LogLevel.Error);
                 return;
             }
         }
