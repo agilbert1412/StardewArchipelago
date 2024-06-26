@@ -78,6 +78,7 @@ namespace StardewArchipelago.GameModifications
             BillboardInjections.Initialize(monitor, modHelper, config, archipelago, locationChecker, friends);
             SpecialOrderBoardInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             CraftingPageInjections.Initialize(monitor, archipelago);
+            OutOfLogicInjections.Initialize(monitor, archipelago, stardewItemManager);
 
             DebugPatchInjections.Initialize(monitor, archipelago);
         }
