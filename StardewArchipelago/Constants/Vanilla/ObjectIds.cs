@@ -6,7 +6,7 @@
         public const string AMARANTH_SEEDS = "299";
         public const string ANCIENT_FRUIT = "454";
         public const string ANCIENT_SEEDS = "499";
-        public const string ANIMAL_CATALOGUE = "Animal Catalogue";
+        public const string ANIMAL_CATALOGUE = "Book_AnimalCatalogue";
         public const string APPLE_SAPLING = "633";
         public const string APRICOT_SAPLING = "629";
         public const string ARTICHOKE_SEEDS = "489";
