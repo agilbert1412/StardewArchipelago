@@ -77,12 +77,11 @@ namespace StardewArchipelago.Locations.Festival
         {
             try
             {
-                if (!__instance.isSpecificFestival("fall16"))
+                if (__instance.isSpecificFestival("fall16"))
                 {
-                    return true; // run original logic
+                    _state.StoredStarTokens += who.festivalScore;
                 }
 
-                _state.StoredStarTokens += who.festivalScore;
                 return true; // run original logic
             }
             catch (Exception ex)
