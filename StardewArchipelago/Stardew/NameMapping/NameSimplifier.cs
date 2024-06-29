@@ -79,7 +79,7 @@ namespace StardewArchipelago.Stardew.NameMapping
 
         private string FixArchaeologyLocationInconsistentNaming(string itemName)
         {
-            itemName = itemName.Replace("Wood Display: ", "Wooden Display: ");
+            itemName = itemName.Replace("Wood Display", "Wooden Display");
             itemName = itemName.Replace("Strange Doll Green", "Strange Doll (Green)");
             itemName = itemName.Replace("Strange Doll Yellow", "Strange Doll");
             if (Constants.Modded.ModItemNameTranslations.ArchaeologyInternalToDisplay.TryGetValue(itemName, out var fixedName))
