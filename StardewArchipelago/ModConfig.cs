@@ -74,6 +74,11 @@ namespace StardewArchipelago
         public bool ShowElevatorIndicators { get; set; } = true;
 
         /// <summary>
+        /// Disables some out of logic obtention methods of important progression items (seeds, saplings, etc)
+        /// </summary>
+        public bool StrictLogic { get; set; } = true;
+
+        /// <summary>
         /// Whether to display archipelago icons on inventory items for items that the player can do checks with
         /// </summary>
         public ItemIndicatorPreference ShowItemIndicators { get; set; } = ItemIndicatorPreference.True;
