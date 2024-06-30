@@ -90,6 +90,7 @@ namespace StardewArchipelago.Constants.Vanilla
             { BAIT_AND_BOBBER, ObjectIds.BAIT_AND_BOBBER },
             { MINING_MONTHLY, ObjectIds.MINING_MONTHLY },
             { COMBAT_QUARTERLY, ObjectIds.COMBAT_QUARTERLY },
+            { QUEEN_OF_SAUCE_COOKBOOK, ObjectIds.QUEEN_OF_SAUCE_COOKBOOK },
         };
 
 
