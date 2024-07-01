@@ -51,6 +51,7 @@ namespace StardewArchipelago.Bundles
             { "Fish Farmer's", 108 },
             { "Sommelier", 355 },
             { "Dry", 356 },
+            { "Green Rain", 359 },
 
             { "Beach Foraging", 240 },
             { "Mines Foraging", 241 },
@@ -180,6 +181,7 @@ namespace StardewArchipelago.Bundles
             { "Fish Farmer's", BUNDLE_DARK_BLUE },
             { "Sommelier", BUNDLE_PURPLE },
             { "Dry", BUNDLE_ORANGE },
+            { "Green Rain", BUNDLE_GREEN },
 
             { "Beach Foraging", BUNDLE_LIGHT_BLUE },
             { "Mines Foraging", BUNDLE_PURPLE },
