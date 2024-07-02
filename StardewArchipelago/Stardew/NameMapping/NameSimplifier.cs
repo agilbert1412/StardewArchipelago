@@ -86,6 +86,10 @@ namespace StardewArchipelago.Stardew.NameMapping
             {
                 itemName = fixedName;
             }
+            if (!itemName.Contains("Vertebrae")) // Basically "if it has the typo".
+            {
+                itemName = itemName.Replace("Vertabra", "Vertebrae");
+            }
             return itemName;
         }
 
