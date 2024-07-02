@@ -65,15 +65,21 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 {
                     case "addCraftingRecipe":
                     {
-                        CheckCraftsanityLocation(__instance.id);
-                        __instance.CurrentCommand++;
-                        return false; // don't run original logic
+                        if (CheckCraftsanityLocation(__instance.id))
+                        {
+                            __instance.CurrentCommand++;
+                            return false; // don't run original logic
+                        }
+                        return true; // run original logic
                     }
                     case "addCookingRecipe":
                     {
-                        CheckChefsanityLocation(__instance.id);
-                        __instance.CurrentCommand++;
-                        return false; // don't run original logic
+                        if (CheckChefsanityLocation(__instance.id))
+                        {
+                            __instance.CurrentCommand++;
+                            return false; // don't run original logic
+                        }
+                        return true; // run original logic
                     }
                 }
                 return true;
@@ -85,26 +91,32 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             }
         }
 
-        public static void CheckChefsanityLocation(string id)
+        public static bool CheckChefsanityLocation(string id)
         {
             var isEventChefsanityLocation = _archipelago.SlotData.Chefsanity.HasFlag(Chefsanity.Friendship) && eventCooking.Keys.Contains(id);
             var isRecipeFromQuest = _archipelago.SlotData.QuestLocations.StoryQuestsEnabled && questEventsWithRecipes.Contains(id);
             if (isRecipeFromQuest || !isEventChefsanityLocation)
             {
-                return;
+                return false;
             }
-            _locationChecker.AddCheckedLocation($"{eventCooking[id]}{RECIPE_SUFFIX}");
+            
+            var locationName = $"{eventCooking[id]}{RECIPE_SUFFIX}";
+            _locationChecker.AddCheckedLocation(locationName);
+            return _archipelago.LocationExists(locationName);
         }
 
-        public static void CheckCraftsanityLocation(string id)
+        public static bool CheckCraftsanityLocation(string id)
         {
             var isEventCraftsanityLocation = _archipelago.SlotData.Craftsanity == Craftsanity.All && eventCrafting.Keys.Contains(id);
             var isRecipeFromQuest = _archipelago.SlotData.QuestLocations.StoryQuestsEnabled && questEventsWithRecipes.Contains(id);
             if (isRecipeFromQuest || !isEventCraftsanityLocation)
             {
-                return;
+                return false;
             }
-            _locationChecker.AddCheckedLocation($"{eventCrafting[id]}{RECIPE_SUFFIX}");
+
+            var locationName = $"{eventCrafting[id]}{RECIPE_SUFFIX}";
+            _locationChecker.AddCheckedLocation(locationName);
+            return _archipelago.LocationExists(locationName);
         }
 
         public static bool SkipEvent_ReplaceRecipe_Prefix(Event __instance)
