@@ -2,6 +2,7 @@
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
+using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.GameData.Characters;
 using Object = StardewValley.Object;
@@ -98,6 +99,31 @@ namespace StardewArchipelago.Locations.Festival
                 _monitor.Log($"Failed in {nameof(ChooseResponse_LegendOfTheWinterStar_Postfix)}:\n{ex}", LogLevel.Error);
                 return;
             }
+        }
+
+        internal static void OnFestivalsRequested(object sender, AssetRequestedEventArgs e)
+        {
+            if (_archipelago.SlotData.FestivalLocations == FestivalLocations.Vanilla)
+            {
+                return;
+            }
+
+            if (!e.NameWithoutLocale.IsEquivalentTo("Data/Festivals/winter25"))
+            {
+                return;
+            }
+
+            e.Edit(asset =>
+                {
+                    var festivalData = asset.AsDictionary<string, string>().Data;
+                    const string willyYear2Key = "Willy_y2";
+                    if (festivalData.ContainsKey(willyYear2Key))
+                    {
+                        festivalData.Remove(willyYear2Key);
+                    }
+                },
+                AssetEditPriority.Late
+            );
         }
     }
 }

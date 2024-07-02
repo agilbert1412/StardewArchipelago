@@ -837,12 +837,19 @@ namespace StardewArchipelago.Locations.Patcher
             PatchIceFestival();
             PatchSquidFest();
             PatchNightMarket();
-            PatchFeastOfTheWinterStar();
+            PatchWinterStar();
         }
 
         private void CleanFestivalEvents()
         {
             _modHelper.Events.Content.AssetRequested -= _festivalShopStockModifier.OnShopStockRequested;
+
+            if (_archipelago.SlotData.FestivalLocations == FestivalLocations.Vanilla)
+            {
+                return;
+            }
+
+            CleanWinterStarEvents();
         }
 
         private void PatchEggFestival()
@@ -975,7 +982,7 @@ namespace StardewArchipelago.Locations.Patcher
             );
         }
 
-        private void PatchFeastOfTheWinterStar()
+        private void PatchWinterStar()
         {
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Dialogue), nameof(Dialogue.chooseResponse)),
@@ -986,6 +993,13 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(typeof(Event), nameof(Event.chooseSecretSantaGift)),
                 prefix: new HarmonyMethod(typeof(WinterStarInjections), nameof(WinterStarInjections.ChooseSecretSantaGift_SuccessfulGift_Prefix))
             );
+            _modHelper.Events.Content.AssetRequested += WinterStarInjections.OnFestivalsRequested;
+            _modHelper.GameContent.InvalidateCache("Data/Festivals");
+        }
+
+        private void CleanWinterStarEvents()
+        {
+            _modHelper.Events.Content.AssetRequested -= WinterStarInjections.OnFestivalsRequested;
         }
 
         private void AddCropSanityLocations()
