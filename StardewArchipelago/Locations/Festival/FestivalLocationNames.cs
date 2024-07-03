@@ -137,14 +137,14 @@ namespace StardewArchipelago.Locations.Festival
         };
         private static readonly string[] TROUT_DERBY_ALL = TROUT_DERBY_REWARDS;
         private static readonly string[] SQUIDFEST_ALL = Array.Empty<string>();
-        private static readonly string[] NIGHT_MARKET_ALL = new[] { MERMAID_PEARL, CONE_HAT, IRIDIUM_FIREPLACE, RARECROW_7, RARECROW_8, };
+        private static readonly string[] NIGHT_MARKET_ALL = new[] { MERMAID_PEARL, CONE_HAT, IRIDIUM_FIREPLACE, RARECROW_7, RARECROW_8 };
 
         public static readonly Dictionary<string, string[]> LocationsByFestival = new()
         {
             { EGG_FESTIVAL, new[] { EGG_HUNT, STRAWBERRY_SEEDS } },
-            { DESERT_FESTIVAL_15, DESERT_FESTIVAL_ALL.Union(new[] { CALICO_STATUE, }).ToArray() },
+            { DESERT_FESTIVAL_15, DESERT_FESTIVAL_ALL.Union(new[] { CALICO_STATUE }).ToArray() },
             { DESERT_FESTIVAL_16, DESERT_FESTIVAL_ALL },
-            { DESERT_FESTIVAL_17, DESERT_FESTIVAL_ALL.Union(new[] { CALICO_STATUE, }).ToArray() },
+            { DESERT_FESTIVAL_17, DESERT_FESTIVAL_ALL.Union(new[] { CALICO_STATUE }).ToArray() },
             { FLOWER_DANCE, new[] { DANCE_WITH_SOMEONE, RARECROW_5, TUB_O_FLOWERS_RECIPE } },
             { LUAU, new[] { LUAU_SOUP } },
             { TROUT_DERBY_20, TROUT_DERBY_ALL },

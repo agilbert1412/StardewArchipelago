@@ -18,7 +18,7 @@ namespace StardewArchipelago.Locations
                 new[]
                 {
                     FestivalLocationNames.STRENGTH_GAME, "Lemon Stone",
-                    "Ocean Stone", "Fairy Stone", "Swirl Stone"
+                    "Ocean Stone", "Fairy Stone", "Swirl Stone",
                 }
             },
             { "Trash", new[] { "Trash Can Upgrade" } },

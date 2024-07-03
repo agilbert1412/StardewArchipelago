@@ -150,7 +150,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             tempSprites.Clear();
             this.inventory = new InventoryMenu(this.xPositionOnScreen + 128, this.yPositionOnScreen + 140, true, highlightMethod: this.HighlightObjects, capacity: 36, rows: 6, horizontalGap: 8, verticalGap: 8, drawSlots: false)
             {
-                capacity = 36
+                capacity = 36,
             };
             for (var index = 0; index < this.inventory.inventory.Count; ++index)
             {

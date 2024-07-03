@@ -98,14 +98,14 @@ namespace StardewArchipelago.Archipelago.Gifting
                 if (!string.IsNullOrWhiteSpace(wordFlag))
                 {
                     yield return CreateTrait(wordFlag, 1D, 1D);
-                }
 
-                if (ReplaceFlags.ContainsKey(wordFlag))
-                {
-                    var replacedWordFlag = GetFromAllFlags(ReplaceFlags[wordFlag]);
-                    if (!string.IsNullOrWhiteSpace(replacedWordFlag))
+                    if (ReplaceFlags.ContainsKey(wordFlag))
                     {
-                        yield return CreateTrait(replacedWordFlag, 1D, 0.5D);
+                        var replacedWordFlag = GetFromAllFlags(ReplaceFlags[wordFlag]);
+                        if (!string.IsNullOrWhiteSpace(replacedWordFlag))
+                        {
+                            yield return CreateTrait(replacedWordFlag, 1D, 0.5D);
+                        }
                     }
                 }
             }
@@ -340,7 +340,7 @@ namespace StardewArchipelago.Archipelago.Gifting
 
         private static readonly Dictionary<string, string> _contextTags = new()
         {
-            { "light_source", GiftFlag.Light },
+            { "light_source", "Light" },
         };
     }
 }

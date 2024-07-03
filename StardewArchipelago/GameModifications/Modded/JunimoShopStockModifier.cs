@@ -32,7 +32,7 @@ namespace StardewArchipelago.GameModifications.Modded
             { "Grey", "I trade rocks for grey what's-its!" },
             { "Yellow", "I hab seeds, gib yellow gubbins!" },
             { "Blue", "I hab fish! You give blue pretty?" },
-            { "Purple", "Rare thing?  Purple thing!  Yay!"}
+            { "Purple", "Rare thing?  Purple thing!  Yay!"},
         };
 
         public JunimoShopStockModifier(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago, StardewItemManager stardewItemManager) : base(monitor, helper, archipelago, stardewItemManager)

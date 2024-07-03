@@ -410,7 +410,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 {
                     layerDepth = 1f,
                     motion = new Vector2(1f, -4f),
-                    acceleration = new Vector2(0.0f, 0.1f)
+                    acceleration = new Vector2(0.0f, 0.1f),
                 });
                 __instance.temporarySprites.Add(new TemporaryAnimatedSprite(50, position + new Vector2(Game1.random.Next(-16, 16), Game1.random.Next(-48, 48)), color * 0.75f)
                 {
@@ -418,7 +418,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                     flipped = true,
                     layerDepth = 1f,
                     motion = new Vector2(-1f, -4f),
-                    acceleration = new Vector2(0.0f, 0.1f)
+                    acceleration = new Vector2(0.0f, 0.1f),
                 });
                 __instance.temporarySprites.Add(new TemporaryAnimatedSprite(50, position + new Vector2(Game1.random.Next(-16, 16), Game1.random.Next(-48, 48)), color * 0.75f)
                 {
@@ -426,7 +426,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                     delayBeforeAnimationStart = 50,
                     layerDepth = 1f,
                     motion = new Vector2(1f, -4f),
-                    acceleration = new Vector2(0.0f, 0.1f)
+                    acceleration = new Vector2(0.0f, 0.1f),
                 });
                 __instance.temporarySprites.Add(new TemporaryAnimatedSprite(50, position + new Vector2(Game1.random.Next(-16, 16), Game1.random.Next(-48, 48)), color * 0.75f)
                 {
@@ -435,7 +435,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                     delayBeforeAnimationStart = 100,
                     layerDepth = 1f,
                     motion = new Vector2(-1f, -4f),
-                    acceleration = new Vector2(0.0f, 0.1f)
+                    acceleration = new Vector2(0.0f, 0.1f),
                 });
                 __instance.temporarySprites.Add(new TemporaryAnimatedSprite(50, position + new Vector2(Game1.random.Next(-16, 16), Game1.random.Next(-48, 48)), new Color(250, 100, 250) * 0.75f)
                 {
@@ -444,7 +444,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                     delayBeforeAnimationStart = 150,
                     layerDepth = 1f,
                     motion = new Vector2(0.0f, -3f),
-                    acceleration = new Vector2(0.0f, 0.1f)
+                    acceleration = new Vector2(0.0f, 0.1f),
                 });
                 if (Game1.gameMode == 6 || Utility.ShouldIgnoreValueChangeCallback())
                 {
@@ -479,7 +479,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 {
                     layerDepth = 1f,
                     motion = new Vector2(1f, -4f),
-                    acceleration = new Vector2(0.0f, 0.1f)
+                    acceleration = new Vector2(0.0f, 0.1f),
                 });
                 __instance.temporarySprites.Add(new TemporaryAnimatedSprite(50, new Vector2(8f, 3.3f) * 64f + new Vector2(Game1.random.Next(-16, 16), Game1.random.Next(-48, 48)), new Color(0, 220, 150) * 0.75f)
                 {
@@ -487,7 +487,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                     flipped = true,
                     layerDepth = 1f,
                     motion = new Vector2(-1f, -4f),
-                    acceleration = new Vector2(0.0f, 0.1f)
+                    acceleration = new Vector2(0.0f, 0.1f),
                 });
                 __instance.temporarySprites.Add(new TemporaryAnimatedSprite(50, new Vector2(8.3f, 3.3f) * 64f + new Vector2(Game1.random.Next(-16, 16), Game1.random.Next(-48, 48)), new Color(0, 200, 120) * 0.75f)
                 {
@@ -495,7 +495,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                     delayBeforeAnimationStart = 50,
                     layerDepth = 1f,
                     motion = new Vector2(1f, -4f),
-                    acceleration = new Vector2(0.0f, 0.1f)
+                    acceleration = new Vector2(0.0f, 0.1f),
                 });
                 __instance.temporarySprites.Add(new TemporaryAnimatedSprite(50, new Vector2(8f, 3.3f) * 64f + new Vector2(Game1.random.Next(-16, 16), Game1.random.Next(-48, 48)), new Color(0, 220, 150) * 0.75f)
                 {
@@ -504,7 +504,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                     delayBeforeAnimationStart = 100,
                     layerDepth = 1f,
                     motion = new Vector2(-1f, -4f),
-                    acceleration = new Vector2(0.0f, 0.1f)
+                    acceleration = new Vector2(0.0f, 0.1f),
                 });
                 __instance.temporarySprites.Add(new TemporaryAnimatedSprite(50, new Vector2(8.5f, 3.3f) * 64f + new Vector2(Game1.random.Next(-16, 16), Game1.random.Next(-48, 48)), new Color(0, 250, 180) * 0.75f)
                 {
@@ -513,7 +513,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                     delayBeforeAnimationStart = 150,
                     layerDepth = 1f,
                     motion = new Vector2(0.0f, -3f),
-                    acceleration = new Vector2(0.0f, 0.1f)
+                    acceleration = new Vector2(0.0f, 0.1f),
                 });
                 if (Game1.gameMode == 6 || Utility.ShouldIgnoreValueChangeCallback())
                 {

@@ -10,6 +10,6 @@ namespace StardewArchipelago.Archipelago
     {
         None,
         RelatedToMe,
-        All
+        All,
     }
 }

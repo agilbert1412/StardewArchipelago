@@ -187,7 +187,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
         private static Dictionary<string, string> _buildingNameReplacements = new()
         {
-            { "Pathoschild.TractorMod_Stable", "Tractor Garage" }
+            { "Pathoschild.TractorMod_Stable", "Tractor Garage" },
         };
     }
 }

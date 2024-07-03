@@ -195,7 +195,7 @@ namespace StardewArchipelago.GameModifications
                     Modification = QuantityModifier.ModificationType.Multiply,
                     Amount = JOJA_PRICE_MULTIPLIER,
                     RandomAmount = null,
-                }
+                },
             };
 
             var objectsData = DataLoader.Objects(Game1.content);

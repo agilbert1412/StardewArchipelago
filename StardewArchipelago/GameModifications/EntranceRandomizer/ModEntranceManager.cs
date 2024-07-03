@@ -73,7 +73,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Scarlett's House", "Custom_ScarlettHouse" },
             { "Wizard Basement", "Custom_WizardBasement" },
             { "Gunther's Bedroom", "Custom_GunthersRoom" },
-            { "Summit", "Custom_SVESummit"}
+            { "Summit", "Custom_SVESummit"},
         };
 
         private static readonly Dictionary<string, string> _locationEugene = new()
