@@ -11,15 +11,17 @@ namespace StardewArchipelago.GameModifications.CodeInjections
     {
         private static IMonitor _monitor;
         private static ArchipelagoClient _archipelago;
+        private static uint _lastDayGoldClockToggled;
 
         public static void Initialize(IMonitor monitor, ArchipelagoClient archipelago)
         {
             _monitor = monitor;
             _archipelago = archipelago;
+            _lastDayGoldClockToggled = 0;
         }
 
         // public virtual bool doAction(Vector2 tileLocation, Farmer who)
-        public static void DoAction_GoldenClockIncreaseTime_Postfix(Building __instance, Vector2 tileLocation, Farmer who, ref bool __result)
+        public static bool DoAction_GoldenClockIncreaseTime_Prefix(Building __instance, Vector2 tileLocation, Farmer who, ref bool __result)
         {
             try
             {
@@ -27,16 +29,22 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     !__instance.buildingType.Value.Equals("Gold Clock") ||
                     __instance.isTilePassable(tileLocation))
                 {
-                    return;
+                    return true; // run original logic
                 }
 
+                if (_lastDayGoldClockToggled != Game1.stats.DaysPlayed)
+                {
+                    _lastDayGoldClockToggled = Game1.stats.DaysPlayed;
+                    return true; // run original logic
+                }
+                
                 Game1.performTenMinuteClockUpdate();
-                return;
+                return false; // don't run original logic
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(DoAction_GoldenClockIncreaseTime_Postfix)}:\n{ex}", LogLevel.Error);
-                return;
+                _monitor.Log($"Failed in {nameof(DoAction_GoldenClockIncreaseTime_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
             }
         }
     }

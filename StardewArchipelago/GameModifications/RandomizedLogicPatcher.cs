@@ -617,7 +617,7 @@ namespace StardewArchipelago.GameModifications
         {
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Building), nameof(Building.doAction)),
-                postfix: new HarmonyMethod(typeof(GoldenClockInjections), nameof(GoldenClockInjections.DoAction_GoldenClockIncreaseTime_Postfix))
+                prefix: new HarmonyMethod(typeof(GoldenClockInjections), nameof(GoldenClockInjections.DoAction_GoldenClockIncreaseTime_Prefix))
             );
         }
 
