@@ -2,6 +2,7 @@
 using System.Linq;
 using Archipelago.Gifting.Net.Gifts.Versions.Current;
 using Archipelago.Gifting.Net.Service;
+using Archipelago.Gifting.Net.Utilities.CloseTraitParser;
 using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
@@ -17,14 +18,14 @@ namespace StardewArchipelago.Archipelago.Gifting
         private Mailman _mail;
         private GiftProcessor _giftProcessor;
 
-        public GiftReceiver(IMonitor monitor, ArchipelagoClient archipelago, IGiftingService giftService, StardewItemManager itemManager, Mailman mail)
+        public GiftReceiver(IMonitor monitor, ArchipelagoClient archipelago, IGiftingService giftService, StardewItemManager itemManager, Mailman mail, ICloseTraitParser<string> closeTraitParser)
         {
             _monitor = monitor;
             _archipelago = archipelago;
             _giftService = giftService;
             _itemManager = itemManager;
             _mail = mail;
-            _giftProcessor = new GiftProcessor(monitor, archipelago, itemManager);
+            _giftProcessor = new GiftProcessor(monitor, archipelago, itemManager, closeTraitParser);
         }
 
         public void ReceiveAllGifts()

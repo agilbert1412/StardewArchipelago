@@ -2,6 +2,7 @@
 using System.IO;
 using Archipelago.Gifting.Net.Service;
 using Archipelago.Gifting.Net.Traits;
+using Archipelago.Gifting.Net.Utilities.CloseTraitParser;
 using Microsoft.Xna.Framework;
 using Newtonsoft.Json;
 using StardewArchipelago.Items.Mail;
@@ -26,6 +27,7 @@ namespace StardewArchipelago.Archipelago.Gifting
         private IGiftingService _giftService;
         private GiftSender _giftSender;
         private GiftReceiver _giftReceiver;
+        private ICloseTraitParser<string> _closeTraitParser;
 
         public GiftSender Sender => _giftSender;
 
@@ -46,9 +48,11 @@ namespace StardewArchipelago.Archipelago.Gifting
             _archipelago = archipelago;
             _giftService = new GiftingService(archipelago.Session);
             _giftSender = new GiftSender(_monitor, _archipelago, _itemManager, _giftService);
-            _giftReceiver = new GiftReceiver(_monitor, _archipelago, _giftService, _itemManager, _mail);
 
             _giftService.OpenGiftBox(true, _desiredTraits);
+            RegisterAllAvailableGifts();
+
+            _giftReceiver = new GiftReceiver(_monitor, _archipelago, _giftService, _itemManager, _mail, _closeTraitParser);
         }
 
         public bool HandleGiftItemCommand(string message)
@@ -98,8 +102,24 @@ namespace StardewArchipelago.Archipelago.Gifting
 
         public void ExportAllGifts(string filePath)
         {
-            var allItems = _itemManager.GetAllItems();
+            var items = GetAllGiftAndTraitsByName();
+            var objectsAsJson = JsonConvert.SerializeObject(items);
+            File.WriteAllText(filePath, objectsAsJson);
+        }
 
+        private void RegisterAllAvailableGifts()
+        {
+            _closeTraitParser = new BKTreeCloseTraitParser<string>();
+            var items = GetAllGiftAndTraitsByName();
+            foreach (var (item, traits) in items)
+            {
+                _closeTraitParser.RegisterAvailableGift(item, traits);
+            }
+        }
+
+        private Dictionary<string, GiftTrait[]> GetAllGiftAndTraitsByName()
+        {
+            var allItems = _itemManager.GetAllItems();
             var items = new Dictionary<string, GiftTrait[]>();
             foreach (var item in allItems)
             {
@@ -120,9 +140,7 @@ namespace StardewArchipelago.Archipelago.Gifting
                 }
                 items.Add(giftItem.Name, traits);
             }
-
-            var objectsAsJson = JsonConvert.SerializeObject(items);
-            File.WriteAllText(filePath, objectsAsJson);
+            return items;
         }
     }
 }
