@@ -495,7 +495,7 @@ namespace StardewArchipelago.GameModifications
 
         private void PatchMixedSeeds()
         {
-            if (_archipelago.SlotData.Cropsanity == Cropsanity.Disabled)
+            if (_archipelago.SlotData.Cropsanity == Cropsanity.Disabled || !ModEntry.Instance.Config.StrictLogic)
             {
                 return;
             }
