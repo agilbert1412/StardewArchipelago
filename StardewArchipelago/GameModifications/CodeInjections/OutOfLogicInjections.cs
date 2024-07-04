@@ -111,7 +111,6 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 _depth++;
                 Game1.stats.Increment("MysteryBoxesOpened");
                 __result = Utility.getTreasureFromGeode(geode);
-                Game1.stats.Decrement("MysteryBoxesOpened");
                 return;
             }
             catch (Exception ex)
