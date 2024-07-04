@@ -29,6 +29,14 @@ namespace StardewArchipelago.Locations
             { "Egg", new[] { "Dinosaur Egg", "Golden Egg", "Void Egg", "Thunder Egg" } },
             { "Clay", new[] { "Land Of Clay" } },
             { "Slime", new[] { "Slime Hutch" } },
+            {
+                "Diamond",
+                new[]
+                {
+                    "Diamond Hunter", "Starfish Diamond", "Diamond Of",
+                }
+            },
+            { "Opal", new[] { "Fire Opal" } },
         };
 
         public LocationNameMatcher()
