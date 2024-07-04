@@ -72,12 +72,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             try
             {
-                if (__instance.map.GetLayer("Buildings").Tiles[tileLocation] == null)
-                {
-                    return true; // run original logic
-                }
-
-                var tileIndex = __instance.map.GetLayer("Buildings").Tiles[tileLocation].TileIndex;
+                var tileIndex = __instance.getTileIndexAt(tileLocation, "Buildings");
                 if (tileIndex != 399)
                 {
                     return true; // run original logic
@@ -102,6 +97,34 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             catch (Exception ex)
             {
                 _monitor.Log($"Failed in {nameof(NightMarketCheckAction_IsTravelingMerchantDay_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
+            }
+        }
+
+        // public override bool checkAction(Location tileLocation, xTile.Dimensions.Rectangle viewport, Farmer who)
+        public static bool DesertFestivalCheckAction_IsTravelingMerchantDay_Prefix(DesertFestival __instance, Location tileLocation, Rectangle viewport, Farmer who, ref bool __result)
+        {
+            try
+            {
+                var tileIndex = __instance.getTileIndexAt(tileLocation, "Buildings");
+                if (tileIndex != 796 && tileIndex != 797)
+                {
+                    return true; // run original logic
+                }
+
+                var isTravelingMerchantDay = IsTravelingMerchantDay(Game1.dayOfMonth);
+
+                if (!isTravelingMerchantDay)
+                {
+                    Game1.drawObjectDialogue("The traveling merchant isn't here today.");
+                    return false; // don't run original logic
+                }
+
+                return true; // run original logic
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(DesertFestivalCheckAction_IsTravelingMerchantDay_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
             }
         }

@@ -237,6 +237,14 @@ namespace StardewArchipelago.Integrations.GenericModConfigMenu
                 setValue: (value) => Config.ShowItemIndicators = (ItemIndicatorPreference)value,
                 formatValue: (value) => ((ItemIndicatorPreference)value).ToString()
             );
+
+            configMenu.AddBoolOption(
+                mod: ModManifest,
+                name: () => "Strict Logic",
+                tooltip: () => "Disables some out-of-logic obtention methods for some critical progression items. Examples: Mystery boxes, Prize Tickets",
+                getValue: () => Config.StrictLogic,
+                setValue: (value) => Config.StrictLogic = value
+            );
         }
     }
 }
