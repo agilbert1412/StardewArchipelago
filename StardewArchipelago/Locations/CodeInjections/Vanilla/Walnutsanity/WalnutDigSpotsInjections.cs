@@ -68,8 +68,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             { "Buried_IslandWest_43_74", "Starfish Diamond" },
             { "Buried_IslandWest_30_75", "X in the sand" },
             { "Buried_IslandWest_21_81", "Diamond Of Indents" },
-            { "Buried_IslandWest_39_24", "Diamond Of Pebbles" },
-            { "Buried_IslandWest_88_14", "Circle Of Grass" },
+            { "Buried_IslandWest_39_24", "Circle Of Grass" },
+            { "Buried_IslandWest_88_14", "Diamond Of Pebbles" },
             { "Buried_IslandNorth_26_81", "Big Circle Of Stones" },
             { "Buried_IslandNorth_42_77", "Diamond Of Grass" },
             { "Buried_IslandNorth_57_79", "Small Circle Of Stones" },
@@ -79,6 +79,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             { "Buried_IslandNorth_19_13", "Northmost Point Circle Of Stones" },
             { "Buried_IslandSouthEast_25_17", "Diamond Of Yellow Starfish" },
             { "Buried_IslandSouthEastCave_36_26", "Pirate Cove Patch Of Sand" },
-        }; // Around the tiger slimes is "Buried_IslandWest_39_24"
+        };
     }
 }
