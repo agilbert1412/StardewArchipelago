@@ -65,6 +65,8 @@ namespace StardewArchipelago.Archipelago.Gifting
                 traits.AddRange(GetObjectTraits(giftObject));
             }
 
+            traits.AddRange(GetContextTagsTraits(giftItem));
+
             return SimplifyDuplicates(traits).ToArray();
         }
 
@@ -81,7 +83,7 @@ namespace StardewArchipelago.Archipelago.Gifting
             var nameFlag = GetFromAllFlags(itemName);
             if (!string.IsNullOrWhiteSpace(nameFlag))
             {
-                yield return CreateTrait(nameFlag, 1D, 3D);
+                yield return CreateTrait(nameFlag);
             }
 
             if (ReplaceFlags.ContainsKey(itemName))
@@ -89,29 +91,27 @@ namespace StardewArchipelago.Archipelago.Gifting
                 var replacedNameFlag = GetFromAllFlags(ReplaceFlags[itemName]);
                 if (!string.IsNullOrWhiteSpace(replacedNameFlag))
                 {
-                    yield return CreateTrait(replacedNameFlag, 1D, 2D);
+                    yield return CreateTrait(replacedNameFlag);
                 }
             }
 
             foreach (var word in itemName.Split(' '))
             {
                 var wordFlag = GiftFlag.AllFlags.FirstOrDefault(x => x.Equals(word, StringComparison.InvariantCultureIgnoreCase));
-                if (string.IsNullOrWhiteSpace(wordFlag))
+                if (!string.IsNullOrWhiteSpace(wordFlag))
+                {
+                    yield return CreateTrait(wordFlag, 0.5D);
+                }
+
+                if (!ReplaceFlags.ContainsKey(word))
                 {
                     continue;
                 }
 
-                yield return CreateTrait(wordFlag, 1D, 1D);
-
-                if (!ReplaceFlags.ContainsKey(wordFlag))
-                {
-                    continue;
-                }
-
-                var replacedWordFlag = GetFromAllFlags(ReplaceFlags[wordFlag]);
+                var replacedWordFlag = GetFromAllFlags(ReplaceFlags[word]);
                 if (!string.IsNullOrWhiteSpace(replacedWordFlag))
                 {
-                    yield return CreateTrait(replacedWordFlag, 1D, 0.5D);
+                    yield return CreateTrait(replacedWordFlag, 0.5D);
                 }
             }
         }
@@ -191,52 +191,52 @@ namespace StardewArchipelago.Archipelago.Gifting
 
             if (effects.FarmingLevel != 0)
             {
-                yield return CreateTrait(GiftFlag.Tool, buffDuration, effects.FarmingLevel);
+                yield return CreateTrait(GiftFlag.Tool, effects.FarmingLevel, buffDuration);
             }
 
             if (effects.FishingLevel != 0)
             {
-                yield return CreateTrait(GiftFlag.Fish, buffDuration, effects.FishingLevel);
+                yield return CreateTrait(GiftFlag.Fish, effects.FishingLevel, buffDuration);
             }
 
             if (effects.MiningLevel != 0)
             {
-                yield return CreateTrait(GiftFlag.Tool, buffDuration, effects.MiningLevel);
+                yield return CreateTrait(GiftFlag.Tool, effects.MiningLevel, buffDuration);
             }
 
             if (effects.ForagingLevel != 0)
             {
-                yield return CreateTrait(GiftFlag.Tool, buffDuration, effects.ForagingLevel);
+                yield return CreateTrait(GiftFlag.Tool, effects.ForagingLevel, buffDuration);
             }
             
             if (effects.LuckLevel != 0)
             {
-                yield return CreateTrait("Luck", buffDuration, effects.LuckLevel);
+                yield return CreateTrait("Luck", effects.LuckLevel, buffDuration);
             }
 
             if (effects.MagneticRadius != 0)
             {
-                yield return CreateTrait("Magnetism", buffDuration, effects.MagneticRadius);
+                yield return CreateTrait("Magnetism", effects.MagneticRadius, buffDuration);
             }
 
             if (effects.MaxStamina != 0)
             {
-                yield return CreateTrait(GiftFlag.Mana, buffDuration, effects.MaxStamina);
+                yield return CreateTrait(GiftFlag.Mana, effects.MaxStamina, buffDuration);
             }
 
             if (effects.Speed != 0)
             {
-                yield return CreateTrait(GiftFlag.Speed, buffDuration, effects.Speed);
+                yield return CreateTrait(GiftFlag.Speed, effects.Speed, buffDuration);
             }
 
             if (effects.Defense != 0)
             {
-                yield return CreateTrait(GiftFlag.Armor, buffDuration, effects.Defense);
+                yield return CreateTrait(GiftFlag.Armor, effects.Defense, buffDuration);
             }
 
             if (effects.Attack != 0)
             {
-                yield return CreateTrait(GiftFlag.Weapon, buffDuration, effects.Attack);
+                yield return CreateTrait(GiftFlag.Weapon, effects.Attack, buffDuration);
             }
         }
 
@@ -261,6 +261,7 @@ namespace StardewArchipelago.Archipelago.Gifting
             const string colorPrefix = "color_";
             const string foodPrefix = "color_";
             const string itemSuffix = "_item";
+            const string largePrefix = "large_";
             var contextTags = giftItem.GetContextTags();
             
             foreach (var contextTag in contextTags)
@@ -268,16 +269,29 @@ namespace StardewArchipelago.Archipelago.Gifting
                 if (_contextTags.ContainsKey(contextTag))
                 {
                     yield return CreateTrait(_contextTags[contextTag]);
+                    continue;
+                }
+
+                if (contextTag == "large_egg_item")
+                {
+                    yield return CreateTrait(GiftFlag.Egg, 2D);
+                    continue;
+                }
+
+                if (contextTag == "large_milk_item")
+                {
+                    yield return CreateTrait("Milk", 2D);
+                    continue;
                 }
 
                 if (contextTag.StartsWith(colorPrefix, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    yield return CreateTrait(CultureInfo.InvariantCulture.TextInfo.ToTitleCase(contextTag[colorPrefix.Length..].ToLower()));
+                    yield return CreateTrait(ToPascalCase(contextTag[colorPrefix.Length..]));
                 }
 
                 if (contextTag.StartsWith(foodPrefix, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    yield return CreateTrait(CultureInfo.InvariantCulture.TextInfo.ToTitleCase(contextTag[foodPrefix.Length..].ToLower()));
+                    yield return CreateTrait(ToPascalCase(contextTag[foodPrefix.Length..]));
                 }
 
                 if (contextTag.StartsWith("dye_", StringComparison.InvariantCultureIgnoreCase))
@@ -287,9 +301,25 @@ namespace StardewArchipelago.Archipelago.Gifting
 
                 if (contextTag.EndsWith(itemSuffix, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    yield return CreateTrait(CultureInfo.InvariantCulture.TextInfo.ToTitleCase(contextTag[..^itemSuffix.Length].ToLower()));
+                    var item = contextTag[..^itemSuffix.Length];
+                    var quality = 1D;
+                    if (item.StartsWith(largePrefix, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        item = item[largePrefix.Length..];
+                        quality *= 2;
+                    }
+                    yield return CreateTrait(ToPascalCase(item), quality);
                 }
             }
+        }
+
+        private string ToPascalCase(string text)
+        {
+            var lowerText = text.ToLower();
+            var spacedText = lowerText.Replace("_", " ");
+            var titleText = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(spacedText);
+            var pascalText = titleText.Replace(" ", "");
+            return pascalText;
         }
 
         private IEnumerable<GiftTrait> SimplifyDuplicates(IEnumerable<GiftTrait> traits)
@@ -309,7 +339,7 @@ namespace StardewArchipelago.Archipelago.Gifting
             return bestTraits.Values;
         }
 
-        private GiftTrait CreateTrait(string trait, double duration = 1.0, double quality = 1.0)
+        private GiftTrait CreateTrait(string trait, double quality = 1.0, double duration = 1.0)
         {
             return new GiftTrait(trait, duration, quality);
         }
@@ -363,16 +393,16 @@ namespace StardewArchipelago.Archipelago.Gifting
             { "asdf", "" },
             { "Minerals", "Mineral" },
             { "Seeds", GiftFlag.Seed },
-            { "Frozen", "Ice" },
-            { "Winter", "Ice" },
-            { "Magma", "Fire" },
+            { "Frozen", GiftFlag.Ice },
+            { "Winter", GiftFlag.Ice },
+            { "Magma", GiftFlag.Fire },
             { "Bulb", GiftFlag.Seed },
             { "Starter", GiftFlag.Seed },
         };
 
         private static readonly Dictionary<string, string> _contextTags = new()
         {
-            { "light_source", "Light" },
+            { "light_source", GiftFlag.Light },
             { "season_spring", "Spring" },
             { "season_summer", "Summer" },
             { "season_fall", "Fall" },
@@ -395,6 +425,9 @@ namespace StardewArchipelago.Archipelago.Gifting
             { "book_xp_fishing", "Book" },
             { "book_xp_mining", "Book" },
             { "book_xp_combat", "Book" },
+            { "cow_milk_item", "Cow" },
+            { "goat_milk_item", "Goat" },
+            { "slime_egg_item", GiftFlag.Egg },
         };
     }
 }
