@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Archipelago.Gifting.Net.Gifts;
 using Archipelago.Gifting.Net.Traits;
@@ -95,18 +96,22 @@ namespace StardewArchipelago.Archipelago.Gifting
             foreach (var word in itemName.Split(' '))
             {
                 var wordFlag = GiftFlag.AllFlags.FirstOrDefault(x => x.Equals(word, StringComparison.InvariantCultureIgnoreCase));
-                if (!string.IsNullOrWhiteSpace(wordFlag))
+                if (string.IsNullOrWhiteSpace(wordFlag))
                 {
-                    yield return CreateTrait(wordFlag, 1D, 1D);
+                    continue;
+                }
 
-                    if (ReplaceFlags.ContainsKey(wordFlag))
-                    {
-                        var replacedWordFlag = GetFromAllFlags(ReplaceFlags[wordFlag]);
-                        if (!string.IsNullOrWhiteSpace(replacedWordFlag))
-                        {
-                            yield return CreateTrait(replacedWordFlag, 1D, 0.5D);
-                        }
-                    }
+                yield return CreateTrait(wordFlag, 1D, 1D);
+
+                if (!ReplaceFlags.ContainsKey(wordFlag))
+                {
+                    continue;
+                }
+
+                var replacedWordFlag = GetFromAllFlags(ReplaceFlags[wordFlag]);
+                if (!string.IsNullOrWhiteSpace(replacedWordFlag))
+                {
+                    yield return CreateTrait(replacedWordFlag, 1D, 0.5D);
                 }
             }
         }
@@ -253,6 +258,9 @@ namespace StardewArchipelago.Archipelago.Gifting
 
         private IEnumerable<GiftTrait> GetContextTagsTraits(Item giftItem)
         {
+            const string colorPrefix = "color_";
+            const string foodPrefix = "color_";
+            const string itemSuffix = "_item";
             var contextTags = giftItem.GetContextTags();
             
             foreach (var contextTag in contextTags)
@@ -260,6 +268,26 @@ namespace StardewArchipelago.Archipelago.Gifting
                 if (_contextTags.ContainsKey(contextTag))
                 {
                     yield return CreateTrait(_contextTags[contextTag]);
+                }
+
+                if (contextTag.StartsWith(colorPrefix, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    yield return CreateTrait(CultureInfo.InvariantCulture.TextInfo.ToTitleCase(contextTag[colorPrefix.Length..].ToLower()));
+                }
+
+                if (contextTag.StartsWith(foodPrefix, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    yield return CreateTrait(CultureInfo.InvariantCulture.TextInfo.ToTitleCase(contextTag[foodPrefix.Length..].ToLower()));
+                }
+
+                if (contextTag.StartsWith("dye_", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    yield return CreateTrait("Dye", contextTag.EndsWith("strong", StringComparison.InvariantCultureIgnoreCase) ? 2 : 1);
+                }
+
+                if (contextTag.EndsWith(itemSuffix, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    yield return CreateTrait(CultureInfo.InvariantCulture.TextInfo.ToTitleCase(contextTag[..^itemSuffix.Length].ToLower()));
                 }
             }
         }
@@ -336,11 +364,37 @@ namespace StardewArchipelago.Archipelago.Gifting
             { "Minerals", "Mineral" },
             { "Seeds", GiftFlag.Seed },
             { "Frozen", "Ice" },
+            { "Winter", "Ice" },
+            { "Magma", "Fire" },
+            { "Bulb", GiftFlag.Seed },
+            { "Starter", GiftFlag.Seed },
         };
 
         private static readonly Dictionary<string, string> _contextTags = new()
         {
             { "light_source", "Light" },
+            { "season_spring", "Spring" },
+            { "season_summer", "Summer" },
+            { "season_fall", "Fall" },
+            { "season_winter", "Winter" },
+            { "fish_ocean", "Ocean" },
+            { "fish_river", "River" },
+            { "fish_lake", "Lake" },
+            { "fish_swamp", "Swamp" },
+            { "fish_pond", "Pond" },
+            { "fish_legendary", "Legendary" },
+            { "fish_legendary_family", "Legendary" },
+            { "fish_desert", "Desert" },
+            { "fish_crab_pot", "CrabPot" },
+            { "fish_carnivorous", "Carnivorous" },
+            { "fish_freshwater", "Freshwater" },
+            { "edible_mushroom", "Mushroom" },
+            { "geode", "Geode" },
+            { "book_xp_farming", "Book" },
+            { "book_xp_foraging", "Book" },
+            { "book_xp_fishing", "Book" },
+            { "book_xp_mining", "Book" },
+            { "book_xp_combat", "Book" },
         };
     }
 }
