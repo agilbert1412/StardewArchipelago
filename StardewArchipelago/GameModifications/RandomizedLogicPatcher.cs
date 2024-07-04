@@ -747,6 +747,11 @@ namespace StardewArchipelago.GameModifications
 
         private void PatchMysteryBoxesAndPrizeTickets()
         {
+            if (!ModEntry.Instance.Config.StrictLogic)
+            {
+                return;
+            }
+
             _harmony.Patch(
                 original: AccessTools.Method(typeof(PrizeTicketMenu), nameof(PrizeTicketMenu.getPrizeItem)),
                 postfix: new HarmonyMethod(typeof(OutOfLogicInjections), nameof(OutOfLogicInjections.GetPrizeItem_SkipOutOfLogicPrizeTickets_Postfix))
