@@ -494,6 +494,11 @@ namespace StardewArchipelago.Stardew
                 {
                     _cookingRecipesByName.Add(NameAliases.RecipeNameAliases[recipe.RecipeName], recipe);
                 }
+
+                if (!string.IsNullOrWhiteSpace(recipe.YieldItem?.Name) && !_cookingRecipesByName.ContainsKey(recipe.YieldItem.Name))
+                {
+                    _cookingRecipesByName.Add(recipe.YieldItem.Name, recipe);
+                }
             }
         }
 
@@ -681,7 +686,7 @@ namespace StardewArchipelago.Stardew
             return meleeWeapon;
         }
 
-        private static StardewCookingRecipe ParseStardewCookingRecipeData(string recipeName, string recipeInfo)
+        private StardewCookingRecipe ParseStardewCookingRecipeData(string recipeName, string recipeInfo)
         {
             var fields = recipeInfo.Split("/");
             var ingredientsField = fields[0].Split(" ");
@@ -697,11 +702,13 @@ namespace StardewArchipelago.Stardew
             var unlockConditions = fields[3];
             var displayName = fields.Length > 4 ? fields[4] : recipeName;
 
-            var cookingRecipe = new StardewCookingRecipe(recipeName, ingredients, yieldItemId, yieldAmount, unlockConditions, displayName);
+            var yieldItem = _objectsById[yieldItemId];
+
+            var cookingRecipe = new StardewCookingRecipe(recipeName, ingredients, yieldItem, yieldAmount, unlockConditions, displayName);
             return cookingRecipe;
         }
 
-        private static StardewCraftingRecipe ParseStardewCraftingRecipeData(string recipeName, string recipeInfo)
+        private StardewCraftingRecipe ParseStardewCraftingRecipeData(string recipeName, string recipeInfo)
         {
             var fields = recipeInfo.Split("/");
             var ingredientsField = fields[0].Split(" ");
@@ -718,7 +725,9 @@ namespace StardewArchipelago.Stardew
             var unlockConditions = fields[4];
             var displayName = fields.Length > 5 ? fields[5] : recipeName;
 
-            var craftingRecipe = new StardewCraftingRecipe(recipeName, ingredients, yieldItemId, yieldAmount, bigCraftable, unlockConditions, displayName);
+            StardewItem yieldItem = bigCraftable == "true" ? _bigCraftablesById[yieldItemId] : _objectsById[yieldItemId];
+
+            var craftingRecipe = new StardewCraftingRecipe(recipeName, ingredients, yieldItem, yieldAmount, bigCraftable, unlockConditions, displayName);
             return craftingRecipe;
         }
 

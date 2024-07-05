@@ -40,7 +40,6 @@
         public const string SpawnBaby = "SpawnBaby";
         public const string Trap = "Trap";
         public const string LearnCookingRecipe = "LearnCookingRecipe";
-        public const string LearnSpecialCraftingRecipe = "LearnSpecialCraftingRecipe"; // used if the item's name has underscores
         public const string MovieTheater = "Repair Movie Theater";
         public const string FruitBats = "FruitBats";
         public const string MushroomBoxes = "MushroomBoxes";

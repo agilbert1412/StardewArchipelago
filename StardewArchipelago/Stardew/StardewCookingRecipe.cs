@@ -7,7 +7,7 @@ namespace StardewArchipelago.Stardew
 {
     public class StardewCookingRecipe : StardewRecipe
     {
-        public StardewCookingRecipe(string recipeName, Dictionary<string, int> ingredients, string yieldItemId, int yieldItemAmount, string unlockConditions, string displayName) : base(recipeName, ingredients, yieldItemId, yieldItemAmount, unlockConditions, displayName)
+        public StardewCookingRecipe(string recipeName, Dictionary<string, int> ingredients, StardewObject yieldItem, int yieldItemAmount, string unlockConditions, string displayName) : base(recipeName, ingredients, yieldItem, yieldItemAmount, unlockConditions, displayName)
         {
         }
 
