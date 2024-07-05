@@ -90,6 +90,7 @@ namespace StardewArchipelago.Stardew.NameMapping
             {
                 itemName = itemName.Replace("Vertabra", "Vertebrae");
             }
+            itemName = new CultureInfo("en-US",false).TextInfo.ToTitleCase(itemName);  // I love typos and horrible code fr - Albrekka
             return itemName;
         }
 
