@@ -180,10 +180,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             try
             {
-                if (_archipelago.SlotData.SkillProgression == SkillsProgression.Vanilla)
-                {
-                    return true; // run original logic; there's a bleed effect from over-assuming from old code.
-                }
                 var skillActualName = skillName.Split('.').Last().Replace("Skill", "");
                 var skill = Enum.Parse<Skill>(skillActualName);
 
