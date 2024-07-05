@@ -128,6 +128,7 @@ namespace StardewArchipelago
             // _helper.ConsoleCommands.Add("load_entrances", "Loads the entrances file", (_, _) => _entranceRandomizer.LoadTransports());
             // _helper.ConsoleCommands.Add("save_entrances", "Saves the entrances file", (_, _) => EntranceInjections.SaveNewEntrancesToFile());
             _helper.ConsoleCommands.Add("export_shippables", "Export all currently loaded shippable items", ExportShippables);
+            _helper.ConsoleCommands.Add("export_mismatches", "Export all items where Name and DisplayName mismatch which can be shipped", ExportMismatchedItems);
             _helper.ConsoleCommands.Add("release_slot", "Release the current slot completely", ReleaseSlot);
             _helper.ConsoleCommands.Add("debug_method", "Runs whatever is currently in the debug method", DebugMethod);
 #endif
@@ -590,6 +591,11 @@ namespace StardewArchipelago
         private void ExportShippables(string arg1, string[] arg2)
         {
             _stardewItemManager.ExportAllItemsMatching(x => x.canBeShipped(), "shippables.json");
+        }
+
+        private void ExportMismatchedItems(string arg1, string[] arg2)
+        {
+            _stardewItemManager.ExportAllMismatchedItems(x => x.canBeShipped(), "mismatches.json");
         }
 
 #if DEBUG

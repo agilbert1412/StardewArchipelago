@@ -7,26 +7,22 @@ namespace StardewArchipelago.Stardew.NameMapping
     {
         private static readonly Dictionary<string, string> ArchaeologyToEnglishNamesMap = new()
         {
-            { "moonslime.Archaeology.ancient_battery", "Ancient Battery Production Station" },
-            { "moonslime.Archaeology.glass_brazier", "Glass Brazier" },
-            { "moonslime.Archaeology.grinder", "Grinder" },
-            { "moonslime.Archaeology.preservation_chamber", "Preservation Chamber" },
-            { "moonslime.Archaeology.h_preservation_chamber", "Hardwood Preservation Chamber" },
-            { "moonslime.Archaeology.glass_fence", "Glass Fence" },
-            { "moonslime.Archaeology.dummy_path_bone", "Bone Path" },
-            { "moonslime.Archaeology.dummy_path_glass", "Glass Path" },
-            { "moonslime.Archaeology.dummy_water_strainer", "Water Shifter" },
-            { "moonslime.Archaeology.h_display", "Hardwood Display" },
-            { "moonslime.Archaeology.w_display", "Wooden Display" },
-            { "moonslime.Archaeology.totem_volcano_warp", "Dwarf Gadget: Infinite Volcano Simulation" },
-            { "moonslime.Archaeology.restoration_table", "Restoration Table" },
-            { "moonslime.Archaeology.rust_path", "Rusty Path" },
-            { "moonslime.Archaeology.rusty_scrap", "Scrap Rust" },
-            { "moonslime.Archaeology.skill_book", "Digging Like Worms" },
-            { "moonslime.Archaeology.diggers_delight", "Digger's Delight" },
-            { "moonslime.Archaeology.rocky_root", "Rocky Root Coffee" },
-            { "moonslime.Archaeology.ancient_jello", "Ancient Jello" },
-            { "moonslime.Archaeology.rusty_brazier", "Rusty Brazier" },
+            {"Rust Path", "Rusty Path"},
+            {"Ancient Dwarven Volcano Simulator", "Dwarf Gadget: Infinite Volcano Simulation"},
+            {"Rusted Scrap", "Scrap Rust"},
+            {"moonslime.Archaeology.h_amphibian_fossil", "Hardwood Display: Amphibian Fossil"},
+            {"Hardwood Display: Snake Vertabra", "Hardwood Display: Snake Vertebrae"},
+            {"Hardwood Display: Strange Doll Green", "Hardwood Display: Strange Doll (Green)"},
+            {"Hardwood Display: Strange Doll Yellow", "Hardwood Display: Strange Doll"},
+            {"Hardwood Display: Trilobite", "Hardwood Display: Trilobite Fossil"},
+            {"Wood Display", "Wooden Display"},
+            {"Wooden Display: nautilus Fossil", "Wooden Display: Nautilus Fossil"},
+            {"Wooden Display: prehistoric Handaxe", "Wooden Display: Prehistoric Handaxe"},
+            {"Wooden Display: Prehistoric Vertabra", "Wooden Display: Prehistoric Vertebra"},
+            {"Wooden Display: Snake Vertabra", "Wooden Display: Snake Vertebrae"},
+            {"Wooden Display: Strange Doll Green", "Wooden Display: Strange Doll (Green)"},
+            {"Wooden Display: Strange Doll Yellow", "Wooden Display: Strange Doll"},
+            {"Wooden Display: Trilobite", "Wooden Display: Trilobite Fossil"},
         };
 
         private static readonly Dictionary<string, string> EnglishToArchaeologyNamesMap = ArchaeologyToEnglishNamesMap.ToDictionary(x => x.Value, x => x.Key);
@@ -37,12 +33,14 @@ namespace StardewArchipelago.Stardew.NameMapping
 
         public string GetEnglishName(string internalName)
         {
-            return ArchaeologyToEnglishNamesMap.ContainsKey(internalName) ? ArchaeologyToEnglishNamesMap[internalName] : internalName;
+            var fixedWoodName = internalName.Replace("Wood Display: ", "Wooden Display: ");
+            return   ArchaeologyToEnglishNamesMap.ContainsKey(fixedWoodName) ? ArchaeologyToEnglishNamesMap[fixedWoodName] : fixedWoodName;      
         }
 
         public string GetInternalName(string englishName)
         {
-            return EnglishToArchaeologyNamesMap.ContainsKey(englishName) ? EnglishToArchaeologyNamesMap[englishName] : englishName;
+            var initialInternalName = EnglishToArchaeologyNamesMap.ContainsKey(englishName) ? EnglishToArchaeologyNamesMap[englishName] : englishName;
+            return initialInternalName.Replace("Wooden Display: ", "Wood Display: ");
         }
 
         public string GetItemName(string recipeName)

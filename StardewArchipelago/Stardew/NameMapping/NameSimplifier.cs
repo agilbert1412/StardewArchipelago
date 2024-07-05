@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Globalization;
 using StardewArchipelago.Constants.Vanilla;
 using StardewValley;
 
@@ -27,11 +26,6 @@ namespace StardewArchipelago.Stardew.NameMapping
             foreach (var (oldChar, newChar) in _simplifiedChars)
             {
                 name = name.Replace(oldChar, newChar);
-            }
-
-            if (item.QualifiedItemId.Contains("moonslime.Archaeology."))
-            {
-                name = FixArchaeologyLocationInconsistentNaming(name);
             }
 
             if (item is not Object shippedObject)
@@ -75,22 +69,6 @@ namespace StardewArchipelago.Stardew.NameMapping
             }
 
             return name;
-        }
-
-        private string FixArchaeologyLocationInconsistentNaming(string itemName)
-        {
-            itemName = itemName.Replace("Wood Display", "Wooden Display");
-            itemName = itemName.Replace("Strange Doll Green", "Strange Doll (Green)");
-            itemName = itemName.Replace("Strange Doll Yellow", "Strange Doll");
-            if (Constants.Modded.ModItemNameTranslations.ArchaeologyInternalToDisplay.TryGetValue(itemName, out var fixedName))
-            {
-                itemName = fixedName;
-            }
-            if (itemName.Contains("Vertabra"))
-            {
-                itemName = itemName.Replace("Vertabra", "Vertebrae");
-            }
-            return itemName;
         }
 
         private static readonly Dictionary<string, string> _renamedObjects = new()
