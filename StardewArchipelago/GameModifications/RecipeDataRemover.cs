@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants.Modded;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -117,13 +118,13 @@ namespace StardewArchipelago.GameModifications
                 var recipeData = cookingRecipesData[recipeName];
                 var recipeUnlockCondition = GetCookingRecipeUnlockCondition(recipeData);
                 var unlockConditionParts = recipeUnlockCondition.Split(" ");
-                if (unlockConditionParts.Length < 3 || unlockConditionParts[0] != "s")
+                var isVanillaSkillUnlock = unlockConditionParts.Length >= 3 && unlockConditionParts[0] == "s";
+                var isBirbCoreSkillUnlock = unlockConditionParts.Length == 2 && ArchipelagoSkillIds.ModdedSkillIds.Contains(unlockConditionParts[0]);
+                if (isVanillaSkillUnlock || isBirbCoreSkillUnlock)
                 {
-                    continue;
+                    var modifiedRecipe = recipeData.Replace(recipeUnlockCondition, "none");
+                    cookingRecipesData[recipeName] = modifiedRecipe;
                 }
-
-                var modifiedRecipe = recipeData.Replace(recipeUnlockCondition, "none");
-                cookingRecipesData[recipeName] = modifiedRecipe;
             }
         }
 

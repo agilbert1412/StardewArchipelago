@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.Extensions;
 using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
@@ -47,31 +48,31 @@ namespace StardewArchipelago.Items.Unlocks.Modded
 
         private LetterAttachment SendProgressiveMagicLevel(ReceivedItem receivedItem)
         {
-            ReceiveAPLevel("spacechase0.Magic");
+            ReceiveAPLevel(ArchipelagoSkillIds.MAGIC);
             return new LetterInformationAttachment(receivedItem);
         }
 
         private LetterAttachment SendProgressiveBinningLevel(ReceivedItem receivedItem)
         {
-            ReceiveAPLevel("drbirbdev.Binning");
+            ReceiveAPLevel(ArchipelagoSkillIds.BINNING);
             return new LetterInformationAttachment(receivedItem);
         }
 
         private LetterAttachment SendProgressiveCookingLevel(ReceivedItem receivedItem)
         {
-            ReceiveAPLevel("spacechase0.Cooking");
+            ReceiveAPLevel(ArchipelagoSkillIds.COOKING);
             return new LetterInformationAttachment(receivedItem);
         }
 
         private LetterAttachment SendProgressiveSocializingLevel(ReceivedItem receivedItem)
         {
-            ReceiveAPLevel("drbirbdev.Socializing");
+            ReceiveAPLevel(ArchipelagoSkillIds.SOCIALIZING);
             return new LetterInformationAttachment(receivedItem);
         }
 
         private LetterAttachment SendProgressiveArchaeologyLevel(ReceivedItem receivedItem)
         {
-            ReceiveAPLevel("moonslime.Archaeology");
+            ReceiveAPLevel(ArchipelagoSkillIds.ARCHAEOLOGY);
             return new LetterInformationAttachment(receivedItem);
         }
 
