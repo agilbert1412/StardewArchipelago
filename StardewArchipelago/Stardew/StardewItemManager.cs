@@ -32,7 +32,7 @@ namespace StardewArchipelago.Stardew
         private Dictionary<string, StardewWeapon> _weaponsById;
         private Dictionary<string, StardewWeapon> _weaponsByName;
         private Dictionary<string, StardewCookingRecipe> _cookingRecipesByName;
-        private Dictionary<string, StardewCraftingRecipe> _craftingRecipesByName;        
+        private Dictionary<string, StardewCraftingRecipe> _craftingRecipesByName;
 
         private List<string> _priorityIds = new()
         {
@@ -184,7 +184,7 @@ namespace StardewArchipelago.Stardew
 
         public IEnumerable<StardewObject> GetObjectsWithPhrase(string phrase)
         {
-            return _objectsByName.Where(x=> x.Key.Contains(phrase, StringComparison.OrdinalIgnoreCase)).Select(x => x.Value); // I do it all for the berry
+            return _objectsByName.Where(x => x.Key.Contains(phrase, StringComparison.OrdinalIgnoreCase)).Select(x => x.Value); // I do it all for the berry
         }
 
         public List<StardewObject> GetObjectsByColor(string color)
@@ -788,6 +788,14 @@ namespace StardewArchipelago.Stardew
                 if (stardewItem.Name == stardewItem.DisplayName)
                 {
                     continue;
+                }
+                if (stardewItem.Name.Contains("Wood"))
+                {
+                    var fixedWoodName = stardewItem.Name.Replace("Wood Display: ", "Wooden Display: ");
+                    if (fixedWoodName == stardewItem.DisplayName)
+                    {
+                        continue;
+                    }
                 }
 
                 yield return "{\"" + stardewItem.Name + "\", \"" + stardewItem.DisplayName + "\"}";

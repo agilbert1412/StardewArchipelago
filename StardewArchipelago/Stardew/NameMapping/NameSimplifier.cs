@@ -79,18 +79,11 @@ namespace StardewArchipelago.Stardew.NameMapping
 
         private string FixArchaeologyLocationInconsistentNaming(string itemName)
         {
-            itemName = itemName.Replace("Wood Display", "Wooden Display");
-            itemName = itemName.Replace("Strange Doll Green", "Strange Doll (Green)");
-            itemName = itemName.Replace("Strange Doll Yellow", "Strange Doll");
+            itemName = itemName.Replace("Wood Display: ", "Wooden Display: ");
             if (Constants.Modded.ModItemNameTranslations.ArchaeologyInternalToDisplay.TryGetValue(itemName, out var fixedName))
             {
                 itemName = fixedName;
             }
-            if (itemName.Contains("Vertabra"))
-            {
-                itemName = itemName.Replace("Vertabra", "Vertebrae");
-            }
-            itemName = new CultureInfo("en-US",false).TextInfo.ToTitleCase(itemName);  // I love typos and horrible code fr - Albrekka
             return itemName;
         }
 
