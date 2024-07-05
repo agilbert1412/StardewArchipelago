@@ -18,6 +18,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private ArchipelagoClient _archipelago;
         private LocationChecker _locationChecker;
         private NameSimplifier _nameSimplifier;
+        private CompoundNameMapper _nameMapper;
 
         public NightShippingBehaviors(IMonitor monitor, ArchipelagoClient archipelago, LocationChecker locationChecker, NameSimplifier nameSimplifier)
         {
@@ -25,6 +26,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             _archipelago = archipelago;
             _locationChecker = locationChecker;
             _nameSimplifier = nameSimplifier;
+            _nameMapper = new CompoundNameMapper(archipelago.SlotData);
         }
 
         // private static IEnumerator<int> _newDayAfterFade()
@@ -90,6 +92,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             foreach (var shippedItem in allShippedItems)
             {
                 var name = _nameSimplifier.GetSimplifiedName(shippedItem);
+                name = _nameMapper.GetEnglishName(name);  // For the Name vs Display Name discrepencies in Mods.
                 if (IgnoredModdedStrings.Shipments.Contains(name))
                 {
                     continue;

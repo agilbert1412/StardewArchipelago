@@ -34,12 +34,14 @@ namespace StardewArchipelago.Stardew.NameMapping
 
         public string GetEnglishName(string internalName)
         {
-            return ArchaeologyToEnglishNamesMap.ContainsKey(internalName) ? ArchaeologyToEnglishNamesMap[internalName] : internalName;
+            var fixedWoodName = internalName.Replace("Wood Display: ", "Wooden Display: ");
+            return   ArchaeologyToEnglishNamesMap.ContainsKey(fixedWoodName) ? ArchaeologyToEnglishNamesMap[fixedWoodName] : fixedWoodName;      
         }
 
         public string GetInternalName(string englishName)
         {
-            return EnglishToArchaeologyNamesMap.ContainsKey(englishName) ? EnglishToArchaeologyNamesMap[englishName] : englishName;
+            var initialInternalName = EnglishToArchaeologyNamesMap.ContainsKey(englishName) ? EnglishToArchaeologyNamesMap[englishName] : englishName;
+            return initialInternalName.Replace("Wooden Display: ", "Wood Display: ");
         }
 
         public string GetItemName(string recipeName)
