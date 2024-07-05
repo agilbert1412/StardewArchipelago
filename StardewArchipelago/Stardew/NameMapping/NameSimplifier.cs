@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Globalization;
 using StardewArchipelago.Constants.Vanilla;
 using StardewValley;
 
@@ -71,7 +70,7 @@ namespace StardewArchipelago.Stardew.NameMapping
 
             return name;
         }
-        
+
         private static readonly Dictionary<string, string> _renamedObjects = new()
         {
             { QualifiedItemIds.STRANGE_DOLL_GREEN, "Strange Doll (Green)" },

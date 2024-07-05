@@ -9,7 +9,6 @@ using StardewValley;
 using StardewValley.GameData.BigCraftables;
 using StardewValley.GameData.Objects;
 using StardewValley.GameData.Weapons;
-using StardewValley.TokenizableStrings;
 using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Stardew
