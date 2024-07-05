@@ -16,12 +16,14 @@ namespace StardewArchipelago.Stardew
 
         protected StardewRecipe(string recipeName, Dictionary<string, int> ingredients, string yieldItemId, int yieldItemAmount, string unlockConditions, string displayName)
         {
-            RecipeName = GetRecipeKey(recipeName);
             Ingredients = ingredients;
             YieldItemId = yieldItemId;
             YieldItemAmount = yieldItemAmount;
             UnlockConditions = unlockConditions;
             DisplayName = displayName;
+
+            // This uses many fields
+            RecipeName = GetRecipeKey(recipeName);
         }
 
         public abstract void TeachToFarmer(Farmer farmer);
@@ -35,7 +37,14 @@ namespace StardewArchipelago.Stardew
                 return DisplayName;
             }
 
-            // We could add a block here for the YieldItem if necessary
+            //if (!string.IsNullOrWhiteSpace(YieldItemId))
+            //{
+            //    var yieldItem = _objectsById[recipe.YieldItemId];
+            //    if (yieldItem?.Name != null)
+            //    {
+            //        return yieldItem.Name;
+            //    }
+            //}
 
             if (!string.IsNullOrWhiteSpace(RecipeName))
             {
