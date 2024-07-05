@@ -7,7 +7,6 @@ namespace StardewArchipelago.Stardew.NameMapping
     {
         private static readonly Dictionary<string, string> ArchaeologyToEnglishNamesMap = new()
         {
-            {"Water Shifter", "Water Sifter"},
             {"Rust Path", "Rusty Path"},
             {"Ancient Dwarven Volcano Simulator", "Dwarf Gadget: Infinite Volcano Simulation"},
             {"Rusted Scrap", "Scrap Rust"},
