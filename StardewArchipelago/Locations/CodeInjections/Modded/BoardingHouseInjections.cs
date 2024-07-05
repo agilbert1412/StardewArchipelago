@@ -95,7 +95,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 foreach (var recipe in recipes)
                 {
                     throw new Exception($"{nameof(BoardingHouseInjections)}.{nameof(ReplaceCraftsanityRecipes)} attempted to use the now removed ShopReplacer. It needs to be updated for 1.6");
-                    // _shopReplacer.PlaceShopRecipeCheck(shopMenu.itemPriceAndStock, $"{recipe.ItemName} Recipe", recipe.ItemName, myActiveHints, recipe.Price);
+                    // _shopReplacer.PlaceShopRecipeCheck(shopMenu.itemPriceAndStock, $"{recipe.RecipeName} Recipe", recipe.RecipeName, myActiveHints, recipe.Price);
                 }
             }
         }

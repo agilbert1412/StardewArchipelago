@@ -9,6 +9,7 @@ using StardewValley;
 using StardewValley.GameData.BigCraftables;
 using StardewValley.GameData.Objects;
 using StardewValley.GameData.Weapons;
+using StardewValley.TokenizableStrings;
 using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Stardew
@@ -483,15 +484,15 @@ namespace StardewArchipelago.Stardew
             {
                 var recipe = ParseStardewCookingRecipeData(recipeName, recipeInfo);
 
-                if (_cookingRecipesByName.ContainsKey(recipe.ItemName))
+                if (_cookingRecipesByName.ContainsKey(recipe.RecipeName))
                 {
                     continue;
                 }
 
-                _cookingRecipesByName.Add(recipe.ItemName, recipe);
-                if (NameAliases.RecipeNameAliases.ContainsKey(recipe.ItemName))
+                _cookingRecipesByName.Add(recipe.RecipeName, recipe);
+                if (NameAliases.RecipeNameAliases.ContainsKey(recipe.RecipeName))
                 {
-                    _cookingRecipesByName.Add(NameAliases.RecipeNameAliases[recipe.ItemName], recipe);
+                    _cookingRecipesByName.Add(NameAliases.RecipeNameAliases[recipe.RecipeName], recipe);
                 }
             }
         }
@@ -504,12 +505,12 @@ namespace StardewArchipelago.Stardew
             {
                 var recipe = ParseStardewCraftingRecipeData(recipeName, recipeInfo);
 
-                if (_craftingRecipesByName.ContainsKey(recipe.ItemName))
+                if (_craftingRecipesByName.ContainsKey(recipe.RecipeName))
                 {
                     continue;
                 }
 
-                _craftingRecipesByName.Add(recipe.ItemName, recipe);
+                _craftingRecipesByName.Add(recipe.RecipeName, recipe);
             }
         }
 
