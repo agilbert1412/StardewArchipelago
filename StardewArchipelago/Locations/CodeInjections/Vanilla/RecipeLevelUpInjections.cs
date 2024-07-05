@@ -4,6 +4,7 @@ using System.Linq;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Locations;
 using StardewModdingAPI;
+using StardewValley.Events;
 using StardewValley.Menus;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
@@ -142,6 +143,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     { 9, new [] { "Ancient Jello" } },
                 }
             },
+            {
+                Skill.Binning, new Dictionary<int, string[]>()
+                {
+                    {1, new [] { "Grilled Cheese" } },
+                    {8, new []{ "Fish Casserole" } }, 
+                }
+            }
         };
 
         /*private static readonly Dictionary<Skill, Dictionary<int, string[]>> _craftingRecipesBySkill = new()
@@ -159,6 +167,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     { 9, new[] { "Dwarf Gadget: Infinite Volcano Simulation" } },
                 }
             },
+            {
+                Skill.Binning, new Dictionary<int, string[]>()
+                {
+                    { 1, new[] { "Recycling Machine" } },
+                    { 2, new[] { "Trash Can" } },
+                    { 4, new[] { "Composter" } },
+                    { 7, new[] { "Recycling Bin" } },
+                    { 9, new[] { "Advanced Recycling Machine" } },
+                }
+            }
         };*/
     }
 }
