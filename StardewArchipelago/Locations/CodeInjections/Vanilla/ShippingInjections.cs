@@ -103,10 +103,33 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     _locationChecker.AddCheckedLocation(apLocation);
                 }
                 else
-                {
+                {    
+                    DoBugsCleanup(shippedItem, out var wasSuccessful);
+                    if (wasSuccessful)
+                    {
+                        continue;
+                    }
                     _monitor.Log($"Unrecognized Shipsanity Location: {name} [{shippedItem.ParentSheetIndex}]", LogLevel.Error);
                 }
             }
+        }
+
+        private void DoBugsCleanup(Item shippedItem, out bool wasSuccessful)
+        {
+            var name = _nameSimplifier.GetSimplifiedName(shippedItem);
+            var sveMappedItems = new List<string>() {"Smelly Rafflesia", "Bearberrys", "Big Conch", "Dried Sand Dollar", "Lucky Four Leaf Clover", "Ancient Ferns Seed"};
+            if (sveMappedItems.Contains(name))
+            {
+                var apLocation = $"{SHIPSANITY_PREFIX}{name}";
+                if (_archipelago.GetLocationId(apLocation) > -1)
+                {
+                    _monitor.Log($"Bugfix caught this for the beta async.  If this isn't that game, let the developers know there's a bug!", LogLevel.Warn);
+                    _locationChecker.AddCheckedLocation(apLocation);
+                    wasSuccessful = true;
+                    return;
+                }
+            }
+            wasSuccessful = false;
         }
     }
 }
