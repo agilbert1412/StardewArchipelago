@@ -764,24 +764,26 @@ namespace StardewArchipelago.Stardew
             }
         }
 
+#if DEBUG
+
         public void ExportAllMismatchedItems(System.Func<Object, bool> condition, string filePath)
         {
             var objectsToExport = new List<string>();
 
-            objectsToExport.AddRange(GetObjectsThatMismatch(condition, _objectsByName));
-            objectsToExport.AddRange(GetObjectsThatMismatch(condition, _bigCraftablesByName));
-            objectsToExport.AddRange(GetObjectsThatMismatch(condition, _furnitureByName));
-            objectsToExport.AddRange(GetObjectsThatMismatch(condition, _hatsByName));
-            objectsToExport.AddRange(GetObjectsThatMismatch(condition, _bootsByName));
-            objectsToExport.AddRange(GetObjectsThatMismatch(condition, _weaponsByName));
+            objectsToExport.AddRange(GetItemsThatMismatch(condition, _objectsByName));
+            objectsToExport.AddRange(GetItemsThatMismatch(condition, _bigCraftablesByName));
+            objectsToExport.AddRange(GetItemsThatMismatch(condition, _furnitureByName));
+            objectsToExport.AddRange(GetItemsThatMismatch(condition, _hatsByName));
+            objectsToExport.AddRange(GetItemsThatMismatch(condition, _bootsByName));
+            objectsToExport.AddRange(GetItemsThatMismatch(condition, _weaponsByName));
 
             var objectsAsJson = JsonConvert.SerializeObject(objectsToExport);
             File.WriteAllText(filePath, objectsAsJson);
         }
 
-        private IEnumerable<string> GetObjectsThatMismatch<T>(System.Func<Object, bool> condition, Dictionary<string, T> objectsByName) where T : StardewItem
+        private IEnumerable<string> GetItemsThatMismatch<T>(System.Func<Object, bool> condition, Dictionary<string, T> itemsByName) where T : StardewItem
         {
-            foreach (var (name, svItem) in objectsByName)
+            foreach (var (name, svItem) in itemsByName)
             {
                 var stardewItem = svItem.PrepareForGivingToFarmer(1);
                 if (stardewItem.Name == stardewItem.DisplayName)
@@ -800,5 +802,6 @@ namespace StardewArchipelago.Stardew
                 yield return "{\"" + stardewItem.Name + "\", \"" + stardewItem.DisplayName + "\"}";
             }
         }
+#endif
     }
 }
