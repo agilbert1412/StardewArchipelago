@@ -37,6 +37,9 @@ namespace StardewArchipelago.Locations
                 }
             },
             { "Opal", new[] { "Fire Opal" } },
+            { "Chest", new[] { "Stone Chest", "Treasure Chest", "Big Chest", "Common Chest", "Rare Chest" } },
+            { "Stone Chest", new[] { "Big Stone Chest" } },
+            { "Jasper", new[] { "by M. Jasper" } }
         };
 
         public LocationNameMatcher()
