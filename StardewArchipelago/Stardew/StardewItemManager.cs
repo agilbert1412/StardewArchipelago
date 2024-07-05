@@ -764,5 +764,34 @@ namespace StardewArchipelago.Stardew
                 yield return name;
             }
         }
+
+        public void ExportAllMismatchedItems(System.Func<Object, bool> condition, string filePath)
+        {
+            var objectsToExport = new List<string>();
+
+            objectsToExport.AddRange(GetObjectsThatMismatch(condition, _objectsByName));
+            objectsToExport.AddRange(GetObjectsThatMismatch(condition, _bigCraftablesByName));
+            objectsToExport.AddRange(GetObjectsThatMismatch(condition, _furnitureByName));
+            objectsToExport.AddRange(GetObjectsThatMismatch(condition, _hatsByName));
+            objectsToExport.AddRange(GetObjectsThatMismatch(condition, _bootsByName));
+            objectsToExport.AddRange(GetObjectsThatMismatch(condition, _weaponsByName));
+
+            var objectsAsJson = JsonConvert.SerializeObject(objectsToExport);
+            File.WriteAllText(filePath, objectsAsJson);
+        }
+
+        private IEnumerable<string> GetObjectsThatMismatch<T>(System.Func<Object, bool> condition, Dictionary<string, T> objectsByName) where T : StardewItem
+        {
+            foreach (var (name, svItem) in objectsByName)
+            {
+                var stardewItem = svItem.PrepareForGivingToFarmer(1);
+                if (stardewItem.Name == stardewItem.DisplayName)
+                {
+                    continue;
+                }
+
+                yield return "{\"" + stardewItem.Name + "\", \"" + stardewItem.DisplayName + "\"}";
+            }
+        }
     }
 }
