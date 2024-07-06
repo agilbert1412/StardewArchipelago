@@ -3221,7 +3221,7 @@
             "classification": "filler"
         },
         "Resource Pack: 2 Triple Shot Espresso": {
-            "code": 722288,
+            "code": 722276,
             "classification": "filler"
         },
         "Dish O' The Sea": {
@@ -3616,6 +3616,14 @@
             "code": 727419,
             "classification": "progression"
         },
+        "Grilled Cheese Recipe": {
+            "code": 727420,
+            "classification": "progression"
+        },
+        "Fish Casserole Recipe": {
+            "code": 727421,
+            "classification": "progression"
+        },
         "Void Mint Seeds": {
             "code": 727450,
             "classification": "progression"
@@ -3814,6 +3822,26 @@
         },
         "Barbarian Elixir": {
             "code": 727716,
+            "classification": "filler"
+        },
+        "Restoration Table": {
+            "code": 727717,
+            "classification": "filler"
+        },
+        "Trash Bin": {
+            "code": 727718,
+            "classification": "filler"
+        },
+        "Composter": {
+            "code": 727719,
+            "classification": "filler"
+        },
+        "Recycling Bin": {
+            "code": 727720,
+            "classification": "filler"
+        },
+        "Advanced Recycling Machine": {
+            "code": 727721,
             "classification": "filler"
         }
     }
