@@ -588,6 +588,8 @@ namespace StardewArchipelago
             }
         }
 
+#if DEBUG
+
         private void ExportShippables(string arg1, string[] arg2)
         {
             _stardewItemManager.ExportAllItemsMatching(x => x.canBeShipped(), "shippables.json");
@@ -598,7 +600,6 @@ namespace StardewArchipelago
             _stardewItemManager.ExportAllMismatchedItems(x => x.canBeShipped(), "mismatches.json");
         }
 
-#if DEBUG
         private void ReleaseSlot(string arg1, string[] arg2)
         {
             if (!_archipelago.IsConnected || !Game1.hasLoadedGame || arg2.Length < 1)
