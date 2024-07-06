@@ -29,6 +29,9 @@ namespace StardewArchipelagoTests
         [TestCase("Stone Chest", new[] { "Craft Stone Chest" }, new[] { "Craft Chest", "Craft Big Chest", "Craft Big Stone Chest" }, TestName = "Stone Chest")]
         [TestCase("Big Chest", new[] { "Craft Big Chest" }, new[] { "Craft Stone Chest", "Craft Chest", "Craft Big Stone Chest" }, TestName = "Big Chest")]
         [TestCase("Big Stone Chest", new[] { "Craft Big Stone Chest" }, new[] { "Craft Chest", "Craft Big Chest", "Craft Stone Chest" }, TestName = "Big Stone Chest")]
+        [TestCase("Egg", new[] { "Shipsanity: Egg" }, new[] { "Shipsanity: Duck Egg", "Shipsanity: Egg (Brown)", "Shipsanity: Large Egg", "Shipsanity: Green Slime Egg", "Shipsanity: Calico Egg" }, TestName = "Egg")]
+        [TestCase("Large Egg", new[] { "Shipsanity: Large Egg" }, new[] { "Shipsanity: Egg (Brown)", "Shipsanity: Large Egg (Brown)" }, TestName = "Large Egg")]
+        [TestCase("Egg (Brown)", new[] { "Shipsanity: Egg (Brown)" }, new[] { "Shipsanity: Large Egg (Brown)" }, TestName = "Brown Egg")]
         public void GetAllLocationsContainingWordTruePositivesTest(string itemName, string[] locationsMatching, string[] locationsNotMatching)
         {
             // Arrange

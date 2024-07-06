@@ -21,12 +21,14 @@ namespace StardewArchipelago.Locations
                     "Ocean Stone", "Fairy Stone", "Swirl Stone",
                 }
             },
+            { "Egg", new[] { "Duck Egg", "Ostrich Egg", "Dinosaur Egg", "Void Egg", "Thunder Egg", "Large Egg", "Egg (Brown)", "Brown Egg", "Slime Egg", "Calico Egg" } },
+            { "Large Egg", new[] { "Large Egg (Brown)" } },
+            { "Egg (Brown)", new[] { "Large Egg (Brown)" } },
             { "Trash", new[] { "Trash Can Upgrade" } },
             { "Hardwood", new[] { "Hardwood Display" } },
             { "Anchor", new[] { "Boat Anchor" } },
             { "Carp", new[] { "Midnight Carp", "Scorpion Carp", "Mutant Carp" } },
             { "Salmon", new[] { "Void Salmon", "King Salmon" } },
-            { "Egg", new[] { "Dinosaur Egg", "Golden Egg", "Void Egg", "Thunder Egg" } },
             { "Clay", new[] { "Land Of Clay" } },
             { "Slime", new[] { "Slime Hutch" } },
             {
