@@ -133,7 +133,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
         {
             try
             {
-                if (__instance.crop == null || __instance.Location is not IslandLocation || !t.isScythe())
+                if (__instance?.crop == null || __instance.Location is not IslandLocation || t == null || !t.isScythe())
                 {
                     return true; // run original logic
                 }
