@@ -223,6 +223,14 @@ namespace StardewArchipelago.Integrations.GenericModConfigMenu
                 setValue: (value) => Config.ShowElevatorIndicators = value
             );
 
+            configMenu.AddBoolOption(
+                mod: ModManifest,
+                name: () => "Strict Logic",
+                tooltip: () => "Disables some out-of-logic obtention methods for some critical progression items. Examples: Mystery boxes, Prize Tickets",
+                getValue: () => Config.StrictLogic,
+                setValue: (value) => Config.StrictLogic = value
+            );
+
             var itemIndicatorValues = Enum.GetValues(typeof(ItemIndicatorPreference)).Cast<int>().ToArray();
             var itemIndicatorMin = itemIndicatorValues.Min();
             var itemIndicatorMax = itemIndicatorValues.Max();
@@ -238,12 +246,19 @@ namespace StardewArchipelago.Integrations.GenericModConfigMenu
                 formatValue: (value) => ((ItemIndicatorPreference)value).ToString()
             );
 
-            configMenu.AddBoolOption(
+            var seasonPreferenceValues = Enum.GetValues(typeof(SeasonPreference)).Cast<int>().ToArray();
+            var seasonPreferenceMin = seasonPreferenceValues.Min();
+            var seasonPreferenceMax = seasonPreferenceValues.Max();
+            configMenu.AddNumberOption(
                 mod: ModManifest,
-                name: () => "Strict Logic",
-                tooltip: () => "Disables some out-of-logic obtention methods for some critical progression items. Examples: Mystery boxes, Prize Tickets",
-                getValue: () => Config.StrictLogic,
-                setValue: (value) => Config.StrictLogic = value
+                name: () => "MultiSleep Season Behavior",
+                tooltip: () => "When multisleeping across a month transition, what season is picked next?",
+                min: seasonPreferenceMin,
+                max: seasonPreferenceMax,
+                interval: 1,
+                getValue: () => (int)Config.MultiSleepSeasonPreference,
+                setValue: (value) => Config.MultiSleepSeasonPreference = (SeasonPreference)value,
+                formatValue: (value) => ((SeasonPreference)value).ToString()
             );
         }
     }

@@ -82,6 +82,11 @@ namespace StardewArchipelago
         /// Whether to display archipelago icons on inventory items for items that the player can do checks with
         /// </summary>
         public ItemIndicatorPreference ShowItemIndicators { get; set; } = ItemIndicatorPreference.True;
+
+        /// <summary>
+        /// What Season to pick when multisleeping across a month transition
+        /// </summary>
+        public SeasonPreference MultiSleepSeasonPreference { get; set; } = SeasonPreference.Repeat;
     }
 
     public enum ItemIndicatorPreference
@@ -89,5 +94,12 @@ namespace StardewArchipelago
         False = 0,
         True = 1,
         OnlyShipsanity = 2,
+    }
+
+    public enum SeasonPreference
+    {
+        Prompt = 0,
+        Repeat = 1,
+        Cycle = 2,
     }
 }
