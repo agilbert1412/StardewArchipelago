@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using StardewArchipelago.Archipelago;
 using StardewValley;
 using StardewValley.Monsters;
 
@@ -13,25 +15,44 @@ namespace StardewArchipelago.Items.Traps
             _tileChooser = tileChooser;
         }
 
-        private readonly string[] _monsterTypes =
+        private readonly string[] _easyMonsterTypes =
         {
-            "Bat", "Frost Bat", "Lava Bat", "Iridium Bat", "Serpent", "Shadow Brute", "Rock Golem", "Green Slime",
-            "Frost Jelly", "Sludge", "Purple Slime",
+            "Bat", "Frost Bat", "Rock Golem", "Green Slime", "Frost Jelly",
         };
 
-        public void SpawnOneMonster(GameLocation map)
+        private readonly string[] _mediumMonsterTypes =
         {
-            var monster = ChooseRandomMonster(map);
+            "Lava Bat", "Shadow Brute", "Rock Golem", "Sludge", "Purple Slime",
+        };
+
+        private readonly string[] _hardMonsterTypes =
+        {
+            "Iridium Bat", "Serpent", "TigerSlime",
+        };
+
+        public void SpawnOneMonster(GameLocation map, TrapItemsDifficulty trapDifficulty)
+        {
+            var monster = ChooseRandomMonster(map, trapDifficulty);
             monster.focusedOnFarmers = true;
             monster.wildernessFarmMonster = true;
             map.characters.Add(monster);
         }
 
-        private Monster ChooseRandomMonster(GameLocation map)
+        private Monster ChooseRandomMonster(GameLocation map, TrapItemsDifficulty trapDifficulty)
         {
             var spawnPosition = _tileChooser.GetRandomTileInboundsOffScreen(map);
 
-            var chosenMonsterType = _monsterTypes[Game1.random.Next(0, _monsterTypes.Length)];
+            var monsters = new List<string>(_easyMonsterTypes);
+            if (trapDifficulty >= TrapItemsDifficulty.Hard)
+            {
+                monsters.AddRange(_mediumMonsterTypes);
+            }
+            if (trapDifficulty >= TrapItemsDifficulty.Hell)
+            {
+                monsters.AddRange(_hardMonsterTypes);
+            }
+
+            var chosenMonsterType = monsters[Game1.random.Next(0, monsters.Count)];
             switch (chosenMonsterType)
             {
                 case "Bat":
@@ -56,6 +77,10 @@ namespace StardewArchipelago.Items.Traps
                     return new GreenSlime(spawnPosition * 64f, 121);
                 case "Sludge":
                     return new GreenSlime(spawnPosition * 64f, 77377);
+                case "Tiger Slime":
+                    var slime = new GreenSlime(spawnPosition * 64f, 0);
+                    slime.makeTigerSlime();
+                    return slime;
                 default:
                     throw new Exception("Could not choose a monster");
             }
