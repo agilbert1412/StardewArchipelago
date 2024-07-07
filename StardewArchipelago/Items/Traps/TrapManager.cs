@@ -490,7 +490,7 @@ namespace StardewArchipelago.Items.Traps
             var numberMonsters = _difficultyBalancer.NumberOfMonsters[_archipelago.SlotData.TrapItemsDifficulty];
             for (var i = 0; i < numberMonsters; i++)
             {
-                _monsterSpawner.SpawnOneMonster(Game1.player.currentLocation);
+                _monsterSpawner.SpawnOneMonster(Game1.player.currentLocation, _archipelago.SlotData.TrapItemsDifficulty);
             }
         }
 
