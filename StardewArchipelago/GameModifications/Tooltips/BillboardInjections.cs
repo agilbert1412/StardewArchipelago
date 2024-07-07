@@ -128,7 +128,7 @@ namespace StardewArchipelago.GameModifications.Tooltips
             var day = index + 1;
             var dayComponent = calendarDays[index];
 
-            if (!GetMissingFestivalChecks(day).Any() && !GetMissingNpcChecks(birthdaysToday).Any() && !GetMissingTravelingCartChecks(day).Any())
+            if (!GetMissingFestivalChecks(day).Any() && !GetMissingNpcChecks(birthdaysToday).Any() && !GetMissingTravelingCartChecks(day).Any() && !GetMissingSpecificDayChecks(day).Any())
             {
                 return;
             }
@@ -190,6 +190,7 @@ namespace StardewArchipelago.GameModifications.Tooltips
                     var missingFestivalChecks = GetMissingFestivalChecks(day);
                     var missingNpcChecks = GetMissingNpcChecks(birthdaysToday);
                     var missingCartChecks = GetMissingTravelingCartChecks(day);
+                    var missingSpecificDayChecks = GetMissingSpecificDayChecks(day);
 
                     foreach (var location in missingFestivalChecks)
                     {
@@ -202,6 +203,11 @@ namespace StardewArchipelago.GameModifications.Tooltips
                     }
 
                     foreach (var location in missingCartChecks)
+                    {
+                        hoverText += $"{Environment.NewLine}- {location}";
+                    }
+
+                    foreach (var location in missingSpecificDayChecks)
                     {
                         hoverText += $"{Environment.NewLine}- {location}";
                     }
@@ -265,6 +271,18 @@ namespace StardewArchipelago.GameModifications.Tooltips
 
             var merchantItemPatern = $"Traveling Merchant {dayOfWeek} Item";
             return _locationChecker.GetAllLocationsNotCheckedContainingWord(merchantItemPatern);
+        }
+
+        private static IEnumerable<string> GetMissingSpecificDayChecks(int day)
+        {
+            if (Game1.season == Season.Spring && day == 17)
+            {
+                const string potOfGold = "Pot Of Gold";
+                if (_locationChecker.IsLocationMissing(potOfGold))
+                {
+                    yield return potOfGold;
+                }
+            }
         }
     }
 }
