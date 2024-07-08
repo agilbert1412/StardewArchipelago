@@ -25,27 +25,6 @@ namespace StardewArchipelago.Stardew.NameMapping
             {"Wooden Display: Trilobite", "Wooden Display: Trilobite Fossil"},
         };
 
-        private static readonly Dictionary<string, string> ArchaeologyCraftIDsToEnglishNamesMap = new()
-        {
-            {"moonslime.Archaeology.preservation_chamber", "Preservation Chamber"},
-            {"moonslime.Archaeology.w_display", "Wooden Display"},
-            {"moonslime.Archaeology.restoration_table", "Restoration Table"},
-            {"moonslime.Archaeology.grinder", "Grinder"},
-            {"moonslime.Archaeology.rust_path", "Rusty Path"},
-            {"moonslime.Archaeology.glass_path", "Glass Path"},
-            {"moonslime.Archaeology.rusty_brazier", "Rusty Brazier"},
-            {"moonslime.Archaeology.bone_path", "Bone Path"},
-            {"moonslime.Archaeology.glass_brazier", "Glass Brazier"},
-            {"moonslime.Archaeology.h_preservation_chamber", "Hardwood Preservation Chamber"},
-            {"moonslime.Archaeology.h_display", "Hardwood Display"},
-            {"moonslime.Archaeology.ancient_battery", "Ancient Battery Production Station"},
-            {"moonslime.Archaeology.glass_fence", "Glass Fence"},
-            {"moonslime.Archaeology.lucky_ring", "Lucky Ring"},
-            {"moonslime.Archaeology.water_shifter", "Water Shifter"},
-            {"moonslime.Archaeology.bone_fence", "Bone Fence"},
-            {"moonslime.Archaeology.totem_volcano_warp", "Dwarf Gadget: Infinite Volcano Simulation"},
-        };
-
         private static readonly Dictionary<string, string> EnglishToArchaeologyNamesMap = ArchaeologyToEnglishNamesMap.ToDictionary(x => x.Value, x => x.Key);
 
         public ArchaeologyNameMapper()
@@ -66,8 +45,7 @@ namespace StardewArchipelago.Stardew.NameMapping
 
         public string GetItemName(string recipeName)
         {
-            var transformedIDName = ArchaeologyCraftIDsToEnglishNamesMap.ContainsKey(recipeName) ? ArchaeologyCraftIDsToEnglishNamesMap[recipeName] : recipeName;
-            return GetEnglishName(transformedIDName);
+                        return GetEnglishName(recipeName);
         }
 
         public string GetRecipeName(string itemName)
