@@ -25,6 +25,14 @@ namespace StardewArchipelago.Stardew.NameMapping
             {"Wooden Display: Trilobite", "Wooden Display: Trilobite Fossil"},
         };
 
+        private static readonly Dictionary<string, string> ArchaeologyCraftIDsToEnglishNamesMap = new()
+        {
+            {"moonslime.Archaeology.preservation_chamber", "Preservation Chamber"},
+            {"moonslime.Archaeology.w_display", "Wooden Display"},
+            {"moonslime.Archaeology.rust_path", "Rusty Path"},
+            {"moonslime.Archaeology.totem_volcano_warp", "Dwarf Gadget: Infinite Volcano Simulation"},
+        };
+
         private static readonly Dictionary<string, string> EnglishToArchaeologyNamesMap = ArchaeologyToEnglishNamesMap.ToDictionary(x => x.Value, x => x.Key);
 
         public ArchaeologyNameMapper()
@@ -45,7 +53,8 @@ namespace StardewArchipelago.Stardew.NameMapping
 
         public string GetItemName(string recipeName)
         {
-                        return GetEnglishName(recipeName);
+            var transformedIDName = ArchaeologyCraftIDsToEnglishNamesMap.ContainsKey(recipeName) ? ArchaeologyCraftIDsToEnglishNamesMap[recipeName] : recipeName;
+            return GetEnglishName(transformedIDName);
         }
 
         public string GetRecipeName(string itemName)
