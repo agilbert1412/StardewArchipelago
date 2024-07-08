@@ -10,7 +10,15 @@ namespace StardewArchipelago.Stardew.NameMapping
             { "Trash Can", "Trash Bin" },
         };
 
-        private static readonly Dictionary<string, string> EnglishToArchaeologyNamesMap = BinningToEnglishNamesMap.ToDictionary(x => x.Value, x => x.Key);
+        private static readonly Dictionary<string, string> BinningCraftIDsToEnglishNamesMap = new()
+        {
+            {"drbirbdev.BinningSkill_TrashCan", "Trash Bin"},
+            {"drbirbdev.BinningSkill_Composter", "Composter"},
+            {"drbirbdev.BinningSkill_RecyclingBin", "Recycling Bin"},
+            {"drbirbdev.BinningSkill_AdvancedRecyclingMachine", "Advanced Recycling Machine"},
+        };
+
+        private static readonly Dictionary<string, string> EnglishToBinningNamesMap = BinningToEnglishNamesMap.ToDictionary(x => x.Value, x => x.Key);
 
         public BinningNameMapper()
         {
@@ -23,12 +31,13 @@ namespace StardewArchipelago.Stardew.NameMapping
 
         public string GetInternalName(string englishName)
         {
-            return EnglishToArchaeologyNamesMap.ContainsKey(englishName) ? EnglishToArchaeologyNamesMap[englishName] : englishName;
+            return EnglishToBinningNamesMap.ContainsKey(englishName) ? EnglishToBinningNamesMap[englishName] : englishName;
         }
 
         public string GetItemName(string recipeName)
         {
-            return GetEnglishName(recipeName);
+            var transformedIDName = BinningCraftIDsToEnglishNamesMap.ContainsKey(recipeName) ? BinningCraftIDsToEnglishNamesMap[recipeName] : recipeName;
+            return GetEnglishName(transformedIDName);
         }
 
         public string GetRecipeName(string itemName)
@@ -38,7 +47,7 @@ namespace StardewArchipelago.Stardew.NameMapping
 
         public bool RecipeNeedsMapping(string itemName)
         {
-            return EnglishToArchaeologyNamesMap.ContainsKey(itemName);
+            return EnglishToBinningNamesMap.ContainsKey(itemName);
         }
     }
 }

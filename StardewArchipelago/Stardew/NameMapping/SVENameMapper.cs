@@ -15,6 +15,11 @@ namespace StardewArchipelago.Stardew.NameMapping
             {"Ancient Ferns Seed", "Ancient Fern Seed"},
         };
 
+        private static readonly Dictionary<string, string> SVECraftIDsToEnglishNamesMap = new()
+        {
+
+        };
+
         private static readonly Dictionary<string, string> EnglishToSVENamesMap = SVEToEnglishNamesMap.ToDictionary(x => x.Value, x => x.Key);
 
         public SVENameMapper()

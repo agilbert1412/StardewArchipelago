@@ -37,6 +37,12 @@ namespace StardewArchipelago.Stardew.NameMapping
                 _mappers.Add(binningMapper);
                 _recipeMappers.Add(binningMapper);
             }
+            if (slotData.Mods.HasMod(ModNames.SOCIALIZING))
+            {
+                var socializingMapper = new SocializingNameMapper();
+                _mappers.Add(socializingMapper);
+                _recipeMappers.Add(socializingMapper);
+            }
         }
 
         public string GetEnglishName(string internalName)
