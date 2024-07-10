@@ -3,6 +3,7 @@ using System.Linq;
 using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Constants;
 using StardewValley.Menus;
 using xTile.Dimensions;
 
@@ -96,7 +97,17 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
         private static void PerformActionMasteryCaveSkill(Skill skill)
         {
+
             if (_locationChecker.IsLocationMissing($"{skill} {MASTERY}"))
+            {
+                int originalStat = (int)Game1.player.stats.Get(StatKeys.Mastery((int)skill));
+
+                Game1.player.stats.Set(StatKeys.Mastery((int)skill), 0);
+                Game1.activeClickableMenu = new MasteryTrackerMenu((int)skill);
+                Game1.player.stats.Set(StatKeys.Mastery((int)skill), originalStat);
+
+            }
+            else
             {
                 Game1.activeClickableMenu = new MasteryTrackerMenu((int)skill);
             }
