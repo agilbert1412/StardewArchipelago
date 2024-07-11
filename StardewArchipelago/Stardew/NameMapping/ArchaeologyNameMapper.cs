@@ -27,10 +27,9 @@ namespace StardewArchipelago.Stardew.NameMapping
 
         private static readonly Dictionary<string, string> ArchaeologyCraftIDsToEnglishNamesMap = new()
         {
-            { "moonslime.Archaeology.preservation_chamber", "Preservation Chamber" },
-            { "moonslime.Archaeology.w_display", "Wooden Display" },
-            { "moonslime.Archaeology.rust_path", "Rusty Path" },
-            { "moonslime.Archaeology.totem_volcano_warp", "Dwarf Gadget: Infinite Volcano Simulation" },
+            {"moonslime.Archaeology.w_display", "Wooden Display"},
+            {"moonslime.Archaeology.rust_path", "Rusty Path"},
+            {"moonslime.Archaeology.totem_volcano_warp", "Dwarf Gadget: Infinite Volcano Simulation"},
         };
 
         private static readonly Dictionary<string, string> EnglishToArchaeologyNamesMap = ArchaeologyToEnglishNamesMap.ToDictionary(x => x.Value, x => x.Key);
