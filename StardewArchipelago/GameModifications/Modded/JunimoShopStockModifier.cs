@@ -20,8 +20,8 @@ namespace StardewArchipelago.GameModifications.Modded
         private static readonly string[] fall = { "fall" };
         private static readonly string[] summer_fall = { "summer", "fall" };
         private static readonly string[] winter = { "winter" };
-        private const float INITIAL_DISCOUNT = 0.65f;
-        private const float APPLES_DISCOUNT = 0.05f;
+        private const float INITIAL_DISCOUNT = 0.3f;
+        private const float APPLES_DISCOUNT = 0.025f;
 
         private static readonly Dictionary<string, string> _junimoPhrase = new()
         {
