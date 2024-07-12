@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
 using StardewModdingAPI;
@@ -47,6 +48,34 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 _monitor.Log($"Failed in {nameof(GrantConversationFriendship_SendFriendshipRecipeChecks_Postfix)}:\n{ex}", LogLevel.Error);
                 return;
+            }
+        }
+
+        // public virtual void command_addCookingRecipe(GameLocation location, GameTime time, string[] split)
+        public static bool CommandAddCookingRecipe_SendFriendshipRecipeChecks_Prefix(Event __instance, GameLocation location, GameTime time, string[] split)
+        {
+            try
+            {
+                var eventCommands = __instance.eventCommands;
+                var currentCommandIndex = __instance.currentCommand;
+                var currentCommand = eventCommands[currentCommandIndex];
+                var indexOfSpace = currentCommand.IndexOf(' ');
+                var recipeName = currentCommand.Substring(indexOfSpace + 1);
+                var apLocation = $"{recipeName}{RecipePurchaseInjections.CHEFSANITY_LOCATION_SUFFIX}";
+
+                if (_archipelago.LocationExists(apLocation))
+                {
+                    _locationChecker.AddCheckedLocation(apLocation);
+                    __instance.currentCommand++;
+                    return false; // don't run original logic
+                }
+
+                return true; // run original logic
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(CommandAddCookingRecipe_SendFriendshipRecipeChecks_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
             }
         }
 
