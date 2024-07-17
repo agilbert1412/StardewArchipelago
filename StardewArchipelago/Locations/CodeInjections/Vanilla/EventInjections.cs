@@ -24,31 +24,31 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             _locationChecker = locationChecker;
         }
 
-        public static void BaseSkipEvent(Event bambooPoleEvent, Action checkLocationAction = null)
+        public static void BaseSkipEvent(Event eventBeingSkipped, Action checkLocationAction = null)
         {
             try
             {
-                if (bambooPoleEvent.playerControlSequence)
+                if (eventBeingSkipped.playerControlSequence)
                 {
-                    bambooPoleEvent.EndPlayerControlSequence();
+                    eventBeingSkipped.EndPlayerControlSequence();
                 }
 
                 Game1.playSound("drumkit6");
 
-                var actorPositionsAfterMoveField = _modHelper.Reflection.GetField<Dictionary<string, Vector3>>(bambooPoleEvent, "actorPositionsAfterMove");
+                var actorPositionsAfterMoveField = _modHelper.Reflection.GetField<Dictionary<string, Vector3>>(eventBeingSkipped, "actorPositionsAfterMove");
                 actorPositionsAfterMoveField.GetValue().Clear();
 
-                foreach (var actor in bambooPoleEvent.actors)
+                foreach (var actor in eventBeingSkipped.actors)
                 {
                     var ignoreStopAnimation = actor.Sprite.ignoreStopAnimation;
                     actor.Sprite.ignoreStopAnimation = true;
                     actor.Halt();
                     actor.Sprite.ignoreStopAnimation = ignoreStopAnimation;
-                    bambooPoleEvent.resetDialogueIfNecessary(actor);
+                    eventBeingSkipped.resetDialogueIfNecessary(actor);
                 }
 
-                bambooPoleEvent.farmer.Halt();
-                bambooPoleEvent.farmer.ignoreCollisions = false;
+                eventBeingSkipped.farmer.Halt();
+                eventBeingSkipped.farmer.ignoreCollisions = false;
                 Game1.exitActiveMenu();
                 Game1.dialogueUp = false;
                 Game1.dialogueTyping = false;
@@ -56,7 +56,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
                 checkLocationAction?.Invoke();
 
-                bambooPoleEvent.endBehaviors(new string[]
+                eventBeingSkipped.endBehaviors(new[]
                 {
                     "end",
                     "position",
