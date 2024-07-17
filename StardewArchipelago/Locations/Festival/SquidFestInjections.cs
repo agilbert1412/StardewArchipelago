@@ -65,7 +65,6 @@ namespace StardewArchipelago.Locations.Festival
                         if (_locationChecker.IsLocationMissing(apLocation))
                         {
                             _locationChecker.AddCheckedLocation(apLocation);
-                            continue;
                         }
                         rewardsToGive.Add($"{Game1.dayOfMonth}_{rewardIndex}");
                         continue;
