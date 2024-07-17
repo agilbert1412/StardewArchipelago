@@ -283,23 +283,25 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 return true;
             }
 
-            var splitTags = requiredTags.Split(",").Select(x => x.Trim()).Where(x => x.Length > 0);
-            if (splitTags.Any(tag => !CheckIslandTagArchipelago(tag)))
+            var splitTags = requiredTags.Split(",").Select(x => x.Trim()).Where(x => x.Length > 0).ToArray();
+            if (splitTags.Any(IsIslandTag))
             {
-                return false;
+                var otherTags = splitTags.Where(x => !IsIslandTag(x));
+                var otherTagsCondition = string.Join(',', otherTags);
+                return HasUnlockedIslandAccess() && SpecialOrder.CheckTags(otherTagsCondition);
             }
 
             return SpecialOrder.CheckTags(requiredTags);
         }
 
-        private static bool CheckIslandTagArchipelago(string requiredTag)
+        private static bool HasUnlockedIslandAccess()
         {
-            if (requiredTag.Equals("island", StringComparison.InvariantCultureIgnoreCase))
-            {
-                return _archipelago.HasReceivedItem("Island Obelisk") || _archipelago.HasReceivedItem("Boat Repair");
-            }
+            return _archipelago.HasReceivedItem("Island Obelisk") || _archipelago.HasReceivedItem("Boat Repair");
+        }
 
-            return true;
+        private static bool IsIslandTag(string requiredTag)
+        {
+            return requiredTag.Equals("island", StringComparison.InvariantCultureIgnoreCase);
         }
 
         private static Dictionary<string, SpecialOrder> CreateSpecialOrderInstancesForType(
