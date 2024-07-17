@@ -113,12 +113,11 @@ namespace StardewArchipelago.GameModifications
             PatchTvChannels();
             PatchCleanupBeforeSave();
             PatchProfitMargin();
-            PatchVoidMayo();
             PatchKent();
             PatchGoldenEgg();
             PatchGoldenClock();
             PatchZeldaAnimations();
-            MakeLegendaryFishRecatchable();
+            MakeLegendaryFishAndVoidMayoRecatchable();
             PatchSecretNotes();
             PatchRecipes();
             PatchTooltips();
@@ -132,10 +131,9 @@ namespace StardewArchipelago.GameModifications
 
         public void CleanEvents()
         {
-            CleanLegendaryFishRecatchableEvent();
+            CleanLegendaryFishAndVoidMayoRecatchableEvent();
             UnpatchSeedShops();
             UnpatchJodiFishQuest();
-            UnpatchVoidMayo();
             CleanGoldenEggEvent();
         }
 
@@ -555,46 +553,6 @@ namespace StardewArchipelago.GameModifications
             );
         }
 
-        private void PatchVoidMayo()
-        {
-            _helper.Events.Content.AssetRequested += RemoveVoidMayoHenchmanCondition;
-        }
-
-        private void UnpatchVoidMayo()
-        {
-            _helper.Events.Content.AssetRequested -= RemoveVoidMayoHenchmanCondition;
-        }
-
-        private void RemoveVoidMayoHenchmanCondition(object sender, AssetRequestedEventArgs e)
-        {
-            if (!e.NameWithoutLocale.IsEquivalentTo("Data/Locations"))
-            {
-                return;
-            }
-
-            e.Edit(asset =>
-                {
-                    const string henchmanCondition = "!PLAYER_HAS_MAIL Host henchmanGone";
-                    var locationsData = asset.AsDictionary<string, LocationData>().Data;
-                    foreach (var (locationName, locationData) in locationsData)
-                    {
-                        foreach (var spawnFishData in locationData.Fish)
-                        {
-                            if (!spawnFishData.Condition.Contains(henchmanCondition, StringComparison.InvariantCultureIgnoreCase))
-                            {
-                                continue;
-                            }
-
-                            var parts = spawnFishData.Condition.Split(',').ToList();
-                            parts = parts.Where(x => !x.Contains(henchmanCondition, StringComparison.InvariantCultureIgnoreCase)).ToList();
-                            spawnFishData.Condition = string.Join(',', parts);
-                        }
-                    }
-                },
-                AssetEditPriority.Late
-            );
-        }
-
         private void PatchKent()
         {
             _harmony.Patch(
@@ -642,12 +600,13 @@ namespace StardewArchipelago.GameModifications
             );
         }
 
-        private void MakeLegendaryFishRecatchable()
+        private void MakeLegendaryFishAndVoidMayoRecatchable()
         {
             _helper.Events.Content.AssetRequested += OnFishAssetRequested;
+            _helper.GameContent.InvalidateCache("Data/Locations");
         }
 
-        private void CleanLegendaryFishRecatchableEvent()
+        private void CleanLegendaryFishAndVoidMayoRecatchableEvent()
         {
             _helper.Events.Content.AssetRequested -= OnFishAssetRequested;
         }
@@ -661,10 +620,24 @@ namespace StardewArchipelago.GameModifications
 
             e.Edit(asset =>
                 {
+                    const string henchmanCondition = "!PLAYER_HAS_MAIL Host henchmanGone";
                     var locationsData = asset.AsDictionary<string, LocationData>().Data;
 
-                    foreach (var spawnFishData in locationsData.Values.SelectMany(p => p.Fish))
-                        spawnFishData.CatchLimit = -1;
+                    foreach (var (locationName, locationData) in locationsData)
+                    {
+                        foreach (var spawnFishData in locationData.Fish)
+                        {
+                            spawnFishData.CatchLimit = -1;
+
+                            if (!spawnFishData.Condition.Contains(henchmanCondition, StringComparison.InvariantCultureIgnoreCase))
+                            {
+                                continue;
+                            }
+                            var parts = spawnFishData.Condition.Split(',').ToList();
+                            parts = parts.Where(x => !x.Contains(henchmanCondition, StringComparison.InvariantCultureIgnoreCase)).ToList();
+                            spawnFishData.Condition = string.Join(',', parts);
+                        }
+                    }
                 },
                 AssetEditPriority.Late
             );
