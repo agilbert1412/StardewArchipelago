@@ -7,6 +7,8 @@ using StardewArchipelago.Serialization;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.BellsAndWhistles;
+using StardewValley.Menus;
+using StardewValley.Minigames;
 
 namespace StardewArchipelago.GameModifications.Seasons
 {
@@ -208,14 +210,21 @@ namespace StardewArchipelago.GameModifications.Seasons
 
         private static void NewDayOriginal(float timeToPause)
         {
+            if (Game1.activeClickableMenu is ReadyCheckDialog { checkName: "sleep" } activeClickableMenu && !activeClickableMenu.isCancelable())
+            {
+                activeClickableMenu.confirm();
+            }
             Game1.currentMinigame = null;
             Game1.newDay = true;
-            Game1.newDaySync = new NewDaySynchronizer();
+            Game1.newDaySync.create();
             if (Game1.player.isInBed.Value || Game1.player.passedOut)
             {
                 Game1.nonWarpFade = true;
+
+                // private static ScreenFade screenFade;
                 var screenFadeField = _helper.Reflection.GetField<ScreenFade>(typeof(Game1), "screenFade");
                 screenFadeField.GetValue().FadeScreenToBlack(Game1.player.passedOut ? 1.1f : 0.0f);
+
                 Game1.player.Halt();
                 Game1.player.currentEyes = 1;
                 Game1.player.blinkTimer = -4000;
@@ -224,7 +233,9 @@ namespace StardewArchipelago.GameModifications.Seasons
                 Game1.pauseTime = timeToPause;
             }
             if (Game1.activeClickableMenu == null || Game1.dialogueUp)
+            {
                 return;
+            }
             Game1.activeClickableMenu.emergencyShutDown();
             Game1.exitActiveMenu();
         }
@@ -235,9 +246,13 @@ namespace StardewArchipelago.GameModifications.Seasons
             try
             {
                 if (__instance.WeddingDate == null || __instance.WeddingDate.TotalDays < Game1.Date.TotalDays)
+                {
                     __result = 0;
+                }
                 else
+                {
                     __result = __instance.WeddingDate.TotalDays - Game1.Date.TotalDays + 1;
+                }
 
                 return false; // don't run original logic
             }
