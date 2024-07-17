@@ -45,7 +45,7 @@ namespace StardewArchipelago.Locations.GingerIsland.Parrots
         private static void AddFarmObeliskParrot(IslandLocation islandWest)
         {
             islandWest.parrotUpgradePerches.Add(new ParrotUpgradePerchArchipelago(AP_FARM_OBELISK_PARROT, _archipelago, islandWest,
-                new Point(72, 37),
+                new Point(72, 38),
                 new Rectangle(71, 29, 3, 8), 20,
                 PurchaseFarmObeliskParrot,
                 IsFarmObeliskParrotPurchased,
