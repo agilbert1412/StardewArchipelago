@@ -5,6 +5,7 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
 using xTile.Dimensions;
+using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -98,8 +99,23 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             if (_locationChecker.IsLocationMissing($"{skill} {MASTERY}"))
             {
-                Game1.activeClickableMenu = new MasteryTrackerMenu((int)skill);
+                var masteryMenu = new MasteryTrackerMenu((int)skill);
+                InitializeClaimButton(masteryMenu);
+                Game1.activeClickableMenu = masteryMenu;
             }
+        }
+
+        private static void InitializeClaimButton(MasteryTrackerMenu masteryMenu)
+        {
+            var bounds = new Rectangle(masteryMenu.xPositionOnScreen + masteryMenu.width / 2 - 84, masteryMenu.yPositionOnScreen + masteryMenu.height - 112, 168, 80);
+            var sourceRect = new Rectangle(0, 123, 42, 21);
+            var claimButton = new ClickableTextureComponent(bounds, Game1.mouseCursors_1_6, sourceRect, 4f)
+            {
+                visible = true, // skill != -1;
+                myID = 0,
+            };
+            masteryMenu.mainButton = claimButton;
+            masteryMenu.currentlySnappedComponent = claimButton;
         }
 
         // private void claimReward()
