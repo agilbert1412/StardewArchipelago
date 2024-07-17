@@ -114,6 +114,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 Skill.Foraging, new Dictionary<int, string[]>()
                 {
                     { 2, new[] { "Survival Burger" } },
+                    { 3, new[] { "Moss Soup" } },
                 }
             },
             {
