@@ -33,7 +33,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     return true; // run original logic
                 }
 
-                EventInjections.BaseSkipEvent(__instance, CheckCopperPanLocation);
+                EventInjections.BaseSkipEvent(__instance, CheckCopperPanLocation, new[] { "end", "position", "43", "36"});
                 return false; // don't run original logic
             }
             catch (Exception ex)

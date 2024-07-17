@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Locations;
+using StardewArchipelago.Stardew.Ids.Vanilla;
 using StardewModdingAPI;
 using StardewValley;
+using EventRecipes = StardewArchipelago.Constants.EventRecipes;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -56,13 +57,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
                 checkLocationAction?.Invoke();
 
-                eventBeingSkipped.endBehaviors(new[]
-                {
-                    "end",
-                    "position",
-                    "43",
-                    "36",
-                }, Game1.currentLocation);
+                DoEndBehaviors(eventBeingSkipped);
             }
             catch (Exception ex)
             {
@@ -198,6 +193,40 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             var locationName = $"{EventRecipes.CraftingRecipeEvents[id]}{Suffix.CRAFTSANITY}";
             _locationChecker.AddCheckedLocation(locationName);
             return _archipelago.LocationExists(locationName);
+        }
+
+        private static void DoEndBehaviors(Event eventBeingSkipped)
+        {
+            switch (eventBeingSkipped.id)
+            {
+                case "-157039427":
+                    eventBeingSkipped.endBehaviors(new[] { "End", "islandDepart" }, Game1.currentLocation);
+                    break;
+                case "-78765":
+                    eventBeingSkipped.endBehaviors(new[] { "End", "tunnelDepart" }, Game1.currentLocation);
+                    break;
+                case EventIds.COMMUNITY_CENTER_COMPLETE:
+                    eventBeingSkipped.endBehaviors(new[] { "End", "position", "52", "20" }, Game1.currentLocation);
+                    break;
+                case "2123343":
+                    eventBeingSkipped.endBehaviors(new[] { "End", "newDay" }, Game1.currentLocation);
+                    break;
+                case "558292":
+                    eventBeingSkipped.endBehaviors(new[] { "End", "bed" }, Game1.currentLocation);
+                    break;
+                case "60367":
+                    eventBeingSkipped.endBehaviors(new[] { "End", "beginGame" }, Game1.currentLocation);
+                    break;
+                case "6497428":
+                    eventBeingSkipped.endBehaviors(new[] { "End", "Leo" }, Game1.currentLocation);
+                    break;
+                case EventIds.BAMBOO_POLE:
+                    eventBeingSkipped.endBehaviors(new[] { "End", "position", "43", "36" }, Game1.currentLocation);
+                    break;
+                default:
+                    eventBeingSkipped.endBehaviors();
+                    break;
+            }
         }
     }
 }

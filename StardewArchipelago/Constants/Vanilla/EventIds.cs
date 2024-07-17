@@ -11,5 +11,6 @@
         public const string COPPER_PAN = "404798";
         public const string WILLY_FISHING_LESSON = "980559";
         public const string BIRDIE_QUEST_COMPLETE = "-666777";
+        public const string COMMUNITY_CENTER_COMPLETE = "191393";
     }
 }
