@@ -152,6 +152,7 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string WHITE_ALGAE = QualifiedObjectId(ObjectIds.WHITE_ALGAE);
         public static readonly string WINTER_SEEDS = QualifiedObjectId(ObjectIds.WINTER_SEEDS);
         public static readonly string YAM_SEEDS = QualifiedObjectId(ObjectIds.YAM_SEEDS);
+        public static readonly string WALL_BASKET = "(F)2425";
 
         public static string QualifiedObjectId(string objectId)
         {
