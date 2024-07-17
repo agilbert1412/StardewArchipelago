@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Locations;
 using StardewArchipelago.Constants.Vanilla;
@@ -55,9 +56,33 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
                 }
 
                 var apShopitem = CreateArchipelagoLocation(item, locationName);
-                shopData.Items.Insert(i, apShopitem);
+                UpdateOrInsertShopItem(shopData, apShopitem, i);
                 ReplaceWithArchipelagoCondition(item, itemName);
             }
+        }
+
+        private static void UpdateOrInsertShopItem(ShopData shopData, ShopItemData apShopitem, int index)
+        {
+            var existingApShopItem = shopData.Items.FirstOrDefault(x => x.Id == apShopitem.Id);
+            if (existingApShopItem == null)
+            {
+                shopData.Items.Insert(index, apShopitem);
+                return;
+            }
+
+            var existingConditions = existingApShopItem.Condition;
+            var newCondition = apShopitem.Condition;
+            if (string.IsNullOrWhiteSpace(newCondition))
+            {
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(existingConditions))
+            {
+                existingApShopItem.Condition = newCondition;
+                return;
+            }
+
+            existingApShopItem.Condition = $"ANY \"{existingConditions}\" \"{newCondition}\"";
         }
 
         /// <summary>
