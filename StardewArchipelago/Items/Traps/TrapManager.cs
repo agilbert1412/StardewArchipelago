@@ -708,6 +708,13 @@ namespace StardewArchipelago.Items.Traps
             var currentPhase = crop.currentPhase.Value;
             var daysPerPhase = crop.phaseDays.ToList();
 
+            if (crop.RegrowsAfterHarvest() && currentPhase >= daysPerPhase.Count - 1)
+            {
+                var daysSinceLastReady = Math.Max(0, crop.GetData().RegrowDays - dayOfCurrentPhase);
+                days = Math.Max(1, days - daysSinceLastReady);
+                dayOfCurrentPhase = 0;
+            }
+
             dayOfCurrentPhase -= days;
 
             while (dayOfCurrentPhase < 0)

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
+using Newtonsoft.Json;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.Gifting;
 using StardewArchipelago.Bundles;
@@ -32,6 +34,7 @@ using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Delegates;
 using StardewValley.Internal;
+using StardewValley.TerrainFeatures;
 using StardewValley.Triggers;
 using ArchipelagoLocation = StardewArchipelago.Locations.InGameLocations.ArchipelagoLocation;
 
@@ -674,7 +677,46 @@ namespace StardewArchipelago
 
         private void DebugMethod(string arg1, string[] arg2)
         {
-            ItemRegistry.GetDataOrErrorItem("(W)0");
+            ExportCropState("crops_before.json");
+            _itemManager.TrapManager.TryExecuteTrapImmediately("Benjamin Budton");
+            ExportCropState("crops_after.json");
+        }
+
+        private void ExportCropState(string cropsFile)
+        {
+            var cropsByLocation = new Dictionary<string, Dictionary<Vector2, CropInfo>>();
+            foreach (var gameLocation in Game1.locations)
+            {
+                var cropsHere = new Dictionary<Vector2, CropInfo>();
+
+                foreach (var terrainFeature in gameLocation.terrainFeatures.Values)
+                {
+                    if (terrainFeature is not HoeDirt groundDirt || groundDirt.crop == null)
+                    {
+                        continue;
+                    }
+                    var cropInfo = new CropInfo()
+                    {
+                        CurrentPhase = groundDirt.crop.currentPhase.Value,
+                        DayOfCurrentPhase = groundDirt.crop.dayOfCurrentPhase.Value,
+                        FullyGrown = groundDirt.crop.fullyGrown.Value,
+                        PhaseDays = groundDirt.crop.phaseDays.ToArray(),
+                    };
+                    cropsHere.Add(groundDirt.Tile, cropInfo);
+                }
+
+                cropsByLocation.Add(gameLocation.Name, cropsHere);
+            }
+            var objectsAsJson = JsonConvert.SerializeObject(cropsByLocation);
+            File.WriteAllText(cropsFile, objectsAsJson);
+        }
+
+        public struct CropInfo
+        {
+            public bool FullyGrown { get; set; }
+            public int DayOfCurrentPhase { get; set; }
+            public int CurrentPhase { get; set; }
+            public int[] PhaseDays { get; set; }
         }
     }
 }
