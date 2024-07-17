@@ -629,10 +629,11 @@ namespace StardewArchipelago.GameModifications
                         {
                             spawnFishData.CatchLimit = -1;
 
-                            if (!spawnFishData.Condition.Contains(henchmanCondition, StringComparison.InvariantCultureIgnoreCase))
+                            if (spawnFishData.Condition == null || !spawnFishData.Condition.Contains(henchmanCondition, StringComparison.InvariantCultureIgnoreCase))
                             {
                                 continue;
                             }
+
                             var parts = spawnFishData.Condition.Split(',').ToList();
                             parts = parts.Where(x => !x.Contains(henchmanCondition, StringComparison.InvariantCultureIgnoreCase)).ToList();
                             spawnFishData.Condition = string.Join(',', parts);
