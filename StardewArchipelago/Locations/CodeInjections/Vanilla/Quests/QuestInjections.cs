@@ -19,6 +19,7 @@ using StardewValley.Objects;
 using StardewValley.Quests;
 using StardewValley.TerrainFeatures;
 using xTile.Dimensions;
+using EventIds = StardewArchipelago.Stardew.Ids.Vanilla.EventIds;
 using Object = StardewValley.Object;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
@@ -552,7 +553,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
                     return;
                 }
 
-                var hasSeenBearEvent = Game1.player.eventsSeen.Contains(EventIds.BEAR_KNOWLEDGE_EVENT);
+                var hasSeenBearEvent = Game1.player.eventsSeen.Contains(EventIds.BEAR_KNOWLEDGE);
                 var hasReceivedBearKnowledge = _archipelago.HasReceivedItem(APItem.BEARS_KNOWLEDGE);
                 if (hasSeenBearEvent == hasReceivedBearKnowledge)
                 {

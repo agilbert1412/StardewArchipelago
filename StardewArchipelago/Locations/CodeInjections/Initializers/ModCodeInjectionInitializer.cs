@@ -44,11 +44,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             {
                 SVECutsceneInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             }
-
-            if (archipelago.SlotData.Mods.HasMod(ModNames.DISTANT_LANDS))
-            {
-                ModdedEventInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
-            }
             if (archipelago.SlotData.Mods.HasMod(ModNames.BOARDING_HOUSE))
             {
                 BoardingHouseInjections.Initialize(monitor, locationChecker, archipelago);

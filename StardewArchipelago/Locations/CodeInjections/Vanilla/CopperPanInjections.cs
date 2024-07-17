@@ -33,7 +33,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     return true; // run original logic
                 }
 
-                SkipCopperPanEventArchipelago(__instance);
+                EventInjections.BaseSkipEvent(__instance, CheckCopperPanLocation);
                 return false; // don't run original logic
             }
             catch (Exception ex)
@@ -66,45 +66,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 _monitor.Log($"Failed in {nameof(AwardFestivalPrize_CopperPan_Prefix)}:\n{ex}", LogLevel.Error);
                 return true; // run original logic
             }
-        }
-
-        private static void SkipCopperPanEventArchipelago(Event copperPanEvent)
-        {
-            if (copperPanEvent.playerControlSequence)
-            {
-                copperPanEvent.EndPlayerControlSequence();
-            }
-
-            Game1.playSound("drumkit6");
-
-            var actorPositionsAfterMoveField = _modHelper.Reflection.GetField<Dictionary<string, Vector3>>(copperPanEvent, "actorPositionsAfterMove");
-            actorPositionsAfterMoveField.GetValue().Clear();
-
-            foreach (var actor in copperPanEvent.actors)
-            {
-                var ignoreStopAnimation = actor.Sprite.ignoreStopAnimation;
-                actor.Sprite.ignoreStopAnimation = true;
-                actor.Halt();
-                actor.Sprite.ignoreStopAnimation = ignoreStopAnimation;
-                copperPanEvent.resetDialogueIfNecessary(actor);
-            }
-
-            copperPanEvent.farmer.Halt();
-            copperPanEvent.farmer.ignoreCollisions = false;
-            Game1.exitActiveMenu();
-            Game1.dialogueUp = false;
-            Game1.dialogueTyping = false;
-            Game1.pauseTime = 0.0f;
-
-            CheckCopperPanLocation();
-
-            copperPanEvent.endBehaviors(new string[4]
-            {
-                "end",
-                "position",
-                "43",
-                "36",
-            }, Game1.currentLocation);
         }
 
         private static void CheckCopperPanLocation()

@@ -56,6 +56,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             FarmEventInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
             BookInjections.Initialize(monitor, modHelper, archipelago, locationChecker, qosManager);
             InitializeWalnutsanityInjections(monitor, modHelper, archipelago, locationChecker);
+            EventInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
         }
 
         private static void InitializeBundleInjections(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, BundlesManager bundlesManager, BundleReader bundleReader)

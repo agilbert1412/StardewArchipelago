@@ -114,59 +114,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
         }
 
-        // public void skipEvent()
-        public static bool SkipEvent_CookiesRecipe_Prefix(Event __instance)
-        {
-            try
-            {
-                if (__instance.id != EventIds.COOKIES_RECIPE)
-                {
-                    return true; // run original logic
-                }
-
-                SkipCookiesRecipeEventArchipelago(__instance);
-                return false; // don't run original logic
-            }
-            catch (Exception ex)
-            {
-                _monitor.Log($"Failed in {nameof(SkipEvent_CookiesRecipe_Prefix)}:\n{ex}", LogLevel.Error);
-                return true; // run original logic
-            }
-        }
-
-        private static void SkipCookiesRecipeEventArchipelago(Event cookiesEvent)
-        {
-            if (cookiesEvent.playerControlSequence)
-            {
-                cookiesEvent.EndPlayerControlSequence();
-            }
-
-            Game1.playSound("drumkit6");
-
-            var actorPositionsAfterMoveField = _helper.Reflection.GetField<Dictionary<string, Vector3>>(cookiesEvent, "actorPositionsAfterMove");
-            actorPositionsAfterMoveField.GetValue().Clear();
-
-            foreach (var actor in cookiesEvent.actors)
-            {
-                var ignoreStopAnimation = actor.Sprite.ignoreStopAnimation;
-                actor.Sprite.ignoreStopAnimation = true;
-                actor.Halt();
-                actor.Sprite.ignoreStopAnimation = ignoreStopAnimation;
-                cookiesEvent.resetDialogueIfNecessary(actor);
-            }
-
-            cookiesEvent.farmer.Halt();
-            cookiesEvent.farmer.ignoreCollisions = false;
-            Game1.exitActiveMenu();
-            Game1.dialogueUp = false;
-            Game1.dialogueTyping = false;
-            Game1.pauseTime = 0.0f;
-
-            // Game1.player.cookingRecipes.TryAdd("Cookies", 0);
-            _locationChecker.AddCheckedLocation($"Cookies{Suffix.CHEFSANITY}");
-            cookiesEvent.endBehaviors();
-        }
-
         private static string GetAliased(string recipeName)
         {
             var aliasedRecipeName = recipeName;

@@ -45,7 +45,6 @@ namespace StardewArchipelago.Locations.Patcher
             AddMagicModInjections();
             AddSkullCavernElevatorModInjections();
             AddSVEModInjections();
-            AddDistantLandsEventInjections();
             AddBoardingHouseInjections();
             PatchSVEShops();
 
@@ -57,23 +56,6 @@ namespace StardewArchipelago.Locations.Patcher
             {
                 UnpatchSVEShops();
             }
-        }
-
-        private void AddDistantLandsEventInjections()
-        {
-            if (!_modsManager.HasMod(ModNames.DISTANT_LANDS))
-            {
-                return;
-            }
-
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(Event), nameof(Event.skipEvent)),
-                prefix: new HarmonyMethod(typeof(ModdedEventInjections), nameof(ModdedEventInjections.SkipEvent_ReplaceRecipe_Prefix))
-            );
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(Event), nameof(Event.tryEventCommand)),
-                prefix: new HarmonyMethod(typeof(ModdedEventInjections), nameof(ModdedEventInjections.TryEventCommand_CheckForStrayRecipe_Prefix))
-            );
         }
 
         private void AddModSkillInjections()

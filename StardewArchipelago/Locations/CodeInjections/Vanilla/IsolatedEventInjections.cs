@@ -246,42 +246,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             try
             {
-                if (__instance.id != EventIds.RUSTY_SWORD_EVENT_ID)
+                if (__instance.id != EventIds.RUSTY_SWORD)
                 {
                     return true; // run original logic
                 }
 
+                EventInjections.BaseSkipEvent(__instance, () => _locationChecker.AddCheckedLocation(RUSTY_SWORD_AP_LOCATION));
 
-                if (__instance.playerControlSequence)
-                {
-                    __instance.EndPlayerControlSequence();
-                }
-
-                Game1.playSound("drumkit6");
-
-                var actorPositionsAfterMoveField = _helper.Reflection.GetField<Dictionary<string, Vector3>>(__instance, "actorPositionsAfterMove");
-                actorPositionsAfterMoveField.GetValue().Clear();
-
-                foreach (var actor in __instance.actors)
-                {
-                    var ignoreStopAnimation = actor.Sprite.ignoreStopAnimation;
-                    actor.Sprite.ignoreStopAnimation = true;
-                    actor.Halt();
-                    actor.Sprite.ignoreStopAnimation = ignoreStopAnimation;
-                    __instance.resetDialogueIfNecessary(actor);
-                }
-
-                __instance.farmer.Halt();
-                __instance.farmer.ignoreCollisions = false;
-                Game1.exitActiveMenu();
-                Game1.dialogueUp = false;
-                Game1.dialogueTyping = false;
-                Game1.pauseTime = 0.0f;
-
-                _locationChecker.AddCheckedLocation(RUSTY_SWORD_AP_LOCATION);
-
-                Game1.player.Position = new Vector2(-9999f, -99999f);
-                __instance.endBehaviors(new string[1] { "end" }, Game1.currentLocation);
                 return false; // don't run original logic
             }
             catch (Exception ex)
@@ -296,7 +267,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             try
             {
-                if (@event.id != EventIds.RUSTY_SWORD_EVENT_ID)
+                if (@event.id != EventIds.RUSTY_SWORD)
                 {
                     return true; // run original logic
                 }

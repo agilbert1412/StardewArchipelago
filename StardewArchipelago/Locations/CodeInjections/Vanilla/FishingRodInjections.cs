@@ -33,7 +33,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     return true; // run original logic
                 }
 
-                SkipBambooPoleEventArchipelago(__instance);
+                EventInjections.BaseSkipEvent(__instance, CheckBambooPoleLocation);
                 return false; // don't run original logic
             }
             catch (Exception ex)
@@ -53,7 +53,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     return true; // run original logic
                 }
 
-                SkipFishingLessonEventArchipelago(__instance);
+                EventInjections.BaseSkipEvent(__instance, CheckFishingLessonLocations);
                 return false; // don't run original logic
             }
             catch (Exception ex)
@@ -136,87 +136,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
         }
 
-        private static void SkipBambooPoleEventArchipelago(Event bambooPoleEvent)
-        {
-            if (bambooPoleEvent.playerControlSequence)
-            {
-                bambooPoleEvent.EndPlayerControlSequence();
-            }
-
-            Game1.playSound("drumkit6");
-
-            var actorPositionsAfterMoveField = _modHelper.Reflection.GetField<Dictionary<string, Vector3>>(bambooPoleEvent, "actorPositionsAfterMove");
-            actorPositionsAfterMoveField.GetValue().Clear();
-
-            foreach (var actor in bambooPoleEvent.actors)
-            {
-                var ignoreStopAnimation = actor.Sprite.ignoreStopAnimation;
-                actor.Sprite.ignoreStopAnimation = true;
-                actor.Halt();
-                actor.Sprite.ignoreStopAnimation = ignoreStopAnimation;
-                bambooPoleEvent.resetDialogueIfNecessary(actor);
-            }
-
-            bambooPoleEvent.farmer.Halt();
-            bambooPoleEvent.farmer.ignoreCollisions = false;
-            Game1.exitActiveMenu();
-            Game1.dialogueUp = false;
-            Game1.dialogueTyping = false;
-            Game1.pauseTime = 0.0f;
-
-            CheckBambooPoleLocation();
-
-            bambooPoleEvent.endBehaviors(new string[4]
-            {
-                "end",
-                "position",
-                "43",
-                "36",
-            }, Game1.currentLocation);
-        }
-
         private static void CheckBambooPoleLocation()
         {
             _locationChecker.AddCheckedLocation("Bamboo Pole Cutscene");
-        }
-
-        private static void SkipFishingLessonEventArchipelago(Event bambooPoleEvent)
-        {
-            if (bambooPoleEvent.playerControlSequence)
-            {
-                bambooPoleEvent.EndPlayerControlSequence();
-            }
-
-            Game1.playSound("drumkit6");
-
-            var actorPositionsAfterMoveField = _modHelper.Reflection.GetField<Dictionary<string, Vector3>>(bambooPoleEvent, "actorPositionsAfterMove");
-            actorPositionsAfterMoveField.GetValue().Clear();
-
-            foreach (var actor in bambooPoleEvent.actors)
-            {
-                var ignoreStopAnimation = actor.Sprite.ignoreStopAnimation;
-                actor.Sprite.ignoreStopAnimation = true;
-                actor.Halt();
-                actor.Sprite.ignoreStopAnimation = ignoreStopAnimation;
-                bambooPoleEvent.resetDialogueIfNecessary(actor);
-            }
-
-            bambooPoleEvent.farmer.Halt();
-            bambooPoleEvent.farmer.ignoreCollisions = false;
-            Game1.exitActiveMenu();
-            Game1.dialogueUp = false;
-            Game1.dialogueTyping = false;
-            Game1.pauseTime = 0.0f;
-
-            CheckFishingLessonLocations();
-
-            bambooPoleEvent.endBehaviors(new string[4]
-            {
-                "end",
-                "position",
-                "43",
-                "36",
-            }, Game1.currentLocation);
         }
 
         private static void CheckFishingLessonLocations()

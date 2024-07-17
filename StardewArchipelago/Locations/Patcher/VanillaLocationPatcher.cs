@@ -1083,6 +1083,15 @@ namespace StardewArchipelago.Locations.Patcher
         {
             PatchChefsanity();
             PatchCraftsanity();
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Event), nameof(Event.skipEvent)),
+                prefix: new HarmonyMethod(typeof(EventInjections), nameof(EventInjections.SkipEvent_ReplaceRecipe_Prefix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Event), nameof(Event.tryEventCommand)),
+                prefix: new HarmonyMethod(typeof(EventInjections), nameof(EventInjections.TryEventCommand_ReplaceRecipeWithCheck_Prefix))
+            );
         }
 
         private void PatchChefsanity()
@@ -1108,16 +1117,6 @@ namespace StardewArchipelago.Locations.Patcher
             {
                 return;
             }
-
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(Event.DefaultCommands), nameof(Event.DefaultCommands.AddCookingRecipe)),
-                prefix: new HarmonyMethod(typeof(RecipeFriendshipInjections), nameof(RecipeFriendshipInjections.AddCookingRecipe_SkipLearningCookies_Prefix))
-            );
-
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(Event), nameof(Event.skipEvent)),
-                prefix: new HarmonyMethod(typeof(RecipeFriendshipInjections), nameof(RecipeFriendshipInjections.SkipEvent_CookiesRecipe_Prefix))
-            );
         }
 
         private void CleanChefsanityEvents()
