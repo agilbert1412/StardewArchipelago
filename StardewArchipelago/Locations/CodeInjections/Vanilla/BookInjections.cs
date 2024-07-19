@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using HarmonyLib;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Constants.Locations;
 using StardewArchipelago.Constants.Vanilla;
@@ -308,6 +309,29 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     holdLastFrame = true,
                     id = 1987654,
                 });
+            }
+        }
+
+        // Code is for modded books.  Its not complete yet but only covers the necessary cases.
+        // public static bool Before_ReadBook(StardewValley.Object __instance, GameLocation location)
+        public static bool Before_ReadBook_ReadBookButForArchipelago_Prefix(Object __instance, GameLocation location)
+        {
+            try
+            {
+                if (__instance.Name != "Book Of Stars")
+                {
+                    return true;
+                }
+                if (_locationChecker.IsLocationMissing("Read Book Of Stars"))
+                {
+                    return false; // Don't run the rest of the code, let Kaito's patch handle it.
+                }
+                return true;  // No need to run this method again
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(Before_ReadBook_ReadBookButForArchipelago_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
             }
         }
     }
