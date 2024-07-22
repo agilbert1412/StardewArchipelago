@@ -552,6 +552,10 @@ namespace StardewArchipelago.Stardew
 
         private void AddObjectByType(ObjectData objectData, StardewObject stardewObject)
         {
+             if (string.IsNullOrEmpty(objectData.Type))
+            {
+                return;
+            }
             if (!_objectsByType.ContainsKey(objectData.Type))
             {
                 _objectsByType[objectData.Type] = new List<StardewObject>();
