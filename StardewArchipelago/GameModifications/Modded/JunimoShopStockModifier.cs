@@ -20,7 +20,7 @@ namespace StardewArchipelago.GameModifications.Modded
         private static readonly string[] fall = { "fall" };
         private static readonly string[] summer_fall = { "summer", "fall" };
         private static readonly string[] winter = { "winter" };
-        private const float INITIAL_DISCOUNT = 0.3f;
+        private const float INITIAL_DISCOUNT = 0.7f;
         private const float APPLES_DISCOUNT = 0.025f;
 
         private static readonly Dictionary<string, string> _junimoPhrase = new()
@@ -174,7 +174,7 @@ namespace StardewArchipelago.GameModifications.Modded
             {
                 applesHearts = Game1.player.friendshipData["Apples"].Points / 250; // Get discount from being friends with Apples
             }
-            return INITIAL_DISCOUNT - applesHearts * APPLES_DISCOUNT;
+            return 1 - INITIAL_DISCOUNT - applesHearts * APPLES_DISCOUNT;
         }
 
         private ShopItemData CreateJunimoSeedItem(List<StardewObject> yellowObjects, string qualifiedId, int stockCount, double discount, string[] season = null)
