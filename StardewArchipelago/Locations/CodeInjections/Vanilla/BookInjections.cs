@@ -318,11 +318,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             try
             {
-                if (__instance.Name != "Book Of Stars")
+                if (__instance.Name != PowerBooks.BOOK_OF_STARS)
                 {
                     return true;
                 }
-                if (_locationChecker.IsLocationMissing("Read Book Of Stars"))
+                if (_locationChecker.IsLocationMissing($"Read {PowerBooks.BOOK_OF_STARS}"))
                 {
                     return false; // Don't run the rest of the code, let Kaito's patch handle it.
                 }
