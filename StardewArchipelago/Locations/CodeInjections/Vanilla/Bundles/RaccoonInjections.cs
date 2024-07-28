@@ -141,46 +141,52 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 if (__instance.mrs_raccoon.Value)
                 {
                     Utility.TryOpenShopMenu(nameof(Raccoon), __instance.Name);
+                    return false; // don't run original logic
                 }
-                else
+
+                var maxNumberOfRaccoons = 9;
+                var receivedRaccoons = _archipelago.GetReceivedItemCount(APItem.PROGRESSIVE_RACCOON);
+                if (!_archipelago.SlotData.QuestLocations.StoryQuestsEnabled)
                 {
-                    var receivedRaccoons = _archipelago.GetReceivedItemCount(APItem.PROGRESSIVE_RACCOON);
-                    if (!_archipelago.SlotData.QuestLocations.StoryQuestsEnabled)
+                    receivedRaccoons += 1;
+                    maxNumberOfRaccoons -= 1;
+                }
+
+                var nextRaccoonRequestNumber = GetCurrentRaccoonBundleNumber();
+                var raccoonBundleAvailable = nextRaccoonRequestNumber < receivedRaccoons;
+
+                if (receivedRaccoons >= maxNumberOfRaccoons && nextRaccoonRequestNumber == -1)
+                {
+                    return true; // run original logic
+                }
+
+                // private bool wasTalkedTo;
+                var wasTalkedToField = _modHelper.Reflection.GetField<bool>(__instance, "wasTalkedTo");
+                var wasTalkedTo = wasTalkedToField.GetValue();
+
+                if (!wasTalkedTo)
+                {
+                    if (raccoonBundleAvailable)
                     {
-                        receivedRaccoons += 1;
-                    }
-
-                    var nextRaccoonRequestNumber = GetCurrentRaccoonBundleNumber();
-                    var raccoonBundleAvailable = nextRaccoonRequestNumber < receivedRaccoons;
-
-                    // private bool wasTalkedTo;
-                    var wasTalkedToField = _modHelper.Reflection.GetField<bool>(__instance, "wasTalkedTo");
-                    var wasTalkedTo = wasTalkedToField.GetValue();
-
-                    if (!wasTalkedTo)
-                    {
-                        if (raccoonBundleAvailable)
-                        {
-                            Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\1_6_Strings:Raccoon_intro"));
-                        }
-                        else
-                        {
-                            Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\1_6_Strings:Raccoon_interim"));
-                        }
-                        if (!raccoonBundleAvailable)
-                        {
-                            return false; // don't run original logic
-                        }
-                        Game1.afterDialogues = () => ActivateRaccoonBundleMutex(__instance);
+                        Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\1_6_Strings:Raccoon_intro"));
                     }
                     else
                     {
-                        if (!raccoonBundleAvailable)
-                        {
-                            return false; // don't run original logic
-                        }
-                        ActivateRaccoonBundleMutex(__instance);
+                        Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\1_6_Strings:Raccoon_interim"));
                     }
+                    if (!raccoonBundleAvailable)
+                    {
+                        return false; // don't run original logic
+                    }
+                    Game1.afterDialogues = () => ActivateRaccoonBundleMutex(__instance);
+                }
+                else
+                {
+                    if (!raccoonBundleAvailable)
+                    {
+                        return false; // don't run original logic
+                    }
+                    ActivateRaccoonBundleMutex(__instance);
                 }
                 return false; // don't run original logic
             }
