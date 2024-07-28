@@ -744,6 +744,28 @@ namespace StardewArchipelago.GameModifications
 
         private void PatchDebugMethods()
         {
+            _harmony.Patch(
+                original: AccessTools.PropertySetter(typeof(Farmer), nameof(Farmer.CanMove)),
+                prefix: new HarmonyMethod(typeof(DebugPatchInjections), nameof(DebugPatchInjections.CanMoveSet_DebugWtfIsHappening_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Game1), nameof(Game1.NewDay)),
+                prefix: new HarmonyMethod(typeof(DebugPatchInjections), nameof(DebugPatchInjections.NewDay_DebugWtfIsHappening_Prefix)),
+                postfix: new HarmonyMethod(typeof(DebugPatchInjections), nameof(DebugPatchInjections.NewDay_DebugWtfIsHappening_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Game1), "_newDayAfterFade"),
+                prefix: new HarmonyMethod(typeof(DebugPatchInjections), nameof(DebugPatchInjections.NewDayAfterFade_DebugWtfIsHappening_Prefix)), 
+                postfix: new HarmonyMethod(typeof(DebugPatchInjections), nameof(DebugPatchInjections.NewDayAfterFade_DebugWtfIsHappening_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Game1), "onFadedBackInComplete"),
+                prefix: new HarmonyMethod(typeof(DebugPatchInjections), nameof(DebugPatchInjections.OnFadedBackInComplete_DebugWtfIsHappening_Prefix)),
+                postfix: new HarmonyMethod(typeof(DebugPatchInjections), nameof(DebugPatchInjections.OnFadedBackInComplete_DebugWtfIsHappening_Postfix))
+            );
         }
     }
 }
