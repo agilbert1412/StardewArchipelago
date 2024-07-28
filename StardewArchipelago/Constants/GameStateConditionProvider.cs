@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using StardewArchipelago.Constants.Locations;
 using StardewValley;
 
 namespace StardewArchipelago.Constants
 {
     public static class GameStateConditionProvider
     {
+        private static readonly string[] _progressiveBuildings = new[] { "Coop", "Barn", "Shed" };
+        private static readonly string[] _progressiveBuildingPrefixes = new[] { string.Empty, Prefix.BUILDING_BIG, Prefix.BUILDING_DELUXE };
+
         public static readonly string HAS_RECEIVED_ITEM = CreateId("HasReceivedItem");
         public static readonly string HAS_STOCK_SIZE = CreateId("HasCartStockSize");
         public static readonly string FOUND_ARTIFACT = CreateId("FoundArtifact");
@@ -37,6 +41,69 @@ namespace StardewArchipelago.Constants
             }
             return $"BUILDINGS_CONSTRUCTED ALL {buildingName} 0 0";
         }
+
+        public static string CreateHasBuildingOrHigherCondition(string buildingName, bool hasBuilding)
+        {
+            var noBuildingConditions = new List<string>();
+            noBuildingConditions.Add(CreateHasBuildingAnywhereCondition(buildingName, false));
+
+            if (!_progressiveBuildings.Any(x => buildingName.EndsWith(x, StringComparison.InvariantCultureIgnoreCase)))
+            {
+                return ConcatenateConditions(noBuildingConditions, hasBuilding);
+            }
+
+            if (buildingName.StartsWith(Prefix.BUILDING_DELUXE, StringComparison.InvariantCultureIgnoreCase))
+            {
+                return ConcatenateConditions(noBuildingConditions, hasBuilding);
+            }
+            if (buildingName.StartsWith(Prefix.BUILDING_BIG, StringComparison.InvariantCultureIgnoreCase))
+            {
+                var deluxeBuildingName = buildingName.Replace(Prefix.BUILDING_BIG, Prefix.BUILDING_DELUXE);
+                noBuildingConditions.Add(CreateHasBuildingAnywhereCondition(deluxeBuildingName, false));
+                return ConcatenateConditions(noBuildingConditions, hasBuilding);
+            }
+            if (_progressiveBuildings.Contains(buildingName))
+            {
+                var bigBuildingName = $"{Prefix.BUILDING_BIG}{buildingName}";
+                var deluxeBuildingName = $"{Prefix.BUILDING_DELUXE}{buildingName}";
+                noBuildingConditions.Add(CreateHasBuildingAnywhereCondition(bigBuildingName, false));
+                noBuildingConditions.Add(CreateHasBuildingAnywhereCondition(deluxeBuildingName, false));
+                return ConcatenateConditions(noBuildingConditions, hasBuilding);
+            }
+
+            return ConcatenateConditions(noBuildingConditions, hasBuilding);
+        }
+
+
+        public static string GetReceivedBuildingCondition(string buildingName)
+        {
+            var itemName = buildingName;
+            var amount = 1;
+            if (buildingName.StartsWith(Prefix.BUILDING_BIG, StringComparison.InvariantCultureIgnoreCase))
+            {
+                amount = 2;
+                itemName = $"Progressive {itemName[Prefix.BUILDING_BIG.Length..]}";
+            }
+            else if (buildingName.StartsWith(Prefix.BUILDING_DELUXE, StringComparison.InvariantCultureIgnoreCase))
+            {
+                amount = 3;
+                itemName = $"Progressive {itemName[Prefix.BUILDING_DELUXE.Length..]}";
+            }
+            else if (_progressiveBuildings.Contains(buildingName))
+            {
+                itemName = $"Progressive {itemName}";
+            }
+            else if (_buildingNameReplacements.ContainsKey(buildingName))
+            {
+                itemName = _buildingNameReplacements[buildingName];
+            }
+            return CreateHasReceivedItemCondition(itemName, amount);
+        }
+
+        private static Dictionary<string, string> _buildingNameReplacements = new()
+        {
+            { "Pathoschild.TractorMod_Stable", "Tractor Garage" },
+        };
 
         public static string CreateHasStockSizeCondition(double minimumStock)
         {
@@ -72,6 +139,38 @@ namespace StardewArchipelago.Constants
         public static string FilterCondition(string condition, Func<string, bool> filter)
         {
             return string.Join(',', condition.Split(',').Where(filter));
+        }
+
+        private static string ConcatenateConditions(IReadOnlyList<string> conditions, bool invert)
+        {
+            if (conditions == null || !conditions.Any())
+            {
+                return "";
+            }
+
+            if (invert)
+            {
+                if (conditions.Count == 1)
+                {
+                    return InvertCondition(conditions[0]);
+                }
+
+                return $"ANY {string.Join(' ', conditions.Select(x => SurroundWithQuotes(InvertCondition(x))))}";
+            }
+            else
+            {
+                return string.Join(", ", conditions);
+            }
+        }
+
+        private static string SurroundWithQuotes(string condition)
+        {
+            return $"\"{condition.Replace("\"", "\\\"")}\"";
+        }
+
+        private static string InvertCondition(string condition)
+        {
+            return $"!{condition}";
         }
 
         private static string CreateId(string name)

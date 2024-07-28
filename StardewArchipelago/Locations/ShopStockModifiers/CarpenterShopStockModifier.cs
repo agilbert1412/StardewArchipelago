@@ -145,12 +145,13 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
 
         private static string GetBuildingRequirementCondition(string requiredBuilding)
         {
-            if (requiredBuilding != null)
+            if (requiredBuilding == null)
             {
-                return $"BUILDINGS_CONSTRUCTED ALL \"{requiredBuilding}\"";
+                return null;
             }
 
-            return null;
+            var queryForThisBuilding = GameStateConditionProvider.CreateHasBuildingOrHigherCondition(requiredBuilding, true);
+            return queryForThisBuilding;
         }
 
         private string GetMaterialString(ISalable material, double priceMultiplier)
