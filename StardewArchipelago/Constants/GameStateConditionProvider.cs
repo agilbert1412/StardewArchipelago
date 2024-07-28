@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using StardewArchipelago.Constants.Locations;
-using StardewValley;
 
 namespace StardewArchipelago.Constants
 {
@@ -11,11 +10,6 @@ namespace StardewArchipelago.Constants
     {
         private static readonly string[] _progressiveBuildings = new[] { "Coop", "Barn", "Shed" };
         private static readonly string[] _progressiveBuildingPrefixes = new[] { string.Empty, Prefix.BUILDING_BIG, Prefix.BUILDING_DELUXE };
-
-        public static readonly string HAS_RECEIVED_ITEM = CreateId("HasReceivedItem");
-        public static readonly string HAS_STOCK_SIZE = CreateId("HasCartStockSize");
-        public static readonly string FOUND_ARTIFACT = CreateId("FoundArtifact");
-        public static readonly string FOUND_MINERAL = CreateId("FoundMineral");
 
         public static string CreateHasReceivedItemCondition(string itemName, int amount = 1)
         {
@@ -25,7 +19,7 @@ namespace StardewArchipelago.Constants
             }
 
             var arguments = new[] { amount.ToString(), itemName };
-            return CreateCondition(HAS_RECEIVED_ITEM, arguments);
+            return CreateCondition(GameStateCondition.HAS_RECEIVED_ITEM, arguments);
         }
 
         public static string CreateHasBuildingAnywhereCondition(string buildingName, bool hasBuilding)
@@ -108,7 +102,7 @@ namespace StardewArchipelago.Constants
         public static string CreateHasStockSizeCondition(double minimumStock)
         {
             var arguments = new[] { minimumStock.ToString() };
-            return CreateCondition(HAS_STOCK_SIZE, arguments);
+            return CreateCondition(GameStateCondition.HAS_STOCK_SIZE, arguments);
         }
 
         public static string CreateSeasonsCondition(string[] seasons)
@@ -118,12 +112,12 @@ namespace StardewArchipelago.Constants
 
         public static string CreateArtifactsCondition(string[] artifacts)
         {
-            return CreateCondition(FOUND_ARTIFACT, artifacts);
+            return CreateCondition(GameStateCondition.FOUND_ARTIFACT, artifacts);
         }
 
         public static string CreateMineralsCondition(string[] minerals)
         {
-            return CreateCondition(FOUND_MINERAL, minerals);
+            return CreateCondition(GameStateCondition.FOUND_MINERAL, minerals);
         }
 
         public static string CreateCondition(string condition, string[] arguments)
@@ -171,21 +165,6 @@ namespace StardewArchipelago.Constants
         private static string InvertCondition(string condition)
         {
             return $"!{condition}";
-        }
-
-        private static string CreateId(string name)
-        {
-            return $"{ModEntry.Instance.ModManifest.UniqueID}.GameStateCondition.{name}";
-        }
-
-        private static string CreateId(MemberInfo t)
-        {
-            return CreateId(t.Name);
-        }
-
-        private static string CreateId<T>()
-        {
-            return CreateId(typeof(T));
         }
     }
 }

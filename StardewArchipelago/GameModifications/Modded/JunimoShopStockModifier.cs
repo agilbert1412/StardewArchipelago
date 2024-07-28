@@ -106,7 +106,7 @@ namespace StardewArchipelago.GameModifications.Modded
             foreach (var rock in mineralObjects)
             {
                 var itemHashCode = rock.GetHashCode();
-                var mineralCondition = $"{GameStateConditionProvider.FOUND_MINERAL} {rock.Id}, SYNCED_RANDOM day junimo_shops_{itemHashCode} 0.4 @addDailyLuck";
+                var mineralCondition = $"{GameStateCondition.FOUND_MINERAL} {rock.Id}, SYNCED_RANDOM day junimo_shops_{itemHashCode} 0.4 @addDailyLuck";
                 shopData.Items.Add(CreateBarterItem(greyItems, rock, mineralCondition, offeredStock: stockCount, discount: discount));
             }
         }
@@ -120,7 +120,7 @@ namespace StardewArchipelago.GameModifications.Modded
             foreach (var artifact in artifactObjects)
             {
                 var itemHashCode = artifact.GetHashCode();
-                var artifactCondition = $"{GameStateConditionProvider.FOUND_ARTIFACT} {artifact.Id}, SYNCED_RANDOM day junimo_shops_{itemHashCode} 0.4 @addDailyLuck";
+                var artifactCondition = $"{GameStateCondition.FOUND_ARTIFACT} {artifact.Id}, SYNCED_RANDOM day junimo_shops_{itemHashCode} 0.4 @addDailyLuck";
                 shopData.Items.Add(CreateBarterItem(redObjects, artifact, artifactCondition, offeredStock: stockCount, discount: discount));
             }
         }
