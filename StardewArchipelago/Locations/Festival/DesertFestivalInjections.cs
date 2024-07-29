@@ -9,6 +9,7 @@ using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Objects;
+using StardewValley.SpecialOrders;
 
 namespace StardewArchipelago.Locations.Festival
 {
@@ -348,6 +349,22 @@ namespace StardewArchipelago.Locations.Festival
             {
                 _monitor.Log($"Failed in {nameof(SignalCalicoStatueActivation_DesertChef_Postfix)}:\n{ex}", LogLevel.Error);
                 return;
+            }
+        }
+
+        // public static void CleanupFestival()
+        public static void CleanupFestival_LetPlayerKeepCalicoEggs_Prefix()
+        {
+            try
+            {
+                // Game1.player.team.itemsToRemoveOvernight.Add("CalicoEgg");
+                SpecialOrder.RemoveAllSpecialOrders("DesertFestivalMarlon");
+                return false; // don't run original logic
+            }
+            catch (Exception ex)
+            {
+                _monitor.Log($"Failed in {nameof(CleanupFestival_LetPlayerKeepCalicoEggs_Prefix)}:\n{ex}", LogLevel.Error);
+                return true; // run original logic
             }
         }
     }

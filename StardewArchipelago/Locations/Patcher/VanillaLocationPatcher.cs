@@ -888,6 +888,10 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(typeof(MineShaft), "signalCalicoStatueActivation"),
                 postfix: new HarmonyMethod(typeof(DesertFestivalInjections), nameof(DesertFestivalInjections.SignalCalicoStatueActivation_DesertChef_Postfix))
             );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(DesertFestival), nameof(DesertFestival.CleanupFestival)),
+                prefix: new HarmonyMethod(typeof(DesertFestivalInjections), nameof(DesertFestivalInjections.CleanupFestival_LetPlayerKeepCalicoEggs_Prefix))
+            );
         }
 
         private void PatchFlowerDance()
