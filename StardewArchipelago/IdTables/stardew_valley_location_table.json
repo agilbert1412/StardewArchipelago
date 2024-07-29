@@ -11612,10 +11612,6 @@
             "code": 724057,
             "region": "Abandoned Mines - 5"
         },
-        "Read Digging Like Worms": {
-            "code": 724351,
-            "region": "Farm"
-        },
         "Cook Magic Elixir": {
             "code": 724401,
             "region": "Farm"
@@ -13132,10 +13128,6 @@
             "code": 725239,
             "region": "Shipping"
         },
-        "Shipsanity: Digging Like Worms": {
-            "code": 725240,
-            "region": "Shipping"
-        },
         "Shipsanity: Digger's Delight": {
             "code": 725241,
             "region": "Shipping"
@@ -13158,6 +13150,10 @@
         },
         "Shipsanity: Fish Casserole": {
             "code": 725246,
+            "region": "Shipping"
+        },
+        "Shipsanity: Snatcher Worm": {
+            "code": 725247,
             "region": "Shipping"
         }
     }
