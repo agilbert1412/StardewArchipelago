@@ -353,7 +353,7 @@ namespace StardewArchipelago.Locations.Festival
         }
 
         // public static void CleanupFestival()
-        public static void CleanupFestival_LetPlayerKeepCalicoEggs_Prefix()
+        public static bool CleanupFestival_LetPlayerKeepCalicoEggs_Prefix()
         {
             try
             {
