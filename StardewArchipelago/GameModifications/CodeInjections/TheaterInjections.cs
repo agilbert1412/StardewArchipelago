@@ -199,7 +199,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         {
             foreach (var character in Utility.getAllCharacters())
             {
-                if (character.isVillager())
+                if (character.IsVillager)
                 {
                     character.TryLoadSchedule();
                 }

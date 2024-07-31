@@ -331,7 +331,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
         {
             try
             {
-                var isValidTarget = n != null && (n is Child || n.isVillager());
+                var isValidTarget = n != null && (n is Child || n.IsVillager);
                 if (!isValidTarget)
                 {
                     return false; // don't run original logic
