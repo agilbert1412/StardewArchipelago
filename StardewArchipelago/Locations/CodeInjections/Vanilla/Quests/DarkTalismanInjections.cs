@@ -20,10 +20,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
 
         private static ILogger _logger;
         private static IModHelper _helper;
-        private static StardewArchipelagoClient _archipelago;
+        private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
 
-        public static void Initialize(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(ILogger logger, IModHelper helper, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             _logger = logger;
             _helper = helper;

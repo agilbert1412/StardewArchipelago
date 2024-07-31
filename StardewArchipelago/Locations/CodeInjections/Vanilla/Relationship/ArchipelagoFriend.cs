@@ -24,7 +24,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
             Child = child;
         }
 
-        public int ShuffledUpTo(StardewArchipelagoClient archipelago)
+        public int ShuffledUpTo(ArchipelagoClient archipelago)
         {
             const int maxHeart = 14;
             for (var i = maxHeart; i > 0; i--)

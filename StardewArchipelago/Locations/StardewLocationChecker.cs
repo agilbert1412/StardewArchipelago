@@ -11,7 +11,7 @@ namespace StardewArchipelago.Locations
     {
         private readonly LocationNameMatcher _locationNameMatcher;
 
-        public StardewLocationChecker(ILogger logger, StardewArchipelagoClient archipelago, List<string> locationsAlreadyChecked) : base(logger, archipelago, locationsAlreadyChecked)
+        public StardewLocationChecker(ILogger logger, ArchipelagoClient archipelago, List<string> locationsAlreadyChecked) : base(logger, archipelago, locationsAlreadyChecked)
         {
             _locationNameMatcher = new LocationNameMatcher();
         }

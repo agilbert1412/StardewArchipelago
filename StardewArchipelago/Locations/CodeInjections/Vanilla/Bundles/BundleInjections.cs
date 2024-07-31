@@ -17,12 +17,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
     {
         private static ILogger _logger;
         private static IModHelper _modHelper;
-        private static StardewArchipelagoClient _archipelago;
+        private static ArchipelagoClient _archipelago;
         private static ArchipelagoStateDto _state;
         private static LocationChecker _locationChecker;
         private static BundlesManager _bundlesManager;
 
-        public static void Initialize(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, BundlesManager bundlesManager)
+        public static void Initialize(ILogger logger, IModHelper modHelper, ArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, BundlesManager bundlesManager)
         {
             _logger = logger;
             _modHelper = modHelper;

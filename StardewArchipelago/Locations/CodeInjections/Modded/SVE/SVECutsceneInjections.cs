@@ -17,7 +17,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
     {
         private static ILogger _logger;
         private static IModHelper _modHelper;
-        private static StardewArchipelagoClient _archipelago;
+        private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
         private const string AURORA_EVENT = "658059254";
         private const string MORGAN_EVENT = "658078924";
@@ -51,7 +51,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
             { "1090506", "Krobus" },
         };
 
-        public static void Initialize(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(ILogger logger, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             _logger = logger;
             _modHelper = modHelper;

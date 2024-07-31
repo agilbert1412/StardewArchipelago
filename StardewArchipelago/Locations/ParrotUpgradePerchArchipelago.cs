@@ -15,7 +15,7 @@ namespace StardewArchipelago.Locations
         private string _scoutedItemName;
         public string ApLocationName { get; }
 
-        public ParrotUpgradePerchArchipelago(string apLocationName, StardewArchipelagoClient archipelago,
+        public ParrotUpgradePerchArchipelago(string apLocationName, ArchipelagoClient archipelago,
             GameLocation location, Point tile_position, Rectangle upgrade_rectangle,
             int required_nuts, Action apply_upgrade, Func<bool> update_completion_status, string upgrade_name = "", string required_mail = "")
             : base(location, tile_position, upgrade_rectangle, required_nuts, apply_upgrade, update_completion_status, upgrade_name, required_mail)

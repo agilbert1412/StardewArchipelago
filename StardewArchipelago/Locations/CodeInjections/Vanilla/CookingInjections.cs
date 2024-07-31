@@ -14,11 +14,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         public const string COOKING_LOCATION_PREFIX = "Cook ";
 
         private static ILogger _logger;
-        private static StardewArchipelagoClient _archipelago;
+        private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
         private static StardewItemManager _itemManager;
 
-        public static void Initialize(ILogger logger, StardewArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager itemManager)
+        public static void Initialize(ILogger logger, ArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager itemManager)
         {
             _logger = logger;
             _archipelago = archipelago;

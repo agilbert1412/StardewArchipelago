@@ -11,10 +11,10 @@ namespace StardewArchipelago.GameModifications.CodeInjections
     public class EntranceInjections
     {
         private static ILogger _logger;
-        private static StardewArchipelagoClient _archipelago;
+        private static ArchipelagoClient _archipelago;
         private static EntranceManager _entranceManager;
 
-        public static void Initialize(ILogger logger, StardewArchipelagoClient archipelago, EntranceManager entranceManager)
+        public static void Initialize(ILogger logger, ArchipelagoClient archipelago, EntranceManager entranceManager)
         {
             _logger = logger;
             _archipelago = archipelago;

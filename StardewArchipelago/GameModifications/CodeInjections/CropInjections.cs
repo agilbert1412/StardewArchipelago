@@ -26,10 +26,10 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         private static readonly string[] _overpoweredSeeds = { ObjectIds.ANCIENT_SEEDS, ObjectIds.RARE_SEED };
 
         private static ILogger _logger;
-        private static StardewArchipelagoClient _archipelago;
+        private static ArchipelagoClient _archipelago;
         private static StardewItemManager _stardewItemManager;
 
-        public static void Initialize(ILogger logger, StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager)
+        public static void Initialize(ILogger logger, ArchipelagoClient archipelago, StardewItemManager stardewItemManager)
         {
             _logger = logger;
             _archipelago = archipelago;

@@ -11,11 +11,11 @@ namespace StardewArchipelago.GameModifications.CodeInjections
     public static class ZeldaAnimationInjections
     {
         private static ILogger _logger;
-        private static StardewArchipelagoClient _archipelago;
+        private static ArchipelagoClient _archipelago;
         private static bool _shouldPrankOnFishDay;
         private static bool _shouldPrankOnOtherDays;
 
-        public static void Initialize(ILogger logger, StardewArchipelagoClient archipelago)
+        public static void Initialize(ILogger logger, ArchipelagoClient archipelago)
         {
             _logger = logger;
             _archipelago = archipelago;

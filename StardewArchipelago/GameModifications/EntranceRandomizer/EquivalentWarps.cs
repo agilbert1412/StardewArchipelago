@@ -39,9 +39,9 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             _auroraVineyardCellarLocations,
         };
 
-        private StardewArchipelagoClient _archipelago;
+        private ArchipelagoClient _archipelago;
 
-        public EquivalentWarps(StardewArchipelagoClient archipelago)
+        public EquivalentWarps(ArchipelagoClient archipelago)
         {
             _archipelago = archipelago;
         }

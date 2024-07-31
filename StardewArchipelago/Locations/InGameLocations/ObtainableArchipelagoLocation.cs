@@ -67,11 +67,11 @@ namespace StardewArchipelago.Locations.InGameLocations
             }
         }
 
-        public ObtainableArchipelagoLocation(string locationName, LogHandler logger, IModHelper modHelper, LocationChecker locationChecker, StardewArchipelagoClient archipelago, Hint[] myActiveHints) : this(locationName, locationName, logger, modHelper, locationChecker, archipelago, myActiveHints)
+        public ObtainableArchipelagoLocation(string locationName, LogHandler logger, IModHelper modHelper, LocationChecker locationChecker, ArchipelagoClient archipelago, Hint[] myActiveHints) : this(locationName, locationName, logger, modHelper, locationChecker, archipelago, myActiveHints)
         {
         }
 
-        public ObtainableArchipelagoLocation(string locationDisplayName, string locationName, LogHandler logger, IModHelper modHelper, LocationChecker locationChecker, StardewArchipelagoClient archipelago, Hint[] myActiveHints)
+        public ObtainableArchipelagoLocation(string locationDisplayName, string locationName, LogHandler logger, IModHelper modHelper, LocationChecker locationChecker, ArchipelagoClient archipelago, Hint[] myActiveHints)
         {
             // Prefix removed for now, because the inconsistency makes it ugly
             // var prefix = locationDisplayName.Length < 18 ? ARCHIPELAGO_PREFIX : ARCHIPELAGO_NO_PREFIX;
@@ -165,7 +165,7 @@ namespace StardewArchipelago.Locations.InGameLocations
             return descriptionWithExtraMaterials;
         }
 
-        public static IEnumerable<ItemQueryResult> Create(string locationName, LogHandler logger, IModHelper modHelper, LocationChecker locationChecker, StardewArchipelagoClient archipelago)
+        public static IEnumerable<ItemQueryResult> Create(string locationName, LogHandler logger, IModHelper modHelper, LocationChecker locationChecker, ArchipelagoClient archipelago)
         {
             if (string.IsNullOrWhiteSpace(locationName))
             {

@@ -13,7 +13,7 @@ namespace StardewArchipelago.Locations.CodeInjections
 {
     public static class GingerIslandInitializer
     {
-        public static void Initialize(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(ILogger logger, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             WalnutRoomDoorInjection.Initialize(logger, modHelper, archipelago, locationChecker);
             BoatTunnelInjections.Initialize(logger, modHelper, archipelago, locationChecker);

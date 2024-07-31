@@ -17,10 +17,10 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         private const string SECRET_NOTE_ID = "(O)79";
 
         private static ILogger _logger;
-        private static StardewArchipelagoClient _archipelago;
+        private static ArchipelagoClient _archipelago;
         private static StardewLocationChecker _locationChecker;
 
-        public static void Initialize(ILogger logger, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker)
+        public static void Initialize(ILogger logger, ArchipelagoClient archipelago, StardewLocationChecker locationChecker)
         {
             _logger = logger;
             _archipelago = archipelago;

@@ -12,9 +12,9 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         private const string RAT_PROBLEM_ID = "26";
 
         private static ILogger _logger;
-        private static StardewArchipelagoClient _archipelago;
+        private static ArchipelagoClient _archipelago;
 
-        public static void Initialize(ILogger logger, StardewArchipelagoClient archipelago)
+        public static void Initialize(ILogger logger, ArchipelagoClient archipelago)
         {
             _logger = logger;
             _archipelago = archipelago;

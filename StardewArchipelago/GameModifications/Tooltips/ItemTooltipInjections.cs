@@ -22,12 +22,12 @@ namespace StardewArchipelago.GameModifications.Tooltips
         private static ILogger _logger;
         private static IModHelper _modHelper;
         private static ModConfig _config;
-        private static StardewArchipelagoClient _archipelago;
+        private static ArchipelagoClient _archipelago;
         private static StardewLocationChecker _locationChecker;
         private static NameSimplifier _nameSimplifier;
         private static Texture2D _miniArchipelagoIcon;
 
-        public static void Initialize(LogHandler logger, IModHelper modHelper, ModConfig config, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker, NameSimplifier nameSimplifier)
+        public static void Initialize(LogHandler logger, IModHelper modHelper, ModConfig config, ArchipelagoClient archipelago, StardewLocationChecker locationChecker, NameSimplifier nameSimplifier)
         {
             _logger = logger;
             _modHelper = modHelper;

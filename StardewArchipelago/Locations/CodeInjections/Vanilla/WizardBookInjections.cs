@@ -24,10 +24,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
         private static ILogger _logger;
         private static IModHelper _modHelper;
-        private static StardewArchipelagoClient _archipelago;
+        private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
 
-        public static void Initialize(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(ILogger logger, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             _logger = logger;
             _modHelper = modHelper;

@@ -23,11 +23,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         public const string AP_LOCATION_ABANDONED_JOJA_MART = "The Missing Bundle";
 
         private static ILogger _logger;
-        private static StardewArchipelagoClient _archipelago;
+        private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
         private static FriendshipReleaser _friendshipReleaser;
 
-        public static void Initialize(ILogger logger, StardewArchipelagoClient archipelago, LocationChecker locationChecker, BundleReader bundleReader)
+        public static void Initialize(ILogger logger, ArchipelagoClient archipelago, LocationChecker locationChecker, BundleReader bundleReader)
         {
             _logger = logger;
             _archipelago = archipelago;

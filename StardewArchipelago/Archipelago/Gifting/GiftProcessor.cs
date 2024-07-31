@@ -14,13 +14,13 @@ namespace StardewArchipelago.Archipelago.Gifting
     public class GiftProcessor
     {
         private ILogger _logger;
-        private StardewArchipelagoClient _archipelago;
+        private ArchipelagoClient _archipelago;
         private StardewItemManager _itemManager;
         private ICloseTraitParser<string> _closeTraitParser;
         private Dictionary<string, Func<int, ItemAmount>> _specialItems;
         private Dictionary<int, Dictionary<string[], Func<int, Dictionary<string, GiftTrait>, ItemAmount>>> _recognizedTraits;
 
-        public GiftProcessor(ILogger logger, StardewArchipelagoClient archipelago, StardewItemManager itemManager, ICloseTraitParser<string> closeTraitParser)
+        public GiftProcessor(ILogger logger, ArchipelagoClient archipelago, StardewItemManager itemManager, ICloseTraitParser<string> closeTraitParser)
         {
             _logger = logger;
             _archipelago = archipelago;

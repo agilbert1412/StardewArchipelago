@@ -11,10 +11,10 @@ namespace StardewArchipelago.GameModifications.CodeInjections
     public static class GoldenClockInjections
     {
         private static ILogger _logger;
-        private static StardewArchipelagoClient _archipelago;
+        private static ArchipelagoClient _archipelago;
         private static uint _lastDayGoldClockToggled;
 
-        public static void Initialize(ILogger logger, StardewArchipelagoClient archipelago)
+        public static void Initialize(ILogger logger, ArchipelagoClient archipelago)
         {
             _logger = logger;
             _archipelago = archipelago;

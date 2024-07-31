@@ -18,7 +18,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
         private static ILogger _logger;
         private static IModHelper _helper;
-        private static StardewArchipelagoClient _archipelago;
+        private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
         private static StardewItemManager _stardewItemManager;
         private static CompoundNameMapper _nameMapper;

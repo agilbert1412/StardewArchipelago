@@ -15,7 +15,7 @@ namespace StardewArchipelago.Items
     {
         private readonly Harmony _harmony;
 
-        public ItemPatcher(ILogger logger, IModHelper helper, Harmony harmony, StardewArchipelagoClient archipelago)
+        public ItemPatcher(ILogger logger, IModHelper helper, Harmony harmony, ArchipelagoClient archipelago)
         {
             _harmony = harmony;
             PlayerBuffInjections.Initialize(logger, helper, archipelago);
