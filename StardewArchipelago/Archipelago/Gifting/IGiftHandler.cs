@@ -1,5 +1,4 @@
-﻿using KaitoKid.ArchipelagoUtilities.Net.Client;
-using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+﻿using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Stardew;
 

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Goals;
 using StardewModdingAPI;

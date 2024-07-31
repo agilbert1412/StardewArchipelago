@@ -4,7 +4,6 @@ using StardewModdingAPI;
 using StardewValley;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
-using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.Locations.Festival
 {

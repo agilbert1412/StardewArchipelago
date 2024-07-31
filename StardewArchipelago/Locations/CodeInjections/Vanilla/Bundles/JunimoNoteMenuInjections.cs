@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
-using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Constants;
@@ -18,7 +17,6 @@ using StardewValley.Menus;
 using Bundle = StardewValley.Menus.Bundle;
 using KaitoKid.ArchipelagoUtilities.Net;
 using StardewArchipelago.Logging;
-using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 {

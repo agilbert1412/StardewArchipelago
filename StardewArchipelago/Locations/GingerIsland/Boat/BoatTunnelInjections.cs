@@ -10,7 +10,6 @@ using xTile.Dimensions;
 using Rectangle = xTile.Dimensions.Rectangle;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
-using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.Locations.GingerIsland.Boat
 {

@@ -5,7 +5,6 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
-using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.Locations.GingerIsland.Parrots
 {

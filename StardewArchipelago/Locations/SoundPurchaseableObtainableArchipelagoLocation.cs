@@ -3,9 +3,7 @@ using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewArchipelago.Locations.InGameLocations;
 using StardewModdingAPI;
 using StardewValley;
-using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
-using StardewArchipelago.Archipelago;
 using StardewArchipelago.Logging;
 
 namespace StardewArchipelago.Locations

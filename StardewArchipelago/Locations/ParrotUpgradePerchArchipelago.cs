@@ -1,7 +1,6 @@
 ﻿using System;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using Microsoft.Xna.Framework;
-using StardewArchipelago.Archipelago;
 using StardewArchipelago.Extensions;
 using StardewValley;
 using StardewValley.BellsAndWhistles;

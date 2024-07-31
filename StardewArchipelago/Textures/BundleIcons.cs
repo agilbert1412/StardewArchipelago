@@ -1,7 +1,6 @@
 ﻿using System.IO;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
-using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Logging;
 
 namespace StardewArchipelago.Textures

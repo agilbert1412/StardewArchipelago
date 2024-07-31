@@ -8,7 +8,6 @@ using Newtonsoft.Json;
 using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Stardew;
 using StardewValley;
-using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 
 namespace StardewArchipelago.Archipelago.Gifting

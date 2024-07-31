@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.Stardew;

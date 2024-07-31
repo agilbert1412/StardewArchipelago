@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewArchipelago.Locations.ShopStockModifiers;
 using StardewArchipelago.Stardew;
 using StardewArchipelago.Stardew.Ids.Vanilla;

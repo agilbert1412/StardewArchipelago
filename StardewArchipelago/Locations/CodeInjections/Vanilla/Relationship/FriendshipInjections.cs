@@ -4,7 +4,6 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Netcode;
-using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewArchipelago.Stardew;
 using StardewArchipelago.Textures;
 using StardewModdingAPI;

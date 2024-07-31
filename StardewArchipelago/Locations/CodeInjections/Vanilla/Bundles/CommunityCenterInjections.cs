@@ -8,7 +8,6 @@ using StardewValley;
 using StardewValley.Locations;
 using xTile.Dimensions;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
-using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 {

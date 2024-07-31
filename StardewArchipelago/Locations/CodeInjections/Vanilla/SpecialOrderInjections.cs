@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Archipelago.MultiClient.Net.Models;
 using Microsoft.Xna.Framework.Content;
-using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.Extensions;
 using StardewArchipelago.Items.Unlocks.Vanilla;

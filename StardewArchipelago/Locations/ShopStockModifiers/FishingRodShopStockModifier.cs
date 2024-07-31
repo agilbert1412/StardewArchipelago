@@ -1,5 +1,4 @@
-﻿using KaitoKid.ArchipelagoUtilities.Net.Client;
-using StardewArchipelago.Constants.Vanilla;
+﻿using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;

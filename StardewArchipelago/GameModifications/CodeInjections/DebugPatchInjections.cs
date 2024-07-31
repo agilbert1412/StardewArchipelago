@@ -3,7 +3,6 @@ using StardewValley;
 using System;
 using System.Diagnostics;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
-using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
 {

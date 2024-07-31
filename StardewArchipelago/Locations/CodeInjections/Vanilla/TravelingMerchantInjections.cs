@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Archipelago.MultiClient.Net.Models;
-using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Locations.InGameLocations;
 using StardewArchipelago.Serialization;
@@ -15,8 +14,6 @@ using StardewValley.Locations;
 using StardewValley.Menus;
 using xTile.Dimensions;
 using Object = StardewValley.Object;
-using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
-using KaitoKid.ArchipelagoUtilities.Net;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Logging;
 

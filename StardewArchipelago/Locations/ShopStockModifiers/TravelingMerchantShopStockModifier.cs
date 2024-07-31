@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Force.DeepCloner;
-using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;

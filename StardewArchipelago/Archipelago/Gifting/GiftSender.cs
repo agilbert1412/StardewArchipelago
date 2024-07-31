@@ -7,10 +7,8 @@ using Archipelago.Gifting.Net.Traits;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.Stardew;
-using StardewModdingAPI;
 using StardewValley;
 using Object = StardewValley.Object;
-using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 
 namespace StardewArchipelago.Archipelago.Gifting

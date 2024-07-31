@@ -7,7 +7,6 @@ using StardewValley.Locations;
 using xTile.Dimensions;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
-using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.Locations.GingerIsland.WalnutRoom
 {
