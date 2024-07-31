@@ -8,6 +8,7 @@ using StardewValley;
 using StardewValley.Locations;
 using xTile.Dimensions;
 using Rectangle = xTile.Dimensions.Rectangle;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 
 namespace StardewArchipelago.Locations.GingerIsland.Boat
 {

@@ -8,8 +8,8 @@
         public const string STEEL = "Steel";
         public const string GOLD = "Gold";
         public const string IRIDIUM = "Iridium";
-        public static readonly string[] MaterialNames = new[] { NONE, COPPER, IRON, GOLD, IRIDIUM };
-        public static readonly string[] InternalMaterialNames = new[] { NONE, COPPER, STEEL, GOLD, IRIDIUM };
-        public static readonly int[] ToolUpgradeCosts = new[] { 0, 2000, 5000, 10000, 25000 };
+        public static readonly string[] MaterialNames = { NONE, COPPER, IRON, GOLD, IRIDIUM };
+        public static readonly string[] InternalMaterialNames = { NONE, COPPER, STEEL, GOLD, IRIDIUM };
+        public static readonly int[] ToolUpgradeCosts = { 0, 2000, 5000, 10000, 25000 };
     }
 }

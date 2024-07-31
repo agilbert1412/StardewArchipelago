@@ -7,13 +7,13 @@ using StardewArchipelago.Stardew.Ids.Vanilla;
 using StardewValley;
 using StardewValley.Characters;
 using StardewValley.TerrainFeatures;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
     public static class CropsanityInjections
     {
-        private static readonly string[] _cropsanityExceptions = new[]
-        {
+        private static readonly string[] _cropsanityExceptions = {
             ObjectIds.WEEDS, ObjectIds.SPRING_ONION, ObjectIds.ANCIENT_FRUIT, ObjectIds.FIBER, ObjectIds.QI_FRUIT,
         };
 

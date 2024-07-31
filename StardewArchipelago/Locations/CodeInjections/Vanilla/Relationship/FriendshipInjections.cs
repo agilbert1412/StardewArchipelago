@@ -15,6 +15,7 @@ using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Objects;
 using Object = StardewValley.Object;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
 {

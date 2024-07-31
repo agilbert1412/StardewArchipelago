@@ -19,6 +19,6 @@
         public const string COOKING = "spacechase0.Cooking";
         public const string SOCIALIZING = "drbirbdev.Socializing";
 
-        public static readonly string[] ModdedSkillIds = new[] { BINNING, MAGIC, ARCHAEOLOGY, COOKING, SOCIALIZING };
+        public static readonly string[] ModdedSkillIds = { BINNING, MAGIC, ARCHAEOLOGY, COOKING, SOCIALIZING };
     }
 }

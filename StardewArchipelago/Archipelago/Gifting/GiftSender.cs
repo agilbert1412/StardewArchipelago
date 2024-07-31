@@ -10,6 +10,8 @@ using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
 using Object = StardewValley.Object;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 
 namespace StardewArchipelago.Archipelago.Gifting
 {

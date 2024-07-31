@@ -6,6 +6,7 @@ using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.GameData.Shops;
 using StardewValley.GameData.Tools;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 
 namespace StardewArchipelago.Locations.ShopStockModifiers
 {

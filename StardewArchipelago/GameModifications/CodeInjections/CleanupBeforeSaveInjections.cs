@@ -1,6 +1,7 @@
 ﻿using System;
 using StardewValley;
 using StardewValley.Monsters;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
 {

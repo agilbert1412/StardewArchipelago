@@ -4,7 +4,6 @@ using System.Linq;
 using Archipelago.MultiClient.Net.Models;
 using KaitoKid.ArchipelagoUtilities.Net;
 using Microsoft.Xna.Framework;
-using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewModdingAPI;

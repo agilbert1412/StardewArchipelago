@@ -15,7 +15,7 @@ namespace StardewArchipelago.GameModifications.Seasons
     public class SeasonsRandomizer
     {
         private const string _nextSeasonDialogKey = "NextSeason";
-        public static readonly string[] ValidSeasons = new[] { "Spring", "Summer", "Fall", "Winter" };
+        public static readonly string[] ValidSeasons = { "Spring", "Summer", "Fall", "Winter" };
         private const string PROGRESSIVE_SEASON = "Progressive Season";
 
         private static ILogger _logger;

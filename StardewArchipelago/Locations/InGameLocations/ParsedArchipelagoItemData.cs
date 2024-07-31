@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
-using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Logging;
 using StardewArchipelago.Textures;
 using StardewModdingAPI;

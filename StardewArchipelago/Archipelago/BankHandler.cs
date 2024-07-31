@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Numerics;
 using Archipelago.MultiClient.Net.Enums;
-using KaitoKid.ArchipelagoUtilities.Net.Client;
 using Microsoft.Xna.Framework;
 using StardewValley;
 

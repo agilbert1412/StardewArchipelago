@@ -7,6 +7,7 @@ using StardewArchipelago.Stardew.Ids.Vanilla;
 using StardewModdingAPI;
 using StardewValley;
 using EventRecipes = StardewArchipelago.Constants.EventRecipes;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {

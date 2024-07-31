@@ -1,7 +1,7 @@
 using FluentAssertions;
 using StardewArchipelago.GameModifications.CodeInjections.Television;
 
-namespace StardewArchipelagoTests
+namespace StardewArchipelago.ests
 {
     public class QueenOfSauceTests
     {

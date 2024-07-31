@@ -2,8 +2,7 @@
 {
     public class Community
     {
-        public static readonly string[] AllNames = new[]
-        {
+        public static readonly string[] AllNames = {
             "Albrekka", "Alchav", "Angela", "ArgonMatrix", "axe_y", "beauxq", "Berserker", "Black Sliver", "blastron",
             "BootsinSoots", "BruceWinless", "CaitSith2", "Captain Canadia", "Celeste", "Damocles", "dewin",
             "el_", "emmalution", "Espeon", "eudaimonistic", "Exempt-Medic", "Farrak Kilhn", "Figment",

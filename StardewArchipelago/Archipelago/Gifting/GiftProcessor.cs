@@ -6,6 +6,8 @@ using Archipelago.Gifting.Net.Traits;
 using Archipelago.Gifting.Net.Utilities.CloseTraitParser;
 using StardewArchipelago.Extensions;
 using StardewArchipelago.Stardew;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 
 namespace StardewArchipelago.Archipelago.Gifting
 {

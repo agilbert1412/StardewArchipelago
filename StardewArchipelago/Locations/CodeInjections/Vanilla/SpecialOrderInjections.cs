@@ -12,6 +12,7 @@ using StardewValley;
 using StardewValley.GameData.SpecialOrders;
 using StardewValley.SpecialOrders;
 using StardewValley.SpecialOrders.Rewards;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {

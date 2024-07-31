@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewArchipelago.Stardew;
 using StardewValley;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {

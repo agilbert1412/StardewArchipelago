@@ -4,7 +4,6 @@ using HarmonyLib;
 using KaitoKid.ArchipelagoUtilities.Net;
 using Microsoft.Xna.Framework;
 using Netcode;
-using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewModdingAPI;

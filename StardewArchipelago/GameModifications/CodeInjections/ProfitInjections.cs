@@ -1,5 +1,4 @@
 ﻿using System;
-using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using Object = StardewValley.Object;

@@ -12,6 +12,7 @@ using StardewValley.GameData.Crops;
 using StardewValley.Locations;
 using StardewValley.Monsters;
 using StardewValley.TerrainFeatures;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
 {

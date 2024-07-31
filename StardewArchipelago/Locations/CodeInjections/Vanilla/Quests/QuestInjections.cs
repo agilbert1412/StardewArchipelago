@@ -20,6 +20,7 @@ using StardewValley.TerrainFeatures;
 using xTile.Dimensions;
 using EventIds = StardewArchipelago.Stardew.Ids.Vanilla.EventIds;
 using Object = StardewValley.Object;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
 {

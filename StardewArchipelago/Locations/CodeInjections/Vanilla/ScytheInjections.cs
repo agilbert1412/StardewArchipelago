@@ -1,6 +1,7 @@
 ﻿using System;
 using StardewValley;
 using xTile.Dimensions;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {

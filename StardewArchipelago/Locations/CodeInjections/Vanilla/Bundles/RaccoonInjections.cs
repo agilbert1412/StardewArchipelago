@@ -19,6 +19,7 @@ using StardewValley.Network.NetEvents;
 using xTile.Dimensions;
 using Bundle = StardewValley.Menus.Bundle;
 using Object = StardewValley.Object;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 {

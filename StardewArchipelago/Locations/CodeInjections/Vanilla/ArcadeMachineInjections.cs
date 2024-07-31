@@ -6,6 +6,7 @@ using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Minigames;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {

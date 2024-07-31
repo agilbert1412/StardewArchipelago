@@ -11,6 +11,7 @@ using StardewValley;
 using StardewValley.GameData.BigCraftables;
 using StardewValley.GameData.Shops;
 using Category = StardewArchipelago.Constants.Vanilla.Category;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 
 namespace StardewArchipelago.Locations.ShopStockModifiers
 {

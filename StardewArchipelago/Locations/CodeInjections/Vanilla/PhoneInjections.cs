@@ -6,6 +6,7 @@ using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Objects;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {

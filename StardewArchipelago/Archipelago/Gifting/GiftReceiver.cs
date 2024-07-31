@@ -5,6 +5,8 @@ using Archipelago.Gifting.Net.Service;
 using Archipelago.Gifting.Net.Utilities.CloseTraitParser;
 using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Stardew;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 
 namespace StardewArchipelago.Archipelago.Gifting
 {

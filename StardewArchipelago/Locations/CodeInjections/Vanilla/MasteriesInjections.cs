@@ -6,6 +6,7 @@ using StardewValley;
 using StardewValley.Menus;
 using xTile.Dimensions;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {

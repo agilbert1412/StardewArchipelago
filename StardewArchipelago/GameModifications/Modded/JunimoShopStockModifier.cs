@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
@@ -16,11 +15,11 @@ namespace StardewArchipelago.GameModifications.Modded
 {
     public class JunimoShopStockModifier : BarterShopStockModifier
     {
-        private static readonly string[] spring = new string[]{"spring"};
-        private static readonly string[] summer = new string[]{"summer"};
-        private static readonly string[] fall = new string[]{"fall"};
-        private static readonly string[] summer_fall = new string[]{"summer", "fall"};
-        private static readonly string[] winter = new string[]{"winter"};
+        private static readonly string[] spring = {"spring"};
+        private static readonly string[] summer = {"summer"};
+        private static readonly string[] fall = {"fall"};
+        private static readonly string[] summer_fall = {"summer", "fall"};
+        private static readonly string[] winter = {"winter"};
         private const float INITIAL_DISCOUNT = 0.65f;
         private const float APPLES_DISCOUNT = 0.05f;
 

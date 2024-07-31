@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using HarmonyLib;
 using KaitoKid.ArchipelagoUtilities.Net;
-using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Bundles;

@@ -4,7 +4,6 @@ using System.Linq;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago.Gifting;
 using StardewArchipelago.Extensions;
-using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Objects;

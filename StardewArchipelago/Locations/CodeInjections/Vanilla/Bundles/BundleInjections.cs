@@ -7,6 +7,7 @@ using StardewArchipelago.Serialization;
 using StardewModdingAPI;
 using StardewValley.Menus;
 using Bundle = StardewValley.Menus.Bundle;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 {

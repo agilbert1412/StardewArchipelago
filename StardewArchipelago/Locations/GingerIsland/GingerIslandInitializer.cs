@@ -5,6 +5,7 @@ using StardewArchipelago.Locations.GingerIsland.Parrots;
 using StardewArchipelago.Locations.GingerIsland.VolcanoForge;
 using StardewArchipelago.Locations.GingerIsland.WalnutRoom;
 using StardewModdingAPI;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 
 namespace StardewArchipelago.Locations.CodeInjections
 {

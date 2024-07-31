@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using HarmonyLib;
-using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago.Gifting;

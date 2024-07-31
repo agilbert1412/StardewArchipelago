@@ -4,6 +4,7 @@ using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewModdingAPI;
 using StardewValley;
 using xTile.Dimensions;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -17,8 +18,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         public const string GOLD_CLOCK = "Gold Clock";
         public const string DEEP_WOODS_OBELISK = "Deep Woods Obelisk";
 
-        private static readonly string[] _wizardBuildings = new[]
-            { EARTH_OBELISK, WATER_OBELISK, DESERT_OBELISK, ISLAND_OBELISK, JUNIMO_HUT, GOLD_CLOCK, DEEP_WOODS_OBELISK };
+        private static readonly string[] _wizardBuildings = { EARTH_OBELISK, WATER_OBELISK, DESERT_OBELISK, ISLAND_OBELISK, JUNIMO_HUT, GOLD_CLOCK, DEEP_WOODS_OBELISK };
 
         private static ILogger _logger;
         private static IModHelper _modHelper;

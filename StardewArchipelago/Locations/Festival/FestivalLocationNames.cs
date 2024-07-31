@@ -71,8 +71,7 @@ namespace StardewArchipelago.Locations.Festival
         public const string LUAU_SOUP = "Luau Soup";
 
         public const string TROUT_DERBY_REWARD_PATTERN = "Trout Derby Reward {0}";
-        public static readonly string[] TROUT_DERBY_REWARDS = new[]
-        {
+        public static readonly string[] TROUT_DERBY_REWARDS = {
             string.Format(TROUT_DERBY_REWARD_PATTERN, 1), string.Format(TROUT_DERBY_REWARD_PATTERN, 2), string.Format(TROUT_DERBY_REWARD_PATTERN, 3),
             string.Format(TROUT_DERBY_REWARD_PATTERN, 4), string.Format(TROUT_DERBY_REWARD_PATTERN, 5), string.Format(TROUT_DERBY_REWARD_PATTERN, 6),
             string.Format(TROUT_DERBY_REWARD_PATTERN, 7), string.Format(TROUT_DERBY_REWARD_PATTERN, 8), string.Format(TROUT_DERBY_REWARD_PATTERN, 9),
@@ -128,8 +127,7 @@ namespace StardewArchipelago.Locations.Festival
         public const string LEGEND_OF_THE_WINTER_STAR = "The Legend of the Winter Star";
         public const string SECRET_SANTA = "Secret Santa";
 
-        private static readonly string[] DESERT_FESTIVAL_ALL = new[]
-        {
+        private static readonly string[] DESERT_FESTIVAL_ALL = {
             CALICO_RACE, MUMMY_MASK, EMILYS_OUTFIT_SERVICES, EARTHY_MOUSSE, SWEET_BEAN_CAKE, SKULL_CAVERN_CASSEROLE, SPICY_TACOS,
             MOUNTAIN_CHILI, CRYSTAL_CAKE, CAVE_KEBAB, HOT_LOG, SOUR_SALAD, SUPERFOOD_CAKE, WARRIOR_SMOOTHIE, RUMPLED_FRUIT_SKIN, CALICO_PIZZA,
             STUFFED_MUSHROOMS, ELF_QUESADILLA, NACHOS_OF_THE_DESERT, CLOPPINO, RAINFOREST_SHRIMP, SHRIMP_DONUT, SMELL_OF_THE_SEA, DESERT_GUMBO,
@@ -137,7 +135,7 @@ namespace StardewArchipelago.Locations.Festival
         };
         private static readonly string[] TROUT_DERBY_ALL = TROUT_DERBY_REWARDS;
         private static readonly string[] SQUIDFEST_ALL = Array.Empty<string>();
-        private static readonly string[] NIGHT_MARKET_ALL = new[] { MERMAID_PEARL, CONE_HAT, IRIDIUM_FIREPLACE, RARECROW_7, RARECROW_8 };
+        private static readonly string[] NIGHT_MARKET_ALL = { MERMAID_PEARL, CONE_HAT, IRIDIUM_FIREPLACE, RARECROW_7, RARECROW_8 };
 
         public static readonly Dictionary<string, string[]> LocationsByFestival = new()
         {

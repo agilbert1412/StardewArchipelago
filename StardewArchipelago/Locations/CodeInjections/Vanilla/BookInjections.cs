@@ -12,6 +12,7 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 using Object = StardewValley.Object;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {

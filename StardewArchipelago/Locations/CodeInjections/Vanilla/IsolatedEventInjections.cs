@@ -13,6 +13,7 @@ using StardewValley.Tools;
 using xTile.Dimensions;
 using Object = StardewValley.Object;
 using Rectangle = xTile.Dimensions.Rectangle;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {

@@ -5,6 +5,7 @@ using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewArchipelago.Constants.Locations;
 using StardewModdingAPI;
 using StardewValley.Menus;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {

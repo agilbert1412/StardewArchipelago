@@ -7,8 +7,8 @@ namespace StardewArchipelago.Constants
 {
     public static class GameStateConditionProvider
     {
-        private static readonly string[] _progressiveBuildings = new[] { "Coop", "Barn", "Shed" };
-        private static readonly string[] _progressiveBuildingPrefixes = new[] { string.Empty, Prefix.BUILDING_BIG, Prefix.BUILDING_DELUXE };
+        private static readonly string[] _progressiveBuildings = { "Coop", "Barn", "Shed" };
+        private static readonly string[] _progressiveBuildingPrefixes = { string.Empty, Prefix.BUILDING_BIG, Prefix.BUILDING_DELUXE };
 
         public static string CreateHasReceivedItemCondition(string itemName, int amount = 1)
         {
