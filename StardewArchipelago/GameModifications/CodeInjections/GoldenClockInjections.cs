@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using StardewArchipelago.Archipelago;
 using StardewValley;
 using StardewValley.Buildings;
 
@@ -10,10 +11,10 @@ namespace StardewArchipelago.GameModifications.CodeInjections
     public static class GoldenClockInjections
     {
         private static ILogger _logger;
-        private static ArchipelagoClient _archipelago;
+        private static StardewArchipelagoClient _archipelago;
         private static uint _lastDayGoldClockToggled;
 
-        public static void Initialize(ILogger logger, ArchipelagoClient archipelago)
+        public static void Initialize(ILogger logger, StardewArchipelagoClient archipelago)
         {
             _logger = logger;
             _archipelago = archipelago;

@@ -1,4 +1,5 @@
-﻿using StardewArchipelago.Stardew;
+﻿using KaitoKid.ArchipelagoUtilities.Net;
+using StardewArchipelago.Stardew;
 
 namespace StardewArchipelago.Locations.Modded.SVE
 {

@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Netcode;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
+using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Items.Traps;
@@ -23,14 +24,14 @@ namespace StardewArchipelago.Items.Mail
     {
         private readonly IModHelper _modHelper;
         private readonly Mailman _mail;
-        private ArchipelagoClient _archipelago;
+        private StardewArchipelagoClient _archipelago;
         private WeaponsManager _weaponsManager;
         private readonly TrapManager _trapManager;
         private readonly BabyBirther _babyBirther;
         private readonly ToolUpgrader _toolUpgrader;
         private Dictionary<string, Action<string>> _letterActions;
 
-        public LetterActions(IModHelper modHelper, Mailman mail, ArchipelagoClient archipelago, WeaponsManager weaponsManager, TrapManager trapManager, BabyBirther babyBirther, StardewItemManager _stardewItemManager)
+        public LetterActions(IModHelper modHelper, Mailman mail, StardewArchipelagoClient archipelago, WeaponsManager weaponsManager, TrapManager trapManager, BabyBirther babyBirther, StardewItemManager _stardewItemManager)
         {
             _modHelper = modHelper;
             _mail = mail;

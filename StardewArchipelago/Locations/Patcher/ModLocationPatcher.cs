@@ -17,7 +17,7 @@ namespace StardewArchipelago.Locations.Patcher
 {
     public class ModLocationPatcher : ILocationPatcher
     {
-        private readonly ArchipelagoClient _archipelago;
+        private readonly StardewArchipelagoClient _archipelago;
         private readonly Harmony _harmony;
         private readonly ILogger _logger;
         private readonly IModHelper _modHelper;
@@ -25,7 +25,7 @@ namespace StardewArchipelago.Locations.Patcher
         private TemperedShopStockModifier _temperedShopStockModifier;
         private BearShopStockModifier _bearShopStockModifier;
 
-        public ModLocationPatcher(Harmony harmony, ILogger logger, IModHelper modHelper, ArchipelagoClient archipelago, StardewItemManager stardewItemManager)
+        public ModLocationPatcher(Harmony harmony, ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager)
         {
             _archipelago = archipelago;
             _harmony = harmony;

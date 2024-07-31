@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
 
 namespace StardewArchipelago.Integrations.GenericModConfigMenu

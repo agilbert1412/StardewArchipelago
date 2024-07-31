@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Force.DeepCloner;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
+using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Vanilla;
 using StardewValley;
 
@@ -15,7 +16,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
         private const string MONSTER_HEADER = "Strings\\Locations:AdventureGuild_KillList_Header";
         private const string MONSTER_FOOTER = "Strings\\Locations:AdventureGuild_KillList_Footer";
 
-        private ArchipelagoClient _archipelago;
+        private StardewArchipelagoClient _archipelago;
 
         public readonly Dictionary<string, string[]> MonstersByCategory = new()
         {
@@ -51,7 +52,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
         public Dictionary<string, int> MonsterGoals { get; private set; }
         public Dictionary<string, string> MonsterCategories { get; private set; }
 
-        public MonsterKillList(ArchipelagoClient archipelago)
+        public MonsterKillList(StardewArchipelagoClient archipelago)
         {
             _archipelago = archipelago;
             MonsterCategories = new Dictionary<string, string>();

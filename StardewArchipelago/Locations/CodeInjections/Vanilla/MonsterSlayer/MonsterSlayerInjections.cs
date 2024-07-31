@@ -8,6 +8,8 @@ using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Monsters;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.ArchipelagoUtilities.Net;
+using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
 {
@@ -17,11 +19,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
 
         private static ILogger _logger;
         private static IModHelper _modHelper;
-        private static ArchipelagoClient _archipelago;
+        private static StardewArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
         private static MonsterKillList _killList;
 
-        public static void Initialize(ILogger logger, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker, MonsterKillList killList)
+        public static void Initialize(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, LocationChecker locationChecker, MonsterKillList killList)
         {
             _logger = logger;
             _modHelper = modHelper;
@@ -77,8 +79,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
             }
             catch (Exception ex)
             {
-                _logger.Log($"Failed in {nameof(ShowMonsterKillList_CustomListFromAP_Prefix)}:\n{ex}",
-                    LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(ShowMonsterKillList_CustomListFromAP_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -118,8 +119,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
             }
             catch (Exception ex)
             {
-                _logger.Log($"Failed in {nameof(MonsterKilled_SendMonstersanityCheck_Postfix)}:\n{ex}",
-                    LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(MonsterKilled_SendMonstersanityCheck_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -134,8 +134,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
             }
             catch (Exception ex)
             {
-                _logger.Log($"Failed in {nameof(MonsterKilled_CheckGoalCompletion_Postfix)}:\n{ex}",
-                    LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(MonsterKilled_CheckGoalCompletion_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -224,7 +223,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
                 }
             }
 
-            _logger.Log($"Could not find a monster slayer category for monster {name}");
+            _logger.LogDebug($"Could not find a monster slayer category for monster {name}");
             return "";
         }
 
@@ -245,7 +244,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
             }
             else
             {
-                _logger.LogInfo($"Tried to check a monster slayer goal, but it doesn't exist! [{apLocation}]");
+                _logger.LogDebug($"Tried to check a monster slayer goal, but it doesn't exist! [{apLocation}]");
             }
         }
     }

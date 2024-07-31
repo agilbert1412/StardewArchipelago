@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
+using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.Stardew;
 
@@ -12,13 +13,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
 
         public Dictionary<string, Dictionary<StardewObject, int>> GrabberItems { get; private set; }
 
-        public VillagerGrabber(ArchipelagoClient archipelago, StardewItemManager itemManager)
+        public VillagerGrabber(StardewArchipelagoClient archipelago, StardewItemManager itemManager)
         {
             _itemManager = itemManager;
             InitializeGrabberItems(archipelago);
         }
 
-        private void InitializeGrabberItems(ArchipelagoClient archipelago)
+        private void InitializeGrabberItems(StardewArchipelagoClient archipelago)
         {
             GrabberItems = new Dictionary<string, Dictionary<StardewObject, int>>();
 
@@ -67,13 +68,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
             InitializeModGrabberItems(archipelago);
         }
 
-        private void InitializeModGrabberItems(ArchipelagoClient archipelago)
+        private void InitializeModGrabberItems(StardewArchipelagoClient archipelago)
         {
             InitializeSVEGrabberItems(archipelago);
             InitializeJunaGrabberItems(archipelago);
         }
 
-        private void InitializeSVEGrabberItems(ArchipelagoClient archipelago)
+        private void InitializeSVEGrabberItems(StardewArchipelagoClient archipelago)
         {
             if (!archipelago.SlotData.Mods.HasMod(ModNames.SVE))
             {
@@ -95,7 +96,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
             AddGrabberItem("Victor", new[] { "Spaghetti", "Battery Pack", "Duck Feather", "Blue Moon Wine", "Aged Blue Moon Wine", "Butterfish" });
         }
 
-        private void InitializeJunaGrabberItems(ArchipelagoClient archipelago)
+        private void InitializeJunaGrabberItems(StardewArchipelagoClient archipelago)
         {
             if (!archipelago.SlotData.Mods.HasMod(ModNames.JUNA))
             {

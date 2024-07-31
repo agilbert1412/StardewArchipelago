@@ -8,6 +8,7 @@ using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley.GameData.Buildings;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -15,9 +16,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
     {
         protected static ILogger _logger;
         protected static IModHelper _helper;
-        protected static ArchipelagoClient _archipelago;
+        protected static StardewArchipelagoClient _archipelago;
 
-        public CarpenterBuildingsModifier(ILogger logger, IModHelper helper, ArchipelagoClient archipelago)
+        public CarpenterBuildingsModifier(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago)
         {
             _logger = logger;
             _helper = helper;

@@ -13,6 +13,8 @@ using StardewValley;
 using StardewValley.Locations;
 using Object = StardewValley.Object;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.ArchipelagoUtilities.Net;
+using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -20,11 +22,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
     {
         private static ILogger _logger;
         private static IModHelper _modHelper;
-        private static ArchipelagoClient _archipelago;
+        private static StardewArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
         private static QueenOfSauceManager _qosManager;
 
-        public static void Initialize(ILogger logger, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker, QueenOfSauceManager qosManager)
+        public static void Initialize(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, LocationChecker locationChecker, QueenOfSauceManager qosManager)
         {
             _logger = logger;
             _modHelper = modHelper;

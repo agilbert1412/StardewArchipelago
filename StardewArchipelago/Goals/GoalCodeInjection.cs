@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using Microsoft.Xna.Framework.Audio;
-using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
@@ -11,6 +11,8 @@ using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Menus;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using StardewArchipelago.Archipelago;
+using StardewArchipelago.Locations;
 
 namespace StardewArchipelago.Goals
 {
@@ -20,12 +22,12 @@ namespace StardewArchipelago.Goals
 
         private static ILogger _logger;
         private static IModHelper _modHelper;
-        private static ArchipelagoClient _archipelago;
-        private static LocationChecker _locationChecker;
+        private static StardewArchipelagoClient _archipelago;
+        private static StardewLocationChecker _locationChecker;
         private static BundleReader _bundleReader;
         private static MonsterKillList _killList;
 
-        public static void Initialize(ILogger logger, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker, BundleReader bundleReader, MonsterKillList killList)
+        public static void Initialize(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker, BundleReader bundleReader, MonsterKillList killList)
         {
             _logger = logger;
             _modHelper = modHelper;

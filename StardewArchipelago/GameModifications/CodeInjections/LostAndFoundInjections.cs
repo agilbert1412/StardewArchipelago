@@ -1,6 +1,7 @@
 ﻿using System;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using StardewArchipelago.Archipelago;
 using StardewValley;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
@@ -8,9 +9,9 @@ namespace StardewArchipelago.GameModifications.CodeInjections
     public static class LostAndFoundInjections
     {
         private static ILogger _logger;
-        private static ArchipelagoClient _archipelago;
+        private static StardewArchipelagoClient _archipelago;
 
-        public static void Initialize(ILogger logger, ArchipelagoClient archipelago)
+        public static void Initialize(ILogger logger, StardewArchipelagoClient archipelago)
         {
             _logger = logger;
             _archipelago = archipelago;

@@ -2,6 +2,7 @@
 using Netcode;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using StardewArchipelago.Archipelago;
 using StardewArchipelago.Items.Unlocks.Vanilla;
 using StardewModdingAPI;
 using StardewValley;
@@ -17,9 +18,9 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
         private static ILogger _logger;
         private static IModHelper _modHelper;
-        private static ArchipelagoClient _archipelago;
+        private static StardewArchipelagoClient _archipelago;
 
-        public static void Initialize(ILogger logger, IModHelper modHelper, ArchipelagoClient archipelago)
+        public static void Initialize(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago)
         {
             _logger = logger;
             _modHelper = modHelper;

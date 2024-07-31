@@ -1,4 +1,5 @@
 using KaitoKid.ArchipelagoUtilities.Net.Client;
+using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Modded;
 using StardewValley;
 
@@ -9,9 +10,9 @@ namespace StardewArchipelago.GameModifications.Modded
         private const string JUNA_MAIL_ONE = "JunaWizardletter2";
         private const string JUNA_MAIL_TWO = "JunaWizardletter4";
 
-        public void CheckJunaHearts(ArchipelagoClient _archipelago)
+        public void CheckJunaHearts(StardewArchipelagoClient archipelago)
         {
-            if (_archipelago == null || !_archipelago.SlotData.Mods.HasMod(ModNames.JUNA))
+            if (archipelago == null || !archipelago.SlotData.Mods.HasMod(ModNames.JUNA))
             {
                 return;
             }

@@ -16,6 +16,9 @@ using StardewValley.BellsAndWhistles;
 using StardewValley.Locations;
 using StardewValley.Menus;
 using Bundle = StardewValley.Menus.Bundle;
+using KaitoKid.ArchipelagoUtilities.Net;
+using StardewArchipelago.Logging;
+using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 {
@@ -24,14 +27,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         private const int REMIXED_BUNDLE_INDEX_THRESHOLD = 100;
         private const int CUSTOM_BUNDLE_INDEX_THRESHOLD = 200;
 
-        private static ILogger _logger;
+        private static LogHandler _logger;
         private static IModHelper _modHelper;
-        private static ArchipelagoClient _archipelago;
+        private static StardewArchipelagoClient _archipelago;
         private static ArchipelagoStateDto _state;
         private static LocationChecker _locationChecker;
         private static BundleReader _bundleReader;
 
-        public static void Initialize(ILogger logger, IModHelper modHelper, ArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, BundleReader bundleReader)
+        public static void Initialize(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, BundleReader bundleReader)
         {
             _logger = logger;
             _modHelper = modHelper;

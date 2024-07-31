@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Extensions;
 using StardewArchipelago.Locations;
@@ -25,14 +26,14 @@ namespace StardewArchipelago.GameModifications.Tooltips
         private static ILogger _logger;
         private static IModHelper _modHelper;
         private static ModConfig _config;
-        private static ArchipelagoClient _archipelago;
+        private static StardewArchipelagoClient _archipelago;
         private static StardewLocationChecker _locationChecker;
         private static Friends _friends;
         private static Texture2D _bigArchipelagoIcon;
         private static Texture2D _miniArchipelagoIcon;
         private static Texture2D _travelingMerchantIcon;
 
-        public static void Initialize(LogHandler logger, IModHelper modHelper, ModConfig config, ArchipelagoClient archipelago, StardewLocationChecker locationChecker, Friends friends)
+        public static void Initialize(LogHandler logger, IModHelper modHelper, ModConfig config, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker, Friends friends)
         {
             _logger = logger;
             _modHelper = modHelper;

@@ -3,6 +3,7 @@ using StardewValley;
 using System;
 using System.Diagnostics;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
 {
@@ -11,9 +12,9 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         private const bool DebugStackTraces = true;
 
         private static ILogger _logger;
-        private static ArchipelagoClient _archipelago;
+        private static StardewArchipelagoClient _archipelago;
 
-        public static void Initialize(ILogger logger, ArchipelagoClient archipelago)
+        public static void Initialize(ILogger logger, StardewArchipelagoClient archipelago)
         {
             _logger = logger;
             _archipelago = archipelago;

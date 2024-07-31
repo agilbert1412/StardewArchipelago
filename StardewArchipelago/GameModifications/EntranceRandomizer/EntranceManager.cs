@@ -26,7 +26,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
         private HashSet<string> _checkedEntrancesToday;
         private Dictionary<string, WarpRequest> generatedWarps;
 
-        public EntranceManager(ILogger logger, ArchipelagoClient archipelago, ArchipelagoStateDto state)
+        public EntranceManager(ILogger logger, StardewArchipelagoClient archipelago, ArchipelagoStateDto state)
         {
             _logger = logger;
             _equivalentAreas = new EquivalentWarps(archipelago);

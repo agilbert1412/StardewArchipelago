@@ -2,7 +2,9 @@
 using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Vanilla;
+using StardewArchipelago.Locations;
 using StardewValley;
 using StardewValley.Extensions;
 using Object = StardewValley.Object;
@@ -15,10 +17,10 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         private const string SECRET_NOTE_ID = "(O)79";
 
         private static ILogger _logger;
-        private static ArchipelagoClient _archipelago;
-        private static LocationChecker _locationChecker;
+        private static StardewArchipelagoClient _archipelago;
+        private static StardewLocationChecker _locationChecker;
 
-        public static void Initialize(ILogger logger, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(ILogger logger, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker)
         {
             _logger = logger;
             _archipelago = archipelago;

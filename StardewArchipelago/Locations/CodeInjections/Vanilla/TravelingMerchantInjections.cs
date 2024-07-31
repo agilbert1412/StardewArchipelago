@@ -16,6 +16,9 @@ using StardewValley.Menus;
 using xTile.Dimensions;
 using Object = StardewValley.Object;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.ArchipelagoUtilities.Net;
+using StardewArchipelago.Archipelago;
+using StardewArchipelago.Logging;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -35,15 +38,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private const string AP_METAL_DETECTOR = "Traveling Merchant Metal Detector"; // Base Price 140%, 8 x 10% discount
         private const string AP_WEDDING_RING_RECIPE = "Wedding Ring Recipe";
 
-        private static ILogger _logger;
+        private static LogHandler _logger;
         private static IModHelper _modHelper;
-        private static ArchipelagoClient _archipelago;
-        private static LocationChecker _locationChecker;
+        private static StardewArchipelagoClient _archipelago;
+        private static StardewLocationChecker _locationChecker;
         private static ArchipelagoStateDto _archipelagoState;
 
         private static Dictionary<ISalable, string> _flairOverride;
 
-        public static void Initialize(ILogger logger, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker, ArchipelagoStateDto archipelagoState)
+        public static void Initialize(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker, ArchipelagoStateDto archipelagoState)
         {
             _logger = logger;
             _modHelper = modHelper;
@@ -225,8 +228,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
         private static double GetRandomItemStockSize(int stockUpgrades)
         {
-            double checksCompleted = _archipelago.Session.Locations.AllLocationsChecked.Count;
-            double totalChecks = _archipelago.Session.Locations.AllLocations.Count;
+            double checksCompleted = _archipelago.GetSession().Locations.AllLocationsChecked.Count;
+            double totalChecks = _archipelago.GetSession().Locations.AllLocations.Count;
             var checksPercentComplete = (checksCompleted / totalChecks) * 100;
             var totalPurchases = _archipelagoState.TravelingMerchantPurchases;
             var stockFromApItems = stockUpgrades * STOCK_AMOUNT_PER_UPGRADE_FOR_RANDOM_ITEMS;

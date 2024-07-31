@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Stardew.Ids.Vanilla;
 using StardewModdingAPI;
@@ -18,11 +19,11 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         private const string MOVIE_THEATER = "MovieTheater";
         private static ILogger _logger;
         private static IModHelper _modHelper;
-        private static ArchipelagoClient _archipelago;
+        private static StardewArchipelagoClient _archipelago;
 
         private static Point GetMissingBundleTile(GameLocation location) => location is MovieTheater ? new Point(17, 8) : new Point(8, 8);
 
-        public static void Initialize(ILogger logger, IModHelper modHelper, ArchipelagoClient archipelago)
+        public static void Initialize(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago)
         {
             _logger = logger;
             _modHelper = modHelper;

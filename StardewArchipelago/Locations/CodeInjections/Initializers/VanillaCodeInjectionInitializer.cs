@@ -12,6 +12,7 @@ using StardewArchipelago.Locations.CodeInjections.Vanilla.Quests;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity;
 using StardewArchipelago.Locations.Festival;
+using StardewArchipelago.Logging;
 using StardewArchipelago.Serialization;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
@@ -20,7 +21,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
 {
     public static class VanillaCodeInjectionInitializer
     {
-        public static void Initialize(ILogger logger, IModHelper modHelper, ModConfig config, ArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, StardewItemManager itemManager, WeaponsManager weaponsManager, BundlesManager bundlesManager, Friends friends)
+        public static void Initialize(LogHandler logger, IModHelper modHelper, ModConfig config, StardewArchipelagoClient archipelago, ArchipelagoStateDto state, StardewLocationChecker locationChecker, StardewItemManager itemManager, WeaponsManager weaponsManager, BundlesManager bundlesManager, Friends friends)
         {
             BackpackInjections.Initialize(logger, archipelago, locationChecker);
             ScytheInjections.Initialize(logger, locationChecker);
@@ -62,7 +63,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             EventInjections.Initialize(logger, modHelper, archipelago, locationChecker);
         }
 
-        private static void InitializeBundleInjections(ILogger logger, IModHelper modHelper, ArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, BundlesManager bundlesManager, BundleReader bundleReader)
+        private static void InitializeBundleInjections(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, BundlesManager bundlesManager, BundleReader bundleReader)
         {
             CommunityCenterInjections.Initialize(logger, archipelago, locationChecker, bundleReader);
             JunimoNoteMenuInjections.Initialize(logger, modHelper, archipelago, state, locationChecker, bundleReader);
@@ -70,7 +71,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             RaccoonInjections.Initialize(logger, modHelper, archipelago, state, locationChecker, bundlesManager);
         }
 
-        private static void InitializeSkills(ILogger logger, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        private static void InitializeSkills(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             SkillInjections.Initialize(logger, modHelper, archipelago, locationChecker);
 
@@ -82,7 +83,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             MasteriesInjections.Initialize(logger, modHelper, archipelago, locationChecker);
         }
 
-        private static void InitializeFestivalPatches(ILogger logger, IModHelper modHelper, ArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker)
+        private static void InitializeFestivalPatches(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker)
         {
             EggFestivalInjections.Initialize(logger, modHelper, archipelago, locationChecker);
             DesertFestivalInjections.Initialize(logger, modHelper, archipelago, locationChecker);
@@ -99,7 +100,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             WinterStarInjections.Initialize(logger, modHelper, archipelago, locationChecker);
         }
 
-        private static void InitializeWalnutsanityInjections(ILogger logger, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        private static void InitializeWalnutsanityInjections(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             WalnutPuzzleInjections.Initialize(logger, modHelper, archipelago, locationChecker);
             WalnutBushInjections.Initialize(logger, modHelper, archipelago, locationChecker);

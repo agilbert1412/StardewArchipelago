@@ -11,13 +11,13 @@ namespace StardewArchipelago.Archipelago
     public class DeathManager
     {
         private static ILogger _logger;
-        private static ArchipelagoClient _archipelago;
+        private static StardewArchipelagoClient _archipelago;
         private IModHelper _modHelper;
         private Harmony _harmony;
 
         private static bool _isCurrentlyReceivingDeathLink = false;
 
-        public DeathManager(ILogger logger, IModHelper modHelper, Harmony harmony, ArchipelagoClient archipelago)
+        public DeathManager(ILogger logger, IModHelper modHelper, Harmony harmony, StardewArchipelagoClient archipelago)
         {
             _logger = logger;
             _modHelper = modHelper;

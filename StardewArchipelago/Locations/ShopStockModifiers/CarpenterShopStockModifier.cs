@@ -13,6 +13,7 @@ using StardewValley;
 using StardewValley.GameData.Shops;
 using Object = StardewValley.Object;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.Locations.ShopStockModifiers
 {
@@ -44,7 +45,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
         public const string TRACTOR_GARAGE_ID = "Pathoschild.TractorMod_Stable";
         public const string TRACTOR_GARAGE_NAME = "Tractor Garage";
 
-        public CarpenterShopStockModifier(ILogger logger, IModHelper modHelper, ArchipelagoClient archipelago, StardewItemManager stardewItemManager) : base(logger, modHelper, archipelago, stardewItemManager)
+        public CarpenterShopStockModifier(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager) : base(logger, modHelper, archipelago, stardewItemManager)
         {
         }
 

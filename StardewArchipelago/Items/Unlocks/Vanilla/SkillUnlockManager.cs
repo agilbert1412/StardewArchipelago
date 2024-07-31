@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
+using StardewArchipelago.Archipelago;
 using StardewArchipelago.Extensions;
 using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
@@ -12,9 +13,9 @@ namespace StardewArchipelago.Items.Unlocks.Vanilla
 {
     public class SkillUnlockManager : IUnlockManager
     {
-        private ArchipelagoClient _archipelago;
+        private StardewArchipelagoClient _archipelago;
 
-        public SkillUnlockManager(ArchipelagoClient archipelago)
+        public SkillUnlockManager(StardewArchipelagoClient archipelago)
         {
             _archipelago = archipelago;
         }

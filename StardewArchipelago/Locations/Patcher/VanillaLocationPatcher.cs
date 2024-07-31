@@ -37,7 +37,7 @@ namespace StardewArchipelago.Locations.Patcher
 {
     public class VanillaLocationPatcher : ILocationPatcher
     {
-        private readonly ArchipelagoClient _archipelago;
+        private readonly StardewArchipelagoClient _archipelago;
         private readonly Harmony _harmony;
         private readonly IModHelper _modHelper;
         private readonly GingerIslandPatcher _gingerIslandPatcher;
@@ -52,7 +52,7 @@ namespace StardewArchipelago.Locations.Patcher
         private readonly CraftingRecipePurchaseStockModifier _craftingRecipePurchaseStockModifier;
         private readonly KrobusStockModifier _krobusStockModifier;
 
-        public VanillaLocationPatcher(ILogger logger, IModHelper modHelper, Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager stardewItemManager)
+        public VanillaLocationPatcher(ILogger logger, IModHelper modHelper, Harmony harmony, StardewArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager stardewItemManager)
         {
             _archipelago = archipelago;
             _harmony = harmony;

@@ -9,6 +9,8 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.ArchipelagoUtilities.Net;
+using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -26,11 +28,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
         private static ILogger _logger;
         private static IModHelper _helper;
-        private static ArchipelagoClient _archipelago;
+        private static StardewArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
         private static Dictionary<Skill, double> _archipelagoExperience = new();
 
-        public static void Initialize(ILogger logger, IModHelper modHelper, ArchipelagoClient archipelago,
+        public static void Initialize(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago,
             LocationChecker locationChecker)
         {
             _logger = logger;
@@ -195,8 +197,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _logger.Log($"Failed in {nameof(AddExperience_ArchipelagoModExperience_Prefix)}:\n{ex}",
-                    LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(AddExperience_ArchipelagoModExperience_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }

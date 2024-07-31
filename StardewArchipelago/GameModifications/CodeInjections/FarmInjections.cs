@@ -27,9 +27,9 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         };
 
         private static ILogger _logger;
-        private static ArchipelagoClient _archipelago;
+        private static StardewArchipelagoClient _archipelago;
 
-        public static void Initialize(ILogger logger, ArchipelagoClient archipelago)
+        public static void Initialize(ILogger logger, StardewArchipelagoClient archipelago)
         {
             _logger = logger;
             _archipelago = archipelago;

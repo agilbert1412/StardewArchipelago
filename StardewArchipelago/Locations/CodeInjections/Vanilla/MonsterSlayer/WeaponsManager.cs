@@ -19,7 +19,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
         public const string TYPE_SWORD = "Sword";
         public const string TYPE_CLUB = "Club";
         public const string TYPE_DAGGER = "Dagger";
-        private readonly ArchipelagoClient _archipelago;
+        private readonly StardewArchipelagoClient _archipelago;
         private ModsManager _modsManager;
 
         private Dictionary<int, List<int>> _weaponWeightsByNumberOfTiers = new()
@@ -33,7 +33,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
         public Dictionary<int, List<StardewItem>> SlingshotsByTier { get; private set; }
         public List<StardewRing> Rings { get; private set; }
 
-        public WeaponsManager(ArchipelagoClient archipelago, StardewItemManager itemManager, ModsManager modsManager)
+        public WeaponsManager(StardewArchipelagoClient archipelago, StardewItemManager itemManager, ModsManager modsManager)
         {
             _archipelago = archipelago;
             _modsManager = modsManager;

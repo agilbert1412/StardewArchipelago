@@ -18,11 +18,11 @@ namespace StardewArchipelago.Archipelago.Gifting
     public class GiftSender
     {
         private readonly ILogger _logger;
-        private readonly ArchipelagoClient _archipelago;
+        private readonly StardewArchipelagoClient _archipelago;
         private readonly IGiftingService _giftService;
         internal GiftGenerator GiftGenerator { get; }
 
-        public GiftSender(ILogger logger, ArchipelagoClient archipelago, StardewItemManager itemManager, IGiftingService giftService)
+        public GiftSender(ILogger logger, StardewArchipelagoClient archipelago, StardewItemManager itemManager, IGiftingService giftService)
         {
             _logger = logger;
             _archipelago = archipelago;
@@ -64,8 +64,7 @@ namespace StardewArchipelago.Archipelago.Gifting
 
 
                 var success = _giftService.SendGift(giftItem, giftTraits, slotName, out var giftId);
-                _logger.Log($"Sending {giftOrTrap} of {giftItem.Amount} {giftItem.Name} to {slotName} with {giftTraits.Length} traits. [ID: {giftId}]",
-                    LogLevel.Info);
+                _logger.LogInfo($"Sending {giftOrTrap} of {giftItem.Amount} {giftItem.Name} to {slotName} with {giftTraits.Length} traits. [ID: {giftId}]");
                 if (!success)
                 {
                     _logger.LogError($"Gift Failed to send properly");

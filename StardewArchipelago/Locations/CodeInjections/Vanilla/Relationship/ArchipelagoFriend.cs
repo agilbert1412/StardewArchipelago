@@ -1,4 +1,5 @@
 ﻿using KaitoKid.ArchipelagoUtilities.Net.Client;
+using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
 {
@@ -23,7 +24,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
             Child = child;
         }
 
-        public int ShuffledUpTo(ArchipelagoClient archipelago)
+        public int ShuffledUpTo(StardewArchipelagoClient archipelago)
         {
             const int maxHeart = 14;
             for (var i = maxHeart; i > 0; i--)

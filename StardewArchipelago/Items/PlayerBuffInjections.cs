@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
 using StardewModdingAPI;
 using StardewValley;
@@ -16,7 +17,7 @@ namespace StardewArchipelago.Items
     {
         private static ILogger _logger;
         private static IModHelper _helper;
-        private static ArchipelagoClient _archipelago;
+        private static StardewArchipelagoClient _archipelago;
 
         private static int _numberOfSpeedBonuses = 0;
         private static int _numberOfLuckBonuses = 0;
@@ -31,7 +32,7 @@ namespace StardewArchipelago.Items
         // private static int _numberOfQualityBonuses = 0; // I might implement this someday
         // private static int _numberOfGlowBonuses = 0; // I might implement this someday
 
-        public static void Initialize(ILogger logger, IModHelper helper, ArchipelagoClient archipelago)
+        public static void Initialize(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago)
         {
             _logger = logger;
             _helper = helper;

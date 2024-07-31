@@ -1,3 +1,6 @@
+using FluentAssertions;
+using StardewArchipelago.Archipelago;
+
 namespace StardewArchipelagoTests
 {
     public class VersionValidatorTests

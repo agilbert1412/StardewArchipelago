@@ -23,7 +23,7 @@ namespace StardewArchipelago.Archipelago.Gifting
         private static ILogger _logger;
         private StardewItemManager _itemManager;
         private Mailman _mail;
-        private ArchipelagoClient _archipelago;
+        private StardewArchipelagoClient _archipelago;
         private IGiftingService _giftService;
         private GiftSender _giftSender;
         private GiftReceiver _giftReceiver;
@@ -35,7 +35,7 @@ namespace StardewArchipelago.Archipelago.Gifting
         {
         }
 
-        public void Initialize(ILogger logger, ArchipelagoClient archipelago, StardewItemManager itemManager, Mailman mail)
+        public void Initialize(ILogger logger, StardewArchipelagoClient archipelago, StardewItemManager itemManager, Mailman mail)
         {
             if (!archipelago.SlotData.Gifting)
             {
@@ -46,7 +46,7 @@ namespace StardewArchipelago.Archipelago.Gifting
             _itemManager = itemManager;
             _mail = mail;
             _archipelago = archipelago;
-            _giftService = new GiftingService(archipelago.Session);
+            _giftService = new GiftingService(archipelago.GetSession());
             _giftSender = new GiftSender(_logger, _archipelago, _itemManager, _giftService);
 
             _giftService.OpenGiftBox(true, _desiredTraits);

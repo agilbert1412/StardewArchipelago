@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Archipelago;
@@ -25,7 +26,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
         private const string GAZETTE_CHAOS_EPISODE =
             "On today's episode, our agent {0} has was sent to explore... but we haven't heard back from them. Let's send them thoughts and prayers! Don't walk outside unprepared, kids!";
 
-        private static LogHandler _logger;
+        private static ILogger _logger;
         private static IModHelper _modHelper;
         private static StardewArchipelagoClient _archipelago;
         private static EntranceManager _entranceManager;
@@ -41,7 +42,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
             _entranceManager = entranceManager;
             _state = state;
 
-            _gazetteTexture = TexturesLoader.GetTexture(_logger, _modHelper, Path.Combine("Gazette", "gazette_all.png"));
+            _gazetteTexture = TexturesLoader.GetTexture(logger, _modHelper, Path.Combine("Gazette", "gazette_all.png"));
         }
 
         private static IReflectedField<int> GetCurrentChannelField(TV tv)

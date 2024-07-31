@@ -3,6 +3,8 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using StardewArchipelago.Archipelago;
 using StardewArchipelago.Locations;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Logging;
@@ -17,15 +19,15 @@ namespace StardewArchipelago.GameModifications.Tooltips
 {
     public class ItemTooltipInjections
     {
-        private static LogHandler _logger;
+        private static ILogger _logger;
         private static IModHelper _modHelper;
         private static ModConfig _config;
-        private static ArchipelagoClient _archipelago;
+        private static StardewArchipelagoClient _archipelago;
         private static StardewLocationChecker _locationChecker;
         private static NameSimplifier _nameSimplifier;
         private static Texture2D _miniArchipelagoIcon;
 
-        public static void Initialize(LogHandler logger, IModHelper modHelper, ModConfig config, ArchipelagoClient archipelago, StardewLocationChecker locationChecker, NameSimplifier nameSimplifier)
+        public static void Initialize(LogHandler logger, IModHelper modHelper, ModConfig config, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker, NameSimplifier nameSimplifier)
         {
             _logger = logger;
             _modHelper = modHelper;

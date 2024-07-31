@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using HarmonyLib;
-using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework;
 using Newtonsoft.Json;
 using StardewArchipelago.Archipelago;
@@ -59,7 +59,7 @@ namespace StardewArchipelago
         private Mailman _mail;
         private ChatForwarder _chatForwarder;
         private IGiftHandler _giftHandler;
-        private ItemManager _itemManager;
+        private APItemManager _itemManager;
         private WeaponsManager _weaponsManager;
         private RandomizedLogicPatcher _logicPatcher;
         private MailPatcher _mailPatcher;
@@ -82,8 +82,10 @@ namespace StardewArchipelago
         private InitialModGameStateInitializer _modStateInitializer;
         private ModifiedVillagerEventChecker _villagerEvents;
 
-        public ArchipelagoStateDto State { get; set; }
         private ArchipelagoConnectionInfo _apConnectionOverride;
+
+        public ArchipelagoStateDto State { get; set; }
+        public ILogger Logger => _logger;
 
         public ModEntry() : base()
         {
@@ -287,16 +289,12 @@ namespace StardewArchipelago
         {
             if (state.APConnectionInfo == null)
             {
-                _logger.Log(
-                    $"About to write Archipelago State data, but the connectionInfo is null! This should never happen. Please contact KaitoKid and describe what you did last so it can be investigated.",
-                    LogLevel.Error);
+                _logger.Log($"About to write Archipelago State data, but the connectionInfo is null! This should never happen. Please contact KaitoKid and describe what you did last so it can be investigated.", LogLevel.Error);
             }
 
             if (state.LettersGenerated == null)
             {
-                _logger.Log(
-                    $"About to write Archipelago State data, but the there are no custom letters! This should never happen. Please contact KaitoKid and describe what you did last so it can be investigated.",
-                    LogLevel.Error);
+                _logger.Log($"About to write Archipelago State data, but the there are no custom letters! This should never happen. Please contact KaitoKid and describe what you did last so it can be investigated.", LogLevel.Error);
             }
         }
 
@@ -347,7 +345,7 @@ namespace StardewArchipelago
 
             var babyBirther = new BabyBirther();
             _giftHandler.Initialize(_logger, _archipelago, _stardewItemManager, _mail);
-            _itemManager = new ItemManager(_logger, _helper, _harmony, _archipelago, _locationChecker, _stardewItemManager, _mail, tileChooser, babyBirther, _giftHandler.Sender, State.ItemsReceived);
+            _itemManager = new APItemManager(_logger, _helper, _harmony, _archipelago, _locationChecker, _stardewItemManager, _mail, tileChooser, babyBirther, _giftHandler.Sender, State.ItemsReceived);
             _weaponsManager = new WeaponsManager(_archipelago, _stardewItemManager, _archipelago.SlotData.Mods);
             _mailPatcher = new MailPatcher(_logger, _harmony, _archipelago, _locationChecker, State, new LetterActions(_helper, _mail, _archipelago, _weaponsManager, _itemManager.TrapManager, babyBirther, _stardewItemManager));
             _bundlesManager = new BundlesManager(_helper, _stardewItemManager, _archipelago.SlotData.BundlesData);

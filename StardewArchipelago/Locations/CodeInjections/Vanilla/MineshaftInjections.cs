@@ -14,6 +14,9 @@ using StardewValley.Tools;
 using xTile.Dimensions;
 using Rectangle = xTile.Dimensions.Rectangle;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.ArchipelagoUtilities.Net;
+using StardewArchipelago.Archipelago;
+using StardewArchipelago.Logging;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -24,11 +27,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
         private static ILogger _logger;
         private static ModConfig _config;
-        private static ArchipelagoClient _archipelago;
+        private static StardewArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
         private static Texture2D _miniArchipelagoIcon;
 
-        public static void Initialize(ILogger logger, IModHelper modHelper, ModConfig config, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(LogHandler logger, IModHelper modHelper, ModConfig config, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             _logger = logger;
             _config = config;

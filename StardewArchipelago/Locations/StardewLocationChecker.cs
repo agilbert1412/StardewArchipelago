@@ -2,6 +2,7 @@
 using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using StardewArchipelago.Archipelago;
 using StardewArchipelago.Goals;
 
 namespace StardewArchipelago.Locations
@@ -10,7 +11,7 @@ namespace StardewArchipelago.Locations
     {
         private readonly LocationNameMatcher _locationNameMatcher;
 
-        public StardewLocationChecker(ILogger logger, ArchipelagoClient archipelago, List<string> locationsAlreadyChecked) : base(logger, archipelago, locationsAlreadyChecked)
+        public StardewLocationChecker(ILogger logger, StardewArchipelagoClient archipelago, List<string> locationsAlreadyChecked) : base(logger, archipelago, locationsAlreadyChecked)
         {
             _locationNameMatcher = new LocationNameMatcher();
         }

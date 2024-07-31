@@ -21,6 +21,8 @@ using xTile.Dimensions;
 using EventIds = StardewArchipelago.Stardew.Ids.Vanilla.EventIds;
 using Object = StardewValley.Object;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.ArchipelagoUtilities.Net;
+using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
 {
@@ -35,11 +37,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
 
         private static ILogger _logger;
         private static IModHelper _helper;
-        private static ArchipelagoClient _archipelago;
+        private static StardewArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
         private static LocalizedContentManager _englishContentManager;
 
-        public static void Initialize(ILogger logger, IModHelper helper, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             _logger = logger;
             _helper = helper;
@@ -608,8 +610,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
             }
             catch (Exception ex)
             {
-                _logger.Log($"Failed in {nameof(AwardFestivalPrize_QiMilk_Prefix)}:\n{ex}",
-                    LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(AwardFestivalPrize_QiMilk_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }

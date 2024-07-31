@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using StardewArchipelago.Archipelago;
 using StardewValley;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
@@ -10,11 +11,11 @@ namespace StardewArchipelago.GameModifications.CodeInjections
     public static class ZeldaAnimationInjections
     {
         private static ILogger _logger;
-        private static ArchipelagoClient _archipelago;
+        private static StardewArchipelagoClient _archipelago;
         private static bool _shouldPrankOnFishDay;
         private static bool _shouldPrankOnOtherDays;
 
-        public static void Initialize(ILogger logger, ArchipelagoClient archipelago)
+        public static void Initialize(ILogger logger, StardewArchipelagoClient archipelago)
         {
             _logger = logger;
             _archipelago = archipelago;

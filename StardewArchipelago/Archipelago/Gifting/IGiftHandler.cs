@@ -8,7 +8,7 @@ namespace StardewArchipelago.Archipelago.Gifting
     public interface IGiftHandler
     {
         GiftSender Sender { get; }
-        void Initialize(ILogger logger, ArchipelagoClient archipelago, StardewItemManager itemManager, Mailman mail);
+        void Initialize(ILogger logger, StardewArchipelagoClient archipelago, StardewItemManager itemManager, Mailman mail);
         bool HandleGiftItemCommand(string message);
         void ReceiveAllGiftsTomorrow();
         void ExportAllGifts(string filePath);

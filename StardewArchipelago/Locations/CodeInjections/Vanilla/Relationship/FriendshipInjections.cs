@@ -16,6 +16,9 @@ using StardewValley.Menus;
 using StardewValley.Objects;
 using Object = StardewValley.Object;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.ArchipelagoUtilities.Net;
+using StardewArchipelago.Archipelago;
+using StardewArchipelago.Logging;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
 {
@@ -40,7 +43,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
 
         private static ILogger _logger;
         private static IModHelper _helper;
-        private static ArchipelagoClient _archipelago;
+        private static StardewArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
         private static Friends _friends;
         private static VillagerGrabber _grabber;
@@ -49,7 +52,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
 
         private static string[] _hintedFriendshipLocations;
 
-        public static void Initialize(ILogger logger, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker, Friends friends, StardewItemManager itemManager)
+        public static void Initialize(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, LocationChecker locationChecker, Friends friends, StardewItemManager itemManager)
         {
             _logger = logger;
             _helper = modHelper;

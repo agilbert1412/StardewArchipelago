@@ -7,6 +7,8 @@ using StardewModdingAPI;
 using StardewValley;
 using EventIds = StardewArchipelago.Stardew.Ids.Vanilla.EventIds;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.ArchipelagoUtilities.Net;
+using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -16,12 +18,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
         private static ILogger _logger;
         private static IModHelper _helper;
-        private static ArchipelagoClient _archipelago;
+        private static StardewArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
         private static StardewItemManager _stardewItemManager;
         private static CompoundNameMapper _nameMapper;
 
-        public static void Initialize(ILogger logger, IModHelper helper, ArchipelagoClient archipelago, StardewItemManager stardewItemManager, LocationChecker locationChecker)
+        public static void Initialize(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager, LocationChecker locationChecker)
         {
             _logger = logger;
             _helper = helper;

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
+using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
 using StardewValley;
 
@@ -38,9 +39,9 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             _auroraVineyardCellarLocations,
         };
 
-        private ArchipelagoClient _archipelago;
+        private StardewArchipelagoClient _archipelago;
 
-        public EquivalentWarps(ArchipelagoClient archipelago)
+        public EquivalentWarps(StardewArchipelagoClient archipelago)
         {
             _archipelago = archipelago;
         }

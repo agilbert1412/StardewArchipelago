@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
+using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.Items.Mail;
 
@@ -10,7 +11,7 @@ namespace StardewArchipelago.Items.Unlocks.Modded
     {
         private List<IUnlockManager> _childUnlockManagers;
 
-        public ModUnlockManager(ArchipelagoClient archipelago)
+        public ModUnlockManager(StardewArchipelagoClient archipelago)
         {
             _childUnlockManagers = new List<IUnlockManager>();
 

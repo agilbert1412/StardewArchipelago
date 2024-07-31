@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using StardewArchipelago.Archipelago;
 using StardewArchipelago.GameModifications.EntranceRandomizer;
 using StardewValley;
 
@@ -10,10 +11,10 @@ namespace StardewArchipelago.GameModifications.CodeInjections
     public class EntranceInjections
     {
         private static ILogger _logger;
-        private static ArchipelagoClient _archipelago;
+        private static StardewArchipelagoClient _archipelago;
         private static EntranceManager _entranceManager;
 
-        public static void Initialize(ILogger logger, ArchipelagoClient archipelago, EntranceManager entranceManager)
+        public static void Initialize(ILogger logger, StardewArchipelagoClient archipelago, EntranceManager entranceManager)
         {
             _logger = logger;
             _archipelago = archipelago;
