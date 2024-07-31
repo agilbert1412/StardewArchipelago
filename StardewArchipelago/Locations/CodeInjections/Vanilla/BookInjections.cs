@@ -326,7 +326,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 {
                     return false; // Don't run the rest of the code, let Kaito's patch handle it.
                 }
-                return true;  // No need to run this method again
+                return true; // No need to run this method again
             }
             catch (Exception ex)
             {
