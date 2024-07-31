@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Extensions;
-using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Characters;
 
@@ -12,12 +13,12 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 {
     public class AppearanceRandomizer
     {
-        private static IMonitor _monitor;
-        private static ArchipelagoClient _archipelago;
+        private static ILogger _logger;
+        private static StardewArchipelagoClient _archipelago;
 
-        public AppearanceRandomizer(IMonitor monitor, ArchipelagoClient archipelago)
+        public AppearanceRandomizer(ILogger logger, StardewArchipelagoClient archipelago)
         {
-            _monitor = monitor;
+            _logger = logger;
             _archipelago = archipelago;
         }
 
@@ -56,7 +57,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(ShuffleCharacterAppearances)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(ShuffleCharacterAppearances)}:\n{ex}");
                 return;
             }
         }

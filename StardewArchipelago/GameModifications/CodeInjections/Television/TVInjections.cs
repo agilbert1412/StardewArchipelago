@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
-using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Constants;
 using StardewValley.Objects;
@@ -19,12 +20,12 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
         private const string AP_SINISTER_SIGNAL = "Sinister Signal";
         public const string GATEWAY_GAZETTE_KEY = "GatewayGazette";
 
-        private static IMonitor _monitor;
-        private static ArchipelagoClient _archipelago;
+        private static ILogger _logger;
+        private static StardewArchipelagoClient _archipelago;
 
-        public static void Initialize(IMonitor monitor, ArchipelagoClient archipelago)
+        public static void Initialize(ILogger logger, StardewArchipelagoClient archipelago)
         {
-            _monitor = monitor;
+            _logger = logger;
             _archipelago = archipelago;
         }
 
@@ -57,7 +58,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(CheckForAction_TVChannels_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(CheckForAction_TVChannels_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }

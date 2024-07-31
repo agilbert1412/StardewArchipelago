@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using HarmonyLib;
-using StardewArchipelago.Archipelago;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Buffs;
@@ -14,10 +14,10 @@ namespace StardewArchipelago.Items
     {
         private readonly Harmony _harmony;
 
-        public ItemPatcher(IMonitor monitor, IModHelper helper, Harmony harmony, ArchipelagoClient archipelago)
+        public ItemPatcher(ILogger logger, IModHelper helper, Harmony harmony, ArchipelagoClient archipelago)
         {
             _harmony = harmony;
-            PlayerBuffInjections.Initialize(monitor, helper, archipelago);
+            PlayerBuffInjections.Initialize(logger, helper, archipelago);
         }
 
         public void PatchApItems()

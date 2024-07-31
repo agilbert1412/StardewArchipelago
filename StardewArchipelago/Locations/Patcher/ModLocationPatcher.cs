@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using HarmonyLib;
+﻿using HarmonyLib;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.GameModifications.CodeInjections.Modded;
 using StardewArchipelago.Locations.CodeInjections.Modded;
 using StardewArchipelago.Locations.CodeInjections.Modded.SVE;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
-using StardewArchipelago.Locations.ShopStockModifiers;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
@@ -20,21 +19,21 @@ namespace StardewArchipelago.Locations.Patcher
     {
         private readonly ArchipelagoClient _archipelago;
         private readonly Harmony _harmony;
-        private readonly IMonitor _monitor;
+        private readonly ILogger _logger;
         private readonly IModHelper _modHelper;
         private ModsManager _modsManager;
         private TemperedShopStockModifier _temperedShopStockModifier;
         private BearShopStockModifier _bearShopStockModifier;
 
-        public ModLocationPatcher(Harmony harmony, IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, StardewItemManager stardewItemManager)
+        public ModLocationPatcher(Harmony harmony, ILogger logger, IModHelper modHelper, ArchipelagoClient archipelago, StardewItemManager stardewItemManager)
         {
             _archipelago = archipelago;
             _harmony = harmony;
-            _monitor = monitor;
+            _logger = logger;
             _modHelper = modHelper;
             _modsManager = archipelago.SlotData.Mods;
-            _temperedShopStockModifier = new TemperedShopStockModifier(monitor, modHelper, archipelago, stardewItemManager);
-            _bearShopStockModifier = new BearShopStockModifier(monitor, modHelper, archipelago, stardewItemManager);
+            _temperedShopStockModifier = new TemperedShopStockModifier(logger, modHelper, archipelago, stardewItemManager);
+            _bearShopStockModifier = new BearShopStockModifier(logger, modHelper, archipelago, stardewItemManager);
 
         }
 
@@ -99,7 +98,7 @@ namespace StardewArchipelago.Locations.Patcher
                 return;
             }
 
-            var socializingConfigPatcher = new SocializingConfigPatcher(_monitor, _modHelper);
+            var socializingConfigPatcher = new SocializingConfigPatcher(_logger, _modHelper);
             socializingConfigPatcher.PatchConfigValues();
         }
 

@@ -1,10 +1,8 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using Microsoft.Xna.Framework.Audio;
-using StardewArchipelago.Archipelago;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewArchipelago.Constants.Modded;
-using StardewArchipelago.Locations;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
 using StardewArchipelago.Stardew;
@@ -19,16 +17,16 @@ namespace StardewArchipelago.Goals
     {
         public const string MASTER_ANGLER_LETTER = "CF_Fish";
 
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static IModHelper _modHelper;
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
         private static BundleReader _bundleReader;
         private static MonsterKillList _killList;
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker, BundleReader bundleReader, MonsterKillList killList)
+        public static void Initialize(ILogger logger, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker, BundleReader bundleReader, MonsterKillList killList)
         {
-            _monitor = monitor;
+            _logger = logger;
             _modHelper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
@@ -386,7 +384,7 @@ namespace StardewArchipelago.Goals
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(DoAreaCompleteReward_CommunityCenterGoal_PostFix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(DoAreaCompleteReward_CommunityCenterGoal_PostFix)}:\n{ex}");
                 return;
             }
         }
@@ -404,7 +402,7 @@ namespace StardewArchipelago.Goals
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(EnterMine_Level120Goal_PostFix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(EnterMine_Level120Goal_PostFix)}:\n{ex}");
                 return;
             }
         }
@@ -418,7 +416,7 @@ namespace StardewArchipelago.Goals
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(FoundWalnut_WalnutHunterGoal_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(FoundWalnut_WalnutHunterGoal_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -502,7 +500,7 @@ namespace StardewArchipelago.Goals
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(ClickCraftingRecipe_CraftMasterGoal_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(ClickCraftingRecipe_CraftMasterGoal_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -516,7 +514,7 @@ namespace StardewArchipelago.Goals
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(TotalMoneyEarned_CheckLegendGoalCompletion_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(TotalMoneyEarned_CheckLegendGoalCompletion_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -541,7 +539,7 @@ namespace StardewArchipelago.Goals
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(FoundAllStardrops_CheckStardropsGoalCompletion_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(FoundAllStardrops_CheckStardropsGoalCompletion_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -560,7 +558,7 @@ namespace StardewArchipelago.Goals
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(PercentGameComplete_PerfectionGoal_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(PercentGameComplete_PerfectionGoal_Postfix)}:\n{ex}");
                 return;
             }
         }

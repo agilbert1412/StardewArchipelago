@@ -1,7 +1,7 @@
 ﻿using System;
-using StardewArchipelago.Locations;
+using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
-using StardewModdingAPI;
 using StardewValley;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
@@ -9,12 +9,12 @@ namespace StardewArchipelago.GameModifications.CodeInjections
     public static class CommunityCenterLogicInjections
     {
 
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static LocationChecker _locationChecker;
 
-        public static void Initialize(IMonitor monitor, LocationChecker locationChecker)
+        public static void Initialize(ILogger logger, LocationChecker locationChecker)
         {
-            _monitor = monitor;
+            _logger = logger;
             _locationChecker = locationChecker;
         }
 
@@ -44,7 +44,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(HasCompletedCommunityCenter_CheckGameStateInsteadOfLetters_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(HasCompletedCommunityCenter_CheckGameStateInsteadOfLetters_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }

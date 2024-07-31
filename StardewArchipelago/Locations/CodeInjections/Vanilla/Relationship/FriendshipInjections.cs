@@ -4,7 +4,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Netcode;
-using StardewArchipelago.Archipelago;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewArchipelago.Stardew;
 using StardewArchipelago.Textures;
 using StardewModdingAPI;
@@ -37,7 +37,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
             "Leo", "Krobus", "Dwarf", "Sandy", "Kent",
         };
 
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static IModHelper _helper;
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
@@ -48,9 +48,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
 
         private static string[] _hintedFriendshipLocations;
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker, Friends friends, StardewItemManager itemManager)
+        public static void Initialize(ILogger logger, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker, Friends friends, StardewItemManager itemManager)
         {
-            _monitor = monitor;
+            _logger = logger;
             _helper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
@@ -63,7 +63,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
                 _apLogos.Add(logoName, new Dictionary<int, Texture2D>());
                 for (var i = 12; i <= 48; i *= 2)
                 {
-                    _apLogos[logoName].Add(i, ArchipelagoTextures.GetArchipelagoLogo(monitor, modHelper, i, logoName));
+                    _apLogos[logoName].Add(i, ArchipelagoTextures.GetArchipelagoLogo(logger, modHelper, i, logoName));
                 }
             }
             _hintedFriendshipLocations = Array.Empty<string>();
@@ -123,7 +123,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(GetPoints_ArchipelagoHearts_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(GetPoints_ArchipelagoHearts_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -170,7 +170,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(SocialPageCtor_CheckHints_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(SocialPageCtor_CheckHints_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -201,7 +201,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(DrawNPCSlot_DrawEarnedHearts_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(DrawNPCSlot_DrawEarnedHearts_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -319,7 +319,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(DayUpdate_ArchipelagoPoints_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(DayUpdate_ArchipelagoPoints_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -392,8 +392,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(ChangeFriendship_ArchipelagoPoints_Prefix)}:\n{ex}", LogLevel.Error);
-                _monitor.Log($"NPC: {n?.Name ?? "null"}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(ChangeFriendship_ArchipelagoPoints_Prefix)}:\n{ex}");
+                _logger.LogError($"NPC: {n?.Name ?? "null"}");
                 return true; // run original logic
             }
         }
@@ -416,7 +416,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(ResetFriendshipsForNewDay_AutopetHumans_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(ResetFriendshipsForNewDay_AutopetHumans_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }

@@ -1,23 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Xna.Framework;
-using StardewArchipelago.Archipelago;
-using StardewModdingAPI;
-using StardewValley;
-using StardewValley.Buildings;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewValley.Menus;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
 {
     public static class CraftingPageInjections
     {
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static ArchipelagoClient _archipelago;
 
-        public static void Initialize(IMonitor monitor, ArchipelagoClient archipelago)
+        public static void Initialize(ILogger logger, ArchipelagoClient archipelago)
         {
-            _monitor = monitor;
+            _logger = logger;
             _archipelago = archipelago;
         }
 
@@ -38,7 +34,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(SnapToDefaultClickableComponent_DontCrashIfEmpty_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(SnapToDefaultClickableComponent_DontCrashIfEmpty_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }

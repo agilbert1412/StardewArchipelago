@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using Archipelago.MultiClient.Net.Enums;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
 using Microsoft.Xna.Framework;
 using StardewValley;
 
@@ -16,9 +17,9 @@ namespace StardewArchipelago.Archipelago
         private const double BANK_TAX = 0.25;
         public static readonly BigInteger EXCHANGE_RATE = 10000000; // To be adjusted based on feedback (pun intended)
 
-        public ArchipelagoClient _archipelago;
+        public StardewArchipelagoClient _archipelago;
 
-        public BankHandler(ArchipelagoClient archipelago)
+        public BankHandler(StardewArchipelagoClient archipelago)
         {
             _archipelago = archipelago;
         }

@@ -5,27 +5,26 @@ using Archipelago.Gifting.Net.Service;
 using Archipelago.Gifting.Net.Utilities.CloseTraitParser;
 using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Stardew;
-using StardewModdingAPI;
 
 namespace StardewArchipelago.Archipelago.Gifting
 {
     public class GiftReceiver
     {
-        private IMonitor _monitor;
+        private ILogger _logger;
         private ArchipelagoClient _archipelago;
         private IGiftingService _giftService;
         private StardewItemManager _itemManager;
         private Mailman _mail;
         private GiftProcessor _giftProcessor;
 
-        public GiftReceiver(IMonitor monitor, ArchipelagoClient archipelago, IGiftingService giftService, StardewItemManager itemManager, Mailman mail, ICloseTraitParser<string> closeTraitParser)
+        public GiftReceiver(ILogger logger, ArchipelagoClient archipelago, IGiftingService giftService, StardewItemManager itemManager, Mailman mail, ICloseTraitParser<string> closeTraitParser)
         {
-            _monitor = monitor;
+            _logger = logger;
             _archipelago = archipelago;
             _giftService = giftService;
             _itemManager = itemManager;
             _mail = mail;
-            _giftProcessor = new GiftProcessor(monitor, archipelago, itemManager, closeTraitParser);
+            _giftProcessor = new GiftProcessor(logger, archipelago, itemManager, closeTraitParser);
         }
 
         public void ReceiveAllGifts()

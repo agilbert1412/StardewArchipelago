@@ -1,6 +1,4 @@
-﻿using System;
-using HarmonyLib;
-using StardewArchipelago.Archipelago;
+﻿using HarmonyLib;
 using StardewModdingAPI;
 
 namespace StardewArchipelago.GameModifications.CodeInjections.Modded
@@ -16,12 +14,12 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Modded
         private const double LOVED_GIFT_MULTIPLIER = 1.2;
         private const double BIRTHDAY_GIFT_MULTIPLIER = 1.2;
 
-        private IMonitor _monitor;
+        private ILogger _logger;
         private IModHelper _modHelper;
 
-        public SocializingConfigPatcher(IMonitor monitor, IModHelper modHelper)
+        public SocializingConfigPatcher(ILogger logger, IModHelper modHelper)
         {
-            _monitor = monitor;
+            _logger = logger;
             _modHelper = modHelper;
         }
 

@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using KaitoKid.ArchipelagoUtilities.Net;
 using Microsoft.Xna.Framework;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Extensions;
 using StardewArchipelago.GameModifications.CodeInjections;
-using StardewArchipelago.Locations;
 using StardewArchipelago.Stardew;
 using StardewValley;
 using StardewValley.Locations;
@@ -16,10 +17,10 @@ namespace StardewArchipelago.GameModifications
     {
         private const int UNLIMITED_MONEY_AMOUNT = 9999999;
         private const int MINIMUM_UNLIMITED_MONEY = 1000000;
-        private ArchipelagoClient _archipelago;
+        private StardewArchipelagoClient _archipelago;
         private StardewItemManager _stardewItemManager;
 
-        public StartingResources(ArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager stardewItemManager)
+        public StartingResources(StardewArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager stardewItemManager)
         {
             _archipelago = archipelago;
             _stardewItemManager = stardewItemManager;

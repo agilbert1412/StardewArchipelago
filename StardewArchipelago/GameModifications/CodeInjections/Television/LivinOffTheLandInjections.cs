@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Archipelago.MultiClient.Net.Models;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Modded;
-using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Objects;
 
@@ -12,13 +13,13 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
 {
     internal class LivinOffTheLandInjections
     {
-        private static IMonitor _monitor;
-        private static ArchipelagoClient _archipelago;
+        private static ILogger _logger;
+        private static StardewArchipelagoClient _archipelago;
         private static Hint[] _myActiveHints;
 
-        public static void Initialize(IMonitor monitor, ArchipelagoClient archipelago)
+        public static void Initialize(ILogger logger, StardewArchipelagoClient archipelago)
         {
-            _monitor = monitor;
+            _logger = logger;
             _archipelago = archipelago;
         }
 
@@ -57,7 +58,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(GetTodaysTip_CustomLivinOffTheLand_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(GetTodaysTip_CustomLivinOffTheLand_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }

@@ -1,5 +1,5 @@
 ﻿using System;
-using StardewModdingAPI;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewValley;
 using StardewValley.Events;
 
@@ -7,11 +7,11 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 {
     public class WorldChangeEventInjections
     {
-        private static IMonitor _monitor;
+        private static ILogger _logger;
 
-        public static void Initialize(IMonitor monitor)
+        public static void Initialize(ILogger logger)
         {
-            _monitor = monitor;
+            _logger = logger;
         }
 
         // public bool setUp()
@@ -58,7 +58,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(SetUp_MakeSureEventsAreNotDuplicated_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(SetUp_MakeSureEventsAreNotDuplicated_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }

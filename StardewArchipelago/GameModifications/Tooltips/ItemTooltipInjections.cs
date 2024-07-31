@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Linq;
+using KaitoKid.ArchipelagoUtilities.Net;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using StardewArchipelago.Archipelago;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Locations;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
+using StardewArchipelago.Logging;
 using StardewArchipelago.Stardew.NameMapping;
 using StardewArchipelago.Textures;
 using StardewModdingAPI;
@@ -16,17 +19,17 @@ namespace StardewArchipelago.GameModifications.Tooltips
 {
     public class ItemTooltipInjections
     {
-        private static IMonitor _monitor;
+        private static LogHandler _logger;
         private static IModHelper _modHelper;
         private static ModConfig _config;
         private static ArchipelagoClient _archipelago;
-        private static LocationChecker _locationChecker;
+        private static StardewLocationChecker _locationChecker;
         private static NameSimplifier _nameSimplifier;
         private static Texture2D _miniArchipelagoIcon;
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ModConfig config, ArchipelagoClient archipelago, LocationChecker locationChecker, NameSimplifier nameSimplifier)
+        public static void Initialize(LogHandler logger, IModHelper modHelper, ModConfig config, ArchipelagoClient archipelago, StardewLocationChecker locationChecker, NameSimplifier nameSimplifier)
         {
-            _monitor = monitor;
+            _logger = logger;
             _modHelper = modHelper;
             _config = config;
             _archipelago = archipelago;
@@ -34,7 +37,7 @@ namespace StardewArchipelago.GameModifications.Tooltips
             _nameSimplifier = nameSimplifier;
 
             var desiredTextureName = ArchipelagoTextures.COLOR;
-            _miniArchipelagoIcon = ArchipelagoTextures.GetArchipelagoLogo(monitor, modHelper, 12, desiredTextureName);
+            _miniArchipelagoIcon = ArchipelagoTextures.GetArchipelagoLogo(logger, modHelper, 12, desiredTextureName);
         }
 
         // public abstract void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, StackDrawType drawStackNumber, Color color, bool drawShadow)
@@ -47,7 +50,7 @@ namespace StardewArchipelago.GameModifications.Tooltips
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(DrawInMenu_AddArchipelagoLogoIfNeeded_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(DrawInMenu_AddArchipelagoLogoIfNeeded_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -65,7 +68,7 @@ namespace StardewArchipelago.GameModifications.Tooltips
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(DrawInMenuColored_AddArchipelagoLogoIfNeeded_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(DrawInMenuColored_AddArchipelagoLogoIfNeeded_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -123,7 +126,7 @@ namespace StardewArchipelago.GameModifications.Tooltips
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(GetDescription_AddMissingChecks_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(GetDescription_AddMissingChecks_Postfix)}:\n{ex}");
                 return;
             }
         }

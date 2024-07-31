@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using StardewArchipelago.Archipelago;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewArchipelago.Stardew.Ids.Vanilla;
 using StardewModdingAPI;
 using StardewValley;
@@ -15,14 +15,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
     {
         private const string DARK_TALISMAN = "Dark Talisman";
 
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static IModHelper _helper;
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
 
-        public static void Initialize(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(ILogger logger, IModHelper helper, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
-            _monitor = monitor;
+            _logger = logger;
             _helper = helper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
@@ -50,7 +50,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(ResetLocalState_PlayCutsceneIfConditionsAreMet_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(ResetLocalState_PlayCutsceneIfConditionsAreMet_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -91,7 +91,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(SetUpLocationSpecificFlair_CreateBuglandChest_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(SetUpLocationSpecificFlair_CreateBuglandChest_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -135,7 +135,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(CheckForAction_BuglandChest_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(CheckForAction_BuglandChest_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -150,7 +150,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(PerformRemoveHenchman_CheckGoblinProblemLocation_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(PerformRemoveHenchman_CheckGoblinProblemLocation_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -171,7 +171,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(CheckAction_ShowWizardMagicInk_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(CheckAction_ShowWizardMagicInk_Postfix)}:\n{ex}");
                 return;
             }
         }

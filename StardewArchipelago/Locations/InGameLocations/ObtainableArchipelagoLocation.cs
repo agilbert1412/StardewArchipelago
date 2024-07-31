@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using Archipelago.MultiClient.Net.Models;
+using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Vanilla;
+using StardewArchipelago.Logging;
 using StardewArchipelago.Textures;
 using StardewModdingAPI;
 using StardewValley;
@@ -16,7 +18,7 @@ using Color = Microsoft.Xna.Framework.Color;
 
 namespace StardewArchipelago.Locations.InGameLocations
 {
-    internal class ArchipelagoLocation : SpecialItem
+    internal class ObtainableArchipelagoLocation : SpecialItem
     {
         private const string ARCHIPELAGO_PREFIX = "Archipelago: ";
         private const string ARCHIPELAGO_SHORT_PREFIX = "AP: ";
@@ -64,11 +66,11 @@ namespace StardewArchipelago.Locations.InGameLocations
             }
         }
 
-        public ArchipelagoLocation(string locationName, IMonitor monitor, IModHelper modHelper, LocationChecker locationChecker, ArchipelagoClient archipelago, Hint[] myActiveHints) : this(locationName, locationName, monitor, modHelper, locationChecker, archipelago, myActiveHints)
+        public ObtainableArchipelagoLocation(string locationName, LogHandler logger, IModHelper modHelper, LocationChecker locationChecker, ArchipelagoClient archipelago, Hint[] myActiveHints) : this(locationName, locationName, logger, modHelper, locationChecker, archipelago, myActiveHints)
         {
         }
 
-        public ArchipelagoLocation(string locationDisplayName, string locationName, IMonitor monitor, IModHelper modHelper, LocationChecker locationChecker, ArchipelagoClient archipelago, Hint[] myActiveHints)
+        public ObtainableArchipelagoLocation(string locationDisplayName, string locationName, LogHandler logger, IModHelper modHelper, LocationChecker locationChecker, ArchipelagoClient archipelago, Hint[] myActiveHints)
         {
             // Prefix removed for now, because the inconsistency makes it ugly
             // var prefix = locationDisplayName.Length < 18 ? ARCHIPELAGO_PREFIX : ARCHIPELAGO_NO_PREFIX;
@@ -82,7 +84,7 @@ namespace StardewArchipelago.Locations.InGameLocations
 
             var isHinted = myActiveHints.Any(hint => archipelago.GetLocationName(hint.LocationId).Equals(locationName, StringComparison.OrdinalIgnoreCase));
             var desiredTextureName = isHinted ? ArchipelagoTextures.PLEADING : ArchipelagoTextures.COLOR;
-            _archipelagoTexture = ArchipelagoTextures.GetArchipelagoLogo(monitor, modHelper, 48, desiredTextureName);
+            _archipelagoTexture = ArchipelagoTextures.GetArchipelagoLogo(logger, modHelper, 48, desiredTextureName);
             
 
             var scoutedLocation = archipelago.ScoutSingleLocation(LocationName);
@@ -162,11 +164,11 @@ namespace StardewArchipelago.Locations.InGameLocations
             return descriptionWithExtraMaterials;
         }
 
-        public static IEnumerable<ItemQueryResult> Create(string locationName, IMonitor monitor, IModHelper modHelper, LocationChecker locationChecker, ArchipelagoClient archipelago)
+        public static IEnumerable<ItemQueryResult> Create(string locationName, LogHandler logger, IModHelper modHelper, LocationChecker locationChecker, ArchipelagoClient archipelago)
         {
             if (string.IsNullOrWhiteSpace(locationName))
             {
-                throw new ArgumentException($"Could not create {nameof(ArchipelagoLocation)} because there was no provided location name");
+                throw new ArgumentException($"Could not create {nameof(ObtainableArchipelagoLocation)} because there was no provided location name");
             }
 
             if (locationChecker.IsLocationMissing(locationName))
@@ -177,7 +179,7 @@ namespace StardewArchipelago.Locations.InGameLocations
                     _activeHints = archipelago.GetMyActiveHints();
                     _lastTimeUpdatedActiveHints = currentTime;
                 }
-                var item = new ArchipelagoLocation(locationName.Trim(), monitor, modHelper, locationChecker, archipelago, _activeHints);
+                var item = new ObtainableArchipelagoLocation(locationName.Trim(), logger, modHelper, locationChecker, archipelago, _activeHints);
                 return new ItemQueryResult[] { new(item) };
             }
 

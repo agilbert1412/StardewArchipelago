@@ -1,4 +1,7 @@
 ﻿using System;
+using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
 using StardewValley;
@@ -17,15 +20,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         private const int DIFFICULTY = 1;
 
 
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static IModHelper _modHelper;
-        private static ArchipelagoClient _archipelago;
+        private static StardewArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
         private static int _realDeepestMineLevel = -1;
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
         {
-            _monitor = monitor;
+            _logger = logger;
             _modHelper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
@@ -61,7 +64,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(MyElevatorMenuConstructor_SkullCavernElevator_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(MyElevatorMenuConstructor_SkullCavernElevator_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -81,7 +84,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(MyElevatorMenuConstructor_SkullCavernElevator_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(MyElevatorMenuConstructor_SkullCavernElevator_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -110,7 +113,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(EnterMine_SendSkullCavernElevatorCheck_PostFix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(EnterMine_SendSkullCavernElevatorCheck_PostFix)}:\n{ex}");
                 return;
             }
         }

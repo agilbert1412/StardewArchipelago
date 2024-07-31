@@ -1,4 +1,4 @@
-﻿using StardewArchipelago.Archipelago;
+﻿using KaitoKid.ArchipelagoUtilities.Net.Client;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
 {

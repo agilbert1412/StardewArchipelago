@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using StardewArchipelago.Archipelago;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewArchipelago.Items.Unlocks.Vanilla;
 using StardewArchipelago.Textures;
 using StardewModdingAPI;
@@ -21,21 +21,21 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private const string TREASURE_LOCATION = "The Mines Floor {0} Treasure";
         private const string ELEVATOR_LOCATION = "Floor {0} Elevator";
 
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static ModConfig _config;
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
         private static Texture2D _miniArchipelagoIcon;
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ModConfig config, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(ILogger logger, IModHelper modHelper, ModConfig config, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
-            _monitor = monitor;
+            _logger = logger;
             _config = config;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
 
             var desiredTextureName = ArchipelagoTextures.COLOR;
-            _miniArchipelagoIcon = ArchipelagoTextures.GetArchipelagoLogo(monitor, modHelper, 12, desiredTextureName);
+            _miniArchipelagoIcon = ArchipelagoTextures.GetArchipelagoLogo(logger, modHelper, 12, desiredTextureName);
         }
 
         public static bool CheckForAction_MineshaftChest_Prefix(Chest __instance, Farmer who, bool justCheckingForActivity, ref bool __result)
@@ -70,7 +70,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(CheckForAction_MineshaftChest_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(CheckForAction_MineshaftChest_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -98,7 +98,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(AddLevelChests_Level120_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(AddLevelChests_Level120_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -125,7 +125,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(EnterMine_SendElevatorCheck_PostFix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(EnterMine_SendElevatorCheck_PostFix)}:\n{ex}");
                 return;
             }
         }
@@ -146,7 +146,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(PerformAction_LoadElevatorMenu_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(PerformAction_LoadElevatorMenu_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -168,7 +168,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(CheckAction_LoadElevatorMenu_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(CheckAction_LoadElevatorMenu_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -226,7 +226,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(Draw_AddArchipelagoIndicators_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(Draw_AddArchipelagoIndicators_Postfix)}:\n{ex}");
                 return;
             }
         }

@@ -1,9 +1,8 @@
 ﻿using System;
-using StardewArchipelago.Archipelago;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewArchipelago.Goals;
 using StardewArchipelago.Locations.Modded.SVE;
 using StardewArchipelago.Stardew;
-using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 using xTile.Dimensions;
@@ -20,14 +19,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         public const string AP_LOCATION_BULLETIN_BOARD = "Complete Bulletin Board";
         public const string AP_LOCATION_ABANDONED_JOJA_MART = "The Missing Bundle";
 
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
         private static FriendshipReleaser _friendshipReleaser;
 
-        public static void Initialize(IMonitor monitor, ArchipelagoClient archipelago, LocationChecker locationChecker, BundleReader bundleReader)
+        public static void Initialize(ILogger logger, ArchipelagoClient archipelago, LocationChecker locationChecker, BundleReader bundleReader)
         {
-            _monitor = monitor;
+            _logger = logger;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
             _friendshipReleaser = new FriendshipReleaser(locationChecker, bundleReader);
@@ -84,7 +83,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(DoAreaCompleteReward_AreaLocations_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(DoAreaCompleteReward_AreaLocations_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -122,7 +121,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(ShouldNoteAppearInArea_AllowAccessEverything_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(ShouldNoteAppearInArea_AllowAccessEverything_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -144,7 +143,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(CheckAction_BulletinBoardNoRequirements_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(CheckAction_BulletinBoardNoRequirements_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -158,7 +157,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(CheckForMissedRewards_DontBother_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(CheckForMissedRewards_DontBother_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }

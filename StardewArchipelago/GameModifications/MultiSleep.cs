@@ -1,5 +1,6 @@
 ﻿using System;
 using HarmonyLib;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using StardewArchipelago.Archipelago;
@@ -10,16 +11,16 @@ namespace StardewArchipelago.GameModifications
 {
     public class MultiSleep
     {
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static IModHelper _modHelper;
         private Harmony _harmony;
 
         public static int DaysToSkip = 0;
         private static int _multiSleepPrice = -1;
 
-        public MultiSleep(IMonitor monitor, IModHelper modHelper, Harmony harmony)
+        public MultiSleep(ILogger logger, IModHelper modHelper, Harmony harmony)
         {
-            _monitor = monitor;
+            _logger = logger;
             _modHelper = modHelper;
             _harmony = harmony;
             DaysToSkip = 0;
@@ -70,7 +71,7 @@ namespace StardewArchipelago.GameModifications
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(PerformTouchAction_Sleep_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(PerformTouchAction_Sleep_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -92,7 +93,7 @@ namespace StardewArchipelago.GameModifications
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(AnswerDialogueAction_SleepMany_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(AnswerDialogueAction_SleepMany_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }

@@ -2,17 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using HarmonyLib;
+using KaitoKid.ArchipelagoUtilities.Net;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Constants.Locations;
 using StardewArchipelago.GameModifications.CodeInjections;
 using StardewArchipelago.GameModifications.CodeInjections.Bundles;
 using StardewArchipelago.GameModifications.CodeInjections.Television;
 using StardewArchipelago.GameModifications.EntranceRandomizer;
 using StardewArchipelago.GameModifications.Seasons;
 using StardewArchipelago.GameModifications.Tooltips;
-using StardewArchipelago.Locations;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
 using StardewArchipelago.Locations.Festival;
 using StardewArchipelago.Locations.InGameLocations;
@@ -31,6 +32,8 @@ using StardewValley.Menus;
 using StardewValley.Network;
 using StardewValley.Objects;
 using Object = StardewValley.Object;
+using StardewArchipelago.Locations;
+using StardewArchipelago.Logging;
 
 namespace StardewArchipelago.GameModifications
 {
@@ -38,14 +41,14 @@ namespace StardewArchipelago.GameModifications
     {
         private readonly Harmony _harmony;
         private readonly IModHelper _helper;
-        private readonly ArchipelagoClient _archipelago;
+        private readonly StardewArchipelagoClient _archipelago;
         private readonly StardewItemManager _stardewItemManager;
         private readonly StartingResources _startingResources;
         private readonly SeedShopStockModifier _seedShopStockModifier;
         private readonly RecipeDataRemover _recipeDataRemover;
         private readonly AnimalShopStockModifier _animalShopStockModifier;
 
-        public RandomizedLogicPatcher(IMonitor monitor, IModHelper modHelper, ModConfig config, Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager stardewItemManager, EntranceManager entranceManager, SeedShopStockModifier seedShopStockModifier, NameSimplifier nameSimplifier, Friends friends, ArchipelagoStateDto state)
+        public RandomizedLogicPatcher(LogHandler logger, IModHelper modHelper, ModConfig config, Harmony harmony, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker, StardewItemManager stardewItemManager, EntranceManager entranceManager, SeedShopStockModifier seedShopStockModifier, NameSimplifier nameSimplifier, Friends friends, ArchipelagoStateDto state)
         {
             _harmony = harmony;
             _helper = modHelper;
@@ -53,42 +56,42 @@ namespace StardewArchipelago.GameModifications
             _stardewItemManager = stardewItemManager;
             _startingResources = new StartingResources(_archipelago, locationChecker, _stardewItemManager);
             _seedShopStockModifier = seedShopStockModifier;
-            _recipeDataRemover = new RecipeDataRemover(monitor, modHelper, archipelago);
-            ArchipelagoLocationsInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
-            MineshaftLogicInjections.Initialize(monitor);
-            CommunityCenterLogicInjections.Initialize(monitor, locationChecker);
-            FarmInjections.Initialize(monitor, _archipelago);
-            AchievementInjections.Initialize(monitor, _archipelago);
-            EntranceInjections.Initialize(monitor, _archipelago, entranceManager);
-            ForestInjections.Initialize(monitor, _archipelago);
-            MountainInjections.Initialize(monitor, modHelper, _archipelago);
-            TheaterInjections.Initialize(monitor, modHelper, archipelago);
-            LostAndFoundInjections.Initialize(monitor, archipelago);
-            InitializeTVInjections(monitor, modHelper, archipelago, entranceManager, state);
-            ProfitInjections.Initialize(monitor, archipelago);
-            QuestLogInjections.Initialize(monitor, archipelago, locationChecker);
-            WorldChangeEventInjections.Initialize(monitor);
-            CropInjections.Initialize(monitor, archipelago, stardewItemManager);
-            SecretNoteInjections.Initialize(monitor, archipelago, locationChecker);
-            KentInjections.Initialize(monitor, archipelago);
-            _animalShopStockModifier = new AnimalShopStockModifier(monitor, modHelper, archipelago, stardewItemManager);
-            GoldenClockInjections.Initialize(monitor, archipelago);
-            ZeldaAnimationInjections.Initialize(monitor, archipelago);
-            ItemTooltipInjections.Initialize(monitor, modHelper, config, archipelago, locationChecker, nameSimplifier);
-            BillboardInjections.Initialize(monitor, modHelper, config, archipelago, locationChecker, friends);
-            SpecialOrderBoardInjections.Initialize(monitor, modHelper, archipelago, locationChecker);
-            CraftingPageInjections.Initialize(monitor, archipelago);
-            OutOfLogicInjections.Initialize(monitor, archipelago, stardewItemManager);
+            _recipeDataRemover = new RecipeDataRemover(logger, modHelper, archipelago);
+            ArchipelagoLocationsInjections.Initialize(logger, modHelper, archipelago, locationChecker);
+            MineshaftLogicInjections.Initialize(logger);
+            CommunityCenterLogicInjections.Initialize(logger, locationChecker);
+            FarmInjections.Initialize(logger, _archipelago);
+            AchievementInjections.Initialize(logger, _archipelago);
+            EntranceInjections.Initialize(logger, _archipelago, entranceManager);
+            ForestInjections.Initialize(logger, _archipelago);
+            MountainInjections.Initialize(logger, modHelper, _archipelago);
+            TheaterInjections.Initialize(logger, modHelper, archipelago);
+            LostAndFoundInjections.Initialize(logger, archipelago);
+            InitializeTVInjections(logger, modHelper, archipelago, entranceManager, state);
+            ProfitInjections.Initialize(logger, archipelago);
+            QuestLogInjections.Initialize(logger, archipelago, locationChecker);
+            WorldChangeEventInjections.Initialize(logger);
+            CropInjections.Initialize(logger, archipelago, stardewItemManager);
+            SecretNoteInjections.Initialize(logger, archipelago, locationChecker);
+            KentInjections.Initialize(logger, archipelago);
+            _animalShopStockModifier = new AnimalShopStockModifier(logger, modHelper, archipelago, stardewItemManager);
+            GoldenClockInjections.Initialize(logger, archipelago);
+            ZeldaAnimationInjections.Initialize(logger, archipelago);
+            ItemTooltipInjections.Initialize(logger, modHelper, config, archipelago, locationChecker, nameSimplifier);
+            BillboardInjections.Initialize(logger, modHelper, config, archipelago, locationChecker, friends);
+            SpecialOrderBoardInjections.Initialize(logger, modHelper, archipelago, locationChecker);
+            CraftingPageInjections.Initialize(logger, archipelago);
+            OutOfLogicInjections.Initialize(logger, archipelago, stardewItemManager);
 
-            DebugPatchInjections.Initialize(monitor, archipelago);
+            DebugPatchInjections.Initialize(logger, archipelago);
         }
 
-        private static void InitializeTVInjections(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, EntranceManager entranceManager,
+        private static void InitializeTVInjections(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, EntranceManager entranceManager,
             ArchipelagoStateDto state)
         {
-            TVInjections.Initialize(monitor, archipelago);
-            LivinOffTheLandInjections.Initialize(monitor, archipelago);
-            GatewayGazetteInjections.Initialize(monitor, modHelper, archipelago, entranceManager, state);
+            TVInjections.Initialize(logger, archipelago);
+            LivinOffTheLandInjections.Initialize(logger, archipelago);
+            GatewayGazetteInjections.Initialize(logger, modHelper, archipelago, entranceManager, state);
         }
 
         public void PatchAllGameLogic()

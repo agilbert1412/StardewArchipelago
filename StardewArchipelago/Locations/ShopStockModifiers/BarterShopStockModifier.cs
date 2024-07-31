@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using StardewArchipelago.Archipelago;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
@@ -12,11 +13,8 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
 {
     public abstract class BarterShopStockModifier : ShopStockModifier
     {
-        public BarterShopStockModifier(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago, StardewItemManager stardewItemManager) : base(monitor, helper, archipelago, stardewItemManager)
+        public BarterShopStockModifier(ILogger logger, IModHelper helper, ArchipelagoClient archipelago, StardewItemManager stardewItemManager) : base(logger, helper, archipelago, stardewItemManager)
         {
-            _monitor = monitor;
-            _helper = helper;
-            _archipelago = archipelago;
         }
 
         protected ShopItemData CreateBarterItem(List<StardewObject> stardewObjects, StardewItem stardewItem, string condition = null, int overridePrice = 0, int offeredStock = 1, double discount = 1)

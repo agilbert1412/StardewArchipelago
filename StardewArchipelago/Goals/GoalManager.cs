@@ -1,7 +1,8 @@
 ﻿using System;
 using HarmonyLib;
+using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Locations;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
@@ -11,15 +12,15 @@ namespace StardewArchipelago.Goals
 {
     public class GoalManager
     {
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private IModHelper _modHelper;
         private Harmony _harmony;
-        private ArchipelagoClient _archipelago;
+        private StardewArchipelagoClient _archipelago;
         private LocationChecker _locationChecker;
 
-        public GoalManager(IMonitor monitor, IModHelper modHelper, Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public GoalManager(ILogger logger, IModHelper modHelper, Harmony harmony, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
         {
-            _monitor = monitor;
+            _logger = logger;
             _modHelper = modHelper;
             _harmony = harmony;
             _archipelago = archipelago;

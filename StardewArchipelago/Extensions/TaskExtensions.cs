@@ -6,9 +6,9 @@ namespace StardewArchipelago.Extensions
 {
     public static class TaskExtensions
     {
-        private static IMonitor _log;
+        private static I_logger _log;
 
-        public static void Initialize(IMonitor log)
+        public static void Initialize(I_logger log)
         {
             _log = log;
         }

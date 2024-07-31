@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using StardewArchipelago.Archipelago;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Items.Unlocks.Vanilla;
 using StardewArchipelago.Stardew.Ids.Vanilla;
@@ -25,14 +24,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         public const string RUSTY_SWORD_AP_LOCATION = "The Mines Entrance Cutscene";
         public const string POT_OF_GOLD_AP_LOCATION = "Pot Of Gold";
 
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static IModHelper _helper;
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(ILogger logger, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
-            _monitor = monitor;
+            _logger = logger;
             _helper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
@@ -61,7 +60,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(CheckAction_OldMasterCanolli_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(CheckAction_OldMasterCanolli_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -82,7 +81,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(AnswerDialogueAction_BeachBridge_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(AnswerDialogueAction_BeachBridge_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -115,7 +114,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(CheckAction_BeachBridge_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(CheckAction_BeachBridge_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -142,7 +141,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(FixBridge_DontFixDuringDraw_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(FixBridge_DontFixDuringDraw_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -163,7 +162,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(Draw_BeachBridgeQuestionMark_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(Draw_BeachBridgeQuestionMark_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -184,7 +183,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(Draw_BeachBridgeQuestionMark_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(Draw_BeachBridgeQuestionMark_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -223,7 +222,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(PerformTouchAction_GalaxySwordShrine_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(PerformTouchAction_GalaxySwordShrine_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -257,7 +256,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(SkipEvent_RustySword_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(SkipEvent_RustySword_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -281,7 +280,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(AwardFestivalPrize_RustySword_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(AwardFestivalPrize_RustySword_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -311,7 +310,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(CheckForAction_PotOfGold_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(CheckForAction_PotOfGold_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }

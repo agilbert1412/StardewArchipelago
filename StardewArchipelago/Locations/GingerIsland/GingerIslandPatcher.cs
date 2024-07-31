@@ -1,5 +1,5 @@
 ﻿using HarmonyLib;
-using StardewArchipelago.Archipelago;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewArchipelago.Locations.CodeInjections;
 using StardewArchipelago.Locations.GingerIsland.Boat;
 using StardewArchipelago.Locations.GingerIsland.Parrots;
@@ -18,11 +18,11 @@ namespace StardewArchipelago.Locations.GingerIsland
         private readonly Harmony _harmony;
         private readonly IParrotReplacer[] _parrotReplacers;
 
-        public GingerIslandPatcher(IMonitor monitor, IModHelper modHelper, Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public GingerIslandPatcher(ILogger logger, IModHelper modHelper, Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             _archipelago = archipelago;
             _harmony = harmony;
-            GingerIslandInitializer.Initialize(monitor, modHelper, _archipelago, locationChecker);
+            GingerIslandInitializer.Initialize(logger, modHelper, _archipelago, locationChecker);
             _parrotReplacers = new IParrotReplacer[]
             {
                 new IslandHutInjections(), new IslandNorthInjections(),

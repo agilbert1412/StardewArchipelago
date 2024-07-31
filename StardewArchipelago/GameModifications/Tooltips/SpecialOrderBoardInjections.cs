@@ -1,34 +1,37 @@
 ﻿using System;
 using System.Linq;
+using KaitoKid.ArchipelagoUtilities.Net;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using StardewArchipelago.Archipelago;
-using StardewArchipelago.Locations;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
+using StardewArchipelago.Logging;
 using StardewArchipelago.Textures;
 using StardewModdingAPI;
 using StardewValley.Menus;
 using StardewValley.SpecialOrders;
+using StardewArchipelago.Locations;
 
 namespace StardewArchipelago.GameModifications.Tooltips
 {
     public class SpecialOrderBoardInjections
     {
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static IModHelper _modHelper;
         private static ArchipelagoClient _archipelago;
-        private static LocationChecker _locationChecker;
+        private static StardewLocationChecker _locationChecker;
         private static Texture2D _bigArchipelagoIcon;
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(LogHandler logger, IModHelper modHelper, ArchipelagoClient archipelago, StardewLocationChecker locationChecker)
         {
-            _monitor = monitor;
+            _logger = logger;
             _modHelper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
 
             var desiredTextureName = ArchipelagoTextures.COLOR;
-            _bigArchipelagoIcon = ArchipelagoTextures.GetArchipelagoLogo(monitor, modHelper, 48, desiredTextureName);
+            _bigArchipelagoIcon = ArchipelagoTextures.GetArchipelagoLogo(logger, modHelper, 48, desiredTextureName);
         }
 
         // public override void draw(SpriteBatch spriteBatch)
@@ -42,7 +45,7 @@ namespace StardewArchipelago.GameModifications.Tooltips
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(Draw_AddArchipelagoIndicators_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(Draw_AddArchipelagoIndicators_Postfix)}:\n{ex}");
                 return;
             }
         }

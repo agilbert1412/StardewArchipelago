@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
-using StardewArchipelago.Archipelago;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewArchipelago.Constants;
-using StardewArchipelago.GameModifications.CodeInjections;
 using StardewValley;
 
 namespace StardewArchipelago.GameModifications.EntranceRandomizer

@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using StardewArchipelago.Archipelago;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewArchipelago.Stardew.Ids.Vanilla;
 using StardewModdingAPI;
 using StardewValley;
@@ -23,14 +23,14 @@ namespace StardewArchipelago.Locations.GingerIsland.Boat
         public const string MAIL_FIXED_BOAT_HULL = "willyBoatHull";
         public const string MAIL_FIXED_BOAT_ANCHOR = "willyBoatAnchor";
 
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static IModHelper _modHelper;
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(ILogger logger, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
-            _monitor = monitor;
+            _logger = logger;
             _modHelper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
@@ -67,7 +67,7 @@ namespace StardewArchipelago.Locations.GingerIsland.Boat
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(CheckAction_BoatRepairAndUsage_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(CheckAction_BoatRepairAndUsage_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -108,7 +108,7 @@ namespace StardewArchipelago.Locations.GingerIsland.Boat
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(AnswerDialogue_BoatRepairAndUsage_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(AnswerDialogue_BoatRepairAndUsage_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -279,7 +279,7 @@ namespace StardewArchipelago.Locations.GingerIsland.Boat
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(Draw_DrawBoatSectionsBasedOnTasksCompleted_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(Draw_DrawBoatSectionsBasedOnTasksCompleted_Postfix)}:\n{ex}");
                 return;
             }
         }

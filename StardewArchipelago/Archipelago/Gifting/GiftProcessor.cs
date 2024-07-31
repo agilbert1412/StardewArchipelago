@@ -6,22 +6,21 @@ using Archipelago.Gifting.Net.Traits;
 using Archipelago.Gifting.Net.Utilities.CloseTraitParser;
 using StardewArchipelago.Extensions;
 using StardewArchipelago.Stardew;
-using StardewModdingAPI;
 
 namespace StardewArchipelago.Archipelago.Gifting
 {
     public class GiftProcessor
     {
-        private IMonitor _monitor;
+        private ILogger _logger;
         private ArchipelagoClient _archipelago;
         private StardewItemManager _itemManager;
         private ICloseTraitParser<string> _closeTraitParser;
         private Dictionary<string, Func<int, ItemAmount>> _specialItems;
         private Dictionary<int, Dictionary<string[], Func<int, Dictionary<string, GiftTrait>, ItemAmount>>> _recognizedTraits;
 
-        public GiftProcessor(IMonitor monitor, ArchipelagoClient archipelago, StardewItemManager itemManager, ICloseTraitParser<string> closeTraitParser)
+        public GiftProcessor(ILogger logger, ArchipelagoClient archipelago, StardewItemManager itemManager, ICloseTraitParser<string> closeTraitParser)
         {
-            _monitor = monitor;
+            _logger = logger;
             _archipelago = archipelago;
             _itemManager = itemManager;
             _closeTraitParser = closeTraitParser;

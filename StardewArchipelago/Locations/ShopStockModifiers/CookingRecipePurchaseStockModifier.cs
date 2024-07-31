@@ -1,4 +1,4 @@
-﻿using StardewArchipelago.Archipelago;
+﻿using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewArchipelago.Constants.Locations;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Stardew;
@@ -11,7 +11,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
 {
     public class CookingRecipePurchaseStockModifier : ShopStockModifier
     {
-        public CookingRecipePurchaseStockModifier(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago, StardewItemManager stardewItemManager) : base(monitor, helper, archipelago, stardewItemManager)
+        public CookingRecipePurchaseStockModifier(ILogger logger, IModHelper helper, ArchipelagoClient archipelago, StardewItemManager stardewItemManager) : base(logger, helper, archipelago, stardewItemManager)
         {
         }
 

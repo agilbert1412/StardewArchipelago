@@ -1,24 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using StardewArchipelago.Archipelago;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewArchipelago.Constants.Locations;
 using StardewModdingAPI;
-using StardewValley.Events;
 using StardewValley.Menus;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
     public static class RecipeLevelUpInjections
     {
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static IModHelper _helper;
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
 
-        public static void Initialize(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(ILogger logger, IModHelper helper, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
-            _monitor = monitor;
+            _logger = logger;
             _helper = helper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
@@ -34,7 +33,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(LevelUpMenuConstructor_SendSkillRecipeChecks_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(LevelUpMenuConstructor_SendSkillRecipeChecks_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -82,7 +81,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 var skillCheck = Enum.TryParse<Skill>(skillActualName, out var skill);
                 if (!skillCheck)
                 {
-                    _monitor.Log($"Leveled up unrecognized Skill: {skillActualName} [{skillName}]", LogLevel.Error);
+                    _logger.LogError($"Leveled up unrecognized Skill: {skillActualName} [{skillName}]");
                     return;
                 }
                 SendSkillRecipeChecks(skill, level);
@@ -90,7 +89,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(SkillLevelUpMenuConstructor_SendModdedSkillRecipeChecks_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(SkillLevelUpMenuConstructor_SendModdedSkillRecipeChecks_Postfix)}:\n{ex}");
                 return;
             }
         }

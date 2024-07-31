@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
+using StardewArchipelago.Extensions;
 using StardewArchipelago.Serialization;
 using StardewArchipelago.Stardew;
 using StardewArchipelago.Textures;
@@ -22,16 +24,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         private const int REMIXED_BUNDLE_INDEX_THRESHOLD = 100;
         private const int CUSTOM_BUNDLE_INDEX_THRESHOLD = 200;
 
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static IModHelper _modHelper;
         private static ArchipelagoClient _archipelago;
         private static ArchipelagoStateDto _state;
         private static LocationChecker _locationChecker;
         private static BundleReader _bundleReader;
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, BundleReader bundleReader)
+        public static void Initialize(ILogger logger, IModHelper modHelper, ArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, BundleReader bundleReader)
         {
-            _monitor = monitor;
+            _logger = logger;
             _modHelper = modHelper;
             _archipelago = archipelago;
             _state = state;
@@ -49,7 +51,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(CheckForRewards_SendBundleChecks_PostFix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(CheckForRewards_SendBundleChecks_PostFix)}:\n{ex}");
             }
         }
 
@@ -80,7 +82,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 var remixedBundlesTexture = Game1.temporaryContent.Load<Texture2D>("LooseSprites\\BundleSprites");
                 foreach (var bundle in __instance.bundles)
                 {
-                    var textureOverride = BundleIcons.GetBundleIcon(_monitor, _modHelper, bundle.name, LogLevel.Trace);
+                    var textureOverride = BundleIcons.GetBundleIcon(_logger, _modHelper, bundle.name, LogLevel.Trace);
                     if (textureOverride == null)
                     {
                         if (bundle.bundleIndex < REMIXED_BUNDLE_INDEX_THRESHOLD)
@@ -102,19 +104,19 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                         {
                             if (TryGetBundleName(bundleIndexString, out var moneyBundleName))
                             {
-                                var texture = BundleIcons.GetBundleIcon(_monitor, _modHelper, moneyBundleName, LogLevel.Error);
+                                var texture = BundleIcons.GetBundleIcon(_logger, _modHelper, moneyBundleName, LogLevel.Error);
                                 bundle.bundleTextureOverride = texture;
                                 bundle.bundleTextureIndexOverride = 0;
                                 if (texture == null)
                                 {
-                                    _monitor.Log($"Could not find a proper icon for money bundle '{moneyBundleName}', using default Archipelago Icon", LogLevel.Warn);
+                                    _logger.LogWarning($"Could not find a proper icon for money bundle '{moneyBundleName}', using default Archipelago Icon");
                                 }
                                 continue;
                             }
                         }
 
-                        _monitor.Log($"Could not find a proper icon for bundle '{bundle.name}', using default Archipelago Icon", LogLevel.Warn);
-                        textureOverride = ArchipelagoTextures.GetArchipelagoLogo(_monitor, _modHelper, 32, ArchipelagoTextures.COLOR);
+                        _logger.LogWarning($"Could not find a proper icon for bundle '{bundle.name}', using default Archipelago Icon");
+                        textureOverride = ArchipelagoTextures.GetArchipelagoLogo(_logger, _modHelper, 32, ArchipelagoTextures.COLOR);
                     }
 
                     bundle.bundleTextureOverride = textureOverride;
@@ -125,7 +127,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(SetupMenu_AddTextureOverrides_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(SetupMenu_AddTextureOverrides_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -187,13 +189,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 }
 
                 var scoutedItem = _archipelago.ScoutSingleLocation(apAreaToScout);
-                var rewardText = $"Reward: {scoutedItem.PlayerName}'s {scoutedItem.GetItemName()}";
+                var rewardText = $"Reward: {scoutedItem.PlayerName}'s {scoutedItem.GetItemName(StringExtensions.TurnHeartsIntoStardewHearts)}";
                 __result = rewardText;
                 return false; // don't run original logic
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(GetRewardNameForArea_ScoutRoomRewards_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(GetRewardNameForArea_ScoutRoomRewards_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -255,7 +257,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(Draw_AddCurrencyBoxes_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(Draw_AddCurrencyBoxes_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -311,7 +313,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(ReceiveLeftClick_PurchaseCurrencyBundle_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(ReceiveLeftClick_PurchaseCurrencyBundle_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }

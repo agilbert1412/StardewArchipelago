@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using KaitoKid.ArchipelagoUtilities.Net;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using StardewArchipelago.Archipelago;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Vanilla;
+using StardewArchipelago.Logging;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.ItemTypeDefinitions;
@@ -15,14 +18,14 @@ namespace StardewArchipelago.Locations.InGameLocations
     /// <summary>Manages the data for archipelago location items.</summary>
     public class ArchipelagoLocationDataDefinition : BaseItemDataDefinition
     {
-        private static IMonitor _monitor;
+        private static LogHandler _logger;
         private static IModHelper _modHelper;
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(LogHandler logger, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
-            _monitor = monitor;
+            _logger = logger;
             _modHelper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
@@ -47,7 +50,7 @@ namespace StardewArchipelago.Locations.InGameLocations
             {
                 return null;
             }
-            var itemData = new ParsedArchipelagoItemData(_monitor, _modHelper, _archipelago, _locationChecker, this, itemId, 0, "", "", "", "", 0, "", null);
+            var itemData = new ParsedArchipelagoItemData(_logger, _modHelper, _archipelago, _locationChecker, this, itemId, 0, "", "", "", "", 0, "", null);
             return itemData;
         }
 
@@ -69,7 +72,7 @@ namespace StardewArchipelago.Locations.InGameLocations
             var apLocationPrefix = IDProvider.AP_LOCATION;
             var indexOfPrefixStart = id.IndexOf(apLocationPrefix, StringComparison.InvariantCultureIgnoreCase);
             var locationName = id[(indexOfPrefixStart + apLocationPrefix.Length + 1)..];
-            return new ArchipelagoLocation(locationName, _monitor, _modHelper, _locationChecker, _archipelago, _archipelago.GetMyActiveHints());
+            return new ObtainableArchipelagoLocation(locationName, _logger, _modHelper, _locationChecker, _archipelago, _archipelago.GetMyActiveHints());
         }
     }
 }

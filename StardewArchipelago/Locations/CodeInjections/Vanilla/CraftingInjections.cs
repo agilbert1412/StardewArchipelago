@@ -1,5 +1,5 @@
 ﻿using System;
-using StardewArchipelago.Archipelago;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.Stardew;
 using StardewArchipelago.Stardew.NameMapping;
@@ -13,16 +13,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
     {
         public const string CRAFTING_LOCATION_PREFIX = "Craft ";
 
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static IModHelper _helper;
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
         private static StardewItemManager _stardewItemManager;
         private static CompoundNameMapper _nameMapper;
 
-        public static void Initialize(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago, StardewItemManager stardewItemManager, LocationChecker locationChecker)
+        public static void Initialize(ILogger logger, IModHelper helper, ArchipelagoClient archipelago, StardewItemManager stardewItemManager, LocationChecker locationChecker)
         {
-            _monitor = monitor;
+            _logger = logger;
             _helper = helper;
             _archipelago = archipelago;
             _stardewItemManager = stardewItemManager;
@@ -55,7 +55,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(CheckForCraftingAchievements_CheckCraftsanityLocation_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(CheckForCraftingAchievements_CheckCraftsanityLocation_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -90,7 +90,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 return false;
             }
 
-            _monitor.Log($"Tried to check Craftsanity locationName for recipe {recipeId}, but could not find it", LogLevel.Warn);
+            _logger.LogWarning($"Tried to check Craftsanity locationName for recipe {recipeId}, but could not find it");
             return false;
         }
 
@@ -109,7 +109,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(AddCraftingRecipe_SkipLearningFurnace_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(AddCraftingRecipe_SkipLearningFurnace_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -130,7 +130,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(SkipEvent_FurnaceRecipe_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(SkipEvent_FurnaceRecipe_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }

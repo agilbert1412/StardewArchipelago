@@ -1,8 +1,11 @@
 using System;
 using System.Reflection;
 using HarmonyLib;
+using KaitoKid.ArchipelagoUtilities.Net;
 using Microsoft.Xna.Framework;
 using Netcode;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
 using StardewValley;
@@ -30,18 +33,18 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         private const string EXCALIBUR_FAIL = "With only {0}/7 Luck, {1}/40 total base skills and {2}/3 pendants, it won't budge.";
         private const string EXCALIBUR_WIN = "{0} has been freed from the stone.  You are worthy.";
         private const int LEVEL_STEP = 10;
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static IModHelper _helper;
-        private static ArchipelagoClient _archipelago;
+        private static StardewArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
         private static Chest chestOrTrashThatGrantedAPCheck = null;
         private static LargeTerrainFeature fountainThatGrantedAPCheck = null;
 
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago,
+        public static void Initialize(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago,
             LocationChecker locationChecker)
         {
-            _monitor = monitor;
+            _logger = logger;
             _helper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
@@ -91,7 +94,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(PerformUseAction_ExcaliburLocation_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(PerformUseAction_ExcaliburLocation_Prefix)}:\n{ex}");
                 return true; //run original logic
             }
         }
@@ -138,7 +141,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(Constructor_WoodsDepthChecker_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(Constructor_WoodsDepthChecker_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -185,7 +188,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(CheckAction_PetUnicornLocation_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(CheckAction_PetUnicornLocation_Prefix)}:\n{ex}");
                 return true; //run original logic
             }
         }
@@ -228,7 +231,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(CheckScared_MakeUnicornLessScared_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(CheckScared_MakeUnicornLessScared_Prefix)}:\n{ex}");
                 return true; //run original logic
             }
         }
@@ -261,7 +264,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(CheckForAction_TreasureChestLocation_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(CheckForAction_TreasureChestLocation_Prefix)}:\n{ex}");
                 return true;
             }
         }
@@ -277,8 +280,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(PlayDestroyedSounds_GingerbreadLocation_Postfix)}:\n{ex}",
-                    LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(PlayDestroyedSounds_GingerbreadLocation_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -294,8 +296,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(PlayDestroyedSounds_IridiumTreeLocation_Postfix)}:\n{ex}",
-                    LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(PlayDestroyedSounds_IridiumTreeLocation_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -311,8 +312,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(Deinfest_DeinfestLocation_Postfix)}:\n{ex}",
-                    LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(Deinfest_DeinfestLocation_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -347,8 +347,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(PerformUseAction_HealingFountainLocation_Prefix)}:\n{ex}",
-                    LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(PerformUseAction_HealingFountainLocation_Prefix)}:\n{ex}");
                 return true; //run original logic
             }
         }

@@ -1,5 +1,5 @@
 ﻿using System;
-using StardewArchipelago.Archipelago;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Locations;
 using StardewArchipelago.Constants.Vanilla;
@@ -13,7 +13,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
 {
     public class ToolShopStockModifier : ShopStockModifier
     {
-        public ToolShopStockModifier(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, StardewItemManager stardewItemManager) : base(monitor, modHelper, archipelago, stardewItemManager)
+        public ToolShopStockModifier(ILogger logger, IModHelper modHelper, ArchipelagoClient archipelago, StardewItemManager stardewItemManager) : base(logger, modHelper, archipelago, stardewItemManager)
         {
         }
 

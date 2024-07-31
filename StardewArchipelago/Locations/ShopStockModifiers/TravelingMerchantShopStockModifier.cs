@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Force.DeepCloner;
-using StardewArchipelago.Archipelago;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
@@ -11,7 +11,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
 {
     public class TravelingMerchantShopStockModifier : ShopStockModifier
     {
-        public TravelingMerchantShopStockModifier(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, StardewItemManager stardewItemManager) : base(monitor, modHelper, archipelago, stardewItemManager)
+        public TravelingMerchantShopStockModifier(ILogger logger, IModHelper modHelper, ArchipelagoClient archipelago, StardewItemManager stardewItemManager) : base(logger, modHelper, archipelago, stardewItemManager)
         {
         }
 

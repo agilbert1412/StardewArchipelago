@@ -20,6 +20,7 @@
     <ItemGroup>
         <PackageReference Include="Archipelago.Gifting.Net" Version="0.3.3" />
         <PackageReference Include="Archipelago.MultiClient.Net" Version="6.2.0" />
+        <PackageReference Include="KaitoKid.ArchipelagoUtilities.Net" Version="1.0.24" />
         <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="4.1.1" />
     </ItemGroup>
 

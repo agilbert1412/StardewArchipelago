@@ -1,5 +1,4 @@
 ﻿using System;
-using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Monsters;
 
@@ -7,11 +6,11 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 {
     public static class CleanupBeforeSaveInjections
     {
-        private static IMonitor _monitor;
+        private static ILogger _logger;
 
-        public static void Initialize(IMonitor monitor)
+        public static void Initialize(ILogger logger)
         {
-            _monitor = monitor;
+            _logger = logger;
         }
 
         // public virtual void cleanupBeforeSave()
@@ -30,7 +29,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(CleanupBeforeSave_RemoveIllegalMonsters_Postfix)} ({__instance?.GetType()} version):\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(CleanupBeforeSave_RemoveIllegalMonsters_Postfix)} ({__instance?.GetType()} version):\n{ex}");
                 return;
             }
         }

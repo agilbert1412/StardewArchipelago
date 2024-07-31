@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using StardewArchipelago.Archipelago;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Stardew;
 using StardewArchipelago.Stardew.Ids.Vanilla;
-using StardewModdingAPI;
 using StardewValley;
-using StardewValley.Extensions;
 using StardewValley.GameData.Crops;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
@@ -25,13 +24,13 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         };
         private static readonly string[] _overpoweredSeeds = { ObjectIds.ANCIENT_SEEDS, ObjectIds.RARE_SEED };
 
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static ArchipelagoClient _archipelago;
         private static StardewItemManager _stardewItemManager;
 
-        public static void Initialize(IMonitor monitor, ArchipelagoClient archipelago, StardewItemManager stardewItemManager)
+        public static void Initialize(ILogger logger, ArchipelagoClient archipelago, StardewItemManager stardewItemManager)
         {
-            _monitor = monitor;
+            _logger = logger;
             _archipelago = archipelago;
             _stardewItemManager = stardewItemManager;
         }
@@ -59,7 +58,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(ResolveSeedId_MixedSeedsBecomesUnlockedCrop_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(ResolveSeedId_MixedSeedsBecomesUnlockedCrop_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }

@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using StardewArchipelago.Archipelago;
+using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Constants.Vanilla;
 using StardewModdingAPI;
 using StardewValley;
-using StardewValley.Menus;
 using StardewValley.Objects;
 using StardewValley.SpecialOrders;
 
@@ -13,7 +14,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
 {
     public class SVECutsceneInjections
     {
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static IModHelper _modHelper;
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
@@ -49,10 +50,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
             { "1090506", "Krobus" },
         };
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago,
-            LocationChecker locationChecker)
+        public static void Initialize(ILogger logger, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
-            _monitor = monitor;
+            _logger = logger;
             _modHelper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
@@ -92,7 +92,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
 
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(CheckForAction_LanceChest_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(CheckForAction_LanceChest_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -117,8 +117,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(EndBehaviors_AddSpecialOrderAfterEvent_Prefix)}:\n{ex}",
-                    LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(EndBehaviors_AddSpecialOrderAfterEvent_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -133,8 +132,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(UpdateSpecialOrders_StopDeletingSpecialOrders_Prefix)}:\n{ex}",
-                    LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(UpdateSpecialOrders_StopDeletingSpecialOrders_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -166,8 +164,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(FixMonsterSlayerQuest_IncludeReleaseofGoals_Postfix)}:\n{ex}",
-                    LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(FixMonsterSlayerQuest_IncludeReleaseofGoals_Postfix)}:\n{ex}");
                 return;
             }
         }

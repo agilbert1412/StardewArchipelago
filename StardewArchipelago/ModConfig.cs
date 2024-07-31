@@ -1,6 +1,4 @@
-﻿using StardewArchipelago.Archipelago;
-
-namespace StardewArchipelago
+﻿namespace StardewArchipelago
 {
     public class ModConfig
     {

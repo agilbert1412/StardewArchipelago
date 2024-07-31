@@ -189,7 +189,7 @@ namespace StardewArchipelago.Constants.Vanilla
 
             if (id.StartsWith("("))
             {
-                ModEntry.Instance.Monitor.Log($"Tried to unqualify Id '{id}', but couldn't figure out the qualifier!", LogLevel.Debug);
+                ModEntry.Instance._logger.LogDebug($"Tried to unqualify Id '{id}', but couldn't figure out the qualifier!");
             }
 
             return id;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using HarmonyLib;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI;
 using StardewValley.Locations;
@@ -10,12 +11,12 @@ namespace StardewArchipelago.GameModifications.CodeInjections
     internal class IslandWestMapInjections
     {
 
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static IModHelper _modHelper;
 
-        public static void PatchMapInjections(IMonitor monitor, IModHelper helper, Harmony harmony)
+        public static void PatchMapInjections(ILogger logger, IModHelper helper, Harmony harmony)
         {
-            _monitor = monitor;
+            _logger = logger;
             _modHelper = helper;
             harmony.Patch(
                 original: AccessTools.Method(typeof(IslandWest), nameof(IslandWest.ApplyFarmHouseRestore)),
@@ -53,7 +54,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(ApplyFarmHouseRestore_RestoreOnlyCorrectParts_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(ApplyFarmHouseRestore_RestoreOnlyCorrectParts_Prefix)}:\n{ex}");
                 return true; // run original logic;
             }
         }

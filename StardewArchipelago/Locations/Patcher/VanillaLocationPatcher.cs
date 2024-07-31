@@ -1,7 +1,10 @@
 ﻿using System;
 using HarmonyLib;
+using KaitoKid.ArchipelagoUtilities.Net;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
@@ -17,7 +20,6 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.BellsAndWhistles;
 using StardewValley.Characters;
-using StardewValley.Constants;
 using StardewValley.Events;
 using StardewValley.GameData.Buildings;
 using StardewValley.Locations;
@@ -50,22 +52,22 @@ namespace StardewArchipelago.Locations.Patcher
         private readonly CraftingRecipePurchaseStockModifier _craftingRecipePurchaseStockModifier;
         private readonly KrobusStockModifier _krobusStockModifier;
 
-        public VanillaLocationPatcher(IMonitor monitor, IModHelper modHelper, Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager stardewItemManager)
+        public VanillaLocationPatcher(ILogger logger, IModHelper modHelper, Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager stardewItemManager)
         {
             _archipelago = archipelago;
             _harmony = harmony;
             _modHelper = modHelper;
-            _gingerIslandPatcher = new GingerIslandPatcher(monitor, _modHelper, _harmony, _archipelago, locationChecker);
-            _toolUpgradesShopStockModifier = new ToolShopStockModifier(monitor, modHelper, archipelago, stardewItemManager);
-            _fishingRodShopStockModifier = new FishingRodShopStockModifier(monitor, modHelper, archipelago, stardewItemManager);
-            _carpenterShopStockModifier = new CarpenterShopStockModifier(monitor, modHelper, archipelago, stardewItemManager);
-            _carpenterBuildingsModifier = new CarpenterBuildingsModifier(monitor, modHelper, archipelago);
-            _guildShopStockModifier = new AdventureGuildShopStockModifier(monitor, modHelper, archipelago, stardewItemManager);
-            _travelingMerchantShopStockModifier = new TravelingMerchantShopStockModifier(monitor, modHelper, archipelago, stardewItemManager);
-            _festivalShopStockModifier = new FestivalShopStockModifier(monitor, modHelper, archipelago, stardewItemManager);
-            _cookingRecipePurchaseStockModifier = new CookingRecipePurchaseStockModifier(monitor, modHelper, archipelago, stardewItemManager);
-            _craftingRecipePurchaseStockModifier = new CraftingRecipePurchaseStockModifier(monitor, modHelper, archipelago, stardewItemManager);
-            _krobusStockModifier = new KrobusStockModifier(monitor, modHelper, archipelago, stardewItemManager);
+            _gingerIslandPatcher = new GingerIslandPatcher(logger, _modHelper, _harmony, _archipelago, locationChecker);
+            _toolUpgradesShopStockModifier = new ToolShopStockModifier(logger, modHelper, archipelago, stardewItemManager);
+            _fishingRodShopStockModifier = new FishingRodShopStockModifier(logger, modHelper, archipelago, stardewItemManager);
+            _carpenterShopStockModifier = new CarpenterShopStockModifier(logger, modHelper, archipelago, stardewItemManager);
+            _carpenterBuildingsModifier = new CarpenterBuildingsModifier(logger, modHelper, archipelago);
+            _guildShopStockModifier = new AdventureGuildShopStockModifier(logger, modHelper, archipelago, stardewItemManager);
+            _travelingMerchantShopStockModifier = new TravelingMerchantShopStockModifier(logger, modHelper, archipelago, stardewItemManager);
+            _festivalShopStockModifier = new FestivalShopStockModifier(logger, modHelper, archipelago, stardewItemManager);
+            _cookingRecipePurchaseStockModifier = new CookingRecipePurchaseStockModifier(logger, modHelper, archipelago, stardewItemManager);
+            _craftingRecipePurchaseStockModifier = new CraftingRecipePurchaseStockModifier(logger, modHelper, archipelago, stardewItemManager);
+            _krobusStockModifier = new KrobusStockModifier(logger, modHelper, archipelago, stardewItemManager);
         }
 
         public void ReplaceAllLocationsRewardsWithChecks()

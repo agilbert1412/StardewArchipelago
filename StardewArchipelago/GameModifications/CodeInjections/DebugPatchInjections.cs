@@ -1,13 +1,8 @@
-﻿using StardewArchipelago.Archipelago;
-using StardewArchipelago.Locations;
-using StardewModdingAPI;
-using StardewValley.Locations;
-using StardewValley.Menus;
+﻿using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewValley;
 using System;
-using System.Threading;
 using System.Diagnostics;
-using System.Collections.Generic;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
 {
@@ -15,12 +10,12 @@ namespace StardewArchipelago.GameModifications.CodeInjections
     {
         private const bool DebugStackTraces = true;
 
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static ArchipelagoClient _archipelago;
 
-        public static void Initialize(IMonitor monitor, ArchipelagoClient archipelago)
+        public static void Initialize(ILogger logger, ArchipelagoClient archipelago)
         {
-            _monitor = monitor;
+            _logger = logger;
             _archipelago = archipelago;
         }
 

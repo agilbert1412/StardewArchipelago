@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.Stardew.NameMapping;
-using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Objects;
 
@@ -14,15 +16,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
     {
         public const string SHIPSANITY_PREFIX = "Shipsanity: ";
 
-        private IMonitor _monitor;
-        private ArchipelagoClient _archipelago;
+        private ILogger _logger;
+        private StardewArchipelagoClient _archipelago;
         private LocationChecker _locationChecker;
         private NameSimplifier _nameSimplifier;
         private CompoundNameMapper _nameMapper;
 
-        public NightShippingBehaviors(IMonitor monitor, ArchipelagoClient archipelago, LocationChecker locationChecker, NameSimplifier nameSimplifier)
+        public NightShippingBehaviors(ILogger logger, StardewArchipelagoClient archipelago, LocationChecker locationChecker, NameSimplifier nameSimplifier)
         {
-            _monitor = monitor;
+            _logger = logger;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
             _nameSimplifier = nameSimplifier;
@@ -39,14 +41,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     return;
                 }
 
-                _monitor.Log($"Currently attempting to check shipsanity locations for the current day", LogLevel.Info);
+                _logger.LogInfo($"Currently attempting to check shipsanity locations for the current day");
                 var allShippedItems = GetAllItemsShippedToday();
-                _monitor.Log($"{allShippedItems.Count} items shipped", LogLevel.Info);
+                _logger.LogInfo($"{allShippedItems.Count} items shipped");
                 CheckAllShipsanityLocations(allShippedItems);
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(CheckShipsanityLocationsBeforeSleep)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(CheckShipsanityLocationsBeforeSleep)}:\n{ex}");
             }
         }
 
@@ -109,7 +111,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     {
                         continue;
                     }
-                    _monitor.Log($"Unrecognized Shipsanity Location: {name} [{shippedItem.ParentSheetIndex}]", LogLevel.Error);
+                    _logger.LogError($"Unrecognized Shipsanity Location: {name} [{shippedItem.ParentSheetIndex}]");
                 }
             }
         }
@@ -124,7 +126,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 var apLocation = $"{SHIPSANITY_PREFIX}{name}";
                 if (_archipelago.GetLocationId(apLocation) > -1)
                 {
-                    _monitor.Log($"Bugfix caught this for the beta async.  If this isn't that game, let the developers know there's a bug!", LogLevel.Warn);
+                    _logger.LogWarning($"Bugfix caught this for the beta async.  If this isn't that game, let the developers know there's a bug!");
                     _locationChecker.AddCheckedLocation(apLocation);
                     return true;
                 }

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Items.Mail;
-using StardewArchipelago.Locations;
 using StardewArchipelago.Stardew.Ids.Vanilla;
 using StardewValley;
-using StardewValley.Locations;
 
 namespace StardewArchipelago.Items.Unlocks.Vanilla
 {
@@ -24,11 +24,11 @@ namespace StardewArchipelago.Items.Unlocks.Vanilla
         public const string ISLAND_MAILBOX = "Island Mailbox";
         public const string TREEHOUSE = "Treehouse";
 
-        private ArchipelagoClient _archipelago;
+        private StardewArchipelagoClient _archipelago;
         private LocationChecker _locationChecker;
         private List<IUnlockManager> _childUnlockManagers;
 
-        public VanillaUnlockManager(ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public VanillaUnlockManager(StardewArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             _archipelago = archipelago;
             _locationChecker = locationChecker;

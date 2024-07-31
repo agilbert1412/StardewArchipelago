@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using StardewArchipelago.Archipelago;
-using StardewModdingAPI;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewValley;
 using StardewValley.TerrainFeatures;
+using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.Items.Traps
 {
@@ -15,13 +16,13 @@ namespace StardewArchipelago.Items.Traps
         private const string STONE_2 = "450";
         private const string WEEDS = "750";
 
-        private IMonitor _monitor;
-        private ArchipelagoClient _archipelago;
+        private ILogger _logger;
+        private StardewArchipelagoClient _archipelago;
         private TrapDifficultyBalancer _difficultyBalancer;
 
-        public DebrisSpawner(IMonitor monitor, ArchipelagoClient archipelago, TrapDifficultyBalancer difficultyBalancer)
+        public DebrisSpawner(ILogger logger, StardewArchipelagoClient archipelago, TrapDifficultyBalancer difficultyBalancer)
         {
-            _monitor = monitor;
+            _logger = logger;
             _archipelago = archipelago;
             _difficultyBalancer = difficultyBalancer;
         }

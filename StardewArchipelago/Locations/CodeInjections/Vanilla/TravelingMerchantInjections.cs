@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Archipelago.MultiClient.Net.Models;
-using StardewArchipelago.Archipelago;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewArchipelago.Constants.Vanilla;
+using StardewArchipelago.Locations.InGameLocations;
 using StardewArchipelago.Serialization;
 using StardewModdingAPI;
 using StardewValley;
@@ -13,7 +14,6 @@ using StardewValley.Internal;
 using StardewValley.Locations;
 using StardewValley.Menus;
 using xTile.Dimensions;
-using ArchipelagoLocation = StardewArchipelago.Locations.InGameLocations.ArchipelagoLocation;
 using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
@@ -34,7 +34,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private const string AP_METAL_DETECTOR = "Traveling Merchant Metal Detector"; // Base Price 140%, 8 x 10% discount
         private const string AP_WEDDING_RING_RECIPE = "Wedding Ring Recipe";
 
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static IModHelper _modHelper;
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
@@ -42,9 +42,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
         private static Dictionary<ISalable, string> _flairOverride;
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker, ArchipelagoStateDto archipelagoState)
+        public static void Initialize(ILogger logger, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker, ArchipelagoStateDto archipelagoState)
         {
-            _monitor = monitor;
+            _logger = logger;
             _modHelper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
@@ -62,7 +62,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(ShouldTravelingMerchantVisitToday_ArchipelagoDays_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(ShouldTravelingMerchantVisitToday_ArchipelagoDays_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -96,7 +96,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(NightMarketCheckAction_IsTravelingMerchantDay_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(NightMarketCheckAction_IsTravelingMerchantDay_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -124,7 +124,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(DesertFestivalCheckAction_IsTravelingMerchantDay_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(DesertFestivalCheckAction_IsTravelingMerchantDay_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -143,7 +143,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(SetUpShopOwner_TravelingMerchantApFlair_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(SetUpShopOwner_TravelingMerchantApFlair_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -433,7 +433,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
             var scamName = _merchantApItemNames[random.Next(0, _merchantApItemNames.Length)];
             var myActiveHints = _archipelago.GetMyActiveHints();
-            var apLocation = new ArchipelagoLocation(scamName, chosenApItem, _monitor, _modHelper, _locationChecker, _archipelago, myActiveHints);
+            var apLocation = new ObtainableArchipelagoLocation(scamName, chosenApItem, _logger, _modHelper, _locationChecker, _archipelago, myActiveHints);
             var price = _merchantPrices[random.Next(0, _merchantPrices.Length)];
 
             yield return new ItemQueryResult(apLocation)

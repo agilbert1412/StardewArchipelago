@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Stardew;
@@ -16,14 +18,14 @@ namespace StardewArchipelago.GameModifications.CodeInjections
     {
         private const int MAX_DEPTH = 10;
 
-        private static IMonitor _monitor;
-        private static ArchipelagoClient _archipelago;
+        private static ILogger _logger;
+        private static StardewArchipelagoClient _archipelago;
         private static StardewItemManager _stardewItemManager;
         private static int _depth;
 
-        public static void Initialize(IMonitor monitor, ArchipelagoClient archipelago, StardewItemManager stardewItemManager)
+        public static void Initialize(ILogger logger, StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager)
         {
-            _monitor = monitor;
+            _logger = logger;
             _archipelago = archipelago;
             _stardewItemManager = stardewItemManager;
             _depth = 0;
@@ -58,7 +60,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(GetPrizeItem_SkipOutOfLogicPrizeTickets_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(GetPrizeItem_SkipOutOfLogicPrizeTickets_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -107,7 +109,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     return;
                 }
 
-                _monitor.Log($"Mystery Box tried to create [{__result.Name}] but the player is not allowed to have this yet. Trying again... (Depth: {_depth})", LogLevel.Debug);
+                _logger.LogDebug($"Mystery Box tried to create [{__result.Name}] but the player is not allowed to have this yet. Trying again... (Depth: {_depth})");
                 _depth++;
                 Game1.stats.Increment("MysteryBoxesOpened");
                 __result = Utility.getTreasureFromGeode(geode);
@@ -116,7 +118,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             catch (Exception ex)
             {
                 _depth = 0;
-                _monitor.Log($"Failed in {nameof(GetTreasureFromGeode_MysteryBoxesGiveReceivedItems_Postfix)} (Depth: {_depth}):\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(GetTreasureFromGeode_MysteryBoxesGiveReceivedItems_Postfix)} (Depth: {_depth}):\n{ex}");
                 return;
             }
         }
@@ -136,7 +138,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(GetRaccoonSeedForCurrentTimeOfYear_MysteryBoxesGiveReceivedItems_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(GetRaccoonSeedForCurrentTimeOfYear_MysteryBoxesGiveReceivedItems_Postfix)}:\n{ex}");
                 return;
             }
         }

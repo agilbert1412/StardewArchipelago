@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Newtonsoft.Json;
-using StardewModdingAPI;
 using StardewValley;
 using StardewValley.GameData;
 
 namespace StardewArchipelago.Archipelago
 {
-    public class SlotData
+    public class SlotData : ISlotData
     {
         private const string GOAL_KEY = "goal";
         private const string FARM_TYPE_KEY = "farm_type";
@@ -59,7 +59,7 @@ namespace StardewArchipelago.Archipelago
         private const string MOD_LIST_KEY = "mods";
 
         private Dictionary<string, object> _slotDataFields;
-        private IMonitor _console;
+        private ILogger _logger;
 
         public string SlotName { get; private set; }
         public Goal Goal { get; private set; }
@@ -109,11 +109,11 @@ namespace StardewArchipelago.Archipelago
         public bool AppearanceRandomizationDaily { get; set; }
         public ModsManager Mods { get; set; }
 
-        public SlotData(string slotName, Dictionary<string, object> slotDataFields, IMonitor console)
+        public SlotData(string slotName, Dictionary<string, object> slotDataFields, ILogger logger)
         {
             SlotName = slotName;
             _slotDataFields = slotDataFields;
-            _console = console;
+            _logger = logger;
 
             Goal = GetSlotSetting(GOAL_KEY, Goal.CommunityCenter);
             var farmType = GetSlotSetting(FARM_TYPE_KEY, SupportedFarmType.Standard);
@@ -164,7 +164,7 @@ namespace StardewArchipelago.Archipelago
             AppearanceRandomizationDaily = false; // GetSlotSetting(RANDOMIZE_NPC_APPEARANCES_DAILY_KEY, false);
             var modsString = GetSlotSetting(MOD_LIST_KEY, "");
             var mods = JsonConvert.DeserializeObject<List<string>>(modsString);
-            Mods = new ModsManager(_console, mods);
+            Mods = new ModsManager(_logger, mods);
         }
 
         private Walnutsanity GetSlotWalnutsanitySetting()
@@ -243,7 +243,7 @@ namespace StardewArchipelago.Archipelago
 
         private T GetSlotDefaultValue<T>(string key, T defaultValue)
         {
-            _console.Log($"SlotData did not contain expected key: \"{key}\"", LogLevel.Warn);
+            _logger.LogWarning($"SlotData did not contain expected key: \"{key}\"");
             return defaultValue;
         }
 

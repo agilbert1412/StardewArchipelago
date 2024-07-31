@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Constants.Modded;
 using StardewModdingAPI;
 
@@ -9,13 +10,13 @@ namespace StardewArchipelago.Archipelago
 
     public class ModsManager
     {
-        private IMonitor _monitor;
+        private ILogger _logger;
         private List<string> _activeMods;
         private VersionValidator _versionValidator;
 
-        public ModsManager(IMonitor monitor, List<string> activeMods)
+        public ModsManager(ILogger logger, List<string> activeMods)
         {
-            _monitor = monitor;
+            _logger = logger;
             _activeMods = activeMods;
             _versionValidator = new VersionValidator();
         }
@@ -64,7 +65,7 @@ namespace StardewArchipelago.Archipelago
             {
                 if (!ModVersions.Versions.ContainsKey(modName))
                 {
-                    _monitor.Log($"Unrecognized mod requested by the server's slot data: {modName}", LogLevel.Warn);
+                    _logger.LogWarning($"Unrecognized mod requested by the server's slot data: {modName}");
                     continue;
                 }
 

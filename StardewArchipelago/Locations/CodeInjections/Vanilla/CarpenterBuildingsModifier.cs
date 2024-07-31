@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Force.DeepCloner;
-using StardewArchipelago.Archipelago;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewArchipelago.Constants;
-using StardewArchipelago.Constants.Locations;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley.GameData.Buildings;
@@ -13,13 +12,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
     public class CarpenterBuildingsModifier
     {
-        protected static IMonitor _monitor;
+        protected static ILogger _logger;
         protected static IModHelper _helper;
         protected static ArchipelagoClient _archipelago;
 
-        public CarpenterBuildingsModifier(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago)
+        public CarpenterBuildingsModifier(ILogger logger, IModHelper helper, ArchipelagoClient archipelago)
         {
-            _monitor = monitor;
+            _logger = logger;
             _helper = helper;
             _archipelago = archipelago;
         }
