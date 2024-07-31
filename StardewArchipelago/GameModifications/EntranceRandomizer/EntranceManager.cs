@@ -24,7 +24,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
 
         public Dictionary<string, string> ModifiedEntrances { get; private set; }
         private HashSet<string> _checkedEntrancesToday;
-        private Dictionary<string, WarpRequest> generatedWarps;
+        private readonly Dictionary<string, WarpRequest> generatedWarps;
 
         public EntranceManager(ILogger logger, ArchipelagoClient archipelago, ArchipelagoStateDto state)
         {
@@ -378,7 +378,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "ScienceHouse|6|24 to SebastianRoom", "ScienceHouse to SebastianRoom" }, // LockedDoorWarp 6 24 ScienceHouse 900 2000S–
         };
 
-        private Dictionary<string, string> _locationAliases = new()
+        private readonly Dictionary<string, string> _locationAliases = new()
         {
             { "Mayor's Manor", "ManorHouse" },
             { "Pierre's General Store", "SeedShop" },
@@ -422,7 +422,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Mutant Bug Lair", "BugLand" },
         };
 
-        private Dictionary<string, string> _locationsSingleWordAliases = new()
+        private readonly Dictionary<string, string> _locationsSingleWordAliases = new()
         {
             { "'s", "" },
             { " ", "" },

@@ -89,8 +89,8 @@ namespace StardewArchipelago.Integrations.GenericModConfigMenu
 
     class GenericModConfig
     {
-        private IModHelper Helper;
-        private IManifest ModManifest;
+        private readonly IModHelper Helper;
+        private readonly IManifest ModManifest;
         private ModConfig Config;
 
         public GenericModConfig(ModEntry mod)

@@ -9,7 +9,7 @@ namespace StardewArchipelago.Items.Mail
         private static readonly Random _random = new();
         private bool _sendForTomorrow = true;
 
-        private ArchipelagoStateDto _state;
+        private readonly ArchipelagoStateDto _state;
 
         public Mailman(ArchipelagoStateDto state)
         {

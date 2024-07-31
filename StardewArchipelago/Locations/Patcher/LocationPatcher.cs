@@ -15,7 +15,7 @@ namespace StardewArchipelago.Locations.Patcher
 {
     public class LocationPatcher
     {
-        private List<ILocationPatcher> _patchers;
+        private readonly List<ILocationPatcher> _patchers;
 
         public LocationPatcher(LogHandler logger, IModHelper modHelper, ModConfig config, Harmony harmony, StardewArchipelagoClient archipelago, ArchipelagoStateDto state,
             StardewLocationChecker locationChecker, StardewItemManager itemManager, WeaponsManager weaponsManager, BundlesManager bundlesManager,

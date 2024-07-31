@@ -11,7 +11,7 @@ namespace StardewArchipelago.Locations
 {
     internal class ParrotUpgradePerchArchipelago : ParrotUpgradePerch
     {
-        private string _scoutedItemName;
+        private readonly string _scoutedItemName;
         public string ApLocationName { get; }
 
         public ParrotUpgradePerchArchipelago(string apLocationName, ArchipelagoClient archipelago,

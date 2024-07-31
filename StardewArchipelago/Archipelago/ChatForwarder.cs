@@ -25,7 +25,7 @@ namespace StardewArchipelago.Archipelago
         private static ILogger _logger;
         private static IModHelper _helper;
         private static StardewArchipelagoClient _archipelago;
-        private Harmony _harmony;
+        private readonly Harmony _harmony;
         private static IGiftHandler _giftHandler;
         private static GoalManager _goalManager;
         private static BankHandler _bankHandler;

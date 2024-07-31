@@ -15,7 +15,7 @@ namespace StardewArchipelago.Archipelago.Gifting
     {
         private const int DEFAULT_BUFF_DURATION = 120;
 
-        private StardewItemManager _itemManager;
+        private readonly StardewItemManager _itemManager;
 
         public GiftGenerator(StardewItemManager itemManager)
         {

@@ -11,8 +11,8 @@ namespace StardewArchipelago.Items.Unlocks
 {
     public class UnlockManager
     {
-        private List<IUnlockManager> _specificUnlockManagers;
-        private Dictionary<string, Func<ReceivedItem, LetterAttachment>> _unlockables;
+        private readonly List<IUnlockManager> _specificUnlockManagers;
+        private readonly Dictionary<string, Func<ReceivedItem, LetterAttachment>> _unlockables;
 
         public UnlockManager(StardewArchipelagoClient archipelago, LocationChecker locationChecker)
         {

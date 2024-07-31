@@ -5,7 +5,7 @@ namespace StardewArchipelago.Logging
 {
     public class LogHandler : Logger
     {
-        private IMonitor _logger;
+        private readonly IMonitor _logger;
 
         public LogHandler(IMonitor logger)
         {

@@ -67,7 +67,7 @@ namespace StardewArchipelago.Items.Traps
         private readonly BabyBirther _babyBirther;
         private readonly DebrisSpawner _debrisSpawner;
         private readonly InventoryShuffler _inventoryShuffler;
-        private Dictionary<string, Action> _traps;
+        private readonly Dictionary<string, Action> _traps;
 
         public TrapManager(ILogger logger, IModHelper helper, Harmony harmony, StardewArchipelagoClient archipelago, TileChooser tileChooser, BabyBirther babyBirther, GiftSender giftSender)
         {

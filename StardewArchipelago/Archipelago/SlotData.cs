@@ -58,8 +58,8 @@ namespace StardewArchipelago.Archipelago
         private const string MULTIWORLD_VERSION_KEY = "client_version";
         private const string MOD_LIST_KEY = "mods";
 
-        private Dictionary<string, object> _slotDataFields;
-        private ILogger _logger;
+        private readonly Dictionary<string, object> _slotDataFields;
+        private readonly ILogger _logger;
 
         public string SlotName { get; private set; }
         public Goal Goal { get; private set; }
@@ -317,7 +317,7 @@ namespace StardewArchipelago.Archipelago
 
     public class FarmType
     {
-        private SupportedFarmType _supportedFarmType;
+        private readonly SupportedFarmType _supportedFarmType;
 
         internal FarmType(SupportedFarmType supportedFarmType)
         {

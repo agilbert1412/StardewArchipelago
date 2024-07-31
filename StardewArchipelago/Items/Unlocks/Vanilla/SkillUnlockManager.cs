@@ -13,7 +13,7 @@ namespace StardewArchipelago.Items.Unlocks.Vanilla
 {
     public class SkillUnlockManager : IUnlockManager
     {
-        private StardewArchipelagoClient _archipelago;
+        private readonly StardewArchipelagoClient _archipelago;
 
         public SkillUnlockManager(StardewArchipelagoClient archipelago)
         {

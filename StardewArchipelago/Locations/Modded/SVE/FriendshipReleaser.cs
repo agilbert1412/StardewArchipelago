@@ -5,8 +5,8 @@ namespace StardewArchipelago.Locations.Modded.SVE
 {
     internal class FriendshipReleaser
     {
-        private LocationChecker _locationChecker;
-        private BundleReader _bundleReader;
+        private readonly LocationChecker _locationChecker;
+        private readonly BundleReader _bundleReader;
 
         public FriendshipReleaser(LocationChecker locationChecker, BundleReader bundleReader)
         {

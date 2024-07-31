@@ -14,7 +14,7 @@ namespace StardewArchipelago.GameModifications
         private static ModEntry _modEntry;
         private static ILogger _logger;
         private static IModHelper _modHelper;
-        private Harmony _harmony;
+        private readonly Harmony _harmony;
         private static StardewArchipelagoClient _archipelago;
 
         public AdvancedOptionsManager(ModEntry modEntry, ILogger logger, IModHelper modHelper, Harmony harmony, StardewArchipelagoClient archipelago)

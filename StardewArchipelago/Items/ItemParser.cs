@@ -20,13 +20,13 @@ namespace StardewArchipelago.Items
         public const string FRIENDSHIP_BONUS_PREFIX = "Friendship Bonus (";
         public const string RECIPE_SUFFIX = " Recipe";
 
-        private ILogger _logger;
-        private StardewItemManager _itemManager;
-        private UnlockManager _unlockManager;
-        private TrapManager _trapManager;
+        private readonly ILogger _logger;
+        private readonly StardewItemManager _itemManager;
+        private readonly UnlockManager _unlockManager;
+        private readonly TrapManager _trapManager;
 
         // When More mods start to need name mapping, we can make a generic version of this
-        private CompoundNameMapper _nameMapper;
+        private readonly CompoundNameMapper _nameMapper;
 
         public ItemParser(ILogger logger, IModHelper helper, Harmony harmony, StardewArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager itemManager, TileChooser tileChooser, BabyBirther babyBirther, GiftSender giftSender)
         {

@@ -16,8 +16,8 @@ namespace StardewArchipelago.Items.Traps
         private const string WEEDS = "750";
 
         private ILogger _logger;
-        private StardewArchipelagoClient _archipelago;
-        private TrapDifficultyBalancer _difficultyBalancer;
+        private readonly StardewArchipelagoClient _archipelago;
+        private readonly TrapDifficultyBalancer _difficultyBalancer;
 
         public DebrisSpawner(ILogger logger, StardewArchipelagoClient archipelago, TrapDifficultyBalancer difficultyBalancer)
         {

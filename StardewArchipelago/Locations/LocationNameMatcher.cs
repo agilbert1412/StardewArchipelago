@@ -8,7 +8,7 @@ namespace StardewArchipelago.Locations
 {
     public class LocationNameMatcher
     {
-        private Dictionary<string, string[]> _wordFilterCache;
+        private readonly Dictionary<string, string[]> _wordFilterCache;
 
         private static readonly Dictionary<string, string[]> _exceptions = new()
         {

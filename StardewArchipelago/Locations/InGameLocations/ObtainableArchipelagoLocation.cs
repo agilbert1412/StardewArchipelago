@@ -27,14 +27,14 @@ namespace StardewArchipelago.Locations.InGameLocations
         protected static Hint[] _activeHints;
         protected static uint _lastTimeUpdatedActiveHints;
 
-        private Texture2D _archipelagoTexture;
+        private readonly Texture2D _archipelagoTexture;
 
         protected LocationChecker _locationChecker;
         protected string _locationDisplayName;
 
         public string LocationName { get; }
 
-        private string _description;
+        private readonly string _description;
 
         private Dictionary<string, int> _extraMaterialsRequired;
 

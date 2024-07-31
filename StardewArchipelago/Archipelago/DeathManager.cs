@@ -13,7 +13,7 @@ namespace StardewArchipelago.Archipelago
         private static ILogger _logger;
         private static ArchipelagoClient _archipelago;
         private IModHelper _modHelper;
-        private Harmony _harmony;
+        private readonly Harmony _harmony;
 
         private static bool _isCurrentlyReceivingDeathLink = false;
 

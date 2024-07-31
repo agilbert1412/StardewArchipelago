@@ -8,7 +8,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
     public class VillagerGrabber
     {
         public const string CAROLINE_SUN_ROOM = "Caroline's Sun Room";
-        private StardewItemManager _itemManager;
+        private readonly StardewItemManager _itemManager;
 
         public Dictionary<string, Dictionary<StardewObject, int>> GrabberItems { get; private set; }
 

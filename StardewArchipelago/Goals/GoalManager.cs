@@ -14,8 +14,8 @@ namespace StardewArchipelago.Goals
     {
         private static ILogger _logger;
         private IModHelper _modHelper;
-        private Harmony _harmony;
-        private StardewArchipelagoClient _archipelago;
+        private readonly Harmony _harmony;
+        private readonly StardewArchipelagoClient _archipelago;
         private LocationChecker _locationChecker;
 
         public GoalManager(ILogger logger, IModHelper modHelper, Harmony harmony, StardewArchipelagoClient archipelago, LocationChecker locationChecker)

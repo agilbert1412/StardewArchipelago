@@ -16,7 +16,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Modded
         private const double BIRTHDAY_GIFT_MULTIPLIER = 1.2;
 
         private ILogger _logger;
-        private IModHelper _modHelper;
+        private readonly IModHelper _modHelper;
 
         public SocializingConfigPatcher(ILogger logger, IModHelper modHelper)
         {

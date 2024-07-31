@@ -15,11 +15,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
     {
         public const string SHIPSANITY_PREFIX = "Shipsanity: ";
 
-        private ILogger _logger;
-        private StardewArchipelagoClient _archipelago;
-        private LocationChecker _locationChecker;
-        private NameSimplifier _nameSimplifier;
-        private CompoundNameMapper _nameMapper;
+        private readonly ILogger _logger;
+        private readonly StardewArchipelagoClient _archipelago;
+        private readonly LocationChecker _locationChecker;
+        private readonly NameSimplifier _nameSimplifier;
+        private readonly CompoundNameMapper _nameMapper;
 
         public NightShippingBehaviors(ILogger logger, StardewArchipelagoClient archipelago, LocationChecker locationChecker, NameSimplifier nameSimplifier)
         {

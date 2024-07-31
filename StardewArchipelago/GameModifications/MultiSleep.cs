@@ -13,7 +13,7 @@ namespace StardewArchipelago.GameModifications
     {
         private static ILogger _logger;
         private static IModHelper _modHelper;
-        private Harmony _harmony;
+        private readonly Harmony _harmony;
 
         public static int DaysToSkip = 0;
         private static int _multiSleepPrice = -1;

@@ -93,7 +93,7 @@ namespace StardewArchipelago.Constants
             return CreateHasReceivedItemCondition(itemName, amount);
         }
 
-        private static Dictionary<string, string> _buildingNameReplacements = new()
+        private static readonly Dictionary<string, string> _buildingNameReplacements = new()
         {
             { "Pathoschild.TractorMod_Stable", "Tractor Garage" },
         };

@@ -7,7 +7,7 @@ namespace StardewArchipelago.Stardew
 {
     public class StardewSlingshot : StardewWeapon
     {
-        private int _defaultSalePrice;
+        private readonly int _defaultSalePrice;
 
         public StardewSlingshot(string id, string name, string description, int minDamage, int maxDamage, double knockBack, double speed, double addedPrecision, double addedDefence, int type, int baseMineLevel, int minMineLevel, double addedAoe, double criticalChance, double criticalDamage, string displayName, int defaultSalePrice)
             : base(id, name, description, minDamage, maxDamage, knockBack, speed, addedPrecision, addedDefence, type, baseMineLevel, minMineLevel, addedAoe, criticalChance, criticalDamage, displayName)

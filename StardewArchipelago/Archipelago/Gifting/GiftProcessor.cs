@@ -15,8 +15,8 @@ namespace StardewArchipelago.Archipelago.Gifting
     {
         private ILogger _logger;
         private ArchipelagoClient _archipelago;
-        private StardewItemManager _itemManager;
-        private ICloseTraitParser<string> _closeTraitParser;
+        private readonly StardewItemManager _itemManager;
+        private readonly ICloseTraitParser<string> _closeTraitParser;
         private Dictionary<string, Func<int, ItemAmount>> _specialItems;
         private Dictionary<int, Dictionary<string[], Func<int, Dictionary<string, GiftTrait>, ItemAmount>>> _recognizedTraits;
 

@@ -24,9 +24,9 @@ namespace StardewArchipelago.GameModifications
 
         private ILogger _logger;
         private IModHelper _modHelper;
-        private StardewArchipelagoClient _archipelago;
+        private readonly StardewArchipelagoClient _archipelago;
         private LocationChecker _locationChecker;
-        private StardewItemManager _stardewItemManager;
+        private readonly StardewItemManager _stardewItemManager;
 
         public SeedShopStockModifier(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager stardewItemManager)
         {

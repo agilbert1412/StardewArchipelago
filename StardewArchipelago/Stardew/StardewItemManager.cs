@@ -33,7 +33,7 @@ namespace StardewArchipelago.Stardew
         private Dictionary<string, StardewCookingRecipe> _cookingRecipesByName;
         private Dictionary<string, StardewCraftingRecipe> _craftingRecipesByName;
 
-        private List<string> _priorityIds = new()
+        private readonly List<string> _priorityIds = new()
         {
             "390",
             "685",

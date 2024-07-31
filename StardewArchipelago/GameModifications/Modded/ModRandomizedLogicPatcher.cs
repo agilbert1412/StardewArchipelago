@@ -12,8 +12,8 @@ namespace StardewArchipelago.GameModifications.Modded
         private readonly Harmony _harmony;
         private readonly StardewArchipelagoClient _archipelago;
         private readonly StardewItemManager _stardewItemManager;
-        private JunimoShopStockModifier _junimoShopStockModifier;
-        private IModHelper _modHelper;
+        private readonly JunimoShopStockModifier _junimoShopStockModifier;
+        private readonly IModHelper _modHelper;
 
         public ModRandomizedLogicPatcher(ILogger logger, IModHelper modHelper, Harmony harmony, StardewArchipelagoClient archipelago, SeedShopStockModifier seedShopStockModifier, StardewItemManager stardewItemManager)
         {

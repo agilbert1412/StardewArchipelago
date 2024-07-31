@@ -13,11 +13,11 @@ namespace StardewArchipelago.Archipelago.Gifting
     public class GiftReceiver
     {
         private ILogger _logger;
-        private ArchipelagoClient _archipelago;
-        private IGiftingService _giftService;
-        private StardewItemManager _itemManager;
-        private Mailman _mail;
-        private GiftProcessor _giftProcessor;
+        private readonly ArchipelagoClient _archipelago;
+        private readonly IGiftingService _giftService;
+        private readonly StardewItemManager _itemManager;
+        private readonly Mailman _mail;
+        private readonly GiftProcessor _giftProcessor;
 
         public GiftReceiver(ILogger logger, ArchipelagoClient archipelago, IGiftingService giftService, StardewItemManager itemManager, Mailman mail, ICloseTraitParser<string> closeTraitParser)
         {

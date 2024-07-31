@@ -10,7 +10,7 @@ namespace StardewArchipelago.Locations
 {
     internal class SoundPurchaseableObtainableArchipelagoLocation : ObtainableArchipelagoLocation
     {
-        private string _sound;
+        private readonly string _sound;
 
         public SoundPurchaseableObtainableArchipelagoLocation(string locationName, LogHandler logger, IModHelper modHelper, LocationChecker locationChecker, ArchipelagoClient archipelago, Hint[] myActiveHints, string sound) : this(locationName, locationName, logger, modHelper, locationChecker, archipelago, myActiveHints, sound)
         {

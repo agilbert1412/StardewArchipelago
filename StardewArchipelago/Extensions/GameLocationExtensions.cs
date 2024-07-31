@@ -197,7 +197,7 @@ namespace StardewArchipelago.Extensions
             return targetPoint;
         }
 
-        private static Dictionary<string, Dictionary<Point, Point>> _touchActionWarpCache = new();
+        private static readonly Dictionary<string, Dictionary<Point, Point>> _touchActionWarpCache = new();
 
         private static Dictionary<Point, Point> GetAllTouchActionWarpsTo(GameLocation origin, string destinationName)
         {
@@ -249,7 +249,7 @@ namespace StardewArchipelago.Extensions
             return touchActionWarps;
         }
 
-        private static Dictionary<string, Dictionary<Point, Point>> _actionWarpCache = new();
+        private static readonly Dictionary<string, Dictionary<Point, Point>> _actionWarpCache = new();
 
         private static Dictionary<Point, Point> GetAllActionWarpsTo(GameLocation origin, string destinationName)
         {

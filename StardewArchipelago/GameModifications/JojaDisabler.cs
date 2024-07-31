@@ -11,7 +11,7 @@ namespace StardewArchipelago.GameModifications
     {
         private static ILogger _logger;
         private static IModHelper _modHelper;
-        private Harmony _harmony;
+        private readonly Harmony _harmony;
 
         public JojaDisabler(ILogger logger, IModHelper modHelper, Harmony harmony)
         {

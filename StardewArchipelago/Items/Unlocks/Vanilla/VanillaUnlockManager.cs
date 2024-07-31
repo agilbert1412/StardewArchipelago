@@ -24,9 +24,9 @@ namespace StardewArchipelago.Items.Unlocks.Vanilla
         public const string ISLAND_MAILBOX = "Island Mailbox";
         public const string TREEHOUSE = "Treehouse";
 
-        private StardewArchipelagoClient _archipelago;
-        private LocationChecker _locationChecker;
-        private List<IUnlockManager> _childUnlockManagers;
+        private readonly StardewArchipelagoClient _archipelago;
+        private readonly LocationChecker _locationChecker;
+        private readonly List<IUnlockManager> _childUnlockManagers;
 
         public VanillaUnlockManager(StardewArchipelagoClient archipelago, LocationChecker locationChecker)
         {

@@ -28,7 +28,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
     public static class QuestInjections
     {
         private const string DESERT_FESTIVAL_FISHING_QUEST_ID = "98765";
-        private static List<string> _ignoredQuests = new()
+        private static readonly List<string> _ignoredQuests = new()
         {
             "To The Beach", "Explore The Mine", "Deeper In The Mine", "To The Bottom?", "The Mysterious Qi",
             "A Winter Mystery", "Cryptic Note", "Dark Talisman", "Goblin Problem",

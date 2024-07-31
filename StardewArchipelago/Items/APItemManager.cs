@@ -15,8 +15,8 @@ namespace StardewArchipelago.Items
     public class APItemManager : ItemManager
     {
         private ArchipelagoClient _archipelago;
-        private ItemParser _itemParser;
-        private Mailman _mail;
+        private readonly ItemParser _itemParser;
+        private readonly Mailman _mail;
 
         public ItemParser ItemParser => _itemParser;
         public TrapManager TrapManager => _itemParser.TrapManager;

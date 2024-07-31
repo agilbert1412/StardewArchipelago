@@ -21,12 +21,12 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
         private const string auroraVineyardCellar = "Custom_ApplesRoom";
         private const string auroraVineyardRefurbished = "Custom_AuroraVineyardRefurbished";
         private const string auroraVineyardCellarRefurbished = "Custom_AuroraVineyardCellarRefurbished";
-        private static string[] _jojaMartLocations = { jojaMart, abandonedJojaMart, movieTheater };
-        private static string[] _trailerLocations = { trailer, trailerBig };
-        private static string[] _beachLocations = { beach, beachNightMarket };
-        private static string[] _grandpaShedLocations = { grandpaShedRuins, grandpaShedFinish };
-        private static string[] _auroraVineyardLocations = { auroraVineyard, auroraVineyardRefurbished };
-        private static string[] _auroraVineyardCellarLocations = { auroraVineyardCellar, auroraVineyardCellarRefurbished };
+        private static readonly string[] _jojaMartLocations = { jojaMart, abandonedJojaMart, movieTheater };
+        private static readonly string[] _trailerLocations = { trailer, trailerBig };
+        private static readonly string[] _beachLocations = { beach, beachNightMarket };
+        private static readonly string[] _grandpaShedLocations = { grandpaShedRuins, grandpaShedFinish };
+        private static readonly string[] _auroraVineyardLocations = { auroraVineyard, auroraVineyardRefurbished };
+        private static readonly string[] _auroraVineyardCellarLocations = { auroraVineyardCellar, auroraVineyardCellarRefurbished };
 
         public List<string[]> EquivalentAreas = new()
         {
@@ -38,7 +38,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             _auroraVineyardCellarLocations,
         };
 
-        private ArchipelagoClient _archipelago;
+        private readonly ArchipelagoClient _archipelago;
 
         public EquivalentWarps(ArchipelagoClient archipelago)
         {

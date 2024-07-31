@@ -15,7 +15,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
         private const string MONSTER_HEADER = "Strings\\Locations:AdventureGuild_KillList_Header";
         private const string MONSTER_FOOTER = "Strings\\Locations:AdventureGuild_KillList_Footer";
 
-        private StardewArchipelagoClient _archipelago;
+        private readonly StardewArchipelagoClient _archipelago;
 
         public readonly Dictionary<string, string[]> MonstersByCategory = new()
         {

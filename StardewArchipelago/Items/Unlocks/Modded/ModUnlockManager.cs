@@ -9,7 +9,7 @@ namespace StardewArchipelago.Items.Unlocks.Modded
 {
     public class ModUnlockManager : IUnlockManager
     {
-        private List<IUnlockManager> _childUnlockManagers;
+        private readonly List<IUnlockManager> _childUnlockManagers;
 
         public ModUnlockManager(StardewArchipelagoClient archipelago)
         {

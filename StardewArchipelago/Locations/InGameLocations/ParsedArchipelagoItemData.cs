@@ -14,8 +14,8 @@ namespace StardewArchipelago.Locations.InGameLocations
     {
         private const int _textureSize = 48;
 
-        private LogHandler _logger;
-        private IModHelper _modHelper;
+        private readonly LogHandler _logger;
+        private readonly IModHelper _modHelper;
         private ArchipelagoClient _archipelago;
         private LocationChecker _locationChecker;
 

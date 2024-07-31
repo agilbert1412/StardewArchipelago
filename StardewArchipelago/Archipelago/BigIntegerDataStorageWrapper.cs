@@ -14,8 +14,8 @@ namespace StardewArchipelago.Archipelago
 {
     public class BigIntegerDataStorageWrapper : IDataStorageWrapper<BigInteger>
     {
-        private ILogger _logger;
-        private ArchipelagoSession _session;
+        private readonly ILogger _logger;
+        private readonly ArchipelagoSession _session;
 
         public BigIntegerDataStorageWrapper(ILogger logger, ArchipelagoSession session)
         {

@@ -10,9 +10,9 @@ namespace StardewArchipelago.Archipelago
 
     public class ModsManager
     {
-        private ILogger _logger;
-        private List<string> _activeMods;
-        private VersionValidator _versionValidator;
+        private readonly ILogger _logger;
+        private readonly List<string> _activeMods;
+        private readonly VersionValidator _versionValidator;
 
         public ModsManager(ILogger logger, List<string> activeMods)
         {

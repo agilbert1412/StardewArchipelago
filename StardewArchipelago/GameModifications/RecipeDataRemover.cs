@@ -14,7 +14,7 @@ namespace StardewArchipelago.GameModifications
     {
         private ILogger _logger;
         private IModHelper _helper;
-        private StardewArchipelagoClient _archipelago;
+        private readonly StardewArchipelagoClient _archipelago;
 
         public RecipeDataRemover(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago)
         {

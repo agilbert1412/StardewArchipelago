@@ -16,8 +16,8 @@ namespace StardewArchipelago.GameModifications
     {
         private const int UNLIMITED_MONEY_AMOUNT = 9999999;
         private const int MINIMUM_UNLIMITED_MONEY = 1000000;
-        private StardewArchipelagoClient _archipelago;
-        private StardewItemManager _stardewItemManager;
+        private readonly StardewArchipelagoClient _archipelago;
+        private readonly StardewItemManager _stardewItemManager;
 
         public StartingResources(StardewArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager stardewItemManager)
         {

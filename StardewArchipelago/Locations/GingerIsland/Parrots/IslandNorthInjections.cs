@@ -20,7 +20,7 @@ namespace StardewArchipelago.Locations.GingerIsland.Parrots
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
 
-        private IslandLocation _islandLocation;
+        private readonly IslandLocation _islandLocation;
 
         public static void Initialize(ILogger logger, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {

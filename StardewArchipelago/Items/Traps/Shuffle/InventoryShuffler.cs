@@ -16,8 +16,8 @@ namespace StardewArchipelago.Items.Traps.Shuffle
     {
         private const int CRAFTING_CATEGORY = -9;
         private const string CRAFTING_TYPE = "Crafting";
-        private ILogger _logger;
-        private GiftSender _giftSender;
+        private readonly ILogger _logger;
+        private readonly GiftSender _giftSender;
 
         public InventoryShuffler(ILogger logger, GiftSender giftSender)
         {
