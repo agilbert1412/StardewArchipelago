@@ -1,6 +1,8 @@
-﻿using Microsoft.Xna.Framework;
+﻿using KaitoKid.ArchipelagoUtilities.Net;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using StardewArchipelago.Archipelago;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
+using StardewArchipelago.Logging;
 using StardewArchipelago.Textures;
 using StardewModdingAPI;
 using StardewValley.ItemTypeDefinitions;
@@ -12,14 +14,15 @@ namespace StardewArchipelago.Locations.InGameLocations
     {
         private const int _textureSize = 48;
 
-        private static IMonitor _monitor;
-        private static IModHelper _modHelper;
-        private static ArchipelagoClient _archipelago;
-        private static LocationChecker _locationChecker;
+        private readonly LogHandler _logger;
+        private readonly IModHelper _modHelper;
+        private ArchipelagoClient _archipelago;
+        private LocationChecker _locationChecker;
 
-        public ParsedArchipelagoItemData(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker, IItemDataDefinition itemType, string itemId, int spriteIndex, string textureName, string internalName, string displayName, string description, int category, string objectType, object rawData, bool isErrorItem = false, bool excludeFromRandomSale = false) : base(itemType, itemId, spriteIndex, textureName, internalName, displayName, description, category, objectType, rawData, isErrorItem, excludeFromRandomSale)
+        public ParsedArchipelagoItemData(LogHandler logger, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker, IItemDataDefinition itemType, string itemId, int spriteIndex, string textureName, string internalName, string displayName, string description, int category, string objectType, object rawData, bool isErrorItem = false, bool excludeFromRandomSale = false) : base(itemType, itemId, spriteIndex, textureName, internalName, displayName,
+            description, category, objectType, rawData, isErrorItem, excludeFromRandomSale)
         {
-            _monitor = monitor;
+            _logger = logger;
             _modHelper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
@@ -27,7 +30,7 @@ namespace StardewArchipelago.Locations.InGameLocations
 
         public override Texture2D GetTexture()
         {
-            return ArchipelagoTextures.GetArchipelagoLogo(_monitor, _modHelper, _textureSize, ArchipelagoTextures.COLOR);
+            return ArchipelagoTextures.GetArchipelagoLogo(_logger, _modHelper, _textureSize, ArchipelagoTextures.COLOR);
         }
 
         public override Rectangle GetSourceRect(int offset = 0, int? spriteIndex = null)

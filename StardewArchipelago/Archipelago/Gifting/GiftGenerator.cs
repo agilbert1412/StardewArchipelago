@@ -15,7 +15,7 @@ namespace StardewArchipelago.Archipelago.Gifting
     {
         private const int DEFAULT_BUFF_DURATION = 120;
 
-        private StardewItemManager _itemManager;
+        private readonly StardewItemManager _itemManager;
 
         public GiftGenerator(StardewItemManager itemManager)
         {
@@ -208,7 +208,7 @@ namespace StardewArchipelago.Archipelago.Gifting
             {
                 yield return CreateTrait(GiftFlag.Tool, effects.ForagingLevel, buffDuration);
             }
-            
+
             if (effects.LuckLevel != 0)
             {
                 yield return CreateTrait("Luck", effects.LuckLevel, buffDuration);
@@ -243,7 +243,7 @@ namespace StardewArchipelago.Archipelago.Gifting
         private IEnumerable<GiftTrait> GetCategoryTraits(Item giftItem)
         {
             var category = giftItem.Category;
-            
+
             if (_categoryFlags.ContainsKey(category))
             {
                 foreach (var categoryName in _categoryFlags[category])
@@ -263,7 +263,7 @@ namespace StardewArchipelago.Archipelago.Gifting
             const string itemSuffix = "_item";
             const string largePrefix = "large_";
             var contextTags = giftItem.GetContextTags();
-            
+
             foreach (var contextTag in contextTags)
             {
                 if (_contextTags.ContainsKey(contextTag))

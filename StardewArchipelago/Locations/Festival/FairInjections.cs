@@ -1,24 +1,26 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
-using StardewArchipelago.Archipelago;
 using StardewArchipelago.Serialization;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.ArchipelagoUtilities.Net;
+using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.Locations.Festival
 {
     internal class FairInjections
     {
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static IModHelper _modHelper;
-        private static ArchipelagoClient _archipelago;
+        private static StardewArchipelagoClient _archipelago;
         private static ArchipelagoStateDto _state;
         private static LocationChecker _locationChecker;
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker)
+        public static void Initialize(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker)
         {
-            _monitor = monitor;
+            _logger = logger;
             _modHelper = modHelper;
             _archipelago = archipelago;
             _state = state;
@@ -47,7 +49,7 @@ namespace StardewArchipelago.Locations.Festival
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(StrengthGameUpdate_StrongEnough_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(StrengthGameUpdate_StrongEnough_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -67,7 +69,7 @@ namespace StardewArchipelago.Locations.Festival
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(InterpretGrangeResults_Success_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(InterpretGrangeResults_Success_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -87,7 +89,7 @@ namespace StardewArchipelago.Locations.Festival
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(ForceEndFestival_KeepStarTokens_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(ForceEndFestival_KeepStarTokens_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }

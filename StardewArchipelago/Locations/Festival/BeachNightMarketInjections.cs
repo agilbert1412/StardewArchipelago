@@ -2,26 +2,28 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Menus;
 using xTile.Dimensions;
 using Rectangle = xTile.Dimensions.Rectangle;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.ArchipelagoUtilities.Net;
+using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.Locations.Festival
 {
     public class BeachNightMarketInjections
     {
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static IModHelper _modHelper;
-        private static ArchipelagoClient _archipelago;
+        private static StardewArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
         {
-            _monitor = monitor;
+            _logger = logger;
             _modHelper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
@@ -42,7 +44,7 @@ namespace StardewArchipelago.Locations.Festival
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(Draw_DontDrawOriginalPainting_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(Draw_DontDrawOriginalPainting_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -68,7 +70,7 @@ namespace StardewArchipelago.Locations.Festival
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(Draw_DrawCorrectPainting_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(Draw_DrawCorrectPainting_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -97,7 +99,7 @@ namespace StardewArchipelago.Locations.Festival
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(CheckAction_LupiniPainting_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(CheckAction_LupiniPainting_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -134,7 +136,7 @@ namespace StardewArchipelago.Locations.Festival
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(AnswerDialogueAction_LupiniPainting_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(AnswerDialogueAction_LupiniPainting_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }

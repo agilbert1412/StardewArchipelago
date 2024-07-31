@@ -1,7 +1,7 @@
 ﻿using System;
-using StardewArchipelago.Archipelago;
-using StardewArchipelago.Locations;
-using StardewModdingAPI;
+using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewValley;
 using StardewValley.Menus;
 
@@ -12,13 +12,13 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         private const string ARCHAEOLOGY_QUEST_ID = "23";
         private const string ARCHAEOLOGY_QUEST_NAME = "Archaeology";
 
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
 
-        public static void Initialize(IMonitor monitor, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(ILogger logger, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
-            _monitor = monitor;
+            _logger = logger;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
         }
@@ -37,7 +37,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(Constructor_MakeQuestsNonCancellable_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(Constructor_MakeQuestsNonCancellable_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -56,7 +56,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(FoundArtifact_StartArchaeologyIfMissed_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(FoundArtifact_StartArchaeologyIfMissed_Postfix)}:\n{ex}");
                 return;
             }
         }

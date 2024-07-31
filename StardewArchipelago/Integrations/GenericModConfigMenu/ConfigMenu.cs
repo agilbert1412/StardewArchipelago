@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
-using StardewModdingAPI;
 using StardewArchipelago.Archipelago;
+using StardewModdingAPI;
 
 namespace StardewArchipelago.Integrations.GenericModConfigMenu
 {
@@ -89,8 +89,8 @@ namespace StardewArchipelago.Integrations.GenericModConfigMenu
 
     class GenericModConfig
     {
-        private IModHelper Helper;
-        private IManifest ModManifest;
+        private readonly IModHelper Helper;
+        private readonly IManifest ModManifest;
         private ModConfig Config;
 
         public GenericModConfig(ModEntry mod)

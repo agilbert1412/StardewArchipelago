@@ -1,23 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using StardewArchipelago.Archipelago;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.GameModifications.EntranceRandomizer;
-using StardewModdingAPI;
 using StardewValley;
-using StardewValley.GameData;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
 {
     public class EntranceInjections
     {
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static ArchipelagoClient _archipelago;
         private static EntranceManager _entranceManager;
 
-        public static void Initialize(IMonitor monitor, ArchipelagoClient archipelago, EntranceManager entranceManager)
+        public static void Initialize(ILogger logger, ArchipelagoClient archipelago, EntranceManager entranceManager)
         {
-            _monitor = monitor;
+            _logger = logger;
             _archipelago = archipelago;
             _entranceManager = entranceManager;
         }
@@ -64,7 +62,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(PerformWarpFarmer_EntranceRandomization_Prefix)} going from {Game1.currentLocation.Name} to {locationRequest.Name}:{Environment.NewLine}\t{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(PerformWarpFarmer_EntranceRandomization_Prefix)} going from {Game1.currentLocation.Name} to {locationRequest.Name}:{Environment.NewLine}\t{ex}");
                 return true; // run original logic
             }
         }

@@ -1,11 +1,12 @@
 ﻿using System;
+using KaitoKid.ArchipelagoUtilities.Net;
 using Microsoft.Xna.Framework.Graphics;
-using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Modded;
-using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 using xTile.Dimensions;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -17,17 +18,17 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private const string PREMIUM_PACK = "Premium Pack";
         private const string PROGRESSIVE_BACKPACK = "Progressive Backpack";
 
-        private static IMonitor _monitor;
-        private static ArchipelagoClient _archipelago;
+        private static ILogger _logger;
+        private static StardewArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
 
         private static uint _dayLastUpdateBackpackDisplay;
         private static int _maxItemsForBackpackDisplay;
         private static int _realMaxItems;
 
-        public static void Initialize(IMonitor monitor, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(ILogger logger, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
         {
-            _monitor = monitor;
+            _logger = logger;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
             _realMaxItems = UNINITIALIZED;
@@ -96,8 +97,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(AnswerDialogueAction_BackPackPurchase_Prefix)}:\n{ex}",
-                    LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(AnswerDialogueAction_BackPackPurchase_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -123,7 +123,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(PerformAction_BuyBackpack_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(PerformAction_BuyBackpack_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -188,7 +188,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(Draw_SeedShopBackpack_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(Draw_SeedShopBackpack_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -207,7 +207,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(Draw_SeedShopBackpack_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(Draw_SeedShopBackpack_Postfix)}:\n{ex}");
                 return;
             }
         }

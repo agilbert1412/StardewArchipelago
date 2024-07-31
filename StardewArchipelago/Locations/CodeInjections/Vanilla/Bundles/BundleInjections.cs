@@ -1,35 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using StardewArchipelago.Archipelago;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewArchipelago.Bundles;
-using StardewArchipelago.Constants;
 using StardewArchipelago.Serialization;
-using StardewArchipelago.Stardew;
-using StardewArchipelago.Textures;
 using StardewModdingAPI;
-using StardewValley;
-using StardewValley.BellsAndWhistles;
-using StardewValley.Locations;
 using StardewValley.Menus;
 using Bundle = StardewValley.Menus.Bundle;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.ArchipelagoUtilities.Net;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 {
     public static class BundleInjections
     {
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static IModHelper _modHelper;
         private static ArchipelagoClient _archipelago;
         private static ArchipelagoStateDto _state;
         private static LocationChecker _locationChecker;
         private static BundlesManager _bundlesManager;
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, BundlesManager bundlesManager)
+        public static void Initialize(ILogger logger, IModHelper modHelper, ArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, BundlesManager bundlesManager)
         {
-            _monitor = monitor;
+            _logger = logger;
             _modHelper = modHelper;
             _archipelago = archipelago;
             _state = state;
@@ -48,7 +42,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(BundleConstructor_GenerateBundleIngredients_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(BundleConstructor_GenerateBundleIngredients_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -63,7 +57,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             {
                 return;
             }
-            
+
             bundle.name = bundleName;
             bundle.label = bundleName;
             bundle.rewardDescription = string.Empty;

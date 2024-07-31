@@ -1,18 +1,18 @@
 ﻿using System;
-using StardewArchipelago.Archipelago;
-using StardewModdingAPI;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewValley;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
 {
     public static class LostAndFoundInjections
     {
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static ArchipelagoClient _archipelago;
 
-        public static void Initialize(IMonitor monitor, ArchipelagoClient archipelago)
+        public static void Initialize(ILogger logger, ArchipelagoClient archipelago)
         {
-            _monitor = monitor;
+            _logger = logger;
             _archipelago = archipelago;
         }
 
@@ -39,7 +39,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(CheckReturnedDonations_UpgradeToolsProperly_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(CheckReturnedDonations_UpgradeToolsProperly_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }

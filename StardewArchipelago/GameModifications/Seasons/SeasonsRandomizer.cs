@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework.Input;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Serialization;
@@ -8,24 +9,23 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.BellsAndWhistles;
 using StardewValley.Menus;
-using StardewValley.Minigames;
 
 namespace StardewArchipelago.GameModifications.Seasons
 {
     public class SeasonsRandomizer
     {
         private const string _nextSeasonDialogKey = "NextSeason";
-        public static readonly string[] ValidSeasons = new[] { "Spring", "Summer", "Fall", "Winter" };
+        public static readonly string[] ValidSeasons = { "Spring", "Summer", "Fall", "Winter" };
         private const string PROGRESSIVE_SEASON = "Progressive Season";
 
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static IModHelper _helper;
-        private static ArchipelagoClient _archipelago;
+        private static StardewArchipelagoClient _archipelago;
         private static ArchipelagoStateDto _state;
 
-        public SeasonsRandomizer(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago, ArchipelagoStateDto state)
+        public SeasonsRandomizer(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago, ArchipelagoStateDto state)
         {
-            _monitor = monitor;
+            _logger = logger;
             _helper = helper;
             _archipelago = archipelago;
             _state = state;
@@ -87,7 +87,7 @@ namespace StardewArchipelago.GameModifications.Seasons
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(OnNewSeason_UsePredefinedChoice_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(OnNewSeason_UsePredefinedChoice_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -104,7 +104,7 @@ namespace StardewArchipelago.GameModifications.Seasons
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(Date_UseTotalDaysStats_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(Date_UseTotalDaysStats_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -129,7 +129,7 @@ namespace StardewArchipelago.GameModifications.Seasons
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(NewDay_SeasonChoice_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(NewDay_SeasonChoice_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -197,7 +197,7 @@ namespace StardewArchipelago.GameModifications.Seasons
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(AnswerDialogueAction_SeasonChoice_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(AnswerDialogueAction_SeasonChoice_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -258,7 +258,7 @@ namespace StardewArchipelago.GameModifications.Seasons
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(CountdownToWedding_Add1_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(CountdownToWedding_Add1_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -314,7 +314,7 @@ namespace StardewArchipelago.GameModifications.Seasons
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(GetWeatherModificationsForDate_UseCorrectDates_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(GetWeatherModificationsForDate_UseCorrectDates_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }

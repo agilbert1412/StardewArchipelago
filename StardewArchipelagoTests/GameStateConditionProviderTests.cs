@@ -1,7 +1,7 @@
 using FluentAssertions;
 using StardewArchipelago.Constants;
 
-namespace StardewArchipelagoTests
+namespace StardewArchipelago.ests
 {
     public class GameStateConditionProviderTests
     {

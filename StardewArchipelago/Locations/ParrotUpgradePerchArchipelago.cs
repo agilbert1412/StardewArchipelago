@@ -1,6 +1,7 @@
 ﻿using System;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
 using Microsoft.Xna.Framework;
-using StardewArchipelago.Archipelago;
+using StardewArchipelago.Extensions;
 using StardewValley;
 using StardewValley.BellsAndWhistles;
 using xTile.Dimensions;
@@ -10,7 +11,7 @@ namespace StardewArchipelago.Locations
 {
     internal class ParrotUpgradePerchArchipelago : ParrotUpgradePerch
     {
-        private string _scoutedItemName;
+        private readonly string _scoutedItemName;
         public string ApLocationName { get; }
 
         public ParrotUpgradePerchArchipelago(string apLocationName, ArchipelagoClient archipelago,
@@ -20,7 +21,7 @@ namespace StardewArchipelago.Locations
         {
             ApLocationName = apLocationName;
             var scoutedLocation = archipelago.ScoutSingleLocation(ApLocationName);
-            _scoutedItemName = scoutedLocation == null ? ScoutedLocation.GenericItemName() : scoutedLocation.GetItemName();
+            _scoutedItemName = scoutedLocation == null ? ScoutedLocation.GenericItemName() : scoutedLocation.GetItemName(StringExtensions.TurnHeartsIntoStardewHearts);
         }
 
         public bool CheckActionArchipelago(Location tileLocation)

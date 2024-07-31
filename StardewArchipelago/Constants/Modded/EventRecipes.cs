@@ -20,7 +20,7 @@ namespace StardewArchipelago.Constants.Modded
             { EventIds.GINGER_TINCTURE_WIZARD, "Ginger Tincture" },
         };
 
-        public static readonly string[] QuestEventsWithRecipes = new string[]
+        public static readonly string[] QuestEventsWithRecipes =
         {
             EventIds.CRAYFISH_SOUP, EventIds.SPECIAL_PUMPKIN_SOUP, EventIds.GINGER_TINCTURE_ALECTO, EventIds.GINGER_TINCTURE_WIZARD,
         };

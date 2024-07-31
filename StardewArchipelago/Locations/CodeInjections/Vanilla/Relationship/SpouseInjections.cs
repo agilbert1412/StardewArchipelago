@@ -1,7 +1,9 @@
 ﻿using System;
-using StardewArchipelago.Archipelago;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewModdingAPI;
 using StardewValley;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.ArchipelagoUtilities.Net;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
 {
@@ -10,14 +12,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
     {
         private const string SPOUSE_STARDROP = "Spouse Stardrop";
 
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static IModHelper _helper;
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(ILogger logger, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
-            _monitor = monitor;
+            _logger = logger;
             _helper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
@@ -65,7 +67,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(CheckAction_SpouseStardrop_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(CheckAction_SpouseStardrop_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }

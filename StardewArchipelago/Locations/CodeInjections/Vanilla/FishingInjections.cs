@@ -1,23 +1,25 @@
 ﻿using System;
 using System.Linq;
-using StardewArchipelago.Archipelago;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Goals;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.ArchipelagoUtilities.Net;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
     public static class FishingInjections
     {
-        private static readonly string[] _fishedTrash = new[]
+        private static readonly string[] _fishedTrash =
         {
             QualifiedItemIds.JOJA_COLA, QualifiedItemIds.TRASH, QualifiedItemIds.DRIFTWOOD,
             QualifiedItemIds.BROKEN_GLASSES, QualifiedItemIds.BROKEN_CD, QualifiedItemIds.SOGGY_NEWSPAPER,
         };
 
-        private static readonly string[] _fishsanityExceptions = new[]
+        private static readonly string[] _fishsanityExceptions =
         {
             QualifiedItemIds.GREEN_ALGAE, QualifiedItemIds.WHITE_ALGAE, QualifiedItemIds.SEAWEED, QualifiedItemIds.ORNATE_NECKLACE,
             QualifiedItemIds.GOLDEN_WALNUT, QualifiedItemIds.SECRET_NOTE, QualifiedItemIds.FOSSILIZED_SPINE, QualifiedItemIds.PEARL,
@@ -26,15 +28,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         };
         public const string FISHSANITY_PREFIX = "Fishsanity: ";
 
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static IModHelper _modHelper;
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
         private static StardewItemManager _itemManager;
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager itemManager)
+        public static void Initialize(ILogger logger, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager itemManager)
         {
-            _monitor = monitor;
+            _logger = logger;
             _modHelper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
@@ -61,12 +63,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 }
                 else if (!_fishsanityExceptions.Contains(itemId))
                 {
-                    _monitor.Log($"Unrecognized Fishsanity Location: {fishName} [{itemId}]", LogLevel.Error);
+                    _logger.LogError($"Unrecognized Fishsanity Location: {fishName} [{itemId}]");
                 }
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(CaughtFish_Fishsanity_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(CaughtFish_Fishsanity_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -80,7 +82,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(CaughtFish_CheckGoalCompletion_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(CaughtFish_CheckGoalCompletion_Postfix)}:\n{ex}");
                 return;
             }
         }

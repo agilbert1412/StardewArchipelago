@@ -1,7 +1,6 @@
-﻿using System;
-using HarmonyLib;
-using StardewArchipelago.Archipelago;
+﻿using HarmonyLib;
 using StardewModdingAPI;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 
 namespace StardewArchipelago.GameModifications.CodeInjections.Modded
 {
@@ -16,12 +15,12 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Modded
         private const double LOVED_GIFT_MULTIPLIER = 1.2;
         private const double BIRTHDAY_GIFT_MULTIPLIER = 1.2;
 
-        private IMonitor _monitor;
-        private IModHelper _modHelper;
+        private ILogger _logger;
+        private readonly IModHelper _modHelper;
 
-        public SocializingConfigPatcher(IMonitor monitor, IModHelper modHelper)
+        public SocializingConfigPatcher(ILogger logger, IModHelper modHelper)
         {
-            _monitor = monitor;
+            _logger = logger;
             _modHelper = modHelper;
         }
 
@@ -29,7 +28,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Modded
         {
             // public class ModEntry : Mod
             var socializingModEntryType = AccessTools.TypeByName($"{SOCIALIZING_NAMESPACE}.ModEntry");
-            
+
             // internal class Config
             var socializingConfigType = AccessTools.TypeByName($"{SOCIALIZING_NAMESPACE}.Config");
 

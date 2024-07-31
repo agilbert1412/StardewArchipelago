@@ -1,5 +1,6 @@
 ﻿using System;
 using HarmonyLib;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
@@ -8,13 +9,13 @@ namespace StardewArchipelago.GameModifications
 {
     public class JojaDisabler
     {
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static IModHelper _modHelper;
-        private Harmony _harmony;
+        private readonly Harmony _harmony;
 
-        public JojaDisabler(IMonitor monitor, IModHelper modHelper, Harmony harmony)
+        public JojaDisabler(ILogger logger, IModHelper modHelper, Harmony harmony)
         {
-            _monitor = monitor;
+            _logger = logger;
             _modHelper = modHelper;
             _harmony = harmony;
         }
@@ -59,7 +60,7 @@ namespace StardewArchipelago.GameModifications
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(AnswerDialogue_JojaMembershipPurchase_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(AnswerDialogue_JojaMembershipPurchase_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago.Gifting;
 using StardewArchipelago.Extensions;
-using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Objects;
@@ -16,12 +16,12 @@ namespace StardewArchipelago.Items.Traps.Shuffle
     {
         private const int CRAFTING_CATEGORY = -9;
         private const string CRAFTING_TYPE = "Crafting";
-        private IMonitor _monitor;
-        private GiftSender _giftSender;
+        private readonly ILogger _logger;
+        private readonly GiftSender _giftSender;
 
-        public InventoryShuffler(IMonitor monitor, GiftSender giftSender)
+        public InventoryShuffler(ILogger logger, GiftSender giftSender)
         {
-            _monitor = monitor;
+            _logger = logger;
             _giftSender = giftSender;
         }
 
@@ -34,7 +34,7 @@ namespace StardewArchipelago.Items.Traps.Shuffle
 
             var groupsToShuffle = new InventoryCollection();
 
-            _monitor.Log($"Executing a Shuffle Trap...", LogLevel.Debug);
+            _logger.LogDebug($"Executing a Shuffle Trap...");
 
             groupsToShuffle.Add(GetItemSlotsFromPlayerInventory());
             groupsToShuffle.AddRange(GetItemSlotsFromChestsInEntireWorld());
@@ -44,29 +44,29 @@ namespace StardewArchipelago.Items.Traps.Shuffle
 
             var numberInventoriesToShuffle = groupsToShuffle.Count;
             var numberItemsToShuffle = groupsToShuffle.Sum(x => x.Content.Count);
-            _monitor.Log($"Found {numberInventoriesToShuffle} inventoryGroups to shuffle, containing a total of {numberItemsToShuffle} items", LogLevel.Debug);
+            _logger.LogDebug($"Found {numberInventoriesToShuffle} inventoryGroups to shuffle, containing a total of {numberItemsToShuffle} items");
 
             var mergedGroups = MergeGroups(groupsToShuffle, targets);
-            _monitor.Log($"Separated inventoryGroups in {mergedGroups.Count} groups to shuffle among themselves", LogLevel.Debug);
+            _logger.LogDebug($"Separated inventoryGroups in {mergedGroups.Count} groups to shuffle among themselves");
 
             var random = new Random((int)(Game1.uniqueIDForThisGame + Game1.stats.DaysPlayed));
 
             if (rateAsGifts > 0)
             {
                 var numberItemsSent = SendRandomGifts(mergedGroups, random, rate * rateAsGifts);
-                _monitor.Log($"Sent {numberItemsSent} items as random gifts", LogLevel.Debug);
+                _logger.LogDebug($"Sent {numberItemsSent} items as random gifts");
             }
 
             foreach (var groupToShuffle in mergedGroups)
             {
                 var slotsToShuffle = groupToShuffle.SelectMany(x => x.Content.Content).ToDictionary(x => x.Key, x => x.Value);
-                _monitor.Log($"Shuffling a group of {groupToShuffle.Inventories.Count} inventoryGroups on map {groupToShuffle.Inventories.First().Info.Map} with {slotsToShuffle.Count} items...", LogLevel.Debug);
+                _logger.LogDebug($"Shuffling a group of {groupToShuffle.Inventories.Count} inventoryGroups on map {groupToShuffle.Inventories.First().Info.Map} with {slotsToShuffle.Count} items...");
                 slotsToShuffle = slotsToShuffle.Where(x => random.NextDouble() < rate).ToDictionary(x => x.Key, x => x.Value);
                 var allSlots = slotsToShuffle.Keys.ToList();
                 var allItems = slotsToShuffle.Values.ToList();
                 var allItemsShuffled = allItems.Shuffle(random);
 
-                _monitor.Log($"Shuffling {slotsToShuffle.Count} items locally", LogLevel.Debug);
+                _logger.LogDebug($"Shuffling {slotsToShuffle.Count} items locally");
 
                 for (var i = 0; i < allSlots.Count; i++)
                 {
@@ -79,7 +79,7 @@ namespace StardewArchipelago.Items.Traps.Shuffle
                 chest.clearNulls();
             }
 
-            _monitor.Log($"Finished the shuffle trap!", LogLevel.Debug);
+            _logger.LogDebug($"Finished the shuffle trap!");
         }
 
         private GroupedInventoryCollection MergeGroups(InventoryCollection groupsToShuffle, ShuffleTarget targets)
@@ -159,21 +159,21 @@ namespace StardewArchipelago.Items.Traps.Shuffle
 
             if (validTargets == null || !validTargets.Any())
             {
-                _monitor.Log($"Found no players to gift to", LogLevel.Debug);
+                _logger.LogDebug($"Found no players to gift to");
                 return 0;
             }
 
-            _monitor.Log($"Found {validTargets.Count} players that can receive random gifts!", LogLevel.Debug);
+            _logger.LogDebug($"Found {validTargets.Count} players that can receive random gifts!");
             var giftsToSend = SelectGiftingTargets(inventoryGroups, random, giftingRate, validTargets, out var slotsToClear);
 
             var failedToSendGifts = _giftSender.SendShuffleGifts(giftsToSend);
             if (failedToSendGifts.Any())
             {
-                _monitor.Log($"Finished sending gifts, {failedToSendGifts.Count} failed to send and will stay local", LogLevel.Debug);
+                _logger.LogDebug($"Finished sending gifts, {failedToSendGifts.Count} failed to send and will stay local");
             }
             else
             {
-                _monitor.Log($"Finished sending gifts", LogLevel.Debug);
+                _logger.LogDebug($"Finished sending gifts");
             }
 
             RemoveGiftedItemsFromPoolToShuffle(inventoryGroups, slotsToClear, failedToSendGifts);
@@ -201,7 +201,7 @@ namespace StardewArchipelago.Items.Traps.Shuffle
                             giftsToSend.Add(chosenTarget, new List<Object>());
                         }
 
-                        _monitor.Log($"{chosenTarget} has been chosen as a recipient for {objectToGift.Stack} {objectToGift.Name}", LogLevel.Trace);
+                        _logger.LogDebug($"{chosenTarget} has been chosen as a recipient for {objectToGift.Stack} {objectToGift.Name}");
                         giftsToSend[chosenTarget].Add(objectToGift);
                         slotsToClear.Add(objectToGift, itemSlot);
                     }
@@ -354,7 +354,7 @@ namespace StardewArchipelago.Items.Traps.Shuffle
             }
             catch (Exception ex)
             {
-                _monitor.Log("Could not find a fridge in the farmhouse", LogLevel.Warn);
+                _logger.LogWarning("Could not find a fridge in the farmhouse");
                 return null;
             }
         }
@@ -380,7 +380,7 @@ namespace StardewArchipelago.Items.Traps.Shuffle
             }
             catch (Exception ex)
             {
-                _monitor.Log("Could not find a fridge in the island farmhouse", LogLevel.Warn);
+                _logger.LogWarning("Could not find a fridge in the island farmhouse");
                 return null;
             }
         }

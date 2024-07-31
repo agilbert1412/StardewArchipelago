@@ -8,7 +8,7 @@ namespace StardewArchipelago.Items.Mail
 {
     public class ModLetterActions
     {
-        private StardewItemManager _stardewItemManager;
+        private readonly StardewItemManager _stardewItemManager;
 
         public ModLetterActions(StardewItemManager stardewItemManager)
         {

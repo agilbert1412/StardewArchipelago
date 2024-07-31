@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Modded;
 using StardewModdingAPI;
@@ -11,13 +12,13 @@ namespace StardewArchipelago.GameModifications
 {
     public class RecipeDataRemover
     {
-        private IMonitor _monitor;
+        private ILogger _logger;
         private IModHelper _helper;
-        private ArchipelagoClient _archipelago;
+        private readonly StardewArchipelagoClient _archipelago;
 
-        public RecipeDataRemover(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago)
+        public RecipeDataRemover(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago)
         {
-            _monitor = monitor;
+            _logger = logger;
             _helper = helper;
             _archipelago = archipelago;
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Modded;
@@ -19,9 +20,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
         public const string TYPE_CLUB = "Club";
         public const string TYPE_DAGGER = "Dagger";
         private readonly ArchipelagoClient _archipelago;
-        private ModsManager _modsManager;
+        private readonly ModsManager _modsManager;
 
-        private Dictionary<int, List<int>> _weaponWeightsByNumberOfTiers = new()
+        private readonly Dictionary<int, List<int>> _weaponWeightsByNumberOfTiers = new()
         {
             { 5, new List<int> { 4, 3, 2, 2, 2 } },
             { 6, new List<int> { 4, 3, 2, 2, 2, 2 } },

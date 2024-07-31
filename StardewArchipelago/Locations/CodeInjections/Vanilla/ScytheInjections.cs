@@ -1,7 +1,8 @@
 ﻿using System;
-using StardewModdingAPI;
 using StardewValley;
 using xTile.Dimensions;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.ArchipelagoUtilities.Net;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -9,12 +10,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
     {
         private const string GRIM_REAPER_STATUE = "Grim Reaper statue";
 
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static LocationChecker _locationChecker;
 
-        public static void Initialize(IMonitor monitor, LocationChecker locationChecker)
+        public static void Initialize(ILogger logger, LocationChecker locationChecker)
         {
-            _monitor = monitor;
+            _logger = logger;
             _locationChecker = locationChecker;
         }
 
@@ -55,7 +56,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(PerformAction_GoldenScythe_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(PerformAction_GoldenScythe_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }

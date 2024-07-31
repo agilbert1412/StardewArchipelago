@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI;
 using StardewValley;
@@ -11,12 +12,12 @@ namespace StardewArchipelago.Items.Traps
 {
     internal class TemporaryBaby : Child
     {
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static IModHelper _helper;
 
-        public static void Initialize(IMonitor monitor, IModHelper helper)
+        public static void Initialize(ILogger logger, IModHelper helper)
         {
-            _monitor = monitor;
+            _logger = logger;
             _helper = helper;
         }
 
@@ -83,7 +84,7 @@ namespace StardewArchipelago.Items.Traps
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(GameLocationPerformTenMinuteUpdate_MoveBabiesAnywhere_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(GameLocationPerformTenMinuteUpdate_MoveBabiesAnywhere_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -103,7 +104,7 @@ namespace StardewArchipelago.Items.Traps
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(ChildTenMinuteUpdate_MoveBabiesAnywhere_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(ChildTenMinuteUpdate_MoveBabiesAnywhere_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }

@@ -7,30 +7,30 @@ namespace StardewArchipelago.Stardew.NameMapping
     {
         private static readonly Dictionary<string, string> ArchaeologyToEnglishNamesMap = new()
         {
-            {"Rust Path", "Rusty Path"},
-            {"Ancient Dwarven Volcano Simulator", "Dwarf Gadget: Infinite Volcano Simulation"},
-            {"Rusted Scrap", "Scrap Rust"},
-            {"moonslime.Archaeology.h_amphibian_fossil", "Hardwood Display: Amphibian Fossil"},
-            {"Hardwood Display: Snake Vertabra", "Hardwood Display: Snake Vertebrae"},
-            {"Hardwood Display: Strange Doll Green", "Hardwood Display: Strange Doll (Green)"},
-            {"Hardwood Display: Strange Doll Yellow", "Hardwood Display: Strange Doll"},
-            {"Hardwood Display: Trilobite", "Hardwood Display: Trilobite Fossil"},
-            {"Wood Display", "Wooden Display"},
-            {"Wooden Display: nautilus Fossil", "Wooden Display: Nautilus Fossil"},
-            {"Wooden Display: prehistoric Handaxe", "Wooden Display: Prehistoric Handaxe"},
-            {"Wooden Display: Prehistoric Vertabra", "Wooden Display: Prehistoric Vertebra"},
-            {"Wooden Display: Snake Vertabra", "Wooden Display: Snake Vertebrae"},
-            {"Wooden Display: Strange Doll Green", "Wooden Display: Strange Doll (Green)"},
-            {"Wooden Display: Strange Doll Yellow", "Wooden Display: Strange Doll"},
-            {"Wooden Display: Trilobite", "Wooden Display: Trilobite Fossil"},
+            { "Rust Path", "Rusty Path" },
+            { "Ancient Dwarven Volcano Simulator", "Dwarf Gadget: Infinite Volcano Simulation" },
+            { "Rusted Scrap", "Scrap Rust" },
+            { "moonslime.Archaeology.h_amphibian_fossil", "Hardwood Display: Amphibian Fossil" },
+            { "Hardwood Display: Snake Vertabra", "Hardwood Display: Snake Vertebrae" },
+            { "Hardwood Display: Strange Doll Green", "Hardwood Display: Strange Doll (Green)" },
+            { "Hardwood Display: Strange Doll Yellow", "Hardwood Display: Strange Doll" },
+            { "Hardwood Display: Trilobite", "Hardwood Display: Trilobite Fossil" },
+            { "Wood Display", "Wooden Display" },
+            { "Wooden Display: nautilus Fossil", "Wooden Display: Nautilus Fossil" },
+            { "Wooden Display: prehistoric Handaxe", "Wooden Display: Prehistoric Handaxe" },
+            { "Wooden Display: Prehistoric Vertabra", "Wooden Display: Prehistoric Vertebra" },
+            { "Wooden Display: Snake Vertabra", "Wooden Display: Snake Vertebrae" },
+            { "Wooden Display: Strange Doll Green", "Wooden Display: Strange Doll (Green)" },
+            { "Wooden Display: Strange Doll Yellow", "Wooden Display: Strange Doll" },
+            { "Wooden Display: Trilobite", "Wooden Display: Trilobite Fossil" },
         };
 
         private static readonly Dictionary<string, string> ArchaeologyCraftIDsToEnglishNamesMap = new()
         {
-            {"moonslime.Archaeology.preservation_chamber", "Preservation Chamber"},
-            {"moonslime.Archaeology.w_display", "Wooden Display"},
-            {"moonslime.Archaeology.rust_path", "Rusty Path"},
-            {"moonslime.Archaeology.totem_volcano_warp", "Dwarf Gadget: Infinite Volcano Simulation"},
+            { "moonslime.Archaeology.preservation_chamber", "Preservation Chamber" },
+            { "moonslime.Archaeology.w_display", "Wooden Display" },
+            { "moonslime.Archaeology.rust_path", "Rusty Path" },
+            { "moonslime.Archaeology.totem_volcano_warp", "Dwarf Gadget: Infinite Volcano Simulation" },
         };
 
         private static readonly Dictionary<string, string> EnglishToArchaeologyNamesMap = ArchaeologyToEnglishNamesMap.ToDictionary(x => x.Value, x => x.Key);
@@ -42,7 +42,7 @@ namespace StardewArchipelago.Stardew.NameMapping
         public string GetEnglishName(string internalName)
         {
             var fixedWoodName = internalName.Replace("Wood Display: ", "Wooden Display: ");
-            return   ArchaeologyToEnglishNamesMap.ContainsKey(fixedWoodName) ? ArchaeologyToEnglishNamesMap[fixedWoodName] : fixedWoodName;      
+            return ArchaeologyToEnglishNamesMap.ContainsKey(fixedWoodName) ? ArchaeologyToEnglishNamesMap[fixedWoodName] : fixedWoodName;
         }
 
         public string GetInternalName(string englishName)

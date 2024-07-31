@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.Constants.Vanilla;
+using StardewArchipelago.Locations.InGameLocations;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.GameData.Shops;
-using ArchipelagoLocation = StardewArchipelago.Locations.InGameLocations.ArchipelagoLocation;
 using Object = StardewValley.Object;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.Locations.ShopStockModifiers
 {
@@ -43,7 +44,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
         public const string TRACTOR_GARAGE_ID = "Pathoschild.TractorMod_Stable";
         public const string TRACTOR_GARAGE_NAME = "Tractor Garage";
 
-        public CarpenterShopStockModifier(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, StardewItemManager stardewItemManager) : base(monitor, modHelper, archipelago, stardewItemManager)
+        public CarpenterShopStockModifier(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager) : base(logger, modHelper, archipelago, stardewItemManager)
         {
         }
 
@@ -115,7 +116,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
 
             var customFields = new Dictionary<string, string>()
             {
-                { ArchipelagoLocation.EXTRA_MATERIALS_KEY, materialsString },
+                { ObtainableArchipelagoLocation.EXTRA_MATERIALS_KEY, materialsString },
             };
             var blueprintCheck = new ShopItemData()
             {

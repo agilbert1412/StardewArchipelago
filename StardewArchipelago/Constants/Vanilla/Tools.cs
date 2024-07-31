@@ -9,6 +9,6 @@
         public const string TRASH_CAN = "Trash Can";
         public const string PAN = "Pan";
         public const string FISHING_ROD = "FishingRod";
-        public static readonly string[] ToolNames = new[] { AXE, WATERING_CAN, PICKAXE, HOE, TRASH_CAN, PAN };
+        public static readonly string[] ToolNames = { AXE, WATERING_CAN, PICKAXE, HOE, TRASH_CAN, PAN };
     }
 }

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Goals;
 using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
-using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Characters;
@@ -25,12 +25,12 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             "Custom_GrandpasShedOutside",
         };
 
-        private static IMonitor _monitor;
-        private static ArchipelagoClient _archipelago;
+        private static ILogger _logger;
+        private static StardewArchipelagoClient _archipelago;
 
-        public static void Initialize(IMonitor monitor, ArchipelagoClient archipelago)
+        public static void Initialize(ILogger logger, StardewArchipelagoClient archipelago)
         {
-            _monitor = monitor;
+            _logger = logger;
             _archipelago = archipelago;
         }
 
@@ -68,7 +68,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(CheckAction_GrandpaNote_PreFix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(CheckAction_GrandpaNote_PreFix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -115,7 +115,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(SpawnWeedsAndStones_ConsiderUserPreference_PreFix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(SpawnWeedsAndStones_ConsiderUserPreference_PreFix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -167,7 +167,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(DeleteStartingDebris)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(DeleteStartingDebris)}:\n{ex}");
                 return;
             }
         }
@@ -214,7 +214,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(PlaceEarlyShippingBin)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(PlaceEarlyShippingBin)}:\n{ex}");
                 return;
             }
         }
@@ -301,7 +301,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(ForcePetIfNeeded)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(ForcePetIfNeeded)}:\n{ex}");
                 return;
             }
         }

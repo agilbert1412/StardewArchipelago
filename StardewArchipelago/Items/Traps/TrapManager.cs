@@ -4,11 +4,13 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Archipelago.MultiClient.Net.Enums;
+using DLCQuestipelago.Extensions;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.Gifting;
-using StardewArchipelago.Extensions;
 using StardewArchipelago.GameModifications;
 using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Items.Traps.Shuffle;
@@ -55,21 +57,21 @@ namespace StardewArchipelago.Items.Traps
         private const string BOMB = "Bomb";
         private const string NUDGE = "Nudge";
 
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private readonly IModHelper _helper;
         private readonly Harmony _harmony;
-        private static ArchipelagoClient _archipelago;
+        private static StardewArchipelagoClient _archipelago;
         private static TrapDifficultyBalancer _difficultyBalancer;
         private readonly TileChooser _tileChooser;
         private readonly MonsterSpawner _monsterSpawner;
         private readonly BabyBirther _babyBirther;
         private readonly DebrisSpawner _debrisSpawner;
         private readonly InventoryShuffler _inventoryShuffler;
-        private Dictionary<string, Action> _traps;
+        private readonly Dictionary<string, Action> _traps;
 
-        public TrapManager(IMonitor monitor, IModHelper helper, Harmony harmony, ArchipelagoClient archipelago, TileChooser tileChooser, BabyBirther babyBirther, GiftSender giftSender)
+        public TrapManager(ILogger logger, IModHelper helper, Harmony harmony, StardewArchipelagoClient archipelago, TileChooser tileChooser, BabyBirther babyBirther, GiftSender giftSender)
         {
-            _monitor = monitor;
+            _logger = logger;
             _helper = helper;
             _harmony = harmony;
             _archipelago = archipelago;
@@ -77,8 +79,8 @@ namespace StardewArchipelago.Items.Traps
             _tileChooser = tileChooser;
             _monsterSpawner = new MonsterSpawner(_tileChooser);
             _babyBirther = babyBirther;
-            _debrisSpawner = new DebrisSpawner(monitor, archipelago, _difficultyBalancer);
-            _inventoryShuffler = new InventoryShuffler(monitor, giftSender);
+            _debrisSpawner = new DebrisSpawner(logger, archipelago, _difficultyBalancer);
+            _inventoryShuffler = new InventoryShuffler(logger, giftSender);
             _traps = new Dictionary<string, Action>();
             RegisterTraps();
 
@@ -86,12 +88,12 @@ namespace StardewArchipelago.Items.Traps
                 original: AccessTools.Method(typeof(Object), nameof(Object.salePrice)),
                 prefix: new HarmonyMethod(typeof(TrapManager), nameof(SalePrice_GetCorrectInflation_Prefix))
             );
-            InitializeTemporaryBaby(monitor, helper, harmony);
+            InitializeTemporaryBaby(logger, helper, harmony);
         }
 
-        private void InitializeTemporaryBaby(IMonitor monitor, IModHelper helper, Harmony harmony)
+        private void InitializeTemporaryBaby(ILogger logger, IModHelper helper, Harmony harmony)
         {
-            TemporaryBaby.Initialize(monitor, helper);
+            TemporaryBaby.Initialize(logger, helper);
             harmony.Patch(
                 original: AccessTools.Method(typeof(Child), nameof(Child.tenMinuteUpdate)),
                 prefix: new HarmonyMethod(typeof(TemporaryBaby), nameof(TemporaryBaby.ChildTenMinuteUpdate_MoveBabiesAnywhere_Prefix))
@@ -804,7 +806,7 @@ namespace StardewArchipelago.Items.Traps
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(SalePrice_GetCorrectInflation_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(SalePrice_GetCorrectInflation_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }

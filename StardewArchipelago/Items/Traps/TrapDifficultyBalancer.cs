@@ -35,7 +35,7 @@ namespace StardewArchipelago.Items.Traps
             { TrapItemsDifficulty.Hell, 0.8 },
             { TrapItemsDifficulty.Nightmare, 1 },
         };
-        
+
         public Dictionary<TrapItemsDifficulty, TeleportDestination> TeleportDestinations = new()
         {
             { TrapItemsDifficulty.NoTraps, TeleportDestination.None },

@@ -1,23 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Items.Unlocks.Modded;
 using StardewArchipelago.Items.Unlocks.Vanilla;
-using StardewArchipelago.Locations;
 
 namespace StardewArchipelago.Items.Unlocks
 {
     public class UnlockManager
     {
-        private List<IUnlockManager> _specificUnlockManagers;
-        private Dictionary<string, Func<ReceivedItem, LetterAttachment>> _unlockables;
+        private readonly List<IUnlockManager> _specificUnlockManagers;
+        private readonly Dictionary<string, Func<ReceivedItem, LetterAttachment>> _unlockables;
 
-        public UnlockManager(ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public UnlockManager(StardewArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             _unlockables = new Dictionary<string, Func<ReceivedItem, LetterAttachment>>();
-            _specificUnlockManagers = new List<IUnlockManager>();
-            _specificUnlockManagers.Add(new VanillaUnlockManager(archipelago, locationChecker));
+            _specificUnlockManagers = new List<IUnlockManager>
+            {
+                new VanillaUnlockManager(archipelago, locationChecker),
+            };
 
             if (archipelago.SlotData.Mods.IsModded)
             {

@@ -1,26 +1,20 @@
 using System.Collections.Generic;
-using System.Reflection;
 using System.Reflection.Emit;
 using HarmonyLib;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using StardewModdingAPI;
-using StardewValley;
 using StardewValley.Extensions;
-using StardewValley.ItemTypeDefinitions;
-using StardewValley.Menus;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 
 namespace StardewArchipelago.GameModifications.CodeInjections.Bundles
 {
     public class BundleMenuInjection
     {
-        private static IMonitor _monitor;
+        private static ILogger _logger;
 
-        public static void setupLogging(IMonitor monitor)
+        public static void setupLogging(ILogger logger)
         {
-            _monitor = monitor;
+            _logger = logger;
         }
-        
+
         //Transpiler way
         public static IEnumerable<CodeInstruction> SkipObjectCheck(IEnumerable<CodeInstruction> instructions)
         {
@@ -45,7 +39,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Bundles
                 {
                     if (foundMethod) // Second trigger of this method, which means Stardew code added a second unexpected call
                     {
-                        _monitor.Log("Community Center object checking has been skipped more than once", LogLevel.Error);
+                        _logger.LogError("Community Center object checking has been skipped more than once");
                     }
                     foundMethod = true;
                     enumerator.MoveNext();
@@ -71,11 +65,11 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Bundles
 
             if (!foundMethod)
             {
-                _monitor.Log("Community Center couldn't be patched to show anything", LogLevel.Error);
+                _logger.LogError("Community Center couldn't be patched to show anything");
             }
             if (label != null)
             {
-                _monitor.Log("The label somehow couldn't be cleared, expect issues on the Community Center bundles", LogLevel.Error);
+                _logger.LogError("The label somehow couldn't be cleared, expect issues on the Community Center bundles");
             }
         }
     }

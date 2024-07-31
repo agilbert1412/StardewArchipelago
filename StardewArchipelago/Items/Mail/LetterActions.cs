@@ -10,7 +10,6 @@ using StardewArchipelago.Items.Traps;
 using StardewArchipelago.Items.Unlocks.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
 using StardewArchipelago.Stardew;
-using StardewArchipelago.Stardew.NameMapping;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
@@ -24,14 +23,14 @@ namespace StardewArchipelago.Items.Mail
     {
         private readonly IModHelper _modHelper;
         private readonly Mailman _mail;
-        private ArchipelagoClient _archipelago;
-        private WeaponsManager _weaponsManager;
+        private readonly StardewArchipelagoClient _archipelago;
+        private readonly WeaponsManager _weaponsManager;
         private readonly TrapManager _trapManager;
         private readonly BabyBirther _babyBirther;
         private readonly ToolUpgrader _toolUpgrader;
-        private Dictionary<string, Action<string>> _letterActions;
+        private readonly Dictionary<string, Action<string>> _letterActions;
 
-        public LetterActions(IModHelper modHelper, Mailman mail, ArchipelagoClient archipelago, WeaponsManager weaponsManager, TrapManager trapManager, BabyBirther babyBirther, StardewItemManager _stardewItemManager)
+        public LetterActions(IModHelper modHelper, Mailman mail, StardewArchipelagoClient archipelago, WeaponsManager weaponsManager, TrapManager trapManager, BabyBirther babyBirther, StardewItemManager _stardewItemManager)
         {
             _modHelper = modHelper;
             _mail = mail;

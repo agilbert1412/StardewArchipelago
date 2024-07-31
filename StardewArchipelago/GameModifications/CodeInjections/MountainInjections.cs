@@ -1,6 +1,7 @@
 ﻿using System;
 using Netcode;
-using StardewArchipelago.Archipelago;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Items.Unlocks.Vanilla;
 using StardewModdingAPI;
 using StardewValley;
@@ -14,13 +15,13 @@ namespace StardewArchipelago.GameModifications.CodeInjections
     {
         private const string RAILROAD_BOULDER_ITEM = "Railroad Boulder Removed";
 
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static IModHelper _modHelper;
         private static ArchipelagoClient _archipelago;
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago)
+        public static void Initialize(ILogger logger, IModHelper modHelper, ArchipelagoClient archipelago)
         {
-            _monitor = monitor;
+            _logger = logger;
             _modHelper = modHelper;
             _archipelago = archipelago;
         }
@@ -53,7 +54,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(ApplyTreehouseIfNecessary_ApplyTreeHouseIfReceivedApItem_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(ApplyTreehouseIfNecessary_ApplyTreeHouseIfReceivedApItem_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -68,7 +69,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(DayUpdate_RailroadDependsOnApItem_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(DayUpdate_RailroadDependsOnApItem_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -83,7 +84,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(ResetSharedState_RailroadDependsOnApItem_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(ResetSharedState_RailroadDependsOnApItem_Postfix)}:\n{ex}");
                 return;
             }
         }

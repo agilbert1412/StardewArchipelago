@@ -1,23 +1,24 @@
 ﻿using System;
-using StardewArchipelago.Archipelago;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 using xTile.Dimensions;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 
 namespace StardewArchipelago.Locations.GingerIsland.Parrots
 {
     public class IslandLocationInjections
     {
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static IModHelper _modHelper;
         private static ArchipelagoClient _archipelago;
 
         private IslandLocation _islandLocation;
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago)
+        public static void Initialize(ILogger logger, IModHelper modHelper, ArchipelagoClient archipelago)
         {
-            _monitor = monitor;
+            _logger = logger;
             _modHelper = modHelper;
             _archipelago = archipelago;
         }
@@ -45,7 +46,7 @@ namespace StardewArchipelago.Locations.GingerIsland.Parrots
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(CheckAction_InteractWithParrots_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(CheckAction_InteractWithParrots_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }

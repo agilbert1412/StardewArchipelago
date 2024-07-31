@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Extensions;
-using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Characters;
 
@@ -12,12 +12,12 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 {
     public class AppearanceRandomizer
     {
-        private static IMonitor _monitor;
-        private static ArchipelagoClient _archipelago;
+        private static ILogger _logger;
+        private static StardewArchipelagoClient _archipelago;
 
-        public AppearanceRandomizer(IMonitor monitor, ArchipelagoClient archipelago)
+        public AppearanceRandomizer(ILogger logger, StardewArchipelagoClient archipelago)
         {
-            _monitor = monitor;
+            _logger = logger;
             _archipelago = archipelago;
         }
 
@@ -56,7 +56,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(ShuffleCharacterAppearances)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(ShuffleCharacterAppearances)}:\n{ex}");
                 return;
             }
         }
@@ -170,7 +170,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         };
 
 
-        private static readonly string[] _villagers = new[]
+        private static readonly string[] _villagers =
         {
             "Birdie",
             "ParrotBoy",
@@ -210,7 +210,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         };
         private const string _monsterTexturePrefix = _characterTexturePrefix + "Monsters\\";
 
-        private static readonly string[] _monsterSprites = new[]
+        private static readonly string[] _monsterSprites =
         {
             "Wilderness Golem", "Skeleton", "Ghost", "Bat", "Big Slime", "Blue Squid", "Bug", "Pepper Rex", "Duggy",
             "Dust Spirit", "Dwarvish Sentry", "Fly", "Green Slime", "Grub", "Lava Crab", "Lava Lurk", "Spider",
@@ -220,7 +220,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
         private const string _animalTexturePrefix = "Animals\\";
 
-        private static readonly string[] _animalSprites = new[]
+        private static readonly string[] _animalSprites =
         {
             "horse", "Dog", "Dog1", "Dog2", "Dog3", "cat", "cat1", "cat2", "cat3", "White Chicken", "BabyWhite Chicken",
             "Brown Chicken", "BabyBrown Chicken", "Duck", "Rabbit", "BabyRabbit", "Cow", "BabyCow", "Sheep", "ShearedSheep", "BabySheep", "Pig", "BabyPig",

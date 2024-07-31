@@ -7,12 +7,12 @@ namespace StardewArchipelago.Constants.Vanilla
     {
         public static readonly Dictionary<string, string> CookingRecipeEvents = new()
         {
-            {EventIds.COOKIES_RECIPE, "Cookies"},
+            { EventIds.COOKIES_RECIPE, "Cookies" },
         };
 
         public static readonly Dictionary<string, string> CraftingRecipeEvents = new()
         {
-            {EventIds.BIRDIE_QUEST_COMPLETE, "Fairy Dust"},
+            { EventIds.BIRDIE_QUEST_COMPLETE, "Fairy Dust" },
         };
 
         public static readonly string[] QuestEventsWithRecipes = { };

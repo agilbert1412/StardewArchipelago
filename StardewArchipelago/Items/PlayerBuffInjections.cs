@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using StardewArchipelago.Archipelago;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Constants;
 using StardewModdingAPI;
 using StardewValley;
@@ -13,7 +14,7 @@ namespace StardewArchipelago.Items
 {
     public class PlayerBuffInjections
     {
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static IModHelper _helper;
         private static ArchipelagoClient _archipelago;
 
@@ -30,9 +31,9 @@ namespace StardewArchipelago.Items
         // private static int _numberOfQualityBonuses = 0; // I might implement this someday
         // private static int _numberOfGlowBonuses = 0; // I might implement this someday
 
-        public static void Initialize(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago)
+        public static void Initialize(ILogger logger, IModHelper helper, ArchipelagoClient archipelago)
         {
-            _monitor = monitor;
+            _logger = logger;
             _helper = helper;
             _archipelago = archipelago;
         }
@@ -77,7 +78,7 @@ namespace StardewArchipelago.Items
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(GetMovementSpeed_AddApBuffs_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(GetMovementSpeed_AddApBuffs_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -93,7 +94,7 @@ namespace StardewArchipelago.Items
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(DailyLuck_AddApBuffs_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(DailyLuck_AddApBuffs_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -111,7 +112,7 @@ namespace StardewArchipelago.Items
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(GetAttackMultiplier_AddApBuffs_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(GetAttackMultiplier_AddApBuffs_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -127,7 +128,7 @@ namespace StardewArchipelago.Items
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(GetDefense_AddApBuffs_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(GetDefense_AddApBuffs_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -143,7 +144,7 @@ namespace StardewArchipelago.Items
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(GetImmunity_AddApBuffs_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(GetImmunity_AddApBuffs_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -159,7 +160,7 @@ namespace StardewArchipelago.Items
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(GetMaxStamina_AddApBuffs_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(GetMaxStamina_AddApBuffs_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -175,13 +176,13 @@ namespace StardewArchipelago.Items
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(CalculateTimeUntilFishingBite_AddApBuffs_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(CalculateTimeUntilFishingBite_AddApBuffs_Postfix)}:\n{ex}");
                 return;
             }
         }
 
         // public BobberBar(string whichFish, float fishSize, bool treasure, List<string> bobbers, string setFlagOnCatch, bool isBossFish, string baitID = "", bool goldenTreasure = false)
-        public static void BobberBarConstructor_AddApBuffs_Postfix(BobberBar __instance, string whichFish, float fishSize, bool treasure, 
+        public static void BobberBarConstructor_AddApBuffs_Postfix(BobberBar __instance, string whichFish, float fishSize, bool treasure,
             List<string> bobbers, string setFlagOnCatch, bool isBossFish, string baitID, bool goldenTreasure)
         {
             try
@@ -192,7 +193,7 @@ namespace StardewArchipelago.Items
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(BobberBarConstructor_AddApBuffs_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(BobberBarConstructor_AddApBuffs_Postfix)}:\n{ex}");
                 return;
             }
         }

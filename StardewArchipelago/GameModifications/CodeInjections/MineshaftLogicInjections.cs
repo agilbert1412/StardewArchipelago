@@ -1,16 +1,16 @@
 ﻿using System;
-using StardewModdingAPI;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewValley.Network;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
 {
     public static class MineshaftLogicInjections
     {
-        private static IMonitor _monitor;
+        private static ILogger _logger;
 
-        public static void Initialize(IMonitor monitor)
+        public static void Initialize(ILogger logger)
         {
-            _monitor = monitor;
+            _logger = logger;
         }
 
         public static bool SetLowestMineLevel_SkipToSkullCavern_Prefix(NetWorldState __instance, int value)
@@ -26,7 +26,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(SetLowestMineLevel_SkipToSkullCavern_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(SetLowestMineLevel_SkipToSkullCavern_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }

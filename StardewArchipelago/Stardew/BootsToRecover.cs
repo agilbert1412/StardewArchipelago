@@ -6,7 +6,7 @@ namespace StardewArchipelago.Stardew
 {
     public class BootsToRecover : Boots
     {
-        private string _bootsId;
+        private readonly string _bootsId;
 
         public BootsToRecover() : base()
         {

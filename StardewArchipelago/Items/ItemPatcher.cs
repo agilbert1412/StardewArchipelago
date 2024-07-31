@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using HarmonyLib;
-using StardewArchipelago.Archipelago;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Buffs;
@@ -14,10 +14,10 @@ namespace StardewArchipelago.Items
     {
         private readonly Harmony _harmony;
 
-        public ItemPatcher(IMonitor monitor, IModHelper helper, Harmony harmony, ArchipelagoClient archipelago)
+        public ItemPatcher(ILogger logger, IModHelper helper, Harmony harmony, ArchipelagoClient archipelago)
         {
             _harmony = harmony;
-            PlayerBuffInjections.Initialize(monitor, helper, archipelago);
+            PlayerBuffInjections.Initialize(logger, helper, archipelago);
         }
 
         public void PatchApItems()
@@ -40,7 +40,7 @@ namespace StardewArchipelago.Items
                 postfix: new HarmonyMethod(typeof(PlayerBuffInjections), nameof(PlayerBuffInjections.GetAttackMultiplier_AddApBuffs_Postfix))
             );
             _harmony.Patch(
-                original: AccessTools.PropertyGetter(typeof(BuffManager),nameof(BuffManager.Defense)),
+                original: AccessTools.PropertyGetter(typeof(BuffManager), nameof(BuffManager.Defense)),
                 postfix: new HarmonyMethod(typeof(PlayerBuffInjections), nameof(PlayerBuffInjections.GetDefense_AddApBuffs_Postfix))
             );
             _harmony.Patch(
@@ -55,7 +55,7 @@ namespace StardewArchipelago.Items
                 original: AccessTools.Method(typeof(FishingRod), "calculateTimeUntilFishingBite"),
                 postfix: new HarmonyMethod(typeof(PlayerBuffInjections), nameof(PlayerBuffInjections.CalculateTimeUntilFishingBite_AddApBuffs_Postfix))
             );
-            
+
             var bobberBarContructorParameters = new[] { typeof(string), typeof(float), typeof(bool), typeof(List<string>), typeof(string), typeof(bool), typeof(string), typeof(bool) };
             _harmony.Patch(
                 original: AccessTools.Constructor(typeof(BobberBar), bobberBarContructorParameters),

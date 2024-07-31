@@ -1,11 +1,13 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
 using StardewArchipelago.GameModifications.EntranceRandomizer;
+using StardewArchipelago.Logging;
 using StardewArchipelago.Serialization;
 using StardewArchipelago.Textures;
 using StardewModdingAPI;
@@ -24,23 +26,23 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
         private const string GAZETTE_CHAOS_EPISODE =
             "On today's episode, our agent {0} has was sent to explore... but we haven't heard back from them. Let's send them thoughts and prayers! Don't walk outside unprepared, kids!";
 
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static IModHelper _modHelper;
-        private static ArchipelagoClient _archipelago;
+        private static StardewArchipelagoClient _archipelago;
         private static EntranceManager _entranceManager;
         private static ArchipelagoStateDto _state;
 
         private static Texture2D _gazetteTexture;
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, EntranceManager entranceManager, ArchipelagoStateDto state)
+        public static void Initialize(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, EntranceManager entranceManager, ArchipelagoStateDto state)
         {
-            _monitor = monitor;
+            _logger = logger;
             _modHelper = modHelper;
             _archipelago = archipelago;
             _entranceManager = entranceManager;
             _state = state;
 
-            _gazetteTexture = TexturesLoader.GetTexture(_monitor, _modHelper, Path.Combine("Gazette", "gazette_all.png"));
+            _gazetteTexture = TexturesLoader.GetTexture(logger, _modHelper, Path.Combine("Gazette", "gazette_all.png"));
         }
 
         private static IReflectedField<int> GetCurrentChannelField(TV tv)
@@ -70,7 +72,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(SelectChannel_SelectGatewayGazetteChannel_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(SelectChannel_SelectGatewayGazetteChannel_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -100,7 +102,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(ProceedToNextScene_GatewayGazette_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(ProceedToNextScene_GatewayGazette_Postfix)}:\n{ex}");
                 return;
             }
         }

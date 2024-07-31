@@ -1,25 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Locations;
 using StardewArchipelago.Stardew.Ids.Vanilla;
 using StardewModdingAPI;
 using StardewValley;
 using EventRecipes = StardewArchipelago.Constants.EventRecipes;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.ArchipelagoUtilities.Net;
+using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
     public static class EventInjections
     {
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static IModHelper _modHelper;
-        private static ArchipelagoClient _archipelago;
+        private static StardewArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
         {
-            _monitor = monitor;
+            _logger = logger;
             _modHelper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
@@ -61,7 +63,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(BaseSkipEvent)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(BaseSkipEvent)}:\n{ex}");
                 throw;
             }
         }
@@ -74,7 +76,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 {
                     return true; // run original logic
                 }
-                
+
                 if (OnCheckRecipeLocation(__instance.id))
                 {
                     BaseSkipEvent(__instance);
@@ -85,7 +87,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(SkipEvent_ReplaceRecipe_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(SkipEvent_ReplaceRecipe_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -140,29 +142,29 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 switch (commandName)
                 {
                     case "addCraftingRecipe":
+                    {
+                        if (CheckCraftsanityLocation(__instance.id))
                         {
-                            if (CheckCraftsanityLocation(__instance.id))
-                            {
-                                __instance.CurrentCommand++;
-                                return false; // don't run original logic
-                            }
-                            return true; // run original logic
+                            __instance.CurrentCommand++;
+                            return false; // don't run original logic
                         }
+                        return true; // run original logic
+                    }
                     case "addCookingRecipe":
+                    {
+                        if (CheckChefsanityLocation(__instance.id))
                         {
-                            if (CheckChefsanityLocation(__instance.id))
-                            {
-                                __instance.CurrentCommand++;
-                                return false; // don't run original logic
-                            }
-                            return true; // run original logic
+                            __instance.CurrentCommand++;
+                            return false; // don't run original logic
                         }
+                        return true; // run original logic
+                    }
                 }
                 return true;
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(TryEventCommand_ReplaceRecipeWithCheck_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(TryEventCommand_ReplaceRecipeWithCheck_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }

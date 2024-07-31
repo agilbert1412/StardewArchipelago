@@ -1,8 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using Microsoft.VisualBasic;
-using StardewArchipelago.Archipelago;
 using StardewArchipelago.Locations.ShopStockModifiers;
 using StardewArchipelago.Stardew;
 using StardewArchipelago.Stardew.Ids.Vanilla;
@@ -10,16 +7,19 @@ using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.GameData.Shops;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
 {
-    public class BearShopStockModifier: BarterShopStockModifier
+    public class BearShopStockModifier : BarterShopStockModifier
     {
         private const float INITIAL_DISCOUNT = 0.85f;
         private const float APPLES_DISCOUNT = 0.05f;
-        public BearShopStockModifier(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago, StardewItemManager stardewItemManager) : base(monitor, helper, archipelago, stardewItemManager)
+
+        public BearShopStockModifier(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager) : base(logger, helper, archipelago, stardewItemManager)
         {
-            _monitor = monitor;
+            _logger = logger;
             _helper = helper;
             _archipelago = archipelago;
             _stardewItemManager = stardewItemManager;
@@ -48,7 +48,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
             var discount = BearDiscount();
             var stockCount = BearStockCount();
             var random = new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame / 2 + shopData.GetHashCode());
-            var chosenItemGroup = berryItems.Where(x => !(x.Name.Contains("Joja") || x.Name.Contains("Seeds")) && x.SellPrice > 0 ).ToList();
+            var chosenItemGroup = berryItems.Where(x => !(x.Name.Contains("Joja") || x.Name.Contains("Seeds")) && x.SellPrice > 0).ToList();
             foreach (var shopItem in shopData.Items)
             {
                 var isRecipe = shopItem.ItemId.Contains("Baked Berry Oatmeal") || shopItem.ItemId.Contains("Flower Cookie");
@@ -82,7 +82,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
         private double BearDiscount()
         {
             var hasKnowledge = _archipelago.HasReceivedItem("Bear Knowledge");
-            var knowledgeBuff = hasKnowledge ? 0.2f: 0f;
+            var knowledgeBuff = hasKnowledge ? 0.2f : 0f;
             var applesHearts = 0;
             if (Game1.player.friendshipData.ContainsKey("Apples"))
             {
@@ -94,7 +94,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
         private int BearStockCount()
         {
             var hasKnowledge = _archipelago.HasReceivedItem("Bear Knowledge");
-            var knowledgeBuff = hasKnowledge ? 3: 1;
+            var knowledgeBuff = hasKnowledge ? 3 : 1;
             var applesHearts = 0;
             if (Game1.player.friendshipData.ContainsKey("Apples"))
             {

@@ -4,13 +4,11 @@ using System.Globalization;
 using System.Linq;
 using Archipelago.MultiClient.Net.Models;
 using Microsoft.Xna.Framework;
-using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Items.Unlocks.Vanilla;
 using StardewArchipelago.Locations.Festival;
-using StardewArchipelago.Stardew.Ids.Vanilla;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
@@ -21,28 +19,30 @@ using StardewValley.TerrainFeatures;
 using xTile.Dimensions;
 using EventIds = StardewArchipelago.Stardew.Ids.Vanilla.EventIds;
 using Object = StardewValley.Object;
-using Rectangle = Microsoft.Xna.Framework.Rectangle;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.ArchipelagoUtilities.Net;
+using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
 {
     public static class QuestInjections
     {
         private const string DESERT_FESTIVAL_FISHING_QUEST_ID = "98765";
-        private static List<string> _ignoredQuests = new()
+        private static readonly List<string> _ignoredQuests = new()
         {
             "To The Beach", "Explore The Mine", "Deeper In The Mine", "To The Bottom?", "The Mysterious Qi",
             "A Winter Mystery", "Cryptic Note", "Dark Talisman", "Goblin Problem",
         };
 
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static IModHelper _helper;
-        private static ArchipelagoClient _archipelago;
+        private static StardewArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
         private static LocalizedContentManager _englishContentManager;
 
-        public static void Initialize(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
         {
-            _monitor = monitor;
+            _logger = logger;
             _helper = helper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
@@ -115,7 +115,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(QuestComplete_LocationInsteadOfReward_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(QuestComplete_LocationInsteadOfReward_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -233,7 +233,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(RemoveQuest_CheckLocation_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(RemoveQuest_CheckLocation_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -280,7 +280,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(GetQuestOfTheDay_BalanceQuests_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(GetQuestOfTheDay_BalanceQuests_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -376,7 +376,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(PerformAction_MysteriousQiLumberPile_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(PerformAction_MysteriousQiLumberPile_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -431,7 +431,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(Shake_WinterMysteryBush_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(Shake_WinterMysteryBush_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -507,7 +507,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(MgThief_AfterSpeech_WinterMysteryFinished_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(MgThief_AfterSpeech_WinterMysteryFinished_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -539,7 +539,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(PopulateClickableComponentList_BearKnowledge_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(PopulateClickableComponentList_BearKnowledge_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -571,7 +571,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(GetPriceAfterMultipliers_BearKnowledge_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(GetPriceAfterMultipliers_BearKnowledge_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -609,8 +609,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(AwardFestivalPrize_QiMilk_Prefix)}:\n{ex}",
-                    LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(AwardFestivalPrize_QiMilk_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }

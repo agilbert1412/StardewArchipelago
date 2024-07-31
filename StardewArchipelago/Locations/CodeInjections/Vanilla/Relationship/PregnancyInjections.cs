@@ -1,11 +1,13 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
-using StardewArchipelago.Archipelago;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.BellsAndWhistles;
 using StardewValley.Characters;
 using StardewValley.Events;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.ArchipelagoUtilities.Net;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
 {
@@ -19,14 +21,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
         private const string PLAYER_GIVE_BIRTH_QUESTION = "Would you like to give birth to a {0}, {1}?";
         private const string ORDER_BABY_QUESTION = "Should I order a {0}, {1}?";
 
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static IModHelper _helper;
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(ILogger logger, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
-            _monitor = monitor;
+            _logger = logger;
             _helper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
@@ -66,7 +68,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(CanGetPregnant_ShuffledPregnancies_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(CanGetPregnant_ShuffledPregnancies_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -103,7 +105,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(Setup_PregnancyQuestionEvent_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(Setup_PregnancyQuestionEvent_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -147,7 +149,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(AnswerPregnancyQuestion_CorrectDate_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(AnswerPregnancyQuestion_CorrectDate_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -203,7 +205,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(TickUpdate_BirthingEvent_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(TickUpdate_BirthingEvent_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }

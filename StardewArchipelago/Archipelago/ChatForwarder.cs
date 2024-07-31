@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using HarmonyLib;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago.Gifting;
 using StardewArchipelago.GameModifications;
@@ -21,10 +22,10 @@ namespace StardewArchipelago.Archipelago
     {
         public const string COMMAND_PREFIX = "!!";
 
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static IModHelper _helper;
-        private static ArchipelagoClient _archipelago;
-        private Harmony _harmony;
+        private static StardewArchipelagoClient _archipelago;
+        private readonly Harmony _harmony;
         private static IGiftHandler _giftHandler;
         private static GoalManager _goalManager;
         private static BankHandler _bankHandler;
@@ -32,9 +33,9 @@ namespace StardewArchipelago.Archipelago
 
         private static string _lastCommand;
 
-        public ChatForwarder(IMonitor monitor, IModHelper helper, Harmony harmony, ArchipelagoClient archipelago, IGiftHandler giftHandler, GoalManager goalManager, TileChooser tileChooser)
+        public ChatForwarder(ILogger logger, IModHelper helper, Harmony harmony, StardewArchipelagoClient archipelago, IGiftHandler giftHandler, GoalManager goalManager, TileChooser tileChooser)
         {
-            _monitor = monitor;
+            _logger = logger;
             _helper = helper;
             _harmony = harmony;
             _archipelago = archipelago;
@@ -74,7 +75,7 @@ namespace StardewArchipelago.Archipelago
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(ReceiveChatMessage_ForwardToAp_PostFix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(ReceiveChatMessage_ForwardToAp_PostFix)}:\n{ex}");
             }
         }
 

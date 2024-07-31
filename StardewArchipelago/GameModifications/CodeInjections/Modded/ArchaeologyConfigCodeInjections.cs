@@ -1,5 +1,6 @@
 ﻿using System;
-using StardewArchipelago.Archipelago;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewModdingAPI;
 
 namespace StardewArchipelago.GameModifications.CodeInjections.Modded
@@ -11,13 +12,13 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Modded
         private const double DIGGING_MULTIPLIER = 1.6; // Default Value: 5
         private const double WATER_SHIFTER_MULTIPLIER = 1.8; // Default Value: 2
 
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static IModHelper _modHelper;
         private static ArchipelagoClient _archipelago;
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago)
+        public static void Initialize(ILogger logger, IModHelper modHelper, ArchipelagoClient archipelago)
         {
-            _monitor = monitor;
+            _logger = logger;
             _modHelper = modHelper;
             _archipelago = archipelago;
         }
@@ -32,7 +33,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Modded
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(ExperienceFromArtifactSpots_APMultiplier_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(ExperienceFromArtifactSpots_APMultiplier_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -47,7 +48,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Modded
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(ExperienceFromPanSpots_APMultiplier_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(ExperienceFromPanSpots_APMultiplier_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -62,7 +63,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Modded
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(ExperienceFromMinesDigging_APMultiplier_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(ExperienceFromMinesDigging_APMultiplier_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -77,7 +78,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Modded
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(ExperienceFromWaterShifter_APMultiplier_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(ExperienceFromWaterShifter_APMultiplier_Postfix)}:\n{ex}");
                 return;
             }
         }

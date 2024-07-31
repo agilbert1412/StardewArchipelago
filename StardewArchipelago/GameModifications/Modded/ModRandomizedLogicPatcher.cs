@@ -1,23 +1,21 @@
 using HarmonyLib;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Modded;
-using StardewArchipelago.GameModifications.CodeInjections.Modded;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
-using StardewValley;
-using StardewValley.Menus;
 
 namespace StardewArchipelago.GameModifications.Modded
 {
     public class ModRandomizedLogicPatcher
     {
         private readonly Harmony _harmony;
-        private readonly ArchipelagoClient _archipelago;
+        private readonly StardewArchipelagoClient _archipelago;
         private readonly StardewItemManager _stardewItemManager;
-        private JunimoShopStockModifier _junimoShopStockModifier;
-        private IModHelper _modHelper;
+        private readonly JunimoShopStockModifier _junimoShopStockModifier;
+        private readonly IModHelper _modHelper;
 
-        public ModRandomizedLogicPatcher(IMonitor monitor, IModHelper modHelper, Harmony harmony, ArchipelagoClient archipelago, SeedShopStockModifier seedShopStockModifier, StardewItemManager stardewItemManager)
+        public ModRandomizedLogicPatcher(ILogger logger, IModHelper modHelper, Harmony harmony, StardewArchipelagoClient archipelago, SeedShopStockModifier seedShopStockModifier, StardewItemManager stardewItemManager)
         {
             _harmony = harmony;
             _archipelago = archipelago;
@@ -25,7 +23,7 @@ namespace StardewArchipelago.GameModifications.Modded
             _modHelper = modHelper;
             if (_archipelago.SlotData.Mods.HasMod(ModNames.SVE))
             {
-                _junimoShopStockModifier = new JunimoShopStockModifier(monitor, modHelper, archipelago, _stardewItemManager);
+                _junimoShopStockModifier = new JunimoShopStockModifier(logger, modHelper, archipelago, _stardewItemManager);
             }
         }
 

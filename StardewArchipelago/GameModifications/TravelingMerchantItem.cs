@@ -8,7 +8,7 @@ namespace StardewArchipelago.GameModifications
     internal class TravelingMerchantItem : ISalable
     {
         private bool _hasBeenPurchasedAlready;
-        private ISalable _stardewItem;
+        private readonly ISalable _stardewItem;
         private ArchipelagoStateDto _archipelagoState;
 
         public TravelingMerchantItem(ISalable stardewItem, ArchipelagoStateDto archipelagoState)

@@ -1,4 +1,5 @@
-﻿using StardewArchipelago.Archipelago;
+﻿using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Locations.ShopStockModifiers;
@@ -11,7 +12,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 {
     public class AnimalShopStockModifier : ShopStockModifier
     {
-        public AnimalShopStockModifier(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago, StardewItemManager stardewItemManager) : base(monitor, helper, archipelago, stardewItemManager)
+        public AnimalShopStockModifier(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager) : base(logger, helper, archipelago, stardewItemManager)
         {
         }
 

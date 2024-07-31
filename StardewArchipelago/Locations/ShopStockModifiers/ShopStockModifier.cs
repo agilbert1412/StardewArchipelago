@@ -1,5 +1,6 @@
 ﻿using System;
 using Force.DeepCloner;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Stardew;
@@ -11,14 +12,14 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
 {
     public abstract class ShopStockModifier
     {
-        protected IMonitor _monitor;
+        protected ILogger _logger;
         protected IModHelper _helper;
-        protected ArchipelagoClient _archipelago;
+        protected StardewArchipelagoClient _archipelago;
         protected StardewItemManager _stardewItemManager;
 
-        public ShopStockModifier(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago, StardewItemManager stardewItemManager)
+        public ShopStockModifier(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager)
         {
-            _monitor = monitor;
+            _logger = logger;
             _helper = helper;
             _archipelago = archipelago;
             _stardewItemManager = stardewItemManager;

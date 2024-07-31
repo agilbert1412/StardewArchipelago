@@ -2,24 +2,24 @@
 using System.Collections.Generic;
 using System.Linq;
 using Force.DeepCloner;
-using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
-using StardewArchipelago.Constants.Locations;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley.GameData.Buildings;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
     public class CarpenterBuildingsModifier
     {
-        protected static IMonitor _monitor;
+        protected static ILogger _logger;
         protected static IModHelper _helper;
-        protected static ArchipelagoClient _archipelago;
+        protected static StardewArchipelagoClient _archipelago;
 
-        public CarpenterBuildingsModifier(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago)
+        public CarpenterBuildingsModifier(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago)
         {
-            _monitor = monitor;
+            _logger = logger;
             _helper = helper;
             _archipelago = archipelago;
         }

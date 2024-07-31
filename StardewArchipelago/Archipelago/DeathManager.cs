@@ -1,5 +1,7 @@
 ﻿using System;
 using HarmonyLib;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI;
 using StardewValley;
@@ -8,16 +10,16 @@ namespace StardewArchipelago.Archipelago
 {
     public class DeathManager
     {
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static ArchipelagoClient _archipelago;
         private IModHelper _modHelper;
-        private Harmony _harmony;
+        private readonly Harmony _harmony;
 
         private static bool _isCurrentlyReceivingDeathLink = false;
 
-        public DeathManager(IMonitor monitor, IModHelper modHelper, Harmony harmony, ArchipelagoClient archipelago)
+        public DeathManager(ILogger logger, IModHelper modHelper, Harmony harmony, ArchipelagoClient archipelago)
         {
-            _monitor = monitor;
+            _logger = logger;
             _modHelper = modHelper;
             _harmony = harmony;
             _archipelago = archipelago;
@@ -50,7 +52,7 @@ namespace StardewArchipelago.Archipelago
                 return;
             }
 
-            _archipelago.SendDeathLink(Game1.player.Name, cause);
+            _archipelago.SendDeathLink(cause);
         }
 
         public void HookIntoDeathlinkEvents()
@@ -88,7 +90,7 @@ namespace StardewArchipelago.Archipelago
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(Update_SendDeathLink_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(Update_SendDeathLink_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -106,7 +108,7 @@ namespace StardewArchipelago.Archipelago
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(PerformPassOut_SendDeathLink_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(PerformPassOut_SendDeathLink_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }

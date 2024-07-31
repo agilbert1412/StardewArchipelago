@@ -7,23 +7,23 @@ using Microsoft.Xna.Framework;
 using Newtonsoft.Json;
 using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Stardew;
-using StardewModdingAPI;
 using StardewValley;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 
 namespace StardewArchipelago.Archipelago.Gifting
 {
     internal class CrossGiftHandler : IGiftHandler
     {
-        private static readonly string[] _desiredTraits = new[]
+        private static readonly string[] _desiredTraits =
         {
             GiftFlag.Speed, GiftFlag.Wood, GiftFlag.Stone, GiftFlag.Consumable, GiftFlag.Food, GiftFlag.Drink,
             GiftFlag.Fish, GiftFlag.Heal, GiftFlag.Metal, GiftFlag.Seed,
         };
 
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private StardewItemManager _itemManager;
         private Mailman _mail;
-        private ArchipelagoClient _archipelago;
+        private StardewArchipelagoClient _archipelago;
         private IGiftingService _giftService;
         private GiftSender _giftSender;
         private GiftReceiver _giftReceiver;
@@ -35,24 +35,24 @@ namespace StardewArchipelago.Archipelago.Gifting
         {
         }
 
-        public void Initialize(IMonitor monitor, ArchipelagoClient archipelago, StardewItemManager itemManager, Mailman mail)
+        public void Initialize(ILogger logger, StardewArchipelagoClient archipelago, StardewItemManager itemManager, Mailman mail)
         {
             if (!archipelago.SlotData.Gifting)
             {
                 return;
             }
 
-            _monitor = monitor;
+            _logger = logger;
             _itemManager = itemManager;
             _mail = mail;
             _archipelago = archipelago;
-            _giftService = new GiftingService(archipelago.Session);
-            _giftSender = new GiftSender(_monitor, _archipelago, _itemManager, _giftService);
+            _giftService = new GiftingService(archipelago.GetSession());
+            _giftSender = new GiftSender(_logger, _archipelago, _itemManager, _giftService);
 
             _giftService.OpenGiftBox(true, _desiredTraits);
             RegisterAllAvailableGifts();
 
-            _giftReceiver = new GiftReceiver(_monitor, _archipelago, _giftService, _itemManager, _mail, _closeTraitParser);
+            _giftReceiver = new GiftReceiver(_logger, _archipelago, _giftService, _itemManager, _mail, _closeTraitParser);
         }
 
         public bool HandleGiftItemCommand(string message)

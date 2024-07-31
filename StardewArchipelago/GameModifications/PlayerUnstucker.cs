@@ -10,7 +10,7 @@ namespace StardewArchipelago.GameModifications
 {
     public class PlayerUnstucker
     {
-        private TileChooser _tileChooser;
+        private readonly TileChooser _tileChooser;
 
         public PlayerUnstucker(TileChooser tileChooser)
         {

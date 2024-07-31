@@ -12,7 +12,7 @@ namespace StardewArchipelago.Stardew.NameMapping
 
         private static readonly Dictionary<string, string> BinningCraftIDsToEnglishNamesMap = new()
         {
-            {"drbirbdev.BinningSkill_TrashCan", "Trash Bin"},
+            { "drbirbdev.BinningSkill_TrashCan", "Trash Bin" },
         };
 
         private static readonly Dictionary<string, string> EnglishToBinningNamesMap = BinningToEnglishNamesMap.ToDictionary(x => x.Value, x => x.Key);

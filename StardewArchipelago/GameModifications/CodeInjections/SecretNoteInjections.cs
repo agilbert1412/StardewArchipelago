@@ -1,8 +1,8 @@
 ﻿using System;
-using StardewArchipelago.Archipelago;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Locations;
-using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Extensions;
 using Object = StardewValley.Object;
@@ -14,13 +14,13 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         private const int MAX_SECRET_NOTES = 25;
         private const string SECRET_NOTE_ID = "(O)79";
 
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static ArchipelagoClient _archipelago;
-        private static LocationChecker _locationChecker;
+        private static StardewLocationChecker _locationChecker;
 
-        public static void Initialize(IMonitor monitor, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(ILogger logger, ArchipelagoClient archipelago, StardewLocationChecker locationChecker)
         {
-            _monitor = monitor;
+            _logger = logger;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
         }
@@ -76,7 +76,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(TryToCreateUnseenSecretNote_AllowSecretNotesIfStillNeedToShipThem_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(TryToCreateUnseenSecretNote_AllowSecretNotesIfStillNeedToShipThem_Postfix)}:\n{ex}");
                 return;
             }
         }

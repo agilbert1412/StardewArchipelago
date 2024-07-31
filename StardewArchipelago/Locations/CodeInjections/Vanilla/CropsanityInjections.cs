@@ -1,31 +1,32 @@
 ﻿using System;
 using System.Linq;
 using Microsoft.Xna.Framework;
-using StardewArchipelago.Archipelago;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewArchipelago.Stardew;
 using StardewArchipelago.Stardew.Ids.Vanilla;
-using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Characters;
 using StardewValley.TerrainFeatures;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.ArchipelagoUtilities.Net;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
     public static class CropsanityInjections
     {
-        private static readonly string[] _cropsanityExceptions = new[]
+        private static readonly string[] _cropsanityExceptions =
         {
             ObjectIds.WEEDS, ObjectIds.SPRING_ONION, ObjectIds.ANCIENT_FRUIT, ObjectIds.FIBER, ObjectIds.QI_FRUIT,
         };
 
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
         private static StardewItemManager _itemManager;
 
-        public static void Initialize(IMonitor monitor, ArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager itemManager)
+        public static void Initialize(ILogger logger, ArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager itemManager)
         {
-            _monitor = monitor;
+            _logger = logger;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
             _itemManager = itemManager;
@@ -50,7 +51,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
                 if (!_itemManager.ObjectExistsById(itemId))
                 {
-                    _monitor.Log($"Unrecognized Cropsanity Crop: [{itemId}]", LogLevel.Error);
+                    _logger.LogError($"Unrecognized Cropsanity Crop: [{itemId}]");
                     return;
                 }
 
@@ -63,14 +64,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 }
                 else if (!_cropsanityExceptions.Contains(itemId))
                 {
-                    _monitor.Log($"Unrecognized Cropsanity Location: {item.Name} [{itemId}]", LogLevel.Error);
+                    _logger.LogError($"Unrecognized Cropsanity Location: {item.Name} [{itemId}]");
                 }
 
                 return;
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(Harvest_CheckCropsanityLocation_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(Harvest_CheckCropsanityLocation_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -94,14 +95,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 }
                 else
                 {
-                    _monitor.Log($"Unrecognized Cropsanity Tree Fruit Location: {fruit.Name} [{fruit.ItemId}]", LogLevel.Error);
+                    _logger.LogError($"Unrecognized Cropsanity Tree Fruit Location: {fruit.Name} [{fruit.ItemId}]");
                 }
 
                 return true; // run original logic
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(Shake_CheckCropsanityFruitTreeLocation_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(Shake_CheckCropsanityFruitTreeLocation_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }

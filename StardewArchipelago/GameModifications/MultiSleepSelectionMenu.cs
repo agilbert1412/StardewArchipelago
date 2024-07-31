@@ -7,7 +7,7 @@ namespace StardewArchipelago.GameModifications
 {
     public class MultiSleepSelectionMenu : NumberSelectionMenu
     {
-        private string _message;
+        private readonly string _message;
 
         public MultiSleepSelectionMenu(string message, behaviorOnNumberSelect behaviorOnSelection, int price = -1, int minValue = 0, int maxValue = 99, int defaultNumber = 0)
             : base(message, behaviorOnSelection, price, minValue, maxValue, defaultNumber)
