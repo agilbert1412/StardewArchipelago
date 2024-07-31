@@ -19,7 +19,8 @@ namespace StardewArchipelago.Locations.InGameLocations
         private ArchipelagoClient _archipelago;
         private LocationChecker _locationChecker;
 
-        public ParsedArchipelagoItemData(LogHandler logger, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker, IItemDataDefinition itemType, string itemId, int spriteIndex, string textureName, string internalName, string displayName, string description, int category, string objectType, object rawData, bool isErrorItem = false, bool excludeFromRandomSale = false) : base(itemType, itemId, spriteIndex, textureName, internalName, displayName, description, category, objectType, rawData, isErrorItem, excludeFromRandomSale)
+        public ParsedArchipelagoItemData(LogHandler logger, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker, IItemDataDefinition itemType, string itemId, int spriteIndex, string textureName, string internalName, string displayName, string description, int category, string objectType, object rawData, bool isErrorItem = false, bool excludeFromRandomSale = false) : base(itemType, itemId, spriteIndex, textureName, internalName, displayName,
+            description, category, objectType, rawData, isErrorItem, excludeFromRandomSale)
         {
             _logger = logger;
             _modHelper = modHelper;

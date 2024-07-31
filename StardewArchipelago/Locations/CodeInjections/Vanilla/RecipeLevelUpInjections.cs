@@ -140,16 +140,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 Skill.Archaeology, new Dictionary<int, string[]>()
                 {
-                    { 3, new [] { "Digger's Delight" } },
-                    { 7, new [] { "Rocky Root Coffee" } },
-                    { 9, new [] { "Ancient Jello" } },
+                    { 3, new[] { "Digger's Delight" } },
+                    { 7, new[] { "Rocky Root Coffee" } },
+                    { 9, new[] { "Ancient Jello" } },
                 }
             },
             {
                 Skill.Binning, new Dictionary<int, string[]>()
                 {
-                    {1, new [] { "Grilled Cheese" } },
-                    {8, new []{ "Fish Casserole" } }, 
+                    { 1, new[] { "Grilled Cheese" } },
+                    { 8, new[] { "Fish Casserole" } },
                 }
             }
         };

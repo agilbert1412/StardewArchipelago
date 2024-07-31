@@ -233,7 +233,7 @@ namespace StardewArchipelago.GameModifications
             SlotNameTextBox.X = xPosition;
             SlotNameTextBox.Y = yPosition;
             SlotNameTextBox.limitWidth = false;
-            
+
             var slotNameRectangle = new Rectangle(xPosition, yPosition, 192, 48);
             slotNameCC.bounds = slotNameRectangle;
 
@@ -258,7 +258,7 @@ namespace StardewArchipelago.GameModifications
             var languageOffset = LocalizedContentManager.CurrentLanguageCode is LocalizedContentManager.LanguageCode.ru or LocalizedContentManager.LanguageCode.es or LocalizedContentManager.LanguageCode.pt ? -4 : 0;
             var passwordLabelPosition = new Rectangle(xOffset + languageOffset + 16 + 192 + 4, yOffset - 8, 1, 1);
             passwordLabel.bounds = passwordLabelPosition;
-            
+
             labels.Add(passwordLabel);
         }
 

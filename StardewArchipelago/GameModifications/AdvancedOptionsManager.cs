@@ -120,7 +120,7 @@ namespace StardewArchipelago.GameModifications
         private static void ForceFarmTypeToArchipelagoProvidedFarm()
         {
             var farmType = _archipelago.SlotData.FarmType;
-            
+
             Game1.whichFarm = farmType.GetWhichFarm();
             Game1.whichModFarm = farmType.GetWhichModFarm();
             Game1.spawnMonstersAtNight = farmType.GetSpawnMonstersAtNight();

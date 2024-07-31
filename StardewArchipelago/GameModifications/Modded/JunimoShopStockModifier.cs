@@ -15,11 +15,11 @@ namespace StardewArchipelago.GameModifications.Modded
 {
     public class JunimoShopStockModifier : BarterShopStockModifier
     {
-        private static readonly string[] spring = {"spring"};
-        private static readonly string[] summer = {"summer"};
-        private static readonly string[] fall = {"fall"};
-        private static readonly string[] summer_fall = {"summer", "fall"};
-        private static readonly string[] winter = {"winter"};
+        private static readonly string[] spring = { "spring" };
+        private static readonly string[] summer = { "summer" };
+        private static readonly string[] fall = { "fall" };
+        private static readonly string[] summer_fall = { "summer", "fall" };
+        private static readonly string[] winter = { "winter" };
         private const float INITIAL_DISCOUNT = 0.65f;
         private const float APPLES_DISCOUNT = 0.05f;
 
@@ -30,7 +30,7 @@ namespace StardewArchipelago.GameModifications.Modded
             { "Grey", "I trade rocks for grey what's-its!" },
             { "Yellow", "I hab seeds, gib yellow gubbins!" },
             { "Blue", "I hab fish! You give blue pretty?" },
-            { "Purple", "Rare thing?  Purple thing!  Yay!"},
+            { "Purple", "Rare thing?  Purple thing!  Yay!" },
         };
 
         public JunimoShopStockModifier(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager) : base(logger, helper, archipelago, stardewItemManager)
@@ -65,7 +65,7 @@ namespace StardewArchipelago.GameModifications.Modded
                 AssetEditPriority.Late
             );
         }
-        
+
         private void GenerateBlueJunimoStock(ShopData shopData, int stockCount, double discount)
         {
             shopData.Owners[0].Dialogues[0].Dialogue = _junimoPhrase["Blue"];
@@ -132,7 +132,7 @@ namespace StardewArchipelago.GameModifications.Modded
 
         private void GeneratePurpleJunimoStock(ShopData shopData, int stockCount, double discount)
         {
-            
+
             shopData.Owners[0].Dialogues[0].Dialogue = _junimoPhrase["Purple"];
             var itemToKeep = shopData.Items.First(x => x.ItemId == "FlashShifter.StardewValleyExpandedCP_Super_Starfruit");
             shopData.Items.Clear();
@@ -181,7 +181,8 @@ namespace StardewArchipelago.GameModifications.Modded
         {
             var seedItemName = _stardewItemManager.GetItemByQualifiedId(qualifiedId).Name;
             var itemHashCode = seedItemName.GetHashCode();
-            var condition = $"SYNCED_RANDOM day junimo_shops_{itemHashCode} 0.4 @addDailyLuck";;
+            var condition = $"SYNCED_RANDOM day junimo_shops_{itemHashCode} 0.4 @addDailyLuck";
+            ;
             if (season is not null)
             {
                 condition = $"{GameStateConditionProvider.CreateSeasonsCondition(season)}, {condition}";

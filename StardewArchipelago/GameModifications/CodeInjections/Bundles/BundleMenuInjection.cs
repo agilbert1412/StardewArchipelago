@@ -14,7 +14,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Bundles
         {
             _logger = logger;
         }
-        
+
         //Transpiler way
         public static IEnumerable<CodeInstruction> SkipObjectCheck(IEnumerable<CodeInstruction> instructions)
         {

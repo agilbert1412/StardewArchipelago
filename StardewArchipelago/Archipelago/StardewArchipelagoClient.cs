@@ -88,59 +88,59 @@ namespace StardewArchipelago.Archipelago
             switch (message)
             {
                 case ChatLogMessage chatMessage:
+                {
+                    if (!ModEntry.Instance.Config.EnableChatMessages)
                     {
-                        if (!ModEntry.Instance.Config.EnableChatMessages)
-                        {
-                            return;
-                        }
-
-                        var color = chatMessage.Player.Name.GetAsBrightColor();
-                        Game1.chatBox?.addMessage(fullMessage, color);
                         return;
                     }
+
+                    var color = chatMessage.Player.Name.GetAsBrightColor();
+                    Game1.chatBox?.addMessage(fullMessage, color);
+                    return;
+                }
                 case ItemSendLogMessage itemSendLogMessage:
+                {
+                    if (ModEntry.Instance.Config.DisplayItemsInChat == ChatItemsFilter.None)
                     {
-                        if (ModEntry.Instance.Config.DisplayItemsInChat == ChatItemsFilter.None)
-                        {
-                            return;
-                        }
-
-                        if (ModEntry.Instance.Config.DisplayItemsInChat == ChatItemsFilter.RelatedToMe && !itemSendLogMessage.IsRelatedToActivePlayer)
-                        {
-                            return;
-                        }
-
-                        var color = Color.Gold;
-
-                        Game1.chatBox?.addMessage(fullMessage, color);
                         return;
                     }
+
+                    if (ModEntry.Instance.Config.DisplayItemsInChat == ChatItemsFilter.RelatedToMe && !itemSendLogMessage.IsRelatedToActivePlayer)
+                    {
+                        return;
+                    }
+
+                    var color = Color.Gold;
+
+                    Game1.chatBox?.addMessage(fullMessage, color);
+                    return;
+                }
                 case GoalLogMessage:
-                    {
-                        var color = Color.Green;
-                        Game1.chatBox?.addMessage(fullMessage, color);
-                        return;
-                    }
+                {
+                    var color = Color.Green;
+                    Game1.chatBox?.addMessage(fullMessage, color);
+                    return;
+                }
                 case JoinLogMessage:
                 case LeaveLogMessage:
                 case TagsChangedLogMessage:
+                {
+                    if (!ModEntry.Instance.Config.EnableConnectionMessages)
                     {
-                        if (!ModEntry.Instance.Config.EnableConnectionMessages)
-                        {
-                            return;
-                        }
-
-                        var color = Color.Gray;
-                        Game1.chatBox?.addMessage(fullMessage, color);
                         return;
                     }
+
+                    var color = Color.Gray;
+                    Game1.chatBox?.addMessage(fullMessage, color);
+                    return;
+                }
                 case CommandResultLogMessage:
                 case not null:
-                    {
-                        var color = Color.Gray;
-                        Game1.chatBox?.addMessage(fullMessage, color);
-                        return;
-                    }
+                {
+                    var color = Color.Gray;
+                    Game1.chatBox?.addMessage(fullMessage, color);
+                    return;
+                }
             }
         }
 

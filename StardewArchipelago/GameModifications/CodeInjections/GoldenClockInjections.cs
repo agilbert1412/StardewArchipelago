@@ -37,7 +37,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     _lastDayGoldClockToggled = Game1.stats.DaysPlayed;
                     return true; // run original logic
                 }
-                
+
                 Game1.performTenMinuteClockUpdate();
                 return false; // don't run original logic
             }

@@ -182,7 +182,7 @@ namespace StardewArchipelago.Items
         }
 
         // public BobberBar(string whichFish, float fishSize, bool treasure, List<string> bobbers, string setFlagOnCatch, bool isBossFish, string baitID = "", bool goldenTreasure = false)
-        public static void BobberBarConstructor_AddApBuffs_Postfix(BobberBar __instance, string whichFish, float fishSize, bool treasure, 
+        public static void BobberBarConstructor_AddApBuffs_Postfix(BobberBar __instance, string whichFish, float fishSize, bool treasure,
             List<string> bobbers, string setFlagOnCatch, bool isBossFish, string baitID, bool goldenTreasure)
         {
             try

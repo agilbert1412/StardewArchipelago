@@ -78,19 +78,19 @@ namespace StardewArchipelago.Locations.InGameLocations
             _locationDisplayName = $"{prefix}{locationDisplayName}";
             Name = _locationDisplayName;
             LocationName = locationName;
-            ItemId = $"{IDProvider.AP_LOCATION}_{LocationName/*.Replace(" ", "_")*/}";
+            ItemId = $"{IDProvider.AP_LOCATION}_{LocationName /*.Replace(" ", "_")*/}";
 
             _locationChecker = locationChecker;
 
             var isHinted = myActiveHints.Any(hint => archipelago.GetLocationName(hint.LocationId).Equals(locationName, StringComparison.OrdinalIgnoreCase));
             var desiredTextureName = isHinted ? ArchipelagoTextures.PLEADING : ArchipelagoTextures.COLOR;
             _archipelagoTexture = ArchipelagoTextures.GetArchipelagoLogo(logger, modHelper, 48, desiredTextureName);
-            
+
 
             var scoutedLocation = archipelago.ScoutSingleLocation(LocationName);
             _description = scoutedLocation == null ? ScoutedLocation.GenericItemName() : scoutedLocation.ToString();
         }
-        
+
         public override void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth,
             StackDrawType drawStackNumber, Color color, bool drawShadow)
         {

@@ -301,7 +301,7 @@ namespace StardewArchipelago.Locations.Patcher
             {
                 return;
             }
-            
+
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Event), nameof(Event.skipEvent)),
                 prefix: new HarmonyMethod(typeof(CopperPanInjections), nameof(CopperPanInjections.SkipEvent_CopperPan_Prefix))
@@ -1288,8 +1288,11 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(typeof(IslandFieldOffice), nameof(IslandFieldOffice.donatePiece)),
                 prefix: new HarmonyMethod(typeof(WalnutPuzzleInjections), nameof(WalnutPuzzleInjections.DonatePiece_CheckInsteadOfNuts_Prefix))
             );
-            var isCollidingPositionParameterTypes = new[] { typeof(Microsoft.Xna.Framework.Rectangle), typeof(xTile.Dimensions.Rectangle),
-                typeof(bool), typeof(int), typeof(bool), typeof(Character), typeof(bool), typeof(bool), typeof(bool), typeof(bool) };
+            var isCollidingPositionParameterTypes = new[]
+            {
+                typeof(Microsoft.Xna.Framework.Rectangle), typeof(xTile.Dimensions.Rectangle),
+                typeof(bool), typeof(int), typeof(bool), typeof(Character), typeof(bool), typeof(bool), typeof(bool), typeof(bool)
+            };
             _harmony.Patch(
                 original: AccessTools.Method(typeof(IslandNorth), nameof(IslandNorth.isCollidingPosition), isCollidingPositionParameterTypes),
                 prefix: new HarmonyMethod(typeof(WalnutPuzzleInjections), nameof(WalnutPuzzleInjections.IsCollidingPosition_CheckInsteadOfNut_Prefix))

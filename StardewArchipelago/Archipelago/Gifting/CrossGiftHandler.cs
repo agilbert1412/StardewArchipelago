@@ -14,7 +14,8 @@ namespace StardewArchipelago.Archipelago.Gifting
 {
     internal class CrossGiftHandler : IGiftHandler
     {
-        private static readonly string[] _desiredTraits = {
+        private static readonly string[] _desiredTraits =
+        {
             GiftFlag.Speed, GiftFlag.Wood, GiftFlag.Stone, GiftFlag.Consumable, GiftFlag.Food, GiftFlag.Drink,
             GiftFlag.Fish, GiftFlag.Heal, GiftFlag.Metal, GiftFlag.Seed,
         };

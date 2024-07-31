@@ -151,7 +151,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                     return false; // don't run original logic
                 }
                 Game1.player.team.MarkCollectedNut("TreeNut");
-                
+
                 DelayedAction.functionAfterDelay(() => CreateLocationDebris("Leo's Tree", new Vector2(10.5f, 7f) * 64f, __instance), 1250);
                 __instance.treeNutObtained.Value = true;
                 return false; // don't run original logic
@@ -745,7 +745,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                     var dialogue = victoryText + Game1.content.LoadString("Strings\\StringsFromMaps:Pirates7_WinNoPrize");
                     Game1.drawDialogueNoTyping(dialogue);
                 }
-                
+
                 return false; // don't run original logic
             }
             catch (Exception ex)

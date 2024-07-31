@@ -37,7 +37,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             {
                 return string.Empty;
             }
-            
+
 #pragma warning disable CS0162
             var stackTrace = new StackTrace();
             var stackTraceString = stackTrace.ToString();

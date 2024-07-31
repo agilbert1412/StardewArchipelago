@@ -28,7 +28,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Modded
         {
             // public class ModEntry : Mod
             var socializingModEntryType = AccessTools.TypeByName($"{SOCIALIZING_NAMESPACE}.ModEntry");
-            
+
             // internal class Config
             var socializingConfigType = AccessTools.TypeByName($"{SOCIALIZING_NAMESPACE}.Config");
 

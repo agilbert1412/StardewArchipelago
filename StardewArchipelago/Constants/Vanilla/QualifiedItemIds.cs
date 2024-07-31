@@ -21,7 +21,8 @@ namespace StardewArchipelago.Constants.Vanilla
         public const string ZERO_QUALIFIER = "(0)"; // This apparently is a typo in the base game, and should be (O) [Object]
         public const string ARCHIPELAGO_QUALIFER = "(AP)";
 
-        private static readonly string[] ALL_QUALIFIERS = {
+        private static readonly string[] ALL_QUALIFIERS =
+        {
             OBJECT_QUALIFIER, BIG_CRAFTABLE_QUALIFIER, FURNITURE_QUALIFIER, WEAPON_QUALIFIER, BOOTS_QUALIFIER, TOOLS_QUALIFIER, HAT_QUALIFIER,
             SHIRT_QUALIFIER, TRINKET_QUALIFIER, WALLPAPER_QUALIFIER, FLOORPAPER_QUALIFIER, PANTS_QUALIFIER, MANNEQUIN_QUALIFIER, ZERO_QUALIFIER,
         };

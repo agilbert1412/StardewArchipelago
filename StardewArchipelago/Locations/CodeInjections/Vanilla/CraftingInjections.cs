@@ -126,7 +126,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 {
                     return true; // run original logic
                 }
-                
+
                 EventInjections.BaseSkipEvent(__instance, () => Game1.player.addQuest("11"));
 
                 return false; // don't run original logic

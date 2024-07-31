@@ -7,12 +7,12 @@ namespace StardewArchipelago.Stardew.NameMapping
     {
         private static readonly Dictionary<string, string> SVEToEnglishNamesMap = new()
         {
-            {"Bearberrys", "Bearberry"},
-            {"Big Conch", "Conch"},
-            {"Dried Sand Dollar", "Sand Dollar"},
-            {"Lucky Four Leaf Clover", "Four Leaf Clover"},
-            {"Smelly Rafflesia", "Rafflesia"},
-            {"Ancient Ferns Seed", "Ancient Fern Seed"},
+            { "Bearberrys", "Bearberry" },
+            { "Big Conch", "Conch" },
+            { "Dried Sand Dollar", "Sand Dollar" },
+            { "Lucky Four Leaf Clover", "Four Leaf Clover" },
+            { "Smelly Rafflesia", "Rafflesia" },
+            { "Ancient Ferns Seed", "Ancient Fern Seed" },
         };
 
         private static readonly Dictionary<string, string> EnglishToSVENamesMap = SVEToEnglishNamesMap.ToDictionary(x => x.Value, x => x.Key);

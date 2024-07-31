@@ -93,7 +93,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             foreach (var shippedItem in allShippedItems)
             {
                 var name = _nameSimplifier.GetSimplifiedName(shippedItem);
-                name = _nameMapper.GetEnglishName(name);  // For the Name vs Display Name discrepencies in Mods.
+                name = _nameMapper.GetEnglishName(name); // For the Name vs Display Name discrepencies in Mods.
                 if (IgnoredModdedStrings.Shipments.Contains(name))
                 {
                     continue;
@@ -104,7 +104,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     _locationChecker.AddCheckedLocation(apLocation);
                 }
                 else
-                {    
+                {
                     var wasSuccessful = DoBugsCleanup(shippedItem);
                     if (wasSuccessful)
                     {
@@ -119,7 +119,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             // In the beta async, backend names for SVE shippables are the internal names.  This fixes the mistake ONLY for that beta async.  Remove after it.
             var name = _nameSimplifier.GetSimplifiedName(shippedItem);
-            var sveMappedItems = new List<string>() {"Smelly Rafflesia", "Bearberrys", "Big Conch", "Dried Sand Dollar", "Lucky Four Leaf Clover", "Ancient Ferns Seed"};
+            var sveMappedItems = new List<string>() { "Smelly Rafflesia", "Bearberrys", "Big Conch", "Dried Sand Dollar", "Lucky Four Leaf Clover", "Ancient Ferns Seed" };
             if (sveMappedItems.Contains(name))
             {
                 var apLocation = $"{SHIPSANITY_PREFIX}{name}";

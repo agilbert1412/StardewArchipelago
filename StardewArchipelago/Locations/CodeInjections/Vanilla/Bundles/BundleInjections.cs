@@ -57,7 +57,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             {
                 return;
             }
-            
+
             bundle.name = bundleName;
             bundle.label = bundleName;
             bundle.rewardDescription = string.Empty;

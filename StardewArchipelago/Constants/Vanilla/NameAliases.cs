@@ -34,8 +34,8 @@ namespace StardewArchipelago.Constants.Vanilla
             { "GuntherSilvian", "Gunther" },
             { "MorrisTod", "Morris" },
             { "Aimon111.WitchSwampOverhaulCP_GoblinZic", "Zic" },
-            { "ichortower.HatMouseLacey_Lacey", "Lacey"},
-            { "SPB_Alec", "Alec"},
+            { "ichortower.HatMouseLacey_Lacey", "Lacey" },
+            { "SPB_Alec", "Alec" },
         };
     }
 }

@@ -85,8 +85,8 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             var cropData = DataLoader.Crops(Game1.content);
             var cropCandidates = cropData.ToDictionary(x => x.Key, x => _stardewItemManager.GetObjectById(x.Key).PrepareForGivingToFarmer());
             var location = Game1.currentLocation;
-            var mixedSeedCandidates = cropData.Where(kvp => !_flowerSeeds.Contains(kvp.Key) && 
-                SeedCanBePlantedHere(cropCandidates[kvp.Key], location, season, cropData) && _archipelago.HasReceivedItem(cropCandidates[kvp.Key].Name))
+            var mixedSeedCandidates = cropData.Where(kvp => !_flowerSeeds.Contains(kvp.Key) &&
+                                                            SeedCanBePlantedHere(cropCandidates[kvp.Key], location, season, cropData) && _archipelago.HasReceivedItem(cropCandidates[kvp.Key].Name))
                 .Select(x => x.Key)
                 .ToList();
 

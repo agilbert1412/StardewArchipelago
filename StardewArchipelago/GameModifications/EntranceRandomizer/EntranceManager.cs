@@ -82,8 +82,8 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
                 RegisterRandomizedEntrance(originalEntrance, replacementEntrance);
             }
 
-            if (slotData.EntranceRandomization == EntranceRandomization.PelicanTown || 
-                slotData.EntranceRandomization == EntranceRandomization.NonProgression || 
+            if (slotData.EntranceRandomization == EntranceRandomization.PelicanTown ||
+                slotData.EntranceRandomization == EntranceRandomization.NonProgression ||
                 slotData.EntranceRandomization == EntranceRandomization.BuildingsWithoutHouse)
             {
                 return;

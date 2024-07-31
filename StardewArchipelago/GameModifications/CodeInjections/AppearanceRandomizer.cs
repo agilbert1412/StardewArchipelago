@@ -170,7 +170,8 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         };
 
 
-        private static readonly string[] _villagers = {
+        private static readonly string[] _villagers =
+        {
             "Birdie",
             "ParrotBoy",
             "George",
@@ -209,7 +210,8 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         };
         private const string _monsterTexturePrefix = _characterTexturePrefix + "Monsters\\";
 
-        private static readonly string[] _monsterSprites = {
+        private static readonly string[] _monsterSprites =
+        {
             "Wilderness Golem", "Skeleton", "Ghost", "Bat", "Big Slime", "Blue Squid", "Bug", "Pepper Rex", "Duggy",
             "Dust Spirit", "Dwarvish Sentry", "Fly", "Green Slime", "Grub", "Lava Crab", "Lava Lurk", "Spider",
             "Metal Head", "Mummy", "Rock Crab", "Stone Golem", "Serpent", "Shadow Brute", "Shadow Girl", "Shadow Guy",
@@ -218,7 +220,8 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
         private const string _animalTexturePrefix = "Animals\\";
 
-        private static readonly string[] _animalSprites = {
+        private static readonly string[] _animalSprites =
+        {
             "horse", "Dog", "Dog1", "Dog2", "Dog3", "cat", "cat1", "cat2", "cat3", "White Chicken", "BabyWhite Chicken",
             "Brown Chicken", "BabyBrown Chicken", "Duck", "Rabbit", "BabyRabbit", "Cow", "BabyCow", "Sheep", "ShearedSheep", "BabySheep", "Pig", "BabyPig",
         };

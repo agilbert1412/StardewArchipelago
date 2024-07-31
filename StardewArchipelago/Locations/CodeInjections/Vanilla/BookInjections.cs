@@ -55,7 +55,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 }
 
                 CallBaseResetLocalState(__instance);
-                
+
                 var lostBooksFound = _archipelago.GetReceivedItemCount("Progressive Lost Book");
 
                 // private Dictionary<int, Vector2> getLostBooksLocations()

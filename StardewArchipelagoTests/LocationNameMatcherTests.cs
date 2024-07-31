@@ -25,7 +25,7 @@ namespace StardewArchipelago.ests
         [TestCase("Apples", new[] { "Friendsanity: Apples 10 <3" }, new[] { "Harvest Apple" }, TestName = "Apples")]
         [TestCase("Opal", new[] { "Museumsanity: Opal" }, new[] { "Museumsanity: Fire Opal" }, TestName = "Opal")]
         [TestCase("Fire Opal", new[] { "Museumsanity: Fire Opal" }, new[] { "Museumsanity: Opal" }, TestName = "Opal")]
-        [TestCase("Chest", new[] { "Craft Chest" }, new[] { "Craft Stone Chest", "Craft Big Chest", "Craft Big Stone Chest"}, TestName = "Chest")]
+        [TestCase("Chest", new[] { "Craft Chest" }, new[] { "Craft Stone Chest", "Craft Big Chest", "Craft Big Stone Chest" }, TestName = "Chest")]
         [TestCase("Stone Chest", new[] { "Craft Stone Chest" }, new[] { "Craft Chest", "Craft Big Chest", "Craft Big Stone Chest" }, TestName = "Stone Chest")]
         [TestCase("Big Chest", new[] { "Craft Big Chest" }, new[] { "Craft Stone Chest", "Craft Chest", "Craft Big Stone Chest" }, TestName = "Big Chest")]
         [TestCase("Big Stone Chest", new[] { "Craft Big Stone Chest" }, new[] { "Craft Chest", "Craft Big Chest", "Craft Stone Chest" }, TestName = "Big Stone Chest")]

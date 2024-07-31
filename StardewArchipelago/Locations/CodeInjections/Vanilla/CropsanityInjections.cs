@@ -14,7 +14,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
     public static class CropsanityInjections
     {
-        private static readonly string[] _cropsanityExceptions = {
+        private static readonly string[] _cropsanityExceptions =
+        {
             ObjectIds.WEEDS, ObjectIds.SPRING_ONION, ObjectIds.ANCIENT_FRUIT, ObjectIds.FIBER, ObjectIds.QI_FRUIT,
         };
 

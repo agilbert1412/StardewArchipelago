@@ -40,7 +40,7 @@ namespace StardewArchipelago.Items
                 postfix: new HarmonyMethod(typeof(PlayerBuffInjections), nameof(PlayerBuffInjections.GetAttackMultiplier_AddApBuffs_Postfix))
             );
             _harmony.Patch(
-                original: AccessTools.PropertyGetter(typeof(BuffManager),nameof(BuffManager.Defense)),
+                original: AccessTools.PropertyGetter(typeof(BuffManager), nameof(BuffManager.Defense)),
                 postfix: new HarmonyMethod(typeof(PlayerBuffInjections), nameof(PlayerBuffInjections.GetDefense_AddApBuffs_Postfix))
             );
             _harmony.Patch(
@@ -55,7 +55,7 @@ namespace StardewArchipelago.Items
                 original: AccessTools.Method(typeof(FishingRod), "calculateTimeUntilFishingBite"),
                 postfix: new HarmonyMethod(typeof(PlayerBuffInjections), nameof(PlayerBuffInjections.CalculateTimeUntilFishingBite_AddApBuffs_Postfix))
             );
-            
+
             var bobberBarContructorParameters = new[] { typeof(string), typeof(float), typeof(bool), typeof(List<string>), typeof(string), typeof(bool), typeof(string), typeof(bool) };
             _harmony.Patch(
                 original: AccessTools.Constructor(typeof(BobberBar), bobberBarContructorParameters),

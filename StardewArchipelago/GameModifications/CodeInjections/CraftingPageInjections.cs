@@ -22,7 +22,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         {
             try
             {
-                
+
                 if (__instance.pagesOfCraftingRecipes.Any() && __instance.pagesOfCraftingRecipes.First().Any())
                 {
                     return true; // run original logic

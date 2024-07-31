@@ -55,9 +55,9 @@ namespace StardewArchipelago.Locations.InGameLocations
 
         /// <inheritdoc />
         public override Rectangle GetSourceRect(
-          ParsedItemData data,
-          Texture2D texture,
-          int spriteIndex)
+            ParsedItemData data,
+            Texture2D texture,
+            int spriteIndex)
         {
             if (data == null)
                 throw new ArgumentNullException(nameof(data));

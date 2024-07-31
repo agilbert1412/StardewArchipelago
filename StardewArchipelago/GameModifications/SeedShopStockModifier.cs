@@ -231,7 +231,7 @@ namespace StardewArchipelago.GameModifications
             {
                 shopData.Items.Remove(existingItem);
             }
-            
+
             var item = new ShopItemData()
             {
                 Id = itemId,

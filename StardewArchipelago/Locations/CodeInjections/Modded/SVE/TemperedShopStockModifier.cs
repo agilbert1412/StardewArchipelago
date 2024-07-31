@@ -16,7 +16,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
     {
         private static new ArchipelagoClient _archipelago;
         private static new StardewItemManager _stardewItemManager;
-        private static readonly string[] _shopsWithTemperedWeapons = {"FlashShifter.StardewValleyExpandedCP_AlesiaVendor", "FlashShifter.StardewValleyExpandedCP_IsaacVendor"};
+        private static readonly string[] _shopsWithTemperedWeapons = { "FlashShifter.StardewValleyExpandedCP_AlesiaVendor", "FlashShifter.StardewValleyExpandedCP_IsaacVendor" };
+
         public TemperedShopStockModifier(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager) : base(logger, helper, archipelago, stardewItemManager)
         {
             _logger = logger;
@@ -46,15 +47,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
             const string daggerLocationName = "Tempered Galaxy Dagger";
             const string swordLocationName = "Tempered Galaxy Sword";
             const string hammerLocationName = "Tempered Galaxy Hammer";
-            var weaponIdsToLocations = new Dictionary<string, string>(){
-                {ModItemIds.TEMPERED_DAGGER, daggerLocationName},
-                {ModItemIds.TEMPERED_SWORD, swordLocationName},
-                {ModItemIds.TEMPERED_HAMMER, hammerLocationName},
+            var weaponIdsToLocations = new Dictionary<string, string>()
+            {
+                { ModItemIds.TEMPERED_DAGGER, daggerLocationName },
+                { ModItemIds.TEMPERED_SWORD, swordLocationName },
+                { ModItemIds.TEMPERED_HAMMER, hammerLocationName },
             };
             foreach (var shopName in _shopsWithTemperedWeapons)
             {
                 var shopData = shops[shopName];
-                for (var i = shopData.Items.Count - 1; i >=0; i--)
+                for (var i = shopData.Items.Count - 1; i >= 0; i--)
                 {
                     var item = shopData.Items[i];
                     if (weaponIdsToLocations.ContainsKey(item.Id))
@@ -134,4 +136,3 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
         }
     }
 }
-

@@ -86,7 +86,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 return true; // run original logic
             }
         }
-        
+
         // public override bool answerDialogueAction(string questionAndAnswer, string[] questionParams)
         public static bool AnswerDialogueAction_FixStump_Prefix(Forest __instance, string questionAndAnswer, string[] questionParams, ref bool __result)
         {

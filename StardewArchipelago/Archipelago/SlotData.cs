@@ -303,6 +303,7 @@ namespace StardewArchipelago.Archipelago
         Allsanity = 24,
         Perfection = 25,
     }
+
     public enum SupportedFarmType
     {
         Standard = 0,

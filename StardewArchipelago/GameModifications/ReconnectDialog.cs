@@ -119,7 +119,7 @@ namespace StardewArchipelago.GameModifications
                 retryButton.scale = Math.Min(retryButton.scale + 0.02f, retryButton.baseScale + 0.2f);
             else
                 retryButton.scale = Math.Max(retryButton.scale - 0.02f, retryButton.baseScale);
-            
+
             if (cancelButton.containsPoint(x, y))
                 cancelButton.scale = Math.Min(cancelButton.scale + 0.02f, cancelButton.baseScale + 0.2f);
             else
@@ -133,7 +133,7 @@ namespace StardewArchipelago.GameModifications
             b.Draw(Game1.fadeToBlackRect, new Rectangle(0, 0, Game1.uiViewport.Width, Game1.uiViewport.Height), Color.Black * 0.5f);
             Game1.drawDialogueBox(xPositionOnScreen, yPositionOnScreen, width, height, false, true);
             b.DrawString(Game1.dialogueFont, message, new Vector2(xPositionOnScreen + borderWidth, yPositionOnScreen + spaceToClearTopBorder + borderWidth / 2), Game1.textColor);
-            
+
             b.DrawString(Game1.dialogueFont, "New address?", new Vector2(xPositionOnScreen + borderWidth, y), Game1.textColor);
             hostField.draw(b, 0, 0);
             retryButton.draw(b);

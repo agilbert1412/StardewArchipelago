@@ -141,7 +141,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 }
 
                 var harvestMethod = __instance.crop.GetHarvestMethod();
-                if (harvestMethod != HarvestMethod.Scythe || !__instance.crop.harvest((int)tileLocation.X, (int)tileLocation.Y, __instance, isForcedScytheHarvest:true))
+                if (harvestMethod != HarvestMethod.Scythe || !__instance.crop.harvest((int)tileLocation.X, (int)tileLocation.Y, __instance, isForcedScytheHarvest: true))
                 {
                     return true; // run original logic
                 }
@@ -189,7 +189,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 {
                     return true; // run original logic
                 }
-                
+
                 var farmerId = who != null ? who.UniqueMultiplayerID : 0L;
                 Game1.createMultipleObjectDebris("(O)719", x, y, r.Next(2, 5), farmerId, __instance);
 
@@ -424,7 +424,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                     var location = $"{apLocationName} {numberWalnutsSoFar}";
                     itemToSpawnId = IDProvider.CreateApLocationItemId(location);
                 }
-                
+
                 return ItemRegistry.Create(itemToSpawnId);
             }
 

@@ -124,7 +124,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 }
 
                 CheckFishingLessonLocations();
-                
+
                 @event.CurrentCommand++;
 
                 return false; // don't run original logic

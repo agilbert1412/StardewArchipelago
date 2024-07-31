@@ -445,7 +445,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             };
         }
 
-        private static readonly double[] _merchantArtifactPriceMultipliers = {
+        private static readonly double[] _merchantArtifactPriceMultipliers =
+        {
             0.1,
             0.25,
             0.5,
@@ -459,7 +460,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             50,
         };
 
-        private static readonly int[] _merchantPrices = {
+        private static readonly int[] _merchantPrices =
+        {
             250,
             500,
             1000,
@@ -468,7 +470,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             10000,
         };
 
-        private static readonly string[] _merchantApItemNames = {
+        private static readonly string[] _merchantApItemNames =
+        {
             "Snake Oil",
             "Glass of time",
             "Orb of Slope Detection",

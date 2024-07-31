@@ -57,7 +57,7 @@ namespace StardewArchipelago.GameModifications.Tooltips
         // public override void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency,
         // float layerDepth, StackDrawType drawStackNumber, Color colorOverride, bool drawShadow)
         public static void DrawInMenuColored_AddArchipelagoLogoIfNeeded_Postfix(ColoredObject __instance, SpriteBatch spriteBatch,
-            Vector2 location, float scaleSize, float transparency, float layerDepth, StackDrawType drawStackNumber, 
+            Vector2 location, float scaleSize, float transparency, float layerDepth, StackDrawType drawStackNumber,
             Color colorOverride, bool drawShadow)
         {
             try

@@ -76,7 +76,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 {
                     return true; // run original logic
                 }
-                
+
                 if (OnCheckRecipeLocation(__instance.id))
                 {
                     BaseSkipEvent(__instance);
@@ -142,23 +142,23 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 switch (commandName)
                 {
                     case "addCraftingRecipe":
+                    {
+                        if (CheckCraftsanityLocation(__instance.id))
                         {
-                            if (CheckCraftsanityLocation(__instance.id))
-                            {
-                                __instance.CurrentCommand++;
-                                return false; // don't run original logic
-                            }
-                            return true; // run original logic
+                            __instance.CurrentCommand++;
+                            return false; // don't run original logic
                         }
+                        return true; // run original logic
+                    }
                     case "addCookingRecipe":
+                    {
+                        if (CheckChefsanityLocation(__instance.id))
                         {
-                            if (CheckChefsanityLocation(__instance.id))
-                            {
-                                __instance.CurrentCommand++;
-                                return false; // don't run original logic
-                            }
-                            return true; // run original logic
+                            __instance.CurrentCommand++;
+                            return false; // don't run original logic
                         }
+                        return true; // run original logic
+                    }
                 }
                 return true;
             }
