@@ -549,7 +549,7 @@ namespace StardewArchipelago
 
         private void OnItemReceived()
         {
-            _itemManager?.ReceiveAllNewItems(true);
+            _itemManager?.ReceiveAllNewItems();
         }
 
         public bool ArchipelagoConnect(string ip, int port, string slot, string password, out string errorMessage)

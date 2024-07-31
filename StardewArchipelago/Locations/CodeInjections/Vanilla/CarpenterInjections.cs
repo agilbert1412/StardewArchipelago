@@ -192,7 +192,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
 
             var frienshipNature = player.friendshipData[player.spouse];
-            var spouse = Game1.getCharacterFromName(player.spouse, true);
+            var spouse = Game1.getCharacterFromName(player.spouse);
 
 
             if (player.isEngaged())

@@ -749,7 +749,7 @@ namespace StardewArchipelago.Stardew
         {
             foreach (var (name, svItem) in objectsByName)
             {
-                var stardewItem = svItem.PrepareForGivingToFarmer(1);
+                var stardewItem = svItem.PrepareForGivingToFarmer();
                 if (stardewItem is not Object stardewObject)
                 {
                     continue;
@@ -785,7 +785,7 @@ namespace StardewArchipelago.Stardew
         {
             foreach (var (name, svItem) in itemsByName)
             {
-                var stardewItem = svItem.PrepareForGivingToFarmer(1);
+                var stardewItem = svItem.PrepareForGivingToFarmer();
                 if (stardewItem.Name == stardewItem.DisplayName)
                 {
                     continue;

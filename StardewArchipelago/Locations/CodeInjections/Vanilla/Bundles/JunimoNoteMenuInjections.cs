@@ -105,7 +105,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                         {
                             if (TryGetBundleName(bundleIndexString, out var moneyBundleName))
                             {
-                                var texture = BundleIcons.GetBundleIcon(_logger, _modHelper, moneyBundleName, LogLevel.Error);
+                                var texture = BundleIcons.GetBundleIcon(_logger, _modHelper, moneyBundleName);
                                 bundle.bundleTextureOverride = texture;
                                 bundle.bundleTextureIndexOverride = 0;
                                 if (texture == null)

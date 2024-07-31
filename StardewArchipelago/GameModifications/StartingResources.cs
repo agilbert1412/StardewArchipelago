@@ -62,9 +62,9 @@ namespace StardewArchipelago.GameModifications
             RemoveGiftBoxes(farmhouse);
             var startCrop = _stardewItemManager.GetItemByName(GetStartingCropForThisSeason()).PrepareForGivingToFarmer(15);
             CreateGiftBoxItemInEmptySpot(farmhouse, startCrop);
-            var telephone = _stardewItemManager.GetItemByName("Telephone").PrepareForGivingToFarmer(1);
+            var telephone = _stardewItemManager.GetItemByName("Telephone").PrepareForGivingToFarmer();
             CreateGiftBoxItemInEmptySpot(farmhouse, telephone);
-            var calendar = _stardewItemManager.GetItemByName("Calendar").PrepareForGivingToFarmer(1);
+            var calendar = _stardewItemManager.GetItemByName("Calendar").PrepareForGivingToFarmer();
             CreateGiftBoxItemInEmptySpot(farmhouse, calendar);
 
             if (!_archipelago.SlotData.QuickStart)
@@ -73,7 +73,7 @@ namespace StardewArchipelago.GameModifications
             }
 
             var chest = _stardewItemManager.GetItemByName("Chest").PrepareForGivingToFarmer(5);
-            var iridiumBand = _stardewItemManager.GetItemByName("Iridium Band").PrepareForGivingToFarmer(1);
+            var iridiumBand = _stardewItemManager.GetItemByName("Iridium Band").PrepareForGivingToFarmer();
             var qualitySprinklers = _stardewItemManager.GetItemByName("Quality Sprinkler").PrepareForGivingToFarmer(4);
             var autoPetters = _stardewItemManager.GetItemByName("Auto-Petter").PrepareForGivingToFarmer(2);
             var autoGrabbers = _stardewItemManager.GetItemByName("Auto-Grabber").PrepareForGivingToFarmer(2);
