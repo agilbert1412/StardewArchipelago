@@ -150,7 +150,7 @@ namespace StardewArchipelago.Locations
                 return Enumerable.Empty<string>();
             }
 
-            return _archipelago.Session.Locations.AllMissingLocations.Select(_archipelago.GetLocationName)
+            return _archipelago.Session.Locations.AllMissingLocations.Select(x => _archipelago.GetLocationName(x))
                 .Where(x => x != null);
         }
 
