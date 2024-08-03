@@ -244,6 +244,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             {
                 bundleTextureOverride = Game1.content.Load<Texture2D>("LooseSprites\\BundleSprites"),
                 bundleTextureIndexOverride = 14 + whichBundle,
+                numberOfIngredientSlots = raccoonBundle.NumberRequired,
             };
             var raccoonNoteMenu = new JunimoNoteMenu(bundle, "LooseSprites\\raccoon_bundle_menu");
             raccoonNoteMenu.onIngredientDeposit = x => _state.CurrentRaccoonBundleStatus[x] = true;
