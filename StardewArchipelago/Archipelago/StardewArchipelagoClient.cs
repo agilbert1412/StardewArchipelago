@@ -30,7 +30,8 @@ namespace StardewArchipelago.Archipelago
 
         public SlotData SlotData => (SlotData)_slotData;
 
-        public StardewArchipelagoClient(ILogger logger, IModHelper modHelper, IManifest manifest, Harmony harmony, Action itemReceivedFunction) : base(logger, new DataPackageCache("stardew_valley", "IdTables"), itemReceivedFunction)
+        public StardewArchipelagoClient(ILogger logger, IModHelper modHelper, IManifest manifest, Harmony harmony, Action itemReceivedFunction, IJsonLoader jsonLoader) :
+            base(logger, new DataPackageCache(new ArchipelagoItemLoader(jsonLoader), new StardewArchipelagoLocationLoader(jsonLoader), "stardew_valley", "IdTables"), itemReceivedFunction)
         {
             _modHelper = modHelper;
             _manifest = manifest;
@@ -250,4 +251,5 @@ namespace StardewArchipelago.Archipelago
             return _bigIntegerDataStorage.DivideByTwo(scope, key);
         }
     }
+
 }

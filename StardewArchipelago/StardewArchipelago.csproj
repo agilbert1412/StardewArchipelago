@@ -8,21 +8,19 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Compile Remove="GameModifications\Buildings\**" />
-      <EmbeddedResource Remove="GameModifications\Buildings\**" />
-      <None Remove="GameModifications\Buildings\**" />
-    </ItemGroup>
-
-    <ItemGroup>
         <None Include="..\.editorconfig" Link=".editorconfig" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Archipelago.Gifting.Net" Version="0.3.3" />
+        <PackageReference Include="Archipelago.Gifting.Net" Version="0.3.4" />
         <PackageReference Include="Archipelago.MultiClient.Net" Version="6.3.0" />
-        <PackageReference Include="KaitoKid.ArchipelagoUtilities.Net" Version="1.1.0" />
+        <PackageReference Include="KaitoKid.ArchipelagoUtilities.Net" Version="1.1.7" />
         <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="4.1.1" />
     </ItemGroup>
+
+	<ItemGroup>
+		<Reference Include="Newtonsoft.Json" HintPath="$(GamePath)\smapi-internal\Newtonsoft.Json.dll" private="false" />
+	</ItemGroup>
 
   <ItemGroup>
     <None Update="IdTables\stardew_valley_item_table.json">
@@ -370,7 +368,6 @@
   </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="GameModifications\CustomOptions\" />
         <Folder Include="Test\" />
     </ItemGroup>
 </Project>

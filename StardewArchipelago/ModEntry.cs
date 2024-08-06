@@ -21,6 +21,7 @@ using StardewArchipelago.Integrations.GenericModConfigMenu;
 using StardewArchipelago.Items;
 using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Items.Traps;
+using StardewArchipelago.Json;
 using StardewArchipelago.Locations;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
@@ -107,7 +108,7 @@ namespace StardewArchipelago
             _helper = helper;
             _harmony = new Harmony(ModManifest.UniqueID);
 
-            _archipelago = new StardewArchipelagoClient(_logger, _helper, ModManifest, _harmony, OnItemReceived);
+            _archipelago = new StardewArchipelagoClient(_logger, _helper, ModManifest, _harmony, OnItemReceived, new SmapiJsonLoader(_helper));
 
             _helper.Events.GameLoop.GameLaunched += OnGameLaunched;
             _helper.Events.GameLoop.SaveCreating += OnSaveCreating;

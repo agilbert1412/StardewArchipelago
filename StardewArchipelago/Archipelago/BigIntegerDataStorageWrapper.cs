@@ -34,7 +34,7 @@ namespace StardewArchipelago.Archipelago
             try
             {
                 var value = _session.DataStorage[scope, key];
-                value.Initialize(0);
+                value.Initialize(JToken.FromObject(0));
                 var bigIntegerValue = value.To<BigInteger>();
                 return bigIntegerValue;
             }
