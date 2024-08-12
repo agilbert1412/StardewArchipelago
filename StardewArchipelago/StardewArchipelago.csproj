@@ -14,6 +14,10 @@
     <ItemGroup>
         <PackageReference Include="Archipelago.Gifting.Net" Version="0.3.4" />
         <PackageReference Include="Archipelago.MultiClient.Net" Version="6.3.0" />
+        <PackageReference Include="Archipelago.MultiClient.Net.Analyzers" Version="1.0.0">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
         <PackageReference Include="KaitoKid.ArchipelagoUtilities.Net" Version="1.1.7" />
         <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="4.1.1" />
     </ItemGroup>
