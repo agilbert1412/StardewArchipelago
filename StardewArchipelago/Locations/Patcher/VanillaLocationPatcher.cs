@@ -1266,7 +1266,7 @@ namespace StardewArchipelago.Locations.Patcher
             );
             _harmony.Patch(
                 original: AccessTools.Method(typeof(IslandFarmCave), nameof(IslandFarmCave.GiveReward)),
-                prefix: new HarmonyMethod(typeof(WalnutPuzzleInjections), nameof(WalnutPuzzleInjections.GiveReward_CheckInsteadOfNuts_Prefix))
+                prefix: new HarmonyMethod(typeof(WalnutPuzzleInjections), nameof(WalnutPuzzleInjections.GiveReward_GourmandCheckInsteadOfNuts_Prefix))
             );
             _harmony.Patch(
                 original: AccessTools.Method(typeof(SandDuggy), nameof(SandDuggy.OnWhackedChanged)),

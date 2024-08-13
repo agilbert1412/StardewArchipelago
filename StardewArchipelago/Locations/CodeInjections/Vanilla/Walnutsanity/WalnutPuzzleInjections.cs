@@ -22,9 +22,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
         private static ILogger _logger;
         private static IModHelper _helper;
         private static ArchipelagoClient _archipelago;
-        private static LocationChecker _locationChecker;
+        private static StardewLocationChecker _locationChecker;
 
-        public static void Initialize(ILogger logger, IModHelper helper, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(ILogger logger, IModHelper helper, ArchipelagoClient archipelago, StardewLocationChecker locationChecker)
         {
             _logger = logger;
             _helper = helper;
@@ -190,23 +190,30 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
         }
 
         // public virtual void GiveReward()
-        public static bool GiveReward_CheckInsteadOfNuts_Prefix(IslandFarmCave __instance)
+        public static bool GiveReward_GourmandCheckInsteadOfNuts_Prefix(IslandFarmCave __instance)
         {
             try
             {
                 var gourmandChecks = new[] { "Gourmand Frog Melon", "Gourmand Frog Wheat", "Gourmand Frog Garlic" };
-                CreateLocationDebris(gourmandChecks[__instance.gourmandRequestsFulfilled.Value], new Vector2(4.5f, 4f) * 64f, __instance, 1);
+                // CreateLocationDebris(gourmandChecks[__instance.gourmandRequestsFulfilled.Value], new Vector2(4.5f, 4f) * 64f, __instance, 1);
+
                 ++__instance.gourmandRequestsFulfilled.Value;
+                for (var i = 0; i < __instance.gourmandRequestsFulfilled.Value; i++)
+                {
+                    _locationChecker.AddCheckedLocation(gourmandChecks[__instance.gourmandRequestsFulfilled.Value]);
+                }
+
                 Game1.player.team.MarkCollectedNut($"IslandGourmand{__instance.gourmandRequestsFulfilled.Value}");
                 // private NetMutex gourmandMutex
                 var gourmandMutexField = _helper.Reflection.GetField<NetMutex>(__instance, "gourmandMutex");
                 var gourmandMutex = gourmandMutexField.GetValue();
                 gourmandMutex.ReleaseLock();
+
                 return false; // don't run original logic
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed in {nameof(GiveReward_CheckInsteadOfNuts_Prefix)}:\n{ex}");
+                _logger.LogError($"Failed in {nameof(GiveReward_GourmandCheckInsteadOfNuts_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }

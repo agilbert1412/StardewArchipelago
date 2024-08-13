@@ -2,6 +2,7 @@
 using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using StardewArchipelago.Constants.Locations;
 using StardewArchipelago.Goals;
 
 namespace StardewArchipelago.Locations
@@ -13,6 +14,20 @@ namespace StardewArchipelago.Locations
         public StardewLocationChecker(ILogger logger, ArchipelagoClient archipelago, List<string> locationsAlreadyChecked) : base(logger, archipelago, locationsAlreadyChecked)
         {
             _locationNameMatcher = new LocationNameMatcher();
+        }
+
+        public void AddWalnutCheckedLocation(string locationName)
+        {
+            var locations = new List<string> { locationName };
+            if (locationName.StartsWith(Prefix.WALNUTSANITY))
+            {
+                locations.Add(locationName[Prefix.WALNUTSANITY.Length..]);
+            }
+            else
+            {
+                locations.Add($"{Prefix.WALNUTSANITY}{locationName}");
+            }
+            base.AddCheckedLocations(locations.ToArray());
         }
 
         public override void SendAllLocationChecks()

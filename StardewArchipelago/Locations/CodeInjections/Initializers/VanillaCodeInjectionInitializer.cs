@@ -99,7 +99,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             WinterStarInjections.Initialize(logger, modHelper, archipelago, locationChecker);
         }
 
-        private static void InitializeWalnutsanityInjections(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
+        private static void InitializeWalnutsanityInjections(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker)
         {
             WalnutPuzzleInjections.Initialize(logger, modHelper, archipelago, locationChecker);
             WalnutBushInjections.Initialize(logger, modHelper, archipelago, locationChecker);
