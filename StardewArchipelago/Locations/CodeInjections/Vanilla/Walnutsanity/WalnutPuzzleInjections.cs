@@ -49,7 +49,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 if (Game1.netWorldState.Value.GoldenCoconutCracked)
                 {
                     // Just in case
-                    _locationChecker.AddCheckedLocation(goldenCoconutLocation);
+                    _locationChecker.AddWalnutCheckedLocation(goldenCoconutLocation);
                     return true; // run original logic
                 }
 
@@ -200,7 +200,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 ++__instance.gourmandRequestsFulfilled.Value;
                 for (var i = 0; i < __instance.gourmandRequestsFulfilled.Value; i++)
                 {
-                    _locationChecker.AddCheckedLocation(gourmandChecks[__instance.gourmandRequestsFulfilled.Value]);
+                    _locationChecker.AddWalnutCheckedLocation(gourmandChecks[__instance.gourmandRequestsFulfilled.Value]);
                 }
 
                 Game1.player.team.MarkCollectedNut($"IslandGourmand{__instance.gourmandRequestsFulfilled.Value}");
@@ -557,7 +557,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 if (!__instance.centerSkeletonRestored.Value && __instance.isRangeAllTrue(0, 6))
                 {
                     __instance.centerSkeletonRestored.Value = true;
-                    _locationChecker.AddCheckedLocation("Complete Large Animal Collection");
+                    _locationChecker.AddWalnutCheckedLocation("Complete Large Animal Collection");
                     __instance.uncollectedRewards.Add(ItemRegistry.Create("(O)69"));
                     Game1.player.team.MarkCollectedNut("IslandCenterSkeletonRestored");
                     __result = true;
@@ -566,7 +566,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 if (!__instance.snakeRestored.Value && __instance.isRangeAllTrue(6, 9))
                 {
                     __instance.snakeRestored.Value = true;
-                    _locationChecker.AddCheckedLocation("Complete Snake Collection");
+                    _locationChecker.AddWalnutCheckedLocation("Complete Snake Collection");
                     __instance.uncollectedRewards.Add(ItemRegistry.Create("(O)835"));
                     Game1.player.team.MarkCollectedNut("IslandSnakeRestored");
                     __result = true;
@@ -575,7 +575,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 if (!__instance.batRestored.Value && __instance.piecesDonated[9])
                 {
                     __instance.batRestored.Value = true;
-                    _locationChecker.AddCheckedLocation("Complete Mummified Bat Collection");
+                    _locationChecker.AddWalnutCheckedLocation("Complete Mummified Bat Collection");
                     __instance.uncollectedRewards.Add(ItemRegistry.Create("(O)TentKit"));
                     Game1.player.team.MarkCollectedNut("IslandBatRestored");
                     __result = true;
@@ -584,7 +584,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 if (!__instance.frogRestored.Value && __instance.piecesDonated[10])
                 {
                     __instance.frogRestored.Value = true;
-                    _locationChecker.AddCheckedLocation("Complete Mummified Frog Collection");
+                    _locationChecker.AddWalnutCheckedLocation("Complete Mummified Frog Collection");
                     __instance.uncollectedRewards.Add(ItemRegistry.Create("(O)926"));
                     Game1.player.team.MarkCollectedNut("IslandFrogRestored");
                     __result = true;
