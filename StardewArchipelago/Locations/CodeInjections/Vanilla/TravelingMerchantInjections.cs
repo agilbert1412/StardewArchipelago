@@ -390,7 +390,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             var dayOfWeek = Days.GetDayOfWeekName(dayOfMonth);
             var requiredAPItemToSeeMerchantToday = string.Format(AP_MERCHANT_DAYS, dayOfWeek);
-            var hasReceivedToday = _archipelago.HasReceivedItem(requiredAPItemToSeeMerchantToday, out sendingPlayerName);
+            var hasReceivedToday = _archipelago.HasReceivedItem(requiredAPItemToSeeMerchantToday, false, out sendingPlayerName);
             return hasReceivedToday;
         }
 
@@ -399,7 +399,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             foreach (var day in Days.DaysOfWeek)
             {
                 var requiredAPItemToSeeMerchantToday = string.Format(AP_MERCHANT_DAYS, day);
-                if (_archipelago.HasReceivedItem(requiredAPItemToSeeMerchantToday, out _))
+                if (_archipelago.HasReceivedItem(requiredAPItemToSeeMerchantToday))
                 {
                     return true;
                 }
