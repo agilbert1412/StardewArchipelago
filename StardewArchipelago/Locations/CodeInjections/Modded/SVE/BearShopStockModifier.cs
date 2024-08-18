@@ -15,7 +15,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
     public class BearShopStockModifier : BarterShopStockModifier
     {
         private const float INITIAL_DISCOUNT = 0.5f;
-        private const float APPLES_DISCOUNT = 0.10f;
+        private const float APPLES_DISCOUNT = 0.01f;
         private const float KNOWLEDGE_DISCOUNT = 0.35f;
 
         public BearShopStockModifier(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager) : base(logger, helper, archipelago, stardewItemManager)
@@ -47,7 +47,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
         {
             var berryItems = _stardewItemManager.GetObjectsWithPhrase("berry").ToList();
             var discount = BearDiscount();
-            var stockCount = BearStockCount();
             var random = new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame / 2 + shopData.GetHashCode());
             var chosenItemGroup = berryItems.Where(x => !(x.Name.Contains("Joja") || x.Name.Contains("Seeds")) && x.SellPrice > 0).ToList();
             foreach (var shopItem in shopData.Items)
@@ -55,10 +54,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
                 var isRecipe = shopItem.ItemId.Contains("Baked Berry Oatmeal") || shopItem.ItemId.Contains("Flower Cookie");
                 if (!_archipelago.SlotData.Chefsanity.HasFlag(Chefsanity.Purchases) || _archipelago.SlotData.Cooksanity == Cooksanity.All || !isRecipe)
                 {
-                    ReplaceCurrencyWithBarterGivenObjects(berryItems, shopItem, stockCount, discount);
+                    ReplaceCurrencyWithBarterGivenObjects(berryItems, shopItem, BearStockCount(isRecipe), discount);
                     continue;
                 }
-                ReplaceCurrencyWithBarterGivenObject(BerryIfChefsanityIsOn(), shopItem, stockCount, discount);
+                ReplaceCurrencyWithBarterGivenObject(BerryIfChefsanityIsOn(), shopItem, BearStockCount(isRecipe), discount);
 
             }
         }
@@ -92,8 +91,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
             return 1 - INITIAL_DISCOUNT - (knowledgeBuff + applesHearts * APPLES_DISCOUNT);
         }
 
-        private int BearStockCount()
+        private int BearStockCount(bool isRecipe)
         {
+            if (isRecipe)
+            {
+                return 1;
+            }
             var hasKnowledge = _archipelago.HasReceivedItem("Bear Knowledge");
             var knowledgeBuff = hasKnowledge ? 3 : 1;
             var applesHearts = 0;
