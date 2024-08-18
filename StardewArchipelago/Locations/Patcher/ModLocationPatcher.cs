@@ -74,11 +74,6 @@ namespace StardewArchipelago.Locations.Patcher
                 );
             }
 
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(StardewValley.Object), "Before_ReadBook"),
-                prefix: new HarmonyMethod(typeof(BookInjections), nameof(BookInjections.Before_ReadBook_ReadBookButForArchipelago_Prefix))
-            );
-
             if (_archipelago.SlotData.Mods.HasMod(ModNames.MAGIC))
             {
                 _harmony.Patch(
