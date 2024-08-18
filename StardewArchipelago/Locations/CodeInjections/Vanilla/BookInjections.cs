@@ -99,8 +99,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         }
 
         // public void readNote(int which)
-        // We use high priority here to avoid other mod conflicts.
-        [HarmonyPriority(Priority.VeryHigh)]
         public static bool ReadNote_BooksanityLostBook_Prefix(GameLocation __instance, int which)
         {
             try
@@ -141,6 +139,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         }
 
         // private void readBook(GameLocation location)
+        // We use high priority here to avoid other mod conflicts.
+        [HarmonyPriority(Priority.VeryHigh)]
         public static bool ReadBook_Booksanity_Prefix(Object __instance, GameLocation location)
         {
             try
