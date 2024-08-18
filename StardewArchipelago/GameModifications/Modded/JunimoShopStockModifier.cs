@@ -138,12 +138,12 @@ namespace StardewArchipelago.GameModifications.Modded
             shopData.Items.Clear();
             var purpleObjects = _stardewItemManager.GetObjectsByColor("Purple");
             shopData.Items.Add(CreateBarterItem(purpleObjects, _stardewItemManager.GetObjectById(itemToKeep.Id), itemToKeep.Condition));
-            shopData.Items.Add(CreateBarterItem(purpleObjects, _stardewItemManager.GetObjectByName("Stardrop Tea"), overridePrice: 50000, offeredStock: stockCount, discount: discount));
+            shopData.Items.Add(CreateBarterItem(purpleObjects, _stardewItemManager.GetObjectByName("Stardrop Tea"), overridePrice: 20000, offeredStock: stockCount, discount: discount));
             shopData.Items.Add(CreateBarterItem(purpleObjects, _stardewItemManager.GetObjectByName("Dewdrop Berry"), overridePrice: 4000, offeredStock: stockCount, discount: discount));
             shopData.Items.Add(CreateBarterItem(purpleObjects, _stardewItemManager.GetObjectByName("Qi Gem"), overridePrice: 10000, offeredStock: stockCount, discount: discount));
             shopData.Items.Add(CreateBarterItem(purpleObjects, _stardewItemManager.GetObjectByName("Calico Egg"), overridePrice: 50, offeredStock: stockCount, discount: discount));
             shopData.Items.Add(CreateBarterItem(purpleObjects, _stardewItemManager.GetObjectByName("Hardwood"), overridePrice: 500, offeredStock: stockCount, discount: discount));
-            shopData.Items.Add(CreateBarterItem(purpleObjects, _stardewItemManager.GetObjectByName("Tea Set"), overridePrice: 100000, offeredStock: stockCount, discount: discount));
+            shopData.Items.Add(CreateBarterItem(purpleObjects, _stardewItemManager.GetObjectByName("Tea Set"), overridePrice: 50000, offeredStock: stockCount, discount: discount));
         }
 
         private void GenerateYellowJunimoStock(ShopData shopData, int stockCount, double discount)
