@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Newtonsoft.Json;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Locations;
 using StardewModdingAPI.Events;
@@ -16,11 +15,11 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Tilesanity
         private static Texture2D _pixelTexture;
         private static int[,] _tileColors;
         private static GameLocation _currentLocation;
-        private static LocationChecker _locationChecker;
+        private static StardewLocationChecker _locationChecker;
         private static TileSanityManager _tileSanityManager;
         private static UIColor _showUI = UIColor.None;
 
-        public static void Initialize(LocationChecker locationChecker, TileSanityManager tileSanityManager)
+        public static void Initialize(StardewLocationChecker locationChecker, TileSanityManager tileSanityManager)
         {
             _locationChecker = locationChecker;
             _tileSanityManager = tileSanityManager;

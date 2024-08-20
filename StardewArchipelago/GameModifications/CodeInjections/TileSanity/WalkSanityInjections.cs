@@ -10,11 +10,11 @@ public static class WalkSanityInjections
 {
     private static Point _farmerCurrentLocation;
     private static IMonitor _monitor;
-    private static ArchipelagoClient _archipelago;
-    private static LocationChecker _locationChecker;
+    private static StardewArchipelagoClient _archipelago;
+    private static StardewLocationChecker _locationChecker;
     private static TileSanityManager _tileSanityManager;
 
-    public static void Initialize(IMonitor monitor, ArchipelagoClient archipelago, LocationChecker locationChecker, TileSanityManager tileSanityManager)
+    public static void Initialize(IMonitor monitor, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker, TileSanityManager tileSanityManager)
     {
         _monitor = monitor;
         _archipelago = archipelago;

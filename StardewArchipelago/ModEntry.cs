@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using HarmonyLib;
@@ -41,8 +39,6 @@ using StardewValley.Delegates;
 using StardewValley.Internal;
 using StardewValley.TerrainFeatures;
 using StardewValley.Triggers;
-using ArchipelagoLocation = StardewArchipelago.Locations.InGameLocations.ArchipelagoLocation;
-using xTile;
 
 namespace StardewArchipelago
 {
@@ -374,7 +370,7 @@ namespace StardewArchipelago
             _multiSleep.InjectMultiSleepOption(_archipelago.SlotData);
             SeasonsRandomizer.ChangeMailKeysBasedOnSeasonsToDaysElapsed();
             _tileSanityManager.PatchWalk(this.Helper);
-            _modStateInitializer = new InitialModGameStateInitializer(_logger, Monitor, _archipelago);
+            _modStateInitializer = new InitialModGameStateInitializer(_logger, _archipelago);
             _hintHelper = new HintHelper();
             Game1.chatBox?.addMessage(
                 $"Connected to Archipelago as {_archipelago.SlotData.SlotName}. Type !!help for client commands", Color.Green);

@@ -13,8 +13,8 @@ namespace StardewArchipelago.GameModifications;
 public class TileSanityManager
 {
     private readonly Harmony _harmony;
-    private readonly ArchipelagoClient _archipelago;
-    private readonly LocationChecker _locationChecker;
+    private readonly StardewArchipelagoClient _archipelago;
+    private readonly StardewLocationChecker _locationChecker;
     private readonly IMonitor _monitor;
     public const string TILESANITY_PREFIX = "Tilesanity: ";
 
@@ -64,7 +64,7 @@ public class TileSanityManager
         }
     }
 
-    public TileSanityManager(Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker, IMonitor monitor)
+    public TileSanityManager(Harmony harmony, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker, IMonitor monitor)
     {
         _harmony = harmony;
         _archipelago = archipelago;
@@ -76,7 +76,8 @@ public class TileSanityManager
     {
         WalkSanityInjections.Initialize(_monitor, _archipelago, _locationChecker, this);
         TileUI.Initialize(_locationChecker, this);
-        
+
+#if !NOWALK
         _harmony.Patch(
             original: AccessTools.Method(typeof(Farmer), nameof(Farmer.Update)),
             prefix: new HarmonyMethod(typeof(WalkSanityInjections),
@@ -95,6 +96,7 @@ public class TileSanityManager
             prefix: new HarmonyMethod(typeof(WalkSanityInjections),
                 nameof(WalkSanityInjections.isCollidingPosition_ForbidMove_Prefix))
         );
+#endif
 
         modHelper.Events.Display.RenderedWorld += TileUI.RenderTiles;
     }

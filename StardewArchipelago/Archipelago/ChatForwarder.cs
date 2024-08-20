@@ -37,7 +37,7 @@ namespace StardewArchipelago.Archipelago
 
         private static string _lastCommand;
 
-        public ChatForwarder(ILogger logger, IMonitor monitor, IModHelper helper, Harmony harmony, ArchipelagoClient archipelago, IGiftHandler giftHandler, GoalManager goalManager, TileChooser tileChooser, TileSanityManager tileSanityManager)
+        public ChatForwarder(ILogger logger, IMonitor monitor, IModHelper helper, Harmony harmony, StardewArchipelagoClient archipelago, IGiftHandler giftHandler, GoalManager goalManager, TileChooser tileChooser, TileSanityManager tileSanityManager)
         {
             _logger = logger;
             _helper = helper;
