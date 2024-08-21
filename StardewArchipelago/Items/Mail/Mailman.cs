@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using StardewArchipelago.Serialization;
 using StardewValley;
 
@@ -14,11 +15,13 @@ namespace StardewArchipelago.Items.Mail
         public Mailman(ArchipelagoStateDto state)
         {
             _state = state;
+            var mailData = DataLoader.Mail(Game1.content);
             foreach (var (mailKey, mailContent) in _state.LettersGenerated)
             {
-                var mailData = DataLoader.Mail(Game1.content);
                 mailData[mailKey] = mailContent;
             }
+
+            GenerateMissingLetters();
         }
 
         public void SendVanillaMail(string mailTitle, bool noLetter)
@@ -83,6 +86,23 @@ namespace StardewArchipelago.Items.Mail
             else
             {
                 _state.LettersGenerated.Add(mailKey, mailContent);
+            }
+        }
+
+        private void GenerateMissingLetters()
+        {
+            var allMailInWorld = Game1.player.mailReceived.Union(Game1.player.mailbox.Union(Game1.player.mailForTomorrow));
+            var mailData = DataLoader.Mail(Game1.content);
+            foreach (var mailKeyString in allMailInWorld)
+            {
+                if (mailData.ContainsKey(mailKeyString) || !MailKey.TryParse(mailKeyString, out var mailKey))
+                {
+                    continue;
+                }
+
+                var mailContentTemplate = GetRandomApMailString();
+                var mailContent = string.Format(mailContentTemplate, mailKey.ItemName, mailKey.PlayerName, mailKey.LocationName, mailKey.EmbedString, Game1.player.farmName.Value);
+                GenerateMail(mailKeyString, mailContent);
             }
         }
 
