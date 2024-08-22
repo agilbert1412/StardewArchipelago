@@ -46,7 +46,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
         private void MakeBearBarter(ShopData shopData)
         {
             var berryItems = _stardewItemManager.GetObjectsWithPhrase("berry").ToList();
-            var discount = BearDiscount();
+            var priceReduction = 1 - BearDiscount();
             var random = new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame / 2 + shopData.GetHashCode());
             var chosenItemGroup = berryItems.Where(x => !(x.Name.Contains("Joja") || x.Name.Contains("Seeds") || x.Name.Contains("Starter")) && x.SellPrice > 0).ToList();
             foreach (var shopItem in shopData.Items)
@@ -54,10 +54,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
                 var isRecipe = shopItem.ItemId.Contains("Baked Berry Oatmeal") || shopItem.ItemId.Contains("Flower Cookie");
                 if (!_archipelago.SlotData.Chefsanity.HasFlag(Chefsanity.Purchases) || _archipelago.SlotData.Cooksanity == Cooksanity.All || !isRecipe)
                 {
-                    ReplaceCurrencyWithBarterGivenObjects(chosenItemGroup, shopItem, BearStockCount(isRecipe), discount, isRecipe);
+                    ReplaceCurrencyWithBarterGivenObjects(chosenItemGroup, shopItem, BearStockCount(isRecipe), priceReduction, isRecipe);
                     continue;
                 }
-                ReplaceCurrencyWithBarterGivenObject(BerryIfChefsanityIsOn(), shopItem, BearStockCount(isRecipe), discount, isRecipe);
+                ReplaceCurrencyWithBarterGivenObject(BerryIfChefsanityIsOn(), shopItem, BearStockCount(isRecipe), priceReduction, isRecipe);
 
             }
         }
@@ -88,7 +88,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
             {
                 applesHearts = Game1.player.friendshipData["Apples"].Points / 250; // Get discount from being friends with Apples
             }
-            return 1 - INITIAL_DISCOUNT - (knowledgeBuff + applesHearts * APPLES_DISCOUNT);
+            var additionalDiscount = knowledgeBuff + applesHearts * APPLES_DISCOUNT;
+            return INITIAL_DISCOUNT + additionalDiscount;
         }
 
         private int BearStockCount(bool isRecipe)

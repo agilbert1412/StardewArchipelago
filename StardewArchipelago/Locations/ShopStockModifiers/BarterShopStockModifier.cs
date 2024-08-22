@@ -17,10 +17,10 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
         {
         }
 
-        protected ShopItemData CreateBarterItem(List<StardewObject> stardewObjects, StardewItem stardewItem, string condition = null, int overridePrice = 0, int offeredStock = 1, double discount = 1, bool isSingle = false)
+        protected ShopItemData CreateBarterItem(List<StardewObject> stardewObjects, StardewItem stardewItem, string condition = null, int overridePrice = 0, int offeredStock = 1, double priceReduction = 1, bool isSingle = false)
         {
             var barterItem = new ShopItemData();
-            var itemPrice = overridePrice == 0 ? (int)(discount * Math.Sqrt(stardewItem.SellPrice)) : (int)(discount * Math.Sqrt(overridePrice));
+            var itemPrice = overridePrice == 0 ? (int)(priceReduction * Math.Sqrt(stardewItem.SellPrice)) : (int)(priceReduction * Math.Sqrt(overridePrice));
             barterItem.Id = IDProvider.CreateId(stardewItem.Name.Replace(" ", "_"));
             barterItem.ItemId = stardewItem.Id;
             barterItem.AvailableStock = offeredStock;
@@ -41,12 +41,12 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
             return barterItem;
         }
 
-        protected void ReplaceCurrencyWithBarterGivenObjects(List<StardewObject> stardewObjects, ShopItemData item, int offeredStock = 1, double discount = 1, bool isSingle = false)
+        protected void ReplaceCurrencyWithBarterGivenObjects(List<StardewObject> stardewObjects, ShopItemData item, int offeredStock = 1, double priceReduction = 1, bool isSingle = false)
         {
             var random = new Random((int)(Game1.stats.DaysPlayed / 28) + (int)(Game1.uniqueIDForThisGame / 2) + item.GetHashCode());
             var chosenItemGroup = stardewObjects.Where(x => x.SellPrice != 0).ToArray();
             var chosenItem = chosenItemGroup[random.Next(chosenItemGroup.Length)];
-            var newPrice = (int)(discount * Math.Sqrt(item.Price));
+            var newPrice = (int)(priceReduction * Math.Sqrt(item.Price));
             var newSellPrice = (int)Math.Sqrt(chosenItem.SellPrice);
             var chosenItemExchangeRate = GetExchangeRate(newPrice, newSellPrice, isSingle);
             item.Price = 0;
@@ -56,9 +56,9 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
             item.MinStack = chosenItemExchangeRate[0];
         }
 
-        protected void ReplaceCurrencyWithBarterGivenObject(StardewObject stardewObject, ShopItemData item, int offeredStock = 1, double discount = 1, bool isSingle = false)
+        protected void ReplaceCurrencyWithBarterGivenObject(StardewObject stardewObject, ShopItemData item, int offeredStock = 1, double priceReduction = 1, bool isSingle = false)
         {
-            var newPrice = (int)(discount * Math.Sqrt(item.Price));
+            var newPrice = (int)(priceReduction * Math.Sqrt(item.Price));
             var newSellPrice = (int)Math.Sqrt(stardewObject.SellPrice);
             var chosenItemExchangeRate = GetExchangeRate(newPrice, newSellPrice, isSingle);
             item.Price = 0;
