@@ -65,7 +65,6 @@ namespace StardewArchipelago.Locations.Patcher
 
             var _spaceCoreInterfaceType = AccessTools.TypeByName("SpaceCore.Interface.SkillLevelUpMenu");
             var spaceCoreSkillsType = AccessTools.TypeByName("SpaceCore.Skills");
-            var spaceCorePatcherType = AccessTools.TypeByName("SpaceCore.Patches.ReadBookPatcher");
             if (_archipelago.SlotData.SkillProgression != SkillsProgression.Vanilla)
             {
                 _harmony.Patch(
