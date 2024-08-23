@@ -14,7 +14,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
 {
     public class BearShopStockModifier : BarterShopStockModifier
     {
-        private const float INITIAL_DISCOUNT = 0.7f;
+        private const float INITIAL_DISCOUNT = 0.3f;
         private const float APPLES_DISCOUNT = 0.025f;
         private const float KNOWLEDGE_DISCOUNT = 0.4f;
 
