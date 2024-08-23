@@ -11,6 +11,7 @@ using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.Gifting;
 using StardewArchipelago.Bundles;
 using StardewArchipelago.Constants;
+using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.GameModifications;
 using StardewArchipelago.GameModifications.CodeInjections;
 using StardewArchipelago.GameModifications.EntranceRandomizer;
@@ -497,6 +498,17 @@ namespace StardewArchipelago
 
         private void DoBugsCleanup()
         {
+            if (_archipelago.SlotData.Mods.HasMod(ModNames.ARCHAEOLOGY))
+            {
+                if (_locationChecker.IsLocationNotChecked("Read Digging Like Worms"))
+                {
+                    _locationChecker.AddCheckedLocation("Read Digging Like Worms");
+                }
+                if (_locationChecker.IsLocationNotChecked("Shipsanity: Digging Like Worms"))
+                {
+                    _locationChecker.AddCheckedLocation("Shipsanity: Digging Like Worms");
+                }
+            }
         }
 
         private void OnDayEnding(object sender, DayEndingEventArgs e)

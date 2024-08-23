@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using HarmonyLib;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Constants.Locations;
 using StardewArchipelago.Constants.Vanilla;
@@ -14,6 +15,7 @@ using Object = StardewValley.Object;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants.Modded;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -24,6 +26,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private static StardewArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
         private static QueenOfSauceManager _qosManager;
+        private static readonly Dictionary<string, string> _modNameToSkillName = new()
+        {
+            {ModNames.BINNING, "drbirbdev.BinningSkill"},
+            {ModNames.ARCHAEOLOGY, "moonslime.ArchaeologySkill"},
+            {ModNames.LUCK, "spacechase0.LuckSkill"},
+            {ModNames.SOCIALIZING, "drbirbdev.SocializingSkill"},
+        };
 
         public static void Initialize(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, LocationChecker locationChecker, QueenOfSauceManager qosManager)
         {
@@ -130,6 +139,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         }
 
         // private void readBook(GameLocation location)
+        // We use high priority here to avoid other mod conflicts.
+        [HarmonyPriority(Priority.VeryHigh)]
         public static bool ReadBook_Booksanity_Prefix(Object __instance, GameLocation location)
         {
             try
@@ -198,6 +209,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 Game1.player.gainExperience(2, 250);
                 Game1.player.gainExperience(3, 250);
                 Game1.player.gainExperience(4, 250);
+                if (_archipelago.SlotData.Mods.HasModdedSkill())
+                {
+                    ApplyModdedSkillExperience();
+                }
                 return;
             }
 
@@ -308,6 +323,20 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     holdLastFrame = true,
                     id = 1987654,
                 });
+            }
+        }
+
+        private static void ApplyModdedSkillExperience()
+        {
+            var spaceCoreSkillType = AccessTools.TypeByName("SpaceCore.Skills");
+            var addExperienceMethod = _modHelper.Reflection.GetMethod(spaceCoreSkillType, "AddExperience");
+            foreach (var (modName, skillName) in _modNameToSkillName)
+            {
+                if (_archipelago.SlotData.Mods.HasMod(modName))
+                {
+                    object[] args = {Game1.player, skillName, 250};
+                    addExperienceMethod.Invoke(args);
+                }
             }
         }
     }
