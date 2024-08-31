@@ -391,6 +391,7 @@ namespace StardewArchipelago.Archipelago.Gifting
             { "Arch", "Artifact" },
             { "Basic", "" },
             { "asdf", "" },
+            { "interactive", ""},
             { "Minerals", "Mineral" },
             { "Seeds", GiftFlag.Seed },
             { "Frozen", GiftFlag.Ice },
@@ -398,6 +399,7 @@ namespace StardewArchipelago.Archipelago.Gifting
             { "Magma", GiftFlag.Fire },
             { "Bulb", GiftFlag.Seed },
             { "Starter", GiftFlag.Seed },
+            { "Medicine", GiftFlag.Cure },
         };
 
         private static readonly Dictionary<string, string> _contextTags = new()
