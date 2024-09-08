@@ -186,7 +186,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
                 var playerName = Lexicon.capitalize(Game1.player.Name);
                 var spouseName = Game1.player.spouse;
                 var pronoun = "it";
-                var scoutedItemClassification = $"{scoutedItem.Classification.ToLower()} item";
+                var scoutedItemClassification = $"{scoutedItem.GetClassificationString()} item";
 
                 var multiplayerField = _helper.Reflection.GetField<Multiplayer>(typeof(Game1), "multiplayer");
                 var multiplayer = multiplayerField.GetValue();
