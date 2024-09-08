@@ -99,17 +99,17 @@ namespace StardewArchipelago.Locations.InGameLocations
                 return ArchipelagoTextures.PLEADING;
             }
 
-            if (scoutedLocation.Classification.HasFlag(ItemFlags.Advancement))
+            if (scoutedLocation.ClassificationFlags.HasFlag(ItemFlags.Advancement))
             {
                 return ArchipelagoTextures.PROGRESSION;
             }
 
-            if (scoutedLocation.Classification.HasFlag(ItemFlags.NeverExclude))
+            if (scoutedLocation.ClassificationFlags.HasFlag(ItemFlags.NeverExclude))
             {
                 return ArchipelagoTextures.COLOR;
             }
 
-            if (scoutedLocation.Classification.HasFlag(ItemFlags.Trap))
+            if (scoutedLocation.ClassificationFlags.HasFlag(ItemFlags.Trap))
             {
                 return ArchipelagoTextures.RED;
             }
