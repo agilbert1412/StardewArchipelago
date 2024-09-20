@@ -80,6 +80,7 @@ namespace StardewArchipelago.GameModifications
             BillboardInjections.Initialize(logger, modHelper, config, archipelago, locationChecker, friends);
             SpecialOrderBoardInjections.Initialize(logger, modHelper, archipelago, locationChecker);
             CraftingPageInjections.Initialize(logger, archipelago);
+            PanningSpotInjections.Initialize(logger, archipelago);
             OutOfLogicInjections.Initialize(logger, archipelago, stardewItemManager);
             DebugPatchInjections.Initialize(logger, archipelago);
             _jojaDisabler = new JojaDisabler(logger, modHelper, harmony);
@@ -125,6 +126,7 @@ namespace StardewArchipelago.GameModifications
             PatchTooltips();
             PatchBundles();
             PatchCraftingPage();
+            PatchPanningSpots();
             PatchMysteryBoxesAndPrizeTickets();
 
             _jojaDisabler.DisableJojaRouteShortcuts();
@@ -720,6 +722,19 @@ namespace StardewArchipelago.GameModifications
             _harmony.Patch(
                 original: AccessTools.Method(typeof(CraftingPage), nameof(CraftingPage.snapToDefaultClickableComponent)),
                 prefix: new HarmonyMethod(typeof(CraftingPageInjections), nameof(CraftingPageInjections.SnapToDefaultClickableComponent_DontCrashIfEmpty_Prefix))
+            );
+        }
+
+        private void PatchPanningSpots()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performOrePanTenMinuteUpdate)),
+                prefix: new HarmonyMethod(typeof(PanningSpotInjections), nameof(PanningSpotInjections.PerformOrePanTenMinuteUpdate_AllowPanningSpotsAlways_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(IslandNorth), nameof(IslandNorth.performOrePanTenMinuteUpdate)),
+                prefix: new HarmonyMethod(typeof(PanningSpotInjections), nameof(PanningSpotInjections.PerformOrePanTenMinuteUpdateOnIslandNorth_AllowPanningSpotsAlways_Prefix))
             );
         }
 
