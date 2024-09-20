@@ -20,11 +20,25 @@ namespace StardewArchipelago.GameModifications
             _harmony = harmony;
         }
 
+        public void DisableJojaRouteShortcuts()
+        {
+            DisableJojaMembership();
+            DisablePerfectionWaivers();
+        }
+
         public void DisableJojaMembership()
         {
             _harmony.Patch(
                 original: AccessTools.Method(typeof(JojaMart), nameof(JojaMart.answerDialogue)),
                 prefix: new HarmonyMethod(typeof(JojaDisabler), nameof(AnswerDialogue_JojaMembershipPurchase_Prefix))
+            );
+        }
+
+        public void DisablePerfectionWaivers()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.answerDialogueAction)),
+                prefix: new HarmonyMethod(typeof(JojaDisabler), nameof(AnswerDialogueAction_PerfectionWaiverPurchase_Prefix))
             );
         }
 
@@ -61,6 +75,37 @@ namespace StardewArchipelago.GameModifications
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(AnswerDialogue_JojaMembershipPurchase_Prefix)}:\n{ex}");
+                return true; // run original logic
+            }
+        }
+
+        // public virtual bool answerDialogueAction(string questionAndAnswer, string[] questionParams)
+        public static bool AnswerDialogueAction_PerfectionWaiverPurchase_Prefix(GameLocation __instance, string questionAndAnswer, string[] questionParams, ref bool __result)
+        {
+            try
+            {
+                if (questionAndAnswer != "Fizz_Yes")
+                {
+                    return true; // run original logic
+                }
+
+                if (Game1.player.Money >= 500000)
+                {
+                    __instance.getCharacterFromName("Fizz")?.shake(500);
+                    const string waiversWontWorkText = "Wait a minute... these perfection stats are not the ones I'm used to... What is this? Archiperfection? My waivers won't work on this!";
+                    Game1.drawObjectDialogue(waiversWontWorkText);
+                }
+                else
+                {
+                    Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\UI:NotEnoughMoney1"));
+                }
+
+                __result = true;
+                return false; // don't run original logic
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(AnswerDialogueAction_PerfectionWaiverPurchase_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }

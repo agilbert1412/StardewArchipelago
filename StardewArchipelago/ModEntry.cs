@@ -72,7 +72,6 @@ namespace StardewArchipelago
         private GoalManager _goalManager;
         private StardewItemManager _stardewItemManager;
         private MultiSleep _multiSleep;
-        private JojaDisabler _jojaDisabler;
         private SeasonsRandomizer _seasonsRandomizer;
         private AppearanceRandomizer _appearanceRandomizer;
         private QuestCleaner _questCleaner;
@@ -337,7 +336,6 @@ namespace StardewArchipelago
             var friends = new Friends();
             ArchipelagoLocationDataDefinition.Initialize(_logger, _helper, _archipelago, _locationChecker);
             _logicPatcher = new RandomizedLogicPatcher(_logger, _helper, Config, _harmony, _archipelago, _locationChecker, _stardewItemManager, _entranceManager, seedShopStockModifier, nameSimplifier, friends, State);
-            _jojaDisabler = new JojaDisabler(_logger, _helper, _harmony);
             _seasonsRandomizer = new SeasonsRandomizer(_logger, _helper, _archipelago, State);
             _appearanceRandomizer = new AppearanceRandomizer(_logger, _archipelago);
             var tileChooser = new TileChooser();
@@ -362,7 +360,6 @@ namespace StardewArchipelago
             _locationsPatcher.ReplaceAllLocationsRewardsWithChecks();
             _itemPatcher.PatchApItems();
             _goalManager.InjectGoalMethods();
-            _jojaDisabler.DisableJojaMembership();
             _multiSleep.InjectMultiSleepOption(_archipelago.SlotData);
             SeasonsRandomizer.ChangeMailKeysBasedOnSeasonsToDaysElapsed();
             _modStateInitializer = new InitialModGameStateInitializer(_logger, _archipelago);

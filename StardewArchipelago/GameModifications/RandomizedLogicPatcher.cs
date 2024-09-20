@@ -31,6 +31,7 @@ using StardewValley.Objects;
 using Object = StardewValley.Object;
 using StardewArchipelago.Locations;
 using StardewArchipelago.Logging;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
 
 namespace StardewArchipelago.GameModifications
 {
@@ -44,6 +45,7 @@ namespace StardewArchipelago.GameModifications
         private readonly SeedShopStockModifier _seedShopStockModifier;
         private readonly RecipeDataRemover _recipeDataRemover;
         private readonly AnimalShopStockModifier _animalShopStockModifier;
+        private readonly JojaDisabler _jojaDisabler;
 
         public RandomizedLogicPatcher(LogHandler logger, IModHelper modHelper, ModConfig config, Harmony harmony, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker, StardewItemManager stardewItemManager, EntranceManager entranceManager, SeedShopStockModifier seedShopStockModifier, NameSimplifier nameSimplifier, Friends friends, ArchipelagoStateDto state)
         {
@@ -79,8 +81,8 @@ namespace StardewArchipelago.GameModifications
             SpecialOrderBoardInjections.Initialize(logger, modHelper, archipelago, locationChecker);
             CraftingPageInjections.Initialize(logger, archipelago);
             OutOfLogicInjections.Initialize(logger, archipelago, stardewItemManager);
-
             DebugPatchInjections.Initialize(logger, archipelago);
+            _jojaDisabler = new JojaDisabler(logger, modHelper, harmony);
         }
 
         private static void InitializeTVInjections(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, EntranceManager entranceManager,
@@ -124,6 +126,8 @@ namespace StardewArchipelago.GameModifications
             PatchBundles();
             PatchCraftingPage();
             PatchMysteryBoxesAndPrizeTickets();
+
+            _jojaDisabler.DisableJojaRouteShortcuts();
             _startingResources.GivePlayerStartingResources();
 
             PatchDebugMethods();
