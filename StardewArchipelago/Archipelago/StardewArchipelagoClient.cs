@@ -43,23 +43,27 @@ namespace StardewArchipelago.Archipelago
             _slotData = new SlotData(slotName, slotDataFields, Logger);
         }
 
-        public override void Connect(KaitoKid.ArchipelagoUtilities.Net.Client.ArchipelagoConnectionInfo connectionInfo, out string errorMessage)
+        public override bool ConnectToMultiworld(ArchipelagoConnectionInfo connectionInfo, out string errorMessage)
         {
-            base.Connect(connectionInfo, out errorMessage);
+            if (!base.ConnectToMultiworld(connectionInfo, out errorMessage))
+            {
+                return false;
+            }
 
 #if RELEASE
             if (!SlotData.Mods.IsModStateCorrect(_modHelper, out errorMessage))
             {
                 DisconnectPermanently();
-                return;
+                return false;
             }
 
             if (!SlotData.Mods.IsPatcherStateCorrect(_modHelper, out errorMessage))
             {
                 DisconnectPermanently();
-                return;
+                return false;
             }
 #endif
+            return true;
         }
 
         protected override void InitializeAfterConnection()

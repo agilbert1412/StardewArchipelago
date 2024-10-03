@@ -387,12 +387,7 @@ namespace StardewArchipelago
                 errorMessage =
                     $"The game being loaded has no connection information.{Environment.NewLine}Please use the connect_override command to input connection fields before loading it";
             }
-            else
-            {
-                _archipelago.Connect(State.APConnectionInfo, out errorMessage);
-            }
-
-            if (_archipelago.IsConnected)
+            else if (_archipelago.ConnectToMultiworld(State.APConnectionInfo, out errorMessage))
             {
                 return true;
             }
@@ -565,8 +560,7 @@ namespace StardewArchipelago
         public bool ArchipelagoConnect(string ip, int port, string slot, string password, out string errorMessage)
         {
             var apConnection = new ArchipelagoConnectionInfo(ip, port, slot, null, password);
-            _archipelago.Connect(apConnection, out errorMessage);
-            if (!_archipelago.IsConnected)
+            if (!_archipelago.ConnectToMultiworld(apConnection, out errorMessage))
             {
                 return false;
             }
