@@ -398,6 +398,7 @@ namespace StardewArchipelago
 
         private void OfferRetry(string errorMessage)
         {
+            _logger.LogError($"Connection to Archipelago failed: {errorMessage}");
             var reconnectDialog = new ReconnectDialog(errorMessage, State.APConnectionInfo,
                 OnClickRetry, (_) => OnCloseBehavior());
             Game1.activeClickableMenu = reconnectDialog;

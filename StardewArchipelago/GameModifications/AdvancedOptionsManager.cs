@@ -189,6 +189,7 @@ namespace StardewArchipelago.GameModifications
                 if (!connected)
                 {
                     var currentMenu = TitleMenu.subMenu;
+                    _logger.LogError($"Connection to Archipelago failed: {errorMessage}");
                     TitleMenu.subMenu = new InformationDialog(errorMessage, (_) => OnClickOkBehavior(currentMenu));
                 }
 
