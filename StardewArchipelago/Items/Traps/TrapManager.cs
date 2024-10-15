@@ -116,8 +116,8 @@ namespace StardewArchipelago.Items.Traps
 
         public bool TryExecuteTrapImmediately(string trapName)
         {
-            if (Game1.player.currentLocation is FarmHouse
-                or IslandFarmHouse) // || Game1.eventUp || Game1.fadeToBlack || Game1.currentMinigame != null || Game1.isWarping || Game1.killScreen)
+            if (Game1.player.currentLocation is FarmHouse or IslandFarmHouse ||
+                Game1.player.isInBed.Value || Game1.player.FarmerSprite.isPassingOut() || Game1.player.passedOut) // || Game1.eventUp || Game1.fadeToBlack || Game1.currentMinigame != null || Game1.isWarping || Game1.killScreen)
             {
                 return false;
             }
