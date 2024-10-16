@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
-using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Modded;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.ArchipelagoUtilities.Net;
+using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -23,16 +25,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             { Skill.Archaeology, ModNames.ARCHAEOLOGY }, { Skill.Socializing, ModNames.SOCIALIZING },
         };
 
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static IModHelper _helper;
-        private static ArchipelagoClient _archipelago;
+        private static StardewArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
         private static Dictionary<Skill, double> _archipelagoExperience = new();
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago,
+        public static void Initialize(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago,
             LocationChecker locationChecker)
         {
-            _monitor = monitor;
+            _logger = logger;
             _helper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
@@ -145,7 +147,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(GainExperience_NormalExperience_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(GainExperience_NormalExperience_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -169,7 +171,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(GainExperience_ArchipelagoExperience_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(GainExperience_ArchipelagoExperience_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -194,8 +196,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(AddExperience_ArchipelagoModExperience_Prefix)}:\n{ex}",
-                    LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(AddExperience_ArchipelagoModExperience_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }

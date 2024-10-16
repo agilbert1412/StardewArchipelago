@@ -1,7 +1,9 @@
 ﻿using System;
 using HarmonyLib;
+using KaitoKid.ArchipelagoUtilities.Net;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
@@ -17,7 +19,6 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.BellsAndWhistles;
 using StardewValley.Characters;
-using StardewValley.Constants;
 using StardewValley.Events;
 using StardewValley.GameData.Buildings;
 using StardewValley.Locations;
@@ -35,7 +36,7 @@ namespace StardewArchipelago.Locations.Patcher
 {
     public class VanillaLocationPatcher : ILocationPatcher
     {
-        private readonly ArchipelagoClient _archipelago;
+        private readonly StardewArchipelagoClient _archipelago;
         private readonly Harmony _harmony;
         private readonly IModHelper _modHelper;
         private readonly GingerIslandPatcher _gingerIslandPatcher;
@@ -50,22 +51,22 @@ namespace StardewArchipelago.Locations.Patcher
         private readonly CraftingRecipePurchaseStockModifier _craftingRecipePurchaseStockModifier;
         private readonly KrobusStockModifier _krobusStockModifier;
 
-        public VanillaLocationPatcher(IMonitor monitor, IModHelper modHelper, Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager stardewItemManager)
+        public VanillaLocationPatcher(ILogger logger, IModHelper modHelper, Harmony harmony, StardewArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager stardewItemManager)
         {
             _archipelago = archipelago;
             _harmony = harmony;
             _modHelper = modHelper;
-            _gingerIslandPatcher = new GingerIslandPatcher(monitor, _modHelper, _harmony, _archipelago, locationChecker);
-            _toolUpgradesShopStockModifier = new ToolShopStockModifier(monitor, modHelper, archipelago, stardewItemManager);
-            _fishingRodShopStockModifier = new FishingRodShopStockModifier(monitor, modHelper, archipelago, stardewItemManager);
-            _carpenterShopStockModifier = new CarpenterShopStockModifier(monitor, modHelper, archipelago, stardewItemManager);
-            _carpenterBuildingsModifier = new CarpenterBuildingsModifier(monitor, modHelper, archipelago);
-            _guildShopStockModifier = new AdventureGuildShopStockModifier(monitor, modHelper, archipelago, stardewItemManager);
-            _travelingMerchantShopStockModifier = new TravelingMerchantShopStockModifier(monitor, modHelper, archipelago, stardewItemManager);
-            _festivalShopStockModifier = new FestivalShopStockModifier(monitor, modHelper, archipelago, stardewItemManager);
-            _cookingRecipePurchaseStockModifier = new CookingRecipePurchaseStockModifier(monitor, modHelper, archipelago, stardewItemManager);
-            _craftingRecipePurchaseStockModifier = new CraftingRecipePurchaseStockModifier(monitor, modHelper, archipelago, stardewItemManager);
-            _krobusStockModifier = new KrobusStockModifier(monitor, modHelper, archipelago, stardewItemManager);
+            _gingerIslandPatcher = new GingerIslandPatcher(logger, _modHelper, _harmony, _archipelago, locationChecker);
+            _toolUpgradesShopStockModifier = new ToolShopStockModifier(logger, modHelper, archipelago, stardewItemManager);
+            _fishingRodShopStockModifier = new FishingRodShopStockModifier(logger, modHelper, archipelago, stardewItemManager);
+            _carpenterShopStockModifier = new CarpenterShopStockModifier(logger, modHelper, archipelago, stardewItemManager);
+            _carpenterBuildingsModifier = new CarpenterBuildingsModifier(logger, modHelper, archipelago);
+            _guildShopStockModifier = new AdventureGuildShopStockModifier(logger, modHelper, archipelago, stardewItemManager);
+            _travelingMerchantShopStockModifier = new TravelingMerchantShopStockModifier(logger, modHelper, archipelago, stardewItemManager);
+            _festivalShopStockModifier = new FestivalShopStockModifier(logger, modHelper, archipelago, stardewItemManager);
+            _cookingRecipePurchaseStockModifier = new CookingRecipePurchaseStockModifier(logger, modHelper, archipelago, stardewItemManager);
+            _craftingRecipePurchaseStockModifier = new CraftingRecipePurchaseStockModifier(logger, modHelper, archipelago, stardewItemManager);
+            _krobusStockModifier = new KrobusStockModifier(logger, modHelper, archipelago, stardewItemManager);
         }
 
         public void ReplaceAllLocationsRewardsWithChecks()
@@ -300,7 +301,7 @@ namespace StardewArchipelago.Locations.Patcher
             {
                 return;
             }
-            
+
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Event), nameof(Event.skipEvent)),
                 prefix: new HarmonyMethod(typeof(CopperPanInjections), nameof(CopperPanInjections.SkipEvent_CopperPan_Prefix))
@@ -720,6 +721,11 @@ namespace StardewArchipelago.Locations.Patcher
             );
 
             _harmony.Patch(
+                original: AccessTools.Method(typeof(BeachNightMarket), nameof(DesertFestival.checkAction)),
+                prefix: new HarmonyMethod(typeof(TravelingMerchantInjections), nameof(TravelingMerchantInjections.DesertFestivalCheckAction_IsTravelingMerchantDay_Prefix))
+            );
+
+            _harmony.Patch(
                 original: AccessTools.Method(typeof(ShopMenu), nameof(ShopMenu.SetUpShopOwner)),
                 postfix: new HarmonyMethod(typeof(TravelingMerchantInjections), nameof(TravelingMerchantInjections.SetUpShopOwner_TravelingMerchantApFlair_Postfix))
             );
@@ -837,12 +843,19 @@ namespace StardewArchipelago.Locations.Patcher
             PatchIceFestival();
             PatchSquidFest();
             PatchNightMarket();
-            PatchFeastOfTheWinterStar();
+            PatchWinterStar();
         }
 
         private void CleanFestivalEvents()
         {
             _modHelper.Events.Content.AssetRequested -= _festivalShopStockModifier.OnShopStockRequested;
+
+            if (_archipelago.SlotData.FestivalLocations == FestivalLocations.Vanilla)
+            {
+                return;
+            }
+
+            CleanWinterStarEvents();
         }
 
         private void PatchEggFestival()
@@ -875,6 +888,10 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony.Patch(
                 original: AccessTools.Method(typeof(MineShaft), "signalCalicoStatueActivation"),
                 postfix: new HarmonyMethod(typeof(DesertFestivalInjections), nameof(DesertFestivalInjections.SignalCalicoStatueActivation_DesertChef_Postfix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(DesertFestival), nameof(DesertFestival.CleanupFestival)),
+                prefix: new HarmonyMethod(typeof(DesertFestivalInjections), nameof(DesertFestivalInjections.CleanupFestival_LetPlayerKeepCalicoEggs_Prefix))
             );
         }
 
@@ -975,7 +992,7 @@ namespace StardewArchipelago.Locations.Patcher
             );
         }
 
-        private void PatchFeastOfTheWinterStar()
+        private void PatchWinterStar()
         {
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Dialogue), nameof(Dialogue.chooseResponse)),
@@ -986,6 +1003,13 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(typeof(Event), nameof(Event.chooseSecretSantaGift)),
                 prefix: new HarmonyMethod(typeof(WinterStarInjections), nameof(WinterStarInjections.ChooseSecretSantaGift_SuccessfulGift_Prefix))
             );
+            _modHelper.Events.Content.AssetRequested += WinterStarInjections.OnFestivalsRequested;
+            _modHelper.GameContent.InvalidateCache("Data/Festivals");
+        }
+
+        private void CleanWinterStarEvents()
+        {
+            _modHelper.Events.Content.AssetRequested -= WinterStarInjections.OnFestivalsRequested;
         }
 
         private void AddCropSanityLocations()
@@ -1064,6 +1088,15 @@ namespace StardewArchipelago.Locations.Patcher
         {
             PatchChefsanity();
             PatchCraftsanity();
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Event), nameof(Event.skipEvent)),
+                prefix: new HarmonyMethod(typeof(EventInjections), nameof(EventInjections.SkipEvent_ReplaceRecipe_Prefix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Event), nameof(Event.tryEventCommand)),
+                prefix: new HarmonyMethod(typeof(EventInjections), nameof(EventInjections.TryEventCommand_ReplaceRecipeWithCheck_Prefix))
+            );
         }
 
         private void PatchChefsanity()
@@ -1089,16 +1122,6 @@ namespace StardewArchipelago.Locations.Patcher
             {
                 return;
             }
-
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(Event.DefaultCommands), nameof(Event.DefaultCommands.AddCookingRecipe)),
-                prefix: new HarmonyMethod(typeof(RecipeFriendshipInjections), nameof(RecipeFriendshipInjections.AddCookingRecipe_SkipLearningCookies_Prefix))
-            );
-
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(Event), nameof(Event.skipEvent)),
-                prefix: new HarmonyMethod(typeof(RecipeFriendshipInjections), nameof(RecipeFriendshipInjections.SkipEvent_CookiesRecipe_Prefix))
-            );
         }
 
         private void CleanChefsanityEvents()
@@ -1243,7 +1266,7 @@ namespace StardewArchipelago.Locations.Patcher
             );
             _harmony.Patch(
                 original: AccessTools.Method(typeof(IslandFarmCave), nameof(IslandFarmCave.GiveReward)),
-                prefix: new HarmonyMethod(typeof(WalnutPuzzleInjections), nameof(WalnutPuzzleInjections.GiveReward_CheckInsteadOfNuts_Prefix))
+                prefix: new HarmonyMethod(typeof(WalnutPuzzleInjections), nameof(WalnutPuzzleInjections.GiveReward_GourmandCheckInsteadOfNuts_Prefix))
             );
             _harmony.Patch(
                 original: AccessTools.Method(typeof(SandDuggy), nameof(SandDuggy.OnWhackedChanged)),
@@ -1265,8 +1288,11 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(typeof(IslandFieldOffice), nameof(IslandFieldOffice.donatePiece)),
                 prefix: new HarmonyMethod(typeof(WalnutPuzzleInjections), nameof(WalnutPuzzleInjections.DonatePiece_CheckInsteadOfNuts_Prefix))
             );
-            var isCollidingPositionParameterTypes = new[] { typeof(Microsoft.Xna.Framework.Rectangle), typeof(xTile.Dimensions.Rectangle),
-                typeof(bool), typeof(int), typeof(bool), typeof(Character), typeof(bool), typeof(bool), typeof(bool), typeof(bool) };
+            var isCollidingPositionParameterTypes = new[]
+            {
+                typeof(Microsoft.Xna.Framework.Rectangle), typeof(xTile.Dimensions.Rectangle),
+                typeof(bool), typeof(int), typeof(bool), typeof(Character), typeof(bool), typeof(bool), typeof(bool), typeof(bool)
+            };
             _harmony.Patch(
                 original: AccessTools.Method(typeof(IslandNorth), nameof(IslandNorth.isCollidingPosition), isCollidingPositionParameterTypes),
                 prefix: new HarmonyMethod(typeof(WalnutPuzzleInjections), nameof(WalnutPuzzleInjections.IsCollidingPosition_CheckInsteadOfNut_Prefix))

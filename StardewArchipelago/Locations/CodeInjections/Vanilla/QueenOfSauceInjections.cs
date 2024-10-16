@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Locations;
 using StardewArchipelago.Extensions;
 using StardewArchipelago.GameModifications.CodeInjections.Television;
@@ -10,6 +9,9 @@ using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Objects;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.ArchipelagoUtilities.Net;
+using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -21,18 +23,18 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private const string ALREADY_KNOWN_KEY = "Strings\\StringsFromCSFiles:TV.cs.13151";
         private const string NEW_RECIPE_LEARNED_KEY = "Strings\\StringsFromCSFiles:TV.cs.13153";
 
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static IModHelper _helper;
-        private static ArchipelagoClient _archipelago;
+        private static StardewArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
         private static StardewItemManager _itemManager;
         private static QueenOfSauceManager _qosManager;
 
         private static Dictionary<long, int> _recipeChoiceCache;
 
-        public static void Initialize(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager itemManager, QueenOfSauceManager qosManager)
+        public static void Initialize(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager itemManager, QueenOfSauceManager qosManager)
         {
-            _monitor = monitor;
+            _logger = logger;
             _helper = helper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
@@ -52,19 +54,19 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 }
 
                 // private TemporaryAnimatedSprite screen;
-                var screenField = _helper.Reflection.GetField<TemporaryAnimatedSprite>(__instance, "screen");
+                var screenField = _helper.Reflection.GetField<TemporaryAnimatedSprite>(__instance, "screen", false);
 
                 // private int currentChannel;
-                var currentChannelField = _helper.Reflection.GetField<int>(__instance, "currentChannel");
+                var currentChannelField = _helper.Reflection.GetField<int>(__instance, "currentChannel", false);
 
-                if (screenField.GetValue() == null || currentChannelField.GetValue() != 5)
+                // ReSharper disable once ConditionIsAlwaysTrueOrFalse
+                if (screenField == null || currentChannelField == null || screenField.GetValue() == null || currentChannelField.GetValue() != 5)
                 {
                     return false; // don't run original logic
                 }
 
                 var cookingChannelData = DataLoader.Tv_CookingChannel(Game1.temporaryContent);
                 var recipeWeek = PickRecipeWeekToTeach(cookingChannelData);
-
 
                 var recipeInfo = cookingChannelData[recipeWeek.ToString()].Split('/');
                 var recipeName = recipeInfo[0];
@@ -85,7 +87,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(GetWeeklyRecipe_UseArchipelagoSchedule_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(GetWeeklyRecipe_UseArchipelagoSchedule_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }

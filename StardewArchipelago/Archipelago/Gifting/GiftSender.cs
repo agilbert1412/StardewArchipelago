@@ -7,22 +7,22 @@ using Archipelago.Gifting.Net.Traits;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.Stardew;
-using StardewModdingAPI;
 using StardewValley;
 using Object = StardewValley.Object;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 
 namespace StardewArchipelago.Archipelago.Gifting
 {
     public class GiftSender
     {
-        private readonly IMonitor _monitor;
-        private readonly ArchipelagoClient _archipelago;
+        private readonly ILogger _logger;
+        private readonly StardewArchipelagoClient _archipelago;
         private readonly IGiftingService _giftService;
         internal GiftGenerator GiftGenerator { get; }
 
-        public GiftSender(IMonitor monitor, ArchipelagoClient archipelago, StardewItemManager itemManager, IGiftingService giftService)
+        public GiftSender(ILogger logger, StardewArchipelagoClient archipelago, StardewItemManager itemManager, IGiftingService giftService)
         {
-            _monitor = monitor;
+            _logger = logger;
             _archipelago = archipelago;
             _giftService = giftService;
             GiftGenerator = new GiftGenerator(itemManager);
@@ -62,11 +62,10 @@ namespace StardewArchipelago.Archipelago.Gifting
 
 
                 var success = _giftService.SendGift(giftItem, giftTraits, slotName, out var giftId);
-                _monitor.Log($"Sending {giftOrTrap} of {giftItem.Amount} {giftItem.Name} to {slotName} with {giftTraits.Length} traits. [ID: {giftId}]",
-                    LogLevel.Info);
+                _logger.LogInfo($"Sending {giftOrTrap} of {giftItem.Amount} {giftItem.Name} to {slotName} with {giftTraits.Length} traits. [ID: {giftId}]");
                 if (!success)
                 {
-                    _monitor.Log($"Gift Failed to send properly", LogLevel.Error);
+                    _logger.LogError($"Gift Failed to send properly");
                     Game1.chatBox?.addMessage($"Unknown Error occurred while sending {giftOrTrap}.", Color.Red);
                     return;
                 }
@@ -78,7 +77,7 @@ namespace StardewArchipelago.Archipelago.Gifting
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Unknown error occurred while attempting to process gift command.{Environment.NewLine}Message: {ex.Message}{Environment.NewLine}StackTrace: {ex.StackTrace}", LogLevel.Error);
+                _logger.LogError($"Unknown error occurred while attempting to process gift command.{Environment.NewLine}Message: {ex.Message}{Environment.NewLine}StackTrace: {ex.StackTrace}");
                 Game1.chatBox?.addMessage($"Could not complete gifting operation. Check SMAPI for error details.", Color.Red);
                 return;
             }
@@ -103,7 +102,7 @@ namespace StardewArchipelago.Archipelago.Gifting
             var totalTax = 0;
             foreach (var (player, gifts) in targets)
             {
-                _monitor.Log($"Attempting to send {gifts.Count} gifts to {player}", LogLevel.Trace);
+                _logger.LogDebug($"Attempting to send {gifts.Count} gifts to {player}");
                 foreach (var giftObject in gifts)
                 {
                     if (TrySendShuffleGift(giftObject, player, out var tax))
@@ -115,7 +114,7 @@ namespace StardewArchipelago.Archipelago.Gifting
                         objectsFailedToSend.Add(giftObject);
                     }
                 }
-                _monitor.Log($"Finished sending {gifts.Count} gifts to {player}", LogLevel.Trace);
+                _logger.LogDebug($"Finished sending {gifts.Count} gifts to {player}");
             }
 
             Game1.player.Money = Math.Max(0, Game1.player.Money - totalTax);
@@ -131,7 +130,7 @@ namespace StardewArchipelago.Archipelago.Gifting
             {
                 if (!GiftGenerator.TryCreateGiftItem(giftObject, false, out var giftItem, out var giftTraits, out _))
                 {
-                    _monitor.Log($"Could not create a proper gift out of {giftObject.Name}", LogLevel.Trace);
+                    _logger.LogDebug($"Could not create a proper gift out of {giftObject.Name}");
                     return false;
                 }
 
@@ -139,24 +138,24 @@ namespace StardewArchipelago.Archipelago.Gifting
 
                 if (!_archipelago.MakeSureConnected())
                 {
-                    _monitor.Log($"Currently Disconnected from Archipelago", LogLevel.Trace);
+                    _logger.LogDebug($"Currently Disconnected from Archipelago");
                     return false;
                 }
 
                 var success = _giftService.SendGift(giftItem, giftTraits, player, out var giftId);
                 if (!success)
                 {
-                    _monitor.Log($"Gift failed to send but did not crash", LogLevel.Trace);
+                    _logger.LogDebug($"Gift failed to send but did not crash");
                     return false;
                 }
 
-                _monitor.Log($"Gift sent successfully!", LogLevel.Trace);
+                _logger.LogDebug($"Gift sent successfully!");
                 tax = GetTaxForItem(giftObject);
                 return true;
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Unknown error occurred while attempting to gift.{Environment.NewLine}Message: {ex.Message}{Environment.NewLine}StackTrace: {ex.StackTrace}", LogLevel.Error);
+                _logger.LogError($"Unknown error occurred while attempting to gift.{Environment.NewLine}Message: {ex.Message}{Environment.NewLine}StackTrace: {ex.StackTrace}");
                 return false;
             }
         }
@@ -236,7 +235,8 @@ namespace StardewArchipelago.Archipelago.Gifting
             if (IsAyeishaHere(out var ayeisha))
             {
                 var tomorrowSentence = recipient == null ? $"It'll get there tomorrow!" : $"It'll reach {recipient} tomorrow!";
-                ayeisha.setNewDialogue($"Sure, I'll deliver that package! {tomorrowSentence} That'll cost you {tax}g.");
+                var dialogue = new Dialogue(ayeisha, null, $"Sure, I'll deliver that package! {tomorrowSentence} That'll cost you {tax}g.");
+                ayeisha.setNewDialogue(dialogue);
                 Game1.drawDialogue(ayeisha);
                 return;
             }

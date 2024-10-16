@@ -71,7 +71,7 @@ namespace StardewArchipelago.Locations.Festival
         public const string LUAU_SOUP = "Luau Soup";
 
         public const string TROUT_DERBY_REWARD_PATTERN = "Trout Derby Reward {0}";
-        public static readonly string[] TROUT_DERBY_REWARDS = new[]
+        public static readonly string[] TROUT_DERBY_REWARDS =
         {
             string.Format(TROUT_DERBY_REWARD_PATTERN, 1), string.Format(TROUT_DERBY_REWARD_PATTERN, 2), string.Format(TROUT_DERBY_REWARD_PATTERN, 3),
             string.Format(TROUT_DERBY_REWARD_PATTERN, 4), string.Format(TROUT_DERBY_REWARD_PATTERN, 5), string.Format(TROUT_DERBY_REWARD_PATTERN, 6),
@@ -103,7 +103,8 @@ namespace StardewArchipelago.Locations.Festival
         public const string SQUIDFEST_DAY_2_IRON = "SquidFest Day 2 Iron";
         public const string SQUIDFEST_DAY_2_GOLD = "SquidFest Day 2 Gold";
         public const string SQUIDFEST_DAY_2_IRIDIUM = "SquidFest Day 2 Iridium";
-        public static readonly string[,] SQUIDFEST_REWARDS = {
+        public static readonly string[,] SQUIDFEST_REWARDS =
+        {
             { SQUIDFEST_DAY_1_COPPER, SQUIDFEST_DAY_1_IRON, SQUIDFEST_DAY_1_GOLD, SQUIDFEST_DAY_1_IRIDIUM },
             { SQUIDFEST_DAY_2_COPPER, SQUIDFEST_DAY_2_IRON, SQUIDFEST_DAY_2_GOLD, SQUIDFEST_DAY_2_IRIDIUM },
         };
@@ -128,7 +129,7 @@ namespace StardewArchipelago.Locations.Festival
         public const string LEGEND_OF_THE_WINTER_STAR = "The Legend of the Winter Star";
         public const string SECRET_SANTA = "Secret Santa";
 
-        private static readonly string[] DESERT_FESTIVAL_ALL = new[]
+        private static readonly string[] DESERT_FESTIVAL_ALL =
         {
             CALICO_RACE, MUMMY_MASK, EMILYS_OUTFIT_SERVICES, EARTHY_MOUSSE, SWEET_BEAN_CAKE, SKULL_CAVERN_CASSEROLE, SPICY_TACOS,
             MOUNTAIN_CHILI, CRYSTAL_CAKE, CAVE_KEBAB, HOT_LOG, SOUR_SALAD, SUPERFOOD_CAKE, WARRIOR_SMOOTHIE, RUMPLED_FRUIT_SKIN, CALICO_PIZZA,
@@ -137,14 +138,14 @@ namespace StardewArchipelago.Locations.Festival
         };
         private static readonly string[] TROUT_DERBY_ALL = TROUT_DERBY_REWARDS;
         private static readonly string[] SQUIDFEST_ALL = Array.Empty<string>();
-        private static readonly string[] NIGHT_MARKET_ALL = new[] { MERMAID_PEARL, CONE_HAT, IRIDIUM_FIREPLACE, RARECROW_7, RARECROW_8, };
+        private static readonly string[] NIGHT_MARKET_ALL = { MERMAID_PEARL, CONE_HAT, IRIDIUM_FIREPLACE, RARECROW_7, RARECROW_8 };
 
         public static readonly Dictionary<string, string[]> LocationsByFestival = new()
         {
             { EGG_FESTIVAL, new[] { EGG_HUNT, STRAWBERRY_SEEDS } },
-            { DESERT_FESTIVAL_15, DESERT_FESTIVAL_ALL.Union(new[] { CALICO_STATUE, }).ToArray() },
+            { DESERT_FESTIVAL_15, DESERT_FESTIVAL_ALL.Union(new[] { CALICO_STATUE }).ToArray() },
             { DESERT_FESTIVAL_16, DESERT_FESTIVAL_ALL },
-            { DESERT_FESTIVAL_17, DESERT_FESTIVAL_ALL.Union(new[] { CALICO_STATUE, }).ToArray() },
+            { DESERT_FESTIVAL_17, DESERT_FESTIVAL_ALL.Union(new[] { CALICO_STATUE }).ToArray() },
             { FLOWER_DANCE, new[] { DANCE_WITH_SOMEONE, RARECROW_5, TUB_O_FLOWERS_RECIPE } },
             { LUAU, new[] { LUAU_SOUP } },
             { TROUT_DERBY_20, TROUT_DERBY_ALL },
@@ -153,8 +154,8 @@ namespace StardewArchipelago.Locations.Festival
             { FAIR, new[] { STRENGTH_GAME, RARECROW_1, FAIR_STARDROP, GRANGE_DISPLAY } },
             { SPIRIT_EVE, new[] { GOLDEN_PUMPKIN, RARECROW_2, JACK_O_LANTERN_RECIPE } },
             { FESTIVAL_OF_ICE, new[] { FISHING_COMPETITION, RARECROW_4 } },
-            { SQUIDFEST_12, SQUIDFEST_ALL.Union(new[] { SQUIDFEST_DAY_1_COPPER, SQUIDFEST_DAY_1_IRON, SQUIDFEST_DAY_1_GOLD, SQUIDFEST_DAY_1_IRIDIUM }).ToArray()  },
-            { SQUIDFEST_13, SQUIDFEST_ALL.Union(new[] { SQUIDFEST_DAY_2_COPPER, SQUIDFEST_DAY_2_IRON, SQUIDFEST_DAY_2_GOLD, SQUIDFEST_DAY_2_IRIDIUM }).ToArray()  },
+            { SQUIDFEST_12, SQUIDFEST_ALL.Union(new[] { SQUIDFEST_DAY_1_COPPER, SQUIDFEST_DAY_1_IRON, SQUIDFEST_DAY_1_GOLD, SQUIDFEST_DAY_1_IRIDIUM }).ToArray() },
+            { SQUIDFEST_13, SQUIDFEST_ALL.Union(new[] { SQUIDFEST_DAY_2_COPPER, SQUIDFEST_DAY_2_IRON, SQUIDFEST_DAY_2_GOLD, SQUIDFEST_DAY_2_IRIDIUM }).ToArray() },
             { FEAST_OF_THE_WINTER_STAR, new[] { LEGEND_OF_THE_WINTER_STAR, SECRET_SANTA } },
             { NIGHT_MARKET_15, NIGHT_MARKET_ALL.Union(new[] { LUPINI_YEAR_1_PAINTING_1, LUPINI_YEAR_2_PAINTING_1, LUPINI_YEAR_3_PAINTING_1 }).ToArray() },
             { NIGHT_MARKET_16, NIGHT_MARKET_ALL.Union(new[] { LUPINI_YEAR_1_PAINTING_2, LUPINI_YEAR_2_PAINTING_2, LUPINI_YEAR_3_PAINTING_2 }).ToArray() },

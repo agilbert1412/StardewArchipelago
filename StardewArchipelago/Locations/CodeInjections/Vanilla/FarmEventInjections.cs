@@ -1,24 +1,26 @@
 ﻿using System;
 using System.Linq;
 using Netcode;
-using StardewArchipelago.Archipelago;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewArchipelago.Constants;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Events;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.ArchipelagoUtilities.Net;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
     public static class FarmEventInjections
     {
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static IModHelper _modHelper;
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(ILogger logger, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
-            _monitor = monitor;
+            _logger = logger;
             _modHelper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
@@ -36,7 +38,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(PickFarmEvent_MrQiPlaneOnlyIfUnlocked_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(PickFarmEvent_MrQiPlaneOnlyIfUnlocked_Postfix)}:\n{ex}");
                 return;
             }
         }

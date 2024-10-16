@@ -22,7 +22,7 @@ namespace StardewArchipelago.Items
                 return upgradedTool;
             }
 
-            if (TryUpgradeToolInLostAndFoundBox(player, toolName, out upgradedTool))
+            if (TryUpgradeToolInSpecialInventories(player, toolName, out upgradedTool))
             {
                 return upgradedTool;
             }
@@ -116,6 +116,36 @@ namespace StardewArchipelago.Items
             if (Game1.getLocationFromName("IslandFarmHouse") is IslandFarmHouse islandHouse)
             {
                 if (TryUpgradeToolInInventory(islandHouse.GetFridge(false).Items, toolName, out upgradedTool))
+                {
+                    return true;
+                }
+            }
+
+            upgradedTool = null;
+            return false;
+        }
+
+        private bool TryUpgradeToolInSpecialInventories(Farmer player, string toolName, out Tool upgradedTool)
+        {
+            if (TryUpgradeToolInLostAndFoundBox(player, toolName, out upgradedTool))
+            {
+                return true;
+            }
+
+            if (TryUpgradeToolInGlobalInventories(player, toolName, out upgradedTool))
+            {
+                return true;
+            }
+
+            upgradedTool = null;
+            return false;
+        }
+
+        private bool TryUpgradeToolInGlobalInventories(Farmer player, string toolName, out Tool upgradedTool)
+        {
+            foreach (var inventoryKey in player.team.globalInventories.Keys.ToArray())
+            {
+                if (TryUpgradeToolInInventory(player.team.globalInventories[inventoryKey], toolName, out upgradedTool))
                 {
                     return true;
                 }

@@ -1,29 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework.Input;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Serialization;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.BellsAndWhistles;
+using StardewValley.Menus;
 
 namespace StardewArchipelago.GameModifications.Seasons
 {
     public class SeasonsRandomizer
     {
         private const string _nextSeasonDialogKey = "NextSeason";
-        public static readonly string[] ValidSeasons = new[] { "Spring", "Summer", "Fall", "Winter" };
+        public static readonly string[] ValidSeasons = { "Spring", "Summer", "Fall", "Winter" };
         private const string PROGRESSIVE_SEASON = "Progressive Season";
 
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static IModHelper _helper;
-        private static ArchipelagoClient _archipelago;
+        private static StardewArchipelagoClient _archipelago;
         private static ArchipelagoStateDto _state;
 
-        public SeasonsRandomizer(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago, ArchipelagoStateDto state)
+        public SeasonsRandomizer(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago, ArchipelagoStateDto state)
         {
-            _monitor = monitor;
+            _logger = logger;
             _helper = helper;
             _archipelago = archipelago;
             _state = state;
@@ -85,7 +87,7 @@ namespace StardewArchipelago.GameModifications.Seasons
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(OnNewSeason_UsePredefinedChoice_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(OnNewSeason_UsePredefinedChoice_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -102,7 +104,7 @@ namespace StardewArchipelago.GameModifications.Seasons
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(Date_UseTotalDaysStats_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(Date_UseTotalDaysStats_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -116,22 +118,66 @@ namespace StardewArchipelago.GameModifications.Seasons
                     return true; // run original logic
                 }
 
-                var possibleResponses = new List<Response>();
-
-                foreach (var season in GetUnlockedSeasons())
+                if (MultiSleep.DaysToSkip > 0)
                 {
-                    possibleResponses.Add(new Response(season, season).SetHotKey(Keys.None));
+                    ChooseNextSeasonBasedOnConfigPreference();
+                    return false; // don't run original logic
                 }
 
-                var seasonName = Utility.capitalizeFirstLetter(Game1.CurrentSeasonDisplayName);
-                Game1.currentLocation.createQuestionDialogue($"{seasonName} has come to an end. What season is next?", possibleResponses.ToArray(), _nextSeasonDialogKey, null);
+                PromptForNextSeason();
                 return false; // don't run original logic
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(NewDay_SeasonChoice_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(NewDay_SeasonChoice_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
+        }
+
+        private static void ChooseNextSeasonBasedOnConfigPreference()
+        {
+            var unlockedSeasons = GetUnlockedSeasons();
+            if (unlockedSeasons.Count == 1)
+            {
+                SetNextSeasonAndSleep(unlockedSeasons.First());
+                return;
+            }
+
+            var currentSeason = Utility.capitalizeFirstLetter(Game1.CurrentSeasonDisplayName);
+
+            switch (ModEntry.Instance.Config.MultiSleepSeasonPreference)
+            {
+                case SeasonPreference.Prompt:
+                    PromptForNextSeason(unlockedSeasons);
+                    return;
+                case SeasonPreference.Repeat:
+                    SetNextSeasonAndSleep(currentSeason);
+                    return;
+                case SeasonPreference.Cycle:
+                    var indexOfCurrentSeason = unlockedSeasons.IndexOf(currentSeason);
+                    var indexOfNextSeason = (indexOfCurrentSeason + 1) % unlockedSeasons.Count;
+                    SetNextSeasonAndSleep(unlockedSeasons[indexOfNextSeason]);
+                    return;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        private static void PromptForNextSeason()
+        {
+            PromptForNextSeason(GetUnlockedSeasons());
+        }
+
+        private static void PromptForNextSeason(List<string> unlockedSeasons)
+        {
+            var possibleResponses = new List<Response>();
+            foreach (var season in unlockedSeasons)
+            {
+                possibleResponses.Add(new Response(season, season).SetHotKey(Keys.None));
+            }
+
+            var seasonName = Utility.capitalizeFirstLetter(Game1.CurrentSeasonDisplayName);
+            Game1.currentLocation.createQuestionDialogue($"{seasonName} has come to an end. What season is next?", possibleResponses.ToArray(), _nextSeasonDialogKey, null);
         }
 
         public static bool AnswerDialogueAction_SeasonChoice_Prefix(GameLocation __instance, string questionAndAnswer, string[] questionParams, ref bool __result)
@@ -145,29 +191,40 @@ namespace StardewArchipelago.GameModifications.Seasons
 
                 var parts = questionAndAnswer.Split("_");
                 var chosenSeason = parts[1];
-                SetNextSeason(chosenSeason);
-
+                SetNextSeasonAndSleep(chosenSeason);
                 __result = true;
-                NewDayOriginal(0);
                 return false; // don't run original logic
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(AnswerDialogueAction_SeasonChoice_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(AnswerDialogueAction_SeasonChoice_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
 
+        private static void SetNextSeasonAndSleep(string season)
+        {
+            SetNextSeason(season);
+            NewDayOriginal(0);
+        }
+
         private static void NewDayOriginal(float timeToPause)
         {
+            if (Game1.activeClickableMenu is ReadyCheckDialog { checkName: "sleep" } activeClickableMenu && !activeClickableMenu.isCancelable())
+            {
+                activeClickableMenu.confirm();
+            }
             Game1.currentMinigame = null;
             Game1.newDay = true;
-            Game1.newDaySync = new NewDaySynchronizer();
+            Game1.newDaySync.create();
             if (Game1.player.isInBed.Value || Game1.player.passedOut)
             {
                 Game1.nonWarpFade = true;
+
+                // private static ScreenFade screenFade;
                 var screenFadeField = _helper.Reflection.GetField<ScreenFade>(typeof(Game1), "screenFade");
                 screenFadeField.GetValue().FadeScreenToBlack(Game1.player.passedOut ? 1.1f : 0.0f);
+
                 Game1.player.Halt();
                 Game1.player.currentEyes = 1;
                 Game1.player.blinkTimer = -4000;
@@ -176,7 +233,9 @@ namespace StardewArchipelago.GameModifications.Seasons
                 Game1.pauseTime = timeToPause;
             }
             if (Game1.activeClickableMenu == null || Game1.dialogueUp)
+            {
                 return;
+            }
             Game1.activeClickableMenu.emergencyShutDown();
             Game1.exitActiveMenu();
         }
@@ -187,15 +246,19 @@ namespace StardewArchipelago.GameModifications.Seasons
             try
             {
                 if (__instance.WeddingDate == null || __instance.WeddingDate.TotalDays < Game1.Date.TotalDays)
+                {
                     __result = 0;
+                }
                 else
+                {
                     __result = __instance.WeddingDate.TotalDays - Game1.Date.TotalDays + 1;
+                }
 
                 return false; // don't run original logic
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(CountdownToWedding_Add1_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(CountdownToWedding_Add1_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -251,7 +314,7 @@ namespace StardewArchipelago.GameModifications.Seasons
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(GetWeatherModificationsForDate_UseCorrectDates_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(GetWeatherModificationsForDate_UseCorrectDates_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }

@@ -31,6 +31,7 @@ namespace StardewArchipelago.Constants.Vanilla
         public const string BAIT_AND_BOBBER = "Bait And Bobber";
         public const string MINING_MONTHLY = "Mining Monthly";
         public const string COMBAT_QUARTERLY = "Combat Quarterly";
+        public const string QUEEN_OF_SAUCE_COOKBOOK = "Queen Of Sauce Cookbook";
 
         public static readonly Dictionary<string, string> BookIdsToNames = new()
         {
@@ -59,6 +60,7 @@ namespace StardewArchipelago.Constants.Vanilla
             { ObjectIds.BAIT_AND_BOBBER, BAIT_AND_BOBBER },
             { ObjectIds.MINING_MONTHLY, MINING_MONTHLY },
             { ObjectIds.COMBAT_QUARTERLY, COMBAT_QUARTERLY },
+            { ObjectIds.QUEEN_OF_SAUCE_COOKBOOK, QUEEN_OF_SAUCE_COOKBOOK },
         };
 
         public static readonly Dictionary<string, string> BookNamesToIds = new()
@@ -88,6 +90,7 @@ namespace StardewArchipelago.Constants.Vanilla
             { BAIT_AND_BOBBER, ObjectIds.BAIT_AND_BOBBER },
             { MINING_MONTHLY, ObjectIds.MINING_MONTHLY },
             { COMBAT_QUARTERLY, ObjectIds.COMBAT_QUARTERLY },
+            { QUEEN_OF_SAUCE_COOKBOOK, ObjectIds.QUEEN_OF_SAUCE_COOKBOOK },
         };
 
 

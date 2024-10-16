@@ -6,20 +6,20 @@ using Archipelago.MultiClient.Net;
 using Archipelago.MultiClient.Net.Enums;
 using Archipelago.MultiClient.Net.Models;
 using Archipelago.MultiClient.Net.Packets;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using StardewModdingAPI;
 
 namespace StardewArchipelago.Archipelago
 {
     public class BigIntegerDataStorageWrapper : IDataStorageWrapper<BigInteger>
     {
-        private IMonitor _monitor;
-        private ArchipelagoSession _session;
+        private readonly ILogger _logger;
+        private readonly ArchipelagoSession _session;
 
-        public BigIntegerDataStorageWrapper(IMonitor monitor, ArchipelagoSession session)
+        public BigIntegerDataStorageWrapper(ILogger logger, ArchipelagoSession session)
         {
-            _monitor = monitor;
+            _logger = logger;
             _session = session;
         }
 
@@ -34,13 +34,13 @@ namespace StardewArchipelago.Archipelago
             try
             {
                 var value = _session.DataStorage[scope, key];
-                value.Initialize(0);
+                value.Initialize(JToken.FromObject(0));
                 var bigIntegerValue = value.To<BigInteger>();
                 return bigIntegerValue;
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Error Reading BigInteger from DataStorage key [{key}].{Environment.NewLine}Message: {ex.Message}{Environment.NewLine}Stack Trace: {ex.StackTrace}", LogLevel.Error);
+                _logger.LogError($"Error Reading BigInteger from DataStorage key [{key}].{Environment.NewLine}Message: {ex.Message}{Environment.NewLine}Stack Trace: {ex.StackTrace}");
                 return null;
             }
         }
@@ -62,7 +62,7 @@ namespace StardewArchipelago.Archipelago
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Error Reading BigInteger from DataStorage key [{key}].{Environment.NewLine}Message: {ex.Message}{Environment.NewLine}Stack Trace: {ex.StackTrace}", LogLevel.Error);
+                _logger.LogError($"Error Reading BigInteger from DataStorage key [{key}].{Environment.NewLine}Message: {ex.Message}{Environment.NewLine}Stack Trace: {ex.StackTrace}");
                 return null;
             }
         }
@@ -88,7 +88,7 @@ namespace StardewArchipelago.Archipelago
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Error adding {amount} to DataStorage key [{key}].{Environment.NewLine}Message: {ex.Message}{Environment.NewLine}Stack Trace: {ex.StackTrace}", LogLevel.Error);
+                _logger.LogError($"Error adding {amount} to DataStorage key [{key}].{Environment.NewLine}Message: {ex.Message}{Environment.NewLine}Stack Trace: {ex.StackTrace}");
                 return false;
             }
         }
@@ -119,7 +119,7 @@ namespace StardewArchipelago.Archipelago
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Error subtracting {amount} from DataStorage key [{key}].{Environment.NewLine}Message: {ex.Message}{Environment.NewLine}Stack Trace: {ex.StackTrace}", LogLevel.Error);
+                _logger.LogError($"Error subtracting {amount} from DataStorage key [{key}].{Environment.NewLine}Message: {ex.Message}{Environment.NewLine}Stack Trace: {ex.StackTrace}");
                 return false;
             }
         }
@@ -133,7 +133,7 @@ namespace StardewArchipelago.Archipelago
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Error multiplying by {multiple} in DataStorage key [{key}].{Environment.NewLine}Message: {ex.Message}{Environment.NewLine}Stack Trace: {ex.StackTrace}", LogLevel.Error);
+                _logger.LogError($"Error multiplying by {multiple} in DataStorage key [{key}].{Environment.NewLine}Message: {ex.Message}{Environment.NewLine}Stack Trace: {ex.StackTrace}");
                 return false;
             }
         }
@@ -147,7 +147,7 @@ namespace StardewArchipelago.Archipelago
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Error dividing by 2 in DataStorage key [{key}].{Environment.NewLine}Message: {ex.Message}{Environment.NewLine}Stack Trace: {ex.StackTrace}", LogLevel.Error);
+                _logger.LogError($"Error dividing by 2 in DataStorage key [{key}].{Environment.NewLine}Message: {ex.Message}{Environment.NewLine}Stack Trace: {ex.StackTrace}");
                 return false;
             }
         }

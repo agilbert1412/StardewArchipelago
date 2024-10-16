@@ -1,18 +1,18 @@
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Modded;
-using StardewModdingAPI;
 using StardewValley;
 
-namespace StardewArchipelago.Locations.CodeInjections.Modded
+namespace StardewArchipelago.GameModifications.Modded
 {
     public class InitialModGameStateInitializer
     {
-        private static IMonitor _monitor;
-        private static ArchipelagoClient _archipelago;
+        private static ILogger _logger;
+        private static StardewArchipelagoClient _archipelago;
 
-        public InitialModGameStateInitializer(IMonitor monitor, ArchipelagoClient archipelago)
+        public InitialModGameStateInitializer(ILogger logger, StardewArchipelagoClient archipelago)
         {
-            _monitor = monitor;
+            _logger = logger;
             _archipelago = archipelago;
             GuntherInitializer();
         }

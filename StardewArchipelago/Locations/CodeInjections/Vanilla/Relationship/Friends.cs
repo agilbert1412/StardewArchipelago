@@ -11,7 +11,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
         public const string PET_NAME = "Pet";
 
         private List<ArchipelagoFriend> _friends;
-        private Dictionary<string, ArchipelagoFriend> _friendsByName;
+        private readonly Dictionary<string, ArchipelagoFriend> _friendsByName;
         private int _lastRefreshDay;
 
         public Friends()

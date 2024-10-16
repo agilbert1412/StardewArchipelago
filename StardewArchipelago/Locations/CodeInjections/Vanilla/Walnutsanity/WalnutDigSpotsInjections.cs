@@ -1,31 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using StardewArchipelago.Archipelago;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewArchipelago.Constants;
-using StardewArchipelago.Textures;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.ArchipelagoUtilities.Net;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
 {
     public static class WalnutDigSpotsInjections
     {
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static IModHelper _helper;
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
-        private static Texture2D _bushtexture;
 
-        public static void Initialize(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(ILogger logger, IModHelper helper, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
-            _monitor = monitor;
+            _logger = logger;
             _helper = helper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
-            _bushtexture = ArchipelagoTextures.GetArchipelagoBush(monitor, helper);
         }
 
         // public override string checkForBuriedItem(int xLocation, int yLocation, bool explosion, bool detectOnly, Farmer who)
@@ -59,7 +57,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(CheckForBuriedItem_ReplaceWalnutWithCheck_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(CheckForBuriedItem_ReplaceWalnutWithCheck_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -70,8 +68,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             { "Buried_IslandWest_43_74", "Starfish Diamond" },
             { "Buried_IslandWest_30_75", "X in the sand" },
             { "Buried_IslandWest_21_81", "Diamond Of Indents" },
-            { "Buried_IslandWest_39_24", "Diamond Of Pebbles" },
-            { "Buried_IslandWest_88_14", "Circle Of Grass" },
+            { "Buried_IslandWest_39_24", "Circle Of Grass" },
+            { "Buried_IslandWest_88_14", "Diamond Of Pebbles" },
             { "Buried_IslandNorth_26_81", "Big Circle Of Stones" },
             { "Buried_IslandNorth_42_77", "Diamond Of Grass" },
             { "Buried_IslandNorth_57_79", "Small Circle Of Stones" },
@@ -81,6 +79,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             { "Buried_IslandNorth_19_13", "Northmost Point Circle Of Stones" },
             { "Buried_IslandSouthEast_25_17", "Diamond Of Yellow Starfish" },
             { "Buried_IslandSouthEastCave_36_26", "Pirate Cove Patch Of Sand" },
-        }; // Around the tiger slimes is "Buried_IslandWest_39_24"
+        };
     }
 }

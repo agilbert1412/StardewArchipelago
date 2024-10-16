@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Reflection;
 using Microsoft.Xna.Framework;
-using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Stardew.Ids.Vanilla;
@@ -12,6 +11,9 @@ using StardewValley.GameData.Crops;
 using StardewValley.Locations;
 using StardewValley.Monsters;
 using StardewValley.TerrainFeatures;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.ArchipelagoUtilities.Net;
+using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
 {
@@ -46,14 +48,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
         private const double INFINITY_WALNUT_CHANCE_REDUCTION_VOLCANO_MONSTER = 0.75;
 
 
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static IModHelper _helper;
-        private static ArchipelagoClient _archipelago;
+        private static StardewArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
 
-        public static void Initialize(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
         {
-            _monitor = monitor;
+            _logger = logger;
             _helper = helper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
@@ -77,7 +79,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(GetFish_RepeatableWalnut_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(GetFish_RepeatableWalnut_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -123,7 +125,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(PerformUseAction_RepeatableFarmingWalnut_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(PerformUseAction_RepeatableFarmingWalnut_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -133,13 +135,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
         {
             try
             {
-                if (__instance.crop == null || __instance.Location is not IslandLocation || !t.isScythe())
+                if (__instance?.crop == null || __instance.Location is not IslandLocation || t == null || !t.isScythe())
                 {
                     return true; // run original logic
                 }
 
                 var harvestMethod = __instance.crop.GetHarvestMethod();
-                if (harvestMethod != HarvestMethod.Scythe || !__instance.crop.harvest((int)tileLocation.X, (int)tileLocation.Y, __instance, isForcedScytheHarvest:true))
+                if (harvestMethod != HarvestMethod.Scythe || !__instance.crop.harvest((int)tileLocation.X, (int)tileLocation.Y, __instance, isForcedScytheHarvest: true))
                 {
                     return true; // run original logic
                 }
@@ -173,7 +175,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(PerformToolAction_RepeatableFarmingWalnut_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(PerformToolAction_RepeatableFarmingWalnut_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -187,7 +189,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 {
                     return true; // run original logic
                 }
-                
+
                 var farmerId = who != null ? who.UniqueMultiplayerID : 0L;
                 Game1.createMultipleObjectDebris("(O)719", x, y, r.Next(2, 5), farmerId, __instance);
 
@@ -208,7 +210,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(BreakStone_RepeatableMusselWalnut_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(BreakStone_RepeatableMusselWalnut_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -238,7 +240,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(RequestLimitedNutDrops_TigerSlimesAndCreatesWalnuts_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(RequestLimitedNutDrops_TigerSlimesAndCreatesWalnuts_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -333,7 +335,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(BreakStone_RepeatableVolcanoStoneWalnut_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(BreakStone_RepeatableVolcanoStoneWalnut_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -360,7 +362,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(MonsterDrop_RepeatableVolcanoMonsterWalnut_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(MonsterDrop_RepeatableVolcanoMonsterWalnut_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -405,6 +407,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 numberWalnutsSoFar = 0;
             }
 
+            AddPotentiallyMissedChecks(apLocationName, numberWalnutsSoFar);
+
             if (numberWalnutsSoFar < 5)
             {
                 if (roll > chanceRequired)
@@ -420,7 +424,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                     var location = $"{apLocationName} {numberWalnutsSoFar}";
                     itemToSpawnId = IDProvider.CreateApLocationItemId(location);
                 }
-                
+
                 return ItemRegistry.Create(itemToSpawnId);
             }
 
@@ -433,6 +437,18 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
 
             Game1.player.team.limitedNutDrops[walnutKey] = numberWalnutsSoFar + 1;
             return ItemRegistry.Create(QualifiedItemIds.GOLDEN_WALNUT);
+        }
+
+        private static void AddPotentiallyMissedChecks(string apLocationName, int numberWalnutsSoFar)
+        {
+            for (var i = 1; i <= numberWalnutsSoFar; i++)
+            {
+                var location = $"{apLocationName} {i}";
+                if (_locationChecker.IsLocationMissing(location))
+                {
+                    _locationChecker.AddCheckedLocation(location);
+                }
+            }
         }
 
         private static void CreateLocationDebris(string locationName, Vector2 pixelOrigin, GameLocation gameLocation, int direction = 0, int groundLevel = 0)

@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using HarmonyLib;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework;
+using Newtonsoft.Json;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.Gifting;
 using StardewArchipelago.Bundles;
 using StardewArchipelago.Constants;
+using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.GameModifications;
 using StardewArchipelago.GameModifications.CodeInjections;
 using StardewArchipelago.GameModifications.EntranceRandomizer;
@@ -17,13 +22,14 @@ using StardewArchipelago.Integrations.GenericModConfigMenu;
 using StardewArchipelago.Items;
 using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Items.Traps;
+using StardewArchipelago.Json;
 using StardewArchipelago.Locations;
-using StardewArchipelago.Locations.CodeInjections.Modded;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
 using StardewArchipelago.Locations.InGameLocations;
 using StardewArchipelago.Locations.Patcher;
+using StardewArchipelago.Logging;
 using StardewArchipelago.Serialization;
 using StardewArchipelago.Stardew;
 using StardewArchipelago.Stardew.NameMapping;
@@ -32,8 +38,8 @@ using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Delegates;
 using StardewValley.Internal;
+using StardewValley.TerrainFeatures;
 using StardewValley.Triggers;
-using ArchipelagoLocation = StardewArchipelago.Locations.InGameLocations.ArchipelagoLocation;
 
 namespace StardewArchipelago
 {
@@ -47,25 +53,25 @@ namespace StardewArchipelago
         private const string AP_EXPERIENCE_KEY = "ArchipelagoSkillsExperience";
         private const string AP_FRIENDSHIP_KEY = "ArchipelagoFriendshipPoints";
 
+        private LogHandler _logger;
         private IModHelper _helper;
         private Harmony _harmony;
-        private ArchipelagoClient _archipelago;
+        private StardewArchipelagoClient _archipelago;
         private AdvancedOptionsManager _advancedOptionsManager;
         private Mailman _mail;
         private ChatForwarder _chatForwarder;
         private IGiftHandler _giftHandler;
-        private ItemManager _itemManager;
+        private APItemManager _itemManager;
         private WeaponsManager _weaponsManager;
         private RandomizedLogicPatcher _logicPatcher;
         private MailPatcher _mailPatcher;
         private BundlesManager _bundlesManager;
-        private LocationChecker _locationChecker;
+        private StardewLocationChecker _locationChecker;
         private LocationPatcher _locationsPatcher;
         private ItemPatcher _itemPatcher;
         private GoalManager _goalManager;
         private StardewItemManager _stardewItemManager;
         private MultiSleep _multiSleep;
-        private JojaDisabler _jojaDisabler;
         private SeasonsRandomizer _seasonsRandomizer;
         private AppearanceRandomizer _appearanceRandomizer;
         private QuestCleaner _questCleaner;
@@ -77,8 +83,10 @@ namespace StardewArchipelago
         private InitialModGameStateInitializer _modStateInitializer;
         private ModifiedVillagerEventChecker _villagerEvents;
 
-        public ArchipelagoStateDto State { get; set; }
         private ArchipelagoConnectionInfo _apConnectionOverride;
+
+        public ArchipelagoStateDto State { get; set; }
+        public ILogger Logger => _logger;
 
         public ModEntry() : base()
         {
@@ -96,10 +104,11 @@ namespace StardewArchipelago
 
             _apConnectionOverride = null;
 
+            _logger = new LogHandler(Monitor);
             _helper = helper;
             _harmony = new Harmony(ModManifest.UniqueID);
 
-            _archipelago = new ArchipelagoClient(Monitor, _helper, _harmony, OnItemReceived, ModManifest);
+            _archipelago = new StardewArchipelagoClient(_logger, _helper, ModManifest, _harmony, OnItemReceived, new SmapiJsonLoader(_helper));
 
             _helper.Events.GameLoop.GameLaunched += OnGameLaunched;
             _helper.Events.GameLoop.SaveCreating += OnSaveCreating;
@@ -128,6 +137,7 @@ namespace StardewArchipelago
             // _helper.ConsoleCommands.Add("load_entrances", "Loads the entrances file", (_, _) => _entranceRandomizer.LoadTransports());
             // _helper.ConsoleCommands.Add("save_entrances", "Saves the entrances file", (_, _) => EntranceInjections.SaveNewEntrancesToFile());
             _helper.ConsoleCommands.Add("export_shippables", "Export all currently loaded shippable items", ExportShippables);
+            _helper.ConsoleCommands.Add("export_mismatches", "Export all items where Name and DisplayName mismatch which can be shipped", ExportMismatchedItems);
             _helper.ConsoleCommands.Add("release_slot", "Release the current slot completely", ReleaseSlot);
             _helper.ConsoleCommands.Add("debug_method", "Runs whatever is currently in the debug method", DebugMethod);
 #endif
@@ -137,16 +147,16 @@ namespace StardewArchipelago
             ItemQueryResolver.Register(IDProvider.METAL_DETECTOR_ITEMS, TravelingMerchantInjections.CreateMetalDetectorItems);
             ItemQueryResolver.Register(IDProvider.TRAVELING_CART_DAILY_CHECK, TravelingMerchantInjections.CreateDailyCheck);
             ItemQueryResolver.Register(IDProvider.ARCHIPELAGO_EQUIPMENTS, AdventureGuildEquipmentsQueryDelegate);
-            GameStateQuery.Register(GameStateConditionProvider.HAS_RECEIVED_ITEM, HasReceivedItemQueryDelegate);
-            GameStateQuery.Register(GameStateConditionProvider.HAS_STOCK_SIZE, TravelingMerchantInjections.HasStockSizeQueryDelegate);
-            GameStateQuery.Register(GameStateConditionProvider.FOUND_ARTIFACT, ArtifactsFoundQueryDelegate);
-            GameStateQuery.Register(GameStateConditionProvider.FOUND_MINERAL, MineralsFoundQueryDelegate);
+            GameStateQuery.Register(GameStateCondition.HAS_RECEIVED_ITEM, HasReceivedItemQueryDelegate);
+            GameStateQuery.Register(GameStateCondition.HAS_STOCK_SIZE, TravelingMerchantInjections.HasStockSizeQueryDelegate);
+            GameStateQuery.Register(GameStateCondition.FOUND_ARTIFACT, ArtifactsFoundQueryDelegate);
+            GameStateQuery.Register(GameStateCondition.FOUND_MINERAL, MineralsFoundQueryDelegate);
             TriggerActionManager.RegisterAction(TriggerActionProvider.TRAVELING_MERCHANT_PURCHASE, TravelingMerchantInjections.OnPurchasedRandomItem);
         }
 
         private IEnumerable<ItemQueryResult> PurchasableAPLocationQueryDelegate(string key, string arguments, ItemQueryContext context, bool avoidrepeat, HashSet<string> avoiditemids, Action<string, string> logerror)
         {
-            return ArchipelagoLocation.Create(arguments, Monitor, Helper, _locationChecker, _archipelago);
+            return ObtainableArchipelagoLocation.Create(arguments, _logger, Helper, _locationChecker, _archipelago);
         }
 
         private IEnumerable<ItemQueryResult> AdventureGuildEquipmentsQueryDelegate(string key, string arguments, ItemQueryContext context, bool avoidrepeat, HashSet<string> avoiditemids, Action<string, string> logerror)
@@ -212,15 +222,15 @@ namespace StardewArchipelago
             _bundlesManager?.CleanEvents();
             _bundlesManager = null;
             SeasonsRandomizer.ResetMailKeys();
-            _multiSleep = new MultiSleep(Monitor, _helper, _harmony);
-            _advancedOptionsManager = new AdvancedOptionsManager(this, Monitor, _helper, _harmony, _archipelago);
+            _multiSleep = new MultiSleep(_logger, _helper, _harmony);
+            _advancedOptionsManager = new AdvancedOptionsManager(this, _logger, _helper, _harmony, _archipelago);
             _advancedOptionsManager.InjectArchipelagoAdvancedOptions();
             _giftHandler = new CrossGiftHandler();
             _villagerEvents = new ModifiedVillagerEventChecker();
             SkillInjections.ResetSkillExperience();
             FriendshipInjections.ResetArchipelagoFriendshipPoints();
 
-            IslandWestMapInjections.PatchMapInjections(Monitor, _helper, _harmony);
+            IslandWestMapInjections.PatchMapInjections(_logger, _helper, _harmony);
         }
 
         private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
@@ -240,12 +250,12 @@ namespace StardewArchipelago
 
             if (!_archipelago.IsConnected)
             {
-                Monitor.Log("You are not allowed to create a new game without connecting to Archipelago", LogLevel.Error);
+                _logger.LogError("You are not allowed to create a new game without connecting to Archipelago");
                 Game1.ExitToTitle();
                 return;
             }
 
-            _seasonsRandomizer = new SeasonsRandomizer(Monitor, _helper, _archipelago, State);
+            _seasonsRandomizer = new SeasonsRandomizer(_logger, _helper, _archipelago, State);
             State.AppearanceRandomizerOverride = null;
             State.TrapDifficultyOverride = null;
             State.SeasonsOrder = new List<string>();
@@ -280,16 +290,12 @@ namespace StardewArchipelago
         {
             if (state.APConnectionInfo == null)
             {
-                Monitor.Log(
-                    $"About to write Archipelago State data, but the connectionInfo is null! This should never happen. Please contact KaitoKid and describe what you did last so it can be investigated.",
-                    LogLevel.Error);
+                _logger.Log($"About to write Archipelago State data, but the connectionInfo is null! This should never happen. Please contact KaitoKid and describe what you did last so it can be investigated.", LogLevel.Error);
             }
 
             if (state.LettersGenerated == null)
             {
-                Monitor.Log(
-                    $"About to write Archipelago State data, but the there are no custom letters! This should never happen. Please contact KaitoKid and describe what you did last so it can be investigated.",
-                    LogLevel.Error);
+                _logger.Log($"About to write Archipelago State data, but the there are no custom letters! This should never happen. Please contact KaitoKid and describe what you did last so it can be investigated.", LogLevel.Error);
             }
         }
 
@@ -321,44 +327,42 @@ namespace StardewArchipelago
         {
             _stardewItemManager = new StardewItemManager();
             _mail = new Mailman(State);
-            _locationChecker = new LocationChecker(Monitor, _archipelago, State.LocationsChecked);
-            _itemPatcher = new ItemPatcher(Monitor, _helper, _harmony, _archipelago);
-            _goalManager = new GoalManager(Monitor, _helper, _harmony, _archipelago, _locationChecker);
-            _entranceManager = new EntranceManager(Monitor, _archipelago, State);
-            var seedShopStockModifier = new SeedShopStockModifier(Monitor, _helper, _archipelago, _locationChecker, _stardewItemManager);
+            _locationChecker = new StardewLocationChecker(_logger, _archipelago, State.LocationsChecked);
+            _itemPatcher = new ItemPatcher(_logger, _helper, _harmony, _archipelago);
+            _goalManager = new GoalManager(_logger, _helper, _harmony, _archipelago, _locationChecker);
+            _entranceManager = new EntranceManager(_logger, _archipelago, State);
+            var seedShopStockModifier = new SeedShopStockModifier(_logger, _helper, _archipelago, _locationChecker, _stardewItemManager);
             var nameSimplifier = new NameSimplifier();
             var friends = new Friends();
-            ArchipelagoLocationDataDefinition.Initialize(Monitor, _helper, _archipelago, _locationChecker);
-            _logicPatcher = new RandomizedLogicPatcher(Monitor, _helper, Config, _harmony, _archipelago, _locationChecker, _stardewItemManager, _entranceManager, seedShopStockModifier, nameSimplifier, friends, State);
-            _jojaDisabler = new JojaDisabler(Monitor, _helper, _harmony);
-            _seasonsRandomizer = new SeasonsRandomizer(Monitor, _helper, _archipelago, State);
-            _appearanceRandomizer = new AppearanceRandomizer(Monitor, _archipelago);
+            ArchipelagoLocationDataDefinition.Initialize(_logger, _helper, _archipelago, _locationChecker);
+            _logicPatcher = new RandomizedLogicPatcher(_logger, _helper, Config, _harmony, _archipelago, _locationChecker, _stardewItemManager, _entranceManager, seedShopStockModifier, nameSimplifier, friends, State);
+            _seasonsRandomizer = new SeasonsRandomizer(_logger, _helper, _archipelago, State);
+            _appearanceRandomizer = new AppearanceRandomizer(_logger, _archipelago);
             var tileChooser = new TileChooser();
             _chatForwarder =
-                new ChatForwarder(Monitor, _helper, _harmony, _archipelago, _giftHandler, _goalManager, tileChooser);
+                new ChatForwarder(_logger, _helper, _harmony, _archipelago, _giftHandler, _goalManager, tileChooser);
             _questCleaner = new QuestCleaner();
 
             var babyBirther = new BabyBirther();
-            _giftHandler.Initialize(Monitor, _archipelago, _stardewItemManager, _mail);
-            _itemManager = new ItemManager(Monitor, _helper, _harmony, _archipelago, _locationChecker, _stardewItemManager, _mail, tileChooser, babyBirther, _giftHandler.Sender, State.ItemsReceived);
+            _giftHandler.Initialize(_logger, _archipelago, _stardewItemManager, _mail);
+            _itemManager = new APItemManager(_logger, _helper, _harmony, _archipelago, _locationChecker, _stardewItemManager, _mail, tileChooser, babyBirther, _giftHandler.Sender, State.ItemsReceived);
             _weaponsManager = new WeaponsManager(_archipelago, _stardewItemManager, _archipelago.SlotData.Mods);
-            _mailPatcher = new MailPatcher(Monitor, _harmony, _archipelago, _locationChecker, State, new LetterActions(_helper, _mail, _archipelago, _weaponsManager, _itemManager.TrapManager, babyBirther, _stardewItemManager));
+            _mailPatcher = new MailPatcher(_logger, _harmony, _archipelago, _locationChecker, State, new LetterActions(_helper, _mail, _archipelago, _weaponsManager, _itemManager.TrapManager, babyBirther, _stardewItemManager));
             _bundlesManager = new BundlesManager(_helper, _stardewItemManager, _archipelago.SlotData.BundlesData);
-            _locationsPatcher = new LocationPatcher(Monitor, _helper, Config, _harmony, _archipelago, State, _locationChecker, _stardewItemManager, _weaponsManager, _bundlesManager, seedShopStockModifier, friends);
-            _shippingBehaviors = new NightShippingBehaviors(Monitor, _archipelago, _locationChecker, nameSimplifier);
+            _locationsPatcher = new LocationPatcher(_logger, _helper, Config, _harmony, _archipelago, State, _locationChecker, _stardewItemManager, _weaponsManager, _bundlesManager, seedShopStockModifier, friends);
+            _shippingBehaviors = new NightShippingBehaviors(_logger, _archipelago, _locationChecker, nameSimplifier);
             _chatForwarder.ListenToChatMessages();
             _logicPatcher.PatchAllGameLogic();
-            _modLogicPatcher = new ModRandomizedLogicPatcher(Monitor, _helper, _harmony, _archipelago, seedShopStockModifier, _stardewItemManager);
+            _modLogicPatcher = new ModRandomizedLogicPatcher(_logger, _helper, _harmony, _archipelago, seedShopStockModifier, _stardewItemManager);
             _modLogicPatcher.PatchAllGameLogic();
             _mailPatcher.PatchMailBoxForApItems();
             _entranceManager.SetEntranceRandomizerSettings(_archipelago.SlotData);
             _locationsPatcher.ReplaceAllLocationsRewardsWithChecks();
             _itemPatcher.PatchApItems();
             _goalManager.InjectGoalMethods();
-            _jojaDisabler.DisableJojaMembership();
             _multiSleep.InjectMultiSleepOption(_archipelago.SlotData);
             SeasonsRandomizer.ChangeMailKeysBasedOnSeasonsToDaysElapsed();
-            _modStateInitializer = new InitialModGameStateInitializer(Monitor, _archipelago);
+            _modStateInitializer = new InitialModGameStateInitializer(_logger, _archipelago);
             _hintHelper = new HintHelper();
             Game1.chatBox?.addMessage(
                 $"Connected to Archipelago as {_archipelago.SlotData.SlotName}. Type !!help for client commands", Color.Green);
@@ -383,12 +387,7 @@ namespace StardewArchipelago
                 errorMessage =
                     $"The game being loaded has no connection information.{Environment.NewLine}Please use the connect_override command to input connection fields before loading it";
             }
-            else
-            {
-                _archipelago.Connect(State.APConnectionInfo, out errorMessage);
-            }
-
-            if (_archipelago.IsConnected)
+            else if (_archipelago.ConnectToMultiworld(State.APConnectionInfo, out errorMessage))
             {
                 return true;
             }
@@ -399,6 +398,7 @@ namespace StardewArchipelago
 
         private void OfferRetry(string errorMessage)
         {
+            _logger.LogError($"Connection to Archipelago failed: {errorMessage}");
             var reconnectDialog = new ReconnectDialog(errorMessage, State.APConnectionInfo,
                 OnClickRetry, (_) => OnCloseBehavior());
             Game1.activeClickableMenu = reconnectDialog;
@@ -417,7 +417,7 @@ namespace StardewArchipelago
 
         private void OnCloseBehavior()
         {
-            Monitor.Log("You are not allowed to load a save without connecting to Archipelago", LogLevel.Error);
+            _logger.LogError("You are not allowed to load a save without connecting to Archipelago");
             // TitleMenu.subMenu = previousMenu;
             Game1.ExitToTitle();
         }
@@ -486,11 +486,22 @@ namespace StardewArchipelago
             Helper.GameContent.InvalidateCache("Data/Shops"); // This should be reworked someday
             DoBugsCleanup();
 
-            _hintHelper.GiveHintTip(_archipelago.Session);
+            _hintHelper.GiveHintTip(_archipelago.GetSession());
         }
 
         private void DoBugsCleanup()
         {
+            if (_archipelago.SlotData.Mods.HasMod(ModNames.ARCHAEOLOGY))
+            {
+                if (_locationChecker.IsLocationNotChecked("Read Digging Like Worms"))
+                {
+                    _locationChecker.AddCheckedLocation("Read Digging Like Worms");
+                }
+                if (_locationChecker.IsLocationNotChecked("Shipsanity: Digging Like Worms"))
+                {
+                    _locationChecker.AddCheckedLocation("Shipsanity: Digging Like Worms");
+                }
+            }
         }
 
         private void OnDayEnding(object sender, DayEndingEventArgs e)
@@ -518,14 +529,14 @@ namespace StardewArchipelago
         {
             if (arg2.Length < 2)
             {
-                Monitor.Log($"You must provide an IP with a port, and a slot name, to connect to archipelago. {CONNECT_SYNTAX}", LogLevel.Info);
+                _logger.Log($"You must provide an IP with a port, and a slot name, to connect to archipelago. {CONNECT_SYNTAX}", LogLevel.Info);
                 return;
             }
 
             var ipAndPort = arg2[0].Split(":");
             if (ipAndPort.Length < 2)
             {
-                Monitor.Log($"You must provide an IP with a port, and a slot name, to connect to archipelago. {CONNECT_SYNTAX}", LogLevel.Info);
+                _logger.Log($"You must provide an IP with a port, and a slot name, to connect to archipelago. {CONNECT_SYNTAX}", LogLevel.Info);
                 return;
             }
 
@@ -534,7 +545,7 @@ namespace StardewArchipelago
             var slot = arg2[1];
             var password = arg2.Length >= 3 ? arg2[2] : "";
             _apConnectionOverride = new ArchipelagoConnectionInfo(ip, port, slot, null, password);
-            Monitor.Log($"Your next connection attempt will instead use {ip}:{port} on slot {slot}.", LogLevel.Info);
+            _logger.Log($"Your next connection attempt will instead use {ip}:{port} on slot {slot}.", LogLevel.Info);
         }
 
         private void OnCommandDisconnectFromArchipelago(string arg1, string[] arg2)
@@ -544,14 +555,13 @@ namespace StardewArchipelago
 
         private void OnItemReceived()
         {
-            _itemManager?.ReceiveAllNewItems(true);
+            _itemManager?.ReceiveAllNewItems();
         }
 
         public bool ArchipelagoConnect(string ip, int port, string slot, string password, out string errorMessage)
         {
             var apConnection = new ArchipelagoConnectionInfo(ip, port, slot, null, password);
-            _archipelago.Connect(apConnection, out errorMessage);
-            if (!_archipelago.IsConnected)
+            if (!_archipelago.ConnectToMultiworld(apConnection, out errorMessage))
             {
                 return false;
             }
@@ -571,7 +581,7 @@ namespace StardewArchipelago
         {
             if (arg2.Length < 1)
             {
-                Monitor.Log($"You must specify a season", LogLevel.Info);
+                _logger.Log($"You must specify a season", LogLevel.Info);
                 return;
             }
 
@@ -587,12 +597,18 @@ namespace StardewArchipelago
             }
         }
 
+#if DEBUG
+
         private void ExportShippables(string arg1, string[] arg2)
         {
             _stardewItemManager.ExportAllItemsMatching(x => x.canBeShipped(), "shippables.json");
         }
 
-#if DEBUG
+        private void ExportMismatchedItems(string arg1, string[] arg2)
+        {
+            _stardewItemManager.ExportAllMismatchedItems(x => x.canBeShipped(), "mismatches.json");
+        }
+
         private void ReleaseSlot(string arg1, string[] arg2)
         {
             if (!_archipelago.IsConnected || !Game1.hasLoadedGame || arg2.Length < 1)
@@ -625,14 +641,14 @@ namespace StardewArchipelago
             Config.EnableSeedShopOverhaul = !Config.EnableSeedShopOverhaul;
             Helper.WriteConfig(Config);
             var enabledText = Config.EnableSeedShopOverhaul ? "enabled" : "disabled";
-            Monitor.Log($"Seed Shop overhaul is now {enabledText}", LogLevel.Info);
+            _logger.Log($"Seed Shop overhaul is now {enabledText}", LogLevel.Info);
         }
 
         private void ExportGifts(string arg1, string[] arg2)
         {
             const string giftsFile = "gifts.json";
             _giftHandler.ExportAllGifts(giftsFile);
-            Monitor.Log($"Gifts have been exported to {giftsFile}", LogLevel.Info);
+            _logger.Log($"Gifts have been exported to {giftsFile}", LogLevel.Info);
         }
 
         private void OverrideDeathlink(string arg1, string[] arg2)
@@ -644,30 +660,69 @@ namespace StardewArchipelago
         {
             if (_archipelago == null || State == null || !_archipelago.MakeSureConnected(0))
             {
-                Monitor.Log($"This command can only be used from in-game, when connected to Archipelago", LogLevel.Info);
+                _logger.Log($"This command can only be used from in-game, when connected to Archipelago", LogLevel.Info);
                 return;
             }
 
             if (arg2.Length < 1)
             {
-                Monitor.Log($"Choose one of the following difficulties: [NoTraps, Easy, Medium, Hard, Hell, Nightmare].", LogLevel.Info);
+                _logger.Log($"Choose one of the following difficulties: [NoTraps, Easy, Medium, Hard, Hell, Nightmare].", LogLevel.Info);
                 return;
             }
 
             var difficulty = arg2[0];
             if (!Enum.TryParse<TrapItemsDifficulty>(difficulty, true, out var difficultyOverride))
             {
-                Monitor.Log($"Choose one of the following difficulties: [NoTraps, Easy, Medium, Hard, Hell, Nightmare].", LogLevel.Info);
+                _logger.Log($"Choose one of the following difficulties: [NoTraps, Easy, Medium, Hard, Hell, Nightmare].", LogLevel.Info);
                 return;
             }
 
             State.TrapDifficultyOverride = difficultyOverride;
-            Monitor.Log($"Trap Difficulty set to [{difficultyOverride}]. Change will be saved next time you sleep", LogLevel.Info);
+            _logger.Log($"Trap Difficulty set to [{difficultyOverride}]. Change will be saved next time you sleep", LogLevel.Info);
         }
 
         private void DebugMethod(string arg1, string[] arg2)
         {
-            ItemRegistry.GetDataOrErrorItem("(W)0");
+            ExportCropState("crops_before.json");
+            _itemManager.TrapManager.TryExecuteTrapImmediately("Benjamin Budton");
+            ExportCropState("crops_after.json");
+        }
+
+        private void ExportCropState(string cropsFile)
+        {
+            var cropsByLocation = new Dictionary<string, Dictionary<Vector2, CropInfo>>();
+            foreach (var gameLocation in Game1.locations)
+            {
+                var cropsHere = new Dictionary<Vector2, CropInfo>();
+
+                foreach (var terrainFeature in gameLocation.terrainFeatures.Values)
+                {
+                    if (terrainFeature is not HoeDirt groundDirt || groundDirt.crop == null)
+                    {
+                        continue;
+                    }
+                    var cropInfo = new CropInfo()
+                    {
+                        CurrentPhase = groundDirt.crop.currentPhase.Value,
+                        DayOfCurrentPhase = groundDirt.crop.dayOfCurrentPhase.Value,
+                        FullyGrown = groundDirt.crop.fullyGrown.Value,
+                        PhaseDays = groundDirt.crop.phaseDays.ToArray(),
+                    };
+                    cropsHere.Add(groundDirt.Tile, cropInfo);
+                }
+
+                cropsByLocation.Add(gameLocation.Name, cropsHere);
+            }
+            var objectsAsJson = JsonConvert.SerializeObject(cropsByLocation);
+            File.WriteAllText(cropsFile, objectsAsJson);
+        }
+
+        public struct CropInfo
+        {
+            public bool FullyGrown { get; set; }
+            public int DayOfCurrentPhase { get; set; }
+            public int CurrentPhase { get; set; }
+            public int[] PhaseDays { get; set; }
         }
     }
 }

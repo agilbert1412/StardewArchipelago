@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Linq;
 using HarmonyLib;
+using KaitoKid.ArchipelagoUtilities.Net;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Goals;
-using StardewArchipelago.Locations;
 using StardewArchipelago.Serialization;
-using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
 
@@ -15,16 +15,16 @@ namespace StardewArchipelago.Items.Mail
 {
     public class MailPatcher
     {
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private readonly Harmony _harmony;
-        private static ArchipelagoClient _archipelago;
+        private static StardewArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
         private static ArchipelagoStateDto _state;
         private static LetterActions _letterActions;
 
-        public MailPatcher(IMonitor monitor, Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker, ArchipelagoStateDto state, LetterActions letterActions)
+        public MailPatcher(ILogger logger, Harmony harmony, StardewArchipelagoClient archipelago, LocationChecker locationChecker, ArchipelagoStateDto state, LetterActions letterActions)
         {
-            _monitor = monitor;
+            _logger = logger;
             _harmony = harmony;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
@@ -93,7 +93,7 @@ namespace StardewArchipelago.Items.Mail
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(ExitThisMenu_ApplyLetterAction_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(ExitThisMenu_ApplyLetterAction_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -131,7 +131,7 @@ namespace StardewArchipelago.Items.Mail
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(Mailbox_HideEmptyApLetters_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(Mailbox_HideEmptyApLetters_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -185,7 +185,7 @@ namespace StardewArchipelago.Items.Mail
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(Mailbox_RemoveMasterAnglerStardropOnFishsanity_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(Mailbox_RemoveMasterAnglerStardropOnFishsanity_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -230,7 +230,7 @@ namespace StardewArchipelago.Items.Mail
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(Mailbox_RemoveRarecrowSocietyRecipeOnFestivals_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(Mailbox_RemoveRarecrowSocietyRecipeOnFestivals_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -276,7 +276,7 @@ namespace StardewArchipelago.Items.Mail
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(Draw_AddMailNumber_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(Draw_AddMailNumber_Postfix)}:\n{ex}");
                 return;
             }
         }

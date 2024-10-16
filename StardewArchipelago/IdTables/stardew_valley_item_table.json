@@ -1902,7 +1902,7 @@
         },
         "Book: The Art O' Crabbing": {
             "code": 717510,
-            "classification": "useful"
+            "classification": "progression"
         },
         "Mr Qi's Plane Ride": {
             "code": 717511,
@@ -2138,6 +2138,10 @@
         },
         "Bomb Trap": {
             "code": 721025,
+            "classification": "trap"
+        },
+        "Nudge Trap": {
+            "code": 721026,
             "classification": "trap"
         },
         "Deflation Bonus": {
@@ -3204,7 +3208,7 @@
             "code": 722272,
             "classification": "useful"
         },
-        "Mystery Box": {
+        "Resource Pack: 4 Mystery Box": {
             "code": 722273,
             "classification": "filler"
         },
@@ -3234,6 +3238,46 @@
         },
         "Treasure Chest": {
             "code": 722280,
+            "classification": "filler"
+        },
+        "Resource Pack: 15 Mixed Seeds": {
+            "code": 722281,
+            "classification": "filler"
+        },
+        "Resource Pack: 15 Mixed Flower Seeds": {
+            "code": 722282,
+            "classification": "filler"
+        },
+        "Resource Pack: 5 Cherry Bomb": {
+            "code": 722283,
+            "classification": "filler"
+        },
+        "Resource Pack: 3 Bomb": {
+            "code": 722284,
+            "classification": "filler"
+        },
+        "Resource Pack: 2 Mega Bomb": {
+            "code": 722285,
+            "classification": "filler"
+        },
+        "Resource Pack: 2 Life Elixir": {
+            "code": 722286,
+            "classification": "filler"
+        },
+        "Resource Pack: 5 Coffee": {
+            "code": 722287,
+            "classification": "filler"
+        },
+        "Prismatic Shard": {
+            "code": 722289,
+            "classification": "filler"
+        },
+        "Stardrop Tea": {
+            "code": 722290,
+            "classification": "filler"
+        },
+        "Resource Pack: 2 Artifact Trove": {
+            "code": 722291,
             "classification": "filler"
         },
         "Luck Level": {
@@ -3572,6 +3616,14 @@
             "code": 727419,
             "classification": "progression"
         },
+        "Grilled Cheese Recipe": {
+            "code": 727420,
+            "classification": "progression"
+        },
+        "Fish Casserole Recipe": {
+            "code": 727421,
+            "classification": "progression"
+        },
         "Void Mint Seeds": {
             "code": 727450,
             "classification": "progression"
@@ -3770,6 +3822,26 @@
         },
         "Barbarian Elixir": {
             "code": 727716,
+            "classification": "filler"
+        },
+        "Restoration Table": {
+            "code": 727717,
+            "classification": "filler"
+        },
+        "Trash Bin": {
+            "code": 727718,
+            "classification": "filler"
+        },
+        "Composter": {
+            "code": 727719,
+            "classification": "filler"
+        },
+        "Recycling Bin": {
+            "code": 727720,
+            "classification": "filler"
+        },
+        "Advanced Recycling Machine": {
+            "code": 727721,
             "classification": "filler"
         }
     }

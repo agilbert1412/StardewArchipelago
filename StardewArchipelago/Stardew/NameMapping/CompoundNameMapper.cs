@@ -7,8 +7,8 @@ namespace StardewArchipelago.Stardew.NameMapping
 {
     public class CompoundNameMapper : INameMapper, IRecipeNameMapper
     {
-        private List<INameMapper> _mappers;
-        private List<IRecipeNameMapper> _recipeMappers;
+        private readonly List<INameMapper> _mappers;
+        private readonly List<IRecipeNameMapper> _recipeMappers;
 
         public CompoundNameMapper(SlotData slotData)
         {
@@ -24,6 +24,18 @@ namespace StardewArchipelago.Stardew.NameMapping
                 var archaeologyMapper = new ArchaeologyNameMapper();
                 _mappers.Add(archaeologyMapper);
                 _recipeMappers.Add(archaeologyMapper);
+            }
+            if (slotData.Mods.HasMod(ModNames.SVE))
+            {
+                var sveMapper = new SVENameMapper();
+                _mappers.Add(sveMapper);
+                _recipeMappers.Add(sveMapper);
+            }
+            if (slotData.Mods.HasMod(ModNames.BINNING))
+            {
+                var binningMapper = new BinningNameMapper();
+                _mappers.Add(binningMapper);
+                _recipeMappers.Add(binningMapper);
             }
         }
 

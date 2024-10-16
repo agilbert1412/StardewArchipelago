@@ -1,5 +1,7 @@
 ﻿using System;
-using StardewArchipelago.Archipelago;
+using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Constants;
 using StardewModdingAPI;
 using StardewValley;
@@ -8,14 +10,14 @@ namespace StardewArchipelago.Locations.InGameLocations
 {
     internal class ArchipelagoLocationsInjections
     {
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static IModHelper _helper;
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
 
-        public static void Initialize(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(ILogger logger, IModHelper helper, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
-            _monitor = monitor;
+            _logger = logger;
             _helper = helper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
@@ -31,7 +33,7 @@ namespace StardewArchipelago.Locations.InGameLocations
                     return true; // run original logic
                 }
 
-                if (item is not ArchipelagoLocation apLocation)
+                if (item is not ObtainableArchipelagoLocation apLocation)
                 {
                     return true; // run original logic
                 }
@@ -42,7 +44,7 @@ namespace StardewArchipelago.Locations.InGameLocations
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(OnItemReceived_PickUpACheck_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(OnItemReceived_PickUpACheck_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -67,7 +69,7 @@ namespace StardewArchipelago.Locations.InGameLocations
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(CouldInventoryAcceptThisItemById_ChecksFlyingAround_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(CouldInventoryAcceptThisItemById_ChecksFlyingAround_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -77,7 +79,7 @@ namespace StardewArchipelago.Locations.InGameLocations
         {
             try
             {
-                if (item is ArchipelagoLocation)
+                if (item is ObtainableArchipelagoLocation)
                 {
                     __result = true;
                     return false; // don't run original logic
@@ -87,7 +89,7 @@ namespace StardewArchipelago.Locations.InGameLocations
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(CouldInventoryAcceptThisItemByItem_ChecksFlyingAround_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(CouldInventoryAcceptThisItemByItem_ChecksFlyingAround_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }

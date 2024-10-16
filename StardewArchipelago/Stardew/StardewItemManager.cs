@@ -31,11 +31,12 @@ namespace StardewArchipelago.Stardew
         private Dictionary<string, StardewWeapon> _weaponsById;
         private Dictionary<string, StardewWeapon> _weaponsByName;
         private Dictionary<string, StardewCookingRecipe> _cookingRecipesByName;
-        private Dictionary<string, StardewCraftingRecipe> _craftingRecipesByName;        
+        private Dictionary<string, StardewCraftingRecipe> _craftingRecipesByName;
 
-        private List<string> _priorityIds = new()
+        private readonly List<string> _priorityIds = new()
         {
             "390",
+            "685",
         };
 
         public Dictionary<string, string> ItemSuffixes = new()
@@ -182,7 +183,7 @@ namespace StardewArchipelago.Stardew
 
         public IEnumerable<StardewObject> GetObjectsWithPhrase(string phrase)
         {
-            return _objectsByName.Where(x=> x.Key.Contains(phrase, StringComparison.OrdinalIgnoreCase)).Select(x => x.Value); // I do it all for the berry
+            return _objectsByName.Where(x => x.Key.Contains(phrase, StringComparison.OrdinalIgnoreCase)).Select(x => x.Value); // I do it all for the berry
         }
 
         public List<StardewObject> GetObjectsByColor(string color)
@@ -329,11 +330,8 @@ namespace StardewArchipelago.Stardew
                 {
                     if (_priorityIds.Contains(id))
                     {
-                        _objectsById.Add(id, stardewItem);
                         _objectsByName[stardewItem.Name] = stardewItem;
                     }
-
-                    continue;
                 }
 
                 AddObjectByColor(objectData, stardewItem);
@@ -362,7 +360,10 @@ namespace StardewArchipelago.Stardew
                 return;
             }
 
-            _objectsByName.Add(stardewItem.Name, stardewItem);
+            if (!_objectsByName.ContainsKey(stardewItem.Name))
+            {
+                _objectsByName.Add(stardewItem.Name, stardewItem);
+            }
         }
 
         private void InitializeBigCraftables()
@@ -482,15 +483,20 @@ namespace StardewArchipelago.Stardew
             {
                 var recipe = ParseStardewCookingRecipeData(recipeName, recipeInfo);
 
-                if (_cookingRecipesByName.ContainsKey(recipe.ItemName))
+                if (_cookingRecipesByName.ContainsKey(recipe.RecipeName))
                 {
                     continue;
                 }
 
-                _cookingRecipesByName.Add(recipe.ItemName, recipe);
-                if (NameAliases.RecipeNameAliases.ContainsKey(recipe.ItemName))
+                _cookingRecipesByName.Add(recipe.RecipeName, recipe);
+                if (NameAliases.RecipeNameAliases.ContainsKey(recipe.RecipeName))
                 {
-                    _cookingRecipesByName.Add(NameAliases.RecipeNameAliases[recipe.ItemName], recipe);
+                    _cookingRecipesByName.Add(NameAliases.RecipeNameAliases[recipe.RecipeName], recipe);
+                }
+
+                if (!string.IsNullOrWhiteSpace(recipe.YieldItem?.Name) && !_cookingRecipesByName.ContainsKey(recipe.YieldItem.Name))
+                {
+                    _cookingRecipesByName.Add(recipe.YieldItem.Name, recipe);
                 }
             }
         }
@@ -503,12 +509,12 @@ namespace StardewArchipelago.Stardew
             {
                 var recipe = ParseStardewCraftingRecipeData(recipeName, recipeInfo);
 
-                if (_craftingRecipesByName.ContainsKey(recipe.ItemName))
+                if (_craftingRecipesByName.ContainsKey(recipe.RecipeName))
                 {
                     continue;
                 }
 
-                _craftingRecipesByName.Add(recipe.ItemName, recipe);
+                _craftingRecipesByName.Add(recipe.RecipeName, recipe);
             }
         }
 
@@ -679,7 +685,7 @@ namespace StardewArchipelago.Stardew
             return meleeWeapon;
         }
 
-        private static StardewCookingRecipe ParseStardewCookingRecipeData(string recipeName, string recipeInfo)
+        private StardewCookingRecipe ParseStardewCookingRecipeData(string recipeName, string recipeInfo)
         {
             var fields = recipeInfo.Split("/");
             var ingredientsField = fields[0].Split(" ");
@@ -695,11 +701,13 @@ namespace StardewArchipelago.Stardew
             var unlockConditions = fields[3];
             var displayName = fields.Length > 4 ? fields[4] : recipeName;
 
-            var cookingRecipe = new StardewCookingRecipe(recipeName, ingredients, yieldItemId, yieldAmount, unlockConditions, displayName);
+            var yieldItem = _objectsById[yieldItemId];
+
+            var cookingRecipe = new StardewCookingRecipe(recipeName, ingredients, yieldItem, yieldAmount, unlockConditions, displayName);
             return cookingRecipe;
         }
 
-        private static StardewCraftingRecipe ParseStardewCraftingRecipeData(string recipeName, string recipeInfo)
+        private StardewCraftingRecipe ParseStardewCraftingRecipeData(string recipeName, string recipeInfo)
         {
             var fields = recipeInfo.Split("/");
             var ingredientsField = fields[0].Split(" ");
@@ -716,7 +724,9 @@ namespace StardewArchipelago.Stardew
             var unlockConditions = fields[4];
             var displayName = fields.Length > 5 ? fields[5] : recipeName;
 
-            var craftingRecipe = new StardewCraftingRecipe(recipeName, ingredients, yieldItemId, yieldAmount, bigCraftable, unlockConditions, displayName);
+            StardewItem yieldItem = bigCraftable == "true" ? _bigCraftablesById[yieldItemId] : _objectsById[yieldItemId];
+
+            var craftingRecipe = new StardewCraftingRecipe(recipeName, ingredients, yieldItem, yieldAmount, bigCraftable, unlockConditions, displayName);
             return craftingRecipe;
         }
 
@@ -739,7 +749,7 @@ namespace StardewArchipelago.Stardew
         {
             foreach (var (name, svItem) in objectsByName)
             {
-                var stardewItem = svItem.PrepareForGivingToFarmer(1);
+                var stardewItem = svItem.PrepareForGivingToFarmer();
                 if (stardewItem is not Object stardewObject)
                 {
                     continue;
@@ -753,5 +763,45 @@ namespace StardewArchipelago.Stardew
                 yield return name;
             }
         }
+
+#if DEBUG
+
+        public void ExportAllMismatchedItems(System.Func<Object, bool> condition, string filePath)
+        {
+            var objectsToExport = new List<string>();
+
+            objectsToExport.AddRange(GetItemsThatMismatch(condition, _objectsByName));
+            objectsToExport.AddRange(GetItemsThatMismatch(condition, _bigCraftablesByName));
+            objectsToExport.AddRange(GetItemsThatMismatch(condition, _furnitureByName));
+            objectsToExport.AddRange(GetItemsThatMismatch(condition, _hatsByName));
+            objectsToExport.AddRange(GetItemsThatMismatch(condition, _bootsByName));
+            objectsToExport.AddRange(GetItemsThatMismatch(condition, _weaponsByName));
+
+            var objectsAsJson = JsonConvert.SerializeObject(objectsToExport);
+            File.WriteAllText(filePath, objectsAsJson);
+        }
+
+        private IEnumerable<string> GetItemsThatMismatch<T>(System.Func<Object, bool> condition, Dictionary<string, T> itemsByName) where T : StardewItem
+        {
+            foreach (var (name, svItem) in itemsByName)
+            {
+                var stardewItem = svItem.PrepareForGivingToFarmer();
+                if (stardewItem.Name == stardewItem.DisplayName)
+                {
+                    continue;
+                }
+                if (stardewItem.Name.Contains("Wood"))
+                {
+                    var fixedWoodName = stardewItem.Name.Replace("Wood Display: ", "Wooden Display: ");
+                    if (fixedWoodName == stardewItem.DisplayName)
+                    {
+                        continue;
+                    }
+                }
+
+                yield return "{\"" + stardewItem.Name + "\", \"" + stardewItem.DisplayName + "\"}";
+            }
+        }
+#endif
     }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Netcode;
-using StardewArchipelago.Archipelago;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Vanilla;
 using StardewModdingAPI;
@@ -12,19 +12,21 @@ using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Minigames;
 using StardewValley.Network;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.ArchipelagoUtilities.Net;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
 {
     public static class WalnutPuzzleInjections
     {
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static IModHelper _helper;
         private static ArchipelagoClient _archipelago;
-        private static LocationChecker _locationChecker;
+        private static StardewLocationChecker _locationChecker;
 
-        public static void Initialize(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(ILogger logger, IModHelper helper, ArchipelagoClient archipelago, StardewLocationChecker locationChecker)
         {
-            _monitor = monitor;
+            _logger = logger;
             _helper = helper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
@@ -47,7 +49,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 if (Game1.netWorldState.Value.GoldenCoconutCracked)
                 {
                     // Just in case
-                    _locationChecker.AddCheckedLocation(goldenCoconutLocation);
+                    _locationChecker.AddWalnutCheckedLocation(goldenCoconutLocation);
                     return true; // run original logic
                 }
 
@@ -69,7 +71,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(ReceiveLeftClick_CrackGoldenCoconut_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(ReceiveLeftClick_CrackGoldenCoconut_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -90,7 +92,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(SpawnBananaNutReward_CheckInsteadOfNuts_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(SpawnBananaNutReward_CheckInsteadOfNuts_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -149,14 +151,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                     return false; // don't run original logic
                 }
                 Game1.player.team.MarkCollectedNut("TreeNut");
-                
+
                 DelayedAction.functionAfterDelay(() => CreateLocationDebris("Leo's Tree", new Vector2(10.5f, 7f) * 64f, __instance), 1250);
                 __instance.treeNutObtained.Value = true;
                 return false; // don't run original logic
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(SpitTreeNut_CheckInsteadOfNut_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(SpitTreeNut_CheckInsteadOfNut_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -182,29 +184,36 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(OnPuzzleFinish_CheckInsteadOfNuts_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(OnPuzzleFinish_CheckInsteadOfNuts_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
 
         // public virtual void GiveReward()
-        public static bool GiveReward_CheckInsteadOfNuts_Prefix(IslandFarmCave __instance)
+        public static bool GiveReward_GourmandCheckInsteadOfNuts_Prefix(IslandFarmCave __instance)
         {
             try
             {
                 var gourmandChecks = new[] { "Gourmand Frog Melon", "Gourmand Frog Wheat", "Gourmand Frog Garlic" };
-                CreateLocationDebris(gourmandChecks[__instance.gourmandRequestsFulfilled.Value], new Vector2(4.5f, 4f) * 64f, __instance, 1);
+                // CreateLocationDebris(gourmandChecks[__instance.gourmandRequestsFulfilled.Value], new Vector2(4.5f, 4f) * 64f, __instance, 1);
+
                 ++__instance.gourmandRequestsFulfilled.Value;
+                for (var i = 0; i < __instance.gourmandRequestsFulfilled.Value; i++)
+                {
+                    _locationChecker.AddWalnutCheckedLocation(gourmandChecks[__instance.gourmandRequestsFulfilled.Value]);
+                }
+
                 Game1.player.team.MarkCollectedNut($"IslandGourmand{__instance.gourmandRequestsFulfilled.Value}");
                 // private NetMutex gourmandMutex
                 var gourmandMutexField = _helper.Reflection.GetField<NetMutex>(__instance, "gourmandMutex");
                 var gourmandMutex = gourmandMutexField.GetValue();
                 gourmandMutex.ReleaseLock();
+
                 return false; // don't run original logic
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(GiveReward_CheckInsteadOfNuts_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(GiveReward_GourmandCheckInsteadOfNuts_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -240,7 +249,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(OnWhackedChanged_CheckInsteadOfNut_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(OnWhackedChanged_CheckInsteadOfNut_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -394,7 +403,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(UpdateWhenCurrentLocation_CheckInsteadOfNuts_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(UpdateWhenCurrentLocation_CheckInsteadOfNuts_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -410,7 +419,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 {
                     layerDepth = 1f,
                     motion = new Vector2(1f, -4f),
-                    acceleration = new Vector2(0.0f, 0.1f)
+                    acceleration = new Vector2(0.0f, 0.1f),
                 });
                 __instance.temporarySprites.Add(new TemporaryAnimatedSprite(50, position + new Vector2(Game1.random.Next(-16, 16), Game1.random.Next(-48, 48)), color * 0.75f)
                 {
@@ -418,7 +427,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                     flipped = true,
                     layerDepth = 1f,
                     motion = new Vector2(-1f, -4f),
-                    acceleration = new Vector2(0.0f, 0.1f)
+                    acceleration = new Vector2(0.0f, 0.1f),
                 });
                 __instance.temporarySprites.Add(new TemporaryAnimatedSprite(50, position + new Vector2(Game1.random.Next(-16, 16), Game1.random.Next(-48, 48)), color * 0.75f)
                 {
@@ -426,7 +435,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                     delayBeforeAnimationStart = 50,
                     layerDepth = 1f,
                     motion = new Vector2(1f, -4f),
-                    acceleration = new Vector2(0.0f, 0.1f)
+                    acceleration = new Vector2(0.0f, 0.1f),
                 });
                 __instance.temporarySprites.Add(new TemporaryAnimatedSprite(50, position + new Vector2(Game1.random.Next(-16, 16), Game1.random.Next(-48, 48)), color * 0.75f)
                 {
@@ -435,7 +444,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                     delayBeforeAnimationStart = 100,
                     layerDepth = 1f,
                     motion = new Vector2(-1f, -4f),
-                    acceleration = new Vector2(0.0f, 0.1f)
+                    acceleration = new Vector2(0.0f, 0.1f),
                 });
                 __instance.temporarySprites.Add(new TemporaryAnimatedSprite(50, position + new Vector2(Game1.random.Next(-16, 16), Game1.random.Next(-48, 48)), new Color(250, 100, 250) * 0.75f)
                 {
@@ -444,7 +453,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                     delayBeforeAnimationStart = 150,
                     layerDepth = 1f,
                     motion = new Vector2(0.0f, -3f),
-                    acceleration = new Vector2(0.0f, 0.1f)
+                    acceleration = new Vector2(0.0f, 0.1f),
                 });
                 if (Game1.gameMode == 6 || Utility.ShouldIgnoreValueChangeCallback())
                 {
@@ -465,7 +474,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(ApplyPlantRestoreLeft_CheckInsteadOfNut_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(ApplyPlantRestoreLeft_CheckInsteadOfNut_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -479,7 +488,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 {
                     layerDepth = 1f,
                     motion = new Vector2(1f, -4f),
-                    acceleration = new Vector2(0.0f, 0.1f)
+                    acceleration = new Vector2(0.0f, 0.1f),
                 });
                 __instance.temporarySprites.Add(new TemporaryAnimatedSprite(50, new Vector2(8f, 3.3f) * 64f + new Vector2(Game1.random.Next(-16, 16), Game1.random.Next(-48, 48)), new Color(0, 220, 150) * 0.75f)
                 {
@@ -487,7 +496,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                     flipped = true,
                     layerDepth = 1f,
                     motion = new Vector2(-1f, -4f),
-                    acceleration = new Vector2(0.0f, 0.1f)
+                    acceleration = new Vector2(0.0f, 0.1f),
                 });
                 __instance.temporarySprites.Add(new TemporaryAnimatedSprite(50, new Vector2(8.3f, 3.3f) * 64f + new Vector2(Game1.random.Next(-16, 16), Game1.random.Next(-48, 48)), new Color(0, 200, 120) * 0.75f)
                 {
@@ -495,7 +504,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                     delayBeforeAnimationStart = 50,
                     layerDepth = 1f,
                     motion = new Vector2(1f, -4f),
-                    acceleration = new Vector2(0.0f, 0.1f)
+                    acceleration = new Vector2(0.0f, 0.1f),
                 });
                 __instance.temporarySprites.Add(new TemporaryAnimatedSprite(50, new Vector2(8f, 3.3f) * 64f + new Vector2(Game1.random.Next(-16, 16), Game1.random.Next(-48, 48)), new Color(0, 220, 150) * 0.75f)
                 {
@@ -504,7 +513,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                     delayBeforeAnimationStart = 100,
                     layerDepth = 1f,
                     motion = new Vector2(-1f, -4f),
-                    acceleration = new Vector2(0.0f, 0.1f)
+                    acceleration = new Vector2(0.0f, 0.1f),
                 });
                 __instance.temporarySprites.Add(new TemporaryAnimatedSprite(50, new Vector2(8.5f, 3.3f) * 64f + new Vector2(Game1.random.Next(-16, 16), Game1.random.Next(-48, 48)), new Color(0, 250, 180) * 0.75f)
                 {
@@ -513,7 +522,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                     delayBeforeAnimationStart = 150,
                     layerDepth = 1f,
                     motion = new Vector2(0.0f, -3f),
-                    acceleration = new Vector2(0.0f, 0.1f)
+                    acceleration = new Vector2(0.0f, 0.1f),
                 });
                 if (Game1.gameMode == 6 || Utility.ShouldIgnoreValueChangeCallback())
                 {
@@ -534,7 +543,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(ApplyPlantRestoreRight_CheckInsteadOfNut_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(ApplyPlantRestoreRight_CheckInsteadOfNut_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -548,7 +557,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 if (!__instance.centerSkeletonRestored.Value && __instance.isRangeAllTrue(0, 6))
                 {
                     __instance.centerSkeletonRestored.Value = true;
-                    __instance.uncollectedRewards.Add(CreateLocationItem("Complete Large Animal Collection"));
+                    _locationChecker.AddWalnutCheckedLocation("Complete Large Animal Collection");
                     __instance.uncollectedRewards.Add(ItemRegistry.Create("(O)69"));
                     Game1.player.team.MarkCollectedNut("IslandCenterSkeletonRestored");
                     __result = true;
@@ -557,7 +566,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 if (!__instance.snakeRestored.Value && __instance.isRangeAllTrue(6, 9))
                 {
                     __instance.snakeRestored.Value = true;
-                    __instance.uncollectedRewards.Add(CreateLocationItem("Complete Snake Collection"));
+                    _locationChecker.AddWalnutCheckedLocation("Complete Snake Collection");
                     __instance.uncollectedRewards.Add(ItemRegistry.Create("(O)835"));
                     Game1.player.team.MarkCollectedNut("IslandSnakeRestored");
                     __result = true;
@@ -566,7 +575,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 if (!__instance.batRestored.Value && __instance.piecesDonated[9])
                 {
                     __instance.batRestored.Value = true;
-                    __instance.uncollectedRewards.Add(CreateLocationItem("Complete Mummified Bat Collection"));
+                    _locationChecker.AddWalnutCheckedLocation("Complete Mummified Bat Collection");
                     __instance.uncollectedRewards.Add(ItemRegistry.Create("(O)TentKit"));
                     Game1.player.team.MarkCollectedNut("IslandBatRestored");
                     __result = true;
@@ -575,7 +584,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 if (!__instance.frogRestored.Value && __instance.piecesDonated[10])
                 {
                     __instance.frogRestored.Value = true;
-                    __instance.uncollectedRewards.Add(CreateLocationItem("Complete Mummified Frog Collection"));
+                    _locationChecker.AddWalnutCheckedLocation("Complete Mummified Frog Collection");
                     __instance.uncollectedRewards.Add(ItemRegistry.Create("(O)926"));
                     Game1.player.team.MarkCollectedNut("IslandFrogRestored");
                     __result = true;
@@ -587,7 +596,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(DonatePiece_CheckInsteadOfNuts_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(DonatePiece_CheckInsteadOfNuts_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -620,7 +629,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(IsCollidingPosition_CheckInsteadOfNut_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(IsCollidingPosition_CheckInsteadOfNut_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -652,7 +661,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(GetFish_CheckInsteadOfNut_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(GetFish_CheckInsteadOfNut_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -680,7 +689,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(OnMermaidPuzzleSuccess_CheckInsteadOfNut_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(OnMermaidPuzzleSuccess_CheckInsteadOfNut_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -743,12 +752,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                     var dialogue = victoryText + Game1.content.LoadString("Strings\\StringsFromMaps:Pirates7_WinNoPrize");
                     Game1.drawDialogueNoTyping(dialogue);
                 }
-                
+
                 return false; // don't run original logic
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(QuitGame_CheckInsteadOfNut_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(QuitGame_CheckInsteadOfNut_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }

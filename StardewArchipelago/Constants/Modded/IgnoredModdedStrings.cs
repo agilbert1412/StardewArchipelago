@@ -33,5 +33,10 @@ namespace StardewArchipelago.Constants.Modded
             "Restore Prismatic Shard", "Restore Golden Mask", "Restore Ancient Sword", "Restore Ancient Doll", "Restore Chipped Amphora",
         };
 
+        public static readonly List<string> JojaRouteSVE = new()
+        {
+            "Razor Trout", "Joja Berry", "Joja Berry Starter", "Joja Veggie", "Joja Veggie Seeds",
+        };
+
     }
 }

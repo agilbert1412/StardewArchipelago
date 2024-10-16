@@ -1,22 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using StardewArchipelago.Archipelago;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewModdingAPI;
 using StardewValley;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.ArchipelagoUtilities.Net;
 
 namespace StardewArchipelago.Locations.Festival
 {
     public static class EggFestivalInjections
     {
 
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static IModHelper _modHelper;
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(ILogger logger, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
-            _monitor = monitor;
+            _logger = logger;
             _modHelper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
@@ -62,7 +64,7 @@ namespace StardewArchipelago.Locations.Festival
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(AwardFestivalPrize_Strawhat_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(AwardFestivalPrize_Strawhat_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }

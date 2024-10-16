@@ -1,5 +1,6 @@
 ﻿using System;
 using HarmonyLib;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
@@ -11,15 +12,15 @@ namespace StardewArchipelago.GameModifications
     public class AdvancedOptionsManager
     {
         private static ModEntry _modEntry;
-        private static IMonitor _console;
+        private static ILogger _logger;
         private static IModHelper _modHelper;
-        private Harmony _harmony;
-        private static ArchipelagoClient _archipelago;
+        private readonly Harmony _harmony;
+        private static StardewArchipelagoClient _archipelago;
 
-        public AdvancedOptionsManager(ModEntry modEntry, IMonitor console, IModHelper modHelper, Harmony harmony, ArchipelagoClient archipelago)
+        public AdvancedOptionsManager(ModEntry modEntry, ILogger logger, IModHelper modHelper, Harmony harmony, StardewArchipelagoClient archipelago)
         {
             _modEntry = modEntry;
-            _console = console;
+            _logger = logger;
             _modHelper = modHelper;
             _harmony = harmony;
             _archipelago = archipelago;
@@ -80,7 +81,7 @@ namespace StardewArchipelago.GameModifications
             }
             catch (Exception ex)
             {
-                _modEntry.Monitor.Log($"Failed in {nameof(ResetComponents_RemoveAdvancedOptionsButton_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(ResetComponents_RemoveAdvancedOptionsButton_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -103,7 +104,7 @@ namespace StardewArchipelago.GameModifications
             }
             catch (Exception ex)
             {
-                _modEntry.Monitor.Log($"Failed in {nameof(LoadForNewGame_ForceSettings_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(LoadForNewGame_ForceSettings_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -119,7 +120,7 @@ namespace StardewArchipelago.GameModifications
         private static void ForceFarmTypeToArchipelagoProvidedFarm()
         {
             var farmType = _archipelago.SlotData.FarmType;
-            
+
             Game1.whichFarm = farmType.GetWhichFarm();
             Game1.whichModFarm = farmType.GetWhichModFarm();
             Game1.spawnMonstersAtNight = farmType.GetSpawnMonstersAtNight();
@@ -139,7 +140,7 @@ namespace StardewArchipelago.GameModifications
             }
             catch (Exception ex)
             {
-                _modEntry.Monitor.Log($"Failed in {nameof(TitleMenuUpdate_ReplaceCharacterMenu_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(TitleMenuUpdate_ReplaceCharacterMenu_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -164,7 +165,7 @@ namespace StardewArchipelago.GameModifications
             }
             catch (Exception ex)
             {
-                _modEntry.Monitor.Log($"Failed in {nameof(CanLeaveMenu_ConsiderNewFields_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(CanLeaveMenu_ConsiderNewFields_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -188,6 +189,7 @@ namespace StardewArchipelago.GameModifications
                 if (!connected)
                 {
                     var currentMenu = TitleMenu.subMenu;
+                    _logger.LogError($"Connection to Archipelago failed: {errorMessage}");
                     TitleMenu.subMenu = new InformationDialog(errorMessage, (_) => OnClickOkBehavior(currentMenu));
                 }
 
@@ -195,7 +197,7 @@ namespace StardewArchipelago.GameModifications
             }
             catch (Exception ex)
             {
-                _modEntry.Monitor.Log($"Failed in {nameof(OptionButtonClick_OkConnectToAp_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(OptionButtonClick_OkConnectToAp_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }

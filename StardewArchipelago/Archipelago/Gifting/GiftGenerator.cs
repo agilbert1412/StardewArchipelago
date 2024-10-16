@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Archipelago.Gifting.Net.Gifts;
 using Archipelago.Gifting.Net.Traits;
@@ -14,7 +15,7 @@ namespace StardewArchipelago.Archipelago.Gifting
     {
         private const int DEFAULT_BUFF_DURATION = 120;
 
-        private StardewItemManager _itemManager;
+        private readonly StardewItemManager _itemManager;
 
         public GiftGenerator(StardewItemManager itemManager)
         {
@@ -47,7 +48,7 @@ namespace StardewArchipelago.Archipelago.Gifting
             return true;
         }
 
-        private GiftTrait[] GenerateGiftTraits(Item giftObject, bool isTrap)
+        private GiftTrait[] GenerateGiftTraits(Item giftItem, bool isTrap)
         {
             var traits = new List<GiftTrait>();
 
@@ -56,21 +57,93 @@ namespace StardewArchipelago.Archipelago.Gifting
                 traits.Add(new GiftTrait(GiftFlag.Trap, 1, 1));
             }
 
-            if (!Game1.objectData.ContainsKey(giftObject.QualifiedItemId))
+            traits.AddRange(GetNameTraits(giftItem));
+            traits.AddRange(GetCategoryTraits(giftItem));
+
+            if (giftItem is Object giftObject && Game1.objectData.ContainsKey(giftItem.ItemId))
             {
-                return traits.ToArray();
+                traits.AddRange(GetObjectTraits(giftObject));
             }
 
-            var objectInfo = Game1.objectData[giftObject.QualifiedItemId];
+            traits.AddRange(GetContextTagsTraits(giftItem));
+
+            return SimplifyDuplicates(traits).ToArray();
+        }
+
+        private IEnumerable<GiftTrait> GetNameTraits(Item giftItem)
+        {
+            var nameTraits = new List<GiftTrait>();
+            nameTraits.AddRange(GetNameTraits(giftItem.Name));
+            nameTraits.AddRange(GetNameTraits(giftItem.DisplayName));
+            return nameTraits;
+        }
+
+        private IEnumerable<GiftTrait> GetNameTraits(string itemName)
+        {
+            var nameFlag = GetFromAllFlags(itemName);
+            if (!string.IsNullOrWhiteSpace(nameFlag))
+            {
+                yield return CreateTrait(nameFlag);
+            }
+
+            if (ReplaceFlags.ContainsKey(itemName))
+            {
+                var replacedNameFlag = GetFromAllFlags(ReplaceFlags[itemName]);
+                if (!string.IsNullOrWhiteSpace(replacedNameFlag))
+                {
+                    yield return CreateTrait(replacedNameFlag);
+                }
+            }
+
+            foreach (var word in itemName.Split(' '))
+            {
+                var wordFlag = GiftFlag.AllFlags.FirstOrDefault(x => x.Equals(word, StringComparison.InvariantCultureIgnoreCase));
+                if (!string.IsNullOrWhiteSpace(wordFlag))
+                {
+                    yield return CreateTrait(wordFlag, 0.5D);
+                }
+
+                if (!ReplaceFlags.ContainsKey(word))
+                {
+                    continue;
+                }
+
+                var replacedWordFlag = GetFromAllFlags(ReplaceFlags[word]);
+                if (!string.IsNullOrWhiteSpace(replacedWordFlag))
+                {
+                    yield return CreateTrait(replacedWordFlag, 0.5D);
+                }
+            }
+        }
+
+        private static string GetFromAllFlags(string itemName)
+        {
+            return GiftFlag.AllFlags.FirstOrDefault(x => x.Equals(itemName, StringComparison.InvariantCultureIgnoreCase));
+        }
+
+        private IEnumerable<GiftTrait> GetObjectTraits(Object giftObject)
+        {
+            var objectInfo = Game1.objectData[giftObject.ItemId];
+
             var edibility = objectInfo.Edibility;
             if (Convert.ToInt32(edibility) > 0)
             {
-                traits.AddRange(GetConsumableTraits(objectInfo));
+                foreach (var consumableTrait in GetConsumableTraits(objectInfo))
+                {
+                    yield return consumableTrait;
+                }
             }
 
-            traits.AddRange(GetCategoryTraits(objectInfo));
+            var type = objectInfo.Type;
+            if (ReplaceFlags.ContainsKey(type))
+            {
+                type = ReplaceFlags[type];
+            }
 
-            return traits.ToArray();
+            if (!string.IsNullOrWhiteSpace(type))
+            {
+                yield return CreateTrait(type);
+            }
         }
 
         private IEnumerable<GiftTrait> GetConsumableTraits(ObjectData objectInfo)
@@ -87,12 +160,15 @@ namespace StardewArchipelago.Archipelago.Gifting
             }
 
             var buffsData = objectInfo.Buffs;
-            foreach (var buffData in buffsData)
+            if (buffsData is not null)
             {
-                var buffDuration = buffData.Duration / DEFAULT_BUFF_DURATION;
-                foreach (var buffTrait in GetBuffTraits(buffData, buffDuration))
+                foreach (var buffData in buffsData)
                 {
-                    yield return buffTrait;
+                    var buffDuration = buffData.Duration / DEFAULT_BUFF_DURATION;
+                    foreach (var buffTrait in GetBuffTraits(buffData, buffDuration))
+                    {
+                        yield return buffTrait;
+                    }
                 }
             }
         }
@@ -104,54 +180,73 @@ namespace StardewArchipelago.Archipelago.Gifting
                 yield break;
             }
 
-            var effects = DataLoader.Buffs(Game1.content)[buffData.BuffId].Effects;
+            // buffData.BuffId should be used for non-standard, not yet compatible buffs such as Oil of Garlic
+
+            if (buffData.CustomAttributes is null)
+            {
+                yield break;
+            }
+
+            var effects = buffData.CustomAttributes;
+
+            if (effects.FarmingLevel != 0)
+            {
+                yield return CreateTrait(GiftFlag.Tool, effects.FarmingLevel, buffDuration);
+            }
 
             if (effects.FishingLevel != 0)
             {
-                yield return CreateTrait(GiftFlag.Fish, buffDuration, effects.FishingLevel);
+                yield return CreateTrait(GiftFlag.Fish, effects.FishingLevel, buffDuration);
             }
 
             if (effects.MiningLevel != 0)
             {
-                yield return CreateTrait(GiftFlag.Tool, buffDuration, effects.MiningLevel);
+                yield return CreateTrait(GiftFlag.Tool, effects.MiningLevel, buffDuration);
             }
 
             if (effects.ForagingLevel != 0)
             {
-                yield return CreateTrait(GiftFlag.Tool, buffDuration, effects.ForagingLevel);
+                yield return CreateTrait(GiftFlag.Tool, effects.ForagingLevel, buffDuration);
+            }
+
+            if (effects.LuckLevel != 0)
+            {
+                yield return CreateTrait("Luck", effects.LuckLevel, buffDuration);
+            }
+
+            if (effects.MagneticRadius != 0)
+            {
+                yield return CreateTrait("Magnetism", effects.MagneticRadius, buffDuration);
             }
 
             if (effects.MaxStamina != 0)
             {
-                yield return CreateTrait(GiftFlag.Mana, buffDuration, effects.MaxStamina);
+                yield return CreateTrait(GiftFlag.Mana, effects.MaxStamina, buffDuration);
             }
 
             if (effects.Speed != 0)
             {
-                yield return CreateTrait(GiftFlag.Speed, buffDuration, effects.Speed);
+                yield return CreateTrait(GiftFlag.Speed, effects.Speed, buffDuration);
             }
 
             if (effects.Defense != 0)
             {
-                yield return CreateTrait(GiftFlag.Armor, buffDuration, effects.Defense);
+                yield return CreateTrait(GiftFlag.Armor, effects.Defense, buffDuration);
             }
 
             if (effects.Attack != 0)
             {
-                yield return CreateTrait(GiftFlag.Weapon, buffDuration, effects.Attack);
+                yield return CreateTrait(GiftFlag.Weapon, effects.Attack, buffDuration);
             }
         }
 
-        private IEnumerable<GiftTrait> GetCategoryTraits(ObjectData objectInfo)
+        private IEnumerable<GiftTrait> GetCategoryTraits(Item giftItem)
         {
-            var type = objectInfo.Type;
-            var category = objectInfo.Category;
+            var category = giftItem.Category;
 
-            var categoryNames = Array.Empty<string>();
             if (_categoryFlags.ContainsKey(category))
             {
-                categoryNames = _categoryFlags[category];
-                foreach (var categoryName in categoryNames)
+                foreach (var categoryName in _categoryFlags[category])
                 {
                     if (!string.IsNullOrWhiteSpace(categoryName))
                     {
@@ -159,26 +254,99 @@ namespace StardewArchipelago.Archipelago.Gifting
                     }
                 }
             }
+        }
 
-            if (ReplaceFlags.ContainsKey(type))
-            {
-                type = ReplaceFlags[type];
-            }
+        private IEnumerable<GiftTrait> GetContextTagsTraits(Item giftItem)
+        {
+            const string colorPrefix = "color_";
+            const string foodPrefix = "color_";
+            const string itemSuffix = "_item";
+            const string largePrefix = "large_";
+            var contextTags = giftItem.GetContextTags();
 
-            if (categoryNames.Contains(type) || string.IsNullOrWhiteSpace(type))
+            foreach (var contextTag in contextTags)
             {
-                yield break;
-            }
+                if (_contextTags.ContainsKey(contextTag))
+                {
+                    yield return CreateTrait(_contextTags[contextTag]);
+                    continue;
+                }
 
-            if (!string.IsNullOrWhiteSpace(type))
-            {
-                yield return CreateTrait(type);
+                if (contextTag == "large_egg_item")
+                {
+                    yield return CreateTrait(GiftFlag.Egg, 2D);
+                    continue;
+                }
+
+                if (contextTag == "large_milk_item")
+                {
+                    yield return CreateTrait("Milk", 2D);
+                    continue;
+                }
+
+                if (contextTag.StartsWith(colorPrefix, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    yield return CreateTrait(ToPascalCase(contextTag[colorPrefix.Length..]));
+                }
+
+                if (contextTag.StartsWith(foodPrefix, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    yield return CreateTrait(ToPascalCase(contextTag[foodPrefix.Length..]));
+                }
+
+                if (contextTag.StartsWith("dye_", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    yield return CreateTrait("Dye", contextTag.EndsWith("strong", StringComparison.InvariantCultureIgnoreCase) ? 2 : 1);
+                }
+
+                if (contextTag.EndsWith(itemSuffix, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    var item = contextTag[..^itemSuffix.Length];
+                    var quality = 1D;
+                    if (item.StartsWith(largePrefix, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        item = item[largePrefix.Length..];
+                        quality *= 2;
+                    }
+                    yield return CreateTrait(ToPascalCase(item), quality);
+                }
             }
         }
 
-        private GiftTrait CreateTrait(string trait, double duration = 1.0, double quality = 1.0)
+        private string ToPascalCase(string text)
+        {
+            var lowerText = text.ToLower();
+            var spacedText = lowerText.Replace("_", " ");
+            var titleText = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(spacedText);
+            var pascalText = titleText.Replace(" ", "");
+            return pascalText;
+        }
+
+        private IEnumerable<GiftTrait> SimplifyDuplicates(IEnumerable<GiftTrait> traits)
+        {
+            var bestTraits = new Dictionary<string, GiftTrait>();
+            foreach (var trait in traits)
+            {
+                if (!bestTraits.ContainsKey(trait.Trait))
+                {
+                    bestTraits.Add(trait.Trait, trait);
+                    continue;
+                }
+
+                bestTraits[trait.Trait] = MaxOf(trait, bestTraits[trait.Trait]);
+            }
+
+            return bestTraits.Values;
+        }
+
+        private GiftTrait CreateTrait(string trait, double quality = 1.0, double duration = 1.0)
         {
             return new GiftTrait(trait, duration, quality);
+        }
+
+        private static GiftTrait MaxOf(GiftTrait trait, GiftTrait previousTrait)
+        {
+            return new GiftTrait(trait.Trait, Math.Max(trait.Duration, previousTrait.Duration), Math.Max(trait.Quality, previousTrait.Quality));
         }
 
         private static readonly Dictionary<int, string[]> _categoryFlags = new()
@@ -186,7 +354,7 @@ namespace StardewArchipelago.Archipelago.Gifting
             { Category.GEM, new[] { "Gem" } },
             { Category.FISH, new[] { GiftFlag.Fish } },
             { Category.EGG, new[] { GiftFlag.Egg } },
-            //{ Category.MILK, new[] {GiftFlag.Milk}},
+            { Category.MILK, new[] { GiftFlag.Animal, "Milk", "AnimalProduct" } },
             { Category.COOKING, new[] { "Cooking" } },
             //{ Category.CRAFTING, new[] {GiftFlag.Crafting}},
             //{ Category.BIG_CRAFTABLE, new[] {GiftFlag.BigCraftable}},
@@ -196,22 +364,22 @@ namespace StardewArchipelago.Archipelago.Gifting
             { Category.BUILDING, new[] { GiftFlag.Material } },
             //{ Category.SELL_AT_PIERRE, new[] {GiftFlag.SellAtPierre}},
             //{ Category.SELL_AT_PIERRE_AND_MARNIE, new[] {GiftFlag.SellAtPierreAndMarnie}},
-            //{ Category.FERTILIZER, new[] {GiftFlag.Fertilizer}},
-            //{ Category.TRASH, new[] {GiftFlag.Trash}},
-            //{ Category.BAIT, new[] {GiftFlag.Bait}},
-            //{ Category.TACKLE, new[] {GiftFlag.Tackle}},
+            { Category.FERTILIZER, new[] { "Fertilizer" } },
+            { Category.TRASH, new[] { "Trash" } },
+            { Category.BAIT, new[] { "Bait" } },
+            { Category.TACKLE, new[] { "Tackle" } },
             //{ Category.SELL_AT_FISH_SHOP, new[] {GiftFlag.SellAtFishShop}},
-            //{ Category.FURNITURE, new[] {GiftFlag.Furniture}},
-            //{ Category.INGREDIENT, new[] {GiftFlag.Ingredient}},
-            //{ Category.ARTISAN_GOOD, new[] {GiftFlag.ArtisanGood}},
-            //{ Category.SYRUP, new[] {GiftFlag.Syrup}},
+            { Category.FURNITURE, new[] { "Furniture" } },
+            { Category.INGREDIENT, new[] { "Ingredient" } },
+            { Category.ARTISAN_GOOD, new[] { "ArtisanGood" } },
+            { Category.SYRUP, new[] { "Syrup", "ArtisanGood" } },
             { Category.MONSTER_LOOT, new[] { GiftFlag.Monster } },
             { Category.EQUIPMENT, new[] { GiftFlag.Armor } },
             { Category.SEED, new[] { GiftFlag.Seed } },
             { Category.VEGETABLE, new[] { GiftFlag.Vegetable } },
             { Category.FRUIT, new[] { GiftFlag.Fruit } },
             { Category.FLOWER, new[] { "Flower" } },
-            //{ Category.FORAGE, new[] {GiftFlag.Forage}},
+            { Category.FORAGE, new[] { "Forage" } },
             { Category.HAT, new[] { "Cosmetic", "Hat" } },
             { Category.RING, new[] { GiftFlag.Armor } },
             { Category.WEAPON, new[] { GiftFlag.Weapon } },
@@ -222,8 +390,48 @@ namespace StardewArchipelago.Archipelago.Gifting
         {
             { "Arch", "Artifact" },
             { "Basic", "" },
+            { "asdf", "" },
+            { "interactive", "" },
+            { "QualityFertilizer", "" },
+            { "Noble", "Fancy" },
             { "Minerals", "Mineral" },
             { "Seeds", GiftFlag.Seed },
+            { "Frozen", GiftFlag.Ice },
+            { "Winter", GiftFlag.Ice },
+            { "Magma", GiftFlag.Fire },
+            { "Bulb", GiftFlag.Seed },
+            { "Starter", GiftFlag.Seed },
+            { "Medicine", GiftFlag.Cure },
+        };
+
+        private static readonly Dictionary<string, string> _contextTags = new()
+        {
+            { "light_source", GiftFlag.Light },
+            { "season_spring", "Spring" },
+            { "season_summer", "Summer" },
+            { "season_fall", "Fall" },
+            { "season_winter", "Winter" },
+            { "fish_ocean", "Ocean" },
+            { "fish_river", "River" },
+            { "fish_lake", "Lake" },
+            { "fish_swamp", "Swamp" },
+            { "fish_pond", "Pond" },
+            { "fish_legendary", "Legendary" },
+            { "fish_legendary_family", "Legendary" },
+            { "fish_desert", "Desert" },
+            { "fish_crab_pot", "CrabPot" },
+            { "fish_carnivorous", "Carnivorous" },
+            { "fish_freshwater", "Freshwater" },
+            { "edible_mushroom", "Mushroom" },
+            { "geode", "Geode" },
+            { "book_xp_farming", "Book" },
+            { "book_xp_foraging", "Book" },
+            { "book_xp_fishing", "Book" },
+            { "book_xp_mining", "Book" },
+            { "book_xp_combat", "Book" },
+            { "cow_milk_item", "Cow" },
+            { "goat_milk_item", "Goat" },
+            { "slime_egg_item", GiftFlag.Egg },
         };
     }
 }

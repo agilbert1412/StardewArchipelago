@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using Microsoft.Xna.Framework.Graphics;
+using StardewArchipelago.Logging;
 using StardewModdingAPI;
 
 namespace StardewArchipelago.Textures
@@ -20,20 +21,20 @@ namespace StardewArchipelago.Textures
 
         public static readonly string[] ValidLogos = { COLOR, WHITE, BLACK, RED, PLEADING };
 
-        public static Texture2D GetArchipelagoLogo(IMonitor monitor, IModHelper modHelper, int size, string color, string preferredIconSet = null)
+        public static Texture2D GetArchipelagoLogo(LogHandler logger, IModHelper modHelper, int size, string color, string preferredIconSet = null)
         {
             var archipelagoFolder = "Archipelago";
             preferredIconSet = GetChosenIconSet(preferredIconSet);
             var fileName = $"{size}x{size} {color} icon.png";
             var relativePathToTexture = Path.Combine(archipelagoFolder, preferredIconSet, fileName);
-            var texture = TexturesLoader.GetTexture(monitor, modHelper, relativePathToTexture, LogLevel.Trace);
+            var texture = TexturesLoader.GetTexture(logger, modHelper, relativePathToTexture, LogLevel.Trace);
             if (texture == null)
             {
                 // Let's try to get the icon from the other set
                 preferredIconSet = GetOtherIconSet(preferredIconSet);
                 fileName = $"{size}x{size} {color} icon.png";
                 relativePathToTexture = Path.Combine(archipelagoFolder, preferredIconSet, fileName);
-                texture = TexturesLoader.GetTexture(monitor, modHelper, relativePathToTexture);
+                texture = TexturesLoader.GetTexture(logger, modHelper, relativePathToTexture);
                 if (texture == null)
                 {
                     throw new InvalidOperationException($"Could not find texture {fileName}");
@@ -43,19 +44,19 @@ namespace StardewArchipelago.Textures
             return texture;
         }
 
-        public static Texture2D GetArchipelagoBush(IMonitor monitor, IModHelper modHelper, string preferredIconSet = null)
+        public static Texture2D GetArchipelagoBush(LogHandler logger, IModHelper modHelper, string preferredIconSet = null)
         {
             var archipelagoFolder = "Archipelago";
             preferredIconSet = GetChosenIconSet(preferredIconSet);
-            var fileName = $"walnut-bush.png";
+            var fileName = $"walnut_bush.png";
             var relativePathToTexture = Path.Combine(archipelagoFolder, preferredIconSet, fileName);
-            var texture = TexturesLoader.GetTexture(monitor, modHelper, relativePathToTexture, LogLevel.Trace);
+            var texture = TexturesLoader.GetTexture(logger, modHelper, relativePathToTexture, LogLevel.Trace);
             if (texture == null)
             {
                 // Let's try to get the icon from the other set
                 preferredIconSet = GetOtherIconSet(preferredIconSet);
                 relativePathToTexture = Path.Combine(archipelagoFolder, preferredIconSet, fileName);
-                texture = TexturesLoader.GetTexture(monitor, modHelper, relativePathToTexture);
+                texture = TexturesLoader.GetTexture(logger, modHelper, relativePathToTexture);
                 if (texture == null)
                 {
                     throw new InvalidOperationException($"Could not find texture {fileName}");

@@ -117,7 +117,7 @@
             "region": "Vault"
         },
         "5,000g Bundle": {
-            "code": 717081,
+            "code": 717028,
             "region": "Vault"
         },
         "10,000g Bundle": {
@@ -9474,19 +9474,19 @@
         },
         "Crooked Circle Of Stones": {
             "code": 721150,
-            "region": "Island North"
+            "region": "Dig Site"
         },
         "Above Dig Site Bush": {
             "code": 721151,
-            "region": "Island North"
+            "region": "Dig Site"
         },
         "Above Field Office Bush 1": {
             "code": 721152,
-            "region": "Island North"
+            "region": "Dig Site"
         },
         "Above Field Office Bush 2": {
             "code": 721153,
-            "region": "Island North"
+            "region": "Dig Site"
         },
         "Complete Large Animal Collection": {
             "code": 721154,
@@ -11612,10 +11612,6 @@
             "code": 724057,
             "region": "Abandoned Mines - 5"
         },
-        "Read Digging Like Worms": {
-            "code": 724351,
-            "region": "Farm"
-        },
         "Cook Magic Elixir": {
             "code": 724401,
             "region": "Farm"
@@ -11736,6 +11732,26 @@
             "code": 724430,
             "region": "Farm"
         },
+        "Craft Bouquet": {
+            "code": 724431,
+            "region": "Farm"
+        },
+        "Craft Trash Bin": {
+            "code": 724432,
+            "region": "Farm"
+        },
+        "Craft Composter": {
+            "code": 724433,
+            "region": "Farm"
+        },
+        "Craft Recycling Bin": {
+            "code": 724434,
+            "region": "Farm"
+        },
+        "Craft Advanced Recycling Machine": {
+            "code": 724435,
+            "region": "Farm"
+        },
         "Magic Elixir Recipe": {
             "code": 724451,
             "region": "Adventurer's Guild"
@@ -11760,7 +11776,7 @@
             "code": 724501,
             "region": "Mountain"
         },
-        "Lost Emerald Ring": {
+        "Ayeisha's Lost Ring": {
             "code": 724502,
             "region": "Forest"
         },
@@ -11928,6 +11944,14 @@
             "code": 724568,
             "region": "Kitchen"
         },
+        "Cook Grilled Cheese": {
+            "code": 724569,
+            "region": "Kitchen"
+        },
+        "Cook Fish Casserole": {
+            "code": 724570,
+            "region": "Kitchen"
+        },
         "Baked Berry Oatmeal Recipe": {
             "code": 724601,
             "region": "Bear Shop"
@@ -12018,6 +12042,14 @@
         },
         "Ancient Jello Recipe": {
             "code": 724625,
+            "region": "Farm"
+        },
+        "Grilled Cheese Recipe": {
+            "code": 724627,
+            "region": "Farm"
+        },
+        "Fish Casserole Recipe": {
+            "code": 724628,
             "region": "Farm"
         },
         "Tempered Galaxy Dagger": {
@@ -12136,10 +12168,6 @@
             "code": 724726,
             "region": "Shearwater Bridge"
         },
-        "Fishsanity: Dulse Seaweed": {
-            "code": 724727,
-            "region": "Blue Moon Vineyard"
-        },
         "Fishsanity: Void Minnow": {
             "code": 724728,
             "region": "Witch's Swamp"
@@ -12204,7 +12232,7 @@
             "code": 725004,
             "region": "Shipping"
         },
-        "Shipsanity: Ancient Ferns Seed": {
+        "Shipsanity: Ancient Fern Seed": {
             "code": 725005,
             "region": "Shipping"
         },
@@ -12228,7 +12256,7 @@
             "code": 725010,
             "region": "Shipping"
         },
-        "Shipsanity: Bearberrys": {
+        "Shipsanity: Bearberry": {
             "code": 725011,
             "region": "Shipping"
         },
@@ -12236,7 +12264,7 @@
             "code": 725012,
             "region": "Shipping"
         },
-        "Shipsanity: Big Conch": {
+        "Shipsanity: Conch": {
             "code": 725013,
             "region": "Shipping"
         },
@@ -12268,12 +12296,8 @@
             "code": 725020,
             "region": "Shipping"
         },
-        "Shipsanity: Dried Sand Dollar": {
+        "Shipsanity: Sand Dollar": {
             "code": 725021,
-            "region": "Shipping"
-        },
-        "Shipsanity: Dulse Seaweed": {
-            "code": 725022,
             "region": "Shipping"
         },
         "Shipsanity: Ferngill Primrose": {
@@ -12352,7 +12376,7 @@
             "code": 725051,
             "region": "Shipping"
         },
-        "Shipsanity: Lucky Four Leaf Clover": {
+        "Shipsanity: Four Leaf Clover": {
             "code": 725052,
             "region": "Shipping"
         },
@@ -12444,7 +12468,7 @@
             "code": 725074,
             "region": "Shipping"
         },
-        "Shipsanity: Smelly Rafflesia": {
+        "Shipsanity: Rafflesia": {
             "code": 725075,
             "region": "Shipping"
         },
@@ -13104,10 +13128,6 @@
             "code": 725239,
             "region": "Shipping"
         },
-        "Shipsanity: Digging Like Worms": {
-            "code": 725240,
-            "region": "Shipping"
-        },
         "Shipsanity: Digger's Delight": {
             "code": 725241,
             "region": "Shipping"
@@ -13118,6 +13138,22 @@
         },
         "Shipsanity: Ancient Jello": {
             "code": 725243,
+            "region": "Shipping"
+        },
+        "Shipsanity: Bone Fence": {
+            "code": 725244,
+            "region": "Shipping"
+        },
+        "Shipsanity: Grilled Cheese": {
+            "code": 725245,
+            "region": "Shipping"
+        },
+        "Shipsanity: Fish Casserole": {
+            "code": 725246,
+            "region": "Shipping"
+        },
+        "Shipsanity: Snatcher Worm": {
+            "code": 725247,
             "region": "Shipping"
         }
     }

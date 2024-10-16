@@ -1,8 +1,3 @@
-using System;
-using StardewArchipelago.Stardew.Ids.Vanilla;
-using StardewModdingAPI;
-using StardewArchipelago.Constants.Vanilla;
-
 namespace StardewArchipelago.Constants.Modded
 {
     internal class ModItemIds

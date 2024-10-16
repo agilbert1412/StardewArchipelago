@@ -1,8 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
-using StardewArchipelago.Archipelago;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.ArchipelagoUtilities.Net;
 
 namespace StardewArchipelago.Locations.GingerIsland.Parrots
 {
@@ -13,16 +15,16 @@ namespace StardewArchipelago.Locations.GingerIsland.Parrots
         private const string AP_FARMHOUSE_PARROT = "Island Farmhouse";
         private const string AP_PARROT_EXPRESS_PARROT = "Parrot Express";
 
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static IModHelper _modHelper;
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
 
-        private IslandLocation _islandWest;
+        private readonly IslandLocation _islandWest;
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(ILogger logger, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
-            _monitor = monitor;
+            _logger = logger;
             _modHelper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;

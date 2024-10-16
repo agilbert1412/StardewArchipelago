@@ -1,4 +1,4 @@
-﻿using StardewArchipelago.Archipelago;
+﻿using KaitoKid.ArchipelagoUtilities.Net.Client;
 
 namespace StardewArchipelago.Items.Mail
 {
@@ -23,7 +23,7 @@ namespace StardewArchipelago.Items.Mail
 
         public override MailKey GetMailKey()
         {
-            return new MailKey(ArchipelagoItem.ItemName, ArchipelagoItem.PlayerName, ArchipelagoItem.LocationName, LetterOpenedAction, ActionParameter, ArchipelagoItem.UniqueId.ToString(), IsEmptyLetter);
+            return new MailKey(ArchipelagoItem.ItemName, ArchipelagoItem.PlayerName, ArchipelagoItem.LocationName, LetterOpenedAction, ActionParameter, GetEmbedString(), ArchipelagoItem.UniqueId.ToString(), IsEmptyLetter);
         }
     }
 }

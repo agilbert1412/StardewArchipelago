@@ -1,11 +1,13 @@
 ﻿using System;
 using HarmonyLib;
+using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.Gifting;
 using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Items.Traps;
 using StardewArchipelago.Items.Unlocks;
-using StardewArchipelago.Locations;
 using StardewArchipelago.Stardew;
 using StardewArchipelago.Stardew.NameMapping;
 using StardewModdingAPI;
@@ -18,20 +20,20 @@ namespace StardewArchipelago.Items
         public const string FRIENDSHIP_BONUS_PREFIX = "Friendship Bonus (";
         public const string RECIPE_SUFFIX = " Recipe";
 
-        private IMonitor _monitor;
-        private StardewItemManager _itemManager;
-        private UnlockManager _unlockManager;
-        private TrapManager _trapManager;
+        private readonly ILogger _logger;
+        private readonly StardewItemManager _itemManager;
+        private readonly UnlockManager _unlockManager;
+        private readonly TrapManager _trapManager;
 
         // When More mods start to need name mapping, we can make a generic version of this
-        private CompoundNameMapper _nameMapper;
+        private readonly CompoundNameMapper _nameMapper;
 
-        public ItemParser(IMonitor monitor, IModHelper helper, Harmony harmony, ArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager itemManager, TileChooser tileChooser, BabyBirther babyBirther, GiftSender giftSender)
+        public ItemParser(ILogger logger, IModHelper helper, Harmony harmony, StardewArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager itemManager, TileChooser tileChooser, BabyBirther babyBirther, GiftSender giftSender)
         {
-            _monitor = monitor;
+            _logger = logger;
             _itemManager = itemManager;
             _unlockManager = new UnlockManager(archipelago, locationChecker);
-            _trapManager = new TrapManager(monitor, helper, harmony, archipelago, tileChooser, babyBirther, giftSender);
+            _trapManager = new TrapManager(logger, helper, harmony, archipelago, tileChooser, babyBirther, giftSender);
             _nameMapper = new CompoundNameMapper(archipelago.SlotData);
         }
 
@@ -82,10 +84,6 @@ namespace StardewArchipelago.Items
             if (receivedItem.ItemName.EndsWith(RECIPE_SUFFIX))
             {
                 var itemOfRecipe = receivedItem.ItemName[..^RECIPE_SUFFIX.Length];
-                if (_nameMapper.RecipeNeedsMapping(itemOfRecipe))
-                {
-                    return new LetterActionAttachment(receivedItem, LetterActionsKeys.LearnSpecialCraftingRecipe, itemOfRecipe);
-                }
                 return _itemManager.GetRecipeByName(itemOfRecipe).GetAsLetter(receivedItem);
             }
 
@@ -164,7 +162,7 @@ namespace StardewArchipelago.Items
                 return _itemManager.GetItemByName(otherVersion);
             }
 
-            _monitor.Log($"Could not properly parse resource pack item: {stardewItemName}", LogLevel.Error);
+            _logger.LogError($"Could not properly parse resource pack item: {stardewItemName}");
             return null;
         }
     }

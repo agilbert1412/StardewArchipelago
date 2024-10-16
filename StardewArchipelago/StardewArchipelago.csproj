@@ -8,20 +8,23 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Compile Remove="GameModifications\Buildings\**" />
-      <EmbeddedResource Remove="GameModifications\Buildings\**" />
-      <None Remove="GameModifications\Buildings\**" />
-    </ItemGroup>
-
-    <ItemGroup>
         <None Include="..\.editorconfig" Link=".editorconfig" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Archipelago.Gifting.Net" Version="0.3.0" />
-        <PackageReference Include="Archipelago.MultiClient.Net" Version="6.0.0-rc5" />
+        <PackageReference Include="Archipelago.Gifting.Net" Version="0.3.5" />
+        <PackageReference Include="Archipelago.MultiClient.Net" Version="6.3.1" />
+        <PackageReference Include="Archipelago.MultiClient.Net.Analyzers" Version="1.3.0">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="KaitoKid.ArchipelagoUtilities.Net" Version="1.1.14" />
         <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="4.1.1" />
     </ItemGroup>
+
+	<ItemGroup>
+		<Reference Include="Newtonsoft.Json" HintPath="$(GamePath)\smapi-internal\Newtonsoft.Json.dll" private="false" />
+	</ItemGroup>
 
   <ItemGroup>
     <None Update="IdTables\stardew_valley_item_table.json">
@@ -121,6 +124,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Textures\Archipelago\Custom\walnut-bush.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Textures\Archipelago\Custom\walnut_bush.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Textures\Archipelago\Original\115x115 pleading icon.png">
@@ -231,6 +237,9 @@
     <None Update="Textures\Bundles\beach_foraging_bundle.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Textures\Bundles\calico_bundle.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Textures\Bundles\carnival_bundle.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -253,6 +262,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Textures\Bundles\dried_bundle.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Textures\Bundles\dry_bundle.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Textures\Bundles\fish_smoker_bundle.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Textures\Bundles\gamblers_bundle.png">
@@ -321,6 +336,9 @@
     <None Update="Textures\Bundles\specific_bait_bundle.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Textures\Bundles\specific_fishing_bundle.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Textures\Bundles\summer_foraging_bundle.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -336,13 +354,24 @@
     <None Update="Textures\Bundles\wine_rack.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Textures\Gazette\gazette_all.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Textures\Gazette\gazette_beach.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Textures\Gazette\gazette_blank.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Textures\Gazette\gazette_railroad.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Textures\traveling_merchant.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="GameModifications\CustomOptions\" />
         <Folder Include="Test\" />
     </ItemGroup>
 </Project>

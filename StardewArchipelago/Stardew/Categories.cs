@@ -35,5 +35,7 @@
         public const int RING = -96;
         public const int WEAPON = -98;
         public const int TOOL = -99;
+        public const int POWER_BOOK = -102;
+        public const int EXPERIENCE_BOOK = -103;
     }
 }

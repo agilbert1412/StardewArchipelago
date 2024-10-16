@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.Stardew.NameMapping;
-using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Objects;
 
@@ -14,17 +15,19 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
     {
         public const string SHIPSANITY_PREFIX = "Shipsanity: ";
 
-        private IMonitor _monitor;
-        private ArchipelagoClient _archipelago;
-        private LocationChecker _locationChecker;
-        private NameSimplifier _nameSimplifier;
+        private readonly ILogger _logger;
+        private readonly StardewArchipelagoClient _archipelago;
+        private readonly LocationChecker _locationChecker;
+        private readonly NameSimplifier _nameSimplifier;
+        private readonly CompoundNameMapper _nameMapper;
 
-        public NightShippingBehaviors(IMonitor monitor, ArchipelagoClient archipelago, LocationChecker locationChecker, NameSimplifier nameSimplifier)
+        public NightShippingBehaviors(ILogger logger, StardewArchipelagoClient archipelago, LocationChecker locationChecker, NameSimplifier nameSimplifier)
         {
-            _monitor = monitor;
+            _logger = logger;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
             _nameSimplifier = nameSimplifier;
+            _nameMapper = new CompoundNameMapper(archipelago.SlotData);
         }
 
         // private static IEnumerator<int> _newDayAfterFade()
@@ -37,14 +40,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     return;
                 }
 
-                _monitor.Log($"Currently attempting to check shipsanity locations for the current day", LogLevel.Info);
+                _logger.LogInfo($"Currently attempting to check shipsanity locations for the current day");
                 var allShippedItems = GetAllItemsShippedToday();
-                _monitor.Log($"{allShippedItems.Count} items shipped", LogLevel.Info);
+                _logger.LogInfo($"{allShippedItems.Count} items shipped");
                 CheckAllShipsanityLocations(allShippedItems);
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(CheckShipsanityLocationsBeforeSleep)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(CheckShipsanityLocationsBeforeSleep)}:\n{ex}");
             }
         }
 
@@ -90,6 +93,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             foreach (var shippedItem in allShippedItems)
             {
                 var name = _nameSimplifier.GetSimplifiedName(shippedItem);
+                name = _nameMapper.GetEnglishName(name); // For the Name vs Display Name discrepencies in Mods.
                 if (IgnoredModdedStrings.Shipments.Contains(name))
                 {
                     continue;
@@ -101,9 +105,32 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 }
                 else
                 {
-                    _monitor.Log($"Unrecognized Shipsanity Location: {name} [{shippedItem.ParentSheetIndex}]", LogLevel.Error);
+                    var wasSuccessful = DoBugsCleanup(shippedItem);
+                    if (wasSuccessful)
+                    {
+                        continue;
+                    }
+                    _logger.LogError($"Unrecognized Shipsanity Location: {name} [{shippedItem.ParentSheetIndex}]");
                 }
             }
+        }
+
+        private bool DoBugsCleanup(Item shippedItem)
+        {
+            // In the beta async, backend names for SVE shippables are the internal names.  This fixes the mistake ONLY for that beta async.  Remove after it.
+            var name = _nameSimplifier.GetSimplifiedName(shippedItem);
+            var sveMappedItems = new List<string>() { "Smelly Rafflesia", "Bearberrys", "Big Conch", "Dried Sand Dollar", "Lucky Four Leaf Clover", "Ancient Ferns Seed" };
+            if (sveMappedItems.Contains(name))
+            {
+                var apLocation = $"{SHIPSANITY_PREFIX}{name}";
+                if (_archipelago.GetLocationId(apLocation) > -1)
+                {
+                    _logger.LogWarning($"Bugfix caught this for the beta async.  If this isn't that game, let the developers know there's a bug!");
+                    _locationChecker.AddCheckedLocation(apLocation);
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

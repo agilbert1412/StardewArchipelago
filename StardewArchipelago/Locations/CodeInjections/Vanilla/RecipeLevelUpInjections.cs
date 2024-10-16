@@ -1,23 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Locations;
 using StardewModdingAPI;
 using StardewValley.Menus;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.ArchipelagoUtilities.Net;
+using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
     public static class RecipeLevelUpInjections
     {
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static IModHelper _helper;
-        private static ArchipelagoClient _archipelago;
+        private static StardewArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
 
-        public static void Initialize(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
         {
-            _monitor = monitor;
+            _logger = logger;
             _helper = helper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
@@ -33,7 +35,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(LevelUpMenuConstructor_SendSkillRecipeChecks_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(LevelUpMenuConstructor_SendSkillRecipeChecks_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -81,7 +83,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 var skillCheck = Enum.TryParse<Skill>(skillActualName, out var skill);
                 if (!skillCheck)
                 {
-                    _monitor.Log($"Leveled up unrecognized Skill: {skillActualName} [{skillName}]", LogLevel.Error);
+                    _logger.LogError($"Leveled up unrecognized Skill: {skillActualName} [{skillName}]");
                     return;
                 }
                 SendSkillRecipeChecks(skill, level);
@@ -89,7 +91,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(SkillLevelUpMenuConstructor_SendModdedSkillRecipeChecks_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(SkillLevelUpMenuConstructor_SendModdedSkillRecipeChecks_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -113,6 +115,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 Skill.Foraging, new Dictionary<int, string[]>()
                 {
                     { 2, new[] { "Survival Burger" } },
+                    { 3, new[] { "Moss Soup" } },
                 }
             },
             {
@@ -134,6 +137,21 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     { 8, new[] { "Lucky Lunch" } },
                 }
             },
+            {
+                Skill.Archaeology, new Dictionary<int, string[]>()
+                {
+                    { 3, new[] { "Digger's Delight" } },
+                    { 7, new[] { "Rocky Root Coffee" } },
+                    { 9, new[] { "Ancient Jello" } },
+                }
+            },
+            {
+                Skill.Binning, new Dictionary<int, string[]>()
+                {
+                    { 1, new[] { "Grilled Cheese" } },
+                    { 8, new[] { "Fish Casserole" } },
+                }
+            }
         };
 
         /*private static readonly Dictionary<Skill, Dictionary<int, string[]>> _craftingRecipesBySkill = new()
@@ -151,6 +169,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     { 9, new[] { "Dwarf Gadget: Infinite Volcano Simulation" } },
                 }
             },
+            {
+                Skill.Binning, new Dictionary<int, string[]>()
+                {
+                    { 1, new[] { "Recycling Machine" } },
+                    { 2, new[] { "Trash Can" } },
+                    { 4, new[] { "Composter" } },
+                    { 7, new[] { "Recycling Bin" } },
+                    { 9, new[] { "Advanced Recycling Machine" } },
+                }
+            }
         };*/
     }
 }

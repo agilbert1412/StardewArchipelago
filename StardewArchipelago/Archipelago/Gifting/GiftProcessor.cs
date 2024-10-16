@@ -3,25 +3,29 @@ using System.Collections.Generic;
 using System.Linq;
 using Archipelago.Gifting.Net.Gifts.Versions.Current;
 using Archipelago.Gifting.Net.Traits;
+using Archipelago.Gifting.Net.Utilities.CloseTraitParser;
 using StardewArchipelago.Extensions;
 using StardewArchipelago.Stardew;
-using StardewModdingAPI;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 
 namespace StardewArchipelago.Archipelago.Gifting
 {
     public class GiftProcessor
     {
-        private IMonitor _monitor;
+        private ILogger _logger;
         private ArchipelagoClient _archipelago;
-        private StardewItemManager _itemManager;
+        private readonly StardewItemManager _itemManager;
+        private readonly ICloseTraitParser<string> _closeTraitParser;
         private Dictionary<string, Func<int, ItemAmount>> _specialItems;
         private Dictionary<int, Dictionary<string[], Func<int, Dictionary<string, GiftTrait>, ItemAmount>>> _recognizedTraits;
 
-        public GiftProcessor(IMonitor monitor, ArchipelagoClient archipelago, StardewItemManager itemManager)
+        public GiftProcessor(ILogger logger, ArchipelagoClient archipelago, StardewItemManager itemManager, ICloseTraitParser<string> closeTraitParser)
         {
-            _monitor = monitor;
+            _logger = logger;
             _archipelago = archipelago;
             _itemManager = itemManager;
+            _closeTraitParser = closeTraitParser;
             InitializeSpecialItems();
             InitializeRecognizedTraits();
         }
@@ -59,6 +63,17 @@ namespace StardewArchipelago.Archipelago.Gifting
                     amount = itemAmount.Amount;
                     return true;
                 }
+            }
+
+            var closestGifts = _closeTraitParser.FindClosestAvailableGift(gift.Traits);
+            if (closestGifts.Any())
+            {
+                var random = new Random(gift.ItemName.GetHashCode());
+                var chosenIndex = random.Next(0, closestGifts.Count);
+                var chosenGift = closestGifts[chosenIndex];
+                itemName = chosenGift;
+                amount = gift.Amount;
+                return true;
             }
 
             foreach (var trait in gift.Traits)

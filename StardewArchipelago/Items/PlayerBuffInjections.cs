@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using StardewArchipelago.Archipelago;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Constants;
 using StardewModdingAPI;
 using StardewValley;
@@ -13,7 +14,7 @@ namespace StardewArchipelago.Items
 {
     public class PlayerBuffInjections
     {
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static IModHelper _helper;
         private static ArchipelagoClient _archipelago;
 
@@ -30,26 +31,32 @@ namespace StardewArchipelago.Items
         // private static int _numberOfQualityBonuses = 0; // I might implement this someday
         // private static int _numberOfGlowBonuses = 0; // I might implement this someday
 
-        public static void Initialize(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago)
+        public static void Initialize(ILogger logger, IModHelper helper, ArchipelagoClient archipelago)
         {
-            _monitor = monitor;
+            _logger = logger;
             _helper = helper;
             _archipelago = archipelago;
         }
 
         public static void CheckForApBuffs()
         {
-            _numberOfSpeedBonuses = _archipelago.GetReceivedItemCount(APItem.MOVEMENT_SPEED_BONUS);
-            _numberOfLuckBonuses = _archipelago.GetReceivedItemCount(APItem.LUCK_BONUS);
-            _numberOfDamageBonuses = _archipelago.GetReceivedItemCount(APItem.DAMAGE_BONUS);
-            _numberOfDefenseBonuses = _archipelago.GetReceivedItemCount(APItem.DEFENSE_BONUS);
-            _numberOfImmunityBonuses = _archipelago.GetReceivedItemCount(APItem.IMMUNITY_BONUS);
-            _numberOfEnergyBonuses = _archipelago.GetReceivedItemCount(APItem.ENERGY_BONUS);
-            _numberOfBiteRateBonuses = _archipelago.GetReceivedItemCount(APItem.BITE_RATE_BONUS);
-            _numberOfFishTrapBonuses = _archipelago.GetReceivedItemCount(APItem.FISH_TRAP_BONUS);
-            _numberOfFishingBarBonuses = _archipelago.GetReceivedItemCount(APItem.FISHING_BAR_SIZE_BONUS);
-            // _numberOfQualityBonuses = _archipelago.GetReceivedItemCount(APItem.QUALITY_BONUS);
-            // _numberOfGlowBonuses = _archipelago.GetReceivedItemCount(APItem.GLOW_BONUS);
+            _numberOfSpeedBonuses = GetNumberOfBuff(APItem.MOVEMENT_SPEED_BONUS);
+            _numberOfLuckBonuses = GetNumberOfBuff(APItem.LUCK_BONUS, 24); // If the daily luck reaches 0.75, weird shit starts to happen. 24 buffs is 0.6, plus the max daily of 0.1 and the trinket of 0.025 makes 0.725
+            _numberOfDamageBonuses = GetNumberOfBuff(APItem.DAMAGE_BONUS);
+            _numberOfDefenseBonuses = GetNumberOfBuff(APItem.DEFENSE_BONUS);
+            _numberOfImmunityBonuses = GetNumberOfBuff(APItem.IMMUNITY_BONUS);
+            _numberOfEnergyBonuses = GetNumberOfBuff(APItem.ENERGY_BONUS);
+            _numberOfBiteRateBonuses = GetNumberOfBuff(APItem.BITE_RATE_BONUS);
+            _numberOfFishTrapBonuses = GetNumberOfBuff(APItem.FISH_TRAP_BONUS);
+            _numberOfFishingBarBonuses = GetNumberOfBuff(APItem.FISHING_BAR_SIZE_BONUS, 65); // If you max out every possible fishing buff from every source, and add 65 of these, it makes the bar take exactly the whole height of the minigame
+            // _numberOfQualityBonuses = GetNumberOfBuff(APItem.QUALITY_BONUS);
+            // _numberOfGlowBonuses = GetNumberOfBuff(APItem.GLOW_BONUS);
+        }
+
+        private static int GetNumberOfBuff(string buffName, int maximum = int.MaxValue)
+        {
+            var numberReceived = _archipelago.GetReceivedItemCount(buffName);
+            return Math.Min(numberReceived, maximum);
         }
 
         public static void GetMovementSpeed_AddApBuffs_Postfix(Farmer __instance, ref float __result)
@@ -71,7 +78,7 @@ namespace StardewArchipelago.Items
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(GetMovementSpeed_AddApBuffs_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(GetMovementSpeed_AddApBuffs_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -87,7 +94,7 @@ namespace StardewArchipelago.Items
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(DailyLuck_AddApBuffs_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(DailyLuck_AddApBuffs_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -105,7 +112,7 @@ namespace StardewArchipelago.Items
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(GetAttackMultiplier_AddApBuffs_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(GetAttackMultiplier_AddApBuffs_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -121,7 +128,7 @@ namespace StardewArchipelago.Items
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(GetDefense_AddApBuffs_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(GetDefense_AddApBuffs_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -137,7 +144,7 @@ namespace StardewArchipelago.Items
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(GetImmunity_AddApBuffs_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(GetImmunity_AddApBuffs_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -153,7 +160,7 @@ namespace StardewArchipelago.Items
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(GetMaxStamina_AddApBuffs_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(GetMaxStamina_AddApBuffs_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -169,13 +176,13 @@ namespace StardewArchipelago.Items
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(CalculateTimeUntilFishingBite_AddApBuffs_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(CalculateTimeUntilFishingBite_AddApBuffs_Postfix)}:\n{ex}");
                 return;
             }
         }
 
         // public BobberBar(string whichFish, float fishSize, bool treasure, List<string> bobbers, string setFlagOnCatch, bool isBossFish, string baitID = "", bool goldenTreasure = false)
-        public static void BobberBarConstructor_AddApBuffs_Postfix(BobberBar __instance, string whichFish, float fishSize, bool treasure, 
+        public static void BobberBarConstructor_AddApBuffs_Postfix(BobberBar __instance, string whichFish, float fishSize, bool treasure,
             List<string> bobbers, string setFlagOnCatch, bool isBossFish, string baitID, bool goldenTreasure)
         {
             try
@@ -186,7 +193,7 @@ namespace StardewArchipelago.Items
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(BobberBarConstructor_AddApBuffs_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(BobberBarConstructor_AddApBuffs_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -199,7 +206,7 @@ namespace StardewArchipelago.Items
 
         private static void AddFishingBarBuff(BobberBar bar)
         {
-            var fishingBarSizeIncrease = (10 * _numberOfFishingBarBonuses);
+            var fishingBarSizeIncrease = (4 * _numberOfFishingBarBonuses);
             bar.bobberBarHeight += fishingBarSizeIncrease;
             bar.bobberBarPos = (568 - bar.bobberBarHeight);
         }

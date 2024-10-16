@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using StardewArchipelago.Archipelago;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Extensions;
 using StardewArchipelago.Locations;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
 using StardewArchipelago.Locations.Festival;
+using StardewArchipelago.Logging;
 using StardewArchipelago.Textures;
 using StardewModdingAPI;
 using StardewValley;
@@ -20,19 +22,19 @@ namespace StardewArchipelago.GameModifications.Tooltips
 {
     public class BillboardInjections
     {
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static IModHelper _modHelper;
         private static ModConfig _config;
         private static ArchipelagoClient _archipelago;
-        private static LocationChecker _locationChecker;
+        private static StardewLocationChecker _locationChecker;
         private static Friends _friends;
         private static Texture2D _bigArchipelagoIcon;
         private static Texture2D _miniArchipelagoIcon;
         private static Texture2D _travelingMerchantIcon;
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ModConfig config, ArchipelagoClient archipelago, LocationChecker locationChecker, Friends friends)
+        public static void Initialize(LogHandler logger, IModHelper modHelper, ModConfig config, ArchipelagoClient archipelago, StardewLocationChecker locationChecker, Friends friends)
         {
-            _monitor = monitor;
+            _logger = logger;
             _modHelper = modHelper;
             _config = config;
             _archipelago = archipelago;
@@ -40,9 +42,9 @@ namespace StardewArchipelago.GameModifications.Tooltips
             _friends = friends;
 
             var desiredTextureName = ArchipelagoTextures.COLOR;
-            _bigArchipelagoIcon = ArchipelagoTextures.GetArchipelagoLogo(monitor, modHelper, 48, desiredTextureName);
-            _miniArchipelagoIcon = ArchipelagoTextures.GetArchipelagoLogo(monitor, modHelper, 24, desiredTextureName);
-            _travelingMerchantIcon = TexturesLoader.GetTexture(monitor, modHelper, "traveling_merchant.png");
+            _bigArchipelagoIcon = ArchipelagoTextures.GetArchipelagoLogo(logger, modHelper, 48, desiredTextureName);
+            _miniArchipelagoIcon = ArchipelagoTextures.GetArchipelagoLogo(logger, modHelper, 24, desiredTextureName);
+            _travelingMerchantIcon = TexturesLoader.GetTexture(logger, modHelper, "traveling_merchant.png");
         }
 
         // public override void draw(SpriteBatch spriteBatch)
@@ -65,7 +67,7 @@ namespace StardewArchipelago.GameModifications.Tooltips
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(Draw_AddArchipelagoIndicators_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(Draw_AddArchipelagoIndicators_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -128,7 +130,7 @@ namespace StardewArchipelago.GameModifications.Tooltips
             var day = index + 1;
             var dayComponent = calendarDays[index];
 
-            if (!GetMissingFestivalChecks(day).Any() && !GetMissingNpcChecks(birthdaysToday).Any() && !GetMissingTravelingCartChecks(day).Any())
+            if (!GetMissingFestivalChecks(day).Any() && !GetMissingNpcChecks(birthdaysToday).Any() && !GetMissingTravelingCartChecks(day).Any() && !GetMissingSpecificDayChecks(day).Any())
             {
                 return;
             }
@@ -190,6 +192,7 @@ namespace StardewArchipelago.GameModifications.Tooltips
                     var missingFestivalChecks = GetMissingFestivalChecks(day);
                     var missingNpcChecks = GetMissingNpcChecks(birthdaysToday);
                     var missingCartChecks = GetMissingTravelingCartChecks(day);
+                    var missingSpecificDayChecks = GetMissingSpecificDayChecks(day);
 
                     foreach (var location in missingFestivalChecks)
                     {
@@ -205,6 +208,11 @@ namespace StardewArchipelago.GameModifications.Tooltips
                     {
                         hoverText += $"{Environment.NewLine}- {location}";
                     }
+
+                    foreach (var location in missingSpecificDayChecks)
+                    {
+                        hoverText += $"{Environment.NewLine}- {location}";
+                    }
                 }
 
                 hoverTextField.SetValue(hoverText.Trim());
@@ -212,7 +220,7 @@ namespace StardewArchipelago.GameModifications.Tooltips
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(PerformHoverAction_AddArchipelagoChecksToTooltips_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(PerformHoverAction_AddArchipelagoChecksToTooltips_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -265,6 +273,18 @@ namespace StardewArchipelago.GameModifications.Tooltips
 
             var merchantItemPatern = $"Traveling Merchant {dayOfWeek} Item";
             return _locationChecker.GetAllLocationsNotCheckedContainingWord(merchantItemPatern);
+        }
+
+        private static IEnumerable<string> GetMissingSpecificDayChecks(int day)
+        {
+            if (Game1.season == Season.Spring && day == 17)
+            {
+                const string potOfGold = "Pot Of Gold";
+                if (_locationChecker.IsLocationMissing(potOfGold))
+                {
+                    yield return potOfGold;
+                }
+            }
         }
     }
 }

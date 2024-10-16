@@ -2,9 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Archipelago.MultiClient.Net.Models;
+using KaitoKid.ArchipelagoUtilities.Net;
 using Microsoft.Xna.Framework;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
-using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
 using StardewValley.Objects;
@@ -40,14 +41,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             },
         };
 
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static LocationChecker _locationChecker;
-        private static ArchipelagoClient _archipelago;
+        private static StardewArchipelagoClient _archipelago;
         private static ShopMenu _lastShopMenuUpdated = null;
 
-        public static void Initialize(IMonitor monitor, LocationChecker locationChecker, ArchipelagoClient archipelago)
+        public static void Initialize(ILogger logger, LocationChecker locationChecker, StardewArchipelagoClient archipelago)
         {
-            _monitor = monitor;
+            _logger = logger;
             _locationChecker = locationChecker;
             _archipelago = archipelago;
         }
@@ -72,7 +73,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(Update_ReplaceDwarfShopChecks_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(Update_ReplaceDwarfShopChecks_Postfix)}:\n{ex}");
                 return; // run original logic
             }
         }
@@ -95,7 +96,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 foreach (var recipe in recipes)
                 {
                     throw new Exception($"{nameof(BoardingHouseInjections)}.{nameof(ReplaceCraftsanityRecipes)} attempted to use the now removed ShopReplacer. It needs to be updated for 1.6");
-                    // _shopReplacer.PlaceShopRecipeCheck(shopMenu.itemPriceAndStock, $"{recipe.ItemName} Recipe", recipe.ItemName, myActiveHints, recipe.Price);
+                    // _shopReplacer.PlaceShopRecipeCheck(shopMenu.itemPriceAndStock, $"{recipe.RecipeName} Recipe", recipe.RecipeName, myActiveHints, recipe.Price);
                 }
             }
         }
@@ -129,7 +130,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(CheckForAction_TreasureChestLocation_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(CheckForAction_TreasureChestLocation_Prefix)}:\n{ex}");
                 return true;
             }
         }

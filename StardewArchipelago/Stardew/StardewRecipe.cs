@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using StardewArchipelago.Archipelago;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewArchipelago.Items.Mail;
 using StardewValley;
 
@@ -7,18 +7,18 @@ namespace StardewArchipelago.Stardew
 {
     public abstract class StardewRecipe
     {
-        public string ItemName { get; protected set; }
+        public string RecipeName { get; protected set; }
         public Dictionary<string, int> Ingredients { get; private set; }
-        public string YieldItemId { get; private set; }
+        public StardewItem YieldItem { get; private set; }
         public int YieldItemAmount { get; private set; }
         public string UnlockConditions { get; private set; }
         public string DisplayName { get; private set; }
 
-        protected StardewRecipe(string itemName, Dictionary<string, int> ingredients, string yieldItemId, int yieldItemAmount, string unlockConditions, string displayName)
+        protected StardewRecipe(string recipeName, Dictionary<string, int> ingredients, StardewItem yieldItem, int yieldItemAmount, string unlockConditions, string displayName)
         {
-            ItemName = itemName;
+            RecipeName = recipeName;
             Ingredients = ingredients;
-            YieldItemId = yieldItemId;
+            YieldItem = yieldItem;
             YieldItemAmount = yieldItemAmount;
             UnlockConditions = unlockConditions;
             DisplayName = displayName;

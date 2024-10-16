@@ -9,6 +9,7 @@ using StardewValley.BellsAndWhistles;
 using StardewValley.Extensions;
 using StardewValley.Locations;
 using StardewValley.Menus;
+
 // ReSharper disable InconsistentNaming
 // ReSharper disable FieldCanBeMadeReadOnly.Local
 // ReSharper disable VirtualMemberCallInConstructor
@@ -142,7 +143,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         //}
 
         public FakeJunimoNoteMenu(Bundle b, string noteTexturePath)
-          : base(Game1.uiViewport.Width / 2 - 640, Game1.uiViewport.Height / 2 - 360, 1280, 720, true)
+            : base(Game1.uiViewport.Width / 2 - 640, Game1.uiViewport.Height / 2 - 360, 1280, 720, true)
         {
             this.singleBundleMenu = true;
             this.whichArea = -1;
@@ -150,7 +151,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             tempSprites.Clear();
             this.inventory = new InventoryMenu(this.xPositionOnScreen + 128, this.yPositionOnScreen + 140, true, highlightMethod: this.HighlightObjects, capacity: 36, rows: 6, horizontalGap: 8, verticalGap: 8, drawSlots: false)
             {
-                capacity = 36
+                capacity = 36,
             };
             for (var index = 0; index < this.inventory.inventory.Count; ++index)
             {
@@ -1631,7 +1632,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                             }
                         }
                         hoverText = dataOrErrorItem.DisplayName;
-                    label_18:
+                        label_18:
                         Item flavoredItem;
                         if (ingredient.preservesId != null)
                         {
@@ -1690,18 +1691,18 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         }
 
         public override bool IsAutomaticSnapValid(
-          int direction,
-          ClickableComponent a,
-          ClickableComponent b)
+            int direction,
+            ClickableComponent a,
+            ClickableComponent b)
         {
             return (this.currentPartialIngredientDescriptionIndex < 0 || (!this.ingredientSlots.Contains<ClickableComponent>(b) || b.item == this.partialDonationItem) && (!this.ingredientList.Contains<ClickableComponent>(b) || this.ingredientList.IndexOf(b as ClickableTextureComponent) == this.currentPartialIngredientDescriptionIndex)) && (a.myID >= 5000 || a.myID == 101 ? 1 : (a.myID == 102 ? 1 : 0)) == (b.myID >= 5000 || b.myID == 101 ? 1 : (b.myID == 102 ? 1 : 0));
         }
 
         private void addRectangleRowsToList(
-          List<Rectangle> toAddTo,
-          int numberOfItems,
-          int centerX,
-          int centerY)
+            List<Rectangle> toAddTo,
+            int numberOfItems,
+            int centerX,
+            int centerY)
         {
             switch (numberOfItems)
             {
@@ -1753,12 +1754,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         }
 
         private List<Rectangle> createRowOfBoxesCenteredAt(
-          int xStart,
-          int yStart,
-          int numBoxes,
-          int boxWidth,
-          int boxHeight,
-          int horizontalGap)
+            int xStart,
+            int yStart,
+            int numBoxes,
+            int boxWidth,
+            int boxHeight,
+            int horizontalGap)
         {
             var ofBoxesCenteredAt = new List<Rectangle>();
             var num = xStart - numBoxes * (boxWidth + horizontalGap) / 2;

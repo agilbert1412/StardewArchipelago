@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using KaitoKid.ArchipelagoUtilities.Net;
 using Microsoft.Xna.Framework;
-using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Minigames;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -66,9 +68,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             JOTPK_AMMO_2, JOTPK_AMMO_3, JOTPK_COWBOY_1, JOTPK_COWBOY_2, JOTPK_VICTORY,
         };
 
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static IModHelper _helper;
-        private static ArchipelagoClient _archipelago;
+        private static StardewArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
         private static int _bootsLevel;
         private static int _gunLevel;
@@ -77,9 +79,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private static int _gunItemOffered = -1;
         private static int _ammoItemOffered = -1;
 
-        public static void Initialize(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
         {
-            _monitor = monitor;
+            _logger = logger;
             _helper = helper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
@@ -102,7 +104,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(RestartLevel_NewGame_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(RestartLevel_NewGame_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -126,7 +128,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(UpdateFruitsSummary_ExtraLives_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(UpdateFruitsSummary_ExtraLives_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -140,7 +142,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(EndCutscene_JunimoKartLevelComplete_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(EndCutscene_JunimoKartLevelComplete_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -237,7 +239,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(GetLootDrop_ExtraLoot_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(GetLootDrop_ExtraLoot_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -264,7 +266,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(UsePowerup_PrairieKingBossBeaten_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(UsePowerup_PrairieKingBossBeaten_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -285,7 +287,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(StartShoppingLevel_ShopBasedOnSentChecks_PostFix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(StartShoppingLevel_ShopBasedOnSentChecks_PostFix)}:\n{ex}");
                 return;
             }
         }
@@ -304,7 +306,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(Tick_Shopping_PostFix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(Tick_Shopping_PostFix)}:\n{ex}");
                 return;
             }
             finally
@@ -407,7 +409,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(AbigailGameCtor_Equipments_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(AbigailGameCtor_Equipments_Postfix)}:\n{ex}");
                 return;
             }
         }

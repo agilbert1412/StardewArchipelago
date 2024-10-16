@@ -1,7 +1,7 @@
 using FluentAssertions;
 using StardewArchipelago.Locations;
 
-namespace StardewArchipelagoTests
+namespace StardewArchipelago.ests
 {
     public class LocationNameMatcherTests
     {
@@ -23,6 +23,15 @@ namespace StardewArchipelagoTests
         [TestCase("Wizard", new[] { "Friendsanity: Wizard 4 <3" }, new string[0], TestName = "Wizard")]
         [TestCase("Apple", new[] { "Harvest Apple" }, new[] { "Friendsanity: Apples 1 <3" }, TestName = "Apple")]
         [TestCase("Apples", new[] { "Friendsanity: Apples 10 <3" }, new[] { "Harvest Apple" }, TestName = "Apples")]
+        [TestCase("Opal", new[] { "Museumsanity: Opal" }, new[] { "Museumsanity: Fire Opal" }, TestName = "Opal")]
+        [TestCase("Fire Opal", new[] { "Museumsanity: Fire Opal" }, new[] { "Museumsanity: Opal" }, TestName = "Opal")]
+        [TestCase("Chest", new[] { "Craft Chest" }, new[] { "Craft Stone Chest", "Craft Big Chest", "Craft Big Stone Chest" }, TestName = "Chest")]
+        [TestCase("Stone Chest", new[] { "Craft Stone Chest" }, new[] { "Craft Chest", "Craft Big Chest", "Craft Big Stone Chest" }, TestName = "Stone Chest")]
+        [TestCase("Big Chest", new[] { "Craft Big Chest" }, new[] { "Craft Stone Chest", "Craft Chest", "Craft Big Stone Chest" }, TestName = "Big Chest")]
+        [TestCase("Big Stone Chest", new[] { "Craft Big Stone Chest" }, new[] { "Craft Chest", "Craft Big Chest", "Craft Stone Chest" }, TestName = "Big Stone Chest")]
+        [TestCase("Egg", new[] { "Shipsanity: Egg" }, new[] { "Shipsanity: Duck Egg", "Shipsanity: Egg (Brown)", "Shipsanity: Large Egg", "Shipsanity: Green Slime Egg", "Shipsanity: Calico Egg" }, TestName = "Egg")]
+        [TestCase("Large Egg", new[] { "Shipsanity: Large Egg" }, new[] { "Shipsanity: Egg (Brown)", "Shipsanity: Large Egg (Brown)" }, TestName = "Large Egg")]
+        [TestCase("Egg (Brown)", new[] { "Shipsanity: Egg (Brown)" }, new[] { "Shipsanity: Large Egg (Brown)" }, TestName = "Brown Egg")]
         public void GetAllLocationsContainingWordTruePositivesTest(string itemName, string[] locationsMatching, string[] locationsNotMatching)
         {
             // Arrange
@@ -40,6 +49,9 @@ namespace StardewArchipelagoTests
         [TestCase("Stone", new[] { "Shipsanity: Swirl Stone", "Smashing Stone" }, TestName = "Swirl Stone")]
         [TestCase("Hardwood", new[] { "Shipsanity: Hardwood Display: Amphibian Fossil" }, TestName = "Hardwood Displays")]
         [TestCase("Anchor", new[] { "Repair Boat Anchor" }, TestName = "Boat Anchor")]
+        [TestCase("Diamond", new[] { "Read The Diamond Hunter", "Starfish Diamond", "Diamond Of Indents", "Diamond Of Pebbles" }, TestName = "Diamond")]
+        [TestCase("Opal", new[] { "Fire Opal" }, TestName = "Opals")]
+        [TestCase("Chest", new[] { "Craft Stone Chest", "Craft Big Chest", "Craft Big Stone Chest", "Volcano Common Chest Walnut", "Volcano Rare Chest Walnut", "Deep Woods Treasure Chest" }, TestName = "Chest")]
         public void GetAllLocationsContainingWordFalsePositivesTest(string itemName, string[] locationsNotMatching)
         {
             // Arrange

@@ -1,8 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using Microsoft.VisualBasic;
-using StardewArchipelago.Archipelago;
 using StardewArchipelago.Locations.ShopStockModifiers;
 using StardewArchipelago.Stardew;
 using StardewArchipelago.Stardew.Ids.Vanilla;
@@ -10,14 +7,20 @@ using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.GameData.Shops;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
 {
-    public class BearShopStockModifier: BarterShopStockModifier
+    public class BearShopStockModifier : BarterShopStockModifier
     {
-        public BearShopStockModifier(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago, StardewItemManager stardewItemManager) : base(monitor, helper, archipelago, stardewItemManager)
+        private const float INITIAL_DISCOUNT = 0.3f;
+        private const float APPLES_DISCOUNT = 0.025f;
+        private const float KNOWLEDGE_DISCOUNT = 0.4f;
+
+        public BearShopStockModifier(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager) : base(logger, helper, archipelago, stardewItemManager)
         {
-            _monitor = monitor;
+            _logger = logger;
             _helper = helper;
             _archipelago = archipelago;
             _stardewItemManager = stardewItemManager;
@@ -43,19 +46,18 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
         private void MakeBearBarter(ShopData shopData)
         {
             var berryItems = _stardewItemManager.GetObjectsWithPhrase("berry").ToList();
-            var discount = BearDiscount();
-            var stockCount = BearStockCount();
+            var priceReduction = 1 - BearDiscount();
             var random = new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame / 2 + shopData.GetHashCode());
-            var chosenItemGroup = berryItems.Where(x => !(x.Name.Contains("Joja") || x.Name.Contains("Seeds")) && x.SellPrice > 0 ).ToList();
+            var chosenItemGroup = berryItems.Where(x => !(x.Name.Contains("Joja") || x.Name.Contains("Seeds") || x.Name.Contains("Starter")) && x.SellPrice > 0).ToList();
             foreach (var shopItem in shopData.Items)
             {
                 var isRecipe = shopItem.ItemId.Contains("Baked Berry Oatmeal") || shopItem.ItemId.Contains("Flower Cookie");
-                if (!_archipelago.SlotData.Chefsanity.HasFlag(Chefsanity.Purchases) || !isRecipe)
+                if (!_archipelago.SlotData.Chefsanity.HasFlag(Chefsanity.Purchases) || _archipelago.SlotData.Cooksanity == Cooksanity.All || !isRecipe)
                 {
-                    ReplaceCurrencyWithBarterGivenObjects(berryItems, shopItem, stockCount, discount);
+                    ReplaceCurrencyWithBarterGivenObjects(chosenItemGroup, shopItem, BearStockCount(isRecipe), priceReduction, isRecipe);
                     continue;
                 }
-                ReplaceCurrencyWithBarterGivenObject(BerryIfChefsanityIsOn(), shopItem, stockCount, discount);
+                ReplaceCurrencyWithBarterGivenObject(BerryIfChefsanityIsOn(), shopItem, BearStockCount(isRecipe), priceReduction, isRecipe);
 
             }
         }
@@ -79,20 +81,25 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
 
         private double BearDiscount()
         {
-            var hasKnowledge = _archipelago.HasReceivedItem("Bear Knowledge");
-            var knowledgeBuff = hasKnowledge ? 0.3f: 0f;
+            var hasKnowledge = _archipelago.HasReceivedItem("Bear's Knowledge");
+            var knowledgeBuff = hasKnowledge ? KNOWLEDGE_DISCOUNT : 0f;
             var applesHearts = 0;
             if (Game1.player.friendshipData.ContainsKey("Apples"))
             {
                 applesHearts = Game1.player.friendshipData["Apples"].Points / 250; // Get discount from being friends with Apples
             }
-            return 1 - (knowledgeBuff + applesHearts * 0.05f);
+            var additionalDiscount = knowledgeBuff + applesHearts * APPLES_DISCOUNT;
+            return INITIAL_DISCOUNT + additionalDiscount;
         }
 
-        private int BearStockCount()
+        private int BearStockCount(bool isRecipe)
         {
+            if (isRecipe)
+            {
+                return 1;
+            }
             var hasKnowledge = _archipelago.HasReceivedItem("Bear Knowledge");
-            var knowledgeBuff = hasKnowledge ? 3: 1;
+            var knowledgeBuff = hasKnowledge ? 3 : 1;
             var applesHearts = 0;
             if (Game1.player.friendshipData.ContainsKey("Apples"))
             {

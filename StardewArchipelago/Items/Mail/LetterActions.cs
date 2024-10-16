@@ -10,7 +10,6 @@ using StardewArchipelago.Items.Traps;
 using StardewArchipelago.Items.Unlocks.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
 using StardewArchipelago.Stardew;
-using StardewArchipelago.Stardew.NameMapping;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
@@ -24,14 +23,14 @@ namespace StardewArchipelago.Items.Mail
     {
         private readonly IModHelper _modHelper;
         private readonly Mailman _mail;
-        private ArchipelagoClient _archipelago;
-        private WeaponsManager _weaponsManager;
+        private readonly StardewArchipelagoClient _archipelago;
+        private readonly WeaponsManager _weaponsManager;
         private readonly TrapManager _trapManager;
         private readonly BabyBirther _babyBirther;
         private readonly ToolUpgrader _toolUpgrader;
-        private Dictionary<string, Action<string>> _letterActions;
+        private readonly Dictionary<string, Action<string>> _letterActions;
 
-        public LetterActions(IModHelper modHelper, Mailman mail, ArchipelagoClient archipelago, WeaponsManager weaponsManager, TrapManager trapManager, BabyBirther babyBirther, StardewItemManager _stardewItemManager)
+        public LetterActions(IModHelper modHelper, Mailman mail, StardewArchipelagoClient archipelago, WeaponsManager weaponsManager, TrapManager trapManager, BabyBirther babyBirther, StardewItemManager _stardewItemManager)
         {
             _modHelper = modHelper;
             _mail = mail;
@@ -82,7 +81,6 @@ namespace StardewArchipelago.Items.Mail
             _letterActions.Add(LetterActionsKeys.SpawnBaby, (_) => _babyBirther.SpawnNewBaby());
             _letterActions.Add(LetterActionsKeys.Trap, ExecuteTrap);
             _letterActions.Add(LetterActionsKeys.LearnCookingRecipe, LearnCookingRecipe);
-            _letterActions.Add(LetterActionsKeys.LearnSpecialCraftingRecipe, LearnSpecialCraftingRecipe);
             modLetterActions.AddModLetterActions(_letterActions);
         }
 
@@ -656,26 +654,24 @@ namespace StardewArchipelago.Items.Mail
 
         private void LearnCookingRecipe(string recipeItemName)
         {
-            var realRecipeName = recipeItemName.Replace("_", " ");
+            var allCookingRecipes = DataLoader.CookingRecipes(Game1.content);
+            var realRecipeName = recipeItemName;
+            if (!allCookingRecipes.ContainsKey(realRecipeName))
+            {
+                realRecipeName = recipeItemName.Replace("_", " ");
+            }
+
+            if (!allCookingRecipes.ContainsKey(realRecipeName))
+            {
+                throw new ArgumentException($"Cooking Recipe '{recipeItemName}' Is not recognized.");
+            }
+
             if (Game1.player.cookingRecipes.ContainsKey(realRecipeName))
             {
                 Game1.player.cookingRecipes[realRecipeName] = 0;
                 return;
             }
             Game1.player.cookingRecipes.Add(realRecipeName, 0);
-        }
-
-        private void LearnSpecialCraftingRecipe(string recipeItemName)
-        {
-            // When more mods start to need name mapping, we can make a generic version of this
-            var nameMapper = new CraftingRecipeNameMapper();
-            var internalName = nameMapper.GetRecipeName(recipeItemName.Replace("_", " "));
-            if (Game1.player.craftingRecipes.ContainsKey(internalName))
-            {
-                Game1.player.craftingRecipes[internalName] = 0;
-                return;
-            }
-            Game1.player.craftingRecipes.Add(internalName, 0);
         }
     }
 }

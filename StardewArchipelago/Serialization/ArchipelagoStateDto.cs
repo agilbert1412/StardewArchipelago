@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.Serialization

@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Linq;
-using StardewArchipelago.Archipelago;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
 using xTile.Dimensions;
+using Rectangle = Microsoft.Xna.Framework.Rectangle;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.ArchipelagoUtilities.Net;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -12,15 +15,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
     {
         private const string MASTERY = "Mastery";
 
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static IModHelper _helper;
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago,
+        public static void Initialize(ILogger logger, IModHelper modHelper, ArchipelagoClient archipelago,
             LocationChecker locationChecker)
         {
-            _monitor = monitor;
+            _logger = logger;
             _helper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
@@ -70,7 +73,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(PerformAction_MasteryCaveInteractions_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(PerformAction_MasteryCaveInteractions_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -98,8 +101,23 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             if (_locationChecker.IsLocationMissing($"{skill} {MASTERY}"))
             {
-                Game1.activeClickableMenu = new MasteryTrackerMenu((int)skill);
+                var masteryMenu = new MasteryTrackerMenu((int)skill);
+                InitializeClaimButton(masteryMenu);
+                Game1.activeClickableMenu = masteryMenu;
             }
+        }
+
+        private static void InitializeClaimButton(MasteryTrackerMenu masteryMenu)
+        {
+            var bounds = new Rectangle(masteryMenu.xPositionOnScreen + masteryMenu.width / 2 - 84, masteryMenu.yPositionOnScreen + masteryMenu.height - 112, 168, 80);
+            var sourceRect = new Rectangle(0, 123, 42, 21);
+            var claimButton = new ClickableTextureComponent(bounds, Game1.mouseCursors_1_6, sourceRect, 4f)
+            {
+                visible = true, // skill != -1;
+                myID = 0,
+            };
+            masteryMenu.mainButton = claimButton;
+            masteryMenu.currentlySnappedComponent = claimButton;
         }
 
         // private void claimReward()
@@ -143,7 +161,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(ClaimReward_SendMasteryCheck_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(ClaimReward_SendMasteryCheck_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -159,7 +177,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(HasCompletedAllMasteryPlaques_RelyOnSentChecks_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(HasCompletedAllMasteryPlaques_RelyOnSentChecks_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }

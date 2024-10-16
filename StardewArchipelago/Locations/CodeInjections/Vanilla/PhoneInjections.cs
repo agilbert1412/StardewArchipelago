@@ -1,24 +1,25 @@
 ﻿using System;
 using System.Linq;
-using StardewArchipelago.Archipelago;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Objects;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
     public static class PhoneInjections
     {
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static IModHelper _modHelper;
         private static ArchipelagoClient _archipelago;
         private static WeaponsManager _weaponsManager;
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, WeaponsManager weaponsManager)
+        public static void Initialize(ILogger logger, IModHelper modHelper, ArchipelagoClient archipelago, WeaponsManager weaponsManager)
         {
-            _monitor = monitor;
+            _logger = logger;
             _modHelper = modHelper;
             _archipelago = archipelago;
             _weaponsManager = weaponsManager;
@@ -61,7 +62,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(CallAdventureGuild_AllowRecovery_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(CallAdventureGuild_AllowRecovery_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }

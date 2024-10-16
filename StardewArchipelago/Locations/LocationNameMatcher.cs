@@ -8,7 +8,7 @@ namespace StardewArchipelago.Locations
 {
     public class LocationNameMatcher
     {
-        private Dictionary<string, string[]> _wordFilterCache;
+        private readonly Dictionary<string, string[]> _wordFilterCache;
 
         private static readonly Dictionary<string, string[]> _exceptions = new()
         {
@@ -18,17 +18,30 @@ namespace StardewArchipelago.Locations
                 new[]
                 {
                     FestivalLocationNames.STRENGTH_GAME, "Lemon Stone",
-                    "Ocean Stone", "Fairy Stone", "Swirl Stone"
+                    "Ocean Stone", "Fairy Stone", "Swirl Stone",
                 }
             },
+            { "Egg", new[] { "Duck Egg", "Ostrich Egg", "Dinosaur Egg", "Void Egg", "Thunder Egg", "Large Egg", "Egg (Brown)", "Brown Egg", "Slime Egg", "Calico Egg" } },
+            { "Large Egg", new[] { "Large Egg (Brown)" } },
+            { "Egg (Brown)", new[] { "Large Egg (Brown)" } },
             { "Trash", new[] { "Trash Can Upgrade" } },
             { "Hardwood", new[] { "Hardwood Display" } },
             { "Anchor", new[] { "Boat Anchor" } },
             { "Carp", new[] { "Midnight Carp", "Scorpion Carp", "Mutant Carp" } },
             { "Salmon", new[] { "Void Salmon", "King Salmon" } },
-            { "Egg", new[] { "Dinosaur Egg", "Golden Egg", "Void Egg", "Thunder Egg" } },
             { "Clay", new[] { "Land Of Clay" } },
             { "Slime", new[] { "Slime Hutch" } },
+            {
+                "Diamond",
+                new[]
+                {
+                    "Diamond Hunter", "Starfish Diamond", "Diamond Of",
+                }
+            },
+            { "Opal", new[] { "Fire Opal" } },
+            { "Chest", new[] { "Stone Chest", "Treasure Chest", "Big Chest", "Common Chest", "Rare Chest" } },
+            { "Stone Chest", new[] { "Big Stone Chest" } },
+            { "Jasper", new[] { "by M. Jasper" } }
         };
 
         public LocationNameMatcher()

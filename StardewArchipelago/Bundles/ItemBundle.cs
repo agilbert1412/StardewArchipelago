@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using StardewArchipelago.Stardew;
-using StardewValley.Menus;
-using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Bundles
 {

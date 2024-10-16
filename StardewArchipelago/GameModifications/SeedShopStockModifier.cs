@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Vanilla;
-using StardewArchipelago.GameModifications.CodeInjections;
-using StardewArchipelago.Locations;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Stardew;
 using StardewArchipelago.Stardew.Ids.Vanilla;
@@ -22,15 +22,15 @@ namespace StardewArchipelago.GameModifications
     {
         private const float JOJA_PRICE_MULTIPLIER = 0.8f;
 
-        private IMonitor _monitor;
+        private ILogger _logger;
         private IModHelper _modHelper;
-        private ArchipelagoClient _archipelago;
+        private readonly StardewArchipelagoClient _archipelago;
         private LocationChecker _locationChecker;
-        private StardewItemManager _stardewItemManager;
+        private readonly StardewItemManager _stardewItemManager;
 
-        public SeedShopStockModifier(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager stardewItemManager)
+        public SeedShopStockModifier(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager stardewItemManager)
         {
-            _monitor = monitor;
+            _logger = logger;
             _modHelper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
@@ -195,7 +195,7 @@ namespace StardewArchipelago.GameModifications
                     Modification = QuantityModifier.ModificationType.Multiply,
                     Amount = JOJA_PRICE_MULTIPLIER,
                     RandomAmount = null,
-                }
+                },
             };
 
             var objectsData = DataLoader.Objects(Game1.content);
@@ -232,18 +232,13 @@ namespace StardewArchipelago.GameModifications
                 shopData.Items.Remove(existingItem);
             }
 
-            var price = pricePerUnit;
-            if (pricePerUnit > 0 && stack > 0)
-            {
-                price = stack * pricePerUnit;
-            }
             var item = new ShopItemData()
             {
                 Id = itemId,
                 ItemId = itemId,
                 MinStack = stack,
                 MaxStack = -1,
-                Price = price,
+                Price = pricePerUnit, // It gets multiplied by the stack size later
                 Condition = null,
             };
             shopData.Items.Add(item);

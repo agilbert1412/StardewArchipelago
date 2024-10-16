@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
-using StardewArchipelago.Archipelago;
-using StardewModdingAPI;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewValley;
 using StardewValley.Buildings;
 
@@ -9,17 +9,19 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 {
     public static class GoldenClockInjections
     {
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static ArchipelagoClient _archipelago;
+        private static uint _lastDayGoldClockToggled;
 
-        public static void Initialize(IMonitor monitor, ArchipelagoClient archipelago)
+        public static void Initialize(ILogger logger, ArchipelagoClient archipelago)
         {
-            _monitor = monitor;
+            _logger = logger;
             _archipelago = archipelago;
+            _lastDayGoldClockToggled = 0;
         }
 
         // public virtual bool doAction(Vector2 tileLocation, Farmer who)
-        public static void DoAction_GoldenClockIncreaseTime_Postfix(Building __instance, Vector2 tileLocation, Farmer who, ref bool __result)
+        public static bool DoAction_GoldenClockIncreaseTime_Prefix(Building __instance, Vector2 tileLocation, Farmer who, ref bool __result)
         {
             try
             {
@@ -27,16 +29,22 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     !__instance.buildingType.Value.Equals("Gold Clock") ||
                     __instance.isTilePassable(tileLocation))
                 {
-                    return;
+                    return true; // run original logic
+                }
+
+                if (_lastDayGoldClockToggled != Game1.stats.DaysPlayed)
+                {
+                    _lastDayGoldClockToggled = Game1.stats.DaysPlayed;
+                    return true; // run original logic
                 }
 
                 Game1.performTenMinuteClockUpdate();
-                return;
+                return false; // don't run original logic
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(DoAction_GoldenClockIncreaseTime_Postfix)}:\n{ex}", LogLevel.Error);
-                return;
+                _logger.LogError($"Failed in {nameof(DoAction_GoldenClockIncreaseTime_Prefix)}:\n{ex}");
+                return true; // run original logic
             }
         }
     }

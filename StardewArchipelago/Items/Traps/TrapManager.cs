@@ -4,11 +4,13 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Archipelago.MultiClient.Net.Enums;
+using DLCQuestipelago.Extensions;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.Gifting;
-using StardewArchipelago.Extensions;
 using StardewArchipelago.GameModifications;
 using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Items.Traps.Shuffle;
@@ -18,6 +20,7 @@ using StardewValley;
 using StardewValley.BellsAndWhistles;
 using StardewValley.Characters;
 using StardewValley.Locations;
+using StardewValley.Network.ChestHit;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
@@ -52,22 +55,23 @@ namespace StardewArchipelago.Items.Traps
         private const string UNGROWTH = "Benjamin Budton";
         private const string INFLATION = "Inflation";
         private const string BOMB = "Bomb";
+        private const string NUDGE = "Nudge";
 
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private readonly IModHelper _helper;
         private readonly Harmony _harmony;
-        private static ArchipelagoClient _archipelago;
+        private static StardewArchipelagoClient _archipelago;
         private static TrapDifficultyBalancer _difficultyBalancer;
         private readonly TileChooser _tileChooser;
         private readonly MonsterSpawner _monsterSpawner;
         private readonly BabyBirther _babyBirther;
         private readonly DebrisSpawner _debrisSpawner;
         private readonly InventoryShuffler _inventoryShuffler;
-        private Dictionary<string, Action> _traps;
+        private readonly Dictionary<string, Action> _traps;
 
-        public TrapManager(IMonitor monitor, IModHelper helper, Harmony harmony, ArchipelagoClient archipelago, TileChooser tileChooser, BabyBirther babyBirther, GiftSender giftSender)
+        public TrapManager(ILogger logger, IModHelper helper, Harmony harmony, StardewArchipelagoClient archipelago, TileChooser tileChooser, BabyBirther babyBirther, GiftSender giftSender)
         {
-            _monitor = monitor;
+            _logger = logger;
             _helper = helper;
             _harmony = harmony;
             _archipelago = archipelago;
@@ -75,8 +79,8 @@ namespace StardewArchipelago.Items.Traps
             _tileChooser = tileChooser;
             _monsterSpawner = new MonsterSpawner(_tileChooser);
             _babyBirther = babyBirther;
-            _debrisSpawner = new DebrisSpawner(monitor, archipelago, _difficultyBalancer);
-            _inventoryShuffler = new InventoryShuffler(monitor, giftSender);
+            _debrisSpawner = new DebrisSpawner(logger, archipelago, _difficultyBalancer);
+            _inventoryShuffler = new InventoryShuffler(logger, giftSender);
             _traps = new Dictionary<string, Action>();
             RegisterTraps();
 
@@ -84,12 +88,12 @@ namespace StardewArchipelago.Items.Traps
                 original: AccessTools.Method(typeof(Object), nameof(Object.salePrice)),
                 prefix: new HarmonyMethod(typeof(TrapManager), nameof(SalePrice_GetCorrectInflation_Prefix))
             );
-            InitializeTemporaryBaby(monitor, helper, harmony);
+            InitializeTemporaryBaby(logger, helper, harmony);
         }
 
-        private void InitializeTemporaryBaby(IMonitor monitor, IModHelper helper, Harmony harmony)
+        private void InitializeTemporaryBaby(ILogger logger, IModHelper helper, Harmony harmony)
         {
-            TemporaryBaby.Initialize(monitor, helper);
+            TemporaryBaby.Initialize(logger, helper);
             harmony.Patch(
                 original: AccessTools.Method(typeof(Child), nameof(Child.tenMinuteUpdate)),
                 prefix: new HarmonyMethod(typeof(TemporaryBaby), nameof(TemporaryBaby.ChildTenMinuteUpdate_MoveBabiesAnywhere_Prefix))
@@ -112,8 +116,8 @@ namespace StardewArchipelago.Items.Traps
 
         public bool TryExecuteTrapImmediately(string trapName)
         {
-            if (Game1.player.currentLocation is FarmHouse
-                or IslandFarmHouse) // || Game1.eventUp || Game1.fadeToBlack || Game1.currentMinigame != null || Game1.isWarping || Game1.killScreen)
+            if (Game1.player.currentLocation is FarmHouse or IslandFarmHouse ||
+                Game1.player.isInBed.Value || Game1.player.FarmerSprite.isPassingOut() || Game1.player.passedOut) // || Game1.eventUp || Game1.fadeToBlack || Game1.currentMinigame != null || Game1.isWarping || Game1.killScreen)
             {
                 return false;
             }
@@ -149,6 +153,7 @@ namespace StardewArchipelago.Items.Traps
             _traps.Add(UNGROWTH, UngrowCrops);
             _traps.Add(INFLATION, ActivateInflation);
             _traps.Add(BOMB, Explode);
+            _traps.Add(NUDGE, NudgePlayerItems);
 
             RegisterTrapsWithTrapSuffix();
             RegisterTrapsWithDifferentSpace();
@@ -487,7 +492,7 @@ namespace StardewArchipelago.Items.Traps
             var numberMonsters = _difficultyBalancer.NumberOfMonsters[_archipelago.SlotData.TrapItemsDifficulty];
             for (var i = 0; i < numberMonsters; i++)
             {
-                _monsterSpawner.SpawnOneMonster(Game1.player.currentLocation);
+                _monsterSpawner.SpawnOneMonster(Game1.player.currentLocation, _archipelago.SlotData.TrapItemsDifficulty);
             }
         }
 
@@ -705,6 +710,13 @@ namespace StardewArchipelago.Items.Traps
             var currentPhase = crop.currentPhase.Value;
             var daysPerPhase = crop.phaseDays.ToList();
 
+            if (crop.RegrowsAfterHarvest() && currentPhase >= daysPerPhase.Count - 1)
+            {
+                var daysSinceLastReady = Math.Max(0, crop.GetData().RegrowDays - dayOfCurrentPhase);
+                days = Math.Max(1, days - daysSinceLastReady);
+                dayOfCurrentPhase = 0;
+            }
+
             dayOfCurrentPhase -= days;
 
             while (dayOfCurrentPhase < 0)
@@ -734,6 +746,27 @@ namespace StardewArchipelago.Items.Traps
             // private Vector2 tilePosition;
             var tilePositionField = _helper.Reflection.GetField<Vector2>(crop, "tilePosition");
             crop.updateDrawMath(tilePositionField.GetValue());
+        }
+
+        private IEnumerable<FruitTree> GetAllFruitTrees()
+        {
+            foreach (var gameLocation in Game1.locations)
+            {
+                foreach (var terrainFeature in gameLocation.terrainFeatures.Values)
+                {
+                    if (terrainFeature is not FruitTree fruitTree)
+                    {
+                        continue;
+                    }
+
+                    yield return fruitTree;
+                }
+            }
+        }
+
+        private void UngrowFruitTree(FruitTree fruitTree, int days)
+        {
+            fruitTree.daysUntilMature.Value += days;
         }
 
         private void ActivateInflation()
@@ -773,7 +806,7 @@ namespace StardewArchipelago.Items.Traps
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(SalePrice_GetCorrectInflation_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(SalePrice_GetCorrectInflation_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -834,25 +867,75 @@ namespace StardewArchipelago.Items.Traps
             location.netAudio.StartPlaying("fuse");
         }
 
-        private IEnumerable<FruitTree> GetAllFruitTrees()
+        private void NudgePlayerItems()
         {
-            foreach (var gameLocation in Game1.locations)
-            {
-                foreach (var terrainFeature in gameLocation.terrainFeatures.Values)
-                {
-                    if (terrainFeature is not FruitTree fruitTree)
-                    {
-                        continue;
-                    }
+            var baseNudgeChance = _difficultyBalancer.NudgeChance[_archipelago.SlotData.TrapItemsDifficulty];
+            var allLocations = Game1.locations.ToList();
+            allLocations.AddRange(Game1.getFarm().buildings.Where(building => building?.indoors.Value != null).Select(building => building.indoors.Value));
 
-                    yield return fruitTree;
-                }
+            NudgeObjectsEverywhere(allLocations, baseNudgeChance);
+            NudgeBuildings(baseNudgeChance);
+        }
+
+        private void NudgeObjectsEverywhere(List<GameLocation> allLocations, double baseNudgeChance)
+        {
+            foreach (var gameLocation in allLocations)
+            {
+                NudgeObjectsAtLocation(gameLocation, baseNudgeChance);
             }
         }
 
-        private void UngrowFruitTree(FruitTree fruitTree, int days)
+        private void NudgeObjectsAtLocation(GameLocation gameLocation, double baseNudgeChance)
         {
-            fruitTree.daysUntilMature.Value += days;
+            foreach (var gameObject in gameLocation.Objects.Values.ToArray())
+            {
+                if (gameObject is not Chest chest)
+                {
+                    continue;
+                }
+
+                NudgeChest(chest, baseNudgeChance);
+            }
+        }
+
+        private void NudgeChest(Chest chest, double baseNudgeChance)
+        {
+            var seed = (int)Game1.stats.DaysPlayed + (int)(chest.TileLocation.X * 77) + (int)(chest.TileLocation.Y * 1933);
+            var random = new Random(seed);
+            var chestNudgeChance = baseNudgeChance;
+            while (random.NextDouble() < chestNudgeChance)
+            {
+                chestNudgeChance /= 2;
+                var mutex = chest.GetMutex();
+
+                mutex.RequestLock(() =>
+                {
+                    chest.clearNulls();
+                    var chestTileBefore = chest.TileLocation;
+                    chest.TryMoveToSafePosition(random.Next(0, 4));
+
+                    // internal readonly ChestHitSynchronizer chestHit;
+                    var chestHitField = _helper.Reflection.GetField<ChestHitSynchronizer>(Game1.player.team, "chestHit");
+                    var chestHit = chestHitField.GetValue();
+
+                    chestHit.SignalMove(chest.Location, (int)chestTileBefore.X, (int)chestTileBefore.Y, (int)chest.TileLocation.X, (int)chest.TileLocation.Y);
+                    mutex.ReleaseLock();
+                });
+            }
+        }
+
+        private void NudgeBuildings(double baseNudgeChance)
+        {
+            if (_archipelago.SlotData.TrapItemsDifficulty < TrapItemsDifficulty.Hell)
+            {
+                return;
+            }
+
+            var buildingsNudgeChance = baseNudgeChance / 8;
+            foreach (var building in Game1.getFarm().buildings)
+            {
+                // TODO: Nudge buildings because I'm evil
+            }
         }
     }
 }

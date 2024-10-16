@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Netcode;
-using StardewArchipelago.Archipelago;
 using StardewArchipelago.Bundles;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Serialization;
@@ -13,7 +11,6 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.BellsAndWhistles;
 using StardewValley.Characters;
-using StardewValley.Events;
 using StardewValley.Internal;
 using StardewValley.Locations;
 using StardewValley.Menus;
@@ -21,6 +18,9 @@ using StardewValley.Network.NetEvents;
 using xTile.Dimensions;
 using Bundle = StardewValley.Menus.Bundle;
 using Object = StardewValley.Object;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.ArchipelagoUtilities.Net;
+using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 {
@@ -28,17 +28,17 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
     {
         private const string GIANT_STUMP = "The Giant Stump";
 
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static IModHelper _modHelper;
-        private static ArchipelagoClient _archipelago;
+        private static StardewArchipelagoClient _archipelago;
         private static ArchipelagoStateDto _state;
         private static LocationChecker _locationChecker;
         private static BundlesManager _bundlesManager;
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, ArchipelagoStateDto state,
+        public static void Initialize(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, ArchipelagoStateDto state,
             LocationChecker locationChecker, BundlesManager bundlesManager)
         {
-            _monitor = monitor;
+            _logger = logger;
             _modHelper = modHelper;
             _archipelago = archipelago;
             _state = state;
@@ -82,11 +82,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(PerformAction_CheckStump_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(PerformAction_CheckStump_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
-        
+
         // public override bool answerDialogueAction(string questionAndAnswer, string[] questionParams)
         public static bool AnswerDialogueAction_FixStump_Prefix(Forest __instance, string questionAndAnswer, string[] questionParams, ref bool __result)
         {
@@ -110,7 +110,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(AnswerDialogueAction_FixStump_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(AnswerDialogueAction_FixStump_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -141,57 +141,58 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 if (__instance.mrs_raccoon.Value)
                 {
                     Utility.TryOpenShopMenu(nameof(Raccoon), __instance.Name);
+                    return false; // don't run original logic
                 }
-                else
+
+                var maxNumberOfRaccoons = 9;
+                var receivedRaccoons = _archipelago.GetReceivedItemCount(APItem.PROGRESSIVE_RACCOON);
+                if (!_archipelago.SlotData.QuestLocations.StoryQuestsEnabled)
                 {
-                    var receivedRaccoons = _archipelago.GetReceivedItemCount(APItem.PROGRESSIVE_RACCOON);
-                    if (!_archipelago.SlotData.QuestLocations.StoryQuestsEnabled)
+                    receivedRaccoons += 1;
+                    maxNumberOfRaccoons -= 1;
+                }
+
+                var nextRaccoonRequestNumber = GetCurrentRaccoonBundleNumber();
+                var raccoonBundleAvailable = nextRaccoonRequestNumber < receivedRaccoons;
+
+                if (receivedRaccoons >= maxNumberOfRaccoons && nextRaccoonRequestNumber == -1)
+                {
+                    return true; // run original logic
+                }
+
+                // private bool wasTalkedTo;
+                var wasTalkedToField = _modHelper.Reflection.GetField<bool>(__instance, "wasTalkedTo");
+                var wasTalkedTo = wasTalkedToField.GetValue();
+
+                if (!wasTalkedTo)
+                {
+                    if (raccoonBundleAvailable)
                     {
-                        receivedRaccoons += 1;
-                    }
-
-                    var nextRaccoonRequestNumber = GetCurrentRaccoonBundleNumber();
-                    var raccoonBundleAvailable = nextRaccoonRequestNumber < receivedRaccoons;
-
-                    // private bool wasTalkedTo;
-                    var wasTalkedToField = _modHelper.Reflection.GetField<bool>(__instance, "wasTalkedTo");
-                    var wasTalkedTo = wasTalkedToField.GetValue();
-
-                    if (!wasTalkedTo)
-                    {
-                        var timesFedRaccoons = Game1.netWorldState.Value.TimesFedRaccoons;
-                        if (timesFedRaccoons >= 5 && raccoonBundleAvailable)
-                        {
-                            Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\1_6_Strings:Raccoon_intro"));
-                        }
-                        else if (timesFedRaccoons > 5 & !raccoonBundleAvailable)
-                        {
-                            Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\1_6_Strings:Raccoon_interim"));
-                        }
-                        else
-                        {
-                            Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\1_6_Strings:Raccoon_" + (!raccoonBundleAvailable ? "interim_" : "intro_") + timesFedRaccoons));
-                        }
-                        if (!raccoonBundleAvailable)
-                        {
-                            return false; // don't run original logic
-                        }
-                        Game1.afterDialogues = () => ActivateRaccoonBundleMutex(__instance);
+                        Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\1_6_Strings:Raccoon_intro"));
                     }
                     else
                     {
-                        if (!raccoonBundleAvailable)
-                        {
-                            return false; // don't run original logic
-                        }
-                        ActivateRaccoonBundleMutex(__instance);
+                        Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\1_6_Strings:Raccoon_interim"));
                     }
+                    if (!raccoonBundleAvailable)
+                    {
+                        return false; // don't run original logic
+                    }
+                    Game1.afterDialogues = () => ActivateRaccoonBundleMutex(__instance);
+                }
+                else
+                {
+                    if (!raccoonBundleAvailable)
+                    {
+                        return false; // don't run original logic
+                    }
+                    ActivateRaccoonBundleMutex(__instance);
                 }
                 return false; // don't run original logic
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(Activate_DisplayDialogueOrBundle_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(Activate_DisplayDialogueOrBundle_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -243,6 +244,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             {
                 bundleTextureOverride = Game1.content.Load<Texture2D>("LooseSprites\\BundleSprites"),
                 bundleTextureIndexOverride = 14 + whichBundle,
+                numberOfIngredientSlots = raccoonBundle.NumberRequired,
             };
             var raccoonNoteMenu = new JunimoNoteMenu(bundle, "LooseSprites\\raccoon_bundle_menu");
             raccoonNoteMenu.onIngredientDeposit = x => _state.CurrentRaccoonBundleStatus[x] = true;
@@ -320,7 +322,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(IsValidItemForThisIngredientDescription_TestPatch_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(IsValidItemForThisIngredientDescription_TestPatch_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -342,7 +344,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(Draw_TreeStumpFix_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(Draw_TreeStumpFix_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -369,7 +371,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(ResetSharedState_WalkThroughRaccoons_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(ResetSharedState_WalkThroughRaccoons_Postfix)}:\n{ex}");
                 return;
             }
         }

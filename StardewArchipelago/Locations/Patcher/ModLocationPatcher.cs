@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using HarmonyLib;
+﻿using HarmonyLib;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.GameModifications.CodeInjections.Modded;
 using StardewArchipelago.Locations.CodeInjections.Modded;
 using StardewArchipelago.Locations.CodeInjections.Modded.SVE;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
-using StardewArchipelago.Locations.ShopStockModifiers;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
@@ -18,23 +16,23 @@ namespace StardewArchipelago.Locations.Patcher
 {
     public class ModLocationPatcher : ILocationPatcher
     {
-        private readonly ArchipelagoClient _archipelago;
+        private readonly StardewArchipelagoClient _archipelago;
         private readonly Harmony _harmony;
-        private readonly IMonitor _monitor;
+        private readonly ILogger _logger;
         private readonly IModHelper _modHelper;
-        private ModsManager _modsManager;
-        private TemperedShopStockModifier _temperedShopStockModifier;
-        private BearShopStockModifier _bearShopStockModifier;
+        private readonly ModsManager _modsManager;
+        private readonly TemperedShopStockModifier _temperedShopStockModifier;
+        private readonly BearShopStockModifier _bearShopStockModifier;
 
-        public ModLocationPatcher(Harmony harmony, IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, StardewItemManager stardewItemManager)
+        public ModLocationPatcher(Harmony harmony, ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager)
         {
             _archipelago = archipelago;
             _harmony = harmony;
-            _monitor = monitor;
+            _logger = logger;
             _modHelper = modHelper;
             _modsManager = archipelago.SlotData.Mods;
-            _temperedShopStockModifier = new TemperedShopStockModifier(monitor, modHelper, archipelago, stardewItemManager);
-            _bearShopStockModifier = new BearShopStockModifier(monitor, modHelper, archipelago, stardewItemManager);
+            _temperedShopStockModifier = new TemperedShopStockModifier(logger, modHelper, archipelago, stardewItemManager);
+            _bearShopStockModifier = new BearShopStockModifier(logger, modHelper, archipelago, stardewItemManager);
 
         }
 
@@ -45,10 +43,9 @@ namespace StardewArchipelago.Locations.Patcher
             AddMagicModInjections();
             AddSkullCavernElevatorModInjections();
             AddSVEModInjections();
-            AddDistantLandsEventInjections();
             AddBoardingHouseInjections();
             PatchSVEShops();
-            
+
         }
 
         public void CleanEvents()
@@ -57,23 +54,6 @@ namespace StardewArchipelago.Locations.Patcher
             {
                 UnpatchSVEShops();
             }
-        }
-
-        private void AddDistantLandsEventInjections()
-        {
-            if (!_modsManager.HasMod(ModNames.DISTANT_LANDS))
-            {
-                return;
-            }
-
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(Event), nameof(Event.skipEvent)),
-                prefix: new HarmonyMethod(typeof(ModdedEventInjections), nameof(ModdedEventInjections.SkipEvent_ReplaceRecipe_Prefix))
-            );
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(Event), nameof(Event.tryEventCommand)),
-                prefix: new HarmonyMethod(typeof(ModdedEventInjections), nameof(ModdedEventInjections.TryEventCommand_CheckForStrayRecipe_Prefix))
-            );
         }
 
         private void AddModSkillInjections()
@@ -85,10 +65,13 @@ namespace StardewArchipelago.Locations.Patcher
 
             var _spaceCoreInterfaceType = AccessTools.TypeByName("SpaceCore.Interface.SkillLevelUpMenu");
             var spaceCoreSkillsType = AccessTools.TypeByName("SpaceCore.Skills");
-            _harmony.Patch(
-                original: AccessTools.Method(spaceCoreSkillsType, "AddExperience"),
-                prefix: new HarmonyMethod(typeof(SkillInjections), nameof(SkillInjections.AddExperience_ArchipelagoModExperience_Prefix))
-            );
+            if (_archipelago.SlotData.SkillProgression != SkillsProgression.Vanilla)
+            {
+                _harmony.Patch(
+                    original: AccessTools.Method(spaceCoreSkillsType, "AddExperience"),
+                    prefix: new HarmonyMethod(typeof(SkillInjections), nameof(SkillInjections.AddExperience_ArchipelagoModExperience_Prefix))
+                );
+            }
 
             if (_archipelago.SlotData.Mods.HasMod(ModNames.MAGIC))
             {
@@ -114,7 +97,7 @@ namespace StardewArchipelago.Locations.Patcher
                 return;
             }
 
-            var socializingConfigPatcher = new SocializingConfigPatcher(_monitor, _modHelper);
+            var socializingConfigPatcher = new SocializingConfigPatcher(_logger, _modHelper);
             socializingConfigPatcher.PatchConfigValues();
         }
 
@@ -255,7 +238,10 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void AddSVEModInjections()
         {
-            
+            if (!_archipelago.SlotData.Mods.HasMod(ModNames.SVE))
+            {
+                return;
+            }
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Chest), nameof(Chest.checkForAction)),
@@ -263,7 +249,7 @@ namespace StardewArchipelago.Locations.Patcher
             );
 
             _harmony.Patch(
-                original: AccessTools.Method(typeof(Event), nameof(Event.endBehaviors), parameters: new []{typeof(string[]), typeof(GameLocation)}),
+                original: AccessTools.Method(typeof(Event), nameof(Event.endBehaviors), parameters: new[] { typeof(string[]), typeof(GameLocation) }),
                 prefix: new HarmonyMethod(typeof(SVECutsceneInjections), nameof(SVECutsceneInjections.EndBehaviors_AddSpecialOrderAfterEvent_Prefix))
             );
             var specialOrderAfterEventsType = AccessTools.TypeByName("AddSpecialOrdersAfterEvents");

@@ -11,8 +11,8 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
         public static readonly Dictionary<string, Dictionary<string, string>> AlteredMapNamesFromVanilla = new()
         {
             {
-                "Stardew Valley Expanded", new() 
-                { 
+                "Stardew Valley Expanded", new()
+                {
                     { "Wizard Basement", "Custom_WizardBasement" },
                 }
             },
@@ -41,8 +41,8 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Fable Reef", "Custom_FableReef" },
             { "First Slash Guild", "Custom_FirstSlashGuild" },
             { "Highlands Outside", "Custom_Highlands" },
-            { "Highlands Cavern", "Custom_HighlandsCavern" },
             { "Highlands Cavern Prison", "Custom_HighlandsCavernPrison" },
+            { "Highlands Cavern", "Custom_HighlandsCavern" },
             { "Lance's House Ladder", "Custom_HighlandsOutpost|12|5" },
             { "Lance's House Main", "Custom_HighlandsOutpost|7|9" },
             { "Lost Woods", "Custom_JunimoWoods|37|2" },
@@ -73,7 +73,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Scarlett's House", "Custom_ScarlettHouse" },
             { "Wizard Basement", "Custom_WizardBasement" },
             { "Gunther's Bedroom", "Custom_GunthersRoom" },
-            { "Summit", "Custom_SVESummit"}
+            { "Summit", "Custom_SVESummit" },
         };
 
         private static readonly Dictionary<string, string> _locationEugene = new()

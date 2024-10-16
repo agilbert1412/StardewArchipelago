@@ -18,7 +18,7 @@ namespace StardewArchipelago.Extensions
             // {new WarpRequest(Game1.getLocationRequest("Town"), , , FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("Trailer_Big"), , , FacingDirection.Up)},
             { new WarpRequest(Game1.getLocationRequest("Town"), 35, 97, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("Sewer"), 16, 11, FacingDirection.Down) },
             { new WarpRequest(Game1.getLocationRequest("Forest"), 94, 100, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("Sewer"), 3, 48, FacingDirection.Up) },
-                        { new WarpRequest(Game1.getLocationRequest("Forest"), 101, 72, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("MasteryCave"), 7, 11, FacingDirection.Up) },
+            { new WarpRequest(Game1.getLocationRequest("Forest"), 101, 72, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("MasteryCave"), 7, 11, FacingDirection.Up) },
             // The warp for SVE's Forest to MasteryCave is changed from 101, 71 to 110, 81.  How do we resolve that one?
             { new WarpRequest(Game1.getLocationRequest("Mountain"), 16, 8, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("LeoTreeHouse"), 3, 8, FacingDirection.Up) },
             { new WarpRequest(Game1.getLocationRequest("BeachNightMarket"), 49, 11, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("ElliottHouse"), 3, 9, FacingDirection.Down) },
@@ -197,7 +197,7 @@ namespace StardewArchipelago.Extensions
             return targetPoint;
         }
 
-        private static Dictionary<string, Dictionary<Point, Point>> _touchActionWarpCache = new();
+        private static readonly Dictionary<string, Dictionary<Point, Point>> _touchActionWarpCache = new();
 
         private static Dictionary<Point, Point> GetAllTouchActionWarpsTo(GameLocation origin, string destinationName)
         {
@@ -249,7 +249,7 @@ namespace StardewArchipelago.Extensions
             return touchActionWarps;
         }
 
-        private static Dictionary<string, Dictionary<Point, Point>> _actionWarpCache = new();
+        private static readonly Dictionary<string, Dictionary<Point, Point>> _actionWarpCache = new();
 
         private static Dictionary<Point, Point> GetAllActionWarpsTo(GameLocation origin, string destinationName)
         {

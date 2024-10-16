@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.Extensions;
 using StardewArchipelago.Serialization;
-using StardewModdingAPI;
 using StardewValley;
 
 namespace StardewArchipelago.GameModifications.EntranceRandomizer
@@ -16,18 +17,18 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
         public const string TRANSITIONAL_STRING = " to ";
         private const string FARM_TO_FARMHOUSE = "Farm to FarmHouse";
 
-        private readonly IMonitor _monitor;
+        private readonly ILogger _logger;
         private readonly EquivalentWarps _equivalentAreas;
         private readonly ModEntranceManager _modEntranceManager;
         private readonly ArchipelagoStateDto _state;
 
         public Dictionary<string, string> ModifiedEntrances { get; private set; }
         private HashSet<string> _checkedEntrancesToday;
-        private Dictionary<string, WarpRequest> generatedWarps;
+        private readonly Dictionary<string, WarpRequest> generatedWarps;
 
-        public EntranceManager(IMonitor monitor, ArchipelagoClient archipelago, ArchipelagoStateDto state)
+        public EntranceManager(ILogger logger, ArchipelagoClient archipelago, ArchipelagoStateDto state)
         {
-            _monitor = monitor;
+            _logger = logger;
             _equivalentAreas = new EquivalentWarps(archipelago);
             _modEntranceManager = new ModEntranceManager();
             _state = state;
@@ -81,8 +82,8 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
                 RegisterRandomizedEntrance(originalEntrance, replacementEntrance);
             }
 
-            if (slotData.EntranceRandomization == EntranceRandomization.PelicanTown || 
-                slotData.EntranceRandomization == EntranceRandomization.NonProgression || 
+            if (slotData.EntranceRandomization == EntranceRandomization.PelicanTown ||
+                slotData.EntranceRandomization == EntranceRandomization.NonProgression ||
                 slotData.EntranceRandomization == EntranceRandomization.BuildingsWithoutHouse)
             {
                 return;
@@ -197,7 +198,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             // return false;
             if (!TryGetModifiedWarpName(key, out var desiredWarpName))
             {
-                _monitor.Log($"Tried to find warp from {currentLocationName} but found none.  Giving default warp.", LogLevel.Trace);
+                _logger.LogDebug($"Tried to find warp from {currentLocationName} but found none.  Giving default warp.");
                 return false;
             }
 
@@ -210,7 +211,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
                     warpRequest = generatedWarps[correctDesiredWarpName];
                     return true;
                 }
-                _monitor.Log($"Desired warp {correctDesiredWarpName} was checked, but not generated.", LogLevel.Trace);
+                _logger.LogDebug($"Desired warp {correctDesiredWarpName} was checked, but not generated.");
                 return false;
             }
 
@@ -243,7 +244,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
 
             if (!locationOriginName.TryGetClosestWarpPointTo(ref locationDestinationName, _equivalentAreas, out var locationOrigin, out var warpPoint))
             {
-                _monitor.Log($"Could not find closest warp for {desiredWarpKey}, returning a null warpRequest.", LogLevel.Error);
+                _logger.LogError($"Could not find closest warp for {desiredWarpKey}, returning a null warpRequest.");
                 warpRequest = null;
                 return false;
             }
@@ -377,7 +378,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "ScienceHouse|6|24 to SebastianRoom", "ScienceHouse to SebastianRoom" }, // LockedDoorWarp 6 24 ScienceHouse 900 2000S–
         };
 
-        private Dictionary<string, string> _locationAliases = new()
+        private readonly Dictionary<string, string> _locationAliases = new()
         {
             { "Mayor's Manor", "ManorHouse" },
             { "Pierre's General Store", "SeedShop" },
@@ -421,7 +422,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Mutant Bug Lair", "BugLand" },
         };
 
-        private Dictionary<string, string> _locationsSingleWordAliases = new()
+        private readonly Dictionary<string, string> _locationsSingleWordAliases = new()
         {
             { "'s", "" },
             { " ", "" },

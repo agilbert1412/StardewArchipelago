@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Archipelago.MultiClient.Net.Models;
 using Microsoft.Xna.Framework.Content;
-using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.Extensions;
 using StardewArchipelago.Items.Unlocks.Vanilla;
@@ -12,20 +11,23 @@ using StardewValley;
 using StardewValley.GameData.SpecialOrders;
 using StardewValley.SpecialOrders;
 using StardewValley.SpecialOrders.Rewards;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.ArchipelagoUtilities.Net;
+using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
     public class SpecialOrderInjections
     {
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static IModHelper _modHelper;
-        private static ArchipelagoClient _archipelago;
+        private static StardewArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
         private static ContentManager _englishContentManager;
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
         {
-            _monitor = monitor;
+            _logger = logger;
             _modHelper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
@@ -42,7 +44,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(IsSpecialOrdersBoardUnlocked_UnlockBasedOnApItem_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(IsSpecialOrdersBoardUnlocked_UnlockBasedOnApItem_Prefix)}:\n{ex}");
                 return true; // run original logic;
             }
         }
@@ -57,7 +59,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(GetSpecialOrder_ArchipelagoReward_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(GetSpecialOrder_ArchipelagoReward_Postfix)}:\n{ex}");
             }
         }
 
@@ -152,7 +154,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(CheckCompletion_ArchipelagoReward_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(CheckCompletion_ArchipelagoReward_Postfix)}:\n{ex}");
             }
         }
 
@@ -191,7 +193,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(SetDuration_UseCorrectDateWithSeasonRandomizer_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(SetDuration_UseCorrectDateWithSeasonRandomizer_Prefix)}:\n{ex}");
                 return true; // run original logic;
             }
         }
@@ -219,7 +221,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(UpdateAvailableSpecialOrders_ChangeFrequencyToBeLessRng_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(UpdateAvailableSpecialOrders_ChangeFrequencyToBeLessRng_Prefix)}:\n{ex}");
                 return true; // run original logic;
             }
         }
@@ -283,23 +285,25 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 return true;
             }
 
-            var splitTags = requiredTags.Split(",").Select(x => x.Trim()).Where(x => x.Length > 0);
-            if (splitTags.Any(tag => !CheckIslandTagArchipelago(tag)))
+            var splitTags = requiredTags.Split(",").Select(x => x.Trim()).Where(x => x.Length > 0).ToArray();
+            if (splitTags.Any(IsIslandTag))
             {
-                return false;
+                var otherTags = splitTags.Where(x => !IsIslandTag(x));
+                var otherTagsCondition = string.Join(',', otherTags);
+                return HasUnlockedIslandAccess() && SpecialOrder.CheckTags(otherTagsCondition);
             }
 
             return SpecialOrder.CheckTags(requiredTags);
         }
 
-        private static bool CheckIslandTagArchipelago(string requiredTag)
+        private static bool HasUnlockedIslandAccess()
         {
-            if (requiredTag.Equals("island", StringComparison.InvariantCultureIgnoreCase))
-            {
-                return _archipelago.HasReceivedItem("Island Obelisk") || _archipelago.HasReceivedItem("Boat Repair");
-            }
+            return _archipelago.HasReceivedItem("Island Obelisk") || _archipelago.HasReceivedItem("Boat Repair");
+        }
 
-            return true;
+        private static bool IsIslandTag(string requiredTag)
+        {
+            return requiredTag.Equals("island", StringComparison.InvariantCultureIgnoreCase);
         }
 
         private static Dictionary<string, SpecialOrder> CreateSpecialOrderInstancesForType(

@@ -2,29 +2,31 @@
 using System.Linq;
 using Archipelago.Gifting.Net.Gifts.Versions.Current;
 using Archipelago.Gifting.Net.Service;
+using Archipelago.Gifting.Net.Utilities.CloseTraitParser;
 using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Stardew;
-using StardewModdingAPI;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 
 namespace StardewArchipelago.Archipelago.Gifting
 {
     public class GiftReceiver
     {
-        private IMonitor _monitor;
-        private ArchipelagoClient _archipelago;
-        private IGiftingService _giftService;
-        private StardewItemManager _itemManager;
-        private Mailman _mail;
-        private GiftProcessor _giftProcessor;
+        private ILogger _logger;
+        private readonly ArchipelagoClient _archipelago;
+        private readonly IGiftingService _giftService;
+        private readonly StardewItemManager _itemManager;
+        private readonly Mailman _mail;
+        private readonly GiftProcessor _giftProcessor;
 
-        public GiftReceiver(IMonitor monitor, ArchipelagoClient archipelago, IGiftingService giftService, StardewItemManager itemManager, Mailman mail)
+        public GiftReceiver(ILogger logger, ArchipelagoClient archipelago, IGiftingService giftService, StardewItemManager itemManager, Mailman mail, ICloseTraitParser<string> closeTraitParser)
         {
-            _monitor = monitor;
+            _logger = logger;
             _archipelago = archipelago;
             _giftService = giftService;
             _itemManager = itemManager;
             _mail = mail;
-            _giftProcessor = new GiftProcessor(monitor, archipelago, itemManager);
+            _giftProcessor = new GiftProcessor(logger, archipelago, itemManager, closeTraitParser);
         }
 
         public void ReceiveAllGifts()

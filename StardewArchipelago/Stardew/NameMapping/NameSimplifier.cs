@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Globalization;
 using StardewArchipelago.Constants.Vanilla;
 using StardewValley;
 
@@ -27,21 +26,6 @@ namespace StardewArchipelago.Stardew.NameMapping
             foreach (var (oldChar, newChar) in _simplifiedChars)
             {
                 name = name.Replace(oldChar, newChar);
-            }
-
-            if (name.Contains("moonslime.Archaeology."))
-            {
-                var ti = CultureInfo.CurrentCulture.TextInfo;
-                var displayName = ti.ToTitleCase(item.DisplayName);
-                if (name.Contains("strange_doll_green"))
-                {
-                    displayName += " (Green)";
-                }
-                if (name.Contains("trilobite")) // Temporary fix.
-                {
-                    displayName = displayName.Replace("Trilobite Fossil", "Trilobite");
-                }
-                name = displayName;
             }
 
             if (item is not Object shippedObject)

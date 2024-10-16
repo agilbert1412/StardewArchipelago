@@ -36,7 +36,6 @@ namespace StardewArchipelago.Items.Traps
             { TrapItemsDifficulty.Nightmare, 1 },
         };
 
-        // TODO: Figure out a way to have different difficulties to random teleports
         public Dictionary<TrapItemsDifficulty, TeleportDestination> TeleportDestinations = new()
         {
             { TrapItemsDifficulty.NoTraps, TeleportDestination.None },
@@ -47,7 +46,6 @@ namespace StardewArchipelago.Items.Traps
             { TrapItemsDifficulty.Nightmare, TeleportDestination.Anywhere },
         };
 
-
         public Dictionary<TrapItemsDifficulty, double> CrowAttackRate = new()
         {
             { TrapItemsDifficulty.NoTraps, 0 },
@@ -57,7 +55,6 @@ namespace StardewArchipelago.Items.Traps
             { TrapItemsDifficulty.Hell, 0.60 },
             { TrapItemsDifficulty.Nightmare, 1 },
         };
-
 
         public Dictionary<TrapItemsDifficulty, CrowTargets> CrowValidTargets = new()
         {
@@ -71,7 +68,6 @@ namespace StardewArchipelago.Items.Traps
 
         public const double SCARECROW_EFFICIENCY = 0.40;
 
-
         public Dictionary<TrapItemsDifficulty, int> NumberOfMonsters = new()
         {
             { TrapItemsDifficulty.NoTraps, 0 },
@@ -81,17 +77,6 @@ namespace StardewArchipelago.Items.Traps
             { TrapItemsDifficulty.Hell, 8 },
             { TrapItemsDifficulty.Nightmare, 12 },
         };
-
-        // TODO: Figure out a way to have different difficulties to entrance reshuffle
-        //public Dictionary<TrapItemsDifficulty, > EntranceReshuffles = new()
-        //{
-        //    {TrapItemsDifficulty.NoTraps, },
-        //    {TrapItemsDifficulty.Easy, },
-        //    {TrapItemsDifficulty.Medium, },
-        //    {TrapItemsDifficulty.Hard, },
-        //    {TrapItemsDifficulty.Hell, },
-        //    {TrapItemsDifficulty.Nightmare, },
-        //};
 
         public Dictionary<TrapItemsDifficulty, int> AmountOfDebris = new()
         {
@@ -133,18 +118,6 @@ namespace StardewArchipelago.Items.Traps
             { TrapItemsDifficulty.Nightmare, 0.1 },
         };
 
-        // TODO: Figure out a way to have different difficulties for temporary winter
-        //public Dictionary<TrapItemsDifficulty, > EntranceReshuffles = new()
-        //{
-        //    {TrapItemsDifficulty.NoTraps, },
-        //    {TrapItemsDifficulty.Easy, },
-        //    {TrapItemsDifficulty.Medium, },
-        //    {TrapItemsDifficulty.Hard, },
-        //    {TrapItemsDifficulty.Hell, },
-        //    {TrapItemsDifficulty.Nightmare, },
-        //};
-
-
         public Dictionary<TrapItemsDifficulty, int> PariahFriendshipLoss = new()
         {
             { TrapItemsDifficulty.NoTraps, -0 },
@@ -154,7 +127,6 @@ namespace StardewArchipelago.Items.Traps
             { TrapItemsDifficulty.Hell, -100 },
             { TrapItemsDifficulty.Nightmare, -400 },
         };
-
 
         public Dictionary<TrapItemsDifficulty, DroughtTarget> DroughtTargets = new()
         {
@@ -244,6 +216,26 @@ namespace StardewArchipelago.Items.Traps
             { TrapItemsDifficulty.Hard, 5 }, // Bomb
             { TrapItemsDifficulty.Hell, 7 }, // Mega Bomb
             { TrapItemsDifficulty.Nightmare, 15 }, // Good luck!
+        };
+
+        public Dictionary<TrapItemsDifficulty, double> NudgeChance = new()
+        {
+            { TrapItemsDifficulty.NoTraps, 0 },
+            { TrapItemsDifficulty.Easy, 0.1 },
+            { TrapItemsDifficulty.Medium, 0.4 },
+            { TrapItemsDifficulty.Hard, 1 },
+            { TrapItemsDifficulty.Hell, 4 },
+            { TrapItemsDifficulty.Nightmare, 8 },
+        };
+
+        public Dictionary<TrapItemsDifficulty, int> HoardAmount = new()
+        {
+            { TrapItemsDifficulty.NoTraps, 0 },
+            { TrapItemsDifficulty.Easy, 2 },
+            { TrapItemsDifficulty.Medium, 10 },
+            { TrapItemsDifficulty.Hard, 25 },
+            { TrapItemsDifficulty.Hell, 60 },
+            { TrapItemsDifficulty.Nightmare, 200 },
         };
     }
 

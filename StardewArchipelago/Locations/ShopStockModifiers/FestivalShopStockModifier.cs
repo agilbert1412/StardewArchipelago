@@ -1,5 +1,5 @@
 ﻿using System;
-using StardewArchipelago.Archipelago;
+using System.Linq;
 using StardewArchipelago.Constants.Locations;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Locations.Festival;
@@ -10,12 +10,14 @@ using StardewValley;
 using StardewValley.GameData.BigCraftables;
 using StardewValley.GameData.Shops;
 using Category = StardewArchipelago.Constants.Vanilla.Category;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.Locations.ShopStockModifiers
 {
     public class FestivalShopStockModifier : ShopStockModifier
     {
-        public FestivalShopStockModifier(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, StardewItemManager stardewItemManager) : base(monitor, modHelper, archipelago, stardewItemManager)
+        public FestivalShopStockModifier(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager) : base(logger, modHelper, archipelago, stardewItemManager)
         {
         }
 
@@ -55,9 +57,33 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
                 }
 
                 var apShopitem = CreateArchipelagoLocation(item, locationName);
-                shopData.Items.Insert(i, apShopitem);
+                UpdateOrInsertShopItem(shopData, apShopitem, i);
                 ReplaceWithArchipelagoCondition(item, itemName);
             }
+        }
+
+        private static void UpdateOrInsertShopItem(ShopData shopData, ShopItemData apShopitem, int index)
+        {
+            var existingApShopItem = shopData.Items.FirstOrDefault(x => x.Id == apShopitem.Id);
+            if (existingApShopItem == null)
+            {
+                shopData.Items.Insert(index, apShopitem);
+                return;
+            }
+
+            var existingConditions = existingApShopItem.Condition;
+            var newCondition = apShopitem.Condition;
+            if (string.IsNullOrWhiteSpace(newCondition))
+            {
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(existingConditions))
+            {
+                existingApShopItem.Condition = newCondition;
+                return;
+            }
+
+            existingApShopItem.Condition = $"ANY \"{existingConditions}\" \"{newCondition}\"";
         }
 
         /// <summary>

@@ -7,7 +7,7 @@ namespace StardewArchipelago.Extensions
 {
     public static class ColorExtensions
     {
-        private static Dictionary<int, Color> _cache = new();
+        private static readonly Dictionary<int, Color> _cache = new();
 
         public static Color GetAsBrightColor(this string name)
         {

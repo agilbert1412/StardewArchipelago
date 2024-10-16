@@ -1,27 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Xna.Framework;
-using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Locations;
 using StardewArchipelago.Constants.Vanilla;
-using StardewArchipelago.Stardew.Ids.Vanilla;
 using StardewModdingAPI;
 using StardewValley;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.ArchipelagoUtilities.Net;
+using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
     public static class RecipeFriendshipInjections
     {
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static IModHelper _helper;
-        private static ArchipelagoClient _archipelago;
+        private static StardewArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
         private static Dictionary<string, string> _allRecipes;
 
-        public static void Initialize(IMonitor monitor, IModHelper helper, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
         {
-            _monitor = monitor;
+            _logger = logger;
             _helper = helper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
@@ -48,7 +48,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(GrantConversationFriendship_SendFriendshipRecipeChecks_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(GrantConversationFriendship_SendFriendshipRecipeChecks_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -109,62 +109,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(AddCookingRecipe_SkipLearningCookies_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(AddCookingRecipe_SkipLearningCookies_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
-        }
-
-        // public void skipEvent()
-        public static bool SkipEvent_CookiesRecipe_Prefix(Event __instance)
-        {
-            try
-            {
-                if (__instance.id != EventIds.COOKIES_RECIPE)
-                {
-                    return true; // run original logic
-                }
-
-                SkipCookiesRecipeEventArchipelago(__instance);
-                return false; // don't run original logic
-            }
-            catch (Exception ex)
-            {
-                _monitor.Log($"Failed in {nameof(SkipEvent_CookiesRecipe_Prefix)}:\n{ex}", LogLevel.Error);
-                return true; // run original logic
-            }
-        }
-
-        private static void SkipCookiesRecipeEventArchipelago(Event cookiesEvent)
-        {
-            if (cookiesEvent.playerControlSequence)
-            {
-                cookiesEvent.EndPlayerControlSequence();
-            }
-
-            Game1.playSound("drumkit6");
-
-            var actorPositionsAfterMoveField = _helper.Reflection.GetField<Dictionary<string, Vector3>>(cookiesEvent, "actorPositionsAfterMove");
-            actorPositionsAfterMoveField.GetValue().Clear();
-
-            foreach (var actor in cookiesEvent.actors)
-            {
-                var ignoreStopAnimation = actor.Sprite.ignoreStopAnimation;
-                actor.Sprite.ignoreStopAnimation = true;
-                actor.Halt();
-                actor.Sprite.ignoreStopAnimation = ignoreStopAnimation;
-                cookiesEvent.resetDialogueIfNecessary(actor);
-            }
-
-            cookiesEvent.farmer.Halt();
-            cookiesEvent.farmer.ignoreCollisions = false;
-            Game1.exitActiveMenu();
-            Game1.dialogueUp = false;
-            Game1.dialogueTyping = false;
-            Game1.pauseTime = 0.0f;
-
-            // Game1.player.cookingRecipes.TryAdd("Cookies", 0);
-            _locationChecker.AddCheckedLocation($"Cookies{Suffix.CHEFSANITY}");
-            cookiesEvent.endBehaviors();
         }
 
         private static string GetAliased(string recipeName)

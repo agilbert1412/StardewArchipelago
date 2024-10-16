@@ -1,23 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework;
-using StardewArchipelago.Archipelago;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewArchipelago.Stardew.Ids.Vanilla;
 using StardewModdingAPI;
 using StardewValley;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.ArchipelagoUtilities.Net;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
     public static class CopperPanInjections
     {
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static IModHelper _modHelper;
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(ILogger logger, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
-            _monitor = monitor;
+            _logger = logger;
             _modHelper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
@@ -33,12 +33,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     return true; // run original logic
                 }
 
-                SkipCopperPanEventArchipelago(__instance);
+                EventInjections.BaseSkipEvent(__instance, CheckCopperPanLocation);
                 return false; // don't run original logic
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(SkipEvent_CopperPan_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(SkipEvent_CopperPan_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -63,48 +63,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(AwardFestivalPrize_CopperPan_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(AwardFestivalPrize_CopperPan_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
-        }
-
-        private static void SkipCopperPanEventArchipelago(Event copperPanEvent)
-        {
-            if (copperPanEvent.playerControlSequence)
-            {
-                copperPanEvent.EndPlayerControlSequence();
-            }
-
-            Game1.playSound("drumkit6");
-
-            var actorPositionsAfterMoveField = _modHelper.Reflection.GetField<Dictionary<string, Vector3>>(copperPanEvent, "actorPositionsAfterMove");
-            actorPositionsAfterMoveField.GetValue().Clear();
-
-            foreach (var actor in copperPanEvent.actors)
-            {
-                var ignoreStopAnimation = actor.Sprite.ignoreStopAnimation;
-                actor.Sprite.ignoreStopAnimation = true;
-                actor.Halt();
-                actor.Sprite.ignoreStopAnimation = ignoreStopAnimation;
-                copperPanEvent.resetDialogueIfNecessary(actor);
-            }
-
-            copperPanEvent.farmer.Halt();
-            copperPanEvent.farmer.ignoreCollisions = false;
-            Game1.exitActiveMenu();
-            Game1.dialogueUp = false;
-            Game1.dialogueTyping = false;
-            Game1.pauseTime = 0.0f;
-
-            CheckCopperPanLocation();
-
-            copperPanEvent.endBehaviors(new string[4]
-            {
-                "end",
-                "position",
-                "43",
-                "36",
-            }, Game1.currentLocation);
         }
 
         private static void CheckCopperPanLocation()

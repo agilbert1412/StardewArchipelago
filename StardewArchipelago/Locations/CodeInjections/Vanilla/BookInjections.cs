@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using HarmonyLib;
 using Microsoft.Xna.Framework;
-using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Locations;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.GameModifications.CodeInjections.Television;
@@ -12,27 +12,41 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 using Object = StardewValley.Object;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.ArchipelagoUtilities.Net;
+using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants.Modded;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
     public static class BookInjections
     {
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static IModHelper _modHelper;
-        private static ArchipelagoClient _archipelago;
+        private static StardewArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
         private static QueenOfSauceManager _qosManager;
-
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker, QueenOfSauceManager qosManager)
+        private static readonly Dictionary<string, string> _modNameToSkillName = new()
         {
-            _monitor = monitor;
+            {ModNames.BINNING, "drbirbdev.BinningSkill"},
+            {ModNames.ARCHAEOLOGY, "moonslime.ArchaeologySkill"},
+            {ModNames.LUCK, "spacechase0.LuckSkill"},
+            {ModNames.SOCIALIZING, "drbirbdev.SocializingSkill"},
+        };
+
+        public static void Initialize(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, LocationChecker locationChecker, QueenOfSauceManager qosManager)
+        {
+            _logger = logger;
             _modHelper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
             _qosManager = qosManager;
 
-            // So the rest of the world doesn't try to spawn them
-            Game1.netWorldState.Value.LostBooksFound = 21;
+            if (archipelago.SlotData.Booksanity == Booksanity.All)
+            {
+                // So the rest of the world doesn't try to spawn them
+                Game1.netWorldState.Value.LostBooksFound = 21;
+            }
         }
 
         // protected override void resetLocalState()
@@ -50,7 +64,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 }
 
                 CallBaseResetLocalState(__instance);
-                
+
                 var lostBooksFound = _archipelago.GetReceivedItemCount("Progressive Lost Book");
 
                 // private Dictionary<int, Vector2> getLostBooksLocations()
@@ -79,7 +93,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(ResetLocalState_BooksanityLostBooks_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(ResetLocalState_BooksanityLostBooks_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -110,7 +124,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(ReadNote_BooksanityLostBook_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(ReadNote_BooksanityLostBook_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -125,6 +139,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         }
 
         // private void readBook(GameLocation location)
+        // We use high priority here to avoid other mod conflicts.
+        [HarmonyPriority(Priority.VeryHigh)]
         public static bool ReadBook_Booksanity_Prefix(Object __instance, GameLocation location)
         {
             try
@@ -134,7 +150,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(ReadBook_Booksanity_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(ReadBook_Booksanity_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -193,6 +209,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 Game1.player.gainExperience(2, 250);
                 Game1.player.gainExperience(3, 250);
                 Game1.player.gainExperience(4, 250);
+                if (_archipelago.SlotData.Mods.HasModdedSkill())
+                {
+                    ApplyModdedSkillExperience();
+                }
                 return;
             }
 
@@ -303,6 +323,20 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     holdLastFrame = true,
                     id = 1987654,
                 });
+            }
+        }
+
+        private static void ApplyModdedSkillExperience()
+        {
+            var spaceCoreSkillType = AccessTools.TypeByName("SpaceCore.Skills");
+            var addExperienceMethod = _modHelper.Reflection.GetMethod(spaceCoreSkillType, "AddExperience");
+            foreach (var (modName, skillName) in _modNameToSkillName)
+            {
+                if (_archipelago.SlotData.Mods.HasMod(modName))
+                {
+                    object[] args = {Game1.player, skillName, 250};
+                    addExperienceMethod.Invoke(args);
+                }
             }
         }
     }

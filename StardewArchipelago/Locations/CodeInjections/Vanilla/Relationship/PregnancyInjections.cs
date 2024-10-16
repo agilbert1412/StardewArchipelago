@@ -1,33 +1,34 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
-using StardewArchipelago.Archipelago;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.BellsAndWhistles;
 using StardewValley.Characters;
 using StardewValley.Events;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.ArchipelagoUtilities.Net;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
 {
 
     public class PregnancyInjections
     {
-        private const int FEMALE = 1;
         private const string FIRST_BABY = "Have a Baby";
         private const string SECOND_BABY = "Have Another Baby";
 
-        private const string npcGiveBirthQuestion = "Would you like me to give birth to a {0}, {1}?";
-        private const string playerGiveBirthQuestion = "Would you like to give birth to a {0}, {1}?";
-        private const string orderBabyQuestion = "Should I order a {0}, {1}?";
+        private const string NPC_GIVE_BIRTH_QUESTION = "Would you like me to give birth to a {0}, {1}?";
+        private const string PLAYER_GIVE_BIRTH_QUESTION = "Would you like to give birth to a {0}, {1}?";
+        private const string ORDER_BABY_QUESTION = "Should I order a {0}, {1}?";
 
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static IModHelper _helper;
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(ILogger logger, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
-            _monitor = monitor;
+            _logger = logger;
             _helper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
@@ -67,7 +68,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(CanGetPregnant_ShuffledPregnancies_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(CanGetPregnant_ShuffledPregnancies_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -89,37 +90,45 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
                     new("Yes", Game1.content.LoadString("Strings\\Events:HaveBabyAnswer_Yes")),
                     new("Not", Game1.content.LoadString("Strings\\Events:HaveBabyAnswer_No")),
                 };
-                string question;
 
-                var npc = Game1.getCharacterFromName(Game1.player.spouse);
-
-                if (npc.isRoommate() || npc.Name.Equals("Krobus"))
-                {
-                    question = orderBabyQuestion;
-                }
-                else if (npc.Gender == Gender.Female)
-                {
-                    question = npcGiveBirthQuestion;
-                }
-                else
-                {
-                    question = playerGiveBirthQuestion;
-                }
+                var spouse = Game1.getCharacterFromName(Game1.player.spouse);
+                var question = PickBabyQuestionBasedOnGenders(spouse);
 
                 var nextBirthLocation = _locationChecker.IsLocationMissing(FIRST_BABY) ? FIRST_BABY : SECOND_BABY;
                 var scoutedItem = _archipelago.ScoutSingleLocation(nextBirthLocation);
                 question = string.Format(question, scoutedItem.ItemName, Game1.player.Name);
                 var answerPregnancyQuestionMethod = _helper.Reflection.GetMethod(__instance, "answerPregnancyQuestion");
-                Game1.currentLocation.createQuestionDialogue(question, answerChoices1, (who, answer) => answerPregnancyQuestionMethod.Invoke(who, answer), npc);
+                Game1.currentLocation.createQuestionDialogue(question, answerChoices1, (who, answer) => answerPregnancyQuestionMethod.Invoke(who, answer), spouse);
                 Game1.messagePause = true;
                 __result = false;
                 return false; // don't run original logic
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(Setup_PregnancyQuestionEvent_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(Setup_PregnancyQuestionEvent_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
+        }
+
+        private static string PickBabyQuestionBasedOnGenders(NPC spouse)
+        {
+            if (spouse.isRoommate() || spouse.Name.Equals("Krobus"))
+            {
+                return ORDER_BABY_QUESTION;
+            }
+
+            if (spouse.Gender == Gender.Female && Game1.player.IsMale)
+            {
+                return NPC_GIVE_BIRTH_QUESTION;
+            }
+
+            if (spouse.Gender == Gender.Male && !Game1.player.IsMale)
+            {
+                return PLAYER_GIVE_BIRTH_QUESTION;
+            }
+
+
+            return ORDER_BABY_QUESTION;
         }
 
         // private void answerPregnancyQuestion(Farmer who, string answer)
@@ -140,7 +149,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(AnswerPregnancyQuestion_CorrectDate_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(AnswerPregnancyQuestion_CorrectDate_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -177,7 +186,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
                 var playerName = Lexicon.capitalize(Game1.player.Name);
                 var spouseName = Game1.player.spouse;
                 var pronoun = "it";
-                var scoutedItemClassification = $"{scoutedItem.Classification.ToLower()} item";
+                var scoutedItemClassification = $"{scoutedItem.GetClassificationString()} item";
 
                 var multiplayerField = _helper.Reflection.GetField<Multiplayer>(typeof(Game1), "multiplayer");
                 var multiplayer = multiplayerField.GetValue();
@@ -196,7 +205,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(TickUpdate_BirthingEvent_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(TickUpdate_BirthingEvent_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }

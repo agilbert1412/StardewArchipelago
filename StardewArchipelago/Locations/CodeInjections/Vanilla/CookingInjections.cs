@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using StardewArchipelago.Archipelago;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewArchipelago.Stardew;
-using StardewModdingAPI;
 using StardewValley;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.ArchipelagoUtilities.Net;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -11,14 +12,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
     {
         public const string COOKING_LOCATION_PREFIX = "Cook ";
 
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
         private static StardewItemManager _itemManager;
 
-        public static void Initialize(IMonitor monitor, ArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager itemManager)
+        public static void Initialize(ILogger logger, ArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager itemManager)
         {
-            _monitor = monitor;
+            _logger = logger;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
             _itemManager = itemManager;
@@ -31,7 +32,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 if (!_itemManager.ObjectExistsById(itemId))
                 {
-                    _monitor.Log($"Unrecognized cooked recipe: {itemId}", LogLevel.Warn);
+                    _logger.LogWarning($"Unrecognized cooked recipe: {itemId}");
                     return;
                 }
 
@@ -48,12 +49,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     return;
                 }
 
-                _monitor.Log($"Unrecognized Cooksanity Location: {cookedItemName} [{itemId}]", LogLevel.Error);
+                _logger.LogError($"Unrecognized Cooksanity Location: {cookedItemName} [{itemId}]");
                 return;
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(CookedRecipe_CheckCooksanityLocation_Postfix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(CookedRecipe_CheckCooksanityLocation_Postfix)}:\n{ex}");
                 return;
             }
         }

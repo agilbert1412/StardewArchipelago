@@ -51,6 +51,7 @@ namespace StardewArchipelago.Bundles
             { "Fish Farmer's", 108 },
             { "Sommelier", 355 },
             { "Dry", 356 },
+            { "Green Rain", 359 },
 
             { "Beach Foraging", 240 },
             { "Mines Foraging", 241 },
@@ -76,6 +77,7 @@ namespace StardewArchipelago.Bundles
             { "Master Baiter", 268 },
             { "Deep Fishing", 239 },
             { "Fish Smoker", 357 },
+            { "Specific Fishing", 360 },
 
             { "Bartender's", 276 },
             { "Helper's", 113 },
@@ -179,6 +181,7 @@ namespace StardewArchipelago.Bundles
             { "Fish Farmer's", BUNDLE_DARK_BLUE },
             { "Sommelier", BUNDLE_PURPLE },
             { "Dry", BUNDLE_ORANGE },
+            { "Green Rain", BUNDLE_GREEN },
 
             { "Beach Foraging", BUNDLE_LIGHT_BLUE },
             { "Mines Foraging", BUNDLE_PURPLE },
@@ -204,6 +207,7 @@ namespace StardewArchipelago.Bundles
             { "Trash", BUNDLE_RED },
             { "Deep Fishing", BUNDLE_DARK_BLUE },
             { "Fish Smoker", BUNDLE_RED },
+            { "Specific Fishing", BUNDLE_RED },
 
             { "Bartender's", BUNDLE_ORANGE },
             { "Calico", BUNDLE_YELLOW },

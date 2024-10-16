@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Linq;
-using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.GameData.Buildings;
 using StardewValley.Menus;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.ArchipelagoUtilities.Net;
+using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -12,14 +14,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
     {
         public const string BUILDING_PROGRESSIVE_HOUSE = "Progressive House";
 
-        private static IMonitor _monitor;
+        private static ILogger _logger;
         private static IModHelper _modHelper;
-        private static ArchipelagoClient _archipelago;
+        private static StardewArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
 
-        public static void Initialize(IMonitor monitor, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
         {
-            _monitor = monitor;
+            _logger = logger;
             _modHelper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
@@ -39,7 +41,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(BlueprintEntryConstructor_IfFreeMakeTheIdCorrect_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(BlueprintEntryConstructor_IfFreeMakeTheIdCorrect_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -82,7 +84,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(CreateQuestionDialogue_CarpenterDialogOptions_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(CreateQuestionDialogue_CarpenterDialogOptions_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -121,7 +123,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(HouseUpgradeOffer_OfferCheaperUpgrade_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(HouseUpgradeOffer_OfferCheaperUpgrade_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -169,7 +171,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(HouseUpgradeOffer_OfferFreeUpgrade_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(HouseUpgradeOffer_OfferFreeUpgrade_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -190,7 +192,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
 
             var frienshipNature = player.friendshipData[player.spouse];
-            var spouse = Game1.getCharacterFromName(player.spouse, true);
+            var spouse = Game1.getCharacterFromName(player.spouse);
 
 
             if (player.isEngaged())
@@ -243,7 +245,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(HouseUpgradeAccept_FreeFromAP_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(HouseUpgradeAccept_FreeFromAP_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -315,7 +317,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _monitor.Log($"Failed in {nameof(HouseUpgradeAccept_CheaperInAP_Prefix)}:\n{ex}", LogLevel.Error);
+                _logger.LogError($"Failed in {nameof(HouseUpgradeAccept_CheaperInAP_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
