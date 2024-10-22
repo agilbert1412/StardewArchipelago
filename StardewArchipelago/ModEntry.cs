@@ -38,6 +38,7 @@ using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Delegates;
 using StardewValley.Internal;
+using StardewValley.Locations;
 using StardewValley.TerrainFeatures;
 using StardewValley.Triggers;
 
@@ -491,16 +492,15 @@ namespace StardewArchipelago
 
         private void DoBugsCleanup()
         {
-            if (_archipelago.SlotData.Mods.HasMod(ModNames.ARCHAEOLOGY))
+            var islandFarmCave = (IslandFarmCave)Game1.getLocationFromName("IslandFarmCave");
+            var gourmandChecks = new[] { "Gourmand Frog Melon", "Gourmand Frog Wheat", "Gourmand Frog Garlic" };
+            for (var i = 0; i < islandFarmCave.gourmandRequestsFulfilled.Value; i++)
             {
-                if (_locationChecker.IsLocationNotChecked("Read Digging Like Worms"))
+                if (i >= gourmandChecks.Length)
                 {
-                    _locationChecker.AddCheckedLocation("Read Digging Like Worms");
+                    continue;
                 }
-                if (_locationChecker.IsLocationNotChecked("Shipsanity: Digging Like Worms"))
-                {
-                    _locationChecker.AddCheckedLocation("Shipsanity: Digging Like Worms");
-                }
+                _locationChecker.AddWalnutCheckedLocation(gourmandChecks[i]);
             }
         }
 
