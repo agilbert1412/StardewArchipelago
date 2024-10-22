@@ -81,6 +81,7 @@ namespace StardewArchipelago.GameModifications
             SpecialOrderBoardInjections.Initialize(logger, modHelper, archipelago, locationChecker);
             CraftingPageInjections.Initialize(logger, archipelago);
             PanningSpotInjections.Initialize(logger, archipelago);
+            WalnutInjections.Initialize(logger, archipelago);
             OutOfLogicInjections.Initialize(logger, archipelago, stardewItemManager);
             DebugPatchInjections.Initialize(logger, archipelago);
             _jojaDisabler = new JojaDisabler(logger, modHelper, harmony);
@@ -127,6 +128,7 @@ namespace StardewArchipelago.GameModifications
             PatchBundles();
             PatchCraftingPage();
             PatchPanningSpots();
+            PatchWalnuts();
             PatchMysteryBoxesAndPrizeTickets();
 
             _jojaDisabler.DisableJojaRouteShortcuts();
@@ -735,6 +737,14 @@ namespace StardewArchipelago.GameModifications
             _harmony.Patch(
                 original: AccessTools.Method(typeof(IslandNorth), nameof(IslandNorth.performOrePanTenMinuteUpdate)),
                 prefix: new HarmonyMethod(typeof(PanningSpotInjections), nameof(PanningSpotInjections.PerformOrePanTenMinuteUpdateOnIslandNorth_AllowPanningSpotsAlways_Prefix))
+            );
+        }
+
+        private void PatchWalnuts()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Farmer), nameof(Farmer.foundWalnut)),
+                prefix: new HarmonyMethod(typeof(WalnutInjections), nameof(WalnutInjections.FoundWalnut_NoUpperLimit_Prefix))
             );
         }
 
