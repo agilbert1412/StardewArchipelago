@@ -200,7 +200,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 ++__instance.gourmandRequestsFulfilled.Value;
                 for (var i = 0; i < __instance.gourmandRequestsFulfilled.Value; i++)
                 {
-                    _locationChecker.AddWalnutCheckedLocation(gourmandChecks[__instance.gourmandRequestsFulfilled.Value]);
+                    if (i >= gourmandChecks.Length)
+                    {
+                        continue;
+                    }
+                    _locationChecker.AddWalnutCheckedLocation(gourmandChecks[i]);
                 }
 
                 Game1.player.team.MarkCollectedNut($"IslandGourmand{__instance.gourmandRequestsFulfilled.Value}");
