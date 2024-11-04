@@ -22,8 +22,8 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             _shouldPrankOnOtherDays = false;
         }
 
-        // public void holdUpItemThenMessage(Item item, bool showMessage = true)
-        public static bool HoldUpItemThenMessage_SkipBasedOnConfig_Prefix(Farmer __instance, Item item, bool showMessage)
+        // public void holdUpItemThenMessage(Item item, int countAdded, bool showMessage = true)
+        public static bool HoldUpItemThenMessage_SkipBasedOnConfig_Prefix(Farmer __instance, Item item, int countAdded, bool showMessage)
         {
             try
             {
