@@ -451,8 +451,6 @@ namespace StardewArchipelago
                 return;
             }
 
-            _questCleaner.CleanQuests(Game1.player);
-
             DoArchipelagoDayStartedProcesses();
         }
 
@@ -463,6 +461,7 @@ namespace StardewArchipelago
                 return;
             }
 
+            _questCleaner.CleanQuests(Game1.player);
             FarmInjections.DeleteStartingDebris();
             FarmInjections.PlaceEarlyShippingBin();
             _mail.SendToday();
