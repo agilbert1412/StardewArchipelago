@@ -4,12 +4,14 @@ using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Constants.Locations;
 using StardewArchipelago.Goals;
+using xTile.Dimensions;
 
 namespace StardewArchipelago.Locations
 {
     public class StardewLocationChecker : LocationChecker
     {
         private readonly LocationNameMatcher _locationNameMatcher;
+        private readonly JojapocalypseManager _jojapocalypseManager;
 
         public StardewLocationChecker(ILogger logger, ArchipelagoClient archipelago, List<string> locationsAlreadyChecked) : base(logger, archipelago, locationsAlreadyChecked)
         {
@@ -27,6 +29,13 @@ namespace StardewArchipelago.Locations
             {
                 // locations.Add($"{Prefix.WALNUTSANITY}{locationName}");
             }
+            base.AddCheckedLocations(locations.ToArray());
+        }
+
+        public void AddJojaCheckedLocation(string locationName)
+        {
+            var locations = new List<string> { locationName };
+            _jojapocalypseManager.AddCheckedLocations(locations);
             base.AddCheckedLocations(locations.ToArray());
         }
 
