@@ -14,7 +14,7 @@ A reasonable effort will be made to stay up to date, but it has to be understood
 The following mods are currently supported:
 
 General: 
-- [Stardew Valley Expanded](https://www.nexusmods.com/stardewvalley/mods/3753), by FlashShifter, Version 1.14.x (including additional [patch](https://github.com/Witchybun/SDV-Randomizer-Content-Patcher/releases))
+- [Stardew Valley Expanded](https://www.nexusmods.com/stardewvalley/mods/3753), by FlashShifter, Version 1.14.x (including [two additional patches](https://github.com/Witchybun/SDV-Randomizer-Content-Patcher/releases) `StardewAP - SVE Patch` and `StardewValleyExpanded 1.14.x-archipelago`. The first patch fixes some Content patcher things to be compatible with Archipelago, and the 2nd patches allows the SVE 1.14 code to be loaded into Stardew Valley 1.6.9+)
 - [Skull Cavern Elevator](https://www.nexusmods.com/stardewvalley/mods/963), by Lestoph, Version 1.6.x
 - [Bigger Backpack](https://www.nexusmods.com/stardewvalley/mods/1845), by spacechase0, Version 7.3.x
 - [Tractor Mod](https://www.nexusmods.com/stardewvalley/mods/1401), by Pathoschild, Version 4.20.x
@@ -37,6 +37,9 @@ Custom NPCs:
 
 In addition, a [Content Patcher mod](https://github.com/Witchybun/SDV-Randomizer-Content-Patcher/releases) may be required for the mod to properly function alongside your game.  Include these alongside StardewArchipelago.
 "x" is used to denote a wildcard digit, that is flexibleand allows for variations. We assume that supported mods will not break on patch updates, and if they do, we may have to be more strict in the future.
+
+Here is what you should see in SMAPI, when installing a mod that requires an additional patch. This example is Stardew Valley Expanded, which has two additional patches that are needed to be loaded properly.
+![image](https://i.imgur.com/y3lBIkw.png)
 
 ## How to add supported mods to my Archipelago slot?
 
