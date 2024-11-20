@@ -21,11 +21,11 @@ namespace StardewArchipelago.Locations
             var locations = new List<string> { locationName };
             if (locationName.StartsWith(Prefix.WALNUTSANITY))
             {
-                locations.Add(locationName[Prefix.WALNUTSANITY.Length..]);
+                // locations.Add(locationName[Prefix.WALNUTSANITY.Length..]);
             }
             else
             {
-                locations.Add($"{Prefix.WALNUTSANITY}{locationName}");
+                // locations.Add($"{Prefix.WALNUTSANITY}{locationName}");
             }
             base.AddCheckedLocations(locations.ToArray());
         }
