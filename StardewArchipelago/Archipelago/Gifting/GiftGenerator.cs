@@ -135,6 +135,11 @@ namespace StardewArchipelago.Archipelago.Gifting
             }
 
             var type = objectInfo.Type;
+            if (type == null)
+            {
+                yield break;
+            }
+
             if (ReplaceFlags.ContainsKey(type))
             {
                 type = ReplaceFlags[type];

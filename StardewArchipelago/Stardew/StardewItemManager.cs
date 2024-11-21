@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Newtonsoft.Json;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Stardew.Ids.Vanilla;
@@ -15,6 +16,8 @@ namespace StardewArchipelago.Stardew
 {
     public class StardewItemManager
     {
+        private readonly ILogger _logger;
+
         private Dictionary<string, StardewItem> _itemsByQualifiedId;
         private Dictionary<string, StardewObject> _objectsById;
         private Dictionary<string, StardewObject> _objectsByName;
@@ -46,8 +49,9 @@ namespace StardewArchipelago.Stardew
             { "182", " (Brown)" },
         };
 
-        public StardewItemManager()
+        public StardewItemManager(ILogger logger)
         {
+            _logger = logger;
             InitializeData();
         }
 
@@ -549,6 +553,11 @@ namespace StardewArchipelago.Stardew
 
         private void InitializeOrAddColorObject(string color, StardewObject stardewObject)
         {
+            if (color == null)
+            {
+                _logger.LogWarning($"A mod has registered an item without a color. The object is named '{stardewObject.Name}' [{stardewObject.Id}]");
+                return;
+            }
             if (!_objectsByColor.ContainsKey(color))
             {
                 _objectsByColor[color] = new List<StardewObject>();
@@ -558,6 +567,11 @@ namespace StardewArchipelago.Stardew
 
         private void AddObjectByType(ObjectData objectData, StardewObject stardewObject)
         {
+            if (objectData.Type == null)
+            {
+                _logger.LogWarning($"A mod has registered an item that lacks the field '{nameof(ObjectData.Type)}'. The object is named '{stardewObject.Name}' [{stardewObject.Id}]");
+                return;
+            }
             if (!_objectsByType.ContainsKey(objectData.Type))
             {
                 _objectsByType[objectData.Type] = new List<StardewObject>();
