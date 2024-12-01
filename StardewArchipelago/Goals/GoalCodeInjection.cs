@@ -13,6 +13,10 @@ using StardewValley.Menus;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Locations;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
+using Microsoft.Xna.Framework;
+using StardewArchipelago.Textures;
+using StardewArchipelago.Logging;
 
 namespace StardewArchipelago.Goals
 {
@@ -20,14 +24,14 @@ namespace StardewArchipelago.Goals
     {
         public const string MASTER_ANGLER_LETTER = "CF_Fish";
 
-        private static ILogger _logger;
+        private static LogHandler _logger;
         private static IModHelper _modHelper;
         private static StardewArchipelagoClient _archipelago;
         private static StardewLocationChecker _locationChecker;
         private static BundleReader _bundleReader;
         private static MonsterKillList _killList;
 
-        public static void Initialize(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker, BundleReader bundleReader, MonsterKillList killList)
+        public static void Initialize(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker, BundleReader bundleReader, MonsterKillList killList)
         {
             _logger = logger;
             _modHelper = modHelper;
@@ -60,13 +64,6 @@ namespace StardewArchipelago.Goals
             }
 
             var farm = Game1.getFarm();
-            var candlesFromScore = Utility.getGrandpaCandlesFromScore(Utility.getGrandpaScore());
-            farm.grandpaScore.Value = candlesFromScore;
-            for (var index = 0; index < candlesFromScore; ++index)
-            {
-                DelayedAction.playSoundAfterDelay("fireball", 100 * index);
-            }
-            farm.addGrandpaCandles();
 
             if (farm.grandpaScore.Value < 4)
             {

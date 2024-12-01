@@ -2,7 +2,10 @@
 using HarmonyLib;
 using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Logging;
+using StardewArchipelago.Textures;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
@@ -12,13 +15,13 @@ namespace StardewArchipelago.Goals
 {
     public class GoalManager
     {
-        private static ILogger _logger;
+        private static LogHandler _logger;
         private IModHelper _modHelper;
         private readonly Harmony _harmony;
         private readonly StardewArchipelagoClient _archipelago;
         private LocationChecker _locationChecker;
 
-        public GoalManager(ILogger logger, IModHelper modHelper, Harmony harmony, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
+        public GoalManager(LogHandler logger, IModHelper modHelper, Harmony harmony, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             _logger = logger;
             _modHelper = modHelper;
@@ -29,6 +32,7 @@ namespace StardewArchipelago.Goals
 
         public void CheckGoalCompletion(bool vanillaGoal = false)
         {
+            EvaluateGrandpaToday(Game1.getFarm());
             switch (_archipelago.SlotData.Goal)
             {
                 case Goal.CommunityCenter:
@@ -193,6 +197,86 @@ namespace StardewArchipelago.Goals
                 original: AccessTools.Method(typeof(Utility), nameof(Utility.percentGameComplete)),
                 postfix: new HarmonyMethod(typeof(GoalCodeInjection), nameof(GoalCodeInjection.PercentGameComplete_PerfectionGoal_Postfix))
             );
+        }
+
+        private void EvaluateGrandpaToday(Farm farm)
+        {
+            var score = Utility.getGrandpaScore();
+            var candlesFromScore = Utility.getGrandpaCandlesFromScore(score);
+            farm.grandpaScore.Value = candlesFromScore;
+            for (var index = 0; index < candlesFromScore; ++index)
+            {
+                DelayedAction.playSoundAfterDelay("fireball", 100 * index);
+            }
+            farm.addGrandpaCandles();
+            AddArchipelagoIconsForPoints(farm, score);
+        }
+
+        private void AddArchipelagoIconsForPoints(Farm farm, int score)
+        {
+            var preference = ModEntry.Instance.Config.ShowGrandpaShrineIndicators;
+            if (preference == GrandpaShrinePreferenrce.Never)
+            {
+                return;
+            }
+            if (preference == GrandpaShrinePreferenrce.GrandpaGoal && _archipelago.SlotData.Goal != Goal.GrandpaEvaluation)
+            {
+                return;
+            }
+
+            var size = 24;
+            var whiteArchipelagoIcon = ArchipelagoTextures.GetArchipelagoLogo(_logger, _modHelper, size, ArchipelagoTextures.WHITE);
+            var coloredArchipelagoIcon = ArchipelagoTextures.GetArchipelagoLogo(_logger, _modHelper, size, ArchipelagoTextures.COLOR);
+
+            var grandpaShrinePosition = farm.GetGrandpaShrinePosition();
+            var localId = 6666 + _archipelago.SlotData.Seed.GetHashCode();
+            farm.removeTemporarySpritesWithIDLocal(localId);
+
+            for (var i = 1; i <= 21; i++)
+            {
+                var texture = whiteArchipelagoIcon;
+                var textureName = $"{ArchipelagoTextures.WHITE}_{size}";
+                if (score >= i)
+                {
+                    texture = coloredArchipelagoIcon;
+                    textureName = $"{ArchipelagoTextures.COLOR}_{size}";
+                }
+
+                var sprite = new TemporaryAnimatedSprite();
+                sprite.texture = texture;
+                sprite.textureName = textureName;
+
+                var sourceRect = new Rectangle(0, 0, size, size);
+                var column = (i - 1) % 7;
+                var row = (i - 1) / 7;
+                var positionX = ((grandpaShrinePosition.X - 2) * 64) + 50 + (column * 32);
+                var positionY = ((grandpaShrinePosition.Y - 3) * 64) + 8 + (row * 32);
+                var position = new Vector2(positionX, positionY);
+
+                sprite.currentParentTileIndex = 0;
+                sprite.initialParentTileIndex = 0;
+                sprite.position = position;
+                sprite.flicker = false;
+                sprite.flipped = false;
+
+                sprite.sourceRect = sourceRect;
+                sprite.sourceRectStartingPos = new Vector2(sourceRect.X, sourceRect.Y);
+                sprite.initialPosition = position;
+                sprite.alphaFade = 0.0f;
+                sprite.color = Color.White;
+
+                sprite.interval = 50f;
+                sprite.totalNumberOfLoops = 99999;
+                sprite.animationLength = 1;
+                sprite.lightId = $"Farm_GrandpaArchipelagoScore_{i}";
+                sprite.id = localId;
+                sprite.lightRadius = 1f;
+                sprite.scale = 1f;
+                sprite.layerDepth = 0.03f;
+                sprite.delayBeforeAnimationStart = i * 50;
+
+                farm.temporarySprites.Add(sprite);
+            }
         }
     }
 }
