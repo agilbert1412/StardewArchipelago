@@ -7,14 +7,19 @@ using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.Extensions;
 using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
+using StardewModdingAPI;
 using StardewValley;
+using StardewModdingAPI.Enums;
 
 namespace StardewArchipelago.Items.Unlocks.Modded
 {
     public class ModSkillUnlockManager : IUnlockManager
     {
-        public ModSkillUnlockManager()
+        private readonly IModHelper _modHelper;
+
+        public ModSkillUnlockManager(IModHelper modHelper)
         {
+            _modHelper = modHelper;
         }
 
         public void RegisterUnlocks(IDictionary<string, Func<ReceivedItem, LetterAttachment>> unlocks)
@@ -80,10 +85,9 @@ namespace StardewArchipelago.Items.Unlocks.Modded
         {
             var farmer = Game1.player;
             var skillsType = AccessTools.TypeByName("SpaceCore.Skills");
-            var expField = ModEntry.Instance.Helper.Reflection.GetField<Dictionary<long, Dictionary<string, int>>>(skillsType, "Exp");
-            var exp = expField.GetValue();
-            var myNewLevelsField = ModEntry.Instance.Helper.Reflection.GetField<List<KeyValuePair<string, int>>>(skillsType, "NewLevels");
-            var myNewLevels = myNewLevelsField.GetValue();
+
+            var exp = GetSpaceCoreExp(skillsType);
+            var myNewLevels = GetSpaceCoreNewlevels(skillsType);
             if (!exp.ContainsKey(farmer.UniqueMultiplayerID))
             {
                 exp.Add(farmer.UniqueMultiplayerID, new Dictionary<string, int>());
@@ -107,6 +111,78 @@ namespace StardewArchipelago.Items.Unlocks.Modded
                     myNewLevels.Add(new KeyValuePair<string, int>(skill, i));
                 }
             }
+        }
+
+        private Dictionary<long, Dictionary<string, int>> GetSpaceCoreExp(Type skillsType)
+        {
+            // There was an experience refactor in 1.27
+            if (IsSpaceCoreOlderThan_1_27())
+            {
+                return GetSpaceCoreExp_1_26(skillsType);
+            }
+
+            var state = GetSpaceCoreSkillsState(skillsType);
+
+            // public Dictionary<long, Dictionary<string, int>> Exp
+            var expField = ModEntry.Instance.Helper.Reflection.GetField<Dictionary<long, Dictionary<string, int>>>(state, "Exp");
+
+            var exp = expField.GetValue();
+            return exp;
+        }
+
+        private static Dictionary<long, Dictionary<string, int>> GetSpaceCoreExp_1_26(Type skillsType)
+        {
+            var expField = ModEntry.Instance.Helper.Reflection.GetField<Dictionary<long, Dictionary<string, int>>>(skillsType, "Exp");
+            var exp = expField.GetValue();
+            return exp;
+        }
+
+        public List<KeyValuePair<string, int>> GetSpaceCoreNewlevels(Type skillsType)
+        {
+            // There was an experience refactor in 1.27
+            if (IsSpaceCoreOlderThan_1_27())
+            {
+                return GetSpaceCoreNewlevels_1_26(skillsType);
+            }
+
+            var state = GetSpaceCoreSkillsState(skillsType);
+
+            // public Dictionary<long, Dictionary<string, int>> Exp
+            var myNewLevelsField = ModEntry.Instance.Helper.Reflection.GetField<List<KeyValuePair<string, int>>>(state, "NewLevels");
+
+            var exp = myNewLevelsField.GetValue();
+            return exp;
+        }
+
+        private static List<KeyValuePair<string, int>> GetSpaceCoreNewlevels_1_26(Type skillsType)
+        {
+            var myNewLevelsField = ModEntry.Instance.Helper.Reflection.GetField<List<KeyValuePair<string, int>>>(skillsType, "NewLevels");
+            var myNewLevels = myNewLevelsField.GetValue();
+            return myNewLevels;
+        }
+
+        private object GetSpaceCoreSkillsState(Type skillsType)
+        {
+            // internal class SkillState
+            // var skillStateType = AccessTools.TypeByName("SpaceCore.Skills+SkillState");
+
+            // internal static SkillState State => _State.Value;
+            var stateProperty = ModEntry.Instance.Helper.Reflection.GetProperty<object>(skillsType, "State");
+            var state = stateProperty.GetValue();
+            return state;
+        }
+
+        private bool IsSpaceCoreOlderThan_1_27()
+        {
+            var spaceCoreMod = _modHelper.ModRegistry.Get("spacechase0.SpaceCore");
+            if (spaceCoreMod == null)
+            {
+                throw new Exception("SpaceCore mod could not be found while attempting to patch modded experience");
+            }
+
+            var version = spaceCoreMod.Manifest.Version;
+
+            return version.MajorVersion <= 1 && version.MinorVersion <= 26;
         }
     }
 }
