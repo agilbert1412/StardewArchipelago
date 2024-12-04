@@ -41,13 +41,7 @@ namespace StardewArchipelago.Items.Unlocks.Modded
 
         private LetterAttachment SendProgressiveLuckLevel(ReceivedItem receivedItem)
         {
-            foreach (var farmer in Game1.getAllFarmers())
-            {
-                var experienceForLevelUp = farmer.GetExperienceToNextLevel(Skill.Luck);
-                farmer.AddExperience(Skill.Luck, experienceForLevelUp);
-                farmer.luckLevel.Value++;
-                farmer.newLevels.Add(new Point((int)Skill.Luck, farmer.luckLevel.Value));
-            }
+            ReceiveAPLevel(ArchipelagoSkillIds.LUCK);
             return new LetterInformationAttachment(receivedItem);
         }
 

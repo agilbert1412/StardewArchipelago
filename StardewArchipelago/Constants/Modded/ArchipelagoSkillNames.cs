@@ -12,7 +12,7 @@
 
     public class ArchipelagoSkillIds
     {
-        public const string LUCK = "Luck";
+        public const string LUCK = "moonslime.Luck";
         public const string BINNING = "drbirbdev.Binning";
         public const string MAGIC = "spacechase0.Magic";
         public const string ARCHAEOLOGY = "moonslime.Archaeology";
