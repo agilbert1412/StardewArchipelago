@@ -261,7 +261,7 @@ namespace StardewArchipelago.Integrations.GenericModConfigMenu
                 formatValue: (value) => ((SeasonPreference)value).ToString()
             );
 
-            var grandpaShrinePreferenceValues = Enum.GetValues(typeof(GrandpaShrinePreferenrce)).Cast<int>().ToArray();
+            var grandpaShrinePreferenceValues = Enum.GetValues(typeof(GrandpaShrinePreference)).Cast<int>().ToArray();
             var grandpaShrinePreferenceMin = grandpaShrinePreferenceValues.Min();
             var grandpaShrinePreferenceMax = grandpaShrinePreferenceValues.Max();
             configMenu.AddNumberOption(
@@ -272,8 +272,8 @@ namespace StardewArchipelago.Integrations.GenericModConfigMenu
                 max: grandpaShrinePreferenceMax,
                 interval: 1,
                 getValue: () => (int)Config.ShowGrandpaShrineIndicators,
-                setValue: (value) => Config.ShowGrandpaShrineIndicators = (GrandpaShrinePreferenrce)value,
-                formatValue: (value) => ((GrandpaShrinePreferenrce)value).ToString()
+                setValue: (value) => Config.ShowGrandpaShrineIndicators = (GrandpaShrinePreference)value,
+                formatValue: (value) => ((GrandpaShrinePreference)value).ToString()
             );
         }
     }

@@ -91,7 +91,7 @@ namespace StardewArchipelago
         /// <summary>
         /// Whether to display archipelago icons on grandpa's shrine to see current points
         /// </summary>
-        public GrandpaShrinePreferenrce ShowGrandpaShrineIndicators { get; set; } = GrandpaShrinePreferenrce.GrandpaGoal;
+        public GrandpaShrinePreference ShowGrandpaShrineIndicators { get; set; } = GrandpaShrinePreference.GrandpaGoal;
     }
 
     public enum ItemIndicatorPreference
@@ -108,7 +108,7 @@ namespace StardewArchipelago
         Cycle = 2,
     }
 
-    public enum GrandpaShrinePreferenrce
+    public enum GrandpaShrinePreference
     {
         Never = 0,
         GrandpaGoal = 1,
