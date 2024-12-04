@@ -21,7 +21,7 @@ General:
 - [Distant Lands - Witch Swamp Overhaul](https://www.nexusmods.com/stardewvalley/mods/18109), by Aimon111, Version 2.1.x
 
 Skills:
-- [Luck Skill](https://www.nexusmods.com/stardewvalley/mods/521), by spacechase0, Version 1.2.x
+- [Luck Skill](https://www.nexusmods.com/stardewvalley/mods/28103), by spacechase0, Version 1.3.x - Note: This mod was ported from the now deprecated "Luck Skill", and has added some new content that isn't fully randomized. But it should work like before
 - [Socializing Skill](https://www.nexusmods.com/stardewvalley/mods/14142), by drbirbdev, Version 2.0.x
 - [Archaeology](https://www.nexusmods.com/stardewvalley/mods/22199), by MoonSlime, Version 2.10.3
 - [Binning Skill](https://www.nexusmods.com/stardewvalley/mods/14073), by drbirbdev, Version 2.0.x
