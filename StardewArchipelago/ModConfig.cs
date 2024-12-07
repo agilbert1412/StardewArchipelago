@@ -87,6 +87,11 @@ namespace StardewArchipelago
         /// What Season to pick when multisleeping across a month transition
         /// </summary>
         public SeasonPreference MultiSleepSeasonPreference { get; set; } = SeasonPreference.Repeat;
+
+        /// <summary>
+        /// Whether to display archipelago icons on grandpa's shrine to see current points
+        /// </summary>
+        public GrandpaShrinePreference ShowGrandpaShrineIndicators { get; set; } = GrandpaShrinePreference.GrandpaGoal;
     }
 
     public enum ItemIndicatorPreference
@@ -101,5 +106,12 @@ namespace StardewArchipelago
         Prompt = 0,
         Repeat = 1,
         Cycle = 2,
+    }
+
+    public enum GrandpaShrinePreference
+    {
+        Never = 0,
+        GrandpaGoal = 1,
+        Always = 2,
     }
 }

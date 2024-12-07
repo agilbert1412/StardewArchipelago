@@ -32,7 +32,7 @@ namespace StardewArchipelago.Items
         {
             _logger = logger;
             _itemManager = itemManager;
-            _unlockManager = new UnlockManager(archipelago, locationChecker);
+            _unlockManager = new UnlockManager(helper, archipelago, locationChecker);
             _trapManager = new TrapManager(logger, helper, harmony, archipelago, tileChooser, babyBirther, giftSender);
             _nameMapper = new CompoundNameMapper(archipelago.SlotData);
         }

@@ -45,9 +45,8 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
                 if (__instance.farmhouseMailbox.Value)
                 {
-                    __instance.setMapTileIndex(81, 40, 771, "Buildings");
-                    __instance.setMapTileIndex(81, 39, 739, "Front");
-                    __instance.setTileProperty(81, 40, "Buildings", "Action", "Mailbox");
+                    __instance.setMapTile(81, 40, 771, "Buildings", "untitled tile sheet", "Mailbox");
+                    __instance.setMapTile(81, 39, 739, "Front", "untitled tile sheet");
                 }
 
                 return false; // don't run original logic;

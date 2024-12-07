@@ -6,6 +6,7 @@ using StardewArchipelago.Archipelago;
 using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Items.Unlocks.Modded;
 using StardewArchipelago.Items.Unlocks.Vanilla;
+using StardewModdingAPI;
 
 namespace StardewArchipelago.Items.Unlocks
 {
@@ -14,7 +15,7 @@ namespace StardewArchipelago.Items.Unlocks
         private readonly List<IUnlockManager> _specificUnlockManagers;
         private readonly Dictionary<string, Func<ReceivedItem, LetterAttachment>> _unlockables;
 
-        public UnlockManager(StardewArchipelagoClient archipelago, LocationChecker locationChecker)
+        public UnlockManager(IModHelper modHelper, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             _unlockables = new Dictionary<string, Func<ReceivedItem, LetterAttachment>>();
             _specificUnlockManagers = new List<IUnlockManager>
@@ -24,7 +25,7 @@ namespace StardewArchipelago.Items.Unlocks
 
             if (archipelago.SlotData.Mods.IsModded)
             {
-                _specificUnlockManagers.Add(new ModUnlockManager(archipelago));
+                _specificUnlockManagers.Add(new ModUnlockManager(modHelper, archipelago));
             }
 
             RegisterUnlocks();

@@ -8,6 +8,7 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 using xTile.Tiles;
+using StardewValley.Extensions;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
 {
@@ -39,6 +40,12 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     return true; // run original logic
                 }
 
+                if (force)
+                {
+                    // __instance._appliedMapOverrides.Clear();
+                }
+                __instance.interiorDoors.MakeMapModifications();
+
                 var abandonedJojaMart = Game1.getLocationFromName(ABANDONED_JOJA_MART);
                 var junimoNotePoint = GetMissingBundleTile(__instance);
 
@@ -50,16 +57,17 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
                 if (__instance.map.TileSheets.Count < 3)
                 {
+                    // The MovieTheater doesn't have an "indoor" layer, but it needs one to pull the tilesheet from in the CC method below. So we just duplicate the one from the abandoned joja mart.
                     var abandonedJojaIndoorTileSheet = abandonedJojaMart.map.GetTileSheet("indoor");
-
-                    // aaa is to make it get sorted to index 0, because the dumbass CC assumes the first tilesheet is the correct one
-                    var indoorTileSheet = new TileSheet("aaa" + abandonedJojaIndoorTileSheet.Id, __instance.map, abandonedJojaIndoorTileSheet.ImageSource, abandonedJojaIndoorTileSheet.SheetSize, abandonedJojaIndoorTileSheet.TileSize);
+                    var indoorTileSheet = new TileSheet(abandonedJojaIndoorTileSheet.Id, __instance.map, abandonedJojaIndoorTileSheet.ImageSource, abandonedJojaIndoorTileSheet.SheetSize, abandonedJojaIndoorTileSheet.TileSize);
                     __instance.map.AddTileSheet(indoorTileSheet);
                 }
 
                 var junimoNoteTileFrames = CommunityCenter.getJunimoNoteTileFrames(0, __instance.map);
                 var layerId = "Buildings";
-                __instance.map.GetLayer(layerId).Tiles[junimoNotePoint.X, junimoNotePoint.Y] = new AnimatedTile(__instance.map.GetLayer(layerId), junimoNoteTileFrames, 70L);
+                // __instance.map.GetLayer(layerId).Tiles[junimoNotePoint.X, junimoNotePoint.Y] = new AnimatedTile(__instance.map.GetLayer(layerId), junimoNoteTileFrames, 70L);
+                var layer = __instance.map.RequireLayer(layerId);
+                layer.Tiles[junimoNotePoint.X, junimoNotePoint.Y] = new AnimatedTile(layer, junimoNoteTileFrames, 70L);
 
                 return false; // don't run original logic
             }

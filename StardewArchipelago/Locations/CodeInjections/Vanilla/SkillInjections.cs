@@ -22,7 +22,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private static readonly Dictionary<Skill, string> _skillToModName = new()
         {
             { Skill.Magic, ModNames.MAGIC }, { Skill.Binning, ModNames.BINNING }, { Skill.Cooking, ModNames.COOKING },
-            { Skill.Archaeology, ModNames.ARCHAEOLOGY }, { Skill.Socializing, ModNames.SOCIALIZING },
+            { Skill.Archaeology, ModNames.ARCHAEOLOGY }, { Skill.Socializing, ModNames.SOCIALIZING }, { Skill.Luck, ModNames.LUCK },
         };
 
         private static ILogger _logger;

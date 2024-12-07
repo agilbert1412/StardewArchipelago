@@ -589,8 +589,10 @@ namespace StardewArchipelago.GameModifications
 
         private void PatchZeldaAnimations()
         {
+            var holdUpItemParameterTypes = new[] { typeof(Item), typeof(int), typeof(bool) };
             _harmony.Patch(
-                original: AccessTools.Method(typeof(Farmer), nameof(Farmer.holdUpItemThenMessage)),
+                original: AccessTools.Method(typeof(Farmer), nameof(Farmer.holdUpItemThenMessage),
+                    holdUpItemParameterTypes),
                 prefix: new HarmonyMethod(typeof(ZeldaAnimationInjections),
                     nameof(ZeldaAnimationInjections.HoldUpItemThenMessage_SkipBasedOnConfig_Prefix))
             );

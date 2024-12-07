@@ -260,6 +260,21 @@ namespace StardewArchipelago.Integrations.GenericModConfigMenu
                 setValue: (value) => Config.MultiSleepSeasonPreference = (SeasonPreference)value,
                 formatValue: (value) => ((SeasonPreference)value).ToString()
             );
+
+            var grandpaShrinePreferenceValues = Enum.GetValues(typeof(GrandpaShrinePreference)).Cast<int>().ToArray();
+            var grandpaShrinePreferenceMin = grandpaShrinePreferenceValues.Min();
+            var grandpaShrinePreferenceMax = grandpaShrinePreferenceValues.Max();
+            configMenu.AddNumberOption(
+                mod: ModManifest,
+                name: () => "Grandpa Shrine Icons",
+                tooltip: () => "When to display Grandpa Evaluation Icons over the shrine",
+                min: grandpaShrinePreferenceMin,
+                max: grandpaShrinePreferenceMax,
+                interval: 1,
+                getValue: () => (int)Config.ShowGrandpaShrineIndicators,
+                setValue: (value) => Config.ShowGrandpaShrineIndicators = (GrandpaShrinePreference)value,
+                formatValue: (value) => ((GrandpaShrinePreference)value).ToString()
+            );
         }
     }
 }

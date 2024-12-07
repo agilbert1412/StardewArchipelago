@@ -175,10 +175,11 @@ namespace StardewArchipelago.Locations.Patcher
                 prefix: new HarmonyMethod(typeof(RaccoonInjections), nameof(RaccoonInjections.Activate_DisplayDialogueOrBundle_Prefix))
             );
 
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(Bundle), nameof(Bundle.IsValidItemForThisIngredientDescription)),
-                prefix: new HarmonyMethod(typeof(RaccoonInjections), nameof(RaccoonInjections.IsValidItemForThisIngredientDescription_TestPatch_Prefix))
-            );
+            // I believe we no longer need this, as vanilla fixed it in 1.6.9. We can bring it back if it breaks.
+            //_harmony.Patch(
+            //    original: AccessTools.Method(typeof(Bundle), nameof(Bundle.IsValidItemForThisIngredientDescription)),
+            //    prefix: new HarmonyMethod(typeof(RaccoonInjections), nameof(RaccoonInjections.IsValidItemForThisIngredientDescription_TestPatch_Prefix))
+            //);
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Forest), "resetSharedState"),

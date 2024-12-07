@@ -21,6 +21,7 @@ using Object = StardewValley.Object;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
 using StardewArchipelago.Archipelago;
+using Netcode;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 {
@@ -290,7 +291,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         }
 
         // public bool IsValidItemForThisIngredientDescription(Item item,BundleIngredientDescription ingredient)
-        public static bool IsValidItemForThisIngredientDescription_TestPatch_Prefix(Bundle __instance, Item item, BundleIngredientDescription ingredient, ref bool __result)
+        /*public static bool IsValidItemForThisIngredientDescription_TestPatch_Prefix(Bundle __instance, Item item, BundleIngredientDescription ingredient, ref bool __result)
         {
             try
             {
@@ -305,11 +306,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                     var flavoredIngredientQuery = "FLAVORED_ITEM " + ingredient.id + " " + ingredient.preservesId;
                     var queryContext = new ItemQueryContext(Game1.currentLocation, Game1.player, Game1.random);
                     var resolvedIngredientQueryResult = ItemQueryResolver.TryResolve(flavoredIngredientQuery, queryContext);
-                    var resolvedIngredient = resolvedIngredientQueryResult.FirstOrDefault<ItemQueryResult>()?.Item;
+                    var resolvedIngredient = resolvedIngredientQueryResult.FirstOrDefault()?.Item;
                     if (resolvedIngredient is Object ingredientObject && item is Object itemObject && itemObject.preservedParentSheetIndex?.Value != null)
                     {
                         var qualifiedIdsMatch = item.QualifiedItemId == ingredientObject.QualifiedItemId;
-                        var preservesIdMatch = ingredient.preservesId.Contains(itemObject.preservedParentSheetIndex.Value);
+                        var preservesIdMatch = itemObject.preservedParentSheetIndex.Value.Contains(ingredient.preservesId);
                         __result = qualifiedIdsMatch && preservesIdMatch;
                         return false; // don't run original logic
                     }
@@ -325,7 +326,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 _logger.LogError($"Failed in {nameof(IsValidItemForThisIngredientDescription_TestPatch_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
-        }
+        }*/
 
         // public override void draw(SpriteBatch spriteBatch)
         public static void Draw_TreeStumpFix_Postfix(Forest __instance, SpriteBatch spriteBatch)
