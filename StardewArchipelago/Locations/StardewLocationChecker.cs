@@ -29,14 +29,14 @@ namespace StardewArchipelago.Locations
             {
                 // locations.Add($"{Prefix.WALNUTSANITY}{locationName}");
             }
-            base.AddCheckedLocations(locations.ToArray());
+            AddCheckedLocations(locations.ToArray());
         }
 
         public void AddJojaCheckedLocation(string locationName)
         {
             var locations = new List<string> { locationName };
             _jojapocalypseManager.AddCheckedLocations(locations);
-            base.AddCheckedLocations(locations.ToArray());
+            AddCheckedLocations(locations.ToArray());
         }
 
         public override void SendAllLocationChecks()

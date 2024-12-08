@@ -15,5 +15,9 @@ namespace StardewArchipelago.Locations
 
         }
 
+        public void AddCheckedLocations(List<string> locations)
+        {
+            JojaCheckedLocations.UnionWith(locations);
+        }
     }
 }
