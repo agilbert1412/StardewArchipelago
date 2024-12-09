@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Newtonsoft.Json;
+using StardewArchipelago.GameModifications.Testing;
 using StardewValley;
 using StardewValley.GameData;
 
@@ -109,7 +110,7 @@ namespace StardewArchipelago.Archipelago
         public bool AppearanceRandomizationDaily { get; set; }
         public ModsManager Mods { get; set; }
 
-        public SlotData(string slotName, Dictionary<string, object> slotDataFields, ILogger logger)
+        public SlotData(string slotName, Dictionary<string, object> slotDataFields, ILogger logger, TesterFeatures testerFeatures)
         {
             SlotName = slotName;
             _slotDataFields = slotDataFields;
@@ -164,7 +165,7 @@ namespace StardewArchipelago.Archipelago
             AppearanceRandomizationDaily = false; // GetSlotSetting(RANDOMIZE_NPC_APPEARANCES_DAILY_KEY, false);
             var modsString = GetSlotSetting(MOD_LIST_KEY, "");
             var mods = JsonConvert.DeserializeObject<List<string>>(modsString);
-            Mods = new ModsManager(_logger, mods);
+            Mods = new ModsManager(_logger, testerFeatures, mods);
         }
 
         private Walnutsanity GetSlotWalnutsanitySetting()

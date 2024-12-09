@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Constants.Modded;
+using StardewArchipelago.GameModifications.Testing;
 using StardewModdingAPI;
 
 namespace StardewArchipelago.Archipelago
@@ -11,12 +12,14 @@ namespace StardewArchipelago.Archipelago
     public class ModsManager
     {
         private readonly ILogger _logger;
+        private readonly TesterFeatures _testerFeatures;
         private readonly List<string> _activeMods;
         private readonly VersionValidator _versionValidator;
 
-        public ModsManager(ILogger logger, List<string> activeMods)
+        public ModsManager(ILogger logger, TesterFeatures testerFeatures, List<string> activeMods)
         {
             _logger = logger;
+            _testerFeatures = testerFeatures;
             _activeMods = activeMods;
             _versionValidator = new VersionValidator();
         }
@@ -117,10 +120,18 @@ namespace StardewArchipelago.Archipelago
                 }
 
                 existingVersion = modInfo.Manifest.Version.ToString();
+                if (_testerFeatures.UnstableMods.Value != VerifyMods.MODS_AND_VERSIONS)
+                {
+                    return true;
+                }
                 return _versionValidator.IsVersionCorrect(existingVersion, desiredVersion);
             }
 
             existingVersion = "[NOT FOUND]";
+            if (_testerFeatures.UnstableMods.Value == VerifyMods.NOTHING)
+            {
+                return true;
+            }
             return false;
         }
 

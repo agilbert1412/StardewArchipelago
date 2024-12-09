@@ -3,6 +3,7 @@ using HarmonyLib;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.GameModifications.Testing;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
@@ -16,14 +17,16 @@ namespace StardewArchipelago.GameModifications
         private static IModHelper _modHelper;
         private readonly Harmony _harmony;
         private static StardewArchipelagoClient _archipelago;
+        private static TesterFeatures _testerFeatures;
 
-        public AdvancedOptionsManager(ModEntry modEntry, ILogger logger, IModHelper modHelper, Harmony harmony, StardewArchipelagoClient archipelago)
+        public AdvancedOptionsManager(ModEntry modEntry, ILogger logger, IModHelper modHelper, Harmony harmony, StardewArchipelagoClient archipelago, TesterFeatures testerFeatures)
         {
             _modEntry = modEntry;
             _logger = logger;
             _modHelper = modHelper;
             _harmony = harmony;
             _archipelago = archipelago;
+            _testerFeatures = testerFeatures;
         }
 
         public void InjectArchipelagoAdvancedOptions()
@@ -99,6 +102,8 @@ namespace StardewArchipelago.GameModifications
                 ForceFarmTypeToArchipelagoProvidedFarm();
                 Game1.bundleType = Game1.BundleType.Default;
                 Game1.game1.SetNewGameOption<bool>("YearOneCompletable", false);
+                Game1.startingCabins = _testerFeatures.Multiplayer.Value;
+                Game1.cabinsSeparate = false;
 
                 return true; // run original logic
             }

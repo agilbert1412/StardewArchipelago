@@ -17,6 +17,7 @@ using StardewArchipelago.GameModifications.CodeInjections;
 using StardewArchipelago.GameModifications.EntranceRandomizer;
 using StardewArchipelago.GameModifications.Modded;
 using StardewArchipelago.GameModifications.Seasons;
+using StardewArchipelago.GameModifications.Testing;
 using StardewArchipelago.Goals;
 using StardewArchipelago.Integrations.GenericModConfigMenu;
 using StardewArchipelago.Items;
@@ -57,6 +58,7 @@ namespace StardewArchipelago
         private LogHandler _logger;
         private IModHelper _helper;
         private Harmony _harmony;
+        private TesterFeatures _testerFeatures;
         private StardewArchipelagoClient _archipelago;
         private AdvancedOptionsManager _advancedOptionsManager;
         private Mailman _mail;
@@ -108,8 +110,9 @@ namespace StardewArchipelago
             _logger = new LogHandler(Monitor);
             _helper = helper;
             _harmony = new Harmony(ModManifest.UniqueID);
+            _testerFeatures = new TesterFeatures(_logger, _helper);
 
-            _archipelago = new StardewArchipelagoClient(_logger, _helper, ModManifest, _harmony, OnItemReceived, new SmapiJsonLoader(_helper));
+            _archipelago = new StardewArchipelagoClient(_logger, _helper, ModManifest, _harmony, OnItemReceived, new SmapiJsonLoader(_helper), _testerFeatures);
 
             _helper.Events.GameLoop.GameLaunched += OnGameLaunched;
             _helper.Events.GameLoop.SaveCreating += OnSaveCreating;
@@ -224,7 +227,7 @@ namespace StardewArchipelago
             _bundlesManager = null;
             SeasonsRandomizer.ResetMailKeys();
             _multiSleep = new MultiSleep(_logger, _helper, _harmony);
-            _advancedOptionsManager = new AdvancedOptionsManager(this, _logger, _helper, _harmony, _archipelago);
+            _advancedOptionsManager = new AdvancedOptionsManager(this, _logger, _helper, _harmony, _archipelago, _testerFeatures);
             _advancedOptionsManager.InjectArchipelagoAdvancedOptions();
             _giftHandler = new CrossGiftHandler();
             _villagerEvents = new ModifiedVillagerEventChecker();
