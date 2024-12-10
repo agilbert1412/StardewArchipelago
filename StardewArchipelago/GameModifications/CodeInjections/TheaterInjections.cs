@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
@@ -55,7 +56,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     return false; // don't run original logic
                 }
 
-                if (__instance.map.TileSheets.Count < 3)
+                if (__instance.map.TileSheets.All(x => x.Id != "indoor"))
                 {
                     // The MovieTheater doesn't have an "indoor" layer, but it needs one to pull the tilesheet from in the CC method below. So we just duplicate the one from the abandoned joja mart.
                     var abandonedJojaIndoorTileSheet = abandonedJojaMart.map.GetTileSheet("indoor");
