@@ -46,6 +46,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         // protected virtual string[] getWeeklyRecipe()
         public static bool GetWeeklyRecipe_UseArchipelagoSchedule_Prefix(TV __instance, ref string[] __result)
         {
+            __result = new[] { "", "" };
             try
             {
                 if (__instance == null)
