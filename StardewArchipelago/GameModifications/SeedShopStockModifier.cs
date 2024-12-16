@@ -96,7 +96,10 @@ namespace StardewArchipelago.GameModifications
                 RemoveCondition(item, "YEAR 2");
                 RemoveCondition(item, "DAYS_PLAYED 15");
 
-                item.AvoidRepeat = true;
+                if (!item.IsRecipe)
+                {
+                    item.AvoidRepeat = true;
+                }
             }
         }
 
