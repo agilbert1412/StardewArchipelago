@@ -69,16 +69,18 @@ namespace StardewArchipelago.GameModifications
 
             if (!_archipelago.SlotData.QuickStart)
             {
+                var chest = _stardewItemManager.GetItemByName("Chest").PrepareForGivingToFarmer(1);
+                CreateGiftBoxItemInEmptySpot(farmhouse, chest);
                 return;
             }
 
-            var chest = _stardewItemManager.GetItemByName("Chest").PrepareForGivingToFarmer(5);
+            var chests = _stardewItemManager.GetItemByName("Chest").PrepareForGivingToFarmer(5);
             var iridiumBand = _stardewItemManager.GetItemByName("Iridium Band").PrepareForGivingToFarmer();
             var qualitySprinklers = _stardewItemManager.GetItemByName("Quality Sprinkler").PrepareForGivingToFarmer(4);
             var autoPetters = _stardewItemManager.GetItemByName("Auto-Petter").PrepareForGivingToFarmer(2);
             var autoGrabbers = _stardewItemManager.GetItemByName("Auto-Grabber").PrepareForGivingToFarmer(2);
 
-            CreateGiftBoxItemInEmptySpot(farmhouse, chest);
+            CreateGiftBoxItemInEmptySpot(farmhouse, chests);
             CreateGiftBoxItemInEmptySpot(farmhouse, iridiumBand);
             CreateGiftBoxItemInEmptySpot(farmhouse, qualitySprinklers);
             CreateGiftBoxItemInEmptySpot(farmhouse, autoPetters);
