@@ -92,6 +92,7 @@ namespace StardewArchipelago.Locations.InGameLocations
 
             _description = scoutedLocation == null ? ScoutedLocation.GenericItemName() : scoutedLocation.ToString();
         }
+        
         private static string GetCorrectTexture(ScoutedLocation scoutedLocation, bool isHinted)
         {
             if (isHinted)
