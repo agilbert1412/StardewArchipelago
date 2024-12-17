@@ -36,8 +36,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         private static IModHelper _helper;
         private static StardewArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
-        private static Chest chestOrTrashThatGrantedAPCheck = null;
-        private static LargeTerrainFeature fountainThatGrantedAPCheck = null;
+        private static Chest _chestOrTrashThatGrantedApCheck = null;
+        private static LargeTerrainFeature _fountainThatGrantedApCheck = null;
 
 
         public static void Initialize(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago,
@@ -251,10 +251,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 {
                     _locationChecker.AddCheckedLocation(isTrashCan.Value ? TREASURE1_AP_LOCATION : TREASURE2_AP_LOCATION);
                     Game1.playSound(isTrashCan.Value ? "trashcan" : "openChest");
-                    chestOrTrashThatGrantedAPCheck = __instance;
+                    _chestOrTrashThatGrantedApCheck = __instance;
                 }
 
-                if (chestOrTrashThatGrantedAPCheck != __instance)
+                if (_chestOrTrashThatGrantedApCheck != __instance)
                 {
                     return true; //run original logic (all other treasure save first is vanilla)
                 }

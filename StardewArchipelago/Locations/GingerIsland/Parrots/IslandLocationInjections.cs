@@ -14,8 +14,6 @@ namespace StardewArchipelago.Locations.GingerIsland.Parrots
         private static IModHelper _modHelper;
         private static ArchipelagoClient _archipelago;
 
-        private IslandLocation _islandLocation;
-
         public static void Initialize(ILogger logger, IModHelper modHelper, ArchipelagoClient archipelago)
         {
             _logger = logger;

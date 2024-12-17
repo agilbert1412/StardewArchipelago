@@ -42,7 +42,7 @@ namespace StardewArchipelago.GameModifications.Testing
             }
             catch (Exception ex)
             {
-                logger.LogError($"Failed at reading the TesterFeatures file. The file is probably corrupted and should be deleted to start fresh, or fixed manually");
+                logger.LogError($"Failed at reading the TesterFeatures file. The file is probably corrupted and should be deleted to start fresh, or fixed manually. Exception: {ex}");
             }
         }
     }

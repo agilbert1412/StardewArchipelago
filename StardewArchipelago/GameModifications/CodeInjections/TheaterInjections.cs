@@ -80,7 +80,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         }
 
         // public bool checkTileIndexAction(int tileIndex)
-        public static bool CheckTileIndexAction_InteractWithMissingBundleNote_Prefix(GameLocation __instance, int tileIndex, ref bool __result)
+        public static bool CheckTileIndexAction_InteractWithMissingBundleNote_Prefix(GameLocation __instance, int tileIndex, ref bool result)
         {
             try
             {
@@ -105,7 +105,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     case 1833:
                         // Game1.activeClickableMenu = (IClickableMenu) new JunimoNoteMenu(6, (Game1.getLocationFromName("CommunityCenter") as CommunityCenter).bundlesDict())
                         ((AbandonedJojaMart)(Game1.getLocationFromName("AbandonedJojaMart"))).checkBundle();
-                        __result = true;
+                        result = true;
                         return false; // don't run original logic
                 }
 
@@ -137,9 +137,9 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             }
         }
 
-        private static bool hasSeenCCCeremonyCutscene;
-        private static bool hasPamHouseUpgrade;
-        private static bool hasShortcuts;
+        private static bool _hasSeenCcCeremonyCutscene;
+        private static bool _hasPamHouseUpgrade;
+        private static bool _hasShortcuts;
 
         // public override void MakeMapModifications(bool force = false)
         public static bool MakeMapModifications_JojamartAndTheater_Prefix(Town __instance, bool force)
@@ -169,8 +169,8 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 }
                 else
                 {
-                    hasSeenCCCeremonyCutscene = Utility.HasAnyPlayerSeenEvent(EventIds.COMMUNITY_CENTER_COMPLETE);
-                    if (hasSeenCCCeremonyCutscene)
+                    _hasSeenCcCeremonyCutscene = Utility.HasAnyPlayerSeenEvent(EventIds.COMMUNITY_CENTER_COMPLETE);
+                    if (_hasSeenCcCeremonyCutscene)
                     {
                         Game1.player.eventsSeen.Remove(EventIds.COMMUNITY_CENTER_COMPLETE);
                     }
@@ -190,7 +190,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         {
             try
             {
-                if (hasSeenCCCeremonyCutscene && !Game1.player­.eventsSeen.Contains(EventIds.COMMUNITY_CENTER_COMPLETE))
+                if (_hasSeenCcCeremonyCutscene && !Game1.player­.eventsSeen.Contains(EventIds.COMMUNITY_CENTER_COMPLETE))
                 {
                     Game1.player.eventsSeen.Add(EventIds.COMMUNITY_CENTER_COMPLETE);
                 }
@@ -216,7 +216,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         }
 
         // private bool changeScheduleForLocationAccessibility(ref string locationName, ref int tileX, ref int tileY, ref int facingDirection)
-        public static bool ChangeScheduleForLocationAccessibility_JojamartAndTheater_Prefix(NPC __instance, ref string locationName, ref int tileX, ref int tileY, ref int facingDirection, ref bool __result)
+        public static bool ChangeScheduleForLocationAccessibility_JojamartAndTheater_Prefix(NPC __instance, ref string locationName, ref int tileX, ref int tileY, ref int facingDirection, ref bool result)
         {
             try
             {
@@ -228,14 +228,14 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 if (locationName != "JojaMart" || !_archipelago.HasReceivedItem(APItem.MOVIE_THEATER))
                 {
                     // no fallback
-                    __result = false;
+                    result = false;
                     return false; // don't run original logic
                 }
 
                 if (!__instance.hasMasterScheduleEntry(locationName + "_Replacement"))
                 {
                     // Fallback on the default schedule
-                    __result = true;
+                    result = true;
                     return false; // don't run original logic
                 }
 
@@ -246,7 +246,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 facingDirection = Convert.ToInt32(strArray[3]);
 
                 // no fallback
-                __result = false;
+                result = false;
                 return false; // don't run original logic
             }
             catch (Exception ex)

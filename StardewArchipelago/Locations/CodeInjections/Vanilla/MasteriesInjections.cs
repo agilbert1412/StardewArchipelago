@@ -68,8 +68,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     default:
                         return true; // run original logic
                 }
-
-                return false; // don't run original logic
             }
             catch (Exception ex)
             {

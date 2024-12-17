@@ -223,8 +223,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     }
                 }
             }
-
-            return "";
         }
 
         // private void houseUpgradeAccept()

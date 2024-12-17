@@ -43,7 +43,7 @@ namespace StardewArchipelago.Locations.GingerIsland.WalnutRoom
                 }
                 else
                 {
-                    var walnutWarning = "You hear a strange voice from behind the door...#'Only the greatest walnut hunters may enter here.'^    Your current status: {0}/100";
+                    // var walnutWarning = "You hear a strange voice from behind the door...#'Only the greatest walnut hunters may enter here.'^    Your current status: {0}/100";
                     var walnutWarningAP = "You hear a strange voice from behind the door...#'Usually, only the greatest walnut hunters may enter here, but your case is a bit special, isn't it? I believe a friend can help you out.'";
                     Game1.drawObjectDialogue(walnutWarningAP);
                 }

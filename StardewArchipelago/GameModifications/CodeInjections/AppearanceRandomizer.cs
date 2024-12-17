@@ -40,7 +40,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 {
                     foreach (var character in gameLocation.characters)
                     {
-                        var isVillager = character.isVillager() || character is Pet;
+                        var isVillager = character.IsVillager || character is Pet;
 
                         if (!isVillager && _archipelago.SlotData.AppearanceRandomization == AppearanceRandomization.Villagers)
                         {
