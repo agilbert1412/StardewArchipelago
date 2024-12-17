@@ -33,9 +33,8 @@ namespace StardewArchipelago.Archipelago
         {
             try
             {
-                var value = _session.DataStorage[scope, key];
-                value.Initialize(JToken.FromObject(0));
-                var bigIntegerValue = value.To<BigInteger>();
+                _session.DataStorage[scope, key].Initialize(JToken.FromObject(0));
+                var bigIntegerValue = _session.DataStorage[scope, key].To<BigInteger>();
                 return bigIntegerValue;
             }
             catch (Exception ex)
@@ -54,9 +53,8 @@ namespace StardewArchipelago.Archipelago
         {
             try
             {
-                var value = _session.DataStorage[scope, key];
-                value.Initialize(0);
-                var bigIntegerValue = await value.GetAsync<BigInteger>();
+                _session.DataStorage[scope, key].Initialize(0);
+                var bigIntegerValue = await _session.DataStorage[scope, key].GetAsync<BigInteger>();
                 callback?.Invoke(bigIntegerValue);
                 return bigIntegerValue;
             }

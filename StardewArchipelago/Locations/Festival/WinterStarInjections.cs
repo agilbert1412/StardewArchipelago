@@ -18,7 +18,7 @@ namespace StardewArchipelago.Locations.Festival
         private static StardewArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
         // private static Random _lastProvidedRandom;
-        private static Random _random = null;
+        // private static Random _random = null;
 
         public static void Initialize(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
         {

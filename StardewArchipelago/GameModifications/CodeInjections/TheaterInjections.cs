@@ -138,8 +138,6 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         }
 
         private static bool _hasSeenCcCeremonyCutscene;
-        private static bool _hasPamHouseUpgrade;
-        private static bool _hasShortcuts;
 
         // public override void MakeMapModifications(bool force = false)
         public static bool MakeMapModifications_JojamartAndTheater_Prefix(Town __instance, bool force)

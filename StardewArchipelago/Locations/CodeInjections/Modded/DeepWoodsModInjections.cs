@@ -37,7 +37,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         private static StardewArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
         private static Chest _chestOrTrashThatGrantedApCheck = null;
-        private static LargeTerrainFeature _fountainThatGrantedApCheck = null;
+        // private static LargeTerrainFeature _fountainThatGrantedApCheck = null;
 
 
         public static void Initialize(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago,
