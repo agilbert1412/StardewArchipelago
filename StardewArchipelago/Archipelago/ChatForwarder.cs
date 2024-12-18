@@ -15,6 +15,7 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Menus;
+using StardewValley.Objects;
 
 namespace StardewArchipelago.Archipelago
 {
@@ -444,13 +445,37 @@ namespace StardewArchipelago.Archipelago
                 return false;
             }
 
-            var farmhouse = (FarmHouse)(Game1.getLocationFromName("FarmHouse"));
-            Game1.player.lastSleepLocation.Value = farmhouse.NameOrUniqueName;
-            Game1.player.lastSleepPoint.Value = farmhouse.GetPlayerBedSpot();
-            Game1.player.mostRecentBed = farmhouse.GetPlayerBed().TileLocation;
-            Game1.player.currentLocation.locationContextId = "Default";
+            SetLastBedToFarmhouse();
             Game1.player.startToPassOut();
             return true;
+        }
+
+        private static void SetLastBedToFarmhouse()
+        {
+            try
+            {
+                var location = Game1.getLocationFromName("FarmHouse");
+                if (location is not FarmHouse farmhouse)
+                {
+                    return;
+                }
+
+                Game1.player.lastSleepLocation.Set(farmhouse.NameOrUniqueName);
+                var bedSpot = farmhouse.GetPlayerBedSpot();
+                Game1.player.lastSleepPoint.Set(bedSpot);
+                var bed = farmhouse.GetBed();
+                if (bed == null)
+                {
+                    return;
+                }
+
+                Game1.player.mostRecentBed = bed.TileLocation;
+                Game1.player.currentLocation.locationContextId = "Default";
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed at setting last bed. Error: {ex}");
+            }
         }
 
         private static bool HandleHelpCommand(string message)
