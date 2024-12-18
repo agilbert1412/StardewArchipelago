@@ -21,7 +21,9 @@ using EventIds = StardewArchipelago.Stardew.Ids.Vanilla.EventIds;
 using Object = StardewValley.Object;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
+using Microsoft.Xna.Framework.Content;
 using StardewArchipelago.Archipelago;
+using System.Reflection.Metadata;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
 {
@@ -38,7 +40,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
         private static IModHelper _helper;
         private static StardewArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
-        private static LocalizedContentManager _englishContentManager;
+        private static ContentManager _englishContentManager;
 
         public static void Initialize(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
         {
@@ -46,7 +48,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
             _helper = helper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
-            _englishContentManager = new LocalizedContentManager(Game1.game1.Content.ServiceProvider, Game1.game1.Content.RootDirectory, new CultureInfo("en-US"));
+            _englishContentManager = new ContentManager(Game1.game1.Content.ServiceProvider, Game1.game1.Content.RootDirectory);
             UpdateIgnoredQuestList();
         }
 
@@ -133,7 +135,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
 
         private static string GetQuestEnglishName(string questId, string defaultName)
         {
-            var englishQuests = DataLoader.Quests(_englishContentManager);
+            var englishQuests = _englishContentManager.Load<Dictionary<string, string>>("Data\\Quests");
 
             if (string.IsNullOrWhiteSpace(questId) || !englishQuests.ContainsKey(questId))
             {
