@@ -31,7 +31,6 @@ namespace StardewArchipelago.Constants.Locations
             { "Slime", new[] { "Slime Hutch" } },
             { "Snail", new[] { IslandNorthInjections.AP_PROF_SNAIL_CAVE } },
             { "Stone Chest", new[] { "Big Stone Chest" } },
-            { "Stone", new[] { "Smashing Stone" } },
             { "Stone", new[] { FestivalLocationNames.STRENGTH_GAME, "Lemon Stone", "Ocean Stone", "Fairy Stone", "Swirl Stone", } },
             { "Strawberry", new[] { "Egg Festival: Strawberry Seeds" } },
             { "Trash", new[] { "Trash Can Upgrade" } },
