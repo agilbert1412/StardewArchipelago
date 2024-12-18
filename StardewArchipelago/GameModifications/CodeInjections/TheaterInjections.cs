@@ -80,7 +80,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         }
 
         // public bool checkTileIndexAction(int tileIndex)
-        public static bool CheckTileIndexAction_InteractWithMissingBundleNote_Prefix(GameLocation __instance, int tileIndex, ref bool result)
+        public static bool CheckTileIndexAction_InteractWithMissingBundleNote_Prefix(GameLocation __instance, int tileIndex, ref bool __result)
         {
             try
             {
@@ -105,7 +105,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     case 1833:
                         // Game1.activeClickableMenu = (IClickableMenu) new JunimoNoteMenu(6, (Game1.getLocationFromName("CommunityCenter") as CommunityCenter).bundlesDict())
                         ((AbandonedJojaMart)(Game1.getLocationFromName("AbandonedJojaMart"))).checkBundle();
-                        result = true;
+                        __result = true;
                         return false; // don't run original logic
                 }
 
@@ -214,7 +214,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         }
 
         // private bool changeScheduleForLocationAccessibility(ref string locationName, ref int tileX, ref int tileY, ref int facingDirection)
-        public static bool ChangeScheduleForLocationAccessibility_JojamartAndTheater_Prefix(NPC __instance, ref string locationName, ref int tileX, ref int tileY, ref int facingDirection, ref bool result)
+        public static bool ChangeScheduleForLocationAccessibility_JojamartAndTheater_Prefix(NPC __instance, ref string locationName, ref int tileX, ref int tileY, ref int facingDirection, ref bool __result)
         {
             try
             {
@@ -226,14 +226,14 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 if (locationName != "JojaMart" || !_archipelago.HasReceivedItem(APItem.MOVIE_THEATER))
                 {
                     // no fallback
-                    result = false;
+                    __result = false;
                     return false; // don't run original logic
                 }
 
                 if (!__instance.hasMasterScheduleEntry(locationName + "_Replacement"))
                 {
                     // Fallback on the default schedule
-                    result = true;
+                    __result = true;
                     return false; // don't run original logic
                 }
 
@@ -244,7 +244,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 facingDirection = Convert.ToInt32(strArray[3]);
 
                 // no fallback
-                result = false;
+                __result = false;
                 return false; // don't run original logic
             }
             catch (Exception ex)
