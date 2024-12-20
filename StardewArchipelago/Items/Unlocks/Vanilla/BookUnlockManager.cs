@@ -46,7 +46,7 @@ namespace StardewArchipelago.Items.Unlocks.Vanilla
             {
                 Game1.player.mailReceived.Add("read_a_book");
             }
-            Utility.checkForBooksReadAchievement();
+            Game1.stats.checkForBooksReadAchievement();
             return new LetterInformationAttachment(receivedItem);
         }
 
