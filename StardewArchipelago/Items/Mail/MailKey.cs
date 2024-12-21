@@ -65,9 +65,9 @@ namespace StardewArchipelago.Items.Mail
                 return false;
             }
 
-            var itemName = splitKey[1];
-            var playerName = splitKey[2];
-            var locationName = splitKey[3];
+            var itemName = splitKey[1].Replace("_", " ");
+            var playerName = splitKey[2].Replace("_", " ");
+            var locationName = splitKey[3].Replace("_", " ");
             var letterOpenedAction = splitKey[4];
             var actionParameter = splitKey[5];
             var embedString = "";
