@@ -330,7 +330,7 @@ namespace StardewArchipelago
         private void InitializeAfterConnection()
         {
             _stardewItemManager = new StardewItemManager(_logger);
-            _mail = new Mailman(State);
+            _mail = new Mailman(_logger, State);
             _locationChecker = new StardewLocationChecker(_logger, _archipelago, State.LocationsChecked);
             _itemPatcher = new ItemPatcher(_logger, _helper, _harmony, _archipelago);
             _goalManager = new GoalManager(_logger, _helper, _harmony, _archipelago, _locationChecker);
