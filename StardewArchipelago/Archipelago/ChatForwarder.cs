@@ -402,23 +402,40 @@ namespace StardewArchipelago.Archipelago
 
         private static bool HandleOverrideSpriteRandomizerCommand(string message)
         {
-            if (!message.ToLower().Equals($"{COMMAND_PREFIX}sprite"))
+            if (!message.ToLower().StartsWith($"{COMMAND_PREFIX}sprite"))
             {
                 return false;
             }
 
-            var currentOverride = ModEntry.Instance.State.AppearanceRandomizerOverride;
-            if (currentOverride == null || currentOverride == AppearanceRandomization.Disabled)
+            var split = message.Split(' ');
+            if (split.Length != 2)
             {
-                currentOverride = AppearanceRandomization.Villagers;
-                Game1.chatBox?.addMessage($"Sprite Randomizer is now enabled. Changes will take effect after sleeping.", Color.Gold);
+                Game1.chatBox?.addMessage($"Usage: `!!sprite [Disabled|Villagers|Chaos]`", Color.Gold);
+                return true;
             }
-            else
+
+            var choice = split[1].ToLower();
+            switch (choice)
             {
-                currentOverride = AppearanceRandomization.Disabled;
-                Game1.chatBox?.addMessage($"Sprite Randomizer is now disabled. Changes will take effect after sleeping, then reloading your game.", Color.Gold);
+                case "disabled":
+                    ModEntry.Instance.State.AppearanceRandomizerOverride = AppearanceRandomization.Disabled;
+                    Game1.chatBox?.addMessage($"Sprite Randomizer is now disabled. Changes will take effect after sleeping.", Color.Gold);
+                    break;
+                case "villagers":
+                    ModEntry.Instance.State.AppearanceRandomizerOverride = AppearanceRandomization.Villagers;
+                    Game1.chatBox?.addMessage($"Sprite Randomizer is now enabled for villagers. Changes will take effect after sleeping.", Color.Gold);
+                    break;
+                case "chaos":
+                    ModEntry.Instance.State.AppearanceRandomizerOverride = AppearanceRandomization.Chaos;
+                    Game1.chatBox?.addMessage($"Sprite Randomizer is now enabled in chaos mode. Changes will take effect after sleeping.", Color.Gold);
+                    break;
+                default:
+                    Game1.chatBox?.addMessage($"Usage: `!!sprite [Disabled|Villagers|Chaos]`", Color.Gold);
+                    break;
+
             }
-            ModEntry.Instance.State.AppearanceRandomizerOverride = currentOverride;
+
+            AppearanceRandomizer.RefreshAllNPCs();
             return true;
         }
 

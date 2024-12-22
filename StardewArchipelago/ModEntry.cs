@@ -341,7 +341,7 @@ namespace StardewArchipelago
             ArchipelagoLocationDataDefinition.Initialize(_logger, _helper, _archipelago, _locationChecker);
             _logicPatcher = new RandomizedLogicPatcher(_logger, _helper, Config, _harmony, _archipelago, _locationChecker, _stardewItemManager, _entranceManager, seedShopStockModifier, nameSimplifier, friends, State);
             _seasonsRandomizer = new SeasonsRandomizer(_logger, _helper, _archipelago, State);
-            _appearanceRandomizer = new AppearanceRandomizer(_logger, _archipelago);
+            _appearanceRandomizer = new AppearanceRandomizer(_logger, _helper, _archipelago, _harmony);
             var tileChooser = new TileChooser();
             _chatForwarder =
                 new ChatForwarder(_logger, _helper, _harmony, _archipelago, _giftHandler, _goalManager, tileChooser);
@@ -483,7 +483,7 @@ namespace StardewArchipelago
             {
                 _archipelago.SlotData.TrapItemsDifficulty = State.TrapDifficultyOverride.Value;
             }
-            _appearanceRandomizer.ShuffleCharacterAppearances();
+            AppearanceRandomizer.GenerateSeededShuffledAppearances();
             _entranceManager.ResetCheckedEntrancesToday(_archipelago.SlotData);
             TheaterInjections.UpdateScheduleForEveryone();
             Helper.GameContent.InvalidateCache("Data/Shops"); // This should be reworked someday

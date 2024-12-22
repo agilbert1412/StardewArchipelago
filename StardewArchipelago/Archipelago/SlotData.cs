@@ -580,7 +580,7 @@ namespace StardewArchipelago.Archipelago
     {
         Disabled = 0,
         Villagers = 1,
-        All = 2,
+        // All = 2,
         Chaos = 3,
     }
 
