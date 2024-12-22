@@ -487,23 +487,11 @@ namespace StardewArchipelago
             _entranceManager.ResetCheckedEntrancesToday(_archipelago.SlotData);
             TheaterInjections.UpdateScheduleForEveryone();
             Helper.GameContent.InvalidateCache("Data/Shops"); // This should be reworked someday
-            DoBugsCleanup();
+
+            var bugFixer = new BugFixer();
+            bugFixer.FixKnownBugs();
 
             _hintHelper.GiveHintTip(_archipelago.GetSession());
-        }
-
-        private void DoBugsCleanup()
-        {
-            var islandFarmCave = (IslandFarmCave)Game1.getLocationFromName("IslandFarmCave");
-            var gourmandChecks = new[] { "Gourmand Frog Melon", "Gourmand Frog Wheat", "Gourmand Frog Garlic" };
-            for (var i = 0; i < islandFarmCave.gourmandRequestsFulfilled.Value; i++)
-            {
-                if (i >= gourmandChecks.Length)
-                {
-                    continue;
-                }
-                _locationChecker.AddWalnutCheckedLocation(gourmandChecks[i]);
-            }
         }
 
         private void OnDayEnding(object sender, DayEndingEventArgs e)
@@ -727,4 +715,5 @@ namespace StardewArchipelago
             public int[] PhaseDays { get; set; }
         }
     }
+
 }
