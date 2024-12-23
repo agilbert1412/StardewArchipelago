@@ -738,10 +738,22 @@ namespace StardewArchipelago.Stardew
             var unlockConditions = fields[4];
             var displayName = fields.Length > 5 ? fields[5] : recipeName;
 
-            StardewItem yieldItem = bigCraftable == "true" ? _bigCraftablesById[yieldItemId] : _objectsById[yieldItemId];
+            var yieldItem = GetYieldItem(bigCraftable, yieldItemId);
 
             var craftingRecipe = new StardewCraftingRecipe(recipeName, ingredients, yieldItem, yieldAmount, bigCraftable, unlockConditions, displayName);
             return craftingRecipe;
+        }
+
+        private StardewItem GetYieldItem(string bigCraftable, string yieldItemId)
+        {
+            if (bigCraftable == "true")
+            {
+                return _bigCraftablesById.ContainsKey(yieldItemId) ? _bigCraftablesById[yieldItemId] : null;
+            }
+            else
+            {
+                return _objectsById.ContainsKey(yieldItemId) ? _objectsById[yieldItemId] : null;
+            }
         }
 
         public void ExportAllItemsMatching(System.Func<Object, bool> condition, string filePath)
