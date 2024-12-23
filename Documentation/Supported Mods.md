@@ -23,7 +23,7 @@ General:
 Skills:
 - [Spacecore Luck Skill](https://www.nexusmods.com/stardewvalley/mods/28103), by spacechase0, Version 1.3.x - Note: This mod was ported from the now deprecated "Luck Skill", and has added some new content that isn't fully randomized. But it should work like before
 - [Socializing Skill](https://www.nexusmods.com/stardewvalley/mods/14142), by drbirbdev, Version 2.0.x
-- [Archaeology](https://www.nexusmods.com/stardewvalley/mods/22199), by MoonSlime, Version 2.10.3
+- [Archaeology](https://www.nexusmods.com/stardewvalley/mods/22199), by MoonSlime, Version 2.12.1
 - [Binning Skill](https://www.nexusmods.com/stardewvalley/mods/14073), by drbirbdev, Version 2.0.x
 
 Custom NPCs:
