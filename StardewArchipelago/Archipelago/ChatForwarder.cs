@@ -408,9 +408,14 @@ namespace StardewArchipelago.Archipelago
             }
 
             var split = message.Split(' ');
+            if (split.Length == 1)
+            {
+                Game1.chatBox?.addMessage($"Sprite Randomizer is currently at `{ModEntry.Instance.Config.SpriteRandomizer}`", Color.Gold);
+                return true;
+            }
             if (split.Length != 2)
             {
-                Game1.chatBox?.addMessage($"Usage: `!!sprite [Disabled|Villagers|Chaos]`", Color.Gold);
+                Game1.chatBox?.addMessage($"Usage: `!!sprite [Disabled|Enabled|Chaos]`", Color.Gold);
                 return true;
             }
 
@@ -418,23 +423,24 @@ namespace StardewArchipelago.Archipelago
             switch (choice)
             {
                 case "disabled":
-                    ModEntry.Instance.State.AppearanceRandomizerOverride = AppearanceRandomization.Disabled;
-                    Game1.chatBox?.addMessage($"Sprite Randomizer is now disabled. Changes will take effect after sleeping.", Color.Gold);
+                    ModEntry.Instance.Config.SpriteRandomizer = AppearanceRandomization.Disabled;
+                    Game1.chatBox?.addMessage($"Sprite Randomizer is now disabled.", Color.Gold);
                     break;
-                case "villagers":
-                    ModEntry.Instance.State.AppearanceRandomizerOverride = AppearanceRandomization.Villagers;
-                    Game1.chatBox?.addMessage($"Sprite Randomizer is now enabled for villagers. Changes will take effect after sleeping.", Color.Gold);
+                case "enabled":
+                    ModEntry.Instance.Config.SpriteRandomizer = AppearanceRandomization.Enabled;
+                    Game1.chatBox?.addMessage($"Sprite Randomizer is now enabled.", Color.Gold);
                     break;
                 case "chaos":
-                    ModEntry.Instance.State.AppearanceRandomizerOverride = AppearanceRandomization.Chaos;
-                    Game1.chatBox?.addMessage($"Sprite Randomizer is now enabled in chaos mode. Changes will take effect after sleeping.", Color.Gold);
+                    ModEntry.Instance.Config.SpriteRandomizer = AppearanceRandomization.Chaos;
+                    Game1.chatBox?.addMessage($"Sprite Randomizer is now enabled in chaos mode.", Color.Gold);
                     break;
                 default:
-                    Game1.chatBox?.addMessage($"Usage: `!!sprite [Disabled|Villagers|Chaos]`", Color.Gold);
+                    Game1.chatBox?.addMessage($"Usage: `!!sprite [Disabled|Enabled|Chaos]`", Color.Gold);
                     break;
 
             }
 
+            AppearanceRandomizer.GenerateSeededShuffledAppearances();
             AppearanceRandomizer.RefreshAllNPCs();
             return true;
         }

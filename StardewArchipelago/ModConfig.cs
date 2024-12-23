@@ -92,6 +92,11 @@ namespace StardewArchipelago
         /// Whether to display archipelago icons on grandpa's shrine to see current points
         /// </summary>
         public GrandpaShrinePreference ShowGrandpaShrineIndicators { get; set; } = GrandpaShrinePreference.GrandpaGoal;
+
+        /// <summary>
+        /// Whether to randomize sprites
+        /// </summary>
+        public AppearanceRandomization SpriteRandomizer { get; set; } = AppearanceRandomization.Disabled;
     }
 
     public enum ItemIndicatorPreference
@@ -113,5 +118,13 @@ namespace StardewArchipelago
         Never = 0,
         GrandpaGoal = 1,
         Always = 2,
+    }
+
+    public enum AppearanceRandomization
+    {
+        Disabled = 0,
+        Enabled = 1,
+        // All = 2,
+        Chaos = 3,
     }
 }

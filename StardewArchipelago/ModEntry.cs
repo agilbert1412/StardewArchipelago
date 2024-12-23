@@ -128,7 +128,6 @@ namespace StardewArchipelago
 
 
             _helper.ConsoleCommands.Add("connect_override", $"Overrides your next connection to Archipelago. {CONNECT_SYNTAX}", OnCommandConnectToArchipelago);
-            _helper.ConsoleCommands.Add("seed_shops_override", "Override the seeds shop setting", OverrideSeedShops);
             _helper.ConsoleCommands.Add("export_all_gifts", "Export all currently loaded giftable items and their traits", ExportGifts);
             _helper.ConsoleCommands.Add("deathlink", "Override the deathlink setting", OverrideDeathlink);
             _helper.ConsoleCommands.Add("trap_difficulty", "Override the trap difficulty setting", OverrideTrapDifficulty);
@@ -260,7 +259,6 @@ namespace StardewArchipelago
             }
 
             _seasonsRandomizer = new SeasonsRandomizer(_logger, _helper, _archipelago, State);
-            State.AppearanceRandomizerOverride = null;
             State.TrapDifficultyOverride = null;
             State.SeasonsOrder = new List<string>();
             State.SeasonsOrder.Add(_seasonsRandomizer.GetFirstSeason());
@@ -270,6 +268,7 @@ namespace StardewArchipelago
             _helper.Data.WriteSaveData(AP_DATA_KEY, State);
             _helper.Data.WriteSaveData(AP_EXPERIENCE_KEY, SkillInjections.GetArchipelagoExperience());
             _helper.Data.WriteSaveData(AP_FRIENDSHIP_KEY, FriendshipInjections.GetArchipelagoFriendshipPoints());
+            _helper.WriteConfig(Config);
         }
 
         private void OnSaveCreated(object sender, SaveCreatedEventArgs e)
@@ -288,6 +287,7 @@ namespace StardewArchipelago
             _helper.Data.WriteSaveData(AP_DATA_KEY, State);
             _helper.Data.WriteSaveData(AP_EXPERIENCE_KEY, SkillInjections.GetArchipelagoExperience());
             _helper.Data.WriteSaveData(AP_FRIENDSHIP_KEY, FriendshipInjections.GetArchipelagoFriendshipPoints());
+            _helper.WriteConfig(Config);
         }
 
         private void DebugAssertStateValues(ArchipelagoStateDto state)
@@ -475,15 +475,12 @@ namespace StardewArchipelago
             _goalManager.CheckGoalCompletion();
             _mail.SendTomorrow();
             PlayerBuffInjections.CheckForApBuffs();
-            if (State.AppearanceRandomizerOverride != null)
-            {
-                _archipelago.SlotData.AppearanceRandomization = State.AppearanceRandomizerOverride.Value;
-            }
             if (State.TrapDifficultyOverride != null)
             {
                 _archipelago.SlotData.TrapItemsDifficulty = State.TrapDifficultyOverride.Value;
             }
             AppearanceRandomizer.GenerateSeededShuffledAppearances();
+            AppearanceRandomizer.RefreshAllNPCs();
             _entranceManager.ResetCheckedEntrancesToday(_archipelago.SlotData);
             TheaterInjections.UpdateScheduleForEveryone();
             Helper.GameContent.InvalidateCache("Data/Shops"); // This should be reworked someday
@@ -624,14 +621,6 @@ namespace StardewArchipelago
         {
             var GenericModConfigMenu = new GenericModConfig(this);
             GenericModConfigMenu.RegisterConfig();
-        }
-
-        private void OverrideSeedShops(string arg1, string[] arg2)
-        {
-            Config.EnableSeedShopOverhaul = !Config.EnableSeedShopOverhaul;
-            Helper.WriteConfig(Config);
-            var enabledText = Config.EnableSeedShopOverhaul ? "enabled" : "disabled";
-            _logger.Log($"Seed Shop overhaul is now {enabledText}", LogLevel.Info);
         }
 
         private void ExportGifts(string arg1, string[] arg2)

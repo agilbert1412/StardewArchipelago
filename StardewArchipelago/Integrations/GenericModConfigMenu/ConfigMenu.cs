@@ -275,6 +275,21 @@ namespace StardewArchipelago.Integrations.GenericModConfigMenu
                 setValue: (value) => Config.ShowGrandpaShrineIndicators = (GrandpaShrinePreference)value,
                 formatValue: (value) => ((GrandpaShrinePreference)value).ToString()
             );
+
+            var spriteRandomizerValues = Enum.GetValues(typeof(AppearanceRandomization)).Cast<int>().ToArray();
+            var spriteRandomizerMin = spriteRandomizerValues.Min();
+            var spriteRandomizerMax = spriteRandomizerValues.Max();
+            configMenu.AddNumberOption(
+                mod: ModManifest,
+                name: () => "Sprite Randomizer",
+                tooltip: () => "Whether to randomize npc sprites",
+                min: spriteRandomizerMin,
+                max: spriteRandomizerMax,
+                interval: 1,
+                getValue: () => (int)Config.SpriteRandomizer,
+                setValue: (value) => Config.SpriteRandomizer = (AppearanceRandomization)value,
+                formatValue: (value) => ((AppearanceRandomization)value).ToString()
+            );
         }
     }
 }

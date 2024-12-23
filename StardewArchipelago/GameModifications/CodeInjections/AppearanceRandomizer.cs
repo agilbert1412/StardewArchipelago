@@ -11,8 +11,11 @@ using StardewModdingAPI;
 using Microsoft.Xna.Framework.Graphics;
 using System.Runtime.CompilerServices;
 using System.Text;
+using StardewArchipelago.Extensions;
 using StardewArchipelago.Items.Traps;
 using StardewValley.Characters;
+using StardewValley.Locations;
+using StardewValley.GameData.Pets;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
 {
@@ -35,17 +38,34 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
             harmony.Patch(
                 original: AccessTools.Method(typeof(NPC), nameof(NPC.ChooseAppearance)),
-                prefix: new HarmonyMethod(typeof(AppearanceRandomizer), nameof(AppearanceRandomizer.ChooseAppearance_AppearanceRandomizer_Prefix))
+                prefix: new HarmonyMethod(typeof(AppearanceRandomizer), nameof(AppearanceRandomizer.NPCChooseAppearance_AppearanceRandomizer_Prefix))
             );
+
+            //harmony.Patch(
+            //    original: AccessTools.Method(typeof(Child), nameof(Child.ChooseAppearance)),
+            //    postfix: new HarmonyMethod(typeof(AppearanceRandomizer), nameof(AppearanceRandomizer.ChildChooseAppearance_AppearanceRandomizer_Postfix))
+            //);
+
+            //harmony.Patch(
+            //    original: AccessTools.Method(typeof(Pet), nameof(Pet.ChooseAppearance)),
+            //    postfix: new HarmonyMethod(typeof(AppearanceRandomizer), nameof(AppearanceRandomizer.PetChooseAppearance_AppearanceRandomizer_Postfix))
+            //);
+
+            RefreshAllNPCs();
         }
 
         public static void GenerateSeededShuffledAppearances()
         {
             _normalAppearances = new Dictionary<Point, List<string>>();
             _shuffledAppearances = new Dictionary<Point, Dictionary<string, string>>();
+            var excludedChars = new[] { "Grandpa", "Welwick" };
             var charData = Game1.characterData;
             foreach (var (name, data) in charData)
             {
+                if (excludedChars.Contains(name))
+                {
+                    continue;
+                }
                 var size = data.Size;
                 if (!_normalAppearances.ContainsKey(size))
                 {
@@ -59,21 +79,27 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 _normalAppearances[size].Add(name);
                 AddExtraFunSprites(size, name);
             }
-
-            var seed = int.Parse(_archipelago.SlotData.Seed);
-            if (_archipelago.SlotData.AppearanceRandomization == AppearanceRandomization.Chaos)
-            {
-                seed += (int)Game1.stats.DaysPlayed;
-            }
-            var random = new Random(seed);
+            AddExtraFunSprites();
             foreach (var (size, characters) in _normalAppearances)
             {
                 foreach (var character in characters)
                 {
+                    var random = GetSeededRandomForCharacter(character);
                     var shuffledAppearance = characters[random.Next(0, characters.Count)];
                     _shuffledAppearances[size].Add(character, shuffledAppearance);
                 }
             }
+        }
+
+        private static Random GetSeededRandomForCharacter(string character, int extraSeed = 0)
+        {
+            var seed = int.Parse(_archipelago.SlotData.Seed) + character.GetHash();
+            if (ModEntry.Instance.Config.SpriteRandomizer == AppearanceRandomization.Chaos)
+            {
+                seed += (int)Game1.stats.DaysPlayed;
+            }
+            var random = new Random(seed);
+            return random;
         }
 
         private static void AddExtraFunSprites(Point size, string name)
@@ -86,37 +112,48 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
         private static void AddExtraFunSprites()
         {
-            var size = new Point(16, 32);
-            _normalAppearances[size].Add("Toddler");
-            _normalAppearances[size].Add("Toddler_dark");
-            _normalAppearances[size].Add("Toddler_girl");
-            _normalAppearances[size].Add("Toddler_girl_dark");
-            _normalAppearances[size].Add("SafariGuy");
-            size = new Point(32, 32);
-            _normalAppearances[size].Add("TrashBear");
-            _normalAppearances[size].Add("SeaMonsterKrobus");
-            _normalAppearances[size].Add("raccoon");
-            size = new Point(32, 42);
-            _normalAppearances[size].Add("robot");
+            AddAppearances(16, 16, "junimo");
+            AddAppearances(16, 32, "Toddler", "Toddler_dark", "Toddler_girl", "Toddler_girl_dark", "Marcello", "SafariGuy",
+                "LeahExMale", "LeahExFemale", "Fizz", "ClothesTherapyCharacters", "Assorted_Fishermen", "Assorted_Fishermen_Winter");
+            AddAppearances(32, 32, "TrashBear", "SeaMonsterKrobus", "raccoon", "IslandParrot", "Gourmand");
+            AddAppearances(32, 42, "robot");
+        }
+
+        private static void AddAppearances(int width, int y, params string[] appearances)
+        {
+            var size = new Point(width, y);
+            if (!_normalAppearances.ContainsKey(size))
+            {
+                _normalAppearances.Add(size, new List<string>());
+            }
+            if (!_shuffledAppearances.ContainsKey(size))
+            {
+                _shuffledAppearances.Add(size, new Dictionary<string, string>());
+            }
+            if (appearances == null)
+            {
+                return;
+            }
+            foreach (var appearance in appearances)
+            {
+                _normalAppearances[size].Add(appearance);
+            }
         }
 
         public static void RefreshAllNPCs()
         {
-            foreach (var gameLocation in Game1.locations)
+            foreach (var character in Utility.getAllCharacters())
             {
-                foreach (var gameLocationCharacter in gameLocation.characters)
-                {
-                    gameLocationCharacter.ChooseAppearance();
-                }
+                character.ChooseAppearance();
             }
         }
 
         // public virtual void TryChooseAppearance(LocalizedContentManager content = null)
-        public static bool ChooseAppearance_AppearanceRandomizer_Prefix(NPC __instance, LocalizedContentManager content)
+        public static bool NPCChooseAppearance_AppearanceRandomizer_Prefix(NPC __instance, LocalizedContentManager content)
         {
             try
             {
-                if (_archipelago.SlotData.AppearanceRandomization == AppearanceRandomization.Disabled)
+                if (ModEntry.Instance.Config.SpriteRandomizer == AppearanceRandomization.Disabled)
                 {
                     return true; // run original logic
                 }
@@ -141,7 +178,15 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 var shuffling = _shuffledAppearances[size];
                 if (!shuffling.ContainsKey(__instance.Name))
                 {
-                    return true; // run original logic
+                    if (!_normalAppearances.ContainsKey(size) || !_shuffledAppearances.ContainsKey(size))
+                    {
+                        return true; // run original logic
+                    }
+
+                    var characters = _normalAppearances[size];
+                    var random = GetSeededRandomForCharacter(__instance.Name);
+                    var shuffledAppearance = characters[random.Next(0, characters.Count)];
+                    _shuffledAppearances[size].Add(__instance.Name, shuffledAppearance);
                 }
 
                 var shuffledName = shuffling[__instance.Name];
@@ -151,12 +196,11 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     return false; // don't run original logic
                 }
 
-
                 return true; // run original logic
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed in {nameof(ChooseAppearance_AppearanceRandomizer_Prefix)}:\n{ex}");
+                _logger.LogError($"Failed in {nameof(NPCChooseAppearance_AppearanceRandomizer_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
         }
@@ -307,12 +351,23 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     npc.LastAppearanceId = chosenAppearanceData?.Id;
                 }
             }
-            if (shuffledCharacterData == null || npc.Sprite == null)
+            if (shuffledCharacterData == null)
+            {
+                if (NPC.TryGetData(npc.Name, out var unshuffledCharacterData))
+                {
+                    npc.Sprite.SpriteWidth = unshuffledCharacterData.Size.X;
+                    npc.Sprite.SpriteHeight = unshuffledCharacterData.Size.Y;
+                }
+            }
+            else
+            {
+                npc.Sprite.SpriteWidth = shuffledCharacterData.Size.X;
+                npc.Sprite.SpriteHeight = shuffledCharacterData.Size.Y;
+            }
+            if (npc.Sprite == null)
             {
                 return false;
             }
-            npc.Sprite.SpriteWidth = shuffledCharacterData.Size.X;
-            npc.Sprite.SpriteHeight = shuffledCharacterData.Size.Y;
             npc.Sprite.ignoreSourceRectUpdates = false;
 
             return true;
@@ -401,6 +456,140 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             stringBuilder.Append(error);
             stringBuilder.Append($". Falling back to default {type}.");
             _logger.LogDebug(stringBuilder.ToString());
+        }
+
+        // public override void ChooseAppearance(LocalizedContentManager content = null)
+        public static void ChildChooseAppearance_AppearanceRandomizer_Postfix(Child __instance, LocalizedContentManager content)
+        {
+            try
+            {
+                if (ModEntry.Instance.Config.SpriteRandomizer == AppearanceRandomization.Disabled)
+                {
+                    return;
+                }
+
+                var spriteName = "Characters\\Baby" + (__instance.darkSkinned.Value ? "_dark" : "");
+                if (__instance.Age >= 3)
+                {
+                    spriteName = "Characters\\Toddler" + (__instance.Gender == Gender.Male ? "" : "_girl") + (__instance.darkSkinned.Value ? "_dark" : "");
+                }
+
+                Point size;
+                if (__instance.Age >= 3)
+                {
+                    size = new Point(16, 32);
+                }
+                else if (__instance.Age == 1)
+                {
+                    size = new Point(22, 32);
+                }
+                else
+                {
+                    size = new Point(22, 16);
+                }
+
+                if (!_shuffledAppearances.ContainsKey(size) || !_normalAppearances.ContainsKey(size))
+                {
+                    return;
+                }
+
+                var key = spriteName + "_" + __instance.Name;
+                if (!_shuffledAppearances[size].ContainsKey(key))
+                {
+                    var random = GetSeededRandomForCharacter(spriteName, key.GetHash());
+                    var characters = _normalAppearances[size];
+                    var shuffledAppearance = characters[random.Next(0, characters.Count)];
+                    _shuffledAppearances[size].Add(key, shuffledAppearance);
+                }
+
+                var shuffledSpriteName = _shuffledAppearances[size][key];
+
+                var characterSpriteAssetName = "Characters/" + shuffledSpriteName;
+                __instance.Sprite = new AnimatedSprite(characterSpriteAssetName, 0, 22, 16);
+                if (__instance.Age >= 3)
+                {
+                    __instance.Sprite.textureName.Value = shuffledSpriteName;
+                    __instance.Sprite.SpriteWidth = size.X;
+                    __instance.Sprite.SpriteHeight = size.Y;
+                    __instance.Sprite.currentFrame = 0;
+                    __instance.HideShadow = false;
+                }
+                else
+                {
+                    __instance.Sprite.textureName.Value = shuffledSpriteName;
+                    __instance.Sprite.SpriteWidth = size.X;
+                    __instance.Sprite.SpriteHeight = size.Y;
+                    __instance.Sprite.currentFrame = 0;
+                    switch (__instance.Age)
+                    {
+                        case 1:
+                            __instance.Sprite.currentFrame = 4;
+                            break;
+                        case 2:
+                            __instance.Sprite.currentFrame = 32;
+                            break;
+                    }
+                    __instance.HideShadow = true;
+                }
+                __instance.Sprite.UpdateSourceRect();
+                __instance.Breather = false;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(ChildChooseAppearance_AppearanceRandomizer_Postfix)}:\n{ex}");
+                return;
+            }
+        }
+
+        // public override void ChooseAppearance(LocalizedContentManager content = null)
+        public static void PetChooseAppearance_AppearanceRandomizer_Postfix(Pet __instance, LocalizedContentManager content)
+        {
+            try
+            {
+                if (ModEntry.Instance.Config.SpriteRandomizer == AppearanceRandomization.Disabled)
+                {
+                    return;
+                }
+
+                var petSpriteName = "Animals\\dog";
+                try
+                {
+                    PetData petData = __instance.GetPetData();
+                    if (petData != null)
+                    {
+                        petSpriteName = petData.GetBreedById(__instance.whichBreed.Value).Texture;
+                    }
+                }
+                catch (Exception ex)
+                {
+                }
+
+                var size = new Point(__instance.Sprite.SpriteWidth, __instance.Sprite.SpriteHeight);
+
+                if (!_shuffledAppearances.ContainsKey(size) || !_normalAppearances.ContainsKey(size))
+                {
+                    return;
+                }
+                    
+                if (!_shuffledAppearances[size].ContainsKey(petSpriteName))
+                {
+                    var random = GetSeededRandomForCharacter(petSpriteName);
+                    var characters = _normalAppearances[size];
+                    var shuffledAppearance = characters[random.Next(0, characters.Count)];
+                    _shuffledAppearances[size].Add(petSpriteName, shuffledAppearance);
+                }
+
+                var shuffledSpriteName = _shuffledAppearances[size][petSpriteName];
+
+                __instance.Sprite?.LoadTexture(shuffledSpriteName);
+                __instance.HideShadow = true;
+                __instance.Breather = false;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(PetChooseAppearance_AppearanceRandomizer_Postfix)}:\n{ex}");
+                return;
+            }
         }
 
         /*
