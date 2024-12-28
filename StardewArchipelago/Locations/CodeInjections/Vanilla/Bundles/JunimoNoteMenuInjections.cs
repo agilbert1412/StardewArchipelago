@@ -201,9 +201,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
         }
 
-        // private bool specificBundlePage;
-        private static IReflectedField<bool> _specificBundlePageField;
-
         // public override void draw(SpriteBatch b)
         public static void Draw_AddCurrencyBoxes_Postfix(JunimoNoteMenu __instance, SpriteBatch b)
         {

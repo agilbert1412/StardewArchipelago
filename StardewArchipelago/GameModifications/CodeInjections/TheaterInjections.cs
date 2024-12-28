@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
@@ -55,7 +56,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     return false; // don't run original logic
                 }
 
-                if (__instance.map.TileSheets.Count < 3)
+                if (__instance.map.TileSheets.All(x => x.Id != "indoor"))
                 {
                     // The MovieTheater doesn't have an "indoor" layer, but it needs one to pull the tilesheet from in the CC method below. So we just duplicate the one from the abandoned joja mart.
                     var abandonedJojaIndoorTileSheet = abandonedJojaMart.map.GetTileSheet("indoor");
@@ -136,9 +137,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             }
         }
 
-        private static bool hasSeenCCCeremonyCutscene;
-        private static bool hasPamHouseUpgrade;
-        private static bool hasShortcuts;
+        private static bool _hasSeenCcCeremonyCutscene;
 
         // public override void MakeMapModifications(bool force = false)
         public static bool MakeMapModifications_JojamartAndTheater_Prefix(Town __instance, bool force)
@@ -168,8 +167,8 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 }
                 else
                 {
-                    hasSeenCCCeremonyCutscene = Utility.HasAnyPlayerSeenEvent(EventIds.COMMUNITY_CENTER_COMPLETE);
-                    if (hasSeenCCCeremonyCutscene)
+                    _hasSeenCcCeremonyCutscene = Utility.HasAnyPlayerSeenEvent(EventIds.COMMUNITY_CENTER_COMPLETE);
+                    if (_hasSeenCcCeremonyCutscene)
                     {
                         Game1.player.eventsSeen.Remove(EventIds.COMMUNITY_CENTER_COMPLETE);
                     }
@@ -189,7 +188,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         {
             try
             {
-                if (hasSeenCCCeremonyCutscene && !Game1.player­.eventsSeen.Contains(EventIds.COMMUNITY_CENTER_COMPLETE))
+                if (_hasSeenCcCeremonyCutscene && !Game1.player­.eventsSeen.Contains(EventIds.COMMUNITY_CENTER_COMPLETE))
                 {
                     Game1.player.eventsSeen.Add(EventIds.COMMUNITY_CENTER_COMPLETE);
                 }

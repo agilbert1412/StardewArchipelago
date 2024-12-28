@@ -113,8 +113,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
                     default:
                         return;
                 }
-
-                return;
             }
             catch (Exception ex)
             {

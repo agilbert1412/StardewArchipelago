@@ -225,7 +225,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     Game1.player.mailReceived.Add("read_a_book");
                 }
             }
-            Utility.checkForBooksReadAchievement();
+            Game1.stats.checkForBooksReadAchievement();
         }
 
         private static void ReadSkillBook(Object book)
@@ -266,7 +266,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             Game1.player.stats.Increment(cookBook.itemId.Value);
             Game1.showGlobalMessage(Game1.content.LoadString("Strings\\1_6_Strings:QoS_Cookbook", numberOfLearnedRecipes.ToString()));
-            Utility.checkForBooksReadAchievement();
+            Game1.stats.checkForBooksReadAchievement();
         }
 
         private static int LearnRecipe(Dictionary<string, string> allRecipes, int recipeWeek)

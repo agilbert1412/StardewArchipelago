@@ -32,11 +32,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             try
             {
-                const string freePrefix = "Free ";
-                if (id.StartsWith(freePrefix))
-                {
-                    id = id.Substring(freePrefix.Length);
-                }
+                id = RemoveFreePrefix(id);
                 return true; // run original logic
             }
             catch (Exception ex)
@@ -44,6 +40,17 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 _logger.LogError($"Failed in {nameof(BlueprintEntryConstructor_IfFreeMakeTheIdCorrect_Prefix)}:\n{ex}");
                 return true; // run original logic
             }
+        }
+
+        public static string RemoveFreePrefix(string id)
+        {
+            const string freePrefix = "Free ";
+            if (id.StartsWith(freePrefix))
+            {
+                return id.Substring(freePrefix.Length);
+            }
+
+            return id;
         }
 
         // public void createQuestionDialogue(string question, Response[] answerChoices, string dialogKey)
@@ -223,8 +230,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     }
                 }
             }
-
-            return "";
         }
 
         // private void houseUpgradeAccept()

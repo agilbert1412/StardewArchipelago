@@ -49,7 +49,7 @@ namespace StardewArchipelago.Stardew
             }
             catch (Exception ex)
             {
-                throw new ArgumentException($"{salableItem.Name} is not a recognized rarecrow!");
+                throw new ArgumentException($"{salableItem.Name} is not a recognized rarecrow! {ex}");
             }
         }
 

@@ -621,7 +621,7 @@ namespace StardewArchipelago.GameModifications
             _helper.Events.Content.AssetRequested -= OnFishAssetRequested;
         }
 
-        private void OnFishAssetRequested(object? sender, AssetRequestedEventArgs e)
+        private void OnFishAssetRequested(object sender, AssetRequestedEventArgs e)
         {
             if (!e.NameWithoutLocale.IsEquivalentTo("Data/Locations"))
             {

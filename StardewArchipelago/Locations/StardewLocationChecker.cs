@@ -9,6 +9,8 @@ namespace StardewArchipelago.Locations
 {
     public class StardewLocationChecker : LocationChecker
     {
+        private const bool PREVENT_SENDING_CHECKS = false;
+
         private readonly LocationNameMatcher _locationNameMatcher;
 
         public StardewLocationChecker(ILogger logger, ArchipelagoClient archipelago, List<string> locationsAlreadyChecked) : base(logger, archipelago, locationsAlreadyChecked)
@@ -32,6 +34,11 @@ namespace StardewArchipelago.Locations
 
         public override void SendAllLocationChecks()
         {
+            if (PREVENT_SENDING_CHECKS)
+            {
+                return;
+            }
+
             base.SendAllLocationChecks();
             GoalCodeInjection.CheckAllsanityGoalCompletion();
         }

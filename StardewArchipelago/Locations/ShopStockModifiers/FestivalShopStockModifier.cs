@@ -246,6 +246,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
                 6 => FestivalLocationNames.RARECROW_6,
                 7 => FestivalLocationNames.RARECROW_7,
                 8 => FestivalLocationNames.RARECROW_8,
+                _ => throw new ArgumentOutOfRangeException(nameof(rarecrowNumber), rarecrowNumber, null)
             };
 
             itemName = locationName.Split("(")[0].Trim();

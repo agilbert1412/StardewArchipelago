@@ -31,11 +31,13 @@ using StardewValley.TerrainFeatures;
 using xTile.Dimensions;
 using Bundle = StardewValley.Menus.Bundle;
 using Object = StardewValley.Object;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
 
 namespace StardewArchipelago.Locations.Patcher
 {
     public class VanillaLocationPatcher : ILocationPatcher
     {
+        private readonly ILogger _logger;
         private readonly StardewArchipelagoClient _archipelago;
         private readonly Harmony _harmony;
         private readonly IModHelper _modHelper;
@@ -53,6 +55,7 @@ namespace StardewArchipelago.Locations.Patcher
 
         public VanillaLocationPatcher(ILogger logger, IModHelper modHelper, Harmony harmony, StardewArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager stardewItemManager)
         {
+            _logger = logger;
             _archipelago = archipelago;
             _harmony = harmony;
             _modHelper = modHelper;
@@ -549,11 +552,15 @@ namespace StardewArchipelago.Locations.Patcher
                 prefix: new HarmonyMethod(typeof(WizardBookInjections), nameof(WizardBookInjections.PerformAction_WizardBook_Prefix))
             );
 
+
+            _logger.LogDebug($"Attempting to patch the BlueprintEntryConstructor");
             var blueprintEntryParameters = new[] { typeof(int), typeof(string), typeof(BuildingData), typeof(string) };
             _harmony.Patch(
                 original: AccessTools.Constructor(typeof(CarpenterMenu.BlueprintEntry), blueprintEntryParameters),
                 prefix: new HarmonyMethod(typeof(CarpenterInjections), nameof(CarpenterInjections.BlueprintEntryConstructor_IfFreeMakeTheIdCorrect_Prefix))
             );
+            _logger.LogDebug($"Finished patching the BlueprintEntryConstructor");
+
 
             if (!_archipelago.SlotData.BuildingProgression.HasFlag(BuildingProgression.Progressive))
             {
@@ -714,6 +721,12 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Forest), nameof(Forest.ShouldTravelingMerchantVisitToday)),
                 prefix: new HarmonyMethod(typeof(TravelingMerchantInjections), nameof(TravelingMerchantInjections.ShouldTravelingMerchantVisitToday_ArchipelagoDays_Prefix))
+            );
+
+            // This patch only exists because apparently, on Mac, the compiler optimizes the previous patch away. That's weird.
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Forest), "resetSharedState"),
+                postfix: new HarmonyMethod(typeof(TravelingMerchantInjections), nameof(TravelingMerchantInjections.ResetSharedState_MakeSureItDoesPatchedTravelingCart_Postfix))
             );
 
             _harmony.Patch(

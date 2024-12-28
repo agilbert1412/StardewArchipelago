@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Serialization;
 using StardewValley;
 
@@ -10,10 +12,12 @@ namespace StardewArchipelago.Items.Mail
         private static readonly Random _random = new();
         private bool _sendForTomorrow = true;
 
+        private readonly ILogger _logger;
         private readonly ArchipelagoStateDto _state;
 
-        public Mailman(ArchipelagoStateDto state)
+        public Mailman(ILogger logger, ArchipelagoStateDto state)
         {
+            _logger = logger;
             _state = state;
             var mailData = DataLoader.Mail(Game1.content);
             foreach (var (mailKey, mailContent) in _state.LettersGenerated)
@@ -21,7 +25,7 @@ namespace StardewArchipelago.Items.Mail
                 mailData[mailKey] = mailContent;
             }
 
-            GenerateMissingLetters();
+            FixLettersThatWereNotGeneratedProperly();
         }
 
         public void SendVanillaMail(string mailTitle, bool noLetter)
@@ -89,9 +93,9 @@ namespace StardewArchipelago.Items.Mail
             }
         }
 
-        private void GenerateMissingLetters()
+        private void FixLettersThatWereNotGeneratedProperly()
         {
-            var allMailInWorld = Game1.player.mailReceived.Union(Game1.player.mailbox.Union(Game1.player.mailForTomorrow));
+            var allMailInWorld = Game1.player.mailReceived.Union(Game1.player.mailbox.Union(Game1.player.mailForTomorrow.Union(Game1.mailbox))).ToList();
             var mailData = DataLoader.Mail(Game1.content);
             foreach (var mailKeyString in allMailInWorld)
             {
@@ -100,9 +104,27 @@ namespace StardewArchipelago.Items.Mail
                     continue;
                 }
 
-                var mailContentTemplate = GetRandomApMailString();
-                var mailContent = string.Format(mailContentTemplate, mailKey.ItemName, mailKey.PlayerName, mailKey.LocationName, mailKey.EmbedString, Game1.player.farmName.Value);
-                GenerateMail(mailKeyString, mailContent);
+                _logger.LogWarning($"A broken Archipelago letter was found in the mailbox. This letter will now be removed, and the mod will attempt to process the contained item again. Letter: {mailKeyString}, MailKey: {mailKey}. Item: {mailKey.ItemName}");
+                RemoveItemFromReceivedItemsSoItGetsProcessedAgain(mailKey);
+                Game1.player.mailReceived.Remove(mailKeyString);
+                Game1.player.mailbox.Remove(mailKeyString);
+                Game1.player.mailForTomorrow.Remove(mailKeyString);
+                Game1.mailbox.Remove(mailKeyString);
+            }
+        }
+
+        private void RemoveItemFromReceivedItemsSoItGetsProcessedAgain(MailKey mailKey)
+        {
+            for (var i = _state.ItemsReceived.Count - 1; i >= 0; i--)
+            {
+                var item = _state.ItemsReceived[i];
+                if (item.ItemName != mailKey.ItemName || item.LocationName != mailKey.LocationName || item.PlayerName != mailKey.PlayerName)
+                {
+                    continue;
+                }
+
+                _state.ItemsReceived.RemoveAt(i);
+                break;
             }
         }
 

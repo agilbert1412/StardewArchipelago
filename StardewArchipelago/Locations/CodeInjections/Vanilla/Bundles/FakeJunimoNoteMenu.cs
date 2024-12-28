@@ -1011,16 +1011,18 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         public static void GetBundleRewards(int area, List<Item> rewards)
         {
-            var communityCenter = Game1.RequireLocation<CommunityCenter>("CommunityCenter");
-            var bundleData = Game1.netWorldState.Value.BundleData;
-            foreach (var key in bundleData.Keys)
+            CommunityCenter communityCenter = Game1.RequireLocation<CommunityCenter>("CommunityCenter");
+            Dictionary<string, string> bundleData = Game1.netWorldState.Value.BundleData;
+            foreach (string key in bundleData.Keys)
             {
                 if (key.Contains(CommunityCenter.getAreaNameFromNumber(area)))
                 {
-                    var int32 = Convert.ToInt32(key.Split('/')[1]);
+                    int int32 = Convert.ToInt32(key.Split('/')[1]);
                     if (communityCenter.bundleRewards[int32])
                     {
-                        var standardTextDescription = Utility.getItemFromStandardTextDescription(bundleData[key].Split('/')[1], Game1.player);
+#pragma warning disable CS0618
+                        Item standardTextDescription = Utility.getItemFromStandardTextDescription(bundleData[key].Split('/')[1], Game1.player);
+#pragma warning restore CS0618
                         standardTextDescription.SpecialVariable = int32;
                         rewards.Add(standardTextDescription);
                     }

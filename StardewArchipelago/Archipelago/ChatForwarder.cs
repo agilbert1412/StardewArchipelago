@@ -15,6 +15,7 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Menus;
+using StardewValley.Objects;
 
 namespace StardewArchipelago.Archipelago
 {
@@ -401,23 +402,46 @@ namespace StardewArchipelago.Archipelago
 
         private static bool HandleOverrideSpriteRandomizerCommand(string message)
         {
-            if (!message.ToLower().Equals($"{COMMAND_PREFIX}sprite"))
+            if (!message.ToLower().StartsWith($"{COMMAND_PREFIX}sprite"))
             {
                 return false;
             }
 
-            var currentOverride = ModEntry.Instance.State.AppearanceRandomizerOverride;
-            if (currentOverride == null || currentOverride == AppearanceRandomization.Disabled)
+            var split = message.Split(' ');
+            if (split.Length == 1)
             {
-                currentOverride = AppearanceRandomization.Villagers;
-                Game1.chatBox?.addMessage($"Sprite Randomizer is now enabled. Changes will take effect after sleeping.", Color.Gold);
+                Game1.chatBox?.addMessage($"Sprite Randomizer is currently at `{ModEntry.Instance.Config.SpriteRandomizer}`", Color.Gold);
+                return true;
             }
-            else
+            if (split.Length != 2)
             {
-                currentOverride = AppearanceRandomization.Disabled;
-                Game1.chatBox?.addMessage($"Sprite Randomizer is now disabled. Changes will take effect after sleeping, then reloading your game.", Color.Gold);
+                Game1.chatBox?.addMessage($"Usage: `!!sprite [Disabled|Enabled|Chaos]`", Color.Gold);
+                return true;
             }
-            ModEntry.Instance.State.AppearanceRandomizerOverride = currentOverride;
+
+            var choice = split[1].ToLower();
+            switch (choice)
+            {
+                case "disabled":
+                    ModEntry.Instance.Config.SpriteRandomizer = AppearanceRandomization.Disabled;
+                    Game1.chatBox?.addMessage($"Sprite Randomizer is now disabled.", Color.Gold);
+                    break;
+                case "enabled":
+                    ModEntry.Instance.Config.SpriteRandomizer = AppearanceRandomization.Enabled;
+                    Game1.chatBox?.addMessage($"Sprite Randomizer is now enabled.", Color.Gold);
+                    break;
+                case "chaos":
+                    ModEntry.Instance.Config.SpriteRandomizer = AppearanceRandomization.Chaos;
+                    Game1.chatBox?.addMessage($"Sprite Randomizer is now enabled in chaos mode.", Color.Gold);
+                    break;
+                default:
+                    Game1.chatBox?.addMessage($"Usage: `!!sprite [Disabled|Enabled|Chaos]`", Color.Gold);
+                    break;
+
+            }
+
+            AppearanceRandomizer.GenerateSeededShuffledAppearances();
+            AppearanceRandomizer.RefreshAllNPCs();
             return true;
         }
 
@@ -444,13 +468,37 @@ namespace StardewArchipelago.Archipelago
                 return false;
             }
 
-            var farmhouse = (FarmHouse)(Game1.getLocationFromName("FarmHouse"));
-            Game1.player.lastSleepLocation.Value = farmhouse.NameOrUniqueName;
-            Game1.player.lastSleepPoint.Value = farmhouse.GetPlayerBedSpot();
-            Game1.player.mostRecentBed = farmhouse.GetPlayerBed().TileLocation;
-            Game1.player.currentLocation.locationContextId = "Default";
+            SetLastBedToFarmhouse();
             Game1.player.startToPassOut();
             return true;
+        }
+
+        private static void SetLastBedToFarmhouse()
+        {
+            try
+            {
+                var location = Game1.getLocationFromName("FarmHouse");
+                if (location is not FarmHouse farmhouse)
+                {
+                    return;
+                }
+
+                Game1.player.lastSleepLocation.Set(farmhouse.NameOrUniqueName);
+                var bedSpot = farmhouse.GetPlayerBedSpot();
+                Game1.player.lastSleepPoint.Set(bedSpot);
+                var bed = farmhouse.GetBed();
+                if (bed == null)
+                {
+                    return;
+                }
+
+                Game1.player.mostRecentBed = bed.TileLocation;
+                Game1.player.currentLocation.locationContextId = "Default";
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed at setting last bed. Error: {ex}");
+            }
         }
 
         private static bool HandleHelpCommand(string message)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Constants;
@@ -32,7 +33,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
         private const string WALNUT_JOURNAL_SCRAP_6 = "Island_W_BuriedTreasureNut2";
         private const string WALNUT_JOURNAL_SCRAP_10 = "Island_N_BuriedTreasureNut";
 
-        private const double WALNUT_BASE_CHANCE_FISHING = 0.25;
+        private const double WALNUT_BASE_CHANCE_FISHING = 0.15;
         private const double INFINITY_WALNUT_CHANCE_REDUCTION_FISHING = 0.75;
 
         private const double WALNUT_BASE_CHANCE_FARMING = 0.10;
@@ -59,6 +60,19 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             _helper = helper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
+
+            InitializeReflectionCalls();
+        }
+
+        private static MethodInfo _gameLocationGetFishMethod;
+        private static IntPtr _gameLocationGetFishMethodPointer;
+        private static Dictionary<string, Func<float, string, int, Farmer, double, Vector2, string, Item>> _islandLocationBaseGetFish;
+
+        private static void InitializeReflectionCalls()
+        {
+            _gameLocationGetFishMethod = typeof(GameLocation).GetMethod("getFish", BindingFlags.Instance | BindingFlags.Public);
+            _gameLocationGetFishMethodPointer = _gameLocationGetFishMethod.MethodHandle.GetFunctionPointer();
+            _islandLocationBaseGetFish = new Dictionary<string, Func<float, string, int, Farmer, double, Vector2, string, Item>>();
         }
 
         //public override Item getFish(float millisecondsAfterNibble, string bait, int waterDepth, Farmer who, double baitPotency, Vector2 bobberTile,
@@ -88,12 +102,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             double baitPotency, Vector2 bobberTile, string locationName)
         {
             // base.resetLocalState();
-            var gameLocationGetFishMethod = typeof(GameLocation).GetMethod("getFish", BindingFlags.Instance | BindingFlags.Public);
-            var functionPointer = gameLocationGetFishMethod.MethodHandle.GetFunctionPointer();
-            var baseGetFish = (Func<float, string, int, Farmer, double, Vector2, string, Item>)Activator.CreateInstance(
-                typeof(Func<float, string, int, Farmer, double, Vector2, string, Item>),
-                islandLocation, functionPointer);
-            return baseGetFish(millisecondsAfterNibble, bait, waterDepth, who, baitPotency, bobberTile, locationName);
+            var key = islandLocation.NameOrUniqueName ?? "";
+            if (!_islandLocationBaseGetFish.ContainsKey(key))
+            {
+                var baseGetFish = (Func<float, string, int, Farmer, double, Vector2, string, Item>)Activator.CreateInstance(
+                    typeof(Func<float, string, int, Farmer, double, Vector2, string, Item>),
+                    islandLocation, _gameLocationGetFishMethodPointer);
+                _islandLocationBaseGetFish.Add(key, baseGetFish);
+            }
+            return _islandLocationBaseGetFish[key](millisecondsAfterNibble, bait, waterDepth, who, baitPotency, bobberTile, locationName);
         }
 
         // public override bool performUseAction(Vector2 tileLocation)
@@ -401,21 +418,20 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
         {
             var roll = random.NextDouble();
             var chanceRequired = baseChance;
+            if (roll > chanceRequired)
+            {
+                return failCallback?.Invoke();
+            }
 
             if (!Game1.player.team.limitedNutDrops.TryGetValue(walnutKey, out var numberWalnutsSoFar))
             {
                 numberWalnutsSoFar = 0;
             }
 
-            AddPotentiallyMissedChecks(apLocationName, numberWalnutsSoFar);
+            AddPotentiallyMissedChecks(apLocationName, Math.Min(5, numberWalnutsSoFar));
 
             if (numberWalnutsSoFar < 5)
             {
-                if (roll > chanceRequired)
-                {
-                    return failCallback?.Invoke();
-                }
-
                 numberWalnutsSoFar++;
                 Game1.player.team.limitedNutDrops[walnutKey] = numberWalnutsSoFar;
                 var itemToSpawnId = QualifiedItemIds.GOLDEN_WALNUT;
@@ -429,7 +445,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             }
 
             // We allow the player to get extra walnuts here, but each one is less likely than the last
-            chanceRequired *= Math.Pow(chanceReduction, numberWalnutsSoFar);
+            chanceRequired *= Math.Pow(chanceReduction, numberWalnutsSoFar - 4);
             if (roll > chanceRequired)
             {
                 return failCallback?.Invoke();
@@ -444,10 +460,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             for (var i = 1; i <= numberWalnutsSoFar; i++)
             {
                 var location = $"{apLocationName} {i}";
-                if (_locationChecker.IsLocationMissing(location))
-                {
-                    _locationChecker.AddCheckedLocation(location);
-                }
+                _locationChecker.AddCheckedLocation(location);
             }
         }
 

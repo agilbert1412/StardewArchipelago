@@ -11,6 +11,7 @@ using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Extensions;
+using StardewArchipelago.GameModifications.Testing;
 using StardewModdingAPI;
 using StardewValley;
 
@@ -21,6 +22,7 @@ namespace StardewArchipelago.Archipelago
         private readonly IModHelper _modHelper;
         private readonly IManifest _manifest;
         private readonly Harmony _harmony;
+        private readonly TesterFeatures _testerFeatures;
         private IDataStorageWrapper<BigInteger> _bigIntegerDataStorage;
         private DeathManager _deathManager;
 
@@ -30,17 +32,18 @@ namespace StardewArchipelago.Archipelago
 
         public SlotData SlotData => (SlotData)_slotData;
 
-        public StardewArchipelagoClient(ILogger logger, IModHelper modHelper, IManifest manifest, Harmony harmony, Action itemReceivedFunction, IJsonLoader jsonLoader) :
+        public StardewArchipelagoClient(ILogger logger, IModHelper modHelper, IManifest manifest, Harmony harmony, Action itemReceivedFunction, IJsonLoader jsonLoader, TesterFeatures testerFeatures) :
             base(logger, new DataPackageCache(new ArchipelagoItemLoader(jsonLoader), new StardewArchipelagoLocationLoader(jsonLoader), "stardew_valley", "IdTables"), itemReceivedFunction)
         {
             _modHelper = modHelper;
             _manifest = manifest;
             _harmony = harmony;
+            _testerFeatures = testerFeatures;
         }
 
         protected override void InitializeSlotData(string slotName, Dictionary<string, object> slotDataFields)
         {
-            _slotData = new SlotData(slotName, slotDataFields, Logger);
+            _slotData = new SlotData(slotName, slotDataFields, Logger, _testerFeatures);
         }
 
         public override bool ConnectToMultiworld(ArchipelagoConnectionInfo connectionInfo, out string errorMessage)
@@ -49,8 +52,7 @@ namespace StardewArchipelago.Archipelago
             {
                 return false;
             }
-
-#if RELEASE
+            
             if (!SlotData.Mods.IsModStateCorrect(_modHelper, out errorMessage))
             {
                 DisconnectPermanently();
@@ -62,7 +64,7 @@ namespace StardewArchipelago.Archipelago
                 DisconnectPermanently();
                 return false;
             }
-#endif
+
             return true;
         }
 

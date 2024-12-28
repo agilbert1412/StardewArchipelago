@@ -354,7 +354,7 @@ namespace StardewArchipelago.Items.Traps.Shuffle
             }
             catch (Exception ex)
             {
-                _logger.LogWarning("Could not find a fridge in the farmhouse");
+                _logger.LogWarning($"Could not find a fridge in the farmhouse. {ex}");
                 return null;
             }
         }
@@ -380,7 +380,7 @@ namespace StardewArchipelago.Items.Traps.Shuffle
             }
             catch (Exception ex)
             {
-                _logger.LogWarning("Could not find a fridge in the island farmhouse");
+                _logger.LogWarning($"Could not find a fridge in the island farmhouse. {ex}");
                 return null;
             }
         }

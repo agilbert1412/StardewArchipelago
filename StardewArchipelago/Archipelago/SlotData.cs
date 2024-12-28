@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Newtonsoft.Json;
+using StardewArchipelago.GameModifications.Testing;
 using StardewValley;
 using StardewValley.GameData;
 
@@ -105,11 +106,9 @@ namespace StardewArchipelago.Archipelago
         public string Seed { get; private set; }
         public string MultiworldVersion { get; private set; }
         public Dictionary<string, string> ModifiedEntrances { get; set; }
-        public AppearanceRandomization AppearanceRandomization { get; set; }
-        public bool AppearanceRandomizationDaily { get; set; }
         public ModsManager Mods { get; set; }
 
-        public SlotData(string slotName, Dictionary<string, object> slotDataFields, ILogger logger)
+        public SlotData(string slotName, Dictionary<string, object> slotDataFields, ILogger logger, TesterFeatures testerFeatures)
         {
             SlotName = slotName;
             _slotDataFields = slotDataFields;
@@ -160,11 +159,9 @@ namespace StardewArchipelago.Archipelago
             MultiworldVersion = GetSlotSetting(MULTIWORLD_VERSION_KEY, "");
             var newEntrancesStringData = GetSlotSetting(MODIFIED_ENTRANCES_KEY, "");
             ModifiedEntrances = JsonConvert.DeserializeObject<Dictionary<string, string>>(newEntrancesStringData);
-            AppearanceRandomization = AppearanceRandomization.Disabled; // GetSlotSetting(RANDOMIZE_NPC_APPEARANCES_KEY, AppearanceRandomization.Disabled);
-            AppearanceRandomizationDaily = false; // GetSlotSetting(RANDOMIZE_NPC_APPEARANCES_DAILY_KEY, false);
             var modsString = GetSlotSetting(MOD_LIST_KEY, "");
             var mods = JsonConvert.DeserializeObject<List<string>>(modsString);
-            Mods = new ModsManager(_logger, mods);
+            Mods = new ModsManager(_logger, testerFeatures, mods);
         }
 
         private Walnutsanity GetSlotWalnutsanitySetting()
@@ -573,14 +570,6 @@ namespace StardewArchipelago.Archipelago
         QuarterDebris = 2,
         NoDebris = 3,
         StartClear = 4,
-    }
-
-    public enum AppearanceRandomization
-    {
-        Disabled = 0,
-        Villagers = 1,
-        All = 2,
-        Chaos = 3,
     }
 
     public enum BundlePrice
