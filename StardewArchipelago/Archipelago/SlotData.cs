@@ -19,6 +19,7 @@ namespace StardewArchipelago.Archipelago
         private const string SEASON_RANDOMIZATION_KEY = "season_randomization";
         private const string CROPSANITY_KEY = "cropsanity";
         private const string BACKPACK_PROGRESSION_KEY = "backpack_progression";
+        private const string BACKPACK_SIZE_KEY = "backpack_size";
         private const string TOOL_PROGRESSION_KEY = "tool_progression";
         private const string ELEVATOR_PROGRESSION_KEY = "elevator_progression";
         private const string SKILLS_PROGRESSION_KEY = "skill_progression";
@@ -79,6 +80,7 @@ namespace StardewArchipelago.Archipelago
         public SeasonRandomization SeasonRandomization { get; private set; }
         public Cropsanity Cropsanity { get; private set; }
         public BackpackProgression BackpackProgression { get; private set; }
+        public int BackpackSize { get; private set; }
         public ToolProgression ToolProgression { get; private set; }
         public ElevatorProgression ElevatorProgression { get; private set; }
         public SkillsProgression SkillProgression { get; private set; }
@@ -135,6 +137,7 @@ namespace StardewArchipelago.Archipelago
             SeasonRandomization = GetSlotSetting(SEASON_RANDOMIZATION_KEY, SeasonRandomization.Disabled);
             Cropsanity = GetSlotSetting(CROPSANITY_KEY, Cropsanity.Disabled);
             BackpackProgression = GetSlotSetting(BACKPACK_PROGRESSION_KEY, BackpackProgression.Progressive);
+            BackpackSize = GetSlotSetting(BACKPACK_SIZE_KEY, 12);
             ToolProgression = GetSlotSetting(TOOL_PROGRESSION_KEY, ToolProgression.Progressive);
             ElevatorProgression = GetSlotSetting(ELEVATOR_PROGRESSION_KEY, ElevatorProgression.ProgressiveFromPreviousFloor);
             SkillProgression = GetSlotSetting(SKILLS_PROGRESSION_KEY, SkillsProgression.Progressive);
