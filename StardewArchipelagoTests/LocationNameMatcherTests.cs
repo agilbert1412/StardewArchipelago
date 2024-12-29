@@ -1,7 +1,7 @@
 using FluentAssertions;
 using StardewArchipelago.Locations;
 
-namespace StardewArchipelago.ests
+namespace StardewArchipelagoTests
 {
     public class LocationNameMatcherTests
     {
