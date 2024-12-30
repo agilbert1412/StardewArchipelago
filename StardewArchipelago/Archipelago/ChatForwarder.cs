@@ -410,7 +410,7 @@ namespace StardewArchipelago.Archipelago
             var split = message.Split(' ');
             if (split.Length == 1)
             {
-                Game1.chatBox?.addMessage($"Sprite Randomizer is currently at `{ModEntry.Instance.Config.SpriteRandomizer}`", Color.Gold);
+                Game1.chatBox?.addMessage($"Sprite Randomizer is currently at `{ModEntry.Instance.Config.SpriteRandomizer}` [Disabled|Enabled|Chaos]", Color.Gold);
                 return true;
             }
             if (split.Length != 2)
