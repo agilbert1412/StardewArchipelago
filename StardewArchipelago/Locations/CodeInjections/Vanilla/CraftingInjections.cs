@@ -79,16 +79,30 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
 
             var recipe = _stardewItemManager.GetRecipeByName(recipeId);
-            var yieldItemName = recipe.YieldItem?.Name;
-            if (yieldItemName == null)
+            if (recipe?.YieldItem == null)
             {
                 _logger.LogWarning($"Tried to check Craftsanity locationName for recipe {recipeId}, but could not find it");
                 return false;
             }
-            locationName = $"{CRAFTING_LOCATION_PREFIX}{yieldItemName}";
-            if (_archipelago.LocationExists(locationName))
+
+            var yieldItemName = recipe.YieldItem.Name;
+            if (yieldItemName != null)
             {
-                return true;
+                locationName = $"{CRAFTING_LOCATION_PREFIX}{yieldItemName}";
+                if (_archipelago.LocationExists(locationName))
+                {
+                    return true;
+                }
+            }
+
+            yieldItemName = recipe.YieldItem.DisplayName;
+            if (yieldItemName != null)
+            {
+                locationName = $"{CRAFTING_LOCATION_PREFIX}{yieldItemName}";
+                if (_archipelago.LocationExists(locationName))
+                {
+                    return true;
+                }
             }
 
             if (IgnoredModdedStrings.Craftables.Contains(recipeId) ||

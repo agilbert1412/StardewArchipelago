@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using Microsoft.Xna.Framework.Content;
 using Newtonsoft.Json;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Stardew.Ids.Vanilla;
@@ -17,6 +18,7 @@ namespace StardewArchipelago.Stardew
     public class StardewItemManager
     {
         private readonly ILogger _logger;
+        private readonly ContentManager _englishContentManager;
 
         private Dictionary<string, StardewItem> _itemsByQualifiedId;
         private Dictionary<string, StardewObject> _objectsById;
@@ -52,6 +54,7 @@ namespace StardewArchipelago.Stardew
         public StardewItemManager(ILogger logger)
         {
             _logger = logger;
+            _englishContentManager = new ContentManager(Game1.game1.Content.ServiceProvider, Game1.game1.Content.RootDirectory);
             InitializeData();
         }
 
@@ -320,7 +323,13 @@ namespace StardewArchipelago.Stardew
             _objectsByName = new Dictionary<string, StardewObject>();
             _objectsByColor = new Dictionary<string, List<StardewObject>>();
             _objectsByType = new Dictionary<string, List<StardewObject>>();
+
+            // We load it in english to avoid localization issues
+            var originalLanguage = LocalizedContentManager.CurrentLanguageCode;
+            LocalizedContentManager.CurrentLanguageCode = LocalizedContentManager.LanguageCode.en;
             var allObjectData = DataLoader.Objects(Game1.content);
+            LocalizedContentManager.CurrentLanguageCode = originalLanguage;
+
             foreach (var (id, objectData) in allObjectData)
             {
                 var stardewItem = ParseStardewObjectData(id, objectData);
@@ -374,7 +383,13 @@ namespace StardewArchipelago.Stardew
         {
             _bigCraftablesById = new Dictionary<string, BigCraftable>();
             _bigCraftablesByName = new Dictionary<string, BigCraftable>();
+
+            // We load it in english to avoid localization issues
+            var originalLanguage = LocalizedContentManager.CurrentLanguageCode;
+            LocalizedContentManager.CurrentLanguageCode = LocalizedContentManager.LanguageCode.en;
             var allBigCraftablesData = DataLoader.BigCraftables(Game1.content);
+            LocalizedContentManager.CurrentLanguageCode = originalLanguage;
+
             foreach (var (id, bigCraftableData) in allBigCraftablesData)
             {
                 var bigCraftable = ParseStardewBigCraftableData(id, bigCraftableData);
@@ -482,7 +497,13 @@ namespace StardewArchipelago.Stardew
         private void InitializeCookingRecipes()
         {
             _cookingRecipesByName = new Dictionary<string, StardewCookingRecipe>();
+
+            // We load it in english to avoid localization issues
+            var originalLanguage = LocalizedContentManager.CurrentLanguageCode;
+            LocalizedContentManager.CurrentLanguageCode = LocalizedContentManager.LanguageCode.en;
             var allCookingInformation = DataLoader.CookingRecipes(Game1.content);
+            LocalizedContentManager.CurrentLanguageCode = originalLanguage;
+
             foreach (var (recipeName, recipeInfo) in allCookingInformation)
             {
                 var recipe = ParseStardewCookingRecipeData(recipeName, recipeInfo);
@@ -508,7 +529,13 @@ namespace StardewArchipelago.Stardew
         private void InitializeCraftingRecipes()
         {
             _craftingRecipesByName = new Dictionary<string, StardewCraftingRecipe>();
+
+            // We load it in english to avoid localization issues
+            var originalLanguage = LocalizedContentManager.CurrentLanguageCode;
+            LocalizedContentManager.CurrentLanguageCode = LocalizedContentManager.LanguageCode.en;
             var allCraftingInformation = DataLoader.CraftingRecipes(Game1.content);
+            LocalizedContentManager.CurrentLanguageCode = originalLanguage;
+
             foreach (var (recipeName, recipeInfo) in allCraftingInformation)
             {
                 var recipe = ParseStardewCraftingRecipeData(recipeName, recipeInfo);
