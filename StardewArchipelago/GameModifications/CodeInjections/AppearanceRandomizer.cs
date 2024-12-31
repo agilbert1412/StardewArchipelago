@@ -9,18 +9,17 @@ using StardewValley;
 using StardewValley.GameData.Characters;
 using StardewModdingAPI;
 using Microsoft.Xna.Framework.Graphics;
-using System.Runtime.CompilerServices;
 using System.Text;
 using StardewArchipelago.Extensions;
-using StardewArchipelago.Items.Traps;
 using StardewValley.Characters;
-using StardewValley.Locations;
 using StardewValley.GameData.Pets;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
 {
     public class AppearanceRandomizer
     {
+        private static bool LOG_ALL_ERRORS = false;
+
         private static ILogger _logger;
         private static IModHelper _modHelper;
         private static StardewArchipelagoClient _archipelago;
@@ -51,10 +50,30 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             //    postfix: new HarmonyMethod(typeof(AppearanceRandomizer), nameof(AppearanceRandomizer.PetChooseAppearance_AppearanceRandomizer_Postfix))
             //);
 
+            harmony.Patch(
+                original: AccessTools.Method(typeof(AnimatedSprite), nameof(AnimatedSprite.StopAnimation)),
+                prefix: new HarmonyMethod(typeof(AppearanceRandomizer), nameof(AppearanceRandomizer.StopAnimation_AddLogging_Prefix))
+            );
+
             RefreshAllNPCs();
         }
 
         public static void GenerateSeededShuffledAppearances()
+        {
+            ExtractSpritesData();
+            foreach (var (size, characters) in _normalAppearances)
+            {
+                foreach (var character in characters)
+                {
+                    var random = GetSeededRandomForCharacter(character);
+                    var shuffledAppearance = characters[random.Next(0, characters.Count)];
+                    _shuffledAppearances[size].Add(character, shuffledAppearance);
+                    _logger.LogDebug($"Today, {character} ({size}) will look like {shuffledAppearance}");
+                }
+            }
+        }
+
+        private static void ExtractSpritesData()
         {
             _normalAppearances = new Dictionary<Point, List<string>>();
             _shuffledAppearances = new Dictionary<Point, Dictionary<string, string>>();
@@ -80,15 +99,6 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 AddExtraFunSprites(size, name);
             }
             AddExtraFunSprites();
-            foreach (var (size, characters) in _normalAppearances)
-            {
-                foreach (var character in characters)
-                {
-                    var random = GetSeededRandomForCharacter(character);
-                    var shuffledAppearance = characters[random.Next(0, characters.Count)];
-                    _shuffledAppearances[size].Add(character, shuffledAppearance);
-                }
-            }
         }
 
         private static Random GetSeededRandomForCharacter(string character, int extraSeed = 0)
@@ -455,7 +465,10 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             stringBuilder.Append(sourceName);
             stringBuilder.Append(error);
             stringBuilder.Append($". Falling back to default {type}.");
-            _logger.LogDebug(stringBuilder.ToString());
+            if (LOG_ALL_ERRORS)
+            {
+                _logger.LogDebug(stringBuilder.ToString());
+            }
         }
 
         // public override void ChooseAppearance(LocalizedContentManager content = null)
@@ -589,6 +602,32 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             {
                 _logger.LogError($"Failed in {nameof(PetChooseAppearance_AppearanceRandomizer_Postfix)}:\n{ex}");
                 return;
+            }
+        }
+
+        // public virtual void StopAnimation()
+        public static bool StopAnimation_AddLogging_Prefix(AnimatedSprite __instance)
+        {
+            try
+            {
+                if (LOG_ALL_ERRORS)
+                {
+                    _logger.LogDebug($"Stopping animation on {__instance.Texture.Name}|{__instance.textureName} ({__instance.SpriteWidth},{__instance.SpriteHeight})");
+                }
+
+                if (__instance.SpriteWidth <= 0 || __instance.SpriteHeight <= 0)
+                {
+                    _logger.LogError($"ERROR TEXTURE {__instance.Texture.Name}|{__instance.textureName} ({__instance.SpriteWidth},{__instance.SpriteHeight})");
+                    LOG_ALL_ERRORS = true;
+                    return false; // don't run original logic
+                }
+                
+                return true; // run original logic
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(StopAnimation_AddLogging_Prefix)}:\n{ex}");
+                return true; // run original logic
             }
         }
 
