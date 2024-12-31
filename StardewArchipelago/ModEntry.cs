@@ -485,7 +485,7 @@ namespace StardewArchipelago
             TheaterInjections.UpdateScheduleForEveryone();
             Helper.GameContent.InvalidateCache("Data/Shops"); // This should be reworked someday
 
-            var bugFixer = new BugFixer();
+            var bugFixer = new BugFixer(_logger, _locationChecker);
             bugFixer.FixKnownBugs();
 
             _hintHelper.GiveHintTip(_archipelago.GetSession());
