@@ -19,7 +19,7 @@ namespace StardewArchipelago.Constants.Modded
             //{ ModNames.DELORES, "1.1.2" },
             //{ ModNames.EUGENE, "1.3.1" },
             { ModNames.JASPER, $"1.8.3" },
-            { ModNames.JUNA, $"2.1.{WILDCARD}" },
+            { ModNames.JUNA, $"2.2.{WILDCARD}" },
             { ModNames.LUCK, $"1.3.{WILDCARD}" },
             //{ ModNames.MAGIC, "0.8.2" },
             { ModNames.MISTER_GINGER, $"1.6.{WILDCARD}" },
@@ -31,8 +31,8 @@ namespace StardewArchipelago.Constants.Modded
             //{ ModNames.WELLWICK, "1.0.0" },
             //{ ModNames.YOBA, "1.0.0" },
             { ModNames.SVE, $"1.14.{WILDCARD}" },
-            { ModNames.DISTANT_LANDS, $"2.1.{WILDCARD}" },
-            { ModNames.LACEY, $"1.3.{WILDCARD}" },
+            { ModNames.DISTANT_LANDS, $"2.2.{WILDCARD}" },
+            { ModNames.LACEY, $"1.4.{WILDCARD}" },
             //{ ModNames.BOARDING_HOUSE, "4.0.16" },
         };
 
