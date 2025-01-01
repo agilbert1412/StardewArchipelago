@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework;
 using StardewValley;
@@ -30,12 +31,12 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 Game1.netWorldState.Value.GoldenWalnuts += stack;
                 Game1.netWorldState.Value.GoldenWalnutsFound += stack;
                 Game1.PerformActionWhenPlayerFree(__instance.showNutPickup);
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(FoundWalnut_NoUpperLimit_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
     }

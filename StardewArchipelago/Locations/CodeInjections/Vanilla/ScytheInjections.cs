@@ -3,6 +3,7 @@ using StardewValley;
 using xTile.Dimensions;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using Microsoft.Xna.Framework.Input;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
@@ -27,11 +28,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 if (action == null || !who.IsLocalPlayer || __instance.ShouldIgnoreAction(action, who, tileLocation))
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
                 if (!ArgUtility.TryGet(action, 0, out var actionName, out _, name: "string actionType") || string.IsNullOrEmpty(actionName))
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
                 
                 if (actionName == "GoldenScythe")
@@ -47,20 +48,20 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                         __instance.setMapTile(29, 6, 277, "Buildings", "mine");
                         __instance.setMapTile(30, 56, 278, "Buildings", "mine");
                         _locationChecker.AddCheckedLocation(GRIM_REAPER_STATUE);
-                        return false; // don't run original logic
+                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                     }
 
                     Game1.changeMusicTrack("silence");
                     __instance.performTouchAction("MagicWarp Mine 67 10", Game1.player.getStandingPosition());
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(PerformAction_GoldenScythe_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
     }

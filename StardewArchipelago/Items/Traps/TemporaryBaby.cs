@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI;
@@ -69,7 +70,7 @@ namespace StardewArchipelago.Items.Traps
             {
                 if (__instance is Farm || __instance is FarmHouse || __instance != Game1.currentLocation)
                 {
-                    return true; // run original logic;
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;;
                 }
 
                 foreach (var character in __instance.characters)
@@ -80,12 +81,12 @@ namespace StardewArchipelago.Items.Traps
                     }
                 }
 
-                return true; // run original logic;
+                return MethodPrefix.RUN_ORIGINAL_METHOD;;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(GameLocationPerformTenMinuteUpdate_MoveBabiesAnywhere_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -100,12 +101,12 @@ namespace StardewArchipelago.Items.Traps
                     return false; // run original logic;
                 }
 
-                return true; // run original logic;
+                return MethodPrefix.RUN_ORIGINAL_METHOD;;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(ChildTenMinuteUpdate_MoveBabiesAnywhere_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
     }

@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewValley;
 using StardewValley.Buildings;
@@ -29,22 +30,22 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     !__instance.buildingType.Value.Equals("Gold Clock") ||
                     __instance.isTilePassable(tileLocation))
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 if (_lastDayGoldClockToggled != Game1.stats.DaysPlayed)
                 {
                     _lastDayGoldClockToggled = Game1.stats.DaysPlayed;
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 Game1.performTenMinuteClockUpdate();
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(DoAction_GoldenClockIncreaseTime_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
     }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework;
 using StardewValley;
@@ -47,10 +48,10 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                             }
                             __instance.orePanPoint.Value = p;
                             __result = true;
-                            return false; // don't run original logic
+                            return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                         }
                         __result = false;
-                        return false; // don't run original logic
+                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                     }
                 }
                 point = __instance.orePanPoint.Value;
@@ -59,12 +60,12 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     __instance.orePanPoint.Value = Point.Zero;
                 }
                 __result = false;
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(PerformOrePanTenMinuteUpdate_AllowPanningSpotsAlways_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -89,10 +90,10 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                         }
                         __instance.orePanPoint.Value = p;
                         __result = true;
-                        return false; // don't run original logic
+                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                     }
                     __result = false;
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
                 point = __instance.orePanPoint.Value;
                 if (!point.Equals(Point.Zero) && r.NextDouble() < 0.2)
@@ -100,12 +101,12 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     __instance.orePanPoint.Value = Point.Zero;
                 }
                 __result = false;
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(PerformOrePanTenMinuteUpdateOnIslandNorth_AllowPanningSpotsAlways_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
     }

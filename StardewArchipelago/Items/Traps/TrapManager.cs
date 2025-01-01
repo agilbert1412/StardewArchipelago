@@ -7,6 +7,7 @@ using Archipelago.MultiClient.Net.Enums;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Extensions;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
@@ -784,30 +785,30 @@ namespace StardewArchipelago.Items.Traps
                 {
                     case 378:
                         __result = GetInflatedPrice(80);
-                        return false; // don't run original logic
+                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                     case 380:
                         __result = GetInflatedPrice(150);
-                        return false; // don't run original logic
+                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                     case 382:
                         __result = GetInflatedPrice(120);
-                        return false; // don't run original logic
+                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                     case 384:
                         __result = GetInflatedPrice(350);
-                        return false; // don't run original logic
+                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                     case 388:
                         __result = GetInflatedPrice(10);
-                        return false; // don't run original logic
+                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                     case 390:
                         __result = GetInflatedPrice(20);
-                        return false; // don't run original logic
+                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                     default:
-                        return true; // run original logic
+                        return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(SalePrice_GetCorrectInflation_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 

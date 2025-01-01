@@ -8,6 +8,7 @@ using StardewValley.Locations;
 using StardewValley.Monsters;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
@@ -37,12 +38,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
             try
             {
                 Game1.DrawDialogue(__instance.Gil, "Characters\\Dialogue\\Gil:Snoring");
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(Gil_NoMonsterSlayerRewards_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -52,12 +53,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
             try
             {
                 __result = _killList.AreAllGoalsComplete();
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(AreAllMonsterSlayerQuestsComplete_ExcludeGingerIsland_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -74,12 +75,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
                 var killListContent = _killList.GetKillListLetterContent();
                 Game1.drawLetterMessage(killListContent);
 
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(ShowMonsterKillList_CustomListFromAP_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 

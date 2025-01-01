@@ -13,6 +13,7 @@ using StardewValley.SpecialOrders;
 using StardewValley.SpecialOrders.Rewards;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
@@ -40,12 +41,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             try
             {
                 __result = _archipelago.HasReceivedItem(VanillaUnlockManager.SPECIAL_ORDER_BOARD_AP_NAME);
-                return false; // don't run original logic;
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(IsSpecialOrdersBoardUnlocked_UnlockBasedOnApItem_Prefix)}:\n{ex}");
-                return true; // run original logic;
+                return MethodPrefix.RUN_ORIGINAL_METHOD;;
             }
         }
 
@@ -189,12 +190,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                         break;
                 }
 
-                return false; // don't run original logic;
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(SetDuration_UseCorrectDateWithSeasonRandomizer_Prefix)}:\n{ex}");
-                return true; // run original logic;
+                return MethodPrefix.RUN_ORIGINAL_METHOD;;
             }
         }
 
@@ -205,7 +206,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 if (Game1.player.team.availableSpecialOrders­ is null)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 SetDurationOfSpecialOrders(Game1.player.team.availableSpecialOrders);
@@ -213,16 +214,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 // Let the game pick festival orders, they aren't checks anyway, right?
                 if (orderType.Equals("DesertFestivalMarlon", StringComparison.InvariantCultureIgnoreCase) || (!_archipelago.SlotData.SpecialOrderLocations.HasFlag(SpecialOrderLocations.Board) && !_archipelago.SlotData.SpecialOrderLocations.HasFlag(SpecialOrderLocations.Qi)))
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 UpdateAvailableSpecialOrdersBasedOnApState(orderType, forceRefresh);
-                return false; // don't run original logic;
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(UpdateAvailableSpecialOrders_ChangeFrequencyToBeLessRng_Prefix)}:\n{ex}");
-                return true; // run original logic;
+                return MethodPrefix.RUN_ORIGINAL_METHOD;;
             }
         }
 

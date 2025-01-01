@@ -24,6 +24,7 @@ using KaitoKid.ArchipelagoUtilities.Net;
 using Microsoft.Xna.Framework.Content;
 using StardewArchipelago.Archipelago;
 using System.Reflection.Metadata;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
 {
@@ -60,7 +61,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
                 var englishQuestName = GetQuestEnglishName(__instance.id.Value, questName);
                 if (__instance.completed.Value || _ignoredQuests.Contains(englishQuestName))
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 if (__instance.id.Value != null && __instance.id.Value.Equals(DESERT_FESTIVAL_FISHING_QUEST_ID, StringComparison.InvariantCultureIgnoreCase))
@@ -68,12 +69,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
                     // This one is a quest for some reason
                     _locationChecker.AddCheckedLocation(FestivalLocationNames.WILLYS_CHALLENGE);
                     OriginalQuestCompleteCode(__instance);
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 if (!_archipelago.SlotData.QuestLocations.StoryQuestsEnabled)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 // Item Delivery: __instance.dailyQuest == true and questType == 3 [Chance: 40 / 65]
@@ -102,7 +103,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
 
                     if (!isArchipelago)
                     {
-                        return true; // run original logic
+                        return MethodPrefix.RUN_ORIGINAL_METHOD;
                     }
 
                     ++Game1.stats.QuestsCompleted;
@@ -113,12 +114,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
                 }
 
                 OriginalQuestCompleteCode(__instance);
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(QuestComplete_LocationInsteadOfReward_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -248,7 +249,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
                 if (Game1.stats.DaysPlayed <= 1U)
                 {
                     __result = null;
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 var todayRandom = new Random((int)Game1.uniqueIDForThisGame + (int)Game1.stats.DaysPlayed);
@@ -256,7 +257,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
                 if (!weightedLocations.Any())
                 {
                     __result = null;
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 var chosenIndex = todayRandom.Next(0, weightedLocations.Count);
@@ -265,25 +266,25 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
                 {
                     case DailyQuest.ITEM_DELIVERY:
                         __result = new ItemDeliveryQuest();
-                        return false; // don't run original logic
+                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                     case DailyQuest.FISHING:
                         __result = new FishingQuest();
-                        return false; // don't run original logic
+                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                     case DailyQuest.GATHERING:
                         __result = new ResourceCollectionQuest();
-                        return false; // don't run original logic
+                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                     case DailyQuest.SLAY_MONSTERS:
                         __result = new SlayMonsterQuest();
-                        return false; // don't run original logic
+                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                     default:
                         __result = null;
-                        return true; // run original logic
+                        return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(GetQuestOfTheDay_BalanceQuests_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -359,14 +360,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
             {
                 if (action == null || !who.IsLocalPlayer)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 var actionFirstWord = action[0];
 
                 if (actionFirstWord != "LumberPile" || who.hasOrWillReceiveMail("TH_LumberPile") || !who.hasOrWillReceiveMail("TH_SandDragon"))
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 Game1.player.mailReceived.Add("TH_LumberPile");
@@ -374,12 +375,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
                 _locationChecker.AddCheckedLocation("The Mysterious Qi");
 
                 __result = true;
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(PerformAction_MysteriousQiLumberPile_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -391,7 +392,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
                 var maxShakeField = _helper.Reflection.GetField<float>(__instance, "maxShake");
                 if (!(maxShakeField.GetValue() == 0.0 || doEvenIfStillShaking))
                 {
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 var shakeLeftField = _helper.Reflection.GetField<bool>(__instance, "shakeLeft");
@@ -423,18 +424,18 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
                         !Game1.player.secretNotesSeen.Contains(21) || Game1.timeOfDay != 2440 ||
                         !(Game1.currentLocation is Town) || Game1.player.mailReceived.Contains("secretNote21_done"))
                     {
-                        return false; // don't run original logic
+                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                     }
                     Game1.player.mailReceived.Add("secretNote21_done");
                     ((Town)Game1.currentLocation).initiateMarnieLewisBush();
                 }
 
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(Shake_WinterMysteryBush_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -505,12 +506,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
                 Game1.player.removeQuest("31");
                 _locationChecker.AddCheckedLocation("A Winter Mystery");
                 afterGlassMethod.Invoke();
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(MgThief_AfterSpeech_WinterMysteryFinished_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -585,12 +586,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
             {
                 if (args.Length < 2)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
                 var prize = args[1];
                 if (!prize.Equals("qimilk", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 _locationChecker.AddCheckedLocation("Cryptic Note");
@@ -607,12 +608,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
 
                 ++@event.CurrentCommand;
 
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(AwardFestivalPrize_QiMilk_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 

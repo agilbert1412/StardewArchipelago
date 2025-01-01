@@ -14,6 +14,7 @@ using StardewValley.Monsters;
 using StardewValley.TerrainFeatures;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
@@ -89,12 +90,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
 
                 var baseFishCallBack = () => CallBaseGetFish(__instance, millisecondsAfterNibble, bait, waterDepth, who, baitPotency, bobberTile, locationName);
                 __result = RollForRepeatableWalnutOrCheck(WALNUT_FISHING_KEY, "Fishing Walnut", random, WALNUT_BASE_CHANCE_FISHING, INFINITY_WALNUT_CHANCE_REDUCTION_FISHING, baseFishCallBack);
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(GetFish_RepeatableWalnut_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -120,7 +121,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             {
                 if (__instance.crop == null || __instance.Location is not IslandLocation)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 var harvestMethod = __instance.crop.GetHarvestMethod();
@@ -131,19 +132,19 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
 
                 if (harvestMethod != HarvestMethod.Grab || !__instance.crop.harvest((int)tileLocation.X, (int)tileLocation.Y, __instance))
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 __instance.destroyCrop(false);
                 __result = true;
 
                 RollForRepeatableWalnutOrCheck(WALNUT_FARMING_KEY, "Harvesting Walnut", __instance.Location, tileLocation.X, tileLocation.Y, Game1.random, WALNUT_BASE_CHANCE_FARMING, INFINITY_WALNUT_CHANCE_REDUCTION_FARMING);
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(PerformUseAction_RepeatableFarmingWalnut_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -154,13 +155,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             {
                 if (__instance?.crop == null || __instance.Location is not IslandLocation || t == null || !t.isScythe())
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 var harvestMethod = __instance.crop.GetHarvestMethod();
                 if (harvestMethod != HarvestMethod.Scythe || !__instance.crop.harvest((int)tileLocation.X, (int)tileLocation.Y, __instance, isForcedScytheHarvest: true))
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 if (__instance.crop.indexOfHarvest.Value == "771" && t.hasEnchantmentOfType<HaymakerEnchantment>())
@@ -188,12 +189,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 __result = false;
 
                 RollForRepeatableWalnutOrCheck(WALNUT_FARMING_KEY, "Harvesting Walnut", __instance.Location, tileLocation.X, tileLocation.Y, Game1.random, WALNUT_BASE_CHANCE_FARMING, INFINITY_WALNUT_CHANCE_REDUCTION_FARMING);
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(PerformToolAction_RepeatableFarmingWalnut_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -204,7 +205,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             {
                 if (stoneId != ObjectIds.MUSSEL_NODE || __instance is not IslandLocation)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 var farmerId = who != null ? who.UniqueMultiplayerID : 0L;
@@ -223,12 +224,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
 
                 RollForRepeatableWalnutOrCheck(WALNUT_MUSSEL_KEY, "Mussel Node Walnut", __instance, x, y, r, WALNUT_BASE_CHANCE_MUSSEL, INFINITY_WALNUT_CHANCE_REDUCTION_MUSSEL);
 
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(BreakStone_RepeatableMusselWalnut_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -240,7 +241,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             {
                 if (__instance.limitedNutDrops.TryGetValue(key, out var numberAlreadyDropped) && numberAlreadyDropped >= limit)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 if (HandleRepeatableWalnuts(__instance, key, location, x, y, numberAlreadyDropped))
@@ -253,12 +254,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                     return false;
                 }
 
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(RequestLimitedNutDrops_TigerSlimesAndCreatesWalnuts_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -348,12 +349,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 }
 
                 __result = CallBaseBreakStone(__instance, stoneId, x, y, who, r);
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(BreakStone_RepeatableVolcanoStoneWalnut_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -375,12 +376,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             {
                 CallBaseMonsterDrop(__instance, monster, x, y, who);
                 RollForRepeatableWalnutOrCheck(WALNUT_VOLCANO_MONSTER_KEY, "Volcano Monsters Walnut", __instance, new Vector2(x, y), Game1.random, WALNUT_BASE_CHANCE_VOLCANO_MONSTER, INFINITY_WALNUT_CHANCE_REDUCTION_VOLCANO_MONSTER);
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(MonsterDrop_RepeatableVolcanoMonsterWalnut_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 

@@ -6,6 +6,7 @@ using StardewValley;
 using StardewValley.Objects;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 
 namespace StardewArchipelago.Locations.Festival
 {
@@ -31,12 +32,12 @@ namespace StardewArchipelago.Locations.Festival
             {
                 if (justCheckingForActivity || __instance.giftbox.Value || __instance.playerChest.Value || Game1.CurrentEvent == null || !Game1.CurrentEvent.isSpecificFestival("fall27"))
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 if (__instance.Items.Count <= 0 || __instance.Items.Count > 1)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 who.currentLocation.playSound("openChest");
@@ -57,12 +58,12 @@ namespace StardewArchipelago.Locations.Festival
                 _locationChecker.AddCheckedLocation(FestivalLocationNames.GOLDEN_PUMPKIN);
 
                 __result = true;
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(CheckForAction_SpiritEveChest_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
     }

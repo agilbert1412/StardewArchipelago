@@ -6,6 +6,7 @@ using StardewValley;
 using StardewValley.Menus;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.Locations.Festival
@@ -36,7 +37,7 @@ namespace StardewArchipelago.Locations.Festival
                 var changeSpeed = changeSpeedField.GetValue();
                 if (changeSpeed != 0.0)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 var powerField = _modHelper.Reflection.GetField<float>(__instance, "power");
@@ -45,12 +46,12 @@ namespace StardewArchipelago.Locations.Festival
                 {
                     _locationChecker.AddCheckedLocation(FestivalLocationNames.STRENGTH_GAME);
                 }
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(StrengthGameUpdate_StrongEnough_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -81,16 +82,16 @@ namespace StardewArchipelago.Locations.Festival
             {
                 if (!__instance.isSpecificFestival("fall16"))
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 _state.StoredStarTokens += who.festivalScore;
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(ForceEndFestival_KeepStarTokens_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
     }

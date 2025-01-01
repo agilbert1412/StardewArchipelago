@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Stardew;
 using StardewArchipelago.Stardew.Ids.Vanilla;
@@ -44,22 +45,22 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 {
                     var randomSeed = GetWeigthedRandomUnlockedFlower(Game1.season);
                     __result = randomSeed;
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 if (itemId == ObjectIds.MIXED_SEEDS)
                 {
                     var randomSeed = GetWeigthedRandomUnlockedCrop(Game1.season);
                     __result = randomSeed;
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(ResolveSeedId_MixedSeedsBecomesUnlockedCrop_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 

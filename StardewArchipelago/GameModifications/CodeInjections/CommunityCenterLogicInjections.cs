@@ -1,5 +1,6 @@
 ﻿using System;
 using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
 using StardewValley;
@@ -40,12 +41,12 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
                 __result = allAreasCompleteAccordingToAp && allAreasCompleteLocally;
 
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(HasCompletedCommunityCenter_CheckGameStateInsteadOfLetters_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
     }

@@ -6,6 +6,7 @@ using StardewValley;
 using StardewValley.Locations;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 
 namespace StardewArchipelago.Locations.GingerIsland.Parrots
 {
@@ -86,16 +87,16 @@ namespace StardewArchipelago.Locations.GingerIsland.Parrots
                 var totalDistance = Math.Abs(y - 47) + Math.Abs(x - 21.5);
                 if (totalDistance > 2)
                 {
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 _locationChecker.AddCheckedLocation(AP_PROF_SNAIL_CAVE);
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(ExplosionAt_CheckProfessorSnailLocation_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
     }

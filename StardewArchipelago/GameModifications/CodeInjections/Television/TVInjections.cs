@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewValley;
@@ -36,7 +37,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
                 if (justCheckingForActivity)
                 {
                     __result = true;
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 var channelsList = new List<Response>();
@@ -53,12 +54,12 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
                 Game1.player.Halt();
 
                 __result = true;
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(CheckForAction_TVChannels_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using StardewArchipelago.Goals;
 using StardewArchipelago.Locations.Modded.SVE;
 using StardewArchipelago.Stardew;
@@ -81,12 +82,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 _friendshipReleaser.ReleaseMorrisHeartsIfNeeded();
                 GoalCodeInjection.CheckCommunityCenterGoalCompletion();
 
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(DoAreaCompleteReward_AreaLocations_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -98,33 +99,33 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 {
                     case Area.Pantry:
                         __result = !Game1.player.hasOrWillReceiveMail("apccPantry"); // _locationChecker.IsLocationNotChecked(AP_LOCATION_PANTRY);
-                        return false; // don't run original logic
+                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                     case Area.CraftsRoom:
                         __result = !Game1.player.hasOrWillReceiveMail("apccCraftsRoom"); // _locationChecker.IsLocationNotChecked(AP_LOCATION_CRAFTS_ROOM);
-                        return false; // don't run original logic
+                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                     case Area.FishTank:
                         __result = !Game1.player.hasOrWillReceiveMail("apccFishTank"); // _locationChecker.IsLocationNotChecked(AP_LOCATION_FISH_TANK);
-                        return false; // don't run original logic
+                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                     case Area.BoilerRoom:
                         __result = !Game1.player.hasOrWillReceiveMail("apccBoilerRoom"); // _locationChecker.IsLocationNotChecked(AP_LOCATION_BOILER_ROOM);
-                        return false; // don't run original logic
+                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                     case Area.Vault:
                         __result = !Game1.player.hasOrWillReceiveMail("apccVault"); // _locationChecker.IsLocationNotChecked(AP_LOCATION_VAULT);
-                        return false; // don't run original logic
+                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                     case Area.Bulletin:
                         __result = !Game1.player.hasOrWillReceiveMail("apccBulletin"); // _locationChecker.IsLocationNotChecked(AP_LOCATION_BULLETIN_BOARD);
-                        return false; // don't run original logic
+                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                     case Area.AbandonedJojaMart:
                         __result = !Game1.player.hasOrWillReceiveMail("apccMovieTheater"); // _locationChecker.IsLocationNotChecked(AP_LOCATION_BULLETIN_BOARD);
-                        return false; // don't run original logic
+                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
                 __result = false;
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(ShouldNoteAppearInArea_AllowAccessEverything_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -136,17 +137,17 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 var tile = __instance.map.GetLayer("Buildings").Tiles[tileLocation];
                 if (tile == null || tile.TileIndex != 1799)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 __instance.checkBundle(5);
                 __result = true;
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(CheckAction_BulletinBoardNoRequirements_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -155,12 +156,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         {
             try
             {
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(CheckForMissedRewards_DontBother_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
     }

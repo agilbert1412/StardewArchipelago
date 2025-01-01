@@ -10,6 +10,7 @@ using StardewValley.Locations;
 using StardewValley.TerrainFeatures;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Logging;
 
@@ -40,7 +41,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             {
                 if (__instance.size.Value != 4)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 var bushId = $"Bush_{__instance.Location.Name}_{__instance.Tile.X}_{__instance.Tile.Y}";
@@ -51,12 +52,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 }
 
                 __result = IDProvider.CreateApLocationItemId(_bushNameMap[bushId]);
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(GetShakeOffItem_ReplaceWalnutWithCheck_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -67,16 +68,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             {
                 if (__instance.size.Value != 4)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 SetUpSourceRectForWalnutsanityBush(__instance);
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(SetUpSourceRect_UseArchipelagoTexture_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -87,7 +88,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             {
                 if (__instance.size.Value != 4)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 var tile = __instance.Tile;
@@ -106,12 +107,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 var shakeRotation = shakeRotationField.GetValue();
                 spriteBatch.Draw(_bushtexture, position, sourceRectangle, Color.White, shakeRotation, new Vector2(16, 32f), 4f, effects, layerDepth);
 
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(Draw_UseArchipelagoTexture_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 

@@ -6,6 +6,7 @@ using StardewValley.Locations;
 using StardewValley.Objects;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 
 namespace StardewArchipelago.Locations.GingerIsland.VolcanoForge
 {
@@ -32,12 +33,12 @@ namespace StardewArchipelago.Locations.GingerIsland.VolcanoForge
             {
                 if (justCheckingForActivity || __instance.giftbox.Value || __instance.playerChest.Value || Game1.currentLocation is not Caldera)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 if (__instance.Items.Count <= 0)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 who.currentLocation.playSound("openChest");
@@ -54,12 +55,12 @@ namespace StardewArchipelago.Locations.GingerIsland.VolcanoForge
                 _locationChecker.AddCheckedLocation($"Volcano Caldera Treasure");
                 Game1.player.mailReceived.Add("CalderaTreasure");
 
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(CheckForAction_CalderaChest_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
     }

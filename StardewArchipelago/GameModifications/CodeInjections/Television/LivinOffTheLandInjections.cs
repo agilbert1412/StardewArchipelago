@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Archipelago.MultiClient.Net.Models;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Modded;
@@ -30,7 +31,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
                 var dayOfWeek = Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth);
                 if (dayOfWeek.Equals("Mon") || dayOfWeek.Equals("Thu"))
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 _myActiveHints = _archipelago.GetMyActiveHints();
@@ -49,16 +50,16 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
                         _archipelago.GetPlayerName(hint.ReceivingPlayer),
                         _archipelago.GetPlayerGame(hint.ReceivingPlayer));
                     __result = formattedTip;
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 __result = tip;
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(GetTodaysTip_CustomLivinOffTheLand_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 

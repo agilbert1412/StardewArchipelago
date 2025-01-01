@@ -4,6 +4,7 @@ using StardewModdingAPI;
 using StardewValley;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 
 namespace StardewArchipelago.Locations.Festival
 {
@@ -29,7 +30,7 @@ namespace StardewArchipelago.Locations.Festival
             {
                 if (!questionAndAnswer.Equals("TroutDerbyBooth_Rewards", StringComparison.InvariantCultureIgnoreCase) || Game1.player.Items.CountId("TroutDerbyTag") <= 0)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 __result = true;
@@ -46,15 +47,15 @@ namespace StardewArchipelago.Locations.Festival
                     Game1.stats.Increment("GoldenTagsTurnedIn");
                     Game1.player.Items.ReduceId("TroutDerbyTag", 1);
                     _locationChecker.AddCheckedLocation(locationName);
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(AnswerDialogueAction_TroutDerbyRewards_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
     }

@@ -11,6 +11,7 @@ using StardewValley;
 using StardewValley.Objects;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
@@ -51,7 +52,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 if (__instance == null)
                 {
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 // private TemporaryAnimatedSprite screen;
@@ -63,7 +64,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 // ReSharper disable once ConditionIsAlwaysTrueOrFalse
                 if (screenField == null || currentChannelField == null || screenField.GetValue() == null || currentChannelField.GetValue() != 5)
                 {
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 var cookingChannelData = DataLoader.Tv_CookingChannel(Game1.temporaryContent);
@@ -84,12 +85,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 }
 
                 __result = tvText;
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(GetWeeklyRecipe_UseArchipelagoSchedule_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 

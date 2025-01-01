@@ -1,5 +1,6 @@
 ﻿using System;
 using HarmonyLib;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewModdingAPI;
 using StardewValley;
@@ -49,13 +50,13 @@ namespace StardewArchipelago.GameModifications
             {
                 if (__instance.lastQuestionKey == null || __instance.afterQuestion != null)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 var response = ArgUtility.SplitBySpaceAndGet(__instance.lastQuestionKey, 0) + "_" + answer.responseKey;
                 if (!response.Equals("JojaSignUp_Yes", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 const int membershipPrice = 5000;
@@ -70,12 +71,12 @@ namespace StardewArchipelago.GameModifications
                 }
 
                 __result = true;
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(AnswerDialogue_JojaMembershipPurchase_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -86,7 +87,7 @@ namespace StardewArchipelago.GameModifications
             {
                 if (questionAndAnswer != "Fizz_Yes")
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 if (Game1.player.Money >= 500000)
@@ -101,12 +102,12 @@ namespace StardewArchipelago.GameModifications
                 }
 
                 __result = true;
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(AnswerDialogueAction_PerfectionWaiverPurchase_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
     }

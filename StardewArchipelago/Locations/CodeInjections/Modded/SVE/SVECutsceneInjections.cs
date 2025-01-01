@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Constants.Vanilla;
 using StardewModdingAPI;
@@ -66,12 +67,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
             {
                 if (justCheckingForActivity || __instance.giftbox.Value || __instance.playerChest.Value)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 if (__instance.Items.Count is <= 0 or > 1 || __instance.Items.First().Name != "Diamond Wand")
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 who.currentLocation.playSound("openChest");
@@ -87,13 +88,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
 
                 _locationChecker.AddCheckedLocation(LANCE_CHEST_LOCATION);
 
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
 
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(CheckForAction_LanceChest_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -104,7 +105,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
             {
                 if (!sveEventSpecialOrders.ContainsKey(__instance.id))
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 //Change the key so it doesn't get deleted
@@ -113,12 +114,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
                 var specialOrder = SpecialOrder.GetSpecialOrder(eventsKey, null);
                 Game1.player.team.specialOrders.Add(specialOrder);
 
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(EndBehaviors_AddSpecialOrderAfterEvent_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -133,7 +134,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(UpdateSpecialOrders_StopDeletingSpecialOrders_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 

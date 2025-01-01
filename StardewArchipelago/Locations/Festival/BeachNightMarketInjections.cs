@@ -10,6 +10,7 @@ using xTile.Dimensions;
 using Rectangle = xTile.Dimensions.Rectangle;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.Locations.Festival
@@ -40,12 +41,12 @@ namespace StardewArchipelago.Locations.Festival
                     Game1.player.mailReceived.Add(paintingMailKey);
                 }
 
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(Draw_DontDrawOriginalPainting_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -83,24 +84,24 @@ namespace StardewArchipelago.Locations.Festival
                 var buildings = __instance.map.GetLayer("Buildings");
                 if (buildings.Tiles[tileLocation] == null || buildings.Tiles[tileLocation].TileIndex != 68 || Game1.timeOfDay < 1700)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 var paintingLocationSoldToday = GetPaintingLocationToday(__instance);
                 if (_locationChecker.IsLocationChecked(paintingLocationSoldToday))
                 {
                     Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\Locations:BeachNightMarket_PainterSold"));
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 __instance.createQuestionDialogue(Game1.content.LoadString("Strings\\Locations:BeachNightMarket_PainterQuestion"), __instance.createYesNoResponses(), "PainterQuestion");
 
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(CheckAction_LupiniPainting_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -111,7 +112,7 @@ namespace StardewArchipelago.Locations.Festival
             {
                 if (_archipelago.SlotData.FestivalLocations == FestivalLocations.Vanilla || questionAndAnswer != "PainterQuestion_Yes")
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 __result = true;
@@ -120,24 +121,24 @@ namespace StardewArchipelago.Locations.Festival
                 if (_locationChecker.IsLocationChecked(paintingLocationSoldToday))
                 {
                     Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\Locations:BeachNightMarket_PainterSold"));
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
                 if (Game1.player.Money < 1200)
                 {
                     Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\Locations:BusStop_NotEnoughMoneyForTicket"));
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 Game1.player.Money -= 1200;
                 Game1.activeClickableMenu = (IClickableMenu)null;
                 _locationChecker.AddCheckedLocation(paintingLocationSoldToday);
                 Game1.player.CanMove = true;
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(AnswerDialogueAction_LupiniPainting_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 

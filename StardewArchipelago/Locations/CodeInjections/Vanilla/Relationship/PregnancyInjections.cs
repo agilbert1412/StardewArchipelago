@@ -8,6 +8,7 @@ using StardewValley.Characters;
 using StardewValley.Events;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
 {
@@ -42,14 +43,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
                 if (__instance is Horse)
                 {
                     __result = false;
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 var farmer = __instance.getSpouse();
                 if (farmer == null || farmer.divorceTonight.Value)
                 {
                     __result = false;
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 var heartLevelForNpc = farmer.getFriendshipHeartLevelForNPC(__instance.Name);
@@ -60,16 +61,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
                     spouseFriendship.DaysUntilBirthing >= 0 || heartLevelForNpc < 10 || farmer.GetDaysMarried() < 7)
                 {
                     __result = false;
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 __result = _locationChecker.IsLocationMissing(FIRST_BABY) || _locationChecker.IsLocationMissing(SECOND_BABY);
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(CanGetPregnant_ShuffledPregnancies_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -82,7 +83,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
                 var whichQuestion = whichQuestionField.GetValue();
                 if (whichQuestion != 1 && whichQuestion != 3)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 Response[] answerChoices1 =
@@ -101,12 +102,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
                 Game1.currentLocation.createQuestionDialogue(question, answerChoices1, (who, answer) => answerPregnancyQuestionMethod.Invoke(who, answer), spouse);
                 Game1.messagePause = true;
                 __result = false;
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(Setup_PregnancyQuestionEvent_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -138,19 +139,19 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
             {
                 if (!answer.Equals("Yes", StringComparison.OrdinalIgnoreCase))
                 {
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 var worldDate = new WorldDate(Game1.Date);
                 worldDate.TotalDays += 14;
                 who.GetSpouseFriendship().NextBirthingDate = worldDate;
 
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(AnswerPregnancyQuestion_CorrectDate_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -167,7 +168,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
                 if (timerField.GetValue() < 1500)
                 {
                     __result = false;
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 Game1.playSound("smallSelect");
@@ -201,12 +202,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
 
                 _locationChecker.AddCheckedLocation(locationBeingChecked);
                 __result = true;
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(TickUpdate_BirthingEvent_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
     }

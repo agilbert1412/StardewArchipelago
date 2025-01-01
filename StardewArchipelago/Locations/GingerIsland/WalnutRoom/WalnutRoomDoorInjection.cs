@@ -7,6 +7,7 @@ using StardewValley.Locations;
 using xTile.Dimensions;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 
 namespace StardewArchipelago.Locations.GingerIsland.WalnutRoom
 {
@@ -33,7 +34,7 @@ namespace StardewArchipelago.Locations.GingerIsland.WalnutRoom
                 if (__instance.getTileIndexAt(tileLocation.X, tileLocation.Y, "Buildings") == -1 ||
                     __instance.getTileIndexAt(tileLocation.X, tileLocation.Y, "Buildings") != 1470)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 if (_archipelago.HasReceivedItem(VanillaUnlockManager.QI_WALNUT_ROOM))
@@ -49,12 +50,12 @@ namespace StardewArchipelago.Locations.GingerIsland.WalnutRoom
                 }
 
                 __result = true;
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(CheckAction_WalnutRoomDoorBasedOnAPItem_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
     }

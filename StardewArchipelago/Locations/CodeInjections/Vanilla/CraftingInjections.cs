@@ -8,6 +8,7 @@ using StardewValley;
 using EventIds = StardewArchipelago.Stardew.Ids.Vanilla.EventIds;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
@@ -123,16 +124,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 if (!@event.eventCommands[@event.CurrentCommand].Contains("Furnace"))
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 ++@event.CurrentCommand;
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(AddCraftingRecipe_SkipLearningFurnace_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -143,17 +144,17 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 if (__instance.id != EventIds.FURNACE_RECIPE)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 EventInjections.BaseSkipEvent(__instance, () => Game1.player.addQuest("11"));
 
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(SkipEvent_FurnaceRecipe_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
     }

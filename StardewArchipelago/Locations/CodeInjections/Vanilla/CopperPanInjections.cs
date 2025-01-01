@@ -5,6 +5,7 @@ using StardewModdingAPI;
 using StardewValley;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -30,16 +31,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 if (__instance.id != EventIds.COPPER_PAN)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 EventInjections.BaseSkipEvent(__instance, CheckCopperPanLocation);
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(SkipEvent_CopperPan_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -50,7 +51,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 if (@event.id != EventIds.COPPER_PAN || args.Length <= 1 || args[1].ToLower() != "pan")
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 CheckCopperPanLocation();
@@ -59,12 +60,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     @event.CurrentCommand++;
                 @event.CurrentCommand++;
 
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(AwardFestivalPrize_CopperPan_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 

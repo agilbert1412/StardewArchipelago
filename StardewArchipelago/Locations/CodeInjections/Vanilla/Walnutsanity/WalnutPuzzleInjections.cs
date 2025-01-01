@@ -14,6 +14,7 @@ using StardewValley.Minigames;
 using StardewValley.Network;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
 {
@@ -42,7 +43,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                     (Game1.player.freeSpotsInInventory() <= 1 && __instance.heldItem.Stack > 1) || Game1.player.freeSpotsInInventory() < 1 ||
                     __instance.heldItem.QualifiedItemId != QualifiedItemIds.GOLDEN_COCONUT)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 var goldenCoconutLocation = $"Open Golden Coconut";
@@ -50,7 +51,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 {
                     // Just in case
                     _locationChecker.AddWalnutCheckedLocation(goldenCoconutLocation);
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 __instance.waitingForServerResponse = true;
@@ -67,12 +68,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                     __instance.startGeodeCrack();
                 });
 
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(ReceiveLeftClick_CrackGoldenCoconut_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -83,17 +84,17 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             {
                 if (__instance.bananaShrineNutAwarded.Value || !Game1.IsMasterGame)
                 {
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
                 Game1.player.team.MarkCollectedNut("BananaShrine");
                 __instance.bananaShrineNutAwarded.Value = true;
                 CreateLocationDebris("Banana Altar", new Vector2(16.5f, 25f) * 64f, __instance, 0, 1280);
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(SpawnBananaNutReward_CheckInsteadOfNuts_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -104,7 +105,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             {
                 if (__instance.treeHitLocal)
                 {
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
                 __instance.treeHitLocal = true;
                 if (Game1.currentLocation == __instance)
@@ -148,18 +149,18 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 }
                 if (!Game1.IsMasterGame || __instance.treeNutObtained.Value)
                 {
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
                 Game1.player.team.MarkCollectedNut("TreeNut");
 
                 DelayedAction.functionAfterDelay(() => CreateLocationDebris("Leo's Tree", new Vector2(10.5f, 7f) * 64f, __instance), 1250);
                 __instance.treeNutObtained.Value = true;
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(SpitTreeNut_CheckInsteadOfNut_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -174,18 +175,18 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 }
                 if (Game1.currentLocation != __instance)
                 {
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
                 Game1.playSound("boulderBreak");
                 Game1.playSound("secret1");
                 Game1.flashAlpha = 1f;
                 __instance.ApplyFinishedTiles();
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(OnPuzzleFinish_CheckInsteadOfNuts_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -213,12 +214,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 var gourmandMutex = gourmandMutexField.GetValue();
                 gourmandMutex.ReleaseLock();
 
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(GiveReward_GourmandCheckInsteadOfNuts_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -229,7 +230,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             {
                 if (Game1.gameMode == 6 || Utility.ShouldIgnoreValueChangeCallback() || !__instance.whacked.Value)
                 {
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 if (Game1.IsMasterGame)
@@ -245,16 +246,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 }
                 if (Game1.currentLocation != __instance.locationRef.Value)
                 {
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
                 __instance.AnimateWhacked();
 
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(OnWhackedChanged_CheckInsteadOfNut_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -336,7 +337,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 }
                 if (__instance.localPhase != 1)
                 {
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
                 double betweenNotesTimer = __instance.betweenNotesTimer;
                 elapsedGameTime = time.ElapsedGameTime;
@@ -344,7 +345,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 __instance.betweenNotesTimer = (float)(betweenNotesTimer - totalMilliseconds1);
                 if (__instance.betweenNotesTimer > 0.0 || __instance.currentCrystalSequence.Count <= 0 || __instance.currentPlaybackCrystalSequenceIndex < 0)
                 {
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
                 var index1 = __instance.currentCrystalSequence[__instance.currentPlaybackCrystalSequenceIndex];
                 if (index1 < crystals.Count)
@@ -380,14 +381,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 }
                 if (__instance.currentPlaybackCrystalSequenceIndex < __instance.currentCrystalSequence.Count)
                 {
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
                 __instance.currentPlaybackCrystalSequenceIndex = -1;
                 if (__instance.currentDifficulty.Value > (__instance.timesFailed.Value < 8 ? 7 : 6))
                 {
                     if (!Game1.IsMasterGame)
                     {
-                        return false; // don't run original logic
+                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                     }
                     __instance.netPhaseTimer.Value = 1000f;
                     __instance.netPhase.Value = 5;
@@ -396,19 +397,19 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 {
                     if (!Game1.IsMasterGame)
                     {
-                        return false; // don't run original logic
+                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                     }
                     __instance.netPhase.Value = 2;
                     __instance.currentCrystalSequenceIndex.Value = 0;
                 }
 
 
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(UpdateWhenCurrentLocation_CheckInsteadOfNuts_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -461,7 +462,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 });
                 if (Game1.gameMode == 6 || Utility.ShouldIgnoreValueChangeCallback())
                 {
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
                 if (Game1.currentLocation == __instance)
                 {
@@ -470,16 +471,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 }
                 if (!Game1.IsMasterGame)
                 {
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
                 Game1.player.team.MarkCollectedNut("IslandLeftPlantRestored");
                 CreateLocationDebris("Purple Flowers Island Survey", new Vector2(1.5f, 3.3f) * 64f, __instance, 1, 256);
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(ApplyPlantRestoreLeft_CheckInsteadOfNut_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -530,7 +531,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 });
                 if (Game1.gameMode == 6 || Utility.ShouldIgnoreValueChangeCallback())
                 {
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
                 if (Game1.currentLocation == __instance)
                 {
@@ -539,16 +540,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 }
                 if (!Game1.IsMasterGame)
                 {
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
                 Game1.player.team.MarkCollectedNut("IslandRightPlantRestored");
                 CreateLocationDebris("Purple Starfish Island Survey", new Vector2(7.5f, 3.3f) * 64f, __instance, 3, 256);
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(ApplyPlantRestoreRight_CheckInsteadOfNut_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -565,7 +566,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                     __instance.uncollectedRewards.Add(ItemRegistry.Create("(O)69"));
                     Game1.player.team.MarkCollectedNut("IslandCenterSkeletonRestored");
                     __result = true;
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
                 if (!__instance.snakeRestored.Value && __instance.isRangeAllTrue(6, 9))
                 {
@@ -574,7 +575,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                     __instance.uncollectedRewards.Add(ItemRegistry.Create("(O)835"));
                     Game1.player.team.MarkCollectedNut("IslandSnakeRestored");
                     __result = true;
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
                 if (!__instance.batRestored.Value && __instance.piecesDonated[9])
                 {
@@ -583,7 +584,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                     __instance.uncollectedRewards.Add(ItemRegistry.Create("(O)TentKit"));
                     Game1.player.team.MarkCollectedNut("IslandBatRestored");
                     __result = true;
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
                 if (!__instance.frogRestored.Value && __instance.piecesDonated[10])
                 {
@@ -592,16 +593,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                     __instance.uncollectedRewards.Add(ItemRegistry.Create("(O)926"));
                     Game1.player.team.MarkCollectedNut("IslandFrogRestored");
                     __result = true;
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 __result = false;
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(DonatePiece_CheckInsteadOfNuts_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -616,12 +617,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             {
                 if (!projectile || damagesFarmer != 0 || position.Bottom >= 832)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 if (!position.Intersects(new Rectangle(3648, 576, 256, 64)) || !Game1.IsMasterGame || __instance.treeNutShot.Value)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 Game1.player.team.MarkCollectedNut("TreeNutShot");
@@ -629,12 +630,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 CreateLocationDebris("Protruding Tree Walnut", new Vector2(58.5f, 11f) * 64f, __instance);
 
                 __result = true;
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(IsCollidingPosition_CheckInsteadOfNut_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -645,7 +646,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             {
                 if ((int)bobberTile.X < 18 || (int)bobberTile.X > 20 || (int)bobberTile.Y < 20 || (int)bobberTile.Y > 22)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 if (!__instance.fishedWalnut.Value)
@@ -655,18 +656,18 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                     {
                         __instance.fishedWalnut.Value = true;
                         __result = CreateLocationItem("Starfish Tide Pool");
-                        return false; // don't run original logic
+                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                     }
                     __instance.fishWalnutEvent.Fire();
                 }
 
                 __result = null;
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(GetFish_CheckInsteadOfNut_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -683,18 +684,18 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 }
                 if (!Game1.IsMasterGame || __instance.mermaidPuzzleFinished.Value)
                 {
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
                 Game1.player.team.MarkCollectedNut("Mermaid");
                 __instance.mermaidPuzzleFinished.Value = true;
                 CreateLocationDebris("Mermaid Song", new Vector2(32f, 33f) * 64f, __instance);
 
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(OnMermaidPuzzleSuccess_CheckInsteadOfNut_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -708,16 +709,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 Game1.currentMinigame = null;
                 if (__instance.currentGameState != Darts.GameState.GameOver)
                 {
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
                 if (__instance.points != 0)
                 {
                     if (Game1.currentLocation is not IslandSouthEastCave)
                     {
-                        return false; // don't run original logic
+                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                     }
                     Game1.drawDialogueNoTyping(Game1.content.LoadString("Strings\\StringsFromMaps:Pirates7_Lose"));
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 var isPerfect = __instance.IsPerfectVictory();
@@ -731,7 +732,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 }
                 if (Game1.currentLocation is not IslandSouthEastCave)
                 {
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 var victoryText = Game1.content.LoadString("Strings\\StringsFromMaps:Pirates7_Win");
@@ -757,12 +758,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                     Game1.drawDialogueNoTyping(dialogue);
                 }
 
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(QuitGame_CheckInsteadOfNut_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 

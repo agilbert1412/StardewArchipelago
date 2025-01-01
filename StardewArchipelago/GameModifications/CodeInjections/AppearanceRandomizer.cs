@@ -10,6 +10,7 @@ using StardewValley.GameData.Characters;
 using StardewModdingAPI;
 using Microsoft.Xna.Framework.Graphics;
 using System.Text;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using StardewArchipelago.Extensions;
 using StardewValley.Characters;
 using StardewValley.GameData.Pets;
@@ -165,24 +166,24 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             {
                 if (ModEntry.Instance.Config.SpriteRandomizer == AppearanceRandomization.Disabled)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 if (__instance.IsMonster)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 if (!Game1.characterData.ContainsKey(__instance.Name))
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 var charData = Game1.characterData[__instance.Name];
                 var size = charData.Size;
                 if (!_shuffledAppearances.ContainsKey(size))
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 var shuffling = _shuffledAppearances[size];
@@ -190,7 +191,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 {
                     if (!_normalAppearances.ContainsKey(size) || !_shuffledAppearances.ContainsKey(size))
                     {
-                        return true; // run original logic
+                        return MethodPrefix.RUN_ORIGINAL_METHOD;
                     }
 
                     var characters = _normalAppearances[size];
@@ -203,15 +204,15 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
                 if (TryChooseAppearance(__instance, content, shuffledName))
                 {
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(NPCChooseAppearance_AppearanceRandomizer_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -619,15 +620,15 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 {
                     _logger.LogError($"ERROR TEXTURE {__instance.Texture.Name}|{__instance.textureName} ({__instance.SpriteWidth},{__instance.SpriteHeight})");
                     LOG_ALL_ERRORS = true;
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
                 
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(StopAnimation_AddLogging_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 

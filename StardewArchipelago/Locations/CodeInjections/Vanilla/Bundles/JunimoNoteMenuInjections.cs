@@ -16,6 +16,7 @@ using StardewValley.Locations;
 using StardewValley.Menus;
 using Bundle = StardewValley.Menus.Bundle;
 using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using StardewArchipelago.Logging;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
@@ -186,18 +187,18 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                         break;
                     default:
                         __result = "???";
-                        return false; // don't run original logic
+                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 var scoutedItem = _archipelago.ScoutSingleLocation(apAreaToScout);
                 var rewardText = $"Reward: {scoutedItem.PlayerName}'s {scoutedItem.GetItemName(StringExtensions.TurnHeartsIntoStardewHearts)}";
                 __result = rewardText;
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(GetRewardNameForArea_ScoutRoomRewards_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -292,7 +293,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 var specificBundlePageField = _modHelper.Reflection.GetField<bool>(__instance, "specificBundlePage");
                 if (!JunimoNoteMenu.canClick || __instance.scrambledText || !specificBundlePageField.GetValue() || __instance.purchaseButton == null || !__instance.purchaseButton.containsPoint(x, y))
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 // private Bundle currentPageBundle;
@@ -303,16 +304,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 var currency = ingredient.id;
                 if (currency == IDProvider.MONEY)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 TryPurchaseCurrentBundle(__instance, ingredient, currentPageBundle);
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(ReceiveLeftClick_PurchaseCurrencyBundle_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 

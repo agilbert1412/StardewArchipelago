@@ -11,6 +11,7 @@ using StardewValley.Objects;
 using StardewValley.SpecialOrders;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.Locations.Festival
@@ -53,12 +54,12 @@ namespace StardewArchipelago.Locations.Festival
                 }
                 __instance.rewardsToCollect[Game1.player.UniqueMultiplayerID] = 0;
                 Game1.activeClickableMenu = new ItemGrabMenu(rewards, false, true, null, null, "Rewards", canBeExitedWithKey: true, playRightClickSound: false, allowRightClick: false, context: __instance);
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(CollectRacePrizes_RaceWinner_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -84,20 +85,20 @@ namespace StardewArchipelago.Locations.Festival
             {
                 if (HandleCactusMan(__instance, question_and_answer, ref __result))
                 {
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 if (HandleGilRewards(question_and_answer, ref __result))
                 {
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 if (HandleScholar(__instance, question_and_answer, ref __result))
                 {
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
@@ -361,12 +362,12 @@ namespace StardewArchipelago.Locations.Festival
             {
                 // Game1.player.team.itemsToRemoveOvernight.Add("CalicoEgg");
                 SpecialOrder.RemoveAllSpecialOrders("DesertFestivalMarlon");
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(CleanupFestival_LetPlayerKeepCalicoEggs_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
     }

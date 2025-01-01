@@ -5,6 +5,7 @@ using StardewModdingAPI;
 using StardewValley;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 
 namespace StardewArchipelago.Locations.Festival
 {
@@ -40,7 +41,7 @@ namespace StardewArchipelago.Locations.Festival
 
                 if (festivalWinners == null || festivalData == null)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 var playerWonFestival = festivalWinners.Contains(Game1.player.UniqueMultiplayerID);
@@ -48,24 +49,24 @@ namespace StardewArchipelago.Locations.Festival
 
                 if (!playerWonFestival || !isEggFestivalDay)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 _locationChecker.AddCheckedLocation(FestivalLocationNames.EGG_HUNT);
                 if (Game1.player.mailReceived.Contains("Egg Festival"))
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 Game1.player.mailReceived.Add("Egg Festival");
                 @event.CurrentCommand += 2;
 
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(AwardFestivalPrize_Strawhat_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
     }

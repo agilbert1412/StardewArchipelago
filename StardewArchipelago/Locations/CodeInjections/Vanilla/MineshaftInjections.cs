@@ -14,6 +14,7 @@ using xTile.Dimensions;
 using Rectangle = xTile.Dimensions.Rectangle;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Logging;
 
@@ -47,12 +48,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 if (justCheckingForActivity || __instance.giftbox.Value || __instance.playerChest.Value || Game1.mine == null || Game1.mine.mineLevel > 120)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 if (__instance.Items.Count <= 0)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 who.currentLocation.playSound("openChest");
@@ -69,12 +70,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
                 _locationChecker.AddCheckedLocation(string.Format(TREASURE_LOCATION, Game1.mine.mineLevel));
 
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(CheckForAction_MineshaftChest_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -84,7 +85,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 if (__instance.mineLevel != 120 || Game1.player.chestConsumedMineLevels.ContainsKey(120))
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 Game1.player.completeQuest("18");
@@ -97,12 +98,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     Tint = Color.Pink,
                 };
 
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(AddLevelChests_Level120_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -140,17 +141,17 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 if (action == null || !who.IsLocalPlayer || action[0] != "MineElevator")
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 CreateElevatorMenuIfUnlocked();
                 __result = true;
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(PerformAction_LoadElevatorMenu_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -162,17 +163,17 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
                 if (tile == null || !who.IsLocalPlayer || tile.TileIndex != 112 || __instance.mineLevel > 120)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 CreateElevatorMenuIfUnlocked();
                 __result = true;
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(CheckAction_LoadElevatorMenu_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 

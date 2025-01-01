@@ -1,5 +1,6 @@
 ﻿using System;
 using HarmonyLib;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
@@ -95,7 +96,7 @@ namespace StardewArchipelago.GameModifications
             {
                 if (!_archipelago.IsConnected)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 ForceGameSeedToArchipelagoProvidedSeed();
@@ -105,12 +106,12 @@ namespace StardewArchipelago.GameModifications
                 Game1.startingCabins = _testerFeatures.Multiplayer.Value;
                 Game1.cabinsSeparate = false;
 
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(LoadForNewGame_ForceSettings_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -156,7 +157,7 @@ namespace StardewArchipelago.GameModifications
             {
                 if (!(__instance is CharacterCustomizationArchipelago apInstance))
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 __result = Game1.player.Name.Length > 0 &&
@@ -166,12 +167,12 @@ namespace StardewArchipelago.GameModifications
                            apInstance.SlotNameTextBox.Text.Length > 0 &&
                            apInstance.IpIsFormattedCorrectly();
 
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(CanLeaveMenu_ConsiderNewFields_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -181,7 +182,7 @@ namespace StardewArchipelago.GameModifications
             {
                 if (!(__instance is CharacterCustomizationArchipelago apInstance) || name != "OK" || !__instance.canLeaveMenu())
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 if (!apInstance.TryParseIpAddress(out var ip, out var port))
@@ -203,7 +204,7 @@ namespace StardewArchipelago.GameModifications
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(OptionButtonClick_OkConnectToAp_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 

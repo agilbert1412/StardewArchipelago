@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework.Input;
 using StardewArchipelago.Archipelago;
@@ -83,12 +84,12 @@ namespace StardewArchipelago.GameModifications.Seasons
             try
             {
                 SetSeason(_state.SeasonsOrder.Last());
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(OnNewSeason_UsePredefinedChoice_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -100,12 +101,12 @@ namespace StardewArchipelago.GameModifications.Seasons
                 GetVanillaValues(out var totalDays, out var year, out var seasonNumber, out var seasonName);
                 var dayOfMonth = (totalDays % 28) + 1;
                 __result = new WorldDate(year, seasonName.ToLower(), dayOfMonth);
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(Date_UseTotalDaysStats_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -115,22 +116,22 @@ namespace StardewArchipelago.GameModifications.Seasons
             {
                 if (Game1.dayOfMonth != 28)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 if (MultiSleep.DaysToSkip > 0)
                 {
                     ChooseNextSeasonBasedOnConfigPreference();
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 PromptForNextSeason();
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(NewDay_SeasonChoice_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -186,19 +187,19 @@ namespace StardewArchipelago.GameModifications.Seasons
             {
                 if (!questionAndAnswer.StartsWith(_nextSeasonDialogKey))
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 var parts = questionAndAnswer.Split("_");
                 var chosenSeason = parts[1];
                 SetNextSeasonAndSleep(chosenSeason);
                 __result = true;
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(AnswerDialogueAction_SeasonChoice_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -254,12 +255,12 @@ namespace StardewArchipelago.GameModifications.Seasons
                     __result = __instance.WeddingDate.TotalDays - Game1.Date.TotalDays + 1;
                 }
 
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(CountdownToWedding_Add1_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -310,12 +311,12 @@ namespace StardewArchipelago.GameModifications.Seasons
                 }
 
                 __result = chosenWeather;
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(GetWeatherModificationsForDate_UseCorrectDates_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 

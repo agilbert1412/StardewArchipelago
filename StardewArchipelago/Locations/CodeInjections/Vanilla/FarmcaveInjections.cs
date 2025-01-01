@@ -4,6 +4,7 @@ using StardewModdingAPI;
 using StardewValley;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -29,7 +30,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 if (questionKey != "cave")
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 _locationChecker.AddCheckedLocation("Demetrius's Breakthrough");
@@ -38,7 +39,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(AnswerDialogue_SendFarmCaveCheck_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
     }

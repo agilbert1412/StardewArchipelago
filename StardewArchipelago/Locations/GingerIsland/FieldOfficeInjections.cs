@@ -4,6 +4,7 @@ using StardewModdingAPI;
 using StardewValley;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 
 namespace StardewArchipelago.Locations.GingerIsland
 {
@@ -29,22 +30,22 @@ namespace StardewArchipelago.Locations.GingerIsland
             {
                 if (!ArgUtility.TryGetRemainder(args, 1, out var recipe, out _))
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 if (!recipe.Equals("Ostrich Incubator", StringComparison.OrdinalIgnoreCase))
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 _locationChecker.AddCheckedLocation("Complete Island Field Office");
                 ++@event.CurrentCommand;
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(AddCraftingRecipe_OstrichIncubator_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
     }

@@ -4,6 +4,7 @@ using StardewModdingAPI;
 using StardewValley;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
 {
@@ -33,12 +34,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
                 var npcName = __instance.Name;
                 if (__instance.IsInvisible || __instance.isSleeping.Value || !who.CanMove || npcName.Equals("Henchman") || l.Name.Equals("WitchSwamp"))
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 if (!npcName.Equals(who.spouse) || !who.IsLocalPlayer)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 if (__instance.Sprite.CurrentAnimation == null)
@@ -48,14 +49,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
 
                 if (!who.friendshipData.ContainsKey(npcName))
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 var friendshipData = who.friendshipData[npcName];
 
                 if (__instance.Sprite.CurrentAnimation != null || friendshipData.Points < 3125 || !_locationChecker.IsLocationMissing(SPOUSE_STARDROP))
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 _locationChecker.AddCheckedLocation(SPOUSE_STARDROP);
@@ -63,12 +64,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
                 __instance.shouldSayMarriageDialogue.Value = false;
                 __instance.currentMarriageDialogue.Clear();
                 who.mailReceived.Add("CF_Spouse");
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(CheckAction_SpouseStardrop_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
     }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Archipelago.MultiClient.Net.Models;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Locations.InGameLocations;
@@ -61,12 +62,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             try
             {
                 __result = IsTravelingMerchantDay(Game1.dayOfMonth);
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(ShouldTravelingMerchantVisitToday_ArchipelagoDays_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -112,13 +113,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 var tileIndex = __instance.getTileIndexAt(tileLocation, "Buildings");
                 if (tileIndex != 399)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 if (Game1.timeOfDay < 1700)
                 {
                     Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\Locations:BeachNightMarket_Closed"));
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 var isTravelingMerchantDay = IsTravelingMerchantDay(Game1.dayOfMonth);
@@ -126,15 +127,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 if (!isTravelingMerchantDay)
                 {
                     Game1.drawObjectDialogue("The traveling merchant isn't here today.");
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(NightMarketCheckAction_IsTravelingMerchantDay_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -146,7 +147,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 var tileIndex = __instance.getTileIndexAt(tileLocation, "Buildings");
                 if (tileIndex != 796 && tileIndex != 797)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 var isTravelingMerchantDay = IsTravelingMerchantDay(Game1.dayOfMonth);
@@ -154,15 +155,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 if (!isTravelingMerchantDay)
                 {
                     Game1.drawObjectDialogue("The traveling merchant isn't here today.");
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(DesertFestivalCheckAction_IsTravelingMerchantDay_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
