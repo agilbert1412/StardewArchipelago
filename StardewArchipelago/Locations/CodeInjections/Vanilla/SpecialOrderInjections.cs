@@ -261,7 +261,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
         }
 
-        private static IEnumerable<KeyValuePair<string, SpecialOrderData>> FilterToSpecialOrdersThatCanBeStartedToday(
+        private static Dictionary<string, SpecialOrderData> FilterToSpecialOrdersThatCanBeStartedToday(
             Dictionary<string, SpecialOrderData> allSpecialOrdersData, string specialOrderType)
         {
             // A lot of this code is duplicated from SpecialOrder.CanStartOrderNow(orderId, order)
@@ -274,7 +274,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 .Where(order => GameStateQuery.CheckConditions(order.Value.Condition))
                 .Where(order => Game1.player.team.specialOrders.All(x => x.questKey.Value != order.Key))
                 .Where(order => !_archipelago.SlotData.ToolProgression.HasFlag(ToolProgression.Progressive) || !order.Key.StartsWith("Demetrius") ||
-                                _archipelago.HasReceivedItem("Progressive Fishing Rod"));
+                                _archipelago.HasReceivedItem("Progressive Fishing Rod"))
+                .ToDictionary(x => x.Key, x => x.Value);
             return specialOrdersThatCanBeStartedToday;
         }
 
@@ -307,7 +308,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         }
 
         private static Dictionary<string, SpecialOrder> CreateSpecialOrderInstancesForType(
-            IEnumerable<KeyValuePair<string, SpecialOrderData>> specialOrdersThatCanBeStartedToday, string orderType, Random random)
+            Dictionary<string, SpecialOrderData> specialOrdersThatCanBeStartedToday, string orderType, Random random)
         {
             var specialOrders = specialOrdersThatCanBeStartedToday
                 .Where(order => order.Value.OrderType == orderType)
@@ -321,8 +322,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             var allSpecialOrders = specialOrders.Select(x => x.Key).ToList();
 
-            var specialOrdersNeverCompletedBefore = allSpecialOrders.Where(key =>
-                _locationChecker.IsLocationMissing(specialOrders[key].GetName())).ToList();
+            var specialOrdersNeverCompletedBefore = allSpecialOrders.Where(key => IsNotCompletedYet(specialOrders, key)).ToList();
 
             var hintedSpecialOrders = specialOrdersNeverCompletedBefore.Where(key =>
                 hints.Any(hint => _archipelago.GetLocationName(hint.LocationId) == specialOrders[key].GetName())).ToList();
@@ -350,6 +350,17 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 var order = allOrdersOrdered[i];
                 Game1.player.team.availableSpecialOrders.Add(specialOrders[order]);
             }
+        }
+
+        private static bool IsNotCompletedYet(Dictionary<string, SpecialOrder> specialOrders, string key)
+        {
+            var orderName = specialOrders[key].GetName();
+            if (_locationChecker.LocationExists(orderName))
+            {
+                return _locationChecker.IsLocationMissing(orderName);
+            }
+
+            return !Game1.player.team.completedSpecialOrders.Contains(key);
         }
 
         public static string GetEnglishQuestName(string questNameKey)
