@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using Archipelago.MultiClient.Net.Models;
 using Microsoft.Xna.Framework;
@@ -23,7 +22,6 @@ using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
 using Microsoft.Xna.Framework.Content;
 using StardewArchipelago.Archipelago;
-using System.Reflection.Metadata;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests

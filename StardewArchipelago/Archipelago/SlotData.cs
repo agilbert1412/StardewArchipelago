@@ -39,6 +39,7 @@ namespace StardewArchipelago.Archipelago
         private const string FRIENDSANITY_HEART_SIZE_KEY = "friendsanity_heart_size";
         private const string BOOKSANITY_KEY = "booksanity";
         private const string WALNUTSANITY_KEY = "walnutsanity";
+        private const string SECRETSANITY_KEY = "secretsanity";
         private const string EXCLUDE_GINGER_ISLAND_KEY = "exclude_ginger_island";
         private const string TRAP_ITEMS_KEY = "trap_items";
         private const string MULTI_SLEEP_ENABLED_KEY = "multiple_day_sleep_enabled";
@@ -94,6 +95,7 @@ namespace StardewArchipelago.Archipelago
         public int FriendsanityHeartSize { get; private set; }
         public Booksanity Booksanity { get; private set; }
         public Walnutsanity Walnutsanity { get; private set; }
+        public Secretsanity Secretsanity { get; private set; }
         public bool ExcludeGingerIsland { get; private set; }
         public TrapItemsDifficulty TrapItemsDifficulty { get; set; }
         public bool EnableMultiSleep { get; private set; }
@@ -146,6 +148,7 @@ namespace StardewArchipelago.Archipelago
             FriendsanityHeartSize = GetSlotSetting(FRIENDSANITY_HEART_SIZE_KEY, 4);
             Booksanity = GetSlotSetting(BOOKSANITY_KEY, Booksanity.None);
             Walnutsanity = GetSlotWalnutsanitySetting();
+            Secretsanity = GetSlotSetting(SECRETSANITY_KEY, Secretsanity.None);
             ExcludeGingerIsland = GetSlotSetting(EXCLUDE_GINGER_ISLAND_KEY, true);
             TrapItemsDifficulty = GetSlotSetting(TRAP_ITEMS_KEY, TrapItemsDifficulty.Medium);
             EnableMultiSleep = GetSlotSetting(MULTI_SLEEP_ENABLED_KEY, true);
@@ -554,6 +557,14 @@ namespace StardewArchipelago.Archipelago
         DigSpots = 0b0100,
         Repeatables = 0b1000,
         All = Puzzles | Bushes | DigSpots | Repeatables,
+    }
+    
+    public enum Secretsanity
+    {
+        None = 0,
+        Simple = 1,
+        SimpleAndFish = 2,
+        All = 3,
     }
 
     public enum TrapItemsDifficulty
