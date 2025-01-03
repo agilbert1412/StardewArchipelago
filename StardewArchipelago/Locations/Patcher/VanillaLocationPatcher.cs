@@ -33,6 +33,7 @@ using Bundle = StardewValley.Menus.Bundle;
 using Object = StardewValley.Object;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Arcade;
+using StardewArchipelago.Locations.Secrets;
 
 namespace StardewArchipelago.Locations.Patcher
 {
@@ -107,6 +108,7 @@ namespace StardewArchipelago.Locations.Patcher
             PatchNightWorldEvents();
             PatchBooks();
             PatchWalnuts();
+            PatchSecrets();
         }
 
         public void CleanEvents()
@@ -1405,6 +1407,29 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony.Patch(
                 original: AccessTools.Method(typeof(VolcanoDungeon), nameof(VolcanoDungeon.monsterDrop)),
                 prefix: new HarmonyMethod(typeof(WalnutRepeatablesInjections), nameof(WalnutRepeatablesInjections.MonsterDrop_RepeatableVolcanoMonsterWalnut_Prefix))
+            );
+        }
+
+        private void PatchSecrets()
+        {
+            if (_archipelago.SlotData.Secretsanity < Secretsanity.Simple)
+            {
+                return;
+            }
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Event.DefaultCommands), nameof(Event.DefaultCommands.SwitchEvent)),
+                postfix: new HarmonyMethod(typeof(PurpleShortsInjections), nameof(PurpleShortsInjections.SwitchEvent_PurpleShortsInSoup_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Event), nameof(Event.interpretGrangeResults)),
+                postfix: new HarmonyMethod(typeof(PurpleShortsInjections), nameof(PurpleShortsInjections.InterpretGrangeResults_Bribe_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Game1), nameof(Game1.drawDialogue)),
+                prefix: new HarmonyMethod(typeof(PurpleShortsInjections), nameof(PurpleShortsInjections.DrawDialogue_ShortsResponses_Prefix))
             );
         }
     }
