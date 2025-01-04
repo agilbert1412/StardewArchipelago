@@ -334,12 +334,12 @@ namespace StardewArchipelago.Stardew
             {
                 var stardewItem = ParseStardewObjectData(id, objectData);
 
-                if (_objectsById.ContainsKey(id))
+                if (id == null || _objectsById.ContainsKey(id) || stardewItem == null)
                 {
                     continue;
                 }
 
-                if (_objectsByName.ContainsKey(stardewItem.Name))
+                if (stardewItem.Name != null && _objectsByName.ContainsKey(stardewItem.Name))
                 {
                     if (_priorityIds.Contains(id))
                     {
