@@ -1431,6 +1431,11 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(typeof(Game1), nameof(Game1.drawDialogue)),
                 prefix: new HarmonyMethod(typeof(PurpleShortsInjections), nameof(PurpleShortsInjections.DrawDialogue_ShortsResponses_Prefix))
             );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(NPC), nameof(NPC.checkAction)),
+                prefix: new HarmonyMethod(typeof(PurpleShortsInjections), nameof(PurpleShortsInjections.CheckAction_ShortsReactions_Prefix))
+            );
         }
     }
 }
