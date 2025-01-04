@@ -97,10 +97,15 @@ namespace StardewArchipelago.Archipelago.Gifting
 
             foreach (var word in itemName.Split(' '))
             {
-                var wordFlag = GiftFlag.AllFlags.FirstOrDefault(x => x.Equals(word, StringComparison.InvariantCultureIgnoreCase));
+                var wordFlag = GetFromAllFlags(word);
                 if (!string.IsNullOrWhiteSpace(wordFlag))
                 {
                     yield return CreateTrait(wordFlag, 0.5D);
+                }
+
+                if (CustomWordFlags.Contains(word))
+                {
+                    yield return CreateTrait(word);
                 }
 
                 if (!ReplaceFlags.ContainsKey(word))
@@ -400,6 +405,7 @@ namespace StardewArchipelago.Archipelago.Gifting
             { "QualityFertilizer", "" },
             { "Noble", "Fancy" },
             { "Minerals", "Mineral" },
+            { "Radioactive", "Radioactive" },
             { "Seeds", GiftFlag.Seed },
             { "Frozen", GiftFlag.Ice },
             { "Winter", GiftFlag.Ice },
@@ -407,6 +413,11 @@ namespace StardewArchipelago.Archipelago.Gifting
             { "Bulb", GiftFlag.Seed },
             { "Starter", GiftFlag.Seed },
             { "Medicine", GiftFlag.Cure },
+        };
+
+        private static readonly List<string> CustomWordFlags = new()
+        {
+            "Radioactive",
         };
 
         private static readonly Dictionary<string, string> _contextTags = new()
