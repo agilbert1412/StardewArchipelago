@@ -73,30 +73,72 @@ namespace StardewArchipelago.Locations.Secrets
         }
 
         // public static void drawDialogue(NPC speaker)
-        public static void DrawDialogue_ShortsResponses_Prefix(NPC speaker)
+        public static bool DrawDialogue_ShortsResponses_Prefix(NPC speaker)
         {
             try
             {
                 if (speaker == null || speaker.Name != "Marnie" || speaker.CurrentDialogue.Count == 0)
                 {
-                    return;
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 var dialogue = speaker.CurrentDialogue.Peek();
                 if (dialogue == null)
                 {
-                    return;
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 SendLocationIfCorrectDialogue(speaker, dialogue, "Fair_Judged_PlayerLost_PurpleShorts", SecretsLocationNames.PURPLE_LETTUCE);
                 SendLocationIfCorrectDialogue(speaker, dialogue, "reject_789", SecretsLocationNames.CONFRONT_MARNIE);
 
-                return;
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(DrawDialogue_ShortsResponses_Prefix)}:\n{ex}");
-                return;
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+        }
+
+        // public virtual bool checkAction(Farmer who, GameLocation l)
+        public static bool CheckAction_ShortsReactions_Prefix(NPC __instance, Farmer who, GameLocation l)
+        {
+            try
+            {
+                if (__instance.IsInvisible || __instance.isSleeping.Value || !who.CanMove)
+                {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
+                string name = __instance.Name;
+                var wearingPurpleShorts = who.pantsItem.Value?.QualifiedItemId == "(P)15";
+                var showingPurpleShorts = wearingPurpleShorts && (name == "Lewis" || name == "Marnie");
+                if (!showingPurpleShorts)
+                {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
+                if (__instance.yJumpVelocity != 0.0 || __instance.Sprite.CurrentAnimation != null)
+                {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
+
+                if (name == "Lewis")
+                {
+                    _locationChecker.AddCheckedLocation(SecretsLocationNames.JUMPSCARE_LEWIS);
+                }
+                if (name == "Marnie")
+                {
+                    _locationChecker.AddCheckedLocation(SecretsLocationNames.MAKE_MARNIE_LAUGH);
+                }
+
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(CheckAction_ShortsReactions_Prefix)}:\n{ex}");
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
