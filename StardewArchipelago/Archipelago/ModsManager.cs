@@ -84,25 +84,29 @@ namespace StardewArchipelago.Archipelago
             return valid;
         }
 
-        public bool IsPatcherStateCorrect(IModHelper modHelper, out string errorMessage)
+        public bool IsExtraRequirementsStateCorrect(IModHelper modHelper, out string errorMessage)
         {
             var loadedModData = modHelper.ModRegistry.GetAll().ToList();
             errorMessage = $"The slot you are connecting to requires a content patcher,\r\n mod, but not all expected mods are installed and active.";
             var valid = true;
             foreach (var modName in _activeMods)
             {
-                if (!ModVersions.CPVersions.ContainsKey(modName))
+                if (!ModVersions.ExtraRequirementsVersions.ContainsKey(modName))
                 {
                     continue;
                 }
-                var requirement = ModVersions.CPVersions[modName];
-                if (IsModActiveAndCorrectVersion(loadedModData, requirement.ContentPatcherMod, requirement.ContentPatcherVersion, out var existingVersion))
-                {
-                    continue;
-                }
+                var requirements = ModVersions.ExtraRequirementsVersions[modName];
 
-                valid = false;
-                errorMessage += $"{Environment.NewLine}\tMod: {requirement.ContentPatcherMod}, expected version: {requirement.ContentPatcherVersion}, current Version: {existingVersion}";
+                foreach (var requirement in requirements)
+                {
+                    if (IsModActiveAndCorrectVersion(loadedModData, requirement.ContentPatcherMod, requirement.ContentPatcherVersion, out var existingVersion))
+                    {
+                        continue;
+                    }
+
+                    valid = false;
+                    errorMessage += $"{Environment.NewLine}\tMod: {requirement.ContentPatcherMod}, expected version: {requirement.ContentPatcherVersion}, current Version: {existingVersion}";
+                }
             }
 
             return valid;

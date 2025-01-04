@@ -48,9 +48,15 @@ namespace StardewArchipelago.Constants.Modded
             }
         }
 
-        public static readonly Dictionary<string, ContentPatcherRequirement> CPVersions = new()
+        public static readonly Dictionary<string, List<ContentPatcherRequirement>> ExtraRequirementsVersions = new()
         {
-            { ModNames.SVE, new ContentPatcherRequirement(ModNames.AP_SVE, "2.1.x") },
+            {
+                ModNames.SVE, new List<ContentPatcherRequirement>()
+                {
+                    new(ModNames.AP_CP_SVE_PATCH, "2.1.x"),
+                    new(ModNames.AP_CP_SVE, "1.14.46"),
+                }
+            },
         };
     }
 }

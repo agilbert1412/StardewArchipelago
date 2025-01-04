@@ -59,7 +59,7 @@ namespace StardewArchipelago.Archipelago
                 return false;
             }
 
-            if (!SlotData.Mods.IsPatcherStateCorrect(_modHelper, out errorMessage))
+            if (!SlotData.Mods.IsExtraRequirementsStateCorrect(_modHelper, out errorMessage))
             {
                 DisconnectPermanently();
                 return false;

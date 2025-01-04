@@ -29,7 +29,8 @@
         public const string LACEY = "Hat Mouse Lacey";
         public const string BOARDING_HOUSE = "Boarding House and Bus Stop Extension";
 
-        public const string AP_SVE = "StardewAP - SVE Patch";
+        public const string AP_CP_SVE = "Stardew Valley Expanded";
+        public const string AP_CP_SVE_PATCH = "StardewAP - SVE Patch";
         public const string AP_JASPER = "StardewAP - Jasper Patch";
     }
 }
