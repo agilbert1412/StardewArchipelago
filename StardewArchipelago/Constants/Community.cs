@@ -61,6 +61,7 @@ namespace StardewArchipelago.Constants
             "MeleneV",
             "mewlif",
             "Mistik",
+            "myserval",
             "N00byKing",
             "Nada",
             // "NinoKito",
