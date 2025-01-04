@@ -18,7 +18,7 @@ namespace StardewArchipelago
         public bool HideEmptyArchipelagoLetters { get; set; } = false;
 
         /// <summary>
-        /// All Archipelago letters will not use a very short and concise format
+        /// All Archipelago letters will now use a very short and concise format
         /// instead of the funny ones full of fluff
         /// </summary>
         public bool DisableLetterTemplates { get; set; } = false;

@@ -135,7 +135,7 @@ namespace StardewArchipelago.Integrations.GenericModConfigMenu
             configMenu.AddBoolOption(
                 mod: ModManifest,
                 name: () => "Disable Letter Templates",
-                tooltip: () => "All Archipelago letters will not use a very short and concise format instead of the funny ones full of fluff",
+                tooltip: () => "All Archipelago letters will now use a very short and concise format instead of the funny ones full of fluff",
                 getValue: () => Config.DisableLetterTemplates,
                 setValue: (value) => Config.DisableLetterTemplates = value
             );
