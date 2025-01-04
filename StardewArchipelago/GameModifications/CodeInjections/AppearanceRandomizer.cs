@@ -14,6 +14,11 @@ using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using StardewArchipelago.Extensions;
 using StardewValley.Characters;
 using StardewValley.GameData.Pets;
+using StardewValley.Buildings;
+using System.Diagnostics;
+using System.Security.Cryptography;
+using System.Xml.Linq;
+using static StardewValley.Minigames.CraneGame;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
 {
@@ -53,8 +58,18 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
             harmony.Patch(
                 original: AccessTools.Method(typeof(AnimatedSprite), nameof(AnimatedSprite.StopAnimation)),
-                prefix: new HarmonyMethod(typeof(AppearanceRandomizer), nameof(AppearanceRandomizer.StopAnimation_AddLogging_Prefix))
+                prefix: new HarmonyMethod(typeof(AppearanceRandomizer), nameof(AppearanceRandomizer.StopAnimation_CatchDivideByZero_Prefix))
             );
+
+            //harmony.Patch(
+            //    original: AccessTools.Method(typeof(AnimatedSprite), nameof(AnimatedSprite.StopAnimation)),
+            //    prefix: new HarmonyMethod(typeof(AppearanceRandomizer), nameof(AppearanceRandomizer.StopAnimation_AddLogging_Prefix))
+            //);
+
+            //harmony.Patch(
+            //    original: AccessTools.Method(typeof(AnimatedSprite), nameof(AnimatedSprite.LoadTexture)),
+            //    postfix: new HarmonyMethod(typeof(AppearanceRandomizer), nameof(AppearanceRandomizer.LoadTexture_AddLogging_Postfix))
+            //);
 
             RefreshAllNPCs();
         }
@@ -72,6 +87,81 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     _logger.LogDebug($"Today, {character} ({size}) will look like {shuffledAppearance}");
                 }
             }
+
+            // .+Today, (.+)\(\{ X: (.+) Y: (.+)\}\) will look like ([a-zA-Z_?]+)
+            // _shuffledAppearances[size_$2_$3]["$1"] = "$4";
+
+            /*var size_16_32 = new Point(16, 32);
+            var size_16_24 = new Point(16, 24);
+            var size_16_16 = new Point(16, 16);
+            var size_32_32 = new Point(32, 32);
+            var size_32_42 = new Point(32, 42);
+            _shuffledAppearances[size_16_32]["Abigail"] = "SafariGuy";
+            _shuffledAppearances[size_16_32]["Caroline"] = "George";
+            _shuffledAppearances[size_16_32]["Clint"] = "Marlon";
+            _shuffledAppearances[size_16_32]["Demetrius"] = "Toddler";
+            _shuffledAppearances[size_16_32]["Willy"] = "Vincent";
+            _shuffledAppearances[size_16_32]["Elliott"] = "Birdie";
+            _shuffledAppearances[size_16_32]["Emily"] = "Pam";
+            _shuffledAppearances[size_16_32]["Evelyn"] = "Governor";
+            _shuffledAppearances[size_16_32]["George"] = "Pierre";
+            _shuffledAppearances[size_16_32]["Gus"] = "Leah";
+            _shuffledAppearances[size_16_32]["Haley"] = "Elliott";
+            _shuffledAppearances[size_16_32]["Harvey"] = "Toddler_girl_dark";
+            _shuffledAppearances[size_16_32]["Jas"] = "Birdie";
+            _shuffledAppearances[size_16_32]["Jodi"] = "Bear";
+            _shuffledAppearances[size_16_32]["Alex"] = "Bouncer";
+            _shuffledAppearances[size_16_32]["Kent"] = "Sam";
+            _shuffledAppearances[size_16_32]["Leah"] = "???";
+            _shuffledAppearances[size_16_32]["Lewis"] = "Marcello";
+            _shuffledAppearances[size_16_32]["Linus"] = "Leo";
+            _shuffledAppearances[size_16_32]["Marlon"] = "Sebastian";
+            _shuffledAppearances[size_16_32]["Marnie"] = "Penny";
+            _shuffledAppearances[size_16_32]["Maru"] = "Emily";
+            _shuffledAppearances[size_16_32]["Pam"] = "Linus";
+            _shuffledAppearances[size_16_32]["Penny"] = "Bear";
+            _shuffledAppearances[size_16_32]["Pierre"] = "Pierre";
+            _shuffledAppearances[size_16_32]["Robin"] = "Pierre";
+            _shuffledAppearances[size_16_32]["Sam"] = "Bear";
+            _shuffledAppearances[size_16_32]["Sebastian"] = "George";
+            _shuffledAppearances[size_16_32]["Shane"] = "Henchman";
+            _shuffledAppearances[size_16_32]["Vincent"] = "Toddler_girl_dark";
+            _shuffledAppearances[size_16_32]["Wizard"] = "Toddler_girl_dark";
+            _shuffledAppearances[size_16_32]["Sandy"] = "???";
+            _shuffledAppearances[size_16_32]["Leo"] = "Gil";
+            _shuffledAppearances[size_16_32]["??? "] = "Jodi";
+            _shuffledAppearances[size_16_32]["Bear"] = "SafariGuy";
+            _shuffledAppearances[size_16_32]["Birdie"] = "Fizz";
+            _shuffledAppearances[size_16_32]["Bouncer"] = "Pam";
+            _shuffledAppearances[size_16_32]["Gil"] = "Elliott";
+            _shuffledAppearances[size_16_32]["Governor"] = "ClothesTherapyCharacters";
+            _shuffledAppearances[size_16_32]["Gunther"] = "Assorted_Fishermen_Winter";
+            _shuffledAppearances[size_16_32]["Henchman"] = "Governor";
+            _shuffledAppearances[size_16_32]["Mister Qi"] = "Sebastian";
+            _shuffledAppearances[size_16_32]["Morris"] = "Jas";
+            _shuffledAppearances[size_16_32]["Old Mariner"] = "Robin";
+            _shuffledAppearances[size_16_32]["Toddler"] = "Jodi";
+            _shuffledAppearances[size_16_32]["Toddler_dark"] = "Evelyn";
+            _shuffledAppearances[size_16_32]["Toddler_girl"] = "Gus";
+            _shuffledAppearances[size_16_32]["Toddler_girl_dark"] = "Leo";
+            _shuffledAppearances[size_16_32]["Marcello"] = "Gunther";
+            _shuffledAppearances[size_16_32]["SafariGuy"] = "Emily";
+            _shuffledAppearances[size_16_32]["LeahExMale"] = "ClothesTherapyCharacters";
+            _shuffledAppearances[size_16_32]["LeahExFemale"] = "Sandy";
+            _shuffledAppearances[size_16_32]["Fizz"] = "Marnie";
+            _shuffledAppearances[size_16_32]["ClothesTherapyCharacters"] = "Mister Qi";
+            _shuffledAppearances[size_16_32]["Assorted_Fishermen"] = "Pam";
+            _shuffledAppearances[size_16_32]["Assorted_Fishermen_Winter"] = "Bear";
+            _shuffledAppearances[size_16_24]["Dwarf"] = "Krobus_Trenchcoat";
+            _shuffledAppearances[size_16_24]["Krobus"] = "Dwarf";
+            _shuffledAppearances[size_16_24]["Krobus_Trenchcoat"] = "Krobus";
+            _shuffledAppearances[size_16_16]["junimo"] = "junimo";
+            _shuffledAppearances[size_32_32]["TrashBear"] = "TrashBear";
+            _shuffledAppearances[size_32_32]["SeaMonsterKrobus"] = "SeaMonsterKrobus";
+            _shuffledAppearances[size_32_32]["raccoon"] = "raccoon";
+            _shuffledAppearances[size_32_32]["IslandParrot"] = "raccoon";
+            _shuffledAppearances[size_32_32]["Gourmand"] = "raccoon";
+            _shuffledAppearances[size_32_42]["robot"] = "robot";*/
         }
 
         private static void ExtractSpritesData()
@@ -607,28 +697,125 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         }
 
         // public virtual void StopAnimation()
+        public static bool StopAnimation_CatchDivideByZero_Prefix(AnimatedSprite __instance)
+        {
+            try
+            {
+                var name = __instance.Texture.Name;
+                var spriteWidth = __instance.SpriteWidth;
+                var spriteHeight = __instance.SpriteHeight;
+                var textureWidth = __instance.Texture?.Width ?? 0;
+                var textureHeight = __instance.Texture?.Height ?? 0;
+
+                if (spriteWidth <= 1 || spriteHeight <= 1 || textureWidth <= 1 || textureHeight <= 1)
+                {
+                    _logger.LogError($"ERROR TEXTURE {name} (Sprite: [{spriteWidth},{spriteHeight}], Texture: [{textureWidth},{textureHeight}])");
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+                }
+
+                try
+                {
+                    if (__instance.ignoreStopAnimation)
+                    {
+                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+                    }
+                    if (__instance.CurrentAnimation != null)
+                    {
+                        __instance.CurrentAnimation = null;
+                        __instance.currentFrame = __instance.oldFrame;
+                        __instance.UpdateSourceRect();
+                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+                    }
+
+                    var textureWidthRatio = textureWidth / spriteWidth;
+                    if (__instance is FarmerSprite && __instance.currentFrame >= 232)
+                    {
+                        __instance.currentFrame -= 8;
+                    }
+                    if (__instance.currentFrame >= 64 && __instance.currentFrame <= 155)
+                    {
+                        __instance.currentFrame = (__instance.currentFrame - __instance.currentFrame % textureWidthRatio) % 32 + 96;
+                    }
+                    else if (__instance.textureUsesFlippedRightForLeft && __instance.currentFrame >= textureWidthRatio * 3)
+                    {
+                        if (__instance.currentFrame == 14 && textureWidthRatio == 4)
+                        {
+                            __instance.currentFrame = 4;
+                        }
+                    }
+                    else
+                    {
+                        __instance.currentFrame = (__instance.currentFrame - __instance.currentFrame % textureWidthRatio) % 32;
+                    }
+
+                    __instance.UpdateSourceRect();
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"ERROR TEXTURE {name} (Sprite: [{spriteWidth},{spriteHeight}], Texture: [{textureWidth},{textureHeight}]). Exception: {ex}");
+                    __instance.UpdateSourceRect();
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(StopAnimation_CatchDivideByZero_Prefix)}:\n{ex}");
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+        }
+
+        // public virtual void StopAnimation()
         public static bool StopAnimation_AddLogging_Prefix(AnimatedSprite __instance)
         {
             try
             {
-                if (LOG_ALL_ERRORS)
-                {
-                    _logger.LogDebug($"Stopping animation on {__instance.Texture.Name}|{__instance.textureName} ({__instance.SpriteWidth},{__instance.SpriteHeight})");
-                }
+                ValidateAnimatedSpriteDimensions(__instance);
+                var name = __instance.Texture.Name;
+                var spriteWidth = __instance.SpriteWidth;
+                var spriteHeight = __instance.SpriteHeight;
+                var textureWidth = __instance.Texture?.Width;
+                var textureHeight = __instance.Texture?.Height;
+                _logger.LogDebug($"Stopping animation on {name} (Sprite: [{spriteWidth},{spriteHeight}], Texture: [{textureWidth},{textureHeight}])");
 
-                if (__instance.SpriteWidth <= 0 || __instance.SpriteHeight <= 0)
-                {
-                    _logger.LogError($"ERROR TEXTURE {__instance.Texture.Name}|{__instance.textureName} ({__instance.SpriteWidth},{__instance.SpriteHeight})");
-                    LOG_ALL_ERRORS = true;
-                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
-                }
-                
                 return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(StopAnimation_AddLogging_Prefix)}:\n{ex}");
                 return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+        }
+
+        // public virtual void LoadTexture(string textureName, bool syncTextureName = true)
+        public static void LoadTexture_AddLogging_Postfix(AnimatedSprite __instance, string textureName, bool syncTextureName)
+        {
+            try
+            {
+                ValidateAnimatedSpriteDimensions(__instance);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(LoadTexture_AddLogging_Postfix)}:\n{ex}");
+            }
+        }
+
+        private static void ValidateAnimatedSpriteDimensions(AnimatedSprite sprite)
+        {
+            var name = sprite.Texture.Name;
+            var spriteWidth = sprite.SpriteWidth;
+            var spriteHeight = sprite.SpriteHeight;
+            var textureWidth = sprite.Texture?.Width ?? 0;
+            var textureHeight = sprite.Texture?.Height ?? 0;
+            if (LOG_ALL_ERRORS)
+            {
+                _logger.LogDebug($"Stopping animation on {name} (Sprite: [{spriteWidth},{spriteHeight}], Texture: [{textureWidth},{textureHeight}])");
+            }
+
+            if (spriteWidth <= 1 || spriteHeight <= 1 || textureWidth <= 1 || textureHeight <= 1)
+            {
+                _logger.LogError($"ERROR TEXTURE {name} (Sprite: [{spriteWidth},{spriteHeight}], Texture: [{textureWidth},{textureHeight}])");
+                LOG_ALL_ERRORS = true;
             }
         }
 
