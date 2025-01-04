@@ -8,6 +8,7 @@ using StardewArchipelago.Archipelago;
 using StardewArchipelago.Locations.Festival;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Tools;
 
 namespace StardewArchipelago.Locations.Secrets
 {
@@ -101,7 +102,7 @@ namespace StardewArchipelago.Locations.Secrets
         }
 
         // public virtual bool checkAction(Farmer who, GameLocation l)
-        public static bool CheckAction_ShortsReactions_Prefix(NPC __instance, Farmer who, GameLocation l)
+        public static bool CheckAction_ShortsReactions_Prefix(NPC __instance, Farmer who, GameLocation l, ref bool __result)
         {
             try
             {
@@ -139,6 +140,25 @@ namespace StardewArchipelago.Locations.Secrets
             {
                 _logger.LogError($"Failed in {nameof(CheckAction_ShortsReactions_Prefix)}:\n{ex}");
                 return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+        }
+
+        // public int getBobberStyle(Farmer who)
+        public static void GetBobberStyle_ShortsBobber_Postfix(FishingRod __instance, Farmer who, ref int __result)
+        {
+            try
+            {
+                if (__result == 39)
+                {
+                    _locationChecker.AddCheckedLocation(SecretsLocationNames.LUCKY_PURPLE_BOBBER);
+                }
+
+                return;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(GetBobberStyle_ShortsBobber_Postfix)}:\n{ex}");
+                return;
             }
         }
 

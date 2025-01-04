@@ -33,6 +33,7 @@ using Bundle = StardewValley.Menus.Bundle;
 using Object = StardewValley.Object;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewArchipelago.Locations.Secrets;
+using StardewValley.Tools;
 
 namespace StardewArchipelago.Locations.Patcher
 {
@@ -1398,6 +1399,11 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony.Patch(
                 original: AccessTools.Method(typeof(NPC), nameof(NPC.checkAction)),
                 prefix: new HarmonyMethod(typeof(PurpleShortsInjections), nameof(PurpleShortsInjections.CheckAction_ShortsReactions_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(FishingRod), nameof(FishingRod.getBobberStyle)),
+                postfix: new HarmonyMethod(typeof(PurpleShortsInjections), nameof(PurpleShortsInjections.GetBobberStyle_ShortsBobber_Postfix))
             );
         }
     }
