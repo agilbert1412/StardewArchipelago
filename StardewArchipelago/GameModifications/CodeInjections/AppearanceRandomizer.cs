@@ -14,11 +14,6 @@ using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using StardewArchipelago.Extensions;
 using StardewValley.Characters;
 using StardewValley.GameData.Pets;
-using StardewValley.Buildings;
-using System.Diagnostics;
-using System.Security.Cryptography;
-using System.Xml.Linq;
-using static StardewValley.Minigames.CraneGame;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
 {

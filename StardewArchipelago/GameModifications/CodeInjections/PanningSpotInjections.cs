@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
@@ -7,7 +6,6 @@ using Microsoft.Xna.Framework;
 using StardewValley;
 using StardewValley.Extensions;
 using StardewValley.Locations;
-using StardewValley.Menus;
 using StardewValley.Tools;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
