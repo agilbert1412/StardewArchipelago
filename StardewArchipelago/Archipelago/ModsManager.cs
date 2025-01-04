@@ -115,6 +115,8 @@ namespace StardewArchipelago.Archipelago
         private bool IsModActiveAndCorrectVersion(List<IModInfo> loadedModData, string desiredModName, string desiredVersion, out string existingVersion)
         {
             var normalizedDesiredModName = GetNormalizedModName(desiredModName);
+            var foundIncorrectVersion = false;
+            existingVersion = "[NOT FOUND]";
             foreach (var modInfo in loadedModData)
             {
                 var modName = GetNormalizedModName(modInfo.Manifest.Name);
@@ -128,10 +130,23 @@ namespace StardewArchipelago.Archipelago
                 {
                     return true;
                 }
-                return _versionValidator.IsVersionCorrect(existingVersion, desiredVersion);
+                var isCorrectVersion = _versionValidator.IsVersionCorrect(existingVersion, desiredVersion);
+                if (isCorrectVersion)
+                {
+                    return true;
+                }
+                else
+                {
+                    foundIncorrectVersion = true;
+                }
+
             }
 
-            existingVersion = "[NOT FOUND]";
+            if (foundIncorrectVersion)
+            {
+                return false;
+            }
+
             if (_testerFeatures.UnstableMods.Value == VerifyMods.NOTHING)
             {
                 return true;
