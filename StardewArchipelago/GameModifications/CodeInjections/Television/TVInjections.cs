@@ -85,12 +85,19 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
 
         private static void AddLivingOffTheLandChannel(string dayOfWeek, List<Response> channelsList)
         {
-            if (!dayOfWeek.Equals("Mon") && !dayOfWeek.Equals("Thu") && !dayOfWeek.Equals("Tue") && !dayOfWeek.Equals("Fri"))
+            if (!ModEntry.Instance.Config.StartWithLivingOffTheLand && !_archipelago.HasReceivedItem(AP_LIVING_OFF_THE_LAND))
             {
                 return;
             }
 
-            if (!ModEntry.Instance.Config.StartWithLivingOffTheLand && !_archipelago.HasReceivedItem(AP_LIVING_OFF_THE_LAND))
+            if (ModEntry.Instance.State.NumberOfLOTLEpisodesWatched <= 0)
+            {
+                // Play the first episode no matter when
+                channelsList.Add(CreateTvChannelLocalizedDialogue("Livin'", "Strings\\StringsFromCSFiles:TV.cs.13111"));
+                return;
+            }
+
+            if (!dayOfWeek.Equals("Mon") && !dayOfWeek.Equals("Thu") && !dayOfWeek.Equals("Tue") && !dayOfWeek.Equals("Fri"))
             {
                 return;
             }

@@ -17,6 +17,7 @@ namespace StardewArchipelago.Serialization
         public int StoredStarTokens { get; set; }
         public List<string> EntrancesTraversed { get; set; }
         public List<bool> CurrentRaccoonBundleStatus { get; set; }
+        public int NumberOfLOTLEpisodesWatched { get; set; }
 
         public ArchipelagoStateDto()
         {
@@ -30,6 +31,7 @@ namespace StardewArchipelago.Serialization
             StoredStarTokens = 0;
             EntrancesTraversed = new List<string>();
             CurrentRaccoonBundleStatus = new List<bool>();
+            NumberOfLOTLEpisodesWatched = 0;
         }
     }
 }

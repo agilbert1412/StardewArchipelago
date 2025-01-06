@@ -6,6 +6,7 @@ using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Modded;
+using StardewArchipelago.Extensions;
 using StardewValley;
 using StardewValley.Objects;
 
@@ -16,11 +17,17 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
         private static ILogger _logger;
         private static StardewArchipelagoClient _archipelago;
         private static Hint[] _myActiveHints;
+        private static List<string> _orderedTips;
 
         public static void Initialize(ILogger logger, StardewArchipelagoClient archipelago)
         {
             _logger = logger;
             _archipelago = archipelago;
+            var random = new Random((int)Game1.uniqueIDForThisGame);
+            var validTips = ArchipelagoTips.Keys.Skip(1).Where(x => ArchipelagoTips[x]()).ToList();
+            var firstTip = ArchipelagoTips.First().Key;
+            _orderedTips = validTips.Shuffle(random);
+            _orderedTips.Insert(0, firstTip);
         }
 
         // protected virtual string getTodaysTip()
@@ -29,23 +36,31 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
             try
             {
                 var dayOfWeek = Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth);
-                if (dayOfWeek.Equals("Mon") || dayOfWeek.Equals("Thu"))
+                if (ModEntry.Instance.State.NumberOfLOTLEpisodesWatched > 0 && (dayOfWeek.Equals("Mon") || dayOfWeek.Equals("Thu")))
                 {
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 _myActiveHints = _archipelago.GetMyActiveHints();
-                var validTips = ArchipelagoTips.Keys.Where(x => ArchipelagoTips[x]()).ToArray();
-                var seed = Game1.uniqueIDForThisGame + Game1.stats.DaysPlayed; //  + (ulong)(Game1.ticks % 100);
-                var random = new Random((int)seed);
-                var tipIndex = random.Next(validTips.Length);
-                var tip = validTips[tipIndex];
 
-                if (_myActiveHints.Any() && tip.Contains("{0}"))
+                var episodeNumber = ModEntry.Instance.State.NumberOfLOTLEpisodesWatched;
+                var episode = _orderedTips[episodeNumber];
+                ModEntry.Instance.State.NumberOfLOTLEpisodesWatched += 1;
+
+                while (episode.Contains("{0}") && !HasActiveHints())
                 {
+                    episodeNumber = ModEntry.Instance.State.NumberOfLOTLEpisodesWatched;
+                    episode = _orderedTips[episodeNumber];
+                    ModEntry.Instance.State.NumberOfLOTLEpisodesWatched += 1;
+                }
+
+                if (HasActiveHints() && episode.Contains("{0}"))
+                {
+                    var seed = Game1.uniqueIDForThisGame + Game1.stats.DaysPlayed; //  + (ulong)(Game1.ticks % 100);
+                    var random = new Random((int)seed);
                     var hintIndex = random.Next(_myActiveHints.Length);
                     var hint = _myActiveHints[hintIndex];
-                    var formattedTip = string.Format(tip,
+                    var formattedTip = string.Format(episode,
                         _archipelago.GetLocationName(hint.LocationId),
                         _archipelago.GetPlayerName(hint.ReceivingPlayer),
                         _archipelago.GetPlayerGame(hint.ReceivingPlayer));
@@ -53,7 +68,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
                     return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
-                __result = tip;
+                __result = episode;
                 return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
@@ -93,7 +108,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
             { "We have had reports of mail letters across the countryside being delivered with nasty surprises in them. Don't let 'em ruffle your feathers! Stay sharp and find a way to turn the tables. Remember, adversity's the best teacher on the rocky road of life!", HasHardTraps },
             { "I've heard a good story the other day. Apparently, there's a white-haired woman hiding in Cindersap forest. She only comes out at night, and it seems she's quite the troublemaker. But I'm sure that's just a myth to scare the kiddos into going to bed!", HasJuna },
             { "Brave adventurers are always talking about myths and legends. Rumor has it that, if you go deep into the woods, and you're lucky enough, you might encounter magical beings. The experience of petting a unicorn is unrivaled! But also, some people just dump their trash there. Try your luck!", HasDeepWoods },
-            { "We got a letter from a folk all the way back in {2}. They recommend completing a... '{0}'?. I don't know what that is, but apparently, it's great! You should really get on that!", HasActiveHints },
+            { "We got a letter from a folk all the way back in {2}. They recommend completing a... '{0}'?. I don't know what that is, but apparently, it's great! You should really get on that!", Always },
             { "...and that folks is how an ol' goblin changed my friend's life around.  Who knew a crayfish dish would be the thing to do it!  I say pay it forward.  Who knows, even goblins might teach ya a thing or two!", HasDistantLands },
             { "Now here's an odd rumor from an ol' miss up in Grampleton.  Mystics capable of turning the weave so thoroughly you can even hear their whispers over the radio!  Might help in a pinch I say!", HasMagic },
         };
