@@ -23,6 +23,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
         {
             _logger = logger;
             _archipelago = archipelago;
+            _myActiveHints = _archipelago.GetMyActiveHints();
             var random = new Random((int)Game1.uniqueIDForThisGame);
             var validTips = ArchipelagoTips.Keys.Skip(1).Where(x => ArchipelagoTips[x]()).ToList();
             var firstTip = ArchipelagoTips.First().Key;
