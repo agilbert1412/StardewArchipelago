@@ -90,7 +90,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
                 return;
             }
 
-            if (!_archipelago.HasReceivedItem(AP_LIVING_OFF_THE_LAND))
+            if (!ModEntry.Instance.Config.StartWithLivingOffTheLand && !_archipelago.HasReceivedItem(AP_LIVING_OFF_THE_LAND))
             {
                 return;
             }
@@ -157,7 +157,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
         {
             var hasWrongEntranceRando = _archipelago.SlotData.EntranceRandomization is EntranceRandomization.Disabled;
             var hasWrongDay = !dayOfWeek.Equals("Mon") && !dayOfWeek.Equals("Fri");
-            var missingChannel = !_archipelago.HasReceivedItem(AP_GATEWAY_GAZETTE);
+            var missingChannel = !ModEntry.Instance.Config.StartWithGatewayGazette && !_archipelago.HasReceivedItem(AP_GATEWAY_GAZETTE);
             if (hasWrongEntranceRando || hasWrongDay || missingChannel)
             {
                 return;

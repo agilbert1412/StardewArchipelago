@@ -290,6 +290,22 @@ namespace StardewArchipelago.Integrations.GenericModConfigMenu
                 setValue: (value) => Config.SpriteRandomizer = (AppearanceRandomization)value,
                 formatValue: (value) => ((AppearanceRandomization)value).ToString()
             );
+
+            configMenu.AddBoolOption(
+                mod: ModManifest,
+                name: () => "Start with Livin' Off the Land",
+                tooltip: () => $"Whether to start with the \"Livin' Off the Land\" TV Channel unlocked. Otherwise, wait for it as an unlock from the multiworld.{Environment.NewLine}The Archipelago episodes are on Tuesdays and Fridays, and runs vanilla episodes on the vanilla days of Mondays and Thursdays",
+                getValue: () => Config.StartWithLivingOffTheLand,
+                setValue: (value) => Config.StartWithLivingOffTheLand = value
+            );
+
+            configMenu.AddBoolOption(
+                mod: ModManifest,
+                name: () => "Start with The Gateway Gazette",
+                tooltip: () => $"Whether to start with the \"Gateway Gazette\" TV Channel unlocked. Otherwise, wait for it as an unlock from the multiworld.{Environment.NewLine}The channel gives information about the current entrance randomizer roll, on Mondays and Fridays",
+                getValue: () => Config.StartWithGatewayGazette,
+                setValue: (value) => Config.StartWithGatewayGazette = value
+            );
         }
     }
 }
