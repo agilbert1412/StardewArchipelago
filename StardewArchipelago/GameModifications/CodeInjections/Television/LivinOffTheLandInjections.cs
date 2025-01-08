@@ -19,6 +19,9 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
         private static Hint[] _myActiveHints;
         private static List<string> _orderedTips;
 
+        private static uint _lastDayCheckedLotL;
+        private static int _currentEpisodeNumber;
+
         public static void Initialize(ILogger logger, StardewArchipelagoClient archipelago)
         {
             _logger = logger;
@@ -29,6 +32,8 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
             var firstTip = ArchipelagoTips.First().Key;
             _orderedTips = validTips.Shuffle(random);
             _orderedTips.Insert(0, firstTip);
+            _lastDayCheckedLotL = 0;
+            _currentEpisodeNumber = 0;
         }
 
         // protected virtual string getTodaysTip()
@@ -44,14 +49,20 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
 
                 _myActiveHints = _archipelago.GetMyActiveHints();
 
-                var episodeNumber = ModEntry.Instance.State.NumberOfLOTLEpisodesWatched;
-                var episode = _orderedTips[episodeNumber];
-                ModEntry.Instance.State.NumberOfLOTLEpisodesWatched += 1;
+
+                if (_lastDayCheckedLotL != Game1.stats.DaysPlayed)
+                {
+                    _lastDayCheckedLotL = Game1.stats.DaysPlayed;
+                    _currentEpisodeNumber = ModEntry.Instance.State.NumberOfLOTLEpisodesWatched;
+                    ModEntry.Instance.State.NumberOfLOTLEpisodesWatched += 1;
+                }
+
+                var episode = _orderedTips[_currentEpisodeNumber % _orderedTips.Count];
 
                 while (episode.Contains("{0}") && !HasActiveHints())
                 {
-                    episodeNumber = ModEntry.Instance.State.NumberOfLOTLEpisodesWatched;
-                    episode = _orderedTips[episodeNumber];
+                    _currentEpisodeNumber = ModEntry.Instance.State.NumberOfLOTLEpisodesWatched;
+                    episode = _orderedTips[_currentEpisodeNumber % _orderedTips.Count];
                     ModEntry.Instance.State.NumberOfLOTLEpisodesWatched += 1;
                 }
 
