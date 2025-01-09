@@ -1413,10 +1413,23 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void PatchSecrets()
         {
+            PatchSimpleSecrets();
+        }
+
+        private void PatchSimpleSecrets()
+        {
+
             if (_archipelago.SlotData.Secretsanity < Secretsanity.Simple)
             {
                 return;
             }
+
+            PatchPurpleShortsSecrets();
+
+        }
+
+        private void PatchPurpleShortsSecrets()
+        {
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Event.DefaultCommands), nameof(Event.DefaultCommands.SwitchEvent)),
