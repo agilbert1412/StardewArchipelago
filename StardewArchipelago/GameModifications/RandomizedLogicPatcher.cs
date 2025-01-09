@@ -60,6 +60,7 @@ namespace StardewArchipelago.GameModifications
             MineshaftLogicInjections.Initialize(logger);
             CommunityCenterLogicInjections.Initialize(logger, locationChecker);
             FarmInjections.Initialize(logger, _archipelago);
+            FarmerInjections.Initialize(logger, _archipelago);
             AchievementInjections.Initialize(logger, _archipelago);
             EntranceInjections.Initialize(logger, _archipelago, entranceManager);
             ForestInjections.Initialize(logger, _archipelago);
@@ -130,6 +131,7 @@ namespace StardewArchipelago.GameModifications
             PatchPanningSpots();
             PatchWalnuts();
             PatchMysteryBoxesAndPrizeTickets();
+            PatchStardropMessage();
 
             _jojaDisabler.DisableJojaRouteShortcuts();
             _startingResources.GivePlayerStartingResources();
@@ -770,6 +772,14 @@ namespace StardewArchipelago.GameModifications
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Utility), nameof(Utility.getRaccoonSeedForCurrentTimeOfYear)),
                 postfix: new HarmonyMethod(typeof(OutOfLogicInjections), nameof(OutOfLogicInjections.GetRaccoonSeedForCurrentTimeOfYear_MysteryBoxesGiveReceivedItems_Postfix))
+            );
+        }
+
+        private void PatchStardropMessage()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Farmer), nameof(Farmer.doneEating)),
+                postfix: new HarmonyMethod(typeof(FarmerInjections), nameof(FarmerInjections.DoneEating_StardropFavoriteThingKaito_Postfix))
             );
         }
 
