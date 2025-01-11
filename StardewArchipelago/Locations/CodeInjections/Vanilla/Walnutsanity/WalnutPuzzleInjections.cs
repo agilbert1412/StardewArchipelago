@@ -660,6 +660,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                     }
                     __instance.fishWalnutEvent.Fire();
                 }
+                else
+                {
+                    _locationChecker.AddWalnutCheckedLocation("Starfish Tide Pool");
+                }
 
                 __result = null;
                 return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
