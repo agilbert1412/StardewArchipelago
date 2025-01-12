@@ -12,6 +12,7 @@ using StardewArchipelago.Locations.CodeInjections.Vanilla.Quests;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity;
 using StardewArchipelago.Locations.Festival;
+using StardewArchipelago.Locations.Secrets;
 using StardewArchipelago.Logging;
 using StardewArchipelago.Serialization;
 using StardewArchipelago.Stardew;
@@ -61,6 +62,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             BookInjections.Initialize(logger, modHelper, archipelago, locationChecker, qosManager);
             InitializeWalnutsanityInjections(logger, modHelper, archipelago, locationChecker);
             EventInjections.Initialize(logger, modHelper, archipelago, locationChecker);
+            InitializeSecretsInjections(logger, modHelper, archipelago, locationChecker);
         }
 
         private static void InitializeArcadeMachines(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker)
@@ -112,6 +114,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             WalnutBushInjections.Initialize(logger, modHelper, archipelago, locationChecker);
             WalnutDigSpotsInjections.Initialize(logger, modHelper, archipelago, locationChecker);
             WalnutRepeatablesInjections.Initialize(logger, modHelper, archipelago, locationChecker);
+        }
+
+        private static void InitializeSecretsInjections(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
+        {
+            PurpleShortsInjections.Initialize(logger, modHelper, archipelago, locationChecker);
+            SimpleSecretsInjections.Initialize(logger, modHelper, archipelago, locationChecker);
+            FishableSecretsInjections.Initialize(logger, modHelper, archipelago, locationChecker);
+            DifficultSecretsInjections.Initialize(logger, modHelper, archipelago, locationChecker);
         }
     }
 }
