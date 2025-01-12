@@ -83,29 +83,5 @@ namespace StardewArchipelago.Locations.Secrets
                 return;
             }
         }
-
-        // public void doneEating()
-        public static void DoneEating_StardropFavoriteThing_Postfix(Farmer __instance)
-        {
-            try
-            {
-                var itemToEat = __instance.itemToEat as Object;
-                if (itemToEat.QualifiedItemId != QualifiedItemIds.STARDROP)
-                {
-                    return;
-                }
-
-                var triggerWords = new string[] { "Kaito", "ConcernedApe", "CA" };
-                if (triggerWords.Any(x => __instance.favoriteThing.Value.Contains(x, StringComparison.InvariantCultureIgnoreCase)) )
-                {
-                    _locationChecker.AddCheckedLocation(SecretsLocationNames.THANK_THE_DEVS);
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Failed in {nameof(DoneEating_StardropFavoriteThing_Postfix)}:\n{ex}");
-                return;
-            }
-        }
     }
 }

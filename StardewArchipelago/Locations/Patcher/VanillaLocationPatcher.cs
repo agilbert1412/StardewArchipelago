@@ -1414,6 +1414,7 @@ namespace StardewArchipelago.Locations.Patcher
         private void PatchSecrets()
         {
             PatchSimpleSecrets();
+            PatchDifficultSecrets();
         }
 
         private void PatchSimpleSecrets()
@@ -1426,6 +1427,15 @@ namespace StardewArchipelago.Locations.Patcher
 
             PatchPurpleShortsSecrets();
 
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(TV), nameof(TV.proceedToNextScene)),
+                postfix: new HarmonyMethod(typeof(SimpleSecretsInjections), nameof(SimpleSecretsInjections.ProceedToNextScene_ForsakenSouls_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Furniture), nameof(Furniture.DayUpdate)),
+                postfix: new HarmonyMethod(typeof(SimpleSecretsInjections), nameof(SimpleSecretsInjections.DayUpdate_SomethingForSanta_Postfix))
+            );
         }
 
         private void PatchPurpleShortsSecrets()
@@ -1454,6 +1464,24 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony.Patch(
                 original: AccessTools.Method(typeof(FishingRod), nameof(FishingRod.getBobberStyle)),
                 postfix: new HarmonyMethod(typeof(PurpleShortsInjections), nameof(PurpleShortsInjections.GetBobberStyle_ShortsBobber_Postfix))
+            );
+        }
+
+        private void PatchDifficultSecrets()
+        {
+            if (_archipelago.SlotData.Secretsanity < Secretsanity.All)
+            {
+                return;
+            }
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Farmer), nameof(Farmer.doneEating)),
+                postfix: new HarmonyMethod(typeof(DifficultSecretsInjections), nameof(DifficultSecretsInjections.DoneEating_StardropFavoriteThing_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(ShippingMenu), nameof(ShippingMenu.receiveLeftClick)),
+                postfix: new HarmonyMethod(typeof(DifficultSecretsInjections), nameof(DifficultSecretsInjections.ReceiveLeftClick_AnnoyMoonMan_Postfix))
             );
         }
     }
