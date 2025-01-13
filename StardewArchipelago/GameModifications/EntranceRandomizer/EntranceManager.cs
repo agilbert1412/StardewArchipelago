@@ -420,6 +420,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Professor Snail Cave", "IslandNorthCave1" },
             { "Qi Walnut Room", "QiNutRoom" },
             { "Mutant Bug Lair", "BugLand" },
+            { "Purple Shorts Maze", "LewisBasement"}
         };
 
         private readonly Dictionary<string, string> _locationsSingleWordAliases = new()

@@ -102,38 +102,31 @@ namespace StardewArchipelago.Items.Mail
         private void IncreaseBackpackLevel()
         {
             var previousMaxItems = Game1.player.MaxItems;
+            var backpackSize = _archipelago.SlotData.BackpackSize;
+            var hasBiggerMod = _archipelago.SlotData.Mods.HasMod(ModNames.BIGGER_BACKPACK);
+            var minSize = 12;
+            var maxSize = hasBiggerMod ? 48 : 32;
+            var newMaxItems = Math.Min(maxSize, Math.Max(minSize, previousMaxItems + backpackSize));
             var backpackName = "";
-            switch (Game1.player.MaxItems)
+            switch (newMaxItems)
             {
                 case < 12:
-                    Game1.player.MaxItems = 12;
                     break;
                 case < 24:
-                    Game1.player.MaxItems = 24;
                     backpackName = Game1.content.LoadString("Strings\\StringsFromCSFiles:GameLocation.cs.8708");
                     break;
                 case < 36:
-                    Game1.player.MaxItems = 36;
                     backpackName = Game1.content.LoadString("Strings\\StringsFromCSFiles:GameLocation.cs.8709");
                     break;
                 case >= 36:
-                    if (_archipelago.SlotData.Mods.HasMod(ModNames.BIGGER_BACKPACK) & (Game1.player.MaxItems >= 36))
+                    if (hasBiggerMod)
                     {
-                        Game1.player.MaxItems = 48;
                         backpackName = "Premium Pack";
                     }
                     break;
             }
 
-            if (previousMaxItems >= Game1.player.MaxItems)
-            {
-                return;
-            }
-
-            while (Game1.player.Items.Count < Game1.player.MaxItems)
-            {
-                Game1.player.Items.Add(null);
-            }
+            Game1.player.increaseBackpackSize(backpackSize);
             Game1.player.holdUpItemThenMessage(new SpecialItem(99, backpackName));
         }
 
