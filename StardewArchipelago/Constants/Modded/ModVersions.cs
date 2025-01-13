@@ -27,7 +27,7 @@ namespace StardewArchipelago.Constants.Modded
             //{ ModNames.SHIKO, "1.1.0" }, // The mod is 1.2.0 but they didn't update the manifest.json
             { ModNames.SKULL_CAVERN_ELEVATOR, $"1.6.{WILDCARD}" },
             { ModNames.SOCIALIZING, $"2.1.{WILDCARD}" },
-            { ModNames.TRACTOR, $"4.20.{WILDCARD}" },
+            { ModNames.TRACTOR, $"4.21.{WILDCARD}" },
             //{ ModNames.WELLWICK, "1.0.0" },
             //{ ModNames.YOBA, "1.0.0" },
             { ModNames.SVE, $"1.14.{WILDCARD}" },
