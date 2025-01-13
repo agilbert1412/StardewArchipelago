@@ -238,6 +238,21 @@ namespace StardewArchipelago.Locations.Patcher
                 prefix: new HarmonyMethod(typeof(BackpackInjections), nameof(BackpackInjections.Draw_SeedShopBackpack_Prefix)),
                 postfix: new HarmonyMethod(typeof(BackpackInjections), nameof(BackpackInjections.Draw_SeedShopBackpack_Postfix))
             );
+
+            /*_harmony.Patch(
+                original: AccessTools.Constructor(typeof(GameMenu), new[] { typeof(bool) }),
+                postfix: new HarmonyMethod(typeof(BackpackInjections), nameof(BackpackInjections.GameMenuConstructor_UseFakeInventoryPages_Postfix))
+            );*/
+
+            /*_harmony.Patch(
+                original: AccessTools.PropertyGetter(typeof(Farmer), nameof(Farmer.MaxItems)),
+                postfix: new HarmonyMethod(typeof(BackpackInjections), nameof(BackpackInjections.MaxItemsGetter_CheckAmount_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.PropertySetter(typeof(Farmer), nameof(Farmer.MaxItems)),
+                postfix: new HarmonyMethod(typeof(BackpackInjections), nameof(BackpackInjections.MaxItemsSetter_CheckAmount_Postfix))
+            );*/
         }
 
         private void ReplaceMineshaftChestsWithChecks()
