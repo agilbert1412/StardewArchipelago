@@ -285,7 +285,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                             Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\UI:NotEnoughMoney3"));
                             break;
                         }
-                        Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\Locations:ScienceHouse_Carpenter_NotEnoughWood1"));
+                        Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\Locations:ScienceHouse_Carpenter_NotEnoughWood", (object)450));
                         break;
                     case 1:
                         var price2 = (int)(50000 * priceMultiplier);
@@ -304,7 +304,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                             Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\UI:NotEnoughMoney3"));
                             break;
                         }
-                        Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\Locations:ScienceHouse_Carpenter_NotEnoughWood2"));
+                        Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\Locations:ScienceHouse_Carpenter_NotEnoughHardwood", (object)100));
                         break;
                     case 2:
                         var price3 = (int)(100000 * priceMultiplier);
