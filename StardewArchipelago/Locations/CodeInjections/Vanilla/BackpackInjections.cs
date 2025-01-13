@@ -10,6 +10,7 @@ using xTile.Dimensions;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.PriceMath;
+using StardewValley.Menus;
 using StardewValley.Minigames;
 using StardewValley.Objects;
 
@@ -347,5 +348,74 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 return;
             }
         }
+
+        // public GameMenu(bool playOpeningSound = true)
+        /*public static void GameMenuConstructor_UseFakeInventoryPages_Postfix(GameMenu __instance, bool playOpeningSound)
+        {
+            try
+            {
+                for (var i = 0; i < __instance.pages.Count; i++)
+                {
+                    var page = __instance.pages[i];
+                    if (page is InventoryPage)
+                    {
+                        __instance.pages[i] = new FakeInventoryPage(__instance.xPositionOnScreen, __instance.yPositionOnScreen, __instance.width, __instance.height);
+                        return;
+                    }
+                }
+                return;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(GameMenuConstructor_UseFakeInventoryPages_Postfix)}:\n{ex}");
+                return;
+            }
+        }*/
+
+        /*
+            [XmlIgnore]
+            public int MaxItems
+            {
+              get => this.maxItems.Value;
+              set => this.maxItems.Value = value;
+            }
+        */
+
+        /*private static int _lastMaxItems = 0;
+        public static void MaxItemsGetter_CheckAmount_Postfix(Farmer __instance, ref int __result)
+        {
+            try
+            {
+
+                if (_lastMaxItems != __result)
+                {
+                    int a = 0;
+                }
+                _lastMaxItems = __result;
+                return;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(MaxItemsGetter_CheckAmount_Postfix)}:\n{ex}");
+                return;
+            }
+        }
+        public static void MaxItemsSetter_CheckAmount_Postfix(Farmer __instance, int value)
+        {
+            try
+            {
+
+                if (_lastMaxItems != value)
+                {
+                    int a = 0;
+                }
+                return;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(MaxItemsSetter_CheckAmount_Postfix)}:\n{ex}");
+                return;
+            }
+        }*/
     }
 }
