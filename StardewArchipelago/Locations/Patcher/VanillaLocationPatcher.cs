@@ -266,12 +266,12 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void PatchFishingRods()
         {
+            _modHelper.Events.Content.AssetRequested += _fishingRodShopStockModifier.OnShopStockRequested;
+
             if (!_archipelago.SlotData.ToolProgression.HasFlag(ToolProgression.Progressive))
             {
                 return;
             }
-
-            _modHelper.Events.Content.AssetRequested += _fishingRodShopStockModifier.OnShopStockRequested;
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Event), nameof(Event.skipEvent)),

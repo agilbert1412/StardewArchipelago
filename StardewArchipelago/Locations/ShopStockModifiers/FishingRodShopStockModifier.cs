@@ -7,6 +7,7 @@ using StardewValley.GameData.Shops;
 using StardewValley.GameData.Tools;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
+using System;
 
 namespace StardewArchipelago.Locations.ShopStockModifiers
 {
@@ -19,11 +20,6 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
 
         public override void OnShopStockRequested(object sender, AssetRequestedEventArgs e)
         {
-            if (!_archipelago.SlotData.ToolProgression.HasFlag(ToolProgression.Progressive))
-            {
-                return;
-            }
-
             if (!AssetIsShops(e))
             {
                 return;
@@ -33,6 +29,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
                 {
                     var shopsData = asset.AsDictionary<string, ShopData>().Data;
                     var willyShopData = shopsData["FishShop"];
+                    MakeFishingRodsCheaper(willyShopData);
                     ReplaceFishingRodsWithToolsChecks(willyShopData);
                 },
                 AssetEditPriority.Late
@@ -41,6 +38,11 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
 
         private void ReplaceFishingRodsWithToolsChecks(ShopData fishShopData)
         {
+            if (!_archipelago.SlotData.ToolProgression.HasFlag(ToolProgression.Progressive))
+            {
+                return;
+            }
+
             var toolsData = DataLoader.Tools(Game1.content);
             for (var i = fishShopData.Items.Count - 1; i >= 0; i--)
             {
@@ -82,6 +84,28 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
             }
 
             ReplaceWithArchipelagoCondition(shopItem, $"Progressive {toolName}", amount);
+        }
+
+        private void MakeFishingRodsCheaper(ShopData willyShopData)
+        {
+            var priceMultiplier = _archipelago.SlotData.ToolPriceMultiplier;
+            if (Math.Abs(priceMultiplier - 1.0) < 0.01)
+            {
+                return;
+            }
+
+            var toolsData = DataLoader.Tools(Game1.content);
+            foreach (var toolShopItem in willyShopData.Items)
+            {
+                var unqualifiedId = QualifiedItemIds.UnqualifyId(toolShopItem.ItemId);
+                if (unqualifiedId == null || !toolsData.ContainsKey(unqualifiedId))
+                {
+                    continue;
+                }
+
+                toolShopItem.Price = (int)Math.Round(toolShopItem.Price * priceMultiplier);
+                toolShopItem.TradeItemAmount = (int)Math.Round(toolShopItem.TradeItemAmount * priceMultiplier);
+            }
         }
     }
 }
