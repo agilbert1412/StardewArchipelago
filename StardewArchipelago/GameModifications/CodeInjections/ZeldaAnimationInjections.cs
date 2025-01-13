@@ -30,11 +30,19 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             {
                 if (Game1.isFestival())
                 {
-                    return true;
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 // We skip this whole method when skipping hold up animations is true
-                return !ModEntry.Instance.Config.SkipHoldUpAnimations || ShouldPrank();
+                if (!ModEntry.Instance.Config.SkipHoldUpAnimations || ShouldPrank())
+                {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
+
+                __instance.CanMove = true;
+                __instance.freezePause = 0;
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
