@@ -14,6 +14,7 @@ namespace StardewArchipelago.Constants
         public static readonly string METAL_DETECTOR_ITEMS = CreateId("MetalDetectorItems");
         public static readonly string TRAVELING_CART_DAILY_CHECK = CreateId("TravelingCartDailyCheck");
         public static readonly string ARCHIPELAGO_EQUIPMENTS = CreateId("ArchipelagoEquipments");
+        public static readonly string TOOL_UPGRADES_CHEAPER = CreateId("ToolUpgradesCheaper");
         public const string ARCHIPELAGO_EQUIPMENTS_SALE = "Sale";
         public const string ARCHIPELAGO_EQUIPMENTS_RECOVERY = "Recovery";
 
