@@ -7,6 +7,7 @@ using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Vanilla;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Menus;
 using StardewValley.Objects;
 using Object = StardewValley.Object;
 
@@ -80,6 +81,32 @@ namespace StardewArchipelago.Locations.Secrets
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(DayUpdate_SomethingForSanta_Postfix)}:\n{ex}");
+                return;
+            }
+        }
+
+        // public override void receiveLeftClick(int x, int y, bool playSound = true)
+        public static void ReceiveLeftClick_LonelyStone_Postfix(MapPage __instance, int x, int y, bool playSound)
+        {
+            try
+            {
+                foreach (var clickableComponent in __instance.points.Values)
+                {
+                    if (!clickableComponent.containsPoint(x, y))
+                    {
+                        continue;
+                    }
+                    var name = clickableComponent.name;
+                    if (name == "Beach/LonelyStone")
+                    {
+                        _locationChecker.AddCheckedLocation(SecretsLocationNames.ACKNOWLEDGE_THE_LONELY_STONE);
+                        return;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(ReceiveLeftClick_LonelyStone_Postfix)}:\n{ex}");
                 return;
             }
         }
