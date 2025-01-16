@@ -1434,7 +1434,6 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void PatchSimpleSecrets()
         {
-
             if (_archipelago.SlotData.Secretsanity < Secretsanity.Simple)
             {
                 return;
@@ -1450,6 +1449,11 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Furniture), nameof(Furniture.DayUpdate)),
                 postfix: new HarmonyMethod(typeof(SimpleSecretsInjections), nameof(SimpleSecretsInjections.DayUpdate_SomethingForSanta_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(MapPage), nameof(MapPage.receiveLeftClick)),
+                postfix: new HarmonyMethod(typeof(SimpleSecretsInjections), nameof(SimpleSecretsInjections.ReceiveLeftClick_LonelyStone_Postfix))
             );
         }
 
