@@ -5,6 +5,7 @@ using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.GameModifications.EntranceRandomizer;
 using StardewValley;
+using StardewArchipelago.Constants.Vanilla;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
 {
@@ -65,6 +66,25 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             {
                 _logger.LogError($"Failed in {nameof(PerformWarpFarmer_EntranceRandomization_Prefix)} going from {Game1.currentLocation.Name} to {locationRequest.Name}:{Environment.NewLine}\t{ex}");
                 return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+        }
+
+        // public virtual bool placementAction(GameLocation location, int x, int y, Farmer who = null)
+        public static void PlacementAction_DontGlowShortsMaze_Postfix(StardewValley.Object __instance, GameLocation location, int x, int y, Farmer who)
+        {
+            try
+            {
+                if (__instance.QualifiedItemId != "(BC)71")
+                {
+                    return;
+                }
+
+                Game1.screenGlowHold = false;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(PlacementAction_DontGlowShortsMaze_Postfix)}\t{ex}");
+                return;
             }
         }
 
