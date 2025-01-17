@@ -329,6 +329,11 @@ namespace StardewArchipelago.GameModifications
                 original: AccessTools.Method(typeof(Game1), "performWarpFarmer"),
                 prefix: new HarmonyMethod(typeof(EntranceInjections), nameof(EntranceInjections.PerformWarpFarmer_EntranceRandomization_Prefix))
             );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Object), nameof(Object.placementAction)),
+                postfix: new HarmonyMethod(typeof(EntranceInjections), nameof(EntranceInjections.PlacementAction_DontGlowShortsMaze_Postfix))
+            );
         }
 
         private void PatchSeasons()
