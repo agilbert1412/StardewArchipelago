@@ -20,7 +20,9 @@ using Bundle = StardewValley.Menus.Bundle;
 using Object = StardewValley.Object;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using StardewArchipelago.Archipelago;
+using Netcode;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 {
@@ -53,14 +55,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             {
                 if (action.Length <= 0 || action[0] != "FixRaccoonStump" || !Game1.MasterPlayer.mailReceived.Contains("raccoonTreeFallen"))
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 if (!_locationChecker.IsLocationMissing(GIANT_STUMP))
                 {
                     Game1.drawObjectDialogue("Eventually someone will move in...");
                     __result = true;
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 if (who.Items.ContainsId("(O)709", 100))
@@ -78,12 +80,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 }
 
                 __result = true;
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(PerformAction_CheckStump_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -94,24 +96,24 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             {
                 if (questionAndAnswer != "ForestStump_Yes")
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 if (_locationChecker.IsLocationChecked(GIANT_STUMP))
                 {
                     __result = true;
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 Game1.globalFadeToBlack(() => FadedForStumpFix(__instance));
                 Game1.player.Items.ReduceId("(O)709", 100);
                 __result = true;
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(AnswerDialogueAction_FixStump_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -141,7 +143,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 if (__instance.mrs_raccoon.Value)
                 {
                     Utility.TryOpenShopMenu(nameof(Raccoon), __instance.Name);
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 var maxNumberOfRaccoons = 9;
@@ -157,7 +159,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
                 if (receivedRaccoons >= maxNumberOfRaccoons && nextRaccoonRequestNumber == -1)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 // private bool wasTalkedTo;
@@ -176,7 +178,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                     }
                     if (!raccoonBundleAvailable)
                     {
-                        return false; // don't run original logic
+                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                     }
                     Game1.afterDialogues = () => ActivateRaccoonBundleMutex(__instance);
                 }
@@ -184,16 +186,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 {
                     if (!raccoonBundleAvailable)
                     {
-                        return false; // don't run original logic
+                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                     }
                     ActivateRaccoonBundleMutex(__instance);
                 }
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(Activate_DisplayDialogueOrBundle_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -290,14 +292,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         }
 
         // public bool IsValidItemForThisIngredientDescription(Item item,BundleIngredientDescription ingredient)
-        public static bool IsValidItemForThisIngredientDescription_TestPatch_Prefix(Bundle __instance, Item item, BundleIngredientDescription ingredient, ref bool __result)
+        /*public static bool IsValidItemForThisIngredientDescription_TestPatch_Prefix(Bundle __instance, Item item, BundleIngredientDescription ingredient, ref bool __result)
         {
             try
             {
                 if (item == null || ingredient.completed || ingredient.quality > item.Quality)
                 {
                     __result = false;
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 if (ingredient.preservesId != null)
@@ -305,27 +307,27 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                     var flavoredIngredientQuery = "FLAVORED_ITEM " + ingredient.id + " " + ingredient.preservesId;
                     var queryContext = new ItemQueryContext(Game1.currentLocation, Game1.player, Game1.random);
                     var resolvedIngredientQueryResult = ItemQueryResolver.TryResolve(flavoredIngredientQuery, queryContext);
-                    var resolvedIngredient = resolvedIngredientQueryResult.FirstOrDefault<ItemQueryResult>()?.Item;
+                    var resolvedIngredient = resolvedIngredientQueryResult.FirstOrDefault()?.Item;
                     if (resolvedIngredient is Object ingredientObject && item is Object itemObject && itemObject.preservedParentSheetIndex?.Value != null)
                     {
                         var qualifiedIdsMatch = item.QualifiedItemId == ingredientObject.QualifiedItemId;
-                        var preservesIdMatch = ingredient.preservesId.Contains(itemObject.preservedParentSheetIndex.Value);
+                        var preservesIdMatch = itemObject.preservedParentSheetIndex.Value.Contains(ingredient.preservesId);
                         __result = qualifiedIdsMatch && preservesIdMatch;
-                        return false; // don't run original logic
+                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                     }
 
                     __result = false;
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(IsValidItemForThisIngredientDescription_TestPatch_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
-        }
+        }*/
 
         // public override void draw(SpriteBatch spriteBatch)
         public static void Draw_TreeStumpFix_Postfix(Forest __instance, SpriteBatch spriteBatch)

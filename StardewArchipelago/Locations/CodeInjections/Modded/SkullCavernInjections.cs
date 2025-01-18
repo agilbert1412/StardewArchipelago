@@ -1,5 +1,6 @@
 ﻿using System;
 using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
@@ -59,12 +60,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 var elevatorMaxLevel = (receivedElevators * ELEVATOR_STEP) + 120;
                 Game1.player.deepestMineLevel = elevatorMaxLevel;
 
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(MyElevatorMenuConstructor_SkullCavernElevator_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 

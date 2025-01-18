@@ -6,6 +6,7 @@ using StardewValley.GameData.Buildings;
 using StardewValley.Menus;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
@@ -32,18 +33,25 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             try
             {
-                const string freePrefix = "Free ";
-                if (id.StartsWith(freePrefix))
-                {
-                    id = id.Substring(freePrefix.Length);
-                }
-                return true; // run original logic
+                id = RemoveFreePrefix(id);
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(BlueprintEntryConstructor_IfFreeMakeTheIdCorrect_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
+        }
+
+        public static string RemoveFreePrefix(string id)
+        {
+            const string freePrefix = "Free ";
+            if (id.StartsWith(freePrefix))
+            {
+                return id.Substring(freePrefix.Length);
+            }
+
+            return id;
         }
 
         // public void createQuestionDialogue(string question, Response[] answerChoices, string dialogKey)
@@ -53,7 +61,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 if (dialogKey != "carpenter" && (dialogKey != "telephone" || answerChoices.All(x => x.responseKey != "Carpenter_BuildingCost")))
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 var receivedHouseUpgrades = _archipelago.GetReceivedItemCount(BUILDING_PROGRESSIVE_HOUSE);
@@ -80,12 +88,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 __instance.lastQuestionKey = dialogKey;
                 Game1.drawObjectQuestionDialogue(question, answerChoices);
 
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(CreateQuestionDialogue_CarpenterDialogOptions_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -97,7 +105,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 var priceMultiplier = _archipelago.SlotData.BuildingPriceMultiplier;
                 if (Math.Abs(priceMultiplier - 1.0) < 0.001)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 switch (Game1.player.HouseUpgradeLevel)
@@ -119,12 +127,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 }
 
                 __instance.createQuestionDialogue(text, __instance.createYesNoResponses(), "upgrade");
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(HouseUpgradeOffer_OfferCheaperUpgrade_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -135,7 +143,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 var receivedHouseUpgrades = _archipelago.GetReceivedItemCount(BUILDING_PROGRESSIVE_HOUSE);
                 if (Game1.player.HouseUpgradeLevel >= receivedHouseUpgrades)
                 {
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 var houseUpgradeReceivedFromAP = _archipelago.GetAllReceivedItems()
@@ -167,12 +175,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                         __instance.createQuestionDialogue(apUpgradeDialogue, __instance.createYesNoResponses(), "upgrade");
                         break;
                 }
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(HouseUpgradeOffer_OfferFreeUpgrade_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -223,8 +231,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     }
                 }
             }
-
-            return "";
         }
 
         // private void houseUpgradeAccept()
@@ -235,18 +241,18 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 var receivedHouseUpgrades = _archipelago.GetReceivedItemCount(BUILDING_PROGRESSIVE_HOUSE);
                 if (Game1.player.HouseUpgradeLevel >= receivedHouseUpgrades)
                 {
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 Game1.player.daysUntilHouseUpgrade.Value = 3;
                 Game1.RequireCharacter("Robin").setNewDialogue("Data\\ExtraDialogue:Robin_HouseUpgrade_Accepted");
                 Game1.drawDialogue(Game1.getCharacterFromName("Robin"));
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(HouseUpgradeAccept_FreeFromAP_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -257,7 +263,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 var priceMultiplier = _archipelago.SlotData.BuildingPriceMultiplier;
                 if (Math.Abs(priceMultiplier - 1.0) < 0.001)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 switch (Game1.player.HouseUpgradeLevel)
@@ -279,7 +285,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                             Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\UI:NotEnoughMoney3"));
                             break;
                         }
-                        Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\Locations:ScienceHouse_Carpenter_NotEnoughWood1"));
+                        Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\Locations:ScienceHouse_Carpenter_NotEnoughWood", (object)450));
                         break;
                     case 1:
                         var price2 = (int)(50000 * priceMultiplier);
@@ -298,7 +304,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                             Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\UI:NotEnoughMoney3"));
                             break;
                         }
-                        Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\Locations:ScienceHouse_Carpenter_NotEnoughWood2"));
+                        Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\Locations:ScienceHouse_Carpenter_NotEnoughHardwood", (object)100));
                         break;
                     case 2:
                         var price3 = (int)(100000 * priceMultiplier);
@@ -313,12 +319,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                         Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\UI:NotEnoughMoney3"));
                         break;
                 }
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(HouseUpgradeAccept_CheaperInAP_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
     }

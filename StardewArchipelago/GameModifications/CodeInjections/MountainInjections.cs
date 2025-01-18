@@ -1,6 +1,7 @@
 ﻿using System;
 using Netcode;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Items.Unlocks.Vanilla;
 using StardewModdingAPI;
@@ -33,7 +34,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             {
                 if (__instance.treehouseBuilt || !_archipelago.HasReceivedItem(VanillaUnlockManager.TREEHOUSE))
                 {
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 var tileSheet = __instance.map.GetTileSheet("untitled tile sheet2");
@@ -44,18 +45,18 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 __instance.treehouseBuilt = true;
                 if (!Game1.IsMasterGame)
                 {
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 __instance.updateDoors();
                 __instance.treehouseDoorDirty = true;
 
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(ApplyTreehouseIfNecessary_ApplyTreeHouseIfReceivedApItem_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 

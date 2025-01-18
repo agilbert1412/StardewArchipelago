@@ -1,8 +1,10 @@
 ﻿using System;
 using HarmonyLib;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.GameModifications.Testing;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
@@ -16,14 +18,16 @@ namespace StardewArchipelago.GameModifications
         private static IModHelper _modHelper;
         private readonly Harmony _harmony;
         private static StardewArchipelagoClient _archipelago;
+        private static TesterFeatures _testerFeatures;
 
-        public AdvancedOptionsManager(ModEntry modEntry, ILogger logger, IModHelper modHelper, Harmony harmony, StardewArchipelagoClient archipelago)
+        public AdvancedOptionsManager(ModEntry modEntry, ILogger logger, IModHelper modHelper, Harmony harmony, StardewArchipelagoClient archipelago, TesterFeatures testerFeatures)
         {
             _modEntry = modEntry;
             _logger = logger;
             _modHelper = modHelper;
             _harmony = harmony;
             _archipelago = archipelago;
+            _testerFeatures = testerFeatures;
         }
 
         public void InjectArchipelagoAdvancedOptions()
@@ -92,20 +96,22 @@ namespace StardewArchipelago.GameModifications
             {
                 if (!_archipelago.IsConnected)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 ForceGameSeedToArchipelagoProvidedSeed();
                 ForceFarmTypeToArchipelagoProvidedFarm();
                 Game1.bundleType = Game1.BundleType.Default;
                 Game1.game1.SetNewGameOption<bool>("YearOneCompletable", false);
+                Game1.startingCabins = _testerFeatures.Multiplayer.Value;
+                Game1.cabinsSeparate = false;
 
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(LoadForNewGame_ForceSettings_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -151,7 +157,7 @@ namespace StardewArchipelago.GameModifications
             {
                 if (!(__instance is CharacterCustomizationArchipelago apInstance))
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 __result = Game1.player.Name.Length > 0 &&
@@ -161,12 +167,12 @@ namespace StardewArchipelago.GameModifications
                            apInstance.SlotNameTextBox.Text.Length > 0 &&
                            apInstance.IpIsFormattedCorrectly();
 
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(CanLeaveMenu_ConsiderNewFields_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -176,7 +182,7 @@ namespace StardewArchipelago.GameModifications
             {
                 if (!(__instance is CharacterCustomizationArchipelago apInstance) || name != "OK" || !__instance.canLeaveMenu())
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 if (!apInstance.TryParseIpAddress(out var ip, out var port))
@@ -189,6 +195,7 @@ namespace StardewArchipelago.GameModifications
                 if (!connected)
                 {
                     var currentMenu = TitleMenu.subMenu;
+                    _logger.LogError($"Connection to Archipelago failed: {errorMessage}");
                     TitleMenu.subMenu = new InformationDialog(errorMessage, (_) => OnClickOkBehavior(currentMenu));
                 }
 
@@ -197,7 +204,7 @@ namespace StardewArchipelago.GameModifications
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(OptionButtonClick_OkConnectToAp_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 

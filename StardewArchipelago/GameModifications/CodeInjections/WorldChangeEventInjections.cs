@@ -1,4 +1,5 @@
 ﻿using System;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewValley;
 using StardewValley.Events;
@@ -46,7 +47,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                         eventToBeAdded = "movieTheater";
                         break;
                     default:
-                        return true; // run original logic
+                        return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 if (Game1.player.activeDialogueEvents.ContainsKey(eventToBeAdded))
@@ -54,12 +55,12 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     Game1.player.activeDialogueEvents.Remove(eventToBeAdded);
                 }
 
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(SetUp_MakeSureEventsAreNotDuplicated_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
     }

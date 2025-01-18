@@ -10,6 +10,7 @@ using StardewValley.Monsters;
 using StardewValley.Objects;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
 {
@@ -64,7 +65,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
             {
                 if (!__instance.Name.Equals("BugLand") || __instance is not BugLand bugLand)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 if (_locationChecker.IsLocationMissing(DARK_TALISMAN) && __instance.CanItemBePlacedHere(new Vector2(31f, 5f)))
@@ -89,12 +90,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
                     }
                 }
 
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(SetUpLocationSpecificFlair_CreateBuglandChest_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -105,12 +106,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
             {
                 if (justCheckingForActivity || __instance.giftbox.Value || __instance.playerChest.Value || Game1.currentLocation is not BugLand)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 if (__instance.Items.Count <= 0)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 who.currentLocation.playSound("openChest");
@@ -133,12 +134,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
 
                 _locationChecker.AddCheckedLocation(DARK_TALISMAN);
 
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(CheckForAction_BuglandChest_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 

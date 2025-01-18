@@ -1,5 +1,6 @@
 ﻿using System;
 using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Constants.Modded;
 using StardewValley;
@@ -64,7 +65,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 if (questionAndAnswer != "Backpack_Purchase")
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 __result = true;
@@ -74,7 +75,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     Game1.player.Money -= 2000;
                     _locationChecker.AddCheckedLocation(LARGE_PACK);
                     UpdateMaxItemsForBackpackDisplay();
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 if (_locationChecker.IsLocationNotChecked(DELUXE_PACK) && Game1.player.Money >= 10000)
@@ -82,7 +83,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     Game1.player.Money -= 10000;
                     _locationChecker.AddCheckedLocation(DELUXE_PACK);
                     UpdateMaxItemsForBackpackDisplay();
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 if (_locationChecker.IsLocationMissing(PREMIUM_PACK) && Game1.player.Money >= 50000)
@@ -90,15 +91,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     Game1.player.Money -= 50000;
                     _locationChecker.AddCheckedLocation(PREMIUM_PACK);
                     UpdateMaxItemsForBackpackDisplay();
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(AnswerDialogueAction_BackPackPurchase_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -109,22 +110,22 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 if (action == null || !who.IsLocalPlayer)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 var actionName = action[0];
                 if (actionName == "BuyBackpack")
                 {
                     BuyBackPackArchipelago(__instance, out __result);
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(PerformAction_BuyBackpack_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -184,12 +185,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 }
 
                 Game1.player.MaxItems = _maxItemsForBackpackDisplay;
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(Draw_SeedShopBackpack_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 

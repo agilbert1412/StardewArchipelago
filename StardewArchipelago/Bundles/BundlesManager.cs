@@ -23,7 +23,7 @@ namespace StardewArchipelago.Bundles
             BundleRooms = new BundleRooms(itemManager, bundlesDictionary);
             _currentBundlesData = BundleRooms.ToStardewStrings();
             _modHelper.Events.Content.AssetRequested += OnBundlesRequested;
-            modHelper.GameContent.InvalidateCache("Data/Bundles");
+            modHelper.GameContent.InvalidateCache(x => x.NameWithoutLocale.IsEquivalentTo("Data/Bundles"));
             ReplaceAllBundles();
         }
 

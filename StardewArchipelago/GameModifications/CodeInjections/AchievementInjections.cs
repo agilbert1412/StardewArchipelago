@@ -1,4 +1,5 @@
 ﻿using System;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Extensions;
@@ -27,7 +28,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     var fector = "Achievement_FectorsChallenge";
                     if (which == jotpkVictory || which == fector)
                     {
-                        return false; // don't run original logic
+                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                     }
                 }
 
@@ -36,16 +37,16 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     var bottom_of_the_mine = "Achievement_TheBottom";
                     if (which == bottom_of_the_mine)
                     {
-                        return false; // don't run original logic
+                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                     }
                 }
 
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(GetSteamAchievement_DisableUndeservedAchievements_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -56,7 +57,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             {
                 if (_archipelago.SlotData.StartingMoney.IsUnlimited())
                 {
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 var totalMoneyEarned = Game1.player.totalMoneyEarned;
@@ -94,12 +95,12 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     Game1.getAchievement((int)MoneyAchievement.Greenhorn);
                 }
 
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(CheckForMoneyAchievements_GrantMoneyAchievementsFairly_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
     }

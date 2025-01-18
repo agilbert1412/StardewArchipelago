@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using Microsoft.Xna.Framework;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
@@ -43,18 +44,18 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     __instance.CheckPetAnimal(rect, who))
                 {
                     __result = true;
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
                 var grandpaShrinePosition = __instance.GetGrandpaShrinePosition();
                 if (tileLocation.X < grandpaShrinePosition.X - 1 || tileLocation.X > grandpaShrinePosition.X + 1 ||
                     tileLocation.Y != grandpaShrinePosition.Y)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 if (__instance.hasSeenGrandpaNote)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 Game1.addMail("hasSeenGrandpaNote", true);
@@ -64,12 +65,12 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 var noteContent = string.Format(noteContentTemplate, _archipelago.SlotData.SlotName, goalGrandpaString);
                 Game1.activeClickableMenu = new LetterViewerMenu(noteContent);
                 __result = true;
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(CheckAction_GrandpaNote_PreFix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -79,7 +80,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             {
                 if (numDebris <= 0)
                 {
-                    return true; // run original logic;
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;;
                 }
 
                 if (Game1.getFarm().isBuildingConstructed("Gold Clock") && _locationsWithGoldenClockEffect.Contains(__instance.Name))
@@ -111,12 +112,12 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 }
 
 
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(SpawnWeedsAndStones_ConsiderUserPreference_PreFix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 

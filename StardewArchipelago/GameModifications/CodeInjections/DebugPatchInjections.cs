@@ -33,10 +33,12 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
         private static string GetShortStackTrace()
         {
+#pragma warning disable CS0162
             if (!DebugStackTraces)
             {
                 return string.Empty;
             }
+#pragma warning restore CS0162
 
 #pragma warning disable CS0162
             var stackTrace = new StackTrace();

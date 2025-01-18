@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewValley;
@@ -36,7 +37,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
                 if (justCheckingForActivity)
                 {
                     __result = true;
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 var channelsList = new List<Response>();
@@ -53,12 +54,12 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
                 Game1.player.Halt();
 
                 __result = true;
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(CheckForAction_TVChannels_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -84,12 +85,19 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
 
         private static void AddLivingOffTheLandChannel(string dayOfWeek, List<Response> channelsList)
         {
-            if (!dayOfWeek.Equals("Mon") && !dayOfWeek.Equals("Thu") && !dayOfWeek.Equals("Tue") && !dayOfWeek.Equals("Fri"))
+            if (!ModEntry.Instance.Config.StartWithLivingOffTheLand && !_archipelago.HasReceivedItem(AP_LIVING_OFF_THE_LAND))
             {
                 return;
             }
 
-            if (!_archipelago.HasReceivedItem(AP_LIVING_OFF_THE_LAND))
+            if (ModEntry.Instance.State.NumberOfLOTLEpisodesWatched <= 0)
+            {
+                // Play the first episode no matter when
+                channelsList.Add(CreateTvChannelLocalizedDialogue("Livin'", "Strings\\StringsFromCSFiles:TV.cs.13111"));
+                return;
+            }
+
+            if (!dayOfWeek.Equals("Mon") && !dayOfWeek.Equals("Thu") && !dayOfWeek.Equals("Tue") && !dayOfWeek.Equals("Fri"))
             {
                 return;
             }
@@ -156,7 +164,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
         {
             var hasWrongEntranceRando = _archipelago.SlotData.EntranceRandomization is EntranceRandomization.Disabled;
             var hasWrongDay = !dayOfWeek.Equals("Mon") && !dayOfWeek.Equals("Fri");
-            var missingChannel = !_archipelago.HasReceivedItem(AP_GATEWAY_GAZETTE);
+            var missingChannel = !ModEntry.Instance.Config.StartWithGatewayGazette && !_archipelago.HasReceivedItem(AP_GATEWAY_GAZETTE);
             if (hasWrongEntranceRando || hasWrongDay || missingChannel)
             {
                 return;

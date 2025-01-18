@@ -9,6 +9,8 @@ namespace StardewArchipelago.Locations
 {
     public class StardewLocationChecker : LocationChecker
     {
+        private const bool PREVENT_SENDING_CHECKS = false;
+
         private readonly LocationNameMatcher _locationNameMatcher;
 
         public StardewLocationChecker(ILogger logger, ArchipelagoClient archipelago, List<string> locationsAlreadyChecked) : base(logger, archipelago, locationsAlreadyChecked)
@@ -21,17 +23,22 @@ namespace StardewArchipelago.Locations
             var locations = new List<string> { locationName };
             if (locationName.StartsWith(Prefix.WALNUTSANITY))
             {
-                locations.Add(locationName[Prefix.WALNUTSANITY.Length..]);
+                // locations.Add(locationName[Prefix.WALNUTSANITY.Length..]);
             }
             else
             {
-                locations.Add($"{Prefix.WALNUTSANITY}{locationName}");
+                // locations.Add($"{Prefix.WALNUTSANITY}{locationName}");
             }
             base.AddCheckedLocations(locations.ToArray());
         }
 
         public override void SendAllLocationChecks()
         {
+            if (PREVENT_SENDING_CHECKS)
+            {
+                return;
+            }
+
             base.SendAllLocationChecks();
             GoalCodeInjection.CheckAllsanityGoalCompletion();
         }

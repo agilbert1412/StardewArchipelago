@@ -1,5 +1,6 @@
 ﻿using System;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewValley;
 
@@ -35,12 +36,12 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     lostAndFoundTool.UpgradeLevel = receivedUpgrades;
                 }
 
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(CheckReturnedDonations_UpgradeToolsProperly_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
     }

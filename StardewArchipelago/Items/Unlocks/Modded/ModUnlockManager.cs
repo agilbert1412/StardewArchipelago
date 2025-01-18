@@ -4,6 +4,7 @@ using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.Items.Mail;
+using StardewModdingAPI;
 
 namespace StardewArchipelago.Items.Unlocks.Modded
 {
@@ -11,13 +12,13 @@ namespace StardewArchipelago.Items.Unlocks.Modded
     {
         private readonly List<IUnlockManager> _childUnlockManagers;
 
-        public ModUnlockManager(StardewArchipelagoClient archipelago)
+        public ModUnlockManager(IModHelper modHelper, StardewArchipelagoClient archipelago)
         {
             _childUnlockManagers = new List<IUnlockManager>();
 
             if (archipelago.SlotData.Mods.HasModdedSkill())
             {
-                _childUnlockManagers.Add(new ModSkillUnlockManager());
+                _childUnlockManagers.Add(new ModSkillUnlockManager(modHelper));
             }
             if (archipelago.SlotData.Mods.HasMod(ModNames.MAGIC))
             {

@@ -22,12 +22,12 @@ namespace StardewArchipelago.Items.Traps
 
         private readonly string[] _mediumMonsterTypes =
         {
-            "Lava Bat", "Shadow Brute", "Rock Golem", "Sludge", "Purple Slime",
+            "Lava Bat", "Shadow Brute", "Sludge", "Purple Slime",
         };
 
         private readonly string[] _hardMonsterTypes =
         {
-            "Iridium Bat", "Serpent", "TigerSlime",
+            "Iridium Bat", "Serpent", "Tiger Slime",
         };
 
         public void SpawnOneMonster(GameLocation map, TrapItemsDifficulty trapDifficulty)
@@ -82,7 +82,7 @@ namespace StardewArchipelago.Items.Traps
                     slime.makeTigerSlime();
                     return slime;
                 default:
-                    throw new Exception("Could not choose a monster");
+                    throw new Exception($"Failed at spawning a monster of type {chosenMonsterType}");
             }
         }
     }

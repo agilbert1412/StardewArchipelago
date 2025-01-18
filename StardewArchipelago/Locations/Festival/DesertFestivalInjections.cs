@@ -11,7 +11,10 @@ using StardewValley.Objects;
 using StardewValley.SpecialOrders;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
+using Microsoft.Xna.Framework.Content;
 using StardewArchipelago.Archipelago;
+using System.IO;
 
 namespace StardewArchipelago.Locations.Festival
 {
@@ -21,7 +24,7 @@ namespace StardewArchipelago.Locations.Festival
         private static IModHelper _modHelper;
         private static StardewArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
-        private static LocalizedContentManager _englishContentManager;
+        private static ContentManager _englishContentManager;
 
         public static void Initialize(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
         {
@@ -29,7 +32,7 @@ namespace StardewArchipelago.Locations.Festival
             _modHelper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
-            _englishContentManager = new LocalizedContentManager(Game1.game1.Content.ServiceProvider, Game1.game1.Content.RootDirectory, new CultureInfo("en-US"));
+            _englishContentManager = new ContentManager(Game1.game1.Content.ServiceProvider, Game1.game1.Content.RootDirectory);
         }
 
         // public virtual void CollectRacePrizes()
@@ -53,12 +56,12 @@ namespace StardewArchipelago.Locations.Festival
                 }
                 __instance.rewardsToCollect[Game1.player.UniqueMultiplayerID] = 0;
                 Game1.activeClickableMenu = new ItemGrabMenu(rewards, false, true, null, null, "Rewards", canBeExitedWithKey: true, playRightClickSound: false, allowRightClick: false, context: __instance);
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(CollectRacePrizes_RaceWinner_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -84,20 +87,20 @@ namespace StardewArchipelago.Locations.Festival
             {
                 if (HandleCactusMan(__instance, question_and_answer, ref __result))
                 {
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 if (HandleGilRewards(question_and_answer, ref __result))
                 {
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 if (HandleScholar(__instance, question_and_answer, ref __result))
                 {
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
@@ -333,9 +336,13 @@ namespace StardewArchipelago.Locations.Festival
             var cookSauceField = _modHelper.Reflection.GetField<int>(desertFestival, "_cookSauce");
             var cookIngredient = cookIngredientField.GetValue();
             var cookSauce = cookSauceField.GetValue();
-
+            
             var foodPath = $"Strings\\1_6_Strings:Cook_DishNames_{cookIngredient}_{cookSauce}";
-            var foodName = _englishContentManager.LoadString(foodPath);
+            ParseStringPath(foodPath, out var assetName, out var key);
+            var asset = _englishContentManager.Load<Dictionary<string, string>>(assetName);
+            var loadedString = GetString(asset, key);
+            var foodName = PreprocessString(loadedString);
+            
             _locationChecker.AddCheckedLocation(foodName);
         }
 
@@ -361,13 +368,44 @@ namespace StardewArchipelago.Locations.Festival
             {
                 // Game1.player.team.itemsToRemoveOvernight.Add("CalicoEgg");
                 SpecialOrder.RemoveAllSpecialOrders("DesertFestivalMarlon");
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(CleanupFestival_LetPlayerKeepCalicoEggs_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
+        }
+
+        private static void ParseStringPath(string path, out string assetName, out string key)
+        {
+            var length = path.IndexOf(':');
+            assetName = length != -1 ? path.Substring(0, length) : throw new ContentLoadException("Unable to parse string path: " + path);
+            key = path.Substring(length + 1, path.Length - length - 1);
+        }
+
+        private static string GetString(Dictionary<string, string> strings, string key)
+        {
+            if (strings == null)
+            {
+                return null;
+            }
+
+            return strings.TryGetValue(key + ".desktop", out var str) || strings.TryGetValue(key, out str) ? str : null;
+        }
+
+        public static string PreprocessString(string text)
+        {
+            if (text == null)
+            {
+                return null;
+            }
+
+            var player = Game1.player;
+            var num = player != null ? (int)player.Gender : 0;
+            text = Dialogue.applyGenderSwitchBlocks((Gender)num, text);
+            text = Dialogue.applyGenderSwitch((Gender)num, text, true);
+            return text;
         }
     }
 }

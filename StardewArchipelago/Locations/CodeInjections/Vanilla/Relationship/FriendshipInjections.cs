@@ -16,6 +16,7 @@ using StardewValley.Objects;
 using Object = StardewValley.Object;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Logging;
 
@@ -115,19 +116,19 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
                 var friend = _friends.GetFriend(__instance);
                 if (friend == null)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 var friendshipPoints = GetEffectiveFriendshipPoints(friend);
                 SetBackendFriendshipPoints(__instance, friendshipPoints);
 
                 __result = friendshipPoints;
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(GetPoints_ArchipelagoHearts_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -284,7 +285,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
             {
                 if (_archipelago.SlotData.Friendsanity is Friendsanity.None or Friendsanity.Bachelors)
                 {
-                    return true; // run original logic;
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;;
                 }
                 if (__instance.currentLocation is FarmHouse)
                 {
@@ -318,12 +319,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
                 }
 
                 __instance.friendshipTowardFarmer.Set(Math.Min(1000, receivedHearts * POINTS_PER_PET_HEART));
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(DayUpdate_ArchipelagoPoints_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -334,7 +335,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
                 var isValidTarget = n != null && (n is Child || n.IsVillager);
                 if (!isValidTarget)
                 {
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 //  Checks if actual name is a value in the dictionary and updates if necessary.
@@ -342,20 +343,20 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
                 var friend = _friends.GetFriend(name);
                 if (friend == null)
                 {
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 var canCommunicateWithNpc = !friend.RequiresDwarfLanguage || __instance.canUnderstandDwarves;
                 if (amount > 0 && !canCommunicateWithNpc)
                 {
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 if (__instance.friendshipData.ContainsKey(friend.StardewName))
                 {
                     if (n.isDivorcedFrom(__instance) && amount > 0)
                     {
-                        return false; // don't run original logic
+                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                     }
 
                     var pointDifference = amount;
@@ -391,13 +392,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
                 SetBackendFriendshipPoints(__instance.friendshipData[friend.StardewName], effectiveFriendshipPoints);
                 Game1.stats.checkForFriendshipAchievements();
 
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(ChangeFriendship_ArchipelagoPoints_Prefix)}:\n{ex}");
                 _logger.LogError($"NPC: {n?.Name ?? "null"}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -415,12 +416,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
                 var date = new WorldDate(Game1.Date);
                 ++date.TotalDays;
                 __instance.updateFriendshipGifts(date);
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(ResetFriendshipsForNewDay_AutopetHumans_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 

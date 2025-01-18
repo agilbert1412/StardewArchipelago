@@ -7,6 +7,7 @@ using StardewValley.Constants;
 using StardewValley.Menus;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 
 namespace StardewArchipelago.Locations.Festival
 {
@@ -32,7 +33,7 @@ namespace StardewArchipelago.Locations.Festival
             {
                 if (!questionAndAnswer.Equals("SquidFestBooth_Rewards", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 __result = true;
@@ -142,12 +143,12 @@ namespace StardewArchipelago.Locations.Festival
                 }
 
                 Game1.drawObjectDialogue(Game1.content.LoadString(alreadyGotSomeRewards ? "Strings\\1_6_Strings:SquidFest_AlreadyGotAvailableRewards" : "Strings\\1_6_Strings:SquidFestBooth_NoRewards"));
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(AnswerDialogueAction_SquidFestRewards_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -157,12 +158,12 @@ namespace StardewArchipelago.Locations.Festival
             try
             {
                 year = (int)(Game1.stats.DaysPlayed / 28);
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(SquidFestScore_UseMonthInsteadOfYear_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
     }

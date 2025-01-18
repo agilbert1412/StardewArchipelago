@@ -8,6 +8,7 @@ using StardewValley;
 using EventRecipes = StardewArchipelago.Constants.EventRecipes;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
@@ -74,21 +75,21 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 if (!EventRecipes.CraftingRecipeEvents.ContainsKey(__instance.id) && !EventRecipes.CookingRecipeEvents.ContainsKey(__instance.id))
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 if (OnCheckRecipeLocation(__instance.id))
                 {
                     BaseSkipEvent(__instance);
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(SkipEvent_ReplaceRecipe_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -146,18 +147,18 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                         if (CheckCraftsanityLocation(__instance.id))
                         {
                             __instance.CurrentCommand++;
-                            return false; // don't run original logic
+                            return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                         }
-                        return true; // run original logic
+                        return MethodPrefix.RUN_ORIGINAL_METHOD;
                     }
                     case "addCookingRecipe":
                     {
                         if (CheckChefsanityLocation(__instance.id))
                         {
                             __instance.CurrentCommand++;
-                            return false; // don't run original logic
+                            return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                         }
-                        return true; // run original logic
+                        return MethodPrefix.RUN_ORIGINAL_METHOD;
                     }
                 }
                 return true;
@@ -165,7 +166,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(TryEventCommand_ReplaceRecipeWithCheck_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 

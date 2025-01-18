@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Archipelago.MultiClient.Net.Models;
 using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using Microsoft.Xna.Framework;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
@@ -113,7 +114,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 var currentChest = abandonedMines[playerLocation];
                 if (__instance.Items.Count <= 0 || _locationChecker.IsLocationChecked(currentChest))
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
                 who.currentLocation.playSound("openChest");
                 if (__instance.synchronized.Value)

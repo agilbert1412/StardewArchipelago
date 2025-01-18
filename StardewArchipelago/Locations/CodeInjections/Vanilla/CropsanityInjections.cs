@@ -9,6 +9,7 @@ using StardewValley.Characters;
 using StardewValley.TerrainFeatures;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -83,7 +84,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 if (!__instance.fruit.Any())
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 var fruit = __instance.fruit.First();
@@ -98,12 +99,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     _logger.LogError($"Unrecognized Cropsanity Tree Fruit Location: {fruit.Name} [{fruit.ItemId}]");
                 }
 
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(Shake_CheckCropsanityFruitTreeLocation_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
     }

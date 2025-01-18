@@ -96,7 +96,10 @@ namespace StardewArchipelago.GameModifications
                 RemoveCondition(item, "YEAR 2");
                 RemoveCondition(item, "DAYS_PLAYED 15");
 
-                item.AvoidRepeat = true;
+                if (!item.IsRecipe)
+                {
+                    item.AvoidRepeat = true;
+                }
             }
         }
 
@@ -208,7 +211,12 @@ namespace StardewArchipelago.GameModifications
 
                 var itemData = objectsData[QualifiedItemIds.UnqualifyId(item.ItemId)];
                 item.AvailableStock = -1;
-                item.AvoidRepeat = true;
+
+                if (!item.IsRecipe)
+                {
+                    item.AvoidRepeat = true;
+                }
+
                 if (item.MinStack == -1)
                 {
                     item.MinStack = itemData.Name.Contains("cola", StringComparison.InvariantCultureIgnoreCase) ? 6 : 50;

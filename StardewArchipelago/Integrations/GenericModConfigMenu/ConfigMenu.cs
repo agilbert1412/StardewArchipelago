@@ -135,7 +135,7 @@ namespace StardewArchipelago.Integrations.GenericModConfigMenu
             configMenu.AddBoolOption(
                 mod: ModManifest,
                 name: () => "Disable Letter Templates",
-                tooltip: () => "All Archipelago letters will not use a very short and concise format instead of the funny ones full of fluff",
+                tooltip: () => "All Archipelago letters will now use a very short and concise format instead of the funny ones full of fluff",
                 getValue: () => Config.DisableLetterTemplates,
                 setValue: (value) => Config.DisableLetterTemplates = value
             );
@@ -259,6 +259,52 @@ namespace StardewArchipelago.Integrations.GenericModConfigMenu
                 getValue: () => (int)Config.MultiSleepSeasonPreference,
                 setValue: (value) => Config.MultiSleepSeasonPreference = (SeasonPreference)value,
                 formatValue: (value) => ((SeasonPreference)value).ToString()
+            );
+
+            var grandpaShrinePreferenceValues = Enum.GetValues(typeof(GrandpaShrinePreference)).Cast<int>().ToArray();
+            var grandpaShrinePreferenceMin = grandpaShrinePreferenceValues.Min();
+            var grandpaShrinePreferenceMax = grandpaShrinePreferenceValues.Max();
+            configMenu.AddNumberOption(
+                mod: ModManifest,
+                name: () => "Grandpa Shrine Icons",
+                tooltip: () => "When to display Grandpa Evaluation Icons over the shrine",
+                min: grandpaShrinePreferenceMin,
+                max: grandpaShrinePreferenceMax,
+                interval: 1,
+                getValue: () => (int)Config.ShowGrandpaShrineIndicators,
+                setValue: (value) => Config.ShowGrandpaShrineIndicators = (GrandpaShrinePreference)value,
+                formatValue: (value) => ((GrandpaShrinePreference)value).ToString()
+            );
+
+            var spriteRandomizerValues = Enum.GetValues(typeof(AppearanceRandomization)).Cast<int>().ToArray();
+            var spriteRandomizerMin = spriteRandomizerValues.Min();
+            var spriteRandomizerMax = spriteRandomizerValues.Max();
+            configMenu.AddNumberOption(
+                mod: ModManifest,
+                name: () => "Sprite Randomizer",
+                tooltip: () => "Whether to randomize npc sprites",
+                min: spriteRandomizerMin,
+                max: spriteRandomizerMax,
+                interval: 1,
+                getValue: () => (int)Config.SpriteRandomizer,
+                setValue: (value) => Config.SpriteRandomizer = (AppearanceRandomization)value,
+                formatValue: (value) => ((AppearanceRandomization)value).ToString()
+            );
+
+            configMenu.AddBoolOption(
+                mod: ModManifest,
+                name: () => "Start with Livin' Off the Land",
+                tooltip: () => $"Whether to start with the \"Livin' Off the Land\" TV Channel unlocked. Otherwise, wait for it as an unlock from the multiworld.{Environment.NewLine}The Archipelago episodes are on Tuesdays and Fridays, and runs vanilla episodes on the vanilla days of Mondays and Thursdays",
+                getValue: () => Config.StartWithLivingOffTheLand,
+                setValue: (value) => Config.StartWithLivingOffTheLand = value
+            );
+
+            configMenu.AddBoolOption(
+                mod: ModManifest,
+                name: () => "Start with The Gateway Gazette",
+                tooltip: () => $"Whether to start with the \"Gateway Gazette\" TV Channel unlocked. Otherwise, wait for it as an unlock from the multiworld.{Environment.NewLine}The channel gives information about the current entrance randomizer roll, on Mondays and Fridays",
+                getValue: () => Config.StartWithGatewayGazette,
+                setValue: (value) => Config.StartWithGatewayGazette = value
             );
         }
     }

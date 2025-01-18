@@ -216,6 +216,11 @@ namespace StardewArchipelago.Items.Unlocks.Vanilla
         {
             foreach (var recipe in recipes)
             {
+                if (farmer.craftingRecipes.ContainsKey(recipe))
+                {
+                    continue;
+                }
+
                 farmer.craftingRecipes.Add(recipe, 0);
             }
         }

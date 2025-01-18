@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Stardew.Ids.Vanilla;
@@ -8,6 +10,7 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 using xTile.Tiles;
+using StardewValley.Extensions;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
 {
@@ -36,8 +39,14 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             {
                 if (__instance.Name != ABANDONED_JOJA_MART && __instance.Name != MOVIE_THEATER)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
+
+                if (force)
+                {
+                    // __instance._appliedMapOverrides.Clear();
+                }
+                __instance.interiorDoors.MakeMapModifications();
 
                 var abandonedJojaMart = Game1.getLocationFromName(ABANDONED_JOJA_MART);
                 var junimoNotePoint = GetMissingBundleTile(__instance);
@@ -45,28 +54,29 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 if (Game1.MasterPlayer.hasOrWillReceiveMail("apccMovieTheater"))
                 {
                     __instance.removeTile(junimoNotePoint.X, junimoNotePoint.Y, "Buildings");
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
-                if (__instance.map.TileSheets.Count < 3)
+                if (__instance.map.TileSheets.All(x => x.Id != "indoor"))
                 {
+                    // The MovieTheater doesn't have an "indoor" layer, but it needs one to pull the tilesheet from in the CC method below. So we just duplicate the one from the abandoned joja mart.
                     var abandonedJojaIndoorTileSheet = abandonedJojaMart.map.GetTileSheet("indoor");
-
-                    // aaa is to make it get sorted to index 0, because the dumbass CC assumes the first tilesheet is the correct one
-                    var indoorTileSheet = new TileSheet("aaa" + abandonedJojaIndoorTileSheet.Id, __instance.map, abandonedJojaIndoorTileSheet.ImageSource, abandonedJojaIndoorTileSheet.SheetSize, abandonedJojaIndoorTileSheet.TileSize);
+                    var indoorTileSheet = new TileSheet(abandonedJojaIndoorTileSheet.Id, __instance.map, abandonedJojaIndoorTileSheet.ImageSource, abandonedJojaIndoorTileSheet.SheetSize, abandonedJojaIndoorTileSheet.TileSize);
                     __instance.map.AddTileSheet(indoorTileSheet);
                 }
 
                 var junimoNoteTileFrames = CommunityCenter.getJunimoNoteTileFrames(0, __instance.map);
                 var layerId = "Buildings";
-                __instance.map.GetLayer(layerId).Tiles[junimoNotePoint.X, junimoNotePoint.Y] = new AnimatedTile(__instance.map.GetLayer(layerId), junimoNoteTileFrames, 70L);
+                // __instance.map.GetLayer(layerId).Tiles[junimoNotePoint.X, junimoNotePoint.Y] = new AnimatedTile(__instance.map.GetLayer(layerId), junimoNoteTileFrames, 70L);
+                var layer = __instance.map.RequireLayer(layerId);
+                layer.Tiles[junimoNotePoint.X, junimoNotePoint.Y] = new AnimatedTile(layer, junimoNoteTileFrames, 70L);
 
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(MakeMapModifications_PlaceMissingBundleNote_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -77,7 +87,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             {
                 if (__instance.Name != ABANDONED_JOJA_MART && __instance.Name != MOVIE_THEATER)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 switch (tileIndex)
@@ -97,15 +107,15 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                         // Game1.activeClickableMenu = (IClickableMenu) new JunimoNoteMenu(6, (Game1.getLocationFromName("CommunityCenter") as CommunityCenter).bundlesDict())
                         ((AbandonedJojaMart)(Game1.getLocationFromName("AbandonedJojaMart"))).checkBundle();
                         __result = true;
-                        return false; // don't run original logic
+                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(CheckTileIndexAction_InteractWithMissingBundleNote_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -119,18 +129,16 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 DelayedAction.removeTileAfterDelay(junimoNotePoint.X, junimoNotePoint.Y, 100, Game1.currentLocation, "Buildings");
 
                 Game1.addMailForTomorrow("apccMovieTheater", true, true);
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(DoRestoreAreaCutscene_InteractWithMissingBundleNote_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
-        private static bool hasSeenCCCeremonyCutscene;
-        private static bool hasPamHouseUpgrade;
-        private static bool hasShortcuts;
+        private static bool _hasSeenCcCeremonyCutscene;
 
         // public override void MakeMapModifications(bool force = false)
         public static bool MakeMapModifications_JojamartAndTheater_Prefix(Town __instance, bool force)
@@ -141,7 +149,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 {
                     var rectangle = new Rectangle(84, 41, 27, 15);
                     __instance.ApplyMapOverride("Town-Theater", rectangle, rectangle);
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 if (_archipelago.GetReceivedItemCount(APItem.MOVIE_THEATER) >= 1)
@@ -160,19 +168,19 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 }
                 else
                 {
-                    hasSeenCCCeremonyCutscene = Utility.HasAnyPlayerSeenEvent(EventIds.COMMUNITY_CENTER_COMPLETE);
-                    if (hasSeenCCCeremonyCutscene)
+                    _hasSeenCcCeremonyCutscene = Utility.HasAnyPlayerSeenEvent(EventIds.COMMUNITY_CENTER_COMPLETE);
+                    if (_hasSeenCcCeremonyCutscene)
                     {
                         Game1.player.eventsSeen.Remove(EventIds.COMMUNITY_CENTER_COMPLETE);
                     }
                 }
 
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(MakeMapModifications_JojamartAndTheater_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -181,7 +189,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         {
             try
             {
-                if (hasSeenCCCeremonyCutscene && !Game1.player­.eventsSeen.Contains(EventIds.COMMUNITY_CENTER_COMPLETE))
+                if (_hasSeenCcCeremonyCutscene && !Game1.player­.eventsSeen.Contains(EventIds.COMMUNITY_CENTER_COMPLETE))
                 {
                     Game1.player.eventsSeen.Add(EventIds.COMMUNITY_CENTER_COMPLETE);
                 }
@@ -213,21 +221,21 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             {
                 if (locationName is "Railroad" or "CommunityCenter")
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 if (locationName != "JojaMart" || !_archipelago.HasReceivedItem(APItem.MOVIE_THEATER))
                 {
                     // no fallback
                     __result = false;
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 if (!__instance.hasMasterScheduleEntry(locationName + "_Replacement"))
                 {
                     // Fallback on the default schedule
                     __result = true;
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 var strArray = __instance.getMasterScheduleEntry(locationName + "_Replacement").Split(' ');
@@ -238,12 +246,12 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
                 // no fallback
                 __result = false;
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(ChangeScheduleForLocationAccessibility_JojamartAndTheater_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
     }

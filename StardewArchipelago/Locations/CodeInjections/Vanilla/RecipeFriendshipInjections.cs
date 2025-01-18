@@ -7,6 +7,7 @@ using StardewModdingAPI;
 using StardewValley;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
@@ -101,16 +102,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 if (!@event.eventCommands[@event.CurrentCommand].Contains("Cookies"))
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 ++@event.CurrentCommand;
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(AddCookingRecipe_SkipLearningCookies_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 

@@ -8,6 +8,7 @@ using xTile.Dimensions;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -39,42 +40,40 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     !ArgUtility.TryGet(action, 0, out var actionKey, out var error) ||
                     !actionKey.StartsWith(MASTERY))
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 switch (actionKey)
                 {
                     case "MasteryRoom":
                         PerformActionMasteryRoom();
-                        return false; // don't run original logic
+                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                     case "MasteryCave_Pedestal":
                         PerformActionMasteryCavePedestal();
-                        return false; // don't run original logic
+                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                     case "MasteryCave_Farming":
                         PerformActionMasteryCaveSkill(Skill.Farming);
-                        return false; // don't run original logic
+                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                     case "MasteryCave_Foraging":
                         PerformActionMasteryCaveSkill(Skill.Foraging);
-                        return false; // don't run original logic
+                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                     case "MasteryCave_Fishing":
                         PerformActionMasteryCaveSkill(Skill.Fishing);
-                        return false; // don't run original logic
+                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                     case "MasteryCave_Mining":
                         PerformActionMasteryCaveSkill(Skill.Mining);
-                        return false; // don't run original logic
+                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                     case "MasteryCave_Combat":
                         PerformActionMasteryCaveSkill(Skill.Combat);
-                        return false; // don't run original logic
+                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                     default:
-                        return true; // run original logic
+                        return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
-
-                return false; // don't run original logic
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(PerformAction_MasteryCaveInteractions_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -146,7 +145,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 }
                 if (!MasteryTrackerMenu.hasCompletedAllMasteryPlaques())
                 {
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
                 DelayedAction.functionAfterDelay(() => MasteryTrackerMenu.addSpiritCandles(), 500);
                 Game1.player.freezePause = 2000;
@@ -157,12 +156,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     Game1.playSound("newArtifact");
                 }, 4000);
 
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(ClaimReward_SendMasteryCheck_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -173,12 +172,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 var skills = new[] { Skill.Farming, Skill.Foraging, Skill.Fishing, Skill.Mining, Skill.Combat };
                 __result = skills.All(skill => _locationChecker.IsLocationChecked($"{skill} {MASTERY}"));
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(HasCompletedAllMasteryPlaques_RelyOnSentChecks_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
     }

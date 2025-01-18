@@ -18,7 +18,7 @@ namespace StardewArchipelago
         public bool HideEmptyArchipelagoLetters { get; set; } = false;
 
         /// <summary>
-        /// All Archipelago letters will not use a very short and concise format
+        /// All Archipelago letters will now use a very short and concise format
         /// instead of the funny ones full of fluff
         /// </summary>
         public bool DisableLetterTemplates { get; set; } = false;
@@ -87,6 +87,30 @@ namespace StardewArchipelago
         /// What Season to pick when multisleeping across a month transition
         /// </summary>
         public SeasonPreference MultiSleepSeasonPreference { get; set; } = SeasonPreference.Repeat;
+
+        /// <summary>
+        /// Whether to display archipelago icons on grandpa's shrine to see current points
+        /// </summary>
+        public GrandpaShrinePreference ShowGrandpaShrineIndicators { get; set; } = GrandpaShrinePreference.GrandpaGoal;
+
+        /// <summary>
+        /// Whether to randomize sprites
+        /// </summary>
+        public AppearanceRandomization SpriteRandomizer { get; set; } = AppearanceRandomization.Disabled;
+
+        /// <summary>
+        /// Whether to start with the "Livin' Off the Land" TV Channel unlocked. Otherwise, wait for it as an unlock from the multiworld.
+        /// The channel serves as a tutorial for Archipelago behaviors, in addition to the vanilla episodes
+        /// This defaults to true, with the target audience being the new players. Once a player is experienced enough to find this config and change it, they are experienced enough to start without the channel
+        /// The Archipelago episodes are on Tuesdays and Fridays, and runs vanilla episodes on the vanilla days of Mondays and Thursdays
+        /// </summary>
+        public bool StartWithLivingOffTheLand { get; set; } = true;
+
+        /// <summary>
+        /// Whether to start with the "Gateway Gazette" TV Channel unlocked. Otherwise, wait for it as an unlock from the multiworld.
+        /// The channel gives information about the current entrance randomizer roll, on Mondays and Fridays
+        /// </summary>
+        public bool StartWithGatewayGazette { get; set; } = false;
     }
 
     public enum ItemIndicatorPreference
@@ -101,5 +125,20 @@ namespace StardewArchipelago
         Prompt = 0,
         Repeat = 1,
         Cycle = 2,
+    }
+
+    public enum GrandpaShrinePreference
+    {
+        Never = 0,
+        GrandpaGoal = 1,
+        Always = 2,
+    }
+
+    public enum AppearanceRandomization
+    {
+        Disabled = 0,
+        Enabled = 1,
+        // All = 2,
+        Chaos = 3,
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Constants.Modded;
+using StardewArchipelago.GameModifications.Testing;
 using StardewModdingAPI;
 
 namespace StardewArchipelago.Archipelago
@@ -11,12 +12,14 @@ namespace StardewArchipelago.Archipelago
     public class ModsManager
     {
         private readonly ILogger _logger;
+        private readonly TesterFeatures _testerFeatures;
         private readonly List<string> _activeMods;
         private readonly VersionValidator _versionValidator;
 
-        public ModsManager(ILogger logger, List<string> activeMods)
+        public ModsManager(ILogger logger, TesterFeatures testerFeatures, List<string> activeMods)
         {
             _logger = logger;
+            _testerFeatures = testerFeatures;
             _activeMods = activeMods;
             _versionValidator = new VersionValidator();
         }
@@ -81,25 +84,29 @@ namespace StardewArchipelago.Archipelago
             return valid;
         }
 
-        public bool IsPatcherStateCorrect(IModHelper modHelper, out string errorMessage)
+        public bool IsExtraRequirementsStateCorrect(IModHelper modHelper, out string errorMessage)
         {
             var loadedModData = modHelper.ModRegistry.GetAll().ToList();
             errorMessage = $"The slot you are connecting to requires a content patcher,\r\n mod, but not all expected mods are installed and active.";
             var valid = true;
             foreach (var modName in _activeMods)
             {
-                if (!ModVersions.CPVersions.ContainsKey(modName))
+                if (!ModVersions.ExtraRequirementsVersions.ContainsKey(modName))
                 {
                     continue;
                 }
-                var requirement = ModVersions.CPVersions[modName];
-                if (IsModActiveAndCorrectVersion(loadedModData, requirement.ContentPatcherMod, requirement.ContentPatcherVersion, out var existingVersion))
-                {
-                    continue;
-                }
+                var requirements = ModVersions.ExtraRequirementsVersions[modName];
 
-                valid = false;
-                errorMessage += $"{Environment.NewLine}\tMod: {requirement.ContentPatcherMod}, expected version: {requirement.ContentPatcherVersion}, current Version: {existingVersion}";
+                foreach (var requirement in requirements)
+                {
+                    if (IsModActiveAndCorrectVersion(loadedModData, requirement.ContentPatcherMod, requirement.ContentPatcherVersion, out var existingVersion))
+                    {
+                        continue;
+                    }
+
+                    valid = false;
+                    errorMessage += $"{Environment.NewLine}\tMod: {requirement.ContentPatcherMod}, expected version: {requirement.ContentPatcherVersion}, current Version: {existingVersion}";
+                }
             }
 
             return valid;
@@ -108,6 +115,8 @@ namespace StardewArchipelago.Archipelago
         private bool IsModActiveAndCorrectVersion(List<IModInfo> loadedModData, string desiredModName, string desiredVersion, out string existingVersion)
         {
             var normalizedDesiredModName = GetNormalizedModName(desiredModName);
+            var foundIncorrectVersion = false;
+            existingVersion = "[NOT FOUND]";
             foreach (var modInfo in loadedModData)
             {
                 var modName = GetNormalizedModName(modInfo.Manifest.Name);
@@ -117,10 +126,31 @@ namespace StardewArchipelago.Archipelago
                 }
 
                 existingVersion = modInfo.Manifest.Version.ToString();
-                return _versionValidator.IsVersionCorrect(existingVersion, desiredVersion);
+                if (_testerFeatures.UnstableMods.Value != VerifyMods.MODS_AND_VERSIONS)
+                {
+                    return true;
+                }
+                var isCorrectVersion = _versionValidator.IsVersionCorrect(existingVersion, desiredVersion);
+                if (isCorrectVersion)
+                {
+                    return true;
+                }
+                else
+                {
+                    foundIncorrectVersion = true;
+                }
+
             }
 
-            existingVersion = "[NOT FOUND]";
+            if (foundIncorrectVersion)
+            {
+                return false;
+            }
+
+            if (_testerFeatures.UnstableMods.Value == VerifyMods.NOTHING)
+            {
+                return true;
+            }
             return false;
         }
 

@@ -14,29 +14,32 @@ A reasonable effort will be made to stay up to date, but it has to be understood
 The following mods are currently supported:
 
 General: 
-- [Stardew Valley Expanded](https://www.nexusmods.com/stardewvalley/mods/3753), by FlashShifter, Version 1.14.x (including additional [patch](https://github.com/Witchybun/SDV-Randomizer-Content-Patcher/releases))
+- [Stardew Valley Expanded](https://www.nexusmods.com/stardewvalley/mods/3753), by FlashShifter, Version 1.14.46 (including [two additional patches](https://github.com/Witchybun/SDV-Randomizer-Content-Patcher/releases) `StardewAP - SVE Patch` and `StardewValleyExpanded 1.14.x-archipelago`. The first patch fixes some Content patcher things to be compatible with Archipelago, and the 2nd patches allows the SVE 1.14.46 code to be loaded into Stardew Valley 1.6.9+). Once patched, the version number in SMAPI will display as `Stardew Valley Expanded 1.14.31-archipelago by FlashShifter, Esca, super-aardvark, and kittycatcasey. Updated for Stardew 1.6.9 by Kaito Kid`. This is because I had to base my patch off of the 1.14.31 code, since the 1.14.46 code was not available. The Content pack for it will maintain its 1.14.46 displayed version number
 - [Skull Cavern Elevator](https://www.nexusmods.com/stardewvalley/mods/963), by Lestoph, Version 1.6.x
 - [Bigger Backpack](https://www.nexusmods.com/stardewvalley/mods/1845), by spacechase0, Version 7.3.x
-- [Tractor Mod](https://www.nexusmods.com/stardewvalley/mods/1401), by Pathoschild, Version 4.19.x
-- [Distant Lands - Witch Swamp Overhaul](https://www.nexusmods.com/stardewvalley/mods/18109), by Aimon111, Version 2.1.x
+- [Tractor Mod](https://www.nexusmods.com/stardewvalley/mods/1401), by Pathoschild, Version 4.21.x
+- [Distant Lands - Witch Swamp Overhaul](https://www.nexusmods.com/stardewvalley/mods/18109), by Aimon111, Version 2.2.x
 
 Skills:
-- [Luck Skill](https://www.nexusmods.com/stardewvalley/mods/521), by spacechase0, Version 1.2.x
-- [Socializing Skill](https://www.nexusmods.com/stardewvalley/mods/14142), by drbirbdev, Version 2.0.x
-- [Archaeology](https://www.nexusmods.com/stardewvalley/mods/22199), by MoonSlime, Version 2.10.3
-- [Binning Skill](https://www.nexusmods.com/stardewvalley/mods/14073), by drbirbdev, Version 2.0.x
+- [Spacecore Luck Skill](https://www.nexusmods.com/stardewvalley/mods/28103), by spacechase0, Version 1.3.x - Note: This mod was ported from the now deprecated "Luck Skill", and has added some new content that isn't fully randomized. But it should work like before
+- [Socializing Skill](https://www.nexusmods.com/stardewvalley/mods/14142), by drbirbdev, Version 2.1.x
+- [Archaeology](https://www.nexusmods.com/stardewvalley/mods/22199), by MoonSlime, Version 2.12.1
+- [Binning Skill](https://www.nexusmods.com/stardewvalley/mods/14073), by drbirbdev, Version 2.1.x
 
 Custom NPCs:
-- [Juna - Roommate NPC](https://www.nexusmods.com/stardewvalley/mods/8606), by elhrvy 2.1.x
+- [Juna - Roommate NPC](https://www.nexusmods.com/stardewvalley/mods/8606), by elhrvy 2.2.x
 - [Professor Jasper Thomas](https://www.nexusmods.com/stardewvalley/mods/5599), by Lemurkat 1.8.3 (including additional [patch](https://github.com/Witchybun/SDV-Randomizer-Content-Patcher/releases))
 - [Alec Revisited](https://www.nexusmods.com/stardewvalley/mods/10697), by HopeWasHere and SoftPandaBoi, Version 2.2.x
 - [Mister Ginger (cat npc)](https://www.nexusmods.com/stardewvalley/mods/5295), by Lemurkat, Version 1.6.x
 - [Ayeisha - The Postal Worker (Custom NPC)](https://www.nexusmods.com/stardewvalley/mods/6427), by TheLimeyDragon, Version 0.7.x
 - [Alecto the Witch](https://www.nexusmods.com/stardewvalley/mods/10671), by zoedoll, Version 1.1.x (including additional [patch](https://github.com/Witchybun/SDV-Randomizer-Content-Patcher/releases))
-- [Hat Mouse Lacey](https://www.nexusmods.com/stardewvalley/mods/18177) by khortower, Version 1.2.x
+- [Hat Mouse Lacey](https://www.nexusmods.com/stardewvalley/mods/18177) by khortower, Version 1.4.x
 
 In addition, a [Content Patcher mod](https://github.com/Witchybun/SDV-Randomizer-Content-Patcher/releases) may be required for the mod to properly function alongside your game.  Include these alongside StardewArchipelago.
 "x" is used to denote a wildcard digit, that is flexibleand allows for variations. We assume that supported mods will not break on patch updates, and if they do, we may have to be more strict in the future.
+
+Here is what you should see in SMAPI, when installing a mod that requires an additional patch. This example is Stardew Valley Expanded, which has two additional patches that are needed to be loaded properly.
+![image](https://i.imgur.com/y3lBIkw.png)
 
 ## How to add supported mods to my Archipelago slot?
 

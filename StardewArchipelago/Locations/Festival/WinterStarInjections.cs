@@ -7,6 +7,7 @@ using StardewValley.GameData.Characters;
 using Object = StardewValley.Object;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.Locations.Festival
@@ -17,8 +18,8 @@ namespace StardewArchipelago.Locations.Festival
         private static IModHelper _modHelper;
         private static StardewArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
-        private static Random _lastProvidedRandom;
-        private static Random _random = null;
+        // private static Random _lastProvidedRandom;
+        // private static Random _random = null;
 
         public static void Initialize(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
         {
@@ -46,12 +47,12 @@ namespace StardewArchipelago.Locations.Festival
                     _locationChecker.AddCheckedLocation(FestivalLocationNames.SECRET_SANTA);
                 }
 
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(ChooseSecretSantaGift_SuccessfulGift_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -63,12 +64,12 @@ namespace StardewArchipelago.Locations.Festival
                 var random = Utility.CreateRandom((int)(Game1.uniqueIDForThisGame / 2UL), (int)(Game1.stats.DaysPlayed / 28), (double)Game1.player.UniqueMultiplayerID);
                 __result = Utility.GetRandomNpc((name, data) => IsWinterStarParticipant(name, data, ignoreNpc), random);
 
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(GetRandomWinterStarParticipant_ChooseBasedOnMonthNotYear_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 

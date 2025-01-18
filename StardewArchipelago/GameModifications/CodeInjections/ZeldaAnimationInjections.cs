@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewValley;
 
@@ -22,23 +23,31 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             _shouldPrankOnOtherDays = false;
         }
 
-        // public void holdUpItemThenMessage(Item item, bool showMessage = true)
-        public static bool HoldUpItemThenMessage_SkipBasedOnConfig_Prefix(Farmer __instance, Item item, bool showMessage)
+        // public void holdUpItemThenMessage(Item item, int countAdded, bool showMessage = true)
+        public static bool HoldUpItemThenMessage_SkipBasedOnConfig_Prefix(Farmer __instance, Item item, int countAdded, bool showMessage)
         {
             try
             {
                 if (Game1.isFestival())
                 {
-                    return true;
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 // We skip this whole method when skipping hold up animations is true
-                return !ModEntry.Instance.Config.SkipHoldUpAnimations || ShouldPrank();
+                if (!ModEntry.Instance.Config.SkipHoldUpAnimations || ShouldPrank())
+                {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
+
+                __instance.CanMove = true;
+                __instance.freezePause = 0;
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(HoldUpItemThenMessage_SkipBasedOnConfig_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -94,11 +103,13 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             }
             farmer.faceDirection(2);
             farmer.freezePause = 4000;
-            farmer.FarmerSprite.animateOnce(new FarmerSprite.AnimationFrame[]
+            farmer.FarmerSprite.animateOnce(new[]
             {
                 new(57, 0),
                 new(57, 2500, false, false, who => Farmer.showHoldingItem(who, item)),
-                showMessage ? new FarmerSprite.AnimationFrame((short)farmer.FarmerSprite.CurrentFrame, 500, false, false, who => Farmer.showReceiveNewItemMessage(who, item), true) : new FarmerSprite.AnimationFrame((short)farmer.FarmerSprite.CurrentFrame, 500, false, false),
+                showMessage ?
+                    new FarmerSprite.AnimationFrame((short)farmer.FarmerSprite.CurrentFrame, 500, false, false, who => Farmer.showReceiveNewItemMessage(who, item, item.Stack), true) :
+                    new FarmerSprite.AnimationFrame((short)farmer.FarmerSprite.CurrentFrame, 500, false, false),
             });
             farmer.mostRecentlyGrabbedItem = item;
             farmer.canMove = false;

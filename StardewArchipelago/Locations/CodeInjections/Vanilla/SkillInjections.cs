@@ -9,6 +9,7 @@ using StardewValley;
 using StardewValley.Menus;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
@@ -22,7 +23,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private static readonly Dictionary<Skill, string> _skillToModName = new()
         {
             { Skill.Magic, ModNames.MAGIC }, { Skill.Binning, ModNames.BINNING }, { Skill.Cooking, ModNames.COOKING },
-            { Skill.Archaeology, ModNames.ARCHAEOLOGY }, { Skill.Socializing, ModNames.SOCIALIZING },
+            { Skill.Archaeology, ModNames.ARCHAEOLOGY }, { Skill.Socializing, ModNames.SOCIALIZING }, { Skill.Luck, ModNames.LUCK },
         };
 
         private static ILogger _logger;
@@ -90,7 +91,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
                 if (!enabledSkills.Contains(skill) || howMuch <= 0 || !__instance.IsLocalPlayer)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 var experienceAmount = GetMultipliedExperience(howMuch);
@@ -112,7 +113,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 var newLevel = GetLevel(newExperienceLevel);
                 if (newLevel <= oldLevel)
                 {
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 switch (skill)
@@ -143,12 +144,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     Game1.showGlobalMessage(Game1.content.LoadString("Strings\\1_6_Strings:NewIdeas"));
                 }
 
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(GainExperience_NormalExperience_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -162,17 +163,17 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
                 if (!enabledSkills.Contains(skill) || howMuch <= 0 || !__instance.IsLocalPlayer)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 AddApExperienceAndCheckLocations(skill, howMuch);
 
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(GainExperience_ArchipelagoExperience_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -187,17 +188,17 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
                 if (!_archipelago.SlotData.Mods.HasMod(_skillToModName[skill]))
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 AddApExperienceAndCheckLocations(skill, amt);
 
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(AddExperience_ArchipelagoModExperience_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 

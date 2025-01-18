@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI;
 using StardewValley;
@@ -138,12 +139,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             try
             {
                 SendJunimoKartLevelsBeatChecks(__instance);
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(EndCutscene_JunimoKartLevelComplete_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -188,7 +189,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 if (__instance.type == 6 && __instance.special)
                 {
                     __result = -1;
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 var easyMode = _archipelago.SlotData.ArcadeMachineLocations == ArcadeLocations.VictoriesEasy;
@@ -202,7 +203,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     var otherMob5CoinChance = increasedDropRate ? 0.2 : 0.1;
                     var mobIsType0 = __instance.type != 0;
                     __result = ((mobIsType0 && Game1.random.NextDouble() < type0Mob5CoinChance || Game1.random.NextDouble() < otherMob5CoinChance)) ? 1 : 0;
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 // 90% Chance of dropping nothing (Original: 95%)
@@ -210,21 +211,21 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 if (Game1.random.NextDouble() <= dropNothingChance)
                 {
                     __result = -1;
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 // 15% Chance of dropping a 6 or 7 item
                 if (Game1.random.NextDouble() < 0.15)
                 {
                     __result = Game1.random.Next(6, 8);
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 // 7% Chance of dropping a 10 item
                 if (Game1.random.NextDouble() < 0.07)
                 {
                     __result = 10;
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 // Item from 2 to 9
@@ -235,12 +236,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     lootDrop = Game1.random.Next(2, 10);
                 }
                 __result = lootDrop;
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(GetLootDrop_ExtraLoot_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -250,24 +251,24 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 if (__instance.activePowerups.ContainsKey(which) || which > -1)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 if (which == -3)
                 {
                     _locationChecker.AddCheckedLocation(JOTPK_VICTORY);
                     Game1.chatBox?.addMessage("You can now type '!!arcade_release jotpk' to release all remaining Prairie King checks", Color.Green);
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 var whichCowboyWasBeaten = which == -1 ? JOTPK_COWBOY_1 : JOTPK_COWBOY_2;
                 _locationChecker.AddCheckedLocation(whichCowboyWasBeaten);
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(UsePowerup_PrairieKingBossBeaten_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 

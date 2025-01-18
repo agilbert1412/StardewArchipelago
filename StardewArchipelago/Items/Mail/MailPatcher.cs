@@ -2,6 +2,7 @@
 using System.Linq;
 using HarmonyLib;
 using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
@@ -107,14 +108,14 @@ namespace StardewArchipelago.Items.Mail
                 var mailbox = Game1.mailbox;
                 if (mailbox == null || !mailbox.Any())
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 var nextLetter = mailbox.First();
 
                 if (!MailKey.TryParse(nextLetter, out _))
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 var mailData = DataLoader.Mail(Game1.content);
@@ -127,12 +128,12 @@ namespace StardewArchipelago.Items.Mail
                 // So if it's an ap letter, always remember it
                 Game1.player.mailReceived.Add(nextLetter);
 
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(Mailbox_HideEmptyApLetters_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -171,22 +172,22 @@ namespace StardewArchipelago.Items.Mail
                 var mailbox = Game1.mailbox;
                 if (mailbox == null || !mailbox.Any())
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 var nextLetter = mailbox.First();
                 if (!nextLetter.Equals(GoalCodeInjection.MASTER_ANGLER_LETTER))
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 ReplaceStardropWithSeafoamPudding();
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(Mailbox_RemoveMasterAnglerStardropOnFishsanity_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -215,23 +216,23 @@ namespace StardewArchipelago.Items.Mail
                 var mailbox = Game1.mailbox;
                 if (mailbox == null || !mailbox.Any())
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 var nextLetter = mailbox.First();
                 if (!nextLetter.Equals(RARECROW_SOCIETY_LETTER))
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 RemoveDeluxeScarecrowRecipe();
                 _locationChecker.AddCheckedLocation(RARECROW_SOCIETY_AP_LOCATION);
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(Mailbox_RemoveRarecrowSocietyRecipeOnFestivals_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 

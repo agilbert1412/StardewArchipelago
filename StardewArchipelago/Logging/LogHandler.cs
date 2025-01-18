@@ -34,7 +34,7 @@ namespace StardewArchipelago.Logging
 
         public override void LogDebug(string message)
         {
-            _logger.Log(message, LogLevel.Debug);
+            _logger.Log(message, LogLevel.Trace);
         }
 
         public void Log(string message, LogLevel logLevel)

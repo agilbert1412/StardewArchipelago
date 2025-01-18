@@ -84,6 +84,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
                 freebuildingData.BuildCost = 0;
                 freebuildingData.BuildMaterials?.Clear();
+                freebuildingData.BuildingType = buildingData.BuildingType;
                 freebuildingData.Description = $"A gift from a friend. {freebuildingData.Description}";
                 freebuildingData.BuildCondition = $"{archipelagoCondition}, {doesNotHaveBuildingCondition}";
                 buildingData.BuildCondition = $"{archipelagoCondition}, {hasBuildingCondition}";

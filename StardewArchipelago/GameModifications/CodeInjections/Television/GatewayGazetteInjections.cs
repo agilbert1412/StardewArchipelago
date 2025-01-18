@@ -119,7 +119,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
             }
 
             var agentName = Community.AllNames[random.Next(Community.AllNames.Length)];
-            var entrancesNotChecked = _entranceManager.ModifiedEntrances.Keys.Where(x => !_state.EntrancesTraversed.Contains(x)).ToArray();
+            var entrancesNotChecked = _entranceManager.ModifiedEntrances.Keys.Where(x => !_state.EntrancesTraversed.Any(y => y.Equals(x, StringComparison.InvariantCultureIgnoreCase))).ToArray();
             if (!entrancesNotChecked.Any())
             {
                 entrancesNotChecked = _entranceManager.ModifiedEntrances.Keys.ToArray();

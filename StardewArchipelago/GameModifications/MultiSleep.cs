@@ -1,5 +1,6 @@
 ﻿using System;
 using HarmonyLib;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -56,7 +57,7 @@ namespace StardewArchipelago.GameModifications
 
                 if (Game1.eventUp || actionStringFirstWord != "Sleep" || Game1.newDay || !Game1.shouldTimePass() || !Game1.player.hasMoved || Game1.player.passedOut)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 var possibleResponses = new Response[3]
@@ -67,12 +68,12 @@ namespace StardewArchipelago.GameModifications
                 };
 
                 __instance.createQuestionDialogue(Game1.content.LoadString("Strings\\Locations:FarmHouse_Bed_GoToSleep"), possibleResponses, "Sleep", null);
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(PerformTouchAction_Sleep_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -82,19 +83,19 @@ namespace StardewArchipelago.GameModifications
             {
                 if (questionAndAnswer != "Sleep_Many")
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 var multiSleepMessage =
                     "How many days do you wish to sleep for?\n(Warning: Sleeping saves the game, this action cannot be undone)";
                 Game1.activeClickableMenu = new MultiSleepSelectionMenu(multiSleepMessage, (value, price, who) => SleepMany(__instance, value), minValue: 1, maxValue: 112, defaultNumber: 7, price: _multiSleepPrice);
                 __result = true;
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(AnswerDialogueAction_SleepMany_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 

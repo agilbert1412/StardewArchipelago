@@ -2,7 +2,10 @@
 using HarmonyLib;
 using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Logging;
+using StardewArchipelago.Textures;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
@@ -12,23 +15,26 @@ namespace StardewArchipelago.Goals
 {
     public class GoalManager
     {
-        private static ILogger _logger;
+        private static LogHandler _logger;
         private IModHelper _modHelper;
         private readonly Harmony _harmony;
         private readonly StardewArchipelagoClient _archipelago;
         private LocationChecker _locationChecker;
+        private GrandpaIndicators _grandpaIndicators;
 
-        public GoalManager(ILogger logger, IModHelper modHelper, Harmony harmony, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
+        public GoalManager(LogHandler logger, IModHelper modHelper, Harmony harmony, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             _logger = logger;
             _modHelper = modHelper;
             _harmony = harmony;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
+            _grandpaIndicators = new GrandpaIndicators(logger, modHelper, archipelago);
         }
 
         public void CheckGoalCompletion(bool vanillaGoal = false)
         {
+            _grandpaIndicators.EvaluateGrandpaToday(Game1.getFarm());
             switch (_archipelago.SlotData.Goal)
             {
                 case Goal.CommunityCenter:

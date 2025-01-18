@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using System;
+using HarmonyLib;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Modded;
@@ -38,14 +39,20 @@ namespace StardewArchipelago.Locations.Patcher
 
         public void ReplaceAllLocationsRewardsWithChecks()
         {
-            AddModSkillInjections();
-            AddDeepWoodsModInjections();
-            AddMagicModInjections();
-            AddSkullCavernElevatorModInjections();
-            AddSVEModInjections();
-            AddBoardingHouseInjections();
-            PatchSVEShops();
-
+            try
+            {
+                AddModSkillInjections();
+                AddDeepWoodsModInjections();
+                AddMagicModInjections();
+                AddSkullCavernElevatorModInjections();
+                AddSVEModInjections();
+                AddBoardingHouseInjections();
+                PatchSVEShops();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed at Initializing mod content. Message: {ex.Message}");
+            }
         }
 
         public void CleanEvents()

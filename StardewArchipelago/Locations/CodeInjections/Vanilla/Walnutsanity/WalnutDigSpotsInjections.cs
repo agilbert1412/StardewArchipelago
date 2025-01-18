@@ -8,6 +8,7 @@ using StardewValley;
 using StardewValley.Locations;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
 {
@@ -33,7 +34,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             {
                 if (!__instance.IsBuriedNutLocation(new Point(xLocation, yLocation)))
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 var digSpotId = $"Buried_{__instance.Name}_{xLocation}_{yLocation}";
@@ -44,7 +45,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
 
                 if (!Game1.netWorldState.Value.FoundBuriedNuts.Add(digSpotId))
                 {
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 Game1.player.team.MarkCollectedNut(digSpotId);
@@ -53,12 +54,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 Game1.createItemDebris(item, new Vector2(xLocation, yLocation) * 64f, -1, __instance);
 
                 __result = "";
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(CheckForBuriedItem_ReplaceWalnutWithCheck_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 

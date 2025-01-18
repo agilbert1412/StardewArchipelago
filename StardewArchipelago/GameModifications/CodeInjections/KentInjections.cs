@@ -1,5 +1,6 @@
 ﻿using System;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewValley;
 
@@ -23,12 +24,12 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             {
                 if (characterId != "Kent")
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 if (Game1.Date.TotalDays < 112)
                 {
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 bypassConditions = true;
@@ -37,7 +38,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(AddCharacterIfNecessary_ConsiderSeasonsRandomizerForKent_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
     }

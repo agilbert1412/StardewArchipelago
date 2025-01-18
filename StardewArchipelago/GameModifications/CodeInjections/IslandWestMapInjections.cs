@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using HarmonyLib;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework;
 using StardewModdingAPI;
@@ -30,7 +31,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             {
                 if (__instance.map == null)
                 {
-                    return false; // don't run original logic;
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;;
                 }
 
                 // protected HashSet<string> _appliedMapOverrides;
@@ -45,17 +46,16 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
                 if (__instance.farmhouseMailbox.Value)
                 {
-                    __instance.setMapTileIndex(81, 40, 771, "Buildings");
-                    __instance.setMapTileIndex(81, 39, 739, "Front");
-                    __instance.setTileProperty(81, 40, "Buildings", "Action", "Mailbox");
+                    __instance.setMapTile(81, 40, 771, "Buildings", "untitled tile sheet", "Mailbox");
+                    __instance.setMapTile(81, 39, 739, "Front", "untitled tile sheet");
                 }
 
-                return false; // don't run original logic;
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(ApplyFarmHouseRestore_RestoreOnlyCorrectParts_Prefix)}:\n{ex}");
-                return true; // run original logic;
+                return MethodPrefix.RUN_ORIGINAL_METHOD;;
             }
         }
     }

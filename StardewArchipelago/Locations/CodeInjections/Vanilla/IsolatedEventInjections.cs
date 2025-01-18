@@ -15,6 +15,7 @@ using Object = StardewValley.Object;
 using Rectangle = xTile.Dimensions.Rectangle;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -47,7 +48,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     .PickTile(new Location(tileLocation.X * 64, tileLocation.Y * 64), viewport.Size);
                 if (tile == null || !who.IsLocalPlayer || (tile.TileIndex != 1140 && tile.TileIndex != 1141) || !__instance.hasUnlockedStatue.Value)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 if (__instance.hasUnlockedStatue.Value && !__instance.localPlayerHasFoundStardrop() && who.freeSpotsInInventory() > 0)
@@ -58,12 +59,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 }
                 __result = true;
 
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(CheckAction_OldMasterCanolli_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -73,18 +74,18 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 if (questionAndAnswer != "BeachBridge_Yes")
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 Game1.player.Items.ReduceId("388", 300);
                 _locationChecker.AddCheckedLocation(BEACH_BRIDGE_AP_LOCATION);
                 __result = true;
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(AnswerDialogueAction_BeachBridge_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -94,13 +95,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 if (tileLocation.X != 58 || tileLocation.Y != 13)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 __result = true;
                 if (_locationChecker.IsLocationChecked(BEACH_BRIDGE_AP_LOCATION))
                 {
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 if (who.Items.ContainsId("388", 300))
@@ -108,16 +109,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     __instance.createQuestionDialogue(
                         Game1.content.LoadString("Strings\\Locations:Beach_FixBridge_Question"),
                         __instance.createYesNoResponses(), "BeachBridge");
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\Locations:Beach_FixBridge_Hint"));
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(CheckAction_BeachBridge_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -131,7 +132,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 if (_realBridgeFixed != null)
                 {
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 if (_archipelago.HasReceivedItem(VanillaUnlockManager.BEACH_BRIDGE))
@@ -139,12 +140,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     return true;
                 }
 
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(FixBridge_DontFixDuringDraw_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -160,12 +161,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 }
 
                 __instance.bridgeFixed.Value = _locationChecker.IsLocationChecked(BEACH_BRIDGE_AP_LOCATION);
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(Draw_BeachBridgeQuestionMark_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -216,16 +217,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     DelayedAction.playSoundAfterDelay("stardrop", 1500);
                     Game1.screenOverlayTempSprites.AddRange(Utility.sparkleWithinArea(new Microsoft.Xna.Framework.Rectangle(0, 0, Game1.viewport.Width, Game1.viewport.Height), 500, Color.White, 10, 2000));
                     Game1.afterDialogues += () => Game1.stopMusicTrack(MusicContext.Event);
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 __instance.localSound("SpringBirds");
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(PerformTouchAction_GalaxySwordShrine_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -249,17 +250,17 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 if (__instance.id != EventIds.RUSTY_SWORD)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 EventInjections.BaseSkipEvent(__instance, () => _locationChecker.AddCheckedLocation(RUSTY_SWORD_AP_LOCATION));
 
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(SkipEvent_RustySword_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -270,7 +271,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 if (@event.id != EventIds.RUSTY_SWORD)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 if (Game1.activeClickableMenu == null)
@@ -278,12 +279,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 @event.CurrentCommand++;
 
                 _locationChecker.AddCheckedLocation(RUSTY_SWORD_AP_LOCATION);
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(AwardFestivalPrize_RustySword_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -294,7 +295,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 if (__instance.isTemporarilyInvisible || justCheckingForActivity || __instance.QualifiedItemId != QualifiedItemIds.POT_OF_GOLD)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 if (_locationChecker.IsLocationMissing(POT_OF_GOLD_AP_LOCATION))
@@ -305,15 +306,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     Utility.addDirtPuffs(__instance.Location, (int)__instance.TileLocation.X, (int)__instance.TileLocation.Y, 1, 1, 3);
                     Utility.addStarsAndSpirals(__instance.Location, (int)__instance.TileLocation.X, (int)__instance.TileLocation.Y, 1, 1, 100, 30, Color.White);
                     _locationChecker.AddCheckedLocation(POT_OF_GOLD_AP_LOCATION);
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(CheckForAction_PotOfGold_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
     }

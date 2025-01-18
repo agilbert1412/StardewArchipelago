@@ -5,6 +5,7 @@ using StardewModdingAPI;
 using StardewValley;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -30,16 +31,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 if (__instance.id != EventIds.BAMBOO_POLE)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 EventInjections.BaseSkipEvent(__instance, CheckBambooPoleLocation);
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(SkipEvent_BambooPole_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -50,16 +51,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 if (__instance.id != EventIds.WILLY_FISHING_LESSON)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 EventInjections.BaseSkipEvent(__instance, CheckFishingLessonLocations);
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(SkipEvent_WillyFishingLesson_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -70,7 +71,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 if (@event.id != EventIds.BAMBOO_POLE || args.Length <= 1 || args[1].ToLower() != "rod")
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 CheckBambooPoleLocation();
@@ -79,12 +80,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     @event.CurrentCommand++;
                 @event.CurrentCommand++;
 
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(AwardFestivalPrize_BambooPole_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -95,7 +96,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 if (@event.id != EventIds.WILLY_FISHING_LESSON)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 CheckFishingLessonLocations();
@@ -104,12 +105,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     @event.CurrentCommand++;
                 @event.CurrentCommand++;
 
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(AwardFestivalPrize_WillyFishingLesson_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -120,19 +121,19 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 if (@event.id != EventIds.WILLY_FISHING_LESSON)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 CheckFishingLessonLocations();
 
                 @event.CurrentCommand++;
 
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(GainSkill_WillyFishingLesson_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 

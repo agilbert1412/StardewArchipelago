@@ -1,5 +1,6 @@
 ﻿using System;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
@@ -13,8 +14,6 @@ namespace StardewArchipelago.Locations.GingerIsland.Parrots
         private static ILogger _logger;
         private static IModHelper _modHelper;
         private static ArchipelagoClient _archipelago;
-
-        private IslandLocation _islandLocation;
 
         public static void Initialize(ILogger logger, IModHelper modHelper, ArchipelagoClient archipelago)
         {
@@ -38,16 +37,16 @@ namespace StardewArchipelago.Locations.GingerIsland.Parrots
                     if (archipelagoParrot.CheckActionArchipelago(tileLocation))
                     {
                         __result = true;
-                        return false; // don't run original logic
+                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                     }
                 }
 
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(CheckAction_InteractWithParrots_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
     }

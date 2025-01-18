@@ -32,6 +32,7 @@ using StardewValley.Objects;
 using Object = StardewValley.Object;
 using StardewArchipelago.Locations;
 using StardewArchipelago.Logging;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
 
 namespace StardewArchipelago.GameModifications
 {
@@ -45,6 +46,7 @@ namespace StardewArchipelago.GameModifications
         private readonly SeedShopStockModifier _seedShopStockModifier;
         private readonly RecipeDataRemover _recipeDataRemover;
         private readonly AnimalShopStockModifier _animalShopStockModifier;
+        private readonly JojaDisabler _jojaDisabler;
 
         public RandomizedLogicPatcher(LogHandler logger, IModHelper modHelper, ModConfig config, Harmony harmony, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker, StardewItemManager stardewItemManager, EntranceManager entranceManager, SeedShopStockModifier seedShopStockModifier, NameSimplifier nameSimplifier, Friends friends, ArchipelagoStateDto state)
         {
@@ -59,6 +61,7 @@ namespace StardewArchipelago.GameModifications
             MineshaftLogicInjections.Initialize(logger);
             CommunityCenterLogicInjections.Initialize(logger, locationChecker);
             FarmInjections.Initialize(logger, _archipelago);
+            FarmerInjections.Initialize(logger, _archipelago);
             AchievementInjections.Initialize(logger, _archipelago);
             EntranceInjections.Initialize(logger, _archipelago, entranceManager);
             ForestInjections.Initialize(logger, _archipelago);
@@ -79,9 +82,11 @@ namespace StardewArchipelago.GameModifications
             BillboardInjections.Initialize(logger, modHelper, config, archipelago, locationChecker, friends);
             SpecialOrderBoardInjections.Initialize(logger, modHelper, archipelago, locationChecker);
             CraftingPageInjections.Initialize(logger, archipelago);
+            PanningSpotInjections.Initialize(logger, archipelago);
+            WalnutInjections.Initialize(logger, archipelago);
             OutOfLogicInjections.Initialize(logger, archipelago, stardewItemManager);
-
             DebugPatchInjections.Initialize(logger, archipelago);
+            _jojaDisabler = new JojaDisabler(logger, modHelper, harmony);
         }
 
         private static void InitializeTVInjections(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, EntranceManager entranceManager,
@@ -124,7 +129,12 @@ namespace StardewArchipelago.GameModifications
             PatchTooltips();
             PatchBundles();
             PatchCraftingPage();
+            PatchPanningSpots();
+            PatchWalnuts();
             PatchMysteryBoxesAndPrizeTickets();
+            PatchStardropMessage();
+
+            _jojaDisabler.DisableJojaRouteShortcuts();
             _startingResources.GivePlayerStartingResources();
 
             PatchDebugMethods();
@@ -582,8 +592,10 @@ namespace StardewArchipelago.GameModifications
 
         private void PatchZeldaAnimations()
         {
+            var holdUpItemParameterTypes = new[] { typeof(Item), typeof(int), typeof(bool) };
             _harmony.Patch(
-                original: AccessTools.Method(typeof(Farmer), nameof(Farmer.holdUpItemThenMessage)),
+                original: AccessTools.Method(typeof(Farmer), nameof(Farmer.holdUpItemThenMessage),
+                    holdUpItemParameterTypes),
                 prefix: new HarmonyMethod(typeof(ZeldaAnimationInjections),
                     nameof(ZeldaAnimationInjections.HoldUpItemThenMessage_SkipBasedOnConfig_Prefix))
             );
@@ -612,7 +624,7 @@ namespace StardewArchipelago.GameModifications
             _helper.Events.Content.AssetRequested -= OnFishAssetRequested;
         }
 
-        private void OnFishAssetRequested(object? sender, AssetRequestedEventArgs e)
+        private void OnFishAssetRequested(object sender, AssetRequestedEventArgs e)
         {
             if (!e.NameWithoutLocale.IsEquivalentTo("Data/Locations"))
             {
@@ -720,6 +732,27 @@ namespace StardewArchipelago.GameModifications
             );
         }
 
+        private void PatchPanningSpots()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performOrePanTenMinuteUpdate)),
+                prefix: new HarmonyMethod(typeof(PanningSpotInjections), nameof(PanningSpotInjections.PerformOrePanTenMinuteUpdate_AllowPanningSpotsAlways_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(IslandNorth), nameof(IslandNorth.performOrePanTenMinuteUpdate)),
+                prefix: new HarmonyMethod(typeof(PanningSpotInjections), nameof(PanningSpotInjections.PerformOrePanTenMinuteUpdateOnIslandNorth_AllowPanningSpotsAlways_Prefix))
+            );
+        }
+
+        private void PatchWalnuts()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Farmer), nameof(Farmer.foundWalnut)),
+                prefix: new HarmonyMethod(typeof(WalnutInjections), nameof(WalnutInjections.FoundWalnut_NoUpperLimit_Prefix))
+            );
+        }
+
         private void PatchMysteryBoxesAndPrizeTickets()
         {
             if (!ModEntry.Instance.Config.StrictLogic)
@@ -740,6 +773,14 @@ namespace StardewArchipelago.GameModifications
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Utility), nameof(Utility.getRaccoonSeedForCurrentTimeOfYear)),
                 postfix: new HarmonyMethod(typeof(OutOfLogicInjections), nameof(OutOfLogicInjections.GetRaccoonSeedForCurrentTimeOfYear_MysteryBoxesGiveReceivedItems_Postfix))
+            );
+        }
+
+        private void PatchStardropMessage()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Farmer), nameof(Farmer.doneEating)),
+                postfix: new HarmonyMethod(typeof(FarmerInjections), nameof(FarmerInjections.DoneEating_StardropFavoriteThingKaito_Postfix))
             );
         }
 

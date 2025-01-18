@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Constants;
@@ -13,6 +14,7 @@ using StardewValley.Monsters;
 using StardewValley.TerrainFeatures;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
@@ -32,7 +34,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
         private const string WALNUT_JOURNAL_SCRAP_6 = "Island_W_BuriedTreasureNut2";
         private const string WALNUT_JOURNAL_SCRAP_10 = "Island_N_BuriedTreasureNut";
 
-        private const double WALNUT_BASE_CHANCE_FISHING = 0.25;
+        private const double WALNUT_BASE_CHANCE_FISHING = 0.15;
         private const double INFINITY_WALNUT_CHANCE_REDUCTION_FISHING = 0.75;
 
         private const double WALNUT_BASE_CHANCE_FARMING = 0.10;
@@ -59,6 +61,19 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             _helper = helper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
+
+            InitializeReflectionCalls();
+        }
+
+        private static MethodInfo _gameLocationGetFishMethod;
+        private static IntPtr _gameLocationGetFishMethodPointer;
+        private static Dictionary<string, Func<float, string, int, Farmer, double, Vector2, string, Item>> _islandLocationBaseGetFish;
+
+        private static void InitializeReflectionCalls()
+        {
+            _gameLocationGetFishMethod = typeof(GameLocation).GetMethod("getFish", BindingFlags.Instance | BindingFlags.Public);
+            _gameLocationGetFishMethodPointer = _gameLocationGetFishMethod.MethodHandle.GetFunctionPointer();
+            _islandLocationBaseGetFish = new Dictionary<string, Func<float, string, int, Farmer, double, Vector2, string, Item>>();
         }
 
         //public override Item getFish(float millisecondsAfterNibble, string bait, int waterDepth, Farmer who, double baitPotency, Vector2 bobberTile,
@@ -75,12 +90,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
 
                 var baseFishCallBack = () => CallBaseGetFish(__instance, millisecondsAfterNibble, bait, waterDepth, who, baitPotency, bobberTile, locationName);
                 __result = RollForRepeatableWalnutOrCheck(WALNUT_FISHING_KEY, "Fishing Walnut", random, WALNUT_BASE_CHANCE_FISHING, INFINITY_WALNUT_CHANCE_REDUCTION_FISHING, baseFishCallBack);
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(GetFish_RepeatableWalnut_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -88,12 +103,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             double baitPotency, Vector2 bobberTile, string locationName)
         {
             // base.resetLocalState();
-            var gameLocationGetFishMethod = typeof(GameLocation).GetMethod("getFish", BindingFlags.Instance | BindingFlags.Public);
-            var functionPointer = gameLocationGetFishMethod.MethodHandle.GetFunctionPointer();
-            var baseGetFish = (Func<float, string, int, Farmer, double, Vector2, string, Item>)Activator.CreateInstance(
-                typeof(Func<float, string, int, Farmer, double, Vector2, string, Item>),
-                islandLocation, functionPointer);
-            return baseGetFish(millisecondsAfterNibble, bait, waterDepth, who, baitPotency, bobberTile, locationName);
+            var key = islandLocation.NameOrUniqueName ?? "";
+            if (!_islandLocationBaseGetFish.ContainsKey(key))
+            {
+                var baseGetFish = (Func<float, string, int, Farmer, double, Vector2, string, Item>)Activator.CreateInstance(
+                    typeof(Func<float, string, int, Farmer, double, Vector2, string, Item>),
+                    islandLocation, _gameLocationGetFishMethodPointer);
+                _islandLocationBaseGetFish.Add(key, baseGetFish);
+            }
+            return _islandLocationBaseGetFish[key](millisecondsAfterNibble, bait, waterDepth, who, baitPotency, bobberTile, locationName);
         }
 
         // public override bool performUseAction(Vector2 tileLocation)
@@ -103,7 +121,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             {
                 if (__instance.crop == null || __instance.Location is not IslandLocation)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 var harvestMethod = __instance.crop.GetHarvestMethod();
@@ -114,19 +132,19 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
 
                 if (harvestMethod != HarvestMethod.Grab || !__instance.crop.harvest((int)tileLocation.X, (int)tileLocation.Y, __instance))
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 __instance.destroyCrop(false);
                 __result = true;
 
                 RollForRepeatableWalnutOrCheck(WALNUT_FARMING_KEY, "Harvesting Walnut", __instance.Location, tileLocation.X, tileLocation.Y, Game1.random, WALNUT_BASE_CHANCE_FARMING, INFINITY_WALNUT_CHANCE_REDUCTION_FARMING);
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(PerformUseAction_RepeatableFarmingWalnut_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -137,13 +155,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             {
                 if (__instance?.crop == null || __instance.Location is not IslandLocation || t == null || !t.isScythe())
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 var harvestMethod = __instance.crop.GetHarvestMethod();
                 if (harvestMethod != HarvestMethod.Scythe || !__instance.crop.harvest((int)tileLocation.X, (int)tileLocation.Y, __instance, isForcedScytheHarvest: true))
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 if (__instance.crop.indexOfHarvest.Value == "771" && t.hasEnchantmentOfType<HaymakerEnchantment>())
@@ -171,12 +189,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 __result = false;
 
                 RollForRepeatableWalnutOrCheck(WALNUT_FARMING_KEY, "Harvesting Walnut", __instance.Location, tileLocation.X, tileLocation.Y, Game1.random, WALNUT_BASE_CHANCE_FARMING, INFINITY_WALNUT_CHANCE_REDUCTION_FARMING);
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(PerformToolAction_RepeatableFarmingWalnut_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -187,7 +205,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             {
                 if (stoneId != ObjectIds.MUSSEL_NODE || __instance is not IslandLocation)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 var farmerId = who != null ? who.UniqueMultiplayerID : 0L;
@@ -206,12 +224,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
 
                 RollForRepeatableWalnutOrCheck(WALNUT_MUSSEL_KEY, "Mussel Node Walnut", __instance, x, y, r, WALNUT_BASE_CHANCE_MUSSEL, INFINITY_WALNUT_CHANCE_REDUCTION_MUSSEL);
 
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(BreakStone_RepeatableMusselWalnut_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -223,7 +241,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             {
                 if (__instance.limitedNutDrops.TryGetValue(key, out var numberAlreadyDropped) && numberAlreadyDropped >= limit)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 if (HandleRepeatableWalnuts(__instance, key, location, x, y, numberAlreadyDropped))
@@ -236,12 +254,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                     return false;
                 }
 
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(RequestLimitedNutDrops_TigerSlimesAndCreatesWalnuts_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -331,12 +349,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 }
 
                 __result = CallBaseBreakStone(__instance, stoneId, x, y, who, r);
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(BreakStone_RepeatableVolcanoStoneWalnut_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -358,12 +376,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             {
                 CallBaseMonsterDrop(__instance, monster, x, y, who);
                 RollForRepeatableWalnutOrCheck(WALNUT_VOLCANO_MONSTER_KEY, "Volcano Monsters Walnut", __instance, new Vector2(x, y), Game1.random, WALNUT_BASE_CHANCE_VOLCANO_MONSTER, INFINITY_WALNUT_CHANCE_REDUCTION_VOLCANO_MONSTER);
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(MonsterDrop_RepeatableVolcanoMonsterWalnut_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -401,21 +419,20 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
         {
             var roll = random.NextDouble();
             var chanceRequired = baseChance;
+            if (roll > chanceRequired)
+            {
+                return failCallback?.Invoke();
+            }
 
             if (!Game1.player.team.limitedNutDrops.TryGetValue(walnutKey, out var numberWalnutsSoFar))
             {
                 numberWalnutsSoFar = 0;
             }
 
-            AddPotentiallyMissedChecks(apLocationName, numberWalnutsSoFar);
+            AddPotentiallyMissedChecks(apLocationName, Math.Min(5, numberWalnutsSoFar));
 
             if (numberWalnutsSoFar < 5)
             {
-                if (roll > chanceRequired)
-                {
-                    return failCallback?.Invoke();
-                }
-
                 numberWalnutsSoFar++;
                 Game1.player.team.limitedNutDrops[walnutKey] = numberWalnutsSoFar;
                 var itemToSpawnId = QualifiedItemIds.GOLDEN_WALNUT;
@@ -429,7 +446,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             }
 
             // We allow the player to get extra walnuts here, but each one is less likely than the last
-            chanceRequired *= Math.Pow(chanceReduction, numberWalnutsSoFar);
+            chanceRequired *= Math.Pow(chanceReduction, numberWalnutsSoFar - 4);
             if (roll > chanceRequired)
             {
                 return failCallback?.Invoke();
@@ -444,10 +461,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             for (var i = 1; i <= numberWalnutsSoFar; i++)
             {
                 var location = $"{apLocationName} {i}";
-                if (_locationChecker.IsLocationMissing(location))
-                {
-                    _locationChecker.AddCheckedLocation(location);
-                }
+                _locationChecker.AddCheckedLocation(location);
             }
         }
 

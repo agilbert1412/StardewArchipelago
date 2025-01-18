@@ -10,6 +10,7 @@ using xTile.Dimensions;
 using Rectangle = xTile.Dimensions.Rectangle;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 
 namespace StardewArchipelago.Locations.GingerIsland.Boat
 {
@@ -48,29 +49,29 @@ namespace StardewArchipelago.Locations.GingerIsland.Boat
                 {
                     InteractWithTicketMachine(__instance, who);
                     __result = true;
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 if (tileLocation.X == 6 && tileLocation.Y == 8)
                 {
                     InteractWithHull(__instance, who);
                     __result = true;
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 if (tileLocation.X == 8 && tileLocation.Y == 10)
                 {
                     InteractWithAnchor(__instance, who);
                     __result = true;
-                    return false; // don't run original logic
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(CheckAction_BoatRepairAndUsage_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -81,7 +82,7 @@ namespace StardewArchipelago.Locations.GingerIsland.Boat
             {
                 if (__instance.lastQuestionKey == null || __instance.afterQuestion != null)
                 {
-                    return true; // run original logic
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 var dialogueKey = __instance.lastQuestionKey.Split(' ')[0] + "_" + answer.responseKey;
@@ -91,27 +92,27 @@ namespace StardewArchipelago.Locations.GingerIsland.Boat
                     case "WillyBoatDonateIridium_Yes":
                         DonateIridium();
                         __result = true;
-                        return false; // don't run original logic
+                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                     case "WillyBoatDonateHardwood_Yes":
                         DonateHardwood();
                         __result = true;
-                        return false; // don't run original logic
+                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                     case "WillyBoatDonateBatteries_Yes":
                         DonateBatteries();
                         __result = true;
-                        return false; // don't run original logic
+                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                     case "Boat_Yes":
                         PurchaseBoatTicket(__instance);
                         __result = true;
-                        return false; // don't run original logic
+                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                     default:
-                        return true; // run original logic
+                        return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(AnswerDialogue_BoatRepairAndUsage_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 

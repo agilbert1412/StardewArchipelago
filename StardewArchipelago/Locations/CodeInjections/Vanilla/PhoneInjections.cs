@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
 using StardewModdingAPI;
@@ -58,12 +59,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                         };
                     }
                 }, 4950);
-                return false; // don't run original logic
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(CallAdventureGuild_AllowRecovery_Prefix)}:\n{ex}");
-                return true; // run original logic
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
     }

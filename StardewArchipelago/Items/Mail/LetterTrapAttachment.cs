@@ -21,7 +21,7 @@ namespace StardewArchipelago.Items.Mail
 
         public override MailKey GetMailKey()
         {
-            return new MailKey(ArchipelagoItem.ItemName, ArchipelagoItem.PlayerName, ArchipelagoItem.LocationName, LetterActionsKeys.Trap, TrapName, ArchipelagoItem.UniqueId.ToString(), IsEmptyLetter);
+            return new MailKey(ArchipelagoItem.ItemName, ArchipelagoItem.PlayerName, ArchipelagoItem.LocationName, LetterActionsKeys.Trap, TrapName, GetEmbedString(), ArchipelagoItem.UniqueId.ToString(), IsEmptyLetter);
         }
     }
 }

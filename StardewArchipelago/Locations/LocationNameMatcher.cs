@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using StardewArchipelago.Constants.Locations;
 using StardewArchipelago.Locations.Festival;
 using StardewArchipelago.Locations.GingerIsland.Parrots;
 
@@ -9,40 +10,6 @@ namespace StardewArchipelago.Locations
     public class LocationNameMatcher
     {
         private readonly Dictionary<string, string[]> _wordFilterCache;
-
-        private static readonly Dictionary<string, string[]> _exceptions = new()
-        {
-            { "Snail", new[] { IslandNorthInjections.AP_PROF_SNAIL_CAVE } },
-            {
-                "Stone",
-                new[]
-                {
-                    FestivalLocationNames.STRENGTH_GAME, "Lemon Stone",
-                    "Ocean Stone", "Fairy Stone", "Swirl Stone",
-                }
-            },
-            { "Egg", new[] { "Duck Egg", "Ostrich Egg", "Dinosaur Egg", "Void Egg", "Thunder Egg", "Large Egg", "Egg (Brown)", "Brown Egg", "Slime Egg", "Calico Egg" } },
-            { "Large Egg", new[] { "Large Egg (Brown)" } },
-            { "Egg (Brown)", new[] { "Large Egg (Brown)" } },
-            { "Trash", new[] { "Trash Can Upgrade" } },
-            { "Hardwood", new[] { "Hardwood Display" } },
-            { "Anchor", new[] { "Boat Anchor" } },
-            { "Carp", new[] { "Midnight Carp", "Scorpion Carp", "Mutant Carp" } },
-            { "Salmon", new[] { "Void Salmon", "King Salmon" } },
-            { "Clay", new[] { "Land Of Clay" } },
-            { "Slime", new[] { "Slime Hutch" } },
-            {
-                "Diamond",
-                new[]
-                {
-                    "Diamond Hunter", "Starfish Diamond", "Diamond Of",
-                }
-            },
-            { "Opal", new[] { "Fire Opal" } },
-            { "Chest", new[] { "Stone Chest", "Treasure Chest", "Big Chest", "Common Chest", "Rare Chest" } },
-            { "Stone Chest", new[] { "Big Stone Chest" } },
-            { "Jasper", new[] { "by M. Jasper" } }
-        };
 
         public LocationNameMatcher()
         {
@@ -68,9 +35,9 @@ namespace StardewArchipelago.Locations
 
             var filteredLocations = FilterForWord(GetAllLocationsMatching(allLocations, wordFilter), wordFilter);
 
-            if (_exceptions.ContainsKey(wordFilter))
+            if (NameMatching.Exceptions.ContainsKey(wordFilter))
             {
-                foreach (var exceptionName in _exceptions[wordFilter])
+                foreach (var exceptionName in NameMatching.Exceptions[wordFilter])
                 {
                     filteredLocations = filteredLocations.Where(x =>
                         !x.Contains(exceptionName, StringComparison.InvariantCultureIgnoreCase));

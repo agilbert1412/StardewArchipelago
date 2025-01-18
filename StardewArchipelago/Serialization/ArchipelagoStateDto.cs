@@ -12,12 +12,12 @@ namespace StardewArchipelago.Serialization
         public Dictionary<string, ScoutedLocation> LocationsScouted { get; set; }
         public Dictionary<string, string> LettersGenerated { get; set; }
         public List<string> SeasonsOrder { get; set; }
-        public AppearanceRandomization? AppearanceRandomizerOverride { get; set; }
         public TrapItemsDifficulty? TrapDifficultyOverride { get; set; }
         public int TravelingMerchantPurchases { get; set; }
         public int StoredStarTokens { get; set; }
         public List<string> EntrancesTraversed { get; set; }
         public List<bool> CurrentRaccoonBundleStatus { get; set; }
+        public int NumberOfLOTLEpisodesWatched { get; set; }
 
         public ArchipelagoStateDto()
         {
@@ -26,12 +26,12 @@ namespace StardewArchipelago.Serialization
             LocationsScouted = new Dictionary<string, ScoutedLocation>();
             LettersGenerated = new Dictionary<string, string>();
             SeasonsOrder = new List<string>();
-            AppearanceRandomizerOverride = null;
             TrapDifficultyOverride = null;
             TravelingMerchantPurchases = 0;
             StoredStarTokens = 0;
             EntrancesTraversed = new List<string>();
             CurrentRaccoonBundleStatus = new List<bool>();
+            NumberOfLOTLEpisodesWatched = 0;
         }
     }
 }

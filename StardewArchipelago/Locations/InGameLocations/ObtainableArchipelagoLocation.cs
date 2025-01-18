@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Archipelago.MultiClient.Net.Enums;
 using Archipelago.MultiClient.Net.Models;
 using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
@@ -83,12 +84,38 @@ namespace StardewArchipelago.Locations.InGameLocations
             _locationChecker = locationChecker;
 
             var isHinted = myActiveHints.Any(hint => archipelago.GetLocationName(hint.LocationId).Equals(locationName, StringComparison.OrdinalIgnoreCase));
-            var desiredTextureName = isHinted ? ArchipelagoTextures.PLEADING : ArchipelagoTextures.COLOR;
+            var scoutedLocation = archipelago.ScoutSingleLocation(LocationName);
+
+            var desiredTextureName = GetCorrectTexture(scoutedLocation, isHinted);
             _archipelagoTexture = ArchipelagoTextures.GetArchipelagoLogo(logger, modHelper, 48, desiredTextureName);
 
 
-            var scoutedLocation = archipelago.ScoutSingleLocation(LocationName);
             _description = scoutedLocation == null ? ScoutedLocation.GenericItemName() : scoutedLocation.ToString();
+        }
+        
+        private static string GetCorrectTexture(ScoutedLocation scoutedLocation, bool isHinted)
+        {
+            if (isHinted)
+            {
+                return ArchipelagoTextures.PLEADING;
+            }
+
+            if (scoutedLocation.ClassificationFlags.HasFlag(ItemFlags.Advancement))
+            {
+                return ArchipelagoTextures.PROGRESSION;
+            }
+
+            if (scoutedLocation.ClassificationFlags.HasFlag(ItemFlags.NeverExclude))
+            {
+                return ArchipelagoTextures.COLOR;
+            }
+
+            if (scoutedLocation.ClassificationFlags.HasFlag(ItemFlags.Trap))
+            {
+                return ArchipelagoTextures.RED;
+            }
+
+            return ArchipelagoTextures.BLACK;
         }
 
         public override void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth,
