@@ -5,6 +5,12 @@
         <ApplicationManifest>manifest.json</ApplicationManifest>
         <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
         <EnableHarmony>true</EnableHarmony>
+        <Configurations>Debug;Release;Debug Tiles</Configurations>
+        <Platforms>AnyCPU</Platforms>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug Tiles' ">
+      <DefineConstants>TRACE;NOWALK;DEBUG</DefineConstants>
     </PropertyGroup>
 
     <ItemGroup>

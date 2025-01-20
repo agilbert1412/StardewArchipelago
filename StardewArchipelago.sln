@@ -16,16 +16,20 @@ Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
+		Debug Tiles|Any CPU = Debug Tiles|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{95900FBD-BF44-485F-B89E-2BF0681F380A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{95900FBD-BF44-485F-B89E-2BF0681F380A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95900FBD-BF44-485F-B89E-2BF0681F380A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{95900FBD-BF44-485F-B89E-2BF0681F380A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95900FBD-BF44-485F-B89E-2BF0681F380A}.Debug Tiles|Any CPU.ActiveCfg = Debug Tiles|Any CPU
 		{9FDF0CF3-5365-4DDE-9B3B-8214FF07E89C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9FDF0CF3-5365-4DDE-9B3B-8214FF07E89C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9FDF0CF3-5365-4DDE-9B3B-8214FF07E89C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9FDF0CF3-5365-4DDE-9B3B-8214FF07E89C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9FDF0CF3-5365-4DDE-9B3B-8214FF07E89C}.Debug Tiles|Any CPU.ActiveCfg = Debug Tiles|Any CPU
+		{9FDF0CF3-5365-4DDE-9B3B-8214FF07E89C}.Debug Tiles|Any CPU.Build.0 = Debug Tiles|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
