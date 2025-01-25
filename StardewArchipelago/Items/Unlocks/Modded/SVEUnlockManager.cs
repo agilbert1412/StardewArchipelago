@@ -21,6 +21,7 @@ namespace StardewArchipelago.Items.Unlocks.Modded
         public const string AURORA_RUNES_AP_NAME = "Nexus: Aurora Vineyard Runes";
         public const string FABLE_REEF_AP_NAME = "Fable Reef Portal";
         public const string AURORA_VINEYARD_TABLET_AP_NAME = "Aurora Vineyard Tablet";
+        public const string AURORA_VINEYARD_RECLAMATION_AP_NAME = "Aurora Vineyard Reclamation";
         public const string GRANDPA_SHED_AP_NAME = "Grandpa's Shed";
         public const string SCARLETT_JOB_OFFER = "Scarlett's Job Offer";
         public const string MORGAN_SCHOOLING = "Morgan's Schooling";
@@ -63,6 +64,7 @@ namespace StardewArchipelago.Items.Unlocks.Modded
         {
             unlocks.Add(SCARLETT_JOB_OFFER, SendScarlettJobOffer);
             unlocks.Add(AURORA_VINEYARD_TABLET_AP_NAME, SendJunimoNote);
+            unlocks.Add(AURORA_VINEYARD_RECLAMATION_AP_NAME, SendJunimoNote);
             unlocks.Add(MORGAN_SCHOOLING, SendAcceptanceLetter);
         }
 
