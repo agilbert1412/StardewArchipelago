@@ -294,7 +294,7 @@ namespace StardewArchipelago.Items.Traps.Shuffle
             {
                 foreach (var (tile, gameObject) in gameLocation.Objects.Pairs)
                 {
-                    if (gameObject is not Chest { SpecialChestType: Chest.SpecialChestTypes.None or Chest.SpecialChestTypes.AutoLoader, Category: CRAFTING_CATEGORY, Type: CRAFTING_TYPE } chest || chest.giftbox.Value)
+                    if (gameObject is not Chest { SpecialChestType: Chest.SpecialChestTypes.None or Chest.SpecialChestTypes.AutoLoader or Chest.SpecialChestTypes.BigChest, Category: CRAFTING_CATEGORY, Type: CRAFTING_TYPE } chest || chest.giftbox.Value)
                     {
                         continue;
                     }
