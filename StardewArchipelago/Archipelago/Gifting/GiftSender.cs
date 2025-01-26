@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Archipelago.Gifting.Net.Gifts;
 using Archipelago.Gifting.Net.Service;
-using Archipelago.Gifting.Net.Traits;
+using Archipelago.Gifting.Net.Versioning.Gifts;
+using Archipelago.Gifting.Net.Versioning.Gifts.Current;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.Stardew;
@@ -45,11 +45,11 @@ namespace StardewArchipelago.Archipelago.Gifting
                     return;
                 }
 
-                var isValidRecipient = _giftService.CanGiftToPlayer(slotName, giftTraits.Select(x => x.Trait));
+                var canGift = _giftService.CanGiftToPlayer(slotName, giftTraits.Select(x => x.Trait));
                 var giftOrTrap = isTrap ? "trap" : "gift";
-                if (!isValidRecipient)
+                if (!canGift.CanGift)
                 {
-                    Game1.chatBox?.addMessage($"{slotName} cannot receive this {giftOrTrap}", Color.Gold);
+                    Game1.chatBox?.addMessage(canGift.Message, Color.Gold);
                     return;
                 }
 
@@ -61,9 +61,9 @@ namespace StardewArchipelago.Archipelago.Gifting
                 }
 
 
-                var success = _giftService.SendGift(giftItem, giftTraits, slotName, out var giftId);
-                _logger.LogInfo($"Sending {giftOrTrap} of {giftItem.Amount} {giftItem.Name} to {slotName} with {giftTraits.Length} traits. [ID: {giftId}]");
-                if (!success)
+                var result = _giftService.SendGift(giftItem, giftTraits, slotName);
+                _logger.LogInfo($"Sending {giftOrTrap} of {giftItem.Amount} {giftItem.Name} to {slotName} with {giftTraits.Length} traits. [ID: {result.GiftId}]");
+                if (!result.Success)
                 {
                     _logger.LogError($"Gift Failed to send properly");
                     Game1.chatBox?.addMessage($"Unknown Error occurred while sending {giftOrTrap}.", Color.Red);
@@ -142,8 +142,8 @@ namespace StardewArchipelago.Archipelago.Gifting
                     return false;
                 }
 
-                var success = _giftService.SendGift(giftItem, giftTraits, player, out var giftId);
-                if (!success)
+                var result = _giftService.SendGift(giftItem, giftTraits, player);
+                if (!result.Success)
                 {
                     _logger.LogDebug($"Gift failed to send but did not crash");
                     return false;

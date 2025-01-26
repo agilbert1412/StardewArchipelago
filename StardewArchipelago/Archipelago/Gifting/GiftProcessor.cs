@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Archipelago.Gifting.Net.Gifts.Versions.Current;
 using Archipelago.Gifting.Net.Traits;
 using Archipelago.Gifting.Net.Utilities.CloseTraitParser;
+using Archipelago.Gifting.Net.Versioning.Gifts.Current;
 using StardewArchipelago.Extensions;
 using StardewArchipelago.Stardew;
 using KaitoKid.ArchipelagoUtilities.Net.Client;

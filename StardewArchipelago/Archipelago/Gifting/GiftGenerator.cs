@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Archipelago.Gifting.Net.Gifts;
 using Archipelago.Gifting.Net.Traits;
+using Archipelago.Gifting.Net.Versioning.Gifts;
+using Archipelago.Gifting.Net.Versioning.Gifts.Current;
 using StardewArchipelago.Stardew;
 using StardewValley;
 using StardewValley.GameData.Objects;
