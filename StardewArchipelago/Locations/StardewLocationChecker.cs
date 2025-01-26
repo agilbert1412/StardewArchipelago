@@ -34,10 +34,12 @@ namespace StardewArchipelago.Locations
 
         public override void SendAllLocationChecks()
         {
+#pragma warning disable CS0162 // Unreachable code detected
             if (PREVENT_SENDING_CHECKS)
             {
                 return;
             }
+#pragma warning restore CS0162 // Unreachable code detected
 
             base.SendAllLocationChecks();
             GoalCodeInjection.CheckAllsanityGoalCompletion();

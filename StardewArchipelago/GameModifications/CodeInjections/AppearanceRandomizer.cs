@@ -659,7 +659,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                         petSpriteName = petData.GetBreedById(__instance.whichBreed.Value).Texture;
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                 }
 
