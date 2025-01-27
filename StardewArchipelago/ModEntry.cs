@@ -11,7 +11,6 @@ using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.Gifting;
 using StardewArchipelago.Bundles;
 using StardewArchipelago.Constants;
-using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.GameModifications;
 using StardewArchipelago.GameModifications.CodeInjections;
 using StardewArchipelago.GameModifications.EntranceRandomizer;
@@ -40,7 +39,6 @@ using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Delegates;
 using StardewValley.Internal;
-using StardewValley.Locations;
 using StardewValley.TerrainFeatures;
 using StardewValley.Triggers;
 
@@ -144,11 +142,13 @@ namespace StardewArchipelago
             _helper.ConsoleCommands.Add("export_shippables", "Export all currently loaded shippable items", ExportShippables);
             _helper.ConsoleCommands.Add("export_mismatches", "Export all items where Name and DisplayName mismatch which can be shipped", ExportMismatchedItems);
             _helper.ConsoleCommands.Add("release_slot", "Release the current slot completely", ReleaseSlot);
+            _helper.ConsoleCommands.Add("debug_method", "Runs whatever is currently in the debug method", DebugMethod);
+#endif
+#if TILESANITY
             _helper.ConsoleCommands.Add("walkable_tiles", "Gets the list of every walkable tile",
                 this.ListWalkableTiles);
             _helper.ConsoleCommands.Add("walkable_csv", "Gets the csv of every walkable tile",
                 this.ConvertWalkablesToCSV);
-            _helper.ConsoleCommands.Add("debug_method", "Runs whatever is currently in the debug method", DebugMethod);
 #endif
 
             ItemRegistry.AddTypeDefinition(new ArchipelagoLocationDataDefinition());
@@ -351,6 +351,7 @@ namespace StardewArchipelago
             _appearanceRandomizer = new AppearanceRandomizer(_logger, _helper, _archipelago, _harmony);
             var tileChooser = new TileChooser();
             _tileSanityManager = new TileSanityManager(_harmony, _archipelago, _locationChecker, Monitor);
+            _tileSanityManager.PatchWalk(this.Helper);
             _chatForwarder = new ChatForwarder(_logger, Monitor, _helper, _harmony, _archipelago, _giftHandler, _goalManager, tileChooser, _tileSanityManager);
             _questCleaner = new QuestCleaner();
 
@@ -373,7 +374,6 @@ namespace StardewArchipelago
             _goalManager.InjectGoalMethods();
             _multiSleep.InjectMultiSleepOption(_archipelago.SlotData);
             SeasonsRandomizer.ChangeMailKeysBasedOnSeasonsToDaysElapsed();
-            _tileSanityManager.PatchWalk(this.Helper);
             _modStateInitializer = new InitialModGameStateInitializer(_logger, _archipelago);
             _hintHelper = new HintHelper();
             Game1.chatBox?.addMessage(

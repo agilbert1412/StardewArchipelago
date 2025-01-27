@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Text.RegularExpressions;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
+using Newtonsoft.Json;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.GameModifications.CodeInjections.Tilesanity;
 using StardewArchipelago.Locations;
@@ -74,6 +76,10 @@ public class TileSanityManager
 
     public void PatchWalk(IModHelper modHelper)
     {
+#if !TILESANITY
+        return;
+#endif
+
         WalkSanityInjections.Initialize(_monitor, _archipelago, _locationChecker, this);
         TileUI.Initialize(_locationChecker, this);
 
@@ -99,5 +105,90 @@ public class TileSanityManager
 #endif
 
         modHelper.Events.Display.RenderedWorld += TileUI.RenderTiles;
+    }
+
+    public bool HandleTilesanityCommands(string message)
+    {
+#if !TILESANITY
+        return false;
+#endif
+        if (TileUI.ProcessCommand(message))
+        {
+            return true;
+        }
+
+        if (HandleWhereCommand(message))
+        {
+            return true;
+        }
+        if (HandleDebugCommands(message))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    private bool HandleWhereCommand(string message)
+    {
+        if (message != $"{ChatForwarder.COMMAND_PREFIX}where")
+        {
+            return false;
+        }
+
+        var (x, y) = Game1.player.TilePoint;
+        Game1.chatBox?.addMessage($"You are currently at {GetTileName(x, y, Game1.player)}",
+            Color.Gold);
+        var (f1, f2) = Game1.currentCursorTile;
+        x = (int)f1;
+        y = (int)f2;
+        var apLocation = GetTileName(x, y, Game1.player);
+        var walkable = _archipelago.GetLocationId(apLocation) > -1 ? "walkable" : "not walkable";
+        Game1.chatBox?.addMessage(
+            $"You are currently pointing at {GetTileName(x, y, Game1.player)} ({walkable})",
+            Color.Gold);
+        return true;
+    }
+
+    private static bool HandleDebugCommands(string message)
+    {
+#if !DEBUG
+        return false;
+#endif
+        switch (message)
+        {
+            case $"{ChatForwarder.COMMAND_PREFIX}walk":
+            {
+                HandleWalkCommand();
+                return true;
+            }
+            case $"{ChatForwarder.COMMAND_PREFIX}unwalk":
+            {
+                HandleUnwalkCommand();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static void HandleWalkCommand()
+    {
+        const string tileFile = "tiles.json";
+        var dictionary = JsonConvert.DeserializeObject<SortedDictionary<string, List<Vector2>>>(File.ReadAllText(tileFile));
+        dictionary[GetMapName(Game1.player)].Add(Game1.currentCursorTile);
+        dictionary[GetMapName(Game1.player)].Sort(((vector2, vector3) =>
+            vector2.X.CompareTo(vector3.X) * 2 + vector2.Y.CompareTo(vector3.Y)));
+        File.WriteAllText(tileFile, JsonConvert.SerializeObject(dictionary, Formatting.Indented));
+        TileUI.SwitchToDebug(dictionary[GetMapName(Game1.player)]);
+    }
+
+    private static void HandleUnwalkCommand()
+    {
+        const string tileFile = "tiles.json";
+        var dictionary = JsonConvert.DeserializeObject<SortedDictionary<string, List<Vector2>>>(File.ReadAllText(tileFile));
+        dictionary[GetMapName(Game1.player)].Remove(Game1.currentCursorTile);
+        dictionary[GetMapName(Game1.player)].Sort(((vector2, vector3) =>
+            vector2.X.CompareTo(vector3.X) * 2 + vector2.Y.CompareTo(vector3.Y)));
+        File.WriteAllText(tileFile, JsonConvert.SerializeObject(dictionary, Formatting.Indented));
+        TileUI.SwitchToDebug(dictionary[GetMapName(Game1.player)]);
     }
 }
