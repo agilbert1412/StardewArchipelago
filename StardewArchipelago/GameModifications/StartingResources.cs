@@ -79,8 +79,11 @@ namespace StardewArchipelago.GameModifications
             var qualitySprinklers = _stardewItemManager.GetItemByName("Quality Sprinkler").PrepareForGivingToFarmer(4);
             var autoPetters = _stardewItemManager.GetItemByName("Auto-Petter").PrepareForGivingToFarmer(2);
             var autoGrabbers = _stardewItemManager.GetItemByName("Auto-Grabber").PrepareForGivingToFarmer(2);
+
+#if TILESANITY
             var paths = _stardewItemManager.GetItemByName("Crystal Path").PrepareForGivingToFarmer(100);
             var seed_maker = _stardewItemManager.GetItemByName("Seed Maker").PrepareForGivingToFarmer(1);
+#endif
 
             CreateGiftBoxItemInEmptySpot(farmhouse, chests);
             CreateGiftBoxItemInEmptySpot(farmhouse, iridiumBand);
