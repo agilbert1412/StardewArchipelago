@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -26,6 +27,7 @@ using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
 using Object = StardewValley.Object;
+using StardewArchipelago.Constants;
 
 namespace StardewArchipelago.Items.Traps
 {
@@ -70,6 +72,9 @@ namespace StardewArchipelago.Items.Traps
         private readonly InventoryShuffler _inventoryShuffler;
         private readonly Dictionary<string, Action> _traps;
 
+        private ConcurrentQueue<string> _queuedTraps;
+        private object _trapLock = new();
+
         public TrapManager(ILogger logger, IModHelper helper, Harmony harmony, StardewArchipelagoClient archipelago, TileChooser tileChooser, BabyBirther babyBirther, GiftSender giftSender)
         {
             _logger = logger;
@@ -84,6 +89,7 @@ namespace StardewArchipelago.Items.Traps
             _inventoryShuffler = new InventoryShuffler(logger, giftSender);
             _traps = new Dictionary<string, Action>();
             RegisterTraps();
+            _queuedTraps = new ConcurrentQueue<string>();
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Object), nameof(Object.salePrice)),
@@ -115,16 +121,49 @@ namespace StardewArchipelago.Items.Traps
             return new LetterTrapAttachment(unlock, unlock.ItemName);
         }
 
+        public bool CanGetTrappedRightNow()
+        {
+            var isSafeLocation = Game1.player.currentLocation is (FarmHouse or IslandFarmHouse);
+            var isSleepTime = Game1.player.isInBed.Value || Game1.player.FarmerSprite.isPassingOut() || Game1.player.passedOut;
+            // || Game1.eventUp || Game1.fadeToBlack || Game1.currentMinigame != null || Game1.isWarping || Game1.killScreen;
+
+            return !isSafeLocation && !isSleepTime;
+        }
+
         public bool TryExecuteTrapImmediately(string trapName)
         {
-            if (Game1.player.currentLocation is FarmHouse or IslandFarmHouse ||
-                Game1.player.isInBed.Value || Game1.player.FarmerSprite.isPassingOut() || Game1.player.passedOut) // || Game1.eventUp || Game1.fadeToBlack || Game1.currentMinigame != null || Game1.isWarping || Game1.killScreen)
+            if (!CanGetTrappedRightNow())
             {
                 return false;
             }
 
-            _traps[trapName]();
+            _queuedTraps.Enqueue(trapName);
             return true;
+        }
+
+        public void DequeueTrap()
+        {
+            if (!CanGetTrappedRightNow())
+            {
+                return;
+            }
+
+            if (_queuedTraps.IsEmpty)
+            {
+                return;
+            }
+
+            if (!_queuedTraps.TryDequeue(out var trapName))
+            {
+                return;
+            }
+
+            var trap = _traps[trapName];
+
+            lock (_trapLock)
+            {
+                trap();
+            }
         }
 
         private void RegisterTraps()

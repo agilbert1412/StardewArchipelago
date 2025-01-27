@@ -502,11 +502,21 @@ namespace StardewArchipelago
 
         private void OnTimeChanged(object sender, TimeChangedEventArgs e)
         {
+            //    _itemManager.ItemParser.TrapManager.DequeueTrap();
         }
 
         private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
         {
             _archipelago.APUpdate();
+            if (!_archipelago.IsConnected || _itemManager == null)
+            {
+                return;
+            }
+
+            if (e.IsMultipleOf(60))
+            {
+                _itemManager.ItemParser.TrapManager.DequeueTrap();
+            }
         }
 
         private void OnReturnedToTitle(object sender, ReturnedToTitleEventArgs e)
