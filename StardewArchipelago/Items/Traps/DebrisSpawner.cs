@@ -4,6 +4,7 @@ using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewValley;
 using StardewValley.TerrainFeatures;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants.Vanilla;
 
 namespace StardewArchipelago.Items.Traps
 {
@@ -98,7 +99,7 @@ namespace StardewArchipelago.Items.Traps
                 return Game1.random.NextDouble() < 0.5 ? STONE_1 : STONE_2;
             }
 
-            return GameLocation.getWeedForSeason(Game1.random, location.GetSeason());
+            return QualifiedItemIds.UnqualifyId(GameLocation.getWeedForSeason(Game1.random, location.GetSeason()));
         }
     }
 }
