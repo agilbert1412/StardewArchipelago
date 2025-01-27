@@ -98,7 +98,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 if (_archipelagoExperience[skill] >= MAX_XP_PER_SKILL)
                 {
                     var currentMasteryLevel = MasteryTrackerMenu.getCurrentMasteryLevel();
-                    Game1.stats.Increment("MasteryExp", Math.Max(1, (int)Math.Round(experienceAmount / 2)));
+                    if (skill == Skill.Farming)
+                    {
+                        experienceAmount /= 2;
+                    }
+                    Game1.stats.Increment("MasteryExp", Math.Max(1, (int)Math.Round(experienceAmount)));
                     if (MasteryTrackerMenu.getCurrentMasteryLevel() > currentMasteryLevel)
                     {
                         Game1.showGlobalMessage(Game1.content.LoadString("Strings\\1_6_Strings:Mastery_newlevel"));
@@ -209,7 +213,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             if (_archipelagoExperience[skill] >= MAX_XP_PER_SKILL && _archipelago.GetReceivedItemCount($"{apSkillName} Level") >= 10)
             {
                 var currentMasteryLevel = MasteryTrackerMenu.getCurrentMasteryLevel();
-                Game1.stats.Increment("MasteryExp", Math.Max(1, (int)Math.Round(experienceAmount / 2)));
+                if (skill == Skill.Farming)
+                {
+                    experienceAmount /= 2;
+                }
+                Game1.stats.Increment("MasteryExp", Math.Max(1, (int)Math.Round(experienceAmount)));
                 if (MasteryTrackerMenu.getCurrentMasteryLevel() > currentMasteryLevel)
                 {
                     Game1.showGlobalMessage(Game1.content.LoadString("Strings\\1_6_Strings:Mastery_newlevel"));
