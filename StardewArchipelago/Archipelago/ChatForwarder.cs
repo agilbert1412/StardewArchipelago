@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using HarmonyLib;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework;
+using Newtonsoft.Json;
 using StardewArchipelago.Archipelago.Gifting;
 using StardewArchipelago.GameModifications;
 using StardewArchipelago.GameModifications.CodeInjections;
+using StardewArchipelago.GameModifications.CodeInjections.Tilesanity;
 using StardewArchipelago.Goals;
 using StardewArchipelago.Items.Traps;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
@@ -29,12 +32,13 @@ namespace StardewArchipelago.Archipelago
         private readonly Harmony _harmony;
         private static IGiftHandler _giftHandler;
         private static GoalManager _goalManager;
+        private static TileSanityManager _tileSanityManager;
         private static BankHandler _bankHandler;
         private static PlayerUnstucker _playerUnstucker;
 
         private static string _lastCommand;
 
-        public ChatForwarder(ILogger logger, IModHelper helper, Harmony harmony, StardewArchipelagoClient archipelago, IGiftHandler giftHandler, GoalManager goalManager, TileChooser tileChooser)
+        public ChatForwarder(ILogger logger, IMonitor monitor, IModHelper helper, Harmony harmony, StardewArchipelagoClient archipelago, IGiftHandler giftHandler, GoalManager goalManager, TileChooser tileChooser, TileSanityManager tileSanityManager)
         {
             _logger = logger;
             _helper = helper;
@@ -42,6 +46,7 @@ namespace StardewArchipelago.Archipelago
             _archipelago = archipelago;
             _giftHandler = giftHandler;
             _goalManager = goalManager;
+            _tileSanityManager = tileSanityManager;
             _playerUnstucker = new PlayerUnstucker(tileChooser);
             _bankHandler = new BankHandler(_archipelago);
             _lastCommand = null;
@@ -164,6 +169,12 @@ namespace StardewArchipelago.Archipelago
             }
 
             if (HandlePrankCommand(messageLower))
+            {
+                _lastCommand = message;
+                return true;
+            }
+
+            if (HandleTilesanityCommand(messageLower))
             {
                 _lastCommand = message;
                 return true;
@@ -322,6 +333,57 @@ namespace StardewArchipelago.Archipelago
             }
 
             ZeldaAnimationInjections.TogglePrank();
+            return true;
+        }
+
+        private static bool HandleTilesanityCommand(string message)
+        {
+            if (TileUI.ProcessCommand(message))
+                return true;
+            
+            if (message != $"{COMMAND_PREFIX}where")
+#if DEBUG
+                if (message != $"{COMMAND_PREFIX}walk" && message != $"{COMMAND_PREFIX}unwalk")
+#endif
+                    return false;
+            var (x, y) = Game1.player.TilePoint;
+            Game1.chatBox?.addMessage($"You are currently at {_tileSanityManager.GetTileName(x, y, Game1.player)}",
+                Color.Gold);
+            var (f1, f2) = Game1.currentCursorTile;
+            x = (int)f1;
+            y = (int)f2;
+            var apLocation = _tileSanityManager.GetTileName(x, y, Game1.player);
+            var walkable = _archipelago.GetLocationId(apLocation) > -1 ? "walkable" : "not walkable";
+            Game1.chatBox?.addMessage(
+                $"You are currently pointing at {_tileSanityManager.GetTileName(x, y, Game1.player)} ({walkable})",
+                Color.Gold);
+#if DEBUG
+            switch (message)
+            {
+                case $"{COMMAND_PREFIX}walk":
+                {
+                    const string tileFile = "tiles.json";
+                    var dictionary = JsonConvert.DeserializeObject<SortedDictionary<string, List<Vector2>>>(File.ReadAllText(tileFile));
+                    dictionary[TileSanityManager.GetMapName(Game1.player)].Add(Game1.currentCursorTile);
+                    dictionary[TileSanityManager.GetMapName(Game1.player)].Sort(((vector2, vector3) =>
+                        vector2.X.CompareTo(vector3.X) * 2 + vector2.Y.CompareTo(vector3.Y)));
+                    File.WriteAllText(tileFile, JsonConvert.SerializeObject(dictionary, Formatting.Indented));
+                    TileUI.SwitchToDebug(dictionary[TileSanityManager.GetMapName(Game1.player)]);
+                    break;
+                }
+                case $"{COMMAND_PREFIX}unwalk":
+                {
+                    const string tileFile = "tiles.json";
+                    var dictionary = JsonConvert.DeserializeObject<SortedDictionary<string, List<Vector2>>>(File.ReadAllText(tileFile));
+                    dictionary[TileSanityManager.GetMapName(Game1.player)].Remove(Game1.currentCursorTile);
+                    dictionary[TileSanityManager.GetMapName(Game1.player)].Sort(((vector2, vector3) =>
+                        vector2.X.CompareTo(vector3.X) * 2 + vector2.Y.CompareTo(vector3.Y)));
+                    File.WriteAllText(tileFile, JsonConvert.SerializeObject(dictionary, Formatting.Indented));
+                    TileUI.SwitchToDebug(dictionary[TileSanityManager.GetMapName(Game1.player)]);
+                    break;
+                }
+            }
+#endif
             return true;
         }
 
@@ -530,6 +592,12 @@ namespace StardewArchipelago.Archipelago
             Game1.chatBox?.addMessage($"{COMMAND_PREFIX}sync - Sends a Sync packet to the Archipelago server", Color.Gold);
 #endif
             Game1.chatBox?.addMessage($"{COMMAND_PREFIX}arcade_release [game] - Releases all remaining checks in an arcade machine that you have already completed", Color.Gold);
+            if (_archipelago.SlotData.Tilesanity != Tilesanity.Nope)
+            {
+                Game1.chatBox?.addMessage($"{COMMAND_PREFIX}where - Shows where you are and pointing at", Color.Gold);
+                Game1.chatBox?.addMessage($"{COMMAND_PREFIX}tilesanity_ui - Toggles the tilesanity UI", Color.Gold);
+                Game1.chatBox?.addMessage($"{COMMAND_PREFIX}tilesanity_ui_black - Toggles the tilesanity UI, but for Kaito", Color.Gold);
+            }
         }
     }
 }
