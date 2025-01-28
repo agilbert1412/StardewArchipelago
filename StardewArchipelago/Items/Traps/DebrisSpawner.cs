@@ -27,7 +27,7 @@ namespace StardewArchipelago.Items.Traps
             _difficultyBalancer = difficultyBalancer;
         }
 
-        public void CreateDebris()
+        public void CreateDebris(int amount)
         {
             var farm = Game1.getFarm();
             var hasGoldClock = farm.isBuildingConstructed("Gold Clock");
@@ -39,12 +39,12 @@ namespace StardewArchipelago.Items.Traps
                 locations.Add(currentLocation);
             }
 
-            var amountOfDebris = _difficultyBalancer.AmountOfDebris[_archipelago.SlotData.TrapItemsDifficulty];
             if (hasGoldClock)
             {
-                amountOfDebris /= 2;
+                amount /= 2;
             }
-            var amountOfDebrisPerLocation = amountOfDebris / locations.Count;
+
+            var amountOfDebrisPerLocation = amount / locations.Count;
             foreach (var gameLocation in locations)
             {
                 if (hasGoldClock && gameLocation == farm)

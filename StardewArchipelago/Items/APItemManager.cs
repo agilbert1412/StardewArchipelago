@@ -21,10 +21,10 @@ namespace StardewArchipelago.Items
         public ItemParser ItemParser => _itemParser;
         public TrapManager TrapManager => _itemParser.TrapManager;
 
-        public APItemManager(ILogger logger, IModHelper helper, Harmony harmony, StardewArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager itemManager, Mailman mail, TileChooser tileChooser, BabyBirther babyBirther, GiftSender giftSender, IEnumerable<ReceivedItem> itemsAlreadyProcessed) : base(archipelago, itemsAlreadyProcessed)
+        public APItemManager(ILogger logger, IModHelper helper, Harmony harmony, StardewArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager itemManager, Mailman mail, TrapExecutor trapExecutor, GiftTrapManager giftTrapManager, IEnumerable<ReceivedItem> itemsAlreadyProcessed) : base(archipelago, itemsAlreadyProcessed)
         {
             _archipelago = archipelago;
-            _itemParser = new ItemParser(logger, helper, harmony, archipelago, locationChecker, itemManager, tileChooser, babyBirther, giftSender);
+            _itemParser = new ItemParser(logger, helper, harmony, archipelago, locationChecker, itemManager, trapExecutor, giftTrapManager);
             _mail = mail;
         }
 

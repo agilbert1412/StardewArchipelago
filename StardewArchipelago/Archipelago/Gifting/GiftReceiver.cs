@@ -7,6 +7,7 @@ using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Stardew;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using StardewArchipelago.Items.Traps;
 
 namespace StardewArchipelago.Archipelago.Gifting
 {
@@ -19,14 +20,14 @@ namespace StardewArchipelago.Archipelago.Gifting
         private readonly Mailman _mail;
         private readonly GiftProcessor _giftProcessor;
 
-        public GiftReceiver(ILogger logger, ArchipelagoClient archipelago, IGiftingService giftService, StardewItemManager itemManager, Mailman mail, ICloseTraitParser<string> closeTraitParser)
+        public GiftReceiver(ILogger logger, ArchipelagoClient archipelago, IGiftingService giftService, StardewItemManager itemManager, Mailman mail, ICloseTraitParser<string> closeTraitParser, GiftTrapManager giftTrapManager)
         {
             _logger = logger;
             _archipelago = archipelago;
             _giftService = giftService;
             _itemManager = itemManager;
             _mail = mail;
-            _giftProcessor = new GiftProcessor(logger, archipelago, itemManager, closeTraitParser);
+            _giftProcessor = new GiftProcessor(logger, archipelago, itemManager, closeTraitParser, giftTrapManager);
         }
 
         public void ReceiveAllGifts()
@@ -82,6 +83,11 @@ namespace StardewArchipelago.Archipelago.Gifting
 
         private void ParseGift(Gift gift, Dictionary<ReceivedGift, int> giftAmounts, Dictionary<string, ReceivedGift> giftIds)
         {
+            if (_giftProcessor.ProcessGiftTrap(gift))
+            {
+                return;
+            }
+
             if (!_giftProcessor.TryMakeStardewItem(gift, out var item, out var amount))
             {
                 if (!gift.IsRefund)

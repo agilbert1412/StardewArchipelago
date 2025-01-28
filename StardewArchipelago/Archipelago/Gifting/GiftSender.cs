@@ -168,6 +168,10 @@ namespace StardewArchipelago.Archipelago.Gifting
         public List<string> GetAllPlayersThatCanReceiveShuffledItems()
         {
             var validTargets = new List<string>();
+            if (!_archipelago.MakeSureConnected(0))
+            {
+                return validTargets;
+            }
 
             var currentPlayer = _archipelago.GetCurrentPlayer();
             if (currentPlayer == null)

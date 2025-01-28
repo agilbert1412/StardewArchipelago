@@ -17,12 +17,12 @@ namespace StardewArchipelago.Items.Traps.Shuffle
         private const int CRAFTING_CATEGORY = -9;
         private const string CRAFTING_TYPE = "Crafting";
         private readonly ILogger _logger;
-        private readonly GiftSender _giftSender;
+        private readonly IGiftHandler _giftHandler;
 
-        public InventoryShuffler(ILogger logger, GiftSender giftSender)
+        public InventoryShuffler(ILogger logger, IGiftHandler giftHandler)
         {
             _logger = logger;
-            _giftSender = giftSender;
+            _giftHandler = giftHandler;
         }
 
         public void ShuffleInventories(ShuffleTarget targets, double rate, double rateAsGifts)
@@ -154,8 +154,14 @@ namespace StardewArchipelago.Items.Traps.Shuffle
         }
 
         private int SendRandomGifts(GroupedInventoryCollection inventoryGroups, Random random, double giftingRate)
-        {
-            var validTargets = _giftSender.GetAllPlayersThatCanReceiveShuffledItems();
+        { 
+            if (_giftHandler?.Sender == null)
+            {
+                _logger.LogDebug($"Found no players to gift to");
+                return 0;
+            }
+
+            var validTargets = _giftHandler.Sender.GetAllPlayersThatCanReceiveShuffledItems();
 
             if (validTargets == null || !validTargets.Any())
             {
@@ -166,7 +172,7 @@ namespace StardewArchipelago.Items.Traps.Shuffle
             _logger.LogDebug($"Found {validTargets.Count} players that can receive random gifts!");
             var giftsToSend = SelectGiftingTargets(inventoryGroups, random, giftingRate, validTargets, out var slotsToClear);
 
-            var failedToSendGifts = _giftSender.SendShuffleGifts(giftsToSend);
+            var failedToSendGifts = _giftHandler.Sender.SendShuffleGifts(giftsToSend);
             if (failedToSendGifts.Any())
             {
                 _logger.LogDebug($"Finished sending gifts, {failedToSendGifts.Count} failed to send and will stay local");

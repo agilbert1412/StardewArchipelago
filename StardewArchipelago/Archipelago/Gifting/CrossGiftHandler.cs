@@ -10,6 +10,7 @@ using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Stardew;
 using StardewValley;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using StardewArchipelago.Items.Traps;
 
 namespace StardewArchipelago.Archipelago.Gifting
 {
@@ -36,7 +37,7 @@ namespace StardewArchipelago.Archipelago.Gifting
         {
         }
 
-        public void Initialize(ILogger logger, StardewArchipelagoClient archipelago, StardewItemManager itemManager, Mailman mail)
+        public void Initialize(ILogger logger, StardewArchipelagoClient archipelago, StardewItemManager itemManager, Mailman mail, GiftTrapManager giftTrapManager)
         {
             if (!archipelago.SlotData.Gifting)
             {
@@ -53,7 +54,7 @@ namespace StardewArchipelago.Archipelago.Gifting
             _giftService.OpenGiftBox(true, _desiredTraits);
             RegisterAllAvailableGifts();
 
-            _giftReceiver = new GiftReceiver(_logger, _archipelago, _giftService, _itemManager, _mail, _closeTraitParser);
+            _giftReceiver = new GiftReceiver(_logger, _archipelago, _giftService, _itemManager, _mail, _closeTraitParser, giftTrapManager);
         }
 
         public bool HandleGiftItemCommand(string message)

@@ -349,17 +349,19 @@ namespace StardewArchipelago
             _logicPatcher = new RandomizedLogicPatcher(_logger, _helper, Config, _harmony, _archipelago, _locationChecker, _stardewItemManager, _entranceManager, seedShopStockModifier, nameSimplifier, friends, State);
             _seasonsRandomizer = new SeasonsRandomizer(_logger, _helper, _archipelago, State);
             _appearanceRandomizer = new AppearanceRandomizer(_logger, _helper, _archipelago, _harmony);
-            var tileChooser = new TileChooser();
+
+            var trapExecutor = new TrapExecutor(_logger, Helper, _archipelago, _giftHandler);
+            var giftTrapManager = new GiftTrapManager(trapExecutor);
+            _giftHandler.Initialize(_logger, _archipelago, _stardewItemManager, _mail, giftTrapManager);
+
             _tileSanityManager = new TileSanityManager(_harmony, _archipelago, _locationChecker, Monitor);
             _tileSanityManager.PatchWalk(this.Helper);
-            _chatForwarder = new ChatForwarder(_logger, Monitor, _helper, _harmony, _archipelago, _giftHandler, _goalManager, tileChooser, _tileSanityManager);
+            _chatForwarder = new ChatForwarder(_logger, Monitor, _helper, _harmony, _archipelago, _giftHandler, _goalManager, trapExecutor.TileChooser, _tileSanityManager);
             _questCleaner = new QuestCleaner();
 
-            var babyBirther = new BabyBirther();
-            _giftHandler.Initialize(_logger, _archipelago, _stardewItemManager, _mail);
-            _itemManager = new APItemManager(_logger, _helper, _harmony, _archipelago, _locationChecker, _stardewItemManager, _mail, tileChooser, babyBirther, _giftHandler.Sender, State.ItemsReceived);
+            _itemManager = new APItemManager(_logger, _helper, _harmony, _archipelago, _locationChecker, _stardewItemManager, _mail, trapExecutor, giftTrapManager, State.ItemsReceived);
             _weaponsManager = new WeaponsManager(_archipelago, _stardewItemManager, _archipelago.SlotData.Mods);
-            _mailPatcher = new MailPatcher(_logger, _harmony, _archipelago, _locationChecker, State, new LetterActions(_helper, _mail, _archipelago, _weaponsManager, _itemManager.TrapManager, babyBirther, _stardewItemManager));
+            _mailPatcher = new MailPatcher(_logger, _harmony, _archipelago, _locationChecker, State, new LetterActions(_helper, _mail, _archipelago, _weaponsManager, _itemManager.TrapManager, trapExecutor.BabyBirther, _stardewItemManager));
             _bundlesManager = new BundlesManager(_helper, _stardewItemManager, _archipelago.SlotData.BundlesData);
             _locationsPatcher = new LocationPatcher(_logger, _helper, Config, _harmony, _archipelago, State, _locationChecker, _stardewItemManager, _weaponsManager, _bundlesManager, seedShopStockModifier, friends);
             _shippingBehaviors = new NightShippingBehaviors(_logger, _archipelago, _locationChecker, nameSimplifier);

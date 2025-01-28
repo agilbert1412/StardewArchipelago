@@ -28,12 +28,12 @@ namespace StardewArchipelago.Items
         // When More mods start to need name mapping, we can make a generic version of this
         private readonly CompoundNameMapper _nameMapper;
 
-        public ItemParser(ILogger logger, IModHelper helper, Harmony harmony, StardewArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager itemManager, TileChooser tileChooser, BabyBirther babyBirther, GiftSender giftSender)
+        public ItemParser(ILogger logger, IModHelper helper, Harmony harmony, StardewArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager itemManager, TrapExecutor trapExecutor, GiftTrapManager giftTrapManager)
         {
             _logger = logger;
             _itemManager = itemManager;
             _unlockManager = new UnlockManager(helper, archipelago, locationChecker);
-            _trapManager = new TrapManager(logger, helper, harmony, archipelago, tileChooser, babyBirther, giftSender);
+            _trapManager = new TrapManager(logger, helper, harmony, archipelago, trapExecutor, giftTrapManager);
             _nameMapper = new CompoundNameMapper(archipelago.SlotData);
         }
 

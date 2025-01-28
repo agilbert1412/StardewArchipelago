@@ -27,7 +27,6 @@ using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
 using Object = StardewValley.Object;
-using StardewArchipelago.Constants;
 
 namespace StardewArchipelago.Items.Traps
 {
@@ -64,32 +63,26 @@ namespace StardewArchipelago.Items.Traps
         private readonly IModHelper _helper;
         private readonly Harmony _harmony;
         private static StardewArchipelagoClient _archipelago;
-        private static TrapDifficultyBalancer _difficultyBalancer;
-        private readonly TileChooser _tileChooser;
-        private readonly MonsterSpawner _monsterSpawner;
-        private readonly BabyBirther _babyBirther;
-        private readonly DebrisSpawner _debrisSpawner;
-        private readonly InventoryShuffler _inventoryShuffler;
+        private readonly TrapExecutor _trapExecutor;
+        private readonly GiftTrapManager _giftTrapManager;
+
         private readonly Dictionary<string, Action> _traps;
 
-        private ConcurrentQueue<string> _queuedTraps;
+        private ConcurrentQueue<QueuedTrap> _queuedTraps;
         private object _trapLock = new();
 
-        public TrapManager(ILogger logger, IModHelper helper, Harmony harmony, StardewArchipelagoClient archipelago, TileChooser tileChooser, BabyBirther babyBirther, GiftSender giftSender)
+        public TrapManager(ILogger logger, IModHelper helper, Harmony harmony, StardewArchipelagoClient archipelago, TrapExecutor trapExecutor, GiftTrapManager giftTrapManager)
         {
             _logger = logger;
             _helper = helper;
             _harmony = harmony;
             _archipelago = archipelago;
-            _difficultyBalancer = new TrapDifficultyBalancer();
-            _tileChooser = tileChooser;
-            _monsterSpawner = new MonsterSpawner(_tileChooser);
-            _babyBirther = babyBirther;
-            _debrisSpawner = new DebrisSpawner(logger, archipelago, _difficultyBalancer);
-            _inventoryShuffler = new InventoryShuffler(logger, giftSender);
+            _giftTrapManager = giftTrapManager;
+            _trapExecutor = trapExecutor;
             _traps = new Dictionary<string, Action>();
             RegisterTraps();
-            _queuedTraps = new ConcurrentQueue<string>();
+            _queuedTraps = new ConcurrentQueue<QueuedTrap>();
+            _giftTrapManager.AssignTrapQueue(_queuedTraps);
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Object), nameof(Object.salePrice)),
@@ -137,7 +130,7 @@ namespace StardewArchipelago.Items.Traps
                 return false;
             }
 
-            _queuedTraps.Enqueue(trapName);
+            _queuedTraps.Enqueue(new QueuedItemTrap(trapName, _traps[trapName]));
             return true;
         }
 
@@ -153,16 +146,15 @@ namespace StardewArchipelago.Items.Traps
                 return;
             }
 
-            if (!_queuedTraps.TryDequeue(out var trapName))
+            if (!_queuedTraps.TryDequeue(out var trap))
             {
                 return;
             }
-
-            var trap = _traps[trapName];
-
+            
             lock (_trapLock)
             {
-                trap();
+                _logger.LogDebug($"Executing Trap {trap.Name}");
+                trap.ExecuteNow();
             }
         }
 
@@ -180,7 +172,7 @@ namespace StardewArchipelago.Items.Traps
             _traps.Add(CROWS, SendCrows);
             _traps.Add(MONSTERS, SpawnMonsters);
             // _traps.Add(ENTRANCE_RESHUFFLE, );
-            _traps.Add(DEBRIS, _debrisSpawner.CreateDebris);
+            _traps.Add(DEBRIS, CreateDebris);
             _traps.Add(SHUFFLE, ShuffleInventory);
             // _traps.Add(WINTER, );
             _traps.Add(PARIAH, SendDislikedGiftToEveryone);
@@ -197,6 +189,12 @@ namespace StardewArchipelago.Items.Traps
 
             RegisterTrapsWithTrapSuffix();
             RegisterTrapsWithDifferentSpace();
+        }
+
+        private void CreateDebris()
+        {
+            var amountOfDebris = _difficultyBalancer.AmountOfDebris[_archipelago.SlotData.TrapItemsDifficulty];
+            _debrisSpawner.SpawnDebris(amountOfDebris);
         }
 
         private void RegisterTrapsWithDifferentSpace()
@@ -861,50 +859,7 @@ namespace StardewArchipelago.Items.Traps
         private void Explode()
         {
             var explosionRadius = _difficultyBalancer.ExplosionSize[_archipelago.SlotData.TrapItemsDifficulty];
-
-            var location = Game1.player.currentLocation;
-            var tile = Game1.player.Tile;
-            var x = tile.X * 64;
-            var y = tile.Y * 64;
-            // protected internal static Multiplayer multiplayer = new Multiplayer();
-            var multiplayerField = _helper.Reflection.GetField<Multiplayer>(typeof(Game1), "multiplayer");
-            var multiplayer = multiplayerField.GetValue();
-            var parentSheetIndex = 287;
-            if (explosionRadius < 5)
-            {
-                parentSheetIndex = 286;
-            }
-            if (explosionRadius > 5)
-            {
-                parentSheetIndex = 288;
-            }
-
-            var randomId = Game1.random.Next();
-            location.playSound("thudStep");
-            var bombSprite = new TemporaryAnimatedSprite(parentSheetIndex, 100f, 1, 24, tile * 64f, true, false, location, Game1.player)
-            {
-                shakeIntensity = 0.5f,
-                shakeIntensityChange = 1f / 500f,
-                extraInfoForEndBehavior = randomId,
-                endFunction = location.removeTemporarySpritesWithID,
-                bombRadius = explosionRadius,
-            };
-            multiplayer.broadcastSprites(location, bombSprite);
-            multiplayer.broadcastSprites(location, new TemporaryAnimatedSprite("LooseSprites\\Cursors", new Rectangle(598, 1279, 3, 4), 53f, 5, 9, tile * 64f + new Vector2(5f, 3f) * 4f, true, false, (y + 7) / 10000f, 0.0f, Color.Yellow, 4f, 0.0f, 0.0f, 0.0f)
-            {
-                id = randomId,
-            });
-            multiplayer.broadcastSprites(location, new TemporaryAnimatedSprite("LooseSprites\\Cursors", new Rectangle(598, 1279, 3, 4), 53f, 5, 9, tile * 64f + new Vector2(5f, 3f) * 4f, true, true, (y + 7) / 10000f, 0.0f, Color.Orange, 4f, 0.0f, 0.0f, 0.0f)
-            {
-                delayBeforeAnimationStart = 50,
-                id = randomId,
-            });
-            multiplayer.broadcastSprites(location, new TemporaryAnimatedSprite("LooseSprites\\Cursors", new Rectangle(598, 1279, 3, 4), 53f, 5, 9, tile * 64f + new Vector2(5f, 3f) * 4f, true, false, (y + 7) / 10000f, 0.0f, Color.White, 3f, 0.0f, 0.0f, 0.0f)
-            {
-                delayBeforeAnimationStart = 100,
-                id = randomId,
-            });
-            location.netAudio.StartPlaying("fuse");
+            _trapExecutor.BombSpawner.SpawnBomb(explosionRadius);
         }
 
         private void NudgePlayerItems()

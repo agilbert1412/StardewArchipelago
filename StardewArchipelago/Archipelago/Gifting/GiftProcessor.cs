@@ -8,6 +8,7 @@ using StardewArchipelago.Extensions;
 using StardewArchipelago.Stardew;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using StardewArchipelago.Items.Traps;
 
 namespace StardewArchipelago.Archipelago.Gifting
 {
@@ -17,17 +18,35 @@ namespace StardewArchipelago.Archipelago.Gifting
         private ArchipelagoClient _archipelago;
         private readonly StardewItemManager _itemManager;
         private readonly ICloseTraitParser<string> _closeTraitParser;
+        private readonly GiftTrapManager _giftTrapManager;
         private Dictionary<string, Func<int, ItemAmount>> _specialItems;
         private Dictionary<int, Dictionary<string[], Func<int, Dictionary<string, GiftTrait>, ItemAmount>>> _recognizedTraits;
 
-        public GiftProcessor(ILogger logger, ArchipelagoClient archipelago, StardewItemManager itemManager, ICloseTraitParser<string> closeTraitParser)
+        public GiftProcessor(ILogger logger, ArchipelagoClient archipelago, StardewItemManager itemManager, ICloseTraitParser<string> closeTraitParser, GiftTrapManager giftTrapManager)
         {
             _logger = logger;
             _archipelago = archipelago;
             _itemManager = itemManager;
             _closeTraitParser = closeTraitParser;
+            _giftTrapManager = giftTrapManager;
             InitializeSpecialItems();
             InitializeRecognizedTraits();
+        }
+
+        public bool ProcessGiftTrap(Gift gift)
+        {
+            if (gift.Traits.All(x => x.Trait != GiftFlag.Trap))
+            {
+                return false;
+            }
+
+            foreach (var giftTrait in gift.Traits)
+            {
+                _giftTrapManager.TriggerTrapForTrait(giftTrait, gift.Amount);
+            }
+
+            return true;
+
         }
 
         public bool TryMakeStardewItem(Gift gift, out string itemName, out int amount)
