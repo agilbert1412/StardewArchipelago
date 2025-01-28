@@ -1,12 +1,8 @@
-﻿using StardewValley.Buildings;
-using StardewValley.Monsters;
-using StardewValley;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using Archipelago.Gifting.Net.Traits;
 using Archipelago.Gifting.Net.Versioning.Gifts.Current;
-using StardewModdingAPI;
 
 namespace StardewArchipelago.Items.Traps
 {
@@ -65,7 +61,7 @@ namespace StardewArchipelago.Items.Traps
 
                 for (var i = 0; i < amount; i++)
                 {
-                    _trapQueue.Enqueue(new QueuedGiftTrap($"Gift {flag}", action));
+                    _trapQueue.Enqueue(new QueuedGiftTrap($"Gift {flag}", action, giftTrait.Quality, giftTrait.Duration));
                 }
             }
         }

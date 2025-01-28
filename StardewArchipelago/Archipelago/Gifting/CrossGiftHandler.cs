@@ -57,6 +57,11 @@ namespace StardewArchipelago.Archipelago.Gifting
             _giftReceiver = new GiftReceiver(_logger, _archipelago, _giftService, _itemManager, _mail, _closeTraitParser, giftTrapManager);
         }
 
+        public void Dispose()
+        {
+            _giftReceiver?.Dispose();
+        }
+
         public bool HandleGiftItemCommand(string message)
         {
             if (_archipelago == null || !_archipelago.SlotData.Gifting)

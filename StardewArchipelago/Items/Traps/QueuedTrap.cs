@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace StardewArchipelago.Items.Traps
+﻿namespace StardewArchipelago.Items.Traps
 {
     public abstract class QueuedTrap
     {

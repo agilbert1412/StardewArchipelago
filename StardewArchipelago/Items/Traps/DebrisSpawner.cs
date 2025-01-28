@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewValley;
 using StardewValley.TerrainFeatures;
-using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Vanilla;
 
 namespace StardewArchipelago.Items.Traps
@@ -17,14 +16,10 @@ namespace StardewArchipelago.Items.Traps
         private const string WEEDS = "750";
 
         private ILogger _logger;
-        private readonly StardewArchipelagoClient _archipelago;
-        private readonly TrapDifficultyBalancer _difficultyBalancer;
 
-        public DebrisSpawner(ILogger logger, StardewArchipelagoClient archipelago, TrapDifficultyBalancer difficultyBalancer)
+        public DebrisSpawner(ILogger logger)
         {
             _logger = logger;
-            _archipelago = archipelago;
-            _difficultyBalancer = difficultyBalancer;
         }
 
         public void CreateDebris(int amount)
@@ -58,7 +53,7 @@ namespace StardewArchipelago.Items.Traps
             }
         }
 
-        private void SpawnDebris(GameLocation location, int amount)
+        public void SpawnDebris(GameLocation location, int amount)
         {
             for (var i = 0; i < amount; ++i)
             {

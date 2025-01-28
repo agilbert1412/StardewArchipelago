@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Archipelago.Gifting.Net.Service;
 using Archipelago.Gifting.Net.Utilities.CloseTraitParser;
@@ -11,7 +12,7 @@ using StardewArchipelago.Items.Traps;
 
 namespace StardewArchipelago.Archipelago.Gifting
 {
-    public class GiftReceiver
+    public class GiftReceiver : IDisposable
     {
         private ILogger _logger;
         private readonly ArchipelagoClient _archipelago;
@@ -28,6 +29,20 @@ namespace StardewArchipelago.Archipelago.Gifting
             _itemManager = itemManager;
             _mail = mail;
             _giftProcessor = new GiftProcessor(logger, archipelago, itemManager, closeTraitParser, giftTrapManager);
+            _giftService.OnNewGift += ProcessNewGiftInstantly;
+        }
+
+        public void Dispose()
+        {
+            _giftService.OnNewGift -= ProcessNewGiftInstantly;
+        }
+
+        public void ProcessNewGiftInstantly(Gift newGift)
+        {
+            if (_giftProcessor.ProcessGiftTrap(newGift))
+            {
+                _giftService.RemoveGiftFromGiftBox(newGift.ID);
+            }
         }
 
         public void ReceiveAllGifts()

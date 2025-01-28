@@ -5,6 +5,7 @@ using System.Linq;
 using Archipelago.Gifting.Net.Traits;
 using Archipelago.Gifting.Net.Versioning.Gifts;
 using Archipelago.Gifting.Net.Versioning.Gifts.Current;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Stardew;
 using StardewValley;
 using StardewValley.GameData.Objects;
@@ -16,10 +17,12 @@ namespace StardewArchipelago.Archipelago.Gifting
     {
         private const int DEFAULT_BUFF_DURATION = 120;
 
+        private readonly ILogger _logger;
         private readonly StardewItemManager _itemManager;
 
-        public GiftGenerator(StardewItemManager itemManager)
+        public GiftGenerator(ILogger logger, StardewItemManager itemManager)
         {
+            _logger = logger;
             _itemManager = itemManager;
         }
 
@@ -319,9 +322,30 @@ namespace StardewArchipelago.Archipelago.Gifting
                         item = item[largePrefix.Length..];
                         quality *= 2;
                     }
-                    yield return CreateTrait(ToPascalCase(item), quality);
+                    item = ToPascalCase(item);
+                    if (item.Equals(GiftFlag.Bomb, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        quality = GetBombQuality(giftItem);
+                    }
+                    yield return CreateTrait(item, quality);
                 }
             }
+        }
+
+        private double GetBombQuality(Item bombItem)
+        {
+            switch (bombItem.ItemId)
+            {
+                case "286":
+                    return 0.5;
+                case "287":
+                    return 1.0;
+                case "288":
+                    return 2.0;
+            }
+
+            _logger.LogError($"Could not parse bomb item {bombItem.Name} with ID {bombItem.ItemId}");
+            return 1.0;
         }
 
         private string ToPascalCase(string text)
@@ -344,7 +368,7 @@ namespace StardewArchipelago.Archipelago.Gifting
                     continue;
                 }
 
-                bestTraits[trait.Trait] = MaxOf(trait, bestTraits[trait.Trait]);
+                bestTraits[trait.Trait] = BestOf(trait, bestTraits[trait.Trait]);
             }
 
             return bestTraits.Values;
@@ -355,9 +379,23 @@ namespace StardewArchipelago.Archipelago.Gifting
             return new GiftTrait(trait, duration, quality);
         }
 
-        private static GiftTrait MaxOf(GiftTrait trait, GiftTrait previousTrait)
+        private static GiftTrait BestOf(GiftTrait trait, GiftTrait previousTrait)
         {
-            return new GiftTrait(trait.Trait, Math.Max(trait.Duration, previousTrait.Duration), Math.Max(trait.Quality, previousTrait.Quality));
+            return new GiftTrait(trait.Trait, BestOf(trait.Duration, previousTrait.Duration), BestOf(trait.Quality, previousTrait.Quality));
+        }
+
+        private static double BestOf(double trait1, double trait2)
+        {
+            const double epsilon = 0.0001;
+            if (Math.Abs(trait1 - 1.0) < epsilon)
+            {
+                return trait2;
+            }
+            if (Math.Abs(trait2 - 1.0) < epsilon)
+            {
+                return trait1;
+            }
+            return Math.Max(trait1, trait2);
         }
 
         private static readonly Dictionary<int, string[]> _categoryFlags = new()

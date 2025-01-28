@@ -235,6 +235,7 @@ namespace StardewArchipelago
             _multiSleep = new MultiSleep(_logger, _helper, _harmony);
             _advancedOptionsManager = new AdvancedOptionsManager(this, _logger, _helper, _harmony, _archipelago, _testerFeatures);
             _advancedOptionsManager.InjectArchipelagoAdvancedOptions();
+            _giftHandler?.Dispose();
             _giftHandler = new CrossGiftHandler();
             _villagerEvents = new ModifiedVillagerEventChecker();
             SkillInjections.ResetSkillExperience();

@@ -196,7 +196,7 @@ namespace StardewArchipelago.Items.Traps.Shuffle
                 {
                     foreach (var (itemSlot, item) in inventory.Content)
                     {
-                        if (item is not Object objectToGift || !_giftSender.CanGiftObject(objectToGift) || random.NextDouble() > giftingRate)
+                        if (item is not Object objectToGift || !_giftHandler.Sender.CanGiftObject(objectToGift) || random.NextDouble() > giftingRate)
                         {
                             continue;
                         }

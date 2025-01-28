@@ -25,7 +25,7 @@ namespace StardewArchipelago.Archipelago.Gifting
             _logger = logger;
             _archipelago = archipelago;
             _giftService = giftService;
-            GiftGenerator = new GiftGenerator(itemManager);
+            GiftGenerator = new GiftGenerator(_logger, itemManager);
         }
 
         public void SendGift(string slotName, bool isTrap)
