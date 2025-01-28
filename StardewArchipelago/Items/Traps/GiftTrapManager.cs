@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using Archipelago.Gifting.Net.Traits;
 using Archipelago.Gifting.Net.Versioning.Gifts.Current;
+using StardewArchipelago.Stardew;
 
 namespace StardewArchipelago.Items.Traps
 {
@@ -28,22 +29,22 @@ namespace StardewArchipelago.Items.Traps
         private void RegisterTraps()
         {
             _giftTraps.Add(GiftFlag.Bomb, SpawnBomb);
-            // _giftTraps.Add(GiftFlag.Armor, GetJinxed);
+            _giftTraps.Add(GiftFlag.Armor, GetJinxed);
+            _giftTraps.Add(GiftFlag.Speed, GetSlowed);
+            _giftTraps.Add(GiftFlag.Slowness, GetSlowed);
+            _giftTraps.Add(GiftFlag.Cure, GetPoisoned);
+            _giftTraps.Add(GiftFlag.Damage, GetWeaknessed);
+            _giftTraps.Add(GiftFlag.Weapon, GetWeaknessed);
+            _giftTraps.Add(GiftFlag.Fire, GetBurnt);
+            _giftTraps.Add(GiftFlag.Ice, GetFrozen);
+            _giftTraps.Add(GiftFlag.Light, GetDarknessed);
 
             // TODO: Code more of these
-            //_giftTraps.Add(GiftFlag.Speed, GetSlowed);
-            //_giftTraps.Add(GiftFlag.Slowness, GetSlowed);
-            //_giftTraps.Add(GiftFlag.Cure, GetPoisoned);
             //_giftTraps.Add(GiftFlag.Energy, LoseEnergy);
             //_giftTraps.Add(GiftFlag.Mana, LoseEnergy);
             //_giftTraps.Add(GiftFlag.Heal, GetDamaged);
             //_giftTraps.Add(GiftFlag.Life, GetDamaged);
-            //_giftTraps.Add(GiftFlag.Damage, GetWeaknessed);
-            //_giftTraps.Add(GiftFlag.Weapon, GetWeaknessed);
-            //_giftTraps.Add(GiftFlag.Fire, GetBurnt);
             //_giftTraps.Add(GiftFlag.Grass, SpawnDebris);
-            //_giftTraps.Add(GiftFlag.Ice, GetFrozen);
-            //_giftTraps.Add(GiftFlag.Light, GetDarknessed);
             //_giftTraps.Add(GiftFlag.Monster, SpawnMonster);
             //_giftTraps.Add(GiftFlag.Animal, SpawnMonster);
             //_giftTraps.Add(GiftFlag.Seed, UngrowCrops);
@@ -87,7 +88,43 @@ namespace StardewArchipelago.Items.Traps
 
         private void GetJinxed(double quality, double duration)
         {
-            throw new NotImplementedException();
+            GetTrapGiftDebuff(Buffs.EvilEye, quality, duration);
+        }
+
+        private void GetSlowed(double quality, double duration)
+        {
+            GetTrapGiftDebuff(Buffs.Slimed, quality, duration, 0.5);
+        }
+
+        private void GetPoisoned(double quality, double duration)
+        {
+            GetTrapGiftDebuff(Buffs.Nauseous, quality, duration);
+        }
+
+        private void GetWeaknessed(double quality, double duration)
+        {
+            GetTrapGiftDebuff(Buffs.Weakness, quality, duration);
+        }
+
+        private void GetBurnt(double quality, double duration)
+        {
+            GetTrapGiftDebuff(Buffs.GoblinsCurse, quality, duration);
+        }
+
+        private void GetFrozen(double quality, double duration)
+        {
+            GetTrapGiftDebuff(Buffs.Frozen, quality, duration, 0.2);
+        }
+
+        private void GetDarknessed(double quality, double duration)
+        {
+            GetTrapGiftDebuff(Buffs.Darkness, quality, duration, 2.0);
+        }
+
+        private void GetTrapGiftDebuff(Buffs whichDebuff, double quality, double duration, double durationMultiplier = 1.0)
+        {
+            var debuffDuration = (int)Math.Round((int)BuffDuration.HalfHour * duration * quality * durationMultiplier);
+            _trapExecutor.AddDebuff(whichDebuff, debuffDuration);
         }
     }
 }

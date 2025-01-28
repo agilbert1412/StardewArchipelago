@@ -103,9 +103,19 @@ namespace StardewArchipelago.Items.Traps
                 return;
             }
 
+            AddDebuff(whichBuff, (int)duration);
+        }
+
+        public void AddDebuff(Buffs whichBuff, int duration)
+        {
+            if (duration <= 0)
+            {
+                return;
+            }
+
             var debuff = new Buff(((int)whichBuff).ToString());
-            debuff.millisecondsDuration = (int)duration;
-            debuff.totalMillisecondsDuration = (int)duration;
+            debuff.millisecondsDuration = duration;
+            debuff.totalMillisecondsDuration = duration;
             Game1.player.applyBuff(debuff);
         }
 
