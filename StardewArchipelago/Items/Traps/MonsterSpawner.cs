@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
+using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewValley;
 using StardewValley.Monsters;
+using xTile;
 
 namespace StardewArchipelago.Items.Traps
 {
@@ -33,6 +36,30 @@ namespace StardewArchipelago.Items.Traps
         public void SpawnOneMonster(GameLocation map, TrapItemsDifficulty trapDifficulty)
         {
             var monster = ChooseRandomMonster(map, trapDifficulty);
+            AddMonster(map, monster);
+        }
+
+        public void SpawnOneMonster(GameLocation map, double quality)
+        {
+            Monster monster;
+            if (quality <= 0.5)
+            {
+                monster = ChooseRandomMonsterFrom(map, _easyMonsterTypes);
+            }
+            else if (quality >= 2.0)
+            {
+                monster = ChooseRandomMonsterFrom(map, _hardMonsterTypes);
+            }
+            else
+            {
+                monster = ChooseRandomMonsterFrom(map, _mediumMonsterTypes);
+            }
+
+            AddMonster(map, monster);
+        }
+
+        private static void AddMonster(GameLocation map, Monster monster)
+        {
             monster.focusedOnFarmers = true;
             monster.wildernessFarmMonster = true;
             map.characters.Add(monster);
@@ -40,8 +67,6 @@ namespace StardewArchipelago.Items.Traps
 
         private Monster ChooseRandomMonster(GameLocation map, TrapItemsDifficulty trapDifficulty)
         {
-            var spawnPosition = _tileChooser.GetRandomTileInboundsOffScreen(map);
-
             var monsters = new List<string>(_easyMonsterTypes);
             if (trapDifficulty >= TrapItemsDifficulty.Hard)
             {
@@ -51,6 +76,13 @@ namespace StardewArchipelago.Items.Traps
             {
                 monsters.AddRange(_hardMonsterTypes);
             }
+
+            return ChooseRandomMonsterFrom(map, monsters);
+        }
+
+        private Monster ChooseRandomMonsterFrom(GameLocation map, IList<string> monsters)
+        {
+            var spawnPosition = _tileChooser.GetRandomTileInboundsOffScreen(map);
 
             var chosenMonsterType = monsters[Game1.random.Next(0, monsters.Count)];
             switch (chosenMonsterType)

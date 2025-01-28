@@ -43,11 +43,11 @@ namespace StardewArchipelago.Items.Traps
             _giftTraps.Add(GiftFlag.Mana, LoseEnergy);
             _giftTraps.Add(GiftFlag.Heal, GetDamaged);
             _giftTraps.Add(GiftFlag.Life, GetDamaged);
+            _giftTraps.Add(GiftFlag.Monster, SpawnMonster);
+            _giftTraps.Add(GiftFlag.Animal, SpawnMonster);
 
             // TODO: Code more of these
             //_giftTraps.Add(GiftFlag.Grass, SpawnDebris);
-            //_giftTraps.Add(GiftFlag.Monster, SpawnMonster);
-            //_giftTraps.Add(GiftFlag.Animal, SpawnMonster);
             //_giftTraps.Add(GiftFlag.Seed, UngrowCrops);
             //_giftTraps.Add(GiftFlag.Wood, SpawnTree);
         }
@@ -146,6 +146,11 @@ namespace StardewArchipelago.Items.Traps
                 var remaining = 1 - reduction;
                 farmer.health = Math.Max(1, (int)Math.Round(farmer.health * remaining));
             }
+        }
+
+        private void SpawnMonster(double quality, double duration)
+        {
+            _trapExecutor.MonsterSpawner.SpawnOneMonster(Game1.player.currentLocation, quality * duration);
         }
     }
 }
