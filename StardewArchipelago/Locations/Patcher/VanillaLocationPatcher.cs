@@ -366,12 +366,17 @@ namespace StardewArchipelago.Locations.Patcher
                 prefix: new HarmonyMethod(typeof(SkillInjections), nameof(SkillInjections.GainExperience_ArchipelagoExperience_Prefix))
             );
 
+            var performActionTypes = new[] { typeof(string[]), typeof(Farmer), typeof(Location) };
             if (_archipelago.SlotData.SkillProgression != SkillsProgression.ProgressiveWithMasteries)
             {
+
+                _harmony.Patch(
+                    original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performAction), performActionTypes),
+                    prefix: new HarmonyMethod(typeof(MasteriesInjections), nameof(MasteriesInjections.PerformAction_VanillaMasteryCaveInteractions_Prefix))
+                );
                 return;
             }
 
-            var performActionTypes = new[] { typeof(string[]), typeof(Farmer), typeof(Location) };
             _harmony.Patch(
                 original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performAction), performActionTypes),
                 prefix: new HarmonyMethod(typeof(MasteriesInjections), nameof(MasteriesInjections.PerformAction_MasteryCaveInteractions_Prefix))

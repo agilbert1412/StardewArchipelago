@@ -31,6 +31,48 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         }
 
         // public virtual bool performAction(string[] action, Farmer who, Location tileLocation)
+        public static bool PerformAction_VanillaMasteryCaveInteractions_Prefix(GameLocation __instance, string[] action, Farmer who, Location tileLocation)
+        {
+            try
+            {
+                if (__instance.ShouldIgnoreAction(action, who, tileLocation) ||
+                    !who.IsLocalPlayer ||
+                    !ArgUtility.TryGet(action, 0, out var actionKey, out var error) ||
+                    !actionKey.StartsWith(MASTERY))
+                {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
+                switch (actionKey)
+                {
+                    case "MasteryRoom":
+                        PerformActionVanillaMasteryRoom();
+                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+                    default:
+                        return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(PerformAction_VanillaMasteryCaveInteractions_Prefix)}:\n{ex}");
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+        }
+
+        private static void PerformActionVanillaMasteryRoom()
+        {
+            if (Game1.player.farmingLevel.Value >= 10 || Game1.player.fishingLevel.Value >= 10 || Game1.player.foragingLevel.Value >= 10 || Game1.player.miningLevel.Value >= 10 || Game1.player.combatLevel.Value >= 10)
+            {
+                Game1.playSound("doorClose");
+                Game1.warpFarmer("MasteryCave", 7, 11, 0);
+                return;
+            }
+
+            const string hintMessage = "Only a master of the five ways may enter.";
+            Game1.drawObjectDialogue(hintMessage);
+        }
+
+        // public virtual bool performAction(string[] action, Farmer who, Location tileLocation)
         public static bool PerformAction_MasteryCaveInteractions_Prefix(GameLocation __instance, string[] action, Farmer who, Location tileLocation)
         {
             try
