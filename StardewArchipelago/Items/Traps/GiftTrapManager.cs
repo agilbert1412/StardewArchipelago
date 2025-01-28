@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Archipelago.Gifting.Net.Traits;
 using Archipelago.Gifting.Net.Versioning.Gifts.Current;
 using StardewArchipelago.Stardew;
+using StardewValley;
 
 namespace StardewArchipelago.Items.Traps
 {
@@ -38,12 +39,12 @@ namespace StardewArchipelago.Items.Traps
             _giftTraps.Add(GiftFlag.Fire, GetBurnt);
             _giftTraps.Add(GiftFlag.Ice, GetFrozen);
             _giftTraps.Add(GiftFlag.Light, GetDarknessed);
+            _giftTraps.Add(GiftFlag.Energy, LoseEnergy);
+            _giftTraps.Add(GiftFlag.Mana, LoseEnergy);
+            _giftTraps.Add(GiftFlag.Heal, GetDamaged);
+            _giftTraps.Add(GiftFlag.Life, GetDamaged);
 
             // TODO: Code more of these
-            //_giftTraps.Add(GiftFlag.Energy, LoseEnergy);
-            //_giftTraps.Add(GiftFlag.Mana, LoseEnergy);
-            //_giftTraps.Add(GiftFlag.Heal, GetDamaged);
-            //_giftTraps.Add(GiftFlag.Life, GetDamaged);
             //_giftTraps.Add(GiftFlag.Grass, SpawnDebris);
             //_giftTraps.Add(GiftFlag.Monster, SpawnMonster);
             //_giftTraps.Add(GiftFlag.Animal, SpawnMonster);
@@ -125,6 +126,26 @@ namespace StardewArchipelago.Items.Traps
         {
             var debuffDuration = (int)Math.Round((int)BuffDuration.HalfHour * duration * quality * durationMultiplier);
             _trapExecutor.AddDebuff(whichDebuff, debuffDuration);
+        }
+
+        private void LoseEnergy(double quality, double duration)
+        {
+            foreach (var farmer in Game1.getAllFarmers())
+            {
+                var reduction = 0.1 * quality * duration;
+                var remaining = 1 - reduction;
+                farmer.stamina = (float)Math.Max(0, farmer.stamina * remaining);
+            }
+        }
+
+        private void GetDamaged(double quality, double duration)
+        {
+            foreach (var farmer in Game1.getAllFarmers())
+            {
+                var reduction = 0.1 * quality * duration;
+                var remaining = 1 - reduction;
+                farmer.health = Math.Max(1, (int)Math.Round(farmer.health * remaining));
+            }
         }
     }
 }
