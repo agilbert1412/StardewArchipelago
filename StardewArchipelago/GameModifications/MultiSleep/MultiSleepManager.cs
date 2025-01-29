@@ -63,7 +63,6 @@ namespace StardewArchipelago.GameModifications.MultiSleep
             }
 
             _multiSleepPrice = slotData.MultiSleepCostPerDay;
-            _multiSleepPrice = 50;
 
             var performTouchActionParameters = new[] { typeof(string[]), typeof(Vector2) };
             _harmony.Patch(
