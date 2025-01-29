@@ -77,7 +77,7 @@ namespace StardewArchipelago.Constants
             "SakuraTsubasa",
             "Salmence",
             "Salzkorn",
-            "SamanthaCoffin",
+            "TheSamanthaTM",
             "Scipio",
             "SlyRyD",
             "Smorgasbord",
