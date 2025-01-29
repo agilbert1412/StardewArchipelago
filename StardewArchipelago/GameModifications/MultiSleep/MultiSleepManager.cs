@@ -25,7 +25,7 @@ namespace StardewArchipelago.GameModifications.MultiSleep
 
         public static MultiSleepBehavior _currentMultiSleep;
         public static MultiSleepBehavior CurrentMultiSleep => _currentMultiSleep;
-        private static int _multiSleepPrice = -1;
+        private static int _multiSleepPrice = 0;
 
         public MultiSleepManager(ILogger logger, IModHelper modHelper, Harmony harmony)
         {
@@ -37,14 +37,22 @@ namespace StardewArchipelago.GameModifications.MultiSleep
 
         public static bool TryDoMultiSleepOnDayStarted()
         {
-            if (_currentMultiSleep.ShouldKeepSleeping())
+            if (!_currentMultiSleep.ShouldKeepSleeping())
             {
-                _currentMultiSleep.KeepSleeping();
-                return true;
+                _currentMultiSleep = new DontMultiSleepBehavior();
+                return false;
             }
 
-            _currentMultiSleep = new DontMultiSleepBehavior();
-            return false;
+            if (Game1.player.Money < _multiSleepPrice)
+            {
+                Game1.drawObjectDialogue($"Cannot afford to continue multisleeping. Cost: {_multiSleepPrice}g/day");
+                _currentMultiSleep = new DontMultiSleepBehavior();
+                return false;
+            }
+
+            Game1.player.Money -= _multiSleepPrice;
+            _currentMultiSleep.KeepSleeping();
+            return true;
         }
 
         public void InjectMultiSleepOption(SlotData slotData)
@@ -55,6 +63,7 @@ namespace StardewArchipelago.GameModifications.MultiSleep
             }
 
             _multiSleepPrice = slotData.MultiSleepCostPerDay;
+            _multiSleepPrice = 50;
 
             var performTouchActionParameters = new[] { typeof(string[]), typeof(Vector2) };
             _harmony.Patch(
@@ -184,21 +193,7 @@ namespace StardewArchipelago.GameModifications.MultiSleep
         public static void SleepMany(GameLocation instance, int numberOfDays)
         {
             var daysToSkip = numberOfDays - 1;
-            var totalPrice = 0;
-            if (_multiSleepPrice > 0)
-            {
-                totalPrice = _multiSleepPrice * daysToSkip;
-            }
-
-            if (Game1.player.Money < totalPrice)
-            {
-                Game1.drawObjectDialogue($"Cannot afford MultiSleep. Cost: {totalPrice}g");
-                return;
-            }
-
             SetDaysToSkip(daysToSkip);
-            Game1.player.Money -= totalPrice;
-
             StartSleep(instance);
         }
 
