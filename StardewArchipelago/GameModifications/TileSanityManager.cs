@@ -14,11 +14,26 @@ namespace StardewArchipelago.GameModifications;
 
 public class TileSanityManager
 {
+    public const string TILESANITY_PREFIX = "Tilesanity: ";
+
     private readonly Harmony _harmony;
     private readonly StardewArchipelagoClient _archipelago;
     private readonly StardewLocationChecker _locationChecker;
     private readonly IMonitor _monitor;
-    public const string TILESANITY_PREFIX = "Tilesanity: ";
+
+    private static int _tilesanitySize;
+
+    public TileSanityManager(Harmony harmony, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker, IMonitor monitor)
+    {
+        _harmony = harmony;
+        _archipelago = archipelago;
+        _locationChecker = locationChecker;
+        _monitor = monitor;
+
+#if TILESANITY
+        _tilesanitySize = _archipelago.SlotData.TilesanitySize;
+#endif
+    }
 
     public static string GetMapName(Farmer farmer)
     {
@@ -36,8 +51,8 @@ public class TileSanityManager
     public string GetTileName(int x, int y, Farmer farmer)
     {
         var map = GetMapName(farmer);
-        x /= _archipelago.SlotData.TilesanitySize;
-        y /= _archipelago.SlotData.TilesanitySize;
+        x /= _tilesanitySize;
+        y /= _tilesanitySize;
 
         return $"{TILESANITY_PREFIX}{map} ({x}-{y})";
     }
@@ -49,29 +64,21 @@ public class TileSanityManager
         var match = Regex.Match(name, pattern);
 
         var map = match.Groups[1].Value;
-        var x = int.Parse(match.Groups[2].Value) * _archipelago.SlotData.TilesanitySize;
-        var y = int.Parse(match.Groups[3].Value) * _archipelago.SlotData.TilesanitySize;
+        var x = int.Parse(match.Groups[2].Value) * _tilesanitySize;
+        var y = int.Parse(match.Groups[3].Value) * _tilesanitySize;
 
         if (map == $"{Game1.GetFarmTypeKey()} Farm")
         {
             map = "Farm";
         }
 
-        for (var i = 0; i < _archipelago.SlotData.TilesanitySize; i++)
+        for (var i = 0; i < _tilesanitySize; i++)
         {
-            for (var j = 0; j < _archipelago.SlotData.TilesanitySize; j++)
+            for (var j = 0; j < _tilesanitySize; j++)
             {
                 yield return (map, x + i, y + j);
             }
         }
-    }
-
-    public TileSanityManager(Harmony harmony, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker, IMonitor monitor)
-    {
-        _harmony = harmony;
-        _archipelago = archipelago;
-        _locationChecker = locationChecker;
-        _monitor = monitor;
     }
 
     public void PatchWalk(IModHelper modHelper)

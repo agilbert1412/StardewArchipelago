@@ -65,8 +65,10 @@ public static class WalkSanityInjections
 
     public static bool IsUnlocked(string name)
     {
+#if TILESANITY
         if (_archipelago.SlotData.Tilesanity < Archipelago.Tilesanity.Simplified)
             return true;
+#endif
         if (name.Contains("FarmHouse"))
             return true;
         if (!_archipelago.LocationExists(name))

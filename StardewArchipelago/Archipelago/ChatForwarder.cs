@@ -541,12 +541,15 @@ namespace StardewArchipelago.Archipelago
             Game1.chatBox?.addMessage($"{COMMAND_PREFIX}sync - Sends a Sync packet to the Archipelago server", Color.Gold);
 #endif
             Game1.chatBox?.addMessage($"{COMMAND_PREFIX}arcade_release [game] - Releases all remaining checks in an arcade machine that you have already completed", Color.Gold);
+
+#if TILESANITY
             if (_archipelago.SlotData.Tilesanity != Tilesanity.Nope)
             {
                 Game1.chatBox?.addMessage($"{COMMAND_PREFIX}where - Shows where you are and pointing at", Color.Gold);
                 Game1.chatBox?.addMessage($"{COMMAND_PREFIX}tilesanity_ui - Toggles the tilesanity UI", Color.Gold);
                 Game1.chatBox?.addMessage($"{COMMAND_PREFIX}tilesanity_ui_black - Toggles the tilesanity UI, but for Kaito", Color.Gold);
             }
+#endif
         }
     }
 }
