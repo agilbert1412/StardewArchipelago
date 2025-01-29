@@ -5,6 +5,7 @@ using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework.Input;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.GameModifications.MultiSleep;
 using StardewArchipelago.Serialization;
 using StardewModdingAPI;
 using StardewValley;
@@ -119,7 +120,7 @@ namespace StardewArchipelago.GameModifications.Seasons
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
-                if (MultiSleep.DaysToSkip > 0)
+                if (MultiSleepManager.CurrentMultiSleep.ShouldKeepSleeping())
                 {
                     ChooseNextSeasonBasedOnConfigPreference();
                     return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;

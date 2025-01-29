@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using StardewValley;
 using StardewValley.Menus;
 
-namespace StardewArchipelago.GameModifications
+namespace StardewArchipelago.GameModifications.MultiSleep
 {
     public class MultiSleepSelectionMenu : NumberSelectionMenu
     {

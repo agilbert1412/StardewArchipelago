@@ -15,6 +15,7 @@ using StardewArchipelago.GameModifications;
 using StardewArchipelago.GameModifications.CodeInjections;
 using StardewArchipelago.GameModifications.EntranceRandomizer;
 using StardewArchipelago.GameModifications.Modded;
+using StardewArchipelago.GameModifications.MultiSleep;
 using StardewArchipelago.GameModifications.Seasons;
 using StardewArchipelago.GameModifications.Testing;
 using StardewArchipelago.Goals;
@@ -73,7 +74,7 @@ namespace StardewArchipelago
         private ItemPatcher _itemPatcher;
         private GoalManager _goalManager;
         private StardewItemManager _stardewItemManager;
-        private MultiSleep _multiSleep;
+        private MultiSleepManager _multiSleepManager;
         private SeasonsRandomizer _seasonsRandomizer;
         private AppearanceRandomizer _appearanceRandomizer;
         private QuestCleaner _questCleaner;
@@ -232,7 +233,7 @@ namespace StardewArchipelago
             _bundlesManager?.CleanEvents();
             _bundlesManager = null;
             SeasonsRandomizer.ResetMailKeys();
-            _multiSleep = new MultiSleep(_logger, _helper, _harmony);
+            _multiSleepManager = new MultiSleepManager(_logger, _helper, _harmony);
             _advancedOptionsManager = new AdvancedOptionsManager(this, _logger, _helper, _harmony, _archipelago, _testerFeatures);
             _advancedOptionsManager.InjectArchipelagoAdvancedOptions();
             _giftHandler?.Dispose();
@@ -375,7 +376,7 @@ namespace StardewArchipelago
             _locationsPatcher.ReplaceAllLocationsRewardsWithChecks();
             _itemPatcher.PatchApItems();
             _goalManager.InjectGoalMethods();
-            _multiSleep.InjectMultiSleepOption(_archipelago.SlotData);
+            _multiSleepManager.InjectMultiSleepOption(_archipelago.SlotData);
             SeasonsRandomizer.ChangeMailKeysBasedOnSeasonsToDaysElapsed();
             _modStateInitializer = new InitialModGameStateInitializer(_logger, _archipelago);
             _hintHelper = new HintHelper();
@@ -458,10 +459,8 @@ namespace StardewArchipelago
             SeasonsRandomizer.ChangeMailKeysBasedOnSeasonsToDaysElapsed();
             SeasonsRandomizer.SendMailHardcodedForToday();
 
-            if (MultiSleep.DaysToSkip > 0)
+            if (MultiSleepManager.TryDoMultiSleepOnDayStarted())
             {
-                MultiSleep.DaysToSkip--;
-                Game1.NewDay(0);
                 return;
             }
 

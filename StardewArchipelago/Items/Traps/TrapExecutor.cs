@@ -13,7 +13,6 @@ using StardewValley;
 using StardewValley.Locations;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Extensions;
-using StardewArchipelago.GameModifications;
 using StardewValley.BellsAndWhistles;
 using StardewValley.Characters;
 using StardewValley.Objects;
@@ -23,6 +22,7 @@ using System.Threading;
 using Archipelago.MultiClient.Net.Enums;
 using StardewValley.Network.ChestHit;
 using Object = StardewValley.Object;
+using StardewArchipelago.GameModifications.MultiSleep;
 
 namespace StardewArchipelago.Items.Traps
 {
@@ -519,7 +519,7 @@ namespace StardewArchipelago.Items.Traps
             var timeToSkip = (int)_difficultyBalancer.TimeFliesDurations[_archipelago.SlotData.TrapItemsDifficulty];
             if (timeToSkip > 120)
             {
-                MultiSleep.DaysToSkip = (timeToSkip / 120) - 1;
+                MultiSleepManager.SetDaysToSkip((timeToSkip / 120) - 1);
                 Game1.timeOfDay = 2800;
                 Game1.player.startToPassOut();
                 return;
@@ -564,7 +564,7 @@ namespace StardewArchipelago.Items.Traps
         public void ForceNextMultisleep()
         {
             var daysToSkip = _difficultyBalancer.DepressionTrapDays[_archipelago.SlotData.TrapItemsDifficulty];
-            MultiSleep.DaysToSkip = daysToSkip;
+            MultiSleepManager.SetDaysToSkip(daysToSkip);
         }
 
         public void UngrowCrops()
