@@ -213,6 +213,7 @@ namespace StardewArchipelago.Items.Mail
             "I hear you need something for you 'secret friend' this winter and boy do I have the perfect item for you: {0}. No need to thank me, I'm sure it's exactly what you needed.^^    -{1} from {2}",
             "You still need one more item for your grange display at the Fair, right? Here's your winner: a freshly caught {0}, straight from the {2} seas.^^    -{1}",
             "I know you've been trying hard to win over a partner for the Flower Dance. This {0} is sure to win over your crush. I just know they'll love it.^^    -{1} from {2}",
+            "I have travelled far and wide for you my lord!^^ Tirelessly, day and night until finally, I reached {2}. There, I found {0} for you. My quest is complete!^^ May I have that cookie now?^^ -{1}" 
         };
 
         private const string ApConciseMailString = "{0} from {1} at {2}.";
@@ -285,6 +286,10 @@ namespace StardewArchipelago.Items.Mail
             "My original letter wasn't safe for streaming, so you're getting this one instead. Here's your {0}.^^    -{1}",
             "Hope you can add this {0} to your power suit like we can here on Zebes^^    -{1}",
             "Don't worry I didn't forget your birthday, I got you {0}, I hope you love it.^^    -{1}",
+            "So here you are again.^^ Playing another Archipelago seed.^^ You know what you could be doing?^^ Playing your backlog.^^ But no, gotta play them classics.^^ -{1} ({0})"
+            "Have you ever played Junimo Kart? I love it, it's just a nice chill game. Here's some {0} so you can play.^^   -{1}"
+            "Aiyhd ndi hjsajkhndb mkss? Fjdskn udf thene ksskdu {0}! Dfsbdubfsken nmsd tr {2}.^^   -{1}"
+            "I found a new game in the same technology document and I worry that this becomes a thread about the manual implementation, and the {0} are shuffled. This is a huge breakthrough!^^   -Sent from {1}'s iPhone"
         };
     }
 }
