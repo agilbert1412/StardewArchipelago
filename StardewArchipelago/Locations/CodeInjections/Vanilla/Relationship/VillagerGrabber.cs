@@ -46,7 +46,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
             AddGrabberItem("Lewis", new[] { "Hot Pepper", "Green Tea" });
             AddGrabberItem("Linus", new[] { "Largemouth Bass", "Catfish", "Fried Calamari", "Sashimi", "Maki Roll" });
             AddGrabberItem("Marnie", new[] { "Hay" }, 30);
-            AddGrabberItem("Marnie", new[] { "Farmer's Lunch", "Green Tea" });
+            AddGrabberItem("Marnie", new[] { "Farmer's Lunch", "Green Tea", "Egg", "Egg (Brown)" });
             AddGrabberItem("Maru", new[] { "Battery Pack", "Iridium Bar" });
             AddGrabberItem("Pam", new[] { "Beer", "Energy Tonic", "Battery Pack", "Pale Ale", "Mead" });
             AddGrabberItem("Penny", new[] { "Melon", "Poppy" });
