@@ -286,10 +286,10 @@ namespace StardewArchipelago.Items.Mail
             "My original letter wasn't safe for streaming, so you're getting this one instead. Here's your {0}.^^    -{1}",
             "Hope you can add this {0} to your power suit like we can here on Zebes^^    -{1}",
             "Don't worry I didn't forget your birthday, I got you {0}, I hope you love it.^^    -{1}",
-            "So here you are again.^^ Playing another Archipelago seed.^^ You know what you could be doing?^^ Playing your backlog.^^ But no, gotta play them classics.^^ -{1} ({0})"
-            "Have you ever played Junimo Kart? I love it, it's just a nice chill game. Here's some {0} so you can play.^^   -{1}"
-            "Aiyhd ndi hjsajkhndb mkss? Fjdskn udf thene ksskdu {0}! Dfsbdubfsken nmsd tr {2}.^^   -{1}"
-            "I found a new game in the same technology document and I worry that this becomes a thread about the manual implementation, and the {0} are shuffled. This is a huge breakthrough!^^   -Sent from {1}'s iPhone"
+            "So here you are again.^^ Playing another Archipelago seed.^^ You know what you could be doing?^^ Playing your backlog.^^ But no, gotta play them classics.^^ -{1} ({0})",
+            "Have you ever played Junimo Kart? I love it, it's just a nice chill game. Here's some {0} so you can play.^^   -{1}",
+            "Aiyhd ndi hjsajkhndb mkss? Fjdskn udf thene ksskdu {0}! Dfsbdubfsken nmsd tr {2}.^^   -{1}",
+            "I found a new game in the same technology document and I worry that this becomes a thread about the manual implementation, and the {0} are shuffled. This is a huge breakthrough!^^   -Sent from {1}'s iPhone",
         };
     }
 }
