@@ -1,19 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Archipelago.MultiClient.Net.Enums;
+using Archipelago.MultiClient.Net.Models;
 using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
-using Microsoft.Xna.Framework;
+using Netcode;
+using Newtonsoft.Json.Linq;
 using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Minigames;
+using Color = Microsoft.Xna.Framework.Color;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Arcade
 {
     public static class JunimoKartInjections
     {
+        private const string JK_DATASTORAGE_SCORE = "JunimoKartEndlessScore";
+        private static JToken EmptyScoresDictionary => JToken.FromObject(new Dictionary<string, int>());
+
         private const string JK_EXTRA_LIFE = "Junimo Kart: Extra Life";
 
         public const string JK_VICTORY = "Junimo Kart: Sunset Speedway (Victory)";
@@ -145,6 +152,125 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Arcade
             {
                 _locationChecker.AddCheckedLocation(junimoKartLocation);
             }
+        }
+
+        // public void submitHighScore()
+        public static bool SubmitHighScore_AddScoreToMultiworld_Prefix(MineCart __instance)
+        {
+            try
+            {
+                // private int score;
+                var scoreField = _helper.Reflection.GetField<int>(__instance, "score");
+                var score = scoreField.GetValue();
+
+                var name = _archipelago.SlotData.SlotName;
+
+                if (Game1.player.team.junimoKartScores.GetScores()[0].Value < score)
+                {
+                    // Game1.multiplayer.globalChatInfoMessage("JunimoKartHighScore", Game1.player.Name);
+                }
+                Game1.player.team.junimoKartScores.AddScore(name, score);
+                if (Game1.player.team.specialOrders != null)
+                {
+                    foreach (var specialOrder in Game1.player.team.specialOrders)
+                    {
+                        var onJkScoreAchieved = specialOrder.onJKScoreAchieved;
+                        if (onJkScoreAchieved != null)
+                        {
+                            onJkScoreAchieved(Game1.player, score);
+                        }
+                    }
+                }
+
+                __instance.RefreshHighScore();
+
+                var session = _archipelago.GetSession();
+                session.DataStorage[Scope.Global, JK_DATASTORAGE_SCORE].Initialize(EmptyScoresDictionary);
+
+                var existingScores = Game1.player.team.junimoKartScores.GetScores();
+                var myScores = existingScores.Where(x => x.Key.Equals(name));
+                var myBestScore = myScores.Max(x => x.Value);
+
+                var newEntry = new Dictionary<string, int> { { name, myBestScore } };
+                session.DataStorage[Scope.Global, JK_DATASTORAGE_SCORE] += Operation.Update(newEntry);
+
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(SubmitHighScore_AddScoreToMultiworld_Prefix)}:\n{ex}");
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+        }
+
+        // public List<KeyValuePair<string, int>> GetScores()
+        public static bool GetScores_AddScoresFromMultiworld_Prefix(NetLeaderboards __instance, ref List<KeyValuePair<string, int>> __result)
+        {
+            try
+            {
+                AddJKScore(__instance.entries, "Lewis", 50000);
+                AddJKScore(__instance.entries, "Shane", 25000);
+                AddJKScore(__instance.entries, "Sam", 10000);
+                AddJKScore(__instance.entries, "Abigail", 5000);
+                AddJKScore(__instance.entries, "Vincent", 250);
+
+                var scores = new List<KeyValuePair<string, int>>();
+                foreach (var entry in __instance.entries)
+                {
+                    scores.Add(new KeyValuePair<string, int>(entry.name.Value, entry.score.Value));
+                }
+
+                var session = _archipelago.GetSession();
+                session.DataStorage[Scope.Global, JK_DATASTORAGE_SCORE].Initialize(EmptyScoresDictionary);
+                var multiworldScores = session.DataStorage[Scope.Global, JK_DATASTORAGE_SCORE].To<Dictionary<string, int>>();
+                foreach (var (name, score) in multiworldScores)
+                {
+                    if (!scores.Any(x => x.Key.Equals(name)))
+                    {
+                        scores.Add(new KeyValuePair<string, int>(name, score));
+                    }
+                }
+
+                scores.Sort(((a, b) => a.Value.CompareTo(b.Value)));
+                scores.Reverse();
+
+                var names = new HashSet<string>();
+                for (var i = 0; i < scores.Count; i++)
+                {
+                    if (names.Contains(scores[i].Key))
+                    {
+                        scores.RemoveAt(i);
+                        i--;
+                        continue;
+                    }
+
+                    names.Add(scores[i].Key);
+                }
+
+                while (scores.Count > __instance.maxEntries.Value)
+                {
+                    scores.RemoveAt(scores.Count - 1);
+                }
+
+                __result = scores;
+
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(GetScores_AddScoresFromMultiworld_Prefix)}:\n{ex}");
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+        }
+
+        private static void AddJKScore(NetObjectList<NetLeaderboardsEntry> entries, string npcName, int score)
+        {
+            if (entries.Any(x => x.name.Value.Equals(npcName)))
+            {
+                return;
+            }
+
+            Game1.player.team.junimoKartScores.AddScore(Game1.RequireCharacter(npcName).displayName, score);
         }
     }
 }

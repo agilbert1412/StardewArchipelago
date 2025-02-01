@@ -717,6 +717,16 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void PatchJunimoKart()
         {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(NetLeaderboards), nameof(NetLeaderboards.GetScores)),
+                prefix: new HarmonyMethod(typeof(JunimoKartInjections), nameof(JunimoKartInjections.GetScores_AddScoresFromMultiworld_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(MineCart), nameof(MineCart.submitHighScore)),
+                prefix: new HarmonyMethod(typeof(JunimoKartInjections), nameof(JunimoKartInjections.SubmitHighScore_AddScoreToMultiworld_Prefix))
+            );
+
             if (_archipelago.SlotData.ArcadeMachineLocations == ArcadeLocations.Disabled)
             {
                 return;
