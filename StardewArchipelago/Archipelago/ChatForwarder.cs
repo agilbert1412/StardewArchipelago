@@ -13,6 +13,7 @@ using StardewArchipelago.GameModifications.CodeInjections.Tilesanity;
 using StardewArchipelago.Goals;
 using StardewArchipelago.Items.Traps;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.Arcade;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
 using StardewModdingAPI;
 using StardewValley;
@@ -372,27 +373,27 @@ namespace StardewArchipelago.Archipelago
 
             if (isJunimoCart)
             {
-                if (!_archipelago.GetAllCheckedLocations().Keys.Contains(ArcadeMachineInjections.JK_VICTORY))
+                if (!_archipelago.GetAllCheckedLocations().Keys.Contains(JunimoKartInjections.JK_VICTORY))
                 {
                     Game1.chatBox?.addMessage($"You must complete Junimo Kart before releasing it", Color.Gold);
                     return true;
                 }
 
                 Game1.chatBox?.addMessage($"Releasing all remaining checks in Junimo Kart", Color.Gold);
-                ArcadeMachineInjections.ReleaseJunimoKart();
+                JunimoKartInjections.ReleaseJunimoKart();
                 return true;
             }
 
             if (isPrairieKing)
             {
-                if (!_archipelago.GetAllCheckedLocations().Keys.Contains(ArcadeMachineInjections.JOTPK_VICTORY))
+                if (!_archipelago.GetAllCheckedLocations().Keys.Contains(JotPKInjections.JOTPK_VICTORY))
                 {
                     Game1.chatBox?.addMessage($"You must complete Journey of the Prairie King before releasing it", Color.Gold);
                     return true;
                 }
 
                 Game1.chatBox?.addMessage($"Releasing all remaining checks in Journey of the Prairie King", Color.Gold);
-                ArcadeMachineInjections.ReleasePrairieKing();
+                JotPKInjections.ReleasePrairieKing();
                 return true;
             }
 

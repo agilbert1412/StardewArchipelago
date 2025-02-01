@@ -10,26 +10,10 @@ using StardewValley.Minigames;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 
-namespace StardewArchipelago.Locations.CodeInjections.Vanilla
+namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Arcade
 {
-    public static class ArcadeMachineInjections
+    public static class JotPKInjections
     {
-        private const string JK_EXTRA_LIFE = "Junimo Kart: Extra Life";
-
-        public const string JK_VICTORY = "Junimo Kart: Sunset Speedway (Victory)";
-        private static readonly Dictionary<int, string> JK_LEVEL_LOCATIONS = new()
-        {
-            { 0, "Junimo Kart: Crumble Cavern" },
-            { 1, "Junimo Kart: Slippery Slopes" },
-            { 8, "Junimo Kart: Secret Level" },
-            { 2, "Junimo Kart: The Gem Sea Giant" },
-            { 5, "Junimo Kart: Slomp's Stomp" },
-            { 3, "Junimo Kart: Ghastly Galleon" },
-            { 9, "Junimo Kart: Glowshroom Grotto" },
-            { 4, "Junimo Kart: Red Hot Rollercoaster" },
-            { 6, JK_VICTORY },
-        };
-
         private const string JOTPK_BOOTS_1 = "JotPK: Boots 1";
         private const string JOTPK_BOOTS_2 = "JotPK: Boots 2";
         private const string JOTPK_GUN_1 = "JotPK: Gun 1";
@@ -61,8 +45,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private const int EXTRA_LIFE = 5;
         private const int SHERIFF_BADGE = 10;
 
-        private static readonly string[] JK_ALL_LOCATIONS = JK_LEVEL_LOCATIONS.Values.ToArray();
-
         private static readonly string[] JOTPK_ALL_LOCATIONS =
         {
             JOTPK_BOOTS_1, JOTPK_BOOTS_2, JOTPK_GUN_1, JOTPK_GUN_2, JOTPK_GUN_3, JOTPK_SUPER_GUN, JOTPK_AMMO_1,
@@ -88,100 +70,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             _locationChecker = locationChecker;
         }
 
-        public static void RestartLevel_NewGame_Postfix(MineCart __instance, bool new_game)
-        {
-            try
-            {
-                var livesLeftField = _helper.Reflection.GetField<int>(__instance, "livesLeft");
-                var livesLeft = livesLeftField.GetValue();
-
-                if (livesLeft != 3 || !new_game)
-                {
-                    return;
-                }
-                var numberExtraLives = GetJunimoKartExtraLives();
-                livesLeftField.SetValue(livesLeft + numberExtraLives);
-                return;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Failed in {nameof(RestartLevel_NewGame_Postfix)}:\n{ex}");
-                return;
-            }
-        }
-
-        public static void UpdateFruitsSummary_ExtraLives_Postfix(MineCart __instance, float time)
-        {
-            try
-            {
-                SendJunimoKartLevelsBeatChecks(__instance);
-
-                var livesLeftField = _helper.Reflection.GetField<int>(__instance, "livesLeft");
-                var livesLeft = livesLeftField.GetValue();
-                var numberExtraLives = GetJunimoKartExtraLives();
-                if (livesLeft >= 3 + numberExtraLives)
-                {
-                    return;
-                }
-                livesLeftField.SetValue(3 + numberExtraLives);
-
-                return;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Failed in {nameof(UpdateFruitsSummary_ExtraLives_Postfix)}:\n{ex}");
-                return;
-            }
-        }
-
-        public static bool EndCutscene_JunimoKartLevelComplete_Prefix(MineCart __instance)
-        {
-            try
-            {
-                SendJunimoKartLevelsBeatChecks(__instance);
-                return MethodPrefix.RUN_ORIGINAL_METHOD;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Failed in {nameof(EndCutscene_JunimoKartLevelComplete_Prefix)}:\n{ex}");
-                return MethodPrefix.RUN_ORIGINAL_METHOD;
-            }
-        }
-
-        private static void SendJunimoKartLevelsBeatChecks(MineCart __instance)
-        {
-            var gamemode = _helper.Reflection.GetField<int>(__instance, "gameMode");
-            var levelsBeat = _helper.Reflection.GetField<int>(__instance, "levelsBeat");
-            var currentLevel = _helper.Reflection.GetField<int>(__instance, "currentTheme");
-            var levelsFinishedThisRun =
-                _helper.Reflection.GetField<List<int>>(__instance, "levelThemesFinishedThisRun");
-            if (gamemode.GetValue() != 3 || levelsBeat.GetValue() < 1)
-            {
-                return;
-            }
-
-            foreach (var levelFinished in levelsFinishedThisRun.GetValue())
-            {
-                var location = JK_LEVEL_LOCATIONS[levelFinished];
-                if (location == JK_VICTORY && _locationChecker.IsLocationMissing(JK_VICTORY))
-                {
-                    Game1.chatBox?.addMessage("You can now type '!!arcade_release jk' to release all remaining Junimo Kart checks", Color.Green);
-                }
-                _locationChecker.AddCheckedLocation(location);
-            }
-        }
-
-        private static int GetJunimoKartExtraLives()
-        {
-            var numberExtraLives = 8;
-            if (_archipelago.SlotData.ArcadeMachineLocations == ArcadeLocations.FullShuffling)
-            {
-                numberExtraLives = _archipelago.GetReceivedItemCount(JK_EXTRA_LIFE);
-            }
-
-            return numberExtraLives;
-        }
-
         public static bool GetLootDrop_ExtraLoot_Prefix(AbigailGame.CowboyMonster __instance, ref int __result)
         {
             try
@@ -202,7 +90,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     var type0Mob5CoinChance = increasedDropRate ? 0.02 : 0.01;
                     var otherMob5CoinChance = increasedDropRate ? 0.2 : 0.1;
                     var mobIsType0 = __instance.type != 0;
-                    __result = ((mobIsType0 && Game1.random.NextDouble() < type0Mob5CoinChance || Game1.random.NextDouble() < otherMob5CoinChance)) ? 1 : 0;
+                    __result = mobIsType0 && Game1.random.NextDouble() < type0Mob5CoinChance || Game1.random.NextDouble() < otherMob5CoinChance ? 1 : 0;
                     return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
@@ -443,7 +331,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             var missingBoots1 = _locationChecker.IsLocationNotChecked(JOTPK_BOOTS_1);
             var missingBoots2 = _locationChecker.IsLocationNotChecked(JOTPK_BOOTS_2);
-            var bootsItemOffered = missingBoots1 ? BOOTS_1 : (missingBoots2 ? BOOTS_2 : EXTRA_LIFE);
+            var bootsItemOffered = missingBoots1 ? BOOTS_1 : missingBoots2 ? BOOTS_2 : EXTRA_LIFE;
             return bootsItemOffered;
         }
 
@@ -453,7 +341,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             var missingGun2 = _locationChecker.IsLocationNotChecked(JOTPK_GUN_2);
             var missingGun3 = _locationChecker.IsLocationNotChecked(JOTPK_GUN_3);
             var missingSuperGun = _locationChecker.IsLocationNotChecked(JOTPK_SUPER_GUN);
-            var gunItemOffered = missingGun1 ? GUN_1 : (missingGun2 ? GUN_2 : (missingGun3 ? GUN_3 : (missingSuperGun ? SUPER_GUN : SHERIFF_BADGE)));
+            var gunItemOffered = missingGun1 ? GUN_1 : missingGun2 ? GUN_2 : missingGun3 ? GUN_3 : missingSuperGun ? SUPER_GUN : SHERIFF_BADGE;
             return gunItemOffered;
         }
 
@@ -462,16 +350,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             var missingAmmo1 = _locationChecker.IsLocationNotChecked(JOTPK_AMMO_1);
             var missingAmmo2 = _locationChecker.IsLocationNotChecked(JOTPK_AMMO_2);
             var missingAmmo3 = _locationChecker.IsLocationNotChecked(JOTPK_AMMO_3);
-            var ammoItemOffered = missingAmmo1 ? AMMO_1 : (missingAmmo2 ? AMMO_2 : (missingAmmo3 ? AMMO_3 : SHERIFF_BADGE));
+            var ammoItemOffered = missingAmmo1 ? AMMO_1 : missingAmmo2 ? AMMO_2 : missingAmmo3 ? AMMO_3 : SHERIFF_BADGE;
             return ammoItemOffered;
-        }
-
-        public static void ReleaseJunimoKart()
-        {
-            foreach (var junimoKartLocation in JK_ALL_LOCATIONS)
-            {
-                _locationChecker.AddCheckedLocation(junimoKartLocation);
-            }
         }
 
         public static void ReleasePrairieKing()

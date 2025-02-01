@@ -32,6 +32,7 @@ using xTile.Dimensions;
 using Bundle = StardewValley.Menus.Bundle;
 using Object = StardewValley.Object;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.Arcade;
 
 namespace StardewArchipelago.Locations.Patcher
 {
@@ -87,7 +88,7 @@ namespace StardewArchipelago.Locations.Patcher
             PatchCarpenter();
             ReplaceIsolatedEventsWithChecks();
             PatchAdventurerGuildShop();
-            ReplaceArcadeMachinesWithChecks();
+            PatchArcadeMachines();
             PatchTravelingMerchant();
             ReplaceRaccoonBundlesWithChecks();
             AddFishsanityLocations();
@@ -664,7 +665,13 @@ namespace StardewArchipelago.Locations.Patcher
             _modHelper.Events.Content.AssetRequested -= _guildShopStockModifier.OnShopStockRequested;
         }
 
-        private void ReplaceArcadeMachinesWithChecks()
+        private void PatchArcadeMachines()
+        {
+            PatchJourneyOfThePrairieKing();
+            PatchJunimoKart();
+        }
+
+        private void PatchJourneyOfThePrairieKing()
         {
             if (_archipelago.SlotData.ArcadeMachineLocations == ArcadeLocations.Disabled)
             {
@@ -673,12 +680,7 @@ namespace StardewArchipelago.Locations.Patcher
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(AbigailGame), nameof(AbigailGame.usePowerup)),
-                prefix: new HarmonyMethod(typeof(ArcadeMachineInjections), nameof(ArcadeMachineInjections.UsePowerup_PrairieKingBossBeaten_Prefix))
-            );
-
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(MineCart), nameof(MineCart.EndCutscene)),
-                prefix: new HarmonyMethod(typeof(ArcadeMachineInjections), nameof(ArcadeMachineInjections.EndCutscene_JunimoKartLevelComplete_Prefix))
+                prefix: new HarmonyMethod(typeof(JotPKInjections), nameof(JotPKInjections.UsePowerup_PrairieKingBossBeaten_Prefix))
             );
 
             if (_archipelago.SlotData.ArcadeMachineLocations == ArcadeLocations.Victories)
@@ -688,37 +690,57 @@ namespace StardewArchipelago.Locations.Patcher
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(AbigailGame.CowboyMonster), nameof(AbigailGame.CowboyMonster.getLootDrop)),
-                prefix: new HarmonyMethod(typeof(ArcadeMachineInjections), nameof(ArcadeMachineInjections.GetLootDrop_ExtraLoot_Prefix))
-            );
-
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(MineCart), "restartLevel"),
-                postfix: new HarmonyMethod(typeof(ArcadeMachineInjections), nameof(ArcadeMachineInjections.RestartLevel_NewGame_Postfix))
-            );
-
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(MineCart), nameof(MineCart.UpdateFruitsSummary)),
-                postfix: new HarmonyMethod(typeof(ArcadeMachineInjections), nameof(ArcadeMachineInjections.UpdateFruitsSummary_ExtraLives_Postfix))
+                prefix: new HarmonyMethod(typeof(JotPKInjections), nameof(JotPKInjections.GetLootDrop_ExtraLoot_Prefix))
             );
 
             var desiredAbigailGameCtorParameters = new[] { typeof(NPC) };
             _harmony.Patch(
                 original: AccessTools.Constructor(typeof(AbigailGame), desiredAbigailGameCtorParameters),
-                postfix: new HarmonyMethod(typeof(ArcadeMachineInjections), nameof(ArcadeMachineInjections.AbigailGameCtor_Equipments_Postfix))
+                postfix: new HarmonyMethod(typeof(JotPKInjections), nameof(JotPKInjections.AbigailGameCtor_Equipments_Postfix))
             );
 
-            if (_archipelago.SlotData.ArcadeMachineLocations == ArcadeLocations.FullShuffling)
+            if (_archipelago.SlotData.ArcadeMachineLocations != ArcadeLocations.FullShuffling)
             {
-                _harmony.Patch(
-                    original: AccessTools.Method(typeof(AbigailGame), nameof(AbigailGame.startShoppingLevel)),
-                    postfix: new HarmonyMethod(typeof(ArcadeMachineInjections), nameof(ArcadeMachineInjections.StartShoppingLevel_ShopBasedOnSentChecks_PostFix))
-                );
-
-                _harmony.Patch(
-                    original: AccessTools.Method(typeof(AbigailGame), nameof(AbigailGame.tick)),
-                    postfix: new HarmonyMethod(typeof(ArcadeMachineInjections), nameof(ArcadeMachineInjections.Tick_Shopping_PostFix))
-                );
+                return;
             }
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(AbigailGame), nameof(AbigailGame.startShoppingLevel)),
+                postfix: new HarmonyMethod(typeof(JotPKInjections), nameof(JotPKInjections.StartShoppingLevel_ShopBasedOnSentChecks_PostFix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(AbigailGame), nameof(AbigailGame.tick)),
+                postfix: new HarmonyMethod(typeof(JotPKInjections), nameof(JotPKInjections.Tick_Shopping_PostFix))
+            );
+        }
+
+        private void PatchJunimoKart()
+        {
+            if (_archipelago.SlotData.ArcadeMachineLocations == ArcadeLocations.Disabled)
+            {
+                return;
+            }
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(MineCart), nameof(MineCart.EndCutscene)),
+                prefix: new HarmonyMethod(typeof(JunimoKartInjections), nameof(JunimoKartInjections.EndCutscene_JunimoKartLevelComplete_Prefix))
+            );
+
+            if (_archipelago.SlotData.ArcadeMachineLocations == ArcadeLocations.Victories)
+            {
+                return;
+            }
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(MineCart), "restartLevel"),
+                postfix: new HarmonyMethod(typeof(JunimoKartInjections), nameof(JunimoKartInjections.RestartLevel_NewGame_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(MineCart), nameof(MineCart.UpdateFruitsSummary)),
+                postfix: new HarmonyMethod(typeof(JunimoKartInjections), nameof(JunimoKartInjections.UpdateFruitsSummary_ExtraLives_Postfix))
+            );
         }
 
         private void PatchTravelingMerchant()

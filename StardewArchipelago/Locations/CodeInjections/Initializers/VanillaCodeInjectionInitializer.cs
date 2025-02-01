@@ -5,6 +5,7 @@ using StardewArchipelago.Bundles;
 using StardewArchipelago.GameModifications.CodeInjections.Television;
 using StardewArchipelago.Goals;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.Arcade;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Quests;
@@ -38,7 +39,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             IsolatedEventInjections.Initialize(logger, modHelper, archipelago, locationChecker);
             WizardBookInjections.Initialize(logger, modHelper, archipelago, locationChecker);
             PhoneInjections.Initialize(logger, modHelper, archipelago, weaponsManager);
-            ArcadeMachineInjections.Initialize(logger, modHelper, archipelago, locationChecker);
+            InitializeArcadeMachines(logger, modHelper, archipelago, locationChecker);
             TravelingMerchantInjections.Initialize(logger, modHelper, archipelago, locationChecker, state);
             FishingInjections.Initialize(logger, modHelper, archipelago, locationChecker, itemManager);
             MuseumInjections.Initialize(logger, modHelper, archipelago, locationChecker, itemManager);
@@ -60,6 +61,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             BookInjections.Initialize(logger, modHelper, archipelago, locationChecker, qosManager);
             InitializeWalnutsanityInjections(logger, modHelper, archipelago, locationChecker);
             EventInjections.Initialize(logger, modHelper, archipelago, locationChecker);
+        }
+
+        private static void InitializeArcadeMachines(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker)
+        {
+            JotPKInjections.Initialize(logger, modHelper, archipelago, locationChecker);
+            JunimoKartInjections.Initialize(logger, modHelper, archipelago, locationChecker);
         }
 
         private static void InitializeBundleInjections(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, BundlesManager bundlesManager, BundleReader bundleReader)
