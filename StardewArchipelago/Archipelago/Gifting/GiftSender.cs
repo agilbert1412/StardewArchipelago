@@ -17,14 +17,12 @@ namespace StardewArchipelago.Archipelago.Gifting
     {
         private readonly ILogger _logger;
         private readonly StardewArchipelagoClient _archipelago;
-        private readonly IGiftingService _giftService;
         internal GiftGenerator GiftGenerator { get; }
 
-        public GiftSender(ILogger logger, StardewArchipelagoClient archipelago, StardewItemManager itemManager, IGiftingService giftService)
+        public GiftSender(ILogger logger, StardewArchipelagoClient archipelago, StardewItemManager itemManager)
         {
             _logger = logger;
             _archipelago = archipelago;
-            _giftService = giftService;
             GiftGenerator = new GiftGenerator(_logger, itemManager);
         }
 
@@ -45,7 +43,7 @@ namespace StardewArchipelago.Archipelago.Gifting
                     return;
                 }
 
-                var canGift = _giftService.CanGiftToPlayer(slotName, giftTraits.Select(x => x.Trait));
+                var canGift = _archipelago.GiftingService.CanGiftToPlayer(slotName, giftTraits.Select(x => x.Trait));
                 var giftOrTrap = isTrap ? "trap" : "gift";
                 if (!canGift.CanGift)
                 {
@@ -61,7 +59,7 @@ namespace StardewArchipelago.Archipelago.Gifting
                 }
 
 
-                var result = _giftService.SendGift(giftItem, giftTraits, slotName);
+                var result = _archipelago.GiftingService.SendGift(giftItem, giftTraits, slotName);
                 _logger.LogInfo($"Sending {giftOrTrap} of {giftItem.Amount} {giftItem.Name} to {slotName} with {giftTraits.Length} traits. [ID: {result.GiftId}]");
                 if (!result.Success)
                 {
@@ -142,7 +140,7 @@ namespace StardewArchipelago.Archipelago.Gifting
                     return false;
                 }
 
-                var result = _giftService.SendGift(giftItem, giftTraits, player);
+                var result = _archipelago.GiftingService.SendGift(giftItem, giftTraits, player);
                 if (!result.Success)
                 {
                     _logger.LogDebug($"Gift failed to send but did not crash");

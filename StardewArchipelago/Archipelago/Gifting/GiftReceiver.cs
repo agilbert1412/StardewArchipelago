@@ -15,39 +15,37 @@ namespace StardewArchipelago.Archipelago.Gifting
     public class GiftReceiver : IDisposable
     {
         private ILogger _logger;
-        private readonly ArchipelagoClient _archipelago;
-        private readonly IGiftingService _giftService;
+        private readonly StardewArchipelagoClient _archipelago;
         private readonly StardewItemManager _itemManager;
         private readonly Mailman _mail;
         private readonly GiftProcessor _giftProcessor;
 
-        public GiftReceiver(ILogger logger, ArchipelagoClient archipelago, IGiftingService giftService, StardewItemManager itemManager, Mailman mail, ICloseTraitParser<string> closeTraitParser, GiftTrapManager giftTrapManager)
+        public GiftReceiver(ILogger logger, StardewArchipelagoClient archipelago, StardewItemManager itemManager, Mailman mail, ICloseTraitParser<string> closeTraitParser, GiftTrapManager giftTrapManager)
         {
             _logger = logger;
             _archipelago = archipelago;
-            _giftService = giftService;
             _itemManager = itemManager;
             _mail = mail;
             _giftProcessor = new GiftProcessor(logger, archipelago, itemManager, closeTraitParser, giftTrapManager);
-            _giftService.OnNewGift += ProcessNewGiftInstantly;
+            _archipelago.GiftingService.OnNewGift += ProcessNewGiftInstantly;
         }
 
         public void Dispose()
         {
-            _giftService.OnNewGift -= ProcessNewGiftInstantly;
+            _archipelago.GiftingService.OnNewGift -= ProcessNewGiftInstantly;
         }
 
         public void ProcessNewGiftInstantly(Gift newGift)
         {
             if (_giftProcessor.ProcessGiftTrap(newGift))
             {
-                _giftService.RemoveGiftFromGiftBox(newGift.ID);
+                _archipelago.GiftingService.RemoveGiftFromGiftBox(newGift.ID);
             }
         }
 
         public void ReceiveAllGifts()
         {
-            var gifts = _giftService.GetAllGiftsAndEmptyGiftBox();
+            var gifts = _archipelago.GiftingService.GetAllGiftsAndEmptyGiftBox();
             if (!gifts.Any())
             {
                 return;
@@ -107,7 +105,7 @@ namespace StardewArchipelago.Archipelago.Gifting
             {
                 if (!gift.IsRefund)
                 {
-                    _giftService.RefundGift(gift);
+                    _archipelago.GiftingService.RefundGift(gift);
                 }
 
                 return;

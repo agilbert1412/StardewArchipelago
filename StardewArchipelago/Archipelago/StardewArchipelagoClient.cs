@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
+using Archipelago.Gifting.Net.Service;
 using Archipelago.MultiClient.Net.BounceFeatures.DeathLink;
 using Archipelago.MultiClient.Net.Enums;
 using Archipelago.MultiClient.Net.MessageLog.Messages;
@@ -31,6 +32,7 @@ namespace StardewArchipelago.Archipelago
         public override string ModVersion => _manifest.Version.ToString();
 
         public SlotData SlotData => (SlotData)_slotData;
+        public IGiftingService GiftingService { get; private set; }
 
         public StardewArchipelagoClient(ILogger logger, IModHelper modHelper, IManifest manifest, Harmony harmony, Action itemReceivedFunction, IJsonLoader jsonLoader, TesterFeatures testerFeatures) :
             base(logger, new DataPackageCache(new ArchipelagoItemLoader(jsonLoader), new StardewArchipelagoLocationLoader(jsonLoader), "stardew_valley", "IdTables"), itemReceivedFunction)
@@ -72,6 +74,7 @@ namespace StardewArchipelago.Archipelago
         {
             base.InitializeAfterConnection();
             _bigIntegerDataStorage = new BigIntegerDataStorageWrapper(Logger, GetSession());
+            GiftingService = new GiftingService(GetSession());
         }
 
         protected override void InitializeDeathLink()

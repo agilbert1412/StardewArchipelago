@@ -26,7 +26,6 @@ namespace StardewArchipelago.Archipelago.Gifting
         private StardewItemManager _itemManager;
         private Mailman _mail;
         private StardewArchipelagoClient _archipelago;
-        private IGiftingService _giftService;
         private GiftSender _giftSender;
         private GiftReceiver _giftReceiver;
         private ICloseTraitParser<string> _closeTraitParser;
@@ -48,13 +47,12 @@ namespace StardewArchipelago.Archipelago.Gifting
             _itemManager = itemManager;
             _mail = mail;
             _archipelago = archipelago;
-            _giftService = new GiftingService(archipelago.GetSession());
-            _giftSender = new GiftSender(_logger, _archipelago, _itemManager, _giftService);
+            _giftSender = new GiftSender(_logger, _archipelago, _itemManager);
 
-            _giftService.OpenGiftBox(true, _desiredTraits);
+            _archipelago.GiftingService.OpenGiftBox(true, _desiredTraits);
             RegisterAllAvailableGifts();
 
-            _giftReceiver = new GiftReceiver(_logger, _archipelago, _giftService, _itemManager, _mail, _closeTraitParser, giftTrapManager);
+            _giftReceiver = new GiftReceiver(_logger, _archipelago, _itemManager, _mail, _closeTraitParser, giftTrapManager);
         }
 
         public void Dispose()
