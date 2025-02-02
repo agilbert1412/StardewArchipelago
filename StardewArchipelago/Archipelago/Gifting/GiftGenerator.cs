@@ -376,12 +376,12 @@ namespace StardewArchipelago.Archipelago.Gifting
 
         private GiftTrait CreateTrait(string trait, double quality = 1.0, double duration = 1.0)
         {
-            return new GiftTrait(trait, duration, quality);
+            return new GiftTrait(trait, quality, duration);
         }
 
         private static GiftTrait BestOf(GiftTrait trait, GiftTrait previousTrait)
         {
-            return new GiftTrait(trait.Trait, BestOf(trait.Duration, previousTrait.Duration), BestOf(trait.Quality, previousTrait.Quality));
+            return new GiftTrait(trait.Trait, BestOf(trait.Quality, previousTrait.Quality), BestOf(trait.Duration, previousTrait.Duration));
         }
 
         private static double BestOf(double trait1, double trait2)
