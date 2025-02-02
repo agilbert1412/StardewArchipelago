@@ -105,8 +105,12 @@ namespace StardewArchipelago.Items.Mail
                 }
 
                 _logger.LogWarning($"A broken Archipelago letter was found in the mailbox. This letter will now be removed, and the mod will attempt to process the contained item again. Letter: {mailKeyString}, MailKey: {mailKey}. Item: {mailKey.ItemName}");
-                RemoveItemFromReceivedItemsSoItGetsProcessedAgain(mailKey);
-                Game1.player.mailReceived.Remove(mailKeyString);
+
+                if (Game1.mailbox.Contains(mailKeyString) || Game1.player.mailbox.Contains(mailKeyString) || Game1.player.mailForTomorrow.Contains(mailKeyString))
+                {
+                    RemoveItemFromReceivedItemsSoItGetsProcessedAgain(mailKey);
+                }
+                
                 Game1.player.mailbox.Remove(mailKeyString);
                 Game1.player.mailForTomorrow.Remove(mailKeyString);
                 Game1.mailbox.Remove(mailKeyString);
