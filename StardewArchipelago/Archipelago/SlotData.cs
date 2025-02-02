@@ -40,6 +40,7 @@ namespace StardewArchipelago.Archipelago
         private const string WALNUTSANITY_KEY = "walnutsanity";
         private const string EXCLUDE_GINGER_ISLAND_KEY = "exclude_ginger_island";
         private const string TRAP_ITEMS_KEY = "trap_items";
+        private const string TRAP_DIFFICULTY_KEY = "trap_difficulty";
         private const string MULTI_SLEEP_ENABLED_KEY = "multiple_day_sleep_enabled";
         private const string MULTI_SLEEP_COST_KEY = "multiple_day_sleep_cost";
         private const string EXPERIENCE_MULTIPLIER_KEY = "experience_multiplier";
@@ -154,7 +155,7 @@ namespace StardewArchipelago.Archipelago
             Booksanity = GetSlotSetting(BOOKSANITY_KEY, Booksanity.None);
             Walnutsanity = GetSlotWalnutsanitySetting();
             ExcludeGingerIsland = GetSlotSetting(EXCLUDE_GINGER_ISLAND_KEY, true);
-            TrapItemsDifficulty = GetSlotSetting(TRAP_ITEMS_KEY, TrapItemsDifficulty.Medium);
+            TrapItemsDifficulty = GetSlotSetting(TRAP_DIFFICULTY_KEY, TrapItemsDifficulty.Medium, TRAP_ITEMS_KEY);
             EnableMultiSleep = GetSlotSetting(MULTI_SLEEP_ENABLED_KEY, true);
             MultiSleepCostPerDay = GetSlotSetting(MULTI_SLEEP_COST_KEY, 0);
             ExperienceMultiplier = GetSlotSetting(EXPERIENCE_MULTIPLIER_KEY, 100) / 100.0;
@@ -204,13 +205,24 @@ namespace StardewArchipelago.Archipelago
             return walnutsanityValues;
         }
 
-        private T GetSlotSetting<T>(string key, T defaultValue) where T : struct, Enum, IConvertible
+        private T GetSlotSetting<T>(string key, T defaultValue, params string[] alternateKeys) where T : struct, Enum, IConvertible
         {
             if (_slotDataFields.ContainsKey(key))
             {
                 if (Enum.TryParse<T>(_slotDataFields[key].ToString(), true, out var parsedValue))
                 {
                     return parsedValue;
+                }
+            }
+
+            foreach (var alternateKey in alternateKeys)
+            {
+                if (_slotDataFields.ContainsKey(alternateKey))
+                {
+                    if (Enum.TryParse<T>(_slotDataFields[alternateKey].ToString(), true, out var parsedValue))
+                    {
+                        return parsedValue;
+                    }
                 }
             }
 
