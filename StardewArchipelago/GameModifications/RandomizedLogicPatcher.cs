@@ -63,7 +63,7 @@ namespace StardewArchipelago.GameModifications
             FarmInjections.Initialize(logger, _archipelago);
             FarmerInjections.Initialize(logger, _archipelago);
             AchievementInjections.Initialize(logger, _archipelago);
-            EntranceInjections.Initialize(logger, _archipelago, entranceManager);
+            EntranceInjections.Initialize(logger, _helper, _archipelago, entranceManager);
             ForestInjections.Initialize(logger, _archipelago);
             MountainInjections.Initialize(logger, modHelper, _archipelago);
             TheaterInjections.Initialize(logger, modHelper, archipelago);
@@ -319,6 +319,11 @@ namespace StardewArchipelago.GameModifications
             {
                 return;
             }
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Game1), nameof(Game1.warpFarmer), new[] { typeof(string), typeof(int), typeof(int), typeof(int) }),
+                prefix: new HarmonyMethod(typeof(EntranceInjections), nameof(EntranceInjections.WarpFarmer_InterceptProblemEntrances_Prefix))
+            );
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Game1), "performWarpFarmer"),

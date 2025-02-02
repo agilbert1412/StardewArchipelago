@@ -4,19 +4,23 @@ using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.GameModifications.EntranceRandomizer;
+using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Locations;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
 {
     public class EntranceInjections
     {
         private static ILogger _logger;
+        private static IModHelper _helper;
         private static ArchipelagoClient _archipelago;
         private static EntranceManager _entranceManager;
 
-        public static void Initialize(ILogger logger, ArchipelagoClient archipelago, EntranceManager entranceManager)
+        public static void Initialize(ILogger logger, IModHelper helper, ArchipelagoClient archipelago, EntranceManager entranceManager)
         {
             _logger = logger;
+            _helper = helper;
             _archipelago = archipelago;
             _entranceManager = entranceManager;
         }
@@ -103,5 +107,37 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 return tileX > 12;
             }
         }
+
+
+        // public static void warpFarmer(
+        // string locationName,
+        // int tileX,
+        // int tileY,
+        // int facingDirectionAfterWarp)
+        public static bool WarpFarmer_InterceptProblemEntrances_Prefix(string locationName, int tileX, int tileY, int facingDirectionAfterWarp)
+        {
+            try
+            {
+                if (Game1.currentLocation is not IslandSouthEastCave cave ||
+                    locationName != "IslandSouthEast" || tileX != 29 || tileY != 19 || facingDirectionAfterWarp != 1 ||
+                    !IslandSouthEastCave.isPirateNight() || cave.wasPirateCaveOnLoad)
+                {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
+                // protected override void resetLocalState()
+                var resetLocalStateMethod = _helper.Reflection.GetMethod(cave, "resetLocalState");
+                resetLocalStateMethod.Invoke();
+                cave.resetForPlayerEntry();
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(WarpFarmer_InterceptProblemEntrances_Prefix)}");
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+        }
+
     }
 }
