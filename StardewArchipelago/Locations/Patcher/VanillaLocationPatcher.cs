@@ -1455,6 +1455,16 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(typeof(MapPage), nameof(MapPage.receiveLeftClick)),
                 postfix: new HarmonyMethod(typeof(SimpleSecretsInjections), nameof(SimpleSecretsInjections.ReceiveLeftClick_LonelyStone_Postfix))
             );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(SkillsPage), nameof(SkillsPage.receiveLeftClick)),
+                postfix: new HarmonyMethod(typeof(SimpleSecretsInjections), nameof(SimpleSecretsInjections.ReceiveLeftClick_JungleJunimo_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performAction)),
+                postfix: new HarmonyMethod(typeof(SimpleSecretsInjections), nameof(SimpleSecretsInjections.PerformAction_SecretStatuesAndDwarfGrave_Prefix))
+            );
         }
 
         private void PatchPurpleShortsSecrets()
