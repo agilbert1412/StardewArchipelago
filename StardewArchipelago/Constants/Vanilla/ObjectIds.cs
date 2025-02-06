@@ -1,4 +1,6 @@
-﻿namespace StardewArchipelago.Stardew.Ids.Vanilla
+﻿using Newtonsoft.Json.Linq;
+
+namespace StardewArchipelago.Stardew.Ids.Vanilla
 {
     public static class ObjectIds
     {
@@ -10,6 +12,7 @@
         public const string APPLE_SAPLING = "633";
         public const string APRICOT_SAPLING = "629";
         public const string ARTICHOKE_SEEDS = "489";
+        public const string ARTIFACT_TROVE = "275";
         public const string BAIT = "685";
         public const string BAIT_AND_BOBBER = "SkillBook_1";
         public const string BANANA_SAPLING = "69";
@@ -22,6 +25,7 @@
         public const string BLACKBERRY = "410";
         public const string BLUEBERRY_SEEDS = "481";
         public const string BOK_CHOY_SEEDS = "491";
+        public const string BOMB = "287";
         public const string BOOK_MYSTERIES = "Book_Mystery";
         public const string BOOK_OF_MYSTERIES = "Book_Mystery";
         public const string BOOK_OF_STARS = "PurpleBook";
@@ -32,6 +36,7 @@
         public const string CACTUS_SEEDS = "802";
         public const string CAULIFLOWER_SEEDS = "474";
         public const string CAVE_JELLY = "CaveJelly";
+        public const string CHERRY_BOMB = "286";
         public const string CHERRY_SAPLING = "628";
         public const string COMBAT_QUARTERLY = "SkillBook_4";
         public const string COOKIES = "223";
@@ -43,14 +48,12 @@
         public const string DELUXE_FERTILIZER = "919";
         public const string DELUXE_RETAINING_SOIL = "920";
         public const string DELUXE_SPEED_GRO = "466";
-        public const string ARTIFACT_TROVE = "275";
-        public const string BOMB = "287";
-        public const string CHERRY_BOMB = "286";
         public const string DIAMOND = "72";
         public const string DRESSED_SPINNER = "687";
         public const string DRIED_FRUIT = "DriedFruit";
         public const string DRIED_MUSHROOMS = "DriedMushrooms";
         public const string DRIFTWOOD = "169";
+        public const string DUCK_MAYONNAISE = "307";
         public const string DWARVISH_SAFETY_MANUAL = "Book_Bombs";
         public const string EGGPLANT_SEEDS = "488";
         public const string FAIRY_SEEDS = "425";
@@ -148,11 +151,13 @@
         public const string STARDROP_TEA = "StardropTea";
         public const string STARFRUIT_SEEDS = "486";
         public const string STONE = "390";
+        public const string STRANGE_BUN = "203";
         public const string STRANGE_DOLL_GREEN = "126";
         public const string SUGAR = "245";
         public const string SUMMER_SEEDS = "496";
         public const string SUNFLOWER = "421";
         public const string SUNFLOWER_SEEDS = "431";
+        public const string SUPER_CUCUMBER = "155";
         public const string THE_ALLEYWAY_BUFFET = "Book_Trash";
         public const string THE_ART_O_CRABBING = "Book_Crabbing";
         public const string THE_DIAMOND_HUNTER = "Book_Diamonds";
