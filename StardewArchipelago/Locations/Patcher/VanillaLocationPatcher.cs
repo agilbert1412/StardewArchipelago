@@ -1429,6 +1429,7 @@ namespace StardewArchipelago.Locations.Patcher
         private void PatchSecrets()
         {
             PatchSimpleSecrets();
+            PatchFishableSecrets();
             PatchDifficultSecrets();
         }
 
@@ -1498,6 +1499,19 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony.Patch(
                 original: AccessTools.Method(typeof(FishingRod), nameof(FishingRod.getBobberStyle)),
                 postfix: new HarmonyMethod(typeof(PurpleShortsInjections), nameof(PurpleShortsInjections.GetBobberStyle_ShortsBobber_Postfix))
+            );
+        }
+
+        private void PatchFishableSecrets()
+        {
+            if (_archipelago.SlotData.Secretsanity < Secretsanity.SimpleAndFish)
+            {
+                return;
+            }
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(FishingRod), nameof(FishingRod.doneHoldingFish)),
+                postfix: new HarmonyMethod(typeof(FishableSecretsInjections), nameof(FishableSecretsInjections.DoneHoldingFish_FishableSecret_Postfix))
             );
         }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using StardewArchipelago.Constants.Vanilla;
 using StardewValley;
 
 namespace StardewArchipelago.Locations.Secrets
@@ -50,5 +51,21 @@ namespace StardewArchipelago.Locations.Secrets
         public const string ENJOY_YOUR_NEW_LIFE_HERE = "Enjoy your new life here";
         public const string WHAT_YOU_EXPECT = "\"What'd you expect?\"";
         public const string SECRET_IRIDIUM_STACKMASTER_TROPHY = "Secret Iridium Stackmaster Trophy";
+
+        public static readonly Dictionary<string, string> FISHABLE_QUALIFIED_ITEM_IDS_TO_LOCATIONS = new()
+        {
+            {QualifiedItemIds.BOAT, BOAT},
+            {QualifiedItemIds.DECORATIVE_TRASH_CAN, DECORATIVE_TRASH_CAN},
+            {QualifiedItemIds.FOLIAGE_PRINT, FOLIAGE_PRINT},
+            {QualifiedItemIds.FROG_HAT, FROG_HAT},
+            {QualifiedItemIds.GOURMAND_STATUE, GOURMAND_STATUE},
+            {QualifiedItemIds.IRIDIUM_KROBUS, IRIDIUM_KROBUS},
+            {QualifiedItemIds.LIFESAVER, LIFESAVER},
+            {QualifiedItemIds.PHYSICS_101, PHYSICS_101},
+            {QualifiedItemIds.PYRAMID_DECAL, PYRAMID_DECAL},
+            {QualifiedItemIds.SQUIRREL_FIGURINE, SQUIRREL_FIGURINE},
+            {QualifiedItemIds.VISTA, VISTA},
+            {QualifiedItemIds.WALL_BASKET, WALL_BASKET},
+        };
     }
 }
