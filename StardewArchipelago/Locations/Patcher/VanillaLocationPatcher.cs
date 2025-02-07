@@ -1465,6 +1465,11 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performAction)),
                 postfix: new HarmonyMethod(typeof(SimpleSecretsInjections), nameof(SimpleSecretsInjections.PerformAction_SecretStatuesAndDwarfGrave_Prefix))
             );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Bush), nameof(Bush.junimoPlushCallback)),
+                postfix: new HarmonyMethod(typeof(SimpleSecretsInjections), nameof(SimpleSecretsInjections.JunimoPlushCallback_SendCheckAndRemovePlush_Postfix))
+            );
         }
 
         private void PatchPurpleShortsSecrets()

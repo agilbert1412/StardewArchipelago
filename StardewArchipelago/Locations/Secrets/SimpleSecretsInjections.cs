@@ -13,6 +13,7 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
 using StardewValley.Objects;
+using StardewValley.TerrainFeatures;
 using xTile.Dimensions;
 using Object = StardewValley.Object;
 
@@ -202,6 +203,21 @@ namespace StardewArchipelago.Locations.Secrets
                 Game1.player.reduceActiveItemByOne();
                 gameLocation.localSound(sound);
                 Game1.flashAlpha = 1f;
+            }
+        }
+
+        // public void junimoPlushCallback(Item item, Farmer who)
+        public static void JunimoPlushCallback_SendCheckAndRemovePlush_Postfix(Bush __instance, Item item, Farmer who)
+        {
+            try
+            {
+                _locationChecker.AddCheckedLocation("Junimo Plush");
+                who.removeFirstOfThisItemFromInventory(QualifiedItemIds.JUNIMO_PLUSH);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(JunimoPlushCallback_SendCheckAndRemovePlush_Postfix)}:\n{ex}");
+                return;
             }
         }
     }

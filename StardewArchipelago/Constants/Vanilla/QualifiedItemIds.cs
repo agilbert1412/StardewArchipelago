@@ -149,8 +149,9 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string TULIP_BULB = QualifiedObjectId(ObjectIds.TULIP_BULB);
         public static readonly string VINEGAR = QualifiedObjectId(ObjectIds.VINEGAR);
         public static readonly string VOID_MAYONNAISE = QualifiedObjectId(ObjectIds.VOID_MAYONNAISE);
-        public static readonly string WALL_BASKET = "(F)2425";
-        public static readonly string WALL_CACTUS = "(F)2655";
+        public static readonly string WALL_BASKET = QualifiedFurnitureId(FurnitureIds.WALL_BASKET);
+        public static readonly string WALL_CACTUS = QualifiedFurnitureId(FurnitureIds.WALL_CACTUS);
+        public static readonly string JUNIMO_PLUSH = QualifiedFurnitureId(FurnitureIds.JUNIMO_PLUSH);
         public static readonly string WHEAT_FLOUR = QualifiedObjectId(ObjectIds.WHEAT_FLOUR);
         public static readonly string WHEAT_SEEDS = QualifiedObjectId(ObjectIds.WHEAT_SEEDS);
         public static readonly string WHITE_ALGAE = QualifiedObjectId(ObjectIds.WHITE_ALGAE);
@@ -164,6 +165,15 @@ namespace StardewArchipelago.Constants.Vanilla
                 return null;
             }
             return $"{OBJECT_QUALIFIER}{objectId}";
+        }
+
+        public static string QualifiedFurnitureId(string objectId)
+        {
+            if (objectId == null)
+            {
+                return null;
+            }
+            return $"{FURNITURE_QUALIFIER}{objectId}";
         }
 
         public static string UnqualifyId(string id)
