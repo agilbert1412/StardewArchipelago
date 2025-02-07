@@ -13,7 +13,6 @@ using StardewValley.Menus;
 using StardewValley.Minigames;
 using StardewValley.Network;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
-using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity

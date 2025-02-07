@@ -7,7 +7,6 @@ using StardewArchipelago.GameModifications.EntranceRandomizer;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
-using StardewArchipelago.Constants.Vanilla;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
 {

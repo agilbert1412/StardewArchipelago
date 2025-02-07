@@ -7,7 +7,6 @@ using StardewArchipelago.Constants.Vanilla;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
-using StardewValley.Objects;
 using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Locations.Secrets

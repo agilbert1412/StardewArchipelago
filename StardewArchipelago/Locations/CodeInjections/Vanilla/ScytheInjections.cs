@@ -4,7 +4,6 @@ using xTile.Dimensions;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
-using Microsoft.Xna.Framework.Input;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {

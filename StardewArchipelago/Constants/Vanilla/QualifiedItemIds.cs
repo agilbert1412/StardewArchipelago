@@ -1,6 +1,4 @@
 ﻿using System;
-using Newtonsoft.Json.Linq;
-using StardewValley.Objects;
 
 namespace StardewArchipelago.Constants.Vanilla
 {

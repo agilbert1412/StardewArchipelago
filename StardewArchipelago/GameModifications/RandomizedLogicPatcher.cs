@@ -8,7 +8,6 @@ using StardewArchipelago.Archipelago;
 using StardewArchipelago.GameModifications.CodeInjections;
 using StardewArchipelago.GameModifications.CodeInjections.Bundles;
 using StardewArchipelago.GameModifications.CodeInjections.Television;
-using StardewArchipelago.GameModifications.CodeInjections.Tilesanity;
 using StardewArchipelago.GameModifications.EntranceRandomizer;
 using StardewArchipelago.GameModifications.Seasons;
 using StardewArchipelago.GameModifications.Tooltips;
@@ -32,7 +31,6 @@ using StardewValley.Objects;
 using Object = StardewValley.Object;
 using StardewArchipelago.Locations;
 using StardewArchipelago.Logging;
-using KaitoKid.ArchipelagoUtilities.Net.Client;
 
 namespace StardewArchipelago.GameModifications
 {

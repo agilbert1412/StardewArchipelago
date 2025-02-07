@@ -1,5 +1,4 @@
-﻿using Archipelago.MultiClient.Net.Helpers;
-using KaitoKid.ArchipelagoUtilities.Net;
+﻿using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewValley;

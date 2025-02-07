@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading;
-using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewValley;
 using StardewValley.Monsters;
-using xTile;
 
 namespace StardewArchipelago.Items.Traps
 {

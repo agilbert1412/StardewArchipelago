@@ -31,7 +31,6 @@ using StardewValley.TerrainFeatures;
 using xTile.Dimensions;
 using Bundle = StardewValley.Menus.Bundle;
 using Object = StardewValley.Object;
-using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Arcade;
 using StardewArchipelago.Locations.Secrets;
 using StardewValley.Tools;
