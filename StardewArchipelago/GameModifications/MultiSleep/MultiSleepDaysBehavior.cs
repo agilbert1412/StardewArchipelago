@@ -1,6 +1,4 @@
 ﻿
-using StardewValley;
-
 namespace StardewArchipelago.GameModifications.MultiSleep
 {
     public class MultiSleepDaysBehavior : MultiSleepBehavior

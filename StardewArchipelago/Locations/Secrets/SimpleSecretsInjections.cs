@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Linq;
-using HarmonyLib;
 using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
-using Microsoft.Xna.Framework.Input;
 using StardewArchipelago.Constants;
-using StardewArchipelago.Constants.Locations;
 using StardewArchipelago.Constants.Vanilla;
 using StardewModdingAPI;
 using StardewValley;
@@ -15,7 +11,6 @@ using StardewValley.Menus;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 using xTile.Dimensions;
-using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Locations.Secrets
 {

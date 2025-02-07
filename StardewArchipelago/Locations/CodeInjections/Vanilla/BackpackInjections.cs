@@ -10,8 +10,6 @@ using xTile.Dimensions;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.PriceMath;
-using StardewValley.Menus;
-using StardewValley.Minigames;
 using StardewValley.Objects;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla

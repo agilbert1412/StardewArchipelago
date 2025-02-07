@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using HarmonyLib;
-using Microsoft.Xna.Framework;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.Extensions;
@@ -9,7 +8,6 @@ using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewModdingAPI;
 using StardewValley;
-using StardewModdingAPI.Enums;
 
 namespace StardewArchipelago.Items.Unlocks.Modded
 {

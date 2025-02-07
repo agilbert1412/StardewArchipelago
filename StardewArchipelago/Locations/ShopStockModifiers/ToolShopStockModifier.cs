@@ -13,9 +13,7 @@ using StardewValley.GameData.Shops;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewValley.Extensions;
-using StardewValley.GameData.Tools;
 using StardewValley.Internal;
-using StardewValley.ItemTypeDefinitions;
 
 namespace StardewArchipelago.Locations.ShopStockModifiers
 {

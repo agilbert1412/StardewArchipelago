@@ -1,11 +1,8 @@
 ﻿using System;
 using HarmonyLib;
 using KaitoKid.ArchipelagoUtilities.Net;
-using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
-using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Logging;
-using StardewArchipelago.Textures;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;

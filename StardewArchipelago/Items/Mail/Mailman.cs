@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Serialization;
 using StardewValley;

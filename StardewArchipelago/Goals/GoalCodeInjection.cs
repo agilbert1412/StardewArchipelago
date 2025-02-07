@@ -10,12 +10,8 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Menus;
-using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Locations;
-using KaitoKid.ArchipelagoUtilities.Net.Client;
-using Microsoft.Xna.Framework;
-using StardewArchipelago.Textures;
 using StardewArchipelago.Logging;
 
 namespace StardewArchipelago.Goals

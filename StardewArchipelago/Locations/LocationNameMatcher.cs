@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using StardewArchipelago.Constants.Locations;
-using StardewArchipelago.Locations.Festival;
-using StardewArchipelago.Locations.GingerIsland.Parrots;
 
 namespace StardewArchipelago.Locations
 {
