@@ -126,7 +126,7 @@ namespace StardewArchipelago.Locations.Secrets
                 var timesClickedJunimoField = _modHelper.Reflection.GetField<int>(__instance, "timesClickedJunimo");
                 if (timesClickedJunimoField.GetValue() > 6)
                 {
-                    _locationChecker.AddCheckedLocation("Jungle Junimo");
+                    _locationChecker.AddCheckedLocation(SecretsLocationNames.JUNGLE_JUNIMO);
                 }
             }
             catch (Exception ex)
@@ -152,7 +152,7 @@ namespace StardewArchipelago.Locations.Secrets
 
                 if (key1.Equals("HMTGF"))
                 {
-                    CheckSecretStatueLocation(__instance, who, QualifiedItemIds.SUPER_CUCUMBER, "??HMTGF??", "discoverMineral");
+                    CheckSecretStatueLocation(__instance, who, QualifiedItemIds.SUPER_CUCUMBER, SecretsLocationNames.HMTGF, "discoverMineral");
 
                     __result = true;
                     return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
@@ -167,11 +167,11 @@ namespace StardewArchipelago.Locations.Secrets
 
                     if (which == "3")
                     {
-                        CheckSecretStatueLocation(__instance, who, QualifiedItemIds.DUCK_MAYONNAISE, "??Pinky Lemon??", "discoverMineral");
+                        CheckSecretStatueLocation(__instance, who, QualifiedItemIds.DUCK_MAYONNAISE, SecretsLocationNames.PINKY_LEMON, "discoverMineral");
                     }
                     else if (which == "4")
                     {
-                        CheckSecretStatueLocation(__instance, who, QualifiedItemIds.STRANGE_BUN, "??Foroguemon??", "croak");
+                        CheckSecretStatueLocation(__instance, who, QualifiedItemIds.STRANGE_BUN, SecretsLocationNames.FOROGUEMON, "croak");
                     }
                     __result = true;
                     return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
@@ -179,7 +179,7 @@ namespace StardewArchipelago.Locations.Secrets
 
                 if (key1.Equals("DwarfGrave") && who.canUnderstandDwarves)
                 {
-                    _locationChecker.AddCheckedLocation("Galaxies Will Heed Your Cry");
+                    _locationChecker.AddCheckedLocation(SecretsLocationNames.GALAXIES_WILL_HEED_YOUR_CRY);
                     Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\Locations:Town_DwarfGrave_Translated").Replace('\n', '^'));
                     __result = true;
                     return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
@@ -211,7 +211,7 @@ namespace StardewArchipelago.Locations.Secrets
         {
             try
             {
-                _locationChecker.AddCheckedLocation("Junimo Plush");
+                _locationChecker.AddCheckedLocation(SecretsLocationNames.JUNIMO_PLUSH);
                 who.removeFirstOfThisItemFromInventory(QualifiedItemIds.JUNIMO_PLUSH);
             }
             catch (Exception ex)

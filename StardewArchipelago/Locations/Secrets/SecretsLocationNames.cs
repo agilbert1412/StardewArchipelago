@@ -19,7 +19,7 @@ namespace StardewArchipelago.Locations.Secrets
         public const string THANK_THE_DEVS = "Thank the Devs";
         public const string ANNOY_THE_MOON_MAN = "Annoy the Moon Man";
         public const string ACKNOWLEDGE_THE_LONELY_STONE = "Acknowledge the Lonely Stone";
-        public const string TAKE_IN_THE_NATURE = "Take In The Nature";
+        public const string JUNGLE_JUNIMO = "Jungle Junimo";
         public const string HMTGF = "??HMTGF??";
         public const string PINKY_LEMON = "??Pinky Lemon??";
         public const string FOROGUEMON = "??Foroguemon??";

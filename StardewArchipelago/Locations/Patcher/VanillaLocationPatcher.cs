@@ -1517,6 +1517,11 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(typeof(ShippingMenu), nameof(ShippingMenu.receiveLeftClick)),
                 postfix: new HarmonyMethod(typeof(DifficultSecretsInjections), nameof(DifficultSecretsInjections.ReceiveLeftClick_AnnoyMoonMan_Postfix))
             );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(TemporaryAnimatedSprite), "PlaySound"),
+                postfix: new HarmonyMethod(typeof(DifficultSecretsInjections), nameof(DifficultSecretsInjections.PlaySound_StrangeSighting_Postfix))
+            );
         }
     }
 }
