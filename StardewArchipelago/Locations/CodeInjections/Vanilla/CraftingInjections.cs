@@ -5,7 +5,7 @@ using StardewArchipelago.Stardew;
 using StardewArchipelago.Stardew.NameMapping;
 using StardewModdingAPI;
 using StardewValley;
-using EventIds = StardewArchipelago.Stardew.Ids.Vanilla.EventIds;
+using EventIds = StardewArchipelago.Constants.Vanilla.EventIds;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;

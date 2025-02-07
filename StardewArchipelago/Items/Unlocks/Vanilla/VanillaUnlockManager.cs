@@ -4,8 +4,8 @@ using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
+using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Items.Mail;
-using StardewArchipelago.Stardew.Ids.Vanilla;
 using StardewValley;
 
 namespace StardewArchipelago.Items.Unlocks.Vanilla

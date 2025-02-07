@@ -1,4 +1,4 @@
-﻿namespace StardewArchipelago.Stardew.Ids.Vanilla
+﻿namespace StardewArchipelago.Constants.Vanilla
 {
     public static class WeaponIds
     {

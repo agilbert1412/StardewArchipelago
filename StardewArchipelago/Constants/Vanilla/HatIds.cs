@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-
-namespace StardewArchipelago.Stardew.Ids.Vanilla
+﻿namespace StardewArchipelago.Constants.Vanilla
 {
     public static class HatIds
     {

@@ -16,7 +16,7 @@ using StardewValley.Objects;
 using StardewValley.Quests;
 using StardewValley.TerrainFeatures;
 using xTile.Dimensions;
-using EventIds = StardewArchipelago.Stardew.Ids.Vanilla.EventIds;
+using EventIds = StardewArchipelago.Constants.Vanilla.EventIds;
 using Object = StardewValley.Object;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
