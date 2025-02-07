@@ -69,5 +69,30 @@ namespace StardewArchipelago.Locations.Secrets
                 return;
             }
         }
+
+        // private void PlaySound(string sound)
+        public static void PlaySound_StrangeSighting_Postfix(TemporaryAnimatedSprite __instance, string sound)
+        {
+            try
+            {
+                if (__instance is not { textureName: "LooseSprites\\temporary_sprites_1" })
+                {
+                    return;
+                }
+
+                var spriteRectangle = new Microsoft.Xna.Framework.Rectangle(448, 546, 16, 25);
+                if (!__instance.sourceRect.Equals(spriteRectangle))
+                {
+                    return;
+                }
+
+                _locationChecker.AddCheckedLocation(SecretsLocationNames.STRANGE_SIGHTING);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(PlaySound_StrangeSighting_Postfix)}:\n{ex}");
+                return;
+            }
+        }
     }
 }
