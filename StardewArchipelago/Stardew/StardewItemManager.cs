@@ -6,7 +6,6 @@ using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework.Content;
 using Newtonsoft.Json;
 using StardewArchipelago.Constants.Vanilla;
-using StardewArchipelago.Stardew.Ids.Vanilla;
 using StardewValley;
 using StardewValley.GameData.BigCraftables;
 using StardewValley.GameData.Objects;

@@ -4,8 +4,8 @@ using System.Linq;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Stardew;
-using StardewArchipelago.Stardew.Ids.Vanilla;
 using StardewValley;
 using StardewValley.GameData.Crops;
 

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using StardewArchipelago.Stardew.Ids.Vanilla;
 
 namespace StardewArchipelago.Constants.Vanilla
 {
