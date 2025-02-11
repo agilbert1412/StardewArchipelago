@@ -345,5 +345,19 @@ namespace StardewArchipelago.Locations.Secrets
                 return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
+
+        // public void addNiceTryEasterEggMessage()
+        public static void AddNiceTryEasterEggMessage_NiceTry_Postfix(ChatBox __instance)
+        {
+            try
+            {
+                _locationChecker.AddCheckedLocation(SecretsLocationNames.NICE_TRY);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(AddNiceTryEasterEggMessage_NiceTry_Postfix)}:\n{ex}");
+                return;
+            }
+        }
     }
 }
