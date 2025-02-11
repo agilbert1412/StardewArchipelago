@@ -39,7 +39,7 @@ namespace StardewArchipelago.Locations.Secrets
         public const string SUMMON_BONE_SERPENT = "Summon Bone Serpent";
         public const string MEOWMERE = "Meowmere";
         public const string A_FAMILIAR_TUNE = "A Familiar Tune";
-        public const string MERPERSON_SIGHTING = "Merperson Sighting";
+        public const string SEA_MONSTER_SIGHTING = "Sea Monster Sighting";
         public const string BIGFOOT = "...Bigfoot?";
         public const string FLUBBER_EXPERIMENT = "Flubber Experiment";
         public const string SEEMS_FISHY = "Seems Fishy";
