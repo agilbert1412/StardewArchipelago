@@ -108,7 +108,7 @@ namespace StardewArchipelago.Locations.Secrets
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
-                string name = __instance.Name;
+                var name = __instance.Name;
                 var wearingPurpleShorts = who.pantsItem.Value?.QualifiedItemId == "(P)15";
                 var showingPurpleShorts = wearingPurpleShorts && (name == "Lewis" || name == "Marnie");
                 if (!showingPurpleShorts)

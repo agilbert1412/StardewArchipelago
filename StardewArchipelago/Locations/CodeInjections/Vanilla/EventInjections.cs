@@ -139,7 +139,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             try
             {
-                string commandName = ArgUtility.Get(args, 0);
+                var commandName = ArgUtility.Get(args, 0);
                 switch (commandName)
                 {
                     case "addCraftingRecipe":
