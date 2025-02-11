@@ -1591,6 +1591,11 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(typeof(Summit), "showQiCheatingEvent"),
                 postfix: new HarmonyMethod(typeof(DifficultSecretsInjections), nameof(DifficultSecretsInjections.ShowQiCheatingEvent_MeMeMeMeMeMeMeMeMeMeMeMeMeMeMeMe_Postfix))
             );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(HUDMessage), nameof(HUDMessage.numbersEasterEgg)),
+                postfix: new HarmonyMethod(typeof(DifficultSecretsInjections), nameof(DifficultSecretsInjections.NumbersEasterEgg_StackMasterTrophy_Postfix))
+            );
         }
     }
 }
