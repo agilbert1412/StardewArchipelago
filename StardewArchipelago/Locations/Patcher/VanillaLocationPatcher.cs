@@ -1506,6 +1506,11 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(typeof(ChatCommands.DefaultHandlers), nameof(ChatCommands.DefaultHandlers.ConcernedApe)),
                 postfix: new HarmonyMethod(typeof(SimpleSecretsInjections), nameof(SimpleSecretsInjections.ConcernedApe_EnjoyNewLifeHere_Postfix))
             );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(ChatCommands.DefaultHandlers), nameof(ChatCommands.DefaultHandlers.Qi)),
+                postfix: new HarmonyMethod(typeof(SimpleSecretsInjections), nameof(SimpleSecretsInjections.Qi_WhatdYouExpect_Postfix))
+            );
         }
 
         private void PatchPurpleShortsSecrets()
