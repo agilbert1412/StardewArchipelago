@@ -1496,6 +1496,11 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(typeof(CharacterCustomization), "optionButtonClick"),
                 prefix: new HarmonyMethod(typeof(SimpleSecretsInjections), nameof(SimpleSecretsInjections.OptionButtonClick_NameEasterEggs_Prefix))
             );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(ChatBox), nameof(ChatBox.addNiceTryEasterEggMessage)),
+                postfix: new HarmonyMethod(typeof(SimpleSecretsInjections), nameof(SimpleSecretsInjections.AddNiceTryEasterEggMessage_NiceTry_Postfix))
+            );
         }
 
         private void PatchPurpleShortsSecrets()
