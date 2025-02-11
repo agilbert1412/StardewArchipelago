@@ -387,6 +387,20 @@ namespace StardewArchipelago.Locations.Secrets
             }
         }
 
+        // public static void Qi(string[] command, ChatBox chat)
+        public static void Qi_WhatdYouExpect_Postfix(string[] command, ChatBox chat)
+        {
+            try
+            {
+                _locationChecker.AddCheckedLocation(SecretsLocationNames.WHAT_YOU_EXPECT);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(Qi_WhatdYouExpect_Postfix)}:\n{ex}");
+                return;
+            }
+        }
+
         public static void KaitoKidChatCommand(string[] command, ChatBox chat)
         {
             var mailKeyGotEasterEgg = $"KaitoChat_{Game1.stats.DaysPlayed}";
