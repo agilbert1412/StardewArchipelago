@@ -331,7 +331,7 @@ namespace StardewArchipelago.Locations.Secrets
 
                 var num1 = Game1.player.Name.IndexOf("[");
                 var num2 = Game1.player.Name.IndexOf("]");
-                string displayName = ItemRegistry.GetData(Game1.player.Name.Substring(num1 + 1, num2 - num1 - 1))?.DisplayName;
+                var displayName = ItemRegistry.GetData(Game1.player.Name.Substring(num1 + 1, num2 - num1 - 1))?.DisplayName;
                 if (displayName != null)
                 {
                     _locationChecker.AddCheckedLocation(SecretsLocationNames.SEEMS_FISHY);

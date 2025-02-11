@@ -52,8 +52,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
           : base(x, y, width, height)
         {
             this.inventory = new FakeInventoryMenu(this.xPositionOnScreen + IClickableMenu.spaceToClearSideBorder + IClickableMenu.borderWidth, this.yPositionOnScreen + IClickableMenu.spaceToClearTopBorder + IClickableMenu.borderWidth, true);
-            int num1 = Game1.player.stats.Get("trinketSlots") > 0U ? 1 : 0;
-            int num2 = num1 != 0 ? 120 : 105;
+            var num1 = Game1.player.stats.Get("trinketSlots") > 0U ? 1 : 0;
+            var num2 = num1 != 0 ? 120 : 105;
             this.equipmentIcons.Add(new ClickableComponent(new Rectangle(this.xPositionOnScreen + 48, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + 4 + 256 - 12, 64, 64), "Left Ring")
             {
                 myID = 102,
@@ -78,12 +78,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 fullyImmutable = true
             });
             this.portrait = new ClickableComponent(new Rectangle(this.xPositionOnScreen + 192 - 8 - 64 + 32, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + 256 - 8 + 64, 64, 96), "32");
-            ClickableTextureComponent textureComponent1 = new ClickableTextureComponent(new Rectangle(this.xPositionOnScreen + width / 3 + 576 + 32, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + 192 + 64, 64, 104), Game1.mouseCursors, new Rectangle(564 + Game1.player.trashCanLevel * 18, 102, 18, 26), 4f);
+            var textureComponent1 = new ClickableTextureComponent(new Rectangle(this.xPositionOnScreen + width / 3 + 576 + 32, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + 192 + 64, 64, 104), Game1.mouseCursors, new Rectangle(564 + Game1.player.trashCanLevel * 18, 102, 18, 26), 4f);
             textureComponent1.myID = 105;
             textureComponent1.upNeighborID = 106;
             textureComponent1.leftNeighborID = 101;
             this.trashCan = textureComponent1;
-            ClickableTextureComponent textureComponent2 = new ClickableTextureComponent("", new Rectangle(this.xPositionOnScreen + width, this.yPositionOnScreen + height / 3 - 64 + 8, 64, 64), "", Game1.content.LoadString("Strings\\UI:ItemGrab_Organize"), Game1.mouseCursors, new Rectangle(162, 440, 16, 16), 4f);
+            var textureComponent2 = new ClickableTextureComponent("", new Rectangle(this.xPositionOnScreen + width, this.yPositionOnScreen + height / 3 - 64 + 8, 64, 64), "", Game1.content.LoadString("Strings\\UI:ItemGrab_Organize"), Game1.mouseCursors, new Rectangle(162, 440, 16, 16), 4f);
             textureComponent2.myID = 106;
             textureComponent2.downNeighborID = 105;
             textureComponent2.leftNeighborID = 11;
@@ -118,9 +118,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             if (num1 != 0)
             {
                 Farmer.MaximumTrinkets = 1;
-                for (int index = 0; index < Farmer.MaximumTrinkets; ++index)
+                for (var index = 0; index < Farmer.MaximumTrinkets; ++index)
                 {
-                    ClickableComponent clickableComponent = new ClickableComponent(new Rectangle(this.xPositionOnScreen + 48 + 280, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + 4 + (4 + index) * 64 - 12, 64, 64), "Trinket")
+                    var clickableComponent = new ClickableComponent(new Rectangle(this.xPositionOnScreen + 48 + 280, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + 4 + (4 + index) * 64 - 12, 64, 64), "Trinket")
                     {
                         myID = 120 + index,
                         upNeighborID = Game1.player.MaxItems - 8,
@@ -137,7 +137,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             if (FakeInventoryPage.ShouldShowJunimoNoteIcon())
             {
-                ClickableTextureComponent textureComponent3 = new ClickableTextureComponent("", new Rectangle(this.xPositionOnScreen + width, this.yPositionOnScreen + 96, 64, 64), "", Game1.content.LoadString("Strings\\UI:GameMenu_JunimoNote_Hover"), Game1.mouseCursors, new Rectangle(331, 374, 15, 14), 4f);
+                var textureComponent3 = new ClickableTextureComponent("", new Rectangle(this.xPositionOnScreen + width, this.yPositionOnScreen + 96, 64, 64), "", Game1.content.LoadString("Strings\\UI:GameMenu_JunimoNote_Hover"), Game1.mouseCursors, new Rectangle(331, 374, 15, 14), 4f);
                 textureComponent3.myID = 898;
                 textureComponent3.leftNeighborID = 11;
                 textureComponent3.downNeighborID = 106;
@@ -169,7 +169,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
         protected virtual Item takeHeldItem()
         {
-            Item cursorSlotItem = Game1.player.CursorSlotItem;
+            var cursorSlotItem = Game1.player.CursorSlotItem;
             Game1.player.CursorSlotItem = (Item)null;
             return cursorSlotItem;
         }
@@ -267,13 +267,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         /// <inheritdoc />
         public override void receiveLeftClick(int x, int y, bool playSound = true)
         {
-            foreach (ClickableComponent equipmentIcon in this.equipmentIcons)
+            foreach (var equipmentIcon in this.equipmentIcons)
             {
                 if (equipmentIcon.containsPoint(x, y))
                 {
-                    Item newItem = Utility.PerformSpecialItemPlaceReplacement(Game1.player.CursorSlotItem);
-                    bool flag = newItem == null;
-                    string name = equipmentIcon.name;
+                    var newItem = Utility.PerformSpecialItemPlaceReplacement(Game1.player.CursorSlotItem);
+                    var flag = newItem == null;
+                    var name = equipmentIcon.name;
                     if (name != null)
                     {
                         switch (name.Length)
@@ -380,9 +380,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                             case 7:
                                 if (name == "Trinket" && Game1.player.stats.Get("trinketSlots") > 0U && this.checkHeldItem((Func<Item, bool>)(i => i == null || i is Trinket)))
                                 {
-                                    int index = equipmentIcon.myID - 120;
-                                    Trinket heldItem1 = (Trinket)this.takeHeldItem();
-                                    Trinket heldItem2 = (Trinket)null;
+                                    var index = equipmentIcon.myID - 120;
+                                    var heldItem1 = (Trinket)this.takeHeldItem();
+                                    var heldItem2 = (Trinket)null;
                                     if (Game1.player.trinketItems.Count > index)
                                     {
                                         heldItem2 = Game1.player.trinketItems[index];
@@ -427,7 +427,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                         }
                         if (newItem == null || newItem is Ring)
                         {
-                            NetRef<Ring> slot = equipmentIcon.name == "Left Ring" ? Game1.player.leftRing : Game1.player.rightRing;
+                            var slot = equipmentIcon.name == "Left Ring" ? Game1.player.leftRing : Game1.player.rightRing;
                             this.setHeldItem(Utility.PerformSpecialItemGrabReplacement((Item)Game1.player.Equip<Ring>((Ring)newItem, slot)));
                             if (Game1.player.leftRing.Value != null)
                             {
@@ -442,7 +442,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 label_43:
                     if (flag && this.checkHeldItem() && Game1.oldKBState.IsKeyDown(Keys.LeftShift))
                     {
-                        for (int i = 0; i < Game1.player.Items.Count; i++)
+                        for (var i = 0; i < Game1.player.Items.Count; i++)
                         {
                             if (Game1.player.Items[i] == null || this.checkHeldItem((Func<Item, bool>)(item => Game1.player.Items[i].canStackWith((ISalable)item))))
                             {
@@ -527,8 +527,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 }
                 else if (this.checkHeldItem((Func<Item, bool>)(i => i is Trinket)) && Game1.player.stats.Get("trinketSlots") > 0U)
                 {
-                    bool flag = false;
-                    for (int index = 0; index < Game1.player.trinketItems.Count; ++index)
+                    var flag = false;
+                    for (var index = 0; index < Game1.player.trinketItems.Count; ++index)
                     {
                         if (Game1.player.trinketItems[index] == null)
                         {
@@ -550,7 +550,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 }
                 if (this.inventory.getInventoryPositionOfClick(x, y) >= 12)
                 {
-                    for (int i = 0; i < 12; i++)
+                    for (var i = 0; i < 12; i++)
                     {
                         if (Game1.player.Items[i] == null || this.checkHeldItem((Func<Item, bool>)(item => Game1.player.Items[i].canStackWith((ISalable)item))))
                         {
@@ -570,7 +570,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 }
                 else if (this.inventory.getInventoryPositionOfClick(x, y) < 12)
                 {
-                    for (int i = 12; i < Game1.player.Items.Count; i++)
+                    for (var i = 12; i < Game1.player.Items.Count; i++)
                     {
                         if (Game1.player.Items[i] == null || this.checkHeldItem((Func<Item, bool>)(item => Game1.player.Items[i].canStackWith((ISalable)item))))
                         {
@@ -642,11 +642,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             this.hoveredItem = this.inventory.hover(x, y, Game1.player.CursorSlotItem);
             this.hoverText = this.inventory.hoverText;
             this.hoverTitle = this.inventory.hoverTitle;
-            foreach (ClickableComponent equipmentIcon in this.equipmentIcons)
+            foreach (var equipmentIcon in this.equipmentIcons)
             {
                 if (equipmentIcon.containsPoint(x, y))
                 {
-                    string name = equipmentIcon.name;
+                    var name = equipmentIcon.name;
                     if (name != null)
                     {
                         switch (name.Length)
@@ -797,9 +797,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             this.drawHorizontalPartition(b, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + 192);
             this.inventory.draw(b);
-            foreach (ClickableComponent equipmentIcon in this.equipmentIcons)
+            foreach (var equipmentIcon in this.equipmentIcons)
             {
-                string name = equipmentIcon.name;
+                var name = equipmentIcon.name;
                 if (name != null)
                 {
                     switch (name.Length)
@@ -865,7 +865,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                         case 7:
                             if (name == "Trinket")
                             {
-                                int index = equipmentIcon.myID - 120;
+                                var index = equipmentIcon.myID - 120;
                                 if (Game1.player.trinketItems.Count > index && Game1.player.trinketItems[index] != null)
                                 {
                                     b.Draw(Game1.menuTexture, equipmentIcon.bounds, new Rectangle?(Game1.getSourceRectForStandardTileSheet(Game1.menuTexture, 10)), Color.White);
@@ -916,12 +916,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             FarmerRenderer.isDrawingForUI = false;
             Utility.drawTextWithShadow(b, Game1.player.Name, Game1.dialogueFont, new Vector2((float)(this.xPositionOnScreen + 192 - 8) - Game1.dialogueFont.MeasureString(Game1.player.Name).X / 2f, (float)(this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + 448 + 8)), Game1.textColor);
-            float num = 32f;
-            string text1 = Game1.content.LoadString("Strings\\UI:Inventory_FarmName", (object)Game1.player.farmName);
+            var num = 32f;
+            var text1 = Game1.content.LoadString("Strings\\UI:Inventory_FarmName", (object)Game1.player.farmName);
             Utility.drawTextWithShadow(b, text1, Game1.dialogueFont, new Vector2((float)((double)this.xPositionOnScreen + (double)num + 512.0 + 32.0 - (double)Game1.dialogueFont.MeasureString(text1).X / 2.0), (float)(this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + 256 + 4)), Game1.textColor);
-            string text2 = Game1.content.LoadString("Strings\\UI:Inventory_CurrentFunds" + (Game1.player.useSeparateWallets ? "_Separate" : ""), (object)Utility.getNumberWithCommas(Game1.player.Money));
+            var text2 = Game1.content.LoadString("Strings\\UI:Inventory_CurrentFunds" + (Game1.player.useSeparateWallets ? "_Separate" : ""), (object)Utility.getNumberWithCommas(Game1.player.Money));
             Utility.drawTextWithShadow(b, text2, Game1.dialogueFont, new Vector2((float)((double)this.xPositionOnScreen + (double)num + 512.0 + 32.0 - (double)Game1.dialogueFont.MeasureString(text2).X / 2.0), (float)(this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + 320 + 4)), Game1.textColor);
-            string text3 = Game1.content.LoadString("Strings\\UI:Inventory_TotalEarnings" + (Game1.player.useSeparateWallets ? "_Separate" : ""), (object)Utility.getNumberWithCommas((int)Game1.player.totalMoneyEarned));
+            var text3 = Game1.content.LoadString("Strings\\UI:Inventory_TotalEarnings" + (Game1.player.useSeparateWallets ? "_Separate" : ""), (object)Utility.getNumberWithCommas((int)Game1.player.totalMoneyEarned));
             Utility.drawTextWithShadow(b, text3, Game1.dialogueFont, new Vector2((float)((double)this.xPositionOnScreen + (double)num + 512.0 + 32.0 - (double)Game1.dialogueFont.MeasureString(text3).X / 2.0), (float)(this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + 384)), Game1.textColor);
             Utility.drawTextWithShadow(b, Utility.getDateString(), Game1.dialogueFont, new Vector2((float)((double)this.xPositionOnScreen + (double)num + 512.0 + 32.0 - (double)Game1.dialogueFont.MeasureString(Utility.getDateString()).X / 2.0), (float)(this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + 448)), Game1.textColor * 0.8f);
             this.organizeButton?.draw(b);

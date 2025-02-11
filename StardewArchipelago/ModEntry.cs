@@ -650,14 +650,14 @@ namespace StardewArchipelago
 
         private void ListWalkableTiles(string arg1, string[] arg2)
         {
-            Farmer farmer = Game1.player;
-            GameLocation playerCurrentLocation = farmer.currentLocation;
+            var farmer = Game1.player;
+            var playerCurrentLocation = farmer.currentLocation;
             List<Vector2> walkables = new();
-            int width = playerCurrentLocation.map.DisplayWidth / 64;
-            int height = playerCurrentLocation.map.DisplayHeight / 64;
-            for (int x = 1; x < width - 1; x++)
+            var width = playerCurrentLocation.map.DisplayWidth / 64;
+            var height = playerCurrentLocation.map.DisplayHeight / 64;
+            for (var x = 1; x < width - 1; x++)
             {
-                for (int y = 1; y < height - 1; y++)
+                for (var y = 1; y < height - 1; y++)
                 {
                     Vector2 position = new(x, y);
                     if (playerCurrentLocation.isTilePassable(position))

@@ -87,7 +87,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     __instance.travelingMerchantBounds.Add(new Microsoft.Xna.Framework.Rectangle(merchantCartTile.X * 64, merchantCartTile.Y * 64, 492, 116));
                     __instance.travelingMerchantBounds.Add(new Microsoft.Xna.Framework.Rectangle(merchantCartTile.X * 64 + 180, merchantCartTile.Y * 64 + 104, 76, 48));
                     __instance.travelingMerchantBounds.Add(new Microsoft.Xna.Framework.Rectangle(merchantCartTile.X * 64 + 340, merchantCartTile.Y * 64 + 104, 104, 48));
-                    foreach (Microsoft.Xna.Framework.Rectangle travelingMerchantBound in __instance.travelingMerchantBounds)
+                    foreach (var travelingMerchantBound in __instance.travelingMerchantBounds)
                     {
                         Utility.clearObjectsInArea(travelingMerchantBound, __instance);
                     }

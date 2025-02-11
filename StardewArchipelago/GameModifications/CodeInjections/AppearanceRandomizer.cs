@@ -653,7 +653,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 var petSpriteName = "Animals\\dog";
                 try
                 {
-                    PetData petData = __instance.GetPetData();
+                    var petData = __instance.GetPetData();
                     if (petData != null)
                     {
                         petSpriteName = petData.GetBreedById(__instance.whichBreed.Value).Texture;
