@@ -132,11 +132,11 @@ namespace StardewArchipelago.Locations.Secrets
         }
 
         // public virtual bool performAction(string[] action, Farmer who, Location tileLocation)
-        public static bool PerformAction_SecretStatuesAndDwarfGrave_Prefix(GameLocation __instance, string[] action, Farmer who, Location tileLocation, ref bool __result)
+        public static bool PerformAction_SecretActions_Prefix(GameLocation __instance, string[] action, Farmer who, Location tileLocation, ref bool __result)
         {
             try
             {
-                if (!who.IsLocalPlayer || __instance.ShouldIgnoreAction(action, who, tileLocation))
+                if (who == null || !who.IsLocalPlayer || __instance.ShouldIgnoreAction(action, who, tileLocation))
                 {
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
@@ -184,7 +184,7 @@ namespace StardewArchipelago.Locations.Secrets
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed in {nameof(PerformAction_SecretStatuesAndDwarfGrave_Prefix)}:\n{ex}");
+                _logger.LogError($"Failed in {nameof(PerformAction_SecretActions_Prefix)}:\n{ex}");
                 return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
@@ -213,6 +213,68 @@ namespace StardewArchipelago.Locations.Secrets
             {
                 _logger.LogError($"Failed in {nameof(JunimoPlushCallback_SendCheckAndRemovePlush_Postfix)}:\n{ex}");
                 return;
+            }
+        }
+
+        // public void addItemByMenuIfNecessary(Item item, ItemGrabMenu.behaviorOnItemSelect itemSelectedCallback = null, bool forceQueue = false)
+        public static bool AddItemByMenuIfNecessary_FarAwayStone_Prefix(Farmer __instance, Item item, ItemGrabMenu.behaviorOnItemSelect itemSelectedCallback, bool forceQueue)
+        {
+            try
+            {
+                if (!item.QualifiedItemId.Equals(QualifiedItemIds.FAR_AWAY_STONE))
+                {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
+                _locationChecker.AddCheckedLocation(SecretsLocationNames.SUMMON_BONE_SERPENT);
+                if (_archipelago.HasReceivedItem("Far Away Stone"))
+                {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(AddItemByMenuIfNecessary_FarAwayStone_Prefix)}:\n{ex}");
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+        }
+
+        // public static void AwardFestivalPrize(Event @event, string[] args, EventContext context)
+        public static bool AwardFestivalPrize_Meowmere_Prefix(Event @event, string[] args, EventContext context)
+        {
+            try
+            {
+                if (!ArgUtility.TryGet(args, 1, out var itemId, out var error, name: "string itemId"))
+                {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
+                var lower = itemId.ToLower();
+                if (lower != "meowmere")
+                {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
+                if (_archipelago.GetReceivedItemCount("Progressive Weapon") >= 2 || _archipelago.GetReceivedItemCount("Progressive Sword") >= 2)
+                {
+                    Game1.player.addItemByMenuIfNecessary(ItemRegistry.Create(QualifiedItemIds.MEOWMERE));
+                }
+
+                _locationChecker.AddCheckedLocation(SecretsLocationNames.MEOWMERE);
+
+                if (Game1.activeClickableMenu == null)
+                    ++@event.CurrentCommand;
+                ++@event.CurrentCommand;
+
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(AwardFestivalPrize_Meowmere_Prefix)}:\n{ex}");
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
     }

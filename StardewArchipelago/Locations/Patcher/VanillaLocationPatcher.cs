@@ -1463,12 +1463,22 @@ namespace StardewArchipelago.Locations.Patcher
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performAction)),
-                postfix: new HarmonyMethod(typeof(SimpleSecretsInjections), nameof(SimpleSecretsInjections.PerformAction_SecretStatuesAndDwarfGrave_Prefix))
+                postfix: new HarmonyMethod(typeof(SimpleSecretsInjections), nameof(SimpleSecretsInjections.PerformAction_SecretActions_Prefix))
             );
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Bush), nameof(Bush.junimoPlushCallback)),
                 postfix: new HarmonyMethod(typeof(SimpleSecretsInjections), nameof(SimpleSecretsInjections.JunimoPlushCallback_SendCheckAndRemovePlush_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Farmer), nameof(Farmer.addItemByMenuIfNecessary)),
+                prefix: new HarmonyMethod(typeof(SimpleSecretsInjections), nameof(SimpleSecretsInjections.AddItemByMenuIfNecessary_FarAwayStone_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Event), nameof(Event.DefaultCommands.AwardFestivalPrize)),
+                prefix: new HarmonyMethod(typeof(SimpleSecretsInjections), nameof(SimpleSecretsInjections.AwardFestivalPrize_Meowmere_Prefix))
             );
         }
 

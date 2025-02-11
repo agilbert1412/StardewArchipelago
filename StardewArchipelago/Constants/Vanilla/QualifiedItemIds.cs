@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 
 namespace StardewArchipelago.Constants.Vanilla
 {
@@ -166,10 +167,17 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string WHITE_ALGAE = QualifiedObjectId(ObjectIds.WHITE_ALGAE);
         public static readonly string WINTER_SEEDS = QualifiedObjectId(ObjectIds.WINTER_SEEDS);
         public static readonly string YAM_SEEDS = QualifiedObjectId(ObjectIds.YAM_SEEDS);
+        public static readonly string FAR_AWAY_STONE = QualifiedObjectId(ObjectIds.FAR_AWAY_STONE);
+        public static readonly string MEOWMERE = QualifiedWeaponId(WeaponIds.MEOWMERE);
 
         public static string QualifiedObjectId(string objectId)
         {
             return QualifyId(OBJECT_QUALIFIER, objectId);
+        }
+
+        public static string QualifiedWeaponId(string weaponId)
+        {
+            return QualifyId(WEAPON_QUALIFIER, weaponId);
         }
 
         public static string QualifiedFurnitureId(string furnitureId)
