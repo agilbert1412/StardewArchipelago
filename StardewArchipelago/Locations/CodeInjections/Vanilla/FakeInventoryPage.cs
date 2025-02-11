@@ -129,7 +129,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                         fullyImmutable = true
                     };
                     if (index < Farmer.MaximumTrinkets - 1)
+                    {
                         clickableComponent.downNeighborID = -99998;
+                    }
                     this.equipmentIcons.Add(clickableComponent);
                 }
             }
@@ -144,16 +146,22 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             this._pet = Game1.GetCharacterOfType<Pet>();
             this._horse = Game1.getCharacterFromName<Horse>(Game1.player.horseName.Value, false);
             if (this._horse != null || !Game1.player.isRidingHorse() || !Game1.player.mount.Name.Equals(Game1.player.horseName.Value))
+            {
                 return;
+            }
             this._horse = Game1.player.mount;
         }
 
         public static bool ShouldShowJunimoNoteIcon()
         {
             if (!Game1.player.hasOrWillReceiveMail("canReadJunimoText") || Game1.player.hasOrWillReceiveMail("JojaMember"))
+            {
                 return false;
+            }
             if (!Game1.MasterPlayer.hasCompletedCommunityCenter())
+            {
                 return true;
+            }
             return Game1.player.hasOrWillReceiveMail("hasSeenAbandonedJunimoNote") && !Game1.MasterPlayer.hasOrWillReceiveMail("ccMovieTheater");
         }
 
@@ -177,9 +185,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             base.receiveKeyPress(key);
             if (Game1.isAnyGamePadButtonBeingPressed() && Game1.options.doesInputListContain(Game1.options.menuButton, key) && this.checkHeldItem())
+            {
                 Game1.setMousePosition(this.trashCan.bounds.Center);
+            }
             if (key == Keys.Delete && this.checkHeldItem((Func<Item, bool>)(i => i != null && i.canBeTrashed())))
+            {
                 Utility.trashItem(this.takeHeldItem());
+            }
             if (Game1.options.doesInputListContain(Game1.options.inventorySlot1, key))
             {
                 Game1.player.CurrentToolIndex = 0;
@@ -238,7 +250,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             else
             {
                 if (!Game1.options.doesInputListContain(Game1.options.inventorySlot12, key))
+                {
                     return;
+                }
                 Game1.player.CurrentToolIndex = 11;
                 Game1.playSound("toolSwap");
             }
@@ -279,10 +293,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                                         goto label_43;
                                     }
                                     else
+                                    {
                                         goto label_43;
+                                    }
                                 }
                                 else
+                                {
                                     goto label_43;
+                                }
                             case 5:
                                 switch (name[0])
                                 {
@@ -302,10 +320,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                                                 goto label_43;
                                             }
                                             else
+                                            {
                                                 goto label_43;
+                                            }
                                         }
                                         else
+                                        {
                                             goto label_43;
+                                        }
                                     case 'P':
                                         if (name == "Pants" && (newItem == null || (newItem is Clothing clothing1 ? (clothing1.clothesType.Value == Clothing.ClothesType.PANTS ? 1 : 0) : 0) != 0))
                                         {
@@ -321,10 +343,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                                                 goto label_43;
                                             }
                                             else
+                                            {
                                                 goto label_43;
+                                            }
                                         }
                                         else
+                                        {
                                             goto label_43;
+                                        }
                                     case 'S':
                                         if (name == "Shirt" && (newItem == null || (newItem is Clothing clothing2 ? (clothing2.clothesType.Value == Clothing.ClothesType.SHIRT ? 1 : 0) : 0) != 0))
                                         {
@@ -340,10 +366,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                                                 goto label_43;
                                             }
                                             else
+                                            {
                                                 goto label_43;
+                                            }
                                         }
                                         else
+                                        {
                                             goto label_43;
+                                        }
                                     default:
                                         goto label_43;
                                 }
@@ -354,7 +384,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                                     Trinket heldItem1 = (Trinket)this.takeHeldItem();
                                     Trinket heldItem2 = (Trinket)null;
                                     if (Game1.player.trinketItems.Count > index)
+                                    {
                                         heldItem2 = Game1.player.trinketItems[index];
+                                    }
                                     this.setHeldItem(Utility.PerformSpecialItemGrabReplacement((Item)heldItem2));
                                     while (Game1.player.trinketItems.Count <= index)
                                         Game1.player.trinketItems.Add((Trinket)null);
@@ -370,17 +402,25 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                                         goto label_43;
                                     }
                                     else
+                                    {
                                         goto label_43;
+                                    }
                                 }
                                 else
+                                {
                                     goto label_43;
+                                }
                             case 9:
                                 if (name == "Left Ring")
+                                {
                                     break;
+                                }
                                 goto label_43;
                             case 10:
                                 if (name == "Right Ring")
+                                {
                                     break;
+                                }
                                 goto label_43;
                             default:
                                 goto label_43;
@@ -390,9 +430,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                             NetRef<Ring> slot = equipmentIcon.name == "Left Ring" ? Game1.player.leftRing : Game1.player.rightRing;
                             this.setHeldItem(Utility.PerformSpecialItemGrabReplacement((Item)Game1.player.Equip<Ring>((Ring)newItem, slot)));
                             if (Game1.player.leftRing.Value != null)
+                            {
                                 Game1.playSound("crit");
+                            }
                             else if (this.checkHeldItem())
+                            {
                                 Game1.playSound("dwop");
+                            }
                         }
                     }
                 label_43:
@@ -403,10 +447,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                             if (Game1.player.Items[i] == null || this.checkHeldItem((Func<Item, bool>)(item => Game1.player.Items[i].canStackWith((ISalable)item))))
                             {
                                 if (Game1.player.CurrentToolIndex == i && this.checkHeldItem())
+                                {
                                     Game1.player.CursorSlotItem.actionWhenBeingHeld(Game1.player);
+                                }
                                 this.setHeldItem(Utility.addItemToInventory(this.takeHeldItem(), i, this.inventory.actualInventory));
                                 if (Game1.player.CurrentToolIndex == i && this.checkHeldItem())
+                                {
                                     Game1.player.CursorSlotItem.actionWhenStopBeingHeld(Game1.player);
+                                }
                                 Game1.playSound("stoneStep");
                                 return;
                             }
@@ -507,10 +555,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                         if (Game1.player.Items[i] == null || this.checkHeldItem((Func<Item, bool>)(item => Game1.player.Items[i].canStackWith((ISalable)item))))
                         {
                             if (Game1.player.CurrentToolIndex == i && this.checkHeldItem())
+                            {
                                 Game1.player.CursorSlotItem.actionWhenBeingHeld(Game1.player);
+                            }
                             this.setHeldItem(Utility.addItemToInventory(this.takeHeldItem(), i, this.inventory.actualInventory));
                             if (this.checkHeldItem())
+                            {
                                 Game1.player.CursorSlotItem.actionWhenStopBeingHeld(Game1.player);
+                            }
                             Game1.playSound("stoneStep");
                             return;
                         }
@@ -523,10 +575,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                         if (Game1.player.Items[i] == null || this.checkHeldItem((Func<Item, bool>)(item => Game1.player.Items[i].canStackWith((ISalable)item))))
                         {
                             if (Game1.player.CurrentToolIndex == i && this.checkHeldItem())
+                            {
                                 Game1.player.CursorSlotItem.actionWhenBeingHeld(Game1.player);
+                            }
                             this.setHeldItem(Utility.addItemToInventory(this.takeHeldItem(), i, this.inventory.actualInventory));
                             if (this.checkHeldItem())
+                            {
                                 Game1.player.CursorSlotItem.actionWhenStopBeingHeld(Game1.player);
+                            }
                             Game1.playSound("stoneStep");
                             return;
                         }
@@ -534,12 +590,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 }
             }
             if (this.portrait.containsPoint(x, y))
+            {
                 this.portrait.name = this.portrait.name.Equals("32") ? "8" : "32";
+            }
             if (this.trashCan.containsPoint(x, y) && this.checkHeldItem((Func<Item, bool>)(i => i != null && i.canBeTrashed())))
             {
                 Utility.trashItem(this.takeHeldItem());
                 if (Game1.options.SnappyMenus)
+                {
                     this.snapCursorToCurrentSnappedComponent();
+                }
             }
             else if (!this.isWithinBounds(x, y) && this.checkHeldItem((Func<Item, bool>)(i => i != null && i.canBeTrashed())))
             {
@@ -552,7 +612,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 Game1.playSound("Ship");
             }
             if (this.junimoNoteIcon == null || !this.junimoNoteIcon.containsPoint(x, y) || !this.readyToClose())
+            {
                 return;
+            }
             Game1.activeClickableMenu = (IClickableMenu)new JunimoNoteMenu(true)
             {
                 gameMenuTabToReturnTo = GameMenu.inventoryTab
@@ -563,7 +625,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         public override void receiveGamePadButton(Buttons button)
         {
             if (button != Buttons.Back || this.organizeButton == null)
+            {
                 return;
+            }
             ItemGrabMenu.organizeItemsInList((IList<Item>)Game1.player.Items);
             Game1.playSound("Ship");
         }
@@ -667,11 +731,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 this.hoverText = Game1.content.LoadString("Strings\\UI:Inventory_PortraitHover_Level", (object)Game1.player.Level) + Environment.NewLine + Game1.player.getTitle();
             }
             else
+            {
                 this.portrait.scale = 0.0f;
+            }
             if (this.trashCan.containsPoint(x, y))
             {
                 if ((double)this.trashCanLidRotation <= 0.0)
+                {
                     Game1.playSound("trashcanlid");
+                }
                 this.trashCanLidRotation = Math.Min(this.trashCanLidRotation + (float)Math.PI / 48f, 1.57079637f);
                 if (this.checkHeldItem() && Utility.getTrashReclamationPrice(Game1.player.CursorSlotItem, Game1.player) > 0)
                 {
@@ -683,19 +751,27 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 this.trashCanLidRotation = Math.Max(this.trashCanLidRotation - 0.1308997f, 0.0f);
                 if ((double)this.trashCanLidRotation == 0.0)
+                {
                     Game1.playSound("thudStep");
+                }
             }
             if (this.organizeButton != null)
             {
                 this.organizeButton.tryHover(x, y);
                 if (this.organizeButton.containsPoint(x, y))
+                {
                     this.hoverText = this.organizeButton.hoverText;
+                }
             }
             if (this.junimoNoteIcon == null)
+            {
                 return;
+            }
             this.junimoNoteIcon.tryHover(x, y);
             if (this.junimoNoteIcon.containsPoint(x, y))
+            {
                 this.hoverText = this.junimoNoteIcon.hoverText;
+            }
             if (GameMenu.bundleItemHovered)
             {
                 this.junimoNoteIcon.scale = this.junimoNoteIcon.baseScale + (float)Math.Sin((double)this.junimoNotePulser / 100.0) / 4f;
@@ -835,7 +911,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             FarmerRenderer.isDrawingForUI = true;
             Game1.player.FarmerRenderer.draw(b, new FarmerSprite.AnimationFrame(0, Game1.player.bathingClothes.Value ? 108 : 0, false, false), Game1.player.bathingClothes.Value ? 108 : 0, new Rectangle(0, Game1.player.bathingClothes.Value ? 576 : 0, 16, 32), new Vector2((float)(this.xPositionOnScreen + 192 - 8 - 32), (float)(this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + 320 - 32 - 8)), Vector2.Zero, 0.8f, 2, Color.White, 0.0f, 1f, Game1.player);
             if (Game1.timeOfDay >= 1900)
+            {
                 Game1.player.FarmerRenderer.draw(b, new FarmerSprite.AnimationFrame(0, Game1.player.bathingClothes.Value ? 108 : 0, false, false), Game1.player.bathingClothes.Value ? 108 : 0, new Rectangle(0, Game1.player.bathingClothes.Value ? 576 : 0, 16, 32), new Vector2((float)(this.xPositionOnScreen + 192 - 8 - 32), (float)(this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + 320 - 32 - 8)), Vector2.Zero, 0.8f, 2, Color.DarkBlue * 0.3f, 0.0f, 1f, Game1.player);
+            }
             FarmerRenderer.isDrawingForUI = false;
             Utility.drawTextWithShadow(b, Game1.player.Name, Game1.dialogueFont, new Vector2((float)(this.xPositionOnScreen + 192 - 8) - Game1.dialogueFont.MeasureString(Game1.player.Name).X / 2f, (float)(this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + 448 + 8)), Game1.textColor);
             float num = 32f;
@@ -850,13 +928,19 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             this.trashCan.draw(b);
             b.Draw(Game1.mouseCursors, new Vector2((float)(this.trashCan.bounds.X + 60), (float)(this.trashCan.bounds.Y + 40)), new Rectangle?(new Rectangle(564 + Game1.player.trashCanLevel * 18, 129, 18, 10)), Color.White, this.trashCanLidRotation, new Vector2(16f, 10f), 4f, SpriteEffects.None, 0.86f);
             if (this.checkHeldItem())
+            {
                 Game1.player.CursorSlotItem.drawInMenu(b, new Vector2((float)(Game1.getOldMouseX() + 16), (float)(Game1.getOldMouseY() + 16)), 1f);
+            }
             if (!string.IsNullOrEmpty(this.hoverText))
             {
                 if (this.hoverAmount > 0)
+                {
                     IClickableMenu.drawToolTip(b, this.hoverText, this.hoverTitle, (Item)null, true, moneyAmountToShowAtBottom: this.hoverAmount);
+                }
                 else
+                {
                     IClickableMenu.drawToolTip(b, this.hoverText, this.hoverTitle, this.hoveredItem, this.checkHeldItem());
+                }
             }
             this.junimoNoteIcon?.draw(b);
         }
@@ -866,7 +950,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             base.emergencyShutDown();
             this.setHeldItem(Game1.player.addItemToInventory(this.takeHeldItem()));
             if (!this.checkHeldItem())
+            {
                 return;
+            }
             Game1.playSound("throwDownITem");
             Game1.createItemDebris(this.takeHeldItem(), Game1.player.getStandingPosition(), Game1.player.FacingDirection);
         }

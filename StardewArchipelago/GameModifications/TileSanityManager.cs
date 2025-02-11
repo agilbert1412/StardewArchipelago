@@ -43,7 +43,9 @@ public class TileSanityManager
         {
             map = farmer.currentLocation.Name;
             if (map == "Farm")
+            {
                 return $"{Game1.GetFarmTypeKey()} Farm";
+            }
         }
         return map;
     }

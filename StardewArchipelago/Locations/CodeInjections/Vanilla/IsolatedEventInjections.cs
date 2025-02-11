@@ -54,7 +54,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 {
                     _locationChecker.AddCheckedLocation(OLD_MASTER_CANNOLI_AP_LOCATION);
                     if (!Game1.player.mailReceived.Contains("CF_Statue"))
+                    {
                         Game1.player.mailReceived.Add("CF_Statue");
+                    }
                 }
                 __result = true;
 
@@ -274,7 +276,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 }
 
                 if (Game1.activeClickableMenu == null)
+                {
                     @event.CurrentCommand++;
+                }
                 @event.CurrentCommand++;
 
                 _locationChecker.AddCheckedLocation(RUSTY_SWORD_AP_LOCATION);

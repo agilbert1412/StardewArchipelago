@@ -742,9 +742,13 @@ namespace StardewArchipelago
             }
 
             if (dictionary.ContainsKey(displayedName))
+            {
                 dictionary[displayedName] = validatedWalkables;
+            }
             else
+            {
                 dictionary.Add(displayedName, validatedWalkables);
+            }
             File.WriteAllText(tileFile, JsonConvert.SerializeObject(dictionary, Formatting.Indented));
             Console.Out.WriteLine("Finished finding walkable tiles");
         }
@@ -791,9 +795,13 @@ namespace StardewArchipelago
                 }
                 var name = $"Tilesanity: {map} ({x}-{y})";
                 if (real)
+                {
                     locationText += $"{id++},{map},{name},TILESANITY,\n";
+                }
                 else
+                {
                     locationText += $"{id++},{map},{name},\"TILESANITY,NOT_TILE\",\n";
+                }
             }
             File.WriteAllText(locationFile, locationText);
             Console.Out.WriteLine("CSV updated");

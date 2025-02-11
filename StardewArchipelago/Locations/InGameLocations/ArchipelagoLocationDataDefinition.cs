@@ -60,7 +60,9 @@ namespace StardewArchipelago.Locations.InGameLocations
             int spriteIndex)
         {
             if (data == null)
+            {
                 throw new ArgumentNullException(nameof(data));
+            }
             return texture != null ? Game1.getSourceRectForStandardTileSheet(texture, spriteIndex, 16, 16) : throw new ArgumentNullException(nameof(texture));
         }
 

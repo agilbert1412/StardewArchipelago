@@ -42,9 +42,13 @@ namespace StardewArchipelago.Locations.Festival
 
                 who.currentLocation.playSound("openChest");
                 if (__instance.synchronized.Value)
+                {
                     __instance.GetMutex().RequestLock(() => __instance.openChestEvent.Fire());
+                }
                 else
+                {
                     __instance.performOpenChest();
+                }
 
                 if (_archipelago.HasReceivedItem("Golden Pumpkin"))
                 {

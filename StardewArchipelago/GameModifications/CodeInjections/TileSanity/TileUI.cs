@@ -41,7 +41,9 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Tilesanity
         public static void RenderTiles(object sender, RenderedWorldEventArgs e)
         {
             if (_showUI == UIColor.None)
+            {
                 return;
+            }
 
             var xMin = Math.Max(0, Game1.viewport.X / Game1.tileSize);
             var yMin = Math.Max(0, Game1.viewport.Y / Game1.tileSize);
@@ -72,11 +74,17 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Tilesanity
                     {
                         var tileName = _tileSanityManager.GetTileName(x, y, Game1.player);
                         if (!WalkSanityInjections.IsUnlocked(tileName))
+                        {
                             _tileColors[x, y] = tileColor = 1;
+                        }
                         else if (_locationChecker.IsLocationMissing(tileName))
+                        {
                             _tileColors[x, y] = tileColor = 2;
+                        }
                         else
+                        {
                             _tileColors[x, y] = tileColor = -1;
+                        }
                     }
                     var color = tileColor switch
                     {
@@ -100,9 +108,13 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Tilesanity
         public static bool ProcessItem(ReceivedItem receivedItem)
         {
             if (!receivedItem.ItemName.Contains(TileSanityManager.TILESANITY_PREFIX))
+            {
                 return false;
+            }
             if (_currentLocation == null)
+            {
                 return true;
+            }
             var tiles = _tileSanityManager.GetTilesFromName(receivedItem.ItemName);
             foreach (var (map, x, y) in tiles)
             {
@@ -121,7 +133,9 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Tilesanity
         public static void CheckLocation(string locationName)
         {
             if (_currentLocation == null)
+            {
                 return;
+            }
             var tiles = _tileSanityManager.GetTilesFromName(locationName);
             var currentMap = _currentLocation.DisplayName;
             if (currentMap == $"{Game1.player.farmName} Farm")
@@ -144,17 +158,25 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Tilesanity
                 case $"{ChatForwarder.COMMAND_PREFIX}tilesanity_ui":
                 {
                     if (_showUI == UIColor.Normal)
+                    {
                         _showUI = UIColor.None;
+                    }
                     else
+                    {
                         _showUI = UIColor.Normal;
+                    }
                     return true;
                 }
                 case $"{ChatForwarder.COMMAND_PREFIX}tilesanity_ui_black":
                 {
                     if (_showUI == UIColor.Black)
+                    {
                         _showUI = UIColor.None;
+                    }
                     else
+                    {
                         _showUI = UIColor.Black;
+                    }
                     return true;
                 }
                 default:

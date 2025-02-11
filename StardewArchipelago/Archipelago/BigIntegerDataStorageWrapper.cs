@@ -101,7 +101,9 @@ namespace StardewArchipelago.Archipelago
                 };
 
                 if (dontGoBelowZero)
+                {
                     operations.Add(new() { OperationType = OperationType.Max, Value = 0 });
+                }
 
                 _session.Socket.SendPacket(
                     new EnergyLinkSetPacket

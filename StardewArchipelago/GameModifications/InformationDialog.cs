@@ -46,7 +46,9 @@ namespace StardewArchipelago.GameModifications
         public override void receiveKeyPress(Keys key)
         {
             if (key == Keys.None)
+            {
                 return;
+            }
             if (Game1.options.doesInputListContain(Game1.options.menuButton, key) && readyToClose())
             {
                 CloseDialog(Game1.player);
@@ -83,9 +85,13 @@ namespace StardewArchipelago.GameModifications
         public void Confirm()
         {
             if (onClickOk != null)
+            {
                 onClickOk(Game1.player);
+            }
             if (active)
+            {
                 Game1.playSound("smallSelect");
+            }
             active = false;
         }
 
@@ -104,15 +110,21 @@ namespace StardewArchipelago.GameModifications
         public override void performHoverAction(int x, int y)
         {
             if (okButton.containsPoint(x, y))
+            {
                 okButton.scale = Math.Min(okButton.scale + 0.02f, okButton.baseScale + 0.2f);
+            }
             else
+            {
                 okButton.scale = Math.Max(okButton.scale - 0.02f, okButton.baseScale);
+            }
         }
 
         public override void draw(SpriteBatch b)
         {
             if (!active)
+            {
                 return;
+            }
             b.Draw(Game1.fadeToBlackRect, new Rectangle(0, 0, Game1.uiViewport.Width, Game1.uiViewport.Height), Color.Black * 0.5f);
             Game1.drawDialogueBox(xPositionOnScreen, yPositionOnScreen, width, height, false, true);
             b.DrawString(Game1.dialogueFont, message, new Vector2(xPositionOnScreen + borderWidth, yPositionOnScreen + spaceToClearTopBorder + borderWidth / 2), Game1.textColor);

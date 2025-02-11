@@ -57,7 +57,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 CheckCopperPanLocation();
 
                 if (Game1.activeClickableMenu == null)
+                {
                     @event.CurrentCommand++;
+                }
                 @event.CurrentCommand++;
 
                 return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;

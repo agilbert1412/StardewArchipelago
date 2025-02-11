@@ -77,7 +77,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 CheckBambooPoleLocation();
 
                 if (Game1.activeClickableMenu == null)
+                {
                     @event.CurrentCommand++;
+                }
                 @event.CurrentCommand++;
 
                 return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
@@ -102,7 +104,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 CheckFishingLessonLocations();
 
                 if (Game1.activeClickableMenu == null)
+                {
                     @event.CurrentCommand++;
+                }
                 @event.CurrentCommand++;
 
                 return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
