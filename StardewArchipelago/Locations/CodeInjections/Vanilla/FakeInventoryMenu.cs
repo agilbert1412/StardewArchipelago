@@ -68,11 +68,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             this.playerInventory = playerInventory;
             this.actualInventory = actualInventory;
             if (actualInventory == null)
+            {
                 this.actualInventory = (IList<Item>)Game1.player.Items;
+            }
             for (int index = 0; index < Game1.player.maxItems.Value; ++index)
             {
                 if (Game1.player.Items.Count <= index)
+                {
                     Game1.player.Items.Add((Item)null);
+                }
             }
             for (int index = 0; index < this.capacity; ++index)
             {
@@ -93,7 +97,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             this.highlightMethod = highlightMethod;
             if (highlightMethod == null)
+            {
                 this.highlightMethod = new InventoryMenu.highlightThisItem(InventoryMenu.highlightAllItems);
+            }
             this.dropItemInvisibleButton = new ClickableComponent(new Rectangle(xPosition - IClickableMenu.borderWidth - IClickableMenu.spaceToClearSideBorder - 128, this.yPositionOnScreen - 12, 64, 64), "")
             {
                 myID = playerInventory ? 107 : -500,
@@ -119,28 +125,36 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     for (int index = 0; index < this.inventory.Count; ++index)
                     {
                         if (index < num)
+                        {
                             border.Add(this.inventory[index]);
+                        }
                     }
                     break;
                 case InventoryMenu.BorderSide.Left:
                     for (int index = 0; index < this.inventory.Count; ++index)
                     {
                         if (index % num == 0)
+                        {
                             border.Add(this.inventory[index]);
+                        }
                     }
                     break;
                 case InventoryMenu.BorderSide.Right:
                     for (int index = 0; index < this.inventory.Count; ++index)
                     {
                         if (index % num == num - 1)
+                        {
                             border.Add(this.inventory[index]);
+                        }
                     }
                     break;
                 case InventoryMenu.BorderSide.Bottom:
                     for (int index = 0; index < this.inventory.Count; ++index)
                     {
                         if (index >= this.actualInventory.Count - num)
+                        {
                             border.Add(this.inventory[index]);
+                        }
                     }
                     break;
             }
@@ -175,14 +189,18 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         public void ShakeItem(int index)
         {
             if (index < 0 || index >= this.inventory.Count)
+            {
                 return;
+            }
             this._iconShakeTimer[index] = Game1.currentGameTime.TotalGameTime.TotalSeconds + 0.5;
         }
 
         public Item tryToAddItem(Item toPlace, string sound = "coin")
         {
             if (toPlace == null)
+            {
                 return (Item)null;
+            }
             int stack = toPlace.Stack;
             foreach (ClickableComponent clickableComponent in this.inventory)
             {
@@ -198,7 +216,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                             Game1.playSound(sound);
                             ItemGrabMenu.behaviorOnItemSelect onAddItem = this.onAddItem;
                             if (onAddItem != null)
+                            {
                                 onAddItem(toPlace, this.playerInventory ? Game1.player : (Farmer)null);
+                            }
                         }
                         catch (Exception ex)
                         {
@@ -227,7 +247,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 }
             }
             if (toPlace.Stack < stack)
+            {
                 Game1.playSound(sound);
+            }
             return toPlace;
         }
 
@@ -236,7 +258,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             for (int index = 0; index < this.inventory.Count; ++index)
             {
                 if (this.inventory[index] != null && this.inventory[index].bounds.Contains(x, y))
+                {
                     return Convert.ToInt32(this.inventory[index].name);
+                }
             }
             return -1;
         }
@@ -255,17 +279,23 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                             if (toPlace != null)
                             {
                                 if (playSound)
+                                {
                                     Game1.playSound("stoneStep");
+                                }
                                 return Utility.addItemToInventory(toPlace, int32, this.actualInventory, this.onAddItem);
                             }
                             if (playSound)
+                            {
                                 Game1.playSound(this.moveItemSound);
+                            }
                             return Utility.removeItemFromInventory(int32, this.actualInventory);
                         }
                         if (toPlace != null)
                         {
                             if (playSound)
+                            {
                                 Game1.playSound("stoneStep");
+                            }
                             return Utility.addItemToInventory(toPlace, int32, this.actualInventory, this.onAddItem);
                         }
                     }
@@ -279,7 +309,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             foreach (ClickableComponent clickableComponent in this.inventory)
             {
                 if (clickableComponent.containsPoint(x, y))
+                {
                     return new Vector2((float)clickableComponent.bounds.X, (float)clickableComponent.bounds.Y);
+                }
             }
             return new Vector2((float)x, (float)y);
         }
@@ -289,7 +321,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             foreach (ClickableComponent c in this.inventory)
             {
                 if (c.containsPoint(x, y))
+                {
                     return this.getItemFromClickableComponent(c);
+                }
             }
             return (Item)null;
         }
@@ -300,7 +334,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 int int32 = Convert.ToInt32(c.name);
                 if (int32 < this.actualInventory.Count)
+                {
                     return this.actualInventory[int32];
+                }
             }
             return (Item)null;
         }
@@ -319,15 +355,21 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 if (clickableComponent.containsPoint(x, y) && int32 < this.actualInventory.Count && (i == null || this.highlightMethod(i)) && i != null)
                 {
                     if (i is Tool tool && (toAddTo == null || toAddTo is StardewValley.Object) && tool.canThisBeAttached((StardewValley.Object)toAddTo))
+                    {
                         return (Item)tool.attach((StardewValley.Object)toAddTo);
+                    }
                     if (onlyCheckToolAttachments)
+                    {
                         return toAddTo;
+                    }
                     if (toAddTo == null)
                     {
                         if (i.maximumStackSize() != -1)
                         {
                             if (int32 == Game1.player.CurrentToolIndex && i.Stack == 1)
+                            {
                                 i.actionWhenStopBeingHeld(Game1.player);
+                            }
                             Item one = i.getOne();
                             Item obj = one;
                             int num;
@@ -347,7 +389,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                             obj.Stack = num;
                             this.actualInventory[int32] = i.ConsumeStack(one.Stack);
                             if (playSound)
+                            {
                                 Game1.playSound(this.moveItemSound);
+                            }
                             return one;
                         }
                     }
@@ -369,9 +413,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                             this.actualInventory[int32] = i.ConsumeStack(1);
                         }
                         if (playSound)
+                        {
                             Game1.playSound(this.moveItemSound);
+                        }
                         if (this.actualInventory[int32] == null && int32 == Game1.player.CurrentToolIndex)
+                        {
                             i.actionWhenStopBeingHeld(Game1.player);
+                        }
                         return toAddTo;
                     }
                 }
@@ -407,11 +455,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                         this.hoverTitle = this.actualInventory[int32].DisplayName;
                     }
                     if (obj == null)
+                    {
                         obj = this.actualInventory[int32];
+                    }
                 }
             }
             if (obj is StardewValley.Object o && Game1.RequireLocation<CommunityCenter>("CommunityCenter").couldThisIngredienteBeUsedInABundle(o))
+            {
                 GameMenu.bundleItemHovered = true;
+            }
             return obj;
         }
 
@@ -435,7 +487,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 double num;
                 if (this._iconShakeTimer.TryGetValue(key, out num) && Game1.currentGameTime.TotalGameTime.TotalSeconds >= num)
+                {
                     this._iconShakeTimer.Remove(key);
+                }
             }
             Color color = red == -1 ? Color.White : new Color((int)Utility.Lerp((float)red, (float)Math.Min((int)byte.MaxValue, red + 150), 0.65f), (int)Utility.Lerp((float)green, (float)Math.Min((int)byte.MaxValue, green + 150), 0.65f), (int)Utility.Lerp((float)blue, (float)Math.Min((int)byte.MaxValue, blue + 150), 0.65f));
             Texture2D texture = red == -1 ? Game1.menuTexture : Game1.uncoloredMenuTexture;
@@ -446,7 +500,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     Vector2 position = new Vector2((float)(this.xPositionOnScreen + index % (this.capacity / this.rows) * 64 + this.horizontalGap * (index % (this.capacity / this.rows))), (float)(this.yPositionOnScreen + index / (this.capacity / this.rows) * (64 + this.verticalGap) + (index / (this.capacity / this.rows) - 1) * 4 - (index >= this.capacity / this.rows || !this.playerInventory || this.verticalGap != 0 ? 0 : 12)));
                     b.Draw(texture, position, new Rectangle?(Game1.getSourceRectForStandardTileSheet(Game1.menuTexture, 10)), color, 0.0f, Vector2.Zero, 1f, SpriteEffects.None, 0.5f);
                     if ((this.playerInventory || this.showGrayedOutSlots) && index >= Game1.player.maxItems.Value)
+                    {
                         b.Draw(texture, position, new Rectangle?(Game1.getSourceRectForStandardTileSheet(Game1.menuTexture, 57)), color * 0.5f, 0.0f, Vector2.Zero, 1f, SpriteEffects.None, 0.5f);
+                    }
                     if (!Game1.options.gamepadControls && index < 12 && this.playerInventory)
                     {
                         string str;
@@ -477,7 +533,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     {
                         bool drawShadow = this.highlightMethod(this.actualInventory[index]);
                         if (this._iconShakeTimer.ContainsKey(index))
+                        {
                             location += 1f * new Vector2((float)Game1.random.Next(-1, 2), (float)Game1.random.Next(-1, 2));
+                        }
                         this.actualInventory[index].drawInMenu(b, location, this.inventory.Count > index ? this.inventory[index].scale : 1f, !this.highlightMethod(this.actualInventory[index]) ? 0.25f : 1f, 0.865f, StackDrawType.Draw, Color.White, drawShadow);
                     }
                 }
@@ -491,7 +549,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     {
                         bool drawShadow = this.highlightMethod(this.actualInventory[index]);
                         if (this._iconShakeTimer.ContainsKey(index))
+                        {
                             location += 1f * new Vector2((float)Game1.random.Next(-1, 2), (float)Game1.random.Next(-1, 2));
+                        }
                         this.actualInventory[index].drawInMenu(b, location, this.inventory.Count > index ? this.inventory[index].scale : 1f, !drawShadow ? 0.25f : 1f, 0.865f, StackDrawType.Draw, Color.White, drawShadow);
                     }
                 }

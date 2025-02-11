@@ -58,7 +58,9 @@ namespace StardewArchipelago.Items.Traps
                 var randomPoint = instance.currentLocation.getRandomTile();
                 instance.controller = new PathFindController(instance, instance.currentLocation, new Point((int)randomPoint.X, (int)randomPoint.Y), -1, instance.toddlerReachedDestination);
                 if (instance.controller.pathToEndPoint != null && instance.currentLocation.isTileOnMap(instance.controller.pathToEndPoint.Last().X, instance.controller.pathToEndPoint.Last().Y))
+                {
                     return;
+                }
                 instance.controller = null;
             }
         }

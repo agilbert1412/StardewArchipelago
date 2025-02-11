@@ -265,7 +265,9 @@ namespace StardewArchipelago.Locations.Secrets
                 _locationChecker.AddCheckedLocation(SecretsLocationNames.MEOWMERE);
 
                 if (Game1.activeClickableMenu == null)
+                {
                     ++@event.CurrentCommand;
+                }
                 ++@event.CurrentCommand;
 
                 return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;

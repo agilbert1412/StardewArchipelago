@@ -129,7 +129,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
                 largestValue = lowestValue;
                 lowestValue = remainder;
                 if (largestValue % lowestValue == 0)
+                {
                     break;
+                }
                 remainder = largestValue % lowestValue;
             }
             return remainder;

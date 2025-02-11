@@ -134,7 +134,9 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
                 largestValue = lowestValue;
                 lowestValue = remainder;
                 if (largestValue % lowestValue == 0)
+                {
                     break;
+                }
                 remainder = largestValue % lowestValue;
             }
             return remainder;

@@ -185,9 +185,18 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Arcade
         {
             try
             {
-                if (CheckBootsPurchaseLocation(__instance)) return;
-                if (CheckSuperGunPurchaseLocation(__instance)) return;
-                if (CheckAmmoPurchaseLocation(__instance)) return;
+                if (CheckBootsPurchaseLocation(__instance))
+                {
+                    return;
+                }
+                if (CheckSuperGunPurchaseLocation(__instance))
+                {
+                    return;
+                }
+                if (CheckAmmoPurchaseLocation(__instance))
+                {
+                    return;
+                }
 
                 return;
             }

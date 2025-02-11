@@ -79,7 +79,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             {
                 __result = null;
                 if (player != Game1.player)
+                {
                     return false;
+                }
                 var spellsLearned = new List<string>();
                 if (player.CurrentItem != null)
                 {
@@ -188,11 +190,17 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             if (player.CurrentTool != null)
             {
                 if (player.CurrentTool is Axe || player.CurrentTool is Pickaxe)
+                {
                     spellsLearned.Add(ANALYZE_CLEARDEBRIS_AP_LOCATION);
+                }
                 else if (player.CurrentTool is Hoe)
+                {
                     spellsLearned.Add(ANALYZE_TILL_AP_LOCATION);
+                }
                 else if (player.CurrentTool is WateringCan)
+                {
                     spellsLearned.Add(ANALYZE_WATER_AP_LOCATION);
+                }
             }
             else if (player.CurrentItem is Boots)
             {
@@ -204,15 +212,25 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 {
                     var index = player.ActiveObject.ParentSheetIndex;
                     if (index == COFFEE)
+                    {
                         spellsLearned.Add(ANALYZE_HASTE_AP_LOCATION);
+                    }
                     else if (index == LIFE_ELIXIR)
+                    {
                         spellsLearned.Add(ANALYZE_HEAL_AP_LOCATION);
+                    }
                     else if (index == EARTH_CRYSTAL)
+                    {
                         spellsLearned.Add(ANALYZE_SHOCKWAVE_AP_LOCATION);
+                    }
                     else if (index == FIRE_QUARTZ)
+                    {
                         spellsLearned.Add(ANALYZE_FIREBALL_AP_LOCATION);
+                    }
                     else if (index == ICE_PIP)
+                    {
                         spellsLearned.Add(ANALYZE_FROSTBOLT_AP_LOCATION);
+                    }
                 }
             }
         }
@@ -224,27 +242,37 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 player.currentLocation.terrainFeatures[tilePos] is HoeDirt hoeDirt)
             {
                 if (hoeDirt.crop != null)
+                {
                     spellsLearned.Add(ANALYZE_TENDRILS_AP_LOCATION);
+                }
             }
 
             var tile = player.currentLocation.map.GetLayer("Buildings").Tiles[(int)tilePos.X, (int)tilePos.Y];
             if (tile != null && tile.TileIndex == MINE_LADDER)
+            {
                 spellsLearned.Add(ANALYZE_DESCEND_AP_LOCATION);
+            }
             if (player.currentLocation is Farm farm || player.currentLocation.Name.Contains("DeepWoods"))
             {
                 foreach (var clump in player.currentLocation.resourceClumps)
                 {
                     if (clump.parentSheetIndex.Value == CROP_TILE &&
                         new Rectangle((int)clump.Tile.X, (int)clump.Tile.Y, clump.width.Value, clump.height.Value).Contains((int)tilePos.X, (int)tilePos.Y))
+                    {
                         spellsLearned.Add(ANALYZE_METEOR_AP_LOCATION);
+                    }
                 }
             }
 
             if (player.currentLocation.doesTileHaveProperty((int)tilePos.X, (int)tilePos.Y, "Action", "Buildings") == "EvilShrineLeft")
+            {
                 spellsLearned.Add(ANALYZE_LUCKSTEAL_AP_LOCATION);
+            }
             if (player.currentLocation is MineShaft mineShaft && mineShaft.mineLevel == 100 &&
                 mineShaft.waterTiles[(int)tilePos.X, (int)tilePos.Y])
+            {
                 spellsLearned.Add(ANALYZE_BLOODMANA_AP_LOCATION);
+            }
         }
 
         private static void CheckTotalCheckLocations()

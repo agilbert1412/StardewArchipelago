@@ -63,7 +63,9 @@ namespace StardewArchipelago.GameModifications
         public override void receiveKeyPress(Keys key)
         {
             if (key == Keys.None)
+            {
                 return;
+            }
             if (Game1.options.doesInputListContain(Game1.options.menuButton, key) && readyToClose())
             {
                 return;
@@ -82,7 +84,9 @@ namespace StardewArchipelago.GameModifications
         {
             onClose("");
             if (active)
+            {
                 Game1.playSound("smallSelect");
+            }
             active = false;
         }
 
@@ -91,7 +95,9 @@ namespace StardewArchipelago.GameModifications
             Game1.activeClickableMenu = null;
             onClickRetry(this.hostField.textBox.Text);
             if (active)
+            {
                 Game1.playSound("smallSelect");
+            }
             active = false;
         }
 
@@ -110,26 +116,38 @@ namespace StardewArchipelago.GameModifications
                 Retry();
             }
             if (hostField.bounds.Contains(x, y))
+            {
                 hostField.receiveLeftClick(x, y);
+            }
         }
 
         public override void performHoverAction(int x, int y)
         {
             if (retryButton.containsPoint(x, y))
+            {
                 retryButton.scale = Math.Min(retryButton.scale + 0.02f, retryButton.baseScale + 0.2f);
+            }
             else
+            {
                 retryButton.scale = Math.Max(retryButton.scale - 0.02f, retryButton.baseScale);
+            }
 
             if (cancelButton.containsPoint(x, y))
+            {
                 cancelButton.scale = Math.Min(cancelButton.scale + 0.02f, cancelButton.baseScale + 0.2f);
+            }
             else
+            {
                 cancelButton.scale = Math.Max(cancelButton.scale - 0.02f, cancelButton.baseScale);
+            }
         }
 
         public override void draw(SpriteBatch b)
         {
             if (!active)
+            {
                 return;
+            }
             b.Draw(Game1.fadeToBlackRect, new Rectangle(0, 0, Game1.uiViewport.Width, Game1.uiViewport.Height), Color.Black * 0.5f);
             Game1.drawDialogueBox(xPositionOnScreen, yPositionOnScreen, width, height, false, true);
             b.DrawString(Game1.dialogueFont, message, new Vector2(xPositionOnScreen + borderWidth, yPositionOnScreen + spaceToClearTopBorder + borderWidth / 2), Game1.textColor);

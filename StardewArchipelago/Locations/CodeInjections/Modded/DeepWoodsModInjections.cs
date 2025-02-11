@@ -57,7 +57,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 var swordPulledOutField = _helper.Reflection.GetField<NetBool>(__instance, "swordPulledOut");
                 var swordPulledOut = swordPulledOutField.GetValue();
                 if (swordPulledOut.Value)
+                {
                     return false; //don't run original logic
+                }
 
                 var playerLuck = Game1.player.LuckLevel;
                 playerLuck = Math.Min(playerLuck, 7);
@@ -244,7 +246,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             try
             {
                 if (justCheckingForActivity)
+                {
                     return false; //don't run original logic
+                }
                 var isTrashCanField = _helper.Reflection.GetField<NetBool>(__instance, "isTrashCan");
                 var isTrashCan = isTrashCanField.GetValue();
                 if (_locationChecker.IsLocationNotChecked(isTrashCan.Value ? TREASURE1_AP_LOCATION : TREASURE2_AP_LOCATION))

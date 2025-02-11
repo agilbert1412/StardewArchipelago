@@ -54,11 +54,15 @@ public static class WalkSanityInjections
         ref bool __result)
     {
         if (!isFarmer)
+        {
             return true;
+        }
         var (x, y) = position.Center;
         var tileName = _tileSanityManager.GetTileName(x / 64, y / 64, Game1.player);
         if (IsUnlocked(tileName))
+        {
             return true;
+        }
         __result = true;
         return false;
     }
@@ -70,11 +74,17 @@ public static class WalkSanityInjections
             return true;
 #endif
         if (name.Contains("FarmHouse"))
+        {
             return true;
+        }
         if (!_archipelago.LocationExists(name))
+        {
             return true;
+        }
         if (_archipelago.HasReceivedItem(name))
+        {
             return true;
+        }
         return false;
     }
 }

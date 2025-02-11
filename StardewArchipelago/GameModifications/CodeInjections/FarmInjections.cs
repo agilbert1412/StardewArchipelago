@@ -239,7 +239,9 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             foreach (var building in farm.buildings)
             {
                 if (building.buildingType.Value == blueprint)
+                {
                     return;
+                }
             }
 
             var shippingBin = Building.CreateInstanceFromId(blueprint, tile);
