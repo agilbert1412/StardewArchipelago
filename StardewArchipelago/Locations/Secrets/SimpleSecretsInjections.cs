@@ -3,10 +3,12 @@ using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using Microsoft.Xna.Framework;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Vanilla;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Delegates;
 using StardewValley.Menus;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
@@ -27,6 +29,15 @@ namespace StardewArchipelago.Locations.Secrets
             _modHelper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
+            
+            ChatCommands.Register("kaito", KaitoKidChatCommand, null, new []
+            {
+                "kaitokid",
+                "kaito kid",
+                "Kaito",
+                "KaitoKid",
+                "Kaito Kid",
+            });
         }
 
         // public virtual void proceedToNextScene()
@@ -358,6 +369,35 @@ namespace StardewArchipelago.Locations.Secrets
                 _logger.LogError($"Failed in {nameof(AddNiceTryEasterEggMessage_NiceTry_Postfix)}:\n{ex}");
                 return;
             }
+        }
+
+        // public static void ConcernedApe(string[] command, ChatBox chat)
+        public static void ConcernedApe_EnjoyNewLifeHere_Postfix(string[] command, ChatBox chat)
+        {
+            try
+            {
+                _locationChecker.AddCheckedLocation(SecretsLocationNames.ENJOY_YOUR_NEW_LIFE_HERE);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(ConcernedApe_EnjoyNewLifeHere_Postfix)}:\n{ex}");
+                return;
+            }
+        }
+
+        public static void KaitoKidChatCommand(string[] command, ChatBox chat)
+        {
+            if (Game1.player.mailReceived.Add("kaitoChat1"))
+            {
+                chat.addMessage("Are you getting used to your new life here in this randomizer? If so, try harder settings!", new Color(104, 214, byte.MaxValue));
+                Game1.player.mailReceived.Add("kaitoChat1");
+            }
+            else
+            {
+                chat.addMessage("Kaito Kid is procrastinating...", Color.Yellow);
+            }
+
+            _locationChecker.AddCheckedLocation(SecretsLocationNames.ENJOY_YOUR_NEW_LIFE_HERE);
         }
     }
 }
