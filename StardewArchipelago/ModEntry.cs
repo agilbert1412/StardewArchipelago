@@ -142,6 +142,7 @@ namespace StardewArchipelago
             // _helper.ConsoleCommands.Add("save_entrances", "Saves the entrances file", (_, _) => EntranceInjections.SaveNewEntrancesToFile());
             _helper.ConsoleCommands.Add("export_shippables", "Export all currently loaded shippable items", ExportShippables);
             _helper.ConsoleCommands.Add("export_mismatches", "Export all items where Name and DisplayName mismatch which can be shipped", ExportMismatchedItems);
+            _helper.ConsoleCommands.Add("export_weapons", "Export all weapons by category and tier", ExportWeapons);
             _helper.ConsoleCommands.Add("release_slot", "Release the current slot completely", ReleaseSlot);
             _helper.ConsoleCommands.Add("debug_method", "Runs whatever is currently in the debug method", DebugMethod);
 #endif
@@ -614,6 +615,17 @@ namespace StardewArchipelago
         private void ExportMismatchedItems(string arg1, string[] arg2)
         {
             _stardewItemManager.ExportAllMismatchedItems(x => x.canBeShipped(), "mismatches.json");
+        }
+
+        private void ExportWeapons(string arg1, string[] arg2)
+        {
+            var weapons = new Dictionary<string, object>();
+            weapons.Add("Weapons", _weaponsManager.WeaponsByCategoryByTier);
+            weapons.Add("Boots", _weaponsManager.BootsByTier);
+            weapons.Add("Rings", _weaponsManager.Rings);
+            weapons.Add("Slingshots", _weaponsManager.SlingshotsByTier);
+            var weaponsAsJson = JsonConvert.SerializeObject(weapons);
+            File.WriteAllText("weapons.json", weaponsAsJson);
         }
 
         private void ReleaseSlot(string arg1, string[] arg2)

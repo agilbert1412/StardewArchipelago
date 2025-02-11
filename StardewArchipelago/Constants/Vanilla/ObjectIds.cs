@@ -178,6 +178,7 @@
         public const string WOODCUTTER_WEEKLY = "SkillBook_2";
         public const string WOODYS_SECRET = "Book_Woodcutting";
         public const string YAM_SEEDS = "492";
+        public const string FAR_AWAY_STONE = "FarAwayStone";
 
 
         public static bool IsSkillBook(string itemId)
