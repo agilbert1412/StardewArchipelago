@@ -1477,8 +1477,13 @@ namespace StardewArchipelago.Locations.Patcher
             );
 
             _harmony.Patch(
-                original: AccessTools.Method(typeof(Event), nameof(Event.DefaultCommands.AwardFestivalPrize)),
+                original: AccessTools.Method(typeof(Event.DefaultCommands), nameof(Event.DefaultCommands.AwardFestivalPrize)),
                 prefix: new HarmonyMethod(typeof(SimpleSecretsInjections), nameof(SimpleSecretsInjections.AwardFestivalPrize_Meowmere_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.playElliottPiano)),
+                prefix: new HarmonyMethod(typeof(SimpleSecretsInjections), nameof(SimpleSecretsInjections.PlayElliottPiano_FamiliarTune_Prefix))
             );
         }
 

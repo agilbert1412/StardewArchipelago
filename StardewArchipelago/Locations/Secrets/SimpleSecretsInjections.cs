@@ -279,5 +279,25 @@ namespace StardewArchipelago.Locations.Secrets
                 return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
+
+        // public void playElliottPiano(int key)
+        public static bool PlayElliottPiano_FamiliarTune_Prefix(GameLocation __instance, int key)
+        {
+            try
+            {
+                if (Game1.elliottPiano >= 7 && key == 1)
+                {
+                    _locationChecker.AddCheckedLocation(SecretsLocationNames.A_FAMILIAR_TUNE);
+                }
+
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(PlayElliottPiano_FamiliarTune_Prefix)}:\n{ex}");
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+        }
     }
 }
