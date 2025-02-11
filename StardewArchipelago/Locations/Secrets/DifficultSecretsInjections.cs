@@ -141,5 +141,22 @@ namespace StardewArchipelago.Locations.Secrets
                 return;
             }
         }
+
+        // public static void numbersEasterEgg(int number)
+        public static void NumbersEasterEgg_StackMasterTrophy_Postfix(int number)
+        {
+            try
+            {
+                if (number >= 1000000)
+                {
+                    _locationChecker.AddCheckedLocation(SecretsLocationNames.SECRET_IRIDIUM_STACKMASTER_TROPHY);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(NumbersEasterEgg_StackMasterTrophy_Postfix)}:\n{ex}");
+                return;
+            }
+        }
     }
 }
