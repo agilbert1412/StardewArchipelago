@@ -299,5 +299,24 @@ namespace StardewArchipelago.Locations.Secrets
                 return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
+
+        // public StardewValley.Dialogue TryGetDialogue(string key)
+        public static void TryGetDialogue_MonstersInHouse_Postfix(NPC __instance, string key, ref StardewValley.Dialogue __result)
+        {
+            try
+            {
+                if (key != "Spouse_MonstersInHouse")
+                {
+                    return;
+                }
+
+                _locationChecker.AddCheckedLocation(SecretsLocationNames.FLUBBER_EXPERIMENT);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(TryGetDialogue_MonstersInHouse_Postfix)}:\n{ex}");
+                return;
+            }
+        }
     }
 }
