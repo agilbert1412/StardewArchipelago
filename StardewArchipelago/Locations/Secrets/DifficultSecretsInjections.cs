@@ -3,6 +3,7 @@ using System.Linq;
 using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using Microsoft.Xna.Framework;
 using StardewArchipelago.Constants.Vanilla;
 using StardewModdingAPI;
 using StardewValley;
@@ -90,6 +91,20 @@ namespace StardewArchipelago.Locations.Secrets
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(PlaySound_StrangeSighting_Postfix)}:\n{ex}");
+                return;
+            }
+        }
+
+        // public SeaMonsterTemporarySprite(float animationInterval, int animationLength, int numberOfLoops, Vector2 position)
+        public static void SeaMonsterTemporarySpriteConstructor_SeaMonsterSighting_Postfix(SeaMonsterTemporarySprite __instance, float animationInterval, int animationLength, int numberOfLoops, Vector2 position)
+        {
+            try
+            {
+                _locationChecker.AddCheckedLocation(SecretsLocationNames.SEA_MONSTER_SIGHTING);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(SeaMonsterTemporarySpriteConstructor_SeaMonsterSighting_Postfix)}:\n{ex}");
                 return;
             }
         }
