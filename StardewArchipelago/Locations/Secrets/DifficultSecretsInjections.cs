@@ -108,5 +108,23 @@ namespace StardewArchipelago.Locations.Secrets
                 return;
             }
         }
+
+        // public TemporaryAnimatedSprite(string textureName, Rectangle sourceRect, Vector2 position, bool flipped, float alphaFade, Color color)
+        public static void TemporaryAnimatedSpriteConstructor_Bigfoot_Postfix(TemporaryAnimatedSprite __instance, string textureName, Rectangle sourceRect, Vector2 position, bool flipped, float alphaFade, Color color)
+        {
+            try
+            {
+                if (textureName != "Characters\\asldkfjsquaskutanfsldk")
+                {
+                    return;
+                }
+                _locationChecker.AddCheckedLocation(SecretsLocationNames.BIGFOOT);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(TemporaryAnimatedSpriteConstructor_Bigfoot_Postfix)}:\n{ex}");
+                return;
+            }
+        }
     }
 }
