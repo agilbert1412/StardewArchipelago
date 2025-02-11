@@ -1486,6 +1486,11 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.playElliottPiano)),
                 prefix: new HarmonyMethod(typeof(SimpleSecretsInjections), nameof(SimpleSecretsInjections.PlayElliottPiano_FamiliarTune_Prefix))
             );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(NPC), nameof(NPC.TryGetDialogue), new[] { typeof(string) }),
+                postfix: new HarmonyMethod(typeof(SimpleSecretsInjections), nameof(SimpleSecretsInjections.TryGetDialogue_MonstersInHouse_Postfix))
+            );
         }
 
         private void PatchPurpleShortsSecrets()
