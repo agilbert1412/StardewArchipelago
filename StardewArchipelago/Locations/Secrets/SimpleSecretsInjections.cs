@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using Archipelago.MultiClient.Net.Enums;
 using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
@@ -387,17 +389,39 @@ namespace StardewArchipelago.Locations.Secrets
 
         public static void KaitoKidChatCommand(string[] command, ChatBox chat)
         {
-            if (Game1.player.mailReceived.Add("kaitoChat1"))
+            var mailKeyGotEasterEgg = $"KaitoChat_{Game1.stats.DaysPlayed}";
+            var mailKeyGotHint = $"KaitoChatHint_{Game1.stats.DaysPlayed}";
+            if (Game1.player.mailReceived.Add(mailKeyGotEasterEgg))
             {
                 chat.addMessage("Are you getting used to your new life here in this randomizer? If so, try harder settings!", new Color(104, 214, byte.MaxValue));
-                Game1.player.mailReceived.Add("kaitoChat1");
+                _locationChecker.AddCheckedLocation(SecretsLocationNames.ENJOY_YOUR_NEW_LIFE_HERE);
+            }
+            else if (Game1.player.mailReceived.Add(mailKeyGotHint))
+            {
+                var random = new Random((int)Game1.stats.DaysPlayed * 2);
+                var missingLocations = _archipelago.GetAllMissingLocations().ToArray();
+                var maxRetries = Math.Max(10, missingLocations.Length / 10);
+                ScoutedLocation scout = null;
+                while (maxRetries > 0 && (scout == null || !scout.ClassificationFlags.HasFlag(ItemFlags.Advancement)))
+                {
+                    var randomLocation = missingLocations[random.Next(missingLocations.Length)];
+                    scout = _archipelago.ScoutSingleLocation(randomLocation);
+                    maxRetries--;
+                }
+                if (scout != null)
+                {
+                    chat.addMessage($"You might be able to find {scout.ItemName} at {scout.LocationName}", new Color(104, 214, byte.MaxValue));
+                }
+                else
+                {
+                    chat.addMessage($"Kaito Kid is procrastinating...", new Color(104, 214, byte.MaxValue));
+                }
             }
             else
             {
-                chat.addMessage("Kaito Kid is procrastinating...", Color.Yellow);
+                chat.addMessage("But don't tell anyone where you got this info!", Color.Yellow);
             }
 
-            _locationChecker.AddCheckedLocation(SecretsLocationNames.ENJOY_YOUR_NEW_LIFE_HERE);
         }
     }
 }
