@@ -318,5 +318,32 @@ namespace StardewArchipelago.Locations.Secrets
                 return;
             }
         }
+
+        // private void optionButtonClick(string name)
+        public static bool OptionButtonClick_NameEasterEggs_Prefix(CharacterCustomization __instance, string name)
+        {
+            try
+            {
+                if (name is not "OK" || !__instance.canLeaveMenu() || Game1.player.Name == __instance.oldName)
+                {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
+                var num1 = Game1.player.Name.IndexOf("[");
+                var num2 = Game1.player.Name.IndexOf("]");
+                string displayName = ItemRegistry.GetData(Game1.player.Name.Substring(num1 + 1, num2 - num1 - 1))?.DisplayName;
+                if (displayName != null)
+                {
+                    _locationChecker.AddCheckedLocation(SecretsLocationNames.SEEMS_FISHY);
+                }
+
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(OptionButtonClick_NameEasterEggs_Prefix)}:\n{ex}");
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+        }
     }
 }
