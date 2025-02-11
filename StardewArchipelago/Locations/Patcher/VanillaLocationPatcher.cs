@@ -1494,7 +1494,7 @@ namespace StardewArchipelago.Locations.Patcher
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(CharacterCustomization), "optionButtonClick"),
-                postfix: new HarmonyMethod(typeof(SimpleSecretsInjections), nameof(SimpleSecretsInjections.OptionButtonClick_NameEasterEggs_Prefix))
+                prefix: new HarmonyMethod(typeof(SimpleSecretsInjections), nameof(SimpleSecretsInjections.OptionButtonClick_NameEasterEggs_Prefix))
             );
         }
 
@@ -1570,6 +1570,11 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony.Patch(
                 original: AccessTools.Constructor(typeof(TemporaryAnimatedSprite), new []{typeof(string), typeof(Rectangle), typeof(Vector2), typeof(bool), typeof(float), typeof(Color)}),
                 postfix: new HarmonyMethod(typeof(DifficultSecretsInjections), nameof(DifficultSecretsInjections.TemporaryAnimatedSpriteConstructor_Bigfoot_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Summit), "showQiCheatingEvent"),
+                postfix: new HarmonyMethod(typeof(DifficultSecretsInjections), nameof(DifficultSecretsInjections.ShowQiCheatingEvent_MeMeMeMeMeMeMeMeMeMeMeMeMeMeMeMe_Postfix))
             );
         }
     }

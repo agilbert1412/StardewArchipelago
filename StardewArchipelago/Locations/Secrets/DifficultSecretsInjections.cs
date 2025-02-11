@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using StardewArchipelago.Constants.Vanilla;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Locations;
 using StardewValley.Menus;
 using Object = StardewValley.Object;
 
@@ -123,6 +124,20 @@ namespace StardewArchipelago.Locations.Secrets
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(TemporaryAnimatedSpriteConstructor_Bigfoot_Postfix)}:\n{ex}");
+                return;
+            }
+        }
+
+        // private void showQiCheatingEvent()
+        public static void ShowQiCheatingEvent_MeMeMeMeMeMeMeMeMeMeMeMeMeMeMeMe_Postfix(Summit __instance)
+        {
+            try
+            {
+                _locationChecker.AddCheckedLocation(SecretsLocationNames.ME_ME_ME_ME);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(ShowQiCheatingEvent_MeMeMeMeMeMeMeMeMeMeMeMeMeMeMeMe_Postfix)}:\n{ex}");
                 return;
             }
         }

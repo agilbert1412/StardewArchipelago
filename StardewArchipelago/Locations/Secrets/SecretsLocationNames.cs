@@ -43,7 +43,7 @@ namespace StardewArchipelago.Locations.Secrets
         public const string BIGFOOT = "...Bigfoot?";
         public const string FLUBBER_EXPERIMENT = "Flubber Experiment";
         public const string SEEMS_FISHY = "Seems Fishy";
-        public const string ME_ME_ME = "'Me me me me me me me me me me me me me me me me'";
+        public const string ME_ME_ME_ME = "'Me me me me me me me me me me me me me me me me'";
         public const string NICE_TRY = "Nice Try";
         public const string ENJOY_YOUR_NEW_LIFE_HERE = "Enjoy your new life here";
         public const string WHAT_YOU_EXPECT = "\"What'd you expect?\"";
