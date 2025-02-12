@@ -15,6 +15,7 @@ using StardewValley.Menus;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 using xTile.Dimensions;
+using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Locations.Secrets
 {
@@ -436,6 +437,40 @@ namespace StardewArchipelago.Locations.Secrets
                 chat.addMessage("But don't tell anyone where you got this info!", Color.Yellow);
             }
 
+        }
+
+        // public virtual StardewValley.Dialogue GetGiftReaction(Farmer giver, Object gift, int taste)
+        public static void GetGiftReaction_SpecialDialogues_Postfix(NPC __instance, Farmer giver, Object gift, int taste, ref Dialogue __result)
+        {
+            try
+            {
+                if (!__instance.CanReceiveGifts() || !Game1.NPCGiftTastes.TryGetValue(__instance.Name, out _) || __instance.isBirthday())
+                {
+                    return;
+                }
+
+                if (__instance.Name == NPCNames.KROBUS && Game1.Date.DayOfWeek == DayOfWeek.Friday)
+                {
+                    return;
+                }
+
+                CheckGiftDialogueLocation(__instance, gift, SecretsLocationNames.WHAT_KIND_OF_MONSTER_IS_THIS, NPCNames.WILLY, QualifiedItemIds.MUTANT_CARP);
+                CheckGiftDialogueLocation(__instance, gift, SecretsLocationNames.MOUTH_WATERING_ALREADY, NPCNames.ABIGAIL, QualifiedItemIds.MAGIC_ROCK_CANDY);
+                CheckGiftDialogueLocation(__instance, gift, SecretsLocationNames.LOVELY_PERFUME, NPCNames.KROBUS, QualifiedItemIds.MONSTER_MUSK);
+                CheckGiftDialogueLocation(__instance, gift, SecretsLocationNames.WHERE_DOES_THIS_JUICE_COME_FROM, NPCNames.DWARF, QualifiedItemIds.MILK, QualifiedItemIds.LARGE_MILK);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(GetGiftReaction_SpecialDialogues_Postfix)}:\n{ex}");
+                return;
+            }
+        }
+        private static void CheckGiftDialogueLocation(NPC __instance, Object gift, string locationName, string npcName, params string[] validGifts)
+        {
+            if (__instance.Name == npcName && validGifts.Contains(gift.QualifiedItemId))
+            {
+                _locationChecker.AddCheckedLocation(locationName);
+            }
         }
     }
 }

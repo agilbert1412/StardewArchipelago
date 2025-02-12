@@ -179,6 +179,10 @@
         public const string WOODYS_SECRET = "Book_Woodcutting";
         public const string YAM_SEEDS = "492";
         public const string FAR_AWAY_STONE = "FarAwayStone";
+        public const string MUTANT_CARP = "682";
+        public const string MILK = "184";
+        public const string LARGE_MILK = "186";
+        public const string MONSTER_MUSK = "879";
 
 
         public static bool IsSkillBook(string itemId)

@@ -48,6 +48,10 @@ namespace StardewArchipelago.Locations.Secrets
         public const string ENJOY_YOUR_NEW_LIFE_HERE = "Enjoy your new life here";
         public const string WHAT_YOU_EXPECT = "\"What'd you expect?\"";
         public const string SECRET_IRIDIUM_STACKMASTER_TROPHY = "Secret Iridium Stackmaster Trophy";
+        public const string WHAT_KIND_OF_MONSTER_IS_THIS = "What kind of monster is this?";
+        public const string MOUTH_WATERING_ALREADY = "My mouth is watering already";
+        public const string LOVELY_PERFUME = "A gift of lovely perfume";
+        public const string WHERE_DOES_THIS_JUICE_COME_FROM = "Where exactly does this juice come from?";
 
         public static readonly Dictionary<string, string> FISHABLE_QUALIFIED_ITEM_IDS_TO_LOCATIONS = new()
         {

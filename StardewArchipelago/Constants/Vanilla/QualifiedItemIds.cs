@@ -67,6 +67,7 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string EGGPLANT_SEEDS = QualifiedObjectId(ObjectIds.EGGPLANT_SEEDS);
         public static readonly string FAIRY_SEEDS = QualifiedObjectId(ObjectIds.FAIRY_SEEDS);
         public static readonly string FALL_SEEDS = QualifiedObjectId(ObjectIds.FALL_SEEDS);
+        public static readonly string FAR_AWAY_STONE = QualifiedObjectId(ObjectIds.FAR_AWAY_STONE);
         public static readonly string FIBER_SEEDS = QualifiedObjectId(ObjectIds.FIBER_SEEDS);
         public static readonly string FOLIAGE_PRINT = QualifiedFurnitureId(FurnitureIds.FOLIAGE_PRINT);
         public static readonly string FOSSILIZED_SPINE = QualifiedObjectId(ObjectIds.FOSSILIZED_SPINE);
@@ -93,14 +94,19 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string KALE_SEEDS = QualifiedObjectId(ObjectIds.KALE_SEEDS);
         public static readonly string LARGE_BROWN_EGG = QualifiedObjectId(ObjectIds.LARGE_BROWN_EGG);
         public static readonly string LARGE_GOAT_MILK = QualifiedObjectId(ObjectIds.LARGE_GOAT_MILK);
+        public static readonly string LARGE_MILK = QualifiedObjectId(ObjectIds.LARGE_MILK);
         public static readonly string LIFESAVER = QualifiedFurnitureId(FurnitureIds.LIFESAVER);
         public static readonly string MAGIC_ROCK_CANDY = QualifiedObjectId(ObjectIds.MAGIC_ROCK_CANDY);
         public static readonly string MANGO_SAPLING = QualifiedObjectId(ObjectIds.MANGO_SAPLING);
         public static readonly string MEGA_BOMB = QualifiedObjectId(ObjectIds.MEGA_BOMB);
         public static readonly string MELON_SEEDS = QualifiedObjectId(ObjectIds.MELON_SEEDS);
+        public static readonly string MEOWMERE = QualifiedWeaponId(WeaponIds.MEOWMERE);
+        public static readonly string MILK = QualifiedObjectId(ObjectIds.MILK);
         public static readonly string MIXED_FLOWER_SEEDS = QualifiedObjectId(ObjectIds.MIXED_FLOWER_SEEDS);
         public static readonly string MIXED_SEEDS = QualifiedObjectId(ObjectIds.MIXED_SEEDS);
+        public static readonly string MONSTER_MUSK = QualifiedObjectId(ObjectIds.MONSTER_MUSK);
         public static readonly string MUMMIFIED_BAT = QualifiedObjectId(ObjectIds.MUMMIFIED_BAT);
+        public static readonly string MUTANT_CARP = QualifiedObjectId(ObjectIds.MUTANT_CARP);
         public static readonly string MYSTERY_BOX = QualifiedObjectId(ObjectIds.MYSTERY_BOX);
         public static readonly string OIL = QualifiedObjectId(ObjectIds.OIL);
         public static readonly string OMNI_GEODE = QualifiedObjectId(ObjectIds.OMNI_GEODE);
@@ -167,8 +173,6 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string WHITE_ALGAE = QualifiedObjectId(ObjectIds.WHITE_ALGAE);
         public static readonly string WINTER_SEEDS = QualifiedObjectId(ObjectIds.WINTER_SEEDS);
         public static readonly string YAM_SEEDS = QualifiedObjectId(ObjectIds.YAM_SEEDS);
-        public static readonly string FAR_AWAY_STONE = QualifiedObjectId(ObjectIds.FAR_AWAY_STONE);
-        public static readonly string MEOWMERE = QualifiedWeaponId(WeaponIds.MEOWMERE);
 
         public static string QualifiedObjectId(string objectId)
         {
