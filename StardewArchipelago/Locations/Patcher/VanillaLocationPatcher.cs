@@ -1511,6 +1511,8 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(typeof(ChatCommands.DefaultHandlers), nameof(ChatCommands.DefaultHandlers.Qi)),
                 postfix: new HarmonyMethod(typeof(SimpleSecretsInjections), nameof(SimpleSecretsInjections.Qi_WhatdYouExpect_Postfix))
             );
+
+            PatchGiftDialogueSecrets();
         }
 
         private void PatchPurpleShortsSecrets()
@@ -1552,6 +1554,14 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony.Patch(
                 original: AccessTools.Method(typeof(FishingRod), nameof(FishingRod.doneHoldingFish)),
                 postfix: new HarmonyMethod(typeof(FishableSecretsInjections), nameof(FishableSecretsInjections.DoneHoldingFish_FishableSecret_Postfix))
+            );
+        }
+
+        private void PatchGiftDialogueSecrets()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(NPC), nameof(NPC.GetGiftReaction)),
+                postfix: new HarmonyMethod(typeof(SimpleSecretsInjections), nameof(SimpleSecretsInjections.GetGiftReaction_SpecialDialogues_Postfix))
             );
         }
 
