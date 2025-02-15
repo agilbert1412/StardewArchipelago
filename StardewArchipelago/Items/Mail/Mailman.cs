@@ -216,7 +216,8 @@ namespace StardewArchipelago.Items.Mail
             "I hear you need something for you 'secret friend' this winter and boy do I have the perfect item for you: {0}. No need to thank me, I'm sure it's exactly what you needed.^^    -{1} from {2}",
             "You still need one more item for your grange display at the Fair, right? Here's your winner: a freshly caught {0}, straight from the {2} seas.^^    -{1}",
             "I know you've been trying hard to win over a partner for the Flower Dance. This {0} is sure to win over your crush. I just know they'll love it.^^    -{1} from {2}",
-            "I have travelled far and wide for you my lord!^^ Tirelessly, day and night until finally, I reached {2}. There, I found {0} for you. My quest is complete!^^ May I have that cookie now?^^ -{1}" 
+            "I have travelled far and wide for you my lord!^^ Tirelessly, day and night until finally, I reached {2}. There, I found {0} for you. My quest is complete!^^ May I have that cookie now?^^ -{1}",
+            "Don't worry, I didn't forget your upcoming marriage. Here's a {0} for your gift!^^ -{1}"
         };
 
         private const string ApConciseMailString = "{0} from {1} at {2}.";
@@ -293,6 +294,11 @@ namespace StardewArchipelago.Items.Mail
             "Have you ever played Junimo Kart? I love it, it's just a nice chill game. Here's some {0} so you can play.^^   -{1}",
             "Aiyhd ndi hjsajkhndb mkss? Fjdskn udf thene ksskdu {0}! Dfsbdubfsken nmsd tr {2}.^^   -{1}",
             "I found a new game in the same technology document and I worry that this becomes a thread about the manual implementation, and the {0} are shuffled. This is a huge breakthrough!^^   -Sent from {1}'s iPhone",
+            "This {0} dropped on my head. When I looked up, I saw a swallow flying away! I have no idea how a 1 oz bird carried this. I didn't think they migrated at all, much less to {2}!^^ -{1}",
+            "I found this {0} while I was inside the back of my moving van bound for Hoenn. It has your name on it, so here you go.^^ -{1}",
+            "I don't remember if you were trying to perfect yourself and reach the summit, but here's a {0} for the journey!^^ -{1}",
+            "I walk this {2} road.^The only road that I have ever known.^Don't know where it goes, but it's only me and this {0}>^^ -{1}",
+            "I'm sorry @, but this {0} was in {2} castle.^^ - {1}"
         };
     }
 }
