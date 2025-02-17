@@ -299,7 +299,7 @@ namespace StardewArchipelago.Items.Mail
             "I found this {0} while I was inside the back of my moving van bound for Hoenn. It has your name on it, so here you go.^^ -{1}",
             "I don't remember if you were trying to perfect yourself and reach the summit, but here's a {0} for the journey!^^ -{1}",
             "I walk this {2} road.^The only road that I have ever known.^Don't know where it goes, but it's only me and this {0}>^^ -{1}",
-            "I'm sorry @, but this {0} was in {2} castle.^^ - {1}"
+            "I'm sorry @, but this {0} was in {2} castle.^^ - {1}",
         };
     }
 }
