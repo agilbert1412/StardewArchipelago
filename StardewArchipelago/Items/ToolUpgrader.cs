@@ -189,8 +189,14 @@ namespace StardewArchipelago.Items
 
         public Tool UpgradeTool(Tool toolToUpgrade, string toolName)
         {
-            var newTool = (Tool)ItemRegistry.Create("(T)" + toolName);
+            var newTool = UpgradeTool(toolName);
             newTool.UpgradeFrom(toolToUpgrade);
+            return newTool;
+        }
+
+        public Tool UpgradeTool(string toolName)
+        {
+            var newTool = (Tool)ItemRegistry.Create("(T)" + toolName);
             return newTool;
         }
     }
