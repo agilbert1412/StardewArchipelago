@@ -210,12 +210,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             var apSkillName = skill.ToString();
             var experienceAmount = GetMultipliedExperience(amount);
-            if (_archipelagoExperience[skill] >= MAX_XP_PER_SKILL && _archipelago.GetReceivedItemCount($"{apSkillName} Level") >= 10)
+            if (_archipelago.GetReceivedItemCount($"{apSkillName} Level") >= 10)
             {
                 var currentMasteryLevel = MasteryTrackerMenu.getCurrentMasteryLevel();
+                var masteryXP = experienceAmount;
                 if (skill == Skill.Farming)
                 {
-                    experienceAmount /= 2;
+                    masteryXP /= 2;
                 }
                 Game1.stats.Increment("MasteryExp", Math.Max(1, (int)Math.Round(experienceAmount)));
                 if (MasteryTrackerMenu.getCurrentMasteryLevel() > currentMasteryLevel)
