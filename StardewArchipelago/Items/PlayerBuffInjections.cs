@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
@@ -7,6 +8,7 @@ using StardewArchipelago.Constants;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Buffs;
+using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Tools;
 
@@ -66,6 +68,16 @@ namespace StardewArchipelago.Items
                 if (Game1.eventUp && Game1.CurrentEvent is { isFestival: false })
                 {
                     return;
+                }
+
+                if (Game1.eventUp && Game1.CurrentEvent != null && Game1.currentLocation is DesertFestival desertFestival)
+                {
+                    var makeoverEvent = desertFestival.GetMakeoverEvent();
+                    var makeoverEventCommands = Event.ParseCommands(makeoverEvent, null);
+                    if (makeoverEventCommands.SequenceEqual(Game1.CurrentEvent.eventCommands))
+                    {
+                        return;
+                    }
                 }
 
                 var baseCoefficient = 1.0f;
