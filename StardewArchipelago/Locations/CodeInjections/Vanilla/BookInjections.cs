@@ -174,13 +174,19 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 isThisBookRandomized = isThisBookRandomized || _archipelago.LocationExists(locationName);
             }
 
+            var itemId = book.ItemId;
+            if (itemId == ObjectIds.QUEEN_OF_SAUCE_COOKBOOK)
+            {
+                ReadCookbook(book);
+                return;
+            }
+
             if (ObjectIds.IsSkillBook(book.ItemId))
             {
                 ReadSkillBook(book);
                 return;
             }
 
-            var itemId = book.ItemId;
             var bookHasSubsequentReward = itemId != ObjectIds.PRICE_CATALOGUE && itemId != ObjectIds.ANIMAL_CATALOGUE;
 
             var previousReads = Game1.player.stats.Get(book.itemId.Value);
@@ -194,12 +200,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     Game1.player.mailReceived.Add("read_a_book");
                 }
                 GiveBookXpReward(book);
-                return;
-            }
-
-            if (itemId == ObjectIds.QUEEN_OF_SAUCE_COOKBOOK)
-            {
-                ReadCookbook(book);
                 return;
             }
 
