@@ -255,7 +255,7 @@ namespace StardewArchipelago.Items.Mail
             var numberOfPreviousToolLetters = _mail.OpenedMailsContainingKey($"{ToolUnlockManager.PROGRESSIVE_TOOL_AP_PREFIX}{toolGenericName}");
             if (numberOfPreviousToolLetters <= 1 && toolGenericName == "Pan")
             {
-                var newTool = _toolUpgrader.CreateTool(toolGenericName);
+                var newTool = _toolUpgrader.UpgradeTool(toolGenericName);
                 Game1.player.holdUpItemThenMessage(newTool);
                 Game1.player.addItemByMenuIfNecessary(newTool);
                 return;

@@ -178,7 +178,7 @@ namespace StardewArchipelago.Items
             {
                 if (toolData.ConventionalUpgradeFrom == item.QualifiedItemId)
                 {
-                    upgradedTool = CreateTool(toolId);
+                    upgradedTool = UpgradeTool(toolToUpgrade, toolId);
                     return true;
                 }
             }
@@ -187,9 +187,11 @@ namespace StardewArchipelago.Items
             return false;
         }
 
-        public Tool CreateTool(string toolName)
+        public Tool UpgradeTool(Tool toolToUpgrade, string toolName)
         {
-            return (Tool)ItemRegistry.Create("(T)" + toolName);
+            var newTool = (Tool)ItemRegistry.Create("(T)" + toolName);
+            newTool.UpgradeFrom(toolToUpgrade);
+            return newTool;
         }
     }
 }
