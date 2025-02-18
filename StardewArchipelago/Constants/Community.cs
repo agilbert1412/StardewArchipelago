@@ -49,6 +49,7 @@ namespace StardewArchipelago.Constants
             "KittyAshy",
             "Kono Tyran",
             "Lady Redacted",
+            "LeftoverLyzard",
             "Liarose",
             "lordlou",
             "Madolinn",
