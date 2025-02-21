@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
@@ -64,6 +65,11 @@ namespace StardewArchipelago.Locations
         public string[] GetAllLocationsNotCheckedContainingWord(string wordFilter)
         {
             return _locationNameMatcher.GetAllLocationsContainingWord(GetAllLocationsNotChecked(), wordFilter);
+        }
+
+        public string[] GetAllLocationsNotCheckedThatOverlap(string[] locations)
+        {
+            return GetAllLocationsNotChecked().Intersect(locations).ToArray();
         }
 
         public bool IsAnyLocationNotChecked(string filter)
