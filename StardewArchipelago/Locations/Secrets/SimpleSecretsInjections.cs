@@ -37,9 +37,6 @@ namespace StardewArchipelago.Locations.Secrets
             {
                 "kaitokid",
                 "kaito kid",
-                "Kaito",
-                "KaitoKid",
-                "Kaito Kid",
             });
         }
 
@@ -406,9 +403,10 @@ namespace StardewArchipelago.Locations.Secrets
         {
             var mailKeyGotEasterEgg = $"KaitoChat_{Game1.stats.DaysPlayed}";
             var mailKeyGotHint = $"KaitoChatHint_{Game1.stats.DaysPlayed}";
+            var color = new Color(104, 214, byte.MaxValue);
             if (Game1.player.mailReceived.Add(mailKeyGotEasterEgg))
             {
-                chat.addMessage("Are you getting used to your new life here in this randomizer? If so, try harder settings!", new Color(104, 214, byte.MaxValue));
+                chat.addMessage("Are you getting used to your new life here in this randomizer? If so, try harder settings!", color);
                 _locationChecker.AddCheckedLocation(SecretsLocationNames.ENJOY_YOUR_NEW_LIFE_HERE);
             }
             else if (Game1.player.mailReceived.Add(mailKeyGotHint))
@@ -425,16 +423,16 @@ namespace StardewArchipelago.Locations.Secrets
                 }
                 if (scout != null)
                 {
-                    chat.addMessage($"You might be able to find {scout.ItemName} at {scout.LocationName}", new Color(104, 214, byte.MaxValue));
+                    chat.addMessage($"You might be able to find {scout.ItemName} at {scout.LocationName}", color);
                 }
                 else
                 {
-                    chat.addMessage($"Kaito Kid is procrastinating...", new Color(104, 214, byte.MaxValue));
+                    chat.addMessage($"Kaito Kid is procrastinating...", color);
                 }
             }
             else
             {
-                chat.addMessage("But don't tell anyone where you got this info!", Color.Yellow);
+                chat.addMessage("But don't tell anyone where you got this info!", color);
             }
 
         }
