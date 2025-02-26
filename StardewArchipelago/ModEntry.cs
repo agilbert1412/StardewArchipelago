@@ -30,6 +30,7 @@ using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
 using StardewArchipelago.Locations.InGameLocations;
 using StardewArchipelago.Locations.Patcher;
+using StardewArchipelago.Locations.Secrets;
 using StardewArchipelago.Locations.ShopStockModifiers;
 using StardewArchipelago.Logging;
 using StardewArchipelago.Serialization;
@@ -164,6 +165,7 @@ namespace StardewArchipelago
             GameStateQuery.Register(GameStateCondition.FOUND_ARTIFACT, ArtifactsFoundQueryDelegate);
             GameStateQuery.Register(GameStateCondition.FOUND_MINERAL, MineralsFoundQueryDelegate);
             TriggerActionManager.RegisterAction(TriggerActionProvider.TRAVELING_MERCHANT_PURCHASE, TravelingMerchantInjections.OnPurchasedRandomItem);
+            ChatCommands.Register("kaito", SimpleSecretsInjections.KaitoKidChatCommand, null, new[] { "kaitokid", "kaito kid", });
         }
 
         private IEnumerable<ItemQueryResult> PurchasableAPLocationQueryDelegate(string key, string arguments, ItemQueryContext context, bool avoidrepeat, HashSet<string> avoiditemids, Action<string, string> logerror)

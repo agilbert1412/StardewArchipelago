@@ -32,12 +32,6 @@ namespace StardewArchipelago.Locations.Secrets
             _modHelper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
-            
-            ChatCommands.Register("kaito", KaitoKidChatCommand, null, new []
-            {
-                "kaitokid",
-                "kaito kid",
-            });
         }
 
         // public virtual void proceedToNextScene()
