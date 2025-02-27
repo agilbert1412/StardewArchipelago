@@ -53,20 +53,49 @@ namespace StardewArchipelago.Locations.Secrets
         public const string LOVELY_PERFUME = "A gift of lovely perfume";
         public const string WHERE_DOES_THIS_JUICE_COME_FROM = "Where exactly does this juice come from?";
 
+        public const string SECRET_NOTE_1 = "Secret Note #1: A Page From Abigail's Diary";
+        public const string SECRET_NOTE_2 = "Secret Note #2: Sam's Holiday Shopping List";
+        public const string SECRET_NOTE_3 = "Secret Note #3: Leah's Perfect Dinner";
+        public const string SECRET_NOTE_4 = "Secret Note #4: Maru's Greatest Invention Yet";
+        public const string SECRET_NOTE_5 = "Secret Note #5: Penny gets everyone something they love";
+        public const string SECRET_NOTE_6 = "Secret Note #6: Stardrop Saloon Special Orders";
+        public const string SECRET_NOTE_7 = "Secret Note #7: Older Bachelors In Town";
+        public const string SECRET_NOTE_8 = "Secret Note #8: To Haley And Emily";
+        public const string SECRET_NOTE_9 = "Secret Note #9: Alex's Strength Training Diet";
+        public const string SECRET_NOTE_10 = "Secret Note #10: Cryptic Note";
+        public const string SECRET_NOTE_11 = "Secret Note #11: Marnie's Memory";
+        public const string SECRET_NOTE_12 = "Secret Note #12: Good Things In Garbage Cans";
+        public const string SECRET_NOTE_13 = "Secret Note #13: Junimo Plush";
+        public const string SECRET_NOTE_14 = "Secret Note #14: Stone Junimo";
+        public const string SECRET_NOTE_15 = "Secret Note #15: Mermaid Show";
+        public const string SECRET_NOTE_16 = "Secret Note #16: Treasure Chest";
+        public const string SECRET_NOTE_17 = "Secret Note #17: Green Strange Doll";
+        public const string SECRET_NOTE_18 = "Secret Note #18: Yellow Strange Doll";
+        public const string SECRET_NOTE_19_PART_1 = "Secret Note #19: Solid Gold Lewis";
+        public const string SECRET_NOTE_19_PART_2 = "Secret Note #19: In Town For All To See";
+        public const string SECRET_NOTE_20 = "Secret Note #20: Special Charm";
+        public const string SECRET_NOTE_21 = "Secret Note #21: A Date In Nature";
+        public const string SECRET_NOTE_22 = "Secret Note #22: The Mysterious Qi";
+        public const string SECRET_NOTE_23 = "Secret Note #23: Strange Note";
+        public const string SECRET_NOTE_24 = "Secret Note #24: M. Jasper's Book On Junimos";
+        public const string SECRET_NOTE_25 = "Secret Note #25: Ornate Necklace";
+        public const string SECRET_NOTE_26 = "Secret Note #26: Ancient Farming Secrets";
+        public const string SECRET_NOTE_27 = "Secret Note #27: A Compendium Of My Greatest Discoveries";
+
         public static readonly Dictionary<string, string> FISHABLE_QUALIFIED_ITEM_IDS_TO_LOCATIONS = new()
         {
-            {QualifiedItemIds.BOAT, BOAT},
-            {QualifiedItemIds.DECORATIVE_TRASH_CAN, DECORATIVE_TRASH_CAN},
-            {QualifiedItemIds.FOLIAGE_PRINT, FOLIAGE_PRINT},
-            {QualifiedItemIds.FROG_HAT, FROG_HAT},
-            {QualifiedItemIds.GOURMAND_STATUE, GOURMAND_STATUE},
-            {QualifiedItemIds.IRIDIUM_KROBUS, IRIDIUM_KROBUS},
-            {QualifiedItemIds.LIFESAVER, LIFESAVER},
-            {QualifiedItemIds.PHYSICS_101, PHYSICS_101},
-            {QualifiedItemIds.PYRAMID_DECAL, PYRAMID_DECAL},
-            {QualifiedItemIds.SQUIRREL_FIGURINE, SQUIRREL_FIGURINE},
-            {QualifiedItemIds.VISTA, VISTA},
-            {QualifiedItemIds.WALL_BASKET, WALL_BASKET},
+            { QualifiedItemIds.BOAT, BOAT },
+            { QualifiedItemIds.DECORATIVE_TRASH_CAN, DECORATIVE_TRASH_CAN },
+            { QualifiedItemIds.FOLIAGE_PRINT, FOLIAGE_PRINT },
+            { QualifiedItemIds.FROG_HAT, FROG_HAT },
+            { QualifiedItemIds.GOURMAND_STATUE, GOURMAND_STATUE },
+            { QualifiedItemIds.IRIDIUM_KROBUS, IRIDIUM_KROBUS },
+            { QualifiedItemIds.LIFESAVER, LIFESAVER },
+            { QualifiedItemIds.PHYSICS_101, PHYSICS_101 },
+            { QualifiedItemIds.PYRAMID_DECAL, PYRAMID_DECAL },
+            { QualifiedItemIds.SQUIRREL_FIGURINE, SQUIRREL_FIGURINE },
+            { QualifiedItemIds.VISTA, VISTA },
+            { QualifiedItemIds.WALL_BASKET, WALL_BASKET },
         };
     }
 }
