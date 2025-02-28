@@ -206,21 +206,6 @@ namespace StardewArchipelago.Locations.Secrets
             }
         }
 
-        // public void junimoPlushCallback(Item item, Farmer who)
-        public static void JunimoPlushCallback_SendCheckAndRemovePlush_Postfix(Bush __instance, Item item, Farmer who)
-        {
-            try
-            {
-                _locationChecker.AddCheckedLocation(SecretsLocationNames.JUNIMO_PLUSH);
-                who.removeFirstOfThisItemFromInventory(QualifiedItemIds.JUNIMO_PLUSH);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Failed in {nameof(JunimoPlushCallback_SendCheckAndRemovePlush_Postfix)}:\n{ex}");
-                return;
-            }
-        }
-
         // public void addItemByMenuIfNecessary(Item item, ItemGrabMenu.behaviorOnItemSelect itemSelectedCallback = null, bool forceQueue = false)
         public static bool AddItemByMenuIfNecessary_FarAwayStone_Prefix(Farmer __instance, Item item, ItemGrabMenu.behaviorOnItemSelect itemSelectedCallback, bool forceQueue)
         {

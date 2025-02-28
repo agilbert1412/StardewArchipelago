@@ -22,7 +22,6 @@ namespace StardewArchipelago.Locations.Secrets
         public const string PINKY_LEMON = "??Pinky Lemon??";
         public const string FOROGUEMON = "??Foroguemon??";
         public const string GALAXIES_WILL_HEED_YOUR_CRY = "Galaxies Will Heed Your Cry";
-        public const string JUNIMO_PLUSH = "Junimo Plush";
         public const string STRANGE_SIGHTING = "Strange Sighting";
         public const string BOAT = "'Boat'";
         public const string DECORATIVE_TRASH_CAN = "Decorative Trash Can";
@@ -97,5 +96,70 @@ namespace StardewArchipelago.Locations.Secrets
             { QualifiedItemIds.VISTA, VISTA },
             { QualifiedItemIds.WALL_BASKET, WALL_BASKET },
         };
+
+        public static readonly Dictionary<string, List<RequiredGift>> SECRET_NOTE_GIFT_REQUIREMENTS = new()
+        {
+            { SECRET_NOTE_1, new List<RequiredGift> { new(NPCNames.ABIGAIL, ObjectIds.PUMPKIN, ObjectIds.AMETHYST, ObjectIds.CHOCOLATE_CAKE, ObjectIds.SPICY_EEL, ObjectIds.BLACKBERRY_COBBLER) } },
+            {
+                SECRET_NOTE_2, new List<RequiredGift>
+                {
+                    new(NPCNames.SEBASTIAN, ObjectIds.FROZEN_TEAR, ObjectIds.SASHIMI),
+                    new(NPCNames.PENNY, ObjectIds.EMERALD, ObjectIds.POPPY),
+                    new(NPCNames.VINCENT, ObjectIds.GRAPE, ObjectIds.CRANBERRY_CANDY),
+                    new(NPCNames.JODI, ObjectIds.CRISPY_BASS, ObjectIds.PANCAKES),
+                    new(NPCNames.KENT, ObjectIds.FIDDLEHEAD_RISOTTO, ObjectIds.ROASTED_HAZELNUTS),
+                    new(NPCNames.SAM, ObjectIds.CACTUS_FRUIT, ObjectIds.MAPLE_BAR, ObjectIds.PIZZA)
+                }
+            },
+            { SECRET_NOTE_3, new List<RequiredGift> { new(NPCNames.LEAH, ObjectIds.SALAD, ObjectIds.GOAT_CHEESE, ObjectIds.TRUFFLE, ObjectIds.WINE) } },
+            { SECRET_NOTE_4, new List<RequiredGift> { new(NPCNames.MARU, ObjectIds.GOLD_BAR, ObjectIds.IRIDIUM_BAR, ObjectIds.BATTERY_PACK, ObjectIds.DIAMOND, ObjectIds.STRAWBERRY) } },
+            {
+                SECRET_NOTE_5, new List<RequiredGift>
+                {
+                    new(NPCNames.PAM, ObjectIds.PARSNIP, ObjectIds.GLAZED_YAMS),
+                    new(NPCNames.JAS, ObjectIds.FAIRY_ROSE, ObjectIds.PLUM_PUDDING),
+                    new(NPCNames.VINCENT, ObjectIds.PINK_CAKE, ObjectIds.GRAPE),
+                    new(NPCNames.GEORGE, ObjectIds.LEEK, ObjectIds.FRIED_MUSHROOM),
+                    new(NPCNames.EVELYN, ObjectIds.BEET, ObjectIds.TULIP)
+                }
+            },
+            {
+                SECRET_NOTE_6, new List<RequiredGift>
+                {
+                    new(NPCNames.LEWIS, ObjectIds.AUTUMN_BOUNTY),
+                    new(NPCNames.MARNIE, ObjectIds.PUMPKIN_PIE),
+                    new(NPCNames.DEMETRIUS, ObjectIds.BEAN_HOTPOT),
+                    new(NPCNames.CAROLINE, ObjectIds.FISH_TACO)
+                }
+            },
+            {
+                SECRET_NOTE_7, new List<RequiredGift>
+                {
+                    new(NPCNames.HARVEY, ObjectIds.COFFEE, ObjectIds.PICKLES),
+                    new(NPCNames.ELLIOTT, ObjectIds.CRAB_CAKES, ObjectIds.POMEGRANATE),
+                    new(NPCNames.SHANE, ObjectIds.BEER, ObjectIds.PIZZA, ObjectIds.PEPPER_POPPERS)
+                }
+            },
+            {
+                SECRET_NOTE_8, new List<RequiredGift>
+                {
+                    new(NPCNames.HALEY, ObjectIds.PINK_CAKE, ObjectIds.SUNFLOWER),
+                    new(NPCNames.EMILY, ObjectIds.AMETHYST, ObjectIds.AQUAMARINE, ObjectIds.EMERALD, ObjectIds.JADE, ObjectIds.RUBY, ObjectIds.TOPAZ, ObjectIds.WOOL)
+                }
+            },
+            { SECRET_NOTE_9, new List<RequiredGift> { new(NPCNames.ALEX, ObjectIds.COMPLETE_BREAKFAST, ObjectIds.SALMON_DINNER) } },
+        };
+    }
+
+    public class RequiredGift
+    {
+        public string Npc { get; private set; }
+        public List<string> Gifts { get; private set; }
+
+        public RequiredGift(string npc, params string[] gifts)
+        {
+            Npc = npc;
+            Gifts = new List<string>(gifts);
+        }
     }
 }

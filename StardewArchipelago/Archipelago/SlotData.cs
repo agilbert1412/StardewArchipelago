@@ -159,7 +159,7 @@ namespace StardewArchipelago.Archipelago
             FriendsanityHeartSize = GetSlotSetting(FRIENDSANITY_HEART_SIZE_KEY, 4);
             Booksanity = GetSlotSetting(BOOKSANITY_KEY, Booksanity.None);
             Walnutsanity = GetSlotWalnutsanitySetting();
-            Secretsanity = GetSlotSetting(SECRETSANITY_KEY, Secretsanity.None);
+            Secretsanity = GetSlotSecretsanitySetting();
             ExcludeGingerIsland = GetSlotSetting(EXCLUDE_GINGER_ISLAND_KEY, true);
             TrapItemsDifficulty = GetSlotSetting(TRAP_DIFFICULTY_KEY, TrapItemsDifficulty.Medium, TRAP_ITEMS_KEY);
             EnableMultiSleep = GetSlotSetting(MULTI_SLEEP_ENABLED_KEY, true);
@@ -184,31 +184,6 @@ namespace StardewArchipelago.Archipelago
             Tilesanity = GetSlotSetting(TILESANITY_KEY, Tilesanity.Nope);
             TilesanitySize = GetSlotSetting(TILESANITY_SIZE_KEY, 1);
 #endif
-        }
-
-        private Walnutsanity GetSlotWalnutsanitySetting()
-        {
-            var walnutsanityValues = Walnutsanity.None;
-            var walnutsanityJson = GetSlotSetting(WALNUTSANITY_KEY, "");
-            if (string.IsNullOrWhiteSpace(walnutsanityJson))
-            {
-                return walnutsanityValues;
-            }
-            var walnutsanityItems = JsonConvert.DeserializeObject<List<string>>(walnutsanityJson);
-            if (walnutsanityItems == null)
-            {
-                return walnutsanityValues;
-            }
-
-            walnutsanityItems = walnutsanityItems.Select(x => x.Replace(" ", "")).ToList();
-            foreach (var walnutsanityValue in Enum.GetValues<Walnutsanity>())
-            {
-                if (walnutsanityItems.Contains(walnutsanityValue.ToString()))
-                {
-                    walnutsanityValues |= walnutsanityValue;
-                }
-            }
-            return walnutsanityValues;
         }
 
         private T GetSlotSetting<T>(string key, T defaultValue, params string[] alternateKeys) where T : struct, Enum, IConvertible
@@ -275,6 +250,64 @@ namespace StardewArchipelago.Archipelago
         {
             _logger.LogWarning($"SlotData did not contain expected key: \"{key}\"");
             return defaultValue;
+        }
+
+        private Walnutsanity GetSlotWalnutsanitySetting()
+        {
+            return GetSlotOptionSetSetting<Walnutsanity>(WALNUTSANITY_KEY);
+
+            var walnutsanityValues = Walnutsanity.None;
+            var walnutsanityJson = GetSlotSetting(WALNUTSANITY_KEY, "");
+            if (string.IsNullOrWhiteSpace(walnutsanityJson))
+            {
+                return walnutsanityValues;
+            }
+            var walnutsanityItems = JsonConvert.DeserializeObject<List<string>>(walnutsanityJson);
+            if (walnutsanityItems == null)
+            {
+                return walnutsanityValues;
+            }
+
+            walnutsanityItems = walnutsanityItems.Select(x => x.Replace(" ", "")).ToList();
+            foreach (var walnutsanityValue in Enum.GetValues<Walnutsanity>())
+            {
+                if (walnutsanityItems.Contains(walnutsanityValue.ToString()))
+                {
+                    walnutsanityValues |= walnutsanityValue;
+                }
+            }
+            return walnutsanityValues;
+        }
+
+        private Secretsanity GetSlotSecretsanitySetting()
+        {
+            return GetSlotOptionSetSetting<Secretsanity>(SECRETSANITY_KEY);
+        }
+
+        public TEnum GetSlotOptionSetSetting<TEnum>(string key) where TEnum : struct, Enum
+        {
+            var enabledValues = 0;
+            var slotJson = GetSlotSetting(key, "");
+            if (string.IsNullOrWhiteSpace(slotJson))
+            {
+                return (TEnum)(object)enabledValues;
+            }
+            var slotItems = JsonConvert.DeserializeObject<List<string>>(slotJson);
+            if (slotItems == null)
+            {
+                return (TEnum)(object)enabledValues;
+            }
+
+            slotItems = slotItems.Select(x => x.Replace(" ", "")).ToList();
+            foreach (var enumValue in Enum.GetValues<TEnum>())
+            {
+                if (slotItems.Contains(enumValue.ToString()))
+                {
+                    enabledValues |= (int)(object)enumValue;
+                }
+            }
+
+            return (TEnum)(object)enabledValues;
         }
 
         public double ToolPriceMultiplier
@@ -585,13 +618,16 @@ namespace StardewArchipelago.Archipelago
         Repeatables = 0b1000,
         All = Puzzles | Bushes | DigSpots | Repeatables,
     }
-    
+
+    [Flags]
     public enum Secretsanity
     {
-        None = 0,
-        Simple = 1,
-        SimpleAndFish = 2,
-        All = 3,
+        None = 0b0000,
+        Easy = 0b0001,
+        Difficult = 0b0010,
+        Fishing = 0b0100,
+        SecretNotes = 0b1000,
+        All = Easy | Difficult | Fishing | SecretNotes,
     }
 
     public enum TrapItemsDifficulty

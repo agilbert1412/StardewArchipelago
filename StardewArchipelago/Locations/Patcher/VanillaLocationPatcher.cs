@@ -77,39 +77,46 @@ namespace StardewArchipelago.Locations.Patcher
 
         public void ReplaceAllLocationsRewardsWithChecks()
         {
-            ReplaceCommunityCenterBundlesWithChecks();
-            ReplaceCommunityCenterAreasWithChecks();
-            ReplaceBackPackUpgradesWithChecks();
-            ReplaceMineshaftChestsWithChecks();
-            ReplaceElevatorsWithChecks();
-            ReplaceToolUpgradesWithChecks();
-            PatchFishingRods();
-            PatchCopperPan();
-            ReplaceSkillsWithChecks();
-            ReplaceQuestsWithChecks();
-            PatchCarpenter();
-            ReplaceIsolatedEventsWithChecks();
-            PatchAdventurerGuildShop();
-            PatchArcadeMachines();
-            PatchTravelingMerchant();
-            ReplaceRaccoonBundlesWithChecks();
-            AddFishsanityLocations();
-            AddMuseumsanityLocations();
-            PatchFestivals();
-            AddCropSanityLocations();
-            ReplaceFriendshipsWithChecks();
-            ReplaceSpecialOrdersWithChecks();
-            ReplaceChildrenWithChecks();
-            _gingerIslandPatcher.PatchGingerIslandLocations();
-            PatchMonstersanity();
-            AddCooksanityLocations();
-            PatchChefAndCraftsanity();
-            PatchKrobusShop();
-            PatchFarmcave();
-            PatchNightWorldEvents();
-            PatchBooks();
-            PatchWalnuts();
-            PatchSecrets();
+            try
+            {
+                ReplaceCommunityCenterBundlesWithChecks();
+                ReplaceCommunityCenterAreasWithChecks();
+                ReplaceBackPackUpgradesWithChecks();
+                ReplaceMineshaftChestsWithChecks();
+                ReplaceElevatorsWithChecks();
+                ReplaceToolUpgradesWithChecks();
+                PatchFishingRods();
+                PatchCopperPan();
+                ReplaceSkillsWithChecks();
+                ReplaceQuestsWithChecks();
+                PatchCarpenter();
+                ReplaceIsolatedEventsWithChecks();
+                PatchAdventurerGuildShop();
+                PatchArcadeMachines();
+                PatchTravelingMerchant();
+                ReplaceRaccoonBundlesWithChecks();
+                AddFishsanityLocations();
+                AddMuseumsanityLocations();
+                PatchFestivals();
+                AddCropSanityLocations();
+                ReplaceFriendshipsWithChecks();
+                ReplaceSpecialOrdersWithChecks();
+                ReplaceChildrenWithChecks();
+                _gingerIslandPatcher.PatchGingerIslandLocations();
+                PatchMonstersanity();
+                AddCooksanityLocations();
+                PatchChefAndCraftsanity();
+                PatchKrobusShop();
+                PatchFarmcave();
+                PatchNightWorldEvents();
+                PatchBooks();
+                PatchWalnuts();
+                PatchSecrets();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(VanillaLocationPatcher)}.{nameof(ReplaceAllLocationsRewardsWithChecks)}. Exception: {ex}");
+            }
         }
 
         public void CleanEvents()
@@ -1428,14 +1435,15 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void PatchSecrets()
         {
-            PatchSimpleSecrets();
+            PatchEasySecrets();
             PatchFishableSecrets();
             PatchDifficultSecrets();
+            PatchSecretNotesSecrets();
         }
 
-        private void PatchSimpleSecrets()
+        private void PatchEasySecrets()
         {
-            if (_archipelago.SlotData.Secretsanity < Secretsanity.Simple)
+            if (!_archipelago.SlotData.Secretsanity.HasFlag(Secretsanity.Easy))
             {
                 return;
             }
@@ -1463,13 +1471,8 @@ namespace StardewArchipelago.Locations.Patcher
             );
 
             _harmony.Patch(
-                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performAction)),
-                postfix: new HarmonyMethod(typeof(SimpleSecretsInjections), nameof(SimpleSecretsInjections.PerformAction_SecretActions_Prefix))
-            );
-
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(Bush), nameof(Bush.junimoPlushCallback)),
-                postfix: new HarmonyMethod(typeof(SimpleSecretsInjections), nameof(SimpleSecretsInjections.JunimoPlushCallback_SendCheckAndRemovePlush_Postfix))
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performAction), new[] { typeof(string[]), typeof(Farmer), typeof(Location)}),
+                prefix: new HarmonyMethod(typeof(SimpleSecretsInjections), nameof(SimpleSecretsInjections.PerformAction_SecretActions_Prefix))
             );
 
             _harmony.Patch(
@@ -1517,7 +1520,6 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void PatchPurpleShortsSecrets()
         {
-
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Event.DefaultCommands), nameof(Event.DefaultCommands.SwitchEvent)),
                 postfix: new HarmonyMethod(typeof(PurpleShortsInjections), nameof(PurpleShortsInjections.SwitchEvent_PurpleShortsInSoup_Postfix))
@@ -1546,7 +1548,7 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void PatchFishableSecrets()
         {
-            if (_archipelago.SlotData.Secretsanity < Secretsanity.SimpleAndFish)
+            if (!_archipelago.SlotData.Secretsanity.HasFlag(Secretsanity.Fishing))
             {
                 return;
             }
@@ -1567,7 +1569,7 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void PatchDifficultSecrets()
         {
-            if (_archipelago.SlotData.Secretsanity < Secretsanity.All)
+            if (!_archipelago.SlotData.Secretsanity.HasFlag(Secretsanity.Difficult))
             {
                 return;
             }
@@ -1588,7 +1590,7 @@ namespace StardewArchipelago.Locations.Patcher
             );
 
             _harmony.Patch(
-                original: AccessTools.Constructor(typeof(SeaMonsterTemporarySprite)),
+                original: AccessTools.Constructor(typeof(SeaMonsterTemporarySprite), new []{typeof(float), typeof(int), typeof(int), typeof(Vector2)}),
                 postfix: new HarmonyMethod(typeof(DifficultSecretsInjections), nameof(DifficultSecretsInjections.SeaMonsterTemporarySpriteConstructor_SeaMonsterSighting_Postfix))
             );
 
@@ -1605,6 +1607,24 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony.Patch(
                 original: AccessTools.Method(typeof(HUDMessage), nameof(HUDMessage.numbersEasterEgg)),
                 postfix: new HarmonyMethod(typeof(DifficultSecretsInjections), nameof(DifficultSecretsInjections.NumbersEasterEgg_StackMasterTrophy_Postfix))
+            );
+        }
+
+        private void PatchSecretNotesSecrets()
+        { 
+            if (!_archipelago.SlotData.Secretsanity.HasFlag(Secretsanity.SecretNotes))
+            {
+                return;
+            }
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Farmer), nameof(Farmer.onGiftGiven)),
+                postfix: new HarmonyMethod(typeof(SecretNotesInjections), nameof(SecretNotesInjections.OnGiftGiven_GiftingNotes_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Bush), nameof(Bush.junimoPlushCallback)),
+                postfix: new HarmonyMethod(typeof(SecretNotesInjections), nameof(SecretNotesInjections.JunimoPlushCallback_SendCheckAndRemovePlush_Postfix))
             );
         }
     }

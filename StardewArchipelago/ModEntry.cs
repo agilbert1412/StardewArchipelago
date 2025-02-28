@@ -7,6 +7,7 @@ using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.Gifting;
 using StardewArchipelago.Bundles;
@@ -855,9 +856,17 @@ namespace StardewArchipelago
 
         private void DebugMethod(string arg1, string[] arg2)
         {
-            ExportCropState("crops_before.json");
-            _itemManager.TrapManager.TryExecuteTrapImmediately("Benjamin Budton");
-            ExportCropState("crops_after.json");
+            var text = File.ReadAllText(@"D:\Jeux\Archipelago\Unpacked Stardew 1.6\Content\Data\Objects.json");
+            var json = JsonConvert.DeserializeObject<JObject>(text);
+            var constantsText = "";
+            foreach (var (id, objectData) in json)
+            {
+                var name = objectData["Name"].ToString();
+                var constantName = name.Replace(" ", "_").ToUpper();
+                constantsText += $"        public const string {constantName} = \"{id}\";{Environment.NewLine}";
+            }
+
+            File.WriteAllText(@"D:\Jeux\Archipelago\Unpacked Stardew 1.6\Content\Data\Objects.cs", constantsText);
         }
 
         private void ExportCropState(string cropsFile)

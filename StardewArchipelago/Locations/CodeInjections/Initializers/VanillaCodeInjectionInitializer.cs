@@ -122,6 +122,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             SimpleSecretsInjections.Initialize(logger, modHelper, archipelago, locationChecker);
             FishableSecretsInjections.Initialize(logger, modHelper, archipelago, locationChecker);
             DifficultSecretsInjections.Initialize(logger, modHelper, archipelago, locationChecker);
+            SecretNotesInjections.Initialize(logger, modHelper, archipelago, locationChecker);
         }
     }
 }
