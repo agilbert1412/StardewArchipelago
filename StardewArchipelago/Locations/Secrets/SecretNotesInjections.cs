@@ -68,7 +68,10 @@ namespace StardewArchipelago.Locations.Secrets
             foreach (var requiredGift in requiredGifts)
             {
                 var giftedItemsToThisPerson = giftedItems[requiredGift.Npc].Where(x => x.Value > 0).Select(x => x.Key).ToHashSet();
-                var giftFulfilled = needsAll ? requiredGift.Gifts.All(x => giftedItemsToThisPerson.Contains(x)) : requiredGift.Gifts.Any(x => giftedItemsToThisPerson.Contains(x));
+
+                bool ItemIsGifted(string itemId) => giftedItemsToThisPerson.Contains(itemId);
+
+                var giftFulfilled = needsAll ? requiredGift.Gifts.All(ItemIsGifted) : requiredGift.Gifts.Any(ItemIsGifted);
                 if (!giftFulfilled)
                 {
                     return false;
