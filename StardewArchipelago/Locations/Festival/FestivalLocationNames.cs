@@ -109,7 +109,7 @@ namespace StardewArchipelago.Locations.Festival
             { SQUIDFEST_DAY_2_COPPER, SQUIDFEST_DAY_2_IRON, SQUIDFEST_DAY_2_GOLD, SQUIDFEST_DAY_2_IRIDIUM },
         };
 
-        public const string MERMAID_PEARL = "Mermaid Pearl";
+        public const string MERMAID_SHOW = "Mermaid Show";
         public const string CONE_HAT = "Cone Hat";
         public const string IRIDIUM_FIREPLACE = "Iridium Fireplace";
         public const string RARECROW_7 = "Rarecrow #7 (Tanuki)";
@@ -138,7 +138,7 @@ namespace StardewArchipelago.Locations.Festival
         };
         private static readonly string[] TROUT_DERBY_ALL = TROUT_DERBY_REWARDS;
         private static readonly string[] SQUIDFEST_ALL = Array.Empty<string>();
-        private static readonly string[] NIGHT_MARKET_ALL = { MERMAID_PEARL, CONE_HAT, IRIDIUM_FIREPLACE, RARECROW_7, RARECROW_8 };
+        private static readonly string[] NIGHT_MARKET_ALL = { MERMAID_SHOW, CONE_HAT, IRIDIUM_FIREPLACE, RARECROW_7, RARECROW_8 };
 
         public static readonly Dictionary<string, string[]> LocationsByFestival = new()
         {

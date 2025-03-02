@@ -109,6 +109,10 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string MUTANT_CARP = QualifiedObjectId(ObjectIds.MUTANT_CARP);
         public static readonly string MYSTERY_BOX = QualifiedObjectId(ObjectIds.MYSTERY_BOX);
         public static readonly string OIL = QualifiedObjectId(ObjectIds.OIL);
+        public static readonly string COAL = QualifiedObjectId(ObjectIds.COAL);
+        public static readonly string COPPER_ORE = QualifiedObjectId(ObjectIds.COPPER_ORE);
+        public static readonly string IRON_ORE = QualifiedObjectId(ObjectIds.IRON_ORE);
+        public static readonly string GEODE = QualifiedObjectId(ObjectIds.GEODE);
         public static readonly string OMNI_GEODE = QualifiedObjectId(ObjectIds.OMNI_GEODE);
         public static readonly string ORANGE_SAPLING = QualifiedObjectId(ObjectIds.ORANGE_SAPLING);
         public static readonly string ORNATE_NECKLACE = QualifiedObjectId(ObjectIds.ORNATE_NECKLACE);
@@ -227,10 +231,16 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string WOOL = QualifiedObjectId(ObjectIds.WOOL);
         public static readonly string COMPLETE_BREAKFAST = QualifiedObjectId(ObjectIds.COMPLETE_BREAKFAST);
         public static readonly string SALMON_DINNER = QualifiedObjectId(ObjectIds.SALMON_DINNER);
+        public static readonly string STONE_JUNIMO = BigCraftableId(BigCraftableIds.STONE_JUNIMO);
 
         public static string QualifiedObjectId(string objectId)
         {
             return QualifyId(OBJECT_QUALIFIER, objectId);
+        }
+
+        public static string BigCraftableId(string bigCraftableId)
+        {
+            return QualifyId(BIG_CRAFTABLE_QUALIFIER, bigCraftableId);
         }
 
         public static string QualifiedWeaponId(string weaponId)

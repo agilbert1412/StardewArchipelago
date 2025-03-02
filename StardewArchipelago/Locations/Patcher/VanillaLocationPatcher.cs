@@ -431,6 +431,11 @@ namespace StardewArchipelago.Locations.Patcher
                 prefix: new HarmonyMethod(typeof(QuestInjections), nameof(QuestInjections.QuestComplete_LocationInsteadOfReward_Prefix))
             );
 
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Event.DefaultCommands), nameof(Event.DefaultCommands.AwardFestivalPrize)),
+                prefix: new HarmonyMethod(typeof(QuestInjections), nameof(QuestInjections.AwardFestivalPrize_QiMilk_Prefix))
+            );
+
             if (!_archipelago.SlotData.QuestLocations.StoryQuestsEnabled)
             {
                 return;
@@ -467,11 +472,6 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Object), "getPriceAfterMultipliers"),
                 postfix: new HarmonyMethod(typeof(QuestInjections), nameof(QuestInjections.GetPriceAfterMultipliers_BearKnowledge_Postfix))
-            );
-
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(Event.DefaultCommands), nameof(Event.DefaultCommands.AwardFestivalPrize)),
-                prefix: new HarmonyMethod(typeof(QuestInjections), nameof(QuestInjections.AwardFestivalPrize_QiMilk_Prefix))
             );
 
             ReplaceDarkTalismanQuestsWithChecks();
@@ -1043,8 +1043,8 @@ namespace StardewArchipelago.Locations.Patcher
         private void PatchNightMarket()
         {
             _harmony.Patch(
-                original: AccessTools.Method(typeof(MermaidHouse), nameof(MermaidHouse.playClamTone), new Type[] { typeof(int), typeof(Farmer) }),
-                prefix: new HarmonyMethod(typeof(MermaidHouseInjections), nameof(MermaidHouseInjections.PlayClamTone_SongFinished_Postfix))
+                original: AccessTools.Method(typeof(MermaidHouse), nameof(MermaidHouse.UpdateWhenCurrentLocation)),
+                postfix: new HarmonyMethod(typeof(MermaidHouseInjections), nameof(MermaidHouseInjections.UpdateWhenCurrentLocation_SongFinished_Postfix))
             );
 
             _harmony.Patch(
@@ -1620,6 +1620,11 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Farmer), nameof(Farmer.onGiftGiven)),
                 postfix: new HarmonyMethod(typeof(SecretNotesInjections), nameof(SecretNotesInjections.OnGiftGiven_GiftingNotes_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(MermaidHouse), nameof(MermaidHouse.playClamTone), new[] { typeof(int), typeof(Farmer) }),
+                postfix: new HarmonyMethod(typeof(SecretNotesInjections), nameof(SecretNotesInjections.PlayClamTone_SongFinished_Postfix))
             );
 
             _harmony.Patch(

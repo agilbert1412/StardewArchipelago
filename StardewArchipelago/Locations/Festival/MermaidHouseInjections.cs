@@ -5,6 +5,8 @@ using StardewValley;
 using StardewValley.Locations;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
+using StardewArchipelago.Locations.Secrets;
+using Microsoft.Xna.Framework;
 
 namespace StardewArchipelago.Locations.Festival
 {
@@ -23,25 +25,25 @@ namespace StardewArchipelago.Locations.Festival
             _locationChecker = locationChecker;
         }
 
-        // public void playClamTone(int which, Farmer who)
-        public static void PlayClamTone_SongFinished_Postfix(MermaidHouse __instance, int which, Farmer who)
+        // public override void UpdateWhenCurrentLocation(GameTime time)
+
+        public static void UpdateWhenCurrentLocation_SongFinished_Postfix(MermaidHouse __instance, GameTime time)
         {
             try
             {
-                var pearlRecipientField = _modHelper.Reflection.GetField<Farmer>(__instance, "pearlRecipient");
-                var pearlRecipient = pearlRecipientField.GetValue();
-                if (pearlRecipient == null || pearlRecipient != Game1.player)
+                // private float oldStopWatchTime;
+                var oldStopWatchTime = _modHelper.Reflection.GetField<float>(__instance, "oldStopWatchTime").GetValue();
+                if (oldStopWatchTime < 65000)
                 {
                     return;
                 }
 
-                _locationChecker.AddCheckedLocation(FestivalLocationNames.MERMAID_PEARL);
-                pearlRecipientField.SetValue(null);
+                _locationChecker.AddCheckedLocation(FestivalLocationNames.MERMAID_SHOW);
                 return;
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed in {nameof(PlayClamTone_SongFinished_Postfix)}:\n{ex}");
+                _logger.LogError($"Failed in {nameof(UpdateWhenCurrentLocation_SongFinished_Postfix)}:\n{ex}");
                 return;
             }
         }

@@ -23,6 +23,7 @@ using KaitoKid.ArchipelagoUtilities.Net;
 using Microsoft.Xna.Framework.Content;
 using StardewArchipelago.Archipelago;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
+using StardewArchipelago.Locations.Secrets;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
 {
@@ -592,7 +593,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
+                if (!_archipelago.SlotData.QuestLocations.StoryQuestsEnabled && !_archipelago.SlotData.Secretsanity.HasFlag(Secretsanity.SecretNotes))
+                {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
                 _locationChecker.AddCheckedLocation("Cryptic Note");
+                _locationChecker.AddCheckedLocation(SecretsLocationNames.SECRET_NOTE_10);
 
                 if (!Game1.player.mailReceived.Contains("qiCave"))
                 {
