@@ -232,6 +232,7 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string COMPLETE_BREAKFAST = QualifiedObjectId(ObjectIds.COMPLETE_BREAKFAST);
         public static readonly string SALMON_DINNER = QualifiedObjectId(ObjectIds.SALMON_DINNER);
         public static readonly string STONE_JUNIMO = BigCraftableId(BigCraftableIds.STONE_JUNIMO);
+        public static readonly string GOLD_LEWIS = BigCraftableId(BigCraftableIds.GOLD_LEWIS);
 
         public static string QualifiedObjectId(string objectId)
         {

@@ -436,6 +436,12 @@ namespace StardewArchipelago.Locations.Patcher
                 prefix: new HarmonyMethod(typeof(QuestInjections), nameof(QuestInjections.AwardFestivalPrize_QiMilk_Prefix))
             );
 
+            var performActionArgumentTypes = new[] { typeof(string[]), typeof(Farmer), typeof(Location) };
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performAction), performActionArgumentTypes),
+                prefix: new HarmonyMethod(typeof(QuestInjections), nameof(QuestInjections.PerformAction_MysteriousQiLumberPile_Prefix))
+            );
+
             if (!_archipelago.SlotData.QuestLocations.StoryQuestsEnabled)
             {
                 return;
@@ -449,12 +455,6 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Utility), nameof(Utility.getQuestOfTheDay)),
                 prefix: new HarmonyMethod(typeof(QuestInjections), nameof(QuestInjections.GetQuestOfTheDay_BalanceQuests_Prefix))
-            );
-
-            var performActionArgumentTypes = new[] { typeof(string[]), typeof(Farmer), typeof(Location) };
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performAction), performActionArgumentTypes),
-                prefix: new HarmonyMethod(typeof(QuestInjections), nameof(QuestInjections.PerformAction_MysteriousQiLumberPile_Prefix))
             );
 
             _harmony.Patch(

@@ -15,12 +15,14 @@ using StardewArchipelago.Locations.Festival;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Delegates;
+using StardewValley.Extensions;
 using StardewValley.GameData.GarbageCans;
 using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 using xTile.Dimensions;
+using xTile.Layers;
 using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Locations.Secrets
@@ -258,6 +260,107 @@ namespace StardewArchipelago.Locations.Secrets
             var item = ItemRegistry.Create(itemId);
             Game1.createItemDebris(item, new Vector2(xLocation, yLocation) * 64f, -1, gameLocation);
             return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+        }
+
+        // public override bool checkAction(Location tileLocation, xTile.Dimensions.Rectangle viewport, Farmer who)
+        public static bool CheckAction_FindGoldLewis_Prefix(Town __instance, Location tileLocation, xTile.Dimensions.Rectangle viewport, Farmer who, ref bool __result)
+        {
+            try
+            {
+                if (who.mount != null)
+                {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
+                var layer = __instance.map.RequireLayer("Buildings");
+                if (layer.GetTileIndexAt(tileLocation, nameof(Town)) != 599)
+                {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
+                if (!Game1.player.secretNotesSeen.Contains(19) || !Game1.player.mailReceived.Add("SecretNote19_done"))
+                {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
+                DelayedAction.playSoundAfterDelay("newArtifact", 250);
+                _locationChecker.AddCheckedLocation(SecretsLocationNames.SECRET_NOTE_19_PART_1);
+                __result = true;
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(CheckAction_FindGoldLewis_Prefix)}:\n{ex}");
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+        }
+
+        // public virtual void rot()
+        public static void Rot_GoldLewisFound_Postfix(Object __instance)
+        {
+            try
+            {
+                if (__instance.QualifiedItemId == QualifiedItemIds.GOLD_LEWIS)
+                {
+                    _locationChecker.AddCheckedLocation(SecretsLocationNames.SECRET_NOTE_19_PART_2);
+                }
+                return;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(Rot_GoldLewisFound_Postfix)}:\n{ex}");
+                return;
+            }
+        }
+
+        // public virtual bool answerDialogueAction(string questionAndAnswer, string[] questionParams)
+        public static bool AnswerDialogueAction_SpecialCharmPurchase_Prefix(GameLocation __instance, string questionAndAnswer, string[] questionParams, ref bool __result)
+        {
+            try
+            {
+
+                if (questionAndAnswer == null || questionAndAnswer != "specialCharmQuestion_Yes")
+                {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
+                if (Game1.player.Items.ContainsId("(O)446"))
+                {
+                    Game1.player.holdUpItemThenMessage((Item)new SpecialItem(3));
+                    Game1.player.removeFirstOfThisItemFromInventory("446");
+                    // Game1.player.hasSpecialCharm = true;
+                    _locationChecker.AddCheckedLocation(SecretsLocationNames.SECRET_NOTE_20);
+                    Game1.player.mailReceived.Add("SecretNote20_done");
+                }
+                else
+                {
+                    Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\Locations:Town_specialCharmNoFoot"));
+                }
+
+                __result = true;
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(CheckAction_FindGoldLewis_Prefix)}:\n{ex}");
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+        }
+
+        // public void initiateMarnieLewisBush()
+        public static void InitiateMarnieLewisBush_BushShaken_Postfix(Town __instance)
+        {
+            try
+            {
+                _locationChecker.AddCheckedLocation(SecretsLocationNames.SECRET_NOTE_21);
+                return;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(Rot_GoldLewisFound_Postfix)}:\n{ex}");
+                return;
+            }
         }
 
         // public void junimoPlushCallback(Item item, Farmer who)

@@ -357,6 +357,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
         {
             try
             {
+                if (!_archipelago.SlotData.QuestLocations.StoryQuestsEnabled && !_archipelago.SlotData.Secretsanity.HasFlag(Secretsanity.SecretNotes))
+                {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
                 if (action == null || !who.IsLocalPlayer)
                 {
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
@@ -371,7 +376,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
 
                 Game1.player.mailReceived.Add("TH_LumberPile");
                 Game1.player.removeQuest("5");
-                _locationChecker.AddCheckedLocation("The Mysterious Qi");
+                _locationChecker.AddCheckedLocations(new [] {"The Mysterious Qi", SecretsLocationNames.SECRET_NOTE_22});
 
                 __result = true;
                 return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
