@@ -20,6 +20,7 @@ using StardewValley.GameData.GarbageCans;
 using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Objects;
+using StardewValley.Quests;
 using StardewValley.TerrainFeatures;
 using xTile.Dimensions;
 using xTile.Layers;
@@ -137,6 +138,21 @@ namespace StardewArchipelago.Locations.Secrets
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(TryGetGarbageItem_TrashCanSpecials_Postfix)}:\n{ex}");
+                return;
+            }
+        }
+
+        // public void junimoPlushCallback(Item item, Farmer who)
+        public static void JunimoPlushCallback_SendCheckAndRemovePlush_Postfix(Bush __instance, Item item, Farmer who)
+        {
+            try
+            {
+                _locationChecker.AddCheckedLocation(SecretsLocationNames.SECRET_NOTE_13);
+                who.removeFirstOfThisItemFromInventory(QualifiedItemIds.JUNIMO_PLUSH);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(JunimoPlushCallback_SendCheckAndRemovePlush_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -362,20 +378,16 @@ namespace StardewArchipelago.Locations.Secrets
                 return;
             }
         }
-
-        // public void junimoPlushCallback(Item item, Farmer who)
-        public static void JunimoPlushCallback_SendCheckAndRemovePlush_Postfix(Bush __instance, Item item, Farmer who)
+        public static bool TryHandleQuestComplete(Quest quest, out bool runOriginal)
         {
-            try
+            runOriginal = MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+            if (quest.id.Value == QuestIds.STRANGE_NOTE)
             {
-                _locationChecker.AddCheckedLocation(SecretsLocationNames.SECRET_NOTE_13);
-                who.removeFirstOfThisItemFromInventory(QualifiedItemIds.JUNIMO_PLUSH);
+                _locationChecker.AddCheckedLocation(SecretsLocationNames.SECRET_NOTE_23);
+                return true;
             }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Failed in {nameof(JunimoPlushCallback_SendCheckAndRemovePlush_Postfix)}:\n{ex}");
-                return;
-            }
+
+            return false;
         }
     }
 }

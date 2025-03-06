@@ -433,13 +433,13 @@ namespace StardewArchipelago.Locations.Patcher
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Event.DefaultCommands), nameof(Event.DefaultCommands.AwardFestivalPrize)),
-                prefix: new HarmonyMethod(typeof(QuestInjections), nameof(QuestInjections.AwardFestivalPrize_QiMilk_Prefix))
+                prefix: new HarmonyMethod(typeof(StoryQuestInjections), nameof(StoryQuestInjections.AwardFestivalPrize_QiMilk_Prefix))
             );
 
             var performActionArgumentTypes = new[] { typeof(string[]), typeof(Farmer), typeof(Location) };
             _harmony.Patch(
                 original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performAction), performActionArgumentTypes),
-                prefix: new HarmonyMethod(typeof(QuestInjections), nameof(QuestInjections.PerformAction_MysteriousQiLumberPile_Prefix))
+                prefix: new HarmonyMethod(typeof(StoryQuestInjections), nameof(StoryQuestInjections.PerformAction_MysteriousQiLumberPile_Prefix))
             );
 
             if (!_archipelago.SlotData.QuestLocations.StoryQuestsEnabled)
@@ -449,29 +449,29 @@ namespace StardewArchipelago.Locations.Patcher
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Event.DefaultCommands), nameof(Event.DefaultCommands.RemoveQuest)),
-                postfix: new HarmonyMethod(typeof(QuestInjections), nameof(QuestInjections.RemoveQuest_CheckLocation_Postfix))
+                postfix: new HarmonyMethod(typeof(StoryQuestInjections), nameof(StoryQuestInjections.RemoveQuest_CheckLocation_Postfix))
             );
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Utility), nameof(Utility.getQuestOfTheDay)),
-                prefix: new HarmonyMethod(typeof(QuestInjections), nameof(QuestInjections.GetQuestOfTheDay_BalanceQuests_Prefix))
+                prefix: new HarmonyMethod(typeof(HelpWantedQuestInjections), nameof(HelpWantedQuestInjections.GetQuestOfTheDay_BalanceQuests_Prefix))
             );
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Bush), "shake"),
-                prefix: new HarmonyMethod(typeof(QuestInjections), nameof(QuestInjections.Shake_WinterMysteryBush_Prefix))
+                prefix: new HarmonyMethod(typeof(StoryQuestInjections), nameof(StoryQuestInjections.Shake_WinterMysteryBush_Prefix))
             );
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Town), "mgThief_afterSpeech"),
-                prefix: new HarmonyMethod(typeof(QuestInjections), nameof(QuestInjections.MgThief_AfterSpeech_WinterMysteryFinished_Prefix))
+                prefix: new HarmonyMethod(typeof(StoryQuestInjections), nameof(StoryQuestInjections.MgThief_AfterSpeech_WinterMysteryFinished_Prefix))
             );
 
             PatchSkillsPage();
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Object), "getPriceAfterMultipliers"),
-                postfix: new HarmonyMethod(typeof(QuestInjections), nameof(QuestInjections.GetPriceAfterMultipliers_BearKnowledge_Postfix))
+                postfix: new HarmonyMethod(typeof(StoryQuestInjections), nameof(StoryQuestInjections.GetPriceAfterMultipliers_BearKnowledge_Postfix))
             );
 
             ReplaceDarkTalismanQuestsWithChecks();
@@ -501,7 +501,7 @@ namespace StardewArchipelago.Locations.Patcher
         {
             _harmony.Patch(
                 original: AccessTools.Method(typeof(PowersTab), nameof(PowersTab.populateClickableComponentList)),
-                postfix: new HarmonyMethod(typeof(QuestInjections), nameof(QuestInjections.PopulateClickableComponentList_BearKnowledge_Postfix))
+                postfix: new HarmonyMethod(typeof(StoryQuestInjections), nameof(StoryQuestInjections.PopulateClickableComponentList_BearKnowledge_Postfix))
             );
         }
 
