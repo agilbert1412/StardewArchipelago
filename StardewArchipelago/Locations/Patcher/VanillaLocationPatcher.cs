@@ -33,6 +33,7 @@ using Bundle = StardewValley.Menus.Bundle;
 using Object = StardewValley.Object;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Arcade;
 using StardewArchipelago.Locations.Secrets;
+using StardewValley.Buildings;
 using StardewValley.Tools;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
@@ -1623,13 +1624,83 @@ namespace StardewArchipelago.Locations.Patcher
             );
 
             _harmony.Patch(
-                original: AccessTools.Method(typeof(MermaidHouse), nameof(MermaidHouse.playClamTone), new[] { typeof(int), typeof(Farmer) }),
-                postfix: new HarmonyMethod(typeof(SecretNotesInjections), nameof(SecretNotesInjections.PlayClamTone_SongFinished_Postfix))
+                original: AccessTools.Constructor(typeof(LetterViewerMenu), new[] {typeof(int)}),
+                postfix: new HarmonyMethod(typeof(SecretNotesInjections), nameof(SecretNotesInjections.LetterViewerMenuConstructor_ReadSecretNote_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.TryGetGarbageItem)),
+                postfix: new HarmonyMethod(typeof(SecretNotesInjections), nameof(SecretNotesInjections.TryGetGarbageItem_TrashCanSpecials_Postfix))
             );
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Bush), nameof(Bush.junimoPlushCallback)),
                 postfix: new HarmonyMethod(typeof(SecretNotesInjections), nameof(SecretNotesInjections.JunimoPlushCallback_SendCheckAndRemovePlush_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Object), nameof(Object.performToolAction)),
+                postfix: new HarmonyMethod(typeof(SecretNotesInjections), nameof(SecretNotesInjections.PerformToolAction_StoneJunimo_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(MermaidHouse), nameof(MermaidHouse.playClamTone), new[] { typeof(int), typeof(Farmer) }),
+                postfix: new HarmonyMethod(typeof(SecretNotesInjections), nameof(SecretNotesInjections.PlayClamTone_SongFinished_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Railroad), nameof(Railroad.checkForBuriedItem)),
+                prefix: new HarmonyMethod(typeof(SecretNotesInjections), nameof(SecretNotesInjections.CheckForBuriedItem_TreasureChest_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Town), nameof(Town.checkForBuriedItem)),
+                prefix: new HarmonyMethod(typeof(SecretNotesInjections), nameof(SecretNotesInjections.CheckForBuriedItem_GreenDoll_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Desert), nameof(Desert.checkForBuriedItem)),
+                prefix: new HarmonyMethod(typeof(SecretNotesInjections), nameof(SecretNotesInjections.CheckForBuriedItem_YellowDoll_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Town), nameof(Town.checkAction)),
+                prefix: new HarmonyMethod(typeof(SecretNotesInjections), nameof(SecretNotesInjections.CheckAction_FindGoldLewis_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Object), nameof(Object.rot)),
+                postfix: new HarmonyMethod(typeof(SecretNotesInjections), nameof(SecretNotesInjections.Rot_GoldLewisFound_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.answerDialogueAction)),
+                prefix: new HarmonyMethod(typeof(SecretNotesInjections), nameof(SecretNotesInjections.AnswerDialogueAction_SpecialCharmPurchase_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Town), nameof(Town.initiateMarnieLewisBush)),
+                postfix: new HarmonyMethod(typeof(SecretNotesInjections), nameof(SecretNotesInjections.InitiateMarnieLewisBush_BushShaken_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(JunimoHut), "getGemColor"),
+                postfix: new HarmonyMethod(typeof(SecretNotesInjections), nameof(SecretNotesInjections.GetGemColor_HasColoredJunimos_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Railroad), nameof(Railroad.getFish)),
+                postfix: new HarmonyMethod(typeof(SecretNotesInjections), nameof(SecretNotesInjections.GetFish_CatchOrnateNecklace_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(JunimoHut), nameof(JunimoHut.dayUpdate)),
+                postfix: new HarmonyMethod(typeof(SecretNotesInjections), nameof(SecretNotesInjections.DayUpdate_HasRaisinFedJunimos_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.resetForPlayerEntry)),
+                postfix: new HarmonyMethod(typeof(SecretNotesInjections), nameof(SecretNotesInjections.ResetForPlayerEntry_FoundCompendium_Postfix))
             );
         }
     }

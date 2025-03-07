@@ -360,7 +360,7 @@ namespace StardewArchipelago.Locations.Secrets
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed in {nameof(CheckAction_FindGoldLewis_Prefix)}:\n{ex}");
+                _logger.LogError($"Failed in {nameof(AnswerDialogueAction_SpecialCharmPurchase_Prefix)}:\n{ex}");
                 return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
@@ -375,7 +375,7 @@ namespace StardewArchipelago.Locations.Secrets
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed in {nameof(Rot_GoldLewisFound_Postfix)}:\n{ex}");
+                _logger.LogError($"Failed in {nameof(InitiateMarnieLewisBush_BushShaken_Postfix)}:\n{ex}");
                 return;
             }
         }
