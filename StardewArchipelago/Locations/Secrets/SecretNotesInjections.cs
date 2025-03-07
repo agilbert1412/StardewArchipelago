@@ -14,6 +14,7 @@ using StardewArchipelago.Extensions;
 using StardewArchipelago.Locations.Festival;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Buildings;
 using StardewValley.Delegates;
 using StardewValley.Extensions;
 using StardewValley.GameData.GarbageCans;
@@ -378,6 +379,7 @@ namespace StardewArchipelago.Locations.Secrets
                 return;
             }
         }
+
         public static bool TryHandleQuestComplete(Quest quest, out bool runOriginal)
         {
             runOriginal = MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
@@ -389,5 +391,82 @@ namespace StardewArchipelago.Locations.Secrets
 
             return false;
         }
+
+        // private Color? getGemColor(ref bool isPrismatic)
+        public static void GetGemColor_HasColoredJunimos_Postfix(JunimoHut __instance, ref bool isPrismatic, ref Color? __result)
+        {
+            try
+            {
+                if (__result.HasValue)
+                {
+                    return;
+                }
+
+                _locationChecker.AddCheckedLocation(SecretsLocationNames.SECRET_NOTE_24);
+                return;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(GetGemColor_HasColoredJunimos_Postfix)}:\n{ex}");
+                return;
+            }
+        }
+
+        // public override Item getFish(float millisecondsAfterNibble, string bait, int waterDepth, Farmer who, double baitPotency, Vector2 bobberTile, string locationName = null)
+        public static void GetFish_CatchOrnateNecklace_Postfix(Railroad __instance, float millisecondsAfterNibble, string bait, int waterDepth, Farmer who, double baitPotency, Vector2 bobberTile, string locationName, ref Item __result)
+        {
+            try
+            {
+                if (__result.QualifiedItemId == QualifiedItemIds.ORNATE_NECKLACE)
+                {
+                    _locationChecker.AddCheckedLocation(SecretsLocationNames.SECRET_NOTE_25);
+                }
+
+                return;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(GetFish_CatchOrnateNecklace_Postfix)}:\n{ex}");
+                return;
+            }
+        }
+
+        // public override void dayUpdate(int dayOfMonth)
+        public static void DayUpdate_HasRaisinFedJunimos_Postfix(JunimoHut __instance, int dayOfMonth)
+        {
+            try
+            {
+                if (__instance.raisinDays.Value > 0)
+                {
+                    _locationChecker.AddCheckedLocation(SecretsLocationNames.SECRET_NOTE_26);
+                }
+                return;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(DayUpdate_HasRaisinFedJunimos_Postfix)}:\n{ex}");
+                return;
+            }
+        }
+
+        // public void resetForPlayerEntry()
+        public static void ResetForPlayerEntry_FoundCompendium_Postfix(GameLocation __instance)
+        {
+            try
+            {
+                if (Game1.player.secretNotesSeen.Contains(27) && __instance.Name == "MasteryCave")
+                {
+                    _locationChecker.AddCheckedLocation(SecretsLocationNames.SECRET_NOTE_27);
+                }
+
+                return;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(ResetForPlayerEntry_FoundCompendium_Postfix)}:\n{ex}");
+                return;
+            }
+        }
+
     }
 }
