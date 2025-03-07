@@ -8,6 +8,7 @@ using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Vanilla;
+using StardewArchipelago.Locations.InGameLocations;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Delegates;
@@ -79,8 +80,8 @@ namespace StardewArchipelago.Locations.Secrets
 
                 if (_locationChecker.IsLocationMissing(SecretsLocationNames.SOMETHING_FOR_SANTA))
                 {
-                    var itemToSpawnId = IDProvider.CreateApLocationItemId(SecretsLocationNames.SOMETHING_FOR_SANTA);
-                    __instance.heldObject.Value = ItemRegistry.Create<StardewValley.Object>(itemToSpawnId);
+                    _locationChecker.AddCheckedLocation(SecretsLocationNames.SOMETHING_FOR_SANTA);
+                    __instance.heldObject.Value = ItemRegistry.Create<StardewValley.Object>("(O)MysteryBox");
                     return;
                 }
             }
