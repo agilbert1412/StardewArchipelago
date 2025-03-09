@@ -45,7 +45,7 @@ namespace StardewArchipelago.Locations.Secrets
         public const string ME_ME_ME_ME = "'Me me me me me me me me me me me me me me me me'";
         public const string NICE_TRY = "Nice Try";
         public const string ENJOY_YOUR_NEW_LIFE_HERE = "Enjoy your new life here";
-        public const string WHAT_YOU_EXPECT = "\"What'd you expect?\"";
+        public const string WHAT_YOU_EXPECT = "'What'd you expect?'";
         public const string SECRET_IRIDIUM_STACKMASTER_TROPHY = "Secret Iridium Stackmaster Trophy";
         public const string WHAT_KIND_OF_MONSTER_IS_THIS = "What kind of monster is this?";
         public const string MOUTH_WATERING_ALREADY = "My mouth is watering already";

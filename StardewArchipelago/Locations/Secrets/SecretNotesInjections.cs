@@ -75,7 +75,9 @@ namespace StardewArchipelago.Locations.Secrets
         {
             foreach (var requiredGift in requiredGifts)
             {
-                var giftedItemsToThisPerson = giftedItems[requiredGift.Npc].Where(x => x.Value > 0).Select(x => x.Key).ToHashSet();
+                var giftedItemsToThisPerson = giftedItems.ContainsKey(requiredGift.Npc) ?
+                    giftedItems[requiredGift.Npc].Where(x => x.Value > 0).Select(x => x.Key).ToHashSet() :
+                    new HashSet<string>();
 
                 bool ItemIsGifted(string itemId) => giftedItemsToThisPerson.Contains(itemId);
 
@@ -314,7 +316,7 @@ namespace StardewArchipelago.Locations.Secrets
         }
 
         // public virtual void rot()
-        public static void Rot_GoldLewisFound_Postfix(Object __instance)
+        public static bool Rot_GoldLewisFound_Prefix(Object __instance)
         {
             try
             {
@@ -322,12 +324,13 @@ namespace StardewArchipelago.Locations.Secrets
                 {
                     _locationChecker.AddCheckedLocation(SecretsLocationNames.SECRET_NOTE_19_PART_2);
                 }
-                return;
+
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed in {nameof(Rot_GoldLewisFound_Postfix)}:\n{ex}");
-                return;
+                _logger.LogError($"Failed in {nameof(Rot_GoldLewisFound_Prefix)}:\n{ex}");
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -397,7 +400,7 @@ namespace StardewArchipelago.Locations.Secrets
         {
             try
             {
-                if (__result.HasValue)
+                if (!__result.HasValue)
                 {
                     return;
                 }

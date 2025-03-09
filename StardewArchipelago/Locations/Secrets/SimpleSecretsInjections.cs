@@ -6,6 +6,7 @@ using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Locations.InGameLocations;
@@ -17,6 +18,7 @@ using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 using xTile.Dimensions;
 using Object = StardewValley.Object;
+using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace StardewArchipelago.Locations.Secrets
 {
@@ -36,7 +38,7 @@ namespace StardewArchipelago.Locations.Secrets
         }
 
         // public virtual void proceedToNextScene()
-        public static void ProceedToNextScene_ForsakenSouls_Postfix(TV __instance)
+        public static bool ProceedToNextScene_ForsakenSouls_Prefix(TV __instance)
         {
             try
             {
@@ -44,11 +46,13 @@ namespace StardewArchipelago.Locations.Secrets
                 {
                     _locationChecker.AddCheckedLocation(SecretsLocationNames.FREE_THE_FORSAKEN_SOULS);
                 }
+
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed in {nameof(ProceedToNextScene_ForsakenSouls_Postfix)}:\n{ex}");
-                return;
+                _logger.LogError($"Failed in {nameof(ProceedToNextScene_ForsakenSouls_Prefix)}:\n{ex}");
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
@@ -118,22 +122,98 @@ namespace StardewArchipelago.Locations.Secrets
             }
         }
 
+        // public override void draw(SpriteBatch b)
+        public static void Draw_JungleJunimo_Postfix(SkillsPage __instance, SpriteBatch b)
+        {
+            try
+            {
+                if (Game1.player.hasCompletedCommunityCenter())
+                {
+                    return;
+                }
+
+
+                var allAreasRewardsReceived = HasReceivedAllCCRewards();
+                if (allAreasRewardsReceived)
+                {
+                    DrawJunimo(__instance, b);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(Draw_JungleJunimo_Postfix)}:\n{ex}");
+                return;
+            }
+        }
+        private static bool HasReceivedAllCCRewards()
+        {
+            var allAreasRewardsReceived =
+                Game1.player.hasOrWillReceiveMail("ccPantry") &&
+                Game1.player.hasOrWillReceiveMail("ccCraftsRoom") &&
+                Game1.player.hasOrWillReceiveMail("ccFishTank") &&
+                Game1.player.hasOrWillReceiveMail("ccBoilerRoom") &&
+                Game1.player.hasOrWillReceiveMail("ccVault") &&
+                Game1.player.hasOrWillReceiveMail("ccBulletin");
+            return allAreasRewardsReceived;
+        }
+        private static void DrawJunimo(SkillsPage skillsPage, SpriteBatch b)
+        {
+
+            var timesClickedJunimoField = _modHelper.Reflection.GetField<int>(skillsPage, "timesClickedJunimo");
+            var timesClickedJunimo = timesClickedJunimoField.GetValue();
+            var num9 = skillsPage.yPositionOnScreen + IClickableMenu.spaceToClearTopBorder + (int)(skillsPage.height / 2.0) + 21;
+            var num10 = skillsPage.xPositionOnScreen + IClickableMenu.spaceToClearSideBorder * 2;
+            var x4 = num10 + 80;
+            var y2 = num9 + 16;
+            b.Draw(Game1.mouseCursors_1_6, new Vector2(x4 - 4 + 30f, y2 + 52 + 30f), new Rectangle(386, 299, 13, 15), Color.White, 0.0f, new Vector2(7.5f), (float)(4.0 + timesClickedJunimo * 0.20000000298023224), SpriteEffects.None, 0.7f);
+            if (Game1.player.mailReceived.Contains("activatedJungleJunimo"))
+            {
+                b.Draw(Game1.mouseCursors_1_6, new Vector2(x4 - 80, y2 - 16), new Rectangle(311, 251, 51, 48), Color.White, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 0.7f);
+            }
+        }
+
         // public override void receiveLeftClick(int x, int y, bool playSound = true)
-        public static void ReceiveLeftClick_JungleJunimo_Postfix(SkillsPage __instance, int x, int y, bool playSound)
+        public static bool ReceiveLeftClick_JungleJunimo_Prefix(SkillsPage __instance, int x, int y, bool playSound)
         {
             try
             {
                 // private int timesClickedJunimo;
                 var timesClickedJunimoField = _modHelper.Reflection.GetField<int>(__instance, "timesClickedJunimo");
-                if (timesClickedJunimoField.GetValue() > 6)
+
+                var isInJunimoArea = x > __instance.xPositionOnScreen + IClickableMenu.spaceToClearSideBorder * 2 && x < __instance.xPositionOnScreen + IClickableMenu.spaceToClearSideBorder * 2 + 200 &&
+                                     y > __instance.yPositionOnScreen + IClickableMenu.spaceToClearTopBorder + (int)(__instance.height / 2.0) + 21 && y < __instance.yPositionOnScreen + __instance.height;
+                if (isInJunimoArea && HasReceivedAllCCRewards() && !Game1.MasterPlayer.hasOrWillReceiveMail("JojaMember") && !Game1.player.mailReceived.Contains("activatedJungleJunimo"))
                 {
-                    _locationChecker.AddCheckedLocation(SecretsLocationNames.JUNGLE_JUNIMO);
+                    timesClickedJunimoField.SetValue(timesClickedJunimoField.GetValue() + 1);
+                    if (timesClickedJunimoField.GetValue() > 6)
+                    {
+                        Game1.playSound("discoverMineral");
+                        Game1.playSound("leafrustle");
+                        Game1.player.mailReceived.Add("activatedJungleJunimo");
+                        _locationChecker.AddCheckedLocation(SecretsLocationNames.JUNGLE_JUNIMO);
+                    }
+                    else
+                        Game1.playSound("hammer");
                 }
+
+                foreach (ClickableComponent ccTrackerButton in __instance.ccTrackerButtons)
+                {
+                    if (ccTrackerButton != null && ccTrackerButton.containsPoint(x, y) && !ccTrackerButton.label.Equals("???"))
+                    {
+                        Game1.activeClickableMenu = new JunimoNoteMenu(true, Convert.ToInt32(ccTrackerButton.name), true)
+                        {
+                            gameMenuTabToReturnTo = GameMenu.skillsTab
+                        };
+                        break;
+                    }
+                }
+
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed in {nameof(ReceiveLeftClick_JungleJunimo_Postfix)}:\n{ex}");
-                return;
+                _logger.LogError($"Failed in {nameof(ReceiveLeftClick_JungleJunimo_Prefix)}:\n{ex}");
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 

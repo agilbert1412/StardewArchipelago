@@ -10,6 +10,7 @@ using StardewArchipelago.Items.Unlocks;
 using StardewArchipelago.Stardew;
 using StardewArchipelago.Stardew.NameMapping;
 using StardewModdingAPI;
+using StardewValley;
 
 namespace StardewArchipelago.Items
 {
@@ -67,6 +68,9 @@ namespace StardewArchipelago.Items
 
             if (TryParseFriendshipBonus(receivedItem.ItemName, out var numberOfPoints))
             {
+                Game1.player.mailReceived.Add("ccBulletinThankYou");
+                Game1.player.mailReceived.Add("ccBulletin%&NL&%");
+                Game1.player.mailReceived.Add("ccBulletin");
                 return new LetterActionAttachment(receivedItem, LetterActionsKeys.Friendship, numberOfPoints.ToString());
             }
 

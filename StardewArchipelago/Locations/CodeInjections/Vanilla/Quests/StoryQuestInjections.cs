@@ -107,6 +107,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
                     return;
                 }
                 _locationChecker.AddCheckedLocation(englishQuestName);
+                SecretNotesInjections.TryHandleQuestComplete(quest, out _);
 
                 return;
             }

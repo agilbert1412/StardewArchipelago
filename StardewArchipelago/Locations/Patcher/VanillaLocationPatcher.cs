@@ -1444,6 +1444,11 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void PatchEasySecrets()
         {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(SkillsPage), nameof(SkillsPage.draw), new[] { typeof(SpriteBatch)}),
+                postfix: new HarmonyMethod(typeof(SimpleSecretsInjections), nameof(SimpleSecretsInjections.Draw_JungleJunimo_Postfix))
+            );
+
             if (!_archipelago.SlotData.Secretsanity.HasFlag(Secretsanity.Easy))
             {
                 return;
@@ -1453,7 +1458,7 @@ namespace StardewArchipelago.Locations.Patcher
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(TV), nameof(TV.proceedToNextScene)),
-                postfix: new HarmonyMethod(typeof(SimpleSecretsInjections), nameof(SimpleSecretsInjections.ProceedToNextScene_ForsakenSouls_Postfix))
+                prefix: new HarmonyMethod(typeof(SimpleSecretsInjections), nameof(SimpleSecretsInjections.ProceedToNextScene_ForsakenSouls_Prefix))
             );
 
             _harmony.Patch(
@@ -1468,7 +1473,7 @@ namespace StardewArchipelago.Locations.Patcher
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(SkillsPage), nameof(SkillsPage.receiveLeftClick)),
-                postfix: new HarmonyMethod(typeof(SimpleSecretsInjections), nameof(SimpleSecretsInjections.ReceiveLeftClick_JungleJunimo_Postfix))
+                prefix: new HarmonyMethod(typeof(SimpleSecretsInjections), nameof(SimpleSecretsInjections.ReceiveLeftClick_JungleJunimo_Prefix))
             );
 
             _harmony.Patch(
@@ -1670,7 +1675,7 @@ namespace StardewArchipelago.Locations.Patcher
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Object), nameof(Object.rot)),
-                postfix: new HarmonyMethod(typeof(SecretNotesInjections), nameof(SecretNotesInjections.Rot_GoldLewisFound_Postfix))
+                prefix: new HarmonyMethod(typeof(SecretNotesInjections), nameof(SecretNotesInjections.Rot_GoldLewisFound_Prefix))
             );
 
             _harmony.Patch(
