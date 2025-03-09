@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework;
 using Netcode;
 using StardewArchipelago.Archipelago;
@@ -21,6 +22,7 @@ namespace StardewArchipelago.Items.Mail
 {
     public class LetterActions
     {
+        private readonly ILogger _logger;
         private readonly IModHelper _modHelper;
         private readonly Mailman _mail;
         private readonly StardewArchipelagoClient _archipelago;
@@ -30,8 +32,9 @@ namespace StardewArchipelago.Items.Mail
         private readonly ToolUpgrader _toolUpgrader;
         private readonly Dictionary<string, Action<string>> _letterActions;
 
-        public LetterActions(IModHelper modHelper, Mailman mail, StardewArchipelagoClient archipelago, WeaponsManager weaponsManager, TrapManager trapManager, BabyBirther babyBirther, StardewItemManager _stardewItemManager)
+        public LetterActions(ILogger logger, IModHelper modHelper, Mailman mail, StardewArchipelagoClient archipelago, WeaponsManager weaponsManager, TrapManager trapManager, BabyBirther babyBirther, StardewItemManager _stardewItemManager)
         {
+            _logger = logger;
             _modHelper = modHelper;
             _mail = mail;
             _archipelago = archipelago;
@@ -258,7 +261,10 @@ namespace StardewArchipelago.Items.Mail
 
             if (upgradedTool == null)
             {
-                throw new Exception($"Could not find a upgradedTool of type {toolGenericName} in this entire world");
+                var newTool = _toolUpgrader.UpgradeTool(toolGenericName);
+                _logger.LogInfo($"Could not find a upgradedTool of type {toolGenericName} in this entire world, creating a brand new one.");
+                Game1.player.holdUpItemThenMessage(newTool);
+                Game1.player.addItemByMenuIfNecessary(newTool);
             }
 
             Game1.player.holdUpItemThenMessage(upgradedTool);

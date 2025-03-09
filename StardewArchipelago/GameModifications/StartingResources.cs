@@ -31,6 +31,7 @@ namespace StardewArchipelago.GameModifications
             if (Game1.Date.TotalDays == 0)
             {
                 GivePlayerQuickStart();
+                RemoveStartingTools();
             }
 
             RemoveShippingBin();
@@ -92,6 +93,16 @@ namespace StardewArchipelago.GameModifications
             CreateGiftBoxItemInEmptySpot(farmhouse, paths);
             CreateGiftBoxItemInEmptySpot(farmhouse, seed_maker);
 #endif
+        }
+        
+        private void RemoveStartingTools()
+        {
+            if (!_archipelago.SlotData.ToolProgression.HasFlag(ToolProgression.NoStartingTools))
+            {
+                return;
+            }
+
+            Game1.player.Items.Clear();
         }
 
         private void RemoveGiftBoxes(FarmHouse farmhouse)
