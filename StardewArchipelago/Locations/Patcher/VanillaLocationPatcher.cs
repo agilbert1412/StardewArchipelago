@@ -1592,17 +1592,12 @@ namespace StardewArchipelago.Locations.Patcher
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(TemporaryAnimatedSprite), "PlaySound"),
-                postfix: new HarmonyMethod(typeof(DifficultSecretsInjections), nameof(DifficultSecretsInjections.PlaySound_StrangeSighting_Postfix))
+                postfix: new HarmonyMethod(typeof(DifficultSecretsInjections), nameof(DifficultSecretsInjections.PlaySound_StrangeSightingAndBigFoot_Postfix))
             );
 
             _harmony.Patch(
                 original: AccessTools.Constructor(typeof(SeaMonsterTemporarySprite), new []{typeof(float), typeof(int), typeof(int), typeof(Vector2)}),
                 postfix: new HarmonyMethod(typeof(DifficultSecretsInjections), nameof(DifficultSecretsInjections.SeaMonsterTemporarySpriteConstructor_SeaMonsterSighting_Postfix))
-            );
-
-            _harmony.Patch(
-                original: AccessTools.Constructor(typeof(TemporaryAnimatedSprite), new []{typeof(string), typeof(Rectangle), typeof(Vector2), typeof(bool), typeof(float), typeof(Color)}),
-                postfix: new HarmonyMethod(typeof(DifficultSecretsInjections), nameof(DifficultSecretsInjections.TemporaryAnimatedSpriteConstructor_Bigfoot_Postfix))
             );
 
             _harmony.Patch(

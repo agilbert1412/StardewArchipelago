@@ -72,26 +72,35 @@ namespace StardewArchipelago.Locations.Secrets
         }
 
         // private void PlaySound(string sound)
-        public static void PlaySound_StrangeSighting_Postfix(TemporaryAnimatedSprite __instance, string sound)
+        public static void PlaySound_StrangeSightingAndBigFoot_Postfix(TemporaryAnimatedSprite __instance, string sound)
         {
             try
             {
-                if (__instance is not { textureName: "LooseSprites\\temporary_sprites_1" })
+                var bigfootTexture = "Characters\\asldkfjsquaskutanfsldk";
+                var strangeTexture = "LooseSprites\\temporary_sprites_1";
+
+                if (__instance.textureName == strangeTexture)
                 {
+
+                    var spriteRectangle = new Microsoft.Xna.Framework.Rectangle(448, 546, 16, 25);
+                    if (!__instance.sourceRect.Equals(spriteRectangle))
+                    {
+                        return;
+                    }
+
+                    _locationChecker.AddCheckedLocation(SecretsLocationNames.STRANGE_SIGHTING);
                     return;
                 }
 
-                var spriteRectangle = new Microsoft.Xna.Framework.Rectangle(448, 546, 16, 25);
-                if (!__instance.sourceRect.Equals(spriteRectangle))
+                if (__instance.textureName == bigfootTexture)
                 {
+                    _locationChecker.AddCheckedLocation(SecretsLocationNames.BIGFOOT);
                     return;
                 }
-
-                _locationChecker.AddCheckedLocation(SecretsLocationNames.STRANGE_SIGHTING);
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed in {nameof(PlaySound_StrangeSighting_Postfix)}:\n{ex}");
+                _logger.LogError($"Failed in {nameof(PlaySound_StrangeSightingAndBigFoot_Postfix)}:\n{ex}");
                 return;
             }
         }
@@ -106,24 +115,6 @@ namespace StardewArchipelago.Locations.Secrets
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(SeaMonsterTemporarySpriteConstructor_SeaMonsterSighting_Postfix)}:\n{ex}");
-                return;
-            }
-        }
-
-        // public TemporaryAnimatedSprite(string textureName, Rectangle sourceRect, Vector2 position, bool flipped, float alphaFade, Color color)
-        public static void TemporaryAnimatedSpriteConstructor_Bigfoot_Postfix(TemporaryAnimatedSprite __instance, string textureName, Rectangle sourceRect, Vector2 position, bool flipped, float alphaFade, Color color)
-        {
-            try
-            {
-                if (textureName != "Characters\\asldkfjsquaskutanfsldk")
-                {
-                    return;
-                }
-                _locationChecker.AddCheckedLocation(SecretsLocationNames.BIGFOOT);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Failed in {nameof(TemporaryAnimatedSpriteConstructor_Bigfoot_Postfix)}:\n{ex}");
                 return;
             }
         }

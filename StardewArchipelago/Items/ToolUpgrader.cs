@@ -127,10 +127,10 @@ namespace StardewArchipelago.Items
 
         private bool TryUpgradeToolInSpecialInventories(Farmer player, string toolName, out Tool upgradedTool)
         {
-            if (TryUpgradeToolInLostAndFoundBox(player, toolName, out upgradedTool))
-            {
-                return true;
-            }
+            //if (TryUpgradeToolInLostAndFoundBox(player, toolName, out upgradedTool))
+            //{
+            //    return true;
+            //}
 
             if (TryUpgradeToolInGlobalInventories(player, toolName, out upgradedTool))
             {
