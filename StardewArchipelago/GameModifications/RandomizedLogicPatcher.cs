@@ -33,6 +33,7 @@ using Object = StardewValley.Object;
 using StardewArchipelago.Locations;
 using StardewArchipelago.Logging;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
+using StardewValley.TerrainFeatures;
 
 namespace StardewArchipelago.GameModifications
 {
@@ -85,6 +86,7 @@ namespace StardewArchipelago.GameModifications
             PanningSpotInjections.Initialize(logger, archipelago);
             WalnutInjections.Initialize(logger, archipelago);
             OutOfLogicInjections.Initialize(logger, archipelago, stardewItemManager);
+            EmptyHandInjections.Initialize(logger, archipelago, stardewItemManager);
             DebugPatchInjections.Initialize(logger, archipelago);
             _jojaDisabler = new JojaDisabler(logger, modHelper, harmony);
         }
@@ -133,6 +135,7 @@ namespace StardewArchipelago.GameModifications
             PatchWalnuts();
             PatchMysteryBoxesAndPrizeTickets();
             PatchStardropMessage();
+            PatchEmptyHandBreak();
 
             _jojaDisabler.DisableJojaRouteShortcuts();
             _startingResources.GivePlayerStartingResources();
@@ -786,6 +789,24 @@ namespace StardewArchipelago.GameModifications
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Farmer), nameof(Farmer.doneEating)),
                 postfix: new HarmonyMethod(typeof(FarmerInjections), nameof(FarmerInjections.DoneEating_StardropFavoriteThingKaito_Postfix))
+            );
+        }
+
+        private void PatchEmptyHandBreak()
+        {
+            if (!ModEntry.Instance.Config.AllowHandBreaking)
+            {
+                return;
+            }
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.checkAction)),
+                prefix: new HarmonyMethod(typeof(EmptyHandInjections), nameof(EmptyHandInjections.CheckAction_BreakSomethingByHand_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Tree), nameof(Tree.performUseAction)),
+                prefix: new HarmonyMethod(typeof(EmptyHandInjections), nameof(EmptyHandInjections.PerformUseAction_BreakTreeByHand_Prefix))
             );
         }
 
