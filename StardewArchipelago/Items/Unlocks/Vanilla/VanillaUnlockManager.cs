@@ -246,6 +246,8 @@ namespace StardewArchipelago.Items.Unlocks.Vanilla
 
         private LetterActionAttachment ConstructTreeHouse(ReceivedItem receivedItem)
         {
+            Game1.addMailForTomorrow("leoMoved", true, true);
+            Game1.player.team.requestLeoMove.Fire();
             return new LetterActionAttachment(receivedItem, LetterActionsKeys.IslandUnlock, TREEHOUSE);
         }
 
