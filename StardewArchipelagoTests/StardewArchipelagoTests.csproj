@@ -7,7 +7,7 @@
 
         <IsPackable>false</IsPackable>
 
-        <Configurations>Debug;Release;Debug tiles;Debug Tiles</Configurations>
+        <Configurations>Debug;Release;Debug tiles;Debug Tiles;Debug Tilesanity;Release Tilesanity</Configurations>
 
         <Platforms>AnyCPU</Platforms>
     </PropertyGroup>

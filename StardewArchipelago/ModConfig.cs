@@ -111,6 +111,12 @@ namespace StardewArchipelago
         /// The channel gives information about the current entrance randomizer roll, on Mondays and Fridays
         /// </summary>
         public bool StartWithGatewayGazette { get; set; } = false;
+
+        /// <summary>
+        /// Whether to allow the player to break items they wouldn't usually be able to, with their empty hand.
+        /// It takes many more hits than it would with the proper tool, and is intended solely to avoid getting physically stuck
+        /// </summary>
+        public bool AllowHandBreaking { get; set; } = false;
     }
 
     public enum ItemIndicatorPreference

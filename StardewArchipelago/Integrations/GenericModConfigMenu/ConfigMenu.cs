@@ -306,6 +306,14 @@ namespace StardewArchipelago.Integrations.GenericModConfigMenu
                 getValue: () => Config.StartWithGatewayGazette,
                 setValue: (value) => Config.StartWithGatewayGazette = value
             );
+
+            configMenu.AddBoolOption(
+                mod: ModManifest,
+                name: () => "Allow Hand Breaking",
+                tooltip: () => $"Whether to allow the player to break items with their bare hands.{Environment.NewLine}It takes many more hits than with the proper tool, and is solely intended to avoid getting physically stuck behind things.",
+                getValue: () => Config.AllowHandBreaking,
+                setValue: (value) => Config.AllowHandBreaking = value
+            );
         }
     }
 }

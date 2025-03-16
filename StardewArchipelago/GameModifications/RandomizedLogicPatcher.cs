@@ -31,6 +31,7 @@ using StardewValley.Objects;
 using Object = StardewValley.Object;
 using StardewArchipelago.Locations;
 using StardewArchipelago.Logging;
+using StardewValley.TerrainFeatures;
 
 namespace StardewArchipelago.GameModifications
 {
@@ -60,6 +61,7 @@ namespace StardewArchipelago.GameModifications
             CommunityCenterLogicInjections.Initialize(logger, locationChecker);
             FarmInjections.Initialize(logger, _archipelago);
             FarmerInjections.Initialize(logger, _archipelago);
+            EventInjections.Initialize(logger, _archipelago);
             AchievementInjections.Initialize(logger, _archipelago);
             EntranceInjections.Initialize(logger, _helper, _archipelago, entranceManager);
             ForestInjections.Initialize(logger, _archipelago);
@@ -83,6 +85,7 @@ namespace StardewArchipelago.GameModifications
             PanningSpotInjections.Initialize(logger, archipelago);
             WalnutInjections.Initialize(logger, archipelago);
             OutOfLogicInjections.Initialize(logger, archipelago, stardewItemManager);
+            EmptyHandInjections.Initialize(logger, archipelago, stardewItemManager);
             DebugPatchInjections.Initialize(logger, archipelago);
             _jojaDisabler = new JojaDisabler(logger, modHelper, harmony);
         }
@@ -131,6 +134,8 @@ namespace StardewArchipelago.GameModifications
             PatchWalnuts();
             PatchMysteryBoxesAndPrizeTickets();
             PatchStardropMessage();
+            PatchLeoMove();
+            PatchEmptyHandBreak();
 
             _jojaDisabler.DisableJojaRouteShortcuts();
             _startingResources.GivePlayerStartingResources();
@@ -794,6 +799,37 @@ namespace StardewArchipelago.GameModifications
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Farmer), nameof(Farmer.doneEating)),
                 postfix: new HarmonyMethod(typeof(FarmerInjections), nameof(FarmerInjections.DoneEating_StardropFavoriteThingKaito_Postfix))
+            );
+        }
+
+        private void PatchLeoMove()
+        {
+            if (_archipelago.SlotData.ExcludeGingerIsland)
+            {
+                return;
+            }
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Event), nameof(Event.endBehaviors)),
+                prefix: new HarmonyMethod(typeof(EventInjections), nameof(EventInjections.EndBehaviors_LeoMoving_Prefix))
+            );
+        }
+
+        private void PatchEmptyHandBreak()
+        {
+            if (!ModEntry.Instance.Config.AllowHandBreaking)
+            {
+                return;
+            }
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.checkAction)),
+                prefix: new HarmonyMethod(typeof(EmptyHandInjections), nameof(EmptyHandInjections.CheckAction_BreakSomethingByHand_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Tree), nameof(Tree.performUseAction)),
+                prefix: new HarmonyMethod(typeof(EmptyHandInjections), nameof(EmptyHandInjections.PerformUseAction_BreakTreeByHand_Prefix))
             );
         }
 

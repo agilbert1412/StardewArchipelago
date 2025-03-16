@@ -147,12 +147,12 @@ namespace StardewArchipelago
             _helper.ConsoleCommands.Add("export_weapons", "Export all weapons by category and tier", ExportWeapons);
             _helper.ConsoleCommands.Add("release_slot", "Release the current slot completely", ReleaseSlot);
             _helper.ConsoleCommands.Add("debug_method", "Runs whatever is currently in the debug method", DebugMethod);
-#endif
 #if TILESANITY
             _helper.ConsoleCommands.Add("walkable_tiles", "Gets the list of every walkable tile",
                 this.ListWalkableTiles);
             _helper.ConsoleCommands.Add("walkable_csv", "Gets the csv of every walkable tile",
                 this.ConvertWalkablesToCSV);
+#endif
 #endif
 
             ItemRegistry.AddTypeDefinition(new ArchipelagoLocationDataDefinition());
