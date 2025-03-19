@@ -108,7 +108,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
                 MonsterGoals.Remove(MonsterName.TIGER_SLIME);
             }
 
-            if (_archipelago.SlotData.SpecialOrderLocations.HasFlag(SpecialOrderLocations.Qi))
+            if (!_archipelago.SlotData.SpecialOrderLocations.HasFlag(SpecialOrderLocations.Qi))
             {
                 MonsterGoals.Remove(MonsterName.ROYAL_SERPENT);
                 MonsterGoals.Remove(MonsterName.SKELETON_MAGE);
