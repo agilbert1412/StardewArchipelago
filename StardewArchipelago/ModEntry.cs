@@ -502,7 +502,10 @@ namespace StardewArchipelago
             var bugFixer = new BugFixer(_logger, _locationChecker);
             bugFixer.FixKnownBugs();
 
-            _hintHelper.GiveHintTip(_archipelago.GetSession());
+            if (_archipelago.GetSession() != null)
+            {
+                _hintHelper.GiveHintTip(_archipelago.GetSession());
+            }
         }
 
         private void OnDayEnding(object sender, DayEndingEventArgs e)

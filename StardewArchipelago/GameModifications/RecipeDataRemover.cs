@@ -97,11 +97,14 @@ namespace StardewArchipelago.GameModifications
 
                 var modifiedRecipe = recipeData.Replace(recipeUnlockCondition, "none");
                 cookingRecipesData[recipeName] = modifiedRecipe;
-                foreach (var farmer in Game1.getAllFarmers())
+                foreach (var farmer in Game1.getOnlineFarmers())
                 {
-                    if (farmer.cookingRecipes.ContainsKey(recipeName) && !_archipelago.HasReceivedItem($"{recipeName} Recipe"))
+                    if (farmer != null)
                     {
-                        farmer.cookingRecipes.Remove(recipeName);
+                        if (farmer.cookingRecipes.ContainsKey(recipeName) && !_archipelago.HasReceivedItem($"{recipeName} Recipe"))
+                        {
+                            farmer.cookingRecipes.Remove(recipeName);
+                        }
                     }
                 }
             }
@@ -159,7 +162,7 @@ namespace StardewArchipelago.GameModifications
                 var modifiedRecipe = recipeData.Replace(recipeUnlockCondition, $"none:{recipeUnlockCondition}");
                 cookingRecipesData[recipeName] = modifiedRecipe;
                 var npcName = unlockConditionParts[1];
-                Game1.player.RemoveMail($"{npcName}Cooking", true);
+                Game1.player?.RemoveMail($"{npcName}Cooking", true);
             }
         }
 
@@ -181,11 +184,14 @@ namespace StardewArchipelago.GameModifications
 
                 var modifiedRecipe = recipeData.Replace(recipeUnlockCondition, "none");
                 craftingRecipesData[recipeName] = modifiedRecipe;
-                foreach (var farmer in Game1.getAllFarmers())
+                foreach (var farmer in Game1.getOnlineFarmers())
                 {
-                    if (farmer.craftingRecipes.ContainsKey(recipeName) && !_archipelago.HasReceivedItem($"{recipeName} Recipe"))
-                    {
-                        farmer.craftingRecipes.Remove(recipeName);
+                    if (farmer != null)
+                    { 
+                        if (farmer.craftingRecipes.ContainsKey(recipeName) && !_archipelago.HasReceivedItem($"{recipeName} Recipe"))
+                        {
+                            farmer.craftingRecipes.Remove(recipeName);
+                        }
                     }
                 }
             }

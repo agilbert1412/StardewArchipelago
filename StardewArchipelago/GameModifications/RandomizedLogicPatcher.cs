@@ -87,6 +87,7 @@ namespace StardewArchipelago.GameModifications
             OutOfLogicInjections.Initialize(logger, archipelago, stardewItemManager);
             EmptyHandInjections.Initialize(logger, archipelago, stardewItemManager);
             DebugPatchInjections.Initialize(logger, archipelago);
+            BundleMenuInjection.setupLogging(logger);
             _jojaDisabler = new JojaDisabler(logger, modHelper, harmony);
         }
 
