@@ -10,7 +10,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Bundles
     {
         private static ILogger _logger;
 
-        public static void setupLogging(ILogger logger)
+        public static void Initialize(ILogger logger)
         {
             _logger = logger;
         }

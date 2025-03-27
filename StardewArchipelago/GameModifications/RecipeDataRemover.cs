@@ -97,7 +97,7 @@ namespace StardewArchipelago.GameModifications
 
                 var modifiedRecipe = recipeData.Replace(recipeUnlockCondition, "none");
                 cookingRecipesData[recipeName] = modifiedRecipe;
-                foreach (var farmer in Game1.getOnlineFarmers())
+                foreach (var farmer in Game1.getAllFarmers())
                 {
                     if (farmer != null)
                     {
@@ -184,7 +184,7 @@ namespace StardewArchipelago.GameModifications
 
                 var modifiedRecipe = recipeData.Replace(recipeUnlockCondition, "none");
                 craftingRecipesData[recipeName] = modifiedRecipe;
-                foreach (var farmer in Game1.getOnlineFarmers())
+                foreach (var farmer in Game1.getAllFarmers())
                 {
                     if (farmer != null)
                     { 
