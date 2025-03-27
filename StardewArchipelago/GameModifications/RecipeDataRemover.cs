@@ -99,6 +99,7 @@ namespace StardewArchipelago.GameModifications
                 cookingRecipesData[recipeName] = modifiedRecipe;
                 foreach (var farmer in Game1.getAllFarmers())
                 {
+                    if (farmer == null) continue;
                     if (farmer.cookingRecipes.ContainsKey(recipeName) && !_archipelago.HasReceivedItem($"{recipeName} Recipe"))
                     {
                         farmer.cookingRecipes.Remove(recipeName);
@@ -159,7 +160,7 @@ namespace StardewArchipelago.GameModifications
                 var modifiedRecipe = recipeData.Replace(recipeUnlockCondition, $"none:{recipeUnlockCondition}");
                 cookingRecipesData[recipeName] = modifiedRecipe;
                 var npcName = unlockConditionParts[1];
-                Game1.player.RemoveMail($"{npcName}Cooking", true);
+                Game1.player?.RemoveMail($"{npcName}Cooking", true);
             }
         }
 
@@ -183,6 +184,7 @@ namespace StardewArchipelago.GameModifications
                 craftingRecipesData[recipeName] = modifiedRecipe;
                 foreach (var farmer in Game1.getAllFarmers())
                 {
+                    if (farmer == null) continue;
                     if (farmer.craftingRecipes.ContainsKey(recipeName) && !_archipelago.HasReceivedItem($"{recipeName} Recipe"))
                     {
                         farmer.craftingRecipes.Remove(recipeName);
