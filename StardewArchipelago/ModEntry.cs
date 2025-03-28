@@ -129,6 +129,7 @@ namespace StardewArchipelago
             _helper.Events.GameLoop.DayEnding += OnDayEnding;
             _helper.Events.GameLoop.ReturnedToTitle += OnReturnedToTitle;
 
+            _helper.Events.Multiplayer.ModMessageReceived += OnModMessageReceived;
 
             _helper.Events.Multiplayer.PeerConnected += OnPeerConnected;
 
