@@ -130,7 +130,6 @@ namespace StardewArchipelago
             _helper.Events.GameLoop.ReturnedToTitle += OnReturnedToTitle;
 
             _helper.Events.Multiplayer.ModMessageReceived += OnModMessageReceived;
-
             _helper.Events.Multiplayer.PeerConnected += OnPeerConnected;
 
             _helper.ConsoleCommands.Add("connect_override", $"Overrides your next connection to Archipelago. {CONNECT_SYNTAX}", OnCommandConnectToArchipelago);
