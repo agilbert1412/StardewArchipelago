@@ -358,6 +358,11 @@ namespace StardewArchipelago.Stardew
 
         private void AddItemAndAliasesToNamesDictionary(StardewObject stardewItem)
         {
+            if (string.IsNullOrWhiteSpace(stardewItem.Name))
+            {
+                return;
+            }
+
             foreach (var aliasGroup in NameAliases.ItemNameAliasGroups)
             {
                 if (!aliasGroup.Contains(stardewItem.Name) && !aliasGroup.Contains(stardewItem.Id))
