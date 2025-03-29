@@ -121,10 +121,28 @@ namespace StardewArchipelago.GameModifications
                 var unlockConditionParts = recipeUnlockCondition.Split(" ");
                 var isVanillaSkillUnlock = unlockConditionParts.Length >= 3 && unlockConditionParts[0] == "s";
                 var isBirbCoreSkillUnlock = IsBirbCoreSkillUnlock(unlockConditionParts);
-                if (isVanillaSkillUnlock || isBirbCoreSkillUnlock)
+                if (!isVanillaSkillUnlock && !isBirbCoreSkillUnlock)
                 {
-                    var modifiedRecipe = recipeData.Replace(recipeUnlockCondition, "none");
-                    cookingRecipesData[recipeName] = modifiedRecipe;
+                    continue;
+                }
+
+                var modifiedRecipe = recipeData.Replace(recipeUnlockCondition, "none");
+                cookingRecipesData[recipeName] = modifiedRecipe;
+                var recipeKey = $"{recipeName} Recipe";
+                var knowsRecipe = Game1.player.cookingRecipes.ContainsKey(recipeName);
+                var shouldKnowRecipe = _archipelago.HasReceivedItem(recipeKey);
+                if (knowsRecipe == shouldKnowRecipe)
+                {
+                    continue;
+                }
+
+                if (knowsRecipe)
+                {
+                    Game1.player.cookingRecipes.Remove(recipeName);
+                }
+                else
+                {
+                    Game1.player.cookingRecipes.Add(recipeName, 0);
                 }
             }
         }
