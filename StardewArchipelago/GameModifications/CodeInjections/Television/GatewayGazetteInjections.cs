@@ -24,7 +24,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
         private const string GAZETTE_EPISODE =
             "On today's episode, our agent {0} has traversed from {1} and discovered... {2}! They came back safe and sound to share this wonderful knowledge with us!";
         private const string GAZETTE_CHAOS_EPISODE =
-            "On today's episode, our agent {0} has was sent to explore... but we haven't heard back from them. Let's send them thoughts and prayers! Don't walk outside unprepared, kids!";
+            "On today's episode, our agent {0} was sent to explore... but we haven't heard back from them. Let's send them thoughts and prayers! Don't walk outside unprepared, kids!";
 
         private static ILogger _logger;
         private static IModHelper _modHelper;
