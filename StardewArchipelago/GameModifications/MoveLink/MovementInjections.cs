@@ -41,6 +41,11 @@ namespace StardewArchipelago.GameModifications.MoveLink
 
         public static void UpdateMove(UpdateTickedEventArgs eventArgs)
         {
+            if (!FoolManager.ShouldPrank())
+            {
+                return;
+            }
+
             const uint moveLinkSendInterval = 15;
             const uint moveLinkApplyInterval = 1;
             if (eventArgs.IsMultipleOf(moveLinkSendInterval))
@@ -88,7 +93,6 @@ namespace StardewArchipelago.GameModifications.MoveLink
         }
         private static float GetXVelocity(Farmer farmer, float movementSpeed)
         {
-
             var xVelocity = 0f;
             if (farmer.movementDirections.Contains(1))
             {
@@ -102,7 +106,6 @@ namespace StardewArchipelago.GameModifications.MoveLink
         }
         private static float GetYVelocity(Farmer farmer, float movementSpeed)
         {
-
             var yVelocity = 0f;
             if (farmer.movementDirections.Contains(0))
             {
@@ -191,6 +194,11 @@ namespace StardewArchipelago.GameModifications.MoveLink
 
         public static void HandleBouncePacket(BouncePacket bouncePacket)
         {
+            if (!FoolManager.ShouldPrank())
+            {
+                return;
+            }
+
             if (!bouncePacket.Tags.Contains(ArchipelagoClient.MOVE_LINK_TAG))
             {
                 return;
