@@ -20,25 +20,26 @@ namespace StardewArchipelago.GameModifications.MoveLink
     {
         private static ILogger _logger;
         private static ArchipelagoClient _archipelago;
-        private static List<ReceivedMovement> _currentMoves;
+        private static List<ReceivedMovement> _queuedMovements;
 
         private const float TILE_FACTOR = 128f;
+        private const float EPSILON = 0.1f;
 
         public static void Initialize(ILogger logger, ArchipelagoClient archipelago)
         {
             _logger = logger;
             _archipelago = archipelago;
-            _currentMoves = new List<ReceivedMovement>();
+            _queuedMovements = new List<ReceivedMovement>();
         }
 
         public static void AddMoveLinkMovement(float time, float x, float y)
         {
-            if (!FoolManager.ShouldPrank() || time <= 0 || x == 0 && y == 0)
+            if (!FoolManager.ShouldPrank() || time <= 0 || (Math.Abs(x) < EPSILON && Math.Abs(y) < EPSILON))
             {
                 return;
             }
 
-            _currentMoves.Add(new ReceivedMovement(time, x, y));
+            _queuedMovements.Add(new ReceivedMovement(time, x, y));
         }
 
         public static void UpdateMove(UpdateTickedEventArgs eventArgs)
@@ -78,13 +79,18 @@ namespace StardewArchipelago.GameModifications.MoveLink
                 var yVelocity = GetYVelocity(farmer, movementSpeed) / TILE_FACTOR * elapsedFrames;
                 var timespan = elapsedFrames / 60f;
 
+                if (Math.Abs(xVelocity) < EPSILON && Math.Abs(yVelocity) < EPSILON)
+                {
+                    return;
+                }
+
                 _archipelago.SendMoveLinkPacket(slot, timespan, xVelocity, yVelocity);
 
-                _logger.LogInfo($"Sent {ArchipelagoClient.MOVE_LINK_TAG} packet{Environment.NewLine}" +
-                                $"  slot: {slot}{Environment.NewLine}" +
-                                $"  timespan: {timespan}{Environment.NewLine}" +
-                                $"  x: {xVelocity}{Environment.NewLine}" +
-                                $"  y: {yVelocity}");
+                //_logger.LogInfo($"Sent {ArchipelagoClient.MOVE_LINK_TAG} packet{Environment.NewLine}" +
+                //                $"  slot: {slot}{Environment.NewLine}" +
+                //                $"  timespan: {timespan}{Environment.NewLine}" +
+                //                $"  x: {xVelocity}{Environment.NewLine}" +
+                //                $"  y: {yVelocity}");
             }
             catch (Exception ex)
             {
@@ -121,7 +127,7 @@ namespace StardewArchipelago.GameModifications.MoveLink
 
         public static void ApplyMoveLink(uint elapsedFrames)
         {
-            if (!FoolManager.ShouldPrank() || !_currentMoves.Any() || (Game1.eventUp && Game1.CurrentEvent?.isFestival == false))
+            if (!FoolManager.ShouldPrank() || !_queuedMovements.Any() || (Game1.eventUp && Game1.CurrentEvent?.isFestival == false))
             {
                 return;
             }
@@ -130,19 +136,38 @@ namespace StardewArchipelago.GameModifications.MoveLink
             var currentLocation = Game1.currentLocation;
             var timespan = elapsedFrames / 60f;
 
-            var currentMove = _currentMoves[0];
+            var currentMove = _queuedMovements[0];
 
             var x = currentMove.X;
             var y = currentMove.Y;
 
-            if (currentMove.TimeRemaining <= 0 || currentMove.X == 0 && currentMove.Y == 0)
+            while (currentMove.TimeRemaining <= 0)
             {
-                _currentMoves.RemoveAt(0);
-                return;
+                _queuedMovements.RemoveAt(0);
+                if (!_queuedMovements.Any())
+                {
+                    return;
+                }
+                currentMove = _queuedMovements[0];
+                x = currentMove.X;
+                y = currentMove.Y;
+            }
+
+            while (Math.Abs(currentMove.X) < EPSILON && Math.Abs(currentMove.Y) < EPSILON)
+            {
+                _queuedMovements.RemoveAt(0);
+                if (!_queuedMovements.Any())
+                {
+                    return;
+                }
+
+                currentMove = _queuedMovements[0];
+                x += currentMove.X;
+                y += currentMove.Y;
             }
             if (currentMove.TimeRemaining <= timespan)
             {
-                _currentMoves.RemoveAt(0);
+                _queuedMovements.RemoveAt(0);
             }
             else if (currentMove.TimeRemaining > timespan)
             {
@@ -213,11 +238,11 @@ namespace StardewArchipelago.GameModifications.MoveLink
 
             AddMoveLinkMovement(timespan, x, y);
 
-            _logger.LogInfo($"Received {ArchipelagoClient.MOVE_LINK_TAG} packet{Environment.NewLine}" +
-                           $"  slot: {slot}{Environment.NewLine}" +
-                           $"  timespan: {timespan}{Environment.NewLine}" +
-                           $"  x: {x}{Environment.NewLine}" +
-                           $"  y: {y}");
+            //_logger.LogInfo($"Received {ArchipelagoClient.MOVE_LINK_TAG} packet{Environment.NewLine}" +
+            //               $"  slot: {slot}{Environment.NewLine}" +
+            //               $"  timespan: {timespan}{Environment.NewLine}" +
+            //               $"  x: {x}{Environment.NewLine}" +
+            //               $"  y: {y}");
         }
     }
 }

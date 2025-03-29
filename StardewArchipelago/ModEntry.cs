@@ -5,7 +5,6 @@ using System.Linq;
 using HarmonyLib;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
-using Microsoft.VisualBasic;
 using Microsoft.Xna.Framework;
 using Newtonsoft.Json;
 using StardewArchipelago.Archipelago;
