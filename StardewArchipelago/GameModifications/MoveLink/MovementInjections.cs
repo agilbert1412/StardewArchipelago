@@ -22,6 +22,8 @@ namespace StardewArchipelago.GameModifications.MoveLink
         private static ArchipelagoClient _archipelago;
         private static List<ReceivedMovement> _currentMoves;
 
+        private const float TILE_FACTOR = 128f;
+
         public static void Initialize(ILogger logger, ArchipelagoClient archipelago)
         {
             _logger = logger;
@@ -71,10 +73,9 @@ namespace StardewArchipelago.GameModifications.MoveLink
                 var session = _archipelago.GetSession();
                 var slot = $"{session.ConnectionInfo.Slot}-{ModEntry.Instance.UniqueIdentifier}";
 
-
                 var movementSpeed = farmer.getMovementSpeed();
-                var xVelocity = GetXVelocity(farmer, movementSpeed) / 64 * elapsedFrames;
-                var yVelocity = GetYVelocity(farmer, movementSpeed) / 64 * elapsedFrames;
+                var xVelocity = GetXVelocity(farmer, movementSpeed) / TILE_FACTOR * elapsedFrames;
+                var yVelocity = GetYVelocity(farmer, movementSpeed) / TILE_FACTOR * elapsedFrames;
                 var timespan = elapsedFrames / 60f;
 
                 _archipelago.SendMoveLinkPacket(slot, timespan, xVelocity, yVelocity);
@@ -120,7 +121,7 @@ namespace StardewArchipelago.GameModifications.MoveLink
 
         public static void ApplyMoveLink(uint elapsedFrames)
         {
-            if (!FoolManager.ShouldPrank() || (Game1.eventUp && Game1.CurrentEvent?.isFestival == false))
+            if (!FoolManager.ShouldPrank() || !_currentMoves.Any() || (Game1.eventUp && Game1.CurrentEvent?.isFestival == false))
             {
                 return;
             }
@@ -129,36 +130,33 @@ namespace StardewArchipelago.GameModifications.MoveLink
             var currentLocation = Game1.currentLocation;
             var timespan = elapsedFrames / 60f;
 
-            for (var i = _currentMoves.Count - 1; i >= 0; i--)
+            var currentMove = _currentMoves[0];
+
+            var x = currentMove.X;
+            var y = currentMove.Y;
+
+            if (currentMove.TimeRemaining <= 0 || currentMove.X == 0 && currentMove.Y == 0)
             {
-                var currentMove = _currentMoves[i];
-
-                var x = currentMove.X;
-                var y = currentMove.Y;
-
-                if (currentMove.TimeRemaining <= 0 || currentMove.X == 0 && currentMove.Y == 0)
-                {
-                    _currentMoves.RemoveAt(i);
-                    continue;
-                }
-                if (currentMove.TimeRemaining <= timespan)
-                {
-                    _currentMoves.RemoveAt(i);
-                }
-                else if (currentMove.TimeRemaining > timespan)
-                {
-                    var factor = timespan / currentMove.TimeRemaining;
-                    var factoredX = x * factor;
-                    var factoredY = y * factor;
-                    x = factoredX;
-                    y = factoredY;
-                    currentMove.X -= factoredX;
-                    currentMove.Y -= factoredY;
-                    currentMove.TimeRemaining -= timespan;
-                }
-
-                MovePlayer(farmer, currentLocation, x * 64f, y * 64f);
+                _currentMoves.RemoveAt(0);
+                return;
             }
+            if (currentMove.TimeRemaining <= timespan)
+            {
+                _currentMoves.RemoveAt(0);
+            }
+            else if (currentMove.TimeRemaining > timespan)
+            {
+                var factor = timespan / currentMove.TimeRemaining;
+                var factoredX = x * factor;
+                var factoredY = y * factor;
+                x = factoredX;
+                y = factoredY;
+                currentMove.X -= factoredX;
+                currentMove.Y -= factoredY;
+                currentMove.TimeRemaining -= timespan;
+            }
+
+            MovePlayer(farmer, currentLocation, x * TILE_FACTOR, y * TILE_FACTOR);
         }
         private static void MovePlayer(Farmer farmer, GameLocation currentLocation, float x, float y)
         {
