@@ -333,7 +333,7 @@ namespace StardewArchipelago.Archipelago
                 return false;
             }
 
-            ZeldaAnimationInjections.TogglePrank();
+            FoolManager.TogglePrank(false);
             return true;
         }
 

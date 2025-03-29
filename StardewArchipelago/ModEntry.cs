@@ -5,6 +5,7 @@ using System.Linq;
 using HarmonyLib;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using Microsoft.VisualBasic;
 using Microsoft.Xna.Framework;
 using Newtonsoft.Json;
 using StardewArchipelago.Archipelago;
@@ -15,6 +16,7 @@ using StardewArchipelago.GameModifications;
 using StardewArchipelago.GameModifications.CodeInjections;
 using StardewArchipelago.GameModifications.EntranceRandomizer;
 using StardewArchipelago.GameModifications.Modded;
+using StardewArchipelago.GameModifications.MoveLink;
 using StardewArchipelago.GameModifications.MultiSleep;
 using StardewArchipelago.GameModifications.Seasons;
 using StardewArchipelago.GameModifications.Testing;
@@ -54,6 +56,8 @@ namespace StardewArchipelago
         private const string AP_DATA_KEY = "ArchipelagoData";
         private const string AP_EXPERIENCE_KEY = "ArchipelagoSkillsExperience";
         private const string AP_FRIENDSHIP_KEY = "ArchipelagoFriendshipPoints";
+
+        public readonly string UniqueIdentifier = Guid.NewGuid().ToString();
 
         private LogHandler _logger;
         private IModHelper _helper;
@@ -525,6 +529,8 @@ namespace StardewArchipelago
             {
                 _itemManager.ItemParser.TrapManager.DequeueTrap();
             }
+
+            MovementInjections.UpdateMove(e);
         }
 
         private void OnReturnedToTitle(object sender, ReturnedToTitleEventArgs e)

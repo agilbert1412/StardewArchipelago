@@ -34,6 +34,7 @@ using StardewArchipelago.Locations;
 using StardewArchipelago.Logging;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewValley.TerrainFeatures;
+using StardewArchipelago.GameModifications.MoveLink;
 
 namespace StardewArchipelago.GameModifications
 {
@@ -88,6 +89,7 @@ namespace StardewArchipelago.GameModifications
             WalnutInjections.Initialize(logger, archipelago);
             OutOfLogicInjections.Initialize(logger, archipelago, stardewItemManager);
             EmptyHandInjections.Initialize(logger, archipelago, stardewItemManager);
+            MovementInjections.Initialize(logger, archipelago);
             DebugPatchInjections.Initialize(logger, archipelago);
             _jojaDisabler = new JojaDisabler(logger, modHelper, harmony);
         }
