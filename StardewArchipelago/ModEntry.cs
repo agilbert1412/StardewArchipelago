@@ -129,8 +129,8 @@ namespace StardewArchipelago
             _helper.Events.GameLoop.DayEnding += OnDayEnding;
             _helper.Events.GameLoop.ReturnedToTitle += OnReturnedToTitle;
 
-            _helper.Events.Multiplayer.ModMessageReceived += OnModMessageReceived;
-            _helper.Events.Multiplayer.PeerConnected += OnPeerConnected;
+            _helper.Events.Multiplayer.ModMessageReceived += MultiplayerHandler.Instance.OnModMessageReceived;
+            _helper.Events.Multiplayer.PeerConnected += MultiplayerHandler.Instance.OnPeerConnected;
 
             _helper.ConsoleCommands.Add("connect_override", $"Overrides your next connection to Archipelago. {CONNECT_SYNTAX}", OnCommandConnectToArchipelago);
             _helper.ConsoleCommands.Add("export_all_gifts", "Export all currently loaded giftable items and their traits", ExportGifts);
@@ -536,19 +536,6 @@ namespace StardewArchipelago
         private void OnReturnedToTitle(object sender, ReturnedToTitleEventArgs e)
         {
             ResetArchipelago();
-        }
-
-        public void OnModMessageReceived(object sender, ModMessageReceivedEventArgs e)
-        {
-            if (e.FromModID != ModManifest.UniqueID || e.Type != "ArchipelagoConnectionInfo") { return; }
-            ArchipelagoConnectionInfo message = e.ReadAs<ArchipelagoConnectionInfo>();
-            ArchipelagoConnect(message.HostUrl, message.Port, message.SlotName, message.Password, out var errorMessage);
-        }
-
-        public void OnPeerConnected(object sender, PeerConnectedEventArgs e)
-        {
-            ArchipelagoConnectionInfo message = State.APConnectionInfo;
-            _helper.Multiplayer.SendMessage(message, "ArchipelagoConnectionInfo", modIDs: new[] { ModManifest.UniqueID }, playerIDs: new[] {e.Peer.PlayerID});
         }
 
         private void OnCommandConnectToArchipelago(string arg1, string[] arg2)
