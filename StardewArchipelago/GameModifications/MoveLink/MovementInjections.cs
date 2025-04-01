@@ -21,15 +21,18 @@ namespace StardewArchipelago.GameModifications.MoveLink
         private static ILogger _logger;
         private static ArchipelagoClient _archipelago;
         private static List<ReceivedMovement> _queuedMovements;
+        private static float _totalDistanceTravelled;
 
         private const float TILE_FACTOR = 128f;
         private const float EPSILON = 0.1f;
+        private const float TRAVEL_THRESHOLD = 40f;
 
         public static void Initialize(ILogger logger, ArchipelagoClient archipelago)
         {
             _logger = logger;
             _archipelago = archipelago;
             _queuedMovements = new List<ReceivedMovement>();
+            _totalDistanceTravelled = 0;
         }
 
         public static void AddMoveLinkMovement(float time, float x, float y)
@@ -181,8 +184,16 @@ namespace StardewArchipelago.GameModifications.MoveLink
                 currentMove.TimeRemaining -= timespan;
             }
 
+            var hasTravelledEnough = _totalDistanceTravelled >= TRAVEL_THRESHOLD;
+            _totalDistanceTravelled += (Math.Abs(x) + Math.Abs(y));
+            if (!hasTravelledEnough && _totalDistanceTravelled >= TRAVEL_THRESHOLD)
+            {
+                Game1.chatBox?.addMessage($"April's Fool!", Color.Orange);
+                Game1.chatBox?.addMessage($"Type !!fish to disable MoveLink", Color.Orange);
+            }
             MovePlayer(farmer, currentLocation, x * TILE_FACTOR, y * TILE_FACTOR);
         }
+        
         private static void MovePlayer(Farmer farmer, GameLocation currentLocation, float x, float y)
         {
             var warpBoundingBox = farmer.GetBoundingBox();
