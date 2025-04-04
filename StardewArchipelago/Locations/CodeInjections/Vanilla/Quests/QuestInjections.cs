@@ -290,9 +290,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
 
         private static List<string> CreateWeightedMissingLocations()
         {
-            var hints = _archipelago.GetHints()
-                .Where(x => !x.Found && _archipelago.GetPlayerName(x.FindingPlayer) == _archipelago.SlotData.SlotName)
-                .ToArray();
+            var hints = _archipelago.GetMyActiveDesiredHints();
             var numberOfSteps = GetNumberOfHelpWantedGroups();
             var remainingHelpWantedQuests = new List<string>();
             for (var groupNumber = 1; groupNumber <= numberOfSteps; groupNumber++)

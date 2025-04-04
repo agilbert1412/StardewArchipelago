@@ -26,7 +26,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
         {
             _logger = logger;
             _archipelago = archipelago;
-            _myActiveHints = _archipelago.GetMyActiveHints();
+            _myActiveHints = _archipelago.GetMyActiveDesiredHints();
             var random = new Random((int)Game1.uniqueIDForThisGame);
             var validTips = ArchipelagoTips.Keys.Skip(1).Where(x => ArchipelagoTips[x]()).ToList();
             var firstTip = ArchipelagoTips.First().Key;
@@ -47,7 +47,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
-                _myActiveHints = _archipelago.GetMyActiveHints();
+                _myActiveHints = _archipelago.GetMyActiveDesiredHints();
 
 
                 if (_lastDayCheckedLotL != Game1.stats.DaysPlayed)

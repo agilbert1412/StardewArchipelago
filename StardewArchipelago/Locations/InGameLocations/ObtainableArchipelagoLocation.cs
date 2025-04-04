@@ -83,21 +83,23 @@ namespace StardewArchipelago.Locations.InGameLocations
 
             _locationChecker = locationChecker;
 
-            var isHinted = myActiveHints.Any(hint => archipelago.GetLocationName(hint.LocationId).Equals(locationName, StringComparison.OrdinalIgnoreCase));
+            var relatedHint = myActiveHints.FirstOrDefault(hint => archipelago.GetLocationName(hint.LocationId).Equals(locationName, StringComparison.OrdinalIgnoreCase));
             var scoutedLocation = archipelago.ScoutSingleLocation(LocationName);
 
-            var desiredTextureName = GetCorrectTexture(scoutedLocation, isHinted);
+            var desiredTextureName = GetCorrectTexture(scoutedLocation, relatedHint);
             _archipelagoTexture = ArchipelagoTextures.GetArchipelagoLogo(logger, modHelper, 48, desiredTextureName);
 
 
             _description = scoutedLocation == null ? ScoutedLocation.GenericItemName() : scoutedLocation.ToString();
         }
         
-        private static string GetCorrectTexture(ScoutedLocation scoutedLocation, bool isHinted)
+        private static string GetCorrectTexture(ScoutedLocation scoutedLocation, Hint relatedHint)
         {
-            if (isHinted)
+            var hintTexture = GetHintTexture(relatedHint);
+
+            if (hintTexture != null)
             {
-                return ArchipelagoTextures.PLEADING;
+                return hintTexture;
             }
 
             if (scoutedLocation.ClassificationFlags.HasFlag(ItemFlags.Advancement))
@@ -105,17 +107,37 @@ namespace StardewArchipelago.Locations.InGameLocations
                 return ArchipelagoTextures.PROGRESSION;
             }
 
-            if (scoutedLocation.ClassificationFlags.HasFlag(ItemFlags.NeverExclude))
-            {
-                return ArchipelagoTextures.COLOR;
-            }
-
             if (scoutedLocation.ClassificationFlags.HasFlag(ItemFlags.Trap))
             {
                 return ArchipelagoTextures.RED;
             }
 
+            if (scoutedLocation.ClassificationFlags.HasFlag(ItemFlags.NeverExclude))
+            {
+                return ArchipelagoTextures.COLOR;
+            }
+
             return ArchipelagoTextures.BLACK;
+        }
+
+        private static string GetHintTexture(Hint relatedHint)
+        {
+            if (relatedHint == null || relatedHint.Found)
+            {
+                return null;
+            }
+
+            if (relatedHint.Status == HintStatus.Priority)
+            {
+                return ArchipelagoTextures.PLEADING;
+            }
+
+            if (relatedHint.Status == HintStatus.Avoid)
+            {
+                return ArchipelagoTextures.RED;
+            }
+
+            return null;
         }
 
         public override void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth,
