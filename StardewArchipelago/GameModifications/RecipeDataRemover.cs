@@ -192,6 +192,21 @@ namespace StardewArchipelago.GameModifications
             {
                 var recipeData = craftingRecipesData[recipeName];
                 var recipeUnlockCondition = GetCraftingRecipeUnlockCondition(recipeData);
+
+                foreach (var farmer in Game1.getAllFarmers())
+                {
+                    var knowsRecipe = farmer.craftingRecipes.ContainsKey(recipeName);
+                    var shouldKnowRecipe = _archipelago.HasReceivedItem($"{recipeName} Recipe");
+                    if (knowsRecipe && !shouldKnowRecipe)
+                    {
+                        farmer.craftingRecipes.Remove(recipeName);
+                    }
+                    else if (!knowsRecipe && shouldKnowRecipe && !farmer.mailForTomorrow.Any(x => x.Contains(recipeName)) && (!farmer.mailbox.Any(x => x.Contains(recipeName))))
+                    {
+                        farmer.craftingRecipes.Add(recipeName, 0);
+                    }
+                }
+
                 if (!recipeUnlockCondition.Equals("default", StringComparison.InvariantCultureIgnoreCase))
                 {
                     continue;
@@ -199,13 +214,6 @@ namespace StardewArchipelago.GameModifications
 
                 var modifiedRecipe = recipeData.Replace(recipeUnlockCondition, "none");
                 craftingRecipesData[recipeName] = modifiedRecipe;
-                foreach (var farmer in Game1.getAllFarmers())
-                {
-                    if (farmer.craftingRecipes.ContainsKey(recipeName) && !_archipelago.HasReceivedItem($"{recipeName} Recipe"))
-                    {
-                        farmer.craftingRecipes.Remove(recipeName);
-                    }
-                }
             }
         }
 
