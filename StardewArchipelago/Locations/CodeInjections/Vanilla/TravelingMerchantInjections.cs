@@ -471,7 +471,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
             var scamName = _merchantApItemNames[random.Next(0, _merchantApItemNames.Length)];
             var myActiveHints = _archipelago.GetMyActiveHints();
-            var apLocation = new ObtainableArchipelagoLocation(scamName, chosenApItem, _logger, _modHelper, _locationChecker, _archipelago, myActiveHints);
+            var apLocation = new ObtainableArchipelagoLocation(scamName, chosenApItem, _logger, _modHelper, _locationChecker, _archipelago, myActiveHints, true);
             var price = _merchantPrices[random.Next(0, _merchantPrices.Length)];
 
             yield return new ItemQueryResult(apLocation)
