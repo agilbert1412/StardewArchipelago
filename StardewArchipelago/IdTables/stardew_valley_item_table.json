@@ -34,7 +34,7 @@
         },
         "Progressive Movie Theater": {
             "code": 717022,
-            "classification": "progression"
+            "classification": "progression|trap"
         },
         "Stardrop": {
             "code": 717023,
@@ -3280,6 +3280,10 @@
             "code": 722291,
             "classification": "filler"
         },
+        "Resource Pack: 20 Cinder Shard": {
+            "code": 722292,
+            "classification": "filler"
+        },
         "Luck Level": {
             "code": 727001,
             "classification": "progression"
@@ -3710,6 +3714,10 @@
         },
         "Morgan's Schooling": {
             "code": 727520,
+            "classification": "progression"
+        },
+        "Aurora Vineyard Reclamation": {
+            "code": 727521,
             "classification": "progression"
         },
         "Magic Elixir Recipe": {

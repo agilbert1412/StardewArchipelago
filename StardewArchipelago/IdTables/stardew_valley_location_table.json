@@ -1266,7 +1266,7 @@
         },
         "Junimo Kart: Secret Level": {
             "code": 717614,
-            "region": "Junimo Kart 2"
+            "region": "Junimo Kart 4"
         },
         "Junimo Kart: The Gem Sea Giant": {
             "code": 717615,
@@ -1294,7 +1294,7 @@
         },
         "Junimo Kart: Sunset Speedway (Victory)": {
             "code": 717621,
-            "region": "Junimo Kart 3"
+            "region": "Junimo Kart 4"
         },
         "Old Master Cannoli": {
             "code": 717701,
@@ -11750,6 +11750,22 @@
         },
         "Craft Advanced Recycling Machine": {
             "code": 724435,
+            "region": "Farm"
+        },
+        "Craft Copper Slot Machine": {
+            "code": 724440,
+            "region": "Farm"
+        },
+        "Craft Gold Slot Machine": {
+            "code": 724441,
+            "region": "Farm"
+        },
+        "Craft Iridium Slot Machine": {
+            "code": 724442,
+            "region": "Farm"
+        },
+        "Craft Radioactive Slot Machine": {
+            "code": 724443,
             "region": "Farm"
         },
         "Magic Elixir Recipe": {
