@@ -12,15 +12,11 @@ namespace StardewArchipelago.GameModifications.CodeInjections
     {
         private static ILogger _logger;
         private static ArchipelagoClient _archipelago;
-        private static bool _shouldPrankOnFishDay;
-        private static bool _shouldPrankOnOtherDays;
 
         public static void Initialize(ILogger logger, ArchipelagoClient archipelago)
         {
             _logger = logger;
             _archipelago = archipelago;
-            _shouldPrankOnFishDay = true;
-            _shouldPrankOnOtherDays = false;
         }
 
         // public void holdUpItemThenMessage(Item item, int countAdded, bool showMessage = true)
@@ -34,7 +30,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 }
 
                 // We skip this whole method when skipping hold up animations is true
-                if (!ModEntry.Instance.Config.SkipHoldUpAnimations || ShouldPrank())
+                if (!ModEntry.Instance.Config.SkipHoldUpAnimations || FoolManager.ShouldDoZeldaPrank())
                 {
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
@@ -56,7 +52,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         {
             try
             {
-                if (!ShouldPrank())
+                if (!FoolManager.ShouldDoZeldaPrank())
                 {
                     return;
                 }
@@ -75,7 +71,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         {
             try
             {
-                if (!ShouldPrank())
+                if (!FoolManager.ShouldDoZeldaPrank())
                 {
                     return;
                 }
@@ -117,46 +113,6 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             if (Game1.random.NextDouble() < 0.2)
             {
                 Game1.chatBox.addMessage("April's Fool! use !!fool to disable", Color.Gold);
-            }
-        }
-
-        public static bool IsPrankDay()
-        {
-            return DateTime.Now.Month == 4 && DateTime.Now.Day == 1;
-        }
-
-        internal static bool ShouldPrank()
-        {
-            return IsPrankDay() ? _shouldPrankOnFishDay : _shouldPrankOnOtherDays;
-        }
-
-        internal static void TogglePrank()
-        {
-            if (IsPrankDay())
-            {
-                if (_shouldPrankOnFishDay)
-                {
-                    _shouldPrankOnFishDay = false;
-                    Game1.chatBox.addMessage("Oh, the fun's already over?", Color.Gold);
-                }
-                else
-                {
-                    _shouldPrankOnFishDay = true;
-                    Game1.chatBox.addMessage("Welcome back", Color.Gold);
-                }
-            }
-            else
-            {
-                if (_shouldPrankOnOtherDays)
-                {
-                    _shouldPrankOnOtherDays = false;
-                    Game1.chatBox.addMessage("That's what I thought.", Color.Gold);
-                }
-                else
-                {
-                    _shouldPrankOnOtherDays = true;
-                    Game1.chatBox.addMessage("Really? You actually like this?", Color.Gold);
-                }
             }
         }
     }

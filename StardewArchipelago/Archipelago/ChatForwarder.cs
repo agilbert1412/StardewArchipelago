@@ -324,12 +324,15 @@ namespace StardewArchipelago.Archipelago
                 message != $"{COMMAND_PREFIX}fool" &&
                 message != $"{COMMAND_PREFIX}fools" &&
                 message != $"{COMMAND_PREFIX}aprilfool" &&
-                message != $"{COMMAND_PREFIX}aprilsfool")
+                message != $"{COMMAND_PREFIX}aprilsfool" &&
+                message != $"{COMMAND_PREFIX}movelink" &&
+                message != $"{COMMAND_PREFIX}move" &&
+                message != $"{COMMAND_PREFIX}link")
             {
                 return false;
             }
 
-            ZeldaAnimationInjections.TogglePrank();
+            FoolManager.TogglePrank(false);
             return true;
         }
 
@@ -530,9 +533,12 @@ namespace StardewArchipelago.Archipelago
             {
                 Game1.chatBox?.addMessage($"{COMMAND_PREFIX}gift [slotName] - Sends your currently held item stack to a chosen player as a gift", Color.Gold);
             }
-            Game1.chatBox?.addMessage($"{COMMAND_PREFIX}letters - Toggle Hiding Empty Archipelago Letters", Color.Gold);
             Game1.chatBox?.addMessage($"{COMMAND_PREFIX}unstuck - Nudge your character if you are stuck in a wall", Color.Gold);
             Game1.chatBox?.addMessage($"{COMMAND_PREFIX}sleep - Immediately pass out, ending the day", Color.Gold);
+            if (FoolManager.IsPrankDay())
+            {
+                Game1.chatBox?.addMessage($"{COMMAND_PREFIX}fish - Enable/Disable the April's Fool Prank", Color.Orange);
+            }
 #if DEBUG
             Game1.chatBox?.addMessage($"{COMMAND_PREFIX}sprite - Enable/Disable the sprite randomizer", Color.Gold);
             Game1.chatBox?.addMessage($"{COMMAND_PREFIX}sync - Sends a Sync packet to the Archipelago server", Color.Gold);

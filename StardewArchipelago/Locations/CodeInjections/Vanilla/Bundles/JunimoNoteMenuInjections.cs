@@ -161,36 +161,23 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         {
             try
             {
-                var apAreaToScout = "???";
-                switch ((Area)whichArea)
+                string apLocationToScout;
+                if (__instance.specificBundlePage)
                 {
-                    case Area.Pantry:
-                        apAreaToScout = CommunityCenterInjections.AP_LOCATION_PANTRY;
-                        break;
-                    case Area.CraftsRoom:
-                        apAreaToScout = CommunityCenterInjections.AP_LOCATION_CRAFTS_ROOM;
-                        break;
-                    case Area.FishTank:
-                        apAreaToScout = CommunityCenterInjections.AP_LOCATION_FISH_TANK;
-                        break;
-                    case Area.BoilerRoom:
-                        apAreaToScout = CommunityCenterInjections.AP_LOCATION_BOILER_ROOM;
-                        break;
-                    case Area.Vault:
-                        apAreaToScout = CommunityCenterInjections.AP_LOCATION_VAULT;
-                        break;
-                    case Area.Bulletin:
-                        apAreaToScout = CommunityCenterInjections.AP_LOCATION_BULLETIN_BOARD;
-                        break;
-                    case Area.AbandonedJojaMart:
-                        apAreaToScout = CommunityCenterInjections.AP_LOCATION_ABANDONED_JOJA_MART;
-                        break;
-                    default:
-                        __result = "???";
-                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+                    if (!TryGetBundleLocationToScout(__instance, out apLocationToScout))
+                    {
+                        return MethodPrefix.RUN_ORIGINAL_METHOD;
+                    }
+                }
+                else
+                {
+                    if (!TryGetRoomLocationToScout(whichArea, out apLocationToScout))
+                    {
+                        return MethodPrefix.RUN_ORIGINAL_METHOD;
+                    }
                 }
 
-                var scoutedItem = _archipelago.ScoutSingleLocation(apAreaToScout);
+                var scoutedItem = _archipelago.ScoutSingleLocation(apLocationToScout, true);
                 var rewardText = $"Reward: {scoutedItem.PlayerName}'s {scoutedItem.GetItemName(StringExtensions.TurnHeartsIntoStardewHearts)}";
                 __result = rewardText;
                 return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
@@ -202,23 +189,64 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
         }
 
+        private static bool TryGetBundleLocationToScout(JunimoNoteMenu junimoNoteMenu, out string apLocationToScout)
+        {
+            var bundle = junimoNoteMenu.currentPageBundle;
+            if (bundle == null)
+            {
+                apLocationToScout = "";
+                return false;
+            }
+
+            apLocationToScout = bundle.name + " Bundle";
+            return true;
+        }
+
+        private static bool TryGetRoomLocationToScout(int whichArea, out string apAreaToScout)
+        {
+            apAreaToScout = "???";
+            switch ((Area)whichArea)
+            {
+                case Area.Pantry:
+                    apAreaToScout = CommunityCenterInjections.AP_LOCATION_PANTRY;
+                    break;
+                case Area.CraftsRoom:
+                    apAreaToScout = CommunityCenterInjections.AP_LOCATION_CRAFTS_ROOM;
+                    break;
+                case Area.FishTank:
+                    apAreaToScout = CommunityCenterInjections.AP_LOCATION_FISH_TANK;
+                    break;
+                case Area.BoilerRoom:
+                    apAreaToScout = CommunityCenterInjections.AP_LOCATION_BOILER_ROOM;
+                    break;
+                case Area.Vault:
+                    apAreaToScout = CommunityCenterInjections.AP_LOCATION_VAULT;
+                    break;
+                case Area.Bulletin:
+                    apAreaToScout = CommunityCenterInjections.AP_LOCATION_BULLETIN_BOARD;
+                    break;
+                case Area.AbandonedJojaMart:
+                    apAreaToScout = CommunityCenterInjections.AP_LOCATION_ABANDONED_JOJA_MART;
+                    break;
+                default:
+                    apAreaToScout = "???";
+                    return false;
+            }
+            return true;
+        }
+
         // public override void draw(SpriteBatch b)
         public static void Draw_AddCurrencyBoxes_Postfix(JunimoNoteMenu __instance, SpriteBatch b)
         {
             try
             {
-                var specificBundlePageField = _modHelper.Reflection.GetField<bool>(__instance, "specificBundlePage");
-                var specificBundlePage = specificBundlePageField.GetValue();
-                if (!specificBundlePage || !Game1.player.hasOrWillReceiveMail("canReadJunimoText"))
+                if (!__instance.specificBundlePage || !Game1.player.hasOrWillReceiveMail("canReadJunimoText"))
                 {
                     Game1.specialCurrencyDisplay.ShowCurrency(null);
                     return;
                 }
 
-                // private Bundle currentPageBundle;
-                var currentPageBundleField = _modHelper.Reflection.GetField<Bundle>(__instance, "currentPageBundle");
-                var currentPageBundle = currentPageBundleField.GetValue();
-                var ingredient = currentPageBundle.ingredients.Last();
+                var ingredient = __instance.currentPageBundle.ingredients.Last();
                 var ingredientId = ingredient.id;
                 if (ingredientId == IDProvider.MONEY)
                 {
@@ -289,25 +317,19 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         {
             try
             {
-                // private bool specificBundlePage;
-                var specificBundlePageField = _modHelper.Reflection.GetField<bool>(__instance, "specificBundlePage");
-                if (!JunimoNoteMenu.canClick || __instance.scrambledText || !specificBundlePageField.GetValue() || __instance.purchaseButton == null || !__instance.purchaseButton.containsPoint(x, y))
+                if (!JunimoNoteMenu.canClick || __instance.scrambledText || !__instance.specificBundlePage || __instance.purchaseButton == null || !__instance.purchaseButton.containsPoint(x, y))
                 {
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
-                // private Bundle currentPageBundle;
-                var currentPageBundleField = _modHelper.Reflection.GetField<Bundle>(__instance, "currentPageBundle");
-                var currentPageBundle = currentPageBundleField.GetValue();
-
-                var ingredient = currentPageBundle.ingredients.Last();
+                var ingredient = __instance.currentPageBundle.ingredients.Last();
                 var currency = ingredient.id;
                 if (currency == IDProvider.MONEY)
                 {
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
-                TryPurchaseCurrentBundle(__instance, ingredient, currentPageBundle);
+                TryPurchaseCurrentBundle(__instance, ingredient, __instance.currentPageBundle);
                 return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
@@ -394,9 +416,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             communityCenter.bundles.FieldDict[currentPageBundle.bundleIndex][0] = true;
             junimoNote.checkForRewards();
             var flag = junimoNote.bundles.Any(bundle => !bundle.complete && !bundle.Equals(currentPageBundle));
-            // private int whichArea;
-            var whichAreaField = _modHelper.Reflection.GetField<int>(junimoNote, "whichArea");
-            var whichArea = whichAreaField.GetValue();
+            var whichArea = junimoNote.whichArea;
             if (!flag)
             {
                 // private void restoreAreaOnExit()

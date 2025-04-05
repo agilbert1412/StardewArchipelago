@@ -62,6 +62,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             BookInjections.Initialize(logger, modHelper, archipelago, locationChecker, qosManager);
             InitializeWalnutsanityInjections(logger, modHelper, archipelago, locationChecker);
             EventInjections.Initialize(logger, modHelper, archipelago, locationChecker);
+            ScoutInjections.Initialize(logger, modHelper, archipelago, locationChecker);
             InitializeSecretsInjections(logger, modHelper, archipelago, locationChecker);
         }
 

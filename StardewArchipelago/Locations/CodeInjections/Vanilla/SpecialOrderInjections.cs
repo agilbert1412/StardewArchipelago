@@ -245,7 +245,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
             var specialOrderInstances = CreateSpecialOrderInstancesForType(specialOrdersThatCanBeStartedToday, orderType, random);
 
-            var hints = _archipelago.GetHints().Where(x => !x.Found && _archipelago.GetPlayerName(x.FindingPlayer) == _archipelago.SlotData.SlotName).ToArray();
+            var hints = _archipelago.GetMyActiveDesiredHints();
 
             ChooseTwoOrders(specialOrderInstances, hints, random);
         }

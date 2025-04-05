@@ -97,13 +97,22 @@ namespace StardewArchipelago.GameModifications
 
                 var modifiedRecipe = recipeData.Replace(recipeUnlockCondition, "none");
                 cookingRecipesData[recipeName] = modifiedRecipe;
-                foreach (var farmer in Game1.getAllFarmers())
+                SynchronizeCookingRecipeState(recipeName);
+            }
+        }
+        private void SynchronizeCookingRecipeState(string recipeName)
+        {
+            if (!_archipelago.MakeSureConnected())
+            {
+                return;
+            }
+
+            foreach (var farmer in Game1.getAllFarmers())
+            {
+                if (farmer == null) continue;
+                if (farmer.cookingRecipes.ContainsKey(recipeName) && !_archipelago.HasReceivedItem($"{recipeName} Recipe"))
                 {
-                    if (farmer == null) continue;
-                    if (farmer.cookingRecipes.ContainsKey(recipeName) && !_archipelago.HasReceivedItem($"{recipeName} Recipe"))
-                    {
-                        farmer.cookingRecipes.Remove(recipeName);
-                    }
+                    farmer.cookingRecipes.Remove(recipeName);
                 }
             }
         }
@@ -122,11 +131,38 @@ namespace StardewArchipelago.GameModifications
                 var unlockConditionParts = recipeUnlockCondition.Split(" ");
                 var isVanillaSkillUnlock = unlockConditionParts.Length >= 3 && unlockConditionParts[0] == "s";
                 var isBirbCoreSkillUnlock = IsBirbCoreSkillUnlock(unlockConditionParts);
-                if (isVanillaSkillUnlock || isBirbCoreSkillUnlock)
+                if (!isVanillaSkillUnlock && !isBirbCoreSkillUnlock)
                 {
-                    var modifiedRecipe = recipeData.Replace(recipeUnlockCondition, "none");
-                    cookingRecipesData[recipeName] = modifiedRecipe;
+                    continue;
                 }
+
+                var modifiedRecipe = recipeData.Replace(recipeUnlockCondition, "none");
+                cookingRecipesData[recipeName] = modifiedRecipe;
+                SynchronizeSkillsCookingRecipesState(recipeName);
+            }
+        }
+        private void SynchronizeSkillsCookingRecipesState(string recipeName)
+        {
+            if (!_archipelago.MakeSureConnected())
+            {
+                return;
+            }
+
+            var recipeKey = $"{recipeName} Recipe";
+            var knowsRecipe = Game1.player.cookingRecipes.ContainsKey(recipeName);
+            var shouldKnowRecipe = _archipelago.HasReceivedItem(recipeKey);
+            if (knowsRecipe == shouldKnowRecipe)
+            {
+                return;
+            }
+
+            if (knowsRecipe)
+            {
+                Game1.player.cookingRecipes.Remove(recipeName);
+            }
+            else
+            {
+                Game1.player.cookingRecipes.Add(recipeName, 0);
             }
         }
 
@@ -175,6 +211,9 @@ namespace StardewArchipelago.GameModifications
             {
                 var recipeData = craftingRecipesData[recipeName];
                 var recipeUnlockCondition = GetCraftingRecipeUnlockCondition(recipeData);
+
+                SynchronizeCraftingRecipesState(recipeName);
+
                 if (!recipeUnlockCondition.Equals("default", StringComparison.InvariantCultureIgnoreCase))
                 {
                     continue;
@@ -182,13 +221,30 @@ namespace StardewArchipelago.GameModifications
 
                 var modifiedRecipe = recipeData.Replace(recipeUnlockCondition, "none");
                 craftingRecipesData[recipeName] = modifiedRecipe;
-                foreach (var farmer in Game1.getAllFarmers())
+            }
+        }
+        private void SynchronizeCraftingRecipesState(string recipeName)
+        {
+            if (!_archipelago.MakeSureConnected())
+            {
+                return;
+            }
+
+            foreach (var farmer in Game1.getAllFarmers())
+            {
+                var knowsRecipe = farmer.craftingRecipes.ContainsKey(recipeName);
+                var shouldKnowRecipe = _archipelago.HasReceivedItem($"{recipeName} Recipe");
+                if (knowsRecipe && !shouldKnowRecipe)
                 {
                     if (farmer == null) continue;
                     if (farmer.craftingRecipes.ContainsKey(recipeName) && !_archipelago.HasReceivedItem($"{recipeName} Recipe"))
                     {
                         farmer.craftingRecipes.Remove(recipeName);
                     }
+                }
+                else if (!knowsRecipe && shouldKnowRecipe && !farmer.mailForTomorrow.Any(x => x.Contains(recipeName)) && (!farmer.mailbox.Any(x => x.Contains(recipeName))))
+                {
+                    farmer.craftingRecipes.Add(recipeName, 0);
                 }
             }
         }

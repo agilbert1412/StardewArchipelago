@@ -358,7 +358,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
         private static Dictionary<Object, string> GetAllHintedDonatableItems(IEnumerable<Object> allMissingDonatableItems)
         {
-            var hints = _archipelago.GetHints().Where(x => !x.Found && _archipelago.GetPlayerName(x.FindingPlayer) == _archipelago.SlotData.SlotName).ToArray();
+            var hints = _archipelago.GetMyActiveDesiredHints();
             var donatableItems = new Dictionary<Object, string>();
             foreach (var donatableItem in allMissingDonatableItems)
             {

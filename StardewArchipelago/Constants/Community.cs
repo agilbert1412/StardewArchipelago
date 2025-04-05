@@ -7,6 +7,7 @@ namespace StardewArchipelago.Constants
         {
             "Albrekka",
             "Alchav",
+            "Alexa913",
             "Angela",
             "angelrosewood",
             "Angkelic",

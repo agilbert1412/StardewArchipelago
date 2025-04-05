@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Archipelago.MultiClient.Net.Models;
 using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using Microsoft.Xna.Framework;
@@ -66,8 +65,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 }
 
                 _lastShopMenuUpdated = __instance;
-                var myActiveHints = _archipelago.GetMyActiveHints();
-                ReplaceCraftsanityRecipes(__instance, myActiveHints);
+                ReplaceCraftsanityRecipes(__instance);
 
                 __instance.forSale = __instance.itemPriceAndStock.Keys.ToList();
                 return; //  run original logic
@@ -80,7 +78,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         }
 
 
-        private static void ReplaceCraftsanityRecipes(ShopMenu shopMenu, Hint[] myActiveHints)
+        private static void ReplaceCraftsanityRecipes(ShopMenu shopMenu)
         {
             if (_archipelago.SlotData.Craftsanity != Craftsanity.All)
             {

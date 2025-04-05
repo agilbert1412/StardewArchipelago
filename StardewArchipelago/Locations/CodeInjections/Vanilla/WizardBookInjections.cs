@@ -44,9 +44,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 {
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
-                var firstWord = action[0];
 
-                if (firstWord != "WizardBook")
+                if (!ArgUtility.TryGet(action, 0, out var actionName, out _, name: "string actionType"))
+                {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
+                if (actionName != "WizardBook")
                 {
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }

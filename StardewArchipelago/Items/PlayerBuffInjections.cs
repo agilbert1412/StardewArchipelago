@@ -16,6 +16,8 @@ namespace StardewArchipelago.Items
 {
     public class PlayerBuffInjections
     {
+        private const int STAMINA_AMOUNT = 12;
+
         private static ILogger _logger;
         private static IModHelper _helper;
         private static ArchipelagoClient _archipelago;
@@ -26,12 +28,14 @@ namespace StardewArchipelago.Items
         private static int _numberOfDefenseBonuses = 0;
         private static int _numberOfImmunityBonuses = 0;
         // private static int _numberOfHealthBonuses = 0; // Handled as an unlock
-        private static int _numberOfEnergyBonuses = 0;
+        private static int _numberOfStaminaBonuses = 0;
         private static int _numberOfBiteRateBonuses = 0;
         private static int _numberOfFishTrapBonuses = 0;
         private static int _numberOfFishingBarBonuses = 0;
         // private static int _numberOfQualityBonuses = 0; // I might implement this someday
         // private static int _numberOfGlowBonuses = 0; // I might implement this someday
+
+        public static int CurrentStaminaBonus => STAMINA_AMOUNT * _numberOfStaminaBonuses;
 
         public static void Initialize(ILogger logger, IModHelper helper, ArchipelagoClient archipelago)
         {
@@ -47,7 +51,7 @@ namespace StardewArchipelago.Items
             _numberOfDamageBonuses = GetNumberOfBuff(APItem.DAMAGE_BONUS);
             _numberOfDefenseBonuses = GetNumberOfBuff(APItem.DEFENSE_BONUS);
             _numberOfImmunityBonuses = GetNumberOfBuff(APItem.IMMUNITY_BONUS);
-            _numberOfEnergyBonuses = GetNumberOfBuff(APItem.ENERGY_BONUS);
+            _numberOfStaminaBonuses = GetNumberOfBuff(APItem.ENERGY_BONUS);
             _numberOfBiteRateBonuses = GetNumberOfBuff(APItem.BITE_RATE_BONUS);
             _numberOfFishTrapBonuses = GetNumberOfBuff(APItem.FISH_TRAP_BONUS);
             _numberOfFishingBarBonuses = GetNumberOfBuff(APItem.FISHING_BAR_SIZE_BONUS, 65); // If you max out every possible fishing buff from every source, and add 65 of these, it makes the bar take exactly the whole height of the minigame
@@ -166,7 +170,7 @@ namespace StardewArchipelago.Items
         {
             try
             {
-                var bonusStamina = (12 * _numberOfEnergyBonuses);
+                var bonusStamina = CurrentStaminaBonus;
                 __result += bonusStamina;
                 return;
             }

@@ -12,6 +12,10 @@ using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Locations;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
+using Microsoft.Xna.Framework;
+using StardewArchipelago.Items;
+using StardewArchipelago.Textures;
 using StardewArchipelago.Logging;
 
 namespace StardewArchipelago.Goals
@@ -333,7 +337,7 @@ namespace StardewArchipelago.Goals
                 return;
             }
 
-            if (Game1.player.maxStamina.Value < 508)
+            if (Game1.player.maxStamina.Value < (508 + PlayerBuffInjections.CurrentStaminaBonus))
             {
                 return;
             }
@@ -520,13 +524,13 @@ namespace StardewArchipelago.Goals
         {
             try
             {
-                if (who.MaxStamina < 508)
+                if (who.maxStamina.Value < 508)
                 {
                     return;
                 }
 
                 who.ClearBuffs();
-                if (who.MaxStamina < 508)
+                if (who.maxStamina.Value < 508)
                 {
                     return;
                 }

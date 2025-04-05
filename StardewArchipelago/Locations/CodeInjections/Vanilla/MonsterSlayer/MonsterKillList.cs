@@ -108,7 +108,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
                 MonsterGoals.Remove(MonsterName.TIGER_SLIME);
             }
 
-            if (_archipelago.SlotData.SpecialOrderLocations.HasFlag(SpecialOrderLocations.Qi))
+            if (!_archipelago.SlotData.SpecialOrderLocations.HasFlag(SpecialOrderLocations.Qi))
             {
                 MonsterGoals.Remove(MonsterName.ROYAL_SERPENT);
                 MonsterGoals.Remove(MonsterName.SKELETON_MAGE);
@@ -196,6 +196,19 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
             if (killCount >= target)
             {
                 lineFormat = Game1.content.LoadString("Strings\\Locations:AdventureGuild_KillList_LineFormat_OverTarget");
+                if (DefaultMonsterGoals.ContainsKey(monsterType) && killCount < DefaultMonsterGoals[monsterType])
+                {
+                    lineFormat += $" ({DefaultMonsterGoals[monsterType]} for perfection)";
+                }
+                else if (MonsterCategories.ContainsKey(monsterType))
+                {
+                    var category = MonsterCategories[monsterType];
+                    var totalKillCount = MonstersByCategory[category].Sum(GetMonstersKilled);
+                    if (DefaultMonsterGoals.ContainsKey(category) && totalKillCount < DefaultMonsterGoals[category])
+                    {
+                        lineFormat += $" ({DefaultMonsterGoals[category]} {category} for perfection)";
+                    }
+                }
             }
 
             var line = string.Format(lineFormat, killCount, target, monsterType) + "^";

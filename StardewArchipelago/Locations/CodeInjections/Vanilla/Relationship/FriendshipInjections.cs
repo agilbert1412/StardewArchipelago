@@ -167,8 +167,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
         {
             try
             {
-                var hints = _archipelago.GetHints().Where(x => !x.Found && _archipelago.GetPlayerName(x.FindingPlayer) == _archipelago.SlotData.SlotName);
-                var hintedLocationNames = hints.Select(hint => _archipelago.GetLocationName(hint.LocationId)).Where(hint => hint.StartsWith($"Friendsanity: ")).ToArray();
+                var hints = _archipelago.GetMyActiveDesiredHints();
+                var hintedLocationNames = hints.Select(hint => _archipelago.GetLocationName(hint.LocationId)).Where(hintName => hintName.StartsWith($"Friendsanity: ")).ToArray();
                 _hintedFriendshipLocations = hintedLocationNames;
                 return;
             }

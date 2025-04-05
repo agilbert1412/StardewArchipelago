@@ -4,17 +4,21 @@ using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
 using Archipelago.Gifting.Net.Service;
+using Archipelago.MultiClient.Net;
 using Archipelago.MultiClient.Net.BounceFeatures.DeathLink;
 using Archipelago.MultiClient.Net.Enums;
 using Archipelago.MultiClient.Net.MessageLog.Messages;
+using Archipelago.MultiClient.Net.Packets;
 using HarmonyLib;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Extensions;
+using StardewArchipelago.GameModifications.MoveLink;
 using StardewArchipelago.GameModifications.Testing;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Minigames;
 
 namespace StardewArchipelago.Archipelago
 {
@@ -151,6 +155,18 @@ namespace StardewArchipelago.Archipelago
                     Game1.chatBox?.addMessage(fullMessage, color);
                     return;
                 }
+            }
+        }
+
+        protected override void OnPacketReceived(ArchipelagoPacketBase packet)
+        {
+            switch (packet)
+            {
+                case BouncePacket bouncePacket:
+                    MovementInjections.HandleBouncePacket(bouncePacket);
+                    break;
+                default:
+                    return;
             }
         }
 

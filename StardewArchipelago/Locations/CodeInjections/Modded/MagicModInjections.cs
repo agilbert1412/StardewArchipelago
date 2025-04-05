@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Archipelago.MultiClient.Net.Models;
 using KaitoKid.ArchipelagoUtilities.Net;
 using Microsoft.Xna.Framework;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
@@ -119,7 +118,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         }
 
 
-        private static void ReplaceCraftsanityRecipes(ShopMenu shopMenu, Hint[] myActiveHints)
+        private static void ReplaceCraftsanityRecipes(ShopMenu shopMenu)
         {
             if (_archipelago.SlotData.Craftsanity != Craftsanity.All)
             {
@@ -156,8 +155,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                 RemoveGuildRecipesFromPhone(__instance);
 
                 _lastShopMenuUpdated = __instance;
-                var myActiveHints = _archipelago.GetMyActiveHints();
-                ReplaceCraftsanityRecipes(__instance, myActiveHints);
+                ReplaceCraftsanityRecipes(__instance);
 
                 __instance.forSale = __instance.itemPriceAndStock.Keys.ToList();
                 return; //  run original logic
