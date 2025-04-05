@@ -139,7 +139,17 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             try
             {
-                if (action == null || !who.IsLocalPlayer || action[0] != "MineElevator")
+                if (action == null || !who.IsLocalPlayer)
+                {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
+                if (!ArgUtility.TryGet(action, 0, out var actionName, out _, name: "string actionType"))
+                {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
+                if (actionName != "MineElevator")
                 {
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
