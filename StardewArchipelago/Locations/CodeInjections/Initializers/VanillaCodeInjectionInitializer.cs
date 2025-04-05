@@ -61,6 +61,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             BookInjections.Initialize(logger, modHelper, archipelago, locationChecker, qosManager);
             InitializeWalnutsanityInjections(logger, modHelper, archipelago, locationChecker);
             EventInjections.Initialize(logger, modHelper, archipelago, locationChecker);
+            ScoutInjections.Initialize(logger, modHelper, archipelago, locationChecker);
         }
 
         private static void InitializeArcadeMachines(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker)

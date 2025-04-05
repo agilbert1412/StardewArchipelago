@@ -107,6 +107,7 @@ namespace StardewArchipelago.Locations.Patcher
             PatchNightWorldEvents();
             PatchBooks();
             PatchWalnuts();
+            PatchScouts();
         }
 
         public void CleanEvents()
@@ -1405,6 +1406,14 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony.Patch(
                 original: AccessTools.Method(typeof(VolcanoDungeon), nameof(VolcanoDungeon.monsterDrop)),
                 prefix: new HarmonyMethod(typeof(WalnutRepeatablesInjections), nameof(WalnutRepeatablesInjections.MonsterDrop_RepeatableVolcanoMonsterWalnut_Prefix))
+            );
+        }
+
+        private void PatchScouts()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(IClickableMenu), nameof(IClickableMenu.exitThisMenu)),
+                prefix: new HarmonyMethod(typeof(ScoutInjections), nameof(ScoutInjections.ExitThisMenu_ScoutShopContent_Prefix))
             );
         }
     }

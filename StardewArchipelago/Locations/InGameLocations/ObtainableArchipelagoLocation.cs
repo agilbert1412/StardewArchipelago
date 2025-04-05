@@ -67,11 +67,11 @@ namespace StardewArchipelago.Locations.InGameLocations
             }
         }
 
-        public ObtainableArchipelagoLocation(string locationName, LogHandler logger, IModHelper modHelper, LocationChecker locationChecker, ArchipelagoClient archipelago, Hint[] myActiveHints, bool autoHint) : this(locationName, locationName, logger, modHelper, locationChecker, archipelago, myActiveHints, autoHint)
+        public ObtainableArchipelagoLocation(string locationName, LogHandler logger, IModHelper modHelper, LocationChecker locationChecker, ArchipelagoClient archipelago, Hint[] myActiveHints) : this(locationName, locationName, logger, modHelper, locationChecker, archipelago, myActiveHints)
         {
         }
 
-        public ObtainableArchipelagoLocation(string locationDisplayName, string locationName, LogHandler logger, IModHelper modHelper, LocationChecker locationChecker, ArchipelagoClient archipelago, Hint[] myActiveHints, bool autoHint)
+        public ObtainableArchipelagoLocation(string locationDisplayName, string locationName, LogHandler logger, IModHelper modHelper, LocationChecker locationChecker, ArchipelagoClient archipelago, Hint[] myActiveHints)
         {
             // Prefix removed for now, because the inconsistency makes it ugly
             // var prefix = locationDisplayName.Length < 18 ? ARCHIPELAGO_PREFIX : ARCHIPELAGO_NO_PREFIX;
@@ -84,7 +84,7 @@ namespace StardewArchipelago.Locations.InGameLocations
             _locationChecker = locationChecker;
 
             var relatedHint = myActiveHints.FirstOrDefault(hint => archipelago.GetLocationName(hint.LocationId).Equals(locationName, StringComparison.OrdinalIgnoreCase));
-            var scoutedLocation = archipelago.ScoutSingleLocation(LocationName, autoHint);
+            var scoutedLocation = archipelago.ScoutSingleLocation(LocationName);
 
             var desiredTextureName = GetCorrectTexture(scoutedLocation, relatedHint);
             _archipelagoTexture = ArchipelagoTextures.GetArchipelagoLogo(logger, modHelper, 48, desiredTextureName);
@@ -228,7 +228,7 @@ namespace StardewArchipelago.Locations.InGameLocations
                     _activeHints = archipelago.GetMyActiveHints();
                     _lastTimeUpdatedActiveHints = currentTime;
                 }
-                var item = new ObtainableArchipelagoLocation(locationName.Trim(), logger, modHelper, locationChecker, archipelago, _activeHints, true);
+                var item = new ObtainableArchipelagoLocation(locationName.Trim(), logger, modHelper, locationChecker, archipelago, _activeHints);
                 return new ItemQueryResult[] { new(item) };
             }
 
