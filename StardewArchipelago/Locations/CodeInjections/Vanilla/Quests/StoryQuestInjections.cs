@@ -133,9 +133,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
-                var actionFirstWord = action[0];
+                if (!ArgUtility.TryGet(action, 0, out var actionName, out _, name: "string actionType"))
+                {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
 
-                if (actionFirstWord != "LumberPile" || who.hasOrWillReceiveMail("TH_LumberPile") || !who.hasOrWillReceiveMail("TH_SandDragon"))
+                if (actionName != "LumberPile" || who.hasOrWillReceiveMail("TH_LumberPile") || !who.hasOrWillReceiveMail("TH_SandDragon"))
                 {
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
