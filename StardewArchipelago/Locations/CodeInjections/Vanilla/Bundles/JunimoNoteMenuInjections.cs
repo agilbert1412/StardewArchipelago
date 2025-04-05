@@ -178,7 +178,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 }
 
                 var scoutedItem = _archipelago.ScoutSingleLocation(apLocationToScout, true);
-                var rewardText = $"Reward: {scoutedItem.PlayerName}'s {scoutedItem.GetItemName(StringExtensions.TurnHeartsIntoStardewHearts)}";
+                var playerName = "Unknown Player";
+                var itemName = "Unknown Item";
+                if (scoutedItem != null)
+                {
+                    itemName = scoutedItem.GetItemName(StringExtensions.TurnHeartsIntoStardewHearts);
+                    playerName = scoutedItem.PlayerName;
+                }
+                var rewardText = $"Reward: {playerName}'s {itemName}";
                 __result = rewardText;
                 return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
