@@ -18,7 +18,7 @@ Everything on this list is available for free, for individuals.
 
 - C# IDE (I use [Visual Studio Community](https://visualstudio.microsoft.com/vs/community/))
 - Python IDE if you intend to modify the apworld (I use [PyCharm](https://www.jetbrains.com/pycharm/))
-- Git client (most IDEs come with a built-in one, but I prefer to use [TortoiseGit](https://tortoisegit.org/)
+- Git client (most IDEs come with a built-in one, but I prefer to use [TortoiseGit](https://tortoisegit.org/))
 - Stardew Valley (duh. I use the [Steam Version](https://store.steampowered.com/app/413150/Stardew_Valley/))
 - [SMAPI](https://smapi.io/)
 - [.NET 6 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/6.0)
