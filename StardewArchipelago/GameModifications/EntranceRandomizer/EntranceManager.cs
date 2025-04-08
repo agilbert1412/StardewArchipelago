@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Archipelago.SlotData;
 using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.Extensions;
 using StardewArchipelago.Serialization;

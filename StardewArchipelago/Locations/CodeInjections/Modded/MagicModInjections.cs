@@ -5,6 +5,7 @@ using KaitoKid.ArchipelagoUtilities.Net;
 using Microsoft.Xna.Framework;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Archipelago.SlotData;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;

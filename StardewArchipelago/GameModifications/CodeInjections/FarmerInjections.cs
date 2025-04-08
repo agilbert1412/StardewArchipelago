@@ -4,6 +4,7 @@ using StardewArchipelago.Archipelago;
 using StardewValley;
 using StardewArchipelago.Constants.Vanilla;
 using System.Linq;
+using StardewArchipelago.Archipelago.SlotData;
 using Object = StardewValley.Object;
 
 namespace StardewArchipelago.GameModifications.CodeInjections

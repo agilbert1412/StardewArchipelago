@@ -16,6 +16,7 @@ using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Archipelago.SlotData;
 using StardewArchipelago.Logging;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla

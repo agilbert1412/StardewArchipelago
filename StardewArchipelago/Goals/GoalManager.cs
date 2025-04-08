@@ -2,6 +2,7 @@
 using HarmonyLib;
 using KaitoKid.ArchipelagoUtilities.Net;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Archipelago.SlotData;
 using StardewArchipelago.Logging;
 using StardewModdingAPI;
 using StardewValley;

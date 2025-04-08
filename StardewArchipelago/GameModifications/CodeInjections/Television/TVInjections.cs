@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Archipelago.SlotData;
 using StardewValley;
 using StardewValley.Constants;
 using StardewValley.Objects;

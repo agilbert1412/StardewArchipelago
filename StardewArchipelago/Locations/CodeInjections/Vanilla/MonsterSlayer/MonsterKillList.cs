@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Force.DeepCloner;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Archipelago.SlotData;
 using StardewArchipelago.Constants.Vanilla;
 using StardewValley;
 

@@ -35,7 +35,7 @@ namespace StardewArchipelago.Archipelago
         public override string ModName => _manifest.Name;
         public override string ModVersion => _manifest.Version.ToString();
 
-        public SlotData SlotData => (SlotData)_slotData;
+        public SlotData.SlotData SlotData => (SlotData.SlotData)_slotData;
         public IGiftingService GiftingService { get; private set; }
 
         public StardewArchipelagoClient(ILogger logger, IModHelper modHelper, IManifest manifest, Harmony harmony, Action itemReceivedFunction, IJsonLoader jsonLoader, TesterFeatures testerFeatures) :
@@ -49,7 +49,7 @@ namespace StardewArchipelago.Archipelago
 
         protected override void InitializeSlotData(string slotName, Dictionary<string, object> slotDataFields)
         {
-            _slotData = new SlotData(slotName, slotDataFields, Logger, _testerFeatures);
+            _slotData = new SlotData.SlotData(slotName, slotDataFields, Logger, _testerFeatures);
         }
 
         public override bool ConnectToMultiworld(ArchipelagoConnectionInfo connectionInfo, out string errorMessage)

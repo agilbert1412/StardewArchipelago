@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Archipelago.SlotData;
 using StardewValley;
 using StardewValley.Monsters;
 

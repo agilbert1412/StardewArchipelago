@@ -5,6 +5,7 @@ using Archipelago.MultiClient.Net.Models;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Archipelago.SlotData;
 using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.Extensions;
 using StardewValley;

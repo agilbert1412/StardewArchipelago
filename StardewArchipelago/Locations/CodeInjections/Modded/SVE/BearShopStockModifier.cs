@@ -8,6 +8,7 @@ using StardewValley;
 using StardewValley.GameData.Shops;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Archipelago.SlotData;
 using StardewArchipelago.Constants.Vanilla;
 
 namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE

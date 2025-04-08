@@ -4,6 +4,7 @@ using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using Microsoft.Xna.Framework;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Archipelago.SlotData;
 using StardewArchipelago.Goals;
 using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;

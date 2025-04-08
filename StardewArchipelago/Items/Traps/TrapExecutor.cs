@@ -20,6 +20,7 @@ using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
 using System.Threading;
 using Archipelago.MultiClient.Net.Enums;
+using StardewArchipelago.Archipelago.SlotData;
 using StardewValley.Network.ChestHit;
 using Object = StardewValley.Object;
 using StardewArchipelago.GameModifications.MultiSleep;

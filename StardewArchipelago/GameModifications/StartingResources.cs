@@ -3,6 +3,7 @@ using System.Linq;
 using KaitoKid.ArchipelagoUtilities.Net;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Archipelago.SlotData;
 using StardewArchipelago.Extensions;
 using StardewArchipelago.GameModifications.CodeInjections;
 using StardewArchipelago.Stardew;

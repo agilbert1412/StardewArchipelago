@@ -5,6 +5,7 @@ using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Archipelago.SlotData;
 using StardewArchipelago.Constants;
 using StardewArchipelago.GameModifications.EntranceRandomizer;
 using StardewArchipelago.Logging;

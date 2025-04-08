@@ -14,6 +14,7 @@ using StardewArchipelago.Archipelago;
 using StardewArchipelago.Locations;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using Microsoft.Xna.Framework;
+using StardewArchipelago.Archipelago.SlotData;
 using StardewArchipelago.Items;
 using StardewArchipelago.Textures;
 using StardewArchipelago.Logging;

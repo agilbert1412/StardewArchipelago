@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Archipelago.SlotData;
 using StardewArchipelago.Stardew;
 
 namespace StardewArchipelago.Items.Traps

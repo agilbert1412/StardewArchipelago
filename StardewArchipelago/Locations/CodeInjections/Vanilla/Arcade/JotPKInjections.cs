@@ -7,6 +7,7 @@ using StardewValley;
 using StardewValley.Minigames;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Archipelago.SlotData;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Arcade
 {

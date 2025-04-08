@@ -5,6 +5,7 @@ using HarmonyLib;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Archipelago.SlotData;
 using StardewArchipelago.GameModifications.CodeInjections;
 using StardewArchipelago.GameModifications.CodeInjections.Bundles;
 using StardewArchipelago.GameModifications.CodeInjections.Television;
