@@ -11,7 +11,6 @@ namespace StardewArchipelago.Archipelago.SlotData
 {
     public class SlotData : ISlotData
     {
-
         private readonly Dictionary<string, object> _slotDataFields;
         private readonly ILogger _logger;
 
@@ -74,60 +73,60 @@ namespace StardewArchipelago.Archipelago.SlotData
             _slotDataFields = slotDataFields;
             _logger = logger;
 
-            Goal = GetSlotSetting(GOAL_KEY, Goal.CommunityCenter);
-            var farmType = GetSlotSetting(FARM_TYPE_KEY, SupportedFarmType.Standard);
+            Goal = GetSlotSetting(SlotDataKeys.GOAL_KEY, Goal.CommunityCenter);
+            var farmType = GetSlotSetting(SlotDataKeys.FARM_TYPE_KEY, SupportedFarmType.Standard);
             FarmType = new FarmType(farmType);
-            StartingMoney = GetSlotSetting(STARTING_MONEY_KEY, 500);
-            ProfitMargin = GetSlotSetting(PROFIT_MARGIN_KEY, 100) / 100.0;
-            BundlesData = GetSlotSetting(MODIFIED_BUNDLES_KEY, "");
-            EntranceRandomization = GetSlotSetting(ENTRANCE_RANDOMIZATION_KEY, EntranceRandomization.Disabled);
-            SeasonRandomization = GetSlotSetting(SEASON_RANDOMIZATION_KEY, SeasonRandomization.Disabled);
-            Cropsanity = GetSlotSetting(CROPSANITY_KEY, Cropsanity.Disabled);
-            BackpackProgression = GetSlotSetting(BACKPACK_PROGRESSION_KEY, BackpackProgression.Progressive);
-            BackpackSize = GetSlotSetting(BACKPACK_SIZE_KEY, 12);
-            ToolProgression = GetSlotSetting(TOOL_PROGRESSION_KEY, ToolProgression.Progressive);
-            ElevatorProgression = GetSlotSetting(ELEVATOR_PROGRESSION_KEY, ElevatorProgression.ProgressiveFromPreviousFloor);
-            SkillProgression = GetSlotSetting(SKILLS_PROGRESSION_KEY, SkillsProgression.Progressive);
-            BuildingProgression = GetSlotSetting(BUILDING_PROGRESSION_KEY, BuildingProgression.Progressive);
-            FestivalLocations = GetSlotSetting(FESTIVAL_OBJECTIVES_KEY, FestivalLocations.Easy);
-            ArcadeMachineLocations = GetSlotSetting(ARCADE_MACHINES_KEY, ArcadeLocations.FullShuffling);
-            SpecialOrderLocations = GetSlotSetting(SPECIAL_ORDERS_KEY, SpecialOrderLocations.Board);
-            QuestLocations = new QuestLocations(GetSlotSetting(QUEST_LOCATIONS_KEY, 0));
-            Fishsanity = GetSlotSetting(FISHSANITY_KEY, Fishsanity.None);
-            Museumsanity = GetSlotSetting(MUSEUMSANITY_KEY, Museumsanity.None);
-            Monstersanity = GetSlotSetting(MONSTERSANITY_KEY, Monstersanity.None);
-            Shipsanity = GetSlotSetting(SHIPSANITY_KEY, Shipsanity.None);
-            Cooksanity = GetSlotSetting(COOKSANITY_KEY, Cooksanity.None);
-            Chefsanity = GetSlotSetting(CHEFSANITY_KEY, Chefsanity.Vanilla);
-            Craftsanity = GetSlotSetting(CRAFTSANITY_KEY, Craftsanity.None);
-            Friendsanity = GetSlotSetting(FRIENDSANITY_KEY, Friendsanity.None);
-            FriendsanityHeartSize = GetSlotSetting(FRIENDSANITY_HEART_SIZE_KEY, 4);
-            Booksanity = GetSlotSetting(BOOKSANITY_KEY, Booksanity.None);
+            StartingMoney = GetSlotSetting(SlotDataKeys.STARTING_MONEY_KEY, 500);
+            ProfitMargin = GetSlotSetting(SlotDataKeys.PROFIT_MARGIN_KEY, 100) / 100.0;
+            BundlesData = GetSlotSetting(SlotDataKeys.MODIFIED_BUNDLES_KEY, "");
+            EntranceRandomization = GetSlotSetting(SlotDataKeys.ENTRANCE_RANDOMIZATION_KEY, EntranceRandomization.Disabled);
+            SeasonRandomization = GetSlotSetting(SlotDataKeys.SEASON_RANDOMIZATION_KEY, SeasonRandomization.Disabled);
+            Cropsanity = GetSlotSetting(SlotDataKeys.CROPSANITY_KEY, Cropsanity.Disabled);
+            BackpackProgression = GetSlotSetting(SlotDataKeys.BACKPACK_PROGRESSION_KEY, BackpackProgression.Progressive);
+            BackpackSize = GetSlotSetting(SlotDataKeys.BACKPACK_SIZE_KEY, 12);
+            ToolProgression = GetSlotSetting(SlotDataKeys.TOOL_PROGRESSION_KEY, ToolProgression.Progressive);
+            ElevatorProgression = GetSlotSetting(SlotDataKeys.ELEVATOR_PROGRESSION_KEY, ElevatorProgression.ProgressiveFromPreviousFloor);
+            SkillProgression = GetSlotSetting(SlotDataKeys.SKILLS_PROGRESSION_KEY, SkillsProgression.Progressive);
+            BuildingProgression = GetSlotSetting(SlotDataKeys.BUILDING_PROGRESSION_KEY, BuildingProgression.Progressive);
+            FestivalLocations = GetSlotSetting(SlotDataKeys.FESTIVAL_OBJECTIVES_KEY, FestivalLocations.Easy);
+            ArcadeMachineLocations = GetSlotSetting(SlotDataKeys.ARCADE_MACHINES_KEY, ArcadeLocations.FullShuffling);
+            SpecialOrderLocations = GetSlotSetting(SlotDataKeys.SPECIAL_ORDERS_KEY, SpecialOrderLocations.Board);
+            QuestLocations = new QuestLocations(GetSlotSetting(SlotDataKeys.QUEST_LOCATIONS_KEY, 0));
+            Fishsanity = GetSlotSetting(SlotDataKeys.FISHSANITY_KEY, Fishsanity.None);
+            Museumsanity = GetSlotSetting(SlotDataKeys.MUSEUMSANITY_KEY, Museumsanity.None);
+            Monstersanity = GetSlotSetting(SlotDataKeys.MONSTERSANITY_KEY, Monstersanity.None);
+            Shipsanity = GetSlotSetting(SlotDataKeys.SHIPSANITY_KEY, Shipsanity.None);
+            Cooksanity = GetSlotSetting(SlotDataKeys.COOKSANITY_KEY, Cooksanity.None);
+            Chefsanity = GetSlotSetting(SlotDataKeys.CHEFSANITY_KEY, Chefsanity.Vanilla);
+            Craftsanity = GetSlotSetting(SlotDataKeys.CRAFTSANITY_KEY, Craftsanity.None);
+            Friendsanity = GetSlotSetting(SlotDataKeys.FRIENDSANITY_KEY, Friendsanity.None);
+            FriendsanityHeartSize = GetSlotSetting(SlotDataKeys.FRIENDSANITY_HEART_SIZE_KEY, 4);
+            Booksanity = GetSlotSetting(SlotDataKeys.BOOKSANITY_KEY, Booksanity.None);
             Walnutsanity = GetSlotWalnutsanitySetting();
             Secretsanity = GetSlotSecretsanitySetting();
-            ExcludeGingerIsland = GetSlotSetting(EXCLUDE_GINGER_ISLAND_KEY, true);
-            TrapItemsDifficulty = GetSlotSetting(TRAP_DIFFICULTY_KEY, TrapItemsDifficulty.Medium, TRAP_ITEMS_KEY);
-            EnableMultiSleep = GetSlotSetting(MULTI_SLEEP_ENABLED_KEY, true);
-            MultiSleepCostPerDay = GetSlotSetting(MULTI_SLEEP_COST_KEY, 0);
-            ExperienceMultiplier = GetSlotSetting(EXPERIENCE_MULTIPLIER_KEY, 100) / 100.0;
-            FriendshipMultiplier = GetSlotSetting(FRIENDSHIP_MULTIPLIER_KEY, 100) / 100.0;
-            DebrisMultiplier = GetSlotSetting(DEBRIS_MULTIPLIER_KEY, DebrisMultiplier.HalfDebris);
-            BundlePrice = GetSlotSetting(BUNDLE_PRICE_KEY, BundlePrice.Normal);
-            QuickStart = GetSlotSetting(QUICK_START_KEY, false);
-            Gifting = GetSlotSetting(GIFTING_KEY, true);
+            ExcludeGingerIsland = GetSlotSetting(SlotDataKeys.EXCLUDE_GINGER_ISLAND_KEY, true);
+            TrapItemsDifficulty = GetSlotSetting(SlotDataKeys.TRAP_DIFFICULTY_KEY, TrapItemsDifficulty.Medium, SlotDataKeys.TRAP_ITEMS_KEY);
+            EnableMultiSleep = GetSlotSetting(SlotDataKeys.MULTI_SLEEP_ENABLED_KEY, true);
+            MultiSleepCostPerDay = GetSlotSetting(SlotDataKeys.MULTI_SLEEP_COST_KEY, 0);
+            ExperienceMultiplier = GetSlotSetting(SlotDataKeys.EXPERIENCE_MULTIPLIER_KEY, 100) / 100.0;
+            FriendshipMultiplier = GetSlotSetting(SlotDataKeys.FRIENDSHIP_MULTIPLIER_KEY, 100) / 100.0;
+            DebrisMultiplier = GetSlotSetting(SlotDataKeys.DEBRIS_MULTIPLIER_KEY, DebrisMultiplier.HalfDebris);
+            BundlePrice = GetSlotSetting(SlotDataKeys.BUNDLE_PRICE_KEY, BundlePrice.Normal);
+            QuickStart = GetSlotSetting(SlotDataKeys.QUICK_START_KEY, false);
+            Gifting = GetSlotSetting(SlotDataKeys.GIFTING_KEY, true);
             Banking = true;
-            DeathLink = GetSlotSetting(DEATH_LINK_KEY, false);
-            Seed = GetSlotSetting(SEED_KEY, "");
-            MultiworldVersion = GetSlotSetting(MULTIWORLD_VERSION_KEY, "");
-            var newEntrancesStringData = GetSlotSetting(MODIFIED_ENTRANCES_KEY, "");
+            DeathLink = GetSlotSetting(SlotDataKeys.DEATH_LINK_KEY, false);
+            Seed = GetSlotSetting(SlotDataKeys.SEED_KEY, "");
+            MultiworldVersion = GetSlotSetting(SlotDataKeys.MULTIWORLD_VERSION_KEY, "");
+            var newEntrancesStringData = GetSlotSetting(SlotDataKeys.MODIFIED_ENTRANCES_KEY, "");
             ModifiedEntrances = JsonConvert.DeserializeObject<Dictionary<string, string>>(newEntrancesStringData);
-            var modsString = GetSlotSetting(MOD_LIST_KEY, "");
+            var modsString = GetSlotSetting(SlotDataKeys.MOD_LIST_KEY, "");
             var mods = JsonConvert.DeserializeObject<List<string>>(modsString);
             Mods = new ModsManager(_logger, testerFeatures, mods);
 
 #if TILESANITY
-            Tilesanity = GetSlotSetting(TILESANITY_KEY, Tilesanity.Nope);
-            TilesanitySize = GetSlotSetting(TILESANITY_SIZE_KEY, 1);
+            Tilesanity = GetSlotSetting(SlotDataKeys.TILESANITY_KEY, Tilesanity.Nope);
+            TilesanitySize = GetSlotSetting(SlotDataKeys.TILESANITY_SIZE_KEY, 1);
 #endif
         }
 
@@ -199,10 +198,10 @@ namespace StardewArchipelago.Archipelago.SlotData
 
         private Walnutsanity GetSlotWalnutsanitySetting()
         {
-            return GetSlotOptionSetSetting<Walnutsanity>(WALNUTSANITY_KEY);
+            return GetSlotOptionSetSetting<Walnutsanity>(SlotDataKeys.WALNUTSANITY_KEY);
 
             var walnutsanityValues = Walnutsanity.None;
-            var walnutsanityJson = GetSlotSetting(WALNUTSANITY_KEY, "");
+            var walnutsanityJson = GetSlotSetting(SlotDataKeys.WALNUTSANITY_KEY, "");
             if (string.IsNullOrWhiteSpace(walnutsanityJson))
             {
                 return walnutsanityValues;
@@ -226,7 +225,7 @@ namespace StardewArchipelago.Archipelago.SlotData
 
         private Secretsanity GetSlotSecretsanitySetting()
         {
-            return GetSlotOptionSetSetting<Secretsanity>(SECRETSANITY_KEY);
+            return GetSlotOptionSetSetting<Secretsanity>(SlotDataKeys.SECRETSANITY_KEY);
         }
 
         public TEnum GetSlotOptionSetSetting<TEnum>(string key) where TEnum : struct, Enum
