@@ -7,65 +7,10 @@ using StardewArchipelago.GameModifications.Testing;
 using StardewValley;
 using StardewValley.GameData;
 
-namespace StardewArchipelago.Archipelago
+namespace StardewArchipelago.Archipelago.SlotData
 {
     public class SlotData : ISlotData
     {
-        private const string GOAL_KEY = "goal";
-        private const string FARM_TYPE_KEY = "farm_type";
-        private const string STARTING_MONEY_KEY = "starting_money";
-        private const string PROFIT_MARGIN_KEY = "profit_margin";
-        private const string ENTRANCE_RANDOMIZATION_KEY = "entrance_randomization";
-        private const string SEASON_RANDOMIZATION_KEY = "season_randomization";
-        private const string CROPSANITY_KEY = "cropsanity";
-        private const string BACKPACK_PROGRESSION_KEY = "backpack_progression";
-        private const string BACKPACK_SIZE_KEY = "backpack_size";
-        private const string TOOL_PROGRESSION_KEY = "tool_progression";
-        private const string ELEVATOR_PROGRESSION_KEY = "elevator_progression";
-        private const string SKILLS_PROGRESSION_KEY = "skill_progression";
-        private const string BUILDING_PROGRESSION_KEY = "building_progression";
-        private const string FESTIVAL_OBJECTIVES_KEY = "festival_locations";
-        private const string ARCADE_MACHINES_KEY = "arcade_machine_locations";
-        private const string SPECIAL_ORDERS_KEY = "special_order_locations";
-        private const string QUEST_LOCATIONS_KEY = "quest_locations";
-        private const string FISHSANITY_KEY = "fishsanity";
-        private const string MUSEUMSANITY_KEY = "museumsanity";
-        private const string MONSTERSANITY_KEY = "monstersanity";
-        private const string SHIPSANITY_KEY = "shipsanity";
-        private const string COOKSANITY_KEY = "cooksanity";
-        private const string CHEFSANITY_KEY = "chefsanity";
-        private const string CRAFTSANITY_KEY = "craftsanity";
-        private const string FRIENDSANITY_KEY = "friendsanity";
-        private const string FRIENDSANITY_HEART_SIZE_KEY = "friendsanity_heart_size";
-        private const string BOOKSANITY_KEY = "booksanity";
-        private const string WALNUTSANITY_KEY = "walnutsanity";
-        private const string SECRETSANITY_KEY = "secretsanity";
-        private const string EXCLUDE_GINGER_ISLAND_KEY = "exclude_ginger_island";
-        private const string TRAP_ITEMS_KEY = "trap_items";
-        private const string TRAP_DIFFICULTY_KEY = "trap_difficulty";
-        private const string MULTI_SLEEP_ENABLED_KEY = "multiple_day_sleep_enabled";
-        private const string MULTI_SLEEP_COST_KEY = "multiple_day_sleep_cost";
-        private const string EXPERIENCE_MULTIPLIER_KEY = "experience_multiplier";
-        private const string FRIENDSHIP_MULTIPLIER_KEY = "friendship_multiplier";
-        private const string DEBRIS_MULTIPLIER_KEY = "debris_multiplier";
-        private const string QUICK_START_KEY = "quick_start";
-        private const string GIFTING_KEY = "gifting";
-        private const string BANKING_KEY = "banking";
-        private const string BANK_TAX_KEY = "bank_tax";
-        private const string BUNDLE_PRICE_KEY = "bundle_price";
-        private const string DEATH_LINK_KEY = "death_link";
-        private const string SEED_KEY = "seed";
-        private const string MODIFIED_BUNDLES_KEY = "modified_bundles";
-        private const string MODIFIED_ENTRANCES_KEY = "randomized_entrances";
-        // private const string RANDOMIZE_NPC_APPEARANCES_KEY = "randomize_appearances";
-        // private const string RANDOMIZE_NPC_APPEARANCES_DAILY_KEY = "randomize_appearances_daily";
-        private const string MULTIWORLD_VERSION_KEY = "client_version";
-        private const string MOD_LIST_KEY = "mods";
-
-#if TILESANITY
-        private const string TILESANITY_KEY = "tilesanity";
-        private const string TILESANITY_SIZE_KEY = "tilesanity_size";
-#endif
 
         private readonly Dictionary<string, object> _slotDataFields;
         private readonly ILogger _logger;
