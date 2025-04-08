@@ -44,6 +44,7 @@ namespace StardewArchipelago.Archipelago.SlotData
         public int FriendsanityHeartSize { get; private set; }
         public Booksanity Booksanity { get; private set; }
         public Walnutsanity Walnutsanity { get; private set; }
+        public Moviesanity Moviesanity { get; private set; }
         public Secretsanity Secretsanity { get; private set; }
         public bool ExcludeGingerIsland { get; private set; }
         public TrapItemsDifficulty TrapItemsDifficulty { get; set; }
