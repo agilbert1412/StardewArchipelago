@@ -1,8 +1,10 @@
 ﻿using System;
 using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using StardewValley;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
+using StardewValley.Locations;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -20,18 +22,19 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             _locationChecker = locationChecker;
         }
 
-        // 
-        public static void Method_Patch_Postfix(GameLocation __instance)
+        // public void RequestEndMovie(long uid)
+        public static bool RequestEndMovie_SendMoviesanityLocations_Prefix(MovieTheater __instance, long uid)
         {
             try
             {
+                // Now we can run code here. This code will run BEFORE the original method, every time it is called.
 
-                return;
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed in {nameof(Method_Patch_Postfix)}:\n{ex}");
-                return;
+                _logger.LogError($"Failed in {nameof(RequestEndMovie_SendMoviesanityLocations_Prefix)}:\n{ex}");
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
     }
