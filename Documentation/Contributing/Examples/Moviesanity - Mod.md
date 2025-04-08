@@ -18,9 +18,11 @@ First, we need to read the moviesanity fields from slot data. Later on, we will 
 
 #### Add the key to `StardewArchipelago.Archipelago.SlotData.SlotDataKeys.cs`
 
+This is the name of the field, as it will come from the Apworld
+
 [Commit](https://github.com/agilbert1412/StardewArchipelago/commit/47a6d6e054283d7083a84fa1b91b86831097be4d)
 
-![image](https://i.imgur.com/49K3ZnI.png)
+![image](https://i.imgur.com/3mf1zcp.png)
 
 #### Create the enum for the Moviesanity values
 
@@ -31,3 +33,19 @@ These values need to match the values used in the Apworld.
 ![image](https://i.imgur.com/LQPV6IV.png)
 
 ![image](https://i.imgur.com/yBe0yHv.png)
+
+#### Add Moviesanity to the SlotData Class
+
+This is where the value will be stored for the duration of the play session
+
+[Commit](https://github.com/agilbert1412/StardewArchipelago/commit/92daeeca15dbbc755b96ccc63e6422808e9004f6)
+
+![image](https://i.imgur.com/iqScwFE.png)
+
+#### Read Moviesanity from the slot data fields and assign it to the SlotData
+
+We usually pick a default value of "None" here, so that if the Apworld does not provide the setting, it's probably an older version that also doesn't want to trigger subsequent code for it.
+
+[Commit](https://github.com/agilbert1412/StardewArchipelago/commit/037796179f623fd94e2f916e4b23cb076c67cda5)
+
+![image](https://i.imgur.com/vxDLv6D.png)
