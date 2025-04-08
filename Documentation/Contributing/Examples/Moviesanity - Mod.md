@@ -19,6 +19,7 @@ First, we need to read the moviesanity fields from slot data. Later on, we will 
 #### Add the key to `StardewArchipelago.Archipelago.SlotData.SlotDataKeys.cs`
 
 [Commit](https://github.com/agilbert1412/StardewArchipelago/commit/47a6d6e054283d7083a84fa1b91b86831097be4d)
+
 ![image](https://i.imgur.com/49K3ZnI.png)
 
 #### Create the enum for the Moviesanity values
@@ -26,5 +27,7 @@ First, we need to read the moviesanity fields from slot data. Later on, we will 
 These values need to match the values used in the Apworld.
 
 [Commit](https://github.com/agilbert1412/StardewArchipelago/commit/d62d99e223ce6b9b4e557e29d9195d03b043cdb2)
+
 ![image](https://i.imgur.com/LQPV6IV.png)
+
 ![image](https://i.imgur.com/yBe0yHv.png)
