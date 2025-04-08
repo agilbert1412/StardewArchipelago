@@ -103,6 +103,7 @@ namespace StardewArchipelago.Archipelago.SlotData
             FriendsanityHeartSize = GetSlotSetting(SlotDataKeys.FRIENDSANITY_HEART_SIZE, 4);
             Booksanity = GetSlotSetting(SlotDataKeys.BOOKSANITY, Booksanity.None);
             Walnutsanity = GetSlotWalnutsanitySetting();
+            Moviesanity = GetSlotSetting(SlotDataKeys.MOVIESANITY, Moviesanity.None);
             Secretsanity = GetSlotSecretsanitySetting();
             ExcludeGingerIsland = GetSlotSetting(SlotDataKeys.EXCLUDE_GINGER_ISLAND, true);
             TrapItemsDifficulty = GetSlotSetting(SlotDataKeys.TRAP_DIFFICULTY, TrapItemsDifficulty.Medium, SlotDataKeys.TRAP_ITEMS);
