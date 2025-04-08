@@ -77,20 +77,37 @@ Generally, I copy the definition of the method I'm patching, as a comment over a
 
 We also need to initialize the CodeInjections class. This will allow it to use structures like the ArchipelagoClient (send checks), and the logger (log errors and warnings), within the patches.
 
-This is done in VanillaCodeInjectionInitializer.cs
+This is done in `StardewArchipelago.Locations.CodeInjections.Initializers.VanillaCodeInjectionInitializer.cs`
 
 ![image](https://i.imgur.com/kOJehne.png)
 
-#### Writing the patch code
+#### Writing the patch code - [Commit](https://github.com/agilbert1412/StardewArchipelago/commit/44b87e50e0f0f2a629c431d43130f9b8c6d5cd8e)
 
-This one is what varies between features. Here, we want to send locations for the movie IF conditions are met, and for the snack IF conditions are met.
+Here, we want to send locations for the movie IF conditions are met, and for the snack IF conditions are met.
 
+This one is the part that varies between features, so the specific code I wrote is exclusive to movies and snacks, and will not be useful for other features.
 
+It is about 150 lines, so I recommend checking the commit details [here](https://github.com/agilbert1412/StardewArchipelago/commit/44b87e50e0f0f2a629c431d43130f9b8c6d5cd8e).
+
+The gist of it is, in the prefix patch, if we are currently about to finish the movie (state 1, about to be state 2), we check both the movie and snack locations.
+
+For the movie, we either check "Watch a movie", or the specific movie. We verify if someone was invited who loves the movie, if that setting was picked. Same for the snack condition.
+
+For the snack, we check the snack location. If the player chose the setting for requiring the snack to be loved, we verify this first.
+
+![image](https://i.imgur.com/Z1HLhSc.png)
+
+#### Applying the patch - [Commit](https://github.com/agilbert1412/StardewArchipelago/commit/e029690eb4394676cedc9554a306f1d0f8c1b186)
+
+Lastly, we need to apply the patch to the method. This is done in `StardewArchipelago.Locations.Patcher.VanillaLocationPatcher.cs`
+
+This uses harmony to set up the patch as a prefix on the original method.
+
+![image](https://i.imgur.com/toVNgvP.png)
 
 ### 3 - Patching the items
 
-
-
+TODO
 
 ### 4 - Testing
 
