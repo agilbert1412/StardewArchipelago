@@ -36,6 +36,7 @@ namespace StardewArchipelago.Archipelago.SlotData
         public const string FRIENDSANITY_HEART_SIZE = "friendsanity_heart_size";
         public const string BOOKSANITY = "booksanity";
         public const string WALNUTSANITY = "walnutsanity";
+        public const string MOVIESANITY = "moviesanity";
         public const string SECRETSANITY = "secretsanity";
         public const string EXCLUDE_GINGER_ISLAND = "exclude_ginger_island";
         public const string TRAP_ITEMS = "trap_items";
