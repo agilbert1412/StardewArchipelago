@@ -198,28 +198,6 @@ namespace StardewArchipelago.Archipelago.SlotData
         private Walnutsanity GetSlotWalnutsanitySetting()
         {
             return GetSlotOptionSetSetting<Walnutsanity>(SlotDataKeys.WALNUTSANITY_KEY);
-
-            var walnutsanityValues = Walnutsanity.None;
-            var walnutsanityJson = GetSlotSetting(SlotDataKeys.WALNUTSANITY_KEY, "");
-            if (string.IsNullOrWhiteSpace(walnutsanityJson))
-            {
-                return walnutsanityValues;
-            }
-            var walnutsanityItems = JsonConvert.DeserializeObject<List<string>>(walnutsanityJson);
-            if (walnutsanityItems == null)
-            {
-                return walnutsanityValues;
-            }
-
-            walnutsanityItems = walnutsanityItems.Select(x => x.Replace(" ", "")).ToList();
-            foreach (var walnutsanityValue in Enum.GetValues<Walnutsanity>())
-            {
-                if (walnutsanityItems.Contains(walnutsanityValue.ToString()))
-                {
-                    walnutsanityValues |= walnutsanityValue;
-                }
-            }
-            return walnutsanityValues;
         }
 
         private Secretsanity GetSlotSecretsanitySetting()
