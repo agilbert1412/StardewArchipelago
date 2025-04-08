@@ -24,6 +24,7 @@ using Microsoft.Xna.Framework.Content;
 using StardewArchipelago.Archipelago;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using StardewArchipelago.Archipelago.SlotData;
+using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.Locations.Secrets;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests

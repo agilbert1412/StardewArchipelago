@@ -70,7 +70,7 @@ public static class WalkSanityInjections
     public static bool IsUnlocked(string name)
     {
 #if TILESANITY
-        if (_archipelago.SlotData.Tilesanity < Archipelago.Tilesanity.Simplified)
+        if (_archipelago.SlotData.Tilesanity < Archipelago.SlotData.SlotEnums.Tilesanity.Simplified)
             return true;
 #endif
         if (name.Contains("FarmHouse"))

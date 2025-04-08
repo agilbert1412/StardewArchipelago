@@ -264,7 +264,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
 
         private static bool HandleRepeatableWalnuts(FarmerTeam __instance, string key, GameLocation location, int x, int y, int numberAlreadyDropped)
         {
-            if (!_archipelago.SlotData.Walnutsanity.HasFlag(Archipelago.SlotData.Walnutsanity.Repeatables))
+            if (!_archipelago.SlotData.Walnutsanity.HasFlag(Archipelago.SlotData.SlotEnums.Walnutsanity.Repeatables))
             {
                 return false;
             }
@@ -303,7 +303,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
 
         private static bool HandleDigSpotWalnuts(FarmerTeam __instance, string key, GameLocation location, int x, int y, int numberAlreadyDropped)
         {
-            if (!_archipelago.SlotData.Walnutsanity.HasFlag(Archipelago.SlotData.Walnutsanity.DigSpots))
+            if (!_archipelago.SlotData.Walnutsanity.HasFlag(Archipelago.SlotData.SlotEnums.Walnutsanity.DigSpots))
             {
                 return false;
             }
@@ -435,7 +435,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 numberWalnutsSoFar++;
                 Game1.player.team.limitedNutDrops[walnutKey] = numberWalnutsSoFar;
                 var itemToSpawnId = QualifiedItemIds.GOLDEN_WALNUT;
-                if (_archipelago.SlotData.Walnutsanity.HasFlag(Archipelago.SlotData.Walnutsanity.Repeatables))
+                if (_archipelago.SlotData.Walnutsanity.HasFlag(Archipelago.SlotData.SlotEnums.Walnutsanity.Repeatables))
                 {
                     var location = $"{apLocationName} {numberWalnutsSoFar}";
                     itemToSpawnId = IDProvider.CreateApLocationItemId(location);

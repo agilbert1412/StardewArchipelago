@@ -1,5 +1,5 @@
 ﻿#if TILESANITY
-namespace StardewArchipelago.Archipelago.SlotData
+namespace StardewArchipelago.Archipelago.SlotData.SlotEnums
 {
     public enum Tilesanity
     {

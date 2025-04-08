@@ -4,6 +4,7 @@ using KaitoKid.ArchipelagoUtilities.Net;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData;
+using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.Extensions;
 using StardewArchipelago.GameModifications.CodeInjections;
 using StardewArchipelago.Stardew;

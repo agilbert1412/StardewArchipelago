@@ -14,6 +14,7 @@ using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using Microsoft.Xna.Framework.Content;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData;
+using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 
 namespace StardewArchipelago.Locations.Festival
 {

@@ -5,6 +5,7 @@ using StardewValley;
 using StardewArchipelago.Constants.Vanilla;
 using System.Linq;
 using StardewArchipelago.Archipelago.SlotData;
+using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using Object = StardewValley.Object;
 
 namespace StardewArchipelago.GameModifications.CodeInjections

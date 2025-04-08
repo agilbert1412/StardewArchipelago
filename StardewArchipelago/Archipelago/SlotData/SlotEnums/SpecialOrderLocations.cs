@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace StardewArchipelago.Archipelago.SlotData
+namespace StardewArchipelago.Archipelago.SlotData.SlotEnums
 {
     [Flags]
     public enum SpecialOrderLocations

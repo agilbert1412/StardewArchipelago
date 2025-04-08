@@ -3,7 +3,7 @@ using System.Linq;
 using StardewValley;
 using StardewValley.GameData;
 
-namespace StardewArchipelago.Archipelago.SlotData
+namespace StardewArchipelago.Archipelago.SlotData.SlotEnums
 {
     public class FarmType
     {
