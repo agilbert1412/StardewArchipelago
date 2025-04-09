@@ -28,6 +28,26 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             _locationChecker = locationChecker;
         }
 
+        // public static List<MovieConcession> GetConcessionsForGuest(string npc_name)
+        public static bool GetConcessionsForGuest_OfferAllUnlockedSnacks_Prefix(string npc_name, ref List<MovieConcession> __result)
+        {
+            try
+            {
+                if (_archipelago.SlotData.Moviesanity < Moviesanity.AllMovies)
+                {
+                    // On "None" and "One", the snacks are not shuffled at all
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(RequestEndMovie_SendMoviesanityLocations_Prefix)}:\n{ex}");
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+        }
+
         // public void RequestEndMovie(long uid)
         public static bool RequestEndMovie_SendMoviesanityLocations_Prefix(MovieTheater __instance, long uid)
         {
