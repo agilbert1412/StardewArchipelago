@@ -142,7 +142,9 @@ From the wiki: "The game tries to populate the list with one loved snack, two li
 So, we have multiple options here, when some snacks are locked
 
 1: Let the game roll 5 snacks, then remove the locked ones. This can lead to an empty shop, even if the player has unlocked some snacks
+
 2: Do our custom rolling code that attempts to emulate the vanilla code, but only from unlocked snacks.
+
 3: Offer all unlocked snacks, instead of a random subset of them.
 
 I personally tend towards #3, because the Movies is already an annoying game mechanic as the player can only go once a week and can miss a critical movie and have to wait very long. Maybe making the snack selection less of a RNG-fest will make this more pleasant.
