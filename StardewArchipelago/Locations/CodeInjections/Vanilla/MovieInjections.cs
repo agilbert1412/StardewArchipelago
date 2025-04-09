@@ -35,7 +35,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             try
             {
-                if (_archipelago.SlotData.Moviesanity < Moviesanity.AllMovies)
+                if (_archipelago.SlotData.Moviesanity <= Moviesanity.One)
                 {
                     // On "None" and "One", the snacks are not shuffled at all
                     return MethodPrefix.RUN_ORIGINAL_METHOD;

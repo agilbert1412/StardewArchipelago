@@ -1727,6 +1727,16 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(typeof(MovieTheater), nameof(MovieTheater.RequestEndMovie)),
                 prefix: new HarmonyMethod(typeof(MovieInjections), nameof(MovieInjections.RequestEndMovie_SendMoviesanityLocations_Prefix))
             );
+
+            if (_archipelago.SlotData.Moviesanity <= Moviesanity.One)
+            {
+                return;
+            }
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(MovieTheater), nameof(MovieTheater.GetConcessionsForGuest), new[] { typeof(string) }),
+                prefix: new HarmonyMethod(typeof(MovieInjections), nameof(MovieInjections.GetConcessionsForGuest_OfferAllUnlockedSnacks_Prefix))
+            );
         }
     }
 }
