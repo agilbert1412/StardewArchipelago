@@ -90,6 +90,28 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
         }
 
+        // public void RequestEndMovie(long uid)
+        public static void RequestEndMovie_SendMoviesanityLocations_Postfix(MovieTheater __instance, long uid)
+        {
+            try
+            {
+                foreach (var farmer in Game1.getAllFarmers().Where(x => x != null))
+                {
+                    farmer.lastSeenMovieWeek.Value = -1;
+                }
+                Utility.ForEachVillager((npc) =>
+                {
+                    npc.lastSeenMovieWeek.Value = -1;
+                    return true;
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(RequestEndMovie_SendMoviesanityLocations_Postfix)}:\n{ex}");
+                return;
+            }
+        }
+
         private static void CheckMovieLocation(MovieTheater movieTheater)
         {
             var moviesanitySetting = _archipelago.SlotData.Moviesanity;

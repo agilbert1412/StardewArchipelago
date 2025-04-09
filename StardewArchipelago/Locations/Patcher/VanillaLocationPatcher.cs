@@ -1725,7 +1725,8 @@ namespace StardewArchipelago.Locations.Patcher
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(MovieTheater), nameof(MovieTheater.RequestEndMovie)),
-                prefix: new HarmonyMethod(typeof(MovieInjections), nameof(MovieInjections.RequestEndMovie_SendMoviesanityLocations_Prefix))
+                prefix: new HarmonyMethod(typeof(MovieInjections), nameof(MovieInjections.RequestEndMovie_SendMoviesanityLocations_Prefix)),
+                postfix: new HarmonyMethod(typeof(MovieInjections), nameof(MovieInjections.RequestEndMovie_SendMoviesanityLocations_Postfix))
             );
 
             if (_archipelago.SlotData.Moviesanity <= Moviesanity.One)
