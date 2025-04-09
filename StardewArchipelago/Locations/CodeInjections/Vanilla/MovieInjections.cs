@@ -8,6 +8,8 @@ using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewModdingAPI;
 using StardewValley.Locations;
+using System.Linq;
+using StardewArchipelago.Constants.Vanilla;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -39,13 +41,28 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
-                return MethodPrefix.RUN_ORIGINAL_METHOD;
+                var allConcessions = MovieTheater.GetConcessions().Values.Where(IsConcessionUnlocked).ToList();
+                var daySaveRandom = Utility.CreateDaySaveRandom();
+                Utility.Shuffle(daySaveRandom, allConcessions);
+
+                __result = allConcessions;
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed in {nameof(RequestEndMovie_SendMoviesanityLocations_Prefix)}:\n{ex}");
+                _logger.LogError($"Failed in {nameof(GetConcessionsForGuest_OfferAllUnlockedSnacks_Prefix)}:\n{ex}");
                 return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
+        }
+
+        private static bool IsConcessionUnlocked(MovieConcession movieConcession)
+        {
+            if (!_concessionFlavors.TryGetValue(movieConcession.Id, out var flavor))
+            {
+                return false;
+            }
+
+            return _archipelago.HasReceivedItem(flavor);
         }
 
         // public void RequestEndMovie(long uid)
@@ -165,7 +182,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
         }
 
-        private static readonly Dictionary<string, string> _movieTitles = new Dictionary<string, string>()
+        private static readonly Dictionary<string, string> _movieTitles = new()
         {
             {"spring_movie_0", "The Brave Little Sapling"},
             {"fall_movie_0", "Mysterium"},
@@ -175,6 +192,34 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {"winter_movie_0", "The Miracle At Coldstar Ranch"},
             {"spring_movie_1", "Natural Wonders: Exploring Our Vibrant World"},
             {"fall_movie_1", "It Howls In The Rain"},
+        };
+
+        private static readonly Dictionary<string, string> _concessionFlavors = new()
+        {
+            { Concessions.APPLE_SLICES, ConcessionFlavor.SWEET },
+            { Concessions.BLACK_LICORICE, ConcessionFlavor.SWEET },
+            { Concessions.CAPPUCCINO_MOUSSE_CAKE, ConcessionFlavor.SWEET },
+            { Concessions.CHOCOLATE_POPCORN, ConcessionFlavor.SWEET },
+            { Concessions.COTTON_CANDY, ConcessionFlavor.SWEET },
+            { Concessions.FRIES, ConcessionFlavor.SALTY },
+            { Concessions.HUMMUS_SNACK_PACK, ConcessionFlavor.SALTY },
+            { Concessions.ICE_CREAM_SANDWICH, ConcessionFlavor.SWEET },
+            { Concessions.JASMINE_TEA, ConcessionFlavor.DRINKS },
+            { Concessions.JAWBREAKER, ConcessionFlavor.SWEET },
+            { Concessions.JOJA_COLA, ConcessionFlavor.DRINKS },
+            { Concessions.JOJACORN, ConcessionFlavor.SALTY },
+            { Concessions.KALE_SMOOTHIE, ConcessionFlavor.DRINKS },
+            { Concessions.NACHOS, ConcessionFlavor.MEALS },
+            { Concessions.PANZANELLA_SALAD, ConcessionFlavor.MEALS },
+            { Concessions.PERSONAL_PIZZA, ConcessionFlavor.MEALS },
+            { Concessions.POPCORN, ConcessionFlavor.SALTY },
+            { Concessions.ROCK_CANDY, ConcessionFlavor.SWEET },
+            { Concessions.SALMON_BURGER, ConcessionFlavor.MEALS },
+            { Concessions.SALTED_PEANUTS, ConcessionFlavor.SALTY },
+            { Concessions.SOUR_SLIMES, ConcessionFlavor.SWEET },
+            { Concessions.STAR_COOKIE, ConcessionFlavor.SWEET },
+            { Concessions.STARDROP_SORBET, ConcessionFlavor.SWEET },
+            { Concessions.TRUFFLE_POPCORN, ConcessionFlavor.SALTY },
         };
     }
 }
