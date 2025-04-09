@@ -16,13 +16,13 @@ The moviesanity feature is a 7.x.x feature introducing location checks for watch
 
 First, we need to read the moviesanity fields from slot data. Later on, we will need to use this data to decide on behavior of the mod.
 
-#### Add the key to `StardewArchipelago.Archipelago.SlotData.SlotDataKeys.cs` - [Commit](https://github.com/agilbert1412/StardewArchipelago/commit/47a6d6e054283d7083a84fa1b91b86831097be4d)
+#### Add the key to `StardewArchipelago.Archipelago.SlotData.SlotDataKeys.cs` - [Commit Details](https://github.com/agilbert1412/StardewArchipelago/commit/47a6d6e054283d7083a84fa1b91b86831097be4d)
 
 This is the name of the field, as it will come from the Apworld
 
 ![image](https://i.imgur.com/3mf1zcp.png)
 
-#### Create the enum for the Moviesanity values - [Commit](https://github.com/agilbert1412/StardewArchipelago/commit/d62d99e223ce6b9b4e557e29d9195d03b043cdb2)
+#### Create the enum for the Moviesanity values - [Commit Details](https://github.com/agilbert1412/StardewArchipelago/commit/d62d99e223ce6b9b4e557e29d9195d03b043cdb2)
 
 These values need to match the values used in the Apworld.
 
@@ -30,13 +30,13 @@ These values need to match the values used in the Apworld.
 
 ![image](https://i.imgur.com/yBe0yHv.png)
 
-#### Add Moviesanity to the SlotData Class - [Commit](https://github.com/agilbert1412/StardewArchipelago/commit/92daeeca15dbbc755b96ccc63e6422808e9004f6)
+#### Add Moviesanity to the SlotData Class - [Commit Details](https://github.com/agilbert1412/StardewArchipelago/commit/92daeeca15dbbc755b96ccc63e6422808e9004f6)
 
 This is where the value will be stored for the duration of the play session
 
 ![image](https://i.imgur.com/iqScwFE.png)
 
-#### Read Moviesanity from the slot data fields and assign it to the SlotData [Commit](https://github.com/agilbert1412/StardewArchipelago/commit/037796179f623fd94e2f916e4b23cb076c67cda5)
+#### Read Moviesanity from the slot data fields and assign it to the SlotData [Commit Details](https://github.com/agilbert1412/StardewArchipelago/commit/037796179f623fd94e2f916e4b23cb076c67cda5)
 
 We usually pick a default value of "None" here, so that if the Apworld does not provide the setting, it's probably an older version that also doesn't want to trigger subsequent code for it.
 
@@ -51,7 +51,7 @@ For this part, you will need to use your decompiler (usually provided with the I
 I want to patch two things. I want to send checks when a movie is watched, and also send a check when a snack is bought for an NPC. These two patches will need some conditions, like is it loved or whatever, but the general idea is two patches.
 Maybe I'll even get away with a single patch, if I can check these things at the same moment.
 
-My first instinct is to look for some movie code, ideally near the ending of the movie. I'll first head over to MovieTheater.cs, and see what is there.
+My first instinct is to look for some movie code, ideally near the ending of the movie. I'll first head over to `MovieTheater.cs`, and see what is there.
 
 ![image](https://i.imgur.com/MgwQfM5.png)
 
@@ -61,15 +61,15 @@ The first thing that comes to mind is this method `RequestEndMovie()`. A quick l
 
 If it doesn't work, we'll try something else.
 
-#### Creating the CodeInjections file - [Commit](https://github.com/agilbert1412/StardewArchipelago/commit/16494ac54e401cf38286266e76001418b7a0d7d9)
+#### Creating the CodeInjections file - [Commit Details](https://github.com/agilbert1412/StardewArchipelago/commit/16494ac54e401cf38286266e76001418b7a0d7d9)
 
-To do this, we'll create a file in StardewArchipelago.Locations.CodeInjections.Vanilla. The stuff in there could use some cleaning up. Basically, there is one file per "topic", often per setting, containing one or many patches. Once a file grows too big, it gets split, and often moved to a subfolder.
+To do this, we'll create a file in `StardewArchipelago.Locations.CodeInjections.Vanilla`. The stuff in there could use some cleaning up. Basically, there is one file per "topic", often per setting, containing one or many patches. Once a file grows too big, it gets split, and often moved to a subfolder.
 
 I do this by copying one of the existing Injections files, and removing most of it except the useful stuff.
 
 ![image](https://i.imgur.com/2rB7QDW.png)
 
-#### Preparing the patch - [Commit](https://github.com/agilbert1412/StardewArchipelago/commit/9fd59d99a6a013737979a0b4b54598ef22866eb3)
+#### Preparing the patch - [Commit Details](https://github.com/agilbert1412/StardewArchipelago/commit/9fd59d99a6a013737979a0b4b54598ef22866eb3)
 
 Generally, I copy the definition of the method I'm patching, as a comment over a patch, just for reference.
 
@@ -81,7 +81,7 @@ This is done in `StardewArchipelago.Locations.CodeInjections.Initializers.Vanill
 
 ![image](https://i.imgur.com/kOJehne.png)
 
-#### Writing the patch code - [Commit](https://github.com/agilbert1412/StardewArchipelago/commit/44b87e50e0f0f2a629c431d43130f9b8c6d5cd8e)
+#### Writing the patch code - [Commit Details](https://github.com/agilbert1412/StardewArchipelago/commit/44b87e50e0f0f2a629c431d43130f9b8c6d5cd8e)
 
 Here, we want to send locations for the movie IF conditions are met, and for the snack IF conditions are met.
 
@@ -97,7 +97,7 @@ For the snack, we check the snack location. If the player chose the setting for 
 
 ![image](https://i.imgur.com/Z1HLhSc.png)
 
-#### Applying the patch - [Commit](https://github.com/agilbert1412/StardewArchipelago/commit/e029690eb4394676cedc9554a306f1d0f8c1b186)
+#### Applying the patch - [Commit Details](https://github.com/agilbert1412/StardewArchipelago/commit/e029690eb4394676cedc9554a306f1d0f8c1b186)
 
 Lastly, we need to apply the patch to the method. This is done in `StardewArchipelago.Locations.Patcher.VanillaLocationPatcher.cs`
 
@@ -107,7 +107,83 @@ This uses harmony to set up the patch as a prefix on the original method.
 
 ### 3 - Patching the items
 
-TODO
+The goal for the items patch is pretty simple. We have 4 items, which are 4 flavor types for the theater snacks. I simply want to only let players purchase snacks from the flavors they have unlocked.
+
+#### Finding the code to patch
+
+The first thing I found, is that the snacks shop is an actual shop, not a custom dialogue. That makes this easy, as we simply need to edit this shop.
+
+![image](https://i.imgur.com/ntUkfF3.png)
+
+I then navigate to my unpacked Stardew assets ([Here](https://stardewvalleywiki.com/Modding:Editing_XNB_files) is a tutorial to unpack the XNB data files to readable files), go to `Content/Data/Shops.json`
+
+You can find more info on the shop format [here](https://stardewvalleywiki.com/Modding:Shops)
+
+![image](https://i.imgur.com/Rtm49xr.png)
+
+But the important part is that it generates the inventory using a query with the Id `MOVIE_CONCESSIONS_FOR_GUEST`
+
+This query, and all vanilla queries, can be found in `ItemQueryResolver.cs`
+
+![image](https://i.imgur.com/ML3h9qn.png)
+
+We can see that it simply loops through concessions for a given guest, and returns them one by one. This leads us back to `MovieTheater.cs`, to the method `GetConcessionsForGuest(string npc_name)`
+
+![image](https://i.imgur.com/TTekXNj.png)
+
+Now we have a decision to make. What behavior do we want, exactly?
+
+#### Game Design
+
+The concession stand does not offer all snacks. It only offers up to 5 snacks with interesting rules
+
+From the wiki: "The game tries to populate the list with one loved snack, two liked snacks, and one disliked snack among the five snacks available at the counter, if they exist. If the theater is built from the Joja Warehouse, JojaCorn is always available for purchase."
+
+So, we have multiple options here, when some snacks are locked
+
+1: Let the game roll 5 snacks, then remove the locked ones. This can lead to an empty shop, even if the player has unlocked some snacks
+2: Do our custom rolling code that attempts to emulate the vanilla code, but only from unlocked snacks.
+3: Offer all unlocked snacks, instead of a random subset of them.
+
+I personally tend towards #3, because the Movies is already an annoying game mechanic as the player can only go once a week and can miss a critical movie and have to wait very long. Maybe making the snack selection less of a RNG-fest will make this more pleasant.
+
+So, in this case, we will replace the method with an alternate version, that does that!
+
+#### Preparing the patch - [Commit Details](https://github.com/agilbert1412/StardewArchipelago/commit/89d2b76c3e969718fcac056cdf2b2047a3ed03a5)
+
+First, the skeleton of the patch. Note that this method is different from the previous one, as it is static, it has a return value, and we intend on fully replacing it instead of simply prefixing it.
+
+![image](https://i.imgur.com/RMZNyBh.png)
+
+#### Writing the patch code - [Commit Details](https://github.com/agilbert1412/StardewArchipelago/commit/8e3c344322daf4f15e524bf21dc7e2b786f80999)
+
+Here, I basically started by copying the code from the original entirely, then I just remove everything that is no longer needed, notably everything related to offering specific preferences. This leads to basically just returning all concessions.
+
+I take this opportunity to simplify the code and rename variables, as decompiled code is not very readable or manageable.
+
+![image](https://i.imgur.com/6PsT21B.png)
+
+Then, I want to add the locking based on AP items.
+
+First, I want to add the Concessions IDs to named constants, so they are easier to work with
+
+![image](https://i.imgur.com/kfm1PAB.png)
+
+Then, I make a dictionary that easily allows me to tell what flavor is required to unlock a given snack. We have a similar dictionary in the apworld for the logic of it, so I'll just copy it over, and change the Python syntax to C# syntax.
+
+![image](https://i.imgur.com/j3Lzxl3.png)
+
+And, lastly, I write a quick method to tell if a given snack is unlocked, and I can easily use it in a `Where()` query to filter the concessions.
+
+![image](https://i.imgur.com/Hyn9iA7.png)
+
+#### Applying the patch - [Commit Details](https://github.com/agilbert1412/StardewArchipelago/commit/a58263155c9545063e3e3928e05e051b2e852d67)
+
+Lastly, we need to apply the patch, same as the other one. This is done in `StardewArchipelago.Locations.Patcher.VanillaLocationPatcher.cs`
+
+This uses harmony to set up the patch as a prefix on the original method.
+
+![image](https://i.imgur.com/PQuyWhO.png)
 
 ### 4 - Testing
 
