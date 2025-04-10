@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This document intends to do a step by step explanation of the implementation of a new feature in the mod.
+This document is a step by step explanation of the implementation of the moviesanity feature in the mod.
 
 In the context of this document, the apworld side of the feature is already entirely built and assumed to be functional. This focuses exclusively on the mod.
 
