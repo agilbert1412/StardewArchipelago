@@ -191,5 +191,48 @@ This uses harmony to set up the patch as a prefix on the original method.
 
 Now, you just generate a game, host it (locally, ideally), and test it! Do the checks, force send the items, make sure everything works without any errors.
 
+Error #1 [Commit Details](https://github.com/agilbert1412/StardewArchipelago/commit/264bf9c190b170b677569cbed5a87827b9a1ff7d): I forgot to add the ModHelper to the Initialize call, when I added it earlier to the Injections class for easier reflection.
+
+This caused a build error.
+
+![image](https://i.imgur.com/ikZxUgj.png)
+
+Other than that, things seem to work!
+
 ### 5 - Profit!
 
+![image](https://i.imgur.com/6usMB8M.png)
+
+### 6 - Going Above and Beyond
+
+To try to make this setting more enjoyable, I have two ideas.
+
+#### Remove the limit of one movie per week - [Commit Details](https://github.com/agilbert1412/StardewArchipelago/commit/00fd23e425852a8c3a19f9accff339f078881dd6)
+
+It seems to me like being able to watch multiple movies in a row will make it much easier to deal with this setting. Especially since it will be easy to accidentally invite the wrong person or order the wrong snack. Or, with ER, to not get to the theater at all.
+
+I found that the fields `Farmer.lastSeenMovieWeek` and `NPC.lastSeenMovieWeek` are the ones that track how recently movies were watched. These are just a week number, so if I just set them to a really low value, like -1, after each movie, we should be fine.
+
+![image](https://i.imgur.com/A4jI14f.png)
+
+This field for NPCs is assigned when the movie starts, but for the player, it is assigned at the **end** of the `RequestEndMovie` method, that we patched with a prefix earlier.
+
+So we need to patch it with a postfix this time, which is a patch that runs **after** the original method.
+
+![image](https://i.imgur.com/7vL0MMn.png)
+
+![image](https://i.imgur.com/dwdf2gg.png)
+
+#### Cycle Movies every week instead of every month - [Commit Details](https://github.com/agilbert1412/StardewArchipelago/commit/0510db672ca6c3dd90a5fe37f4d4271fcf1af855)
+
+Again, in the spirit of reducing the pointless sleeping for the movie grind, I figured the movie schedule should change more often. Once a week seems decent, plus the fact that players can give it multiple attempts in the same week with the previous change.
+
+After digging into how the movies are decided, I realized that the algorithm is very incompatible with the seasons randomizer. Notably, the part where it tries to check the date when you unlocked the theater, and heavily relies on seasons, plus the fact that in AP, we can't know in advance what season the player will choose next.
+
+So I decided to rewrite the algorithm found in `MovieTheater.GetMoviesForSeason()`. My new algorithm will return 4 movies for the current, month, but they will be the two movies from that season, duplicated twice each, in a pattern 0-1-0-1.
+
+This will lead to weekly cycling and allow players to quickly pick a season to get to the movie they want. I also added an offset when checking the upcoming movie, so they get swapped. This will not be accurate on the last week of the month, if the player does not repeat the season, but that seems minor, and I have no good way to make it better.
+
+I ended up writing this patch
+
+![image](https://i.imgur.com/H7KDIig.png)
