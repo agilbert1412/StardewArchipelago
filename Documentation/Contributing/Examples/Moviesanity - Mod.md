@@ -79,7 +79,7 @@ Generally, I copy the definition of the method I'm patching, as a comment over a
 
 We also need to initialize the CodeInjections class. This will allow it to use structures like the ArchipelagoClient (send checks), and the logger (log errors and warnings), within the patches.
 
-This is done in `StardewArchipelago.Locations.CodeInjections.Initializers.VanillaCodeInjectionInitializer.cs`
+This is done in `StardewArchipelago.Locations.CodeInjections.Initializers.VanillaCodeInjectionInitializer.cs`.
 
 ![image](https://i.imgur.com/kOJehne.png)
 
