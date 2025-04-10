@@ -20,7 +20,7 @@ First, we need to read the moviesanity fields from slot data. Later on, we will 
 
 #### Add the key to `StardewArchipelago.Archipelago.SlotData.SlotDataKeys.cs` - [Commit Details](https://github.com/agilbert1412/StardewArchipelago/commit/47a6d6e054283d7083a84fa1b91b86831097be4d)
 
-This is the name of the field, as it will come from the Apworld
+This is the name of the field, as it will come from the Apworld.
 
 ![image](https://i.imgur.com/3mf1zcp.png)
 
@@ -34,7 +34,7 @@ These values need to match the values used in the Apworld.
 
 #### Add Moviesanity to the SlotData Class - [Commit Details](https://github.com/agilbert1412/StardewArchipelago/commit/92daeeca15dbbc755b96ccc63e6422808e9004f6)
 
-This is where the value will be stored for the duration of the play session
+This is where the value will be stored for the duration of the play session.
 
 ![image](https://i.imgur.com/iqScwFE.png)
 
@@ -101,7 +101,7 @@ For the snack, we check the snack location. If the player chose the setting for 
 
 #### Applying the patch - [Commit Details](https://github.com/agilbert1412/StardewArchipelago/commit/e029690eb4394676cedc9554a306f1d0f8c1b186)
 
-Lastly, we need to apply the patch to the method. This is done in `StardewArchipelago.Locations.Patcher.VanillaLocationPatcher.cs`
+Lastly, we need to apply the patch to the method. This is done in `StardewArchipelago.Locations.Patcher.VanillaLocationPatcher.cs`.
 
 This uses harmony to set up the patch as a prefix on the original method.
 
@@ -117,15 +117,15 @@ The first thing I found, is that the snacks shop is an actual shop, not a custom
 
 ![image](https://i.imgur.com/ntUkfF3.png)
 
-I then navigate to my unpacked Stardew assets ([Here](https://stardewvalleywiki.com/Modding:Editing_XNB_files) is a tutorial to unpack the XNB data files to readable files), go to `Content/Data/Shops.json`
+I then navigate to my unpacked Stardew assets ([Here](https://stardewvalleywiki.com/Modding:Editing_XNB_files) is a tutorial to unpack the XNB data files to readable files), go to `Content/Data/Shops.json`.
 
-You can find more info on the shop format [here](https://stardewvalleywiki.com/Modding:Shops)
+You can find more info on the shop format [here](https://stardewvalleywiki.com/Modding:Shops).
 
 ![image](https://i.imgur.com/Rtm49xr.png)
 
-But the important part is that it generates the inventory using a query with the Id `MOVIE_CONCESSIONS_FOR_GUEST`
+But the important part is that it generates the inventory using a query with the Id `MOVIE_CONCESSIONS_FOR_GUEST`.
 
-This query, and all vanilla queries, can be found in `ItemQueryResolver.cs`
+This query, and all vanilla queries, can be found in `ItemQueryResolver.cs`.
 
 ![image](https://i.imgur.com/ML3h9qn.png)
 
