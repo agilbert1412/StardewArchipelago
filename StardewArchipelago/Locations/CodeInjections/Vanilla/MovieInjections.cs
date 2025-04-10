@@ -10,6 +10,7 @@ using StardewModdingAPI;
 using StardewValley.Locations;
 using System.Linq;
 using StardewArchipelago.Constants.Vanilla;
+using StardewValley.GameData.Movies;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -109,6 +110,37 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 _logger.LogError($"Failed in {nameof(RequestEndMovie_SendMoviesanityLocations_Postfix)}:\n{ex}");
                 return;
+            }
+        }
+
+        // public static List<MovieData> GetMoviesForSeason(WorldDate date)
+        public static bool GetMoviesForSeason_LoopEveryWeek_Prefix(WorldDate date, ref List<MovieData> __result)
+        {
+            try
+            {
+                var movieData = MovieTheater.GetMovieData();
+                var moviesThisSeason = movieData.Where(x => MovieTheater.MovieSeasonMatches(x, Game1.season)).ToArray();
+                __result = new List<MovieData>();
+                for (var i = 0; i < 4; i++)
+                {
+                    if (date.TotalDays == Game1.Date.TotalDays)
+                    {
+                        // If we are checking today's movie, we add the current season movies, twice each, so they alternate 0-1-0-1
+                        __result.Add(moviesThisSeason[i % moviesThisSeason.Length]);
+                    }
+                    else
+                    {
+                        // If we are checking the upcoming movie, we invert it, so they alternate 1-0-1-0
+                        __result.Add(moviesThisSeason[(i + 1) % moviesThisSeason.Length]);
+                    }
+                }
+
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(GetMoviesForSeason_LoopEveryWeek_Prefix)}:\n{ex}");
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 

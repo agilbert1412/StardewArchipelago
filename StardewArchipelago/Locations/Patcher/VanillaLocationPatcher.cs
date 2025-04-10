@@ -1729,6 +1729,11 @@ namespace StardewArchipelago.Locations.Patcher
                 postfix: new HarmonyMethod(typeof(MovieInjections), nameof(MovieInjections.RequestEndMovie_SendMoviesanityLocations_Postfix))
             );
 
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(MovieTheater), nameof(MovieTheater.GetMoviesForSeason)),
+                prefix: new HarmonyMethod(typeof(MovieInjections), nameof(MovieInjections.GetMoviesForSeason_LoopEveryWeek_Prefix))
+            );
+
             if (_archipelago.SlotData.Moviesanity <= Moviesanity.One)
             {
                 return;
