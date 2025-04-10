@@ -48,7 +48,7 @@ We usually pick a default value of "None" here, so that if the Apworld does not 
 
 #### Finding the code to patch
 
-For this part, you will need to use your decompiler (usually provided with the IDE), and learn to navigate decompiled sources. I can't really teach you all that, but I can show you my thought process.
+For this part, you will need to use your decompiler (usually provided with the IDE, or you can use [DotPeek](https://www.jetbrains.com/decompiler/)), and to navigate decompiled sources. I can't teach you all that, but I can show you my thought process.
 
 I want to patch two things. I want to send checks when a movie is watched, and also send a check when a snack is bought for an NPC. These two patches will need some conditions, like is it loved or whatever, but the general idea is two patches.
 Maybe I'll even get away with a single patch, if I can check these things at the same moment.
