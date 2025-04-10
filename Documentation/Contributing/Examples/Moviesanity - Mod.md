@@ -4,7 +4,9 @@
 
 This document is a step by step explanation of the implementation of the moviesanity feature in the mod.
 
-In the context of this document, the apworld side of the feature is already entirely built and assumed to be functional. This focuses exclusively on the mod.
+In the context of this document, the apworld side of the feature is already entirely implemented and assumed to be functional. This focuses exclusively on the mod.
+
+Building the Apworld first is not necessary, but usually recommended. If you make the mod first, some steps might require you to use placeholder values or data
 
 ## Moviesanity
 
