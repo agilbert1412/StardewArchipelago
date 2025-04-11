@@ -108,7 +108,7 @@ If the method returns void, the `__result` parameter is omitted. If the original
 
 ![image](https://i.imgur.com/vofjqqx.png)
 
-We also need to initialize the CodeInjections class. This will allow it to use structures like the ArchipelagoClient (send checks), and the logger (log errors and warnings), within the patches.
+I also need to initialize the CodeInjections class. This will allow it to use structures like the ArchipelagoClient (send checks), and the logger (log errors and warnings), within the patches.
 
 This is done in `StardewArchipelago.Locations.CodeInjections.Initializers.VanillaCodeInjectionInitializer.cs`.
 
@@ -116,23 +116,23 @@ This is done in `StardewArchipelago.Locations.CodeInjections.Initializers.Vanill
 
 #### Writing the patch code - [Commit Details](https://github.com/agilbert1412/StardewArchipelago/commit/44b87e50e0f0f2a629c431d43130f9b8c6d5cd8e)
 
-Here, we want to send locations for the movie IF conditions are met, and for the snack IF conditions are met.
+Here, I want to send locations for the movie IF conditions are met, and for the snack IF conditions are met.
 
 This one is the part that varies between features, so the specific code I wrote is exclusive to movies and snacks, and will not be useful for other features.
 
 It is about 150 lines, so I recommend checking the commit details [here](https://github.com/agilbert1412/StardewArchipelago/commit/44b87e50e0f0f2a629c431d43130f9b8c6d5cd8e).
 
-The gist of it is, in the prefix patch, if we are currently about to finish the movie (state 1, about to be state 2), we check both the movie and snack locations.
+The gist of it is, in the prefix patch, if I are currently about to finish the movie (state 1, about to be state 2), I check both the movie and snack locations.
 
-For the movie, we either check "Watch a movie", or the specific movie. We verify if someone was invited who loves the movie, if that setting was picked. Same for the snack condition.
+For the movie, I either check "Watch a movie", or the specific movie. I verify if someone was invited who loves the movie, if that setting was picked. Same for the snack condition.
 
-For the snack, we check the snack location. If the player chose the setting for requiring the snack to be loved, we verify this first.
+For the snack, I check the snack location. If the player chose the setting for requiring the snack to be loved, I verify this first.
 
 ![image](https://i.imgur.com/Z1HLhSc.png)
 
 #### Applying the patch - [Commit Details](https://github.com/agilbert1412/StardewArchipelago/commit/e029690eb4394676cedc9554a306f1d0f8c1b186)
 
-Lastly, we need to apply the patch to the method. This is done in `StardewArchipelago.Locations.Patcher.VanillaLocationPatcher.cs`.
+Lastly, I need to apply the patch to the method. This is done in `StardewArchipelago.Locations.Patcher.VanillaLocationPatcher.cs`.
 
 This uses harmony to set up the patch as a prefix on the original method.
 
@@ -140,7 +140,7 @@ This uses harmony to set up the patch as a prefix on the original method.
 
 ### 3 - Patching the items
 
-The goal for the items patch is pretty simple. We have 4 items, which are 4 flavor types for the theater snacks. I simply want to only let players purchase snacks from the flavors they have unlocked.
+The goal for the items patch is pretty simple. I have 4 items, which are 4 flavor types for the theater snacks. I simply want to only let players purchase snacks from the flavors they have unlocked.
 
 #### Finding the code to patch
 
@@ -160,11 +160,11 @@ This query, and all vanilla queries, can be found in `ItemQueryResolver.cs`.
 
 ![image](https://i.imgur.com/ML3h9qn.png)
 
-We can see that it simply loops through concessions for a given guest, and returns them one by one. This leads us back to `MovieTheater.cs`, to the method `GetConcessionsForGuest(string npc_name)`
+I can see that it simply loops through concessions for a given guest, and returns them one by one. This leads us back to `MovieTheater.cs`, to the method `GetConcessionsForGuest(string npc_name)`
 
 ![image](https://i.imgur.com/TTekXNj.png)
 
-Now we have a decision to make. What behavior do we want, exactly?
+Now I have a decision to make. What behavior do I want, exactly?
 
 #### Game Design
 
@@ -172,7 +172,7 @@ The concession stand does not offer all snacks. It only offers up to 5 snacks wi
 
 From the wiki: "The game tries to populate the list with one loved snack, two liked snacks, and one disliked snack among the five snacks available at the counter, if they exist. If the theater is built from the Joja Warehouse, JojaCorn is always available for purchase."
 
-So, we have multiple options here, when some snacks are locked
+So, I have multiple options here, when some snacks are locked
 
 1: Let the game roll 5 snacks, then remove the locked ones. This can lead to an empty shop, even if the player has unlocked some snacks
 
@@ -182,11 +182,11 @@ So, we have multiple options here, when some snacks are locked
 
 I personally tend towards #3, because the Movies is already an annoying game mechanic as the player can only go once a week and can miss a critical movie and have to wait very long. Maybe making the snack selection less of a RNG-fest will make this more pleasant.
 
-So, in this case, we will replace the method with an alternate version, that does that!
+So, in this case, I will replace the method with an alternate version, that does that!
 
 #### Preparing the patch - [Commit Details](https://github.com/agilbert1412/StardewArchipelago/commit/89d2b76c3e969718fcac056cdf2b2047a3ed03a5)
 
-First, the skeleton of the patch. Note that this method is different from the previous one, as it is static, it has a return value, and we intend on fully replacing it instead of simply prefixing it.
+First, the skeleton of the patch. Note that this method is different from the previous one, as it is static, it has a return value, and I intend on fully replacing it instead of simply prefixing it.
 
 ![image](https://i.imgur.com/RMZNyBh.png)
 
@@ -204,7 +204,7 @@ First, I want to add the Concessions IDs to named constants, so they are easier 
 
 ![image](https://i.imgur.com/kfm1PAB.png)
 
-Then, I make a dictionary that easily allows me to tell what flavor is required to unlock a given snack. We have a similar dictionary in the apworld for the logic of it, so I'll just copy it over, and change the Python syntax to C# syntax.
+Then, I make a dictionary that easily allows me to tell what flavor is required to unlock a given snack. I have a similar dictionary in the apworld for the logic of it, so I'll just copy it over, and change the Python syntax to C# syntax.
 
 ![image](https://i.imgur.com/j3Lzxl3.png)
 
@@ -214,7 +214,7 @@ And, lastly, I write a quick method to tell if a given snack is unlocked, and I 
 
 #### Applying the patch - [Commit Details](https://github.com/agilbert1412/StardewArchipelago/commit/a58263155c9545063e3e3928e05e051b2e852d67)
 
-Lastly, we need to apply the patch, same as the other one. This is done in `StardewArchipelago.Locations.Patcher.VanillaLocationPatcher.cs`
+Lastly, I need to apply the patch, same as the other one. This is done in `StardewArchipelago.Locations.Patcher.VanillaLocationPatcher.cs`
 
 This uses harmony to set up the patch as a prefix on the original method.
 
@@ -248,9 +248,9 @@ I found that the fields `Farmer.lastSeenMovieWeek` and `NPC.lastSeenMovieWeek` a
 
 ![image](https://i.imgur.com/A4jI14f.png)
 
-This field for NPCs is assigned when the movie starts, but for the player, it is assigned at the **end** of the `RequestEndMovie` method, that we patched with a prefix earlier.
+This field for NPCs is assigned when the movie starts, but for the player, it is assigned at the **end** of the `RequestEndMovie` method, that I patched with a prefix earlier.
 
-So we need to patch it with a postfix this time, which is a patch that runs **after** the original method.
+So I need to patch it with a postfix this time, which is a patch that runs **after** the original method.
 
 ![image](https://i.imgur.com/7vL0MMn.png)
 
