@@ -2,11 +2,24 @@
 
 ## Introduction
 
-This document is a step by step explanation of the implementation of the moviesanity feature in the mod.
+### This document
+
+This document is a step by step explanation of my process when I implementated the moviesanity feature in the mod. This is not intended as thorough documentation, but more as a list of the steps I take, why I take them, and how I think about these things.
+It can be used as a reference, when building a different feature, to get a rough idea of where to start and where to go.
+
+### The apworld
 
 In the context of this document, the apworld side of the feature is already entirely implemented and assumed to be functional. This focuses exclusively on the mod.
 
 Building the Apworld first is not necessary, but usually recommended. If you make the mod first, some steps in this guide might require you to use placeholder values or data until the apworld is ready.
+
+### What is required
+
+[Contributing Document](../Contributing.md)
+
+If you are ready this simply out of curiosity, nothing is required. But you will benefit from understanding concepts outlined in the contributing document.
+
+If you intend to follow along, and maybe make your own features, then you will need all the software in the contributing document, and to understand the concepts outlined in it.
 
 ## Moviesanity
 
@@ -16,15 +29,17 @@ The moviesanity feature is a 7.x.x feature introducing location checks for watch
 
 ### 1 - Slot Data
 
+The Slot Data is the dictionary of all values that the apworld sends to the mod upon connection. This typically includes the player settings, and some extra data for example bundles, entrances, etc.
+
 First, we need to read the moviesanity fields from slot data. Later on, we will need to use this data to decide on behavior of the mod.
 
-#### Add the key to `StardewArchipelago.Archipelago.SlotData.SlotDataKeys.cs` - [Commit Details](https://github.com/agilbert1412/StardewArchipelago/commit/47a6d6e054283d7083a84fa1b91b86831097be4d)
+#### Adding the key to `StardewArchipelago.Archipelago.SlotData.SlotDataKeys.cs` - [Commit Details](https://github.com/agilbert1412/StardewArchipelago/commit/47a6d6e054283d7083a84fa1b91b86831097be4d)
 
 This is the name of the field, as it will come from the Apworld.
 
 ![image](https://i.imgur.com/3mf1zcp.png)
 
-#### Create the enum for the Moviesanity values - [Commit Details](https://github.com/agilbert1412/StardewArchipelago/commit/d62d99e223ce6b9b4e557e29d9195d03b043cdb2)
+#### Creating the enum for the Moviesanity values - [Commit Details](https://github.com/agilbert1412/StardewArchipelago/commit/d62d99e223ce6b9b4e557e29d9195d03b043cdb2)
 
 These values need to match the values used in the Apworld.
 
@@ -32,19 +47,23 @@ These values need to match the values used in the Apworld.
 
 ![image](https://i.imgur.com/yBe0yHv.png)
 
-#### Add Moviesanity to the SlotData Class - [Commit Details](https://github.com/agilbert1412/StardewArchipelago/commit/92daeeca15dbbc755b96ccc63e6422808e9004f6)
+#### Adding Moviesanity to the SlotData Class - [Commit Details](https://github.com/agilbert1412/StardewArchipelago/commit/92daeeca15dbbc755b96ccc63e6422808e9004f6)
 
 This is where the value will be stored for the duration of the play session.
 
 ![image](https://i.imgur.com/iqScwFE.png)
 
-#### Read Moviesanity from the slot data fields and assign it to the SlotData [Commit Details](https://github.com/agilbert1412/StardewArchipelago/commit/037796179f623fd94e2f916e4b23cb076c67cda5)
+#### Reading Moviesanity from the slot data fields and assign it to the SlotData [Commit Details](https://github.com/agilbert1412/StardewArchipelago/commit/037796179f623fd94e2f916e4b23cb076c67cda5)
 
-We usually pick a default value of "None" here, so that if the Apworld does not provide the setting, it's probably an older version that also doesn't want to trigger subsequent code for it.
+I usually pick a default value of "None" here, so that if the Apworld does not provide the setting, it's probably an older version that also doesn't want to trigger subsequent code for it.
 
 ![image](https://i.imgur.com/vxDLv6D.png)
 
 ### 2 - Patching the locations
+
+The vast majority of the features in this mod exist as [Harmony Patches](https://harmony.pardeike.net/articles/patching.html), which are methods of code that are set to run before, after, or instead of, the original vanilla code. The idea is simple: Find the code you want to change, and apply a prefix or postfix patch to it.
+
+I generally organize the patches in CodeInjection files, and one file can contain multiple patches. I generally only place patches in the same file if they are directly related to each other. For example, in this case, we will probably place all moviesanity patches in one single file.
 
 #### Finding the code to patch
 
@@ -53,27 +72,39 @@ For this part, you will need to use your decompiler (usually provided with the I
 I want to patch two things. I want to send checks when a movie is watched, and also send a check when a snack is bought for an NPC. These two patches will need some conditions, like is it loved or whatever, but the general idea is two patches.
 Maybe I'll even get away with a single patch, if I can check these things at the same moment.
 
-My first instinct is to look for some movie code, ideally near the ending of the movie. I'll first head over to `MovieTheater.cs`, and see what is there.
+The first step would be to look for some movie related code, ideally near the ending of the movie. Based on previous experiences with the Stardew code, the class for the Movie Theater map is probably where most of it is. I will head over to `MovieTheater.cs`, and see what is there.
 
 ![image](https://i.imgur.com/MgwQfM5.png)
 
-The first thing that comes to mind is this method `RequestEndMovie()`. A quick look through the call stack, and this appears to be precisely the code that runs when the movie finishes, so probably exactly what we want.
+I first skim through the method names in this file, to get a rough idea of what happens in this class. For methods that seem important to moviesanity, I also read them and try to understand what they do.
+
+The method `RequestEndMovie()` seems extremely promising. A quick look through the call stack, and this appears to be precisely the code that runs when the movie finishes, so probably exactly what we want.
 
 ![image](https://i.imgur.com/pbHZp60.png)
 
-If it doesn't work, we'll try something else.
+If it doesn't work, I will try something else.
 
 #### Creating the CodeInjections file - [Commit Details](https://github.com/agilbert1412/StardewArchipelago/commit/16494ac54e401cf38286266e76001418b7a0d7d9)
 
-To do this, we'll create a file in `StardewArchipelago.Locations.CodeInjections.Vanilla`. The stuff in there could use some cleaning up. Basically, there is one file per "topic", often per setting, containing one or many patches. Once a file grows too big, it gets split, and often moved to a subfolder.
+To do this, I'll create a file in `StardewArchipelago.Locations.CodeInjections.Vanilla`. Basically, there is one file per "topic", often per setting, containing one or many patches. Once a file grows too big, it gets split, and often moved to a subfolder.
 
-I do this by copying one of the existing Injections files, and removing most of it except the useful stuff.
+I do this by copying one of the existing Injections files, and removing most of it except the skeleton. Basically, I keep the Initialize method, and one patch, with its content removed.
 
 ![image](https://i.imgur.com/2rB7QDW.png)
 
 #### Preparing the patch - [Commit Details](https://github.com/agilbert1412/StardewArchipelago/commit/9fd59d99a6a013737979a0b4b54598ef22866eb3)
 
-Generally, I copy the definition of the method I'm patching, as a comment over a patch, just for reference.
+Generally, I copy the definition of the method I'm patching, as a comment over a patch, just for reference. The Patch syntax needs to match the original method's syntax in many ways, so that's very convenient to have.
+
+I always wrap patches in a single `Try...Catch` block, which logs the error and runs the original method if anything goes wrong. This makes sure that individual patches cannot crash the entire game if I make a mistake in one of them.
+
+The patch syntax goes like this
+
+Prefix: `public static bool OriginalMethodName_PatchDescription_Prefix([OriginalClass] __instance, [EveryOriginalParameter], ref [OriginalReturnType] __result)`
+
+Postfix: `public static void OriginalMethodName_PatchDescription_Postfix([OriginalClass] __instance, [EveryOriginalParameter], ref [OriginalReturnType] __result)`
+
+If the method returns void, the `__result` parameter is omitted. If the original method is static, the `__instance` parameter is omitted. If the patch is a prefix, it returns a boolean deciding if the original code should still run, or not, in addition to the prefix.
 
 ![image](https://i.imgur.com/vofjqqx.png)
 
