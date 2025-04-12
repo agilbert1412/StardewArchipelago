@@ -314,6 +314,18 @@ namespace StardewArchipelago.Integrations.GenericModConfigMenu
                 getValue: () => Config.AllowHandBreaking,
                 setValue: (value) => Config.AllowHandBreaking = value
             );
+
+            configMenu.AddNumberOption(
+                mod: ModManifest,
+                name: () => "Bookseller Price Multiplier",
+                tooltip: () => "Multiplier to apply to the bookseller book prices",
+                min: 5,
+                max: 1000,
+                interval: 1,
+                getValue: () => Config.BooksellerPriceMultiplier,
+                setValue: (value) => Config.BooksellerPriceMultiplier = value,
+                formatValue: (value) => $"{value}%"
+            );
         }
     }
 }

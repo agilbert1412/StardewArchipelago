@@ -117,6 +117,12 @@ namespace StardewArchipelago
         /// It takes many more hits than it would with the proper tool, and is intended solely to avoid getting physically stuck
         /// </summary>
         public bool AllowHandBreaking { get; set; } = false;
+
+        /// <summary>
+        /// Multiplier to apply to all bookseller books.
+        /// Can help to reduce the booksanity grinding
+        /// </summary>
+        public int BooksellerPriceMultiplier { get; set; } = 100;
     }
 
     public enum ItemIndicatorPreference

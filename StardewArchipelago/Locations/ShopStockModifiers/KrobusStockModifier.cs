@@ -27,11 +27,11 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
             }
 
             e.Edit(asset =>
-                {
-                    var shopsData = asset.AsDictionary<string, ShopData>().Data;
-                    var krobusShop = shopsData["ShadowShop"];
-                    ReplaceStardropWithCheck(krobusShop);
-                },
+            {
+                var shopsData = asset.AsDictionary<string, ShopData>().Data;
+                var krobusShop = shopsData["ShadowShop"];
+                ReplaceStardropWithCheck(krobusShop);
+            },
                 AssetEditPriority.Late
             );
         }
