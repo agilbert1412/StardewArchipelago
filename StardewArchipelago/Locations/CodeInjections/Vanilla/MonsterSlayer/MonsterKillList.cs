@@ -40,7 +40,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
             { MonsterCategory.VOID_SPIRITS, 150 },
             { MonsterCategory.BATS, 200 },
             { MonsterCategory.SKELETONS, 50 },
-            { MonsterCategory.CAVE_INSECTS, 125 },
+            { MonsterCategory.CAVE_INSECTS, 80 },
             { MonsterCategory.DUGGIES, 30 },
             { MonsterCategory.DUST_SPRITES, 500 },
             { MonsterCategory.ROCK_CRABS, 60 },
