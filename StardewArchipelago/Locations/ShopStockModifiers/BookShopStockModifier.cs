@@ -1,4 +1,5 @@
-﻿using StardewArchipelago.Stardew;
+﻿using System.Collections.Generic;
+using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley.GameData.Shops;
@@ -36,10 +37,21 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
 
         private void ApplyPriceMultiplier(ShopData shopData)
         {
+            if (ModEntry.Instance.Config.BooksellerPriceMultiplier != 100)
+            {
+                return;
+            }
+
             var multiplier = ModEntry.Instance.Config.BooksellerPriceMultiplier / 100f;
             for (var i = shopData.Items.Count - 1; i >= 0; i--)
             {
                 var item = shopData.Items[i];
+
+                if (item.PriceModifiers == null)
+                {
+                    item.PriceModifiers = new List<QuantityModifier>();
+                }
+
                 var modifier = new QuantityModifier
                 {
                     Amount = multiplier,

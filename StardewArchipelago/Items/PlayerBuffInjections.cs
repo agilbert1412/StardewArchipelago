@@ -74,14 +74,10 @@ namespace StardewArchipelago.Items
                     return;
                 }
 
-                if (Game1.eventUp && Game1.CurrentEvent != null && Game1.currentLocation is DesertFestival desertFestival)
+                var pos = Game1.player.Tile;
+                if (Game1.currentLocation is DesertFestival desertFestival && pos.X >= 25 && pos.X <= 27 && pos.Y >= 50 && pos.Y <= 52)
                 {
-                    var makeoverEvent = desertFestival.GetMakeoverEvent();
-                    var makeoverEventCommands = Event.ParseCommands(makeoverEvent, null);
-                    if (makeoverEventCommands.SequenceEqual(Game1.CurrentEvent.eventCommands))
-                    {
-                        return;
-                    }
+                    return;
                 }
 
                 var baseCoefficient = 1.0f;
