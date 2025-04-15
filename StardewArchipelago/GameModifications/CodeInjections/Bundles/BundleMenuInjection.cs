@@ -1,8 +1,16 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection.Emit;
 using HarmonyLib;
 using StardewValley.Extensions;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using StardewArchipelago.Bundles;
+using StardewArchipelago.Constants;
+using StardewValley.Menus;
+using Bundle = StardewValley.Menus.Bundle;
+using System.Reflection;
 
 namespace StardewArchipelago.GameModifications.CodeInjections.Bundles
 {
@@ -10,7 +18,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Bundles
     {
         private static ILogger _logger;
 
-        public static void setupLogging(ILogger logger)
+        public static void Initialize(ILogger logger)
         {
             _logger = logger;
         }
@@ -19,8 +27,14 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Bundles
         public static IEnumerable<CodeInstruction> SkipObjectCheck(IEnumerable<CodeInstruction> instructions)
         {
             // We want to skip `if (dataOrErrorItem.HasTypeObject())`, just after `ParsedItemData dataOrErrorItem = ItemRegistry.GetDataOrErrorItem(representativeItemId);`
-            // In 1.6.8.24119, it looks like this
-            // IL_019c: ldloc.s 7
+
+            // [1371 11 - 1371 97]
+            // IL_0193: ldloc.s representativeItemId
+            // IL_0195: call         class StardewValley.ItemTypeDefinitions.ParsedItemData StardewValley.ItemRegistry::GetDataOrErrorItem(string)
+            // IL_019a: stloc.s dataOrErrorItem
+
+            // [1372 11 - 1372 47]
+            // IL_019c: ldloc.s dataOrErrorItem
             // IL_019e: call bool StardewValley.Extensions.ItemExtensions::HasTypeObject(class StardewValley.ItemTypeDefinitions.IHaveItemTypeId)
             // IL_01a3: brfalse IL_0330
 
@@ -71,6 +85,53 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Bundles
             {
                 _logger.LogError("The label somehow couldn't be cleared, expect issues on the Community Center bundles");
             }
+        }
+
+        //Transpiler way
+        public static IEnumerable<CodeInstruction> ReplaceVaultCheckWithBundleType(IEnumerable<CodeInstruction> instructions)
+        {
+            // We want to replace `if (this.whichArea == 4)`, just after `this.specificBundlePage = true;`
+
+            // [1335 7 - 1335 37]
+            // IL_0011: ldarg.0      // this
+            // IL_0012: ldc.i4.1
+            // IL_0013: stfld        bool StardewValley.Menus.JunimoNoteMenu::specificBundlePage
+
+            // [1336 7 - 1336 31]
+            // IL_0018: ldarg.0      // this
+            // IL_0019: ldfld int32 StardewValley.Menus.JunimoNoteMenu::whichArea
+            // IL_001e: ldc.i4.4
+            // IL_001f: bne.un IL_00b2
+
+            CodeMatcher matcher = new(instructions);
+
+            var whichAreaFieldInfo = AccessTools.Field(typeof(JunimoNoteMenu), nameof(JunimoNoteMenu.whichArea));
+
+            var isBundleCurrencyBasedInfo = AccessTools.Method(typeof(BundleMenuInjection), nameof(IsBundleCurrencyBased));
+
+            matcher.MatchEndForward(
+                new CodeMatch(OpCodes.Ldarg_0),
+                new CodeMatch(OpCodes.Ldfld),
+                new CodeMatch(OpCodes.Ldc_I4_4),
+                new CodeMatch(OpCodes.Bne_Un)
+            )
+            .SetOpcodeAndAdvance(OpCodes.Brfalse)
+            .Advance(-1)
+            .Insert(
+                new CodeInstruction(OpCodes.Pop),
+                new CodeInstruction(OpCodes.Pop),
+                new CodeInstruction(OpCodes.Ldarg_0),
+                new CodeInstruction(OpCodes.Call, isBundleCurrencyBasedInfo)
+                );
+
+            return matcher.InstructionEnumeration();
+        }
+
+        public static bool IsBundleCurrencyBased(JunimoNoteMenu menu)
+        {
+            var ingredient = menu.currentPageBundle.ingredients.Last();
+            var ingredientId = ingredient.id;
+            return CurrencyBundle.CurrencyIds.ContainsValue(ingredientId);
         }
     }
 }
