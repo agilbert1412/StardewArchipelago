@@ -9,6 +9,7 @@ using StardewValley.Events;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
+using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
 {
@@ -24,10 +25,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
 
         private static ILogger _logger;
         private static IModHelper _helper;
-        private static ArchipelagoClient _archipelago;
+        private static StardewArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
 
-        public static void Initialize(ILogger logger, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             _logger = logger;
             _helper = modHelper;
@@ -96,7 +97,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
                 var question = PickBabyQuestionBasedOnGenders(spouse);
 
                 var nextBirthLocation = _locationChecker.IsLocationMissing(FIRST_BABY) ? FIRST_BABY : SECOND_BABY;
-                var scoutedItem = _archipelago.ScoutSingleLocation(nextBirthLocation);
+                var scoutedItem = _archipelago.ScoutStardewLocation(nextBirthLocation);
                 question = string.Format(question, scoutedItem.ItemName, Game1.player.Name);
                 var answerPregnancyQuestionMethod = _helper.Reflection.GetMethod(__instance, "answerPregnancyQuestion");
                 Game1.currentLocation.createQuestionDialogue(question, answerChoices1, (who, answer) => answerPregnancyQuestionMethod.Invoke(who, answer), spouse);
@@ -178,7 +179,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
                 var chosenDialogue = dialogueOptions[Game1.random.Next(0, dialogueOptions.Length)];
 
                 var locationBeingChecked = _locationChecker.IsLocationMissing(FIRST_BABY) ? FIRST_BABY : SECOND_BABY;
-                var scoutedItem = _archipelago.ScoutSingleLocation(locationBeingChecked);
+                var scoutedItem = _archipelago.ScoutStardewLocation(locationBeingChecked);
                 var scoutedItemName = scoutedItem.ItemName;
 
                 var marriageDialogue = new MarriageDialogueReference("Data\\ExtraDialogue", chosenDialogue, true, scoutedItemName);

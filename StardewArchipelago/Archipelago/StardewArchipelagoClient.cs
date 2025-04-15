@@ -275,6 +275,23 @@ namespace StardewArchipelago.Archipelago
 
             return _bigIntegerDataStorage.DivideByTwo(scope, key);
         }
+
+        private bool ShouldHint(bool createAsHint)
+        {
+            var playerCount = GetSession().Players.AllPlayers.Count() > 1;
+            var shouldHint = createAsHint && (playerCount || ModEntry.Instance.Config.ScoutHintInSoloMultiworld);
+            return shouldHint;
+        }
+
+        public ScoutedLocation ScoutStardewLocation(string locationName, bool createAsHint = false)
+        {
+            return ScoutSingleLocation(locationName, ShouldHint(createAsHint));
+        }
+
+        public Dictionary<string, ScoutedLocation> ScoutStardewLocations(IEnumerable<string> locationNames, bool createAsHint = false)
+        {
+            return ScoutManyLocations(locationNames, ShouldHint(createAsHint));
+        }
     }
 
 }

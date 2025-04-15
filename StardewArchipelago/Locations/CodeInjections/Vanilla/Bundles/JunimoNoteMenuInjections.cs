@@ -17,6 +17,7 @@ using StardewValley.Menus;
 using Bundle = StardewValley.Menus.Bundle;
 using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
+using StardewArchipelago.Archipelago;
 using StardewArchipelago.Logging;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
@@ -28,12 +29,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         private static LogHandler _logger;
         private static IModHelper _modHelper;
-        private static ArchipelagoClient _archipelago;
+        private static StardewArchipelagoClient _archipelago;
         private static ArchipelagoStateDto _state;
         private static LocationChecker _locationChecker;
         private static BundleReader _bundleReader;
 
-        public static void Initialize(LogHandler logger, IModHelper modHelper, ArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, BundleReader bundleReader)
+        public static void Initialize(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, BundleReader bundleReader)
         {
             _logger = logger;
             _modHelper = modHelper;
@@ -177,7 +178,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                     }
                 }
 
-                var scoutedItem = _archipelago.ScoutSingleLocation(apLocationToScout, true);
+                var scoutedItem = _archipelago.ScoutStardewLocation(apLocationToScout, true);
                 var playerName = "Unknown Player";
                 var itemName = "Unknown Item";
                 if (scoutedItem != null)

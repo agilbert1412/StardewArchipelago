@@ -123,6 +123,11 @@ namespace StardewArchipelago
         /// Can help to reduce the booksanity grinding
         /// </summary>
         public int BooksellerPriceMultiplier { get; set; } = 100;
+
+        /// <summary>
+        /// Whether shops and other scoutable locations should auto-hint themselves, even when playing solo
+        /// </summary>
+        public bool ScoutHintInSoloMultiworld { get; set; } = false;
     }
 
     public enum ItemIndicatorPreference

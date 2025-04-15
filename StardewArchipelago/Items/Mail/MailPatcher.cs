@@ -241,7 +241,7 @@ namespace StardewArchipelago.Items.Mail
             const string deluxeScarecrowRecipeText = "Please accept this blueprint to commemorate your achievement.";
             const string deluxeScarecrowRecipeItemText = "%item craftingRecipe Deluxe_Scarecrow %%";
 
-            var scoutedLocation = _archipelago.ScoutSingleLocation(RARECROW_SOCIETY_AP_LOCATION);
+            var scoutedLocation = _archipelago.ScoutStardewLocation(RARECROW_SOCIETY_AP_LOCATION);
             var scoutedItemName = scoutedLocation.ItemName;
             var scoutedPlayer = scoutedLocation.PlayerName;
             var replacementText = $"We will send {scoutedItemName} to {scoutedPlayer} to commemorate your achievement.";

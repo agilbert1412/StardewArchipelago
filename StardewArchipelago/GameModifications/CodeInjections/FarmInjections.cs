@@ -315,7 +315,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             }
 
             var location = string.Format(FriendshipInjections.FRIENDSANITY_PATTERN, Friends.PET_NAME, 5);
-            var scouted = _archipelago.ScoutSingleLocation(location);
+            var scouted = _archipelago.ScoutStardewLocation(location);
             return $"After all, what would {scouted.PlayerName} do without their {scouted.ItemName}?";
         }
 

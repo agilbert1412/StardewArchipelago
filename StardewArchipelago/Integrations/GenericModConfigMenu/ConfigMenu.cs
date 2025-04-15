@@ -326,6 +326,14 @@ namespace StardewArchipelago.Integrations.GenericModConfigMenu
                 setValue: (value) => Config.BooksellerPriceMultiplier = value,
                 formatValue: (value) => $"{value}%"
             );
+
+            configMenu.AddBoolOption(
+                mod: ModManifest,
+                name: () => "Scout Hint In Solo Multiworlds",
+                tooltip: () => $"Whether shops and other scoutable locations should auto-hint themselves, even when playing solo. Bigger Multiworlds always scout-hint.",
+                getValue: () => Config.ScoutHintInSoloMultiworld,
+                setValue: (value) => Config.ScoutHintInSoloMultiworld = value
+            );
         }
     }
 }
