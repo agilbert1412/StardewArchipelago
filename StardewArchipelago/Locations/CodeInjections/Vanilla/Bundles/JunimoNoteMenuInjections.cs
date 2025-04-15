@@ -205,6 +205,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 return false;
             }
 
+            if (bundle.name.StartsWith("Raccoon Request "))
+            {
+                apLocationToScout = bundle.name;
+                return true;
+            }
+
             apLocationToScout = bundle.name + " Bundle";
             return true;
         }
