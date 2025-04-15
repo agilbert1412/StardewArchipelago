@@ -60,6 +60,7 @@ namespace StardewArchipelago.GameModifications
                 {
                     var craftingRecipesData = asset.AsDictionary<string, string>().Data;
                     RemoveObsoleteCraftingLearnConditions(craftingRecipesData);
+                    MakeSurePlayerKnowsAllReceivedRecipes(craftingRecipesData);
                 },
                 AssetEditPriority.Late
             );
@@ -226,6 +227,26 @@ namespace StardewArchipelago.GameModifications
             var recipeFields = recipeData.Split("/");
             var recipeUnlockCondition = recipeFields[fieldIndex];
             return recipeUnlockCondition;
+        }
+
+        private void MakeSurePlayerKnowsAllReceivedRecipes(IDictionary<string, string> craftingRecipesData)
+        {
+            if (_archipelago.SlotData.Craftsanity == Craftsanity.None)
+            {
+                return;
+            }
+
+            foreach (var recipeName in craftingRecipesData.Keys.ToArray())
+            {
+                var recipeData = craftingRecipesData[recipeName];
+                foreach (var farmer in Game1.getAllFarmers())
+                {
+                    if (!farmer.craftingRecipes.ContainsKey(recipeName) && _archipelago.HasReceivedItem($"{recipeName} Recipe"))
+                    {
+                        farmer.craftingRecipes.Add(recipeName, 0);
+                    }
+                }
+            }
         }
     }
 }

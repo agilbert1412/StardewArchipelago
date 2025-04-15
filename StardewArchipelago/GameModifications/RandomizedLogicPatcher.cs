@@ -152,6 +152,7 @@ namespace StardewArchipelago.GameModifications
             CleanLegendaryFishAndVoidMayoRecatchableEvent();
             UnpatchSeedShops();
             UnpatchJodiFishQuest();
+            UnPatchRecipes();
             CleanGoldenEggEvent();
         }
 
