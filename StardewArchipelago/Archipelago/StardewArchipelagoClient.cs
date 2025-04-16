@@ -278,7 +278,7 @@ namespace StardewArchipelago.Archipelago
 
         private bool ShouldHint(bool createAsHint)
         {
-            var playerCount = GetSession().Players.AllPlayers.Count() > 1;
+            var playerCount = GetSession().Players.AllPlayers.Count(x => !x.Game.Equals("Archipelago")) > 1;
             var shouldHint = createAsHint && (playerCount || ModEntry.Instance.Config.ScoutHintInSoloMultiworld);
             return shouldHint;
         }
