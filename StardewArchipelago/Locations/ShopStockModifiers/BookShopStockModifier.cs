@@ -37,7 +37,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
 
         private void ApplyPriceMultiplier(ShopData shopData)
         {
-            if (ModEntry.Instance.Config.BooksellerPriceMultiplier != 100)
+            if (ModEntry.Instance.Config.BooksellerPriceMultiplier == 100)
             {
                 return;
             }
