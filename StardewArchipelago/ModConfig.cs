@@ -128,6 +128,11 @@ namespace StardewArchipelago
         /// Whether shops and other scoutable locations should auto-hint themselves, even when playing solo
         /// </summary>
         public bool ScoutHintInSoloMultiworld { get; set; } = false;
+
+        /// <summary>
+        /// Preferred Hinting behaviors for scouted locations. If playing in a multiworld with others, DontHint will be changed to HintOnlyProgression
+        /// </summary>
+        // public ScoutingPreference ScoutHintInSoloMultiworld { get; set; } = ScoutingPreference.HintProgressionUseful;
     }
 
     public enum ItemIndicatorPreference
@@ -157,5 +162,14 @@ namespace StardewArchipelago
         Enabled = 1,
         // All = 2,
         Chaos = 3,
+    }
+
+    public enum ScoutingPreference
+    {
+        DontHint = 0,
+        HintOnlyProgression = 1,
+        HintProgressionUseful = 2,
+        HintProgressionUsefulFiller = 3,
+        HintEverything = 4,
     }
 }
