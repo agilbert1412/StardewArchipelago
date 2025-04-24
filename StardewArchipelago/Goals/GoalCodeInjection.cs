@@ -10,14 +10,12 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Menus;
-using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Locations;
-using KaitoKid.ArchipelagoUtilities.Net.Client;
-using Microsoft.Xna.Framework;
 using StardewArchipelago.Items;
-using StardewArchipelago.Textures;
 using StardewArchipelago.Logging;
+using StardewValley.Extensions;
+using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Goals
 {
@@ -426,23 +424,33 @@ namespace StardewArchipelago.Goals
         {
             var numberOfUnavailableItems = _archipelago.SlotData.ExcludeGingerIsland ? 10 : 0;
             var numberOfMissedItems = 0;
-            foreach (var (id, objectData) in Game1.objectData)
+
+            foreach (var parsedItemData in ItemRegistry.GetObjectTypeDefinition().GetAllData())
             {
-                if (objectData.ExcludeFromShippingCollection)
+                switch (parsedItemData.Category)
                 {
-                    continue;
-                }
+                    case -7:
+                    case -2:
+                        continue;
+                    default:
+                        if (!Object.isPotentialBasicShipped(parsedItemData.ItemId, parsedItemData.Category, parsedItemData.ObjectType))
+                        {
+                            continue;
+                        }
 
-                if (!Game1.player.basicShipped.ContainsKey(id))
-                {
-                    numberOfMissedItems++;
-                }
+                        if (!Game1.player.basicShipped.ContainsKey(parsedItemData.ItemId))
+                        {
+                            numberOfMissedItems++;
+                        }
 
-                if (numberOfMissedItems > numberOfUnavailableItems)
-                {
-                    return false;
+                        if (numberOfMissedItems > numberOfUnavailableItems)
+                        {
+                            return false;
+                        }
+                        break;
                 }
             }
+
             return true;
         }
 
