@@ -10,6 +10,7 @@ namespace StardewArchipelago.GameModifications.MultiSleep
         public const string FESTIVAL = "Festival";
         public const string BIRTHDAY = "Birthday";
         public const string TRAVELING_CART = "Traveling Cart";
+        public const string BOOKSELLER = "Bookseller";
         public const string END_OF_MONTH = "End of Month";
 
         private string _untilWhat;
@@ -42,6 +43,8 @@ namespace StardewArchipelago.GameModifications.MultiSleep
                     return birthdayPerson == null;
                 case TRAVELING_CART:
                     return !TravelingMerchantInjections.IsTravelingMerchantDay(Game1.dayOfMonth);
+                case BOOKSELLER:
+                    return !Utility.getDaysOfBooksellerThisSeason().Contains(Game1.dayOfMonth);
 
                 default:
                     return false;

@@ -160,6 +160,7 @@ namespace StardewArchipelago.GameModifications.MultiSleep
             {
                 possibleResponses.Add(new Response(MultiSleepUntilBehavior.TRAVELING_CART, "Traveling Cart"));
             }
+            possibleResponses.Add(new Response(MultiSleepUntilBehavior.BOOKSELLER, "Bookseller"));
             possibleResponses.Add(new Response(MultiSleepUntilBehavior.END_OF_MONTH, "End of month"));
             possibleResponses.Add(new Response("Cancel", "Nevermind").SetHotKey(Keys.Escape));
 
@@ -175,6 +176,7 @@ namespace StardewArchipelago.GameModifications.MultiSleep
                 case MultiSleepUntilBehavior.FESTIVAL:
                 case MultiSleepUntilBehavior.BIRTHDAY:
                 case MultiSleepUntilBehavior.TRAVELING_CART:
+                case MultiSleepUntilBehavior.BOOKSELLER:
                     _currentMultiSleep = new MultiSleepUntilBehavior(untilKey);
                     StartSleep(instance);
                     return;
