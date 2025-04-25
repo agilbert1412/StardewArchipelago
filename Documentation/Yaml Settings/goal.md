@@ -40,7 +40,7 @@ Restore the community center, by completing every bundle in every room. External
 In Archipelago, you do not need to wait for year 2 to get evaluated. Grandpa evaluates you every single morning, so your slot will goal as soon as it qualifies.
 The mod provides a built-in tracker for evaluation points, shown above Grandpa's Shrine.
 
-[!image](https://i.imgur.com/QEoTJTz.png)
+![image](https://i.imgur.com/QEoTJTz.png)
 
 - This goal is **not** *Adaptable*. There are no settings that will customize this goal
 - This goal is **not** *Focused*. There are many things to do to obtain grandpa points and you can decide which ones to work on.
