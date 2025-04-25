@@ -90,6 +90,7 @@ namespace StardewArchipelago.GameModifications
             OutOfLogicInjections.Initialize(logger, archipelago, stardewItemManager);
             EmptyHandInjections.Initialize(logger, archipelago, stardewItemManager);
             MovementInjections.Initialize(logger, archipelago);
+            BundleMenuInjection.Initialize(logger);
             DebugPatchInjections.Initialize(logger, archipelago);
             BundleMenuInjection.Initialize(logger);
             _jojaDisabler = new JojaDisabler(logger, modHelper, harmony);
@@ -153,6 +154,7 @@ namespace StardewArchipelago.GameModifications
             CleanLegendaryFishAndVoidMayoRecatchableEvent();
             UnpatchSeedShops();
             UnpatchJodiFishQuest();
+            UnPatchRecipes();
             CleanGoldenEggEvent();
         }
 
@@ -744,6 +746,11 @@ namespace StardewArchipelago.GameModifications
             _harmony.Patch(
                 original: AccessTools.Method(typeof(JunimoNoteMenu), "setUpBundleSpecificPage"),
                 transpiler: new HarmonyMethod(typeof(BundleMenuInjection), nameof(BundleMenuInjection.SkipObjectCheck))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(JunimoNoteMenu), "setUpBundleSpecificPage"),
+                transpiler: new HarmonyMethod(typeof(BundleMenuInjection), nameof(BundleMenuInjection.ReplaceVaultCheckWithBundleType))
             );
         }
 

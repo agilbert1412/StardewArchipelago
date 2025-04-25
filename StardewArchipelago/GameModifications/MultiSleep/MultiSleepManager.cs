@@ -137,7 +137,7 @@ namespace StardewArchipelago.GameModifications.MultiSleep
         {
             var multiSleepMessage =
                 "How many days do you wish to sleep for?\n(Warning: Sleeping saves the game, this action cannot be undone)";
-            Game1.activeClickableMenu = new MultiSleepSelectionMenu(multiSleepMessage, (value, price, who) => SleepMany(__instance, value), minValue: 1, maxValue: 112, defaultNumber: 7, price: _multiSleepPrice);
+            Game1.activeClickableMenu = new MultiSleepSelectionMenu(multiSleepMessage, (value, price, who) => SleepMany(__instance, value), minValue: 1, maxValue: 224, defaultNumber: 7, price: _multiSleepPrice);
         }
 
         private static void ShowSleepUntilDialogue(GameLocation __instance)
@@ -157,6 +157,7 @@ namespace StardewArchipelago.GameModifications.MultiSleep
             {
                 possibleResponses.Add(new Response(MultiSleepUntilBehavior.TRAVELING_CART, "Traveling Cart"));
             }
+            possibleResponses.Add(new Response(MultiSleepUntilBehavior.BOOKSELLER, "Bookseller"));
             possibleResponses.Add(new Response(MultiSleepUntilBehavior.END_OF_MONTH, "End of month"));
             possibleResponses.Add(new Response("Cancel", "Nevermind").SetHotKey(Keys.Escape));
 
@@ -172,6 +173,7 @@ namespace StardewArchipelago.GameModifications.MultiSleep
                 case MultiSleepUntilBehavior.FESTIVAL:
                 case MultiSleepUntilBehavior.BIRTHDAY:
                 case MultiSleepUntilBehavior.TRAVELING_CART:
+                case MultiSleepUntilBehavior.BOOKSELLER:
                     _currentMultiSleep = new MultiSleepUntilBehavior(untilKey);
                     StartSleep(instance);
                     return;

@@ -322,7 +322,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                                 if (Game1.IsMasterGame)
                                 {
                                     Game1.player.team.MarkCollectedNut("IslandWestCavePuzzle");
-                                    CreateLocationDebris("Colored Crystals", new Vector2(5f, 2f) * 64f, __instance);
+                                    CreateLocationDebris("Colored Crystals", new Vector2(6f, 4f) * 64f, __instance);
                                 }
                                 __instance.completed.Value = true;
                                 if (Game1.currentLocation == __instance)

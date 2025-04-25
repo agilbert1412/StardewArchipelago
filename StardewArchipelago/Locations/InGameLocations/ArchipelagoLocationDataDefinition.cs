@@ -11,6 +11,7 @@ using StardewArchipelago.Logging;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.ItemTypeDefinitions;
+using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.Locations.InGameLocations
 {
@@ -19,10 +20,10 @@ namespace StardewArchipelago.Locations.InGameLocations
     {
         private static LogHandler _logger;
         private static IModHelper _modHelper;
-        private static ArchipelagoClient _archipelago;
+        private static StardewArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
 
-        public static void Initialize(LogHandler logger, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             _logger = logger;
             _modHelper = modHelper;

@@ -239,7 +239,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
 
             var whichBundle = (currentRaccoonBundleNumber - 1) % 5;
-            var bundle = new Bundle("Seafood", null, ingredients, new bool[1])
+            var bundle = new Bundle(currentRaccoonBundleName, null, ingredients, new bool[1])
             {
                 bundleTextureOverride = Game1.content.Load<Texture2D>("LooseSprites\\BundleSprites"),
                 bundleTextureIndexOverride = 14 + whichBundle,

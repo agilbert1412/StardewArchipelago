@@ -58,6 +58,7 @@ namespace StardewArchipelago.Locations.Patcher
         private readonly CookingRecipePurchaseStockModifier _cookingRecipePurchaseStockModifier;
         private readonly CraftingRecipePurchaseStockModifier _craftingRecipePurchaseStockModifier;
         private readonly KrobusStockModifier _krobusStockModifier;
+        private readonly BookShopStockModifier _bookShopStockModifier;
 
         public VanillaLocationPatcher(ILogger logger, IModHelper modHelper, Harmony harmony, StardewArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager stardewItemManager)
         {
@@ -76,6 +77,7 @@ namespace StardewArchipelago.Locations.Patcher
             _cookingRecipePurchaseStockModifier = new CookingRecipePurchaseStockModifier(logger, modHelper, archipelago, stardewItemManager);
             _craftingRecipePurchaseStockModifier = new CraftingRecipePurchaseStockModifier(logger, modHelper, archipelago, stardewItemManager);
             _krobusStockModifier = new KrobusStockModifier(logger, modHelper, archipelago, stardewItemManager);
+            _bookShopStockModifier = new BookShopStockModifier(logger, modHelper, archipelago, stardewItemManager);
         }
 
         public void ReplaceAllLocationsRewardsWithChecks()
@@ -135,6 +137,7 @@ namespace StardewArchipelago.Locations.Patcher
             CleanChefsanityEvents();
             CleanCraftsanityEvents();
             CleanKrobusEvents();
+            CleanBookEvents();
         }
 
         private void ReplaceCommunityCenterBundlesWithChecks()
@@ -1268,6 +1271,8 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void PatchBooks()
         {
+            _modHelper.Events.Content.AssetRequested += _bookShopStockModifier.OnShopStockRequested;
+
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Object), "readBook"),
                 prefix: new HarmonyMethod(typeof(BookInjections), nameof(BookInjections.ReadBook_Booksanity_Prefix))
@@ -1287,6 +1292,11 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(typeof(LibraryMuseum), "resetLocalState"),
                 prefix: new HarmonyMethod(typeof(BookInjections), nameof(BookInjections.ResetLocalState_BooksanityLostBooks_Prefix))
             );
+        }
+
+        private void CleanBookEvents()
+        {
+            _modHelper.Events.Content.AssetRequested -= _bookShopStockModifier.OnShopStockRequested;
         }
 
         private void PatchWalnuts()
