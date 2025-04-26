@@ -757,15 +757,16 @@ namespace StardewArchipelago.GameModifications
                 prefix: new HarmonyMethod(typeof(BundleMenuInjection), nameof(BundleMenuInjection.SetActiveClickableMenu_UseJunimoNoteMenuRemake_Prefix))
             );
 
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(JunimoNoteMenu), "setUpBundleSpecificPage"),
-                transpiler: new HarmonyMethod(typeof(BundleMenuInjection), nameof(BundleMenuInjection.SkipObjectCheck))
-            );
+            // This is no longer necessary, now we use the JunimoNoteMenuRemake
+            //_harmony.Patch(
+            //    original: AccessTools.Method(typeof(JunimoNoteMenu), "setUpBundleSpecificPage"),
+            //    transpiler: new HarmonyMethod(typeof(BundleMenuInjection), nameof(BundleMenuInjection.SkipObjectCheck))
+            //);
 
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(JunimoNoteMenu), "setUpBundleSpecificPage"),
-                transpiler: new HarmonyMethod(typeof(BundleMenuInjection), nameof(BundleMenuInjection.ReplaceVaultCheckWithBundleType))
-            );
+            //_harmony.Patch(
+            //    original: AccessTools.Method(typeof(JunimoNoteMenu), "setUpBundleSpecificPage"),
+            //    transpiler: new HarmonyMethod(typeof(BundleMenuInjection), nameof(BundleMenuInjection.ReplaceVaultCheckWithBundleType))
+            //);
         }
 
         private void PatchCraftingPage()

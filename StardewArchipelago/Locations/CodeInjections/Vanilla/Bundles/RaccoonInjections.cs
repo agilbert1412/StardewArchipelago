@@ -250,9 +250,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 NumberOfIngredientSlots = raccoonBundle.NumberRequired,
             };
             var raccoonNoteMenu = new ArchipelagoJunimoNoteMenu(_logger, _modHelper, _archipelago, _state, _locationChecker, _bundleReader, bundle, "LooseSprites\\raccoon_bundle_menu");
-            raccoonNoteMenu.onIngredientDeposit = x => _state.CurrentRaccoonBundleStatus[x] = true;
-            raccoonNoteMenu.onBundleComplete = _ => BundleComplete(raccoon);
-            raccoonNoteMenu.onScreenSwipeFinished = _ => BundleCompleteAfterSwipe(raccoon);
+            raccoonNoteMenu.OnIngredientDeposit = x => _state.CurrentRaccoonBundleStatus[x] = true;
+            raccoonNoteMenu.OnBundleComplete = _ => BundleComplete(raccoon);
+            raccoonNoteMenu.OnScreenSwipeFinished = _ => BundleCompleteAfterSwipe(raccoon);
             raccoonNoteMenu.behaviorBeforeCleanup = _ => raccoon.mutex?.ReleaseLock();
             Game1.activeClickableMenu = raccoonNoteMenu;
         }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using StardewArchipelago.Bundles;
 using StardewValley;
 using StardewValley.BellsAndWhistles;
 using StardewValley.Extensions;
@@ -10,57 +11,58 @@ using StardewValley.Menus;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+// ReSharper disable PossibleLossOfFraction
 
 #nullable disable
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
 {
     public class JunimoNoteMenuRemake : IClickableMenu
     {
-        public const int region_ingredientSlotModifier = 250;
-        public const int region_ingredientListModifier = 1000;
-        public const int region_bundleModifier = 5000;
-        public const int region_areaNextButton = 101;
-        public const int region_areaBackButton = 102;
-        public const int region_backButton = 103;
-        public const int region_purchaseButton = 104;
-        public const int region_presentButton = 105;
-        public const string noteTextureName = "LooseSprites\\JunimoNote";
-        public Texture2D noteTexture;
-        public bool specificBundlePage;
-        public const int baseWidth = 320;
-        public const int baseHeight = 180;
-        public InventoryMenu inventory;
-        public Item partialDonationItem;
-        public List<Item> partialDonationComponents = new List<Item>();
-        public BundleIngredientDescription? currentPartialIngredientDescription;
-        public int currentPartialIngredientDescriptionIndex = -1;
-        public Item heldItem;
-        public Item hoveredItem;
-        public static bool canClick = true;
-        public int whichArea;
-        public int gameMenuTabToReturnTo = -1;
-        public IClickableMenu menuToReturnTo;
-        public bool bundlesChanged;
-        public static ScreenSwipe screenSwipe;
-        public static string hoverText = "";
-        public List<BundleRemake> bundles = new List<BundleRemake>();
-        public static TemporaryAnimatedSpriteList tempSprites = new TemporaryAnimatedSpriteList();
-        public List<ClickableTextureComponent> ingredientSlots = new List<ClickableTextureComponent>();
-        public List<ClickableTextureComponent> ingredientList = new List<ClickableTextureComponent>();
-        public bool fromGameMenu;
-        public bool fromThisMenu;
-        public bool scrambledText;
-        private bool singleBundleMenu;
-        public ClickableTextureComponent backButton;
-        public ClickableTextureComponent purchaseButton;
-        public ClickableTextureComponent areaNextButton;
-        public ClickableTextureComponent areaBackButton;
-        public ClickableAnimatedComponent presentButton;
-        public Action<int> onIngredientDeposit;
-        public Action<JunimoNoteMenuRemake> onBundleComplete;
-        public Action<JunimoNoteMenuRemake> onScreenSwipeFinished;
+        public const int REGION_INGREDIENT_SLOT_MODIFIER = 250;
+        public const int REGION_INGREDIENT_LIST_MODIFIER = 1000;
+        public const int REGION_BUNDLE_MODIFIER = 5000;
+        public const int REGION_AREA_NEXT_BUTTON = 101;
+        public const int REGION_AREA_BACK_BUTTON = 102;
+        public const int REGION_BACK_BUTTON = 103;
+        public const int REGION_PURCHASE_BUTTON = 104;
+        public const int REGION_PRESENT_BUTTON = 105;
+        public const int BASE_WIDTH = 320;
+        public const int BASE_HEIGHT = 180;
+        public const string NOTE_TEXTURE_NAME = "LooseSprites\\JunimoNote";
+        public Texture2D NoteTexture;
+        public bool SpecificBundlePage;
+        public InventoryMenu Inventory;
+        public Item PartialDonationItem;
+        public List<Item> PartialDonationComponents = new();
+        public BundleIngredientDescription? CurrentPartialIngredientDescription;
+        public int CurrentPartialIngredientDescriptionIndex = -1;
+        public Item HeldItem;
+        public Item HoveredItem;
+        public static bool CanClick = true;
+        public int WhichArea;
+        public int GameMenuTabToReturnTo = -1;
+        public IClickableMenu MenuToReturnTo;
+        public bool BundlesChanged;
+        public static ScreenSwipe ScreenSwipe;
+        public static string HoverText = "";
+        public List<BundleRemake> Bundles = new();
+        public static TemporaryAnimatedSpriteList TempSprites = new();
+        public List<ClickableTextureComponent> IngredientSlots = new();
+        public List<ClickableTextureComponent> IngredientList = new();
+        public bool FromGameMenu;
+        public bool FromThisMenu;
+        public bool ScrambledText;
+        private readonly bool _singleBundleMenu;
+        public ClickableTextureComponent BackButton;
+        public ClickableTextureComponent PurchaseButton;
+        public ClickableTextureComponent AreaNextButton;
+        public ClickableTextureComponent AreaBackButton;
+        public ClickableAnimatedComponent PresentButton;
+        public Action<int> OnIngredientDeposit;
+        public Action<JunimoNoteMenuRemake> OnBundleComplete;
+        public Action<JunimoNoteMenuRemake> OnScreenSwipeFinished;
         public BundleRemake CurrentPageBundle;
-        private int oldTriggerSpot;
+        private int _oldTriggerSpot;
 
         public JunimoNoteMenuRemake(bool fromGameMenu, int area = 1, bool fromThisMenu = false)
           : base(Game1.uiViewport.Width / 2 - 640, Game1.uiViewport.Height / 2 - 360, 1280, 720, true)
@@ -73,7 +75,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                     if (communityCenter.shouldNoteAppearInArea(index) && !communityCenter.areasComplete[index])
                     {
                         area = index;
-                        whichArea = area;
+                        WhichArea = area;
                         break;
                     }
                 }
@@ -82,35 +84,35 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                     area = 6;
                 }
             }
-            setUpMenu(area, communityCenter.bundlesDict());
+            SetUpMenu(area, communityCenter.bundlesDict());
             Game1.player.forceCanMove();
             var textureComponent1 = new ClickableTextureComponent(new Rectangle(xPositionOnScreen + width - 128, yPositionOnScreen, 48, 44), Game1.mouseCursors, new Rectangle(365, 495, 12, 11), 4f);
             textureComponent1.visible = false;
-            textureComponent1.myID = 101;
-            textureComponent1.leftNeighborID = 102;
+            textureComponent1.myID = REGION_AREA_NEXT_BUTTON;
+            textureComponent1.leftNeighborID = REGION_AREA_BACK_BUTTON;
             textureComponent1.leftNeighborImmutable = true;
             textureComponent1.downNeighborID = -99998;
-            areaNextButton = textureComponent1;
+            AreaNextButton = textureComponent1;
             var textureComponent2 = new ClickableTextureComponent(new Rectangle(xPositionOnScreen + 64, yPositionOnScreen, 48, 44), Game1.mouseCursors, new Rectangle(352, 495, 12, 11), 4f);
             textureComponent2.visible = false;
-            textureComponent2.myID = 102;
-            textureComponent2.rightNeighborID = 101;
+            textureComponent2.myID = REGION_AREA_BACK_BUTTON;
+            textureComponent2.rightNeighborID = REGION_AREA_NEXT_BUTTON;
             textureComponent2.rightNeighborImmutable = true;
             textureComponent2.downNeighborID = -99998;
-            areaBackButton = textureComponent2;
+            AreaBackButton = textureComponent2;
             var num = 6;
             for (var area1 = 0; area1 < num; ++area1)
             {
                 if (area1 != area && communityCenter.shouldNoteAppearInArea(area1))
                 {
-                    areaNextButton.visible = true;
-                    areaBackButton.visible = true;
+                    AreaNextButton.visible = true;
+                    AreaBackButton.visible = true;
                     break;
                 }
             }
-            this.fromGameMenu = fromGameMenu;
-            this.fromThisMenu = fromThisMenu;
-            foreach (var bundle in bundles)
+            this.FromGameMenu = fromGameMenu;
+            this.FromThisMenu = fromThisMenu;
+            foreach (var bundle in Bundles)
             {
                 bundle.DepositsAllowed = false;
             }
@@ -125,7 +127,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
         public JunimoNoteMenuRemake(int whichArea, Dictionary<int, bool[]> bundlesComplete)
           : base(Game1.uiViewport.Width / 2 - 640, Game1.uiViewport.Height / 2 - 360, 1280, 720, true)
         {
-            setUpMenu(whichArea, bundlesComplete);
+            SetUpMenu(whichArea, bundlesComplete);
             if (!Game1.options.SnappyMenus)
             {
                 return;
@@ -137,32 +139,32 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
         public JunimoNoteMenuRemake(BundleRemake b, string noteTexturePath)
           : base(Game1.uiViewport.Width / 2 - 640, Game1.uiViewport.Height / 2 - 360, 1280, 720, true)
         {
-            singleBundleMenu = true;
-            whichArea = -1;
-            noteTexture = Game1.temporaryContent.Load<Texture2D>(noteTexturePath);
-            tempSprites.Clear();
-            inventory = new InventoryMenu(xPositionOnScreen + 128, yPositionOnScreen + 140, true, highlightMethod: HighlightObjects, capacity: 36, rows: 6, horizontalGap: 8, verticalGap: 8, drawSlots: false)
+            _singleBundleMenu = true;
+            WhichArea = -1;
+            NoteTexture = Game1.temporaryContent.Load<Texture2D>(noteTexturePath);
+            TempSprites.Clear();
+            Inventory = new InventoryMenu(xPositionOnScreen + 128, yPositionOnScreen + 140, true, highlightMethod: HighlightObjects, capacity: 36, rows: 6, horizontalGap: 8, verticalGap: 8, drawSlots: false)
             {
                 capacity = 36
             };
-            for (var index = 0; index < inventory.inventory.Count; ++index)
+            for (var index = 0; index < Inventory.inventory.Count; ++index)
             {
-                if (index >= inventory.actualInventory.Count)
+                if (index >= Inventory.actualInventory.Count)
                 {
-                    inventory.inventory[index].visible = false;
+                    Inventory.inventory[index].visible = false;
                 }
             }
-            foreach (var clickableComponent in inventory.GetBorder(InventoryMenu.BorderSide.Bottom))
+            foreach (var clickableComponent in Inventory.GetBorder(InventoryMenu.BorderSide.Bottom))
             {
                 clickableComponent.downNeighborID = -99998;
             }
-            foreach (var clickableComponent in inventory.GetBorder(InventoryMenu.BorderSide.Right))
+            foreach (var clickableComponent in Inventory.GetBorder(InventoryMenu.BorderSide.Right))
             {
                 clickableComponent.rightNeighborID = -99998;
             }
-            inventory.dropItemInvisibleButton.visible = false;
-            canClick = true;
-            setUpBundleSpecificPage(b);
+            Inventory.dropItemInvisibleButton.visible = false;
+            CanClick = true;
+            SetUpBundleSpecificPage(b);
             if (!Game1.options.SnappyMenus)
             {
                 return;
@@ -173,62 +175,58 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
 
         public override void snapToDefaultClickableComponent()
         {
-            if (specificBundlePage)
+            if (SpecificBundlePage)
             {
                 currentlySnappedComponent = getComponentWithID(0);
             }
             else
             {
-                currentlySnappedComponent = getComponentWithID(5000);
+                currentlySnappedComponent = getComponentWithID(REGION_BUNDLE_MODIFIER);
             }
             snapCursorToCurrentSnappedComponent();
         }
 
-        protected override bool _ShouldAutoSnapPrioritizeAlignedElements() => !specificBundlePage;
+        protected override bool _ShouldAutoSnapPrioritizeAlignedElements() => !SpecificBundlePage;
 
-        protected override void customSnapBehavior(int direction, int oldRegion, int oldID)
+        protected override void customSnapBehavior(int direction, int oldRegion, int oldId)
         {
-            if (!Game1.player.hasOrWillReceiveMail("canReadJunimoText") || oldID - 5000 < 0 || oldID - 5000 >= 10 || currentlySnappedComponent == null)
+            if (!Game1.player.hasOrWillReceiveMail("canReadJunimoText") || oldId - REGION_BUNDLE_MODIFIER < 0 || oldId - REGION_BUNDLE_MODIFIER >= 10 || currentlySnappedComponent == null)
             {
                 return;
             }
             var num1 = -1;
             var num2 = 999999;
             var center1 = currentlySnappedComponent.bounds.Center;
-            for (var index = 0; index < bundles.Count; ++index)
+            for (var index = 0; index < Bundles.Count; ++index)
             {
-                if (bundles[index].myID != oldID)
+                if (Bundles[index].myID != oldId)
                 {
                     var num3 = 999999;
-                    var center2 = bundles[index].bounds.Center;
+                    var center2 = Bundles[index].bounds.Center;
                     switch (direction)
                     {
                         case 0:
                             if (center2.Y < center1.Y)
                             {
                                 num3 = center1.Y - center2.Y + Math.Abs(center1.X - center2.X) * 3;
-                                break;
                             }
                             break;
                         case 1:
                             if (center2.X > center1.X)
                             {
                                 num3 = center2.X - center1.X + Math.Abs(center1.Y - center2.Y) * 3;
-                                break;
                             }
                             break;
                         case 2:
                             if (center2.Y > center1.Y)
                             {
                                 num3 = center2.Y - center1.Y + Math.Abs(center1.X - center2.X) * 3;
-                                break;
                             }
                             break;
                         case 3:
                             if (center2.X < center1.X)
                             {
                                 num3 = center1.X - center2.X + Math.Abs(center1.Y - center2.Y) * 3;
-                                break;
                             }
                             break;
                     }
@@ -241,7 +239,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             }
             if (num1 != -1)
             {
-                currentlySnappedComponent = getComponentWithID(num1 + 5000);
+                currentlySnappedComponent = getComponentWithID(num1 + REGION_BUNDLE_MODIFIER);
                 snapCursorToCurrentSnappedComponent();
             }
             else
@@ -249,39 +247,39 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                 switch (direction)
                 {
                     case 1:
-                        if (areaNextButton == null || !areaNextButton.visible)
+                        if (AreaNextButton == null || !AreaNextButton.visible)
                         {
                             break;
                         }
-                        currentlySnappedComponent = areaNextButton;
+                        currentlySnappedComponent = AreaNextButton;
                         snapCursorToCurrentSnappedComponent();
-                        areaNextButton.leftNeighborID = oldID;
+                        AreaNextButton.leftNeighborID = oldId;
                         break;
                     case 2:
-                        if (presentButton == null)
+                        if (PresentButton == null)
                         {
                             break;
                         }
-                        currentlySnappedComponent = presentButton;
+                        currentlySnappedComponent = PresentButton;
                         snapCursorToCurrentSnappedComponent();
-                        presentButton.upNeighborID = oldID;
+                        PresentButton.upNeighborID = oldId;
                         break;
                     case 3:
-                        if (areaBackButton == null || !areaBackButton.visible)
+                        if (AreaBackButton == null || !AreaBackButton.visible)
                         {
                             break;
                         }
-                        currentlySnappedComponent = areaBackButton;
+                        currentlySnappedComponent = AreaBackButton;
                         snapCursorToCurrentSnappedComponent();
-                        areaBackButton.rightNeighborID = oldID;
+                        AreaBackButton.rightNeighborID = oldId;
                         break;
                 }
             }
         }
 
-        public virtual void setUpMenu(int whichArea, Dictionary<int, bool[]> bundlesComplete)
+        public virtual void SetUpMenu(int whichArea, Dictionary<int, bool[]> bundlesComplete)
         {
-            noteTexture = Game1.temporaryContent.Load<Texture2D>("LooseSprites\\JunimoNote");
+            NoteTexture = Game1.temporaryContent.Load<Texture2D>(NOTE_TEXTURE_NAME);
             if (!Game1.player.hasOrWillReceiveMail("seenJunimoNote"))
             {
                 Game1.player.removeQuest("26");
@@ -295,29 +293,29 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             {
                 Game1.player.mailReceived.Add("hasSeenAbandonedJunimoNote");
             }
-            scrambledText = !Game1.player.hasOrWillReceiveMail("canReadJunimoText");
-            tempSprites.Clear();
-            this.whichArea = whichArea;
-            inventory = new InventoryMenu(xPositionOnScreen + 128, yPositionOnScreen + 140, true, highlightMethod: HighlightObjects, capacity: 36, rows: 6, horizontalGap: 8, verticalGap: 8, drawSlots: false)
+            ScrambledText = !Game1.player.hasOrWillReceiveMail("canReadJunimoText");
+            TempSprites.Clear();
+            this.WhichArea = whichArea;
+            Inventory = new InventoryMenu(xPositionOnScreen + 128, yPositionOnScreen + 140, true, highlightMethod: HighlightObjects, capacity: 36, rows: 6, horizontalGap: 8, verticalGap: 8, drawSlots: false)
             {
                 capacity = 36
             };
-            for (var index = 0; index < inventory.inventory.Count; ++index)
+            for (var index = 0; index < Inventory.inventory.Count; ++index)
             {
-                if (index >= inventory.actualInventory.Count)
+                if (index >= Inventory.actualInventory.Count)
                 {
-                    inventory.inventory[index].visible = false;
+                    Inventory.inventory[index].visible = false;
                 }
             }
-            foreach (var clickableComponent in inventory.GetBorder(InventoryMenu.BorderSide.Bottom))
+            foreach (var clickableComponent in Inventory.GetBorder(InventoryMenu.BorderSide.Bottom))
             {
                 clickableComponent.downNeighborID = -99998;
             }
-            foreach (var clickableComponent in inventory.GetBorder(InventoryMenu.BorderSide.Right))
+            foreach (var clickableComponent in Inventory.GetBorder(InventoryMenu.BorderSide.Right))
             {
                 clickableComponent.rightNeighborID = -99998;
             }
-            inventory.dropItemInvisibleButton.visible = false;
+            Inventory.dropItemInvisibleButton.visible = false;
             var bundleData = Game1.netWorldState.Value.BundleData;
             var areaNameFromNumber = CommunityCenter.getAreaNameFromNumber(whichArea);
             var whichBundle = 0;
@@ -326,9 +324,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                 if (key.Contains(areaNameFromNumber))
                 {
                     var int32 = Convert.ToInt32(key.Split('/')[1]);
-                    var bundles = this.bundles;
-                    var bundle = new BundleRemake(int32, bundleData[key], bundlesComplete[int32], getBundleLocationFromNumber(whichBundle), "LooseSprites\\JunimoNote", this);
-                    bundle.myID = whichBundle + 5000;
+                    var bundles = this.Bundles;
+                    var bundle = new BundleRemake(int32, bundleData[key], bundlesComplete[int32], GetBundleLocationFromNumber(whichBundle), NOTE_TEXTURE_NAME, this);
+                    bundle.myID = whichBundle + REGION_BUNDLE_MODIFIER;
                     bundle.rightNeighborID = -7777;
                     bundle.leftNeighborID = -7777;
                     bundle.upNeighborID = -7777;
@@ -339,13 +337,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                 }
             }
             var textureComponent = new ClickableTextureComponent("Back", new Rectangle(xPositionOnScreen + borderWidth * 2 + 8, yPositionOnScreen + borderWidth * 2 + 4, 64, 64), null, null, Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 44), 1f);
-            textureComponent.myID = 103;
-            backButton = textureComponent;
+            textureComponent.myID = REGION_BACK_BUTTON;
+            BackButton = textureComponent;
             CheckForRewards();
-            canClick = true;
+            CanClick = true;
             Game1.playSound("shwip");
             var flag = false;
-            foreach (var bundle in bundles)
+            foreach (var bundle in Bundles)
             {
                 if (!bundle.Complete && !bundle.Equals(CurrentPageBundle))
                 {
@@ -367,9 +365,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
         {
             if (CurrentPageBundle != null)
             {
-                if (partialDonationItem != null && currentPartialIngredientDescriptionIndex >= 0)
+                if (PartialDonationItem != null && CurrentPartialIngredientDescriptionIndex >= 0)
                 {
-                    return CurrentPageBundle.IsValidItemForThisIngredientDescription(item, CurrentPageBundle.Ingredients[currentPartialIngredientDescriptionIndex]);
+                    return CurrentPageBundle.IsValidItemForThisIngredientDescription(item, CurrentPageBundle.Ingredients[CurrentPartialIngredientDescriptionIndex]);
                 }
                 foreach (var ingredient in CurrentPageBundle.Ingredients)
                 {
@@ -384,52 +382,52 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
 
         public override bool readyToClose()
         {
-            return (!specificBundlePage || singleBundleMenu) && IsReadyToCloseMenuOrBundle();
+            return (!SpecificBundlePage || _singleBundleMenu) && IsReadyToCloseMenuOrBundle();
         }
 
         /// <inheritdoc />
         public override void receiveLeftClick(int x, int y, bool playSound = true)
         {
-            if (!canClick)
+            if (!CanClick)
             {
                 return;
             }
             base.receiveLeftClick(x, y, playSound);
-            if (scrambledText)
+            if (ScrambledText)
             {
                 return;
             }
-            if (specificBundlePage)
+            if (SpecificBundlePage)
             {
                 if (!CurrentPageBundle.Complete && CurrentPageBundle.CompletionTimer <= 0)
                 {
-                    heldItem = inventory.leftClick(x, y, heldItem);
+                    HeldItem = Inventory.leftClick(x, y, HeldItem);
                 }
-                if (backButton != null && backButton.containsPoint(x, y) && heldItem == null)
+                if (BackButton != null && BackButton.containsPoint(x, y) && HeldItem == null)
                 {
-                    closeBundlePage();
+                    CloseBundlePage();
                 }
-                if (partialDonationItem != null)
+                if (PartialDonationItem != null)
                 {
-                    if (heldItem != null && Game1.oldKBState.IsKeyDown(Keys.LeftShift))
+                    if (HeldItem != null && Game1.oldKBState.IsKeyDown(Keys.LeftShift))
                     {
-                        for (var index = 0; index < ingredientSlots.Count; ++index)
+                        for (var index = 0; index < IngredientSlots.Count; ++index)
                         {
-                            if (ingredientSlots[index].item == partialDonationItem)
+                            if (IngredientSlots[index].item == PartialDonationItem)
                             {
-                                HandlePartialDonation(heldItem, ingredientSlots[index]);
+                                HandlePartialDonation(HeldItem, IngredientSlots[index]);
                             }
                         }
                     }
                     else
                     {
-                        for (var index = 0; index < ingredientSlots.Count; ++index)
+                        for (var index = 0; index < IngredientSlots.Count; ++index)
                         {
-                            if (ingredientSlots[index].containsPoint(x, y) && ingredientSlots[index].item == partialDonationItem)
+                            if (IngredientSlots[index].containsPoint(x, y) && IngredientSlots[index].item == PartialDonationItem)
                             {
-                                if (heldItem != null)
+                                if (HeldItem != null)
                                 {
-                                    HandlePartialDonation(heldItem, ingredientSlots[index]);
+                                    HandlePartialDonation(HeldItem, IngredientSlots[index]);
                                     return;
                                 }
                                 ReturnPartialDonations(!Game1.oldKBState.IsKeyDown(Keys.LeftShift));
@@ -438,44 +436,44 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                         }
                     }
                 }
-                else if (heldItem != null)
+                else if (HeldItem != null)
                 {
                     if (Game1.oldKBState.IsKeyDown(Keys.LeftShift))
                     {
-                        for (var index = 0; index < ingredientSlots.Count; ++index)
+                        for (var index = 0; index < IngredientSlots.Count; ++index)
                         {
-                            if (CurrentPageBundle.CanAcceptThisItem(heldItem, ingredientSlots[index]))
+                            if (CurrentPageBundle.CanAcceptThisItem(HeldItem, IngredientSlots[index]))
                             {
-                                if (ingredientSlots[index].item == null)
+                                if (IngredientSlots[index].item == null)
                                 {
-                                    heldItem = CurrentPageBundle.TryToDepositThisItem(heldItem, ingredientSlots[index], "LooseSprites\\JunimoNote", this);
-                                    checkIfBundleIsComplete();
+                                    HeldItem = CurrentPageBundle.TryToDepositThisItem(HeldItem, IngredientSlots[index], NOTE_TEXTURE_NAME, this);
+                                    CheckIfBundleIsComplete();
                                     return;
                                 }
                             }
-                            else if (ingredientSlots[index].item == null)
+                            else if (IngredientSlots[index].item == null)
                             {
-                                HandlePartialDonation(heldItem, ingredientSlots[index]);
+                                HandlePartialDonation(HeldItem, IngredientSlots[index]);
                             }
                         }
                     }
-                    for (var index = 0; index < ingredientSlots.Count; ++index)
+                    for (var index = 0; index < IngredientSlots.Count; ++index)
                     {
-                        if (ingredientSlots[index].containsPoint(x, y))
+                        if (IngredientSlots[index].containsPoint(x, y))
                         {
-                            if (CurrentPageBundle.CanAcceptThisItem(heldItem, ingredientSlots[index]))
+                            if (CurrentPageBundle.CanAcceptThisItem(HeldItem, IngredientSlots[index]))
                             {
-                                heldItem = CurrentPageBundle.TryToDepositThisItem(heldItem, ingredientSlots[index], "LooseSprites\\JunimoNote", this);
-                                checkIfBundleIsComplete();
+                                HeldItem = CurrentPageBundle.TryToDepositThisItem(HeldItem, IngredientSlots[index], NOTE_TEXTURE_NAME, this);
+                                CheckIfBundleIsComplete();
                             }
-                            else if (ingredientSlots[index].item == null)
+                            else if (IngredientSlots[index].item == null)
                             {
-                                HandlePartialDonation(heldItem, ingredientSlots[index]);
+                                HandlePartialDonation(HeldItem, IngredientSlots[index]);
                             }
                         }
                     }
                 }
-                if (purchaseButton != null && purchaseButton.containsPoint(x, y))
+                if (PurchaseButton != null && PurchaseButton.containsPoint(x, y))
                 {
                     var stack = CurrentPageBundle.Ingredients.Last().stack;
                     if (Game1.player.Money >= stack)
@@ -483,16 +481,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                         Game1.player.Money -= stack;
                         Game1.playSound("select");
                         CurrentPageBundle.CompletionAnimation(this);
-                        if (purchaseButton != null)
+                        if (PurchaseButton != null)
                         {
-                            purchaseButton.scale = purchaseButton.baseScale * 0.75f;
+                            PurchaseButton.scale = PurchaseButton.baseScale * 0.75f;
                         }
                         var communityCenter = Game1.RequireLocation<CommunityCenter>("CommunityCenter");
                         communityCenter.bundleRewards[CurrentPageBundle.BundleIndex] = true;
                         communityCenter.bundles.FieldDict[CurrentPageBundle.BundleIndex][0] = true;
                         CheckForRewards();
                         var flag = false;
-                        foreach (var bundle in bundles)
+                        foreach (var bundle in Bundles)
                         {
                             if (!bundle.Complete && !bundle.Equals(CurrentPageBundle))
                             {
@@ -502,13 +500,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                         }
                         if (!flag)
                         {
-                            communityCenter.markAreaAsComplete(whichArea);
+                            communityCenter.markAreaAsComplete(WhichArea);
                             exitFunction = restoreAreaOnExit;
-                            communityCenter.areaCompleteReward(whichArea);
+                            communityCenter.areaCompleteReward(WhichArea);
                         }
                         else
                         {
-                            communityCenter.getJunimoForArea(whichArea)?.bringBundleBackToHut(Bundle.getColorFromColorIndex(CurrentPageBundle.BundleColor), Game1.RequireLocation("CommunityCenter"));
+                            communityCenter.getJunimoForArea(WhichArea)?.bringBundleBackToHut(BundleRemake.GetColorFromColorIndex(CurrentPageBundle.BundleColor), Game1.RequireLocation("CommunityCenter"));
                         }
                         Game1.Multiplayer.globalChatInfoMessage("Bundle");
                     }
@@ -519,82 +517,82 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                 }
                 if (upperRightCloseButton != null && IsReadyToCloseMenuOrBundle() && upperRightCloseButton.containsPoint(x, y))
                 {
-                    closeBundlePage();
+                    CloseBundlePage();
                     return;
                 }
             }
             else
             {
-                foreach (var bundle in bundles)
+                foreach (var bundle in Bundles)
                 {
                     if (bundle.CanBeClicked() && bundle.containsPoint(x, y))
                     {
-                        setUpBundleSpecificPage(bundle);
+                        SetUpBundleSpecificPage(bundle);
                         Game1.playSound("shwip");
                         return;
                     }
                 }
-                if (presentButton != null && presentButton.containsPoint(x, y) && !fromGameMenu && !fromThisMenu)
+                if (PresentButton != null && PresentButton.containsPoint(x, y) && !FromGameMenu && !FromThisMenu)
                 {
-                    openRewardsMenu();
+                    OpenRewardsMenu();
                 }
-                if (fromGameMenu)
+                if (FromGameMenu)
                 {
-                    if (areaNextButton.containsPoint(x, y))
+                    if (AreaNextButton.containsPoint(x, y))
                     {
                         SwapPage(1);
                     }
-                    else if (areaBackButton.containsPoint(x, y))
+                    else if (AreaBackButton.containsPoint(x, y))
                     {
                         SwapPage(-1);
                     }
                 }
             }
-            if (heldItem == null || isWithinBounds(x, y) || !heldItem.canBeTrashed())
+            if (HeldItem == null || isWithinBounds(x, y) || !HeldItem.canBeTrashed())
             {
                 return;
             }
             Game1.playSound("throwDownITem");
-            Game1.createItemDebris(heldItem, Game1.player.getStandingPosition(), Game1.player.FacingDirection);
-            heldItem = null;
+            Game1.createItemDebris(HeldItem, Game1.player.getStandingPosition(), Game1.player.FacingDirection);
+            HeldItem = null;
         }
 
-        public virtual void ReturnPartialDonation(Item item, bool play_sound = true)
+        public virtual void ReturnPartialDonation(Item item, bool playSound = true)
         {
-            var affected_items_list = new List<Item>();
-            var inventory = Game1.player.addItemToInventory(item, affected_items_list);
-            foreach (var obj in affected_items_list)
+            var affectedItemsList = new List<Item>();
+            var inventory = Game1.player.addItemToInventory(item, affectedItemsList);
+            foreach (var obj in affectedItemsList)
             {
-                this.inventory.ShakeItem(obj);
+                this.Inventory.ShakeItem(obj);
             }
             if (inventory != null)
             {
                 Utility.CollectOrDrop(inventory);
-                this.inventory.ShakeItem(inventory);
+                this.Inventory.ShakeItem(inventory);
             }
-            if (!play_sound)
+            if (!playSound)
             {
                 return;
             }
             Game1.playSound("coin");
         }
 
-        public virtual void ReturnPartialDonations(bool to_hand = true)
+        public virtual void ReturnPartialDonations(bool toHand = true)
         {
-            if (partialDonationComponents.Count > 0)
+            if (PartialDonationComponents.Count > 0)
             {
-                var play_sound = true;
-                foreach (var donationComponent in partialDonationComponents)
+                var playSound = true;
+                foreach (var donationComponent in PartialDonationComponents)
                 {
-                    if (heldItem == null & to_hand)
+                    if (HeldItem == null & toHand)
                     {
                         Game1.playSound("dwop");
-                        heldItem = donationComponent;
+                        HeldItem = donationComponent;
                     }
                     else
                     {
-                        ReturnPartialDonation(donationComponent, play_sound);
-                        play_sound = false;
+                        ReturnPartialDonation(donationComponent, playSound);
+                        playSound = false;
                     }
                 }
             }
@@ -603,17 +601,17 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
 
         public virtual void ResetPartialDonation()
         {
-            partialDonationComponents.Clear();
-            currentPartialIngredientDescription = new BundleIngredientDescription?();
-            currentPartialIngredientDescriptionIndex = -1;
-            foreach (var ingredientSlot in ingredientSlots)
+            PartialDonationComponents.Clear();
+            CurrentPartialIngredientDescription = new BundleIngredientDescription?();
+            CurrentPartialIngredientDescriptionIndex = -1;
+            foreach (var ingredientSlot in IngredientSlots)
             {
-                if (ingredientSlot.item == partialDonationItem)
+                if (ingredientSlot.item == PartialDonationItem)
                 {
                     ingredientSlot.item = null;
                 }
             }
-            partialDonationItem = null;
+            PartialDonationItem = null;
         }
 
         public virtual bool CanBePartiallyOrFullyDonated(Item item)
@@ -640,86 +638,86 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                     num += obj.Stack;
                 }
             }
-            if (descriptionIndexForItem == currentPartialIngredientDescriptionIndex && partialDonationItem != null)
+            if (descriptionIndexForItem == CurrentPartialIngredientDescriptionIndex && PartialDonationItem != null)
             {
-                num += partialDonationItem.Stack;
+                num += PartialDonationItem.Stack;
             }
             return num >= ingredient.stack;
         }
 
         public virtual void HandlePartialDonation(Item item, ClickableTextureComponent slot)
         {
-            if (CurrentPageBundle != null && !CurrentPageBundle.DepositsAllowed || partialDonationItem != null && slot.item != partialDonationItem || !CanBePartiallyOrFullyDonated(item))
+            if (CurrentPageBundle != null && !CurrentPageBundle.DepositsAllowed || PartialDonationItem != null && slot.item != PartialDonationItem || !CanBePartiallyOrFullyDonated(item))
             {
                 return;
             }
-            if (!currentPartialIngredientDescription.HasValue)
+            if (!CurrentPartialIngredientDescription.HasValue)
             {
-                currentPartialIngredientDescriptionIndex = CurrentPageBundle.GetBundleIngredientDescriptionIndexForItem(item);
-                if (currentPartialIngredientDescriptionIndex != -1)
+                CurrentPartialIngredientDescriptionIndex = CurrentPageBundle.GetBundleIngredientDescriptionIndexForItem(item);
+                if (CurrentPartialIngredientDescriptionIndex != -1)
                 {
-                    currentPartialIngredientDescription = CurrentPageBundle.Ingredients[currentPartialIngredientDescriptionIndex];
+                    CurrentPartialIngredientDescription = CurrentPageBundle.Ingredients[CurrentPartialIngredientDescriptionIndex];
                 }
             }
-            if (!currentPartialIngredientDescription.HasValue || !CurrentPageBundle.IsValidItemForThisIngredientDescription(item, currentPartialIngredientDescription.Value))
+            if (!CurrentPartialIngredientDescription.HasValue || !CurrentPageBundle.IsValidItemForThisIngredientDescription(item, CurrentPartialIngredientDescription.Value))
             {
                 return;
             }
             var flag1 = true;
-            var flag2 = item == heldItem;
+            var flag2 = item == HeldItem;
             int amount;
             if (slot.item == null)
             {
                 Game1.playSound("sell");
                 flag1 = false;
-                partialDonationItem = item.getOne();
-                amount = Math.Min(currentPartialIngredientDescription.Value.stack, item.Stack);
-                partialDonationItem.Stack = amount;
+                PartialDonationItem = item.getOne();
+                amount = Math.Min(CurrentPartialIngredientDescription.Value.stack, item.Stack);
+                PartialDonationItem.Stack = amount;
                 item = item.ConsumeStack(amount);
-                partialDonationItem.Quality = currentPartialIngredientDescription.Value.quality;
-                slot.item = partialDonationItem;
+                PartialDonationItem.Quality = CurrentPartialIngredientDescription.Value.quality;
+                slot.item = PartialDonationItem;
                 slot.sourceRect.X = 512;
                 slot.sourceRect.Y = 244;
             }
             else
             {
-                amount = Math.Min(currentPartialIngredientDescription.Value.stack - partialDonationItem.Stack, item.Stack);
-                partialDonationItem.Stack += amount;
+                amount = Math.Min(CurrentPartialIngredientDescription.Value.stack - PartialDonationItem.Stack, item.Stack);
+                PartialDonationItem.Stack += amount;
                 item = item.ConsumeStack(amount);
             }
             if (amount > 0)
             {
-                var one = heldItem.getOne();
+                var one = HeldItem.getOne();
                 one.Stack = amount;
-                foreach (var donationComponent in partialDonationComponents)
+                foreach (var donationComponent in PartialDonationComponents)
                 {
-                    if (donationComponent.canStackWith(heldItem))
+                    if (donationComponent.canStackWith(HeldItem))
                     {
                         one.Stack = donationComponent.addToStack(one);
                     }
                 }
                 if (one.Stack > 0)
                 {
-                    partialDonationComponents.Add(one);
+                    PartialDonationComponents.Add(one);
                 }
-                partialDonationComponents.Sort((a, b) => b.Stack.CompareTo(a.Stack));
+                PartialDonationComponents.Sort((a, b) => b.Stack.CompareTo(a.Stack));
             }
             if (flag2 && item == null)
             {
-                heldItem = null;
+                HeldItem = null;
             }
-            if (partialDonationItem.Stack >= currentPartialIngredientDescription.Value.stack)
+            if (PartialDonationItem.Stack >= CurrentPartialIngredientDescription.Value.stack)
             {
                 slot.item = null;
-                this.partialDonationItem = CurrentPageBundle.TryToDepositThisItem(this.partialDonationItem, slot, "LooseSprites\\JunimoNote", this);
-                var partialDonationItem = this.partialDonationItem;
+                this.PartialDonationItem = CurrentPageBundle.TryToDepositThisItem(this.PartialDonationItem, slot, NOTE_TEXTURE_NAME, this);
+                var partialDonationItem = this.PartialDonationItem;
                 if ((partialDonationItem != null ? partialDonationItem.Stack > 0 ? 1 : 0 : 0) != 0)
                 {
-                    ReturnPartialDonation(this.partialDonationItem);
+                    ReturnPartialDonation(this.PartialDonationItem);
                 }
-                this.partialDonationItem = null;
+                this.PartialDonationItem = null;
                 ResetPartialDonation();
-                checkIfBundleIsComplete();
+                CheckIfBundleIsComplete();
             }
             else
             {
@@ -733,7 +731,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
 
         public bool IsReadyToCloseMenuOrBundle()
         {
-            if (specificBundlePage)
+            if (SpecificBundlePage)
             {
                 var currentPageBundle = this.CurrentPageBundle;
                 if ((currentPageBundle != null ? currentPageBundle.CompletionTimer > 0 ? 1 : 0 : 0) != 0)
@@ -741,14 +739,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                     return false;
                 }
             }
-            return heldItem == null;
+            return HeldItem == null;
         }
 
         /// <inheritdoc />
         public override void receiveGamePadButton(Buttons button)
         {
             base.receiveGamePadButton(button);
-            if (specificBundlePage)
+            if (SpecificBundlePage)
             {
                 switch (button)
                 {
@@ -758,9 +756,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                         {
                             break;
                         }
-                        oldTriggerSpot = currentlySnappedComponent.myID;
+                        _oldTriggerSpot = currentlySnappedComponent.myID;
                         var id = 250;
-                        foreach (var ingredientSlot in ingredientSlots)
+                        foreach (var ingredientSlot in IngredientSlots)
                         {
                             if (ingredientSlot.item == null)
                             {
@@ -773,18 +771,18 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                         break;
                     case Buttons.LeftTrigger:
                         var snappedComponent2 = currentlySnappedComponent;
-                        if ((snappedComponent2 != null ? snappedComponent2.myID >= 250 ? 1 : 0 : 0) == 0)
+                        if ((snappedComponent2 != null ? snappedComponent2.myID >= REGION_INGREDIENT_SLOT_MODIFIER ? 1 : 0 : 0) == 0)
                         {
                             break;
                         }
-                        setCurrentlySnappedComponentTo(oldTriggerSpot);
+                        setCurrentlySnappedComponentTo(_oldTriggerSpot);
                         snapCursorToCurrentSnappedComponent();
                         break;
                 }
             }
             else
             {
-                if (!fromGameMenu)
+                if (!FromGameMenu)
                 {
                     return;
                 }
@@ -805,12 +803,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
 
         public void SwapPage(int direction)
         {
-            if (direction > 0 && !areaNextButton.visible || direction < 0 && !areaBackButton.visible)
+            if (direction > 0 && !AreaNextButton.visible || direction < 0 && !AreaBackButton.visible)
             {
                 return;
             }
             var communityCenter = Game1.RequireLocation<CommunityCenter>("CommunityCenter");
-            var whichArea = this.whichArea;
+            var whichArea = this.WhichArea;
             var num1 = 6;
             for (var index = 0; index < num1; ++index)
             {
@@ -826,13 +824,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                 if (communityCenter.shouldNoteAppearInArea(whichArea))
                 {
                     var num2 = -1;
-                    if (currentlySnappedComponent != null && (currentlySnappedComponent.myID >= 5000 || currentlySnappedComponent.myID == 101 || currentlySnappedComponent.myID == 102))
+                    if (currentlySnappedComponent != null && (currentlySnappedComponent.myID >= REGION_BUNDLE_MODIFIER || currentlySnappedComponent.myID == REGION_AREA_NEXT_BUTTON || currentlySnappedComponent.myID == REGION_AREA_BACK_BUTTON))
                     {
                         num2 = currentlySnappedComponent.myID;
                     }
                     var junimoNoteMenu = new JunimoNoteMenuRemake(true, whichArea, true)
                     {
-                        gameMenuTabToReturnTo = gameMenuTabToReturnTo
+                        GameMenuTabToReturnTo = GameMenuTabToReturnTo
                     };
                     Game1.activeClickableMenu = junimoNoteMenu;
                     if (num2 >= 0)
@@ -840,28 +838,28 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                         junimoNoteMenu.currentlySnappedComponent = junimoNoteMenu.getComponentWithID(currentlySnappedComponent.myID);
                         junimoNoteMenu.snapCursorToCurrentSnappedComponent();
                     }
-                    if (junimoNoteMenu.getComponentWithID(areaNextButton.leftNeighborID) != null)
+                    if (junimoNoteMenu.getComponentWithID(AreaNextButton.leftNeighborID) != null)
                     {
-                        junimoNoteMenu.areaNextButton.leftNeighborID = areaNextButton.leftNeighborID;
+                        junimoNoteMenu.AreaNextButton.leftNeighborID = AreaNextButton.leftNeighborID;
                     }
                     else
                     {
-                        junimoNoteMenu.areaNextButton.leftNeighborID = junimoNoteMenu.areaBackButton.myID;
+                        junimoNoteMenu.AreaNextButton.leftNeighborID = junimoNoteMenu.AreaBackButton.myID;
                     }
-                    junimoNoteMenu.areaNextButton.rightNeighborID = areaNextButton.rightNeighborID;
-                    junimoNoteMenu.areaNextButton.upNeighborID = areaNextButton.upNeighborID;
-                    junimoNoteMenu.areaNextButton.downNeighborID = areaNextButton.downNeighborID;
-                    if (junimoNoteMenu.getComponentWithID(areaBackButton.rightNeighborID) != null)
+                    junimoNoteMenu.AreaNextButton.rightNeighborID = AreaNextButton.rightNeighborID;
+                    junimoNoteMenu.AreaNextButton.upNeighborID = AreaNextButton.upNeighborID;
+                    junimoNoteMenu.AreaNextButton.downNeighborID = AreaNextButton.downNeighborID;
+                    if (junimoNoteMenu.getComponentWithID(AreaBackButton.rightNeighborID) != null)
                     {
-                        junimoNoteMenu.areaBackButton.leftNeighborID = areaBackButton.leftNeighborID;
+                        junimoNoteMenu.AreaBackButton.leftNeighborID = AreaBackButton.leftNeighborID;
                     }
                     else
                     {
-                        junimoNoteMenu.areaBackButton.leftNeighborID = junimoNoteMenu.areaNextButton.myID;
+                        junimoNoteMenu.AreaBackButton.leftNeighborID = junimoNoteMenu.AreaNextButton.myID;
                     }
-                    junimoNoteMenu.areaBackButton.rightNeighborID = areaBackButton.rightNeighborID;
-                    junimoNoteMenu.areaBackButton.upNeighborID = areaBackButton.upNeighborID;
-                    junimoNoteMenu.areaBackButton.downNeighborID = areaBackButton.downNeighborID;
+                    junimoNoteMenu.AreaBackButton.rightNeighborID = AreaBackButton.rightNeighborID;
+                    junimoNoteMenu.AreaBackButton.upNeighborID = AreaBackButton.upNeighborID;
+                    junimoNoteMenu.AreaBackButton.downNeighborID = AreaBackButton.downNeighborID;
                     break;
                 }
             }
@@ -870,82 +868,82 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
         /// <inheritdoc />
         public override void receiveKeyPress(Keys key)
         {
-            if (gameMenuTabToReturnTo != -1)
+            if (GameMenuTabToReturnTo != -1)
             {
                 closeSound = "shwip";
             }
             base.receiveKeyPress(key);
-            if (key == Keys.Delete && heldItem != null && heldItem.canBeTrashed())
+            if (key == Keys.Delete && HeldItem != null && HeldItem.canBeTrashed())
             {
-                Utility.trashItem(heldItem);
-                heldItem = null;
+                Utility.trashItem(HeldItem);
+                HeldItem = null;
             }
             if (!Game1.options.doesInputListContain(Game1.options.menuButton, key) || !IsReadyToCloseMenuOrBundle())
             {
                 return;
             }
-            if (singleBundleMenu)
+            if (_singleBundleMenu)
             {
-                exitThisMenu(gameMenuTabToReturnTo == -1);
+                exitThisMenu(GameMenuTabToReturnTo == -1);
             }
-            closeBundlePage();
+            CloseBundlePage();
         }
 
         /// <inheritdoc />
         protected override void cleanupBeforeExit()
         {
             base.cleanupBeforeExit();
-            if (gameMenuTabToReturnTo != -1)
+            if (GameMenuTabToReturnTo != -1)
             {
-                Game1.activeClickableMenu = new GameMenu(gameMenuTabToReturnTo, playOpeningSound: false);
+                Game1.activeClickableMenu = new GameMenu(GameMenuTabToReturnTo, playOpeningSound: false);
             }
             else
             {
-                if (menuToReturnTo == null)
+                if (MenuToReturnTo == null)
                 {
                     return;
                 }
-                Game1.activeClickableMenu = menuToReturnTo;
+                Game1.activeClickableMenu = MenuToReturnTo;
             }
         }
 
-        private void closeBundlePage()
+        private void CloseBundlePage()
         {
-            if (partialDonationItem != null)
+            if (PartialDonationItem != null)
             {
                 ReturnPartialDonations(false);
             }
             else
             {
-                if (!specificBundlePage)
+                if (!SpecificBundlePage)
                 {
                     return;
                 }
-                hoveredItem = null;
-                inventory.descriptionText = "";
-                if (heldItem == null)
+                HoveredItem = null;
+                Inventory.descriptionText = "";
+                if (HeldItem == null)
                 {
-                    takeDownBundleSpecificPage();
+                    TakeDownBundleSpecificPage();
                     Game1.playSound("shwip");
                 }
                 else
                 {
-                    heldItem = inventory.tryToAddItem(heldItem);
+                    HeldItem = Inventory.tryToAddItem(HeldItem);
                 }
             }
         }
 
-        protected virtual void reOpenThisMenu()
+        protected virtual void ReOpenThisMenu()
         {
-            var num = specificBundlePage ? 1 : 0;
+            var num = SpecificBundlePage ? 1 : 0;
             var junimoNoteMenu = CreateJunimoNoteMenu();
             if (num != 0)
             {
-                foreach (var bundle in junimoNoteMenu.bundles)
+                foreach (var bundle in junimoNoteMenu.Bundles)
                 {
                     if (bundle.BundleIndex == CurrentPageBundle.BundleIndex)
                     {
-                        junimoNoteMenu.setUpBundleSpecificPage(bundle);
+                        junimoNoteMenu.SetUpBundleSpecificPage(bundle);
                         break;
                     }
                 }
@@ -955,41 +953,41 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
 
         protected virtual JunimoNoteMenuRemake CreateJunimoNoteMenu()
         {
-            if (fromGameMenu || fromThisMenu)
+            if (FromGameMenu || FromThisMenu)
             {
-                return new JunimoNoteMenuRemake(fromGameMenu, whichArea, fromThisMenu)
+                return new JunimoNoteMenuRemake(FromGameMenu, WhichArea, FromThisMenu)
                 {
-                    gameMenuTabToReturnTo = gameMenuTabToReturnTo,
-                    menuToReturnTo = menuToReturnTo,
+                    GameMenuTabToReturnTo = GameMenuTabToReturnTo,
+                    MenuToReturnTo = MenuToReturnTo,
                 };
             }
             else
             {
-                return new JunimoNoteMenuRemake(whichArea, Game1.RequireLocation<CommunityCenter>("CommunityCenter").bundlesDict())
+                return new JunimoNoteMenuRemake(WhichArea, Game1.RequireLocation<CommunityCenter>("CommunityCenter").bundlesDict())
                 {
-                    gameMenuTabToReturnTo = gameMenuTabToReturnTo,
-                    menuToReturnTo = menuToReturnTo,
+                    GameMenuTabToReturnTo = GameMenuTabToReturnTo,
+                    MenuToReturnTo = MenuToReturnTo,
                 };
             }
         }
 
-        private void updateIngredientSlots()
+        private void UpdateIngredientSlots()
         {
             var index = 0;
             foreach (var ingredient in CurrentPageBundle.Ingredients)
             {
-                if (ingredient.completed && index < ingredientSlots.Count)
+                if (ingredient.completed && index < IngredientSlots.Count)
                 {
                     var representativeItemId = GetRepresentativeItemId(ingredient);
                     if (ingredient.preservesId != null)
                     {
-                        ingredientSlots[index].item = Utility.CreateFlavoredItem(representativeItemId, ingredient.preservesId, ingredient.quality, ingredient.stack);
+                        IngredientSlots[index].item = Utility.CreateFlavoredItem(representativeItemId, ingredient.preservesId, ingredient.quality, ingredient.stack);
                     }
                     else
                     {
-                        ingredientSlots[index].item = ItemRegistry.Create(representativeItemId, ingredient.stack, ingredient.quality);
+                        IngredientSlots[index].item = ItemRegistry.Create(representativeItemId, ingredient.stack, ingredient.quality);
                     }
-                    CurrentPageBundle.IngredientDepositAnimation(ingredientSlots[index], "LooseSprites\\JunimoNote", true);
+                    CurrentPageBundle.IngredientDepositAnimation(IngredientSlots[index], NOTE_TEXTURE_NAME, true);
                     ++index;
                 }
             }
@@ -1035,31 +1033,31 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             }
         }
 
-        private void openRewardsMenu()
+        private void OpenRewardsMenu()
         {
             Game1.playSound("smallSelect");
             var objList = new List<Item>();
-            GetBundleRewards(whichArea, objList);
-            Game1.activeClickableMenu = new ItemGrabMenu(objList, false, true, null, null, null, rewardGrabbed, canBeExitedWithKey: true, context: this);
-            Game1.activeClickableMenu.exitFunction = exitFunction != null ? exitFunction : reOpenThisMenu;
+            GetBundleRewards(WhichArea, objList);
+            Game1.activeClickableMenu = new ItemGrabMenu(objList, false, true, null, null, null, RewardGrabbed, canBeExitedWithKey: true, context: this);
+            Game1.activeClickableMenu.exitFunction = exitFunction != null ? exitFunction : ReOpenThisMenu;
         }
 
-        private void rewardGrabbed(Item item, Farmer who)
+        private void RewardGrabbed(Item item, Farmer who)
         {
             Game1.RequireLocation<CommunityCenter>("CommunityCenter").bundleRewards[item.SpecialVariable] = false;
         }
 
-        private void checkIfBundleIsComplete()
+        private void CheckIfBundleIsComplete()
         {
             ReturnPartialDonations();
-            if (!specificBundlePage || CurrentPageBundle == null)
+            if (!SpecificBundlePage || CurrentPageBundle == null)
             {
                 return;
             }
             var num = 0;
-            foreach (var ingredientSlot in ingredientSlots)
+            foreach (var ingredientSlot in IngredientSlots)
             {
-                if (ingredientSlot.item != null && ingredientSlot.item != partialDonationItem)
+                if (ingredientSlot.item != null && ingredientSlot.item != PartialDonationItem)
                 {
                     ++num;
                 }
@@ -1068,24 +1066,24 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             {
                 return;
             }
-            if (heldItem != null)
+            if (HeldItem != null)
             {
-                Game1.player.addItemToInventory(heldItem);
-                heldItem = null;
+                Game1.player.addItemToInventory(HeldItem);
+                HeldItem = null;
             }
-            if (!singleBundleMenu)
+            if (!_singleBundleMenu)
             {
                 var location = Game1.RequireLocation<CommunityCenter>("CommunityCenter");
                 for (var index = 0; index < location.bundles[CurrentPageBundle.BundleIndex].Length; ++index)
                     location.bundles.FieldDict[CurrentPageBundle.BundleIndex][index] = true;
                 location.checkForNewJunimoNotes();
-                screenSwipe = new ScreenSwipe(0, w: width, h: height);
+                ScreenSwipe = new ScreenSwipe(0, w: width, h: height);
                 CurrentPageBundle.CompletionAnimation(this, delay: 400);
-                canClick = false;
+                CanClick = false;
                 location.bundleRewards[CurrentPageBundle.BundleIndex] = true;
                 Game1.Multiplayer.globalChatInfoMessage("Bundle");
                 var flag = false;
-                foreach (var bundle in bundles)
+                foreach (var bundle in Bundles)
                 {
                     if (!bundle.Complete && !bundle.Equals(CurrentPageBundle))
                     {
@@ -1095,30 +1093,30 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                 }
                 if (!flag)
                 {
-                    if (whichArea == 6)
+                    if (WhichArea == 6)
                     {
                         exitFunction = restoreaAreaOnExit_AbandonedJojaMart;
                     }
                     else
                     {
-                        location.markAreaAsComplete(whichArea);
+                        location.markAreaAsComplete(WhichArea);
                         exitFunction = restoreAreaOnExit;
-                        location.areaCompleteReward(whichArea);
+                        location.areaCompleteReward(WhichArea);
                     }
                 }
                 else
                 {
-                    location.getJunimoForArea(whichArea)?.bringBundleBackToHut(Bundle.getColorFromColorIndex(CurrentPageBundle.BundleColor), location);
+                    location.getJunimoForArea(WhichArea)?.bringBundleBackToHut(BundleRemake.GetColorFromColorIndex(CurrentPageBundle.BundleColor), location);
                 }
                 CheckForRewards();
             }
             else
             {
-                if (onBundleComplete == null)
+                if (OnBundleComplete == null)
                 {
                     return;
                 }
-                onBundleComplete(this);
+                OnBundleComplete(this);
             }
         }
 
@@ -1129,11 +1127,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
 
         protected void restoreAreaOnExit()
         {
-            if (fromGameMenu)
+            if (FromGameMenu)
             {
                 return;
             }
-            Game1.RequireLocation<CommunityCenter>("CommunityCenter").restoreAreaCutscene(whichArea);
+            Game1.RequireLocation<CommunityCenter>("CommunityCenter").restoreAreaCutscene(WhichArea);
         }
 
         public virtual void CheckForRewards()
@@ -1141,12 +1139,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             var bundleData = Game1.netWorldState.Value.BundleData;
             foreach (var key in bundleData.Keys)
             {
-                if (key.Contains(CommunityCenter.getAreaNameFromNumber(whichArea)) && bundleData[key].Split('/')[1].Length > 1)
+                if (key.Contains(CommunityCenter.getAreaNameFromNumber(WhichArea)) && bundleData[key].Split('/')[1].Length > 1)
                 {
                     var int32 = Convert.ToInt32(key.Split('/')[1]);
                     if (Game1.RequireLocation<CommunityCenter>("CommunityCenter").bundleRewards[int32])
                     {
-                        presentButton = new ClickableAnimatedComponent(new Rectangle(xPositionOnScreen + 592, yPositionOnScreen + 512, 72, 72), "", Game1.content.LoadString("Strings\\StringsFromCSFiles:JunimoNoteMenu.cs.10783"), new TemporaryAnimatedSprite("LooseSprites\\JunimoNote", new Rectangle(548, 262, 18, 20), 70f, 4, 99999, new Vector2(-64f, -64f), false, false, 0.5f, 0.0f, Color.White, 4f, 0.0f, 0.0f, 0.0f, true));
+                        PresentButton = new ClickableAnimatedComponent(new Rectangle(xPositionOnScreen + 592, yPositionOnScreen + 512, 72, 72), "", Game1.content.LoadString("Strings\\StringsFromCSFiles:JunimoNoteMenu.cs.10783"), new TemporaryAnimatedSprite(NOTE_TEXTURE_NAME, new Rectangle(548, 262, 18, 20), 70f, 4, 99999, new Vector2(-64f, -64f), false, false, 0.5f, 0.0f, Color.White, 4f, 0.0f, 0.0f, 0.0f, true));
                         break;
                     }
                 }
@@ -1156,131 +1154,128 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
         /// <inheritdoc />
         public override void receiveRightClick(int x, int y, bool playSound = true)
         {
-            if (!canClick)
+            if (!CanClick)
             {
                 return;
             }
-            if (specificBundlePage)
+            if (SpecificBundlePage)
             {
-                heldItem = inventory.rightClick(x, y, heldItem);
-                if (partialDonationItem != null)
+                HeldItem = Inventory.rightClick(x, y, HeldItem);
+                if (PartialDonationItem != null)
                 {
-                    for (var index = 0; index < ingredientSlots.Count; ++index)
+                    for (var index = 0; index < IngredientSlots.Count; ++index)
                     {
-                        if (ingredientSlots[index].containsPoint(x, y) && ingredientSlots[index].item == partialDonationItem)
+                        if (IngredientSlots[index].containsPoint(x, y) && IngredientSlots[index].item == PartialDonationItem)
                         {
-                            if (partialDonationComponents.Count > 0)
+                            if (PartialDonationComponents.Count > 0)
                             {
-                                var one = partialDonationComponents[0].getOne();
+                                var one = PartialDonationComponents[0].getOne();
                                 var flag = false;
-                                if (heldItem == null)
+                                if (HeldItem == null)
                                 {
-                                    heldItem = one;
+                                    HeldItem = one;
                                     Game1.playSound("dwop");
                                     flag = true;
                                 }
-                                else if (heldItem.canStackWith(one))
+                                else if (HeldItem.canStackWith(one))
                                 {
-                                    heldItem.addToStack(one);
+                                    HeldItem.addToStack(one);
                                     Game1.playSound("dwop");
                                     flag = true;
                                 }
                                 if (flag)
                                 {
-                                    if (partialDonationComponents[0].ConsumeStack(1) == null)
+                                    if (PartialDonationComponents[0].ConsumeStack(1) == null)
                                     {
-                                        partialDonationComponents.RemoveAt(0);
+                                        PartialDonationComponents.RemoveAt(0);
                                     }
-                                    if (partialDonationItem != null)
+                                    if (PartialDonationItem != null)
                                     {
                                         var num = 0;
-                                        foreach (var donationComponent in partialDonationComponents)
+                                        foreach (var donationComponent in PartialDonationComponents)
                                         {
                                             num += donationComponent.Stack;
                                         }
-                                        partialDonationItem.Stack = num;
+                                        PartialDonationItem.Stack = num;
                                     }
-                                    if (partialDonationComponents.Count == 0)
+                                    if (PartialDonationComponents.Count == 0)
                                     {
                                         ResetPartialDonation();
-                                        break;
                                     }
-                                    break;
                                 }
-                                break;
                             }
                             break;
                         }
                     }
                 }
             }
-            if (specificBundlePage || !IsReadyToCloseMenuOrBundle())
+            if (SpecificBundlePage || !IsReadyToCloseMenuOrBundle())
             {
                 return;
             }
-            exitThisMenu(gameMenuTabToReturnTo == -1);
+            exitThisMenu(GameMenuTabToReturnTo == -1);
         }
 
         /// <inheritdoc />
         public override void update(GameTime time)
         {
-            if (specificBundlePage && CurrentPageBundle != null && CurrentPageBundle.CompletionTimer <= 0 && IsReadyToCloseMenuOrBundle() && CurrentPageBundle.Complete)
+            if (SpecificBundlePage && CurrentPageBundle != null && CurrentPageBundle.CompletionTimer <= 0 && IsReadyToCloseMenuOrBundle() && CurrentPageBundle.Complete)
             {
-                takeDownBundleSpecificPage();
+                TakeDownBundleSpecificPage();
             }
-            foreach (var bundle in bundles)
+            foreach (var bundle in Bundles)
             {
                 bundle.Update(time);
             }
-            tempSprites.RemoveWhere(sprite => sprite.update(time));
-            presentButton?.update(time);
-            if (screenSwipe != null)
+            TempSprites.RemoveWhere(sprite => sprite.update(time));
+            PresentButton?.update(time);
+            if (ScreenSwipe != null)
             {
-                canClick = false;
-                if (screenSwipe.update(time))
+                CanClick = false;
+                if (ScreenSwipe.update(time))
                 {
-                    screenSwipe = null;
-                    canClick = true;
-                    var screenSwipeFinished = onScreenSwipeFinished;
+                    ScreenSwipe = null;
+                    CanClick = true;
+                    var screenSwipeFinished = OnScreenSwipeFinished;
                     if (screenSwipeFinished != null)
                     {
                         screenSwipeFinished(this);
                     }
                 }
             }
-            if (!bundlesChanged || !fromGameMenu)
+            if (!BundlesChanged || !FromGameMenu)
             {
                 return;
             }
-            reOpenThisMenu();
+            ReOpenThisMenu();
         }
 
         /// <inheritdoc />
         public override void performHoverAction(int x, int y)
         {
             base.performHoverAction(x, y);
-            if (scrambledText)
+            if (ScrambledText)
             {
                 return;
             }
-            hoverText = "";
-            if (specificBundlePage)
+            HoverText = "";
+            if (SpecificBundlePage)
             {
-                backButton?.tryHover(x, y);
-                hoveredItem = CurrentPageBundle.Complete || CurrentPageBundle.CompletionTimer > 0 ? null : inventory.hover(x, y, heldItem);
-                foreach (var ingredient in ingredientList)
+                BackButton?.tryHover(x, y);
+                HoveredItem = CurrentPageBundle.Complete || CurrentPageBundle.CompletionTimer > 0 ? null : Inventory.hover(x, y, HeldItem);
+                foreach (var ingredient in IngredientList)
                 {
                     if (ingredient.bounds.Contains(x, y))
                     {
-                        hoverText = ingredient.hoverText;
+                        HoverText = ingredient.hoverText;
                         break;
                     }
                 }
-                if (heldItem != null)
+                if (HeldItem != null)
                 {
-                    foreach (var ingredientSlot in ingredientSlots)
+                    foreach (var ingredientSlot in IngredientSlots)
                     {
-                        if (ingredientSlot.bounds.Contains(x, y) && CanBePartiallyOrFullyDonated(heldItem) && (partialDonationItem == null || ingredientSlot.item == partialDonationItem))
+                        if (ingredientSlot.bounds.Contains(x, y) && CanBePartiallyOrFullyDonated(HeldItem) && (PartialDonationItem == null || ingredientSlot.item == PartialDonationItem))
                         {
                             ingredientSlot.sourceRect.X = 530;
                             ingredientSlot.sourceRect.Y = 262;
@@ -1292,24 +1287,24 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                         }
                     }
                 }
-                purchaseButton?.tryHover(x, y);
+                PurchaseButton?.tryHover(x, y);
             }
             else
             {
-                if (presentButton != null)
+                if (PresentButton != null)
                 {
-                    hoverText = presentButton.tryHover(x, y);
+                    HoverText = PresentButton.tryHover(x, y);
                 }
-                foreach (var bundle in bundles)
+                foreach (var bundle in Bundles)
                 {
                     bundle.TryHoverAction(x, y);
                 }
-                if (!fromGameMenu)
+                if (!FromGameMenu)
                 {
                     return;
                 }
-                areaNextButton.tryHover(x, y);
-                areaBackButton.tryHover(x, y);
+                AreaNextButton.tryHover(x, y);
+                AreaBackButton.tryHover(x, y);
             }
         }
 
@@ -1324,50 +1319,50 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             {
                 b.Draw(Game1.fadeToBlackRect, new Rectangle(0, 0, Game1.uiViewport.Width, Game1.uiViewport.Height), Color.Black * 0.5f);
             }
-            if (!specificBundlePage)
+            if (!SpecificBundlePage)
             {
-                b.Draw(noteTexture, new Vector2(xPositionOnScreen, yPositionOnScreen), new Rectangle(0, 0, 320, 180), Color.White, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 0.1f);
-                SpriteText.drawStringHorizontallyCenteredAt(b, scrambledText ? CommunityCenter.getAreaEnglishDisplayNameFromNumber(whichArea) : CommunityCenter.getAreaDisplayNameFromNumber(whichArea), xPositionOnScreen + width / 2 + 16, yPositionOnScreen + 12, height: 99999, alpha: 0.88f, junimoText: scrambledText);
-                if (scrambledText)
+                b.Draw(NoteTexture, new Vector2(xPositionOnScreen, yPositionOnScreen), new Rectangle(0, 0, BASE_WIDTH, BASE_HEIGHT), Color.White, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 0.1f);
+                SpriteText.drawStringHorizontallyCenteredAt(b, ScrambledText ? CommunityCenter.getAreaEnglishDisplayNameFromNumber(WhichArea) : CommunityCenter.getAreaDisplayNameFromNumber(WhichArea), xPositionOnScreen + width / 2 + 16, yPositionOnScreen + 12, height: 99999, alpha: 0.88f, junimoText: ScrambledText);
+                if (ScrambledText)
                 {
                     SpriteText.drawString(b, LocalizedContentManager.CurrentLanguageLatin ? Game1.content.LoadString("Strings\\StringsFromCSFiles:JunimoNoteMenu.cs.10786") : Game1.content.LoadBaseString("Strings\\StringsFromCSFiles:JunimoNoteMenu.cs.10786"), xPositionOnScreen + 96, yPositionOnScreen + 96, width: width - 192, height: 99999, alpha: 0.88f, junimoText: true);
                     base.draw(b);
-                    if (Game1.options.SnappyMenus || !canClick)
+                    if (Game1.options.SnappyMenus || !CanClick)
                     {
                         return;
                     }
                     drawMouse(b);
                     return;
                 }
-                foreach (var bundle in bundles)
+                foreach (var bundle in Bundles)
                 {
                     bundle.Draw(b);
                 }
-                presentButton?.draw(b);
-                foreach (var tempSprite in tempSprites)
+                PresentButton?.draw(b);
+                foreach (var tempSprite in TempSprites)
                 {
                     tempSprite.draw(b, true);
                 }
-                if (fromGameMenu)
+                if (FromGameMenu)
                 {
-                    if (areaNextButton.visible)
+                    if (AreaNextButton.visible)
                     {
-                        areaNextButton.draw(b);
+                        AreaNextButton.draw(b);
                     }
-                    if (areaBackButton.visible)
+                    if (AreaBackButton.visible)
                     {
-                        areaBackButton.draw(b);
+                        AreaBackButton.draw(b);
                     }
                 }
             }
             else
             {
-                b.Draw(noteTexture, new Vector2(xPositionOnScreen, yPositionOnScreen), new Rectangle(320, 0, 320, 180), Color.White, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 0.1f);
+                b.Draw(NoteTexture, new Vector2(xPositionOnScreen, yPositionOnScreen), new Rectangle(BASE_WIDTH, 0, BASE_WIDTH, BASE_HEIGHT), Color.White, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 0.1f);
                 if (CurrentPageBundle != null)
                 {
                     var num1 = CurrentPageBundle.BundleIndex;
-                    var texture = noteTexture;
-                    var num2 = 180;
+                    var texture = NoteTexture;
+                    var num2 = BASE_HEIGHT;
                     if (CurrentPageBundle.BundleTextureIndexOverride >= 0)
                     {
                         num1 = CurrentPageBundle.BundleTextureIndexOverride;
@@ -1381,54 +1376,54 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                     if (CurrentPageBundle.label != null)
                     {
                         var x = Game1.dialogueFont.MeasureString(!Game1.player.hasOrWillReceiveMail("canReadJunimoText") ? "???" : Game1.content.LoadString("Strings\\UI:JunimoNote_BundleName", CurrentPageBundle.label)).X;
-                        b.Draw(noteTexture, new Vector2(xPositionOnScreen + 936 - (int)x / 2 - 16, yPositionOnScreen + 228), new Rectangle(517, 266, 4, 17), Color.White, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 0.1f);
-                        b.Draw(noteTexture, new Rectangle(xPositionOnScreen + 936 - (int)x / 2, yPositionOnScreen + 228, (int)x, 68), new Rectangle(520, 266, 1, 17), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, 0.1f);
-                        b.Draw(noteTexture, new Vector2(xPositionOnScreen + 936 + (int)x / 2, yPositionOnScreen + 228), new Rectangle(524, 266, 4, 17), Color.White, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 0.1f);
+                        b.Draw(NoteTexture, new Vector2(xPositionOnScreen + 936 - (int)x / 2 - 16, yPositionOnScreen + 228), new Rectangle(517, 266, 4, 17), Color.White, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 0.1f);
+                        b.Draw(NoteTexture, new Rectangle(xPositionOnScreen + 936 - (int)x / 2, yPositionOnScreen + 228, (int)x, 68), new Rectangle(520, 266, 1, 17), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, 0.1f);
+                        b.Draw(NoteTexture, new Vector2(xPositionOnScreen + 936 + (int)x / 2, yPositionOnScreen + 228), new Rectangle(524, 266, 4, 17), Color.White, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 0.1f);
                         b.DrawString(Game1.dialogueFont, !Game1.player.hasOrWillReceiveMail("canReadJunimoText") ? "???" : Game1.content.LoadString("Strings\\UI:JunimoNote_BundleName", CurrentPageBundle.label), new Vector2(xPositionOnScreen + 936 - x / 2f, yPositionOnScreen + 236) + new Vector2(2f, 2f), Game1.textShadowColor);
                         b.DrawString(Game1.dialogueFont, !Game1.player.hasOrWillReceiveMail("canReadJunimoText") ? "???" : Game1.content.LoadString("Strings\\UI:JunimoNote_BundleName", CurrentPageBundle.label), new Vector2(xPositionOnScreen + 936 - x / 2f, yPositionOnScreen + 236) + new Vector2(0.0f, 2f), Game1.textShadowColor);
                         b.DrawString(Game1.dialogueFont, !Game1.player.hasOrWillReceiveMail("canReadJunimoText") ? "???" : Game1.content.LoadString("Strings\\UI:JunimoNote_BundleName", CurrentPageBundle.label), new Vector2(xPositionOnScreen + 936 - x / 2f, yPositionOnScreen + 236) + new Vector2(2f, 0.0f), Game1.textShadowColor);
                         b.DrawString(Game1.dialogueFont, !Game1.player.hasOrWillReceiveMail("canReadJunimoText") ? "???" : Game1.content.LoadString("Strings\\UI:JunimoNote_BundleName", CurrentPageBundle.label), new Vector2(xPositionOnScreen + 936 - x / 2f, yPositionOnScreen + 236), Game1.textColor * 0.9f);
                     }
                 }
-                if (backButton != null)
+                if (BackButton != null)
                 {
-                    backButton.draw(b);
+                    BackButton.draw(b);
                 }
-                if (purchaseButton != null)
+                if (PurchaseButton != null)
                 {
-                    purchaseButton.draw(b);
+                    PurchaseButton.draw(b);
                     Game1.dayTimeMoneyBox.drawMoneyBox(b);
                 }
                 var extraAlpha = 1f;
-                if (partialDonationItem != null)
+                if (PartialDonationItem != null)
                 {
                     extraAlpha = 0.25f;
                 }
-                foreach (var tempSprite in tempSprites)
+                foreach (var tempSprite in TempSprites)
                 {
                     tempSprite.draw(b, true, extraAlpha: extraAlpha);
                 }
-                foreach (var ingredientSlot in ingredientSlots)
+                foreach (var ingredientSlot in IngredientSlots)
                 {
                     var alpha = 1f;
-                    if (partialDonationItem != null && ingredientSlot.item != partialDonationItem)
+                    if (PartialDonationItem != null && ingredientSlot.item != PartialDonationItem)
                     {
                         alpha = 0.25f;
                     }
-                    if (ingredientSlot.item == null || partialDonationItem != null && ingredientSlot.item == partialDonationItem)
+                    if (ingredientSlot.item == null || PartialDonationItem != null && ingredientSlot.item == PartialDonationItem)
                     {
-                        ingredientSlot.draw(b, (fromGameMenu ? Color.LightGray * 0.5f : Color.White) * alpha, 0.89f);
+                        ingredientSlot.draw(b, (FromGameMenu ? Color.LightGray * 0.5f : Color.White) * alpha, 0.89f);
                     }
                     ingredientSlot.drawItem(b, 4, 4, alpha);
                 }
-                for (var index = 0; index < ingredientList.Count; ++index)
+                for (var index = 0; index < IngredientList.Count; ++index)
                 {
                     var num3 = 1f;
-                    if (currentPartialIngredientDescriptionIndex >= 0 && currentPartialIngredientDescriptionIndex != index)
+                    if (CurrentPartialIngredientDescriptionIndex >= 0 && CurrentPartialIngredientDescriptionIndex != index)
                     {
                         num3 = 0.25f;
                     }
-                    var ingredient = ingredientList[index];
+                    var ingredient = IngredientList[index];
                     var flag = false;
                     var num4 = index;
                     var count = CurrentPageBundle?.Ingredients?.Count;
@@ -1446,34 +1441,34 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                         ingredient.item.drawInMenu(b, new Vector2(ingredient.bounds.X, ingredient.bounds.Y), ingredient.scale / 4f, 1f, 0.9f, StackDrawType.Draw, Color.White * (flag ? 0.25f : num3), false);
                     }
                 }
-                inventory.draw(b);
+                Inventory.draw(b);
             }
-            if (getRewardNameForArea(whichArea) != "")
+            if (GetRewardNameForArea(WhichArea) != "")
             {
-                SpriteText.drawStringWithScrollCenteredAt(b, getRewardNameForArea(whichArea), xPositionOnScreen + width / 2, Math.Min(yPositionOnScreen + height + 20, Game1.uiViewport.Height - 64 - 8));
+                SpriteText.drawStringWithScrollCenteredAt(b, GetRewardNameForArea(WhichArea), xPositionOnScreen + width / 2, Math.Min(yPositionOnScreen + height + 20, Game1.uiViewport.Height - 64 - 8));
             }
             base.draw(b);
             Game1.mouseCursorTransparency = 1f;
-            if (canClick)
+            if (CanClick)
             {
                 drawMouse(b);
             }
-            heldItem?.drawInMenu(b, new Vector2(Game1.getOldMouseX() + 16, Game1.getOldMouseY() + 16), 1f);
-            if (inventory.descriptionText.Length > 0)
+            HeldItem?.drawInMenu(b, new Vector2(Game1.getOldMouseX() + 16, Game1.getOldMouseY() + 16), 1f);
+            if (Inventory.descriptionText.Length > 0)
             {
-                if (hoveredItem != null)
+                if (HoveredItem != null)
                 {
-                    drawToolTip(b, hoveredItem.getDescription(), hoveredItem.DisplayName, hoveredItem);
+                    drawToolTip(b, HoveredItem.getDescription(), HoveredItem.DisplayName, HoveredItem);
                 }
             }
             else
             {
-                drawHoverText(b, singleBundleMenu || Game1.player.hasOrWillReceiveMail("canReadJunimoText") || hoverText.Length <= 0 ? hoverText : "???", Game1.dialogueFont);
+                drawHoverText(b, _singleBundleMenu || Game1.player.hasOrWillReceiveMail("canReadJunimoText") || HoverText.Length <= 0 ? HoverText : "???", Game1.dialogueFont);
             }
-            screenSwipe?.draw(b);
+            ScreenSwipe?.draw(b);
         }
 
-        public virtual string getRewardNameForArea(int whichArea)
+        public virtual string GetRewardNameForArea(int whichArea)
         {
             switch (whichArea)
             {
@@ -1500,47 +1495,47 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
         public override void gameWindowSizeChanged(Rectangle oldBounds, Rectangle newBounds)
         {
             base.gameWindowSizeChanged(oldBounds, newBounds);
-            tempSprites.Clear();
+            TempSprites.Clear();
             xPositionOnScreen = Game1.uiViewport.Width / 2 - 640;
             yPositionOnScreen = Game1.uiViewport.Height / 2 - 360;
-            backButton = new ClickableTextureComponent("Back", new Rectangle(xPositionOnScreen + borderWidth * 2 + 8, yPositionOnScreen + borderWidth * 2 + 4, 64, 64), null, null, Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 44), 1f);
-            if (fromGameMenu)
+            BackButton = new ClickableTextureComponent("Back", new Rectangle(xPositionOnScreen + borderWidth * 2 + 8, yPositionOnScreen + borderWidth * 2 + 4, 64, 64), null, null, Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 44), 1f);
+            if (FromGameMenu)
             {
                 var textureComponent1 = new ClickableTextureComponent(new Rectangle(xPositionOnScreen + width - 128, yPositionOnScreen, 48, 44), Game1.mouseCursors, new Rectangle(365, 495, 12, 11), 4f);
                 textureComponent1.visible = false;
-                areaNextButton = textureComponent1;
+                AreaNextButton = textureComponent1;
                 var textureComponent2 = new ClickableTextureComponent(new Rectangle(xPositionOnScreen + 64, yPositionOnScreen, 48, 44), Game1.mouseCursors, new Rectangle(352, 495, 12, 11), 4f);
                 textureComponent2.visible = false;
-                areaBackButton = textureComponent2;
+                AreaBackButton = textureComponent2;
             }
-            inventory = new InventoryMenu(xPositionOnScreen + 128, yPositionOnScreen + 140, true, highlightMethod: HighlightObjects, capacity: Game1.player.maxItems.Value, rows: 6, horizontalGap: 8, verticalGap: 8, drawSlots: false);
-            for (var index = 0; index < inventory.inventory.Count; ++index)
+            Inventory = new InventoryMenu(xPositionOnScreen + 128, yPositionOnScreen + 140, true, highlightMethod: HighlightObjects, capacity: Game1.player.maxItems.Value, rows: 6, horizontalGap: 8, verticalGap: 8, drawSlots: false);
+            for (var index = 0; index < Inventory.inventory.Count; ++index)
             {
-                if (index >= inventory.actualInventory.Count)
+                if (index >= Inventory.actualInventory.Count)
                 {
-                    inventory.inventory[index].visible = false;
+                    Inventory.inventory[index].visible = false;
                 }
             }
-            for (var index = 0; index < bundles.Count; ++index)
+            for (var index = 0; index < Bundles.Count; ++index)
             {
-                var locationFromNumber = getBundleLocationFromNumber(index);
-                bundles[index].bounds.X = locationFromNumber.X;
-                bundles[index].bounds.Y = locationFromNumber.Y;
-                bundles[index].Sprite.position = new Vector2(locationFromNumber.X, locationFromNumber.Y);
+                var locationFromNumber = GetBundleLocationFromNumber(index);
+                Bundles[index].bounds.X = locationFromNumber.X;
+                Bundles[index].bounds.Y = locationFromNumber.Y;
+                Bundles[index].Sprite.position = new Vector2(locationFromNumber.X, locationFromNumber.Y);
             }
-            if (!specificBundlePage)
+            if (!SpecificBundlePage)
             {
                 return;
             }
             var ofIngredientSlots = CurrentPageBundle.NumberOfIngredientSlots;
             var toAddTo1 = new List<Rectangle>();
-            addRectangleRowsToList(toAddTo1, ofIngredientSlots, 932, 540);
-            ingredientSlots.Clear();
+            AddRectangleRowsToList(toAddTo1, ofIngredientSlots, 932, 540);
+            IngredientSlots.Clear();
             for (var index = 0; index < toAddTo1.Count; ++index)
-                ingredientSlots.Add(new ClickableTextureComponent(toAddTo1[index], noteTexture, new Rectangle(512, 244, 18, 18), 4f));
+                IngredientSlots.Add(new ClickableTextureComponent(toAddTo1[index], NoteTexture, new Rectangle(512, 244, 18, 18), 4f));
             var toAddTo2 = new List<Rectangle>();
-            ingredientList.Clear();
-            addRectangleRowsToList(toAddTo2, CurrentPageBundle.Ingredients.Count, 932, 364);
+            IngredientList.Clear();
+            AddRectangleRowsToList(toAddTo2, CurrentPageBundle.Ingredients.Count, 932, 364);
             for (var index = 0; index < toAddTo2.Count; ++index)
             {
                 var ingredient = CurrentPageBundle.Ingredients[index];
@@ -1551,9 +1546,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                     var texture = parsedOrErrorData.GetTexture();
                     var sourceRect = parsedOrErrorData.GetSourceRect();
                     var obj = ingredient.preservesId != null ? Utility.CreateFlavoredItem(ingredient.id, ingredient.preservesId, ingredient.quality, ingredient.stack) : ItemRegistry.Create(ingredient.id, ingredient.stack, ingredient.quality);
-                    var ingredientList = this.ingredientList;
+                    var ingredientList = this.IngredientList;
                     var textureComponent = new ClickableTextureComponent("", toAddTo2[index], "", obj.DisplayName, texture, sourceRect, 4f);
-                    textureComponent.myID = index + 1000;
+                    textureComponent.myID = index + REGION_INGREDIENT_LIST_MODIFIER;
                     textureComponent.item = obj;
                     textureComponent.upNeighborID = -99998;
                     textureComponent.rightNeighborID = -99998;
@@ -1562,134 +1557,153 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                     ingredientList.Add(textureComponent);
                 }
             }
-            updateIngredientSlots();
+            UpdateIngredientSlots();
         }
 
-        private void setUpBundleSpecificPage(BundleRemake b)
+        private void SetUpBundleSpecificPage(BundleRemake b)
         {
-            tempSprites.Clear();
+            TempSprites.Clear();
             CurrentPageBundle = b;
-            specificBundlePage = true;
-            if (whichArea == 4)
+            SpecificBundlePage = true;
+            if (IsBundleCurrencyBased())
             {
-                if (fromGameMenu)
-                {
-                    return;
-                }
-                var textureComponent = new ClickableTextureComponent(new Rectangle(xPositionOnScreen + 800, yPositionOnScreen + 504, 260, 72), noteTexture, new Rectangle(517, 286, 65, 20), 4f);
-                textureComponent.myID = 797;
-                textureComponent.leftNeighborID = 103;
-                purchaseButton = textureComponent;
-                if (!Game1.options.SnappyMenus)
-                {
-                    return;
-                }
-                currentlySnappedComponent = purchaseButton;
-                snapCursorToCurrentSnappedComponent();
+                SetUpPurchaseButton();
             }
             else
             {
-                var ofIngredientSlots = b.NumberOfIngredientSlots;
-                var toAddTo1 = new List<Rectangle>();
-                addRectangleRowsToList(toAddTo1, ofIngredientSlots, 932, 540);
-                for (var index = 0; index < toAddTo1.Count; ++index)
-                {
-                    var ingredientSlots = this.ingredientSlots;
-                    var textureComponent = new ClickableTextureComponent(toAddTo1[index], noteTexture, new Rectangle(512, 244, 18, 18), 4f);
-                    textureComponent.myID = index + 250;
-                    textureComponent.upNeighborID = -99998;
-                    textureComponent.rightNeighborID = -99998;
-                    textureComponent.leftNeighborID = -99998;
-                    textureComponent.downNeighborID = -99998;
-                    ingredientSlots.Add(textureComponent);
-                }
-                var toAddTo2 = new List<Rectangle>();
-                addRectangleRowsToList(toAddTo2, b.Ingredients.Count, 932, 364);
-                for (var index = 0; index < toAddTo2.Count; ++index)
-                {
-                    var ingredient = b.Ingredients[index];
-                    var representativeItemId = GetRepresentativeItemId(ingredient);
-                    var dataOrErrorItem = ItemRegistry.GetDataOrErrorItem(representativeItemId);
-                    if (dataOrErrorItem.HasTypeObject())
-                    {
-                        var category = ingredient.category;
-                        string hoverText;
-                        if (category.HasValue)
-                        {
-                            switch (category.GetValueOrDefault())
-                            {
-                                case -75:
-                                    hoverText = Game1.content.LoadString("Strings\\StringsFromCSFiles:CraftingRecipe.cs.570");
-                                    goto label_18;
-                                case -6:
-                                    hoverText = Game1.content.LoadString("Strings\\StringsFromCSFiles:CraftingRecipe.cs.573");
-                                    goto label_18;
-                                case -5:
-                                    hoverText = Game1.content.LoadString("Strings\\StringsFromCSFiles:CraftingRecipe.cs.572");
-                                    goto label_18;
-                                case -4:
-                                    hoverText = Game1.content.LoadString("Strings\\StringsFromCSFiles:CraftingRecipe.cs.571");
-                                    goto label_18;
-                                case -2:
-                                    hoverText = Game1.content.LoadString("Strings\\StringsFromCSFiles:CraftingRecipe.cs.569");
-                                    goto label_18;
-                            }
-                        }
-                        hoverText = dataOrErrorItem.DisplayName;
-                    label_18:
-                        Item flavoredItem;
-                        if (ingredient.preservesId != null)
-                        {
-                            flavoredItem = Utility.CreateFlavoredItem(ingredient.id, ingredient.preservesId, ingredient.quality, ingredient.stack);
-                            hoverText = flavoredItem.DisplayName;
-                        }
-                        else
-                        {
-                            flavoredItem = ItemRegistry.Create(representativeItemId, ingredient.stack, ingredient.quality);
-                        }
-                        var texture = dataOrErrorItem.GetTexture();
-                        var sourceRect = dataOrErrorItem.GetSourceRect();
-                        var ingredientList = this.ingredientList;
-                        var textureComponent = new ClickableTextureComponent("ingredient_list_slot", toAddTo2[index], "", hoverText, texture, sourceRect, 4f);
-                        textureComponent.myID = index + 1000;
-                        textureComponent.item = flavoredItem;
-                        textureComponent.upNeighborID = -99998;
-                        textureComponent.rightNeighborID = -99998;
-                        textureComponent.leftNeighborID = -99998;
-                        textureComponent.downNeighborID = -99998;
-                        ingredientList.Add(textureComponent);
-                    }
-                }
-                updateIngredientSlots();
-                if (!Game1.options.SnappyMenus)
-                {
-                    return;
-                }
-                populateClickableComponentList();
-                if (inventory?.inventory != null)
-                {
-                    for (var index = 0; index < inventory.inventory.Count; ++index)
-                    {
-                        if (inventory.inventory[index] != null)
-                        {
-                            if (inventory.inventory[index].downNeighborID == 101)
-                            {
-                                inventory.inventory[index].downNeighborID = -1;
-                            }
-                            if (inventory.inventory[index].leftNeighborID == -1)
-                            {
-                                inventory.inventory[index].leftNeighborID = 103;
-                            }
-                            if (inventory.inventory[index].upNeighborID >= 1000)
-                            {
-                                inventory.inventory[index].upNeighborID = 103;
-                            }
-                        }
-                    }
-                }
-                currentlySnappedComponent = getComponentWithID(0);
-                snapCursorToCurrentSnappedComponent();
+                SetUpIngredientButtons(b);
             }
+        }
+
+        private void SetUpPurchaseButton()
+        {
+            if (FromGameMenu)
+            {
+                return;
+            }
+            var textureComponent = new ClickableTextureComponent(new Rectangle(xPositionOnScreen + 800, yPositionOnScreen + 504, 260, 72), NoteTexture, new Rectangle(517, 286, 65, 20), 4f);
+            textureComponent.myID = 797;
+            textureComponent.leftNeighborID = REGION_BACK_BUTTON;
+            PurchaseButton = textureComponent;
+            if (!Game1.options.SnappyMenus)
+            {
+                return;
+            }
+            currentlySnappedComponent = PurchaseButton;
+            snapCursorToCurrentSnappedComponent();
+        }
+
+        private void SetUpIngredientButtons(BundleRemake b)
+        {
+
+            var ofIngredientSlots = b.NumberOfIngredientSlots;
+            var toAddTo1 = new List<Rectangle>();
+            AddRectangleRowsToList(toAddTo1, ofIngredientSlots, 932, 540);
+            for (var index = 0; index < toAddTo1.Count; ++index)
+            {
+                var ingredientSlots = this.IngredientSlots;
+                var textureComponent = new ClickableTextureComponent(toAddTo1[index], NoteTexture, new Rectangle(512, 244, 18, 18), 4f);
+                textureComponent.myID = index + REGION_INGREDIENT_SLOT_MODIFIER;
+                textureComponent.upNeighborID = -99998;
+                textureComponent.rightNeighborID = -99998;
+                textureComponent.leftNeighborID = -99998;
+                textureComponent.downNeighborID = -99998;
+                ingredientSlots.Add(textureComponent);
+            }
+            var toAddTo2 = new List<Rectangle>();
+            AddRectangleRowsToList(toAddTo2, b.Ingredients.Count, 932, 364);
+            for (var index = 0; index < toAddTo2.Count; ++index)
+            {
+                var ingredient = b.Ingredients[index];
+                var representativeItemId = GetRepresentativeItemId(ingredient);
+                var dataOrErrorItem = ItemRegistry.GetDataOrErrorItem(representativeItemId);
+                // StardewArchipelago: Patch to allow any object type in a bundle
+                //if (dataOrErrorItem.HasTypeObject())
+                //{
+                var category = ingredient.category;
+                string hoverText;
+                if (category.HasValue)
+                {
+                    switch (category.GetValueOrDefault())
+                    {
+                        case -75:
+                            hoverText = Game1.content.LoadString("Strings\\StringsFromCSFiles:CraftingRecipe.cs.570");
+                            goto label_18;
+                        case -6:
+                            hoverText = Game1.content.LoadString("Strings\\StringsFromCSFiles:CraftingRecipe.cs.573");
+                            goto label_18;
+                        case -5:
+                            hoverText = Game1.content.LoadString("Strings\\StringsFromCSFiles:CraftingRecipe.cs.572");
+                            goto label_18;
+                        case -4:
+                            hoverText = Game1.content.LoadString("Strings\\StringsFromCSFiles:CraftingRecipe.cs.571");
+                            goto label_18;
+                        case -2:
+                            hoverText = Game1.content.LoadString("Strings\\StringsFromCSFiles:CraftingRecipe.cs.569");
+                            goto label_18;
+                    }
+                }
+                hoverText = dataOrErrorItem.DisplayName;
+                label_18:
+                Item flavoredItem;
+                if (ingredient.preservesId != null)
+                {
+                    flavoredItem = Utility.CreateFlavoredItem(ingredient.id, ingredient.preservesId, ingredient.quality, ingredient.stack);
+                    hoverText = flavoredItem.DisplayName;
+                }
+                else
+                {
+                    flavoredItem = ItemRegistry.Create(representativeItemId, ingredient.stack, ingredient.quality);
+                }
+                var texture = dataOrErrorItem.GetTexture();
+                var sourceRect = dataOrErrorItem.GetSourceRect();
+                var ingredientList = this.IngredientList;
+                var textureComponent = new ClickableTextureComponent("ingredient_list_slot", toAddTo2[index], "", hoverText, texture, sourceRect, 4f);
+                textureComponent.myID = index + REGION_INGREDIENT_LIST_MODIFIER;
+                textureComponent.item = flavoredItem;
+                textureComponent.upNeighborID = -99998;
+                textureComponent.rightNeighborID = -99998;
+                textureComponent.leftNeighborID = -99998;
+                textureComponent.downNeighborID = -99998;
+                ingredientList.Add(textureComponent);
+                //}
+            }
+            UpdateIngredientSlots();
+            if (!Game1.options.SnappyMenus)
+            {
+                return;
+            }
+            populateClickableComponentList();
+            if (Inventory?.inventory != null)
+            {
+                for (var index = 0; index < Inventory.inventory.Count; ++index)
+                {
+                    if (Inventory.inventory[index] != null)
+                    {
+                        if (Inventory.inventory[index].downNeighborID == REGION_AREA_NEXT_BUTTON)
+                        {
+                            Inventory.inventory[index].downNeighborID = -1;
+                        }
+                        if (Inventory.inventory[index].leftNeighborID == -1)
+                        {
+                            Inventory.inventory[index].leftNeighborID = REGION_BACK_BUTTON;
+                        }
+                        if (Inventory.inventory[index].upNeighborID >= REGION_INGREDIENT_LIST_MODIFIER)
+                        {
+                            Inventory.inventory[index].upNeighborID = REGION_BACK_BUTTON;
+                        }
+                    }
+                }
+            }
+            currentlySnappedComponent = getComponentWithID(0);
+            snapCursorToCurrentSnappedComponent();
+        }
+
+        public bool IsBundleCurrencyBased()
+        {
+            var ingredient = CurrentPageBundle.Ingredients.Last();
+            var ingredientId = ingredient.id;
+            return CurrencyBundle.CurrencyIds.ContainsValue(ingredientId);
         }
 
         public override bool IsAutomaticSnapValid(
@@ -1697,10 +1711,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
           ClickableComponent a,
           ClickableComponent b)
         {
-            return (currentPartialIngredientDescriptionIndex < 0 || (!ingredientSlots.Contains(b) || b.item == partialDonationItem) && (!ingredientList.Contains(b) || ingredientList.IndexOf(b as ClickableTextureComponent) == currentPartialIngredientDescriptionIndex)) && (a.myID >= 5000 || a.myID == 101 ? 1 : a.myID == 102 ? 1 : 0) == (b.myID >= 5000 || b.myID == 101 ? 1 : b.myID == 102 ? 1 : 0);
+            return (CurrentPartialIngredientDescriptionIndex < 0 || (!IngredientSlots.Contains(b) || b.item == PartialDonationItem) && (!IngredientList.Contains(b) || IngredientList.IndexOf(b as ClickableTextureComponent) == CurrentPartialIngredientDescriptionIndex)) && (a.myID >= REGION_BUNDLE_MODIFIER || a.myID == REGION_AREA_NEXT_BUTTON ? 1 : a.myID == REGION_AREA_BACK_BUTTON ? 1 : 0) == (b.myID >= REGION_BUNDLE_MODIFIER || b.myID == REGION_AREA_NEXT_BUTTON ? 1 : b.myID == REGION_AREA_BACK_BUTTON ? 1 : 0);
         }
 
-        private void addRectangleRowsToList(
+        private void AddRectangleRowsToList(
           List<Rectangle> toAddTo,
           int numberOfItems,
           int centerX,
@@ -1709,53 +1723,53 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             switch (numberOfItems)
             {
                 case 1:
-                    toAddTo.AddRange(createRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY, 1, 72, 72, 12));
+                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY, 1, 72, 72, 12));
                     break;
                 case 2:
-                    toAddTo.AddRange(createRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY, 2, 72, 72, 12));
+                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY, 2, 72, 72, 12));
                     break;
                 case 3:
-                    toAddTo.AddRange(createRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY, 3, 72, 72, 12));
+                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY, 3, 72, 72, 12));
                     break;
                 case 4:
-                    toAddTo.AddRange(createRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY, 4, 72, 72, 12));
+                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY, 4, 72, 72, 12));
                     break;
                 case 5:
-                    toAddTo.AddRange(createRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY - 36, 3, 72, 72, 12));
-                    toAddTo.AddRange(createRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY + 40, 2, 72, 72, 12));
+                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY - 36, 3, 72, 72, 12));
+                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY + 40, 2, 72, 72, 12));
                     break;
                 case 6:
-                    toAddTo.AddRange(createRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY - 36, 3, 72, 72, 12));
-                    toAddTo.AddRange(createRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY + 40, 3, 72, 72, 12));
+                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY - 36, 3, 72, 72, 12));
+                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY + 40, 3, 72, 72, 12));
                     break;
                 case 7:
-                    toAddTo.AddRange(createRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY - 36, 4, 72, 72, 12));
-                    toAddTo.AddRange(createRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY + 40, 3, 72, 72, 12));
+                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY - 36, 4, 72, 72, 12));
+                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY + 40, 3, 72, 72, 12));
                     break;
                 case 8:
-                    toAddTo.AddRange(createRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY - 36, 4, 72, 72, 12));
-                    toAddTo.AddRange(createRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY + 40, 4, 72, 72, 12));
+                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY - 36, 4, 72, 72, 12));
+                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY + 40, 4, 72, 72, 12));
                     break;
                 case 9:
-                    toAddTo.AddRange(createRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY - 36, 5, 72, 72, 12));
-                    toAddTo.AddRange(createRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY + 40, 4, 72, 72, 12));
+                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY - 36, 5, 72, 72, 12));
+                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY + 40, 4, 72, 72, 12));
                     break;
                 case 10:
-                    toAddTo.AddRange(createRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY - 36, 5, 72, 72, 12));
-                    toAddTo.AddRange(createRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY + 40, 5, 72, 72, 12));
+                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY - 36, 5, 72, 72, 12));
+                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY + 40, 5, 72, 72, 12));
                     break;
                 case 11:
-                    toAddTo.AddRange(createRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY - 36, 6, 72, 72, 12));
-                    toAddTo.AddRange(createRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY + 40, 5, 72, 72, 12));
+                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY - 36, 6, 72, 72, 12));
+                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY + 40, 5, 72, 72, 12));
                     break;
                 case 12:
-                    toAddTo.AddRange(createRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY - 36, 6, 72, 72, 12));
-                    toAddTo.AddRange(createRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY + 40, 6, 72, 72, 12));
+                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY - 36, 6, 72, 72, 12));
+                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY + 40, 6, 72, 72, 12));
                     break;
             }
         }
 
-        private List<Rectangle> createRowOfBoxesCenteredAt(
+        private List<Rectangle> CreateRowOfBoxesCenteredAt(
           int xStart,
           int yStart,
           int numBoxes,
@@ -1771,23 +1785,23 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             return ofBoxesCenteredAt;
         }
 
-        public void takeDownBundleSpecificPage()
+        public void TakeDownBundleSpecificPage()
         {
             if (!IsReadyToCloseMenuOrBundle())
             {
                 return;
             }
             ReturnPartialDonations(false);
-            hoveredItem = null;
-            if (!specificBundlePage)
+            HoveredItem = null;
+            if (!SpecificBundlePage)
             {
                 return;
             }
-            specificBundlePage = false;
-            ingredientSlots.Clear();
-            ingredientList.Clear();
-            tempSprites.Clear();
-            purchaseButton = null;
+            SpecificBundlePage = false;
+            IngredientSlots.Clear();
+            IngredientList.Clear();
+            TempSprites.Clear();
+            PurchaseButton = null;
             if (!Game1.options.SnappyMenus)
             {
                 return;
@@ -1803,7 +1817,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             }
         }
 
-        private Point getBundleLocationFromNumber(int whichBundle)
+        private Point GetBundleLocationFromNumber(int whichBundle)
         {
             var locationFromNumber = new Point(xPositionOnScreen, yPositionOnScreen);
             switch (whichBundle)

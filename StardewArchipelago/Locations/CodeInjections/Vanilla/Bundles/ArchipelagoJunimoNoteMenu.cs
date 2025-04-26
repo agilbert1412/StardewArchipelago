@@ -67,29 +67,29 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         protected override JunimoNoteMenuRemake CreateJunimoNoteMenu()
         {
-            if (fromGameMenu || fromThisMenu)
+            if (FromGameMenu || FromThisMenu)
             {
-                return new ArchipelagoJunimoNoteMenu(_logger, _modHelper, _archipelago, _state, _locationChecker, _bundleReader, fromGameMenu, whichArea, fromThisMenu)
+                return new ArchipelagoJunimoNoteMenu(_logger, _modHelper, _archipelago, _state, _locationChecker, _bundleReader, FromGameMenu, WhichArea, FromThisMenu)
                 {
-                    gameMenuTabToReturnTo = gameMenuTabToReturnTo,
-                    menuToReturnTo = menuToReturnTo,
+                    GameMenuTabToReturnTo = GameMenuTabToReturnTo,
+                    MenuToReturnTo = MenuToReturnTo,
                 };
             }
             else
             {
-                return new ArchipelagoJunimoNoteMenu(_logger, _modHelper, _archipelago, _state, _locationChecker, _bundleReader, whichArea, Game1.RequireLocation<CommunityCenter>("CommunityCenter").bundlesDict())
+                return new ArchipelagoJunimoNoteMenu(_logger, _modHelper, _archipelago, _state, _locationChecker, _bundleReader, WhichArea, Game1.RequireLocation<CommunityCenter>("CommunityCenter").bundlesDict())
                 {
-                    gameMenuTabToReturnTo = gameMenuTabToReturnTo,
-                    menuToReturnTo = menuToReturnTo,
+                    GameMenuTabToReturnTo = GameMenuTabToReturnTo,
+                    MenuToReturnTo = MenuToReturnTo,
                 };
             }
         }
 
-        public override void setUpMenu(int whichArea, Dictionary<int, bool[]> bundlesComplete)
+        public override void SetUpMenu(int whichArea, Dictionary<int, bool[]> bundlesComplete)
         {
-            base.setUpMenu(whichArea, bundlesComplete);
+            base.SetUpMenu(whichArea, bundlesComplete);
             var remixedBundlesTexture = Game1.temporaryContent.Load<Texture2D>("LooseSprites\\BundleSprites");
-            foreach (var bundle in this.bundles)
+            foreach (var bundle in this.Bundles)
             {
                 var textureOverride = BundleIcons.GetBundleIcon(_logger, _modHelper, bundle.name, LogLevel.Trace);
                 if (textureOverride == null)
@@ -133,21 +133,21 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
         }
 
-        public override string getRewardNameForArea(int whichArea)
+        public override string GetRewardNameForArea(int whichArea)
         {
             string apLocationToScout;
-            if (specificBundlePage)
+            if (SpecificBundlePage)
             {
                 if (!TryGetBundleLocationToScout(out apLocationToScout))
                 {
-                    return base.getRewardNameForArea(whichArea);
+                    return base.GetRewardNameForArea(whichArea);
                 }
             }
             else
             {
                 if (!TryGetRoomLocationToScout(whichArea, out apLocationToScout))
                 {
-                    return base.getRewardNameForArea(whichArea);
+                    return base.GetRewardNameForArea(whichArea);
                 }
             }
 
@@ -167,7 +167,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         {
             base.draw(b);
 
-            if (!this.specificBundlePage || !Game1.player.hasOrWillReceiveMail("canReadJunimoText"))
+            if (!this.SpecificBundlePage || !Game1.player.hasOrWillReceiveMail("canReadJunimoText"))
             {
                 Game1.specialCurrencyDisplay.ShowCurrency(null);
                 return;
@@ -210,7 +210,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         public override void receiveLeftClick(int x, int y, bool playSound = true)
         {
-            if (!JunimoNoteMenu.canClick || this.scrambledText || !this.specificBundlePage || this.purchaseButton == null || !this.purchaseButton.containsPoint(x, y))
+            if (!JunimoNoteMenu.canClick || this.ScrambledText || !this.SpecificBundlePage || this.PurchaseButton == null || !this.PurchaseButton.containsPoint(x, y))
             {
                 base.receiveLeftClick(x, y, playSound);
                 return;
@@ -407,20 +407,20 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         {
             Game1.playSound("select");
             CurrentPageBundle.CompletionAnimation(this);
-            if (this.purchaseButton == null)
+            if (this.PurchaseButton == null)
             {
             }
             else
             {
-                this.purchaseButton.scale = this.purchaseButton.baseScale * 0.75f;
+                this.PurchaseButton.scale = this.PurchaseButton.baseScale * 0.75f;
             }
 
             var communityCenter = (CommunityCenter)Game1.getLocationFromName("CommunityCenter");
             communityCenter.bundleRewards[CurrentPageBundle.BundleIndex] = true;
             communityCenter.bundles.FieldDict[CurrentPageBundle.BundleIndex][0] = true;
             this.CheckForRewards();
-            var flag = this.bundles.Any(bundle => !bundle.Complete && !bundle.Equals(CurrentPageBundle));
-            var whichArea = this.whichArea;
+            var flag = this.Bundles.Any(bundle => !bundle.Complete && !bundle.Equals(CurrentPageBundle));
+            var whichArea = this.WhichArea;
             if (!flag)
             {
                 communityCenter.markAreaAsComplete(whichArea);

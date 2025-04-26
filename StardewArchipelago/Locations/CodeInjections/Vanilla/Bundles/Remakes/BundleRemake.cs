@@ -10,6 +10,7 @@ using StardewValley.Internal;
 using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.TokenizableStrings;
+// ReSharper disable ParameterHidesMember
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
 {
@@ -79,7 +80,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             JunimoNoteMenuRemake menu)
             : base(new Rectangle(position.X, position.Y, 64, 64), "")
         {
-            if (menu != null && menu.fromGameMenu)
+            if (menu != null && menu.FromGameMenu)
             {
                 this.DepositsAllowed = false;
             }
@@ -178,7 +179,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             };
             ++temporaryAnimatedSprite1.sourceRect.Y;
             --temporaryAnimatedSprite1.sourceRect.Height;
-            JunimoNoteMenuRemake.tempSprites.Add(temporaryAnimatedSprite1);
+            JunimoNoteMenuRemake.TempSprites.Add(temporaryAnimatedSprite1);
             var temporaryAnimatedSprite2 = new TemporaryAnimatedSprite(50, this.Sprite.position, BundleRemake.GetColorFromColorIndex(this.BundleColor))
             {
                 motion = new Vector2(1f, 0.5f),
@@ -188,7 +189,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             };
             ++temporaryAnimatedSprite2.sourceRect.Y;
             --temporaryAnimatedSprite2.sourceRect.Height;
-            JunimoNoteMenuRemake.tempSprites.Add(temporaryAnimatedSprite2);
+            JunimoNoteMenuRemake.TempSprites.Add(temporaryAnimatedSprite2);
         }
 
         public void TryHoverAction(int x, int y)
@@ -196,7 +197,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             if (this.bounds.Contains(x, y) && !this.Complete)
             {
                 this.Sprite.paused = false;
-                JunimoNoteMenuRemake.hoverText = Game1.content.LoadString("Strings\\UI:JunimoNote_BundleName", this.label);
+                JunimoNoteMenuRemake.HoverText = Game1.content.LoadString("Strings\\UI:JunimoNote_BundleName", this.label);
             }
             else
             {
@@ -258,7 +259,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
         public bool CanAcceptThisItem(
             Item item,
             ClickableTextureComponent slot,
-            bool ignoreStackCount = false)
+            bool ignoreStackCount)
         {
             if (!this.DepositsAllowed)
             {
@@ -317,9 +318,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                     Game1.playSound("newArtifact");
                     slot.sourceRect.X = 512;
                     slot.sourceRect.Y = 244;
-                    if (parentMenu.onIngredientDeposit != null)
+                    if (parentMenu.OnIngredientDeposit != null)
                     {
-                        parentMenu.onIngredientDeposit(index1);
+                        parentMenu.OnIngredientDeposit(index1);
                         break;
                     }
                     communityCenter.bundles.FieldDict[this.BundleIndex][index1] = true;
@@ -347,7 +348,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                 temporaryAnimatedSprite.sourceRectStartingPos = new Vector2(temporaryAnimatedSprite.sourceRect.X, temporaryAnimatedSprite.sourceRect.Y);
                 temporaryAnimatedSprite.animationLength = 1;
             }
-            JunimoNoteMenuRemake.tempSprites.Add(temporaryAnimatedSprite);
+            JunimoNoteMenuRemake.TempSprites.Add(temporaryAnimatedSprite);
         }
 
         public bool CanBeClicked() => !this.Complete;
@@ -368,7 +369,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
         {
             if (Game1.activeClickableMenu is JunimoNoteMenuRemake activeClickableMenu)
             {
-                activeClickableMenu.takeDownBundleSpecificPage();
+                activeClickableMenu.TakeDownBundleSpecificPage();
             }
             this.Sprite.pingPong = false;
             this.Sprite.paused = false;
@@ -396,7 +397,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                     Game1.playSound("dwop");
                 }
                 this.bounds.Inflate(64, 64);
-                JunimoNoteMenuRemake.tempSprites.AddRange(Utility.sparkleWithinArea(this.bounds, 8, BundleRemake.GetColorFromColorIndex(this.BundleColor) * 0.5f));
+                JunimoNoteMenuRemake.TempSprites.AddRange(Utility.sparkleWithinArea(this.bounds, 8, BundleRemake.GetColorFromColorIndex(this.BundleColor) * 0.5f));
                 this.bounds.Inflate(-64, -64);
             }
             this.Complete = true;
@@ -405,7 +406,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
         public void Update(GameTime time)
         {
             this.Sprite.update(time);
-            if (this.CompletionTimer > 0 && JunimoNoteMenuRemake.screenSwipe == null)
+            if (this.CompletionTimer > 0 && JunimoNoteMenuRemake.ScreenSwipe == null)
             {
                 this.CompletionTimer -= time.ElapsedGameTime.Milliseconds;
                 if (this.CompletionTimer <= 0)
