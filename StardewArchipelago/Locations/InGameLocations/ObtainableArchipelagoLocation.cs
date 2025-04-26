@@ -5,6 +5,7 @@ using Archipelago.MultiClient.Net.Enums;
 using Archipelago.MultiClient.Net.Models;
 using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.ItemSprites;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Archipelago;
@@ -22,6 +23,8 @@ namespace StardewArchipelago.Locations.InGameLocations
 {
     internal class ObtainableArchipelagoLocation : SpecialItem
     {
+        private static ArchipelagoItemSprites _itemSprites = null;
+
         private const string ARCHIPELAGO_PREFIX = "Archipelago: ";
         private const string ARCHIPELAGO_SHORT_PREFIX = "AP: ";
         private const string ARCHIPELAGO_NO_PREFIX = "";
@@ -74,6 +77,11 @@ namespace StardewArchipelago.Locations.InGameLocations
 
         public ObtainableArchipelagoLocation(string locationDisplayName, string locationName, LogHandler logger, IModHelper modHelper, LocationChecker locationChecker, StardewArchipelagoClient archipelago, Hint[] myActiveHints)
         {
+            if (_itemSprites == null)
+            {
+                _itemSprites = new ArchipelagoItemSprites(logger);
+            }
+
             // Prefix removed for now, because the inconsistency makes it ugly
             // var prefix = locationDisplayName.Length < 18 ? ARCHIPELAGO_PREFIX : ARCHIPELAGO_NO_PREFIX;
             var prefix = ARCHIPELAGO_NO_PREFIX;
@@ -87,14 +95,27 @@ namespace StardewArchipelago.Locations.InGameLocations
             var relatedHint = myActiveHints.FirstOrDefault(hint => archipelago.GetLocationName(hint.LocationId).Equals(locationName, StringComparison.OrdinalIgnoreCase));
             var scoutedLocation = archipelago.ScoutStardewLocation(LocationName);
 
-            var desiredTextureName = GetCorrectTexture(scoutedLocation, relatedHint);
-            _archipelagoTexture = ArchipelagoTextures.GetArchipelagoLogo(logger, modHelper, 48, desiredTextureName);
+            _archipelagoTexture = GetCorrectTexture(logger, modHelper, scoutedLocation, archipelago, relatedHint);
 
 
             _description = scoutedLocation == null ? ScoutedLocation.GenericItemName() : scoutedLocation.ToString();
         }
-        
-        private static string GetCorrectTexture(ScoutedLocation scoutedLocation, Hint relatedHint)
+
+        private static Texture2D GetCorrectTexture(LogHandler logger, IModHelper modHelper, ScoutedLocation scoutedLocation, StardewArchipelagoClient archipelago, Hint relatedHint)
+        {
+            if (_itemSprites.TryGetCustomAsset(scoutedLocation, archipelago.GameName, out var sprite))
+            {
+                if (ArchipelagoTextures.TryGetItemSprite(logger, modHelper, sprite, out var texture2D))
+                {
+                    return texture2D;
+                }
+            }
+
+            var genericTextureName = GetCorrectGenericTextureName(scoutedLocation, relatedHint);
+            return ArchipelagoTextures.GetArchipelagoLogo(logger, modHelper, 48, genericTextureName);
+        }
+
+        private static string GetCorrectGenericTextureName(ScoutedLocation scoutedLocation, Hint relatedHint)
         {
             var hintTexture = GetHintTexture(relatedHint);
 
