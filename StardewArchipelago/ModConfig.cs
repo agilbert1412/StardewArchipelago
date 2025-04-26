@@ -133,6 +133,21 @@ namespace StardewArchipelago
         /// Preferred Hinting behaviors for scouted locations. If playing in a multiworld with others, DontHint will be changed to HintOnlyProgression
         /// </summary>
         // public ScoutingPreference ScoutHintInSoloMultiworld { get; set; } = ScoutingPreference.HintProgressionUseful;
+
+        /// <summary>
+        /// When seeing a scouted item, and a custom asset is available for this game and item, display the custom asset instead of a generic logo
+        /// </summary>
+        public bool CustomAssets { get; set; } = true;
+
+        /// <summary>
+        /// When seeing a scouted item, and a custom asset is available for this item in a different game, display the custom asset instead of a generic logo
+        /// </summary>
+        public bool CustomAssetGameFlexible { get; set; } = true;
+
+        /// <summary>
+        /// When seeing a scouted item, and a custom asset is available for this game but not for this item, display the generic game asset instead of a generic logo
+        /// </summary>
+        public bool CustomAssetGenericGame { get; set; } = true;
     }
 
     public enum ItemIndicatorPreference

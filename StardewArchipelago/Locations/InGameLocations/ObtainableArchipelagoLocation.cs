@@ -103,7 +103,8 @@ namespace StardewArchipelago.Locations.InGameLocations
 
         private static Texture2D GetCorrectTexture(LogHandler logger, IModHelper modHelper, ScoutedLocation scoutedLocation, StardewArchipelagoClient archipelago, Hint relatedHint)
         {
-            if (_itemSprites.TryGetCustomAsset(scoutedLocation, archipelago.GameName, out var sprite))
+            var config = ModEntry.Instance.Config;
+            if (config.CustomAssets && _itemSprites.TryGetCustomAsset(scoutedLocation, archipelago.GameName, config.CustomAssetGameFlexible, config.CustomAssetGenericGame, out var sprite))
             {
                 if (ArchipelagoTextures.TryGetItemSprite(logger, modHelper, sprite, out var texture2D))
                 {
