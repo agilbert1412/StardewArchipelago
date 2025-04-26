@@ -9,18 +9,88 @@ using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Bundles;
 using StardewArchipelago.Constants;
 using StardewValley.Menus;
-using Bundle = StardewValley.Menus.Bundle;
 using System.Reflection;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes;
+using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
+using StardewArchipelago.Archipelago;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
+using StardewArchipelago.Logging;
+using StardewArchipelago.Serialization;
+using StardewArchipelago.Stardew;
+using StardewModdingAPI;
+using StardewValley.Locations;
+using StardewValley;
 
 namespace StardewArchipelago.GameModifications.CodeInjections.Bundles
 {
     public class BundleMenuInjection
     {
-        private static ILogger _logger;
+        private static LogHandler _logger;
+        private static IModHelper _modHelper;
+        private static StardewArchipelagoClient _archipelago;
+        private static ArchipelagoStateDto _state;
+        private static LocationChecker _locationChecker;
+        private static BundleReader _bundleReader;
 
-        public static void Initialize(ILogger logger)
+        public static void Initialize(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, BundleReader bundleReader)
         {
             _logger = logger;
+            _modHelper = modHelper;
+            _archipelago = archipelago;
+            _state = state;
+            _locationChecker = locationChecker;
+            _bundleReader = bundleReader;
+        }
+
+        // public void checkBundle(int area)
+        public static bool CheckBundle_UseRemakeMenuInCC_Prefix(CommunityCenter __instance, int area)
+        {
+            try
+            {
+                __instance.bundleMutexes[area].RequestLock(() => Game1.activeClickableMenu = new ArchipelagoJunimoNoteMenu(_logger, _modHelper, _archipelago, _state, _locationChecker, _bundleReader, area, __instance.bundlesDict()));
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(CheckBundle_UseRemakeMenuInCC_Prefix)}:\n{ex}");
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+        }
+
+        // public void checkBundle()
+        public static bool CheckBundle_UseRemakeMenuInJojaMart_Prefix(AbandonedJojaMart __instance)
+        {
+            try
+            {
+                __instance.bundleMutex.RequestLock(() => Game1.activeClickableMenu = new ArchipelagoJunimoNoteMenu(_logger, _modHelper, _archipelago, _state, _locationChecker, _bundleReader, 6, Game1.RequireLocation<CommunityCenter>("CommunityCenter").bundlesDict()));
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(CheckBundle_UseRemakeMenuInJojaMart_Prefix)}:\n{ex}");
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+        }
+
+        // public static IClickableMenu activeClickableMenu
+        public static bool SetActiveClickableMenu_UseJunimoNoteMenuRemake_Prefix(ref IClickableMenu value)
+        {
+            try
+            {
+                if (value is not JunimoNoteMenu junimoNoteMenu)
+                {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
+                value = new ArchipelagoJunimoNoteMenu(_logger, _modHelper, _archipelago, _state, _locationChecker, _bundleReader, junimoNoteMenu.fromGameMenu, junimoNoteMenu.whichArea, junimoNoteMenu.fromThisMenu);
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(SetActiveClickableMenu_UseJunimoNoteMenuRemake_Prefix)}:\n{ex}");
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
         }
 
         //Transpiler way

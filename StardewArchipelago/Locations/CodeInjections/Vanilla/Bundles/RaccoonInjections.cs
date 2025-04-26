@@ -14,12 +14,14 @@ using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Network.NetEvents;
 using xTile.Dimensions;
-using Bundle = StardewValley.Menus.Bundle;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Vanilla;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes;
+using StardewArchipelago.Stardew;
+using StardewArchipelago.Logging;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 {
@@ -27,15 +29,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
     {
         private const string GIANT_STUMP = "The Giant Stump";
 
-        private static ILogger _logger;
+        private static LogHandler _logger;
         private static IModHelper _modHelper;
         private static StardewArchipelagoClient _archipelago;
         private static ArchipelagoStateDto _state;
         private static LocationChecker _locationChecker;
         private static BundlesManager _bundlesManager;
+        private static BundleReader _bundleReader;
 
-        public static void Initialize(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, ArchipelagoStateDto state,
-            LocationChecker locationChecker, BundlesManager bundlesManager)
+        public static void Initialize(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, ArchipelagoStateDto state,
+            LocationChecker locationChecker, BundlesManager bundlesManager, BundleReader bundleReader)
         {
             _logger = logger;
             _modHelper = modHelper;
@@ -43,6 +46,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             _state = state;
             _locationChecker = locationChecker;
             _bundlesManager = bundlesManager;
+            _bundleReader = bundleReader;
         }
 
         // public override bool performAction(string[] action, Farmer who, Location tileLocation)
@@ -239,13 +243,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
 
             var whichBundle = (currentRaccoonBundleNumber - 1) % 5;
-            var bundle = new Bundle(currentRaccoonBundleName, null, ingredients, new bool[1])
+            var bundle = new BundleRemake(currentRaccoonBundleName, null, ingredients, new bool[1])
             {
-                bundleTextureOverride = Game1.content.Load<Texture2D>("LooseSprites\\BundleSprites"),
-                bundleTextureIndexOverride = 14 + whichBundle,
-                numberOfIngredientSlots = raccoonBundle.NumberRequired,
+                BundleTextureOverride = Game1.content.Load<Texture2D>("LooseSprites\\BundleSprites"),
+                BundleTextureIndexOverride = 14 + whichBundle,
+                NumberOfIngredientSlots = raccoonBundle.NumberRequired,
             };
-            var raccoonNoteMenu = new JunimoNoteMenu(bundle, "LooseSprites\\raccoon_bundle_menu");
+            var raccoonNoteMenu = new ArchipelagoJunimoNoteMenu(_logger, _modHelper, _archipelago, _state, _locationChecker, _bundleReader, bundle, "LooseSprites\\raccoon_bundle_menu");
             raccoonNoteMenu.onIngredientDeposit = x => _state.CurrentRaccoonBundleStatus[x] = true;
             raccoonNoteMenu.onBundleComplete = _ => BundleComplete(raccoon);
             raccoonNoteMenu.onScreenSwipeFinished = _ => BundleCompleteAfterSwipe(raccoon);

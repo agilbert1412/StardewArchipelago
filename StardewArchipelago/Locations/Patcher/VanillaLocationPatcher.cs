@@ -5,7 +5,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Archipelago.SlotData;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
@@ -31,13 +30,11 @@ using StardewValley.Quests;
 using StardewValley.SpecialOrders;
 using StardewValley.TerrainFeatures;
 using xTile.Dimensions;
-using Bundle = StardewValley.Menus.Bundle;
 using Object = StardewValley.Object;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Arcade;
 using StardewArchipelago.Locations.Secrets;
 using StardewValley.Buildings;
 using StardewValley.Tools;
-using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace StardewArchipelago.Locations.Patcher
 {
@@ -143,27 +140,6 @@ namespace StardewArchipelago.Locations.Patcher
         private void ReplaceCommunityCenterBundlesWithChecks()
         {
             _harmony.Patch(
-                original: AccessTools.Method(typeof(JunimoNoteMenu), nameof(JunimoNoteMenu.checkForRewards)),
-                postfix: new HarmonyMethod(typeof(JunimoNoteMenuInjections), nameof(JunimoNoteMenuInjections.CheckForRewards_SendBundleChecks_PostFix))
-            );
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(JunimoNoteMenu), nameof(JunimoNoteMenu.getRewardNameForArea)),
-                prefix: new HarmonyMethod(typeof(JunimoNoteMenuInjections), nameof(JunimoNoteMenuInjections.GetRewardNameForArea_ScoutRoomRewards_Prefix))
-            );
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(JunimoNoteMenu), nameof(JunimoNoteMenu.setUpMenu)),
-                postfix: new HarmonyMethod(typeof(JunimoNoteMenuInjections), nameof(JunimoNoteMenuInjections.SetupMenu_AddTextureOverrides_Postfix))
-            );
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(JunimoNoteMenu), nameof(JunimoNoteMenu.receiveLeftClick)),
-                prefix: new HarmonyMethod(typeof(JunimoNoteMenuInjections), nameof(JunimoNoteMenuInjections.ReceiveLeftClick_PurchaseCurrencyBundle_Prefix))
-            );
-            var drawParameters = new[] { typeof(SpriteBatch) };
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(JunimoNoteMenu), nameof(JunimoNoteMenu.draw), drawParameters),
-                postfix: new HarmonyMethod(typeof(JunimoNoteMenuInjections), nameof(JunimoNoteMenuInjections.Draw_AddCurrencyBoxes_Postfix))
-            );
-            _harmony.Patch(
                 original: AccessTools.Method(typeof(CommunityCenter), nameof(CommunityCenter.shouldNoteAppearInArea)),
                 prefix: new HarmonyMethod(typeof(CommunityCenterInjections), nameof(CommunityCenterInjections.ShouldNoteAppearInArea_AllowAccessEverything_Prefix))
             );
@@ -174,11 +150,6 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony.Patch(
                 original: AccessTools.Method(typeof(CommunityCenter), "checkForMissedRewards"),
                 prefix: new HarmonyMethod(typeof(CommunityCenterInjections), nameof(CommunityCenterInjections.CheckForMissedRewards_DontBother_Prefix))
-            );
-            var bundleConstructorArguments = new[] { typeof(int), typeof(string), typeof(bool[]), typeof(Point), typeof(string), typeof(JunimoNoteMenu) };
-            _harmony.Patch(
-                original: AccessTools.Constructor(typeof(Bundle), bundleConstructorArguments),
-                postfix: new HarmonyMethod(typeof(BundleInjections), nameof(BundleInjections.BundleConstructor_GenerateBundleIngredients_Postfix))
             );
         }
 

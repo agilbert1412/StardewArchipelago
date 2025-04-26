@@ -50,7 +50,7 @@ namespace StardewArchipelago.GameModifications
         private readonly AnimalShopStockModifier _animalShopStockModifier;
         private readonly JojaDisabler _jojaDisabler;
 
-        public RandomizedLogicPatcher(LogHandler logger, IModHelper modHelper, ModConfig config, Harmony harmony, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker, StardewItemManager stardewItemManager, EntranceManager entranceManager, SeedShopStockModifier seedShopStockModifier, NameSimplifier nameSimplifier, Friends friends, ArchipelagoStateDto state)
+        public RandomizedLogicPatcher(LogHandler logger, IModHelper modHelper, ModConfig config, Harmony harmony, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker, StardewItemManager stardewItemManager, EntranceManager entranceManager, SeedShopStockModifier seedShopStockModifier, NameSimplifier nameSimplifier, Friends friends, ArchipelagoStateDto state, BundleReader bundleReader)
         {
             _harmony = harmony;
             _helper = modHelper;
@@ -90,9 +90,8 @@ namespace StardewArchipelago.GameModifications
             OutOfLogicInjections.Initialize(logger, archipelago, stardewItemManager);
             EmptyHandInjections.Initialize(logger, archipelago, stardewItemManager);
             MovementInjections.Initialize(logger, archipelago);
-            BundleMenuInjection.Initialize(logger);
+            BundleMenuInjection.Initialize(logger, modHelper, archipelago, state, locationChecker, bundleReader);
             DebugPatchInjections.Initialize(logger, archipelago);
-            BundleMenuInjection.Initialize(logger);
             _jojaDisabler = new JojaDisabler(logger, modHelper, harmony);
         }
 
@@ -743,6 +742,21 @@ namespace StardewArchipelago.GameModifications
 
         private void PatchBundles()
         {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(CommunityCenter), nameof(CommunityCenter.checkBundle)),
+                prefix: new HarmonyMethod(typeof(BundleMenuInjection), nameof(BundleMenuInjection.CheckBundle_UseRemakeMenuInCC_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(AbandonedJojaMart), nameof(AbandonedJojaMart.checkBundle)),
+                prefix: new HarmonyMethod(typeof(BundleMenuInjection), nameof(BundleMenuInjection.CheckBundle_UseRemakeMenuInJojaMart_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.PropertySetter(typeof(CommunityCenter), nameof(Game1.activeClickableMenu)),
+                prefix: new HarmonyMethod(typeof(BundleMenuInjection), nameof(BundleMenuInjection.SetActiveClickableMenu_UseJunimoNoteMenuRemake_Prefix))
+            );
+
             _harmony.Patch(
                 original: AccessTools.Method(typeof(JunimoNoteMenu), "setUpBundleSpecificPage"),
                 transpiler: new HarmonyMethod(typeof(BundleMenuInjection), nameof(BundleMenuInjection.SkipObjectCheck))

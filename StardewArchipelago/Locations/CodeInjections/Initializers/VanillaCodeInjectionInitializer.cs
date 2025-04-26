@@ -78,9 +78,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
         private static void InitializeBundleInjections(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, BundlesManager bundlesManager, BundleReader bundleReader)
         {
             CommunityCenterInjections.Initialize(logger, archipelago, locationChecker, bundleReader);
-            JunimoNoteMenuInjections.Initialize(logger, modHelper, archipelago, state, locationChecker, bundleReader);
-            BundleInjections.Initialize(logger, modHelper, archipelago, state, locationChecker, bundlesManager);
-            RaccoonInjections.Initialize(logger, modHelper, archipelago, state, locationChecker, bundlesManager);
+            RaccoonInjections.Initialize(logger, modHelper, archipelago, state, locationChecker, bundlesManager, bundleReader);
         }
 
         private static void InitializeSkills(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
