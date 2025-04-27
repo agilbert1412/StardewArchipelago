@@ -42,7 +42,7 @@ The mod provides a built-in tracker for evaluation points, shown above Grandpa's
 
 ![image](https://i.imgur.com/QEoTJTz.png)
 
-- This goal is **not** *Adaptable*. There are no settings that will customize this goal
+- This goal is **not** *Adaptable*. There are no settings that will customize this goal. The setting ~~[Profit Margin](./profit_margin.md)~~ probably has the strongest impact on the difficulty of the goal.
 - This goal is **not** *Focused*. There are many things to do to obtain grandpa points and you can decide which ones to work on.
 - This goal is **not** *Coopable*. A single farm must have a score sufficient to win the goal.
 
@@ -63,7 +63,7 @@ It is recommended to shuffle elevators, tools and skill levels to synergize with
 
 This goal requires to find the `Magnifying Glass`, the `Skull Key`, and some way to access `The Desert`. Then you must find the correct secret note, and lastly you must perform a deep Skull Cavern Dive. This requires a certain level of proficiency from the player, as an inexperienced player might be unable to complete the quest no matter how much stuff they unlock.
 
-- This goal is **not** *Adaptable*. There are no settings that will customize this goal. Using the mod [Skull Cavern Elevator](../Supported Mods.md) can trivialize this goal.
+- This goal is **not** *Adaptable*. There are no settings that will customize this goal. Using the mod [Skull Cavern Elevator](./../Supported Mods.md) can trivialize this goal.
 - This goal is *Focused*. You will be doing mostly mining and combat.
 - This goal is **not** *Coopable*. A single player must complete the quest.
 
