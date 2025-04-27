@@ -71,8 +71,117 @@ This goal requires to find the `Magnifying Glass`, the `Skull Key`, and some way
 
 #### Catch Every Fish
 
-You must catch every fish available in the world. It is recommended to use Fishsanity with this goal, so that catching individual fish provides rewards, instead of being all pointless until the very last one.
+You must catch every fish available in the world. It is recommended to use ~~[Fishsanity](./fishsanity.md)~~ with this goal, so that catching individual fish provides rewards, instead of being all pointless until the very last one.
 
 - This goal is *Adaptable*. If ~~[Fishsanity](./fishsanity.md)~~ is enabled, the Goal becomes to catch every fish that has been chosen as a Fishsanity location, for example catching all easy fish.
 - This goal is *Focused*. You will be doing mostly fishing.
 - This goal is *Coopable*. If ~~[Fishsanity](./fishsanity.md)~~ is enabled, the goal is to send every Fishsanity location, not to actually catch the fish. Several players can coop a slot to send each a subset of the fish. If Fishsanity is diabled, the goal reverts to the vanilla definition which is **not** *Coopable*.
+
+### Complete Collection
+
+#### Complete the museum collection
+
+You must complete the museum collection by donating all 95 minerals and artifacts. It is recommended to use ~~[Museumsanity](./museumsanity.md)~~ with this goal, so that donations or milestones contribute to your progress during the playthrough.
+
+- This goal is **not** *Adaptable*. While the goal is closely related to ~~[Museumsanity](./museumsanity.md)~~, there are no museumsanity settings that reduce the size of the museum. They only change which donations will give an item.
+- This goal is *Focused*. You will be doing mostly mining, finding artifact spots, opening geodes.
+- This goal is **not** *Coopable*. One player must donate all 95 items in their local save file for the goal to be fulfilled.
+
+### Full House
+
+#### Get Married and have 2 children
+
+You must find a husband or wife, get married, upgrade your house twice, and have two children. The children do not necessarily need to come from your current partner, they just need to exist at the same time as said partner.
+This goal pairs well with ~~[Friendsanity](./friendsanity.md)~~, as without it, your goal will be mostly unrelated to your slot's progression.
+
+- This goal is **not** *Adaptable*. The task remains the same regardless of settings.
+- This goal is *Focused*. You will work mostly on friendship points with a single villager.
+- This goal is **not** *Coopable*. One player must have a full house to fulfill the goal.
+
+
+
+### Greatest Walnut Hunter
+
+#### Find 130 Golden Walnuts
+
+You must obtain a total of 130 walnuts over the course of your entire game. If using ~~[Walnutsanity](./walnutsanity.md)~~, the walnuts that you *receive* are the ones that are counted, not the locations. Walnuts that you spend are still counted for the goal.
+
+In vanilla, there are 130 walnuts total. But in Archipelago, due to some technical limitations, you can obtain extra walnuts as part of an anti-softlock mechanic. This means that this goal will generally be easier than the vanilla version of it, and a knowledgeable player can make it even easier by griding the correct things.
+
+If this goal is picked, but ~~[Exclude Ginger Island](./exclude_ginger_island.md)~~ is enabled, your Ginger Island setting will get force-disabled, as the goal is impossible without Ginger Island.
+
+- This goal is **not** *Adaptable*. The task remains the same regardless of settings.
+- This goal is **not** *Focused*. If you are using ~~[Walnutsanity](./walnutsanity.md)~~, this goal is essentially a Macguffin Hunt where the goal is to receive several specific items, and you cannot focus on them specifically.
+- This goal is **not** *Coopable*. One player must have received all 130 walnuts to complete the goal
+
+
+
+### Protector of the Valley
+
+#### Complete all the Monster Eradication Goals
+
+You must complete all the Monster Slayer goals visible on the board at the Adventurer's guild. This goal pairs well with ~~[Monstersanity](./monstersanity.md)~~.
+
+- This goal is *Adaptable*. The monster eradication goals vary depending on if you ~~[Exclude Ginger Island](./exclude_ginger_island.md)~~, if you included the Qi Board ~~[Special Order Locations](./special_order_locations.md)~~ and your ~~[Monstersanity](./monstersanity.md)~~ setting. The goal is to complete all the enabled monstersanity checks.
+- This goal is *Focused*. You will be mostly navigating the various mines and slaying monsters.
+- This goal is *Coopable*. If using ~~[Monstersanity](./monstersanity.md)~~, the goal is to complete all the monstersanity checks, which can be done by several players.
+
+### Full Shipment
+
+#### Ship every item
+
+You must ship every item in the collections shipping tab, or every ~~[Shipsanity](./shipsanity.md)~~ check in your slot, depending on if ~~[Shipsanity](./shipsanity.md)~~ is enabled.
+
+Selling items to vendors does not count. Shipping through the Ginger Island shipping bin or a mini-shipping bin counts.
+
+- This goal is *Adaptable*. If ~~[Shipsanity](./shipsanity.md)~~ is enabled, the goal is to complete your shipsanity checks. This means you can make the goal much easier or much harder than the vanilla version.
+- This goal is **not** *Focused*. Unless using something specific, like ~~[Shipsanity](./shipsanity.md)~~: Fish, you can generally expect that shipping every includes interacting with many game mechanics.
+- This goal is *Coopable*. If using ~~[Shipsanity](./shipsanity.md)~~, the goal is to complete every shipsanity check, which can be done by several players.
+
+### Gourmet Chef
+
+#### Cook Every Recipe
+
+You must cook every recipe available in the Kitchen. This goal pairs well with both ~~[Cooksanity](./cooksanity.md)~~ and ~~[Chefsanity](./chefsanity.md)~~
+
+- This goal is *Adaptable*. If ~~[Cooksanity](./cooksanity.md)~~ is enabled, the goal is to complete your cooksanity checks. This means you can make the goal much easier by only enabling cooksanity for a subset of recipes.
+- This goal is *Focused*. You will be mostly doing cooking.
+- This goal is *Coopable*. If using ~~[Cooksanity](./cooksanity.md)~~, the goal is to complete every cooksanity check, which can be done by several players.
+
+
+### Craft Master
+
+#### Craft Every Item
+
+You must craft every item available in the Crafting Menu. This goal pairs well with both ~~[Craftsanity](./craftsanity.md)~~
+
+- This goal is *Adaptable*. If ~~[Craftsanity](./craftsanity.md)~~ is enabled, the goal is to complete your craftsanity checks.
+- This goal is *Focused*. You will be mostly doing crafting.
+- This goal is *Coopable*. If using ~~[Craftsanity](./craftsanity.md)~~, the goal is to complete every craftsanity check, which can be done by several players.
+
+### Legend
+
+#### Earn 10 000 000g
+
+You must earn a total of 10 000 000g. This does not include your ~~[Starting Gold](./starting_gold.md)~~, but it is strongly impacted by your ~~[Profit Margin](./profit_margin.md)~~.
+
+- This goal is **not** *Adaptable*. The amount remains the same.
+- This goal is *Focused*. You will be mostly grinding good sources of money to get to that milestone.
+- This goal is **not** *Coopable*. Your total earnings are on your current farm only.
+
+### Mystery of the Stardrops
+
+####
+
+
+
+### Allsanity
+
+####
+
+
+
+### Perfection
+
+####
+
