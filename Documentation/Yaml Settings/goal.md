@@ -63,7 +63,7 @@ It is recommended to shuffle elevators, tools and skill levels to synergize with
 
 This goal requires to find the `Magnifying Glass`, the `Skull Key`, and some way to access `The Desert`. Then you must find the correct secret note, and lastly you must perform a deep Skull Cavern Dive. This requires a certain level of proficiency from the player, as an inexperienced player might be unable to complete the quest no matter how much stuff they unlock.
 
-- This goal is **not** *Adaptable*. There are no settings that will customize this goal. Using the mod [Skull Cavern Elevator](./Supported Mods.md) can trivialize this goal.
+- This goal is **not** *Adaptable*. There are no settings that will customize this goal. Using the mod [Skull Cavern Elevator](../Supported%20Mods.md) can trivialize this goal.
 - This goal is *Focused*. You will be doing mostly mining and combat.
 - This goal is **not** *Coopable*. A single player must complete the quest.
 
