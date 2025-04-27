@@ -133,6 +133,7 @@ namespace StardewArchipelago
 
             _helper.ConsoleCommands.Add("connect_override", $"Overrides your next connection to Archipelago. {CONNECT_SYNTAX}", OnCommandConnectToArchipelago);
             _helper.ConsoleCommands.Add("export_all_gifts", "Export all currently loaded giftable items and their traits", ExportGifts);
+            _helper.ConsoleCommands.Add("clear_scouts", "Clears your scouting cache to allow redownloading scouting data", ClearScouts);
             _helper.ConsoleCommands.Add("deathlink", "Override the deathlink setting", OverrideDeathlink);
             _helper.ConsoleCommands.Add("trap_difficulty", "Override the trap difficulty setting", OverrideTrapDifficulty);
 
@@ -804,6 +805,13 @@ namespace StardewArchipelago
             const string giftsFile = "gifts.json";
             _giftHandler.ExportAllGifts(giftsFile);
             _logger.Log($"Gifts have been exported to {giftsFile}", LogLevel.Info);
+        }
+
+        private void ClearScouts(string arg1, string[] arg2)
+        {
+            _archipelago.ScoutHintedLocations.Clear();
+            _archipelago.ScoutedLocations.Clear();
+            State.LocationsScouted.Clear();
         }
 
         private void OverrideDeathlink(string arg1, string[] arg2)
