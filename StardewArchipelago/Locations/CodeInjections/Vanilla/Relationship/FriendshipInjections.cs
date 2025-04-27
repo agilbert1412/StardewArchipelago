@@ -383,15 +383,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
                     {
                         Game1.addMailForTomorrow("SeaAmulet");
                     }
+
+                    var effectiveFriendshipPoints = GetEffectiveFriendshipPoints(friend);
+                    SetBackendFriendshipPoints(__instance.friendshipData[friend.StardewName], effectiveFriendshipPoints);
                 }
                 else
                 {
                     Game1.debugOutput = "Tried to change friendship for a friend that wasn't there.";
                 }
-
-
-                var effectiveFriendshipPoints = GetEffectiveFriendshipPoints(friend);
-                SetBackendFriendshipPoints(__instance.friendshipData[friend.StardewName], effectiveFriendshipPoints);
+                
                 Game1.stats.checkForFriendshipAchievements();
 
                 return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Reflection.Metadata.Ecma335;
+using KaitoKid.ArchipelagoUtilities.Net.ItemSprites;
 using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Logging;
 using StardewModdingAPI;
@@ -91,6 +93,14 @@ namespace StardewArchipelago.Textures
                 return ICON_SET_CUSTOM;
             }
             return GetPreferredIconSet();
+        }
+
+        public static bool TryGetItemSprite(LogHandler logger, IModHelper modHelper, ItemSprite sprite, out Texture2D texture2D)
+        {
+            var customAssetsFolder = "Custom Assets";
+            var fileName = sprite.FilePath;
+            texture2D = TexturesLoader.GetTexture(logger, modHelper, fileName, LogLevel.Trace);
+            return texture2D != null;
         }
     }
 }

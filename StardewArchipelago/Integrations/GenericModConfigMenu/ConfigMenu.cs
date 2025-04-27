@@ -334,6 +334,30 @@ namespace StardewArchipelago.Integrations.GenericModConfigMenu
                 getValue: () => Config.ScoutHintInSoloMultiworld,
                 setValue: (value) => Config.ScoutHintInSoloMultiworld = value
             );
+
+            configMenu.AddBoolOption(
+                mod: ModManifest,
+                name: () => "Custom Assets",
+                tooltip: () => $"Use custom assets for scouted items when available",
+                getValue: () => Config.CustomAssets,
+                setValue: (value) => Config.CustomAssets = value
+            );
+
+            configMenu.AddBoolOption(
+                mod: ModManifest,
+                name: () => "Custom Assets flexibility across games",
+                tooltip: () => $"If a custom asset for the correct game doesn't exist, allow using an asset for the same item name in a different game",
+                getValue: () => Config.CustomAssetGameFlexible,
+                setValue: (value) => Config.CustomAssetGameFlexible = value
+            );
+
+            configMenu.AddBoolOption(
+                mod: ModManifest,
+                name: () => "Custom assets generic game icons",
+                tooltip: () => $"If a custom asset for the correct item doesn't exist, use a generic custom asset for the game itself",
+                getValue: () => Config.CustomAssetGenericGame,
+                setValue: (value) => Config.CustomAssetGenericGame = value
+            );
         }
     }
 }
