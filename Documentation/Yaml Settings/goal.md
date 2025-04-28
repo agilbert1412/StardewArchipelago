@@ -171,9 +171,22 @@ You must earn a total of 10 000 000g. This does not include your ~~[Starting Gol
 
 ### Mystery of the Stardrops
 
-####
+#### Find Every Stardrop
 
+You must find all 7 stardrops spread out across the multiworld. If shuffled, you must **receive** the stardrop, and if some are kept vanilla, they must be obtained locally.
 
+The stardrops are:
+- At the Stardew Valley Fair. Is shuffled with ~~[Festival Locations](./festival_locations.md)~~
+- On floor 100 in the mines. Is always shuffled.
+- From the spouse or roommate upon reaching 12.5 hearts. Is not shuffled, but is indirectly locked behind ~~[Friendsanity](./friendsanity.md)~~ hearts.
+- Sold by Krobus in the Sewers. Is always shuffled.
+- Obtained from Old Master Cannoli in the secret woods. Is always shuffled.
+- Received after catching every fish. Is shuffled with ~~[Fishsanity](./fishsanity.md)~~.
+- Received after completing the Museum. Is shuffled with ~~[Museumsanity](./museumsanity.md)~~.
+
+- This goal is **not** *Adaptable*. The amount remains the same.
+- This goal is **not** *Focused*. The stardrops, shuffled or not, will require navigating many different tasks. This goal is essentially a Macguffin Hunt where the goal is to receive several specific items, and you cannot focus on them specifically.
+- This goal is **not** *Coopable*. The energy bar must reach 508 on a single save file to trigger the goal.
 
 ### Allsanity
 
