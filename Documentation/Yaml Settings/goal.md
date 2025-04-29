@@ -190,11 +190,29 @@ The stardrops are:
 
 ### Allsanity
 
-####
+#### Complete every location check in your slot
 
+You must complete every single one of your location checks to win, no exceptions. This goal cannot release after goal, as by definition, when it goals there is nothing left to release.
 
+- This goal is *Adaptable*. Every setting you turn on adds more things to do to goal. Its duration will be highly variable
+- This goal is **not** *Focused*. You literally need to do everything.
+- This goal is *Coopable*. The condition for victory is based on the server state for locations, so multiple players can coop a slot. This goal is also severely helped by other players doing `!collect` on the slot.
+- This goal is *Long*. While the duration is variable, and can technically be made medium or short, in the vast majority of cases, this goal will be a very long one due to having so many requirements and needing pretty much all your progression items.
 
 ### Perfection
 
-####
+#### You must achieve [Perfection](https://stardewvalleywiki.com/Perfection) in your save file.
+
+You must attain 100% perfection in your save file. This is entirely based on the vanilla definition of perfection. So even if some tasks are made shorter for their checks, for example ~~[Monstersanity](./monstersanity.md)~~: Very Short Goals, you will still need to complete the original goals to obtain perfection.
+
+In many cases, if shuffled, the received items are what counts, for example hearts. The tasks are not what is counted. But in cases where there are no items (ex: ~~[Cooksanity](./cooksanity.md)~~), then the tasks are counted instead.
+
+- This goal is **not** *Adaptable*. The requirements are always the same.
+- This goal is **not** *Focused*. You pretty much need to do everything.
+- This goal is **not** *Coopable*. The perfection tracker is almost entirely based on the local save state, so a single player must do everything.
+- This goal is *Long*. This is arguably the longest goal, and will take tens of hours to complete.
+
+
+## [Return to Index](./index.md)
+
 
