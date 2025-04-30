@@ -13,7 +13,7 @@ This document is a work in progress. Nodes that are ~~struck through~~ do not ex
 These settings decide what your playthrough will be. They do not directly add or remove shuffled locations or items, but instead indirectly decide what your playthrough will be.
 
 - [Goal](./goal.md)
-- ~~[Farm Type](./farm_type.md)~~
+- [Farm Type](./farm_type.md)
 - ~~[Bundle Randomization](./bundle_randomization.md)~~
 - ~~[Bundle Price](./bundle_price.md)~~
 - ~~[Entrance Randomization](./entrance_randomization.md)~~
