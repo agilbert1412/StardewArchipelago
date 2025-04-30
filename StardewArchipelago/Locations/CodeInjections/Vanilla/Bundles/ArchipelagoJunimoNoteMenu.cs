@@ -26,38 +26,25 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         private const int REMIXED_BUNDLE_INDEX_THRESHOLD = 100;
         private const int CUSTOM_BUNDLE_INDEX_THRESHOLD = 200;
 
-        protected LogHandler _logger;
-        protected IModHelper _modHelper;
-        protected StardewArchipelagoClient _archipelago;
-        protected ArchipelagoStateDto _state;
-        protected LocationChecker _locationChecker;
-        protected BundleReader _bundleReader;
-        protected BundleFactory _bundleFactory;
+        protected static ArchipelagoWrapperBundles _apWrapper;
 
-        public ArchipelagoJunimoNoteMenu(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, BundleReader bundleReader, bool fromGameMenu, int area = 1, bool fromThisMenu = false) : base(fromGameMenu, area, fromThisMenu)
+        protected ArchipelagoJunimoNoteMenu(bool fromGameMenu, int area = 1, bool fromThisMenu = false) : base(fromGameMenu, area, fromThisMenu)
         {
-            InitializeArchipelago(logger, modHelper, archipelago, state, locationChecker, bundleReader);
         }
 
-        public ArchipelagoJunimoNoteMenu(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, BundleReader bundleReader, int whichArea, Dictionary<int, bool[]> bundlesComplete) : base(whichArea, bundlesComplete)
+        protected ArchipelagoJunimoNoteMenu(int whichArea, Dictionary<int, bool[]> bundlesComplete) : base(whichArea, bundlesComplete)
         {
-            InitializeArchipelago(logger, modHelper, archipelago, state, locationChecker, bundleReader);
         }
 
-        public ArchipelagoJunimoNoteMenu(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, BundleReader bundleReader, BundleRemake bundle, string noteTexturePath) : base(bundle, noteTexturePath)
+        protected ArchipelagoJunimoNoteMenu(BundleRemake bundle, string noteTexturePath) : base(bundle, noteTexturePath)
         {
-            InitializeArchipelago(logger, modHelper, archipelago, state, locationChecker, bundleReader);
         }
 
-        private void InitializeArchipelago(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, BundleReader bundleReader)
+        public static void CreateWrapper(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker)
         {
-            _logger = logger;
-            _modHelper = modHelper;
-            _archipelago = archipelago;
-            _state = state;
-            _locationChecker = locationChecker;
-            _bundleReader = bundleReader;
-            _bundleFactory = new BundleFactory(_logger, _modHelper, _archipelago, _state, _locationChecker, _bundleReader);
+            var bundleFactory = new BundleFactory(logger, modHelper, archipelago, state, locationChecker);
+            var wrapper = new ArchipelagoWrapperBundles(logger, modHelper, archipelago, state, locationChecker, bundleFactory, new BundleReader());
+            _apWrapper = wrapper;
         }
 
         public override void CheckForRewards()
@@ -71,14 +58,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         {
             if (FromGameMenu || FromThisMenu)
             {
-                var menu = _bundleFactory.CreateJunimoNoteMenu(this, FromGameMenu, WhichArea, FromThisMenu);
+                var menu = _apWrapper.Factory.CreateJunimoNoteMenu(this, FromGameMenu, WhichArea, FromThisMenu);
                 menu.GameMenuTabToReturnTo = GameMenuTabToReturnTo;
                 menu.MenuToReturnTo = MenuToReturnTo;
                 return menu;
             }
             else
             {
-                var menu = _bundleFactory.CreateJunimoNoteMenu(this, WhichArea, Game1.RequireLocation<CommunityCenter>("CommunityCenter").bundlesDict());
+                var menu = _apWrapper.Factory.CreateJunimoNoteMenu(this, WhichArea, Game1.RequireLocation<CommunityCenter>("CommunityCenter").bundlesDict());
                 menu.GameMenuTabToReturnTo = GameMenuTabToReturnTo;
                 menu.MenuToReturnTo = MenuToReturnTo;
                 return menu;
@@ -91,7 +78,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             var remixedBundlesTexture = Game1.temporaryContent.Load<Texture2D>("LooseSprites\\BundleSprites");
             foreach (var bundle in this.Bundles)
             {
-                var textureOverride = BundleIcons.GetBundleIcon(_logger, _modHelper, bundle.name, LogLevel.Trace);
+                var textureOverride = BundleIcons.GetBundleIcon(_apWrapper.Logger, _apWrapper.ModHelper, bundle.name, LogLevel.Trace);
                 if (textureOverride == null)
                 {
                     if (bundle.BundleIndex < REMIXED_BUNDLE_INDEX_THRESHOLD)
@@ -113,19 +100,19 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                     {
                         if (TryGetBundleName(bundleIndexString, out var moneyBundleName))
                         {
-                            var texture = BundleIcons.GetBundleIcon(_logger, _modHelper, moneyBundleName);
+                            var texture = BundleIcons.GetBundleIcon(_apWrapper.Logger, _apWrapper.ModHelper, moneyBundleName);
                             bundle.BundleTextureOverride = texture;
                             bundle.BundleTextureIndexOverride = 0;
                             if (texture == null)
                             {
-                                _logger.LogWarning($"Could not find a proper icon for money bundle '{moneyBundleName}', using default Archipelago Icon");
+                                _apWrapper.Logger.LogWarning($"Could not find a proper icon for money bundle '{moneyBundleName}', using default Archipelago Icon");
                             }
                             continue;
                         }
                     }
 
-                    _logger.LogWarning($"Could not find a proper icon for bundle '{bundle.name}', using default Archipelago Icon");
-                    textureOverride = ArchipelagoTextures.GetArchipelagoLogo(_logger, _modHelper, 32, ArchipelagoTextures.COLOR);
+                    _apWrapper.Logger.LogWarning($"Could not find a proper icon for bundle '{bundle.name}', using default Archipelago Icon");
+                    textureOverride = ArchipelagoTextures.GetArchipelagoLogo(_apWrapper.Logger, _apWrapper.ModHelper, 32, ArchipelagoTextures.COLOR);
                 }
 
                 bundle.BundleTextureOverride = textureOverride;
@@ -151,7 +138,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 }
             }
 
-            var scoutedItem = _archipelago.ScoutStardewLocation(apLocationToScout, true);
+            var scoutedItem = _apWrapper.Archipelago.ScoutStardewLocation(apLocationToScout, true);
             var playerName = "Unknown Player";
             var itemName = "Unknown Item";
             if (scoutedItem != null)
@@ -175,10 +162,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         private void CheckAllBundleLocations()
         {
-            var completedBundleNames = _bundleReader.GetAllCompletedBundles();
+            var completedBundleNames = _apWrapper.Reader.GetAllCompletedBundles();
             foreach (var completedBundleName in completedBundleNames)
             {
-                _locationChecker.AddCheckedLocation(completedBundleName + " Bundle");
+                _apWrapper.LocationChecker.AddCheckedLocation(completedBundleName + " Bundle");
             }
         }
 
@@ -273,7 +260,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             {
                 snappedId = currentlySnappedComponent.myID;
             }
-            var junimoNoteMenu = _bundleFactory.CreateJunimoNoteMenu(this, true, whichArea, true);
+            var junimoNoteMenu = _apWrapper.Factory.CreateJunimoNoteMenu(this, true, whichArea, true);
             junimoNoteMenu.GameMenuTabToReturnTo = GameMenuTabToReturnTo;
             if (snappedId >= 0)
             {

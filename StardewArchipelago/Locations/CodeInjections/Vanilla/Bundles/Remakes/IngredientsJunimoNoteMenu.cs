@@ -26,15 +26,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
         public BundleIngredientDescription? CurrentPartialIngredientDescription;
         public int CurrentPartialIngredientDescriptionIndex = -1;
 
-        public IngredientsJunimoNoteMenu(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, BundleReader bundleReader, bool fromGameMenu, int area = 1, bool fromThisMenu = false) : base(logger, modHelper, archipelago, state, locationChecker, bundleReader, fromGameMenu, area, fromThisMenu)
+        public IngredientsJunimoNoteMenu(bool fromGameMenu, int area = 1, bool fromThisMenu = false) : base(fromGameMenu, area, fromThisMenu)
         {
         }
 
-        public IngredientsJunimoNoteMenu(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, BundleReader bundleReader, int whichArea, Dictionary<int, bool[]> bundlesComplete) : base(logger, modHelper, archipelago, state, locationChecker, bundleReader, whichArea, bundlesComplete)
+        public IngredientsJunimoNoteMenu(int whichArea, Dictionary<int, bool[]> bundlesComplete) : base(whichArea, bundlesComplete)
         {
         }
 
-        public IngredientsJunimoNoteMenu(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, BundleReader bundleReader, BundleRemake bundle, string noteTexturePath) : base(logger, modHelper, archipelago, state, locationChecker, bundleReader, bundle, noteTexturePath)
+        public IngredientsJunimoNoteMenu(BundleRemake bundle, string noteTexturePath) : base(bundle, noteTexturePath)
         {
         }
 

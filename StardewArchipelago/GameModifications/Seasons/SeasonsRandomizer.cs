@@ -138,7 +138,7 @@ namespace StardewArchipelago.GameModifications.Seasons
             }
         }
 
-        private static void ChooseNextSeasonBasedOnConfigPreference()
+        public static void ChooseNextSeasonBasedOnConfigPreference()
         {
             var unlockedSeasons = GetUnlockedSeasons();
             if (unlockedSeasons.Count == 1)
@@ -212,7 +212,7 @@ namespace StardewArchipelago.GameModifications.Seasons
             NewDayOriginal(0);
         }
 
-        private static void NewDayOriginal(float timeToPause)
+        public static void NewDayOriginal(float timeToPause)
         {
             if (Game1.activeClickableMenu is ReadyCheckDialog { checkName: "sleep" } activeClickableMenu && !activeClickableMenu.isCancelable())
             {

@@ -20,15 +20,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
     {
         public ClickableTextureComponent PurchaseButton;
 
-        public CurrencyJunimoNoteMenu(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, BundleReader bundleReader, bool fromGameMenu, int area = 1, bool fromThisMenu = false) : base(logger, modHelper, archipelago, state, locationChecker, bundleReader, fromGameMenu, area, fromThisMenu)
+        public CurrencyJunimoNoteMenu(bool fromGameMenu, int area = 1, bool fromThisMenu = false) : base(fromGameMenu, area, fromThisMenu)
         {
         }
 
-        public CurrencyJunimoNoteMenu(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, BundleReader bundleReader, int whichArea, Dictionary<int, bool[]> bundlesComplete) : base(logger, modHelper, archipelago, state, locationChecker, bundleReader, whichArea, bundlesComplete)
+        public CurrencyJunimoNoteMenu(int whichArea, Dictionary<int, bool[]> bundlesComplete) : base(whichArea, bundlesComplete)
         {
         }
 
-        public CurrencyJunimoNoteMenu(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, BundleReader bundleReader, BundleRemake bundle, string noteTexturePath) : base(logger, modHelper, archipelago, state, locationChecker, bundleReader, bundle, noteTexturePath)
+        public CurrencyJunimoNoteMenu(BundleRemake bundle, string noteTexturePath) : base(bundle, noteTexturePath)
         {
         }
 
@@ -116,7 +116,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             PurchaseButton?.tryHover(x, y);
         }
 
-        protected virtual void DrawBundleRequirements(SpriteBatch b)
+        protected override void DrawBundleRequirements(SpriteBatch b)
         {
             base.DrawBundleRequirements(b);
             DrawCurrencyBoxes(b);
@@ -183,7 +183,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             spriteBatch.End();
             Game1.PushUIMode();
             spriteBatch.Begin(blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
-            var tokenAmount = _state.StoredStarTokens;
+            var tokenAmount = _apWrapper.State.Wallet.StoredStarTokens;
             spriteBatch.Draw(Game1.fadeToBlackRect, new Rectangle(16, 16, 128 + (tokenAmount > 999 ? 16 : 0), 64), Color.Black * 0.75f);
             spriteBatch.Draw(Game1.mouseCursors, new Vector2(32f, 32f), new Rectangle(338, 400, 8, 8), Color.White, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 1f);
             Game1.drawWithBorder(tokenAmount.ToString() ?? "", Color.Black, Color.White, new Vector2(72f, (float)(21 + (LocalizedContentManager.CurrentLanguageCode == LocalizedContentManager.LanguageCode.en ? 8 : (LocalizedContentManager.CurrentLanguageLatin ? 16 : 8)))), 0.0f, 1f, 1f, false);
@@ -268,13 +268,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
 
         private void TryPurchaseCurrentBundleWithStarTokens(BundleIngredientDescription ingredient)
         {
-            if (_state.StoredStarTokens < ingredient.stack)
+            if (_apWrapper.State.Wallet.StoredStarTokens < ingredient.stack)
             {
                 Game1.dayTimeMoneyBox.moneyShakeTimer = 600;
                 return;
             }
 
-            _state.StoredStarTokens -= ingredient.stack;
+            _apWrapper.State.Wallet.StoredStarTokens -= ingredient.stack;
 
             PerformCurrencyPurchase();
         }

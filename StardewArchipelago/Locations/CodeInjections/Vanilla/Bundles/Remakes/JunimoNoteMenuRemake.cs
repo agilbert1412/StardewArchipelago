@@ -10,6 +10,8 @@ using StardewValley.Menus;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using StardewArchipelago.Stardew;
+
 // ReSharper disable PossibleLossOfFraction
 
 #nullable disable
@@ -56,7 +58,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
         public BundleRemake CurrentPageBundle;
         protected int _oldTriggerSpot;
 
-        public JunimoNoteMenuRemake(bool fromGameMenu, int area = 1, bool fromThisMenu = false)
+        protected JunimoNoteMenuRemake(bool fromGameMenu, int area = 1, bool fromThisMenu = false)
           : base(Game1.uiViewport.Width / 2 - 640, Game1.uiViewport.Height / 2 - 360, 1280, 720, true)
         {
             var communityCenter = Game1.RequireLocation<CommunityCenter>("CommunityCenter");
@@ -116,7 +118,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             snapToDefaultClickableComponent();
         }
 
-        public JunimoNoteMenuRemake(int whichArea, Dictionary<int, bool[]> bundlesComplete)
+        protected JunimoNoteMenuRemake(int whichArea, Dictionary<int, bool[]> bundlesComplete)
           : base(Game1.uiViewport.Width / 2 - 640, Game1.uiViewport.Height / 2 - 360, 1280, 720, true)
         {
             SetUpMenu(whichArea, bundlesComplete);
@@ -128,7 +130,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             snapToDefaultClickableComponent();
         }
 
-        public JunimoNoteMenuRemake(BundleRemake bundle, string noteTexturePath)
+        protected JunimoNoteMenuRemake(BundleRemake bundle, string noteTexturePath)
           : base(Game1.uiViewport.Width / 2 - 640, Game1.uiViewport.Height / 2 - 360, 1280, 720, true)
         {
             _singleBundleMenu = true;

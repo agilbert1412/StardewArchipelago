@@ -50,7 +50,7 @@ namespace StardewArchipelago.GameModifications
         private readonly AnimalShopStockModifier _animalShopStockModifier;
         private readonly JojaDisabler _jojaDisabler;
 
-        public RandomizedLogicPatcher(LogHandler logger, IModHelper modHelper, ModConfig config, Harmony harmony, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker, StardewItemManager stardewItemManager, EntranceManager entranceManager, SeedShopStockModifier seedShopStockModifier, NameSimplifier nameSimplifier, Friends friends, ArchipelagoStateDto state, BundleReader bundleReader)
+        public RandomizedLogicPatcher(LogHandler logger, IModHelper modHelper, ModConfig config, Harmony harmony, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker, StardewItemManager stardewItemManager, EntranceManager entranceManager, SeedShopStockModifier seedShopStockModifier, NameSimplifier nameSimplifier, Friends friends, ArchipelagoStateDto state)
         {
             _harmony = harmony;
             _helper = modHelper;
@@ -90,7 +90,7 @@ namespace StardewArchipelago.GameModifications
             OutOfLogicInjections.Initialize(logger, archipelago, stardewItemManager);
             EmptyHandInjections.Initialize(logger, archipelago, stardewItemManager);
             MovementInjections.Initialize(logger, archipelago);
-            BundleMenuInjection.Initialize(logger, modHelper, archipelago, state, locationChecker, bundleReader);
+            BundleMenuInjection.Initialize(logger, modHelper, archipelago, state, locationChecker);
             DebugPatchInjections.Initialize(logger, archipelago);
             _jojaDisabler = new JojaDisabler(logger, modHelper, harmony);
         }
@@ -753,7 +753,7 @@ namespace StardewArchipelago.GameModifications
             );
 
             _harmony.Patch(
-                original: AccessTools.PropertySetter(typeof(CommunityCenter), nameof(Game1.activeClickableMenu)),
+                original: AccessTools.PropertySetter(typeof(Game1), nameof(Game1.activeClickableMenu)),
                 prefix: new HarmonyMethod(typeof(BundleMenuInjection), nameof(BundleMenuInjection.SetActiveClickableMenu_UseJunimoNoteMenuRemake_Prefix))
             );
 

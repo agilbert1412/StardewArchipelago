@@ -87,7 +87,7 @@ namespace StardewArchipelago.Locations.Festival
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
-                _state.StoredStarTokens += who.festivalScore;
+                _state.Wallet.StoredStarTokens += who.festivalScore;
                 return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)

@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
-using StardewArchipelago.Archipelago;
-using StardewArchipelago.Archipelago.SlotData;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 
 namespace StardewArchipelago.Serialization
@@ -16,7 +14,7 @@ namespace StardewArchipelago.Serialization
         public List<string> SeasonsOrder { get; set; }
         public TrapItemsDifficulty? TrapDifficultyOverride { get; set; }
         public int TravelingMerchantPurchases { get; set; }
-        public int StoredStarTokens { get; set; }
+        public ArchipelagoWalletDto Wallet { get; set; }
         public List<string> EntrancesTraversed { get; set; }
         public List<bool> CurrentRaccoonBundleStatus { get; set; }
         public int NumberOfLOTLEpisodesWatched { get; set; }
@@ -30,7 +28,7 @@ namespace StardewArchipelago.Serialization
             SeasonsOrder = new List<string>();
             TrapDifficultyOverride = null;
             TravelingMerchantPurchases = 0;
-            StoredStarTokens = 0;
+            Wallet = new ArchipelagoWalletDto();
             EntrancesTraversed = new List<string>();
             CurrentRaccoonBundleStatus = new List<bool>();
             NumberOfLOTLEpisodesWatched = 0;
