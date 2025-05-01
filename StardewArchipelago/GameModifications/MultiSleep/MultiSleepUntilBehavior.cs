@@ -28,6 +28,7 @@ namespace StardewArchipelago.GameModifications.MultiSleep
 
         public override bool ShouldKeepSleeping()
         {
+            bool allReady;
             switch (_untilWhat)
             {
                 case RAIN:
@@ -52,10 +53,10 @@ namespace StardewArchipelago.GameModifications.MultiSleep
                 case BOOKSELLER:
                     return !Utility.getDaysOfBooksellerThisSeason().Contains(Game1.dayOfMonth);
                 case ANY_CROP_READY:
-                    CheckAllCrops(out _, out var anyReady, out var allReady);
+                    CheckAllCrops(out _, out var anyReady, out allReady);
                     return !anyReady && !allReady;
                 case ALL_CROPS_READY:
-                    CheckAllCrops(out var anyNotReady, out _, out var allReady);
+                    CheckAllCrops(out var anyNotReady, out _, out allReady);
                     return anyNotReady && !allReady;
 
                 default:
