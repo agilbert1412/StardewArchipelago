@@ -1,5 +1,7 @@
 ﻿using System;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using Microsoft.Xna.Framework;
+using StardewArchipelago.GameModifications.Seasons;
 using StardewValley;
 using StardewValley.BellsAndWhistles;
 using StardewValley.Menus;
@@ -11,7 +13,7 @@ namespace StardewArchipelago.GameModifications.MultiSleep
     {
         public abstract bool ShouldKeepSleeping();
 
-        public virtual void KeepSleeping()
+        public static void SleepOnce()
         {
             NewDay(0);
             Game1.newDayAfterFade(AfterNewDay);
@@ -28,6 +30,17 @@ namespace StardewArchipelago.GameModifications.MultiSleep
                 Game1.nonWarpFade = false;
                 Game1.fadeIn = false;
             }
+        }
+
+        public virtual void KeepSleeping()
+        {
+            if (Game1.dayOfMonth == 28)
+            {
+                SeasonsRandomizer.ChooseNextSeasonBasedOnConfigPreference();
+                return;
+            }
+
+            SleepOnce();
         }
 
         private static void NewDay(float timeToPause)
