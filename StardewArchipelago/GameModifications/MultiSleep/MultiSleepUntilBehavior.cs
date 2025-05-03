@@ -151,7 +151,7 @@ namespace StardewArchipelago.GameModifications.MultiSleep
 
         public static void CheckCrop(HoeDirt hoeDirt, ref bool anyNotReady, ref bool anyReady, ref bool allReady)
         {
-            if (hoeDirt == null || hoeDirt.crop == null)
+            if (hoeDirt == null || hoeDirt.crop == null || hoeDirt.crop.forageCrop.Value || hoeDirt.crop.dead.Value)
             {
                 return;
             }
@@ -159,11 +159,11 @@ namespace StardewArchipelago.GameModifications.MultiSleep
             if (hoeDirt.readyForHarvest())
             {
                 anyReady = true;
-                allReady = false;
             }
             else
             {
                 anyNotReady = true;
+                allReady = false;
             }
         }
     }
