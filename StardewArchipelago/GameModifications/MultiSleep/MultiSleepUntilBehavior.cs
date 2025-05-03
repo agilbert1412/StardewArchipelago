@@ -132,6 +132,10 @@ namespace StardewArchipelago.GameModifications.MultiSleep
                 {
                     continue;
                 }
+                if (location.IsOutdoors && hoeDirt.needsWatering() && !hoeDirt.isWatered() && location.GetSeason() == Season.Winter)
+                {
+                    continue;
+                }
                 CheckCrop(hoeDirt, ref anyNotReady, ref anyReady, ref allReady);
             }
             foreach (var locationObject in location.objects.Values)
