@@ -1,0 +1,18 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace StardewArchipelago.Bundles
+{
+    public class MemeBundleNames
+    {
+        public const string CLIQUE = "Clique";
+        public const string VAMPIRE = "Vampire";
+        public const string EXHAUSTION = "Exhaustion";
+        public const string TICK_TOCK = "Tick Tock";
+        public const string ARCHIPELA_GO = "Archipela-Go!";
+        public const string COOKIE_CLICKER = "Cookie Clicker";
+    }
+}

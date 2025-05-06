@@ -1581,7 +1581,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             }
         }
 
-        private void SetUpPurchaseButton()
+        protected virtual void SetUpPurchaseButton()
         {
             if (FromGameMenu)
             {
@@ -1791,7 +1791,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             return ofBoxesCenteredAt;
         }
 
-        public void TakeDownBundleSpecificPage()
+        public virtual void TakeDownBundleSpecificPage()
         {
             if (!IsReadyToCloseMenuOrBundle())
             {
@@ -1803,6 +1803,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             {
                 return;
             }
+            TakeDownSpecificBundleComponents();
+        }
+
+        protected virtual void TakeDownSpecificBundleComponents()
+        {
             SpecificBundlePage = false;
             IngredientSlots.Clear();
             IngredientList.Clear();

@@ -1,0 +1,286 @@
+﻿
+using System;
+using System.Linq;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using StardewArchipelago.Constants;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes;
+using StardewValley.Locations;
+using StardewValley.Menus;
+using StardewValley;
+using StardewArchipelago.Logging;
+using StardewModdingAPI;
+using StardewArchipelago.Serialization;
+using StardewValley.BellsAndWhistles;
+
+namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
+{
+    public class BundleCurrencyManager
+    {
+        private static LogHandler _logger;
+        private static IModHelper _modHelper;
+        private static ArchipelagoWalletDto _wallet;
+        private ArchipelagoJunimoNoteMenu _menu;
+
+        public BundleCurrencyManager(LogHandler logger, IModHelper modHelper, ArchipelagoWalletDto wallet, ArchipelagoJunimoNoteMenu menu)
+        {
+            _logger = logger;
+            _modHelper = modHelper;
+            _wallet = wallet;
+            _menu = menu;
+        }
+
+        public void DrawCurrency(SpriteBatch b)
+        {
+            if (!_menu.SpecificBundlePage || !Game1.player.hasOrWillReceiveMail("canReadJunimoText"))
+            {
+                Game1.specialCurrencyDisplay.ShowCurrency(null);
+                return;
+            }
+
+            var ingredient = _menu.CurrentPageBundle.Ingredients.Last();
+            var ingredientId = ingredient.id;
+            if (ingredientId == IDProvider.MONEY)
+            {
+                return;
+            }
+
+            var amountText = DrawCurrencyAndGetAmount(b, ingredient, ingredientId);
+            if (string.IsNullOrWhiteSpace(amountText))
+            {
+                return;
+            }
+
+            var textSize = Game1.dialogueFont.MeasureString(amountText).X;
+            var textPosition = new Vector2(_menu.xPositionOnScreen + 936 - textSize / 2f, _menu.yPositionOnScreen + 292);
+            b.DrawString(Game1.dialogueFont, amountText, textPosition, Game1.textColor * 0.9f);
+        }
+
+        private string DrawCurrencyAndGetAmount(SpriteBatch b, BundleIngredientDescription ingredient, string ingredientId)
+        {
+            var amountText = $"{ingredient.stack}";
+
+            if (ingredientId == IDProvider.QI_GEM)
+            {
+                Game1.specialCurrencyDisplay.ShowCurrency("qiGems");
+                amountText += " Qi Gems";
+            }
+            else if (ingredientId == IDProvider.QI_COIN)
+            {
+                SpriteText.drawStringWithScrollBackground(b, Game1.player.clubCoins.ToString(), 64, 16);
+                amountText += " Qi Coins";
+            }
+            else if (ingredientId == IDProvider.STAR_TOKEN)
+            {
+                DrawStarTokenCurrency();
+                amountText += " Star Tokens";
+            }
+            else if (ingredientId == MemeIDProvider.BLOOD)
+            {
+                DrawBloodCurrency();
+                amountText += " Blood";
+            }
+            else if (ingredientId == MemeIDProvider.ENERGY)
+            {
+                DrawEnergyCurrency();
+                amountText += " Energy";
+            }
+            else if (ingredientId == MemeIDProvider.TIME)
+            {
+                DrawTimeCurrency();
+                amountText += " Hours";
+            }
+            else if (ingredientId == MemeIDProvider.STEP)
+            {
+                DrawStepsCurrency();
+                amountText += " Steps";
+            }
+            else if (ingredientId == MemeIDProvider.CLIC)
+            {
+                Game1.specialCurrencyDisplay.ShowCurrency(null);
+                return "";
+            }
+            else if (ingredientId == MemeIDProvider.COOKIES_CLICKING)
+            {
+                DrawCookiesCurrency();
+                amountText += " Cookies";
+            }
+            else if (ingredientId == MemeIDProvider.DEATH)
+            {
+                amountText += " Death";
+            }
+            else
+            {
+                Game1.specialCurrencyDisplay.ShowCurrency(null);
+                return "";
+            }
+
+            return amountText;
+        }
+
+        private void DrawStarTokenCurrency()
+        {
+            DrawSpecialCurrency(_wallet.StarTokens);
+        }
+
+        private void DrawBloodCurrency()
+        {
+            DrawSpecialCurrency(_wallet.Blood);
+        }
+
+        private void DrawEnergyCurrency()
+        {
+            DrawSpecialCurrency(_wallet.Energy);
+        }
+
+        private void DrawTimeCurrency()
+        {
+            DrawSpecialCurrency(_wallet.Time);
+        }
+
+        private void DrawStepsCurrency()
+        {
+            DrawSpecialCurrency(Game1.stats.StepsTaken);
+        }
+
+        private void DrawCookiesCurrency()
+        {
+            DrawSpecialCurrency(_wallet.Cookies);
+        }
+
+        private static void DrawSpecialCurrency(int amountOwned)
+        {
+            DrawSpecialCurrency((uint)amountOwned);
+        }
+
+        private static void DrawSpecialCurrency(uint amountOwned)
+        {
+            var spriteBatch = Game1.spriteBatch;
+            spriteBatch.End();
+            Game1.PushUIMode();
+            spriteBatch.Begin(blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
+            spriteBatch.Draw(Game1.fadeToBlackRect, new Rectangle(16, 16, 128 + (amountOwned > 999 ? 16 : 0), 64), Color.Black * 0.75f);
+            spriteBatch.Draw(Game1.mouseCursors, new Vector2(32f, 32f), new Rectangle(338, 400, 8, 8), Color.White, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 1f);
+            Game1.drawWithBorder(amountOwned.ToString() ?? "", Color.Black, Color.White, new Vector2(72f, (float)(21 + (LocalizedContentManager.CurrentLanguageCode == LocalizedContentManager.LanguageCode.en ? 8 : (LocalizedContentManager.CurrentLanguageLatin ? 16 : 8)))), 0.0f, 1f, 1f, false);
+
+            spriteBatch.End();
+            Game1.PopUIMode();
+            spriteBatch.Begin(blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
+        }
+
+        public void TryPurchaseCurrentBundle(BundleIngredientDescription ingredient)
+        {
+            if (ingredient.id == IDProvider.QI_GEM)
+            {
+                TryPurchaseCurrentBundleWithQiGems(ingredient);
+                return;
+            }
+
+            if (ingredient.id == IDProvider.QI_COIN)
+            {
+                TryPurchaseCurrentBundleWithQiCoins(ingredient);
+                return;
+            }
+
+            if (ingredient.id == IDProvider.STAR_TOKEN)
+            {
+                TryPurchaseCurrentBundleWithStarTokens(ingredient);
+                return;
+            }
+
+            if (ingredient.id == MemeIDProvider.BLOOD)
+            {
+                TryPurchaseCurrentBundleWithBlood(ingredient);
+                return;
+            }
+
+            if (ingredient.id == MemeIDProvider.ENERGY)
+            {
+                TryPurchaseCurrentBundleWithEnergy(ingredient);
+                return;
+            }
+
+            if (ingredient.id == MemeIDProvider.TIME)
+            {
+                TryPurchaseCurrentBundleWithTime(ingredient);
+                return;
+            }
+
+            if (ingredient.id == MemeIDProvider.STEP)
+            {
+                TryPurchaseCurrentBundleWithSteps(ingredient);
+                return;
+            }
+
+            if (ingredient.id == MemeIDProvider.COOKIES_CLICKING)
+            {
+                TryPurchaseCurrentBundleWithCookies(ingredient);
+                return;
+            }
+
+            if (ingredient.id == MemeIDProvider.CLIC)
+            {
+                TryPurchaseCurrentBundleWithOneClic(ingredient);
+                return;
+            }
+        }
+
+        private void TryPurchaseCurrentBundleWithQiGems(BundleIngredientDescription ingredient)
+        {
+            TryPurchaseCurrentBundleWithWalletCurrency(ingredient, Game1.player.QiGems, payAmount => Game1.player.QiGems -= payAmount);
+        }
+
+        private void TryPurchaseCurrentBundleWithQiCoins(BundleIngredientDescription ingredient)
+        {
+            TryPurchaseCurrentBundleWithWalletCurrency(ingredient, Game1.player.clubCoins, payAmount => Game1.player.clubCoins -= payAmount);
+        }
+
+        private void TryPurchaseCurrentBundleWithStarTokens(BundleIngredientDescription ingredient)
+        {
+            TryPurchaseCurrentBundleWithWalletCurrency(ingredient, _wallet.StarTokens, payAmount => _wallet.StarTokens -= payAmount);
+        }
+
+        private void TryPurchaseCurrentBundleWithBlood(BundleIngredientDescription ingredient)
+        {
+            TryPurchaseCurrentBundleWithWalletCurrency(ingredient, _wallet.Blood, payAmount => _wallet.Blood -= payAmount);
+        }
+
+        private void TryPurchaseCurrentBundleWithEnergy(BundleIngredientDescription ingredient)
+        {
+            TryPurchaseCurrentBundleWithWalletCurrency(ingredient, _wallet.Energy, payAmount => _wallet.Energy -= payAmount);
+        }
+
+        private void TryPurchaseCurrentBundleWithTime(BundleIngredientDescription ingredient)
+        {
+            TryPurchaseCurrentBundleWithWalletCurrency(ingredient, _wallet.Time, payAmount => _wallet.Time -= payAmount);
+        }
+
+        private void TryPurchaseCurrentBundleWithSteps(BundleIngredientDescription ingredient)
+        {
+            TryPurchaseCurrentBundleWithWalletCurrency(ingredient, (int)Game1.stats.StepsTaken, payAmount => Game1.stats.StepsTaken -= (uint)payAmount);
+        }
+
+        private void TryPurchaseCurrentBundleWithCookies(BundleIngredientDescription ingredient)
+        {
+            TryPurchaseCurrentBundleWithWalletCurrency(ingredient, _wallet.Cookies, payAmount => _wallet.Cookies -= payAmount);
+        }
+
+        private void TryPurchaseCurrentBundleWithOneClic(BundleIngredientDescription ingredient)
+        {
+            TryPurchaseCurrentBundleWithWalletCurrency(ingredient, 1, _ => {});
+        }
+
+        private void TryPurchaseCurrentBundleWithWalletCurrency(BundleIngredientDescription ingredient, int amountOwned, Action<int> payAction)
+        {
+            if (amountOwned < ingredient.stack)
+            {
+                Game1.dayTimeMoneyBox.moneyShakeTimer = 600;
+                return;
+            }
+
+            payAction(ingredient.stack);
+
+            _menu.PerformCurrencyPurchase();
+        }
+    }
+}

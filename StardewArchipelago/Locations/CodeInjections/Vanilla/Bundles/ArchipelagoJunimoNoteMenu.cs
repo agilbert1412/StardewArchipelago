@@ -1,6 +1,7 @@
 ﻿#nullable disable
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
@@ -17,8 +18,10 @@ using StardewArchipelago.Extensions;
 using StardewArchipelago.Constants;
 using StardewValley.BellsAndWhistles;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Bundles;
 using StardewArchipelago.Logging;
 using StardewArchipelago.Serialization;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 {
@@ -33,17 +36,31 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         private static ArchipelagoWalletDto _wallet;
         private static LocationChecker _locationChecker;
         private static BundleReader _bundleReader;
+        private BundleCurrencyManager _currencyManager;
+
+        public Texture2D MemeTexture;
+        public ClickableTextureComponent DonateButton;
 
         public ArchipelagoJunimoNoteMenu(bool fromGameMenu, int area = 1, bool fromThisMenu = false) : base(fromGameMenu, area, fromThisMenu)
         {
+            InitializeFields();
         }
 
         public ArchipelagoJunimoNoteMenu(int whichArea, Dictionary<int, bool[]> bundlesComplete) : base(whichArea, bundlesComplete)
         {
+            InitializeFields();
         }
 
         public ArchipelagoJunimoNoteMenu(ArchipelagoBundle b, string noteTexturePath) : base(b, noteTexturePath)
         {
+            InitializeFields();
+        }
+
+        private void InitializeFields()
+        {
+            _currencyManager = new BundleCurrencyManager(_logger, _modHelper, _wallet, this);
+            var memeAssetsPath = Path.Combine("Bundles", "UI", "MemeBundleAssets.png");
+            MemeTexture = TexturesLoader.GetTexture(_logger, _modHelper, memeAssetsPath);
         }
 
         public static void InitializeArchipelago(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, ArchipelagoWalletDto wallet, LocationChecker locationChecker)
@@ -164,46 +181,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         public override void draw(SpriteBatch b)
         {
             base.draw(b);
-
-            if (!this.SpecificBundlePage || !Game1.player.hasOrWillReceiveMail("canReadJunimoText"))
-            {
-                Game1.specialCurrencyDisplay.ShowCurrency(null);
-                return;
-            }
-
-            var ingredient = this.CurrentPageBundle.Ingredients.Last();
-            var ingredientId = ingredient.id;
-            if (ingredientId == IDProvider.MONEY)
-            {
-                return;
-            }
-
-            var amountText = $"{ingredient.stack}";
-
-            if (ingredientId == IDProvider.QI_GEM)
-            {
-                Game1.specialCurrencyDisplay.ShowCurrency("qiGems");
-                amountText += " Qi Gems";
-            }
-            else if (ingredientId == IDProvider.QI_COIN)
-            {
-                SpriteText.drawStringWithScrollBackground(b, Game1.player.clubCoins.ToString(), 64, 16);
-                amountText += " Qi Coins";
-            }
-            else if (ingredientId == IDProvider.STAR_TOKEN)
-            {
-                DrawStarTokenCurrency();
-                amountText += " Star Tokens";
-            }
-            else
-            {
-                Game1.specialCurrencyDisplay.ShowCurrency(null);
-                return;
-            }
-
-            var textSize = Game1.dialogueFont.MeasureString(amountText).X;
-            var textPosition = new Vector2(this.xPositionOnScreen + 936 - textSize / 2f, this.yPositionOnScreen + 292);
-            b.DrawString(Game1.dialogueFont, amountText, textPosition, Game1.textColor * 0.9f);
+            _currencyManager.DrawCurrency(b);
+            DonateButton?.draw(b);
         }
 
         public override void receiveLeftClick(int x, int y, bool playSound = true)
@@ -222,7 +201,40 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 return;
             }
 
-            TryPurchaseCurrentBundle(ingredient);
+            _currencyManager.TryPurchaseCurrentBundle(ingredient);
+        }
+
+        public void PerformCurrencyPurchase()
+        {
+            Game1.playSound("select");
+            CurrentPageBundle.CompletionAnimation(this);
+            if (this.PurchaseButton == null)
+            {
+            }
+            else
+            {
+                this.PurchaseButton.scale = this.PurchaseButton.baseScale * 0.75f;
+            }
+
+            var communityCenter = (CommunityCenter)Game1.getLocationFromName("CommunityCenter");
+            communityCenter.bundleRewards[CurrentPageBundle.BundleIndex] = true;
+            communityCenter.bundles.FieldDict[CurrentPageBundle.BundleIndex][0] = true;
+            this.CheckForRewards();
+            var flag = this.Bundles.Any(bundle => !bundle.Complete && !bundle.Equals(CurrentPageBundle));
+            var whichArea = this.WhichArea;
+            if (!flag)
+            {
+                communityCenter.markAreaAsComplete(whichArea);
+                this.exitFunction = () => this.restoreAreaOnExit();
+                communityCenter.areaCompleteReward(whichArea);
+            }
+            else
+            {
+                communityCenter.getJunimoForArea(whichArea)?.bringBundleBackToHut(BundleRemake.GetColorFromColorIndex(CurrentPageBundle.BundleColor),
+                    Game1.getLocationFromName("CommunityCenter"));
+            }
+
+            // Game1.multiplayer.globalChatInfoMessage("Bundle");
         }
 
         private void CheckAllBundleLocations()
@@ -318,115 +330,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             return true;
         }
 
-        private void DrawStarTokenCurrency()
-        {
-            var spriteBatch = Game1.spriteBatch;
-            spriteBatch.End();
-            Game1.PushUIMode();
-            spriteBatch.Begin(blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
-            var tokenAmount = _wallet.StarTokens;
-            spriteBatch.Draw(Game1.fadeToBlackRect, new Rectangle(16, 16, 128 + (tokenAmount > 999 ? 16 : 0), 64), Color.Black * 0.75f);
-            spriteBatch.Draw(Game1.mouseCursors, new Vector2(32f, 32f), new Rectangle(338, 400, 8, 8), Color.White, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 1f);
-            Game1.drawWithBorder(tokenAmount.ToString() ?? "", Color.Black, Color.White, new Vector2(72f, (float)(21 + (LocalizedContentManager.CurrentLanguageCode == LocalizedContentManager.LanguageCode.en ? 8 : (LocalizedContentManager.CurrentLanguageLatin ? 16 : 8)))), 0.0f, 1f, 1f, false);
-
-            spriteBatch.End();
-            Game1.PopUIMode();
-            spriteBatch.Begin(blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
-        }
-
-        private void TryPurchaseCurrentBundle(BundleIngredientDescription ingredient)
-        {
-            if (ingredient.id == IDProvider.QI_GEM)
-            {
-                TryPurchaseCurrentBundleWithQiGems(ingredient);
-                return;
-            }
-
-            if (ingredient.id == IDProvider.QI_COIN)
-            {
-                TryPurchaseCurrentBundleWithQiCoins(ingredient);
-                return;
-            }
-
-            if (ingredient.id == IDProvider.STAR_TOKEN)
-            {
-                TryPurchaseCurrentBundleWithStarTokens(ingredient);
-                return;
-            }
-        }
-
-        private void TryPurchaseCurrentBundleWithQiGems(BundleIngredientDescription ingredient)
-        {
-            if (Game1.player.QiGems < ingredient.stack)
-            {
-                Game1.dayTimeMoneyBox.moneyShakeTimer = 600;
-                return;
-            }
-
-            Game1.player.QiGems -= ingredient.stack;
-
-            PerformCurrencyPurchase();
-        }
-
-        private void TryPurchaseCurrentBundleWithQiCoins(BundleIngredientDescription ingredient)
-        {
-            if (Game1.player.clubCoins < ingredient.stack)
-            {
-                Game1.dayTimeMoneyBox.moneyShakeTimer = 600;
-                return;
-            }
-
-            Game1.player.clubCoins -= ingredient.stack;
-
-            PerformCurrencyPurchase();
-        }
-
-        private void TryPurchaseCurrentBundleWithStarTokens(BundleIngredientDescription ingredient)
-        {
-            if (_wallet.StarTokens < ingredient.stack)
-            {
-                Game1.dayTimeMoneyBox.moneyShakeTimer = 600;
-                return;
-            }
-
-            _wallet.StarTokens -= ingredient.stack;
-
-            PerformCurrencyPurchase();
-        }
-
-        private void PerformCurrencyPurchase()
-        {
-            Game1.playSound("select");
-            CurrentPageBundle.CompletionAnimation(this);
-            if (this.PurchaseButton == null)
-            {
-            }
-            else
-            {
-                this.PurchaseButton.scale = this.PurchaseButton.baseScale * 0.75f;
-            }
-
-            var communityCenter = (CommunityCenter)Game1.getLocationFromName("CommunityCenter");
-            communityCenter.bundleRewards[CurrentPageBundle.BundleIndex] = true;
-            communityCenter.bundles.FieldDict[CurrentPageBundle.BundleIndex][0] = true;
-            this.CheckForRewards();
-            var flag = this.Bundles.Any(bundle => !bundle.Complete && !bundle.Equals(CurrentPageBundle));
-            var whichArea = this.WhichArea;
-            if (!flag)
-            {
-                communityCenter.markAreaAsComplete(whichArea);
-                this.exitFunction = () => this.restoreAreaOnExit();
-                communityCenter.areaCompleteReward(whichArea);
-            }
-            else
-            {
-                communityCenter.getJunimoForArea(whichArea)?.bringBundleBackToHut(BundleRemake.GetColorFromColorIndex(CurrentPageBundle.BundleColor),
-                    Game1.getLocationFromName("CommunityCenter"));
-            }
-
-            // Game1.multiplayer.globalChatInfoMessage("Bundle");
-        }
-
         protected override ArchipelagoBundle CreateBundle(Dictionary<int, bool[]> bundlesComplete, string key, Dictionary<string, string> bundleData, int whichBundle)
         {
             var int32 = Convert.ToInt32(key.Split('/')[1]);
@@ -438,6 +341,47 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             bundle.downNeighborID = -7777;
             bundle.fullyImmutable = true;
             return bundle;
+        }
+
+        protected override void SetUpPurchaseButton()
+        {
+            base.SetUpPurchaseButton();
+            switch (CurrentPageBundle.name)
+            {
+                case MemeBundleNames.CLIQUE:
+
+                    // TODO: Clique Button
+                    // PurchaseButton.texture = null;
+                    break;
+                case MemeBundleNames.VAMPIRE:
+                case MemeBundleNames.EXHAUSTION:
+                case MemeBundleNames.TICK_TOCK:
+                    SetUpDonateButton();
+                    break;
+                case MemeBundleNames.COOKIE_CLICKER:
+                    // TODO: Cookies and Stuff
+                    break;
+            }
+        }
+
+        private void SetUpDonateButton()
+        {
+            if (FromGameMenu)
+            {
+                return;
+            }
+
+            var textureComponent = new ClickableTextureComponent(new Rectangle(xPositionOnScreen + 800, yPositionOnScreen + 474, 260, 72), MemeTexture, new Rectangle(0, 0, 53, 20), 4f);
+            textureComponent.myID = 796;
+            textureComponent.leftNeighborID = REGION_BACK_BUTTON;
+            textureComponent.rightNeighborID = REGION_PURCHASE_BUTTON;
+            DonateButton = textureComponent;
+        }
+
+        protected override void TakeDownSpecificBundleComponents()
+        {
+            base.TakeDownSpecificBundleComponents();
+            DonateButton = null;
         }
     }
 }
