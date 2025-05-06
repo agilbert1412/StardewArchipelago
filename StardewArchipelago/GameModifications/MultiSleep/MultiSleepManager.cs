@@ -162,7 +162,7 @@ namespace StardewArchipelago.GameModifications.MultiSleep
             }
             possibleResponses.Add(new Response(MultiSleepUntilBehavior.BOOKSELLER, "Bookseller"));
             MultiSleepUntilBehavior.CheckAllCrops(out var anyNotReady, out var anyReady, out var allReady);
-            if (!anyReady)
+            if (!anyReady && anyNotReady)
             {
                 possibleResponses.Add(new Response(MultiSleepUntilBehavior.ANY_CROP_READY, "Any Crop Ready"));
             }
