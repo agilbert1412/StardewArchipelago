@@ -18,7 +18,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         private static ILogger _logger;
         private static IModHelper _modHelper;
         private static ArchipelagoClient _archipelago;
-        private static ArchipelagoStateDto _state;
+        private static ArchipelagoWalletDto _wallet;
         private static LocationChecker _locationChecker;
         private static BundlesManager _bundlesManager;
 
@@ -31,12 +31,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             InitializeBundle(bundleIndex, rawBundleInfo, completedIngredientsList, textureName, menu);
         }
 
-        public static void InitializeArchipelago(ILogger logger, IModHelper modHelper, ArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, BundlesManager bundlesManager)
+        public static void InitializeArchipelago(ILogger logger, IModHelper modHelper, ArchipelagoClient archipelago, ArchipelagoWalletDto wallet, LocationChecker locationChecker, BundlesManager bundlesManager)
         {
             _logger = logger;
             _modHelper = modHelper;
             _archipelago = archipelago;
-            _state = state;
+            _wallet = wallet;
             _locationChecker = locationChecker;
             _bundlesManager = bundlesManager;
         }
@@ -75,7 +75,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 }
             }
 
-            ingredients = ingredients;
+            Ingredients = ingredients;
             BundleColor = itemBundle.ColorIndex;
             NumberOfIngredientSlots = itemBundle.NumberRequired;
 

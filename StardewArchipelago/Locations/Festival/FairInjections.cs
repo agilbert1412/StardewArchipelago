@@ -18,15 +18,15 @@ namespace StardewArchipelago.Locations.Festival
         private static ILogger _logger;
         private static IModHelper _modHelper;
         private static StardewArchipelagoClient _archipelago;
-        private static ArchipelagoStateDto _state;
+        private static ArchipelagoWalletDto _wallet;
         private static LocationChecker _locationChecker;
 
-        public static void Initialize(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker)
+        public static void Initialize(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, ArchipelagoWalletDto wallet, LocationChecker locationChecker)
         {
             _logger = logger;
             _modHelper = modHelper;
             _archipelago = archipelago;
-            _state = state;
+            _wallet = wallet;
             _locationChecker = locationChecker;
         }
 
@@ -87,7 +87,7 @@ namespace StardewArchipelago.Locations.Festival
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
-                _state.StoredStarTokens += who.festivalScore;
+                _wallet.StarTokens += who.festivalScore;
                 return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)

@@ -41,6 +41,14 @@ namespace StardewArchipelago.Bundles
             { "Qi Coin", IDProvider.QI_COIN },
             // {"Golden Walnut", IDProvider.GOLDEN_WALNUT},
             { "Qi Gem", IDProvider.QI_GEM },
+
+            { "Blood", MemeIDProvider.BLOOD },
+            { "Energy", MemeIDProvider.ENERGY },
+            { "Time", MemeIDProvider.TIME },
+            { "Clic", MemeIDProvider.CLIC },
+            { "Cookies Clicking", MemeIDProvider.COOKIES_CLICKING },
+            { "Death", MemeIDProvider.DEATH },
+            { "Steps", MemeIDProvider.STEP },
         };
     }
 }

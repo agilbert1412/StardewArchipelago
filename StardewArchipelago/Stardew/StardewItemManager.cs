@@ -154,6 +154,12 @@ namespace StardewArchipelago.Stardew
                 return _furnitureByName[itemName];
             }
 
+            var nameWithoutSpaces = itemName.Replace(" ", "");
+            if (_furnitureByName.ContainsKey(nameWithoutSpaces))
+            {
+                return _furnitureByName[nameWithoutSpaces];
+            }
+
             if (_hatsByName.ContainsKey(itemName))
             {
                 return _hatsByName[itemName];

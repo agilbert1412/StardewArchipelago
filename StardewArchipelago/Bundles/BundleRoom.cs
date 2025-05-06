@@ -1,21 +1,33 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Stardew;
 
 namespace StardewArchipelago.Bundles
 {
     public class BundleRoom
     {
+        private readonly ILogger _logger;
         public string Name { get; }
         public Dictionary<string, Bundle> Bundles { get; }
 
-        public BundleRoom(StardewItemManager itemManager, string name, Dictionary<string, Dictionary<string, string>> bundles)
+        public BundleRoom(ILogger logger, StardewItemManager itemManager, string name, Dictionary<string, Dictionary<string, string>> bundles)
         {
+            _logger = logger;
             Name = name;
             Bundles = new Dictionary<string, Bundle>();
             foreach (var (bundleName, bundleContent) in bundles)
             {
-                var bundle = Bundle.Parse(itemManager, Name, bundleName, bundleContent);
-                Bundles.Add(bundleName, bundle);
+                try
+                {
+                    var bundle = Bundle.Parse(itemManager, Name, bundleName, bundleContent);
+                    Bundles.Add(bundleName, bundle);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Error Parsing Bundle {bundleName}, with content {bundleContent}. Error: {ex}");
+                }
             }
         }
 

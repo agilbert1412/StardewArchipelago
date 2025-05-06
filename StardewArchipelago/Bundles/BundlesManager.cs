@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Netcode;
 using Newtonsoft.Json;
 using StardewArchipelago.Stardew;
@@ -12,15 +14,17 @@ namespace StardewArchipelago.Bundles
 {
     public class BundlesManager
     {
+        private readonly ILogger _logger;
         private readonly IModHelper _modHelper;
         private readonly Dictionary<string, string> _currentBundlesData;
         public BundleRooms BundleRooms { get; }
 
-        public BundlesManager(IModHelper modHelper, StardewItemManager itemManager, string bundlesJson)
+        public BundlesManager(ILogger logger, IModHelper modHelper, StardewItemManager itemManager, string bundlesJson)
         {
+            _logger = logger;
             _modHelper = modHelper;
             var bundlesDictionary = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, Dictionary<string, string>>>>(bundlesJson);
-            BundleRooms = new BundleRooms(itemManager, bundlesDictionary);
+            BundleRooms = new BundleRooms(_logger, itemManager, bundlesDictionary);
             _currentBundlesData = BundleRooms.ToStardewStrings();
             _modHelper.Events.Content.AssetRequested += OnBundlesRequested;
             modHelper.GameContent.InvalidateCache(x => x.NameWithoutLocale.IsEquivalentTo("Data/Bundles"));

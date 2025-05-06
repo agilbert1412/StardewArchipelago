@@ -51,7 +51,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             SpouseInjections.Initialize(logger, modHelper, archipelago, locationChecker);
             PregnancyInjections.Initialize(logger, modHelper, archipelago, locationChecker);
             CropsanityInjections.Initialize(logger, archipelago, locationChecker, itemManager);
-            InitializeFestivalPatches(logger, modHelper, archipelago, state, locationChecker);
+            InitializeFestivalPatches(logger, modHelper, archipelago, state.Wallet, locationChecker);
             MonsterSlayerInjections.Initialize(logger, modHelper, archipelago, locationChecker, killList);
             CookingInjections.Initialize(logger, archipelago, locationChecker, itemManager);
             var qosManager = new QueenOfSauceManager(state);
@@ -77,8 +77,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
 
         private static void InitializeBundleInjections(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, BundlesManager bundlesManager, BundleReader bundleReader)
         {
-            ArchipelagoJunimoNoteMenu.InitializeArchipelago(logger, modHelper, archipelago, state, locationChecker);
-            ArchipelagoBundle.InitializeArchipelago(logger, modHelper, archipelago, state, locationChecker, bundlesManager);
+            ArchipelagoJunimoNoteMenu.InitializeArchipelago(logger, modHelper, archipelago, state.Wallet, locationChecker);
+            ArchipelagoBundle.InitializeArchipelago(logger, modHelper, archipelago, state.Wallet, locationChecker, bundlesManager);
             CommunityCenterInjections.Initialize(logger, archipelago, locationChecker, bundleReader);
             RaccoonInjections.Initialize(logger, modHelper, archipelago, state, locationChecker, bundlesManager, bundleReader);
         }
@@ -95,7 +95,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             MasteriesInjections.Initialize(logger, modHelper, archipelago, locationChecker);
         }
 
-        private static void InitializeFestivalPatches(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker)
+        private static void InitializeFestivalPatches(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, ArchipelagoWalletDto wallet, LocationChecker locationChecker)
         {
             EggFestivalInjections.Initialize(logger, modHelper, archipelago, locationChecker);
             DesertFestivalInjections.Initialize(logger, modHelper, archipelago, locationChecker);
@@ -103,7 +103,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             LuauInjections.Initialize(logger, modHelper, archipelago, locationChecker);
             TroutDerbyInjections.Initialize(logger, modHelper, archipelago, locationChecker);
             MoonlightJelliesInjections.Initialize(logger, modHelper, archipelago, locationChecker);
-            FairInjections.Initialize(logger, modHelper, archipelago, state, locationChecker);
+            FairInjections.Initialize(logger, modHelper, archipelago, wallet, locationChecker);
             SpiritEveInjections.Initialize(logger, modHelper, archipelago, locationChecker);
             IceFestivalInjections.Initialize(logger, modHelper, archipelago, locationChecker);
             SquidFestInjections.Initialize(logger, modHelper, archipelago, locationChecker);

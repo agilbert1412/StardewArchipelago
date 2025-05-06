@@ -158,50 +158,50 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Bundles
         }
 
         //Transpiler way
-        public static IEnumerable<CodeInstruction> ReplaceVaultCheckWithBundleType(IEnumerable<CodeInstruction> instructions)
-        {
-            // We want to replace `if (this.whichArea == 4)`, just after `this.specificBundlePage = true;`
+        //public static IEnumerable<CodeInstruction> ReplaceVaultCheckWithBundleType(IEnumerable<CodeInstruction> instructions)
+        //{
+        //    // We want to replace `if (this.whichArea == 4)`, just after `this.specificBundlePage = true;`
 
-            // [1335 7 - 1335 37]
-            // IL_0011: ldarg.0      // this
-            // IL_0012: ldc.i4.1
-            // IL_0013: stfld        bool StardewValley.Menus.JunimoNoteMenu::specificBundlePage
+        //    // [1335 7 - 1335 37]
+        //    // IL_0011: ldarg.0      // this
+        //    // IL_0012: ldc.i4.1
+        //    // IL_0013: stfld        bool StardewValley.Menus.JunimoNoteMenu::specificBundlePage
 
-            // [1336 7 - 1336 31]
-            // IL_0018: ldarg.0      // this
-            // IL_0019: ldfld int32 StardewValley.Menus.JunimoNoteMenu::whichArea
-            // IL_001e: ldc.i4.4
-            // IL_001f: bne.un IL_00b2
+        //    // [1336 7 - 1336 31]
+        //    // IL_0018: ldarg.0      // this
+        //    // IL_0019: ldfld int32 StardewValley.Menus.JunimoNoteMenu::whichArea
+        //    // IL_001e: ldc.i4.4
+        //    // IL_001f: bne.un IL_00b2
 
-            CodeMatcher matcher = new(instructions);
+        //    CodeMatcher matcher = new(instructions);
 
-            var whichAreaFieldInfo = AccessTools.Field(typeof(JunimoNoteMenu), nameof(JunimoNoteMenu.whichArea));
+        //    var whichAreaFieldInfo = AccessTools.Field(typeof(JunimoNoteMenu), nameof(JunimoNoteMenu.whichArea));
 
-            var isBundleCurrencyBasedInfo = AccessTools.Method(typeof(BundleMenuInjection), nameof(IsBundleCurrencyBased));
+        //    var isBundleCurrencyBasedInfo = AccessTools.Method(typeof(BundleMenuInjection), nameof(IsBundleCurrencyBased));
 
-            matcher.MatchEndForward(
-                new CodeMatch(OpCodes.Ldarg_0),
-                new CodeMatch(OpCodes.Ldfld),
-                new CodeMatch(OpCodes.Ldc_I4_4),
-                new CodeMatch(OpCodes.Bne_Un)
-            )
-            .SetOpcodeAndAdvance(OpCodes.Brfalse)
-            .Advance(-1)
-            .Insert(
-                new CodeInstruction(OpCodes.Pop),
-                new CodeInstruction(OpCodes.Pop),
-                new CodeInstruction(OpCodes.Ldarg_0),
-                new CodeInstruction(OpCodes.Call, isBundleCurrencyBasedInfo)
-                );
+        //    matcher.MatchEndForward(
+        //        new CodeMatch(OpCodes.Ldarg_0),
+        //        new CodeMatch(OpCodes.Ldfld),
+        //        new CodeMatch(OpCodes.Ldc_I4_4),
+        //        new CodeMatch(OpCodes.Bne_Un)
+        //    )
+        //    .SetOpcodeAndAdvance(OpCodes.Brfalse)
+        //    .Advance(-1)
+        //    .Insert(
+        //        new CodeInstruction(OpCodes.Pop),
+        //        new CodeInstruction(OpCodes.Pop),
+        //        new CodeInstruction(OpCodes.Ldarg_0),
+        //        new CodeInstruction(OpCodes.Call, isBundleCurrencyBasedInfo)
+        //        );
 
-            return matcher.InstructionEnumeration();
-        }
+        //    return matcher.InstructionEnumeration();
+        //}
 
-        public static bool IsBundleCurrencyBased(JunimoNoteMenu menu)
-        {
-            var ingredient = menu.currentPageBundle.ingredients.Last();
-            var ingredientId = ingredient.id;
-            return CurrencyBundle.CurrencyIds.ContainsValue(ingredientId);
-        }
+        //public static bool IsBundleCurrencyBased(JunimoNoteMenu menu)
+        //{
+        //    var ingredient = menu.currentPageBundle.ingredients.Last();
+        //    var ingredientId = ingredient.id;
+        //    return CurrencyBundle.CurrencyIds.ContainsValue(ingredientId);
+        //}
     }
 }

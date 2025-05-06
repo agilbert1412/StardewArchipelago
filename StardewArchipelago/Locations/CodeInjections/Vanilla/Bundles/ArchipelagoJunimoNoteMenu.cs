@@ -30,7 +30,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         private static LogHandler _logger;
         private static IModHelper _modHelper;
         private static StardewArchipelagoClient _archipelago;
-        private static ArchipelagoStateDto _state;
+        private static ArchipelagoWalletDto _wallet;
         private static LocationChecker _locationChecker;
         private static BundleReader _bundleReader;
 
@@ -46,12 +46,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         {
         }
 
-        public static void InitializeArchipelago(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker)
+        public static void InitializeArchipelago(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, ArchipelagoWalletDto wallet, LocationChecker locationChecker)
         {
             _logger = logger;
             _modHelper = modHelper;
             _archipelago = archipelago;
-            _state = state;
+            _wallet = wallet;
             _locationChecker = locationChecker;
             _bundleReader = new BundleReader();
         }
@@ -324,21 +324,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             spriteBatch.End();
             Game1.PushUIMode();
             spriteBatch.Begin(blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
-            var tokenAmount = _state.StoredStarTokens;
+            var tokenAmount = _wallet.StarTokens;
             spriteBatch.Draw(Game1.fadeToBlackRect, new Rectangle(16, 16, 128 + (tokenAmount > 999 ? 16 : 0), 64), Color.Black * 0.75f);
             spriteBatch.Draw(Game1.mouseCursors, new Vector2(32f, 32f), new Rectangle(338, 400, 8, 8), Color.White, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 1f);
             Game1.drawWithBorder(tokenAmount.ToString() ?? "", Color.Black, Color.White, new Vector2(72f, (float)(21 + (LocalizedContentManager.CurrentLanguageCode == LocalizedContentManager.LanguageCode.en ? 8 : (LocalizedContentManager.CurrentLanguageLatin ? 16 : 8)))), 0.0f, 1f, 1f, false);
-            //if (Game1.activeClickableMenu == null)
-            //{
-            // Game1.dayTimeMoneyBox.drawMoneyBox(spriteBatch, Game1.dayTimeMoneyBox.xPositionOnScreen, 4);
-            //}
+
             spriteBatch.End();
             Game1.PopUIMode();
             spriteBatch.Begin(blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
-            //if (Game1.IsMultiplayer)
-            //{
-            //    Game1.player.team.festivalScoreStatus.Draw(spriteBatch, new Vector2(32f, (float)(Game1.viewport.Height - 32)), draw_layer: 0.99f, vertical_origin: PlayerStatusList.VerticalAlignment.Bottom);
-            //}
         }
 
         private void TryPurchaseCurrentBundle(BundleIngredientDescription ingredient)
@@ -390,13 +383,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         private void TryPurchaseCurrentBundleWithStarTokens(BundleIngredientDescription ingredient)
         {
-            if (_state.StoredStarTokens < ingredient.stack)
+            if (_wallet.StarTokens < ingredient.stack)
             {
                 Game1.dayTimeMoneyBox.moneyShakeTimer = 600;
                 return;
             }
 
-            _state.StoredStarTokens -= ingredient.stack;
+            _wallet.StarTokens -= ingredient.stack;
 
             PerformCurrencyPurchase();
         }

@@ -7,7 +7,7 @@ namespace StardewArchipelago.Bundles
 {
     public class BundleItem
     {
-        private static readonly Dictionary<string, int> QualityTable = new() { { "Basic", 0 }, { "Silver", 1 }, { "Gold", 2 }, { "Iridium", 3 } };
+        internal static readonly Dictionary<string, int> QualityTable = new() { { "Basic", 0 }, { "Silver", 1 }, { "Gold", 2 }, { "Iridium", 3 } };
         public StardewItem StardewItem { get; set; }
         public int Amount { get; set; }
         public int Quality { get; set; }
@@ -40,6 +40,10 @@ namespace StardewArchipelago.Bundles
             if (id == "Pickles")
             {
                 id = "Pickle";
+            }
+            if (id == "Aged Roe")
+            {
+                id = "AgedRoe";
             }
             var bundleIngredient = new BundleIngredientDescription(id,
                 Amount, Quality,
