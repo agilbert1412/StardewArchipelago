@@ -51,6 +51,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     locationsToScout.Add(apItem.LocationName);
                 }
 
+                if (!locationsToScout.Any())
+                {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
                 _archipelago.ScoutStardewLocations(locationsToScout, true);
 
                 return MethodPrefix.RUN_ORIGINAL_METHOD;

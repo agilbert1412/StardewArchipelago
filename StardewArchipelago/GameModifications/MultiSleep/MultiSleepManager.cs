@@ -158,6 +158,15 @@ namespace StardewArchipelago.GameModifications.MultiSleep
                 possibleResponses.Add(new Response(MultiSleepUntilBehavior.TRAVELING_CART, "Traveling Cart"));
             }
             possibleResponses.Add(new Response(MultiSleepUntilBehavior.BOOKSELLER, "Bookseller"));
+            MultiSleepUntilBehavior.CheckAllCrops(out var anyNotReady, out var anyReady, out var allReady);
+            if (!anyReady)
+            {
+                possibleResponses.Add(new Response(MultiSleepUntilBehavior.ANY_CROP_READY, "Any Crop Ready"));
+            }
+            if (anyNotReady)
+            {
+                possibleResponses.Add(new Response(MultiSleepUntilBehavior.ALL_CROPS_READY, "All Crops Ready"));
+            }
             possibleResponses.Add(new Response(MultiSleepUntilBehavior.END_OF_MONTH, "End of month"));
             possibleResponses.Add(new Response("Cancel", "Nevermind").SetHotKey(Keys.Escape));
 
@@ -174,6 +183,8 @@ namespace StardewArchipelago.GameModifications.MultiSleep
                 case MultiSleepUntilBehavior.BIRTHDAY:
                 case MultiSleepUntilBehavior.TRAVELING_CART:
                 case MultiSleepUntilBehavior.BOOKSELLER:
+                case MultiSleepUntilBehavior.ANY_CROP_READY:
+                case MultiSleepUntilBehavior.ALL_CROPS_READY:
                     _currentMultiSleep = new MultiSleepUntilBehavior(untilKey);
                     StartSleep(instance);
                     return;

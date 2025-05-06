@@ -122,12 +122,6 @@ namespace StardewArchipelago.GameModifications.Seasons
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
-                if (MultiSleepManager.CurrentMultiSleep.ShouldKeepSleeping())
-                {
-                    ChooseNextSeasonBasedOnConfigPreference();
-                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
-                }
-
                 PromptForNextSeason();
                 return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
@@ -138,7 +132,7 @@ namespace StardewArchipelago.GameModifications.Seasons
             }
         }
 
-        private static void ChooseNextSeasonBasedOnConfigPreference()
+        public static void ChooseNextSeasonBasedOnConfigPreference()
         {
             var unlockedSeasons = GetUnlockedSeasons();
             if (unlockedSeasons.Count == 1)
@@ -209,39 +203,7 @@ namespace StardewArchipelago.GameModifications.Seasons
         private static void SetNextSeasonAndSleep(string season)
         {
             SetNextSeason(season);
-            NewDayOriginal(0);
-        }
-
-        private static void NewDayOriginal(float timeToPause)
-        {
-            if (Game1.activeClickableMenu is ReadyCheckDialog { checkName: "sleep" } activeClickableMenu && !activeClickableMenu.isCancelable())
-            {
-                activeClickableMenu.confirm();
-            }
-            Game1.currentMinigame = null;
-            Game1.newDay = true;
-            Game1.newDaySync.create();
-            if (Game1.player.isInBed.Value || Game1.player.passedOut)
-            {
-                Game1.nonWarpFade = true;
-
-                // private static ScreenFade screenFade;
-                var screenFadeField = _helper.Reflection.GetField<ScreenFade>(typeof(Game1), "screenFade");
-                screenFadeField.GetValue().FadeScreenToBlack(Game1.player.passedOut ? 1.1f : 0.0f);
-
-                Game1.player.Halt();
-                Game1.player.currentEyes = 1;
-                Game1.player.blinkTimer = -4000;
-                Game1.player.CanMove = false;
-                Game1.player.passedOut = false;
-                Game1.pauseTime = timeToPause;
-            }
-            if (Game1.activeClickableMenu == null || Game1.dialogueUp)
-            {
-                return;
-            }
-            Game1.activeClickableMenu.emergencyShutDown();
-            Game1.exitActiveMenu();
+            MultiSleepBehavior.SleepOnce();
         }
 
         // public int CountdownToWedding
