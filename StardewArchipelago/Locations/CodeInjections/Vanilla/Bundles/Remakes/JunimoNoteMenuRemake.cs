@@ -45,7 +45,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
         public bool BundlesChanged;
         public static ScreenSwipe ScreenSwipe;
         public static string HoverText = "";
-        public List<BundleRemake> Bundles = new();
+        public List<ArchipelagoBundle> Bundles = new();
         public static TemporaryAnimatedSpriteList TempSprites = new();
         public List<ClickableTextureComponent> IngredientSlots = new();
         public List<ClickableTextureComponent> IngredientList = new();
@@ -61,7 +61,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
         public Action<int> OnIngredientDeposit;
         public Action<JunimoNoteMenuRemake> OnBundleComplete;
         public Action<JunimoNoteMenuRemake> OnScreenSwipeFinished;
-        public BundleRemake CurrentPageBundle;
+        public ArchipelagoBundle CurrentPageBundle;
         private int _oldTriggerSpot;
 
         public JunimoNoteMenuRemake(bool fromGameMenu, int area = 1, bool fromThisMenu = false)
@@ -136,7 +136,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             snapToDefaultClickableComponent();
         }
 
-        public JunimoNoteMenuRemake(BundleRemake b, string noteTexturePath)
+        public JunimoNoteMenuRemake(ArchipelagoBundle b, string noteTexturePath)
           : base(Game1.uiViewport.Width / 2 - 640, Game1.uiViewport.Height / 2 - 360, 1280, 720, true)
         {
             _singleBundleMenu = true;
@@ -323,15 +323,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             {
                 if (key.Contains(areaNameFromNumber))
                 {
-                    var int32 = Convert.ToInt32(key.Split('/')[1]);
                     var bundles = this.Bundles;
-                    var bundle = new BundleRemake(int32, bundleData[key], bundlesComplete[int32], GetBundleLocationFromNumber(whichBundle), NOTE_TEXTURE_NAME, this);
-                    bundle.myID = whichBundle + REGION_BUNDLE_MODIFIER;
-                    bundle.rightNeighborID = -7777;
-                    bundle.leftNeighborID = -7777;
-                    bundle.upNeighborID = -7777;
-                    bundle.downNeighborID = -7777;
-                    bundle.fullyImmutable = true;
+                    var bundle = CreateBundle(bundlesComplete, key, bundleData, whichBundle);
                     bundles.Add(bundle);
                     ++whichBundle;
                 }
@@ -359,6 +352,19 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             communityCenter.markAreaAsComplete(whichArea);
             exitFunction = restoreAreaOnExit;
             communityCenter.areaCompleteReward(whichArea);
+        }
+
+        protected virtual ArchipelagoBundle CreateBundle(Dictionary<int, bool[]> bundlesComplete, string key, Dictionary<string, string> bundleData, int whichBundle)
+        {
+            var int32 = Convert.ToInt32(key.Split('/')[1]);
+            var bundle = new ArchipelagoBundle(int32, bundleData[key], bundlesComplete[int32], GetBundleLocationFromNumber(whichBundle), NOTE_TEXTURE_NAME, (ArchipelagoJunimoNoteMenu)this);
+            bundle.myID = whichBundle + REGION_BUNDLE_MODIFIER;
+            bundle.rightNeighborID = -7777;
+            bundle.leftNeighborID = -7777;
+            bundle.upNeighborID = -7777;
+            bundle.downNeighborID = -7777;
+            bundle.fullyImmutable = true;
+            return bundle;
         }
 
         public virtual bool HighlightObjects(Item item)
@@ -1560,7 +1566,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             UpdateIngredientSlots();
         }
 
-        private void SetUpBundleSpecificPage(BundleRemake b)
+        private void SetUpBundleSpecificPage(ArchipelagoBundle b)
         {
             TempSprites.Clear();
             CurrentPageBundle = b;
@@ -1817,7 +1823,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             }
         }
 
-        private Point GetBundleLocationFromNumber(int whichBundle)
+        protected Point GetBundleLocationFromNumber(int whichBundle)
         {
             var locationFromNumber = new Point(xPositionOnScreen, yPositionOnScreen);
             switch (whichBundle)

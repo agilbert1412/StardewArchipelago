@@ -16,6 +16,11 @@ namespace StardewArchipelago.Archipelago
 
         public void GiveHintTip(ArchipelagoSession session)
         {
+            if (session == null)
+            {
+                return;
+            }
+
             if (!TryGetCurrentHintCost(session, out var hintCost))
             {
                 return;

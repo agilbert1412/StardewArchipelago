@@ -48,7 +48,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Bundles
         {
             try
             {
-                __instance.bundleMutexes[area].RequestLock(() => Game1.activeClickableMenu = new ArchipelagoJunimoNoteMenu(_logger, _modHelper, _archipelago, _state, _locationChecker, _bundleReader, area, __instance.bundlesDict()));
+                __instance.bundleMutexes[area].RequestLock(() => Game1.activeClickableMenu = new ArchipelagoJunimoNoteMenu(area, __instance.bundlesDict()));
                 return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
@@ -63,7 +63,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Bundles
         {
             try
             {
-                __instance.bundleMutex.RequestLock(() => Game1.activeClickableMenu = new ArchipelagoJunimoNoteMenu(_logger, _modHelper, _archipelago, _state, _locationChecker, _bundleReader, 6, Game1.RequireLocation<CommunityCenter>("CommunityCenter").bundlesDict()));
+                __instance.bundleMutex.RequestLock(() => Game1.activeClickableMenu = new ArchipelagoJunimoNoteMenu(6, Game1.RequireLocation<CommunityCenter>("CommunityCenter").bundlesDict()));
                 return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
@@ -83,7 +83,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Bundles
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
-                value = new ArchipelagoJunimoNoteMenu(_logger, _modHelper, _archipelago, _state, _locationChecker, _bundleReader, junimoNoteMenu.fromGameMenu, junimoNoteMenu.whichArea, junimoNoteMenu.fromThisMenu);
+                value = new ArchipelagoJunimoNoteMenu(junimoNoteMenu.fromGameMenu, junimoNoteMenu.whichArea, junimoNoteMenu.fromThisMenu);
                 return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)

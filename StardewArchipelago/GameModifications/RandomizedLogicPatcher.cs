@@ -753,7 +753,7 @@ namespace StardewArchipelago.GameModifications
             );
 
             _harmony.Patch(
-                original: AccessTools.PropertySetter(typeof(CommunityCenter), nameof(Game1.activeClickableMenu)),
+                original: AccessTools.PropertySetter(typeof(Game1), nameof(Game1.activeClickableMenu)),
                 prefix: new HarmonyMethod(typeof(BundleMenuInjection), nameof(BundleMenuInjection.SetActiveClickableMenu_UseJunimoNoteMenuRemake_Prefix))
             );
 

@@ -1,4 +1,5 @@
 ﻿#nullable disable
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using KaitoKid.ArchipelagoUtilities.Net;
@@ -26,36 +27,33 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         private const int REMIXED_BUNDLE_INDEX_THRESHOLD = 100;
         private const int CUSTOM_BUNDLE_INDEX_THRESHOLD = 200;
 
-        private LogHandler _logger;
-        private IModHelper _modHelper;
-        private StardewArchipelagoClient _archipelago;
-        private ArchipelagoStateDto _state;
-        private LocationChecker _locationChecker;
-        private BundleReader _bundleReader;
+        private static LogHandler _logger;
+        private static IModHelper _modHelper;
+        private static StardewArchipelagoClient _archipelago;
+        private static ArchipelagoStateDto _state;
+        private static LocationChecker _locationChecker;
+        private static BundleReader _bundleReader;
 
-        public ArchipelagoJunimoNoteMenu(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, BundleReader bundleReader, bool fromGameMenu, int area = 1, bool fromThisMenu = false) : base(fromGameMenu, area, fromThisMenu)
+        public ArchipelagoJunimoNoteMenu(bool fromGameMenu, int area = 1, bool fromThisMenu = false) : base(fromGameMenu, area, fromThisMenu)
         {
-            InitializeArchipelago(logger, modHelper, archipelago, state, locationChecker, bundleReader);
         }
 
-        public ArchipelagoJunimoNoteMenu(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, BundleReader bundleReader, int whichArea, Dictionary<int, bool[]> bundlesComplete) : base(whichArea, bundlesComplete)
+        public ArchipelagoJunimoNoteMenu(int whichArea, Dictionary<int, bool[]> bundlesComplete) : base(whichArea, bundlesComplete)
         {
-            InitializeArchipelago(logger, modHelper, archipelago, state, locationChecker, bundleReader);
         }
 
-        public ArchipelagoJunimoNoteMenu(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, BundleReader bundleReader, BundleRemake b, string noteTexturePath) : base(b, noteTexturePath)
+        public ArchipelagoJunimoNoteMenu(ArchipelagoBundle b, string noteTexturePath) : base(b, noteTexturePath)
         {
-            InitializeArchipelago(logger, modHelper, archipelago, state, locationChecker, bundleReader);
         }
 
-        private void InitializeArchipelago(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, BundleReader bundleReader)
+        public static void InitializeArchipelago(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker)
         {
             _logger = logger;
             _modHelper = modHelper;
             _archipelago = archipelago;
             _state = state;
             _locationChecker = locationChecker;
-            _bundleReader = bundleReader;
+            _bundleReader = new BundleReader();
         }
 
         public override void CheckForRewards()
@@ -69,7 +67,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         {
             if (FromGameMenu || FromThisMenu)
             {
-                return new ArchipelagoJunimoNoteMenu(_logger, _modHelper, _archipelago, _state, _locationChecker, _bundleReader, FromGameMenu, WhichArea, FromThisMenu)
+                return new ArchipelagoJunimoNoteMenu(FromGameMenu, WhichArea, FromThisMenu)
                 {
                     GameMenuTabToReturnTo = GameMenuTabToReturnTo,
                     MenuToReturnTo = MenuToReturnTo,
@@ -77,7 +75,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
             else
             {
-                return new ArchipelagoJunimoNoteMenu(_logger, _modHelper, _archipelago, _state, _locationChecker, _bundleReader, WhichArea, Game1.RequireLocation<CommunityCenter>("CommunityCenter").bundlesDict())
+                return new ArchipelagoJunimoNoteMenu(WhichArea, Game1.RequireLocation<CommunityCenter>("CommunityCenter").bundlesDict())
                 {
                     GameMenuTabToReturnTo = GameMenuTabToReturnTo,
                     MenuToReturnTo = MenuToReturnTo,
@@ -434,6 +432,19 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
 
             // Game1.multiplayer.globalChatInfoMessage("Bundle");
+        }
+
+        protected override ArchipelagoBundle CreateBundle(Dictionary<int, bool[]> bundlesComplete, string key, Dictionary<string, string> bundleData, int whichBundle)
+        {
+            var int32 = Convert.ToInt32(key.Split('/')[1]);
+            var bundle = new ArchipelagoBundle(int32, bundleData[key], bundlesComplete[int32], GetBundleLocationFromNumber(whichBundle), NOTE_TEXTURE_NAME, this);
+            bundle.myID = whichBundle + REGION_BUNDLE_MODIFIER;
+            bundle.rightNeighborID = -7777;
+            bundle.leftNeighborID = -7777;
+            bundle.upNeighborID = -7777;
+            bundle.downNeighborID = -7777;
+            bundle.fullyImmutable = true;
+            return bundle;
         }
     }
 }

@@ -243,13 +243,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
 
             var whichBundle = (currentRaccoonBundleNumber - 1) % 5;
-            var bundle = new BundleRemake(currentRaccoonBundleName, null, ingredients, new bool[1])
+            var bundle = new ArchipelagoBundle(currentRaccoonBundleName, null, ingredients, new bool[1])
             {
                 BundleTextureOverride = Game1.content.Load<Texture2D>("LooseSprites\\BundleSprites"),
                 BundleTextureIndexOverride = 14 + whichBundle,
                 NumberOfIngredientSlots = raccoonBundle.NumberRequired,
             };
-            var raccoonNoteMenu = new ArchipelagoJunimoNoteMenu(_logger, _modHelper, _archipelago, _state, _locationChecker, _bundleReader, bundle, "LooseSprites\\raccoon_bundle_menu");
+            var raccoonNoteMenu = new ArchipelagoJunimoNoteMenu(bundle, "LooseSprites\\raccoon_bundle_menu");
             raccoonNoteMenu.OnIngredientDeposit = x => _state.CurrentRaccoonBundleStatus[x] = true;
             raccoonNoteMenu.OnBundleComplete = _ => BundleComplete(raccoon);
             raccoonNoteMenu.OnScreenSwipeFinished = _ => BundleCompleteAfterSwipe(raccoon);
