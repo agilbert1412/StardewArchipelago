@@ -15,11 +15,11 @@ namespace StardewArchipelago.Constants
         public static readonly string DEATH = IDProvider.CreateId("Death");
         public static readonly string STEP = IDProvider.CreateId("Step");
 
-        public static readonly string WORN_BOOTS = IDProvider.CreateId("Worn Boots");
-        public static readonly string WORN_SHIRT = IDProvider.CreateId("Worn Shirt");
-        public static readonly string WORN_PANTS = IDProvider.CreateId("Worn Pants");
-        public static readonly string WORN_HAT = IDProvider.CreateId("Worn Hat");
-        public static readonly string WORN_RING = IDProvider.CreateId("Worn Ring");
+        public static readonly string WORN_BOOTS = IDProvider.CreateId("WornBoots");
+        public static readonly string WORN_SHIRT = IDProvider.CreateId("WornShirt");
+        public static readonly string WORN_PANTS = IDProvider.CreateId("WornPants");
+        public static readonly string WORN_HAT = IDProvider.CreateId("WornHat");
+        public static readonly string WORN_RING = IDProvider.CreateId("WornRing");
 
         public static readonly Dictionary<string, string> MemeItemIds = new()
         {
