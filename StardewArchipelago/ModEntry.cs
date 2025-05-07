@@ -134,6 +134,8 @@ namespace StardewArchipelago
             _helper.Events.GameLoop.DayEnding += OnDayEnding;
             _helper.Events.GameLoop.ReturnedToTitle += OnReturnedToTitle;
 
+            _helper.Events.Multiplayer.ModMessageReceived += MultiplayerHandler.Instance.OnModMessageReceived;
+            _helper.Events.Multiplayer.PeerConnected += MultiplayerHandler.Instance.OnPeerConnected;
 
             _helper.ConsoleCommands.Add("connect_override", $"Overrides your next connection to Archipelago. {CONNECT_SYNTAX}", OnCommandConnectToArchipelago);
             _helper.ConsoleCommands.Add("export_all_gifts", "Export all currently loaded giftable items and their traits", ExportGifts);
