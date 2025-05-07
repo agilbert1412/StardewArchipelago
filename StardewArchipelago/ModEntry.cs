@@ -526,6 +526,7 @@ namespace StardewArchipelago
         private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
         {
             _archipelago.APUpdate();
+            State?.Wallet?.CookieClicker?.DoFrame();
             if (!_archipelago.IsConnected || _itemManager == null)
             {
                 return;

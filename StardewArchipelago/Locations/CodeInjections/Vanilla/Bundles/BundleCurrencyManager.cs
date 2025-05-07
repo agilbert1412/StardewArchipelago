@@ -52,9 +52,18 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 return;
             }
 
-            var textSize = Game1.dialogueFont.MeasureString(amountText).X;
-            var textPosition = new Vector2(_menu.xPositionOnScreen + 936 - textSize / 2f, _menu.yPositionOnScreen + 292);
-            b.DrawString(Game1.dialogueFont, amountText, textPosition, Game1.textColor * 0.9f);
+            DrawText(b, amountText, 936, 292);
+        }
+
+        private void DrawText(SpriteBatch b, string text, int relativePositionX, int relativePositionY, SpriteFont font = null)
+        {
+            if (font == null)
+            {
+                font = Game1.dialogueFont;
+            }
+            var textSize = font.MeasureString(text).X;
+            var textPosition = new Vector2(_menu.xPositionOnScreen + relativePositionX - textSize / 2f, _menu.yPositionOnScreen + relativePositionY);
+            b.DrawString(font, text, textPosition, Game1.textColor * 0.9f);
         }
 
         private string DrawCurrencyAndGetAmount(SpriteBatch b, BundleIngredientDescription ingredient, string ingredientId)
@@ -98,12 +107,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
             else if (ingredientId == MemeIDProvider.CLIC)
             {
-                Game1.specialCurrencyDisplay.ShowCurrency(null);
-                return "";
+                DrawCookiesCurrency(b);
+                amountText += " Cookies";
+                // Game1.specialCurrencyDisplay.ShowCurrency(null);
+                // return "";
             }
             else if (ingredientId == MemeIDProvider.COOKIES_CLICKS)
             {
-                DrawCookiesCurrency();
+                DrawCookiesCurrency(b);
                 amountText += " Cookies";
             }
             else if (ingredientId == MemeIDProvider.DEATH)
@@ -144,9 +155,26 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             DrawSpecialCurrency((int)Game1.stats.StepsTaken, Game1.mouseCursors, new Rectangle(100, 428, 10, 10));
         }
 
-        private void DrawCookiesCurrency()
+        private void DrawCookiesCurrency(SpriteBatch spriteBatch)
         {
-            DrawSpecialCurrency(_wallet.CookieClicker.GetCookies(), Game1.objectSpriteSheet, new Rectangle(112, 146, 14, 14));
+            DrawSpecialCurrency(_wallet.CookieClicker.GetCookies(), Game1.objectSpriteSheet, new Rectangle(112, 144, 16, 16), 3f);
+
+            var pricesY = 350;
+            var amountsY = 410;
+            var centeredX = 936;
+            var pricesXOffset = 200;
+            var amountsXOffset = 100;
+            var cursorPriceX = centeredX - pricesXOffset;
+            var grandmaPriceX = centeredX + pricesXOffset;
+            var cursorAmountX = centeredX - amountsXOffset;
+            var grandmaAmountX = centeredX + amountsXOffset;
+
+            var font = Game1.smallFont;
+
+            DrawText(spriteBatch, $"cost: {_wallet.CookieClicker.GetCursorUpgradePrice()}", cursorPriceX, pricesY, font);
+            DrawText(spriteBatch, $"{_wallet.CookieClicker.CursorUpgrades}", cursorAmountX, amountsY, font);
+            DrawText(spriteBatch, $"{_wallet.CookieClicker.Grandmas}", grandmaAmountX, amountsY, font);
+            DrawText(spriteBatch, $"cost: {_wallet.CookieClicker.GetGrandmaUpgradePrice()}", grandmaPriceX, pricesY, font);
         }
 
         private void DrawDeathCurrency()
@@ -154,14 +182,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             DrawSpecialCurrency(_wallet.Deaths, Game1.mouseCursors, new Rectangle(497, 1776, 14, 16));
         }
 
-        private static void DrawSpecialCurrency(int amountOwned, Texture2D texture, Rectangle sourceRectangle)
+        private static void DrawSpecialCurrency(int amountOwned, Texture2D texture, Rectangle sourceRectangle, float scale = 4f)
         {
             var spriteBatch = Game1.spriteBatch;
             spriteBatch.End();
             Game1.PushUIMode();
             spriteBatch.Begin(blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
             spriteBatch.Draw(Game1.fadeToBlackRect, new Rectangle(16, 16, 128 + (amountOwned > 999 ? 16 : 0), 64), Color.Black * 0.75f);
-            spriteBatch.Draw(texture, new Vector2(32f, 32f), sourceRectangle, Color.White, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 1f);
+            spriteBatch.Draw(texture, new Vector2(32f, 32f), sourceRectangle, Color.White, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 1f);
             Game1.drawWithBorder(amountOwned.ToString() ?? "", Color.Black, Color.White, new Vector2(72f, (float)(21 + (LocalizedContentManager.CurrentLanguageCode == LocalizedContentManager.LanguageCode.en ? 8 : (LocalizedContentManager.CurrentLanguageLatin ? 16 : 8)))), 0.0f, 1f, 1f, false);
 
             spriteBatch.End();
@@ -221,7 +249,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
             if (ingredient.id == MemeIDProvider.CLIC)
             {
-                TryPurchaseCurrentBundleWithOneClic(ingredient);
+                TryPurchaseCurrentBundleWithCookies(ingredient);
+                // TryPurchaseCurrentBundleWithOneClic(ingredient);
                 return;
             }
         }

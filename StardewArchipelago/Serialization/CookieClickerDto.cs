@@ -85,14 +85,14 @@ namespace StardewArchipelago.Serialization
             }
         }
 
-        private double GetCursorUpgradePrice()
+        public int GetCursorUpgradePrice()
         {
-            return 10 * Math.Pow(5, CursorUpgrades);
+            return (int)Math.Floor(10 * Math.Pow(5, CursorUpgrades));
         }
 
-        private double GetGrandmaUpgradePrice()
+        public int GetGrandmaUpgradePrice()
         {
-            return 100 * Math.Pow(1.1, Grandmas);
+            return (int)Math.Floor(100 * Math.Pow(1.1, Grandmas));
         }
     }
 }

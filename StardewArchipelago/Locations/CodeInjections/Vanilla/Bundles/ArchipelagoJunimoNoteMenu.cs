@@ -410,23 +410,23 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             var buttonBackgroundRectangle = new Rectangle(512, 244, 18, 18);
             var xStart = xPositionOnScreen + 800;
             var xPerButton = 100;
-            var y = yPositionOnScreen + 350;
+            var y = yPositionOnScreen + 335;
             var buttonScale = 4f;
             var grandmaScale = 3f;
 
-            var cookieButtonRect = new Rectangle(xStart, y, 72, 72);
-            var cookieBackground = new ClickableTextureComponent(cookieButtonRect, NoteTexture, buttonBackgroundRectangle, buttonScale);
-            var cookieTextureRect = new Rectangle(112, 144, 16, 16);
-            var cookieRect = GetCenteredTexture(cookieButtonRect, cookieTextureRect, buttonScale, buttonScale);
-            var cookieButton = new ClickableTextureComponent(cookieRect, Game1.objectSpriteSheet, cookieTextureRect, buttonScale);
-            cookieButton.myID = 793;
-
-            var cursorButtonRect = new Rectangle(xStart + xPerButton, y, 72, 72);
+            var cursorButtonRect = new Rectangle(xStart, y, 72, 72);
             var cursorBackground = new ClickableTextureComponent(cursorButtonRect, NoteTexture, buttonBackgroundRectangle, buttonScale);
             var cursorTextureRect = new Rectangle(0, 0, 8, 10);
             var cursorRect = GetCenteredTexture(cursorButtonRect, cursorTextureRect, buttonScale, buttonScale);
             var cursorButton = new ClickableTextureComponent(cursorRect, Game1.mouseCursors, cursorTextureRect, buttonScale);
-            cursorButton.myID = 794;
+            cursorButton.myID = 793;
+
+            var cookieButtonRect = new Rectangle(xStart + xPerButton, y, 72, 72);
+            var cookieBackground = new ClickableTextureComponent(cookieButtonRect, NoteTexture, buttonBackgroundRectangle, buttonScale);
+            var cookieTextureRect = new Rectangle(112, 144, 16, 16);
+            var cookieRect = GetCenteredTexture(cookieButtonRect, cookieTextureRect, buttonScale, buttonScale);
+            var cookieButton = new ClickableTextureComponent(cookieRect, Game1.objectSpriteSheet, cookieTextureRect, buttonScale);
+            cookieButton.myID = 794;
 
             var grandmaButtonRect = new Rectangle(xStart + (xPerButton*2), y, 72, 72);
             var grandmaBackground = new ClickableTextureComponent(grandmaButtonRect, NoteTexture, buttonBackgroundRectangle, buttonScale);
@@ -435,11 +435,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             var grandmaButton = new ClickableTextureComponent(grandmaRect, Game1.getCharacterFromName("Evelyn").Sprite.Texture, grandmaTextureRect, grandmaScale);
             grandmaButton.myID = 795;
 
-            cookieButton.leftNeighborID = REGION_BACK_BUTTON;
-            cookieButton.rightNeighborID = cursorButton.myID;
-            cursorButton.leftNeighborID = cookieButton.myID;
-            cursorButton.rightNeighborID = grandmaButton.myID;
-            grandmaButton.leftNeighborID = cursorButton.myID;
+            cursorButton.leftNeighborID = REGION_BACK_BUTTON;
+            cursorButton.rightNeighborID = cookieButton.myID;
+            cookieButton.leftNeighborID = cursorButton.myID;
+            cookieButton.rightNeighborID = grandmaButton.myID;
+            grandmaButton.leftNeighborID = cookieButton.myID;
             grandmaButton.rightNeighborID = REGION_PURCHASE_BUTTON;
 
             ExtraButtons.Add(cookieBackground, () => { });
