@@ -392,7 +392,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 return;
             }
 
-            var textureComponent = new ClickableTextureComponent(new Rectangle(xPositionOnScreen + 800, yPositionOnScreen + 400, 260, 72), MemeTexture, new Rectangle(0, 0, 53, 20), 4f);
+            var textureComponent = new ClickableTextureComponent(new Rectangle(xPositionOnScreen + 825, yPositionOnScreen + 400, 260, 72), MemeTexture, new Rectangle(0, 0, 53, 20), 4f);
             textureComponent.myID = 796;
             textureComponent.leftNeighborID = REGION_BACK_BUTTON;
             textureComponent.rightNeighborID = REGION_PURCHASE_BUTTON;
