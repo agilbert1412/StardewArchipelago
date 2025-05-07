@@ -11,7 +11,7 @@ namespace StardewArchipelago.Constants
         public static readonly string ENERGY = IDProvider.CreateId("Energy");
         public static readonly string TIME = IDProvider.CreateId("Time");
         public static readonly string CLIC = IDProvider.CreateId("Clic");
-        public static readonly string COOKIES_CLICKING = IDProvider.CreateId("CookiesClicking");
+        public static readonly string COOKIES_CLICKS = IDProvider.CreateId("CookieClics");
         public static readonly string DEATH = IDProvider.CreateId("Death");
         public static readonly string STEP = IDProvider.CreateId("Step");
 

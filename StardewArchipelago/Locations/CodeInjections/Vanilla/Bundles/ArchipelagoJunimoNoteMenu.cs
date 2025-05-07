@@ -19,6 +19,7 @@ using StardewArchipelago.Archipelago;
 using StardewArchipelago.Bundles;
 using StardewArchipelago.Logging;
 using StardewArchipelago.Serialization;
+using System.Reflection;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 {
@@ -379,8 +380,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                     SetUpDonateButton();
                     break;
                 case MemeBundleNames.COOKIE_CLICKER:
-                    // SetUpCookiesButtons();
-                    // TODO: Cookies and Stuff
+                    SetUpCookiesButtons();
                     break;
             }
         }
@@ -398,6 +398,74 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             textureComponent.rightNeighborID = REGION_PURCHASE_BUTTON;
             _donateButton = textureComponent;
             ExtraButtons.Add(_donateButton, () => _currencyManager.DonateToBundle(CurrentPageBundle.Ingredients.Last().id));
+        }
+
+        private void SetUpCookiesButtons()
+        {
+            if (FromGameMenu)
+            {
+                return;
+            }
+
+            var buttonBackgroundRectangle = new Rectangle(512, 244, 18, 18);
+            var xStart = xPositionOnScreen + 800;
+            var xPerButton = 100;
+            var y = yPositionOnScreen + 350;
+            var buttonScale = 4f;
+            var grandmaScale = 3f;
+
+            var cookieButtonRect = new Rectangle(xStart, y, 72, 72);
+            var cookieBackground = new ClickableTextureComponent(cookieButtonRect, NoteTexture, buttonBackgroundRectangle, buttonScale);
+            var cookieTextureRect = new Rectangle(112, 144, 16, 16);
+            var cookieRect = GetCenteredTexture(cookieButtonRect, cookieTextureRect, buttonScale, buttonScale);
+            var cookieButton = new ClickableTextureComponent(cookieRect, Game1.objectSpriteSheet, cookieTextureRect, buttonScale);
+            cookieButton.myID = 793;
+
+            var cursorButtonRect = new Rectangle(xStart + xPerButton, y, 72, 72);
+            var cursorBackground = new ClickableTextureComponent(cursorButtonRect, NoteTexture, buttonBackgroundRectangle, buttonScale);
+            var cursorTextureRect = new Rectangle(0, 0, 8, 10);
+            var cursorRect = GetCenteredTexture(cursorButtonRect, cursorTextureRect, buttonScale, buttonScale);
+            var cursorButton = new ClickableTextureComponent(cursorRect, Game1.mouseCursors, cursorTextureRect, buttonScale);
+            cursorButton.myID = 794;
+
+            var grandmaButtonRect = new Rectangle(xStart + (xPerButton*2), y, 72, 72);
+            var grandmaBackground = new ClickableTextureComponent(grandmaButtonRect, NoteTexture, buttonBackgroundRectangle, buttonScale);
+            var grandmaTextureRect = new Rectangle(0, 168, 16, 24);
+            var grandmaRect = GetCenteredTexture(grandmaButtonRect, grandmaTextureRect, buttonScale, grandmaScale);
+            var grandmaButton = new ClickableTextureComponent(grandmaRect, Game1.getCharacterFromName("Evelyn").Sprite.Texture, grandmaTextureRect, grandmaScale);
+            grandmaButton.myID = 795;
+
+            cookieButton.leftNeighborID = REGION_BACK_BUTTON;
+            cookieButton.rightNeighborID = cursorButton.myID;
+            cursorButton.leftNeighborID = cookieButton.myID;
+            cursorButton.rightNeighborID = grandmaButton.myID;
+            grandmaButton.leftNeighborID = cursorButton.myID;
+            grandmaButton.rightNeighborID = REGION_PURCHASE_BUTTON;
+
+            ExtraButtons.Add(cookieBackground, () => { });
+            ExtraButtons.Add(cursorBackground, () => { });
+            ExtraButtons.Add(grandmaBackground, () => { });
+            ExtraButtons.Add(cookieButton, _wallet.CookieClicker.ClickCookie);
+            ExtraButtons.Add(cursorButton, _wallet.CookieClicker.UpgradeCursor);
+            ExtraButtons.Add(grandmaButton, _wallet.CookieClicker.UpgradeGrandma);
+        }
+
+        private static Rectangle GetCenteredTexture(Rectangle buttonRect, Rectangle textureRect, float buttonScale, float textureScale)
+        {
+            var buttonScaledWidth = (int)(buttonRect.Width / buttonScale);
+            var buttonScaledHeight = (int)(buttonRect.Height / buttonScale);
+            var textureScaledWidth = (int)(textureRect.Width / buttonScale * textureScale);
+            var textureScaledHeight = (int)(textureRect.Height / buttonScale * textureScale);
+            var widthDifference = buttonScaledWidth - textureScaledWidth;
+            var heightDifference = buttonScaledHeight - textureScaledHeight;
+            var xOffset = (int)(widthDifference * buttonScale / 2);
+            var yOffset = (int)(heightDifference * buttonScale / 2);
+            var centeredX = buttonRect.X + xOffset;
+            var centeredY = buttonRect.Y + yOffset;
+            return new Rectangle(centeredX,
+                centeredY,
+                buttonRect.Width,
+                buttonRect.Height);
         }
 
         protected override void TakeDownSpecificBundleComponents()

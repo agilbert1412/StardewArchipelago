@@ -7,7 +7,7 @@
         public int Energy { get; set; }
         public int Time { get; set; }
         public int Deaths { get; set; }
-        public int Cookies { get; set; }
+        public CookieClickerDto CookieClicker { get; set; }
 
         public ArchipelagoWalletDto()
         {
@@ -16,7 +16,7 @@
             Energy = 0;
             Time = 0;
             Deaths = 0;
-            Cookies = 0;
+            CookieClicker = new CookieClickerDto();
         }
     }
 }

@@ -46,7 +46,7 @@ namespace StardewArchipelago.Bundles
             { "Energy", MemeIDProvider.ENERGY },
             { "Time", MemeIDProvider.TIME },
             { "Clic", MemeIDProvider.CLIC },
-            { "Cookies Clicking", MemeIDProvider.COOKIES_CLICKING },
+            { "CookieClics", MemeIDProvider.COOKIES_CLICKS },
             { "Death", MemeIDProvider.DEATH },
             { "Steps", MemeIDProvider.STEP },
         };

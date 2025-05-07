@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using StardewArchipelago.Bundles;
 using StardewValley;
 using StardewValley.Locations;
 
@@ -31,7 +32,7 @@ namespace StardewArchipelago.Stardew
             {
                 var splitKey = key.Split('/');
                 var bundleId = Convert.ToInt32(splitKey[1]);
-                var isCompleted = IsBundleComplete(communityCenter, bundleId);
+                var isCompleted = IsBundleComplete(communityCenter, bundleId, bundleData);
                 if (isCompleted)
                 {
                     var bundleName = bundleData.Split("/").First();
@@ -63,9 +64,13 @@ namespace StardewArchipelago.Stardew
             return Game1.locations.OfType<CommunityCenter>().First();
         }
 
-        private bool IsBundleComplete(CommunityCenter communityCenter, int bundleId)
+        private bool IsBundleComplete(CommunityCenter communityCenter, int bundleId, string bundleData)
         {
-            if (GetAreaNumberFromId(bundleId) == Area.Vault)
+            var dataFields = bundleData.Split("/");
+            var name = dataFields[0];
+            var ingredients = dataFields[2];
+            var firstIngredientId = ingredients.Split(" ")[0];
+            if (CurrencyBundle.CurrencyIds.ContainsValue(firstIngredientId))
             {
                 return communityCenter.bundles[bundleId][0];
             }

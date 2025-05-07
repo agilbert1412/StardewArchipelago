@@ -1556,7 +1556,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                 texture = CurrentPageBundle.BundleTextureOverride;
                 num2 = 0;
             }
-            b.Draw(texture, new Vector2(xPositionOnScreen + 872, yPositionOnScreen + 88), new Rectangle(num1 * 16 * 2 % texture.Width, num2 + 32 * (num1 * 16 * 2 / texture.Width), 32, 32), Color.White, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 0.15f);
+            var scale = 128f / texture.ActualWidth;
+            b.Draw(texture, new Vector2(xPositionOnScreen + 872, yPositionOnScreen + 88), new Rectangle(num1 * 16 * 2 % texture.Width, num2 + 32 * (num1 * 16 * 2 / texture.Width), texture.ActualWidth, texture.ActualHeight), Color.White, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 0.15f);
             if (CurrentPageBundle.label != null)
             {
                 var x = Game1.dialogueFont.MeasureString(!Game1.player.hasOrWillReceiveMail("canReadJunimoText") ? "???" : Game1.content.LoadString("Strings\\UI:JunimoNote_BundleName", CurrentPageBundle.label)).X;

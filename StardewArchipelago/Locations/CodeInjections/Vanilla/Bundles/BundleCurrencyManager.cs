@@ -101,7 +101,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 Game1.specialCurrencyDisplay.ShowCurrency(null);
                 return "";
             }
-            else if (ingredientId == MemeIDProvider.COOKIES_CLICKING)
+            else if (ingredientId == MemeIDProvider.COOKIES_CLICKS)
             {
                 DrawCookiesCurrency();
                 amountText += " Cookies";
@@ -146,7 +146,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         private void DrawCookiesCurrency()
         {
-            DrawSpecialCurrency(_wallet.Cookies, Game1.objectSpriteSheet, new Rectangle(112, 146, 14, 14));
+            DrawSpecialCurrency(_wallet.CookieClicker.GetCookies(), Game1.objectSpriteSheet, new Rectangle(112, 146, 14, 14));
         }
 
         private void DrawDeathCurrency()
@@ -213,7 +213,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 return;
             }
 
-            if (ingredient.id == MemeIDProvider.COOKIES_CLICKING)
+            if (ingredient.id == MemeIDProvider.COOKIES_CLICKS)
             {
                 TryPurchaseCurrentBundleWithCookies(ingredient);
                 return;
@@ -263,7 +263,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         private void TryPurchaseCurrentBundleWithCookies(BundleIngredientDescription ingredient)
         {
-            TryPurchaseCurrentBundleWithWalletCurrency(ingredient, _wallet.Cookies, payAmount => _wallet.Cookies -= payAmount);
+            TryPurchaseCurrentBundleWithWalletCurrency(ingredient, _wallet.CookieClicker.GetCookies(), payAmount => _wallet.CookieClicker.SpendCookies(payAmount));
         }
 
         private void TryPurchaseCurrentBundleWithOneClic(BundleIngredientDescription ingredient)
