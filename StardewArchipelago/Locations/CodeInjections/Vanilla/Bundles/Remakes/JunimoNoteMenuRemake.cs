@@ -405,153 +405,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             }
             if (SpecificBundlePage)
             {
-                if (!CurrentPageBundle.Complete && CurrentPageBundle.CompletionTimer <= 0)
+                if (ReceiveLeftClickInSpecificBundlePage(x, y))
                 {
-                    HeldItem = Inventory.leftClick(x, y, HeldItem);
-                }
-                if (BackButton != null && BackButton.containsPoint(x, y) && HeldItem == null)
-                {
-                    CloseBundlePage();
-                }
-                if (PartialDonationItem != null)
-                {
-                    if (HeldItem != null && Game1.oldKBState.IsKeyDown(Keys.LeftShift))
-                    {
-                        for (var index = 0; index < IngredientSlots.Count; ++index)
-                        {
-                            if (IngredientSlots[index].item == PartialDonationItem)
-                            {
-                                HandlePartialDonation(HeldItem, IngredientSlots[index]);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        for (var index = 0; index < IngredientSlots.Count; ++index)
-                        {
-                            if (IngredientSlots[index].containsPoint(x, y) && IngredientSlots[index].item == PartialDonationItem)
-                            {
-                                if (HeldItem != null)
-                                {
-                                    HandlePartialDonation(HeldItem, IngredientSlots[index]);
-                                    return;
-                                }
-                                ReturnPartialDonations(!Game1.oldKBState.IsKeyDown(Keys.LeftShift));
-                                return;
-                            }
-                        }
-                    }
-                }
-                else if (HeldItem != null)
-                {
-                    if (Game1.oldKBState.IsKeyDown(Keys.LeftShift))
-                    {
-                        for (var index = 0; index < IngredientSlots.Count; ++index)
-                        {
-                            if (CurrentPageBundle.CanAcceptThisItem(HeldItem, IngredientSlots[index]))
-                            {
-                                if (IngredientSlots[index].item == null)
-                                {
-                                    HeldItem = CurrentPageBundle.TryToDepositThisItem(HeldItem, IngredientSlots[index], NOTE_TEXTURE_NAME, this);
-                                    CheckIfBundleIsComplete();
-                                    return;
-                                }
-                            }
-                            else if (IngredientSlots[index].item == null)
-                            {
-                                HandlePartialDonation(HeldItem, IngredientSlots[index]);
-                            }
-                        }
-                    }
-                    for (var index = 0; index < IngredientSlots.Count; ++index)
-                    {
-                        if (IngredientSlots[index].containsPoint(x, y))
-                        {
-                            if (CurrentPageBundle.CanAcceptThisItem(HeldItem, IngredientSlots[index]))
-                            {
-                                HeldItem = CurrentPageBundle.TryToDepositThisItem(HeldItem, IngredientSlots[index], NOTE_TEXTURE_NAME, this);
-                                CheckIfBundleIsComplete();
-                            }
-                            else if (IngredientSlots[index].item == null)
-                            {
-                                HandlePartialDonation(HeldItem, IngredientSlots[index]);
-                            }
-                        }
-                    }
-                }
-                if (PurchaseButton != null && PurchaseButton.containsPoint(x, y))
-                {
-                    var stack = CurrentPageBundle.Ingredients.Last().stack;
-                    if (Game1.player.Money >= stack)
-                    {
-                        Game1.player.Money -= stack;
-                        Game1.playSound("select");
-                        CurrentPageBundle.CompletionAnimation(this);
-                        if (PurchaseButton != null)
-                        {
-                            PurchaseButton.scale = PurchaseButton.baseScale * 0.75f;
-                        }
-                        var communityCenter = Game1.RequireLocation<CommunityCenter>("CommunityCenter");
-                        communityCenter.bundleRewards[CurrentPageBundle.BundleIndex] = true;
-                        communityCenter.bundles.FieldDict[CurrentPageBundle.BundleIndex][0] = true;
-                        CheckForRewards();
-                        var flag = false;
-                        foreach (var bundle in Bundles)
-                        {
-                            if (!bundle.Complete && !bundle.Equals(CurrentPageBundle))
-                            {
-                                flag = true;
-                                break;
-                            }
-                        }
-                        if (!flag)
-                        {
-                            communityCenter.markAreaAsComplete(WhichArea);
-                            exitFunction = restoreAreaOnExit;
-                            communityCenter.areaCompleteReward(WhichArea);
-                        }
-                        else
-                        {
-                            communityCenter.getJunimoForArea(WhichArea)?.bringBundleBackToHut(BundleRemake.GetColorFromColorIndex(CurrentPageBundle.BundleColor), Game1.RequireLocation("CommunityCenter"));
-                        }
-                        Game1.Multiplayer.globalChatInfoMessage("Bundle");
-                    }
-                    else
-                    {
-                        Game1.dayTimeMoneyBox.moneyShakeTimer = 600;
-                    }
-                }
-                if (upperRightCloseButton != null && IsReadyToCloseMenuOrBundle() && upperRightCloseButton.containsPoint(x, y))
-                {
-                    CloseBundlePage();
                     return;
                 }
             }
             else
             {
-                foreach (var bundle in Bundles)
+                if (ReceiveLeftClickInBundleRoomPage(x, y))
                 {
-                    if (bundle.CanBeClicked() && bundle.containsPoint(x, y))
-                    {
-                        SetUpBundleSpecificPage(bundle);
-                        Game1.playSound("shwip");
-                        return;
-                    }
-                }
-                if (PresentButton != null && PresentButton.containsPoint(x, y) && !FromGameMenu && !FromThisMenu)
-                {
-                    OpenRewardsMenu();
-                }
-                if (FromGameMenu)
-                {
-                    if (AreaNextButton.containsPoint(x, y))
-                    {
-                        SwapPage(1);
-                    }
-                    else if (AreaBackButton.containsPoint(x, y))
-                    {
-                        SwapPage(-1);
-                    }
+                    return;
                 }
             }
             if (HeldItem == null || isWithinBounds(x, y) || !HeldItem.canBeTrashed())
@@ -561,6 +424,172 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             Game1.playSound("throwDownITem");
             Game1.createItemDebris(HeldItem, Game1.player.getStandingPosition(), Game1.player.FacingDirection);
             HeldItem = null;
+        }
+
+        protected virtual bool ReceiveLeftClickInSpecificBundlePage(int x, int y)
+        {
+            if (!CurrentPageBundle.Complete && CurrentPageBundle.CompletionTimer <= 0)
+            {
+                HeldItem = Inventory.leftClick(x, y, HeldItem);
+            }
+            if (BackButton != null && BackButton.containsPoint(x, y) && HeldItem == null)
+            {
+                CloseBundlePage();
+            }
+            if (PartialDonationItem != null)
+            {
+                if (HeldItem != null && Game1.oldKBState.IsKeyDown(Keys.LeftShift))
+                {
+                    for (var index = 0; index < IngredientSlots.Count; ++index)
+                    {
+                        if (IngredientSlots[index].item == PartialDonationItem)
+                        {
+                            HandlePartialDonation(HeldItem, IngredientSlots[index]);
+                        }
+                    }
+                }
+                else
+                {
+                    for (var index = 0; index < IngredientSlots.Count; ++index)
+                    {
+                        if (IngredientSlots[index].containsPoint(x, y) && IngredientSlots[index].item == PartialDonationItem)
+                        {
+                            if (HeldItem != null)
+                            {
+                                HandlePartialDonation(HeldItem, IngredientSlots[index]);
+                                return true;
+                            }
+                            ReturnPartialDonations(!Game1.oldKBState.IsKeyDown(Keys.LeftShift));
+                            return true;
+                        }
+                    }
+                }
+            }
+            else if (HeldItem != null)
+            {
+                if (Game1.oldKBState.IsKeyDown(Keys.LeftShift))
+                {
+                    for (var index = 0; index < IngredientSlots.Count; ++index)
+                    {
+                        if (CurrentPageBundle.CanAcceptThisItem(HeldItem, IngredientSlots[index]))
+                        {
+                            if (IngredientSlots[index].item == null)
+                            {
+                                HeldItem = CurrentPageBundle.TryToDepositThisItem(HeldItem, IngredientSlots[index], NOTE_TEXTURE_NAME, this);
+                                CheckIfBundleIsComplete();
+                                return true;
+                            }
+                        }
+                        else if (IngredientSlots[index].item == null)
+                        {
+                            HandlePartialDonation(HeldItem, IngredientSlots[index]);
+                        }
+                    }
+                }
+                for (var index = 0; index < IngredientSlots.Count; ++index)
+                {
+                    if (IngredientSlots[index].containsPoint(x, y))
+                    {
+                        if (CurrentPageBundle.CanAcceptThisItem(HeldItem, IngredientSlots[index]))
+                        {
+                            HeldItem = CurrentPageBundle.TryToDepositThisItem(HeldItem, IngredientSlots[index], NOTE_TEXTURE_NAME, this);
+                            CheckIfBundleIsComplete();
+                        }
+                        else if (IngredientSlots[index].item == null)
+                        {
+                            HandlePartialDonation(HeldItem, IngredientSlots[index]);
+                        }
+                    }
+                }
+            }
+            ReceiveLeftClickInButtons(x, y);
+            if (upperRightCloseButton != null && IsReadyToCloseMenuOrBundle() && upperRightCloseButton.containsPoint(x, y))
+            {
+                CloseBundlePage();
+                return true;
+            }
+            return false;
+        }
+
+        protected virtual void ReceiveLeftClickInButtons(int x, int y)
+        {
+            ReceiveLeftClickPurchaseButton(x, y);
+        }
+
+        protected virtual void ReceiveLeftClickPurchaseButton(int x, int y)
+        {
+            if (PurchaseButton == null || !PurchaseButton.containsPoint(x, y))
+            {
+                return;
+            }
+            var stack = CurrentPageBundle.Ingredients.Last().stack;
+            if (Game1.player.Money >= stack)
+            {
+                Game1.player.Money -= stack;
+                Game1.playSound("select");
+                CurrentPageBundle.CompletionAnimation(this);
+                if (PurchaseButton != null)
+                {
+                    PurchaseButton.scale = PurchaseButton.baseScale * 0.75f;
+                }
+                var communityCenter = Game1.RequireLocation<CommunityCenter>("CommunityCenter");
+                communityCenter.bundleRewards[CurrentPageBundle.BundleIndex] = true;
+                communityCenter.bundles.FieldDict[CurrentPageBundle.BundleIndex][0] = true;
+                CheckForRewards();
+                var flag = false;
+                foreach (var bundle in Bundles)
+                {
+                    if (!bundle.Complete && !bundle.Equals(CurrentPageBundle))
+                    {
+                        flag = true;
+                        break;
+                    }
+                }
+                if (!flag)
+                {
+                    communityCenter.markAreaAsComplete(WhichArea);
+                    exitFunction = restoreAreaOnExit;
+                    communityCenter.areaCompleteReward(WhichArea);
+                }
+                else
+                {
+                    communityCenter.getJunimoForArea(WhichArea)?.bringBundleBackToHut(BundleRemake.GetColorFromColorIndex(CurrentPageBundle.BundleColor), Game1.RequireLocation("CommunityCenter"));
+                }
+                Game1.Multiplayer.globalChatInfoMessage("Bundle");
+            }
+            else
+            {
+                Game1.dayTimeMoneyBox.moneyShakeTimer = 600;
+            }
+        }
+
+        private bool ReceiveLeftClickInBundleRoomPage(int x, int y)
+        {
+            foreach (var bundle in Bundles)
+            {
+                if (bundle.CanBeClicked() && bundle.containsPoint(x, y))
+                {
+                    SetUpBundleSpecificPage(bundle);
+                    Game1.playSound("shwip");
+                    return true;
+                }
+            }
+            if (PresentButton != null && PresentButton.containsPoint(x, y) && !FromGameMenu && !FromThisMenu)
+            {
+                OpenRewardsMenu();
+            }
+            if (FromGameMenu)
+            {
+                if (AreaNextButton.containsPoint(x, y))
+                {
+                    SwapPage(1);
+                }
+                else if (AreaBackButton.containsPoint(x, y))
+                {
+                    SwapPage(-1);
+                }
+            }
+            return false;
         }
 
         public virtual void ReturnPartialDonation(Item item, bool playSound = true)
@@ -1267,51 +1296,76 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             HoverText = "";
             if (SpecificBundlePage)
             {
-                BackButton?.tryHover(x, y);
-                HoveredItem = CurrentPageBundle.Complete || CurrentPageBundle.CompletionTimer > 0 ? null : Inventory.hover(x, y, HeldItem);
-                foreach (var ingredient in IngredientList)
-                {
-                    if (ingredient.bounds.Contains(x, y))
-                    {
-                        HoverText = ingredient.hoverText;
-                        break;
-                    }
-                }
-                if (HeldItem != null)
-                {
-                    foreach (var ingredientSlot in IngredientSlots)
-                    {
-                        if (ingredientSlot.bounds.Contains(x, y) && CanBePartiallyOrFullyDonated(HeldItem) && (PartialDonationItem == null || ingredientSlot.item == PartialDonationItem))
-                        {
-                            ingredientSlot.sourceRect.X = 530;
-                            ingredientSlot.sourceRect.Y = 262;
-                        }
-                        else
-                        {
-                            ingredientSlot.sourceRect.X = 512;
-                            ingredientSlot.sourceRect.Y = 244;
-                        }
-                    }
-                }
-                PurchaseButton?.tryHover(x, y);
+                PerformHoverActionSpecificBundlePage(x, y);
             }
             else
             {
-                if (PresentButton != null)
-                {
-                    HoverText = PresentButton.tryHover(x, y);
-                }
-                foreach (var bundle in Bundles)
-                {
-                    bundle.TryHoverAction(x, y);
-                }
-                if (!FromGameMenu)
-                {
-                    return;
-                }
-                AreaNextButton.tryHover(x, y);
-                AreaBackButton.tryHover(x, y);
+                PerformHoverActionBundleRoomPage(x, y);
             }
+        }
+
+        private void PerformHoverActionSpecificBundlePage(int x, int y)
+        {
+            BackButton?.tryHover(x, y);
+            HoveredItem = CurrentPageBundle.Complete || CurrentPageBundle.CompletionTimer > 0 ? null : Inventory.hover(x, y, HeldItem);
+            PerformHoverIngredients(x, y);
+            PerformHoverIngredientSlots(x, y);
+            TryHoverButtons(x, y);
+        }
+
+        private void PerformHoverIngredients(int x, int y)
+        {
+            foreach (var ingredient in IngredientList)
+            {
+                if (ingredient.bounds.Contains(x, y))
+                {
+                    HoverText = ingredient.hoverText;
+                    break;
+                }
+            }
+        }
+
+        private void PerformHoverIngredientSlots(int x, int y)
+        {
+            if (HeldItem != null)
+            {
+                foreach (var ingredientSlot in IngredientSlots)
+                {
+                    if (ingredientSlot.bounds.Contains(x, y) && CanBePartiallyOrFullyDonated(HeldItem) && (PartialDonationItem == null || ingredientSlot.item == PartialDonationItem))
+                    {
+                        ingredientSlot.sourceRect.X = 530;
+                        ingredientSlot.sourceRect.Y = 262;
+                    }
+                    else
+                    {
+                        ingredientSlot.sourceRect.X = 512;
+                        ingredientSlot.sourceRect.Y = 244;
+                    }
+                }
+            }
+        }
+
+        protected virtual void TryHoverButtons(int x, int y)
+        {
+            PurchaseButton?.tryHover(x, y);
+        }
+
+        private void PerformHoverActionBundleRoomPage(int x, int y)
+        {
+            if (PresentButton != null)
+            {
+                HoverText = PresentButton.tryHover(x, y);
+            }
+            foreach (var bundle in Bundles)
+            {
+                bundle.TryHoverAction(x, y);
+            }
+            if (!FromGameMenu)
+            {
+                return;
+            }
+            AreaNextButton.tryHover(x, y);
+            AreaBackButton.tryHover(x, y);
         }
 
         /// <inheritdoc />
@@ -1363,91 +1417,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             }
             else
             {
-                b.Draw(NoteTexture, new Vector2(xPositionOnScreen, yPositionOnScreen), new Rectangle(BASE_WIDTH, 0, BASE_WIDTH, BASE_HEIGHT), Color.White, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 0.1f);
-                if (CurrentPageBundle != null)
-                {
-                    var num1 = CurrentPageBundle.BundleIndex;
-                    var texture = NoteTexture;
-                    var num2 = BASE_HEIGHT;
-                    if (CurrentPageBundle.BundleTextureIndexOverride >= 0)
-                    {
-                        num1 = CurrentPageBundle.BundleTextureIndexOverride;
-                    }
-                    if (CurrentPageBundle.BundleTextureOverride != null)
-                    {
-                        texture = CurrentPageBundle.BundleTextureOverride;
-                        num2 = 0;
-                    }
-                    b.Draw(texture, new Vector2(xPositionOnScreen + 872, yPositionOnScreen + 88), new Rectangle(num1 * 16 * 2 % texture.Width, num2 + 32 * (num1 * 16 * 2 / texture.Width), 32, 32), Color.White, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 0.15f);
-                    if (CurrentPageBundle.label != null)
-                    {
-                        var x = Game1.dialogueFont.MeasureString(!Game1.player.hasOrWillReceiveMail("canReadJunimoText") ? "???" : Game1.content.LoadString("Strings\\UI:JunimoNote_BundleName", CurrentPageBundle.label)).X;
-                        b.Draw(NoteTexture, new Vector2(xPositionOnScreen + 936 - (int)x / 2 - 16, yPositionOnScreen + 228), new Rectangle(517, 266, 4, 17), Color.White, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 0.1f);
-                        b.Draw(NoteTexture, new Rectangle(xPositionOnScreen + 936 - (int)x / 2, yPositionOnScreen + 228, (int)x, 68), new Rectangle(520, 266, 1, 17), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, 0.1f);
-                        b.Draw(NoteTexture, new Vector2(xPositionOnScreen + 936 + (int)x / 2, yPositionOnScreen + 228), new Rectangle(524, 266, 4, 17), Color.White, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 0.1f);
-                        b.DrawString(Game1.dialogueFont, !Game1.player.hasOrWillReceiveMail("canReadJunimoText") ? "???" : Game1.content.LoadString("Strings\\UI:JunimoNote_BundleName", CurrentPageBundle.label), new Vector2(xPositionOnScreen + 936 - x / 2f, yPositionOnScreen + 236) + new Vector2(2f, 2f), Game1.textShadowColor);
-                        b.DrawString(Game1.dialogueFont, !Game1.player.hasOrWillReceiveMail("canReadJunimoText") ? "???" : Game1.content.LoadString("Strings\\UI:JunimoNote_BundleName", CurrentPageBundle.label), new Vector2(xPositionOnScreen + 936 - x / 2f, yPositionOnScreen + 236) + new Vector2(0.0f, 2f), Game1.textShadowColor);
-                        b.DrawString(Game1.dialogueFont, !Game1.player.hasOrWillReceiveMail("canReadJunimoText") ? "???" : Game1.content.LoadString("Strings\\UI:JunimoNote_BundleName", CurrentPageBundle.label), new Vector2(xPositionOnScreen + 936 - x / 2f, yPositionOnScreen + 236) + new Vector2(2f, 0.0f), Game1.textShadowColor);
-                        b.DrawString(Game1.dialogueFont, !Game1.player.hasOrWillReceiveMail("canReadJunimoText") ? "???" : Game1.content.LoadString("Strings\\UI:JunimoNote_BundleName", CurrentPageBundle.label), new Vector2(xPositionOnScreen + 936 - x / 2f, yPositionOnScreen + 236), Game1.textColor * 0.9f);
-                    }
-                }
-                if (BackButton != null)
-                {
-                    BackButton.draw(b);
-                }
-                if (PurchaseButton != null)
-                {
-                    PurchaseButton.draw(b);
-                    Game1.dayTimeMoneyBox.drawMoneyBox(b);
-                }
-                var extraAlpha = 1f;
-                if (PartialDonationItem != null)
-                {
-                    extraAlpha = 0.25f;
-                }
-                foreach (var tempSprite in TempSprites)
-                {
-                    tempSprite.draw(b, true, extraAlpha: extraAlpha);
-                }
-                foreach (var ingredientSlot in IngredientSlots)
-                {
-                    var alpha = 1f;
-                    if (PartialDonationItem != null && ingredientSlot.item != PartialDonationItem)
-                    {
-                        alpha = 0.25f;
-                    }
-                    if (ingredientSlot.item == null || PartialDonationItem != null && ingredientSlot.item == PartialDonationItem)
-                    {
-                        ingredientSlot.draw(b, (FromGameMenu ? Color.LightGray * 0.5f : Color.White) * alpha, 0.89f);
-                    }
-                    ingredientSlot.drawItem(b, 4, 4, alpha);
-                }
-                for (var index = 0; index < IngredientList.Count; ++index)
-                {
-                    var num3 = 1f;
-                    if (CurrentPartialIngredientDescriptionIndex >= 0 && CurrentPartialIngredientDescriptionIndex != index)
-                    {
-                        num3 = 0.25f;
-                    }
-                    var ingredient = IngredientList[index];
-                    var flag = false;
-                    var num4 = index;
-                    var count = CurrentPageBundle?.Ingredients?.Count;
-                    var valueOrDefault = count.GetValueOrDefault();
-                    if (num4 < valueOrDefault & count.HasValue && CurrentPageBundle.Ingredients[index].completed)
-                    {
-                        flag = true;
-                    }
-                    if (!flag)
-                    {
-                        b.Draw(Game1.shadowTexture, new Vector2(ingredient.bounds.Center.X - Game1.shadowTexture.Bounds.Width * 4 / 2 - 4, ingredient.bounds.Center.Y + 4), Game1.shadowTexture.Bounds, Color.White * num3, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 0.1f);
-                    }
-                    if (ingredient.item != null && ingredient.visible)
-                    {
-                        ingredient.item.drawInMenu(b, new Vector2(ingredient.bounds.X, ingredient.bounds.Y), ingredient.scale / 4f, 1f, 0.9f, StackDrawType.Draw, Color.White * (flag ? 0.25f : num3), false);
-                    }
-                }
-                Inventory.draw(b);
+                DrawSpecificBundle(b);
             }
             if (GetRewardNameForArea(WhichArea) != "")
             {
@@ -1472,6 +1442,132 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                 drawHoverText(b, _singleBundleMenu || Game1.player.hasOrWillReceiveMail("canReadJunimoText") || HoverText.Length <= 0 ? HoverText : "???", Game1.dialogueFont);
             }
             ScreenSwipe?.draw(b);
+        }
+
+        private void DrawSpecificBundle(SpriteBatch b)
+        {
+            b.Draw(NoteTexture, new Vector2(xPositionOnScreen, yPositionOnScreen), new Rectangle(BASE_WIDTH, 0, BASE_WIDTH, BASE_HEIGHT), Color.White, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 0.1f);
+            
+            DrawCurrentPageBundle(b);
+            DrawButtons(b);
+            DrawTemporarySprites(b);
+            DrawIngredientSlots(b);
+            DrawIngredients(b);
+            Inventory.draw(b);
+        }
+
+        protected virtual void DrawButtons(SpriteBatch b)
+        {
+            DrawBackButton(b);
+            DrawPurchaseButton(b);
+        }
+
+        private void DrawBackButton(SpriteBatch b)
+        {
+            if (BackButton != null)
+            {
+                BackButton.draw(b);
+            }
+        }
+
+        private void DrawPurchaseButton(SpriteBatch b)
+        {
+            if (PurchaseButton != null)
+            {
+                PurchaseButton.draw(b);
+                Game1.dayTimeMoneyBox.drawMoneyBox(b);
+            }
+        }
+
+        private void DrawTemporarySprites(SpriteBatch b)
+        {
+            var extraAlpha = 1f;
+            if (PartialDonationItem != null)
+            {
+                extraAlpha = 0.25f;
+            }
+            foreach (var tempSprite in TempSprites)
+            {
+                tempSprite.draw(b, true, extraAlpha: extraAlpha);
+            }
+        }
+
+        private void DrawIngredientSlots(SpriteBatch b)
+        {
+            foreach (var ingredientSlot in IngredientSlots)
+            {
+                var alpha = 1f;
+                if (PartialDonationItem != null && ingredientSlot.item != PartialDonationItem)
+                {
+                    alpha = 0.25f;
+                }
+                if (ingredientSlot.item == null || PartialDonationItem != null && ingredientSlot.item == PartialDonationItem)
+                {
+                    ingredientSlot.draw(b, (FromGameMenu ? Color.LightGray * 0.5f : Color.White) * alpha, 0.89f);
+                }
+                ingredientSlot.drawItem(b, 4, 4, alpha);
+            }
+        }
+
+        private void DrawIngredients(SpriteBatch b)
+        {
+            for (var index = 0; index < IngredientList.Count; ++index)
+            {
+                var num3 = 1f;
+                if (CurrentPartialIngredientDescriptionIndex >= 0 && CurrentPartialIngredientDescriptionIndex != index)
+                {
+                    num3 = 0.25f;
+                }
+                var ingredient = IngredientList[index];
+                var flag = false;
+                var num4 = index;
+                var count = CurrentPageBundle?.Ingredients?.Count;
+                var valueOrDefault = count.GetValueOrDefault();
+                if (num4 < valueOrDefault & count.HasValue && CurrentPageBundle.Ingredients[index].completed)
+                {
+                    flag = true;
+                }
+                if (!flag)
+                {
+                    b.Draw(Game1.shadowTexture, new Vector2(ingredient.bounds.Center.X - Game1.shadowTexture.Bounds.Width * 4 / 2 - 4, ingredient.bounds.Center.Y + 4), Game1.shadowTexture.Bounds, Color.White * num3, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 0.1f);
+                }
+                if (ingredient.item != null && ingredient.visible)
+                {
+                    ingredient.item.drawInMenu(b, new Vector2(ingredient.bounds.X, ingredient.bounds.Y), ingredient.scale / 4f, 1f, 0.9f, StackDrawType.Draw, Color.White * (flag ? 0.25f : num3), false);
+                }
+            }
+        }
+
+        private void DrawCurrentPageBundle(SpriteBatch b)
+        {
+            if (CurrentPageBundle == null)
+            {
+                return;
+            }
+            var num1 = CurrentPageBundle.BundleIndex;
+            var texture = NoteTexture;
+            var num2 = BASE_HEIGHT;
+            if (CurrentPageBundle.BundleTextureIndexOverride >= 0)
+            {
+                num1 = CurrentPageBundle.BundleTextureIndexOverride;
+            }
+            if (CurrentPageBundle.BundleTextureOverride != null)
+            {
+                texture = CurrentPageBundle.BundleTextureOverride;
+                num2 = 0;
+            }
+            b.Draw(texture, new Vector2(xPositionOnScreen + 872, yPositionOnScreen + 88), new Rectangle(num1 * 16 * 2 % texture.Width, num2 + 32 * (num1 * 16 * 2 / texture.Width), 32, 32), Color.White, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 0.15f);
+            if (CurrentPageBundle.label != null)
+            {
+                var x = Game1.dialogueFont.MeasureString(!Game1.player.hasOrWillReceiveMail("canReadJunimoText") ? "???" : Game1.content.LoadString("Strings\\UI:JunimoNote_BundleName", CurrentPageBundle.label)).X;
+                b.Draw(NoteTexture, new Vector2(xPositionOnScreen + 936 - (int)x / 2 - 16, yPositionOnScreen + 228), new Rectangle(517, 266, 4, 17), Color.White, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 0.1f);
+                b.Draw(NoteTexture, new Rectangle(xPositionOnScreen + 936 - (int)x / 2, yPositionOnScreen + 228, (int)x, 68), new Rectangle(520, 266, 1, 17), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, 0.1f);
+                b.Draw(NoteTexture, new Vector2(xPositionOnScreen + 936 + (int)x / 2, yPositionOnScreen + 228), new Rectangle(524, 266, 4, 17), Color.White, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 0.1f);
+                b.DrawString(Game1.dialogueFont, !Game1.player.hasOrWillReceiveMail("canReadJunimoText") ? "???" : Game1.content.LoadString("Strings\\UI:JunimoNote_BundleName", CurrentPageBundle.label), new Vector2(xPositionOnScreen + 936 - x / 2f, yPositionOnScreen + 236) + new Vector2(2f, 2f), Game1.textShadowColor);
+                b.DrawString(Game1.dialogueFont, !Game1.player.hasOrWillReceiveMail("canReadJunimoText") ? "???" : Game1.content.LoadString("Strings\\UI:JunimoNote_BundleName", CurrentPageBundle.label), new Vector2(xPositionOnScreen + 936 - x / 2f, yPositionOnScreen + 236) + new Vector2(0.0f, 2f), Game1.textShadowColor);
+                b.DrawString(Game1.dialogueFont, !Game1.player.hasOrWillReceiveMail("canReadJunimoText") ? "???" : Game1.content.LoadString("Strings\\UI:JunimoNote_BundleName", CurrentPageBundle.label), new Vector2(xPositionOnScreen + 936 - x / 2f, yPositionOnScreen + 236) + new Vector2(2f, 0.0f), Game1.textShadowColor);
+                b.DrawString(Game1.dialogueFont, !Game1.player.hasOrWillReceiveMail("canReadJunimoText") ? "???" : Game1.content.LoadString("Strings\\UI:JunimoNote_BundleName", CurrentPageBundle.label), new Vector2(xPositionOnScreen + 936 - x / 2f, yPositionOnScreen + 236), Game1.textColor * 0.9f);
+            }
         }
 
         public virtual string GetRewardNameForArea(int whichArea)
@@ -1573,12 +1669,17 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             SpecificBundlePage = true;
             if (IsBundleCurrencyBased())
             {
-                SetUpPurchaseButton();
+                SetUpCurrencyButtons();
             }
             else
             {
                 SetUpIngredientButtons(b);
             }
+        }
+
+        protected virtual void SetUpCurrencyButtons()
+        {
+            SetUpPurchaseButton();
         }
 
         protected virtual void SetUpPurchaseButton()

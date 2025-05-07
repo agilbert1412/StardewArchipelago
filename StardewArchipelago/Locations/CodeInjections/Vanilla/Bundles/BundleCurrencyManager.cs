@@ -12,6 +12,7 @@ using StardewArchipelago.Logging;
 using StardewModdingAPI;
 using StardewArchipelago.Serialization;
 using StardewValley.BellsAndWhistles;
+using StardewValley.GameData.HomeRenovations;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 {
@@ -88,7 +89,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             else if (ingredientId == MemeIDProvider.TIME)
             {
                 DrawTimeCurrency();
-                amountText += " Hours";
+                amountText += " Minutes";
             }
             else if (ingredientId == MemeIDProvider.STEP)
             {
@@ -120,47 +121,47 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         private void DrawStarTokenCurrency()
         {
-            DrawSpecialCurrency(_wallet.StarTokens);
+            DrawSpecialCurrency(_wallet.StarTokens, Game1.mouseCursors, new Rectangle(338, 400, 8, 8));
         }
 
         private void DrawBloodCurrency()
         {
-            DrawSpecialCurrency(_wallet.Blood);
+            DrawSpecialCurrency(_wallet.Blood, _menu.MemeTexture, new Rectangle(58, 0, 5, 8));
         }
 
         private void DrawEnergyCurrency()
         {
-            DrawSpecialCurrency(_wallet.Energy);
+            DrawSpecialCurrency(_wallet.Energy, Game1.mouseCursors, new Rectangle(1, 412, 14, 14));
         }
 
         private void DrawTimeCurrency()
         {
-            DrawSpecialCurrency(_wallet.Time);
+            DrawSpecialCurrency(_wallet.Time, Game1.mouseCursors, new Rectangle(434, 475, 9, 9));
         }
 
         private void DrawStepsCurrency()
         {
-            DrawSpecialCurrency(Game1.stats.StepsTaken);
+            DrawSpecialCurrency((int)Game1.stats.StepsTaken, Game1.mouseCursors, new Rectangle(100, 428, 10, 10));
         }
 
         private void DrawCookiesCurrency()
         {
-            DrawSpecialCurrency(_wallet.Cookies);
+            DrawSpecialCurrency(_wallet.Cookies, Game1.objectSpriteSheet, new Rectangle(112, 146, 14, 14));
         }
 
-        private static void DrawSpecialCurrency(int amountOwned)
+        private void DrawDeathCurrency()
         {
-            DrawSpecialCurrency((uint)amountOwned);
+            DrawSpecialCurrency(_wallet.Deaths, Game1.mouseCursors, new Rectangle(497, 1776, 14, 16));
         }
 
-        private static void DrawSpecialCurrency(uint amountOwned)
+        private static void DrawSpecialCurrency(int amountOwned, Texture2D texture, Rectangle sourceRectangle)
         {
             var spriteBatch = Game1.spriteBatch;
             spriteBatch.End();
             Game1.PushUIMode();
             spriteBatch.Begin(blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
             spriteBatch.Draw(Game1.fadeToBlackRect, new Rectangle(16, 16, 128 + (amountOwned > 999 ? 16 : 0), 64), Color.Black * 0.75f);
-            spriteBatch.Draw(Game1.mouseCursors, new Vector2(32f, 32f), new Rectangle(338, 400, 8, 8), Color.White, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 1f);
+            spriteBatch.Draw(texture, new Vector2(32f, 32f), sourceRectangle, Color.White, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 1f);
             Game1.drawWithBorder(amountOwned.ToString() ?? "", Color.Black, Color.White, new Vector2(72f, (float)(21 + (LocalizedContentManager.CurrentLanguageCode == LocalizedContentManager.LanguageCode.en ? 8 : (LocalizedContentManager.CurrentLanguageLatin ? 16 : 8)))), 0.0f, 1f, 1f, false);
 
             spriteBatch.End();
@@ -281,6 +282,37 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             payAction(ingredient.stack);
 
             _menu.PerformCurrencyPurchase();
+        }
+
+        public void DonateToBundle(string currencyId)
+        {
+            if (currencyId == MemeIDProvider.BLOOD)
+            {
+                const int donationAmount = 25;
+                var donation = Math.Min(Game1.player.health, donationAmount);
+                Game1.player.health -= donationAmount;
+                _wallet.Blood += donation;
+                return;
+            }
+
+            if (currencyId == MemeIDProvider.ENERGY)
+            {
+                const int donationAmount = 50;
+                var donation = Math.Min(Game1.player.Stamina, donationAmount);
+                Game1.player.Stamina -= donationAmount;
+                _wallet.Energy += (int)donation;
+                return;
+            }
+
+            if (currencyId == MemeIDProvider.TIME)
+            {
+                if (Game1.timeOfDay < 2600)
+                {
+                    Game1.performTenMinuteClockUpdate();
+                    _wallet.Time += 10;
+                }
+                return;
+            }
         }
     }
 }

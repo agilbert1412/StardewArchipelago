@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using KaitoKid.ArchipelagoUtilities.Net;
-using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes;
 using StardewArchipelago.Stardew;
 using StardewValley.Locations;
@@ -16,12 +15,10 @@ using StardewModdingAPI;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Extensions;
 using StardewArchipelago.Constants;
-using StardewValley.BellsAndWhistles;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Bundles;
 using StardewArchipelago.Logging;
 using StardewArchipelago.Serialization;
-using KaitoKid.ArchipelagoUtilities.Net.Client;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 {
@@ -39,7 +36,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         private BundleCurrencyManager _currencyManager;
 
         public Texture2D MemeTexture;
-        public ClickableTextureComponent DonateButton;
+        private ClickableTextureComponent _donateButton;
+        public Dictionary<ClickableTextureComponent, Action> ExtraButtons;
 
         public ArchipelagoJunimoNoteMenu(bool fromGameMenu, int area = 1, bool fromThisMenu = false) : base(fromGameMenu, area, fromThisMenu)
         {
@@ -61,6 +59,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             _currencyManager = new BundleCurrencyManager(_logger, _modHelper, _wallet, this);
             var memeAssetsPath = Path.Combine("Bundles", "UI", "MemeBundleAssets.png");
             MemeTexture = TexturesLoader.GetTexture(_logger, _modHelper, memeAssetsPath);
+            ExtraButtons = new Dictionary<ClickableTextureComponent, Action>();
         }
 
         public static void InitializeArchipelago(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, ArchipelagoWalletDto wallet, LocationChecker locationChecker)
@@ -75,7 +74,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         public override void CheckForRewards()
         {
-            base.CheckForRewards();
             CheckAllBundleLocations();
             MarkAllRewardsAsAlreadyGrabbed();
         }
@@ -182,14 +180,36 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         {
             base.draw(b);
             _currencyManager.DrawCurrency(b);
-            DonateButton?.draw(b);
         }
 
-        public override void receiveLeftClick(int x, int y, bool playSound = true)
+        protected override void DrawButtons(SpriteBatch b)
         {
-            if (!JunimoNoteMenu.canClick || this.ScrambledText || !this.SpecificBundlePage || this.PurchaseButton == null || !this.PurchaseButton.containsPoint(x, y))
+            base.DrawButtons(b);
+            foreach (var (extraButton, _) in ExtraButtons)
             {
-                base.receiveLeftClick(x, y, playSound);
+                extraButton?.draw(b);
+            }
+        }
+
+        protected override void ReceiveLeftClickInButtons(int x, int y)
+        {
+            base.ReceiveLeftClickInButtons(x, y);
+            foreach (var (extraButton, actionWhenClicked) in ExtraButtons)
+            {
+                if (extraButton == null || !extraButton.containsPoint(x, y))
+                {
+                    continue;
+                }
+
+                actionWhenClicked();
+            }
+        }
+
+        protected override void ReceiveLeftClickPurchaseButton(int x, int y)
+        {
+            if (this.PurchaseButton == null || !this.PurchaseButton.containsPoint(x, y))
+            {
+                base.ReceiveLeftClickPurchaseButton(x, y);
                 return;
             }
 
@@ -197,7 +217,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             var currency = ingredient.id;
             if (currency == IDProvider.MONEY)
             {
-                base.receiveLeftClick(x, y, playSound);
+                base.ReceiveLeftClickPurchaseButton(x, y);
                 return;
             }
 
@@ -343,9 +363,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             return bundle;
         }
 
-        protected override void SetUpPurchaseButton()
+        protected override void SetUpCurrencyButtons()
         {
-            base.SetUpPurchaseButton();
+            base.SetUpCurrencyButtons();
             switch (CurrentPageBundle.name)
             {
                 case MemeBundleNames.CLIQUE:
@@ -359,6 +379,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                     SetUpDonateButton();
                     break;
                 case MemeBundleNames.COOKIE_CLICKER:
+                    // SetUpCookiesButtons();
                     // TODO: Cookies and Stuff
                     break;
             }
@@ -371,17 +392,28 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 return;
             }
 
-            var textureComponent = new ClickableTextureComponent(new Rectangle(xPositionOnScreen + 800, yPositionOnScreen + 474, 260, 72), MemeTexture, new Rectangle(0, 0, 53, 20), 4f);
+            var textureComponent = new ClickableTextureComponent(new Rectangle(xPositionOnScreen + 800, yPositionOnScreen + 400, 260, 72), MemeTexture, new Rectangle(0, 0, 53, 20), 4f);
             textureComponent.myID = 796;
             textureComponent.leftNeighborID = REGION_BACK_BUTTON;
             textureComponent.rightNeighborID = REGION_PURCHASE_BUTTON;
-            DonateButton = textureComponent;
+            _donateButton = textureComponent;
+            ExtraButtons.Add(_donateButton, () => _currencyManager.DonateToBundle(CurrentPageBundle.Ingredients.Last().id));
         }
 
         protected override void TakeDownSpecificBundleComponents()
         {
             base.TakeDownSpecificBundleComponents();
-            DonateButton = null;
+            _donateButton = null;
+            ExtraButtons.Clear();
+        }
+
+        protected override void TryHoverButtons(int x, int y)
+        {
+            base.TryHoverButtons(x, y);
+            foreach (var (extraButton, _) in ExtraButtons)
+            {
+                extraButton?.tryHover(x, y);
+            }
         }
     }
 }
