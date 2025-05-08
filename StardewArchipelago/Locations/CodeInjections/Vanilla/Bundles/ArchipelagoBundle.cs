@@ -9,8 +9,16 @@ using StardewArchipelago.Serialization;
 using StardewModdingAPI;
 using StardewValley.Menus;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Logging;
 using StardewValley;
+using Netcode;
+using StardewValley.Network;
+using StardewValley.TerrainFeatures;
+using System;
+using StardewValley.Extensions;
+using Object = StardewValley.Object;
+using Microsoft.Xna.Framework.Input;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 {
@@ -19,6 +27,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         private static ILogger _logger;
         private static IModHelper _modHelper;
         private static ArchipelagoClient _archipelago;
+        private static ArchipelagoStateDto _state;
         private static ArchipelagoWalletDto _wallet;
         private static LocationChecker _locationChecker;
         private static BundlesManager _bundlesManager;
@@ -32,12 +41,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             InitializeBundle(bundleIndex, rawBundleInfo, completedIngredientsList, textureName, menu);
         }
 
-        public static void InitializeArchipelago(ILogger logger, IModHelper modHelper, ArchipelagoClient archipelago, ArchipelagoWalletDto wallet, LocationChecker locationChecker, BundlesManager bundlesManager)
+        public static void InitializeArchipelago(ILogger logger, IModHelper modHelper, ArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, BundlesManager bundlesManager)
         {
             _logger = logger;
             _modHelper = modHelper;
             _archipelago = archipelago;
-            _wallet = wallet;
+            _state = state;
+            _wallet = _state.Wallet;
             _locationChecker = locationChecker;
             _bundlesManager = bundlesManager;
         }
@@ -106,6 +116,36 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
 
             return base.IsValidItemForThisIngredientDescription(item, ingredient);
+        }
+
+        public override Item TryToDepositThisItem(Item item, ClickableTextureComponent slot, string noteTextureName, JunimoNoteMenuRemake parentMenu)
+        {
+            if (name == MemeBundleNames.HONORABLE)
+            {
+                if (item.QualifiedItemId == QualifiedItemIds.STONE)
+                {
+                    _state.NumberTimesCursed++;
+                    LightningStrikeOnce();
+                    Game1.weatherForTomorrow = "Storm";
+                    Game1.isRaining = true;
+                    Game1.isSnowing = false;
+                    Game1.isLightning = true;
+                    Game1.isDebrisWeather = false;
+                    Game1.isGreenRain = false;
+                    Game1.updateWeather(Game1.currentGameTime);
+                }
+            }
+
+            var itemAfterDeposit = base.TryToDepositThisItem(item, slot, noteTextureName, parentMenu);
+            return itemAfterDeposit;
+        }
+
+
+
+        public static void LightningStrikeOnce()
+        {
+            Game1.flashAlpha = (float)(0.5 + Game1.random.NextDouble());
+            Game1.playSound("thunder");
         }
     }
 }

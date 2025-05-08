@@ -62,7 +62,7 @@ namespace StardewArchipelago.GameModifications
             ArchipelagoLocationsInjections.Initialize(logger, modHelper, archipelago, locationChecker);
             MineshaftLogicInjections.Initialize(logger);
             CommunityCenterLogicInjections.Initialize(logger, locationChecker);
-            FarmInjections.Initialize(logger, _archipelago);
+            FarmInjections.Initialize(logger, _archipelago, state);
             FarmerInjections.Initialize(logger, _archipelago);
             EventInjections.Initialize(logger, _archipelago);
             AchievementInjections.Initialize(logger, _archipelago);
@@ -111,6 +111,7 @@ namespace StardewArchipelago.GameModifications
             PatchDefinitionOfCommunityCenterComplete();
             PatchGrandpaNote();
             PatchDebris();
+            PatchCurses();
             PatchTown();
             PatchForest();
             PatchMountain();
@@ -257,6 +258,14 @@ namespace StardewArchipelago.GameModifications
             _harmony.Patch(
                 original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.spawnWeedsAndStones)),
                 prefix: new HarmonyMethod(typeof(FarmInjections), nameof(FarmInjections.SpawnWeedsAndStones_ConsiderUserPreference_PreFix))
+            );
+        }
+
+        private void PatchCurses()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Farm), "doLightningStrike"),
+                prefix: new HarmonyMethod(typeof(FarmInjections), nameof(FarmInjections.DoLightningStrike_ChanceToHitPlayer_Prefix))
             );
         }
 

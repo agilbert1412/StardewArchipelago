@@ -17,5 +17,6 @@ namespace StardewArchipelago.Bundles
         public const string REVERSE = "Reverse";
         public const string SISYPHUS = "Sisyphus";
         public const string BUREAUCRACY = "Bureaucracy";
+        public const string HONORABLE = "Honorable";
     }
 }

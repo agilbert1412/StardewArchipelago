@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using Microsoft.Xna.Framework;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
@@ -9,9 +10,11 @@ using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.Goals;
 using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
+using StardewArchipelago.Serialization;
 using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Characters;
+using StardewValley.Extensions;
 using StardewValley.Menus;
 using StardewValley.TerrainFeatures;
 using xTile.Dimensions;
@@ -30,11 +33,13 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
         private static ILogger _logger;
         private static StardewArchipelagoClient _archipelago;
+        private static ArchipelagoStateDto _state;
 
-        public static void Initialize(ILogger logger, StardewArchipelagoClient archipelago)
+        public static void Initialize(ILogger logger, StardewArchipelagoClient archipelago, ArchipelagoStateDto state)
         {
             _logger = logger;
             _archipelago = archipelago;
+            _state = state;
         }
 
         public static bool CheckAction_GrandpaNote_PreFix(Farm __instance, Location tileLocation, Rectangle viewport, Farmer who, ref bool __result)
@@ -335,5 +340,59 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         {
             return _archipelago.SlotData.Friendsanity != Friendsanity.None && _archipelago.SlotData.Friendsanity != Friendsanity.Bachelors;
         }
+
+        // private void doLightningStrike(Farm.LightningStrikeEvent lightning)
+
+        public static bool DoLightningStrike_ChanceToHitPlayer_Prefix(Farm __instance, Farm.LightningStrikeEvent lightning)
+        {
+            try
+            {
+                if (_state.NumberTimesCursed <= 0 || !Game1.currentLocation.IsOutdoors)
+                {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
+                var hitChance = 0.1;
+                var shouldHit = false;
+                var iteration = _state.NumberTimesCursed;
+                var random = Utility.CreateDaySaveRandom();
+                while (iteration > 0 && !shouldHit)
+                {
+                    if (random.NextDouble() < hitChance)
+                    {
+                        shouldHit = true;
+                    }
+                    iteration--;
+                }
+
+                if (!shouldHit)
+                {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
+                HitPlayerWithLightning(lightning);
+
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(DoLightningStrike_ChanceToHitPlayer_Prefix)}:\n{ex}");
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+        }
+
+        private static void HitPlayerWithLightning(Farm.LightningStrikeEvent lightning)
+        {
+            Game1.flashAlpha = (float)(0.5 + Game1.random.NextDouble());
+            Game1.playSound("thunder");
+            var boltPosition = Game1.player.Position;
+            if (lightning.destroyedTerrainFeature)
+            {
+                Game1.currentLocation.temporarySprites.Add(new TemporaryAnimatedSprite(362, 75f, 6, 1, boltPosition, false, false));
+            }
+            Utility.drawLightningBolt(boltPosition, Game1.currentLocation);
+            Game1.player.health -= 100;
+        }
+
     }
 }

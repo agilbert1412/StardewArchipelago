@@ -275,7 +275,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             return false;
         }
 
-        public Item TryToDepositThisItem(
+        public virtual Item TryToDepositThisItem(
             Item item,
             ClickableTextureComponent slot,
             string noteTextureName,
@@ -353,7 +353,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
 
         public bool CanBeClicked() => !this.Complete;
 
-        public void CompletionAnimation(JunimoNoteMenuRemake menu, bool playSound = true, int delay = 0)
+        public virtual void CompletionAnimation(JunimoNoteMenuRemake menu, bool playSound = true, int delay = 0)
         {
             if (delay <= 0)
             {
