@@ -14,5 +14,8 @@ namespace StardewArchipelago.Bundles
         public const string TICK_TOCK = "Tick Tock";
         public const string ARCHIPELA_GO = "Archipela-Go!";
         public const string COOKIE_CLICKER = "Cookie Clicker";
+        public const string REVERSE = "Reverse";
+        public const string SISYPHUS = "Sisyphus";
+        public const string BUREAUCRACY = "Bureaucracy";
     }
 }

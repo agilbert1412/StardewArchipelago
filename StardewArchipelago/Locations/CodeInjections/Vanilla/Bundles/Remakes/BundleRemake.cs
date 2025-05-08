@@ -211,7 +211,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             }
         }
 
-        public bool IsValidItemForThisIngredientDescription(
+        public virtual bool IsValidItemForThisIngredientDescription(
             Item item,
             BundleIngredientDescription ingredient)
         {
@@ -256,7 +256,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             return this.CanAcceptThisItem(item, slot, false);
         }
 
-        public bool CanAcceptThisItem(
+        public virtual bool CanAcceptThisItem(
             Item item,
             ClickableTextureComponent slot,
             bool ignoreStackCount)

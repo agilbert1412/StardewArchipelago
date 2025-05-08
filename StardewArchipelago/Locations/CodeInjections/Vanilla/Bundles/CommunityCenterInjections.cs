@@ -9,6 +9,11 @@ using StardewValley;
 using StardewValley.Locations;
 using xTile.Dimensions;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using Microsoft.Xna.Framework;
+using StardewArchipelago.Bundles;
+using StardewArchipelago.Constants.Vanilla;
+using StardewValley.Network;
+using Rectangle = xTile.Dimensions.Rectangle;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 {
@@ -164,5 +169,65 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
+
+        // protected override void resetSharedState()
+        public static void ResetSharedState_SisyphusStoneFallDown_Postfix(CommunityCenter __instance)
+        {
+            try
+            {
+                if (ArchipelagoJunimoNoteMenu.SisyphusIndex >= 0 && !ArchipelagoJunimoNoteMenu.SisyphusStoneFell)
+                {
+                    foreach (var (bundleKey, bundleData) in Game1.netWorldState.Value.BundleData)
+                    {
+                        var bundleFields = bundleData.Split("/");
+                        var bundleName = bundleFields[0];
+                        if (bundleName != MemeBundleNames.SISYPHUS)
+                        {
+                            continue;
+                        }
+
+                        var areaName = bundleKey.Split("/")[0];
+                        var area = CommunityCenter.getAreaNumberFromName(areaName);
+                        var notePosition = GetNotePosition(area);
+                        notePosition.Y += 1;
+                        var noteVector = new Vector2(notePosition.X, notePosition.Y) * 64f;
+
+                        var item = ItemRegistry.Create(QualifiedItemIds.STONE);
+                        Game1.createItemDebris(item, noteVector, 0, __instance);
+                        ArchipelagoJunimoNoteMenu.SisyphusStoneFell = true;
+                        return;
+                    }
+
+                }
+                return;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(ResetSharedState_SisyphusStoneFallDown_Postfix)}:\n{ex}");
+                return;
+            }
+        }
+
+        private static Point GetNotePosition(int area)
+        {
+            switch (area)
+            {
+                case 0:
+                    return new Point(14, 5);
+                case 1:
+                    return new Point(14, 23);
+                case 2:
+                    return new Point(40, 10);
+                case 3:
+                    return new Point(63, 14);
+                case 4:
+                    return new Point(55, 6);
+                case 5:
+                    return new Point(46, 11);
+                default:
+                    return Point.Zero;
+            }
+        }
+
     }
 }

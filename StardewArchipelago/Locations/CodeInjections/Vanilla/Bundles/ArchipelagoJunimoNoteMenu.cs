@@ -20,6 +20,8 @@ using StardewArchipelago.Bundles;
 using StardewArchipelago.Logging;
 using StardewArchipelago.Serialization;
 using System.Reflection;
+using Microsoft.Xna.Framework.Input;
+using StardewValley.Minigames;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 {
@@ -35,6 +37,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         private static LocationChecker _locationChecker;
         private static BundleReader _bundleReader;
         private BundleCurrencyManager _currencyManager;
+
+        internal static bool SisyphusStoneFell = false;
+        internal static int SisyphusIndex = -1;
+        internal static int BureaucracyIndex = -1;
 
         public Texture2D MemeTexture;
         private ClickableTextureComponent _donateButton;
@@ -79,7 +85,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             MarkAllRewardsAsAlreadyGrabbed();
         }
 
-        protected override JunimoNoteMenuRemake CreateJunimoNoteMenu()
+        protected override ArchipelagoJunimoNoteMenu CreateJunimoNoteMenu()
         {
             if (FromGameMenu || FromThisMenu)
             {
@@ -482,6 +488,245 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             {
                 extraButton?.tryHover(x, y);
             }
+        }
+
+        protected override void UpdateIngredientSlots()
+        {
+            base.UpdateIngredientSlots();
+            UpdateIngredientSlotsSpecialBundles();
+        }
+
+        private void UpdateIngredientSlotsSpecialBundles()
+        {
+            UpdateIngredientSlotsSisyphus();
+            UpdateIngredientSlotsBureaucracy();
+        }
+
+        private void UpdateIngredientSlotsSisyphus()
+        {
+            if (CurrentPageBundle?.name != MemeBundleNames.SISYPHUS)
+            {
+                return;
+            }
+            if (SisyphusIndex >= 0 && !SisyphusStoneFell)
+            {
+                FocusOnOneIngredientSlot(SisyphusIndex);
+                return;
+            }
+            for (var slotIndex = 0; slotIndex < IngredientSlots.Count; ++slotIndex)
+            {
+                if (IngredientSlots[slotIndex].item != null)
+                {
+                    continue;
+                }
+
+                FocusOnOneIngredientSlot(slotIndex);
+                SisyphusIndex = slotIndex;
+                SisyphusStoneFell = false;
+                return;
+            }
+        }
+
+        private void UpdateIngredientSlotsBureaucracy()
+        {
+            if (CurrentPageBundle?.name != MemeBundleNames.BUREAUCRACY)
+            {
+                return;
+            }
+
+            for (var slotIndex = 0; slotIndex < CurrentPageBundle.Ingredients.Count; ++slotIndex)
+            {
+                var ingredient = CurrentPageBundle.Ingredients[slotIndex];
+                if (Game1.player.Items.ContainsId(ingredient.id))
+                {
+                    continue;
+                }
+
+                FocusOnOneIngredientSlot(slotIndex);
+                BureaucracyIndex = slotIndex;
+                return;
+            }
+
+            FocusOnOneIngredientSlot(0);
+            BureaucracyIndex = 0;
+        }
+
+        private void FocusOnOneIngredientSlot(int focusedSlotIndex)
+        {
+            for (var slotIndex = 0; slotIndex < IngredientSlots.Count; ++slotIndex)
+            {
+                var toAddTo1 = new List<Rectangle>();
+                if (slotIndex == focusedSlotIndex)
+                {
+                    AddRectangleRowsToList(toAddTo1, 1, 932, 540);
+                }
+                else
+                {
+                    AddRectangleRowsToList(toAddTo1, 1, 932 * 100, 540 * 100);
+                }
+                foreach (var tempSprite in TempSprites)
+                {
+                    if (tempSprite.Position.X == IngredientSlots[slotIndex].bounds.X && tempSprite.Position.Y == IngredientSlots[slotIndex].bounds.Y)
+                    {
+                        tempSprite.Position = new Vector2(toAddTo1[0].X, toAddTo1[0].Y);
+                    }
+                }
+                IngredientSlots[slotIndex].bounds = toAddTo1[0];
+            }
+            for (var slotIndex = 0; slotIndex < IngredientList.Count; ++slotIndex)
+            {
+                var toAddTo1 = new List<Rectangle>();
+                if (slotIndex == focusedSlotIndex)
+                {
+                    AddRectangleRowsToList(toAddTo1, 1, 932, 364);
+                }
+                else
+                {
+                    AddRectangleRowsToList(toAddTo1, 1, 932 * 100, 364 * 100);
+                }
+                foreach (var tempSprite in TempSprites)
+                {
+                    if (tempSprite.Position.X == IngredientList[slotIndex].bounds.X && tempSprite.Position.Y == IngredientList[slotIndex].bounds.Y)
+                    {
+                        tempSprite.Position = new Vector2(toAddTo1[0].X, toAddTo1[0].Y);
+                    }
+                }
+                IngredientList[slotIndex].bounds = toAddTo1[0];
+            }
+        }
+
+        protected override int UpdateIngredientSlot(BundleIngredientDescription ingredient, int index)
+        {
+            if (CurrentPageBundle.name == MemeBundleNames.REVERSE)
+            {
+                return UpdateReverseIngredientSlot(ingredient, index);
+            }
+
+            return base.UpdateIngredientSlot(ingredient, index);
+        }
+
+        private int UpdateReverseIngredientSlot(BundleIngredientDescription ingredient, int index)
+        {
+            if (ingredient.completed && index < IngredientSlots.Count)
+            {
+                return index;
+            }
+
+            var representativeItemId = GetRepresentativeItemId(ingredient);
+            if (ingredient.preservesId != null)
+            {
+                IngredientSlots[index].item = Utility.CreateFlavoredItem(representativeItemId, ingredient.preservesId, ingredient.quality, ingredient.stack);
+            }
+            else
+            {
+                IngredientSlots[index].item = ItemRegistry.Create(representativeItemId, ingredient.stack, ingredient.quality);
+            }
+            // CurrentPageBundle.IngredientDepositAnimation(IngredientSlots[index], NOTE_TEXTURE_NAME, true);
+            ++index;
+            return index;
+        }
+
+        protected override bool ReceiveLeftClickInSpecificBundlePage(int x, int y)
+        {
+            if (CurrentPageBundle.name == MemeBundleNames.REVERSE)
+            {
+                if (ReceiveLeftClickInReverseBundle(x, y))
+                {
+                    return true;
+                }
+            }
+
+            return base.ReceiveLeftClickInSpecificBundlePage(x, y);
+        }
+
+        private bool ReceiveLeftClickInReverseBundle(int x, int y)
+        {
+            if (HeldItem != null || !CurrentPageBundle.DepositsAllowed)
+            {
+                return false;
+            }
+
+            for (var index = 0; index < IngredientSlots.Count; ++index)
+            {
+                if (!IngredientSlots[index].containsPoint(x, y))
+                {
+                    continue;
+                }
+
+                if (IngredientSlots[index].item == null)
+                {
+                    continue;
+                }
+
+                HeldItem = IngredientSlots[index].item;
+                IngredientSlots[index].item = null;
+                var communityCenter = Game1.RequireLocation<CommunityCenter>("CommunityCenter");
+
+                for (var ingredientIndex = 0; ingredientIndex < CurrentPageBundle.Ingredients.Count; ++ingredientIndex)
+                {
+                    var ingredientDescription = CurrentPageBundle.Ingredients[ingredientIndex];
+                    if (CurrentPageBundle.IsValidItemForThisIngredientDescription(HeldItem, ingredientDescription))
+                    {
+                        var completedDescription = new BundleIngredientDescription(ingredientDescription, true);
+                        CurrentPageBundle.Ingredients[ingredientIndex] = completedDescription;
+                        communityCenter.bundles.FieldDict[CurrentPageBundle.BundleIndex][ingredientIndex] = true;
+                        if (OnIngredientDeposit != null)
+                        {
+                            OnIngredientDeposit(ingredientIndex);
+                            break;
+                        }
+                        break;
+                    }
+                }
+
+                CheckIfBundleIsComplete();
+            }
+
+            return false;
+        }
+
+        protected override bool CheckIfAllIngredientsAreDeposited()
+        {
+            if (CurrentPageBundle.name == MemeBundleNames.REVERSE)
+            {
+                return CheckIfAllIngredientsAreTakenOut();
+            }
+            if (CurrentPageBundle.name == MemeBundleNames.BUREAUCRACY)
+            {
+                return CheckIfAnyIngredientsIsDeposited();
+            }
+
+            return base.CheckIfAllIngredientsAreDeposited();
+        }
+
+        protected virtual bool CheckIfAnyIngredientsIsDeposited()
+        {
+            foreach (var ingredientSlot in IngredientSlots)
+            {
+                if (ingredientSlot.item != null)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private bool CheckIfAllIngredientsAreTakenOut()
+        {
+            var num = 0;
+            foreach (var ingredientSlot in IngredientSlots)
+            {
+                if (ingredientSlot.item == null)
+                {
+                    ++num;
+                }
+            }
+            if (num < CurrentPageBundle.NumberOfIngredientSlots)
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

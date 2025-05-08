@@ -10,6 +10,7 @@ using StardewModdingAPI;
 using StardewValley.Menus;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Logging;
+using StardewValley;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 {
@@ -83,6 +84,28 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             {
                 Complete = true;
             }
+        }
+
+        public override bool CanAcceptThisItem(Item item, ClickableTextureComponent slot, bool ignoreStackCount)
+        {
+            if (name == MemeBundleNames.BUREAUCRACY)
+            {
+                var currentIngredient = Ingredients[ArchipelagoJunimoNoteMenu.BureaucracyIndex];
+                return item.QualifiedItemId == currentIngredient.id;
+            }
+
+            return base.CanAcceptThisItem(item, slot, ignoreStackCount);
+        }
+
+        public override bool IsValidItemForThisIngredientDescription(Item item, BundleIngredientDescription ingredient)
+        {
+            if (name == MemeBundleNames.BUREAUCRACY)
+            {
+                var currentIngredient = Ingredients[ArchipelagoJunimoNoteMenu.BureaucracyIndex];
+                return item.QualifiedItemId == currentIngredient.id;
+            }
+
+            return base.IsValidItemForThisIngredientDescription(item, ingredient);
         }
     }
 }

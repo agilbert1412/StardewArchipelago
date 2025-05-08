@@ -59,8 +59,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
         public ClickableTextureComponent AreaBackButton;
         public ClickableAnimatedComponent PresentButton;
         public Action<int> OnIngredientDeposit;
-        public Action<JunimoNoteMenuRemake> OnBundleComplete;
-        public Action<JunimoNoteMenuRemake> OnScreenSwipeFinished;
+        public Action<ArchipelagoJunimoNoteMenu> OnBundleComplete;
+        public Action<ArchipelagoJunimoNoteMenu> OnScreenSwipeFinished;
         public ArchipelagoBundle CurrentPageBundle;
         private int _oldTriggerSpot;
 
@@ -863,7 +863,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                     {
                         num2 = currentlySnappedComponent.myID;
                     }
-                    var junimoNoteMenu = new JunimoNoteMenuRemake(true, whichArea, true)
+                    var junimoNoteMenu = new ArchipelagoJunimoNoteMenu(true, whichArea, true)
                     {
                         GameMenuTabToReturnTo = GameMenuTabToReturnTo
                     };
@@ -986,11 +986,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             Game1.activeClickableMenu = junimoNoteMenu;
         }
 
-        protected virtual JunimoNoteMenuRemake CreateJunimoNoteMenu()
+        protected virtual ArchipelagoJunimoNoteMenu CreateJunimoNoteMenu()
         {
             if (FromGameMenu || FromThisMenu)
             {
-                return new JunimoNoteMenuRemake(FromGameMenu, WhichArea, FromThisMenu)
+                return new ArchipelagoJunimoNoteMenu(FromGameMenu, WhichArea, FromThisMenu)
                 {
                     GameMenuTabToReturnTo = GameMenuTabToReturnTo,
                     MenuToReturnTo = MenuToReturnTo,
@@ -998,7 +998,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             }
             else
             {
-                return new JunimoNoteMenuRemake(WhichArea, Game1.RequireLocation<CommunityCenter>("CommunityCenter").bundlesDict())
+                return new ArchipelagoJunimoNoteMenu(WhichArea, Game1.RequireLocation<CommunityCenter>("CommunityCenter").bundlesDict())
                 {
                     GameMenuTabToReturnTo = GameMenuTabToReturnTo,
                     MenuToReturnTo = MenuToReturnTo,
@@ -1006,26 +1006,34 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             }
         }
 
-        private void UpdateIngredientSlots()
+        protected virtual void UpdateIngredientSlots()
         {
             var index = 0;
             foreach (var ingredient in CurrentPageBundle.Ingredients)
             {
-                if (ingredient.completed && index < IngredientSlots.Count)
-                {
-                    var representativeItemId = GetRepresentativeItemId(ingredient);
-                    if (ingredient.preservesId != null)
-                    {
-                        IngredientSlots[index].item = Utility.CreateFlavoredItem(representativeItemId, ingredient.preservesId, ingredient.quality, ingredient.stack);
-                    }
-                    else
-                    {
-                        IngredientSlots[index].item = ItemRegistry.Create(representativeItemId, ingredient.stack, ingredient.quality);
-                    }
-                    CurrentPageBundle.IngredientDepositAnimation(IngredientSlots[index], NOTE_TEXTURE_NAME, true);
-                    ++index;
-                }
+                index = UpdateIngredientSlot(ingredient, index);
             }
+        }
+
+        protected virtual int UpdateIngredientSlot(BundleIngredientDescription ingredient, int index)
+        {
+            if (!ingredient.completed || index >= IngredientSlots.Count)
+            {
+                return index;
+            }
+
+            var representativeItemId = GetRepresentativeItemId(ingredient);
+            if (ingredient.preservesId != null)
+            {
+                IngredientSlots[index].item = Utility.CreateFlavoredItem(representativeItemId, ingredient.preservesId, ingredient.quality, ingredient.stack);
+            }
+            else
+            {
+                IngredientSlots[index].item = ItemRegistry.Create(representativeItemId, ingredient.stack, ingredient.quality);
+            }
+            CurrentPageBundle.IngredientDepositAnimation(IngredientSlots[index], NOTE_TEXTURE_NAME, true);
+            ++index;
+            return index;
         }
 
         /// <summary>Get the qualified item ID to draw in the bundle UI for an ingredient.</summary>
@@ -1082,22 +1090,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             Game1.RequireLocation<CommunityCenter>("CommunityCenter").bundleRewards[item.SpecialVariable] = false;
         }
 
-        private void CheckIfBundleIsComplete()
+        protected virtual void CheckIfBundleIsComplete()
         {
             ReturnPartialDonations();
             if (!SpecificBundlePage || CurrentPageBundle == null)
             {
                 return;
             }
-            var num = 0;
-            foreach (var ingredientSlot in IngredientSlots)
-            {
-                if (ingredientSlot.item != null && ingredientSlot.item != PartialDonationItem)
-                {
-                    ++num;
-                }
-            }
-            if (num < CurrentPageBundle.NumberOfIngredientSlots)
+            if (!CheckIfAllIngredientsAreDeposited())
             {
                 return;
             }
@@ -1151,8 +1151,25 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                 {
                     return;
                 }
-                OnBundleComplete(this);
+                OnBundleComplete((ArchipelagoJunimoNoteMenu)this);
             }
+        }
+
+        protected virtual bool CheckIfAllIngredientsAreDeposited()
+        {
+            var num = 0;
+            foreach (var ingredientSlot in IngredientSlots)
+            {
+                if (ingredientSlot.item != null)
+                {
+                    ++num;
+                }
+            }
+            if (num < CurrentPageBundle.NumberOfIngredientSlots)
+            {
+                return false;
+            }
+            return true;
         }
 
         protected void restoreaAreaOnExit_AbandonedJojaMart()
@@ -1274,7 +1291,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                     var screenSwipeFinished = OnScreenSwipeFinished;
                     if (screenSwipeFinished != null)
                     {
-                        screenSwipeFinished(this);
+                        screenSwipeFinished((ArchipelagoJunimoNoteMenu)this);
                     }
                 }
             }
@@ -1703,7 +1720,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
 
         private void SetUpIngredientButtons(BundleRemake b)
         {
-
             var ofIngredientSlots = b.NumberOfIngredientSlots;
             var toAddTo1 = new List<Rectangle>();
             AddRectangleRowsToList(toAddTo1, ofIngredientSlots, 932, 540);
@@ -1822,7 +1838,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             return (CurrentPartialIngredientDescriptionIndex < 0 || (!IngredientSlots.Contains(b) || b.item == PartialDonationItem) && (!IngredientList.Contains(b) || IngredientList.IndexOf(b as ClickableTextureComponent) == CurrentPartialIngredientDescriptionIndex)) && (a.myID >= REGION_BUNDLE_MODIFIER || a.myID == REGION_AREA_NEXT_BUTTON ? 1 : a.myID == REGION_AREA_BACK_BUTTON ? 1 : 0) == (b.myID >= REGION_BUNDLE_MODIFIER || b.myID == REGION_AREA_NEXT_BUTTON ? 1 : b.myID == REGION_AREA_BACK_BUTTON ? 1 : 0);
         }
 
-        private void AddRectangleRowsToList(
+        protected void AddRectangleRowsToList(
           List<Rectangle> toAddTo,
           int numberOfItems,
           int centerX,

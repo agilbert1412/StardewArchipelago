@@ -151,6 +151,10 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(typeof(CommunityCenter), "checkForMissedRewards"),
                 prefix: new HarmonyMethod(typeof(CommunityCenterInjections), nameof(CommunityCenterInjections.CheckForMissedRewards_DontBother_Prefix))
             );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(CommunityCenter), "resetSharedState"),
+                prefix: new HarmonyMethod(typeof(CommunityCenterInjections), nameof(CommunityCenterInjections.ResetSharedState_SisyphusStoneFallDown_Postfix))
+            );
         }
 
         private void ReplaceCommunityCenterAreasWithChecks()
