@@ -428,10 +428,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
 
         protected virtual bool ReceiveLeftClickInSpecificBundlePage(int x, int y)
         {
-            if (!CurrentPageBundle.Complete && CurrentPageBundle.CompletionTimer <= 0)
-            {
-                HeldItem = Inventory.leftClick(x, y, HeldItem);
-            }
+            PickItemFromInventory(x, y);
             if (BackButton != null && BackButton.containsPoint(x, y) && HeldItem == null)
             {
                 CloseBundlePage();
@@ -509,6 +506,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                 return true;
             }
             return false;
+        }
+
+        protected virtual void PickItemFromInventory(int x, int y)
+        {
+            if (!CurrentPageBundle.Complete && CurrentPageBundle.CompletionTimer <= 0)
+            {
+                HeldItem = Inventory.leftClick(x, y, HeldItem);
+            }
         }
 
         protected virtual void ReceiveLeftClickInButtons(int x, int y)
@@ -1470,6 +1475,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             DrawTemporarySprites(b);
             DrawIngredientSlots(b);
             DrawIngredients(b);
+            DrawInventory(b);
+        }
+
+        protected virtual void DrawInventory(SpriteBatch b)
+        {
             Inventory.draw(b);
         }
 
@@ -1526,7 +1536,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             }
         }
 
-        private void DrawIngredients(SpriteBatch b)
+        private void DrawIngredients(SpriteBatch spriteBatch)
         {
             for (var index = 0; index < IngredientList.Count; ++index)
             {
@@ -1546,12 +1556,17 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                 }
                 if (!flag)
                 {
-                    b.Draw(Game1.shadowTexture, new Vector2(ingredient.bounds.Center.X - Game1.shadowTexture.Bounds.Width * 4 / 2 - 4, ingredient.bounds.Center.Y + 4), Game1.shadowTexture.Bounds, Color.White * num3, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 0.1f);
+                    spriteBatch.Draw(Game1.shadowTexture, new Vector2(ingredient.bounds.Center.X - Game1.shadowTexture.Bounds.Width * 4 / 2 - 4, ingredient.bounds.Center.Y + 4), Game1.shadowTexture.Bounds, Color.White * num3, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 0.1f);
                 }
-                if (ingredient.item != null && ingredient.visible)
-                {
-                    ingredient.item.drawInMenu(b, new Vector2(ingredient.bounds.X, ingredient.bounds.Y), ingredient.scale / 4f, 1f, 0.9f, StackDrawType.Draw, Color.White * (flag ? 0.25f : num3), false);
-                }
+                DrawIngredient(spriteBatch, CurrentPageBundle?.Ingredients?[index], ingredient, (flag ? 0.25f : num3));
+            }
+        }
+
+        protected virtual void DrawIngredient(SpriteBatch spriteBatch, BundleIngredientDescription? ingredient, ClickableTextureComponent ingredientBox, float overlayTransparency)
+        {
+            if (ingredientBox.item != null && ingredientBox.visible)
+            {
+                ingredientBox.item.drawInMenu(spriteBatch, new Vector2(ingredientBox.bounds.X, ingredientBox.bounds.Y), ingredientBox.scale / 4f, 1f, 0.9f, StackDrawType.Draw, Color.White * overlayTransparency, false);
             }
         }
 
@@ -1581,11 +1596,18 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                 b.Draw(NoteTexture, new Vector2(xPositionOnScreen + 936 - (int)x / 2 - 16, yPositionOnScreen + 228), new Rectangle(517, 266, 4, 17), Color.White, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 0.1f);
                 b.Draw(NoteTexture, new Rectangle(xPositionOnScreen + 936 - (int)x / 2, yPositionOnScreen + 228, (int)x, 68), new Rectangle(520, 266, 1, 17), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, 0.1f);
                 b.Draw(NoteTexture, new Vector2(xPositionOnScreen + 936 + (int)x / 2, yPositionOnScreen + 228), new Rectangle(524, 266, 4, 17), Color.White, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 0.1f);
-                b.DrawString(Game1.dialogueFont, !Game1.player.hasOrWillReceiveMail("canReadJunimoText") ? "???" : Game1.content.LoadString("Strings\\UI:JunimoNote_BundleName", CurrentPageBundle.label), new Vector2(xPositionOnScreen + 936 - x / 2f, yPositionOnScreen + 236) + new Vector2(2f, 2f), Game1.textShadowColor);
-                b.DrawString(Game1.dialogueFont, !Game1.player.hasOrWillReceiveMail("canReadJunimoText") ? "???" : Game1.content.LoadString("Strings\\UI:JunimoNote_BundleName", CurrentPageBundle.label), new Vector2(xPositionOnScreen + 936 - x / 2f, yPositionOnScreen + 236) + new Vector2(0.0f, 2f), Game1.textShadowColor);
-                b.DrawString(Game1.dialogueFont, !Game1.player.hasOrWillReceiveMail("canReadJunimoText") ? "???" : Game1.content.LoadString("Strings\\UI:JunimoNote_BundleName", CurrentPageBundle.label), new Vector2(xPositionOnScreen + 936 - x / 2f, yPositionOnScreen + 236) + new Vector2(2f, 0.0f), Game1.textShadowColor);
-                b.DrawString(Game1.dialogueFont, !Game1.player.hasOrWillReceiveMail("canReadJunimoText") ? "???" : Game1.content.LoadString("Strings\\UI:JunimoNote_BundleName", CurrentPageBundle.label), new Vector2(xPositionOnScreen + 936 - x / 2f, yPositionOnScreen + 236), Game1.textColor * 0.9f);
+                var text = GetBundleNameText();
+                b.DrawString(Game1.dialogueFont, text, new Vector2(xPositionOnScreen + 936 - x / 2f, yPositionOnScreen + 236) + new Vector2(2f, 2f), Game1.textShadowColor);
+                b.DrawString(Game1.dialogueFont, text, new Vector2(xPositionOnScreen + 936 - x / 2f, yPositionOnScreen + 236) + new Vector2(0.0f, 2f), Game1.textShadowColor);
+                b.DrawString(Game1.dialogueFont, text, new Vector2(xPositionOnScreen + 936 - x / 2f, yPositionOnScreen + 236) + new Vector2(2f, 0.0f), Game1.textShadowColor);
+                b.DrawString(Game1.dialogueFont, text, new Vector2(xPositionOnScreen + 936 - x / 2f, yPositionOnScreen + 236), Game1.textColor * 0.9f);
             }
+        }
+
+        protected virtual string GetBundleNameText()
+        {
+            var text = !Game1.player.hasOrWillReceiveMail("canReadJunimoText") ? "???" : Game1.content.LoadString("Strings\\UI:JunimoNote_BundleName", CurrentPageBundle.label);
+            return text;
         }
 
         public virtual string GetRewardNameForArea(int whichArea)
@@ -1653,6 +1675,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             IngredientSlots.Clear();
             for (var index = 0; index < toAddTo1.Count; ++index)
                 IngredientSlots.Add(new ClickableTextureComponent(toAddTo1[index], NoteTexture, new Rectangle(512, 244, 18, 18), 4f));
+            CreateIngredients();
+            UpdateIngredientSlots();
+        }
+
+        private void CreateIngredients()
+        {
             var toAddTo2 = new List<Rectangle>();
             IngredientList.Clear();
             AddRectangleRowsToList(toAddTo2, CurrentPageBundle.Ingredients.Count, 932, 364);
@@ -1677,7 +1705,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                     ingredientList.Add(textureComponent);
                 }
             }
-            UpdateIngredientSlots();
         }
 
         private void SetUpBundleSpecificPage(ArchipelagoBundle b)

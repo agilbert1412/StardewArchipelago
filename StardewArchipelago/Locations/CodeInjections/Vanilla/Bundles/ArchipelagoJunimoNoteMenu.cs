@@ -41,6 +41,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         internal static bool SisyphusStoneFell = false;
         internal static int SisyphusIndex = -1;
         internal static int BureaucracyIndex = -1;
+        internal ClothesMenu _clothesMenu;
 
         public Texture2D MemeTexture;
         private ClickableTextureComponent _donateButton;
@@ -67,6 +68,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             var memeAssetsPath = Path.Combine("Bundles", "UI", "MemeBundleAssets.png");
             MemeTexture = TexturesLoader.GetTexture(_logger, _modHelper, memeAssetsPath);
             ExtraButtons = new Dictionary<ClickableTextureComponent, Action>();
+            InitializeClothesMenu();
+        }
+
+        private void InitializeClothesMenu()
+        {
+            var capacity = Game1.player.maxItems.Value;
+            var rows = 6;
+            var width = 64 * ((capacity == -1 ? 36 : capacity) / rows);
+            var height = 64 * rows + 16;
+            _clothesMenu = new ClothesMenu(xPositionOnScreen + 128, yPositionOnScreen + 140, width, height);
         }
 
         public static void InitializeArchipelago(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, ArchipelagoWalletDto wallet, LocationChecker locationChecker)
@@ -269,7 +280,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             var completedBundleNames = _bundleReader.GetAllCompletedBundles();
             foreach (var completedBundleName in completedBundleNames)
             {
-                _locationChecker.AddCheckedLocation(completedBundleName + " Bundle");
+                if (_locationChecker.IsLocationMissing(completedBundleName + " Bundle"))
+                {
+                    _locationChecker.AddCheckedLocation(completedBundleName + " Bundle");
+                }
+                else if (_locationChecker.IsLocationMissing(completedBundleName))
+                {
+                    _locationChecker.AddCheckedLocation(completedBundleName);
+                }
             }
         }
 
@@ -321,7 +339,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
 
             apLocationToScout = bundle.name + " Bundle";
-            return true;
+            if (_locationChecker.LocationExists(apLocationToScout))
+            {
+                return true;
+            }
+
+            apLocationToScout = bundle.name;
+            return _locationChecker.LocationExists(apLocationToScout);
         }
 
         private bool TryGetRoomLocationToScout(int whichArea, out string apAreaToScout)
@@ -727,6 +751,89 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 return false;
             }
             return true;
+        }
+
+        protected override void DrawInventory(SpriteBatch b)
+        {
+            if (CurrentPageBundle.name == MemeBundleNames.OFF_YOUR_BACK)
+            {
+                _clothesMenu.draw(b);
+                return;
+            }
+            base.DrawInventory(b);
+        }
+
+        protected override void DrawIngredient(SpriteBatch spriteBatch, BundleIngredientDescription? ingredient, ClickableTextureComponent ingredientBox, float overlayTransparency)
+        {
+            if (CurrentPageBundle.name == MemeBundleNames.OFF_YOUR_BACK)
+            {
+                if (ingredient == null || ingredientBox.item == null || !ingredientBox.visible)
+                {
+                    return;
+                }
+                DrawWornHat(spriteBatch, ingredient.Value, ingredientBox, overlayTransparency);
+                DrawWornBoots(spriteBatch, ingredient.Value, ingredientBox, overlayTransparency);
+                DrawWornPants(spriteBatch, ingredient.Value, ingredientBox, overlayTransparency);
+                DrawWornShirt(spriteBatch, ingredient.Value, ingredientBox, overlayTransparency);
+                DrawWornRing(spriteBatch, ingredient.Value, ingredientBox, overlayTransparency);
+                return;
+            }
+
+            base.DrawIngredient(spriteBatch, ingredient, ingredientBox, overlayTransparency);
+        }
+
+        private static void DrawWornHat(SpriteBatch spriteBatch, BundleIngredientDescription ingredient, ClickableTextureComponent ingredientBox, float overlayTransparency)
+        {
+            DrawWornItem(spriteBatch, ingredient, ingredientBox, overlayTransparency, MemeIDProvider.WORN_HAT, "Used Hat", Game1.player.hat.Value, 42);
+        }
+
+        private static void DrawWornBoots(SpriteBatch spriteBatch, BundleIngredientDescription ingredient, ClickableTextureComponent ingredientBox, float overlayTransparency)
+        {
+            DrawWornItem(spriteBatch, ingredient, ingredientBox, overlayTransparency, MemeIDProvider.WORN_BOOTS, "Used Boots", Game1.player.boots.Value, 40);
+        }
+
+        private static void DrawWornPants(SpriteBatch spriteBatch, BundleIngredientDescription ingredient, ClickableTextureComponent ingredientBox, float overlayTransparency)
+        {
+            DrawWornItem(spriteBatch, ingredient, ingredientBox, overlayTransparency, MemeIDProvider.WORN_PANTS, "Used Pants", Game1.player.pantsItem.Value, 68);
+        }
+
+        private static void DrawWornShirt(SpriteBatch spriteBatch, BundleIngredientDescription ingredient, ClickableTextureComponent ingredientBox, float overlayTransparency)
+        {
+            DrawWornItem(spriteBatch, ingredient, ingredientBox, overlayTransparency, MemeIDProvider.WORN_SHIRT, "Used Shirt", Game1.player.shirtItem.Value, 69);
+        }
+
+        private static void DrawWornRing(SpriteBatch spriteBatch, BundleIngredientDescription ingredient, ClickableTextureComponent ingredientBox, float overlayTransparency)
+        {
+            DrawWornItem(spriteBatch, ingredient, ingredientBox, overlayTransparency, MemeIDProvider.WORN_LEFT_RING, "Used Left Ring", Game1.player.leftRing.Value, 41);
+            DrawWornItem(spriteBatch, ingredient, ingredientBox, overlayTransparency, MemeIDProvider.WORN_RIGHT_RING, "Used Right Ring", Game1.player.rightRing.Value, 41);
+        }
+
+        private static void DrawWornItem(SpriteBatch spriteBatch, BundleIngredientDescription ingredient, ClickableTextureComponent ingredientBox, float overlayTransparency, string wornItemId, string hoverText, Item wornItem, int emptySlotTilePosition)
+        {
+            if (ingredient.id != wornItemId)
+            {
+                return;
+            }
+
+            ingredientBox.hoverText = hoverText;
+            if (wornItem == null)
+            {
+                spriteBatch.Draw(Game1.menuTexture, ingredientBox.bounds, new Rectangle?(Game1.getSourceRectForStandardTileSheet(Game1.menuTexture, emptySlotTilePosition)), Color.White);
+            }
+            else
+            {
+                wornItem.drawInMenu(spriteBatch, new Vector2(ingredientBox.bounds.X, ingredientBox.bounds.Y), ingredientBox.scale / 4f, 1f, 0.9f, StackDrawType.Draw, Color.White * overlayTransparency, false);
+            }
+        }
+
+        protected override void PickItemFromInventory(int x, int y)
+        {
+            if (CurrentPageBundle.name == MemeBundleNames.OFF_YOUR_BACK)
+            {
+                HeldItem = _clothesMenu.leftClick(x, y, HeldItem);
+                return;
+            }
+            base.PickItemFromInventory(x, y);
         }
     }
 }

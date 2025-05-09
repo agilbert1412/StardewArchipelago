@@ -16,9 +16,13 @@ using Netcode;
 using StardewValley.Network;
 using StardewValley.TerrainFeatures;
 using System;
+using System.Linq;
 using StardewValley.Extensions;
 using Object = StardewValley.Object;
 using Microsoft.Xna.Framework.Input;
+using StardewArchipelago.Constants;
+using StardewValley.Internal;
+using StardewValley.Objects;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 {
@@ -57,6 +61,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             var rawBundleParts = rawBundleInfo.Split('/');
             var bundleName = rawBundleParts[0];
             var bundleDisplayName = $"{bundleName} Bundle";
+            if (!_bundlesManager.BundleRooms.BundlesByName.ContainsKey(bundleDisplayName))
+            {
+                bundleDisplayName = bundleName;
+                if (!_bundlesManager.BundleRooms.BundlesByName.ContainsKey(bundleDisplayName))
+                {
+                    throw new Exception($"Unrecognized bundle name: {bundleName}");
+                }
+            }
             var bundleFromArchipelago = _bundlesManager.BundleRooms.BundlesByName[bundleDisplayName];
             if (bundleFromArchipelago is not ItemBundle itemBundle)
             {
@@ -113,6 +125,35 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             {
                 var currentIngredient = Ingredients[ArchipelagoJunimoNoteMenu.BureaucracyIndex];
                 return item.QualifiedItemId == currentIngredient.id;
+            }
+            if (name == MemeBundleNames.OFF_YOUR_BACK)
+            {
+                if (item == null || ingredient.completed)
+                {
+                    return false;
+                }
+                if (item is Hat && ingredient.id == MemeIDProvider.WORN_HAT)
+                {
+                    return true;
+                }
+                if (item is Boots && ingredient.id == MemeIDProvider.WORN_BOOTS)
+                {
+                    return true;
+                }
+                if (item is Clothing pants && pants.clothesType.Value == Clothing.ClothesType.PANTS && ingredient.id == MemeIDProvider.WORN_PANTS)
+                {
+                    return true;
+                }
+                if (item is Clothing shirt && shirt.clothesType.Value == Clothing.ClothesType.SHIRT && ingredient.id == MemeIDProvider.WORN_SHIRT)
+                {
+                    return true;
+                }
+                if (item is Ring ring && (ingredient.id == MemeIDProvider.WORN_LEFT_RING || ingredient.id == MemeIDProvider.WORN_RIGHT_RING))
+                {
+                    return true;
+                }
+
+                return false;
             }
 
             return base.IsValidItemForThisIngredientDescription(item, ingredient);
