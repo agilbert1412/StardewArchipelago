@@ -20,5 +20,6 @@ namespace StardewArchipelago.Bundles
         public const string HONORABLE = "Honorable";
         public const string OFF_YOUR_BACK = "Off Your Back";
         public const string BUN_DLE = "Bun-dle";
+        public const string TRAP = "Trap";
     }
 }

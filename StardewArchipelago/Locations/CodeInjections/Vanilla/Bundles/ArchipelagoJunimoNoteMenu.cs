@@ -122,46 +122,103 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             var remixedBundlesTexture = Game1.temporaryContent.Load<Texture2D>("LooseSprites\\BundleSprites");
             foreach (var bundle in this.Bundles)
             {
-                var textureOverride = BundleIcons.GetBundleIcon(_logger, _modHelper, bundle.name, LogLevel.Trace);
-                if (textureOverride == null)
-                {
-                    if (bundle.BundleIndex < REMIXED_BUNDLE_INDEX_THRESHOLD)
-                    {
-                        bundle.BundleTextureOverride = null;
-                        bundle.BundleTextureIndexOverride = -1;
-                        continue;
-                    }
+                AssignBundleIcon(bundle, remixedBundlesTexture);
+            }
+        }
 
-                    if (bundle.BundleIndex < CUSTOM_BUNDLE_INDEX_THRESHOLD)
-                    {
-                        bundle.BundleTextureOverride = remixedBundlesTexture;
-                        bundle.BundleTextureIndexOverride = bundle.BundleIndex - REMIXED_BUNDLE_INDEX_THRESHOLD;
-                        continue;
-                    }
-
-                    var bundleIndexString = bundle.BundleIndex.ToString();
-                    if (bundleIndexString.Length == 4)
-                    {
-                        if (TryGetBundleName(bundleIndexString, out var moneyBundleName))
-                        {
-                            var texture = BundleIcons.GetBundleIcon(_logger, _modHelper, moneyBundleName);
-                            bundle.BundleTextureOverride = texture;
-                            bundle.BundleTextureIndexOverride = 0;
-                            if (texture == null)
-                            {
-                                _logger.LogWarning($"Could not find a proper icon for money bundle '{moneyBundleName}', using default Archipelago Icon");
-                            }
-                            continue;
-                        }
-                    }
-
-                    _logger.LogWarning($"Could not find a proper icon for bundle '{bundle.name}', using default Archipelago Icon");
-                    textureOverride = ArchipelagoTextures.GetArchipelagoLogo(_logger, _modHelper, 32, ArchipelagoTextures.COLOR);
-                }
-
+        private void AssignBundleIcon(ArchipelagoBundle bundle, Texture2D remixedBundlesTexture)
+        {
+            var textureOverride = BundleIcons.GetBundleIcon(_logger, _modHelper, bundle.name, LogLevel.Trace);
+            if (textureOverride != null)
+            {
                 bundle.BundleTextureOverride = textureOverride;
                 bundle.BundleTextureIndexOverride = 0;
+                return;
             }
+
+            if (TryAssignSpecialMemeIcon(bundle))
+            {
+                return;
+            }
+
+            if (TryAssignVanillaRemixedIcon(bundle))
+            {
+                return;
+            }
+
+            if (TryAssignIconFromVanillaTextures(bundle, remixedBundlesTexture))
+            {
+                return;
+            }
+
+            if (TryAssignMoneyBundleIcon(bundle))
+            {
+                return;
+            }
+
+            AssignDefaultIcon(bundle);
+        }
+
+        private static bool TryAssignSpecialMemeIcon(ArchipelagoBundle bundle)
+        {
+            if (bundle.name == MemeBundleNames.TRAP)
+            {
+                var textureOverride = ArchipelagoTextures.GetArchipelagoLogo(_logger, _modHelper, 32, ArchipelagoTextures.RED);
+                bundle.BundleTextureOverride = textureOverride;
+                bundle.BundleTextureIndexOverride = 0;
+                return true;
+            }
+            return false;
+        }
+
+        private static bool TryAssignVanillaRemixedIcon(ArchipelagoBundle bundle)
+        {
+            if (bundle.BundleIndex < REMIXED_BUNDLE_INDEX_THRESHOLD)
+            {
+                bundle.BundleTextureOverride = null;
+                bundle.BundleTextureIndexOverride = -1;
+                return true;
+            }
+            return false;
+        }
+
+        private static bool TryAssignIconFromVanillaTextures(ArchipelagoBundle bundle, Texture2D remixedBundlesTexture)
+        {
+            if (bundle.BundleIndex < CUSTOM_BUNDLE_INDEX_THRESHOLD)
+            {
+                bundle.BundleTextureOverride = remixedBundlesTexture;
+                bundle.BundleTextureIndexOverride = bundle.BundleIndex - REMIXED_BUNDLE_INDEX_THRESHOLD;
+                return true;
+            }
+            return false;
+        }
+
+        private bool TryAssignMoneyBundleIcon(ArchipelagoBundle bundle)
+        {
+            var bundleIndexString = bundle.BundleIndex.ToString();
+            if (bundleIndexString.Length == 4)
+            {
+                if (TryGetBundleName(bundleIndexString, out var moneyBundleName))
+                {
+                    var texture = BundleIcons.GetBundleIcon(_logger, _modHelper, moneyBundleName);
+                    bundle.BundleTextureOverride = texture;
+                    bundle.BundleTextureIndexOverride = 0;
+                    if (texture == null)
+                    {
+                        _logger.LogWarning($"Could not find a proper icon for money bundle '{moneyBundleName}', using default Archipelago Icon");
+                    }
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private static void AssignDefaultIcon(ArchipelagoBundle bundle)
+        {
+            _logger.LogWarning($"Could not find a proper icon for bundle '{bundle.name}', using default Archipelago Icon");
+            var textureOverride = ArchipelagoTextures.GetArchipelagoLogo(_logger, _modHelper, 32, ArchipelagoTextures.COLOR);
+            bundle.BundleTextureOverride = textureOverride;
+            bundle.BundleTextureIndexOverride = 0;
         }
 
         public override string GetRewardNameForArea(int whichArea)
@@ -834,6 +891,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 return;
             }
             base.PickItemFromInventory(x, y);
+        }
+
+        protected override string GetBundleNameText()
+        {
+            if (CurrentPageBundle.name == MemeBundleNames.BUN_DLE)
+            {
+                return MemeBundleNames.BUN_DLE;
+            }
+            return base.GetBundleNameText();
         }
     }
 }

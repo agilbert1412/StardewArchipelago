@@ -70,6 +70,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 }
             }
             var bundleFromArchipelago = _bundlesManager.BundleRooms.BundlesByName[bundleDisplayName];
+
+            // BundleColor = bundleFromArchipelago.ColorIndex;
+
             if (bundleFromArchipelago is not ItemBundle itemBundle)
             {
                 return;
@@ -99,7 +102,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
 
             Ingredients = ingredients;
-            BundleColor = itemBundle.ColorIndex;
             NumberOfIngredientSlots = itemBundle.NumberRequired;
 
             if (numberAlreadyDonated >= NumberOfIngredientSlots)

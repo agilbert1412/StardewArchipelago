@@ -57,7 +57,8 @@ namespace StardewArchipelago.Bundles
                 var colors = BundleIndexes.BundleColorIndexes.Values.Distinct().ToArray();
                 var random = new Random(NameWithoutBundle.GetHash());
                 var chosenColor = random.Next(0, colors.Length);
-                return colors[chosenColor];
+                var color = colors[chosenColor];
+                return color;
             }
         }
 

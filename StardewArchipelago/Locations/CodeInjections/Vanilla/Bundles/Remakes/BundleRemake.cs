@@ -126,6 +126,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                     ++num;
                 }
             }
+
             this.BundleColor = Convert.ToInt32(array[3]);
             this.NumberOfIngredientSlots = ArgUtility.GetInt(array, 4, this.Ingredients.Count);
             if (num >= this.NumberOfIngredientSlots)
