@@ -472,6 +472,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
         }
 
+        protected override void SetUpPurchaseButton()
+        {
+            if (CurrentPageBundle.name == MemeBundleNames.NFT)
+            {
+                return;
+            }
+
+            base.SetUpPurchaseButton();
+        }
+
         private void SetUpDonateButton()
         {
             if (FromGameMenu)
@@ -900,6 +910,45 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 return MemeBundleNames.BUN_DLE;
             }
             return base.GetBundleNameText();
+        }
+
+        protected override void DrawSpecificBundle(SpriteBatch b)
+        {
+            base.DrawSpecificBundle(b);
+
+            if (CurrentPageBundle.name == MemeBundleNames.FLASHBANG)
+            {
+                b.Draw(CurrentPageBundle.BundleTextureOverride, new Vector2(0, 0), new Rectangle(Game1.viewport.Width, 0, Game1.viewport.Width, Game1.viewport.Height), Color.White, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 0.1f);
+            }
+        }
+
+        public static void OnUpdateTickedStatic()
+        {
+            if (Game1.activeClickableMenu is ArchipelagoJunimoNoteMenu junimoNoteMenu)
+            {
+                junimoNoteMenu.OnUpdateTicked();
+            }
+        }
+
+        public void OnUpdateTicked()
+        {
+            if (!SpecificBundlePage || CurrentPageBundle == null || CurrentPageBundle.name != MemeBundleNames.NFT)
+            {
+                return;
+            }
+
+            if (DidPlayerJustScreenshot())
+            {
+                PerformCurrencyPurchase();
+            }
+        }
+
+        public bool DidPlayerJustScreenshot(bool ignoreNonMouseHeldInput = false)
+        {
+            var keyboard = Game1.input.GetKeyboardState();
+            var pressedKeys = keyboard.GetPressedKeys(); 
+            var hasPressedScreenshotKey = pressedKeys.Contains(Keys.F12) || pressedKeys.Contains(Keys.PrintScreen) || pressedKeys.Contains(Keys.Print);
+            return hasPressedScreenshotKey;
         }
     }
 }

@@ -30,6 +30,7 @@ using StardewArchipelago.Items.Traps;
 using StardewArchipelago.Json;
 using StardewArchipelago.Locations;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
 using StardewArchipelago.Locations.InGameLocations;
@@ -526,6 +527,7 @@ namespace StardewArchipelago
         private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
         {
             _archipelago.APUpdate();
+            ArchipelagoJunimoNoteMenu.OnUpdateTickedStatic();
             State?.Wallet?.CookieClicker?.DoFrame();
             if (!_archipelago.IsConnected || _itemManager == null)
             {

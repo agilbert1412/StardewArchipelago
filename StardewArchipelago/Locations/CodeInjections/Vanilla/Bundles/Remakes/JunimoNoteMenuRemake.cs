@@ -1466,7 +1466,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             ScreenSwipe?.draw(b);
         }
 
-        private void DrawSpecificBundle(SpriteBatch b)
+        protected virtual void DrawSpecificBundle(SpriteBatch b)
         {
             b.Draw(NoteTexture, new Vector2(xPositionOnScreen, yPositionOnScreen), new Rectangle(BASE_WIDTH, 0, BASE_WIDTH, BASE_HEIGHT), Color.White, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 0.1f);
             
