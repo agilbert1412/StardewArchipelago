@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using Microsoft.Xna.Framework.Graphics;
+using StardewArchipelago.Bundles;
 using StardewModdingAPI;
 using StardewArchipelago.Logging;
 
@@ -38,6 +39,10 @@ namespace StardewArchipelago.Textures
             var bundlesFolder = Path.Combine("Bundles", "Icons", folder);
             var cleanName = bundleName.Replace("'", "").Replace(" ", "_").ToLower();
             var fileNameBundleName = $"{cleanName}_{BUNDLE_SUFFIX}.png";
+            if (bundleName == MemeBundleNames.BUN_DLE)
+            {
+                fileNameBundleName = $"{cleanName}.png";
+            }
             var pathToTexture = Path.Combine(bundlesFolder, fileNameBundleName);
             logger.LogDebug($"Attempting to load bundle icon '{pathToTexture}'");
             return TexturesLoader.GetTexture(logger, modHelper, pathToTexture, failureLogLevel);
