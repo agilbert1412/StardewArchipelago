@@ -137,7 +137,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         private void DrawBloodCurrency()
         {
-            DrawSpecialCurrency(_wallet.Blood, _menu.MemeTexture, new Rectangle(58, 0, 5, 8));
+            DrawSpecialCurrency(_wallet.Blood, _menu.MemeTexture, new Rectangle(58, 0, 5, 9), 4f);
         }
 
         private void DrawEnergyCurrency()
@@ -318,7 +318,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             if (currencyId == MemeIDProvider.BLOOD)
             {
                 const int donationAmount = 25;
-                var donation = Math.Min(Game1.player.health, donationAmount);
+                var donation = Math.Max(0, Math.Min(Game1.player.health, donationAmount));
                 Game1.player.health -= donationAmount;
                 _wallet.Blood += donation;
                 return;
