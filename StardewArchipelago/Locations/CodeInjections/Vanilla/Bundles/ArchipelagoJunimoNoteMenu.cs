@@ -948,7 +948,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             var keyboard = Game1.input.GetKeyboardState();
             var pressedKeys = keyboard.GetPressedKeys(); 
             var hasPressedScreenshotKey = pressedKeys.Contains(Keys.F12) || pressedKeys.Contains(Keys.PrintScreen) || pressedKeys.Contains(Keys.Print);
-            return hasPressedScreenshotKey;
+            var hasPressedWindows = pressedKeys.Contains(Keys.LeftWindows) || pressedKeys.Contains(Keys.RightWindows);
+            var hasPressedShift = pressedKeys.Contains(Keys.LeftShift) || pressedKeys.Contains(Keys.RightShift);
+            var hasSummonedSnippingTool = hasPressedWindows && hasPressedShift && pressedKeys.Contains(Keys.S);
+            return hasPressedScreenshotKey || hasSummonedSnippingTool;
         }
     }
 }
