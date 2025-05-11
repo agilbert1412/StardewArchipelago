@@ -236,7 +236,7 @@ namespace StardewArchipelago.Locations.InGameLocations
             return descriptionWithExtraMaterials;
         }
 
-        public static IEnumerable<ItemQueryResult> Create(string locationName, LogHandler logger, IModHelper modHelper, LocationChecker locationChecker, StardewArchipelagoClient archipelago)
+        public static IEnumerable<ItemQueryResult> Create(string locationName, LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             if (string.IsNullOrWhiteSpace(locationName))
             {

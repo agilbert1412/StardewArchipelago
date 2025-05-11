@@ -1,6 +1,7 @@
 ﻿using StardewArchipelago.Archipelago;
 using StardewArchipelago.Bundles;
 using StardewArchipelago.GameModifications;
+using StardewArchipelago.Items.Traps;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
 using StardewArchipelago.Logging;
@@ -14,9 +15,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
     {
         public static void Initialize(LogHandler logger, IModHelper modHelper, ModConfig config, StardewArchipelagoClient archipelago, ArchipelagoStateDto state,
             StardewLocationChecker locationChecker, StardewItemManager itemManager, WeaponsManager weaponsManager, BundlesManager bundlesManager,
-            SeedShopStockModifier seedShopStockModifier, Friends friends)
+            SeedShopStockModifier seedShopStockModifier, Friends friends, TrapManager trapManager)
         {
-            VanillaCodeInjectionInitializer.Initialize(logger, modHelper, config, archipelago, state, locationChecker, itemManager, weaponsManager, bundlesManager, friends);
+            VanillaCodeInjectionInitializer.Initialize(logger, modHelper, config, archipelago, state, locationChecker, itemManager, weaponsManager, bundlesManager, friends, trapManager);
             if (archipelago.SlotData.Mods.IsModded)
             {
                 ModCodeInjectionInitializer.Initialize(logger, modHelper, archipelago, locationChecker, seedShopStockModifier);

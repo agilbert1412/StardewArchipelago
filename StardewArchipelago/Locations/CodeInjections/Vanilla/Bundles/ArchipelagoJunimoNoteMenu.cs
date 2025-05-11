@@ -21,6 +21,7 @@ using StardewArchipelago.Logging;
 using StardewArchipelago.Serialization;
 using System.Reflection;
 using Microsoft.Xna.Framework.Input;
+using StardewArchipelago.Items.Traps;
 using StardewValley.Minigames;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
@@ -36,6 +37,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         private static ArchipelagoWalletDto _wallet;
         private static LocationChecker _locationChecker;
         private static BundleReader _bundleReader;
+        private static TrapManager _trapManager;
         private BundleCurrencyManager _currencyManager;
 
         internal static bool SisyphusStoneFell = false;
@@ -80,13 +82,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             _clothesMenu = new ClothesMenu(xPositionOnScreen + 128, yPositionOnScreen + 140, width, height);
         }
 
-        public static void InitializeArchipelago(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, ArchipelagoWalletDto wallet, LocationChecker locationChecker)
+        public static void InitializeArchipelago(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, ArchipelagoWalletDto wallet, LocationChecker locationChecker, TrapManager trapManager)
         {
             _logger = logger;
             _modHelper = modHelper;
             _archipelago = archipelago;
             _wallet = wallet;
             _locationChecker = locationChecker;
+            _trapManager = trapManager;
             _bundleReader = new BundleReader();
         }
 
@@ -692,6 +695,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             {
                 return UpdateReverseIngredientSlot(ingredient, index);
             }
+            if (CurrentPageBundle.name == MemeBundleNames.TRAP)
+            {
+                return UpdateTrapIngredientSlot(ingredient, index);
+            }
 
             return base.UpdateIngredientSlot(ingredient, index);
         }
@@ -717,11 +724,30 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             return index;
         }
 
+        private int UpdateTrapIngredientSlot(BundleIngredientDescription ingredient, int index)
+        {
+            if (ingredient.completed && index < IngredientSlots.Count)
+            {
+                return index;
+            }
+
+            IngredientSlots[index].item = ItemRegistry.Create(MemeIDProvider.FUN_TRAP, ingredient.stack, ingredient.quality);
+            ++index;
+            return index;
+        }
+
         protected override bool ReceiveLeftClickInSpecificBundlePage(int x, int y)
         {
             if (CurrentPageBundle.name == MemeBundleNames.REVERSE)
             {
                 if (ReceiveLeftClickInReverseBundle(x, y))
+                {
+                    return true;
+                }
+            }
+            if (CurrentPageBundle.name == MemeBundleNames.TRAP)
+            {
+                if (ReceiveLeftClickInTrapBundle(x, y))
                 {
                     return true;
                 }
@@ -776,6 +802,57 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             return false;
         }
 
+        private bool ReceiveLeftClickInTrapBundle(int x, int y)
+        {
+            if (HeldItem != null || !CurrentPageBundle.DepositsAllowed)
+            {
+                return false;
+            }
+
+            for (var index = 0; index < IngredientSlots.Count; ++index)
+            {
+                if (!IngredientSlots[index].containsPoint(x, y))
+                {
+                    continue;
+                }
+
+                if (IngredientSlots[index].item == null)
+                {
+                    continue;
+                }
+
+                var item = IngredientSlots[index].item;
+                IngredientSlots[index].item = null;
+                var communityCenter = Game1.RequireLocation<CommunityCenter>("CommunityCenter");
+
+                for (var ingredientIndex = 0; ingredientIndex < CurrentPageBundle.Ingredients.Count; ++ingredientIndex)
+                {
+                    var ingredientDescription = CurrentPageBundle.Ingredients[ingredientIndex];
+                    if (CurrentPageBundle.IsValidItemForThisIngredientDescription(item, ingredientDescription))
+                    {
+                        var completedDescription = new BundleIngredientDescription(ingredientDescription, true);
+                        CurrentPageBundle.Ingredients[ingredientIndex] = completedDescription;
+                        communityCenter.bundles.FieldDict[CurrentPageBundle.BundleIndex][ingredientIndex] = true;
+                        ExecuteRandomTrap(ingredientIndex);
+                        if (OnIngredientDeposit != null)
+                        {
+                            OnIngredientDeposit(ingredientIndex);
+                        }
+                        break;
+                    }
+                }
+
+                CheckIfBundleIsComplete();
+            }
+
+            return false;
+        }
+
+        private void ExecuteRandomTrap(int ingredientIndex)
+        {
+            _trapManager.ExecuteRandomTrapImmediately(ingredientIndex);
+        }
+
         protected override bool CheckIfAllIngredientsAreDeposited()
         {
             if (CurrentPageBundle.name == MemeBundleNames.REVERSE)
@@ -784,7 +861,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
             if (CurrentPageBundle.name == MemeBundleNames.BUREAUCRACY)
             {
-                return CheckIfAnyIngredientsIsDeposited();
+                var isComplete = CheckIfAnyIngredientsIsDeposited();
+                if (isComplete)
+                {
+                    DoPermitA39EasterEgg();
+                }
+                return isComplete;
             }
 
             return base.CheckIfAllIngredientsAreDeposited();
@@ -801,6 +883,23 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
 
             return false;
+        }
+
+        protected virtual void DoPermitA39EasterEgg()
+        {
+            var numberOwned = 0;
+            foreach (var ingredient in CurrentPageBundle.Ingredients)
+            {
+                if (Game1.player.Items.ContainsId(ingredient.id))
+                {
+                    numberOwned++;
+                }
+            }
+
+            if (numberOwned < CurrentPageBundle.Ingredients.Count - 1)
+            {
+                Game1.chatBox.addMessage($"Congrats on obtaining Permit A39!", Color.Purple);
+            }
         }
 
         private bool CheckIfAllIngredientsAreTakenOut()

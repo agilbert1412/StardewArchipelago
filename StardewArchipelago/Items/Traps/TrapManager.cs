@@ -108,6 +108,15 @@ namespace StardewArchipelago.Items.Traps
             return !isSafeLocation && !isSleepTime;
         }
 
+        public void ExecuteRandomTrapImmediately(int seed)
+        {
+            var random = Utility.CreateRandom(Game1.uniqueIDForThisGame, seed);
+            var trapNames = _traps.Keys.Where(x => !x.EndsWith(" Trap") && !x.Contains("_")).Distinct().OrderBy(x => x).ToArray();
+            var randomIndex = random.Next(0, trapNames.Length);
+            var randomTrap = trapNames[randomIndex];
+            ExecuteTrapImmediately(randomTrap);
+        }
+
         public bool TryExecuteTrapImmediately(string trapName)
         {
             if (!CanGetTrappedRightNow())
@@ -115,8 +124,13 @@ namespace StardewArchipelago.Items.Traps
                 return false;
             }
 
-            _queuedTraps.Enqueue(new QueuedItemTrap(trapName, _traps[trapName]));
+            ExecuteTrapImmediately(trapName);
             return true;
+        }
+
+        private void ExecuteTrapImmediately(string trapName)
+        {
+            _queuedTraps.Enqueue(new QueuedItemTrap(trapName, _traps[trapName]));
         }
 
         public void DequeueTrap()

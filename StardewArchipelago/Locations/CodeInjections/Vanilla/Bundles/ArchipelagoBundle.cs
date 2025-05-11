@@ -130,35 +130,40 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
             if (name == MemeBundleNames.OFF_YOUR_BACK)
             {
-                if (item == null || ingredient.completed)
-                {
-                    return false;
-                }
-                if (item is Hat && ingredient.id == MemeIDProvider.WORN_HAT)
-                {
-                    return true;
-                }
-                if (item is Boots && ingredient.id == MemeIDProvider.WORN_BOOTS)
-                {
-                    return true;
-                }
-                if (item is Clothing pants && pants.clothesType.Value == Clothing.ClothesType.PANTS && ingredient.id == MemeIDProvider.WORN_PANTS)
-                {
-                    return true;
-                }
-                if (item is Clothing shirt && shirt.clothesType.Value == Clothing.ClothesType.SHIRT && ingredient.id == MemeIDProvider.WORN_SHIRT)
-                {
-                    return true;
-                }
-                if (item is Ring ring && (ingredient.id == MemeIDProvider.WORN_LEFT_RING || ingredient.id == MemeIDProvider.WORN_RIGHT_RING))
-                {
-                    return true;
-                }
-
-                return false;
+                return IsValidItemForOffYourBackIngredientDescription(item, ingredient);
             }
 
             return base.IsValidItemForThisIngredientDescription(item, ingredient);
+        }
+
+        private static bool IsValidItemForOffYourBackIngredientDescription(Item item, BundleIngredientDescription ingredient)
+        {
+            if (item == null || ingredient.completed)
+            {
+                return false;
+            }
+            if (item is Hat && ingredient.id == MemeIDProvider.WORN_HAT)
+            {
+                return true;
+            }
+            if (item is Boots && ingredient.id == MemeIDProvider.WORN_BOOTS)
+            {
+                return true;
+            }
+            if (item is Clothing pants && pants.clothesType.Value == Clothing.ClothesType.PANTS && ingredient.id == MemeIDProvider.WORN_PANTS)
+            {
+                return true;
+            }
+            if (item is Clothing shirt && shirt.clothesType.Value == Clothing.ClothesType.SHIRT && ingredient.id == MemeIDProvider.WORN_SHIRT)
+            {
+                return true;
+            }
+            if (item is Ring ring && (ingredient.id == MemeIDProvider.WORN_LEFT_RING || ingredient.id == MemeIDProvider.WORN_RIGHT_RING))
+            {
+                return true;
+            }
+
+            return false;
         }
 
         public override Item TryToDepositThisItem(Item item, ClickableTextureComponent slot, string noteTextureName, JunimoNoteMenuRemake parentMenu)
