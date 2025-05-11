@@ -28,6 +28,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
         public const int REGION_PRESENT_BUTTON = 105;
         public const int BASE_WIDTH = 320;
         public const int BASE_HEIGHT = 180;
+        protected const int INGREDIENTS_CENTER_X = 932;
+        protected const int INGREDIENTS_CENTER_Y = 364;
+        protected const int INGREDIENT_SLOTS_CENTER_X = INGREDIENTS_CENTER_X;
+        protected const int INGREDIENT_SLOTS_CENTER_Y = 540;
         public const string NOTE_TEXTURE_NAME = "LooseSprites\\JunimoNote";
         public Texture2D NoteTexture;
         public bool SpecificBundlePage;
@@ -1519,21 +1523,26 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             }
         }
 
-        private void DrawIngredientSlots(SpriteBatch b)
+        protected virtual void DrawIngredientSlots(SpriteBatch b)
         {
             foreach (var ingredientSlot in IngredientSlots)
             {
-                var alpha = 1f;
-                if (PartialDonationItem != null && ingredientSlot.item != PartialDonationItem)
-                {
-                    alpha = 0.25f;
-                }
-                if (ingredientSlot.item == null || PartialDonationItem != null && ingredientSlot.item == PartialDonationItem)
-                {
-                    ingredientSlot.draw(b, (FromGameMenu ? Color.LightGray * 0.5f : Color.White) * alpha, 0.89f);
-                }
-                ingredientSlot.drawItem(b, 4, 4, alpha);
+                DrawIngredientSlot(b, ingredientSlot);
             }
+        }
+
+        protected virtual void DrawIngredientSlot(SpriteBatch b, ClickableTextureComponent ingredientSlot)
+        {
+            var alpha = 1f;
+            if (PartialDonationItem != null && ingredientSlot.item != PartialDonationItem)
+            {
+                alpha = 0.25f;
+            }
+            if (ingredientSlot.item == null || PartialDonationItem != null && ingredientSlot.item == PartialDonationItem)
+            {
+                ingredientSlot.draw(b, (FromGameMenu ? Color.LightGray * 0.5f : Color.White) * alpha, 0.89f);
+            }
+            ingredientSlot.drawItem(b, 4, 4, alpha);
         }
 
         private void DrawIngredients(SpriteBatch spriteBatch)
@@ -1556,10 +1565,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                 }
                 if (!flag)
                 {
-                    spriteBatch.Draw(Game1.shadowTexture, new Vector2(ingredient.bounds.Center.X - Game1.shadowTexture.Bounds.Width * 4 / 2 - 4, ingredient.bounds.Center.Y + 4), Game1.shadowTexture.Bounds, Color.White * num3, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 0.1f);
+                    DrawIngredientShadow(spriteBatch, ingredient, num3);
                 }
                 DrawIngredient(spriteBatch, CurrentPageBundle?.Ingredients?[index], ingredient, (flag ? 0.25f : num3));
             }
+        }
+
+        protected virtual void DrawIngredientShadow(SpriteBatch spriteBatch, ClickableTextureComponent ingredient, float transparency)
+        {
+            spriteBatch.Draw(Game1.shadowTexture, new Vector2(ingredient.bounds.Center.X - Game1.shadowTexture.Bounds.Width * 4 / 2 - 4, ingredient.bounds.Center.Y + 4), Game1.shadowTexture.Bounds, Color.White * transparency, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 0.1f);
         }
 
         protected virtual void DrawIngredient(SpriteBatch spriteBatch, BundleIngredientDescription? ingredient, ClickableTextureComponent ingredientBox, float overlayTransparency)
@@ -1748,6 +1762,21 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
 
         private void SetUpIngredientButtons(BundleRemake b)
         {
+            SetupIngredientSlots(b);
+            SetupIngredients(b);
+            UpdateIngredientSlots();
+            if (!Game1.options.SnappyMenus)
+            {
+                return;
+            }
+            populateClickableComponentList();
+            SetupInventoryNeighbors();
+            currentlySnappedComponent = getComponentWithID(0);
+            snapCursorToCurrentSnappedComponent();
+        }
+
+        private void SetupIngredientSlots(BundleRemake b)
+        {
             var ofIngredientSlots = b.NumberOfIngredientSlots;
             var toAddTo1 = new List<Rectangle>();
             AddRectangleRowsToList(toAddTo1, ofIngredientSlots, 932, 540);
@@ -1762,6 +1791,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                 textureComponent.downNeighborID = -99998;
                 ingredientSlots.Add(textureComponent);
             }
+        }
+
+        private void SetupIngredients(BundleRemake b)
+        {
             var toAddTo2 = new List<Rectangle>();
             AddRectangleRowsToList(toAddTo2, b.Ingredients.Count, 932, 364);
             for (var index = 0; index < toAddTo2.Count; ++index)
@@ -1807,25 +1840,29 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                 {
                     flavoredItem = ItemRegistry.Create(representativeItemId, ingredient.stack, ingredient.quality);
                 }
-                var texture = dataOrErrorItem.GetTexture();
-                var sourceRect = dataOrErrorItem.GetSourceRect();
                 var ingredientList = this.IngredientList;
-                var textureComponent = new ClickableTextureComponent("ingredient_list_slot", toAddTo2[index], "", hoverText, texture, sourceRect, 4f);
-                textureComponent.myID = index + REGION_INGREDIENT_LIST_MODIFIER;
-                textureComponent.item = flavoredItem;
-                textureComponent.upNeighborID = -99998;
-                textureComponent.rightNeighborID = -99998;
-                textureComponent.leftNeighborID = -99998;
-                textureComponent.downNeighborID = -99998;
+                var textureComponent = CreateIngredientButton(dataOrErrorItem, toAddTo2[index], index, hoverText, flavoredItem);
                 ingredientList.Add(textureComponent);
                 //}
             }
-            UpdateIngredientSlots();
-            if (!Game1.options.SnappyMenus)
-            {
-                return;
-            }
-            populateClickableComponentList();
+        }
+
+        protected virtual ClickableTextureComponent CreateIngredientButton(ParsedItemData dataOrErrorItem, Rectangle bounds, int index, string hoverText, Item flavoredItem)
+        {
+            var texture = dataOrErrorItem.GetTexture();
+            var sourceRect = dataOrErrorItem.GetSourceRect();
+            var textureComponent = new ClickableTextureComponent("ingredient_list_slot", bounds, "", hoverText, texture, sourceRect, 4f);
+            textureComponent.myID = index + REGION_INGREDIENT_LIST_MODIFIER;
+            textureComponent.item = flavoredItem;
+            textureComponent.upNeighborID = -99998;
+            textureComponent.rightNeighborID = -99998;
+            textureComponent.leftNeighborID = -99998;
+            textureComponent.downNeighborID = -99998;
+            return textureComponent;
+        }
+
+        private void SetupInventoryNeighbors()
+        {
             if (Inventory?.inventory != null)
             {
                 for (var index = 0; index < Inventory.inventory.Count; ++index)
@@ -1847,8 +1884,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                     }
                 }
             }
-            currentlySnappedComponent = getComponentWithID(0);
-            snapCursorToCurrentSnappedComponent();
         }
 
         public bool IsBundleCurrencyBased()

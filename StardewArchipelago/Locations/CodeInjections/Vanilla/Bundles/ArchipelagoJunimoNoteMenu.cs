@@ -22,7 +22,9 @@ using StardewArchipelago.Serialization;
 using System.Reflection;
 using Microsoft.Xna.Framework.Input;
 using StardewArchipelago.Items.Traps;
+using StardewValley.ItemTypeDefinitions;
 using StardewValley.Minigames;
+using Microsoft.Xna.Framework.Graphics.PackedVector;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 {
@@ -240,6 +242,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 {
                     return base.GetRewardNameForArea(whichArea);
                 }
+            }
+
+            if (_locationChecker.IsLocationChecked(apLocationToScout))
+            {
+                return $"No Reward Remaining";
             }
 
             var scoutedItem = _archipelago.ScoutStardewLocation(apLocationToScout, true);
@@ -850,12 +857,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         private void ExecuteRandomTrap(int ingredientIndex)
         {
-            _trapManager.ExecuteRandomTrapImmediately(ingredientIndex);
+            var chosenTrap = _trapManager.ExecuteRandomTrapImmediately(ingredientIndex);
+            Game1.chatBox?.addMessage($"Trap Bundle sent {chosenTrap} to {_archipelago.GetPlayerName()} (Trap Bundle Item {ingredientIndex})", Color.Gold);
         }
 
         protected override bool CheckIfAllIngredientsAreDeposited()
         {
-            if (CurrentPageBundle.name == MemeBundleNames.REVERSE)
+            if (CurrentPageBundle.name == MemeBundleNames.REVERSE || CurrentPageBundle.name == MemeBundleNames.TRAP)
             {
                 return CheckIfAllIngredientsAreTakenOut();
             }
@@ -929,6 +937,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             base.DrawInventory(b);
         }
 
+        protected override void DrawIngredientShadow(SpriteBatch spriteBatch, ClickableTextureComponent ingredient, float transparency)
+        {
+            if (CurrentPageBundle.name == MemeBundleNames.TRAP)
+            {
+                return;
+            }
+            base.DrawIngredientShadow(spriteBatch, ingredient, transparency);
+        }
+
         protected override void DrawIngredient(SpriteBatch spriteBatch, BundleIngredientDescription? ingredient, ClickableTextureComponent ingredientBox, float overlayTransparency)
         {
             if (CurrentPageBundle.name == MemeBundleNames.OFF_YOUR_BACK)
@@ -942,6 +959,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 DrawWornPants(spriteBatch, ingredient.Value, ingredientBox, overlayTransparency);
                 DrawWornShirt(spriteBatch, ingredient.Value, ingredientBox, overlayTransparency);
                 DrawWornRing(spriteBatch, ingredient.Value, ingredientBox, overlayTransparency);
+                return;
+            }
+
+            if (CurrentPageBundle.name == MemeBundleNames.TRAP)
+            {
                 return;
             }
 
@@ -1051,6 +1073,25 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             var hasPressedShift = pressedKeys.Contains(Keys.LeftShift) || pressedKeys.Contains(Keys.RightShift);
             var hasSummonedSnippingTool = hasPressedWindows && hasPressedShift && pressedKeys.Contains(Keys.S);
             return hasPressedScreenshotKey || hasSummonedSnippingTool;
+        }
+
+        protected override ClickableTextureComponent CreateIngredientButton(ParsedItemData dataOrErrorItem, Rectangle bounds, int index, string hoverText, Item flavoredItem)
+        {
+            var offsetY = INGREDIENT_SLOTS_CENTER_Y - INGREDIENTS_CENTER_Y;
+            bounds.Y += offsetY;
+            return base.CreateIngredientButton(dataOrErrorItem, bounds, index, hoverText, flavoredItem);
+        }
+
+        protected override void DrawIngredientSlot(SpriteBatch b, ClickableTextureComponent ingredientSlot)
+        {
+            if (CurrentPageBundle.name == MemeBundleNames.TRAP)
+            {
+                ingredientSlot.draw(b, (FromGameMenu ? Color.LightGray * 0.5f : Color.White), 0.89f);
+                ingredientSlot.drawItem(b, 4, 4, 1f);
+                return;
+            }
+
+            base.DrawIngredientSlot(b, ingredientSlot);
         }
     }
 }
