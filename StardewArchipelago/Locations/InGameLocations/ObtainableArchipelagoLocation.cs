@@ -113,7 +113,7 @@ namespace StardewArchipelago.Locations.InGameLocations
             }
 
             var genericTextureName = GetCorrectGenericTextureName(scoutedLocation, relatedHint);
-            return ArchipelagoTextures.GetArchipelagoLogo(logger, modHelper, 48, genericTextureName);
+            return ArchipelagoTextures.GetArchipelagoLogo(48, genericTextureName);
         }
 
         private static string GetCorrectGenericTextureName(ScoutedLocation scoutedLocation, Hint relatedHint)

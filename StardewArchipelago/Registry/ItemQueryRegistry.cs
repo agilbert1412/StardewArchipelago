@@ -2,12 +2,15 @@
 using KaitoKid.ArchipelagoUtilities.Net;
 using System.Collections.Generic;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Archipelago.Gifting;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
 using StardewArchipelago.Locations.InGameLocations;
 using StardewArchipelago.Locations.ShopStockModifiers;
 using StardewArchipelago.Logging;
+using StardewArchipelago.Serialization;
+using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley.Internal;
 
@@ -27,7 +30,7 @@ namespace StardewArchipelago.Registry
             _modHelper = modHelper;
         }
 
-        public void Initialize(StardewArchipelagoClient archipelago, LocationChecker locationChecker, WeaponsManager weaponsManager)
+        public void Initialize(StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager, LocationChecker locationChecker, IGiftHandler _giftHandler, WeaponsManager weaponsManager, ArchipelagoStateDto state)
         {
             _archipelago = archipelago;
             _locationChecker = locationChecker;

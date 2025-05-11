@@ -9,14 +9,24 @@ namespace StardewArchipelago.Textures
 {
     public class TexturesLoader
     {
-        public static Texture2D GetTexture(LogHandler logger, IModHelper modHelper, string texture, LogLevel failureLogLevel = LogLevel.Error)
+
+        private static LogHandler _logger;
+        private static IModHelper _modHelper;
+
+        public static void Initialize(LogHandler logger, IModHelper modHelper)
+        {
+            _logger = logger;
+            _modHelper = modHelper;
+        }
+
+        public static Texture2D GetTexture(string texture, LogLevel failureLogLevel = LogLevel.Error)
         {
             if (Game1.content.ServiceProvider.GetService(typeof(IGraphicsDeviceService)) is not IGraphicsDeviceService service)
             {
                 throw new InvalidOperationException("No Graphics Device Service");
             }
 
-            var currentModFolder = modHelper.DirectoryPath;
+            var currentModFolder = _modHelper.DirectoryPath;
             if (!Directory.Exists(currentModFolder))
             {
                 throw new InvalidOperationException("Could not find StardewArchipelago folder");
@@ -26,11 +36,11 @@ namespace StardewArchipelago.Textures
             var relativePathToTexture = Path.Combine(currentModFolder, texturesFolder, texture);
             if (!File.Exists(relativePathToTexture))
             {
-                logger.Log($"Tried to load texture '{relativePathToTexture}', but it couldn't be found!", failureLogLevel);
+                _logger.Log($"Tried to load texture '{relativePathToTexture}', but it couldn't be found!", failureLogLevel);
                 return null;
             }
 
-            logger.LogDebug($"Loading Texture file '{relativePathToTexture}'");
+            _logger.LogDebug($"Loading Texture file '{relativePathToTexture}'");
             return Texture2D.FromFile(service.GraphicsDevice, relativePathToTexture);
         }
     }

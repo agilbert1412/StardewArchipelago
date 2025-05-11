@@ -30,7 +30,7 @@ namespace StardewArchipelago.Locations.InGameLocations
 
         public override Texture2D GetTexture()
         {
-            return ArchipelagoTextures.GetArchipelagoLogo(_logger, _modHelper, _textureSize, ArchipelagoTextures.COLOR);
+            return ArchipelagoTextures.GetArchipelagoLogo(_textureSize, ArchipelagoTextures.COLOR);
         }
 
         public override Rectangle GetSourceRect(int offset = 0, int? spriteIndex = null)

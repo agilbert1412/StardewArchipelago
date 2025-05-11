@@ -43,6 +43,7 @@ using StardewArchipelago.Registry;
 using StardewArchipelago.Serialization;
 using StardewArchipelago.Stardew;
 using StardewArchipelago.Stardew.NameMapping;
+using StardewArchipelago.Textures;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -174,6 +175,7 @@ namespace StardewArchipelago
         {
             ResetArchipelago();
             ResetModIntegrations();
+            ArchipelagoTextures.Initialize(_logger, Helper);
         }
 
         private void OnSaveCreating(object sender, SaveCreatingEventArgs e)

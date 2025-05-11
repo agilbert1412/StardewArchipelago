@@ -34,5 +34,16 @@ namespace StardewArchipelago.Constants
             {"Worn Right Ring", WORN_RIGHT_RING},
             {"Fun Trap", FUN_TRAP},
         };
+
+        public static readonly Dictionary<string, string> MemeItemNames = new()
+        {
+            { WORN_BOOTS, "Worn Boots" },
+            { WORN_SHIRT, "Worn Shirt" },
+            { WORN_PANTS, "Worn Pants" },
+            { WORN_HAT, "Worn Hat" },
+            { WORN_LEFT_RING, "Worn Left Ring" },
+            { WORN_RIGHT_RING, "Worn Right Ring" },
+            { FUN_TRAP, "Fun Trap" },
+        };
     }
 }

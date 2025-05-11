@@ -69,7 +69,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
                 _apLogos.Add(logoName, new Dictionary<int, Texture2D>());
                 for (var i = 12; i <= 48; i *= 2)
                 {
-                    _apLogos[logoName].Add(i, ArchipelagoTextures.GetArchipelagoLogo(logger, modHelper, i, logoName));
+                    _apLogos[logoName].Add(i, ArchipelagoTextures.GetArchipelagoLogo(i, logoName));
                 }
             }
             _hintedFriendshipLocations = Array.Empty<string>();

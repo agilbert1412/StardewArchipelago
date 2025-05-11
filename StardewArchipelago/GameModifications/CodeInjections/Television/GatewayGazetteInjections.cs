@@ -44,7 +44,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
             _entranceManager = entranceManager;
             _state = state;
 
-            _gazetteTexture = TexturesLoader.GetTexture(logger, _modHelper, Path.Combine("Gazette", "gazette_all.png"));
+            _gazetteTexture = TexturesLoader.GetTexture(Path.Combine("Gazette", "gazette_all.png"));
         }
 
         private static IReflectedField<int> GetCurrentChannelField(TV tv)

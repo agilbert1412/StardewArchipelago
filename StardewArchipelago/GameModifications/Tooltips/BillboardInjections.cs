@@ -42,9 +42,9 @@ namespace StardewArchipelago.GameModifications.Tooltips
             _friends = friends;
 
             var desiredTextureName = ArchipelagoTextures.COLOR;
-            _bigArchipelagoIcon = ArchipelagoTextures.GetArchipelagoLogo(logger, modHelper, 48, desiredTextureName);
-            _miniArchipelagoIcon = ArchipelagoTextures.GetArchipelagoLogo(logger, modHelper, 24, desiredTextureName);
-            _travelingMerchantIcon = TexturesLoader.GetTexture(logger, modHelper, "traveling_merchant.png");
+            _bigArchipelagoIcon = ArchipelagoTextures.GetArchipelagoLogo(48, desiredTextureName);
+            _miniArchipelagoIcon = ArchipelagoTextures.GetArchipelagoLogo(24, desiredTextureName);
+            _travelingMerchantIcon = TexturesLoader.GetTexture("traveling_merchant.png");
         }
 
         // public override void draw(SpriteBatch spriteBatch)

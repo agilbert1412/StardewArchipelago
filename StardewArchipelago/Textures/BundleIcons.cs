@@ -45,7 +45,7 @@ namespace StardewArchipelago.Textures
             }
             var pathToTexture = Path.Combine(bundlesFolder, fileNameBundleName);
             logger.LogDebug($"Attempting to load bundle icon '{pathToTexture}'");
-            return TexturesLoader.GetTexture(logger, modHelper, pathToTexture, failureLogLevel);
+            return TexturesLoader.GetTexture(pathToTexture, failureLogLevel);
         }
     }
 }

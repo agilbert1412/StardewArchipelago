@@ -68,7 +68,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         {
             _currencyManager = new BundleCurrencyManager(_logger, _modHelper, _wallet, this);
             var memeAssetsPath = Path.Combine("Bundles", "UI", "MemeBundleAssets.png");
-            MemeTexture = TexturesLoader.GetTexture(_logger, _modHelper, memeAssetsPath);
+            MemeTexture = TexturesLoader.GetTexture(memeAssetsPath);
             ExtraButtons = new Dictionary<ClickableTextureComponent, Action>();
             InitializeClothesMenu();
         }
@@ -166,7 +166,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         {
             if (bundle.name == MemeBundleNames.TRAP)
             {
-                var textureOverride = ArchipelagoTextures.GetArchipelagoLogo(_logger, _modHelper, 32, ArchipelagoTextures.RED);
+                var textureOverride = ArchipelagoTextures.GetArchipelagoLogo(32, ArchipelagoTextures.RED);
                 bundle.BundleTextureOverride = textureOverride;
                 bundle.BundleTextureIndexOverride = 0;
                 return true;
@@ -219,7 +219,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         private static void AssignDefaultIcon(ArchipelagoBundle bundle)
         {
             _logger.LogWarning($"Could not find a proper icon for bundle '{bundle.name}', using default Archipelago Icon");
-            var textureOverride = ArchipelagoTextures.GetArchipelagoLogo(_logger, _modHelper, 32, ArchipelagoTextures.COLOR);
+            var textureOverride = ArchipelagoTextures.GetArchipelagoLogo(32, ArchipelagoTextures.COLOR);
             bundle.BundleTextureOverride = textureOverride;
             bundle.BundleTextureIndexOverride = 0;
         }

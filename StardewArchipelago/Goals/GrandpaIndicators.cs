@@ -72,8 +72,8 @@ namespace StardewArchipelago.Goals
                 return;
             }
 
-            var whiteArchipelagoIcon = ArchipelagoTextures.GetArchipelagoLogo(_logger, _modHelper, INDICATOR_SIZE, ArchipelagoTextures.WHITE);
-            var coloredArchipelagoIcon = ArchipelagoTextures.GetArchipelagoLogo(_logger, _modHelper, INDICATOR_SIZE, ArchipelagoTextures.COLOR);
+            var whiteArchipelagoIcon = ArchipelagoTextures.GetArchipelagoLogo(INDICATOR_SIZE, ArchipelagoTextures.WHITE);
+            var coloredArchipelagoIcon = ArchipelagoTextures.GetArchipelagoLogo(INDICATOR_SIZE, ArchipelagoTextures.COLOR);
 
             var grandpaShrinePosition = farm.GetGrandpaShrinePosition();
             var localId = 6666 + _archipelago.SlotData.Seed.GetHashCode();

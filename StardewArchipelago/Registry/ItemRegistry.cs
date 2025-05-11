@@ -5,6 +5,7 @@ using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.Gifting;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
 using StardewArchipelago.Locations.InGameLocations;
+using StardewArchipelago.Registry.Definition;
 using StardewArchipelago.Serialization;
 using StardewArchipelago.Stardew;
 
@@ -28,6 +29,7 @@ namespace StardewArchipelago.Registry
             try
             {
                 StardewValley.ItemRegistry.AddTypeDefinition(new ArchipelagoLocationDataDefinition());
+                StardewValley.ItemRegistry.AddTypeDefinition(new MemeBundleItemDataDefinition());
             }
             catch (Exception ex)
             {

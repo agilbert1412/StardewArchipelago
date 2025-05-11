@@ -23,20 +23,30 @@ namespace StardewArchipelago.Textures
 
         public static readonly string[] ValidLogos = { COLOR, WHITE, BLACK, RED, PLEADING };
 
-        public static Texture2D GetArchipelagoLogo(LogHandler logger, IModHelper modHelper, int size, string color, string preferredIconSet = null)
+        private static LogHandler _logger;
+        private static IModHelper _modHelper;
+
+        public static void Initialize(LogHandler logger, IModHelper modHelper)
+        {
+            _logger = logger;
+            _modHelper = modHelper;
+            TexturesLoader.Initialize(_logger, _modHelper);
+        }
+
+        public static Texture2D GetArchipelagoLogo(int size, string color, string preferredIconSet = null)
         {
             var archipelagoFolder = "Archipelago";
             preferredIconSet = GetChosenIconSet(preferredIconSet);
             var fileName = $"{size}x{size} {color} icon.png";
             var relativePathToTexture = Path.Combine(archipelagoFolder, preferredIconSet, fileName);
-            var texture = TexturesLoader.GetTexture(logger, modHelper, relativePathToTexture, LogLevel.Trace);
+            var texture = TexturesLoader.GetTexture(relativePathToTexture, LogLevel.Trace);
             if (texture == null)
             {
                 // Let's try to get the icon from the other set
                 preferredIconSet = GetOtherIconSet(preferredIconSet);
                 fileName = $"{size}x{size} {color} icon.png";
                 relativePathToTexture = Path.Combine(archipelagoFolder, preferredIconSet, fileName);
-                texture = TexturesLoader.GetTexture(logger, modHelper, relativePathToTexture);
+                texture = TexturesLoader.GetTexture(relativePathToTexture);
                 if (texture == null)
                 {
                     throw new InvalidOperationException($"Could not find texture {fileName}");
@@ -52,13 +62,13 @@ namespace StardewArchipelago.Textures
             preferredIconSet = GetChosenIconSet(preferredIconSet);
             var fileName = $"walnut_bush.png";
             var relativePathToTexture = Path.Combine(archipelagoFolder, preferredIconSet, fileName);
-            var texture = TexturesLoader.GetTexture(logger, modHelper, relativePathToTexture, LogLevel.Trace);
+            var texture = TexturesLoader.GetTexture(relativePathToTexture, LogLevel.Trace);
             if (texture == null)
             {
                 // Let's try to get the icon from the other set
                 preferredIconSet = GetOtherIconSet(preferredIconSet);
                 relativePathToTexture = Path.Combine(archipelagoFolder, preferredIconSet, fileName);
-                texture = TexturesLoader.GetTexture(logger, modHelper, relativePathToTexture);
+                texture = TexturesLoader.GetTexture(relativePathToTexture);
                 if (texture == null)
                 {
                     throw new InvalidOperationException($"Could not find texture {fileName}");
@@ -99,7 +109,7 @@ namespace StardewArchipelago.Textures
         {
             var customAssetsFolder = "Custom Assets";
             var fileName = sprite.FilePath;
-            texture2D = TexturesLoader.GetTexture(logger, modHelper, fileName, LogLevel.Trace);
+            texture2D = TexturesLoader.GetTexture(fileName, LogLevel.Trace);
             return texture2D != null;
         }
     }
