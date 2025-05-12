@@ -107,10 +107,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
             else if (ingredientId == MemeIDProvider.CLIC)
             {
-                DrawCookiesCurrency(b);
-                amountText += " Cookies";
-                // Game1.specialCurrencyDisplay.ShowCurrency(null);
-                // return "";
+                Game1.specialCurrencyDisplay.ShowCurrency(null);
+                return "";
             }
             else if (ingredientId == MemeIDProvider.COOKIES_CLICKS)
             {
