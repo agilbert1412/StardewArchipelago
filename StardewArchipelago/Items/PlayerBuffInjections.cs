@@ -69,7 +69,6 @@ namespace StardewArchipelago.Items
         {
             try
             {
-                return;
                 if (Game1.eventUp && Game1.CurrentEvent is { isFestival: false })
                 {
                     return;
