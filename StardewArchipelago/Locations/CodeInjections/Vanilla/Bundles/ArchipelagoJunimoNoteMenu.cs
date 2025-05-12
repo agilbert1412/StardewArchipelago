@@ -1210,6 +1210,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 var offsetY = INGREDIENT_SLOTS_CENTER_Y - INGREDIENTS_CENTER_Y;
                 bounds.Y += offsetY;
             }
+            if (CurrentPageBundle.name == MemeBundleNames.EMMALUTION)
+            {
+                if (hoverText == "Rain Totem")
+                {
+                    hoverText = "Brain Totem";
+                }
+            }
             return base.CreateIngredientButton(dataOrErrorItem, bounds, index, hoverText, flavoredItem);
         }
 

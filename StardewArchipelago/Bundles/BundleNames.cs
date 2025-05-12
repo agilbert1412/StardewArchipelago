@@ -26,5 +26,6 @@ namespace StardewArchipelago.Bundles
         public const string BUNDLE_BUNDLE = "Bundle";
         public const string SCHRODINGER = "Schrodinger's";
         public const string DEATH = "Death";
+        public const string EMMALUTION = "Emmalution";
     }
 }
