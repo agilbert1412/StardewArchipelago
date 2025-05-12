@@ -11,6 +11,7 @@ using StardewValley.Menus;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 // ReSharper disable PossibleLossOfFraction
 
 #nullable disable
@@ -379,8 +380,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                 {
                     return CurrentPageBundle.IsValidItemForThisIngredientDescription(item, CurrentPageBundle.Ingredients[CurrentPartialIngredientDescriptionIndex]);
                 }
-                foreach (var ingredient in CurrentPageBundle.Ingredients)
+                for (var index = GetIngredientsStartIndex(); index < GetIngredientsEndIndex(); index++)
                 {
+                    var ingredient = CurrentPageBundle.Ingredients[index];
                     if (CurrentPageBundle.IsValidItemForThisIngredientDescription(item, ingredient))
                     {
                         return true;
@@ -441,7 +443,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             {
                 if (HeldItem != null && Game1.oldKBState.IsKeyDown(Keys.LeftShift))
                 {
-                    for (var index = 0; index < IngredientSlots.Count; ++index)
+                    for (var index = GetIngredientSlotsStartIndex(); index < GetIngredientSlotsEndIndex(); ++index)
                     {
                         if (IngredientSlots[index].item == PartialDonationItem)
                         {
@@ -451,7 +453,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                 }
                 else
                 {
-                    for (var index = 0; index < IngredientSlots.Count; ++index)
+                    for (var index = GetIngredientSlotsStartIndex(); index < GetIngredientSlotsEndIndex(); ++index)
                     {
                         if (IngredientSlots[index].containsPoint(x, y) && IngredientSlots[index].item == PartialDonationItem)
                         {
@@ -470,7 +472,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             {
                 if (Game1.oldKBState.IsKeyDown(Keys.LeftShift))
                 {
-                    for (var index = 0; index < IngredientSlots.Count; ++index)
+                    for (var index = GetIngredientSlotsStartIndex(); index < GetIngredientSlotsEndIndex(); ++index)
                     {
                         if (CurrentPageBundle.CanAcceptThisItem(HeldItem, IngredientSlots[index]))
                         {
@@ -487,7 +489,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                         }
                     }
                 }
-                for (var index = 0; index < IngredientSlots.Count; ++index)
+                for (var index = GetIngredientSlotsStartIndex(); index < GetIngredientSlotsEndIndex(); ++index)
                 {
                     if (IngredientSlots[index].containsPoint(x, y))
                     {
@@ -1224,7 +1226,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                 HeldItem = Inventory.rightClick(x, y, HeldItem);
                 if (PartialDonationItem != null)
                 {
-                    for (var index = 0; index < IngredientSlots.Count; ++index)
+                    for (var index = GetIngredientSlotsStartIndex(); index < GetIngredientSlotsEndIndex(); ++index)
                     {
                         if (IngredientSlots[index].containsPoint(x, y) && IngredientSlots[index].item == PartialDonationItem)
                         {
@@ -1339,10 +1341,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             TryHoverButtons(x, y);
         }
 
-        private void PerformHoverIngredients(int x, int y)
+        protected virtual void PerformHoverIngredients(int x, int y)
         {
-            foreach (var ingredient in IngredientList)
+            for (var i = GetIngredientsStartIndex(); i < GetIngredientsEndIndex(); i++)
             {
+                var ingredient = IngredientList[i];
                 if (ingredient.bounds.Contains(x, y))
                 {
                     HoverText = ingredient.hoverText;
@@ -1351,7 +1354,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             }
         }
 
-        private void PerformHoverIngredientSlots(int x, int y)
+        protected virtual void PerformHoverIngredientSlots(int x, int y)
         {
             if (HeldItem != null)
             {
@@ -1510,7 +1513,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             }
         }
 
-        private void DrawTemporarySprites(SpriteBatch b)
+        protected virtual void DrawTemporarySprites(SpriteBatch b)
         {
             var extraAlpha = 1f;
             if (PartialDonationItem != null)
@@ -1525,15 +1528,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
 
         protected virtual void DrawIngredientSlots(SpriteBatch b)
         {
-            foreach (var ingredientSlot in IngredientSlots)
+            for (var index = GetIngredientSlotsStartIndex(); index < GetIngredientSlotsEndIndex(); ++index)
             {
-                DrawIngredientSlot(b, ingredientSlot);
+                DrawIngredientSlot(b, index);
             }
         }
 
-        protected virtual void DrawIngredientSlot(SpriteBatch b, ClickableTextureComponent ingredientSlot)
+        protected virtual void DrawIngredientSlot(SpriteBatch b, int index)
         {
             var alpha = 1f;
+            var ingredientSlot = IngredientSlots[index];
             if (PartialDonationItem != null && ingredientSlot.item != PartialDonationItem)
             {
                 alpha = 0.25f;
@@ -1545,30 +1549,35 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             ingredientSlot.drawItem(b, 4, 4, alpha);
         }
 
-        private void DrawIngredients(SpriteBatch spriteBatch)
+        protected virtual void DrawIngredients(SpriteBatch spriteBatch)
         {
-            for (var index = 0; index < IngredientList.Count; ++index)
+            for (var index = GetIngredientsStartIndex(); index < GetIngredientsEndIndex(); ++index)
             {
-                var num3 = 1f;
-                if (CurrentPartialIngredientDescriptionIndex >= 0 && CurrentPartialIngredientDescriptionIndex != index)
-                {
-                    num3 = 0.25f;
-                }
-                var ingredient = IngredientList[index];
-                var flag = false;
-                var num4 = index;
-                var count = CurrentPageBundle?.Ingredients?.Count;
-                var valueOrDefault = count.GetValueOrDefault();
-                if (num4 < valueOrDefault & count.HasValue && CurrentPageBundle.Ingredients[index].completed)
-                {
-                    flag = true;
-                }
-                if (!flag)
-                {
-                    DrawIngredientShadow(spriteBatch, ingredient, num3);
-                }
-                DrawIngredient(spriteBatch, CurrentPageBundle?.Ingredients?[index], ingredient, (flag ? 0.25f : num3));
+                DrawIngredientAndShadow(spriteBatch, index);
             }
+        }
+
+        protected void DrawIngredientAndShadow(SpriteBatch spriteBatch, int index)
+        {
+            var num3 = 1f;
+            if (CurrentPartialIngredientDescriptionIndex >= 0 && CurrentPartialIngredientDescriptionIndex != index)
+            {
+                num3 = 0.25f;
+            }
+            var ingredient = IngredientList[index];
+            var flag = false;
+            var num4 = index;
+            var count = CurrentPageBundle?.Ingredients?.Count;
+            var valueOrDefault = count.GetValueOrDefault();
+            if (num4 < valueOrDefault & count.HasValue && CurrentPageBundle.Ingredients[index].completed)
+            {
+                flag = true;
+            }
+            if (!flag)
+            {
+                DrawIngredientShadow(spriteBatch, ingredient, num3);
+            }
+            DrawIngredient(spriteBatch, CurrentPageBundle?.Ingredients?[index], ingredient, (flag ? 0.25f : num3));
         }
 
         protected virtual void DrawIngredientShadow(SpriteBatch spriteBatch, ClickableTextureComponent ingredient, float transparency)
@@ -1584,7 +1593,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             }
         }
 
-        private void DrawCurrentPageBundle(SpriteBatch b)
+        protected void DrawCurrentPageBundle(SpriteBatch b)
         {
             if (CurrentPageBundle == null)
             {
@@ -1685,8 +1694,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                 return;
             }
             var ofIngredientSlots = CurrentPageBundle.NumberOfIngredientSlots;
-            var toAddTo1 = new List<Rectangle>();
-            AddRectangleRowsToList(toAddTo1, ofIngredientSlots, 932, 540);
+            var toAddTo1 = GenerateIngredientSlotsRectangles(ofIngredientSlots);
             IngredientSlots.Clear();
             for (var index = 0; index < toAddTo1.Count; ++index)
                 IngredientSlots.Add(new ClickableTextureComponent(toAddTo1[index], NoteTexture, new Rectangle(512, 244, 18, 18), 4f));
@@ -1694,11 +1702,24 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             UpdateIngredientSlots();
         }
 
+        protected List<Rectangle> GenerateIngredientRectangles(int numberIngredients)
+        {
+            var toAddTo1 = new List<Rectangle>();
+            AddRectangleRowsToList(toAddTo1, numberIngredients, INGREDIENTS_CENTER_X, INGREDIENTS_CENTER_Y);
+            return toAddTo1;
+        }
+
+        protected List<Rectangle> GenerateIngredientSlotsRectangles(int numberIngredientSlots)
+        {
+            var toAddTo1 = new List<Rectangle>();
+            AddRectangleRowsToList(toAddTo1, numberIngredientSlots, INGREDIENT_SLOTS_CENTER_X, INGREDIENT_SLOTS_CENTER_Y);
+            return toAddTo1;
+        }
+
         private void CreateIngredients()
         {
-            var toAddTo2 = new List<Rectangle>();
             IngredientList.Clear();
-            AddRectangleRowsToList(toAddTo2, CurrentPageBundle.Ingredients.Count, 932, 364);
+            var toAddTo2 = GenerateIngredientRectangles(CurrentPageBundle.Ingredients.Count);
             for (var index = 0; index < toAddTo2.Count; ++index)
             {
                 var ingredient = CurrentPageBundle.Ingredients[index];
@@ -1778,8 +1799,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
         private void SetupIngredientSlots(BundleRemake b)
         {
             var ofIngredientSlots = b.NumberOfIngredientSlots;
-            var toAddTo1 = new List<Rectangle>();
-            AddRectangleRowsToList(toAddTo1, ofIngredientSlots, 932, 540);
+            var toAddTo1 = GenerateIngredientSlotsRectangles(ofIngredientSlots);
             for (var index = 0; index < toAddTo1.Count; ++index)
             {
                 var ingredientSlots = this.IngredientSlots;
@@ -1795,8 +1815,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
 
         private void SetupIngredients(BundleRemake b)
         {
-            var toAddTo2 = new List<Rectangle>();
-            AddRectangleRowsToList(toAddTo2, b.Ingredients.Count, 932, 364);
+            var toAddTo2 = GenerateIngredientRectangles(b.Ingredients.Count);
             for (var index = 0; index < toAddTo2.Count; ++index)
             {
                 var ingredient = b.Ingredients[index];
@@ -1907,6 +1926,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
           int centerX,
           int centerY)
         {
+            if (numberOfItems > 12)
+            {
+                AddRectangleRowsToList(toAddTo, numberOfItems / 2, centerX, centerY);
+                AddRectangleRowsToList(toAddTo, numberOfItems / 2, centerX, centerY);
+                return;
+            }
             switch (numberOfItems)
             {
                 case 1:
@@ -2053,5 +2078,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             }
             return locationFromNumber;
         }
+
+        protected virtual int GetIngredientsStartIndex() => 0;
+        protected virtual int GetIngredientsEndIndex() => IngredientList.Count;
+
+        protected virtual int GetIngredientSlotsStartIndex() => 0;
+        protected virtual int GetIngredientSlotsEndIndex() => IngredientSlots.Count;
     }
 }

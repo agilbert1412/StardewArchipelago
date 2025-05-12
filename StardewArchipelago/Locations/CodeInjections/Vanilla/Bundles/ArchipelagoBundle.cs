@@ -123,7 +123,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         public override bool IsValidItemForThisIngredientDescription(Item item, BundleIngredientDescription ingredient)
         {
-            if (name == MemeBundleNames.BUREAUCRACY)
+            if (name == MemeBundleNames.BUREAUCRACY && item is not null)
             {
                 var currentIngredient = Ingredients[ArchipelagoJunimoNoteMenu.BureaucracyIndex];
                 return item.QualifiedItemId == currentIngredient.id;

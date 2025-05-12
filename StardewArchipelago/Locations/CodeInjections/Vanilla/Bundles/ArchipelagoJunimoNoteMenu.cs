@@ -25,6 +25,7 @@ using StardewArchipelago.Items.Traps;
 using StardewValley.ItemTypeDefinitions;
 using StardewValley.Minigames;
 using Microsoft.Xna.Framework.Graphics.PackedVector;
+using Bundle = StardewArchipelago.Bundles.Bundle;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 {
@@ -46,6 +47,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         internal static int SisyphusIndex = -1;
         internal static int BureaucracyIndex = -1;
         internal ClothesMenu _clothesMenu;
+        internal int _bundleBundleIndex = -1;
+        internal const int NUMBER_SUB_BUNDLES = 4;
+        internal int ingredientsPerSubBundle => IngredientList.Count / NUMBER_SUB_BUNDLES;
 
         public Texture2D MemeTexture;
         private ClickableTextureComponent _donateButton;
@@ -577,6 +581,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         protected override void TakeDownSpecificBundleComponents()
         {
+            if (CurrentPageBundle.name == MemeBundleNames.BUNDLE_BUNDLE)
+            {
+                if (_bundleBundleIndex != -1)
+                {
+                    _bundleBundleIndex = -1;
+                    return;
+                }
+            }
+
             base.TakeDownSpecificBundleComponents();
             _donateButton = null;
             ExtraButtons.Clear();
@@ -593,17 +606,23 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         protected override void UpdateIngredientSlots()
         {
+            if (CurrentPageBundle.name == MemeBundleNames.BUNDLE_BUNDLE)
+            {
+                UpdateIngredientSlotsBundleBundle();
+                AfterUpdateIngredientSlotsBundleBundle();
+                return;
+            }
             base.UpdateIngredientSlots();
-            UpdateIngredientSlotsSpecialBundles();
+            AfterUpdateIngredientSlotsSpecialBundles();
         }
 
-        private void UpdateIngredientSlotsSpecialBundles()
+        private void AfterUpdateIngredientSlotsSpecialBundles()
         {
-            UpdateIngredientSlotsSisyphus();
-            UpdateIngredientSlotsBureaucracy();
+            AfterUpdateIngredientSlotsSisyphus();
+            AfterUpdateIngredientSlotsBureaucracy();
         }
 
-        private void UpdateIngredientSlotsSisyphus()
+        private void AfterUpdateIngredientSlotsSisyphus()
         {
             if (CurrentPageBundle?.name != MemeBundleNames.SISYPHUS)
             {
@@ -628,7 +647,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
         }
 
-        private void UpdateIngredientSlotsBureaucracy()
+        private void AfterUpdateIngredientSlotsBureaucracy()
         {
             if (CurrentPageBundle?.name != MemeBundleNames.BUREAUCRACY)
             {
@@ -650,6 +669,34 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
             FocusOnOneIngredientSlot(0);
             BureaucracyIndex = 0;
+        }
+
+        private void AfterUpdateIngredientSlotsBundleBundle()
+        {
+            if (CurrentPageBundle?.name != MemeBundleNames.BUNDLE_BUNDLE)
+            {
+                return;
+            }
+
+            var ingredientRectangles = GenerateIngredientRectangles(ingredientsPerSubBundle);
+            var ingredientSlotRectangles = GenerateIngredientSlotsRectangles(ingredientsPerSubBundle);
+
+            for (var indexBundle = 0; indexBundle < NUMBER_SUB_BUNDLES; indexBundle++)
+            {
+                for (var indexIngredient = 0; indexIngredient < ingredientsPerSubBundle; indexIngredient++)
+                {
+                    var index = indexBundle * ingredientsPerSubBundle + indexIngredient;
+                    IngredientList[index].bounds = ingredientRectangles[indexIngredient];
+                    IngredientSlots[index].bounds = ingredientSlotRectangles[indexIngredient];
+                }
+            }
+
+            var SubBundleRectangles = GenerateIngredientSlotsRectangles(NUMBER_SUB_BUNDLES);
+            for (var indexSubBundle = 0; indexSubBundle < NUMBER_SUB_BUNDLES; indexSubBundle++)
+            {
+                var sourceRect = new Rectangle(512, 244, 18, 18);
+                IngredientSlots.Add(new ClickableTextureComponent(SubBundleRectangles[indexSubBundle], NoteTexture, sourceRect, 4f));
+            }
         }
 
         private void FocusOnOneIngredientSlot(int focusedSlotIndex)
@@ -759,6 +806,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                     return true;
                 }
             }
+            if (CurrentPageBundle.name == MemeBundleNames.BUNDLE_BUNDLE)
+            {
+                if (ReceiveLeftClickInBundleBundle(x, y))
+                {
+                    return true;
+                }
+            }
 
             return base.ReceiveLeftClickInSpecificBundlePage(x, y);
         }
@@ -855,10 +909,30 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             return false;
         }
 
+        private bool ReceiveLeftClickInBundleBundle(int x, int y)
+        {
+            if (_bundleBundleIndex == -1)
+            {
+                var startIndex = NUMBER_SUB_BUNDLES * ingredientsPerSubBundle;
+                var endIndex = startIndex + NUMBER_SUB_BUNDLES;
+                for (var i = startIndex; i < endIndex; i++)
+                {
+                    if (IngredientSlots[i].containsPoint(x, y))
+                    {
+                        _bundleBundleIndex = i - startIndex;
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
         private void ExecuteRandomTrap(int ingredientIndex)
         {
             var chosenTrap = _trapManager.ExecuteRandomTrapImmediately(ingredientIndex);
-            Game1.chatBox?.addMessage($"Trap Bundle sent {chosenTrap} to {_archipelago.GetPlayerName()} (Trap Bundle Item {ingredientIndex})", Color.Gold);
+            var message = _archipelago.SendFakeItemMessage(chosenTrap, $"Trap Bundle Item {ingredientIndex}");
+            Game1.chatBox?.addMessage(message, Color.Gold);
         }
 
         protected override bool CheckIfAllIngredientsAreDeposited()
@@ -875,6 +949,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                     DoPermitA39EasterEgg();
                 }
                 return isComplete;
+            }
+            if (CurrentPageBundle.name == MemeBundleNames.BUNDLE_BUNDLE)
+            {
+                return CheckIfAllIngredientsIsDepositedExcludingTheBundlesThemselves();
             }
 
             return base.CheckIfAllIngredientsAreDeposited();
@@ -925,6 +1003,19 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 return false;
             }
             return true;
+        }
+
+        protected virtual bool CheckIfAllIngredientsIsDepositedExcludingTheBundlesThemselves()
+        {
+            var num = 0;
+            foreach (var ingredientSlot in IngredientSlots)
+            {
+                if (ingredientSlot.item != null)
+                {
+                    ++num;
+                }
+            }
+            return num >= CurrentPageBundle.NumberOfIngredientSlots;
         }
 
         protected override void DrawInventory(SpriteBatch b)
@@ -1036,7 +1127,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         protected override void DrawSpecificBundle(SpriteBatch b)
         {
             base.DrawSpecificBundle(b);
-
             if (CurrentPageBundle.name == MemeBundleNames.FLASHBANG)
             {
                 b.Draw(CurrentPageBundle.BundleTextureOverride, new Vector2(0, 0), new Rectangle(Game1.viewport.Width, 0, Game1.viewport.Width, Game1.viewport.Height), Color.White, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 0.1f);
@@ -1077,21 +1167,212 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         protected override ClickableTextureComponent CreateIngredientButton(ParsedItemData dataOrErrorItem, Rectangle bounds, int index, string hoverText, Item flavoredItem)
         {
-            var offsetY = INGREDIENT_SLOTS_CENTER_Y - INGREDIENTS_CENTER_Y;
-            bounds.Y += offsetY;
+            if (CurrentPageBundle.name == MemeBundleNames.TRAP)
+            {
+                var offsetY = INGREDIENT_SLOTS_CENTER_Y - INGREDIENTS_CENTER_Y;
+                bounds.Y += offsetY;
+            }
             return base.CreateIngredientButton(dataOrErrorItem, bounds, index, hoverText, flavoredItem);
         }
 
-        protected override void DrawIngredientSlot(SpriteBatch b, ClickableTextureComponent ingredientSlot)
+        protected override void DrawIngredientSlot(SpriteBatch b, int index)
         {
             if (CurrentPageBundle.name == MemeBundleNames.TRAP)
             {
+                var ingredientSlot = IngredientSlots[index];
                 ingredientSlot.draw(b, (FromGameMenu ? Color.LightGray * 0.5f : Color.White), 0.89f);
                 ingredientSlot.drawItem(b, 4, 4, 1f);
                 return;
             }
 
-            base.DrawIngredientSlot(b, ingredientSlot);
+            base.DrawIngredientSlot(b, index);
+        }
+
+        protected override void DrawIngredients(SpriteBatch spriteBatch)
+        {
+            base.DrawIngredients(spriteBatch);
+        }
+
+        protected override void DrawIngredientSlots(SpriteBatch b)
+        {
+            if (CurrentPageBundle.name == MemeBundleNames.BUNDLE_BUNDLE)
+            {
+                DrawIngredientSlotsBundleBundle(b);
+                return;
+            }
+            base.DrawIngredientSlots(b);
+        }
+
+        private void DrawIngredientSlotsBundleBundle(SpriteBatch b)
+        {
+            if (_bundleBundleIndex == -1)
+            {
+                var startIndex = NUMBER_SUB_BUNDLES * ingredientsPerSubBundle;
+                var endIndex = startIndex + NUMBER_SUB_BUNDLES;
+                for (var index = startIndex; index < endIndex; ++index)
+                {
+                    var subBundleIndex = index - startIndex;
+                    var y = 244 + (subBundleIndex * 16);
+                    var sourceRect = new Rectangle(16, y, 16, 16);
+                    if (SubBundleComplete(subBundleIndex))
+                    {
+                        sourceRect.X += 9 * 16;
+                    }
+                    else
+                    {
+                        IngredientSlots[index].draw(b, (FromGameMenu ? Color.LightGray * 0.5f : Color.White), 0.89f);
+                    }
+                    b.Draw(NoteTexture, IngredientSlots[index].bounds, sourceRect, Color.White);
+                   // DrawIngredientSlot(b, index);
+                }
+                return;
+            }
+            base.DrawIngredientSlots(b);
+        }
+
+        private bool SubBundleComplete(int subBundleIndex)
+        {
+            var startIndex = subBundleIndex * ingredientsPerSubBundle;
+            var endIndex = startIndex + ingredientsPerSubBundle;
+            var num = 0;
+            for (var index = startIndex; index < endIndex; index++)
+            {
+                var ingredientSlot = IngredientSlots[index];
+                if (ingredientSlot.item != null)
+                {
+                    ++num;
+                }
+            }
+            return num >= ingredientsPerSubBundle;
+        }
+
+        protected override void DrawTemporarySprites(SpriteBatch b)
+        {
+            if (CurrentPageBundle.name == MemeBundleNames.BUNDLE_BUNDLE)
+            {
+                if (_bundleBundleIndex == -1)
+                {
+                    return;
+                }
+            }
+            base.DrawTemporarySprites(b);
+        }
+
+        protected override int GetIngredientsStartIndex()
+        {
+            if (CurrentPageBundle == null || CurrentPageBundle.name != MemeBundleNames.BUNDLE_BUNDLE)
+            {
+                return base.GetIngredientsStartIndex();
+            }
+
+            return GetIngredientsStartIndex(_bundleBundleIndex);
+        }
+
+        protected override int GetIngredientsEndIndex()
+        {
+            if (CurrentPageBundle == null || CurrentPageBundle.name != MemeBundleNames.BUNDLE_BUNDLE)
+            {
+                return base.GetIngredientsEndIndex();
+            }
+
+            return GetIngredientsEndIndex(_bundleBundleIndex);
+        }
+
+        protected override int GetIngredientSlotsStartIndex()
+        {
+            if (CurrentPageBundle == null || CurrentPageBundle.name != MemeBundleNames.BUNDLE_BUNDLE)
+            {
+                return base.GetIngredientSlotsStartIndex();
+            }
+
+            return GetIngredientSlotsStartIndex(_bundleBundleIndex);
+        }
+
+        protected override int GetIngredientSlotsEndIndex()
+        {
+            if (CurrentPageBundle == null || CurrentPageBundle.name != MemeBundleNames.BUNDLE_BUNDLE)
+            {
+                return base.GetIngredientSlotsEndIndex();
+            }
+
+            return GetIngredientSlotsEndIndex(_bundleBundleIndex);
+        }
+
+        private int GetIngredientsStartIndex(int bundleBundleIndex)
+        {
+            if (bundleBundleIndex == -1)
+            {
+                return 0;
+            }
+
+            return bundleBundleIndex * ingredientsPerSubBundle;
+        }
+
+        private int GetIngredientsEndIndex(int bundleBundleIndex)
+        {
+            if (bundleBundleIndex == -1)
+            {
+                return 0;
+            }
+
+            return (bundleBundleIndex + 1) * ingredientsPerSubBundle;
+        }
+
+        private int GetIngredientSlotsStartIndex(int bundleBundleIndex)
+        {
+            if (bundleBundleIndex == -1)
+            {
+                return NUMBER_SUB_BUNDLES * ingredientsPerSubBundle;
+            }
+
+            return bundleBundleIndex * ingredientsPerSubBundle;
+        }
+
+        private int GetIngredientSlotsEndIndex(int bundleBundleIndex)
+        {
+
+            if (bundleBundleIndex == -1)
+            {
+                return (NUMBER_SUB_BUNDLES + 1) * ingredientsPerSubBundle;
+            }
+
+            return (bundleBundleIndex + 1) * ingredientsPerSubBundle;
+        }
+
+        protected void UpdateIngredientSlotsBundleBundle()
+        {
+            for (var bundleIndex = 0; bundleIndex < NUMBER_SUB_BUNDLES; bundleIndex++)
+            {
+                var startIndex = GetIngredientSlotsStartIndex(bundleIndex);
+                var endIndex = GetIngredientSlotsEndIndex(bundleIndex);
+                var ingredientSlotIndex = startIndex;
+                for (var i = startIndex; i < endIndex; i++)
+                {
+                    var ingredient = CurrentPageBundle.Ingredients[i];
+                    ingredientSlotIndex = UpdateIngredientSlotBundleBundle(ingredient, ingredientSlotIndex);
+                }
+            }
+        }
+
+        protected int UpdateIngredientSlotBundleBundle(BundleIngredientDescription ingredient, int index)
+        {
+            if (!ingredient.completed || index >= IngredientSlots.Count)
+            {
+                return index;
+            }
+
+            var representativeItemId = GetRepresentativeItemId(ingredient);
+            if (ingredient.preservesId != null)
+            {
+                IngredientSlots[index].item = Utility.CreateFlavoredItem(representativeItemId, ingredient.preservesId, ingredient.quality, ingredient.stack);
+            }
+            else
+            {
+                IngredientSlots[index].item = ItemRegistry.Create(representativeItemId, ingredient.stack, ingredient.quality);
+            }
+            CurrentPageBundle.IngredientDepositAnimation(IngredientSlots[index], NOTE_TEXTURE_NAME, true);
+            ++index;
+            return index;
         }
     }
 }

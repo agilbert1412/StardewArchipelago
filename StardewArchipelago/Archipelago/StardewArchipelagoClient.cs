@@ -8,17 +8,18 @@ using Archipelago.MultiClient.Net;
 using Archipelago.MultiClient.Net.BounceFeatures.DeathLink;
 using Archipelago.MultiClient.Net.Enums;
 using Archipelago.MultiClient.Net.MessageLog.Messages;
+using Archipelago.MultiClient.Net.Models;
 using Archipelago.MultiClient.Net.Packets;
 using HarmonyLib;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
-using Microsoft.Xna.Framework;
 using StardewArchipelago.Extensions;
 using StardewArchipelago.GameModifications.MoveLink;
 using StardewArchipelago.GameModifications.Testing;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Minigames;
+using Color = Microsoft.Xna.Framework.Color;
 
 namespace StardewArchipelago.Archipelago
 {
@@ -38,6 +39,8 @@ namespace StardewArchipelago.Archipelago
         public SlotData.SlotData SlotData => (SlotData.SlotData)_slotData;
         public IGiftingService GiftingService { get; private set; }
 
+        private List<string> _messagesToIgnore;
+
         public StardewArchipelagoClient(ILogger logger, IModHelper modHelper, IManifest manifest, Harmony harmony, Action itemReceivedFunction, IJsonLoader jsonLoader, TesterFeatures testerFeatures) :
             base(logger, new DataPackageCache(new ArchipelagoItemLoader(jsonLoader), new StardewArchipelagoLocationLoader(jsonLoader), "stardew_valley", "IdTables"), itemReceivedFunction)
         {
@@ -45,6 +48,7 @@ namespace StardewArchipelago.Archipelago
             _manifest = manifest;
             _harmony = harmony;
             _testerFeatures = testerFeatures;
+            _messagesToIgnore = new List<string>();
         }
 
         protected override void InitializeSlotData(string slotName, Dictionary<string, object> slotDataFields)
@@ -95,9 +99,15 @@ namespace StardewArchipelago.Archipelago
         protected override void OnMessageReceived(LogMessage message)
         {
             var fullMessage = string.Join(" ", message.Parts.Select(str => str.Text));
-            Logger.LogInfo(fullMessage);
+            var stardewFullMessage = fullMessage.TurnHeartsIntoStardewHearts();
 
-            fullMessage = fullMessage.TurnHeartsIntoStardewHearts();
+            if (_messagesToIgnore.Contains(fullMessage) || _messagesToIgnore.Contains(stardewFullMessage))
+            {
+                Logger.LogDebug($"Ignoring Chat Message: {fullMessage}");
+                return;
+            }
+
+            Logger.LogInfo(fullMessage);
 
             switch (message)
             {
@@ -109,7 +119,7 @@ namespace StardewArchipelago.Archipelago
                     }
 
                     var color = chatMessage.Player.Name.GetAsBrightColor();
-                    Game1.chatBox?.addMessage(fullMessage, color);
+                    Game1.chatBox?.addMessage(stardewFullMessage, color);
                     return;
                 }
                 case ItemSendLogMessage itemSendLogMessage:
@@ -126,13 +136,13 @@ namespace StardewArchipelago.Archipelago
 
                     var color = Color.Gold;
 
-                    Game1.chatBox?.addMessage(fullMessage, color);
+                    Game1.chatBox?.addMessage(stardewFullMessage, color);
                     return;
                 }
                 case GoalLogMessage:
                 {
                     var color = Color.Green;
-                    Game1.chatBox?.addMessage(fullMessage, color);
+                    Game1.chatBox?.addMessage(stardewFullMessage, color);
                     return;
                 }
                 case JoinLogMessage:
@@ -145,14 +155,14 @@ namespace StardewArchipelago.Archipelago
                     }
 
                     var color = Color.Gray;
-                    Game1.chatBox?.addMessage(fullMessage, color);
+                    Game1.chatBox?.addMessage(stardewFullMessage, color);
                     return;
                 }
                 case CommandResultLogMessage:
                 case not null:
                 {
                     var color = Color.Gray;
-                    Game1.chatBox?.addMessage(fullMessage, color);
+                    Game1.chatBox?.addMessage(stardewFullMessage, color);
                     return;
                 }
             }
@@ -298,6 +308,25 @@ namespace StardewArchipelago.Archipelago
         {
             return ScoutManyLocations(locationNames, ShouldHint(createAsHint));
         }
-    }
 
+        public string SendFakeItemMessage(string itemName, string locationName)
+        {
+            var message = $"Trap Bundle sent {itemName} to {GetPlayerName()} ({locationName})";
+            _messagesToIgnore.Add(message);
+
+            if (!this.MakeSureConnected())
+            {
+                return message;
+            }
+
+            var session = GetSession();
+            var packet = new SayPacket()
+            {
+                Text = message,
+            };
+
+            session.Socket.SendPacket(packet);
+            return message;
+        }
+    }
 }

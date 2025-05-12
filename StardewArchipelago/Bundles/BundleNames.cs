@@ -23,5 +23,6 @@ namespace StardewArchipelago.Bundles
         public const string TRAP = "Trap";
         public const string FLASHBANG = "Flashbang";
         public const string NFT = "NFT";
+        public const string BUNDLE_BUNDLE = "Bundle";
     }
 }
