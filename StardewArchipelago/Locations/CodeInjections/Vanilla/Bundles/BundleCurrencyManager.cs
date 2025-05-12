@@ -119,6 +119,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             {
                 amountText += " Death";
             }
+            else if (ingredientId == MemeIDProvider.COOKIES_CLICKS)
+            {
+                DrawTimeElapsedCurrency();
+                var allowedTime = ArchipelagoJunimoNoteMenu.AllowedMillisecondsOnThisSlot;
+                var seconds = allowedTime / 1000;
+                var milliseconds = allowedTime % 1000;
+                amountText += $"{seconds}:{milliseconds}";
+            }
             else
             {
                 Game1.specialCurrencyDisplay.ShowCurrency(null);
@@ -146,6 +154,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         private void DrawTimeCurrency()
         {
             DrawSpecialCurrency(_wallet.Time, Game1.mouseCursors, new Rectangle(434, 475, 9, 9));
+        }
+
+        private void DrawTimeElapsedCurrency()
+        {
+            var elapsedTime = ArchipelagoJunimoNoteMenu.DayStopwatch.ElapsedMilliseconds;
+            var elapsedMinutes = elapsedTime / (60 * 1000);
+            var totalSeconds = elapsedTime % (60 * 1000);
+            var elapsedSeconds = totalSeconds / 1000;
+            var elapsedMilliseconds = totalSeconds % 1000;
+            DrawSpecialCurrency($"{elapsedMinutes}:{elapsedSeconds}:{elapsedMilliseconds}", Game1.mouseCursors, new Rectangle(434, 475, 9, 9));
         }
 
         private void DrawStepsCurrency()
@@ -182,13 +200,20 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         private static void DrawSpecialCurrency(int amountOwned, Texture2D texture, Rectangle sourceRectangle, float scale = 4f)
         {
+            DrawSpecialCurrency(amountOwned.ToString(), texture, sourceRectangle, scale);
+        }
+
+        private static void DrawSpecialCurrency(string amountOwned, Texture2D texture, Rectangle sourceRectangle, float scale = 4f)
+        {
+            amountOwned ??= "";
             var spriteBatch = Game1.spriteBatch;
             spriteBatch.End();
             Game1.PushUIMode();
             spriteBatch.Begin(blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
-            spriteBatch.Draw(Game1.fadeToBlackRect, new Rectangle(16, 16, 128 + (amountOwned > 999 ? 16 : 0), 64), Color.Black * 0.75f);
+            var width = 128 + (amountOwned.Length > 3 ? (amountOwned.Length-3) * 16 : 0);
+            spriteBatch.Draw(Game1.fadeToBlackRect, new Rectangle(16, 16, width, 64), Color.Black * 0.75f);
             spriteBatch.Draw(texture, new Vector2(32f, 32f), sourceRectangle, Color.White, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 1f);
-            Game1.drawWithBorder(amountOwned.ToString() ?? "", Color.Black, Color.White, new Vector2(72f, (float)(21 + (LocalizedContentManager.CurrentLanguageCode == LocalizedContentManager.LanguageCode.en ? 8 : (LocalizedContentManager.CurrentLanguageLatin ? 16 : 8)))), 0.0f, 1f, 1f, false);
+            Game1.drawWithBorder(amountOwned, Color.Black, Color.White, new Vector2(72f, (float)(21 + (LocalizedContentManager.CurrentLanguageCode == LocalizedContentManager.LanguageCode.en ? 8 : (LocalizedContentManager.CurrentLanguageLatin ? 16 : 8)))), 0.0f, 1f, 1f, false);
 
             spriteBatch.End();
             Game1.PopUIMode();
@@ -247,8 +272,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
             if (ingredient.id == MemeIDProvider.CLIC)
             {
-                TryPurchaseCurrentBundleWithCookies(ingredient);
-                // TryPurchaseCurrentBundleWithOneClic(ingredient);
+                TryPurchaseCurrentBundleWithOneClic(ingredient);
+                return;
+            }
+
+            if (ingredient.id == MemeIDProvider.CLIC)
+            {
+                TryPurchaseCurrentBundleWithTimeElapsed(ingredient);
                 return;
             }
         }
@@ -296,6 +326,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         private void TryPurchaseCurrentBundleWithOneClic(BundleIngredientDescription ingredient)
         {
             TryPurchaseCurrentBundleWithWalletCurrency(ingredient, 1, _ => {});
+        }
+
+        private void TryPurchaseCurrentBundleWithTimeElapsed(BundleIngredientDescription ingredient)
+        {
+            if (ArchipelagoJunimoNoteMenu.DayStopwatch.ElapsedMilliseconds > ArchipelagoJunimoNoteMenu.AllowedMillisecondsOnThisSlot)
+            {
+                Game1.dayTimeMoneyBox.moneyShakeTimer = 600;
+                return;
+            }
+            TryPurchaseCurrentBundleWithWalletCurrency(ingredient, 1, _ => { });
         }
 
         private void TryPurchaseCurrentBundleWithWalletCurrency(BundleIngredientDescription ingredient, int amountOwned, Action<int> payAction)

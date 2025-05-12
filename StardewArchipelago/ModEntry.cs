@@ -389,6 +389,8 @@ namespace StardewArchipelago
         {
             SeasonsRandomizer.ChangeMailKeysBasedOnSeasonsToDaysElapsed();
             SeasonsRandomizer.SendMailHardcodedForToday();
+            ArchipelagoJunimoNoteMenu.DayStopwatch.Reset();
+            ArchipelagoJunimoNoteMenu.DayStopwatch.Start();
 
             if (MultiSleepManager.TryDoMultiSleepOnDayStarted())
             {

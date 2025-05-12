@@ -1,6 +1,7 @@
 ﻿#nullable disable
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using KaitoKid.ArchipelagoUtilities.Net;
@@ -50,6 +51,17 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         internal int _bundleBundleIndex = -1;
         internal const int NUMBER_SUB_BUNDLES = 4;
         internal int ingredientsPerSubBundle => IngredientList.Count / NUMBER_SUB_BUNDLES;
+        internal static Stopwatch DayStopwatch = new Stopwatch();
+        internal const int ALLOWED_MILLISECONDS = 1000;
+        internal static int AllowedMillisecondsOnThisSlot
+        {
+            get
+            {
+                var random = new Random((int)Game1.uniqueIDForThisGame);
+                var extraTime = random.Next(ALLOWED_MILLISECONDS / 4);
+                return ALLOWED_MILLISECONDS + extraTime;
+            }
+        }
 
         public Texture2D MemeTexture;
         private ClickableTextureComponent _donateButton;
@@ -478,8 +490,31 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             {
                 return;
             }
+            if (CurrentPageBundle.name == MemeBundleNames.CLIQUE)
+            {
+                SetUpCliqueButton();
+                return;
+            }
 
             base.SetUpPurchaseButton();
+        }
+
+        private void SetUpCliqueButton()
+        {
+            if (FromGameMenu)
+            {
+                return;
+            }
+            var textureComponent = new ClickableTextureComponent(new Rectangle(xPositionOnScreen + 800, yPositionOnScreen + 504, 260, 72), MemeTexture, new Rectangle(0, 20, 65, 20), 4f);
+            textureComponent.myID = 797;
+            textureComponent.leftNeighborID = REGION_BACK_BUTTON;
+            PurchaseButton = textureComponent;
+            if (!Game1.options.SnappyMenus)
+            {
+                return;
+            }
+            currentlySnappedComponent = PurchaseButton;
+            snapCursorToCurrentSnappedComponent();
         }
 
         private void SetUpDonateButton()
