@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using KaitoKid.ArchipelagoUtilities.Net;
 using StardewArchipelago.Bundles;
 using StardewValley;
 using StardewValley.Locations;
@@ -22,6 +23,22 @@ namespace StardewArchipelago.Stardew
         {
             var communityCenter = GetCommunityCenter();
             return communityCenter.areAllAreasComplete();
+        }
+
+        public void CheckAllBundleLocations(LocationChecker locationChecker)
+        {
+            var completedBundleNames = GetAllCompletedBundles();
+            foreach (var completedBundleName in completedBundleNames)
+            {
+                if (locationChecker.IsLocationMissing(completedBundleName + " Bundle"))
+                {
+                    locationChecker.AddCheckedLocation(completedBundleName + " Bundle");
+                }
+                else if (locationChecker.IsLocationMissing(completedBundleName))
+                {
+                    locationChecker.AddCheckedLocation(completedBundleName);
+                }
+            }
         }
 
         public List<string> GetAllCompletedBundles()

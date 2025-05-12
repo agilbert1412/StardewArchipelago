@@ -268,6 +268,7 @@ namespace StardewArchipelago
             _stardewItemManager = new StardewItemManager(_logger);
             _mail = new Mailman(_logger, State);
             _locationChecker = new StardewLocationChecker(_logger, _archipelago, State.LocationsChecked);
+            DeathManager.Initialize(_locationChecker);
             _itemPatcher = new ItemPatcher(_logger, _helper, _harmony, _archipelago);
             _goalManager = new GoalManager(_logger, _helper, _harmony, _archipelago, _locationChecker);
             _entranceManager = new EntranceManager(_logger, _archipelago, State);

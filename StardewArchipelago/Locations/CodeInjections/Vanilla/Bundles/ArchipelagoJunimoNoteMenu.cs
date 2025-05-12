@@ -101,7 +101,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         public override void CheckForRewards()
         {
-            CheckAllBundleLocations();
+            _bundleReader.CheckAllBundleLocations(_locationChecker);
             MarkAllRewardsAsAlreadyGrabbed();
         }
 
@@ -346,22 +346,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             // Game1.multiplayer.globalChatInfoMessage("Bundle");
         }
 
-        private void CheckAllBundleLocations()
-        {
-            var completedBundleNames = _bundleReader.GetAllCompletedBundles();
-            foreach (var completedBundleName in completedBundleNames)
-            {
-                if (_locationChecker.IsLocationMissing(completedBundleName + " Bundle"))
-                {
-                    _locationChecker.AddCheckedLocation(completedBundleName + " Bundle");
-                }
-                else if (_locationChecker.IsLocationMissing(completedBundleName))
-                {
-                    _locationChecker.AddCheckedLocation(completedBundleName);
-                }
-            }
-        }
-
         private void MarkAllRewardsAsAlreadyGrabbed()
         {
             var communityCenter = Game1.locations.OfType<CommunityCenter>().First();
@@ -471,7 +455,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             switch (CurrentPageBundle.name)
             {
                 case MemeBundleNames.CLIQUE:
-
                     // TODO: Clique Button
                     // PurchaseButton.texture = null;
                     break;
@@ -483,12 +466,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 case MemeBundleNames.COOKIE_CLICKER:
                     SetUpCookiesButtons();
                     break;
+                case MemeBundleNames.DEATH:
+                    SetUpMonstersButton();
+                    break;
             }
         }
 
         protected override void SetUpPurchaseButton()
         {
-            if (CurrentPageBundle.name == MemeBundleNames.NFT)
+            if (CurrentPageBundle.name == MemeBundleNames.NFT || CurrentPageBundle.name == MemeBundleNames.DEATH)
             {
                 return;
             }
@@ -559,6 +545,37 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             ExtraButtons.Add(cookieButton, _wallet.CookieClicker.ClickCookie);
             ExtraButtons.Add(cursorButton, _wallet.CookieClicker.UpgradeCursor);
             ExtraButtons.Add(grandmaButton, _wallet.CookieClicker.UpgradeGrandma);
+        }
+
+        private void SetUpMonstersButton()
+        {
+            if (FromGameMenu)
+            {
+                return;
+            }
+
+            var buttonBackgroundRectangle = new Rectangle(512, 244, 18, 18);
+            var xStart = xPositionOnScreen + 800;
+            var xPerButton = 100;
+            var y = yPositionOnScreen + 504;
+            var buttonScale = 4f;
+
+            var dieBackgroundRect = new Rectangle(xStart + xPerButton, y, 72, 72);
+            var dieBackground = new ClickableTextureComponent(dieBackgroundRect, NoteTexture, buttonBackgroundRectangle, buttonScale);
+            var dieTextureRect = new Rectangle(240, 1808, 16, 16);
+            var dieRect = GetCenteredTexture(dieBackgroundRect, dieTextureRect, buttonScale, buttonScale);
+            var dieButton = new ClickableTextureComponent(dieRect, Game1.mouseCursors, dieTextureRect, buttonScale);
+            dieButton.myID = 794;
+
+            dieButton.leftNeighborID = REGION_BACK_BUTTON;
+            dieButton.rightNeighborID = REGION_PURCHASE_BUTTON;
+
+            ExtraButtons.Add(dieBackground, () => { });
+            ExtraButtons.Add(dieButton, () =>
+            {
+                _trapManager.ExecuteTrapImmediately("Monsters Trap");
+                exitThisMenu();
+            });
         }
 
         private static Rectangle GetCenteredTexture(Rectangle buttonRect, Rectangle textureRect, float buttonScale, float textureScale)
@@ -1281,7 +1298,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             base.DrawIngredientSlots(b);
         }
 
-        private bool SubBundleComplete(int subBundleIndex)
+        internal bool SubBundleComplete(int subBundleIndex)
         {
             var startIndex = subBundleIndex * ingredientsPerSubBundle;
             var endIndex = startIndex + ingredientsPerSubBundle;

@@ -366,7 +366,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             }
         }
 
-        private void CompletionAnimation(bool playSound = true)
+        protected void CompletionAnimation(bool playSound = true)
         {
             if (Game1.activeClickableMenu is JunimoNoteMenuRemake activeClickableMenu)
             {

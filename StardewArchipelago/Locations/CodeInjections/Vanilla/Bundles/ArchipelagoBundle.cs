@@ -158,6 +158,22 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         public override Item TryToDepositThisItem(Item item, ClickableTextureComponent slot, string noteTextureName, ArchipelagoJunimoNoteMenu parentMenu)
         {
+            if (name == MemeBundleNames.BUNDLE_BUNDLE)
+            {
+                if (parentMenu._bundleBundleIndex >= 0)
+                {
+                    var doneBefore = parentMenu.SubBundleComplete(parentMenu._bundleBundleIndex);
+                    var result = base.TryToDepositThisItem(item, slot, noteTextureName, parentMenu);
+                    var doneAfter = parentMenu.SubBundleComplete(parentMenu._bundleBundleIndex);
+                    if (!doneBefore && doneAfter)
+                    {
+                        var completeBefore = Complete;
+                        CompletionAnimation();
+                        Complete = completeBefore;
+                    }
+                    return result;
+                }
+            }
             if (name == MemeBundleNames.HONORABLE)
             {
                 if (item.QualifiedItemId == QualifiedItemIds.STONE)

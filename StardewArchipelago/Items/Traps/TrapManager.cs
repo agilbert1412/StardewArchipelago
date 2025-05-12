@@ -129,7 +129,7 @@ namespace StardewArchipelago.Items.Traps
             return true;
         }
 
-        private void ExecuteTrapImmediately(string trapName)
+        public void ExecuteTrapImmediately(string trapName)
         {
             _queuedTraps.Enqueue(new QueuedItemTrap(trapName, _traps[trapName]));
         }

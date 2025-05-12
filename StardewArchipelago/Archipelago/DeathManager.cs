@@ -1,20 +1,27 @@
 ﻿using System;
+using System.Linq;
 using HarmonyLib;
+using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework;
+using StardewArchipelago.Bundles;
+using StardewArchipelago.Constants;
+using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Locations;
 
 namespace StardewArchipelago.Archipelago
 {
     public class DeathManager
     {
         private static ILogger _logger;
+        private static IModHelper _modHelper;
+        private static Harmony _harmony;
         private static ArchipelagoClient _archipelago;
-        private IModHelper _modHelper;
-        private readonly Harmony _harmony;
+        private static LocationChecker _locationChecker;
 
         private static bool _isCurrentlyReceivingDeathLink = false;
 
@@ -24,6 +31,11 @@ namespace StardewArchipelago.Archipelago
             _modHelper = modHelper;
             _harmony = harmony;
             _archipelago = archipelago;
+        }
+
+        public static void Initialize(LocationChecker locationChecker)
+        {
+            _locationChecker = locationChecker;
         }
 
         public static void ReceiveDeathLink()
@@ -85,6 +97,7 @@ namespace StardewArchipelago.Archipelago
                 if (__instance.CanMove && __instance.health <= 0 && !Game1.killScreen && Game1.timeOfDay < 2600)
                 {
                     SendDeathLink("died in combat");
+                    TriggerDeathBundle();
                 }
 
                 return MethodPrefix.RUN_ORIGINAL_METHOD;
@@ -94,6 +107,33 @@ namespace StardewArchipelago.Archipelago
                 _logger.LogError($"Failed in {nameof(Update_SendDeathLink_Prefix)}:\n{ex}");
                 return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
+        }
+
+        private static void TriggerDeathBundle()
+        {
+            if (Game1.currentLocation is not CommunityCenter communityCenter)
+            {
+                return;
+            }
+
+            var index = -1;
+            foreach (var (bundleKey, bundleData) in Game1.netWorldState.Value.BundleData)
+            {
+                var name = bundleData.Split("/").First();
+                if (name == MemeBundleNames.DEATH)
+                {
+                    index = int.Parse(bundleKey.Split("/").Last());
+                    break;
+                }
+            }
+            if (index == -1)
+            {
+                return;
+            }
+            communityCenter.bundleRewards[index] = true;
+            communityCenter.bundles.FieldDict[index][0] = true;
+            var bundleReader = new BundleReader();
+            bundleReader.CheckAllBundleLocations(_locationChecker);
         }
 
         public static bool PerformPassOut_SendDeathLink_Prefix(Farmer __instance)
