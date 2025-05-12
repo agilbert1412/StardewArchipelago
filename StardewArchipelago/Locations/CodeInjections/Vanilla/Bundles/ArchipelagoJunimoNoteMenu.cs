@@ -620,6 +620,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         {
             AfterUpdateIngredientSlotsSisyphus();
             AfterUpdateIngredientSlotsBureaucracy();
+            AfterUpdateIngredientSlotsSchrodinger();
         }
 
         private void AfterUpdateIngredientSlotsSisyphus()
@@ -696,6 +697,26 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             {
                 var sourceRect = new Rectangle(512, 244, 18, 18);
                 IngredientSlots.Add(new ClickableTextureComponent(SubBundleRectangles[indexSubBundle], NoteTexture, sourceRect, 4f));
+            }
+        }
+
+        private void AfterUpdateIngredientSlotsSchrodinger()
+        {
+            if (CurrentPageBundle?.name != MemeBundleNames.SCHRODINGER)
+            {
+                return;
+            }
+            
+            var index = GetValidSchrodingerIndex();
+            for (var i = GetIngredientsEndIndex() - 1; i >= 0; i--)
+            {
+                if (i == index)
+                {
+                    continue;
+                }
+
+                IngredientList.RemoveAt(i);
+                CurrentPageBundle.Ingredients.RemoveAt(i);
             }
         }
 
@@ -843,7 +864,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 for (var ingredientIndex = 0; ingredientIndex < CurrentPageBundle.Ingredients.Count; ++ingredientIndex)
                 {
                     var ingredientDescription = CurrentPageBundle.Ingredients[ingredientIndex];
-                    if (CurrentPageBundle.IsValidItemForThisIngredientDescription(HeldItem, ingredientDescription))
+                    if (CurrentPageBundle.IsValidItemForThisIngredientDescription(HeldItem, ingredientDescription, ingredientIndex, this))
                     {
                         var completedDescription = new BundleIngredientDescription(ingredientDescription, true);
                         CurrentPageBundle.Ingredients[ingredientIndex] = completedDescription;
@@ -889,7 +910,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 for (var ingredientIndex = 0; ingredientIndex < CurrentPageBundle.Ingredients.Count; ++ingredientIndex)
                 {
                     var ingredientDescription = CurrentPageBundle.Ingredients[ingredientIndex];
-                    if (CurrentPageBundle.IsValidItemForThisIngredientDescription(item, ingredientDescription))
+                    if (CurrentPageBundle.IsValidItemForThisIngredientDescription(item, ingredientDescription, ingredientIndex, this))
                     {
                         var completedDescription = new BundleIngredientDescription(ingredientDescription, true);
                         CurrentPageBundle.Ingredients[ingredientIndex] = completedDescription;
@@ -1191,6 +1212,36 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         protected override void DrawIngredients(SpriteBatch spriteBatch)
         {
             base.DrawIngredients(spriteBatch);
+        }
+
+        public int GetValidSchrodingerIndex()
+        {
+            var inventorySeed = GetInventorySeed();
+            var seed = Utility.CreateRandomSeed(Game1.uniqueIDForThisGame, inventorySeed);
+            var random = new Random(seed);
+            var index = random.Next(GetIngredientsStartIndex(), GetIngredientsEndIndex());
+            return index;
+        }
+
+        public static int GetInventorySeed()
+        {
+            unchecked
+            {
+                var inventorySeed = 0;
+                foreach (var playerItem in Game1.player.Items)
+                {
+                    if (playerItem == null)
+                    {
+                        inventorySeed = (inventorySeed * 9) + 3;
+                        continue;
+                    }
+                    inventorySeed = (inventorySeed * 7) + playerItem.Category;
+                    inventorySeed = (inventorySeed * 7) + playerItem.ParentSheetIndex;
+                    inventorySeed = (inventorySeed * 7) + playerItem.Quality;
+                    inventorySeed = (inventorySeed * 7) + playerItem.Stack;
+                }
+                return inventorySeed;
+            }
         }
 
         protected override void DrawIngredientSlots(SpriteBatch b)

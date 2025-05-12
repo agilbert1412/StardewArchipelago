@@ -8,20 +8,10 @@ using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes;
 using StardewArchipelago.Serialization;
 using StardewModdingAPI;
 using StardewValley.Menus;
-using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Vanilla;
-using StardewArchipelago.Logging;
 using StardewValley;
-using Netcode;
-using StardewValley.Network;
-using StardewValley.TerrainFeatures;
 using System;
-using System.Linq;
-using StardewValley.Extensions;
-using Object = StardewValley.Object;
-using Microsoft.Xna.Framework.Input;
 using StardewArchipelago.Constants;
-using StardewValley.Internal;
 using StardewValley.Objects;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
@@ -110,7 +100,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
         }
 
-        public override bool CanAcceptThisItem(Item item, ClickableTextureComponent slot, bool ignoreStackCount)
+        public override bool CanAcceptThisItem(Item item, ClickableTextureComponent slot, bool ignoreStackCount, ArchipelagoJunimoNoteMenu parentMenu)
         {
             if (name == MemeBundleNames.BUREAUCRACY)
             {
@@ -118,10 +108,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 return item.QualifiedItemId == currentIngredient.id;
             }
 
-            return base.CanAcceptThisItem(item, slot, ignoreStackCount);
+            return base.CanAcceptThisItem(item, slot, ignoreStackCount, parentMenu);
         }
 
-        public override bool IsValidItemForThisIngredientDescription(Item item, BundleIngredientDescription ingredient)
+        public override bool IsValidItemForThisIngredientDescription(Item item, BundleIngredientDescription ingredient, int ingredientIndex, ArchipelagoJunimoNoteMenu parentMenu)
         {
             if (name == MemeBundleNames.BUREAUCRACY && item is not null)
             {
@@ -133,7 +123,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 return IsValidItemForOffYourBackIngredientDescription(item, ingredient);
             }
 
-            return base.IsValidItemForThisIngredientDescription(item, ingredient);
+            return base.IsValidItemForThisIngredientDescription(item, ingredient, ingredientIndex, parentMenu);
         }
 
         private static bool IsValidItemForOffYourBackIngredientDescription(Item item, BundleIngredientDescription ingredient)
@@ -166,7 +156,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             return false;
         }
 
-        public override Item TryToDepositThisItem(Item item, ClickableTextureComponent slot, string noteTextureName, JunimoNoteMenuRemake parentMenu)
+        public override Item TryToDepositThisItem(Item item, ClickableTextureComponent slot, string noteTextureName, ArchipelagoJunimoNoteMenu parentMenu)
         {
             if (name == MemeBundleNames.HONORABLE)
             {
@@ -187,8 +177,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             var itemAfterDeposit = base.TryToDepositThisItem(item, slot, noteTextureName, parentMenu);
             return itemAfterDeposit;
         }
-
-
 
         public static void LightningStrikeOnce()
         {

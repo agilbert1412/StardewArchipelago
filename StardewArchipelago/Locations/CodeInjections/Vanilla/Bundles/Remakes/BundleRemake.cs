@@ -212,9 +212,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             }
         }
 
-        public virtual bool IsValidItemForThisIngredientDescription(
-            Item item,
-            BundleIngredientDescription ingredient)
+        public virtual bool IsValidItemForThisIngredientDescription(Item item, BundleIngredientDescription ingredient, 
+            int ingredientIndex, ArchipelagoJunimoNoteMenu parentMenu)
         {
             if (item == null || ingredient.completed || ingredient.quality > item.Quality)
             {
@@ -240,11 +239,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             return category1 == valueOrDefault & category2.HasValue;
         }
 
-        public int GetBundleIngredientDescriptionIndexForItem(Item item)
+        public int GetBundleIngredientDescriptionIndexForItem(Item item, ArchipelagoJunimoNoteMenu parentMenu)
         {
             for (var index = 0; index < this.Ingredients.Count; ++index)
             {
-                if (this.IsValidItemForThisIngredientDescription(item, this.Ingredients[index]))
+                if (this.IsValidItemForThisIngredientDescription(item, this.Ingredients[index], index, parentMenu))
                 {
                     return index;
                 }
@@ -252,15 +251,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             return -1;
         }
 
-        public bool CanAcceptThisItem(Item item, ClickableTextureComponent slot)
+        public bool CanAcceptThisItem(Item item, ClickableTextureComponent slot, ArchipelagoJunimoNoteMenu parentMenu)
         {
-            return this.CanAcceptThisItem(item, slot, false);
+            return this.CanAcceptThisItem(item, slot, false, parentMenu);
         }
 
         public virtual bool CanAcceptThisItem(
             Item item,
             ClickableTextureComponent slot,
-            bool ignoreStackCount)
+            bool ignoreStackCount, 
+            ArchipelagoJunimoNoteMenu parentMenu)
         {
             if (!this.DepositsAllowed)
             {
@@ -268,7 +268,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             }
             for (var index = 0; index < this.Ingredients.Count; ++index)
             {
-                if (this.IsValidItemForThisIngredientDescription(item, this.Ingredients[index]) && (ignoreStackCount || this.Ingredients[index].stack <= item.Stack) && slot?.item == null)
+                if (this.IsValidItemForThisIngredientDescription(item, this.Ingredients[index], index, parentMenu) && (ignoreStackCount || this.Ingredients[index].stack <= item.Stack) && slot?.item == null)
                 {
                     return true;
                 }
@@ -280,7 +280,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             Item item,
             ClickableTextureComponent slot,
             string noteTextureName,
-            JunimoNoteMenuRemake parentMenu)
+            ArchipelagoJunimoNoteMenu parentMenu)
         {
             if (!this.DepositsAllowed)
             {
@@ -298,7 +298,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             for (var index1 = 0; index1 < this.Ingredients.Count; ++index1)
             {
                 var ingredientDescription1 = this.Ingredients[index1];
-                if (this.IsValidItemForThisIngredientDescription(item, ingredientDescription1) && slot.item == null)
+                if (this.IsValidItemForThisIngredientDescription(item, ingredientDescription1, index1, parentMenu) && slot.item == null)
                 {
                     item = item.ConsumeStack(ingredientDescription1.stack);
                     var ingredients = this.Ingredients;
