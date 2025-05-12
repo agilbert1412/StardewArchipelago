@@ -52,16 +52,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         internal const int NUMBER_SUB_BUNDLES = 4;
         internal int ingredientsPerSubBundle => IngredientList.Count / NUMBER_SUB_BUNDLES;
         internal static Stopwatch DayStopwatch = new Stopwatch();
-        internal const int ALLOWED_MILLISECONDS = 1000;
-        internal static int AllowedMillisecondsOnThisSlot
-        {
-            get
-            {
-                var random = new Random((int)Game1.uniqueIDForThisGame);
-                var extraTime = random.Next(ALLOWED_MILLISECONDS / 4);
-                return ALLOWED_MILLISECONDS + extraTime;
-            }
-        }
 
         public Texture2D MemeTexture;
         private ClickableTextureComponent _donateButton;

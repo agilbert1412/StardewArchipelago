@@ -122,10 +122,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             else if (ingredientId == MemeIDProvider.COOKIES_CLICKS)
             {
                 DrawTimeElapsedCurrency();
-                var allowedTime = ArchipelagoJunimoNoteMenu.AllowedMillisecondsOnThisSlot;
+                var allowedTime = GetFastBundleAllowedTime(ingredient);
                 var seconds = allowedTime / 1000;
                 var milliseconds = allowedTime % 1000;
-                amountText += $"{seconds}:{milliseconds}";
+                amountText = $"{seconds}:{milliseconds}";
             }
             else
             {
@@ -134,6 +134,33 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
 
             return amountText;
+        }
+
+        private static int GetFastBundleAllowedTime(BundleIngredientDescription ingredient)
+        {
+            var walkingTime = 10000;
+            var coffeeTime = (int)(Math.Round(walkingTime * 0.8));
+            var horseTime = (int)(Math.Round(walkingTime * 0.6));
+            var horseCoffeeTime = (int)(Math.Round(walkingTime * 0.4));
+            switch (ingredient.stack)
+            {
+                case 100:
+                    return walkingTime * 2;
+                case 200:
+                    return (int)(Math.Round(walkingTime * 1.4));
+                case 600:
+                    return (int)(Math.Round(walkingTime * 1.2));
+                case 1000:
+                    return walkingTime;
+                case 1400:
+                    return coffeeTime;
+                case 1800:
+                    return horseTime;
+                case 4000:
+                    return horseCoffeeTime;
+            }
+
+            return walkingTime;
         }
 
         private void DrawStarTokenCurrency()
@@ -330,7 +357,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         private void TryPurchaseCurrentBundleWithTimeElapsed(BundleIngredientDescription ingredient)
         {
-            if (ArchipelagoJunimoNoteMenu.DayStopwatch.ElapsedMilliseconds > ArchipelagoJunimoNoteMenu.AllowedMillisecondsOnThisSlot)
+            if (ArchipelagoJunimoNoteMenu.DayStopwatch.ElapsedMilliseconds > ingredient.stack)
             {
                 Game1.dayTimeMoneyBox.moneyShakeTimer = 600;
                 return;
