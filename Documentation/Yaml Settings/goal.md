@@ -182,9 +182,7 @@ The stardrops are:
 - Sold by Krobus in the Sewers. Is always shuffled.
 - Obtained from Old Master Cannoli in the secret woods. Is always shuffled.
 - Received after catching every fish. Is shuffled with ~~[Fishsanity](./fishsanity.md)~~.
-- Received after completing the Museum. Is shuffled with ~~[Museumsanity](./museumsanity.md)~~.
-
-
+- Received after completing the Museum. Is shuffled with ~~[Museumsanity](./museumsanity.md)~~.<br><br>
 
 - This goal is **not** *Adaptable*. The amount remains the same.
 - This goal is **not** *Focused*. The stardrops, shuffled or not, will require navigating many different tasks. This goal is essentially a Macguffin Hunt where the goal is to receive several specific items, and you cannot focus on them specifically.
