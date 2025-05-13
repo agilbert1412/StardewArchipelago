@@ -5,6 +5,7 @@ using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.Gifting;
+using StardewArchipelago.GameModifications.CodeInjections.Tilesanity;
 using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Items.Traps;
 using StardewArchipelago.Items.Unlocks;
@@ -41,6 +42,11 @@ namespace StardewArchipelago.Items
 
         public bool TrySendItemImmediately(ReceivedItem receivedItem)
         {
+#if TILESANITY
+            if (TileUI.ProcessItem(receivedItem))
+                return true;
+#endif
+            
             if (_trapManager.IsTrap(receivedItem.ItemName))
             {
                 return _trapManager.TryExecuteTrapImmediately(receivedItem.ItemName);

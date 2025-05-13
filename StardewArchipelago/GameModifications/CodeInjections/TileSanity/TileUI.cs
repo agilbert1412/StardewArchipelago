@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Locations;
+using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
 
@@ -118,7 +119,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Tilesanity
             }
             return true;
         }
-        public static void CheckLocation(string locationName)
+        public static void CheckLocation(string locationName, IMonitor monitor)
         {
             if (_currentLocation == null)
                 return;
@@ -132,7 +133,14 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Tilesanity
             {
                 if (map == currentMap)
                 {
-                    _tileColors[x, y] = -1;
+                    if (x < 0 || y < 0 || x >= _tileColors.GetLength(0) || y >= _tileColors.GetLength(1))
+                    {
+                        monitor.Log($"Tile index out of bounds : ({x}, {y}) max values : {_tileColors.GetLength(0)}, {_tileColors.GetLength(1)}");
+                    }
+                    else
+                    {
+                        _tileColors[x, y] = -1;
+                    }
                 }
             }
         }
