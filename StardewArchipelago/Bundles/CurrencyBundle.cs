@@ -49,6 +49,9 @@ namespace StardewArchipelago.Bundles
             { "CookieClics", MemeIDProvider.COOKIES_CLICKS },
             { "Death", MemeIDProvider.DEATH },
             { "Steps", MemeIDProvider.STEP },
+            { "Time Elapsed", MemeIDProvider.TIME_ELAPSED },
+            { "Dead Crop", MemeIDProvider.DEAD_CROP },
+            { "Dead Pumpkins", MemeIDProvider.DEAD_PUMPKIN },
         };
     }
 }

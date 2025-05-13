@@ -14,6 +14,9 @@ namespace StardewArchipelago.Constants
         public static readonly string COOKIES_CLICKS = IDProvider.CreateId("CookieClics");
         public static readonly string DEATH = IDProvider.CreateId("Death");
         public static readonly string STEP = IDProvider.CreateId("Step");
+        public static readonly string TIME_ELAPSED = IDProvider.CreateId("TimeElapsed");
+        public static readonly string DEAD_CROP = IDProvider.CreateId("DeadCrop");
+        public static readonly string DEAD_PUMPKIN = IDProvider.CreateId("DeadPumpkin");
 
         public static readonly string WORN_BOOTS = IDProvider.CreateId("WornBoots");
         public static readonly string WORN_SHIRT = IDProvider.CreateId("WornShirt");

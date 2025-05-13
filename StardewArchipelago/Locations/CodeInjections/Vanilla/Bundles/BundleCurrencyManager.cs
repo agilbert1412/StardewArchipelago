@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Constants;
+using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes;
 using StardewValley.Locations;
 using StardewValley.Menus;
@@ -119,13 +120,23 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             {
                 amountText += " Death";
             }
-            else if (ingredientId == MemeIDProvider.COOKIES_CLICKS)
+            else if (ingredientId == MemeIDProvider.TIME_ELAPSED)
             {
                 DrawTimeElapsedCurrency();
                 var allowedTime = GetFastBundleAllowedTime(ingredient);
                 var seconds = allowedTime / 1000;
                 var milliseconds = allowedTime % 1000;
                 amountText = $"{seconds}:{milliseconds}";
+            }
+            else if (ingredientId == MemeIDProvider.DEAD_CROP)
+            {
+                DrawDeadCropsCurrency();
+                amountText += " Dead Crops";
+            }
+            else if (ingredientId == MemeIDProvider.DEAD_PUMPKIN)
+            {
+                DrawDeadPumpkinsCurrency();
+                amountText += " Dead Pumpkins";
             }
             else
             {
@@ -175,7 +186,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         private void DrawEnergyCurrency()
         {
-            DrawSpecialCurrency(_wallet.Energy, Game1.mouseCursors, new Rectangle(1, 412, 14, 14));
+            DrawSpecialCurrency(_wallet.Energy, Game1.mouseCursors, new Rectangle(0, 410, 16, 16));
         }
 
         private void DrawTimeCurrency()
@@ -220,9 +231,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             DrawText(spriteBatch, $"cost: {_wallet.CookieClicker.GetGrandmaUpgradePrice()}", grandmaPriceX, pricesY, font);
         }
 
-        private void DrawDeathCurrency()
+        private void DrawDeadCropsCurrency()
         {
-            DrawSpecialCurrency(_wallet.Deaths, Game1.mouseCursors, new Rectangle(497, 1776, 14, 16));
+            DrawSpecialCurrency(_wallet.DeadCropsById.Sum(x => x.Value), Game1.objectSpriteSheet, new Rectangle(64, 496, 16, 16));
+        }
+
+        private void DrawDeadPumpkinsCurrency()
+        {
+            _wallet.DeadCropsById.TryAdd(ObjectIds.PUMPKIN, 0);
+            DrawSpecialCurrency(_wallet.DeadCropsById[ObjectIds.PUMPKIN], Game1.objectSpriteSheet, new Rectangle(48, 496, 16, 16));
         }
 
         private static void DrawSpecialCurrency(int amountOwned, Texture2D texture, Rectangle sourceRectangle, float scale = 4f)
@@ -239,7 +256,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             spriteBatch.Begin(blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
             var width = 128 + (amountOwned.Length > 3 ? (amountOwned.Length-3) * 16 : 0);
             spriteBatch.Draw(Game1.fadeToBlackRect, new Rectangle(16, 16, width, 64), Color.Black * 0.75f);
-            spriteBatch.Draw(texture, new Vector2(32f, 32f), sourceRectangle, Color.White, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 1f);
+            var position = new Vector2(32f, 32f);
+            if (sourceRectangle.Width >= 16)
+            {
+                position.X -= 8;
+            }
+            if (sourceRectangle.Height >= 16)
+            {
+                position.Y -= 8;
+            }
+            spriteBatch.Draw(texture, position, sourceRectangle, Color.White, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 1f);
             Game1.drawWithBorder(amountOwned, Color.Black, Color.White, new Vector2(72f, (float)(21 + (LocalizedContentManager.CurrentLanguageCode == LocalizedContentManager.LanguageCode.en ? 8 : (LocalizedContentManager.CurrentLanguageLatin ? 16 : 8)))), 0.0f, 1f, 1f, false);
 
             spriteBatch.End();
@@ -303,9 +329,21 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 return;
             }
 
-            if (ingredient.id == MemeIDProvider.CLIC)
+            if (ingredient.id == MemeIDProvider.TIME_ELAPSED)
             {
                 TryPurchaseCurrentBundleWithTimeElapsed(ingredient);
+                return;
+            }
+
+            if (ingredient.id == MemeIDProvider.DEAD_CROP)
+            {
+                TryPurchaseCurrentBundleWithDeadCrops(ingredient);
+                return;
+            }
+
+            if (ingredient.id == MemeIDProvider.DEAD_PUMPKIN)
+            {
+                TryPurchaseCurrentBundleWithDeadPumpkins(ingredient);
                 return;
             }
         }
@@ -363,6 +401,37 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 return;
             }
             TryPurchaseCurrentBundleWithWalletCurrency(ingredient, 1, _ => { });
+        }
+
+        private void TryPurchaseCurrentBundleWithDeadCrops(BundleIngredientDescription ingredient)
+        {
+            TryPurchaseCurrentBundleWithWalletCurrency(ingredient, _wallet.DeadCropsById.Sum(x => x.Value), payAmount =>
+            {
+                var keepLooping = true;
+                while (payAmount > 0 && keepLooping)
+                {
+                    keepLooping = false;
+                    foreach (var key in _wallet.DeadCropsById.Keys)
+                    {
+                        if (_wallet.DeadCropsById[key] <= 0)
+                        {
+                            continue;
+                        }
+
+                        _wallet.DeadCropsById[key]--;
+                        payAmount--;
+                        keepLooping = true;
+                        break;
+                    }
+                }
+
+            });
+        }
+
+        private void TryPurchaseCurrentBundleWithDeadPumpkins(BundleIngredientDescription ingredient)
+        {
+            _wallet.DeadCropsById.TryAdd(ObjectIds.PUMPKIN, 0);
+            TryPurchaseCurrentBundleWithWalletCurrency(ingredient, _wallet.DeadCropsById[ObjectIds.PUMPKIN], payAmount => _wallet.DeadCropsById[ObjectIds.PUMPKIN] -= payAmount);
         }
 
         private void TryPurchaseCurrentBundleWithWalletCurrency(BundleIngredientDescription ingredient, int amountOwned, Action<int> payAction)

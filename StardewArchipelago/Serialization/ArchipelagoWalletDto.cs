@@ -1,4 +1,6 @@
-﻿namespace StardewArchipelago.Serialization
+﻿using System.Collections.Generic;
+
+namespace StardewArchipelago.Serialization
 {
     public class ArchipelagoWalletDto
     {
@@ -8,6 +10,7 @@
         public int Time { get; set; }
         public int Deaths { get; set; }
         public CookieClickerDto CookieClicker { get; set; }
+        public Dictionary<string, int> DeadCropsById { get; set; }
 
         public ArchipelagoWalletDto()
         {
@@ -17,6 +20,7 @@
             Time = 0;
             Deaths = 0;
             CookieClicker = new CookieClickerDto();
+            DeadCropsById = new Dictionary<string, int>();
         }
     }
 }

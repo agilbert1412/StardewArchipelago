@@ -75,7 +75,7 @@ namespace StardewArchipelago.GameModifications
             ProfitInjections.Initialize(logger, archipelago);
             QuestLogInjections.Initialize(logger, archipelago, locationChecker);
             WorldChangeEventInjections.Initialize(logger);
-            CropInjections.Initialize(logger, archipelago, stardewItemManager);
+            CropInjections.Initialize(logger, archipelago, stardewItemManager, state.Wallet);
             SecretNoteInjections.Initialize(logger, archipelago, locationChecker);
             KentInjections.Initialize(logger, archipelago);
             _animalShopStockModifier = new AnimalShopStockModifier(logger, modHelper, archipelago, stardewItemManager);
@@ -122,7 +122,7 @@ namespace StardewArchipelago.GameModifications
             PatchQuestLog();
             PatchWorldChangedEvent();
             PatchLostAndFoundBox();
-            PatchMixedSeeds();
+            PatchCrops();
             PatchTvChannels();
             PatchCleanupBeforeSave();
             PatchProfitMargin();
@@ -532,6 +532,16 @@ namespace StardewArchipelago.GameModifications
             _harmony.Patch(
                 original: AccessTools.Method(typeof(WorldChangeEvent), nameof(WorldChangeEvent.setUp)),
                 prefix: new HarmonyMethod(typeof(WorldChangeEventInjections), nameof(WorldChangeEventInjections.SetUp_MakeSureEventsAreNotDuplicated_Prefix))
+            );
+        }
+
+        private void PatchCrops()
+        {
+            PatchMixedSeeds();
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Crop), nameof(Crop.Kill)),
+                prefix: new HarmonyMethod(typeof(CropInjections), nameof(CropInjections.Kill_CountDeadCrops_Prefix))
             );
         }
 

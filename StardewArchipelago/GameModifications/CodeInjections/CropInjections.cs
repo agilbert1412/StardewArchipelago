@@ -5,6 +5,7 @@ using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Constants.Vanilla;
+using StardewArchipelago.Serialization;
 using StardewArchipelago.Stardew;
 using StardewValley;
 using StardewValley.GameData.Crops;
@@ -28,12 +29,14 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         private static ILogger _logger;
         private static ArchipelagoClient _archipelago;
         private static StardewItemManager _stardewItemManager;
+        private static ArchipelagoWalletDto _wallet;
 
-        public static void Initialize(ILogger logger, ArchipelagoClient archipelago, StardewItemManager stardewItemManager)
+        public static void Initialize(ILogger logger, ArchipelagoClient archipelago, StardewItemManager stardewItemManager, ArchipelagoWalletDto wallet)
         {
             _logger = logger;
             _archipelago = archipelago;
             _stardewItemManager = stardewItemManager;
+            _wallet = wallet;
         }
 
         // public static string ResolveSeedId(string yieldItemId, GameLocation location)
@@ -153,6 +156,23 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             }
 
             return cropData[seedId].RegrowDays != -1;
+        }
+
+        // public void Kill()
+        public static bool Kill_CountDeadCrops_Prefix(Crop __instance)
+        {
+            try
+            {
+                var cropId = __instance.indexOfHarvest.Value;
+                _wallet.DeadCropsById.TryAdd(cropId, 0);
+                _wallet.DeadCropsById[cropId]++;
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(ResolveSeedId_MixedSeedsBecomesUnlockedCrop_Prefix)}:\n{ex}");
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
         }
     }
 }
