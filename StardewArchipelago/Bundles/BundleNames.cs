@@ -16,7 +16,7 @@ namespace StardewArchipelago.Bundles
         public const string COOKIE_CLICKER = "Cookie Clicker";
         public const string REVERSE = "Reverse";
         public const string SISYPHUS = "Sisyphus";
-        public const string BUREAUCRACY = "Bureaucracy";
+        public const string PERMIT_A38 = "Permit A38";
         public const string HONORABLE = "Honorable";
         public const string OFF_YOUR_BACK = "Off Your Back";
         public const string BUN_DLE = "Bun-dle";
