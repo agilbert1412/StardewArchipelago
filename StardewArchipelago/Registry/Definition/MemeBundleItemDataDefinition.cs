@@ -64,12 +64,12 @@ namespace StardewArchipelago.Registry.Definition
         /// <inheritdoc />
         public override Item CreateItem(ParsedItemData data)
         {
-            if (data is not ParsedMemeBundleItemData memeBundleItemData)
-            {
-                throw new ArgumentNullException(nameof(data));
-            }
+            //if (data is not ParsedMemeBundleItemData memeBundleItemData)
+            //{
+            //    throw new ArgumentNullException(nameof(data));
+            //}
 
-            return new MemeBundleItem(memeBundleItemData);
+            return new MemeBundleItem(data);
         }
     }
 }

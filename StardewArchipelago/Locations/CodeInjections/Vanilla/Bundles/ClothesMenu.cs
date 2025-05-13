@@ -232,33 +232,32 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                     {
                         if (equipmentIcon.name == "Hat" && toPlace is Hat hat)
                         {
-                            Game1.player.Equip(hat, Game1.player.hat);
+                            return Game1.player.Equip(hat, Game1.player.hat);
                         }
                         else if (equipmentIcon.name == "Boots" && toPlace is Boots boots)
                         {
-                            Game1.player.Equip(boots, Game1.player.boots);
+                            return Game1.player.Equip(boots, Game1.player.boots);
                         }
                         else if (equipmentIcon.name == "Pants" && toPlace is Clothing pants && pants.clothesType.Value == Clothing.ClothesType.PANTS)
                         {
-                            Game1.player.Equip(pants, Game1.player.pantsItem);
+                            return Game1.player.Equip(pants, Game1.player.pantsItem);
                         }
                         else if (equipmentIcon.name == "Shirt" && toPlace is Clothing shirt && shirt.clothesType.Value == Clothing.ClothesType.SHIRT)
                         {
-                            Game1.player.Equip(shirt, Game1.player.shirtItem);
+                            return Game1.player.Equip(shirt, Game1.player.shirtItem);
                         }
                         else if (equipmentIcon.name == "Left Ring" && toPlace is Ring leftRing)
                         {
-                            Game1.player.Equip(leftRing, Game1.player.leftRing);
+                            return Game1.player.Equip(leftRing, Game1.player.leftRing);
                         }
                         else if (equipmentIcon.name == "Right Ring" && toPlace is Ring rightRing)
                         {
-                            Game1.player.Equip(rightRing, Game1.player.rightRing);
+                            return Game1.player.Equip(rightRing, Game1.player.rightRing);
                         }
                         else
                         {
                             return toPlace;
                         }
-                        return null;
                     }
                 }
                 else

@@ -12,6 +12,7 @@ using StardewArchipelago.Constants.Vanilla;
 using StardewValley;
 using System;
 using StardewArchipelago.Constants;
+using StardewValley.Locations;
 using StardewValley.Objects;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
@@ -102,7 +103,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         public override bool CanAcceptThisItem(Item item, ClickableTextureComponent slot, bool ignoreStackCount, ArchipelagoJunimoNoteMenu parentMenu)
         {
-            if (name == MemeBundleNames.BUREAUCRACY)
+            if (name == MemeBundleNames.PERMIT_A38)
             {
                 var currentIngredient = Ingredients[ArchipelagoJunimoNoteMenu.BureaucracyIndex];
                 return item.QualifiedItemId == currentIngredient.id;
@@ -113,7 +114,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         public override bool IsValidItemForThisIngredientDescription(Item item, BundleIngredientDescription ingredient, int ingredientIndex, ArchipelagoJunimoNoteMenu parentMenu)
         {
-            if (name == MemeBundleNames.BUREAUCRACY && item is not null)
+            if (name == MemeBundleNames.PERMIT_A38 && item is not null)
             {
                 var currentIngredient = Ingredients[ArchipelagoJunimoNoteMenu.BureaucracyIndex];
                 return item.QualifiedItemId == currentIngredient.id;
@@ -198,6 +199,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         {
             Game1.flashAlpha = (float)(0.5 + Game1.random.NextDouble());
             Game1.playSound("thunder");
+        }
+
+        protected override Item SuccessfullyDepositThisItem(Item item, ClickableTextureComponent slot, string noteTextureName, ArchipelagoJunimoNoteMenu parentMenu, BundleIngredientDescription ingredientDescription1, int index1, CommunityCenter communityCenter)
+        {
+            var result = base.SuccessfullyDepositThisItem(item, slot, noteTextureName, parentMenu, ingredientDescription1, index1, communityCenter);
+            if (name == MemeBundleNames.OFF_YOUR_BACK)
+            {
+                _state.QualifiedIdsClothesDonated.Add(item.QualifiedItemId);
+            }
+            return result;
         }
     }
 }

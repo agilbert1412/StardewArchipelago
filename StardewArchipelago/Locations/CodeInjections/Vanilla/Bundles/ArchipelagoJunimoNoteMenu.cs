@@ -26,7 +26,10 @@ using StardewArchipelago.Items.Traps;
 using StardewValley.ItemTypeDefinitions;
 using StardewValley.Minigames;
 using Microsoft.Xna.Framework.Graphics.PackedVector;
+using StardewArchipelago.Constants.Vanilla;
+using StardewValley.Objects;
 using Bundle = StardewArchipelago.Bundles.Bundle;
+using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 {
@@ -38,6 +41,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         private static LogHandler _logger;
         private static IModHelper _modHelper;
         private static StardewArchipelagoClient _archipelago;
+        private static ArchipelagoStateDto _state;
         private static ArchipelagoWalletDto _wallet;
         private static LocationChecker _locationChecker;
         private static BundleReader _bundleReader;
@@ -93,12 +97,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             _clothesMenu = new ClothesMenu(xPositionOnScreen + 128, yPositionOnScreen + 140, width, height);
         }
 
-        public static void InitializeArchipelago(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, ArchipelagoWalletDto wallet, LocationChecker locationChecker, TrapManager trapManager)
+        public static void InitializeArchipelago(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, TrapManager trapManager)
         {
             _logger = logger;
             _modHelper = modHelper;
             _archipelago = archipelago;
-            _wallet = wallet;
+            _state = state;
+            _wallet = state.Wallet;
             _locationChecker = locationChecker;
             _trapManager = trapManager;
             _bundleReader = new BundleReader();
@@ -460,6 +465,78 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             return bundle;
         }
 
+        protected override void SetUpIngredientButtons(BundleRemake b)
+        {
+            if (CurrentPageBundle.name == MemeBundleNames.JOURNALIST)
+            {
+                CurrentPageBundle.Ingredients[0] = FindOneEasilyObtainableItem();
+            }
+            base.SetUpIngredientButtons(b);
+        }
+
+        private BundleIngredientDescription FindOneEasilyObtainableItem()
+        {
+            if (TryPickFromInventory(out var easilyDonatedItem))
+            {
+                return easilyDonatedItem;
+            }
+
+            if (TryPickFromEntireWorld(out var easilyObtainableItem))
+            {
+                return easilyObtainableItem;
+            }
+
+            return Game1.season switch
+            {
+                Season.Spring => new BundleIngredientDescription(QualifiedItemIds.LEEK, 1, 0, false),
+                Season.Summer => new BundleIngredientDescription(QualifiedItemIds.GRAPE, 1, 0, false),
+                Season.Fall => new BundleIngredientDescription(QualifiedItemIds.BLACKBERRY, 1, 0, false),
+                Season.Winter => new BundleIngredientDescription(QualifiedItemIds.CRYSTAL_FRUIT, 1, 0, false),
+                _ => new BundleIngredientDescription(QualifiedItemIds.WOOD, 1, 0, false)
+            };
+        }
+
+        private static bool TryPickFromInventory(out BundleIngredientDescription easilyObtainableItem)
+        {
+            var validObjects = new List<Object>();
+            foreach (var playerItem in Game1.player.Items)
+            {
+                if (playerItem is Object ownedObject && ownedObject.HasBeenInInventory)
+                {
+                    validObjects.Add(ownedObject);
+                }
+            }
+
+            return TryGetCheapestObject(validObjects, out easilyObtainableItem);
+        }
+
+        private static bool TryPickFromEntireWorld(out BundleIngredientDescription easilyObtainableItem)
+        {
+            var validObjects = new List<Object>();
+            Utility.ForEachItem((Func<Item, bool>)(item =>
+            {
+                if (item is Object ownedObject && ownedObject.HasBeenInInventory)
+                    validObjects.Add(ownedObject);
+                return true;
+            }));
+
+            return TryGetCheapestObject(validObjects, out easilyObtainableItem);
+        }
+
+        private static bool TryGetCheapestObject(List<Object> validObjects, out BundleIngredientDescription easilyObtainableItem)
+        {
+            validObjects = validObjects.Where(x => x.salePrice() > 0).ToList();
+            if (!validObjects.Any())
+            {
+                easilyObtainableItem = new BundleIngredientDescription();
+                return false;
+            }
+
+            validObjects = validObjects.OrderBy(x => x.salePrice()).ToList();
+            easilyObtainableItem = new BundleIngredientDescription(validObjects[0].ItemId, 1, 0, false);
+            return true;
+        }
+
         protected override void SetUpCurrencyButtons()
         {
             base.SetUpCurrencyButtons();
@@ -713,7 +790,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         private void AfterUpdateIngredientSlotsBureaucracy()
         {
-            if (CurrentPageBundle?.name != MemeBundleNames.BUREAUCRACY)
+            if (CurrentPageBundle?.name != MemeBundleNames.PERMIT_A38)
             {
                 return;
             }
@@ -1025,7 +1102,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             {
                 return CheckIfAllIngredientsAreTakenOut();
             }
-            if (CurrentPageBundle.name == MemeBundleNames.BUREAUCRACY)
+            if (CurrentPageBundle.name == MemeBundleNames.PERMIT_A38)
             {
                 var isComplete = CheckIfAnyIngredientsIsDeposited();
                 if (isComplete)
@@ -1133,7 +1210,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 DrawWornBoots(spriteBatch, ingredient.Value, ingredientBox, overlayTransparency);
                 DrawWornPants(spriteBatch, ingredient.Value, ingredientBox, overlayTransparency);
                 DrawWornShirt(spriteBatch, ingredient.Value, ingredientBox, overlayTransparency);
-                DrawWornRing(spriteBatch, ingredient.Value, ingredientBox, overlayTransparency);
+                DrawWornLeftRing(spriteBatch, ingredient.Value, ingredientBox, overlayTransparency);
+                DrawWornRightRing(spriteBatch, ingredient.Value, ingredientBox, overlayTransparency);
                 return;
             }
 
@@ -1145,33 +1223,50 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             base.DrawIngredient(spriteBatch, ingredient, ingredientBox, overlayTransparency);
         }
 
-        private static void DrawWornHat(SpriteBatch spriteBatch, BundleIngredientDescription ingredient, ClickableTextureComponent ingredientBox, float overlayTransparency)
+        private void DrawWornHat(SpriteBatch spriteBatch, BundleIngredientDescription ingredient, ClickableTextureComponent ingredientBox, float overlayTransparency)
         {
-            DrawWornItem(spriteBatch, ingredient, ingredientBox, overlayTransparency, MemeIDProvider.WORN_HAT, "Used Hat", Game1.player.hat.Value, 42);
+            DrawWornItem(spriteBatch, ingredient, ingredientBox, overlayTransparency, MemeIDProvider.WORN_HAT, "Used Hat",
+                Game1.player.hat.Value, 42,
+                x => ItemRegistry.Create(x) is Hat);
         }
 
-        private static void DrawWornBoots(SpriteBatch spriteBatch, BundleIngredientDescription ingredient, ClickableTextureComponent ingredientBox, float overlayTransparency)
+        private void DrawWornBoots(SpriteBatch spriteBatch, BundleIngredientDescription ingredient, ClickableTextureComponent ingredientBox, float overlayTransparency)
         {
-            DrawWornItem(spriteBatch, ingredient, ingredientBox, overlayTransparency, MemeIDProvider.WORN_BOOTS, "Used Boots", Game1.player.boots.Value, 40);
+            DrawWornItem(spriteBatch, ingredient, ingredientBox, overlayTransparency, MemeIDProvider.WORN_BOOTS, "Used Boots",
+                Game1.player.boots.Value, 40,
+                x => ItemRegistry.Create(x) is Boots);
         }
 
-        private static void DrawWornPants(SpriteBatch spriteBatch, BundleIngredientDescription ingredient, ClickableTextureComponent ingredientBox, float overlayTransparency)
+        private void DrawWornPants(SpriteBatch spriteBatch, BundleIngredientDescription ingredient, ClickableTextureComponent ingredientBox, float overlayTransparency)
         {
-            DrawWornItem(spriteBatch, ingredient, ingredientBox, overlayTransparency, MemeIDProvider.WORN_PANTS, "Used Pants", Game1.player.pantsItem.Value, 68);
+            DrawWornItem(spriteBatch, ingredient, ingredientBox, overlayTransparency, MemeIDProvider.WORN_PANTS, "Used Pants",
+                Game1.player.pantsItem.Value, 68,
+                x => ItemRegistry.Create(x) is Clothing clothing && clothing.clothesType.Value == Clothing.ClothesType.PANTS);
         }
 
-        private static void DrawWornShirt(SpriteBatch spriteBatch, BundleIngredientDescription ingredient, ClickableTextureComponent ingredientBox, float overlayTransparency)
+        private void DrawWornShirt(SpriteBatch spriteBatch, BundleIngredientDescription ingredient, ClickableTextureComponent ingredientBox, float overlayTransparency)
         {
-            DrawWornItem(spriteBatch, ingredient, ingredientBox, overlayTransparency, MemeIDProvider.WORN_SHIRT, "Used Shirt", Game1.player.shirtItem.Value, 69);
+            DrawWornItem(spriteBatch, ingredient, ingredientBox, overlayTransparency, MemeIDProvider.WORN_SHIRT, "Used Shirt",
+                Game1.player.shirtItem.Value, 69,
+                x => ItemRegistry.Create(x) is Clothing clothing && clothing.clothesType.Value == Clothing.ClothesType.SHIRT);
         }
 
-        private static void DrawWornRing(SpriteBatch spriteBatch, BundleIngredientDescription ingredient, ClickableTextureComponent ingredientBox, float overlayTransparency)
+        private void DrawWornLeftRing(SpriteBatch spriteBatch, BundleIngredientDescription ingredient, ClickableTextureComponent ingredientBox, float overlayTransparency)
         {
-            DrawWornItem(spriteBatch, ingredient, ingredientBox, overlayTransparency, MemeIDProvider.WORN_LEFT_RING, "Used Left Ring", Game1.player.leftRing.Value, 41);
-            DrawWornItem(spriteBatch, ingredient, ingredientBox, overlayTransparency, MemeIDProvider.WORN_RIGHT_RING, "Used Right Ring", Game1.player.rightRing.Value, 41);
+            DrawWornItem(spriteBatch, ingredient, ingredientBox, overlayTransparency, MemeIDProvider.WORN_LEFT_RING, "Used Left Ring",
+                Game1.player.leftRing.Value, 41,
+                x => ItemRegistry.Create(x) is Ring); 
         }
 
-        private static void DrawWornItem(SpriteBatch spriteBatch, BundleIngredientDescription ingredient, ClickableTextureComponent ingredientBox, float overlayTransparency, string wornItemId, string hoverText, Item wornItem, int emptySlotTilePosition)
+        private void DrawWornRightRing(SpriteBatch spriteBatch, BundleIngredientDescription ingredient, ClickableTextureComponent ingredientBox, float overlayTransparency)
+        {
+            DrawWornItem(spriteBatch, ingredient, ingredientBox, overlayTransparency, MemeIDProvider.WORN_RIGHT_RING, "Used Right Ring",
+                Game1.player.rightRing.Value, 41,
+                x => ItemRegistry.Create(x) is Ring, true);
+        }
+
+        private void DrawWornItem(SpriteBatch spriteBatch, BundleIngredientDescription ingredient, ClickableTextureComponent ingredientBox, float overlayTransparency, string wornItemId, string hoverText, Item wornItem,
+            int emptySlotTilePosition, Func<string, bool> IsItemValid, bool last = false)
         {
             if (ingredient.id != wornItemId)
             {
@@ -1179,14 +1274,38 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
 
             ingredientBox.hoverText = hoverText;
+            if (ingredient.completed)
+            {
+                var donatedItemId = _state.QualifiedIdsClothesDonated.First(IsItemValid);
+                if (last)
+                {
+                    donatedItemId = _state.QualifiedIdsClothesDonated.Last(IsItemValid);
+                }
+                var donatedItem = ItemRegistry.Create(donatedItemId);
+                DrawIngredientInMenu(donatedItem, spriteBatch, ingredientBox, overlayTransparency);
+                return;
+            }
             if (wornItem == null)
             {
-                spriteBatch.Draw(Game1.menuTexture, ingredientBox.bounds, new Rectangle?(Game1.getSourceRectForStandardTileSheet(Game1.menuTexture, emptySlotTilePosition)), Color.White);
+                var heldValid = HeldItem != null && IsItemValid(HeldItem.QualifiedItemId);
+                if (heldValid)
+                {
+                    DrawIngredientInMenu(HeldItem, spriteBatch, ingredientBox, overlayTransparency);
+                }
+                else
+                {
+                    spriteBatch.Draw(Game1.menuTexture, ingredientBox.bounds, Game1.getSourceRectForStandardTileSheet(Game1.menuTexture, emptySlotTilePosition), Color.White);
+                }
             }
             else
             {
-                wornItem.drawInMenu(spriteBatch, new Vector2(ingredientBox.bounds.X, ingredientBox.bounds.Y), ingredientBox.scale / 4f, 1f, 0.9f, StackDrawType.Draw, Color.White * overlayTransparency, false);
+                DrawIngredientInMenu(wornItem, spriteBatch, ingredientBox, overlayTransparency);
             }
+        }
+
+        private void DrawIngredientInMenu(Item item, SpriteBatch spriteBatch, ClickableTextureComponent ingredientBox, float transparency = 1f)
+        {
+            item.drawInMenu(spriteBatch, new Vector2(ingredientBox.bounds.X, ingredientBox.bounds.Y), ingredientBox.scale / 4f, 1f, 0.9f, StackDrawType.Draw, Color.White * transparency, false);
         }
 
         protected override void PickItemFromInventory(int x, int y)

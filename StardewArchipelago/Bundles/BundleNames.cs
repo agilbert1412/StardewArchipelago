@@ -31,5 +31,6 @@ namespace StardewArchipelago.Bundles
         public const string FLOOR_IS_LAVA = "The Floor Is Lava";
         public const string CONNECTION = "Connection";
         public const string RESTRAINT = "Restraint";
+        public const string JOURNALIST = "Journalist's";
     }
 }

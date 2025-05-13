@@ -56,6 +56,7 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string COOKIES = QualifiedObjectId(ObjectIds.COOKIES);
         public static readonly string CORN_SEEDS = QualifiedObjectId(ObjectIds.CORN_SEEDS);
         public static readonly string CRANBERRY_SEEDS = QualifiedObjectId(ObjectIds.CRANBERRY_SEEDS);
+        public static readonly string CRYSTAL_FRUIT = QualifiedObjectId(ObjectIds.CRYSTAL_FRUIT);
         public static readonly string DECORATIVE_TRASH_CAN = QualifiedFurnitureId(FurnitureIds.DECORATIVE_TRASH_CAN);
         public static readonly string DELUXE_FERTILIZER = QualifiedObjectId(ObjectIds.DELUXE_FERTILIZER);
         public static readonly string DELUXE_RETAINING_SOIL = QualifiedObjectId(ObjectIds.DELUXE_RETAINING_SOIL);
@@ -234,6 +235,7 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string SALMON_DINNER = QualifiedObjectId(ObjectIds.SALMON_DINNER);
         public static readonly string STONE_JUNIMO = BigCraftableId(BigCraftableIds.STONE_JUNIMO);
         public static readonly string GOLD_LEWIS = BigCraftableId(BigCraftableIds.GOLD_LEWIS);
+        public static readonly string WOOD = QualifiedObjectId(ObjectIds.WOOD);
 
         public static string QualifiedObjectId(string objectId)
         {

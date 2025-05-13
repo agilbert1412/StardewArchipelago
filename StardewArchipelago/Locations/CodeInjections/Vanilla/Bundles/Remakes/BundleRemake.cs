@@ -300,35 +300,42 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                 var ingredientDescription1 = this.Ingredients[index1];
                 if (this.IsValidItemForThisIngredientDescription(item, ingredientDescription1, index1, parentMenu) && slot.item == null)
                 {
-                    item = item.ConsumeStack(ingredientDescription1.stack);
-                    var ingredients = this.Ingredients;
-                    var index2 = index1;
-                    ingredientDescription1 = new BundleIngredientDescription(ingredientDescription1, true);
-                    var ingredientDescription2 = ingredientDescription1;
-                    ingredients[index2] = ingredientDescription2;
-                    this.IngredientDepositAnimation(slot, noteTextureName);
-                    var representativeItemId = JunimoNoteMenuRemake.GetRepresentativeItemId(ingredientDescription1);
-                    if (ingredientDescription1.preservesId != null)
-                    {
-                        slot.item = Utility.CreateFlavoredItem(ingredientDescription1.id, ingredientDescription1.preservesId, ingredientDescription1.quality, ingredientDescription1.stack);
-                    }
-                    else
-                    {
-                        slot.item = ItemRegistry.Create(representativeItemId, ingredientDescription1.stack, ingredientDescription1.quality);
-                    }
-                    Game1.playSound("newArtifact");
-                    slot.sourceRect.X = 512;
-                    slot.sourceRect.Y = 244;
-                    if (parentMenu.OnIngredientDeposit != null)
-                    {
-                        parentMenu.OnIngredientDeposit(index1);
-                        break;
-                    }
-                    communityCenter.bundles.FieldDict[this.BundleIndex][index1] = true;
-                    Game1.Multiplayer.globalChatInfoMessage("BundleDonate", Game1.player.displayName, TokenStringBuilder.ItemNameFor(slot.item));
+                    item = SuccessfullyDepositThisItem(item, slot, noteTextureName, parentMenu, ingredientDescription1, index1, communityCenter);
                     break;
                 }
             }
+            return item;
+        }
+
+        protected virtual Item SuccessfullyDepositThisItem(Item item, ClickableTextureComponent slot, string noteTextureName, ArchipelagoJunimoNoteMenu parentMenu, BundleIngredientDescription ingredientDescription1, int index1,
+            CommunityCenter communityCenter)
+        {
+            item = item.ConsumeStack(ingredientDescription1.stack);
+            var ingredients = this.Ingredients;
+            var index2 = index1;
+            ingredientDescription1 = new BundleIngredientDescription(ingredientDescription1, true);
+            var ingredientDescription2 = ingredientDescription1;
+            ingredients[index2] = ingredientDescription2;
+            this.IngredientDepositAnimation(slot, noteTextureName);
+            var representativeItemId = JunimoNoteMenuRemake.GetRepresentativeItemId(ingredientDescription1);
+            if (ingredientDescription1.preservesId != null)
+            {
+                slot.item = Utility.CreateFlavoredItem(ingredientDescription1.id, ingredientDescription1.preservesId, ingredientDescription1.quality, ingredientDescription1.stack);
+            }
+            else
+            {
+                slot.item = ItemRegistry.Create(representativeItemId, ingredientDescription1.stack, ingredientDescription1.quality);
+            }
+            Game1.playSound("newArtifact");
+            slot.sourceRect.X = 512;
+            slot.sourceRect.Y = 244;
+            if (parentMenu.OnIngredientDeposit != null)
+            {
+                parentMenu.OnIngredientDeposit(index1);
+                return item;
+            }
+            communityCenter.bundles.FieldDict[this.BundleIndex][index1] = true;
+            Game1.Multiplayer.globalChatInfoMessage("BundleDonate", Game1.player.displayName, TokenStringBuilder.ItemNameFor(slot.item));
             return item;
         }
 

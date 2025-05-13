@@ -19,6 +19,7 @@ namespace StardewArchipelago.Serialization
         public List<bool> CurrentRaccoonBundleStatus { get; set; }
         public int NumberOfLOTLEpisodesWatched { get; set; }
         public int NumberTimesCursed { get; set; }
+        public List<string> QualifiedIdsClothesDonated { get; set; }
 
         public ArchipelagoStateDto()
         {
@@ -34,6 +35,7 @@ namespace StardewArchipelago.Serialization
             CurrentRaccoonBundleStatus = new List<bool>();
             NumberOfLOTLEpisodesWatched = 0;
             NumberTimesCursed = 0;
+            QualifiedIdsClothesDonated = new List<string>();
         }
     }
 }

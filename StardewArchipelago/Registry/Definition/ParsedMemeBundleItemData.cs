@@ -1,4 +1,5 @@
-﻿using KaitoKid.ArchipelagoUtilities.Net;
+﻿using System.Linq;
+using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -6,7 +7,10 @@ using StardewArchipelago.Constants;
 using StardewArchipelago.Logging;
 using StardewArchipelago.Textures;
 using StardewModdingAPI;
+using StardewValley;
+using StardewValley.BellsAndWhistles;
 using StardewValley.ItemTypeDefinitions;
+using StardewValley.Objects;
 
 namespace StardewArchipelago.Registry.Definition
 {
@@ -40,8 +44,10 @@ namespace StardewArchipelago.Registry.Definition
             {
                 return new Rectangle(0, 0, 32, 32);
             }
-
-            return new Rectangle(0, 0, _textureSize, _textureSize);
+            else
+            {
+                return new Rectangle(0, 0, _textureSize, _textureSize);
+            }
         }
     }
 }

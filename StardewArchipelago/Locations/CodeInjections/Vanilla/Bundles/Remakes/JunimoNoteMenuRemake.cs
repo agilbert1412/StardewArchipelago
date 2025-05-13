@@ -321,19 +321,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                 clickableComponent.rightNeighborID = -99998;
             }
             Inventory.dropItemInvisibleButton.visible = false;
-            var bundleData = Game1.netWorldState.Value.BundleData;
-            var areaNameFromNumber = CommunityCenter.getAreaNameFromNumber(whichArea);
-            var whichBundle = 0;
-            foreach (var key in bundleData.Keys)
-            {
-                if (key.Contains(areaNameFromNumber))
-                {
-                    var bundles = this.Bundles;
-                    var bundle = CreateBundle(bundlesComplete, key, bundleData, whichBundle);
-                    bundles.Add(bundle);
-                    ++whichBundle;
-                }
-            }
+            CreateBundles(whichArea, bundlesComplete);
             var textureComponent = new ClickableTextureComponent("Back", new Rectangle(xPositionOnScreen + borderWidth * 2 + 8, yPositionOnScreen + borderWidth * 2 + 4, 64, 64), null, null, Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 44), 1f);
             textureComponent.myID = REGION_BACK_BUTTON;
             BackButton = textureComponent;
@@ -357,6 +345,23 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             communityCenter.markAreaAsComplete(whichArea);
             exitFunction = restoreAreaOnExit;
             communityCenter.areaCompleteReward(whichArea);
+        }
+
+        protected virtual void CreateBundles(int whichArea, Dictionary<int, bool[]> bundlesComplete)
+        {
+            var bundleData = Game1.netWorldState.Value.BundleData;
+            var areaNameFromNumber = CommunityCenter.getAreaNameFromNumber(whichArea);
+            var whichBundle = 0;
+            foreach (var key in bundleData.Keys)
+            {
+                if (key.Contains(areaNameFromNumber))
+                {
+                    var bundles = this.Bundles;
+                    var bundle = CreateBundle(bundlesComplete, key, bundleData, whichBundle);
+                    bundles.Add(bundle);
+                    ++whichBundle;
+                }
+            }
         }
 
         protected virtual ArchipelagoBundle CreateBundle(Dictionary<int, bool[]> bundlesComplete, string key, Dictionary<string, string> bundleData, int whichBundle)
@@ -1781,7 +1786,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             snapCursorToCurrentSnappedComponent();
         }
 
-        private void SetUpIngredientButtons(BundleRemake b)
+        protected virtual void SetUpIngredientButtons(BundleRemake b)
         {
             SetupIngredientSlots(b);
             SetupIngredients(b);
