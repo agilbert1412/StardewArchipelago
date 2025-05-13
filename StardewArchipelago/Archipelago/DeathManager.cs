@@ -8,6 +8,7 @@ using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Bundles;
 using StardewArchipelago.Constants;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
@@ -116,24 +117,7 @@ namespace StardewArchipelago.Archipelago
                 return;
             }
 
-            var index = -1;
-            foreach (var (bundleKey, bundleData) in Game1.netWorldState.Value.BundleData)
-            {
-                var name = bundleData.Split("/").First();
-                if (name == MemeBundleNames.DEATH)
-                {
-                    index = int.Parse(bundleKey.Split("/").Last());
-                    break;
-                }
-            }
-            if (index == -1)
-            {
-                return;
-            }
-            communityCenter.bundleRewards[index] = true;
-            communityCenter.bundles.FieldDict[index][0] = true;
-            var bundleReader = new BundleReader();
-            bundleReader.CheckAllBundleLocations(_locationChecker);
+            ArchipelagoJunimoNoteMenu.CompleteBundleIfExists(MemeBundleNames.DEATH);
         }
 
         public static bool PerformPassOut_SendDeathLink_Prefix(Farmer __instance)

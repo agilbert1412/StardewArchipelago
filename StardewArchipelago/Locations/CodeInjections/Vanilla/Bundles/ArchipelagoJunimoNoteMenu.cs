@@ -52,6 +52,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         internal const int NUMBER_SUB_BUNDLES = 4;
         internal int ingredientsPerSubBundle => IngredientList.Count / NUMBER_SUB_BUNDLES;
         internal static Stopwatch DayStopwatch = new Stopwatch();
+        internal static int FloorIsLavaHasTouchedGroundToday = 0;
+        internal static bool HasLookedAtRestaintBundleToday = false;
+        internal static bool HasPurchasedRestaintBundleToday = false;
 
         public Texture2D MemeTexture;
         private ClickableTextureComponent _donateButton;
@@ -304,6 +307,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 return;
             }
 
+            if (CurrentPageBundle.name == MemeBundleNames.RESTRAINT)
+            {
+                PurchaseButton = null;
+                HasPurchasedRestaintBundleToday = true;
+            }
+
             var ingredient = this.CurrentPageBundle.Ingredients.Last();
             var currency = ingredient.id;
             if (currency == IDProvider.MONEY)
@@ -480,10 +489,22 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             {
                 return;
             }
+            if (CurrentPageBundle.name == MemeBundleNames.FAST && DayStopwatch.ElapsedMilliseconds > BundleCurrencyManager.GetFastBundleAllowedTime(CurrentPageBundle.Ingredients.First()))
+            {
+                return;
+            }
+            if (CurrentPageBundle.name == MemeBundleNames.FLOOR_IS_LAVA && FloorIsLavaHasTouchedGroundToday > 0)
+            {
+                return;
+            }
             if (CurrentPageBundle.name == MemeBundleNames.CLIQUE)
             {
                 SetUpCliqueButton();
                 return;
+            }
+            if (CurrentPageBundle.name == MemeBundleNames.RESTRAINT && !FromGameMenu)
+            {
+                HasLookedAtRestaintBundleToday = true;
             }
 
             base.SetUpPurchaseButton();
@@ -1473,6 +1494,50 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             CurrentPageBundle.IngredientDepositAnimation(IngredientSlots[index], NOTE_TEXTURE_NAME, true);
             ++index;
             return index;
+        }
+
+        public static void CompleteBundleIfExists(string bundleName)
+        {
+            var communityCenter = (CommunityCenter)Game1.getLocationFromName("CommunityCenter");
+
+            var index = -1;
+            foreach (var (bundleKey, bundleData) in Game1.netWorldState.Value.BundleData)
+            {
+                var name = bundleData.Split("/").First();
+                if (name == bundleName)
+                {
+                    index = int.Parse(bundleKey.Split("/").Last());
+                    break;
+                }
+            }
+            if (index == -1)
+            {
+                return;
+            }
+            communityCenter.bundleRewards[index] = true;
+            for (var i = 0; i < communityCenter.bundles.FieldDict[index].Length; i++)
+            {
+                communityCenter.bundles.FieldDict[index][i] = true;
+            }
+            var bundleReader = new BundleReader();
+            bundleReader.CheckAllBundleLocations(_locationChecker);
+        }
+
+        public static void OnDayStarted()
+        {
+            ArchipelagoJunimoNoteMenu.DayStopwatch.Reset();
+            ArchipelagoJunimoNoteMenu.DayStopwatch.Start();
+            ArchipelagoJunimoNoteMenu.FloorIsLavaHasTouchedGroundToday = 0;
+            ArchipelagoJunimoNoteMenu.HasLookedAtRestaintBundleToday = false;
+            ArchipelagoJunimoNoteMenu.HasPurchasedRestaintBundleToday = false;
+        }
+
+        public static void OnDayEnded()
+        {
+            if (HasLookedAtRestaintBundleToday && !HasPurchasedRestaintBundleToday)
+            {
+                CompleteBundleIfExists(MemeBundleNames.RESTRAINT);
+            }
         }
     }
 }

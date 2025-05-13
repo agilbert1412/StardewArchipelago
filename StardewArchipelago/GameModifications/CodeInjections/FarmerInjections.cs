@@ -6,7 +6,11 @@ using StardewArchipelago.Constants.Vanilla;
 using System.Linq;
 using StardewArchipelago.Archipelago.SlotData;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
+using StardewValley.Locations;
 using Object = StardewValley.Object;
+using Microsoft.Xna.Framework.Input;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
+using StardewValley.TerrainFeatures;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
 {
@@ -69,6 +73,32 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(DoneEating_StardropFavoriteThingKaito_Postfix)}:\n{ex}");
+                return;
+            }
+        }
+
+        // public void takeStep()
+        public static void TakeStep_FloorIsLava_Postfix(Stats __instance)
+        {
+            try
+            {
+                var farmer = Game1.player;
+                if (farmer == null || farmer.isRidingHorse() || farmer.IsSitting())
+                {
+                    return;
+                }
+
+                var tile = farmer.Tile;
+                if (Game1.currentLocation.terrainFeatures.TryGetValue(tile, out var terrainFeature) && terrainFeature is Flooring flooring)
+                {
+                    return;
+                }
+
+                ArchipelagoJunimoNoteMenu.FloorIsLavaHasTouchedGroundToday++;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(TakeStep_FloorIsLava_Postfix)}:\n{ex}");
                 return;
             }
         }

@@ -313,6 +313,7 @@ namespace StardewArchipelago
             _hintHelper = new HintHelper();
             Game1.chatBox?.addMessage(
                 $"Connected to Archipelago as {_archipelago.SlotData.SlotName}. Type !!help for client commands", Color.Green);
+            ArchipelagoJunimoNoteMenu.CompleteBundleIfExists(MemeBundleNames.CONNECTION);
         }
 
         private bool AttemptConnectionToArchipelago()
@@ -389,8 +390,7 @@ namespace StardewArchipelago
         {
             SeasonsRandomizer.ChangeMailKeysBasedOnSeasonsToDaysElapsed();
             SeasonsRandomizer.SendMailHardcodedForToday();
-            ArchipelagoJunimoNoteMenu.DayStopwatch.Reset();
-            ArchipelagoJunimoNoteMenu.DayStopwatch.Start();
+            ArchipelagoJunimoNoteMenu.OnDayStarted();
 
             if (MultiSleepManager.TryDoMultiSleepOnDayStarted())
             {
@@ -439,6 +439,7 @@ namespace StardewArchipelago
             _giftHandler.ReceiveAllGiftsTomorrow();
             _villagerEvents.CheckJunaHearts(_archipelago);
             _shippingBehaviors?.CheckShipsanityLocationsBeforeSleep();
+            ArchipelagoJunimoNoteMenu.OnDayEnded();
         }
 
         private void OnTimeChanged(object sender, TimeChangedEventArgs e)

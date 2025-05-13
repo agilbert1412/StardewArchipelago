@@ -27,5 +27,9 @@ namespace StardewArchipelago.Bundles
         public const string SCHRODINGER = "Schrodinger's";
         public const string DEATH = "Death";
         public const string EMMALUTION = "Emmalution";
+        public const string FAST = "Fast";
+        public const string FLOOR_IS_LAVA = "The Floor Is Lava";
+        public const string CONNECTION = "Connection";
+        public const string RESTRAINT = "Restraint";
     }
 }

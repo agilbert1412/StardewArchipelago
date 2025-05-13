@@ -139,7 +139,7 @@ namespace StardewArchipelago.GameModifications
             PatchPanningSpots();
             PatchWalnuts();
             PatchMysteryBoxesAndPrizeTickets();
-            PatchStardropMessage();
+            PatchFarmer();
             PatchLeoMove();
             PatchEmptyHandBreak();
 
@@ -837,6 +837,16 @@ namespace StardewArchipelago.GameModifications
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Utility), nameof(Utility.getRaccoonSeedForCurrentTimeOfYear)),
                 postfix: new HarmonyMethod(typeof(OutOfLogicInjections), nameof(OutOfLogicInjections.GetRaccoonSeedForCurrentTimeOfYear_MysteryBoxesGiveReceivedItems_Postfix))
+            );
+        }
+
+        private void PatchFarmer()
+        {
+            PatchStardropMessage();
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Stats), nameof(Stats.takeStep)),
+                postfix: new HarmonyMethod(typeof(FarmerInjections), nameof(FarmerInjections.TakeStep_FloorIsLava_Postfix))
             );
         }
 

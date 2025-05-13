@@ -147,7 +147,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             return amountText;
         }
 
-        private static int GetFastBundleAllowedTime(BundleIngredientDescription ingredient)
+        internal static int GetFastBundleAllowedTime(BundleIngredientDescription ingredient)
         {
             var walkingTime = 10000;
             var coffeeTime = (int)(Math.Round(walkingTime * 0.8));
@@ -186,7 +186,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         private void DrawEnergyCurrency()
         {
-            DrawSpecialCurrency(_wallet.Energy, Game1.mouseCursors, new Rectangle(0, 410, 16, 16));
+            DrawSpecialCurrency(_wallet.Energy, Game1.mouseCursors, new Rectangle(0, 410, 16, 16), 3f);
         }
 
         private void DrawTimeCurrency()
@@ -233,13 +233,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         private void DrawDeadCropsCurrency()
         {
-            DrawSpecialCurrency(_wallet.DeadCropsById.Sum(x => x.Value), Game1.objectSpriteSheet, new Rectangle(64, 496, 16, 16));
+            DrawSpecialCurrency(_wallet.DeadCropsById.Sum(x => x.Value), Game1.objectSpriteSheet, new Rectangle(64, 496, 16, 16), 3f);
         }
 
         private void DrawDeadPumpkinsCurrency()
         {
             _wallet.DeadCropsById.TryAdd(ObjectIds.PUMPKIN, 0);
-            DrawSpecialCurrency(_wallet.DeadCropsById[ObjectIds.PUMPKIN], Game1.objectSpriteSheet, new Rectangle(48, 496, 16, 16));
+            DrawSpecialCurrency(_wallet.DeadCropsById[ObjectIds.PUMPKIN], Game1.objectSpriteSheet, new Rectangle(48, 496, 16, 16), 3f);
         }
 
         private static void DrawSpecialCurrency(int amountOwned, Texture2D texture, Rectangle sourceRectangle, float scale = 4f)
@@ -395,7 +395,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         private void TryPurchaseCurrentBundleWithTimeElapsed(BundleIngredientDescription ingredient)
         {
-            if (ArchipelagoJunimoNoteMenu.DayStopwatch.ElapsedMilliseconds > ingredient.stack)
+            if (ArchipelagoJunimoNoteMenu.DayStopwatch.ElapsedMilliseconds > GetFastBundleAllowedTime(ingredient))
             {
                 Game1.dayTimeMoneyBox.moneyShakeTimer = 600;
                 return;
@@ -455,15 +455,27 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 var donation = Math.Max(0, Math.Min(Game1.player.health, donationAmount));
                 Game1.player.health -= donationAmount;
                 _wallet.Blood += donation;
+                if (Game1.player.health <= 0)
+                {
+                    Game1.activeClickableMenu?.exitThisMenu();
+                }
                 return;
             }
 
             if (currencyId == MemeIDProvider.ENERGY)
             {
-                const int donationAmount = 50;
-                var donation = Math.Min(Game1.player.Stamina, donationAmount);
+                var donationAmount = 50;
+                if (Game1.player.Stamina + 16 < donationAmount)
+                {
+                    donationAmount = (int)Math.Ceiling(Game1.player.Stamina + 16);
+                }
+                var donation = Math.Max(0, donationAmount);
                 Game1.player.Stamina -= donationAmount;
-                _wallet.Energy += (int)donation;
+                _wallet.Energy += donation;
+                if (Game1.player.Stamina <= -16)
+                {
+                    Game1.activeClickableMenu?.exitThisMenu();
+                }
                 return;
             }
 
