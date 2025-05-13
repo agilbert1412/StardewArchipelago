@@ -185,6 +185,7 @@ The stardrops are:
 - Received after completing the Museum. Is shuffled with ~~[Museumsanity](./museumsanity.md)~~.
 
 
+
 - This goal is **not** *Adaptable*. The amount remains the same.
 - This goal is **not** *Focused*. The stardrops, shuffled or not, will require navigating many different tasks. This goal is essentially a Macguffin Hunt where the goal is to receive several specific items, and you cannot focus on them specifically.
 - This goal is **not** *Coopable*. The energy bar must reach 508 on a single save file to trigger the goal.
