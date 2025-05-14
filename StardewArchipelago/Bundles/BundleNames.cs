@@ -32,5 +32,6 @@ namespace StardewArchipelago.Bundles
         public const string CONNECTION = "Connection";
         public const string RESTRAINT = "Restraint";
         public const string JOURNALIST = "Journalist's";
+        public const string IKEA = "IKEA";
     }
 }

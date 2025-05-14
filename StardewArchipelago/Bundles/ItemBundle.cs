@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
 using StardewArchipelago.Stardew;
+using StardewValley;
 
 namespace StardewArchipelago.Bundles
 {
@@ -13,6 +15,16 @@ namespace StardewArchipelago.Bundles
         {
             NumberRequired = int.Parse(bundleContent[NUMBER_REQUIRED_KEY]);
             Items = new List<BundleItem>();
+            InitializeItems(itemManager, bundleContent);
+        }
+
+        private void InitializeItems(StardewItemManager itemManager, Dictionary<string, string> bundleContent)
+        {
+            if (NameWithoutBundle == MemeBundleNames.IKEA)
+            {
+                InitializeIKEAItems(itemManager, bundleContent);
+                return;
+            }
             foreach (var (key, itemDetails) in bundleContent)
             {
                 if (key == NUMBER_REQUIRED_KEY)
@@ -39,6 +51,34 @@ namespace StardewArchipelago.Bundles
                     var bundleItem = new BundleItem(itemManager, itemName, amount, quality);
                     Items.Add(bundleItem);
                 }
+            }
+        }
+
+        private void InitializeIKEAItems(StardewItemManager itemManager, Dictionary<string, string> bundleContent)
+        {
+            foreach (var (key, itemDetails) in bundleContent)
+            {
+                if (key == NUMBER_REQUIRED_KEY)
+                {
+                    continue;
+                }
+
+                var itemFields = itemDetails.Split("|");
+                var itemName = itemFields[0];
+                var recipe = CraftingRecipe.craftingRecipes[itemName];
+                var recipeParts = recipe.Split("/");
+                var subIngredientsString = recipeParts[0];
+                var subIngredientsPairs = subIngredientsString.Split(" ");
+                ArchipelagoJunimoNoteMenu.IkeaItemQualifiedId = itemManager.GetItemByName(itemName).GetQualifiedId();
+
+                for (var i = 0; i < subIngredientsPairs.Length - 1; i += 2)
+                {
+                    var ingredientId = subIngredientsPairs[i];
+                    var ingredientAmount = int.Parse(subIngredientsPairs[i + 1]);
+                    var bundleItem = new BundleItem(itemManager, itemManager.GetObjectById(ingredientId).Name, ingredientAmount, "Basic");
+                    Items.Add(bundleItem);
+                }
+                NumberRequired = Items.Count;
             }
         }
 

@@ -123,6 +123,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             {
                 return IsValidItemForOffYourBackIngredientDescription(item, ingredient);
             }
+            if (name == MemeBundleNames.IKEA && ingredientIndex >= Ingredients.Count)
+            {
+                return false;
+            }
 
             return base.IsValidItemForThisIngredientDescription(item, ingredient, ingredientIndex, parentMenu);
         }

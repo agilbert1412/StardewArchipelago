@@ -59,6 +59,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         internal static int FloorIsLavaHasTouchedGroundToday = 0;
         internal static bool HasLookedAtRestaintBundleToday = false;
         internal static bool HasPurchasedRestaintBundleToday = false;
+        internal static string IkeaItemQualifiedId = "";
 
         public Texture2D MemeTexture;
         private ClickableTextureComponent _donateButton;
@@ -513,12 +514,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         private static bool TryPickFromEntireWorld(out BundleIngredientDescription easilyObtainableItem)
         {
             var validObjects = new List<Object>();
-            Utility.ForEachItem((Func<Item, bool>)(item =>
+            Utility.ForEachItem(item =>
             {
                 if (item is Object ownedObject && ownedObject.HasBeenInInventory)
                     validObjects.Add(ownedObject);
                 return true;
-            }));
+            });
 
             return TryGetCheapestObject(validObjects, out easilyObtainableItem);
         }
@@ -752,8 +753,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 AfterUpdateIngredientSlotsBundleBundle();
                 return;
             }
+            BeforeUpdateIngredientSlotsSpecialBundles();
             base.UpdateIngredientSlots();
             AfterUpdateIngredientSlotsSpecialBundles();
+        }
+
+        private void BeforeUpdateIngredientSlotsSpecialBundles()
+        {
         }
 
         private void AfterUpdateIngredientSlotsSpecialBundles()
@@ -761,6 +767,30 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             AfterUpdateIngredientSlotsSisyphus();
             AfterUpdateIngredientSlotsBureaucracy();
             AfterUpdateIngredientSlotsSchrodinger();
+            AfterUpdateIngredientSlotsIKEA();
+        }
+
+        private void AfterUpdateIngredientSlotsIKEA()
+        {
+            if (CurrentPageBundle == null || CurrentPageBundle.name != MemeBundleNames.IKEA)
+            {
+                return;
+            }
+
+            if (IngredientList.Last().item.QualifiedItemId == IkeaItemQualifiedId)
+            {
+                return;
+            }
+
+            var ingredientRectangles = GenerateIngredientRectangles(1);
+            CreateIngredientComponent(IkeaItemQualifiedId, 1, 0, ingredientRectangles);
+
+            for (var i = 0; i < IngredientList.Count - 1; i++)
+            {
+                IngredientList[i].visible = false;
+                IngredientList[i].bounds.X *= 100;
+                IngredientList[i].bounds.Y *= 100;
+            }
         }
 
         private void AfterUpdateIngredientSlotsSisyphus()
@@ -1400,6 +1430,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         protected override void DrawIngredients(SpriteBatch spriteBatch)
         {
+            if (CurrentPageBundle.name == MemeBundleNames.IKEA)
+            {
+                var ingredientDescription = new BundleIngredientDescription(IkeaItemQualifiedId, 1, 0, false);
+                DrawIngredientAndShadow(spriteBatch, ingredientDescription, IngredientList.Count - 1);
+                return;
+            }
             base.DrawIngredients(spriteBatch);
         }
 
@@ -1510,12 +1546,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         protected override int GetIngredientsEndIndex()
         {
-            if (CurrentPageBundle == null || CurrentPageBundle.name != MemeBundleNames.BUNDLE_BUNDLE)
+            if (CurrentPageBundle != null && CurrentPageBundle.name == MemeBundleNames.BUNDLE_BUNDLE)
             {
-                return base.GetIngredientsEndIndex();
+                return GetIngredientsEndIndex(_bundleBundleIndex);
             }
 
-            return GetIngredientsEndIndex(_bundleBundleIndex);
+            return base.GetIngredientsEndIndex();
         }
 
         protected override int GetIngredientSlotsStartIndex()

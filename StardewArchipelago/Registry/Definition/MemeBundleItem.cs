@@ -67,11 +67,6 @@ namespace StardewArchipelago.Registry.Definition
 
         private Texture2D GetWornItemTexture(string donatedId)
         {
-            if (string.IsNullOrWhiteSpace(donatedId))
-            {
-                return null;
-            }
-
             var dataOrErrorItem = StardewValley.ItemRegistry.GetDataOrErrorItem(donatedId);
             var spriteIndex = dataOrErrorItem.SpriteIndex;
             var texture = dataOrErrorItem.GetTexture();
@@ -97,27 +92,27 @@ namespace StardewArchipelago.Registry.Definition
             var clothesDonated = ModEntry.Instance.State.QualifiedIdsClothesDonated;
             if (ItemId == MemeIDProvider.WORN_HAT)
             {
-                return clothesDonated.First(x => StardewValley.ItemRegistry.Create(x) is Hat);
+                return clothesDonated.FirstOrDefault(x => StardewValley.ItemRegistry.Create(x) is Hat);
             }
             if (ItemId == MemeIDProvider.WORN_BOOTS)
             {
-                return clothesDonated.First(x => StardewValley.ItemRegistry.Create(x) is Boots);
+                return clothesDonated.FirstOrDefault(x => StardewValley.ItemRegistry.Create(x) is Boots);
             }
             if (ItemId == MemeIDProvider.WORN_PANTS)
             {
-                return clothesDonated.First(x => StardewValley.ItemRegistry.Create(x) is Clothing pants && pants.clothesType.Value == Clothing.ClothesType.PANTS);
+                return clothesDonated.FirstOrDefault(x => StardewValley.ItemRegistry.Create(x) is Clothing pants && pants.clothesType.Value == Clothing.ClothesType.PANTS);
             }
             if (ItemId == MemeIDProvider.WORN_SHIRT)
             {
-                return clothesDonated.First(x => StardewValley.ItemRegistry.Create(x) is Clothing shirt && shirt.clothesType.Value == Clothing.ClothesType.SHIRT);
+                return clothesDonated.FirstOrDefault(x => StardewValley.ItemRegistry.Create(x) is Clothing shirt && shirt.clothesType.Value == Clothing.ClothesType.SHIRT);
             }
             if (ItemId == MemeIDProvider.WORN_LEFT_RING)
             {
-                return clothesDonated.First(x => StardewValley.ItemRegistry.Create(x) is Ring ring);
+                return clothesDonated.FirstOrDefault(x => StardewValley.ItemRegistry.Create(x) is Ring ring);
             }
             if (ItemId == MemeIDProvider.WORN_RIGHT_RING)
             {
-                return clothesDonated.Last(x => StardewValley.ItemRegistry.Create(x) is Ring ring);
+                return clothesDonated.LastOrDefault(x => StardewValley.ItemRegistry.Create(x) is Ring ring);
             }
 
             return "";

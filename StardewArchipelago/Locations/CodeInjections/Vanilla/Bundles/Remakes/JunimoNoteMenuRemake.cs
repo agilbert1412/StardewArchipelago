@@ -385,7 +385,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                 {
                     return CurrentPageBundle.IsValidItemForThisIngredientDescription(item, CurrentPageBundle.Ingredients[CurrentPartialIngredientDescriptionIndex], CurrentPartialIngredientDescriptionIndex, (ArchipelagoJunimoNoteMenu)this);
                 }
-                for (var index = GetIngredientsStartIndex(); index < GetIngredientsEndIndex(); index++)
+                for (var index = GetIngredientsStartIndex(); index < GetIngredientsEndIndex() && index < CurrentPageBundle.Ingredients.Count; index++)
                 {
                     var ingredient = CurrentPageBundle.Ingredients[index];
                     if (CurrentPageBundle.IsValidItemForThisIngredientDescription(item, ingredient, index, (ArchipelagoJunimoNoteMenu)this))
@@ -1562,7 +1562,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             }
         }
 
-        protected void DrawIngredientAndShadow(SpriteBatch spriteBatch, int index)
+        protected virtual void DrawIngredientAndShadow(SpriteBatch spriteBatch, int index)
+        {
+            if (CurrentPageBundle?.Ingredients == null || index >= CurrentPageBundle.Ingredients.Count)
+            {
+                return;
+            }
+            DrawIngredientAndShadow(spriteBatch, CurrentPageBundle.Ingredients[index], index);
+        }
+
+        protected virtual void DrawIngredientAndShadow(SpriteBatch spriteBatch, BundleIngredientDescription ingredientDescription, int index)
         {
             var num3 = 1f;
             if (CurrentPartialIngredientDescriptionIndex >= 0 && CurrentPartialIngredientDescriptionIndex != index)
@@ -1574,15 +1583,20 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             var num4 = index;
             var count = CurrentPageBundle?.Ingredients?.Count;
             var valueOrDefault = count.GetValueOrDefault();
-            if (num4 < valueOrDefault & count.HasValue && CurrentPageBundle.Ingredients[index].completed)
+            if (num4 < valueOrDefault & count.HasValue && ingredientDescription.completed)
             {
                 flag = true;
             }
-            if (!flag)
+            DrawIngredientAndShadow(spriteBatch, ingredientDescription, !flag, ingredient, num3);
+        }
+
+        private void DrawIngredientAndShadow(SpriteBatch spriteBatch, BundleIngredientDescription ingredientDescription, bool drawShadow, ClickableTextureComponent ingredient, float transparency)
+        {
+            if (drawShadow)
             {
-                DrawIngredientShadow(spriteBatch, ingredient, num3);
+                DrawIngredientShadow(spriteBatch, ingredient, transparency);
             }
-            DrawIngredient(spriteBatch, CurrentPageBundle?.Ingredients?[index], ingredient, (flag ? 0.25f : num3));
+            DrawIngredient(spriteBatch, ingredientDescription, ingredient, (drawShadow ? transparency : 0.25f));
         }
 
         protected virtual void DrawIngredientShadow(SpriteBatch spriteBatch, ClickableTextureComponent ingredient, float transparency)
@@ -1724,28 +1738,40 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
         private void CreateIngredients()
         {
             IngredientList.Clear();
-            var toAddTo2 = GenerateIngredientRectangles(CurrentPageBundle.Ingredients.Count);
-            for (var index = 0; index < toAddTo2.Count; ++index)
+            var ingredientRectangles = GenerateIngredientRectangles(CurrentPageBundle.Ingredients.Count);
+            for (var index = 0; index < ingredientRectangles.Count; ++index)
             {
-                var ingredient = CurrentPageBundle.Ingredients[index];
-                var metadata = ItemRegistry.GetMetadata(ingredient.id);
-                if (metadata?.TypeIdentifier == "(O)")
-                {
-                    var parsedOrErrorData = metadata.GetParsedOrErrorData();
-                    var texture = parsedOrErrorData.GetTexture();
-                    var sourceRect = parsedOrErrorData.GetSourceRect();
-                    var obj = ingredient.preservesId != null ? Utility.CreateFlavoredItem(ingredient.id, ingredient.preservesId, ingredient.quality, ingredient.stack) : ItemRegistry.Create(ingredient.id, ingredient.stack, ingredient.quality);
-                    var ingredientList = this.IngredientList;
-                    var textureComponent = new ClickableTextureComponent("", toAddTo2[index], "", obj.DisplayName, texture, sourceRect, 4f);
-                    textureComponent.myID = index + REGION_INGREDIENT_LIST_MODIFIER;
-                    textureComponent.item = obj;
-                    textureComponent.upNeighborID = -99998;
-                    textureComponent.rightNeighborID = -99998;
-                    textureComponent.leftNeighborID = -99998;
-                    textureComponent.downNeighborID = -99998;
-                    ingredientList.Add(textureComponent);
-                }
+                CreateIngredientComponent(index, ingredientRectangles);
             }
+        }
+
+        private void CreateIngredientComponent(int index, List<Rectangle> ingredientRectangles)
+        {
+            var ingredient = CurrentPageBundle.Ingredients[index];
+            CreateIngredientComponent(ingredient, index, ingredientRectangles);
+        }
+
+        private void CreateIngredientComponent(BundleIngredientDescription ingredient, int index, List<Rectangle> ingredientRectangles)
+        {
+            CreateIngredientComponent(ingredient.id, ingredient.stack, index, ingredientRectangles, ingredient.quality, ingredient.preservesId);
+        }
+
+        protected void CreateIngredientComponent(string itemId, int stack, int index, List<Rectangle> ingredientRectangles, int quality = 0, string preservesId = null)
+        {
+            var metadata = ItemRegistry.GetMetadata(itemId);
+            var parsedOrErrorData = metadata.GetParsedOrErrorData();
+            var texture = parsedOrErrorData.GetTexture();
+            var sourceRect = parsedOrErrorData.GetSourceRect();
+            var obj = preservesId != null ? Utility.CreateFlavoredItem(itemId, preservesId, quality, stack) : ItemRegistry.Create(itemId, stack, quality);
+            var ingredientList = this.IngredientList;
+            var textureComponent = new ClickableTextureComponent("", ingredientRectangles[index], "", obj.DisplayName, texture, sourceRect, 4f);
+            textureComponent.myID = index + REGION_INGREDIENT_LIST_MODIFIER;
+            textureComponent.item = obj;
+            textureComponent.upNeighborID = -99998;
+            textureComponent.rightNeighborID = -99998;
+            textureComponent.leftNeighborID = -99998;
+            textureComponent.downNeighborID = -99998;
+            ingredientList.Add(textureComponent);
         }
 
         private void SetUpBundleSpecificPage(ArchipelagoBundle b)
