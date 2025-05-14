@@ -14,6 +14,7 @@ using System;
 using StardewArchipelago.Constants;
 using StardewValley.Locations;
 using StardewValley.Objects;
+using System.Linq;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 {
@@ -126,6 +127,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             if (name == MemeBundleNames.IKEA && ingredientIndex >= Ingredients.Count)
             {
                 return false;
+            }
+            if (name == MemeBundleNames.MERMAID)
+            {
+                var sequence = new[] { 1, 5, 4, 2, 3 };
+                var numberIngredientsDonated = Ingredients.Count(x => x.completed);
+                var onlyValidIngredient = sequence[numberIngredientsDonated] - 1;
+                if (ingredientIndex != onlyValidIngredient)
+                {
+                    return false;
+                }
             }
 
             return base.IsValidItemForThisIngredientDescription(item, ingredient, ingredientIndex, parentMenu);

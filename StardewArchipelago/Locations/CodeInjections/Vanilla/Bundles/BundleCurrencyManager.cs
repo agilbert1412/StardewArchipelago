@@ -126,9 +126,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             {
                 DrawTimeElapsedCurrency();
                 var allowedTime = GetFastBundleAllowedTime(ingredient);
-                var seconds = allowedTime / 1000;
-                var milliseconds = allowedTime % 1000;
-                amountText = $"{seconds}:{milliseconds}";
+                var minutes = allowedTime / 60000;
+                var seconds = (allowedTime % 60000) / 1000;
+                var milliseconds = (allowedTime % 60000) % 1000;
+                amountText = $"{minutes.ToString("D2")}:{seconds.ToString("D2")}:{milliseconds.ToString("D3")}";
             }
             else if (ingredientId == MemeIDProvider.DEAD_CROP)
             {
@@ -161,10 +162,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         internal static int GetFastBundleAllowedTime(BundleIngredientDescription ingredient)
         {
-            var walkingTime = 42 * 000; // 42 sec
-            var coffeeTime = 39 * 000; // 39
-            var horseTime = 36 * 000; // 36
-            var horseCoffeeTime = 34 * 000; // 34
+            var walkingTime = 42 * 1000; // 42 sec
+            var coffeeTime = 39 * 1000; // 39
+            var horseTime = 36 * 1000; // 36
+            var horseCoffeeTime = 34 * 1000; // 34
             switch (ingredient.stack)
             {
                 case 100:
@@ -213,7 +214,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             var totalSeconds = elapsedTime % (60 * 1000);
             var elapsedSeconds = totalSeconds / 1000;
             var elapsedMilliseconds = totalSeconds % 1000;
-            DrawSpecialCurrency($"{elapsedMinutes}:{elapsedSeconds}:{elapsedMilliseconds}", Game1.mouseCursors, new Rectangle(434, 475, 9, 9));
+            DrawSpecialCurrency($"{elapsedMinutes.ToString("D2")}:{elapsedSeconds.ToString("D2")}:{elapsedMilliseconds.ToString("D3")}", Game1.mouseCursors, new Rectangle(434, 475, 9, 9));
         }
 
         private void DrawStepsCurrency()

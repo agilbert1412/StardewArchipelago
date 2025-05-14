@@ -163,6 +163,10 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         {
             try
             {
+                if (__instance.dead.Value)
+                {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
                 var cropId = __instance.indexOfHarvest.Value;
                 _wallet.DeadCropsById.TryAdd(cropId, 0);
                 _wallet.DeadCropsById[cropId]++;

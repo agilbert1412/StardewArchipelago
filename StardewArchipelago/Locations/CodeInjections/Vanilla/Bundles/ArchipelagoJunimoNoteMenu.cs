@@ -1250,7 +1250,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 return;
             }
 
-            base.DrawIngredient(spriteBatch, ingredient, ingredientBox, overlayTransparency);
+            base.DrawIngredientAndShadow(spriteBatch, ingredient, drawShadow, ingredientBox, overlayTransparency);
         }
 
         private void DrawWornHat(SpriteBatch spriteBatch, BundleIngredientDescription ingredient, ClickableTextureComponent ingredientBox, float overlayTransparency, bool drawShadow)
@@ -1312,7 +1312,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                     donatedItemId = _state.QualifiedIdsClothesDonated.Last(IsItemValid);
                 }
                 var donatedItem = ItemRegistry.Create(donatedItemId);
-                DrawIngredientInMenu(donatedItem, spriteBatch, ingredientBox, overlayTransparency);
+                DrawIngredientInMenu(donatedItem, spriteBatch, ingredientBox, (drawShadow ? overlayTransparency : 0.25f));
                 return;
             }
             if (wornItem == null)
@@ -1324,7 +1324,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                     {
                         DrawIngredientShadow(spriteBatch, ingredientBox, overlayTransparency);
                     }
-                    DrawIngredientInMenu(HeldItem, spriteBatch, ingredientBox, overlayTransparency);
+                    DrawIngredientInMenu(HeldItem, spriteBatch, ingredientBox, (drawShadow ? overlayTransparency : 0.25f));
                 }
                 else
                 {
@@ -1337,7 +1337,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 {
                     DrawIngredientShadow(spriteBatch, ingredientBox, overlayTransparency);
                 }
-                DrawIngredientInMenu(wornItem, spriteBatch, ingredientBox, overlayTransparency);
+                DrawIngredientInMenu(wornItem, spriteBatch, ingredientBox, (drawShadow ? overlayTransparency : 0.25f));
             }
         }
 
