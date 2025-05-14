@@ -19,7 +19,8 @@ namespace StardewArchipelago.Constants
         public static readonly string DEAD_CROP = IDProvider.CreateId("DeadCrop");
         public static readonly string DEAD_PUMPKIN = IDProvider.CreateId("DeadPumpkin");
         public static readonly string CHILD = IDProvider.CreateId("Child");
-        public static readonly string UNCAUGHT_FISH = IDProvider.CreateId("UncaughtFish");
+        public static readonly string MISSED_FISH = IDProvider.CreateId("MissedFish");
+        public static readonly string HONEYWELL = IDProvider.CreateId("HoneyInWell");
 
         public static readonly string WORN_BOOTS = IDProvider.CreateId("WornBoots");
         public static readonly string WORN_SHIRT = IDProvider.CreateId("WornShirt");
@@ -27,7 +28,6 @@ namespace StardewArchipelago.Constants
         public static readonly string WORN_HAT = IDProvider.CreateId("WornHat");
         public static readonly string WORN_LEFT_RING = IDProvider.CreateId("WornLeftRing");
         public static readonly string WORN_RIGHT_RING = IDProvider.CreateId("WornRightRing");
-        public static readonly string WELL = IDProvider.CreateId("ConstructedWell");
 
         public static readonly string FUN_TRAP = IDProvider.CreateId("FunTrap");
 
@@ -40,7 +40,6 @@ namespace StardewArchipelago.Constants
             { "Worn Left Ring", WORN_LEFT_RING },
             { "Worn Right Ring", WORN_RIGHT_RING },
             { "Fun Trap", FUN_TRAP },
-            { "Well", WELL },
         };
 
         public static readonly Dictionary<string, string> MemeItemNames = new()
@@ -52,7 +51,6 @@ namespace StardewArchipelago.Constants
             { WORN_LEFT_RING, "Worn Left Ring" },
             { WORN_RIGHT_RING, "Worn Right Ring" },
             { FUN_TRAP, "Fun Trap" },
-            { WELL, "Well" },
         };
     }
 }

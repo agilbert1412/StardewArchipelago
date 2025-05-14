@@ -563,7 +563,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         protected override void SetUpPurchaseButton()
         {
-            if (CurrentPageBundle.name == MemeBundleNames.NFT || CurrentPageBundle.name == MemeBundleNames.DEATH)
+            if (CurrentPageBundle.name == MemeBundleNames.NFT || CurrentPageBundle.name == MemeBundleNames.DEATH || CurrentPageBundle.name == MemeBundleNames.HONEYWELL)
             {
                 return;
             }

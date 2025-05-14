@@ -51,8 +51,10 @@ namespace StardewArchipelago.Bundles
             { "Steps", MemeIDProvider.STEP },
             { "Time Elapsed", MemeIDProvider.TIME_ELAPSED },
             { "Dead Crop", MemeIDProvider.DEAD_CROP },
-            { "Dead Pumpkins", MemeIDProvider.DEAD_PUMPKIN },
+            { "Dead Pumpkin", MemeIDProvider.DEAD_PUMPKIN },
+            { "Missed Fish", MemeIDProvider.MISSED_FISH },
             { "Child", MemeIDProvider.CHILD },
+            { "Honeywell", MemeIDProvider.HONEYWELL },
         };
     }
 }
