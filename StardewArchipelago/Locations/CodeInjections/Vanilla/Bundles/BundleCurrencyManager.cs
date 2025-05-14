@@ -141,7 +141,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 DrawDeadPumpkinsCurrency();
                 amountText += " Dead Pumpkins";
             }
-            else if (ingredientId == MemeIDProvider.UNCAUGHT_FISH)
+            else if (ingredientId == MemeIDProvider.MISSED_FISH)
             {
                 DrawUncaughtFishCurrency();
                 amountText += " Uncaught Fish";
@@ -370,7 +370,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 return;
             }
 
-            if (ingredient.id == MemeIDProvider.UNCAUGHT_FISH)
+            if (ingredient.id == MemeIDProvider.MISSED_FISH)
             {
                 TryPurchaseCurrentBundleWithUncaughtFish(ingredient);
                 return;
