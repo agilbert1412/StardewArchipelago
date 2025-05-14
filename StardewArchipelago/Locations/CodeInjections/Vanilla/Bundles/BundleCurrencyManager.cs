@@ -161,10 +161,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         internal static int GetFastBundleAllowedTime(BundleIngredientDescription ingredient)
         {
-            var walkingTime = 10000;
-            var coffeeTime = (int)(Math.Round(walkingTime * 0.8));
-            var horseTime = (int)(Math.Round(walkingTime * 0.6));
-            var horseCoffeeTime = (int)(Math.Round(walkingTime * 0.4));
+            var walkingTime = 42 * 000; // 42 sec
+            var coffeeTime = 39 * 000; // 39
+            var horseTime = 36 * 000; // 36
+            var horseCoffeeTime = 34 * 000; // 34
             switch (ingredient.stack)
             {
                 case 100:
@@ -261,7 +261,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         private void DrawChildrenCurrency()
         {
-            DrawSpecialCurrency(Game1.player.getChildrenCount(), Game1.objectSpriteSheet, new Rectangle(416, 1962, 16, 16), 3f);
+            DrawSpecialCurrency(Game1.player.getChildrenCount(), Game1.mouseCursors, new Rectangle(416, 1962, 16, 16), 3f);
         }
 
         private static void DrawSpecialCurrency(int amountOwned, Texture2D texture, Rectangle sourceRectangle, float scale = 4f)

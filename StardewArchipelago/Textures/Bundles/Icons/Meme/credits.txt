@@ -26,6 +26,7 @@ Eg: Internet Meme
 Emmalution: Emote from Emmalution's Discord Server
 Exhaustion: Internet Meme
 Fast: Internet Meme
+Firstborn: Internet Meme
 Flashbang: Handmade White Frame
 Fruit: Stardew Valley Artwork
 Hats Off To You: Anonymous
