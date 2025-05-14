@@ -168,6 +168,10 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
                 var cropId = __instance.indexOfHarvest.Value;
+                if (cropId == null)
+                {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
                 _wallet.DeadCropsById.TryAdd(cropId, 0);
                 _wallet.DeadCropsById[cropId]++;
                 return MethodPrefix.RUN_ORIGINAL_METHOD;
