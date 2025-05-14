@@ -1590,7 +1590,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             DrawIngredientAndShadow(spriteBatch, ingredientDescription, !flag, ingredient, num3);
         }
 
-        private void DrawIngredientAndShadow(SpriteBatch spriteBatch, BundleIngredientDescription ingredientDescription, bool drawShadow, ClickableTextureComponent ingredient, float transparency)
+        protected virtual void DrawIngredientAndShadow(SpriteBatch spriteBatch, BundleIngredientDescription ingredientDescription, bool drawShadow, ClickableTextureComponent ingredient, float transparency)
         {
             if (drawShadow)
             {
@@ -1604,7 +1604,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             spriteBatch.Draw(Game1.shadowTexture, new Vector2(ingredient.bounds.Center.X - Game1.shadowTexture.Bounds.Width * 4 / 2 - 4, ingredient.bounds.Center.Y + 4), Game1.shadowTexture.Bounds, Color.White * transparency, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 0.1f);
         }
 
-        protected virtual void DrawIngredient(SpriteBatch spriteBatch, BundleIngredientDescription? ingredient, ClickableTextureComponent ingredientBox, float overlayTransparency)
+        protected virtual void DrawIngredient(SpriteBatch spriteBatch, BundleIngredientDescription ingredient, ClickableTextureComponent ingredientBox, float overlayTransparency)
         {
             if (ingredientBox.item != null && ingredientBox.visible)
             {

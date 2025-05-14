@@ -14,6 +14,8 @@ using StardewModdingAPI;
 using StardewArchipelago.Serialization;
 using StardewValley.BellsAndWhistles;
 using StardewValley.GameData.HomeRenovations;
+using StardewValley.Characters;
+using StardewValley.Objects;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 {
@@ -138,6 +140,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 DrawDeadPumpkinsCurrency();
                 amountText += " Dead Pumpkins";
             }
+            else if (ingredientId == MemeIDProvider.UNCAUGHT_FISH)
+            {
+                DrawUncaughtFishCurrency();
+                amountText += " Uncaught Fish";
+            }
+            else if (ingredientId == MemeIDProvider.CHILD)
+            {
+                DrawChildrenCurrency();
+                amountText += " Children";
+            }
             else
             {
                 Game1.specialCurrencyDisplay.ShowCurrency(null);
@@ -240,6 +252,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         {
             _wallet.DeadCropsById.TryAdd(ObjectIds.PUMPKIN, 0);
             DrawSpecialCurrency(_wallet.DeadCropsById[ObjectIds.PUMPKIN], Game1.objectSpriteSheet, new Rectangle(48, 496, 16, 16), 3f);
+        }
+
+        private void DrawUncaughtFishCurrency()
+        {
+            DrawSpecialCurrency(_wallet.UncaughtFishById.Sum(x => x.Value), Game1.mouseCursors, new Rectangle(615, 840, 20, 20), 2f);
+        }
+
+        private void DrawChildrenCurrency()
+        {
+            DrawSpecialCurrency(Game1.player.getChildrenCount(), Game1.objectSpriteSheet, new Rectangle(416, 1962, 16, 16), 3f);
         }
 
         private static void DrawSpecialCurrency(int amountOwned, Texture2D texture, Rectangle sourceRectangle, float scale = 4f)
@@ -346,6 +368,18 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 TryPurchaseCurrentBundleWithDeadPumpkins(ingredient);
                 return;
             }
+
+            if (ingredient.id == MemeIDProvider.UNCAUGHT_FISH)
+            {
+                TryPurchaseCurrentBundleWithUncaughtFish(ingredient);
+                return;
+            }
+
+            if (ingredient.id == MemeIDProvider.CHILD)
+            {
+                TryPurchaseCurrentBundleWithChildren(ingredient);
+                return;
+            }
         }
 
         private void TryPurchaseCurrentBundleWithQiGems(BundleIngredientDescription ingredient)
@@ -432,6 +466,108 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         {
             _wallet.DeadCropsById.TryAdd(ObjectIds.PUMPKIN, 0);
             TryPurchaseCurrentBundleWithWalletCurrency(ingredient, _wallet.DeadCropsById[ObjectIds.PUMPKIN], payAmount => _wallet.DeadCropsById[ObjectIds.PUMPKIN] -= payAmount);
+        }
+
+        private void TryPurchaseCurrentBundleWithUncaughtFish(BundleIngredientDescription ingredient)
+        {
+            TryPurchaseCurrentBundleWithWalletCurrency(ingredient, _wallet.UncaughtFishById.Sum(x => x.Value), payAmount =>
+            {
+                var keepLooping = true;
+                while (payAmount > 0 && keepLooping)
+                {
+                    keepLooping = false;
+                    foreach (var key in _wallet.UncaughtFishById.Keys)
+                    {
+                        if (_wallet.UncaughtFishById[key] <= 0)
+                        {
+                            continue;
+                        }
+
+                        _wallet.UncaughtFishById[key]--;
+                        payAmount--;
+                        keepLooping = true;
+                        break;
+                    }
+                }
+
+            });
+        }
+
+        private void TryPurchaseCurrentBundleWithChildren(BundleIngredientDescription ingredient)
+        {
+            TryPurchaseCurrentBundleWithWalletCurrency(ingredient, Game1.player.getChildrenCount(), payAmount =>
+            {
+                var remainingPayAmount = payAmount;
+                var homeOfFarmer = Utility.getHomeOfFarmer(Game1.player);
+                for (var index = homeOfFarmer.characters.Count - 1; index >= 0; --index)
+                {
+                    if (homeOfFarmer.characters[index] is Child character)
+                    {
+                        homeOfFarmer.GetChildBed((int)character.Gender)?.mutex.ReleaseLock();
+                        if (character.hat.Value != null)
+                        {
+                            var hat = character.hat.Value;
+                            character.hat.Value = (Hat)null;
+                            Game1.player.addItemToInventory(hat);
+                        }
+                        homeOfFarmer.characters.RemoveAt(index);
+                        var num = (int)Game1.stats.Increment("childrenTurnedToDoves");
+                        remainingPayAmount--;
+                        if (remainingPayAmount <= 0)
+                        {
+                            break;
+                        }
+                    }
+                }
+                if (remainingPayAmount <= 0)
+                {
+                    BroadcastSacrificeSprites();
+                }
+            });
+        }
+
+        private void BroadcastSacrificeSprites()
+        {
+            Game1.Multiplayer.broadcastSprites(Game1.currentLocation, new TemporaryAnimatedSprite("LooseSprites\\Cursors", new Microsoft.Xna.Framework.Rectangle(536, 1945, 8, 8), new Vector2(156f, 388f), false, 0.0f, Color.White)
+            {
+                interval = 50f,
+                totalNumberOfLoops = 99999,
+                animationLength = 7,
+                layerDepth = 0.0385000035f,
+                scale = 4f,
+            });
+            for (var index = 0; index < 20; ++index)
+            {
+                Game1.Multiplayer.broadcastSprites(Game1.currentLocation,
+                    new TemporaryAnimatedSprite("LooseSprites\\Cursors", new Microsoft.Xna.Framework.Rectangle(372, 1956, 10, 10), new Vector2(2f, 6f) * 64f + new Vector2((float)Game1.random.Next(-32, 64), (float)Game1.random.Next(16)),
+                        false, 1f / 500f, Color.LightGray)
+                    {
+                        alpha = 0.75f,
+                        motion = new Vector2(1f, -0.5f),
+                        acceleration = new Vector2(-1f / 500f, 0.0f),
+                        interval = 99999f,
+                        layerDepth = (float)(0.03840000182390213 + (double)Game1.random.Next(100) / 10000.0),
+                        scale = 3f,
+                        scaleChange = 0.01f,
+                        rotationChange = (float)((double)Game1.random.Next(-5, 6) * 3.1415927410125732 / 256.0),
+                        delayBeforeAnimationStart = index * 25,
+                    });
+            }
+            Game1.currentLocation.playSound("fireball");
+            Game1.Multiplayer.broadcastSprites(Game1.currentLocation,
+                new TemporaryAnimatedSprite("LooseSprites\\Cursors", new Microsoft.Xna.Framework.Rectangle(388, 1894, 24, 22), 100f, 6, 9999, new Vector2(2f, 5f) * 64f, false, true, 1f, 0.0f, Color.White, 4f, 0.0f, 0.0f, 0.0f)
+                {
+                    motion = new Vector2(4f, -2f),
+                });
+            if (Game1.player.getChildrenCount() > 1)
+            {
+                Game1.Multiplayer.broadcastSprites(Game1.currentLocation,
+                    new TemporaryAnimatedSprite("LooseSprites\\Cursors", new Microsoft.Xna.Framework.Rectangle(388, 1894, 24, 22), 100f, 6, 9999, new Vector2(2f, 5f) * 64f, false, true, 1f, 0.0f, Color.White, 4f, 0.0f, 0.0f, 0.0f)
+                    {
+                        motion = new Vector2(4f, -1.5f),
+                        delayBeforeAnimationStart = 50,
+                    });
+            }
         }
 
         private void TryPurchaseCurrentBundleWithWalletCurrency(BundleIngredientDescription ingredient, int amountOwned, Action<int> payAction)

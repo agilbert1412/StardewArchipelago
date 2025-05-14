@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
+using Newtonsoft.Json.Linq;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Locations.InGameLocations;
 
@@ -18,6 +19,7 @@ namespace StardewArchipelago.Constants
         public static readonly string DEAD_CROP = IDProvider.CreateId("DeadCrop");
         public static readonly string DEAD_PUMPKIN = IDProvider.CreateId("DeadPumpkin");
         public static readonly string CHILD = IDProvider.CreateId("Child");
+        public static readonly string UNCAUGHT_FISH = IDProvider.CreateId("UncaughtFish");
 
         public static readonly string WORN_BOOTS = IDProvider.CreateId("WornBoots");
         public static readonly string WORN_SHIRT = IDProvider.CreateId("WornShirt");

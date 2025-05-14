@@ -1228,20 +1228,20 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             base.DrawIngredientShadow(spriteBatch, ingredient, transparency);
         }
 
-        protected override void DrawIngredient(SpriteBatch spriteBatch, BundleIngredientDescription? ingredient, ClickableTextureComponent ingredientBox, float overlayTransparency)
+        protected override void DrawIngredientAndShadow(SpriteBatch spriteBatch, BundleIngredientDescription ingredient, bool drawShadow, ClickableTextureComponent ingredientBox, float overlayTransparency)
         {
             if (CurrentPageBundle.name == MemeBundleNames.OFF_YOUR_BACK)
             {
-                if (ingredient == null || ingredientBox.item == null || !ingredientBox.visible)
+                if (ingredientBox.item == null || !ingredientBox.visible)
                 {
                     return;
                 }
-                DrawWornHat(spriteBatch, ingredient.Value, ingredientBox, overlayTransparency);
-                DrawWornBoots(spriteBatch, ingredient.Value, ingredientBox, overlayTransparency);
-                DrawWornPants(spriteBatch, ingredient.Value, ingredientBox, overlayTransparency);
-                DrawWornShirt(spriteBatch, ingredient.Value, ingredientBox, overlayTransparency);
-                DrawWornLeftRing(spriteBatch, ingredient.Value, ingredientBox, overlayTransparency);
-                DrawWornRightRing(spriteBatch, ingredient.Value, ingredientBox, overlayTransparency);
+                DrawWornHat(spriteBatch, ingredient, ingredientBox, overlayTransparency, drawShadow);
+                DrawWornBoots(spriteBatch, ingredient, ingredientBox, overlayTransparency, drawShadow);
+                DrawWornPants(spriteBatch, ingredient, ingredientBox, overlayTransparency, drawShadow);
+                DrawWornShirt(spriteBatch, ingredient, ingredientBox, overlayTransparency, drawShadow);
+                DrawWornLeftRing(spriteBatch, ingredient, ingredientBox, overlayTransparency, drawShadow);
+                DrawWornRightRing(spriteBatch, ingredient, ingredientBox, overlayTransparency, drawShadow);
                 return;
             }
 
@@ -1253,50 +1253,50 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             base.DrawIngredient(spriteBatch, ingredient, ingredientBox, overlayTransparency);
         }
 
-        private void DrawWornHat(SpriteBatch spriteBatch, BundleIngredientDescription ingredient, ClickableTextureComponent ingredientBox, float overlayTransparency)
+        private void DrawWornHat(SpriteBatch spriteBatch, BundleIngredientDescription ingredient, ClickableTextureComponent ingredientBox, float overlayTransparency, bool drawShadow)
         {
             DrawWornItem(spriteBatch, ingredient, ingredientBox, overlayTransparency, MemeIDProvider.WORN_HAT, "Used Hat",
                 Game1.player.hat.Value, 42,
-                x => ItemRegistry.Create(x) is Hat);
+                x => ItemRegistry.Create(x) is Hat, drawShadow);
         }
 
-        private void DrawWornBoots(SpriteBatch spriteBatch, BundleIngredientDescription ingredient, ClickableTextureComponent ingredientBox, float overlayTransparency)
+        private void DrawWornBoots(SpriteBatch spriteBatch, BundleIngredientDescription ingredient, ClickableTextureComponent ingredientBox, float overlayTransparency, bool drawShadow)
         {
             DrawWornItem(spriteBatch, ingredient, ingredientBox, overlayTransparency, MemeIDProvider.WORN_BOOTS, "Used Boots",
                 Game1.player.boots.Value, 40,
-                x => ItemRegistry.Create(x) is Boots);
+                x => ItemRegistry.Create(x) is Boots, drawShadow);
         }
 
-        private void DrawWornPants(SpriteBatch spriteBatch, BundleIngredientDescription ingredient, ClickableTextureComponent ingredientBox, float overlayTransparency)
+        private void DrawWornPants(SpriteBatch spriteBatch, BundleIngredientDescription ingredient, ClickableTextureComponent ingredientBox, float overlayTransparency, bool drawShadow)
         {
             DrawWornItem(spriteBatch, ingredient, ingredientBox, overlayTransparency, MemeIDProvider.WORN_PANTS, "Used Pants",
                 Game1.player.pantsItem.Value, 68,
-                x => ItemRegistry.Create(x) is Clothing clothing && clothing.clothesType.Value == Clothing.ClothesType.PANTS);
+                x => ItemRegistry.Create(x) is Clothing clothing && clothing.clothesType.Value == Clothing.ClothesType.PANTS, drawShadow);
         }
 
-        private void DrawWornShirt(SpriteBatch spriteBatch, BundleIngredientDescription ingredient, ClickableTextureComponent ingredientBox, float overlayTransparency)
+        private void DrawWornShirt(SpriteBatch spriteBatch, BundleIngredientDescription ingredient, ClickableTextureComponent ingredientBox, float overlayTransparency, bool drawShadow)
         {
             DrawWornItem(spriteBatch, ingredient, ingredientBox, overlayTransparency, MemeIDProvider.WORN_SHIRT, "Used Shirt",
                 Game1.player.shirtItem.Value, 69,
-                x => ItemRegistry.Create(x) is Clothing clothing && clothing.clothesType.Value == Clothing.ClothesType.SHIRT);
+                x => ItemRegistry.Create(x) is Clothing clothing && clothing.clothesType.Value == Clothing.ClothesType.SHIRT, drawShadow);
         }
 
-        private void DrawWornLeftRing(SpriteBatch spriteBatch, BundleIngredientDescription ingredient, ClickableTextureComponent ingredientBox, float overlayTransparency)
+        private void DrawWornLeftRing(SpriteBatch spriteBatch, BundleIngredientDescription ingredient, ClickableTextureComponent ingredientBox, float overlayTransparency, bool drawShadow)
         {
             DrawWornItem(spriteBatch, ingredient, ingredientBox, overlayTransparency, MemeIDProvider.WORN_LEFT_RING, "Used Left Ring",
                 Game1.player.leftRing.Value, 41,
-                x => ItemRegistry.Create(x) is Ring); 
+                x => ItemRegistry.Create(x) is Ring, drawShadow); 
         }
 
-        private void DrawWornRightRing(SpriteBatch spriteBatch, BundleIngredientDescription ingredient, ClickableTextureComponent ingredientBox, float overlayTransparency)
+        private void DrawWornRightRing(SpriteBatch spriteBatch, BundleIngredientDescription ingredient, ClickableTextureComponent ingredientBox, float overlayTransparency, bool drawShadow)
         {
             DrawWornItem(spriteBatch, ingredient, ingredientBox, overlayTransparency, MemeIDProvider.WORN_RIGHT_RING, "Used Right Ring",
                 Game1.player.rightRing.Value, 41,
-                x => ItemRegistry.Create(x) is Ring, true);
+                x => ItemRegistry.Create(x) is Ring, drawShadow, true);
         }
 
         private void DrawWornItem(SpriteBatch spriteBatch, BundleIngredientDescription ingredient, ClickableTextureComponent ingredientBox, float overlayTransparency, string wornItemId, string hoverText, Item wornItem,
-            int emptySlotTilePosition, Func<string, bool> IsItemValid, bool last = false)
+            int emptySlotTilePosition, Func<string, bool> IsItemValid, bool drawShadow, bool last = false)
         {
             if (ingredient.id != wornItemId)
             {
@@ -1320,6 +1320,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 var heldValid = HeldItem != null && IsItemValid(HeldItem.QualifiedItemId);
                 if (heldValid)
                 {
+                    if (drawShadow)
+                    {
+                        DrawIngredientShadow(spriteBatch, ingredientBox, overlayTransparency);
+                    }
                     DrawIngredientInMenu(HeldItem, spriteBatch, ingredientBox, overlayTransparency);
                 }
                 else
@@ -1329,6 +1333,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
             else
             {
+                if (drawShadow)
+                {
+                    DrawIngredientShadow(spriteBatch, ingredientBox, overlayTransparency);
+                }
                 DrawIngredientInMenu(wornItem, spriteBatch, ingredientBox, overlayTransparency);
             }
         }
