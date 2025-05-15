@@ -1658,32 +1658,50 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             ++index;
             return index;
         }
+        public static bool IsBundleRemaining(string bundleName)
+        {
+            var bundleIndex = GetBundleId(bundleName, out var communityCenter);
+            if (bundleIndex <= -1)
+            {
+                return false;
+            }
+
+            return !communityCenter.isBundleComplete(bundleIndex);
+        }
 
         public static void CompleteBundleIfExists(string bundleName)
         {
-            var communityCenter = (CommunityCenter)Game1.getLocationFromName("CommunityCenter");
+            var bundleIndex = GetBundleId(bundleName, out var communityCenter);
+            if (bundleIndex <= -1)
+            {
+                return;
+            }
+            communityCenter.bundleRewards[bundleIndex] = true;
+            for (var i = 0; i < communityCenter.bundles.FieldDict[bundleIndex].Length; i++)
+            {
+                communityCenter.bundles.FieldDict[bundleIndex][i] = true;
+            }
+            var bundleReader = new BundleReader();
+            bundleReader.CheckAllBundleLocations(_locationChecker);
+        }
 
-            var index = -1;
+        private static int GetBundleId(string bundleName)
+        {
+            return GetBundleId(bundleName, out _);
+        }
+
+        private static int GetBundleId(string bundleName, out CommunityCenter communityCenter)
+        {
+            communityCenter = (CommunityCenter)Game1.getLocationFromName("CommunityCenter");
             foreach (var (bundleKey, bundleData) in Game1.netWorldState.Value.BundleData)
             {
                 var name = bundleData.Split("/").First();
                 if (name == bundleName)
                 {
-                    index = int.Parse(bundleKey.Split("/").Last());
-                    break;
+                    return int.Parse(bundleKey.Split("/").Last());
                 }
             }
-            if (index == -1)
-            {
-                return;
-            }
-            communityCenter.bundleRewards[index] = true;
-            for (var i = 0; i < communityCenter.bundles.FieldDict[index].Length; i++)
-            {
-                communityCenter.bundles.FieldDict[index][i] = true;
-            }
-            var bundleReader = new BundleReader();
-            bundleReader.CheckAllBundleLocations(_locationChecker);
+            return -1;
         }
 
         public static void OnDayStarted()

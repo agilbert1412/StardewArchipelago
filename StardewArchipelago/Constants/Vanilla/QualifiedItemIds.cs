@@ -236,6 +236,7 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string STONE_JUNIMO = BigCraftableId(BigCraftableIds.STONE_JUNIMO);
         public static readonly string GOLD_LEWIS = BigCraftableId(BigCraftableIds.GOLD_LEWIS);
         public static readonly string WOOD = QualifiedObjectId(ObjectIds.WOOD);
+        public static readonly string HONEY = QualifiedObjectId(ObjectIds.HONEY);
 
         public static string QualifiedObjectId(string objectId)
         {

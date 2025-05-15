@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
+using StardewArchipelago.Bundles;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
@@ -81,8 +82,7 @@ namespace StardewArchipelago.Locations.Patcher
         {
             try
             {
-                ReplaceCommunityCenterBundlesWithChecks();
-                ReplaceCommunityCenterAreasWithChecks();
+                PatchCommunityCenter();
                 ReplaceBackPackUpgradesWithChecks();
                 ReplaceMineshaftChestsWithChecks();
                 ReplaceElevatorsWithChecks();
@@ -96,7 +96,6 @@ namespace StardewArchipelago.Locations.Patcher
                 PatchAdventurerGuildShop();
                 PatchArcadeMachines();
                 PatchTravelingMerchant();
-                ReplaceRaccoonBundlesWithChecks();
                 AddFishsanityLocations();
                 AddMuseumsanityLocations();
                 PatchFestivals();
@@ -137,6 +136,14 @@ namespace StardewArchipelago.Locations.Patcher
             CleanBookEvents();
         }
 
+        private void PatchCommunityCenter()
+        {
+            ReplaceCommunityCenterBundlesWithChecks();
+            ReplaceCommunityCenterAreasWithChecks();
+            ReplaceRaccoonBundlesWithChecks();
+            PatchMemeBundles();
+        }
+
         private void ReplaceCommunityCenterBundlesWithChecks()
         {
             _harmony.Patch(
@@ -172,12 +179,6 @@ namespace StardewArchipelago.Locations.Patcher
                 prefix: new HarmonyMethod(typeof(RaccoonInjections), nameof(RaccoonInjections.Activate_DisplayDialogueOrBundle_Prefix))
             );
 
-            // I believe we no longer need this, as vanilla fixed it in 1.6.9. We can bring it back if it breaks.
-            //_harmony.Patch(
-            //    original: AccessTools.Method(typeof(Bundle), nameof(Bundle.IsValidItemForThisIngredientDescription)),
-            //    prefix: new HarmonyMethod(typeof(RaccoonInjections), nameof(RaccoonInjections.IsValidItemForThisIngredientDescription_TestPatch_Prefix))
-            //);
-
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Forest), "resetSharedState"),
                 postfix: new HarmonyMethod(typeof(RaccoonInjections), nameof(RaccoonInjections.ResetSharedState_WalkThroughRaccoons_Postfix))
@@ -202,6 +203,19 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Forest), nameof(Forest.draw)),
                 postfix: new HarmonyMethod(typeof(RaccoonInjections), nameof(RaccoonInjections.Draw_TreeStumpFix_Postfix))
+            );
+        }
+
+        private void PatchMemeBundles()
+        {
+            if (!ArchipelagoJunimoNoteMenu.IsBundleRemaining(MemeBundleNames.HONEYWELL))
+            {
+                return;
+            }
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Building), nameof(Building.doAction)),
+                prefix: new HarmonyMethod(typeof(WellInjections), nameof(WellInjections.DoAction_ThrowHoneyInWell_Prefix))
             );
         }
 
