@@ -25,7 +25,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
 {
     public static class VanillaCodeInjectionInitializer
     {
-        public static void Initialize(LogHandler logger, IModHelper modHelper, ModConfig config, StardewArchipelagoClient archipelago, ArchipelagoStateDto state, StardewLocationChecker locationChecker, StardewItemManager itemManager, WeaponsManager weaponsManager, BundlesManager bundlesManager, Friends friends, TrapManager trapManager)
+        public static void Initialize(LogHandler logger, IModHelper modHelper, ModConfig config, StardewArchipelagoClient archipelago, ArchipelagoStateDto state, StardewLocationChecker locationChecker, StardewItemManager itemManager, WeaponsManager weaponsManager, BundlesManager bundlesManager, Friends friends, TrapManager trapManager, BankHandler bank)
         {
             BackpackInjections.Initialize(logger, archipelago, locationChecker);
             ScytheInjections.Initialize(logger, locationChecker);
@@ -34,7 +34,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             var bundleReader = new BundleReader();
             var killList = new MonsterKillList(archipelago);
             GoalCodeInjection.Initialize(logger, modHelper, archipelago, locationChecker, bundleReader, killList);
-            InitializeBundleInjections(logger, modHelper, archipelago, state, locationChecker, bundlesManager, bundleReader, trapManager);
+            InitializeBundleInjections(logger, modHelper, archipelago, state, locationChecker, bundlesManager, bundleReader, trapManager, bank);
             MineshaftInjections.Initialize(logger, modHelper, config, archipelago, locationChecker);
             InitializeSkills(logger, modHelper, archipelago, locationChecker);
             QuestInjections.Initialize(logger, modHelper, archipelago, locationChecker);
@@ -76,9 +76,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             JunimoKartInjections.Initialize(logger, modHelper, archipelago, locationChecker);
         }
 
-        private static void InitializeBundleInjections(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, BundlesManager bundlesManager, BundleReader bundleReader, TrapManager trapManager)
+        private static void InitializeBundleInjections(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, BundlesManager bundlesManager, BundleReader bundleReader, TrapManager trapManager, BankHandler bank)
         {
-            ArchipelagoJunimoNoteMenu.InitializeArchipelago(logger, modHelper, archipelago, state, locationChecker, trapManager);
+            ArchipelagoJunimoNoteMenu.InitializeArchipelago(logger, modHelper, archipelago, state, bank, locationChecker, trapManager);
             ArchipelagoBundle.InitializeArchipelago(logger, modHelper, archipelago, state, locationChecker, bundlesManager);
             CommunityCenterInjections.Initialize(logger, archipelago, locationChecker, bundleReader);
             RaccoonInjections.Initialize(logger, modHelper, archipelago, state, locationChecker, bundlesManager, bundleReader);

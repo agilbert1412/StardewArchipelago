@@ -32,6 +32,7 @@ using Bundle = StardewArchipelago.Bundles.Bundle;
 using Object = StardewValley.Object;
 using Archipelago.MultiClient.Net.Models;
 using StardewModdingAPI.Events;
+using Color = Microsoft.Xna.Framework.Color;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 {
@@ -45,6 +46,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         private static StardewArchipelagoClient _archipelago;
         private static ArchipelagoStateDto _state;
         private static ArchipelagoWalletDto _wallet;
+        private static BankHandler _bank;
         private static LocationChecker _locationChecker;
         private static BundleReader _bundleReader;
         private static TrapManager _trapManager;
@@ -84,7 +86,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         private void InitializeFields()
         {
-            _currencyManager = new BundleCurrencyManager(_logger, _modHelper, _wallet, this);
+            _currencyManager = new BundleCurrencyManager(_logger, _modHelper, _wallet, _bank, this);
             var memeAssetsPath = Path.Combine("Bundles", "UI", "MemeBundleAssets.png");
             MemeTexture = TexturesLoader.GetTexture(memeAssetsPath);
             ExtraButtons = new Dictionary<ClickableTextureComponent, Action>();
@@ -100,13 +102,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             _clothesMenu = new ClothesMenu(xPositionOnScreen + 128, yPositionOnScreen + 140, width, height);
         }
 
-        public static void InitializeArchipelago(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, TrapManager trapManager)
+        public static void InitializeArchipelago(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, ArchipelagoStateDto state, BankHandler bank, LocationChecker locationChecker, TrapManager trapManager)
         {
             _logger = logger;
             _modHelper = modHelper;
             _archipelago = archipelago;
             _state = state;
             _wallet = state.Wallet;
+            _bank = bank;
             _locationChecker = locationChecker;
             _trapManager = trapManager;
             _bundleReader = new BundleReader();
@@ -331,7 +334,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             var goodRepeatItems = new[] { "Progressive Weapon", "Progressive Coop", "Progressive Barn" };
             goodRepeatItems = goodRepeatItems.OrderBy(x => _archipelago.GetReceivedItemCount(x)).ToArray();
 
-            specialRewardName = $"Reward: {myName}'s {goodItem}";
+            specialRewardName = $"Reward: {myName}'s {goodRepeatItems[0]}";
             return true;
         }
 

@@ -13,7 +13,6 @@ namespace StardewArchipelago.Items
 {
     public class APItemManager : ItemManager
     {
-        private ArchipelagoClient _archipelago;
         private readonly ItemParser _itemParser;
         private readonly Mailman _mail;
 
@@ -22,7 +21,6 @@ namespace StardewArchipelago.Items
 
         public APItemManager(ILogger logger, IModHelper helper, Harmony harmony, StardewArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager itemManager, Mailman mail, TrapExecutor trapExecutor, GiftTrapManager giftTrapManager, IEnumerable<ReceivedItem> itemsAlreadyProcessed) : base(archipelago, itemsAlreadyProcessed)
         {
-            _archipelago = archipelago;
             _itemParser = new ItemParser(logger, helper, harmony, archipelago, locationChecker, itemManager, trapExecutor, giftTrapManager);
             _mail = mail;
         }

@@ -36,7 +36,7 @@ namespace StardewArchipelago.Archipelago
 
         private static string _lastCommand;
 
-        public ChatForwarder(ILogger logger, IMonitor monitor, IModHelper helper, Harmony harmony, StardewArchipelagoClient archipelago, IGiftHandler giftHandler, GoalManager goalManager, TileChooser tileChooser, TileSanityManager tileSanityManager)
+        public ChatForwarder(ILogger logger, IMonitor monitor, IModHelper helper, Harmony harmony, StardewArchipelagoClient archipelago, IGiftHandler giftHandler, GoalManager goalManager, TileChooser tileChooser, TileSanityManager tileSanityManager, BankHandler bank)
         {
             _logger = logger;
             _helper = helper;
@@ -46,7 +46,7 @@ namespace StardewArchipelago.Archipelago
             _goalManager = goalManager;
             _tileSanityManager = tileSanityManager;
             _playerUnstucker = new PlayerUnstucker(tileChooser);
-            _bankHandler = new BankHandler(_archipelago);
+            _bankHandler = bank;
             _lastCommand = null;
         }
 

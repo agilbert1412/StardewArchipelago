@@ -273,7 +273,8 @@ namespace StardewArchipelago
 
             _tileSanityManager = new TileSanityManager(_harmony, _archipelago, _locationChecker, Monitor);
             _tileSanityManager.PatchWalk(this.Helper);
-            _chatForwarder = new ChatForwarder(_logger, Monitor, _helper, _harmony, _archipelago, _giftHandler, _goalManager, trapExecutor.TileChooser, _tileSanityManager);
+            var bank = new BankHandler(_archipelago);
+            _chatForwarder = new ChatForwarder(_logger, Monitor, _helper, _harmony, _archipelago, _giftHandler, _goalManager, trapExecutor.TileChooser, _tileSanityManager, bank);
             _questCleaner = new QuestCleaner();
 
             _itemManager = new APItemManager(_logger, _helper, _harmony, _archipelago, _locationChecker, _stardewItemManager, _mail, trapExecutor, giftTrapManager, State.ItemsReceived);
@@ -283,7 +284,7 @@ namespace StardewArchipelago
 
             _mailPatcher = new MailPatcher(_logger, _harmony, _archipelago, _locationChecker, State, new LetterActions(_logger, _helper, _mail, _archipelago, _weaponsManager, _itemManager.TrapManager, trapExecutor.BabyBirther, _stardewItemManager));
             _bundlesManager = new BundlesManager(_logger, _helper, _archipelago, _stardewItemManager, _archipelago.SlotData.BundlesData);
-            _locationsPatcher = new LocationPatcher(_logger, _helper, Config, _harmony, _archipelago, State, _locationChecker, _stardewItemManager, _weaponsManager, _bundlesManager, seedShopStockModifier, friends, _itemManager.TrapManager);
+            _locationsPatcher = new LocationPatcher(_logger, _helper, Config, _harmony, _archipelago, State, _locationChecker, _stardewItemManager, _weaponsManager, _bundlesManager, seedShopStockModifier, friends, _itemManager.TrapManager, bank);
             _shippingBehaviors = new NightShippingBehaviors(_logger, _archipelago, _locationChecker, nameSimplifier);
             _chatForwarder.ListenToChatMessages();
             _logicPatcher.PatchAllGameLogic();
