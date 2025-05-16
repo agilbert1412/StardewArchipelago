@@ -164,7 +164,7 @@ namespace StardewArchipelago.Archipelago
             Game1.chatBox?.addMessage($"Current Balance: {currentBankAmount}$", Color.Gold);
         }
 
-        private BigInteger GetBankMoneyAmount()
+        public BigInteger GetBankMoneyAmount()
         {
             var realAmountJoules = GetBankJoulesAmount();
 
@@ -196,7 +196,7 @@ namespace StardewArchipelago.Archipelago
             return _archipelago.AddBigIntegerDataStorage(Scope.Global, bankingKey, amountToAddJoules);
         }
 
-        private bool RemoveFromBank(BigInteger amountToRemove)
+        public bool RemoveFromBank(BigInteger amountToRemove)
         {
             var bankingKey = string.Format(BANKING_TEAM_KEY, _archipelago.GetTeam());
             var amountToRemoveJoules = MoneyToJoules(amountToRemove);

@@ -1,20 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using HarmonyLib;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
-using Microsoft.Win32;
 using Microsoft.Xna.Framework;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.Gifting;
-using StardewArchipelago.Archipelago.SlotData;
-using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.Bundles;
-using StardewArchipelago.Constants;
 using StardewArchipelago.GameModifications;
 using StardewArchipelago.GameModifications.CodeInjections;
 using StardewArchipelago.GameModifications.EntranceRandomizer;
@@ -36,8 +29,6 @@ using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
 using StardewArchipelago.Locations.InGameLocations;
 using StardewArchipelago.Locations.Patcher;
-using StardewArchipelago.Locations.Secrets;
-using StardewArchipelago.Locations.ShopStockModifiers;
 using StardewArchipelago.Logging;
 using StardewArchipelago.Registry;
 using StardewArchipelago.Serialization;
@@ -47,10 +38,6 @@ using StardewArchipelago.Textures;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
-using StardewValley.Delegates;
-using StardewValley.Internal;
-using StardewValley.TerrainFeatures;
-using StardewValley.Triggers;
 
 namespace StardewArchipelago
 {
@@ -295,7 +282,7 @@ namespace StardewArchipelago
             _registry.Initialize(_archipelago, _stardewItemManager, _locationChecker, _giftHandler, _weaponsManager, State);
 
             _mailPatcher = new MailPatcher(_logger, _harmony, _archipelago, _locationChecker, State, new LetterActions(_logger, _helper, _mail, _archipelago, _weaponsManager, _itemManager.TrapManager, trapExecutor.BabyBirther, _stardewItemManager));
-            _bundlesManager = new BundlesManager(_logger, _helper, _stardewItemManager, _archipelago.SlotData.BundlesData);
+            _bundlesManager = new BundlesManager(_logger, _helper, _archipelago, _stardewItemManager, _archipelago.SlotData.BundlesData);
             _locationsPatcher = new LocationPatcher(_logger, _helper, Config, _harmony, _archipelago, State, _locationChecker, _stardewItemManager, _weaponsManager, _bundlesManager, seedShopStockModifier, friends, _itemManager.TrapManager);
             _shippingBehaviors = new NightShippingBehaviors(_logger, _archipelago, _locationChecker, nameSimplifier);
             _chatForwarder.ListenToChatMessages();
@@ -450,7 +437,7 @@ namespace StardewArchipelago
         private void OnUpdateTicked(object sender, UpdateTickedEventArgs e)
         {
             _archipelago.APUpdate();
-            ArchipelagoJunimoNoteMenu.OnUpdateTickedStatic();
+            ArchipelagoJunimoNoteMenu.OnUpdateTickedStatic(e);
             State?.Wallet?.CookieClicker?.DoFrame();
             if (!_archipelago.IsConnected || _itemManager == null)
             {

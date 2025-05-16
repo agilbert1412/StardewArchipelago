@@ -1,15 +1,19 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
 
 namespace StardewArchipelago.Bundles
 {
     public class CurrencyBundle : Bundle
     {
+        private StardewArchipelagoClient _archipelago;
         public string Currency { get; }
         public int Amount { get; set; }
 
-        public CurrencyBundle(string roomName, string bundleName, Dictionary<string, string> bundleContent) : base(roomName, bundleName)
+        public CurrencyBundle(StardewArchipelagoClient archipelago, string roomName, string bundleName, Dictionary<string, string> bundleContent) : base(roomName, bundleName)
         {
+            _archipelago = archipelago;
             foreach (var (key, itemDetails) in bundleContent)
             {
                 if (key == NUMBER_REQUIRED_KEY)
@@ -20,7 +24,21 @@ namespace StardewArchipelago.Bundles
                 var itemFields = itemDetails.Split("|");
                 Currency = itemFields[0];
                 Amount = int.Parse(itemFields[1]);
+                SpecialCurrencyHandling();
                 return;
+            }
+        }
+
+        private void SpecialCurrencyHandling()
+        {
+            CrowdfundingCurrencyHandling();
+        }
+
+        private void CrowdfundingCurrencyHandling()
+        {
+            if (NameWithoutBundle == MemeBundleNames.CROWDFUNDING)
+            {
+                Amount *= _archipelago.GetAllPlayers().Count();
             }
         }
 

@@ -3,19 +3,19 @@ using System;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using StardewArchipelago.Archipelago;
+using StardewArchipelago.Bundles;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Vanilla;
-using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes;
-using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley;
 using StardewArchipelago.Logging;
 using StardewModdingAPI;
 using StardewArchipelago.Serialization;
 using StardewValley.BellsAndWhistles;
-using StardewValley.GameData.HomeRenovations;
 using StardewValley.Characters;
 using StardewValley.Objects;
+using StardewModdingAPI.Events;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 {
@@ -24,13 +24,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         private static LogHandler _logger;
         private static IModHelper _modHelper;
         private static ArchipelagoWalletDto _wallet;
+        private static BankHandler _bank;
         private ArchipelagoJunimoNoteMenu _menu;
 
-        public BundleCurrencyManager(LogHandler logger, IModHelper modHelper, ArchipelagoWalletDto wallet, ArchipelagoJunimoNoteMenu menu)
+        public BundleCurrencyManager(LogHandler logger, IModHelper modHelper, ArchipelagoWalletDto wallet, BankHandler bank, ArchipelagoJunimoNoteMenu menu)
         {
             _logger = logger;
             _modHelper = modHelper;
             _wallet = wallet;
+            _bank = bank;
             _menu = menu;
         }
 
@@ -151,6 +153,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 DrawChildrenCurrency();
                 amountText += " Children";
             }
+            else if (ingredientId == MemeIDProvider.BANK_MONEY)
+            {
+                DrawBankCurrency();
+                amountText += "$";
+            }
             else
             {
                 Game1.specialCurrencyDisplay.ShowCurrency(null);
@@ -263,6 +270,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         private void DrawChildrenCurrency()
         {
             DrawSpecialCurrency(Game1.player.getChildrenCount(), Game1.mouseCursors, new Rectangle(416, 1962, 16, 16), 3f);
+        }
+
+        private void DrawBankCurrency()
+        {
+            DrawSpecialCurrency(_currentBankString, Game1.mouseCursors, new Rectangle(416, 1962, 16, 16), 3f);
         }
 
         private static void DrawSpecialCurrency(int amountOwned, Texture2D texture, Rectangle sourceRectangle, float scale = 4f)
@@ -379,6 +391,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             if (ingredient.id == MemeIDProvider.CHILD)
             {
                 TryPurchaseCurrentBundleWithChildren(ingredient);
+                return;
+            }
+
+            if (ingredient.id == MemeIDProvider.BANK_MONEY)
+            {
+                TryPurchaseCurrentBundleWithBankMoney(ingredient);
                 return;
             }
         }
@@ -571,6 +589,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
         }
 
+        private void TryPurchaseCurrentBundleWithBankMoney(BundleIngredientDescription ingredient)
+        {
+            var currentBank = _bank.GetBankMoneyAmount();
+            var currentBankInteger = currentBank > int.MaxValue ? int.MaxValue : (int)currentBank;
+            TryPurchaseCurrentBundleWithWalletCurrency(ingredient, currentBankInteger, amount => { _bank.RemoveFromBank(amount); });
+        }
+
         private void TryPurchaseCurrentBundleWithWalletCurrency(BundleIngredientDescription ingredient, int amountOwned, Action<int> payAction)
         {
             if (amountOwned < ingredient.stack)
@@ -624,6 +649,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                     _wallet.Time += 10;
                 }
                 return;
+            }
+        }
+
+        private string _currentBankString;
+        public void OnUpdateTicked(UpdateTickedEventArgs e)
+        {
+            if (e.IsMultipleOf(60) && ArchipelagoJunimoNoteMenu.IsBundleRemaining(MemeBundleNames.CROWDFUNDING))
+            {
+                var currentBank = _bank.GetBankMoneyAmount();
+                _currentBankString = currentBank.ToString();
             }
         }
     }

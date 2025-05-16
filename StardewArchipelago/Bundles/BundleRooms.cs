@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Stardew;
 
@@ -11,7 +12,7 @@ namespace StardewArchipelago.Bundles
         public Dictionary<string, BundleRoom> Rooms { get; set; }
         public Dictionary<string, Bundle> BundlesByName { get; set; }
 
-        public BundleRooms(ILogger logger, StardewItemManager itemManager, Dictionary<string, Dictionary<string, Dictionary<string, string>>> bundlesDictionary)
+        public BundleRooms(ILogger logger, StardewArchipelagoClient archipelago, StardewItemManager itemManager, Dictionary<string, Dictionary<string, Dictionary<string, string>>> bundlesDictionary)
         {
             _logger = logger;
             Rooms = new Dictionary<string, BundleRoom>();
@@ -19,7 +20,7 @@ namespace StardewArchipelago.Bundles
 
             foreach (var (roomName, roomBundles) in bundlesDictionary)
             {
-                var room = new BundleRoom(_logger, itemManager, roomName, roomBundles);
+                var room = new BundleRoom(_logger, archipelago, itemManager, roomName, roomBundles);
                 Rooms.Add(roomName, room);
                 foreach (var (name, bundle) in room.Bundles)
                 {

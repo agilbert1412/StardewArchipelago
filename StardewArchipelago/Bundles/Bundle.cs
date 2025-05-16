@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Extensions;
 using StardewArchipelago.Stardew;
@@ -68,11 +69,11 @@ namespace StardewArchipelago.Bundles
             Name = bundleName;
         }
 
-        public static Bundle Parse(StardewItemManager itemManager, string name, string bundleName, Dictionary<string, string> bundleContent)
+        public static Bundle Parse(StardewArchipelagoClient archipelago, StardewItemManager itemManager, string name, string bundleName, Dictionary<string, string> bundleContent)
         {
             if (bundleContent.Count() == 2 && bundleContent.Values.Any(x => CurrencyBundle.CurrencyIds.Keys.Contains(x.Split("|")[0])))
             {
-                return new CurrencyBundle(name, bundleName, bundleContent);
+                return new CurrencyBundle(archipelago, name, bundleName, bundleContent);
             }
 
             if (bundleContent.Values.Any(x => MemeIDProvider.MemeItemIds.ContainsKey(x.Split("|")[0])))

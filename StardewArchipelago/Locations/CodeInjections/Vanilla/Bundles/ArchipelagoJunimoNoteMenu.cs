@@ -31,6 +31,7 @@ using StardewValley.Objects;
 using Bundle = StardewArchipelago.Bundles.Bundle;
 using Object = StardewValley.Object;
 using Archipelago.MultiClient.Net.Models;
+using StardewModdingAPI.Events;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 {
@@ -1432,11 +1433,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
         }
 
-        public static void OnUpdateTickedStatic()
+        public static void OnUpdateTickedStatic(UpdateTickedEventArgs e)
         {
             if (Game1.activeClickableMenu is ArchipelagoJunimoNoteMenu junimoNoteMenu)
             {
                 junimoNoteMenu.OnUpdateTicked();
+                junimoNoteMenu._currencyManager.OnUpdateTicked(e);
             }
         }
 
