@@ -827,8 +827,6 @@ namespace StardewArchipelago.Stardew
             }
         }
 
-#if DEBUG
-
         public void ExportAllMismatchedItems(System.Func<Object, bool> condition, string filePath)
         {
             var objectsToExport = new List<string>();
@@ -865,6 +863,5 @@ namespace StardewArchipelago.Stardew
                 yield return "{\"" + stardewItem.Name + "\", \"" + stardewItem.DisplayName + "\"}";
             }
         }
-#endif
     }
 }

@@ -55,6 +55,8 @@ namespace StardewArchipelago.Bundles
             { "Missed Fish", MemeIDProvider.MISSED_FISH },
             { "Child", MemeIDProvider.CHILD },
             { "Honeywell", MemeIDProvider.HONEYWELL },
+            { "Bank Money", MemeIDProvider.BANK_MONEY },
+            { "Sleep Days", MemeIDProvider.SLEEP_DAYS },
         };
     }
 }

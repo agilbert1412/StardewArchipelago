@@ -30,6 +30,7 @@ using StardewArchipelago.Constants.Vanilla;
 using StardewValley.Objects;
 using Bundle = StardewArchipelago.Bundles.Bundle;
 using Object = StardewValley.Object;
+using Archipelago.MultiClient.Net.Models;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 {
@@ -243,6 +244,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         public override string GetRewardNameForArea(int whichArea)
         {
+            if (TryGetSpecialRewardName(whichArea, out var specialRewardName))
+            {
+                return specialRewardName;
+            }
+
             string apLocationToScout;
             if (SpecificBundlePage)
             {
@@ -274,6 +280,58 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
             var rewardText = $"Reward: {playerName}'s {itemName}";
             return rewardText;
+        }
+
+        private bool TryGetSpecialRewardName(int whichArea, out string specialRewardName)
+        {
+            if (TryGetClickbaitRewardName(whichArea, out specialRewardName))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool TryGetClickbaitRewardName(int whichArea, out string specialRewardName)
+        {
+            if (CurrentPageBundle.name != MemeBundleNames.CLICKBAIT)
+            {
+                specialRewardName = "";
+                return false;
+            }
+
+            var hints = _archipelago.GetActiveDesiredHintsForMe();
+            if (hints.Any())
+            {
+                var hint = hints.First();
+                specialRewardName = $"Reward: {hint.ReceivingPlayer}'s {_archipelago.GetItemName(hint.ItemId)}";
+                return true;
+            }
+
+            hints = _archipelago.GetMyActiveDesiredHints();
+            if (hints.Any())
+            {
+                var hint = hints.First();
+                specialRewardName = $"Reward: {hint.ReceivingPlayer}'s {_archipelago.GetItemName(hint.ItemId)}";
+                return true;
+            }
+
+            var goodItems = new[] { "Greenhouse", "Dwarvish Translation Guide", "Bridge Repair", "Rusty Key", "Bus Repair", "Minecarts Repair", "Gold Clock", "Desert Obelisk", "Island Obelisk" };
+            var myName = _archipelago.GetPlayerName();
+            foreach (var goodItem in goodItems)
+            {
+                if (!_archipelago.HasReceivedItem(goodItem))
+                {
+                    specialRewardName = $"Reward: {myName}'s {goodItem}";
+                    return true;
+                }
+            }
+
+            var goodRepeatItems = new[] { "Progressive Weapon", "Progressive Coop", "Progressive Barn" };
+            goodRepeatItems = goodRepeatItems.OrderBy(x => _archipelago.GetReceivedItemCount(x)).ToArray();
+
+            specialRewardName = $"Reward: {myName}'s {goodItem}";
+            return true;
         }
 
         public override void draw(SpriteBatch b)
@@ -395,7 +453,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
         }
 
-        private bool TryGetBundleLocationToScout(out string apLocationToScout)
+        protected virtual bool TryGetBundleLocationToScout(out string apLocationToScout)
         {
             var bundle = CurrentPageBundle;
             if (bundle == null)

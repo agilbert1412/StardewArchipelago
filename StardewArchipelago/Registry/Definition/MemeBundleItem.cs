@@ -52,6 +52,11 @@ namespace StardewArchipelago.Registry.Definition
         public override void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, StackDrawType drawStackNumber, Color color, bool drawShadow)
         {
             var donatedId = GetDonatedIdMatchingItem();
+            if (string.IsNullOrEmpty(donatedId))
+            {
+                base.drawInMenu(spriteBatch, location, scaleSize * 0.5f, transparency, layerDepth, drawStackNumber, color, drawShadow);
+                return;
+            }
             this.AdjustMenuDrawForRecipes(ref transparency, ref scaleSize);
             if (drawShadow)
             {

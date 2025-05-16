@@ -328,5 +328,29 @@ namespace StardewArchipelago.Archipelago
             session.Socket.SendPacket(packet);
             return message;
         }
+
+        public Hint[] GetActiveDesiredHintsForMe()
+        {
+            var desiredHintStatus = new[] { HintStatus.Priority };
+            return this.GetActiveHintsForMeMatchingStatus(desiredHintStatus);
+        }
+
+        public Hint[] GetActiveAvoidedHintsForMe()
+        {
+            var avoidedHintStatus = new[] { HintStatus.Priority };
+            return this.GetActiveHintsForMeMatchingStatus(avoidedHintStatus);
+        }
+
+        public Hint[] GetActiveHintsForMeMatchingStatus(HintStatus[] statusToMatch)
+        {
+            if (!this.MakeSureConnected())
+            {
+                return Array.Empty<Hint>();
+            }
+
+            var hints = GetHints();
+            var hintsMatchingStatus = hints.Where(x => !x.Found && this.GetPlayerName(x.ReceivingPlayer) == this._slotData.SlotName && statusToMatch.Contains(x.Status));
+            return hintsMatchingStatus.ToArray();
+        }
     }
 }

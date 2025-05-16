@@ -35,5 +35,6 @@ namespace StardewArchipelago.Bundles
         public const string IKEA = "IKEA";
         public const string MERMAID = "Mermaid";
         public const string HONEYWELL = "Honeywell";
+        public const string CLICKBAIT = "Clickbait";
     }
 }

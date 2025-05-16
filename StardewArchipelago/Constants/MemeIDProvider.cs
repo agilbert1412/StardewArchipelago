@@ -21,6 +21,8 @@ namespace StardewArchipelago.Constants
         public static readonly string CHILD = IDProvider.CreateId("Child");
         public static readonly string MISSED_FISH = IDProvider.CreateId("MissedFish");
         public static readonly string HONEYWELL = IDProvider.CreateId("HoneyInWell");
+        public static readonly string BANK_MONEY = IDProvider.CreateId("BankMoney");
+        public static readonly string SLEEP_DAYS = IDProvider.CreateId("SleepDays");
 
         public static readonly string WORN_BOOTS = IDProvider.CreateId("WornBoots");
         public static readonly string WORN_SHIRT = IDProvider.CreateId("WornShirt");
