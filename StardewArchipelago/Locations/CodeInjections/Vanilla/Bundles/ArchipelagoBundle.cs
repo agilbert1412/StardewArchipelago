@@ -65,6 +65,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
             // BundleColor = bundleFromArchipelago.ColorIndex;
 
+            if (name == MemeBundleNames.COMMUNISM)
+            {
+                Ingredients[0] = new BundleIngredientDescription(Ingredients[0].id, Game1.player.Money, Ingredients[0].quality, Ingredients[0].completed, Ingredients[0].preservesId);
+            }
+
             if (bundleFromArchipelago is not ItemBundle itemBundle)
             {
                 return;

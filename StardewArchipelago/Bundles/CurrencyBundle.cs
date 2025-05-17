@@ -38,7 +38,7 @@ namespace StardewArchipelago.Bundles
         {
             if (NameWithoutBundle == MemeBundleNames.CROWDFUNDING)
             {
-                Amount *= _archipelago.GetAllPlayers().Count();
+                Amount *= _archipelago.GetAllPlayers().Count() - 1;
             }
         }
 

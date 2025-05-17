@@ -37,5 +37,7 @@ namespace StardewArchipelago.Bundles
         public const string HONEYWELL = "Honeywell";
         public const string CLICKBAIT = "Clickbait";
         public const string CROWDFUNDING = "Crowdfunding";
+        public const string COMMUNISM = "Communism";
+        public const string HIBERNATION = "Hibernation";
     }
 }

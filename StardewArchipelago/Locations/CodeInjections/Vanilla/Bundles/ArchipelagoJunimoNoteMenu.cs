@@ -64,6 +64,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         internal static bool HasLookedAtRestaintBundleToday = false;
         internal static bool HasPurchasedRestaintBundleToday = false;
         internal static string IkeaItemQualifiedId = "";
+        private Hint[] _hintsForMe;
+        private Hint[] _hintsFromMe;
 
         public Texture2D MemeTexture;
         private ClickableTextureComponent _donateButton;
@@ -91,6 +93,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             MemeTexture = TexturesLoader.GetTexture(memeAssetsPath);
             ExtraButtons = new Dictionary<ClickableTextureComponent, Action>();
             InitializeClothesMenu();
+            _hintsForMe = _archipelago.GetActiveDesiredHintsForMe();
+            _hintsFromMe = _archipelago.GetMyActiveDesiredHints();
         }
 
         private void InitializeClothesMenu()
@@ -298,24 +302,22 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         private bool TryGetClickbaitRewardName(int whichArea, out string specialRewardName)
         {
-            if (CurrentPageBundle.name != MemeBundleNames.CLICKBAIT)
+            if (CurrentPageBundle == null || CurrentPageBundle.name != MemeBundleNames.CLICKBAIT)
             {
                 specialRewardName = "";
                 return false;
             }
 
-            var hints = _archipelago.GetActiveDesiredHintsForMe();
-            if (hints.Any())
+            if (_hintsForMe.Any())
             {
-                var hint = hints.First();
+                var hint = _hintsForMe.First();
                 specialRewardName = $"Reward: {hint.ReceivingPlayer}'s {_archipelago.GetItemName(hint.ItemId)}";
                 return true;
             }
 
-            hints = _archipelago.GetMyActiveDesiredHints();
-            if (hints.Any())
+            if (_hintsFromMe.Any())
             {
-                var hint = hints.First();
+                var hint = _hintsFromMe.First();
                 specialRewardName = $"Reward: {hint.ReceivingPlayer}'s {_archipelago.GetItemName(hint.ItemId)}";
                 return true;
             }
@@ -634,6 +636,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 return;
             }
             if (CurrentPageBundle.name == MemeBundleNames.FLOOR_IS_LAVA && FloorIsLavaHasTouchedGroundToday > 0)
+            {
+                return;
+            }
+            if (CurrentPageBundle.name == MemeBundleNames.HIBERNATION)
             {
                 return;
             }

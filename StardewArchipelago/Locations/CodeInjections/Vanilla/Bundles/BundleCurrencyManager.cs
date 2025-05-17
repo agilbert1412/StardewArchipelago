@@ -46,10 +46,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
             var ingredient = _menu.CurrentPageBundle.Ingredients.Last();
             var ingredientId = ingredient.id;
-            if (ingredientId == IDProvider.MONEY)
-            {
-                return;
-            }
 
             var amountText = DrawCurrencyAndGetAmount(b, ingredient, ingredientId);
             if (string.IsNullOrWhiteSpace(amountText))
@@ -75,7 +71,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         {
             var amountText = $"{ingredient.stack}";
 
-            if (ingredientId == IDProvider.QI_GEM)
+            var memeBundlesThatShouldDisplayMoney = new[] { MemeBundleNames.COMMUNISM, MemeBundleNames.CLICKBAIT };
+            if (ingredientId == IDProvider.MONEY && memeBundlesThatShouldDisplayMoney.Contains(_menu.CurrentPageBundle.name) )
+            {
+                Game1.dayTimeMoneyBox.drawMoneyBox(b);
+                amountText += "g";
+            }
+            else if (ingredientId == IDProvider.QI_GEM)
             {
                 Game1.specialCurrencyDisplay.ShowCurrency("qiGems");
                 amountText += " Qi Gems";
