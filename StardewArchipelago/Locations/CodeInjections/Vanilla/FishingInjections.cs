@@ -8,6 +8,10 @@ using StardewModdingAPI;
 using StardewValley;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
+using StardewValley.Menus;
+using Microsoft.Xna.Framework;
+using StardewArchipelago.Serialization;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -33,14 +37,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
         private static StardewItemManager _itemManager;
+        private static ArchipelagoWalletDto _wallet;
 
-        public static void Initialize(ILogger logger, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager itemManager)
+        public static void Initialize(ILogger logger, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager itemManager, ArchipelagoWalletDto wallet)
         {
             _logger = logger;
             _modHelper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
             _itemManager = itemManager;
+            _wallet = wallet;
         }
 
         // public bool caughtFish(string itemId, int size, bool from_fish_pond = false, int numberCaught = 1)
@@ -91,5 +97,29 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             return _fishedTrash.Contains(itemId);
         }
+
+        // public override void update(GameTime time)
+        public static bool Update_CountMissedFish_Prefix(BobberBar __instance, GameTime time)
+        {
+            try
+            {
+                if (!__instance.fadeOut || __instance.scale > 0.0 || __instance.distanceFromCatching > 0.05)
+                {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
+                _wallet.MissedFishById.TryAdd(__instance.whichFish, 0);
+                _wallet.MissedFishById[__instance.whichFish]++;
+
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(Update_CountMissedFish_Prefix)}:\n{ex}");
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+        }
+
+
     }
 }

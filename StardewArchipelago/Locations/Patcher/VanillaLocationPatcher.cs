@@ -96,7 +96,7 @@ namespace StardewArchipelago.Locations.Patcher
                 PatchAdventurerGuildShop();
                 PatchArcadeMachines();
                 PatchTravelingMerchant();
-                AddFishsanityLocations();
+                PatchFishing();
                 AddMuseumsanityLocations();
                 PatchFestivals();
                 AddCropSanityLocations();
@@ -809,6 +809,15 @@ namespace StardewArchipelago.Locations.Patcher
         private void CleanTravelingMerchantEvents()
         {
             _modHelper.Events.Content.AssetRequested -= _travelingMerchantShopStockModifier.OnShopStockRequested;
+        }
+
+        private void PatchFishing()
+        {
+            AddFishsanityLocations();
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(BobberBar), nameof(BobberBar.update)),
+                prefix: new HarmonyMethod(typeof(FishingInjections), nameof(FishingInjections.Update_CountMissedFish_Prefix))
+            );
         }
 
         private void AddFishsanityLocations()

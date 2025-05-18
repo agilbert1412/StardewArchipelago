@@ -11,7 +11,7 @@ namespace StardewArchipelago.Serialization
         public int Deaths { get; set; }
         public CookieClickerDto CookieClicker { get; set; }
         public Dictionary<string, int> DeadCropsById { get; set; }
-        public Dictionary<string, int> UncaughtFishById { get; set; }
+        public Dictionary<string, int> MissedFishById { get; set; }
 
         public ArchipelagoWalletDto()
         {
@@ -22,7 +22,7 @@ namespace StardewArchipelago.Serialization
             Deaths = 0;
             CookieClicker = new CookieClickerDto();
             DeadCropsById = new Dictionary<string, int>();
-            UncaughtFishById = new Dictionary<string, int>();
+            MissedFishById = new Dictionary<string, int>();
         }
     }
 }

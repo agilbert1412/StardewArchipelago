@@ -288,7 +288,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         private void DrawUncaughtFishCurrency()
         {
-            DrawSpecialCurrency(_wallet.UncaughtFishById.Sum(x => x.Value), Game1.mouseCursors, new Rectangle(615, 840, 20, 20), 2f);
+            DrawSpecialCurrency(_wallet.UncaughtFishById.Sum(x => x.Value), Game1.mouseCursors, new Rectangle(614, 1840, 20, 20), 2f);
         }
 
         private void DrawChildrenCurrency()
