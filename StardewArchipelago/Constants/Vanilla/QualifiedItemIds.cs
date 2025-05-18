@@ -3,7 +3,7 @@ using System;
 
 namespace StardewArchipelago.Constants.Vanilla
 {
-    internal class QualifiedItemIds
+    public class QualifiedItemIds
     {
         public const string OBJECT_QUALIFIER = "(O)";
         public const string BIG_CRAFTABLE_QUALIFIER = "(BC)";

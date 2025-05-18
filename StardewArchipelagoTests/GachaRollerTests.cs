@@ -1,4 +1,5 @@
 using FluentAssertions;
+using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Gacha;
 
 namespace StardewArchipelagoTests
@@ -15,6 +16,18 @@ namespace StardewArchipelagoTests
         public void Setup()
         {
         }
+
+        //[Test]
+        //public void TestNumberOfRewards()
+        //{
+        //    var allRewards = new List<string>();
+        //    allRewards.AddRange(_tier0Items);
+        //    allRewards.AddRange(_tier1Items);
+        //    allRewards.AddRange(_tier2Items);
+        //    allRewards.AddRange(_tier3Items);
+        //    allRewards.AddRange(_tier4Items);
+        //    Console.WriteLine($"Number of Rewards: {allRewards.Count}");
+        //}
 
         [TestCaseSource(typeof(GachaRollerTests), nameof(PricesAndInvestments))]
         public void TestRollShouldGiveT5AfterInvestingApproximatelyPrice(int bundlePrice, int investmentAmount)
