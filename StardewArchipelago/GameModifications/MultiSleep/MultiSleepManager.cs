@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Input;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
 using StardewModdingAPI;
 using StardewValley;
 
@@ -168,6 +169,10 @@ namespace StardewArchipelago.GameModifications.MultiSleep
                 possibleResponses.Add(new Response(MultiSleepUntilBehavior.ALL_CROPS_READY, "All Crops Ready"));
             }
             possibleResponses.Add(new Response(MultiSleepUntilBehavior.END_OF_MONTH, "End of month"));
+            if (ArchipelagoJunimoNoteMenu.HasLookedAtHibernationBundleToday)
+            {
+                possibleResponses.Add(new Response(MultiSleepUntilBehavior.HIBERNATE, "Hibernate"));
+            }
             possibleResponses.Add(new Response("Cancel", "Nevermind").SetHotKey(Keys.Escape));
 
             __instance.createQuestionDialogue(multiSleepMessage, possibleResponses.ToArray(), "SleepUntil", null);
@@ -185,6 +190,7 @@ namespace StardewArchipelago.GameModifications.MultiSleep
                 case MultiSleepUntilBehavior.BOOKSELLER:
                 case MultiSleepUntilBehavior.ANY_CROP_READY:
                 case MultiSleepUntilBehavior.ALL_CROPS_READY:
+                case MultiSleepUntilBehavior.HIBERNATE:
                     _currentMultiSleep = new MultiSleepUntilBehavior(untilKey);
                     StartSleep(instance);
                     return;

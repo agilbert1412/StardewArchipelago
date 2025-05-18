@@ -2,6 +2,7 @@
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.GameModifications.Seasons;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
 using StardewValley;
 using StardewValley.BellsAndWhistles;
 using StardewValley.Menus;
@@ -11,6 +12,8 @@ namespace StardewArchipelago.GameModifications.MultiSleep
 {
     public abstract class MultiSleepBehavior
     {
+        private int _numberOfDaysSlept = 0;
+
         public abstract bool ShouldKeepSleeping();
 
         public static void SleepOnce()
@@ -34,6 +37,9 @@ namespace StardewArchipelago.GameModifications.MultiSleep
 
         public virtual void KeepSleeping()
         {
+            _numberOfDaysSlept++;
+            ArchipelagoJunimoNoteMenu.HasBeenHibernatingFor(_numberOfDaysSlept);
+
             if (Game1.dayOfMonth == 28)
             {
                 SeasonsRandomizer.ChooseNextSeasonBasedOnConfigPreference();

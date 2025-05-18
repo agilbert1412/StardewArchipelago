@@ -64,6 +64,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         internal static int FloorIsLavaHasTouchedGroundToday = 0;
         internal static bool HasLookedAtRestaintBundleToday = false;
         internal static bool HasPurchasedRestaintBundleToday = false;
+        internal static bool HasLookedAtHibernationBundleToday = false;
         internal static string IkeaItemQualifiedId = "";
         private Hint[] _hintsForMe;
         private Hint[] _hintsFromMe;
@@ -646,6 +647,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
             if (CurrentPageBundle.name == MemeBundleNames.HIBERNATION)
             {
+                HasLookedAtHibernationBundleToday = true;
                 return;
             }
             if (CurrentPageBundle.name == MemeBundleNames.GACHA)
@@ -1801,6 +1803,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             ++index;
             return index;
         }
+        
         public static bool IsBundleRemaining(string bundleName)
         {
             var bundleIndex = GetBundleId(bundleName, out var communityCenter);
@@ -1854,6 +1857,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             ArchipelagoJunimoNoteMenu.FloorIsLavaHasTouchedGroundToday = 0;
             ArchipelagoJunimoNoteMenu.HasLookedAtRestaintBundleToday = false;
             ArchipelagoJunimoNoteMenu.HasPurchasedRestaintBundleToday = false;
+            ArchipelagoJunimoNoteMenu.HasLookedAtRestaintBundleToday = false;
         }
 
         public static void OnDayEnded()
@@ -1861,6 +1865,31 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             if (HasLookedAtRestaintBundleToday && !HasPurchasedRestaintBundleToday)
             {
                 CompleteBundleIfExists(MemeBundleNames.RESTRAINT);
+            }
+        }
+        public static void HasBeenHibernatingFor(int numberOfDaysSlept)
+        {
+            if (!IsBundleRemaining(MemeBundleNames.HIBERNATION))
+            {
+                return;
+            }
+            
+            foreach (var (bundleKey, bundleData) in Game1.netWorldState.Value.BundleData)
+            {
+                var name = bundleData.Split("/").First();
+                if (name != MemeBundleNames.HIBERNATION)
+                {
+                    continue;
+                }
+
+                var ingredients = bundleData.Split("/")[2];
+                var parts = ingredients.Split(" ");
+                var price = int.Parse(parts[1]);
+                if (numberOfDaysSlept >= price)
+                {
+                    CompleteBundleIfExists(MemeBundleNames.HIBERNATION);
+                }
+                return;
             }
         }
     }

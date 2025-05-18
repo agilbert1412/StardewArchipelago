@@ -4,6 +4,8 @@ using StardewValley.Buildings;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 using System;
+using StardewArchipelago.Bundles;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
 
 namespace StardewArchipelago.GameModifications.MultiSleep
 {
@@ -18,6 +20,7 @@ namespace StardewArchipelago.GameModifications.MultiSleep
         public const string ANY_CROP_READY = "Any Crop Ready";
         public const string ALL_CROPS_READY = "All Crops Ready";
         public const string END_OF_MONTH = "End of Month";
+        public const string HIBERNATE = "Hibernate";
 
         private string _untilWhat;
 
@@ -58,7 +61,8 @@ namespace StardewArchipelago.GameModifications.MultiSleep
                 case ALL_CROPS_READY:
                     CheckAllCrops(out var anyNotReady, out _, out allReady);
                     return anyNotReady && !allReady;
-
+                case HIBERNATE:
+                    return ArchipelagoJunimoNoteMenu.IsBundleRemaining(MemeBundleNames.HIBERNATION);
                 default:
                     return false;
             }

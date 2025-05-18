@@ -9,6 +9,7 @@ using StardewArchipelago.Constants.Vanilla;
 using StardewValley;
 using StardewValley.GameData.BigCraftables;
 using StardewValley.GameData.Objects;
+using StardewValley.GameData.Shirts;
 using StardewValley.GameData.Weapons;
 using Object = StardewValley.Object;
 
@@ -32,6 +33,10 @@ namespace StardewArchipelago.Stardew
         private Dictionary<string, StardewFurniture> _furnitureByName;
         private Dictionary<string, StardewHat> _hatsById;
         private Dictionary<string, StardewHat> _hatsByName;
+        private Dictionary<string, StardewShirt> _shirtsById;
+        private Dictionary<string, StardewShirt> _shirtsByName;
+        //private Dictionary<string, StardewPants> _pantsById;
+        //private Dictionary<string, StardewPants> _pantsByName;
         private Dictionary<string, StardewWeapon> _weaponsById;
         private Dictionary<string, StardewWeapon> _weaponsByName;
         private Dictionary<string, StardewCookingRecipe> _cookingRecipesByName;
@@ -74,6 +79,8 @@ namespace StardewArchipelago.Stardew
                    _bootsByName.ContainsKey(itemName) ||
                    _furnitureByName.ContainsKey(itemName) ||
                    _hatsByName.ContainsKey(itemName) ||
+                   _shirtsByName.ContainsKey(itemName) ||
+                   //_pantsByName.ContainsKey(itemName) ||
                    _weaponsByName.ContainsKey(itemName);
         }
 
@@ -164,6 +171,16 @@ namespace StardewArchipelago.Stardew
             {
                 return _hatsByName[itemName];
             }
+
+            if (_shirtsByName.ContainsKey(itemName))
+            {
+                return _shirtsByName[itemName];
+            }
+
+            //if (_pantsByName.ContainsKey(itemName))
+            //{
+            //    return _pantsByName[itemName];
+            //}
 
             if (_weaponsByName.ContainsKey(itemName))
             {
@@ -315,7 +332,7 @@ namespace StardewArchipelago.Stardew
             InitializeBoots();
             // InitializeClothing(); var allClothingInformation = Game1.clothingInformation;
             InitializeFurniture();
-            InitializeHats();
+            InitializeClothing();
             // InitializeTools();
             InitializeWeapons();
             InitializeCookingRecipes();
@@ -464,6 +481,13 @@ namespace StardewArchipelago.Stardew
             }
         }
 
+        private void InitializeClothing()
+        {
+            InitializeHats();
+            InitializeShirts();
+            // InitializePants();
+        }
+
         private void InitializeHats()
         {
             _hatsById = new Dictionary<string, StardewHat>();
@@ -481,6 +505,26 @@ namespace StardewArchipelago.Stardew
                 _hatsById.Add(id, hat);
                 _hatsByName.Add(hat.Name, hat);
                 _itemsByQualifiedId.Add(hat.GetQualifiedId(), hat);
+            }
+        }
+
+        private void InitializeShirts()
+        {
+            _shirtsById = new Dictionary<string, StardewShirt>();
+            _shirtsByName = new Dictionary<string, StardewShirt>();
+            var allShirtsInformation = DataLoader.Shirts(Game1.content);
+            foreach (var (id, shirtData) in allShirtsInformation)
+            {
+                var shirt = ParseStardewShirtData(id, shirtData);
+
+                if (_shirtsById.ContainsKey(id) || _shirtsByName.ContainsKey(shirt.Name))
+                {
+                    continue;
+                }
+
+                _shirtsById.Add(id, shirt);
+                _shirtsByName.Add(shirt.Name, shirt);
+                _itemsByQualifiedId.Add(shirt.GetQualifiedId(), shirt);
             }
         }
 
@@ -703,6 +747,24 @@ namespace StardewArchipelago.Stardew
 
             var hat = new StardewHat(id, name, description, skipHairDraw, ignoreHairstyleOffset, displayName);
             return hat;
+        }
+
+        private static StardewShirt ParseStardewShirtData(string id, ShirtData shirtData)
+        {
+            var name = shirtData.Name;
+            var description = shirtData.Description;
+            var hasSleeves = shirtData.HasSleeves;
+            var price = shirtData.Price;
+            var spriteIndex = shirtData.SpriteIndex;
+            var isPrismatic = shirtData.IsPrismatic;
+            var texture = shirtData.Texture;
+            var canBeDyed = shirtData.CanBeDyed;
+            var canChooseDuringCharacterCustomization = shirtData.CanChooseDuringCharacterCustomization;
+            var defaultColor = shirtData.DefaultColor;
+            var displayName = string.IsNullOrWhiteSpace(shirtData.DisplayName) ? name : shirtData.DisplayName;
+
+            var shirt = new StardewShirt(id, name, description, price, displayName);
+            return shirt;
         }
 
         private static StardewWeapon ParseStardewWeaponData(string id, WeaponData weaponData)
