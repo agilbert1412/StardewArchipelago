@@ -652,6 +652,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             {
                 return;
             }
+            if (CurrentPageBundle.name == MemeBundleNames.ASMR)
+            {
+                return;
+            }
             if (CurrentPageBundle.name == MemeBundleNames.CLIQUE)
             {
                 SetUpCliqueButton();

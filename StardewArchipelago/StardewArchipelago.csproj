@@ -47,7 +47,10 @@
 		<None Update="IdTables\stardew_valley_location_table.json">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-		<None Update="Sounds\doom-eternal.wav">
+		<None Update="Sounds\**\*.txt">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Sounds\**\*.wav">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 		<None Update="Textures\Archipelago\Custom\*.png">
@@ -57,6 +60,9 @@
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 		<None Update="Textures\Bundles\Icons\**\*.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Textures\Bundles\Icons\**\*.txt">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 		<None Update="Textures\Bundles\UI\*.png">
