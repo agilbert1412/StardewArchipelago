@@ -59,6 +59,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             _actionAfterAnimation = actionAfterAnimation;
         }
 
+        public bool IsAnimating()
+        {
+            return _currentAnimationFramesRemaining > 0;
+        }
+
         public override void draw(SpriteBatch b, Color c, float layerDepth, int frameOffset = 0, int xOffset = 0, int yOffset = 0)
         {
             var position = new Vector2(bounds.X + xOffset + sourceRect.Width / 2 * baseScale, bounds.Y + yOffset + sourceRect.Height / 2 * baseScale);

@@ -70,8 +70,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         private GachaResolver _gachaResolver;
 
         public Texture2D MemeTexture;
-        private ClickableTextureComponent _donateButton;
-        public Dictionary<ClickableTextureComponent, Action> ExtraButtons;
+        private BundleButton _donateButton;
+        public Dictionary<BundleButton, Action> ExtraButtons;
 
         public ArchipelagoJunimoNoteMenu(bool fromGameMenu, int area = 1, bool fromThisMenu = false) : base(fromGameMenu, area, fromThisMenu)
         {
@@ -93,7 +93,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             _currencyManager = new BundleCurrencyManager(_logger, _modHelper, _wallet, _bank, this);
             var memeAssetsPath = Path.Combine("Bundles", "UI", "MemeBundleAssets.png");
             MemeTexture = TexturesLoader.GetTexture(memeAssetsPath);
-            ExtraButtons = new Dictionary<ClickableTextureComponent, Action>();
+            ExtraButtons = new Dictionary<BundleButton, Action>();
             InitializeClothesMenu();
             _hintsForMe = _archipelago.GetActiveDesiredHintsForMe();
             _hintsFromMe = _archipelago.GetMyActiveDesiredHints();
@@ -362,7 +362,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             base.ReceiveLeftClickInButtons(x, y);
             foreach (var (extraButton, actionWhenClicked) in ExtraButtons)
             {
-                if (extraButton == null || !extraButton.containsPoint(x, y))
+                if (extraButton == null || extraButton.IsAnimating() || !extraButton.containsPoint(x, y))
                 {
                     continue;
                 }
@@ -690,11 +690,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 return;
             }
 
-            var textureComponent = new ClickableTextureComponent(new Rectangle(xPositionOnScreen + 825, yPositionOnScreen + 350, 260, 72), MemeTexture, new Rectangle(0, 0, 53, 20), 4f);
-            textureComponent.myID = 796;
-            textureComponent.leftNeighborID = REGION_BACK_BUTTON;
-            textureComponent.rightNeighborID = REGION_PURCHASE_BUTTON;
-            _donateButton = textureComponent;
+            var donateButton = new BundleButton(new Rectangle(xPositionOnScreen + 825, yPositionOnScreen + 350, 260, 72), MemeTexture, new Rectangle(0, 0, 53, 20), 4f);
+            donateButton.myID = 796;
+            donateButton.leftNeighborID = REGION_BACK_BUTTON;
+            donateButton.rightNeighborID = REGION_PURCHASE_BUTTON;
+            _donateButton = donateButton;
             ExtraButtons.Add(_donateButton, () => _currencyManager.DonateToBundle(CurrentPageBundle.Ingredients.Last().id));
         }
 
@@ -713,24 +713,24 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             var grandmaScale = 3f;
 
             var cursorButtonRect = new Rectangle(xStart, y, 72, 72);
-            var cursorBackground = new ClickableTextureComponent(cursorButtonRect, NoteTexture, buttonBackgroundRectangle, buttonScale);
+            var cursorBackground = new BundleButton(cursorButtonRect, NoteTexture, buttonBackgroundRectangle, buttonScale);
             var cursorTextureRect = new Rectangle(0, 0, 8, 10);
             var cursorRect = GetCenteredTexture(cursorButtonRect, cursorTextureRect, buttonScale, buttonScale);
-            var cursorButton = new ClickableTextureComponent(cursorRect, Game1.mouseCursors, cursorTextureRect, buttonScale);
+            var cursorButton = new BundleButton(cursorRect, Game1.mouseCursors, cursorTextureRect, buttonScale);
             cursorButton.myID = 793;
 
             var cookieButtonRect = new Rectangle(xStart + xPerButton, y, 72, 72);
-            var cookieBackground = new ClickableTextureComponent(cookieButtonRect, NoteTexture, buttonBackgroundRectangle, buttonScale);
+            var cookieBackground = new BundleButton(cookieButtonRect, NoteTexture, buttonBackgroundRectangle, buttonScale);
             var cookieTextureRect = new Rectangle(112, 144, 16, 16);
             var cookieRect = GetCenteredTexture(cookieButtonRect, cookieTextureRect, buttonScale, buttonScale);
-            var cookieButton = new ClickableTextureComponent(cookieRect, Game1.objectSpriteSheet, cookieTextureRect, buttonScale);
+            var cookieButton = new BundleButton(cookieRect, Game1.objectSpriteSheet, cookieTextureRect, buttonScale);
             cookieButton.myID = 794;
 
             var grandmaButtonRect = new Rectangle(xStart + (xPerButton*2), y, 72, 72);
-            var grandmaBackground = new ClickableTextureComponent(grandmaButtonRect, NoteTexture, buttonBackgroundRectangle, buttonScale);
+            var grandmaBackground = new BundleButton(grandmaButtonRect, NoteTexture, buttonBackgroundRectangle, buttonScale);
             var grandmaTextureRect = new Rectangle(0, 168, 16, 24);
             var grandmaRect = GetCenteredTexture(grandmaButtonRect, grandmaTextureRect, buttonScale, grandmaScale);
-            var grandmaButton = new ClickableTextureComponent(grandmaRect, Game1.getCharacterFromName("Evelyn").Sprite.Texture, grandmaTextureRect, grandmaScale);
+            var grandmaButton = new BundleButton(grandmaRect, Game1.getCharacterFromName("Evelyn").Sprite.Texture, grandmaTextureRect, grandmaScale);
             grandmaButton.myID = 795;
 
             cursorButton.leftNeighborID = REGION_BACK_BUTTON;
@@ -761,18 +761,18 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             var y = yPositionOnScreen + 504;
             var buttonScale = 4f;
 
-            var dieBackgroundRect = new Rectangle(xStart + xPerButton, y, 72, 72);
-            var dieBackground = new ClickableTextureComponent(dieBackgroundRect, NoteTexture, buttonBackgroundRectangle, buttonScale);
-            var dieTextureRect = new Rectangle(240, 1808, 16, 16);
-            var dieRect = GetCenteredTexture(dieBackgroundRect, dieTextureRect, buttonScale, buttonScale);
-            var dieButton = new ClickableTextureComponent(dieRect, Game1.mouseCursors, dieTextureRect, buttonScale);
-            dieButton.myID = 794;
+            var dangerBackgroundRect = new Rectangle(xStart + xPerButton, y, 72, 72);
+            var dangerBackground = new BundleButton(dangerBackgroundRect, NoteTexture, buttonBackgroundRectangle, buttonScale);
+            var dangerTextureRect = new Rectangle(240, 1808, 16, 16);
+            var dangerRect = GetCenteredTexture(dangerBackgroundRect, dangerTextureRect, buttonScale, buttonScale);
+            var dangerButton = new BundleButton(dangerRect, Game1.mouseCursors, dangerTextureRect, buttonScale);
+            dangerButton.myID = 794;
 
-            dieButton.leftNeighborID = REGION_BACK_BUTTON;
-            dieButton.rightNeighborID = REGION_PURCHASE_BUTTON;
+            dangerButton.leftNeighborID = REGION_BACK_BUTTON;
+            dangerButton.rightNeighborID = REGION_PURCHASE_BUTTON;
 
-            ExtraButtons.Add(dieBackground, () => { });
-            ExtraButtons.Add(dieButton, () =>
+            ExtraButtons.Add(dangerBackground, () => { });
+            ExtraButtons.Add(dangerButton, () =>
             {
                 _trapManager.ExecuteTrapImmediately("Monsters Trap");
                 exitThisMenu();
@@ -794,7 +794,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             var chestsScale = 3f;
 
             var commonButtonRect = new Rectangle(xStart, y, 72, 72);
-            var commonBackground = new ClickableTextureComponent(commonButtonRect, NoteTexture, buttonBackgroundRectangle, buttonScale);
+            var commonBackground = new BundleButton(commonButtonRect, NoteTexture, buttonBackgroundRectangle, buttonScale);
             var commonTextureRect = new Rectangle(64, 1952, 32, 32);
             var commonRect = GetCenteredTexture(commonButtonRect, commonTextureRect, buttonScale, chestsScale);
             var commonButton = new BundleButton(commonRect, Game1.mouseCursors, commonTextureRect, chestsScale);
@@ -804,7 +804,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             commonButton.SetPressAnimation(Game1.mouseCursors, commonTextureRect, new Vector2(32, 0), 4);
 
             var rareButtonRect = new Rectangle(xStart + xPerButton, y, 72, 72);
-            var rareBackground = new ClickableTextureComponent(rareButtonRect, NoteTexture, buttonBackgroundRectangle, buttonScale);
+            var rareBackground = new BundleButton(rareButtonRect, NoteTexture, buttonBackgroundRectangle, buttonScale);
             var rareTextureRect = new Rectangle(64, 1920, 32, 32);
             var rareRect = GetCenteredTexture(rareButtonRect, rareTextureRect, buttonScale, chestsScale);
             var rareButton = new BundleButton(rareRect, Game1.mouseCursors, rareTextureRect, chestsScale);
@@ -814,7 +814,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             rareButton.SetPressAnimation(Game1.mouseCursors, rareTextureRect, new Vector2(32, 0), 4);
 
             var legendaryButtonRect = new Rectangle(xStart + (xPerButton * 2), y, 72, 72);
-            var legendaryBackground = new ClickableTextureComponent(legendaryButtonRect, NoteTexture, buttonBackgroundRectangle, buttonScale);
+            var legendaryBackground = new BundleButton(legendaryButtonRect, NoteTexture, buttonBackgroundRectangle, buttonScale);
             var legendaryTextureRect = new Rectangle(256, 75, 32, 32);
             var legendaryRect = GetCenteredTexture(legendaryButtonRect, legendaryTextureRect, buttonScale, chestsScale);
             var legendaryButton = new BundleButton(legendaryRect, Game1.mouseCursors_1_6, legendaryTextureRect, chestsScale);
