@@ -129,6 +129,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             {
                 return IsValidItemForOffYourBackIngredientDescription(item, ingredient);
             }
+            if (name == MemeBundleNames.COMMITMENT)
+            {
+                var baseValid = base.IsValidItemForThisIngredientDescription(item, ingredient, ingredientIndex, parentMenu);
+                if (!baseValid)
+                {
+                    return baseValid;
+                }
+                return IsValidItemForCommitmentIngredientDescription(item, ingredient);
+            }
             if (name == MemeBundleNames.IKEA && ingredientIndex >= Ingredients.Count)
             {
                 return false;
@@ -172,6 +181,36 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             if (item is Ring ring && (ingredient.id == MemeIDProvider.WORN_LEFT_RING || ingredient.id == MemeIDProvider.WORN_RIGHT_RING))
             {
                 return true;
+            }
+
+            return false;
+        }
+
+        private static bool IsValidItemForCommitmentIngredientDescription(Item item, BundleIngredientDescription ingredient)
+        {
+            if (item == null || ingredient.completed)
+            {
+                return false;
+            }
+
+            if (item.QualifiedItemId == QualifiedItemIds.BOUQUET)
+            {
+                return Game1.player.friendshipData.Values.Any(x => x.IsDating());
+            }
+
+            if (item.QualifiedItemId == QualifiedItemIds.MERMAID_PENDANT)
+            {
+                return Game1.player.friendshipData.Values.Any(x => x.IsMarried());
+            }
+
+            if (item.QualifiedItemId == QualifiedItemIds.WILTED_BOUQUET)
+            {
+                return Game1.player.friendshipData.Values.Any(x => x.IsDivorced());
+            }
+
+            if (item.QualifiedItemId == QualifiedItemIds.ANCIENT_DOLL)
+            {
+                return Game1.stats.Get("childrenTurnedToDoves") >= ingredient.stack;
             }
 
             return false;

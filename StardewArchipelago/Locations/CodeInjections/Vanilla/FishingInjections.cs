@@ -103,7 +103,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             try
             {
-                if (!__instance.fadeOut || __instance.scale > 0.0 || __instance.distanceFromCatching > 0.05)
+                if (!__instance.fadeOut || __instance.scale > 0.05 || __instance.distanceFromCatching > 0.05)
                 {
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }

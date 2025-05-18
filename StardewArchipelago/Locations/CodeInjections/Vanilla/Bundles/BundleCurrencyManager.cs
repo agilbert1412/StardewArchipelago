@@ -288,7 +288,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         private void DrawUncaughtFishCurrency()
         {
-            DrawSpecialCurrency(_wallet.UncaughtFishById.Sum(x => x.Value), Game1.mouseCursors, new Rectangle(614, 1840, 20, 20), 2f);
+            DrawSpecialCurrency(_wallet.MissedFishById.Sum(x => x.Value), Game1.mouseCursors, new Rectangle(614, 1840, 20, 20), 2f);
         }
 
         private void DrawChildrenCurrency()
@@ -513,20 +513,20 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         private void TryPurchaseCurrentBundleWithUncaughtFish(BundleIngredientDescription ingredient)
         {
-            TryPurchaseCurrentBundleWithWalletCurrency(ingredient, _wallet.UncaughtFishById.Sum(x => x.Value), payAmount =>
+            TryPurchaseCurrentBundleWithWalletCurrency(ingredient, _wallet.MissedFishById.Sum(x => x.Value), payAmount =>
             {
                 var keepLooping = true;
                 while (payAmount > 0 && keepLooping)
                 {
                     keepLooping = false;
-                    foreach (var key in _wallet.UncaughtFishById.Keys)
+                    foreach (var key in _wallet.MissedFishById.Keys)
                     {
-                        if (_wallet.UncaughtFishById[key] <= 0)
+                        if (_wallet.MissedFishById[key] <= 0)
                         {
                             continue;
                         }
 
-                        _wallet.UncaughtFishById[key]--;
+                        _wallet.MissedFishById[key]--;
                         payAmount--;
                         keepLooping = true;
                         break;

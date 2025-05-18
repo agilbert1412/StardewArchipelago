@@ -67,6 +67,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 ShowObjectThrownIntoWaterAnimation(__instance, who, who.ActiveObject, () =>
                 {
                     Game1.playSound("jingle1");
+                    ArchipelagoJunimoNoteMenu.CompleteBundleIfExists(MemeBundleNames.HONEYWELL);
                 });
                 who.reduceActiveItemByOne();
                 __result = true;
