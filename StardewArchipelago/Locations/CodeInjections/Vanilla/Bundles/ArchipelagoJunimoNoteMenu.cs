@@ -33,6 +33,7 @@ using Object = StardewValley.Object;
 using Archipelago.MultiClient.Net.Models;
 using StardewModdingAPI.Events;
 using Color = Microsoft.Xna.Framework.Color;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Gacha;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 {
@@ -66,6 +67,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         internal static string IkeaItemQualifiedId = "";
         private Hint[] _hintsForMe;
         private Hint[] _hintsFromMe;
+        private GachaResolver _gachaResolver;
 
         public Texture2D MemeTexture;
         private ClickableTextureComponent _donateButton;
@@ -619,6 +621,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 case MemeBundleNames.COOKIE_CLICKER:
                     SetUpCookiesButtons();
                     break;
+                case MemeBundleNames.GACHA:
+                    SetUpGachaButtons();
+                    break;
                 case MemeBundleNames.DEATH:
                     SetUpMonstersButton();
                     break;
@@ -640,6 +645,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 return;
             }
             if (CurrentPageBundle.name == MemeBundleNames.HIBERNATION)
+            {
+                return;
+            }
+            if (CurrentPageBundle.name == MemeBundleNames.GACHA)
             {
                 return;
             }
@@ -768,6 +777,67 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 _trapManager.ExecuteTrapImmediately("Monsters Trap");
                 exitThisMenu();
             });
+        }
+
+        private void SetUpGachaButtons()
+        {
+            if (FromGameMenu)
+            {
+                return;
+            }
+
+            var buttonBackgroundRectangle = new Rectangle(512, 244, 18, 18);
+            var xStart = xPositionOnScreen + 800;
+            var xPerButton = 100;
+            var y = yPositionOnScreen + 335;
+            var buttonScale = 4f;
+            var chestsScale = 3f;
+
+            var commonButtonRect = new Rectangle(xStart, y, 72, 72);
+            var commonBackground = new ClickableTextureComponent(commonButtonRect, NoteTexture, buttonBackgroundRectangle, buttonScale);
+            var commonTextureRect = new Rectangle(64, 1952, 32, 32);
+            var commonRect = GetCenteredTexture(commonButtonRect, commonTextureRect, buttonScale, chestsScale);
+            var commonButton = new BundleButton(commonRect, Game1.mouseCursors, commonTextureRect, chestsScale);
+            commonButton.myID = 793;
+            commonButton.hoverText = "Common Chest";
+            commonButton.SetDrawOffset(new Vector2(-2, -18));
+            commonButton.SetPressAnimation(Game1.mouseCursors, commonTextureRect, new Vector2(32, 0), 4);
+
+            var rareButtonRect = new Rectangle(xStart + xPerButton, y, 72, 72);
+            var rareBackground = new ClickableTextureComponent(rareButtonRect, NoteTexture, buttonBackgroundRectangle, buttonScale);
+            var rareTextureRect = new Rectangle(64, 1920, 32, 32);
+            var rareRect = GetCenteredTexture(rareButtonRect, rareTextureRect, buttonScale, chestsScale);
+            var rareButton = new BundleButton(rareRect, Game1.mouseCursors, rareTextureRect, chestsScale);
+            rareButton.myID = 794;
+            rareButton.hoverText = "Rare Chest";
+            rareButton.SetDrawOffset(new Vector2(-2, -18));
+            rareButton.SetPressAnimation(Game1.mouseCursors, rareTextureRect, new Vector2(32, 0), 4);
+
+            var legendaryButtonRect = new Rectangle(xStart + (xPerButton * 2), y, 72, 72);
+            var legendaryBackground = new ClickableTextureComponent(legendaryButtonRect, NoteTexture, buttonBackgroundRectangle, buttonScale);
+            var legendaryTextureRect = new Rectangle(256, 75, 32, 32);
+            var legendaryRect = GetCenteredTexture(legendaryButtonRect, legendaryTextureRect, buttonScale, chestsScale);
+            var legendaryButton = new BundleButton(legendaryRect, Game1.mouseCursors_1_6, legendaryTextureRect, chestsScale);
+            legendaryButton.myID = 795;
+            legendaryButton.hoverText = "Legendary Chest";
+            legendaryButton.SetDrawOffset(new Vector2(0, -6));
+            legendaryButton.SetPressAnimation(Game1.mouseCursors_1_6, legendaryTextureRect, new Vector2(32, 0), 4);
+
+            commonButton.leftNeighborID = REGION_BACK_BUTTON;
+            commonButton.rightNeighborID = rareButton.myID;
+            rareButton.leftNeighborID = commonButton.myID;
+            rareButton.rightNeighborID = legendaryButton.myID;
+            legendaryButton.leftNeighborID = rareButton.myID;
+            legendaryButton.rightNeighborID = REGION_PURCHASE_BUTTON;
+
+            _gachaResolver = new GachaResolver(CurrentPageBundle.Ingredients.First().stack);
+
+            ExtraButtons.Add(rareBackground, () => { });
+            ExtraButtons.Add(commonBackground, () => { });
+            ExtraButtons.Add(legendaryBackground, () => { });
+            ExtraButtons.Add(commonButton, () => _gachaResolver.PressButton(commonButton, GachaRoller.COMMON_PRICE, this));
+            ExtraButtons.Add(rareButton, () => _gachaResolver.PressButton(rareButton, GachaRoller.RARE_PRICE, this));
+            ExtraButtons.Add(legendaryButton, () => _gachaResolver.PressButton(legendaryButton, GachaRoller.LEGENDARY_PRICE, this));
         }
 
         private static Rectangle GetCenteredTexture(Rectangle buttonRect, Rectangle textureRect, float buttonScale, float textureScale)

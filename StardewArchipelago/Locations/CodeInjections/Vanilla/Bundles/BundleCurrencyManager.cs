@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -7,6 +6,7 @@ using StardewArchipelago.Archipelago;
 using StardewArchipelago.Bundles;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Vanilla;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Gacha;
 using StardewValley.Menus;
 using StardewValley;
 using StardewArchipelago.Logging;
@@ -71,8 +71,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         {
             var amountText = $"{ingredient.stack}";
 
-            var memeBundlesThatShouldDisplayMoney = new[] { MemeBundleNames.COMMUNISM, MemeBundleNames.CLICKBAIT };
-            if (ingredientId == IDProvider.MONEY && memeBundlesThatShouldDisplayMoney.Contains(_menu.CurrentPageBundle.name) )
+            var memeBundlesThatShouldDisplayMoney = new[] { MemeBundleNames.COMMUNISM, MemeBundleNames.CLICKBAIT, MemeBundleNames.GACHA };
+            if (_menu.CurrentPageBundle.name == MemeBundleNames.GACHA)
+            {
+                Game1.dayTimeMoneyBox.drawMoneyBox(b);
+                DrawGachaPrices(b);
+                amountText = "";
+            }
+            else if (ingredientId == IDProvider.MONEY && memeBundlesThatShouldDisplayMoney.Contains(_menu.CurrentPageBundle.name) )
             {
                 Game1.dayTimeMoneyBox.drawMoneyBox(b);
                 amountText += "g";
@@ -251,6 +257,22 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             DrawText(spriteBatch, $"{_wallet.CookieClicker.CursorUpgrades}", cursorAmountX, amountsY, font);
             DrawText(spriteBatch, $"{_wallet.CookieClicker.Grandmas}", grandmaAmountX, amountsY, font);
             DrawText(spriteBatch, $"cost: {_wallet.CookieClicker.GetGrandmaUpgradePrice()}", grandmaPriceX, pricesY, font);
+        }
+
+        private void DrawGachaPrices(SpriteBatch spriteBatch)
+        {
+            var pricesY = 410;
+            var centeredX = 936;
+            var pricesXOffset = 100;
+            var commonPriceX = centeredX - pricesXOffset;
+            var rarePriceX = centeredX;
+            var legendaryPriceX = centeredX + pricesXOffset;
+
+            var font = Game1.smallFont;
+            
+            DrawText(spriteBatch, $"{GachaRoller.COMMON_PRICE}g", commonPriceX, pricesY, font);
+            DrawText(spriteBatch, $"{GachaRoller.RARE_PRICE}g", rarePriceX, pricesY, font);
+            DrawText(spriteBatch, $"{GachaRoller.LEGENDARY_PRICE}g", legendaryPriceX, pricesY, font);
         }
 
         private void DrawDeadCropsCurrency()

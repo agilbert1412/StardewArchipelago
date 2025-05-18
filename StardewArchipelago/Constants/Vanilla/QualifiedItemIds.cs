@@ -237,6 +237,18 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string GOLD_LEWIS = BigCraftableId(BigCraftableIds.GOLD_LEWIS);
         public static readonly string WOOD = QualifiedObjectId(ObjectIds.WOOD);
         public static readonly string HONEY = QualifiedObjectId(ObjectIds.HONEY);
+        public static readonly string FIBER = QualifiedObjectId(ObjectIds.FIBER);
+        public static readonly string SAP = QualifiedObjectId(ObjectIds.SAP);
+        public static readonly string EARTH_CRYSTAL = QualifiedObjectId(ObjectIds.EARTH_CRYSTAL);
+        public static readonly string QUARTZ = QualifiedObjectId(ObjectIds.QUARTZ);
+        public static readonly string FIRE_QUARTZ = QualifiedObjectId(ObjectIds.FIRE_QUARTZ);
+        public static readonly string GOLD_ORE = QualifiedObjectId(ObjectIds.GOLD_ORE);
+        public static readonly string IRIDIUM_ORE = QualifiedObjectId(ObjectIds.IRIDIUM_ORE);
+        public static readonly string RADIOACTIVE_ORE = QualifiedObjectId(ObjectIds.RADIOACTIVE_ORE);
+        public static readonly string COPPER_BAR = QualifiedObjectId(ObjectIds.COPPER_BAR);
+        public static readonly string IRON_BAR = QualifiedObjectId(ObjectIds.IRON_BAR);
+        public static readonly string LUCKY_PURPLE_SHORTS = QualifiedObjectId(ObjectIds.LUCKY_PURPLE_SHORTS);
+        public static readonly string RADIOACTIVE_BAR = QualifiedObjectId(ObjectIds.RADIOACTIVE_BAR);
 
         public static string QualifiedObjectId(string objectId)
         {

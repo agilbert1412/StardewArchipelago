@@ -39,5 +39,6 @@ namespace StardewArchipelago.Bundles
         public const string CROWDFUNDING = "Crowdfunding";
         public const string COMMUNISM = "Communism";
         public const string HIBERNATION = "Hibernation";
+        public const string GACHA = "Gacha";
     }
 }

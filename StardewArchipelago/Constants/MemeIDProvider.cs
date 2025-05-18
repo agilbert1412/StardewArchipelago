@@ -33,6 +33,12 @@ namespace StardewArchipelago.Constants
 
         public static readonly string FUN_TRAP = IDProvider.CreateId("FunTrap");
 
+        public static readonly string T1_ITEM = IDProvider.CreateId("T1Item");
+        public static readonly string T2_ITEM = IDProvider.CreateId("T2Item");
+        public static readonly string T3_ITEM = IDProvider.CreateId("T3Item");
+        public static readonly string T4_ITEM = IDProvider.CreateId("T4Item");
+        public static readonly string T5_ITEM = IDProvider.CreateId("T5Item");
+
         public static readonly Dictionary<string, string> MemeItemIds = new()
         {
             { "Worn Boots", WORN_BOOTS },
