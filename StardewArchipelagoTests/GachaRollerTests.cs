@@ -6,7 +6,7 @@ namespace StardewArchipelagoTests
 {
     public class GachaRollerTests
     {
-        private const int _numberAttempts = 1000;
+        private const int _numberAttempts = 2000;
         private const double _acceptableLowerBound = 0.75;
         private const double _acceptableUpperBound = 2.25;
 

@@ -61,6 +61,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Gacha
                 Game1.createItemDebris(notAdded, Game1.player.Position, 0, Game1.currentLocation);
             }
         }
+
         private static void SendMessageAndPlaySound(string chest, string messageResult, string sound, int rewardTier)
         {
             var message = $"Opened {chest}: {messageResult} [Tier {rewardTier}]";
