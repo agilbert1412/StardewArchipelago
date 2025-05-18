@@ -54,7 +54,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Gacha
                 return;
             }
 
-            SendMessageAndPlaySound(button.hoverText, $" {item.Name}!", "newArtifact", tierRolled);
+            SendMessageAndPlaySound(button.hoverText, $" {item.Name}!", tierRolled >= 4 ? "discoverMineral" : "newArtifact", tierRolled);
             var notAdded = Game1.player.addItemToInventory(item);
             if (notAdded != null)
             {
