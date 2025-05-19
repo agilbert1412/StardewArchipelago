@@ -1337,6 +1337,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                     if (IngredientSlots[i].containsPoint(x, y))
                     {
                         _bundleBundleIndex = i - startIndex;
+                        Game1.playSound("shwip");
                         return true;
                     }
                 }
