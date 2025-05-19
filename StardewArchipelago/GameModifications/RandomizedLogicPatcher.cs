@@ -35,6 +35,7 @@ using StardewArchipelago.Locations;
 using StardewArchipelago.Logging;
 using StardewValley.TerrainFeatures;
 using StardewArchipelago.GameModifications.MoveLink;
+using StardewArchipelago.Locations.Secrets;
 
 namespace StardewArchipelago.GameModifications
 {
@@ -91,6 +92,7 @@ namespace StardewArchipelago.GameModifications
             EmptyHandInjections.Initialize(logger, archipelago, stardewItemManager);
             MovementInjections.Initialize(logger, archipelago);
             BundleMenuInjection.Initialize(logger, modHelper, archipelago, state, locationChecker, bundleReader);
+            GarbageInjections.Initialize(logger, archipelago);
             DebugPatchInjections.Initialize(logger, archipelago);
             _jojaDisabler = new JojaDisabler(logger, modHelper, harmony);
         }
@@ -774,6 +776,11 @@ namespace StardewArchipelago.GameModifications
             _harmony.Patch(
                 original: AccessTools.PropertySetter(typeof(Game1), nameof(Game1.activeClickableMenu)),
                 prefix: new HarmonyMethod(typeof(BundleMenuInjection), nameof(BundleMenuInjection.SetActiveClickableMenu_UseJunimoNoteMenuRemake_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.TryGetGarbageItem)),
+                postfix: new HarmonyMethod(typeof(GarbageInjections), nameof(GarbageInjections.TryGetGarbageItem_TagItemWithTrash_Postfix))
             );
 
             // This is no longer necessary, now we use the JunimoNoteMenuRemake

@@ -15,6 +15,7 @@ using StardewArchipelago.Constants;
 using StardewValley.Locations;
 using StardewValley.Objects;
 using System.Linq;
+using StardewArchipelago.GameModifications.CodeInjections;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 {
@@ -151,6 +152,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 {
                     return false;
                 }
+            }
+            if (name == MemeBundleNames.LOSER_CLUB && ingredient.id == MemeIDProvider.TRASH_TUNA)
+            {
+                
+                if (item == null || item.QualifiedItemId != QualifiedItemIds.TUNA || item.modData == null || !item.modData.ContainsKey(GarbageInjections.FROM_TRASH_KEY))
+                {
+                    return false;
+                }
+
+                return bool.TryParse(item.modData[GarbageInjections.FROM_TRASH_KEY], out var fromTrash) && fromTrash;
             }
 
             return base.IsValidItemForThisIngredientDescription(item, ingredient, ingredientIndex, parentMenu);

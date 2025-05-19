@@ -298,6 +298,7 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string MERMAID_PENDANT = QualifiedObjectId(ObjectIds.MERMAIDS_PENDANT);
         public static readonly string WILTED_BOUQUET = QualifiedObjectId(ObjectIds.WILTED_BOUQUET);
         public static readonly string ANCIENT_DOLL = QualifiedObjectId(ObjectIds.ANCIENT_DOLL);
+        public static readonly string TUNA = QualifiedObjectId(ObjectIds.TUNA);
 
         public static string QualifiedObjectId(string objectId)
         {

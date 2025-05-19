@@ -27,6 +27,10 @@ namespace StardewArchipelago.Registry.Definition
             {
                 _texture = ArchipelagoTextures.GetArchipelagoLogo(32, ArchipelagoTextures.RED);
             }
+            else if (ItemId == MemeIDProvider.TRASH_TUNA)
+            {
+                _texture = Game1.objectSpriteSheet;
+            }
             else
             {
                 _texture = ArchipelagoTextures.GetArchipelagoLogo(_textureSize, ArchipelagoTextures.COLOR);
@@ -43,6 +47,10 @@ namespace StardewArchipelago.Registry.Definition
             if (ItemId == MemeIDProvider.FUN_TRAP)
             {
                 return new Rectangle(0, 0, 32, 32);
+            }
+            else if (ItemId == MemeIDProvider.FUN_TRAP)
+            {
+                return new Rectangle(160, 80, 16, 16);
             }
             else
             {

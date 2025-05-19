@@ -42,5 +42,6 @@ namespace StardewArchipelago.Bundles
         public const string GACHA = "Gacha";
         public const string ASMR = "ASMR";
         public const string COMMITMENT = "Commitment";
+        public const string LOSER_CLUB = "Loser Club";
     }
 }

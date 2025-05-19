@@ -23,6 +23,7 @@ namespace StardewArchipelago.Constants
         public static readonly string HONEYWELL = IDProvider.CreateId("HoneyInWell");
         public static readonly string BANK_MONEY = IDProvider.CreateId("BankMoney");
         public static readonly string SLEEP_DAYS = IDProvider.CreateId("SleepDays");
+        public static readonly string DEATHLINKS = IDProvider.CreateId("DeathLinks");
 
         public static readonly string WORN_BOOTS = IDProvider.CreateId("WornBoots");
         public static readonly string WORN_SHIRT = IDProvider.CreateId("WornShirt");
@@ -32,12 +33,7 @@ namespace StardewArchipelago.Constants
         public static readonly string WORN_RIGHT_RING = IDProvider.CreateId("WornRightRing");
 
         public static readonly string FUN_TRAP = IDProvider.CreateId("FunTrap");
-
-        public static readonly string T1_ITEM = IDProvider.CreateId("T1Item");
-        public static readonly string T2_ITEM = IDProvider.CreateId("T2Item");
-        public static readonly string T3_ITEM = IDProvider.CreateId("T3Item");
-        public static readonly string T4_ITEM = IDProvider.CreateId("T4Item");
-        public static readonly string T5_ITEM = IDProvider.CreateId("T5Item");
+        public static readonly string TRASH_TUNA = IDProvider.CreateId("TrashTuna");
 
         public static readonly Dictionary<string, string> MemeItemIds = new()
         {
@@ -48,6 +44,7 @@ namespace StardewArchipelago.Constants
             { "Worn Left Ring", WORN_LEFT_RING },
             { "Worn Right Ring", WORN_RIGHT_RING },
             { "Fun Trap", FUN_TRAP },
+            { "Trash Tuna", TRASH_TUNA },
         };
 
         public static readonly Dictionary<string, string> MemeItemNames = new()
@@ -59,6 +56,7 @@ namespace StardewArchipelago.Constants
             { WORN_LEFT_RING, "Worn Left Ring" },
             { WORN_RIGHT_RING, "Worn Right Ring" },
             { FUN_TRAP, "Fun Trap" },
+            { TRASH_TUNA, "Trash Tuna" },
         };
     }
 }
