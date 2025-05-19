@@ -1930,7 +1930,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 {
                     return;
                 }
-                DrawBundleLabel(b, xPositionOnScreen + 936, yPositionOnScreen + 100 + SlidingPuzzleHandler.IMAGE_SIZE, 8);
+                DrawBundleLabel(b, xPositionOnScreen + 936, yPositionOnScreen + 120 + SlidingPuzzleHandler.IMAGE_SIZE, 8);
                 return;
             }
             base.DrawBundleLabel(b);
