@@ -2084,43 +2084,49 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
         protected Point GetBundleLocationFromNumber(int whichBundle)
         {
             var locationFromNumber = new Point(xPositionOnScreen, yPositionOnScreen);
+            var centerX = 588;
+            var centerY = 276;
             switch (whichBundle)
             {
                 case 0:
-                    locationFromNumber.X += 592;
-                    locationFromNumber.Y += 136;
+                    locationFromNumber.X += centerX;
+                    locationFromNumber.Y += centerY - 116;
                     break;
                 case 1:
-                    locationFromNumber.X += 392;
-                    locationFromNumber.Y += 384;
+                    locationFromNumber.X += centerX - 200;
+                    locationFromNumber.Y += centerY + 128;
                     break;
                 case 2:
-                    locationFromNumber.X += 784;
-                    locationFromNumber.Y += 388;
+                    locationFromNumber.X += centerX + 200;
+                    locationFromNumber.Y += centerY + 128;
                     break;
                 case 3:
-                    locationFromNumber.X += 304;
-                    locationFromNumber.Y += 252;
+                    locationFromNumber.X += centerX - 288;
+                    locationFromNumber.Y += centerY;
                     break;
                 case 4:
-                    locationFromNumber.X += 892;
-                    locationFromNumber.Y += 252;
+                    locationFromNumber.X += centerX + 288;
+                    locationFromNumber.Y += centerY;
                     break;
                 case 5:
-                    locationFromNumber.X += 588;
-                    locationFromNumber.Y += 276;
+                    locationFromNumber.X += centerX;
+                    locationFromNumber.Y += centerY;
                     break;
                 case 6:
-                    locationFromNumber.X += 588;
-                    locationFromNumber.Y += 380;
+                    locationFromNumber.X += centerX;
+                    locationFromNumber.Y += centerY + 104;
                     break;
                 case 7:
-                    locationFromNumber.X += 440;
-                    locationFromNumber.Y += 164;
+                    locationFromNumber.X += centerX - 144;
+                    locationFromNumber.Y += centerY - 112;
                     break;
                 case 8:
-                    locationFromNumber.X += 776;
-                    locationFromNumber.Y += 164;
+                    locationFromNumber.X += centerX + 144;
+                    locationFromNumber.Y += centerY - 112;
+                    break;
+                case 9:
+                    locationFromNumber.X += centerX;
+                    locationFromNumber.Y += centerY + 144;
                     break;
             }
             return locationFromNumber;

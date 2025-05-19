@@ -94,6 +94,8 @@ namespace StardewArchipelago.Archipelago.Gifting
                 return false;
             }
 
+            slotName = MemeBundleNames.COOPERATION + " Bundle";
+
             if (!ArchipelagoJunimoNoteMenu.IsBundleRemaining(MemeBundleNames.COOPERATION))
             {
                 return false;
