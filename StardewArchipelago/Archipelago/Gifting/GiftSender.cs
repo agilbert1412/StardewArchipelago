@@ -9,6 +9,8 @@ using StardewArchipelago.Stardew;
 using StardewValley;
 using Object = StardewValley.Object;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using StardewArchipelago.Bundles;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
 
 namespace StardewArchipelago.Archipelago.Gifting
 {
@@ -29,6 +31,11 @@ namespace StardewArchipelago.Archipelago.Gifting
         {
             try
             {
+                if (TrySendGiftToBundle(slotName))
+                {
+                    return;
+                }
+
                 if (!_archipelago.PlayerExists(slotName))
                 {
                     Game1.chatBox?.addMessage($"Could not find player named {slotName}", Color.Gold);
@@ -78,6 +85,45 @@ namespace StardewArchipelago.Archipelago.Gifting
                 Game1.chatBox?.addMessage($"Could not complete gifting operation. Check SMAPI for error details.", Color.Red);
                 return;
             }
+        }
+        private bool TrySendGiftToBundle(string slotName)
+        {
+            if (!slotName.Equals("Bundle", StringComparison.InvariantCultureIgnoreCase) &&
+                !slotName.Equals("Cooperation Bundle", StringComparison.InvariantCultureIgnoreCase))
+            {
+                return false;
+            }
+
+            if (!ArchipelagoJunimoNoteMenu.IsBundleRemaining(MemeBundleNames.COOPERATION))
+            {
+                return false;
+            }
+
+            var giftObject = Game1.player.ActiveObject;
+            var tax = GetTaxForItem(giftObject, out var itemValue, out var taxRate);
+            tax *= 2;
+            taxRate *= 2;
+            if (Game1.player.Money < tax)
+            {
+                GiveCantAffordTaxFeedbackToPlayer(itemValue, tax, taxRate);
+                return true;
+            }
+
+            var donatedAmount = ArchipelagoJunimoNoteMenu.TryDonateToBundle(MemeBundleNames.COOPERATION, giftObject.Name, giftObject.Stack);
+            if (donatedAmount <= 0)
+            {
+                return false;
+            }
+
+            Game1.player.Money -= tax;
+            GiveJojaPrimeInformationToPlayer(slotName, "gift", giftObject.Name, donatedAmount);
+            GiveTaxFeedbackToPlayer(slotName, tax);
+            Game1.player.ActiveObject.Stack -= donatedAmount;
+            if (Game1.player.ActiveObject.Stack <= 0)
+            {
+                Game1.player.ActiveObject = null;
+            }
+            return true;
         }
 
         private int GetTaxForItem(Object giftObject)
@@ -223,12 +269,17 @@ namespace StardewArchipelago.Archipelago.Gifting
 
         private void GiveJojaPrimeInformationToPlayer(string recipient, string giftOrTrap, GiftItem giftItem)
         {
+            GiveJojaPrimeInformationToPlayer(recipient, giftOrTrap, giftItem.Name, giftItem.Amount);
+        }
+
+        private void GiveJojaPrimeInformationToPlayer(string recipient, string giftOrTrap, string giftName, int giftAmount)
+        {
             if (IsAyeishaHere(out _))
             {
                 return;
             }
 
-            Game1.chatBox?.addMessage($"{recipient} will receive your {giftOrTrap} of {giftItem.Amount} {giftItem.Name} within 1 business day", Color.Gold);
+            Game1.chatBox?.addMessage($"{recipient} will receive your {giftOrTrap} of {giftAmount} {giftName} within 1 business day", Color.Gold);
         }
 
         private void GiveTaxFeedbackToPlayer(string recipient, int tax)

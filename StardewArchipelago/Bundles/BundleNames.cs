@@ -44,5 +44,6 @@ namespace StardewArchipelago.Bundles
         public const string COMMITMENT = "Commitment";
         public const string LOSER_CLUB = "Loser Club";
         public const string PUZZLE = "Puzzle";
+        public const string COOPERATION = "Cooperation";
     }
 }

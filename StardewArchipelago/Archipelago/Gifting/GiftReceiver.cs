@@ -6,7 +6,9 @@ using Archipelago.Gifting.Net.Versioning.Gifts.Current;
 using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Stardew;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using StardewArchipelago.Bundles;
 using StardewArchipelago.Items.Traps;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
 
 namespace StardewArchipelago.Archipelago.Gifting
 {
@@ -59,6 +61,15 @@ namespace StardewArchipelago.Archipelago.Gifting
             foreach (var (receivedGift, amount) in giftAmounts)
             {
                 var amountRemaining = amount;
+                var amountInBundle = TrySendGiftToBundle(receivedGift, amountRemaining);
+                if (amountInBundle > 0)
+                {
+                    amountRemaining -= amountInBundle;
+                    if (amountRemaining <= 0)
+                    {
+                        continue;
+                    }
+                }
                 while (amountRemaining > 0)
                 {
                     amountRemaining = SendGiftMail(giftIds, receivedGift, amountRemaining);
@@ -132,6 +143,16 @@ namespace StardewArchipelago.Archipelago.Gifting
         private string GetMailKey(IEnumerable<string> ids, int amount)
         {
             return $"APGift;{string.Join(";", ids)};{amount}";
+        }
+
+        public int TrySendGiftToBundle(ReceivedGift receivedGift, int amount)
+        {
+            if (!ArchipelagoJunimoNoteMenu.IsBundleRemaining(MemeBundleNames.COOPERATION))
+            {
+                return 0;
+            }
+
+            return ArchipelagoJunimoNoteMenu.TryDonateToBundle(MemeBundleNames.COOPERATION, receivedGift.ItemName, amount);
         }
     }
 }

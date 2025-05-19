@@ -1,6 +1,6 @@
 ﻿namespace StardewArchipelago.Archipelago.Gifting
 {
-    internal class ReceivedGift
+    public class ReceivedGift
     {
         public string ItemName { get; }
         public int SenderSlot { get; }

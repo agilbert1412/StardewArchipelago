@@ -1831,7 +1831,61 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 return false;
             }
 
-            return !communityCenter.isBundleComplete(bundleIndex);
+            var isComplete = communityCenter.isBundleComplete(bundleIndex);
+            if (isComplete && _locationChecker.IsLocationMissing($"{bundleName} Bundle"))
+            {
+                _locationChecker.AddCheckedLocation(bundleName);
+            }
+            return !isComplete;
+        }
+
+        public static int TryDonateToBundle(string bundleName, string itemName, int itemAmount)
+        {
+            var bundleIndex = GetBundleId(bundleName, out var communityCenter);
+            if (bundleIndex <= -1)
+            {
+                return 0;
+            }
+
+            var desiredBundleKey = "";
+            var desiredBundleData = "";
+            foreach (var (bundleKey, bundleData) in Game1.netWorldState.Value.BundleData)
+            {
+                var name = bundleData.Split("/").First();
+                if (name == bundleName)
+                {
+                    desiredBundleKey = bundleKey;
+                    desiredBundleData = bundleData;
+                    break;
+                }
+            }
+
+            var bundleParts = desiredBundleData.Split("/");
+            var ingredientsData = bundleParts[2];
+            var ingredientFields = ingredientsData.Split(" ");
+            var requiredDonations = string.IsNullOrWhiteSpace(bundleParts[4]) ? ingredientFields.Length / 3 : int.Parse(bundleParts[4]);
+            for (var i = 0; i < ingredientFields.Length; i += 3)
+            {
+                if (communityCenter.bundles.FieldDict[bundleIndex][i/3])
+                {
+                    continue;
+                }
+
+                var id = ingredientFields[i];
+                var amount = int.Parse(ingredientFields[i + 1]);
+                var requiredItem = ItemRegistry.Create(id);
+                if (itemName == requiredItem.Name && itemAmount >= amount)
+                {
+                    communityCenter.bundles.FieldDict[bundleIndex][i/3] = true;
+                    if (communityCenter.bundles.FieldDict[bundleIndex].Count(x => x) >= requiredDonations)
+                    {
+                        CompleteBundleIfExists(bundleName);
+                    }
+                    return amount;
+                }
+            }
+
+            return 0;
         }
 
         public static void CompleteBundleIfExists(string bundleName)

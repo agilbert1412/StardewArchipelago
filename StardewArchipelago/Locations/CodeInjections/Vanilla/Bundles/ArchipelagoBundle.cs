@@ -155,13 +155,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
             if (name == MemeBundleNames.LOSER_CLUB && ingredient.id == QualifiedItemIds.TUNA)
             {
-                
                 if (item == null || item.QualifiedItemId != QualifiedItemIds.TUNA || item.modData == null || !item.modData.ContainsKey(GarbageInjections.FROM_TRASH_KEY))
                 {
                     return false;
                 }
 
                 return bool.TryParse(item.modData[GarbageInjections.FROM_TRASH_KEY], out var fromTrash) && fromTrash;
+            }
+            if (name == MemeBundleNames.COOPERATION)
+            {
+                return false;
             }
 
             return base.IsValidItemForThisIngredientDescription(item, ingredient, ingredientIndex, parentMenu);

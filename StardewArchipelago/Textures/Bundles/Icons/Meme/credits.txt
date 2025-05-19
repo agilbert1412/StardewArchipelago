@@ -27,6 +27,7 @@ Commitment: Tinder Logo
 Communism: Communism logo
 Connection Bundle: Stock image modified by Kaito Kid with an Archipelago logo
 Cookie Clicker: Cookie Clicker Artwork
+Cooperation: Stock Image
 Crab Rave: Stardew Valley Screenshot
 Crap Pot: Emoji
 Death: Stardew Valley Artwork
@@ -60,6 +61,7 @@ Obelisks: Age of Mythology Screenshot
 Off Your Back: Clothes off my Back Logo
 Permit A38: Asterix Screenshot
 Potato: Kaito Kid, made from Stardew Valley Artwork
+Puzzle: Dynamically loads one of the other images
 Restraint Bundle: Screenshot from Spongebob
 Reverse: Modified Stardew Valley Screenshot
 Rick: Rick and Morty Screenshot
