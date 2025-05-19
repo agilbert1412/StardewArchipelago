@@ -1282,7 +1282,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             Game1.chatBox?.addMessage(message, Color.Gold);
         }
 
-        protected override bool CheckIfAllIngredientsAreDeposited()
+        internal override bool CheckIfAllIngredientsAreDeposited()
         {
             if (CurrentPageBundle.name == MemeBundleNames.REVERSE || CurrentPageBundle.name == MemeBundleNames.TRAP)
             {

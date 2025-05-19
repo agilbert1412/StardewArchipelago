@@ -1170,7 +1170,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             }
         }
 
-        protected virtual bool CheckIfAllIngredientsAreDeposited()
+        internal virtual bool CheckIfAllIngredientsAreDeposited()
         {
             var num = 0;
             foreach (var ingredientSlot in IngredientSlots)

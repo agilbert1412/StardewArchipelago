@@ -281,6 +281,29 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             {
                 _state.QualifiedIdsClothesDonated.Add(item.QualifiedItemId);
             }
+            if (name == MemeBundleNames.POOL)
+            {
+                if (ingredientDescription1.stack != 8)
+                {
+                    return result;
+                }
+
+                if (parentMenu.CheckIfAllIngredientsAreDeposited())
+                {
+                    return result;
+                }
+
+                Ingredients = Ingredients.Select(x => new BundleIngredientDescription(x, false)).ToList();
+                communityCenter.bundleRewards[BundleIndex] = true;
+                for (var i = 0; i < communityCenter.bundles.FieldDict[BundleIndex].Length; i++)
+                {
+                    communityCenter.bundles.FieldDict[BundleIndex][i] = false;
+                }
+                foreach (var ingredientSlot in parentMenu.IngredientSlots)
+                {
+                    ingredientSlot.item = null;
+                }
+            }
             return result;
         }
     }
