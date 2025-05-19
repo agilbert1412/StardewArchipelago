@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Textures;
 using StardewModdingAPI;
 using StardewValley;
-using StardewValley.GameData.HomeRenovations;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 {
@@ -17,23 +12,24 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         public const int IMAGE_SIZE = 256;
         private const int OFFSET_X = 936 - (IMAGE_SIZE / 2);
         private const int OFFSET_Y = 88;
-        private const int SIZE = 4;
-        private const int NUMBER_OF_SQUARES = SIZE * SIZE;
+        private int _size;
+        private int NumberOfSquares => _size * _size;
         private Texture2D _backgroundTexture;
         private Rectangle _backgroundTextureSourceRect;
         private Texture2D _todayTexture;
         private int[] _squarePositions;
 
-        public SlidingPuzzleHandler(IModHelper modHelper, Texture2D backgroundTexture)
+        public SlidingPuzzleHandler(IModHelper modHelper, Texture2D backgroundTexture, int blockSize)
         {
+            _size = blockSize;
             _backgroundTexture = backgroundTexture;
             _backgroundTextureSourceRect = new Rectangle(0, 40, 120, 82);
             var allBundleTextures = BundleIcons.GetAllBundleIcons(modHelper);
             var random = Utility.CreateDaySaveRandom();
             var chosenTexture = allBundleTextures[random.Next(allBundleTextures.Count)];
             _todayTexture = chosenTexture;
-            _squarePositions = new int[NUMBER_OF_SQUARES];
-            for (var i = 0; i < NUMBER_OF_SQUARES; i++)
+            _squarePositions = new int[NumberOfSquares];
+            for (var i = 0; i < NumberOfSquares; i++)
             {
                 _squarePositions[i] = i;
             }
@@ -47,7 +43,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             const int NumberOfSwaps = 1000;
             for (int i = 0; i < NumberOfSwaps; i++)
             {
-                var indexMove = random.Next(NUMBER_OF_SQUARES);
+                var indexMove = random.Next(NumberOfSquares);
                 MoveSquare(indexMove);
             }
         }
@@ -59,7 +55,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             var backgroundY = yPositionOnScreen + 56;
             var backgroundPosition = new Vector2(backgroundX, backgroundY);
             spriteBatch.Draw(_backgroundTexture, backgroundPosition, _backgroundTextureSourceRect, Color.White, 0.0f, Vector2.Zero, backgroundScale, SpriteEffects.None, 0.15f);
-            for (var i = 0; i < NUMBER_OF_SQUARES; i++)
+            for (var i = 0; i < NumberOfSquares; i++)
             {
                 DrawPuzzleSquare(spriteBatch, i, xPositionOnScreen + OFFSET_X, yPositionOnScreen + OFFSET_Y);
             }
@@ -67,15 +63,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         private void DrawPuzzleSquare(SpriteBatch spriteBatch, int squareIndex, int originX, int originY)
         {
-            if (_squarePositions[squareIndex] == NUMBER_OF_SQUARES - 1)
+            if (_squarePositions[squareIndex] == NumberOfSquares - 1)
             {
                 return;
             }
 
-            var squareX = squareIndex % SIZE;
-            var squareY = squareIndex / SIZE;
-            var currentTextureX = _squarePositions[squareIndex] % SIZE;
-            var currentTextureY = _squarePositions[squareIndex] / SIZE;
+            var squareX = squareIndex % _size;
+            var squareY = squareIndex / _size;
+            var currentTextureX = _squarePositions[squareIndex] % _size;
+            var currentTextureY = _squarePositions[squareIndex] / _size;
             
 
             var x = originX + (ScaledSquareWidth * squareX);
@@ -97,7 +93,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
             var squareX = x / ScaledSquareWidth;
             var squareY = y / ScaledSquareWidth;
-            var squareIndex = squareY * SIZE + squareX;
+            var squareIndex = squareY * _size + squareX;
             if (!CanMoveSquare(squareIndex))
             {
                 return false;
@@ -109,7 +105,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         public bool IsPuzzleSolved()
         {
-            for (int i = 0; i < NUMBER_OF_SQUARES; i++)
+            for (int i = 0; i < NumberOfSquares; i++)
             {
                 if (_squarePositions[i] != i)
                 {
@@ -128,15 +124,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         public bool CanMoveSquare(int square, out int holePosition)
         {
             holePosition = GetHolePosition();
-            if (square < 0 || square >= NUMBER_OF_SQUARES || holePosition < 0 || holePosition >= NUMBER_OF_SQUARES || square == holePosition)
+            if (square < 0 || square >= NumberOfSquares || holePosition < 0 || holePosition >= NumberOfSquares || square == holePosition)
             {
                 return false;
             }
 
-            var squareX = square % SIZE;
-            var squareY = square / SIZE;
-            var holeX = holePosition % SIZE;
-            var holeY = holePosition / SIZE;
+            var squareX = square % _size;
+            var squareY = square / _size;
+            var holeX = holePosition % _size;
+            var holeY = holePosition / _size;
             if (squareX == holeX)
             {
                 return Math.Abs(squareY - holeY) == 1;
@@ -166,9 +162,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         public int GetHolePosition()
         {
-            for (var i = 0; i < NUMBER_OF_SQUARES; i++)
+            for (var i = 0; i < NumberOfSquares; i++)
             {
-                if (_squarePositions[i] == NUMBER_OF_SQUARES - 1)
+                if (_squarePositions[i] == NumberOfSquares - 1)
                 {
                     return i;
                 }
@@ -177,7 +173,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             throw new ArgumentException("No hole in the current puzzle. Something went very wrong");
         }
 
-        private int SquareWidth => _todayTexture.ActualWidth / SIZE;
+        private int SquareWidth => _todayTexture.ActualWidth / _size;
         private float SquareScale => (float)IMAGE_SIZE / (float)_todayTexture.ActualWidth;
         private int ScaledSquareWidth => (int)Math.Round(SquareWidth * SquareScale);
     }

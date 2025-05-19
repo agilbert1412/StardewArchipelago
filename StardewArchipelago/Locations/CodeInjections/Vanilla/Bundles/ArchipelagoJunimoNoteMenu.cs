@@ -1936,13 +1936,27 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             base.DrawBundleLabel(b);
         }
 
-        protected override void SetUpBundleSpecificPage(ArchipelagoBundle b)
+        protected override void SetUpBundleSpecificPage(ArchipelagoBundle bundle)
         {
-            base.SetUpBundleSpecificPage(b);
-            if (b.name == MemeBundleNames.PUZZLE)
+            base.SetUpBundleSpecificPage(bundle);
+            if (bundle.name == MemeBundleNames.PUZZLE)
             {
-                _slidingPuzzle = new SlidingPuzzleHandler(_modHelper, MemeTexture);
+                _slidingPuzzle = new SlidingPuzzleHandler(_modHelper, MemeTexture, GetSlidingPuzzleSize(bundle));
             }
+        }
+
+        private int GetSlidingPuzzleSize(ArchipelagoBundle bundle)
+        {
+            var stack = bundle.Ingredients.First().stack;
+            return stack switch
+            {
+                <= 1 => 2,
+                < 10 => 3,
+                10 => 4,
+                < 40 => 5,
+                >= 40 => 6,
+            };
+
         }
     }
 }

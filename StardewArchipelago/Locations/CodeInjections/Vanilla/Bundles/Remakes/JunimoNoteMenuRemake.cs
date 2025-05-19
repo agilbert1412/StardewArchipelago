@@ -1790,10 +1790,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             ingredientList.Add(textureComponent);
         }
 
-        protected virtual void SetUpBundleSpecificPage(ArchipelagoBundle b)
+        protected virtual void SetUpBundleSpecificPage(ArchipelagoBundle bundle)
         {
             TempSprites.Clear();
-            CurrentPageBundle = b;
+            CurrentPageBundle = bundle;
             SpecificBundlePage = true;
             if (IsBundleCurrencyBased())
             {
@@ -1801,7 +1801,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             }
             else
             {
-                SetUpIngredientButtons(b);
+                SetUpIngredientButtons(bundle);
             }
         }
 
