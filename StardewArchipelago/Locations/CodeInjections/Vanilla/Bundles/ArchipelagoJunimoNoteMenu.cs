@@ -20,17 +20,14 @@ using StardewArchipelago.Archipelago;
 using StardewArchipelago.Bundles;
 using StardewArchipelago.Logging;
 using StardewArchipelago.Serialization;
-using System.Reflection;
 using Microsoft.Xna.Framework.Input;
 using StardewArchipelago.Items.Traps;
 using StardewValley.ItemTypeDefinitions;
-using StardewValley.Minigames;
-using Microsoft.Xna.Framework.Graphics.PackedVector;
 using StardewArchipelago.Constants.Vanilla;
 using StardewValley.Objects;
-using Bundle = StardewArchipelago.Bundles.Bundle;
 using Object = StardewValley.Object;
 using Archipelago.MultiClient.Net.Models;
+using Microsoft.Xna.Framework.Audio;
 using StardewModdingAPI.Events;
 using Color = Microsoft.Xna.Framework.Color;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Gacha;
@@ -70,6 +67,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         private Hint[] _hintsFromMe;
         private GachaResolver _gachaResolver;
         private SlidingPuzzleHandler _slidingPuzzle;
+        private string[] _asmrCues = null;
+        private ICue _currentCue;
 
         public Texture2D MemeTexture;
         private BundleButton _donateButton;
@@ -875,6 +874,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                     return;
                 }
             }
+            if (_currentCue != null)
+            {
+                _currentCue.Stop(AudioStopOptions.Immediate);
+                _currentCue.Dispose();
+                _currentCue = null;
+            }
 
             base.TakeDownSpecificBundleComponents();
             _donateButton = null;
@@ -1541,14 +1546,29 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         public void OnUpdateTicked()
         {
-            if (!SpecificBundlePage || CurrentPageBundle == null || CurrentPageBundle.name != MemeBundleNames.NFT)
+            if (!SpecificBundlePage || CurrentPageBundle == null)
             {
                 return;
             }
 
-            if (DidPlayerJustScreenshot())
+            if (CurrentPageBundle.name == MemeBundleNames.NFT && DidPlayerJustScreenshot())
             {
                 PerformCurrencyPurchase();
+                return;
+            }
+            if (CurrentPageBundle.name == MemeBundleNames.ASMR)
+            {
+                if (_currentCue == null)
+                {
+                    return;
+                }
+
+                if (_currentCue.IsPlaying)
+                {
+                    return;
+                }
+
+                PlayNextASMR();
             }
         }
 
@@ -1997,6 +2017,67 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             {
                 _slidingPuzzle = new SlidingPuzzleHandler(_modHelper, MemeTexture, GetSlidingPuzzleSize(bundle));
             }
+            if (bundle.name == MemeBundleNames.ASMR)
+            {
+                StartPlayingASMR();
+            }
+        }
+
+        private void StartPlayingASMR()
+        {
+            RegisterASMRCues();
+            PlayNextASMR();
+        }
+
+        private void PlayNextASMR()
+        {
+            var nextIndex = 0;
+            if (_currentCue != null)
+            {
+                var currentName = _currentCue.Name;
+                var currentIndex = Array.IndexOf(_asmrCues, currentName);
+                nextIndex = currentIndex + 1;
+            }
+            if (nextIndex < _asmrCues.Length)
+            {
+                Game1.playSound(_asmrCues[nextIndex], out var cue);
+                _currentCue = cue;
+            }
+            else
+            {
+                _currentCue.Stop(AudioStopOptions.Immediate);
+                _currentCue.Dispose();
+                _currentCue = null;
+                if (CurrentPageBundle != null && CurrentPageBundle.name == MemeBundleNames.ASMR)
+                {
+                    PerformCurrencyPurchase();
+                }
+            }
+        }
+
+        private void RegisterASMRCues()
+        {
+            if (_asmrCues != null && _asmrCues.Any())
+            {
+                return;
+            }
+
+            var currentModFolder = _modHelper.DirectoryPath;
+            var soundsFolder = "Sounds";
+            var asmrFolder = "ASMR";
+            var relativePathToAsmrSounds = Path.Combine(currentModFolder, soundsFolder, asmrFolder);
+            var files = Directory.EnumerateFiles(relativePathToAsmrSounds, "*.wav", SearchOption.TopDirectoryOnly);
+            var cues = new List<string>();
+            foreach (var file in files)
+            {
+                var soundName = new FileInfo(file).Name;
+                var cueDefinition = new CueDefinition(soundName, SoundEffect.FromFile(file), 0);
+                Game1.soundBank.AddCue(cueDefinition);
+                cues.Add(soundName);
+            }
+
+            var random = Utility.CreateDaySaveRandom();
+            _asmrCues = cues.OrderBy(x => x.Contains("stardrop_asmr") ? 999 : random.NextDouble()).ToArray();
         }
 
         private int GetSlidingPuzzleSize(ArchipelagoBundle bundle)
