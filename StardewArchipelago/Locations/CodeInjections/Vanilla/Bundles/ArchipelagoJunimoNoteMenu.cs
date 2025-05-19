@@ -69,6 +69,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         private Hint[] _hintsForMe;
         private Hint[] _hintsFromMe;
         private GachaResolver _gachaResolver;
+        private SlidingPuzzleHandler _slidingPuzzle;
 
         public Texture2D MemeTexture;
         private BundleButton _donateButton;
@@ -610,10 +611,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             base.SetUpCurrencyButtons();
             switch (CurrentPageBundle.name)
             {
-                case MemeBundleNames.CLIQUE:
-                    // TODO: Clique Button
-                    // PurchaseButton.texture = null;
-                    break;
                 case MemeBundleNames.VAMPIRE:
                 case MemeBundleNames.EXHAUSTION:
                 case MemeBundleNames.TICK_TOCK:
@@ -655,6 +652,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 return;
             }
             if (CurrentPageBundle.name == MemeBundleNames.ASMR)
+            {
+                return;
+            }
+            if (CurrentPageBundle.name == MemeBundleNames.PUZZLE)
             {
                 return;
             }
@@ -1148,6 +1149,17 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                     return true;
                 }
             }
+            if (CurrentPageBundle.name == MemeBundleNames.PUZZLE)
+            {
+                if (_slidingPuzzle.ReceiveLeftClick(x - xPositionOnScreen, y - yPositionOnScreen))
+                {
+                    if (_slidingPuzzle.IsPuzzleSolved())
+                    {
+                        PerformCurrencyPurchase();
+                    }
+                    return true;
+                }
+            }
 
             return base.ReceiveLeftClickInSpecificBundlePage(x, y);
         }
@@ -1565,6 +1577,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                     hoverText = "Brain Totem";
                 }
             }
+            if (CurrentPageBundle.name == MemeBundleNames.LOSER_CLUB)
+            {
+                if (hoverText == "Tuna")
+                {
+                    hoverText = "Trash Tuna";
+                }
+            }
             return base.CreateIngredientButton(dataOrErrorItem, bounds, index, hoverText, flavoredItem);
         }
 
@@ -1890,6 +1909,39 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                     CompleteBundleIfExists(MemeBundleNames.HIBERNATION);
                 }
                 return;
+            }
+        }
+
+        protected override void DrawBundleTexture(SpriteBatch b)
+        {
+            if (CurrentPageBundle.name == MemeBundleNames.PUZZLE)
+            {
+                _slidingPuzzle.DrawPuzzle(b, xPositionOnScreen, yPositionOnScreen);
+                return;
+            }
+            base.DrawBundleTexture(b);
+        }
+
+        protected override void DrawBundleLabel(SpriteBatch b)
+        {
+            if (CurrentPageBundle.name == MemeBundleNames.PUZZLE)
+            {
+                if (CurrentPageBundle.label == null)
+                {
+                    return;
+                }
+                DrawBundleLabel(b, xPositionOnScreen + 936, yPositionOnScreen + 100 + SlidingPuzzleHandler.IMAGE_SIZE, 8);
+                return;
+            }
+            base.DrawBundleLabel(b);
+        }
+
+        protected override void SetUpBundleSpecificPage(ArchipelagoBundle b)
+        {
+            base.SetUpBundleSpecificPage(b);
+            if (b.name == MemeBundleNames.PUZZLE)
+            {
+                _slidingPuzzle = new SlidingPuzzleHandler(_modHelper, MemeTexture);
             }
         }
     }

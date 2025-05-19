@@ -1611,12 +1611,18 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             }
         }
 
-        protected void DrawCurrentPageBundle(SpriteBatch b)
+        protected virtual void DrawCurrentPageBundle(SpriteBatch b)
         {
             if (CurrentPageBundle == null)
             {
                 return;
             }
+            DrawBundleTexture(b);
+            DrawBundleLabel(b);
+        }
+
+        protected virtual void DrawBundleTexture(SpriteBatch b)
+        {
             var num1 = CurrentPageBundle.BundleIndex;
             var texture = NoteTexture;
             var num2 = BASE_HEIGHT;
@@ -1630,20 +1636,31 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                 num2 = 0;
             }
             var scale = 128f / texture.ActualWidth;
-            b.Draw(texture, new Vector2(xPositionOnScreen + 872, yPositionOnScreen + 88), new Rectangle(num1 * 16 * 2 % texture.Width, num2 + 32 * (num1 * 16 * 2 / texture.Width), texture.ActualWidth, texture.ActualHeight), Color.White, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 0.15f);
-            if (CurrentPageBundle.label != null)
+            b.Draw(texture, new Vector2(xPositionOnScreen + 872, yPositionOnScreen + 88), new Rectangle(num1 * 16 * 2 % texture.Width, num2 + 32 * (num1 * 16 * 2 / texture.Width), texture.ActualWidth, texture.ActualHeight), Color.White, 0.0f,
+                Vector2.Zero, scale, SpriteEffects.None, 0.15f);
+        }
+
+        protected virtual void DrawBundleLabel(SpriteBatch b)
+        {
+            if (CurrentPageBundle.label == null)
             {
-                var text = GetBundleNameText();
-                var x = Game1.dialogueFont.MeasureString(text).X;
-                b.Draw(NoteTexture, new Vector2(xPositionOnScreen + 936 - (int)x / 2 - 16, yPositionOnScreen + 228), new Rectangle(517, 266, 4, 17), Color.White, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 0.1f);
-                b.Draw(NoteTexture, new Rectangle(xPositionOnScreen + 936 - (int)x / 2, yPositionOnScreen + 228, (int)x, 68), new Rectangle(520, 266, 1, 17), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, 0.1f);
-                b.Draw(NoteTexture, new Vector2(xPositionOnScreen + 936 + (int)x / 2, yPositionOnScreen + 228), new Rectangle(524, 266, 4, 17), Color.White, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 0.1f);
-                
-                b.DrawString(Game1.dialogueFont, text, new Vector2(xPositionOnScreen + 936 - x / 2f, yPositionOnScreen + 236) + new Vector2(2f, 2f), Game1.textShadowColor);
-                b.DrawString(Game1.dialogueFont, text, new Vector2(xPositionOnScreen + 936 - x / 2f, yPositionOnScreen + 236) + new Vector2(0.0f, 2f), Game1.textShadowColor);
-                b.DrawString(Game1.dialogueFont, text, new Vector2(xPositionOnScreen + 936 - x / 2f, yPositionOnScreen + 236) + new Vector2(2f, 0.0f), Game1.textShadowColor);
-                b.DrawString(Game1.dialogueFont, text, new Vector2(xPositionOnScreen + 936 - x / 2f, yPositionOnScreen + 236), Game1.textColor * 0.9f);
+                return;
             }
+            DrawBundleLabel(b, xPositionOnScreen + 936, yPositionOnScreen + 228, 8);
+        }
+
+        protected void DrawBundleLabel(SpriteBatch b, int centerX, int centerY, int textOffsetY)
+        {
+            var text = GetBundleNameText();
+            var x = Game1.dialogueFont.MeasureString(text).X;
+            b.Draw(NoteTexture, new Vector2(centerX - (int)x / 2 - 16, centerY), new Rectangle(517, 266, 4, 17), Color.White, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 0.1f);
+            b.Draw(NoteTexture, new Rectangle(centerX - (int)x / 2, centerY, (int)x, 68), new Rectangle(520, 266, 1, 17), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, 0.1f);
+            b.Draw(NoteTexture, new Vector2(centerX + (int)x / 2, centerY), new Rectangle(524, 266, 4, 17), Color.White, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 0.1f);
+
+            b.DrawString(Game1.dialogueFont, text, new Vector2(centerX - x / 2f, centerY + textOffsetY) + new Vector2(2f, 2f), Game1.textShadowColor);
+            b.DrawString(Game1.dialogueFont, text, new Vector2(centerX - x / 2f, centerY + textOffsetY) + new Vector2(0.0f, 2f), Game1.textShadowColor);
+            b.DrawString(Game1.dialogueFont, text, new Vector2(centerX - x / 2f, centerY + textOffsetY) + new Vector2(2f, 0.0f), Game1.textShadowColor);
+            b.DrawString(Game1.dialogueFont, text, new Vector2(centerX - x / 2f, centerY + textOffsetY), Game1.textColor * 0.9f);
         }
 
         protected virtual string GetBundleNameText()
@@ -1773,7 +1790,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             ingredientList.Add(textureComponent);
         }
 
-        private void SetUpBundleSpecificPage(ArchipelagoBundle b)
+        protected virtual void SetUpBundleSpecificPage(ArchipelagoBundle b)
         {
             TempSprites.Clear();
             CurrentPageBundle = b;

@@ -153,7 +153,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                     return false;
                 }
             }
-            if (name == MemeBundleNames.LOSER_CLUB && ingredient.id == MemeIDProvider.TRASH_TUNA)
+            if (name == MemeBundleNames.LOSER_CLUB && ingredient.id == QualifiedItemIds.TUNA)
             {
                 
                 if (item == null || item.QualifiedItemId != QualifiedItemIds.TUNA || item.modData == null || !item.modData.ContainsKey(GarbageInjections.FROM_TRASH_KEY))

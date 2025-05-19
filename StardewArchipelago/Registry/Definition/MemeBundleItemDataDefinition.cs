@@ -29,7 +29,7 @@ namespace StardewArchipelago.Registry.Definition
         /// <inheritdoc />
         public override IEnumerable<string> GetAllIds() => new[]
         {
-            MemeIDProvider.FUN_TRAP, MemeIDProvider.TRASH_TUNA,
+            MemeIDProvider.FUN_TRAP,
             MemeIDProvider.WORN_BOOTS, MemeIDProvider.WORN_HAT, MemeIDProvider.WORN_PANTS,
             MemeIDProvider.WORN_SHIRT, MemeIDProvider.WORN_LEFT_RING, MemeIDProvider.WORN_RIGHT_RING,
         };

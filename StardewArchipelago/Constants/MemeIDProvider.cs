@@ -33,7 +33,6 @@ namespace StardewArchipelago.Constants
         public static readonly string WORN_RIGHT_RING = IDProvider.CreateId("WornRightRing");
 
         public static readonly string FUN_TRAP = IDProvider.CreateId("FunTrap");
-        public static readonly string TRASH_TUNA = IDProvider.CreateId("TrashTuna");
 
         public static readonly Dictionary<string, string> MemeItemIds = new()
         {
@@ -44,7 +43,6 @@ namespace StardewArchipelago.Constants
             { "Worn Left Ring", WORN_LEFT_RING },
             { "Worn Right Ring", WORN_RIGHT_RING },
             { "Fun Trap", FUN_TRAP },
-            { "Trash Tuna", TRASH_TUNA },
         };
 
         public static readonly Dictionary<string, string> MemeItemNames = new()
@@ -56,7 +54,6 @@ namespace StardewArchipelago.Constants
             { WORN_LEFT_RING, "Worn Left Ring" },
             { WORN_RIGHT_RING, "Worn Right Ring" },
             { FUN_TRAP, "Fun Trap" },
-            { TRASH_TUNA, "Trash Tuna" },
         };
     }
 }

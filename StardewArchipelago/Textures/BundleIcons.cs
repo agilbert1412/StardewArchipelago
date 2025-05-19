@@ -1,8 +1,10 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Bundles;
 using StardewModdingAPI;
 using StardewArchipelago.Logging;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
 
 namespace StardewArchipelago.Textures
 {
@@ -46,6 +48,24 @@ namespace StardewArchipelago.Textures
             var pathToTexture = Path.Combine(bundlesFolder, fileNameBundleName);
             logger.LogDebug($"Attempting to load bundle icon '{pathToTexture}'");
             return TexturesLoader.GetTexture(pathToTexture, failureLogLevel);
+        }
+
+        public static List<Texture2D> GetAllBundleIcons(IModHelper modHelper)
+        {
+            var currentModFolder = modHelper.DirectoryPath;
+            const string texturesFolder = "Textures";
+            var bundleIconsFolder = Path.Combine(currentModFolder, texturesFolder, "Bundles", "Icons");
+            var bundleFilenamePattern = $"*.png";
+            var allBundleIcons = Directory.EnumerateFiles(bundleIconsFolder, bundleFilenamePattern, SearchOption.AllDirectories);
+            var textures = new List<Texture2D>();
+            foreach (var bundleIcon in allBundleIcons)
+            {
+                var pathToTexture = Path.Combine(bundleIconsFolder, bundleIcon);
+                var texture = TexturesLoader.GetTexture(pathToTexture);
+                textures.Add(texture);
+            }
+
+            return textures;
         }
     }
 }
