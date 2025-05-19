@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework;
 using StardewArchipelago.Bundles;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
+using StardewArchipelago.Serialization;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
@@ -46,6 +47,7 @@ namespace StardewArchipelago.Archipelago
                 return;
             }
 
+            ModEntry.Instance.State.Wallet.DeathLinks++;
             _isCurrentlyReceivingDeathLink = true;
             foreach (var farmer in Game1.getAllFarmers())
             {
@@ -66,6 +68,7 @@ namespace StardewArchipelago.Archipelago
                 return;
             }
 
+            ModEntry.Instance.State.Wallet.DeathLinks++;
             _archipelago.SendDeathLink(cause);
         }
 

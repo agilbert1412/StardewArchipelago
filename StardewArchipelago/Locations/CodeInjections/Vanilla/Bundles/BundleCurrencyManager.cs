@@ -78,6 +78,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 DrawGachaPrices(b);
                 amountText = "";
             }
+            else if(_menu.CurrentPageBundle.name == MemeBundleNames.HUMBLE)
+            {
+                Game1.dayTimeMoneyBox.drawMoneyBox(b);
+                DrawHumbleDonationPrices(b);
+                amountText = "";
+            }
             else if (ingredientId == IDProvider.MONEY && memeBundlesThatShouldDisplayMoney.Contains(_menu.CurrentPageBundle.name) )
             {
                 Game1.dayTimeMoneyBox.drawMoneyBox(b);
@@ -154,7 +160,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             else if (ingredientId == MemeIDProvider.MISSED_FISH)
             {
                 DrawUncaughtFishCurrency();
-                amountText += " Uncaught Fish";
+                amountText += " Missed Fish";
             }
             else if (ingredientId == MemeIDProvider.CHILD)
             {
@@ -165,6 +171,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             {
                 DrawBankCurrency();
                 amountText += "$";
+            }
+            else if (ingredientId == MemeIDProvider.DEATHLINKS)
+            {
+                DrawDeathLinksCurrency();
+                amountText += " DeathLinks";
             }
             else
             {
@@ -275,6 +286,24 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             DrawText(spriteBatch, $"{GachaRoller.LEGENDARY_PRICE}g", legendaryPriceX, pricesY, font);
         }
 
+        private void DrawHumbleDonationPrices(SpriteBatch spriteBatch)
+        {
+            var pricesY = 410;
+            var centeredX = 936;
+            var pricesXOffset = 100;
+            var cheapPriceX = centeredX - pricesXOffset;
+            var normalPriceX = centeredX;
+            var generousPriceX = centeredX + pricesXOffset;
+
+            var font = Game1.smallFont;
+            var price = _menu.CurrentPageBundle.Ingredients.First().stack;
+
+            DrawText(spriteBatch, $"Pay what you want!", centeredX, pricesY - 120, font);
+            DrawText(spriteBatch, $"{(int)(price * 0.1)}g", cheapPriceX, pricesY, font);
+            DrawText(spriteBatch, $"{price}g", normalPriceX, pricesY, font);
+            DrawText(spriteBatch, $"{price * 10}g", generousPriceX, pricesY, font);
+        }
+
         private void DrawDeadCropsCurrency()
         {
             DrawSpecialCurrency(_wallet.DeadCropsById.Sum(x => x.Value), Game1.objectSpriteSheet, new Rectangle(64, 496, 16, 16), 3f);
@@ -299,6 +328,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         private void DrawBankCurrency()
         {
             DrawSpecialCurrency(_currentBankString, Game1.mouseCursors, new Rectangle(416, 1962, 16, 16), 3f);
+        }
+
+        private void DrawDeathLinksCurrency()
+        {
+            DrawSpecialCurrency(_wallet.DeathLinks, Game1.mouseCursors, new Rectangle(416, 1962, 16, 16), 3f);
         }
 
         private static void DrawSpecialCurrency(int amountOwned, Texture2D texture, Rectangle sourceRectangle, float scale = 4f)
@@ -421,6 +455,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             if (ingredient.id == MemeIDProvider.BANK_MONEY)
             {
                 TryPurchaseCurrentBundleWithBankMoney(ingredient);
+                return;
+            }
+
+            if (ingredient.id == MemeIDProvider.DEATHLINKS)
+            {
+                TryPurchaseCurrentBundleWithDeathLinks(ingredient);
                 return;
             }
         }
@@ -620,6 +660,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             TryPurchaseCurrentBundleWithWalletCurrency(ingredient, currentBankInteger, amount => { _bank.RemoveFromBank(amount); });
         }
 
+        private void TryPurchaseCurrentBundleWithDeathLinks(BundleIngredientDescription ingredient)
+        {
+            TryPurchaseCurrentBundleWithWalletCurrency(ingredient, _wallet.DeathLinks, amount => { _wallet.DeathLinks -= amount; });
+        }
+
         private void TryPurchaseCurrentBundleWithWalletCurrency(BundleIngredientDescription ingredient, int amountOwned, Action<int> payAction)
         {
             if (amountOwned < ingredient.stack)
@@ -631,6 +676,37 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             payAction(ingredient.stack);
 
             _menu.PerformCurrencyPurchase();
+        }
+
+        public void PurchaseWithCharityDonation(ArchipelagoJunimoNoteMenu menu, double priceRate, double donationRate)
+        {
+            if (menu.CurrentPageBundle == null || menu.CurrentPageBundle.name != MemeBundleNames.HUMBLE)
+            {
+                return;
+            }
+
+            var normalPrice = menu.CurrentPageBundle.Ingredients.Last().stack;
+            var paidPrice = (int)Math.Round(normalPrice * priceRate);
+            var donatedPrice = (int)Math.Round(paidPrice * donationRate);
+            if (Game1.player.Money < paidPrice)
+            {
+                Game1.dayTimeMoneyBox.moneyShakeTimer = 600;
+                return;
+            }
+
+            Game1.player.Money -= paidPrice;
+            _bank.AddToBank(donatedPrice);
+            var donationQualifier = "";
+            if (priceRate < 0.5)
+            {
+                donationQualifier = " cheap";
+            }
+            if (priceRate > 5)
+            {
+                donationQualifier = " generous";
+            }
+            Game1.chatBox.addMessage($"Thank you for your{donationQualifier} donation! {donatedPrice}g has been donated to your community", Color.Green);
+            menu.PerformCurrencyPurchase();
         }
 
         public void DonateToBundle(string currencyId)

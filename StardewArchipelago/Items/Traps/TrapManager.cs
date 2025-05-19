@@ -48,7 +48,7 @@ namespace StardewArchipelago.Items.Traps
         private readonly IModHelper _helper;
         private readonly Harmony _harmony;
         private static StardewArchipelagoClient _archipelago;
-        private readonly TrapExecutor _trapExecutor;
+        public readonly TrapExecutor TrapExecutor;
         private readonly GiftTrapManager _giftTrapManager;
 
         private readonly Dictionary<string, Action> _traps;
@@ -63,7 +63,7 @@ namespace StardewArchipelago.Items.Traps
             _harmony = harmony;
             _archipelago = archipelago;
             _giftTrapManager = giftTrapManager;
-            _trapExecutor = trapExecutor;
+            TrapExecutor = trapExecutor;
             _traps = new Dictionary<string, Action>();
             RegisterTraps();
             _queuedTraps = new ConcurrentQueue<QueuedTrap>();
@@ -160,32 +160,32 @@ namespace StardewArchipelago.Items.Traps
 
         private void RegisterTraps()
         {
-            _traps.Add(BURNT, _trapExecutor.AddBurntDebuff);
-            _traps.Add(DARKNESS, _trapExecutor.AddDarknessDebuff);
-            _traps.Add(FROZEN, _trapExecutor.AddFrozenDebuff);
-            _traps.Add(JINXED, _trapExecutor.AddJinxedDebuff);
-            _traps.Add(NAUSEATED, _trapExecutor.AddNauseatedDebuff);
-            _traps.Add(SLIMED, _trapExecutor.AddSlimedDebuff);
-            _traps.Add(WEAKNESS, _trapExecutor.AddWeaknessDebuff);
-            _traps.Add(TAXES, _trapExecutor.ChargeTaxes);
-            _traps.Add(RANDOM_TELEPORT, _trapExecutor.TeleportRandomly);
-            _traps.Add(CROWS, _trapExecutor.SendCrows);
-            _traps.Add(MONSTERS, _trapExecutor.SpawnMonsters);
+            _traps.Add(BURNT, TrapExecutor.AddBurntDebuff);
+            _traps.Add(DARKNESS, TrapExecutor.AddDarknessDebuff);
+            _traps.Add(FROZEN, TrapExecutor.AddFrozenDebuff);
+            _traps.Add(JINXED, TrapExecutor.AddJinxedDebuff);
+            _traps.Add(NAUSEATED, TrapExecutor.AddNauseatedDebuff);
+            _traps.Add(SLIMED, TrapExecutor.AddSlimedDebuff);
+            _traps.Add(WEAKNESS, TrapExecutor.AddWeaknessDebuff);
+            _traps.Add(TAXES, TrapExecutor.ChargeTaxes);
+            _traps.Add(RANDOM_TELEPORT, TrapExecutor.TeleportRandomly);
+            _traps.Add(CROWS, TrapExecutor.SendCrows);
+            _traps.Add(MONSTERS, TrapExecutor.SpawnMonsters);
             // _traps.Add(ENTRANCE_RESHUFFLE, );
-            _traps.Add(DEBRIS, _trapExecutor.CreateDebris);
-            _traps.Add(SHUFFLE, _trapExecutor.ShuffleInventory);
+            _traps.Add(DEBRIS, TrapExecutor.CreateDebris);
+            _traps.Add(SHUFFLE, TrapExecutor.ShuffleInventory);
             // _traps.Add(WINTER, );
-            _traps.Add(PARIAH, _trapExecutor.SendDislikedGiftToEveryone);
-            _traps.Add(DROUGHT, _trapExecutor.PerformDroughtTrap);
-            _traps.Add(TIME_FLIES, _trapExecutor.SkipTimeForward);
-            _traps.Add(BABIES, _trapExecutor.SpawnTemporaryBabies);
-            _traps.Add(MEOW, _trapExecutor.PlayMeows);
-            _traps.Add(BARK, _trapExecutor.PlayBarks);
-            _traps.Add(DEPRESSION, _trapExecutor.ForceNextMultisleep);
-            _traps.Add(UNGROWTH, _trapExecutor.UngrowCrops);
-            _traps.Add(INFLATION, _trapExecutor.ActivateInflation);
-            _traps.Add(BOMB, _trapExecutor.Explode);
-            _traps.Add(NUDGE, _trapExecutor.NudgePlayerItems);
+            _traps.Add(PARIAH, TrapExecutor.SendDislikedGiftToEveryone);
+            _traps.Add(DROUGHT, TrapExecutor.PerformDroughtTrap);
+            _traps.Add(TIME_FLIES, TrapExecutor.SkipTimeForward);
+            _traps.Add(BABIES, TrapExecutor.SpawnTemporaryBabies);
+            _traps.Add(MEOW, TrapExecutor.PlayMeows);
+            _traps.Add(BARK, TrapExecutor.PlayBarks);
+            _traps.Add(DEPRESSION, TrapExecutor.ForceNextMultisleep);
+            _traps.Add(UNGROWTH, TrapExecutor.UngrowCrops);
+            _traps.Add(INFLATION, TrapExecutor.ActivateInflation);
+            _traps.Add(BOMB, TrapExecutor.Explode);
+            _traps.Add(NUDGE, TrapExecutor.NudgePlayerItems);
 
             RegisterTrapsWithTrapSuffix();
             RegisterTrapsWithDifferentSpace();

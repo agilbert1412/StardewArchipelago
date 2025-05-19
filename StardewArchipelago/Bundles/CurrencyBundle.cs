@@ -75,7 +75,7 @@ namespace StardewArchipelago.Bundles
             { "Honeywell", MemeIDProvider.HONEYWELL },
             { "Bank Money", MemeIDProvider.BANK_MONEY },
             { "Sleep Days", MemeIDProvider.SLEEP_DAYS },
-            { "Deathlinks", MemeIDProvider.DEATHLINKS },
+            { "DeathLinks", MemeIDProvider.DEATHLINKS },
         };
     }
 }

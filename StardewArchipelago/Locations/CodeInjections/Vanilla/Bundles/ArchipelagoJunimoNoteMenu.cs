@@ -71,6 +71,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         private ICue _currentCue;
 
         public Texture2D MemeTexture;
+        public Texture2D HumbleBundleTexture;
         private BundleButton _donateButton;
         public Dictionary<BundleButton, Action> ExtraButtons;
 
@@ -92,8 +93,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         private void InitializeFields()
         {
             _currencyManager = new BundleCurrencyManager(_logger, _modHelper, _wallet, _bank, this);
-            var memeAssetsPath = Path.Combine("Bundles", "UI", "MemeBundleAssets.png");
+            var memeUIFolder = Path.Combine("Bundles", "UI");
+            var memeAssetsPath = Path.Combine(memeUIFolder, "MemeBundleAssets.png");
             MemeTexture = TexturesLoader.GetTexture(memeAssetsPath);
+            var humbleIconPath = Path.Combine(memeUIFolder, "humble_button.png");
+            HumbleBundleTexture = TexturesLoader.GetTexture(humbleIconPath);
             ExtraButtons = new Dictionary<BundleButton, Action>();
             InitializeClothesMenu();
             _hintsForMe = _archipelago.GetActiveDesiredHintsForMe();
@@ -621,6 +625,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 case MemeBundleNames.GACHA:
                     SetUpGachaButtons();
                     break;
+                case MemeBundleNames.HUMBLE:
+                    SetUpHumbleBundleButtons();
+                    break;
                 case MemeBundleNames.DEATH:
                     SetUpMonstersButton();
                     break;
@@ -655,6 +662,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 return;
             }
             if (CurrentPageBundle.name == MemeBundleNames.PUZZLE)
+            {
+                return;
+            }
+            if (CurrentPageBundle.name == MemeBundleNames.HUMBLE)
             {
                 return;
             }
@@ -781,6 +792,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             ExtraButtons.Add(dangerButton, () =>
             {
                 _trapManager.ExecuteTrapImmediately("Monsters Trap");
+                _trapManager.TrapExecutor.MonsterSpawner.SpawnOneMonster(Game1.player.currentLocation, _archipelago.SlotData.TrapItemsDifficulty);
                 exitThisMenu();
             });
         }
@@ -844,6 +856,59 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             ExtraButtons.Add(commonButton, () => _gachaResolver.PressButton(commonButton, GachaRoller.COMMON_PRICE, this));
             ExtraButtons.Add(rareButton, () => _gachaResolver.PressButton(rareButton, GachaRoller.RARE_PRICE, this));
             ExtraButtons.Add(legendaryButton, () => _gachaResolver.PressButton(legendaryButton, GachaRoller.LEGENDARY_PRICE, this));
+        }
+
+        private void SetUpHumbleBundleButtons()
+        {
+            if (FromGameMenu)
+            {
+                return;
+            }
+
+            var buttonBackgroundRectangle = new Rectangle(512, 244, 18, 18);
+            var xStart = xPositionOnScreen + 800;
+            var xPerButton = 100;
+            var y = yPositionOnScreen + 335;
+            var buttonScale = 4f;
+            var iconScale = 0.5625f;
+            var bundleTextureRect = new Rectangle(0, 0, 128, 128);
+
+            var cheapButtonRect = new Rectangle(xStart, y, 72, 72);
+            var cheapBackground = new BundleButton(cheapButtonRect, NoteTexture, buttonBackgroundRectangle, buttonScale);
+            var cheapRect = GetCenteredTexture(cheapButtonRect, bundleTextureRect, buttonScale, iconScale);
+            var cheapButton = new BundleButton(cheapRect, HumbleBundleTexture, bundleTextureRect, iconScale);
+            cheapButton.myID = 793;
+            cheapButton.hoverText = "Cheap Donation";
+            
+            var normalButtonRect = new Rectangle(xStart + xPerButton, y, 72, 72);
+            var normalBackground = new BundleButton(normalButtonRect, NoteTexture, buttonBackgroundRectangle, buttonScale);
+            var normalRect = GetCenteredTexture(normalButtonRect, bundleTextureRect, buttonScale, iconScale);
+            var normalButton = new BundleButton(normalRect, HumbleBundleTexture, bundleTextureRect, iconScale);
+            normalButton.myID = 794;
+            normalButton.hoverText = "Normal Donation";
+            
+            var generousButtonRect = new Rectangle(xStart + (xPerButton * 2), y, 72, 72);
+            var generousBackground = new BundleButton(generousButtonRect, NoteTexture, buttonBackgroundRectangle, buttonScale);
+            var generousRect = GetCenteredTexture(generousButtonRect, bundleTextureRect, buttonScale, iconScale);
+            var generousButton = new BundleButton(generousRect, HumbleBundleTexture, bundleTextureRect, iconScale);
+            generousButton.myID = 795;
+            generousButton.hoverText = "Generous Donation";
+
+            cheapButton.leftNeighborID = REGION_BACK_BUTTON;
+            cheapButton.rightNeighborID = normalButton.myID;
+            normalButton.leftNeighborID = cheapButton.myID;
+            normalButton.rightNeighborID = generousButton.myID;
+            generousButton.leftNeighborID = normalButton.myID;
+            generousButton.rightNeighborID = REGION_PURCHASE_BUTTON;
+
+            _gachaResolver = new GachaResolver(CurrentPageBundle.Ingredients.First().stack);
+
+            ExtraButtons.Add(normalBackground, () => { });
+            ExtraButtons.Add(cheapBackground, () => { });
+            ExtraButtons.Add(generousBackground, () => { });
+            ExtraButtons.Add(cheapButton, () => _currencyManager.PurchaseWithCharityDonation(this, 0.1, 0.5));
+            ExtraButtons.Add(normalButton, () => _currencyManager.PurchaseWithCharityDonation(this, 1, 2));
+            ExtraButtons.Add(generousButton, () => _currencyManager.PurchaseWithCharityDonation(this, 10, 5));
         }
 
         private static Rectangle GetCenteredTexture(Rectangle buttonRect, Rectangle textureRect, float buttonScale, float textureScale)

@@ -189,7 +189,7 @@ namespace StardewArchipelago.Archipelago
             return realAmountJoules.Value;
         }
 
-        private bool AddToBank(int amountToAdd)
+        public bool AddToBank(int amountToAdd)
         {
             var bankingKey = string.Format(BANKING_TEAM_KEY, _archipelago.GetTeam());
             var amountToAddJoules = MoneyToJoules(amountToAdd);

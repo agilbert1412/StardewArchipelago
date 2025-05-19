@@ -46,5 +46,6 @@ namespace StardewArchipelago.Bundles
         public const string PUZZLE = "Puzzle";
         public const string COOPERATION = "Cooperation";
         public const string POOL = "Pool";
+        public const string HUMBLE = "Humble";
     }
 }

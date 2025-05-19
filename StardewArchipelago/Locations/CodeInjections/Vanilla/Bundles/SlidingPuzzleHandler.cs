@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Textures;
@@ -18,10 +21,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         private Rectangle _backgroundTextureSourceRect;
         private Texture2D _todayTexture;
         private int[] _squarePositions;
+        private Dictionary<int, List<int>> _validMovesCache;
 
         public SlidingPuzzleHandler(IModHelper modHelper, Texture2D backgroundTexture, int blockSize)
         {
             _size = blockSize;
+            //_size = new Random().Next(2, 7);
             _backgroundTexture = backgroundTexture;
             _backgroundTextureSourceRect = new Rectangle(0, 40, 120, 82);
             var allBundleTextures = BundleIcons.GetAllBundleIcons(modHelper);
@@ -29,6 +34,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             var chosenTexture = allBundleTextures[random.Next(allBundleTextures.Count)];
             _todayTexture = chosenTexture;
             _squarePositions = new int[NumberOfSquares];
+            _validMovesCache = new Dictionary<int, List<int>>();
             for (var i = 0; i < NumberOfSquares; i++)
             {
                 _squarePositions[i] = i;
@@ -40,11 +46,24 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         private void ShufflePuzzle(Random random)
         {
-            const int NumberOfSwaps = 1000;
+            int NumberOfSwaps = NumberOfSquares * NumberOfSquares;
+            for (int i = 0; i < NumberOfSquares; i++)
+            {
+                if (_validMovesCache.ContainsKey(i))
+                {
+                    continue;
+                }
+
+                _validMovesCache.Add(i, CalculateValidMoves(i));
+            }
+            var holePosition = _squarePositions.Last();
             for (int i = 0; i < NumberOfSwaps; i++)
             {
-                var indexMove = random.Next(NumberOfSquares);
-                MoveSquare(indexMove);
+                var validMoves = _validMovesCache[holePosition];
+                var indexMove = random.Next(validMoves.Count);
+                var swapMove = validMoves[indexMove];
+                MoveSquare(swapMove);
+                holePosition = swapMove;
             }
         }
 
@@ -63,24 +82,28 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         private void DrawPuzzleSquare(SpriteBatch spriteBatch, int squareIndex, int originX, int originY)
         {
+            var squareX = squareIndex % _size;
+            var squareY = squareIndex / _size;
+            var x = originX + (ScaledSquareWidth * squareX);
+            var y = originY + (ScaledSquareWidth * squareY);
+            var position = new Vector2(x, y);
             if (_squarePositions[squareIndex] == NumberOfSquares - 1)
             {
+                //var xSourceRect = new Rectangle(268, 471, 16, 16);
+                //var xScale = (SquareWidth / 32f);
+                //var quarterSquare = ScaledSquareWidth / 4;
+                //var xPosition = new Vector2(position.X + quarterSquare, position.Y + quarterSquare);
+                //spriteBatch.Draw(Game1.mouseCursors, xPosition, xSourceRect, new Color(255, 255, 255, 191), 0.0f,
+                //    Vector2.Zero, xScale, SpriteEffects.None, 0.15f);
                 return;
             }
 
-            var squareX = squareIndex % _size;
-            var squareY = squareIndex / _size;
             var currentTextureX = _squarePositions[squareIndex] % _size;
             var currentTextureY = _squarePositions[squareIndex] / _size;
             
-
-            var x = originX + (ScaledSquareWidth * squareX);
-            var y = originY + (ScaledSquareWidth * squareY);
-
             var sourceRectX = SquareWidth * currentTextureX;
             var sourceRectY = SquareWidth * currentTextureY;
 
-            var position = new Vector2(x, y);
             var sourceRect = new Rectangle(sourceRectX, sourceRectY, SquareWidth, SquareWidth);
             spriteBatch.Draw(_todayTexture, position, sourceRect, Color.White, 0.0f,
                 Vector2.Zero, SquareScale, SpriteEffects.None, 0.15f);
@@ -129,20 +152,36 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 return false;
             }
 
-            var squareX = square % _size;
-            var squareY = square / _size;
-            var holeX = holePosition % _size;
-            var holeY = holePosition / _size;
-            if (squareX == holeX)
+            if (!_validMovesCache.ContainsKey(holePosition))
             {
-                return Math.Abs(squareY - holeY) == 1;
-            }
-            if (squareY == holeY)
-            {
-                return Math.Abs(squareX - holeX) == 1;
+                _validMovesCache.Add(holePosition, CalculateValidMoves(holePosition));
             }
 
-            return false;
+            return _validMovesCache[holePosition].Contains(square);
+        }
+        private List<int> CalculateValidMoves(int holePosition)
+        {
+            var holeX = holePosition % _size;
+            var holeY = holePosition / _size;
+            var validMoves = new List<int>();
+            if (holeX > 0)
+            {
+                validMoves.Add(holePosition-1);
+            }
+            if (holeX < _size-1)
+            {
+                validMoves.Add(holePosition + 1);
+            }
+            if (holeY > 0)
+            {
+                validMoves.Add(holePosition - _size);
+            }
+            if (holeY < _size - 1)
+            {
+                validMoves.Add(holePosition + _size);
+            }
+
+            return validMoves;
         }
 
         public void MoveSquare(int square)
