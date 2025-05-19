@@ -468,6 +468,10 @@ namespace StardewArchipelago.Stardew
 
                 _furnitureById.Add(id, furniture);
                 _furnitureByName.Add(furniture.Name, furniture);
+                if (furniture.Name == "Bed")
+                {
+                    _furnitureByName.Add("Single Bed", furniture);
+                }
                 if (furniture.IsLupiniPainting)
                 {
                     _furnitureByName.Add($"Lupini: {furniture.Name}", furniture);
