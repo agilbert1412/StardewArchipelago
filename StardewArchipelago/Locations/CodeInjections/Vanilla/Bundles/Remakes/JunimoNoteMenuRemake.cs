@@ -541,41 +541,42 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             if (Game1.player.Money >= stack)
             {
                 Game1.player.Money -= stack;
-                Game1.playSound("select");
-                CurrentPageBundle.CompletionAnimation(this);
-                if (PurchaseButton != null)
-                {
-                    PurchaseButton.scale = PurchaseButton.baseScale * 0.75f;
-                }
-                var communityCenter = Game1.RequireLocation<CommunityCenter>("CommunityCenter");
-                communityCenter.bundleRewards[CurrentPageBundle.BundleIndex] = true;
-                communityCenter.bundles.FieldDict[CurrentPageBundle.BundleIndex][0] = true;
-                CheckForRewards();
-                var flag = false;
-                foreach (var bundle in Bundles)
-                {
-                    if (!bundle.Complete && !bundle.Equals(CurrentPageBundle))
-                    {
-                        flag = true;
-                        break;
-                    }
-                }
-                if (!flag)
-                {
-                    communityCenter.markAreaAsComplete(WhichArea);
-                    exitFunction = restoreAreaOnExit;
-                    communityCenter.areaCompleteReward(WhichArea);
-                }
-                else
-                {
-                    communityCenter.getJunimoForArea(WhichArea)?.bringBundleBackToHut(BundleRemake.GetColorFromColorIndex(CurrentPageBundle.BundleColor), Game1.RequireLocation("CommunityCenter"));
-                }
-                Game1.Multiplayer.globalChatInfoMessage("Bundle");
+                PerformCurrencyPurchase();
             }
             else
             {
                 Game1.dayTimeMoneyBox.moneyShakeTimer = 600;
             }
+        }
+
+        public virtual void PerformCurrencyPurchase()
+        {
+            Game1.playSound("select");
+            CurrentPageBundle.CompletionAnimation(this);
+            if (PurchaseButton != null)
+            {
+                PurchaseButton.scale = PurchaseButton.baseScale * 0.75f;
+            }
+
+            var communityCenter = (CommunityCenter)Game1.getLocationFromName("CommunityCenter");
+            communityCenter.bundleRewards[CurrentPageBundle.BundleIndex] = true;
+            communityCenter.bundles.FieldDict[CurrentPageBundle.BundleIndex][0] = true;
+            CheckForRewards();
+            var flag = Bundles.Any(bundle => !bundle.Complete && !bundle.Equals(CurrentPageBundle));
+            var whichArea = WhichArea;
+            if (!flag)
+            {
+                communityCenter.markAreaAsComplete(whichArea);
+                exitFunction = () => restoreAreaOnExit();
+                communityCenter.areaCompleteReward(whichArea);
+            }
+            else
+            {
+                communityCenter.getJunimoForArea(whichArea)?.bringBundleBackToHut(BundleRemake.GetColorFromColorIndex(CurrentPageBundle.BundleColor),
+                    Game1.getLocationFromName("CommunityCenter"));
+            }
+
+            Game1.Multiplayer.globalChatInfoMessage("Bundle");
         }
 
         private bool ReceiveLeftClickInBundleRoomPage(int x, int y)

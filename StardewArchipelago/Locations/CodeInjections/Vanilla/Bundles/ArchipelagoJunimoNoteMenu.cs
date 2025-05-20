@@ -401,37 +401,19 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             _currencyManager.TryPurchaseCurrentBundle(ingredient);
         }
 
-        public void PerformCurrencyPurchase()
+        public override void PerformCurrencyPurchase()
         {
-            Game1.playSound("select");
-            CurrentPageBundle.CompletionAnimation(this);
-            if (this.PurchaseButton == null)
+            base.PerformCurrencyPurchase();
+            if (CurrentPageBundle.name == MemeBundleNames.SCAM || CurrentPageBundle.name == MemeBundleNames.INVESTMENT)
             {
+                var random = Utility.CreateDaySaveRandom();
+                var paymentMethods = new[] {"gift cards", "Bitcoins", "Ethereum" };
+                var companies = new[] { "CashPyramid.biz", "Stonks United", "TrustMeBro Capital", "GrandmaCoin Investments", "SafeAndSecureBank123", "ProfitHub", "Joja Crypto Fund", "Ponzi & Sons", "Bundle Return On Kapital Enterprise" };
+                var paymentMethod = paymentMethods[random.Next(paymentMethods.Length)];
+                var company = companies[random.Next(companies.Length)];
+                Game1.chatBox.addMessage($"We have received your {paymentMethod} without issue.", Color.Green);
+                Game1.chatBox.addMessage($"Thank you for investing with {company}!", Color.Green);
             }
-            else
-            {
-                this.PurchaseButton.scale = this.PurchaseButton.baseScale * 0.75f;
-            }
-
-            var communityCenter = (CommunityCenter)Game1.getLocationFromName("CommunityCenter");
-            communityCenter.bundleRewards[CurrentPageBundle.BundleIndex] = true;
-            communityCenter.bundles.FieldDict[CurrentPageBundle.BundleIndex][0] = true;
-            this.CheckForRewards();
-            var flag = this.Bundles.Any(bundle => !bundle.Complete && !bundle.Equals(CurrentPageBundle));
-            var whichArea = this.WhichArea;
-            if (!flag)
-            {
-                communityCenter.markAreaAsComplete(whichArea);
-                this.exitFunction = () => this.restoreAreaOnExit();
-                communityCenter.areaCompleteReward(whichArea);
-            }
-            else
-            {
-                communityCenter.getJunimoForArea(whichArea)?.bringBundleBackToHut(BundleRemake.GetColorFromColorIndex(CurrentPageBundle.BundleColor),
-                    Game1.getLocationFromName("CommunityCenter"));
-            }
-
-            // Game1.multiplayer.globalChatInfoMessage("Bundle");
         }
 
         private void MarkAllRewardsAsAlreadyGrabbed()

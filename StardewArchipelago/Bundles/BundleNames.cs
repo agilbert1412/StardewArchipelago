@@ -47,5 +47,7 @@ namespace StardewArchipelago.Bundles
         public const string COOPERATION = "Cooperation";
         public const string POOL = "Pool";
         public const string HUMBLE = "Humble";
+        public const string SCAM = "Scam";
+        public const string INVESTMENT = "Investment";
     }
 }

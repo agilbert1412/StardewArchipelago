@@ -71,8 +71,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         {
             var amountText = $"{ingredient.stack}";
 
-            var memeBundlesThatShouldDisplayMoney = new[] { MemeBundleNames.COMMUNISM, MemeBundleNames.CLICKBAIT, MemeBundleNames.GACHA };
-            if (_menu.CurrentPageBundle.name == MemeBundleNames.GACHA)
+            var memeBundlesThatShouldDisplayMoney = new[] { MemeBundleNames.COMMUNISM, MemeBundleNames.CLICKBAIT };
+            if (_menu.CurrentPageBundle.name == MemeBundleNames.SCAM || _menu.CurrentPageBundle.name == MemeBundleNames.INVESTMENT)
+            {
+                Game1.dayTimeMoneyBox.drawMoneyBox(b);
+                DrawInvestmentOpportunityLabel(b);
+                amountText += "g";
+            }
+            else if (_menu.CurrentPageBundle.name == MemeBundleNames.GACHA)
             {
                 Game1.dayTimeMoneyBox.drawMoneyBox(b);
                 DrawGachaPrices(b);
@@ -302,6 +308,17 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             DrawText(spriteBatch, $"{(int)(price * 0.1)}g", cheapPriceX, pricesY, font);
             DrawText(spriteBatch, $"{price}g", normalPriceX, pricesY, font);
             DrawText(spriteBatch, $"{price * 10}g", generousPriceX, pricesY, font);
+        }
+
+        private void DrawInvestmentOpportunityLabel(SpriteBatch spriteBatch)
+        {
+            var y = 340;
+            var font = Game1.smallFont;
+            // Stardew Capital Appreciation Method
+            DrawText(spriteBatch, $"Big investment opportunity in the", 936, y, font);
+            DrawText(spriteBatch, $"Stardew Capital Archipelago Mutuals!", 936, y + 30, font);
+            DrawText(spriteBatch, $"60% to 150% profit by end of month!", 936, y + 60, font);
+            // DrawText(spriteBatch, $"by the end of the month!", 936, y + 90, font);
         }
 
         private void DrawDeadCropsCurrency()

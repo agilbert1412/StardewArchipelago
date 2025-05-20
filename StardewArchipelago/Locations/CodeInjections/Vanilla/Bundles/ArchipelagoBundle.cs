@@ -76,8 +76,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 return;
             }
 
-            name = bundleName;
-            label = bundleName;
+            InitializeNameAndLabel(bundleName);
             RewardDescription = string.Empty;
             Complete = true;
 
@@ -106,6 +105,20 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             {
                 Complete = true;
             }
+        }
+        private void InitializeNameAndLabel(string bundleName)
+        {
+            var nameForPlayer = GetBundleNameForPlayer(bundleName);
+            name = nameForPlayer;
+            label = nameForPlayer;
+        }
+        private string GetBundleNameForPlayer(string bundleName)
+        {
+            if (bundleName == MemeBundleNames.SCAM)
+            {
+                return MemeBundleNames.INVESTMENT;
+            }
+            return bundleName;
         }
 
         public override bool CanAcceptThisItem(Item item, ClickableTextureComponent slot, bool ignoreStackCount, ArchipelagoJunimoNoteMenu parentMenu)
