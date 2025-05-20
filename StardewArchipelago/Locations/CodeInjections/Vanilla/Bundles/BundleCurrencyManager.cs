@@ -327,7 +327,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         private void DrawBankCurrency()
         {
-            DrawSpecialCurrency(_currentBankString, Game1.mouseCursors, new Rectangle(416, 1962, 16, 16), 3f);
+            DrawSpecialCurrency(_currentBankString, Game1.mouseCursors, new Rectangle(280, 411, 16, 16), 3f);
         }
 
         private void DrawDeathLinksCurrency()

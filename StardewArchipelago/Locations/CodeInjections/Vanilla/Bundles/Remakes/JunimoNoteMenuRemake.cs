@@ -2126,7 +2126,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                     break;
                 case 9:
                     locationFromNumber.X += centerX;
-                    locationFromNumber.Y += centerY + 144;
+                    locationFromNumber.Y += centerY + 208;
                     break;
             }
             return locationFromNumber;
