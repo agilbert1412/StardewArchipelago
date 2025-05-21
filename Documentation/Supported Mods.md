@@ -70,6 +70,9 @@ Alternatively, the [weighted settings page](https://archipelago.gg/weighted-opti
       **NOTE**: if your operating system did not prompt you to overwrite some files, you have likely installed SVE or the patch files incorrectly. Common errors include: not extracting the mods from their zip files, and installing the mods in the wrong folder.
 6) You should now have the Stardew Valley Expanded and StardewAP - SVE Patch folders in your Mods folder. If your yaml settings were also correctly set up in the above sections, you should be ready to play with SVE.
 
+### What your Mods folder would look like at minimum if correctly installed
+![Minimum mods needed to run SVE with SDV](/StardewArchipelago/Pictures/SVE%20Min%20Mods.png)
+
 ## Weren't there more mods supported?
 
 The addition of 1.6 caused a bit of strain for every mod developer, and so not every mod was updated to be compatible with 1.6.
