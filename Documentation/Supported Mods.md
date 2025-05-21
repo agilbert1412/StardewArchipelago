@@ -14,7 +14,7 @@ A reasonable effort will be made to stay up to date, but it has to be understood
 The following mods are currently supported:
 
 General: 
-- [Stardew Valley Expanded](https://www.nexusmods.com/stardewvalley/mods/3753), by FlashShifter, Version 1.14.46 (including [two additional patches](https://github.com/Witchybun/SDV-Randomizer-Content-Patcher/releases) `StardewAP - SVE Patch` and `StardewValleyExpanded 1.14.x-archipelago`. The first patch fixes some Content patcher things to be compatible with Archipelago, and the 2nd patches allows the SVE 1.14.46 code to be loaded into Stardew Valley 1.6.9+). Once patched, the version number in SMAPI will display as `Stardew Valley Expanded 1.14.31-archipelago by FlashShifter, Esca, super-aardvark, and kittycatcasey. Updated for Stardew 1.6.9 by Kaito Kid`. This is because I had to base my patch off of the 1.14.31 code, since the 1.14.46 code was not available. The Content pack for it will maintain its 1.14.46 displayed version number
+- [Stardew Valley Expanded] (#stardew-valley-expanded-specific-instructions), by FlashShifter, Version 1.14.46 **Requires additional installation steps and patch files**
 - [Skull Cavern Elevator](https://www.nexusmods.com/stardewvalley/mods/963), by Lestoph, Version 1.6.x
 - [Bigger Backpack](https://www.nexusmods.com/stardewvalley/mods/1845), by spacechase0, Version 7.3.x
 - [Tractor Mod](https://www.nexusmods.com/stardewvalley/mods/1401), by Pathoschild, Version 4.21.x
@@ -59,6 +59,15 @@ If you can load the supported mod on the correct version, the exact version of a
 ## Having trouble with the YAML syntax?
 
 Alternatively, the [weighted settings page](https://archipelago.gg/weighted-options) is another option available to add mods to your yaml file. First, click the link. In the section titled **Game Select**, drag the slider beside **Stardew Valley** to 1. Next, scroll down to the secton titled **Mods**. There, you will find a series of checkboxes. Check the checkboxes beside the name of the mods that you'd like to include in your yaml file. Lastly, click the **export settings** button at the bottom of the page, which will download the yaml file to your computer. Open that yaml file in your preferred text editor, and look for the section titled **Mods**. Select that entire section, and copy it to your clipboard. Then, if you haven't already done so, open your yaml file that you'd like to include the mods in, and paste what you've just copied over into it. Make sure that you select over the pre-existing mods category that is included by default by the website. This is the most important step. Ensure you **save** the file to wherever you'd like to save it to. For good measure, open the saved file again to make sure that it saved properly. You've now added mods to your yaml file! 
+
+## Stardew Valley Expanded Specific Instructions
+
+1) Download [Stardew Valley Expanded](https://www.nexusmods.com/stardewvalley/mods/3753) Version **1.14.46** and all dependencies.
+2) Extract them all into your mods folder.
+3) Download these [two additional patches](https://github.com/Witchybun/SDV-Randomizer-Content-Patcher/releases) `StardewAP - SVE Patch` and `StardewValleyExpanded 1.14.x-archipelago`.
+     - The first patch fixes some Content patcher things to be compatible with Archipelago, and the 2nd patches allows the SVE 1.14.46 code to be loaded into Stardew Valley 1.6.9+). Once patched, the version number in SMAPI will display as `Stardew Valley Expanded 1.14.31-archipelago by FlashShifter, Esca, super-aardvark, and kittycatcasey. Updated for Stardew 1.6.9 by Kaito Kid`. This is because I had to base my patch off of the 1.14.31 code, since the 1.14.46 code was not available. The Content pack for it will maintain its 1.14.46 displayed version number
+4) Extract the patch file folders directly into your mods folder, so that the Stardew Valley Expanded folder is getting partially overwritten. **NOTE**: if your operating system did not prompt you to overwrite some files, you have likely installed the patch files incorrectly.
+5) You should now have the Stardew Valley Expanded and StardewAP - SVE Patch folders in your Mods folder. If your yaml settings were also correctly set up in the above sections, you should be ready to play with SVE.
 
 ## Weren't there more mods supported?
 
