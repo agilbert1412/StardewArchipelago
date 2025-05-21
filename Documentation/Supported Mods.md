@@ -66,8 +66,9 @@ Alternatively, the [weighted settings page](https://archipelago.gg/weighted-opti
 2) Extract them all into your mods folder.
 3) Download these [two additional patches](https://github.com/Witchybun/SDV-Randomizer-Content-Patcher/releases) `StardewAP - SVE Patch` and `StardewValleyExpanded 1.14.x-archipelago`.
      - The first patch fixes some Content patcher things to be compatible with Archipelago, and the 2nd patches allows the SVE 1.14.46 code to be loaded into Stardew Valley 1.6.9+). Once patched, the version number in SMAPI will display as `Stardew Valley Expanded 1.14.31-archipelago by FlashShifter, Esca, super-aardvark, and kittycatcasey. Updated for Stardew 1.6.9 by Kaito Kid`. This is because I had to base my patch off of the 1.14.31 code, since the 1.14.46 code was not available. The Content pack for it will maintain its 1.14.46 displayed version number
-4) Extract the patch file folders directly into your mods folder, so that the Stardew Valley Expanded folder is getting partially overwritten. **NOTE**: if your operating system did not prompt you to overwrite some files, you have likely installed the patch files incorrectly.
-5) You should now have the Stardew Valley Expanded and StardewAP - SVE Patch folders in your Mods folder. If your yaml settings were also correctly set up in the above sections, you should be ready to play with SVE.
+4) Extract the patch file folders directly into your mods folder, so that the Stardew Valley Expanded folder is getting partially overwritten.
+      **NOTE**: if your operating system did not prompt you to overwrite some files, you have likely installed SVE or the patch files incorrectly. Common errors include: not extracting the mods from their zip files, and installing the mods in the wrong folder.
+6) You should now have the Stardew Valley Expanded and StardewAP - SVE Patch folders in your Mods folder. If your yaml settings were also correctly set up in the above sections, you should be ready to play with SVE.
 
 ## Weren't there more mods supported?
 
