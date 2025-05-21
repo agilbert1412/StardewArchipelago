@@ -71,12 +71,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 Ingredients[0] = new BundleIngredientDescription(Ingredients[0].id, Game1.player.Money, Ingredients[0].quality, Ingredients[0].completed, Ingredients[0].preservesId);
             }
 
+            InitializeNameAndLabel(bundleName);
+
             if (bundleFromArchipelago is not ItemBundle itemBundle)
             {
                 return;
             }
 
-            InitializeNameAndLabel(bundleName);
             RewardDescription = string.Empty;
             Complete = true;
 
