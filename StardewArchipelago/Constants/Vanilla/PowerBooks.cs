@@ -1,5 +1,4 @@
-﻿using StardewArchipelago.Constants.Modded;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace StardewArchipelago.Constants.Vanilla
 {
@@ -32,8 +31,6 @@ namespace StardewArchipelago.Constants.Vanilla
         public const string MINING_MONTHLY = "Mining Monthly";
         public const string COMBAT_QUARTERLY = "Combat Quarterly";
         public const string QUEEN_OF_SAUCE_COOKBOOK = "Queen Of Sauce Cookbook";
-        // Mod Books
-        public const string DIGGING_LIKE_WORMS = "Digging Like Worms";
 
         public static readonly Dictionary<string, string> BookIdsToNames = new()
         {
@@ -63,8 +60,6 @@ namespace StardewArchipelago.Constants.Vanilla
             { ObjectIds.MINING_MONTHLY, MINING_MONTHLY },
             { ObjectIds.COMBAT_QUARTERLY, COMBAT_QUARTERLY },
             { ObjectIds.QUEEN_OF_SAUCE_COOKBOOK, QUEEN_OF_SAUCE_COOKBOOK },
-            // Mod Books
-            { ModBookIds.DIGGING_LIKE_WORMS, DIGGING_LIKE_WORMS },
         };
 
         public static readonly Dictionary<string, string> BookNamesToIds = new()
@@ -95,8 +90,6 @@ namespace StardewArchipelago.Constants.Vanilla
             { MINING_MONTHLY, ObjectIds.MINING_MONTHLY },
             { COMBAT_QUARTERLY, ObjectIds.COMBAT_QUARTERLY },
             { QUEEN_OF_SAUCE_COOKBOOK, ObjectIds.QUEEN_OF_SAUCE_COOKBOOK },
-            // Mod Books
-            { DIGGING_LIKE_WORMS, ModBookIds.DIGGING_LIKE_WORMS },
         };
 
 
@@ -106,26 +99,5 @@ namespace StardewArchipelago.Constants.Vanilla
         "Book_Horse" "Horse: The Book"
         "Book_WildSeeds" "Ways Of The Wild" "Raccoon Journal"
          */
-    }
-}
-
-namespace StardewArchipelago.Constants.Modded
-{
-    public static class ModPowerBooks
-    {
-        // Mod Books
-        public const string DIGGING_LIKE_WORMS = "Digging Like Worms";
-
-        public static readonly Dictionary<string, string> BookIdsToNames = new()
-        {
-            // Mod Books
-            { ModBookIds.DIGGING_LIKE_WORMS, DIGGING_LIKE_WORMS },
-        };
-
-        public static readonly Dictionary<string, string> BookNamesToIds = new()
-        {
-            // Mod Books
-            { DIGGING_LIKE_WORMS, ModBookIds.DIGGING_LIKE_WORMS },
-        };
     }
 }
