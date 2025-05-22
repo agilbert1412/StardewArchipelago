@@ -71,7 +71,7 @@ Alternatively, the [weighted settings page](https://archipelago.gg/weighted-opti
 6) You should now have the Stardew Valley Expanded and StardewAP - SVE Patch folders in your Mods folder. If your yaml settings were also correctly set up in the above sections, you should be ready to play with SVE.
 
 ### What your Mods folder would look like at minimum if correctly installed
-![Minimum mods needed to run SVE with SDV](/Documentation/SVE%20Min%20Mods.png?raw=true)
+![Minimum mods needed to run SVE with SDV](/Documentation/Images/SVE%20Min%20Mods.png?raw=true)
 
 ## Weren't there more mods supported?
 
