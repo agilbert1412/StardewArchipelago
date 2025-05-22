@@ -14,7 +14,7 @@ A reasonable effort will be made to stay up to date, but it has to be understood
 The following mods are currently supported:
 
 General: 
-- [Stardew Valley Expanded] (#stardew-valley-expanded-specific-instructions), by FlashShifter, Version 1.14.46 **Requires additional installation steps and patch files**
+- [Stardew Valley Expanded](#stardew-valley-expanded-specific-instructions), by FlashShifter, Version 1.14.46 **Requires additional installation steps and patch files**
 - [Skull Cavern Elevator](https://www.nexusmods.com/stardewvalley/mods/963), by Lestoph, Version 1.6.x
 - [Bigger Backpack](https://www.nexusmods.com/stardewvalley/mods/1845), by spacechase0, Version 7.3.x
 - [Tractor Mod](https://www.nexusmods.com/stardewvalley/mods/1401), by Pathoschild, Version 4.21.x
