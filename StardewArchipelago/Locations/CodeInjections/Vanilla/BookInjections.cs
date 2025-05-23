@@ -161,7 +161,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             PlayReadBookAnimation(book, location);
 
-            var possibleNames = new[] { book.Name, PowerBooks.BookIdsToNames[book.ItemId] };
+            var possibleNames = new[] { book.Name, PowerBooks.BookIdsToNames[book.ItemId], book.Name, ModBookIds.ModBookIdsToNames[book.ItemId] };
             var isThisBookRandomized = false;
             foreach (var possibleName in possibleNames)
             {
