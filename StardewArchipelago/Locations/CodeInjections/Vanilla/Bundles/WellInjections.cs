@@ -3,32 +3,29 @@ using KaitoKid.ArchipelagoUtilities.Net;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Bundles;
 using StardewArchipelago.Logging;
-using StardewArchipelago.Serialization;
-using StardewArchipelago.Stardew;
 using StardewModdingAPI;
-using StardewValley.Locations;
 using StardewValley;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Constants.Vanilla;
 using StardewValley.Buildings;
-using xTile.Dimensions;
 using StardewValley.Extensions;
-using StardewValley.ItemTypeDefinitions;
 using Object = StardewValley.Object;
+using Microsoft.Xna.Framework.Audio;
+using System.IO;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 {
     internal class WellInjections
     {
+        private const string HONEYWELL_FILE = "honeywell.wav";
+        private const string HONEYWELL_CUE = "honeywell";
+
         private static LogHandler _logger;
         private static IModHelper _modHelper;
         private static StardewArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
+
 
         public static void Initialize(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
         {
@@ -36,6 +33,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             _modHelper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
+            var currentModFolder = _modHelper.DirectoryPath;
+            var soundsFolder = "Sounds";
+            var relativePathToSound = Path.Combine(currentModFolder, soundsFolder, HONEYWELL_FILE);
+            var honeywellCueDefinition = new CueDefinition(HONEYWELL_CUE, SoundEffect.FromFile(relativePathToSound), 0);
+            Game1.soundBank.AddCue(honeywellCueDefinition);
         }
 
         // public virtual bool doAction(Vector2 tileLocation, Farmer who)
@@ -43,7 +45,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         {
             try
             {
-                if (__instance.buildingType.Value != "Well" || !ArchipelagoJunimoNoteMenu.IsBundleRemaining(MemeBundleNames.HONEYWELL))
+                if (__instance.buildingType.Value != "Well")
                 {
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
@@ -66,7 +68,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
                 ShowObjectThrownIntoWaterAnimation(__instance, who, who.ActiveObject, () =>
                 {
-                    Game1.playSound("jingle1");
+                    Game1.playSound(HONEYWELL_CUE);
                     ArchipelagoJunimoNoteMenu.CompleteBundleIfExists(MemeBundleNames.HONEYWELL);
                 });
                 who.reduceActiveItemByOne();

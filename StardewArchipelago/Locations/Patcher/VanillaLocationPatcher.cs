@@ -208,11 +208,6 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void PatchMemeBundles()
         {
-            if (!ArchipelagoJunimoNoteMenu.IsBundleRemaining(MemeBundleNames.HONEYWELL))
-            {
-                return;
-            }
-
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Building), nameof(Building.doAction)),
                 prefix: new HarmonyMethod(typeof(WellInjections), nameof(WellInjections.DoAction_ThrowHoneyInWell_Prefix))
