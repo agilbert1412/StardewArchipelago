@@ -15,7 +15,7 @@ namespace StardewArchipelago.Constants.Modded
             { ModNames.BIGGER_BACKPACK, $"7.3.{WILDCARD}" },
             { ModNames.BINNING, $"2.1.{WILDCARD}" },
             //{ ModNames.COOKING, "1.4.5" },
-            //{ ModNames.DEEP_WOODS, "4.0.1-alpha" },
+            //{ ModNames.DEEP_WOODS, "3.1.0-beta" },
             //{ ModNames.DELORES, "1.1.2" },
             //{ ModNames.EUGENE, "1.3.1" },
             { ModNames.JASPER, $"1.8.3" },
@@ -31,7 +31,6 @@ namespace StardewArchipelago.Constants.Modded
             //{ ModNames.WELLWICK, "1.0.0" },
             //{ ModNames.YOBA, "1.0.0" },
             { ModNames.SVE, $"1.14.{WILDCARD}" },
-            //{ ModNames.SVE, $"1.15.10" }, less SVE versioning dirty edits 
             { ModNames.DISTANT_LANDS, $"2.2.{WILDCARD}" },
             { ModNames.LACEY, $"1.4.{WILDCARD}" },
             //{ ModNames.BOARDING_HOUSE, "4.0.16" },
