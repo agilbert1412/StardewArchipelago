@@ -349,7 +349,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         private void DrawDeathLinksCurrency()
         {
-            DrawSpecialCurrency(_wallet.DeathLinks, Game1.mouseCursors, new Rectangle(416, 1962, 16, 16), 3f);
+            DrawSpecialCurrency(_wallet.DeathLinks, _menu.MemeTexture, new Rectangle(63, 0, 16, 16), 3f);
         }
 
         private static void DrawSpecialCurrency(int amountOwned, Texture2D texture, Rectangle sourceRectangle, float scale = 4f)
