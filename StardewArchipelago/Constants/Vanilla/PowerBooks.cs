@@ -32,8 +32,6 @@ namespace StardewArchipelago.Constants.Vanilla
         public const string MINING_MONTHLY = "Mining Monthly";
         public const string COMBAT_QUARTERLY = "Combat Quarterly";
         public const string QUEEN_OF_SAUCE_COOKBOOK = "Queen Of Sauce Cookbook";
-        // Mod Books
-        public const string DIGGING_LIKE_WORMS = "Digging Like Worms";
 
         public static readonly Dictionary<string, string> BookIdsToNames = new()
         {
