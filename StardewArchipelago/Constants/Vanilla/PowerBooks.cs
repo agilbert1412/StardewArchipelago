@@ -62,7 +62,7 @@ namespace StardewArchipelago.Constants.Vanilla
             { ObjectIds.COMBAT_QUARTERLY, COMBAT_QUARTERLY },
             { ObjectIds.QUEEN_OF_SAUCE_COOKBOOK, QUEEN_OF_SAUCE_COOKBOOK },
             // Modded
-            { ModBookIds.DIGGING_LIKE_WORMS, DIGGING_LIKE_WORMS },
+            { ModBookIds.DIGGING_LIKE_WORMS, ModBookIds.DIGGING_LIKE_WORMS },
         };
 
         public static readonly Dictionary<string, string> BookNamesToIds = new()
@@ -94,7 +94,7 @@ namespace StardewArchipelago.Constants.Vanilla
             { COMBAT_QUARTERLY, ObjectIds.COMBAT_QUARTERLY },
             { QUEEN_OF_SAUCE_COOKBOOK, ObjectIds.QUEEN_OF_SAUCE_COOKBOOK },
             //Modded
-            { DIGGING_LIKE_WORMS, ModBookIds.DIGGING_LIKE_WORMS },
+            { ModBookIds.DIGGING_LIKE_WORMS, ModBookIds.DIGGING_LIKE_WORMS },
         };
 
 
