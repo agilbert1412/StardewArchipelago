@@ -16,10 +16,8 @@ using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Extensions;
 using StardewArchipelago.GameModifications.MoveLink;
 using StardewArchipelago.GameModifications.Testing;
-using StardewArchipelago.Serialization;
 using StardewModdingAPI;
 using StardewValley;
-using StardewValley.Minigames;
 using Color = Microsoft.Xna.Framework.Color;
 
 namespace StardewArchipelago.Archipelago

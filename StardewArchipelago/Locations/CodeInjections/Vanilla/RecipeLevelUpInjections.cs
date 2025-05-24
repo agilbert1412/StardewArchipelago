@@ -7,7 +7,6 @@ using StardewValley.Menus;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Archipelago.SlotData;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla

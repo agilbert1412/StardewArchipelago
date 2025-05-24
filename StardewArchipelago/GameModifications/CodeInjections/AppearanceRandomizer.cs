@@ -13,7 +13,6 @@ using System.Text;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using StardewArchipelago.Extensions;
 using StardewValley.Characters;
-using StardewValley.GameData.Pets;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
 {

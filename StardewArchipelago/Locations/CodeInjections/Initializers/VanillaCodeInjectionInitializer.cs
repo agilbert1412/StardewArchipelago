@@ -1,7 +1,6 @@
 ﻿using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Archipelago.SlotData;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.Bundles;
 using StardewArchipelago.GameModifications.CodeInjections.Television;

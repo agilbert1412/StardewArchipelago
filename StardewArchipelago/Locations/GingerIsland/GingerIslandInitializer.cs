@@ -1,5 +1,4 @@
-﻿using KaitoKid.ArchipelagoUtilities.Net.Client;
-using StardewArchipelago.Locations.GingerIsland;
+﻿using StardewArchipelago.Locations.GingerIsland;
 using StardewArchipelago.Locations.GingerIsland.Boat;
 using StardewArchipelago.Locations.GingerIsland.Parrots;
 using StardewArchipelago.Locations.GingerIsland.VolcanoForge;

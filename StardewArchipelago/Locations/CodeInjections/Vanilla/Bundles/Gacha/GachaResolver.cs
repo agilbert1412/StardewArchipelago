@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes;
 using StardewValley;
-using StardewValley.Delegates;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Gacha
 {

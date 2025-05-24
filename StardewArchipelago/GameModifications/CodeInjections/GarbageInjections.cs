@@ -1,17 +1,8 @@
 ﻿using System;
-using KaitoKid.ArchipelagoUtilities.Net;
-using System.Collections.Generic;
-using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Archipelago.SlotData;
-using StardewArchipelago.Archipelago.SlotData.SlotEnums;
-using StardewArchipelago.Constants.Vanilla;
-using StardewArchipelago.Extensions;
-using StardewArchipelago.Locations.Secrets;
 using StardewValley;
 using StardewValley.GameData.GarbageCans;
-using StardewValley.Locations;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
 {

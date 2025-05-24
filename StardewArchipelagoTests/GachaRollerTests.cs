@@ -1,5 +1,4 @@
 using FluentAssertions;
-using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Gacha;
 
 namespace StardewArchipelagoTests

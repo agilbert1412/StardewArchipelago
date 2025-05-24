@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using StardewArchipelago.Archipelago;
-using StardewArchipelago.Archipelago.SlotData;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.Stardew;
 

@@ -5,14 +5,11 @@ using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework.Input;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Archipelago.SlotData;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.GameModifications.MultiSleep;
 using StardewArchipelago.Serialization;
 using StardewModdingAPI;
 using StardewValley;
-using StardewValley.BellsAndWhistles;
-using StardewValley.Menus;
 
 namespace StardewArchipelago.GameModifications.Seasons
 {

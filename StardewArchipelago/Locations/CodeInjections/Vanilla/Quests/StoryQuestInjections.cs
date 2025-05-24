@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using Archipelago.MultiClient.Net.Models;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.Constants.Vanilla;
-using StardewArchipelago.Items.Unlocks.Vanilla;
-using StardewArchipelago.Locations.Festival;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
@@ -23,7 +19,6 @@ using KaitoKid.ArchipelagoUtilities.Net;
 using Microsoft.Xna.Framework.Content;
 using StardewArchipelago.Archipelago;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
-using StardewArchipelago.Archipelago.SlotData;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.Locations.Secrets;
 

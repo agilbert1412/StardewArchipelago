@@ -5,7 +5,6 @@ using HarmonyLib;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago.Gifting;
-using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.GameModifications;
 using StardewArchipelago.GameModifications.CodeInjections;
 using StardewArchipelago.Goals;

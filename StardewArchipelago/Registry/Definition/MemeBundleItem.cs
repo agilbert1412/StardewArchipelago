@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Vanilla;
-using StardewArchipelago.Textures;
 using StardewValley;
 using StardewValley.ItemTypeDefinitions;
 using StardewValley.Objects;

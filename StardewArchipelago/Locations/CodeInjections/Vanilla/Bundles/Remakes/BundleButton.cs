@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewValley.Menus;
-using static StardewValley.FarmerSprite;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
 {

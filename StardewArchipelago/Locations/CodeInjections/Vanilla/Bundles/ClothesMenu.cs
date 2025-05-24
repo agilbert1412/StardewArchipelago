@@ -6,18 +6,12 @@
 // XML documentation location: d:\programs\steam\steamapps\common\Stardew Valley\Stardew Valley.xml
 
 #nullable disable
-using System;
 using System.Collections.Generic;
-using System.Xml.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using Netcode;
 using StardewValley;
-using StardewValley.Characters;
 using StardewValley.Menus;
 using StardewValley.Objects;
-using StardewValley.Objects.Trinkets;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 {

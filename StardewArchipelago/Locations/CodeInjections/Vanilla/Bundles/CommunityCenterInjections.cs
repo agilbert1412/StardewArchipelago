@@ -12,7 +12,6 @@ using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Bundles;
 using StardewArchipelago.Constants.Vanilla;
-using StardewValley.Network;
 using Rectangle = xTile.Dimensions.Rectangle;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles

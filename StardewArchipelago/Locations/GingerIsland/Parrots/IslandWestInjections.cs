@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;

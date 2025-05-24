@@ -1,16 +1,8 @@
-﻿using System.Linq;
-using KaitoKid.ArchipelagoUtilities.Net;
-using KaitoKid.ArchipelagoUtilities.Net.Client;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Constants;
-using StardewArchipelago.Logging;
 using StardewArchipelago.Textures;
-using StardewModdingAPI;
-using StardewValley;
-using StardewValley.BellsAndWhistles;
 using StardewValley.ItemTypeDefinitions;
-using StardewValley.Objects;
 
 namespace StardewArchipelago.Registry.Definition
 {

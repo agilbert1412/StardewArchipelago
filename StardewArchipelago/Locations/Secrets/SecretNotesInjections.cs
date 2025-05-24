@@ -1,23 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Archipelago.MultiClient.Net.Enums;
 using KaitoKid.ArchipelagoUtilities.Net;
-using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Archipelago.SlotData;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Extensions;
-using StardewArchipelago.Locations.Festival;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Buildings;
-using StardewValley.Delegates;
 using StardewValley.Extensions;
 using StardewValley.GameData.GarbageCans;
 using StardewValley.Locations;
@@ -26,7 +21,6 @@ using StardewValley.Objects;
 using StardewValley.Quests;
 using StardewValley.TerrainFeatures;
 using xTile.Dimensions;
-using xTile.Layers;
 using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Locations.Secrets

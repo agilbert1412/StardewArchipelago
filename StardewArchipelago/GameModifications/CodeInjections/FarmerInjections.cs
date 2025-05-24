@@ -4,11 +4,8 @@ using StardewArchipelago.Archipelago;
 using StardewValley;
 using StardewArchipelago.Constants.Vanilla;
 using System.Linq;
-using StardewArchipelago.Archipelago.SlotData;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
-using StardewValley.Locations;
 using Object = StardewValley.Object;
-using Microsoft.Xna.Framework.Input;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
 using StardewValley.TerrainFeatures;
 

@@ -14,12 +14,10 @@ using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Network.NetEvents;
 using xTile.Dimensions;
-using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Vanilla;
-using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes;
 using StardewArchipelago.Stardew;
 using StardewArchipelago.Logging;
 

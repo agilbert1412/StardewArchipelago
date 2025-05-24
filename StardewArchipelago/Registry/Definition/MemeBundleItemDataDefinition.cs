@@ -1,19 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using KaitoKid.ArchipelagoUtilities.Net;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Extensions;
-using StardewArchipelago.Locations.InGameLocations;
-using StardewArchipelago.Logging;
-using StardewModdingAPI;
 using StardewValley;
 using StardewValley.ItemTypeDefinitions;
-using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Registry.Definition
 {

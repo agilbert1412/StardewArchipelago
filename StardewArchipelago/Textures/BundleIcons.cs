@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Bundles;
 using StardewModdingAPI;
 using StardewArchipelago.Logging;
-using KaitoKid.ArchipelagoUtilities.Net.Client;
 
 namespace StardewArchipelago.Textures
 {

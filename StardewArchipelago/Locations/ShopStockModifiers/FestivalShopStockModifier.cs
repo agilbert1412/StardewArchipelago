@@ -12,7 +12,6 @@ using StardewValley.GameData.Shops;
 using Category = StardewArchipelago.Constants.Vanilla.Category;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Archipelago.SlotData;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 
 namespace StardewArchipelago.Locations.ShopStockModifiers

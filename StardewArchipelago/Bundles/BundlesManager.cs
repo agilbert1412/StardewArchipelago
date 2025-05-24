@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Netcode;
 using Newtonsoft.Json;

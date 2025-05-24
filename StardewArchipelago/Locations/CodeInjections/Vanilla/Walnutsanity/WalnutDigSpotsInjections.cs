@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewArchipelago.Constants;
 using StardewModdingAPI;
 using StardewValley;

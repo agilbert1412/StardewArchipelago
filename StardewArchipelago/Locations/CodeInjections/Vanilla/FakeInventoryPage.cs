@@ -10,7 +10,6 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Netcode;
 using StardewValley;
 using StardewValley.Characters;
 using StardewValley.Menus;

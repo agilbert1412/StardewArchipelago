@@ -1,5 +1,4 @@
 ﻿using Archipelago.MultiClient.Net.Models;
-using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewArchipelago.Locations.InGameLocations;
 using StardewModdingAPI;
 using StardewValley;

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using Newtonsoft.Json.Linq;
-using StardewValley;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Gacha
 {

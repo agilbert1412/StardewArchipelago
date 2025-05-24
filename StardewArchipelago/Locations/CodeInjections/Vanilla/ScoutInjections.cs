@@ -1,17 +1,13 @@
 ﻿using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Constants.Locations;
 using StardewModdingAPI;
 using StardewValley.Menus;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using StardewArchipelago.Locations.InGameLocations;
-using StardewValley;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {

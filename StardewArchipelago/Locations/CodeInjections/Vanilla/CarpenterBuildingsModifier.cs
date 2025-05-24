@@ -8,7 +8,6 @@ using StardewModdingAPI.Events;
 using StardewValley.GameData.Buildings;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Archipelago.SlotData;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla

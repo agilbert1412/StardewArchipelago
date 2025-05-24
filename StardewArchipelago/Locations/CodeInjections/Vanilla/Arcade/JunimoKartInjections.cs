@@ -9,7 +9,6 @@ using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Netcode;
 using Newtonsoft.Json.Linq;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Archipelago.SlotData;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewModdingAPI;
 using StardewValley;

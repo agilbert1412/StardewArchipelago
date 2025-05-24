@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.WebSockets;
-using Archipelago.MultiClient.Net;
 using Archipelago.MultiClient.Net.Packets;
 using Microsoft.Xna.Framework;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
-using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewValley;
-using Microsoft.Xna.Framework.Graphics;
-using Newtonsoft.Json.Linq;
 using StardewArchipelago.GameModifications.CodeInjections;
 using StardewModdingAPI.Events;
 

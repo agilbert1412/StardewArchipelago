@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Reflection.Metadata.Ecma335;
 using KaitoKid.ArchipelagoUtilities.Net.ItemSprites;
 using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Logging;
