@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using StardewArchipelago.Constants.Modded;
 
 namespace StardewArchipelago.Constants.Vanilla
 {
@@ -60,6 +61,8 @@ namespace StardewArchipelago.Constants.Vanilla
             { ObjectIds.MINING_MONTHLY, MINING_MONTHLY },
             { ObjectIds.COMBAT_QUARTERLY, COMBAT_QUARTERLY },
             { ObjectIds.QUEEN_OF_SAUCE_COOKBOOK, QUEEN_OF_SAUCE_COOKBOOK },
+            // Modded
+            { ModBookIds.DIGGING_LIKE_WORMS_ID, ModBookIds.DIGGING_LIKE_WORMS_NAME },
         };
 
         public static readonly Dictionary<string, string> BookNamesToIds = new()
@@ -90,6 +93,8 @@ namespace StardewArchipelago.Constants.Vanilla
             { MINING_MONTHLY, ObjectIds.MINING_MONTHLY },
             { COMBAT_QUARTERLY, ObjectIds.COMBAT_QUARTERLY },
             { QUEEN_OF_SAUCE_COOKBOOK, ObjectIds.QUEEN_OF_SAUCE_COOKBOOK },
+            //Modded
+            { ModBookIds.DIGGING_LIKE_WORMS_NAME, ModBookIds.DIGGING_LIKE_WORMS_ID },
         };
 
 
