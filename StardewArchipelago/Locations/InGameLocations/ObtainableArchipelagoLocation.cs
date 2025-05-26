@@ -96,8 +96,6 @@ namespace StardewArchipelago.Locations.InGameLocations
             var scoutedLocation = archipelago.ScoutStardewLocation(LocationName);
 
             _archipelagoTexture = GetCorrectTexture(logger, modHelper, scoutedLocation, archipelago, relatedHint);
-
-
             _description = scoutedLocation == null ? ScoutedLocation.GenericItemName() : scoutedLocation.ToString();
         }
 
@@ -118,8 +116,12 @@ namespace StardewArchipelago.Locations.InGameLocations
 
         private static string GetCorrectGenericTextureName(ScoutedLocation scoutedLocation, Hint relatedHint)
         {
-            var hintTexture = GetHintTexture(relatedHint);
+            if (scoutedLocation == null)
+            {
+                return ArchipelagoTextures.WHITE;
+            }
 
+            var hintTexture = GetHintTexture(relatedHint);
             if (hintTexture != null)
             {
                 return hintTexture;
