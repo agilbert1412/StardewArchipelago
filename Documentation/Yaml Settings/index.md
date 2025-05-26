@@ -14,7 +14,7 @@ These settings decide what your playthrough will be. They do not directly add or
 
 - [Goal](./goal.md)
 - [Farm Type](./farm_type.md)
-- ~~[Bundle Randomization](./bundle_randomization.md)~~
+- [Bundle Randomization](./bundle_randomization.md)
 - ~~[Bundle Price](./bundle_price.md)~~
 - ~~[Entrance Randomization](./entrance_randomization.md)~~
 - ~~[Exclude Ginger Island](./exclude_ginger_island.md)~~
@@ -75,3 +75,10 @@ These have direct effects on in-game behaviors, not tied to the Archipelago rand
 - ~~[Death Link](./death_link.md)~~
 - ~~[Progression Balancing](./progression_balancing.md)~~
 - ~~[Accessibility](./accessibility.md)~~
+
+## Yaml-only settings
+
+These settings cannot be picked from the website, and require filling out your yaml manually. They are intended for very experienced players.
+
+- ~~[Mods](./mods.md)~~
+- ~~[Bundle Plando](./bundle-plando.md)~~

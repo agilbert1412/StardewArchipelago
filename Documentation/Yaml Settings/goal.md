@@ -29,7 +29,7 @@ In-game, you can read Grandpa's letter on his shrine to get reminded of what you
 Restore the community center, by completing every bundle in every room. External bundles, like for example the missing bundle or the raccoon requests still exist in the world, but are not considered part of the goal.
 
 - This goal can be **Short** and it can be **Long**. This will be mostly decided by the setting ~~[Bundle Price](./bundle_price.md)~~
-- This goal is partially *Adaptable*. Settings like ~~[Bundle Randomization](./bundle_randomization.md)~~ and ~~[Bundle Price](./bundle_price.md)~~ will change the content of the bundles and therefore have a significant impact on the goal. Settings like ~~[Exclude Ginger Island](./exclude_ginger_island.md)~~ will have a slight impact, by allowing or banning certain items from appearing in bundles.
+- This goal is partially *Adaptable*. Settings like [Bundle Randomization](./bundle_randomization.md) and ~~[Bundle Price](./bundle_price.md)~~ will change the content of the bundles and therefore have a significant impact on the goal. Settings like ~~[Exclude Ginger Island](./exclude_ginger_island.md)~~ will have a slight impact, by allowing or banning certain items from appearing in bundles.
 - This goal is **not** *Focused*. You will be doing a bit of everything to fulfill bundles.
 - This goal is **not** *Coopable*. To win, a save file must exist with a fully locally completed Community Center
 
