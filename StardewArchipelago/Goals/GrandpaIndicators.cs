@@ -102,6 +102,7 @@ namespace StardewArchipelago.Goals
                 sprite.position = position;
                 sprite.flicker = false;
                 sprite.flipped = false;
+                sprite.drawAboveAlwaysFront = true;
 
                 sprite.sourceRect = sourceRect;
                 sprite.sourceRectStartingPos = new Vector2(sourceRect.X, sourceRect.Y);
@@ -137,8 +138,8 @@ namespace StardewArchipelago.Goals
 
             var originX = ((grandpaShrinePosition.X - 2) * 64) + 50;
             var originY = ((grandpaShrinePosition.Y - 3) * 64) + 8;
-            var width = (7 * 32) + 24;
-            var height = (3 * 32) + 24;
+            var width = (7 * 32);
+            var height = (3 * 32);
             if (position.X < originX || position.X > originX + width || position.Y < originY || position.Y > originY + height)
             {
                 return false;

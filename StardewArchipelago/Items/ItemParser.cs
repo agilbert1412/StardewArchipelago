@@ -87,7 +87,13 @@ namespace StardewArchipelago.Items
             if (receivedItem.ItemName.EndsWith(RECIPE_SUFFIX))
             {
                 var itemOfRecipe = receivedItem.ItemName[..^RECIPE_SUFFIX.Length];
-                return _itemManager.GetRecipeByName(itemOfRecipe).GetAsLetter(receivedItem);
+                var recipe = _itemManager.GetRecipeByName(itemOfRecipe);
+                if (recipe == null)
+                {
+                    _logger.LogError($"Could not process received recipe: {receivedItem.ItemName}. Generating an empty letter.");
+                    return new LetterInformationAttachment(receivedItem);
+                }
+                return recipe.GetAsLetter(receivedItem);
             }
 
             var itemName = _nameMapper.GetInternalName(receivedItem.ItemName);

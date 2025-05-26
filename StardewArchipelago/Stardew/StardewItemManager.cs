@@ -311,7 +311,8 @@ namespace StardewArchipelago.Stardew
                 return _craftingRecipesByName[recipeName];
             }
 
-            throw new ArgumentException($"Recipe not found: {recipeName}");
+            _logger.LogError($"Recipe not found: {recipeName}");
+            return null;
         }
 
         public StardewWeapon[] GetAllWeapons()
