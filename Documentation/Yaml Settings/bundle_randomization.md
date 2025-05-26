@@ -10,7 +10,7 @@ This setting will use all the vanilla bundles from the vanilla game. These are l
 
 The content of the bundles is static, it has no variance. You know exactly what you get.
 
-The Bundles are still affected by ~~[Bundle Price](./bundle_price.md)~~. If you increase the cost of bundles, some of the items will duplicate.
+The Bundles are still affected by [Bundle Price](./bundle_price.md). If you increase the cost of bundles, some of the items will duplicate.
 
 ### Thematic
 
@@ -20,7 +20,7 @@ For example, the `Spring Foraging Bundle`, that usually requires 4 items (Wild H
 
 The content of the bundles is written by hand, and might sometimes be slightly subjective. But you should get a good idea of what kind of items might be required, based on the name.
 
-When increasing the ~~[Bundle Price](./bundle_price.md)~~, extra items will get pulled from the pool, until they are all included, and only then will duplicates get rolled.
+When increasing the [Bundle Price](./bundle_price.md), extra items will get pulled from the pool, until they are all included, and only then will duplicates get rolled.
 
 This also affects the missing bundle and the raccoon requests, even if the latter already had some randomness. Additional items can be part of specific request types.
 
@@ -62,9 +62,9 @@ All of these bundles are some sort of joke, troll, or reference to a different m
 
 This means that many of these are trivially easy, and many are very difficult. The only consistent factor is that they are intended to be funny.
 
-Many of these bundles are *Fixed Price* bundles, because the exact prices and amounts are part of the joke, and changing them would ruin it. This means that the ~~[Bundle Price](./bundle_price.md)~~ setting does not affect them.
+Many of these bundles are *Fixed Price* bundles, because the exact prices and amounts are part of the joke, and changing them would ruin it. This means that the [Bundle Price](./bundle_price.md) setting does not affect them.
 
-Still, there is a significant number that are affected by ~~[Bundle Price](./bundle_price.md)~~, and it should be used sparingly.
+Still, there is a significant number that are affected by [Bundle Price](./bundle_price.md), and it should be used sparingly.
 
 Some of these bundles, if played on Maximum Prices, will be insanely difficult. I **highly discourage** playing meme bundles on maximum prices. If you do so, it is at your own risk.
 
