@@ -413,6 +413,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 return true;
             }
 
+            if (key == SpecialOrders.EXTENDED_FAMILY &&
+                (_locationChecker.IsAnyLocationNotChecked("Son of Crimsonfish") ||
+                 _locationChecker.IsAnyLocationNotChecked("Ms. Angler") ||
+                 _locationChecker.IsAnyLocationNotChecked("Legend II") ||
+                 _locationChecker.IsAnyLocationNotChecked("Glacierfish Jr.") ||
+                 _locationChecker.IsAnyLocationNotChecked("Radioactive Carp")))
+            {
+                return true;
+            }
+
             return false;
         }
 
