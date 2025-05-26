@@ -15,6 +15,7 @@ using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants.Vanilla;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -23,10 +24,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private static ILogger _logger;
         private static IModHelper _modHelper;
         private static StardewArchipelagoClient _archipelago;
-        private static LocationChecker _locationChecker;
+        private static StardewLocationChecker _locationChecker;
         private static ContentManager _englishContentManager;
 
-        public static void Initialize(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker)
         {
             _logger = logger;
             _modHelper = modHelper;
@@ -267,17 +268,58 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             // A lot of this code is duplicated from SpecialOrder.CanStartOrderNow(orderId, order)
             // But I need to do something special with CheckTags so I had to split it and run it on my own
+
             var specialOrdersThatCanBeStartedToday = allSpecialOrdersData
-                .Where(order => order.Value.OrderType == specialOrderType)
-                .Where(order => order.Value.Repeatable || !Game1.MasterPlayer.team.completedSpecialOrders.Contains(order.Key))
-                .Where(order => Game1.dayOfMonth < 16 || order.Value.Duration != QuestDuration.Month)
-                .Where(order => CheckTags(order.Value.RequiredTags))
-                .Where(order => GameStateQuery.CheckConditions(order.Value.Condition))
-                .Where(order => Game1.player.team.specialOrders.All(x => x.questKey.Value != order.Key))
-                .Where(order => !_archipelago.SlotData.ToolProgression.HasFlag(ToolProgression.Progressive) || !order.Key.StartsWith("Demetrius") ||
-                                _archipelago.HasReceivedItem("Progressive Fishing Rod"))
+                .Where(order => OrderTypeFilter(order, specialOrderType))
+                .Where(RepeatableFilter)
+                .Where(TooLateInMonthFilter)
+                .Where(TagsFilter)
+                .Where(ConditionsFilter)
+                .Where(ActiveSpecialOrdersFilter)
+                .Where(FishingRodFilter)
+                .Where(ArcadeMachineFilter)
                 .ToDictionary(x => x.Key, x => x.Value);
             return specialOrdersThatCanBeStartedToday;
+        }
+
+        private static bool OrderTypeFilter(KeyValuePair<string, SpecialOrderData> order, string specialOrderType)
+        {
+            return order.Value.OrderType == specialOrderType;
+        }
+
+        private static bool RepeatableFilter(KeyValuePair<string, SpecialOrderData> order)
+        {
+            return order.Value.Repeatable || !Game1.MasterPlayer.team.completedSpecialOrders.Contains(order.Key);
+        }
+
+        private static bool TooLateInMonthFilter(KeyValuePair<string, SpecialOrderData> order)
+        {
+            return Game1.dayOfMonth < 16 || order.Value.Duration != QuestDuration.Month;
+        }
+
+        private static bool TagsFilter(KeyValuePair<string, SpecialOrderData> order)
+        {
+            return CheckTags(order.Value.RequiredTags);
+        }
+
+        private static bool ConditionsFilter(KeyValuePair<string, SpecialOrderData> order)
+        {
+            return GameStateQuery.CheckConditions(order.Value.Condition);
+        }
+
+        private static bool ActiveSpecialOrdersFilter(KeyValuePair<string, SpecialOrderData> order)
+        {
+            return Game1.player.team.specialOrders.All(x => x.questKey.Value != order.Key);
+        }
+
+        private static bool FishingRodFilter(KeyValuePair<string, SpecialOrderData> order)
+        {
+            return !_archipelago.SlotData.ToolProgression.HasFlag(ToolProgression.Progressive) || !order.Key.StartsWith("Demetrius") || _archipelago.HasReceivedItem("Progressive Fishing Rod");
+        }
+
+        private static bool ArcadeMachineFilter(KeyValuePair<string, SpecialOrderData> order)
+        {
+            return _archipelago.SlotData.ArcadeMachineLocations != ArcadeLocations.Disabled || order.Key != SpecialOrders.LETS_PLAY_A_GAME;
         }
 
         private static bool CheckTags(string requiredTags)
@@ -321,9 +363,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private static void ChooseTwoOrders(Dictionary<string, SpecialOrder> specialOrders,
             Hint[] hints, Random random)
         {
+            const double chanceOfPreferentialPick = 0.6;
+
             var allSpecialOrders = specialOrders.Select(x => x.Key).ToList();
 
-            var specialOrdersNeverCompletedBefore = allSpecialOrders.Where(key => IsNotCompletedYet(specialOrders, key)).ToList();
+            var specialOrdersNeverCompletedBefore = allSpecialOrders.Where(key => StillNeedsToCompleteOrder(specialOrders, key)).ToList();
 
             var hintedSpecialOrders = specialOrdersNeverCompletedBefore.Where(key =>
                 hints.Any(hint => _archipelago.GetLocationName(hint.LocationId) == specialOrders[key].GetName())).ToList();
@@ -336,14 +380,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             allSpecialOrders = allSpecialOrders.Shuffle(random);
 
             var allOrdersOrdered = new List<string>(hintedSpecialOrders);
-            if (allOrdersOrdered.Count < 2)
+            if (allOrdersOrdered.Count < 2 || random.NextDouble() > chanceOfPreferentialPick)
             {
                 allOrdersOrdered.AddRange(specialOrdersNeverCompletedBefore);
-            }
 
-            if (allOrdersOrdered.Count < 2)
-            {
-                allOrdersOrdered.AddRange(allSpecialOrders);
+                if (allOrdersOrdered.Count < 2 || random.NextDouble() > chanceOfPreferentialPick)
+                {
+                    allOrdersOrdered.AddRange(allSpecialOrders);
+                }
             }
 
             for (var i = 0; i < 2; ++i)
@@ -353,15 +397,25 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
         }
 
-        private static bool IsNotCompletedYet(Dictionary<string, SpecialOrder> specialOrders, string key)
+        private static bool StillNeedsToCompleteOrder(Dictionary<string, SpecialOrder> specialOrders, string key)
         {
             var orderName = specialOrders[key].GetName();
-            if (_locationChecker.LocationExists(orderName))
+            if (_locationChecker.LocationExists(orderName) && _locationChecker.IsLocationMissing(orderName))
             {
-                return _locationChecker.IsLocationMissing(orderName);
+                return true;
             }
 
-            return !Game1.player.team.completedSpecialOrders.Contains(key);
+            if (!Game1.player.team.completedSpecialOrders.Contains(key))
+            {
+                return true;
+            }
+
+            if (key == SpecialOrders.QIS_CROP && (_locationChecker.IsAnyLocationNotChecked("Qi Bean") || _locationChecker.IsAnyLocationNotChecked("Qi Crop")))
+            {
+                return true;
+            }
+
+            return false;
         }
 
         public static string GetEnglishQuestName(string questNameKey)
