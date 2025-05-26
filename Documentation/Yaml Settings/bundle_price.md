@@ -35,6 +35,8 @@ This is generally undesirable, so the default prices of bundles will respect the
 
 For Simplicity, I would usually refer to the Spring Foraging Bundle as a `7/4/4` bundle, which means 7 potential items, 4 ingredients picked, and 4 slots to fill.
 
+When talking about how difficult a given bundle is, the size of the item pool is generally not relevant, so in this case I might refer to the Spring Foraging Bundle as a `4/4` bundle, omitting the first number entirely.
+
 ### Bundle Price Impact on item slots
 
 The Bundle Price setting has a direct effect on the number of item slots. It can also have an indirect effect on the requested ingredients, if it increases the number of slots higher than the current number, as described in the previous section.
