@@ -1,4 +1,4 @@
-# Stardew Valley Archipelago Farm Type
+# Stardew Valley Archipelago - Farm Type
 
 ## Farm Type
 

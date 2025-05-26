@@ -1,4 +1,4 @@
-# Stardew Valley Archipelago Goals
+# Stardew Valley Archipelago - Goals
 
 ## Goal
 
@@ -29,7 +29,7 @@ In-game, you can read Grandpa's letter on his shrine to get reminded of what you
 Restore the community center, by completing every bundle in every room. External bundles, like for example the missing bundle or the raccoon requests still exist in the world, but are not considered part of the goal.
 
 - This goal can be **Short** and it can be **Long**. This will be mostly decided by the setting [Bundle Price](./bundle_price.md)
-- This goal is partially *Adaptable*. Settings like [Bundle Randomization](./bundle_randomization.md) and [Bundle Price](./bundle_price.md) will change the content of the bundles and therefore have a significant impact on the goal. Settings like ~~[Exclude Ginger Island](./exclude_ginger_island.md)~~ will have a slight impact, by allowing or banning certain items from appearing in bundles.
+- This goal is partially *Adaptable*. Settings like [Bundle Randomization](./bundle_randomization.md) and [Bundle Price](./bundle_price.md) will change the content of the bundles and therefore have a significant impact on the goal. Settings like [Exclude Ginger Island](./exclude_ginger_island.md) will have a slight impact, by allowing or banning certain items from appearing in bundles.
 - This goal is **not** *Focused*. You will be doing a bit of everything to fulfill bundles.
 - This goal is **not** *Coopable*. To win, a save file must exist with a fully locally completed Community Center
 
@@ -108,7 +108,7 @@ You must obtain a total of 130 walnuts over the course of your entire game. If u
 
 In vanilla, there are 130 walnuts total. But in Archipelago, due to some technical limitations, you can obtain extra walnuts as part of an anti-softlock mechanic. This means that this goal will generally be easier than the vanilla version of it, and a knowledgeable player can make it even easier by griding the correct things.
 
-If this goal is picked, but ~~[Exclude Ginger Island](./exclude_ginger_island.md)~~ is enabled, your Ginger Island setting will get force-disabled, as the goal is impossible without Ginger Island.
+If this goal is picked, but [Exclude Ginger Island](./exclude_ginger_island.md) is enabled, your Ginger Island setting will get force-disabled, as the goal is impossible without Ginger Island.
 
 - This goal is **not** *Adaptable*. The task remains the same regardless of settings.
 - This goal is **not** *Focused*. If you are using ~~[Walnutsanity](./walnutsanity.md)~~, this goal is essentially a Macguffin Hunt where the goal is to receive several specific items, and you cannot focus on them specifically.
@@ -122,7 +122,7 @@ If this goal is picked, but ~~[Exclude Ginger Island](./exclude_ginger_island.md
 
 You must complete all the Monster Slayer goals visible on the board at the Adventurer's guild. This goal pairs well with ~~[Monstersanity](./monstersanity.md)~~.
 
-- This goal is *Adaptable*. The monster eradication goals vary depending on if you ~~[Exclude Ginger Island](./exclude_ginger_island.md)~~, if you included the Qi Board ~~[Special Order Locations](./special_order_locations.md)~~ and your ~~[Monstersanity](./monstersanity.md)~~ setting. The goal is to complete all the enabled monstersanity checks.
+- This goal is *Adaptable*. The monster eradication goals vary depending on if you [Exclude Ginger Island](./exclude_ginger_island.md), if you included the Qi Board ~~[Special Order Locations](./special_order_locations.md)~~ and your ~~[Monstersanity](./monstersanity.md)~~ setting. The goal is to complete all the enabled monstersanity checks.
 - This goal is *Focused*. You will be mostly navigating the various mines and slaying monsters.
 - This goal is *Coopable*. If using ~~[Monstersanity](./monstersanity.md)~~, the goal is to complete all the monstersanity checks, which can be done by several players.
 

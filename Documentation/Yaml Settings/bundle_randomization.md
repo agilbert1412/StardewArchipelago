@@ -1,4 +1,4 @@
-# Stardew Valley Archipelago Bundle Randomization
+# Stardew Valley Archipelago - Bundle Randomization
 
 ## Bundle Randomization
 

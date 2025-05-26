@@ -1,4 +1,4 @@
-# Stardew Valley Archipelago Entrance Randomization
+# Stardew Valley Archipelago - Entrance Randomization
 
 ## Entrance Randomization
 

@@ -1,4 +1,4 @@
-# Stardew Valley Archipelago Bundle Price
+# Stardew Valley Archipelago - Bundle Price
 
 ## Bundle Price
 
