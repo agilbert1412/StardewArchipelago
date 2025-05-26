@@ -363,7 +363,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private static void ChooseTwoOrders(Dictionary<string, SpecialOrder> specialOrders,
             Hint[] hints, Random random)
         {
-            const double chanceOfPreferentialPick = 0.6;
+            const double chanceOfPreferentialPick = 0.75;
 
             var allSpecialOrders = specialOrders.Select(x => x.Key).ToList();
 
@@ -380,14 +380,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             allSpecialOrders = allSpecialOrders.Shuffle(random);
 
             var allOrdersOrdered = new List<string>(hintedSpecialOrders);
-            if (allOrdersOrdered.Count < 2 || random.NextDouble() > chanceOfPreferentialPick)
-            {
-                allOrdersOrdered.AddRange(specialOrdersNeverCompletedBefore);
+            allOrdersOrdered.AddRange(specialOrdersNeverCompletedBefore);
+            allOrdersOrdered.AddRange(allSpecialOrders);
 
-                if (allOrdersOrdered.Count < 2 || random.NextDouble() > chanceOfPreferentialPick)
-                {
-                    allOrdersOrdered.AddRange(allSpecialOrders);
-                }
+            if (random.NextDouble() > chanceOfPreferentialPick)
+            {
+                allOrdersOrdered = allOrdersOrdered.Shuffle(random);
             }
 
             for (var i = 0; i < 2; ++i)
