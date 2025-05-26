@@ -54,6 +54,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
+                if (!_locationChecker.IsLocationMissing(goldenCoconutLocation))
+                {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
                 __instance.waitingForServerResponse = true;
                 Game1.player.team.goldenCoconutMutex.RequestLock(() =>
                 {
