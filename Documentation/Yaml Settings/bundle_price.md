@@ -25,7 +25,7 @@ Each of these items can have an amount, a quality, and a flavor if applicable. I
 
 The 2nd important value is the number of requested ingredients. This is the number of items that will get picked from the item pool, to be shown as ingredients to a given player. In the Spring Foraging Bundle, this number is 4.
 
-The 3rd value is the number of item slots to fill. If this number is smaller than the number of ingredients, the player gets to pick which ingredients they fulfill, leading to more agency.
+The 3rd value is the number of item slots to fill. If this number is smaller than the number of ingredients, the player gets to pick which ingredients they fulfill, leading to more freedom and player choice.
 
 ![image](https://i.imgur.com/d8Awymz.png)
 
