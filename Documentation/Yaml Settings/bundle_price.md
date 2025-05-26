@@ -6,6 +6,8 @@ The Bundle Price setting allows you to customize the difficulty of the bundles f
 
 This setting has a massive impact on the difficulty and duration of a slot with the [Community Center](./goal.md#community-center) goal.
 
+Expensive settings are very difficult, and you should only play Maximum Prices if you are truly ready for a crazy challenge.
+
 ### How Bundles work
 
 Bundles in Archipelago are composed of multiple different "number of items", which all play a different role. For the sake of this explanation, I will use the [Thematic](./bundle_randomization.md#thematic) Spring Foraging Bundle.
