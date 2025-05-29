@@ -41,6 +41,8 @@ using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Delegates;
 using StardewValley.Internal;
+using StardewValley.Minigames;
+using StardewValley.Monsters;
 using StardewValley.TerrainFeatures;
 using StardewValley.Triggers;
 
@@ -290,6 +292,8 @@ namespace StardewArchipelago
 
         private void OnSaving(object sender, SavingEventArgs e)
         {
+            CleanSaveGameProblems();
+
             SeasonsRandomizer.PrepareDateForSaveGame();
             State.ItemsReceived = _itemManager.GetAllItemsAlreadyProcessed();
             State.LocationsChecked = _locationChecker.GetAllLocationsAlreadyChecked();
@@ -301,6 +305,29 @@ namespace StardewArchipelago
             _helper.Data.WriteSaveData(AP_EXPERIENCE_KEY, SkillInjections.GetArchipelagoExperience());
             _helper.Data.WriteSaveData(AP_FRIENDSHIP_KEY, FriendshipInjections.GetArchipelagoFriendshipPoints());
             _helper.WriteConfig(Config);
+        }
+
+        private void CleanSaveGameProblems()
+        {
+            foreach (var gameLocation in Game1.locations)
+            {
+                foreach (var character in gameLocation.characters.ToArray())
+                {
+                    if (character is not Monster monster)
+                    {
+                        continue;
+                    }
+                    var typeName = monster.GetType().FullName;
+                    if (typeName == null || !typeName.EndsWith("FTM"))
+                    {
+                        _logger.LogInfo($"Will attempt to save a monster of type '{typeName}' in {gameLocation.Name}");
+                        continue;
+                    }
+
+                    _logger.LogInfo($"Removing a monster of type '{typeName}' in {gameLocation.Name} to avoid save game troubles");
+                    gameLocation.characters.Remove(monster);
+                }
+            }
         }
 
         private void DebugAssertStateValues(ArchipelagoStateDto state)
