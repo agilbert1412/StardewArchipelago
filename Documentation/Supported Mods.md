@@ -83,7 +83,6 @@ The following mods have technical mod support, but are temporarily deprecated as
 - [Magic](https://www.nexusmods.com/stardewvalley/mods/2007), by spacechase0, Version 0.8.2
 - [Cooking Skill](https://www.nexusmods.com/stardewvalley/mods/522), by spacechase0, Version 1.4.5
 - [Custom NPC - Riley](https://www.nexusmods.com/stardewvalley/mods/5811), by SG, Version 1.2.2
-- [Boarding House and Bus Stop Extension](https://www.nexusmods.com/stardewvalley/mods/4120), by TrentXV, Version 4.0.16
 - [Custom NPC - Yoba](https://www.nexusmods.com/stardewvalley/mods/14871), by Jerem, Version 1.0.0
 - [Custom NPC Eugene](https://www.nexusmods.com/stardewvalley/mods/9222), by Leroy and translated by Sapiescent, Version 1.3.1
 - ['Prophet' Wellwick](https://www.nexusmods.com/stardewvalley/mods/6462), by Jyangnam, Version 1.0.0
