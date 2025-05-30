@@ -180,7 +180,7 @@ The stardrops are:
 - On floor 100 in the mines. Is always shuffled.
 - From the spouse or roommate upon reaching 12.5 hearts. Is shuffled if ~~[Friendsanity](./friendsanity.md)~~ is enabled to any degree.
 - Sold by Krobus in the Sewers. Is always shuffled.
-- Obtained from Old Master Cannoli in the secret woods. Is always shuffled.
+- Obtained from Old Master Cannoli in the secret woods. Is always shuffled. [Note for 7.x.x, this stardrop will be shuffled as part of ~~[Secretsanity](./secretsanity.md)~~]
 - Received after catching every fish. Is shuffled with ~~[Fishsanity](./fishsanity.md)~~.
 - Received after completing the Museum. Is always shuffled.
 <br><br>
