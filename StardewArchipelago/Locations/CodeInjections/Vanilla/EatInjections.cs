@@ -67,7 +67,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             name = _nameMapper.GetEnglishName(name); // For the Name vs Display Name discrepencies in Mods.
 
             var apLocation = objectData.IsDrink ? $"Drink {name}" : $"Eat {name}";
-            if (_locationChecker.LocationExists(apLocation))
+            if (_archipelago.GetLocationId(apLocation) > -1)
             {
                 _locationChecker.AddCheckedLocation(apLocation);
             }
