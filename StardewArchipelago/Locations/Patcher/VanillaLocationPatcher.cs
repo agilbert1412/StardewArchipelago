@@ -35,6 +35,7 @@ using StardewArchipelago.Locations.CodeInjections.Vanilla.Arcade;
 using StardewArchipelago.Locations.Secrets;
 using StardewValley.Buildings;
 using StardewValley.Tools;
+using StardewArchipelago.GameModifications.CodeInjections;
 
 namespace StardewArchipelago.Locations.Patcher
 {
@@ -114,6 +115,7 @@ namespace StardewArchipelago.Locations.Patcher
                 PatchSecrets();
                 PatchMoviesanity();
                 PatchHatsanity();
+                PatchEating();
                 PatchScouts();
             }
             catch (Exception ex)
@@ -1596,11 +1598,6 @@ namespace StardewArchipelago.Locations.Patcher
             }
 
             _harmony.Patch(
-                original: AccessTools.Method(typeof(Farmer), nameof(Farmer.doneEating)),
-                postfix: new HarmonyMethod(typeof(DifficultSecretsInjections), nameof(DifficultSecretsInjections.DoneEating_StardropFavoriteThing_Postfix))
-            );
-
-            _harmony.Patch(
                 original: AccessTools.Method(typeof(ShippingMenu), nameof(ShippingMenu.receiveLeftClick)),
                 postfix: new HarmonyMethod(typeof(DifficultSecretsInjections), nameof(DifficultSecretsInjections.ReceiveLeftClick_AnnoyMoonMan_Postfix))
             );
@@ -1758,6 +1755,14 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Item), nameof(Item.onEquip)),
                 postfix: new HarmonyMethod(typeof(HatInjections), nameof(HatInjections.OnEquip_EquippedHat_Postfix))
+            );
+        }
+
+        private void PatchEating()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Farmer), nameof(Farmer.doneEating)),
+                postfix: new HarmonyMethod(typeof(DifficultSecretsInjections), nameof(EatInjections.DoneEating_EatingPatches_Postfix))
             );
         }
     }

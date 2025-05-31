@@ -18,13 +18,14 @@ using StardewArchipelago.Locations.Secrets;
 using StardewArchipelago.Logging;
 using StardewArchipelago.Serialization;
 using StardewArchipelago.Stardew;
+using StardewArchipelago.Stardew.NameMapping;
 using StardewModdingAPI;
 
 namespace StardewArchipelago.Locations.CodeInjections.Initializers
 {
     public static class VanillaCodeInjectionInitializer
     {
-        public static void Initialize(LogHandler logger, IModHelper modHelper, ModConfig config, StardewArchipelagoClient archipelago, ArchipelagoStateDto state, StardewLocationChecker locationChecker, StardewItemManager itemManager, WeaponsManager weaponsManager, BundlesManager bundlesManager, Friends friends, TrapManager trapManager, BankHandler bank)
+        public static void Initialize(LogHandler logger, IModHelper modHelper, ModConfig config, StardewArchipelagoClient archipelago, ArchipelagoStateDto state, StardewLocationChecker locationChecker, StardewItemManager itemManager, WeaponsManager weaponsManager, BundlesManager bundlesManager, Friends friends, TrapManager trapManager, BankHandler bank, NameSimplifier nameSimplifier)
         {
             BackpackInjections.Initialize(logger, archipelago, locationChecker);
             ScytheInjections.Initialize(logger, locationChecker);
@@ -68,6 +69,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             InitializeSecretsInjections(logger, modHelper, archipelago, locationChecker);
             MovieInjections.Initialize(logger, modHelper, archipelago, locationChecker);
             HatInjections.Initialize(logger, modHelper, archipelago, locationChecker);
+            EatInjections.Initialize(logger, modHelper, archipelago, locationChecker, nameSimplifier);
         }
 
         private static void InitializeArcadeMachines(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker)

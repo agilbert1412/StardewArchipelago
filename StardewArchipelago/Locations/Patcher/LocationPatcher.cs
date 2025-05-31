@@ -10,6 +10,7 @@ using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
 using StardewArchipelago.Logging;
 using StardewArchipelago.Serialization;
 using StardewArchipelago.Stardew;
+using StardewArchipelago.Stardew.NameMapping;
 using StardewModdingAPI;
 
 namespace StardewArchipelago.Locations.Patcher
@@ -20,9 +21,9 @@ namespace StardewArchipelago.Locations.Patcher
 
         public LocationPatcher(LogHandler logger, IModHelper modHelper, ModConfig config, Harmony harmony, StardewArchipelagoClient archipelago, ArchipelagoStateDto state,
             StardewLocationChecker locationChecker, StardewItemManager itemManager, WeaponsManager weaponsManager, BundlesManager bundlesManager,
-            SeedShopStockModifier seedShopStockModifier, Friends friends, TrapManager trapManager, BankHandler bank)
+            SeedShopStockModifier seedShopStockModifier, Friends friends, TrapManager trapManager, BankHandler bank, NameSimplifier nameSimplifier)
         {
-            CodeInjectionInitializer.Initialize(logger, modHelper, config, archipelago, state, locationChecker, itemManager, weaponsManager, bundlesManager, seedShopStockModifier, friends, trapManager, bank);
+            CodeInjectionInitializer.Initialize(logger, modHelper, config, archipelago, state, locationChecker, itemManager, weaponsManager, bundlesManager, seedShopStockModifier, friends, trapManager, bank, nameSimplifier);
             _patchers = new List<ILocationPatcher>();
             _patchers.Add(new VanillaLocationPatcher(logger, modHelper, harmony, archipelago, locationChecker, itemManager));
             if (archipelago.SlotData.Mods.IsModded)

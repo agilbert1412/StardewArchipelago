@@ -28,8 +28,7 @@ namespace StardewArchipelago.Locations.Secrets
             _locationChecker = locationChecker;
         }
 
-        // public void doneEating()
-        public static void DoneEating_StardropFavoriteThing_Postfix(Farmer __instance)
+        public static void DoneEatingStardropSecret(Farmer __instance)
         {
             try
             {
@@ -47,7 +46,7 @@ namespace StardewArchipelago.Locations.Secrets
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed in {nameof(DoneEating_StardropFavoriteThing_Postfix)}:\n{ex}");
+                _logger.LogError($"Failed in {nameof(DoneEatingStardropSecret)}:\n{ex}");
                 return;
             }
         }

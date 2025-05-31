@@ -847,19 +847,9 @@ namespace StardewArchipelago.GameModifications
 
         private void PatchFarmer()
         {
-            PatchStardropMessage();
-
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Stats), nameof(Stats.takeStep)),
                 postfix: new HarmonyMethod(typeof(FarmerInjections), nameof(FarmerInjections.TakeStep_FloorIsLava_Postfix))
-            );
-        }
-
-        private void PatchStardropMessage()
-        {
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(Farmer), nameof(Farmer.doneEating)),
-                postfix: new HarmonyMethod(typeof(FarmerInjections), nameof(FarmerInjections.DoneEating_StardropFavoriteThingKaito_Postfix))
             );
         }
 
