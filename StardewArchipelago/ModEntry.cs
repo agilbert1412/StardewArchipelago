@@ -7,6 +7,7 @@ using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.Gifting;
+using StardewArchipelago.Bugfixes;
 using StardewArchipelago.Bundles;
 using StardewArchipelago.GameModifications;
 using StardewArchipelago.GameModifications.CodeInjections;
@@ -81,6 +82,7 @@ namespace StardewArchipelago
         private NightShippingBehaviors _shippingBehaviors;
         private TileSanityManager _tileSanityManager;
         private HintHelper _hintHelper;
+        private SaveCleaner _saveCleaner;
 
         private ModRandomizedLogicPatcher _modLogicPatcher;
         private InitialModGameStateInitializer _modStateInitializer;
@@ -114,6 +116,8 @@ namespace StardewArchipelago
             _testerFeatures = new TesterFeatures(_logger, _helper);
 
             _archipelago = new StardewArchipelagoClient(_logger, _helper, ModManifest, _harmony, OnItemReceived, new SmapiJsonLoader(_helper), _testerFeatures);
+
+            _saveCleaner = new SaveCleaner(_logger);
 
             _helper.Events.GameLoop.GameLaunched += OnGameLaunched;
             _helper.Events.GameLoop.SaveCreating += OnSaveCreating;
@@ -201,7 +205,7 @@ namespace StardewArchipelago
 
         private void OnSaving(object sender, SavingEventArgs e)
         {
-            CleanSaveGameProblems();
+            _saveCleaner.OnSaving(sender, e);
 
             SeasonsRandomizer.PrepareDateForSaveGame();
             State.ItemsReceived = _itemManager.GetAllItemsAlreadyProcessed();
@@ -214,29 +218,6 @@ namespace StardewArchipelago
             _helper.Data.WriteSaveData(AP_EXPERIENCE_KEY, SkillInjections.GetArchipelagoExperience());
             _helper.Data.WriteSaveData(AP_FRIENDSHIP_KEY, FriendshipInjections.GetArchipelagoFriendshipPoints());
             _helper.WriteConfig(Config);
-        }
-
-        private void CleanSaveGameProblems()
-        {
-            foreach (var gameLocation in Game1.locations)
-            {
-                foreach (var character in gameLocation.characters.ToArray())
-                {
-                    if (character is not Monster monster)
-                    {
-                        continue;
-                    }
-                    var typeName = monster.GetType().FullName;
-                    if (typeName == null || !typeName.EndsWith("FTM"))
-                    {
-                        _logger.LogInfo($"Will attempt to save a monster of type '{typeName}' in {gameLocation.Name}");
-                        continue;
-                    }
-
-                    _logger.LogInfo($"Removing a monster of type '{typeName}' in {gameLocation.Name} to avoid save game troubles");
-                    gameLocation.characters.Remove(monster);
-                }
-            }
         }
 
         private void DebugAssertStateValues(ArchipelagoStateDto state)
