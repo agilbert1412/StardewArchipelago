@@ -113,6 +113,7 @@ namespace StardewArchipelago.Locations.Patcher
                 PatchWalnuts();
                 PatchSecrets();
                 PatchMoviesanity();
+                PatchHatsanity();
                 PatchScouts();
             }
             catch (Exception ex)
@@ -1744,6 +1745,19 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony.Patch(
                 original: AccessTools.Method(typeof(MovieTheater), nameof(MovieTheater.GetConcessionsForGuest), new[] { typeof(string) }),
                 prefix: new HarmonyMethod(typeof(MovieInjections), nameof(MovieInjections.GetConcessionsForGuest_OfferAllUnlockedSnacks_Prefix))
+            );
+        }
+
+        private void PatchHatsanity()
+        {
+            if (_archipelago.SlotData.Hatsanity <= Hatsanity.None)
+            {
+                return;
+            }
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Item), nameof(Item.onEquip)),
+                postfix: new HarmonyMethod(typeof(HatInjections), nameof(HatInjections.OnEquip_EquippedHat_Postfix))
             );
         }
     }

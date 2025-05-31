@@ -298,6 +298,13 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string WILTED_BOUQUET = QualifiedObjectId(ObjectIds.WILTED_BOUQUET);
         public static readonly string ANCIENT_DOLL = QualifiedObjectId(ObjectIds.ANCIENT_DOLL);
         public static readonly string TUNA = QualifiedObjectId(ObjectIds.TUNA);
+        public static readonly string PARTY_HAT_RED = QualifiedHatId(HatIds.PARTY_HAT_RED);
+        public static readonly string PARTY_HAT_BLUE = QualifiedHatId(HatIds.PARTY_HAT_BLUE);
+        public static readonly string PARTY_HAT_GREEN = QualifiedHatId(HatIds.PARTY_HAT_GREEN);
+        public static readonly string COPPER_PAN_HAT = QualifiedHatId(HatIds.COPPER_PAN);
+        public static readonly string STEEL_PAN_HAT = QualifiedHatId(HatIds.STEEL_PAN);
+        public static readonly string GOLD_PAN_HAT = QualifiedHatId(HatIds.GOLD_PAN);
+        public static readonly string IRIDIUM_PAN_HAT = QualifiedHatId(HatIds.IRIDIUM_PAN);
 
         public static string QualifiedObjectId(string objectId)
         {

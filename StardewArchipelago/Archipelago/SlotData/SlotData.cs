@@ -46,6 +46,7 @@ namespace StardewArchipelago.Archipelago.SlotData
         public Walnutsanity Walnutsanity { get; private set; }
         public Moviesanity Moviesanity { get; private set; }
         public Secretsanity Secretsanity { get; private set; }
+        public Hatsanity Hatsanity { get; set; }
         public bool ExcludeGingerIsland { get; private set; }
         public TrapItemsDifficulty TrapItemsDifficulty { get; set; }
         public bool EnableMultiSleep { get; private set; }
@@ -105,6 +106,7 @@ namespace StardewArchipelago.Archipelago.SlotData
             Walnutsanity = GetSlotWalnutsanitySetting();
             Moviesanity = GetSlotSetting(SlotDataKeys.MOVIESANITY, Moviesanity.None);
             Secretsanity = GetSlotSecretsanitySetting();
+            Hatsanity = GetSlotSetting(SlotDataKeys.HATSANITY, Hatsanity.None);
             ExcludeGingerIsland = GetSlotSetting(SlotDataKeys.EXCLUDE_GINGER_ISLAND, true);
             TrapItemsDifficulty = GetSlotSetting(SlotDataKeys.TRAP_DIFFICULTY, TrapItemsDifficulty.Medium, SlotDataKeys.TRAP_ITEMS);
             EnableMultiSleep = GetSlotSetting(SlotDataKeys.MULTI_SLEEP_ENABLED, true);

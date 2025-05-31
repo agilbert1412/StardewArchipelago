@@ -38,6 +38,7 @@ using StardewArchipelago.Textures;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
+using StardewValley.Monsters;
 
 namespace StardewArchipelago
 {
