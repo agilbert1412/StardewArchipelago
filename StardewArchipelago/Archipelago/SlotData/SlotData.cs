@@ -42,6 +42,7 @@ namespace StardewArchipelago.Archipelago.SlotData
         public Craftsanity Craftsanity { get; private set; }
         public Friendsanity Friendsanity { get; private set; }
         public int FriendsanityHeartSize { get; private set; }
+        public Eatsanity Eatsanity { get; private set; }
         public Booksanity Booksanity { get; private set; }
         public Walnutsanity Walnutsanity { get; private set; }
         public Moviesanity Moviesanity { get; private set; }
@@ -102,6 +103,7 @@ namespace StardewArchipelago.Archipelago.SlotData
             Craftsanity = GetSlotSetting(SlotDataKeys.CRAFTSANITY, Craftsanity.None);
             Friendsanity = GetSlotSetting(SlotDataKeys.FRIENDSANITY, Friendsanity.None);
             FriendsanityHeartSize = GetSlotSetting(SlotDataKeys.FRIENDSANITY_HEART_SIZE, 4);
+            Eatsanity = GetSlotEatsanitySetting();
             Booksanity = GetSlotSetting(SlotDataKeys.BOOKSANITY, Booksanity.None);
             Walnutsanity = GetSlotWalnutsanitySetting();
             Moviesanity = GetSlotSetting(SlotDataKeys.MOVIESANITY, Moviesanity.None);
@@ -197,6 +199,11 @@ namespace StardewArchipelago.Archipelago.SlotData
         {
             _logger.LogWarning($"SlotData did not contain expected key: \"{key}\"");
             return defaultValue;
+        }
+
+        private Eatsanity GetSlotEatsanitySetting()
+        {
+            return GetSlotOptionSetSetting<Eatsanity>(SlotDataKeys.EATSANITY);
         }
 
         private Walnutsanity GetSlotWalnutsanitySetting()

@@ -28,6 +28,7 @@
         public const string CRAFTSANITY = "craftsanity";
         public const string FRIENDSANITY = "friendsanity";
         public const string FRIENDSANITY_HEART_SIZE = "friendsanity_heart_size";
+        public const string EATSANITY = "eatsanity";
         public const string BOOKSANITY = "booksanity";
         public const string WALNUTSANITY = "walnutsanity";
         public const string MOVIESANITY = "moviesanity";
