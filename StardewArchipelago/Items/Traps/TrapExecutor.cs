@@ -40,6 +40,7 @@ namespace StardewArchipelago.Items.Traps
         public readonly BabyBirther BabyBirther;
         public readonly DebrisSpawner DebrisSpawner;
         public readonly InventoryShuffler InventoryShuffler;
+        public readonly BuffApplier DebuffApplier;
 
         public TrapExecutor(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, IGiftHandler giftHandler)
         {
@@ -53,6 +54,7 @@ namespace StardewArchipelago.Items.Traps
             BabyBirther = new BabyBirther();
             DebrisSpawner = new DebrisSpawner(_logger);
             InventoryShuffler = new InventoryShuffler(_logger, giftHandler);
+            DebuffApplier = new BuffApplier();
         }
 
         public void AddBurntDebuff()
@@ -68,7 +70,7 @@ namespace StardewArchipelago.Items.Traps
         public void AddFrozenDebuff()
         {
             var duration = _difficultyBalancer.FrozenDebuffDurations[_archipelago.SlotData.TrapItemsDifficulty];
-            AddDebuff(Buffs.Frozen, duration);
+            DebuffApplier.AddBuff(Buffs.Frozen, duration);
         }
 
         public void AddJinxedDebuff()
@@ -94,30 +96,7 @@ namespace StardewArchipelago.Items.Traps
         private void AddDebuff(Buffs whichBuff)
         {
             var duration = _difficultyBalancer.DefaultDebuffDurations[_archipelago.SlotData.TrapItemsDifficulty];
-            AddDebuff(whichBuff, duration);
-        }
-
-        private void AddDebuff(Buffs whichBuff, BuffDuration duration)
-        {
-            if (duration == BuffDuration.Zero)
-            {
-                return;
-            }
-
-            AddDebuff(whichBuff, (int)duration);
-        }
-
-        public void AddDebuff(Buffs whichBuff, int duration)
-        {
-            if (duration <= 0)
-            {
-                return;
-            }
-
-            var debuff = new Buff(((int)whichBuff).ToString());
-            debuff.millisecondsDuration = duration;
-            debuff.totalMillisecondsDuration = duration;
-            Game1.player.applyBuff(debuff);
+            DebuffApplier.AddBuff(whichBuff, duration);
         }
 
         public void CreateDebris()

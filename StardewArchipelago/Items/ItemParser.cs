@@ -79,6 +79,11 @@ namespace StardewArchipelago.Items
                 return _trapManager.GenerateTrapLetter(receivedItem);
             }
 
+            if (receivedItem.ItemName.EndsWith(" Enzyme"))
+            {
+                return new LetterBuffAttachment(receivedItem, receivedItem.ItemName);
+            }
+
             if (_unlockManager.IsUnlock(receivedItem.ItemName))
             {
                 return _unlockManager.PerformUnlockAsLetter(receivedItem);

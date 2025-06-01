@@ -228,23 +228,23 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             try
             {
-                var numberEnzymes = _archipelago.GetReceivedItemCount("Energy Enzyme");
+                var numberEnzymes = _archipelago.GetReceivedItemCount("Stamina Enzyme");
                 if (numberEnzymes <= 0)
                 {
-                    // No enzyme, no energy!
+                    // No enzyme, no stamina!
                     __result = 0;
                     return;
                 }
 
                 if (numberEnzymes > 5)
                 {
-                    // After 5 enzymes, all items get a little buff of energy
+                    // After 5 enzymes, all items get a little buff of stamina
                     __result = (int)Math.Round(__result * Math.Pow(1.1, numberEnzymes-5));
                 }
 
                 if (numberEnzymes >= 10)
                 {
-                    // Max enzymes, max energy!
+                    // Max enzymes, max stamina!
                     return;
                 }
 
@@ -278,7 +278,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             try
             {
-                var numberEnzymes = _archipelago.GetReceivedItemCount("Energy Enzyme");
+                var numberEnzymes = _archipelago.GetReceivedItemCount("Health Enzyme");
                 if (numberEnzymes <= 0)
                 {
                     // No enzyme, no health!
@@ -429,7 +429,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             newBuffData.MiningLevel = _archipelago.GetReceivedItemCount("Mining Enzyme");
             newBuffData.MagneticRadius = _archipelago.GetReceivedItemCount("Magnetism Enzyme") * 32;
             newBuffData.Defense = _archipelago.GetReceivedItemCount("Defense Enzyme");
-            newBuffData.MaxStamina = _archipelago.GetReceivedItemCount("Max Energy Enzyme") * 20;
+            newBuffData.MaxStamina = _archipelago.GetReceivedItemCount("Max Stamina Enzyme") * 20;
 
             return new BuffEffects(newBuffData);
         }
@@ -443,7 +443,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
            items.extend(item_factory(item) for item in ["Mining Enzyme"]*5)
            items.extend(item_factory(item) for item in ["Magnetism Enzyme"]*2)
            items.extend(item_factory(item) for item in ["Defense Enzyme"]*5)
-           items.extend(item_factory(item) for item in ["Max Energy Enzyme"]*3)
+           items.extend(item_factory(item) for item in ["Max Stamina Enzyme"]*3)
 
            items.extend(item_factory(item) for item in ["Squid Ink Enzyme"])
            items.extend(item_factory(item) for item in ["Monster Musk Enzyme"])

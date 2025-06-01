@@ -39,6 +39,7 @@
         public const string IslandUnlock = "IslandUnlock";
         public const string SpawnBaby = "SpawnBaby";
         public const string Trap = "Trap";
+        public const string Buff = "Buff";
         public const string LearnCookingRecipe = "LearnCookingRecipe";
         public const string MovieTheater = "Repair Movie Theater";
         public const string FruitBats = "FruitBats";

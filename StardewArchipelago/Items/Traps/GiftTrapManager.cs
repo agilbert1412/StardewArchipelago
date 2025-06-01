@@ -125,7 +125,7 @@ namespace StardewArchipelago.Items.Traps
         private void GetTrapGiftDebuff(Buffs whichDebuff, double quality, double duration, double durationMultiplier = 1.0)
         {
             var debuffDuration = (int)Math.Round((int)BuffDuration.HalfHour * duration * quality * durationMultiplier);
-            _trapExecutor.AddDebuff(whichDebuff, debuffDuration);
+            _trapExecutor.DebuffApplier.AddBuff(whichDebuff, debuffDuration);
         }
 
         private void LoseEnergy(double quality, double duration)

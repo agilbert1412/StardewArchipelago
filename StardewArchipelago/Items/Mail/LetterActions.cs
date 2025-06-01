@@ -83,6 +83,7 @@ namespace StardewArchipelago.Items.Mail
             _letterActions.Add(LetterActionsKeys.IslandUnlock, PerformParrotUpgrade);
             _letterActions.Add(LetterActionsKeys.SpawnBaby, (_) => _babyBirther.SpawnNewBaby());
             _letterActions.Add(LetterActionsKeys.Trap, ExecuteTrap);
+            _letterActions.Add(LetterActionsKeys.Buff, ApplyBuff);
             _letterActions.Add(LetterActionsKeys.LearnCookingRecipe, LearnCookingRecipe);
             modLetterActions.AddModLetterActions(_letterActions);
         }
@@ -599,6 +600,16 @@ namespace StardewArchipelago.Items.Mail
             }
 
             _trapManager.TryExecuteTrapImmediately(trapName);
+        }
+
+        private void ApplyBuff(string buffName)
+        {
+            if (!_trapManager.TrapExecutor.DebuffApplier.IsBuff(buffName, out var buff))
+            {
+                throw new ArgumentException(buffName);
+            }
+
+            _trapManager.TrapExecutor.DebuffApplier.AddBuff(buff, BuffDuration.WholeDay);
         }
 
         private void GetWeaponOfNextTier()
