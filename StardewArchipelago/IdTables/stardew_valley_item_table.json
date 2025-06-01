@@ -26,7 +26,7 @@
         },
         "Minecarts Repair": {
             "code": 717020,
-            "classification": "useful"
+            "classification": "progression"
         },
         "Bus Repair": {
             "code": 717021,
@@ -266,7 +266,7 @@
         },
         "Junimo Hut": {
             "code": 717082,
-            "classification": "useful"
+            "classification": "progression"
         },
         "Gold Clock": {
             "code": 717083,
@@ -282,7 +282,7 @@
         },
         "Well": {
             "code": 717086,
-            "classification": "useful"
+            "classification": "progression"
         },
         "Silo": {
             "code": 717087,
@@ -302,7 +302,7 @@
         },
         "Stable": {
             "code": 717091,
-            "classification": "useful"
+            "classification": "progression"
         },
         "Slime Hutch": {
             "code": 717092,
@@ -890,7 +890,7 @@
         },
         "Sewing Machine": {
             "code": 717239,
-            "classification": "useful"
+            "classification": "progression"
         },
         "Coffee Maker": {
             "code": 717240,
@@ -1058,7 +1058,7 @@
         },
         "Sinister Signal": {
             "code": 717281,
-            "classification": "filler"
+            "classification": "progression"
         },
         "Dark Talisman": {
             "code": 717282,
@@ -1110,7 +1110,7 @@
         },
         "Progressive Footwear": {
             "code": 717294,
-            "classification": "useful"
+            "classification": "progression"
         },
         "Small Glow Ring": {
             "code": 717295,
@@ -1130,7 +1130,7 @@
         },
         "Slime Charmer Ring": {
             "code": 717299,
-            "classification": "useful"
+            "classification": "progression"
         },
         "Warrior Ring": {
             "code": 717300,
@@ -1146,19 +1146,19 @@
         },
         "Ring of Yoba": {
             "code": 717303,
-            "classification": "useful"
+            "classification": "progression"
         },
         "Sturdy Ring": {
             "code": 717304,
-            "classification": "useful"
+            "classification": "progression"
         },
         "Burglar's Ring": {
             "code": 717305,
-            "classification": "useful"
+            "classification": "progression"
         },
         "Iridium Band": {
             "code": 717306,
-            "classification": "useful"
+            "classification": "progression"
         },
         "Jukebox Ring": {
             "code": 717307,
@@ -1190,7 +1190,7 @@
         },
         "Wedding Ring": {
             "code": 717314,
-            "classification": "useful"
+            "classification": "progression"
         },
         "Crabshell Ring": {
             "code": 717315,
@@ -1198,7 +1198,7 @@
         },
         "Napalm Ring": {
             "code": 717316,
-            "classification": "useful"
+            "classification": "progression"
         },
         "Thorns Ring": {
             "code": 717317,
@@ -1210,7 +1210,7 @@
         },
         "Hot Java Ring": {
             "code": 717319,
-            "classification": "useful"
+            "classification": "progression"
         },
         "Protection Ring": {
             "code": 717320,
@@ -1834,7 +1834,7 @@
         },
         "Progressive Scythe": {
             "code": 717493,
-            "classification": "useful"
+            "classification": "progression"
         },
         "Progressive Pan": {
             "code": 717494,
@@ -1910,11 +1910,11 @@
         },
         "Power: Price Catalogue": {
             "code": 717521,
-            "classification": "useful"
+            "classification": "progression"
         },
         "Power: Mapping Cave Systems": {
             "code": 717522,
-            "classification": "useful"
+            "classification": "progression"
         },
         "Power: Way Of The Wind pt. 1": {
             "code": 717523,
@@ -1922,47 +1922,47 @@
         },
         "Power: Way Of The Wind pt. 2": {
             "code": 717524,
-            "classification": "useful"
+            "classification": "progression"
         },
         "Power: Monster Compendium": {
             "code": 717525,
-            "classification": "useful"
+            "classification": "progression"
         },
         "Power: Friendship 101": {
             "code": 717526,
-            "classification": "useful"
+            "classification": "progression"
         },
         "Power: Jack Be Nimble, Jack Be Thick": {
             "code": 717527,
-            "classification": "useful"
+            "classification": "progression"
         },
         "Power: Woody's Secret": {
             "code": 717528,
-            "classification": "useful"
+            "classification": "progression"
         },
         "Power: Raccoon Journal": {
             "code": 717529,
-            "classification": "useful"
+            "classification": "progression"
         },
         "Power: Jewels Of The Sea": {
             "code": 717530,
-            "classification": "useful"
+            "classification": "progression"
         },
         "Power: Dwarvish Safety Manual": {
             "code": 717531,
-            "classification": "useful"
+            "classification": "progression"
         },
         "Power: The Art O' Crabbing": {
             "code": 717532,
-            "classification": "useful"
+            "classification": "progression"
         },
         "Power: The Alleyway Buffet": {
             "code": 717533,
-            "classification": "useful"
+            "classification": "progression"
         },
         "Power: The Diamond Hunter": {
             "code": 717534,
-            "classification": "useful"
+            "classification": "progression"
         },
         "Power: Book of Mysteries": {
             "code": 717535,
@@ -1970,19 +1970,19 @@
         },
         "Power: Horse: The Book": {
             "code": 717536,
-            "classification": "useful"
+            "classification": "progression"
         },
         "Power: Treasure Appraisal Guide": {
             "code": 717537,
-            "classification": "useful"
+            "classification": "progression"
         },
         "Power: Ol' Slitherlegs": {
             "code": 717538,
-            "classification": "useful"
+            "classification": "progression"
         },
         "Power: Animal Catalogue": {
             "code": 717539,
-            "classification": "useful"
+            "classification": "progression"
         },
         "Progressive Lost Book": {
             "code": 717541,
@@ -2039,6 +2039,206 @@
         "Glow Bonus": {
             "code": 717563,
             "classification": "filler"
+        },
+        "Pet Bowl": {
+            "code": 717564,
+            "classification": "progression"
+        },
+        "??HMTGF??": {
+            "code": 717565,
+            "classification": "filler"
+        },
+        "??Pinky Lemon??": {
+            "code": 717566,
+            "classification": "filler"
+        },
+        "??Foroguemon??": {
+            "code": 717567,
+            "classification": "filler"
+        },
+        "Junimo Plush": {
+            "code": 717568,
+            "classification": "filler"
+        },
+        "'Boat'": {
+            "code": 717569,
+            "classification": "filler"
+        },
+        "Decorative Trash Can": {
+            "code": 717570,
+            "classification": "filler"
+        },
+        "Foliage Print": {
+            "code": 717571,
+            "classification": "filler"
+        },
+        "Frog Hat": {
+            "code": 717572,
+            "classification": "filler"
+        },
+        "Gourmand Statue": {
+            "code": 717573,
+            "classification": "filler"
+        },
+        "Iridium Krobus": {
+            "code": 717574,
+            "classification": "filler"
+        },
+        "Lifesaver": {
+            "code": 717575,
+            "classification": "filler"
+        },
+        "'Physics 101'": {
+            "code": 717576,
+            "classification": "filler"
+        },
+        "Pyramid Decal": {
+            "code": 717577,
+            "classification": "filler"
+        },
+        "Squirrel Figurine": {
+            "code": 717578,
+            "classification": "filler"
+        },
+        "'Vista'": {
+            "code": 717579,
+            "classification": "filler"
+        },
+        "Wall Basket": {
+            "code": 717580,
+            "classification": "filler"
+        },
+        "Far Away Stone": {
+            "code": 717581,
+            "classification": "progression"
+        },
+        "Strange Doll": {
+            "code": 717582,
+            "classification": "filler"
+        },
+        "Strange Doll (Green)": {
+            "code": 717583,
+            "classification": "filler"
+        },
+        "Solid Gold Lewis": {
+            "code": 717584,
+            "classification": "progression"
+        },
+        "Special Charm": {
+            "code": 717585,
+            "classification": "useful"
+        },
+        "Stone Junimo": {
+            "code": 717586,
+            "classification": "filler"
+        },
+        "Movie Salty Snacks": {
+            "code": 717587,
+            "classification": "progression"
+        },
+        "Movie Sweet Snacks": {
+            "code": 717588,
+            "classification": "progression"
+        },
+        "Movie Drinks": {
+            "code": 717589,
+            "classification": "progression"
+        },
+        "Movie Meals": {
+            "code": 717590,
+            "classification": "progression"
+        },
+        "Basilisk Paw": {
+            "code": 717601,
+            "classification": "filler"
+        },
+        "Fairy Box": {
+            "code": 717602,
+            "classification": "filler"
+        },
+        "Frog Egg": {
+            "code": 717603,
+            "classification": "filler"
+        },
+        "Golden Spur": {
+            "code": 717604,
+            "classification": "filler"
+        },
+        "Ice Rod": {
+            "code": 717605,
+            "classification": "filler"
+        },
+        "Magic Hair Gel": {
+            "code": 717606,
+            "classification": "filler"
+        },
+        "Magic Quiver": {
+            "code": 717607,
+            "classification": "filler"
+        },
+        "Parrot Egg": {
+            "code": 717608,
+            "classification": "filler"
+        },
+        "Stamina Enzyme": {
+            "code": 717621,
+            "classification": "useful"
+        },
+        "Health Enzyme": {
+            "code": 717622,
+            "classification": "useful"
+        },
+        "Speed Enzyme": {
+            "code": 717623,
+            "classification": "useful"
+        },
+        "Luck Enzyme": {
+            "code": 717624,
+            "classification": "useful"
+        },
+        "Farming Enzyme": {
+            "code": 717625,
+            "classification": "useful"
+        },
+        "Foraging Enzyme": {
+            "code": 717626,
+            "classification": "useful"
+        },
+        "Fishing Enzyme": {
+            "code": 717627,
+            "classification": "useful"
+        },
+        "Mining Enzyme": {
+            "code": 717628,
+            "classification": "useful"
+        },
+        "Magnetism Enzyme": {
+            "code": 717629,
+            "classification": "useful"
+        },
+        "Defense Enzyme": {
+            "code": 717630,
+            "classification": "useful"
+        },
+        "Max Stamina Enzyme": {
+            "code": 717631,
+            "classification": "useful"
+        },
+        "Squid Ink Enzyme": {
+            "code": 717632,
+            "classification": "useful"
+        },
+        "Monster Musk Enzyme": {
+            "code": 717633,
+            "classification": "useful"
+        },
+        "Oil Of Garlic Enzyme": {
+            "code": 717634,
+            "classification": "useful"
+        },
+        "Tipsy Enzyme": {
+            "code": 717635,
+            "classification": "trap"
         },
         "Burnt Trap": {
             "code": 721001,
@@ -2946,7 +3146,7 @@
         },
         "Friendship Bonus (2 <3)": {
             "code": 722199,
-            "classification": "useful"
+            "classification": "progression"
         },
         "Friendship Bonus (3 <3)": {
             "code": 722200,
@@ -3850,6 +4050,10 @@
         },
         "Advanced Recycling Machine": {
             "code": 727721,
+            "classification": "filler"
+        },
+        "Digging Like Worms": {
+            "code": 727722,
             "classification": "filler"
         }
     }
