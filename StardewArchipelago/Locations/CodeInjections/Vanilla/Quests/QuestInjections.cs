@@ -25,6 +25,7 @@ using Microsoft.Xna.Framework.Content;
 using StardewArchipelago.Archipelago;
 using System.Reflection.Metadata;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
+using Category = StardewArchipelago.Stardew.Category;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
 {
@@ -349,6 +350,31 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
         private static string GetHelpWantedLocationName(string type, int number)
         {
             return $"{string.Format(DailyQuest.HELP_WANTED, type)} {number}";
+        }
+
+        // public static string getRandomItemFromSeason(Season season, bool forQuest, Random random)
+        public static void GetRandomItemFromSeason_RemoveFishIfCantCatchThem_Postfix(Season season, bool forQuest, Random random, ref string __result)
+        {
+            try
+            {
+                if (!_archipelago.SlotData.ToolProgression.HasFlag(ToolProgression.Progressive) ||
+                    _archipelago.HasReceivedItem(ToolUnlockManager.PROGRESSIVE_FISHING_ROD))
+                {
+                    return;
+                }
+
+                var chosenItem = ItemRegistry.Create<Object>(__result);
+                if (chosenItem.Category == Category.FISH)
+                {
+                    __result = Utility.getRandomItemFromSeason(season, forQuest, random);
+                }
+                return;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(GetRandomItemFromSeason_RemoveFishIfCantCatchThem_Postfix)}:\n{ex}");
+                return;
+            }
         }
 
         // public virtual bool performAction(string[] action, Farmer who, Location tileLocation)

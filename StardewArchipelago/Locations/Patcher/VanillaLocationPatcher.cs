@@ -425,6 +425,11 @@ namespace StardewArchipelago.Locations.Patcher
                 prefix: new HarmonyMethod(typeof(QuestInjections), nameof(QuestInjections.GetQuestOfTheDay_BalanceQuests_Prefix))
             );
 
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Utility), nameof(Utility.getRandomItemFromSeason), new []{typeof(Season), typeof(bool), typeof(Random)}),
+                postfix: new HarmonyMethod(typeof(QuestInjections), nameof(QuestInjections.GetRandomItemFromSeason_RemoveFishIfCantCatchThem_Postfix))
+            );
+
             var performActionArgumentTypes = new[] { typeof(string[]), typeof(Farmer), typeof(Location) };
             _harmony.Patch(
                 original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performAction), performActionArgumentTypes),
