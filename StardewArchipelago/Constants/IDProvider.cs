@@ -7,6 +7,7 @@ namespace StardewArchipelago.Constants
     public static class IDProvider
     {
         public static readonly string AP_LOCATION = CreateId<ObtainableArchipelagoLocation>();
+        public static readonly string JOJA_AP_LOCATION = CreateId<JojaObtainableArchipelagoLocation>();
 
         public static readonly string MONEY = CreateId("Money");
         public static readonly string QI_GEM = CreateId("QiGem");
@@ -24,6 +25,12 @@ namespace StardewArchipelago.Constants
         public static string CreateApLocationItemId(string locationName)
         {
             return $"{QualifiedItemIds.ARCHIPELAGO_QUALIFER}{AP_LOCATION} {locationName}";
+        }
+
+
+        public static string CreateJojaApLocationItemId(string locationName)
+        {
+            return $"{QualifiedItemIds.ARCHIPELAGO_QUALIFER}{JOJA_AP_LOCATION} {locationName}";
         }
 
         public static string CreateId(string name)

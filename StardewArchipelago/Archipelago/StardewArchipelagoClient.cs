@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
@@ -18,6 +19,7 @@ using StardewArchipelago.GameModifications.MoveLink;
 using StardewArchipelago.GameModifications.Testing;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Extensions;
 using Color = Microsoft.Xna.Framework.Color;
 
 namespace StardewArchipelago.Archipelago
@@ -41,13 +43,30 @@ namespace StardewArchipelago.Archipelago
         private List<string> _messagesToIgnore;
 
         public StardewArchipelagoClient(ILogger logger, IModHelper modHelper, IManifest manifest, Harmony harmony, Action itemReceivedFunction, IJsonLoader jsonLoader, TesterFeatures testerFeatures) :
-            base(logger, new DataPackageCache(new ArchipelagoItemLoader(jsonLoader), new StardewArchipelagoLocationLoader(jsonLoader), "stardew_valley", "IdTables"), itemReceivedFunction)
+            base(logger, new StardewDatapackageCache(new ArchipelagoItemLoader(jsonLoader), new StardewArchipelagoLocationLoader(jsonLoader), "stardew_valley", "IdTables"), itemReceivedFunction)
         {
             _modHelper = modHelper;
             _manifest = manifest;
             _harmony = harmony;
             _testerFeatures = testerFeatures;
             _messagesToIgnore = new List<string>();
+
+            PrintLocationTags();
+        }
+
+        private void PrintLocationTags()
+        {
+            var tags = new HashSet<string>();
+            foreach (var location in DataPackageCache.GetAllLocations())
+            {
+                tags.AddRange(location.LocationTags);
+            }
+            var text = "";
+            foreach (var tag in tags)
+            {
+                text += $"public const string {tag} = \"{tag}\"";
+            }
+            File.WriteAllText("AllLocationTags.cs",text);
         }
 
         protected override void InitializeSlotData(string slotName, Dictionary<string, object> slotDataFields)
@@ -365,5 +384,7 @@ namespace StardewArchipelago.Archipelago
 
             return playerName + "'s " + itemName;
         }
+
+        public StardewDatapackageCache DataPackageCache => (StardewDatapackageCache)LocalDataPackage;
     }
 }

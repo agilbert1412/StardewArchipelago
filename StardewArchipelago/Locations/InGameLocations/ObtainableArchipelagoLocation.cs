@@ -71,11 +71,11 @@ namespace StardewArchipelago.Locations.InGameLocations
             }
         }
 
-        public ObtainableArchipelagoLocation(string locationName, LogHandler logger, IModHelper modHelper, LocationChecker locationChecker, StardewArchipelagoClient archipelago, Hint[] myActiveHints, bool allowScouting = true) : this(locationName, locationName, logger, modHelper, locationChecker, archipelago, myActiveHints)
+        public ObtainableArchipelagoLocation(string locationName, LogHandler logger, IModHelper modHelper, LocationChecker locationChecker, StardewArchipelagoClient archipelago, Hint[] myActiveHints, bool allowScouting) : this(locationName, locationName, logger, modHelper, locationChecker, archipelago, myActiveHints, allowScouting)
         {
         }
 
-        public ObtainableArchipelagoLocation(string locationDisplayName, string locationName, LogHandler logger, IModHelper modHelper, LocationChecker locationChecker, StardewArchipelagoClient archipelago, Hint[] myActiveHints, bool allowScouting = true)
+        public ObtainableArchipelagoLocation(string locationDisplayName, string locationName, LogHandler logger, IModHelper modHelper, LocationChecker locationChecker, StardewArchipelagoClient archipelago, Hint[] myActiveHints, bool allowScouting)
         {
             if (_itemSprites == null)
             {
@@ -266,7 +266,7 @@ namespace StardewArchipelago.Locations.InGameLocations
                     _activeHints = archipelago.GetMyActiveHints();
                     _lastTimeUpdatedActiveHints = currentTime;
                 }
-                var item = new ObtainableArchipelagoLocation(locationName.Trim(), logger, modHelper, locationChecker, archipelago, _activeHints);
+                var item = new ObtainableArchipelagoLocation(locationName.Trim(), logger, modHelper, locationChecker, archipelago, _activeHints, true);
                 return new ItemQueryResult[] { new(item) };
             }
 

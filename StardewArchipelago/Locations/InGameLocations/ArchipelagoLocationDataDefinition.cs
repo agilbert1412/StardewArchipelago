@@ -73,7 +73,7 @@ namespace StardewArchipelago.Locations.InGameLocations
             var apLocationPrefix = IDProvider.AP_LOCATION;
             var indexOfPrefixStart = id.IndexOf(apLocationPrefix, StringComparison.InvariantCultureIgnoreCase);
             var locationName = id[(indexOfPrefixStart + apLocationPrefix.Length + 1)..];
-            return new ObtainableArchipelagoLocation(locationName, _logger, _modHelper, _locationChecker, _archipelago, _archipelago.GetMyActiveHints());
+            return new ObtainableArchipelagoLocation(locationName, _logger, _modHelper, _locationChecker, _archipelago, _archipelago.GetMyActiveHints(), true);
         }
     }
 }
