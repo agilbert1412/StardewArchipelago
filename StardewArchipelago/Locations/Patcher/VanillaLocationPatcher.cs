@@ -453,6 +453,11 @@ namespace StardewArchipelago.Locations.Patcher
             );
 
             _harmony.Patch(
+                original: AccessTools.Method(typeof(Utility), nameof(Utility.getRandomItemFromSeason), new[] { typeof(Season), typeof(bool), typeof(Random) }),
+                postfix: new HarmonyMethod(typeof(QuestInjections), nameof(HelpWantedQuestInjections.GetRandomItemFromSeason_RemoveFishIfCantCatchThem_Postfix))
+            );
+
+            _harmony.Patch(
                 original: AccessTools.Method(typeof(Bush), "shake"),
                 prefix: new HarmonyMethod(typeof(StoryQuestInjections), nameof(StoryQuestInjections.Shake_WinterMysteryBush_Prefix))
             );
