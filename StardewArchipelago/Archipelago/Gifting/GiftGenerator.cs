@@ -6,6 +6,7 @@ using Archipelago.Gifting.Net.Traits;
 using Archipelago.Gifting.Net.Versioning.Gifts;
 using Archipelago.Gifting.Net.Versioning.Gifts.Current;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Stardew;
 using StardewValley;
 using StardewValley.GameData.Objects;
@@ -424,7 +425,7 @@ namespace StardewArchipelago.Archipelago.Gifting
             { Category.SYRUP, new[] { "Syrup", "ArtisanGood" } },
             { Category.MONSTER_LOOT, new[] { GiftFlag.Monster } },
             { Category.EQUIPMENT, new[] { GiftFlag.Armor } },
-            { Category.SEED, new[] { GiftFlag.Seed } },
+            { Category.SEEDS, new[] { GiftFlag.Seed } },
             { Category.VEGETABLE, new[] { GiftFlag.Vegetable } },
             { Category.FRUIT, new[] { GiftFlag.Fruit } },
             { Category.FLOWER, new[] { "Flower" } },

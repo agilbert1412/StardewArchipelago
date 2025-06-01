@@ -13,6 +13,7 @@ using StardewValley.Menus;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Locations;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
+using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Items;
 using StardewArchipelago.Logging;
 using StardewValley.Extensions;

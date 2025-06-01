@@ -9,7 +9,6 @@ using StardewArchipelago.Stardew;
 using StardewValley;
 using StardewValley.Extensions;
 using StardewValley.Objects;
-using Category = StardewArchipelago.Stardew.Category;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
 {
@@ -35,7 +34,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         {
             try
             {
-                if (__result.Category != Category.SEED || _archipelago.SlotData.Cropsanity == Cropsanity.Disabled)
+                if (__result.Category != Category.SEEDS || _archipelago.SlotData.Cropsanity == Cropsanity.Disabled)
                 {
                     return;
                 }
@@ -83,7 +82,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     return;
                 }
 
-                if (__result.Category == Category.SEED && _archipelago.SlotData.Cropsanity == Cropsanity.Disabled)
+                if (__result.Category == Category.SEEDS && _archipelago.SlotData.Cropsanity == Cropsanity.Disabled)
                 {
                     _depth = 0;
                     return;
