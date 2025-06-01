@@ -351,5 +351,19 @@ namespace StardewArchipelago.Archipelago
             var hintsMatchingStatus = hints.Where(x => !x.Found && this.GetPlayerName(x.ReceivingPlayer) == this._slotData.SlotName && statusToMatch.Contains(x.Status));
             return hintsMatchingStatus.ToArray();
         }
+
+        public string GetHintString(Hint relatedHint)
+        {
+            if (!MakeSureConnected() || relatedHint == null)
+            {
+                return ScoutedLocation.GenericItemName();
+            }
+
+            var playerName = GetPlayerName(relatedHint.ReceivingPlayer);
+            var playerGame = GetPlayerGame(relatedHint.ReceivingPlayer);
+            var itemName = GetSession().Items.GetItemName(relatedHint.ItemId, playerGame);
+
+            return playerName + "'s " + itemName;
+        }
     }
 }
