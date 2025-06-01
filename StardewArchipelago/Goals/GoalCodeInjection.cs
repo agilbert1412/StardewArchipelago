@@ -346,6 +346,21 @@ namespace StardewArchipelago.Goals
             _archipelago.ReportGoalCompletion();
         }
 
+        public static void CheckMadHatterGoalCompletion()
+        {
+            if (!_archipelago.IsConnected || _archipelago.SlotData.Goal != Goal.MadHatter)
+            {
+                return;
+            }
+            
+            if (_locationChecker.IsAnyLocationNotCheckedStartingWith(HatInjections.HATSANITY_PREFIX))
+            {
+                return;
+            }
+
+            _archipelago.ReportGoalCompletion();
+        }
+
         public static void CheckAllsanityGoalCompletion()
         {
             if (!_archipelago.IsConnected || _archipelago.SlotData.Goal != Goal.Allsanity)
@@ -592,6 +607,7 @@ namespace StardewArchipelago.Goals
                 Goal.CraftMaster => "Craft every item",
                 Goal.Legend => "Earn 10 000 000g",
                 Goal.MysteryOfTheStardrops => "Obtain all stardrops",
+                Goal.MadHatter => "Wear every Hat",
                 Goal.Allsanity => "Complete every Archipelago check",
                 Goal.Perfection => "Achieve Perfection",
                 _ => throw new NotImplementedException(),
@@ -638,6 +654,8 @@ namespace StardewArchipelago.Goals
                     return "Nothing beats cold hard cash. Become rich enough, and buy your happiness";
                 case Goal.MysteryOfTheStardrops:
                     return "A healthy body is a healthy mind. Get in shape by increasing your energy to the maximum.";
+                case Goal.MadHatter:
+                    return "In life, it's important to be able to wear many hats. Trust no one, and wear all of them!";
                 case Goal.Allsanity:
                     return "You cannot leave anyone stranded in a Burger King. Leave no loose ends";
                 case Goal.Perfection:

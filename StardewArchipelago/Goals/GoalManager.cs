@@ -77,6 +77,9 @@ namespace StardewArchipelago.Goals
                 case Goal.MysteryOfTheStardrops:
                     GoalCodeInjection.CheckMysteryOfTheStardropsGoalCompletion();
                     return;
+                case Goal.MadHatter:
+                    GoalCodeInjection.CheckMadHatterGoalCompletion();
+                    return;
                 case Goal.Allsanity:
                     GoalCodeInjection.CheckAllsanityGoalCompletion();
                     return;
@@ -131,6 +134,9 @@ namespace StardewArchipelago.Goals
                     return;
                 case Goal.MysteryOfTheStardrops:
                     InjectStardropsGoalMethods();
+                    return;
+                case Goal.MadHatter:
+                    // Gets tested when wearing a hat
                     return;
                 case Goal.Allsanity:
                     // Gets tested when sending a check

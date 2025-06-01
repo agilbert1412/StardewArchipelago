@@ -18,12 +18,15 @@ using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using Netcode;
+using StardewArchipelago.Goals;
 using StardewValley.Objects;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
     public static class HatInjections
     {
+        public const string HATSANITY_PREFIX = "Wear ";
+
         private static Dictionary<string, string[]> _hatAliases = new()
         {
             { QualifiedItemIds.STEEL_PAN_HAT, new[] { "Copper Pan" } },
@@ -60,9 +63,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 var hatName = hat.Name;
                 if (_hatAliases.ContainsKey(hat.QualifiedItemId))
                 {
-                    _locationChecker.AddCheckedLocations(_hatAliases[hat.QualifiedItemId].Select(x => $"Wear {x}").ToArray());
+                    _locationChecker.AddCheckedLocations(_hatAliases[hat.QualifiedItemId].Select(x => $"{HATSANITY_PREFIX}{x}").ToArray());
                 }
-                _locationChecker.AddCheckedLocation($"Wear {hatName}");
+                _locationChecker.AddCheckedLocation($"{HATSANITY_PREFIX}{hatName}");
+                GoalCodeInjection.CheckMadHatterGoalCompletion();
                 return;
             }
             catch (Exception ex)

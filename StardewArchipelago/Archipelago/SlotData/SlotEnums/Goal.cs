@@ -16,6 +16,7 @@
         CraftMaster = 11,
         Legend = 12,
         MysteryOfTheStardrops = 13,
+        MadHatter = 20,
         Allsanity = 24,
         Perfection = 25,
     }
