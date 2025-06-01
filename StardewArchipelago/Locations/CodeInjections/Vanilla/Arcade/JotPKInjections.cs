@@ -288,6 +288,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Arcade
         {
             try
             {
+                if (Game1.player.jotpkProgress.Value != null)
+                {
+                    return;
+                }
+
                 AssignStartingEquipment(__instance);
 
                 var easyMode = _archipelago.SlotData.ArcadeMachineLocations == ArcadeLocations.VictoriesEasy;
