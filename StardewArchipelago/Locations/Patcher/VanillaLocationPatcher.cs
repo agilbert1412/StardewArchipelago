@@ -36,6 +36,7 @@ using StardewArchipelago.Locations.Secrets;
 using StardewValley.Buildings;
 using StardewValley.Tools;
 using StardewArchipelago.GameModifications.CodeInjections;
+using EventInjections = StardewArchipelago.Locations.CodeInjections.Vanilla.EventInjections;
 
 namespace StardewArchipelago.Locations.Patcher
 {
@@ -1762,7 +1763,27 @@ namespace StardewArchipelago.Locations.Patcher
         {
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Farmer), nameof(Farmer.doneEating)),
-                postfix: new HarmonyMethod(typeof(DifficultSecretsInjections), nameof(EatInjections.DoneEating_EatingPatches_Postfix))
+                prefix: new HarmonyMethod(typeof(EatInjections), nameof(EatInjections.DoneEating_EatingPatches_Prefix))
+            );
+
+            if (!_archipelago.SlotData.Eatsanity.HasFlag(Eatsanity.LockEffects))
+            {
+                return;
+            }
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Object), nameof(Object.staminaRecoveredOnConsumption)),
+                postfix: new HarmonyMethod(typeof(EatInjections), nameof(EatInjections.StaminaRecoveredOnConsumption_LimitToEnzymes_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Object), nameof(Object.healthRecoveredOnConsumption)),
+                postfix: new HarmonyMethod(typeof(EatInjections), nameof(EatInjections.HealthRecoveredOnConsumption_LimitToEnzymes_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Object), nameof(Object.TryCreateBuffsFromData)),
+                postfix: new HarmonyMethod(typeof(EatInjections), nameof(EatInjections.TryCreateBuffsFromData_LimitToEnzymes_Postfix))
             );
         }
     }
