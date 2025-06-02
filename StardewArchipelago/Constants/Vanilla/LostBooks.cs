@@ -7,7 +7,7 @@ namespace StardewArchipelago.Constants.Vanilla
         public const string TIPS_ON_FARMING = "Tips on Farming";
         public const string BOOK_BY_MARNIE = "This is a book by Marnie";
         public const string ON_FORAGING = "On Foraging";
-        public const string FISHERMAN_ACT_1 = "The Fisherman, Act 1";
+        public const string FISHERMAN_ACT_1 = "The Fisherman, Act I";
         public const string HOW_DEEP_MINES_GO = "How Deep do the mines go?";
         public const string OLD_FARMER_JOURNAL = "An Old Farmer's Journal";
         public const string SCARECROWS = "Scarecrows";
