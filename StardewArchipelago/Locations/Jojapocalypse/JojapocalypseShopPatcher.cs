@@ -13,6 +13,7 @@ using Netcode;
 using StardewArchipelago.Archipelago.ApworldData;
 using StardewArchipelago.Locations.InGameLocations;
 using StardewValley.Menus;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
 
 namespace StardewArchipelago.Locations.Jojapocalypse
 {
@@ -25,6 +26,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
         private static StardewLocationChecker _locationChecker;
         private static JojaLocationChecker _jojaLocationChecker;
         private static JojapocalypseManager _jojapocalypseManager;
+        private static JojaPriceCalculator _jojaPriceCalculator;
 
         public JojapocalypseShopPatcher(LogHandler logger, IModHelper modHelper, Harmony harmony, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker, JojaLocationChecker jojaLocationChecker, JojapocalypseManager jojapocalypseManager)
         {
@@ -35,11 +37,15 @@ namespace StardewArchipelago.Locations.Jojapocalypse
             _locationChecker = locationChecker;
             _jojaLocationChecker = jojaLocationChecker;
             _jojapocalypseManager = jojapocalypseManager;
+            _jojaPriceCalculator = _jojapocalypseManager.PriceCalculator;
         }
 
         public void PatchJojaShops()
         {
-
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(JojaMart), nameof(JojaMart.checkAction)),
+                prefix: new HarmonyMethod(typeof(JojapocalypseShopPatcher), nameof(CheckAction_JojapocalypseShops_Prefix))
+            );
         }
 
         // public override bool checkAction(Location tileLocation, xTile.Dimensions.Rectangle viewport, Farmer who)
@@ -52,9 +58,8 @@ namespace StardewArchipelago.Locations.Jojapocalypse
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
-                const string archipelagoPartnershipText = "Greetings. As part of our partnership with Archipelago";
-                DrawMorrisDialogue(nameof(archipelagoPartnershipText), archipelagoPartnershipText,
-                    x => OpenJojapocalypseShop());
+                const string archipelagoPartnershipText = "Greetings. As part of our new partnership with Archipelago, we can offer you our services to accomplish any task you or your organisation might need! Nothing is off limits, as long as you're ready to pay the price.";
+                DrawMorrisDialogue(nameof(archipelagoPartnershipText), archipelagoPartnershipText, () => OpenJojapocalypseShop());
 
                 return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
@@ -65,21 +70,21 @@ namespace StardewArchipelago.Locations.Jojapocalypse
             }
         }
 
-        private static void DrawMorrisDialogue(string dialogueKey, string dialogueText, Func<int, bool> answerQuestionBehavior = null)
+        private static void DrawMorrisDialogue(string dialogueKey, string dialogueText, Action actionAfterFinish = null)
         {
             JojaMart.Morris.CurrentDialogue.Clear();
 
             var newDialogue = new Dialogue(JojaMart.Morris, dialogueKey, dialogueText); 
             JojaMart.Morris.CurrentDialogue.Push(newDialogue);
 
-            if (answerQuestionBehavior != null)
+            if (actionAfterFinish != null)
             {
-                JojaMart.Morris.CurrentDialogue.Peek().answerQuestionBehavior = new Dialogue.onAnswerQuestion(answerQuestionBehavior);
+                JojaMart.Morris.CurrentDialogue.Peek().onFinish = actionAfterFinish;
             }
             Game1.drawDialogue(JojaMart.Morris);
         }
 
-        private static bool OpenJojapocalypseShop(IEnumerable<string> locationTagFilters = null)
+        private static void OpenJojapocalypseShop(IEnumerable<string> locationTagFilters = null)
         {
             if (locationTagFilters == null)
             {
@@ -89,20 +94,19 @@ namespace StardewArchipelago.Locations.Jojapocalypse
             var items = CreateJojapocalypseItems(locationTagFilters);
 
             Game1.activeClickableMenu = new ShopMenu($"Jojapocalypse_{string.Join("_", locationTagFilters)}", items, 0, "Morris", on_purchase: OnPurchaseJojapocalypseItem);
-            return true;
         }
 
         private static List<ISalable> CreateJojapocalypseItems(IEnumerable<string> locationTagFilters)
         {
             var locations = _archipelago.DataPackageCache.GetAllLocations();
             var locationsMissing = locations.Where(x => _locationChecker.IsLocationMissing(x.Name));
-            var locationsFiltered = locationsMissing.Where(x => x.LocationTags.Any(locationTagFilters.Contains));
+            var locationsFiltered = locationsMissing.Where(x => locationTagFilters.All(x.LocationTags.Contains));
             var locationsCanPurchaseNow = locationsFiltered.Where(CanPurchaseJojapocalypseLocation);
 
             var salableItems = new List<ISalable>();
             foreach (var location in locationsCanPurchaseNow)
             {
-                salableItems.Add(new JojaObtainableArchipelagoLocation($"Joja {location.Name}", location.Name, _logger, _modHelper, _jojaLocationChecker, _archipelago));
+                salableItems.Add(new JojaObtainableArchipelagoLocation($"Joja {location.Name}", location.Name, _logger, _modHelper, _jojaLocationChecker, _archipelago, _jojaPriceCalculator));
             }
 
             return salableItems;
