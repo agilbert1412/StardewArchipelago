@@ -6,6 +6,7 @@ using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Vanilla;
+using StardewArchipelago.Extensions;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Stardew;
 using StardewArchipelago.Stardew.Ids.Vanilla;
@@ -132,7 +133,7 @@ namespace StardewArchipelago.GameModifications
                 return true;
             }
 
-            var random = new Random((int)Game1.stats.DaysPlayed + (int)Game1.uniqueIDForThisGame / 2 + shopItem.GetHashCode());
+            var random = Utility.CreateDaySaveRandom(shopItem.Id.GetHash(), shopItem.ItemId.GetHash(), shopItem.ObjectInternalName.GetHash());
             var maxAmount = GetVillagerMaxAmountAndPrice(shopItem.Condition, hasStocklist && isPierre, ref priceMultiplier);
             var todayStock = random.Next(maxAmount);
             if (todayStock < 5)
