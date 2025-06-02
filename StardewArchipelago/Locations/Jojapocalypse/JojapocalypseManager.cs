@@ -15,14 +15,12 @@ namespace StardewArchipelago.Locations.Jojapocalypse
         private readonly JojapocalypseShopPatcher _jojapocalypseShopPatcher;
         private readonly JojaPriceCalculator _jojaPriceCalculator;
 
-        public JojaPriceCalculator PriceCalculator => _jojaPriceCalculator;
-
         public JojapocalypseManager(LogHandler logger, IModHelper modHelper, ModConfig config, Harmony harmony, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker, JojaLocationChecker jojaLocationChecker)
         {
             _config = config;
             _jojaDisabler = new JojaDisabler(logger, modHelper, harmony);
-            _jojapocalypseShopPatcher = new JojapocalypseShopPatcher(logger, modHelper, harmony, archipelago, locationChecker, jojaLocationChecker, this);
             _jojaPriceCalculator = new JojaPriceCalculator(logger, locationChecker);
+            _jojapocalypseShopPatcher = new JojapocalypseShopPatcher(logger, modHelper, harmony, archipelago, locationChecker, jojaLocationChecker, this, _jojaPriceCalculator);
         }
 
         public void PatchAllJojaLogic()

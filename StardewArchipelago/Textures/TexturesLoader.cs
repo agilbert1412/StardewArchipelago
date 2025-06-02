@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Logging;
@@ -13,14 +14,23 @@ namespace StardewArchipelago.Textures
         private static LogHandler _logger;
         private static IModHelper _modHelper;
 
+        private static Dictionary<string, Texture2D> _loadedTextures;
+
         public static void Initialize(LogHandler logger, IModHelper modHelper)
         {
             _logger = logger;
             _modHelper = modHelper;
+            _loadedTextures = new Dictionary<string, Texture2D>();
         }
 
         public static Texture2D GetTexture(string texture, LogLevel failureLogLevel = LogLevel.Error)
         {
+            var cacheKey = texture ?? "--";
+            if (_loadedTextures.ContainsKey(cacheKey))
+            {
+                return _loadedTextures[cacheKey];
+            }
+
             if (Game1.content.ServiceProvider.GetService(typeof(IGraphicsDeviceService)) is not IGraphicsDeviceService service)
             {
                 throw new InvalidOperationException("No Graphics Device Service");
@@ -41,7 +51,9 @@ namespace StardewArchipelago.Textures
             }
 
             _logger.LogDebug($"Loading Texture file '{relativePathToTexture}'");
-            return Texture2D.FromFile(service.GraphicsDevice, relativePathToTexture);
+            var loadedTexture = Texture2D.FromFile(service.GraphicsDevice, relativePathToTexture);
+            _loadedTextures.Add(cacheKey, loadedTexture);
+            return loadedTexture;
         }
     }
 }

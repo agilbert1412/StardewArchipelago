@@ -28,7 +28,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
         private static JojapocalypseManager _jojapocalypseManager;
         private static JojaPriceCalculator _jojaPriceCalculator;
 
-        public JojapocalypseShopPatcher(LogHandler logger, IModHelper modHelper, Harmony harmony, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker, JojaLocationChecker jojaLocationChecker, JojapocalypseManager jojapocalypseManager)
+        public JojapocalypseShopPatcher(LogHandler logger, IModHelper modHelper, Harmony harmony, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker, JojaLocationChecker jojaLocationChecker, JojapocalypseManager jojapocalypseManager, JojaPriceCalculator jojaPriceCalculator)
         {
             _logger = logger;
             _modHelper = modHelper;
@@ -37,7 +37,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
             _locationChecker = locationChecker;
             _jojaLocationChecker = jojaLocationChecker;
             _jojapocalypseManager = jojapocalypseManager;
-            _jojaPriceCalculator = _jojapocalypseManager.PriceCalculator;
+            _jojaPriceCalculator = jojaPriceCalculator;
         }
 
         public void PatchJojaShops()
@@ -147,7 +147,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
         private static bool OnPurchaseJojapocalypseItem(ISalable salable, Farmer who, int counttaken, ItemStockInformation stock)
         {
             _jojapocalypseManager.OnNewPurchase(((JojaObtainableArchipelagoLocation)salable).LocationName);
-            return true;
+            return false;
         }
     }
 }

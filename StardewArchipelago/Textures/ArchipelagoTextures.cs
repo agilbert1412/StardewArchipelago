@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using KaitoKid.ArchipelagoUtilities.Net.ItemSprites;
 using Microsoft.Xna.Framework.Graphics;
@@ -25,15 +26,26 @@ namespace StardewArchipelago.Textures
         private static LogHandler _logger;
         private static IModHelper _modHelper;
 
+        private static Dictionary<string, Texture2D> _loadedIcons;
+        private static Dictionary<string, Texture2D> _loadedBushes;
+
         public static void Initialize(LogHandler logger, IModHelper modHelper)
         {
             _logger = logger;
             _modHelper = modHelper;
             TexturesLoader.Initialize(_logger, _modHelper);
+            _loadedIcons = new Dictionary<string, Texture2D>();
+            _loadedBushes = new Dictionary<string, Texture2D>();
         }
 
         public static Texture2D GetArchipelagoLogo(int size, string color, string preferredIconSet = null)
         {
+            var cacheKey = $"{size}_{color}_{preferredIconSet ?? "-"}";
+            if (_loadedIcons.ContainsKey(cacheKey))
+            {
+                return _loadedIcons[cacheKey];
+            }
+
             var archipelagoFolder = "Archipelago";
             preferredIconSet = GetChosenIconSet(preferredIconSet);
             var fileName = $"{size}x{size} {color} icon.png";
@@ -52,11 +64,18 @@ namespace StardewArchipelago.Textures
                 }
             }
 
+            _loadedIcons.Add(cacheKey, texture);
             return texture;
         }
 
         public static Texture2D GetArchipelagoBush(LogHandler logger, IModHelper modHelper, string preferredIconSet = null)
         {
+            var cacheKey = preferredIconSet ?? "--";
+            if (_loadedBushes.ContainsKey(cacheKey))
+            {
+                return _loadedBushes[cacheKey];
+            }
+
             var archipelagoFolder = "Archipelago";
             preferredIconSet = GetChosenIconSet(preferredIconSet);
             var fileName = $"walnut_bush.png";
@@ -74,6 +93,7 @@ namespace StardewArchipelago.Textures
                 }
             }
 
+            _loadedBushes.Add(cacheKey, texture);
             return texture;
         }
 
