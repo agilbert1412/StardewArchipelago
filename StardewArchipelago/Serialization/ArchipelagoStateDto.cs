@@ -9,6 +9,7 @@ namespace StardewArchipelago.Serialization
         public ArchipelagoConnectionInfo APConnectionInfo { get; set; }
         public List<ReceivedItem> ItemsReceived { get; set; }
         public List<string> LocationsChecked { get; set; }
+        public List<string> JojaLocationsChecked { get; set; }
         public Dictionary<string, ScoutedLocation> LocationsScouted { get; set; }
         public Dictionary<string, string> LettersGenerated { get; set; }
         public List<string> SeasonsOrder { get; set; }
@@ -25,6 +26,7 @@ namespace StardewArchipelago.Serialization
         {
             ItemsReceived = new List<ReceivedItem>();
             LocationsChecked = new List<string>();
+            JojaLocationsChecked = new List<string>();
             LocationsScouted = new Dictionary<string, ScoutedLocation>();
             LettersGenerated = new Dictionary<string, string>();
             SeasonsOrder = new List<string>();

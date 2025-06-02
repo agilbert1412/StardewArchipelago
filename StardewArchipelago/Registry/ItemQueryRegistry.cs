@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.Gifting;
 using StardewArchipelago.Constants;
+using StardewArchipelago.Locations;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
 using StardewArchipelago.Locations.InGameLocations;
@@ -21,7 +22,7 @@ namespace StardewArchipelago.Registry
         private LogHandler _logger;
         private IModHelper _modHelper;
         private StardewArchipelagoClient _archipelago;
-        private LocationChecker _locationChecker;
+        private StardewLocationChecker _locationChecker;
         private WeaponsManager _weaponsManager;
 
         public ItemQueryRegistry(LogHandler logger, IModHelper modHelper)
@@ -30,7 +31,7 @@ namespace StardewArchipelago.Registry
             _modHelper = modHelper;
         }
 
-        public void Initialize(StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager, LocationChecker locationChecker, IGiftHandler _giftHandler, WeaponsManager weaponsManager, ArchipelagoStateDto state)
+        public void Initialize(StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager, StardewLocationChecker locationChecker, IGiftHandler _giftHandler, WeaponsManager weaponsManager, ArchipelagoStateDto state)
         {
             _archipelago = archipelago;
             _locationChecker = locationChecker;

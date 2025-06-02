@@ -1993,12 +1993,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         public static void OnDayStarted()
         {
-            ArchipelagoJunimoNoteMenu.DayStopwatch.Reset();
-            ArchipelagoJunimoNoteMenu.DayStopwatch.Start();
-            ArchipelagoJunimoNoteMenu.FloorIsLavaHasTouchedGroundToday = 0;
-            ArchipelagoJunimoNoteMenu.HasLookedAtRestaintBundleToday = false;
-            ArchipelagoJunimoNoteMenu.HasPurchasedRestaintBundleToday = false;
-            ArchipelagoJunimoNoteMenu.HasLookedAtRestaintBundleToday = false;
+            DayStopwatch.Reset();
+            DayStopwatch.Start();
+            FloorIsLavaHasTouchedGroundToday = 0;
+            HasLookedAtRestaintBundleToday = false;
+            HasPurchasedRestaintBundleToday = false;
+            HasLookedAtRestaintBundleToday = false;
         }
 
         public static void OnDayEnded()

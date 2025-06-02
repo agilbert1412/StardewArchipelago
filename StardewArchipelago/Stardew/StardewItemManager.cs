@@ -860,7 +860,7 @@ namespace StardewArchipelago.Stardew
             }
         }
 
-        public void ExportAllItemsMatching(System.Func<Object, bool> condition, string filePath)
+        public void ExportAllItemsMatching(Func<Object, bool> condition, string filePath)
         {
             var objectsToExport = new List<string>();
 
@@ -875,7 +875,7 @@ namespace StardewArchipelago.Stardew
             File.WriteAllText(filePath, objectsAsJson);
         }
 
-        private IEnumerable<string> GetObjectsToExport<T>(System.Func<Object, bool> condition, Dictionary<string, T> objectsByName) where T : StardewItem
+        private IEnumerable<string> GetObjectsToExport<T>(Func<Object, bool> condition, Dictionary<string, T> objectsByName) where T : StardewItem
         {
             foreach (var (name, svItem) in objectsByName)
             {
@@ -894,7 +894,7 @@ namespace StardewArchipelago.Stardew
             }
         }
 
-        public void ExportAllMismatchedItems(System.Func<Object, bool> condition, string filePath)
+        public void ExportAllMismatchedItems(Func<Object, bool> condition, string filePath)
         {
             var objectsToExport = new List<string>();
 
@@ -909,7 +909,7 @@ namespace StardewArchipelago.Stardew
             File.WriteAllText(filePath, objectsAsJson);
         }
 
-        private IEnumerable<string> GetItemsThatMismatch<T>(System.Func<Object, bool> condition, Dictionary<string, T> itemsByName) where T : StardewItem
+        private IEnumerable<string> GetItemsThatMismatch<T>(Func<Object, bool> condition, Dictionary<string, T> itemsByName) where T : StardewItem
         {
             foreach (var (name, svItem) in itemsByName)
             {

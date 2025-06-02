@@ -34,6 +34,7 @@ using StardewArchipelago.Locations;
 using StardewArchipelago.Logging;
 using StardewValley.TerrainFeatures;
 using StardewArchipelago.GameModifications.MoveLink;
+using StardewArchipelago.Locations.Jojapocalypse;
 
 namespace StardewArchipelago.GameModifications
 {
@@ -47,7 +48,6 @@ namespace StardewArchipelago.GameModifications
         private readonly SeedShopStockModifier _seedShopStockModifier;
         private readonly RecipeDataRemover _recipeDataRemover;
         private readonly AnimalShopStockModifier _animalShopStockModifier;
-        private readonly JojaDisabler _jojaDisabler;
 
         public RandomizedLogicPatcher(LogHandler logger, IModHelper modHelper, ModConfig config, Harmony harmony, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker, StardewItemManager stardewItemManager, EntranceManager entranceManager, SeedShopStockModifier seedShopStockModifier, NameSimplifier nameSimplifier, Friends friends, ArchipelagoStateDto state, BundleReader bundleReader)
         {
@@ -92,7 +92,6 @@ namespace StardewArchipelago.GameModifications
             BundleMenuInjection.Initialize(logger, modHelper, archipelago, state, locationChecker, bundleReader);
             GarbageInjections.Initialize(logger, archipelago);
             DebugPatchInjections.Initialize(logger, archipelago);
-            _jojaDisabler = new JojaDisabler(logger, modHelper, harmony);
         }
 
         private static void InitializeTVInjections(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, EntranceManager entranceManager,
@@ -143,7 +142,6 @@ namespace StardewArchipelago.GameModifications
             PatchLeoMove();
             PatchEmptyHandBreak();
 
-            _jojaDisabler.DisableJojaRouteShortcuts();
             _startingResources.GivePlayerStartingResources();
 
             PatchDebugMethods();

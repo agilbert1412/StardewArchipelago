@@ -7,7 +7,8 @@ using StardewArchipelago.Goals;
 
 namespace StardewArchipelago.Locations
 {
-    public class StardewLocationChecker : LocationChecker
+
+    public class StardewLocationChecker : LocationChecker, ILocationChecker
     {
         private const bool PREVENT_SENDING_CHECKS = false;
 

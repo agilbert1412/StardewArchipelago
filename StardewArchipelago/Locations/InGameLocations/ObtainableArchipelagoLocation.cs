@@ -34,7 +34,7 @@ namespace StardewArchipelago.Locations.InGameLocations
 
         private readonly Texture2D _archipelagoTexture;
 
-        protected LocationChecker _locationChecker;
+        protected ILocationChecker _locationChecker;
         protected string _locationDisplayName;
 
         public string LocationName { get; }
@@ -71,11 +71,11 @@ namespace StardewArchipelago.Locations.InGameLocations
             }
         }
 
-        public ObtainableArchipelagoLocation(string locationName, LogHandler logger, IModHelper modHelper, LocationChecker locationChecker, StardewArchipelagoClient archipelago, Hint[] myActiveHints, bool allowScouting) : this(locationName, locationName, logger, modHelper, locationChecker, archipelago, myActiveHints, allowScouting)
+        public ObtainableArchipelagoLocation(string locationName, LogHandler logger, IModHelper modHelper, ILocationChecker locationChecker, StardewArchipelagoClient archipelago, Hint[] myActiveHints, bool allowScouting) : this(locationName, locationName, logger, modHelper, locationChecker, archipelago, myActiveHints, allowScouting)
         {
         }
 
-        public ObtainableArchipelagoLocation(string locationDisplayName, string locationName, LogHandler logger, IModHelper modHelper, LocationChecker locationChecker, StardewArchipelagoClient archipelago, Hint[] myActiveHints, bool allowScouting)
+        public ObtainableArchipelagoLocation(string locationDisplayName, string locationName, LogHandler logger, IModHelper modHelper, ILocationChecker locationChecker, StardewArchipelagoClient archipelago, Hint[] myActiveHints, bool allowScouting)
         {
             if (_itemSprites == null)
             {
@@ -235,7 +235,7 @@ namespace StardewArchipelago.Locations.InGameLocations
             return true;
         }
 
-        public void SendCheck()
+        public virtual void SendCheck()
         {
             _locationChecker.AddCheckedLocation(LocationName);
         }
@@ -251,7 +251,7 @@ namespace StardewArchipelago.Locations.InGameLocations
             return descriptionWithExtraMaterials;
         }
 
-        public static IEnumerable<ItemQueryResult> Create(string locationName, LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static IEnumerable<ItemQueryResult> Create(string locationName, LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker)
         {
             if (string.IsNullOrWhiteSpace(locationName))
             {

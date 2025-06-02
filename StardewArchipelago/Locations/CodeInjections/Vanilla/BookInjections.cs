@@ -311,7 +311,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             });
             Game1.MusicDuckTimer = 4000f;
             Game1.playSound("book_read");
-            Game1.Multiplayer.broadcastSprites(location, new TemporaryAnimatedSprite("LooseSprites\\Book_Animation", new Microsoft.Xna.Framework.Rectangle(0, 0, 20, 20), 10f, 45, 1, Game1.player.getStandingPosition() + new Vector2(-48f, -156f), false, false, Game1.player.getDrawLayer() + 1f / 1000f, 0.0f, Color.White, 4f, 0.0f, 0.0f, 0.0f)
+            Game1.Multiplayer.broadcastSprites(location, new TemporaryAnimatedSprite("LooseSprites\\Book_Animation", new Rectangle(0, 0, 20, 20), 10f, 45, 1, Game1.player.getStandingPosition() + new Vector2(-48f, -156f), false, false, Game1.player.getDrawLayer() + 1f / 1000f, 0.0f, Color.White, 4f, 0.0f, 0.0f, 0.0f)
             {
                 holdLastFrame = true,
                 id = 1987654,
@@ -319,7 +319,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             var colorFromTags = ItemContextTagManager.GetColorFromTags(book);
             if (colorFromTags.HasValue)
             {
-                Game1.Multiplayer.broadcastSprites(location, new TemporaryAnimatedSprite("LooseSprites\\Book_Animation", new Microsoft.Xna.Framework.Rectangle(0, 20, 20, 20), 10f, 45, 1, Game1.player.getStandingPosition() + new Vector2(-48f, -156f), false, false, Game1.player.getDrawLayer() + 0.0012f, 0.0f, colorFromTags.Value, 4f, 0.0f, 0.0f, 0.0f)
+                Game1.Multiplayer.broadcastSprites(location, new TemporaryAnimatedSprite("LooseSprites\\Book_Animation", new Rectangle(0, 20, 20, 20), 10f, 45, 1, Game1.player.getStandingPosition() + new Vector2(-48f, -156f), false, false, Game1.player.getDrawLayer() + 0.0012f, 0.0f, colorFromTags.Value, 4f, 0.0f, 0.0f, 0.0f)
                 {
                     holdLastFrame = true,
                     id = 1987654,

@@ -100,7 +100,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 this.highlightMethod = new InventoryMenu.highlightThisItem(InventoryMenu.highlightAllItems);
             }
-            this.dropItemInvisibleButton = new ClickableComponent(new Rectangle(xPosition - IClickableMenu.borderWidth - IClickableMenu.spaceToClearSideBorder - 128, this.yPositionOnScreen - 12, 64, 64), "")
+            this.dropItemInvisibleButton = new ClickableComponent(new Rectangle(xPosition - borderWidth - spaceToClearSideBorder - 128, this.yPositionOnScreen - 12, 64, 64), "")
             {
                 myID = playerInventory ? 107 : -500,
                 rightNeighborID = 0

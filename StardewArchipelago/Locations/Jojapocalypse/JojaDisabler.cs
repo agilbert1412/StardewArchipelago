@@ -6,7 +6,7 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 
-namespace StardewArchipelago.GameModifications
+namespace StardewArchipelago.Locations.Jojapocalypse
 {
     public class JojaDisabler
     {

@@ -20,9 +20,9 @@ namespace StardewArchipelago.Locations.InGameLocations
         private static LogHandler _logger;
         private static IModHelper _modHelper;
         private static StardewArchipelagoClient _archipelago;
-        private static LocationChecker _locationChecker;
+        private static StardewLocationChecker _locationChecker;
 
-        public static void Initialize(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker)
         {
             _logger = logger;
             _modHelper = modHelper;
@@ -68,6 +68,11 @@ namespace StardewArchipelago.Locations.InGameLocations
 
         /// <inheritdoc />
         public override Item CreateItem(ParsedItemData data)
+        {
+            return CreateApLocationItem(data);
+        }
+
+        private static Item CreateApLocationItem(ParsedItemData data)
         {
             var id = data.ItemId;
             var apLocationPrefix = IDProvider.AP_LOCATION;

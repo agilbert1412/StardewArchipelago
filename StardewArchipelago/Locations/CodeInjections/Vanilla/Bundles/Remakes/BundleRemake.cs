@@ -173,7 +173,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                 return;
             }
             Game1.playSound("leafrustle");
-            var temporaryAnimatedSprite1 = new TemporaryAnimatedSprite(50, this.Sprite.position, BundleRemake.GetColorFromColorIndex(this.BundleColor))
+            var temporaryAnimatedSprite1 = new TemporaryAnimatedSprite(50, this.Sprite.position, GetColorFromColorIndex(this.BundleColor))
             {
                 motion = new Vector2(-1f, 0.5f),
                 acceleration = new Vector2(0.0f, 0.02f),
@@ -181,7 +181,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             ++temporaryAnimatedSprite1.sourceRect.Y;
             --temporaryAnimatedSprite1.sourceRect.Height;
             JunimoNoteMenuRemake.TempSprites.Add(temporaryAnimatedSprite1);
-            var temporaryAnimatedSprite2 = new TemporaryAnimatedSprite(50, this.Sprite.position, BundleRemake.GetColorFromColorIndex(this.BundleColor))
+            var temporaryAnimatedSprite2 = new TemporaryAnimatedSprite(50, this.Sprite.position, GetColorFromColorIndex(this.BundleColor))
             {
                 motion = new Vector2(1f, 0.5f),
                 acceleration = new Vector2(0.0f, 0.02f),
@@ -405,7 +405,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                     Game1.playSound("dwop");
                 }
                 this.bounds.Inflate(64, 64);
-                JunimoNoteMenuRemake.TempSprites.AddRange(Utility.sparkleWithinArea(this.bounds, 8, BundleRemake.GetColorFromColorIndex(this.BundleColor) * 0.5f));
+                JunimoNoteMenuRemake.TempSprites.AddRange(Utility.sparkleWithinArea(this.bounds, 8, GetColorFromColorIndex(this.BundleColor) * 0.5f));
                 this.bounds.Inflate(-64, -64);
             }
             this.Complete = true;

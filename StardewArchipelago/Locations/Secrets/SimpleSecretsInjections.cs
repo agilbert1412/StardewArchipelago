@@ -81,7 +81,7 @@ namespace StardewArchipelago.Locations.Secrets
                 if (_locationChecker.IsLocationMissing(SecretsLocationNames.SOMETHING_FOR_SANTA))
                 {
                     _locationChecker.AddCheckedLocation(SecretsLocationNames.SOMETHING_FOR_SANTA);
-                    __instance.heldObject.Value = ItemRegistry.Create<StardewValley.Object>("(O)MysteryBox");
+                    __instance.heldObject.Value = ItemRegistry.Create<Object>("(O)MysteryBox");
                     return;
                 }
             }
@@ -368,7 +368,7 @@ namespace StardewArchipelago.Locations.Secrets
         }
 
         // public StardewValley.Dialogue TryGetDialogue(string key)
-        public static void TryGetDialogue_MonstersInHouse_Postfix(NPC __instance, string key, ref StardewValley.Dialogue __result)
+        public static void TryGetDialogue_MonstersInHouse_Postfix(NPC __instance, string key, ref Dialogue __result)
         {
             try
             {

@@ -158,7 +158,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             Game1.screenGlowOnce(new Color(200, 0, byte.MaxValue), true);
             farmer.CanMove = false;
             farmer.freezePause = 8000;
-            farmer.currentLocation.temporarySprites.Add(new TemporaryAnimatedSprite("LooseSprites\\Cursors", new Microsoft.Xna.Framework.Rectangle(368, 16, 16, 16), 60f, 8, 40, farmer.Position + new Vector2(-8f, sbyte.MinValue), false, false, 1f, 0.0f, Color.White, 4f, 0.0075f, 0.0f, 0.0f)
+            farmer.currentLocation.temporarySprites.Add(new TemporaryAnimatedSprite("LooseSprites\\Cursors", new Rectangle(368, 16, 16, 16), 60f, 8, 40, farmer.Position + new Vector2(-8f, sbyte.MinValue), false, false, 1f, 0.0f, Color.White, 4f, 0.0075f, 0.0f, 0.0f)
             {
                 alpha = 0.75f,
                 alphaFade = 1f / 400f,

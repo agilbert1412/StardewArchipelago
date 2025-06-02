@@ -8,6 +8,7 @@ using StardewArchipelago.Archipelago.Gifting;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
 using StardewArchipelago.Serialization;
 using StardewArchipelago.Stardew;
+using StardewArchipelago.Locations;
 
 namespace StardewArchipelago.Registry
 {
@@ -28,7 +29,7 @@ namespace StardewArchipelago.Registry
             _registryManagers.Add(new TriggerActionRegistry(_logger));
         }
 
-        public void Initialize(StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager, LocationChecker locationChecker, IGiftHandler _giftHandler, WeaponsManager weaponsManager, ArchipelagoStateDto state)
+        public void Initialize(StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager, StardewLocationChecker locationChecker, IGiftHandler _giftHandler, WeaponsManager weaponsManager, ArchipelagoStateDto state)
         {
             try
             {

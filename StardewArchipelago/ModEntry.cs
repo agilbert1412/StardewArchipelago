@@ -29,6 +29,7 @@ using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
 using StardewArchipelago.Locations.InGameLocations;
+using StardewArchipelago.Locations.Jojapocalypse;
 using StardewArchipelago.Locations.Patcher;
 using StardewArchipelago.Logging;
 using StardewArchipelago.Registry;
@@ -67,9 +68,11 @@ namespace StardewArchipelago
         private APItemManager _itemManager;
         private WeaponsManager _weaponsManager;
         private RandomizedLogicPatcher _logicPatcher;
+        private JojapocalypseManager _jojapocalypseManager;
         private MailPatcher _mailPatcher;
         private BundlesManager _bundlesManager;
         private StardewLocationChecker _locationChecker;
+        private JojaLocationChecker _jojaLocationChecker;
         private LocationPatcher _locationsPatcher;
         private ItemPatcher _itemPatcher;
         private GoalManager _goalManager;
@@ -174,6 +177,7 @@ namespace StardewArchipelago
         {
             State.ItemsReceived = new List<ReceivedItem>();
             State.LocationsChecked = new List<string>();
+            State.JojaLocationsChecked = new List<string>();
             State.LocationsScouted = new Dictionary<string, ScoutedLocation>();
             State.LettersGenerated = new Dictionary<string, string>();
             SkillInjections.ResetSkillExperience();
@@ -210,6 +214,7 @@ namespace StardewArchipelago
             SeasonsRandomizer.PrepareDateForSaveGame();
             State.ItemsReceived = _itemManager.GetAllItemsAlreadyProcessed();
             State.LocationsChecked = _locationChecker.GetAllLocationsAlreadyChecked();
+            State.JojaLocationsChecked = _jojaLocationChecker.GetAllLocationsCheckedByJoja();
             State.LocationsScouted = _archipelago.ScoutedLocations;
             // _state.SeasonOrder should be fine?
 
@@ -262,6 +267,7 @@ namespace StardewArchipelago
             _stardewItemManager = new StardewItemManager(_logger);
             _mail = new Mailman(_logger, State);
             _locationChecker = new StardewLocationChecker(_logger, _archipelago, State.LocationsChecked);
+            _jojaLocationChecker = new JojaLocationChecker(_locationChecker, State.JojaLocationsChecked);
             DeathManager.Initialize(_locationChecker);
             _itemPatcher = new ItemPatcher(_logger, _helper, _harmony, _archipelago);
             _goalManager = new GoalManager(_logger, _helper, _harmony, _archipelago, _locationChecker);
@@ -271,6 +277,7 @@ namespace StardewArchipelago
             var friends = new Friends();
             ArchipelagoLocationDataDefinition.Initialize(_logger, _helper, _archipelago, _locationChecker);
             _logicPatcher = new RandomizedLogicPatcher(_logger, _helper, Config, _harmony, _archipelago, _locationChecker, _stardewItemManager, _entranceManager, seedShopStockModifier, nameSimplifier, friends, State, new BundleReader());
+            _jojapocalypseManager = new JojapocalypseManager(_logger, _helper, Config, _harmony, _archipelago, _locationChecker, _jojaLocationChecker);
             _seasonsRandomizer = new SeasonsRandomizer(_logger, _helper, _archipelago, State);
             _appearanceRandomizer = new AppearanceRandomizer(_logger, _helper, _archipelago, _harmony);
 
@@ -295,6 +302,7 @@ namespace StardewArchipelago
             _shippingBehaviors = new NightShippingBehaviors(_logger, _archipelago, _locationChecker, nameSimplifier);
             _chatForwarder.ListenToChatMessages();
             _logicPatcher.PatchAllGameLogic();
+            _jojapocalypseManager.PatchAllJojaLogic();
             _modLogicPatcher = new ModRandomizedLogicPatcher(_logger, _helper, _harmony, _archipelago, seedShopStockModifier, _stardewItemManager);
             _modLogicPatcher.PatchAllGameLogic();
             _mailPatcher.PatchMailBoxForApItems();

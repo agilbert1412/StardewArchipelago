@@ -81,7 +81,7 @@ namespace StardewArchipelago.Locations.Secrets
                 if (__instance.textureName == strangeTexture)
                 {
 
-                    var spriteRectangle = new Microsoft.Xna.Framework.Rectangle(448, 546, 16, 25);
+                    var spriteRectangle = new Rectangle(448, 546, 16, 25);
                     if (!__instance.sourceRect.Equals(spriteRectangle))
                     {
                         return;

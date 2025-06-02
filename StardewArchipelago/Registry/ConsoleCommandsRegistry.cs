@@ -19,6 +19,7 @@ using StardewArchipelago.Stardew;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Serialization;
+using StardewArchipelago.Locations;
 
 namespace StardewArchipelago.Registry
 {
@@ -44,7 +45,7 @@ namespace StardewArchipelago.Registry
             _mod = mod;
         }
 
-        public void Initialize(StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager, LocationChecker locationChecker, IGiftHandler giftHandler, WeaponsManager weaponsManager, ArchipelagoStateDto state)
+        public void Initialize(StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager, StardewLocationChecker locationChecker, IGiftHandler giftHandler, WeaponsManager weaponsManager, ArchipelagoStateDto state)
         {
             _archipelago = archipelago;
             _stardewItemManager = stardewItemManager;

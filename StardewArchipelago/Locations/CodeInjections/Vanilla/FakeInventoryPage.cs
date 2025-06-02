@@ -50,10 +50,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         public FakeInventoryPage(int x, int y, int width, int height)
           : base(x, y, width, height)
         {
-            this.inventory = new FakeInventoryMenu(this.xPositionOnScreen + IClickableMenu.spaceToClearSideBorder + IClickableMenu.borderWidth, this.yPositionOnScreen + IClickableMenu.spaceToClearTopBorder + IClickableMenu.borderWidth, true);
+            this.inventory = new FakeInventoryMenu(this.xPositionOnScreen + spaceToClearSideBorder + borderWidth, this.yPositionOnScreen + spaceToClearTopBorder + borderWidth, true);
             var num1 = Game1.player.stats.Get("trinketSlots") > 0U ? 1 : 0;
             var num2 = num1 != 0 ? 120 : 105;
-            this.equipmentIcons.Add(new ClickableComponent(new Rectangle(this.xPositionOnScreen + 48, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + 4 + 256 - 12, 64, 64), "Left Ring")
+            this.equipmentIcons.Add(new ClickableComponent(new Rectangle(this.xPositionOnScreen + 48, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + 4 + 256 - 12, 64, 64), "Left Ring")
             {
                 myID = 102,
                 downNeighborID = 103,
@@ -61,7 +61,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 rightNeighborID = 101,
                 fullyImmutable = false
             });
-            this.equipmentIcons.Add(new ClickableComponent(new Rectangle(this.xPositionOnScreen + 48, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + 4 + 320 - 12, 64, 64), "Right Ring")
+            this.equipmentIcons.Add(new ClickableComponent(new Rectangle(this.xPositionOnScreen + 48, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + 4 + 320 - 12, 64, 64), "Right Ring")
             {
                 myID = 103,
                 upNeighborID = 102,
@@ -69,15 +69,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 rightNeighborID = 108,
                 fullyImmutable = true
             });
-            this.equipmentIcons.Add(new ClickableComponent(new Rectangle(this.xPositionOnScreen + 48, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + 4 + 384 - 12, 64, 64), "Boots")
+            this.equipmentIcons.Add(new ClickableComponent(new Rectangle(this.xPositionOnScreen + 48, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + 4 + 384 - 12, 64, 64), "Boots")
             {
                 myID = 104,
                 upNeighborID = 103,
                 rightNeighborID = 109,
                 fullyImmutable = true
             });
-            this.portrait = new ClickableComponent(new Rectangle(this.xPositionOnScreen + 192 - 8 - 64 + 32, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + 256 - 8 + 64, 64, 96), "32");
-            var textureComponent1 = new ClickableTextureComponent(new Rectangle(this.xPositionOnScreen + width / 3 + 576 + 32, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + 192 + 64, 64, 104), Game1.mouseCursors, new Rectangle(564 + Game1.player.trashCanLevel * 18, 102, 18, 26), 4f);
+            this.portrait = new ClickableComponent(new Rectangle(this.xPositionOnScreen + 192 - 8 - 64 + 32, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + 256 - 8 + 64, 64, 96), "32");
+            var textureComponent1 = new ClickableTextureComponent(new Rectangle(this.xPositionOnScreen + width / 3 + 576 + 32, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + 192 + 64, 64, 104), Game1.mouseCursors, new Rectangle(564 + Game1.player.trashCanLevel * 18, 102, 18, 26), 4f);
             textureComponent1.myID = 105;
             textureComponent1.upNeighborID = 106;
             textureComponent1.leftNeighborID = 101;
@@ -88,7 +88,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             textureComponent2.leftNeighborID = 11;
             textureComponent2.upNeighborID = 898;
             this.organizeButton = textureComponent2;
-            this.equipmentIcons.Add(new ClickableComponent(new Rectangle(this.xPositionOnScreen + 48 + 208, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + 4 + 256 - 12, 64, 64), "Hat")
+            this.equipmentIcons.Add(new ClickableComponent(new Rectangle(this.xPositionOnScreen + 48 + 208, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + 4 + 256 - 12, 64, 64), "Hat")
             {
                 myID = 101,
                 leftNeighborID = 102,
@@ -97,7 +97,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 rightNeighborID = num2,
                 fullyImmutable = false
             });
-            this.equipmentIcons.Add(new ClickableComponent(new Rectangle(this.xPositionOnScreen + 48 + 208, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + 4 + 320 - 12, 64, 64), "Shirt")
+            this.equipmentIcons.Add(new ClickableComponent(new Rectangle(this.xPositionOnScreen + 48 + 208, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + 4 + 320 - 12, 64, 64), "Shirt")
             {
                 myID = 108,
                 upNeighborID = 101,
@@ -106,7 +106,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 leftNeighborID = 103,
                 fullyImmutable = true
             });
-            this.equipmentIcons.Add(new ClickableComponent(new Rectangle(this.xPositionOnScreen + 48 + 208, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + 4 + 384 - 12, 64, 64), "Pants")
+            this.equipmentIcons.Add(new ClickableComponent(new Rectangle(this.xPositionOnScreen + 48 + 208, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + 4 + 384 - 12, 64, 64), "Pants")
             {
                 myID = 109,
                 upNeighborID = 108,
@@ -119,7 +119,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 Farmer.MaximumTrinkets = 1;
                 for (var index = 0; index < Farmer.MaximumTrinkets; ++index)
                 {
-                    var clickableComponent = new ClickableComponent(new Rectangle(this.xPositionOnScreen + 48 + 280, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + 4 + (4 + index) * 64 - 12, 64, 64), "Trinket")
+                    var clickableComponent = new ClickableComponent(new Rectangle(this.xPositionOnScreen + 48 + 280, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + 4 + (4 + index) * 64 - 12, 64, 64), "Trinket")
                     {
                         myID = 120 + index,
                         upNeighborID = Game1.player.MaxItems - 8,
@@ -134,7 +134,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     this.equipmentIcons.Add(clickableComponent);
                 }
             }
-            if (FakeInventoryPage.ShouldShowJunimoNoteIcon())
+            if (ShouldShowJunimoNoteIcon())
             {
                 var textureComponent3 = new ClickableTextureComponent("", new Rectangle(this.xPositionOnScreen + width, this.yPositionOnScreen + 96, 64, 64), "", Game1.content.LoadString("Strings\\UI:GameMenu_JunimoNote_Hover"), Game1.mouseCursors, new Rectangle(331, 374, 15, 14), 4f);
                 textureComponent3.myID = 898;
@@ -794,7 +794,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         /// <inheritdoc />
         public override void draw(SpriteBatch b)
         {
-            this.drawHorizontalPartition(b, this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + 192);
+            this.drawHorizontalPartition(b, this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + 192);
             this.inventory.draw(b);
             foreach (var equipmentIcon in this.equipmentIcons)
             {
@@ -906,23 +906,23 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     }
                 }
             }
-            b.Draw(Game1.timeOfDay >= 1900 ? Game1.nightbg : Game1.daybg, new Vector2((float)(this.xPositionOnScreen + 192 - 64 - 8), (float)(this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + 256 - 8)), Color.White);
+            b.Draw(Game1.timeOfDay >= 1900 ? Game1.nightbg : Game1.daybg, new Vector2((float)(this.xPositionOnScreen + 192 - 64 - 8), (float)(this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + 256 - 8)), Color.White);
             FarmerRenderer.isDrawingForUI = true;
-            Game1.player.FarmerRenderer.draw(b, new FarmerSprite.AnimationFrame(0, Game1.player.bathingClothes.Value ? 108 : 0, false, false), Game1.player.bathingClothes.Value ? 108 : 0, new Rectangle(0, Game1.player.bathingClothes.Value ? 576 : 0, 16, 32), new Vector2((float)(this.xPositionOnScreen + 192 - 8 - 32), (float)(this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + 320 - 32 - 8)), Vector2.Zero, 0.8f, 2, Color.White, 0.0f, 1f, Game1.player);
+            Game1.player.FarmerRenderer.draw(b, new FarmerSprite.AnimationFrame(0, Game1.player.bathingClothes.Value ? 108 : 0, false, false), Game1.player.bathingClothes.Value ? 108 : 0, new Rectangle(0, Game1.player.bathingClothes.Value ? 576 : 0, 16, 32), new Vector2((float)(this.xPositionOnScreen + 192 - 8 - 32), (float)(this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + 320 - 32 - 8)), Vector2.Zero, 0.8f, 2, Color.White, 0.0f, 1f, Game1.player);
             if (Game1.timeOfDay >= 1900)
             {
-                Game1.player.FarmerRenderer.draw(b, new FarmerSprite.AnimationFrame(0, Game1.player.bathingClothes.Value ? 108 : 0, false, false), Game1.player.bathingClothes.Value ? 108 : 0, new Rectangle(0, Game1.player.bathingClothes.Value ? 576 : 0, 16, 32), new Vector2((float)(this.xPositionOnScreen + 192 - 8 - 32), (float)(this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + 320 - 32 - 8)), Vector2.Zero, 0.8f, 2, Color.DarkBlue * 0.3f, 0.0f, 1f, Game1.player);
+                Game1.player.FarmerRenderer.draw(b, new FarmerSprite.AnimationFrame(0, Game1.player.bathingClothes.Value ? 108 : 0, false, false), Game1.player.bathingClothes.Value ? 108 : 0, new Rectangle(0, Game1.player.bathingClothes.Value ? 576 : 0, 16, 32), new Vector2((float)(this.xPositionOnScreen + 192 - 8 - 32), (float)(this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + 320 - 32 - 8)), Vector2.Zero, 0.8f, 2, Color.DarkBlue * 0.3f, 0.0f, 1f, Game1.player);
             }
             FarmerRenderer.isDrawingForUI = false;
-            Utility.drawTextWithShadow(b, Game1.player.Name, Game1.dialogueFont, new Vector2((float)(this.xPositionOnScreen + 192 - 8) - Game1.dialogueFont.MeasureString(Game1.player.Name).X / 2f, (float)(this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + 448 + 8)), Game1.textColor);
+            Utility.drawTextWithShadow(b, Game1.player.Name, Game1.dialogueFont, new Vector2((float)(this.xPositionOnScreen + 192 - 8) - Game1.dialogueFont.MeasureString(Game1.player.Name).X / 2f, (float)(this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + 448 + 8)), Game1.textColor);
             var num = 32f;
             var text1 = Game1.content.LoadString("Strings\\UI:Inventory_FarmName", (object)Game1.player.farmName);
-            Utility.drawTextWithShadow(b, text1, Game1.dialogueFont, new Vector2((float)((double)this.xPositionOnScreen + (double)num + 512.0 + 32.0 - (double)Game1.dialogueFont.MeasureString(text1).X / 2.0), (float)(this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + 256 + 4)), Game1.textColor);
+            Utility.drawTextWithShadow(b, text1, Game1.dialogueFont, new Vector2((float)((double)this.xPositionOnScreen + (double)num + 512.0 + 32.0 - (double)Game1.dialogueFont.MeasureString(text1).X / 2.0), (float)(this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + 256 + 4)), Game1.textColor);
             var text2 = Game1.content.LoadString("Strings\\UI:Inventory_CurrentFunds" + (Game1.player.useSeparateWallets ? "_Separate" : ""), (object)Utility.getNumberWithCommas(Game1.player.Money));
-            Utility.drawTextWithShadow(b, text2, Game1.dialogueFont, new Vector2((float)((double)this.xPositionOnScreen + (double)num + 512.0 + 32.0 - (double)Game1.dialogueFont.MeasureString(text2).X / 2.0), (float)(this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + 320 + 4)), Game1.textColor);
+            Utility.drawTextWithShadow(b, text2, Game1.dialogueFont, new Vector2((float)((double)this.xPositionOnScreen + (double)num + 512.0 + 32.0 - (double)Game1.dialogueFont.MeasureString(text2).X / 2.0), (float)(this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + 320 + 4)), Game1.textColor);
             var text3 = Game1.content.LoadString("Strings\\UI:Inventory_TotalEarnings" + (Game1.player.useSeparateWallets ? "_Separate" : ""), (object)Utility.getNumberWithCommas((int)Game1.player.totalMoneyEarned));
-            Utility.drawTextWithShadow(b, text3, Game1.dialogueFont, new Vector2((float)((double)this.xPositionOnScreen + (double)num + 512.0 + 32.0 - (double)Game1.dialogueFont.MeasureString(text3).X / 2.0), (float)(this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + 384)), Game1.textColor);
-            Utility.drawTextWithShadow(b, Utility.getDateString(), Game1.dialogueFont, new Vector2((float)((double)this.xPositionOnScreen + (double)num + 512.0 + 32.0 - (double)Game1.dialogueFont.MeasureString(Utility.getDateString()).X / 2.0), (float)(this.yPositionOnScreen + IClickableMenu.borderWidth + IClickableMenu.spaceToClearTopBorder + 448)), Game1.textColor * 0.8f);
+            Utility.drawTextWithShadow(b, text3, Game1.dialogueFont, new Vector2((float)((double)this.xPositionOnScreen + (double)num + 512.0 + 32.0 - (double)Game1.dialogueFont.MeasureString(text3).X / 2.0), (float)(this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + 384)), Game1.textColor);
+            Utility.drawTextWithShadow(b, Utility.getDateString(), Game1.dialogueFont, new Vector2((float)((double)this.xPositionOnScreen + (double)num + 512.0 + 32.0 - (double)Game1.dialogueFont.MeasureString(Utility.getDateString()).X / 2.0), (float)(this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + 448)), Game1.textColor * 0.8f);
             this.organizeButton?.draw(b);
             this.trashCan.draw(b);
             b.Draw(Game1.mouseCursors, new Vector2((float)(this.trashCan.bounds.X + 60), (float)(this.trashCan.bounds.Y + 40)), new Rectangle?(new Rectangle(564 + Game1.player.trashCanLevel * 18, 129, 18, 10)), Color.White, this.trashCanLidRotation, new Vector2(16f, 10f), 4f, SpriteEffects.None, 0.86f);
@@ -934,11 +934,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 if (this.hoverAmount > 0)
                 {
-                    IClickableMenu.drawToolTip(b, this.hoverText, this.hoverTitle, (Item)null, true, moneyAmountToShowAtBottom: this.hoverAmount);
+                    drawToolTip(b, this.hoverText, this.hoverTitle, (Item)null, true, moneyAmountToShowAtBottom: this.hoverAmount);
                 }
                 else
                 {
-                    IClickableMenu.drawToolTip(b, this.hoverText, this.hoverTitle, this.hoveredItem, this.checkHeldItem());
+                    drawToolTip(b, this.hoverText, this.hoverTitle, this.hoveredItem, this.checkHeldItem());
                 }
             }
             this.junimoNoteIcon?.draw(b);

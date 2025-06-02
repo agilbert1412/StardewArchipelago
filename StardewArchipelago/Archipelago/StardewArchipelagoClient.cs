@@ -51,7 +51,7 @@ namespace StardewArchipelago.Archipelago
             _testerFeatures = testerFeatures;
             _messagesToIgnore = new List<string>();
 
-            PrintLocationTags();
+            // PrintLocationTags();
         }
 
         private void PrintLocationTags()
@@ -64,7 +64,7 @@ namespace StardewArchipelago.Archipelago
             var text = "";
             foreach (var tag in tags)
             {
-                text += $"public const string {tag} = \"{tag}\"";
+                text += $"public const string {tag} = \"{tag}\";{Environment.NewLine}";
             }
             File.WriteAllText("AllLocationTags.cs",text);
         }

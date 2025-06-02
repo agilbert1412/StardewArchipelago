@@ -119,15 +119,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                     delayBeforeAnimationStart = (int)delay,
                     layerDepth = (float)(((building.tileY.Value + 0.5) * 64.0 + 2.0) / 10000.0)
                 });
-                sprites.Add(new TemporaryAnimatedSprite("TileSheets\\animations", new Microsoft.Xna.Framework.Rectangle(0, 0, 64, 64), 55f, 8, 0, centerTile * 64f, false, Game1.random.NextBool(), (float)(((building.tileY.Value + 0.5) * 64.0 + 1.0) / 10000.0), 0.01f, Color.White, 0.75f, 3f / 1000f, 0.0f, 0.0f)
+                sprites.Add(new TemporaryAnimatedSprite("TileSheets\\animations", new Rectangle(0, 0, 64, 64), 55f, 8, 0, centerTile * 64f, false, Game1.random.NextBool(), (float)(((building.tileY.Value + 0.5) * 64.0 + 1.0) / 10000.0), 0.01f, Color.White, 0.75f, 3f / 1000f, 0.0f, 0.0f)
                 {
                     delayBeforeAnimationStart = (int)delay
                 });
-                sprites.Add(new TemporaryAnimatedSprite("TileSheets\\animations", new Microsoft.Xna.Framework.Rectangle(0, 0, 64, 64), 65f, 8, 0, centerTile * 64f + new Vector2(Game1.random.Next(-32, 32), Game1.random.Next(-16, 32)), false, Game1.random.NextBool(), (float)(((building.tileY.Value + 0.5) * 64.0 + 1.0) / 10000.0), 0.01f, Color.White, 0.75f, 3f / 1000f, 0.0f, 0.0f)
+                sprites.Add(new TemporaryAnimatedSprite("TileSheets\\animations", new Rectangle(0, 0, 64, 64), 65f, 8, 0, centerTile * 64f + new Vector2(Game1.random.Next(-32, 32), Game1.random.Next(-16, 32)), false, Game1.random.NextBool(), (float)(((building.tileY.Value + 0.5) * 64.0 + 1.0) / 10000.0), 0.01f, Color.White, 0.75f, 3f / 1000f, 0.0f, 0.0f)
                 {
                     delayBeforeAnimationStart = (int)delay
                 });
-                sprites.Add(new TemporaryAnimatedSprite("TileSheets\\animations", new Microsoft.Xna.Framework.Rectangle(0, 0, 64, 64), 75f, 8, 0, centerTile * 64f + new Vector2(Game1.random.Next(-32, 32), Game1.random.Next(-16, 32)), false, Game1.random.NextBool(), (float)(((building.tileY.Value + 0.5) * 64.0 + 1.0) / 10000.0), 0.01f, Color.White, 0.75f, 3f / 1000f, 0.0f, 0.0f)
+                sprites.Add(new TemporaryAnimatedSprite("TileSheets\\animations", new Rectangle(0, 0, 64, 64), 75f, 8, 0, centerTile * 64f + new Vector2(Game1.random.Next(-32, 32), Game1.random.Next(-16, 32)), false, Game1.random.NextBool(), (float)(((building.tileY.Value + 0.5) * 64.0 + 1.0) / 10000.0), 0.01f, Color.White, 0.75f, 3f / 1000f, 0.0f, 0.0f)
                 {
                     delayBeforeAnimationStart = (int)delay
                 });
@@ -171,15 +171,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                     delayBeforeAnimationStart = (int)delay,
                     layerDepth = (float)(((building.tileY.Value + 0.5) * 64.0 + 2.0) / 10000.0)
                 });
-                sprites.Add(new TemporaryAnimatedSprite("TileSheets\\animations", new Microsoft.Xna.Framework.Rectangle(0, 0, 64, 64), 55f, 8, 0, centerTile * 64f, false, Game1.random.NextBool(), (float)(((building.tileY.Value + 0.5) * 64.0 + 1.0) / 10000.0), 0.01f, Color.White, 0.75f, 3f / 1000f, 0.0f, 0.0f)
+                sprites.Add(new TemporaryAnimatedSprite("TileSheets\\animations", new Rectangle(0, 0, 64, 64), 55f, 8, 0, centerTile * 64f, false, Game1.random.NextBool(), (float)(((building.tileY.Value + 0.5) * 64.0 + 1.0) / 10000.0), 0.01f, Color.White, 0.75f, 3f / 1000f, 0.0f, 0.0f)
                 {
                     delayBeforeAnimationStart = (int)delay
                 });
-                sprites.Add(new TemporaryAnimatedSprite("TileSheets\\animations", new Microsoft.Xna.Framework.Rectangle(0, 0, 64, 64), 65f, 8, 0, centerTile * 64f + new Vector2(Game1.random.Next(-32, 32), Game1.random.Next(-16, 32)), false, Game1.random.NextBool(), (float)(((building.tileY.Value + 0.5) * 64.0 + 1.0) / 10000.0), 0.01f, Color.White, 0.75f, 3f / 1000f, 0.0f, 0.0f)
+                sprites.Add(new TemporaryAnimatedSprite("TileSheets\\animations", new Rectangle(0, 0, 64, 64), 65f, 8, 0, centerTile * 64f + new Vector2(Game1.random.Next(-32, 32), Game1.random.Next(-16, 32)), false, Game1.random.NextBool(), (float)(((building.tileY.Value + 0.5) * 64.0 + 1.0) / 10000.0), 0.01f, Color.White, 0.75f, 3f / 1000f, 0.0f, 0.0f)
                 {
                     delayBeforeAnimationStart = (int)delay
                 });
-                sprites.Add(new TemporaryAnimatedSprite("TileSheets\\animations", new Microsoft.Xna.Framework.Rectangle(0, 0, 64, 64), 75f, 8, 0, centerTile * 64f + new Vector2(Game1.random.Next(-32, 32), Game1.random.Next(-16, 32)), false, Game1.random.NextBool(), (float)(((building.tileY.Value + 0.5) * 64.0 + 1.0) / 10000.0), 0.01f, Color.White, 0.75f, 3f / 1000f, 0.0f, 0.0f)
+                sprites.Add(new TemporaryAnimatedSprite("TileSheets\\animations", new Rectangle(0, 0, 64, 64), 75f, 8, 0, centerTile * 64f + new Vector2(Game1.random.Next(-32, 32), Game1.random.Next(-16, 32)), false, Game1.random.NextBool(), (float)(((building.tileY.Value + 0.5) * 64.0 + 1.0) / 10000.0), 0.01f, Color.White, 0.75f, 3f / 1000f, 0.0f, 0.0f)
                 {
                     delayBeforeAnimationStart = (int)delay
                 });

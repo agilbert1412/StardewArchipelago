@@ -628,7 +628,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         private void BroadcastSacrificeSprites()
         {
-            Game1.Multiplayer.broadcastSprites(Game1.currentLocation, new TemporaryAnimatedSprite("LooseSprites\\Cursors", new Microsoft.Xna.Framework.Rectangle(536, 1945, 8, 8), new Vector2(156f, 388f), false, 0.0f, Color.White)
+            Game1.Multiplayer.broadcastSprites(Game1.currentLocation, new TemporaryAnimatedSprite("LooseSprites\\Cursors", new Rectangle(536, 1945, 8, 8), new Vector2(156f, 388f), false, 0.0f, Color.White)
             {
                 interval = 50f,
                 totalNumberOfLoops = 99999,
@@ -639,7 +639,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             for (var index = 0; index < 20; ++index)
             {
                 Game1.Multiplayer.broadcastSprites(Game1.currentLocation,
-                    new TemporaryAnimatedSprite("LooseSprites\\Cursors", new Microsoft.Xna.Framework.Rectangle(372, 1956, 10, 10), new Vector2(2f, 6f) * 64f + new Vector2((float)Game1.random.Next(-32, 64), (float)Game1.random.Next(16)),
+                    new TemporaryAnimatedSprite("LooseSprites\\Cursors", new Rectangle(372, 1956, 10, 10), new Vector2(2f, 6f) * 64f + new Vector2((float)Game1.random.Next(-32, 64), (float)Game1.random.Next(16)),
                         false, 1f / 500f, Color.LightGray)
                     {
                         alpha = 0.75f,
@@ -655,14 +655,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
             Game1.currentLocation.playSound("fireball");
             Game1.Multiplayer.broadcastSprites(Game1.currentLocation,
-                new TemporaryAnimatedSprite("LooseSprites\\Cursors", new Microsoft.Xna.Framework.Rectangle(388, 1894, 24, 22), 100f, 6, 9999, new Vector2(2f, 5f) * 64f, false, true, 1f, 0.0f, Color.White, 4f, 0.0f, 0.0f, 0.0f)
+                new TemporaryAnimatedSprite("LooseSprites\\Cursors", new Rectangle(388, 1894, 24, 22), 100f, 6, 9999, new Vector2(2f, 5f) * 64f, false, true, 1f, 0.0f, Color.White, 4f, 0.0f, 0.0f, 0.0f)
                 {
                     motion = new Vector2(4f, -2f),
                 });
             if (Game1.player.getChildrenCount() > 1)
             {
                 Game1.Multiplayer.broadcastSprites(Game1.currentLocation,
-                    new TemporaryAnimatedSprite("LooseSprites\\Cursors", new Microsoft.Xna.Framework.Rectangle(388, 1894, 24, 22), 100f, 6, 9999, new Vector2(2f, 5f) * 64f, false, true, 1f, 0.0f, Color.White, 4f, 0.0f, 0.0f, 0.0f)
+                    new TemporaryAnimatedSprite("LooseSprites\\Cursors", new Rectangle(388, 1894, 24, 22), 100f, 6, 9999, new Vector2(2f, 5f) * 64f, false, true, 1f, 0.0f, Color.White, 4f, 0.0f, 0.0f, 0.0f)
                     {
                         motion = new Vector2(4f, -1.5f),
                         delayBeforeAnimationStart = 50,

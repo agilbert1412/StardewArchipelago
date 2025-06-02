@@ -37,7 +37,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
             harmony.Patch(
                 original: AccessTools.Method(typeof(NPC), nameof(NPC.ChooseAppearance)),
-                prefix: new HarmonyMethod(typeof(AppearanceRandomizer), nameof(AppearanceRandomizer.NPCChooseAppearance_AppearanceRandomizer_Prefix))
+                prefix: new HarmonyMethod(typeof(AppearanceRandomizer), nameof(NPCChooseAppearance_AppearanceRandomizer_Prefix))
             );
 
             //harmony.Patch(
@@ -52,7 +52,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
             harmony.Patch(
                 original: AccessTools.Method(typeof(AnimatedSprite), nameof(AnimatedSprite.StopAnimation)),
-                prefix: new HarmonyMethod(typeof(AppearanceRandomizer), nameof(AppearanceRandomizer.StopAnimation_CatchDivideByZero_Prefix))
+                prefix: new HarmonyMethod(typeof(AppearanceRandomizer), nameof(StopAnimation_CatchDivideByZero_Prefix))
             );
 
             //harmony.Patch(
