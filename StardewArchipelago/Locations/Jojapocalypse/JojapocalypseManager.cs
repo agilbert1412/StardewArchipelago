@@ -5,12 +5,14 @@ using StardewArchipelago.Locations.InGameLocations;
 using StardewArchipelago.Logging;
 using StardewValley;
 using StardewValley.Menus;
+using StardewValley.Locations;
 
 namespace StardewArchipelago.Locations.Jojapocalypse
 {
     public class JojapocalypseManager
     {
         private readonly ModConfig _config;
+        private readonly JojaLocationChecker _jojaLocationChecker;
         private readonly JojaDisabler _jojaDisabler;
         private readonly JojapocalypseShopPatcher _jojapocalypseShopPatcher;
         private readonly JojaPriceCalculator _jojaPriceCalculator;
@@ -18,6 +20,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
         public JojapocalypseManager(LogHandler logger, IModHelper modHelper, ModConfig config, Harmony harmony, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker, JojaLocationChecker jojaLocationChecker)
         {
             _config = config;
+            _jojaLocationChecker = jojaLocationChecker;
             _jojaDisabler = new JojaDisabler(logger, modHelper, harmony);
             _jojaPriceCalculator = new JojaPriceCalculator(logger, locationChecker);
             _jojapocalypseShopPatcher = new JojapocalypseShopPatcher(logger, modHelper, harmony, archipelago, locationChecker, jojaLocationChecker, this, _jojaPriceCalculator);
@@ -25,7 +28,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
 
         public void PatchAllJojaLogic()
         {
-            if (_config.Jojapocalypse == JojapocalypseSetting.Disabled)
+            if (JojapocalypseConfigs.Jojapocalypse == JojapocalypseSetting.Disabled)
             {
                 _jojaDisabler.DisableJojaRouteShortcuts();
                 return;
@@ -38,6 +41,27 @@ namespace StardewArchipelago.Locations.Jojapocalypse
         public void OnNewPurchase(string locationName)
         {
             UpdateAllShopPrices();
+            SignUpForJojaMembership();
+        }
+
+        private void SignUpForJojaMembership()
+        {
+            if (_jojaLocationChecker.GetAllLocationsCheckedByJoja().Count < JojapocalypseConfigs.NumberOfPurchasesBeforeMembership)
+            {
+                return;
+            }
+
+            var mail = "JojaMember";
+            if (Game1.player.hasOrWillReceiveMail(mail))
+            {
+                return;
+            }
+
+            Game1.addMailForTomorrow(mail, true, true);
+            Game1.player.removeQuest("26");
+            Game1.activeClickableMenu?.exitThisMenu();
+            JojaMart.Morris.setNewDialogue("Data\\ExtraDialogue:Morris_PlayerSignedUp");
+            Game1.drawDialogue(JojaMart.Morris);
         }
 
         private static void UpdateAllShopPrices()

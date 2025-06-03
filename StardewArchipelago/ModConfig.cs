@@ -148,11 +148,6 @@ namespace StardewArchipelago
         /// When seeing a scouted item, and a custom asset is available for this game but not for this item, display the generic game asset instead of a generic logo
         /// </summary>
         public bool CustomAssetGenericGame { get; set; } = true;
-
-        /// <summary>
-        /// [EXPERIMENTAL] Jojapocalypse config
-        /// </summary>
-        public JojapocalypseSetting Jojapocalypse { get; set; } = JojapocalypseSetting.Disabled;
     }
 
     public enum ItemIndicatorPreference
@@ -191,12 +186,5 @@ namespace StardewArchipelago
         HintProgressionUseful = 2,
         HintProgressionUsefulFiller = 3,
         HintEverything = 4,
-    }
-
-    public enum JojapocalypseSetting
-    {
-        Disabled,
-        Allowed,
-        Forced,
     }
 }

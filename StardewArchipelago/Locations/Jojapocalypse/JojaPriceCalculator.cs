@@ -10,20 +10,9 @@ namespace StardewArchipelago.Locations.Jojapocalypse
 {
     public class JojaPriceCalculator
     {
-        private const int START_PRICE = 100;
-        private const int END_PRICE = 100000;
-        private static readonly Dictionary<ItemClassification, double> CLASSIFICATION_MULTIPLIERS = new()
-        {
-            { ItemClassification.Progression, 1 },
-            { ItemClassification.Useful, 0.4 },
-            { ItemClassification.Trap, 0.1 },
-            { ItemClassification.Filler, 0.2 },
-        };
-
         private ILogger _logger;
         private StardewLocationChecker _locationChecker;
         private int _totalLocationsInSlot;
-        private bool _useExponentialPricing = true;
 
         public JojaPriceCalculator(ILogger logger, StardewLocationChecker locationChecker)
         {
@@ -37,7 +26,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
             var missingLocationsCount = _locationChecker.GetAllMissingLocations().Count;
             var doneLocationsCount = _totalLocationsInSlot - missingLocationsCount;
 
-            if (_useExponentialPricing)
+            if (JojapocalypseConfigs.UseExponentialPricing)
             {
                 return GetNextItemPriceExponential(doneLocationsCount);
             }
@@ -50,15 +39,15 @@ namespace StardewArchipelago.Locations.Jojapocalypse
         private int GetNextItemPriceExponential(int doneLocationsCount)
         {
             var ratio = (double)doneLocationsCount / (_totalLocationsInSlot - 1);
-            var priceNext = START_PRICE * Math.Pow((double)END_PRICE / START_PRICE, ratio);
+            var priceNext = JojapocalypseConfigs.StartPrice * Math.Pow((double)JojapocalypseConfigs.EndPrice / JojapocalypseConfigs.StartPrice, ratio);
             return (int)Math.Round(priceNext);
         }
 
         private int GetNextItemPriceLinear(int doneLocationsCount)
         {
-            var priceRange = END_PRICE - START_PRICE;
+            var priceRange = JojapocalypseConfigs.EndPrice - JojapocalypseConfigs.StartPrice;
             var priceIncreasePerLocation = (double)priceRange / (_totalLocationsInSlot - 1);
-            var priceNext = START_PRICE + (doneLocationsCount * priceIncreasePerLocation);
+            var priceNext = JojapocalypseConfigs.StartPrice + (doneLocationsCount * priceIncreasePerLocation);
             return (int)Math.Round(priceNext);
         }
     }
