@@ -10,7 +10,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
 {
     public class JojaPriceCalculator
     {
-        private const int START_PRICE = 10;
+        private const int START_PRICE = 100;
         private const int END_PRICE = 100000;
         private static readonly Dictionary<ItemClassification, double> CLASSIFICATION_MULTIPLIERS = new()
         {

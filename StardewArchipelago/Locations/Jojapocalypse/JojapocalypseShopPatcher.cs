@@ -27,6 +27,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
         private static JojaLocationChecker _jojaLocationChecker;
         private static JojapocalypseManager _jojapocalypseManager;
         private static JojaPriceCalculator _jojaPriceCalculator;
+        private static JojapocalypseFiltering _jojaFiltering;
 
         public JojapocalypseShopPatcher(LogHandler logger, IModHelper modHelper, Harmony harmony, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker, JojaLocationChecker jojaLocationChecker, JojapocalypseManager jojapocalypseManager, JojaPriceCalculator jojaPriceCalculator)
         {
@@ -38,6 +39,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
             _jojaLocationChecker = jojaLocationChecker;
             _jojapocalypseManager = jojapocalypseManager;
             _jojaPriceCalculator = jojaPriceCalculator;
+            _jojaFiltering = new JojapocalypseFiltering(_logger, _archipelago, _locationChecker);
         }
 
         public void PatchJojaShops()
@@ -98,50 +100,19 @@ namespace StardewArchipelago.Locations.Jojapocalypse
 
         private static List<ISalable> CreateJojapocalypseItems(IEnumerable<string> locationTagFilters)
         {
-            var locations = _archipelago.DataPackageCache.GetAllLocations();
-            var locationsMissing = locations.Where(x => _locationChecker.IsLocationMissing(x.Name));
-            var locationsFiltered = locationsMissing.Where(x => locationTagFilters.All(x.LocationTags.Contains));
-            var locationsCanPurchaseNow = locationsFiltered.Where(CanPurchaseJojapocalypseLocation);
+            var locations = _archipelago.DataPackageCache.GetAllLocations().ToArray();
+            var locationsMissing = locations.Where(x => _locationChecker.IsLocationMissing(x.Name)).ToArray();
+            var locationsFiltered = locationsMissing.Where(x => locationTagFilters.All(x.LocationTags.Contains)).ToArray();
+            var locationsCanPurchaseNow = locationsFiltered.Where(_jojaFiltering.CanPurchaseJojapocalypseLocation).ToArray();
+            var locationsInOrder = locationsCanPurchaseNow.OrderBy(x => x.Name).ToArray();
 
             var salableItems = new List<ISalable>();
-            foreach (var location in locationsCanPurchaseNow)
+            foreach (var location in locationsInOrder)
             {
                 salableItems.Add(new JojaObtainableArchipelagoLocation($"Joja {location.Name}", location.Name, _logger, _modHelper, _jojaLocationChecker, _archipelago, _jojaPriceCalculator));
             }
 
             return salableItems;
-        }
-
-        private static bool CanPurchaseJojapocalypseLocation(StardewArchipelagoLocation location)
-        {
-            var nameWords = location.Name.Split(" ");
-            for (var i = 0; i < nameWords.Length; i++)
-            {
-                if (!int.TryParse(nameWords[i], out var number))
-                {
-                    continue;
-                }
-
-                if (number <= 1)
-                {
-                    continue;
-                }
-
-                for (var j = number - 1; j >= 0; j--)
-                {
-                    var previousNumberLocationNameWords = new List<string>();
-                    previousNumberLocationNameWords.AddRange(nameWords.Take(i));
-                    previousNumberLocationNameWords.Add(j.ToString());
-                    previousNumberLocationNameWords.AddRange(nameWords.Skip(i + 1));
-                    var previousNumberLocation = string.Join(" ", previousNumberLocationNameWords);
-                    if (_locationChecker.IsLocationMissing(previousNumberLocation))
-                    {
-                        return false;
-                    }
-                }
-            }
-
-            return true;
         }
 
         private static bool OnPurchaseJojapocalypseItem(ISalable salable, Farmer who, int counttaken, ItemStockInformation stock)
