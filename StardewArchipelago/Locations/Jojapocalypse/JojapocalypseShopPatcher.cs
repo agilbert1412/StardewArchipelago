@@ -60,7 +60,9 @@ namespace StardewArchipelago.Locations.Jojapocalypse
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
-                var archipelagoPartnershipText = "Greetings. As part of our new partnership with Archipelago, we can offer you our services to accomplish any task you or your organisation might need! Nothing is off limits, as long as you're ready to pay the price.";
+                var archipelagoPartnershipText = "Greetings. As part of our new partnership with Archipelago, we can offer you our services to accomplish any task you or your organisation might need!"+
+                                                 "#$b#" +
+                                                 "Nothing is off limits, as long as you're ready to pay the price.";
                 DrawMorrisDialogue(nameof(archipelagoPartnershipText), archipelagoPartnershipText, () => OpenJojapocalypseShop());
 
                 return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
