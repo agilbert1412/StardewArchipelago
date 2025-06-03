@@ -16,6 +16,9 @@ using System.Text;
 using System.Threading.Tasks;
 using StardewArchipelago.Locations.Jojapocalypse.Consequences;
 using StardewValley;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
+using StardewValley.TerrainFeatures;
+using StardewValley.Tools;
 
 namespace StardewArchipelago.Locations.Jojapocalypse
 {
@@ -43,7 +46,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
             ToolConsequences.Initialize(_logger, _modHelper, _archipelago, _jojaLocationChecker);
             CropConsequences.Initialize(_logger, _modHelper, _archipelago, _jojaLocationChecker);
             // Elevators should cost money
-            // Skills should reduce natural resources
+            SkillsConsequences.Initialize(_logger, _modHelper, _archipelago, _jojaLocationChecker);
             // Blueprints
             // Story Quests
             // Arcade Machines
@@ -76,8 +79,47 @@ namespace StardewArchipelago.Locations.Jojapocalypse
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Crop), nameof(Crop.newDay)),
-                postfix: new HarmonyMethod(typeof(CropConsequences), nameof(CropConsequences.NewDay_ChanceOfNotGrowing_Prefix))
+                postfix: new HarmonyMethod(typeof(CropConsequences), nameof(CropConsequences.NewDay_ChanceOfDying_Prefix))
             );
+
+            PatchSkillConsequences();
+        }
+
+        private void PatchSkillConsequences()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Crop), nameof(Crop.newDay)),
+                postfix: new HarmonyMethod(typeof(SkillsConsequences), nameof(SkillsConsequences.NewDay_ChanceOfNotGrowing_Prefix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Tree), nameof(Tree.dayUpdate)),
+                postfix: new HarmonyMethod(typeof(SkillsConsequences), nameof(SkillsConsequences.DayUpdate_ChanceToNotGrowTree_Prefix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(FishingRod), "calculateTimeUntilFishingBite"),
+                postfix: new HarmonyMethod(typeof(SkillsConsequences), nameof(SkillsConsequences.CalculateTimeUntilFishingBite_AddTimePerFish_Postfix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(MineShaft), "adjustLevelChances"),
+                postfix: new HarmonyMethod(typeof(SkillsConsequences), nameof(SkillsConsequences.AdjustLevelChances_FewerThingsInMine_Postfix))
+            );
+        }
+
+        public static bool RollConsequenceChance(double chancePerPurchase, int numberPurchased, double seedA = 0.0, double seedB = 0.0, double seedC = 0.0)
+        {
+            var chanceEvent = GetEventChance(chancePerPurchase, numberPurchased);
+            var random = Utility.CreateDaySaveRandom(seedA, seedB, seedC);
+            return random.NextDouble() <= chanceEvent;
+        }
+
+        public static double GetEventChance(double chancePerPurchase, int numberPurchased)
+        {
+            var chanceEventPerPurchase = chancePerPurchase;
+            var chanceNotEventPerPurchase = 1 - chanceEventPerPurchase;
+            var chanceNotEvent = Math.Pow(chanceNotEventPerPurchase, numberPurchased);
+            var chanceEvent = 1 - chanceNotEvent;
+
+            return chanceEvent;
         }
     }
 }

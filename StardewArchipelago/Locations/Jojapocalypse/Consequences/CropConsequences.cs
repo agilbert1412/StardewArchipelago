@@ -29,32 +29,26 @@ namespace StardewArchipelago.Locations.Jojapocalypse.Consequences
         }
 
         // public virtual void newDay(int state)
-        public static bool NewDay_ChanceOfNotGrowing_Prefix(Crop __instance, int state)
+        public static bool NewDay_ChanceOfDying_Prefix(Crop __instance, int state)
         {
             try
             {
-
-                var numberPurchased = _jojaLocationChecker.CountCheckedLocationsWithTag(LocationTag.TOOL_UPGRADE);
+                var numberPurchased = _jojaLocationChecker.CountCheckedLocationsWithTag(LocationTag.CROPSANITY);
                 if (numberPurchased <= 0)
                 {
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
-                var chanceToSkipDayPerPurchase = 0.01;
-                var chanceToGrowPerPurchase = 1 - chanceToSkipDayPerPurchase;
-                var chanceToGrow = Math.Pow(chanceToGrowPerPurchase, numberPurchased);
-
-                var random = Utility.CreateDaySaveRandom(__instance.currentLocation.Name.GetHash(), __instance.tilePosition.X, __instance.tilePosition.Y);
-                if (random.NextDouble() <= chanceToGrow)
+                if (JojapocalypseConsequencesPatcher.RollConsequenceChance(0.005, numberPurchased, __instance.currentLocation.Name.GetHash(), __instance.tilePosition.X, __instance.tilePosition.Y))
                 {
-                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                    __instance.Kill();
                 }
 
-                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed in {nameof(NewDay_ChanceOfNotGrowing_Prefix)}:\n{ex}");
+                _logger.LogError($"Failed in {nameof(NewDay_ChanceOfDying_Prefix)}:\n{ex}");
                 return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
