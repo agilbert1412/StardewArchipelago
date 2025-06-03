@@ -44,7 +44,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse.Consequences
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
-                if (JojapocalypseConsequencesPatcher.RollConsequenceChance(0.1, numberPurchased, __instance.currentLocation.Name.GetHash(), __instance.tilePosition.X, __instance.tilePosition.Y))
+                if (JojapocalypseConsequencesPatcher.RollConsequenceChance(0.1, numberPurchased, nameof(NewDay_ChanceOfNotGrowing_Prefix).GetHash(), __instance.currentLocation.Name.GetHash(), (__instance.tilePosition.X * 877) + __instance.tilePosition.Y))
                 {
                     return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }

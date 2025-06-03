@@ -5,10 +5,12 @@ using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago.ApworldData;
 using StardewArchipelago.Constants.Vanilla;
+using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Locations.Festival;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Objects;
+using StardewValley.Tools;
 
 namespace StardewArchipelago.Locations.Jojapocalypse.Consequences
 {
@@ -38,7 +40,9 @@ namespace StardewArchipelago.Locations.Jojapocalypse.Consequences
                     return;
                 }
 
-                who.Stamina -= numberPurchased * power;
+                var toolUsuallyCostsEnergy = __instance is Axe or Pickaxe or Hoe or WateringCan;
+
+                who.Stamina -= numberPurchased * power * 0.1f * (toolUsuallyCostsEnergy ? 1f : 0.05f);
                 return;
             }
             catch (Exception ex)

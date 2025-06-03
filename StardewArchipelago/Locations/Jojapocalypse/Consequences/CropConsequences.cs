@@ -39,7 +39,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse.Consequences
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
-                if (JojapocalypseConsequencesPatcher.RollConsequenceChance(0.005, numberPurchased, __instance.currentLocation.Name.GetHash(), __instance.tilePosition.X, __instance.tilePosition.Y))
+                if (JojapocalypseConsequencesPatcher.RollConsequenceChance(0.005, numberPurchased, nameof(NewDay_ChanceOfDying_Prefix).GetHash(), __instance.currentLocation.Name.GetHash(), (__instance.tilePosition.X*877) + __instance.tilePosition.Y))
                 {
                     __instance.Kill();
                 }
