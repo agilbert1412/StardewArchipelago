@@ -16,6 +16,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
         private readonly JojaDisabler _jojaDisabler;
         private readonly JojapocalypseShopPatcher _jojapocalypseShopPatcher;
         private readonly JojaPriceCalculator _jojaPriceCalculator;
+        private readonly JojapocalypseConsequencesPatcher _jojaConsequencesPatcher;
 
         public JojapocalypseManager(LogHandler logger, IModHelper modHelper, ModConfig config, Harmony harmony, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker, JojaLocationChecker jojaLocationChecker)
         {
@@ -24,6 +25,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
             _jojaDisabler = new JojaDisabler(logger, modHelper, harmony);
             _jojaPriceCalculator = new JojaPriceCalculator(logger, locationChecker);
             _jojapocalypseShopPatcher = new JojapocalypseShopPatcher(logger, modHelper, harmony, archipelago, locationChecker, jojaLocationChecker, this, _jojaPriceCalculator);
+            _jojaConsequencesPatcher = new JojapocalypseConsequencesPatcher(logger, modHelper, harmony, archipelago, jojaLocationChecker);
         }
 
         public void PatchAllJojaLogic()
@@ -36,12 +38,14 @@ namespace StardewArchipelago.Locations.Jojapocalypse
 
             _jojaDisabler.DisablePerfectionWaivers();
             _jojapocalypseShopPatcher.PatchJojaShops();
+            _jojaConsequencesPatcher.PatchAllConsequences();
         }
 
         public void OnNewPurchase(string locationName)
         {
             UpdateAllShopPrices();
             SignUpForJojaMembership();
+            _jojaLocationChecker.RecountTags();
         }
 
         private void SignUpForJojaMembership()

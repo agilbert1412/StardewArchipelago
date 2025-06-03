@@ -27,5 +27,10 @@ namespace StardewArchipelago.Archipelago
         {
             return _locationCacheById.Values.Cast<StardewArchipelagoLocation>();
         }
+
+        public StardewArchipelagoLocation GetLocation(string locationName)
+        {
+            return (StardewArchipelagoLocation)_locationCacheByName[locationName];
+        }
     }
 }
