@@ -2,9 +2,14 @@
 using Archipelago.MultiClient.Net.Models;
 using KaitoKid.ArchipelagoUtilities.Net;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.Quests;
 using StardewArchipelago.Locations.Jojapocalypse;
 using StardewArchipelago.Logging;
 using StardewModdingAPI;
+using StardewValley;
+using StardewValley.Quests;
 
 namespace StardewArchipelago.Locations.InGameLocations
 {
@@ -26,6 +31,35 @@ namespace StardewArchipelago.Locations.InGameLocations
         public override int salePrice(bool ignoreProfitMargins = false)
         {
             return _jojaPriceCalculator.GetNextItemPrice();
+        }
+
+        public override bool actionWhenPurchased(string shopId)
+        {
+            ArchipelagoJunimoNoteMenu.CompleteBundleIfExists(LocationName);
+            CompleteQuestIfExists();
+            return base.actionWhenPurchased(shopId);
+        }
+
+        private void CompleteQuestIfExists()
+        {
+            var idToComplete = "";
+            foreach (var activeQuest in Game1.player.questLog)
+            {
+                var questName = activeQuest.GetName();
+                var englishQuestName = StoryQuestInjections.GetQuestEnglishName(activeQuest.id.Value, questName);
+                if (!LocationName.Equals(englishQuestName, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    continue;
+                }
+
+                idToComplete = activeQuest.id.Value;
+                break;
+            }
+
+            if (!string.IsNullOrWhiteSpace(idToComplete))
+            {
+                Game1.player.completeQuest(idToComplete);
+            }
         }
     }
 }

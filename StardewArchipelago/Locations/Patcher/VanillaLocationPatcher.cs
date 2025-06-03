@@ -153,14 +153,17 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(typeof(CommunityCenter), nameof(CommunityCenter.shouldNoteAppearInArea)),
                 prefix: new HarmonyMethod(typeof(CommunityCenterInjections), nameof(CommunityCenterInjections.ShouldNoteAppearInArea_AllowAccessEverything_Prefix))
             );
+
             _harmony.Patch(
                 original: AccessTools.Method(typeof(CommunityCenter), nameof(CommunityCenter.checkAction)),
                 prefix: new HarmonyMethod(typeof(CommunityCenterInjections), nameof(CommunityCenterInjections.CheckAction_BulletinBoardNoRequirements_Prefix))
             );
+
             _harmony.Patch(
                 original: AccessTools.Method(typeof(CommunityCenter), "checkForMissedRewards"),
                 prefix: new HarmonyMethod(typeof(CommunityCenterInjections), nameof(CommunityCenterInjections.CheckForMissedRewards_DontBother_Prefix))
             );
+
             _harmony.Patch(
                 original: AccessTools.Method(typeof(CommunityCenter), "resetSharedState"),
                 prefix: new HarmonyMethod(typeof(CommunityCenterInjections), nameof(CommunityCenterInjections.ResetSharedState_SisyphusStoneFallDown_Postfix))

@@ -76,7 +76,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
             return false;
         }
 
-        private static string GetQuestEnglishName(string questId, string defaultName)
+        public static string GetQuestEnglishName(string questId, string defaultName)
         {
             var englishQuests = _englishContentManager.Load<Dictionary<string, string>>("Data\\Quests");
 

@@ -1983,7 +1983,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             foreach (var (bundleKey, bundleData) in Game1.netWorldState.Value.BundleData)
             {
                 var name = bundleData.Split("/").First();
-                if (name == bundleName)
+                if (name.Equals(bundleName) || name.Equals($"{bundleName} Bundle") || (bundleName.EndsWith(" Bundle") && name.Equals(bundleName[..^" Bundle".Length])))
                 {
                     return int.Parse(bundleKey.Split("/").Last());
                 }

@@ -42,6 +42,29 @@ namespace StardewArchipelago.Locations.Jojapocalypse
         {
             ToolConsequences.Initialize(_logger, _modHelper, _archipelago, _jojaLocationChecker);
             CropConsequences.Initialize(_logger, _modHelper, _archipelago, _jojaLocationChecker);
+            // Elevators should cost money
+            // Skills should reduce natural resources
+            // Blueprints
+            // Story Quests
+            // Arcade Machines
+            // Traveling Merchant should increase TC prices
+            // Fishsanity should reduce bite rate of fish
+            // Museumsanity should increase price of breaking geodes
+            // Festivals
+            // Desert Festival and skull cavern should increase Bus cost (?)
+            // Special Orders should increase amounts
+            // Ginger island should increase boat cost (?)
+            // Baby should decrease friendship with spouse
+            // Monstersanity should decrease combat prowess
+            // Shipsanity should reduce profit margin
+            // Cooksanity should increase chance of failing cooking
+            // Chefsanity
+            // Craftsanity should increase chance of failing crafting
+            // Booksanity should increase bookseller prices
+            // Secretsanity should decrease secret note spawn chance
+            // Movie should increase ticket and snack costs
+            // Hatsanity
+            // Eatsanity should decrease food efficiency
         }
 
         public void PatchAllConsequences()
