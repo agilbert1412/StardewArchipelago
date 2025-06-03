@@ -79,7 +79,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Crop), nameof(Crop.newDay)),
-                postfix: new HarmonyMethod(typeof(CropConsequences), nameof(CropConsequences.NewDay_ChanceOfDying_Prefix))
+                prefix: new HarmonyMethod(typeof(CropConsequences), nameof(CropConsequences.NewDay_ChanceOfDying_Prefix))
             );
 
             PatchSkillConsequences();
@@ -89,11 +89,11 @@ namespace StardewArchipelago.Locations.Jojapocalypse
         {
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Crop), nameof(Crop.newDay)),
-                postfix: new HarmonyMethod(typeof(SkillsConsequences), nameof(SkillsConsequences.NewDay_ChanceOfNotGrowing_Prefix))
+                prefix: new HarmonyMethod(typeof(SkillsConsequences), nameof(SkillsConsequences.NewDay_ChanceOfNotGrowing_Prefix))
             );
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Tree), nameof(Tree.dayUpdate)),
-                postfix: new HarmonyMethod(typeof(SkillsConsequences), nameof(SkillsConsequences.DayUpdate_ChanceToNotGrowTree_Prefix))
+                prefix: new HarmonyMethod(typeof(SkillsConsequences), nameof(SkillsConsequences.DayUpdate_ChanceToNotGrowTree_Prefix))
             );
             _harmony.Patch(
                 original: AccessTools.Method(typeof(FishingRod), "calculateTimeUntilFishingBite"),

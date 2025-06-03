@@ -8,7 +8,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
 {
     public class JojapocalypseConfigs
     {
-        public static JojapocalypseSetting Jojapocalypse { get; set; } = JojapocalypseSetting.Disabled;
+        public static JojapocalypseSetting Jojapocalypse { get; set; } = JojapocalypseSetting.Allowed;
         public static int StartPrice { get; set; } = 100;
         public static int EndPrice { get; set; } = 100000;
         public static bool UseExponentialPricing { get; set; } = true;
