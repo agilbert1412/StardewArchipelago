@@ -60,7 +60,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
-                const string archipelagoPartnershipText = "Greetings. As part of our new partnership with Archipelago, we can offer you our services to accomplish any task you or your organisation might need!^Nothing is off limits, as long as you're ready to pay the price.";
+                var archipelagoPartnershipText = "Greetings. As part of our new partnership with Archipelago, we can offer you our services to accomplish any task you or your organisation might need! Nothing is off limits, as long as you're ready to pay the price.";
                 DrawMorrisDialogue(nameof(archipelagoPartnershipText), archipelagoPartnershipText, () => OpenJojapocalypseShop());
 
                 return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
@@ -76,18 +76,21 @@ namespace StardewArchipelago.Locations.Jojapocalypse
         {
             JojaMart.Morris.CurrentDialogue.Clear();
 
-            var newDialogue = new Dialogue(JojaMart.Morris, dialogueKey, dialogueText); 
-            JojaMart.Morris.CurrentDialogue.Push(newDialogue);
+            var newDialogue = new Dialogue(JojaMart.Morris, dialogueKey, dialogueText);
 
             if (actionAfterFinish != null)
             {
-                JojaMart.Morris.CurrentDialogue.Peek().onFinish = actionAfterFinish;
+                newDialogue.onFinish += actionAfterFinish;
             }
+
+            JojaMart.Morris.setNewDialogue(newDialogue);
             Game1.drawDialogue(JojaMart.Morris);
         }
 
         private static void OpenJojapocalypseShop(IEnumerable<string> locationTagFilters = null)
         {
+            var dialogueBox = ((DialogueBox)(Game1.activeClickableMenu));
+            dialogueBox.closeDialogue();
             if (locationTagFilters == null)
             {
                 locationTagFilters = Array.Empty<string>();
