@@ -55,7 +55,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
             // Museumsanity should increase price of breaking geodes
             // Festivals
             // Desert Festival and skull cavern should increase Bus cost (?)
-            // Special Orders should increase amounts
+            SpecialOrderConsequences.Initialize(_logger, _modHelper, _archipelago, _jojaLocationChecker);
             // Ginger island should increase boat cost (?)
             // Baby should decrease friendship with spouse
             // Monstersanity should decrease combat prowess

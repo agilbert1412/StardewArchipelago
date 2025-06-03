@@ -17,6 +17,7 @@ using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
+using StardewArchipelago.Locations.Jojapocalypse.Consequences;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -121,7 +122,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 requirementMultiplier = 0.6;
             }
-            else
+
+            requirementMultiplier = SpecialOrderConsequences.AdjustSpecialOrderAmountMultiplier(requirementMultiplier);
+
+            if (Math.Abs(requirementMultiplier - 1.0) < 0.01)
             {
                 return;
             }
