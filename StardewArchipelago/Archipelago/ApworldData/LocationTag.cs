@@ -74,6 +74,8 @@
         public const string CHEFSANITY_SKILL = "CHEFSANITY_SKILL";
         public const string CHEFSANITY_STARTER = "CHEFSANITY_STARTER";
         public const string CRAFTSANITY = "CRAFTSANITY";
+        public const string CRAFTSANITY_CRAFT = "CRAFTSANITY_CRAFT";
+        public const string CRAFTSANITY_RECIPE = "CRAFTSANITY_RECIPE";
         public const string REQUIRES_MASTERIES = "REQUIRES_MASTERIES";
         public const string RACCOON_BUNDLES = "RACCOON_BUNDLES";
         public const string BOOKSANITY = "BOOKSANITY";

@@ -62,7 +62,6 @@ namespace StardewArchipelago.Locations.Jojapocalypse
             // Monstersanity should decrease combat prowess
             ShippingConsequences.Initialize(_logger, _modHelper, _archipelago, _jojaLocationChecker);
             CraftingCookingConsequences.Initialize(_logger, _modHelper, _archipelago, _jojaLocationChecker);
-            // Chefsanity
             // Booksanity should increase bookseller prices
             // Secretsanity should decrease secret note spawn chance
             // Movie should increase ticket and snack costs

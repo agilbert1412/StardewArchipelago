@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework;
@@ -9,6 +10,7 @@ using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Extensions;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Extensions;
 using StardewValley.Inventories;
 using StardewValley.Menus;
 using StardewValley.Tools;
@@ -57,13 +59,19 @@ namespace StardewArchipelago.Locations.Jojapocalypse.Consequences
         {
             try
             {
-                var numberPurchased = _jojaLocationChecker.CountCheckedLocationsWithTag(LocationTag.COOKSANITY);
-                if (numberPurchased <= 0)
+                var numberCooksanityPurchased = _jojaLocationChecker.CountCheckedLocationsWithTag(LocationTag.COOKSANITY);
+                var numberChefsanityPurchased = _jojaLocationChecker.CountCheckedLocationsWithTag(LocationTag.CHEFSANITY);
+                if (numberCooksanityPurchased <= 0 && numberChefsanityPurchased <= 0)
                 {
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
-                if (JojapocalypseConsequencesPatcher.RollConsequenceChance(0.01, numberPurchased, Game1.ticks))
+                if (JojapocalypseConsequencesPatcher.RollConsequenceChance(0.04, numberCooksanityPurchased, Game1.ticks))
+                {
+                    ConsumeRandomUnrelatedIngredient(craftingPage, recipe);
+                }
+
+                if (JojapocalypseConsequencesPatcher.RollConsequenceChance(0.01, numberCooksanityPurchased, Game1.ticks))
                 {
                     var extraIngredientsToUse = new List<KeyValuePair<string, int>>();
                     extraIngredientsToUse.Add(new KeyValuePair<string, int>("917", 1));
@@ -102,31 +110,23 @@ namespace StardewArchipelago.Locations.Jojapocalypse.Consequences
             }
         }
 
-        private static IList<Item> GetContainerContents(CraftingPage craftingPage)
-        {
-            if (craftingPage._materialContainers == null)
-            {
-                return null;
-            }
-            var containerContents = new List<Item>();
-            foreach (var materialContainer in craftingPage._materialContainers)
-            {
-                containerContents.AddRange(materialContainer);
-            }
-            return containerContents;
-        }
-
         private static bool ClickCraftingRecipePrefix(CraftingPage craftingPage, CraftingRecipe recipe, bool playSound)
         {
             try
             {
-                var numberPurchased = _jojaLocationChecker.CountCheckedLocationsWithTag(LocationTag.CRAFTSANITY);
-                if (numberPurchased <= 0)
+                var numberCraftsanityCraftPurchased = _jojaLocationChecker.CountCheckedLocationsWithTag(LocationTag.CRAFTSANITY_CRAFT);
+                var numberCraftsanityRecipePurchased = _jojaLocationChecker.CountCheckedLocationsWithTag(LocationTag.CRAFTSANITY_RECIPE);
+                if (numberCraftsanityCraftPurchased <= 0 && numberCraftsanityRecipePurchased <= 0)
                 {
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
-                if (JojapocalypseConsequencesPatcher.RollConsequenceChance(0.01, numberPurchased, Game1.ticks))
+                if (JojapocalypseConsequencesPatcher.RollConsequenceChance(0.1, numberCraftsanityRecipePurchased, Game1.ticks))
+                {
+                    ConsumeRandomUnrelatedIngredient(craftingPage, recipe);
+                }
+
+                if (JojapocalypseConsequencesPatcher.RollConsequenceChance(0.01, numberCraftsanityCraftPurchased, Game1.ticks))
                 {
                     recipe.consumeIngredients(craftingPage._materialContainers);
                     if (playSound)
@@ -145,6 +145,39 @@ namespace StardewArchipelago.Locations.Jojapocalypse.Consequences
                 _logger.LogError($"Failed in {nameof(ClickCraftingRecipePrefix)}:\n{ex}");
                 return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
+        }
+
+        private static void ConsumeRandomUnrelatedIngredient(CraftingPage craftingPage, CraftingRecipe recipe)
+        {
+            var recipeIngredients = new HashSet<string>();
+            recipeIngredients.AddRange(recipe.recipeList.Select(x => x.Key));
+
+            var candidateIngredients = new List<Tuple<IInventory, Item>>();
+            candidateIngredients.AddRange(Game1.player.Items.Where(x => !recipeIngredients.Contains(x.ItemId)).Select(x => new Tuple<IInventory, Item>(Game1.player.Items, x)));
+            foreach (var materialContainer in craftingPage._materialContainers)
+            {
+                candidateIngredients.AddRange(materialContainer.Where(x => !recipeIngredients.Contains(x.ItemId)).Select(x => new Tuple<IInventory, Item>(materialContainer, x)));
+            }
+
+            var random = new Random();
+            var index = random.Next(candidateIngredients.Count);
+            var ingredientToConsume = candidateIngredients[index];
+            ingredientToConsume.Item1.Reduce(ingredientToConsume.Item2, 1);
+            Game1.chatBox.addMessage($"You misremembered the recipe and accidentally used {ingredientToConsume.Item2.Name}...", Color.Red);
+        }
+
+        private static IList<Item> GetContainerContents(CraftingPage craftingPage)
+        {
+            if (craftingPage._materialContainers == null)
+            {
+                return null;
+            }
+            var containerContents = new List<Item>();
+            foreach (var materialContainer in craftingPage._materialContainers)
+            {
+                containerContents.AddRange(materialContainer);
+            }
+            return containerContents;
         }
     }
 }
