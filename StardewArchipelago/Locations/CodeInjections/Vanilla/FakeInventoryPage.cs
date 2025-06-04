@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using StardewArchipelago.Locations.Jojapocalypse;
 using StardewValley;
 using StardewValley.Characters;
 using StardewValley.Menus;
@@ -153,7 +154,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
         public static bool ShouldShowJunimoNoteIcon()
         {
-            if (!Game1.player.hasOrWillReceiveMail("canReadJunimoText") || Game1.player.hasOrWillReceiveMail("JojaMember"))
+            if (!Game1.player.hasOrWillReceiveMail("canReadJunimoText") || Game1.player.hasOrWillReceiveMail(JojaConstants.MEMBERSHIP_MAIL))
             {
                 return false;
             }

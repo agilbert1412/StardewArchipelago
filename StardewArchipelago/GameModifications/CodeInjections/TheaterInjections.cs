@@ -11,6 +11,8 @@ using StardewValley;
 using StardewValley.Locations;
 using xTile.Tiles;
 using StardewValley.Extensions;
+using StardewArchipelago.Locations.Jojapocalypse;
+using System.Collections.Generic;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
 {
@@ -145,43 +147,90 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         {
             try
             {
-                if (_archipelago.GetReceivedItemCount(APItem.MOVIE_THEATER) >= 2)
+                if (Game1.player.hasOrWillReceiveMail(JojaConstants.MEMBERSHIP_MAIL))
                 {
-                    var rectangle = new Rectangle(84, 41, 27, 15);
-                    __instance.ApplyMapOverride("Town-Theater", rectangle, rectangle);
-                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                    return MakeMapModificationsJojaRoutePrefix(__instance);
                 }
 
-                if (_archipelago.GetReceivedItemCount(APItem.MOVIE_THEATER) >= 1)
-                {
-                    // private void showDestroyedJoja()
-                    var showDestroyedJojaMethod = _modHelper.Reflection.GetMethod(__instance, "showDestroyedJoja");
-                    showDestroyedJojaMethod.Invoke();
-                    if (Utility.doesMasterPlayerHaveMailReceivedButNotMailForTomorrow("abandonedJojaMartAccessible"))
-                    {
-                        __instance.crackOpenAbandonedJojaMartDoor();
-                    }
-                    if (!Game1.player.mailReceived.Contains(string.Join("ap", ABANDONED_JOJA_MART)))
-                    {
-                        Game1.player.mailReceived.Add("apAbandonedJojaMart");
-                    }
-                }
-                else
-                {
-                    _hasSeenCcCeremonyCutscene = Utility.HasAnyPlayerSeenEvent(EventIds.COMMUNITY_CENTER_COMPLETE);
-                    if (_hasSeenCcCeremonyCutscene)
-                    {
-                        Game1.player.eventsSeen.Remove(EventIds.COMMUNITY_CENTER_COMPLETE);
-                    }
-                }
-
-                return MethodPrefix.RUN_ORIGINAL_METHOD;
+                return MakeMapModificationCCRoutePrefix(__instance);
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(MakeMapModifications_JojamartAndTheater_Prefix)}:\n{ex}");
                 return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
+        }
+
+        private static bool MakeMapModificationsJojaRoutePrefix(Town town)
+        {
+            if (_archipelago.GetReceivedItemCount(APItem.MOVIE_THEATER) >= 2)
+            {
+                // protected string loadedMapPath;
+                var loadedMapPathField = _modHelper.Reflection.GetField<HashSet<string>>(town, "loadedMapPath");
+                var loadedMapPath = loadedMapPathField.GetValue();
+
+                var rectangle = new Rectangle(46, 11, 15, 17);
+                var IsHalloween = Game1.IsFall && Game1.dayOfMonth == 27 && Game1.year % 2 == 0 && loadedMapPath.Contains("Halloween");
+                if (IsHalloween)
+                {
+                    // protected HashSet<string> _appliedMapOverrides;
+                    var _appliedMapOverridesField = _modHelper.Reflection.GetField<HashSet<string>>(town, "_appliedMapOverrides");
+                    var appliedMapOverrides = _appliedMapOverridesField.GetValue();
+                    appliedMapOverrides.Remove("Town-TheaterCC");
+                }
+                town.ApplyMapOverride("Town-TheaterCC" + (IsHalloween ? "-Halloween2" : ""), new Rectangle?(rectangle), new Rectangle?(rectangle));
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+
+            if (_archipelago.GetReceivedItemCount(APItem.MOVIE_THEATER) >= 1)
+            {
+                // private void refurbishCommunityCenter()
+                var refurbishCommunityCenterMethod = _modHelper.Reflection.GetMethod(town, "refurbishCommunityCenter");
+                refurbishCommunityCenterMethod.Invoke();
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+
+            _hasSeenCcCeremonyCutscene = Utility.HasAnyPlayerSeenEvent(EventIds.COMMUNITY_CENTER_COMPLETE);
+            if (_hasSeenCcCeremonyCutscene)
+            {
+                Game1.player.eventsSeen.Remove(EventIds.COMMUNITY_CENTER_COMPLETE);
+            }
+
+            return MethodPrefix.RUN_ORIGINAL_METHOD;
+        }
+
+        private static bool MakeMapModificationCCRoutePrefix(Town town)
+        {
+            if (_archipelago.GetReceivedItemCount(APItem.MOVIE_THEATER) >= 2)
+            {
+                var rectangle = new Rectangle(84, 41, 27, 15);
+                town.ApplyMapOverride("Town-Theater", rectangle, rectangle);
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+
+            if (_archipelago.GetReceivedItemCount(APItem.MOVIE_THEATER) >= 1)
+            {
+                // private void showDestroyedJoja()
+                var showDestroyedJojaMethod = _modHelper.Reflection.GetMethod(town, "showDestroyedJoja");
+                showDestroyedJojaMethod.Invoke();
+                if (Utility.doesMasterPlayerHaveMailReceivedButNotMailForTomorrow("abandonedJojaMartAccessible"))
+                {
+                    town.crackOpenAbandonedJojaMartDoor();
+                }
+                if (!Game1.player.mailReceived.Contains(string.Join("ap", ABANDONED_JOJA_MART)))
+                {
+                    Game1.player.mailReceived.Add("apAbandonedJojaMart");
+                }
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+
+            _hasSeenCcCeremonyCutscene = Utility.HasAnyPlayerSeenEvent(EventIds.COMMUNITY_CENTER_COMPLETE);
+            if (_hasSeenCcCeremonyCutscene)
+            {
+                Game1.player.eventsSeen.Remove(EventIds.COMMUNITY_CENTER_COMPLETE);
+            }
+
+            return MethodPrefix.RUN_ORIGINAL_METHOD;
         }
 
         // public override void MakeMapModifications(bool force = false)

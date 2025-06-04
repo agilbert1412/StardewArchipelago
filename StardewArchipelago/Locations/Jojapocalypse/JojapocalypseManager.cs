@@ -55,13 +55,12 @@ namespace StardewArchipelago.Locations.Jojapocalypse
                 return;
             }
 
-            var mail = "JojaMember";
-            if (Game1.player.hasOrWillReceiveMail(mail))
+            if (Game1.player.hasOrWillReceiveMail(JojaConstants.MEMBERSHIP_MAIL))
             {
                 return;
             }
 
-            Game1.addMailForTomorrow(mail, true, true);
+            Game1.addMailForTomorrow(JojaConstants.MEMBERSHIP_MAIL, true, true);
             Game1.player.removeQuest("26");
             Game1.activeClickableMenu?.exitThisMenu();
             JojaMart.Morris.setNewDialogue("Data\\ExtraDialogue:Morris_PlayerSignedUp");
