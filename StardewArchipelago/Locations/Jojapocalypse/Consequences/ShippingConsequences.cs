@@ -1,18 +1,9 @@
 ﻿using System;
-using KaitoKid.ArchipelagoUtilities.Net;
-using KaitoKid.ArchipelagoUtilities.Net.Client;
-using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.ApworldData;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
-using StardewArchipelago.Constants.Vanilla;
-using StardewArchipelago.Locations.CodeInjections.Vanilla;
-using StardewArchipelago.Locations.Festival;
 using StardewModdingAPI;
-using StardewValley;
-using StardewValley.Objects;
-using StardewValley.Tools;
 
 namespace StardewArchipelago.Locations.Jojapocalypse.Consequences
 {

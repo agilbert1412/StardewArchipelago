@@ -51,7 +51,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
             // Story Quests
             // Arcade Machines
             // Traveling Merchant should increase TC prices
-            // Fishsanity should reduce bite rate of fish
+            FishingConsequences.Initialize(_logger, _modHelper, _archipelago, _jojaLocationChecker);
             // Museumsanity should increase price of breaking geodes
             // Festivals
             // Desert Festival and skull cavern should increase Bus cost (?)
@@ -83,6 +83,11 @@ namespace StardewArchipelago.Locations.Jojapocalypse
             );
 
             PatchSkillConsequences();
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(FishingRod), nameof(FishingRod.pullFishFromWater)),
+                prefix: new HarmonyMethod(typeof(FishingConsequences), nameof(FishingConsequences.PullFishFromWater_ReplaceWithTrash_Prefix))
+            );
         }
 
         private void PatchSkillConsequences()

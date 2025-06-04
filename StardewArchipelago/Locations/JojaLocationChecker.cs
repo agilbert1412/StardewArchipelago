@@ -56,5 +56,10 @@ namespace StardewArchipelago.Locations
         {
             _checkedLocationsByTag.Clear();
         }
+
+        public bool HasCheckedLocation(string locationName)
+        {
+            return _locationsCheckedByJoja.Contains(locationName);
+        }
     }
 }
