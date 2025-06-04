@@ -21,7 +21,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         {
             try
             {
-                __result = (int)Math.Round(__result * _archipelago.SlotData.ProfitMargin);
+                __result = (int)Math.Round(__result * _archipelago.SlotData.GetCurrentProfitMargin());
             }
             catch (Exception ex)
             {
