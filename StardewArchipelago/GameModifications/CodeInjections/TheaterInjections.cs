@@ -39,7 +39,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         {
             try
             {
-                if (__instance.Name != ABANDONED_JOJA_MART && __instance.Name != MOVIE_THEATER)
+                if (__instance.Name != ABANDONED_JOJA_MART && __instance.Name != MOVIE_THEATER || Game1.player.hasOrWillReceiveMail(JojaConstants.MEMBERSHIP_MAIL))
                 {
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
@@ -87,7 +87,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         {
             try
             {
-                if (__instance.Name != ABANDONED_JOJA_MART && __instance.Name != MOVIE_THEATER)
+                if (__instance.Name != ABANDONED_JOJA_MART && __instance.Name != MOVIE_THEATER || Game1.player.hasOrWillReceiveMail(JojaConstants.MEMBERSHIP_MAIL)
                 {
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
