@@ -65,7 +65,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
             // Booksanity should increase bookseller prices
             // Secretsanity should decrease secret note spawn chance
             // Movie should increase ticket and snack costs
-            // Hatsanity
+            // Hatsanity sometimes your hat falls off lmao
             // Eatsanity should decrease food efficiency
         }
 
