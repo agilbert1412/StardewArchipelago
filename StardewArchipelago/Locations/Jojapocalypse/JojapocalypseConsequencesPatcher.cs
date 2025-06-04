@@ -59,7 +59,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
             // Ginger island should increase boat cost (?)
             // Baby should decrease friendship with spouse
             // Monstersanity should decrease combat prowess
-            // Shipsanity should reduce profit margin
+            ShippingConsequences.Initialize(_logger, _modHelper, _archipelago, _jojaLocationChecker);
             // Cooksanity should increase chance of failing cooking
             // Chefsanity
             // Craftsanity should increase chance of failing crafting
