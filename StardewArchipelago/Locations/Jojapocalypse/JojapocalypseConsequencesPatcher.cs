@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 using StardewArchipelago.Locations.Jojapocalypse.Consequences;
 using StardewValley;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
+using StardewValley.Menus;
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
 
@@ -60,9 +61,8 @@ namespace StardewArchipelago.Locations.Jojapocalypse
             // Baby should decrease friendship with spouse
             // Monstersanity should decrease combat prowess
             ShippingConsequences.Initialize(_logger, _modHelper, _archipelago, _jojaLocationChecker);
-            // Cooksanity should increase chance of failing cooking
+            CraftingCookingConsequences.Initialize(_logger, _modHelper, _archipelago, _jojaLocationChecker);
             // Chefsanity
-            // Craftsanity should increase chance of failing crafting
             // Booksanity should increase bookseller prices
             // Secretsanity should decrease secret note spawn chance
             // Movie should increase ticket and snack costs
@@ -87,6 +87,11 @@ namespace StardewArchipelago.Locations.Jojapocalypse
             _harmony.Patch(
                 original: AccessTools.Method(typeof(FishingRod), nameof(FishingRod.pullFishFromWater)),
                 prefix: new HarmonyMethod(typeof(FishingConsequences), nameof(FishingConsequences.PullFishFromWater_ReplaceWithTrash_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(CraftingPage), "clickCraftingRecipe"),
+                prefix: new HarmonyMethod(typeof(CraftingCookingConsequences), nameof(CraftingCookingConsequences.ClickCraftingRecipe_ChanceOfFailingCraft_Prefix))
             );
         }
 
