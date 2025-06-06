@@ -3,7 +3,10 @@ using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.ApworldData;
+using StardewArchipelago.Archipelago.SlotData;
+using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Locations.Festival;
@@ -18,10 +21,10 @@ namespace StardewArchipelago.Locations.Jojapocalypse.Consequences
     {
         private static ILogger _logger;
         private static IModHelper _modHelper;
-        private static ArchipelagoClient _archipelago;
+        private static StardewArchipelagoClient _archipelago;
         private static JojaLocationChecker _jojaLocationChecker;
 
-        public static void Initialize(ILogger logger, IModHelper modHelper, ArchipelagoClient archipelago, JojaLocationChecker jojaLocationChecker)
+        public static void Initialize(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, JojaLocationChecker jojaLocationChecker)
         {
             _logger = logger;
             _modHelper = modHelper;
@@ -33,7 +36,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse.Consequences
         {
             try
             {
-                if (JojapocalypseConfigs.Jojapocalypse == JojapocalypseSetting.Disabled)
+                if (_archipelago.SlotData.Jojapocalypse.Jojapocalypse == JojapocalypseSetting.Disabled)
                 {
                     return amountMultiplier;
                 }

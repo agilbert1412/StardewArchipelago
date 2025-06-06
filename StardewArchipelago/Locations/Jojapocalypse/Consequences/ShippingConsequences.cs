@@ -2,6 +2,7 @@
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.ApworldData;
+using StardewArchipelago.Archipelago.SlotData;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewModdingAPI;
 
@@ -26,7 +27,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse.Consequences
         {
             try
             {
-                if (JojapocalypseConfigs.Jojapocalypse == JojapocalypseSetting.Disabled)
+                if (_archipelago.SlotData.Jojapocalypse.Jojapocalypse == JojapocalypseSetting.Disabled)
                 {
                     return profitMargin;
                 }

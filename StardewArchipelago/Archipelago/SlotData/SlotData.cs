@@ -64,6 +64,7 @@ namespace StardewArchipelago.Archipelago.SlotData
         public string MultiworldVersion { get; private set; }
         public Dictionary<string, string> ModifiedEntrances { get; set; }
         public ModsManager Mods { get; set; }
+        public JojapocalypseSlotData Jojapocalypse { get; set; }
 
 #if TILESANITY
         public Tilesanity Tilesanity { get; private set; }
@@ -75,172 +76,67 @@ namespace StardewArchipelago.Archipelago.SlotData
             SlotName = slotName;
             _slotDataFields = slotDataFields;
             _logger = logger;
+            var slotDataReader = new SlotDataReader(_logger, _slotDataFields);
 
-            Goal = GetSlotSetting(SlotDataKeys.GOAL, Goal.CommunityCenter);
-            var farmType = GetSlotSetting(SlotDataKeys.FARM_TYPE, SupportedFarmType.Standard);
+            Goal = slotDataReader.GetSlotSetting(SlotDataKeys.GOAL, Goal.CommunityCenter);
+            var farmType = slotDataReader.GetSlotSetting(SlotDataKeys.FARM_TYPE, SupportedFarmType.Standard);
             FarmType = new FarmType(farmType);
-            StartingMoney = GetSlotSetting(SlotDataKeys.STARTING_MONEY, 500);
-            ProfitMargin = GetSlotSetting(SlotDataKeys.PROFIT_MARGIN, 100) / 100.0;
-            BundlesData = GetSlotSetting(SlotDataKeys.MODIFIED_BUNDLES, "");
-            EntranceRandomization = GetSlotSetting(SlotDataKeys.ENTRANCE_RANDOMIZATION, EntranceRandomization.Disabled);
-            SeasonRandomization = GetSlotSetting(SlotDataKeys.SEASON_RANDOMIZATION, SeasonRandomization.Disabled);
-            Cropsanity = GetSlotSetting(SlotDataKeys.CROPSANITY, Cropsanity.Disabled);
-            BackpackProgression = GetSlotSetting(SlotDataKeys.BACKPACK_PROGRESSION, BackpackProgression.Progressive);
-            BackpackSize = GetSlotSetting(SlotDataKeys.BACKPACK_SIZE, 12);
-            ToolProgression = GetSlotSetting(SlotDataKeys.TOOL_PROGRESSION, ToolProgression.Progressive);
-            ElevatorProgression = GetSlotSetting(SlotDataKeys.ELEVATOR_PROGRESSION, ElevatorProgression.ProgressiveFromPreviousFloor);
-            SkillProgression = GetSlotSetting(SlotDataKeys.SKILLS_PROGRESSION, SkillsProgression.Progressive);
-            BuildingProgression = GetSlotSetting(SlotDataKeys.BUILDING_PROGRESSION, BuildingProgression.Progressive);
-            FestivalLocations = GetSlotSetting(SlotDataKeys.FESTIVAL_OBJECTIVES, FestivalLocations.Easy);
-            ArcadeMachineLocations = GetSlotSetting(SlotDataKeys.ARCADE_MACHINES, ArcadeLocations.FullShuffling);
-            SpecialOrderLocations = GetSlotSetting(SlotDataKeys.SPECIAL_ORDERS, SpecialOrderLocations.Board);
-            QuestLocations = new QuestLocations(GetSlotSetting(SlotDataKeys.QUEST_LOCATIONS, 0));
-            Fishsanity = GetSlotSetting(SlotDataKeys.FISHSANITY, Fishsanity.None);
-            Museumsanity = GetSlotSetting(SlotDataKeys.MUSEUMSANITY, Museumsanity.None);
-            Monstersanity = GetSlotSetting(SlotDataKeys.MONSTERSANITY, Monstersanity.None);
-            Shipsanity = GetSlotSetting(SlotDataKeys.SHIPSANITY, Shipsanity.None);
-            Cooksanity = GetSlotSetting(SlotDataKeys.COOKSANITY, Cooksanity.None);
-            Chefsanity = GetSlotSetting(SlotDataKeys.CHEFSANITY, Chefsanity.Vanilla);
-            Craftsanity = GetSlotSetting(SlotDataKeys.CRAFTSANITY, Craftsanity.None);
-            Friendsanity = GetSlotSetting(SlotDataKeys.FRIENDSANITY, Friendsanity.None);
-            FriendsanityHeartSize = GetSlotSetting(SlotDataKeys.FRIENDSANITY_HEART_SIZE, 4);
-            Eatsanity = GetSlotEatsanitySetting();
-            Booksanity = GetSlotSetting(SlotDataKeys.BOOKSANITY, Booksanity.None);
-            Walnutsanity = GetSlotWalnutsanitySetting();
-            Moviesanity = GetSlotSetting(SlotDataKeys.MOVIESANITY, Moviesanity.None);
-            Secretsanity = GetSlotSecretsanitySetting();
-            Hatsanity = GetSlotSetting(SlotDataKeys.HATSANITY, Hatsanity.None);
-            ExcludeGingerIsland = GetSlotSetting(SlotDataKeys.EXCLUDE_GINGER_ISLAND, true);
-            TrapItemsDifficulty = GetSlotSetting(SlotDataKeys.TRAP_DIFFICULTY, TrapItemsDifficulty.Medium, SlotDataKeys.TRAP_ITEMS);
-            EnableMultiSleep = GetSlotSetting(SlotDataKeys.MULTI_SLEEP_ENABLED, true);
-            MultiSleepCostPerDay = GetSlotSetting(SlotDataKeys.MULTI_SLEEP_COST, 0);
-            ExperienceMultiplier = GetSlotSetting(SlotDataKeys.EXPERIENCE_MULTIPLIER, 100) / 100.0;
-            FriendshipMultiplier = GetSlotSetting(SlotDataKeys.FRIENDSHIP_MULTIPLIER, 100) / 100.0;
-            DebrisMultiplier = GetSlotSetting(SlotDataKeys.DEBRIS_MULTIPLIER, DebrisMultiplier.HalfDebris);
-            BundlePrice = GetSlotSetting(SlotDataKeys.BUNDLE_PRICE, BundlePrice.Normal);
-            QuickStart = GetSlotSetting(SlotDataKeys.QUICK_START, false);
-            Gifting = GetSlotSetting(SlotDataKeys.GIFTING, true);
+            StartingMoney = slotDataReader.GetSlotSetting(SlotDataKeys.STARTING_MONEY, 500);
+            ProfitMargin = slotDataReader.GetSlotSetting(SlotDataKeys.PROFIT_MARGIN, 100) / 100.0;
+            BundlesData = slotDataReader.GetSlotSetting(SlotDataKeys.MODIFIED_BUNDLES, "");
+            EntranceRandomization = slotDataReader.GetSlotSetting(SlotDataKeys.ENTRANCE_RANDOMIZATION, EntranceRandomization.Disabled);
+            SeasonRandomization = slotDataReader.GetSlotSetting(SlotDataKeys.SEASON_RANDOMIZATION, SeasonRandomization.Disabled);
+            Cropsanity = slotDataReader.GetSlotSetting(SlotDataKeys.CROPSANITY, Cropsanity.Disabled);
+            BackpackProgression = slotDataReader.GetSlotSetting(SlotDataKeys.BACKPACK_PROGRESSION, BackpackProgression.Progressive);
+            BackpackSize = slotDataReader.GetSlotSetting(SlotDataKeys.BACKPACK_SIZE, 12);
+            ToolProgression = slotDataReader.GetSlotSetting(SlotDataKeys.TOOL_PROGRESSION, ToolProgression.Progressive);
+            ElevatorProgression = slotDataReader.GetSlotSetting(SlotDataKeys.ELEVATOR_PROGRESSION, ElevatorProgression.ProgressiveFromPreviousFloor);
+            SkillProgression = slotDataReader.GetSlotSetting(SlotDataKeys.SKILLS_PROGRESSION, SkillsProgression.Progressive);
+            BuildingProgression = slotDataReader.GetSlotSetting(SlotDataKeys.BUILDING_PROGRESSION, BuildingProgression.Progressive);
+            FestivalLocations = slotDataReader.GetSlotSetting(SlotDataKeys.FESTIVAL_OBJECTIVES, FestivalLocations.Easy);
+            ArcadeMachineLocations = slotDataReader.GetSlotSetting(SlotDataKeys.ARCADE_MACHINES, ArcadeLocations.FullShuffling);
+            SpecialOrderLocations = slotDataReader.GetSlotSetting(SlotDataKeys.SPECIAL_ORDERS, SpecialOrderLocations.Board);
+            QuestLocations = new QuestLocations(slotDataReader.GetSlotSetting(SlotDataKeys.QUEST_LOCATIONS, 0));
+            Fishsanity = slotDataReader.GetSlotSetting(SlotDataKeys.FISHSANITY, Fishsanity.None);
+            Museumsanity = slotDataReader.GetSlotSetting(SlotDataKeys.MUSEUMSANITY, Museumsanity.None);
+            Monstersanity = slotDataReader.GetSlotSetting(SlotDataKeys.MONSTERSANITY, Monstersanity.None);
+            Shipsanity = slotDataReader.GetSlotSetting(SlotDataKeys.SHIPSANITY, Shipsanity.None);
+            Cooksanity = slotDataReader.GetSlotSetting(SlotDataKeys.COOKSANITY, Cooksanity.None);
+            Chefsanity = slotDataReader.GetSlotSetting(SlotDataKeys.CHEFSANITY, Chefsanity.Vanilla);
+            Craftsanity = slotDataReader.GetSlotSetting(SlotDataKeys.CRAFTSANITY, Craftsanity.None);
+            Friendsanity = slotDataReader.GetSlotSetting(SlotDataKeys.FRIENDSANITY, Friendsanity.None);
+            FriendsanityHeartSize = slotDataReader.GetSlotSetting(SlotDataKeys.FRIENDSANITY_HEART_SIZE, 4);
+            Eatsanity = slotDataReader.GetSlotEatsanitySetting();
+            Booksanity = slotDataReader.GetSlotSetting(SlotDataKeys.BOOKSANITY, Booksanity.None);
+            Walnutsanity = slotDataReader.GetSlotWalnutsanitySetting();
+            Moviesanity = slotDataReader.GetSlotSetting(SlotDataKeys.MOVIESANITY, Moviesanity.None);
+            Secretsanity = slotDataReader.GetSlotSecretsanitySetting();
+            Hatsanity = slotDataReader.GetSlotSetting(SlotDataKeys.HATSANITY, Hatsanity.None);
+            ExcludeGingerIsland = slotDataReader.GetSlotSetting(SlotDataKeys.EXCLUDE_GINGER_ISLAND, true);
+            TrapItemsDifficulty = slotDataReader.GetSlotSetting(SlotDataKeys.TRAP_DIFFICULTY, TrapItemsDifficulty.Medium, SlotDataKeys.TRAP_ITEMS);
+            EnableMultiSleep = slotDataReader.GetSlotSetting(SlotDataKeys.MULTI_SLEEP_ENABLED, true);
+            MultiSleepCostPerDay = slotDataReader.GetSlotSetting(SlotDataKeys.MULTI_SLEEP_COST, 0);
+            ExperienceMultiplier = slotDataReader.GetSlotSetting(SlotDataKeys.EXPERIENCE_MULTIPLIER, 100) / 100.0;
+            FriendshipMultiplier = slotDataReader.GetSlotSetting(SlotDataKeys.FRIENDSHIP_MULTIPLIER, 100) / 100.0;
+            DebrisMultiplier = slotDataReader.GetSlotSetting(SlotDataKeys.DEBRIS_MULTIPLIER, DebrisMultiplier.HalfDebris);
+            BundlePrice = slotDataReader.GetSlotSetting(SlotDataKeys.BUNDLE_PRICE, BundlePrice.Normal);
+            QuickStart = slotDataReader.GetSlotSetting(SlotDataKeys.QUICK_START, false);
+            Gifting = slotDataReader.GetSlotSetting(SlotDataKeys.GIFTING, true);
             Banking = true;
-            DeathLink = GetSlotSetting(SlotDataKeys.DEATH_LINK, false);
-            Seed = GetSlotSetting(SlotDataKeys.SEED, "");
-            MultiworldVersion = GetSlotSetting(SlotDataKeys.MULTIWORLD_VERSION, "");
-            var newEntrancesStringData = GetSlotSetting(SlotDataKeys.MODIFIED_ENTRANCES, "");
+            DeathLink = slotDataReader.GetSlotSetting(SlotDataKeys.DEATH_LINK, false);
+            Seed = slotDataReader.GetSlotSetting(SlotDataKeys.SEED, "");
+            MultiworldVersion = slotDataReader.GetSlotSetting(SlotDataKeys.MULTIWORLD_VERSION, "");
+            var newEntrancesStringData = slotDataReader.GetSlotSetting(SlotDataKeys.MODIFIED_ENTRANCES, "");
             ModifiedEntrances = JsonConvert.DeserializeObject<Dictionary<string, string>>(newEntrancesStringData);
-            var modsString = GetSlotSetting(SlotDataKeys.MOD_LIST, "");
+            var modsString = slotDataReader.GetSlotSetting(SlotDataKeys.MOD_LIST, "");
             var mods = JsonConvert.DeserializeObject<List<string>>(modsString);
             Mods = new ModsManager(_logger, testerFeatures, mods);
+            Jojapocalypse = new JojapocalypseSlotData(_logger, slotDataReader);
 
 #if TILESANITY
-            Tilesanity = GetSlotSetting(SlotDataKeys.TILESANITY, Tilesanity.Nope);
-            TilesanitySize = GetSlotSetting(SlotDataKeys.TILESANITY_SIZE, 1);
+            Tilesanity = slotDataReader.GetSlotSetting(SlotDataKeys.TILESANITY, Tilesanity.Nope);
+            TilesanitySize = slotDataReader.GetSlotSetting(SlotDataKeys.TILESANITY_SIZE, 1);
 #endif
-        }
-
-        private T GetSlotSetting<T>(string key, T defaultValue, params string[] alternateKeys) where T : struct, Enum, IConvertible
-        {
-            if (_slotDataFields.ContainsKey(key))
-            {
-                if (Enum.TryParse<T>(_slotDataFields[key].ToString(), true, out var parsedValue))
-                {
-                    return parsedValue;
-                }
-            }
-
-            foreach (var alternateKey in alternateKeys)
-            {
-                if (_slotDataFields.ContainsKey(alternateKey))
-                {
-                    if (Enum.TryParse<T>(_slotDataFields[alternateKey].ToString(), true, out var parsedValue))
-                    {
-                        return parsedValue;
-                    }
-                }
-            }
-
-            return GetSlotDefaultValue(key, defaultValue);
-        }
-
-        private string GetSlotSetting(string key, string defaultValue)
-        {
-            return _slotDataFields.ContainsKey(key) ? _slotDataFields[key].ToString() : GetSlotDefaultValue(key, defaultValue);
-        }
-
-        private int GetSlotSetting(string key, int defaultValue)
-        {
-            return _slotDataFields.ContainsKey(key) ? (int)(long)_slotDataFields[key] : GetSlotDefaultValue(key, defaultValue);
-        }
-
-        private bool GetSlotSetting(string key, bool defaultValue)
-        {
-            if (_slotDataFields.ContainsKey(key) && _slotDataFields[key] != null && _slotDataFields[key] is bool boolValue)
-            {
-                return boolValue;
-            }
-            if (_slotDataFields[key] is string strValue && bool.TryParse(strValue, out var parsedValue))
-            {
-                return parsedValue;
-            }
-            if (_slotDataFields[key] is int intValue)
-            {
-                return intValue != 0;
-            }
-            if (_slotDataFields[key] is long longValue)
-            {
-                return longValue != 0;
-            }
-            if (_slotDataFields[key] is short shortValue)
-            {
-                return shortValue != 0;
-            }
-
-            return GetSlotDefaultValue(key, defaultValue);
-        }
-
-        private T GetSlotDefaultValue<T>(string key, T defaultValue)
-        {
-            _logger.LogWarning($"SlotData did not contain expected key: \"{key}\"");
-            return defaultValue;
-        }
-
-        private Eatsanity GetSlotEatsanitySetting()
-        {
-            return GetSlotOptionSetSetting<Eatsanity>(SlotDataKeys.EATSANITY);
-        }
-
-        private Walnutsanity GetSlotWalnutsanitySetting()
-        {
-            return GetSlotOptionSetSetting<Walnutsanity>(SlotDataKeys.WALNUTSANITY);
-        }
-
-        private Secretsanity GetSlotSecretsanitySetting()
-        {
-            return GetSlotOptionSetSetting<Secretsanity>(SlotDataKeys.SECRETSANITY);
-        }
-
-        public TEnum GetSlotOptionSetSetting<TEnum>(string key) where TEnum : struct, Enum
-        {
-            var enabledValues = 0;
-            var slotJson = GetSlotSetting(key, "");
-            if (string.IsNullOrWhiteSpace(slotJson))
-            {
-                return (TEnum)(object)enabledValues;
-            }
-            var slotItems = JsonConvert.DeserializeObject<List<string>>(slotJson);
-            if (slotItems == null)
-            {
-                return (TEnum)(object)enabledValues;
-            }
-
-            slotItems = slotItems.Select(x => x.Replace(" ", "")).ToList();
-            foreach (var enumValue in Enum.GetValues<TEnum>())
-            {
-                if (slotItems.Contains(enumValue.ToString()))
-                {
-                    enabledValues |= (int)(object)enumValue;
-                }
-            }
-
-            return (TEnum)(object)enabledValues;
         }
 
         public double ToolPriceMultiplier

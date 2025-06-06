@@ -6,12 +6,15 @@ using StardewArchipelago.Logging;
 using StardewValley;
 using StardewValley.Menus;
 using StardewValley.Locations;
+using StardewArchipelago.Archipelago.SlotData;
+using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 
 namespace StardewArchipelago.Locations.Jojapocalypse
 {
     public class JojapocalypseManager
     {
         private readonly ModConfig _config;
+        private readonly StardewArchipelagoClient _archipelago;
         private readonly JojaLocationChecker _jojaLocationChecker;
         private readonly JojaDisabler _jojaDisabler;
         private readonly JojapocalypseShopPatcher _jojapocalypseShopPatcher;
@@ -21,16 +24,17 @@ namespace StardewArchipelago.Locations.Jojapocalypse
         public JojapocalypseManager(LogHandler logger, IModHelper modHelper, ModConfig config, Harmony harmony, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker, JojaLocationChecker jojaLocationChecker)
         {
             _config = config;
+            _archipelago = archipelago;
             _jojaLocationChecker = jojaLocationChecker;
             _jojaDisabler = new JojaDisabler(logger, modHelper, harmony);
-            _jojaPriceCalculator = new JojaPriceCalculator(logger, locationChecker);
-            _jojapocalypseShopPatcher = new JojapocalypseShopPatcher(logger, modHelper, harmony, archipelago, locationChecker, jojaLocationChecker, this, _jojaPriceCalculator);
-            _jojaConsequencesPatcher = new JojapocalypseConsequencesPatcher(logger, modHelper, harmony, archipelago, jojaLocationChecker);
+            _jojaPriceCalculator = new JojaPriceCalculator(logger, _archipelago, locationChecker);
+            _jojapocalypseShopPatcher = new JojapocalypseShopPatcher(logger, modHelper, harmony, _archipelago, locationChecker, jojaLocationChecker, this, _jojaPriceCalculator);
+            _jojaConsequencesPatcher = new JojapocalypseConsequencesPatcher(logger, modHelper, harmony, _archipelago, jojaLocationChecker);
         }
 
         public void PatchAllJojaLogic()
         {
-            if (JojapocalypseConfigs.Jojapocalypse == JojapocalypseSetting.Disabled)
+            if (_archipelago.SlotData.Jojapocalypse.Jojapocalypse == JojapocalypseSetting.Disabled)
             {
                 _jojaDisabler.DisableJojaRouteShortcuts();
                 return;
@@ -50,7 +54,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
 
         private void SignUpForJojaMembership()
         {
-            if (_jojaLocationChecker.GetAllLocationsCheckedByJoja().Count < JojapocalypseConfigs.NumberOfPurchasesBeforeMembership)
+            if (_jojaLocationChecker.GetAllLocationsCheckedByJoja().Count < _archipelago.SlotData.Jojapocalypse.PurchasesBeforeMembership)
             {
                 return;
             }

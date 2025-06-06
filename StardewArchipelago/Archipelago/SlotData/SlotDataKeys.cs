@@ -54,6 +54,12 @@
         public const string MULTIWORLD_VERSION = "client_version";
         public const string MOD_LIST = "mods";
 
+        public const string JOJAPOCALYPSE = "jojapocalypse";
+        public const string JOJA_START_PRICE = "joja_start_price";
+        public const string JOJA_END_PRICE = "joja_end_price";
+        public const string JOJA_PRICING_PATTERN = "joja_pricing_pattern";
+        public const string JOJA_PURCHASES_FOR_MEMBERSHIP = "joja_purchases_for_membership";
+
 #if TILESANITY
         public const string TILESANITY = "tilesanity";
         public const string TILESANITY_SIZE = "tilesanity_size";
