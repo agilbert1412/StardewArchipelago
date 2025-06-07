@@ -615,8 +615,7 @@ namespace StardewArchipelago.Archipelago
     {
         Nope = 0,
         Locations = 1,
-        Simplified = 2,
-        Full = 3,
+        Full = 2,
     }
 #endif
 }
