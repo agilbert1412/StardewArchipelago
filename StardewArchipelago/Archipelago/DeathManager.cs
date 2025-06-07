@@ -19,7 +19,6 @@ namespace StardewArchipelago.Archipelago
         private static IModHelper _modHelper;
         private static Harmony _harmony;
         private static ArchipelagoClient _archipelago;
-        private static LocationChecker _locationChecker;
 
         private static bool _isCurrentlyReceivingDeathLink = false;
 
@@ -29,11 +28,6 @@ namespace StardewArchipelago.Archipelago
             _modHelper = modHelper;
             _harmony = harmony;
             _archipelago = archipelago;
-        }
-
-        public static void Initialize(LocationChecker locationChecker)
-        {
-            _locationChecker = locationChecker;
         }
 
         public static void ReceiveDeathLink()

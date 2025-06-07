@@ -7,6 +7,7 @@ using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.Gifting;
+using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.Bugfixes;
 using StardewArchipelago.Bundles;
 using StardewArchipelago.GameModifications;
@@ -267,7 +268,10 @@ namespace StardewArchipelago
             _mail = new Mailman(_logger, State);
             _locationChecker = new StardewLocationChecker(_logger, _archipelago, State.LocationsChecked);
             _jojaLocationChecker = new JojaLocationChecker(_archipelago, _locationChecker, State.JojaLocationsChecked);
-            DeathManager.Initialize(_locationChecker);
+            if (_archipelago.SlotData.Jojapocalypse.Jojapocalypse == JojapocalypseSetting.Forced)
+            {
+                _locationChecker = new DisabledLocationChecker(_logger, _archipelago, State.LocationsChecked);
+            }
             _itemPatcher = new ItemPatcher(_logger, _helper, _harmony, _archipelago);
             _goalManager = new GoalManager(_logger, _helper, _harmony, _archipelago, _locationChecker);
             _entranceManager = new EntranceManager(_logger, _archipelago, State);

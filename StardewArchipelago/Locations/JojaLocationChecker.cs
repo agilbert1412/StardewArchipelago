@@ -22,20 +22,20 @@ namespace StardewArchipelago.Locations
 
         public void AddWalnutCheckedLocation(string locationName)
         {
-            _locationChecker.AddWalnutCheckedLocation(locationName);
             _locationsCheckedByJoja.Add(locationName);
+            _locationChecker.AddWalnutCheckedLocation(locationName);
         }
 
         public void AddCheckedLocations(string[] locationNames)
         {
-            _locationChecker.AddCheckedLocations(locationNames);
             _locationsCheckedByJoja.AddRange(locationNames);
+            _locationChecker.AddCheckedLocations(locationNames);
         }
 
         public void AddCheckedLocation(string locationName)
         {
-            _locationChecker.AddCheckedLocation(locationName);
             _locationsCheckedByJoja.Add(locationName);
+            _locationChecker.AddCheckedLocation(locationName);
         }
 
         public List<string> GetAllLocationsCheckedByJoja()

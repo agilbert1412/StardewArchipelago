@@ -19,7 +19,7 @@ namespace StardewArchipelago.Locations
             _locationNameMatcher = new LocationNameMatcher();
         }
 
-        public void AddWalnutCheckedLocation(string locationName)
+        public virtual void AddWalnutCheckedLocation(string locationName)
         {
             var locations = new List<string> { locationName };
             if (locationName.StartsWith(Prefix.WALNUTSANITY))

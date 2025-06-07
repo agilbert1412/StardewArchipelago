@@ -1,7 +1,10 @@
-﻿namespace StardewArchipelago.Locations.Jojapocalypse
+﻿using Microsoft.Xna.Framework;
+
+namespace StardewArchipelago.Locations.Jojapocalypse
 {
     public class JojaConstants
     {
         public const string MEMBERSHIP_MAIL = "JojaMember";
+        public static readonly Color JOJA_COLOR = new(53, 83, 139);
     }
 }
