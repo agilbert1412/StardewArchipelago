@@ -9,11 +9,8 @@ using System.Collections.Generic;
 using System.Linq;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using xTile.Dimensions;
-using Netcode;
-using StardewArchipelago.Archipelago.ApworldData;
 using StardewArchipelago.Locations.InGameLocations;
 using StardewValley.Menus;
-using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
 
 namespace StardewArchipelago.Locations.Jojapocalypse
 {

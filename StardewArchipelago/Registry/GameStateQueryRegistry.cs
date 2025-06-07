@@ -1,5 +1,4 @@
 ﻿using System;
-using KaitoKid.ArchipelagoUtilities.Net;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;

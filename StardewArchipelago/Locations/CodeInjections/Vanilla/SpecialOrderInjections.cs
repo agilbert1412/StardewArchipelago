@@ -12,7 +12,6 @@ using StardewValley.GameData.SpecialOrders;
 using StardewValley.SpecialOrders;
 using StardewValley.SpecialOrders.Rewards;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
-using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Vanilla;

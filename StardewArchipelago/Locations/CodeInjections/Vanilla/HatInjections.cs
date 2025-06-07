@@ -1,23 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewArchipelago.Constants.Vanilla;
-using StardewArchipelago.Items.Unlocks.Vanilla;
 using StardewModdingAPI;
 using StardewValley;
-using StardewValley.GameData;
-using StardewValley.Locations;
-using StardewValley.Tools;
-using xTile.Dimensions;
-using Object = StardewValley.Object;
-using Rectangle = xTile.Dimensions.Rectangle;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
-using KaitoKid.ArchipelagoUtilities.Net.Constants;
-using Netcode;
 using StardewArchipelago.Goals;
 using StardewValley.Objects;
 

@@ -1,5 +1,4 @@
-﻿using KaitoKid.ArchipelagoUtilities.Net;
-using StardewArchipelago.Archipelago;
+﻿using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.Gifting;
 using StardewArchipelago.Locations;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;

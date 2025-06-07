@@ -8,7 +8,6 @@ using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.GameModifications.CodeInjections;
 using StardewArchipelago.Locations.Secrets;
 using StardewArchipelago.Logging;
-using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.Stardew.NameMapping;
 using StardewValley.GameData.Objects;
 using Object = StardewValley.Object;

@@ -3,8 +3,6 @@ using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 
 namespace StardewArchipelago.Archipelago.SlotData

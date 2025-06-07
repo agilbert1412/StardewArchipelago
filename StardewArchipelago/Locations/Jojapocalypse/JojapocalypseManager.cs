@@ -6,7 +6,6 @@ using StardewArchipelago.Logging;
 using StardewValley;
 using StardewValley.Menus;
 using StardewValley.Locations;
-using StardewArchipelago.Archipelago.SlotData;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 
 namespace StardewArchipelago.Locations.Jojapocalypse

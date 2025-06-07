@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace StardewArchipelago.Locations
+﻿namespace StardewArchipelago.Locations
 {
     public interface ILocationChecker
     {

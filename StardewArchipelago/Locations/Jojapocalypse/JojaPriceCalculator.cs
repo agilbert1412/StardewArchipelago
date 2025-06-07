@@ -1,12 +1,8 @@
 ﻿
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Archipelago.SlotData;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 
 namespace StardewArchipelago.Locations.Jojapocalypse

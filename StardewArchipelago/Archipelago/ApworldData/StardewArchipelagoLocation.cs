@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
-using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
-using Newtonsoft.Json.Linq;
 
 namespace StardewArchipelago.Archipelago.ApworldData
 {

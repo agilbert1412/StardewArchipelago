@@ -34,7 +34,6 @@ using StardewArchipelago.Locations;
 using StardewArchipelago.Logging;
 using StardewValley.TerrainFeatures;
 using StardewArchipelago.GameModifications.MoveLink;
-using StardewArchipelago.Locations.Jojapocalypse;
 
 namespace StardewArchipelago.GameModifications
 {

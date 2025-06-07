@@ -1,5 +1,4 @@
 ﻿using System;
-using KaitoKid.ArchipelagoUtilities.Net;
 using System.Collections.Generic;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.Gifting;

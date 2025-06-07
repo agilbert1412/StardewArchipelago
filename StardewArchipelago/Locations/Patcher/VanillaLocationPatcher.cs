@@ -35,7 +35,6 @@ using StardewArchipelago.Locations.CodeInjections.Vanilla.Arcade;
 using StardewArchipelago.Locations.Secrets;
 using StardewValley.Buildings;
 using StardewValley.Tools;
-using StardewArchipelago.GameModifications.CodeInjections;
 using EventInjections = StardewArchipelago.Locations.CodeInjections.Vanilla.EventInjections;
 
 namespace StardewArchipelago.Locations.Patcher

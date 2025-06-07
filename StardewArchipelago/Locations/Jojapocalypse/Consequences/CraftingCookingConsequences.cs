@@ -6,15 +6,11 @@ using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.ApworldData;
-using StardewArchipelago.Constants.Vanilla;
-using StardewArchipelago.Extensions;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Extensions;
 using StardewValley.Inventories;
 using StardewValley.Menus;
-using StardewValley.Tools;
-using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Locations.Jojapocalypse.Consequences
 {

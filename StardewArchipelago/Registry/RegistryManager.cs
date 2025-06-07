@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using StardewArchipelago.Logging;
 using StardewModdingAPI;
-using KaitoKid.ArchipelagoUtilities.Net;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.Gifting;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
