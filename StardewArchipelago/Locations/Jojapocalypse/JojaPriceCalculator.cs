@@ -13,6 +13,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
         private StardewArchipelagoClient _archipelago;
         private StardewLocationChecker _locationChecker;
         private int _totalLocationsInSlot;
+        private double _currentPriceMultiplier;
 
         public JojaPriceCalculator(ILogger logger, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker)
         {
@@ -20,6 +21,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
             _archipelago = archipelago;
             _locationChecker = locationChecker;
             _totalLocationsInSlot = _locationChecker.GetAllLocations().Count();
+            _currentPriceMultiplier = 1.0;
         }
 
         public int GetNextItemPrice()
@@ -43,7 +45,8 @@ namespace StardewArchipelago.Locations.Jojapocalypse
         {
             var ratio = (double)doneLocationsCount / (_totalLocationsInSlot - 1);
             var priceNext = _archipelago.SlotData.Jojapocalypse.StartPrice * Math.Pow((double)_archipelago.SlotData.Jojapocalypse.EndPrice / _archipelago.SlotData.Jojapocalypse.StartPrice, ratio);
-            return (int)Math.Round(priceNext);
+            var priceMultiplied = Math.Min(_archipelago.SlotData.Jojapocalypse.EndPrice, priceNext * _currentPriceMultiplier);
+            return (int)Math.Round(priceMultiplied);
         }
 
         private int GetNextItemPriceLinear(int doneLocationsCount)
@@ -51,7 +54,13 @@ namespace StardewArchipelago.Locations.Jojapocalypse
             var priceRange = _archipelago.SlotData.Jojapocalypse.EndPrice - _archipelago.SlotData.Jojapocalypse.StartPrice;
             var priceIncreasePerLocation = (double)priceRange / (_totalLocationsInSlot - 1);
             var priceNext = _archipelago.SlotData.Jojapocalypse.StartPrice + (doneLocationsCount * priceIncreasePerLocation);
-            return (int)Math.Round(priceNext);
+            var priceMultiplied = Math.Min(_archipelago.SlotData.Jojapocalypse.EndPrice, priceNext * _currentPriceMultiplier);
+            return (int)Math.Round(priceMultiplied);
+        }
+
+        public void SetPriceMultiplier(double priceMultiplier)
+        {
+            _currentPriceMultiplier = priceMultiplier;
         }
     }
 }
