@@ -238,7 +238,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
                     return;
                 }
 
-                var chanceOfAd = _jojaLocationChecker.GetPercentCheckedLocationsByJoja() * 0.25;
+                var chanceOfAd = _jojaLocationChecker.GetPercentCheckedLocationsByJoja() * 1000.25;
                 if (random.NextDouble() < chanceOfAd)
                 {
                     __result = JojaConstants.JOJA_INCOMING_CALL;
@@ -268,24 +268,31 @@ namespace StardewArchipelago.Locations.Jojapocalypse
                     speaker = new NPC(speaker.Sprite, Vector2.Zero, "", 0, speaker.Name, speaker.Portrait, false);
                     speaker.displayName = speaker.displayName;
 
-                    var dialogueOffer = "Hello! This is your Jojamart customer service representative." +
-                                        " We are calling you with a one-time, incredible offer!" +
-                                        " If you purchase it now, you can be the proud owner of '{0}' for the modest sum of {1}!";
+                    var dialoguePart1 = "Hello! This is your Jojamart customer service representative." +
+                                             " We are calling you with a one-time, incredible offer!";
+                    var dialoguePart2 = " If you purchase it now, you can be the proud owner of {0} for the modest sum of {1}g!";
                     var offeredLocation = _jojaLocationChecker.GetTodayRandomOfferLocation();
                     _jojaPriceCalculator.SetPriceMultiplier(0.4);
                     var offeredPrice = _jojaPriceCalculator.GetNextItemPrice();
-                    var dialogueResolved = string.Format(dialogueOffer, offeredLocation, offeredPrice);
+                    var dialoguePart2Resolved = string.Format(dialoguePart2, offeredLocation, offeredPrice);
 
                     var responsePositive = "What a good deal!";
                     var responseNegative = Game1.content.LoadString("Strings\\Characters:Phone_HangUp");
-                    var dialogueWithResponses = $"$y '{dialogueResolved}_{responsePositive}_Thank you._{responseNegative}_Have a good day.'";
-                    
-                    
+                    var dialoguePart2WithResponses = $"$y '{dialoguePart2Resolved}_{responsePositive}_Thank you._{responseNegative}_Have a good day.'";
 
-                    var newDialogue = new Dialogue(speaker, nameof(dialogueWithResponses), dialogueWithResponses);
-                    newDialogue.answerQuestionBehavior = OnAnswerPhoneAd;
+                    var dialogue1 = new Dialogue(speaker, nameof(dialoguePart1), dialoguePart1);
+                    var dialogue2 = new Dialogue(speaker, nameof(dialoguePart2WithResponses), dialoguePart2WithResponses);
+                    dialogue2.answerQuestionBehavior = OnAnswerPhoneAd;
+                    dialogue1.onFinish = () =>
+                    {
+                        Morris.CurrentDialogue.Clear();
+                        Morris.CurrentDialogue.Push(dialogue2);
+                        Game1.drawDialogue(Morris);
+                    };
 
-                    Game1.DrawDialogue(newDialogue);
+                    Morris.CurrentDialogue.Clear();
+                    Morris.CurrentDialogue.Push(dialogue1);
+                    Game1.drawDialogue(Morris);
                 };
 
                 __result = dialogueAction;
