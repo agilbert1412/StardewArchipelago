@@ -71,6 +71,9 @@
 		<None Update="Textures\Gazette\*.png">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
+		<None Update="Sounds\616848__trp__telephone-on-hold-voice-music-muzak-2012.wav">
+		  <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</None>
 		<None Update="Textures\traveling_merchant.png">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
