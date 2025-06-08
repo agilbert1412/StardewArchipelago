@@ -6,7 +6,6 @@ using StardewArchipelago.Archipelago.ApworldData;
 using StardewArchipelago.Constants.Vanilla;
 using StardewModdingAPI;
 using StardewValley;
-using StardewValley.Tools;
 
 namespace StardewArchipelago.Locations.Jojapocalypse.Consequences
 {
