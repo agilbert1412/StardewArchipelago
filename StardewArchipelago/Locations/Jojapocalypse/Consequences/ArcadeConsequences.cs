@@ -171,7 +171,6 @@ namespace StardewArchipelago.Locations.Jojapocalypse.Consequences
         {
             var numberArcadePurchased = _jojaLocationChecker.CountCheckedLocationsWithTag(LocationTag.JOTPK) +
                                         _jojaLocationChecker.CountCheckedLocationsWithTag(LocationTag.JUNIMO_KART);
-            numberArcadePurchased = 16;
             if (numberArcadePurchased <= 0)
             {
                 timeScaleFactor = 1;
