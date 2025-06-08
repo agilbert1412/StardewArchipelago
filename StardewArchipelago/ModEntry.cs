@@ -270,12 +270,15 @@ namespace StardewArchipelago
         {
             _stardewItemManager = new StardewItemManager(_logger);
             _mail = new Mailman(_logger, State);
-            _locationChecker = new StardewLocationChecker(_logger, _archipelago, State.LocationsChecked);
-            _jojaLocationChecker = new JojaLocationChecker(_archipelago, _locationChecker, State.JojaLocationsChecked);
             if (_archipelago.SlotData.Jojapocalypse.Jojapocalypse == JojapocalypseSetting.Forced)
             {
                 _locationChecker = new DisabledLocationChecker(_logger, _archipelago, State.LocationsChecked, State.AttemptedLocationChecks);
             }
+            else
+            {
+                _locationChecker = new StardewLocationChecker(_logger, _archipelago, State.LocationsChecked);
+            }
+            _jojaLocationChecker = new JojaLocationChecker(_archipelago, _locationChecker, State.JojaLocationsChecked);
             _itemPatcher = new ItemPatcher(_logger, _helper, _harmony, _archipelago);
             _goalManager = new GoalManager(_logger, _helper, _harmony, _archipelago, _locationChecker);
             _entranceManager = new EntranceManager(_logger, _archipelago, State);

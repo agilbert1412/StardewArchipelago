@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants.Locations;
 using StardewValley;
 using StardewValley.Extensions;
 
@@ -24,19 +25,33 @@ namespace StardewArchipelago.Locations
         public void AddWalnutCheckedLocation(string locationName)
         {
             _locationsCheckedByJoja.Add(locationName);
-            _locationChecker.AddWalnutCheckedLocation(locationName);
+
+            var locations = new List<string> { locationName };
+            if (locationName.StartsWith(Prefix.WALNUTSANITY))
+            {
+                // locations.Add(locationName[Prefix.WALNUTSANITY.Length..]);
+            }
+            else
+            {
+                // locations.Add($"{Prefix.WALNUTSANITY}{locationName}");
+            }
+
+            _locationChecker.RememberCheckedLocations(locations.ToArray());
+            _locationChecker.SendAllLocationChecks();
         }
 
         public void AddCheckedLocations(string[] locationNames)
         {
             _locationsCheckedByJoja.AddRange(locationNames);
-            _locationChecker.AddCheckedLocations(locationNames);
+            _locationChecker.RememberCheckedLocations(locationNames);
+            _locationChecker.SendAllLocationChecks();
         }
 
         public void AddCheckedLocation(string locationName)
         {
             _locationsCheckedByJoja.Add(locationName);
-            _locationChecker.AddCheckedLocation(locationName);
+            _locationChecker.RememberCheckedLocation(locationName);
+            _locationChecker.SendAllLocationChecks();
         }
 
         public List<string> GetAllLocationsCheckedByJoja()

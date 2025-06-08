@@ -19,7 +19,6 @@ using StardewValley.TokenizableStrings;
 using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework;
 using Rectangle = xTile.Dimensions.Rectangle;
-using static HarmonyLib.Code;
 using Microsoft.Xna.Framework.Audio;
 using System.IO;
 
@@ -181,10 +180,11 @@ namespace StardewArchipelago.Locations.Jojapocalypse
                 var stayOnlineText = "Thank you for calling Jojamart! Please stay on the line, a representative will be with you shortly.";
                 DrawMorrisDialogue(nameof(stayOnlineText), stayOnlineText, () =>
                 {
-                    Game1.playSound(HOLD_MUSIC_CUE);
+                    Game1.playSound(HOLD_MUSIC_CUE, out var cue);
 
                     DelayedAction.functionAfterDelay(() =>
                     {
+                        cue.Stop(AudioStopOptions.Immediate);
                         var purchasingText = "Thank you for calling Jojamart. What will you be purchasing today? Note that there is a delivery fee for phone purchases.";
                         DrawMorrisDialogue(nameof(purchasingText), purchasingText, () => OpenJojapocalypseShop(1.5));
                     }, timeOnHold);
@@ -255,7 +255,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
                     return;
                 }
 
-                var chanceOfAd = (_jojaLocationChecker.GetPercentCheckedLocationsByJoja() * 0.25) + 0.02;
+                var chanceOfAd = (_jojaLocationChecker.GetPercentCheckedLocationsByJoja() * 0.25) + 0.02 + 1;
                 if (random.NextDouble() < chanceOfAd)
                 {
                     __result = JojaConstants.JOJA_INCOMING_CALL;

@@ -41,9 +41,10 @@ namespace StardewArchipelago.Locations.InGameLocations
 
         public override bool actionWhenPurchased(string shopId)
         {
+            var result = base.actionWhenPurchased(shopId);
             ArchipelagoJunimoNoteMenu.CompleteBundleIfExists(LocationName);
             CompleteQuestIfExists();
-            return base.actionWhenPurchased(shopId);
+            return result;
         }
 
         private void CompleteQuestIfExists()
