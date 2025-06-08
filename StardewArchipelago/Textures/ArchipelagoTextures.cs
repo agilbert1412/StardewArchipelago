@@ -17,6 +17,7 @@ namespace StardewArchipelago.Textures
         public const string RED = "red";
         public const string PLEADING = "pleading";
         public const string PROGRESSION = "progression";
+        public const string JOJA = "joja";
 
         public const string ICON_SET_CUSTOM = "Custom";
         public const string ICON_SET_ORIGINAL = "Original";

@@ -1,10 +1,14 @@
 ﻿using System;
 using Archipelago.MultiClient.Net.Models;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.ItemSprites;
+using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Quests;
 using StardewArchipelago.Locations.Jojapocalypse;
 using StardewArchipelago.Logging;
+using StardewArchipelago.Textures;
 using StardewModdingAPI;
 using StardewValley;
 
@@ -23,6 +27,11 @@ namespace StardewArchipelago.Locations.InGameLocations
         {
             _jojaLocationChecker = locationChecker;
             _jojaPriceCalculator = jojaPriceCalculator;
+        }
+
+        protected override Texture2D GetCorrectTexture(LogHandler logger, IModHelper modHelper, ScoutedLocation scoutedLocation, StardewArchipelagoClient archipelago, Hint relatedHint)
+        {
+            return ArchipelagoTextures.GetArchipelagoLogo(48, ArchipelagoTextures.JOJA);
         }
 
         public override int salePrice(bool ignoreProfitMargins = false)
