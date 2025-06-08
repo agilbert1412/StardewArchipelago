@@ -31,7 +31,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse.Consequences
             try
             {
                 var numberPurchased = _jojaLocationChecker.CountCheckedLocationsWithTag(LocationTag.BUILDING_BLUEPRINT);
-                if (numberPurchased <= 0)
+                if (numberPurchased <= 0 || __result == null)
                 {
                     return;
                 }

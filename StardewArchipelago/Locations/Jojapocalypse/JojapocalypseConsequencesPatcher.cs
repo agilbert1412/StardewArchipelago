@@ -4,6 +4,7 @@ using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
 using StardewValley.Locations;
 using System;
+using Microsoft.Xna.Framework;
 using StardewArchipelago.Locations.Jojapocalypse.Consequences;
 using StardewValley;
 using StardewValley.Buildings;
@@ -93,7 +94,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Building), nameof(Building.CreateInstanceFromId)),
-                prefix: new HarmonyMethod(typeof(BuildingConsequences), nameof(BuildingConsequences.CreateInstanceFromId_AddConstructionDays_Postfix))
+                postfix: new HarmonyMethod(typeof(BuildingConsequences), nameof(BuildingConsequences.CreateInstanceFromId_AddConstructionDays_Postfix))
             );
         }
 
@@ -122,6 +123,26 @@ namespace StardewArchipelago.Locations.Jojapocalypse
             _harmony.Patch(
                 original: AccessTools.Method(typeof(AbigailGame), nameof(AbigailGame.tick)),
                 prefix: new HarmonyMethod(typeof(ArcadeConsequences), nameof(ArcadeConsequences.Tick_IncreaseJotPKTimescale_Prefix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(AbigailGame), nameof(AbigailGame.getMovementSpeed)),
+                postfix: new HarmonyMethod(typeof(ArcadeConsequences), nameof(ArcadeConsequences.GetMovementSpeed_IncreaseJotPKTimescale_Postfix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Constructor(typeof(AbigailGame.CowboyMonster), new[] { typeof(int), typeof(int), typeof(int), typeof(Point) }),
+                postfix: new HarmonyMethod(typeof(ArcadeConsequences), nameof(ArcadeConsequences.CowboyMonsterConstructor1_IncreaseJotPKTimescale_Postfix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Constructor(typeof(AbigailGame.CowboyMonster), new[] { typeof(int), typeof(Point) }),
+                postfix: new HarmonyMethod(typeof(ArcadeConsequences), nameof(ArcadeConsequences.CowboyMonsterConstructor2_IncreaseJotPKTimescale_Postfix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Constructor(typeof(AbigailGame.CowboyBullet), new[] { typeof(Point), typeof(Point), typeof(int) }),
+                postfix: new HarmonyMethod(typeof(ArcadeConsequences), nameof(ArcadeConsequences.CowboyBulletConstructor1_IncreaseJotPKTimescale_Postfix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Constructor(typeof(AbigailGame.CowboyBullet), new[] { typeof(Point), typeof(int), typeof(int) }),
+                postfix: new HarmonyMethod(typeof(ArcadeConsequences), nameof(ArcadeConsequences.CowboyBulletConstructor2_IncreaseJotPKTimescale_Postfix))
             );
             _harmony.Patch(
                 original: AccessTools.Method(typeof(MineCart), nameof(MineCart.tick)),

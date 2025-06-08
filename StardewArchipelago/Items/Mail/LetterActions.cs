@@ -606,6 +606,7 @@ namespace StardewArchipelago.Items.Mail
         {
             if (!_trapManager.TrapExecutor.DebuffApplier.IsBuff(buffName, out var buff))
             {
+                return;
                 throw new ArgumentException(buffName);
             }
 

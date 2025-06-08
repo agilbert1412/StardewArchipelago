@@ -62,7 +62,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse.Consequences
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
-                if (JojapocalypseConsequencesPatcher.RollConsequenceChance(0.04, numberCooksanityPurchased, Game1.ticks))
+                if (JojapocalypseConsequencesPatcher.RollConsequenceChance(0.04, numberChefsanityPurchased, Game1.ticks))
                 {
                     ConsumeRandomUnrelatedIngredient(craftingPage, recipe);
                 }
@@ -122,7 +122,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse.Consequences
                     ConsumeRandomUnrelatedIngredient(craftingPage, recipe);
                 }
 
-                if (JojapocalypseConsequencesPatcher.RollConsequenceChance(0.01, numberCraftsanityCraftPurchased, Game1.ticks))
+                if (JojapocalypseConsequencesPatcher.RollConsequenceChance(0.01, numberCraftsanityCraftPurchased, Game1.ticks / 2))
                 {
                     recipe.consumeIngredients(craftingPage._materialContainers);
                     if (playSound)
@@ -130,7 +130,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse.Consequences
                         Game1.playSound("coin");
                     }
 
-                    Game1.chatBox.addMessage($"You broke this recipe... You must be out of practice.", Color.Red);
+                    Game1.chatBox.addMessage($"You broke this {recipe.DisplayName}... You must be out of practice.", Color.Red);
                     return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
@@ -149,10 +149,18 @@ namespace StardewArchipelago.Locations.Jojapocalypse.Consequences
             recipeIngredients.AddRange(recipe.recipeList.Select(x => x.Key));
 
             var candidateIngredients = new List<Tuple<IInventory, Item>>();
-            candidateIngredients.AddRange(Game1.player.Items.Where(x => !recipeIngredients.Contains(x.ItemId)).Select(x => new Tuple<IInventory, Item>(Game1.player.Items, x)));
-            foreach (var materialContainer in craftingPage._materialContainers)
+            candidateIngredients.AddRange(Game1.player.Items.Where(x => x != null && x.Stack > 1 && !recipeIngredients.Contains(x.ItemId)).Select(x => new Tuple<IInventory, Item>(Game1.player.Items, x)));
+            if (craftingPage._materialContainers != null)
             {
-                candidateIngredients.AddRange(materialContainer.Where(x => !recipeIngredients.Contains(x.ItemId)).Select(x => new Tuple<IInventory, Item>(materialContainer, x)));
+                foreach (var materialContainer in craftingPage._materialContainers)
+                {
+                    candidateIngredients.AddRange(materialContainer.Where(x => x != null && x.Stack > 1 && !recipeIngredients.Contains(x.ItemId)).Select(x => new Tuple<IInventory, Item>(materialContainer, x)));
+                }
+            }
+
+            if (candidateIngredients.Count <= 0)
+            {
+                return;
             }
 
             var random = new Random();
