@@ -25,7 +25,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
 {
     public static class VanillaCodeInjectionInitializer
     {
-        public static void Initialize(LogHandler logger, IModHelper modHelper, ModConfig config, StardewArchipelagoClient archipelago, ArchipelagoStateDto state, StardewLocationChecker locationChecker, StardewItemManager itemManager, WeaponsManager weaponsManager, BundlesManager bundlesManager, Friends friends, TrapManager trapManager, BankHandler bank, NameSimplifier nameSimplifier)
+        public static void Initialize(LogHandler logger, IModHelper modHelper, ModConfig config, StardewArchipelagoClient archipelago, ArchipelagoStateDto state, StardewLocationChecker locationChecker, JojaLocationChecker jojaLocationChecker, StardewItemManager itemManager, WeaponsManager weaponsManager, BundlesManager bundlesManager, Friends friends, TrapManager trapManager, BankHandler bank, NameSimplifier nameSimplifier)
         {
             BackpackInjections.Initialize(logger, archipelago, locationChecker);
             ScytheInjections.Initialize(logger, locationChecker);
@@ -35,7 +35,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             var killList = new MonsterKillList(archipelago);
             GoalCodeInjection.Initialize(logger, modHelper, archipelago, locationChecker, bundleReader, killList);
             InitializeBundleInjections(logger, modHelper, archipelago, state, locationChecker, bundlesManager, bundleReader, trapManager, bank);
-            MineshaftInjections.Initialize(logger, modHelper, config, archipelago, locationChecker);
+            MineshaftInjections.Initialize(logger, modHelper, config, archipelago, locationChecker, jojaLocationChecker);
             InitializeSkills(logger, modHelper, archipelago, locationChecker);
             QuestInjections.Initialize(logger, modHelper, archipelago, locationChecker);
             DarkTalismanInjections.Initialize(logger, modHelper, archipelago, locationChecker);

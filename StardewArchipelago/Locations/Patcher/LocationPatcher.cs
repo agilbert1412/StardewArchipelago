@@ -20,10 +20,10 @@ namespace StardewArchipelago.Locations.Patcher
         private readonly List<ILocationPatcher> _patchers;
 
         public LocationPatcher(LogHandler logger, IModHelper modHelper, ModConfig config, Harmony harmony, StardewArchipelagoClient archipelago, ArchipelagoStateDto state,
-            StardewLocationChecker locationChecker, StardewItemManager itemManager, WeaponsManager weaponsManager, BundlesManager bundlesManager,
+            StardewLocationChecker locationChecker, JojaLocationChecker jojaLocationChecker, StardewItemManager itemManager, WeaponsManager weaponsManager, BundlesManager bundlesManager,
             SeedShopStockModifier seedShopStockModifier, Friends friends, TrapManager trapManager, BankHandler bank, NameSimplifier nameSimplifier)
         {
-            CodeInjectionInitializer.Initialize(logger, modHelper, config, archipelago, state, locationChecker, itemManager, weaponsManager, bundlesManager, seedShopStockModifier, friends, trapManager, bank, nameSimplifier);
+            CodeInjectionInitializer.Initialize(logger, modHelper, config, archipelago, state, locationChecker, jojaLocationChecker, itemManager, weaponsManager, bundlesManager, seedShopStockModifier, friends, trapManager, bank, nameSimplifier);
             _patchers = new List<ILocationPatcher>();
             _patchers.Add(new VanillaLocationPatcher(logger, modHelper, harmony, archipelago, locationChecker, itemManager));
             if (archipelago.SlotData.Mods.IsModded)
