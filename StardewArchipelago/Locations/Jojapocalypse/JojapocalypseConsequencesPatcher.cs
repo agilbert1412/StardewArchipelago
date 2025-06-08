@@ -6,6 +6,7 @@ using StardewValley.Locations;
 using System;
 using StardewArchipelago.Locations.Jojapocalypse.Consequences;
 using StardewValley;
+using StardewValley.Buildings;
 using StardewValley.Menus;
 using StardewValley.Minigames;
 using StardewValley.TerrainFeatures;
@@ -38,7 +39,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
             CropConsequences.Initialize(_logger, _modHelper, _archipelago, _jojaLocationChecker); // Crops sometimes die
             MineshaftConsequences.Initialize(_logger, _modHelper, _archipelago, _jojaLocationChecker); // The elevator undergoes maintenance
             SkillsConsequences.Initialize(_logger, _modHelper, _archipelago, _jojaLocationChecker); // Natural resources spawn less
-            // Blueprints
+            BuildingConsequences.Initialize(_logger, _modHelper, _archipelago, _jojaLocationChecker); // Buildings take longer to build
             // Story Quests
             ArcadeConsequences.Initialize(_logger, _modHelper, _archipelago, _jojaLocationChecker); // Arcade Machines timescale increases
             TravelingCartConsequences.Initialize(_logger, _modHelper, _archipelago, _jojaLocationChecker); // Sometimes she doesn't come to pelican town
@@ -89,6 +90,11 @@ namespace StardewArchipelago.Locations.Jojapocalypse
             );
 
             PatchArcadeConsequences();
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Building), nameof(Building.CreateInstanceFromId)),
+                prefix: new HarmonyMethod(typeof(BuildingConsequences), nameof(BuildingConsequences.CreateInstanceFromId_AddConstructionDays_Postfix))
+            );
         }
 
         private void PatchSkillConsequences()
