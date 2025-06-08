@@ -214,6 +214,10 @@ namespace StardewArchipelago
             SeasonsRandomizer.PrepareDateForSaveGame();
             State.ItemsReceived = _itemManager.GetAllItemsAlreadyProcessed();
             State.LocationsChecked = _locationChecker.GetAllLocationsAlreadyChecked();
+            if (_locationChecker is DisabledLocationChecker disabledLocationChecker)
+            {
+                State.AttemptedLocationChecks = new List<string>(disabledLocationChecker.LocationsAlreadyAttemptedToCheck);
+            }
             State.JojaLocationsChecked = _jojaLocationChecker.GetAllLocationsCheckedByJoja();
             State.LocationsScouted = _archipelago.ScoutedLocations;
             // _state.SeasonOrder should be fine?
@@ -270,7 +274,7 @@ namespace StardewArchipelago
             _jojaLocationChecker = new JojaLocationChecker(_archipelago, _locationChecker, State.JojaLocationsChecked);
             if (_archipelago.SlotData.Jojapocalypse.Jojapocalypse == JojapocalypseSetting.Forced)
             {
-                _locationChecker = new DisabledLocationChecker(_logger, _archipelago, State.LocationsChecked);
+                _locationChecker = new DisabledLocationChecker(_logger, _archipelago, State.LocationsChecked, State.AttemptedLocationChecks);
             }
             _itemPatcher = new ItemPatcher(_logger, _helper, _harmony, _archipelago);
             _goalManager = new GoalManager(_logger, _helper, _harmony, _archipelago, _locationChecker);

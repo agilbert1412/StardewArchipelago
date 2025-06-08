@@ -20,11 +20,15 @@ using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework;
 using Rectangle = xTile.Dimensions.Rectangle;
 using static HarmonyLib.Code;
+using Microsoft.Xna.Framework.Audio;
+using System.IO;
 
 namespace StardewArchipelago.Locations.Jojapocalypse
 {
     public class JojapocalypseShopPatcher
     {
+        private const string HOLD_MUSIC_CUE = "hold-music";
+
         private static LogHandler _logger;
         private static IModHelper _modHelper;
         private static Harmony _harmony;
@@ -46,6 +50,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
             _jojapocalypseManager = jojapocalypseManager;
             _jojaPriceCalculator = jojaPriceCalculator;
             _jojaFiltering = new JojapocalypseFiltering(_logger, _archipelago, _locationChecker);
+            RegisterHoldMusic();
         }
 
         public void PatchJojaShops()
@@ -66,6 +71,16 @@ namespace StardewArchipelago.Locations.Jojapocalypse
                 original: AccessTools.Method(typeof(Phone), nameof(Phone.GetIncomingCallAction)),
                 prefix: new HarmonyMethod(typeof(JojapocalypseShopPatcher), nameof(GetIncomingCallAction_JojaIncomingCall_Prefix))
             );
+        }
+
+        private static void RegisterHoldMusic()
+        {
+            var currentModFolder = _modHelper.DirectoryPath;
+            var soundsFolder = "Sounds";
+            var fileName = "hold-music.wav";
+            var relativePathToSound = Path.Combine(currentModFolder, soundsFolder, fileName);
+            var holdMusicCueDefinition = new CueDefinition(HOLD_MUSIC_CUE, SoundEffect.FromFile(relativePathToSound), 0);
+            Game1.soundBank.AddCue(holdMusicCueDefinition);
         }
 
         // public override bool checkAction(Location tileLocation, xTile.Dimensions.Rectangle viewport, Farmer who)
@@ -166,6 +181,8 @@ namespace StardewArchipelago.Locations.Jojapocalypse
                 var stayOnlineText = "Thank you for calling Jojamart! Please stay on the line, a representative will be with you shortly.";
                 DrawMorrisDialogue(nameof(stayOnlineText), stayOnlineText, () =>
                 {
+                    Game1.playSound(HOLD_MUSIC_CUE);
+
                     DelayedAction.functionAfterDelay(() =>
                     {
                         var purchasingText = "Thank you for calling Jojamart. What will you be purchasing today? Note that there is a delivery fee for phone purchases.";
