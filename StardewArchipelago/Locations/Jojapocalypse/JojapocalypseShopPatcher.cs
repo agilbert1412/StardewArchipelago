@@ -238,7 +238,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
                     return;
                 }
 
-                var chanceOfAd = _jojaLocationChecker.GetPercentCheckedLocationsByJoja() * 1000.25;
+                var chanceOfAd = (_jojaLocationChecker.GetPercentCheckedLocationsByJoja() * 0.25) + 0.02;
                 if (random.NextDouble() < chanceOfAd)
                 {
                     __result = JojaConstants.JOJA_INCOMING_CALL;
