@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using StardewArchipelago.Archipelago;
+using StardewValley;
 using StardewValley.Extensions;
 
 namespace StardewArchipelago.Locations
@@ -43,6 +44,13 @@ namespace StardewArchipelago.Locations
             return _locationsCheckedByJoja.ToList();
         }
 
+        public double GetPercentCheckedLocationsByJoja()
+        {
+            var countByJoja = _locationsCheckedByJoja.Count;
+            var totalLocations = _locationChecker.GetAllLocations().Count();
+            return (double)countByJoja / totalLocations;
+        }
+
         public int CountCheckedLocationsWithTag(string locationTag)
         {
             if (!_checkedLocationsByTag.ContainsKey(locationTag))
@@ -60,6 +68,14 @@ namespace StardewArchipelago.Locations
         public bool HasCheckedLocation(string locationName)
         {
             return _locationsCheckedByJoja.Contains(locationName);
+        }
+
+        public string GetTodayRandomOfferLocation()
+        {
+            var random = Utility.CreateDaySaveRandom();
+            var missing = _locationChecker.GetAllMissingLocationNames().ToArray();
+            var index = random.Next(missing.Length);
+            return missing[index];
         }
     }
 }

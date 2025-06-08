@@ -27,7 +27,10 @@ namespace StardewArchipelago.Locations
 
         public override void AddCheckedLocation(string locationName)
         {
-            Game1.chatBox.addMessage($"Did you know that Joja also sells '{locationName}'. Pay us (a visit)!", JojaConstants.JOJA_COLOR);
+            if (IsLocationMissing(locationName))
+            {
+                Game1.chatBox.addMessage($"Did you know that Joja also sells '{locationName}'. Pay us (a visit)!", JojaConstants.JOJA_COLOR);
+            }
             return;
         }
     }

@@ -12,6 +12,14 @@ using xTile.Dimensions;
 using StardewArchipelago.Locations.InGameLocations;
 using StardewValley.Menus;
 using StardewValley.Objects;
+using Microsoft.Xna.Framework.Graphics;
+using StardewValley.GameData;
+using StardewValley.Logging;
+using StardewValley.TokenizableStrings;
+using System.Runtime.CompilerServices;
+using Microsoft.Xna.Framework;
+using Rectangle = xTile.Dimensions.Rectangle;
+using static HarmonyLib.Code;
 
 namespace StardewArchipelago.Locations.Jojapocalypse
 {
@@ -49,6 +57,14 @@ namespace StardewArchipelago.Locations.Jojapocalypse
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Game1), nameof(Game1.ShowTelephoneMenu)),
                 prefix: new HarmonyMethod(typeof(JojapocalypseShopPatcher), nameof(ShowTelephoneMenu_AddJojaPhoneNumber_Prefix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(DefaultPhoneHandler), nameof(DefaultPhoneHandler.CheckForIncomingCall)),
+                postfix: new HarmonyMethod(typeof(JojapocalypseShopPatcher), nameof(CheckForIncomingCall_AddJojaAdCalls_Postfix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Phone), nameof(Phone.GetIncomingCallAction)),
+                prefix: new HarmonyMethod(typeof(JojapocalypseShopPatcher), nameof(GetIncomingCallAction_JojaIncomingCall_Prefix))
             );
         }
 
@@ -94,7 +110,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
                     responses.AddRange(phoneHandler.GetOutgoingNumbers());
                 }
                 responses.Add(new KeyValuePair<string, string>("HangUp", Game1.content.LoadString("Strings\\Locations:MineCart_Destination_Cancel")));
-                Game1.currentLocation.ShowPagedResponses(Game1.content.LoadString("Strings\\Characters:Phone_SelectNumber"), responses, (Action<string>)(callId =>
+                Game1.currentLocation.ShowPagedResponses(Game1.content.LoadString("Strings\\Characters:Phone_SelectNumber"), responses, callId =>
                 {
                     if (callId == "HangUp")
                     {
@@ -115,7 +131,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
                         }
                         Phone.HangUp();
                     }
-                }), addCancel: false, itemsPerPage: 6);
+                }, addCancel: false, itemsPerPage: 6);
                 return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
@@ -140,7 +156,9 @@ namespace StardewArchipelago.Locations.Jojapocalypse
         public static void CallJojamart()
         {
             Game1.currentLocation.playShopPhoneNumberSounds("Jojamart");
-            Game1.player.freezePause = 4950;
+            var timeInputNumber = 4950;
+            var timeOnHold = Utility.CreateDaySaveRandom().Next(1000, 30000);
+            Game1.player.freezePause = timeInputNumber + timeOnHold;
             DelayedAction.functionAfterDelay(() =>
             {
                 Game1.playSound("bigSelect");
@@ -152,29 +170,29 @@ namespace StardewArchipelago.Locations.Jojapocalypse
                     {
                         var purchasingText = "Thank you for calling Jojamart. What will you be purchasing today? Note that there is a delivery fee for phone purchases.";
                         DrawMorrisDialogue(nameof(purchasingText), purchasingText, () => OpenJojapocalypseShop(1.5));
-                    }, Utility.CreateDaySaveRandom().Next(1000, 30000));
+                    }, timeOnHold);
                 });
-            }, 4950);
+            }, timeInputNumber);
         }
 
         private static void DrawMorrisDialogue(string dialogueKey, string dialogueText, Action actionAfterFinish = null)
         {
-            JojaMart.Morris.CurrentDialogue.Clear();
+            Morris.CurrentDialogue.Clear();
 
-            var newDialogue = new Dialogue(JojaMart.Morris, dialogueKey, dialogueText);
+            var newDialogue = new Dialogue(Morris, dialogueKey, dialogueText);
 
             if (actionAfterFinish != null)
             {
                 newDialogue.onFinish += actionAfterFinish;
             }
 
-            JojaMart.Morris.setNewDialogue(newDialogue);
-            Game1.drawDialogue(JojaMart.Morris);
+            Morris.setNewDialogue(newDialogue);
+            Game1.drawDialogue(Morris);
         }
 
         private static void OpenJojapocalypseShop(double priceMultiplier = 1.0, IEnumerable<string> locationTagFilters = null)
         {
-            var dialogueBox = ((DialogueBox)(Game1.activeClickableMenu));
+            var dialogueBox = (DialogueBox)Game1.activeClickableMenu;
             dialogueBox.closeDialogue();
             if (locationTagFilters == null)
             {
@@ -208,6 +226,115 @@ namespace StardewArchipelago.Locations.Jojapocalypse
         {
             _jojapocalypseManager.OnNewPurchase(((JojaObtainableArchipelagoLocation)salable).LocationName);
             return false;
+        }
+
+        //public string CheckForIncomingCall(Random random)
+        public static void CheckForIncomingCall_AddJojaAdCalls_Postfix(DefaultPhoneHandler __instance, Random random, ref string __result)
+        {
+            try
+            {
+                if (!string.IsNullOrWhiteSpace(__result))
+                {
+                    return;
+                }
+
+                var chanceOfAd = _jojaLocationChecker.GetPercentCheckedLocationsByJoja() * 0.25;
+                if (random.NextDouble() < chanceOfAd)
+                {
+                    __result = JojaConstants.JOJA_INCOMING_CALL;
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(CheckForIncomingCall_AddJojaAdCalls_Postfix)}:\n{ex}");
+                return;
+            }
+        }
+
+        // public static Action GetIncomingCallAction(string callId)
+        public static bool GetIncomingCallAction_JojaIncomingCall_Prefix(string callId, ref Action __result)
+        {
+            try
+            {
+                if (callId != JojaConstants.JOJA_INCOMING_CALL)
+                {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
+                var dialogueAction = () =>
+                {
+                    var speaker = Morris;
+                    speaker = new NPC(speaker.Sprite, Vector2.Zero, "", 0, speaker.Name, speaker.Portrait, false);
+                    speaker.displayName = speaker.displayName;
+
+                    var dialogueOffer = "Hello! This is your Jojamart customer service representative." +
+                                        " We are calling you with a one-time, incredible offer!" +
+                                        " If you purchase it now, you can be the proud owner of '{0}' for the modest sum of {1}!";
+                    var offeredLocation = _jojaLocationChecker.GetTodayRandomOfferLocation();
+                    _jojaPriceCalculator.SetPriceMultiplier(0.4);
+                    var offeredPrice = _jojaPriceCalculator.GetNextItemPrice();
+                    var dialogueResolved = string.Format(dialogueOffer, offeredLocation, offeredPrice);
+
+                    var responsePositive = "What a good deal!";
+                    var responseNegative = Game1.content.LoadString("Strings\\Characters:Phone_HangUp");
+                    var dialogueWithResponses = $"$y '{dialogueResolved}_{responsePositive}_Thank you._{responseNegative}_Have a good day.'";
+                    
+                    
+
+                    var newDialogue = new Dialogue(speaker, nameof(dialogueWithResponses), dialogueWithResponses);
+                    newDialogue.answerQuestionBehavior = OnAnswerPhoneAd;
+
+                    Game1.DrawDialogue(newDialogue);
+                };
+
+                __result = dialogueAction;
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(GetIncomingCallAction_JojaIncomingCall_Prefix)}:\n{ex}");
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+        }
+
+        private static bool OnAnswerPhoneAd(int whichresponse)
+        {
+            if (whichresponse == 0)
+            {
+                var offeredLocation = _jojaLocationChecker.GetTodayRandomOfferLocation();
+                _jojaPriceCalculator.SetPriceMultiplier(0.4);
+                var offeredPrice = _jojaPriceCalculator.GetNextItemPrice();
+                if (Game1.player.Money >= offeredPrice)
+                {
+                    Game1.player.Money -= offeredPrice;
+                    _jojaLocationChecker.AddCheckedLocation(offeredLocation);
+                    var responsePurchaseSuccess = "Thank you for doing business with Joja.";
+                    DrawMorrisDialogue(responsePurchaseSuccess, responsePurchaseSuccess);
+                    return true;
+                }
+
+                var responseCantAfford = $"If you cannot afford this item, we can set up a payment plan of {offeredPrice/4} per month for 24 months";
+                DrawMorrisDialogue(responseCantAfford, responseCantAfford);
+                return true;
+            }
+
+            return false;
+        }
+
+        private static NPC Morris
+        {
+            get
+            {
+                if (JojaMart.Morris == null)
+                {
+                    var jojaMart = Game1.getLocationFromName(nameof(JojaMart));
+                    // protected virtual void resetLocalState()
+                    var resetLocalStateMethod = _modHelper.Reflection.GetMethod(jojaMart, "resetLocalState");
+                    resetLocalStateMethod.Invoke();
+                }
+                return JojaMart.Morris;
+            }
         }
     }
 }
