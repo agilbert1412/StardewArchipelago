@@ -45,7 +45,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse.Consequences
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed in {nameof(Tick_IncreaseTimescale_Prefix)}:\n{ex}");
+                _logger.LogError($"Failed in {nameof(Tick_IncreaseJotPKTimescale_Prefix)}:\n{ex}");
                 return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
