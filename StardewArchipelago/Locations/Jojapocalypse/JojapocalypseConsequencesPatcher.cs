@@ -7,6 +7,7 @@ using System;
 using StardewArchipelago.Locations.Jojapocalypse.Consequences;
 using StardewValley;
 using StardewValley.Menus;
+using StardewValley.Minigames;
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
 
@@ -39,7 +40,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
             SkillsConsequences.Initialize(_logger, _modHelper, _archipelago, _jojaLocationChecker); // Natural resources spawn less
             // Blueprints
             // Story Quests
-            // Arcade Machines
+            ArcadeConsequences.Initialize(_logger, _modHelper, _archipelago, _jojaLocationChecker); // Arcade Machines timescale increases
             TravelingCartConsequences.Initialize(_logger, _modHelper, _archipelago, _jojaLocationChecker); // Sometimes she doesn't come to pelican town
             FishingConsequences.Initialize(_logger, _modHelper, _archipelago, _jojaLocationChecker); // Sometimes you catch trash instead of fish
             GeodeConsequences.Initialize(_logger, _modHelper, _archipelago, _jojaLocationChecker); // Museumsanity should make geodes sometimes empty
@@ -86,6 +87,8 @@ namespace StardewArchipelago.Locations.Jojapocalypse
                 original: AccessTools.Method(typeof(Utility), nameof(Utility.getTreasureFromGeode)),
                 prefix: new HarmonyMethod(typeof(GeodeConsequences), nameof(GeodeConsequences.GetTreasureFromGeode_SometimesTrash_Prefix))
             );
+
+            PatchArcadeConsequences();
         }
 
         private void PatchSkillConsequences()
@@ -105,6 +108,18 @@ namespace StardewArchipelago.Locations.Jojapocalypse
             _harmony.Patch(
                 original: AccessTools.Method(typeof(MineShaft), "adjustLevelChances"),
                 postfix: new HarmonyMethod(typeof(SkillsConsequences), nameof(SkillsConsequences.AdjustLevelChances_FewerThingsInMine_Postfix))
+            );
+        }
+
+        private void PatchArcadeConsequences()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(AbigailGame), nameof(AbigailGame.tick)),
+                prefix: new HarmonyMethod(typeof(ArcadeConsequences), nameof(ArcadeConsequences.Tick_IncreaseJotPKTimescale_Prefix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(MineCart), nameof(MineCart.tick)),
+                prefix: new HarmonyMethod(typeof(ArcadeConsequences), nameof(ArcadeConsequences.Tick_IncreaseJunimoKartTimescale_Prefix))
             );
         }
 
