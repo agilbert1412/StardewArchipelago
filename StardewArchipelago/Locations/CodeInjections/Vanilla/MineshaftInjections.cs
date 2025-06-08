@@ -17,6 +17,8 @@ using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
+using StardewArchipelago.GameModifications;
+using StardewArchipelago.Locations.Jojapocalypse.Consequences;
 using StardewArchipelago.Logging;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
@@ -30,14 +32,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private static ModConfig _config;
         private static StardewArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
+        private static JojaLocationChecker _jojaLocationChecker;
         private static Texture2D _miniArchipelagoIcon;
 
-        public static void Initialize(LogHandler logger, IModHelper modHelper, ModConfig config, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(LogHandler logger, IModHelper modHelper, ModConfig config, StardewArchipelagoClient archipelago, LocationChecker locationChecker, JojaLocationChecker jojaLocationChecker)
         {
             _logger = logger;
             _config = config;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
+            _jojaLocationChecker = jojaLocationChecker;
 
             var desiredTextureName = ArchipelagoTextures.COLOR;
             _miniArchipelagoIcon = ArchipelagoTextures.GetArchipelagoLogo(12, desiredTextureName);
@@ -195,20 +199,28 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private static void CreateElevatorMenuIfUnlocked()
         {
             var numberOfMineElevatorReceived = _archipelago.GetReceivedItemCount(VanillaUnlockManager.PROGRESSIVE_MINE_ELEVATOR);
-            var mineLevelUnlocked = numberOfMineElevatorReceived * 5;
-            mineLevelUnlocked = Math.Min(120, Math.Max(0, mineLevelUnlocked));
 
-            if (mineLevelUnlocked < 5)
+            if (HasUnlockedElevators(numberOfMineElevatorReceived))
             {
-                Game1.drawObjectDialogue(Game1.parseText(Game1.content.LoadString("Strings\\Locations:Mines_MineElevator_NotWorking")));
+                if (MineshaftConsequences.CanUseElevatorToday())
+                {
+                    var mineLevelUnlocked = numberOfMineElevatorReceived * ArchipelagoMineElevatorMenu.FLOORS_PER_ELEVATOR;
+                    mineLevelUnlocked = Math.Min(120, Math.Max(0, mineLevelUnlocked));
+                    Game1.activeClickableMenu = new ArchipelagoMineElevatorMenu(mineLevelUnlocked);
+                    return;
+                }
+
+                Game1.drawObjectDialogue("This elevator is currently undergoing Maintenance^^    - Joja");
+                return;
             }
-            else
-            {
-                var previousMaxLevel = MineShaft.lowestLevelReached;
-                MineShaft.lowestLevelReached = mineLevelUnlocked;
-                Game1.activeClickableMenu = new MineElevatorMenu();
-                MineShaft.lowestLevelReached = previousMaxLevel;
-            }
+
+            Game1.drawObjectDialogue(Game1.parseText(Game1.content.LoadString("Strings\\Locations:Mines_MineElevator_NotWorking")));
+        }
+
+        private static bool HasUnlockedElevators(int numberOfMineElevatorReceived)
+        {
+            var hasOneElevator = numberOfMineElevatorReceived >= 1;
+            return hasOneElevator;
         }
 
         // public override void draw(SpriteBatch b)

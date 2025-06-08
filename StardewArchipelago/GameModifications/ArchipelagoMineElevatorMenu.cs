@@ -10,12 +10,14 @@ namespace StardewArchipelago.GameModifications
 {
     public class ArchipelagoMineElevatorMenu : IClickableMenu
     {
+        public const int FLOORS_PER_ELEVATOR = 5;
+
         public List<ClickableComponent> elevators = new();
 
-        public ArchipelagoMineElevatorMenu()
+        public ArchipelagoMineElevatorMenu(int mineLevelUnlocked)
           : base(0, 0, 0, 0, true)
         {
-            var num1 = Math.Min(MineShaft.lowestLevelReached, 120) / 5;
+            var num1 = Math.Min(mineLevelUnlocked, 120) / FLOORS_PER_ELEVATOR;
             this.width = num1 > 50 ? 484 + borderWidth * 2 : Math.Min(220 + borderWidth * 2, num1 * 44 + borderWidth * 2);
             this.height = Math.Max(64 + borderWidth * 3, num1 * 44 / (this.width - borderWidth) * 44 + 64 + borderWidth * 3);
             this.xPositionOnScreen = Game1.uiViewport.Width / 2 - this.width / 2;

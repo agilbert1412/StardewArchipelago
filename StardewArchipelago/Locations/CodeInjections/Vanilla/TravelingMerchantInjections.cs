@@ -16,6 +16,7 @@ using StardewValley.Menus;
 using xTile.Dimensions;
 using Object = StardewValley.Object;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Locations.Jojapocalypse.Consequences;
 using StardewArchipelago.Logging;
 using Rectangle = xTile.Dimensions.Rectangle;
 
@@ -427,7 +428,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             var dayOfWeek = Days.GetDayOfWeekName(dayOfMonth);
             var requiredAPItemToSeeMerchantToday = string.Format(AP_MERCHANT_DAYS, dayOfWeek);
             var hasReceivedToday = _archipelago.HasReceivedItem(requiredAPItemToSeeMerchantToday, false, out sendingPlayerName);
-            return hasReceivedToday;
+            return hasReceivedToday && TravelingCartConsequences.CanMeetToday();
         }
 
         public static bool HasAnyTravelingMerchantDay()

@@ -33,24 +33,24 @@ namespace StardewArchipelago.Locations.Jojapocalypse
 
         private void InitializeAllConsequences()
         {
-            ToolConsequences.Initialize(_logger, _modHelper, _archipelago, _jojaLocationChecker);
-            CropConsequences.Initialize(_logger, _modHelper, _archipelago, _jojaLocationChecker);
-            // Elevators should cost money
-            SkillsConsequences.Initialize(_logger, _modHelper, _archipelago, _jojaLocationChecker);
+            ToolConsequences.Initialize(_logger, _modHelper, _archipelago, _jojaLocationChecker); // Tools take extra energy to swing
+            CropConsequences.Initialize(_logger, _modHelper, _archipelago, _jojaLocationChecker); // Crops sometimes die
+            MineshaftConsequences.Initialize(_logger, _modHelper, _archipelago, _jojaLocationChecker); // The elevator undergoes maintenance
+            SkillsConsequences.Initialize(_logger, _modHelper, _archipelago, _jojaLocationChecker); // Natural resources spawn less
             // Blueprints
             // Story Quests
             // Arcade Machines
-            // Traveling Merchant should increase TC prices
-            FishingConsequences.Initialize(_logger, _modHelper, _archipelago, _jojaLocationChecker);
-            // Museumsanity should increase price of breaking geodes
-            // Festivals
+            TravelingCartConsequences.Initialize(_logger, _modHelper, _archipelago, _jojaLocationChecker); // Sometimes she doesn't come to pelican town
+            FishingConsequences.Initialize(_logger, _modHelper, _archipelago, _jojaLocationChecker); // Sometimes you catch trash instead of fish
+            GeodeConsequences.Initialize(_logger, _modHelper, _archipelago, _jojaLocationChecker); // Museumsanity should make geodes sometimes empty
+            // Festivals get sometimes cancelled
             // Desert Festival and skull cavern should increase Bus cost (?)
-            SpecialOrderConsequences.Initialize(_logger, _modHelper, _archipelago, _jojaLocationChecker);
+            SpecialOrderConsequences.Initialize(_logger, _modHelper, _archipelago, _jojaLocationChecker); // Special orders require extras
             // Ginger island should increase boat cost (?)
             // Baby should decrease friendship with spouse
             // Monstersanity should decrease combat prowess
-            ShippingConsequences.Initialize(_logger, _modHelper, _archipelago, _jojaLocationChecker);
-            CraftingCookingConsequences.Initialize(_logger, _modHelper, _archipelago, _jojaLocationChecker);
+            ShippingConsequences.Initialize(_logger, _modHelper, _archipelago, _jojaLocationChecker); // Your global profit margin reduces
+            CraftingCookingConsequences.Initialize(_logger, _modHelper, _archipelago, _jojaLocationChecker); // Chance of failing crafts, chance of using extra unrelated items
             // Booksanity should increase bookseller prices
             // Secretsanity should decrease secret note spawn chance
             // Movie should increase ticket and snack costs
@@ -80,6 +80,11 @@ namespace StardewArchipelago.Locations.Jojapocalypse
             _harmony.Patch(
                 original: AccessTools.Method(typeof(CraftingPage), "clickCraftingRecipe"),
                 prefix: new HarmonyMethod(typeof(CraftingCookingConsequences), nameof(CraftingCookingConsequences.ClickCraftingRecipe_ChanceOfFailingCraft_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Utility), nameof(Utility.getTreasureFromGeode)),
+                prefix: new HarmonyMethod(typeof(GeodeConsequences), nameof(GeodeConsequences.GetTreasureFromGeode_SometimesTrash_Prefix))
             );
         }
 
