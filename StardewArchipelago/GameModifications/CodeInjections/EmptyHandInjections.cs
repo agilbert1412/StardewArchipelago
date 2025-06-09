@@ -38,11 +38,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 var tileVector = new Vector2((int)(toolLocation.X / 64), (int)(toolLocation.Y / 64));
                 if (!__instance.objects.ContainsKey(tileVector))
                 {
-#if TILESANITY
                     return BreakBigObjectBareHanded(__instance, tileVector, tileLocation, who, ref __result);
-#else
-                    return MethodPrefix.RUN_ORIGINAL_METHOD;
-#endif
                 }
 
                 var objectToBreak = __instance.objects[tileVector];
@@ -191,7 +187,6 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             return 20;
         }
 
-#if TILESANITY
         private static bool BreakBigObjectBareHanded(GameLocation gameLocation, Vector2 tileVector, Location tileLocation, Farmer who, ref bool __result)
         {
             //Only allow removing debris in the farm
@@ -268,6 +263,5 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             __result = true;
             return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
         }
-#endif
     }
 }
