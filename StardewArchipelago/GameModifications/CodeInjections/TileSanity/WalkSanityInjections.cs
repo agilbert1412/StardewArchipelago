@@ -39,12 +39,12 @@ public static class WalkSanityInjections
                 if (!_locationChecker.IsLocationChecked(apLocation))
                 {
                     _locationChecker.AddCheckedLocation(apLocation);
-                    TileUI.CheckLocation(apLocation);
+                    TileUI.CheckLocation(apLocation, _monitor);
                 }
             }
             else
             {
-                _monitor.Log($"Unrecognized Tilesanity Location: {apLocation}", LogLevel.Error);
+                _monitor.Log($"Unrecognized Tilesanity Location: {apLocation}", LogLevel.Info);
             }
         }
     }
@@ -54,11 +54,15 @@ public static class WalkSanityInjections
         ref bool __result)
     {
         if (!isFarmer)
+        {
             return true;
+        }
         var (x, y) = position.Center;
         var tileName = _tileSanityManager.GetTileName(x / 64, y / 64, Game1.player);
         if (IsUnlocked(tileName))
+        {
             return true;
+        }
         __result = true;
         return false;
     }
@@ -66,15 +70,21 @@ public static class WalkSanityInjections
     public static bool IsUnlocked(string name)
     {
 #if TILESANITY
-        if (_archipelago.SlotData.Tilesanity < Archipelago.Tilesanity.Simplified)
+        if (_archipelago.SlotData.Tilesanity < Archipelago.Tilesanity.Full)
             return true;
 #endif
         if (name.Contains("FarmHouse"))
+        {
             return true;
+        }
         if (!_archipelago.LocationExists(name))
+        {
             return true;
+        }
         if (_archipelago.HasReceivedItem(name))
+        {
             return true;
+        }
         return false;
     }
 }

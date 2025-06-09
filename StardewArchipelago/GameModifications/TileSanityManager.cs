@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
@@ -161,11 +162,34 @@ public class TileSanityManager
 #if !DEBUG
         return false;
 #endif
+        if (message.StartsWith($"{ChatForwarder.COMMAND_PREFIX}walk"))
+        {
+            var split = message.Split(" ");
+            if (split.Length == 1)
+            {
+                HandleWalkCommand(Game1.currentCursorTile);
+            }
+            else
+            {
+                var x1 = int.Parse(split[1]);
+                var y1 = int.Parse(split[2]);
+                var x2 = int.Parse(split[3]);
+                var y2 = int.Parse(split[4]);
+                for (int i = x1; i <= x2; i++)
+                {
+                    for (int j = y1; j <= y2; j++)
+                    {
+                        HandleWalkCommand(new Vector2(i, j));
+                    }
+                }
+            }
+            return true;
+        }
         switch (message)
         {
             case $"{ChatForwarder.COMMAND_PREFIX}walk":
             {
-                HandleWalkCommand();
+                HandleWalkCommand(Game1.currentCursorTile);
                 return true;
             }
             case $"{ChatForwarder.COMMAND_PREFIX}unwalk":
@@ -173,15 +197,20 @@ public class TileSanityManager
                 HandleUnwalkCommand();
                 return true;
             }
+            case $"{ChatForwarder.COMMAND_PREFIX}tile":
+            {
+                HandleRegisterTileCommand();
+                return true;
+            }
         }
         return false;
     }
 
-    private static void HandleWalkCommand()
+    private static void HandleWalkCommand(Vector2 tile)
     {
         const string tileFile = "tiles.json";
         var dictionary = JsonConvert.DeserializeObject<SortedDictionary<string, List<Vector2>>>(File.ReadAllText(tileFile));
-        dictionary[GetMapName(Game1.player)].Add(Game1.currentCursorTile);
+        dictionary[GetMapName(Game1.player)].Add(tile);
         dictionary[GetMapName(Game1.player)].Sort(((vector2, vector3) =>
             vector2.X.CompareTo(vector3.X) * 2 + vector2.Y.CompareTo(vector3.Y)));
         File.WriteAllText(tileFile, JsonConvert.SerializeObject(dictionary, Formatting.Indented));
@@ -197,5 +226,32 @@ public class TileSanityManager
             vector2.X.CompareTo(vector3.X) * 2 + vector2.Y.CompareTo(vector3.Y)));
         File.WriteAllText(tileFile, JsonConvert.SerializeObject(dictionary, Formatting.Indented));
         TileUI.SwitchToDebug(dictionary[GetMapName(Game1.player)]);
+    }
+
+    private class ImportantTile
+    {
+        [JsonPropertyName("position")]
+        public Vector2 Position;
+        [JsonPropertyName("required_items")]
+        public List<string> RequiredItems = new List<string>();
+        [JsonPropertyName("entrances")] public List<string> Entrances;
+
+        public ImportantTile(Vector2 position)
+        {
+            Position = position;
+            Entrances = new List<string> {"New"};
+        }
+    }
+    private static void HandleRegisterTileCommand()
+    {
+        const string tileFile = "important_tiles.json";
+        var dictionary = JsonConvert.DeserializeObject<SortedDictionary<string, List<ImportantTile>>>(File.ReadAllText(tileFile));
+        if (!dictionary.ContainsKey(GetMapName(Game1.player)))
+            dictionary.Add(GetMapName(Game1.player), new List<ImportantTile>());
+        
+        dictionary[GetMapName(Game1.player)].Add(new ImportantTile(Game1.currentCursorTile));
+        dictionary[GetMapName(Game1.player)].Sort(((tile1, tile2) =>
+            (tile1.Position.X.CompareTo(tile2.Position.X) * 2 + tile1.Position.Y.CompareTo(tile2.Position.Y))));
+        File.WriteAllText(tileFile, JsonConvert.SerializeObject(dictionary, Formatting.Indented));
     }
 }

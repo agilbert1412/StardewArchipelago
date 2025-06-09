@@ -38,7 +38,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 var tileVector = new Vector2((int)(toolLocation.X / 64), (int)(toolLocation.Y / 64));
                 if (!__instance.objects.ContainsKey(tileVector))
                 {
-                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                    return BreakBigObjectBareHanded(__instance, tileVector, tileLocation, who, ref __result);
                 }
 
                 var objectToBreak = __instance.objects[tileVector];
@@ -185,6 +185,83 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             }
 
             return 20;
+        }
+
+        private static bool BreakBigObjectBareHanded(GameLocation gameLocation, Vector2 tileVector, Location tileLocation, Farmer who, ref bool __result)
+        {
+            //Only allow removing debris in the farm
+            if (gameLocation?.name.Value != "Farm")
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+
+            ResourceClump objectToBreak = null;
+            foreach (var resourceClump in gameLocation.resourceClumps)
+            {
+                if (resourceClump.occupiesTile((int)tileVector.X, (int)tileVector.Y))
+                {
+                    objectToBreak = resourceClump;
+                    break;
+                }
+            }
+            if (objectToBreak == null)
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+
+            if (who.CurrentTool != null || who.ActiveObject != null)
+            {
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+            
+            if (objectToBreak != _lastHitTerrainFeature)
+            {
+                _lastHitTerrainFeature = objectToBreak;
+                _hitsRemaining = 20;
+            }
+            _hitsRemaining--;
+            // We need to only try to break it every so often or it's too quick
+            if (_hitsRemaining > 0)
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+            _hitsRemaining = 20;
+
+            var objectType = objectToBreak.parentSheetIndex.Value;
+            int radialDebris;
+            switch (objectType)
+            {
+                case 600: //stump
+                case 602: //hard twig
+                    Game1.player.Stamina -= 4 - Game1.player.ForagingLevel * 0.2f;
+                    radialDebris = 12;
+                    break;
+                case 672: //boulder
+                    Game1.player.Stamina -= 4 - Game1.player.MiningLevel * 0.2f;
+                    radialDebris = 14;
+                    break;
+                default:
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+            Game1.createRadialDebris(Game1.currentLocation, radialDebris, tileLocation.X + Game1.random.Next(objectToBreak.width.Value / 2 + 1), tileLocation.Y + Game1.random.Next(objectToBreak.height.Value / 2 + 1), Game1.random.Next(4, 9), resource: false);
+
+            objectToBreak.health.Value -= 0.1f;
+
+            objectToBreak.Location.localSound("hammer");
+            if (objectToBreak.health.Value > 0)
+            {
+                objectToBreak.shakeTimer = 100;
+                __result = true;
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+            }
+
+            if (objectToBreak.parentSheetIndex.Value == 672)
+            {
+                objectToBreak.Location.localSound("boulderBreak");
+                Game1.createRadialDebris(Game1.currentLocation, 32, tileLocation.X, tileLocation.Y, Game1.random.Next(4, 9), resource: false);
+            }
+            else
+            {
+                objectToBreak.Location.localSound("stumpCrack");
+                Game1.createRadialDebris(Game1.currentLocation, 34, tileLocation.X, tileLocation.Y, Game1.random.Next(4, 9), resource: false);
+            }
+            gameLocation.resourceClumps.Remove(objectToBreak);
+            __result = true;
+            return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
         }
     }
 }
