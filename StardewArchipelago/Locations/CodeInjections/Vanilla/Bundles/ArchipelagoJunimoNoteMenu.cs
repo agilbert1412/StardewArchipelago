@@ -329,7 +329,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 return true;
             }
 
-            var goodItems = new[] { "Greenhouse", "Dwarvish Translation Guide", "Bridge Repair", "Rusty Key", "Bus Repair", "Minecarts Repair", "Gold Clock", "Desert Obelisk", "Island Obelisk" };
+            var goodItems = new List<string> { "Greenhouse", "Dwarvish Translation Guide", "Bridge Repair", "Rusty Key", "Bus Repair", "Minecarts Repair", "Gold Clock", "Desert Obelisk", "Island Obelisk" };
+            goodItems = goodItems.Shuffle(new Random((int)(Game1.uniqueIDForThisGame / 2)));
             var myName = _archipelago.GetPlayerName();
             foreach (var goodItem in goodItems)
             {
