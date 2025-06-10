@@ -4,6 +4,7 @@ using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Constants.Locations;
 using StardewArchipelago.Goals;
+using xTile.Dimensions;
 
 namespace StardewArchipelago.Locations
 {
@@ -21,15 +22,18 @@ namespace StardewArchipelago.Locations
         public void AddWalnutCheckedLocation(string locationName)
         {
             var locations = new List<string> { locationName };
+            locations.Add(GetWalnutAlternateName(locationName));
+            base.AddCheckedLocations(locations.ToArray());
+        }
+
+        public static string GetWalnutAlternateName(string locationName)
+        {
             if (locationName.StartsWith(Prefix.WALNUTSANITY))
             {
-                // locations.Add(locationName[Prefix.WALNUTSANITY.Length..]);
+                return locationName[Prefix.WALNUTSANITY.Length..];
             }
-            else
-            {
-                // locations.Add($"{Prefix.WALNUTSANITY}{locationName}");
-            }
-            base.AddCheckedLocations(locations.ToArray());
+
+            return $"{Prefix.WALNUTSANITY}{locationName}";
         }
 
         public override void SendAllLocationChecks()

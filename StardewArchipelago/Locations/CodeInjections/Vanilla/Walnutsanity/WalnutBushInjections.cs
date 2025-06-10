@@ -32,7 +32,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             _locationChecker = locationChecker;
             _bushtexture = ArchipelagoTextures.GetArchipelagoBush(logger, helper);
             Utility.ForEachLocation((x) => SetupWalnutsanityBushes(x), true, true);
-            _archipelago.ScoutStardewLocations(_bushNameMap.Values);
+            _archipelago.ScoutWalnutLocations(_bushNameMap.Values);
         }
 
         // public string GetShakeOffItem()
