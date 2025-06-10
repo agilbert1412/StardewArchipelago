@@ -17,6 +17,7 @@ using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Extensions;
 using StardewArchipelago.GameModifications.MoveLink;
 using StardewArchipelago.GameModifications.Testing;
+using StardewArchipelago.Locations;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Extensions;
@@ -325,6 +326,18 @@ namespace StardewArchipelago.Archipelago
         public Dictionary<string, ScoutedLocation> ScoutStardewLocations(IEnumerable<string> locationNames, bool createAsHint = false)
         {
             return ScoutManyLocations(locationNames, ShouldHint(createAsHint));
+        }
+
+        public Dictionary<string, ScoutedLocation> ScoutWalnutLocations(IEnumerable<string> locationNames, bool createAsHint = false)
+        {
+            var allNames = new List<string>();
+            foreach (var locationName in locationNames)
+            {
+                allNames.Add(locationName);
+                allNames.Add(StardewLocationChecker.GetWalnutAlternateName(locationName));
+            }
+
+            return ScoutManyLocations(allNames, ShouldHint(createAsHint));
         }
 
         public string SendFakeItemMessage(string itemName, string locationName)

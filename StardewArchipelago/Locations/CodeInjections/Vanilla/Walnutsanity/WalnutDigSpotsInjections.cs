@@ -25,7 +25,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             _helper = helper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
-            _archipelago.ScoutStardewLocations(_digSpotNameMap.Values);
+            _archipelago.ScoutWalnutLocations(_digSpotNameMap.Values);
         }
 
         // public override string checkForBuriedItem(int xLocation, int yLocation, bool explosion, bool detectOnly, Farmer who)
@@ -44,7 +44,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                     throw new Exception($"Dig Spot '{digSpotId}' Could not be mapped to an Archipelago location!");
                 }
 
-                if (!Game1.netWorldState.Value.FoundBuriedNuts.Add(digSpotId))
+                if (!Game1.netWorldState.Value.FoundBuriedNuts.Add(digSpotId) && !_locationChecker.IsLocationMissing(_digSpotNameMap[digSpotId]))
                 {
                     return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }

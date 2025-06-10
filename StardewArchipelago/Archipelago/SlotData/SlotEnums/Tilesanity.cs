@@ -5,8 +5,7 @@ namespace StardewArchipelago.Archipelago.SlotData.SlotEnums
     {
         Nope = 0,
         Locations = 1,
-        Simplified = 2,
-        Full = 3,
+        Full = 2,
     }
 }
 

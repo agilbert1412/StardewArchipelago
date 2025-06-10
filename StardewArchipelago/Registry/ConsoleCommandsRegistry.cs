@@ -103,7 +103,6 @@ namespace StardewArchipelago.Registry
             return;
 #endif
             _modHelper.ConsoleCommands.Add("walkable_tiles", "Gets the list of every walkable tile", this.ListWalkableTiles);
-            _modHelper.ConsoleCommands.Add("walkable_csv", "Gets the csv of every walkable tile", this.ConvertWalkablesToCSV);
         }
 
         private void OnCommandConnectToArchipelago(string arg1, string[] arg2)
@@ -265,9 +264,9 @@ namespace StardewArchipelago.Registry
             List<Vector2> walkables = new();
             var width = playerCurrentLocation.map.DisplayWidth / 64;
             var height = playerCurrentLocation.map.DisplayHeight / 64;
-            for (var x = 1; x < width - 1; x++)
+            for (var x = 0; x < width; x++)
             {
-                for (var y = 1; y < height - 1; y++)
+                for (var y = 0; y < height; y++)
                 {
                     Vector2 position = new(x, y);
                     if (playerCurrentLocation.isTilePassable(position))
@@ -351,70 +350,9 @@ namespace StardewArchipelago.Registry
                     break;
             }
 
-            if (dictionary.ContainsKey(displayedName))
-            {
-                dictionary[displayedName] = validatedWalkables;
-            }
-            else
-            {
-                dictionary.Add(displayedName, validatedWalkables);
-            }
+            dictionary[displayedName] = validatedWalkables;
             File.WriteAllText(tileFile, JsonConvert.SerializeObject(dictionary, Formatting.Indented));
             Console.Out.WriteLine("Finished finding walkable tiles");
-        }
-
-        private void ConvertWalkablesToCSV(string arg1, string[] arg2)
-        {
-            const string tileFile = "tiles.json";
-            var data_dictionary = JsonConvert.DeserializeObject<Dictionary<string, List<Vector2>>>(File.ReadAllText(tileFile));
-
-            var tiles_dictionary = new Dictionary<(string, int, int), bool>();
-            foreach (var (map, tiles) in data_dictionary)
-            {
-                foreach (var (x, y) in tiles)
-                {
-                    tiles_dictionary.Add(((string, int, int))(map, x, y), true);
-                }
-            }
-            foreach (var (map, tiles) in data_dictionary)
-            {
-                foreach (var (x, y) in tiles)
-                {
-                    for (var i = 2; i <= 10; i++)
-                    {
-                        tiles_dictionary.TryAdd(((string, int, int))(map, x / i, y / i), false);
-                    }
-                }
-            }
-
-            var sortedDict = from entry in tiles_dictionary
-                             orderby entry.Key.Item1, entry.Key.Item2, entry.Key.Item3
-                             select entry;
-
-            const string locationFile = "tilesanity.csv";
-            var id = 20_000;
-            var locationText = "id,region,name,tags,mod_name\n" +
-                               "20000,None,Progressive Tile,NOT_TILE,\n";
-            var previous_map = "";
-            foreach (var ((map, x, y), real) in sortedDict)
-            {
-                if (map != previous_map)
-                {
-                    id += 1_000 - id % 1_000;
-                    previous_map = map;
-                }
-                var name = $"Tilesanity: {map} ({x}-{y})";
-                if (real)
-                {
-                    locationText += $"{id++},{map},{name},TILESANITY,\n";
-                }
-                else
-                {
-                    locationText += $"{id++},{map},{name},\"TILESANITY,NOT_TILE\",\n";
-                }
-            }
-            File.WriteAllText(locationFile, locationText);
-            Console.Out.WriteLine("CSV updated");
         }
 
         private void OnCommandDisconnectFromArchipelago(string arg1, string[] arg2)
