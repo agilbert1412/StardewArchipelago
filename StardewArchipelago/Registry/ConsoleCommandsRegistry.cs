@@ -345,7 +345,7 @@ namespace StardewArchipelago.Registry
                         "0" => string.Join(' ', arg2.Skip(1)),
                         "1" => playerCurrentLocation.DisplayName,
                         "2" => playerCurrentLocation.Name,
-                        _ => throw new ArgumentException()
+                        _ => throw new ArgumentException(),
                     };
                     break;
             }
