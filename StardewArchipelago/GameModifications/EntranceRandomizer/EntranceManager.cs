@@ -400,6 +400,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Wizard Basement", "WizardHouseBasement" },
             { "The Mines", "Mine|18|13" }, // 54 4 Mine 18 13
             { "Quarry Mine Entrance", "Mine|67|17" }, // 103 15 Mine 67 17
+            { "Outside Adventure Guild", "Mountain"},
             { "Quarry", "Mountain" },
             { "Shipwreck", "CaptainRoom" },
             { "Gourmand Cave", "IslandFarmcave" },
@@ -422,7 +423,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Professor Snail Cave", "IslandNorthCave1" },
             { "Qi Walnut Room", "QiNutRoom" },
             { "Mutant Bug Lair", "BugLand" },
-            { "Purple Shorts Maze", "LewisBasement"}
+            { "Purple Shorts Maze", "LewisBasement"},
         };
 
         private readonly Dictionary<string, string> _locationsSingleWordAliases = new()
