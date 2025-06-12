@@ -159,7 +159,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
         }
 
         // public void actionWhenReceived(Farmer who)
-        public static void CheckAction_ShowWizardMagicInk_Postfix(SpecialItem __instance, Farmer who)
+        public static void ActionWhenReceived_MagicInk_Postfix(SpecialItem __instance, Farmer who)
         {
             try
             {
@@ -174,7 +174,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed in {nameof(CheckAction_ShowWizardMagicInk_Postfix)}:\n{ex}");
+                _logger.LogError($"Failed in {nameof(ActionWhenReceived_MagicInk_Postfix)}:\n{ex}");
                 return;
             }
         }

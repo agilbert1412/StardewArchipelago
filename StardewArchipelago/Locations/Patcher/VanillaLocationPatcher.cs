@@ -482,8 +482,8 @@ namespace StardewArchipelago.Locations.Patcher
         private void ReplaceDarkTalismanQuestsWithChecks()
         {
             _harmony.Patch(
-                original: AccessTools.Method(typeof(NPC), nameof(NPC.checkAction)),
-                prefix: new HarmonyMethod(typeof(DarkTalismanInjections), nameof(DarkTalismanInjections.CheckAction_ShowWizardMagicInk_Postfix))
+                original: AccessTools.Method(typeof(SpecialItem), nameof(SpecialItem.actionWhenReceived)),
+                postfix: new HarmonyMethod(typeof(DarkTalismanInjections), nameof(DarkTalismanInjections.ActionWhenReceived_MagicInk_Postfix))
             );
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Chest), nameof(Chest.checkForAction)),
