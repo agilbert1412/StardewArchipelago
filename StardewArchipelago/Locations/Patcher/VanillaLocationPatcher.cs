@@ -469,7 +469,7 @@ namespace StardewArchipelago.Locations.Patcher
                 prefix: new HarmonyMethod(typeof(StoryQuestInjections), nameof(StoryQuestInjections.MgThief_AfterSpeech_WinterMysteryFinished_Prefix))
             );
 
-            PatchSkillsPage();
+            PatchPowersTab();
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Object), "getPriceAfterMultipliers"),
@@ -499,11 +499,11 @@ namespace StardewArchipelago.Locations.Patcher
             );
         }
 
-        private void PatchSkillsPage()
+        private void PatchPowersTab()
         {
             _harmony.Patch(
                 original: AccessTools.Method(typeof(PowersTab), nameof(PowersTab.populateClickableComponentList)),
-                postfix: new HarmonyMethod(typeof(StoryQuestInjections), nameof(StoryQuestInjections.PopulateClickableComponentList_BearKnowledge_Postfix))
+                postfix: new HarmonyMethod(typeof(StoryQuestInjections), nameof(StoryQuestInjections.PopulateClickableComponentList_DisplayPowersReceivedFromAp_Postfix))
             );
         }
 

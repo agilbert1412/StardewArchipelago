@@ -162,6 +162,26 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
         }
 
+        protected override void SetUpScramblingAndMail(int whichArea)
+        {
+            _locationChecker.AddCheckedLocation("Rat Problem");
+            Game1.player.removeQuest("26");
+            if (!Game1.player.hasOrWillReceiveMail("seenJunimoNote"))
+            {
+                Game1.player.mailReceived.Add("seenJunimoNote");
+            }
+            if (!Game1.player.hasOrWillReceiveMail("hasSeenAbandonedJunimoNote") && whichArea == 6)
+            {
+                Game1.player.mailReceived.Add("hasSeenAbandonedJunimoNote");
+            }
+            ScrambledText = CanReadNote();
+        }
+
+        protected override bool CanReadNote()
+        {
+            return _archipelago.HasReceivedItem("Forest Magic");
+        }
+
         private void AssignBundleIcon(ArchipelagoBundle bundle, Texture2D remixedBundlesTexture)
         {
             var textureOverride = BundleIcons.GetBundleIcon(_logger, _modHelper, bundle.name, LogLevel.Trace);

@@ -175,7 +175,7 @@ namespace StardewArchipelago.Items.Mail
         {
             if (_sendForTomorrow)
             {
-                Game1.player.mailForTomorrow.Add(mailTitle);
+                Game1.addMailForTomorrow(mailTitle);
             }
             else
             {

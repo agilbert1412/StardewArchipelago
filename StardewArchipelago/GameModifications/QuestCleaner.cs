@@ -1,30 +1,35 @@
-﻿using StardewValley;
+﻿using KaitoKid.ArchipelagoUtilities.Net;
+using StardewArchipelago.Locations;
+using StardewValley;
 using StardewValley.Quests;
 
 namespace StardewArchipelago.GameModifications
 {
     public class QuestCleaner
     {
+        private StardewLocationChecker _locationChecker;
+
         private const string INITIATION_ID_SECOND_PART = "16";
         private const string RAT_PROBLEM_ID = "26";
         private const string MEET_THE_WIZARD_ID = "1";
         private const string RAISING_ANIMALS_ID = "7";
 
-        public QuestCleaner()
+        public QuestCleaner(StardewLocationChecker locationChecker)
         {
+            _locationChecker = locationChecker;
         }
 
         public void CleanQuests(Farmer player)
         {
+            CleanInitiation();
             foreach (var quest in player.questLog)
             {
-                CleanInitiation(quest);
                 CleanRatProblem(player, quest);
                 CleanRaisingAnimals(quest);
             }
         }
 
-        private void CleanInitiation(Quest quest)
+        private void CleanInitiation()
         {
             if (Game1.player.mailReceived.Contains("guildMember"))
             {
@@ -41,10 +46,12 @@ namespace StardewArchipelago.GameModifications
                 return;
             }
 
-            if (player.hasQuest(MEET_THE_WIZARD_ID) || player.hasOrWillReceiveMail("canReadJunimoText"))
+            if (_locationChecker.IsLocationMissing("Rat Problem"))
             {
-                quest.questComplete();
+                return;
             }
+
+            quest.questComplete();
         }
 
         private void CleanRaisingAnimals(Quest quest)

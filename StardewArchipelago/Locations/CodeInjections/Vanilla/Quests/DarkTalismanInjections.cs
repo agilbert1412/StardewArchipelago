@@ -158,18 +158,18 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
             }
         }
 
-        // public virtual bool checkAction(Farmer who, GameLocation l)
-        public static void CheckAction_ShowWizardMagicInk_Postfix(NPC __instance, Farmer who, GameLocation l, ref bool __result)
+        // public void actionWhenReceived(Farmer who)
+        public static void CheckAction_ShowWizardMagicInk_Postfix(SpecialItem __instance, Farmer who)
         {
             try
             {
-                if (!__instance.Name.Contains("Wizard", StringComparison.OrdinalIgnoreCase) || l is not WizardHouse ||
-                    !who.hasMagicInk)
+                if (__instance.which.Value != 7)
                 {
                     return;
                 }
 
                 _locationChecker.AddCheckedLocation($"Magic Ink");
+                who.hasMagicInk = _archipelago.HasReceivedItem("Magic Ink");
                 return;
             }
             catch (Exception ex)

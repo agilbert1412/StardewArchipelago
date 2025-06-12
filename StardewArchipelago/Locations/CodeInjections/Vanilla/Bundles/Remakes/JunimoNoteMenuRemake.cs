@@ -194,7 +194,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
 
         protected override void customSnapBehavior(int direction, int oldRegion, int oldId)
         {
-            if (!Game1.player.hasOrWillReceiveMail("canReadJunimoText") || oldId - REGION_BUNDLE_MODIFIER < 0 || oldId - REGION_BUNDLE_MODIFIER >= 10 || currentlySnappedComponent == null)
+            if (!CanReadNote() || oldId - REGION_BUNDLE_MODIFIER < 0 || oldId - REGION_BUNDLE_MODIFIER >= 10 || currentlySnappedComponent == null)
             {
                 return;
             }
@@ -284,20 +284,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
         public virtual void SetUpMenu(int whichArea, Dictionary<int, bool[]> bundlesComplete)
         {
             NoteTexture = Game1.temporaryContent.Load<Texture2D>(NOTE_TEXTURE_NAME);
-            if (!Game1.player.hasOrWillReceiveMail("seenJunimoNote"))
-            {
-                Game1.player.removeQuest("26");
-                Game1.player.mailReceived.Add("seenJunimoNote");
-            }
-            if (!Game1.player.hasOrWillReceiveMail("wizardJunimoNote"))
-            {
-                Game1.addMailForTomorrow("wizardJunimoNote");
-            }
-            if (!Game1.player.hasOrWillReceiveMail("hasSeenAbandonedJunimoNote") && whichArea == 6)
-            {
-                Game1.player.mailReceived.Add("hasSeenAbandonedJunimoNote");
-            }
-            ScrambledText = !Game1.player.hasOrWillReceiveMail("canReadJunimoText");
+            SetUpScramblingAndMail(whichArea);
             TempSprites.Clear();
             this.WhichArea = whichArea;
             Inventory = new InventoryMenu(xPositionOnScreen + 128, yPositionOnScreen + 140, true, highlightMethod: HighlightObjects, capacity: 36, rows: 6, horizontalGap: 8, verticalGap: 8, drawSlots: false)
@@ -344,6 +331,29 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             communityCenter.markAreaAsComplete(whichArea);
             exitFunction = restoreAreaOnExit;
             communityCenter.areaCompleteReward(whichArea);
+        }
+
+        protected virtual void SetUpScramblingAndMail(int whichArea)
+        {
+            if (!Game1.player.hasOrWillReceiveMail("seenJunimoNote"))
+            {
+                Game1.player.removeQuest("26");
+                Game1.player.mailReceived.Add("seenJunimoNote");
+            }
+            if (!Game1.player.hasOrWillReceiveMail("wizardJunimoNote"))
+            {
+                Game1.addMailForTomorrow("wizardJunimoNote");
+            }
+            if (!Game1.player.hasOrWillReceiveMail("hasSeenAbandonedJunimoNote") && whichArea == 6)
+            {
+                Game1.player.mailReceived.Add("hasSeenAbandonedJunimoNote");
+            }
+            ScrambledText = !CanReadNote();
+        }
+
+        protected virtual bool CanReadNote()
+        {
+            return Game1.player.hasOrWillReceiveMail("canReadJunimoText");
         }
 
         protected virtual void CreateBundles(int whichArea, Dictionary<int, bool[]> bundlesComplete)
@@ -1473,7 +1483,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             }
             else
             {
-                drawHoverText(b, _singleBundleMenu || Game1.player.hasOrWillReceiveMail("canReadJunimoText") || HoverText.Length <= 0 ? HoverText : "???", Game1.dialogueFont);
+                drawHoverText(b, _singleBundleMenu || CanReadNote() || HoverText.Length <= 0 ? HoverText : "???", Game1.dialogueFont);
             }
             ScreenSwipe?.draw(b);
         }
@@ -1666,7 +1676,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
 
         protected virtual string GetBundleNameText()
         {
-            var text = !Game1.player.hasOrWillReceiveMail("canReadJunimoText") ? "???" : Game1.content.LoadString("Strings\\UI:JunimoNote_BundleName", CurrentPageBundle.label);
+            var text = !CanReadNote() ? "???" : Game1.content.LoadString("Strings\\UI:JunimoNote_BundleName", CurrentPageBundle.label);
             return text;
         }
 

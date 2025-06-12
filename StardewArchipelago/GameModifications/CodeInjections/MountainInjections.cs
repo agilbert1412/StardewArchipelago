@@ -14,6 +14,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 {
     public class MountainInjections
     {
+        private const string LANDSLIDE_REMOVED_ITEM = "Landslide Removed";
         private const string RAILROAD_BOULDER_ITEM = "Railroad Boulder Removed";
 
         private static ILogger _logger;
@@ -66,6 +67,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             try
             {
                 SetRailroadBlockedBasedOnArchipelagoItem(__instance);
+                SetLandslideBasedOnArchipelagoItem(__instance);
                 return;
             }
             catch (Exception ex)
@@ -81,6 +83,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             try
             {
                 SetRailroadBlockedBasedOnArchipelagoItem(__instance);
+                SetLandslideBasedOnArchipelagoItem(__instance);
                 return;
             }
             catch (Exception ex)
@@ -95,6 +98,28 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             // private readonly NetBool railroadAreaBlocked = new NetBool(Game1.stats.DaysPlayed < 31U);
             var railroadAreaBlockedField = _modHelper.Reflection.GetField<NetBool>(mountain, "railroadAreaBlocked");
             railroadAreaBlockedField.GetValue().Value = !_archipelago.HasReceivedItem(RAILROAD_BOULDER_ITEM);
+        }
+
+        public static void SetLandslideBasedOnArchipelagoItem(Mountain mountain)
+        {
+            var isLandslideRemoved = _archipelago.HasReceivedItem(LANDSLIDE_REMOVED_ITEM);
+
+            // private readonly NetBool landslide = new NetBool(Game1.stats.DaysPlayed < 5U);
+            var landslideField = _modHelper.Reflection.GetField<NetBool>(mountain, "landslide");
+            landslideField.GetValue().Value = !isLandslideRemoved;
+            SynchronizeLandslideLetterWithCurrentState(isLandslideRemoved);
+        }
+
+        private static void SynchronizeLandslideLetterWithCurrentState(bool isLandslideRemoved)
+        {
+            if (isLandslideRemoved && !Game1.player.hasOrWillReceiveMail("landslideDone"))
+            {
+                Game1.addMail("landslideDone", sendToEveryone: true);
+            }
+            if (!isLandslideRemoved && Game1.player.hasOrWillReceiveMail("landslideDone"))
+            {
+                Game1.player.RemoveMail("landslideDone");
+            }
         }
     }
 }

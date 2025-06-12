@@ -299,7 +299,7 @@ namespace StardewArchipelago
             _tileSanityManager.PatchWalk(this.Helper);
             var bank = new BankHandler(_archipelago);
             _chatForwarder = new ChatForwarder(_logger, Monitor, _helper, _harmony, _archipelago, _giftHandler, _goalManager, trapExecutor.TileChooser, _tileSanityManager, bank);
-            _questCleaner = new QuestCleaner();
+            _questCleaner = new QuestCleaner(_locationChecker);
 
             _itemManager = new APItemManager(_logger, _helper, _harmony, _archipelago, _locationChecker, _stardewItemManager, _mail, trapExecutor, giftTrapManager, State.ItemsReceived);
             _weaponsManager = new WeaponsManager(_archipelago, _stardewItemManager, _archipelago.SlotData.Mods);

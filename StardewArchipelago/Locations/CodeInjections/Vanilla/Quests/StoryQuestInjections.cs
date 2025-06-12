@@ -286,25 +286,18 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
         }
 
         // public override void populateClickableComponentList()
-        public static void PopulateClickableComponentList_BearKnowledge_Postfix(PowersTab __instance)
+        public static void PopulateClickableComponentList_DisplayPowersReceivedFromAp_Postfix(PowersTab __instance)
         {
             try
             {
-                var hasBearKnowledge = _archipelago.HasReceivedItem(APItem.BEARS_KNOWLEDGE);
                 foreach (var powersLine in __instance.powers)
                 {
                     foreach (var powerComponent in powersLine)
                     {
-                        // I couldn't really find a better way to identify this icon uniquely.
-                        // Ideally, in the long term, the condition should be changed in the Data itself, instead of this jank patching.
-                        if (powerComponent.sourceRect.X != 192 || powerComponent.sourceRect.Y != 336)
-                        {
-                            continue;
-                        }
-
+                        // I couldn't really find a better way to identify these icons uniquely.
+                        // Ideally, in the long term, the conditions should be changed in the Data itself, instead of this jank patching.
                         // drawShadow is poorly named. If drawShadow, then it's "real", otherwise it's a black outline.
-                        powerComponent.drawShadow = hasBearKnowledge;
-                        return;
+                        DrawPowerBasedOnApState(powerComponent);
                     }
                 }
 
@@ -312,9 +305,37 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed in {nameof(PopulateClickableComponentList_BearKnowledge_Postfix)}:\n{ex}");
+                _logger.LogError($"Failed in {nameof(PopulateClickableComponentList_DisplayPowersReceivedFromAp_Postfix)}:\n{ex}");
                 return;
             }
+        }
+
+        private static void DrawPowerBasedOnApState(ClickableTextureComponent powerComponent)
+        {
+            DrawForestMagicBasedOnApState(powerComponent);
+            DrawBearsKnowledgeBasedOnApState(powerComponent);
+        }
+
+        private static void DrawForestMagicBasedOnApState(ClickableTextureComponent powerComponent)
+        {
+            var hasForestMagic = _archipelago.HasReceivedItem(APItem.FOREST_MAGIC);
+            if (powerComponent.sourceRect.X != 16 || powerComponent.sourceRect.Y != 340)
+            {
+                return;
+            }
+
+            powerComponent.drawShadow = hasForestMagic;
+        }
+
+        private static void DrawBearsKnowledgeBasedOnApState(ClickableTextureComponent powerComponent)
+        {
+            var hasBearKnowledge = _archipelago.HasReceivedItem(APItem.BEARS_KNOWLEDGE);
+            if (powerComponent.sourceRect.X != 192 || powerComponent.sourceRect.Y != 336)
+            {
+                return;
+            }
+
+            powerComponent.drawShadow = hasBearKnowledge;
         }
 
         public static void GetPriceAfterMultipliers_BearKnowledge_Postfix(Object __instance, float startPrice, long specificPlayerID, ref float __result)

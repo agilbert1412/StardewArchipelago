@@ -73,6 +73,12 @@ namespace StardewArchipelago.Items.Unlocks.Vanilla
 
         private void RegisterPlayerImprovement(IDictionary<string, Func<ReceivedItem, LetterAttachment>> unlocks)
         {
+            unlocks.Add("Community Center Key", SendCommunityCenterKeyLetter);
+            unlocks.Add("Wizard Invitation", SendWizardInvitationLetter);
+            unlocks.Add("Forest Magic", SendForestMagicLetter);
+            // unlocks.Add("Landslide Removed", SendLandslideRemovedLetter);
+            unlocks.Add("Magic Ink", SendMagicInkLetter);
+
             unlocks.Add("Progressive Backpack", SendProgressiveBackpackLetter);
             unlocks.Add("Stardrop", SendStardropLetter);
             unlocks.Add("Dwarvish Translation Guide", SendDwarvishTranslationGuideLetter);
@@ -254,6 +260,27 @@ namespace StardewArchipelago.Items.Unlocks.Vanilla
         private LetterActionAttachment GetNewBabyLetter(ReceivedItem receivedItem)
         {
             return new LetterActionAttachment(receivedItem, LetterActionsKeys.SpawnBaby);
+        }
+
+        private LetterVanillaAttachment SendCommunityCenterKeyLetter(ReceivedItem receivedItem)
+        {
+            return new LetterVanillaAttachment(receivedItem, "ccDoorUnlock", false);
+        }
+
+        private LetterVanillaAttachment SendWizardInvitationLetter(ReceivedItem receivedItem)
+        {
+            return new LetterVanillaAttachment(receivedItem, "wizardJunimoNote", false);
+        }
+
+        private LetterVanillaAttachment SendForestMagicLetter(ReceivedItem receivedItem)
+        {
+            return new LetterVanillaAttachment(receivedItem, "canReadJunimoText", true);
+        }
+
+        private LetterAttachment SendMagicInkLetter(ReceivedItem receivedItem)
+        {
+            Game1.player.hasMagicInk = true;
+            return new LetterInformationAttachment(receivedItem);
         }
 
         private LetterActionAttachment SendProgressiveBackpackLetter(ReceivedItem receivedItem)

@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Linq;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewValley;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using StardewValley.GameData;
+using StardewValley.Extensions;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
 {
@@ -43,6 +45,32 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(EndBehaviors_LeoMoving_Prefix)}:\n{ex}");
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+        }
+
+        // public static void AddMailReceived(Event @event, string[] args, EventContext context)
+        public static bool AddMailReceived_BlockSomeSpecificLetters_Prefix(Event @event, string[] args, EventContext context)
+        {
+            try
+            {
+                if (!ArgUtility.TryGet(args, 1, out var str, out var error, name: "string mailId") || !ArgUtility.TryGetOptionalBool(args, 2, out var add, out error, true, "bool add"))
+                {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
+                var lettersToBlock = new[] { "ccDoorUnlock" };
+                if (lettersToBlock.Contains(str))
+                {
+                    ++@event.CurrentCommand;
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+                }
+
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(AddMailReceived_BlockSomeSpecificLetters_Prefix)}:\n{ex}");
                 return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }

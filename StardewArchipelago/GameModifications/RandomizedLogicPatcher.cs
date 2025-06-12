@@ -139,6 +139,7 @@ namespace StardewArchipelago.GameModifications
             PatchMysteryBoxesAndPrizeTickets();
             PatchFarmer();
             PatchLeoMove();
+            PatchEvents();
             PatchEmptyHandBreak();
 
             _startingResources.GivePlayerStartingResources();
@@ -860,6 +861,14 @@ namespace StardewArchipelago.GameModifications
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Event), nameof(Event.endBehaviors), new[] { typeof(string[]), typeof(GameLocation) }),
                 prefix: new HarmonyMethod(typeof(EventInjections), nameof(EventInjections.EndBehaviors_LeoMoving_Prefix))
+            );
+        }
+
+        private void PatchEvents()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Event.DefaultCommands), nameof(Event.DefaultCommands.AddMailReceived)),
+                prefix: new HarmonyMethod(typeof(EventInjections), nameof(EventInjections.AddMailReceived_BlockSomeSpecificLetters_Prefix))
             );
         }
 
