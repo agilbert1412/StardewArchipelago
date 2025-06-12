@@ -34,8 +34,8 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     Game1.stopMusicTrack(MusicContext.Default);
                 }
 
-                Game1.addMailForTomorrow("leoMoved", true, true);
-                Game1.player.team.requestLeoMove.Fire();
+                //Game1.addMailForTomorrow("leoMoved", true, true);
+                //Game1.player.team.requestLeoMove.Fire();
                 __instance.exitEvent();
 
                 return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
