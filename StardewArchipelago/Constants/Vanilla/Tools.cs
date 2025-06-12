@@ -11,4 +11,10 @@
         public const string FISHING_ROD = "FishingRod";
         public static readonly string[] ToolNames = { AXE, WATERING_CAN, PICKAXE, HOE, TRASH_CAN, PAN };
     }
+
+    public class ToolIds
+    {
+
+        public const string RETURN_SCEPTER = "ReturnScepter";
+    }
 }

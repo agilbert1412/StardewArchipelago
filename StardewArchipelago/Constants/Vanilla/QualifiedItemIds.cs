@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 
 namespace StardewArchipelago.Constants.Vanilla
 {
@@ -305,6 +306,7 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string STEEL_PAN_HAT = QualifiedHatId(HatIds.STEEL_PAN);
         public static readonly string GOLD_PAN_HAT = QualifiedHatId(HatIds.GOLD_PAN);
         public static readonly string IRIDIUM_PAN_HAT = QualifiedHatId(HatIds.IRIDIUM_PAN);
+        public static readonly string RETURN_SCEPTER = QualifiedToolId(ToolIds.RETURN_SCEPTER);
 
         public static string QualifiedObjectId(string objectId)
         {
@@ -329,6 +331,11 @@ namespace StardewArchipelago.Constants.Vanilla
         public static string QualifiedHatId(string hatId)
         {
             return QualifyId(HAT_QUALIFIER, hatId);
+        }
+
+        public static string QualifiedToolId(string toolId)
+        {
+            return QualifyId(TOOLS_QUALIFIER, toolId);
         }
 
         public static string QualifyId(string qualifier, string objectId)

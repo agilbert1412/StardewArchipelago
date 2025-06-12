@@ -7,6 +7,7 @@ using StardewValley;
 using StardewValley.GameData.Shops;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants;
 
 namespace StardewArchipelago.Locations.ShopStockModifiers
 {
@@ -31,6 +32,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
                 var shopsData = asset.AsDictionary<string, ShopData>().Data;
                 var krobusShop = shopsData["ShadowShop"];
                 ReplaceStardropWithCheck(krobusShop);
+                ReplaceReturnScepterWithCheck(krobusShop);
             },
                 AssetEditPriority.Late
             );
@@ -39,7 +41,6 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
         private void ReplaceStardropWithCheck(ShopData shopData)
         {
             const string krobusStardropLocationName = "Krobus Stardrop";
-            var itemsData = DataLoader.Objects(Game1.content);
             for (var i = shopData.Items.Count - 1; i >= 0; i--)
             {
                 var item = shopData.Items[i];
@@ -50,6 +51,30 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
 
                 var apShopItem = CreateArchipelagoLocation(item, krobusStardropLocationName);
                 shopData.Items.RemoveAt(i);
+                shopData.Items.Insert(i, apShopItem);
+            }
+        }
+
+        private void ReplaceReturnScepterWithCheck(ShopData shopData)
+        {
+            if (!_archipelago.SlotData.IncludeEndgameLocations)
+            {
+                return;
+            }
+
+            const string returnScepterLocationName = "Purchase Return Scepter";
+            for (var i = shopData.Items.Count - 1; i >= 0; i--)
+            {
+                var item = shopData.Items[i];
+                if (!item.Id.Equals(QualifiedItemIds.RETURN_SCEPTER, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    continue;
+                }
+
+                item.Condition = GameStateConditionProvider.CreateHasReceivedItemCondition("Return Scepter");
+                // shopData.Items.RemoveAt(i);
+
+                var apShopItem = CreateArchipelagoLocation(item, returnScepterLocationName);
                 shopData.Items.Insert(i, apShopItem);
             }
         }
