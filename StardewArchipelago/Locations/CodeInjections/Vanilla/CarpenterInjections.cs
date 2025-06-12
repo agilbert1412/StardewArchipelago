@@ -85,6 +85,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     answerChoices = answerChoices.Where(x => x.responseKey != "Construct" && x.responseKey != "Carpenter_BuildingCost").ToArray();
                 }
 
+                if (_archipelago.SlotData.IncludeEndgameLocations)
+                {
+                    answerChoices = answerChoices.Where(x => x.responseKey != "CommunityUpgrade").ToArray();
+                }
+
                 __instance.lastQuestionKey = dialogKey;
                 Game1.drawObjectQuestionDialogue(question, answerChoices);
 
