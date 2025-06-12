@@ -91,7 +91,7 @@ namespace StardewArchipelago.Locations.Patcher
                 PatchCopperPan();
                 ReplaceSkillsWithChecks();
                 ReplaceQuestsWithChecks();
-                PatchCarpenter();
+                PatchBuildingsAndBlueprints();
                 ReplaceIsolatedEventsWithChecks();
                 PatchAdventurerGuildShop();
                 PatchArcadeMachines();
@@ -573,7 +573,7 @@ namespace StardewArchipelago.Locations.Patcher
             );
         }
 
-        private void PatchCarpenter()
+        private void PatchBuildingsAndBlueprints()
         {
             _modHelper.Events.Content.AssetRequested += _carpenterShopStockModifier.OnShopStockRequested;
             _modHelper.Events.Content.AssetRequested += _carpenterBuildingsModifier.OnBuildingsRequested;
@@ -583,6 +583,10 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony.Patch(
                 original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performAction), performActionArgumentTypes),
                 prefix: new HarmonyMethod(typeof(WizardBookInjections), nameof(WizardBookInjections.PerformAction_WizardBook_Prefix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.answerDialogueAction)),
+                prefix: new HarmonyMethod(typeof(WizardBookInjections), nameof(WizardBookInjections.AnswerDialogueAction_WizardBook_Prefix))
             );
 
 

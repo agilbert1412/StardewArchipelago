@@ -1,9 +1,12 @@
-﻿namespace StardewArchipelago.Constants
+﻿using Newtonsoft.Json.Linq;
+
+namespace StardewArchipelago.Constants
 {
     public static class APItem
     {
         public const string FOREST_MAGIC = "Forest Magic";
         public const string BEARS_KNOWLEDGE = "Bear's Knowledge";
+        public const string MAGIC_INK = "Magic Ink";
         public const string PROGRESSIVE_RACCOON = "Progressive Raccoon";
         public const string MOVIE_THEATER = "Progressive Movie Theater";
         public const string MOVEMENT_SPEED_BONUS = "Movement Speed Bonus";
