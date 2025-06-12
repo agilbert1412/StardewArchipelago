@@ -34,6 +34,7 @@
         public const string MOVIESANITY = "moviesanity";
         public const string SECRETSANITY = "secretsanity";
         public const string HATSANITY = "hatsanity";
+        public const string INCLUDE_ENDGAME_LOCATIONS = "include_endgame_locations";
         public const string EXCLUDE_GINGER_ISLAND = "exclude_ginger_island";
         public const string TRAP_ITEMS = "trap_items";
         public const string TRAP_DIFFICULTY = "trap_difficulty";

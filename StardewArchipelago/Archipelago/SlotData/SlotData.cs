@@ -47,6 +47,7 @@ namespace StardewArchipelago.Archipelago.SlotData
         public Moviesanity Moviesanity { get; private set; }
         public Secretsanity Secretsanity { get; private set; }
         public Hatsanity Hatsanity { get; set; }
+        public bool IncludeEndgameLocations { get; set; }
         public bool ExcludeGingerIsland { get; private set; }
         public TrapItemsDifficulty TrapItemsDifficulty { get; set; }
         public bool EnableMultiSleep { get; private set; }
@@ -110,6 +111,7 @@ namespace StardewArchipelago.Archipelago.SlotData
             Moviesanity = slotDataReader.GetSlotSetting(SlotDataKeys.MOVIESANITY, Moviesanity.None);
             Secretsanity = slotDataReader.GetSlotSecretsanitySetting();
             Hatsanity = slotDataReader.GetSlotSetting(SlotDataKeys.HATSANITY, Hatsanity.None);
+            IncludeEndgameLocations = slotDataReader.GetSlotSetting(SlotDataKeys.INCLUDE_ENDGAME_LOCATIONS, false);
             ExcludeGingerIsland = slotDataReader.GetSlotSetting(SlotDataKeys.EXCLUDE_GINGER_ISLAND, true);
             TrapItemsDifficulty = slotDataReader.GetSlotSetting(SlotDataKeys.TRAP_DIFFICULTY, TrapItemsDifficulty.Medium, SlotDataKeys.TRAP_ITEMS);
             EnableMultiSleep = slotDataReader.GetSlotSetting(SlotDataKeys.MULTI_SLEEP_ENABLED, true);

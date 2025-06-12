@@ -14,6 +14,7 @@ using Object = StardewValley.Object;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
+using Newtonsoft.Json.Linq;
 
 namespace StardewArchipelago.Locations.ShopStockModifiers
 {
@@ -41,6 +42,14 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
         public const string BUILDING_BIG_SHED = "Big Shed";
 
         public const string BUILDING_SHIPPING_BIN = "Shipping Bin";
+
+        private const string BUILDING_PAM_HOUSE = "Pam House";
+        private const string SHORTCUT_FOREST_TO_BEACH = "Forest To Beach Shortcut";
+        private const string SHORTCUT_MOUNTAIN_TO_JOJAMART = "Mountain To Jojamart Shortcut";
+        private const string SHORTCUT_MOUNTAIN_TO_TOWN = "Mountain To Town Shortcut";
+        private const string SHORTCUT_TOWN_TO_TIDE_POOLS = "Town To Tide Pools Shortcut";
+        private const string SHORTCUT_TUNNEL_TO_BACKWOODS = "Tunnel To Backwoods Shortcut";
+        private const string SHORTCUT_MOUNTAIN_LAKE_TO_ADVENTURE_GUILD = "Mountain Lake To Adventure Guild Shortcut";
 
         public const string TRACTOR_GARAGE_ID = "Pathoschild.TractorMod_Stable";
         public const string TRACTOR_GARAGE_NAME = "Tractor Garage";
@@ -75,39 +84,55 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
 
             var checksToAdd = new List<ShopItemData>();
 
-            AddCheckToStock(checksToAdd, BUILDING_HOUSE_KITCHEN, 10000, new[] { Wood(450) }, GetFarmhouseRequirementCondition(0));
-            AddCheckToStock(checksToAdd, BUILDING_HOUSE_KIDS_ROOM, 50000, new[] { Hardwood(150) }, GetFarmhouseRequirementCondition(1));
-            AddCheckToStock(checksToAdd, BUILDING_HOUSE_CELLAR, 100000, Array.Empty<Item>(), GetFarmhouseRequirementCondition(2));
+            AddCheckToStock(checksToAdd, BUILDING_HOUSE_KITCHEN, 10_000, new[] { Wood(450) }, GetFarmhouseRequirementCondition(0));
+            AddCheckToStock(checksToAdd, BUILDING_HOUSE_KIDS_ROOM, 50_000, new[] { Hardwood(150) }, GetFarmhouseRequirementCondition(1));
+            AddCheckToStock(checksToAdd, BUILDING_HOUSE_CELLAR, 100_000, Array.Empty<Item>(), GetFarmhouseRequirementCondition(2));
 
-            AddCheckToStock(checksToAdd, BUILDING_COOP, 4000, new[] { Wood(300), Stone(100) });
-            AddCheckToStock(checksToAdd, BUILDING_BIG_COOP, 10000, new[] { Wood(400), Stone(150) }, GetBuildingRequirementCondition(BUILDING_COOP));
-            AddCheckToStock(checksToAdd, BUILDING_DELUXE_COOP, 20000, new[] { Wood(500), Stone(200) }, GetBuildingRequirementCondition(BUILDING_BIG_COOP));
+            AddCheckToStock(checksToAdd, BUILDING_COOP, 4_000, new[] { Wood(300), Stone(100) });
+            AddCheckToStock(checksToAdd, BUILDING_BIG_COOP, 10_000, new[] { Wood(400), Stone(150) }, GetBuildingRequirementCondition(BUILDING_COOP));
+            AddCheckToStock(checksToAdd, BUILDING_DELUXE_COOP, 20_000, new[] { Wood(500), Stone(200) }, GetBuildingRequirementCondition(BUILDING_BIG_COOP));
 
-            AddCheckToStock(checksToAdd, BUILDING_BARN, 6000, new[] { Wood(350), Stone(150) });
-            AddCheckToStock(checksToAdd, BUILDING_BIG_BARN, 12000, new[] { Wood(400), Stone(200) }, GetBuildingRequirementCondition(BUILDING_BARN));
-            AddCheckToStock(checksToAdd, BUILDING_DELUXE_BARN, 25000, new[] { Wood(500), Stone(300) }, GetBuildingRequirementCondition(BUILDING_BIG_BARN));
+            AddCheckToStock(checksToAdd, BUILDING_BARN, 6_000, new[] { Wood(350), Stone(150) });
+            AddCheckToStock(checksToAdd, BUILDING_BIG_BARN, 12_000, new[] { Wood(400), Stone(200) }, GetBuildingRequirementCondition(BUILDING_BARN));
+            AddCheckToStock(checksToAdd, BUILDING_DELUXE_BARN, 25_000, new[] { Wood(500), Stone(300) }, GetBuildingRequirementCondition(BUILDING_BIG_BARN));
 
-            AddCheckToStock(checksToAdd, BUILDING_FISH_POND, 5000, new[] { Stone(200), Seaweed(5), GreenAlgae(5) });
-            AddCheckToStock(checksToAdd, BUILDING_MILL, 2500, new[] { Stone(50), Wood(150), Cloth(4) });
+            AddCheckToStock(checksToAdd, BUILDING_FISH_POND, 5_000, new[] { Stone(200), Seaweed(5), GreenAlgae(5) });
+            AddCheckToStock(checksToAdd, BUILDING_MILL, 2_500, new[] { Stone(50), Wood(150), Cloth(4) });
 
-            AddCheckToStock(checksToAdd, BUILDING_SHED, 15000, new[] { Wood(300) });
-            AddCheckToStock(checksToAdd, BUILDING_BIG_SHED, 20000, new[] { Wood(550), Stone(300) }, GetBuildingRequirementCondition(BUILDING_SHED));
+            AddCheckToStock(checksToAdd, BUILDING_SHED, 15_000, new[] { Wood(300) });
+            AddCheckToStock(checksToAdd, BUILDING_BIG_SHED, 20_000, new[] { Wood(550), Stone(300) }, GetBuildingRequirementCondition(BUILDING_SHED));
 
             AddCheckToStock(checksToAdd, BUILDING_SILO, 100, new[] { Stone(100), Clay(10), CopperBar(5) });
-            AddCheckToStock(checksToAdd, BUILDING_SLIME_HUTCH, 10000, new[] { Stone(500), RefinedQuartz(10), IridiumBar(1) });
-            AddCheckToStock(checksToAdd, BUILDING_STABLE, 10000, new[] { Hardwood(100), IronBar(5) });
-            AddCheckToStock(checksToAdd, BUILDING_WELL, 1000, new[] { Stone(75) });
+            AddCheckToStock(checksToAdd, BUILDING_SLIME_HUTCH, 10_000, new[] { Stone(500), RefinedQuartz(10), IridiumBar(1) });
+            AddCheckToStock(checksToAdd, BUILDING_STABLE, 10_000, new[] { Hardwood(100), IronBar(5) });
+            AddCheckToStock(checksToAdd, BUILDING_WELL, 1_000, new[] { Stone(75) });
             AddCheckToStock(checksToAdd, BUILDING_SHIPPING_BIN, 250, new[] { Wood(150) });
             if (_archipelago.SlotData.Mods.HasMod(ModNames.TRACTOR))
             {
-                AddCheckToStock(checksToAdd, TRACTOR_GARAGE_NAME, 150000, new[] { IronBar(20), IridiumBar(5), BatteryPack(5) });
+                AddCheckToStock(checksToAdd, TRACTOR_GARAGE_NAME, 150_000, new[] { IronBar(20), IridiumBar(5), BatteryPack(5) });
+            }
+
+            if (_archipelago.SlotData.IncludeEndgameLocations)
+            {
+                AddCheckToStock(checksToAdd, BUILDING_PAM_HOUSE, 500_000);
+                AddCheckToStock(checksToAdd, SHORTCUT_FOREST_TO_BEACH, 50_000);
+                AddCheckToStock(checksToAdd, SHORTCUT_MOUNTAIN_TO_JOJAMART, 50_000);
+                AddCheckToStock(checksToAdd, SHORTCUT_MOUNTAIN_TO_TOWN, 50_000);
+                AddCheckToStock(checksToAdd, SHORTCUT_TOWN_TO_TIDE_POOLS, 50_000);
+                AddCheckToStock(checksToAdd, SHORTCUT_TUNNEL_TO_BACKWOODS, 50_000);
+                AddCheckToStock(checksToAdd, SHORTCUT_MOUNTAIN_LAKE_TO_ADVENTURE_GUILD, 50_000);
             }
 
             carpenterShopData.Items.InsertRange(0, checksToAdd);
         }
 
-        private void AddCheckToStock(List<ShopItemData> shopItems, string buildingName, int price, Item[] materials, string condition = null)
+        private void AddCheckToStock(List<ShopItemData> shopItems, string buildingName, int price, Item[] materials = null, string condition = null)
         {
+            if (materials == null)
+            {
+                materials = Array.Empty<Item>();
+            }
+
             var locationName = string.Format(BUILDING_BLUEPRINT_LOCATION_NAME, buildingName);
             var id = $"{IDProvider.AP_LOCATION} {locationName}";
 
