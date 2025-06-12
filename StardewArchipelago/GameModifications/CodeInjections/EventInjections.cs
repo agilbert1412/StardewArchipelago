@@ -4,6 +4,7 @@ using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewValley;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
+using StardewArchipelago.Locations;
 using StardewValley.GameData;
 using StardewValley.Extensions;
 
@@ -13,11 +14,13 @@ namespace StardewArchipelago.GameModifications.CodeInjections
     {
         private static ILogger _logger;
         private static StardewArchipelagoClient _archipelago;
+        private static StardewLocationChecker _locationChecker;
 
-        public static void Initialize(ILogger logger, StardewArchipelagoClient archipelago)
+        public static void Initialize(ILogger logger, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker)
         {
             _logger = logger;
             _archipelago = archipelago;
+            _locationChecker = locationChecker;
         }
 
         // public void endBehaviors(string[] args, GameLocation location)
@@ -59,9 +62,9 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
-                var lettersToBlock = new[] { "ccDoorUnlock" };
-                if (lettersToBlock.Contains(str))
+                if (str.Equals("ccDoorUnlock"))
                 {
+                    _locationChecker.AddCheckedLocation("Rat Problem Cutscene");
                     ++@event.CurrentCommand;
                     return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }

@@ -174,7 +174,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             {
                 Game1.player.mailReceived.Add("hasSeenAbandonedJunimoNote");
             }
-            ScrambledText = CanReadNote();
+            ScrambledText = !CanReadNote();
         }
 
         protected override bool CanReadNote()
