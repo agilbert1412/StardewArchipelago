@@ -120,7 +120,7 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string GLAZED_YAMS = QualifiedObjectId(ObjectIds.GLAZED_YAMS);
         public static readonly string GOAT_CHEESE = QualifiedObjectId(ObjectIds.GOAT_CHEESE);
         public static readonly string GOLD_BAR = QualifiedObjectId(ObjectIds.GOLD_BAR);
-        public static readonly string GOLD_LEWIS = BigCraftableId(BigCraftableIds.GOLD_LEWIS);
+        public static readonly string GOLD_LEWIS = QualifiedBigCraftableId(BigCraftableIds.GOLD_LEWIS);
         public static readonly string GOLD_ORE = QualifiedObjectId(ObjectIds.GOLD_ORE);
         public static readonly string GOLDEN_COCONUT = QualifiedObjectId(ObjectIds.GOLDEN_COCONUT);
         public static readonly string GOLDEN_EGG = QualifiedObjectId(ObjectIds.GOLDEN_EGG);
@@ -255,7 +255,7 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string STARDROP_TEA = QualifiedObjectId(ObjectIds.STARDROP_TEA);
         public static readonly string STARFRUIT_SEEDS = QualifiedObjectId(ObjectIds.STARFRUIT_SEEDS);
         public static readonly string STONE = QualifiedObjectId(ObjectIds.STONE);
-        public static readonly string STONE_JUNIMO = BigCraftableId(BigCraftableIds.STONE_JUNIMO);
+        public static readonly string STONE_JUNIMO = QualifiedBigCraftableId(BigCraftableIds.STONE_JUNIMO);
         public static readonly string STRANGE_BUN = QualifiedObjectId(ObjectIds.STRANGE_BUN);
         public static readonly string STRANGE_DOLL_GREEN = QualifiedObjectId(ObjectIds.STRANGE_DOLL_GREEN);
         public static readonly string STRAWBERRY = QualifiedObjectId(ObjectIds.STRAWBERRY);
@@ -310,13 +310,14 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string EXOTIC_DOUBLE_BED = QualifiedFurnitureId(FurnitureIds.EXOTIC_DOUBLE_BED);
         public static readonly string PIERRE_MISSING_STOCKLIST = QualifiedObjectId(ObjectIds.PIERRES_MISSING_STOCKLIST);
         public static readonly string HORSE_FLUTE = QualifiedObjectId(ObjectIds.HORSE_FLUTE);
+        public static readonly string MINI_SHIPPING_BIN = QualifiedBigCraftableId(BigCraftableIds.MINI_SHIPPING_BIN);
 
         public static string QualifiedObjectId(string objectId)
         {
             return QualifyId(OBJECT_QUALIFIER, objectId);
         }
 
-        public static string BigCraftableId(string bigCraftableId)
+        public static string QualifiedBigCraftableId(string bigCraftableId)
         {
             return QualifyId(BIG_CRAFTABLE_QUALIFIER, bigCraftableId);
         }
