@@ -114,7 +114,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
 
             if (_archipelago.SlotData.IncludeEndgameLocations)
             {
-                AddCheckToStock(checksToAdd, BUILDING_PAM_HOUSE, 500_000);
+                AddCheckToStock(checksToAdd, BUILDING_PAM_HOUSE, 500_000, new[] { Wood(950) });
                 AddCheckToStock(checksToAdd, SHORTCUT_FOREST_TO_BEACH, 50_000);
                 AddCheckToStock(checksToAdd, SHORTCUT_MOUNTAIN_TO_JOJAMART, 50_000);
                 AddCheckToStock(checksToAdd, SHORTCUT_MOUNTAIN_TO_TOWN, 50_000);

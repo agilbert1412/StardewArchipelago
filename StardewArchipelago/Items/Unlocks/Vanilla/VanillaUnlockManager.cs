@@ -51,6 +51,7 @@ namespace StardewArchipelago.Items.Unlocks.Vanilla
             RegisterIsolatedEventsItems(unlocks);
             RegisterGingerIslandRepairs(unlocks);
             RegisterSpecialItems(unlocks);
+            RegisterCommunityUpgrades(unlocks);
             foreach (var childUnlockManager in _childUnlockManagers)
             {
                 childUnlockManager.RegisterUnlocks(unlocks);
@@ -92,6 +93,11 @@ namespace StardewArchipelago.Items.Unlocks.Vanilla
             unlocks.Add("Key To The Town", SendKeyToTheTownLetter);
 
             unlocks.Add(APItem.HEALTH_BONUS, SendHealthBonusLetter);
+        }
+
+        private void RegisterCommunityUpgrades(IDictionary<string, Func<ReceivedItem, LetterAttachment>> unlocks)
+        {
+            unlocks.Add("Pam House", SendPamHouseLetter);
         }
 
         private void RegisterUniqueItems(IDictionary<string, Func<ReceivedItem, LetterAttachment>> unlocks)
@@ -367,6 +373,12 @@ namespace StardewArchipelago.Items.Unlocks.Vanilla
         private LetterActionAttachment SendMushroomBoxesLetter(ReceivedItem receivedItem)
         {
             return new LetterActionAttachment(receivedItem, LetterActionsKeys.MushroomBoxes);
+        }
+
+        private LetterVanillaAttachment SendPamHouseLetter(ReceivedItem receivedItem)
+        {
+            Game1.player.changeFriendship(1000, Game1.getCharacterFromName("Pam"));
+            return new LetterVanillaAttachment(receivedItem, "pamHouseUpgrade", true);
         }
     }
 }

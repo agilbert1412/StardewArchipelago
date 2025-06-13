@@ -68,6 +68,8 @@ namespace StardewArchipelago.GameModifications
             ForestInjections.Initialize(logger, _archipelago);
             MountainInjections.Initialize(logger, modHelper, _archipelago);
             TheaterInjections.Initialize(logger, modHelper, archipelago);
+            TownInjections.Initialize(logger, modHelper, archipelago);
+            ShortcutInjections.Initialize(logger, modHelper, archipelago);
             LostAndFoundInjections.Initialize(logger, archipelago);
             InitializeTVInjections(logger, modHelper, archipelago, entranceManager, state);
             ProfitInjections.Initialize(logger, archipelago);
@@ -111,6 +113,7 @@ namespace StardewArchipelago.GameModifications
             PatchDebris();
             PatchCurses();
             PatchTown();
+            PatchShortcuts();
             PatchForest();
             PatchMountain();
             PatchEntrances();
@@ -286,8 +289,8 @@ namespace StardewArchipelago.GameModifications
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Town), nameof(Town.MakeMapModifications)),
-                prefix: new HarmonyMethod(typeof(TheaterInjections), nameof(TheaterInjections.MakeMapModifications_JojamartAndTheater_Prefix)),
-                postfix: new HarmonyMethod(typeof(TheaterInjections), nameof(TheaterInjections.MakeMapModifications_JojamartAndTheater_Postfix))
+                prefix: new HarmonyMethod(typeof(TownInjections), nameof(TownInjections.MakeMapModifications_JojamartAndTheater_Prefix)),
+                postfix: new HarmonyMethod(typeof(TownInjections), nameof(TownInjections.MakeMapModifications_JojamartAndTheaterAndShortcuts_Postfix))
             );
 
             _harmony.Patch(
@@ -299,6 +302,26 @@ namespace StardewArchipelago.GameModifications
             //    original: AccessTools.Method(typeof(NPC), nameof(NPC.parseMasterSchedule)),
             //    prefix: new HarmonyMethod(typeof(TheaterInjections), nameof(TheaterInjections.ParseMasterSchedule_JojamartAndTheater_Prefix))
             //);
+        }
+
+        private void PatchShortcuts()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Mountain), nameof(Mountain.MakeMapModifications)),
+                postfix: new HarmonyMethod(typeof(ShortcutInjections), nameof(ShortcutInjections.MakeMapModifications_OpenMountainShortcuts_Postfix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Forest), nameof(Forest.MakeMapModifications)),
+                postfix: new HarmonyMethod(typeof(ShortcutInjections), nameof(ShortcutInjections.MakeMapModifications_OpenForestShortcuts_Postfix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Beach), nameof(Beach.MakeMapModifications)),
+                postfix: new HarmonyMethod(typeof(ShortcutInjections), nameof(ShortcutInjections.MakeMapModifications_OpenBeachShortcuts_Postfix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.MakeMapModifications)),
+                postfix: new HarmonyMethod(typeof(ShortcutInjections), nameof(ShortcutInjections.MakeMapModifications_OpenBackwoodsShortcuts_Postfix))
+            );
         }
 
         private void PatchForest()
