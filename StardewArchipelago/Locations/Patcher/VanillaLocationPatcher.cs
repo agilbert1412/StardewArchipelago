@@ -55,7 +55,7 @@ namespace StardewArchipelago.Locations.Patcher
         private readonly FestivalShopStockModifier _festivalShopStockModifier;
         private readonly CookingRecipePurchaseStockModifier _cookingRecipePurchaseStockModifier;
         private readonly CraftingRecipePurchaseStockModifier _craftingRecipePurchaseStockModifier;
-        private readonly KrobusStockModifier _krobusStockModifier;
+        private readonly KrobusShopStockModifier _krobusShopStockModifier;
         private readonly BookShopStockModifier _bookShopStockModifier;
 
         public VanillaLocationPatcher(ILogger logger, IModHelper modHelper, Harmony harmony, StardewArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager stardewItemManager)
@@ -74,7 +74,7 @@ namespace StardewArchipelago.Locations.Patcher
             _festivalShopStockModifier = new FestivalShopStockModifier(logger, modHelper, archipelago, stardewItemManager);
             _cookingRecipePurchaseStockModifier = new CookingRecipePurchaseStockModifier(logger, modHelper, archipelago, stardewItemManager);
             _craftingRecipePurchaseStockModifier = new CraftingRecipePurchaseStockModifier(logger, modHelper, archipelago, stardewItemManager);
-            _krobusStockModifier = new KrobusStockModifier(logger, modHelper, archipelago, stardewItemManager);
+            _krobusShopStockModifier = new KrobusShopStockModifier(logger, modHelper, archipelago, stardewItemManager);
             _bookShopStockModifier = new BookShopStockModifier(logger, modHelper, archipelago, stardewItemManager);
         }
 
@@ -1252,12 +1252,12 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void PatchKrobusShop()
         {
-            _modHelper.Events.Content.AssetRequested += _krobusStockModifier.OnShopStockRequested;
+            _modHelper.Events.Content.AssetRequested += _krobusShopStockModifier.OnShopStockRequested;
         }
 
         private void CleanKrobusEvents()
         {
-            _modHelper.Events.Content.AssetRequested -= _krobusStockModifier.OnShopStockRequested;
+            _modHelper.Events.Content.AssetRequested -= _krobusShopStockModifier.OnShopStockRequested;
         }
 
         private void PatchFarmcave()

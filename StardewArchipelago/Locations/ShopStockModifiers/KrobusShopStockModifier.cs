@@ -11,9 +11,9 @@ using StardewArchipelago.Constants;
 
 namespace StardewArchipelago.Locations.ShopStockModifiers
 {
-    public class KrobusStockModifier : ShopStockModifier
+    public class KrobusShopStockModifier : ShopStockModifier
     {
-        public KrobusStockModifier(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager) : base(logger, helper, archipelago, stardewItemManager)
+        public KrobusShopStockModifier(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager) : base(logger, helper, archipelago, stardewItemManager)
         {
             _logger = logger;
             _helper = helper;
