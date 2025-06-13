@@ -307,6 +307,9 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string GOLD_PAN_HAT = QualifiedHatId(HatIds.GOLD_PAN);
         public static readonly string IRIDIUM_PAN_HAT = QualifiedHatId(HatIds.IRIDIUM_PAN);
         public static readonly string RETURN_SCEPTER = QualifiedToolId(ToolIds.RETURN_SCEPTER);
+        public static readonly string EXOTIC_DOUBLE_BED = QualifiedFurnitureId(FurnitureIds.EXOTIC_DOUBLE_BED);
+        public static readonly string PIERRE_MISSING_STOCKLIST = QualifiedObjectId(ObjectIds.PIERRES_MISSING_STOCKLIST);
+        public static readonly string HORSE_FLUTE = QualifiedObjectId(ObjectIds.HORSE_FLUTE);
 
         public static string QualifiedObjectId(string objectId)
         {

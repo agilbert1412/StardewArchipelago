@@ -15,5 +15,6 @@
         public const string VISTA = "2423";
         public const string WALL_BASKET = "2425";
         public const string WALL_CACTUS = "2655";
+        public const string EXOTIC_DOUBLE_BED = "2514";
     }
 }
