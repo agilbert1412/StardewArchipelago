@@ -70,6 +70,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             MovieInjections.Initialize(logger, modHelper, archipelago, locationChecker);
             HatInjections.Initialize(logger, modHelper, archipelago, locationChecker);
             EatInjections.Initialize(logger, modHelper, archipelago, locationChecker, nameSimplifier);
+            CasinoInjections.Initialize(logger, modHelper, archipelago, locationChecker);
         }
 
         private static void InitializeArcadeMachines(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker)

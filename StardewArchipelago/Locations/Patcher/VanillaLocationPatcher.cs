@@ -119,6 +119,7 @@ namespace StardewArchipelago.Locations.Patcher
                 PatchMoviesanity();
                 PatchHatsanity();
                 PatchEating();
+                PatchEndgameLocations();
                 PatchScouts();
             }
             catch (Exception ex)
@@ -1809,6 +1810,24 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Object), nameof(Object.TryCreateBuffsFromData)),
                 postfix: new HarmonyMethod(typeof(EatInjections), nameof(EatInjections.TryCreateBuffsFromData_LimitToEnzymes_Postfix))
+            );
+        }
+
+        private void PatchEndgameLocations()
+        {
+            if (!_archipelago.SlotData.IncludeEndgameLocations)
+            {
+                return;
+            }
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performAction)),
+                prefix: new HarmonyMethod(typeof(CasinoInjections), nameof(CasinoInjections.PerformAction_OfferStatueOfEndlessFortune_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.answerDialogueAction)),
+                prefix: new HarmonyMethod(typeof(CasinoInjections), nameof(CasinoInjections.AnswerDialogueAction_PurchaseStatueOfEndlessFortune_Prefix))
             );
         }
     }
