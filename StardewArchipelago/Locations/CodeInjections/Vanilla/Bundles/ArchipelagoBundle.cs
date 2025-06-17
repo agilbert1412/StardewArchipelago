@@ -15,7 +15,6 @@ using StardewArchipelago.Constants;
 using StardewValley.Locations;
 using StardewValley.Objects;
 using System.Linq;
-using StardewArchipelago.GameModifications.CodeInjections;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 {

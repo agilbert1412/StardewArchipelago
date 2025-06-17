@@ -118,6 +118,7 @@ namespace StardewArchipelago.Locations.Patcher
                 PatchNightWorldEvents();
                 PatchBooks();
                 PatchWalnuts();
+                PatchSecretNotes();
                 PatchSecrets();
                 PatchMoviesanity();
                 PatchHatsanity();
@@ -1664,6 +1665,14 @@ namespace StardewArchipelago.Locations.Patcher
             );
         }
 
+        private void PatchSecretNotes()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.tryToCreateUnseenSecretNote)),
+                postfix: new HarmonyMethod(typeof(SecretNotesInjections), nameof(SecretNotesInjections.TryToCreateUnseenSecretNote_AllowSecretNotesIfStillNeedToShipThem_Postfix))
+            );
+        }
+
         private void PatchSecretNotesSecrets()
         { 
             if (!_archipelago.SlotData.Secretsanity.HasFlag(Secretsanity.SecretNotes))
@@ -1842,6 +1851,14 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony.Patch(
                 original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.answerDialogueAction)),
                 prefix: new HarmonyMethod(typeof(CasinoInjections), nameof(CasinoInjections.AnswerDialogueAction_PurchaseStatueOfEndlessFortune_Prefix))
+            );
+        }
+
+        private void PatchGarbageCans()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.TryGetGarbageItem)),
+                postfix: new HarmonyMethod(typeof(GarbageInjections), nameof(GarbageInjections.TryGetGarbageItem_TagItemWithTrash_Postfix))
             );
         }
     }

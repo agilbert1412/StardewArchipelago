@@ -71,6 +71,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             HatInjections.Initialize(logger, modHelper, archipelago, locationChecker);
             EatInjections.Initialize(logger, modHelper, archipelago, locationChecker, nameSimplifier);
             CasinoInjections.Initialize(logger, modHelper, archipelago, locationChecker);
+            GarbageInjections.Initialize(logger, archipelago, locationChecker);
         }
 
         private static void InitializeArcadeMachines(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker)
@@ -125,7 +126,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             WalnutRepeatablesInjections.Initialize(logger, modHelper, archipelago, locationChecker);
         }
 
-        private static void InitializeSecretsInjections(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
+        private static void InitializeSecretsInjections(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker)
         {
             PurpleShortsInjections.Initialize(logger, modHelper, archipelago, locationChecker);
             SimpleSecretsInjections.Initialize(logger, modHelper, archipelago, locationChecker);

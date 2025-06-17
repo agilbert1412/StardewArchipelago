@@ -12,9 +12,6 @@ using StardewArchipelago.GameModifications.CodeInjections.Television;
 using StardewArchipelago.GameModifications.EntranceRandomizer;
 using StardewArchipelago.GameModifications.Seasons;
 using StardewArchipelago.GameModifications.Tooltips;
-using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
-using StardewArchipelago.Locations.Festival;
-using StardewArchipelago.Locations.InGameLocations;
 using StardewArchipelago.Serialization;
 using StardewArchipelago.Stardew;
 using StardewArchipelago.Stardew.NameMapping;
@@ -30,10 +27,13 @@ using StardewValley.Menus;
 using StardewValley.Network;
 using StardewValley.Objects;
 using Object = StardewValley.Object;
-using StardewArchipelago.Locations;
 using StardewArchipelago.Logging;
 using StardewValley.TerrainFeatures;
 using StardewArchipelago.GameModifications.MoveLink;
+using StardewArchipelago.Locations;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
+using StardewArchipelago.Locations.Festival;
+using StardewArchipelago.Locations.InGameLocations;
 
 namespace StardewArchipelago.GameModifications
 {
@@ -76,7 +76,6 @@ namespace StardewArchipelago.GameModifications
             QuestLogInjections.Initialize(logger, archipelago, locationChecker);
             WorldChangeEventInjections.Initialize(logger);
             CropInjections.Initialize(logger, archipelago, stardewItemManager, state.Wallet);
-            SecretNoteInjections.Initialize(logger, archipelago, locationChecker);
             KentInjections.Initialize(logger, archipelago);
             _animalShopStockModifier = new AnimalShopStockModifier(logger, modHelper, archipelago, stardewItemManager);
             GoldenClockInjections.Initialize(logger, archipelago);
@@ -91,7 +90,6 @@ namespace StardewArchipelago.GameModifications
             EmptyHandInjections.Initialize(logger, archipelago, stardewItemManager);
             MovementInjections.Initialize(logger, archipelago);
             BundleMenuInjection.Initialize(logger, modHelper, archipelago, state, locationChecker, bundleReader);
-            GarbageInjections.Initialize(logger, archipelago);
             DebugPatchInjections.Initialize(logger, archipelago);
         }
 
@@ -132,7 +130,6 @@ namespace StardewArchipelago.GameModifications
             PatchGoldenClock();
             PatchZeldaAnimations();
             MakeLegendaryFishAndVoidMayoRecatchable();
-            PatchSecretNotes();
             PatchRecipes();
             PatchTooltips();
             PatchBundles();
@@ -721,14 +718,6 @@ namespace StardewArchipelago.GameModifications
             );
         }
 
-        private void PatchSecretNotes()
-        {
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.tryToCreateUnseenSecretNote)),
-                postfix: new HarmonyMethod(typeof(SecretNoteInjections), nameof(SecretNoteInjections.TryToCreateUnseenSecretNote_AllowSecretNotesIfStillNeedToShipThem_Postfix))
-            );
-        }
-
         private void PatchRecipes()
         {
             _helper.Events.Content.AssetRequested += _recipeDataRemover.OnCookingRecipesRequested;
@@ -795,11 +784,6 @@ namespace StardewArchipelago.GameModifications
             _harmony.Patch(
                 original: AccessTools.PropertySetter(typeof(Game1), nameof(Game1.activeClickableMenu)),
                 prefix: new HarmonyMethod(typeof(BundleMenuInjection), nameof(BundleMenuInjection.SetActiveClickableMenu_UseJunimoNoteMenuRemake_Prefix))
-            );
-
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.TryGetGarbageItem)),
-                postfix: new HarmonyMethod(typeof(GarbageInjections), nameof(GarbageInjections.TryGetGarbageItem_TagItemWithTrash_Postfix))
             );
 
             // This is no longer necessary, now we use the JunimoNoteMenuRemake

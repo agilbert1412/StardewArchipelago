@@ -27,17 +27,77 @@ namespace StardewArchipelago.Locations.Secrets
 {
     public class SecretNotesInjections
     {
+        private const int MAX_SECRET_NOTES = 25;
+        private const string SECRET_NOTE_ID = "(O)79";
+
         private static ILogger _logger;
         private static IModHelper _modHelper;
         private static StardewArchipelagoClient _archipelago;
-        private static LocationChecker _locationChecker;
+        private static StardewLocationChecker _locationChecker;
 
-        public static void Initialize(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker)
         {
             _logger = logger;
             _modHelper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
+        }
+
+
+        // public Object tryToCreateUnseenSecretNote(Farmer who)
+        public static void TryToCreateUnseenSecretNote_AllowSecretNotesIfStillNeedToShipThem_Postfix(GameLocation __instance, Farmer who, ref Object __result)
+        {
+            try
+            {
+                if (who == null || __result != null || !who.hasMagnifyingGlass)
+                {
+                    return;
+                }
+
+                var isIsland = __instance.InIslandContext();
+                if (isIsland)
+                {
+                    var needsExtraJournalScrap = _locationChecker.IsAnyLocationNotChecked("Journal Scrap");
+                    if (!needsExtraJournalScrap)
+                    {
+                        return;
+                    }
+                }
+                else
+                {
+                    var needsExtraSecretNotes = _locationChecker.IsAnyLocationNotChecked("Secret Note");
+                    if (!needsExtraSecretNotes)
+                    {
+                        return;
+                    }
+                }
+
+                var itemId = isIsland ? QualifiedItemIds.JOURNAL_SCRAP : QualifiedItemIds.SECRET_NOTE;
+                if (who.Items.ContainsId(itemId))
+                {
+                    return;
+                }
+
+                var unseenSecretNotes = Utility.GetUnseenSecretNotes(who, isIsland, out var totalNotes);
+                if (unseenSecretNotes.Length > 0)
+                {
+                    return;
+                }
+
+                if (Game1.random.NextBool(GameLocation.LAST_SECRET_NOTE_CHANCE * 0.25))
+                {
+                    return;
+                }
+
+                var secretNote = ItemRegistry.Create<Object>(itemId);
+                __result = secretNote;
+                return;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(TryToCreateUnseenSecretNote_AllowSecretNotesIfStillNeedToShipThem_Postfix)}:\n{ex}");
+                return;
+            }
         }
 
         // public void onGiftGiven(NPC npc, Object item)
@@ -116,28 +176,33 @@ namespace StardewArchipelago.Locations.Secrets
                     return;
                 }
 
-                var validPairs = new Dictionary<string, List<string>>
-                {
-                    { "Saloon", new List<string> { Game1.dishOfTheDay.QualifiedItemId } },
-                    { "Evelyn", new List<string> { QualifiedItemIds.COOKIES } },
-                    { "Blacksmith", new List<string> { QualifiedItemIds.COAL, QualifiedItemIds.COPPER_ORE, QualifiedItemIds.IRON_ORE } },
-                    { "Museum", new List<string> { QualifiedItemIds.GEODE, QualifiedItemIds.OMNI_GEODE } }
-                };
-
-                if (validPairs.ContainsKey(id))
-                {
-                    var items = validPairs[id];
-                    if (items.Contains(item.QualifiedItemId))
-                    {
-                        _locationChecker.AddCheckedLocation(SecretsLocationNames.SECRET_NOTE_12);
-                    }
-                }
+                CheckForSecretNoteGarbageCanItem(id, item);
 
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(TryGetGarbageItem_TrashCanSpecials_Postfix)}:\n{ex}");
                 return;
+            }
+        }
+
+        public static void CheckForSecretNoteGarbageCanItem(string id, Item item)
+        {
+            var validPairs = new Dictionary<string, List<string>>
+            {
+                { "Saloon", new List<string> { Game1.dishOfTheDay.QualifiedItemId } },
+                { "Evelyn", new List<string> { QualifiedItemIds.COOKIES } },
+                { "Blacksmith", new List<string> { QualifiedItemIds.COAL, QualifiedItemIds.COPPER_ORE, QualifiedItemIds.IRON_ORE } },
+                { "Museum", new List<string> { QualifiedItemIds.GEODE, QualifiedItemIds.OMNI_GEODE } }
+            };
+
+            if (validPairs.ContainsKey(id))
+            {
+                var items = validPairs[id];
+                if (items.Contains(item.QualifiedItemId))
+                {
+                    _locationChecker.AddCheckedLocation(SecretsLocationNames.SECRET_NOTE_12);
+                }
             }
         }
 
