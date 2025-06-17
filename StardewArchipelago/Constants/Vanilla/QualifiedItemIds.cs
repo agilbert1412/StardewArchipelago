@@ -312,6 +312,19 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string HORSE_FLUTE = QualifiedObjectId(ObjectIds.HORSE_FLUTE);
         public static readonly string MINI_SHIPPING_BIN = QualifiedBigCraftableId(BigCraftableIds.MINI_SHIPPING_BIN);
 
+        public static readonly string CATALOGUE = QualifiedFurnitureId(FurnitureIds.CATALOGUE);
+        public static readonly string FURNITURE_CATALOGUE = QualifiedFurnitureId(FurnitureIds.FURNITURE_CATALOGUE);
+        public static readonly string JOJA_CATALOGUE = QualifiedFurnitureId(FurnitureIds.JOJA_CATALOGUE);
+        public static readonly string JUNIMO_CATALOGUE = QualifiedFurnitureId(FurnitureIds.JUNIMO_CATALOGUE);
+        public static readonly string RETRO_CATALOGUE = QualifiedFurnitureId(FurnitureIds.RETRO_CATALOGUE);
+        public static readonly string TRASH_CATALOGUE = QualifiedFurnitureId(FurnitureIds.TRASH_CATALOGUE);
+        public static readonly string WIZARD_CATALOGUE = QualifiedFurnitureId(FurnitureIds.WIZARD_CATALOGUE);
+
+        public static readonly string[] ALL_CATALOGUES = {
+            CATALOGUE, FURNITURE_CATALOGUE, JOJA_CATALOGUE, JUNIMO_CATALOGUE,
+            RETRO_CATALOGUE, TRASH_CATALOGUE, WIZARD_CATALOGUE,
+        };
+
         public static string QualifiedObjectId(string objectId)
         {
             return QualifyId(OBJECT_QUALIFIER, objectId);

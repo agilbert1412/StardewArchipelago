@@ -58,6 +58,7 @@ namespace StardewArchipelago.Locations.Patcher
         private readonly KrobusShopStockModifier _krobusShopStockModifier;
         private readonly BookShopStockModifier _bookShopStockModifier;
         private readonly QiGemShopStockModifier _qiGemShopStockModifier;
+        private readonly CataloguesShopStockModifier _catalogueShopStockModifier;
 
         public VanillaLocationPatcher(ILogger logger, IModHelper modHelper, Harmony harmony, StardewArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager stardewItemManager)
         {
@@ -78,6 +79,7 @@ namespace StardewArchipelago.Locations.Patcher
             _krobusShopStockModifier = new KrobusShopStockModifier(logger, modHelper, archipelago, stardewItemManager);
             _bookShopStockModifier = new BookShopStockModifier(logger, modHelper, archipelago, stardewItemManager);
             _qiGemShopStockModifier = new QiGemShopStockModifier(logger, modHelper, archipelago, stardewItemManager);
+            _catalogueShopStockModifier = new CataloguesShopStockModifier(logger, modHelper, archipelago, stardewItemManager);
         }
 
         public void ReplaceAllLocationsRewardsWithChecks()
@@ -111,6 +113,7 @@ namespace StardewArchipelago.Locations.Patcher
                 PatchChefAndCraftsanity();
                 PatchKrobusShop();
                 PatchQiGemShop();
+                PatchCatalogueShops();
                 PatchFarmcave();
                 PatchNightWorldEvents();
                 PatchBooks();
@@ -140,6 +143,7 @@ namespace StardewArchipelago.Locations.Patcher
             CleanCraftsanityEvents();
             CleanKrobusEvents();
             CleanQiGemEvents();
+            CleanCatalogueShopEvents();
             CleanBookEvents();
         }
 
@@ -1273,6 +1277,16 @@ namespace StardewArchipelago.Locations.Patcher
         private void CleanQiGemEvents()
         {
             _modHelper.Events.Content.AssetRequested -= _qiGemShopStockModifier.OnShopStockRequested;
+        }
+
+        private void PatchCatalogueShops()
+        {
+            _modHelper.Events.Content.AssetRequested += _catalogueShopStockModifier.OnShopStockRequested;
+        }
+
+        private void CleanCatalogueShopEvents()
+        {
+            _modHelper.Events.Content.AssetRequested -= _catalogueShopStockModifier.OnShopStockRequested;
         }
 
         private void PatchFarmcave()

@@ -16,5 +16,18 @@
         public const string WALL_BASKET = "2425";
         public const string WALL_CACTUS = "2655";
         public const string EXOTIC_DOUBLE_BED = "2514";
+
+        public const string CATALOGUE = "1308";
+        public const string FURNITURE_CATALOGUE = "1226";
+        public const string JOJA_CATALOGUE = "JojaCatalogue";
+        public const string JUNIMO_CATALOGUE = "JunimoCatalogue";
+        public const string RETRO_CATALOGUE = "RetroCatalogue";
+        public const string TRASH_CATALOGUE = "TrashCatalogue";
+        public const string WIZARD_CATALOGUE = "WizardCatalogue";
+
+        public static readonly string[] ALL_CATALOGUES = {
+            CATALOGUE, FURNITURE_CATALOGUE, JOJA_CATALOGUE, JUNIMO_CATALOGUE,
+            RETRO_CATALOGUE, TRASH_CATALOGUE, WIZARD_CATALOGUE,
+        };
     }
 }
