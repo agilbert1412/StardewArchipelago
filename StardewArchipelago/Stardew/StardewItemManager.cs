@@ -461,7 +461,7 @@ namespace StardewArchipelago.Stardew
             foreach (var (id, furnitureInfo) in allFurnitureInformation)
             {
                 var furniture = ParseStardewFurnitureData(id, furnitureInfo);
-
+                
                 if (_furnitureById.ContainsKey(id) || _furnitureByName.ContainsKey(furniture.Name))
                 {
                     continue;
@@ -469,6 +469,11 @@ namespace StardewArchipelago.Stardew
 
                 _furnitureById.Add(id, furniture);
                 _furnitureByName.Add(furniture.Name, furniture);
+                if (IsPascalCaseName(furniture.Name))
+                {
+                    var spacesName = PascalToSpaces(furniture.Name);
+                    _furnitureByName.Add(spacesName, furniture);
+                }
                 if (furniture.Name == "Bed")
                 {
                     _furnitureByName.Add("Single Bed", furniture);
@@ -732,7 +737,7 @@ namespace StardewArchipelago.Stardew
             var type = fields[1];
             var tilesheetSize = fields[2];
             var boundingBoxSize = fields[3];
-            var price = fields[5];
+            var price = int.Parse(fields[5]);
             var rotations = fields.Length > 6 ? fields[6] : "1";
             var displayName = fields.Length > 7 ? fields[7] : name;
             var placementRestriction = fields.Length > 8 ? fields[8] : "";
@@ -929,6 +934,52 @@ namespace StardewArchipelago.Stardew
 
                 yield return "{\"" + stardewItem.Name + "\", \"" + stardewItem.DisplayName + "\"}";
             }
+        }
+        private bool IsPascalCaseName(string furnitureName)
+        {
+            if (string.IsNullOrWhiteSpace(furnitureName) || furnitureName.Length < 4 || furnitureName.Contains(" "))
+            {
+                return false;
+            }
+
+            var firstLetter = furnitureName.Substring(0, 1);
+            if (firstLetter == firstLetter.ToLower())
+            {
+                return false;
+            }
+
+            var ignoreFirstLetter = furnitureName.Substring(1);
+            if (ignoreFirstLetter == ignoreFirstLetter.ToUpper() || ignoreFirstLetter == ignoreFirstLetter.ToLower())
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private string PascalToSpaces(string furnitureName)
+        {
+            var words = new List<string>();
+            var currentWord = "";
+            foreach (var charStr in furnitureName.Select(character => character.ToString()))
+            {
+                if (charStr == charStr.ToUpper())
+                {
+                    if (currentWord.Length > 0)
+                    {
+                        words.Add(currentWord);
+                    }
+                    currentWord = "";
+                }
+
+                currentWord += charStr;
+            }
+            if (currentWord.Length > 0)
+            {
+                words.Add(currentWord);
+            }
+
+            return string.Join(" ", words);
         }
     }
 }

@@ -73,7 +73,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
                 var hasReceivedAnyBuildings = _wizardBuildings.Any(x => _archipelago.HasReceivedItem(x));
                 var hasMagicInk = who.hasMagicInk;
-                var canPurchaseBlueprints = _wizardBuildings.Any(x => _locationChecker.IsLocationMissing($"{x} Blueprint"));
+                var canPurchaseBlueprints = hasMagicInk && _wizardBuildings.Any(x => _locationChecker.IsLocationMissing($"{x} Blueprint"));
 
                 if (!hasReceivedAnyBuildings && !canPurchaseBlueprints)
                 {

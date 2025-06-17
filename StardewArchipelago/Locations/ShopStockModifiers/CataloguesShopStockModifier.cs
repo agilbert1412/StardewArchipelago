@@ -59,7 +59,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
             {
                 var item = shopData.Items[i];
 
-                if (!CATALOGUE_NAMES.ContainsKey(item.Id) && !CATALOGUE_NAMES.ContainsKey(item.ItemId))
+                if (!CATALOGUE_NAMES.ContainsKey(item.Id))
                 {
                     continue;
                 }

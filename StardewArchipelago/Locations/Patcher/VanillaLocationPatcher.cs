@@ -1844,7 +1844,7 @@ namespace StardewArchipelago.Locations.Patcher
             }
 
             _harmony.Patch(
-                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performAction)),
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performAction), new[] { typeof(string[]), typeof(Farmer), typeof(Location)}),
                 prefix: new HarmonyMethod(typeof(CasinoInjections), nameof(CasinoInjections.PerformAction_OfferStatueOfEndlessFortune_Prefix))
             );
 

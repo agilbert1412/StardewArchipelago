@@ -9,6 +9,7 @@ using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Locations;
 using StardewArchipelago.Constants.Vanilla;
+using Netcode;
 
 namespace StardewArchipelago.Locations.ShopStockModifiers
 {
@@ -114,12 +115,12 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
             var createdSpousePortrait = false;
             for (var i = 0; i < cartShopData.Items.Count; i++)
             {
-                createdSpousePortrait = ReplacePortraits(cartShopData, i, createdSpousePortrait);
-                ReplaceTeaSet(cartShopData, i);
+                createdSpousePortrait = ReplacePortraits(cartShopData, ref i, createdSpousePortrait);
+                ReplaceTeaSet(cartShopData, ref i);
             }
         }
 
-        private bool ReplacePortraits(ShopData cartShopData, int i, bool createdSpousePortrait)
+        private bool ReplacePortraits(ShopData cartShopData, ref int i, bool createdSpousePortrait)
         {
             var item = cartShopData.Items[i];
             var portrait = "Portrait";
@@ -129,7 +130,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
                 return createdSpousePortrait;
             }
 
-            var npcName = unqualifiedItemId[unqualifiedItemId.IndexOf(portrait)..];
+            var npcName = unqualifiedItemId[..unqualifiedItemId.IndexOf(portrait)];
             var locationName = $"{Prefix.PURCHASE}{npcName} {portrait}";
 
             var conditions = new[]
@@ -142,18 +143,21 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
 
             var apShopItem = CreateArchipelagoLocation(item, locationName);
             cartShopData.Items.Insert(i, apShopItem);
+            i++;
+
             if (!createdSpousePortrait)
             {
                 var spouseLocationName = "Purchase Spouse Portrait";
                 var apSpouseShopItem = CreateArchipelagoLocation(item, spouseLocationName);
                 apSpouseShopItem.Condition = "PLAYER_HEARTS Current AnyDateable 14";
                 cartShopData.Items.Insert(i, apSpouseShopItem);
+                i++;
                 createdSpousePortrait = true;
             }
             return createdSpousePortrait;
         }
 
-        private void ReplaceTeaSet(ShopData cartShopData, int i)
+        private void ReplaceTeaSet(ShopData cartShopData, ref int i)
         {
             var item = cartShopData.Items[i];
             if (item.ItemId != QualifiedItemIds.TEA_SET)
@@ -167,6 +171,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
 
             var apShopItem = CreateArchipelagoLocation(item, locationName);
             cartShopData.Items.Insert(i, apShopItem);
+            i++;
         }
     }
 }

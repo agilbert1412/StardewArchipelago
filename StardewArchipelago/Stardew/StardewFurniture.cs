@@ -31,7 +31,7 @@ namespace StardewArchipelago.Stardew
 
         public bool IsLupiniPainting => int.TryParse(Id, out var numericId) && numericId % 2 == 0 && numericId >= 1838 && numericId <= 1854;
 
-        public StardewFurniture(string id, string name, string type, string tilesheetSize, string boundingBoxSize, string rotations, string price, string displayName, string placementRestriction) : base(id, name, 0, displayName, "")
+        public StardewFurniture(string id, string name, string type, string tilesheetSize, string boundingBoxSize, string rotations, int price, string displayName, string placementRestriction) : base(id, name, price, displayName, "")
         {
             Type = type;
             TilesheetSize = tilesheetSize;

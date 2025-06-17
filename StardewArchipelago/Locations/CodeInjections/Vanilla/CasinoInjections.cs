@@ -59,7 +59,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 }
 
                 var responses = new List<Response>();
-                if (_locationChecker.IsLocationMissing(STATUE_LOCATION) || _archipelago.HasReceivedItem(""))
+                if (_locationChecker.IsLocationMissing(STATUE_LOCATION) || _archipelago.HasReceivedItem(statue))
                 {
                     responses.Add(new Response("I'll", Game1.content.LoadString("Strings\\Locations:Club_ClubSeller_Yes")));
                 }
@@ -103,6 +103,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 if (Game1.player.Money < 1000000)
                 {
                     Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\Locations:Club_ClubSeller_NotEnoughMoney"));
+                    _archipelago.ScoutStardewLocation(STATUE_LOCATION, true); 
                     return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
