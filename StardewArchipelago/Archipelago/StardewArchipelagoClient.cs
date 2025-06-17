@@ -328,18 +328,6 @@ namespace StardewArchipelago.Archipelago
             return ScoutManyLocations(locationNames, ShouldHint(createAsHint));
         }
 
-        public Dictionary<string, ScoutedLocation> ScoutWalnutLocations(IEnumerable<string> locationNames, bool createAsHint = false)
-        {
-            var allNames = new List<string>();
-            foreach (var locationName in locationNames)
-            {
-                allNames.Add(locationName);
-                allNames.Add(StardewLocationChecker.GetWalnutAlternateName(locationName));
-            }
-
-            return ScoutManyLocations(allNames, ShouldHint(createAsHint));
-        }
-
         public string SendFakeItemMessage(string itemName, string locationName)
         {
             var message = $"Trap Bundle sent {itemName} to {GetPlayerName()} ({locationName})";

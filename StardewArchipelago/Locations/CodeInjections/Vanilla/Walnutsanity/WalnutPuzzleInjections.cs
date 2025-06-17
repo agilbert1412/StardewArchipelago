@@ -14,6 +14,7 @@ using StardewValley.Minigames;
 using StardewValley.Network;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
+using StardewArchipelago.Constants.Locations;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
 {
@@ -45,11 +46,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
-                var goldenCoconutLocation = $"Open Golden Coconut";
+                var goldenCoconutLocation = $"{Prefix.WALNUTSANITY}Open Golden Coconut";
                 if (Game1.netWorldState.Value.GoldenCoconutCracked)
                 {
                     // Just in case
-                    _locationChecker.AddWalnutCheckedLocation(goldenCoconutLocation);
+                    _locationChecker.AddCheckedLocation(goldenCoconutLocation);
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
@@ -92,7 +93,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 }
                 Game1.player.team.MarkCollectedNut("BananaShrine");
                 __instance.bananaShrineNutAwarded.Value = true;
-                CreateLocationDebris("Banana Altar", new Vector2(16.5f, 25f) * 64f, __instance, 0, 1280);
+                CreateLocationDebris($"{Prefix.WALNUTSANITY}Banana Altar", new Vector2(16.5f, 25f) * 64f, __instance, 0, 1280);
                 return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
@@ -157,7 +158,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 }
                 Game1.player.team.MarkCollectedNut("TreeNut");
 
-                DelayedAction.functionAfterDelay(() => CreateLocationDebris("Leo's Tree", new Vector2(10.5f, 7f) * 64f, __instance), 1250);
+                DelayedAction.functionAfterDelay(() => CreateLocationDebris($"{Prefix.WALNUTSANITY}Leo's Tree", new Vector2(10.5f, 7f) * 64f, __instance), 1250);
                 __instance.treeNutObtained.Value = true;
                 return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
@@ -175,7 +176,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             {
                 if (Game1.IsMasterGame)
                 {
-                    CreateLocationDebris("Gem Birds Shrine", new Vector2(24f, 19f) * 64f, __instance, -1);
+                    CreateLocationDebris($"{Prefix.WALNUTSANITY}Gem Birds Shrine", new Vector2(24f, 19f) * 64f, __instance, -1);
                 }
                 if (Game1.currentLocation != __instance)
                 {
@@ -199,7 +200,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
         {
             try
             {
-                var gourmandChecks = new[] { "Gourmand Frog Melon", "Gourmand Frog Wheat", "Gourmand Frog Garlic" };
+                var gourmandChecks = new[]
+                {
+                    $"{Prefix.WALNUTSANITY}Gourmand Frog Melon",
+                    $"{Prefix.WALNUTSANITY}Gourmand Frog Wheat",
+                    $"{Prefix.WALNUTSANITY}Gourmand Frog Garlic",
+                };
                 // CreateLocationDebris(gourmandChecks[__instance.gourmandRequestsFulfilled.Value], new Vector2(4.5f, 4f) * 64f, __instance, 1);
 
                 ++__instance.gourmandRequestsFulfilled.Value;
@@ -209,7 +215,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                     {
                         continue;
                     }
-                    _locationChecker.AddWalnutCheckedLocation(gourmandChecks[i]);
+                    _locationChecker.AddCheckedLocation(gourmandChecks[i]);
                 }
 
                 Game1.player.team.MarkCollectedNut($"IslandGourmand{__instance.gourmandRequestsFulfilled.Value}");
@@ -246,7 +252,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                     }
                     Game1.player.team.MarkCollectedNut(nameof(SandDuggy));
                     var pixelOrigin = new Vector2(__instance.holeLocations[index].X, __instance.holeLocations[index].Y) * 64f;
-                    CreateLocationDebris("Whack A Mole", pixelOrigin, __instance.locationRef.Value, -1);
+                    CreateLocationDebris($"{Prefix.WALNUTSANITY}Whack A Mole", pixelOrigin, __instance.locationRef.Value, -1);
                 }
                 if (Game1.currentLocation != __instance.locationRef.Value)
                 {
@@ -327,7 +333,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                                 if (Game1.IsMasterGame)
                                 {
                                     Game1.player.team.MarkCollectedNut("IslandWestCavePuzzle");
-                                    CreateLocationDebris("Colored Crystals", new Vector2(6f, 4f) * 64f, __instance);
+                                    CreateLocationDebris($"{Prefix.WALNUTSANITY}Colored Crystals", new Vector2(6f, 4f) * 64f, __instance);
                                 }
                                 __instance.completed.Value = true;
                                 if (Game1.currentLocation == __instance)
@@ -478,7 +484,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                     return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
                 Game1.player.team.MarkCollectedNut("IslandLeftPlantRestored");
-                CreateLocationDebris("Purple Flowers Island Survey", new Vector2(1.5f, 3.3f) * 64f, __instance, 1, 256);
+                CreateLocationDebris($"{Prefix.WALNUTSANITY}Purple Flowers Island Survey", new Vector2(1.5f, 3.3f) * 64f, __instance, 1, 256);
                 return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
@@ -547,7 +553,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                     return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
                 Game1.player.team.MarkCollectedNut("IslandRightPlantRestored");
-                CreateLocationDebris("Purple Starfish Island Survey", new Vector2(7.5f, 3.3f) * 64f, __instance, 3, 256);
+                CreateLocationDebris($"{Prefix.WALNUTSANITY}Purple Starfish Island Survey", new Vector2(7.5f, 3.3f) * 64f, __instance, 3, 256);
                 return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
@@ -566,7 +572,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 if (!__instance.centerSkeletonRestored.Value && __instance.isRangeAllTrue(0, 6))
                 {
                     __instance.centerSkeletonRestored.Value = true;
-                    _locationChecker.AddWalnutCheckedLocation("Complete Large Animal Collection");
+                    _locationChecker.AddCheckedLocation($"{Prefix.WALNUTSANITY}Complete Large Animal Collection");
                     __instance.uncollectedRewards.Add(ItemRegistry.Create("(O)69"));
                     Game1.player.team.MarkCollectedNut("IslandCenterSkeletonRestored");
                     __result = true;
@@ -575,7 +581,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 if (!__instance.snakeRestored.Value && __instance.isRangeAllTrue(6, 9))
                 {
                     __instance.snakeRestored.Value = true;
-                    _locationChecker.AddWalnutCheckedLocation("Complete Snake Collection");
+                    _locationChecker.AddCheckedLocation($"{Prefix.WALNUTSANITY}Complete Snake Collection");
                     __instance.uncollectedRewards.Add(ItemRegistry.Create("(O)835"));
                     Game1.player.team.MarkCollectedNut("IslandSnakeRestored");
                     __result = true;
@@ -584,7 +590,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 if (!__instance.batRestored.Value && __instance.piecesDonated[9])
                 {
                     __instance.batRestored.Value = true;
-                    _locationChecker.AddWalnutCheckedLocation("Complete Mummified Bat Collection");
+                    _locationChecker.AddCheckedLocation($"{Prefix.WALNUTSANITY}Complete Mummified Bat Collection");
                     __instance.uncollectedRewards.Add(ItemRegistry.Create("(O)TentKit"));
                     Game1.player.team.MarkCollectedNut("IslandBatRestored");
                     __result = true;
@@ -593,7 +599,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 if (!__instance.frogRestored.Value && __instance.piecesDonated[10])
                 {
                     __instance.frogRestored.Value = true;
-                    _locationChecker.AddWalnutCheckedLocation("Complete Mummified Frog Collection");
+                    _locationChecker.AddCheckedLocation($"{Prefix.WALNUTSANITY}Complete Mummified Frog Collection");
                     __instance.uncollectedRewards.Add(ItemRegistry.Create("(O)926"));
                     Game1.player.team.MarkCollectedNut("IslandFrogRestored");
                     __result = true;
@@ -631,7 +637,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
 
                 Game1.player.team.MarkCollectedNut("TreeNutShot");
                 __instance.treeNutShot.Value = true;
-                CreateLocationDebris("Protruding Tree Walnut", new Vector2(58.5f, 11f) * 64f, __instance);
+                CreateLocationDebris($"{Prefix.WALNUTSANITY}Protruding Tree Walnut", new Vector2(58.5f, 11f) * 64f, __instance);
 
                 __result = true;
                 return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
@@ -659,14 +665,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                     if (!Game1.IsMultiplayer)
                     {
                         __instance.fishedWalnut.Value = true;
-                        __result = CreateLocationItem("Starfish Tide Pool");
+                        __result = CreateLocationItem($"{Prefix.WALNUTSANITY}Starfish Tide Pool");
                         return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                     }
                     __instance.fishWalnutEvent.Fire();
                 }
                 else
                 {
-                    _locationChecker.AddWalnutCheckedLocation("Starfish Tide Pool");
+                    _locationChecker.AddCheckedLocation($"{Prefix.WALNUTSANITY}Starfish Tide Pool");
                 }
 
                 __result = null;
@@ -696,7 +702,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 }
                 Game1.player.team.MarkCollectedNut("Mermaid");
                 __instance.mermaidPuzzleFinished.Value = true;
-                CreateLocationDebris("Mermaid Song", new Vector2(32f, 33f) * 64f, __instance);
+                CreateLocationDebris($"{Prefix.WALNUTSANITY}Mermaid Song", new Vector2(32f, 33f) * 64f, __instance);
 
                 return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
@@ -753,7 +759,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 if (__instance.startingDartCount == 20 && numberOfDartNutsAlreadyDropped == 0 || __instance.startingDartCount == 15 && numberOfDartNutsAlreadyDropped == 1 || __instance.startingDartCount == 10 && numberOfDartNutsAlreadyDropped == 2)
                 {
                     var dialogue = victoryText + Game1.content.LoadString("Strings\\StringsFromMaps:Pirates7_WinPrize");
-                    var dartLocations = new[] { "Pirate Darts 1", "Pirate Darts 2", "Pirate Darts 3" };
+                    var dartLocations = new[]
+                    {
+                        $"{Prefix.WALNUTSANITY}Pirate Darts 1",
+                        $"{Prefix.WALNUTSANITY}Pirate Darts 2",
+                        $"{Prefix.WALNUTSANITY}Pirate Darts 3"
+                    };
                     var dartLocation = dartLocations[numberOfDartNutsAlreadyDropped];
                     Game1.afterDialogues += () => CreateLocationDebris(dartLocation, new Vector2(31, 8) * 64f, Game1.currentLocation);
                     numberOfDartNutsAlreadyDropped++;

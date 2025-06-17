@@ -9,6 +9,7 @@ using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants.Locations;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
 {
@@ -25,7 +26,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             _helper = helper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
-            _archipelago.ScoutWalnutLocations(_digSpotNameMap.Values);
+            _archipelago.ScoutStardewLocations(_digSpotNameMap.Values);
         }
 
         // public override string checkForBuriedItem(int xLocation, int yLocation, bool explosion, bool detectOnly, Farmer who)
@@ -66,21 +67,21 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
 
         private static readonly Dictionary<string, string> _digSpotNameMap = new()
         {
-            { "Buried_IslandWest_62_76", "Starfish Triangle" },
-            { "Buried_IslandWest_43_74", "Starfish Diamond" },
-            { "Buried_IslandWest_30_75", "X in the sand" },
-            { "Buried_IslandWest_21_81", "Diamond Of Indents" },
-            { "Buried_IslandWest_39_24", "Circle Of Grass" },
-            { "Buried_IslandWest_88_14", "Diamond Of Pebbles" },
-            { "Buried_IslandNorth_26_81", "Big Circle Of Stones" },
-            { "Buried_IslandNorth_42_77", "Diamond Of Grass" },
-            { "Buried_IslandNorth_57_79", "Small Circle Of Stones" },
-            { "Buried_IslandNorth_62_54", "Patch Of Sand" },
-            { "Buried_IslandNorth_19_39", "Crooked Circle Of Stones" },
-            { "Buried_IslandNorth_54_21", "Arc Of Stones" },
-            { "Buried_IslandNorth_19_13", "Northmost Point Circle Of Stones" },
-            { "Buried_IslandSouthEast_25_17", "Diamond Of Yellow Starfish" },
-            { "Buried_IslandSouthEastCave_36_26", "Pirate Cove Patch Of Sand" },
+            { "Buried_IslandWest_62_76", $"{Prefix.WALNUTSANITY}Starfish Triangle" },
+            { "Buried_IslandWest_43_74", $"{Prefix.WALNUTSANITY}Starfish Diamond" },
+            { "Buried_IslandWest_30_75", $"{Prefix.WALNUTSANITY}X in the sand" },
+            { "Buried_IslandWest_21_81", $"{Prefix.WALNUTSANITY}Diamond Of Indents" },
+            { "Buried_IslandWest_39_24", $"{Prefix.WALNUTSANITY}Circle Of Grass" },
+            { "Buried_IslandWest_88_14", $"{Prefix.WALNUTSANITY}Diamond Of Pebbles" },
+            { "Buried_IslandNorth_26_81", $"{Prefix.WALNUTSANITY}Big Circle Of Stones" },
+            { "Buried_IslandNorth_42_77", $"{Prefix.WALNUTSANITY}Diamond Of Grass" },
+            { "Buried_IslandNorth_57_79", $"{Prefix.WALNUTSANITY}Small Circle Of Stones" },
+            { "Buried_IslandNorth_62_54", $"{Prefix.WALNUTSANITY}Patch Of Sand" },
+            { "Buried_IslandNorth_19_39", $"{Prefix.WALNUTSANITY}Crooked Circle Of Stones" },
+            { "Buried_IslandNorth_54_21", $"{Prefix.WALNUTSANITY}Arc Of Stones" },
+            { "Buried_IslandNorth_19_13", $"{Prefix.WALNUTSANITY}Northmost Point Circle Of Stones" },
+            { "Buried_IslandSouthEast_25_17", $"{Prefix.WALNUTSANITY}Diamond Of Yellow Starfish" },
+            { "Buried_IslandSouthEastCave_36_26", $"{Prefix.WALNUTSANITY}Pirate Cove Patch Of Sand" },
         };
     }
 }

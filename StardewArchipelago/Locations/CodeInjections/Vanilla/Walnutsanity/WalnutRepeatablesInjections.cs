@@ -15,6 +15,7 @@ using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants.Locations;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
 {
@@ -88,7 +89,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 var random = Utility.CreateRandom(seedA, seedB, seedC);
 
                 var baseFishCallBack = () => CallBaseGetFish(__instance, millisecondsAfterNibble, bait, waterDepth, who, baitPotency, bobberTile, locationName);
-                __result = RollForRepeatableWalnutOrCheck(WALNUT_FISHING_KEY, "Fishing Walnut", random, WALNUT_BASE_CHANCE_FISHING, INFINITY_WALNUT_CHANCE_REDUCTION_FISHING, baseFishCallBack);
+                __result = RollForRepeatableWalnutOrCheck(WALNUT_FISHING_KEY, $"{Prefix.WALNUTSANITY}Fishing Walnut", random, WALNUT_BASE_CHANCE_FISHING, INFINITY_WALNUT_CHANCE_REDUCTION_FISHING, baseFishCallBack);
                 return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
@@ -137,7 +138,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 __instance.destroyCrop(false);
                 __result = true;
 
-                RollForRepeatableWalnutOrCheck(WALNUT_FARMING_KEY, "Harvesting Walnut", __instance.Location, tileLocation.X, tileLocation.Y, Game1.random, WALNUT_BASE_CHANCE_FARMING, INFINITY_WALNUT_CHANCE_REDUCTION_FARMING);
+                RollForRepeatableWalnutOrCheck(WALNUT_FARMING_KEY, $"{Prefix.WALNUTSANITY}Harvesting Walnut", __instance.Location, tileLocation.X, tileLocation.Y, Game1.random, WALNUT_BASE_CHANCE_FARMING, INFINITY_WALNUT_CHANCE_REDUCTION_FARMING);
                 return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
@@ -187,7 +188,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 __instance.shake((float)Math.PI / 32f, (float)Math.PI / 40f, (double)tileLocation.X * 64.0 < (double)Game1.player.Position.X);
                 __result = false;
 
-                RollForRepeatableWalnutOrCheck(WALNUT_FARMING_KEY, "Harvesting Walnut", __instance.Location, tileLocation.X, tileLocation.Y, Game1.random, WALNUT_BASE_CHANCE_FARMING, INFINITY_WALNUT_CHANCE_REDUCTION_FARMING);
+                RollForRepeatableWalnutOrCheck(WALNUT_FARMING_KEY, $"{Prefix.WALNUTSANITY}Harvesting Walnut", __instance.Location, tileLocation.X, tileLocation.Y, Game1.random, WALNUT_BASE_CHANCE_FARMING, INFINITY_WALNUT_CHANCE_REDUCTION_FARMING);
                 return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
@@ -221,7 +222,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 who?.gainExperience(3, 5);
                 __result = true;
 
-                RollForRepeatableWalnutOrCheck(WALNUT_MUSSEL_KEY, "Mussel Node Walnut", __instance, x, y, r, WALNUT_BASE_CHANCE_MUSSEL, INFINITY_WALNUT_CHANCE_REDUCTION_MUSSEL);
+                RollForRepeatableWalnutOrCheck(WALNUT_MUSSEL_KEY, $"{Prefix.WALNUTSANITY}Mussel Node Walnut", __instance, x, y, r, WALNUT_BASE_CHANCE_MUSSEL, INFINITY_WALNUT_CHANCE_REDUCTION_MUSSEL);
 
                 return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
@@ -271,7 +272,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
 
             if (key == WALNUT_TIGER_SLIMES_KEY)
             {
-                CreateLocationDebris("Tiger Slime Walnut", new Vector2(x, y), location);
+                CreateLocationDebris($"{Prefix.WALNUTSANITY}Tiger Slime Walnut", new Vector2(x, y), location);
                 __instance.limitedNutDrops[key] = numberAlreadyDropped + 1;
                 return true;
             }
@@ -279,21 +280,21 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             if (key == WALNUT_VOLCANO_BARREL_KEY)
             {
                 var newNumber = numberAlreadyDropped + 1;
-                CreateLocationDebris($"Volcano Crates Walnut {newNumber}", new Vector2(x, y), location);
+                CreateLocationDebris($"{Prefix.WALNUTSANITY}Volcano Crates Walnut {newNumber}", new Vector2(x, y), location);
                 __instance.limitedNutDrops[key] = newNumber;
                 return true;
             }
 
             if (key == WALNUT_VOLCANO_COMMON_CHEST_KEY)
             {
-                CreateLocationDebris("Volcano Common Chest Walnut", new Vector2(x, y), location);
+                CreateLocationDebris($"{Prefix.WALNUTSANITY}Volcano Common Chest Walnut", new Vector2(x, y), location);
                 __instance.limitedNutDrops[key] = numberAlreadyDropped + 1;
                 return true;
             }
 
             if (key == WALNUT_VOLCANO_RARE_CHEST_KEY)
             {
-                CreateLocationDebris("Volcano Rare Chest Walnut", new Vector2(x, y), location);
+                CreateLocationDebris($"{Prefix.WALNUTSANITY}Volcano Rare Chest Walnut", new Vector2(x, y), location);
                 __instance.limitedNutDrops[key] = numberAlreadyDropped + 1;
                 return true;
             }
@@ -310,21 +311,21 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
 
             if (key == WALNUT_JOURNAL_SCRAP_4)
             {
-                CreateLocationDebris("Journal Scrap #4", new Vector2(x, y), location);
+                CreateLocationDebris($"{Prefix.WALNUTSANITY}Journal Scrap #4", new Vector2(x, y), location);
                 __instance.limitedNutDrops[key] = numberAlreadyDropped + 1;
                 return true;
             }
 
             if (key == WALNUT_JOURNAL_SCRAP_6)
             {
-                CreateLocationDebris("Journal Scrap #6", new Vector2(x, y), location);
+                CreateLocationDebris($"{Prefix.WALNUTSANITY}Journal Scrap #6", new Vector2(x, y), location);
                 __instance.limitedNutDrops[key] = numberAlreadyDropped + 1;
                 return true;
             }
 
             if (key == WALNUT_JOURNAL_SCRAP_10)
             {
-                CreateLocationDebris("Journal Scrap #10", new Vector2(x, y), location);
+                CreateLocationDebris($"{Prefix.WALNUTSANITY}Journal Scrap #10", new Vector2(x, y), location);
                 __instance.limitedNutDrops[key] = numberAlreadyDropped + 1;
                 return true;
             }
@@ -344,7 +345,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
 
                 if (who != null)
                 {
-                    RollForRepeatableWalnutOrCheck(WALNUT_VOLCANO_MINING_KEY, "Volcano Rocks Walnut", __instance, x, y, r, WALNUT_BASE_CHANCE_VOLCANO_MINING, INFINITY_WALNUT_CHANCE_REDUCTION_VOLCANO_MINING);
+                    RollForRepeatableWalnutOrCheck(WALNUT_VOLCANO_MINING_KEY, $"{Prefix.WALNUTSANITY}Volcano Rocks Walnut", __instance, x, y, r, WALNUT_BASE_CHANCE_VOLCANO_MINING, INFINITY_WALNUT_CHANCE_REDUCTION_VOLCANO_MINING);
                 }
 
                 __result = CallBaseBreakStone(__instance, stoneId, x, y, who, r);
@@ -374,7 +375,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             try
             {
                 CallBaseMonsterDrop(__instance, monster, x, y, who);
-                RollForRepeatableWalnutOrCheck(WALNUT_VOLCANO_MONSTER_KEY, "Volcano Monsters Walnut", __instance, new Vector2(x, y), Game1.random, WALNUT_BASE_CHANCE_VOLCANO_MONSTER, INFINITY_WALNUT_CHANCE_REDUCTION_VOLCANO_MONSTER);
+                RollForRepeatableWalnutOrCheck(WALNUT_VOLCANO_MONSTER_KEY, $"{Prefix.WALNUTSANITY}Volcano Monsters Walnut", __instance, new Vector2(x, y), Game1.random, WALNUT_BASE_CHANCE_VOLCANO_MONSTER, INFINITY_WALNUT_CHANCE_REDUCTION_VOLCANO_MONSTER);
                 return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)

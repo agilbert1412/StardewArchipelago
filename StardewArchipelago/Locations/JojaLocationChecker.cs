@@ -22,24 +22,6 @@ namespace StardewArchipelago.Locations
             _checkedLocationsByTag = new Dictionary<string, int>();
         }
 
-        public void AddWalnutCheckedLocation(string locationName)
-        {
-            _locationsCheckedByJoja.Add(locationName);
-
-            var locations = new List<string> { locationName };
-            if (locationName.StartsWith(Prefix.WALNUTSANITY))
-            {
-                // locations.Add(locationName[Prefix.WALNUTSANITY.Length..]);
-            }
-            else
-            {
-                // locations.Add($"{Prefix.WALNUTSANITY}{locationName}");
-            }
-
-            _locationChecker.RememberCheckedLocations(locations.ToArray());
-            _locationChecker.SendAllLocationChecks();
-        }
-
         public void AddCheckedLocations(string[] locationNames)
         {
             _locationsCheckedByJoja.AddRange(locationNames);

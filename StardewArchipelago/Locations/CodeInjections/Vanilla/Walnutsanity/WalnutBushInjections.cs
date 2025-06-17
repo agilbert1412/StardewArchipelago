@@ -12,6 +12,7 @@ using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants.Locations;
 using StardewArchipelago.Logging;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
@@ -32,7 +33,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             _locationChecker = locationChecker;
             _bushtexture = ArchipelagoTextures.GetArchipelagoBush(logger, helper);
             Utility.ForEachLocation((x) => SetupWalnutsanityBushes(x), true, true);
-            _archipelago.ScoutWalnutLocations(_bushNameMap.Values);
+            _archipelago.ScoutStardewLocations(_bushNameMap.Values);
         }
 
         // public string GetShakeOffItem()
@@ -144,28 +145,28 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
 
         private static readonly Dictionary<string, string> _bushNameMap = new()
         {
-            { "Bush_IslandEast_17_37", "Jungle Bush" },
-            { "Bush_IslandShrine_23_34", "Gem Birds Bush" },
-            { "Bush_CaptainRoom_2_4", "Shipwreck Bush" },
-            { "Bush_IslandWest_38_56", "Bush Behind Coconut Tree" },
-            { "Bush_IslandWest_25_30", "Walnut Room Bush" },
-            { "Bush_IslandWest_15_3", "Coast Bush" },
-            { "Bush_IslandWest_31_24", "Bush Behind Mahogany Tree" },
-            { "Bush_IslandWest_54_18", "Below Colored Crystals Cave Bush" },
-            { "Bush_IslandWest_64_30", "Cliff Edge Bush" },
-            { "Bush_IslandWest_104_3", "Farm Parrot Express Bush" },
-            { "Bush_IslandWest_75_29", "Farmhouse Cliff Bush" },
-            { "Bush_IslandNorth_9_84", "Grove Bush" },
-            { "Bush_IslandNorth_4_42", "Above Dig Site Bush" },
-            { "Bush_IslandNorth_45_38", "Above Field Office Bush 1" },
-            { "Bush_IslandNorth_47_40", "Above Field Office Bush 2" },
-            { "Bush_IslandNorth_56_27", "Bush Behind Volcano Tree" },
-            { "Bush_IslandNorth_20_26", "Hidden Passage Bush" },
-            { "Bush_IslandNorth_13_33", "Secret Beach Bush 1" },
-            { "Bush_IslandNorth_5_30", "Secret Beach Bush 2" },
-            { "Bush_Caldera_28_36", "Forge Entrance Bush" },
-            { "Bush_Caldera_9_34", "Forge Exit Bush" },
-            { "Bush_IslandSouth_31_5", "Cliff Over Island South Bush" },
+            { "Bush_IslandEast_17_37", $"{Prefix.WALNUTSANITY}Jungle Bush" },
+            { "Bush_IslandShrine_23_34", $"{Prefix.WALNUTSANITY}Gem Birds Bush" },
+            { "Bush_CaptainRoom_2_4", $"{Prefix.WALNUTSANITY}Shipwreck Bush" },
+            { "Bush_IslandWest_38_56", $"{Prefix.WALNUTSANITY}Bush Behind Coconut Tree" },
+            { "Bush_IslandWest_25_30", $"{Prefix.WALNUTSANITY}Walnut Room Bush" },
+            { "Bush_IslandWest_15_3", $"{Prefix.WALNUTSANITY}Coast Bush" },
+            { "Bush_IslandWest_31_24", $"{Prefix.WALNUTSANITY}Bush Behind Mahogany Tree" },
+            { "Bush_IslandWest_54_18", $"{Prefix.WALNUTSANITY}Below Colored Crystals Cave Bush" },
+            { "Bush_IslandWest_64_30", $"{Prefix.WALNUTSANITY}Cliff Edge Bush" },
+            { "Bush_IslandWest_104_3", $"{Prefix.WALNUTSANITY}Farm Parrot Express Bush" },
+            { "Bush_IslandWest_75_29", $"{Prefix.WALNUTSANITY}Farmhouse Cliff Bush" },
+            { "Bush_IslandNorth_9_84", $"{Prefix.WALNUTSANITY}Grove Bush" },
+            { "Bush_IslandNorth_4_42", $"{Prefix.WALNUTSANITY}Above Dig Site Bush" },
+            { "Bush_IslandNorth_45_38", $"{Prefix.WALNUTSANITY}Above Field Office Bush 1" },
+            { "Bush_IslandNorth_47_40", $"{Prefix.WALNUTSANITY}Above Field Office Bush 2" },
+            { "Bush_IslandNorth_56_27", $"{Prefix.WALNUTSANITY}Bush Behind Volcano Tree" },
+            { "Bush_IslandNorth_20_26", $"{Prefix.WALNUTSANITY}Hidden Passage Bush" },
+            { "Bush_IslandNorth_13_33", $"{Prefix.WALNUTSANITY}Secret Beach Bush 1" },
+            { "Bush_IslandNorth_5_30", $"{Prefix.WALNUTSANITY}Secret Beach Bush 2" },
+            { "Bush_Caldera_28_36", $"{Prefix.WALNUTSANITY}Forge Entrance Bush" },
+            { "Bush_Caldera_9_34", $"{Prefix.WALNUTSANITY}Forge Exit Bush" },
+            { "Bush_IslandSouth_31_5", $"{Prefix.WALNUTSANITY}Cliff Over Island South Bush" },
         };
     }
 }

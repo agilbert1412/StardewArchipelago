@@ -20,23 +20,6 @@ namespace StardewArchipelago.Locations
             _locationNameMatcher = new LocationNameMatcher();
         }
 
-        public virtual void AddWalnutCheckedLocation(string locationName)
-        {
-            var locations = new List<string> { locationName };
-            locations.Add(GetWalnutAlternateName(locationName));
-            base.AddCheckedLocations(locations.ToArray());
-        }
-
-        public static string GetWalnutAlternateName(string locationName)
-        {
-            if (locationName.StartsWith(Prefix.WALNUTSANITY))
-            {
-                return locationName[Prefix.WALNUTSANITY.Length..];
-            }
-
-            return $"{Prefix.WALNUTSANITY}{locationName}";
-        }
-
         public override void SendAllLocationChecks()
         {
 #pragma warning disable CS0162 // Unreachable code detected

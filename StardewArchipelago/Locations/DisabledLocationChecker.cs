@@ -19,27 +19,6 @@ namespace StardewArchipelago.Locations
             LocationsAlreadyAttemptedToCheck = new HashSet<string>(locationsAlreadyFailedToCheck);
         }
 
-        public override void AddWalnutCheckedLocation(string locationName)
-        {
-            if (LocationsAlreadyAttemptedToCheck.Contains(locationName))
-            {
-                return;
-            }
-
-            var locations = new List<string> { locationName };
-            if (locationName.StartsWith(Prefix.WALNUTSANITY))
-            {
-                locations.Add(locationName[Prefix.WALNUTSANITY.Length..]);
-            }
-            else
-            {
-                locations.Add($"{Prefix.WALNUTSANITY}{locationName}");
-            }
-            Game1.chatBox.addMessage($"Did you know that Joja also sells golden walnuts?. Pay us (a visit)!", JojaConstants.JOJA_COLOR);
-            LocationsAlreadyAttemptedToCheck.Add(locationName);
-            return;
-        }
-
         public override void AddCheckedLocations(string[] locationNames)
         {
             if (locationNames.All(x => LocationsAlreadyAttemptedToCheck.Contains(x)))
