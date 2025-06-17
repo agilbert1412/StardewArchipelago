@@ -6,6 +6,6 @@
         public const string BUILDING_BIG = "Big ";
         public const string BUILDING_DELUXE = "Deluxe ";
         public const string WALNUTSANITY = "Walnutsanity: ";
-        public const string PURCHASE_CATALOGUE = "Purchase ";
+        public const string PURCHASE = "Purchase ";
     }
 }

@@ -1,20 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
-using StardewValley;
 using StardewValley.GameData.Shops;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
+using StardewArchipelago.Constants.Locations;
 
 namespace StardewArchipelago.Locations.ShopStockModifiers
 {
     public class QiGemShopStockModifier : ShopStockModifier
     {
-        private const string PurchaseEndgameLocationPrefix = "Purchase ";
         private const string HorseFluteName = "Horse Flute";
         private const string StocklistName = "Pierre's Missing Stocklist";
         private const string KeyToTheTownName = "Key To The Town";
@@ -72,7 +70,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
                 }
 
                 var itemToReplace = itemsToReplace[item.Id];
-                var locationName = $"{PurchaseEndgameLocationPrefix}{itemToReplace}";
+                var locationName = $"{Prefix.PURCHASE}{itemToReplace}";
 
                 item.Condition = GameStateConditionProvider.CreateHasReceivedItemCondition(itemToReplace);
                 // shopData.Items.RemoveAt(i);

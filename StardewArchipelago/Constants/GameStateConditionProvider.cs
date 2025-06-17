@@ -67,7 +67,6 @@ namespace StardewArchipelago.Constants
             return ConcatenateConditions(noBuildingConditions, hasBuilding);
         }
 
-
         public static string GetReceivedBuildingCondition(string buildingName)
         {
             var itemName = buildingName;
@@ -134,7 +133,7 @@ namespace StardewArchipelago.Constants
             return string.Join(',', condition.Split(',').Where(filter));
         }
 
-        private static string ConcatenateConditions(IReadOnlyList<string> conditions, bool invert)
+        public static string ConcatenateConditions(IReadOnlyList<string> conditions, bool invert)
         {
             if (conditions == null || !conditions.Any())
             {

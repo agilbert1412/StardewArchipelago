@@ -7,6 +7,8 @@ using StardewModdingAPI.Events;
 using StardewValley.GameData.Shops;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants.Locations;
+using StardewArchipelago.Constants.Vanilla;
 
 namespace StardewArchipelago.Locations.ShopStockModifiers
 {
@@ -31,6 +33,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
                     AddMetalDetectorItems(cartShopData);
                     AddChecks(cartShopData);
                     RemoveWeddingRingCondition(cartShopData);
+                    ReplaceEndgameLocationItems(cartShopData);
                 },
                 AssetEditPriority.Late - 1
             );
@@ -99,6 +102,71 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
 
                 item.Condition = GameStateConditionProvider.RemoveCondition(item.Condition, "IS_MULTIPLAYER");
             }
+        }
+
+        private void ReplaceEndgameLocationItems(ShopData cartShopData)
+        {
+            if (!_archipelago.SlotData.IncludeEndgameLocations)
+            {
+                return;
+            }
+
+            var createdSpousePortrait = false;
+            for (var i = 0; i < cartShopData.Items.Count; i++)
+            {
+                createdSpousePortrait = ReplacePortraits(cartShopData, i, createdSpousePortrait);
+                ReplaceTeaSet(cartShopData, i);
+            }
+        }
+
+        private bool ReplacePortraits(ShopData cartShopData, int i, bool createdSpousePortrait)
+        {
+            var item = cartShopData.Items[i];
+            var portrait = "Portrait";
+            var unqualifiedItemId = QualifiedItemIds.UnqualifyId(item.ItemId, out var qualifier);
+            if (qualifier != QualifiedItemIds.FURNITURE_QUALIFIER || !unqualifiedItemId.EndsWith(portrait))
+            {
+                return createdSpousePortrait;
+            }
+
+            var npcName = unqualifiedItemId[unqualifiedItemId.IndexOf(portrait)..];
+            var locationName = $"{Prefix.PURCHASE}{npcName} {portrait}";
+
+            var conditions = new[]
+            {
+                item.Condition,
+                GameStateConditionProvider.CreateHasReceivedItemCondition($"{npcName} {portrait}"),
+            };
+            item.Condition = GameStateConditionProvider.ConcatenateConditions(conditions, false);
+            // shopData.Items.RemoveAt(i);
+
+            var apShopItem = CreateArchipelagoLocation(item, locationName);
+            cartShopData.Items.Insert(i, apShopItem);
+            if (!createdSpousePortrait)
+            {
+                var spouseLocationName = "Purchase Spouse Portrait";
+                var apSpouseShopItem = CreateArchipelagoLocation(item, spouseLocationName);
+                apSpouseShopItem.Condition = "PLAYER_HEARTS Current AnyDateable 14";
+                cartShopData.Items.Insert(i, apSpouseShopItem);
+                createdSpousePortrait = true;
+            }
+            return createdSpousePortrait;
+        }
+
+        private void ReplaceTeaSet(ShopData cartShopData, int i)
+        {
+            var item = cartShopData.Items[i];
+            if (item.ItemId != QualifiedItemIds.TEA_SET)
+            {
+                return;
+            }
+            
+            var locationName = $"{Prefix.PURCHASE}Tea Set";
+            
+            // shopData.Items.RemoveAt(i);
+
+            var apShopItem = CreateArchipelagoLocation(item, locationName);
+            cartShopData.Items.Insert(i, apShopItem);
         }
     }
 }

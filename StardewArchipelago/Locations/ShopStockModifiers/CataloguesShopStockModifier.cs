@@ -4,11 +4,9 @@ using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
-using StardewValley;
 using StardewValley.GameData.Shops;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.Constants;
 
 namespace StardewArchipelago.Locations.ShopStockModifiers
@@ -72,7 +70,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
                     catalogueName = CATALOGUE_NAMES[item.ItemId];
                 }
                 
-                var locationName = $"{Prefix.PURCHASE_CATALOGUE}{catalogueName}";
+                var locationName = $"{Prefix.PURCHASE}{catalogueName}";
 
                 item.Condition = GameStateConditionProvider.CreateHasReceivedItemCondition(catalogueName);
                 // shopData.Items.RemoveAt(i);

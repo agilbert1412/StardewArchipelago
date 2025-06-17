@@ -14,7 +14,6 @@ using Object = StardewValley.Object;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
-using Newtonsoft.Json.Linq;
 
 namespace StardewArchipelago.Locations.ShopStockModifiers
 {
