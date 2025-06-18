@@ -72,7 +72,8 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
                 
                 var locationName = $"{Prefix.PURCHASE}{catalogueName}";
 
-                item.Condition = GameStateConditionProvider.CreateHasReceivedItemCondition(catalogueName);
+                item.Condition = item.Condition.AddCondition(GameStateConditionProvider.CreateHasReceivedItemCondition(catalogueName));
+                
                 // shopData.Items.RemoveAt(i);
 
                 var apShopItem = CreateArchipelagoLocation(item, locationName);

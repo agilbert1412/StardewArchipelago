@@ -140,6 +140,8 @@ namespace StardewArchipelago.Constants
                 return "";
             }
 
+            conditions = conditions.Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
+
             if (invert)
             {
                 if (conditions.Count == 1)
@@ -163,6 +165,18 @@ namespace StardewArchipelago.Constants
         private static string InvertCondition(string condition)
         {
             return $"!{condition}";
+        }
+
+        public static string AddCondition(this string existingCondition, params string[] newConditions)
+        {
+            var conditions = new List<string>()
+            {
+                existingCondition,
+            };
+            conditions.AddRange(newConditions);
+
+            var combinedConditions = ConcatenateConditions(conditions, false);
+            return combinedConditions;
         }
     }
 }

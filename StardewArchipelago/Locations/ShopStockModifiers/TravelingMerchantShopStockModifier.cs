@@ -133,12 +133,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
             var npcName = unqualifiedItemId[..unqualifiedItemId.IndexOf(portrait)];
             var locationName = $"{Prefix.PURCHASE}{npcName} {portrait}";
 
-            var conditions = new[]
-            {
-                item.Condition,
-                GameStateConditionProvider.CreateHasReceivedItemCondition($"{npcName} {portrait}"),
-            };
-            item.Condition = GameStateConditionProvider.ConcatenateConditions(conditions, false);
+            item.Condition = item.Condition.AddCondition(GameStateConditionProvider.CreateHasReceivedItemCondition($"{npcName} {portrait}"));
             // shopData.Items.RemoveAt(i);
 
             var apShopItem = CreateArchipelagoLocation(item, locationName);
