@@ -7,6 +7,7 @@ using StardewModdingAPI.Events;
 using StardewValley.GameData.Shops;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.Constants.Locations;
 using StardewArchipelago.Constants.Vanilla;
 
@@ -132,7 +133,10 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
             var npcName = unqualifiedItemId[..unqualifiedItemId.IndexOf(portrait)];
             var locationName = $"{Prefix.PURCHASE}{npcName} {portrait}";
 
-            item.Condition = item.Condition.AddCondition(GameStateConditionProvider.CreateHasReceivedItemCondition($"{npcName} {portrait}"));
+            if (_archipelago.SlotData.Friendsanity == Friendsanity.AllWithMarriage)
+            {
+                item.Condition = item.Condition.AddCondition(GameStateConditionProvider.CreateHasReceivedItemCondition($"{npcName} {portrait}"));
+            }
             // shopData.Items.RemoveAt(i);
 
             var apShopItem = CreateArchipelagoLocation(item, locationName);
