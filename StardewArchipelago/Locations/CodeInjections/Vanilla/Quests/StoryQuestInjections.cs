@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Modded;
@@ -66,7 +67,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
 
             if (!quest.dailyQuest.Value)
             {
-                _locationChecker.AddCheckedLocation(englishQuestName);
+                _locationChecker.AddCheckedLocation($"Quest: {englishQuestName}");
                 QuestInjections.OriginalQuestCompleteCode(quest);
                 runOriginal = MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 return true;
@@ -103,7 +104,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
                 {
                     return;
                 }
-                _locationChecker.AddCheckedLocation(englishQuestName);
+                _locationChecker.AddCheckedLocation($"Quest: {englishQuestName}");
                 SecretNotesInjections.TryHandleQuestComplete(quest, out _);
 
                 return;
@@ -142,7 +143,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
 
                 Game1.player.mailReceived.Add("TH_LumberPile");
                 Game1.player.removeQuest("5");
-                _locationChecker.AddCheckedLocations(new [] {"The Mysterious Qi", SecretsLocationNames.SECRET_NOTE_22});
+                var locations = new[] { $"Quest: The Mysterious Qi", SecretsLocationNames.SECRET_NOTE_22 };
+                _locationChecker.AddCheckedLocations(locations);
 
                 __result = true;
                 return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
@@ -274,7 +276,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
             {
                 var afterGlassMethod = _helper.Reflection.GetMethod(__instance, "mgThief_afterGlass");
                 Game1.player.removeQuest("31");
-                _locationChecker.AddCheckedLocation("A Winter Mystery");
+                _locationChecker.AddCheckedLocation("Quest: A Winter Mystery");
                 afterGlassMethod.Invoke();
                 return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
@@ -390,7 +392,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
-                _locationChecker.AddCheckedLocation("Cryptic Note");
+                _locationChecker.AddCheckedLocation("Quest: Cryptic Note");
                 _locationChecker.AddCheckedLocation(SecretsLocationNames.SECRET_NOTE_10);
 
                 if (!Game1.player.mailReceived.Contains("qiCave"))

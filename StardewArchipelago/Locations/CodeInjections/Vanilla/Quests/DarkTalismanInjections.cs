@@ -168,7 +168,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
                     return;
                 }
 
-                _locationChecker.AddCheckedLocation($"Magic Ink");
+                _locationChecker.AddCheckedLocation($"Quest: Magic Ink");
                 who.hasMagicInk = _archipelago.HasReceivedItem("Magic Ink");
                 return;
             }

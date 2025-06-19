@@ -24,7 +24,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
         private const string RAILROAD_KEY = "Clint2Again";
         private const string RAILROAD_BOULDER_ID = "8050108";
         private const string IRIDIUM_BOMB_ID = "8050109";
-        private const string LANCE_CHEST_LOCATION = "Monster Crops";
+        private const string LANCE_CHEST_LOCATION = "Quest: Monster Crops";
         private const string MONSTER_ERADICATION_AP_PREFIX = "Monster Eradication: ";
 
         private const string APPLES_NAME = "Apples";
