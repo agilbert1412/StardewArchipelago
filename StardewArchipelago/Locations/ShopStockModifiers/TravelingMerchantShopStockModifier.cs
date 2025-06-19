@@ -9,7 +9,6 @@ using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Locations;
 using StardewArchipelago.Constants.Vanilla;
-using Netcode;
 
 namespace StardewArchipelago.Locations.ShopStockModifiers
 {

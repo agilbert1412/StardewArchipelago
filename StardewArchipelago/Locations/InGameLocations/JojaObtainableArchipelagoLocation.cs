@@ -1,7 +1,6 @@
 ﻿using System;
 using Archipelago.MultiClient.Net.Models;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
-using KaitoKid.ArchipelagoUtilities.Net.ItemSprites;
 using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;

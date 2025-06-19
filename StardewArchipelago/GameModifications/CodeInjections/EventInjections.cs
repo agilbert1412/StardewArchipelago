@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Linq;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewValley;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using StardewArchipelago.Locations;
 using StardewValley.GameData;
-using StardewValley.Extensions;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
 {

@@ -1,5 +1,4 @@
-﻿using KaitoKid.ArchipelagoUtilities.Net.Client;
-using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+﻿using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
 using StardewValley;
@@ -7,11 +6,7 @@ using StardewValley.Locations;
 using StardewValley.TerrainFeatures;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
-using xTile.Dimensions;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
 {

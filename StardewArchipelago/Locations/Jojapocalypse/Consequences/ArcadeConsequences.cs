@@ -4,9 +4,7 @@ using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago.ApworldData;
-using StardewArchipelago.Constants.Vanilla;
 using StardewModdingAPI;
-using StardewValley;
 using StardewValley.Minigames;
 using static StardewValley.Minigames.AbigailGame;
 

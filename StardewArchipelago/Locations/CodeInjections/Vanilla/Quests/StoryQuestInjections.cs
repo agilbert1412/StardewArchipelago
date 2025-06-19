@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Modded;

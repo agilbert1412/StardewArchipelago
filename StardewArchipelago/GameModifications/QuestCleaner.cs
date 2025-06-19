@@ -1,5 +1,4 @@
-﻿using KaitoKid.ArchipelagoUtilities.Net;
-using StardewArchipelago.Locations;
+﻿using StardewArchipelago.Locations;
 using StardewValley;
 using StardewValley.Quests;
 

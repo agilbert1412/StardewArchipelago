@@ -1,10 +1,7 @@
-﻿using System;
-using KaitoKid.ArchipelagoUtilities.Net.Client;
+﻿using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago.ApworldData;
 using StardewModdingAPI;
-using StardewValley;
-using StardewValley.Tools;
 
 namespace StardewArchipelago.Locations.Jojapocalypse.Consequences
 {

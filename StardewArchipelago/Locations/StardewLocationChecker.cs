@@ -2,9 +2,7 @@
 using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
-using StardewArchipelago.Constants.Locations;
 using StardewArchipelago.Goals;
-using xTile.Dimensions;
 
 namespace StardewArchipelago.Locations
 {

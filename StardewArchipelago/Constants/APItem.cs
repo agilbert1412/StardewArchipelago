@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-
-namespace StardewArchipelago.Constants
+﻿namespace StardewArchipelago.Constants
 {
     public static class APItem
     {

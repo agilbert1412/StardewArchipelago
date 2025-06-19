@@ -17,7 +17,6 @@ using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Extensions;
 using StardewArchipelago.GameModifications.MoveLink;
 using StardewArchipelago.GameModifications.Testing;
-using StardewArchipelago.Locations;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Extensions;

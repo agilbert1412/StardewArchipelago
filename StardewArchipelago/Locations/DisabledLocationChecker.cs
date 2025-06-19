@@ -2,8 +2,6 @@
 using System.Linq;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
-using Microsoft.Xna.Framework;
-using StardewArchipelago.Constants.Locations;
 using StardewArchipelago.Locations.Jojapocalypse;
 using StardewValley;
 using StardewValley.Extensions;

@@ -5,14 +5,12 @@ using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Constants;
-using StardewArchipelago.Constants.Vanilla;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 using xTile.Tiles;
 using StardewValley.Extensions;
 using StardewArchipelago.Locations.Jojapocalypse;
-using System.Collections.Generic;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
 {
