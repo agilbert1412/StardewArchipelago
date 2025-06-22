@@ -307,7 +307,7 @@ namespace StardewArchipelago
             _registry.Initialize(_archipelago, _stardewItemManager, _locationChecker, _giftHandler, _weaponsManager, State);
 
             _mailPatcher = new MailPatcher(_logger, _harmony, _archipelago, _locationChecker, State, new LetterActions(_logger, _helper, _mail, _archipelago, _weaponsManager, _itemManager.TrapManager, trapExecutor.BabyBirther, _stardewItemManager));
-            _bundlesManager = new BundlesManager(_logger, _helper, _archipelago, _stardewItemManager, _archipelago.SlotData.BundlesData);
+            _bundlesManager = new BundlesManager(_logger, _helper, _archipelago, _stardewItemManager);
             _locationsPatcher = new LocationPatcher(_logger, _helper, Config, _harmony, _archipelago, State, _locationChecker, _jojaLocationChecker, _stardewItemManager, _weaponsManager, _bundlesManager, seedShopStockModifier, friends, _itemManager.TrapManager, bank, nameSimplifier);
             _shippingBehaviors = new NightShippingBehaviors(_logger, _archipelago, _locationChecker, nameSimplifier);
             _chatForwarder.ListenToChatMessages();
