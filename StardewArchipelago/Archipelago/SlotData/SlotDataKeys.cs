@@ -51,6 +51,7 @@
         public const string DEATH_LINK = "death_link";
         public const string SEED = "seed";
         public const string MODIFIED_BUNDLES = "modified_bundles";
+        public const string TRASH_BEAR_REQUESTS = "trash_bear_requests";
         public const string MODIFIED_ENTRANCES = "randomized_entrances";
         public const string MULTIWORLD_VERSION = "client_version";
         public const string MOD_LIST = "mods";

@@ -87,6 +87,7 @@ namespace StardewArchipelago.Locations.Patcher
             try
             {
                 PatchCommunityCenter();
+                PatchTrashBear();
                 ReplaceBackPackUpgradesWithChecks();
                 ReplaceMineshaftChestsWithChecks();
                 ReplaceElevatorsWithChecks();
@@ -226,6 +227,29 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Building), nameof(Building.doAction)),
                 prefix: new HarmonyMethod(typeof(WellInjections), nameof(WellInjections.DoAction_ThrowHoneyInWell_Prefix))
+            );
+        }
+
+        private void PatchTrashBear()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Forest), "resetLocalState"),
+                postfix: new HarmonyMethod(typeof(TrashBearInjections), nameof(TrashBearInjections.ResetLocalState_SpawnTrashBear_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(TrashBear), "doCutscene"),
+                prefix: new HarmonyMethod(typeof(TrashBearInjections), nameof(TrashBearInjections.DoCutscene_DontPlayTheCutsceneNormally_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(TrashBear), nameof(TrashBear.draw), new[] { typeof(SpriteBatch) }),
+                prefix: new HarmonyMethod(typeof(TrashBearInjections), nameof(TrashBearInjections.Draw_DrawAllDesiredItemsAtOnce_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(TrashBear), nameof(TrashBear.tryToReceiveActiveObject)),
+                prefix: new HarmonyMethod(typeof(TrashBearInjections), nameof(TrashBearInjections.TryToReceiveActiveObject_AcceptAnyDesiredItem_Prefix))
             );
         }
 

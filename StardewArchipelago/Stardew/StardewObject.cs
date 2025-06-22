@@ -43,7 +43,7 @@ namespace StardewArchipelago.Stardew
 
         public override string GetQualifiedId()
         {
-            return $"{QualifiedItemIds.OBJECT_QUALIFIER}{Id}";
+            return QualifiedItemIds.QualifiedObjectId(Id);
         }
     }
 }

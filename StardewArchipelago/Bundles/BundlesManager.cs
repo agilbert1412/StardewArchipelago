@@ -18,17 +18,20 @@ namespace StardewArchipelago.Bundles
         private readonly IModHelper _modHelper;
         private readonly Dictionary<string, string> _currentBundlesData;
         public BundleRooms BundleRooms { get; }
+        public Dictionary<string, List<string>> TrashBearRequests { get; }
 
-        public BundlesManager(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, StardewItemManager itemManager, string bundlesJson)
+        public BundlesManager(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, StardewItemManager itemManager)
         {
             _logger = logger;
             _modHelper = modHelper;
-            var bundlesDictionary = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, Dictionary<string, string>>>>(bundlesJson);
+            var bundlesDictionary = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, Dictionary<string, string>>>>(archipelago.SlotData.BundlesData);
             BundleRooms = new BundleRooms(_logger, archipelago, itemManager, bundlesDictionary);
             _currentBundlesData = BundleRooms.ToStardewStrings();
             _modHelper.Events.Content.AssetRequested += OnBundlesRequested;
             modHelper.GameContent.InvalidateCache(x => x.NameWithoutLocale.IsEquivalentTo("Data/Bundles"));
             ReplaceAllBundles();
+
+            TrashBearRequests = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(archipelago.SlotData.TrashBearRequestsData);
         }
 
         public void CleanEvents()

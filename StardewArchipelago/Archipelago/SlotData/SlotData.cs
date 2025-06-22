@@ -18,6 +18,7 @@ namespace StardewArchipelago.Archipelago.SlotData
         public int StartingMoney { get; private set; }
         public double ProfitMargin { get; private set; }
         public string BundlesData { get; set; }
+        public string TrashBearRequestsData { get; set; }
         public BundlePrice BundlePrice { get; private set; }
         public EntranceRandomization EntranceRandomization { get; private set; }
         public SeasonRandomization SeasonRandomization { get; private set; }
@@ -83,6 +84,7 @@ namespace StardewArchipelago.Archipelago.SlotData
             StartingMoney = slotDataReader.GetSlotSetting(SlotDataKeys.STARTING_MONEY, 500);
             ProfitMargin = slotDataReader.GetSlotSetting(SlotDataKeys.PROFIT_MARGIN, 100) / 100.0;
             BundlesData = slotDataReader.GetSlotSetting(SlotDataKeys.MODIFIED_BUNDLES, "");
+            TrashBearRequestsData = slotDataReader.GetSlotSetting(SlotDataKeys.TRASH_BEAR_REQUESTS, "");
             EntranceRandomization = slotDataReader.GetSlotSetting(SlotDataKeys.ENTRANCE_RANDOMIZATION, EntranceRandomization.Disabled);
             SeasonRandomization = slotDataReader.GetSlotSetting(SlotDataKeys.SEASON_RANDOMIZATION, SeasonRandomization.Disabled);
             Cropsanity = slotDataReader.GetSlotSetting(SlotDataKeys.CROPSANITY, Cropsanity.Disabled);
