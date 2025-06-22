@@ -22,7 +22,7 @@ namespace StardewArchipelago.Serialization
         public int NumberOfLOTLEpisodesWatched { get; set; }
         public int NumberTimesCursed { get; set; }
         public List<string> QualifiedIdsClothesDonated { get; set; }
-        public List<string> TrashBearItemsEaten { get; }
+        public List<string> TrashBearItemsEaten { get; set; }
 
         public ArchipelagoStateDto()
         {

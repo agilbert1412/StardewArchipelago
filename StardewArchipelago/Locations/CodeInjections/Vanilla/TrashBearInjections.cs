@@ -69,10 +69,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
                 if (hasReceivedCleanup && !hasSeenCutscene)
                 {
-                    NetWorldState.addWorldStateIDEverywhere("trashBear3");
-                    NetWorldState.addWorldStateIDEverywhere("trashBear2");
-                    NetWorldState.addWorldStateIDEverywhere("trashBear1");
-                    NetWorldState.addWorldStateIDEverywhere("trashBearDone");
                     StartTrashBearCleanupCutscene();
                 }
 
@@ -94,7 +90,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             if (Game1.activeClickableMenu != null)
                 return;
             Game1.player.freezePause = 2000;
-            Game1.globalFadeToBlack(() => Game1.currentLocation.startEvent(new StardewValley.Event("spring_day_ambient/-1000 -1000/farmer 104 95 3/skippable/addTemporaryActor TrashBear 32 32 102 95 0 false/animate TrashBear false true 250 0 1/viewport 102 97 clamp true/pause 3000/stopAnimation TrashBear/move TrashBear 0 2 2/faceDirection farmer 2/pause 1000/animate TrashBear false true 275 13 14 15 14/playSound trashbear_flute/specificTemporarySprite trashBearPrelude/viewport move -1 1 4000/pause 9000/stopAnimation TrashBear/playSound yoba/specificTemporarySprite trashBearMagic/pause 500/animate farmer false true 100 94/jump farmer/pause 2000/viewport move 1 -1 4000/stopAnimation farmer/move farmer 0 2 2/pause 4000/playSound trashbear/specificTemporarySprite trashBearUmbrella1/warp TrashBear -100 -100/pause 2000/faceDirection farmer 1/pause 2000/fade/viewport -5000 -5000/changeLocation Town/viewport 54 68 true/specificTemporarySprite trashBearTown/pause 10000/end", null, "777111")));
+            Game1.globalFadeToBlack(() =>
+            {
+                Game1.currentLocation.startEvent(new StardewValley.Event(
+                        "spring_day_ambient/-1000 -1000/farmer 104 95 3/skippable/addTemporaryActor TrashBear 32 32 102 95 0 false/animate TrashBear false true 250 0 1/viewport 102 97 clamp true/pause 3000/stopAnimation TrashBear/move TrashBear 0 2 2/faceDirection farmer 2/pause 1000/animate TrashBear false true 275 13 14 15 14/playSound trashbear_flute/specificTemporarySprite trashBearPrelude/viewport move -1 1 4000/pause 9000/stopAnimation TrashBear/playSound yoba/specificTemporarySprite trashBearMagic/pause 500/animate farmer false true 100 94/jump farmer/pause 2000/viewport move 1 -1 4000/stopAnimation farmer/move farmer 0 2 2/pause 4000/playSound trashbear/specificTemporarySprite trashBearUmbrella1/warp TrashBear -100 -100/pause 2000/faceDirection farmer 1/pause 2000/fade/viewport -5000 -5000/changeLocation Town/viewport 54 68 true/specificTemporarySprite trashBearTown/pause 10000/end",
+                        null, "777111"));
+                NetWorldState.addWorldStateIDEverywhere("trashBear3");
+                NetWorldState.addWorldStateIDEverywhere("trashBear2");
+                NetWorldState.addWorldStateIDEverywhere("trashBear1");
+                NetWorldState.addWorldStateIDEverywhere("trashBearDone");
+            });
         }
 
         // private void doCutscene()
@@ -125,7 +130,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
-                var offsetPerBubble = 64;
+                var offsetPerBubble = 85;
                 var i = 0;
                 foreach (var (requestType, requestItems) in _bundlesManager.TrashBearRequests)
                 {
@@ -159,10 +164,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private static void CallBaseDraw(TrashBear trashBear, SpriteBatch b)
         {
             // base.draw(b);
-            var characterDrawMethod = typeof(Character).GetMethod("draw", BindingFlags.Instance | BindingFlags.Public);
+            var characterDrawMethod = typeof(Character).GetMethod("draw", BindingFlags.Instance | BindingFlags.Public, new[] { typeof(SpriteBatch) });
             var functionPointer = characterDrawMethod.MethodHandle.GetFunctionPointer();
-            var baseDraw = (Action)Activator.CreateInstance(typeof(Action), trashBear, b, functionPointer);
-            baseDraw();
+            var baseDraw = (Action<SpriteBatch>)Activator.CreateInstance(typeof(Action<SpriteBatch>), trashBear, functionPointer);
+            baseDraw(b);
         }
 
         private static void DrawOneDesiredItem(TrashBear trashBear, SpriteBatch spriteBatch, string desiredItemQualifiedId, Point offset)
@@ -171,12 +176,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             var tilePoint = trashBear.TilePoint;
             var num2 = (tilePoint.Y + 1) * 64 / 10000f;
             var num3 = currentFrameOffset - 40f;
-            var bubblePosition = Game1.GlobalToLocal(Game1.viewport, new Vector2(tilePoint.X * 64 + 32 + offset.X, tilePoint.Y * 64 - 96 - 48 + num3 + offset.Y));
-            spriteBatch.Draw(Game1.mouseCursors, bubblePosition, new Rectangle(141, 465, 20, 24), Color.White * 0.75f, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, num2 + 1E-06f);
+            var bubblePosition = Game1.GlobalToLocal(Game1.viewport, new Vector2(tilePoint.X * 64 + 32 - 4 + offset.X, tilePoint.Y * 64 - 96 - 48 + num3 + offset.Y));
+            spriteBatch.Draw(Game1.mouseCursors, bubblePosition, new Rectangle(141, 465, 20, 24), Color.White * 0.75f, 0.0f, Vector2.Zero, 4f, offset.X < 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, num2 + 1E-06f);
             var dataOrErrorItem = ItemRegistry.GetDataOrErrorItem(desiredItemQualifiedId);
             var texture = dataOrErrorItem.GetTexture();
             var sourceRect = dataOrErrorItem.GetSourceRect();
-            var itemPosition = Game1.GlobalToLocal(Game1.viewport, new Vector2(tilePoint.X * 64 + 64 + 8 + offset.X, tilePoint.Y * 64 - 64 - 32 - 8 + num3 + offset.Y));
+            var itemPosition = Game1.GlobalToLocal(Game1.viewport, new Vector2(tilePoint.X * 64 + 64 - 4 + 8 + offset.X, tilePoint.Y * 64 - 64 - 32 - 8 + num3 + offset.Y));
             spriteBatch.Draw(texture, itemPosition, sourceRect, Color.White, 0.0f, new Vector2(8f, 8f), 4f, SpriteEffects.None, num2 + 1E-05f);
         }
 
@@ -192,6 +197,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 }
 
                 var heldItemId = who.ActiveObject.QualifiedItemId;
+                var heldItemName = who.ActiveObject.Name;
 
                 var desiredItems = _bundlesManager.TrashBearRequests.SelectMany(x => x.Value);
                 var remainingItems = desiredItems.Where(x => !_state.TrashBearItemsEaten.Contains(x));
@@ -211,6 +217,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     var eatEvent = eatEventField.GetValue();
                     eatEvent.Fire(__instance.itemWantedIndex);
                     who.reduceActiveItemByOne();
+                    _state.TrashBearItemsEaten.Add(heldItemName);
                 }
 
                 CheckAllTrashBearFinishedLocations();
