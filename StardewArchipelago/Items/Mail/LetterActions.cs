@@ -115,6 +115,7 @@ namespace StardewArchipelago.Items.Mail
             switch (newMaxItems)
             {
                 case < 12:
+                    backpackName = "Small Pack";
                     break;
                 case < 24:
                     backpackName = Game1.content.LoadString("Strings\\StringsFromCSFiles:GameLocation.cs.8708");
