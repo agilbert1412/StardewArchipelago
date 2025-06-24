@@ -546,6 +546,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             {
                 CurrentPageBundle.Ingredients[0] = FindOneEasilyObtainableItem();
             }
+            if (CurrentPageBundle.name == MemeBundleNames.DOCTOR)
+            {
+                var numberApples = (int)Math.Clamp(Game1.stats.DaysPlayed, 1, 999);
+                var existingIngredient = CurrentPageBundle.Ingredients.First();
+                CurrentPageBundle.Ingredients.Clear(); ;
+                var appleIngredient = new BundleIngredientDescription(QualifiedItemIds.APPLE, numberApples, 0, existingIngredient.completed);
+                CurrentPageBundle.Ingredients.Add(appleIngredient);
+            }
             base.SetUpIngredientButtons(b);
         }
 

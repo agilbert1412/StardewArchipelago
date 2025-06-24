@@ -67,10 +67,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             _locationChecker = locationChecker;
             _priceCalculator = new BackpackPriceCalculator();
             _backpackLocationsInOrder = GetAllBackpackLocationsInOrder();
-            var biggerBackpackModType = AccessTools.TypeByName("BiggerBackpack.Mod");
-            if (biggerBackpackModType != null)
+            var biggerBackpackModEntryType = AccessTools.TypeByName("BiggerBackpack.ModEntry");
+            if (biggerBackpackModEntryType != null)
             {
-                _drawBiggerBackpackMethod = AccessTools.Method(biggerBackpackModType, "drawBiggerBackpack");
+                _drawBiggerBackpackMethod = AccessTools.Method(biggerBackpackModEntryType, "drawBiggerBackpack");
             }
         }
 

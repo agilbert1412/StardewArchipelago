@@ -43,5 +43,6 @@
         public const string HUMBLE = "Humble";
         public const string SCAM = "Scam";
         public const string INVESTMENT = "Investment";
+        public const string DOCTOR = "Doctor";
     }
 }

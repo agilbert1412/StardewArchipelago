@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 
 namespace StardewArchipelago.Constants.Vanilla
 {
@@ -31,6 +32,7 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string AMARANTH_SEEDS = QualifiedObjectId(ObjectIds.AMARANTH_SEEDS);
         public static readonly string AMETHYST = QualifiedObjectId(ObjectIds.AMETHYST);
         public static readonly string ANCIENT_SEEDS = QualifiedObjectId(ObjectIds.ANCIENT_SEEDS);
+        public static readonly string APPLE = QualifiedObjectId(ObjectIds.APPLE);
         public static readonly string APPLE_SAPLING = QualifiedObjectId(ObjectIds.APPLE_SAPLING);
         public static readonly string APRICOT_SAPLING = QualifiedObjectId(ObjectIds.APRICOT_SAPLING);
         public static readonly string AQUAMARINE = QualifiedObjectId(ObjectIds.AQUAMARINE);
