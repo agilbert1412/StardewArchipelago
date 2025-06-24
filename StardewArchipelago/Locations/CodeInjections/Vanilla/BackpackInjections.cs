@@ -126,6 +126,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 _maxItemsForBackpackDisplay = 48;
             }
+            else if (tier == 0)
+            {
+                _maxItemsForBackpackDisplay = 12;
+            }
             else
             {
                 _maxItemsForBackpackDisplay = tier * 12;

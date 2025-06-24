@@ -104,6 +104,14 @@ namespace StardewArchipelago.GameModifications
             }
 
             Game1.player.Items.Clear();
+            if (_archipelago.SlotData.BackpackProgression != BackpackProgression.Vanilla)
+            {
+                Game1.player.MaxItems = 0;
+                while (Game1.player.Items.Count > Game1.player.MaxItems)
+                {
+                    Game1.player.Items.RemoveAt(0);
+                }
+            }
         }
 
         private void RemoveGiftBoxes(FarmHouse farmhouse)
