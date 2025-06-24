@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
@@ -6,12 +7,18 @@ using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Constants.Modded;
 using StardewValley;
 using StardewValley.Locations;
-using xTile.Dimensions;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.PriceMath;
 using StardewValley.Objects;
+using System.Reflection;
+using Microsoft.Xna.Framework;
+using StardewModdingAPI;
+using xTile.Dimensions;
+using Rectangle = Microsoft.Xna.Framework.Rectangle;
+using HarmonyLib;
+using StardewArchipelago.Textures;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -28,14 +35,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private const string PROGRESSIVE_BACKPACK = "Progressive Backpack";
 
         private static ILogger _logger;
+        private static IModHelper _modHelper;
         private static StardewArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
         private static BackpackPriceCalculator _priceCalculator;
 
         private static string[] _backpackLocationsInOrder;
-        private static uint _dayLastUpdateBackpackDisplay;
-        private static int _maxItemsForBackpackDisplay;
-        private static int _realMaxItems;
 
         private const string SLOTS_IDENTIFIER = "[SLOTS]";
         private static readonly string QUESTION_SMALL = "Backpack Upgrade -- 12 slots".Replace("12", SLOTS_IDENTIFIER);
@@ -52,15 +57,21 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private static readonly string RESPONSE_NO = Game1.content.LoadString("Strings\\Locations:SeedShop_BuyBackpack_ResponseNo");
         private static readonly string[] RESPONSES_PER_TIER = new[] { RESPONSE_PURCHASE_SMALL, RESPONSE_PURCHASE_LARGE, RESPONSE_PURCHASE_DELUXE, RESPONSE_PURCHASE_PREMIUM };
 
-        public static void Initialize(ILogger logger, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
+        private static MethodInfo _drawBiggerBackpackMethod;
+
+        public static void Initialize(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             _logger = logger;
+            _modHelper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
             _priceCalculator = new BackpackPriceCalculator();
-            _realMaxItems = UNINITIALIZED;
             _backpackLocationsInOrder = GetAllBackpackLocationsInOrder();
-            UpdateMaxItemsForBackpackDisplay();
+            var biggerBackpackModType = AccessTools.TypeByName("BiggerBackpack.Mod");
+            if (biggerBackpackModType != null)
+            {
+                _drawBiggerBackpackMethod = AccessTools.Method(biggerBackpackModType, "drawBiggerBackpack");
+            }
         }
 
         private static string[] GetAllBackpackLocationsInOrder()
@@ -109,33 +120,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             // The parameter tier might be used when we start to shuffle the first row, as some slots will come for free
             return SLOTS_PER_ROW / _archipelago.SlotData.BackpackSize;
-        }
-
-        private static void UpdateMaxItemsForBackpackDisplay()
-        {
-            if (!CanBuyNextBackpack())
-            {
-                _maxItemsForBackpackDisplay = 48;
-                _dayLastUpdateBackpackDisplay = Game1.stats.DaysPlayed;
-                return;
-            }
-
-            var nextBackpack = GetNextBackpackLocation();
-            var tier = GetTier(nextBackpack);
-            if (tier < 0)
-            {
-                _maxItemsForBackpackDisplay = 48;
-            }
-            else if (tier == 0)
-            {
-                _maxItemsForBackpackDisplay = 12;
-            }
-            else
-            {
-                _maxItemsForBackpackDisplay = tier * 12;
-            }
-
-            _dayLastUpdateBackpackDisplay = Game1.stats.DaysPlayed;
         }
 
         public static bool AnswerDialogueAction_BackPackPurchase_Prefix(GameLocation __instance, string questionAndAnswer, string[] questionParams, ref bool __result)
@@ -191,7 +175,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 Game1.player.Money -= price;
                 Game1.player.increaseBackpackSize(_archipelago.SlotData.BackpackSize);
-                Game1.player.holdUpItemThenMessage((Item)new SpecialItem(99, Game1.content.LoadString("Strings\\StringsFromCSFiles:GameLocation.cs.8708")));
+                Game1.player.holdUpItemThenMessage(new SpecialItem(99, Game1.content.LoadString("Strings\\StringsFromCSFiles:GameLocation.cs.8708")));
                 // Game1.multiplayer.globalChatInfoMessage("BackpackLarge", Game1.player.Name);
             }
         }
@@ -214,7 +198,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 Game1.player.Money -= price;
                 _locationChecker.AddCheckedLocation(nextLocation);
-                UpdateMaxItemsForBackpackDisplay();
             }
         }
 
@@ -317,18 +300,34 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             try
             {
-                if (Game1.stats.DaysPlayed != _dayLastUpdateBackpackDisplay)
+                CallBaseDraw(__instance, b);
+
+                var backpackToDisplay = GetBackpackToDisplay();
+                switch (backpackToDisplay)
                 {
-                    UpdateMaxItemsForBackpackDisplay();
+                    case 0:
+                        var smallBackpackTexture = TexturesLoader.GetTexture(Path.Combine("Backpack", "small_pack.png"));
+                        DrawBackpackOnCounter(b, smallBackpackTexture, new Rectangle(0, 0, 12, 14));
+                        break;
+                    case 1:
+                        DrawBackpackOnCounter(b, Game1.mouseCursors, new Rectangle(byte.MaxValue, 1436, 12, 14));
+                        break;
+                    case 2:
+                        DrawBackpackOnCounter(b, Game1.mouseCursors, new Rectangle(267, 1436, 12, 14));
+                        break;
+                    case 3:
+                        if (_drawBiggerBackpackMethod != null)
+                        {
+                            _drawBiggerBackpackMethod.Invoke(null, new object[] { b });
+                        }
+                        // Display Bigger Backpack
+                        break;
+                    default:
+                        b.Draw(Game1.mouseCursors, Game1.GlobalToLocal(Game1.viewport, new Rectangle(452, 1184, 112, 20)), new Rectangle(258, 1449, 1, 1), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, 0.1232f);
+                        break;
                 }
 
-                if (_realMaxItems == UNINITIALIZED)
-                {
-                    _realMaxItems = Game1.player.MaxItems;
-                }
-
-                Game1.player.MaxItems = _maxItemsForBackpackDisplay;
-                return MethodPrefix.RUN_ORIGINAL_METHOD;
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
@@ -337,23 +336,36 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
         }
 
-        // public override void draw(SpriteBatch b)
-        public static void Draw_SeedShopBackpack_Postfix(SeedShop __instance, SpriteBatch b)
+        private static void CallBaseDraw(SeedShop seedShop, SpriteBatch b)
         {
-            try
+            // base.draw(b);
+            var gameLocationDrawMethod = typeof(GameLocation).GetMethod("draw", BindingFlags.Instance | BindingFlags.Public, new[] { typeof(SpriteBatch) });
+            var functionPointer = gameLocationDrawMethod.MethodHandle.GetFunctionPointer();
+            var baseDraw = (Action<SpriteBatch>)Activator.CreateInstance(typeof(Action<SpriteBatch>), seedShop, functionPointer);
+            baseDraw(b);
+        }
+
+        private static int GetBackpackToDisplay()
+        {
+            if (!CanBuyNextBackpack())
             {
-                if (_realMaxItems != UNINITIALIZED)
-                {
-                    Game1.player.MaxItems = _realMaxItems;
-                }
-                _realMaxItems = UNINITIALIZED;
-                return;
+                return -1;
             }
-            catch (Exception ex)
+
+            var nextBackpack = GetNextBackpackLocation();
+            var tier = GetTier(nextBackpack);
+            if (tier < 0)
             {
-                _logger.LogError($"Failed in {nameof(Draw_SeedShopBackpack_Postfix)}:\n{ex}");
-                return;
+                return -1;
             }
+
+            return tier;
+        }
+
+        private static void DrawBackpackOnCounter(SpriteBatch b, Texture2D texture, Rectangle sourceRect)
+        {
+            var drawPosition = Game1.GlobalToLocal(new Vector2(456f, 1088f));
+            b.Draw(texture, drawPosition, sourceRect, Color.White, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 0.1232f);
         }
 
         // public GameMenu(bool playOpeningSound = true)

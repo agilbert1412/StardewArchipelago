@@ -273,8 +273,7 @@ namespace StardewArchipelago.Locations.Patcher
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(SeedShop), nameof(SeedShop.draw)),
-                prefix: new HarmonyMethod(typeof(BackpackInjections), nameof(BackpackInjections.Draw_SeedShopBackpack_Prefix)),
-                postfix: new HarmonyMethod(typeof(BackpackInjections), nameof(BackpackInjections.Draw_SeedShopBackpack_Postfix))
+                prefix: new HarmonyMethod(typeof(BackpackInjections), nameof(BackpackInjections.Draw_SeedShopBackpack_Prefix))
             );
 
             /*_harmony.Patch(
