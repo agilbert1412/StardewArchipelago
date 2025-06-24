@@ -28,7 +28,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
         public static void Initialize(LogHandler logger, IModHelper modHelper, ModConfig config, StardewArchipelagoClient archipelago, ArchipelagoStateDto state, StardewLocationChecker locationChecker, JojaLocationChecker jojaLocationChecker, StardewItemManager itemManager, WeaponsManager weaponsManager, BundlesManager bundlesManager, Friends friends, TrapManager trapManager, BankHandler bank, NameSimplifier nameSimplifier)
         {
             TrashBearInjections.Initialize(logger, modHelper, archipelago, locationChecker, bundlesManager, itemManager, state);
-            BackpackInjections.Initialize(logger, archipelago, locationChecker);
+            BackpackInjections.Initialize(logger, modHelper, archipelago, locationChecker);
             ScytheInjections.Initialize(logger, locationChecker);
             FishingRodInjections.Initialize(logger, modHelper, archipelago, locationChecker);
             CopperPanInjections.Initialize(logger, modHelper, archipelago, locationChecker);
