@@ -67,6 +67,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         private Hint[] _hintsFromMe;
         private GachaResolver _gachaResolver;
         private SlidingPuzzleHandler _slidingPuzzle;
+        private DoomHandler _doomHandler;
         private string[] _asmrCues = null;
         private ICue _currentCue;
 
@@ -1241,6 +1242,17 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                     return true;
                 }
             }
+            if (CurrentPageBundle.name == MemeBundleNames.DOOM)
+            {
+                if (_doomHandler.ReceiveLeftClick(x - xPositionOnScreen, y - yPositionOnScreen))
+                {
+                    if (_doomHandler.IsLevelSolved())
+                    {
+                        PerformCurrencyPurchase();
+                    }
+                    return true;
+                }
+            }
 
             return base.ReceiveLeftClickInSpecificBundlePage(x, y);
         }
@@ -1646,6 +1658,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 }
 
                 PlayNextASMR();
+            }
+            if (CurrentPageBundle.name == MemeBundleNames.DOOM)
+            {
+                _doomHandler?.OnUpdateTicked();
             }
         }
 
@@ -2070,6 +2086,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 _slidingPuzzle.DrawPuzzle(b, xPositionOnScreen, yPositionOnScreen);
                 return;
             }
+            if (CurrentPageBundle.name == MemeBundleNames.DOOM)
+            {
+                _doomHandler.DrawFrame(b);
+                return;
+            }
             base.DrawBundleTexture(b);
         }
 
@@ -2093,6 +2114,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             if (bundle.name == MemeBundleNames.PUZZLE)
             {
                 _slidingPuzzle = new SlidingPuzzleHandler(_modHelper, MemeTexture, GetSlidingPuzzleSize(bundle));
+            }
+            if (bundle.name == MemeBundleNames.DOOM)
+            {
+                _doomHandler = new DoomHandler();
             }
             if (bundle.name == MemeBundleNames.ASMR)
             {

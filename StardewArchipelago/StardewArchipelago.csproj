@@ -37,6 +37,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Reference Include="managed-doom">
+		  <HintPath>..\..\managed-doom\ManagedDoom\bin\Debug\net8.0\managed-doom.dll</HintPath>
+		</Reference>
 		<Reference Include="Newtonsoft.Json" HintPath="$(GamePath)\smapi-internal\Newtonsoft.Json.dll" private="false" />
 	</ItemGroup>
 
