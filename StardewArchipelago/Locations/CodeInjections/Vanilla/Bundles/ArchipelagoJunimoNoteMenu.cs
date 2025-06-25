@@ -59,8 +59,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         internal int ingredientsPerSubBundle => IngredientList.Count / NUMBER_SUB_BUNDLES;
         internal static Stopwatch DayStopwatch = new Stopwatch();
         internal static int FloorIsLavaHasTouchedGroundToday = 0;
-        internal static bool HasLookedAtRestaintBundleToday = false;
-        internal static bool HasPurchasedRestaintBundleToday = false;
+        internal static bool HasLookedAtRestraintBundleToday = false;
+        internal static bool HasLookedAtStanleyBundleToday = false;
+        internal static bool HasPurchasedRestraintBundleToday = false;
         internal static bool HasLookedAtHibernationBundleToday = false;
         internal static string IkeaItemQualifiedId = "";
         private Hint[] _hintsForMe;
@@ -410,7 +411,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             if (CurrentPageBundle.name == MemeBundleNames.RESTRAINT)
             {
                 PurchaseButton = null;
-                HasPurchasedRestaintBundleToday = true;
+                HasPurchasedRestraintBundleToday = true;
             }
 
             var ingredient = this.CurrentPageBundle.Ingredients.Last();
@@ -707,7 +708,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
             if (CurrentPageBundle.name == MemeBundleNames.RESTRAINT && !FromGameMenu)
             {
-                HasLookedAtRestaintBundleToday = true;
+                HasLookedAtRestraintBundleToday = true;
+            }
+            if (CurrentPageBundle.name == MemeBundleNames.STANLEY)
+            {
+                HasLookedAtStanleyBundleToday = true;
+                return;
             }
 
             base.SetUpPurchaseButton();
@@ -2135,16 +2141,28 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             DayStopwatch.Reset();
             DayStopwatch.Start();
             FloorIsLavaHasTouchedGroundToday = 0;
-            HasLookedAtRestaintBundleToday = false;
-            HasPurchasedRestaintBundleToday = false;
-            HasLookedAtRestaintBundleToday = false;
+            HasLookedAtRestraintBundleToday = false;
+            HasPurchasedRestraintBundleToday = false;
+            HasLookedAtStanleyBundleToday = false;
         }
 
         public static void OnDayEnded()
         {
-            if (HasLookedAtRestaintBundleToday && !HasPurchasedRestaintBundleToday)
+            if (HasLookedAtRestraintBundleToday && !HasPurchasedRestraintBundleToday)
             {
                 CompleteBundleIfExists(MemeBundleNames.RESTRAINT);
+            }
+            if (HasLookedAtStanleyBundleToday)
+            {
+                _state.LastDayLookedAtStanleyBundle = (int)Game1.stats.DaysPlayed;
+            }
+            else if (_state != null && _state.LastDayLookedAtStanleyBundle > -1)
+            {
+                var daysSinceLastLooked = Game1.stats.DaysPlayed - _state.LastDayLookedAtStanleyBundle;
+                if (daysSinceLastLooked >= (112 * 5))
+                {
+                    CompleteBundleIfExists(MemeBundleNames.STANLEY);
+                }
             }
         }
         public static void HasBeenHibernatingFor(int numberOfDaysSlept)

@@ -24,6 +24,7 @@ namespace StardewArchipelago.Serialization
         public int NumberTimesCursed { get; set; }
         public List<string> QualifiedIdsClothesDonated { get; set; }
         public List<string> TrashBearItemsEaten { get; set; }
+        public int LastDayLookedAtStanleyBundle { get; set; }
 
         public ArchipelagoStateDto()
         {
@@ -44,6 +45,7 @@ namespace StardewArchipelago.Serialization
             NumberTimesCursed = 0;
             QualifiedIdsClothesDonated = new List<string>();
             TrashBearItemsEaten = new List<string>();
+            LastDayLookedAtStanleyBundle = -1;
         }
     }
 }

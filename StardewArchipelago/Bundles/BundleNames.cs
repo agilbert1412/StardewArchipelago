@@ -45,5 +45,6 @@
         public const string INVESTMENT = "Investment";
         public const string DOCTOR = "Doctor";
         public const string VERY_STICKY = "Very Sticky";
+        public const string STANLEY = "Stanley";
     }
 }

@@ -90,6 +90,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 DrawHumbleDonationPrices(b);
                 amountText = "";
             }
+            else if (_menu.CurrentPageBundle.name == MemeBundleNames.STANLEY)
+            {
+                DrawGoOutsideAchievement(b);
+                amountText = "Go Outside";
+            }
             else if (ingredientId == IDProvider.MONEY && memeBundlesThatShouldDisplayMoney.Contains(_menu.CurrentPageBundle.name) )
             {
                 Game1.dayTimeMoneyBox.drawMoneyBox(b);
@@ -350,6 +355,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         private void DrawDeathLinksCurrency()
         {
             DrawSpecialCurrency(_wallet.DeathLinks, _menu.MemeTexture, new Rectangle(63, 0, 16, 16), 3f);
+        }
+
+        private void DrawGoOutsideAchievement(SpriteBatch spriteBatch)
+        {
+            var textY = 410;
+            var centeredX = 936;
+            var font = Game1.smallFont;
+            DrawText(spriteBatch, $"Do not look at this bundle for 5 years", centeredX, textY, font);
         }
 
         private static void DrawSpecialCurrency(int amountOwned, Texture2D texture, Rectangle sourceRectangle, float scale = 4f)
