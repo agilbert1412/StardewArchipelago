@@ -790,7 +790,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             }
         }
 
-        public bool IsReadyToCloseMenuOrBundle()
+        public virtual bool IsReadyToCloseMenuOrBundle()
         {
             if (SpecificBundlePage)
             {
@@ -2057,6 +2057,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
 
         public virtual void TakeDownBundleSpecificPage()
         {
+            HeldItem = Inventory.tryToAddItem(HeldItem);
             if (!IsReadyToCloseMenuOrBundle())
             {
                 return;

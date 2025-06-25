@@ -70,6 +70,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         private string[] _asmrCues = null;
         private ICue _currentCue;
         private bool _isCurrentlySticky = false;
+        private Point _stickyPosition = Point.Zero;
 
         public Texture2D MemeTexture;
         public Texture2D HumbleBundleTexture;
@@ -468,6 +469,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                     moneyBundleName = "";
                     return false;
             }
+        }
+
+        public override bool IsReadyToCloseMenuOrBundle()
+        {
+            if (_isCurrentlySticky)
+            {
+                HeldItem = Inventory.tryToAddItem(HeldItem);
+            }
+
+            return base.IsReadyToCloseMenuOrBundle();
         }
 
         protected virtual bool TryGetBundleLocationToScout(out string apLocationToScout)
@@ -967,10 +978,24 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         public override void update(GameTime time)
         {
             base.update(time);
-            if (_isCurrentlySticky)
+            if (_isCurrentlySticky && Game1.ticks % 2 == 0)
             {
-                Game1.setMousePosition(Game1.getOldMouseX(), Game1.getOldMouseY());
+                var nextPosition = GetPointTowardsSticky(0.01);
+                Game1.setMousePosition(nextPosition);
             }
+        }
+
+        private Point GetPointTowardsSticky(double percentDistance)
+        {
+            var mousePosition = Game1.getMousePosition();
+            var deltaX = _stickyPosition.X - mousePosition.X;
+            var deltaY = _stickyPosition.Y - mousePosition.Y;
+            deltaX = deltaX > 0 ? (int)Math.Ceiling(deltaX * percentDistance) : (int)Math.Floor(deltaX * percentDistance);
+            deltaY = deltaY > 0 ? (int)Math.Ceiling(deltaY * percentDistance) : (int)Math.Floor(deltaY * percentDistance);
+            var nextX = mousePosition.X + deltaX;
+            var nextY = mousePosition.Y + deltaY;
+            var nextPosition = new Point(nextX, nextY);
+            return nextPosition;
         }
 
         protected override void PerformHoverActionSpecificBundlePage(int x, int y)
@@ -991,6 +1016,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             if (textureRectangle.Contains(x, y))
             {
                 _isCurrentlySticky = true;
+                _stickyPosition = textureRectangle.Center;
                 return;
             }
 
@@ -1000,6 +1026,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 if (ingredient.bounds.Contains(x, y))
                 {
                     _isCurrentlySticky = true;
+                    _stickyPosition = ingredient.bounds.Center;
                     return;
                 }
             }
@@ -1009,6 +1036,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 if (ingredientSlot.bounds.Contains(x, y) && ingredientSlot.item != null)
                 {
                     _isCurrentlySticky = true;
+                    _stickyPosition = ingredientSlot.bounds.Center;
                     return;
                 }
             }
@@ -1665,16 +1693,23 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
             if (_isCurrentlySticky)
             {
-                var mousePosition = Game1.getMousePosition();
+
                 var sap = ItemRegistry.Create<Object>(QualifiedItemIds.SAP);
-                var random = new Random();
-                var maxDistance = 32;
-                for (var i = 0; i < 4; i++)
+                var seed = Game1.ticks / 10;
+                var random = new Random(seed);
+                if (random.NextDouble() < 0.01)
                 {
+                    int a = 5;
+                }
+                var maxDistance = 32;
+                var mouseOffset = 8;
+                for (var i = 0.0; i <= 1; i += 0.2)
+                {
+                    var nextPosition = GetPointTowardsSticky(i);
                     var x = (int)Math.Round((random.NextDouble() * maxDistance) - (maxDistance / 2));
                     var y = (int)Math.Round((random.NextDouble() * maxDistance) - (maxDistance / 2));
-                    var position = new Point(mousePosition.X + x, mousePosition.Y + y);
-                    sap.draw(b, position.X, position.Y);
+                    var position = new Vector2(nextPosition.X + x - mouseOffset, nextPosition.Y + y - mouseOffset);
+                    sap.drawInMenu(b, position, 1.0f);
                 }
             }
         }
