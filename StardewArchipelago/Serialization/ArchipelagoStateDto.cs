@@ -15,6 +15,7 @@ namespace StardewArchipelago.Serialization
         public Dictionary<string, string> LettersGenerated { get; set; }
         public List<string> SeasonsOrder { get; set; }
         public TrapItemsDifficulty? TrapDifficultyOverride { get; set; }
+        public bool EntranceRandomizerOverride { get; set; }
         public int TravelingMerchantPurchases { get; set; }
         public ArchipelagoWalletDto Wallet { get; set; }
         public List<string> EntrancesTraversed { get; set; }
@@ -34,6 +35,7 @@ namespace StardewArchipelago.Serialization
             LettersGenerated = new Dictionary<string, string>();
             SeasonsOrder = new List<string>();
             TrapDifficultyOverride = null;
+            EntranceRandomizerOverride = false;
             TravelingMerchantPurchases = 0;
             Wallet = new ArchipelagoWalletDto();
             EntrancesTraversed = new List<string>();

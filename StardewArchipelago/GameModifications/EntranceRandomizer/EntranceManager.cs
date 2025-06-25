@@ -193,6 +193,11 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
         public bool TryGetEntranceReplacement(string currentLocationName, string locationRequestName, Point targetPosition, out WarpRequest warpRequest)
         {
             warpRequest = null;
+            if (ModEntry.Instance.State.EntranceRandomizerOverride)
+            {
+                return false;
+            }
+
             var defaultCurrentLocationName = _equivalentAreas.GetDefaultEquivalentEntrance(currentLocationName);
             var defaultLocationRequestName = _equivalentAreas.GetDefaultEquivalentEntrance(locationRequestName);
             targetPosition = targetPosition.CheckSpecialVolcanoEdgeCaseWarp(defaultLocationRequestName);
