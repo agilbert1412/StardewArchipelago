@@ -475,7 +475,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         {
             if (_isCurrentlySticky)
             {
-                HeldItem = Inventory.tryToAddItem(HeldItem);
+                if (SpecificBundlePage)
+                {
+                    var currentPageBundle = this.CurrentPageBundle;
+                    if ((currentPageBundle != null ? currentPageBundle.CompletionTimer > 0 ? 1 : 0 : 0) != 0)
+                    {
+                        return false;
+                    }
+                }
+                return true;
             }
 
             return base.IsReadyToCloseMenuOrBundle();
@@ -980,7 +988,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             base.update(time);
             if (_isCurrentlySticky && Game1.ticks % 2 == 0)
             {
-                var nextPosition = GetPointTowardsSticky(0.01);
+                var nextPosition = GetPointTowardsSticky(0.05);
                 Game1.setMousePosition(nextPosition);
             }
         }
@@ -1702,8 +1710,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                     int a = 5;
                 }
                 var maxDistance = 32;
-                var mouseOffset = 8;
-                for (var i = 0.0; i <= 1; i += 0.2)
+                var mouseOffset = 32;
+                for (var i = 0.0; i <= 1; i += 0.02)
                 {
                     var nextPosition = GetPointTowardsSticky(i);
                     var x = (int)Math.Round((random.NextDouble() * maxDistance) - (maxDistance / 2));
