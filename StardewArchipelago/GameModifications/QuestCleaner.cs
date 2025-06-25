@@ -45,7 +45,7 @@ namespace StardewArchipelago.GameModifications
                 return;
             }
 
-            if (_locationChecker.IsLocationMissing("Rat Problem"))
+            if (_locationChecker.IsLocationMissing("Rat Problem Cutscene"))
             {
                 return;
             }
