@@ -69,6 +69,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         private SlidingPuzzleHandler _slidingPuzzle;
         private string[] _asmrCues = null;
         private ICue _currentCue;
+        private bool _isCurrentlySticky = false;
 
         public Texture2D MemeTexture;
         public Texture2D HumbleBundleTexture;
@@ -960,6 +961,57 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             base.TakeDownSpecificBundleComponents();
             _donateButton = null;
             ExtraButtons.Clear();
+            _isCurrentlySticky = false;
+        }
+
+        public override void update(GameTime time)
+        {
+            base.update(time);
+            if (_isCurrentlySticky)
+            {
+                Game1.setMousePosition(Game1.getOldMouseX(), Game1.getOldMouseY());
+            }
+        }
+
+        protected override void PerformHoverActionSpecificBundlePage(int x, int y)
+        {
+            base.PerformHoverActionSpecificBundlePage(x, y);
+            TryStickToSomething(x, y);
+        }
+
+        private void TryStickToSomething(int x, int y)
+        {
+            if (CurrentPageBundle.name != MemeBundleNames.VERY_STICKY)
+            {
+                return;
+            }
+
+            var texturePosition = new Vector2(xPositionOnScreen + 872, yPositionOnScreen + 88);
+            var textureRectangle = new Rectangle((int)texturePosition.X, (int)texturePosition.Y, 128, 128);
+            if (textureRectangle.Contains(x, y))
+            {
+                _isCurrentlySticky = true;
+                return;
+            }
+
+            for (var i = GetIngredientsStartIndex(); i < GetIngredientsEndIndex(); i++)
+            {
+                var ingredient = IngredientList[i];
+                if (ingredient.bounds.Contains(x, y))
+                {
+                    _isCurrentlySticky = true;
+                    return;
+                }
+            }
+
+            foreach (var ingredientSlot in IngredientSlots)
+            {
+                if (ingredientSlot.bounds.Contains(x, y) && ingredientSlot.item != null)
+                {
+                    _isCurrentlySticky = true;
+                    return;
+                }
+            }
         }
 
         protected override void TryHoverButtons(int x, int y)
@@ -1609,6 +1661,21 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             if (CurrentPageBundle.name == MemeBundleNames.FLASHBANG)
             {
                 b.Draw(CurrentPageBundle.BundleTextureOverride, new Vector2(0, 0), new Rectangle(Game1.viewport.Width, 0, Game1.viewport.Width, Game1.viewport.Height), Color.White, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 0.1f);
+            }
+
+            if (_isCurrentlySticky)
+            {
+                var mousePosition = Game1.getMousePosition();
+                var sap = ItemRegistry.Create<Object>(QualifiedItemIds.SAP);
+                var random = new Random();
+                var maxDistance = 32;
+                for (var i = 0; i < 4; i++)
+                {
+                    var x = (int)Math.Round((random.NextDouble() * maxDistance) - (maxDistance / 2));
+                    var y = (int)Math.Round((random.NextDouble() * maxDistance) - (maxDistance / 2));
+                    var position = new Point(mousePosition.X + x, mousePosition.Y + y);
+                    sap.draw(b, position.X, position.Y);
+                }
             }
         }
 

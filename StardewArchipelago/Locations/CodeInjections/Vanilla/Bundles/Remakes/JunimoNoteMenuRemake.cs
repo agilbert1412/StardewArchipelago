@@ -1347,7 +1347,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             }
         }
 
-        private void PerformHoverActionSpecificBundlePage(int x, int y)
+        protected virtual void PerformHoverActionSpecificBundlePage(int x, int y)
         {
             BackButton?.tryHover(x, y);
             HoveredItem = CurrentPageBundle.Complete || CurrentPageBundle.CompletionTimer > 0 ? null : Inventory.hover(x, y, HeldItem);
