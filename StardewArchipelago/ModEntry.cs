@@ -142,6 +142,7 @@ namespace StardewArchipelago
             _helper.ConsoleCommands.Add("clear_scouts", "Clears your scouting cache to allow redownloading scouting data", ClearScouts);
             _helper.ConsoleCommands.Add("deathlink", "Override the deathlink setting", OverrideDeathlink);
             _helper.ConsoleCommands.Add("trap_difficulty", "Override the trap difficulty setting", OverrideTrapDifficulty);
+            _helper.ConsoleCommands.Add("override_entrance_randomizer", "Override the Entrance Randomizer to force it off. Does not work for values that change the logic.", OverrideEntranceRandomizer);
 
 #if DEBUG
             _helper.ConsoleCommands.Add("connect", $"Connect to Archipelago. {CONNECT_SYNTAX}", OnCommandConnectToArchipelago);
@@ -795,6 +796,31 @@ namespace StardewArchipelago
 
             State.TrapDifficultyOverride = difficultyOverride;
             _logger.Log($"Trap Difficulty set to [{difficultyOverride}]. Change will be saved next time you sleep", LogLevel.Info);
+        }
+
+        private void OverrideEntranceRandomizer(string arg1, string[] arg2)
+        {
+            if (_archipelago == null || State == null || !_archipelago.MakeSureConnected(0))
+            {
+                _logger.Log($"This command can only be used from in-game, when connected to Archipelago", LogLevel.Info);
+                return;
+            }
+
+            if (_archipelago.SlotData.EntranceRandomization is EntranceRandomization.Buildings or EntranceRandomization.BuildingsWithoutHouse or EntranceRandomization.Everything)
+            {
+                _logger.Log($"Cannot override EntranceRandomization.{_archipelago.SlotData.EntranceRandomization} because logic rules rely on it.", LogLevel.Info);
+                return;
+            }
+
+            if (_archipelago.SlotData.EntranceRandomization is EntranceRandomization.Disabled)
+            {
+                _logger.Log($"Cannot override EntranceRandomization.{_archipelago.SlotData.EntranceRandomization} because it is already off!", LogLevel.Info);
+                return;
+            }
+
+            State.EntranceRandomizerOverride = !State.EntranceRandomizerOverride;
+            var response = State.EntranceRandomizerOverride ? "overriden to be disabled" : "restored to yaml value";
+            _logger.Log($"Entrance Randomizer {response}. Change will be saved next time you sleep", LogLevel.Info);
         }
 
         private void DebugMethod(string arg1, string[] arg2)
