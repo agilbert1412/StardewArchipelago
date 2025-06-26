@@ -359,7 +359,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         private void DrawGoOutsideAchievement(SpriteBatch spriteBatch)
         {
-            var textY = 410;
+            var textY = 335;
             var centeredX = 936;
             var font = Game1.smallFont;
             DrawText(spriteBatch, $"Do not look at this bundle for 5 years", centeredX, textY, font);
