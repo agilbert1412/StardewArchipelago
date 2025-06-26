@@ -21,6 +21,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 {
     public class BundleCurrencyManager
     {
+        public static int BALD_HAIR = 52;
+
         private static LogHandler _logger;
         private static IModHelper _modHelper;
         private static ArchipelagoWalletDto _wallet;
@@ -779,6 +781,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                     _wallet.Time += 10;
                 }
                 return;
+            }
+
+            if (_menu.CurrentPageBundle.name == MemeBundleNames.HAIRY)
+            {
+                Game1.player.changeHairStyle(BALD_HAIR);
+                _menu.PerformCurrencyPurchase();
             }
         }
 

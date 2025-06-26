@@ -167,7 +167,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         protected override void SetUpScramblingAndMail(int whichArea)
         {
-            _locationChecker.AddCheckedLocation("Rat Problem");
+            _locationChecker.AddCheckedLocation("Quest: Rat Problem");
             Game1.player.removeQuest("26");
             if (!Game1.player.hasOrWillReceiveMail("seenJunimoNote"))
             {
@@ -649,7 +649,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 case MemeBundleNames.VAMPIRE:
                 case MemeBundleNames.EXHAUSTION:
                 case MemeBundleNames.TICK_TOCK:
-                    SetUpDonateButton();
+                    SetUpDonateButton(true);
                     break;
                 case MemeBundleNames.COOKIE_CLICKER:
                     SetUpCookiesButtons();
@@ -701,6 +701,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             {
                 return;
             }
+            if (CurrentPageBundle.name == MemeBundleNames.HAIRY)
+            {
+                if (Game1.player.getHair() != BundleCurrencyManager.BALD_HAIR)
+                {
+                    SetUpDonateButton(false);
+                }
+                return;
+            }
             if (CurrentPageBundle.name == MemeBundleNames.CLIQUE)
             {
                 SetUpCliqueButton();
@@ -737,14 +745,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             snapCursorToCurrentSnappedComponent();
         }
 
-        private void SetUpDonateButton()
+        private void SetUpDonateButton(bool abovePurchaseButton)
         {
             if (FromGameMenu)
             {
                 return;
             }
 
-            var donateButton = new BundleButton(new Rectangle(xPositionOnScreen + 825, yPositionOnScreen + 350, 260, 72), MemeTexture, new Rectangle(0, 0, 53, 20), 4f);
+            var yPosition = yPositionOnScreen + (abovePurchaseButton ? 350 : 504);
+            var donateButton = new BundleButton(new Rectangle(xPositionOnScreen + 825, yPosition, 260, 72), MemeTexture, new Rectangle(0, 0, 53, 20), 4f);
             donateButton.myID = 796;
             donateButton.leftNeighborID = REGION_BACK_BUTTON;
             donateButton.rightNeighborID = REGION_PURCHASE_BUTTON;
@@ -1702,13 +1711,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             base.DrawSpecificBundle(b);
             if (CurrentPageBundle.name == MemeBundleNames.FLASHBANG)
             {
-                b.Draw(CurrentPageBundle.BundleTextureOverride, new Vector2(0, 0), new Rectangle(Game1.viewport.Width, 0, Game1.viewport.Width, Game1.viewport.Height), Color.White, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 0.1f);
+                b.Draw(CurrentPageBundle.BundleTextureOverride, new Vector2(0, 0), new Microsoft.Xna.Framework.Rectangle(Game1.viewport.Width, 0, Game1.viewport.Width, Game1.viewport.Height), Color.White, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 0.1f);
             }
 
             if (_isCurrentlySticky)
             {
-
-                var sap = ItemRegistry.Create<Object>(QualifiedItemIds.SAP);
+                var sap = ItemRegistry.GetDataOrErrorItem(QualifiedItemIds.SAP);
                 var seed = Game1.ticks / 10;
                 var random = new Random(seed);
                 if (random.NextDouble() < 0.01)
@@ -1723,7 +1731,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                     var x = (int)Math.Round((random.NextDouble() * maxDistance) - (maxDistance / 2));
                     var y = (int)Math.Round((random.NextDouble() * maxDistance) - (maxDistance / 2));
                     var position = new Vector2(nextPosition.X + x - mouseOffset, nextPosition.Y + y - mouseOffset);
-                    sap.drawInMenu(b, position, 1.0f);
+                    var sourceRect = sap.GetSourceRect(0, new int?(sap.SpriteIndex));
+                    b.Draw(sap.GetTexture(), position + new Vector2(32f, 32f), sourceRect, Color.White * 1f, 0.0f, new Vector2((float)(sourceRect.Width / 2), (float)(sourceRect.Height / 2)), 4f, SpriteEffects.None, 0.9f);
+                    // sap.drawInMenu(b, position, 1.0f);
                 }
             }
         }
