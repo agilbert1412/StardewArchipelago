@@ -8,6 +8,7 @@ using StardewArchipelago.Extensions;
 using StardewArchipelago.GameModifications.CodeInjections;
 using StardewArchipelago.Stardew;
 using StardewValley;
+using StardewValley.Buildings;
 using StardewValley.Locations;
 using StardewValley.Objects;
 
@@ -36,6 +37,7 @@ namespace StardewArchipelago.GameModifications
             }
 
             RemoveShippingBin();
+            RemovePetBowls();
             SendGilTelephoneLetter();
         }
 
@@ -180,13 +182,28 @@ namespace StardewArchipelago.GameModifications
             }
 
             var farm = Game1.getFarm();
-            if (!FarmInjections.TryFindShippingBin(farm, out var shippingBin))
+            var shippingBins = FarmInjections.FindShippingBins(farm);
+            foreach (var shippingBin in shippingBins)
+            {
+                shippingBin.BeforeDemolish();
+                farm.destroyStructure(shippingBin);
+            }
+        }
+
+        private void RemovePetBowls()
+        {
+            if (!_archipelago.SlotData.BuildingProgression.HasFlag(BuildingProgression.Progressive) || _archipelago.HasReceivedItem("Pet Bowl"))
             {
                 return;
             }
 
-            shippingBin.BeforeDemolish();
-            farm.destroyStructure(shippingBin);
+            var farm = Game1.getFarm();
+            var petBowls = FarmInjections.FindPetBowls(farm);
+            foreach (var petBowl in petBowls)
+            {
+                petBowl.BeforeDemolish();
+                farm.destroyStructure(petBowl);
+            }
         }
 
         private void SendGilTelephoneLetter()

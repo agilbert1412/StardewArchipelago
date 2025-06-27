@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using Microsoft.Xna.Framework;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
@@ -200,26 +201,17 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             }
         }
 
-        public static void PlaceEarlyShippingBin()
+        public static void PlaceAutoBuildings()
         {
             try
             {
-                if (!_archipelago.HasReceivedItem("Shipping Bin"))
-                {
-                    return;
-                }
-
                 var farm = Game1.getFarm();
-                if (TryFindShippingBin(farm, out _))
-                {
-                    return;
-                }
-
                 ConstructStarterShippingBin(farm);
+                ConstructStarterPetBowl(farm);
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed in {nameof(PlaceEarlyShippingBin)}:\n{ex}");
+                _logger.LogError($"Failed in {nameof(PlaceAutoBuildings)}:\n{ex}");
                 return;
             }
         }
@@ -227,6 +219,16 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         private static void ConstructStarterShippingBin(Farm farm)
         {
             var blueprint = "Shipping Bin";
+            if (!_archipelago.HasReceivedItem(blueprint))
+            {
+                return;
+            }
+
+            if (FindShippingBins(farm).Any())
+            {
+                return;
+            }
+
             var tile = farm.GetStarterShippingBinLocation();
             var collisionMask = CollisionMask.Buildings | CollisionMask.Characters | CollisionMask.Farmers | CollisionMask.Flooring | CollisionMask.Furniture | CollisionMask.Objects;
             for (var x = 0; x < 2; x++)
@@ -253,19 +255,48 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             farm.buildings.Add(shippingBin);
         }
 
-        public static bool TryFindShippingBin(Farm farm, out ShippingBin shippingBin)
+        private static void ConstructStarterPetBowl(Farm farm)
         {
+            var blueprint = "Pet Bowl";
+            if (!_archipelago.HasReceivedItem(blueprint))
+            {
+                return;
+            }
+
+            if (FindPetBowls(farm).Any())
+            {
+                return;
+            }
+
+            farm.AddDefaultBuilding(blueprint, farm.GetStarterPetBowlLocation());
+        }
+
+        public static List<ShippingBin> FindShippingBins(Farm farm)
+        {
+            var shippingBins = new List<ShippingBin>();
             foreach (var building in farm.buildings)
             {
                 if (building is ShippingBin bin)
                 {
-                    shippingBin = bin;
-                    return true;
+                    shippingBins.Add(bin);
                 }
             }
 
-            shippingBin = null;
-            return false;
+            return shippingBins;
+        }
+
+        public static List<PetBowl> FindPetBowls(Farm farm)
+        {
+            var petBowls = new List<PetBowl>();
+            foreach (var building in farm.buildings)
+            {
+                if (building is PetBowl petBowl)
+                {
+                    petBowls.Add(petBowl);
+                }
+            }
+
+            return petBowls;
         }
 
         public static void ForcePetIfNeeded(Mailman mailman)
