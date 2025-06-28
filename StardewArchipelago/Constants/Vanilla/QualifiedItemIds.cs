@@ -320,6 +320,9 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string RETRO_CATALOGUE = QualifiedFurnitureId(FurnitureIds.RETRO_CATALOGUE);
         public static readonly string TRASH_CATALOGUE = QualifiedFurnitureId(FurnitureIds.TRASH_CATALOGUE);
         public static readonly string WIZARD_CATALOGUE = QualifiedFurnitureId(FurnitureIds.WIZARD_CATALOGUE);
+        public static readonly string SCYTHE = QualifiedWeaponId(WeaponIds.SCYTHE);
+        public static readonly string GOLDEN_SCYTHE = QualifiedWeaponId(WeaponIds.GOLDEN_SCYTHE);
+        public static readonly string IRIDIUM_SCYTHE = QualifiedWeaponId(WeaponIds.IRIDIUM_SCYTHE);
 
         public static readonly string[] ALL_CATALOGUES = {
             CATALOGUE, FURNITURE_CATALOGUE, JOJA_CATALOGUE, JUNIMO_CATALOGUE,

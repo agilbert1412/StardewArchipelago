@@ -6,5 +6,8 @@
         public const string MASTER_SLINGSHOT = "33";
         public const string GALAXY_SLINGSHOT = "34";
         public const string MEOWMERE = "65";
+        public const string SCYTHE = "47";
+        public const string GOLDEN_SCYTHE = "53";
+        public const string IRIDIUM_SCYTHE = "66";
     }
 }

@@ -5,6 +5,7 @@ using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework;
 using Netcode;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Items.Traps;
@@ -196,11 +197,20 @@ namespace StardewArchipelago.Items.Mail
 
             // This includes the current letter due to the timing of this patch
             var scytheNumber = _mail.OpenedMailsContainingKey(ToolUnlockManager.PROGRESSIVE_SCYTHE);
-            scytheNumber = Math.Max(1, Math.Min(2, scytheNumber));
-            var scytheId = "(W)53"; // Golden Scythe
-            if (scytheNumber > 1)
+            scytheNumber = Math.Max(1, Math.Min(3, scytheNumber));
+            if (_archipelago.SlotData.ToolProgression.HasFlag(ToolProgression.NoStartingTools))
             {
-                scytheId = "(W)66"; // Iridium Scythe
+                scytheNumber -= 1;
+            }
+
+            var scytheId = QualifiedItemIds.SCYTHE;
+            if (scytheNumber == 1)
+            {
+                scytheId = QualifiedItemIds.GOLDEN_SCYTHE;
+            }
+            if (scytheNumber >= 2)
+            {
+                scytheId = QualifiedItemIds.IRIDIUM_SCYTHE;
             }
 
             var itemToAdd = ItemRegistry.Create(scytheId);
