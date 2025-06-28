@@ -269,7 +269,7 @@ namespace StardewArchipelago
         private void InitializeAfterConnection()
         {
             _stardewItemManager = new StardewItemManager(_logger);
-            _mail = new Mailman(_logger, State);
+            _mail = new Mailman(_logger, _archipelago, State);
             if (_archipelago.SlotData.Jojapocalypse.Jojapocalypse == JojapocalypseSetting.Forced)
             {
                 _locationChecker = new DisabledLocationChecker(_logger, _archipelago, State.LocationsChecked, State.AttemptedLocationChecks);

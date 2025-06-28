@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using StardewArchipelago.Archipelago;
+using StardewArchipelago.Extensions;
 using StardewArchipelago.Serialization;
 using StardewValley;
 
@@ -12,11 +14,13 @@ namespace StardewArchipelago.Items.Mail
         private bool _sendForTomorrow = true;
 
         private readonly ILogger _logger;
+        private readonly StardewArchipelagoClient _archipelago;
         private readonly ArchipelagoStateDto _state;
 
-        public Mailman(ILogger logger, ArchipelagoStateDto state)
+        public Mailman(ILogger logger, StardewArchipelagoClient archipelago, ArchipelagoStateDto state)
         {
             _logger = logger;
+            _archipelago = archipelago;
             _state = state;
             var mailData = DataLoader.Mail(Game1.content);
             foreach (var (mailKey, mailContent) in _state.LettersGenerated)
@@ -80,6 +84,7 @@ namespace StardewArchipelago.Items.Mail
         public void GenerateMail(string mailKey, string mailContent)
         {
             mailContent = mailContent.Replace("<3", "<");
+            mailContent = mailContent.AnonymizePlayerNames(_archipelago.GetSession().Players);
             var mailData = DataLoader.Mail(Game1.content);
             mailData[mailKey] = mailContent;
             if (_state.LettersGenerated.ContainsKey(mailKey))

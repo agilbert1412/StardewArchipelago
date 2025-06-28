@@ -126,6 +126,7 @@ namespace StardewArchipelago.Archipelago
             }
 
             Logger.LogInfo(fullMessage);
+            stardewFullMessage = stardewFullMessage.AnonymizePlayerNames(GetSession().Players);
 
             switch (message)
             {
@@ -319,12 +320,26 @@ namespace StardewArchipelago.Archipelago
 
         public ScoutedLocation ScoutStardewLocation(string locationName, bool createAsHint = false)
         {
-            return ScoutSingleLocation(locationName, ShouldHint(createAsHint));
+            var scoutedLocation = ScoutSingleLocation(locationName, ShouldHint(createAsHint));
+            if (scoutedLocation != null && ModEntry.Instance.Config.AnonymizeNamesInChat)
+            {
+                scoutedLocation = new ScoutedLocation(scoutedLocation.LocationName, scoutedLocation.ItemName, scoutedLocation.PlayerName.AnonymizePlayerNames(GetSession().Players), scoutedLocation.GameName, scoutedLocation.LocationId,
+                    scoutedLocation.ItemId, scoutedLocation.PlayerId, scoutedLocation.ClassificationFlags);
+            }
+            return scoutedLocation;
         }
 
         public Dictionary<string, ScoutedLocation> ScoutStardewLocations(IEnumerable<string> locationNames, bool createAsHint = false)
         {
-            return ScoutManyLocations(locationNames, ShouldHint(createAsHint));
+            var scoutedLocations = ScoutManyLocations(locationNames, ShouldHint(createAsHint));
+            foreach (var scoutedLocationKey in scoutedLocations.Keys)
+            {
+                var scoutedLocation = scoutedLocations[scoutedLocationKey];
+                scoutedLocations[scoutedLocationKey] = new ScoutedLocation(scoutedLocation.LocationName, scoutedLocation.ItemName, scoutedLocation.PlayerName.AnonymizePlayerNames(GetSession().Players), scoutedLocation.GameName, scoutedLocation.LocationId,
+                        scoutedLocation.ItemId, scoutedLocation.PlayerId, scoutedLocation.ClassificationFlags);
+            }
+
+            return scoutedLocations;
         }
 
         public string SendFakeItemMessage(string itemName, string locationName)

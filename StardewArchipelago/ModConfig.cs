@@ -49,6 +49,11 @@ namespace StardewArchipelago
         public int BonusPerMovementSpeed { get; set; } = 5;
 
         /// <summary>
+        /// Whether to Anonymize Player names in the chatbox
+        /// </summary>
+        public bool AnonymizeNamesInChat { get; set; } = false;
+
+        /// <summary>
         /// Which Item messages should be displayed in the game chatbox
         /// </summary>
         public ChatItemsFilter DisplayItemsInChat { get; set; } = ChatItemsFilter.RelatedToMe;
