@@ -277,6 +277,7 @@ namespace StardewArchipelago.Items.Mail
                 _logger.LogInfo($"Could not find a upgradedTool of type {toolGenericName} in this entire world, creating a brand new one.");
                 Game1.player.holdUpItemThenMessage(newTool);
                 Game1.player.addItemByMenuIfNecessary(newTool);
+                return;
             }
 
             Game1.player.holdUpItemThenMessage(upgradedTool);

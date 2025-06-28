@@ -196,6 +196,10 @@ namespace StardewArchipelago.Items
 
         public Tool UpgradeTool(string toolName)
         {
+            if (toolName == "Watering_Can")
+            {
+                toolName = "WateringCan";
+            }
             var newTool = (Tool)ItemRegistry.Create("(T)" + toolName);
             return newTool;
         }

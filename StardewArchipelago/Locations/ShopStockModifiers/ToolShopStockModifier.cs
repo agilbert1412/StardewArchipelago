@@ -66,6 +66,10 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
                     }
                     var requiredItem = $"{Prefix.PROGRESSIVE}{toolName}";
                     var requiredAmount = i - 1;
+                    if (_archipelago.SlotData.ToolProgression.HasFlag(ToolProgression.NoStartingTools))
+                    {
+                        requiredAmount += 1;
+                    }
                     var id = $"{IDProvider.AP_LOCATION} {locationName}";
                     var toolId = $"{Materials.InternalMaterialNames[i]}{toolName.Replace(" ", "")}";
 
