@@ -157,6 +157,13 @@ namespace StardewArchipelago.Constants
             "Seal",
             "Hamster",
         };
+        // To add later
+        // Shrike
+        // Capybara
+        // Pterodactyl
+        // Brontosaurus
+        // Triceratops
+        // Human
     }
 
 }

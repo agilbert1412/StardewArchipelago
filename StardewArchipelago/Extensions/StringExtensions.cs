@@ -25,11 +25,6 @@ namespace StardewArchipelago.Extensions
                 return name;
             }
 
-            // Frazz -> 125
-            // Kimou00 -> 99
-            // Cap -> 57
-            // Honeywell -> 8
-
             var hash = name.GetHash();
             var random = new Random(hash);
             var animalIndex = random.Next(AnimalNames.AllNames.Length);
@@ -81,12 +76,12 @@ namespace StardewArchipelago.Extensions
                     var toReplace = $"{name}{endChar}";
                     if (startChar == "" && endChar != "" && anonymizedMessage.StartsWith(toReplace))
                     {
-                        anonymizedMessage = $"{anonymousName}{endChar}" + anonymizedMessage.Substring(toReplace.Length);
+                        anonymizedMessage = $"{anonymousName}{endChar}" + anonymizedMessage[toReplace.Length..];
                     }
                     toReplace = $"{startChar}{name}";
                     if (startChar != "" && endChar == "" && anonymizedMessage.EndsWith(toReplace))
                     {
-                        anonymizedMessage = anonymizedMessage.Substring(0, anonymizedMessage.Length - toReplace.Length) + $"{startChar}{anonymousName}";
+                        anonymizedMessage = anonymizedMessage[..^toReplace.Length] + $"{startChar}{anonymousName}";
                     }
                     toReplace = $"{startChar}{name}{endChar}";
                     if (startChar != "" && endChar != "" && anonymizedMessage.Contains(toReplace))
