@@ -51,6 +51,12 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                         continue;
                     }
 
+                    if (Game1.player.Items.ContainsId(lostAndFoundItem.QualifiedItemId))
+                    {
+                        __instance.returnedDonations.Remove(lostAndFoundItem);
+                        continue;
+                    }
+
                     lostAndFoundTool.UpgradeLevel = receivedUpgrades;
 
                     if (startedWithout)
