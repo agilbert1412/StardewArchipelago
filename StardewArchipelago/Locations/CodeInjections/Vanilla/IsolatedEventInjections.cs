@@ -15,6 +15,8 @@ using Rectangle = xTile.Dimensions.Rectangle;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
+using StardewArchipelago.Archipelago;
+using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -28,10 +30,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
         private static ILogger _logger;
         private static IModHelper _helper;
-        private static ArchipelagoClient _archipelago;
+        private static StardewArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
 
-        public static void Initialize(ILogger logger, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             _logger = logger;
             _helper = modHelper;
@@ -299,6 +301,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 if (__instance.isTemporarilyInvisible || justCheckingForActivity || __instance.QualifiedItemId != QualifiedItemIds.POT_OF_GOLD)
                 {
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
+                if (_archipelago.SlotData.Hatsanity > Hatsanity.None)
+                {
+                    Game1.createMultipleItemDebris(ItemRegistry.Create("(H)LeprechuanHat"), __instance.TileLocation * 64f + new Vector2(32f), 1);
                 }
 
                 if (_locationChecker.IsLocationMissing(POT_OF_GOLD_AP_LOCATION))
