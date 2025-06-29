@@ -22,7 +22,7 @@ namespace StardewArchipelago.GameModifications.Testing
             _featuresByName.Add(MoveLink.Name, MoveLink);
 
 #if DEBUG
-            UnstableMods.Value = VerifyMods.NOTHING;
+            // UnstableMods.Value = VerifyMods.NOTHING;
 #endif
 
             try

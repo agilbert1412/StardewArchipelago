@@ -88,8 +88,8 @@ namespace StardewArchipelago.Registry
             _modHelper.ConsoleCommands.Add("export_shippables", "Export all currently loaded shippable items", ExportShippables);
             _modHelper.ConsoleCommands.Add("export_mismatches", "Export all items where Name and DisplayName mismatch which can be shipped", ExportMismatchedItems);
             _modHelper.ConsoleCommands.Add("export_weapons", "Export all weapons by category and tier", ExportWeapons);
-            _modHelper.ConsoleCommands.Add("release_slot", "Release the current slot completely", ReleaseSlot);
-            _modHelper.ConsoleCommands.Add("debug_method", "Runs whatever is currently in the debug method", DebugMethod);
+            //_modHelper.ConsoleCommands.Add("release_slot", "Release the current slot completely", ReleaseSlot);
+            //_modHelper.ConsoleCommands.Add("debug_method", "Runs whatever is currently in the debug method", DebugMethod);
             // _modHelper.ConsoleCommands.Add("set_next_season", "Sets the next season to a chosen value", SetNextSeason);
             // _modHelper.ConsoleCommands.Add("test_sendalllocations", "Tests if every AP item in the stardew_valley_location_table json file are supported by the mod", _tester.TestSendAllLocations);
             // _modHelper.ConsoleCommands.Add("load_entrances", "Loads the entrances file", (_, _) => _entranceRandomizer.LoadTransports());
