@@ -45,7 +45,7 @@ namespace StardewArchipelago.GameModifications.Tooltips
         {
             try
             {
-                ItemDrawInMenuPostfix(__instance, spriteBatch, location, scaleSize, transparency, layerDepth, color);
+                ItemDrawInMenuPostfix(__instance, spriteBatch, location, scaleSize, transparency, layerDepth, color, new Vector2(14f, 14f), new Vector2(8, 8));
                 return;
             }
             catch (Exception ex)
@@ -63,7 +63,7 @@ namespace StardewArchipelago.GameModifications.Tooltips
         {
             try
             {
-                ItemDrawInMenuPostfix(__instance, spriteBatch, location, scaleSize, transparency, layerDepth, colorOverride);
+                ItemDrawInMenuPostfix(__instance, spriteBatch, location, scaleSize, transparency, layerDepth, colorOverride, new Vector2(14f, 14f), new Vector2(8, 8));
                 return;
             }
             catch (Exception ex)
@@ -78,7 +78,7 @@ namespace StardewArchipelago.GameModifications.Tooltips
         {
             try
             {
-                ItemDrawInMenuPostfix(__instance, spriteBatch, location, scaleSize, transparency, layerDepth, color);
+                ItemDrawInMenuPostfix(__instance, spriteBatch, location, scaleSize, transparency, layerDepth, color, new Vector2(14f, 14f), new Vector2(8, 8));
                 return;
             }
             catch (Exception ex)
@@ -112,7 +112,12 @@ namespace StardewArchipelago.GameModifications.Tooltips
                 var itemData = recipe.GetItemData();
                 var name = itemData.InternalName;
                 var simplifiedName = _nameSimplifier.GetSimplifiedName(name, itemData.QualifiedItemId, itemData.ItemId);
-                ItemDrawInMenuPostfix(simplifiedName, spriteBatch, location, scaleSize, transparency, layerDepth, color);
+                var locationX = __instance.bounds.X + xOffset + __instance.sourceRect.Width / 2;// * __instance.baseScale;
+                var locationY = __instance.bounds.Y + yOffset + __instance.sourceRect.Height / 2;// * __instance.baseScale;
+                var location = new Vector2(locationX, locationY);
+                var origin = new Vector2(__instance.sourceRect.Width / 2, __instance.sourceRect.Height / 2);
+                var prefix = craftingPage.cooking ? "Cooksanity: " : "Craftsanity: ";
+                ItemDrawInMenuPostfix($"{prefix}{simplifiedName}", b, location, 1.0f, 1f, layerDepth, c, new Vector2(0, 0), origin);
 
                 return;
             }
@@ -148,7 +153,7 @@ namespace StardewArchipelago.GameModifications.Tooltips
         }
 
         private static void ItemDrawInMenuPostfix(Item item, SpriteBatch spriteBatch, Vector2 location,
-            float scaleSize, float transparency, float layerDepth, Color color)
+            float scaleSize, float transparency, float layerDepth, Color color, Vector2 offset, Vector2 origin)
         {
             if (item == null)
             {
@@ -156,11 +161,11 @@ namespace StardewArchipelago.GameModifications.Tooltips
             }
 
             var simplifiedName = _nameSimplifier.GetSimplifiedName(item);
-            ItemDrawInMenuPostfix(simplifiedName, spriteBatch, location, scaleSize, transparency, layerDepth, color);
+            ItemDrawInMenuPostfix(simplifiedName, spriteBatch, location, scaleSize, transparency, layerDepth, color, offset, origin);
         }
 
         private static void ItemDrawInMenuPostfix(string itemSimplifiedName, SpriteBatch spriteBatch, Vector2 location,
-            float scaleSize, float transparency, float layerDepth, Color color)
+            float scaleSize, float transparency, float layerDepth, Color color, Vector2 offset, Vector2 origin)
         {
             if (_config.ShowItemIndicators == ItemIndicatorPreference.False)
             {
@@ -176,10 +181,9 @@ namespace StardewArchipelago.GameModifications.Tooltips
                 return;
             }
 
-            var position = location + new Vector2(14f, 14f);
+            var position = location + offset;
             var sourceRectangle = new Rectangle(0, 0, 12, 12);
             var transparentColor = color * transparency;
-            var origin = new Vector2(8f, 8f);
 
             spriteBatch.Draw(_miniArchipelagoIcon, position, sourceRectangle, transparentColor, 0.0f, origin, scaleSize,
                 SpriteEffects.None, layerDepth);
