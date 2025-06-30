@@ -11,6 +11,7 @@ using StardewArchipelago.Stardew.NameMapping;
 using StardewArchipelago.Textures;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Menus;
 using StardewValley.Objects;
 using Object = StardewValley.Object;
 
@@ -87,24 +88,93 @@ namespace StardewArchipelago.GameModifications.Tooltips
             }
         }
 
-        private static bool ItemDrawInMenuPostfix(Item item, SpriteBatch spriteBatch, Vector2 location,
-            float scaleSize, float transparency, float layerDepth, Color color)
+        // public virtual void draw(SpriteBatch b, Color c, float layerDepth, int frameOffset = 0, int xOffset = 0, int yOffset = 0)
+        public static void DrawRecipe_AddArchipelagoLogoIfNeeded_Postfix(ClickableTextureComponent __instance, SpriteBatch b, Color c, float layerDepth, int frameOffset, int xOffset, int yOffset)
         {
-            if (item == null || _config.ShowItemIndicators == ItemIndicatorPreference.False)
+            try
             {
+                if (!TryGetActiveCraftingPage(out var craftingPage))
+                {
+                    return;
+                }
+
+                if (craftingPage.pagesOfCraftingRecipes.Count <= craftingPage.currentCraftingPage)
+                {
+                    return;
+                }
+
+                if (!craftingPage.pagesOfCraftingRecipes[craftingPage.currentCraftingPage].ContainsKey(__instance))
+                {
+                    return;
+                }
+
+                var recipe = craftingPage.pagesOfCraftingRecipes[craftingPage.currentCraftingPage][__instance];
+                var itemData = recipe.GetItemData();
+                var name = itemData.InternalName;
+                var simplifiedName = _nameSimplifier.GetSimplifiedName(name, itemData.QualifiedItemId, itemData.ItemId);
+                ItemDrawInMenuPostfix(simplifiedName, spriteBatch, location, scaleSize, transparency, layerDepth, color);
+
+                return;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(DrawRecipe_AddArchipelagoLogoIfNeeded_Postfix)}:\n{ex}");
+                return;
+            }
+        }
+
+        private static bool TryGetActiveCraftingPage(out CraftingPage craftingPage)
+        {
+            craftingPage = null;
+            var activeMenu = Game1.activeClickableMenu;
+            if (activeMenu == null)
+            {
+                return false;
+            }
+
+            if (activeMenu is CraftingPage)
+            {
+                craftingPage = (CraftingPage)activeMenu;
                 return true;
             }
 
+            if (Game1.activeClickableMenu is GameMenu gameMenu && gameMenu.GetCurrentPage() is CraftingPage)
+            {
+                craftingPage = (CraftingPage)gameMenu.GetCurrentPage();
+                return true;
+            }
+
+            return false;
+        }
+
+        private static void ItemDrawInMenuPostfix(Item item, SpriteBatch spriteBatch, Vector2 location,
+            float scaleSize, float transparency, float layerDepth, Color color)
+        {
+            if (item == null)
+            {
+                return;
+            }
+
             var simplifiedName = _nameSimplifier.GetSimplifiedName(item);
-            var allUncheckedLocations = _locationChecker.GetAllLocationsNotCheckedContainingWord(simplifiedName);
+            ItemDrawInMenuPostfix(simplifiedName, spriteBatch, location, scaleSize, transparency, layerDepth, color);
+        }
+
+        private static void ItemDrawInMenuPostfix(string itemSimplifiedName, SpriteBatch spriteBatch, Vector2 location,
+            float scaleSize, float transparency, float layerDepth, Color color)
+        {
+            if (_config.ShowItemIndicators == ItemIndicatorPreference.False)
+            {
+                return;
+            }
+
+            var allUncheckedLocations = _locationChecker.GetAllLocationsNotCheckedContainingWord(itemSimplifiedName);
 
             allUncheckedLocations = FilterLocationsBasedOnConfig(allUncheckedLocations);
 
             if (!allUncheckedLocations.Any())
             {
-                return true;
+                return;
             }
-
 
             var position = location + new Vector2(14f, 14f);
             var sourceRectangle = new Rectangle(0, 0, 12, 12);
@@ -113,7 +183,7 @@ namespace StardewArchipelago.GameModifications.Tooltips
 
             spriteBatch.Draw(_miniArchipelagoIcon, position, sourceRectangle, transparentColor, 0.0f, origin, scaleSize,
                 SpriteEffects.None, layerDepth);
-            return false;
+            return;
         }
 
         // public override string getDescription()

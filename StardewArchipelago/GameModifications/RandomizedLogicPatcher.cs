@@ -753,6 +753,11 @@ namespace StardewArchipelago.GameModifications
             );
 
             _harmony.Patch(
+                original: AccessTools.Method(typeof(ClickableTextureComponent), nameof(ClickableTextureComponent.draw), new[] { typeof(SpriteBatch), typeof(Color), typeof(float), typeof(int), typeof(int), typeof(int) }),
+                postfix: new HarmonyMethod(typeof(ItemTooltipInjections), nameof(ItemTooltipInjections.DrawRecipe_AddArchipelagoLogoIfNeeded_Postfix))
+            );
+
+            _harmony.Patch(
                 original: AccessTools.Method(typeof(Object), nameof(Object.getDescription)),
                 postfix: new HarmonyMethod(typeof(ItemTooltipInjections), nameof(ItemTooltipInjections.GetDescription_AddMissingChecks_Postfix))
             );

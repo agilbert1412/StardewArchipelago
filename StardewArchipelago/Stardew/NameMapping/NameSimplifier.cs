@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using StardewArchipelago.Constants.Vanilla;
 using StardewValley;
+using static StardewValley.Object;
 
 namespace StardewArchipelago.Stardew.NameMapping
 {
@@ -12,25 +13,25 @@ namespace StardewArchipelago.Stardew.NameMapping
 
         public string GetSimplifiedName(Item item)
         {
-            var name = item.Name;
-            if (item is Object && _renamedObjects.ContainsKey(item.QualifiedItemId))
+            return GetSimplifiedName(item.Name, item.QualifiedItemId, item.ItemId, item is Object itemObject ? itemObject.preserve.Value : null);
+        }
+
+        public string GetSimplifiedName(string itemName, string itemQualifiedId, string itemId, PreserveType? preserveType = null)
+        {
+            var name = itemName;
+            if (_renamedObjects.ContainsKey(itemQualifiedId))
             {
-                name = _renamedObjects[item.QualifiedItemId];
+                name = _renamedObjects[itemQualifiedId];
             }
 
-            if (PowerBooks.BookIdsToNames.ContainsKey(item.ItemId))
+            if (PowerBooks.BookIdsToNames.ContainsKey(itemId))
             {
-                name = PowerBooks.BookIdsToNames[item.ItemId];
+                name = PowerBooks.BookIdsToNames[itemId];
             }
 
             foreach (var (oldChar, newChar) in _simplifiedChars)
             {
                 name = name.Replace(oldChar, newChar);
-            }
-
-            if (item is not Object shippedObject)
-            {
-                return name;
             }
 
             foreach (var simplifiedName in _simplifiedNames)
@@ -41,9 +42,9 @@ namespace StardewArchipelago.Stardew.NameMapping
                 }
             }
 
-            if (shippedObject.preserve.Value.HasValue)
+            if (preserveType.HasValue)
             {
-                switch (shippedObject.preserve.Value.GetValueOrDefault())
+                switch (preserveType.GetValueOrDefault())
                 {
                     case Object.PreserveType.Wine:
                         return "Wine";
