@@ -2153,6 +2153,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             FloorIsLavaHasTouchedGroundToday = 0;
             HasLookedAtRestraintBundleToday = false;
             HasPurchasedRestraintBundleToday = false;
+            HasLookedAtHibernationBundleToday = false;
             HasLookedAtStanleyBundleToday = false;
         }
 

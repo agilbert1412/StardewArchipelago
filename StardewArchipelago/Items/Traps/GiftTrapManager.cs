@@ -164,7 +164,7 @@ namespace StardewArchipelago.Items.Traps
                 <= 0.4 => TeleportDestination.SameMap,
                 <= 0.8 => TeleportDestination.SameMapOrHome,
                 <= 1.2 => TeleportDestination.PelicanTown,
-                _ => TeleportDestination.Anywhere
+                _ => TeleportDestination.Anywhere,
             };
             _trapExecutor.TeleportRandomly(destination);
         }
