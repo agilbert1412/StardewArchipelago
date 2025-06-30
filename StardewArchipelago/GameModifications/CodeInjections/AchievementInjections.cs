@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.Extensions;
 using StardewValley;
+using StardewValley.TokenizableStrings;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
 {
@@ -70,30 +72,25 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 const uint homesteaderAmount = 250000U;
                 const uint millionaireAmount = 1000000U;
                 const uint legendAmount = 10000000U;
-
-                if (moneyEarnedIfProfitMarginWas1 >= legendAmount)
+                var achievementsByAmount = new Dictionary<MoneyAchievement, uint>()
                 {
-                    Game1.getAchievement((int)MoneyAchievement.Legend);
-                }
+                    { MoneyAchievement.Legend, legendAmount },
+                    { MoneyAchievement.Millionaire, millionaireAmount },
+                    { MoneyAchievement.Homesteader, homesteaderAmount },
+                    { MoneyAchievement.Cowpoke, cowpokeAmount },
+                    { MoneyAchievement.Greenhorn, greenhornAmount },
+                };
 
-                if (moneyEarnedIfProfitMarginWas1 >= millionaireAmount)
+                foreach (var (achievement, amountNeeded) in achievementsByAmount)
                 {
-                    Game1.getAchievement((int)MoneyAchievement.Millionaire);
-                }
-
-                if (moneyEarnedIfProfitMarginWas1 >= homesteaderAmount)
-                {
-                    Game1.getAchievement((int)MoneyAchievement.Homesteader);
-                }
-
-                if (moneyEarnedIfProfitMarginWas1 >= cowpokeAmount)
-                {
-                    Game1.getAchievement((int)MoneyAchievement.Cowpoke);
-                }
-
-                if (moneyEarnedIfProfitMarginWas1 >= greenhornAmount)
-                {
-                    Game1.getAchievement((int)MoneyAchievement.Greenhorn);
+                    if (moneyEarnedIfProfitMarginWas1 >= amountNeeded)
+                    {
+                        GrantSteamAchievement((int)achievement);
+                    }
+                    if (moneyEarnedAfterStartingMoney >= amountNeeded)
+                    {
+                        GrantAchievementInGame((int)achievement);
+                    }
                 }
 
                 return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
@@ -103,6 +100,52 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 _logger.LogError($"Failed in {nameof(CheckForMoneyAchievements_GrantMoneyAchievementsFairly_Prefix)}:\n{ex}");
                 return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
+        }
+
+        // public static void getAchievement(int which, bool allowBroadcasting = true)
+        private static void GrantAchievement(int which, bool allowBroadcasting = true)
+        {
+            GrantAchievementInGame(which, allowBroadcasting);
+            GrantSteamAchievement(which);
+        }
+
+        private static void GrantAchievementInGame(int which, bool allowBroadcasting = true)
+        {
+            if (Game1.player.achievements.Contains(which) || Game1.gameMode != (byte)3 || !Game1.achievements.TryGetValue(which, out var str1))
+            {
+                return;
+            }
+            var achievementName = str1.Split('^')[0];
+            Game1.player.achievements.Add(which);
+            if (which < 32 & allowBroadcasting)
+            {
+                if (Game1.stats.isSharedAchievement(which))
+                {
+                    Game1.Multiplayer.sendSharedAchievementMessage(which);
+                }
+                else
+                {
+                    var str2 = Game1.player.Name;
+                    if (str2 == "")
+                    {
+                        str2 = TokenStringBuilder.LocalizedText("Strings\\UI:Chat_PlayerJoinedNewName");
+                    }
+                    Game1.Multiplayer.globalChatInfoMessage("Achievement", str2, TokenStringBuilder.AchievementName(which));
+                }
+            }
+            Game1.playSound("achievement");
+            Game1.addHUDMessage(HUDMessage.ForAchievement(achievementName));
+            Game1.player.autoGenerateActiveDialogueEvent("achievement_" + which.ToString());
+            if (Game1.player.hasOrWillReceiveMail("hatter"))
+            {
+                return;
+            }
+            Game1.addMailForTomorrow("hatter");
+        }
+
+        private static void GrantSteamAchievement(int which)
+        {
+            Game1.getPlatformAchievement(which.ToString());
         }
     }
 
