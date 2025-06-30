@@ -61,6 +61,7 @@ namespace StardewArchipelago.Registry
             {
                 RegisterPlayerCommands();
                 RegisterDebugCommands();
+                RegisterBeta7Commands();
             }
             catch (Exception ex)
             {
@@ -104,6 +105,11 @@ namespace StardewArchipelago.Registry
             return;
 #endif
             _modHelper.ConsoleCommands.Add("walkable_tiles", "Gets the list of every walkable tile", this.ListWalkableTiles);
+        }
+
+        private void RegisterBeta7Commands()
+        {
+            _modHelper.ConsoleCommands.Add("send_logical_check", $"Sends a check that has a logic issue. Specify the location name.", OnSendLogicalCheck);
         }
 
         private void OnCommandConnectToArchipelago(string arg1, string[] arg2)
@@ -384,6 +390,54 @@ namespace StardewArchipelago.Registry
         private void OnCommandDisconnectFromArchipelago(string arg1, string[] arg2)
         {
             _mod.ArchipelagoDisconnect();
+        }
+
+        private void OnSendLogicalCheck(string arg1, string[] arg2)
+        {
+            if (_archipelago == null || _state == null || !_archipelago.MakeSureConnected(0))
+            {
+                _logger.Log($"This command can only be used from in-game, when connected to Archipelago", LogLevel.Info);
+                return;
+            }
+
+            if (arg2.Length < 1)
+            {
+                _logger.Log($"Please provide a location name", LogLevel.Info);
+                return;
+            }
+
+            var locationName = arg2[0];
+            if (!_archipelago.LocationExists(locationName))
+            {
+                _logger.Log($"Location '{locationName}' does not exist in this multiworld", LogLevel.Info);
+                return;
+            }
+
+            if (!_locationChecker.IsLocationMissing(locationName))
+            {
+                _logger.Log($"Location '{locationName}' is already checked!", LogLevel.Info);
+                return;
+            }
+
+            var allowedLocations = new[]
+            {
+                "Beach Bridge Repair",
+                "Grim Reaper statue",
+                "Help Wanted: Gathering ",
+                "Iridium Krobus",
+                "Quest: Cryptic Note",
+                "Secret Note #10: Cryptic Note",
+                "Foliage Print",
+            };
+
+            if (!allowedLocations.Contains(locationName) && !allowedLocations.Any(x => locationName.StartsWith(x)))
+            {
+                _logger.Log($"Location '{locationName}' is not marked as logically buggy and cannot be force-sent with this command.", LogLevel.Info);
+                return;
+            }
+
+            _logger.Log($"Sending '{locationName}'...", LogLevel.Info);
+            _locationChecker.AddCheckedLocation(locationName);
         }
     }
 }
