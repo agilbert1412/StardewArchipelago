@@ -25,7 +25,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         public const string MUSEUMSANITY_SKELETON_FRONT = "Skeleton Front";
         public const string MUSEUMSANITY_SKELETON_MIDDLE = "Skeleton Middle";
         public const string MUSEUMSANITY_SKELETON_BACK = "Skeleton Back";
-        private const string ARCHAEOLOGY_QUEST = "Archaeology";
+        private const string ARCHAEOLOGY_QUEST = "Quest: Archaeology";
 
         private static ILogger _logger;
         private static IModHelper _modHelper;
