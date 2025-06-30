@@ -116,7 +116,7 @@ namespace StardewArchipelago.GameModifications.Tooltips
                 var locationY = __instance.bounds.Y + yOffset + __instance.sourceRect.Height / 2;// * __instance.baseScale;
                 var location = new Vector2(locationX, locationY);
                 var origin = new Vector2(__instance.sourceRect.Width / 2, __instance.sourceRect.Height / 2);
-                var prefix = craftingPage.cooking ? "Cooksanity: " : "Craftsanity: ";
+                var prefix = craftingPage.cooking ? "Cook " : "Craft ";
                 ItemDrawInMenuPostfix($"{prefix}{simplifiedName}", b, location, 1.0f, 1f, layerDepth, c, new Vector2(0, 0), origin);
 
                 return;
