@@ -148,7 +148,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
         {
             try
             {
-                _locationChecker.AddCheckedLocation($"Goblin Problem");
+                _locationChecker.AddCheckedLocation($"Quest: Goblin Problem");
                 return;
             }
             catch (Exception ex)
