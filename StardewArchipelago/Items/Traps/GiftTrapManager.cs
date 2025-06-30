@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using Archipelago.Gifting.Net.Traits;
 using Archipelago.Gifting.Net.Versioning.Gifts.Current;
 using StardewArchipelago.Stardew;
@@ -45,6 +46,7 @@ namespace StardewArchipelago.Items.Traps
             _giftTraps.Add(GiftFlag.Life, GetDamaged);
             _giftTraps.Add(GiftFlag.Monster, SpawnMonster);
             _giftTraps.Add(GiftFlag.Animal, SpawnMonster);
+            _giftTraps.Add("Teleport", TeleportRandomly);
 
             // TODO: Code more of these
             //_giftTraps.Add(GiftFlag.Grass, SpawnDebris);
@@ -151,6 +153,18 @@ namespace StardewArchipelago.Items.Traps
         private void SpawnMonster(double quality, double duration)
         {
             _trapExecutor.MonsterSpawner.SpawnOneMonster(Game1.player.currentLocation, quality * duration);
+        }
+
+        private void TeleportRandomly(double quality, double duration)
+        {
+            var destinations = Enum.GetValues<TeleportDestination>();
+            var destinationValues = destinations.Select(x => (int)x).ToArray();
+            var averageDestination = ((destinationValues.Max() - destinationValues.Min()) * 0.5) + destinationValues.Min();
+            var destinationScaled = averageDestination * quality * duration;
+            var destinationRounded = (int)Math.Round(destinationScaled);
+            var destinationClamped = Math.Clamp(destinationRounded, destinationValues.Min(), destinationValues.Max());
+            var destination = (TeleportDestination)destinationClamped;
+            _trapExecutor.TeleportRandomly(destination);
         }
     }
 }

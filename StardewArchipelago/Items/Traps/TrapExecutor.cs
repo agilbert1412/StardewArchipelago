@@ -109,6 +109,11 @@ namespace StardewArchipelago.Items.Traps
         {
             var difficulty = _archipelago.SlotData.TrapItemsDifficulty;
             var destination = _difficultyBalancer.TeleportDestinations[difficulty];
+            TeleportRandomly(destination);
+        }
+
+        public void TeleportRandomly(TeleportDestination destination)
+        {
             var validMaps = new List<GameLocation>();
             switch (destination)
             {
@@ -137,6 +142,11 @@ namespace StardewArchipelago.Items.Traps
                     throw new ArgumentOutOfRangeException();
             }
 
+            TeleportRandomly(validMaps, destination);
+        }
+
+        private void TeleportRandomly(List<GameLocation> validMaps, TeleportDestination destination)
+        {
             GameLocation chosenLocation = null;
             Vector2? chosenTile = null;
             while (chosenLocation == null || chosenTile == null)

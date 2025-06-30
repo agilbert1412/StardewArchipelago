@@ -453,6 +453,7 @@ namespace StardewArchipelago.Archipelago.Gifting
             { "Bulb", GiftFlag.Seed },
             { "Starter", GiftFlag.Seed },
             { "Medicine", GiftFlag.Cure },
+            { "Warp", "Teleport" },
         };
 
         private static readonly List<string> CustomWordFlags = new()
