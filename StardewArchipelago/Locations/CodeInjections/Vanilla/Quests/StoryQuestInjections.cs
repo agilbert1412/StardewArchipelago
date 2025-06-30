@@ -104,6 +104,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
                 {
                     return;
                 }
+
+                _logger.LogInfo($"Removing quest '{englishQuestName}'");
                 _locationChecker.AddCheckedLocation($"Quest: {englishQuestName}");
                 SecretNotesInjections.TryHandleQuestComplete(quest, out _);
 

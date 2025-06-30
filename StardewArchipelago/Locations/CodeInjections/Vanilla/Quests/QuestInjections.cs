@@ -59,6 +59,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
                     return runOriginal;
                 }
 
+                _logger.LogInfo($"Trying to handle quest complete for '{__instance.GetName()}'");
                 if (StoryQuestInjections.TryHandleQuestComplete(__instance, out runOriginal))
                 {
                     return runOriginal;
