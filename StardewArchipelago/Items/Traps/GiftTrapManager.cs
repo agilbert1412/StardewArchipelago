@@ -157,13 +157,15 @@ namespace StardewArchipelago.Items.Traps
 
         private void TeleportRandomly(double quality, double duration)
         {
-            var destinations = Enum.GetValues<TeleportDestination>();
-            var destinationValues = destinations.Select(x => (int)x).ToArray();
-            var averageDestination = ((destinationValues.Max() - destinationValues.Min()) * 0.5) + destinationValues.Min();
-            var destinationScaled = averageDestination * quality * duration;
-            var destinationRounded = (int)Math.Round(destinationScaled);
-            var destinationClamped = Math.Clamp(destinationRounded, destinationValues.Min(), destinationValues.Max());
-            var destination = (TeleportDestination)destinationClamped;
+            var destinationScaled = quality * duration;
+            var destination = destinationScaled switch
+            {
+                <= 0.2 => TeleportDestination.Nearby,
+                <= 0.4 => TeleportDestination.SameMap,
+                <= 0.8 => TeleportDestination.SameMapOrHome,
+                <= 1.2 => TeleportDestination.PelicanTown,
+                _ => TeleportDestination.Anywhere
+            };
             _trapExecutor.TeleportRandomly(destination);
         }
     }

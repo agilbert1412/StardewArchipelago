@@ -7,6 +7,7 @@ using Archipelago.Gifting.Net.Versioning.Gifts;
 using Archipelago.Gifting.Net.Versioning.Gifts.Current;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Constants.Vanilla;
+using StardewArchipelago.Items.Traps;
 using StardewArchipelago.Stardew;
 using StardewValley;
 using StardewValley.GameData.Objects;
@@ -71,6 +72,8 @@ namespace StardewArchipelago.Archipelago.Gifting
             }
 
             traits.AddRange(GetContextTagsTraits(giftItem));
+
+            traits.AddRange(GetCustomTraits(giftItem));
 
             return SimplifyDuplicates(traits).ToArray();
         }
@@ -333,6 +336,31 @@ namespace StardewArchipelago.Archipelago.Gifting
             }
         }
 
+        private IEnumerable<GiftTrait> GetCustomTraits(Item giftItem)
+        {
+            const string teleportTrait = "Teleport";
+            if(giftItem.QualifiedItemId == QualifiedItemIds.WARP_TOTEM_FARM)
+            {
+                yield return CreateTrait(teleportTrait, 0.5d);
+            }
+            if (giftItem.QualifiedItemId == QualifiedItemIds.WARP_TOTEM_BEACH)
+            {
+                yield return CreateTrait(teleportTrait, 1d);
+            }
+            if (giftItem.QualifiedItemId == QualifiedItemIds.WARP_TOTEM_MOUNTAINS)
+            {
+                yield return CreateTrait(teleportTrait, 1d);
+            }
+            if (giftItem.QualifiedItemId == QualifiedItemIds.WARP_TOTEM_DESERT)
+            {
+                yield return CreateTrait(teleportTrait, 2d);
+            }
+            if (giftItem.QualifiedItemId == QualifiedItemIds.WARP_TOTEM_ISLAND)
+            {
+                yield return CreateTrait(teleportTrait, 3d);
+            }
+        }
+
         private double GetBombQuality(Item bombItem)
         {
             switch (bombItem.ItemId)
@@ -453,7 +481,6 @@ namespace StardewArchipelago.Archipelago.Gifting
             { "Bulb", GiftFlag.Seed },
             { "Starter", GiftFlag.Seed },
             { "Medicine", GiftFlag.Cure },
-            { "Warp", "Teleport" },
         };
 
         private static readonly List<string> CustomWordFlags = new()
