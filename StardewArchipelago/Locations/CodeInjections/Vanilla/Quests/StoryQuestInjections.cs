@@ -64,6 +64,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
                 return true;
             }
 
+            _logger.LogInfo($"Completing quest '{englishQuestName}'");
             if (!quest.dailyQuest.Value)
             {
                 _locationChecker.AddCheckedLocation($"Quest: {englishQuestName}");
