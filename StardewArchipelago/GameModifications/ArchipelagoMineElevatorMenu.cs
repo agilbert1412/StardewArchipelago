@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Menus;
@@ -136,6 +137,8 @@ namespace StardewArchipelago.GameModifications
             }
             base.draw(b);
             this.drawMouse(b);
+
+            MineshaftInjections.DrawElevatorIndicators(this.elevators, b);
         }
     }
 }

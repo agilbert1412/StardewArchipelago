@@ -47,7 +47,7 @@ namespace StardewArchipelago.GameModifications.Tooltips
             _travelingMerchantIcon = TexturesLoader.GetTexture("traveling_merchant.png");
         }
 
-        // public override void draw(SpriteBatch spriteBatch)
+        // public override void draw(SpriteBatch b)
         public static void Draw_AddArchipelagoIndicators_Postfix(Billboard __instance, SpriteBatch b)
         {
             try
@@ -61,6 +61,16 @@ namespace StardewArchipelago.GameModifications.Tooltips
                 else
                 {
                     DrawCalendarIndicators(__instance, b);
+                }
+
+                __instance.drawMouse(b);
+                // private string hoverText = "";
+                var hoverTextField = _modHelper.Reflection.GetField<string>(__instance, "hoverText");
+                var hoverText = hoverTextField.GetValue();
+
+                if (hoverText.Length > 0)
+                {
+                    IClickableMenu.drawHoverText(b, hoverText, Game1.dialogueFont);
                 }
 
                 return;

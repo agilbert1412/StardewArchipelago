@@ -228,30 +228,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             try
             {
-                if (!_config.ShowElevatorIndicators)
-                {
-                    return;
-                }
-
-                foreach (var button in __instance.elevators)
-                {
-                    var floor = Convert.ToInt32(button.name);
-                    var elevatorLocation = string.Format(ELEVATOR_LOCATION, floor);
-                    var treasureLocation = string.Format(TREASURE_LOCATION, floor);
-                    var checkRemainingOnThatFloor = _locationChecker.IsLocationMissing(elevatorLocation) || _locationChecker.IsLocationMissing(treasureLocation);
-
-                    if (!checkRemainingOnThatFloor)
-                    {
-                        continue;
-                    }
-
-                    var buttonLocation = new Vector2(button.bounds.X, button.bounds.Y);
-                    var position = buttonLocation + new Vector2(12f, 12f);
-                    var sourceRectangle = new Microsoft.Xna.Framework.Rectangle(0, 0, 12, 12);
-                    var color = Color.White;
-                    var origin = new Vector2(8f, 8f);
-                    b.Draw(_miniArchipelagoIcon, position, sourceRectangle, color, 0.0f, origin, 1f, SpriteEffects.None, 0.86f);
-                }
+                DrawElevatorIndicators(__instance.elevators, b);
 
                 return;
             }
@@ -260,6 +237,36 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 _logger.LogError($"Failed in {nameof(Draw_AddArchipelagoIndicators_Postfix)}:\n{ex}");
                 return;
             }
+        }
+
+        public static void DrawElevatorIndicators(IEnumerable<ClickableComponent> elevatorButtons, SpriteBatch b)
+        {
+            if (!_config.ShowElevatorIndicators)
+            {
+                return;
+            }
+
+            foreach (var button in elevatorButtons)
+            {
+                var floor = Convert.ToInt32(button.name);
+                var elevatorLocation = string.Format(ELEVATOR_LOCATION, floor);
+                var treasureLocation = string.Format(TREASURE_LOCATION, floor);
+                var checkRemainingOnThatFloor = _locationChecker.IsLocationMissing(elevatorLocation) || _locationChecker.IsLocationMissing(treasureLocation);
+
+                if (!checkRemainingOnThatFloor)
+                {
+                    continue;
+                }
+
+                var buttonLocation = new Vector2(button.bounds.X, button.bounds.Y);
+                var position = buttonLocation + new Vector2(12f, 12f);
+                var sourceRectangle = new Microsoft.Xna.Framework.Rectangle(0, 0, 12, 12);
+                var color = Color.White;
+                var origin = new Vector2(8f, 8f);
+                b.Draw(_miniArchipelagoIcon, position, sourceRectangle, color, 0.0f, origin, 1f, SpriteEffects.None, 0.86f);
+            }
+
+            return;
         }
     }
 }
