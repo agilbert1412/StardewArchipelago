@@ -10,7 +10,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
     public class QuestLogInjections
     {
         private const string ARCHAEOLOGY_QUEST_ID = "23";
-        private const string ARCHAEOLOGY_QUEST_NAME = "Archaeology";
+        public const string ARCHAEOLOGY_QUEST_NAME = "Quest: Archaeology";
 
         private static ILogger _logger;
         private static ArchipelagoClient _archipelago;

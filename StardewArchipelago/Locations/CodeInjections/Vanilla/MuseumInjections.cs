@@ -11,6 +11,7 @@ using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
+using StardewArchipelago.GameModifications.CodeInjections;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -25,7 +26,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         public const string MUSEUMSANITY_SKELETON_FRONT = "Skeleton Front";
         public const string MUSEUMSANITY_SKELETON_MIDDLE = "Skeleton Middle";
         public const string MUSEUMSANITY_SKELETON_BACK = "Skeleton Back";
-        private const string ARCHAEOLOGY_QUEST = "Quest: Archaeology";
 
         private static ILogger _logger;
         private static IModHelper _modHelper;
@@ -62,7 +62,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
                 if (totalNumberDonated > 0)
                 {
-                    _locationChecker.AddCheckedLocation(ARCHAEOLOGY_QUEST);
+                    _locationChecker.AddCheckedLocation(QuestLogInjections.ARCHAEOLOGY_QUEST_NAME);
                 }
 
                 __result = rewards;
