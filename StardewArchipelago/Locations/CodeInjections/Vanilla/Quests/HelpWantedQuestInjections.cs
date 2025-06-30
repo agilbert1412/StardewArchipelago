@@ -35,6 +35,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
         }
         public static bool TryHandleQuestComplete(Quest quest, out bool runOriginal)
         {
+            if (!quest.dailyQuest.Value)
+            {
+                runOriginal = MethodPrefix.RUN_ORIGINAL_METHOD;
+                return false;
+            }
+
             if (_archipelago.SlotData.QuestLocations.HelpWantedNumber <= 0)
             {
                 runOriginal = MethodPrefix.RUN_ORIGINAL_METHOD;
@@ -45,40 +51,34 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
             // Copper Ores: Daily True, Type 1
             // Slay Monsters: Daily True, Type 4
             // Catch fish: Daily True, Type 7
-            if (quest.dailyQuest.Value)
+            var isArchipelago = true;
+            var numberOfSteps = GetNumberOfHelpWantedGroups();
+            switch (quest.questType.Value)
             {
-                var isArchipelago = true;
-                var numberOfSteps = GetNumberOfHelpWantedGroups();
-                switch (quest.questType.Value)
-                {
-                    case (int)QuestType.ItemDelivery:
-                        isArchipelago = CheckDailyQuestLocationOfType(DailyQuest.ITEM_DELIVERY, numberOfSteps * 4);
-                        break;
-                    case (int)QuestType.SlayMonsters:
-                        isArchipelago = CheckDailyQuestLocationOfType(DailyQuest.SLAY_MONSTERS, numberOfSteps);
-                        break;
-                    case (int)QuestType.Fishing:
-                        isArchipelago = CheckDailyQuestLocationOfType(DailyQuest.FISHING, numberOfSteps);
-                        break;
-                    case (int)QuestType.ResourceCollection:
-                        isArchipelago = CheckDailyQuestLocationOfType(DailyQuest.GATHERING, numberOfSteps);
-                        break;
-                }
+                case (int)QuestType.ItemDelivery:
+                    isArchipelago = CheckDailyQuestLocationOfType(DailyQuest.ITEM_DELIVERY, numberOfSteps * 4);
+                    break;
+                case (int)QuestType.SlayMonsters:
+                    isArchipelago = CheckDailyQuestLocationOfType(DailyQuest.SLAY_MONSTERS, numberOfSteps);
+                    break;
+                case (int)QuestType.Fishing:
+                    isArchipelago = CheckDailyQuestLocationOfType(DailyQuest.FISHING, numberOfSteps);
+                    break;
+                case (int)QuestType.ResourceCollection:
+                    isArchipelago = CheckDailyQuestLocationOfType(DailyQuest.GATHERING, numberOfSteps);
+                    break;
+            }
 
-                if (!isArchipelago)
-                {
-                    runOriginal = MethodPrefix.RUN_ORIGINAL_METHOD;
-                    return true;
-                }
-
-                ++Game1.stats.QuestsCompleted;
-                QuestInjections.OriginalQuestCompleteCode(quest);
-                runOriginal = MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+            if (!isArchipelago)
+            {
+                runOriginal = MethodPrefix.RUN_ORIGINAL_METHOD;
                 return true;
             }
 
-            runOriginal = MethodPrefix.RUN_ORIGINAL_METHOD;
-            return false;
+            ++Game1.stats.QuestsCompleted;
+            QuestInjections.OriginalQuestCompleteCode(quest);
+            runOriginal = MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+            return true;
         }
 
         private static int GetNumberOfHelpWantedGroups()
