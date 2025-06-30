@@ -10,7 +10,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Modded
         private const double ARTIFACT_SPOT_MULTIPLIER = 1.6; // Default Value: 10
         private const double PANNING_MULTIPLIER = 1.5; // Default Value: 20
         private const double DIGGING_MULTIPLIER = 1.6; // Default Value: 5
-        private const double WATER_SHIFTER_MULTIPLIER = 1.8; // Default Value: 2
+        private const double WATER_SIFTER_MULTIPLIER = 1.8; // Default Value: 2
 
         private static ILogger _logger;
         private static IModHelper _modHelper;
@@ -69,16 +69,16 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Modded
         }
 
         // public int ExperienceFromWaterShifter { get; set; } = 2;
-        public static void ExperienceFromWaterShifter_APMultiplier_Postfix(object __instance, ref int __result)
+        public static void ExperienceFromWaterSifter_APMultiplier_Postfix(object __instance, ref int __result)
         {
             try
             {
-                __result = (int)(__result * WATER_SHIFTER_MULTIPLIER);
+                __result = (int)(__result * WATER_SIFTER_MULTIPLIER);
                 return;
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed in {nameof(ExperienceFromWaterShifter_APMultiplier_Postfix)}:\n{ex}");
+                _logger.LogError($"Failed in {nameof(ExperienceFromWaterSifter_APMultiplier_Postfix)}:\n{ex}");
                 return;
             }
         }

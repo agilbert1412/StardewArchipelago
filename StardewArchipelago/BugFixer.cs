@@ -20,7 +20,6 @@ namespace StardewArchipelago
         public void FixKnownBugs()
         {
             FixFreeBuildingsWithFreeInTheId();
-            FixShipsanityWaterShifter();
         }
 
         private static void FixFreeBuildingsWithFreeInTheId()
@@ -33,11 +32,6 @@ namespace StardewArchipelago
                     building.buildingType.Set(CarpenterInjections.RemoveFreePrefix(building.buildingType.Get()));
                 }
             }
-        }
-
-        private void FixShipsanityWaterShifter()
-        {
-            _locationChecker.AddCheckedLocation("Shipsanity: Water Shifter");
         }
     }
 }
