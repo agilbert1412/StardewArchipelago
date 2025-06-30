@@ -139,6 +139,21 @@ namespace StardewArchipelago.Stardew
             return false; // This is where I should do something about complex items like wines and such
         }
 
+        public bool HatExists(string hatName)
+        {
+            if (string.IsNullOrWhiteSpace(hatName))
+            {
+                return false;
+            }
+
+            if (_hatsByName.ContainsKey(hatName))
+            {
+                return true;
+            }
+
+            return false; 
+        }
+
         public StardewItem GetItemByName(string itemName)
         {
             if (_objectsByName.ContainsKey(itemName))

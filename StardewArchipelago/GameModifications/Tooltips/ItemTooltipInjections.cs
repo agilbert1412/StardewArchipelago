@@ -40,39 +40,54 @@ namespace StardewArchipelago.GameModifications.Tooltips
         }
 
         // public abstract void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, StackDrawType drawStackNumber, Color color, bool drawShadow)
-        public static void DrawInMenu_AddArchipelagoLogoIfNeeded_Postfix(Object __instance, SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, StackDrawType drawStackNumber, Color color, bool drawShadow)
+        public static void DrawInMenuObject_AddArchipelagoLogoIfNeeded_Postfix(Object __instance, SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, StackDrawType drawStackNumber, Color color, bool drawShadow)
         {
             try
             {
-                ObjectDrawInMenuPostfix(__instance, spriteBatch, location, scaleSize, transparency, layerDepth, color);
+                ItemDrawInMenuPostfix(__instance, spriteBatch, location, scaleSize, transparency, layerDepth, color);
                 return;
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed in {nameof(DrawInMenu_AddArchipelagoLogoIfNeeded_Postfix)}:\n{ex}");
+                _logger.LogError($"Failed in {nameof(DrawInMenuObject_AddArchipelagoLogoIfNeeded_Postfix)}:\n{ex}");
                 return;
             }
         }
 
         // public override void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency,
         // float layerDepth, StackDrawType drawStackNumber, Color colorOverride, bool drawShadow)
-        public static void DrawInMenuColored_AddArchipelagoLogoIfNeeded_Postfix(ColoredObject __instance, SpriteBatch spriteBatch,
+        public static void DrawInMenuColoredObject_AddArchipelagoLogoIfNeeded_Postfix(ColoredObject __instance, SpriteBatch spriteBatch,
             Vector2 location, float scaleSize, float transparency, float layerDepth, StackDrawType drawStackNumber,
             Color colorOverride, bool drawShadow)
         {
             try
             {
-                ObjectDrawInMenuPostfix(__instance, spriteBatch, location, scaleSize, transparency, layerDepth, colorOverride);
+                ItemDrawInMenuPostfix(__instance, spriteBatch, location, scaleSize, transparency, layerDepth, colorOverride);
                 return;
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed in {nameof(DrawInMenuColored_AddArchipelagoLogoIfNeeded_Postfix)}:\n{ex}");
+                _logger.LogError($"Failed in {nameof(DrawInMenuColoredObject_AddArchipelagoLogoIfNeeded_Postfix)}:\n{ex}");
                 return;
             }
         }
 
-        private static bool ObjectDrawInMenuPostfix(Object item, SpriteBatch spriteBatch, Vector2 location,
+        // public abstract void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, StackDrawType drawStackNumber, Color color, bool drawShadow)
+        public static void DrawInMenuHat_AddArchipelagoLogoIfNeeded_Postfix(Hat __instance, SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth, StackDrawType drawStackNumber, Color color, bool drawShadow)
+        {
+            try
+            {
+                ItemDrawInMenuPostfix(__instance, spriteBatch, location, scaleSize, transparency, layerDepth, color);
+                return;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(DrawInMenuHat_AddArchipelagoLogoIfNeeded_Postfix)}:\n{ex}");
+                return;
+            }
+        }
+
+        private static bool ItemDrawInMenuPostfix(Item item, SpriteBatch spriteBatch, Vector2 location,
             float scaleSize, float transparency, float layerDepth, Color color)
         {
             if (item == null || _config.ShowItemIndicators == ItemIndicatorPreference.False)
@@ -102,7 +117,7 @@ namespace StardewArchipelago.GameModifications.Tooltips
         }
 
         // public override string getDescription()
-        public static void GetDescription_AddMissingChecks_Postfix(Object __instance, ref string __result)
+        public static void GetDescription_AddMissingChecks_Postfix(Item __instance, ref string __result)
         {
             try
             {

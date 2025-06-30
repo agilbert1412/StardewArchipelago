@@ -739,12 +739,17 @@ namespace StardewArchipelago.GameModifications
                 { typeof(SpriteBatch), typeof(Vector2), typeof(float), typeof(float), typeof(float), typeof(StackDrawType), typeof(Color), typeof(bool) };
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Object), nameof(Object.drawInMenu), objectDrawParameters),
-                postfix: new HarmonyMethod(typeof(ItemTooltipInjections), nameof(ItemTooltipInjections.DrawInMenu_AddArchipelagoLogoIfNeeded_Postfix))
+                postfix: new HarmonyMethod(typeof(ItemTooltipInjections), nameof(ItemTooltipInjections.DrawInMenuObject_AddArchipelagoLogoIfNeeded_Postfix))
             );
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(ColoredObject), nameof(ColoredObject.drawInMenu), objectDrawParameters),
-                postfix: new HarmonyMethod(typeof(ItemTooltipInjections), nameof(ItemTooltipInjections.DrawInMenuColored_AddArchipelagoLogoIfNeeded_Postfix))
+                postfix: new HarmonyMethod(typeof(ItemTooltipInjections), nameof(ItemTooltipInjections.DrawInMenuColoredObject_AddArchipelagoLogoIfNeeded_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Hat), nameof(Hat.drawInMenu), objectDrawParameters),
+                postfix: new HarmonyMethod(typeof(ItemTooltipInjections), nameof(ItemTooltipInjections.DrawInMenuHat_AddArchipelagoLogoIfNeeded_Postfix))
             );
 
             _harmony.Patch(
