@@ -100,6 +100,24 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     if (startedWithout && receivedUpgrades <= 0)
                     {
                         team.returnedDonations.Remove(lostAndFoundItem);
+                        continue;
+                    }
+
+                    var toolExistsAnywhere = false;
+                    Utility.ForEachItem(x =>
+                    {
+                        if (x is Tool tool && tool.GetType().FullName == lostAndFoundItem.GetType().FullName)
+                        {
+                            toolExistsAnywhere = true;
+                            return false;
+                        }
+                        return true;
+                    });
+
+                    if (toolExistsAnywhere)
+                    {
+                        team.returnedDonations.Remove(lostAndFoundItem);
+                        continue;
                     }
                 }
 
