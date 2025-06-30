@@ -54,7 +54,12 @@ namespace StardewArchipelago.Archipelago.SlotData
 
         public bool GetSlotSetting(string key, bool defaultValue)
         {
-            if (_slotDataFields.ContainsKey(key) && _slotDataFields[key] != null && _slotDataFields[key] is bool boolValue)
+            if (!_slotDataFields.ContainsKey(key) || _slotDataFields[key] == null)
+            {
+                return GetSlotDefaultValue(key, defaultValue);
+            }
+
+            if (_slotDataFields[key] is bool boolValue)
             {
                 return boolValue;
             }
