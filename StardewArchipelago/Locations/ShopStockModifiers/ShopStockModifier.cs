@@ -57,7 +57,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
 
         protected void ReplaceWithArchipelagoCondition(ShopItemData shopItem, string item, int amount = 1)
         {
-            if (string.IsNullOrWhiteSpace(item))
+            if (string.IsNullOrWhiteSpace(item) || _stardewItemManager.HatExists(item))
             {
                 return;
             }
