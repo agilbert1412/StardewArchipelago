@@ -846,218 +846,224 @@
             "tags": ["BUNDLE", "COMMUNITY_CENTER_BUNDLE", "FISH_TANK_BUNDLE"],
             "content_packs": []
         },
-        "Small Pack 1": {
+        "Small Pack": {
             "code": 717161,
             "region": "Pierre's General Store",
-            "tags": ["BACKPACK", "SPLIT_BACKPACK", "STARTING_TOOLS"],
+            "tags": ["BACKPACK", "BACKPACK_TIER", "STARTING_TOOLS"],
             "content_packs": []
         },
-        "Small Pack 2": {
+        "Small Pack 1": {
             "code": 717162,
             "region": "Pierre's General Store",
             "tags": ["BACKPACK", "SPLIT_BACKPACK", "STARTING_TOOLS"],
             "content_packs": []
         },
-        "Small Pack 3": {
+        "Small Pack 2": {
             "code": 717163,
             "region": "Pierre's General Store",
             "tags": ["BACKPACK", "SPLIT_BACKPACK", "STARTING_TOOLS"],
             "content_packs": []
         },
-        "Small Pack 4": {
+        "Small Pack 3": {
             "code": 717164,
             "region": "Pierre's General Store",
             "tags": ["BACKPACK", "SPLIT_BACKPACK", "STARTING_TOOLS"],
             "content_packs": []
         },
-        "Small Pack 5": {
+        "Small Pack 4": {
             "code": 717165,
             "region": "Pierre's General Store",
             "tags": ["BACKPACK", "SPLIT_BACKPACK", "STARTING_TOOLS"],
             "content_packs": []
         },
-        "Small Pack 6": {
+        "Small Pack 5": {
             "code": 717166,
             "region": "Pierre's General Store",
             "tags": ["BACKPACK", "SPLIT_BACKPACK", "STARTING_TOOLS"],
             "content_packs": []
         },
-        "Small Pack 7": {
+        "Small Pack 6": {
             "code": 717167,
             "region": "Pierre's General Store",
             "tags": ["BACKPACK", "SPLIT_BACKPACK", "STARTING_TOOLS"],
             "content_packs": []
         },
-        "Small Pack 8": {
+        "Small Pack 7": {
             "code": 717168,
             "region": "Pierre's General Store",
             "tags": ["BACKPACK", "SPLIT_BACKPACK", "STARTING_TOOLS"],
             "content_packs": []
         },
-        "Small Pack 9": {
+        "Small Pack 8": {
             "code": 717169,
             "region": "Pierre's General Store",
             "tags": ["BACKPACK", "SPLIT_BACKPACK", "STARTING_TOOLS"],
             "content_packs": []
         },
-        "Small Pack 10": {
+        "Small Pack 9": {
             "code": 717170,
             "region": "Pierre's General Store",
             "tags": ["BACKPACK", "SPLIT_BACKPACK", "STARTING_TOOLS"],
             "content_packs": []
         },
-        "Small Pack 11": {
+        "Small Pack 10": {
             "code": 717171,
             "region": "Pierre's General Store",
             "tags": ["BACKPACK", "SPLIT_BACKPACK", "STARTING_TOOLS"],
             "content_packs": []
         },
-        "Small Pack 12": {
+        "Small Pack 11": {
             "code": 717172,
             "region": "Pierre's General Store",
             "tags": ["BACKPACK", "SPLIT_BACKPACK", "STARTING_TOOLS"],
             "content_packs": []
         },
-        "Large Pack 1": {
+        "Small Pack 12": {
             "code": 717174,
             "region": "Pierre's General Store",
-            "tags": ["BACKPACK", "SPLIT_BACKPACK"],
+            "tags": ["BACKPACK", "SPLIT_BACKPACK", "STARTING_TOOLS"],
             "content_packs": []
         },
-        "Large Pack 2": {
+        "Large Pack 1": {
             "code": 717175,
             "region": "Pierre's General Store",
             "tags": ["BACKPACK", "SPLIT_BACKPACK"],
             "content_packs": []
         },
-        "Large Pack 3": {
+        "Large Pack 2": {
             "code": 717176,
             "region": "Pierre's General Store",
             "tags": ["BACKPACK", "SPLIT_BACKPACK"],
             "content_packs": []
         },
-        "Large Pack 4": {
+        "Large Pack 3": {
             "code": 717177,
             "region": "Pierre's General Store",
             "tags": ["BACKPACK", "SPLIT_BACKPACK"],
             "content_packs": []
         },
-        "Large Pack 5": {
+        "Large Pack 4": {
             "code": 717178,
             "region": "Pierre's General Store",
             "tags": ["BACKPACK", "SPLIT_BACKPACK"],
             "content_packs": []
         },
-        "Large Pack 6": {
+        "Large Pack 5": {
             "code": 717179,
             "region": "Pierre's General Store",
             "tags": ["BACKPACK", "SPLIT_BACKPACK"],
             "content_packs": []
         },
-        "Large Pack 7": {
+        "Large Pack 6": {
             "code": 717180,
             "region": "Pierre's General Store",
             "tags": ["BACKPACK", "SPLIT_BACKPACK"],
             "content_packs": []
         },
-        "Large Pack 8": {
+        "Large Pack 7": {
             "code": 717181,
             "region": "Pierre's General Store",
             "tags": ["BACKPACK", "SPLIT_BACKPACK"],
             "content_packs": []
         },
-        "Large Pack 9": {
+        "Large Pack 8": {
             "code": 717182,
             "region": "Pierre's General Store",
             "tags": ["BACKPACK", "SPLIT_BACKPACK"],
             "content_packs": []
         },
-        "Large Pack 10": {
+        "Large Pack 9": {
             "code": 717183,
             "region": "Pierre's General Store",
             "tags": ["BACKPACK", "SPLIT_BACKPACK"],
             "content_packs": []
         },
-        "Large Pack 11": {
+        "Large Pack 10": {
             "code": 717184,
             "region": "Pierre's General Store",
             "tags": ["BACKPACK", "SPLIT_BACKPACK"],
             "content_packs": []
         },
-        "Large Pack 12": {
+        "Large Pack 11": {
             "code": 717185,
             "region": "Pierre's General Store",
             "tags": ["BACKPACK", "SPLIT_BACKPACK"],
             "content_packs": []
         },
-        "Deluxe Pack 1": {
+        "Large Pack 12": {
             "code": 717187,
             "region": "Pierre's General Store",
             "tags": ["BACKPACK", "SPLIT_BACKPACK"],
             "content_packs": []
         },
-        "Deluxe Pack 2": {
+        "Deluxe Pack 1": {
             "code": 717188,
             "region": "Pierre's General Store",
             "tags": ["BACKPACK", "SPLIT_BACKPACK"],
             "content_packs": []
         },
-        "Deluxe Pack 3": {
+        "Deluxe Pack 2": {
             "code": 717189,
             "region": "Pierre's General Store",
             "tags": ["BACKPACK", "SPLIT_BACKPACK"],
             "content_packs": []
         },
-        "Deluxe Pack 4": {
+        "Deluxe Pack 3": {
             "code": 717190,
             "region": "Pierre's General Store",
             "tags": ["BACKPACK", "SPLIT_BACKPACK"],
             "content_packs": []
         },
-        "Deluxe Pack 5": {
+        "Deluxe Pack 4": {
             "code": 717191,
             "region": "Pierre's General Store",
             "tags": ["BACKPACK", "SPLIT_BACKPACK"],
             "content_packs": []
         },
-        "Deluxe Pack 6": {
+        "Deluxe Pack 5": {
             "code": 717192,
             "region": "Pierre's General Store",
             "tags": ["BACKPACK", "SPLIT_BACKPACK"],
             "content_packs": []
         },
-        "Deluxe Pack 7": {
+        "Deluxe Pack 6": {
             "code": 717193,
             "region": "Pierre's General Store",
             "tags": ["BACKPACK", "SPLIT_BACKPACK"],
             "content_packs": []
         },
-        "Deluxe Pack 8": {
+        "Deluxe Pack 7": {
             "code": 717194,
             "region": "Pierre's General Store",
             "tags": ["BACKPACK", "SPLIT_BACKPACK"],
             "content_packs": []
         },
-        "Deluxe Pack 9": {
+        "Deluxe Pack 8": {
             "code": 717195,
             "region": "Pierre's General Store",
             "tags": ["BACKPACK", "SPLIT_BACKPACK"],
             "content_packs": []
         },
-        "Deluxe Pack 10": {
+        "Deluxe Pack 9": {
             "code": 717196,
             "region": "Pierre's General Store",
             "tags": ["BACKPACK", "SPLIT_BACKPACK"],
             "content_packs": []
         },
-        "Deluxe Pack 11": {
+        "Deluxe Pack 10": {
             "code": 717197,
             "region": "Pierre's General Store",
             "tags": ["BACKPACK", "SPLIT_BACKPACK"],
             "content_packs": []
         },
-        "Deluxe Pack 12": {
+        "Deluxe Pack 11": {
             "code": 717198,
+            "region": "Pierre's General Store",
+            "tags": ["BACKPACK", "SPLIT_BACKPACK"],
+            "content_packs": []
+        },
+        "Deluxe Pack 12": {
+            "code": 717199,
             "region": "Pierre's General Store",
             "tags": ["BACKPACK", "SPLIT_BACKPACK"],
             "content_packs": []
@@ -1295,6 +1301,36 @@
             "region": "Volcano - Floor 10",
             "tags": ["GINGER_ISLAND", "MANDATORY"],
             "content_packs": ["Ginger Island (Vanilla)"]
+        },
+        "Rat Problem Cutscene": {
+            "code": 717252,
+            "region": "Town",
+            "tags": ["MANDATORY"],
+            "content_packs": []
+        },
+        "Trash Bear Foraging": {
+            "code": 717253,
+            "region": "Trash Bear",
+            "tags": ["TRASH_BEAR"],
+            "content_packs": []
+        },
+        "Trash Bear Cooking": {
+            "code": 717254,
+            "region": "Trash Bear",
+            "tags": ["TRASH_BEAR"],
+            "content_packs": []
+        },
+        "Trash Bear Farming": {
+            "code": 717255,
+            "region": "Trash Bear",
+            "tags": ["TRASH_BEAR"],
+            "content_packs": []
+        },
+        "Trash Bear Fishing": {
+            "code": 717256,
+            "region": "Trash Bear",
+            "tags": ["TRASH_BEAR"],
+            "content_packs": []
         },
         "Totems Bundle": {
             "code": 717261,
@@ -1746,303 +1782,309 @@
             "tags": ["BUILDING_BLUEPRINT"],
             "content_packs": []
         },
-        "Introductions": {
+        "Quest: Introductions": {
             "code": 717501,
             "region": "Town",
             "tags": ["STORY_QUEST"],
             "content_packs": []
         },
-        "How To Win Friends": {
+        "Quest: How To Win Friends": {
             "code": 717502,
             "region": "Town",
             "tags": ["STORY_QUEST"],
             "content_packs": []
         },
-        "Getting Started": {
+        "Quest: Getting Started": {
             "code": 717503,
             "region": "Farm",
             "tags": ["STORY_QUEST"],
             "content_packs": []
         },
-        "Raising Animals": {
+        "Quest: Raising Animals": {
             "code": 717504,
             "region": "Farm",
             "tags": ["STORY_QUEST"],
             "content_packs": []
         },
-        "Advancement": {
+        "Quest: Advancement": {
             "code": 717505,
             "region": "Farm",
             "tags": ["STORY_QUEST"],
             "content_packs": []
         },
-        "Archaeology": {
+        "Quest: Archaeology": {
             "code": 717506,
             "region": "Museum",
             "tags": ["STORY_QUEST"],
             "content_packs": []
         },
-        "Meet The Wizard": {
+        "Quest: Meet The Wizard": {
             "code": 717507,
             "region": "Wizard Tower",
             "tags": ["STORY_QUEST"],
             "content_packs": []
         },
-        "Forging Ahead": {
+        "Quest: Forging Ahead": {
             "code": 717508,
             "region": "The Mines - Floor 5",
             "tags": ["STORY_QUEST"],
             "content_packs": []
         },
-        "Smelting": {
+        "Quest: Smelting": {
             "code": 717509,
             "region": "The Mines - Floor 10",
             "tags": ["STORY_QUEST"],
             "content_packs": []
         },
-        "Initiation": {
+        "Quest: Initiation": {
             "code": 717510,
             "region": "The Mines - Floor 15",
             "tags": ["STORY_QUEST"],
             "content_packs": []
         },
-        "Robin's Lost Axe": {
+        "Quest: Robin's Lost Axe": {
             "code": 717511,
             "region": "Mountain",
             "tags": ["STORY_QUEST"],
             "content_packs": []
         },
-        "Jodi's Request": {
+        "Quest: Jodi's Request": {
             "code": 717512,
             "region": "Town",
             "tags": ["STORY_QUEST"],
             "content_packs": []
         },
-        "Mayor's \"Shorts\"": {
+        "Quest: Mayor's \"Shorts\"": {
             "code": 717513,
             "region": "Town",
             "tags": ["STORY_QUEST"],
             "content_packs": []
         },
-        "Blackberry Basket": {
+        "Quest: Blackberry Basket": {
             "code": 717514,
             "region": "Mountain",
             "tags": ["STORY_QUEST"],
             "content_packs": []
         },
-        "Marnie's Request": {
+        "Quest: Marnie's Request": {
             "code": 717515,
             "region": "Marnie's Ranch",
             "tags": ["STORY_QUEST"],
             "content_packs": []
         },
-        "Pam Is Thirsty": {
+        "Quest: Pam Is Thirsty": {
             "code": 717516,
             "region": "Town",
             "tags": ["STORY_QUEST"],
             "content_packs": []
         },
-        "A Dark Reagent": {
+        "Quest: A Dark Reagent": {
             "code": 717517,
             "region": "Wizard Tower",
             "tags": ["STORY_QUEST"],
             "content_packs": []
         },
-        "Cow's Delight": {
+        "Quest: Cow's Delight": {
             "code": 717518,
             "region": "Forest",
             "tags": ["STORY_QUEST"],
             "content_packs": []
         },
-        "The Skull Key": {
+        "Quest: The Skull Key": {
             "code": 717519,
             "region": "Skull Cavern Entrance",
             "tags": ["STORY_QUEST"],
             "content_packs": []
         },
-        "Crop Research": {
+        "Quest: Crop Research": {
             "code": 717520,
             "region": "Mountain",
             "tags": ["STORY_QUEST"],
             "content_packs": []
         },
-        "Knee Therapy": {
+        "Quest: Knee Therapy": {
             "code": 717521,
             "region": "Alex's House",
             "tags": ["STORY_QUEST"],
             "content_packs": []
         },
-        "Robin's Request": {
+        "Quest: Robin's Request": {
             "code": 717522,
             "region": "Mountain",
             "tags": ["STORY_QUEST"],
             "content_packs": []
         },
-        "Qi's Challenge": {
+        "Quest: Qi's Challenge": {
             "code": 717523,
             "region": "Skull Cavern Floor 25",
             "tags": ["STORY_QUEST"],
             "content_packs": []
         },
-        "The Mysterious Qi": {
+        "Quest: The Mysterious Qi": {
             "code": 717524,
             "region": "Desert",
             "tags": ["STORY_QUEST"],
             "content_packs": []
         },
-        "Carving Pumpkins": {
+        "Quest: Carving Pumpkins": {
             "code": 717525,
             "region": "Town",
             "tags": ["STORY_QUEST"],
             "content_packs": []
         },
-        "A Winter Mystery": {
+        "Quest: A Winter Mystery": {
             "code": 717526,
             "region": "Town",
             "tags": ["STORY_QUEST"],
             "content_packs": []
         },
-        "Strange Note": {
+        "Quest: Strange Note": {
             "code": 717527,
             "region": "Secret Woods",
             "tags": ["STORY_QUEST"],
             "content_packs": []
         },
-        "Cryptic Note": {
+        "Quest: Cryptic Note": {
             "code": 717528,
             "region": "Skull Cavern Floor 100",
             "tags": ["STORY_QUEST"],
             "content_packs": []
         },
-        "Fresh Fruit": {
+        "Quest: Fresh Fruit": {
             "code": 717529,
             "region": "Town",
             "tags": ["STORY_QUEST"],
             "content_packs": []
         },
-        "Aquatic Research": {
+        "Quest: Aquatic Research": {
             "code": 717530,
             "region": "Mountain",
             "tags": ["STORY_QUEST"],
             "content_packs": []
         },
-        "A Soldier's Star": {
+        "Quest: A Soldier's Star": {
             "code": 717531,
             "region": "Town",
             "tags": ["STORY_QUEST"],
             "content_packs": []
         },
-        "Mayor's Need": {
+        "Quest: Mayor's Need": {
             "code": 717532,
             "region": "Town",
             "tags": ["STORY_QUEST"],
             "content_packs": []
         },
-        "Wanted: Lobster": {
+        "Quest: Wanted: Lobster": {
             "code": 717533,
             "region": "Saloon",
             "tags": ["STORY_QUEST"],
             "content_packs": []
         },
-        "Pam Needs Juice": {
+        "Quest: Pam Needs Juice": {
             "code": 717534,
             "region": "Town",
             "tags": ["STORY_QUEST"],
             "content_packs": []
         },
-        "Fish Casserole": {
+        "Quest: Fish Casserole": {
             "code": 717535,
             "region": "Sam's House",
             "tags": ["STORY_QUEST"],
             "content_packs": []
         },
-        "Catch A Squid": {
+        "Quest: Catch A Squid": {
             "code": 717536,
             "region": "Beach",
             "tags": ["STORY_QUEST"],
             "content_packs": []
         },
-        "Fish Stew": {
+        "Quest: Fish Stew": {
             "code": 717537,
             "region": "Saloon",
             "tags": ["STORY_QUEST"],
             "content_packs": []
         },
-        "Pierre's Notice": {
+        "Quest: Pierre's Notice": {
             "code": 717538,
             "region": "Pierre's General Store",
             "tags": ["STORY_QUEST"],
             "content_packs": []
         },
-        "Clint's Attempt": {
+        "Quest: Clint's Attempt": {
             "code": 717539,
             "region": "Clint's Blacksmith",
             "tags": ["STORY_QUEST"],
             "content_packs": []
         },
-        "A Favor For Clint": {
+        "Quest: A Favor For Clint": {
             "code": 717540,
             "region": "Town",
             "tags": ["STORY_QUEST"],
             "content_packs": []
         },
-        "Staff Of Power": {
+        "Quest: Staff Of Power": {
             "code": 717541,
             "region": "Wizard Tower",
             "tags": ["STORY_QUEST"],
             "content_packs": []
         },
-        "Granny's Gift": {
+        "Quest: Granny's Gift": {
             "code": 717542,
             "region": "Town",
             "tags": ["STORY_QUEST"],
             "content_packs": []
         },
-        "Exotic Spirits": {
+        "Quest: Exotic Spirits": {
             "code": 717543,
             "region": "Desert",
             "tags": ["STORY_QUEST"],
             "content_packs": []
         },
-        "Catch a Lingcod": {
+        "Quest: Catch a Lingcod": {
             "code": 717544,
             "region": "Fishing",
             "tags": ["STORY_QUEST"],
             "content_packs": []
         },
-        "The Pirate's Wife": {
+        "Quest: The Pirate's Wife": {
             "code": 717545,
             "region": "Island West",
             "tags": ["GINGER_ISLAND", "STORY_QUEST"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
-        "Dark Talisman": {
+        "Quest: Dark Talisman": {
             "code": 717546,
             "region": "Mutant Bug Lair",
             "tags": ["STORY_QUEST"],
             "content_packs": []
         },
-        "Goblin Problem": {
+        "Quest: Goblin Problem": {
             "code": 717547,
             "region": "Witch's Swamp",
             "tags": ["STORY_QUEST"],
             "content_packs": []
         },
-        "Magic Ink": {
+        "Quest: Magic Ink": {
             "code": 717548,
             "region": "Witch's Hut",
             "tags": ["STORY_QUEST"],
             "content_packs": []
         },
-        "The Giant Stump": {
+        "Quest: The Giant Stump": {
             "code": 717549,
             "region": "Forest",
             "tags": ["STORY_QUEST"],
             "content_packs": []
         },
-        "Feeding Animals": {
+        "Quest: Feeding Animals": {
             "code": 717550,
             "region": "Farm",
+            "tags": ["STORY_QUEST"],
+            "content_packs": []
+        },
+        "Quest: Rat Problem": {
+            "code": 717551,
+            "region": "Community Center",
             "tags": ["STORY_QUEST"],
             "content_packs": []
         },
@@ -7022,13 +7064,13 @@
         },
         "Island Mailbox": {
             "code": 719207,
-            "region": "Island Farmhouse",
+            "region": "Island West",
             "tags": ["GINGER_ISLAND", "WALNUT_PURCHASE"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Farm Obelisk": {
             "code": 719208,
-            "region": "Island Farmhouse",
+            "region": "Island West",
             "tags": ["GINGER_ISLAND", "WALNUT_PURCHASE"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
@@ -14763,7 +14805,7 @@
         "Thank the Devs": {
             "code": 721210,
             "region": "Menu",
-            "tags": ["DIFFICULT_SECRET", "SECRETSANITY"],
+            "tags": ["EASY_SECRET", "SECRETSANITY"],
             "content_packs": []
         },
         "Annoy the Moon Man": {
@@ -15902,6 +15944,30 @@
         },
         "Scam Bundle": {
             "code": 721493,
+            "region": "Community Center",
+            "tags": ["BUNDLE", "COMMUNITY_CENTER_BUNDLE", "MEME_BUNDLE"],
+            "content_packs": []
+        },
+        "Doctor Bundle": {
+            "code": 721494,
+            "region": "Community Center",
+            "tags": ["BUNDLE", "COMMUNITY_CENTER_BUNDLE", "MEME_BUNDLE"],
+            "content_packs": []
+        },
+        "Very Sticky Bundle": {
+            "code": 721495,
+            "region": "Community Center",
+            "tags": ["BUNDLE", "COMMUNITY_CENTER_BUNDLE", "MEME_BUNDLE"],
+            "content_packs": []
+        },
+        "Stanley Bundle": {
+            "code": 721496,
+            "region": "Community Center",
+            "tags": ["BUNDLE", "COMMUNITY_CENTER_BUNDLE", "MEME_BUNDLE"],
+            "content_packs": []
+        },
+        "Hairy Bundle": {
+            "code": 721497,
             "region": "Community Center",
             "tags": ["BUNDLE", "COMMUNITY_CENTER_BUNDLE", "MEME_BUNDLE"],
             "content_packs": []
@@ -18256,6 +18322,252 @@
             "code": 722050,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_ARTISAN", "EATSANITY_POISONOUS"],
+            "content_packs": []
+        },
+        "Earth Obelisk Blueprint": {
+            "code": 722101,
+            "region": "Wizard Blueprints",
+            "tags": ["ENDGAME_LOCATIONS"],
+            "content_packs": []
+        },
+        "Water Obelisk Blueprint": {
+            "code": 722102,
+            "region": "Wizard Blueprints",
+            "tags": ["ENDGAME_LOCATIONS"],
+            "content_packs": []
+        },
+        "Desert Obelisk Blueprint": {
+            "code": 722103,
+            "region": "Wizard Blueprints",
+            "tags": ["ENDGAME_LOCATIONS"],
+            "content_packs": []
+        },
+        "Island Obelisk Blueprint": {
+            "code": 722104,
+            "region": "Wizard Blueprints",
+            "tags": ["ENDGAME_LOCATIONS", "GINGER_ISLAND"],
+            "content_packs": ["Ginger Island (Vanilla)"]
+        },
+        "Junimo Hut Blueprint": {
+            "code": 722105,
+            "region": "Wizard Blueprints",
+            "tags": ["ENDGAME_LOCATIONS"],
+            "content_packs": []
+        },
+        "Gold Clock Blueprint": {
+            "code": 722106,
+            "region": "Wizard Blueprints",
+            "tags": ["ENDGAME_LOCATIONS"],
+            "content_packs": []
+        },
+        "Purchase Return Scepter": {
+            "code": 722107,
+            "region": "Sewer",
+            "tags": ["ENDGAME_LOCATIONS"],
+            "content_packs": []
+        },
+        "Pam House Blueprint": {
+            "code": 722108,
+            "region": "Carpenter Shop",
+            "tags": ["ENDGAME_LOCATIONS"],
+            "content_packs": []
+        },
+        "Forest To Beach Shortcut Blueprint": {
+            "code": 722109,
+            "region": "Carpenter Shop",
+            "tags": ["ENDGAME_LOCATIONS"],
+            "content_packs": []
+        },
+        "Mountain Shortcuts Blueprint": {
+            "code": 722110,
+            "region": "Carpenter Shop",
+            "tags": ["ENDGAME_LOCATIONS"],
+            "content_packs": []
+        },
+        "Town To Tide Pools Shortcut Blueprint": {
+            "code": 722112,
+            "region": "Carpenter Shop",
+            "tags": ["ENDGAME_LOCATIONS"],
+            "content_packs": []
+        },
+        "Tunnel To Backwoods Shortcut Blueprint": {
+            "code": 722113,
+            "region": "Carpenter Shop",
+            "tags": ["ENDGAME_LOCATIONS"],
+            "content_packs": []
+        },
+        "Purchase Horse Flute": {
+            "code": 722115,
+            "region": "Qi's Walnut Room",
+            "tags": ["ENDGAME_LOCATIONS", "GINGER_ISLAND", "REQUIRES_QI_ORDERS"],
+            "content_packs": ["Ginger Island (Vanilla)", "Qi Board (Vanilla)"]
+        },
+        "Purchase Pierre's Missing Stocklist": {
+            "code": 722116,
+            "region": "Qi's Walnut Room",
+            "tags": ["ENDGAME_LOCATIONS", "GINGER_ISLAND", "REQUIRES_QI_ORDERS"],
+            "content_packs": ["Ginger Island (Vanilla)", "Qi Board (Vanilla)"]
+        },
+        "Purchase Key To The Town": {
+            "code": 722117,
+            "region": "Qi's Walnut Room",
+            "tags": ["ENDGAME_LOCATIONS", "GINGER_ISLAND", "REQUIRES_QI_ORDERS"],
+            "content_packs": ["Ginger Island (Vanilla)", "Qi Board (Vanilla)"]
+        },
+        "Purchase Mini-Shipping Bin": {
+            "code": 722118,
+            "region": "Qi's Walnut Room",
+            "tags": ["ENDGAME_LOCATIONS", "GINGER_ISLAND", "REQUIRES_QI_ORDERS"],
+            "content_packs": ["Ginger Island (Vanilla)", "Qi Board (Vanilla)"]
+        },
+        "Purchase Exotic Double Bed": {
+            "code": 722119,
+            "region": "Qi's Walnut Room",
+            "tags": ["ENDGAME_LOCATIONS", "GINGER_ISLAND", "REQUIRES_QI_ORDERS"],
+            "content_packs": ["Ginger Island (Vanilla)", "Qi Board (Vanilla)"]
+        },
+        "Purchase Golden Egg": {
+            "code": 722120,
+            "region": "Qi's Walnut Room",
+            "tags": ["ENDGAME_LOCATIONS", "GINGER_ISLAND", "REQUIRES_QI_ORDERS"],
+            "content_packs": ["Ginger Island (Vanilla)", "Qi Board (Vanilla)"]
+        },
+        "Purchase Statue Of Endless Fortune": {
+            "code": 722121,
+            "region": "Casino",
+            "tags": ["ENDGAME_LOCATIONS"],
+            "content_packs": []
+        },
+        "Purchase Catalogue": {
+            "code": 722122,
+            "region": "Pierre's General Store",
+            "tags": ["ENDGAME_LOCATIONS"],
+            "content_packs": []
+        },
+        "Purchase Furniture Catalogue": {
+            "code": 722123,
+            "region": "Carpenter Shop",
+            "tags": ["ENDGAME_LOCATIONS"],
+            "content_packs": []
+        },
+        "Purchase Joja Furniture Catalogue": {
+            "code": 722124,
+            "region": "JojaMart",
+            "tags": ["ENDGAME_LOCATIONS"],
+            "content_packs": []
+        },
+        "Purchase Junimo Catalogue": {
+            "code": 722125,
+            "region": "Traveling Cart",
+            "tags": ["ENDGAME_LOCATIONS"],
+            "content_packs": []
+        },
+        "Purchase Retro Catalogue": {
+            "code": 722126,
+            "region": "Traveling Cart",
+            "tags": ["ENDGAME_LOCATIONS"],
+            "content_packs": []
+        },
+        "Find Trash Catalogue": {
+            "code": 722127,
+            "region": "Garbage Cans",
+            "tags": ["ENDGAME_LOCATIONS"],
+            "content_packs": []
+        },
+        "Purchase Wizard Catalogue": {
+            "code": 722128,
+            "region": "Sewer",
+            "tags": ["ENDGAME_LOCATIONS"],
+            "content_packs": []
+        },
+        "Purchase Spouse Portrait": {
+            "code": 722129,
+            "region": "Traveling Cart",
+            "tags": ["ENDGAME_LOCATIONS", "REQUIRES_FRIENDSANITY"],
+            "content_packs": []
+        },
+        "Purchase Abigail Portrait": {
+            "code": 722130,
+            "region": "Traveling Cart",
+            "tags": ["ENDGAME_LOCATIONS", "REQUIRES_FRIENDSANITY_MARRIAGE"],
+            "content_packs": []
+        },
+        "Purchase Alex Portrait": {
+            "code": 722131,
+            "region": "Traveling Cart",
+            "tags": ["ENDGAME_LOCATIONS", "REQUIRES_FRIENDSANITY_MARRIAGE"],
+            "content_packs": []
+        },
+        "Purchase Elliott Portrait": {
+            "code": 722132,
+            "region": "Traveling Cart",
+            "tags": ["ENDGAME_LOCATIONS", "REQUIRES_FRIENDSANITY_MARRIAGE"],
+            "content_packs": []
+        },
+        "Purchase Emily Portrait": {
+            "code": 722133,
+            "region": "Traveling Cart",
+            "tags": ["ENDGAME_LOCATIONS", "REQUIRES_FRIENDSANITY_MARRIAGE"],
+            "content_packs": []
+        },
+        "Purchase Haley Portrait": {
+            "code": 722134,
+            "region": "Traveling Cart",
+            "tags": ["ENDGAME_LOCATIONS", "REQUIRES_FRIENDSANITY_MARRIAGE"],
+            "content_packs": []
+        },
+        "Purchase Harvey Portrait": {
+            "code": 722135,
+            "region": "Traveling Cart",
+            "tags": ["ENDGAME_LOCATIONS", "REQUIRES_FRIENDSANITY_MARRIAGE"],
+            "content_packs": []
+        },
+        "Purchase Krobus Portrait": {
+            "code": 722136,
+            "region": "Traveling Cart",
+            "tags": ["ENDGAME_LOCATIONS", "REQUIRES_FRIENDSANITY_MARRIAGE"],
+            "content_packs": []
+        },
+        "Purchase Leah Portrait": {
+            "code": 722137,
+            "region": "Traveling Cart",
+            "tags": ["ENDGAME_LOCATIONS", "REQUIRES_FRIENDSANITY_MARRIAGE"],
+            "content_packs": []
+        },
+        "Purchase Maru Portrait": {
+            "code": 722138,
+            "region": "Traveling Cart",
+            "tags": ["ENDGAME_LOCATIONS", "REQUIRES_FRIENDSANITY_MARRIAGE"],
+            "content_packs": []
+        },
+        "Purchase Penny Portrait": {
+            "code": 722139,
+            "region": "Traveling Cart",
+            "tags": ["ENDGAME_LOCATIONS", "REQUIRES_FRIENDSANITY_MARRIAGE"],
+            "content_packs": []
+        },
+        "Purchase Sam Portrait": {
+            "code": 722140,
+            "region": "Traveling Cart",
+            "tags": ["ENDGAME_LOCATIONS", "REQUIRES_FRIENDSANITY_MARRIAGE"],
+            "content_packs": []
+        },
+        "Purchase Sebastian Portrait": {
+            "code": 722141,
+            "region": "Traveling Cart",
+            "tags": ["ENDGAME_LOCATIONS", "REQUIRES_FRIENDSANITY_MARRIAGE"],
+            "content_packs": []
+        },
+        "Purchase Shane Portrait": {
+            "code": 722142,
+            "region": "Traveling Cart",
+            "tags": ["ENDGAME_LOCATIONS", "REQUIRES_FRIENDSANITY_MARRIAGE"],
+            "content_packs": []
+        },
+        "Purchase Tea Set": {
+            "code": 722143,
+            "region": "Traveling Cart",
+            "tags": ["ENDGAME_LOCATIONS"],
             "content_packs": []
         },
         "Level 1 Luck": {
@@ -21330,7 +21642,7 @@
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": ["Archaeology"]
         },
-        "Craft Water Shifter": {
+        "Craft Water Sifter": {
             "code": 774411,
             "region": "Farm",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
@@ -21534,31 +21846,31 @@
             "tags": ["CRAFTSANITY", "CRAFTSANITY_RECIPE"],
             "content_packs": ["Stardew Valley Expanded"]
         },
-        "Missing Envelope": {
+        "Quest: Missing Envelope": {
             "code": 774501,
             "region": "Mountain",
             "tags": ["STORY_QUEST"],
             "content_packs": ["Ayeisha - The Postal Worker (Custom NPC)"]
         },
-        "Ayeisha's Lost Ring": {
+        "Quest: Ayeisha's Lost Ring": {
             "code": 774502,
             "region": "Forest",
             "tags": ["STORY_QUEST"],
             "content_packs": ["Ayeisha - The Postal Worker (Custom NPC)"]
         },
-        "Mr.Ginger's request": {
+        "Quest: Mr.Ginger's request": {
             "code": 774503,
             "region": "Forest",
             "tags": ["STORY_QUEST"],
             "content_packs": ["Mister Ginger (cat npc)"]
         },
-        "Juna's Drink Request": {
+        "Quest: Juna's Drink Request": {
             "code": 774504,
             "region": "Forest",
             "tags": ["STORY_QUEST"],
             "content_packs": ["Juna - Roommate NPC"]
         },
-        "Juna's BFF Request": {
+        "Quest: Juna's BFF Request": {
             "code": 774505,
             "region": "Forest",
             "tags": ["STORY_QUEST"],
@@ -21570,37 +21882,37 @@
             "tags": ["SPECIAL_ORDER_BOARD"],
             "content_packs": ["Juna - Roommate NPC"]
         },
-        "Marlon's Boat": {
+        "Quest: Marlon's Boat": {
             "code": 774507,
             "region": "Adventurer's Guild",
             "tags": ["GINGER_ISLAND", "STORY_QUEST"],
             "content_packs": ["Ginger Island (Vanilla)", "Stardew Valley Expanded"]
         },
-        "The Railroad Boulder": {
+        "Quest: The Railroad Boulder": {
             "code": 774508,
             "region": "Railroad",
             "tags": ["STORY_QUEST"],
             "content_packs": ["Stardew Valley Expanded"]
         },
-        "Grandpa's Shed": {
+        "Quest: Grandpa's Shed": {
             "code": 774509,
             "region": "Grandpa's Shed Interior",
             "tags": ["STORY_QUEST"],
             "content_packs": ["Stardew Valley Expanded"]
         },
-        "Aurora Vineyard": {
+        "Quest: Aurora Vineyard": {
             "code": 774510,
             "region": "Aurora Vineyard",
             "tags": ["STORY_QUEST"],
             "content_packs": ["Stardew Valley Expanded"]
         },
-        "Monster Crops": {
+        "Quest: Monster Crops": {
             "code": 774511,
             "region": "Lance's House Main",
             "tags": ["GINGER_ISLAND", "STORY_QUEST"],
             "content_packs": ["Ginger Island (Vanilla)", "Stardew Valley Expanded"]
         },
-        "Void Soul Retrieval": {
+        "Quest: Void Soul Retrieval": {
             "code": 774512,
             "region": "Sewer",
             "tags": ["GINGER_ISLAND", "STORY_QUEST"],
@@ -21642,13 +21954,13 @@
             "tags": ["GINGER_ISLAND"],
             "content_packs": ["Distant Lands - Witch Swamp Overhaul", "Ginger Island (Vanilla)"]
         },
-        "A New Pot": {
+        "Quest: A New Pot": {
             "code": 774520,
             "region": "Witch's Swamp",
             "tags": ["STORY_QUEST"],
             "content_packs": ["Distant Lands - Witch Swamp Overhaul"]
         },
-        "Fancy Blanket Task": {
+        "Quest: Fancy Blanket Task": {
             "code": 774521,
             "region": "Witch's Swamp",
             "tags": ["STORY_QUEST"],
@@ -21660,7 +21972,7 @@
             "tags": ["GINGER_ISLAND"],
             "content_packs": ["Distant Lands - Witch Swamp Overhaul", "Ginger Island (Vanilla)"]
         },
-        "Pumpkin Soup": {
+        "Quest: Pumpkin Soup": {
             "code": 774523,
             "region": "Boarding House - First Floor",
             "tags": ["STORY_QUEST"],
@@ -21678,7 +21990,7 @@
             "tags": ["SPECIAL_ORDER_BOARD"],
             "content_packs": ["Professor Jasper Thomas"]
         },
-        "Hats for the Hat Mouse": {
+        "Quest: Hats for the Hat Mouse": {
             "code": 774526,
             "region": "Mouse House",
             "tags": ["STORY_QUEST"],
@@ -23340,7 +23652,7 @@
             "tags": ["GINGER_ISLAND", "SHIPSANITY"],
             "content_packs": ["Archaeology", "Ginger Island (Vanilla)"]
         },
-        "Shipsanity: Water Shifter": {
+        "Shipsanity: Water Sifter": {
             "code": 775202,
             "region": "Shipping",
             "tags": ["DEPRECATED", "SHIPSANITY"],

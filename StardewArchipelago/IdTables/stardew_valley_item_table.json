@@ -2240,6 +2240,138 @@
             "code": 717635,
             "classification": "trap"
         },
+        "Forest Magic": {
+            "code": 717636,
+            "classification": "progression"
+        },
+        "Landslide Removed": {
+            "code": 717637,
+            "classification": "progression"
+        },
+        "Magic Ink": {
+            "code": 717638,
+            "classification": "progression"
+        },
+        "Community Center Key": {
+            "code": 717639,
+            "classification": "progression"
+        },
+        "Wizard Invitation": {
+            "code": 717640,
+            "classification": "progression"
+        },
+        "Pam House": {
+            "code": 717641,
+            "classification": "progression"
+        },
+        "Forest To Beach Shortcut": {
+            "code": 717642,
+            "classification": "progression"
+        },
+        "Mountain Shortcuts": {
+            "code": 717643,
+            "classification": "progression"
+        },
+        "Town To Tide Pools Shortcut": {
+            "code": 717645,
+            "classification": "progression"
+        },
+        "Tunnel To Backwoods Shortcut": {
+            "code": 717646,
+            "classification": "progression"
+        },
+        "Statue Of Endless Fortune": {
+            "code": 717648,
+            "classification": "useful"
+        },
+        "Catalogue": {
+            "code": 717649,
+            "classification": "progression"
+        },
+        "Furniture Catalogue": {
+            "code": 717650,
+            "classification": "progression"
+        },
+        "Joja Furniture Catalogue": {
+            "code": 717651,
+            "classification": "progression"
+        },
+        "Junimo Catalogue": {
+            "code": 717652,
+            "classification": "progression"
+        },
+        "Retro Catalogue": {
+            "code": 717653,
+            "classification": "progression"
+        },
+        "Trash Catalogue": {
+            "code": 717654,
+            "classification": "progression"
+        },
+        "Wizard Catalogue": {
+            "code": 717655,
+            "classification": "progression"
+        },
+        "Abigail Portrait": {
+            "code": 717656,
+            "classification": "filler"
+        },
+        "Alex Portrait": {
+            "code": 717657,
+            "classification": "filler"
+        },
+        "Elliott Portrait": {
+            "code": 717658,
+            "classification": "filler"
+        },
+        "Emily Portrait": {
+            "code": 717659,
+            "classification": "filler"
+        },
+        "Haley Portrait": {
+            "code": 717660,
+            "classification": "filler"
+        },
+        "Harvey Portrait": {
+            "code": 717661,
+            "classification": "filler"
+        },
+        "Krobus Portrait": {
+            "code": 717662,
+            "classification": "filler"
+        },
+        "Leah Portrait": {
+            "code": 717663,
+            "classification": "filler"
+        },
+        "Maru Portrait": {
+            "code": 717664,
+            "classification": "filler"
+        },
+        "Penny Portrait": {
+            "code": 717665,
+            "classification": "filler"
+        },
+        "Sam Portrait": {
+            "code": 717666,
+            "classification": "filler"
+        },
+        "Sebastian Portrait": {
+            "code": 717667,
+            "classification": "filler"
+        },
+        "Shane Portrait": {
+            "code": 717668,
+            "classification": "filler"
+        },
+        "Trash Bear Arrival": {
+            "code": 717669,
+            "classification": "progression"
+        },
+        "Trash Bear Cleanup": {
+            "code": 717670,
+            "classification": "filler"
+        },
         "Burnt Trap": {
             "code": 721001,
             "classification": "trap"
@@ -3484,6 +3616,30 @@
             "code": 722292,
             "classification": "filler"
         },
+        "Workbench": {
+            "code": 722293,
+            "classification": "useful"
+        },
+        "Big Chest": {
+            "code": 722294,
+            "classification": "filler"
+        },
+        "Big Stone Chest": {
+            "code": 722295,
+            "classification": "filler"
+        },
+        "Dehydrator": {
+            "code": 722296,
+            "classification": "filler"
+        },
+        "Fish Smoker": {
+            "code": 722297,
+            "classification": "filler"
+        },
+        "Heavy Furnace": {
+            "code": 722298,
+            "classification": "filler"
+        },
         "Luck Level": {
             "code": 727001,
             "classification": "progression"
@@ -3984,7 +4140,7 @@
             "code": 727704,
             "classification": "filler"
         },
-        "Resource Pack: 3 Water Shifter": {
+        "Resource Pack: 3 Water Sifter": {
             "code": 727705,
             "classification": "filler"
         },
