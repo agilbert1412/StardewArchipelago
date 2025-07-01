@@ -152,7 +152,7 @@ namespace StardewArchipelago
         /// <summary>
         /// When seeing a scouted item, and a custom asset is available for this game but not for this item, display the generic game asset instead of a generic logo
         /// </summary>
-        public bool CustomAssetGenericGame { get; set; } = true;
+        public bool CustomAssetGenericGame { get; set; } = false;
     }
 
     public enum ItemIndicatorPreference
