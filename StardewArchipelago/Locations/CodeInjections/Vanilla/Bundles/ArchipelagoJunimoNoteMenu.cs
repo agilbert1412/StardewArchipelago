@@ -680,7 +680,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             {
                 return;
             }
-            if (CurrentPageBundle.name == MemeBundleNames.HIBERNATION)
+            if (CurrentPageBundle.name == MemeBundleNames.HIBERNATION && !FromGameMenu)
             {
                 HasLookedAtHibernationBundleToday = true;
                 return;

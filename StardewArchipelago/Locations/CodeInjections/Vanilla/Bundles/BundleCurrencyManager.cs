@@ -265,6 +265,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         {
             DrawSpecialCurrency(_wallet.CookieClicker.GetCookies(), Game1.objectSpriteSheet, new Rectangle(112, 144, 16, 16), 3f);
 
+            if (_menu.FromGameMenu)
+            {
+                return;
+            }
+
             var pricesY = 350;
             var amountsY = 410;
             var centeredX = 936;
@@ -285,6 +290,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         private void DrawGachaPrices(SpriteBatch spriteBatch)
         {
+            if (_menu.FromGameMenu)
+            {
+                return;
+            }
+
             var pricesY = 410;
             var centeredX = 936;
             var pricesXOffset = 100;
@@ -301,6 +311,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         private void DrawHumbleDonationPrices(SpriteBatch spriteBatch)
         {
+            if (_menu.FromGameMenu)
+            {
+                return;
+            }
+
             var pricesY = 410;
             var centeredX = 936;
             var pricesXOffset = 100;
@@ -319,6 +334,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         private void DrawInvestmentOpportunityLabel(SpriteBatch spriteBatch)
         {
+            if (_menu.FromGameMenu)
+            {
+                return;
+            }
+
             var y = 340;
             var font = Game1.smallFont;
             // Stardew Capital Appreciation Method
