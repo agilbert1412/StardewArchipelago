@@ -56,7 +56,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         internal ClothesMenu _clothesMenu;
         internal int _bundleBundleIndex = -1;
         internal const int NUMBER_SUB_BUNDLES = 4;
-        internal int ingredientsPerSubBundle => IngredientList.Count / NUMBER_SUB_BUNDLES;
+        internal int ingredientsPerSubBundle => IngredientList?.Count / NUMBER_SUB_BUNDLES ?? 0;
+        internal int ingredientsSlotsPerSubBundle => CurrentPageBundle?.NumberOfIngredientSlots / NUMBER_SUB_BUNDLES ?? 0;
         internal static Stopwatch DayStopwatch = new Stopwatch();
         internal static int FloorIsLavaHasTouchedGroundToday = 0;
         internal static bool HasLookedAtRestraintBundleToday = false;
@@ -1078,8 +1079,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         {
             if (CurrentPageBundle.name == MemeBundleNames.BUNDLE_BUNDLE)
             {
-                UpdateIngredientSlotsBundleBundle();
                 AfterUpdateIngredientSlotsBundleBundle();
+                UpdateIngredientSlotsBundleBundle();
                 return;
             }
             BeforeUpdateIngredientSlotsSpecialBundles();
@@ -1179,15 +1180,19 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
 
             var ingredientRectangles = GenerateIngredientRectangles(ingredientsPerSubBundle);
-            var ingredientSlotRectangles = GenerateIngredientSlotsRectangles(ingredientsPerSubBundle);
+            var ingredientSlotRectangles = GenerateIngredientSlotsRectangles(ingredientsSlotsPerSubBundle);
 
             for (var indexBundle = 0; indexBundle < NUMBER_SUB_BUNDLES; indexBundle++)
             {
                 for (var indexIngredient = 0; indexIngredient < ingredientsPerSubBundle; indexIngredient++)
                 {
-                    var index = indexBundle * ingredientsPerSubBundle + indexIngredient;
-                    IngredientList[index].bounds = ingredientRectangles[indexIngredient];
-                    IngredientSlots[index].bounds = ingredientSlotRectangles[indexIngredient];
+                    var ingredientIndex = indexBundle * ingredientsPerSubBundle + indexIngredient;
+                    IngredientList[ingredientIndex].bounds = ingredientRectangles[indexIngredient];
+                }
+                for (var indexIngredientSlot = 0; indexIngredientSlot < ingredientsSlotsPerSubBundle; indexIngredientSlot++)
+                {
+                    var ingredientSlotIndex = indexBundle * ingredientsSlotsPerSubBundle + indexIngredientSlot;
+                    IngredientSlots[ingredientSlotIndex].bounds = ingredientSlotRectangles[indexIngredientSlot];
                 }
             }
 
@@ -1449,7 +1454,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         {
             if (_bundleBundleIndex == -1)
             {
-                var startIndex = NUMBER_SUB_BUNDLES * ingredientsPerSubBundle;
+                var startIndex = NUMBER_SUB_BUNDLES * ingredientsSlotsPerSubBundle;
                 var endIndex = startIndex + NUMBER_SUB_BUNDLES;
                 for (var i = startIndex; i < endIndex; i++)
                 {
@@ -1883,7 +1888,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         {
             if (_bundleBundleIndex == -1)
             {
-                var startIndex = NUMBER_SUB_BUNDLES * ingredientsPerSubBundle;
+                var startIndex = NUMBER_SUB_BUNDLES * ingredientsSlotsPerSubBundle;
                 var endIndex = startIndex + NUMBER_SUB_BUNDLES;
                 for (var index = startIndex; index < endIndex; ++index)
                 {
@@ -1908,8 +1913,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         internal bool SubBundleComplete(int subBundleIndex)
         {
-            var startIndex = subBundleIndex * ingredientsPerSubBundle;
-            var endIndex = startIndex + ingredientsPerSubBundle;
+            var startIndex = subBundleIndex * ingredientsSlotsPerSubBundle;
+            var endIndex = startIndex + ingredientsSlotsPerSubBundle;
             var num = 0;
             for (var index = startIndex; index < endIndex; index++)
             {
@@ -1919,7 +1924,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                     ++num;
                 }
             }
-            return num >= ingredientsPerSubBundle;
+            return num >= ingredientsSlotsPerSubBundle;
         }
 
         protected override void DrawTemporarySprites(SpriteBatch b)
@@ -1998,10 +2003,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         {
             if (bundleBundleIndex == -1)
             {
-                return NUMBER_SUB_BUNDLES * ingredientsPerSubBundle;
+                return NUMBER_SUB_BUNDLES * ingredientsSlotsPerSubBundle;
             }
 
-            return bundleBundleIndex * ingredientsPerSubBundle;
+            return bundleBundleIndex * ingredientsSlotsPerSubBundle;
         }
 
         private int GetIngredientSlotsEndIndex(int bundleBundleIndex)
@@ -2009,19 +2014,19 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
             if (bundleBundleIndex == -1)
             {
-                return (NUMBER_SUB_BUNDLES + 1) * ingredientsPerSubBundle;
+                return (NUMBER_SUB_BUNDLES + 1) * ingredientsSlotsPerSubBundle;
             }
 
-            return (bundleBundleIndex + 1) * ingredientsPerSubBundle;
+            return (bundleBundleIndex + 1) * ingredientsSlotsPerSubBundle;
         }
 
         protected void UpdateIngredientSlotsBundleBundle()
         {
             for (var bundleIndex = 0; bundleIndex < NUMBER_SUB_BUNDLES; bundleIndex++)
             {
-                var startIndex = GetIngredientSlotsStartIndex(bundleIndex);
-                var endIndex = GetIngredientSlotsEndIndex(bundleIndex);
-                var ingredientSlotIndex = startIndex;
+                var startIndex = GetIngredientsStartIndex(bundleIndex);
+                var endIndex = GetIngredientsEndIndex(bundleIndex);
+                var ingredientSlotIndex = GetIngredientSlotsStartIndex(bundleIndex);
                 for (var i = startIndex; i < endIndex; i++)
                 {
                     var ingredient = CurrentPageBundle.Ingredients[i];
