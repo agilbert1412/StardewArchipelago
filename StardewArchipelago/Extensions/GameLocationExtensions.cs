@@ -15,7 +15,7 @@ namespace StardewArchipelago.Extensions
         {
             { new WarpRequest(Game1.getLocationRequest("Town"), 96, 51, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("AbandonedJojaMart"), 9, 13, FacingDirection.Up) },
             { new WarpRequest(Game1.getLocationRequest("Town"), 96, 51, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("MovieTheater"), 13, 15, FacingDirection.Up) },
-            // {new WarpRequest(Game1.getLocationRequest("Town"), , , FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("Trailer_Big"), , , FacingDirection.Up)},
+            {new WarpRequest(Game1.getLocationRequest("Town"), 72, 69, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("Trailer_Big"), 13, 24, FacingDirection.Up)},
             { new WarpRequest(Game1.getLocationRequest("Town"), 35, 97, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("Sewer"), 16, 11, FacingDirection.Down) },
             { new WarpRequest(Game1.getLocationRequest("Forest"), 94, 100, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("Sewer"), 3, 48, FacingDirection.Up) },
             { new WarpRequest(Game1.getLocationRequest("Forest"), 101, 72, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("MasteryCave"), 7, 11, FacingDirection.Up) },
