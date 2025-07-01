@@ -1312,6 +1312,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         protected override bool ReceiveLeftClickInSpecificBundlePage(int x, int y)
         {
+            if (FromGameMenu)
+            {
+                return base.ReceiveLeftClickInSpecificBundlePage(x, y);
+            }
+
             if (CurrentPageBundle.name == MemeBundleNames.REVERSE)
             {
                 if (ReceiveLeftClickInReverseBundle(x, y))
