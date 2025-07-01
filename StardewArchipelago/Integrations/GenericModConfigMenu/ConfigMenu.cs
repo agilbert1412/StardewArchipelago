@@ -176,6 +176,14 @@ namespace StardewArchipelago.Integrations.GenericModConfigMenu
                 formatValue: (value) => $"{value * 5}%"
             );
 
+            configMenu.AddBoolOption(
+                mod: ModManifest,
+                name: () => "Anonymize names in chat",
+                tooltip: () => "Replace every player name with a random animal, in chat and menus, for privacy reasons",
+                getValue: () => Config.AnonymizeNamesInChat,
+                setValue: (value) => Config.AnonymizeNamesInChat = value
+            );
+
             var chatFilterValues = Enum.GetValues(typeof(ChatItemsFilter)).Cast<int>().ToArray();
             var chatFilterValuesMin = chatFilterValues.Min();
             var chatFilterValuesMax = chatFilterValues.Max();
