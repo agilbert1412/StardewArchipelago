@@ -342,14 +342,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             if (_hintsForMe.Any())
             {
                 var hint = _hintsForMe.First();
-                specialRewardName = $"Reward: {hint.ReceivingPlayer}'s {_archipelago.GetItemName(hint.ItemId)}";
+                specialRewardName = $"Reward: {_archipelago.GetPlayerName(hint.ReceivingPlayer)}'s {_archipelago.GetItemName(hint.ItemId)}";
                 return true;
             }
 
             if (_hintsFromMe.Any())
             {
                 var hint = _hintsFromMe.First();
-                specialRewardName = $"Reward: {hint.ReceivingPlayer}'s {_archipelago.GetItemName(hint.ItemId)}";
+                specialRewardName = $"Reward: {_archipelago.GetPlayerName(hint.ReceivingPlayer)}'s {_archipelago.GetItemName(hint.ItemId)}";
                 return true;
             }
 
