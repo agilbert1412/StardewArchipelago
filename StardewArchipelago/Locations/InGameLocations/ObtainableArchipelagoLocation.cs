@@ -36,7 +36,7 @@ namespace StardewArchipelago.Locations.InGameLocations
         protected ILocationChecker _locationChecker;
         protected string _locationDisplayName;
 
-        public string LocationName { get; }
+        public string LocationName { get; set; }
 
         private readonly string _description;
 

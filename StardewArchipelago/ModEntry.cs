@@ -119,9 +119,7 @@ namespace StardewArchipelago
             _testerFeatures = new TesterFeatures(_logger, _helper);
 
             _archipelago = new StardewArchipelagoClient(_logger, _helper, ModManifest, _harmony, OnItemReceived, new SmapiJsonLoader(_helper), _testerFeatures);
-
-            _saveCleaner = new SaveCleaner(_logger);
-
+            
             _helper.Events.GameLoop.GameLaunched += OnGameLaunched;
             _helper.Events.GameLoop.SaveCreating += OnSaveCreating;
             _helper.Events.GameLoop.SaveCreated += OnSaveCreated;
@@ -278,6 +276,7 @@ namespace StardewArchipelago
             {
                 _locationChecker = new StardewLocationChecker(_logger, _archipelago, State.LocationsChecked);
             }
+            _saveCleaner = new SaveCleaner(_logger, _locationChecker);
             _jojaLocationChecker = new JojaLocationChecker(_archipelago, _locationChecker, State.JojaLocationsChecked);
             _itemPatcher = new ItemPatcher(_logger, _helper, _harmony, _archipelago);
             _goalManager = new GoalManager(_logger, _helper, _harmony, _archipelago, _locationChecker);
