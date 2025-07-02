@@ -4,10 +4,13 @@ using StardewArchipelago.Archipelago;
 using StardewValley;
 using StardewArchipelago.Constants.Vanilla;
 using System.Linq;
+using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
+using StardewArchipelago.Bundles;
 using Object = StardewValley.Object;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
 using StardewValley.TerrainFeatures;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
 {
@@ -90,6 +93,25 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 if (Game1.currentLocation.terrainFeatures.TryGetValue(tile, out var terrainFeature) && terrainFeature is Flooring flooring)
                 {
                     return;
+                }
+
+                var canPlace = Game1.currentLocation.CanItemBePlacedHere(tile, collisionMask: CollisionMask.Flooring);
+                if (!canPlace)
+                {
+                    return;
+                }
+
+                if (ArchipelagoJunimoNoteMenu.FloorIsLavaHasTouchedGroundToday == 0 &&
+                    ArchipelagoJunimoNoteMenu.IsBundleRemaining(MemeBundleNames.FLOOR_IS_LAVA) &&
+                    _archipelago.HasReceivedItem("Forest Magic"))
+                {
+                    var firePosition = new Vector2((float)(tile.X * 64 + 16 - 4), (float)(tile.Y * 64 - 8));
+                    var sourceRect = new Rectangle(276, 1985, 12, 11);
+                    // var sourceRect = new Rectangle?(new Rectangle(276 + (int)((Game1.currentGameTime.TotalGameTime.TotalMilliseconds + (double)(x * 3047) + (double)(y * 88)) % 400.0 / 100.0) * 12, 1985, 12, 11));
+                    var tempSprite = new TemporaryAnimatedSprite("LooseSprites\\Cursors", sourceRect, 60, 4, 4, firePosition, false, false);
+                    tempSprite.scale = 4f;
+                    Game1.currentLocation.TemporarySprites.Add(tempSprite);
+                    Game1.playSound("fireball");
                 }
 
                 ArchipelagoJunimoNoteMenu.FloorIsLavaHasTouchedGroundToday++;
