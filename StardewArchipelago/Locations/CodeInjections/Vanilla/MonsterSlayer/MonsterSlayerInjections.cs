@@ -11,6 +11,11 @@ using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
+using StardewValley.GameData;
+using StardewValley.TokenizableStrings;
+using System.Collections.Generic;
+using StardewValley.Menus;
+using StardewValley.Objects;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
 {
@@ -38,7 +43,77 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
         {
             try
             {
-                Game1.DrawDialogue(__instance.Gil, "Characters\\Dialogue\\Gil:Snoring");
+                var rewards = new List<Item>();
+                var completedGoals = new List<KeyValuePair<string, MonsterSlayerQuestData>>();
+                var values = new List<string>();
+                foreach (var monsterSlayerQuest in DataLoader.MonsterSlayerQuests(Game1.content))
+                {
+                    var key = monsterSlayerQuest.Key;
+                    var goal = monsterSlayerQuest.Value;
+                    if (AdventureGuild.HasCollectedReward(Game1.player, key) || !AdventureGuild.IsComplete(goal))
+                    {
+                        continue;
+                    }
+
+                    completedGoals.Add(monsterSlayerQuest);
+                    if (goal.RewardItemId != null)
+                    {
+                        var obj = ItemRegistry.Create(goal.RewardItemId);
+                        obj.SpecialVariable = completedGoals.Count - 1;
+                        if (obj is StardewValley.Object @object)
+                        {
+                            @object.specialItem = true;
+                        }
+                        if (obj is Hat hat)
+                        {
+                            rewards.Add(hat);
+                        }
+                    }
+                    if (goal.RewardDialogue != null && (goal.RewardDialogueFlag == null || !Game1.player.mailReceived.Contains(goal.RewardDialogueFlag)))
+                    {
+                        values.Add(TokenParser.ParseText(goal.RewardDialogue));
+                    }
+                    if (goal.RewardMail != null)
+                    {
+                        Game1.addMailForTomorrow(goal.RewardMail);
+                    }
+                    if (goal.RewardMailAll != null)
+                    {
+                        Game1.addMailForTomorrow(goal.RewardMailAll, sendToEveryone: true);
+                    }
+                    if (goal.RewardFlag != null)
+                    {
+                        Game1.addMail(goal.RewardFlag, true);
+                    }
+                    if (goal.RewardFlagAll != null)
+                    {
+                        Game1.addMail(goal.RewardFlagAll, true, true);
+                    }
+                }
+                if (rewards.Count > 0 || values.Count > 0)
+                {
+                    if (values.Count > 0)
+                    {
+                        Game1.DrawDialogue(new Dialogue(__instance.Gil, null, string.Join("#$b#", values)));
+                        Game1.afterDialogues += () => OpenRewardMenuIfNeeded(__instance, rewards, completedGoals);
+                    }
+                    else
+                    {
+                        OpenRewardMenuIfNeeded(__instance, rewards, completedGoals);
+                    }
+                }
+                else
+                {
+                    if (__instance.talkedToGil)
+                    {
+                        Game1.DrawDialogue(__instance.Gil, "Characters\\Dialogue\\Gil:Snoring");
+                    }
+                    else
+                    {
+                        Game1.DrawDialogue(__instance.Gil, "Characters\\Dialogue\\Gil:ComeBackLater");
+                    }
+                    __instance.talkedToGil = true;
+                }
                 return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
@@ -46,6 +121,17 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
                 _logger.LogError($"Failed in {nameof(Gil_NoMonsterSlayerRewards_Prefix)}:\n{ex}");
                 return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
+        }
+        private static void OpenRewardMenuIfNeeded(AdventureGuild adventureGuild, List<Item> rewards, List<KeyValuePair<string, MonsterSlayerQuestData>> completedGoals)
+        {
+            if (rewards.Count == 0)
+            {
+                return;
+            }
+            Game1.activeClickableMenu = new ItemGrabMenu(rewards, adventureGuild)
+            {
+                behaviorOnItemGrab = (item, who) => adventureGuild.OnRewardCollected(item, who, completedGoals)
+            };
         }
 
         // public static bool areAllMonsterSlayerQuestsComplete()
