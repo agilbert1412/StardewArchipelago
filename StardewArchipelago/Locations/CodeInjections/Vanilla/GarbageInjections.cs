@@ -55,6 +55,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             item.modData.TryAdd(FROM_TRASH_KEY, true.ToString());
             item.modData[FROM_TRASH_KEY] = true.ToString();
         }
+
         private static Item ReplaceTrashCatalogue(string id, Item item)
         {
             if (!_archipelago.SlotData.IncludeEndgameLocations)
