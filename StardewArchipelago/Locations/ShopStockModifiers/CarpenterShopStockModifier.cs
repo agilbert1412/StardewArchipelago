@@ -41,6 +41,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
         public const string BUILDING_BIG_SHED = "Big Shed";
 
         public const string BUILDING_SHIPPING_BIN = "Shipping Bin";
+        public const string BUILDING_PET_BOWL = "Pet Bowl";
 
         private const string BUILDING_PAM_HOUSE = "Pam House";
         private const string SHORTCUT_FOREST_TO_BEACH = "Forest To Beach Shortcut";
@@ -104,6 +105,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
             AddCheckToStock(checksToAdd, BUILDING_STABLE, 10_000, new[] { Hardwood(100), IronBar(5) });
             AddCheckToStock(checksToAdd, BUILDING_WELL, 1_000, new[] { Stone(75) });
             AddCheckToStock(checksToAdd, BUILDING_SHIPPING_BIN, 250, new[] { Wood(150) });
+            AddCheckToStock(checksToAdd, BUILDING_PET_BOWL, 5000, new[] { Hardwood(25) });
             if (_archipelago.SlotData.Mods.HasMod(ModNames.TRACTOR))
             {
                 AddCheckToStock(checksToAdd, TRACTOR_GARAGE_NAME, 150_000, new[] { IronBar(20), IridiumBar(5), BatteryPack(5) });
