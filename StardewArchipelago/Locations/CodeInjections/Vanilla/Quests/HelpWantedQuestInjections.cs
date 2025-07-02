@@ -44,7 +44,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
             if (_archipelago.SlotData.QuestLocations.HelpWantedNumber <= 0)
             {
                 runOriginal = MethodPrefix.RUN_ORIGINAL_METHOD;
-                return false;
+                return true;
             }
 
             // Item Delivery: __instance.dailyQuest == true and questType == 3 [Chance: 40 / 65]
