@@ -125,6 +125,7 @@ namespace StardewArchipelago.Locations.Patcher
                 PatchHatsanity();
                 PatchEating();
                 PatchEndgameLocations();
+                PatchGarbageCans();
                 PatchScouts();
             }
             catch (Exception ex)
