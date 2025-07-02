@@ -24,6 +24,7 @@ namespace StardewArchipelago.Constants.Locations
             { "Jasper", new[] { "by M. Jasper" } },
             { "Large Egg", new[] { "Large Egg (Brown)" } },
             { "Legend", new[] { "The Legend of the Winter Star" } },
+            { "Milk", new[] { "Large Milk", "Goat Milk", "Snake Milk" } },
             { "Opal", new[] { "Fire Opal" } },
             { "Pizza", new[] { "Calico Pizza" } },
             { "Salad", new[] { "Sour Salad" } },
