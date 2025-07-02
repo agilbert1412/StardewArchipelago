@@ -328,6 +328,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 return true;
             }
 
+            if (TryGetInvestmentBundleRewardName(whichArea, out specialRewardName))
+            {
+                return true;
+            }
+
             return false;
         }
 
@@ -369,6 +374,21 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             goodRepeatItems = goodRepeatItems.OrderBy(x => _archipelago.GetReceivedItemCount(x)).ToArray();
 
             specialRewardName = $"Reward: {myName}'s {goodRepeatItems[0]}";
+            return true;
+        }
+
+        private bool TryGetInvestmentBundleRewardName(int whichArea, out string specialRewardName)
+        {
+            if (CurrentPageBundle == null || (CurrentPageBundle.name != MemeBundleNames.SCAM && CurrentPageBundle.name != MemeBundleNames.INVESTMENT))
+            {
+                specialRewardName = "";
+                return false;
+            }
+
+            var price = CurrentPageBundle.Ingredients.First().stack;
+            var minReturn = 1.6 * price;
+            var maxReturn = 2.5 * price;
+            specialRewardName = $"Reward: {minReturn}g to {maxReturn}g";
             return true;
         }
 
