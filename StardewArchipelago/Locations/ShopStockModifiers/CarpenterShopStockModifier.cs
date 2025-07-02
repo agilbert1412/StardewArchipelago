@@ -44,11 +44,9 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
 
         private const string BUILDING_PAM_HOUSE = "Pam House";
         private const string SHORTCUT_FOREST_TO_BEACH = "Forest To Beach Shortcut";
-        private const string SHORTCUT_MOUNTAIN_TO_JOJAMART = "Mountain To Jojamart Shortcut";
-        private const string SHORTCUT_MOUNTAIN_TO_TOWN = "Mountain To Town Shortcut";
+        private const string SHORTCUTS_MOUNTAIN = "Mountain Shortcuts";
         private const string SHORTCUT_TOWN_TO_TIDE_POOLS = "Town To Tide Pools Shortcut";
         private const string SHORTCUT_TUNNEL_TO_BACKWOODS = "Tunnel To Backwoods Shortcut";
-        private const string SHORTCUT_MOUNTAIN_LAKE_TO_ADVENTURE_GUILD = "Mountain Lake To Adventure Guild Shortcut";
 
         public const string TRACTOR_GARAGE_ID = "Pathoschild.TractorMod_Stable";
         public const string TRACTOR_GARAGE_NAME = "Tractor Garage";
@@ -114,12 +112,10 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
             if (_archipelago.SlotData.IncludeEndgameLocations)
             {
                 AddCheckToStock(checksToAdd, BUILDING_PAM_HOUSE, 500_000, new[] { Wood(950) });
-                AddCheckToStock(checksToAdd, SHORTCUT_FOREST_TO_BEACH, 50_000);
-                AddCheckToStock(checksToAdd, SHORTCUT_MOUNTAIN_TO_JOJAMART, 50_000);
-                AddCheckToStock(checksToAdd, SHORTCUT_MOUNTAIN_TO_TOWN, 50_000);
-                AddCheckToStock(checksToAdd, SHORTCUT_TOWN_TO_TIDE_POOLS, 50_000);
-                AddCheckToStock(checksToAdd, SHORTCUT_TUNNEL_TO_BACKWOODS, 50_000);
-                AddCheckToStock(checksToAdd, SHORTCUT_MOUNTAIN_LAKE_TO_ADVENTURE_GUILD, 50_000);
+                AddCheckToStock(checksToAdd, SHORTCUT_FOREST_TO_BEACH, 75_000);
+                AddCheckToStock(checksToAdd, SHORTCUTS_MOUNTAIN, 75_000);
+                AddCheckToStock(checksToAdd, SHORTCUT_TOWN_TO_TIDE_POOLS, 75_000);
+                AddCheckToStock(checksToAdd, SHORTCUT_TUNNEL_TO_BACKWOODS, 75_000);
             }
 
             carpenterShopData.Items.InsertRange(0, checksToAdd);
