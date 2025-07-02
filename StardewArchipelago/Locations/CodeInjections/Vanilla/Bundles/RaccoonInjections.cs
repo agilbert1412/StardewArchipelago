@@ -25,7 +25,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 {
     public static class RaccoonInjections
     {
-        private const string GIANT_STUMP = "The Giant Stump";
+        private const string GIANT_STUMP = "Quest: The Giant Stump";
 
         private static LogHandler _logger;
         private static IModHelper _modHelper;
@@ -333,7 +333,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         {
             try
             {
-                if (!_locationChecker.IsLocationMissing("The Giant Stump") || !Game1.player.hasQuest(QuestIds.GIANT_STUMP))
+                if (!_locationChecker.IsLocationMissing("Quest: The Giant Stump") || !Game1.player.hasQuest(QuestIds.GIANT_STUMP))
                 {
                     return;
                 }
@@ -355,7 +355,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         {
             try
             {
-                if (!_locationChecker.IsLocationMissing("The Giant Stump"))
+                if (!_locationChecker.IsLocationMissing("Quest: The Giant Stump"))
                 {
                     return;
                 }

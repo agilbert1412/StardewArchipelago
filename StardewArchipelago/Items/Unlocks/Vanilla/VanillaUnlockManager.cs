@@ -178,7 +178,7 @@ namespace StardewArchipelago.Items.Unlocks.Vanilla
             if (_archipelago.SlotData.QuestLocations.StoryQuestsEnabled && !Game1.MasterPlayer.mailReceived.Contains("raccoonMovedIn"))
             {
                 Game1.MasterPlayer.mailReceived.Add("raccoonMovedIn");
-                if (_locationChecker.IsLocationMissing("The Giant Stump") && !Game1.player.hasQuest("134"))
+                if (_locationChecker.IsLocationMissing("Quest: The Giant Stump") && !Game1.player.hasQuest("134"))
                 {
                     Game1.player.addQuest("134");
                     Game1.player.mailReceived.Add("checkedRaccoonStump");
