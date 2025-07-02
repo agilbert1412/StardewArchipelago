@@ -1647,8 +1647,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             {
                 texture = CurrentPageBundle.BundleTextureOverride;
                 num2 = 0;
-                scale = 128f / texture.ActualWidth;
-                size = texture.ActualWidth;
+                if (CurrentPageBundle.BundleTextureIndexOverride == 0)
+                {
+                    scale = 128f / texture.ActualWidth;
+                    size = texture.ActualWidth;
+                }
             }
             b.Draw(texture, new Vector2(xPositionOnScreen + 872, yPositionOnScreen + 88), new Rectangle(num1 * 16 * 2 % texture.Width, num2 + 32 * (num1 * 16 * 2 / texture.Width), size, size), Color.White, 0.0f,
                 Vector2.Zero, scale, SpriteEffects.None, 0.15f);
