@@ -1637,6 +1637,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             var num1 = CurrentPageBundle.BundleIndex;
             var texture = NoteTexture;
             var num2 = BASE_HEIGHT;
+            var  scale = 4f;
+            var size = 32;
             if (CurrentPageBundle.BundleTextureIndexOverride >= 0)
             {
                 num1 = CurrentPageBundle.BundleTextureIndexOverride;
@@ -1645,9 +1647,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             {
                 texture = CurrentPageBundle.BundleTextureOverride;
                 num2 = 0;
+                scale = 128f / texture.ActualWidth;
+                size = texture.ActualWidth;
             }
-            var scale = 128f / texture.ActualWidth;
-            b.Draw(texture, new Vector2(xPositionOnScreen + 872, yPositionOnScreen + 88), new Rectangle(num1 * 16 * 2 % texture.Width, num2 + 32 * (num1 * 16 * 2 / texture.Width), texture.ActualWidth, texture.ActualHeight), Color.White, 0.0f,
+            b.Draw(texture, new Vector2(xPositionOnScreen + 872, yPositionOnScreen + 88), new Rectangle(num1 * 16 * 2 % texture.Width, num2 + 32 * (num1 * 16 * 2 / texture.Width), size, size), Color.White, 0.0f,
                 Vector2.Zero, scale, SpriteEffects.None, 0.15f);
         }
 
