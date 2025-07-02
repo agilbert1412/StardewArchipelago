@@ -342,7 +342,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             }
             if (!Game1.player.hasOrWillReceiveMail("wizardJunimoNote"))
             {
-                Game1.addMailForTomorrow("wizardJunimoNote");
+                // Game1.addMailForTomorrow("wizardJunimoNote");
             }
             if (!Game1.player.hasOrWillReceiveMail("hasSeenAbandonedJunimoNote") && whichArea == 6)
             {
