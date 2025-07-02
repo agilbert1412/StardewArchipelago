@@ -813,7 +813,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         private string _currentBankString;
         public void OnUpdateTicked(UpdateTickedEventArgs e)
         {
-            if (e.IsMultipleOf(60) && ArchipelagoJunimoNoteMenu.IsBundleRemaining(MemeBundleNames.CROWDFUNDING))
+            if (e.IsMultipleOf(60) && ArchipelagoJunimoNoteMenu.IsBundleRemaining(MemeBundleNames.CROWDFUNDING) && _menu?.CurrentPageBundle?.name == MemeBundleNames.CROWDFUNDING)
             {
                 var currentBank = _bank.GetBankMoneyAmount();
                 _currentBankString = currentBank.ToString();
