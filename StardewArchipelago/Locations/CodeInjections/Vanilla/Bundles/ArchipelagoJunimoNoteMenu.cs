@@ -2243,7 +2243,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             {
                 _slidingPuzzle = new SlidingPuzzleHandler(_modHelper, MemeTexture, GetSlidingPuzzleSize(bundle));
             }
-            if (bundle.name == MemeBundleNames.ASMR)
+            if (bundle.name == MemeBundleNames.ASMR && !FromGameMenu)
             {
                 StartPlayingASMR();
             }
