@@ -70,6 +70,12 @@ namespace StardewArchipelago.Locations.InGameLocations
             }
         }
 
+        public ObtainableArchipelagoLocation()
+        {
+            var locationName = string.IsNullOrWhiteSpace(LocationName) ? "Unknown Location" : LocationName;
+            ModEntry.Instance.Logger.LogError($"The game attempted to use the parameterless constructor in {nameof(ObtainableArchipelagoLocation)} ({locationName}), potentially as part of a serialization process");
+        }
+
         public ObtainableArchipelagoLocation(string locationName, LogHandler logger, IModHelper modHelper, ILocationChecker locationChecker, StardewArchipelagoClient archipelago, Hint[] myActiveHints, bool allowScouting) : this(locationName, locationName, logger, modHelper, locationChecker, archipelago, myActiveHints, allowScouting)
         {
         }
