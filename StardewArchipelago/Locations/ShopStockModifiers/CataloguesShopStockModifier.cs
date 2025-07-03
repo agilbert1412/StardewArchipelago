@@ -73,6 +73,11 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
                 var locationName = $"{Prefix.PURCHASE}{catalogueName}";
 
                 item.Condition = item.Condition.AddCondition(GameStateConditionProvider.CreateHasReceivedItemCondition(catalogueName));
+                var ccCondition = "IS_COMMUNITY_CENTER_COMPLETE";
+                if (item.Condition.Contains(ccCondition))
+                {
+                    item.Condition = item.Condition.Replace(ccCondition, GameStateConditionProvider.CreateHasReceivedItemCondition("Forest Magic"));
+                }
                 
                 // shopData.Items.RemoveAt(i);
 
