@@ -158,7 +158,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
-                if (actionName != "MineElevator")
+                if (actionName != "MineElevator" || __instance.Name != "Mine")
                 {
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
