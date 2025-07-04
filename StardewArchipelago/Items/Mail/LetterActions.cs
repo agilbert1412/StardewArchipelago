@@ -170,6 +170,8 @@ namespace StardewArchipelago.Items.Mail
 
         private void ReceiveIridiumSnakeMilk()
         {
+            var snakeMilk = ItemRegistry.Create<Object>(QualifiedItemIds.IRIDIUM_SNAKE_MILK);
+            Game1.player.eatObject(snakeMilk, true);
             Game1.player.maxHealth += 25;
         }
 
