@@ -291,7 +291,7 @@ namespace StardewArchipelago
             _appearanceRandomizer = new AppearanceRandomizer(_logger, _helper, _archipelago, _harmony);
 
             var trapExecutor = new TrapExecutor(_logger, Helper, _archipelago, _giftHandler);
-            var giftTrapManager = new GiftTrapManager(trapExecutor);
+            var giftTrapManager = new GiftTrapManager(_logger, trapExecutor);
             _giftHandler.Initialize(_logger, _archipelago, _stardewItemManager, _mail, giftTrapManager);
 
             _tileSanityManager = new TileSanityManager(_harmony, _archipelago, _locationChecker, Monitor);

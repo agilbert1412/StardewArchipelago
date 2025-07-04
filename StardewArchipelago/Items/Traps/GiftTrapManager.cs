@@ -4,20 +4,25 @@ using System.Collections.Generic;
 using System.Linq;
 using Archipelago.Gifting.Net.Traits;
 using Archipelago.Gifting.Net.Versioning.Gifts.Current;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using Microsoft.Xna.Framework;
 using StardewArchipelago.Stardew;
+using StardewModdingAPI;
 using StardewValley;
 
 namespace StardewArchipelago.Items.Traps
 {
     public class GiftTrapManager
     {
+        private readonly ILogger _logger;
         private readonly TrapExecutor _trapExecutor;
         private ConcurrentQueue<QueuedTrap> _trapQueue;
 
         private readonly Dictionary<string, Action<double, double>> _giftTraps;
 
-        public GiftTrapManager(TrapExecutor trapExecutor)
+        public GiftTrapManager(ILogger logger, TrapExecutor trapExecutor)
         {
+            _logger = logger;
             _trapExecutor = trapExecutor;
             _giftTraps = new Dictionary<string, Action<double, double>>();
             RegisterTraps();
@@ -54,8 +59,13 @@ namespace StardewArchipelago.Items.Traps
             //_giftTraps.Add(GiftFlag.Wood, SpawnTree);
         }
 
-        public void TriggerTrapForTrait(GiftTrait giftTrait, int amount)
+        public void TriggerTrapForTrait(GiftTrait giftTrait, int amount, string originPlayer)
         {
+            if (amount <= 0)
+            {
+                return;
+            }
+
             foreach (var (flag, action) in _giftTraps)
             {
                 if (!giftTrait.Trait.Equals(flag, StringComparison.InvariantCultureIgnoreCase))
@@ -67,6 +77,10 @@ namespace StardewArchipelago.Items.Traps
                 {
                     _trapQueue.Enqueue(new QueuedGiftTrap($"Gift {flag}", action, giftTrait.Quality, giftTrait.Duration));
                 }
+
+
+                _logger.LogInfo($"Received Gift Trap '{flag}' (Amount: {amount}, Quality: {giftTrait.Quality}, Duration: {giftTrait.Duration})");
+                Game1.chatBox.addMessage($"{originPlayer} sent you a {flag} gift trap!", Color.DarkRed);
             }
         }
 

@@ -40,9 +40,11 @@ namespace StardewArchipelago.Archipelago.Gifting
                 return false;
             }
 
+            var senderName = _archipelago.GetPlayerName(gift.SenderSlot);
+
             foreach (var giftTrait in gift.Traits)
             {
-                _giftTrapManager.TriggerTrapForTrait(giftTrait, gift.Amount);
+                _giftTrapManager.TriggerTrapForTrait(giftTrait, gift.Amount, senderName.ToAnonymousName());
             }
 
             return true;

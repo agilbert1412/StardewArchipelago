@@ -10,7 +10,7 @@ namespace StardewArchipelagoTests
         [SetUp]
         public void Setup()
         {
-            _giftTrapManager = new GiftTrapManager(null);
+            _giftTrapManager = new GiftTrapManager(null, null);
         }
 
         [Test]
