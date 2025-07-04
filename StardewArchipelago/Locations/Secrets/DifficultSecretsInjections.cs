@@ -19,6 +19,7 @@ namespace StardewArchipelago.Locations.Secrets
         private static IModHelper _modHelper;
         private static ArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
+        private static ScoutedLocation _stackMasterScout;
 
         public static void Initialize(ILogger logger, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
         {
@@ -26,6 +27,7 @@ namespace StardewArchipelago.Locations.Secrets
             _modHelper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
+            _stackMasterScout = _archipelago.ScoutSingleLocation(SecretsLocationNames.SECRET_IRIDIUM_STACKMASTER_TROPHY, false);
         }
 
         public static void DoneEatingStardropSecret(Farmer __instance)
@@ -137,6 +139,16 @@ namespace StardewArchipelago.Locations.Secrets
         {
             try
             {
+                if (_stackMasterScout == null)
+                {
+                    _stackMasterScout = _archipelago.ScoutSingleLocation(SecretsLocationNames.SECRET_IRIDIUM_STACKMASTER_TROPHY, false);
+                }
+                if (number > 250000 && !Game1.player.mailReceived.Contains("numbersEggFreeScout"))
+                {
+                    Game1.player.mailReceived.Add("numbersEggFreeScout");
+                    Game1.chatBox.addMessage("Let me give you a little hint...", new Color(100, 50, (int)byte.MaxValue));
+                    Game1.chatBox.addMessage($"I wonder if {_stackMasterScout.PlayerName} really needs their {_stackMasterScout.ItemName}?", new Color(100, 50, (int)byte.MaxValue));
+                }
                 if (number >= 1000000)
                 {
                     _locationChecker.AddCheckedLocation(SecretsLocationNames.SECRET_IRIDIUM_STACKMASTER_TROPHY);
