@@ -77,7 +77,7 @@ namespace StardewArchipelago.Items.Mail
             string embedString)
         {
             var mailContentTemplate = GetRandomApMailString();
-            var mailContent = string.Format(mailContentTemplate, apItemName, findingPlayer, locationName, embedString, Game1.player.farmName.Value);
+            var mailContent = string.Format(mailContentTemplate, apItemName, findingPlayer.ToAnonymousName(), locationName, embedString, Game1.player.farmName.Value);
             GenerateMail(mailKey, mailContent);
         }
 

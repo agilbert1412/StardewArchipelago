@@ -46,14 +46,14 @@ namespace StardewArchipelago.Extensions
 
             foreach (var playerInfo in players.AllPlayers)
             {
-                if (messageContent.Contains(playerInfo.Name))
-                {
-                    messageContent = AnonymizePlayerName(messageContent, playerInfo.Name);
-                }
-
                 if (messageContent.Contains(playerInfo.Alias))
                 {
                     messageContent = AnonymizePlayerName(messageContent, playerInfo.Alias);
+                }
+
+                if (messageContent.Contains(playerInfo.Name))
+                {
+                    messageContent = AnonymizePlayerName(messageContent, playerInfo.Name);
                 }
             }
 
