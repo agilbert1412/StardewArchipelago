@@ -38,6 +38,7 @@ namespace StardewArchipelago.Constants
             "Fly Sniper",
             "Frazzleduck",
             "Heinermann",
+            "Honeywell",
             "Iritav100",
             "Ishigh",
             "JaredWeakStrike",
