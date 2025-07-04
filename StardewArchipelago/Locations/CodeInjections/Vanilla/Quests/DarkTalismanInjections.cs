@@ -16,7 +16,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
 {
     public class DarkTalismanInjections
     {
-        private const string DARK_TALISMAN = "Dark Talisman";
+        private const string DARK_TALISMAN_EVENT = "Dark Talisman";
+        private const string DARK_TALISMAN_QUEST = $"Quest: {DARK_TALISMAN_EVENT}";
 
         private static ILogger _logger;
         private static IModHelper _helper;
@@ -68,7 +69,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
-                if (_locationChecker.IsLocationMissing(DARK_TALISMAN) && __instance.CanItemBePlacedHere(new Vector2(31f, 5f)))
+                if (_locationChecker.IsLocationMissing(DARK_TALISMAN_QUEST) && __instance.CanItemBePlacedHere(new Vector2(31f, 5f)))
                 {
                     __instance.overlayObjects.Add(new Vector2(31f, 5f), new Chest(new List<Item>()
                     {
@@ -132,7 +133,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
 
                 __result = true;
 
-                _locationChecker.AddCheckedLocation(DARK_TALISMAN);
+                _locationChecker.AddCheckedLocation(DARK_TALISMAN_QUEST);
 
                 return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
