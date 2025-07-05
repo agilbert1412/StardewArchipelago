@@ -1813,7 +1813,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             var hasPressedWindows = pressedKeys.Contains(Keys.LeftWindows) || pressedKeys.Contains(Keys.RightWindows);
             var hasPressedShift = pressedKeys.Contains(Keys.LeftShift) || pressedKeys.Contains(Keys.RightShift);
             var hasSummonedSnippingTool = hasPressedWindows && hasPressedShift && pressedKeys.Contains(Keys.S);
-            return hasPressedScreenshotKey || hasSummonedSnippingTool;
+            var hasPressedCtrl = pressedKeys.Contains(Keys.LeftControl) || pressedKeys.Contains(Keys.RightControl);
+            var hasPressedCopy = hasPressedCtrl && pressedKeys.Contains(Keys.C);
+            var hasPressedSave = hasPressedCtrl && pressedKeys.Contains(Keys.S);
+            return hasPressedScreenshotKey || hasSummonedSnippingTool || hasPressedCopy || hasPressedSave;
         }
 
         protected override ClickableTextureComponent CreateIngredientButton(ParsedItemData dataOrErrorItem, Rectangle bounds, int index, string hoverText, Item flavoredItem)
