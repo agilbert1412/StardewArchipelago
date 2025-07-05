@@ -72,38 +72,69 @@ namespace StardewArchipelago.Locations.Secrets
             }
         }
 
+        // public TemporaryAnimatedSprite(string textureName, Rectangle sourceRect, Vector2 position, bool flipped, float alphaFade, Color color)
+        public static void TemporaryAnimatedSpriteConstructor_StrangeSightingAndBigFoot_Postfix(TemporaryAnimatedSprite __instance, string textureName, Rectangle sourceRect, Vector2 position, bool flipped, float alphaFade, Color color)
+        {
+            try
+            {
+                CheckStrangeSighting(textureName, sourceRect);
+                CheckBigfoot(textureName, sourceRect);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(TemporaryAnimatedSpriteConstructor_StrangeSightingAndBigFoot_Postfix)}:\n{ex}");
+                return;
+            }
+        }
+
         // private void PlaySound(string sound)
         public static void PlaySound_StrangeSightingAndBigFoot_Postfix(TemporaryAnimatedSprite __instance, string sound)
         {
             try
             {
-                var bigfootTexture = "Characters\\asldkfjsquaskutanfsldk";
-                var strangeTexture = "LooseSprites\\temporary_sprites_1";
-
-                if (__instance.textureName == strangeTexture)
-                {
-
-                    var spriteRectangle = new Rectangle(448, 546, 16, 25);
-                    if (!__instance.sourceRect.Equals(spriteRectangle))
-                    {
-                        return;
-                    }
-
-                    _locationChecker.AddCheckedLocation(SecretsLocationNames.STRANGE_SIGHTING);
-                    return;
-                }
-
-                if (__instance.textureName == bigfootTexture)
-                {
-                    _locationChecker.AddCheckedLocation(SecretsLocationNames.BIGFOOT);
-                    return;
-                }
+                CheckStrangeSighting(__instance.textureName, __instance.sourceRect);
+                CheckBigfoot(__instance.textureName, __instance.sourceRect);
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(PlaySound_StrangeSightingAndBigFoot_Postfix)}:\n{ex}");
                 return;
             }
+        }
+
+        private static bool CheckStrangeSighting(string textureName, Rectangle sourceRect)
+        {
+            var strangeTexture = "LooseSprites\\temporary_sprites_1";
+            if (textureName != strangeTexture)
+            {
+                return false;
+            }
+            var spriteRectangle = new Rectangle(448, 546, 16, 25);
+            if (!sourceRect.Equals(spriteRectangle))
+            {
+                return false;
+            }
+
+            _locationChecker.AddCheckedLocation(SecretsLocationNames.STRANGE_SIGHTING);
+            return true;
+        }
+
+        private static bool CheckBigfoot(string textureName, Rectangle sourceRect)
+        {
+            var bigfootTexture = "Characters\\asldkfjsquaskutanfsldk";
+            if (textureName != bigfootTexture)
+            {
+                return false;
+            }
+
+            var spriteRectangle = new Rectangle(0, 0, 32, 48);
+            if (!sourceRect.Equals(spriteRectangle))
+            {
+                return false;
+            }
+
+            _locationChecker.AddCheckedLocation(SecretsLocationNames.BIGFOOT);
+            return true;
         }
 
         // public SeaMonsterTemporarySprite(float animationInterval, int animationLength, int numberOfLoops, Vector2 position)

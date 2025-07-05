@@ -29,13 +29,14 @@ using StardewValley.Objects;
 using StardewValley.Quests;
 using StardewValley.SpecialOrders;
 using StardewValley.TerrainFeatures;
-using xTile.Dimensions;
 using Object = StardewValley.Object;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Arcade;
 using StardewArchipelago.Locations.Secrets;
 using StardewValley.Buildings;
 using StardewValley.Tools;
+using xTile.Dimensions;
 using EventInjections = StardewArchipelago.Locations.CodeInjections.Vanilla.EventInjections;
+using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace StardewArchipelago.Locations.Patcher
 {
@@ -1666,6 +1667,11 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony.Patch(
                 original: AccessTools.Method(typeof(ShippingMenu), nameof(ShippingMenu.receiveLeftClick)),
                 postfix: new HarmonyMethod(typeof(DifficultSecretsInjections), nameof(DifficultSecretsInjections.ReceiveLeftClick_AnnoyMoonMan_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Constructor(typeof(TemporaryAnimatedSprite), new []{ typeof(string), typeof(Rectangle), typeof(Vector2), typeof(bool), typeof(float), typeof(Color) }),
+                postfix: new HarmonyMethod(typeof(DifficultSecretsInjections), nameof(DifficultSecretsInjections.TemporaryAnimatedSpriteConstructor_StrangeSightingAndBigFoot_Postfix))
             );
 
             _harmony.Patch(
