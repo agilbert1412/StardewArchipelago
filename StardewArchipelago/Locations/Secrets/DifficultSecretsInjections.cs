@@ -78,7 +78,6 @@ namespace StardewArchipelago.Locations.Secrets
             try
             {
                 CheckStrangeSighting(textureName, sourceRect);
-                CheckBigfoot(textureName, sourceRect);
             }
             catch (Exception ex)
             {
