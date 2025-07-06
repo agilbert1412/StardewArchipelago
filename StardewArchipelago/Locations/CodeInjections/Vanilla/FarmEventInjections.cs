@@ -45,15 +45,17 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
         private static FarmEvent OverwriteQiPlaneEvent(FarmEvent nightEvent)
         {
+            var isConnected = _archipelago.MakeSureConnected();
+
             const string qiPlaneMail = "sawQiPlane";
             var hasUnlockedQiPlane = _archipelago.HasReceivedItem("Mr Qi's Plane Ride");
             var hasSeenQiPlaneEvent = Game1.player.mailReceived.Contains(qiPlaneMail);
-            if (!hasUnlockedQiPlane && hasSeenQiPlaneEvent)
+            if (isConnected && !hasUnlockedQiPlane && hasSeenQiPlaneEvent)
             {
                 Game1.player.mailReceived.Remove(qiPlaneMail);
             }
 
-            if (nightEvent == null && hasUnlockedQiPlane && !hasSeenQiPlaneEvent)
+            if (isConnected && nightEvent == null && hasUnlockedQiPlane && !hasSeenQiPlaneEvent)
             {
                 return new QiPlaneEvent();
             }
