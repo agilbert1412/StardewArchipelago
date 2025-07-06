@@ -1,11 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.Items.Mail;
+using StardewArchipelago.Locations.InGameLocations;
 using StardewValley;
+using StardewValley.Buildings;
+using StardewValley.Delegates;
+using StardewValley.Internal;
+using StardewValley.Objects;
+using StardewValley.SpecialOrders;
+using StardewValley.Tools;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
 {
@@ -35,6 +43,15 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
                     lostAndFoundTool.UpgradeLevel = 0;
                     var baseName = lostAndFoundTool.Name;
+                    var prefixes = new[] { "Copper", "Steel", "Gold", "Iridium" };
+                    foreach (var prefix in prefixes)
+                    {
+                        var startString = $"{prefix} ";
+                        if (baseName.StartsWith(startString))
+                        {
+                            baseName = baseName.Replace(startString, "");
+                        }
+                    }
                     var apName = $"Progressive {baseName}";
                     if (AnyIncomingLetterContainingKey(apName))
                     {
@@ -79,53 +96,8 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         {
             try
             {
-                var team = Game1.player.team;
-                foreach (var lostAndFoundItem in team.returnedDonations.ToArray())
-                {
-                    if (lostAndFoundItem is not Tool lostAndFoundTool)
-                    {
-                        continue;
-                    }
-
-                    var baseName = lostAndFoundTool.Name;
-                    var apName = $"Progressive {baseName}";
-                    if (AnyIncomingLetterContainingKey(apName))
-                    {
-                        team.returnedDonations.Remove(lostAndFoundItem);
-                        continue;
-                    }
-
-                    var receivedUpgrades = _archipelago.GetReceivedItemCount(apName);
-                    var startedWithout = _archipelago.SlotData.ToolProgression.HasFlag(ToolProgression.NoStartingTools);
-                    if (startedWithout && receivedUpgrades <= 0)
-                    {
-                        team.returnedDonations.Remove(lostAndFoundItem);
-                        continue;
-                    }
-
-                    var toolExistsAnywhere = false;
-                    Utility.ForEachItem(x =>
-                    {
-                        if (x is Tool tool && tool.GetType().FullName == lostAndFoundItem.GetType().FullName)
-                        {
-                            toolExistsAnywhere = true;
-                            return false;
-                        }
-                        return true;
-                    });
-
-                    if (toolExistsAnywhere)
-                    {
-                        team.returnedDonations.Remove(lostAndFoundItem);
-                        continue;
-                    }
-                }
-
-                if (!team.returnedDonations.Any())
-                {
-                    team.newLostAndFoundItems.Value = false;
-                }
-
+                DontLostAndFoundUnreceivedTools();
+                CorrectlyUpgradeOwnedTools();
                 return;
             }
             catch (Exception ex)
@@ -133,6 +105,98 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 _logger.LogError($"Failed in {nameof(FixProblems_DontLostAndFoundUnreceivedTools_Postfix)}:\n{ex}");
                 return;
             }
+        }
+
+        private static void DontLostAndFoundUnreceivedTools()
+        {
+            var team = Game1.player.team;
+            foreach (var lostAndFoundItem in team.returnedDonations.ToArray())
+            {
+                if (lostAndFoundItem is not Tool lostAndFoundTool)
+                {
+                    continue;
+                }
+
+                var baseName = lostAndFoundTool.Name;
+                var apName = $"Progressive {baseName}";
+                if (AnyIncomingLetterContainingKey(apName))
+                {
+                    team.returnedDonations.Remove(lostAndFoundItem);
+                    continue;
+                }
+
+                var receivedUpgrades = _archipelago.GetReceivedItemCount(apName);
+                var startedWithout = _archipelago.SlotData.ToolProgression.HasFlag(ToolProgression.NoStartingTools);
+                if (startedWithout && receivedUpgrades <= 0)
+                {
+                    team.returnedDonations.Remove(lostAndFoundItem);
+                    continue;
+                }
+
+                continue;
+            }
+
+            if (!team.returnedDonations.Any())
+            {
+                team.newLostAndFoundItems.Value = false;
+            }
+        }
+
+        private static void CorrectlyUpgradeOwnedTools()
+        {
+            Utility.ForEachItemContext(MakeToolCorrectLevel);
+        }
+
+        private static bool MakeToolCorrectLevel(in ForEachItemContext context)
+        {
+            var item = context.Item;
+            if (item is not Tool tool || item is FishingRod)
+            {
+                return true;
+            }
+
+            var baseName = tool.Name;
+            var apName = $"Progressive {baseName}";
+            if (AnyIncomingLetterContainingKey(apName))
+            {
+                return true;
+            }
+
+            var receivedUpgrades = _archipelago.GetReceivedItemCount(apName);
+            var startedWithout = _archipelago.SlotData.ToolProgression.HasFlag(ToolProgression.NoStartingTools) && tool is not Pan;
+            if (receivedUpgrades <= 0 || startedWithout && receivedUpgrades <= 1)
+            {
+                return true;
+            }
+
+            var expectedLevel = startedWithout ? receivedUpgrades - 1 : receivedUpgrades;
+            var newTool = CreateNewTool(tool, expectedLevel);
+            if (tool.UpgradeLevel == expectedLevel && tool.Name == newTool.Name)
+            {
+                return true;
+            }
+
+            context.ReplaceItemWith(newTool);
+            return true;
+        }
+
+        private static Tool CreateNewTool(Tool tool, int expectedLevel)
+        {
+            foreach (var (toolId, toolData) in Game1.toolData)
+            {
+                if (tool.GetToolData().ClassName != toolData.ClassName)
+                {
+                    continue;
+                }
+                if (expectedLevel != toolData.UpgradeLevel)
+                {
+                    continue;
+                }
+                var newTool = (Tool)ItemRegistry.Create("(T)" + toolId);
+                return newTool;
+            }
+
+            return tool;
         }
 
         public static bool AnyIncomingLetterContainingKey(string apItemName)
