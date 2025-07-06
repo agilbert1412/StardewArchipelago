@@ -193,6 +193,7 @@ namespace StardewArchipelago.Items.Traps
 
         private void TeleportFarmerTo(string locationName, Vector2 tile)
         {
+            _logger.LogInfo($"Teleporting the player to {locationName} [{tile}]");
             var farmer = Game1.player;
             var multiplayerField = _helper.Reflection.GetField<Multiplayer>(typeof(Game1), "multiplayer");
             var multiplayer = multiplayerField.GetValue();
