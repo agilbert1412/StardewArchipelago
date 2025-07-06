@@ -52,6 +52,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                             baseName = baseName.Replace(startString, "");
                         }
                     }
+
                     var apName = $"Progressive {baseName}";
                     if (AnyIncomingLetterContainingKey(apName))
                     {
