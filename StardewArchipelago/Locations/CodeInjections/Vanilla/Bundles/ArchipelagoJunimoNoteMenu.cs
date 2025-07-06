@@ -2091,7 +2091,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
             var bundleData = Game1.netWorldState.Value.BundleData;
             var bundle = new ArchipelagoBundle(bundleIndex, bundleData.First(x => x.Key.EndsWith($"{bundleIndex}")).Value, communityCenter.bundlesDict()[bundleIndex], Point.Zero, NOTE_TEXTURE_NAME, null);
-            var isComplete = communityCenter.isBundleComplete(bundleIndex);
+            var isComplete = bundle.Complete;
             if (isComplete && _locationChecker.IsLocationMissing($"{bundleName} Bundle"))
             {
                 _locationChecker.AddCheckedLocation(bundleName);
