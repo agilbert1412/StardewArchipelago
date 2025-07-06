@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using StardewArchipelago.Bundles;
 using StardewValley;
 using StardewValley.Extensions;
 using StardewValley.Internal;
@@ -110,29 +111,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                     this.BundleTextureIndexOverride = -1;
                 }
             }
+
             var strArray1 = ArgUtility.SplitBySpace(array[2]);
-            this.Complete = true;
-            this.Ingredients = new List<BundleIngredientDescription>();
-            var num = 0;
-            for (var index = 0; index < strArray1.Length; index += 3)
-            {
-                this.Ingredients.Add(new BundleIngredientDescription(strArray1[index], Convert.ToInt32(strArray1[index + 1]), Convert.ToInt32(strArray1[index + 2]), completedIngredientsList[index / 3]));
-                if (!completedIngredientsList[index / 3])
-                {
-                    this.Complete = false;
-                }
-                else
-                {
-                    ++num;
-                }
-            }
+            this.Complete = IsBundleComplete(completedIngredientsList, strArray1, array, out var ingredients);
+
+            this.Ingredients = ingredients;
+            this.NumberOfIngredientSlots = ArgUtility.GetInt(array, 4, this.Ingredients.Count);
 
             this.BundleColor = Convert.ToInt32(array[3]);
-            this.NumberOfIngredientSlots = ArgUtility.GetInt(array, 4, this.Ingredients.Count);
-            if (num >= this.NumberOfIngredientSlots)
-            {
-                this.Complete = true;
-            }
+
             this.Sprite = new TemporaryAnimatedSprite(textureName, new Rectangle(this.BundleColor * 256 % 512, 244 + this.BundleColor * 256 / 512 * 16, 16, 16), 70f, 3, 99999, new Vector2(this.bounds.X, this.bounds.Y), false,
                 false, 0.8f, 0.0f, Color.White, 4f, 0.0f, 0.0f, 0.0f)
             {
@@ -149,6 +136,44 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                 return;
             }
             this.CompletionAnimation(menu, false);
+        }
+
+        public static bool IsBundleComplete(bool[] completedIngredientsList, string[] bundleDataFields)
+        {
+            var bundleIngredientsArray = ArgUtility.SplitBySpace(bundleDataFields[2]);
+            return IsBundleComplete(completedIngredientsList, bundleIngredientsArray, bundleDataFields, out _);
+        }
+
+        public static bool IsBundleComplete(bool[] completedIngredientsList, string[] ingredientsArray, string[] bundleDataFields)
+        {
+            return IsBundleComplete(completedIngredientsList, ingredientsArray, bundleDataFields, out _);
+        }
+
+        public static bool IsBundleComplete(bool[] completedIngredientsList, string[] ingredientsArray, string[] bundleDataFields, out List<BundleIngredientDescription> ingredients)
+        {
+            var complete = true;
+            ingredients = new List<BundleIngredientDescription>();
+            var num = 0;
+            for (var index = 0; index < ingredientsArray.Length; index += 3)
+            {
+                ingredients.Add(new BundleIngredientDescription(ingredientsArray[index], Convert.ToInt32(ingredientsArray[index + 1]), Convert.ToInt32(ingredientsArray[index + 2]), completedIngredientsList[index / 3]));
+                if (!completedIngredientsList[index / 3])
+                {
+                    complete = false;
+                }
+                else
+                {
+                    ++num;
+                }
+            }
+
+            var numberOfIngredientSlots = ArgUtility.GetInt(bundleDataFields, 4, ingredients.Count);
+            if (num >= numberOfIngredientSlots)
+            {
+                complete = true;
+            }
+
+            return complete;
         }
 
         public Item GetReward()

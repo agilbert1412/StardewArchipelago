@@ -78,10 +78,17 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
 
             RewardDescription = string.Empty;
-            Complete = true;
+            Complete = IsBundleComplete(completedIngredientsList, itemBundle, out var ingredients);
 
+            Ingredients = ingredients;
+            NumberOfIngredientSlots = itemBundle.NumberRequired;
+        }
+
+        private static bool IsBundleComplete(bool[] completedIngredientsList, ItemBundle itemBundle, out List<BundleIngredientDescription> ingredients)
+        {
             var numberAlreadyDonated = 0;
-            var ingredients = new List<BundleIngredientDescription>();
+            ingredients = new List<BundleIngredientDescription>();
+            var isComplete = true;
             for (var i = 0; i < itemBundle.Items.Count; i++)
             {
                 var bundleItem = itemBundle.Items[i];
@@ -94,18 +101,17 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 }
                 else
                 {
-                    Complete = false;
+                    isComplete = false;
                 }
             }
 
-            Ingredients = ingredients;
-            NumberOfIngredientSlots = itemBundle.NumberRequired;
-
-            if (numberAlreadyDonated >= NumberOfIngredientSlots)
+            if (numberAlreadyDonated >= itemBundle.NumberRequired)
             {
-                Complete = true;
+                isComplete = true;
             }
+            return isComplete;
         }
+
         private void InitializeNameAndLabel(string bundleName)
         {
             var nameForPlayer = GetBundleNameForPlayer(bundleName);

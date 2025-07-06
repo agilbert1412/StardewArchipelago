@@ -2090,8 +2090,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
 
             var bundleData = Game1.netWorldState.Value.BundleData;
-            var bundle = new ArchipelagoBundle(bundleIndex, bundleData.First(x => x.Key.EndsWith($"{bundleIndex}")).Value, communityCenter.bundlesDict()[bundleIndex], Point.Zero, NOTE_TEXTURE_NAME, null);
-            var isComplete = bundle.Complete;
+            var bundleInfo = bundleData.First(x => x.Key.EndsWith($"{bundleIndex}")).Value;
+            var bundlesDict = communityCenter.bundlesDict();
+            var bundleState = bundlesDict[bundleIndex];
+            var bundleInfoArray = bundleInfo.Split('/');
+            //var bundleIngredientsArray = ArgUtility.SplitBySpace(bundleInfoArray[2]);
+            //var bundle = new ArchipelagoBundle(bundleIndex, bundleInfo, bundleState, Point.Zero, NOTE_TEXTURE_NAME, null);
+            var isComplete = BundleRemake.IsBundleComplete(bundleState, bundleInfoArray);
             if (isComplete && _locationChecker.IsLocationMissing($"{bundleName} Bundle"))
             {
                 _locationChecker.AddCheckedLocation(bundleName);
