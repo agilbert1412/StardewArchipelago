@@ -42,16 +42,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
 
                     lostAndFoundTool.UpgradeLevel = 0;
-                    var baseName = lostAndFoundTool.Name;
-                    var prefixes = new[] { "Copper", "Steel", "Gold", "Iridium" };
-                    foreach (var prefix in prefixes)
-                    {
-                        var startString = $"{prefix} ";
-                        if (baseName.StartsWith(startString))
-                        {
-                            baseName = baseName.Replace(startString, "");
-                        }
-                    }
+                    var baseName = GetToolBaseName(lostAndFoundTool);
 
                     var apName = $"Progressive {baseName}";
                     if (AnyIncomingLetterContainingKey(apName))
@@ -118,7 +109,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     continue;
                 }
 
-                var baseName = lostAndFoundTool.Name;
+                var baseName = GetToolBaseName(lostAndFoundTool);
                 var apName = $"Progressive {baseName}";
                 if (AnyIncomingLetterContainingKey(apName))
                 {
@@ -141,6 +132,21 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             {
                 team.newLostAndFoundItems.Value = false;
             }
+        }
+
+        private static string GetToolBaseName(Tool tool)
+        {
+            var baseName = tool.Name;
+            var prefixes = new[] { "Copper", "Steel", "Gold", "Iridium" };
+            foreach (var prefix in prefixes)
+            {
+                var startString = $"{prefix} ";
+                if (baseName.StartsWith(startString))
+                {
+                    baseName = baseName.Replace(startString, "");
+                }
+            }
+            return baseName;
         }
 
         private static void CorrectlyUpgradeOwnedTools()
