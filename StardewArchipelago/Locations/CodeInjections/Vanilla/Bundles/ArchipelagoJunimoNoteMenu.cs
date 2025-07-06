@@ -31,6 +31,8 @@ using Microsoft.Xna.Framework.Audio;
 using StardewModdingAPI.Events;
 using Color = Microsoft.Xna.Framework.Color;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Gacha;
+using StardewValley.GameData.Bundles;
+using StardewValley.Minigames;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 {
@@ -2087,6 +2089,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 return false;
             }
 
+            var bundleData = Game1.netWorldState.Value.BundleData;
+            var bundle = new ArchipelagoBundle(bundleIndex, bundleData.First(x => x.Key.EndsWith($"{bundleIndex}")).Value, communityCenter.bundlesDict()[bundleIndex], Point.Zero, NOTE_TEXTURE_NAME, null);
             var isComplete = communityCenter.isBundleComplete(bundleIndex);
             if (isComplete && _locationChecker.IsLocationMissing($"{bundleName} Bundle"))
             {
