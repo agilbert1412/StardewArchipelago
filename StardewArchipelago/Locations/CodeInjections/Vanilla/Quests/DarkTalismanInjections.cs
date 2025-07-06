@@ -10,6 +10,7 @@ using StardewValley.Objects;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
+using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Vanilla;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
@@ -170,7 +171,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
                 }
 
                 _locationChecker.AddCheckedLocation($"Quest: Magic Ink");
-                who.hasMagicInk = _archipelago.HasReceivedItem("Magic Ink");
+                who.hasMagicInk = _archipelago.HasReceivedItem(APItem.MAGIC_INK);
                 return;
             }
             catch (Exception ex)

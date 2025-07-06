@@ -19,6 +19,11 @@ namespace StardewArchipelago.Extensions
 
         public static string ToAnonymousName(this string name)
         {
+            if (!ModEntry.Instance.Config.AnonymizeNamesInChat)
+            {
+                return name;
+            }
+
             if (name == null)
             {
                 Debugger.Break();
@@ -62,6 +67,11 @@ namespace StardewArchipelago.Extensions
 
         private static string AnonymizePlayerName(string messageContent, string name)
         {
+            if (!ModEntry.Instance.Config.AnonymizeNamesInChat)
+            {
+                return messageContent;
+            }
+
             var anonymizedMessage = messageContent;
             var anonymousName = name.ToAnonymousName();
             var delimitingChars = new[] { " ", ".", "?", "!", "(", ")", ":", ";", "[", "]", "{", "}", "*", "&", "¬", "%", "$", "#", "/", @"\", "|", "@", "" };
