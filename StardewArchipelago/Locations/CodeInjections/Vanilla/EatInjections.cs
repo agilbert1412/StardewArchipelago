@@ -234,36 +234,53 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     __result = 0;
                     return;
                 }
+                
+                const double enzymeThresholdForBonus = 5;
+                const double enzymeMultiplier = 1.15;
+                const double enzymeCapMultiplier = 1.5;
+                const double enzymeCapStartingFactor = 5;
 
-                if (numberEnzymes > 5)
-                {
-                    // After 5 enzymes, all items get a little buff of stamina
-                    __result = (int)Math.Round(__result * Math.Pow(1.1, numberEnzymes-5));
-                }
+                /*
+                 * Multiplier (Approximately)
+                 * 0 -> 0.5
+                 * 1 -> 0.57
+                 * 2 -> 0.65
+                 * 3 -> 0.75
+                 * 4 -> 0.85
+                 * 5 -> 1
+                 * 6 -> 1.15
+                 * 7 -> 1.3
+                 * 8 -> 1.5
+                 * 9 -> 1.75
+                 * 10 -> 2
+                 */
+
+                __result = (int)Math.Round(__result * Math.Pow(enzymeMultiplier, numberEnzymes - enzymeThresholdForBonus));
 
                 if (numberEnzymes >= 10)
                 {
-                    // Max enzymes, max stamina!
+                    // Max enzymes, max health!
                     return;
                 }
 
-                var cap = (int)Math.Round(2 * Math.Pow(2, numberEnzymes-1));
+                /*
+                 * Cap (Approximately)
+                 * 0 -> 16 (No stamina)
+                 * 1 -> 22
+                 * 2 -> 34
+                 * 3 -> 52
+                 * 4 -> 76
+                 * 5 -> 116
+                 * 6 -> 172
+                 * 7 -> 260
+                 * 8 -> 390
+                 * 9 -> 586
+                 * 10 -> 876 (uncapped)
+                 */
+
+                var cap = (int)Math.Round(2 * Math.Pow(enzymeCapMultiplier, numberEnzymes + enzymeCapStartingFactor));
                 __result = Math.Min(cap, __result);
                 return;
-
-                /*
-                 * 0 -> 0
-                 * 1 -> 2
-                 * 2 -> 4
-                 * 3 -> 8
-                 * 4 -> 16
-                 * 5 -> 32
-                 * 6 -> 64
-                 * 7 -> 128
-                 * 8 -> 256
-                 * 9 -> 512
-                 * 10 ->1024
-                 */
             }
             catch (Exception ex)
             {
@@ -287,11 +304,27 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
                 __result = BaseHealthValue(__instance);
 
-                if (numberEnzymes > 5)
-                {
-                    // After 5 enzymes, all items get a little buff of health
-                    __result = (int)Math.Round(__result * Math.Pow(1.1, numberEnzymes - 5));
-                }
+                const double enzymeThresholdForBonus = 5;
+                const double enzymeMultiplier = 1.15;
+                const double enzymeCapMultiplier = 1.5;
+                const double enzymeCapStartingFactor = 5;
+
+                /*
+                 * Multiplier (Approximately)
+                 * 0 -> 0.5
+                 * 1 -> 0.57
+                 * 2 -> 0.65
+                 * 3 -> 0.75
+                 * 4 -> 0.85
+                 * 5 -> 1
+                 * 6 -> 1.15
+                 * 7 -> 1.3
+                 * 8 -> 1.5
+                 * 9 -> 1.75
+                 * 10 -> 2
+                 */
+
+                __result = (int)Math.Round(__result * Math.Pow(enzymeMultiplier, numberEnzymes - enzymeThresholdForBonus));
 
                 if (numberEnzymes >= 10)
                 {
@@ -299,23 +332,24 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     return;
                 }
 
-                var cap = (int)Math.Round(1 * Math.Pow(2, numberEnzymes - 1));
+                /*
+                 * Cap (Approximately)
+                 * 0 -> 8 (No health)
+                 * 1 -> 11
+                 * 2 -> 17
+                 * 3 -> 26
+                 * 4 -> 38
+                 * 5 -> 58
+                 * 6 -> 86
+                 * 7 -> 130
+                 * 8 -> 195
+                 * 9 -> 292
+                 * 10 -> 438 (uncapped)
+                 */
+
+                var cap = (int)Math.Round(Math.Pow(enzymeCapMultiplier, numberEnzymes + enzymeCapStartingFactor));
                 __result = Math.Min(cap, __result);
                 return;
-
-                /*
-                 * 0 -> 0
-                 * 1 -> 1
-                 * 2 -> 2
-                 * 3 -> 4
-                 * 4 -> 8
-                 * 5 -> 16
-                 * 6 -> 32
-                 * 7 -> 64
-                 * 8 -> 128
-                 * 9 -> 256
-                 * 10 -> 512
-                 */
             }
             catch (Exception ex)
             {
