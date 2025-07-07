@@ -569,7 +569,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 Game1.dayTimeMoneyBox.moneyShakeTimer = 600;
                 return;
             }
-            TryPurchaseCurrentBundleWithWalletCurrency(ingredient, 1, _ => { });
+            TryPurchaseCurrentBundleWithWalletCurrency(ingredient, ingredient.stack*2, _ => { });
         }
 
         private void TryPurchaseCurrentBundleWithDeadCrops(BundleIngredientDescription ingredient)
