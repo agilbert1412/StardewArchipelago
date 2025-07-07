@@ -56,7 +56,7 @@ namespace StardewArchipelago.Locations.Secrets
                 var isIsland = __instance.InIslandContext();
                 if (isIsland)
                 {
-                    var needsExtraJournalScrap = _locationChecker.IsAnyLocationNotChecked("Journal Scrap");
+                    var needsExtraJournalScrap = _locationChecker.IsAnyLocationNotCheckedEndingWith(": Journal Scrap");
                     if (!needsExtraJournalScrap)
                     {
                         return;
@@ -64,7 +64,7 @@ namespace StardewArchipelago.Locations.Secrets
                 }
                 else
                 {
-                    var needsExtraSecretNotes = _locationChecker.IsAnyLocationNotChecked("Secret Note");
+                    var needsExtraSecretNotes = _locationChecker.IsAnyLocationNotCheckedEndingWith(": Secret Note");
                     if (!needsExtraSecretNotes)
                     {
                         return;

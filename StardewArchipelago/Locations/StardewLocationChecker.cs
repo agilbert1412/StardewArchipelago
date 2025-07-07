@@ -61,5 +61,10 @@ namespace StardewArchipelago.Locations
         {
             return _locationNameMatcher.IsAnyLocationStartingWith(GetAllLocationsNotChecked(), prefix);
         }
+
+        public bool IsAnyLocationNotCheckedEndingWith(string prefix)
+        {
+            return _locationNameMatcher.IsAnyLocationEndingWith(GetAllLocationsNotChecked(), prefix);
+        }
     }
 }

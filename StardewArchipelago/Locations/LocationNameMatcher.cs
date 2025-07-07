@@ -24,6 +24,11 @@ namespace StardewArchipelago.Locations
             return allLocations.Where(x => x.StartsWith(prefix, StringComparison.InvariantCultureIgnoreCase));
         }
 
+        public IEnumerable<string> GetAllLocationsEndingWith(IEnumerable<string> allLocations, string suffix)
+        {
+            return allLocations.Where(x => x.EndsWith(suffix, StringComparison.InvariantCultureIgnoreCase));
+        }
+
         public string[] GetAllLocationsContainingWord(IEnumerable<string> allLocations, string wordFilter)
         {
             if (_wordFilterCache.ContainsKey(wordFilter))
@@ -55,6 +60,11 @@ namespace StardewArchipelago.Locations
         public bool IsAnyLocationStartingWith(IEnumerable<string> allLocations, string prefix)
         {
             return GetAllLocationsStartingWith(allLocations, prefix).Any();
+        }
+
+        public bool IsAnyLocationEndingWith(IEnumerable<string> allLocations, string suffix)
+        {
+            return GetAllLocationsEndingWith(allLocations, suffix).Any();
         }
 
         private static IEnumerable<string> FilterForWord(IEnumerable<string> locations, string filterWord)
