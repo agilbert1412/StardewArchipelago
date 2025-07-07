@@ -59,6 +59,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             var qosManager = new QueenOfSauceManager(state);
             QueenOfSauceInjections.Initialize(logger, modHelper, archipelago, locationChecker, itemManager, qosManager);
             RecipeLevelUpInjections.Initialize(logger, modHelper, archipelago, locationChecker);
+            ConversationFriendshipInjections.Initialize(logger, modHelper, archipelago, locationChecker);
             RecipeFriendshipInjections.Initialize(logger, modHelper, archipelago, locationChecker);
             CraftingInjections.Initialize(logger, modHelper, archipelago, itemManager, locationChecker);
             FarmCaveInjections.Initialize(logger, modHelper, archipelago, locationChecker);

@@ -47,5 +47,6 @@
         public const string VERY_STICKY = "Very Sticky";
         public const string STANLEY = "Stanley";
         public const string HAIRY = "Hairy";
+        public const string ANIMAL_WELL = "Animal Well";
     }
 }

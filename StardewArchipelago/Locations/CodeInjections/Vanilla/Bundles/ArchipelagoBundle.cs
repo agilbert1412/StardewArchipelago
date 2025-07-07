@@ -185,6 +185,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             {
                 return false;
             }
+            if (name == MemeBundleNames.ANIMAL_WELL && item.QualifiedItemId == QualifiedItemIds.ADVANCED_TV_REMOTE)
+            {
+                return false;
+            }
 
             return base.IsValidItemForThisIngredientDescription(item, ingredient, ingredientIndex, parentMenu);
         }

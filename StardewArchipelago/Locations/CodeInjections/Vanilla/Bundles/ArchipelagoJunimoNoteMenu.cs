@@ -2174,7 +2174,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             return GetBundleId(bundleName, out _);
         }
 
-        private static int GetBundleId(string bundleName, out CommunityCenter communityCenter)
+        public static int GetBundleId(string bundleName, out CommunityCenter communityCenter)
         {
             communityCenter = (CommunityCenter)Game1.getLocationFromName("CommunityCenter");
             foreach (var (bundleKey, bundleData) in Game1.netWorldState.Value.BundleData)

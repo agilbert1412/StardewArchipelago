@@ -32,25 +32,25 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         }
 
         // public void grantConversationFriendship(Farmer who, int amount = 20)
-        public static void GrantConversationFriendship_SendFriendshipRecipeChecks_Postfix(NPC __instance, Farmer who, int amount = 20)
+        public static void SendFriendshipRecipeChecks(NPC npc, Farmer player)
         {
             try
             {
-                if (!who.friendshipData.ContainsKey(__instance.Name))
+                if (!player.friendshipData.ContainsKey(npc.Name))
                 {
                     return;
                 }
 
-                var friendship = who.friendshipData[__instance.Name];
+                var friendship = player.friendshipData[npc.Name];
                 var currentHearts = friendship.Points / 250;
-                CheckCookingRecipeLocations(__instance.Name, currentHearts);
-                CheckCraftingRecipeLocations(__instance.Name, currentHearts);
+                CheckCookingRecipeLocations(npc.Name, currentHearts);
+                CheckCraftingRecipeLocations(npc.Name, currentHearts);
 
                 return;
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed in {nameof(GrantConversationFriendship_SendFriendshipRecipeChecks_Postfix)}:\n{ex}");
+                _logger.LogError($"Failed in {nameof(SendFriendshipRecipeChecks)}:\n{ex}");
                 return;
             }
         }

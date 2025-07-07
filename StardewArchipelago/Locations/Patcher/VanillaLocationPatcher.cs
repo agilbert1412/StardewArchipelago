@@ -113,6 +113,7 @@ namespace StardewArchipelago.Locations.Patcher
                 PatchMonstersanity();
                 AddCooksanityLocations();
                 PatchChefAndCraftsanity();
+                PatchConversationFriendship();
                 PatchKrobusShop();
                 PatchQiGemShop();
                 PatchCatalogueShops();
@@ -1239,11 +1240,6 @@ namespace StardewArchipelago.Locations.Patcher
                 prefix: new HarmonyMethod(typeof(RecipeLevelUpInjections), nameof(RecipeLevelUpInjections.LevelUpMenuConstructor_SendSkillRecipeChecks_Postfix))
             );
 
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(NPC), nameof(NPC.grantConversationFriendship)),
-                prefix: new HarmonyMethod(typeof(RecipeFriendshipInjections), nameof(RecipeFriendshipInjections.GrantConversationFriendship_SendFriendshipRecipeChecks_Postfix))
-            );
-
             if (!_archipelago.SlotData.Chefsanity.HasFlag(Chefsanity.Friendship))
             {
                 return;
@@ -1283,6 +1279,14 @@ namespace StardewArchipelago.Locations.Patcher
         private void CleanCraftsanityEvents()
         {
             _modHelper.Events.Content.AssetRequested -= _craftingRecipePurchaseStockModifier.OnShopStockRequested;
+        }
+
+        private void PatchConversationFriendship()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(NPC), nameof(NPC.grantConversationFriendship)),
+                prefix: new HarmonyMethod(typeof(ConversationFriendshipInjections), nameof(ConversationFriendshipInjections.GrantConversationFriendship_TalkEvents_Postfix))
+            );
         }
 
         private void PatchKrobusShop()
