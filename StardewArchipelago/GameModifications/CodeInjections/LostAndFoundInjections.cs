@@ -5,6 +5,7 @@ using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
+using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Locations.InGameLocations;
 using StardewValley;
@@ -162,7 +163,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 return true;
             }
 
-            var baseName = tool.Name;
+            var baseName = GetToolBaseName(tool);
             var apName = $"Progressive {baseName}";
             if (AnyIncomingLetterContainingKey(apName))
             {
@@ -180,11 +181,22 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             var newTool = CreateNewTool(tool, expectedLevel);
             if (tool.UpgradeLevel == expectedLevel && tool.Name == newTool.Name)
             {
+                DowngradeToolIfRequested(tool);
                 return true;
             }
 
+            DowngradeToolIfRequested(newTool);
             context.ReplaceItemWith(newTool);
             return true;
+        }
+
+        private static void DowngradeToolIfRequested(Tool tool)
+        {
+
+            if (ModEntry.Instance.Config.LimitHoeWateringCanLevel && tool is Hoe || tool is WateringCan)
+            {
+                tool.UpgradeLevel = 0;
+            }
         }
 
         private static Tool CreateNewTool(Tool tool, int expectedLevel)
