@@ -179,8 +179,9 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
             var expectedLevel = startedWithout ? receivedUpgrades - 1 : receivedUpgrades;
             var newTool = CreateNewTool(tool, expectedLevel);
-            if (tool.UpgradeLevel == expectedLevel && tool.Name == newTool.Name)
+            if (tool.QualifiedItemId == newTool.QualifiedItemId)
             {
+                tool.UpgradeLevel = newTool.UpgradeLevel;
                 DowngradeToolIfRequested(tool);
                 return true;
             }
@@ -192,7 +193,6 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
         private static void DowngradeToolIfRequested(Tool tool)
         {
-
             if (ModEntry.Instance.Config.LimitHoeWateringCanLevel && tool is Hoe || tool is WateringCan)
             {
                 tool.UpgradeLevel = 0;
