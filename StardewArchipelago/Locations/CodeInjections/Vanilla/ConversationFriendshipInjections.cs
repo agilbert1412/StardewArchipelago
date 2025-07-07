@@ -12,6 +12,7 @@ using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.Bundles;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
+using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -101,10 +102,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 }
                 else if (!needsToCompleteQuest)
                 {
+                    var remote = ItemRegistry.Create<Object>(QualifiedItemIds.ADVANCED_TV_REMOTE);
+
                     var dialogue = new Dialogue(npc, null,
                         "I got this fancy new remote, but I can't figure it out. It's always triggering random things in the rooms of the house. Youngsters like you like these things, you can have it.");
 
-                    var remote = ItemRegistry.Create<StardewValley.Object>(QualifiedItemIds.ADVANCED_TV_REMOTE);
                     remote.specialItem = true;
                     remote.questItem.Value = true;
                     DelayedAction.functionAfterDelay(() => player.addItemByMenuIfNecessary(remote), 200);
