@@ -117,6 +117,7 @@ namespace StardewArchipelago.Archipelago
             var normalizedDesiredModName = GetNormalizedModName(desiredModName);
             var foundIncorrectVersion = false;
             existingVersion = "[NOT FOUND]";
+            return true;
             foreach (var modInfo in loadedModData)
             {
                 var modName = GetNormalizedModName(modInfo.Manifest.Name);

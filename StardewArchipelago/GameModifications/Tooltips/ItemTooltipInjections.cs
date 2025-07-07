@@ -93,6 +93,21 @@ namespace StardewArchipelago.GameModifications.Tooltips
         {
             try
             {
+                DrawIndicatorOnRecipe(__instance, b, c, layerDepth, xOffset, yOffset);
+                DrawIndicatorOnSecretNote(__instance, b, c, layerDepth, xOffset, yOffset); ;
+                return;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(DrawRecipe_AddArchipelagoLogoIfNeeded_Postfix)}:\n{ex}");
+                return;
+            }
+        }
+
+        private static void DrawIndicatorOnRecipe(ClickableTextureComponent menu, SpriteBatch spriteBatch, Color color, float layerDepth, int xOffset, int yOffset)
+        {
+            try
+            {
                 if (!TryGetActiveCraftingPage(out var craftingPage))
                 {
                     return;
@@ -103,27 +118,27 @@ namespace StardewArchipelago.GameModifications.Tooltips
                     return;
                 }
 
-                if (!craftingPage.pagesOfCraftingRecipes[craftingPage.currentCraftingPage].ContainsKey(__instance))
+                if (!craftingPage.pagesOfCraftingRecipes[craftingPage.currentCraftingPage].ContainsKey(menu))
                 {
                     return;
                 }
 
-                var recipe = craftingPage.pagesOfCraftingRecipes[craftingPage.currentCraftingPage][__instance];
+                var recipe = craftingPage.pagesOfCraftingRecipes[craftingPage.currentCraftingPage][menu];
                 var itemData = recipe.GetItemData();
                 var name = itemData.InternalName;
                 var simplifiedName = _nameSimplifier.GetSimplifiedName(name, itemData.QualifiedItemId, itemData.ItemId);
-                var locationX = __instance.bounds.X + xOffset + __instance.sourceRect.Width / 2;// * __instance.baseScale;
-                var locationY = __instance.bounds.Y + yOffset + __instance.sourceRect.Height / 2;// * __instance.baseScale;
+                var locationX = menu.bounds.X + xOffset + menu.sourceRect.Width / 2;// * menu.baseScale;
+                var locationY = menu.bounds.Y + yOffset + menu.sourceRect.Height / 2;// * menu.baseScale;
                 var location = new Vector2(locationX, locationY);
-                var origin = new Vector2(__instance.sourceRect.Width / 2, __instance.sourceRect.Height / 2);
+                var origin = new Vector2(menu.sourceRect.Width / 2, menu.sourceRect.Height / 2);
                 var prefix = craftingPage.cooking ? "Cook " : "Craft ";
-                ItemDrawInMenuPostfix($"{prefix}{simplifiedName}", b, location, 1.0f, 1f, layerDepth, c, new Vector2(0, 0), origin);
+                ItemDrawInMenuPostfix($"{prefix}{simplifiedName}", spriteBatch, location, 1.0f, 1f, layerDepth, color, new Vector2(0, 0), origin);
 
                 return;
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed in {nameof(DrawRecipe_AddArchipelagoLogoIfNeeded_Postfix)}:\n{ex}");
+                _logger.LogError($"Failed in {nameof(DrawIndicatorOnRecipe)}:\n{ex}");
                 return;
             }
         }
@@ -146,6 +161,67 @@ namespace StardewArchipelago.GameModifications.Tooltips
             if (Game1.activeClickableMenu is GameMenu gameMenu && gameMenu.GetCurrentPage() is CraftingPage)
             {
                 craftingPage = (CraftingPage)gameMenu.GetCurrentPage();
+                return true;
+            }
+
+            return false;
+        }
+
+        private static void DrawIndicatorOnSecretNote(ClickableTextureComponent component, SpriteBatch spriteBatch, Color color, float layerDepth, int xOffset, int yOffset)
+        {
+            try
+            {
+                if (!TryGetActiveCollectionsPage(out var collectionsPage))
+                {
+                    return;
+                }
+
+                // this.collections[this.currentTab][this.currentPage]
+                if (collectionsPage.collections.Count <= collectionsPage.currentTab || collectionsPage.currentTab != CollectionsPage.secretNotesTab)
+                {
+                    return;
+                }
+
+                if (!collectionsPage.collections[collectionsPage.currentTab].Any(x => x.Contains(component)))
+                {
+                    return;
+                }
+
+                var secretNoteComponentName = component.name;
+                var number = int.Parse(secretNoteComponentName.Split(" ").First());
+                var locationX = component.bounds.X + xOffset + component.sourceRect.Width / 2;// * component.baseScale;
+                var locationY = component.bounds.Y + yOffset + component.sourceRect.Height / 2;// * component.baseScale;
+                var location = new Vector2(locationX, locationY);
+                var origin = new Vector2(component.sourceRect.Width / 2, component.sourceRect.Height / 2);
+                ItemDrawInMenuPostfix($"Secret Note #{number}:", spriteBatch, location, 1.0f, 1f, layerDepth, color, new Vector2(0, 0), origin);
+
+                return;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(DrawIndicatorOnSecretNote)}:\n{ex}");
+                return;
+            }
+        }
+
+        private static bool TryGetActiveCollectionsPage(out CollectionsPage collectionsPage)
+        {
+            collectionsPage = null;
+            var activeMenu = Game1.activeClickableMenu;
+            if (activeMenu == null)
+            {
+                return false;
+            }
+
+            if (activeMenu is CollectionsPage)
+            {
+                collectionsPage = (CollectionsPage)activeMenu;
+                return true;
+            }
+
+            if (Game1.activeClickableMenu is GameMenu gameMenu && gameMenu.GetCurrentPage() is CollectionsPage)
+            {
+                collectionsPage = (CollectionsPage)gameMenu.GetCurrentPage();
                 return true;
             }
 
