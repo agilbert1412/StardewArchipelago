@@ -5,7 +5,6 @@ Anything for Beyonce: itsjustluke on Vine
 Archipela-Go!: combo89 on Discord
 ArgonMatrix: Images created by Spiniyo on Fiverr for ArgonMatrix
 ASMR: Custom ASMR lines provided by Allison (Jubilee Whispers) https://www.youtube.com/@JubileeWhispers. Icon from google images
-A TUNA: Discord image from ATwentySomethingLoser
 Automation: Factorio Artwork
 Bad Farmer: Brawndo Logo from Idiocracy
 Bad Fisherman: Stock image
@@ -44,13 +43,14 @@ Fast: Internet Meme
 Firstborn: Internet Meme
 Flashbang: Handmade White Frame
 FrazzleDuck: Image from Frazzleduck
-Fruit: Stardew Valley Artwork
+'Fruit': Stardew Valley Artwork
 Gacha: Paimon from Genshin Impact
-Hats Off To You: Anonymous
 Hairy: Frame from One Punch Man
+Hats Off To You: Anonymous
 Hibernation: Sleeping Pepe the Frog from unknown artist
 Honeywell: Icon made by Honeywell
 Honorable: Stardew Valley Combined Artwork
+Humble: Humble Bundle Logo
 Hurricane Tortilla: jakebieniewicz on Vine
 IKEA: IKEA Logo
 Investment: Stonks Meme
@@ -60,6 +60,7 @@ Kent C.: Internet Meme
 Legendairy: Legendairy Milk Logo
 Lemonade Stand: Recreation of the duck from The Duck Song on youtube
 Look At These Chickens: Vine
+Loser Club: Image from ATwentySomethingLoser in their Loser Club community
 Mermaid: Stardew Valley Screenshot
 Minecraft: Minecraft Movie Screenshot
 Ministry of Madness: Icon by Eponasong for the MoM Discord Server
@@ -67,9 +68,9 @@ NFT: lmao
 Not The Bees: Bee Movie Screenshot
 Obelisks: Age of Mythology Screenshot
 Off Your Back: Clothes off my Back Logo
+Permit A38: Asterix Screenshot
 Pomnut: Image from TheRedWolfe based on Stardew Assets
 Pool: Stock Image
-Permit A38: Asterix Screenshot
 Potato: Kaito Kid, made from Stardew Valley Artwork
 Puzzle: Dynamically loads one of the other images
 Restraint Bundle: Screenshot from Spongebob
