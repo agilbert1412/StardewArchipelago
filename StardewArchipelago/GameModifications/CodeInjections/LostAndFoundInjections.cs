@@ -158,7 +158,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         private static bool MakeToolCorrectLevel(in ForEachItemContext context)
         {
             var item = context.Item;
-            if (item is not Tool tool || item is FishingRod)
+            if (item is not Tool tool || item is FishingRod || item is MeleeWeapon)
             {
                 return true;
             }
@@ -178,16 +178,25 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             }
 
             var expectedLevel = startedWithout ? receivedUpgrades - 1 : receivedUpgrades;
-            var newTool = CreateNewTool(tool, expectedLevel);
-            if (tool.QualifiedItemId == newTool.QualifiedItemId)
+            try
             {
-                tool.UpgradeLevel = newTool.UpgradeLevel;
-                DowngradeToolIfRequested(tool);
+                var newTool = CreateNewTool(tool, expectedLevel);
+                if (tool.QualifiedItemId == newTool.QualifiedItemId)
+                {
+                    tool.UpgradeLevel = newTool.UpgradeLevel;
+                    DowngradeToolIfRequested(tool);
+                    return true;
+                }
+
+                DowngradeToolIfRequested(newTool);
+                context.ReplaceItemWith(newTool);
                 return true;
             }
+            catch (Exception ex)
+            {
+                var aaa = 5;
+            }
 
-            DowngradeToolIfRequested(newTool);
-            context.ReplaceItemWith(newTool);
             return true;
         }
 
