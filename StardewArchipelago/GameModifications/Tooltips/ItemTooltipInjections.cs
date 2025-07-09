@@ -255,7 +255,7 @@ namespace StardewArchipelago.GameModifications.Tooltips
                 return;
             }
 
-            Func<string, IEnumerable<string>> matchingMethod = matchExactly ? _locationChecker.GetAllLocationsNotCheckedMatchingExactly : _locationChecker.GetAllLocationsNotChecked;
+            Func<string, IEnumerable<string>> matchingMethod = matchExactly ? _locationChecker.GetAllLocationsNotCheckedMatchingExactly : _locationChecker.GetAllLocationsNotCheckedContainingWord;
             var allUncheckedLocations = itemSimplifiedNames.SelectMany(x => matchingMethod(x));
 
             allUncheckedLocations = FilterLocationsBasedOnConfig(allUncheckedLocations);
