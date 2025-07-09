@@ -3,6 +3,7 @@ using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using StardewArchipelago.Constants.Vanilla;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Tools;
@@ -67,6 +68,34 @@ namespace StardewArchipelago.Locations.Secrets
             {
                 _logger.LogError($"Failed in {nameof(InterpretGrangeResults_Bribe_Postfix)}:\n{ex}");
                 return;
+            }
+        }
+
+        // public virtual bool tryToReceiveActiveObject(Farmer who, bool probe = false)
+        public static bool TryToReceiveActiveObject_ConfrontMarnie_Prefix(NPC __instance, Farmer who, bool probe)
+        {
+            try
+            {
+                if (__instance.Name != "Marnie" || !QualifiedItemIds.IsLuckyShorts(who.ActiveObject.QualifiedItemId) || probe)
+                {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
+                var confrontDialogue = __instance.TryGetDialogue("reject_789");
+                if (confrontDialogue != null)
+                {
+                    __instance.setNewDialogue(confrontDialogue);
+                    Game1.drawDialogue(__instance);
+                    _locationChecker.AddCheckedLocation(SecretsLocationNames.CONFRONT_MARNIE);
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+                }
+
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(TryToReceiveActiveObject_ConfrontMarnie_Prefix)}:\n{ex}");
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 

@@ -1625,6 +1625,11 @@ namespace StardewArchipelago.Locations.Patcher
             );
 
             _harmony.Patch(
+                original: AccessTools.Method(typeof(NPC), nameof(NPC.tryToReceiveActiveObject)),
+                prefix: new HarmonyMethod(typeof(PurpleShortsInjections), nameof(PurpleShortsInjections.TryToReceiveActiveObject_ConfrontMarnie_Prefix))
+            );
+
+            _harmony.Patch(
                 original: AccessTools.Method(typeof(Game1), nameof(Game1.drawDialogue)),
                 prefix: new HarmonyMethod(typeof(PurpleShortsInjections), nameof(PurpleShortsInjections.DrawDialogue_ShortsResponses_Prefix))
             );

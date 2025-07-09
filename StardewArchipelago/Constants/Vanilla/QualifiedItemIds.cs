@@ -157,6 +157,7 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string LIFESAVER = QualifiedFurnitureId(FurnitureIds.LIFESAVER);
         public static readonly string LUCKY_LUNCH = QualifiedObjectId(ObjectIds.LUCKY_LUNCH);
         public static readonly string LUCKY_PURPLE_SHORTS = QualifiedObjectId(ObjectIds.LUCKY_PURPLE_SHORTS);
+        public static readonly string TRIMMED_LUCKY_PURPLE_SHORTS = QualifiedObjectId(ObjectIds.TRIMMED_LUCKY_PURPLE_SHORTS);
         public static readonly string MAGIC_BAIT = QualifiedObjectId(ObjectIds.MAGIC_BAIT);
         public static readonly string MAGIC_ROCK_CANDY = QualifiedObjectId(ObjectIds.MAGIC_ROCK_CANDY);
         public static readonly string MAGMA_GEODE = QualifiedObjectId(ObjectIds.MAGMA_GEODE);
@@ -431,6 +432,11 @@ namespace StardewArchipelago.Constants.Vanilla
             }
 
             return itemId.StartsWith(qualifier, StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        public static bool IsLuckyShorts(string qualifiedId)
+        {
+            return qualifiedId == LUCKY_PURPLE_SHORTS || qualifiedId == TRIMMED_LUCKY_PURPLE_SHORTS;
         }
     }
 }
