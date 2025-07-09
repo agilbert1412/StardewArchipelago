@@ -428,6 +428,10 @@ namespace StardewArchipelago.Registry
                 "Quest: Cryptic Note",
                 "Secret Note #10: Cryptic Note",
                 "Foliage Print",
+                "Raising Animals",
+                "Feeding Animals",
+                "Corrupted Crops Task",
+                "Witch's order",
             };
 
             if (!allowedLocations.Contains(locationName) && !allowedLocations.Any(x => locationName.StartsWith(x)))
