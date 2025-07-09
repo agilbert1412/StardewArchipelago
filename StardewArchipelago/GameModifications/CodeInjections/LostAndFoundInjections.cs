@@ -178,31 +178,27 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             }
 
             var expectedLevel = startedWithout ? receivedUpgrades - 1 : receivedUpgrades;
-            try
+            var newTool = CreateNewTool(tool, expectedLevel);
+            if (tool.QualifiedItemId == newTool.QualifiedItemId)
             {
-                var newTool = CreateNewTool(tool, expectedLevel);
-                if (tool.QualifiedItemId == newTool.QualifiedItemId)
-                {
-                    tool.UpgradeLevel = newTool.UpgradeLevel;
-                    DowngradeToolIfRequested(tool);
-                    return true;
-                }
-
-                DowngradeToolIfRequested(newTool);
-                context.ReplaceItemWith(newTool);
+                tool.UpgradeLevel = newTool.UpgradeLevel;
+                DowngradeToolIfRequested(tool);
                 return true;
             }
-            catch (Exception ex)
-            {
-                var aaa = 5;
-            }
 
+            DowngradeToolIfRequested(newTool);
+            context.ReplaceItemWith(newTool);
             return true;
         }
 
         private static void DowngradeToolIfRequested(Tool tool)
         {
-            if (ModEntry.Instance.Config.LimitHoeWateringCanLevel && tool is Hoe || tool is WateringCan)
+            if (!ModEntry.Instance.Config.LimitHoeWateringCanLevel)
+            {
+                return;
+            }
+
+            if (tool is Hoe || tool is WateringCan)
             {
                 tool.UpgradeLevel = 0;
             }
