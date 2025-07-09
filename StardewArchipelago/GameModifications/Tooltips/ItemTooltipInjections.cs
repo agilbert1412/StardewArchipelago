@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -78,7 +79,7 @@ namespace StardewArchipelago.GameModifications.Tooltips
         {
             try
             {
-                ItemDrawInMenuPostfix(__instance, spriteBatch, location, scaleSize, transparency, layerDepth, color, new Vector2(14f, 14f), new Vector2(8, 8));
+                ItemDrawInMenuPostfix(HatInjections.GetHatLocations(__instance), spriteBatch, location, scaleSize, transparency, layerDepth, color, new Vector2(14f, 14f), new Vector2(8, 8), true);
                 return;
             }
             catch (Exception ex)
@@ -243,12 +244,19 @@ namespace StardewArchipelago.GameModifications.Tooltips
         private static void ItemDrawInMenuPostfix(string itemSimplifiedName, SpriteBatch spriteBatch, Vector2 location,
             float scaleSize, float transparency, float layerDepth, Color color, Vector2 offset, Vector2 origin)
         {
+            ItemDrawInMenuPostfix(new[] { itemSimplifiedName }, spriteBatch, location, scaleSize, transparency, layerDepth, color, offset, origin);
+        }
+
+        private static void ItemDrawInMenuPostfix(IEnumerable<string> itemSimplifiedNames, SpriteBatch spriteBatch, Vector2 location,
+            float scaleSize, float transparency, float layerDepth, Color color, Vector2 offset, Vector2 origin, bool matchExactly = false)
+        {
             if (_config.ShowItemIndicators == ItemIndicatorPreference.False)
             {
                 return;
             }
 
-            var allUncheckedLocations = _locationChecker.GetAllLocationsNotCheckedContainingWord(itemSimplifiedName);
+            Func<string, IEnumerable<string>> matchingMethod = matchExactly ? _locationChecker.GetAllLocationsNotCheckedMatchingExactly : _locationChecker.GetAllLocationsNotChecked;
+            var allUncheckedLocations = itemSimplifiedNames.SelectMany(x => matchingMethod(x));
 
             allUncheckedLocations = FilterLocationsBasedOnConfig(allUncheckedLocations);
 
@@ -277,7 +285,7 @@ namespace StardewArchipelago.GameModifications.Tooltips
                 }
 
                 var simplifiedName = _nameSimplifier.GetSimplifiedName(__instance);
-                var allUncheckedLocations = _locationChecker.GetAllLocationsNotCheckedContainingWord(simplifiedName);
+                IEnumerable<string> allUncheckedLocations = _locationChecker.GetAllLocationsNotCheckedContainingWord(simplifiedName);
 
                 allUncheckedLocations = FilterLocationsBasedOnConfig(allUncheckedLocations);
 
@@ -295,7 +303,7 @@ namespace StardewArchipelago.GameModifications.Tooltips
             }
         }
 
-        private static string[] FilterLocationsBasedOnConfig(string[] allUncheckedLocations)
+        private static IEnumerable<string> FilterLocationsBasedOnConfig(IEnumerable<string> allUncheckedLocations)
         {
             if (_config.ShowItemIndicators == ItemIndicatorPreference.OnlyShipsanity)
             {

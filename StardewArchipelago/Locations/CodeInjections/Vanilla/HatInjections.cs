@@ -9,6 +9,7 @@ using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
 using StardewArchipelago.Goals;
 using StardewValley.Objects;
+using StardewArchipelago.Constants;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -49,12 +50,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     return;
                 }
 
-                var hatName = hat.Name;
-                if (_hatAliases.ContainsKey(hat.QualifiedItemId))
-                {
-                    _locationChecker.AddCheckedLocations(_hatAliases[hat.QualifiedItemId].Select(x => $"{HATSANITY_PREFIX}{x}").ToArray());
-                }
-                _locationChecker.AddCheckedLocation($"{HATSANITY_PREFIX}{hatName}");
+                _locationChecker.AddCheckedLocations(GetHatLocations(hat).ToArray());
                 GoalCodeInjection.CheckMadHatterGoalCompletion();
                 return;
             }
@@ -63,6 +59,25 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 _logger.LogError($"Failed in {nameof(OnEquip_EquippedHat_Postfix)}:\n{ex}");
                 return;
             }
+        }
+
+        public static IEnumerable<string> GetHatLocations(Hat hat)
+        {
+            if (hat == null)
+            {
+                yield break;
+            }
+
+            var hatName = hat.Name;
+            if (_hatAliases.ContainsKey(hat.QualifiedItemId))
+            {
+                foreach (var hatLocation in _hatAliases[hat.QualifiedItemId].Select(x => $"{HATSANITY_PREFIX}{x}"))
+                {
+                    yield return hatLocation;
+                }
+            }
+
+            yield return $"{HATSANITY_PREFIX}{hatName}";
         }
     }
 }

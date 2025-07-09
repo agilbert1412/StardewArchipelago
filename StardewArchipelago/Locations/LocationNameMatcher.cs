@@ -14,6 +14,11 @@ namespace StardewArchipelago.Locations
             _wordFilterCache = new Dictionary<string, string[]>();
         }
 
+        public IEnumerable<string> GetAllLocationsMatchingExactly(IEnumerable<string> allLocations, string filter)
+        {
+            return allLocations.Where(x => x.Equals(filter, StringComparison.InvariantCultureIgnoreCase));
+        }
+
         public IEnumerable<string> GetAllLocationsMatching(IEnumerable<string> allLocations, string filter)
         {
             return allLocations.Where(x => x.Contains(filter, StringComparison.InvariantCultureIgnoreCase));
