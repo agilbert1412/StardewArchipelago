@@ -32,7 +32,7 @@ namespace StardewArchipelago.Constants.Modded
             //{ ModNames.YOBA, "1.0.0" },
             { ModNames.SVE, $"1.14.{WILDCARD}" },
             { ModNames.DISTANT_LANDS, $"2.2.{WILDCARD}" },
-            { ModNames.LACEY, $"1.4.{WILDCARD}" },
+            { ModNames.LACEY, $"1.6.{WILDCARD}" },
             //{ ModNames.BOARDING_HOUSE, "4.0.16" },
         };
 
