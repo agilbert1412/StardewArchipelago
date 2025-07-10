@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using StardewArchipelago.Archipelago.ConnectionResults;
 using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.GameModifications.Testing;
 using StardewModdingAPI;
@@ -59,11 +60,10 @@ namespace StardewArchipelago.Archipelago
             return false;
         }
 
-        public bool IsModStateCorrect(IModHelper modHelper, out string errorMessage)
+        public bool IsModStateCorrect(IModHelper modHelper, out List<MissingMod> missingMods)
         {
             var loadedModData = modHelper.ModRegistry.GetAll().ToList();
-            errorMessage = $"The slot you are connecting to has been created expecting modded content,\r\nbut not all expected mods are installed and active.";
-            var valid = true;
+            missingMods = new List<MissingMod>();
             foreach (var modName in _activeMods)
             {
                 if (!ModVersions.Versions.ContainsKey(modName))
@@ -77,18 +77,17 @@ namespace StardewArchipelago.Archipelago
                 {
                     continue;
                 }
-                valid = false;
-                errorMessage += $"{Environment.NewLine}\tMod: {modName}, expected version: {desiredVersion}, current Version: {existingVersion}";
+
+                missingMods.Add(new MissingMod(modName, desiredVersion, existingVersion));
             }
 
-            return valid;
+            return !missingMods.Any();
         }
 
-        public bool IsExtraRequirementsStateCorrect(IModHelper modHelper, out string errorMessage)
+        public bool IsExtraRequirementsStateCorrect(IModHelper modHelper, out List<MissingMod> problemMods)
         {
             var loadedModData = modHelper.ModRegistry.GetAll().ToList();
-            errorMessage = $"The slot you are connecting to requires a content patcher,\r\n mod, but not all expected mods are installed and active.";
-            var valid = true;
+            problemMods = new List<MissingMod>();
             foreach (var modName in _activeMods)
             {
                 if (!ModVersions.ExtraRequirementsVersions.ContainsKey(modName))
@@ -104,12 +103,11 @@ namespace StardewArchipelago.Archipelago
                         continue;
                     }
 
-                    valid = false;
-                    errorMessage += $"{Environment.NewLine}\tMod: {requirement.ContentPatcherMod}, expected version: {requirement.ContentPatcherVersion}, current Version: {existingVersion}";
+                    problemMods.Add(new MissingMod(requirement.ContentPatcherMod, requirement.ContentPatcherVersion, existingVersion));
                 }
             }
 
-            return valid;
+            return !problemMods.Any();
         }
 
         private bool IsModActiveAndCorrectVersion(List<IModInfo> loadedModData, string desiredModName, string desiredVersion, out string existingVersion)
@@ -152,6 +150,30 @@ namespace StardewArchipelago.Archipelago
                 return true;
             }
             return false;
+        }
+
+        public bool HasKnownIncompatibleMods(IModHelper modHelper, out List<IncompatibleMod> incompatibleMods)
+        {
+            var loadedModData = modHelper.ModRegistry.GetAll().ToList();
+            incompatibleMods = new List<IncompatibleMod>();
+            foreach (var modInfo in loadedModData)
+            {
+                var modName = GetNormalizedModName(modInfo.Manifest.Name);
+                if (!ModVersions.IncompatibleMods.ContainsKey(modName))
+                {
+                    continue;
+                }
+
+                if (_activeMods.Any(x => GetNormalizedModName(x).Equals(modName)))
+                {
+                    continue;
+                }
+
+                var justification = ModVersions.IncompatibleMods[modName];
+                incompatibleMods.Add(new IncompatibleMod(modName, justification));
+            }
+
+            return !incompatibleMods.Any();
         }
 
         private static string GetNormalizedModName(string modName)

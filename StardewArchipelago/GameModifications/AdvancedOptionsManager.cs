@@ -190,16 +190,17 @@ namespace StardewArchipelago.GameModifications
                     return false;
                 }
 
-                var connected = _modEntry.ArchipelagoConnect(ip, port, apInstance.SlotNameTextBox.Text, apInstance.PasswordTextBox.Text, out var errorMessage);
+                var result = _modEntry.ArchipelagoConnect(ip, port, apInstance.SlotNameTextBox.Text, apInstance.PasswordTextBox.Text);
 
-                if (!connected)
+                if (!result.Success)
                 {
                     var currentMenu = TitleMenu.subMenu;
-                    _logger.LogError($"Connection to Archipelago failed: {errorMessage}");
-                    TitleMenu.subMenu = new InformationDialog(errorMessage, (_) => OnClickOkBehavior(currentMenu));
+                    _logger.LogError($"Connection to Archipelago failed: {result.Message}");
+                    TitleMenu.subMenu = new InformationDialog(result.Message, (_) => OnClickOkBehavior(currentMenu));
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
-                return connected; // run original logic only if connected successfully
+                return MethodPrefix.RUN_ORIGINAL_METHOD; // run original logic only if connected successfully
             }
             catch (Exception ex)
             {
