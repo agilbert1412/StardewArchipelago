@@ -32,7 +32,7 @@ namespace StardewArchipelago.Constants.Modded
             //{ ModNames.YOBA, "1.0.0" },
             { ModNames.SVE, $"1.14.{WILDCARD}" },
             { ModNames.DISTANT_LANDS, $"2.2.{WILDCARD}" },
-            { ModNames.LACEY, $"1.4.{WILDCARD}" },
+            { ModNames.LACEY, $"1.6.{WILDCARD}" },
             //{ ModNames.BOARDING_HOUSE, "4.0.16" },
         };
 
@@ -57,6 +57,19 @@ namespace StardewArchipelago.Constants.Modded
                     new(ModNames.AP_CP_SVE, "1.14.46"),
                 }
             },
+        };
+
+        public static readonly Dictionary<string, string> IncompatibleMods = new()
+        {
+            {
+                ModNames.SVE, "Changes too much of the game to be added without randomizing it"
+            },
+            //{
+            //    ModNames.EAST_SCARP, "Changes too much of the game"
+            //},
+            //{
+            //    ModNames.RIDGESIDE_VILLAGE, "Changes too much of the game"
+            //},
         };
     }
 }

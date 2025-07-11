@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using HarmonyLib;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Client.ConnectionResults;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Archipelago.ConnectionResults;
 using StardewArchipelago.Archipelago.Gifting;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.Bugfixes;
@@ -250,7 +252,7 @@ namespace StardewArchipelago
             {
                 ReadPersistentArchipelagoData();
 
-                if (!AttemptConnectionToArchipelago())
+                if (!AttemptConnectionToArchipelago().Success)
                 {
                     return;
                 }
@@ -328,11 +330,11 @@ namespace StardewArchipelago
             ArchipelagoJunimoNoteMenu.CompleteBundleIfExists(MemeBundleNames.CONNECTION);
         }
 
-        private bool AttemptConnectionToArchipelago()
+        private ConnectionResult AttemptConnectionToArchipelago()
         {
             if (_archipelago.IsConnected)
             {
-                return true;
+                return new AlreadyConnectedResult();
             }
 
             if (ArchipelagoConnectionOverride != null)
@@ -341,19 +343,38 @@ namespace StardewArchipelago
                 ArchipelagoConnectionOverride = null;
             }
 
-            var errorMessage = "";
             if (State.APConnectionInfo == null)
             {
-                errorMessage =
-                    $"The game being loaded has no connection information.{Environment.NewLine}Please use the connect_override command to input connection fields before loading it";
-            }
-            else if (_archipelago.ConnectToMultiworld(State.APConnectionInfo, out errorMessage))
-            {
-                return true;
+                var noConnectionResult = new NoConnectionInformationResult();
+                ShowErrorAndExit(noConnectionResult.Message);
+                return noConnectionResult;
             }
 
-            OfferRetry(errorMessage);
-            return false;
+            var result = _archipelago.ConnectToMultiworld(State.APConnectionInfo);
+            if (result.Success)
+            {
+                return result;
+            }
+
+            if (result is FailedConnectionResult failedResult)
+            {
+                if (failedResult.RetryPossible)
+                {
+                    OfferRetry(failedResult.Message);
+                }
+                else
+                {
+                    ShowErrorAndExit(failedResult.Message);
+                }
+            }
+
+            return result;
+        }
+
+        private void ShowErrorAndExit(string errorMessage)
+        {
+            _logger.LogError($"Connection to Archipelago failed: {errorMessage}");
+            Game1.activeClickableMenu = new InformationDialog(errorMessage, (_) => OnCloseBehavior());
         }
 
         private void OfferRetry(string errorMessage)
@@ -368,7 +389,7 @@ namespace StardewArchipelago
         {
             var ipAndPort = serverAddress.Split(":");
             ArchipelagoConnectionOverride = new ArchipelagoConnectionInfo(ipAndPort[0], int.Parse(ipAndPort[1]), State.APConnectionInfo.SlotName, State.APConnectionInfo.DeathLink, State.APConnectionInfo.Password);
-            if (AttemptConnectionToArchipelago())
+            if (AttemptConnectionToArchipelago().Success)
             {
                 InitializeAfterConnection();
                 DoArchipelagoDayStartedProcesses();
@@ -488,16 +509,16 @@ namespace StardewArchipelago
             _itemManager?.ReceiveAllNewItems();
         }
 
-        public bool ArchipelagoConnect(string ip, int port, string slot, string password, out string errorMessage)
+        public ConnectionResult ArchipelagoConnect(string ip, int port, string slot, string password)
         {
             var apConnection = new ArchipelagoConnectionInfo(ip, port, slot, null, password);
-            if (!_archipelago.ConnectToMultiworld(apConnection, out errorMessage))
+            var result = _archipelago.ConnectToMultiworld(apConnection);
+            if (result.Success)
             {
-                return false;
+                State.APConnectionInfo = apConnection;
             }
 
-            State.APConnectionInfo = apConnection;
-            return true;
+            return result;
         }
 
         public void ArchipelagoDisconnect()

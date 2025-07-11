@@ -13,7 +13,9 @@ using Archipelago.MultiClient.Net.Models;
 using Archipelago.MultiClient.Net.Packets;
 using HarmonyLib;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Client.ConnectionResults;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using StardewArchipelago.Archipelago.ConnectionResults;
 using StardewArchipelago.Extensions;
 using StardewArchipelago.GameModifications.MoveLink;
 using StardewArchipelago.GameModifications.Testing;
@@ -74,26 +76,33 @@ namespace StardewArchipelago.Archipelago
             _slotData = new SlotData.SlotData(slotName, slotDataFields, Logger, _testerFeatures);
         }
 
-        public override bool ConnectToMultiworld(ArchipelagoConnectionInfo connectionInfo, out string errorMessage)
+        public override ConnectionResult ConnectToMultiworld(ArchipelagoConnectionInfo connectionInfo)
         {
-            if (!base.ConnectToMultiworld(connectionInfo, out errorMessage))
+            var baseResult = base.ConnectToMultiworld(connectionInfo);
+            if (!baseResult.Success)
             {
-                return false;
+                return baseResult;
             }
             
-            if (!SlotData.Mods.IsModStateCorrect(_modHelper, out errorMessage))
+            if (!SlotData.Mods.IsModStateCorrect(_modHelper, out var missingMods))
             {
                 DisconnectPermanently();
-                return false;
+                return new MissingModsConnectionResult(missingMods);
             }
 
-            if (!SlotData.Mods.IsExtraRequirementsStateCorrect(_modHelper, out errorMessage))
+            if (!SlotData.Mods.IsExtraRequirementsStateCorrect(_modHelper, out var missingModRequirements))
             {
                 DisconnectPermanently();
-                return false;
+                return new MissingModRequirementsConnectionResult(missingModRequirements);
             }
 
-            return true;
+            if (!SlotData.Mods.HasKnownIncompatibleMods(_modHelper, out var incompatibleMods))
+            {
+                DisconnectPermanently();
+                return new IncompatibleModsConnectionResult(incompatibleMods);
+            }
+
+            return baseResult;
         }
 
         protected override void InitializeAfterConnection()
