@@ -82,6 +82,7 @@ namespace StardewArchipelago.Stardew.NameMapping
             { QualifiedItemIds.DRIED_FRUIT, "Dried Fruit" },
             { QualifiedItemIds.DRIED_MUSHROOMS, "Dried Mushrooms" },
             { QualifiedItemIds.SMOKED_FISH, "Smoked Fish" },
+            { QualifiedItemIds.IRIDIUM_SNAKE_MILK, "Iridium Snake Milk" },
         };
 
         private static readonly List<string> _simplifiedNames = new()
