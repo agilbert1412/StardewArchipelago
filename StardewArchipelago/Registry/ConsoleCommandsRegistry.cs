@@ -430,8 +430,9 @@ namespace StardewArchipelago.Registry
                 "Foliage Print",
                 "Raising Animals",
                 "Feeding Animals",
-                "Corrupted Crops Task",
-                "Witch's order",
+                "Quest: Corrupted Crops Task",
+                "Quest: Witch's order",
+                "Drink Iridium Snake Milk",
             };
 
             if (!allowedLocations.Contains(locationName) && !allowedLocations.Any(x => locationName.StartsWith(x)))
