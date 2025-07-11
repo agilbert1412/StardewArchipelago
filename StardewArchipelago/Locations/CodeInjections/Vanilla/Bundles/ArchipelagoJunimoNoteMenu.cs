@@ -70,7 +70,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         private Hint[] _hintsForMe;
         private Hint[] _hintsFromMe;
         private GachaResolver _gachaResolver;
-        private SlidingPuzzleHandler _slidingPuzzle;
+        private static SlidingPuzzleHandler _slidingPuzzle;
         private string[] _asmrCues = null;
         private ICue _currentCue;
         private bool _isCurrentlySticky = false;
@@ -2197,6 +2197,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             HasPurchasedRestraintBundleToday = false;
             HasLookedAtHibernationBundleToday = false;
             HasLookedAtStanleyBundleToday = false;
+            _slidingPuzzle = null;
         }
 
         public static void OnDayEnded()
@@ -2273,7 +2274,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             base.SetUpBundleSpecificPage(bundle);
             if (bundle.name == MemeBundleNames.PUZZLE)
             {
-                _slidingPuzzle = new SlidingPuzzleHandler(_modHelper, MemeTexture, GetSlidingPuzzleSize(bundle));
+                if (_slidingPuzzle == null)
+                {
+                    _slidingPuzzle = new SlidingPuzzleHandler(_modHelper, MemeTexture, GetSlidingPuzzleSize(bundle));
+                }
             }
             if (bundle.name == MemeBundleNames.ASMR && !FromGameMenu)
             {
