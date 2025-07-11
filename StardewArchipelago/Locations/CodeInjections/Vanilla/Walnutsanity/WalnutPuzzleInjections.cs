@@ -15,6 +15,8 @@ using StardewValley.Network;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using StardewArchipelago.Constants.Locations;
+using Microsoft.Xna.Framework.Graphics;
+using System.Reflection;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
 {
@@ -283,6 +285,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 }
 
                 // base.UpdateWhenCurrentLocation(time);
+                CallBaseUpdateWhenCurrentLocation(__instance, time);
 
                 // protected List<IslandWestCave1.CaveCrystal> crystals
                 var crystalsField = _helper.Reflection.GetField<List<IslandWestCave1.CaveCrystal>>(__instance, "crystals");
@@ -333,7 +336,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                                 if (Game1.IsMasterGame)
                                 {
                                     Game1.player.team.MarkCollectedNut("IslandWestCavePuzzle");
-                                    CreateLocationDebris($"{Prefix.WALNUTSANITY}Colored Crystals", new Vector2(6f, 4f) * 64f, __instance);
+                                    CreateLocationDebris($"{Prefix.WALNUTSANITY}Colored Crystals", new Vector2(6f, 4f) * 64f, __instance, -1);
                                 }
                                 __instance.completed.Value = true;
                                 if (Game1.currentLocation == __instance)
@@ -421,6 +424,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 _logger.LogError($"Failed in {nameof(UpdateWhenCurrentLocation_CheckInsteadOfNuts_Prefix)}:\n{ex}");
                 return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
+        }
+
+        private static void CallBaseUpdateWhenCurrentLocation(IslandWestCave1 crystalsCave, GameTime time)
+        {
+            // public override void UpdateWhenCurrentLocation(GameTime time)
+            var islandLocationUpdateWhenCurrentLocationMethod = typeof(IslandLocation).GetMethod("UpdateWhenCurrentLocation", BindingFlags.Instance | BindingFlags.Public, new[] { typeof(GameTime) });
+            var functionPointer = islandLocationUpdateWhenCurrentLocationMethod.MethodHandle.GetFunctionPointer();
+            var baseUpdateWhenCurrentLocation = (Action<GameTime>)Activator.CreateInstance(typeof(Action<GameTime>), crystalsCave, functionPointer);
+            baseUpdateWhenCurrentLocation(time);
         }
 
         // private void ApplyPlantRestoreLeft()
