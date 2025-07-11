@@ -1,4 +1,5 @@
-﻿using StardewValley.Monsters;
+﻿using System.Collections.Generic;
+using StardewValley.Monsters;
 using StardewValley;
 using System.Linq;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
