@@ -218,7 +218,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             else
             {
-                _logger.LogError($"Unrecognized Eatsanity Location: {name} [{eatenItem.QualifiedItemId}]");
+                _logger.LogError($"Unrecognized Eatsanity Location: {apLocation} ({name} [{eatenItem.QualifiedItemId}])");
             }
         }
 
