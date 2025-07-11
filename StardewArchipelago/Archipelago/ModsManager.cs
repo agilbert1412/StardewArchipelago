@@ -158,18 +158,25 @@ namespace StardewArchipelago.Archipelago
             incompatibleMods = new List<IncompatibleMod>();
             foreach (var modInfo in loadedModData)
             {
-                var modName = GetNormalizedModName(modInfo.Manifest.Name);
+                var modName = modInfo.Manifest.Name;
                 if (!ModVersions.IncompatibleMods.ContainsKey(modName))
                 {
                     continue;
                 }
+;
+                var justification = ModVersions.IncompatibleMods[modName];
 
-                if (_activeMods.Any(x => GetNormalizedModName(x).Equals(modName)))
+                var simplifiedModName = GetNormalizedModName(modName);
+                if (_activeMods.Any(x => GetNormalizedModName(x).Equals(simplifiedModName)))
                 {
                     continue;
                 }
 
-                var justification = ModVersions.IncompatibleMods[modName];
+                if (incompatibleMods.Any(x => x.ModName == modName))
+                {
+                    continue;
+                }
+
                 incompatibleMods.Add(new IncompatibleMod(modName, justification));
             }
 
