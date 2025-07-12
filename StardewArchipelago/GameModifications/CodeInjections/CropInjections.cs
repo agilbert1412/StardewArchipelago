@@ -178,7 +178,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed in {nameof(ResolveSeedId_MixedSeedsBecomesUnlockedCrop_Prefix)}:\n{ex}");
+                _logger.LogError($"Failed in {nameof(Kill_CountDeadCrops_Prefix)}:\n{ex}");
                 return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
