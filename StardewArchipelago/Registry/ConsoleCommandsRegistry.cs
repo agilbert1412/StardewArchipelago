@@ -432,6 +432,8 @@ namespace StardewArchipelago.Registry
                 "Feeding Animals",
                 "Quest: Corrupted Crops Task",
                 "Quest: Witch's order",
+                "Corrupted Crops Task",
+                "Witch's order",
                 "Drink Iridium Snake Milk",
             };
 

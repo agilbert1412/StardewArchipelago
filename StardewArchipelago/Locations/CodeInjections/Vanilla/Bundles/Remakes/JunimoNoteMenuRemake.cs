@@ -287,10 +287,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             SetUpScramblingAndMail(whichArea);
             TempSprites.Clear();
             this.WhichArea = whichArea;
-            Inventory = new InventoryMenu(xPositionOnScreen + 128, yPositionOnScreen + 140, true, highlightMethod: HighlightObjects, capacity: 36, rows: 6, horizontalGap: 8, verticalGap: 8, drawSlots: false)
-            {
-                capacity = 36
-            };
+            Inventory = SetupInventoryMenu();
             for (var index = 0; index < Inventory.inventory.Count; ++index)
             {
                 if (index >= Inventory.actualInventory.Count)
@@ -308,9 +305,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             }
             Inventory.dropItemInvisibleButton.visible = false;
             CreateBundles(whichArea, bundlesComplete);
-            var textureComponent = new ClickableTextureComponent("Back", new Rectangle(xPositionOnScreen + borderWidth * 2 + 8, yPositionOnScreen + borderWidth * 2 + 4, 64, 64), null, null, Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 44), 1f);
-            textureComponent.myID = REGION_BACK_BUTTON;
-            BackButton = textureComponent;
+            BackButton = SetUpBackButton();
             CheckForRewards();
             CanClick = true;
             Game1.playSound("shwip");
@@ -331,6 +326,38 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             communityCenter.markAreaAsComplete(whichArea);
             exitFunction = restoreAreaOnExit;
             communityCenter.areaCompleteReward(whichArea);
+        }
+
+        protected virtual InventoryMenu SetupInventoryMenu()
+        {
+            var xPosition = xPositionOnScreen + 128;
+            var yPosition = yPositionOnScreen + 140;
+            var capacity = 36;
+            var rows = 6;
+            var gap = 8;
+            return SetupInventoryMenu(xPosition, yPosition, capacity, rows, gap);
+        }
+
+        protected InventoryMenu SetupInventoryMenu(int xPosition, int yPosition, int capacity, int rows, int gap)
+        {
+            return new InventoryMenu(xPosition, yPosition, true, highlightMethod: HighlightObjects, capacity: capacity, rows: rows, horizontalGap: gap, verticalGap: gap, drawSlots: false)
+            {
+                capacity = capacity,
+            };
+        }
+
+        protected virtual ClickableTextureComponent SetUpBackButton()
+        {
+            var xPosition = xPositionOnScreen + borderWidth * 2 + 8;
+            var yPosition = yPositionOnScreen + borderWidth * 2 + 4;
+            return SetUpBackButton(xPosition, yPosition);
+        }
+
+        protected ClickableTextureComponent SetUpBackButton(int xPosition, int yPosition)
+        {
+            var textureComponent = new ClickableTextureComponent("Back", new Rectangle(xPosition, yPosition, 64, 64), null, null, Game1.mouseCursors, Game1.getSourceRectForStandardTileSheet(Game1.mouseCursors, 44), 1f);
+            textureComponent.myID = REGION_BACK_BUTTON;
+            return textureComponent;
         }
 
         protected virtual void SetUpScramblingAndMail(int whichArea)

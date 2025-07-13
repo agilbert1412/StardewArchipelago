@@ -28,6 +28,7 @@ using StardewValley.Objects;
 using Object = StardewValley.Object;
 using Archipelago.MultiClient.Net.Models;
 using Microsoft.Xna.Framework.Audio;
+using StardewArchipelago.Constants.Modded;
 using StardewModdingAPI.Events;
 using Color = Microsoft.Xna.Framework.Color;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Gacha;
@@ -166,6 +167,31 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             {
                 AssignBundleIcon(bundle, remixedBundlesTexture);
             }
+        }
+
+        protected override InventoryMenu SetupInventoryMenu()
+        {
+            if (_modHelper.ModRegistry.IsLoaded(ModUniqueIds.UniqueIds[ModNames.BIGGER_BACKPACK]))
+            {
+                var xPosition = xPositionOnScreen + 104;
+                var yPosition = yPositionOnScreen + 120;
+                var capacity = 49;
+                var rows = 7;
+                var gap = 4;
+                return SetupInventoryMenu(xPosition, yPosition, capacity, rows, gap);
+            }
+            return base.SetupInventoryMenu();
+        }
+
+        protected override ClickableTextureComponent SetUpBackButton()
+        {
+            if (_modHelper.ModRegistry.IsLoaded(ModUniqueIds.UniqueIds[ModNames.BIGGER_BACKPACK]))
+            {
+                var xPosition = xPositionOnScreen;
+                var yPosition = yPositionOnScreen;
+                return SetUpBackButton(xPosition, yPosition);
+            }
+            return base.SetUpBackButton();
         }
 
         protected override void SetUpScramblingAndMail(int whichArea)
@@ -1583,6 +1609,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         protected override void DrawInventory(SpriteBatch b)
         {
+            _clothesMenu.draw(b);
             if (CurrentPageBundle.name == MemeBundleNames.OFF_YOUR_BACK)
             {
                 _clothesMenu.draw(b);

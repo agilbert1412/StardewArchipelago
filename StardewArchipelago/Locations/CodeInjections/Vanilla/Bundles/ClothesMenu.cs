@@ -9,6 +9,8 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using StardewArchipelago.Constants.Modded;
+using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
 using StardewValley.Objects;
@@ -30,19 +32,43 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         public List<ClickableComponent> equipmentIcons = new();
         public ClickableComponent portrait;
 
-        public ClothesMenu(int x, int y, int width, int height)
+        public ClothesMenu(IModHelper modHelper, int x, int y, int width, int height)
           : base(x, y, width, height)
         {
+            // With Bigger Backpack, the whole menu is slightly different! Gotta make these buttons fit!
+            var hasBiggerBackpack = modHelper.ModRegistry.IsLoaded(ModUniqueIds.UniqueIds[ModNames.BIGGER_BACKPACK]);
+
             var startX = this.xPositionOnScreen + 64 + 4;
             var startY = this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + 128 - 40;
+
+            if (hasBiggerBackpack)
+            {
+                startX -= 24 + 0;
+                startY -= 20 + 12;
+            }
+
             var leftColumnX = startX;
-            var characterX = leftColumnX + 64 + 14;
+            var offsetPerColumn = 64;
+            var characterX = leftColumnX + offsetPerColumn + 14;
+            if (hasBiggerBackpack)
+            {
+                characterX -= 8;
+            }
             var characterY = startY + 8;
-            var rightColumnX = characterX + 128 + 14;
+            var rightColumnX = characterX + (offsetPerColumn*2) + 14;
+            if (hasBiggerBackpack)
+            {
+                rightColumnX -= 8;
+            }
             var offsetPerRow = 64 + 10;
+            if (hasBiggerBackpack)
+            {
+                offsetPerRow -= 2;
+            }
             var firstRowY = startY;
             var secondRowY = firstRowY + offsetPerRow;
             var thirdRowY = secondRowY + offsetPerRow;
+
             this.equipmentIcons.Add(new ClickableComponent(new Rectangle(leftColumnX, firstRowY, 64, 64), "Left Ring")
             {
                 myID = region_ring1,
