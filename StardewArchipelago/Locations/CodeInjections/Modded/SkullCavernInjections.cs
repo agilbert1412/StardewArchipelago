@@ -35,61 +35,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
             _locationChecker = locationChecker;
         }
 
-        // public MyElevatorMenu(int elevatorStep, double difficulty, int elevatorCostPerStep)
-        public static bool MyElevatorMenuConstructor_SkullCavernElevator_Prefix(MineElevatorMenu __instance, ref int elevatorStep, ref double difficulty, ref int elevatorCostPerStep)
-        {
-            try
-            {
-                if (!_archipelago.HasReceivedItem(SKULL_KEY))
-                {
-                    return true; // Don't bother updating anything until then.
-                }
-                var receivedElevators = _archipelago.GetReceivedItemCount(SKULL_CAVERN_ELEVATOR_ITEM);
-                elevatorStep = ELEVATOR_STEP;
-                difficulty = DIFFICULTY;
-
-                if (_realDeepestMineLevel == -1)
-                {
-                    _realDeepestMineLevel = Game1.player.deepestMineLevel;
-                }
-
-                if (receivedElevators >= 8 && Game1.player.deepestMineLevel >= 320)
-                {
-                    return true; //let the player gain these floors on their own since they've "collected" the floors already
-                }
-
-                var elevatorMaxLevel = (receivedElevators * ELEVATOR_STEP) + 120;
-                Game1.player.deepestMineLevel = elevatorMaxLevel;
-
-                return MethodPrefix.RUN_ORIGINAL_METHOD;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Failed in {nameof(MyElevatorMenuConstructor_SkullCavernElevator_Prefix)}:\n{ex}");
-                return MethodPrefix.RUN_ORIGINAL_METHOD;
-            }
-        }
-
-        // public MyElevatorMenu(int elevatorStep, double difficulty, int elevatorCostPerStep)
-        public static void MyElevatorMenuConstructor_SkullCavernElevator_Postfix(MineElevatorMenu __instance, int elevatorStep, double difficulty, int elevatorCostPerStep)
-        {
-            try
-            {
-                if (_realDeepestMineLevel > -1)
-                {
-                    Game1.player.deepestMineLevel = _realDeepestMineLevel;
-                    _realDeepestMineLevel = -1;
-                }
-
-                return;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Failed in {nameof(MyElevatorMenuConstructor_SkullCavernElevator_Postfix)}:\n{ex}");
-                return;
-            }
-        }
-
         // public static void enterMine(int whatLevel)
         public static void EnterMine_SendSkullCavernElevatorCheck_PostFix(int whatLevel)
         {

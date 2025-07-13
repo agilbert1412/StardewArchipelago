@@ -225,23 +225,6 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(typeof(Game1), nameof(Game1.enterMine)),
                 postfix: new HarmonyMethod(typeof(SkullCavernInjections), nameof(SkullCavernInjections.EnterMine_SendSkullCavernElevatorCheck_PostFix))
             );
-
-            var constructorParameterTypes = new[] { typeof(int), typeof(double), typeof(int) };
-            var myElevatorMenuType = AccessTools.TypeByName("MyElevatorMenu");
-            var myElevatorMenuConstructor = AccessTools.Constructor(myElevatorMenuType, constructorParameterTypes);
-            _harmony.Patch(
-                original: myElevatorMenuConstructor,
-                prefix: new HarmonyMethod(typeof(SkullCavernInjections), nameof(SkullCavernInjections.MyElevatorMenuConstructor_SkullCavernElevator_Prefix)),
-                postfix: new HarmonyMethod(typeof(SkullCavernInjections), nameof(SkullCavernInjections.MyElevatorMenuConstructor_SkullCavernElevator_Postfix))
-            );
-
-            var myElevatorMenuWithScrollBarType = AccessTools.TypeByName("MyElevatorMenuWithScrollbar");
-            var myElevatorMenuWithScrollBarConstructor = AccessTools.Constructor(myElevatorMenuWithScrollBarType, constructorParameterTypes);
-            _harmony.Patch(
-                original: myElevatorMenuWithScrollBarConstructor,
-                prefix: new HarmonyMethod(typeof(SkullCavernInjections), nameof(SkullCavernInjections.MyElevatorMenuConstructor_SkullCavernElevator_Prefix)),
-                postfix: new HarmonyMethod(typeof(SkullCavernInjections), nameof(SkullCavernInjections.MyElevatorMenuConstructor_SkullCavernElevator_Postfix))
-            );
         }
 
         private void AddSVEModInjections()
