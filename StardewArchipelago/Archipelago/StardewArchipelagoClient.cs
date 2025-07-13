@@ -128,7 +128,7 @@ namespace StardewArchipelago.Archipelago
             var fullMessage = string.Join(" ", message.Parts.Select(str => str.Text));
             var stardewFullMessage = fullMessage.TurnHeartsIntoStardewHearts();
 
-            if (_messagesToIgnore.Contains(fullMessage) || _messagesToIgnore.Contains(stardewFullMessage))
+            if (_messagesToIgnore.Any(x => x.Contains(fullMessage) || fullMessage.Contains(x)) || _messagesToIgnore.Any(x => x.Contains(stardewFullMessage) || fullMessage.Contains(x)))
             {
                 Logger.LogDebug($"Ignoring Chat Message: {fullMessage}");
                 return;

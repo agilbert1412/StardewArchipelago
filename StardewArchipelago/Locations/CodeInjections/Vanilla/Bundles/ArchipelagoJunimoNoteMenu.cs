@@ -52,8 +52,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         private static TrapManager _trapManager;
         private BundleCurrencyManager _currencyManager;
 
-        internal static bool SisyphusStoneFell = false;
-        internal static int SisyphusIndex = -1;
+        public static bool SisyphusStoneNeedsToFall = false;
+        private static int SisyphusIndex = 0;
         internal static int BureaucracyIndex = -1;
         internal ClothesMenu _clothesMenu;
         internal int _bundleBundleIndex = -1;
@@ -1151,11 +1151,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             {
                 return;
             }
-            if (SisyphusIndex >= 0 && !SisyphusStoneFell)
-            {
-                FocusOnOneIngredientSlot(SisyphusIndex);
-                return;
-            }
             for (var slotIndex = 0; slotIndex < IngredientSlots.Count; ++slotIndex)
             {
                 if (IngredientSlots[slotIndex].item != null)
@@ -1163,9 +1158,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                     continue;
                 }
 
-                FocusOnOneIngredientSlot(slotIndex);
                 SisyphusIndex = slotIndex;
-                SisyphusStoneFell = false;
+                var slotToFocus = SisyphusIndex;
+                if (!SisyphusStoneNeedsToFall)
+                {
+                    slotToFocus--;
+                    return;
+                }
+                FocusOnOneIngredientSlot(slotToFocus);
                 return;
             }
         }

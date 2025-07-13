@@ -266,6 +266,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                     if (!doneBefore && doneAfter)
                     {
                         var completeBefore = Complete;
+                        parentMenu.HeldItem = result;
                         CompletionAnimation();
                         Complete = completeBefore;
                     }
@@ -327,6 +328,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 {
                     ingredientSlot.item = null;
                 }
+            }
+            if (name == MemeBundleNames.SISYPHUS)
+            {
+                ArchipelagoJunimoNoteMenu.SisyphusStoneNeedsToFall = true;
             }
             return result;
         }

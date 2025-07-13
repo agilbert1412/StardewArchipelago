@@ -174,7 +174,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         {
             try
             {
-                if (ArchipelagoJunimoNoteMenu.SisyphusIndex >= 0 && !ArchipelagoJunimoNoteMenu.SisyphusStoneFell)
+                if (ArchipelagoJunimoNoteMenu.SisyphusStoneNeedsToFall)
                 {
                     foreach (var (bundleKey, bundleData) in Game1.netWorldState.Value.BundleData)
                     {
@@ -193,7 +193,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
                         var item = ItemRegistry.Create(QualifiedItemIds.STONE);
                         Game1.createItemDebris(item, noteVector, 0, __instance);
-                        ArchipelagoJunimoNoteMenu.SisyphusStoneFell = true;
+                        ArchipelagoJunimoNoteMenu.SisyphusStoneNeedsToFall = false;
                         return;
                     }
 
