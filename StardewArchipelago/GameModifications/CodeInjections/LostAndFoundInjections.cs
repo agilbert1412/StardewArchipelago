@@ -158,7 +158,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         private static bool MakeToolCorrectLevel(in ForEachItemContext context)
         {
             var item = context.Item;
-            if (item is not Tool tool || item is FishingRod || item is MeleeWeapon)
+            if (item is not Tool tool || item is FishingRod || item is MeleeWeapon || item is Slingshot)
             {
                 return true;
             }
