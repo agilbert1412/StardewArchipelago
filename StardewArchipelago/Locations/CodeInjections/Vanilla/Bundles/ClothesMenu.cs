@@ -37,34 +37,30 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         {
             // With Bigger Backpack, the whole menu is slightly different! Gotta make these buttons fit!
             var hasBiggerBackpack = modHelper.ModRegistry.IsLoaded(ModUniqueIds.UniqueIds[ModNames.BIGGER_BACKPACK]);
-
-            var startX = this.xPositionOnScreen + 64 + 4;
-            var startY = this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + 128 - 40;
-
+            var startXOffset = 0;
+            var startYOffset = 0;
+            var characterXOffset = 0;
+            var rightColumnXOffset = 0;
+            var offsetPerRowOffset = 0;
             if (hasBiggerBackpack)
             {
-                startX -= 24 + 0;
-                startY -= 20 + 12;
+                startXOffset = 24;
+                startYOffset = 20 + 12;
+                characterXOffset = 8;
+                rightColumnXOffset = 8;
+                offsetPerRowOffset = 2;
             }
+
+            var startX = this.xPositionOnScreen + 64 + 4 - startXOffset;
+            var startY = this.yPositionOnScreen + borderWidth + spaceToClearTopBorder + 128 - 40 - startYOffset;
 
             var leftColumnX = startX;
             var offsetPerColumn = 64;
-            var characterX = leftColumnX + offsetPerColumn + 14;
-            if (hasBiggerBackpack)
-            {
-                characterX -= 8;
-            }
+            var characterX = leftColumnX + offsetPerColumn + 14 - characterXOffset;
             var characterY = startY + 8;
-            var rightColumnX = characterX + (offsetPerColumn*2) + 14;
-            if (hasBiggerBackpack)
-            {
-                rightColumnX -= 8;
-            }
-            var offsetPerRow = 64 + 10;
-            if (hasBiggerBackpack)
-            {
-                offsetPerRow -= 2;
-            }
+            var rightColumnX = characterX + (offsetPerColumn*2) + 14 - rightColumnXOffset;
+            var offsetPerRow = 64 + 10 - offsetPerRowOffset;
+
             var firstRowY = startY;
             var secondRowY = firstRowY + offsetPerRow;
             var thirdRowY = secondRowY + offsetPerRow;

@@ -117,7 +117,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             var rows = 6;
             var width = 64 * ((capacity == -1 ? 36 : capacity) / rows);
             var height = 64 * rows + 16;
-            _clothesMenu = new ClothesMenu(xPositionOnScreen + 128, yPositionOnScreen + 140, width, height);
+            _clothesMenu = new ClothesMenu(_modHelper, xPositionOnScreen + 128, yPositionOnScreen + 140, width, height);
         }
 
         public static void InitializeArchipelago(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, ArchipelagoStateDto state, BankHandler bank, LocationChecker locationChecker, TrapManager trapManager)
