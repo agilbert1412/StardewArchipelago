@@ -38,9 +38,6 @@
 
 	<ItemGroup>
 		<Reference Include="Newtonsoft.Json" HintPath="$(GamePath)\smapi-internal\Newtonsoft.Json.dll" private="false" />
-		<Reference Include="SkullCavernElevator">
-		  <HintPath>..\..\..\..\Programs\Steam\steamapps\common\Stardew Valley\Mods\SkullCavernElevator\SkullCavernElevator.dll</HintPath>
-		</Reference>
 	</ItemGroup>
 
 	<ItemGroup>
