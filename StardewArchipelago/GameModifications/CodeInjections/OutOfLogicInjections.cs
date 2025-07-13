@@ -68,7 +68,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         {
             try
             {
-                if (!Utility.IsGeode(geode) || !geode.QualifiedItemId.Contains("MysteryBox") || __result is null or Furniture or Clothing ||
+                if (!Utility.IsGeode(geode) || !geode.QualifiedItemId.Contains("MysteryBox") || __result is null or Furniture or Clothing or Hat ||
                     __result.QualifiedItemId.Contains("MysteryBox") || __result.Category is Category.POWER_BOOK or Category.EXPERIENCE_BOOK)
                 {
                     _depth = 0;
