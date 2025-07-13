@@ -20,6 +20,9 @@ using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.GameModifications;
 using StardewArchipelago.Locations.Jojapocalypse.Consequences;
 using StardewArchipelago.Logging;
+using SkullCavernElevator.SkullCavernElevator;
+using StardewArchipelago.Items.Unlocks.Modded;
+using StardewArchipelago.Locations.CodeInjections.Modded;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -158,6 +161,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
+                if (actionName == "MineElevator" && __instance.Name == "SkullCave")
+                {
+                    CreateSkullCavernElevatorMenuIfUnlocked();
+                    __result = true;
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+                }
+
                 if (actionName != "MineElevator" || __instance.Name != "Mine")
                 {
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
@@ -180,9 +190,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 var tile = __instance.map.GetLayer("Buildings").PickTile(new Location(tileLocation.X * 64, tileLocation.Y * 64), viewport.Size);
 
-                if (tile == null || !who.IsLocalPlayer || tile.TileIndex != 112 || __instance.mineLevel > 120)
+                if (tile == null || !who.IsLocalPlayer || tile.TileIndex != 112)
                 {
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
+                if (__instance.mineLevel > 120)
+                {
+                    CreateSkullCavernElevatorMenuIfUnlocked();
+                    __result = true;
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 CreateElevatorMenuIfUnlocked();
@@ -207,6 +224,27 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     var mineLevelUnlocked = numberOfMineElevatorReceived * ArchipelagoMineElevatorMenu.FLOORS_PER_ELEVATOR;
                     mineLevelUnlocked = Math.Min(120, Math.Max(0, mineLevelUnlocked));
                     Game1.activeClickableMenu = new ArchipelagoMineElevatorMenu(mineLevelUnlocked);
+                    return;
+                }
+
+                Game1.drawObjectDialogue("This elevator is currently undergoing Maintenance^^    - Joja");
+                return;
+            }
+
+            Game1.drawObjectDialogue(Game1.parseText(Game1.content.LoadString("Strings\\Locations:Mines_MineElevator_NotWorking")));
+        }
+
+        private static void CreateSkullCavernElevatorMenuIfUnlocked()
+        {
+            var numberOfMineElevatorReceived = _archipelago.GetReceivedItemCount(SkullCavernInjections.SKULL_CAVERN_ELEVATOR_ITEM);
+
+            if (HasUnlockedElevators(numberOfMineElevatorReceived))
+            {
+                if (MineshaftConsequences.CanUseElevatorToday())
+                {
+                    var mineLevelUnlocked = numberOfMineElevatorReceived * SkullCavernInjections.ELEVATOR_STEP;
+                    mineLevelUnlocked = Math.Min(300, Math.Max(0, mineLevelUnlocked));
+                    Game1.activeClickableMenu = new AchipelagoSkullCavernElevatorMenu(mineLevelUnlocked);
                     return;
                 }
 

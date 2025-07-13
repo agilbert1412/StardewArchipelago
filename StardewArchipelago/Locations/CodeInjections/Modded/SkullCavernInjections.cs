@@ -17,7 +17,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         public const string SKULL_CAVERN_FLOOR_LOCATION = "Skull Cavern: Floor {0}";
         public const string SKULL_KEY = "Skull Key";
 
-        private const int ELEVATOR_STEP = 25;
+        public const int ELEVATOR_STEP = 25;
         private const int DIFFICULTY = 1;
 
 
