@@ -1160,10 +1160,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
                 SisyphusIndex = slotIndex;
                 var slotToFocus = SisyphusIndex;
-                if (!SisyphusStoneNeedsToFall)
+                if (SisyphusStoneNeedsToFall)
                 {
                     slotToFocus--;
-                    return;
                 }
                 FocusOnOneIngredientSlot(slotToFocus);
                 return;
