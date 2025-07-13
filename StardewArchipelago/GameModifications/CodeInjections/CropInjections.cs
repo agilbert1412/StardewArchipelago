@@ -158,28 +158,35 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             return cropData[seedId].RegrowDays != -1;
         }
 
-        // public void Kill()
-        public static bool Kill_CountDeadCrops_Prefix(Crop __instance)
+        // public virtual void newDay(int state)
+        public static void NewDay_CountDeadCrops_Prefix(Crop __instance, int state)
         {
             try
             {
+                var currentLocation = __instance.currentLocation;
+                if (!currentLocation.isOutdoors.Value || __instance.IsInSeason(currentLocation))
+                {
+                    return;
+                }
+
                 if (__instance.dead.Value)
                 {
-                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                    return;
                 }
                 var cropId = __instance.indexOfHarvest.Value;
                 if (cropId == null)
                 {
-                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                    return;
                 }
                 _wallet.DeadCropsById.TryAdd(cropId, 0);
                 _wallet.DeadCropsById[cropId]++;
-                return MethodPrefix.RUN_ORIGINAL_METHOD;
+                _logger.LogDebug($"Dead {cropId}: {_wallet.DeadCropsById[cropId]}");
+                return;
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed in {nameof(Kill_CountDeadCrops_Prefix)}:\n{ex}");
-                return MethodPrefix.RUN_ORIGINAL_METHOD;
+                _logger.LogError($"Failed in {nameof(NewDay_CountDeadCrops_Prefix)}:\n{ex}");
+                return;
             }
         }
     }

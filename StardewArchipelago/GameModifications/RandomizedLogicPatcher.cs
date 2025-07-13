@@ -558,8 +558,8 @@ namespace StardewArchipelago.GameModifications
             PatchMixedSeeds();
 
             _harmony.Patch(
-                original: AccessTools.Method(typeof(Crop), nameof(Crop.Kill)),
-                prefix: new HarmonyMethod(typeof(CropInjections), nameof(CropInjections.Kill_CountDeadCrops_Prefix))
+                original: AccessTools.Method(typeof(Crop), nameof(Crop.newDay)),
+                prefix: new HarmonyMethod(typeof(CropInjections), nameof(CropInjections.NewDay_CountDeadCrops_Prefix))
             );
         }
 
