@@ -1609,7 +1609,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         protected override void DrawInventory(SpriteBatch b)
         {
-            _clothesMenu.draw(b);
             if (CurrentPageBundle.name == MemeBundleNames.OFF_YOUR_BACK)
             {
                 _clothesMenu.draw(b);
