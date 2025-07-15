@@ -430,6 +430,8 @@ namespace StardewArchipelago.Registry
                 "Foliage Print",
                 "Raising Animals",
                 "Feeding Animals",
+                "Quest: Raising Animals",
+                "Quest: Feeding Animals",
                 "Quest: Corrupted Crops Task",
                 "Quest: Witch's order",
                 "Corrupted Crops Task",
