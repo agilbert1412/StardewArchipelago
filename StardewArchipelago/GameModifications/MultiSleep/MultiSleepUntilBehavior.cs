@@ -173,5 +173,10 @@ namespace StardewArchipelago.GameModifications.MultiSleep
                 allReady = false;
             }
         }
+
+        public override bool ShouldPromptForMultisleep()
+        {
+            return false;
+        }
     }
 }

@@ -11,5 +11,10 @@
         {
             return false;
         }
+
+        public override bool ShouldPromptForMultisleep()
+        {
+            return true;
+        }
     }
 }

@@ -22,5 +22,10 @@ namespace StardewArchipelago.GameModifications.MultiSleep
             _daysRemaining--;
             base.KeepSleeping();
         }
+
+        public override bool ShouldPromptForMultisleep()
+        {
+            return false;
+        }
     }
 }

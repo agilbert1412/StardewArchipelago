@@ -87,8 +87,11 @@ namespace StardewArchipelago.GameModifications.MultiSleep
 
                 var possibleResponses = new List<Response>();
                 possibleResponses.Add(new Response("Yes", Game1.content.LoadString("Strings\\Lexicon:QuestionDialogue_Yes")).SetHotKey(Keys.Y));
-                possibleResponses.Add(new Response("Many", "Sleep for multiple days").SetHotKey(Keys.U));
-                possibleResponses.Add(new Response("Until", "Sleep until..."));
+                if (CurrentMultiSleep.ShouldPromptForMultisleep())
+                {
+                    possibleResponses.Add(new Response("Many", "Sleep for multiple days").SetHotKey(Keys.U));
+                    possibleResponses.Add(new Response("Until", "Sleep until..."));
+                }
                 possibleResponses.Add(new Response("No", Game1.content.LoadString("Strings\\Lexicon:QuestionDialogue_No")).SetHotKey(Keys.Escape));
 
                 __instance.createQuestionDialogue(Game1.content.LoadString("Strings\\Locations:FarmHouse_Bed_GoToSleep"), possibleResponses.ToArray(), "Sleep", null);

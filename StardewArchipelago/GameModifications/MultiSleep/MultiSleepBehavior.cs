@@ -68,5 +68,7 @@ namespace StardewArchipelago.GameModifications.MultiSleep
             Game1.activeClickableMenu.emergencyShutDown();
             Game1.exitActiveMenu();
         }
+
+        public abstract bool ShouldPromptForMultisleep();
     }
 }
