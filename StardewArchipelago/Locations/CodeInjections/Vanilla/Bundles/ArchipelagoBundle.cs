@@ -135,6 +135,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 var currentIngredient = Ingredients[ArchipelagoJunimoNoteMenu.BureaucracyIndex];
                 return item.QualifiedItemId == currentIngredient.id;
             }
+            if (name == MemeBundleNames.SISYPHUS)
+            {
+                if (ArchipelagoJunimoNoteMenu.SisyphusStoneNeedsToFall)
+                {
+                    return false;
+                }
+            }
 
             return base.CanAcceptThisItem(item, slot, ignoreStackCount, parentMenu);
         }

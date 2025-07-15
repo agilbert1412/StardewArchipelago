@@ -54,7 +54,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         private BundleCurrencyManager _currencyManager;
 
         public static bool SisyphusStoneNeedsToFall = false;
-        private static int SisyphusIndex = 0;
+        internal static int SisyphusIndex = 0;
         internal static int BureaucracyIndex = -1;
         internal ClothesMenu _clothesMenu;
         internal int _bundleBundleIndex = -1;
