@@ -69,6 +69,21 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         }
 
         // public override void MakeMapModifications(bool force = false)
+        public static void MakeMapModifications_OpenBeachNightMarketShortcuts_Postfix(BeachNightMarket __instance, bool force)
+        {
+            try
+            {
+                OpenBeachShortcuts(__instance);
+                return;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(MakeMapModifications_OpenBeachShortcuts_Postfix)}:\n{ex}");
+                return;
+            }
+        }
+
+        // public override void MakeMapModifications(bool force = false)
         public static void MakeMapModifications_OpenBackwoodsShortcuts_Postfix(GameLocation __instance, bool force)
         {
             try
@@ -178,7 +193,25 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             OpenTidePoolsToTownShortcut(beach);
         }
 
-        private static void OpenBeachToForestShortcut(Beach beach)
+        public static void OpenBeachShortcuts(BeachNightMarket beach)
+        {
+            if (!_archipelago.SlotData.IncludeEndgameLocations)
+            {
+                return;
+            }
+
+            // private bool hasShownCCUpgrade;
+            //var hasShownCCUpgradeField = _modHelper.Reflection.GetField<bool>(beach, "hasShownCCUpgrade");
+            //if (hasShownCCUpgradeField.GetValue())
+            //{
+            //    return;
+            //}
+            //hasShownCCUpgradeField.SetValue(true);
+            OpenBeachToForestShortcut(beach);
+            OpenTidePoolsToTownShortcut(beach);
+        }
+
+        private static void OpenBeachToForestShortcut(GameLocation beach)
         {
             if (!_archipelago.HasReceivedItem("Forest To Beach Shortcut"))
             {
@@ -202,7 +235,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             beach.setMapTile(3, 7, 107, "Back", "untitled tile sheet");
         }
 
-        private static void OpenTidePoolsToTownShortcut(Beach beach)
+        private static void OpenTidePoolsToTownShortcut(GameLocation beach)
         {
             if (!_archipelago.HasReceivedItem("Town To Tide Pools Shortcut"))
             {
