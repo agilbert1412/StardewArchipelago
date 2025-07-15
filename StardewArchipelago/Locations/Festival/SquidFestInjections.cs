@@ -8,6 +8,8 @@ using StardewValley.Menus;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
+using StardewArchipelago.Archipelago;
+using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 
 namespace StardewArchipelago.Locations.Festival
 {
@@ -15,10 +17,10 @@ namespace StardewArchipelago.Locations.Festival
     {
         private static ILogger _logger;
         private static IModHelper _modHelper;
-        private static ArchipelagoClient _archipelago;
+        private static StardewArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
 
-        public static void Initialize(ILogger logger, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             _logger = logger;
             _modHelper = modHelper;
@@ -116,7 +118,10 @@ namespace StardewArchipelago.Locations.Festival
                                 inventory.Add(ItemRegistry.Create("(O)253", 3));
                                 continue;
                             case "13_3":
-                                //inventory.Add(new StardewValley.Objects.Hat("SquidHat"));
+                                if (_archipelago.SlotData.Hatsanity > Hatsanity.None)
+                                {
+                                    inventory.Add(new StardewValley.Objects.Hat("SquidHat"));
+                                }
                                 //if (!hasCrabBook)
                                 //{
                                 //    inventory.Add(ItemRegistry.Create("(O)Book_Crabbing"));
