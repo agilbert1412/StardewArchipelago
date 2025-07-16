@@ -488,6 +488,11 @@ namespace StardewArchipelago.GameModifications
                 original: AccessTools.Method(typeof(FarmerTeam), nameof(FarmerTeam.CheckReturnedDonations)),
                 prefix: new HarmonyMethod(typeof(LostAndFoundInjections), nameof(LostAndFoundInjections.CheckReturnedDonations_UpgradeToolsProperly_Prefix))
             );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Game1), nameof(Game1.fixProblems)),
+                postfix: new HarmonyMethod(typeof(LostAndFoundInjections), nameof(LostAndFoundInjections.FixProblems_DontLostAndFoundUnreceivedTools_Postfix))
+            );
         }
 
         private void PatchQuestLog()

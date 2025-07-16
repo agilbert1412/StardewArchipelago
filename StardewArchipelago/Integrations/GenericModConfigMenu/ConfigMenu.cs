@@ -358,6 +358,14 @@ namespace StardewArchipelago.Integrations.GenericModConfigMenu
                 getValue: () => Config.CustomAssetGenericGame,
                 setValue: (value) => Config.CustomAssetGenericGame = value
             );
+
+            configMenu.AddBoolOption(
+                mod: ModManifest,
+                name: () => "Limit hoe and watering can levels",
+                tooltip: () => $"Makes hoes and watering cans behave as if they were at the basic level no matter what. Generally used for animation cancelling.",
+                getValue: () => Config.LimitHoeWateringCanLevel,
+                setValue: (value) => Config.LimitHoeWateringCanLevel = value
+            );
         }
     }
 }
