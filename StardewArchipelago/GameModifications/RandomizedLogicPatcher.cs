@@ -34,6 +34,7 @@ using StardewArchipelago.Locations;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
 using StardewArchipelago.Locations.Festival;
 using StardewArchipelago.Locations.InGameLocations;
+using StardewArchipelago.GameModifications.CodeInjections.Powers;
 
 namespace StardewArchipelago.GameModifications
 {
@@ -47,6 +48,7 @@ namespace StardewArchipelago.GameModifications
         private readonly SeedShopStockModifier _seedShopStockModifier;
         private readonly RecipeDataRemover _recipeDataRemover;
         private readonly AnimalShopStockModifier _animalShopStockModifier;
+        private readonly PowersModifier _powersModifier;
 
         public RandomizedLogicPatcher(LogHandler logger, IModHelper modHelper, ModConfig config, Harmony harmony, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker, StardewItemManager stardewItemManager, EntranceManager entranceManager, SeedShopStockModifier seedShopStockModifier, NameSimplifier nameSimplifier, Friends friends, ArchipelagoStateDto state, BundleReader bundleReader)
         {
@@ -91,6 +93,7 @@ namespace StardewArchipelago.GameModifications
             MovementInjections.Initialize(logger, archipelago);
             BundleMenuInjection.Initialize(logger, modHelper, archipelago, state, locationChecker, bundleReader);
             DebugPatchInjections.Initialize(logger, archipelago);
+            _powersModifier = new PowersModifier(logger, modHelper, archipelago);
         }
 
         private static void InitializeTVInjections(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, EntranceManager entranceManager,
@@ -127,6 +130,7 @@ namespace StardewArchipelago.GameModifications
             PatchProfitMargin();
             PatchKent();
             PatchGoldenEgg();
+            PatchPowers();
             PatchGoldenClock();
             PatchZeldaAnimations();
             MakeLegendaryFishAndVoidMayoRecatchable();
@@ -154,6 +158,7 @@ namespace StardewArchipelago.GameModifications
             UnpatchJodiFishQuest();
             UnPatchRecipes();
             CleanGoldenEggEvent();
+            CleanPowersEvents();
         }
 
         private void PatchPickUpLocation()
@@ -641,6 +646,21 @@ namespace StardewArchipelago.GameModifications
         private void CleanGoldenEggEvent()
         {
             _helper.Events.Content.AssetRequested -= _animalShopStockModifier.OnShopStockRequested;
+        }
+
+        private void PatchPowers()
+        {
+            _helper.Events.Content.AssetRequested += _powersModifier.OnPowersRequested;
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(PowersTab), nameof(PowersTab.populateClickableComponentList)),
+                postfix: new HarmonyMethod(typeof(PowersModifier), nameof(PowersModifier.PopulateClickableComponentList_AddTextures_Postfix))
+            );
+        }
+
+        private void CleanPowersEvents()
+        {
+            _helper.Events.Content.AssetRequested -= _powersModifier.OnPowersRequested;
         }
 
         private void PatchGoldenClock()
