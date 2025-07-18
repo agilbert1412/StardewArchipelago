@@ -8,6 +8,7 @@ using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Constants.Vanilla;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
@@ -196,9 +197,9 @@ namespace StardewArchipelago.Locations.Secrets
                 {
                     if (ccTrackerButton != null && ccTrackerButton.containsPoint(x, y) && !ccTrackerButton.label.Equals("???"))
                     {
-                        Game1.activeClickableMenu = new JunimoNoteMenu(true, Convert.ToInt32(ccTrackerButton.name), true)
+                        Game1.activeClickableMenu = new ArchipelagoJunimoNoteMenu(true, Convert.ToInt32(ccTrackerButton.name), true)
                         {
-                            gameMenuTabToReturnTo = GameMenu.skillsTab
+                            GameMenuTabToReturnTo = GameMenu.skillsTab
                         };
                         break;
                     }
