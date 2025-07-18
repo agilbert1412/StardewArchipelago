@@ -656,6 +656,11 @@ namespace StardewArchipelago.GameModifications
                 original: AccessTools.Method(typeof(PowersTab), nameof(PowersTab.populateClickableComponentList)),
                 postfix: new HarmonyMethod(typeof(PowersModifier), nameof(PowersModifier.PopulateClickableComponentList_AddTextures_Postfix))
             );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(PowersTab), nameof(PowersTab.performHoverAction)),
+                postfix: new HarmonyMethod(typeof(PowersModifier), nameof(PowersModifier.PerformHoverAction_AddTooltipsOnApItems_Postfix))
+            );
         }
 
         private void CleanPowersEvents()

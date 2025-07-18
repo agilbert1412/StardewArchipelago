@@ -9,6 +9,7 @@ using StardewArchipelago.Constants;
 using StardewArchipelago.Textures;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
+using StardewValley;
 using StardewValley.GameData.Powers;
 using StardewValley.Menus;
 
@@ -124,6 +125,34 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Powers
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(PopulateClickableComponentList_AddTextures_Postfix)}:\n{ex}");
+                return;
+            }
+        }
+
+        // public override void performHoverAction(int x, int y)
+        public static void PerformHoverAction_AddTooltipsOnApItems_Postfix(PowersTab __instance, int x, int y)
+        {
+            try
+            {
+                __instance.hoverText = "";
+                __instance.descriptionText = "";
+                foreach (var textureComponent in __instance.powers[__instance.currentPage])
+                {
+                    if (!textureComponent.containsPoint(x, y))
+                    {
+                        continue;
+                    }
+
+                    var showTitle = textureComponent.drawShadow || _powersByName.ContainsKey(textureComponent.name);
+                    var showDescription = textureComponent.drawShadow;
+
+                    __instance.hoverText = showTitle ? textureComponent.label : "???";
+                    __instance.descriptionText = showDescription ? Game1.parseText(textureComponent.hoverText, Game1.smallFont, Math.Max((int)Game1.dialogueFont.MeasureString(__instance.hoverText).X, 320)) : (showTitle ? "You can hint this item" : "");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(PerformHoverAction_AddTooltipsOnApItems_Postfix)}:\n{ex}");
                 return;
             }
         }
