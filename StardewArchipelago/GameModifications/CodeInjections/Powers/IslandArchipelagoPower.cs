@@ -13,5 +13,9 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Powers
         public IslandArchipelagoPower(string name, string description = null, Point? textureOrigin = null) : base(name, description, textureOrigin, (x) => !x.ExcludeGingerIsland)
         {
         }
+
+        public IslandArchipelagoPower(string name, string description, int textureOriginX, int textureOriginY) : this(name, description, new Point(textureOriginX, textureOriginY))
+        {
+        }
     }
 }

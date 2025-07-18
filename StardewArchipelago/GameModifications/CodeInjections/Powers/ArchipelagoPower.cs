@@ -41,6 +41,10 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Powers
             IsIncluded = isIncluded ?? (_ => true);
         }
 
+        public ArchipelagoPower(string name, string description, int textureOriginX, int textureOriginY) : this(name, description, new Point(textureOriginX, textureOriginY))
+        {
+        }
+
         public override bool Equals(object obj)
         {
             if (obj is not ArchipelagoPower otherPower)
