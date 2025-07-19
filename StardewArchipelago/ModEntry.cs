@@ -394,8 +394,9 @@ namespace StardewArchipelago
             SeasonsRandomizer.ChangeMailKeysBasedOnSeasonsToDaysElapsed();
             _modStateInitializer = new InitialModGameStateInitializer(_logger, _archipelago);
             _hintHelper = new HintHelper();
-            Game1.chatBox?.addMessage(
-                $"Connected to Archipelago as {_archipelago.SlotData.SlotName}. Type !!help for client commands", Color.Green);
+            Game1.chatBox?.addMessage($"Connected to Archipelago as {_archipelago.SlotData.SlotName}. Type !!help for client commands", Color.Green);
+
+            Game1.UseLegacyRandom = Config.UseLegacyRandomization;
         }
 
         private ConnectionResult AttemptConnectionToArchipelago()
