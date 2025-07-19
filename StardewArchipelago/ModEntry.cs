@@ -175,6 +175,7 @@ namespace StardewArchipelago
 
         private void OnSaveCreating(object sender, SaveCreatingEventArgs e)
         {
+            Game1.UseLegacyRandom = Config.UseLegacyRandomization;
             State.ItemsReceived = new List<ReceivedItem>();
             State.LocationsChecked = new List<string>();
             State.JojaLocationsChecked = new List<string>();
@@ -205,7 +206,6 @@ namespace StardewArchipelago
 
         private void OnSaveCreated(object sender, SaveCreatedEventArgs e)
         {
-            Game1.UseLegacyRandom = Config.UseLegacyRandomization;
         }
 
         private void OnSaving(object sender, SavingEventArgs e)
