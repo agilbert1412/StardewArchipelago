@@ -684,10 +684,6 @@ namespace StardewArchipelago.Locations.Patcher
                 prefix: new HarmonyMethod(typeof(IsolatedEventInjections), nameof(IsolatedEventInjections.AwardFestivalPrize_RustySword_Prefix))
             );
             _harmony.Patch(
-                original: AccessTools.Method(typeof(Woods), nameof(Woods.checkAction)),
-                prefix: new HarmonyMethod(typeof(IsolatedEventInjections), nameof(IsolatedEventInjections.CheckAction_OldMasterCanolli_Prefix))
-            );
-            _harmony.Patch(
                 original: AccessTools.Method(typeof(Beach), nameof(Beach.answerDialogueAction)),
                 prefix: new HarmonyMethod(typeof(IsolatedEventInjections), nameof(IsolatedEventInjections.AnswerDialogueAction_BeachBridge_Prefix))
             );
@@ -1541,6 +1537,11 @@ namespace StardewArchipelago.Locations.Patcher
             {
                 return;
             }
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Woods), nameof(Woods.checkAction)),
+                prefix: new HarmonyMethod(typeof(IsolatedEventInjections), nameof(IsolatedEventInjections.CheckAction_OldMasterCanolli_Prefix))
+            );
 
             PatchPurpleShortsSecrets();
 
