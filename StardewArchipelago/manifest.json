@@ -6,5 +6,5 @@
   "UniqueID": "KaitoKid.StardewArchipelago",
   "EntryDll": "StardewArchipelago.dll",
   "MinimumApiVersion": "3.0.0",
-  "UpdateKeys": ["GitHub:agilbert1412/StardewArchipelago"]
+  "UpdateKeys": [ "Nexus:16087" ]
 }
