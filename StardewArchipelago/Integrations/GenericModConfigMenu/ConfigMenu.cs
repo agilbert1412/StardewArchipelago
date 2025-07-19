@@ -370,7 +370,7 @@ namespace StardewArchipelago.Integrations.GenericModConfigMenu
             configMenu.AddBoolOption(
                 mod: ModManifest,
                 name: () => "Use Legacy Randomization",
-                tooltip: () => $"Equivalent to the vanilla advanced option of the same name. Can be changed over the course of one playthrough.",
+                tooltip: () => $"Equivalent to the vanilla advanced option of the same name. Only applies at the moment of creating the save file",
                 getValue: () => Config.UseLegacyRandomization,
                 setValue: (value) => Config.UseLegacyRandomization = value
             );

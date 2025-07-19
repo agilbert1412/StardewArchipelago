@@ -155,7 +155,7 @@ namespace StardewArchipelago
         public bool LimitHoeWateringCanLevel { get; set; } = false;
 
         /// <summary>
-        /// Equivalent to the vanilla toggle "Use Legacy Randomization", but can be changed over the course of the same playthrough
+        /// Equivalent to the vanilla toggle "Use Legacy Randomization". Only applies at the save creation
         /// </summary>
         public bool UseLegacyRandomization { get; set; } = false;
     }
