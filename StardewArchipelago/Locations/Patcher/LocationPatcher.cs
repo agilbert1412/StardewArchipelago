@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using HarmonyLib;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Archipelago.Gifting;
 using StardewArchipelago.Bundles;
 using StardewArchipelago.GameModifications;
 using StardewArchipelago.Items.Traps;
@@ -21,9 +22,9 @@ namespace StardewArchipelago.Locations.Patcher
 
         public LocationPatcher(LogHandler logger, IModHelper modHelper, ModConfig config, Harmony harmony, StardewArchipelagoClient archipelago, ArchipelagoStateDto state,
             StardewLocationChecker locationChecker, JojaLocationChecker jojaLocationChecker, StardewItemManager itemManager, WeaponsManager weaponsManager, BundlesManager bundlesManager,
-            SeedShopStockModifier seedShopStockModifier, Friends friends, TrapManager trapManager, BankHandler bank, NameSimplifier nameSimplifier)
+            SeedShopStockModifier seedShopStockModifier, Friends friends, TrapManager trapManager, BankHandler bank, NameSimplifier nameSimplifier, GiftSender giftSender)
         {
-            CodeInjectionInitializer.Initialize(logger, modHelper, config, archipelago, state, locationChecker, jojaLocationChecker, itemManager, weaponsManager, bundlesManager, seedShopStockModifier, friends, trapManager, bank, nameSimplifier);
+            CodeInjectionInitializer.Initialize(logger, modHelper, config, archipelago, state, locationChecker, jojaLocationChecker, itemManager, weaponsManager, bundlesManager, seedShopStockModifier, friends, trapManager, bank, nameSimplifier, giftSender);
             _patchers = new List<ILocationPatcher>();
             _patchers.Add(new VanillaLocationPatcher(logger, modHelper, harmony, archipelago, locationChecker, itemManager));
             if (archipelago.SlotData.Mods.IsModded)

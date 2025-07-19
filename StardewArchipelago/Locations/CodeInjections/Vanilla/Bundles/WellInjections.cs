@@ -13,6 +13,7 @@ using StardewValley.Extensions;
 using Object = StardewValley.Object;
 using Microsoft.Xna.Framework.Audio;
 using System.IO;
+using StardewArchipelago.Archipelago.Gifting;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 {
@@ -25,14 +26,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         private static IModHelper _modHelper;
         private static StardewArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
+        private static GiftSender _giftSender;
 
 
-        public static void Initialize(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, LocationChecker locationChecker, GiftSender giftSender)
         {
             _logger = logger;
             _modHelper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
+            _giftSender = giftSender;
             var currentModFolder = _modHelper.DirectoryPath;
             var soundsFolder = "Sounds";
             var relativePathToSound = Path.Combine(currentModFolder, soundsFolder, HONEYWELL_FILE);
@@ -66,10 +69,18 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                     Game1.haltAfterCheck = false;
                 }
 
+                var honey = who.ActiveObject;
+                var quality = honey.Quality;
+                var preserveType = honey.preserve.Value;
+                var preserveId = honey.preservedParentSheetIndex.Value;
                 ShowObjectThrownIntoWaterAnimation(__instance, who, who.ActiveObject, () =>
                 {
                     Game1.playSound(HONEYWELL_CUE);
                     ArchipelagoJunimoNoteMenu.CompleteBundleIfExists(MemeBundleNames.HONEYWELL);
+                    var giftHoney = ItemRegistry.Create<Object>(ObjectIds.HONEY, 1, quality);
+                    giftHoney.preserve.Set(preserveType);
+                    giftHoney.preservedParentSheetIndex.Set(preserveId);
+                    _giftSender.SendSilentGift("Honeywell", giftHoney);
                 });
                 who.reduceActiveItemByOne();
                 __result = true;

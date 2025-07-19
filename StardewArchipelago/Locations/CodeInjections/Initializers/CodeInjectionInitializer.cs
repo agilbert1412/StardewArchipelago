@@ -1,4 +1,5 @@
 ﻿using StardewArchipelago.Archipelago;
+using StardewArchipelago.Archipelago.Gifting;
 using StardewArchipelago.Bundles;
 using StardewArchipelago.GameModifications;
 using StardewArchipelago.Items.Traps;
@@ -16,9 +17,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
     {
         public static void Initialize(LogHandler logger, IModHelper modHelper, ModConfig config, StardewArchipelagoClient archipelago, ArchipelagoStateDto state,
             StardewLocationChecker locationChecker, JojaLocationChecker jojaLocationChecker, StardewItemManager itemManager, WeaponsManager weaponsManager, BundlesManager bundlesManager,
-            SeedShopStockModifier seedShopStockModifier, Friends friends, TrapManager trapManager, BankHandler bank, NameSimplifier nameSimplifier)
+            SeedShopStockModifier seedShopStockModifier, Friends friends, TrapManager trapManager, BankHandler bank, NameSimplifier nameSimplifier, GiftSender giftSender)
         {
-            VanillaCodeInjectionInitializer.Initialize(logger, modHelper, config, archipelago, state, locationChecker, jojaLocationChecker, itemManager, weaponsManager, bundlesManager, friends, trapManager, bank, nameSimplifier);
+            VanillaCodeInjectionInitializer.Initialize(logger, modHelper, config, archipelago, state, locationChecker, jojaLocationChecker, itemManager, weaponsManager, bundlesManager, friends, trapManager, bank, nameSimplifier, giftSender);
             if (archipelago.SlotData.Mods.IsModded)
             {
                 ModCodeInjectionInitializer.Initialize(logger, modHelper, archipelago, locationChecker, seedShopStockModifier);

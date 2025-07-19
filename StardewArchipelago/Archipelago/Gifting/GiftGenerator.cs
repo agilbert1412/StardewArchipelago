@@ -74,6 +74,7 @@ namespace StardewArchipelago.Archipelago.Gifting
             traits.AddRange(GetContextTagsTraits(giftItem));
 
             traits.AddRange(GetCustomTraits(giftItem));
+            traits.AddRange(GetFlavoredTraits(giftItem));
 
             return SimplifyDuplicates(traits).ToArray();
         }
@@ -359,6 +360,30 @@ namespace StardewArchipelago.Archipelago.Gifting
             {
                 yield return CreateTrait(teleportTrait, 3d);
             }
+        }
+
+        private IEnumerable<GiftTrait> GetFlavoredTraits(Item giftItem)
+        {
+            if (giftItem is not Object giftObject)
+            {
+                yield break;
+            }
+
+            var preserveId = giftObject.GetPreservedItemId();
+            if (string.IsNullOrWhiteSpace(preserveId))
+            {
+                yield break;
+            }
+
+            yield return CreateTrait("Flavored");
+
+            if (!_itemManager.ObjectExistsById(preserveId))
+            {
+                yield break;
+            }
+
+            var flavorObject = _itemManager.GetObjectById(preserveId);
+            yield return CreateTrait(flavorObject.Name, 0.5, 1);
         }
 
         private double GetBombQuality(Item bombItem)

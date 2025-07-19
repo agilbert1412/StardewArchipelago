@@ -128,6 +128,40 @@ namespace StardewArchipelago.Archipelago.Gifting
             return true;
         }
 
+        public void SendSilentGift(string slotName, Object silentGiftItem)
+        {
+            try
+            {
+                if (!_archipelago.PlayerExists(slotName))
+                {
+                    return;
+                }
+
+                if (!GiftGenerator.TryCreateGiftItem(silentGiftItem, false, out var giftItem, out var giftTraits, out var errorMessage))
+                {
+                    return;
+                }
+
+                var canGift = _archipelago.GiftingService.CanGiftToPlayer(slotName, giftTraits.Select(x => x.Trait));
+                if (!canGift.CanGift)
+                {
+                    return;
+                }
+
+                var result = _archipelago.GiftingService.SendGift(giftItem, giftTraits, slotName);
+                if (!result.Success)
+                {
+                    _logger.LogWarning($"Silent gift failed to send properly.");
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning($"Unknown error occurred while attempting to process silent gift.{Environment.NewLine}Message: {ex.Message}{Environment.NewLine}StackTrace: {ex.StackTrace}");
+                return;
+            }
+        }
+
         private int GetTaxForItem(Object giftObject)
         {
             return GetTaxForItem(giftObject, out _, out _);

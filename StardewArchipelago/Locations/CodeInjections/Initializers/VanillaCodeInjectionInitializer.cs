@@ -1,6 +1,7 @@
 ﻿using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Archipelago.Gifting;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.Bundles;
 using StardewArchipelago.GameModifications.CodeInjections.Television;
@@ -25,7 +26,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
 {
     public static class VanillaCodeInjectionInitializer
     {
-        public static void Initialize(LogHandler logger, IModHelper modHelper, ModConfig config, StardewArchipelagoClient archipelago, ArchipelagoStateDto state, StardewLocationChecker locationChecker, JojaLocationChecker jojaLocationChecker, StardewItemManager itemManager, WeaponsManager weaponsManager, BundlesManager bundlesManager, Friends friends, TrapManager trapManager, BankHandler bank, NameSimplifier nameSimplifier)
+        public static void Initialize(LogHandler logger, IModHelper modHelper, ModConfig config, StardewArchipelagoClient archipelago, ArchipelagoStateDto state, StardewLocationChecker locationChecker, JojaLocationChecker jojaLocationChecker, StardewItemManager itemManager, WeaponsManager weaponsManager, BundlesManager bundlesManager, Friends friends, TrapManager trapManager, BankHandler bank, NameSimplifier nameSimplifier, GiftSender giftSender)
         {
             TrashBearInjections.Initialize(logger, modHelper, archipelago, locationChecker, bundlesManager, itemManager, state);
             BackpackInjections.Initialize(logger, modHelper, archipelago, locationChecker);
@@ -35,7 +36,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             var bundleReader = new BundleReader();
             var killList = new MonsterKillList(archipelago);
             GoalCodeInjection.Initialize(logger, modHelper, archipelago, locationChecker, bundleReader, killList);
-            InitializeBundleInjections(logger, modHelper, archipelago, state, locationChecker, bundlesManager, bundleReader, trapManager, bank);
+            InitializeBundleInjections(logger, modHelper, archipelago, state, locationChecker, bundlesManager, bundleReader, trapManager, bank, giftSender);
             MineshaftInjections.Initialize(logger, modHelper, config, archipelago, locationChecker, jojaLocationChecker);
             InitializeSkills(logger, modHelper, archipelago, locationChecker);
             QuestInjections.Initialize(logger, modHelper, archipelago, locationChecker);
@@ -82,13 +83,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             JunimoKartInjections.Initialize(logger, modHelper, archipelago, locationChecker);
         }
 
-        private static void InitializeBundleInjections(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, BundlesManager bundlesManager, BundleReader bundleReader, TrapManager trapManager, BankHandler bank)
+        private static void InitializeBundleInjections(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, BundlesManager bundlesManager, BundleReader bundleReader, TrapManager trapManager, BankHandler bank, GiftSender giftSender)
         {
             ArchipelagoJunimoNoteMenu.InitializeArchipelago(logger, modHelper, archipelago, state, bank, locationChecker, trapManager);
             ArchipelagoBundle.InitializeArchipelago(logger, modHelper, archipelago, state, locationChecker, bundlesManager);
             CommunityCenterInjections.Initialize(logger, archipelago, locationChecker, bundleReader);
             RaccoonInjections.Initialize(logger, modHelper, archipelago, state, locationChecker, bundlesManager, bundleReader);
-            WellInjections.Initialize(logger, modHelper, archipelago, locationChecker);
+            WellInjections.Initialize(logger, modHelper, archipelago, locationChecker, giftSender);
         }
 
         private static void InitializeSkills(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
