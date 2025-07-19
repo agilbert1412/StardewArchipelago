@@ -320,15 +320,38 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                 return item;
             }
             var communityCenter = Game1.RequireLocation<CommunityCenter>("CommunityCenter");
+            var validIndexes = new HashSet<int>();
             for (var index1 = 0; index1 < this.Ingredients.Count; ++index1)
             {
                 var ingredientDescription1 = this.Ingredients[index1];
                 if (this.IsValidItemForThisIngredientDescription(item, ingredientDescription1, index1, parentMenu) && slot.item == null)
                 {
-                    item = SuccessfullyDepositThisItem(item, slot, noteTextureName, parentMenu, ingredientDescription1, index1, communityCenter);
-                    break;
+                    validIndexes.Add(index1);
                 }
             }
+
+            var orderedIndexes = validIndexes.Where(x =>
+            {
+                var ingredient = this.Ingredients[x];
+                return ingredient.quality <= item.Quality;
+            }).OrderBy(x =>
+            {
+                var ingredient = this.Ingredients[x];
+                var qualityDifference = Math.Abs(ingredient.quality - item.Quality);
+                var amountDifference = Math.Abs(ingredient.stack - item.Stack);
+                var orderValue = (qualityDifference * 1000) + (amountDifference);
+                if (ingredient.stack > item.Stack)
+                {
+                    orderValue = orderValue * 1000;
+                }
+                return orderValue;
+            }).ToArray();
+            if (orderedIndexes.Any())
+            {
+                var ingredientDescription1 = this.Ingredients[orderedIndexes[0]];
+                item = SuccessfullyDepositThisItem(item, slot, noteTextureName, parentMenu, ingredientDescription1, orderedIndexes[0], communityCenter);
+            }
+
             return item;
         }
 
