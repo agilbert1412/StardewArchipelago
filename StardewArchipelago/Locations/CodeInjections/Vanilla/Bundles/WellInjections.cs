@@ -13,6 +13,7 @@ using StardewValley.Extensions;
 using Object = StardewValley.Object;
 using Microsoft.Xna.Framework.Audio;
 using System.IO;
+using KaitoKid.ArchipelagoUtilities.Net.Extensions;
 using StardewArchipelago.Archipelago.Gifting;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
@@ -80,7 +81,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                     var giftHoney = ItemRegistry.Create<Object>(ObjectIds.HONEY, 1, quality);
                     giftHoney.preserve.Set(preserveType);
                     giftHoney.preservedParentSheetIndex.Set(preserveId);
-                    _giftSender.SendSilentGift("Honeywell", giftHoney);
+                    _giftSender.SendSilentGift("Honeywell", giftHoney).FireAndForget();
                 });
                 who.reduceActiveItemByOne();
                 __result = true;

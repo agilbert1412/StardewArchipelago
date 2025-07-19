@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Archipelago.Gifting.Net.Versioning.Gifts;
 using Archipelago.Gifting.Net.Versioning.Gifts.Current;
 using Microsoft.Xna.Framework;
@@ -128,7 +129,7 @@ namespace StardewArchipelago.Archipelago.Gifting
             return true;
         }
 
-        public void SendSilentGift(string slotName, Object silentGiftItem)
+        public async Task SendSilentGift(string slotName, Object silentGiftItem)
         {
             try
             {
@@ -142,13 +143,13 @@ namespace StardewArchipelago.Archipelago.Gifting
                     return;
                 }
 
-                var canGift = _archipelago.GiftingService.CanGiftToPlayer(slotName, giftTraits.Select(x => x.Trait));
+                var canGift = await _archipelago.GiftingService.CanGiftToPlayerAsync(slotName, giftTraits.Select(x => x.Trait));
                 if (!canGift.CanGift)
                 {
                     return;
                 }
 
-                var result = _archipelago.GiftingService.SendGift(giftItem, giftTraits, slotName);
+                var result = await _archipelago.GiftingService.SendGiftAsync(giftItem, giftTraits, slotName);
                 if (!result.Success)
                 {
                     _logger.LogWarning($"Silent gift failed to send properly.");
