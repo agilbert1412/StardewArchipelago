@@ -158,6 +158,11 @@ namespace StardewArchipelago
         /// Makes all hoes and watering cans behave as if they were at the basic level. Generally used for Animation Cancelling purposes
         /// </summary>
         public bool LimitHoeWateringCanLevel { get; set; } = false;
+
+        /// <summary>
+        /// Equivalent to the vanilla toggle "Use Legacy Randomization". Only applies at the save creation
+        /// </summary>
+        public bool UseLegacyRandomization { get; set; } = false;
     }
 
     public enum ItemIndicatorPreference

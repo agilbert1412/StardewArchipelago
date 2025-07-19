@@ -374,6 +374,14 @@ namespace StardewArchipelago.Integrations.GenericModConfigMenu
                 getValue: () => Config.LimitHoeWateringCanLevel,
                 setValue: (value) => Config.LimitHoeWateringCanLevel = value
             );
+
+            configMenu.AddBoolOption(
+                mod: ModManifest,
+                name: () => "Use Legacy Randomization",
+                tooltip: () => $"Equivalent to the vanilla advanced option of the same name. Only applies at the moment of creating the save file",
+                getValue: () => Config.UseLegacyRandomization,
+                setValue: (value) => Config.UseLegacyRandomization = value
+            );
         }
     }
 }

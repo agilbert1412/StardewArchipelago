@@ -205,6 +205,7 @@ namespace StardewArchipelago
 
         private void OnSaveCreated(object sender, SaveCreatedEventArgs e)
         {
+            Game1.UseLegacyRandom = Config.UseLegacyRandomization;
         }
 
         private void OnSaving(object sender, SavingEventArgs e)
@@ -325,8 +326,7 @@ namespace StardewArchipelago
             SeasonsRandomizer.ChangeMailKeysBasedOnSeasonsToDaysElapsed();
             _modStateInitializer = new InitialModGameStateInitializer(_logger, _archipelago);
             _hintHelper = new HintHelper();
-            Game1.chatBox?.addMessage(
-                $"Connected to Archipelago as {_archipelago.SlotData.SlotName}. Type !!help for client commands", Color.Green);
+            Game1.chatBox?.addMessage($"Connected to Archipelago as {_archipelago.SlotData.SlotName}. Type !!help for client commands", Color.Green);
             ArchipelagoJunimoNoteMenu.CompleteBundleIfExists(MemeBundleNames.CONNECTION);
         }
 
