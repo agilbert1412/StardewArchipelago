@@ -361,3 +361,6 @@ StardewArchipelago/.vscode/launch.json
 src/manifest.json
 StardewArchipelago/.vscode/tasks.json
 .vscode/launch.json
+
+# Custom
+/Directory.Build.props
