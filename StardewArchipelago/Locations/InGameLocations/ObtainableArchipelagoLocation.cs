@@ -61,9 +61,9 @@ namespace StardewArchipelago.Locations.InGameLocations
                 foreach (var extraMaterialString in extraMaterialsString.Split(",", StringSplitOptions.RemoveEmptyEntries))
                 {
                     var extraMaterialFields = extraMaterialString.Split(":");
-                    var materialId = extraMaterialFields[0];
+                    var materialQualifiedId = extraMaterialFields[0];
                     var materialAmount = int.Parse(extraMaterialFields[1]);
-                    _extraMaterialsRequired.Add(materialId, materialAmount);
+                    _extraMaterialsRequired.Add(materialQualifiedId, materialAmount);
                 }
 
                 return _extraMaterialsRequired;
@@ -219,9 +219,9 @@ namespace StardewArchipelago.Locations.InGameLocations
 
         public override bool CanBuyItem(Farmer who)
         {
-            foreach (var (id, amount) in ExtraMaterialsRequired)
+            foreach (var (qualifiedId, amount) in ExtraMaterialsRequired)
             {
-                if (who.Items.CountId(id) < amount)
+                if (who.Items.CountId(qualifiedId) < amount)
                 {
                     return false;
                 }
@@ -232,9 +232,9 @@ namespace StardewArchipelago.Locations.InGameLocations
 
         public override bool actionWhenPurchased(string shopId)
         {
-            foreach (var (id, amount) in ExtraMaterialsRequired)
+            foreach (var (qualifiedId, amount) in ExtraMaterialsRequired)
             {
-                Game1.player.Items.ReduceId(id, amount);
+                Game1.player.Items.ReduceId(qualifiedId, amount);
             }
             SendCheck();
             return true;
@@ -248,9 +248,10 @@ namespace StardewArchipelago.Locations.InGameLocations
         public override string getDescription()
         {
             var descriptionWithExtraMaterials = $"{_description}{Environment.NewLine}";
-            foreach (var (id, amount) in ExtraMaterialsRequired)
+            foreach (var (qualifiedId, amount) in ExtraMaterialsRequired)
             {
-                descriptionWithExtraMaterials += $"{Environment.NewLine}{amount} {DataLoader.Objects(Game1.content)[id].Name}";
+                var resolvedItem = ItemRegistry.Create(qualifiedId, amount);
+                descriptionWithExtraMaterials += $"{Environment.NewLine}{amount} {resolvedItem.Name}";
             }
 
             return descriptionWithExtraMaterials;

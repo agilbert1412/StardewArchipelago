@@ -20,7 +20,8 @@ namespace StardewArchipelago.Registry
         {
             _logger = logger;
             _registryManagers = new List<IRegistry>();
-            _registryManagers.Add(new ItemRegistry(_logger));
+            var itemRegistry = new ItemRegistry(_logger);
+            _registryManagers.Add(itemRegistry);
             _registryManagers.Add(new ItemQueryRegistry(_logger, modHelper));
             _registryManagers.Add(new GameStateQueryRegistry(_logger));
             _registryManagers.Add(new ChatCommandsRegistry(_logger));

@@ -10,7 +10,7 @@ namespace StardewArchipelago.Constants.Locations
         public static readonly Dictionary<string, string[]> Exceptions = new()
         {
             { "Anchor", new[] { "Boat Anchor" } },
-            { "Bait", new[] { "Magic Bait", "Wild Bait", "Challenge Bait", "Targeted Bait", "Specific Bait", "Deluxe Bait" } },
+            { "Bait", new[] { "Magic Bait", "Wild Bait", "Challenge Bait", "Targeted Bait", "Specific Bait", "Deluxe Bait", "Bait Maker" } },
             { "Blueberry", new[] { "Blueberry Tart" } },
             { "Bomb", new[] { "Cherry Bomb", "Mega Bomb" } },
             { "Carp", new[] { "Midnight Carp", "Scorpion Carp", "Mutant Carp", "Carp Surprise" } },

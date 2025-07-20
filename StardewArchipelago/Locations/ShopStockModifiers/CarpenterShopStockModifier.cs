@@ -181,72 +181,77 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
         private string GetMaterialString(ISalable material, double priceMultiplier)
         {
             var amount = Math.Max(1, (int)Math.Round(material.Stack * priceMultiplier));
-            return $"{QualifiedItemIds.UnqualifyId(material.QualifiedItemId)}:{amount}";
+            return $"{material.QualifiedItemId}:{amount}";
         }
 
         private static Item Wood(int amount)
         {
-            return StardewObject(388, amount);
+            return StardewObject(ObjectIds.WOOD, amount);
         }
 
         private static Item Stone(int amount)
         {
-            return StardewObject(390, amount);
+            return StardewObject(ObjectIds.STONE, amount);
         }
 
         private static Item Seaweed(int amount)
         {
-            return StardewObject(152, amount);
+            return StardewObject(ObjectIds.SEAWEED, amount);
         }
 
         private static Item GreenAlgae(int amount)
         {
-            return StardewObject(153, amount);
+            return StardewObject(ObjectIds.GREEN_ALGAE, amount);
         }
 
         private static Item Cloth(int amount)
         {
-            return StardewObject(428, amount);
+            return StardewObject(ObjectIds.CLOTH, amount);
         }
 
         private static Item Clay(int amount)
         {
-            return StardewObject(330, amount);
+            return StardewObject(ObjectIds.CLAY, amount);
         }
 
         private static Item CopperBar(int amount)
         {
-            return StardewObject(334, amount);
+            return StardewObject(ObjectIds.COPPER_BAR, amount);
         }
 
         private static Item RefinedQuartz(int amount)
         {
-            return StardewObject(338, amount);
+            return StardewObject(ObjectIds.REFINED_QUARTZ, amount);
         }
 
         private static Item IridiumBar(int amount)
         {
-            return StardewObject(337, amount);
+            return StardewObject(ObjectIds.IRIDIUM_BAR, amount);
         }
 
         private static Item Hardwood(int amount)
         {
-            return StardewObject(709, amount);
+            return StardewObject(ObjectIds.HARDWOOD, amount);
         }
 
         private static Item IronBar(int amount)
         {
-            return StardewObject(335, amount);
+            return StardewObject(ObjectIds.IRON_BAR, amount);
         }
 
         private static Item BatteryPack(int amount)
         {
-            return StardewObject(787, amount);
+            return StardewObject(ObjectIds.BATTERY_PACK, amount);
         }
 
-        private static Item StardewObject(int id, int amount)
+        private static Item StardewObject(string objectId, int amount)
         {
-            return new Object(id.ToString(), amount);
+            return ItemRegistry.Create<Object>(objectId, amount);
+        }
+
+        private static Item StardewItem(string qualifiedObjectId, int amount)
+        {
+            return ItemRegistry.Create(qualifiedObjectId, amount);
         }
     }
 }
