@@ -17,6 +17,10 @@ using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Menus;
 
+#if TILESANITY
+using StardewArchipelago.Archipelago.SlotData.SlotEnums;
+#endif
+
 namespace StardewArchipelago.Archipelago
 {
     public class ChatForwarder
