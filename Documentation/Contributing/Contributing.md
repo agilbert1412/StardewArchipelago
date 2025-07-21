@@ -2,11 +2,17 @@
 
 ## Introduction
 
-This mod is separated in two parts.
+This randomizer implementation maintained in two pieces:
 
-First, the actual mod, that players use in their Stardew Valley. This mod is coded in C#, and the standard Stardew Valley modding tutorials (like the ones on the wiki https://stardewvalleywiki.com/Modding:Modder_Guide/Get_Started) will be massively helpful to understand it.
+### StardewArchipelago
 
-Second, the backend, also called the `apworld`. This is in Python, and lives in the Archipelago Core repository, for the most part. This part handles the generator, the website, the hosting, etc. It can also be modified for purposes of compatibility with potential trackers. Other Stardew Valley mods have no such thing, so you'll find documentation and help on the [Archipelago Repository](https://github.com/ArchipelagoMW/Archipelago) and [Discord Server](https://discord.gg/8Z65BR2).
+*The repository you are current reading the documentation of.*
+
+This is the Stardew Valley mod that players use to connect to Archipelago to play randomized game instances. This mod is written in C# and the standard Stardew Valley modding tutorials (like the ones on the wiki https://stardewvalleywiki.com/Modding:Modder_Guide/Get_Started) will be massively helpful to understand how it works.
+
+### Archipelago World
+
+Also known as the the `apworld`. This is written in Python and is implemented as part of the [Main Archipelago Repository](https://github.com/ArchipelagoMW/Archipelago/tree/main/worlds/stardew_valley). This part handles the generator, the website, the hosting, etc. It can also be modified for purposes of compatibility with potential trackers. Other Stardew Valley mods have no such thing, so you'll find documentation and help on the [Archipelago Repository](https://github.com/ArchipelagoMW/Archipelago) and [Discord Server](https://discord.gg/8Z65BR2).
 
 ## Software
 
@@ -34,3 +40,15 @@ Everything on this list is available for free, for individuals.
   * [Archipelago Core](https://github.com/ArchipelagoMW/Archipelago), [my fork of it](https://github.com/agilbert1412/Archipelago), and your fork of it
   * [StardewArchipelago](https://github.com/agilbert1412/StardewArchipelago) and your fork of it
   * OPTIONAL - [ArchipelagoUtilities](https://github.com/agilbert1412/ArchipelagoUtilities) a set of utilities for my Archipelago mod, in case you need to modify something there (unlikely)
+
+## Game Path
+
+When building the application, MSBuild will attempt to automatically determine the location of your Stardew Valley installation. If for whatever reason this fails to identify to correct location, you can specify the path manually by adding a file called `Directory.Build.props` to the top level of this repository. Example contents:
+
+```xml
+<Project>
+  <PropertyGroup>
+    <GamePath>C:\Path\To\Stardew Valley</GamePath>
+  </PropertyGroup>
+</Project>
+```

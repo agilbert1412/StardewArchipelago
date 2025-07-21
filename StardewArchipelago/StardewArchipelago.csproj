@@ -84,4 +84,10 @@
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>
+	<Target Name="write_game_path" BeforeTargets="Build">
+		<WriteLinesToFile
+			File="$(BaseIntermediateOutputPath)game_path.txt"
+			Lines="$(GamePath)"
+			Overwrite="true" />
+	</Target>
 </Project>

@@ -12,6 +12,10 @@ using StardewArchipelago.Stardew.NameMapping;
 using StardewModdingAPI;
 using StardewValley;
 
+#if TILESANITY
+using StardewArchipelago.GameModifications.CodeInjections.Tilesanity;
+#endif
+
 namespace StardewArchipelago.Items
 {
     public class ItemParser
@@ -45,7 +49,7 @@ namespace StardewArchipelago.Items
             if (TileUI.ProcessItem(receivedItem))
                 return true;
 #endif
-            
+
             if (_trapManager.IsTrap(receivedItem.ItemName))
             {
                 return _trapManager.TryExecuteTrapImmediately(receivedItem.ItemName);

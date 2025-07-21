@@ -26,6 +26,7 @@ Global
 		{95900FBD-BF44-485F-B89E-2BF0681F380A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{95900FBD-BF44-485F-B89E-2BF0681F380A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{95900FBD-BF44-485F-B89E-2BF0681F380A}.Debug Tiles|Any CPU.ActiveCfg = Debug Tiles|Any CPU
+		{95900FBD-BF44-485F-B89E-2BF0681F380A}.Debug Tiles|Any CPU.Build.0   = Debug Tiles|Any CPU
 		{95900FBD-BF44-485F-B89E-2BF0681F380A}.Debug Tilesanity|Any CPU.ActiveCfg = Debug Tilesanity|Any CPU
 		{95900FBD-BF44-485F-B89E-2BF0681F380A}.Debug Tilesanity|Any CPU.Build.0 = Debug Tilesanity|Any CPU
 		{95900FBD-BF44-485F-B89E-2BF0681F380A}.Release Tilesanity|Any CPU.ActiveCfg = Release Tilesanity|Any CPU
