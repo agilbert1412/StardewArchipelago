@@ -1,0 +1,124 @@
+// Maintainance: Keep the "Choose build target" options and the "Build All" $targets list synchronized
+// with the targets defined in StardewArchipelago.sln
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "inputs": [
+        {
+            "id": "conf",
+            "type": "pickString",
+            "description": "Choose build target",
+            "options": [
+                "Debug",
+                "Debug Tiles",
+                "Debug Tilesanity",
+                "Release",
+                "Release Tilesanity"
+            ],
+            "default": "Debug"
+        }
+    ],
+    "tasks": [
+        {
+            "label": "Build",
+            "type": "shell",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "command": "dotnet",
+            "args": [
+                "build",
+                "-c",
+                "${input:conf}",
+                "-p:EnableModDeploy=false",
+                "-p:EnableModZip=false"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$msCompile"
+            ]
+        },
+        {
+            "label": "Build All",
+            "type": "shell",
+            "group": "build",
+            "command": "powershell",
+            "args": [
+                "-NoProfile",
+                "-Command",
+                "$targets=@(\\\"Debug\\\",\\\"Debug Tiles\\\",\\\"Debug Tilesanity\\\",\\\"Release\\\",\\\"Release Tilesanity\\\"); foreach($t in $targets){ dotnet build -c $t -p:EnableModDeploy=false -p:EnableModZip=false; if($LASTEXITCODE -ne 0){ exit $LASTEXITCODE } }"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$msCompile"
+            ]
+        },
+        {
+            "label": "Deploy",
+            "type": "shell",
+            "hide": true,
+            "group": "build",
+            "command": "dotnet",
+            "args": [
+                "build",
+                "-c",
+                "${input:conf}"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$msCompile"
+            ]
+        },
+        {
+            "label": "Run",
+            "type": "shell",
+            "group": "build",
+            "dependsOn": "Deploy",
+            "command": "powershell",
+            "args": [
+                "-NoProfile",
+                "-Command",
+                "$game_path = Get-Content '${workspaceFolder}/StardewArchipelago/obj/game_path.txt'; & \"$game_path\\StardewModdingAPI.exe\""
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
+        },
+        {
+            "label": "Test",
+            "type": "shell",
+            "group": "build",
+            "command": "dotnet",
+            "args": [
+                "test",
+                "-c",
+                "${input:conf}"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$msCompile"
+            ]
+        },
+        {
+            "label": "Clean",
+            "type": "shell",
+            "command": "dotnet clean",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$msCompile"
+            ]
+        }
+    ]
+}

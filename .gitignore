@@ -364,3 +364,4 @@ StardewArchipelago/.vscode/tasks.json
 
 # Custom
 /Directory.Build.props
+!.vscode/tasks.json
