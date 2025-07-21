@@ -189,7 +189,11 @@ namespace StardewArchipelago.GameModifications.Tooltips
                 }
 
                 var secretNoteComponentName = component.name;
-                var number = int.Parse(secretNoteComponentName.Split(" ").First());
+                if (!int.TryParse(secretNoteComponentName.Split(" ").First(), out var number))
+                {
+                    return;
+                }
+
                 var locationX = component.bounds.X + xOffset + component.sourceRect.Width / 2;// * component.baseScale;
                 var locationY = component.bounds.Y + yOffset + component.sourceRect.Height / 2;// * component.baseScale;
                 var location = new Vector2(locationX, locationY);
