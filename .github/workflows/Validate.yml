@@ -1,0 +1,87 @@
+# Maintenance:
+#   - Keep `DOTNET_BUILD_VER` updated to the current LTS version: https://dotnet.microsoft.com/en-us/platform/support/policy
+#   - Keep `DOTNET_TARGET_VER` synchronized with the .NET version used by Stardew Valley at runtime
+#   - Whenever Stardew Valley and/or SMAPI is updated, update `SDV_VER` and `SMAPI_VER` to match the tag from https://github.com/StardewModders/mod-reference-assemblies/tags
+#   - Keep the `configuration` matrix list synchronized with the build configurations defined in `StardewArchipelago.csproj`
+
+name: Validate
+
+env:
+  DOTNET_BUILD_VER: 8.0.x
+  DOTNET_TARGET_VER: 6.0.x
+  REF_DLLS_REPO: StardewModders/mod-reference-assemblies
+  SDV_VER: 1.6.15
+  SMAPI_VER: 4.2.1
+
+  REF_DLLS_PATH: ${{ github.workspace }}/reference-assemblies
+  NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    # All types excluding draft
+    types: [opened, synchronize, reopened, ready_for_review]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        configuration:
+          - Debug
+          - Debug Tiles
+          - Debug Tilesanity
+          - Release
+          - Release Tilesanity
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: cache_ref_assemblies
+        id: cache_ref_assemblies
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.REF_DLLS_PATH }}
+          key: ref_dlls-${{ env.SDV_VER }}-${{ env.SMAPI_VER }}
+          restore-keys: ref_dlls-
+
+      - name: checkout_ref_assemblies
+        if: steps.cache_ref_assemblies.outputs.cache-hit != 'true'
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ env.REF_DLLS_REPO }}
+          path: '${{ env.REF_DLLS_PATH }}'
+          ref: 'SDV${{ env.SDV_VER }}-SMAPI${{ env.SMAPI_VER }}'
+          fetch-depth: 0
+
+      - name: setup_dotnet
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            ${{ env.DOTNET_BUILD_VER }}
+            ${{ env.DOTNET_TARGET_VER }}
+          cache: true
+          cache-dependency-path: |
+            StardewArchipelago/packages.lock.json
+            StardewArchipelagoTests/packages.lock.json
+
+      - name: dotnet restore
+        run: dotnet restore --locked-mode
+
+      - name: dotnet_build (${{ matrix.configuration }})
+        run: dotnet build --no-restore -p:ContinuousIntegrationBuild=true -p:EnableModDeploy=false -p:EnableModZip=false -p:EnableGameDebugging=false -p:BundleExtraAssemblies=false -p:GamePath="${{ env.REF_DLLS_PATH }}" -c "${{ matrix.configuration }}"
+
+      - name: dotnet_test (${{ matrix.configuration }})
+        if: ${{ matrix.configuration == 'Release' }}
+        run: dotnet test --no-build --no-restore -c Release

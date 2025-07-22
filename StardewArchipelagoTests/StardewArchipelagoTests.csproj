@@ -2,12 +2,17 @@
 
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
+        <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+        <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-
         <IsPackable>false</IsPackable>
+        <EnableGameDebugging>false</EnableGameDebugging>
+        <EnableModDeploy>false</EnableModDeploy>
+        <EnableModZip>false</EnableModZip>
+        <BundleExtraAssemblies>All</BundleExtraAssemblies>
 
-        <Configurations>Debug;Release;Debug Tiles;Debug Tiles;Debug Tilesanity;Release Tilesanity</Configurations>
+        <Configurations>Debug;Release</Configurations>
 
         <Platforms>AnyCPU</Platforms>
     </PropertyGroup>
