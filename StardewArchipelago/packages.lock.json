@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "dependencies": {
+    "net6.0": {
+      "Archipelago.Gifting.Net": {
+        "type": "Direct",
+        "requested": "[0.4.3, )",
+        "resolved": "0.4.3",
+        "contentHash": "gEtGgWJJTqlVBq1xDEobjoHXDPPw2d0EZAoOM9NUvlWd8YVruTG2z3X3+3R1x0uoXuYGZ0jidJkN7BHxNOL/3Q==",
+        "dependencies": {
+          "Archipelago.MultiClient.Net": "6.6.0"
+        }
+      },
+      "Archipelago.MultiClient.Net": {
+        "type": "Direct",
+        "requested": "[6.6.0, )",
+        "resolved": "6.6.0",
+        "contentHash": "ZUNmgZg1zsMwoRaTFz0rqm9UwpUcqCkAsW6GAgLwE749dRmonPLimhYU/AryA4BagTGblL5ce9euwWU4Oj1YSw=="
+      },
+      "Archipelago.MultiClient.Net.Analyzers": {
+        "type": "Direct",
+        "requested": "[1.5.0, )",
+        "resolved": "1.5.0",
+        "contentHash": "4tQEOY5xrrq0Tzct4gP0ceeZkLF3aim+nSBS9KiHxkR7wTqSjU23nn7V0I0SSHpRtIP/DalZq8t7bSMmdv9npg=="
+      },
+      "KaitoKid.ArchipelagoUtilities.Net": {
+        "type": "Direct",
+        "requested": "[2.0.3, )",
+        "resolved": "2.0.3",
+        "contentHash": "nBBsIoXcpX3eIqjTirONLsolG4kn76BRXXFAVRydDi6V1W3yTt5AJy+qEYP229Kz1m97/EbAjHKR/+tSxrtR4g==",
+        "dependencies": {
+          "Archipelago.MultiClient.Net": "6.6.0"
+        }
+      },
+      "Pathoschild.Stardew.ModBuildConfig": {
+        "type": "Direct",
+        "requested": "[4.4.0, )",
+        "resolved": "4.4.0",
+        "contentHash": "Yi7/8bZlLS1bqZxft1yZWxJmIBfIoRxQBFIwWrF0AjC4/j/HmWdDC7dbNzzM4ZtOTtjOAQ8AC7WjP6KHgLPpdg=="
+      }
+    }
+  }
+}
