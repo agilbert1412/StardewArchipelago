@@ -3,6 +3,9 @@ using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Gacha;
 
 namespace StardewArchipelagoTests
 {
+#if RELEASE
+    [Ignore($"These tests take too long, so we only run them when debugging")]
+#endif
     public class GachaRollerTests
     {
         private const int _numberAttempts = 2000;
