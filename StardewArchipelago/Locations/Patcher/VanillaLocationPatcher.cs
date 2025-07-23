@@ -37,6 +37,7 @@ using StardewValley.Tools;
 using xTile.Dimensions;
 using EventInjections = StardewArchipelago.Locations.CodeInjections.Vanilla.EventInjections;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
+using StardewArchipelago.GameModifications.Tooltips;
 
 namespace StardewArchipelago.Locations.Patcher
 {
@@ -1719,6 +1720,11 @@ namespace StardewArchipelago.Locations.Patcher
             {
                 return;
             }
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(CollectionsPage), nameof(CollectionsPage.draw), new[] { typeof(SpriteBatch) }),
+                prefix: new HarmonyMethod(typeof(ItemTooltipInjections), nameof(ItemTooltipInjections.Draw_AddArchipelagoLogoOnSecretNotes_Prefix))
+            );
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Farmer), nameof(Farmer.onGiftGiven)),

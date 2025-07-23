@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Locations;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
@@ -95,7 +96,7 @@ namespace StardewArchipelago.GameModifications.Tooltips
             try
             {
                 DrawIndicatorOnRecipe(__instance, b, c, layerDepth, xOffset, yOffset);
-                DrawIndicatorOnSecretNote(__instance, b, c, layerDepth, xOffset, yOffset); ;
+                // DrawIndicatorOnSecretNote(__instance, b, c, layerDepth, xOffset, yOffset); ;
                 return;
             }
             catch (Exception ex)
@@ -168,26 +169,129 @@ namespace StardewArchipelago.GameModifications.Tooltips
             return false;
         }
 
-        private static void DrawIndicatorOnSecretNote(ClickableTextureComponent component, SpriteBatch spriteBatch, Color color, float layerDepth, int xOffset, int yOffset)
+        // public override void draw(SpriteBatch b)
+        public static bool Draw_AddArchipelagoLogoOnSecretNotes_Prefix(CollectionsPage __instance, SpriteBatch b)
         {
             try
             {
-                if (!TryGetActiveCollectionsPage(out var collectionsPage))
+                if (__instance.collections.Count <= __instance.currentTab || __instance.currentTab != CollectionsPage.secretNotesTab)
                 {
-                    return;
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
-                // this.collections[this.currentTab][this.currentPage]
-                if (collectionsPage.collections.Count <= collectionsPage.currentTab || collectionsPage.currentTab != CollectionsPage.secretNotesTab)
+                foreach (var textureComponent in __instance.sideTabs.Values)
                 {
-                    return;
+                    textureComponent.draw(b);
                 }
-
-                if (!collectionsPage.collections[collectionsPage.currentTab].Any(x => x.Contains(component)))
+                if (__instance.currentPage > 0)
                 {
-                    return;
+                    __instance.backButton.draw(b);
                 }
+                if (__instance.currentPage < __instance.collections[__instance.currentTab].Count - 1)
+                {
+                    __instance.forwardButton.draw(b);
+                }
+                b.End();
+                DrawSecretNotes(__instance, b);
+                b.Begin(blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
 
+                // private Item hoverItem;
+                var hoverItemField = _modHelper.Reflection.GetField<Item>(__instance, "hoverItem");
+                var hoverItem = hoverItemField.GetValue();
+
+                // private string hoverText = "";
+                var hoverTextField = _modHelper.Reflection.GetField<string>(__instance, "hoverText");
+                var hoverText = hoverTextField.GetValue();
+
+                // private CraftingRecipe hoverCraftingRecipe;
+                var hoverCraftingRecipeField = _modHelper.Reflection.GetField<CraftingRecipe>(__instance, "hoverCraftingRecipe");
+                var hoverCraftingRecipe = hoverCraftingRecipeField.GetValue();
+
+                // private int value;
+                var valueField = _modHelper.Reflection.GetField<int>(__instance, "value");
+                var value = valueField.GetValue();
+
+                if (hoverItem != null)
+                {
+                    var hoverItemText = hoverItem.getDescription();
+                    var hoverTitle = hoverItem.DisplayName;
+                    if (hoverItemText.Contains("{0}"))
+                    {
+                        var str1 = Game1.content.LoadStringReturnNullIfNotFound("Strings\\Objects:" + hoverItem.Name + "_CollectionsTabDescription");
+                        if (str1 != null)
+                        {
+                            hoverItemText = str1;
+                        }
+                        var str2 = Game1.content.LoadStringReturnNullIfNotFound("Strings\\Objects:" + hoverItem.Name + "_CollectionsTabName");
+                        if (str2 != null)
+                        {
+                            hoverTitle = str2;
+                        }
+                    }
+                    IClickableMenu.drawToolTip(b, hoverItemText, hoverTitle, hoverItem, craftingIngredients: hoverCraftingRecipe);
+                }
+                else if (!hoverText.Equals(""))
+                {
+                    IClickableMenu.drawHoverText(b, hoverText, Game1.smallFont, moneyAmountToDisplayAtBottom: value);
+                    if (__instance.secretNoteImage != -1)
+                    {
+                        IClickableMenu.drawTextureBox(b, Game1.getOldMouseX(), Game1.getOldMouseY() + 64 + 32, 288, 288, Color.White);
+                        b.Draw(__instance.secretNoteImageTexture, new Vector2(Game1.getOldMouseX() + 16, Game1.getOldMouseY() + 64 + 32 + 16), new Rectangle?(new Rectangle(__instance.secretNoteImage * 64 % __instance.secretNoteImageTexture.Width, __instance.secretNoteImage * 64 / __instance.secretNoteImageTexture.Width * 64, 64, 64)), Color.White, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 0.865f);
+                    }
+                }
+                __instance.letterviewerSubMenu?.draw(b);
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(Draw_AddArchipelagoLogoOnSecretNotes_Prefix)}:\n{ex}");
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+        }
+
+        private static void DrawSecretNotes(CollectionsPage collectionsPage, SpriteBatch b)
+        {
+            b.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp);
+            foreach (var textureComponent in collectionsPage.collections[collectionsPage.currentTab][collectionsPage.currentPage])
+            {
+                var strArray = ArgUtility.SplitBySpace(textureComponent.name);
+                var boolean = Convert.ToBoolean(strArray[1]);
+                var color = GetDrawColor(collectionsPage, textureComponent, strArray, boolean);
+                textureComponent.draw(b, color, 0.86f);
+                if (collectionsPage.currentTab == 5 & boolean)
+                {
+                    var num = Utility.CreateRandom(Convert.ToInt32(strArray[0])).Next(12);
+                    b.Draw(Game1.mouseCursors, new Vector2(textureComponent.bounds.X + 16 + 16, textureComponent.bounds.Y + 20 + 16), new Rectangle?(new Rectangle(256 + num % 6 * 64 / 2, 128 + num / 6 * 64 / 2, 32, 32)), Color.White, 0.0f, new Vector2(16f, 16f), textureComponent.scale, SpriteEffects.None, 0.88f);
+                }
+            }
+            b.End();
+            b.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp);
+            foreach (var textureComponent in collectionsPage.collections[collectionsPage.currentTab][collectionsPage.currentPage])
+            {
+                var color = GetDrawColor(collectionsPage, textureComponent);
+                DrawIndicatorOnSecretNote(textureComponent, b, color, 0.86f);
+            }
+            b.End();
+        }
+
+        private static Color GetDrawColor(CollectionsPage __instance, ClickableTextureComponent textureComponent)
+        {
+            var strArray = ArgUtility.SplitBySpace(textureComponent.name);
+            var boolean = Convert.ToBoolean(strArray[1]);
+            return GetDrawColor(__instance, textureComponent, strArray, boolean);
+        }
+
+        private static Color GetDrawColor(CollectionsPage __instance, ClickableTextureComponent textureComponent, string[] strArray, bool boolean)
+        {
+            var flag = __instance.currentTab == 4 && Convert.ToBoolean(strArray[2]) || __instance.currentTab == 5 && !boolean && textureComponent.hoverText != "???";
+            var color = flag ? Color.DimGray * 0.4f : (boolean ? Color.White : Color.Black * 0.2f);
+            return color;
+        }
+
+        private static void DrawIndicatorOnSecretNote(ClickableTextureComponent component, SpriteBatch spriteBatch, Color color, float layerDepth, int xOffset = 0, int yOffset = 0)
+        {
+            try
+            {
                 var secretNoteComponentName = component.name;
                 if (!int.TryParse(secretNoteComponentName.Split(" ").First(), out var number))
                 {
@@ -198,7 +302,8 @@ namespace StardewArchipelago.GameModifications.Tooltips
                 var locationY = component.bounds.Y + yOffset + component.sourceRect.Height / 2;// * component.baseScale;
                 var location = new Vector2(locationX, locationY);
                 var origin = new Vector2(component.sourceRect.Width / 2, component.sourceRect.Height / 2);
-                ItemDrawInMenuPostfix($"Secret Note #{number}:", spriteBatch, location, 1.0f, 1f, layerDepth, color, new Vector2(0, 0), origin);
+                var locationName = number > 1000 ? $"Journal Scrap #{number-1000}" : $"Secret Note #{number}:";
+                ItemDrawInMenuPostfix(locationName, spriteBatch, location, 1.0f, 1f, layerDepth, color, new Vector2(0, 0), origin);
 
                 return;
             }
@@ -207,30 +312,6 @@ namespace StardewArchipelago.GameModifications.Tooltips
                 _logger.LogError($"Failed in {nameof(DrawIndicatorOnSecretNote)}:\n{ex}");
                 return;
             }
-        }
-
-        private static bool TryGetActiveCollectionsPage(out CollectionsPage collectionsPage)
-        {
-            collectionsPage = null;
-            var activeMenu = Game1.activeClickableMenu;
-            if (activeMenu == null)
-            {
-                return false;
-            }
-
-            if (activeMenu is CollectionsPage)
-            {
-                collectionsPage = (CollectionsPage)activeMenu;
-                return true;
-            }
-
-            if (Game1.activeClickableMenu is GameMenu gameMenu && gameMenu.GetCurrentPage() is CollectionsPage)
-            {
-                collectionsPage = (CollectionsPage)gameMenu.GetCurrentPage();
-                return true;
-            }
-
-            return false;
         }
 
         private static void ItemDrawInMenuPostfix(Item item, SpriteBatch spriteBatch, Vector2 location,
@@ -266,6 +347,7 @@ namespace StardewArchipelago.GameModifications.Tooltips
 
             if (!allUncheckedLocations.Any())
             {
+                // _logger.LogWarning($"Skipping Indicator for {itemSimplifiedNames.First()}");
                 return;
             }
 
@@ -275,6 +357,7 @@ namespace StardewArchipelago.GameModifications.Tooltips
 
             spriteBatch.Draw(_miniArchipelagoIcon, position, sourceRectangle, transparentColor, 0.0f, origin, scaleSize,
                 SpriteEffects.None, layerDepth);
+            // _logger.LogWarning($"Drawing Indicator for {itemSimplifiedNames.First()}");
             return;
         }
 
