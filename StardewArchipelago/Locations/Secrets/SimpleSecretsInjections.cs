@@ -392,13 +392,18 @@ namespace StardewArchipelago.Locations.Secrets
         {
             try
             {
-                if (name is not "OK" || !__instance.canLeaveMenu() || Game1.player.Name == __instance.oldName)
+                if (name is not "OK" || !__instance.canLeaveMenu() || Game1.player?.Name == null || Game1.player.Name == __instance.oldName)
                 {
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
-                var num1 = Game1.player.Name.IndexOf("[");
-                var num2 = Game1.player.Name.IndexOf("]");
+                var num1 = Game1.player.Name.IndexOf("[", StringComparison.InvariantCulture);
+                var num2 = Game1.player.Name.IndexOf("]", StringComparison.InvariantCulture);
+                if (num1 < 0 || num2 <= num1)
+                {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
                 var displayName = ItemRegistry.GetData(Game1.player.Name.Substring(num1 + 1, num2 - num1 - 1))?.DisplayName;
                 if (displayName != null)
                 {
