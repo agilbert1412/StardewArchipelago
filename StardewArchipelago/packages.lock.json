@@ -13,9 +13,9 @@
       },
       "Archipelago.MultiClient.Net": {
         "type": "Direct",
-        "requested": "[6.6.0, )",
-        "resolved": "6.6.0",
-        "contentHash": "ZUNmgZg1zsMwoRaTFz0rqm9UwpUcqCkAsW6GAgLwE749dRmonPLimhYU/AryA4BagTGblL5ce9euwWU4Oj1YSw=="
+        "requested": "[6.6.1, )",
+        "resolved": "6.6.1",
+        "contentHash": "CvojDLce6/ZkDTa/JNeCX4fM7X0gDdVAI5oIOKOtZjsOk4xJ9kTBix6ajnV2tIABEgpKzmMQm21Oz93Bu0m7IA=="
       },
       "Archipelago.MultiClient.Net.Analyzers": {
         "type": "Direct",
