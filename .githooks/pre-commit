@@ -1,2 +1,4 @@
 #!/usr/bin/env sh
+cd "$(dirname "${BASH_SOURCE[0]}/..")"
+dotnet restore
 git add **/packages.lock.json
