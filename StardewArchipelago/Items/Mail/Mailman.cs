@@ -33,7 +33,7 @@ namespace StardewArchipelago.Items.Mail
 
         public void SendVanillaMail(string mailTitle, bool noLetter)
         {
-            if (Game1.player.mailReceived.Contains(mailTitle))
+            if (Game1.player.hasOrWillReceiveMail(mailTitle))
             {
                 return;
             }

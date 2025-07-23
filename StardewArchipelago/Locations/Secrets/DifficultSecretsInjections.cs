@@ -4,6 +4,8 @@ using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework;
+using StardewArchipelago.Archipelago;
+using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.Constants.Vanilla;
 using StardewModdingAPI;
 using StardewValley;
@@ -17,17 +19,20 @@ namespace StardewArchipelago.Locations.Secrets
     {
         private static ILogger _logger;
         private static IModHelper _modHelper;
-        private static ArchipelagoClient _archipelago;
+        private static StardewArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
         private static ScoutedLocation _stackMasterScout;
 
-        public static void Initialize(ILogger logger, IModHelper modHelper, ArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             _logger = logger;
             _modHelper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
-            _stackMasterScout = _archipelago.ScoutSingleLocation(SecretsLocationNames.SECRET_IRIDIUM_STACKMASTER_TROPHY, false);
+            if (archipelago.SlotData.Secretsanity.HasFlag(Secretsanity.Difficult))
+            {
+                _stackMasterScout = _archipelago.ScoutSingleLocation(SecretsLocationNames.SECRET_IRIDIUM_STACKMASTER_TROPHY, false);
+            }
         }
 
         public static void DoneEatingStardropSecret(Farmer __instance)
