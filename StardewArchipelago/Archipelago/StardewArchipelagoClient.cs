@@ -114,12 +114,8 @@ namespace StardewArchipelago.Archipelago
 
         protected override void InitializeDeathLink()
         {
-            if (_deathManager == null)
-            {
-                _deathManager = new DeathManager(Logger, _modHelper, _harmony, this);
-                _deathManager.HookIntoDeathlinkEvents();
-            }
-
+            _deathManager = new DeathManager(Logger, _modHelper, _harmony, this);
+            _deathManager.HookIntoDeathlinkEvents();
             base.InitializeDeathLink();
         }
 
@@ -219,6 +215,7 @@ namespace StardewArchipelago.Archipelago
         {
             base.DisconnectAndCleanup();
             _bigIntegerDataStorage = null;
+            _deathManager = null;
         }
 
         protected override void OnError()
