@@ -80,7 +80,7 @@ jobs:
         run: dotnet restore --locked-mode
 
       - name: dotnet_build (${{ matrix.configuration }})
-        run: dotnet build --no-restore -p:ContinuousIntegrationBuild=true -p:EnableModDeploy=false -p:EnableModZip=false -p:EnableGameDebugging=false -p:BundleExtraAssemblies=false -p:GamePath="${{ env.REF_DLLS_PATH }}" -c "${{ matrix.configuration }}"
+        run: dotnet build -v:q --clp:ErrorsOnly --no-restore -p:ContinuousIntegrationBuild=true -p:EnableModDeploy=false -p:EnableModZip=false -p:EnableGameDebugging=false -p:BundleExtraAssemblies=false -p:GamePath="${{ env.REF_DLLS_PATH }}" -c "${{ matrix.configuration }}"
 
       - name: dotnet_test (${{ matrix.configuration }})
         if: ${{ matrix.configuration == 'Release' }}
