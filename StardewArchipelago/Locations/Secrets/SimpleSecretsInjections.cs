@@ -517,7 +517,7 @@ namespace StardewArchipelago.Locations.Secrets
                 CheckGiftDialogueLocation(__instance, gift, SecretsLocationNames.WHAT_KIND_OF_MONSTER_IS_THIS, NPCNames.WILLY, QualifiedItemIds.MUTANT_CARP);
                 CheckGiftDialogueLocation(__instance, gift, SecretsLocationNames.MOUTH_WATERING_ALREADY, NPCNames.ABIGAIL, QualifiedItemIds.MAGIC_ROCK_CANDY);
                 CheckGiftDialogueLocation(__instance, gift, SecretsLocationNames.LOVELY_PERFUME, NPCNames.KROBUS, QualifiedItemIds.MONSTER_MUSK);
-                CheckGiftDialogueLocation(__instance, gift, SecretsLocationNames.WHERE_DOES_THIS_JUICE_COME_FROM, NPCNames.DWARF, QualifiedItemIds.MILK, QualifiedItemIds.LARGE_MILK);
+                CheckGiftDialogueLocation(__instance, gift, SecretsLocationNames.WHERE_DOES_THIS_JUICE_COME_FROM, NPCNames.DWARF, QualifiedItemIds.MILK, QualifiedItemIds.LARGE_MILK, QualifiedItemIds.GOAT_MILK, QualifiedItemIds.LARGE_GOAT_MILK);
             }
             catch (Exception ex)
             {
