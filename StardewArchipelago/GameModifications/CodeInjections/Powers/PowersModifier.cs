@@ -169,7 +169,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Powers
                     powerIcon.baseScale = customPower.TextureScale;
                 }
 
-                _hints = _archipelago.GetMyActiveHints();
+                _hints = _archipelago.GetHints();
             }
             catch (Exception ex)
             {
@@ -201,6 +201,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Powers
                     {
                         if (showTitle)
                         {
+                            var hintItemNames = _hints.Select(x => _archipelago.GetItemName(x.ItemId)).ToArray();
                             var hintForThisItem = _hints.FirstOrDefault(hint => hint.ReceivingPlayer == _archipelago.GetCurrentPlayer().Slot &&
                                                                              _archipelago.GetItemName(hint.ItemId) == itemName);
                             if (hintForThisItem == null)
