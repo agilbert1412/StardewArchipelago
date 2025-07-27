@@ -437,6 +437,14 @@ namespace StardewArchipelago.Registry
                 "Corrupted Crops Task",
                 "Witch's order",
                 "Drink Iridium Snake Milk",
+                "Watch The Brave Little Sapling",
+                "Watch Journey Of The Prairie King: The Motion Picture",
+                "Watch Mysterium",
+                "Watch The Miracle At Coldstar Ranch",
+                "Watch Natural Wonders: Exploring Our Vibrant World",
+                "Watch Wumbus",
+                "Watch It Howls In The Rain",
+                "Watch The Zuzu City Express",
             };
 
             if (!allowedLocations.Contains(locationName) && !allowedLocations.Any(x => locationName.StartsWith(x)))
