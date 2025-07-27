@@ -45,12 +45,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Arcade
         private static StardewArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
 
+        private static List<KeyValuePair<string, int>> _latestScores;
+
         public static void Initialize(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             _logger = logger;
             _helper = helper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
+            _latestScores = new List<KeyValuePair<string, int>>();
         }
 
         public static void RestartLevel_NewGame_Postfix(MineCart __instance, bool new_game)
@@ -215,10 +218,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Arcade
                 AddJKScore(__instance.entries, "Abigail", 5000);
                 AddJKScore(__instance.entries, "Vincent", 250);
 
-                var scores = new List<KeyValuePair<string, int>>();
+                _latestScores = new List<KeyValuePair<string, int>>();
                 foreach (var entry in __instance.entries)
                 {
-                    scores.Add(new KeyValuePair<string, int>(entry.name.Value, entry.score.Value));
+                    _latestScores.Add(new KeyValuePair<string, int>(entry.name.Value, entry.score.Value));
                 }
 
                 var session = _archipelago.GetSession();
@@ -226,34 +229,31 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Arcade
                 var multiworldScores = session.DataStorage[Scope.Global, JK_DATASTORAGE_SCORE].To<Dictionary<string, int>>();
                 foreach (var (name, score) in multiworldScores)
                 {
-                    if (!scores.Any(x => x.Key.Equals(name)))
+                    if (!_latestScores.Any(x => x.Key.Equals(name)))
                     {
-                        scores.Add(new KeyValuePair<string, int>(name, score));
+                        _latestScores.Add(new KeyValuePair<string, int>(name, score));
                     }
                 }
 
-                scores.Sort(((a, b) => a.Value.CompareTo(b.Value)));
-                scores.Reverse();
+                _latestScores.Sort(((a, b) => a.Value.CompareTo(b.Value)));
+                _latestScores.Reverse();
 
                 var names = new HashSet<string>();
-                for (var i = 0; i < scores.Count; i++)
+                for (var i = 0; i < _latestScores.Count; i++)
                 {
-                    if (names.Contains(scores[i].Key))
+                    if (names.Contains(_latestScores[i].Key))
                     {
-                        scores.RemoveAt(i);
+                        _latestScores.RemoveAt(i);
                         i--;
                         continue;
                     }
 
-                    names.Add(scores[i].Key);
+                    names.Add(_latestScores[i].Key);
                 }
 
-                while (scores.Count > __instance.maxEntries.Value)
-                {
-                    scores.RemoveAt(scores.Count - 1);
-                }
+                var scoresForLeaderboard = _latestScores.Take(__instance.maxEntries.Value).ToList();
 
-                __result = scores;
+                __result = scoresForLeaderboard;
 
                 return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
