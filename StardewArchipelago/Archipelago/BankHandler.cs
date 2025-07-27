@@ -65,13 +65,13 @@ namespace StardewArchipelago.Archipelago
                 return true;
             }
 
-            if (bankCommandParts[0].Equals(DEPOSIT_COMMAND, StringComparison.OrdinalIgnoreCase))
+            if (bankCommandParts[0].StartsWith(DEPOSIT_COMMAND[0].ToString(), StringComparison.OrdinalIgnoreCase))
             {
                 HandleDepositCommand(bankCommandParts[1]);
                 return true;
             }
 
-            if (bankCommandParts[0].Equals(WITHDRAW_COMMAND, StringComparison.OrdinalIgnoreCase))
+            if (bankCommandParts[0].Equals(WITHDRAW_COMMAND[0].ToString(), StringComparison.OrdinalIgnoreCase))
             {
                 HandleWithdrawCommand(bankCommandParts[1]);
                 return true;
