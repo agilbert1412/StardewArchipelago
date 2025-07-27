@@ -15,7 +15,6 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
     {
         private const string HorseFluteName = "Horse Flute";
         private const string StocklistName = "Pierre's Missing Stocklist";
-        private const string KeyToTheTownName = "Key To The Town";
         private const string MiniShippingBinName = "Mini-Shipping Bin";
         private const string ExoticDoubleBedName = "Exotic Double Bed";
         private const string GoldenEggName = "Golden Egg";
@@ -55,7 +54,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
             {
                 { QualifiedItemIds.HORSE_FLUTE, HorseFluteName },
                 { QualifiedItemIds.PIERRE_MISSING_STOCKLIST, StocklistName },
-                { "TownKey", KeyToTheTownName },
+                { "TownKey", APItem.KEY_TO_THE_TOWN },
                 { QualifiedItemIds.MINI_SHIPPING_BIN, MiniShippingBinName }, // ???
                 { QualifiedItemIds.EXOTIC_DOUBLE_BED, ExoticDoubleBedName },
                 { QualifiedItemIds.GOLDEN_EGG, GoldenEggName },

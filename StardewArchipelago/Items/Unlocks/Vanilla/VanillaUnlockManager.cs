@@ -82,15 +82,15 @@ namespace StardewArchipelago.Items.Unlocks.Vanilla
 
             unlocks.Add("Progressive Backpack", SendProgressiveBackpackLetter);
             unlocks.Add("Stardrop", SendStardropLetter);
-            unlocks.Add("Dwarvish Translation Guide", SendDwarvishTranslationGuideLetter);
-            unlocks.Add("Skull Key", SendSkullKeyLetter);
-            unlocks.Add("Rusty Key", SendRustyKeyLetter);
+            unlocks.Add(APItem.DWARVISH_TRANSLATION_GUIDE, SendDwarvishTranslationGuideLetter);
+            unlocks.Add(APItem.SKULL_KEY, SendSkullKeyLetter);
+            unlocks.Add(APItem.RUSTY_KEY, SendRustyKeyLetter);
 
-            unlocks.Add("Club Card", SendClubCardLetter);
-            unlocks.Add("Magnifying Glass", SendMagnifyingGlassLetter);
+            unlocks.Add(APItem.CLUB_CARD, SendClubCardLetter);
+            unlocks.Add(APItem.MAGNIFYING_GLASS, SendMagnifyingGlassLetter);
             unlocks.Add("Iridium Snake Milk", SendIridiumSnakeMilkLetter);
-            unlocks.Add("Dark Talisman", SendDarkTalismanLetter);
-            unlocks.Add("Key To The Town", SendKeyToTheTownLetter);
+            unlocks.Add(APItem.DARK_TALISMAN, SendDarkTalismanLetter);
+            unlocks.Add(APItem.KEY_TO_THE_TOWN, SendKeyToTheTownLetter);
 
             unlocks.Add(APItem.HEALTH_BONUS, SendHealthBonusLetter);
         }

@@ -321,7 +321,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
                 return true;
             }
 
-            return _archipelago.HasReceivedItem("Magnifying Glass");
+            return _archipelago.HasReceivedItem(APItem.MAGNIFYING_GLASS);
         }
 
         private bool ValidateBundleLocation(StardewArchipelagoLocation location)

@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Archipelago.MultiClient.Net.Models;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Textures;
 using StardewModdingAPI;
@@ -20,9 +22,48 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Powers
         protected static ILogger _logger;
         protected static IModHelper _helper;
         protected static StardewArchipelagoClient _archipelago;
+        private static Hint[] _hints;
 
         private static HashSet<ArchipelagoPower> _customPowers = new()
         {
+            new VanillaArchipelagoPower("ForestMagic", APItem.FOREST_MAGIC),
+            new VanillaArchipelagoPower("DwarvishTranslationGuide", APItem.DWARVISH_TRANSLATION_GUIDE),
+            new VanillaArchipelagoPower("RustyKey", APItem.RUSTY_KEY),
+            new VanillaArchipelagoPower("ClubCard", APItem.CLUB_CARD, (x) => x.QuestLocations.StoryQuestsEnabled),
+            // new VanillaArchipelagoPower("SpecialCharm", APItem.SPECIAL_CHARM, (x) => x.Secretsanity.HasFlag(Secretsanity.SecretNotes)),
+            new VanillaArchipelagoPower("SkullKey", APItem.SKULL_KEY),
+            new VanillaArchipelagoPower("MagnifyingGlass", APItem.MAGNIFYING_GLASS, (x) => x.QuestLocations.StoryQuestsEnabled),
+            new VanillaArchipelagoPower("DarkTalisman", APItem.DARK_TALISMAN, (x) => x.QuestLocations.StoryQuestsEnabled),
+            new VanillaArchipelagoPower("MagicInk", APItem.MAGIC_INK, (x) => x.QuestLocations.StoryQuestsEnabled),
+            new VanillaArchipelagoPower("BearPaw", APItem.BEARS_KNOWLEDGE, (x) => x.QuestLocations.StoryQuestsEnabled),
+            new VanillaArchipelagoPower("KeyToTheTown", APItem.KEY_TO_THE_TOWN),
+
+            //new VanillaArchipelagoPower("Book_PriceCatalogue", APItem.),
+            //new VanillaArchipelagoPower("Book_Marlon", APItem.),
+            //new VanillaArchipelagoPower("Book_Speed", APItem.),
+            //new VanillaArchipelagoPower("Book_Speed2", APItem.),
+            //new VanillaArchipelagoPower("Book_Void", APItem.),
+            //new VanillaArchipelagoPower("Book_Friendship", APItem.),
+            //new VanillaArchipelagoPower("Book_Defense", APItem.),
+            //new VanillaArchipelagoPower("Book_Woodcutting", APItem.),
+            //new VanillaArchipelagoPower("Book_WildSeeds", APItem.),
+            //new VanillaArchipelagoPower("Book_Roe", APItem.),
+            //new VanillaArchipelagoPower("Book_Bombs", APItem.),
+            //new VanillaArchipelagoPower("Book_Crabbing", APItem.),
+            //new VanillaArchipelagoPower("Book_Trash", APItem.),
+            //new VanillaArchipelagoPower("Book_Diamonds", APItem.),
+            //new VanillaArchipelagoPower("Book_Mystery", APItem.),
+            //new VanillaArchipelagoPower("Book_Horse", APItem.),
+            //new VanillaArchipelagoPower("Book_Artifact", APItem.),
+            //new VanillaArchipelagoPower("Book_Grass", APItem.),
+            //new VanillaArchipelagoPower("Book_AnimalCatalogue", APItem.),
+
+            //new VanillaArchipelagoPower("Mastery_Farming", APItem.),
+            //new VanillaArchipelagoPower("Mastery_Fishing", APItem.),
+            //new VanillaArchipelagoPower("Mastery_Foraging", APItem.),
+            //new VanillaArchipelagoPower("Mastery_Mining", APItem.),
+            //new VanillaArchipelagoPower("Mastery_Combat", APItem.),
+
             new ArchipelagoPower("Community Center Key", "The Community Center door is unlocked", 0, 0),
             new ArchipelagoPower("Wizard Invitation", "The Wizard invited you to meet him at the tower", 16, 0),
             new ArchipelagoPower("Landslide Removed", "The path to the mines is cleared", 32, 0),
@@ -39,7 +80,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Powers
             // new IslandArchipelagoPower("Island Mailbox", ""),
             // new IslandArchipelagoPower("Farm Obelisk", ""),
             new IslandArchipelagoPower("Dig Site Bridge", "The bridge to the dig site on Island North is repaired", 64, 32),
-            new IslandArchipelagoPower("Island Trader", "The Island Trader has opened a shop on Island North", 80, 32), 
+            new IslandArchipelagoPower("Island Trader", "The Island Trader has opened a shop on Island North", 80, 32),
             new IslandArchipelagoPower("Open Professor Snail Cave", "Professor Snail is free and returned to his field office", 0, 48),
             // new IslandArchipelagoPower("Volcano Bridge", ""),
             // new IslandArchipelagoPower("Volcano Exit Shortcut", ""),
@@ -55,6 +96,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Powers
             _logger = logger;
             _helper = helper;
             _archipelago = archipelago;
+            _hints = Array.Empty<Hint>();
         }
 
         public void OnPowersRequested(object sender, AssetRequestedEventArgs e)
@@ -93,9 +135,14 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Powers
                 return;
             }
 
+            if (customPower.IsVanillaPower())
+            {
+                return;
+            }
+
             var powerData = new PowersData()
             {
-                DisplayName = customPower.Name,
+                DisplayName = customPower.DisplayName,
                 Description = customPower.Description,
                 TexturePath = "LooseSprites\\Cursors",
                 TexturePosition = customPower.TextureRectangle.Location,
@@ -111,7 +158,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Powers
             {
                 foreach (var powerIcon in __instance.powers.SelectMany(x => x))
                 {
-                    if (!_powersByName.TryGetValue(powerIcon.name, out var customPower))
+                    if (!_powersByName.TryGetValue(powerIcon.name, out var customPower) || customPower.IsVanillaPower())
                     {
                         continue;
                     }
@@ -121,6 +168,8 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Powers
                     powerIcon.scale = customPower.TextureScale;
                     powerIcon.baseScale = customPower.TextureScale;
                 }
+
+                _hints = _archipelago.GetMyActiveHints();
             }
             catch (Exception ex)
             {
@@ -146,8 +195,33 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Powers
                     var showTitle = textureComponent.drawShadow || _powersByName.ContainsKey(textureComponent.name);
                     var showDescription = textureComponent.drawShadow;
 
-                    __instance.hoverText = showTitle ? textureComponent.label : "???";
-                    __instance.descriptionText = showDescription ? Game1.parseText(textureComponent.hoverText, Game1.smallFont, Math.Max((int)Game1.dialogueFont.MeasureString(__instance.hoverText).X, 320)) : (showTitle ? "You can hint this item" : "");
+                    var itemName = showTitle ? textureComponent.label : "???";
+                    string description = Game1.parseText(textureComponent.hoverText, Game1.smallFont, Math.Max((int)Game1.dialogueFont.MeasureString(__instance.hoverText).X, 320));
+                    if (!showDescription)
+                    {
+                        if (showTitle)
+                        {
+                            var hintForThisItem = _hints.FirstOrDefault(hint => hint.ReceivingPlayer == _archipelago.GetCurrentPlayer().Slot &&
+                                                                             _archipelago.GetItemName(hint.ItemId) == itemName);
+                            if (hintForThisItem == null)
+                            {
+                                description = "You can hint this item";
+                            }
+                            else
+                            {
+                                var findingPlayerName = _archipelago.GetPlayerName(hintForThisItem.FindingPlayer);
+                                var locationName = _archipelago.GetLocationName(hintForThisItem.LocationId);
+                                description = $"At {findingPlayerName}'s {locationName}";
+                            }
+                        }
+                        else
+                        {
+                            description = "";
+                        }
+                    }
+
+                    __instance.hoverText = itemName;
+                    __instance.descriptionText = description;
                 }
             }
             catch (Exception ex)

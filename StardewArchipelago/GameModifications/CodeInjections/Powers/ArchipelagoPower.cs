@@ -21,6 +21,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Powers
         public string Condition => GameStateConditionProvider.CreateHasReceivedItemCondition(Name);
 
         public Func<SlotData, bool> IsIncluded { get; }
+        public virtual string DisplayName => Name;
 
         public ArchipelagoPower(string name, string description = null, Point? textureOrigin = null, Func<SlotData, bool> isIncluded = null)
         {
@@ -68,6 +69,11 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Powers
         public override int GetHashCode()
         {
             return Name.GetHashCode();
+        }
+
+        public virtual bool IsVanillaPower()
+        {
+            return false;
         }
     }
 }
