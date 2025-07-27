@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.Stardew;
@@ -19,7 +20,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
         public const string TYPE_SWORD = "Sword";
         public const string TYPE_CLUB = "Club";
         public const string TYPE_DAGGER = "Dagger";
-        private readonly ArchipelagoClient _archipelago;
+        private readonly StardewArchipelagoClient _archipelago;
         private readonly ModsManager _modsManager;
 
         private readonly Dictionary<int, List<int>> _weaponWeightsByNumberOfTiers = new()
@@ -33,7 +34,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
         public Dictionary<int, List<StardewItem>> SlingshotsByTier { get; private set; }
         public List<StardewRing> Rings { get; private set; }
 
-        public WeaponsManager(ArchipelagoClient archipelago, StardewItemManager itemManager, ModsManager modsManager)
+        public WeaponsManager(StardewArchipelagoClient archipelago, StardewItemManager itemManager, ModsManager modsManager)
         {
             _archipelago = archipelago;
             _modsManager = modsManager;
@@ -122,6 +123,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
         private IEnumerable<ItemQueryResult> GetBootsToSell(bool isRecovery, double priceMultiplier, Random random)
         {
             var receivedTier = _archipelago.GetReceivedItemCount("Progressive Boots");
+            if (_archipelago.SlotData.Monstersanity == Monstersanity.None && receivedTier >= 3)
+            {
+                receivedTier++;
+            }
             for (var i = 1; i <= BootsByTier.Keys.Max(); i++)
             {
                 var bootsInTier = BootsByTier.ContainsKey(i) ? BootsByTier[i] : new List<StardewItem>();
