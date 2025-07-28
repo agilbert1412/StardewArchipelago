@@ -30,6 +30,7 @@ namespace StardewArchipelago.Archipelago.Gifting
         private ICloseTraitParser<string> _closeTraitParser;
 
         public GiftSender Sender => _giftSender;
+        public GiftReceiver Receiver => _giftReceiver;
 
         public CrossGiftHandler()
         {

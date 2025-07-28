@@ -423,7 +423,7 @@ namespace StardewArchipelago
         {
             SeasonsRandomizer.ChangeMailKeysBasedOnSeasonsToDaysElapsed();
             SeasonsRandomizer.SendMailHardcodedForToday();
-            ArchipelagoJunimoNoteMenu.OnDayStarted();
+            ArchipelagoJunimoNoteMenu.OnDayStarted(_giftHandler.Receiver);
 
             if (MultiSleepManager.TryDoMultiSleepOnDayStarted())
             {

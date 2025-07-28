@@ -28,6 +28,7 @@ using StardewValley.Objects;
 using Object = StardewValley.Object;
 using Archipelago.MultiClient.Net.Models;
 using Microsoft.Xna.Framework.Audio;
+using StardewArchipelago.Archipelago.Gifting;
 using StardewArchipelago.Constants.Modded;
 using StardewModdingAPI.Events;
 using Color = Microsoft.Xna.Framework.Color;
@@ -2213,7 +2214,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             return -1;
         }
 
-        public static void OnDayStarted()
+        public static void OnDayStarted(GiftReceiver giftReceiver)
         {
             DayStopwatch.Reset();
             DayStopwatch.Start();
@@ -2223,6 +2224,25 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             HasLookedAtHibernationBundleToday = false;
             HasLookedAtStanleyBundleToday = false;
             _slidingPuzzle = null;
+
+            SendMinistryOfMadnessGift(giftReceiver);
+        }
+
+        private static void SendMinistryOfMadnessGift(GiftReceiver giftReceiver)
+        {
+            if (!IsBundleRemaining(MemeBundleNames.MINISTRY_OF_MADNESS) || !_archipelago.HasReceivedItem(APItem.FOREST_MAGIC))
+            {
+                return;
+            }
+
+            var daySaveRandom = Utility.CreateDaySaveRandom();
+            if (!(daySaveRandom.NextDouble() < 0.1))
+            {
+                return;
+            }
+            var potentialObjects = new[] { ObjectIds.TRASH, ObjectIds.JOJA_COLA, ObjectIds.BROKEN_GLASSES, ObjectIds.BROKEN_CD, ObjectIds.SOGGY_NEWSPAPER };
+            var chosenTrash = potentialObjects[daySaveRandom.Next(potentialObjects.Length)];
+            giftReceiver.ReceiveFakeGift(chosenTrash, daySaveRandom.Next(0, 100), MemeBundleNames.MINISTRY_OF_MADNESS);
         }
 
         public static void OnDayEnded()

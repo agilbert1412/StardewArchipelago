@@ -9,6 +9,7 @@ namespace StardewArchipelago.Archipelago.Gifting
     public interface IGiftHandler : IDisposable
     {
         GiftSender Sender { get; }
+        GiftReceiver Receiver { get; }
         void Initialize(ILogger logger, StardewArchipelagoClient archipelago, StardewItemManager itemManager, Mailman mail, GiftTrapManager giftTrapManager);
         bool HandleGiftItemCommand(string message);
         void ReceiveAllGiftsTomorrow();

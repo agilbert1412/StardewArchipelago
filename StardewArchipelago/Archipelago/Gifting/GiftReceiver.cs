@@ -9,6 +9,7 @@ using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Bundles;
 using StardewArchipelago.Items.Traps;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
+using StardewValley;
 
 namespace StardewArchipelago.Archipelago.Gifting
 {
@@ -96,11 +97,29 @@ namespace StardewArchipelago.Archipelago.Gifting
             }
 
             var amountRemainingAfterGift = amount - amountInGift;
-            var mailKey = GetMailKey(relatedGiftIds, amountRemainingAfterGift);
-            var embed = GetEmbed(item, amountInGift);
-            _mail.SendArchipelagoGiftMail(mailKey, receivedGift.ItemName, receivedGift.SenderName, senderGame, embed);
+            SendGiftMail(receivedGift.ItemName, receivedGift.SenderName, relatedGiftIds, amountRemainingAfterGift, item, amountInGift, senderGame);
 
             return amountRemainingAfterGift;
+        }
+
+        private void SendGiftMail(string itemName, string senderName, string[] relatedGiftIds, int amountRemainingAfterGift, StardewItem item, int amountInGift, string senderGame)
+        {
+            var mailKey = GetMailKey(relatedGiftIds, amountRemainingAfterGift);
+            var embed = GetEmbed(item, amountInGift);
+            SendGiftMail(itemName, senderName, senderGame, mailKey, embed);
+        }
+
+        public void ReceiveFakeGift(string objectId, int amount, string senderName)
+        {
+            var mailKey = GetMailKey(Guid.NewGuid().ToString(), amount);
+            var embed = GetEmbed(objectId, amount);
+            var stardewObject = _itemManager.GetObjectById(objectId);
+            SendGiftMail(stardewObject.Name, senderName, "Stardew Valley", mailKey, embed);
+        }
+
+        public void SendGiftMail(string itemName, string senderName, string senderGame, string mailKey, string embed)
+        {
+            _mail.SendArchipelagoGiftMail(mailKey, itemName, senderName, senderGame, embed);
         }
 
         private void ParseGift(Gift gift, Dictionary<ReceivedGift, int> giftAmounts, Dictionary<string, ReceivedGift> giftIds)
@@ -137,12 +156,27 @@ namespace StardewArchipelago.Archipelago.Gifting
                 return "";
             }
 
-            return $"%item object {item.Id} {amount} %%";
+            return GetEmbed(item.Id, amount);
+        }
+
+        private string GetEmbed(string objectId, int amount)
+        {
+            if (amount <= 0)
+            {
+                return "";
+            }
+
+            return $"%item object {objectId} {amount} %%";
         }
 
         private string GetMailKey(IEnumerable<string> ids, int amount)
         {
             return $"APGift;{string.Join(";", ids)};{amount}";
+        }
+
+        private string GetMailKey(string guid, int amount)
+        {
+            return $"APGift;{guid};{amount}";
         }
 
         public int TrySendGiftToBundle(ReceivedGift receivedGift, int amount)
