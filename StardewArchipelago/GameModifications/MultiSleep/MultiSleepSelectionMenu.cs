@@ -58,6 +58,9 @@ namespace StardewArchipelago.GameModifications.MultiSleep
                 if (currentValue <= maxValue && (price <= 0 || num * price <= Game1.player.Money))
                 {
                     this.exitThisMenu();
+                    this.emergencyShutDown();
+                    Game1.player.canMove = true;
+                    Game1.dialogueUp = false;
                 }
             }
         }
