@@ -52,6 +52,14 @@ namespace StardewArchipelago.GameModifications.MultiSleep
                 return;
             }
             base.receiveLeftClick(x, y, playSound);
+            if (okButton.containsPoint(x, y))
+            {
+                var num = currentValue - 1;
+                if (currentValue <= maxValue && (price <= 0 || num * price <= Game1.player.Money))
+                {
+                    this.exitThisMenu();
+                }
+            }
         }
     }
 }
