@@ -71,7 +71,7 @@ namespace StardewArchipelago.Archipelago
                 return true;
             }
 
-            if (bankCommandParts[0].Equals(WITHDRAW_COMMAND[0].ToString(), StringComparison.OrdinalIgnoreCase))
+            if (bankCommandParts[0].StartsWith(WITHDRAW_COMMAND[0].ToString(), StringComparison.OrdinalIgnoreCase))
             {
                 HandleWithdrawCommand(bankCommandParts[1]);
                 return true;
