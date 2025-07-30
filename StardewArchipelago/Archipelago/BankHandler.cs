@@ -12,7 +12,9 @@ namespace StardewArchipelago.Archipelago
         public const string BANKING_TEAM_KEY = "EnergyLink{0}";
         private const string DEPOSIT_COMMAND = "Deposit";
         private const string WITHDRAW_COMMAND = "Withdraw";
-        private const int MAX_DISPLAY_MONEY = 100000000; // 100 Millions
+        private static readonly BigInteger MAX_DISPLAY_MONEY = 100000000; // 100 Millions
+        private const int MIN_OPERATION_AMOUNT = 1;
+        private const int MAX_OPERATION_AMOUNT = int.MaxValue - 2;
         private const double BANK_TAX = 0.25;
         public static readonly BigInteger EXCHANGE_RATE = 10000000; // To be adjusted based on feedback (pun intended)
 
@@ -100,6 +102,12 @@ namespace StardewArchipelago.Archipelago
                 return;
             }
 
+            if (amountToDeposit < MIN_OPERATION_AMOUNT || amountToDeposit > MAX_OPERATION_AMOUNT)
+            {
+                Game1.chatBox?.addMessage($"You can only deposit amounts between {MIN_OPERATION_AMOUNT} and {MAX_OPERATION_AMOUNT}", Color.Gold);
+                return;
+            }
+
             if (amountToDeposit > Game1.player.Money)
             {
                 Game1.chatBox?.addMessage($"You do not have enough money to make this deposit", Color.Gold);
@@ -128,6 +136,12 @@ namespace StardewArchipelago.Archipelago
             if (!int.TryParse(amount, out var amountToWithdraw))
             {
                 PrintUsageRules();
+                return;
+            }
+
+            if (amountToWithdraw < MIN_OPERATION_AMOUNT || amountToWithdraw > MAX_OPERATION_AMOUNT)
+            {
+                Game1.chatBox?.addMessage($"You can only withdraw amounts between {MIN_OPERATION_AMOUNT} and {MAX_OPERATION_AMOUNT}", Color.Gold);
                 return;
             }
 
