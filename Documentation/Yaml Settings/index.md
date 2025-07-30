@@ -73,6 +73,7 @@ These have direct effects on in-game behaviors, not tied to the Archipelago rand
 
 - ~~[Gifting](./gifting.md)~~
 - ~~[Death Link](./death_link.md)~~
+- ~~[Start Inventory](./start_inventory.md)~~
 - ~~[Progression Balancing](./progression_balancing.md)~~
 - ~~[Accessibility](./accessibility.md)~~
 
