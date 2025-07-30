@@ -196,12 +196,12 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Powers
                     var showDescription = textureComponent.drawShadow;
 
                     var itemName = showTitle ? textureComponent.label : "???";
-                    string description = Game1.parseText(textureComponent.hoverText, Game1.smallFont, Math.Max((int)Game1.dialogueFont.MeasureString(__instance.hoverText).X, 320));
+                    var description = Game1.parseText(textureComponent.hoverText, Game1.smallFont, Math.Max((int)Game1.dialogueFont.MeasureString(__instance.hoverText).X, 320));
                     if (!showDescription)
                     {
                         if (showTitle)
                         {
-                            var hintItemNames = _hints.Select(x => _archipelago.GetItemName(x.ItemId)).ToArray();
+                            var hintItemNames = _hints.Where(x => x.ReceivingPlayer == _archipelago.GetCurrentPlayer().Slot).Select(x => _archipelago.GetItemName(x.ItemId)).ToArray();
                             var hintForThisItem = _hints.FirstOrDefault(hint => hint.ReceivingPlayer == _archipelago.GetCurrentPlayer().Slot &&
                                                                              _archipelago.GetItemName(hint.ItemId) == itemName);
                             if (hintForThisItem == null)
