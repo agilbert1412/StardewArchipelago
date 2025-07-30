@@ -23,7 +23,7 @@ These settings decide what your playthrough will be. They do not directly add or
 
 These settings are critical customization of items and locations. They are the biggest deciders of progression style, and how much of the core mechanics of the game will start out locked and be randomized.
 
-- ~~[Season Randomization](./season_randomization.md)~~
+- [Season Randomization](./season_randomization.md)
 - ~~[Cropsanity](./cropsanity.md)~~
 - ~~[Backpack Progression](./backpack_progression.md)~~
 - ~~[Tool Progression](./tool_progression.md)~~
