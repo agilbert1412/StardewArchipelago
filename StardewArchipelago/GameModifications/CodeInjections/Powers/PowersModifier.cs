@@ -6,8 +6,10 @@ using Archipelago.MultiClient.Net.Models;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Archipelago.SlotData;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.Constants;
+using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Textures;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -29,40 +31,40 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Powers
             new VanillaArchipelagoPower("ForestMagic", APItem.FOREST_MAGIC),
             new VanillaArchipelagoPower("DwarvishTranslationGuide", APItem.DWARVISH_TRANSLATION_GUIDE),
             new VanillaArchipelagoPower("RustyKey", APItem.RUSTY_KEY),
-            new VanillaArchipelagoPower("ClubCard", APItem.CLUB_CARD, (x) => x.QuestLocations.StoryQuestsEnabled),
-            // new VanillaArchipelagoPower("SpecialCharm", APItem.SPECIAL_CHARM, (x) => x.Secretsanity.HasFlag(Secretsanity.SecretNotes)),
+            new VanillaArchipelagoPower("ClubCard", APItem.CLUB_CARD, StoryQuestsEnabled),
+            new VanillaArchipelagoPower("SpecialCharm", APItem.SPECIAL_CHARM, (x) => x.Secretsanity.HasFlag(Secretsanity.SecretNotes)),
             new VanillaArchipelagoPower("SkullKey", APItem.SKULL_KEY),
-            new VanillaArchipelagoPower("MagnifyingGlass", APItem.MAGNIFYING_GLASS, (x) => x.QuestLocations.StoryQuestsEnabled),
-            new VanillaArchipelagoPower("DarkTalisman", APItem.DARK_TALISMAN, (x) => x.QuestLocations.StoryQuestsEnabled),
-            new VanillaArchipelagoPower("MagicInk", APItem.MAGIC_INK, (x) => x.QuestLocations.StoryQuestsEnabled),
-            new VanillaArchipelagoPower("BearPaw", APItem.BEARS_KNOWLEDGE, (x) => x.QuestLocations.StoryQuestsEnabled),
+            new VanillaArchipelagoPower("MagnifyingGlass", APItem.MAGNIFYING_GLASS, StoryQuestsEnabled),
+            new VanillaArchipelagoPower("DarkTalisman", APItem.DARK_TALISMAN, StoryQuestsEnabled),
+            new VanillaArchipelagoPower("MagicInk", APItem.MAGIC_INK, StoryQuestsEnabled),
+            new VanillaArchipelagoPower("BearPaw", APItem.BEARS_KNOWLEDGE, StoryQuestsEnabled),
             new VanillaArchipelagoPower("KeyToTheTown", APItem.KEY_TO_THE_TOWN),
 
-            //new VanillaArchipelagoPower("Book_PriceCatalogue", APItem.),
-            //new VanillaArchipelagoPower("Book_Marlon", APItem.),
-            //new VanillaArchipelagoPower("Book_Speed", APItem.),
-            //new VanillaArchipelagoPower("Book_Speed2", APItem.),
-            //new VanillaArchipelagoPower("Book_Void", APItem.),
-            //new VanillaArchipelagoPower("Book_Friendship", APItem.),
-            //new VanillaArchipelagoPower("Book_Defense", APItem.),
-            //new VanillaArchipelagoPower("Book_Woodcutting", APItem.),
-            //new VanillaArchipelagoPower("Book_WildSeeds", APItem.),
-            //new VanillaArchipelagoPower("Book_Roe", APItem.),
-            //new VanillaArchipelagoPower("Book_Bombs", APItem.),
-            //new VanillaArchipelagoPower("Book_Crabbing", APItem.),
-            //new VanillaArchipelagoPower("Book_Trash", APItem.),
-            //new VanillaArchipelagoPower("Book_Diamonds", APItem.),
-            //new VanillaArchipelagoPower("Book_Mystery", APItem.),
-            //new VanillaArchipelagoPower("Book_Horse", APItem.),
-            //new VanillaArchipelagoPower("Book_Artifact", APItem.),
-            //new VanillaArchipelagoPower("Book_Grass", APItem.),
-            //new VanillaArchipelagoPower("Book_AnimalCatalogue", APItem.),
+            new VanillaArchipelagoPower("Book_PriceCatalogue", Power(PowerBooks.PRICE_CATALOGUE), PowerBooksEnabled),
+            new VanillaArchipelagoPower("Book_Marlon", Power(PowerBooks.MAPPING_CAVE_SYSTEMS), PowerBooksEnabled),
+            new VanillaArchipelagoPower("Book_Speed", Power(PowerBooks.WAY_OF_THE_WIND_1), PowerBooksEnabled),
+            new VanillaArchipelagoPower("Book_Speed2", Power(PowerBooks.WAY_OF_THE_WIND_2), PowerBooksEnabled),
+            new VanillaArchipelagoPower("Book_Void", Power(PowerBooks.MONSTER_COMPENDIUM), PowerBooksEnabled),
+            new VanillaArchipelagoPower("Book_Friendship", Power(PowerBooks.FRIENDSHIP_101), PowerBooksEnabled),
+            new VanillaArchipelagoPower("Book_Defense", Power(PowerBooks.JACK_BE_NIMBLE_JACK_BE_THICK), PowerBooksEnabled),
+            new VanillaArchipelagoPower("Book_Woodcutting", Power(PowerBooks.WOODYS_SECRET), PowerBooksEnabled),
+            new VanillaArchipelagoPower("Book_WildSeeds", Power(PowerBooks.RACCOON_JOURNAL), PowerBooksEnabled),
+            new VanillaArchipelagoPower("Book_Roe", Power(PowerBooks.JEWELS_OF_THE_SEA), PowerBooksEnabled),
+            new VanillaArchipelagoPower("Book_Bombs", Power(PowerBooks.DWARVISH_SAFETY_MANUAL), PowerBooksEnabled),
+            new VanillaArchipelagoPower("Book_Crabbing", Power(PowerBooks.THE_ART_O_CRABBING), PowerBooksEnabled),
+            new VanillaArchipelagoPower("Book_Trash", Power(PowerBooks.THE_ALLEYWAY_BUFFET), PowerBooksEnabled),
+            new VanillaArchipelagoPower("Book_Diamonds", Power(PowerBooks.THE_DIAMOND_HUNTER), PowerBooksEnabled),
+            new VanillaArchipelagoPower("Book_Mystery", Power(PowerBooks.BOOK_OF_MYSTERIES), PowerBooksEnabled),
+            new VanillaArchipelagoPower("Book_Horse", Power(PowerBooks.HORSE_THE_BOOK), PowerBooksEnabled),
+            new VanillaArchipelagoPower("Book_Artifact", Power(PowerBooks.TREASURE_APPRAISAL_GUIDE), PowerBooksEnabled),
+            new VanillaArchipelagoPower("Book_Grass", Power(PowerBooks.OL_SLITHERLEGS), PowerBooksEnabled),
+            new VanillaArchipelagoPower("Book_AnimalCatalogue", Power(PowerBooks.ANIMAL_CATALOGUE), PowerBooksEnabled),
 
-            //new VanillaArchipelagoPower("Mastery_Farming", APItem.),
-            //new VanillaArchipelagoPower("Mastery_Fishing", APItem.),
-            //new VanillaArchipelagoPower("Mastery_Foraging", APItem.),
-            //new VanillaArchipelagoPower("Mastery_Mining", APItem.),
-            //new VanillaArchipelagoPower("Mastery_Combat", APItem.),
+            new VanillaArchipelagoPower("Mastery_Farming", Mastery.FARMING, MasteriesEnabled),
+            new VanillaArchipelagoPower("Mastery_Fishing", Mastery.FISHING, MasteriesEnabled),
+            new VanillaArchipelagoPower("Mastery_Foraging", Mastery.FORAGING, MasteriesEnabled),
+            new VanillaArchipelagoPower("Mastery_Mining", Mastery.MINING, MasteriesEnabled),
+            new VanillaArchipelagoPower("Mastery_Combat", Mastery.COMBAT, MasteriesEnabled),
 
             new ArchipelagoPower("Community Center Key", "The Community Center door is unlocked", 0, 0),
             new ArchipelagoPower("Wizard Invitation", "The Wizard invited you to meet him at the tower", 16, 0),
@@ -88,6 +90,26 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Powers
             new IslandArchipelagoPower("Parrot Express", "The Parrot Express Transportation is available", 32, 48),
             new IslandArchipelagoPower("Qi Walnut Room", "Yes, kid, you can come see me. I won't bite.", 48, 48),
         };
+
+        private static string Power(string bookName)
+        {
+            return $"Power: {bookName}";
+        }
+
+        private static bool StoryQuestsEnabled(SlotData slotData)
+        {
+            return slotData.QuestLocations.StoryQuestsEnabled;
+        }
+
+        private static bool PowerBooksEnabled(SlotData slotData)
+        {
+            return slotData.Booksanity >= Booksanity.Power;
+        }
+
+        private static bool MasteriesEnabled(SlotData slotData)
+        {
+            return slotData.SkillProgression >= SkillsProgression.ProgressiveWithMasteries;
+        }
 
         private static Dictionary<string, ArchipelagoPower> _powersByName = _customPowers.ToDictionary(x => x.Name, x => x);
 
@@ -183,6 +205,11 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Powers
         {
             try
             {
+                if (!_archipelago.MakeSureConnected())
+                {
+                    return;
+                }
+
                 __instance.hoverText = "";
                 __instance.descriptionText = "";
                 foreach (var textureComponent in __instance.powers[__instance.currentPage])
@@ -192,7 +219,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Powers
                         continue;
                     }
 
-                    var showTitle = textureComponent.drawShadow || _powersByName.ContainsKey(textureComponent.name);
+                    var showTitle = textureComponent.drawShadow || (_powersByName.ContainsKey(textureComponent.name) && _powersByName[textureComponent.name].IsIncluded(_archipelago.SlotData));
                     var showDescription = textureComponent.drawShadow;
 
                     var itemName = showTitle ? textureComponent.label : "???";
@@ -201,7 +228,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Powers
                     {
                         if (showTitle)
                         {
-                            var hintItemNames = _hints.Where(x => x.ReceivingPlayer == _archipelago.GetCurrentPlayer().Slot).Select(x => _archipelago.GetItemName(x.ItemId)).ToArray();
+                            //var hintItemNames = _hints.Where(x => x.ReceivingPlayer == _archipelago.GetCurrentPlayer().Slot).Select(x => _archipelago.GetItemName(x.ItemId)).ToArray();
                             var hintForThisItem = _hints.FirstOrDefault(hint => hint.ReceivingPlayer == _archipelago.GetCurrentPlayer().Slot &&
                                                                              _archipelago.GetItemName(hint.ItemId) == itemName);
                             if (hintForThisItem == null)

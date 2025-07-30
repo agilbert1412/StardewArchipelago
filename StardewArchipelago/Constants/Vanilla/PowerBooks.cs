@@ -25,14 +25,6 @@ namespace StardewArchipelago.Constants.Vanilla
         public const string OL_SLITHERLEGS = "Ol' Slitherlegs";
         public const string ANIMAL_CATALOGUE = "Animal Catalogue";
 
-        public const string BOOK_OF_STARS = "Book Of Stars";
-        public const string ALMANAC = "Stardew Valley Almanac";
-        public const string WOODCUTTER_WEEKLY = "Woodcutter's Weekly";
-        public const string BAIT_AND_BOBBER = "Bait And Bobber";
-        public const string MINING_MONTHLY = "Mining Monthly";
-        public const string COMBAT_QUARTERLY = "Combat Quarterly";
-        public const string QUEEN_OF_SAUCE_COOKBOOK = "Queen Of Sauce Cookbook";
-
         public static readonly Dictionary<string, string> BookIdsToNames = new()
         {
             { ObjectIds.PRICE_CATALOGUE, PRICE_CATALOGUE },
@@ -54,13 +46,13 @@ namespace StardewArchipelago.Constants.Vanilla
             { ObjectIds.TREASURE_APPRAISAL_GUIDE, TREASURE_APPRAISAL_GUIDE },
             { ObjectIds.OL_SLITHERLEGS, OL_SLITHERLEGS },
             { ObjectIds.ANIMAL_CATALOGUE, ANIMAL_CATALOGUE },
-            { ObjectIds.BOOK_OF_STARS, BOOK_OF_STARS },
-            { ObjectIds.STARDEW_VALLEY_ALMANAC, ALMANAC },
-            { ObjectIds.WOODCUTTER_WEEKLY, WOODCUTTER_WEEKLY },
-            { ObjectIds.BAIT_AND_BOBBER, BAIT_AND_BOBBER },
-            { ObjectIds.MINING_MONTHLY, MINING_MONTHLY },
-            { ObjectIds.COMBAT_QUARTERLY, COMBAT_QUARTERLY },
-            { ObjectIds.QUEEN_OF_SAUCE_COOKBOOK, QUEEN_OF_SAUCE_COOKBOOK },
+            { ObjectIds.BOOK_OF_STARS, SkillBooks.BOOK_OF_STARS },
+            { ObjectIds.STARDEW_VALLEY_ALMANAC, SkillBooks.ALMANAC },
+            { ObjectIds.WOODCUTTER_WEEKLY, SkillBooks.WOODCUTTER_WEEKLY },
+            { ObjectIds.BAIT_AND_BOBBER, SkillBooks.BAIT_AND_BOBBER },
+            { ObjectIds.MINING_MONTHLY, SkillBooks.MINING_MONTHLY },
+            { ObjectIds.COMBAT_QUARTERLY, SkillBooks.COMBAT_QUARTERLY },
+            { ObjectIds.QUEEN_OF_SAUCE_COOKBOOK, SkillBooks.QUEEN_OF_SAUCE_COOKBOOK },
             // Modded
             { ModBookIds.DIGGING_LIKE_WORMS_ID, ModBookIds.DIGGING_LIKE_WORMS_NAME },
         };
@@ -86,13 +78,13 @@ namespace StardewArchipelago.Constants.Vanilla
             { TREASURE_APPRAISAL_GUIDE, ObjectIds.TREASURE_APPRAISAL_GUIDE },
             { OL_SLITHERLEGS, ObjectIds.OL_SLITHERLEGS },
             { ANIMAL_CATALOGUE, ObjectIds.ANIMAL_CATALOGUE },
-            { BOOK_OF_STARS, ObjectIds.BOOK_OF_STARS },
-            { ALMANAC, ObjectIds.STARDEW_VALLEY_ALMANAC },
-            { WOODCUTTER_WEEKLY, ObjectIds.WOODCUTTER_WEEKLY },
-            { BAIT_AND_BOBBER, ObjectIds.BAIT_AND_BOBBER },
-            { MINING_MONTHLY, ObjectIds.MINING_MONTHLY },
-            { COMBAT_QUARTERLY, ObjectIds.COMBAT_QUARTERLY },
-            { QUEEN_OF_SAUCE_COOKBOOK, ObjectIds.QUEEN_OF_SAUCE_COOKBOOK },
+            { SkillBooks.BOOK_OF_STARS, ObjectIds.BOOK_OF_STARS },
+            { SkillBooks.ALMANAC, ObjectIds.STARDEW_VALLEY_ALMANAC },
+            { SkillBooks.WOODCUTTER_WEEKLY, ObjectIds.WOODCUTTER_WEEKLY },
+            { SkillBooks.BAIT_AND_BOBBER, ObjectIds.BAIT_AND_BOBBER },
+            { SkillBooks.MINING_MONTHLY, ObjectIds.MINING_MONTHLY },
+            { SkillBooks.COMBAT_QUARTERLY, ObjectIds.COMBAT_QUARTERLY },
+            { SkillBooks.QUEEN_OF_SAUCE_COOKBOOK, ObjectIds.QUEEN_OF_SAUCE_COOKBOOK },
             //Modded
             { ModBookIds.DIGGING_LIKE_WORMS_NAME, ModBookIds.DIGGING_LIKE_WORMS_ID },
         };
@@ -104,5 +96,16 @@ namespace StardewArchipelago.Constants.Vanilla
         "Book_Horse" "Horse: The Book"
         "Book_WildSeeds" "Ways Of The Wild" "Raccoon Journal"
          */
+    }
+
+    public class SkillBooks
+    {
+        public const string BOOK_OF_STARS = "Book Of Stars";
+        public const string ALMANAC = "Stardew Valley Almanac";
+        public const string WOODCUTTER_WEEKLY = "Woodcutter's Weekly";
+        public const string BAIT_AND_BOBBER = "Bait And Bobber";
+        public const string MINING_MONTHLY = "Mining Monthly";
+        public const string COMBAT_QUARTERLY = "Combat Quarterly";
+        public const string QUEEN_OF_SAUCE_COOKBOOK = "Queen Of Sauce Cookbook";
     }
 }

@@ -29,5 +29,6 @@
         public const string MAGNIFYING_GLASS = "Magnifying Glass";
         public const string DARK_TALISMAN = "Dark Talisman";
         public const string KEY_TO_THE_TOWN = "Key To The Town";
+        public const string SPECIAL_CHARM = "Special Charm";
     }
 }
