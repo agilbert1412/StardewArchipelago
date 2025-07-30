@@ -274,6 +274,16 @@ namespace StardewArchipelago.Items.Mail
                 const float scale = 1f;
                 Utility.drawTinyDigits(numLetters, b, localPosition + new Vector2(64 - Utility.getWidthOfTinyDigitString(numLetters, 3f * scale) + 3f * scale, (float)(64.0 - 18.0 * scale + 1.0)), 3f * scale, 1f, Color.Red);
 
+                //var layerDepth = (float)((mailboxPositionTile.X + 1) * 64 / 10000.0 + mailboxPositionTile.Y * 64 / 10000.0);
+                //var bubblePositionGlobal = new Vector2(mailboxPositionTile.X * 64, mailboxPositionTile.Y * 64 - 96 - 48 + animationOffsetY);
+                //var mailPositionGlobal = new Vector2(mailboxPositionTile.X * 64 + 32 + 4, mailboxPositionTile.Y * 64 - 64 - 24 - 8 + animationOffsetY);
+                //var bubblePosition = Game1.GlobalToLocal(Game1.viewport, bubblePositionGlobal);
+                //var mailPosition = Game1.GlobalToLocal(Game1.viewport, mailPositionGlobal);
+                //var bubbleRect = new Rectangle(141, 465, 20, 24);
+                //var mailRect = new Rectangle(189, 423, 15, 13);
+                //b.Draw(Game1.mouseCursors, bubblePosition, bubbleRect, Color.White * 0.75f, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, layerDepth + 1E-06f);
+                //b.Draw(Game1.mouseCursors, mailPosition, mailRect, Color.White, 0.0f, new Vector2(7f, 6f), 4f, SpriteEffects.None, layerDepth + 1E-05f);
+
                 return;
             }
             catch (Exception ex)
