@@ -169,7 +169,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
             try
             {
                 var hints = _archipelago.GetMyActiveDesiredHints();
-                var hintedLocationNames = hints.Select(hint => _archipelago.GetLocationName(hint.LocationId)).Where(hintName => hintName.StartsWith($"Friendsanity: ")).ToArray();
+                var hintedLocationNames = hints.Select(hint => _archipelago.GetLocationName(hint)).Where(hintName => hintName.StartsWith($"Friendsanity: ")).ToArray();
                 _hintedFriendshipLocations = hintedLocationNames;
                 return;
             }

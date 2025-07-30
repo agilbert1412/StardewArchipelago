@@ -238,7 +238,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Powers
                             else
                             {
                                 var findingPlayerName = _archipelago.GetPlayerName(hintForThisItem.FindingPlayer);
-                                var locationName = _archipelago.GetLocationName(hintForThisItem.LocationId);
+                                var locationName = _archipelago.GetLocationName(hintForThisItem);
                                 description = $"At {findingPlayerName}'s {locationName}";
                             }
                         }

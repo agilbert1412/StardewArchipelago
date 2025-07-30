@@ -74,7 +74,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
                     var hintIndex = random.Next(_myActiveHints.Length);
                     var hint = _myActiveHints[hintIndex];
                     var formattedTip = string.Format(episode,
-                        _archipelago.GetLocationName(hint.LocationId),
+                        _archipelago.GetLocationName(hint),
                         _archipelago.GetPlayerName(hint.ReceivingPlayer),
                         _archipelago.GetPlayerGame(hint.ReceivingPlayer));
                     __result = formattedTip;

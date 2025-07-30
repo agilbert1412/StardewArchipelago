@@ -374,7 +374,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             var specialOrdersNeverCompletedBefore = allSpecialOrders.Where(key => StillNeedsToCompleteOrder(specialOrders, key)).ToList();
 
             var hintedSpecialOrders = specialOrdersNeverCompletedBefore.Where(key =>
-                hints.Any(hint => _archipelago.GetLocationName(hint.LocationId) == specialOrders[key].GetName())).ToList();
+                hints.Any(hint => _archipelago.GetLocationName(hint) == specialOrders[key].GetName())).ToList();
 
             allSpecialOrders.RemoveAll(x => specialOrdersNeverCompletedBefore.Contains(x));
             specialOrdersNeverCompletedBefore.RemoveAll(x => hintedSpecialOrders.Contains(x));
