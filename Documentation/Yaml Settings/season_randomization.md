@@ -14,7 +14,7 @@ This is designed in order to make content more easily reached, once it becomes p
 
 #### Disabled
 
-The seasons are not randomized at all. Instead, you start in spring, will all seasons immediately available. You will not need to unlock anything.
+The seasons are not randomized at all. Instead, you start in spring, with all seasons immediately available. You will not need to unlock anything.
 
 Warning: Turning Season Randomization off might *feel* like it would make the game easier, but it generally makes it **harder**. This severely inflates your early spheres, by having 4 times more locations immediately available.
 If you are playing alone, this means you will have more things to do, and therefore more trouble finding the few critical progression items that would allow you to move on to the next spheres.
@@ -38,7 +38,7 @@ This leads to a randomized experience with proper hard locks, but more predictab
 
 ### Special Behavior
 
-If you are playing on `Randomized` or `Randomized Not Winter`, you can place one season in your ~~[Start Inventory](./start_inventory.md)~~. If the generate notices that you are already starting with at least one season, it will **not** assign you a random starting season, and instead let it be the way you chose.
+If you are playing on `Randomized` or `Randomized Not Winter`, you can place one season in your ~~[Start Inventory](./start_inventory.md)~~. If the generator notices that you are already starting with at least one season, it will **not** assign you a random starting season, and instead let it be the way you chose.
 
 This allows you to start in the season of your preference, yet still randomize the other 3.
 
