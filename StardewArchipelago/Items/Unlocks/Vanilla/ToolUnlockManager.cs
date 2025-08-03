@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Items.Mail;
 using StardewValley;
