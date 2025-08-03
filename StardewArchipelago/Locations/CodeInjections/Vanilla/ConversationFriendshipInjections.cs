@@ -77,7 +77,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     return;
                 }
 
-                var animalWellBundleId = ArchipelagoJunimoNoteMenu.GetBundleId(MemeBundleNames.ANIMAL_WELL, out var communityCenter);
+                var animalWellBundleId = ArchipelagoJunimoNoteMenu.GetBundleId(MemeBundleNames.ANIMAL_WELL, out var communityCenter, out _);
                 var bundleExists = animalWellBundleId >= 0;
                 if (!bundleExists)
                 {

@@ -2109,7 +2109,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         
         public static bool IsBundleRemaining(string bundleName)
         {
-            var bundleIndex = GetBundleId(bundleName, out var communityCenter);
+            var bundleIndex = GetBundleId(bundleName, out var communityCenter, out _);
             if (bundleIndex <= -1)
             {
                 return false;
@@ -2132,7 +2132,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         public static int TryDonateToBundle(string bundleName, string itemName, int itemAmount)
         {
-            var bundleIndex = GetBundleId(bundleName, out var communityCenter);
+            var bundleIndex = GetBundleId(bundleName, out var communityCenter, out var area);
             if (bundleIndex <= -1)
             {
                 return 0;
@@ -2181,34 +2181,35 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         public static void CompleteBundleIfExists(string bundleName)
         {
-            var bundleIndex = GetBundleId(bundleName, out var communityCenter);
+            var bundleIndex = GetBundleId(bundleName, out var communityCenter, out var area);
             if (bundleIndex <= -1)
             {
                 return;
             }
-            communityCenter.bundleRewards[bundleIndex] = true;
-            for (var i = 0; i < communityCenter.bundles.FieldDict[bundleIndex].Length; i++)
-            {
-                communityCenter.bundles.FieldDict[bundleIndex][i] = true;
-            }
+
+            CompleteBundleInMenu(bundleIndex, area);
+
             var bundleReader = new BundleReader();
             bundleReader.CheckAllBundleLocations(_locationChecker);
         }
 
         private static int GetBundleId(string bundleName)
         {
-            return GetBundleId(bundleName, out _);
+            return GetBundleId(bundleName, out _, out _);
         }
 
-        public static int GetBundleId(string bundleName, out CommunityCenter communityCenter)
+        public static int GetBundleId(string bundleName, out CommunityCenter communityCenter, out int area)
         {
             communityCenter = (CommunityCenter)Game1.getLocationFromName("CommunityCenter");
+            area = 0;
             foreach (var (bundleKey, bundleData) in Game1.netWorldState.Value.BundleData)
             {
                 var name = bundleData.Split("/").First();
                 if (name.Equals(bundleName) || name.Equals($"{bundleName} Bundle") || (bundleName.EndsWith(" Bundle") && name.Equals(bundleName[..^" Bundle".Length])))
                 {
-                    return int.Parse(bundleKey.Split("/").Last());
+                    var keyFields = bundleKey.Split("/");
+                    area = CommunityCenter.getAreaNumberFromName(keyFields.First());
+                    return int.Parse(keyFields.Last());
                 }
             }
             return -1;
