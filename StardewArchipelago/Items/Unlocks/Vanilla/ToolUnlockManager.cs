@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
+using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Items.Mail;
 using StardewValley;
+using StardewValley.Tools;
 
 namespace StardewArchipelago.Items.Unlocks.Vanilla
 {
@@ -93,6 +96,30 @@ namespace StardewArchipelago.Items.Unlocks.Vanilla
                 Game1.player.mailReceived.Add("gotGoldenScythe");
             }
             return new LetterActionAttachment(receivedItem, LetterActionsKeys.ProgressiveScythe);
+        }
+
+        public static bool HasAnyFishingRod(StardewArchipelagoClient archipelago)
+        {
+            if (archipelago.SlotData.ToolProgression.HasFlag(ToolProgression.Progressive))
+            {
+                return archipelago.HasReceivedItem(PROGRESSIVE_FISHING_ROD);
+            }
+
+            return PlayerHasFishingRodAnywhere();
+        }
+
+        private static bool PlayerHasFishingRodAnywhere()
+        {
+            var hasFishingRod = false;
+            Utility.ForEachItem(item =>
+            {
+                if (item is FishingRod)
+                {
+                    hasFishingRod = true;
+                }
+                return !hasFishingRod;
+            });
+            return hasFishingRod;
         }
     }
 }
