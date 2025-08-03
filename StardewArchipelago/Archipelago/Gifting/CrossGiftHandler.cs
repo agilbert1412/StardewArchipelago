@@ -38,21 +38,20 @@ namespace StardewArchipelago.Archipelago.Gifting
 
         public void Initialize(ILogger logger, StardewArchipelagoClient archipelago, StardewItemManager itemManager, Mailman mail, GiftTrapManager giftTrapManager)
         {
-            if (!archipelago.SlotData.Gifting)
-            {
-                return;
-            }
-
             _logger = logger;
             _itemManager = itemManager;
             _mail = mail;
             _archipelago = archipelago;
             _giftSender = new GiftSender(_logger, _archipelago, _itemManager);
 
-            _archipelago.GiftingService.OpenGiftBox(true, _desiredTraits);
-            RegisterAllAvailableGifts();
+            if (archipelago.SlotData.Gifting)
+            {
+                _archipelago.GiftingService.OpenGiftBox(true, _desiredTraits);
+                RegisterAllAvailableGifts();
 
-            _giftReceiver = new GiftReceiver(_logger, _archipelago, _itemManager, _mail, _closeTraitParser, giftTrapManager);
+                _giftReceiver = new GiftReceiver(_logger, _archipelago, _itemManager, _mail, _closeTraitParser, giftTrapManager);
+                return;
+            }
         }
 
         public void Dispose()
