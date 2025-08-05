@@ -1365,6 +1365,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         protected override bool ReceiveLeftClickInSpecificBundlePage(int x, int y)
         {
+            if (CurrentPageBundle.name == MemeBundleNames.BUNDLE_BUNDLE)
+            {
+                if (ReceiveLeftClickInBundleBundle(x, y))
+                {
+                    return true;
+                }
+            }
+
             if (FromGameMenu)
             {
                 return base.ReceiveLeftClickInSpecificBundlePage(x, y);
@@ -1380,13 +1388,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             if (CurrentPageBundle.name == MemeBundleNames.TRAP)
             {
                 if (ReceiveLeftClickInTrapBundle(x, y))
-                {
-                    return true;
-                }
-            }
-            if (CurrentPageBundle.name == MemeBundleNames.BUNDLE_BUNDLE)
-            {
-                if (ReceiveLeftClickInBundleBundle(x, y))
                 {
                     return true;
                 }
