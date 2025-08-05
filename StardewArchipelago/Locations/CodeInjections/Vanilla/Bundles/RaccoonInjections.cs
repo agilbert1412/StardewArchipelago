@@ -158,7 +158,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
                 if (receivedRaccoons >= maxNumberOfRaccoons && nextRaccoonRequestNumber == -1)
                 {
-                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                    Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\1_6_Strings:Raccoon_interim"));
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 // private bool wasTalkedTo;
