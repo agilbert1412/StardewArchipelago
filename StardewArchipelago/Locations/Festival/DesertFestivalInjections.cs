@@ -208,7 +208,15 @@ namespace StardewArchipelago.Locations.Festival
                 {
                     Game1.DrawDialogue(gil, "Strings\\1_6_Strings:Gil_Rating_25", calicoEggRating);
                     eggPrize = 200;
-                    extraPrize = new StardewValley.Object("253", 5);
+                    if (!Game1.player.mailReceived.Contains("DF_Gil_Hat"))
+                    {
+                        extraPrize = new Hat("GilsHat");
+                        Game1.player.mailReceived.Add("DF_Gil_Hat");
+                    }
+                    else
+                    {
+                        extraPrize = new StardewValley.Object("253", 5);
+                    }
                     earnedCheck = true;
                     break;
                 }
