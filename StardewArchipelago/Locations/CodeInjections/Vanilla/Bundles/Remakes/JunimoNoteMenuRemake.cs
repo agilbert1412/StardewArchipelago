@@ -1180,23 +1180,38 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
 
         public static void CompleteBundleInMenu(int bundleIndex, int whichArea, JunimoNoteMenuRemake menu = null)
         {
-            if (menu == null)
+            var communityCenter = Game1.RequireLocation<CommunityCenter>("CommunityCenter");
+            var freshMenu = menu == null;
+            if (freshMenu)
             {
                 menu = new ArchipelagoJunimoNoteMenu(whichArea, Game1.RequireLocation<CommunityCenter>("CommunityCenter").bundlesDict());
                 var bundle = menu.Bundles.First(x => x.BundleIndex == bundleIndex);
                 menu.SetUpBundleSpecificPage(bundle);
             }
-
-            var location = Game1.RequireLocation<CommunityCenter>("CommunityCenter");
-            for (var index = 0; index < location.bundles[bundleIndex].Length; ++index)
+            DoBundleCompletion(bundleIndex, menu, communityCenter);
+            menu.CheckForRewards();
+            if (freshMenu)
             {
-                location.bundles.FieldDict[bundleIndex][index] = true;
+                menu.exitThisMenuNoSound();
             }
-            location.checkForNewJunimoNotes();
+        }
+
+        private static void DoBundleCompletion(int bundleIndex, JunimoNoteMenuRemake menu, CommunityCenter communityCenter)
+        {
+            if (menu.CurrentPageBundle.Complete)
+            {
+                return;
+            }
+
+            for (var index = 0; index < communityCenter.bundles[bundleIndex].Length; ++index)
+            {
+                communityCenter.bundles.FieldDict[bundleIndex][index] = true;
+            }
+            communityCenter.checkForNewJunimoNotes();
             ScreenSwipe = new ScreenSwipe(0, w: menu.width, h: menu.height);
             menu.CurrentPageBundle.CompletionAnimation(menu, delay: 400);
             CanClick = false;
-            location.bundleRewards[bundleIndex] = true;
+            communityCenter.bundleRewards[bundleIndex] = true;
             Game1.Multiplayer.globalChatInfoMessage("Bundle");
             var flag = false;
             foreach (var bundle in menu.Bundles)
@@ -1215,18 +1230,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                 }
                 else
                 {
-                    location.markAreaAsComplete(menu.WhichArea);
+                    communityCenter.markAreaAsComplete(menu.WhichArea);
                     menu.exitFunction = menu.restoreAreaOnExit;
-                    location.areaCompleteReward(menu.WhichArea);
+                    communityCenter.areaCompleteReward(menu.WhichArea);
                 }
             }
             else
             {
-                location.getJunimoForArea(menu.WhichArea)?.bringBundleBackToHut(BundleRemake.GetColorFromColorIndex(menu.CurrentPageBundle.BundleColor), location);
+                communityCenter.getJunimoForArea(menu.WhichArea)?.bringBundleBackToHut(BundleRemake.GetColorFromColorIndex(menu.CurrentPageBundle.BundleColor), communityCenter);
             }
-            menu.CheckForRewards();
-            menu.exitThisMenuNoSound();
-
         }
 
         internal virtual bool CheckIfAllIngredientsAreDeposited()

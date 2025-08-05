@@ -2115,6 +2115,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 return false;
             }
 
+            return IsBundleRemaining(bundleName, bundleIndex, communityCenter);
+        }
+
+        private static bool IsBundleRemaining(string bundleName, int bundleIndex, CommunityCenter communityCenter)
+        {
             var bundleData = Game1.netWorldState.Value.BundleData;
             var bundleInfo = bundleData.First(x => x.Key.EndsWith($"{bundleIndex}")).Value;
             var bundlesDict = communityCenter.bundlesDict();
@@ -2187,7 +2192,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 return;
             }
 
-            CompleteBundleInMenu(bundleIndex, area);
+            if (IsBundleRemaining(bundleName, bundleIndex, communityCenter))
+            {
+                CompleteBundleInMenu(bundleIndex, area);
+            }
 
             var bundleReader = new BundleReader();
             bundleReader.CheckAllBundleLocations(_locationChecker);
