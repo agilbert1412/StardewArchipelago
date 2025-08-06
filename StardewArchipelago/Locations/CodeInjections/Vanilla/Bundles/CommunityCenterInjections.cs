@@ -228,5 +228,24 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
         }
 
+        // public void markAreaAsComplete(int area)
+        public static bool MarkAreaAsComplete_SkipIllegalAreas_Prefix(CommunityCenter __instance, int area)
+        {
+            try
+            {
+                if (area >= __instance.areasComplete.Count)
+                {
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+                }
+
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(MarkAreaAsComplete_SkipIllegalAreas_Prefix)}:\n{ex}");
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+        }
+
     }
 }

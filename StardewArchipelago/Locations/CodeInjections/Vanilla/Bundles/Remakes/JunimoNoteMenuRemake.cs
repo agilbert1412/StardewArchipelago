@@ -72,22 +72,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
           : base(Game1.uiViewport.Width / 2 - 640, Game1.uiViewport.Height / 2 - 360, 1280, 720, true)
         {
             var communityCenter = Game1.RequireLocation<CommunityCenter>("CommunityCenter");
-            if (fromGameMenu && !fromThisMenu)
-            {
-                for (var index = 0; index < communityCenter.areasComplete.Count; ++index)
-                {
-                    if (communityCenter.shouldNoteAppearInArea(index) && !communityCenter.areasComplete[index])
-                    {
-                        area = index;
-                        WhichArea = area;
-                        break;
-                    }
-                }
-                if (Utility.doesMasterPlayerHaveMailReceivedButNotMailForTomorrow("abandonedJojaMartAccessible") && !Game1.MasterPlayer.hasOrWillReceiveMail("ccMovieTheater"))
-                {
-                    area = 6;
-                }
-            }
+            area = SetUpWhichArea(fromGameMenu, fromThisMenu, communityCenter, area);
+
             SetUpMenu(area, communityCenter.bundlesDict());
             Game1.player.forceCanMove();
             var textureComponent1 = new ClickableTextureComponent(new Rectangle(xPositionOnScreen + width - 128, yPositionOnScreen, 48, 44), Game1.mouseCursors, new Rectangle(365, 495, 12, 11), 4f);
@@ -126,6 +112,32 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             }
             populateClickableComponentList();
             snapToDefaultClickableComponent();
+        }
+
+        protected virtual int SetUpWhichArea(bool fromGameMenu, bool fromThisMenu, CommunityCenter communityCenter, int area)
+        {
+            if (fromGameMenu && !fromThisMenu)
+            {
+                for (var index = 0; index < communityCenter.areasComplete.Count; ++index)
+                {
+                    if (communityCenter.shouldNoteAppearInArea(index) && !communityCenter.areasComplete[index])
+                    {
+                        area = index;
+                        WhichArea = area;
+                        break;
+                    }
+                }
+
+                var canAccessMissingBundle = Utility.doesMasterPlayerHaveMailReceivedButNotMailForTomorrow("abandonedJojaMartAccessible");
+                var missingBundleNotDone = !Game1.MasterPlayer.hasOrWillReceiveMail("ccMovieTheater");
+
+                if (canAccessMissingBundle && missingBundleNotDone)
+                {
+                    area = 6;
+                }
+            }
+
+            return area;
         }
 
         public JunimoNoteMenuRemake(int whichArea, Dictionary<int, bool[]> bundlesComplete)

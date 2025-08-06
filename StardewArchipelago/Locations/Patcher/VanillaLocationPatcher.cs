@@ -182,6 +182,11 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(typeof(CommunityCenter), "resetSharedState"),
                 prefix: new HarmonyMethod(typeof(CommunityCenterInjections), nameof(CommunityCenterInjections.ResetSharedState_SisyphusStoneFallDown_Postfix))
             );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(CommunityCenter), nameof(CommunityCenter.markAreaAsComplete)),
+                prefix: new HarmonyMethod(typeof(CommunityCenterInjections), nameof(CommunityCenterInjections.MarkAreaAsComplete_SkipIllegalAreas_Prefix))
+            );
         }
 
         private void ReplaceCommunityCenterAreasWithChecks()

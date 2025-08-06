@@ -170,6 +170,32 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
         }
 
+        protected override int SetUpWhichArea(bool fromGameMenu, bool fromThisMenu, CommunityCenter communityCenter, int area)
+        {
+            if (fromGameMenu && !fromThisMenu)
+            {
+                for (var index = 0; index < communityCenter.areasComplete.Count; ++index)
+                {
+                    if (communityCenter.shouldNoteAppearInArea(index) && !communityCenter.areasComplete[index])
+                    {
+                        area = index;
+                        WhichArea = area;
+                        break;
+                    }
+                }
+
+                var canAccessMissingBundle = Utility.doesMasterPlayerHaveMailReceivedButNotMailForTomorrow("abandonedJojaMartAccessible");
+                var missingBundleNotDone = _locationChecker.IsLocationMissing("The Missing Bundle");
+
+                if (canAccessMissingBundle && missingBundleNotDone)
+                {
+                    area = 6;
+                }
+            }
+
+            return area;
+        }
+
         protected override InventoryMenu SetupInventoryMenu()
         {
             if (_modHelper.ModRegistry.IsLoaded(ModUniqueIds.UniqueIds[ModNames.BIGGER_BACKPACK]))
