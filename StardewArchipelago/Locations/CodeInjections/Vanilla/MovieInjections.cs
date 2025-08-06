@@ -9,6 +9,7 @@ using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewModdingAPI;
 using StardewValley.Locations;
 using System.Linq;
+using Microsoft.Xna.Framework;
 using StardewArchipelago.Constants.Vanilla;
 using StardewValley.GameData.Movies;
 
@@ -140,6 +141,61 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(GetMoviesForSeason_LoopEveryWeek_Prefix)}:\n{ex}");
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+        }
+
+        // public override void performTouchAction(string[] action, Vector2 playerStandingPosition)
+        public static bool PerformTouchAction_WarnCorrectlyAboutLeaving_Prefix(MovieTheater __instance, string[] action, Vector2 playerStandingPosition)
+        {
+            try
+            {
+                if (__instance.IgnoreTouchActions())
+                {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
+                if (ArgUtility.Get(action, 0) != "Theater_Exit")
+                {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
+                if (!ArgUtility.TryGetPoint(action, 1, out var point, out var error, "Point exitTile"))
+                {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
+                // protected int _exitX;
+                // protected int _exitY;
+                var exitXField = _modHelper.Reflection.GetField<int>(__instance, "_exitX");
+                var exitYField = _modHelper.Reflection.GetField<int>(__instance, "_exitY");
+
+                var theaterTileOffset = Town.GetTheaterTileOffset();
+                exitXField.SetValue(point.X + theaterTileOffset.X);
+                exitYField.SetValue(point.Y + theaterTileOffset.Y);
+
+                // protected int CurrentState
+                var currentStateProp = _modHelper.Reflection.GetProperty<int>(__instance, "CurrentState");
+                var currentState = currentStateProp.GetValue();
+
+                if (currentState == 0)
+                {
+                    Game1.player.position.Y -= (float)(((double)Game1.player.Speed + (double)Game1.player.addedSpeed) * 2.0);
+                    Game1.player.Halt();
+                    Game1.currentLocation.createQuestionDialogue(Game1.content.LoadString("Strings\\Characters:MovieTheater_LeavePrompt"), Game1.currentLocation.createYesNoResponses(), "LeaveMovie");
+                }
+                else
+                {
+                    // protected void _Leave()
+                    var leaveMethod = _modHelper.Reflection.GetMethod(__instance, "_Leave");
+                    leaveMethod.Invoke();
+                }
+
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(PerformTouchAction_WarnCorrectlyAboutLeaving_Prefix)}:\n{ex}");
                 return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }

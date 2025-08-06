@@ -1,12 +1,13 @@
-﻿using System;
-using HarmonyLib;
+﻿using HarmonyLib;
 using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
+using StardewArchipelago.GameModifications.Tooltips;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.Arcade;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Quests;
@@ -14,11 +15,13 @@ using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity;
 using StardewArchipelago.Locations.Festival;
 using StardewArchipelago.Locations.GingerIsland;
+using StardewArchipelago.Locations.Secrets;
 using StardewArchipelago.Locations.ShopStockModifiers;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.BellsAndWhistles;
+using StardewValley.Buildings;
 using StardewValley.Characters;
 using StardewValley.Events;
 using StardewValley.GameData.Buildings;
@@ -29,15 +32,13 @@ using StardewValley.Objects;
 using StardewValley.Quests;
 using StardewValley.SpecialOrders;
 using StardewValley.TerrainFeatures;
-using Object = StardewValley.Object;
-using StardewArchipelago.Locations.CodeInjections.Vanilla.Arcade;
-using StardewArchipelago.Locations.Secrets;
-using StardewValley.Buildings;
 using StardewValley.Tools;
+using System;
 using xTile.Dimensions;
+using static System.Collections.Specialized.BitVector32;
 using EventInjections = StardewArchipelago.Locations.CodeInjections.Vanilla.EventInjections;
+using Object = StardewValley.Object;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
-using StardewArchipelago.GameModifications.Tooltips;
 
 namespace StardewArchipelago.Locations.Patcher
 {
@@ -1819,6 +1820,11 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void PatchMoviesanity()
         {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(MovieTheater), nameof(MovieTheater.performTouchAction), new[] { typeof(string[]), typeof(Vector2) }),
+                prefix: new HarmonyMethod(typeof(MovieInjections), nameof(MovieInjections.PerformTouchAction_WarnCorrectlyAboutLeaving_Prefix))
+            );
+
             if (_archipelago.SlotData.Moviesanity <= Moviesanity.None)
             {
                 return;
