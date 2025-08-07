@@ -48,6 +48,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
 
         private void AddArchipelagoChecks(string shopId, ShopData shopData)
         {
+            var shopsToIgnore = new[] { "AnimalShop", "Carpenter", "FishShop", "SeedShop" };
             for (var i = shopData.Items.Count - 1; i >= 0; i--)
             {
                 var item = shopData.Items[i];
