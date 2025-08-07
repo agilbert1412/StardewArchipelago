@@ -50,6 +50,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
             if (!string.IsNullOrWhiteSpace(apShopItem.Condition))
             {
                 apShopItem.Condition = GameStateConditionProvider.RemoveCondition(apShopItem.Condition, GameStateCondition.HAS_RECEIVED_ITEM);
+                apShopItem.Condition = GameStateConditionProvider.RemoveCondition(apShopItem.Condition, GameStateCondition.HAS_CRAFTING_RECIPE);
             }
 
             return apShopItem;
