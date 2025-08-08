@@ -1,21 +1,22 @@
-﻿using System;
-using System.Linq;
+﻿using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using StardewArchipelago.Archipelago;
+using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Goals;
 using StardewModdingAPI;
 using StardewValley;
-using StardewValley.Locations;
-using StardewValley.Monsters;
-using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
-using KaitoKid.ArchipelagoUtilities.Net;
-using KaitoKid.ArchipelagoUtilities.Net.Constants;
-using StardewArchipelago.Archipelago;
-using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewValley.GameData;
-using StardewValley.TokenizableStrings;
-using System.Collections.Generic;
+using StardewValley.Locations;
 using StardewValley.Menus;
+using StardewValley.Monsters;
 using StardewValley.Objects;
+using StardewValley.TokenizableStrings;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using xTile.Dimensions;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
 {
@@ -37,6 +38,44 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
             _locationChecker = locationChecker;
             _killList = killList;
         }
+
+        // public override bool checkAction(Location tileLocation, xTile.Dimensions.Rectangle viewport, Farmer who)
+        public static bool CheckAction_NoMonsterSlayerRewards_Prefix(AdventureGuild __instance, Location tileLocation, xTile.Dimensions.Rectangle viewport, Farmer who, ref bool __result)
+        {
+            try
+            {
+                var tileIndex = __instance.getTileIndexAt(tileLocation, "Buildings", "1");
+                _logger.LogInfo($"new Location({tileLocation.X}, {tileLocation.Y})");
+
+                var gilLocations = new[]
+                {
+                    new Location(10, 12),
+                    new Location(10, 13),
+                    new Location(11, 11),
+                    new Location(11, 12),
+                    new Location(11, 13),
+                    new Location(11, 13),
+                    new Location(12, 12),
+                    new Location(12, 13),
+                };
+
+                if (gilLocations.Any(x => x.Equals(tileLocation)))
+                {
+                    // private void gil()
+                    var gilMethod = _modHelper.Reflection.GetMethod(__instance, "gil");
+                    gilMethod.Invoke();
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+                }
+
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(Gil_NoMonsterSlayerRewards_Prefix)}:\n{ex}");
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+        }
+
 
         // private void gil()
         public static bool Gil_NoMonsterSlayerRewards_Prefix(AdventureGuild __instance)

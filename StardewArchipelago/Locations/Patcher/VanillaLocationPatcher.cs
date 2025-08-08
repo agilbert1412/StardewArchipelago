@@ -34,6 +34,7 @@ using StardewValley.SpecialOrders;
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
 using System;
+using StardewArchipelago.Constants.Modded;
 using xTile.Dimensions;
 using static System.Collections.Specialized.BitVector32;
 using EventInjections = StardewArchipelago.Locations.CodeInjections.Vanilla.EventInjections;
@@ -1183,6 +1184,14 @@ namespace StardewArchipelago.Locations.Patcher
             if (_archipelago.SlotData.Monstersanity == Monstersanity.None)
             {
                 return;
+            }
+
+            if (_archipelago.SlotData.Mods.HasMod(ModNames.SVE))
+            {
+                _harmony.Patch(
+                    original: AccessTools.Method(typeof(AdventureGuild), nameof(AdventureGuild.checkAction)),
+                    prefix: new HarmonyMethod(typeof(MonsterSlayerInjections), nameof(MonsterSlayerInjections.CheckAction_NoMonsterSlayerRewards_Prefix))
+                );
             }
 
             _harmony.Patch(
