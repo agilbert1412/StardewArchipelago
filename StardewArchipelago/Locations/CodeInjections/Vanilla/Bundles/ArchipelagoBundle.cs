@@ -198,7 +198,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             {
                 return false;
             }
-            if (name == MemeBundleNames.ANIMAL_WELL && item.QualifiedItemId == QualifiedItemIds.ADVANCED_TV_REMOTE && !_archipelago.SlotData.ExcludeGingerIsland)
+            if (name == MemeBundleNames.ANIMAL_WELL && item != null && item.QualifiedItemId == QualifiedItemIds.ADVANCED_TV_REMOTE && !_archipelago.SlotData.ExcludeGingerIsland)
             {
                 return false;
             }
