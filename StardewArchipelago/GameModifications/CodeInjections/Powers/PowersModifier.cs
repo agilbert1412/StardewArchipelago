@@ -31,7 +31,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Powers
             new VanillaArchipelagoPower("ForestMagic", APItem.FOREST_MAGIC),
             new VanillaArchipelagoPower("DwarvishTranslationGuide", APItem.DWARVISH_TRANSLATION_GUIDE),
             new VanillaArchipelagoPower("RustyKey", APItem.RUSTY_KEY),
-            new VanillaArchipelagoPower("ClubCard", APItem.CLUB_CARD, StoryQuestsEnabled),
+            new VanillaArchipelagoPower("ClubCard", APItem.CLUB_CARD, (x) => StoryQuestsEnabled(x) || x.Secretsanity.HasFlag(Secretsanity.SecretNotes)),
             new VanillaArchipelagoPower("SpecialCharm", APItem.SPECIAL_CHARM, (x) => x.Secretsanity.HasFlag(Secretsanity.SecretNotes)),
             new VanillaArchipelagoPower("SkullKey", APItem.SKULL_KEY),
             new VanillaArchipelagoPower("MagnifyingGlass", APItem.MAGNIFYING_GLASS, StoryQuestsEnabled),
