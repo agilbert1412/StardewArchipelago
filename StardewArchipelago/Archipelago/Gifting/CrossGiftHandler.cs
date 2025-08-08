@@ -43,13 +43,13 @@ namespace StardewArchipelago.Archipelago.Gifting
             _mail = mail;
             _archipelago = archipelago;
             _giftSender = new GiftSender(_logger, _archipelago, _itemManager);
+            _giftReceiver = new GiftReceiver(_logger, _archipelago, _itemManager, _mail, _closeTraitParser, giftTrapManager);
 
             if (archipelago.SlotData.Gifting)
             {
                 _archipelago.GiftingService.OpenGiftBox(true, _desiredTraits);
                 RegisterAllAvailableGifts();
 
-                _giftReceiver = new GiftReceiver(_logger, _archipelago, _itemManager, _mail, _closeTraitParser, giftTrapManager);
                 return;
             }
         }
