@@ -2157,7 +2157,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             var isComplete = BundleRemake.IsBundleComplete(bundleState, bundleInfoArray);
             if (isComplete && _locationChecker.IsLocationMissing($"{bundleName} Bundle"))
             {
-                _locationChecker.AddCheckedLocation(bundleName);
+                _locationChecker.AddCheckedLocation($"{bundleName} Bundle");
             }
             return !isComplete;
         }
@@ -2199,11 +2199,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 var requiredItem = ItemRegistry.Create(id);
                 if (itemName == requiredItem.Name && itemAmount >= amount)
                 {
-                    communityCenter.bundles.FieldDict[bundleIndex][i/3] = true;
-                    if (communityCenter.bundles.FieldDict[bundleIndex].Count(x => x) >= requiredDonations)
+                    if (communityCenter.bundles.FieldDict[bundleIndex].Count(x => x) >= requiredDonations-1)
                     {
                         CompleteBundleIfExists(bundleName);
+                        return amount;
                     }
+                    communityCenter.bundles.FieldDict[bundleIndex][i / 3] = true;
                     return amount;
                 }
             }
