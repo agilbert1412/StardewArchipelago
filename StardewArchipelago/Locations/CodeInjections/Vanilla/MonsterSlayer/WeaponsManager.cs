@@ -1,16 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using KaitoKid.ArchipelagoUtilities.Net.Client;
+﻿using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Modded;
+using StardewArchipelago.Items.Unlocks.Vanilla;
 using StardewArchipelago.Stardew;
 using StardewValley;
 using StardewValley.Internal;
 using StardewValley.Objects;
 using StardewValley.Tools;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
 {
@@ -122,7 +123,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
 
         private IEnumerable<ItemQueryResult> GetBootsToSell(bool isRecovery, double priceMultiplier, Random random)
         {
-            var receivedTier = _archipelago.GetReceivedItemCount("Progressive Boots");
+            var receivedTier = _archipelago.GetReceivedItemCount(EquipmentUnlockManager.PROGRESSIVE_BOOTS);
             if (_archipelago.SlotData.Monstersanity == Monstersanity.None && receivedTier >= 3)
             {
                 receivedTier++;
