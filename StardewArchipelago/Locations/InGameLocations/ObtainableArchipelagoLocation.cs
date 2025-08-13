@@ -92,7 +92,7 @@ namespace StardewArchipelago.Locations.InGameLocations
 
             _locationChecker = locationChecker;
 
-            var relatedHint = myActiveHints.FirstOrDefault(hint => archipelago.GetLocationName(hint.LocationId).Equals(locationName, StringComparison.OrdinalIgnoreCase));
+            var relatedHint = myActiveHints.FirstOrDefault(hint => archipelago.GetLocationName(hint).Equals(locationName, StringComparison.OrdinalIgnoreCase));
             var scoutedLocation = archipelago.ScoutStardewLocation(LocationName);
 
             _archipelagoTexture = GetCorrectTexture(logger, modHelper, scoutedLocation, archipelago, relatedHint);

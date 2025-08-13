@@ -193,9 +193,9 @@ namespace StardewArchipelago.Archipelago
             _bigIntegerDataStorage = null;
         }
 
-        protected override void OnError()
+        protected override void OnError(string message, Exception ex)
         {
-            base.OnError();
+            base.OnError(message, ex);
             Game1.chatBox?.addMessage("Connection to Archipelago lost. The game will try reconnecting later. Check the SMAPI console for details", Color.Red);
         }
 
@@ -310,6 +310,23 @@ namespace StardewArchipelago.Archipelago
             {
                 allNames.Add(locationName);
                 allNames.Add(StardewLocationChecker.GetWalnutAlternateName(locationName));
+            }
+
+            var session = GetSession();
+            allNames = allNames.Where(name =>
+            {
+                var id = session.Locations.GetLocationIdFromName(GameName, name);
+                if (id <= 0)
+                {
+                    return false;
+                }
+
+                return session.Locations.AllMissingLocations.Contains(id);
+            }).ToList();
+
+            if (!allNames.Any())
+            {
+                return new Dictionary<string, ScoutedLocation>();
             }
 
             return ScoutManyLocations(allNames, ShouldHint(createAsHint));

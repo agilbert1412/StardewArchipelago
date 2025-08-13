@@ -1,4 +1,5 @@
-﻿using KaitoKid.ArchipelagoUtilities.Net.Client;
+﻿using System;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewModdingAPI;
 
 namespace StardewArchipelago.Logging
@@ -13,6 +14,11 @@ namespace StardewArchipelago.Logging
         }
 
         public override void LogError(string message)
+        {
+            _logger.Log(message, LogLevel.Error);
+        }
+
+        public override void LogError(string message, Exception e)
         {
             _logger.Log(message, LogLevel.Error);
         }

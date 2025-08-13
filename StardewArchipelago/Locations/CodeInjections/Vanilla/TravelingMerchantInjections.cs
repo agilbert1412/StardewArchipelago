@@ -380,7 +380,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
         private static bool IsItemRelevantForHint(Hint hint, Object item)
         {
-            var locationName = _archipelago.GetLocationName(hint.LocationId);
+            var locationName = _archipelago.GetLocationName(hint);
             var isDirectlyNeeded = locationName.Contains(item.Name, StringComparison.InvariantCultureIgnoreCase);
             if (isDirectlyNeeded)
             {

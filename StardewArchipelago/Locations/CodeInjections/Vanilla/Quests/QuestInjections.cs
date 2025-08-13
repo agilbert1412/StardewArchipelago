@@ -343,7 +343,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
                 return;
             }
 
-            var weight = hints.Any(hint => _archipelago.GetLocationName(hint.LocationId) == location) ? 10 : 1;
+            var weight = hints.Any(hint => _archipelago.GetLocationName(hint) == location) ? 10 : 1;
             remainingHelpWantedQuests.AddRange(Enumerable.Repeat(questType, weight));
         }
 
