@@ -5,6 +5,7 @@ using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Modded;
+using StardewArchipelago.Items.Unlocks.Vanilla;
 using StardewArchipelago.Stardew;
 using StardewValley;
 using StardewValley.Internal;
@@ -121,7 +122,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer
 
         private IEnumerable<ItemQueryResult> GetBootsToSell(bool isRecovery, double priceMultiplier, Random random)
         {
-            var receivedTier = _archipelago.GetReceivedItemCount("Progressive Boots");
+            var receivedTier = _archipelago.GetReceivedItemCount(EquipmentUnlockManager.PROGRESSIVE_BOOTS);
             for (var i = 1; i <= BootsByTier.Keys.Max(); i++)
             {
                 var bootsInTier = BootsByTier.ContainsKey(i) ? BootsByTier[i] : new List<StardewItem>();
