@@ -54,7 +54,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 if (!_locationChecker.LocationExists(locationName))
                 {
                     var prefixedName = $"Walnutsanity: {locationName}";
-                    if (_locationChecker.LocationExists(locationName))
+                    if (_locationChecker.LocationExists(prefixedName))
                     {
                         locationName = prefixedName;
                     }
