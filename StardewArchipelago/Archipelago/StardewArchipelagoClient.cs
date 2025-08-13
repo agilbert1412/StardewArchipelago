@@ -218,9 +218,9 @@ namespace StardewArchipelago.Archipelago
             _deathManager = null;
         }
 
-        protected override void OnError()
+        protected override void OnError(string message, Exception e)
         {
-            base.OnError();
+            base.OnError(message, e);
             Game1.chatBox?.addMessage("Connection to Archipelago lost. The game will try reconnecting later. Check the SMAPI console for details", Color.Red);
         }
 
