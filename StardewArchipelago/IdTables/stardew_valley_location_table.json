@@ -4530,11 +4530,11 @@
         },
         "Island Mailbox": {
             "code": 719207,
-            "region": "Island Farmhouse"
+            "region": "Island West"
         },
         "Farm Obelisk": {
             "code": 719208,
-            "region": "Island Farmhouse"
+            "region": "Island West"
         },
         "Dig Site Bridge": {
             "code": 719209,
@@ -9276,379 +9276,379 @@
             "code": 721071,
             "region": "Museum"
         },
-        "Open Golden Coconut": {
+        "Walnutsanity: Open Golden Coconut": {
             "code": 721101,
             "region": "Clint's Blacksmith"
         },
-        "Fishing Walnut 1": {
+        "Walnutsanity: Fishing Walnut 1": {
             "code": 721102,
             "region": "Island West"
         },
-        "Fishing Walnut 2": {
+        "Walnutsanity: Fishing Walnut 2": {
             "code": 721103,
             "region": "Island West"
         },
-        "Fishing Walnut 3": {
+        "Walnutsanity: Fishing Walnut 3": {
             "code": 721104,
             "region": "Island North"
         },
-        "Fishing Walnut 4": {
+        "Walnutsanity: Fishing Walnut 4": {
             "code": 721105,
             "region": "Island North"
         },
-        "Fishing Walnut 5": {
+        "Walnutsanity: Fishing Walnut 5": {
             "code": 721106,
             "region": "Island Southeast"
         },
-        "Jungle Bush": {
+        "Walnutsanity: Jungle Bush": {
             "code": 721107,
             "region": "Island East"
         },
-        "Banana Altar": {
+        "Walnutsanity: Banana Altar": {
             "code": 721108,
             "region": "Island East"
         },
-        "Leo's Tree": {
+        "Walnutsanity: Leo's Tree": {
             "code": 721109,
             "region": "Leo's Hut"
         },
-        "Gem Birds Bush": {
+        "Walnutsanity: Gem Birds Bush": {
             "code": 721110,
             "region": "Island Shrine"
         },
-        "Gem Birds Shrine": {
+        "Walnutsanity: Gem Birds Shrine": {
             "code": 721111,
             "region": "Island Shrine"
         },
-        "Harvesting Walnut 1": {
+        "Walnutsanity: Harvesting Walnut 1": {
             "code": 721112,
             "region": "Island West"
         },
-        "Harvesting Walnut 2": {
+        "Walnutsanity: Harvesting Walnut 2": {
             "code": 721113,
             "region": "Island West"
         },
-        "Harvesting Walnut 3": {
+        "Walnutsanity: Harvesting Walnut 3": {
             "code": 721114,
             "region": "Island West"
         },
-        "Harvesting Walnut 4": {
+        "Walnutsanity: Harvesting Walnut 4": {
             "code": 721115,
             "region": "Island West"
         },
-        "Harvesting Walnut 5": {
+        "Walnutsanity: Harvesting Walnut 5": {
             "code": 721116,
             "region": "Island West"
         },
-        "Gourmand Frog Melon": {
+        "Walnutsanity: Gourmand Frog Melon": {
             "code": 721117,
             "region": "Gourmand Frog Cave"
         },
-        "Gourmand Frog Wheat": {
+        "Walnutsanity: Gourmand Frog Wheat": {
             "code": 721118,
             "region": "Gourmand Frog Cave"
         },
-        "Gourmand Frog Garlic": {
+        "Walnutsanity: Gourmand Frog Garlic": {
             "code": 721119,
             "region": "Gourmand Frog Cave"
         },
-        "Journal Scrap #6": {
+        "Walnutsanity: Journal Scrap #6": {
             "code": 721120,
             "region": "Island West"
         },
-        "Mussel Node Walnut 1": {
+        "Walnutsanity: Mussel Node Walnut 1": {
             "code": 721121,
             "region": "Island West"
         },
-        "Mussel Node Walnut 2": {
+        "Walnutsanity: Mussel Node Walnut 2": {
             "code": 721122,
             "region": "Island West"
         },
-        "Mussel Node Walnut 3": {
+        "Walnutsanity: Mussel Node Walnut 3": {
             "code": 721123,
             "region": "Island West"
         },
-        "Mussel Node Walnut 4": {
+        "Walnutsanity: Mussel Node Walnut 4": {
             "code": 721124,
             "region": "Island West"
         },
-        "Mussel Node Walnut 5": {
+        "Walnutsanity: Mussel Node Walnut 5": {
             "code": 721125,
             "region": "Island West"
         },
-        "Shipwreck Bush": {
+        "Walnutsanity: Shipwreck Bush": {
             "code": 721126,
             "region": "Shipwreck"
         },
-        "Whack A Mole": {
+        "Walnutsanity: Whack A Mole": {
             "code": 721127,
             "region": "Island West"
         },
-        "Starfish Triangle": {
+        "Walnutsanity: Starfish Triangle": {
             "code": 721128,
             "region": "Island West"
         },
-        "Starfish Diamond": {
+        "Walnutsanity: Starfish Diamond": {
             "code": 721129,
             "region": "Island West"
         },
-        "X in the sand": {
+        "Walnutsanity: X in the sand": {
             "code": 721130,
             "region": "Island West"
         },
-        "Diamond Of Indents": {
+        "Walnutsanity: Diamond Of Indents": {
             "code": 721131,
             "region": "Island West"
         },
-        "Bush Behind Coconut Tree": {
+        "Walnutsanity: Bush Behind Coconut Tree": {
             "code": 721132,
             "region": "Island West"
         },
-        "Journal Scrap #4": {
+        "Walnutsanity: Journal Scrap #4": {
             "code": 721133,
             "region": "Island West"
         },
-        "Walnut Room Bush": {
+        "Walnutsanity: Walnut Room Bush": {
             "code": 721134,
             "region": "Island West"
         },
-        "Coast Bush": {
+        "Walnutsanity: Coast Bush": {
             "code": 721135,
             "region": "Island West"
         },
-        "Tiger Slime Walnut": {
+        "Walnutsanity: Tiger Slime Walnut": {
             "code": 721136,
             "region": "Island West"
         },
-        "Bush Behind Mahogany Tree": {
+        "Walnutsanity: Bush Behind Mahogany Tree": {
             "code": 721137,
             "region": "Island West"
         },
-        "Circle Of Grass": {
+        "Walnutsanity: Circle Of Grass": {
             "code": 721138,
             "region": "Island West"
         },
-        "Below Colored Crystals Cave Bush": {
+        "Walnutsanity: Below Colored Crystals Cave Bush": {
             "code": 721139,
             "region": "Island West"
         },
-        "Colored Crystals": {
+        "Walnutsanity: Colored Crystals": {
             "code": 721140,
             "region": "Colored Crystals Cave"
         },
-        "Cliff Edge Bush": {
+        "Walnutsanity: Cliff Edge Bush": {
             "code": 721141,
             "region": "Island West"
         },
-        "Diamond Of Pebbles": {
+        "Walnutsanity: Diamond Of Pebbles": {
             "code": 721142,
             "region": "Island West"
         },
-        "Farm Parrot Express Bush": {
+        "Walnutsanity: Farm Parrot Express Bush": {
             "code": 721143,
             "region": "Island West"
         },
-        "Farmhouse Cliff Bush": {
+        "Walnutsanity: Farmhouse Cliff Bush": {
             "code": 721144,
             "region": "Island West"
         },
-        "Big Circle Of Stones": {
+        "Walnutsanity: Big Circle Of Stones": {
             "code": 721145,
             "region": "Island North"
         },
-        "Grove Bush": {
+        "Walnutsanity: Grove Bush": {
             "code": 721146,
             "region": "Island North"
         },
-        "Diamond Of Grass": {
+        "Walnutsanity: Diamond Of Grass": {
             "code": 721147,
             "region": "Island North"
         },
-        "Small Circle Of Stones": {
+        "Walnutsanity: Small Circle Of Stones": {
             "code": 721148,
             "region": "Island North"
         },
-        "Patch Of Sand": {
+        "Walnutsanity: Patch Of Sand": {
             "code": 721149,
             "region": "Island North"
         },
-        "Crooked Circle Of Stones": {
+        "Walnutsanity: Crooked Circle Of Stones": {
             "code": 721150,
             "region": "Dig Site"
         },
-        "Above Dig Site Bush": {
+        "Walnutsanity: Above Dig Site Bush": {
             "code": 721151,
             "region": "Dig Site"
         },
-        "Above Field Office Bush 1": {
+        "Walnutsanity: Above Field Office Bush 1": {
             "code": 721152,
             "region": "Dig Site"
         },
-        "Above Field Office Bush 2": {
+        "Walnutsanity: Above Field Office Bush 2": {
             "code": 721153,
             "region": "Dig Site"
         },
-        "Complete Large Animal Collection": {
+        "Walnutsanity: Complete Large Animal Collection": {
             "code": 721154,
             "region": "Field Office"
         },
-        "Complete Snake Collection": {
+        "Walnutsanity: Complete Snake Collection": {
             "code": 721155,
             "region": "Field Office"
         },
-        "Complete Mummified Frog Collection": {
+        "Walnutsanity: Complete Mummified Frog Collection": {
             "code": 721156,
             "region": "Field Office"
         },
-        "Complete Mummified Bat Collection": {
+        "Walnutsanity: Complete Mummified Bat Collection": {
             "code": 721157,
             "region": "Field Office"
         },
-        "Purple Flowers Island Survey": {
+        "Walnutsanity: Purple Flowers Island Survey": {
             "code": 721158,
             "region": "Field Office"
         },
-        "Purple Starfish Island Survey": {
+        "Walnutsanity: Purple Starfish Island Survey": {
             "code": 721159,
             "region": "Field Office"
         },
-        "Bush Behind Volcano Tree": {
+        "Walnutsanity: Bush Behind Volcano Tree": {
             "code": 721160,
             "region": "Island North"
         },
-        "Arc Of Stones": {
+        "Walnutsanity: Arc Of Stones": {
             "code": 721161,
             "region": "Island North"
         },
-        "Protruding Tree Walnut": {
+        "Walnutsanity: Protruding Tree Walnut": {
             "code": 721162,
             "region": "Island North"
         },
-        "Journal Scrap #10": {
+        "Walnutsanity: Journal Scrap #10": {
             "code": 721163,
             "region": "Island North"
         },
-        "Northmost Point Circle Of Stones": {
+        "Walnutsanity: Northmost Point Circle Of Stones": {
             "code": 721164,
             "region": "Island North"
         },
-        "Hidden Passage Bush": {
+        "Walnutsanity: Hidden Passage Bush": {
             "code": 721165,
             "region": "Island North"
         },
-        "Secret Beach Bush 1": {
+        "Walnutsanity: Secret Beach Bush 1": {
             "code": 721166,
             "region": "Volcano Secret Beach"
         },
-        "Secret Beach Bush 2": {
+        "Walnutsanity: Secret Beach Bush 2": {
             "code": 721167,
             "region": "Volcano Secret Beach"
         },
-        "Volcano Rocks Walnut 1": {
+        "Walnutsanity: Volcano Rocks Walnut 1": {
             "code": 721168,
             "region": "Volcano - Floor 5"
         },
-        "Volcano Rocks Walnut 2": {
+        "Walnutsanity: Volcano Rocks Walnut 2": {
             "code": 721169,
             "region": "Volcano - Floor 5"
         },
-        "Volcano Rocks Walnut 3": {
+        "Walnutsanity: Volcano Rocks Walnut 3": {
             "code": 721170,
             "region": "Volcano - Floor 10"
         },
-        "Volcano Rocks Walnut 4": {
+        "Walnutsanity: Volcano Rocks Walnut 4": {
             "code": 721171,
             "region": "Volcano - Floor 10"
         },
-        "Volcano Rocks Walnut 5": {
+        "Walnutsanity: Volcano Rocks Walnut 5": {
             "code": 721172,
             "region": "Volcano - Floor 10"
         },
-        "Volcano Monsters Walnut 1": {
+        "Walnutsanity: Volcano Monsters Walnut 1": {
             "code": 721173,
             "region": "Volcano - Floor 5"
         },
-        "Volcano Monsters Walnut 2": {
+        "Walnutsanity: Volcano Monsters Walnut 2": {
             "code": 721174,
             "region": "Volcano - Floor 5"
         },
-        "Volcano Monsters Walnut 3": {
+        "Walnutsanity: Volcano Monsters Walnut 3": {
             "code": 721175,
             "region": "Volcano - Floor 10"
         },
-        "Volcano Monsters Walnut 4": {
+        "Walnutsanity: Volcano Monsters Walnut 4": {
             "code": 721176,
             "region": "Volcano - Floor 10"
         },
-        "Volcano Monsters Walnut 5": {
+        "Walnutsanity: Volcano Monsters Walnut 5": {
             "code": 721177,
             "region": "Volcano - Floor 10"
         },
-        "Volcano Crates Walnut 1": {
+        "Walnutsanity: Volcano Crates Walnut 1": {
             "code": 721178,
             "region": "Volcano - Floor 5"
         },
-        "Volcano Crates Walnut 2": {
+        "Walnutsanity: Volcano Crates Walnut 2": {
             "code": 721179,
             "region": "Volcano - Floor 5"
         },
-        "Volcano Crates Walnut 3": {
+        "Walnutsanity: Volcano Crates Walnut 3": {
             "code": 721180,
             "region": "Volcano - Floor 10"
         },
-        "Volcano Crates Walnut 4": {
+        "Walnutsanity: Volcano Crates Walnut 4": {
             "code": 721181,
             "region": "Volcano - Floor 10"
         },
-        "Volcano Crates Walnut 5": {
+        "Walnutsanity: Volcano Crates Walnut 5": {
             "code": 721182,
             "region": "Volcano - Floor 10"
         },
-        "Volcano Common Chest Walnut": {
+        "Walnutsanity: Volcano Common Chest Walnut": {
             "code": 721183,
             "region": "Volcano - Floor 5"
         },
-        "Volcano Rare Chest Walnut": {
+        "Walnutsanity: Volcano Rare Chest Walnut": {
             "code": 721184,
             "region": "Volcano - Floor 10"
         },
-        "Forge Entrance Bush": {
+        "Walnutsanity: Forge Entrance Bush": {
             "code": 721185,
             "region": "Volcano - Floor 10"
         },
-        "Forge Exit Bush": {
+        "Walnutsanity: Forge Exit Bush": {
             "code": 721186,
             "region": "Volcano - Floor 10"
         },
-        "Cliff Over Island South Bush": {
+        "Walnutsanity: Cliff Over Island South Bush": {
             "code": 721187,
             "region": "Island North"
         },
-        "Starfish Tide Pool": {
+        "Walnutsanity: Starfish Tide Pool": {
             "code": 721188,
             "region": "Island Southeast"
         },
-        "Diamond Of Yellow Starfish": {
+        "Walnutsanity: Diamond Of Yellow Starfish": {
             "code": 721189,
             "region": "Island Southeast"
         },
-        "Mermaid Song": {
+        "Walnutsanity: Mermaid Song": {
             "code": 721190,
             "region": "Island Southeast"
         },
-        "Pirate Darts 1": {
+        "Walnutsanity: Pirate Darts 1": {
             "code": 721191,
             "region": "Pirate Cove"
         },
-        "Pirate Darts 2": {
+        "Walnutsanity: Pirate Darts 2": {
             "code": 721192,
             "region": "Pirate Cove"
         },
-        "Pirate Darts 3": {
+        "Walnutsanity: Pirate Darts 3": {
             "code": 721193,
             "region": "Pirate Cove"
         },
-        "Pirate Cove Patch Of Sand": {
+        "Walnutsanity: Pirate Cove Patch Of Sand": {
             "code": 721194,
             "region": "Pirate Cove"
         },

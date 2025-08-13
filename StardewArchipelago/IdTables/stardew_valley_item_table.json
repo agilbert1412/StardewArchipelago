@@ -2040,6 +2040,10 @@
             "code": 717563,
             "classification": "filler"
         },
+        "Pet Bowl": {
+            "code": 717564,
+            "classification": "progression"
+        },
         "Burnt Trap": {
             "code": 721001,
             "classification": "trap"
