@@ -374,7 +374,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             {
                 slot.item = ItemRegistry.Create(representativeItemId, ingredientDescription1.stack, ingredientDescription1.quality);
             }
-            Game1.playSound("newArtifact");
+            PlayItemDonatedSound();
             slot.sourceRect.X = 512;
             slot.sourceRect.Y = 244;
             if (parentMenu.OnIngredientDeposit != null)
@@ -385,6 +385,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             communityCenter.bundles.FieldDict[this.BundleIndex][index1] = true;
             Game1.Multiplayer.globalChatInfoMessage("BundleDonate", Game1.player.displayName, TokenStringBuilder.ItemNameFor(slot.item));
             return item;
+        }
+
+        protected virtual void PlayItemDonatedSound()
+        {
+            Game1.playSound("newArtifact");
         }
 
         public void IngredientDepositAnimation(

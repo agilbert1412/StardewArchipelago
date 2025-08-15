@@ -1,40 +1,39 @@
 ﻿#nullable disable
+using Archipelago.MultiClient.Net.Models;
+using KaitoKid.ArchipelagoUtilities.Net;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using StardewArchipelago.Archipelago;
+using StardewArchipelago.Archipelago.Gifting;
+using StardewArchipelago.Bundles;
+using StardewArchipelago.Constants;
+using StardewArchipelago.Constants.Modded;
+using StardewArchipelago.Constants.Vanilla;
+using StardewArchipelago.Extensions;
+using StardewArchipelago.Items.Traps;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Gacha;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes;
+using StardewArchipelago.Logging;
+using StardewArchipelago.Serialization;
+using StardewArchipelago.Stardew;
+using StardewArchipelago.Textures;
+using StardewModdingAPI;
+using StardewModdingAPI.Events;
+using StardewValley;
+using StardewValley.ItemTypeDefinitions;
+using StardewValley.Locations;
+using StardewValley.Menus;
+using StardewValley.Objects;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using KaitoKid.ArchipelagoUtilities.Net;
-using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes;
-using StardewArchipelago.Stardew;
-using StardewValley.Locations;
-using StardewValley;
-using StardewValley.Menus;
-using Microsoft.Xna.Framework.Graphics;
-using StardewArchipelago.Textures;
-using StardewModdingAPI;
-using Microsoft.Xna.Framework;
-using StardewArchipelago.Extensions;
-using StardewArchipelago.Constants;
-using StardewArchipelago.Archipelago;
-using StardewArchipelago.Bundles;
-using StardewArchipelago.Logging;
-using StardewArchipelago.Serialization;
-using Microsoft.Xna.Framework.Input;
-using StardewArchipelago.Items.Traps;
-using StardewValley.ItemTypeDefinitions;
-using StardewArchipelago.Constants.Vanilla;
-using StardewValley.Objects;
-using Object = StardewValley.Object;
-using Archipelago.MultiClient.Net.Models;
-using Microsoft.Xna.Framework.Audio;
-using StardewArchipelago.Archipelago.Gifting;
-using StardewArchipelago.Constants.Modded;
-using StardewModdingAPI.Events;
+using static HarmonyLib.Code;
 using Color = Microsoft.Xna.Framework.Color;
-using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Gacha;
-using StardewValley.GameData.Bundles;
-using StardewValley.Minigames;
+using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 {
@@ -2436,6 +2435,22 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 >= 40 => 6,
             };
 
+        }
+
+        protected override void CompleteBundleInMenu()
+        {
+            if (CurrentPageBundle.name == MemeBundleNames.MERMAID)
+            {
+                Game1.currentLocation.temporarySprites.Add(new TemporaryAnimatedSprite()
+                {
+                    interval = 1f,
+                    delayBeforeAnimationStart = 2425 + 400,
+                    endFunction = (x) => base.CompleteBundleInMenu(),
+                });
+                return;
+            }
+
+            base.CompleteBundleInMenu();
         }
     }
 }

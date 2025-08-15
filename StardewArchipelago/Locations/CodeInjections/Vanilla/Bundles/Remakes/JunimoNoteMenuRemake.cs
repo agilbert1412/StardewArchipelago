@@ -1185,7 +1185,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             }
         }
 
-        private void CompleteBundleInMenu()
+        protected virtual void CompleteBundleInMenu()
         {
             CompleteBundleInMenu(CurrentPageBundle.BundleIndex, WhichArea, this);
         }

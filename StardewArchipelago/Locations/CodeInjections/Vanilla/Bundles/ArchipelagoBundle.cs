@@ -29,6 +29,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         private static LocationChecker _locationChecker;
         private static BundlesManager _bundlesManager;
 
+        private static int[] _mermaidSequence = new[] { 1, 5, 4, 2, 3 };
+        private static int[] _mermaidPitches = new[] { 300, 600, 800, 1000, 1200 };
+
         public ArchipelagoBundle(string name, string displayName, List<BundleIngredientDescription> ingredients, bool[] completedIngredientsList, string rewardListString = "") : base(name, displayName, ingredients, completedIngredientsList, rewardListString)
         {
         }
@@ -172,9 +175,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
             if (name == MemeBundleNames.MERMAID)
             {
-                var sequence = new[] { 1, 5, 4, 2, 3 };
                 var numberIngredientsDonated = Ingredients.Count(x => x.completed);
-                var onlyValidIngredient = sequence[numberIngredientsDonated] - 1;
+                var onlyValidIngredient = _mermaidSequence[numberIngredientsDonated] - 1;
                 if (ingredientIndex != onlyValidIngredient)
                 {
                     return false;
@@ -346,6 +348,49 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 ArchipelagoJunimoNoteMenu.SisyphusStoneNeedsToFall = true;
             }
             return result;
+        }
+
+        protected override void PlayItemDonatedSound()
+        {
+            if (name == MemeBundleNames.MERMAID)
+            {
+                var num = this.Ingredients.Count(x => x.completed);
+                var songIndex = num - 1;
+                var songNote = _mermaidSequence[songIndex];
+                var pitchIndex = songNote - 1;
+                PlayClamTone(pitchIndex);
+                if (num >= _mermaidSequence.Length)
+                {
+                    PlayFullMermaidSong();
+                }
+                return;
+            }
+            base.PlayItemDonatedSound();
+        }
+
+        public void PlayClamTone(int pitchIndex)
+        {
+            var pitch = _mermaidPitches[pitchIndex];
+            Game1.playSound("clam_tone", pitch);
+        }
+
+        private void PlayFullMermaidSong()
+        {
+            var location = Game1.currentLocation;
+            var noteDelay = 385; // 1270 - 885;
+
+            for (var i = 0; i < _mermaidSequence.Length; i++)
+            {
+                var note = _mermaidSequence[i] - 1;
+                var delay = 885 + (i * noteDelay);
+                location.temporarySprites.Add(new TemporaryAnimatedSprite()
+                {
+                    interval = 1f,
+                    delayBeforeAnimationStart = delay,
+                    endFunction = this.PlayClamTone,
+                    extraInfoForEndBehavior = note,
+                });
+            }
         }
     }
 }
