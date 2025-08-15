@@ -256,6 +256,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             foreach (var movieInvitation in Game1.player.team.movieInvitations)
             {
                 var concession = GetPurchasedConcession(movieTheater, movieInvitation);
+                if (concession == null)
+                {
+                    continue;
+                }
 
                 if (moviesanitySetting == Moviesanity.AllMoviesAndAllLovedSnacks)
                 {
