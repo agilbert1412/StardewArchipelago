@@ -124,7 +124,8 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Tilesanity
                 {
                     currentMap = _currentLocation.Name;
                 }
-                if (map == currentMap)
+                // x/y here are unchecked
+                if (map == currentMap && _tileColors.GetLength(0) > x && _tileColors.GetLength(1) > y)
                 {
                     _tileColors[x, y] = 2;
                 }
