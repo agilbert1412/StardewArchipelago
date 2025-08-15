@@ -79,6 +79,7 @@ namespace StardewArchipelago.Items.Unlocks.Vanilla
             unlocks.Add("Forest Magic", SendForestMagicLetter);
             // unlocks.Add("Landslide Removed", SendLandslideRemovedLetter);
             unlocks.Add("Magic Ink", SendMagicInkLetter);
+            unlocks.Add(APItem.SPECIAL_CHARM, SendSpecialCharmLetter);
 
             unlocks.Add("Progressive Backpack", SendProgressiveBackpackLetter);
             unlocks.Add("Stardrop", SendStardropLetter);
@@ -290,6 +291,12 @@ namespace StardewArchipelago.Items.Unlocks.Vanilla
         private LetterAttachment SendMagicInkLetter(ReceivedItem receivedItem)
         {
             Game1.player.hasMagicInk = true;
+            return new LetterInformationAttachment(receivedItem);
+        }
+
+        private LetterAttachment SendSpecialCharmLetter(ReceivedItem receivedItem)
+        {
+            Game1.player.hasSpecialCharm = true;
             return new LetterInformationAttachment(receivedItem);
         }
 
