@@ -321,6 +321,10 @@ namespace StardewArchipelago.GameModifications
                 postfix: new HarmonyMethod(typeof(ShortcutInjections), nameof(ShortcutInjections.MakeMapModifications_OpenBeachShortcuts_Postfix))
             );
             _harmony.Patch(
+                original: AccessTools.Method(typeof(BeachNightMarket), nameof(BeachNightMarket.MakeMapModifications)),
+                postfix: new HarmonyMethod(typeof(ShortcutInjections), nameof(ShortcutInjections.MakeMapModifications_OpenBeachNightMarketShortcuts_Postfix))
+            );
+            _harmony.Patch(
                 original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.MakeMapModifications)),
                 postfix: new HarmonyMethod(typeof(ShortcutInjections), nameof(ShortcutInjections.MakeMapModifications_OpenBackwoodsShortcuts_Postfix))
             );

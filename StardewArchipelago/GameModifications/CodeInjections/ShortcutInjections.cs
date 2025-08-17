@@ -78,7 +78,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed in {nameof(MakeMapModifications_OpenBeachShortcuts_Postfix)}:\n{ex}");
+                _logger.LogError($"Failed in {nameof(MakeMapModifications_OpenBeachNightMarketShortcuts_Postfix)}:\n{ex}");
                 return;
             }
         }
