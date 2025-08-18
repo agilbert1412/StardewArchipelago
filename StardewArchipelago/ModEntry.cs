@@ -146,6 +146,7 @@ namespace StardewArchipelago
             _helper.ConsoleCommands.Add("deathlink", "Override the deathlink setting", OverrideDeathlink);
             _helper.ConsoleCommands.Add("trap_difficulty", "Override the trap difficulty setting", OverrideTrapDifficulty);
             _helper.ConsoleCommands.Add("override_entrance_randomizer", "Override the Entrance Randomizer to force it off. Does not work for values that change the logic.", OverrideEntranceRandomizer);
+            _helper.ConsoleCommands.Add("export_bundles", "Exports the entirety of the current bundles for the slot, to a json file in the game folder. Contains spoilers!", ExportBundles);
 
 #if DEBUG
             _helper.ConsoleCommands.Add("connect", $"Connect to Archipelago. {CONNECT_SYNTAX}", OnCommandConnectToArchipelago);
@@ -843,6 +844,24 @@ namespace StardewArchipelago
             State.EntranceRandomizerOverride = !State.EntranceRandomizerOverride;
             var response = State.EntranceRandomizerOverride ? "overriden to be disabled" : "restored to yaml value";
             _logger.Log($"Entrance Randomizer {response}. Change will be saved next time you sleep", LogLevel.Info);
+        }
+
+        private void ExportBundles(string arg1, string[] arg2)
+        {
+            if (_archipelago == null || State == null || _archipelago.SlotData == null || _archipelago.SlotData.BundlesData == null || !_archipelago.MakeSureConnected(0))
+            {
+                _logger.Log($"This command can only be used from in-game, when connected to Archipelago", LogLevel.Info);
+                return;
+            }
+
+            var bundlesFile = "exported_bundles.json";
+            ExportBundlesState(_archipelago.SlotData.BundlesData, bundlesFile);
+            _logger.Log($"Bundles Data exported to {bundlesFile}", LogLevel.Info);
+        }
+
+        private void ExportBundlesState(string bundlesDataJson, string bundlesFile)
+        {
+            File.WriteAllText(bundlesFile, bundlesDataJson);
         }
 
         private void DebugMethod(string arg1, string[] arg2)
