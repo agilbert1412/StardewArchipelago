@@ -77,6 +77,7 @@ namespace StardewArchipelago.Registry
             _modHelper.ConsoleCommands.Add("deathlink", "Override the deathlink setting", OverrideDeathlink);
             _modHelper.ConsoleCommands.Add("trap_difficulty", "Override the trap difficulty setting", OverrideTrapDifficulty);
             _modHelper.ConsoleCommands.Add("override_entrance_randomizer", "Override the Entrance Randomizer to force it off. Does not work for values that change the logic.", OverrideEntranceRandomizer);
+            _modHelper.ConsoleCommands.Add("export_bundles", "Exports the entirety of the current bundles for the slot, to a json file in the game folder. Contains spoilers!", ExportBundles);
         }
 
         private void RegisterDebugCommands()
@@ -202,6 +203,24 @@ namespace StardewArchipelago.Registry
             _state.EntranceRandomizerOverride = !_state.EntranceRandomizerOverride;
             var response = _state.EntranceRandomizerOverride ? "overriden to be disabled" : "restored to yaml value";
             _logger.Log($"Entrance Randomizer {response}. Change will be saved next time you sleep", LogLevel.Info);
+        }
+
+        private void ExportBundles(string arg1, string[] arg2)
+        {
+            if (_archipelago == null || _state == null || _archipelago.SlotData == null || _archipelago.SlotData.BundlesData == null || !_archipelago.MakeSureConnected(0))
+            {
+                _logger.Log($"This command can only be used from in-game, when connected to Archipelago", LogLevel.Info);
+                return;
+            }
+
+            var bundlesFile = "exported_bundles.json";
+            ExportBundlesState(_archipelago.SlotData.BundlesData, bundlesFile);
+            _logger.Log($"Bundles Data exported to {bundlesFile}", LogLevel.Info);
+        }
+
+        private void ExportBundlesState(string bundlesDataJson, string bundlesFile)
+        {
+            File.WriteAllText(bundlesFile, bundlesDataJson);
         }
 
         private void DebugMethod(string arg1, string[] arg2)

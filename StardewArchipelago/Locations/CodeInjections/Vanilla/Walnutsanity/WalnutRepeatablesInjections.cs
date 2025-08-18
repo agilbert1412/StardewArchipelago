@@ -53,9 +53,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
         private static ILogger _logger;
         private static IModHelper _helper;
         private static StardewArchipelagoClient _archipelago;
-        private static LocationChecker _locationChecker;
+        private static StardewLocationChecker _locationChecker;
 
-        public static void Initialize(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker)
         {
             _logger = logger;
             _helper = helper;
@@ -439,7 +439,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 if (_archipelago.SlotData.Walnutsanity.HasFlag(Archipelago.SlotData.SlotEnums.Walnutsanity.Repeatables))
                 {
                     var location = $"{apLocationName} {numberWalnutsSoFar}";
-                    itemToSpawnId = IDProvider.CreateApLocationItemId(location);
+                    itemToSpawnId = CreateApWalnutLocationItemId(location);
                 }
 
                 return ItemRegistry.Create(itemToSpawnId);
@@ -461,7 +461,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
             for (var i = 1; i <= numberWalnutsSoFar; i++)
             {
                 var location = $"{apLocationName} {i}";
-                _locationChecker.AddCheckedLocation(location);
+                _locationChecker.AddWalnutCheckedLocation(location);
             }
         }
 
@@ -477,8 +477,23 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
 
         private static Item CreateLocationItem(string locationName)
         {
-            var itemId = IDProvider.CreateApLocationItemId(locationName);
+            var itemId = CreateApWalnutLocationItemId(locationName);
             return ItemRegistry.Create(itemId);
+        }
+
+        private static string CreateApWalnutLocationItemId(string locationName)
+        {
+            if (!_locationChecker.LocationExists(locationName))
+            {
+                var prefixedName = $"Walnutsanity: {locationName}";
+                if (_locationChecker.LocationExists(prefixedName))
+                {
+                    locationName = prefixedName;
+                }
+            }
+
+            var itemId = IDProvider.CreateApLocationItemId(locationName);
+            return itemId;
         }
     }
 }
