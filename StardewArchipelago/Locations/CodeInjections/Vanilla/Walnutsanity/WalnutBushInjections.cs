@@ -53,16 +53,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                     throw new Exception($"Bush '{bushId}' Could not be mapped to an Archipelago location!");
                 }
 
-                var locationName = _bushNameMap[bushId];
-                if (!_locationChecker.LocationExists(locationName))
-                {
-                    var prefixedName = $"Walnutsanity: {locationName}";
-                    if (_locationChecker.LocationExists(prefixedName))
-                    {
-                        locationName = prefixedName;
-                    }
-                }
-                __result = IDProvider.CreateApLocationItemId(locationName);
+                __result = IDProvider.CreateApLocationItemId(_bushNameMap[bushId]);
                 return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)

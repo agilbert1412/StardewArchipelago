@@ -65,7 +65,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                 Game1.player.team.goldenCoconutMutex.RequestLock(() =>
                 {
                     __instance.waitingForServerResponse = false;
-                    var itemToSpawnId = CreateApWalnutLocationItemId(goldenCoconutLocation);
+                    var itemToSpawnId = IDProvider.CreateApLocationItemId(goldenCoconutLocation);
                     __instance.geodeTreasureOverride = ItemRegistry.Create(itemToSpawnId);
                     Game1.netWorldState.Value.GoldenCoconutCracked = true;
                     __instance.startGeodeCrack();
@@ -806,24 +806,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
 
         private static Item CreateLocationItem(string locationName)
         {
-            var itemId = CreateApWalnutLocationItemId(locationName);
+            var itemId = IDProvider.CreateApLocationItemId(locationName);
             var item = ItemRegistry.Create(itemId);
             return item;
-        }
-
-        private static string CreateApWalnutLocationItemId(string locationName)
-        {
-            if (!_locationChecker.LocationExists(locationName))
-            {
-                var prefixedName = $"Walnutsanity: {locationName}";
-                if (_locationChecker.LocationExists(prefixedName))
-                {
-                    locationName = prefixedName;
-                }
-            }
-
-            var itemId = IDProvider.CreateApLocationItemId(locationName);
-            return itemId;
         }
     }
 }

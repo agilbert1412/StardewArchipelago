@@ -50,18 +50,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
                     return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
-                var locationName = _digSpotNameMap[digSpotId];
-                if (!_locationChecker.LocationExists(locationName))
-                {
-                    var prefixedName = $"Walnutsanity: {locationName}";
-                    if (_locationChecker.LocationExists(prefixedName))
-                    {
-                        locationName = prefixedName;
-                    }
-                }
-
                 Game1.player.team.MarkCollectedNut(digSpotId);
-                var itemId = IDProvider.CreateApLocationItemId(locationName);
+                var itemId = IDProvider.CreateApLocationItemId(_digSpotNameMap[digSpotId]);
                 var item = ItemRegistry.Create(itemId);
                 Game1.createItemDebris(item, new Vector2(xLocation, yLocation) * 64f, -1, __instance);
 
