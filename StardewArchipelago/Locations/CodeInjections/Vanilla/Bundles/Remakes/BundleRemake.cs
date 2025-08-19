@@ -422,7 +422,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                 temporaryAnimatedSprite.sourceRectStartingPos = new Vector2(temporaryAnimatedSprite.sourceRect.X, temporaryAnimatedSprite.sourceRect.Y);
                 temporaryAnimatedSprite.animationLength = 1;
             }
-            // JunimoNoteMenuRemake.TempSprites.Add(temporaryAnimatedSprite);
+            JunimoNoteMenuRemake.TempSprites.Add(temporaryAnimatedSprite);
         }
 
         public bool CanBeClicked() => !this.Complete;

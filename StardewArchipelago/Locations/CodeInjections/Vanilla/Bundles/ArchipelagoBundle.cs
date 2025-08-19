@@ -450,6 +450,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             if (name == MemeBundleNames.SQUARE_HOLE)
             {
                 base.IngredientDepositAnimation(parentMenu.IngredientSlots.First(), noteTextureName, animationRect, parentMenu, skipAnimation);
+                return;
             }
 
             base.IngredientDepositAnimation(slot, noteTextureName, animationRect, parentMenu, skipAnimation);
