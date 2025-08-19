@@ -31,6 +31,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Xml.Linq;
 using static HarmonyLib.Code;
 using Color = Microsoft.Xna.Framework.Color;
 using Object = StardewValley.Object;
@@ -1172,6 +1173,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             AfterUpdateIngredientSlotsBureaucracy();
             AfterUpdateIngredientSlotsSchrodinger();
             AfterUpdateIngredientSlotsIKEA();
+            AfterUpdateIngredientSlotsSquareHole();
         }
 
         private void AfterUpdateIngredientSlotsIKEA()
@@ -1195,6 +1197,30 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 IngredientList[i].bounds.X *= 100;
                 IngredientList[i].bounds.Y *= 100;
             }
+        }
+
+        private void AfterUpdateIngredientSlotsSquareHole()
+        {
+            if (CurrentPageBundle == null || CurrentPageBundle.name != MemeBundleNames.SQUARE_HOLE)
+            {
+                return;
+            }
+
+            for (var i = 0; i < IngredientSlots.Count; i++)
+            {
+                var sourceRect = GetSquareHoleSourceRect(i, false);
+                IngredientSlots[i].texture = MemeTexture;
+                IngredientSlots[i].sourceRect.X = sourceRect.X;
+                IngredientSlots[i].sourceRect.Y = sourceRect.Y;
+            }
+        }
+
+        private Point GetSquareHoleSourceRect(int index, bool highlight)
+        {
+            const int size = 18;
+            var x = 0 + (highlight ? 126 : 0);
+            var y = 122 + (index * size);
+            return new Point(x, y);
         }
 
         private void AfterUpdateIngredientSlotsSisyphus()
@@ -1906,8 +1932,41 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 ingredientSlot.drawItem(b, 4, 4, 1f);
                 return;
             }
+            if (CurrentPageBundle.name == MemeBundleNames.SQUARE_HOLE)
+            {
+                DrawIngredientSlotSquareHole(b, index);
+                return;
+            }
 
             base.DrawIngredientSlot(b, index);
+        }
+
+        private void DrawIngredientSlotSquareHole(SpriteBatch spriteBatch, int index)
+        {
+            var alpha = 1f;
+            var ingredientSlot = IngredientSlots[index];
+            if (PartialDonationItem != null && ingredientSlot.item != PartialDonationItem)
+            {
+                alpha = 0.25f;
+            }
+            if (ingredientSlot.item == null || index != 0 || PartialDonationItem != null && ingredientSlot.item == PartialDonationItem)
+            {
+                ingredientSlot.draw(spriteBatch, (FromGameMenu ? Color.LightGray * 0.5f : Color.White) * alpha, 0.89f);
+            }
+            if (index != 0)
+            {
+                return;
+            }
+            var firstSlot = IngredientSlots[0];
+            var i = 0;
+            foreach (var slotWithItem in IngredientSlots.Where(x => x.item != null))
+            {
+                var offsetX = ((i % 3 - 1) * 12) + 4;
+                var offsetY = (((double)(i / 3) - 0.5) * 12) + 4;
+                slotWithItem.item.drawInMenu(spriteBatch, new Vector2((float)(firstSlot.bounds.X + offsetX), (float)(firstSlot.bounds.Y + offsetY)), firstSlot.scale / 8f, alpha, 0.9f);
+                // slotWithItem.drawItem(spriteBatch, 4, 4, alpha);
+                i++;
+            }
         }
 
         protected override void DrawIngredients(SpriteBatch spriteBatch)
@@ -2128,11 +2187,21 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             {
                 IngredientSlots[index].item = ItemRegistry.Create(representativeItemId, ingredient.stack, ingredient.quality);
             }
-            CurrentPageBundle.IngredientDepositAnimation(IngredientSlots[index], NOTE_TEXTURE_NAME, true);
+            CurrentPageBundle.IngredientDepositAnimation(IngredientSlots[index], NOTE_TEXTURE_NAME, new Rectangle(530, 244, 18, 18), this, true);
             ++index;
             return index;
         }
-        
+
+        protected override bool SlotCanReceiveItem(ClickableTextureComponent slot)
+        {
+            if (CurrentPageBundle != null && CurrentPageBundle.name == MemeBundleNames.SQUARE_HOLE)
+            {
+                return slot.sourceRect.Y == 122;
+            }
+
+            return base.SlotCanReceiveItem(slot);
+        }
+
         public static bool IsBundleRemaining(string bundleName)
         {
             var bundleIndex = GetBundleId(bundleName, out var communityCenter, out _);
@@ -2300,6 +2369,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 }
             }
         }
+
         public static void HasBeenHibernatingFor(int numberOfDaysSlept)
         {
             if (!IsBundleRemaining(MemeBundleNames.HIBERNATION))
@@ -2451,6 +2521,36 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
 
             base.CompleteBundleInMenu();
+        }
+
+        protected override void PerformHoverIngredientSlots(int x, int y)
+        {
+            if (CurrentPageBundle != null && CurrentPageBundle.name == MemeBundleNames.SQUARE_HOLE)
+            {
+                PerformHoverIngredientSlotsSquareHole(x, y);
+                return;
+            }
+            base.PerformHoverIngredientSlots(x, y);
+        }
+
+        private void PerformHoverIngredientSlotsSquareHole(int x, int y)
+        {
+            if (HeldItem == null)
+            {
+                return;
+            }
+
+            foreach (var ingredientSlot in IngredientSlots)
+            {
+                if (ingredientSlot.bounds.Contains(x, y) && CanBePartiallyOrFullyDonated(HeldItem) && (PartialDonationItem == null || ingredientSlot.item == PartialDonationItem))
+                {
+                    ingredientSlot.sourceRect.X = 126;
+                }
+                else
+                {
+                    ingredientSlot.sourceRect.X = 0;
+                }
+            }
         }
     }
 }

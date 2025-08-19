@@ -492,7 +492,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             {
                 CloseBundlePage();
             }
-            if (PartialDonationItem != null)
+            if (PartialDonationItem != null && CurrentPageBundle.name != MemeBundleNames.SQUARE_HOLE)
             {
                 if (HeldItem != null && Game1.oldKBState.IsKeyDown(Keys.LeftShift))
                 {
@@ -523,20 +523,20 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             }
             else if (HeldItem != null)
             {
-                if (Game1.oldKBState.IsKeyDown(Keys.LeftShift))
+                if (Game1.oldKBState.IsKeyDown(Keys.LeftShift) && CurrentPageBundle.name != MemeBundleNames.SQUARE_HOLE)
                 {
                     for (var index = GetIngredientSlotsStartIndex(); index < GetIngredientSlotsEndIndex(); ++index)
                     {
                         if (CurrentPageBundle.CanAcceptThisItem(HeldItem, IngredientSlots[index], (ArchipelagoJunimoNoteMenu)this))
                         {
-                            if (IngredientSlots[index].item == null)
+                            if (SlotCanReceiveItem(IngredientSlots[index]))
                             {
                                 HeldItem = CurrentPageBundle.TryToDepositThisItem(HeldItem, IngredientSlots[index], NOTE_TEXTURE_NAME, (ArchipelagoJunimoNoteMenu)this);
                                 CheckIfBundleIsComplete();
                                 return true;
                             }
                         }
-                        else if (IngredientSlots[index].item == null)
+                        else if (SlotCanReceiveItem(IngredientSlots[index]))
                         {
                             HandlePartialDonation(HeldItem, IngredientSlots[index]);
                         }
@@ -551,7 +551,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                             HeldItem = CurrentPageBundle.TryToDepositThisItem(HeldItem, IngredientSlots[index], NOTE_TEXTURE_NAME, (ArchipelagoJunimoNoteMenu)this);
                             CheckIfBundleIsComplete();
                         }
-                        else if (IngredientSlots[index].item == null)
+                        else if (SlotCanReceiveItem(IngredientSlots[index]))
                         {
                             HandlePartialDonation(HeldItem, IngredientSlots[index]);
                         }
@@ -565,6 +565,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                 return true;
             }
             return false;
+        }
+
+        protected virtual bool SlotCanReceiveItem(ClickableTextureComponent slot)
+        {
+            return slot.item == null;
         }
 
         protected virtual void PickItemFromInventory(int x, int y)
@@ -1096,7 +1101,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             {
                 IngredientSlots[index].item = ItemRegistry.Create(representativeItemId, ingredient.stack, ingredient.quality);
             }
-            CurrentPageBundle.IngredientDepositAnimation(IngredientSlots[index], NOTE_TEXTURE_NAME, true);
+            CurrentPageBundle.IngredientDepositAnimation(IngredientSlots[index], NOTE_TEXTURE_NAME, new Rectangle(530, 244, 18, 18), this, true);
             ++index;
             return index;
         }

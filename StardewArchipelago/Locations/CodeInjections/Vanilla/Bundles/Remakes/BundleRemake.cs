@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Bundles;
 using StardewValley;
 using StardewValley.Extensions;
+using StardewValley.GameData.HomeRenovations;
 using StardewValley.Internal;
 using StardewValley.Locations;
 using StardewValley.Menus;
@@ -293,7 +294,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             }
             for (var index = 0; index < this.Ingredients.Count; ++index)
             {
-                if (this.IsValidItemForThisIngredientDescription(item, this.Ingredients[index], index, parentMenu) && (ignoreStackCount || this.Ingredients[index].stack <= item.Stack) && slot?.item == null)
+                if (this.IsValidItemForThisIngredientDescription(item, this.Ingredients[index], index, parentMenu) && (ignoreStackCount || this.Ingredients[index].stack <= item.Stack) && SlotCanReceiveItem(slot))
                 {
                     return true;
                 }
@@ -324,7 +325,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             for (var index1 = 0; index1 < this.Ingredients.Count; ++index1)
             {
                 var ingredientDescription1 = this.Ingredients[index1];
-                if (this.IsValidItemForThisIngredientDescription(item, ingredientDescription1, index1, parentMenu) && slot.item == null)
+                if (this.IsValidItemForThisIngredientDescription(item, ingredientDescription1, index1, parentMenu) && SlotCanReceiveItem(slot))
                 {
                     validIndexes.Add(index1);
                 }
@@ -355,6 +356,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             return item;
         }
 
+        protected virtual bool SlotCanReceiveItem(ClickableTextureComponent slot)
+        {
+            return slot.item == null;
+        }
+
         protected virtual Item SuccessfullyDepositThisItem(Item item, ClickableTextureComponent slot, string noteTextureName, ArchipelagoJunimoNoteMenu parentMenu, BundleIngredientDescription ingredientDescription1, int index1,
             CommunityCenter communityCenter)
         {
@@ -364,7 +370,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             ingredientDescription1 = new BundleIngredientDescription(ingredientDescription1, true);
             var ingredientDescription2 = ingredientDescription1;
             ingredients[index2] = ingredientDescription2;
-            this.IngredientDepositAnimation(slot, noteTextureName);
+            this.IngredientDepositAnimation(slot, noteTextureName, new Rectangle(530, 244, 18, 18), parentMenu);
             var representativeItemId = JunimoNoteMenuRemake.GetRepresentativeItemId(ingredientDescription1);
             if (ingredientDescription1.preservesId != null)
             {
@@ -375,8 +381,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                 slot.item = ItemRegistry.Create(representativeItemId, ingredientDescription1.stack, ingredientDescription1.quality);
             }
             PlayItemDonatedSound();
-            slot.sourceRect.X = 512;
-            slot.sourceRect.Y = 244;
+            ResetSlotSourceRect(slot);
             if (parentMenu.OnIngredientDeposit != null)
             {
                 parentMenu.OnIngredientDeposit(index1);
@@ -387,17 +392,25 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             return item;
         }
 
+        protected virtual void ResetSlotSourceRect(ClickableTextureComponent slot)
+        {
+            slot.sourceRect.X = 512;
+            slot.sourceRect.Y = 244;
+        }
+
         protected virtual void PlayItemDonatedSound()
         {
             Game1.playSound("newArtifact");
         }
 
-        public void IngredientDepositAnimation(
+        public virtual void IngredientDepositAnimation(
             ClickableTextureComponent slot,
             string noteTextureName,
+            Rectangle animationRect,
+            JunimoNoteMenuRemake parentMenu,
             bool skipAnimation = false)
         {
-            var temporaryAnimatedSprite = new TemporaryAnimatedSprite(noteTextureName, new Rectangle(530, 244, 18, 18), 50f, 6, 1, new Vector2(slot.bounds.X, slot.bounds.Y), false, false, 0.88f, 0.0f, Color.White, 4f, 0.0f,
+            var temporaryAnimatedSprite = new TemporaryAnimatedSprite(noteTextureName, animationRect, 50f, 6, 1, new Vector2(slot.bounds.X, slot.bounds.Y), false, false, 0.88f, 0.0f, Color.White, 4f, 0.0f,
                 0.0f, 0.0f, true)
             {
                 holdLastFrame = true,
@@ -409,7 +422,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                 temporaryAnimatedSprite.sourceRectStartingPos = new Vector2(temporaryAnimatedSprite.sourceRect.X, temporaryAnimatedSprite.sourceRect.Y);
                 temporaryAnimatedSprite.animationLength = 1;
             }
-            JunimoNoteMenuRemake.TempSprites.Add(temporaryAnimatedSprite);
+            // JunimoNoteMenuRemake.TempSprites.Add(temporaryAnimatedSprite);
         }
 
         public bool CanBeClicked() => !this.Complete;

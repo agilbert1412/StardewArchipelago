@@ -1,21 +1,23 @@
-﻿using System.Collections.Generic;
+﻿using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
-using KaitoKid.ArchipelagoUtilities.Net;
 using Microsoft.Xna.Framework;
+using StardewArchipelago.Archipelago;
 using StardewArchipelago.Bundles;
+using StardewArchipelago.Constants;
+using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes;
 using StardewArchipelago.Serialization;
 using StardewModdingAPI;
-using StardewValley.Menus;
-using StardewArchipelago.Constants.Vanilla;
 using StardewValley;
-using System;
-using StardewArchipelago.Constants;
 using StardewValley.Locations;
+using StardewValley.Menus;
 using StardewValley.Objects;
+using StardewValley.TokenizableStrings;
+using System;
+using System.Collections.Generic;
 using System.Linq;
-using StardewArchipelago.Archipelago;
+using System.Security.Cryptography.X509Certificates;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 {
@@ -313,8 +315,32 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             Game1.playSound("thunder");
         }
 
+        protected override bool SlotCanReceiveItem(ClickableTextureComponent slot)
+        {
+            if (slot == null)
+            {
+                return false;
+            }
+
+            if (name == MemeBundleNames.SQUARE_HOLE)
+            {
+                return true;
+            }
+
+            return base.SlotCanReceiveItem(slot);
+        }
+
         protected override Item SuccessfullyDepositThisItem(Item item, ClickableTextureComponent slot, string noteTextureName, ArchipelagoJunimoNoteMenu parentMenu, BundleIngredientDescription ingredientDescription1, int index1, CommunityCenter communityCenter)
         {
+            if (name == MemeBundleNames.SQUARE_HOLE)
+            {
+                if (slot.sourceRect.Y != 122)
+                {
+                    return FakeDepositThisItem(item, slot, noteTextureName, parentMenu, ingredientDescription1, index1, communityCenter);
+                }
+
+                slot = parentMenu.IngredientSlots.First(x => x.item == null);
+            }
             var result = base.SuccessfullyDepositThisItem(item, slot, noteTextureName, parentMenu, ingredientDescription1, index1, communityCenter);
             if (name == MemeBundleNames.OFF_YOUR_BACK)
             {
@@ -348,6 +374,31 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 ArchipelagoJunimoNoteMenu.SisyphusStoneNeedsToFall = true;
             }
             return result;
+        }
+
+        protected override void ResetSlotSourceRect(ClickableTextureComponent slot)
+        {
+            if (name == MemeBundleNames.SQUARE_HOLE)
+            {
+                slot.sourceRect.X = 0;
+                return;
+            }
+            base.ResetSlotSourceRect(slot);
+        }
+
+        protected virtual Item FakeDepositThisItem(Item item, ClickableTextureComponent slot, string noteTextureName, ArchipelagoJunimoNoteMenu parentMenu, BundleIngredientDescription ingredientDescription1, int index1,
+            CommunityCenter communityCenter)
+        {
+            item = item.ConsumeStack(ingredientDescription1.stack);
+            // this.IngredientDepositAnimation(slot, noteTextureName, new Rectangle(18, slot.sourceRect.Y, 18, 18));
+            PlayItemDonatedSound();
+            slot.sourceRect.X = 0;
+            if (parentMenu.OnIngredientDeposit != null)
+            {
+                parentMenu.OnIngredientDeposit(index1);
+                return item;
+            }
+            return item;
         }
 
         protected override void PlayItemDonatedSound()
@@ -391,6 +442,17 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                     extraInfoForEndBehavior = note,
                 });
             }
+        }
+
+        public override void IngredientDepositAnimation(ClickableTextureComponent slot, string noteTextureName,
+            Rectangle animationRect, JunimoNoteMenuRemake parentMenu, bool skipAnimation = false)
+        {
+            if (name == MemeBundleNames.SQUARE_HOLE)
+            {
+                base.IngredientDepositAnimation(parentMenu.IngredientSlots.First(), noteTextureName, animationRect, parentMenu, skipAnimation);
+            }
+
+            base.IngredientDepositAnimation(slot, noteTextureName, animationRect, parentMenu, skipAnimation);
         }
     }
 }
