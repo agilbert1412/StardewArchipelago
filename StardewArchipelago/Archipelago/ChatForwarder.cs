@@ -163,6 +163,12 @@ namespace StardewArchipelago.Archipelago
                 return true;
             }
 
+            if (HandleMailCommand(messageLower))
+            {
+                _lastCommand = message;
+                return true;
+            }
+
             if (HandleSyncCommand(messageLower))
             {
                 _lastCommand = message;
@@ -305,6 +311,28 @@ namespace StardewArchipelago.Archipelago
                 default:
                     return Utility.capitalizeFirstLetter(enteredName);
             }
+        }
+
+        private static bool HandleMailCommand(string message)
+        {
+            if (message != $"{COMMAND_PREFIX}mail" && message != $"{COMMAND_PREFIX}mailbox")
+            {
+                return false;
+            }
+
+            var mailAmount = Game1.mailbox.Count;
+            if (mailAmount <= 0)
+            {
+                Game1.chatBox?.addMessage($"Mailbox is empty", Color.Gold);
+                return true;
+            }
+
+            var farm = Game1.RequireLocation<Farm>("Farm");
+            farm.mailbox();
+
+            mailAmount = Game1.mailbox.Count;
+            Game1.chatBox?.addMessage($"Mail Remaining: {mailAmount}", Color.Gold);
+            return true;
         }
 
         private static bool HandleSyncCommand(string message)
