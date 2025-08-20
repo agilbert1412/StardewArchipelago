@@ -6,6 +6,7 @@ using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
@@ -18,16 +19,18 @@ namespace StardewArchipelago.GameModifications.MultiSleep
     {
         private static ILogger _logger;
         private static IModHelper _modHelper;
+        private static StardewArchipelagoClient _archipelago;
         private readonly Harmony _harmony;
 
         public static MultiSleepBehavior _currentMultiSleep;
         public static MultiSleepBehavior CurrentMultiSleep => _currentMultiSleep;
         private static int _multiSleepPrice = 0;
 
-        public MultiSleepManager(ILogger logger, IModHelper modHelper, Harmony harmony)
+        public MultiSleepManager(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, Harmony harmony)
         {
             _logger = logger;
             _modHelper = modHelper;
+            _archipelago = archipelago;
             _harmony = harmony;
             _currentMultiSleep = new DontMultiSleepBehavior();
         }
@@ -154,6 +157,10 @@ namespace StardewArchipelago.GameModifications.MultiSleep
                 possibleResponses.Add(new Response(MultiSleepUntilBehavior.RAIN, "Rain"));
                 possibleResponses.Add(new Response(MultiSleepUntilBehavior.STORM, "Storm"));
             }
+            if (_archipelago.HasReceivedItem("Fortune Teller"))
+            {
+                possibleResponses.Add(new Response(MultiSleepUntilBehavior.GREAT_LUCK, "Great Luck"));
+            }
             possibleResponses.Add(new Response(MultiSleepUntilBehavior.FESTIVAL, "Festival"));
             possibleResponses.Add(new Response(MultiSleepUntilBehavior.BIRTHDAY, "Birthday"));
             if (TravelingMerchantInjections.HasAnyTravelingMerchantDay())
@@ -186,6 +193,7 @@ namespace StardewArchipelago.GameModifications.MultiSleep
             {
                 case MultiSleepUntilBehavior.RAIN:
                 case MultiSleepUntilBehavior.STORM:
+                case MultiSleepUntilBehavior.GREAT_LUCK:
                 case MultiSleepUntilBehavior.FESTIVAL:
                 case MultiSleepUntilBehavior.BIRTHDAY:
                 case MultiSleepUntilBehavior.TRAVELING_CART:
