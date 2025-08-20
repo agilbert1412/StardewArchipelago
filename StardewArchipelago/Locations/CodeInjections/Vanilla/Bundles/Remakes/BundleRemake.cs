@@ -380,7 +380,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             {
                 slot.item = ItemRegistry.Create(representativeItemId, ingredientDescription1.stack, ingredientDescription1.quality);
             }
-            PlayItemDonatedSound();
+            PlayItemDonatedSound(parentMenu);
             ResetSlotSourceRect(slot);
             if (parentMenu.OnIngredientDeposit != null)
             {
@@ -398,7 +398,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             slot.sourceRect.Y = 244;
         }
 
-        protected virtual void PlayItemDonatedSound()
+        protected virtual void PlayItemDonatedSound(ArchipelagoJunimoNoteMenu parentMenu)
         {
             Game1.playSound("newArtifact");
         }

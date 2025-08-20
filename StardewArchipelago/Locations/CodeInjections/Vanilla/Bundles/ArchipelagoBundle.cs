@@ -391,7 +391,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         {
             item = item.ConsumeStack(ingredientDescription1.stack);
             // this.IngredientDepositAnimation(slot, noteTextureName, new Rectangle(18, slot.sourceRect.Y, 18, 18));
-            PlayItemDonatedSound();
+            parentMenu.PlaySquareHoleFailDepositSound();
             slot.sourceRect.X = 0;
             if (parentMenu.OnIngredientDeposit != null)
             {
@@ -401,7 +401,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             return item;
         }
 
-        protected override void PlayItemDonatedSound()
+        protected override void PlayItemDonatedSound(ArchipelagoJunimoNoteMenu parentMenu)
         {
             if (name == MemeBundleNames.MERMAID)
             {
@@ -416,7 +416,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 }
                 return;
             }
-            base.PlayItemDonatedSound();
+            if (name == MemeBundleNames.SQUARE_HOLE)
+            {
+                parentMenu.PlaySquareHoleSuccessSound();
+                return;
+            }
+            base.PlayItemDonatedSound(parentMenu);
         }
 
         public void PlayClamTone(int pitchIndex)

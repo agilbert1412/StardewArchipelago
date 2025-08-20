@@ -580,6 +580,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             }
         }
 
+        protected virtual void PickItemFromInventoryRightClick(int x, int y)
+        {
+            HeldItem = Inventory.rightClick(x, y, HeldItem);
+        }
+
         protected virtual void ReceiveLeftClickInButtons(int x, int y)
         {
             ReceiveLeftClickPurchaseButton(x, y);
@@ -1315,7 +1320,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             }
             if (SpecificBundlePage)
             {
-                HeldItem = Inventory.rightClick(x, y, HeldItem);
+                PickItemFromInventoryRightClick(x, y);
                 if (PartialDonationItem != null)
                 {
                     for (var index = GetIngredientSlotsStartIndex(); index < GetIngredientSlotsEndIndex(); ++index)

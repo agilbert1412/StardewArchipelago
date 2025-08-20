@@ -74,6 +74,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         private GachaResolver _gachaResolver;
         private static SlidingPuzzleHandler _slidingPuzzle;
         private string[] _asmrCues = null;
+        private Dictionary<string, string[]> _squareHoleCues = null;
         private ICue _currentCue;
         private bool _isCurrentlySticky = false;
         private Point _stickyPosition = Point.Zero;
@@ -1804,7 +1805,33 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 HeldItem = _clothesMenu.leftClick(x, y, HeldItem);
                 return;
             }
+            if (CurrentPageBundle.name == MemeBundleNames.SQUARE_HOLE && HeldItem == null)
+            {
+                if (!CurrentPageBundle.Complete && CurrentPageBundle.CompletionTimer <= 0)
+                {
+                    HeldItem = Inventory.leftClick(x, y, HeldItem);
+                    if (HeldItem != null)
+                    {
+                        PlaySquareHoleTakeItemSound();
+                    }
+                }
+                return;
+            }
             base.PickItemFromInventory(x, y);
+        }
+
+        protected override void PickItemFromInventoryRightClick(int x, int y)
+        {
+            if (CurrentPageBundle.name == MemeBundleNames.SQUARE_HOLE && HeldItem == null)
+            {
+                HeldItem = Inventory.rightClick(x, y, HeldItem);
+                if (HeldItem != null)
+                {
+                    PlaySquareHoleTakeItemSound();
+                }
+                return;
+            }
+            base.PickItemFromInventoryRightClick(x, y);
         }
 
         protected override string GetBundleNameText()
@@ -2434,6 +2461,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             {
                 StartPlayingASMR();
             }
+            if (bundle.name == MemeBundleNames.SQUARE_HOLE)
+            {
+                RegisterSquareHoleCues();
+            }
         }
 
         private void StartPlayingASMR()
@@ -2551,6 +2582,75 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                     ingredientSlot.sourceRect.X = 0;
                 }
             }
+        }
+
+        private const string _failDepositKey = "sh-deposit-sound";
+        private const string _takeItemKey = "sh-take-item";
+        private const string _squareHoleKey = "sh-square-hole";
+
+        private void RegisterSquareHoleCues()
+        {
+            if (_squareHoleCues != null && _squareHoleCues.Any())
+            {
+                return;
+            }
+
+            var currentModFolder = _modHelper.DirectoryPath;
+            var soundsFolder = "Sounds";
+            var squareHoleFolder = "Square Hole";
+            var relativePathToSquareHoleSounds = Path.Combine(currentModFolder, soundsFolder, squareHoleFolder);
+            var files = Directory.EnumerateFiles(relativePathToSquareHoleSounds, "*.wav", SearchOption.TopDirectoryOnly);
+            var cues = new Dictionary<string, List<string>>()
+            {
+                { _failDepositKey, new List<string>() },
+                { _takeItemKey, new List<string>() },
+                { _squareHoleKey, new List<string>() },
+            };
+            foreach (var file in files)
+            {
+                var soundName = new FileInfo(file).Name;
+                var cueDefinition = new CueDefinition(soundName, SoundEffect.FromFile(file), 0);
+                Game1.soundBank.AddCue(cueDefinition);
+                if (soundName.StartsWith("deposit_sound"))
+                {
+                    cues[_failDepositKey].Add(soundName);
+                }
+                else if (soundName.StartsWith("goes_in_square_hole_"))
+                {
+                    cues[_squareHoleKey].Add(soundName);
+                }
+                else
+                {
+                    cues[_takeItemKey].Add(soundName);
+                }
+            }
+
+            var random = Utility.CreateDaySaveRandom();
+            _squareHoleCues = cues.ToDictionary(x => x.Key, x => x.Value.OrderBy(_ => random.NextDouble()).ToArray());
+        }
+
+        private void PlaySquareHoleTakeItemSound()
+        {
+            RegisterSquareHoleCues();
+            var cues = _squareHoleCues[_takeItemKey];
+            var randomIndex = Game1.random.Next(0, cues.Length);
+            Game1.playSound(cues[randomIndex]);
+        }
+
+        public void PlaySquareHoleFailDepositSound()
+        {
+            RegisterSquareHoleCues();
+            var cues = _squareHoleCues[_failDepositKey];
+            var randomIndex = Game1.random.Next(0, cues.Length);
+            Game1.playSound(cues[randomIndex]);
+        }
+
+        public void PlaySquareHoleSuccessSound()
+        {
+            RegisterSquareHoleCues();
+            var cues = _squareHoleCues[_squareHoleKey];
+            var randomIndex = Game1.random.Next(0, cues.Length);
+            Game1.playSound(cues[randomIndex]);
         }
     }
 }
