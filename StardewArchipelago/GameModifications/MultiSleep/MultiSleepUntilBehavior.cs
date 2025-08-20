@@ -39,7 +39,7 @@ namespace StardewArchipelago.GameModifications.MultiSleep
                 case STORM:
                     return !Game1.isLightning;
                 case GREAT_LUCK:
-                    return Game1.player.DailyLuck > 0.07;
+                    return Game1.player.DailyLuck <= 0.07;
                 case FESTIVAL:
                     return !IsFestivalDay();
                 case BIRTHDAY:
