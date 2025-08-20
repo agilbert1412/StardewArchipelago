@@ -154,7 +154,7 @@ namespace StardewArchipelago
             _bundlesManager?.CleanEvents();
             _bundlesManager = null;
             SeasonsRandomizer.ResetMailKeys();
-            _multiSleepManager = new MultiSleepManager(_logger, _helper, _harmony);
+            _multiSleepManager = new MultiSleepManager(_logger, _helper, _archipelago, _harmony);
             _advancedOptionsManager = new AdvancedOptionsManager(this, _logger, _helper, _harmony, _archipelago, _testerFeatures);
             _advancedOptionsManager.InjectArchipelagoAdvancedOptions();
             _giftHandler?.Dispose();
