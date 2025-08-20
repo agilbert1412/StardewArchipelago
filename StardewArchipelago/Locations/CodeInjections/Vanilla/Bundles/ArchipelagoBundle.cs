@@ -178,6 +178,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             if (name == MemeBundleNames.MERMAID)
             {
                 var numberIngredientsDonated = Ingredients.Count(x => x.completed);
+                if (numberIngredientsDonated >= _mermaidSequence.Length)
+                {
+                    return false;
+                }
                 var onlyValidIngredient = _mermaidSequence[numberIngredientsDonated] - 1;
                 if (ingredientIndex != onlyValidIngredient)
                 {
