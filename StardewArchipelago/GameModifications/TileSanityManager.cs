@@ -48,21 +48,38 @@ public class TileSanityManager
                 return $"{Game1.GetFarmTypeKey()} Farm";
             }
         }
-        return map;
+        return map switch
+        {
+            "Club" => "Casino",
+            "IslandWestCave1" => "Colored Crystals Cave",
+            "IslandNorthCave1" => "Island Mushroom Cave",
+            "Wizard's Tower" when farmer.currentLocation.Name == "WizardHouseBasement" => "WizardBasement",
+            "Spa" => farmer.currentLocation.Name switch
+            {
+                "BathHouse_Entry" => "Bathhouse Entrance",
+                "BathHouse_MensLocker" => "Men's Locker Room",
+                "BathHouse_WomensLocker" => "Women's Locker Room",
+                _ => "Public Bath",
+            },
+            "QiNutRoom" => "Qi's Walnut Room",
+            "CaptainRoom" => "Shipwreck",
+            _ => map
+        };
     }
 
     public string GetTileName(int x, int y, Farmer farmer)
     {
         var map = GetMapName(farmer);
+#if !NOWALK
         x /= _tilesanitySize;
         y /= _tilesanitySize;
-
+#endif
         return $"{TILESANITY_PREFIX}{map} ({x}-{y})";
     }
 
     public IEnumerable<(string map, int x, int y)> GetTilesFromName(string name)
     {
-        var pattern = $@"{Regex.Escape(TILESANITY_PREFIX)}([ \w]+) +\((\d+)\-(\d+)\)";
+        var pattern = $@"{Regex.Escape(TILESANITY_PREFIX)}([ \w'&,]+) +\((\d+)\-(\d+)\)";
 
         var match = Regex.Match(name, pattern);
 
@@ -115,6 +132,15 @@ public class TileSanityManager
 #endif
 
         modHelper.Events.Display.RenderedWorld += TileUI.RenderTiles;
+    }
+
+    public void UnpatchWalk(IModHelper modHelper)
+    {
+#if !TILESANITY
+        return;
+#endif
+
+        modHelper.Events.Display.RenderedWorld -= TileUI.RenderTiles;
     }
 
     public bool HandleTilesanityCommands(string message)
@@ -212,6 +238,11 @@ public class TileSanityManager
     {
         const string tileFile = "tiles.json";
         var dictionary = JsonConvert.DeserializeObject<SortedDictionary<string, List<Vector2>>>(File.ReadAllText(tileFile));
+        if (dictionary[GetMapName(Game1.player)].Contains(tile))
+        {
+            TileUI.SwitchToDebug(dictionary[GetMapName(Game1.player)]);
+            return;
+        }
         dictionary[GetMapName(Game1.player)].Add(tile);
         dictionary[GetMapName(Game1.player)].Sort(((vector2, vector3) =>
             vector2.X.CompareTo(vector3.X) * 2 + vector2.Y.CompareTo(vector3.Y)));
@@ -232,25 +263,24 @@ public class TileSanityManager
 
     private class ImportantTile
     {
-        [JsonPropertyName("position")]
-        public Vector2 Position;
-        [JsonPropertyName("required_items")]
-        public List<string> RequiredItems = new List<string>();
+        [JsonPropertyName("position")] public Vector2 Position;
+        [JsonPropertyName("required_items")] public List<string> RequiredItems = new List<string>();
         [JsonPropertyName("entrances")] public List<string> Entrances;
 
         public ImportantTile(Vector2 position)
         {
             Position = position;
-            Entrances = new List<string> {"New"};
+            Entrances = new List<string> { "New" };
         }
     }
+
     private static void HandleRegisterTileCommand()
     {
         const string tileFile = "important_tiles.json";
         var dictionary = JsonConvert.DeserializeObject<SortedDictionary<string, List<ImportantTile>>>(File.ReadAllText(tileFile));
         if (!dictionary.ContainsKey(GetMapName(Game1.player)))
             dictionary.Add(GetMapName(Game1.player), new List<ImportantTile>());
-        
+
         dictionary[GetMapName(Game1.player)].Add(new ImportantTile(Game1.currentCursorTile));
         dictionary[GetMapName(Game1.player)].Sort(((tile1, tile2) =>
             (tile1.Position.X.CompareTo(tile2.Position.X) * 2 + tile1.Position.Y.CompareTo(tile2.Position.Y))));

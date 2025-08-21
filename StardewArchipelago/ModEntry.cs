@@ -164,6 +164,7 @@ namespace StardewArchipelago
             FriendshipInjections.ResetArchipelagoFriendshipPoints();
 
             IslandWestMapInjections.PatchMapInjections(_logger, _helper, _harmony);
+            _tileSanityManager?.UnpatchWalk(this.Helper);
         }
 
         private void OnGameLaunched(object sender, GameLaunchedEventArgs e)
