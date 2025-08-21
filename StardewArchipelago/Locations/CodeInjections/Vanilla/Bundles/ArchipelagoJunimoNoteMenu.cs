@@ -1868,7 +1868,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                     var x = (int)Math.Round((random.NextDouble() * maxDistance) - (maxDistance / 2));
                     var y = (int)Math.Round((random.NextDouble() * maxDistance) - (maxDistance / 2));
                     var position = new Vector2(nextPosition.X + x - mouseOffset, nextPosition.Y + y - mouseOffset);
-                    var sourceRect = sap.GetSourceRect(0, new int?(sap.SpriteIndex));
+                    var sourceRect = sap.GetSourceRect(0, sap.SpriteIndex);
                     b.Draw(sap.GetTexture(), position + new Vector2(32f, 32f), sourceRect, Color.White * 1f, 0.0f, new Vector2((float)(sourceRect.Width / 2), (float)(sourceRect.Height / 2)), 4f, SpriteEffects.None, 0.9f);
                     // sap.drawInMenu(b, position, 1.0f);
                 }

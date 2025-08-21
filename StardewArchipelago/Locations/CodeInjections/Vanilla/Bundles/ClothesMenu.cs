@@ -127,11 +127,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                             {
                                 if (Game1.player.hat.Value != null)
                                 {
-                                    b.Draw(Game1.menuTexture, equipmentIcon.bounds, new Rectangle?(Game1.getSourceRectForStandardTileSheet(Game1.menuTexture, 10)), Color.White);
+                                    b.Draw(Game1.menuTexture, equipmentIcon.bounds, Game1.getSourceRectForStandardTileSheet(Game1.menuTexture, 10), Color.White);
                                     Game1.player.hat.Value.drawInMenu(b, new Vector2((float)equipmentIcon.bounds.X, (float)equipmentIcon.bounds.Y), equipmentIcon.scale, 1f, 0.866f, StackDrawType.Hide);
                                     continue;
                                 }
-                                b.Draw(Game1.menuTexture, equipmentIcon.bounds, new Rectangle?(Game1.getSourceRectForStandardTileSheet(Game1.menuTexture, 42)), Color.White);
+                                b.Draw(Game1.menuTexture, equipmentIcon.bounds, Game1.getSourceRectForStandardTileSheet(Game1.menuTexture, 42), Color.White);
                                 continue;
                             }
                             continue;
@@ -143,11 +143,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                                     {
                                         if (Game1.player.boots.Value != null)
                                         {
-                                            b.Draw(Game1.menuTexture, equipmentIcon.bounds, new Rectangle?(Game1.getSourceRectForStandardTileSheet(Game1.menuTexture, 10)), Color.White);
+                                            b.Draw(Game1.menuTexture, equipmentIcon.bounds, Game1.getSourceRectForStandardTileSheet(Game1.menuTexture, 10), Color.White);
                                             Game1.player.boots.Value.drawInMenu(b, new Vector2((float)equipmentIcon.bounds.X, (float)equipmentIcon.bounds.Y), equipmentIcon.scale);
                                             continue;
                                         }
-                                        b.Draw(Game1.menuTexture, equipmentIcon.bounds, new Rectangle?(Game1.getSourceRectForStandardTileSheet(Game1.menuTexture, 40)), Color.White);
+                                        b.Draw(Game1.menuTexture, equipmentIcon.bounds, Game1.getSourceRectForStandardTileSheet(Game1.menuTexture, 40), Color.White);
                                         continue;
                                     }
                                     continue;
@@ -156,11 +156,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                                     {
                                         if (Game1.player.pantsItem.Value != null)
                                         {
-                                            b.Draw(Game1.menuTexture, equipmentIcon.bounds, new Rectangle?(Game1.getSourceRectForStandardTileSheet(Game1.menuTexture, 10)), Color.White);
+                                            b.Draw(Game1.menuTexture, equipmentIcon.bounds, Game1.getSourceRectForStandardTileSheet(Game1.menuTexture, 10), Color.White);
                                             Game1.player.pantsItem.Value.drawInMenu(b, new Vector2((float)equipmentIcon.bounds.X, (float)equipmentIcon.bounds.Y), equipmentIcon.scale);
                                             continue;
                                         }
-                                        b.Draw(Game1.menuTexture, equipmentIcon.bounds, new Rectangle?(Game1.getSourceRectForStandardTileSheet(Game1.menuTexture, 68)), Color.White);
+                                        b.Draw(Game1.menuTexture, equipmentIcon.bounds, Game1.getSourceRectForStandardTileSheet(Game1.menuTexture, 68), Color.White);
                                         continue;
                                     }
                                     continue;
@@ -169,11 +169,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                                     {
                                         if (Game1.player.shirtItem.Value != null)
                                         {
-                                            b.Draw(Game1.menuTexture, equipmentIcon.bounds, new Rectangle?(Game1.getSourceRectForStandardTileSheet(Game1.menuTexture, 10)), Color.White);
+                                            b.Draw(Game1.menuTexture, equipmentIcon.bounds, Game1.getSourceRectForStandardTileSheet(Game1.menuTexture, 10), Color.White);
                                             Game1.player.shirtItem.Value.drawInMenu(b, new Vector2((float)equipmentIcon.bounds.X, (float)equipmentIcon.bounds.Y), equipmentIcon.scale);
                                             continue;
                                         }
-                                        b.Draw(Game1.menuTexture, equipmentIcon.bounds, new Rectangle?(Game1.getSourceRectForStandardTileSheet(Game1.menuTexture, 69)), Color.White);
+                                        b.Draw(Game1.menuTexture, equipmentIcon.bounds, Game1.getSourceRectForStandardTileSheet(Game1.menuTexture, 69), Color.White);
                                         continue;
                                     }
                                     continue;
@@ -186,11 +186,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                                 var index = equipmentIcon.myID - 120;
                                 if (Game1.player.trinketItems.Count > index && Game1.player.trinketItems[index] != null)
                                 {
-                                    b.Draw(Game1.menuTexture, equipmentIcon.bounds, new Rectangle?(Game1.getSourceRectForStandardTileSheet(Game1.menuTexture, 10)), Color.White);
+                                    b.Draw(Game1.menuTexture, equipmentIcon.bounds, Game1.getSourceRectForStandardTileSheet(Game1.menuTexture, 10), Color.White);
                                     Game1.player.trinketItems[index].drawInMenu(b, new Vector2((float)equipmentIcon.bounds.X, (float)equipmentIcon.bounds.Y), equipmentIcon.scale);
                                     continue;
                                 }
-                                b.Draw(Game1.menuTexture, equipmentIcon.bounds, new Rectangle?(Game1.getSourceRectForStandardTileSheet(Game1.menuTexture, 70)), Color.White);
+                                b.Draw(Game1.menuTexture, equipmentIcon.bounds, Game1.getSourceRectForStandardTileSheet(Game1.menuTexture, 70), Color.White);
                                 continue;
                             }
                             continue;
@@ -199,11 +199,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                             {
                                 if (Game1.player.leftRing.Value != null)
                                 {
-                                    b.Draw(Game1.menuTexture, equipmentIcon.bounds, new Rectangle?(Game1.getSourceRectForStandardTileSheet(Game1.menuTexture, 10)), Color.White);
+                                    b.Draw(Game1.menuTexture, equipmentIcon.bounds, Game1.getSourceRectForStandardTileSheet(Game1.menuTexture, 10), Color.White);
                                     Game1.player.leftRing.Value.drawInMenu(b, new Vector2((float)equipmentIcon.bounds.X, (float)equipmentIcon.bounds.Y), equipmentIcon.scale);
                                     continue;
                                 }
-                                b.Draw(Game1.menuTexture, equipmentIcon.bounds, new Rectangle?(Game1.getSourceRectForStandardTileSheet(Game1.menuTexture, 41)), Color.White);
+                                b.Draw(Game1.menuTexture, equipmentIcon.bounds, Game1.getSourceRectForStandardTileSheet(Game1.menuTexture, 41), Color.White);
                                 continue;
                             }
                             continue;
@@ -212,11 +212,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                             {
                                 if (Game1.player.rightRing.Value != null)
                                 {
-                                    b.Draw(Game1.menuTexture, equipmentIcon.bounds, new Rectangle?(Game1.getSourceRectForStandardTileSheet(Game1.menuTexture, 10)), Color.White);
+                                    b.Draw(Game1.menuTexture, equipmentIcon.bounds, Game1.getSourceRectForStandardTileSheet(Game1.menuTexture, 10), Color.White);
                                     Game1.player.rightRing.Value.drawInMenu(b, new Vector2((float)equipmentIcon.bounds.X, (float)equipmentIcon.bounds.Y), equipmentIcon.scale);
                                     continue;
                                 }
-                                b.Draw(Game1.menuTexture, equipmentIcon.bounds, new Rectangle?(Game1.getSourceRectForStandardTileSheet(Game1.menuTexture, 41)), Color.White);
+                                b.Draw(Game1.menuTexture, equipmentIcon.bounds, Game1.getSourceRectForStandardTileSheet(Game1.menuTexture, 41), Color.White);
                                 continue;
                             }
                             continue;
