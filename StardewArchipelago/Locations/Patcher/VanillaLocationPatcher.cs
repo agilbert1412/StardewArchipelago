@@ -239,6 +239,11 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(typeof(Building), nameof(Building.doAction)),
                 prefix: new HarmonyMethod(typeof(WellInjections), nameof(WellInjections.DoAction_ThrowHoneyInWell_Prefix))
             );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Horse), nameof(Horse.checkAction)),
+                prefix: new HarmonyMethod(typeof(HorseInjections), nameof(HorseInjections.CheckAction_FeedPomnutItems_Prefix))
+            );
         }
 
         private void PatchTrashBear()

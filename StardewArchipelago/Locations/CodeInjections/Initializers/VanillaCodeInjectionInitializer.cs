@@ -90,6 +90,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             CommunityCenterInjections.Initialize(logger, archipelago, locationChecker, bundleReader);
             RaccoonInjections.Initialize(logger, modHelper, archipelago, state, locationChecker, bundlesManager, bundleReader);
             WellInjections.Initialize(logger, modHelper, archipelago, locationChecker, giftSender);
+            HorseInjections.Initialize(logger, modHelper, archipelago, locationChecker);
         }
 
         private static void InitializeSkills(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, LocationChecker locationChecker)

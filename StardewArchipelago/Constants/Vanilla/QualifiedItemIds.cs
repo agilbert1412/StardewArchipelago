@@ -316,6 +316,8 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string MINI_SHIPPING_BIN = QualifiedBigCraftableId(BigCraftableIds.MINI_SHIPPING_BIN);
         public static readonly string IRIDIUM_SNAKE_MILK = QualifiedObjectId(ObjectIds.IRIDIUM_SNAKE_MILK);
         public static readonly string ADVANCED_TV_REMOTE = QualifiedObjectId(ObjectIds.ADVANCED_TV_REMOTE);
+        public static readonly string HAZELNUT = QualifiedObjectId(ObjectIds.HAZELNUT);
+        public static readonly string CARROT = QualifiedObjectId(ObjectIds.CARROT);
 
         public static readonly string CATALOGUE = QualifiedFurnitureId(FurnitureIds.CATALOGUE);
         public static readonly string FURNITURE_CATALOGUE = QualifiedFurnitureId(FurnitureIds.FURNITURE_CATALOGUE);
