@@ -31,12 +31,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         private static IModHelper _modHelper;
         private static StardewArchipelagoClient _archipelago;
         private static ArchipelagoStateDto _state;
-        private static LocationChecker _locationChecker;
+        private static StardewLocationChecker _locationChecker;
         private static BundlesManager _bundlesManager;
         private static BundleReader _bundleReader;
 
         public static void Initialize(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, ArchipelagoStateDto state,
-            LocationChecker locationChecker, BundlesManager bundlesManager, BundleReader bundleReader)
+            StardewLocationChecker locationChecker, BundlesManager bundlesManager, BundleReader bundleReader)
         {
             _logger = logger;
             _modHelper = modHelper;
@@ -145,12 +145,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                     return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
-                var maxNumberOfRaccoons = 9;
+                var maxNumberOfRaccoons = GetMaxRaccoonsInSlot();
                 var receivedRaccoons = _archipelago.GetReceivedItemCount(APItem.PROGRESSIVE_RACCOON);
                 if (!_archipelago.SlotData.QuestLocations.StoryQuestsEnabled)
                 {
                     receivedRaccoons += 1;
-                    maxNumberOfRaccoons -= 1;
                 }
 
                 var nextRaccoonRequestNumber = GetCurrentRaccoonBundleNumber();
@@ -356,18 +355,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         {
             try
             {
-                if (!_locationChecker.IsLocationMissing("Quest: The Giant Stump"))
-                {
-                    return;
-                }
-
-                foreach (var character in __instance.characters)
-                {
-                    if (character is Raccoon raccoon)
-                    {
-                        raccoon.farmerPassesThrough = true;
-                    }
-                }
+                MakeRaccoonWalkableThrough(__instance);
+                SetRaccoonBabies(__instance);
 
                 return;
             }
@@ -376,6 +365,61 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 _logger.LogError($"Failed in {nameof(ResetSharedState_WalkThroughRaccoons_Postfix)}:\n{ex}");
                 return;
             }
+        }
+
+        private static void MakeRaccoonWalkableThrough(Forest forest)
+        {
+            if (!_locationChecker.IsLocationMissing("Quest: The Giant Stump"))
+            {
+                return;
+            }
+
+            foreach (var character in forest.characters)
+            {
+                if (character is Raccoon raccoon)
+                {
+                    raccoon.farmerPassesThrough = true;
+                }
+            }
+
+            return;
+        }
+
+        private static void SetRaccoonBabies(Forest forest)
+        {
+            var maxRaccoons = GetMaxRaccoonsInSlot();
+            var receivedRaccoons = _archipelago.GetReceivedItemCount(APItem.PROGRESSIVE_RACCOON);
+
+            // private int numRaccoonBabies = -1;
+            var numRaccoonBabiesField = _modHelper.Reflection.GetField<int>(forest, "numRaccoonBabies");
+
+            var correctNumRaccoonBabies = Game1.netWorldState.Value.TimesFedRaccoons - 1;
+            if (Game1.netWorldState.Value.Date.TotalDays - Game1.netWorldState.Value.DaysPlayedWhenLastRaccoonBundleWasFinished < 7)
+            {
+                --correctNumRaccoonBabies;
+            }
+            if (correctNumRaccoonBabies < 0)
+            {
+                correctNumRaccoonBabies = 0;
+            }
+            if (receivedRaccoons >= maxRaccoons)
+            {
+                Game1.getAchievement(39);
+            }
+
+            numRaccoonBabiesField.SetValue(correctNumRaccoonBabies);
+        }
+
+        private static int GetMaxRaccoonsInSlot()
+        {
+            var defaultNum = 8;
+            var numAsLocations = _locationChecker.GetAllLocationsStartingWith("Raccoon Request ").Count();
+            var realNum = Math.Min(defaultNum, numAsLocations);
+            if (_archipelago.SlotData.QuestLocations.StoryQuestsEnabled)
+            {
+                realNum += 1;
+            }
+            return realNum;
         }
     }
 }

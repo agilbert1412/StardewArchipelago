@@ -52,6 +52,11 @@ namespace StardewArchipelago.Locations
             return _locationNameMatcher.GetAllLocationsStartingWith(GetAllLocationsNotChecked(), prefix);
         }
 
+        public IEnumerable<string> GetAllLocationsStartingWith(string prefix)
+        {
+            return _locationNameMatcher.GetAllLocationsStartingWith(GetAllLocations(), prefix);
+        }
+
         public string[] GetAllLocationsNotCheckedContainingWord(string wordFilter)
         {
             return _locationNameMatcher.GetAllLocationsContainingWord(GetAllLocationsNotChecked(), wordFilter);
