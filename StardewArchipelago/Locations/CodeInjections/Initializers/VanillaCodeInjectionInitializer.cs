@@ -83,7 +83,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             JunimoKartInjections.Initialize(logger, modHelper, archipelago, locationChecker);
         }
 
-        private static void InitializeBundleInjections(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, BundlesManager bundlesManager, BundleReader bundleReader, TrapManager trapManager, BankHandler bank, GiftSender giftSender)
+        private static void InitializeBundleInjections(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, ArchipelagoStateDto state, StardewLocationChecker locationChecker, BundlesManager bundlesManager, BundleReader bundleReader, TrapManager trapManager, BankHandler bank, GiftSender giftSender)
         {
             ArchipelagoJunimoNoteMenu.InitializeArchipelago(logger, modHelper, archipelago, state, bank, locationChecker, trapManager);
             ArchipelagoBundle.InitializeArchipelago(logger, modHelper, archipelago, state, locationChecker, bundlesManager);
