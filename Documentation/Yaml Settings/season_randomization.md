@@ -24,7 +24,7 @@ If you are playing in a multiworld, this means you will have a significantly hea
 
 You will be assigned one random starting season, and the other 3 are random unlocks to be found in the multiworld.
 
-This is the default value, and it is the recommended experience.
+**This is the default value, and it is the recommended experience.**
 
 #### Randomized Not Winter
 
