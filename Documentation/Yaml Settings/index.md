@@ -64,7 +64,8 @@ These have direct effects on in-game behaviors, not tied to the Archipelago rand
 - ~~[Debris Multiplier](./debris_multiplier.md)~~
 - ~~[Number of Movement Buffs](./number_of_movement_buffs.md)~~
 - ~~[Enabled Filler Buffs](./enabled_filler_buffs.md)~~
-- ~~[Trap Items](./trap_items.md)~~
+- ~~[Trap Difficulty](./trap_difficulty.md)~~
+- ~~[Trap Distribution](./trap_distribution.md)~~
 - ~~[Multiple Day Sleep Enabled](./multiple_day_sleep.md)~~
 - ~~[Multiple Day Sleep](./multiple_day_sleep.md)~~
 - ~~[Quick Start](./quick_start.md)~~
@@ -82,4 +83,24 @@ These have direct effects on in-game behaviors, not tied to the Archipelago rand
 These settings cannot be picked from the website, and require filling out your yaml manually. They are intended for very experienced players.
 
 - ~~[Mods](./mods.md)~~
-- ~~[Bundle Plando](./bundle-plando.md)~~
+- ~~[Bundle Plando](./bundle_plando.md)~~
+
+## 7.x.x Settings
+
+These settings are only available in the 7.x.x Pre-release version of the mod
+
+- ~~[Bundles Per Room](./bundle_per_room.md)~~
+- ~~[Backpack Size](./backpack_size.md)~~
+- ~~[Eatsanity](./eatsanity.md)~~
+- ~~[Moviesanity](./moviesanity.md)~~
+- ~~[Secretsanity](./secretsanity.md)~~
+- ~~[Hatsanity](./hatsanity.md)~~
+- ~~[Include Endgame Locations](./include_endgame_locations.md)~~
+- ~~[Bundle Whitelist](./bundle_whitelist.md)~~
+- ~~[Bundle Blacklist](./bundle_blacklist.md)~~
+- ~~[Jojapocalypse](./jojapocalypse.md)~~
+- ~~[Joja Start Price](./joja_start_price.md)~~
+- ~~[Joja End Price](./joja_end_price.md)~~
+- ~~[Joja Pricing Pattern](./joja_pricing_pattern.md)~~
+- ~~[Joja Purchases For Membership](./joja_purchases_for_membership.md)~~
+- ~~[Joja Are You Sure?](./joja_are_you_sure.md)~~
