@@ -35,6 +35,16 @@ This does not include
 
 **This is the default value, and it is the recommended experience.**
 
+
+### Logic Rules
+
+Harvest rules for a crop:
+- Have a reliable access to seeds, excluding Jojamart (because it can close down unexpectedly)
+- Have a hoe and a watering can
+- Have access to a place where the seed can grow. If this place is the farm, the correct season is required.
+
+This means that while you can grow the free sample seed, it is not necessarily in logic to do so. This is due to all item logic having to be entirely renewable (For example, your free sample could get lost, or eaten by crows, etc).
+
 ## Related Mod Configs
 
 ### Seed Shop Overhaul
