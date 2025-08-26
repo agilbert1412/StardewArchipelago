@@ -38,7 +38,7 @@ Through the setting ~~[Backpack Size](./backpack_size.md)~~, the player can cust
 
 This means that, instead of having 2 backpack upgrades of 12 slots each, you can have 6 upgrades of 4 slots each, or at the most, 24 upgrades of 1 slot each.
 
-This applies to both items and locations. If the backpack is split into smaller variations, the total price of every `Large Pack` upgrade will total 2000g, but split between multiple upgrades, with a growth curve so that every upgrade costs more than the next one.
+This applies to both items and locations. If the backpack is split into smaller variations, the total price of every `Large Pack` upgrade will total 2000g, but split between multiple upgrades, with a growth curve so that every upgrade costs more than the previous one.
 
 You can still only purchase upgrade `N`, after receiving backpack `N-1`
 
