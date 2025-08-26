@@ -25,7 +25,7 @@ These settings are critical customization of items and locations. They are the b
 
 - [Season Randomization](./season_randomization.md)
 - [Cropsanity](./cropsanity.md)
-- ~~[Backpack Progression](./backpack_progression.md)~~
+- [Backpack Progression](./backpack_progression.md)
 - ~~[Tool Progression](./tool_progression.md)~~
 - ~~[Elevator Progression](./elevator_progression.md)~~
 - ~~[Skill Progression](./skill_progression.md)~~
