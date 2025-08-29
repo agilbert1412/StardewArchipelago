@@ -41,10 +41,21 @@ namespace StardewArchipelago.Items.Mail
                 postfix: new HarmonyMethod(typeof(MailPatcher), nameof(ExitThisMenu_ApplyLetterAction_Postfix))
             );
 
-            _harmony.Patch(
+            if (ModEntry.Instance.Config.HideEmptyArchipelagoLetters)
+            {
+                _harmony.Patch(
                 original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.mailbox)),
                 prefix: new HarmonyMethod(typeof(MailPatcher), nameof(Mailbox_HideEmptyApLetters_Prefix))
-            );
+                );
+            }
+            
+            if (ModEntry.Instance.Config.HideNpcGiftMail)
+            {
+                _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.mailbox)),
+                prefix: new HarmonyMethod(typeof(MailPatcher), nameof(Mailbox_HideNpcGiftMail_Prefix))
+                );
+            }
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Farm), nameof(Farm.draw)),
@@ -140,15 +151,10 @@ namespace StardewArchipelago.Items.Mail
 
         private static void CleanMailboxUntilNonEmptyLetter()
         {
-            if (!ModEntry.Instance.Config.HideEmptyArchipelagoLetters)
-            {
-                return;
-            }
-
             var mailbox = Game1.mailbox;
             while (mailbox.Count > 1)
             {
-                var nextLetterInMailbox = Game1.mailbox[1];
+                var nextLetterInMailbox = Game1.mailbox[1]; //Check starting from the second letter, attempting to remove the first letter causes the entire mailbox to be emptied, including received items and quests
 
                 if (!MailKey.TryParse(nextLetterInMailbox, out var apMailKey))
                 {
@@ -290,6 +296,37 @@ namespace StardewArchipelago.Items.Mail
             {
                 _logger.LogError($"Failed in {nameof(Draw_AddMailNumber_Postfix)}:\n{ex}");
                 return;
+            }
+        }
+
+        // public void mailbox()
+        public static bool Mailbox_HideNpcGiftMail_Prefix(GameLocation __instance)
+        {
+            try
+            {
+                var mailbox = Game1.mailbox;
+                if (mailbox == null | !mailbox.Any())
+                {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
+                while (mailbox.Count > 1)
+                {
+                    var nextLetter = Game1.mailbox[1]; //Check starting from the second letter, attempting to remove the first letter causes the entire mailbox to be emptied, including received items and quests
+                    if (!Game1.player.friendshipData.Keys.Contains(nextLetter))
+                    {
+                        return MethodPrefix.RUN_ORIGINAL_METHOD;
+                    }
+                    Game1.player.mailReceived.Add(nextLetter);
+                    mailbox.RemoveAt(1);
+                }
+
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(Mailbox_HideNpcGiftMail_Prefix)}:\n{ex}");
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
     }

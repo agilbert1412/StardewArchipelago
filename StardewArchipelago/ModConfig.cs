@@ -16,6 +16,11 @@ namespace StardewArchipelago
         /// Examples include NPC Hearts, Seasons, Carpenter building unlocks, etc
         /// </summary>
         public bool HideEmptyArchipelagoLetters { get; set; } = false;
+        
+        /// <summary>
+        /// Automatically removes random gifts received in mail from NPCs
+        /// </summary>
+        public bool HideNpcGiftMail { get; set; } = false;
 
         /// <summary>
         /// All Archipelago letters will now use a very short and concise format
