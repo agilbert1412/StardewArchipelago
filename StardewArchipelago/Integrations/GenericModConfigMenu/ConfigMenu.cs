@@ -134,6 +134,14 @@ namespace StardewArchipelago.Integrations.GenericModConfigMenu
 
             configMenu.AddBoolOption(
                 mod: ModManifest,
+                name: () => "Hide NPC Gift Mail",
+                tooltip: () => "All received NPC gifts will be skipped and trashed, reducing clutter when multisleeping",
+                getValue: () => Config.HideNpcGiftMail,
+                setValue: (value) => Config.HideNpcGiftMail = value
+            );
+
+            configMenu.AddBoolOption(
+                mod: ModManifest,
                 name: () => "Disable Letter Templates",
                 tooltip: () => "All Archipelago letters will now use a very short and concise format instead of the funny ones full of fluff",
                 getValue: () => Config.DisableLetterTemplates,

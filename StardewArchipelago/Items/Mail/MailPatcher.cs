@@ -47,6 +47,11 @@ namespace StardewArchipelago.Items.Mail
             );
 
             _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.mailbox)),
+                prefix: new HarmonyMethod(typeof(MailPatcher), nameof(Mailbox_HideNpcGiftMail))
+            );
+
+            _harmony.Patch(
                 original: AccessTools.Method(typeof(Farm), nameof(Farm.draw)),
                 postfix: new HarmonyMethod(typeof(MailPatcher), nameof(Draw_AddMailNumber_Postfix))
             );
@@ -290,6 +295,43 @@ namespace StardewArchipelago.Items.Mail
             {
                 _logger.LogError($"Failed in {nameof(Draw_AddMailNumber_Postfix)}:\n{ex}");
                 return;
+            }
+        }
+
+        // public void mailbox()
+        public static bool Mailbox_HideNpcGiftMail(GameLocation __instance)
+        {
+            if (!ModEntry.Instance.Config.HideNpcGiftMail)
+            {
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+
+            try
+            {
+                var mailbox = Game1.mailbox;
+                if (mailbox == null | !mailbox.Any())
+                {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
+                var potentialGifters = new[] { "Robin", "Demetrius", "Linus", "Pierre", "Caroline", "George", "Evelyn", "Pam", "Lewis", "Gus", "Clint", "Jodi", "Kent", "Emily", "Marnie", "Shane", "Wizard", "Sandy" };
+                while (mailbox.Count > 1)
+                {
+                    var nextLetter = Game1.mailbox[1];
+                    if (!potentialGifters.Contains(nextLetter))
+                    {
+                        return MethodPrefix.RUN_ORIGINAL_METHOD;
+                    }
+                    Game1.player.mailReceived.Add(nextLetter);
+                    mailbox.RemoveAt(1);
+                }
+
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(Mailbox_HideNpcGiftMail)}:\n{ex}");
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
     }
