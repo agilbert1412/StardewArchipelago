@@ -1,17 +1,17 @@
-﻿using System;
-using System.Linq;
-using HarmonyLib;
+﻿using HarmonyLib;
 using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.Goals;
 using StardewArchipelago.Serialization;
 using StardewValley;
 using StardewValley.Menus;
+using System;
+using System.Linq;
 
 namespace StardewArchipelago.Items.Mail
 {
@@ -44,16 +44,16 @@ namespace StardewArchipelago.Items.Mail
             if (ModEntry.Instance.Config.HideEmptyArchipelagoLetters)
             {
                 _harmony.Patch(
-                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.mailbox)),
-                prefix: new HarmonyMethod(typeof(MailPatcher), nameof(Mailbox_HideEmptyApLetters_Prefix))
+                    original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.mailbox)),
+                    prefix: new HarmonyMethod(typeof(MailPatcher), nameof(Mailbox_HideEmptyApLetters_Prefix))
                 );
             }
-            
+
             if (ModEntry.Instance.Config.HideNpcGiftMail)
             {
                 _harmony.Patch(
-                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.mailbox)),
-                prefix: new HarmonyMethod(typeof(MailPatcher), nameof(Mailbox_HideNpcGiftMail_Prefix))
+                    original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.mailbox)),
+                    prefix: new HarmonyMethod(typeof(MailPatcher), nameof(Mailbox_HideNpcGiftMail_Prefix))
                 );
             }
 
