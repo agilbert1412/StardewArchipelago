@@ -19,7 +19,6 @@ namespace StardewArchipelago
         
         /// <summary>
         /// Automatically removes random gifts received in mail from NPCs
-        /// Finds which letters are random gifts by checking the letter names for the specific keys
         /// </summary>
         public bool HideNpcGiftMail { get; set; } = false;
 
