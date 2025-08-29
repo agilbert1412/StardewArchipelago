@@ -48,7 +48,6 @@ namespace StardewArchipelago.Items.Mail
                 prefix: new HarmonyMethod(typeof(MailPatcher), nameof(Mailbox_HideEmptyApLetters_Prefix))
                 );
             }
-
             
             if (ModEntry.Instance.Config.HideNpcGiftMail)
             {
