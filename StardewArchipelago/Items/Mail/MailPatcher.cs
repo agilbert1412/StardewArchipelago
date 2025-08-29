@@ -41,15 +41,22 @@ namespace StardewArchipelago.Items.Mail
                 postfix: new HarmonyMethod(typeof(MailPatcher), nameof(ExitThisMenu_ApplyLetterAction_Postfix))
             );
 
-            _harmony.Patch(
+            if (ModEntry.Instance.Config.HideEmptyArchipelagoLetters)
+            {
+                _harmony.Patch(
                 original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.mailbox)),
                 prefix: new HarmonyMethod(typeof(MailPatcher), nameof(Mailbox_HideEmptyApLetters_Prefix))
-            );
+                );
+            }
 
-            _harmony.Patch(
+            
+            if (ModEntry.Instance.Config.HideNpcGiftMail)
+            {
+                _harmony.Patch(
                 original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.mailbox)),
-                prefix: new HarmonyMethod(typeof(MailPatcher), nameof(Mailbox_HideNpcGiftMail))
-            );
+                prefix: new HarmonyMethod(typeof(MailPatcher), nameof(Mailbox_HideNpcGiftMail_Prefix))
+                );
+            }
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Farm), nameof(Farm.draw)),
@@ -145,15 +152,10 @@ namespace StardewArchipelago.Items.Mail
 
         private static void CleanMailboxUntilNonEmptyLetter()
         {
-            if (!ModEntry.Instance.Config.HideEmptyArchipelagoLetters)
-            {
-                return;
-            }
-
             var mailbox = Game1.mailbox;
             while (mailbox.Count > 1)
             {
-                var nextLetterInMailbox = Game1.mailbox[1];
+                var nextLetterInMailbox = Game1.mailbox[1]; //Check starting from the second letter, attempting to remove the first letter causes the entire mailbox to be emptied, including received items and quests
 
                 if (!MailKey.TryParse(nextLetterInMailbox, out var apMailKey))
                 {
@@ -299,13 +301,8 @@ namespace StardewArchipelago.Items.Mail
         }
 
         // public void mailbox()
-        public static bool Mailbox_HideNpcGiftMail(GameLocation __instance)
+        public static bool Mailbox_HideNpcGiftMail_Prefix(GameLocation __instance)
         {
-            if (!ModEntry.Instance.Config.HideNpcGiftMail)
-            {
-                return MethodPrefix.RUN_ORIGINAL_METHOD;
-            }
-
             try
             {
                 var mailbox = Game1.mailbox;
@@ -314,11 +311,10 @@ namespace StardewArchipelago.Items.Mail
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
-                var potentialGifters = new[] { "Robin", "Demetrius", "Linus", "Pierre", "Caroline", "George", "Evelyn", "Pam", "Lewis", "Gus", "Clint", "Jodi", "Kent", "Emily", "Marnie", "Shane", "Wizard", "Sandy" };
                 while (mailbox.Count > 1)
                 {
-                    var nextLetter = Game1.mailbox[1];
-                    if (!potentialGifters.Contains(nextLetter))
+                    var nextLetter = Game1.mailbox[1]; //Check starting from the second letter, attempting to remove the first letter causes the entire mailbox to be emptied, including received items and quests
+                    if (!Game1.player.friendshipData.Keys.Contains(nextLetter))
                     {
                         return MethodPrefix.RUN_ORIGINAL_METHOD;
                     }
@@ -330,7 +326,7 @@ namespace StardewArchipelago.Items.Mail
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed in {nameof(Mailbox_HideNpcGiftMail)}:\n{ex}");
+                _logger.LogError($"Failed in {nameof(Mailbox_HideNpcGiftMail_Prefix)}:\n{ex}");
                 return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }

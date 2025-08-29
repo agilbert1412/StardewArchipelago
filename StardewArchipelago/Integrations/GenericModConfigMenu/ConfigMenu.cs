@@ -135,7 +135,7 @@ namespace StardewArchipelago.Integrations.GenericModConfigMenu
             configMenu.AddBoolOption(
                 mod: ModManifest,
                 name: () => "Hide NPC Gift Mail",
-                tooltip: () => "All received NPC gifts will be skipped and trashed, reducing clutter when multisleeping",
+                tooltip: () => "All received NPC gifts will be skipped, reducing clutter",
                 getValue: () => Config.HideNpcGiftMail,
                 setValue: (value) => Config.HideNpcGiftMail = value
             );
