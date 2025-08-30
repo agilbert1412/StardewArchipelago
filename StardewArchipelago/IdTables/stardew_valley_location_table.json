@@ -1134,7 +1134,7 @@
             "tags": ["MANDATORY", "THE_MINES_TREASURE"],
             "content_packs": []
         },
-        "Grim Reaper statue": {
+        "Grim Reaper Statue": {
             "code": 717212,
             "region": "Quarry Mine",
             "tags": ["MANDATORY"],

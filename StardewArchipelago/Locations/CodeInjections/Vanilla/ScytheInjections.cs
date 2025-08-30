@@ -9,7 +9,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
     public static class ScytheInjections
     {
-        private const string GRIM_REAPER_STATUE = "Grim Reaper statue";
+        private const string GRIM_REAPER_STATUE = "Grim Reaper Statue";
 
         private static ILogger _logger;
         private static LocationChecker _locationChecker;

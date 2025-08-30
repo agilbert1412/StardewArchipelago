@@ -438,32 +438,8 @@ namespace StardewArchipelago.Registry
                 return;
             }
 
-            var allowedLocations = new[]
+            var allowedLocations = new string[]
             {
-                "Beach Bridge Repair",
-                "Grim Reaper statue",
-                "Help Wanted: Gathering ",
-                "Iridium Krobus",
-                "Quest: Cryptic Note",
-                "Secret Note #10: Cryptic Note",
-                "Foliage Print",
-                "Raising Animals",
-                "Feeding Animals",
-                "Quest: Raising Animals",
-                "Quest: Feeding Animals",
-                "Quest: Corrupted Crops Task",
-                "Quest: Witch's order",
-                "Corrupted Crops Task",
-                "Witch's order",
-                "Drink Iridium Snake Milk",
-                "Watch The Brave Little Sapling",
-                "Watch Journey Of The Prairie King: The Motion Picture",
-                "Watch Mysterium",
-                "Watch The Miracle At Coldstar Ranch",
-                "Watch Natural Wonders: Exploring Our Vibrant World",
-                "Watch Wumbus",
-                "Watch It Howls In The Rain",
-                "Watch The Zuzu City Express",
             };
 
             if (!allowedLocations.Contains(locationName) && !allowedLocations.Any(x => locationName.StartsWith(x)))
