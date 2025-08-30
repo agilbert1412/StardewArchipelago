@@ -94,6 +94,11 @@ namespace StardewArchipelago.Archipelago.SlotData
             return GetSlotOptionSetSetting<StartWithout>(SlotDataKeys.START_WITHOUT);
         }
 
+        public Chefsanity GetSlotChefsanitySetting()
+        {
+            return GetSlotOptionSetSetting<Chefsanity>(SlotDataKeys.CHEFSANITY);
+        }
+
         public Eatsanity GetSlotEatsanitySetting()
         {
             return GetSlotOptionSetSetting<Eatsanity>(SlotDataKeys.EATSANITY);
@@ -126,7 +131,7 @@ namespace StardewArchipelago.Archipelago.SlotData
             slotItems = slotItems.Select(x => x.Replace(" ", "")).ToList();
             foreach (var enumValue in Enum.GetValues<TEnum>())
             {
-                if (slotItems.Contains(enumValue.ToString()))
+                if (slotItems.Any(x => x.Equals(enumValue.ToString(), StringComparison.InvariantCultureIgnoreCase)))
                 {
                     enabledValues |= (int)(object)enumValue;
                 }

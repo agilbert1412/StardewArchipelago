@@ -105,7 +105,7 @@ namespace StardewArchipelago.Archipelago.SlotData
             Monstersanity = slotDataReader.GetSlotSetting(SlotDataKeys.MONSTERSANITY, Monstersanity.None);
             Shipsanity = slotDataReader.GetSlotSetting(SlotDataKeys.SHIPSANITY, Shipsanity.None);
             Cooksanity = slotDataReader.GetSlotSetting(SlotDataKeys.COOKSANITY, Cooksanity.None);
-            Chefsanity = slotDataReader.GetSlotSetting(SlotDataKeys.CHEFSANITY, Chefsanity.Vanilla);
+            Chefsanity = slotDataReader.GetSlotChefsanitySetting();
             Craftsanity = slotDataReader.GetSlotSetting(SlotDataKeys.CRAFTSANITY, Craftsanity.None);
             Friendsanity = slotDataReader.GetSlotSetting(SlotDataKeys.FRIENDSANITY, Friendsanity.None);
             FriendsanityHeartSize = slotDataReader.GetSlotSetting(SlotDataKeys.FRIENDSANITY_HEART_SIZE, 4);
