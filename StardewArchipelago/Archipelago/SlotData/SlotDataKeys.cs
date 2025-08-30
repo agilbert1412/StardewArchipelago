@@ -7,6 +7,7 @@
         public const string STARTING_MONEY = "starting_money";
         public const string PROFIT_MARGIN = "profit_margin";
         public const string ENTRANCE_RANDOMIZATION = "entrance_randomization";
+        public const string START_WITHOUT = "start_without";
         public const string SEASON_RANDOMIZATION = "season_randomization";
         public const string CROPSANITY = "cropsanity";
         public const string BACKPACK_PROGRESSION = "backpack_progression";

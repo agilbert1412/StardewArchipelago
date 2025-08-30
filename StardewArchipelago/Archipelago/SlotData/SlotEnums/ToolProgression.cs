@@ -9,6 +9,5 @@ namespace StardewArchipelago.Archipelago.SlotData.SlotEnums
         Progressive = 0b0001,
         Cheap = 0b0010,
         VeryCheap = 0b0100,
-        NoStartingTools = 0b1000,
     }
 }

@@ -89,6 +89,11 @@ namespace StardewArchipelago.Archipelago.SlotData
             return defaultValue;
         }
 
+        public StartWithout GetSlotStartWithoutSetting()
+        {
+            return GetSlotOptionSetSetting<StartWithout>(SlotDataKeys.START_WITHOUT);
+        }
+
         public Eatsanity GetSlotEatsanitySetting()
         {
             return GetSlotOptionSetSetting<Eatsanity>(SlotDataKeys.EATSANITY);

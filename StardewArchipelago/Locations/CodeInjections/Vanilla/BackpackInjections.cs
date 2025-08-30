@@ -97,12 +97,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
 
             var indexNextBackpack = Array.IndexOf(_backpackLocationsInOrder, nextBackpack);
-
-            // TODO: Delete this after Beta7. This is to work around a logic bug
-            if (_archipelago.SlotData.ToolProgression.HasFlag(ToolProgression.NoStartingTools))
-            {
-                indexNextBackpack -= 12 / _archipelago.SlotData.BackpackSize;
-            }
             return _archipelago.GetReceivedItemCount(PROGRESSIVE_BACKPACK) >= indexNextBackpack;
         }
 

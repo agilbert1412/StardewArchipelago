@@ -200,7 +200,7 @@ namespace StardewArchipelago.Items.Mail
             // This includes the current letter due to the timing of this patch
             var scytheNumber = _mail.OpenedMailsContainingKey(ToolUnlockManager.PROGRESSIVE_SCYTHE);
             scytheNumber = Math.Max(1, Math.Min(3, scytheNumber));
-            if (_archipelago.SlotData.ToolProgression.HasFlag(ToolProgression.NoStartingTools))
+            if (_archipelago.SlotData.StartWithout.HasFlag(StartWithout.Tools))
             {
                 scytheNumber -= 1;
             }

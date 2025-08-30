@@ -100,7 +100,7 @@ namespace StardewArchipelago.GameModifications
         
         private void RemoveStartingTools()
         {
-            if (!_archipelago.SlotData.ToolProgression.HasFlag(ToolProgression.NoStartingTools))
+            if (!_archipelago.SlotData.StartWithout.HasFlag(StartWithout.Tools))
             {
                 return;
             }
