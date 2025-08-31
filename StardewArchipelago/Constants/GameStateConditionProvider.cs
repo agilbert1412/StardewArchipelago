@@ -21,6 +21,17 @@ namespace StardewArchipelago.Constants
             return CreateCondition(GameStateCondition.HAS_RECEIVED_ITEM, arguments);
         }
 
+        public static string CreateHasReceivedItemExactAmountCondition(string itemName, int amount)
+        {
+            if (amount < 0)
+            {
+                throw new Exception($"Cannot create {nameof(GameStateCondition.HAS_RECEIVED_ITEM_EXACT_AMOUNT)} condition with an amount of {amount}");
+            }
+
+            var arguments = new[] { amount.ToString(), itemName };
+            return CreateCondition(GameStateCondition.HAS_RECEIVED_ITEM_EXACT_AMOUNT, arguments);
+        }
+
         public static string CreateHasBuildingAnywhereCondition(string buildingName, bool hasBuilding)
         {
             if (buildingName.Contains(" "))
@@ -155,6 +166,28 @@ namespace StardewArchipelago.Constants
             {
                 return string.Join(", ", conditions);
             }
+        }
+
+        public static string CreateOrCondition(IReadOnlyList<string> conditions)
+        {
+            if (conditions == null)
+            {
+                return "";
+            }
+
+            conditions = conditions.Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
+
+            if (!conditions.Any())
+            {
+                return "";
+            }
+
+            if (conditions.Count == 1)
+            {
+                return conditions.First();
+            }
+
+            return $"ANY {string.Join(' ', conditions.Select(x => SurroundWithQuotes(InvertCondition(x))))}";
         }
 
         private static string SurroundWithQuotes(string condition)

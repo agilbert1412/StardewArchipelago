@@ -330,6 +330,33 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string GOLDEN_SCYTHE = QualifiedWeaponId(WeaponIds.GOLDEN_SCYTHE);
         public static readonly string IRIDIUM_SCYTHE = QualifiedWeaponId(WeaponIds.IRIDIUM_SCYTHE);
 
+        public static readonly string ANIMAL_CATALOGUE = QualifiedObjectId(ObjectIds.ANIMAL_CATALOGUE);
+        public static readonly string BAIT_AND_BOBBER = QualifiedObjectId(ObjectIds.BAIT_AND_BOBBER);
+        public static readonly string BOOK_OF_MYSTERIES = QualifiedObjectId(ObjectIds.BOOK_OF_MYSTERIES);
+        public static readonly string BOOK_OF_STARS = QualifiedObjectId(ObjectIds.BOOK_OF_STARS);
+        public static readonly string COMBAT_QUARTERLY = QualifiedObjectId(ObjectIds.COMBAT_QUARTERLY);
+        public static readonly string DWARVISH_SAFETY_MANUAL = QualifiedObjectId(ObjectIds.DWARVISH_SAFETY_MANUAL);
+        public static readonly string FRIENDSHIP_101 = QualifiedObjectId(ObjectIds.FRIENDSHIP_101);
+        public static readonly string HORSE_THE_BOOK = QualifiedObjectId(ObjectIds.HORSE_THE_BOOK);
+        public static readonly string JACK_BE_NIMBLE_JACK_BE_THICK = QualifiedObjectId(ObjectIds.JACK_BE_NIMBLE_JACK_BE_THICK);
+        public static readonly string JEWELS_OF_THE_SEA = QualifiedObjectId(ObjectIds.JEWELS_OF_THE_SEA);
+        public static readonly string MAPPING_CAVE_SYSTEMS = QualifiedObjectId(ObjectIds.MAPPING_CAVE_SYSTEMS);
+        public static readonly string MINING_MONTHLY = QualifiedObjectId(ObjectIds.MINING_MONTHLY);
+        public static readonly string MONSTER_COMPENDIUM = QualifiedObjectId(ObjectIds.MONSTER_COMPENDIUM);
+        public static readonly string OL_SLITHERLEGS = QualifiedObjectId(ObjectIds.OL_SLITHERLEGS);
+        public static readonly string PRICE_CATALOGUE = QualifiedObjectId(ObjectIds.PRICE_CATALOGUE);
+        public static readonly string QUEEN_OF_SAUCE_COOKBOOK = QualifiedObjectId(ObjectIds.QUEEN_OF_SAUCE_COOKBOOK);
+        public static readonly string RACCOON_JOURNAL = QualifiedObjectId(ObjectIds.RACCOON_JOURNAL);
+        public static readonly string STARDEW_VALLEY_ALMANAC = QualifiedObjectId(ObjectIds.STARDEW_VALLEY_ALMANAC);
+        public static readonly string THE_ALLEYWAY_BUFFET = QualifiedObjectId(ObjectIds.THE_ALLEYWAY_BUFFET);
+        public static readonly string THE_ART_O_CRABBING = QualifiedObjectId(ObjectIds.THE_ART_O_CRABBING);
+        public static readonly string THE_DIAMOND_HUNTER = QualifiedObjectId(ObjectIds.THE_DIAMOND_HUNTER);
+        public static readonly string TREASURE_APPRAISAL_GUIDE = QualifiedObjectId(ObjectIds.TREASURE_APPRAISAL_GUIDE);
+        public static readonly string WAY_OF_THE_WIND_1 = QualifiedObjectId(ObjectIds.WAY_OF_THE_WIND_1);
+        public static readonly string WAY_OF_THE_WIND_2 = QualifiedObjectId(ObjectIds.WAY_OF_THE_WIND_2);
+        public static readonly string WOODCUTTER_WEEKLY = QualifiedObjectId(ObjectIds.WOODCUTTER_WEEKLY);
+        public static readonly string WOODYS_SECRET = QualifiedObjectId(ObjectIds.WOODYS_SECRET);
+
         public static readonly string[] ALL_CATALOGUES = {
             CATALOGUE, FURNITURE_CATALOGUE, JOJA_CATALOGUE, JUNIMO_CATALOGUE,
             RETRO_CATALOGUE, TRASH_CATALOGUE, WIZARD_CATALOGUE,

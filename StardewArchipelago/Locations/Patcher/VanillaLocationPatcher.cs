@@ -1367,6 +1367,11 @@ namespace StardewArchipelago.Locations.Patcher
                 prefix: new HarmonyMethod(typeof(BookInjections), nameof(BookInjections.ReadBook_Booksanity_Prefix))
             );
 
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Utility), nameof(Utility.getDaysOfBooksellerThisSeason)),
+                prefix: new HarmonyMethod(typeof(BookInjections), nameof(BookInjections.GetDaysOfBooksellerThisSeason_UseReceivedDays_Prefix))
+            );
+
             if (_archipelago.SlotData.Booksanity < Booksanity.All)
             {
                 return;

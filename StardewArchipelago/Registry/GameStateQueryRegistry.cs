@@ -34,6 +34,7 @@ namespace StardewArchipelago.Registry
             try
             {
                 GameStateQuery.Register(GameStateCondition.HAS_RECEIVED_ITEM, HasReceivedItemQueryDelegate);
+                GameStateQuery.Register(GameStateCondition.HAS_RECEIVED_ITEM_EXACT_AMOUNT, HasReceivedItemExactAmountQueryDelegate);
                 GameStateQuery.Register(GameStateCondition.HAS_STOCK_SIZE, TravelingMerchantInjections.HasStockSizeQueryDelegate);
                 GameStateQuery.Register(GameStateCondition.FOUND_ARTIFACT, ArtifactsFoundQueryDelegate);
                 GameStateQuery.Register(GameStateCondition.FOUND_MINERAL, MineralsFoundQueryDelegate);
@@ -54,6 +55,18 @@ namespace StardewArchipelago.Registry
             var amount = int.Parse(query[1]);
             var itemName = string.Join(' ', query.Skip(2));
             return _archipelago.GetReceivedItemCount(itemName) >= amount;
+        }
+
+        private bool HasReceivedItemExactAmountQueryDelegate(string[] query, GameStateQueryContext context)
+        {
+            if (!query.Any())
+            {
+                return false;
+            }
+
+            var amount = int.Parse(query[1]);
+            var itemName = string.Join(' ', query.Skip(2));
+            return _archipelago.GetReceivedItemCount(itemName) == amount;
         }
 
         private bool ArtifactsFoundQueryDelegate(string[] query, GameStateQueryContext context)

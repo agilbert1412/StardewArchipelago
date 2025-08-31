@@ -30,5 +30,10 @@
         public const string DARK_TALISMAN = "Dark Talisman";
         public const string KEY_TO_THE_TOWN = "Key To The Town";
         public const string SPECIAL_CHARM = "Special Charm";
+
+        public const string BOOKSELLER_DAY = "Progressive Bookseller Days";
+        public const string BOOKSELLER_EXPERIENCE_BOOKS = "Bookseller Stock: Progressive Experience Books";
+        public const string BOOKSELLER_RARE_BOOKS = "Bookseller Stock: Progressive Rare Books";
+        public const string BOOKSELLER_PERMANENT_BOOKS = "Bookseller Stock: Permanent Books";
     }
 }

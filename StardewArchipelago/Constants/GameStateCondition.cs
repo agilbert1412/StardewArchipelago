@@ -5,6 +5,7 @@ namespace StardewArchipelago.Constants
     public static class GameStateCondition
     {
         public static readonly string HAS_RECEIVED_ITEM = CreateId("HasReceivedItem");
+        public static readonly string HAS_RECEIVED_ITEM_EXACT_AMOUNT = CreateId("HasReceivedItemExactAmount");
         public static readonly string HAS_STOCK_SIZE = CreateId("HasCartStockSize");
         public static readonly string FOUND_ARTIFACT = CreateId("FoundArtifact");
         public static readonly string FOUND_MINERAL = CreateId("FoundMineral");

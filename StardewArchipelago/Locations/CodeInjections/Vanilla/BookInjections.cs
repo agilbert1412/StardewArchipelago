@@ -16,6 +16,7 @@ using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
+using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Modded;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
@@ -47,6 +48,55 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 // So the rest of the world doesn't try to spawn them
                 Game1.netWorldState.Value.LostBooksFound = 21;
+            }
+        }
+
+        // public static List<int> getDaysOfBooksellerThisSeason()
+        public static bool GetDaysOfBooksellerThisSeason_UseReceivedDays_Prefix(ref List<int> __result)
+        {
+            try
+            {
+                var totalDays = Game1.stats.DaysPlayed;
+                var totalMonths = totalDays / 28;
+                var random = Utility.CreateRandom(totalMonths * 11, Game1.uniqueIDForThisGame, Game1.seasonIndex);
+                var dayCandidates = Array.Empty<int>();
+                var booksellerThisSeason = new List<int>();
+                switch (Game1.season)
+                {
+                    case Season.Spring:
+                        dayCandidates = new[] { 11, 12, 21, 22, 25 };
+                        break;
+                    case Season.Summer:
+                        dayCandidates = new[] { 9, 12, 18, 25, 27 };
+                        break;
+                    case Season.Fall:
+                        dayCandidates = new[] { 4, 7, 8, 9, 12, 19, 22, 25 };
+                        break;
+                    case Season.Winter:
+                        dayCandidates = new[] { 5, 11, 12, 19, 22, 24 };
+                        break;
+                }
+
+                var receivedDays = Math.Min(_archipelago.GetReceivedItemCount(APItem.BOOKSELLER_DAY), dayCandidates.Length);
+                for (var i = 0; i < receivedDays; i++)
+                {
+                    var index = random.Next(dayCandidates.Length);
+                    var chosenDay = dayCandidates[index];
+                    while (booksellerThisSeason.Contains(chosenDay))
+                    {
+                        index = random.Next(dayCandidates.Length);
+                        chosenDay = dayCandidates[index];
+                    }
+                    booksellerThisSeason.Add(chosenDay);
+                }
+
+                __result = booksellerThisSeason;
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(GetDaysOfBooksellerThisSeason_UseReceivedDays_Prefix)}:\n{ex}");
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
