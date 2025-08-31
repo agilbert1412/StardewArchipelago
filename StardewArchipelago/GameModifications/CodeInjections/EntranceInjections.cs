@@ -1,12 +1,15 @@
-﻿using System;
-using Microsoft.Xna.Framework;
-using KaitoKid.ArchipelagoUtilities.Net.Client;
+﻿using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using StardewArchipelago.GameModifications.EntranceRandomizer;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
+using System;
+using StardewArchipelago.Constants;
+using xTile.Dimensions;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
 {
@@ -154,6 +157,95 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(WarpFarmer_InterceptProblemEntrances_Prefix)}");
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+        }
+
+
+        // public virtual bool performAction(string[] action, Farmer who, Location tileLocation)
+        public static bool PerformAction_LockerRoomKeys_Prefix(GameLocation __instance, string[] action, Farmer who, Location tileLocation, ref bool __result)
+        {
+            try
+            {
+                if (__instance.ShouldIgnoreAction(action, who, tileLocation))
+                {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
+                if (!ArgUtility.TryGet(action, 0, out var key1, out var error, name: "string actionType"))
+                {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
+                if (!who.IsLocalPlayer || key1 == null)
+                {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
+                if (key1 == "WarpMensLocker")
+                {
+                    if (!ArgUtility.TryGetPoint(action, 1, out var point, out error, "Point tile") || !ArgUtility.TryGet(action, 3, out var locationName, out error, name: "string locationName"))
+                    {
+                        __instance.LogTileActionError(action, tileLocation.X, tileLocation.Y, error);
+                        __result = false;
+                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+                    }
+
+                    var flag = action.Length < 5;
+                    if (!_archipelago.HasReceivedItem(APItem.MENS_LOCKER_KEY))
+                    {
+                        if (who.IsLocalPlayer)
+                        {
+                            Game1.drawObjectDialogue("The Men's locker room is locked... Maybe you'll find a key for it eventually?");
+                        }
+                        __result = true;
+                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+                    }
+
+                    who.faceGeneralDirection(new Vector2((float)tileLocation.X, (float)tileLocation.Y) * 64f);
+                    if (flag)
+                    {
+                        __instance.playSound("doorClose", new Vector2((float)tileLocation.X, (float)tileLocation.Y));
+                    }
+                    Game1.warpFarmer(locationName, point.X, point.Y, false);
+
+                    __result = true;
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+                }
+                if (key1 == "WarpWomensLocker")
+                {
+                    if (!ArgUtility.TryGetPoint(action, 1, out var point, out error, "Point tile") || !ArgUtility.TryGet(action, 3, out var locationName, out error, name: "string locationName"))
+                    {
+                        __instance.LogTileActionError(action, tileLocation.X, tileLocation.Y, error);
+                        __result = false;
+                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+                    }
+
+                    var flag = action.Length < 5;
+                    if (!_archipelago.HasReceivedItem(APItem.WOMENS_LOCKER_KEY))
+                    {
+                        if (who.IsLocalPlayer)
+                        {
+                            Game1.drawObjectDialogue("The Women's locker room is locked... Maybe you'll find a key for it eventually?");
+                        }
+                        __result = true;
+                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+                    }
+
+                    who.faceGeneralDirection(new Vector2((float)tileLocation.X, (float)tileLocation.Y) * 64f);
+                    if (flag)
+                    {
+                        __instance.playSound("doorClose", new Vector2((float)tileLocation.X, (float)tileLocation.Y));
+                    }
+                    Game1.warpFarmer(locationName, point.X, point.Y, false);
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+                }
+
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(PerformAction_LockerRoomKeys_Prefix)}");
                 return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }

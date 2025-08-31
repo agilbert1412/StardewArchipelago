@@ -35,6 +35,7 @@ using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
 using StardewArchipelago.Locations.Festival;
 using StardewArchipelago.Locations.InGameLocations;
 using StardewArchipelago.GameModifications.CodeInjections.Powers;
+using xTile.Dimensions;
 
 namespace StardewArchipelago.GameModifications
 {
@@ -360,6 +361,11 @@ namespace StardewArchipelago.GameModifications
 
         private void PatchEntrances()
         {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performAction), new[] { typeof(string), typeof(Farmer), typeof(Location) }),
+                prefix: new HarmonyMethod(typeof(EntranceInjections), nameof(EntranceInjections.PerformAction_LockerRoomKeys_Prefix))
+            );
+
             if (_archipelago.SlotData.EntranceRandomization == EntranceRandomization.Disabled)
             {
                 return;

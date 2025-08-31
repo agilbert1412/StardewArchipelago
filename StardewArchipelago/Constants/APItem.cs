@@ -35,5 +35,7 @@
         public const string BOOKSELLER_EXPERIENCE_BOOKS = "Bookseller Stock: Progressive Experience Books";
         public const string BOOKSELLER_RARE_BOOKS = "Bookseller Stock: Progressive Rare Books";
         public const string BOOKSELLER_PERMANENT_BOOKS = "Bookseller Stock: Permanent Books";
+        public const string MENS_LOCKER_KEY = "Men's Locker Key";
+        public const string WOMENS_LOCKER_KEY = "Women's Locker Key";
     }
 }

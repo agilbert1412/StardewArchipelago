@@ -353,10 +353,6 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             {
                 var newString = aliases[oldString];
                 var customizedNewString = newString;
-                if (customizedNewString.Contains("{0}"))
-                {
-                    customizedNewString = string.Format(newString, Game1.player.Gender == Gender.Male ? "Mens" : "Womens");
-                }
 
                 if (singleWord)
                 {
@@ -415,7 +411,8 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Oasis", "SandyHouse" },
             { "Casino", "Club" },
             { "Bathhouse Entrance", "BathHouse_Entry" },
-            { "Locker Room", "BathHouse_{0}Locker" },
+            { "Men's Locker Room", "BathHouse_MensLocker" },
+            { "Women's Locker Room", "BathHouse_WomensLocker" },
             { "Public Bath", "BathHouse_Pool" },
             { "Pirate Cove", "IslandSouthEastCave" },
             { "Leo Hut", "IslandHut" },
