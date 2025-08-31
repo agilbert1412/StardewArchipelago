@@ -20,7 +20,7 @@ namespace StardewArchipelago.Constants.Modded
             //{ ModNames.EUGENE, "1.3.1" },
             { ModNames.JASPER, $"1.8.3" },
             { ModNames.JUNA, $"2.2.{WILDCARD}" },
-            { ModNames.LUCK, $"1.3.{WILDCARD}" },
+            { ModNames.LUCK, $"1.4.{WILDCARD}" },
             //{ ModNames.MAGIC, "0.8.2" },
             { ModNames.MISTER_GINGER, $"1.6.{WILDCARD}" },
             //{ ModNames.RILEY, "1.2.2" },
