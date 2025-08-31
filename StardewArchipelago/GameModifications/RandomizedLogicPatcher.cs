@@ -362,7 +362,7 @@ namespace StardewArchipelago.GameModifications
         private void PatchEntrances()
         {
             _harmony.Patch(
-                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performAction), new[] { typeof(string), typeof(Farmer), typeof(Location) }),
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performAction), new[] { typeof(string[]), typeof(Farmer), typeof(Location) }),
                 prefix: new HarmonyMethod(typeof(EntranceInjections), nameof(EntranceInjections.PerformAction_LockerRoomKeys_Prefix))
             );
 

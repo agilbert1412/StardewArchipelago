@@ -70,6 +70,8 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Powers
             new ArchipelagoPower("Wizard Invitation", "The Wizard invited you to meet him at the tower", 16, 0),
             new ArchipelagoPower("Landslide Removed", "The path to the mines is cleared", 32, 0),
             new ArchipelagoPower("Railroad Boulder Removed", "The entrance to the railroad is open", 48, 0),
+            new ArchipelagoPower(APItem.MENS_LOCKER_KEY, "You can enter the men's locker room", 64, 16),
+            new ArchipelagoPower(APItem.WOMENS_LOCKER_KEY, "You can enter the women's locker room", 80, 16),
             new ArchipelagoPower("Beach Bridge", "The bridge on the beach is repaired", 64, 0),
             new ArchipelagoPower("Fruit Bats", "Fruit bats will periodically bring fruit to your farm cave", 0, 16),
             new ArchipelagoPower("Mushroom Boxes", "Demetrius installed mushroom boxes in your farm cave", 16, 16),
