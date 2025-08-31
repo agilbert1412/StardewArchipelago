@@ -2377,7 +2377,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
             var potentialObjects = new[] { ObjectIds.TRASH, ObjectIds.JOJA_COLA, ObjectIds.BROKEN_GLASSES, ObjectIds.BROKEN_CD, ObjectIds.SOGGY_NEWSPAPER };
             var chosenTrash = potentialObjects[daySaveRandom.Next(potentialObjects.Length)];
-            giftReceiver.ReceiveFakeGift(chosenTrash, daySaveRandom.Next(0, 100), MemeBundleNames.MINISTRY_OF_MADNESS);
+            giftReceiver.ReceiveFakeGift(chosenTrash, daySaveRandom.Next(0, 200), MemeBundleNames.MINISTRY_OF_MADNESS);
         }
 
         public static void OnDayEnded()
