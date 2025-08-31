@@ -224,15 +224,18 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         protected override void SetUpScramblingAndMail(int whichArea)
         {
-            _locationChecker.AddCheckedLocation("Quest: Rat Problem");
-            Game1.player.removeQuest("26");
-            if (!Game1.player.hasOrWillReceiveMail("seenJunimoNote"))
+            if (!FromGameMenu)
             {
-                Game1.player.mailReceived.Add("seenJunimoNote");
-            }
-            if (!Game1.player.hasOrWillReceiveMail("hasSeenAbandonedJunimoNote") && whichArea == 6)
-            {
-                Game1.player.mailReceived.Add("hasSeenAbandonedJunimoNote");
+                _locationChecker.AddCheckedLocation("Quest: Rat Problem");
+                Game1.player.removeQuest("26");
+                if (!Game1.player.hasOrWillReceiveMail("seenJunimoNote"))
+                {
+                    Game1.player.mailReceived.Add("seenJunimoNote");
+                }
+                if (!Game1.player.hasOrWillReceiveMail("hasSeenAbandonedJunimoNote") && whichArea == 6)
+                {
+                    Game1.player.mailReceived.Add("hasSeenAbandonedJunimoNote");
+                }
             }
             ScrambledText = !CanReadNote();
         }

@@ -74,6 +74,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             var communityCenter = Game1.RequireLocation<CommunityCenter>("CommunityCenter");
             area = SetUpWhichArea(fromGameMenu, fromThisMenu, communityCenter, area);
 
+            this.FromGameMenu = fromGameMenu;
+            this.FromThisMenu = fromThisMenu;
             SetUpMenu(area, communityCenter.bundlesDict());
             Game1.player.forceCanMove();
             var textureComponent1 = new ClickableTextureComponent(new Rectangle(xPositionOnScreen + width - 128, yPositionOnScreen, 48, 44), Game1.mouseCursors, new Rectangle(365, 495, 12, 11), 4f);
@@ -100,8 +102,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                     break;
                 }
             }
-            this.FromGameMenu = fromGameMenu;
-            this.FromThisMenu = fromThisMenu;
             foreach (var bundle in Bundles)
             {
                 bundle.DepositsAllowed = false;
@@ -1206,7 +1206,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             var freshMenu = menu == null;
             if (freshMenu)
             {
-                menu = new ArchipelagoJunimoNoteMenu(whichArea, Game1.RequireLocation<CommunityCenter>("CommunityCenter").bundlesDict());
+                var bundlesComplete = Game1.RequireLocation<CommunityCenter>("CommunityCenter").bundlesDict();
+                menu = new ArchipelagoJunimoNoteMenu(true, whichArea, true);
                 var bundle = menu.Bundles.First(x => x.BundleIndex == bundleIndex);
                 menu.SetUpBundleSpecificPage(bundle);
             }
