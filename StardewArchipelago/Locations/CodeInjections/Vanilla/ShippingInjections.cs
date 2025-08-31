@@ -106,32 +106,27 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 }
                 else
                 {
-                    var wasSuccessful = DoBugsCleanup(shippedItem);
-                    if (wasSuccessful)
-                    {
-                        continue;
-                    }
                     _logger.LogError($"Unrecognized Shipsanity Location: {name} [{shippedItem.ParentSheetIndex}]");
                 }
             }
         }
 
-        private bool DoBugsCleanup(Item shippedItem)
-        {
-            // In the beta async, backend names for SVE shippables are the internal names.  This fixes the mistake ONLY for that beta async.  Remove after it.
-            var name = _nameSimplifier.GetSimplifiedName(shippedItem);
-            var sveMappedItems = new List<string>() { "Smelly Rafflesia", "Bearberrys", "Big Conch", "Dried Sand Dollar", "Lucky Four Leaf Clover", "Ancient Ferns Seed" };
-            if (sveMappedItems.Contains(name))
-            {
-                var apLocation = $"{SHIPSANITY_PREFIX}{name}";
-                if (_archipelago.GetLocationId(apLocation) > -1)
-                {
-                    _logger.LogWarning($"Bugfix caught this for the beta async.  If this isn't that game, let the developers know there's a bug!");
-                    _locationChecker.AddCheckedLocation(apLocation);
-                    return true;
-                }
-            }
-            return false;
-        }
+        //private bool DoBugsCleanup(Item shippedItem)
+        //{
+        //    // In the beta async, backend names for SVE shippables are the internal names.  This fixes the mistake ONLY for that beta async.  Remove after it.
+        //    var name = _nameSimplifier.GetSimplifiedName(shippedItem);
+        //    var sveMappedItems = new List<string>() { "Smelly Rafflesia", "Bearberrys", "Big Conch", "Dried Sand Dollar", "Lucky Four Leaf Clover", "Ancient Ferns Seed" };
+        //    if (sveMappedItems.Contains(name))
+        //    {
+        //        var apLocation = $"{SHIPSANITY_PREFIX}{name}";
+        //        if (_archipelago.GetLocationId(apLocation) > -1)
+        //        {
+        //            _logger.LogWarning($"Bugfix caught this for the beta async.  If this isn't that game, let the developers know there's a bug!");
+        //            _locationChecker.AddCheckedLocation(apLocation);
+        //            return true;
+        //        }
+        //    }
+        //    return false;
+        //}
     }
 }
