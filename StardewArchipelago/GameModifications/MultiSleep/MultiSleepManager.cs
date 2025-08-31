@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData;
+using StardewArchipelago.Constants;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
 using StardewModdingAPI;
@@ -167,7 +168,10 @@ namespace StardewArchipelago.GameModifications.MultiSleep
             {
                 possibleResponses.Add(new Response(MultiSleepUntilBehavior.TRAVELING_CART, "Traveling Cart"));
             }
-            possibleResponses.Add(new Response(MultiSleepUntilBehavior.BOOKSELLER, "Bookseller"));
+            if (_archipelago.HasReceivedItem(APItem.BOOKSELLER_DAY))
+            {
+                possibleResponses.Add(new Response(MultiSleepUntilBehavior.BOOKSELLER, "Bookseller"));
+            }
             MultiSleepUntilBehavior.CheckAllCrops(out var anyNotReady, out var anyReady, out var allReady);
             if (!anyReady && anyNotReady)
             {

@@ -1,6 +1,7 @@
 ﻿using Force.DeepCloner;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using Newtonsoft.Json;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Vanilla;
@@ -13,6 +14,7 @@ using StardewValley.GameData.Shops;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 
 namespace StardewArchipelago.Locations.ShopStockModifiers
@@ -37,8 +39,15 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
             {
                 var shopsData = asset.AsDictionary<string, ShopData>().Data;
                 var booksellerShop = shopsData["Bookseller"];
+
+                var booksellerShopAsJson = JsonConvert.SerializeObject(booksellerShop);
+                File.WriteAllText("booksellerShop_original.json", booksellerShopAsJson);
+
                 ChangeSalesBasedOnApUnlocks(booksellerShop);
                 ApplyPriceMultiplier(booksellerShop);
+
+                booksellerShopAsJson = JsonConvert.SerializeObject(booksellerShop);
+                File.WriteAllText("booksellerShop_modified.json", booksellerShopAsJson);
             },
                 AssetEditPriority.Late
             );
@@ -61,7 +70,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
                     AddConditionForPermanentBook(shopData, i);
                     continue;
                 }
-                if (item.Id == QualifiedItemIds.WOODCUTTER_WEEKLY)
+                if (item.Id == QualifiedItemIds.WOODCUTTER_WEEKLY && item.Condition.StartsWith("SYNCED_RANDOM"))
                 {
                     RemoveFromShop(shopData, i);
                     continue;
@@ -91,7 +100,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
                 item.Condition = "";
             }
 
-            item.Condition.AddCondition(GameStateConditionProvider.CreateHasReceivedItemCondition(APItem.BOOKSELLER_PERMANENT_BOOKS));
+            item.Condition = item.Condition.AddCondition(GameStateConditionProvider.CreateHasReceivedItemCondition(APItem.BOOKSELLER_PERMANENT_BOOKS));
         }
 
         private void RemoveFromShop(ShopData shopData, int itemIndex)
@@ -124,6 +133,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
                 rareBookToInsert.Condition = fullCondition;
                 rareBookToInsert.Id = rareBook;
                 rareBookToInsert.ItemId = rareBook;
+                rareBookToInsert.RandomItemId = null;
                 booksToInsert.Add(rareBookToInsert);
             }
 
@@ -165,6 +175,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
                 experienceBookToInsert.Id = experienceBook;
                 experienceBookToInsert.ItemId = experienceBook;
                 experienceBookToInsert.Price = price;
+                experienceBookToInsert.RandomItemId = null;
                 booksToInsert.Add(experienceBookToInsert);
             }
 

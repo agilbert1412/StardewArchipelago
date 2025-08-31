@@ -187,7 +187,7 @@ namespace StardewArchipelago.Constants
                 return conditions.First();
             }
 
-            return $"ANY {string.Join(' ', conditions.Select(x => SurroundWithQuotes(InvertCondition(x))))}";
+            return $"ANY {string.Join(' ', conditions.Select(x => SurroundWithQuotes(x)))}";
         }
 
         private static string SurroundWithQuotes(string condition)

@@ -54,7 +54,8 @@ namespace StardewArchipelago.Registry
 
             var amount = int.Parse(query[1]);
             var itemName = string.Join(' ', query.Skip(2));
-            return _archipelago.GetReceivedItemCount(itemName) >= amount;
+            var receivedCount = _archipelago.GetReceivedItemCount(itemName);
+            return receivedCount >= amount;
         }
 
         private bool HasReceivedItemExactAmountQueryDelegate(string[] query, GameStateQueryContext context)
@@ -66,7 +67,8 @@ namespace StardewArchipelago.Registry
 
             var amount = int.Parse(query[1]);
             var itemName = string.Join(' ', query.Skip(2));
-            return _archipelago.GetReceivedItemCount(itemName) == amount;
+            var receivedCount = _archipelago.GetReceivedItemCount(itemName);
+            return receivedCount == amount;
         }
 
         private bool ArtifactsFoundQueryDelegate(string[] query, GameStateQueryContext context)
