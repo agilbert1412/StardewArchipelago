@@ -80,7 +80,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
 
         private void AddChecks(ShopData cartShopData)
         {
-            var metalDetector = new ShopItemData()
+            var dailyCheck = new ShopItemData()
             {
                 Id = IDProvider.TRAVELING_CART_DAILY_CHECK,
                 ItemId = IDProvider.TRAVELING_CART_DAILY_CHECK,
@@ -88,7 +88,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
                 IsRecipe = false,
                 MaxItems = 1,
             };
-            cartShopData.Items.Add(metalDetector);
+            cartShopData.Items.Add(dailyCheck);
         }
 
         private void RemoveWeddingRingCondition(ShopData cartShopData)

@@ -449,16 +449,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             var dayOfWeek = Days.GetDayOfWeekName(Game1.dayOfMonth);
             var apItems = new List<string>();
-            for (var i = 1; i < 4; i++)
+            for (var i = 1; i < 11; i++)
             {
                 var apLocationName = string.Format(AP_MERCHANT_LOCATION, dayOfWeek, i);
 
-                if (_locationChecker.IsLocationChecked(apLocationName))
+                if (_locationChecker.IsLocationMissing(apLocationName))
                 {
-                    continue;
+                    apItems.Add(apLocationName);
                 }
-
-                apItems.Add(apLocationName);
             }
 
             if (!apItems.Any())
