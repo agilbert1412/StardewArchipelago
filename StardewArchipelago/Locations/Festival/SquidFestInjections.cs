@@ -118,7 +118,7 @@ namespace StardewArchipelago.Locations.Festival
                                 inventory.Add(ItemRegistry.Create("(O)253", 3));
                                 continue;
                             case "13_3":
-                                if (_archipelago.SlotData.Hatsanity > Hatsanity.None)
+                                if (_archipelago.SlotData.Hatsanity != Hatsanity.None)
                                 {
                                     inventory.Add(new StardewValley.Objects.Hat("SquidHat"));
                                 }

@@ -114,7 +114,7 @@ namespace StardewArchipelago.Archipelago.SlotData
             Walnutsanity = slotDataReader.GetSlotWalnutsanitySetting();
             Moviesanity = slotDataReader.GetSlotSetting(SlotDataKeys.MOVIESANITY, Moviesanity.None);
             Secretsanity = slotDataReader.GetSlotSecretsanitySetting();
-            Hatsanity = slotDataReader.GetSlotSetting(SlotDataKeys.HATSANITY, Hatsanity.None);
+            Hatsanity = slotDataReader.GetSlotHatsanitySetting();
             IncludeEndgameLocations = slotDataReader.GetSlotSetting(SlotDataKeys.INCLUDE_ENDGAME_LOCATIONS, false);
             ExcludeGingerIsland = slotDataReader.GetSlotSetting(SlotDataKeys.EXCLUDE_GINGER_ISLAND, true);
             TrapItemsDifficulty = slotDataReader.GetSlotSetting(SlotDataKeys.TRAP_DIFFICULTY, TrapItemsDifficulty.Medium, SlotDataKeys.TRAP_ITEMS);

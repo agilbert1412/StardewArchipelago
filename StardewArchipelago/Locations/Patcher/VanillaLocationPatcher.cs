@@ -1880,7 +1880,7 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void PatchHatsanity()
         {
-            if (_archipelago.SlotData.Hatsanity <= Hatsanity.None)
+            if (_archipelago.SlotData.Hatsanity == Hatsanity.None)
             {
                 return;
             }

@@ -114,6 +114,11 @@ namespace StardewArchipelago.Archipelago.SlotData
             return GetSlotOptionSetSetting<Secretsanity>(SlotDataKeys.SECRETSANITY);
         }
 
+        public Hatsanity GetSlotHatsanitySetting()
+        {
+            return GetSlotOptionSetSetting<Hatsanity>(SlotDataKeys.HATSANITY);
+        }
+
         public TEnum GetSlotOptionSetSetting<TEnum>(string key) where TEnum : struct, Enum
         {
             var enabledValues = 0;

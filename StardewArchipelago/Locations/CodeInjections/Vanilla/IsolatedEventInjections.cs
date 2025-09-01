@@ -303,7 +303,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
-                if (_archipelago.SlotData.Hatsanity > Hatsanity.None)
+                if (_archipelago.SlotData.Hatsanity != Hatsanity.None)
                 {
                     Game1.createMultipleItemDebris(ItemRegistry.Create("(H)LeprechuanHat"), __instance.TileLocation * 64f + new Vector2(32f), 1);
                 }
