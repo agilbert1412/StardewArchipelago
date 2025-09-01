@@ -1643,6 +1643,11 @@ namespace StardewArchipelago.Locations.Patcher
                 postfix: new HarmonyMethod(typeof(SimpleSecretsInjections), nameof(SimpleSecretsInjections.Qi_WhatdYouExpect_Postfix))
             );
 
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GiantCrop), nameof(GiantCrop.performToolAction)),
+                postfix: new HarmonyMethod(typeof(SimpleSecretsInjections), nameof(SimpleSecretsInjections.PerformToolAction_ObtainPreciousFruitWheneverYouLike_Postfix))
+            );
+
             PatchGiftDialogueSecrets();
         }
 

@@ -51,6 +51,7 @@ namespace StardewArchipelago.Locations.Secrets
         public const string MOUTH_WATERING_ALREADY = "My mouth is watering already";
         public const string LOVELY_PERFUME = "A gift of lovely perfume";
         public const string WHERE_DOES_THIS_JUICE_COME_FROM = "Where exactly does this juice come from?";
+        public const string PRECIOUS_FRUIT_WHENEVER = "Obtain my precious fruit whenever you like";
 
         public const string SECRET_NOTE_1 = "Secret Note #1: A Page From Abigail's Diary";
         public const string SECRET_NOTE_2 = "Secret Note #2: Sam's Holiday Shopping List";

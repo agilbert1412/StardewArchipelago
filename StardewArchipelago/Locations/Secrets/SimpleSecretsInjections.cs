@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using Archipelago.MultiClient.Net.Enums;
+﻿using Archipelago.MultiClient.Net.Enums;
 using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
@@ -11,8 +9,13 @@ using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.GameData.GiantCrops;
 using StardewValley.Menus;
 using StardewValley.Objects;
+using StardewValley.TerrainFeatures;
+using StardewValley.Tools;
+using System;
+using System.Linq;
 using xTile.Dimensions;
 using Object = StardewValley.Object;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
@@ -193,7 +196,7 @@ namespace StardewArchipelago.Locations.Secrets
                         Game1.playSound("hammer");
                 }
 
-                foreach (ClickableComponent ccTrackerButton in __instance.ccTrackerButtons)
+                foreach (var ccTrackerButton in __instance.ccTrackerButtons)
                 {
                     if (ccTrackerButton != null && ccTrackerButton.containsPoint(x, y) && !ccTrackerButton.label.Equals("???"))
                     {
@@ -457,6 +460,32 @@ namespace StardewArchipelago.Locations.Secrets
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(Qi_WhatdYouExpect_Postfix)}:\n{ex}");
+                return;
+            }
+        }
+
+        // public override bool performToolAction(Tool t, int damage, Vector2 tileLocation)
+        public static void PerformToolAction_ObtainPreciousFruitWheneverYouLike_Postfix(GiantCrop __instance, Tool t, int damage, Vector2 tileLocation, ref bool __result)
+        {
+            try
+            {
+                if (t is not Axe || __instance.health.Value > 0.0 || !__instance.Id.Equals("QiFruit") || Game1.player.team.SpecialOrderActive("QiChallenge2"))
+                {
+                    return;
+                }
+
+                var data = __instance.GetData();
+                if (data?.HarvestItems == null)
+                {
+                    return;
+                }
+
+                _locationChecker.AddCheckedLocation(SecretsLocationNames.PRECIOUS_FRUIT_WHENEVER);
+                return;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(PerformToolAction_ObtainPreciousFruitWheneverYouLike_Postfix)}:\n{ex}");
                 return;
             }
         }

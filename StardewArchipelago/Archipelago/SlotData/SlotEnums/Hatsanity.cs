@@ -1,5 +1,8 @@
-﻿namespace StardewArchipelago.Archipelago.SlotData.SlotEnums
+﻿using System;
+
+namespace StardewArchipelago.Archipelago.SlotData.SlotEnums
 {
+    [Flags]
     public enum Hatsanity
     {
         None =           0b0000000,
