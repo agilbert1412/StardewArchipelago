@@ -122,24 +122,32 @@ namespace StardewArchipelago.Archipelago.SlotData
         public TEnum GetSlotOptionSetSetting<TEnum>(string key) where TEnum : struct, Enum
         {
             var enabledValues = 0;
-            var slotJson = GetSlotSetting(key, "");
-            if (string.IsNullOrWhiteSpace(slotJson))
+            try
             {
-                return (TEnum)(object)enabledValues;
-            }
-            var slotItems = JsonConvert.DeserializeObject<List<string>>(slotJson);
-            if (slotItems == null)
-            {
-                return (TEnum)(object)enabledValues;
-            }
-
-            slotItems = slotItems.Select(x => x.Replace(" ", "")).ToList();
-            foreach (var enumValue in Enum.GetValues<TEnum>())
-            {
-                if (slotItems.Any(x => x.Equals(enumValue.ToString(), StringComparison.InvariantCultureIgnoreCase)))
+                var slotJson = GetSlotSetting(key, "");
+                if (string.IsNullOrWhiteSpace(slotJson))
                 {
-                    enabledValues |= (int)(object)enumValue;
+                    return (TEnum)(object)enabledValues;
                 }
+                var slotItems = JsonConvert.DeserializeObject<List<string>>(slotJson);
+                if (slotItems == null)
+                {
+                    return (TEnum)(object)enabledValues;
+                }
+
+                slotItems = slotItems.Select(x => x.Replace(" ", "")).ToList();
+                foreach (var enumValue in Enum.GetValues<TEnum>())
+                {
+                    if (slotItems.Any(x => x.Equals(enumValue.ToString(), StringComparison.InvariantCultureIgnoreCase)))
+                    {
+                        enabledValues |= (int)(object)enumValue;
+                    }
+                }
+                return (TEnum)(object)enabledValues;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogErrorException(ex, nameof(GetSlotOptionSetSetting), key);
             }
 
             return (TEnum)(object)enabledValues;
