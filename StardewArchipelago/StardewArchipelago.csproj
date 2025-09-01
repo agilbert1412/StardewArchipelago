@@ -34,7 +34,7 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="KaitoKid.ArchipelagoUtilities.Net" Version="2.1.2" />
+		<PackageReference Include="KaitoKid.ArchipelagoUtilities.Net" Version="2.1.5" />
 		<PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="4.4.0" />
 	</ItemGroup>
 

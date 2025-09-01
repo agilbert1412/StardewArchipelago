@@ -25,9 +25,9 @@
       },
       "KaitoKid.ArchipelagoUtilities.Net": {
         "type": "Direct",
-        "requested": "[2.1.2, )",
-        "resolved": "2.1.2",
-        "contentHash": "sK4Z4+hGBnrNF967jK4NiV5pBVOl4L+SH+/tHyZS4/H4TOJCzERRAOT9Y+WdBJrBGZEYRrh6byyquZI+WW3rmg==",
+        "requested": "[2.1.5, )",
+        "resolved": "2.1.5",
+        "contentHash": "R1gPaBtjREyBAqsrBzygrlvKw5gmaObf3XnjeXmpV6SfT/7RV89ev8ll0aG18/s/fqJAh0a583u8Q7dqds6Ybw==",
         "dependencies": {
           "Archipelago.MultiClient.Net": "6.6.0"
         }

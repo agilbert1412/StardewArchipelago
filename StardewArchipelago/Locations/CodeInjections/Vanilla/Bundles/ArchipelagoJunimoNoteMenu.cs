@@ -2365,6 +2365,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         private static void SendMinistryOfMadnessGift(GiftReceiver giftReceiver)
         {
+            if (_archipelago == null || !_archipelago.MakeSureConnected(5))
+            {
+                return;
+            }
+
             if (!IsBundleRemaining(MemeBundleNames.MINISTRY_OF_MADNESS) || !_archipelago.HasReceivedItem(APItem.FOREST_MAGIC))
             {
                 return;
