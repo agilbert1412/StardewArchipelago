@@ -31,7 +31,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             _nameMapper = new CompoundNameMapper(archipelago.SlotData);
         }
 
-        // private static IEnumerator<int> _newDayAfterFade()
         public void CheckShipsanityLocationsBeforeSleep()
         {
             try
@@ -93,8 +92,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             foreach (var shippedItem in allShippedItems)
             {
-                var name = _nameSimplifier.GetSimplifiedName(shippedItem);
-                name = _nameMapper.GetEnglishName(name); // For the Name vs Display Name discrepencies in Mods.
+                var name = GetNameForShipsanity(shippedItem);
                 if (IgnoredModdedStrings.Shipments.Contains(name))
                 {
                     continue;
@@ -109,6 +107,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     _logger.LogError($"Unrecognized Shipsanity Location: {name} [{shippedItem.ParentSheetIndex}]");
                 }
             }
+        }
+
+        public string GetNameForShipsanity(Item shippedItem)
+        {
+            var name = _nameSimplifier.GetSimplifiedName(shippedItem);
+            name = _nameMapper.GetEnglishName(name); // For the Name vs Display Name discrepencies in Mods.
+            return name;
         }
 
         //private bool DoBugsCleanup(Item shippedItem)

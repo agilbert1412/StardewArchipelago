@@ -131,6 +131,7 @@ namespace StardewArchipelago.Locations.Patcher
                 PatchEating();
                 PatchEndgameLocations();
                 PatchGarbageCans();
+                PatchShipping();
                 PatchScouts();
             }
             catch (Exception ex)
@@ -1941,6 +1942,14 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony.Patch(
                 original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.TryGetGarbageItem)),
                 postfix: new HarmonyMethod(typeof(GarbageInjections), nameof(GarbageInjections.TryGetGarbageItem_TagItemWithTrash_Postfix))
+            );
+        }
+
+        private void PatchShipping()
+        {
+            _harmony.Patch(
+                original: AccessTools.Constructor(typeof(CollectionsPage), new []{ typeof(int) , typeof(int) , typeof(int) , typeof(int) }),
+                postfix: new HarmonyMethod(typeof(CollectionsInjections), nameof(CollectionsInjections.CollectionsPageConstructor_AddAllShipsanityItems_Postfix))
             );
         }
     }

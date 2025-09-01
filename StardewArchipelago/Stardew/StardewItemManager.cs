@@ -882,20 +882,26 @@ namespace StardewArchipelago.Stardew
 
         public void ExportAllItemsMatching(Func<Object, bool> condition, string filePath)
         {
-            var objectsToExport = new List<string>();
-
-            objectsToExport.AddRange(GetObjectsToExport(condition, _objectsByName));
-            objectsToExport.AddRange(GetObjectsToExport(condition, _bigCraftablesByName));
-            objectsToExport.AddRange(GetObjectsToExport(condition, _furnitureByName));
-            objectsToExport.AddRange(GetObjectsToExport(condition, _hatsByName));
-            objectsToExport.AddRange(GetObjectsToExport(condition, _bootsByName));
-            objectsToExport.AddRange(GetObjectsToExport(condition, _weaponsByName));
-
-            var objectsAsJson = JsonConvert.SerializeObject(objectsToExport);
+            var objectsToExport = GetAllItemsMatching(condition);
+            var names = objectsToExport.Select(x => x.Name).ToList();
+            var objectsAsJson = JsonConvert.SerializeObject(names);
             File.WriteAllText(filePath, objectsAsJson);
         }
 
-        private IEnumerable<string> GetObjectsToExport<T>(Func<Object, bool> condition, Dictionary<string, T> objectsByName) where T : StardewItem
+        public List<Item> GetAllItemsMatching(Func<Object, bool> condition)
+        {
+            var matchingItems = new List<Item>();
+
+            matchingItems.AddRange(GetObjectsToExport(condition, _objectsByName));
+            matchingItems.AddRange(GetObjectsToExport(condition, _bigCraftablesByName));
+            matchingItems.AddRange(GetObjectsToExport(condition, _furnitureByName));
+            matchingItems.AddRange(GetObjectsToExport(condition, _hatsByName));
+            matchingItems.AddRange(GetObjectsToExport(condition, _bootsByName));
+            matchingItems.AddRange(GetObjectsToExport(condition, _weaponsByName));
+            return matchingItems;
+        }
+
+        private IEnumerable<Object> GetObjectsToExport<T>(Func<Object, bool> condition, Dictionary<string, T> objectsByName) where T : StardewItem
         {
             foreach (var (name, svItem) in objectsByName)
             {
@@ -910,7 +916,7 @@ namespace StardewArchipelago.Stardew
                     continue;
                 }
 
-                yield return name;
+                yield return stardewObject;
             }
         }
 

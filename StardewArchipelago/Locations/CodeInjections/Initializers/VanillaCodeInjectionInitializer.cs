@@ -26,7 +26,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
 {
     public static class VanillaCodeInjectionInitializer
     {
-        public static void Initialize(LogHandler logger, IModHelper modHelper, ModConfig config, StardewArchipelagoClient archipelago, ArchipelagoStateDto state, StardewLocationChecker locationChecker, JojaLocationChecker jojaLocationChecker, StardewItemManager itemManager, WeaponsManager weaponsManager, BundlesManager bundlesManager, Friends friends, TrapManager trapManager, BankHandler bank, NameSimplifier nameSimplifier, GiftSender giftSender)
+        public static void Initialize(LogHandler logger, IModHelper modHelper, ModConfig config, StardewArchipelagoClient archipelago, ArchipelagoStateDto state, StardewLocationChecker locationChecker, JojaLocationChecker jojaLocationChecker, StardewItemManager itemManager, WeaponsManager weaponsManager, BundlesManager bundlesManager, Friends friends, TrapManager trapManager, BankHandler bank, NameSimplifier nameSimplifier, GiftSender giftSender, NightShippingBehaviors nightShippingBehaviors)
         {
             TrashBearInjections.Initialize(logger, modHelper, archipelago, locationChecker, bundlesManager, itemManager, state);
             BackpackInjections.Initialize(logger, modHelper, archipelago, locationChecker);
@@ -75,6 +75,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             EatInjections.Initialize(logger, modHelper, archipelago, locationChecker, nameSimplifier);
             CasinoInjections.Initialize(logger, modHelper, archipelago, locationChecker);
             GarbageInjections.Initialize(logger, archipelago, locationChecker);
+            CollectionsInjections.Initialize(logger, archipelago, locationChecker, itemManager, nightShippingBehaviors);
         }
 
         private static void InitializeArcadeMachines(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker)
