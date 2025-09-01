@@ -12,6 +12,7 @@ namespace StardewArchipelago.Serialization
         public CookieClickerDto CookieClicker { get; set; }
         public Dictionary<string, int> DeadCropsById { get; set; }
         public Dictionary<string, int> MissedFishById { get; set; }
+        public HashSet<string> TouchedItems { get; set; }
 
         public ArchipelagoWalletDto()
         {
@@ -23,6 +24,7 @@ namespace StardewArchipelago.Serialization
             CookieClicker = new CookieClickerDto();
             DeadCropsById = new Dictionary<string, int>();
             MissedFishById = new Dictionary<string, int>();
+            TouchedItems = new HashSet<string>();
         }
     }
 }

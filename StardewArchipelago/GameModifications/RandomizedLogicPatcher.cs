@@ -93,6 +93,7 @@ namespace StardewArchipelago.GameModifications
             EmptyHandInjections.Initialize(logger, archipelago, stardewItemManager);
             MovementInjections.Initialize(logger, archipelago);
             BundleMenuInjection.Initialize(logger, modHelper, archipelago, state, locationChecker, bundleReader);
+            InventoryInjections.Initialize(logger, archipelago, state.Wallet);
             DebugPatchInjections.Initialize(logger, archipelago);
             _powersModifier = new PowersModifier(logger, modHelper, archipelago);
         }
@@ -146,6 +147,7 @@ namespace StardewArchipelago.GameModifications
             PatchLeoMove();
             PatchEvents();
             PatchEmptyHandBreak();
+            PatchTouchingItems();
 
             _startingResources.GivePlayerStartingResources();
 
@@ -939,6 +941,24 @@ namespace StardewArchipelago.GameModifications
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Tree), nameof(Tree.performUseAction)),
                 prefix: new HarmonyMethod(typeof(EmptyHandInjections), nameof(EmptyHandInjections.PerformUseAction_BreakTreeByHand_Prefix))
+            );
+        }
+
+        private void PatchTouchingItems()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Farmer), nameof(Farmer.OnItemReceived)),
+                postfix: new HarmonyMethod(typeof(InventoryInjections), nameof(InventoryInjections.OnItemReceived_TouchItems_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.PropertyGetter(typeof(Item), nameof(Item.HasBeenInInventory)),
+                postfix: new HarmonyMethod(typeof(InventoryInjections), nameof(InventoryInjections.HasBeenInInventoryGet_TouchItems_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.PropertySetter(typeof(Item), nameof(Item.HasBeenInInventory)),
+                postfix: new HarmonyMethod(typeof(InventoryInjections), nameof(InventoryInjections.HasBeenInInventorySet_TouchItems_Postfix))
             );
         }
 
