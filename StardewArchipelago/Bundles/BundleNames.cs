@@ -50,6 +50,13 @@
         public const string ANIMAL_WELL = "ANIMAL WELL";
         public const string MINISTRY_OF_MADNESS = "Ministry of Madness";
         public const string SQUARE_HOLE = "Square Hole";
-        public const string POMNUT = "Pomnut";
+        public const string ADHD = "ADHD";
+        public const string THEALGORERHYTM = "TheAlGoreRhythm";
+        public const string SACRIFICE = "Sacrifice";
+        public const string POLLUTION = "Pollution";
+        public const string CATCH_AND_RELEASE = "Catch And Release";
+        public const string COLORED_CRYSTALS = "Colored Crystals";
+        public const string HINT = "Hint";
+        public const string RECONNECTION = "Reconnection";
     }
 }

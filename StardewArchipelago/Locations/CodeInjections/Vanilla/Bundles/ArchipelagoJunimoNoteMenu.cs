@@ -22,6 +22,7 @@ using StardewArchipelago.Textures;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
+using StardewValley.Inventories;
 using StardewValley.ItemTypeDefinitions;
 using StardewValley.Locations;
 using StardewValley.Menus;
@@ -31,8 +32,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Xml.Linq;
-using static HarmonyLib.Code;
 using Color = Microsoft.Xna.Framework.Color;
 using Object = StardewValley.Object;
 
@@ -1801,6 +1800,23 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             item.drawInMenu(spriteBatch, new Vector2(ingredientBox.bounds.X, ingredientBox.bounds.Y), ingredientBox.scale / 4f, 1f, 0.9f, StackDrawType.Draw, Color.White * transparency, false);
         }
 
+        protected override void DrawIngredient(SpriteBatch spriteBatch, BundleIngredientDescription ingredient, ClickableTextureComponent ingredientBox, float overlayTransparency)
+        {
+            if (CurrentPageBundle.name == MemeBundleNames.THEALGORERHYTM)
+            {
+                if (HeldItem == null || HeldItem.QualifiedItemId != ingredient.id)
+                {
+                    var item = ingredientBox.item;
+                    if (item != null && ingredientBox.visible)
+                    {
+                        var singleStackItem = ItemRegistry.Create(item.QualifiedItemId, 1);
+                        singleStackItem.drawInMenu(spriteBatch, new Vector2(ingredientBox.bounds.X, ingredientBox.bounds.Y), ingredientBox.scale / 4f, 1f, 0.9f, StackDrawType.Draw, Color.White * overlayTransparency, false);
+                    }
+                }
+            }
+            base.DrawIngredient(spriteBatch, ingredient, ingredientBox, overlayTransparency);
+        }
+
         protected override void PickItemFromInventory(int x, int y)
         {
             if (CurrentPageBundle.name == MemeBundleNames.OFF_YOUR_BACK)
@@ -1861,7 +1877,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 var random = new Random(seed);
                 if (random.NextDouble() < 0.01)
                 {
-                    int a = 5;
+                    var a = 5;
                 }
                 var maxDistance = 32;
                 var mouseOffset = 32;
@@ -2473,6 +2489,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             {
                 RegisterSquareHoleCues();
             }
+            if (bundle.name == MemeBundleNames.ADHD)
+            {
+                SendHomeADHDIngredients();
+            }
         }
 
         private void StartPlayingASMR()
@@ -2659,6 +2679,93 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             var cues = _squareHoleCues[_squareHoleKey];
             var randomIndex = Game1.random.Next(0, cues.Length);
             Game1.playSound(cues[randomIndex]);
+        }
+
+        public void SendHomeADHDIngredients()
+        {
+            var foundADHDIngredient = false;
+            for (var index = 0; index < Game1.player.Items.Count; index++)
+            {
+                var playerItem = Game1.player.Items[index];
+                if (!HighlightObjects(playerItem))
+                {
+                    continue;
+                }
+
+                if (foundADHDIngredient)
+                {
+                    SendItemHome(Game1.player.Items, index);
+                }
+                else
+                {
+                    foundADHDIngredient = true;
+                }
+            }
+        }
+
+        private void SendItemHome(Inventory inventory, int index)
+        {
+            var item = inventory[index];
+            var maxStack = item.maximumStackSize();
+
+            var farm = Game1.getFarm();
+            var locations = new List<GameLocation>{ farm, Game1.getLocationFromName("FarmHouse") };
+            foreach (var building in farm.buildings)
+            {
+                if (building?.indoors.Value == null)
+                {
+                    continue;
+                }
+                locations.Add(building.indoors.Value);
+            }
+
+            foreach (var gameLocation in locations)
+            {
+                if (TryStackItemInLocationInventories(gameLocation, item, maxStack))
+                {
+                    inventory[index] = null;
+                    return;
+                }
+            }
+        }
+
+        private static bool TryStackItemInLocationInventories(GameLocation gameLocation, Item item, int maxStack)
+        {
+            foreach (var (tile, tileObject) in gameLocation.objects.Pairs)
+            {
+                if (tileObject is Chest chest)
+                {
+                    if (TryStackItemInInventory(chest.Items, item, maxStack))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            var fridge = gameLocation.GetFridge();
+            if (fridge != null)
+            {
+                if (TryStackItemInInventory(fridge.Items, item, maxStack))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static bool TryStackItemInInventory(Inventory inventory, Item item, int maxStack)
+        {
+            foreach (var chestItem in inventory)
+            {
+                if (chestItem.canStackWith(item) && chestItem.Stack + item.Stack < maxStack)
+                {
+                    chestItem.Stack += item.Stack;
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }
