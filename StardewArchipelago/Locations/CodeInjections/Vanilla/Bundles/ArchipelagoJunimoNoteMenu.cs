@@ -391,6 +391,22 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 return true;
             }
 
+            if (CurrentPageBundle == null)
+            {
+                return false;
+            }
+
+            if (CurrentPageBundle.name != MemeBundleNames.HINT)
+            {
+                specialRewardName = "Reward: Unknown";
+                var hints = _archipelago.GetHints();
+                if (hints.Any(x => x.FindingPlayer == _archipelago.GetCurrentPlayer().Slot && x.LocationId == _archipelago.GetLocationId($"{MemeBundleNames.HINT} Bundle")))
+                {
+                    CompleteBundleInMenu();
+                }
+                return true;
+            }
+
             return false;
         }
 
