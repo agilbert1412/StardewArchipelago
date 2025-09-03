@@ -20,6 +20,7 @@ namespace StardewArchipelago.Constants
         public static readonly string BANK_MONEY = IDProvider.CreateId("BankMoney");
         public static readonly string SLEEP_DAYS = IDProvider.CreateId("SleepDays");
         public static readonly string DEATHLINKS = IDProvider.CreateId("DeathLinks");
+        public static readonly string GOATS = IDProvider.CreateId("Goat");
 
         public static readonly string WORN_BOOTS = IDProvider.CreateId("WornBoots");
         public static readonly string WORN_SHIRT = IDProvider.CreateId("WornShirt");

@@ -1,21 +1,24 @@
-﻿using System;
-using System.Linq;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Bundles;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Gacha;
-using StardewValley.Menus;
-using StardewValley;
 using StardewArchipelago.Logging;
-using StardewModdingAPI;
 using StardewArchipelago.Serialization;
-using StardewValley.BellsAndWhistles;
-using StardewValley.Characters;
-using StardewValley.Objects;
+using StardewModdingAPI;
 using StardewModdingAPI.Events;
+using StardewValley;
+using StardewValley.BellsAndWhistles;
+using StardewValley.Buildings;
+using StardewValley.Characters;
+using StardewValley.Extensions;
+using StardewValley.Menus;
+using StardewValley.Objects;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 {
@@ -189,6 +192,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             {
                 DrawDeathLinksCurrency();
                 amountText += " DeathLinks";
+            }
+            else if (ingredientId == MemeIDProvider.GOATS)
+            {
+                DrawGoatsCurrency();
+                amountText += " Goat";
+                if (ingredient.stack > 1)
+                {
+                    amountText += "s";
+                }
             }
             else
             {
@@ -369,6 +381,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             DrawSpecialCurrency(Game1.player.getChildrenCount(), Game1.mouseCursors, new Rectangle(416, 1962, 16, 16), 3f);
         }
 
+        private void DrawGoatsCurrency()
+        {
+            DrawSpecialCurrency(CountOwnedGoats(), Game1.mouseCursors, new Rectangle(70, 448, 21, 16), 3f);
+        }
+
         private void DrawBankCurrency()
         {
             DrawSpecialCurrency(_currentBankString, Game1.mouseCursors, new Rectangle(280, 411, 16, 16), 3f);
@@ -402,7 +419,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             var width = 128 + (amountOwned.Length > 3 ? (amountOwned.Length-3) * 16 : 0);
             spriteBatch.Draw(Game1.fadeToBlackRect, new Rectangle(16, 16, width, 64), Color.Black * 0.75f);
             var position = new Vector2(32f, 32f);
-            if (sourceRectangle.Width >= 16)
+            if (sourceRectangle.Width >= 24)
+            {
+                position.X -= 12;
+            }
+            else if (sourceRectangle.Width >= 20)
+            {
+                position.X -= 10;
+            }
+            else if (sourceRectangle.Width >= 16)
             {
                 position.X -= 8;
             }
@@ -513,6 +538,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             if (ingredient.id == MemeIDProvider.DEATHLINKS)
             {
                 TryPurchaseCurrentBundleWithDeathLinks(ingredient);
+                return;
+            }
+
+            if (ingredient.id == MemeIDProvider.GOATS)
+            {
+                TryPurchaseCurrentBundleWithGoats(ingredient);
                 return;
             }
         }
@@ -659,6 +690,55 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                     BroadcastSacrificeSprites();
                 }
             });
+        }
+
+        private void TryPurchaseCurrentBundleWithGoats(BundleIngredientDescription ingredient)
+        {
+            var goatsOwned = CountOwnedGoats();
+            TryPurchaseCurrentBundleWithWalletCurrency(ingredient, goatsOwned, payAmount =>
+            {
+                var goats = GetOwnedGoats();
+                var sacrificed = 0;
+                foreach (var goat in goats)
+                {
+                    ((AnimalHouse)goat.homeInterior).animalsThatLiveHere.Remove(goat.myID.Value);
+                    goat.health.Value = -1;
+                    if (goat.foundGrass != null && FarmAnimal.reservedGrass.Contains(goat.foundGrass))
+                    {
+                        FarmAnimal.reservedGrass.Remove(goat.foundGrass);
+                    }
+                    BroadcastSacrificeSprites();
+                    sacrificed++;
+                    if (sacrificed >= payAmount)
+                    {
+                        break;
+                    }
+                }
+            });
+        }
+
+        private int CountOwnedGoats()
+        {
+            var goats = GetOwnedGoats();
+            return goats.Count;
+        }
+
+        private List<FarmAnimal> GetOwnedGoats()
+        {
+            var farm = Game1.getFarm();
+            var goats = new List<FarmAnimal>();
+            foreach (var buildingIndoors in farm.buildings.Select(x => x.GetIndoors()).Where(x => x != null))
+            {
+                foreach (var animal in buildingIndoors.Animals.Values)
+                {
+                    if (animal.type.Value == "Goat")
+                    {
+                        goats.Add(animal);
+                    }
+                }
+            }
+
+            return goats;
         }
 
         private void BroadcastSacrificeSprites()
