@@ -202,7 +202,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
                 return bool.TryParse(item.modData[GarbageInjections.FROM_TRASH_KEY], out var fromTrash) && fromTrash;
             }
-            if (name == MemeBundleNames.COOPERATION || name == MemeBundleNames.POMNUT)
+            if (name == MemeBundleNames.COOPERATION || name == MemeBundleNames.POMNUT || name == MemeBundleNames.POLLUTION || name == MemeBundleNames.CATCH_AND_RELEASE)
             {
                 return false;
             }

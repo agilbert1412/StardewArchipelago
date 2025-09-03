@@ -238,7 +238,15 @@ namespace StardewArchipelago.Locations.Patcher
         {
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Building), nameof(Building.doAction)),
-                prefix: new HarmonyMethod(typeof(WellInjections), nameof(WellInjections.DoAction_ThrowHoneyInWell_Prefix))
+                prefix: new HarmonyMethod(typeof(ThrowInWaterInjections), nameof(ThrowInWaterInjections.DoAction_ThrowHoneyInWell_Prefix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.checkAction)),
+                prefix: new HarmonyMethod(typeof(ThrowInWaterInjections), nameof(ThrowInWaterInjections.CheckAction_ThrowPollutionAndFishInWater_Prefix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.UpdateWhenCurrentLocation)),
+                prefix: new HarmonyMethod(typeof(ThrowInWaterInjections), nameof(ThrowInWaterInjections.UpdateWhenCurrentLocation_WaterWithFish_Postfix))
             );
 
             _harmony.Patch(

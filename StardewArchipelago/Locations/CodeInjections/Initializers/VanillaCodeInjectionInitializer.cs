@@ -90,7 +90,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             ArchipelagoBundle.InitializeArchipelago(logger, modHelper, archipelago, state, locationChecker, bundlesManager);
             CommunityCenterInjections.Initialize(logger, archipelago, locationChecker, bundleReader);
             RaccoonInjections.Initialize(logger, modHelper, archipelago, state, locationChecker, bundlesManager, bundleReader);
-            WellInjections.Initialize(logger, modHelper, archipelago, locationChecker, giftSender);
+            ThrowInWaterInjections.Initialize(logger, modHelper, archipelago, locationChecker, giftSender);
             HorseInjections.Initialize(logger, modHelper, archipelago, locationChecker);
         }
 

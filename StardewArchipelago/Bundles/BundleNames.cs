@@ -50,6 +50,7 @@
         public const string ANIMAL_WELL = "ANIMAL WELL";
         public const string MINISTRY_OF_MADNESS = "Ministry of Madness";
         public const string SQUARE_HOLE = "Square Hole";
+        public const string POMNUT = "Pomnut";
         public const string ADHD = "ADHD";
         public const string THEALGORERHYTM = "TheAlGoreRhythm";
         public const string SACRIFICE = "Sacrifice";
