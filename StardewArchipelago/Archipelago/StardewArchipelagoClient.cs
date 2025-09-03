@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Numerics;
-using System.Threading.Tasks;
-using Archipelago.Gifting.Net.Service;
+﻿using Archipelago.Gifting.Net.Service;
 using Archipelago.MultiClient.Net;
 using Archipelago.MultiClient.Net.BounceFeatures.DeathLink;
 using Archipelago.MultiClient.Net.Enums;
@@ -16,12 +10,20 @@ using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Client.ConnectionResults;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago.ConnectionResults;
+using StardewArchipelago.Bundles;
 using StardewArchipelago.Extensions;
 using StardewArchipelago.GameModifications.MoveLink;
 using StardewArchipelago.GameModifications.Testing;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Extensions;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Numerics;
+using System.Threading.Tasks;
 using Color = Microsoft.Xna.Framework.Color;
 
 namespace StardewArchipelago.Archipelago
@@ -234,6 +236,7 @@ namespace StardewArchipelago.Archipelago
         {
             base.OnReconnectSuccess();
             Game1.chatBox?.addMessage("Reconnection attempt successful!", Color.Green);
+            ArchipelagoJunimoNoteMenu.CompleteBundleIfExists(MemeBundleNames.RECONNECTION);
         }
 
         public void SetBigIntegerDataStorage(Scope scope, string key, BigInteger value)
