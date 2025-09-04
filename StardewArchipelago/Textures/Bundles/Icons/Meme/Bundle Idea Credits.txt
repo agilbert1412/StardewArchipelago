@@ -1,16 +1,11 @@
-This is the name of the person who brought up the idea first. Many of the ideas were slightly reworked by Kaito Kid during implementation, so they don't always perfectly match the original suggestion.
-Sometimes, the final bundle is a merge of two submissions. In this case, both names will appear
-I did not keep track of everyone who has seen or heard the prototype of a bundle, and provided feedback that ended up improving it. Sorry!
-When it says 'X with the help of Y', it generally means X got the idea of making a bundle themed around Y, but then asked Y to design the bundle itself.
-
-
+'Fruit': Maecena
 AAAA: rosenothorns03
-Amon's Fall: Kaito Kid
 ANIMAL WELL: Kaito Kid
+ASMR: Kaito Kid with the help of the JubileeWhispers Community
+Amon's Fall: Kaito Kid
 Anything for Beyonce: rosenothorns03
 Archipela-Go!: Kaito Kid
 ArgonMatrix: Kaito Kid with the help of the ArgonMatrix Community
-ASMR: Kaito Kid with the help of the JubileeWhispers Community
 Automation: Kaito Kid
 Bad Farmer: Kaito Kid
 Bad Fisherman: Kaito Kid
@@ -19,15 +14,17 @@ Big Grapes: Kaito Kid
 Blossom Garden: Kaito Kid with the help of the Blossom Garden Community
 Bun-dle: Kaito Kid
 Bundle Bundle: Kaito Kid
-Burger King: Mistik & Ishigh & Nocallia
 Burger King's Revenge: Nocallia
+Burger King: Mistik & Ishigh & Nocallia
 Caffeinated: Rubik
 Cap: Ishigh
 Capitalist: Kaito Kid
+Catch And Release: Kaito Kid
 Celeste: Kaito Kid
 Chaos Emerald: Bunk
 Clickbait: Kaito Kid
 Clique: Kaito Kid with the help of the Clique community
+Colored Crystals: Kaito Kid
 Commitment: RayStormThunder
 Communism: Kaito Kid
 Connection Bundle: 
@@ -38,8 +35,10 @@ Crap Pot: Kaito Kid
 Crowfunding: Kaito Kid
 Death: Kaito Kid
 Deathlink: Kaito Kid
-Doctor: Kaito Kid
+Distracted: pix_tek idea modified by Kaito Kid
 Doctor Angler: Kaito Kid
+Doctor: Kaito Kid
+Dr Seuss: jinxtinks
 Eg: Nocallia & ProfBytes
 Emmalution: Kaito Kid with the help of the Cosy Valley community
 Exhaustion: Kaito Kid 
@@ -47,15 +46,16 @@ Fast: Kaito Kid
 Firstborn: Kaito Kid 
 Flashbang: Kaito Kid 
 FrazzleDuck: Kaito Kid 
-'Fruit': Maecena
 Gacha: Kaito Kid 
 Hairy: Kaito Kid 
 Hats Off To You: axe_y
 Hibernation: Kaito Kid with the help of Honeywell
+Hint: Kaito Kid
 Honeywell: Kaito Kid 
 Honorable: Flint
 Humble: Kaito Kid
 Hurricane Tortilla: rosenothorns03
+I did not keep track of everyone who has seen or heard the prototype of a bundle, and provided feedback that ended up improving it. Sorry!
 IKEA: Kaito Kid
 Investment: Kaito Kid
 Joetg: Kaito Kid with the help of the Cozy Crew community
@@ -73,26 +73,32 @@ Not The Bees: PreludeWish
 Obelisks: Nocallia
 Off Your Back: Kaito Kid
 Permit A38: Kaito Kid & axe_y
+Pollution: Kaito Kid
 Pomnut: Kaito Kid with the help of the TheRedWolfe community
 Pool: Kaito Kid
 Potato: Nikki
 Puzzle: Kaito Kid
+Reconnection: Kaito Kid
 Restraint Bundle: Kaito Kid
 Reverse: Kaito Kid
 Rick: Kaito Kid
 Romance: Mistik
+SMAPI: Kaito Kid
+Sacrifice: Kaito Kid
 Sappy: ProfBytes
 Schrodinger: Kaito Kid
 Screw You: Nocallia
 Sisyphus: Kaito Kid & Flint
-SMAPI: Kaito Kid
 Snitch: LilyFlair
+Sometimes, the final bundle is a merge of two submissions. In this case, both names will appear
 Speedrunners: Omasumi
 Square Hole: Kaito Kid
 Stanley: Kaito Kid
 Sunmaid: Kaito Kid
 The Floor Is Lava: Kaito Kid
+TheAlGoreRhythm: Kaito Kid
 This Is Fine: Kaito Kid
+This is the name of the person who brought up the idea first. Many of the ideas were slightly reworked by Kaito Kid during implementation, so they don't always perfectly match the original suggestion.
 Tick Tock: Kaito Kid
 Tilesanity: Ishigh
 Trout: Nocallia
@@ -100,3 +106,4 @@ Vampire: Kaito Kid
 Very Sticky: Kaito Kid
 Vocaloid: Nocallia
 What The Rock Is Cooking: pix_tek
+When it says 'X with the help of Y', it generally means X got the idea of making a bundle themed around Y, but then asked Y to design the bundle itself.
