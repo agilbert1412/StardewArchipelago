@@ -96,7 +96,7 @@ Square Hole: Kaito Kid
 Stanley: Kaito Kid
 Sunmaid: Kaito Kid
 The Floor Is Lava: Kaito Kid
-TheAlGoreRhythm: Kaito Kid
+TheAlGoreRhythm: TheAlGoreRhythm with slight tweaks by Kaito Kid
 This Is Fine: Kaito Kid
 This is the name of the person who brought up the idea first. Many of the ideas were slightly reworked by Kaito Kid during implementation, so they don't always perfectly match the original suggestion.
 Tick Tock: Kaito Kid
