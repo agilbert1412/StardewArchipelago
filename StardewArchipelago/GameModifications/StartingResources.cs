@@ -34,6 +34,7 @@ namespace StardewArchipelago.GameModifications
             {
                 GivePlayerQuickStart();
                 RemoveStartingTools();
+                RemoveStartingBackpack();
             }
 
             RemoveShippingBin();
@@ -106,11 +107,27 @@ namespace StardewArchipelago.GameModifications
             }
 
             Game1.player.Items.Clear();
+        }
+
+        private void RemoveStartingBackpack()
+        {
+            if (!_archipelago.SlotData.StartWithout.HasFlag(StartWithout.Backpack))
+            {
+                return;
+            }
+
             if (_archipelago.SlotData.BackpackProgression != BackpackProgression.Vanilla)
             {
                 Game1.player.MaxItems = 0;
+                var farmhouse = Game1.getLocationFromName("FarmHouse") as FarmHouse;
                 while (Game1.player.Items.Count > Game1.player.MaxItems)
                 {
+                    var item = Game1.player.Items[0];
+                    if (item != null)
+                    {
+                        CreateGiftBoxItemInEmptySpot(farmhouse, item);
+                        Game1.player.Items[0] = null;
+                    }
                     Game1.player.Items.RemoveAt(0);
                 }
             }
