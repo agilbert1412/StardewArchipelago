@@ -34,12 +34,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         private static LocationChecker _locationChecker;
         private static GiftSender _giftSender;
 
-        private static Vector2 _lastThrownPosition = Vector2.Zero;
-        private static Object _lastFishThrown;
-        private static int _numberOfFishToJump = 0;
-        private static float _timeUntilFishHop = 0f;
         private static List<JumpingFish> _jumpingFish = new();
-        private static int _fishSilhouettes = 0;
+        private static List<(Object fish, Vector2 position, int jumpsRemaining, float delay)> _fishToJump = new();
 
         public static void Initialize(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, LocationChecker locationChecker, GiftSender giftSender)
         {
@@ -144,10 +140,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
                     if (activeObject.Category == Category.FISH)
                     {
-                        _numberOfFishToJump = 4;
-                        _timeUntilFishHop = 2f;
-                        _lastThrownPosition = vectorLocation;
-                        _lastFishThrown = activeObject;
+                        _fishToJump.Add(new(activeObject, vectorLocation, 8, 2f));
                     }
                 });
                 who.reduceActiveItemByOne();
@@ -167,13 +160,25 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         {
             try
             {
-                if (_numberOfFishToJump > 0)
+                for (var index = _fishToJump.Count - 1; index >= 0; index--)
                 {
-                    _timeUntilFishHop -= (float)time.ElapsedGameTime.TotalSeconds;
-                    if (_timeUntilFishHop <= 0.0 && JumpFish(__instance))
+                    var (fish, position, jumpsRemaining, delay) = _fishToJump[index];
+
+                    delay -= (float)time.ElapsedGameTime.TotalSeconds;
+                    if (delay <= 0.0 && JumpFish(__instance, fish, position))
                     {
-                        --_numberOfFishToJump;
-                        _timeUntilFishHop = Utility.RandomFloat(1.1f, 2.1f);
+                        --jumpsRemaining;
+                        delay = Utility.RandomFloat(1.1f, 2.1f);
+                    }
+
+                    _fishToJump[index] = (fish, position, jumpsRemaining, delay);
+                    if (jumpsRemaining > 0)
+                    {
+                        _fishToJump[index] = (fish, position, jumpsRemaining, delay);
+                    }
+                    else
+                    {
+                        // _fishToJump.RemoveAt(index);
                     }
                 }
                 for (var index = 0; index < _jumpingFish.Count; ++index)
@@ -213,10 +218,17 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
         }
 
-        public static bool JumpFish(GameLocation gameLocation)
+        public static bool JumpFish(GameLocation gameLocation, Object fish, Vector2 position)
         {
-            _jumpingFish.Add(new JumpingFish(gameLocation, _lastFishThrown, _lastThrownPosition * 64f, (_lastThrownPosition + new Vector2(0.5f, 0.5f)) * 64f));
+            var randomStartOffset = new Vector2(GetJumpOffset(), GetJumpOffset());
+            var randomEndOffset = new Vector2(GetJumpOffset(), GetJumpOffset());
+            _jumpingFish.Add(new JumpingFish(gameLocation, fish, (position + randomStartOffset) * 64f, (position + randomEndOffset) * 64f));
             return true;
+        }
+
+        private static float GetJumpOffset()
+        {
+            return Game1.random.NextSingle() * 1.5f - 0.75f;
         }
 
         private static void ShowObjectThrownIntoBuildingAnimation(Building building, Farmer who, Object whichObject, Action callback = null)
