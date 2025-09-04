@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+﻿using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework.Content;
 using Newtonsoft.Json;
 using StardewArchipelago.Constants.Vanilla;
@@ -11,6 +7,11 @@ using StardewValley.GameData.BigCraftables;
 using StardewValley.GameData.Objects;
 using StardewValley.GameData.Shirts;
 using StardewValley.GameData.Weapons;
+using StardewValley.Objects;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Stardew
@@ -437,6 +438,19 @@ namespace StardewArchipelago.Stardew
             {
                 var bigCraftable = ParseStardewBigCraftableData(id, bigCraftableData);
 
+                if (bigCraftable.Name == "House Plant")
+                {
+                    if (int.TryParse(bigCraftable.Id, out var intId))
+                    {
+                        var plantNumber = intId;
+                        _bigCraftablesByName.Add($"House Plant {plantNumber} (Big Craftable)", bigCraftable);
+                        if (plantNumber == 2)
+                        {
+                            _bigCraftablesByName.Add($"House Plant 13 (Crane Game)", bigCraftable);
+                        }
+                    }
+                }
+
                 if (_bigCraftablesById.ContainsKey(id) || _bigCraftablesByName.ContainsKey(bigCraftable.Name))
                 {
                     continue;
@@ -476,7 +490,16 @@ namespace StardewArchipelago.Stardew
             foreach (var (id, furnitureInfo) in allFurnitureInformation)
             {
                 var furniture = ParseStardewFurnitureData(id, furnitureInfo);
-                
+
+                if (furniture.Name == "House Plant")
+                {
+                    if (int.TryParse(furniture.Id, out var intId))
+                    {
+                        var plantNumber = intId - 1375;
+                        _furnitureByName.Add($"House Plant {plantNumber} (Furniture)", furniture);
+                    }
+                }
+
                 if (_furnitureById.ContainsKey(id) || _furnitureByName.ContainsKey(furniture.Name))
                 {
                     continue;

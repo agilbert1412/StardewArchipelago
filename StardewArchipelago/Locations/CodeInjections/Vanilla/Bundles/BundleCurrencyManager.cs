@@ -31,6 +31,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         private static ArchipelagoWalletDto _wallet;
         private static BankHandler _bank;
         private ArchipelagoJunimoNoteMenu _menu;
+        private List<FarmAnimal> _goats;
 
         public BundleCurrencyManager(LogHandler logger, IModHelper modHelper, ArchipelagoWalletDto wallet, BankHandler bank, ArchipelagoJunimoNoteMenu menu)
         {
@@ -39,6 +40,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             _wallet = wallet;
             _bank = bank;
             _menu = menu;
+            _goats = GetOwnedGoats();
         }
 
         public void DrawCurrency(SpriteBatch b)
@@ -383,7 +385,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         private void DrawGoatsCurrency()
         {
-            DrawSpecialCurrency(CountOwnedGoats(), Game1.mouseCursors, new Rectangle(70, 448, 21, 16), 3f);
+            DrawSpecialCurrency(_goats.Count, Game1.mouseCursors, new Rectangle(70, 448, 21, 16), 3f);
         }
 
         private void DrawBankCurrency()
@@ -436,7 +438,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 position.Y -= 8;
             }
             spriteBatch.Draw(texture, position, sourceRectangle, Color.White, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 1f);
-            Game1.drawWithBorder(amountOwned, Color.Black, Color.White, new Vector2(72f, (float)(21 + (LocalizedContentManager.CurrentLanguageCode == LocalizedContentManager.LanguageCode.en ? 8 : (LocalizedContentManager.CurrentLanguageLatin ? 16 : 8)))), 0.0f, 1f, 1f, false);
+            Game1.drawWithBorder(amountOwned, Color.Black, Color.White, new Vector2((72f + position.X), (float)(21 + (LocalizedContentManager.CurrentLanguageCode == LocalizedContentManager.LanguageCode.en ? 8 : (LocalizedContentManager.CurrentLanguageLatin ? 16 : 8)))), 0.0f, 1f, 1f, false);
 
             spriteBatch.End();
             Game1.PopUIMode();
@@ -694,12 +696,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         private void TryPurchaseCurrentBundleWithGoats(BundleIngredientDescription ingredient)
         {
-            var goatsOwned = CountOwnedGoats();
-            TryPurchaseCurrentBundleWithWalletCurrency(ingredient, goatsOwned, payAmount =>
+            TryPurchaseCurrentBundleWithWalletCurrency(ingredient, _goats.Count, payAmount =>
             {
-                var goats = GetOwnedGoats();
                 var sacrificed = 0;
-                foreach (var goat in goats)
+                foreach (var goat in _goats)
                 {
                     ((AnimalHouse)goat.homeInterior).animalsThatLiveHere.Remove(goat.myID.Value);
                     goat.health.Value = -1;
@@ -714,13 +714,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                         break;
                     }
                 }
-            });
-        }
 
-        private int CountOwnedGoats()
-        {
-            var goats = GetOwnedGoats();
-            return goats.Count;
+                _goats = GetOwnedGoats();
+            });
         }
 
         private List<FarmAnimal> GetOwnedGoats()
@@ -731,7 +727,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             {
                 foreach (var animal in buildingIndoors.Animals.Values)
                 {
-                    if (animal.type.Value == "Goat")
+                    if (animal.type.Value == "Goat" && animal.isAdult() && (animal.wasPet.Value || animal.wasAutoPet.Value))
                     {
                         goats.Add(animal);
                     }

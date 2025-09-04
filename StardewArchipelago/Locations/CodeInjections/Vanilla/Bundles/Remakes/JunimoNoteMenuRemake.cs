@@ -1680,16 +1680,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             {
                 flag = true;
             }
-            DrawIngredientAndShadow(spriteBatch, ingredientDescription, !flag, ingredient, num3);
+            DrawIngredientAndShadow(spriteBatch, ingredientDescription, !flag, ingredient, num3, index);
         }
 
-        protected virtual void DrawIngredientAndShadow(SpriteBatch spriteBatch, BundleIngredientDescription ingredientDescription, bool drawShadow, ClickableTextureComponent ingredient, float transparency)
+        protected virtual void DrawIngredientAndShadow(SpriteBatch spriteBatch, BundleIngredientDescription ingredientDescription, bool drawShadow, ClickableTextureComponent ingredient, float transparency, int index)
         {
             if (drawShadow)
             {
                 DrawIngredientShadow(spriteBatch, ingredient, transparency);
             }
-            DrawIngredient(spriteBatch, ingredientDescription, ingredient, (drawShadow ? transparency : 0.25f));
+            DrawIngredient(spriteBatch, ingredientDescription, ingredient, (drawShadow ? transparency : 0.25f), index);
         }
 
         protected virtual void DrawIngredientShadow(SpriteBatch spriteBatch, ClickableTextureComponent ingredient, float transparency)
@@ -1697,7 +1697,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             spriteBatch.Draw(Game1.shadowTexture, new Vector2(ingredient.bounds.Center.X - Game1.shadowTexture.Bounds.Width * 4 / 2 - 4, ingredient.bounds.Center.Y + 4), Game1.shadowTexture.Bounds, Color.White * transparency, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 0.1f);
         }
 
-        protected virtual void DrawIngredient(SpriteBatch spriteBatch, BundleIngredientDescription ingredient, ClickableTextureComponent ingredientBox, float overlayTransparency)
+        protected virtual void DrawIngredient(SpriteBatch spriteBatch, BundleIngredientDescription ingredient, ClickableTextureComponent ingredientBox, float overlayTransparency, int index)
         {
             if (ingredientBox.item != null && ingredientBox.visible)
             {

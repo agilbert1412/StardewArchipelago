@@ -22,6 +22,7 @@ using StardewArchipelago.Textures;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
+using StardewValley.Internal;
 using StardewValley.Inventories;
 using StardewValley.ItemTypeDefinitions;
 using StardewValley.Locations;
@@ -32,6 +33,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using Color = Microsoft.Xna.Framework.Color;
 using Object = StardewValley.Object;
 
@@ -68,6 +70,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         internal static bool HasPurchasedRestraintBundleToday = false;
         internal static bool HasLookedAtHibernationBundleToday = false;
         internal static string IkeaItemQualifiedId = "";
+        private Hint[] _hintsInMyWorld;
         private Hint[] _hintsForMe;
         private Hint[] _hintsFromMe;
         private GachaResolver _gachaResolver;
@@ -108,6 +111,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             HumbleBundleTexture = TexturesLoader.GetTexture(humbleIconPath);
             ExtraButtons = new Dictionary<BundleButton, Action>();
             InitializeClothesMenu();
+
+            var hints = _archipelago.GetHints();
+            _hintsInMyWorld = hints.Where(x => x.FindingPlayer == _archipelago.GetCurrentPlayer().Slot).ToArray();
             _hintsForMe = _archipelago.GetActiveDesiredHintsForMe();
             _hintsFromMe = _archipelago.GetMyActiveDesiredHints();
         }
@@ -396,14 +402,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 return false;
             }
 
-            if (CurrentPageBundle.name != MemeBundleNames.HINT)
+            if (CurrentPageBundle.name == MemeBundleNames.HINT)
             {
                 specialRewardName = "Reward: Unknown";
-                var hints = _archipelago.GetHints();
-                if (hints.Any(x => x.FindingPlayer == _archipelago.GetCurrentPlayer().Slot && x.LocationId == _archipelago.GetLocationId($"{MemeBundleNames.HINT} Bundle")))
-                {
-                    CompleteBundleInMenu();
-                }
                 return true;
             }
 
@@ -763,7 +764,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         protected override void SetUpPurchaseButton()
         {
-            if (CurrentPageBundle.name == MemeBundleNames.NFT || CurrentPageBundle.name == MemeBundleNames.DEATH || CurrentPageBundle.name == MemeBundleNames.HONEYWELL)
+            if (CurrentPageBundle.name == MemeBundleNames.NFT || CurrentPageBundle.name == MemeBundleNames.DEATH || CurrentPageBundle.name == MemeBundleNames.HONEYWELL || CurrentPageBundle.name == MemeBundleNames.HINT)
             {
                 return;
             }
@@ -1698,7 +1699,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             base.DrawIngredientShadow(spriteBatch, ingredient, transparency);
         }
 
-        protected override void DrawIngredientAndShadow(SpriteBatch spriteBatch, BundleIngredientDescription ingredient, bool drawShadow, ClickableTextureComponent ingredientBox, float overlayTransparency)
+        protected override void DrawIngredientAndShadow(SpriteBatch spriteBatch, BundleIngredientDescription ingredient, bool drawShadow, ClickableTextureComponent ingredientBox, float overlayTransparency, int index)
         {
             if (CurrentPageBundle.name == MemeBundleNames.OFF_YOUR_BACK)
             {
@@ -1720,7 +1721,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 return;
             }
 
-            base.DrawIngredientAndShadow(spriteBatch, ingredient, drawShadow, ingredientBox, overlayTransparency);
+            base.DrawIngredientAndShadow(spriteBatch, ingredient, drawShadow, ingredientBox, overlayTransparency, index);
         }
 
         private void DrawWornHat(SpriteBatch spriteBatch, BundleIngredientDescription ingredient, ClickableTextureComponent ingredientBox, float overlayTransparency, bool drawShadow)
@@ -1816,21 +1817,31 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             item.drawInMenu(spriteBatch, new Vector2(ingredientBox.bounds.X, ingredientBox.bounds.Y), ingredientBox.scale / 4f, 1f, 0.9f, StackDrawType.Draw, Color.White * transparency, false);
         }
 
-        protected override void DrawIngredient(SpriteBatch spriteBatch, BundleIngredientDescription ingredient, ClickableTextureComponent ingredientBox, float overlayTransparency)
+        protected override void DrawIngredient(SpriteBatch spriteBatch, BundleIngredientDescription ingredient, ClickableTextureComponent ingredientBox, float overlayTransparency, int index)
         {
             if (CurrentPageBundle.name == MemeBundleNames.THEALGORERHYTM)
             {
-                if (HeldItem == null || HeldItem.QualifiedItemId != ingredient.id)
+                if (HeldItem == null || !CurrentPageBundle.IsValidItemForThisIngredientDescription(HeldItem, ingredient, index, this))
                 {
                     var item = ingredientBox.item;
                     if (item != null && ingredientBox.visible)
                     {
                         var singleStackItem = ItemRegistry.Create(item.QualifiedItemId, 1);
+                        if (ingredient.preservesId != null)
+                        {
+                            var context = new ItemQueryContext(Game1.currentLocation, Game1.player, Game1.random, "query 'FLAVORED_ITEM'");
+                            var flavoredVariant = ItemQueryResolver.TryResolve("FLAVORED_ITEM " + ingredient.id + " " + ingredient.preservesId, context).FirstOrDefault()?.Item;
+                            if (flavoredVariant is Item flavoredItem)
+                            {
+                                singleStackItem = flavoredItem;
+                            }
+                        }
                         singleStackItem.drawInMenu(spriteBatch, new Vector2(ingredientBox.bounds.X, ingredientBox.bounds.Y), ingredientBox.scale / 4f, 1f, 0.9f, StackDrawType.Draw, Color.White * overlayTransparency, false);
+                        return;
                     }
                 }
             }
-            base.DrawIngredient(spriteBatch, ingredient, ingredientBox, overlayTransparency);
+            base.DrawIngredient(spriteBatch, ingredient, ingredientBox, overlayTransparency, index);
         }
 
         protected override void PickItemFromInventory(int x, int y)
@@ -2505,9 +2516,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             {
                 RegisterSquareHoleCues();
             }
-            if (bundle.name == MemeBundleNames.ADHD)
+            if (bundle.name == MemeBundleNames.DISTRACTED)
             {
-                SendHomeADHDIngredients();
+                SendHomeDistractedIngredients();
+            }
+            if (bundle.name == MemeBundleNames.HINT && _hintsInMyWorld.Any(x => x.LocationId == _archipelago.GetLocationId($"{MemeBundleNames.HINT} Bundle")))
+            {
+                PerformCurrencyPurchase();
             }
         }
 
@@ -2697,9 +2712,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             Game1.playSound(cues[randomIndex]);
         }
 
-        public void SendHomeADHDIngredients()
+        public void SendHomeDistractedIngredients()
         {
-            var foundADHDIngredient = false;
+            var foundDistractedIngredient = false;
             for (var index = 0; index < Game1.player.Items.Count; index++)
             {
                 var playerItem = Game1.player.Items[index];
@@ -2708,13 +2723,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                     continue;
                 }
 
-                if (foundADHDIngredient)
+                if (foundDistractedIngredient)
                 {
                     SendItemHome(Game1.player.Items, index);
                 }
                 else
                 {
-                    foundADHDIngredient = true;
+                    foundDistractedIngredient = true;
                 }
             }
         }
@@ -2738,6 +2753,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             foreach (var gameLocation in locations)
             {
                 if (TryStackItemInLocationInventories(gameLocation, item, maxStack))
+                {
+                    inventory[index] = null;
+                    return;
+                }
+            }
+
+            foreach (var gameLocation in locations)
+            {
+                if (TryPlaceItemInLocationInventories(gameLocation, item, maxStack))
                 {
                     inventory[index] = null;
                     return;
@@ -2779,6 +2803,42 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                     chestItem.Stack += item.Stack;
                     return true;
                 }
+            }
+
+            return false;
+        }
+
+        private static bool TryPlaceItemInLocationInventories(GameLocation gameLocation, Item item, int maxStack)
+        {
+            foreach (var (tile, tileObject) in gameLocation.objects.Pairs)
+            {
+                if (tileObject is Chest chest)
+                {
+                    if (TryPlaceItemInChest(chest, item, maxStack))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            var fridge = gameLocation.GetFridge();
+            if (fridge != null)
+            {
+                if (TryPlaceItemInChest(fridge, item, maxStack))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static bool TryPlaceItemInChest(Chest chest, Item item, int maxStack)
+        {
+            if (chest.Items.Count(x => x is { Stack: >= 1 }) < chest.GetActualCapacity())
+            {
+                chest.addItem(item);
+                return true;
             }
 
             return false;

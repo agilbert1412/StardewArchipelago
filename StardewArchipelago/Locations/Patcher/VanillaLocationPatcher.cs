@@ -246,7 +246,11 @@ namespace StardewArchipelago.Locations.Patcher
             );
             _harmony.Patch(
                 original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.UpdateWhenCurrentLocation)),
-                prefix: new HarmonyMethod(typeof(ThrowInWaterInjections), nameof(ThrowInWaterInjections.UpdateWhenCurrentLocation_WaterWithFish_Postfix))
+                postfix: new HarmonyMethod(typeof(ThrowInWaterInjections), nameof(ThrowInWaterInjections.UpdateWhenCurrentLocation_WaterWithFish_Postfix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.draw)),
+                postfix: new HarmonyMethod(typeof(ThrowInWaterInjections), nameof(ThrowInWaterInjections.Draw_JumpingFish_Postfix))
             );
 
             _harmony.Patch(

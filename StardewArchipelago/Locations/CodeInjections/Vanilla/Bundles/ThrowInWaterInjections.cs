@@ -131,7 +131,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
                 var honey = who.ActiveObject;
                 var quality = honey.Quality;
-                var vectorLocation = new Vector2(tileLocation.X, tileLocation.Y);
+                var offsetX = who.FacingDirection == 1 ? 1f : (who.FacingDirection == 3 ? -1f : 0f);
+                var offsetY = who.FacingDirection == 2 ? 1f : (who.FacingDirection == 0 ? -1f : 0f);
+                var vectorLocation = new Vector2(tileLocation.X + offsetX, tileLocation.Y + offsetY);
                 ShowObjectThrownIntoWaterAnimation(vectorLocation, who, activeObject, () =>
                 {
                     var donatedAmount = ArchipelagoJunimoNoteMenu.TryDonateToBundle(MemeBundleNames.POLLUTION, activeObject.Name, 1);
@@ -193,9 +195,27 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
         }
 
+        // public virtual void draw(SpriteBatch b)
+        public static void Draw_JumpingFish_Postfix(GameLocation __instance, SpriteBatch b)
+        {
+            try
+            {
+                for (var index = 0; index < _jumpingFish.Count; ++index)
+                {
+                    var jumpingFish = _jumpingFish[index];
+                    jumpingFish.Draw(b);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(Draw_JumpingFish_Postfix)}:\n{ex}");
+                return;
+            }
+        }
+
         public static bool JumpFish(GameLocation gameLocation)
         {
-            _jumpingFish.Add(new JumpingFish(gameLocation, _lastFishThrown, _lastThrownPosition, (_lastThrownPosition + new Vector2(0.5f, 0.5f)) * 64f));
+            _jumpingFish.Add(new JumpingFish(gameLocation, _lastFishThrown, _lastThrownPosition * 64f, (_lastThrownPosition + new Vector2(0.5f, 0.5f)) * 64f));
             return true;
         }
 
@@ -292,15 +312,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                     delayBeforeAnimationStart = (int)delay,
                     layerDepth = (float)(((targetTile.Y - 0.5) * 64.0 + 2.0) / 10000.0)
                 });
-                sprites.Add(new TemporaryAnimatedSprite("TileSheets\\animations", new Rectangle(0, 0, 64, 64), 55f, 8, 0, targetTile * 64f, false, Game1.random.NextBool(), (float)(((targetTile.Y - 0.5) * 64.0 + 1.0) / 10000.0), 0.01f, Color.White, 0.75f, 3f / 1000f, 0.0f, 0.0f)
+                sprites.Add(new TemporaryAnimatedSprite("TileSheets\\animations", new Rectangle(0, 0, 64, 64), 55f, 8, 0, targetTile * 64f, false, Game1.random.NextBool(), (float)((targetTile.Y * 64.0 + 1.0) / 10000.0), 0.01f, Color.White, 0.75f, 3f / 1000f, 0.0f, 0.0f)
                 {
                     delayBeforeAnimationStart = (int)delay
                 });
-                sprites.Add(new TemporaryAnimatedSprite("TileSheets\\animations", new Rectangle(0, 0, 64, 64), 65f, 8, 0, targetTile * 64f + new Vector2(Game1.random.Next(-32, 32), Game1.random.Next(-16, 32)), false, Game1.random.NextBool(), (float)(((targetTile.Y - 0.5) * 64.0 + 1.0) / 10000.0), 0.01f, Color.White, 0.75f, 3f / 1000f, 0.0f, 0.0f)
+                sprites.Add(new TemporaryAnimatedSprite("TileSheets\\animations", new Rectangle(0, 0, 64, 64), 65f, 8, 0, targetTile * 64f + new Vector2(Game1.random.Next(-32, 32), Game1.random.Next(-16, 32)), false, Game1.random.NextBool(), (float)((targetTile.Y * 64.0 + 1.0) / 10000.0), 0.01f, Color.White, 0.75f, 3f / 1000f, 0.0f, 0.0f)
                 {
                     delayBeforeAnimationStart = (int)delay
                 });
-                sprites.Add(new TemporaryAnimatedSprite("TileSheets\\animations", new Rectangle(0, 0, 64, 64), 75f, 8, 0, targetTile * 64f + new Vector2(Game1.random.Next(-32, 32), Game1.random.Next(-16, 32)), false, Game1.random.NextBool(), (float)(((targetTile.Y - 0.5) * 64.0 + 1.0) / 10000.0), 0.01f, Color.White, 0.75f, 3f / 1000f, 0.0f, 0.0f)
+                sprites.Add(new TemporaryAnimatedSprite("TileSheets\\animations", new Rectangle(0, 0, 64, 64), 75f, 8, 0, targetTile * 64f + new Vector2(Game1.random.Next(-32, 32), Game1.random.Next(-16, 32)), false, Game1.random.NextBool(), (float)((targetTile.Y * 64.0 + 1.0) / 10000.0), 0.01f, Color.White, 0.75f, 3f / 1000f, 0.0f, 0.0f)
                 {
                     delayBeforeAnimationStart = (int)delay
                 });
