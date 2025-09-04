@@ -329,5 +329,36 @@ namespace StardewArchipelago.Items.Mail
                 return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
+
+        public void ReceiveFirstFewBackpacks()
+        {
+            while (Game1.player.MaxItems < 6)
+            {
+                if (TryReceiveOneMailBackpack())
+                {
+                    continue;
+                }
+                return;
+            }
+        }
+
+        private static bool TryReceiveOneMailBackpack()
+        {
+
+            var mailbox = Game1.player.mailbox.ToArray();
+            for (var i = 0; i < mailbox.Length; i++)
+            {
+                var mail = mailbox[i];
+                if (mail.Contains("Progressive_Backpack"))
+                {
+                    _letterActions.IncreaseBackpackLevel();
+                    Game1.player.mailbox.RemoveAt(i);
+                    Game1.player.mailReceived.Add(mail);
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
 }

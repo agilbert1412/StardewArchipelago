@@ -104,7 +104,7 @@ namespace StardewArchipelago.Items.Mail
             }
         }
 
-        private void IncreaseBackpackLevel()
+        public void IncreaseBackpackLevel()
         {
             var previousMaxItems = Game1.player.MaxItems;
             var backpackSize = _archipelago.SlotData.BackpackSize;

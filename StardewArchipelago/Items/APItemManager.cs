@@ -40,21 +40,5 @@ namespace StardewArchipelago.Items
             var attachment = _itemParser.ProcessItemAsLetter(receivedItem);
             attachment.SendToPlayer(_mail);
         }
-
-        public void MakeSureBackpacksAreFirst()
-        {
-            if (Game1.player.MaxItems > 6)
-            {
-                return;
-            }
-
-            var mailbox = Game1.player.mailbox.ToArray();
-            mailbox = mailbox.OrderBy(x => x.Contains("Progressive_Backpack") ? 0 : 1).ToArray();
-            Game1.player.mailbox.Clear();
-            foreach (var mail in mailbox)
-            {
-                Game1.player.mailbox.Add(mail);
-            }
-        }
     }
 }

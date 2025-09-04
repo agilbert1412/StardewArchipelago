@@ -449,7 +449,7 @@ namespace StardewArchipelago
             _locationChecker.VerifyNewLocationChecksWithArchipelago();
             _locationChecker.SendAllLocationChecks();
             _itemManager.ReceiveAllNewItems(false);
-            _itemManager.MakeSureBackpacksAreFirst();
+            _mailPatcher.ReceiveFirstFewBackpacks();
             _goalManager.CheckGoalCompletion();
             _mail.SendTomorrow();
             PlayerBuffInjections.CheckForApBuffs();

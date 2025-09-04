@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using StardewValley.GameData;
 using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Stardew
@@ -32,6 +33,8 @@ namespace StardewArchipelago.Stardew
         private Dictionary<string, StardewBoots> _bootsByName;
         private Dictionary<string, StardewFurniture> _furnitureById;
         private Dictionary<string, StardewFurniture> _furnitureByName;
+        private Dictionary<string, StardewMannequin> _mannequinById;
+        private Dictionary<string, StardewMannequin> _mannequinByName;
         private Dictionary<string, StardewHat> _hatsById;
         private Dictionary<string, StardewHat> _hatsByName;
         private Dictionary<string, StardewShirt> _shirtsById;
@@ -96,6 +99,7 @@ namespace StardewArchipelago.Stardew
                    _bigCraftablesById.ContainsKey(itemId) ||
                    _bootsById.ContainsKey(itemId) ||
                    _furnitureById.ContainsKey(itemId) ||
+                   _mannequinById.ContainsKey(itemId) ||
                    _hatsById.ContainsKey(itemId) ||
                    _weaponsById.ContainsKey(itemId);
         }
@@ -175,6 +179,11 @@ namespace StardewArchipelago.Stardew
             if (_furnitureByName.ContainsKey(itemName))
             {
                 return _furnitureByName[itemName];
+            }
+
+            if (_mannequinByName.ContainsKey(itemName))
+            {
+                return _mannequinByName[itemName];
             }
 
             var nameWithoutSpaces = itemName.Replace(" ", "");
@@ -285,6 +294,16 @@ namespace StardewArchipelago.Stardew
             throw new ArgumentException($"Item not found: {itemId}");
         }
 
+        public StardewMannequin GetMannequinById(string itemId)
+        {
+            if (_mannequinById.ContainsKey(itemId))
+            {
+                return _mannequinById[itemId];
+            }
+
+            throw new ArgumentException($"Item not found: {itemId}");
+        }
+
         public StardewHat GetHatById(string itemId)
         {
             if (_hatsById.ContainsKey(itemId))
@@ -349,6 +368,7 @@ namespace StardewArchipelago.Stardew
             InitializeBoots();
             // InitializeClothing(); var allClothingInformation = Game1.clothingInformation;
             InitializeFurniture();
+            InitializeMannequins();
             InitializeClothing();
             // InitializeTools();
             InitializeWeapons();
@@ -526,6 +546,42 @@ namespace StardewArchipelago.Stardew
                 }
 
                 _itemsByQualifiedId.Add(furniture.GetQualifiedId(), furniture);
+            }
+        }
+
+        private void InitializeMannequins()
+        {
+            _mannequinById = new Dictionary<string, StardewMannequin>();
+            _mannequinByName = new Dictionary<string, StardewMannequin>();
+            var allMannequinInformation = DataLoader.Mannequins(Game1.content);
+            foreach (var (id, mannequinInfo) in allMannequinInformation)
+            {
+                var mannequin = ParseStardewMannequinData(id, mannequinInfo);
+
+                if (mannequin.Id == "CursedMannequinMale")
+                {
+                    _mannequinByName.Add($"Cursed Mannequin (Male)", mannequin);
+                    _mannequinByName.Add($"Cursed Mannequin", mannequin);
+                }
+                if (mannequin.Id == "CursedMannequinFemale")
+                {
+                    _mannequinByName.Add($"Cursed Mannequin (Female)", mannequin);
+                }
+
+                if (_mannequinById.ContainsKey(id) || _mannequinByName.ContainsKey(mannequin.Name))
+                {
+                    continue;
+                }
+
+                _mannequinById.Add(id, mannequin);
+                _mannequinByName.Add(mannequin.Name, mannequin);
+                if (IsPascalCaseName(mannequin.Name))
+                {
+                    var spacesName = PascalToSpaces(mannequin.Name);
+                    _mannequinByName.Add(spacesName, mannequin);
+                }
+
+                _itemsByQualifiedId.Add(mannequin.GetQualifiedId(), mannequin);
             }
         }
 
@@ -782,6 +838,18 @@ namespace StardewArchipelago.Stardew
 
             var furniture = new StardewFurniture(id, name, type, tilesheetSize, boundingBoxSize, rotations, price, displayName, placementRestriction);
             return furniture;
+        }
+
+        private static StardewMannequin ParseStardewMannequinData(string id, MannequinData mannequinData)
+        {
+            var name = mannequinData.DisplayName;
+            var cursed = mannequinData.Cursed;
+            var price = 0;
+            var displayName = mannequinData.DisplayName;
+            var description = mannequinData.Description;
+
+            var mannequin = new StardewMannequin(id, name, cursed, price, displayName, description);
+            return mannequin;
         }
 
         private static StardewHat ParseStardewHatData(string id, string hatInfo)
