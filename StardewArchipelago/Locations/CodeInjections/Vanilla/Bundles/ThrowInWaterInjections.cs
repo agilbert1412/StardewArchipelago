@@ -171,14 +171,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                         delay = Utility.RandomFloat(1.1f, 2.1f);
                     }
 
-                    _fishToJump[index] = (fish, position, jumpsRemaining, delay);
                     if (jumpsRemaining > 0)
                     {
                         _fishToJump[index] = (fish, position, jumpsRemaining, delay);
                     }
                     else
                     {
-                        // _fishToJump.RemoveAt(index);
+                        _fishToJump.RemoveAt(index);
                     }
                 }
                 for (var index = 0; index < _jumpingFish.Count; ++index)
