@@ -168,7 +168,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                     if (delay <= 0.0 && JumpFish(__instance, fish, position))
                     {
                         --jumpsRemaining;
-                        delay = Utility.RandomFloat(1.1f, 2.1f);
+                        delay = Utility.RandomFloat(1.5f, 3.0f);
                     }
 
                     if (jumpsRemaining > 0)
@@ -227,7 +227,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         private static float GetJumpOffset()
         {
-            return Game1.random.NextSingle() * 1.5f - 0.75f;
+            return Game1.random.NextSingle() * 2f - 1f + 0.5f;
         }
 
         private static void ShowObjectThrownIntoBuildingAnimation(Building building, Farmer who, Object whichObject, Action callback = null)
