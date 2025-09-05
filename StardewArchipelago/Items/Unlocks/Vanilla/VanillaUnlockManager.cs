@@ -192,6 +192,11 @@ namespace StardewArchipelago.Items.Unlocks.Vanilla
             }
 
             ++Game1.netWorldState.Value.TimesFedRaccoons;
+            Game1.netWorldState.Value.DaysPlayedWhenLastRaccoonBundleWasFinished = Game1.netWorldState.Value.Date.TotalDays - 7;
+            if (Game1.netWorldState.Value.DaysPlayedWhenLastRaccoonBundleWasFinished == 0)
+            {
+                Game1.netWorldState.Value.DaysPlayedWhenLastRaccoonBundleWasFinished = 1;
+            }
             return new LetterInformationAttachment(receivedItem);
         }
 
