@@ -371,7 +371,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 case "(O)434":
                 case "(O)349":
                     return 0;
-                case "(O)773":
+                case $"(O){ObjectIds.LIFE_ELIXIR}":
                     return 999;
 
                 case "(O)874":

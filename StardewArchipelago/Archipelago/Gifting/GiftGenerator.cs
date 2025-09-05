@@ -142,7 +142,7 @@ namespace StardewArchipelago.Archipelago.Gifting
             var edibility = objectInfo.Edibility;
             if (Convert.ToInt32(edibility) > 0)
             {
-                foreach (var consumableTrait in GetConsumableTraits(objectInfo))
+                foreach (var consumableTrait in GetConsumableTraits(giftObject, objectInfo))
                 {
                     yield return consumableTrait;
                 }
@@ -165,7 +165,7 @@ namespace StardewArchipelago.Archipelago.Gifting
             }
         }
 
-        private IEnumerable<GiftTrait> GetConsumableTraits(ObjectData objectInfo)
+        private IEnumerable<GiftTrait> GetConsumableTraits(Object giftObject, ObjectData objectInfo)
         {
             yield return CreateTrait(GiftFlag.Consumable);
 
@@ -176,6 +176,26 @@ namespace StardewArchipelago.Archipelago.Gifting
             else
             {
                 yield return CreateTrait(GiftFlag.Food);
+            }
+
+            if (objectInfo.Edibility > 10)
+            {
+                // energy (edibility × 2.5)
+                // health (edibility × 1.125)
+                var energyValue = objectInfo.Edibility / 40.0;
+                var healthValue = objectInfo.Edibility / 80.0;
+                if (giftObject.ItemId == ObjectIds.LIFE_ELIXIR)
+                {
+                    healthValue *= 10;
+                }
+                else
+                {
+                    yield return CreateTrait(GiftFlag.Energy, energyValue);
+                }
+                if (giftObject.ItemId != ObjectIds.ENERGY_TONIC)
+                {
+                    yield return CreateTrait(GiftFlag.Heal, healthValue);
+                }
             }
 
             var buffsData = objectInfo.Buffs;
