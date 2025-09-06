@@ -10,7 +10,7 @@ namespace StardewArchipelago.Constants.Modded
         {
             { ModNames.ALEC, $"2.2.{WILDCARD}" },
             { ModNames.ALECTO, $"1.1.{WILDCARD}" },
-            { ModNames.ARCHAEOLOGY, $"2.12.1" },
+            { ModNames.ARCHAEOLOGY, $"2.14.{WILDCARD}" },
             { ModNames.AYEISHA, $"0.7.{WILDCARD}" },
             { ModNames.BIGGER_BACKPACK, $"7.3.{WILDCARD}" },
             { ModNames.BINNING, $"2.1.{WILDCARD}" },
