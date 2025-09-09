@@ -71,7 +71,8 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
                 var itemToReplace = itemsToReplace[item.Id];
                 var locationName = $"{Prefix.PURCHASE}{itemToReplace}";
 
-                item.Condition = GameStateConditionProvider.CreateHasReceivedItemCondition(itemToReplace);
+                // TODO: Replace with a slot data check for allowed filler items, maybe?
+                // item.Condition = GameStateConditionProvider.CreateHasReceivedItemCondition(itemToReplace);
                 // shopData.Items.RemoveAt(i);
 
                 var apShopItem = CreateArchipelagoLocation(item, locationName);
