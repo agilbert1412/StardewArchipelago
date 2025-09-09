@@ -86,7 +86,10 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
                     continue;
                 }
 
-                if (!_archipelago.DataPackageCache.GetLocation(location).LocationTags.Contains(LocationTag.CHEFSANITY_PURCHASE))
+                var locationTags = _archipelago.DataPackageCache.GetLocation(location).LocationTags;
+                var isAnyChefsanity = locationTags.Contains(LocationTag.CHEFSANITY);
+                var isChefsanityPurchases = locationTags.Contains(LocationTag.CHEFSANITY_PURCHASE);
+                if (isAnyChefsanity && !isChefsanityPurchases)
                 {
                     shopData.Items.RemoveAt(i);
                 }
