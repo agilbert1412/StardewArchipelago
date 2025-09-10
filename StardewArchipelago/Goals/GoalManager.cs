@@ -80,6 +80,9 @@ namespace StardewArchipelago.Goals
                 case Goal.MadHatter:
                     GoalCodeInjection.CheckMadHatterGoalCompletion();
                     return;
+                case Goal.UltimateFoodie:
+                    GoalCodeInjection.CheckUltimateFoodieGoalCompletion();
+                    return;
                 case Goal.Allsanity:
                     GoalCodeInjection.CheckAllsanityGoalCompletion();
                     return;
@@ -137,6 +140,9 @@ namespace StardewArchipelago.Goals
                     return;
                 case Goal.MadHatter:
                     // Gets tested when wearing a hat
+                    return;
+                case Goal.UltimateFoodie:
+                    // Gets tested when eating something
                     return;
                 case Goal.Allsanity:
                     // Gets tested when sending a check

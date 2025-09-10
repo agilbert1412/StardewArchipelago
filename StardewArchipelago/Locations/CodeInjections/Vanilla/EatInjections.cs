@@ -1,31 +1,35 @@
-﻿using System;
-using StardewModdingAPI;
-using StardewValley;
+﻿using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
-using KaitoKid.ArchipelagoUtilities.Net;
+using Microsoft.Xna.Framework;
+using Netcode;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
+using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.GameModifications.CodeInjections;
+using StardewArchipelago.Goals;
 using StardewArchipelago.Locations.Secrets;
 using StardewArchipelago.Logging;
 using StardewArchipelago.Stardew.NameMapping;
-using StardewValley.GameData.Objects;
-using Object = StardewValley.Object;
+using StardewModdingAPI;
+using StardewValley;
 using StardewValley.Buffs;
+using StardewValley.Extensions;
+using StardewValley.GameData.Buffs;
+using StardewValley.GameData.Objects;
+using StardewValley.Locations;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using KaitoKid.ArchipelagoUtilities.Net.Constants;
-using Microsoft.Xna.Framework;
-using StardewArchipelago.Constants.Vanilla;
-using StardewValley.GameData.Buffs;
-using StardewValley.Extensions;
-using StardewValley.Locations;
-using Netcode;
+using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
     public static class EatInjections
     {
+        public const string EAT_PREFIX = "Eat ";
+        public const string DRINK_PREFIX = "Drink ";
+
         private static ILogger _logger;
         private static IModHelper _modHelper;
         private static StardewArchipelagoClient _archipelago;
@@ -211,7 +215,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             var name = _nameSimplifier.GetSimplifiedName(eatenItem);
             name = _nameMapper.GetEnglishName(name); // For the Name vs Display Name discrepencies in Mods.
 
-            var apLocation = objectData.IsDrink ? $"Drink {name}" : $"Eat {name}";
+            var apLocation = objectData.IsDrink ? $"{DRINK_PREFIX}{name}" : $"{EAT_PREFIX}{name}";
             if (_archipelago.GetLocationId(apLocation) > -1)
             {
                 _locationChecker.AddCheckedLocation(apLocation);
@@ -220,6 +224,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 _logger.LogError($"Unrecognized Eatsanity Location: {apLocation} ({name} [{eatenItem.QualifiedItemId}])");
             }
+
+            GoalCodeInjection.CheckUltimateFoodieGoalCompletion();
         }
 
         // public override int staminaRecoveredOnConsumption()
