@@ -233,6 +233,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             try
             {
+                if (__result < 0)
+                {
+                    // Penalties are not blocked!
+                    return;
+                }
+
                 var numberEnzymes = _archipelago.GetReceivedItemCount("Stamina Enzyme");
                 if (numberEnzymes <= 0)
                 {
@@ -265,7 +271,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
                 if (numberEnzymes >= 10)
                 {
-                    // Max enzymes, max health!
+                    // Max enzymes, max stamina!
                     return;
                 }
 
@@ -300,6 +306,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             try
             {
+                if (__result < 0)
+                {
+                    // Penalties are not blocked!
+                    return;
+                }
+
                 var numberEnzymes = _archipelago.GetReceivedItemCount("Health Enzyme");
                 if (numberEnzymes <= 0)
                 {
