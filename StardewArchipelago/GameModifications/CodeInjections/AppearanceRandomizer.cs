@@ -304,7 +304,6 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         {
             if (npc is Pet || npc is Child)
             {
-                var a = 5;
             }
 
             npc.LastAppearanceId = null;

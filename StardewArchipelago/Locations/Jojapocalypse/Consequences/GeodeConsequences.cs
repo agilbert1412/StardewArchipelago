@@ -33,7 +33,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse.Consequences
                 var numberMilestonesPurchased = _jojaLocationChecker.CountCheckedLocationsWithTag(LocationTag.MUSEUM_MILESTONES);
 
                 var seedA = geode.QualifiedItemId.Contains("MysteryBox") ? Game1.stats.Get("MysteryBoxesOpened") : (double)Game1.stats.GeodesCracked;
-                var seedB = (int)Game1.player.uniqueMultiplayerID.Value / 2;
+                var seedB = (int)Game1.player.UniqueMultiplayerID / 2;
 
                 if (numberDonationsPurchased > 0 && JojapocalypseConsequencesPatcher.RollConsequenceChance(0.025, numberDonationsPurchased, seedA, seedB))
                 {
