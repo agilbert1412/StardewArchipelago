@@ -1598,8 +1598,8 @@ namespace StardewArchipelago.Locations.Patcher
             );
 
             _harmony.Patch(
-                original: AccessTools.Method(typeof(Farmer), nameof(Farmer.addItemByMenuIfNecessary)),
-                prefix: new HarmonyMethod(typeof(SimpleSecretsInjections), nameof(SimpleSecretsInjections.AddItemByMenuIfNecessary_FarAwayStone_Prefix))
+                original: AccessTools.Method(typeof(Farmer), nameof(Farmer.addItemsByMenuIfNecessary)),
+                prefix: new HarmonyMethod(typeof(SimpleSecretsInjections), nameof(SimpleSecretsInjections.AddItemsByMenuIfNecessary_FarAwayStone_Prefix))
             );
 
             _harmony.Patch(

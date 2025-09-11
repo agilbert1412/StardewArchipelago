@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using Archipelago.MultiClient.Net.Enums;
+﻿using Archipelago.MultiClient.Net.Enums;
 using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
@@ -13,6 +11,9 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
 using StardewValley.Objects;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using xTile.Dimensions;
 using Object = StardewValley.Object;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
@@ -285,10 +286,19 @@ namespace StardewArchipelago.Locations.Secrets
         }
 
         // public void addItemByMenuIfNecessary(Item item, ItemGrabMenu.behaviorOnItemSelect itemSelectedCallback = null, bool forceQueue = false)
-        public static bool AddItemByMenuIfNecessary_FarAwayStone_Prefix(Farmer __instance, Item item, ItemGrabMenu.behaviorOnItemSelect itemSelectedCallback, bool forceQueue)
+        // Let's try switching to this for mac reasons
+        // public void addItemsByMenuIfNecessary(List<Item> itemsToAdd, ItemGrabMenu.behaviorOnItemSelect itemSelectedCallback = null, bool forceQueue = false)
+        public static bool AddItemsByMenuIfNecessary_FarAwayStone_Prefix(Farmer __instance, List<Item> itemsToAdd, ItemGrabMenu.behaviorOnItemSelect itemSelectedCallback, bool forceQueue)
         {
             try
             {
+                if (itemsToAdd.Count != 1)
+                {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
+                var item = itemsToAdd.First();
+                _logger.LogDebug($"About to AddItemsByMenuIfNecessary(), the item is {item.Name} [{item.QualifiedItemId}]");
                 if (!item.QualifiedItemId.Equals(QualifiedItemIds.FAR_AWAY_STONE))
                 {
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
@@ -304,7 +314,7 @@ namespace StardewArchipelago.Locations.Secrets
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed in {nameof(AddItemByMenuIfNecessary_FarAwayStone_Prefix)}:\n{ex}");
+                _logger.LogError($"Failed in {nameof(AddItemsByMenuIfNecessary_FarAwayStone_Prefix)}:\n{ex}");
                 return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
