@@ -177,11 +177,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             return complete;
         }
 
-        public Item GetReward()
-        {
-            return Utility.getItemFromStandardTextDescription(this.RewardDescription, Game1.player);
-        }
-
         public void Shake(float force = 0.07363108f)
         {
             if (!this.Sprite.paused)

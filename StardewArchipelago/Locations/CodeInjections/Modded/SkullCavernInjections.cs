@@ -17,14 +17,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
         public const string SKULL_CAVERN_FLOOR_LOCATION = "Skull Cavern: Floor {0}";
 
         public const int ELEVATOR_STEP = 25;
-        private const int DIFFICULTY = 1;
 
 
         private static ILogger _logger;
         private static IModHelper _modHelper;
         private static StardewArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
-        private static int _realDeepestMineLevel = -1;
 
         public static void Initialize(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
         {

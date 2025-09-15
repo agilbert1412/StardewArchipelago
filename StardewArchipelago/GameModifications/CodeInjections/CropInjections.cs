@@ -164,7 +164,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             try
             {
                 var currentLocation = __instance.currentLocation;
-                if (!currentLocation.isOutdoors.Value || __instance.IsInSeason(currentLocation))
+                if (!currentLocation.IsOutdoors || __instance.IsInSeason(currentLocation))
                 {
                     return;
                 }
