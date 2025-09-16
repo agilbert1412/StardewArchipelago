@@ -78,7 +78,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     var random = GetSeededRandomForCharacter(character);
                     var shuffledAppearance = characters[random.Next(0, characters.Count)];
                     _shuffledAppearances[size].Add(character, shuffledAppearance);
-                    _logger.LogDebug($"Today, {character} ({size}) will look like {shuffledAppearance}");
+                    // _logger.LogDebug($"Today, {character} ({size}) will look like {shuffledAppearance}");
                 }
             }
 

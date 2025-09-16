@@ -301,7 +301,7 @@ namespace StardewArchipelago.Locations.Secrets
                 }
 
                 var item = itemsToAdd.First();
-                _logger.LogDebug($"About to AddItemsByMenuIfNecessary(), the item is {item.Name} [{item.QualifiedItemId}]");
+                // _logger.LogDebug($"About to AddItemsByMenuIfNecessary(), the item is {item.Name} [{item.QualifiedItemId}]");
                 if (!item.QualifiedItemId.Equals(QualifiedItemIds.FAR_AWAY_STONE))
                 {
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
