@@ -447,6 +447,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             var newBuffEffects = new BuffEffects();
             var newBuffData = new BuffAttributesData();
 
+            newBuffData.Attack = Math.Min(maxBuffEffects.Attack.Value, defaultEffects.Attack.Value);
             newBuffData.Speed = Math.Min(maxBuffEffects.Speed.Value, defaultEffects.Speed.Value);
             newBuffData.LuckLevel = Math.Min(maxBuffEffects.LuckLevel.Value, defaultEffects.LuckLevel.Value);
             newBuffData.FarmingLevel = Math.Min(maxBuffEffects.FarmingLevel.Value, defaultEffects.FarmingLevel.Value);
@@ -480,6 +481,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             newBuffData.MiningLevel = _archipelago.GetReceivedItemCount("Mining Enzyme");
             newBuffData.MagneticRadius = _archipelago.GetReceivedItemCount("Magnetism Enzyme") * 32;
             newBuffData.Defense = _archipelago.GetReceivedItemCount("Defense Enzyme");
+            newBuffData.Attack = _archipelago.GetReceivedItemCount("Attack Enzyme");
             newBuffData.MaxStamina = _archipelago.GetReceivedItemCount("Max Stamina Enzyme") * 20;
 
             return new BuffEffects(newBuffData);
@@ -494,6 +496,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
            items.extend(item_factory(item) for item in ["Mining Enzyme"]*5)
            items.extend(item_factory(item) for item in ["Magnetism Enzyme"]*2)
            items.extend(item_factory(item) for item in ["Defense Enzyme"]*5)
+           items.extend(item_factory(item) for item in ["Attack Enzyme"]*5)
            items.extend(item_factory(item) for item in ["Max Stamina Enzyme"]*3)
 
            items.extend(item_factory(item) for item in ["Squid Ink Enzyme"])

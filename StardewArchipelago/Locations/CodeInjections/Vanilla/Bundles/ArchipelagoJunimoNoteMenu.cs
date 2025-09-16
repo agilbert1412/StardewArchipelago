@@ -1902,10 +1902,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 var sap = ItemRegistry.GetDataOrErrorItem(QualifiedItemIds.SAP);
                 var seed = Game1.ticks / 10;
                 var random = new Random(seed);
-                if (random.NextDouble() < 0.01)
-                {
-                    var a = 5;
-                }
                 var maxDistance = 32;
                 var mouseOffset = 32;
                 for (var i = 0.0; i <= 1; i += 0.02)
