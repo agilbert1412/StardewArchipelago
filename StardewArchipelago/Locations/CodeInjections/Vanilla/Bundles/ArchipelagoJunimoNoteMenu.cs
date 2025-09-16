@@ -85,6 +85,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         public Texture2D HumbleBundleTexture;
         private BundleButton _donateButton;
         public Dictionary<BundleButton, Action> ExtraButtons;
+        private Texture2D _normalAlGoreRhythmTexture = null;
+        private Texture2D _evilAlGoreRhythmTexture = null;
 
         public ArchipelagoJunimoNoteMenu(bool fromGameMenu, int area = 1, bool fromThisMenu = false) : base(fromGameMenu, area, fromThisMenu)
         {
@@ -2477,6 +2479,26 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             {
                 _slidingPuzzle.DrawPuzzle(b, xPositionOnScreen, yPositionOnScreen);
                 return;
+            }
+
+            if (CurrentPageBundle.name == MemeBundleNames.THEALGORERHYTM)
+            {
+                if (HeldItem != null && HeldItem.Stack <= 1)
+                {
+                    if (_evilAlGoreRhythmTexture == null)
+                    {
+                        _evilAlGoreRhythmTexture = BundleIcons.GetBundleIcon(_logger, _modHelper, CurrentPageBundle.name + "_evil", LogLevel.Trace);
+                    }
+                    CurrentPageBundle.BundleTextureOverride = _evilAlGoreRhythmTexture;
+                }
+                else
+                {
+                    if (_normalAlGoreRhythmTexture == null)
+                    {
+                        _normalAlGoreRhythmTexture = BundleIcons.GetBundleIcon(_logger, _modHelper, CurrentPageBundle.name, LogLevel.Trace);
+                    }
+                    CurrentPageBundle.BundleTextureOverride = _normalAlGoreRhythmTexture;
+                }
             }
             base.DrawBundleTexture(b);
         }
