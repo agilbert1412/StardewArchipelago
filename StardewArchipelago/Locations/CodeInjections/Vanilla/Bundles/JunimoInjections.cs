@@ -73,11 +73,21 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                     return;
                 }
 
-                DrawBeautifulHair(__instance, b, (FacingDirection)__instance.FacingDirection);
+
+                var facingDirection = (FacingDirection)__instance.FacingDirection;
+                if (__instance.Sprite.currentFrame >= 32)
+                {
+                    facingDirection = FacingDirection.Up;
+                }
+                else if (__instance.Sprite.currentFrame >= 16)
+                {
+                    facingDirection = __instance.flip ? FacingDirection.Left : FacingDirection.Right;
+                }
+                DrawBeautifulHair(__instance, b, facingDirection);
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed in {nameof(Draw_DrawBeautifulHair_Postfix)}:\n{ex}");
+                _logger.LogError($"Failed in {nameof(DrawHarvester_DrawBeautifulHair_Postfix)}:\n{ex}");
                 return;
             }
         }
