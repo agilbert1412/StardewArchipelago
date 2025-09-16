@@ -347,14 +347,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         public override string GetRewardNameForArea(int whichArea)
         {
-            if (TryGetSpecialRewardName(whichArea, out var specialRewardName))
-            {
-                return specialRewardName;
-            }
-
             string apLocationToScout;
             if (SpecificBundlePage)
             {
+                if (TryGetSpecialRewardName(out var specialRewardName))
+                {
+                    return specialRewardName;
+                }
+
                 if (!TryGetBundleLocationToScout(out apLocationToScout))
                 {
                     return base.GetRewardNameForArea(whichArea);
@@ -385,21 +385,22 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             return rewardText;
         }
 
-        private bool TryGetSpecialRewardName(int whichArea, out string specialRewardName)
+        private bool TryGetSpecialRewardName(out string specialRewardName)
         {
-            if (TryGetClickbaitRewardName(whichArea, out specialRewardName))
-            {
-                return true;
-            }
-
-            if (TryGetInvestmentBundleRewardName(whichArea, out specialRewardName))
-            {
-                return true;
-            }
-
+            specialRewardName = "";
             if (CurrentPageBundle == null)
             {
                 return false;
+            }
+
+            if (TryGetClickbaitRewardName(out specialRewardName))
+            {
+                return true;
+            }
+
+            if (TryGetInvestmentBundleRewardName(out specialRewardName))
+            {
+                return true;
             }
 
             if (CurrentPageBundle.name == MemeBundleNames.HINT)
@@ -411,9 +412,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             return false;
         }
 
-        private bool TryGetClickbaitRewardName(int whichArea, out string specialRewardName)
+        private bool TryGetClickbaitRewardName(out string specialRewardName)
         {
-            if (CurrentPageBundle == null || CurrentPageBundle.name != MemeBundleNames.CLICKBAIT)
+            if (CurrentPageBundle.name != MemeBundleNames.CLICKBAIT)
             {
                 specialRewardName = "";
                 return false;
@@ -452,9 +453,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             return true;
         }
 
-        private bool TryGetInvestmentBundleRewardName(int whichArea, out string specialRewardName)
+        private bool TryGetInvestmentBundleRewardName(out string specialRewardName)
         {
-            if (CurrentPageBundle == null || (CurrentPageBundle.name != MemeBundleNames.SCAM && CurrentPageBundle.name != MemeBundleNames.INVESTMENT))
+            if (CurrentPageBundle.name != MemeBundleNames.SCAM && CurrentPageBundle.name != MemeBundleNames.INVESTMENT)
             {
                 specialRewardName = "";
                 return false;
