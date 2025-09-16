@@ -881,6 +881,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
             if (_menu.CurrentPageBundle.name == MemeBundleNames.HAIRY)
             {
+                _wallet.DonatedHair = Game1.player.getHair();
+                _wallet.DonatedHairColor = new List<int>() { Game1.player.hairstyleColor.R, Game1.player.hairstyleColor.G, Game1.player.hairstyleColor.B };
                 Game1.player.changeHairStyle(BALD_HAIR);
                 _menu.PerformCurrencyPurchase();
             }

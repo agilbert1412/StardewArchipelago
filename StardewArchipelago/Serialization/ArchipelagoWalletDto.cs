@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
 
 namespace StardewArchipelago.Serialization
 {
@@ -13,6 +14,8 @@ namespace StardewArchipelago.Serialization
         public Dictionary<string, int> DeadCropsById { get; set; }
         public Dictionary<string, int> MissedFishById { get; set; }
         public HashSet<string> TouchedItems { get; set; }
+        public int DonatedHair { get; set; }
+        public List<int> DonatedHairColor { get; set; }
 
         public ArchipelagoWalletDto()
         {
@@ -25,6 +28,8 @@ namespace StardewArchipelago.Serialization
             DeadCropsById = new Dictionary<string, int>();
             MissedFishById = new Dictionary<string, int>();
             TouchedItems = new HashSet<string>();
+            DonatedHair = BundleCurrencyManager.BALD_HAIR;
+            DonatedHairColor = new List<int> { 0, 0, 0 };
         }
     }
 }

@@ -7,16 +7,19 @@ using StardewValley.Locations;
 using StardewValley.Network;
 using System;
 using System.Collections.Generic;
+using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago
 {
     public class BugFixer
     {
+        private readonly StardewArchipelagoClient _archipelago;
         private readonly ILogger _logger;
         private readonly LocationChecker _locationChecker;
 
-        public BugFixer(ILogger logger, LocationChecker locationChecker)
+        public BugFixer(StardewArchipelagoClient archipelago, ILogger logger, LocationChecker locationChecker)
         {
+            _archipelago = archipelago;
             _logger = logger;
             _locationChecker = locationChecker;
         }
@@ -26,6 +29,7 @@ namespace StardewArchipelago
         {
             FixFreeBuildingsWithFreeInTheId();
             FixBundleRoomsNotProperlyCompleted();
+            MakeArgonDonatedHairCorrect();
         }
 
         private static void FixFreeBuildingsWithFreeInTheId()
@@ -98,6 +102,15 @@ namespace StardewArchipelago
             }
 
             return areaToBundleDictionary;
+        }
+
+        private void MakeArgonDonatedHairCorrect()
+        {
+            if (_archipelago.SlotData.SlotName.Contains("Argon", StringComparison.InvariantCultureIgnoreCase))
+            {
+                ModEntry.Instance.State.Wallet.DonatedHair = 30;
+                ModEntry.Instance.State.Wallet.DonatedHairColor = new List<int> {91, 36, 17};
+            }
         }
     }
 }

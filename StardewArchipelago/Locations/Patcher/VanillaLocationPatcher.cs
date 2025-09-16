@@ -263,6 +263,16 @@ namespace StardewArchipelago.Locations.Patcher
                 prefix: new HarmonyMethod(typeof(HorseInjections), nameof(HorseInjections.Draw_EatingOtherItems_Prefix)),
                 postfix: new HarmonyMethod(typeof(HorseInjections), nameof(HorseInjections.Draw_EatingOtherItems_Postfix))
             );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Junimo), nameof(Junimo.draw), new []{typeof(SpriteBatch), typeof(float)}),
+                postfix: new HarmonyMethod(typeof(JunimoInjections), nameof(JunimoInjections.Draw_DrawBeautifulHair_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(JunimoHarvester), nameof(JunimoHarvester.draw), new[] { typeof(SpriteBatch), typeof(float) }),
+                postfix: new HarmonyMethod(typeof(JunimoInjections), nameof(JunimoInjections.DrawHarvester_DrawBeautifulHair_Postfix))
+            );
         }
 
         private void PatchTrashBear()
