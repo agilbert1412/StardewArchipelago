@@ -45,7 +45,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                     return;
                 }
 
-                DrawBeautifulHair(__instance, b);
+                var facingDirection = FacingDirection.Down;
+                if (__instance.Sprite.currentFrame >= 32)
+                {
+                    facingDirection = FacingDirection.Up;
+                }
+                else if (__instance.Sprite.currentFrame >= 16)
+                {
+                    facingDirection = __instance.flip ? FacingDirection.Left : FacingDirection.Right;
+                }
+                DrawBeautifulHair(__instance, b, facingDirection);
             }
             catch (Exception ex)
             {
@@ -64,7 +73,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                     return;
                 }
 
-                DrawBeautifulHair(__instance, b);
+                DrawBeautifulHair(__instance, b, (FacingDirection)__instance.FacingDirection);
             }
             catch (Exception ex)
             {
@@ -73,7 +82,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
         }
 
-        private static void DrawBeautifulHair(NPC __instance, SpriteBatch b)
+        private static void DrawBeautifulHair(NPC __instance, SpriteBatch b, FacingDirection facingDirection)
         {
 
             var farmer = Game1.player;
@@ -100,29 +109,35 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             drawPosition = Game1.GlobalToLocal(drawPosition);
             var hairLayer = FarmerRenderer.GetLayerDepth(layerDepth, FarmerRenderer.FarmerSpriteLayers.Hair);
 
-            switch (__instance.FacingDirection)
+            switch (facingDirection)
             {
-                case 0:
+                case FacingDirection.Up:
+                    hairSourceRect.Offset(0, 64);
                     b.Draw(hairTexture, drawPosition, hairSourceRect, hairColor, rotation, origin, scale, SpriteEffects.None, hairLayer);
                     break;
-                case 1:
+                case FacingDirection.Right:
+                    hairSourceRect.Offset(0, 32);
                     offset = new Vector2(featureXOffsetPerFrame * 4, featureYOffsetPerFrame * 4 + hairOffsetY);
                     drawPosition = position + origin + __instance.drawOffset + offset;
                     drawPosition = Game1.GlobalToLocal(drawPosition);
                     b.Draw(hairTexture, drawPosition, hairSourceRect, hairColor, rotation, origin, scale, SpriteEffects.None, hairLayer);
                     break;
-                case 2:
+                case FacingDirection.Down:
                     offset = new Vector2(featureXOffsetPerFrame * 4, featureYOffsetPerFrame * 4 + hairOffsetY);
                     drawPosition = position + origin + __instance.drawOffset + offset;
                     drawPosition = Game1.GlobalToLocal(drawPosition);
                     b.Draw(hairTexture, drawPosition, hairSourceRect, hairColor, rotation, origin, scale, SpriteEffects.None, hairLayer);
                     break;
-                case 3:
+                case FacingDirection.Left:
                     var hairFlip = true;
                     if (hairStyleMetadata != null && hairStyleMetadata.usesUniqueLeftSprite)
                     {
                         hairFlip = false;
                         hairSourceRect.Offset(0, 96);
+                    }
+                    else
+                    {
+                        hairSourceRect.Offset(0, 32);
                     }
                     offset = new Vector2(-featureXOffsetPerFrame * 4, featureYOffsetPerFrame * 4 + hairOffsetY);
                     drawPosition = position + origin + __instance.drawOffset + offset;
