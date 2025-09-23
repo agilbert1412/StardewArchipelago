@@ -135,9 +135,9 @@ namespace StardewArchipelago
         public int BooksellerPriceMultiplier { get; set; } = 100;
 
         /// <summary>
-        /// Whether shops and other scoutable locations should auto-hint themselves, even when playing solo
+        /// Which items in shops and other previews will automatically generate a server hint. When playing in a multiworld, `DontHint` is not allowed.
         /// </summary>
-        public bool ScoutHintInSoloMultiworld { get; set; } = false;
+        public ScoutingPreference ScoutHintBehavior { get; set; } = ScoutingPreference.HintOnlyProgression;
 
         /// <summary>
         /// Preferred Hinting behaviors for scouted locations. If playing in a multiworld with others, DontHint will be changed to HintOnlyProgression

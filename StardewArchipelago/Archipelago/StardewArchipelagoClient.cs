@@ -314,22 +314,47 @@ namespace StardewArchipelago.Archipelago
             return _bigIntegerDataStorage.DivideByTwo(scope, key);
         }
 
-        private bool ShouldHint(bool createAsHint)
+        private ScoutingPreference ShouldHint(bool createAsHint)
         {
+            if (!createAsHint)
+            {
+                return ScoutingPreference.DontHint;
+            }
+
             var session = GetSession();
             if (!MakeSureConnected() || session == null)
             {
-                return false;
+                return ScoutingPreference.DontHint;
             }
 
-            var playerCount = session.Players.AllPlayers.Count(x => !x.Game.Equals("Archipelago")) > 1;
-            var shouldHint = createAsHint && (playerCount || ModEntry.Instance.Config.ScoutHintInSoloMultiworld);
-            return shouldHint;
+            var isMultiworld = session.Players.AllPlayers.Count(x => !x.Game.Equals("Archipelago")) > 1;
+            if (isMultiworld && ModEntry.Instance.Config.ScoutHintBehavior == ScoutingPreference.DontHint)
+            {
+                return ScoutingPreference.HintOnlyProgression;
+            }
+
+            return ModEntry.Instance.Config.ScoutHintBehavior;
         }
 
         public ScoutedLocation ScoutStardewLocation(string locationName, bool createAsHint = false)
         {
-            var scoutedLocation = ScoutSingleLocation(locationName, ShouldHint(createAsHint));
+            var scoutBehavior = ShouldHint(createAsHint);
+            ScoutedLocation scoutedLocation;
+            if (scoutBehavior == ScoutingPreference.HintEverything)
+            {
+                scoutedLocation = ScoutSingleLocation(locationName, true);
+            }
+            else
+            {
+                scoutedLocation = ScoutSingleLocation(locationName, false);
+                var shouldHint = ShouldHintAfterScouting(scoutBehavior, scoutedLocation);
+                if (shouldHint)
+                {
+                    ScoutSingleLocation(locationName, true);
+                }
+            }
+
+
             if (scoutedLocation != null && ModEntry.Instance.Config.AnonymizeNamesInChat)
             {
                 scoutedLocation = new ScoutedLocation(scoutedLocation.LocationName, scoutedLocation.ItemName, scoutedLocation.PlayerName.AnonymizePlayerNames(GetSession().Players), scoutedLocation.GameName, scoutedLocation.LocationId,
@@ -340,7 +365,22 @@ namespace StardewArchipelago.Archipelago
 
         public Dictionary<string, ScoutedLocation> ScoutStardewLocations(IEnumerable<string> locationNames, bool createAsHint = false)
         {
-            var scoutedLocations = ScoutManyLocations(locationNames, ShouldHint(createAsHint));
+            var scoutBehavior = ShouldHint(createAsHint);
+            Dictionary<string, ScoutedLocation> scoutedLocations;
+            if (scoutBehavior == ScoutingPreference.HintEverything)
+            {
+                scoutedLocations = ScoutManyLocations(locationNames, true);
+            }
+            else
+            {
+                scoutedLocations = ScoutManyLocations(locationNames, false);
+                var locationsToHint = locationNames.Where(x => ShouldHintAfterScouting(scoutBehavior, scoutedLocations[x])).ToArray();
+                if (locationsToHint.Any())
+                {
+                    ScoutManyLocations(locationsToHint, true);
+                }
+            }
+
             foreach (var scoutedLocationKey in scoutedLocations.Keys)
             {
                 var scoutedLocation = scoutedLocations[scoutedLocationKey];
@@ -349,6 +389,26 @@ namespace StardewArchipelago.Archipelago
             }
 
             return scoutedLocations;
+        }
+
+        private bool ShouldHintAfterScouting(ScoutingPreference scoutBehavior, ScoutedLocation scoutedLocation)
+        {
+            var classification = scoutedLocation.ClassificationFlags;
+            switch (scoutBehavior)
+            {
+                case ScoutingPreference.DontHint:
+                    return false;
+                case ScoutingPreference.HintOnlyProgression:
+                    return classification.HasFlag(ItemFlags.Advancement);
+                case ScoutingPreference.HintProgressionUseful:
+                    return classification.HasFlag(ItemFlags.Advancement) || classification.HasFlag(ItemFlags.NeverExclude);
+                case ScoutingPreference.HintProgressionUsefulFiller:
+                    return classification.HasFlag(ItemFlags.Advancement) || classification.HasFlag(ItemFlags.NeverExclude) || classification == ItemFlags.None;
+                case ScoutingPreference.HintEverything:
+                    return true;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(scoutBehavior), scoutBehavior, null);
+            }
         }
 
         public string SendFakeItemMessage(string itemName, string locationName)
