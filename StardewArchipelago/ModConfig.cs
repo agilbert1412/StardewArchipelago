@@ -137,7 +137,7 @@ namespace StardewArchipelago
         /// <summary>
         /// Which items in shops and other previews will automatically generate a server hint. When playing in a multiworld, `DontHint` is not allowed.
         /// </summary>
-        public ScoutingPreference ScoutHintBehavior { get; set; } = ScoutingPreference.HintOnlyProgression;
+        public ScoutingPreference ScoutHintBehavior { get; set; } = ScoutingPreference.DontHint;
 
         /// <summary>
         /// Preferred Hinting behaviors for scouted locations. If playing in a multiworld with others, DontHint will be changed to HintOnlyProgression
