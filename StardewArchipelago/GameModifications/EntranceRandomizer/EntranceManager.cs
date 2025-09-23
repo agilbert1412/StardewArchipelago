@@ -111,22 +111,38 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
         private void SwapFarmhouseEntranceWithAnotherEmptyAreaEntrance(SlotData slotData)
         {
             var outsideAreas = new List<string>() { "Town", "Mountain", "Farm", "Forest", "BusStop", "Desert", "Beach" };
-            outsideAreas.AddRange(IncludeOutsideModEntrancesToOutsideAreas(slotData));
+            outsideAreas.AddRange(GetModOutsideEntrances(slotData));
             var random = new Random(int.Parse(slotData.Seed));
             var chosenEntrance = "";
             var replacementIsOutside = false;
+            var entrancesWhereCannotPlaceFarm = GetEntranceWhereCannotPlaceFarm(slotData);
 
             while (!replacementIsOutside)
             {
+
                 chosenEntrance = ModifiedEntrances.Keys.ToArray()[random.Next(ModifiedEntrances.Keys.Count)];
-                var barredEntranceRule = !chosenEntrance.Contains("67|17") && !chosenEntrance.Contains("SpriteSpring");
+                var barredEntranceRule = entrancesWhereCannotPlaceFarm.All(x => !chosenEntrance.Contains(x));
                 replacementIsOutside = outsideAreas.Contains(chosenEntrance.Split(TRANSITIONAL_STRING)[0]) && barredEntranceRule; // 67|17 is Quarry Mine
             }
 
             SwapTwoEntrances(ModifiedEntrances, chosenEntrance, FARM_TO_FARMHOUSE);
         }
+        private static List<string> GetEntranceWhereCannotPlaceFarm(SlotData slotData)
+        {
+            var entrancesWhereCannotPlaceFarm = new List<string> { "Mine|67|17", "SpriteSpring" };
+            if (slotData.StartWithout.HasFlag(StartWithout.Landslide))
+            {
+                entrancesWhereCannotPlaceFarm.Add("Mine|18|13");
+                entrancesWhereCannotPlaceFarm.Add("AdventureGuild");
+            }
+            if (slotData.StartWithout.HasFlag(StartWithout.CommunityCenter))
+            {
+                entrancesWhereCannotPlaceFarm.Add("CommunityCenter");
+            }
+            return entrancesWhereCannotPlaceFarm;
+        }
 
-        private IEnumerable<string> IncludeOutsideModEntrancesToOutsideAreas(SlotData slotData)
+        private IEnumerable<string> GetModOutsideEntrances(SlotData slotData)
         {
             if (slotData.Mods.HasMod(ModNames.SVE))
             {
