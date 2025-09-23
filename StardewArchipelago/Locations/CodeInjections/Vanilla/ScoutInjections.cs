@@ -39,7 +39,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 var locationsToScout = new List<string>();
                 foreach (var (item, stockInfo) in shopMenu.itemPriceAndStock)
                 {
-                    if (item is not ObtainableArchipelagoLocation apItem || stockInfo.Stock == 0)
+                    if (item is not ObtainableArchipelagoLocation apItem || stockInfo.Stock == 0 || !apItem.AllowScouting)
                     {
                         continue;
                     }

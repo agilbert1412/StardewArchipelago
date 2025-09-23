@@ -70,6 +70,8 @@ namespace StardewArchipelago.Locations.InGameLocations
             }
         }
 
+        public bool AllowScouting { get; set; }
+
         public ObtainableArchipelagoLocation()
         {
             var locationName = string.IsNullOrWhiteSpace(LocationName) ? "Unknown Location" : LocationName;
@@ -96,10 +98,11 @@ namespace StardewArchipelago.Locations.InGameLocations
             ItemId = $"{IDProvider.AP_LOCATION}_{LocationName /*.Replace(" ", "_")*/}";
 
             _locationChecker = locationChecker;
+            AllowScouting = allowScouting;
 
             var relatedHint = myActiveHints.FirstOrDefault(hint => archipelago.GetLocationName(hint).Equals(locationName, StringComparison.OrdinalIgnoreCase));
 
-            if (allowScouting)
+            if (AllowScouting)
             {
                 var scoutedLocation = archipelago.ScoutStardewLocation(LocationName);
                 _archipelagoTexture = GetCorrectTexture(logger, modHelper, scoutedLocation, archipelago, relatedHint);
