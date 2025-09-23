@@ -343,12 +343,19 @@ namespace StardewArchipelago.Integrations.GenericModConfigMenu
                 formatValue: (value) => $"{value}%"
             );
 
-            configMenu.AddBoolOption(
+            var scoutHintPreferenceValues = Enum.GetValues(typeof(ScoutingPreference)).Cast<int>().ToArray();
+            var scoutHintPreferenceMin = scoutHintPreferenceValues.Min();
+            var scoutHintPreferenceMax = scoutHintPreferenceValues.Max();
+            configMenu.AddNumberOption(
                 mod: ModManifest,
-                name: () => "Scout Hint In Solo Multiworlds",
-                tooltip: () => $"Whether shops and other scoutable locations should auto-hint themselves, even when playing solo. Bigger Multiworlds always scout-hint.",
-                getValue: () => Config.ScoutHintInSoloMultiworld,
-                setValue: (value) => Config.ScoutHintInSoloMultiworld = value
+                name: () => "Preference for Scout Hints",
+                tooltip: () => "What items should automatically generate scout hints when being previewed. If playing in a multiworld, the minimum is 'HintOnlyProgression'",
+                min: scoutHintPreferenceMin,
+                max: scoutHintPreferenceMax,
+                interval: 1,
+                getValue: () => (int)Config.ScoutHintBehavior,
+                setValue: (value) => Config.ScoutHintBehavior = (ScoutingPreference)value,
+                formatValue: (value) => ((ScoutingPreference)value).ToString()
             );
 
             configMenu.AddBoolOption(
