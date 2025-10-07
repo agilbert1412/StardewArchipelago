@@ -304,6 +304,17 @@ namespace StardewArchipelago.Items.Mail
             "I don't remember if you were trying to perfect yourself and reach the summit, but here's a {0} for the journey!^^ -{1}",
             "I walk this {2} road.^The only road that I have ever known.^Don't know where it goes, but it's only me and this {0}>^^ -{1}",
             "I'm sorry @, but this {0} was in {2} castle.^^ - {1}",
+            "Honey, wake up! {2} just dropped a new {0}!^^ -{1}",
+            "I'm sending you this {0} in the hopes you'll be able to decipher it's secrets.^^ I found it at the {2} Ruins.^^ -{1}",
+            "I knew that you would leave the forest someday, @.^^ I want you to have this {0}.^^ Please take good care of it.^^ -{1}",
+            "I need you to begin work on project {2}.^^ I have enclosed {0} for supplies.^^ I expect your report on my my desk on Tuesday morning.^^ -{1}",
+            "Life is like a box of {0}.^^ You never know what you're gonna get.^^ -{1}",
+            "I know people collect stuff like stamps, but I've never met anyone like you. ^^ Why do you collect {0}???^^ Please tell me, I have to know!^^ - {1}",
+            "They had a {0} convention in town over the weekend, so I stopped by to get you one.^^ -{1}",
+            "I hear that {1} can find your {0} at {2}.^^^^^^ Wait, this isn't a hint location...",
+            "Did you know? You're seeing I sent you this {0} due to an effect in your brain called sight.^^ -{1}",
+            "Did you know? I got you this {0} by pressing buttons with these things we have called hands.^^ -{1}",   
         };
     }
 }
+
