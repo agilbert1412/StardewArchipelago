@@ -1601,11 +1601,6 @@ namespace StardewArchipelago.Locations.Patcher
             PatchPurpleShortsSecrets();
 
             _harmony.Patch(
-                original: AccessTools.Method(typeof(TV), nameof(TV.proceedToNextScene)),
-                prefix: new HarmonyMethod(typeof(SimpleSecretsInjections), nameof(SimpleSecretsInjections.ProceedToNextScene_ForsakenSouls_Prefix))
-            );
-
-            _harmony.Patch(
                 original: AccessTools.Method(typeof(Furniture), nameof(Furniture.DayUpdate)),
                 postfix: new HarmonyMethod(typeof(SimpleSecretsInjections), nameof(SimpleSecretsInjections.DayUpdate_SomethingForSanta_Postfix))
             );
@@ -1733,6 +1728,11 @@ namespace StardewArchipelago.Locations.Patcher
             {
                 return;
             }
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(TV), nameof(TV.proceedToNextScene)),
+                prefix: new HarmonyMethod(typeof(SimpleSecretsInjections), nameof(SimpleSecretsInjections.ProceedToNextScene_ForsakenSouls_Prefix))
+            );
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(ShippingMenu), nameof(ShippingMenu.receiveLeftClick)),

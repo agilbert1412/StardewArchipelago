@@ -374,7 +374,7 @@ namespace StardewArchipelago.Archipelago
             else
             {
                 scoutedLocations = ScoutManyLocations(locationNames, false);
-                var locationsToHint = locationNames.Where(x => ShouldHintAfterScouting(scoutBehavior, scoutedLocations[x])).ToArray();
+                var locationsToHint = locationNames.Where(x => scoutedLocations.ContainsKey(x) && ShouldHintAfterScouting(scoutBehavior, scoutedLocations[x])).ToArray();
                 if (locationsToHint.Any())
                 {
                     ScoutManyLocations(locationsToHint, true);
