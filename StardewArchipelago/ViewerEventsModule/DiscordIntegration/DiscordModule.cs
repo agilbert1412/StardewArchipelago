@@ -2,6 +2,9 @@
 using Discord.WebSocket;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.ViewerEventsModule.DiscordIntegration.Commands;
+using StardewArchipelago.ViewerEventsModule.EventsExecution;
+using System;
+using System.Threading.Tasks;
 
 namespace StardewArchipelago.ViewerEventsModule.DiscordIntegration
 {
@@ -9,6 +12,7 @@ namespace StardewArchipelago.ViewerEventsModule.DiscordIntegration
     {
         private readonly ILogger _logger;
         private readonly IBotCommunicator _communications;
+        private readonly ViewerEventsExecutor _eventsExecutor;
 
         private readonly ChannelSet _activeChannels = ChannelSet.ExtraLifeChannels;
 
@@ -24,10 +28,11 @@ namespace StardewArchipelago.ViewerEventsModule.DiscordIntegration
         public const string EVENTS_FILE = "EventsList.json";
         public const string CREDITS_FILE = "Credits.json";
 
-        public DiscordModule(ILogger logger, IBotCommunicator communications)
+        public DiscordModule(ILogger logger, IBotCommunicator communications, ViewerEventsExecutor eventsExecutor)
         {
             _logger = logger;
             _communications = communications;
+            _eventsExecutor = eventsExecutor;
             _commandReader = new CommandReader();
             _helpProvider = new HelpProvider(_communications, _activeChannels);
             _creditsCommandsHandler = new CreditsCommandsHandler(_communications, _commandReader);
@@ -46,7 +51,7 @@ namespace StardewArchipelago.ViewerEventsModule.DiscordIntegration
         {
         }
 
-        public async Task ExecuteTTGCommand(SocketUserMessage message)
+        public async Task ExecuteViewerCommand(SocketUserMessage message)
         {
             var messageText = message.Content.ToLower();
             var sender = message.Author;
@@ -73,11 +78,11 @@ namespace StardewArchipelago.ViewerEventsModule.DiscordIntegration
             }
 
             _creditsCommandsHandler.HandleCreditsAdminCommands(message, messageText, _accounts);
-            _eventsCommandsHandler.HandleEventsAdminCommands(message, messageText, _events, _eventQueue);
+            _eventsCommandsHandler.HandleEventsAdminCommands(message, messageText, _eventsExecutor);
 
             if (messageText.Equals("!help"))
             {
-                _helpProvider.SendAllHelpMessages(_events);
+                _helpProvider.SendAllHelpMessages(_eventsExecutor.Events);
             }
         }
 
@@ -89,7 +94,7 @@ namespace StardewArchipelago.ViewerEventsModule.DiscordIntegration
             }
 
             await _creditsCommandsHandler.HandleCreditsUserCommands(message, messageText, _accounts);
-            await _eventsCommandsHandler.HandleEventsUserCommands(message, messageText, _accounts, _events, _eventQueue);
+            await _eventsCommandsHandler.HandleEventsUserCommands(message, messageText, _accounts, _eventsExecutor);
         }
 
         private async Task HandleDonationCommands(SocketUserMessage message)
@@ -109,65 +114,12 @@ namespace StardewArchipelago.ViewerEventsModule.DiscordIntegration
             // Export Queue
         }
 
-        private /*async*/ void DequeueUntilQueueEmpty()
-        {
-            if (_eventQueue.IsEmpty)
-            {
-                return;
-            }
-
-            Dequeue();
-
-            /*var nextDequeue = */
-            Task.Delay(new TimeSpan(0, 0, 5)).ContinueWith(o => { DequeueUntilQueueEmpty(); });
-            /*await nextDequeue;*/
-        }
-
-        private void Dequeue()
-        {
-            if (_eventQueue.IsEmpty || _eventQueue.IsPaused())
-            {
-                return;
-            }
-
-            var eventToSend = _eventQueue.First;
-            var baseEvent = eventToSend.BaseEvent;
-            var baseEventName = baseEvent.name;
-            _logger.LogInfo(
-                $"Attempting to dequeue {eventToSend.queueCount} instances of {eventToSend.baseEventName} triggered by {eventToSend.username}.");
-            _eventQueue.RemoveFirst();
-            _eventQueue.PrintToConsole();
-
-            _xml.WriteXML(XmlHandler.XML_EVENT, baseEventName);
-            _xml.WriteXML(XmlHandler.XML_VALUE, eventToSend.queueCount.ToString());
-            _xml.WriteXML(XmlHandler.XML_USERNAME, eventToSend.username);
-            if (baseEventName.ToLower() == "infinitecycle")
-            {
-                _xml.WriteXML(XmlHandler.XML_ARGS, GenHybrid(eventToSend.queueCount));
-            }
-
-            /*if (eventToSend.baseEvent.name.ToLower() == "infinitecycle")
-            {
-                WriteXML(XMLARGS, GenHybrid(eventToSend.queueCount));
-            }*/
-            if (SOA_EVENTS.Any(eventToSend.baseEventName.Contains))
-            {
-                for (int i = 0; i < eventToSend.queueCount; i++)
-                {
-                    _eventQueue.AddSpearOfAdun(eventToSend.baseEventName);
-                    _logger.LogInfo($"Added {eventToSend.baseEventName} to the Spear Queue");
-                }
-            }
-
-            _xml.LockBankFile();
-        }
-
         private void ClearBankDEVONLY()
         {
             //TODO: Plug into an admin command
 
             _logger.LogInfo("DEV ONLY: Reset the bank for everything!");
-            _events.ClearAllBanks();
+            _eventsExecutor.Events.ClearAllBanks();
             
             ExportData();
             Environment.Exit(0);
@@ -182,7 +134,7 @@ namespace StardewArchipelago.ViewerEventsModule.DiscordIntegration
 
         private void ImportEvents()
         {
-            _events.ImportFrom(EVENTS_FILE);
+            _eventsExecutor.Events.ImportFrom(EVENTS_FILE);
         }
 
         private void ImportCredits()
@@ -192,7 +144,7 @@ namespace StardewArchipelago.ViewerEventsModule.DiscordIntegration
 
         private void ExportEvents()
         {
-            _events.ExportTo(EVENTS_FILE);
+            _eventsExecutor.Events.ExportTo(EVENTS_FILE);
         }
 
         private void ExportCredits()

@@ -1,27 +1,32 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using System;
+using System.Collections;
+using Newtonsoft.Json.Linq;
+using StardewArchipelago.ViewerEventsModule.EventsExecution;
 
 namespace StardewArchipelago.ViewerEventsModule.Events
 {
-    public class Event
+    public class ViewerEvent
     {
         public string name;
         public int cost; // The current cost
         public int bank; // The currently donated credits contributing to the next activation
+        public bool stackable;
         public string alignment; // "positive", "negative" or "neutral"
         public string description;
         public string descriptionAnsi; // the description with coloring!
 
-        public Event()
+        public ViewerEvent()
         {
 
         }
 
-        public Event(JObject data)
+        public ViewerEvent(JObject data)
         {
             name = data["name"].ToString();
             cost = int.Parse(data["cost"].ToString());
             bank = int.Parse(data["bank"].ToString());
-            alignment = data["alignment"].ToString(); ;
+            stackable = bool.Parse(data["stackable"].ToString());
+            alignment = data["alignment"].ToString();
             description = data["description"].ToString();
 
             descriptionAnsi = data.ContainsKey("descriptionAnsi") && !string.IsNullOrWhiteSpace(data["descriptionAnsi"].ToString()) ? data["descriptionAnsi"].ToString() : description;
@@ -75,6 +80,11 @@ namespace StardewArchipelago.ViewerEventsModule.Events
         public void SetCostWithMultiplier(int newCost, double multiplier)
         {
             cost = (int)Math.Round(newCost / multiplier);
+        }
+
+        public ExecutableEvent GetExecutableEvent(QueuedEvent queuedEvent)
+        {
+            return new ExecutableEvent(queuedEvent);
         }
     }
 }

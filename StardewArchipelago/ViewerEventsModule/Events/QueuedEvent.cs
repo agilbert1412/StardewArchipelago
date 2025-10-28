@@ -1,15 +1,16 @@
 ﻿using Newtonsoft.Json.Linq;
+using StardewArchipelago.ViewerEventsModule.EventsExecution;
 
 namespace StardewArchipelago.ViewerEventsModule.Events
 {
     public class QueuedEvent
     {
-        private Event _baseEvent;
+        private ViewerEvent _baseEvent;
         public string baseEventName;
         public int queueCount; //how many of these should be called
         public string username; //who triggered it
 
-        public QueuedEvent(Event e)
+        public QueuedEvent(ViewerEvent e)
         {
             _baseEvent = e;
             baseEventName = e.name;
@@ -24,6 +25,11 @@ namespace StardewArchipelago.ViewerEventsModule.Events
             _baseEvent = allEvents.GetEvent(baseEventName);
         }
 
-        public Event BaseEvent => _baseEvent;
+        public ViewerEvent BaseEvent => _baseEvent;
+
+        public ExecutableEvent GetExecutableEvent()
+        {
+            return BaseEvent.GetExecutableEvent(this);
+        }
     }
 }

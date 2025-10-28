@@ -1,4 +1,9 @@
-﻿using StardewArchipelago.ViewerEventsModule.Events;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using StardewArchipelago.ViewerEventsModule.Events;
 
 namespace StardewArchipelago.ViewerEventsModule.DiscordIntegration
 {
@@ -27,12 +32,12 @@ namespace StardewArchipelago.ViewerEventsModule.DiscordIntegration
 
         public async Task SendEventsHelp(EventCollection events)
         {
-            await _communications.DeleteAllMessagesInChannel(_channels.HelpGenericEventsChannel);
+            await _communications.DeleteAllMessagesInChannel(_channels.HelpEventsChannel);
             Thread.Sleep(200);
-            await SendEventsListHelp(events.ToList(), _channels.HelpGenericEventsChannel, events.CurrentMultiplier);
+            await SendEventsListHelp(events.ToList(), _channels.HelpEventsChannel, events.CurrentMultiplier);
         }
 
-        private async Task SendEventsListHelp(IEnumerable<Event> events, ulong channel, double priceMultiplier)
+        private async Task SendEventsListHelp(IEnumerable<ViewerEvent> events, ulong channel, double priceMultiplier)
         {
             var eventsListString = $"**Events available:**" + Environment.NewLine;
             eventsListString = StartListString(eventsListString);

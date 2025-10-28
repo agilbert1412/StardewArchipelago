@@ -1,6 +1,10 @@
-﻿using Discord;
+﻿using System;
+using System.IO;
+using System.Threading.Tasks;
+using Discord;
 using Discord.WebSocket;
 using StardewArchipelago.ViewerEventsModule.Events;
+using StardewArchipelago.ViewerEventsModule.EventsExecution;
 
 namespace StardewArchipelago.ViewerEventsModule.DiscordIntegration.Commands
 {
@@ -17,25 +21,24 @@ namespace StardewArchipelago.ViewerEventsModule.DiscordIntegration.Commands
             _helpProvider = helpProvider;
         }
 
-        public void HandleEventsAdminCommands(SocketUserMessage message, string messageText, EventCollection events, EventQueue eventQueue)
+        public void HandleEventsAdminCommands(SocketUserMessage message, string messageText, ViewerEventsExecutor eventExecutor)
         {
-            HandleQueueEvent(message, messageText, events, eventQueue);
-            HandleTriggerEvent(message, messageText, events, eventQueue);
-            HandleSetBank(message, messageText, events);
-            HandleSetGlobalPriceMultiplier(message, messageText, events);
-            HandleGlobalPause(message, messageText, eventQueue);
+            HandleQueueEvent(message, messageText, eventExecutor);
+            HandleTriggerEvent(message, messageText, eventExecutor);
+            HandleSetBank(message, messageText, eventExecutor);
+            HandleSetGlobalPriceMultiplier(message, messageText, eventExecutor);
+            HandleGlobalPause(message, messageText, eventExecutor);
         }
 
-        public async Task HandleEventsUserCommands(SocketUserMessage message, string messageText, CreditAccounts creditAccounts, EventCollection events,
-            EventQueue eventQueue)
+        public async Task HandleEventsUserCommands(SocketUserMessage message, string messageText, CreditAccounts creditAccounts, ViewerEventsExecutor eventExecutor)
         {
-            HandleCommandBank(message, messageText, events);
-            await HandleCommandPurchase(message, messageText, creditAccounts, events, eventQueue);
-            await HandleCommandPay(message, messageText, creditAccounts, events, eventQueue);
-            HandleGetGlobalPriceMultiplier(message, messageText, events);
+            HandleCommandBank(message, messageText, eventExecutor);
+            await HandleCommandPurchase(message, messageText, creditAccounts, eventExecutor);
+            await HandleCommandPay(message, messageText, creditAccounts, eventExecutor);
+            HandleGetGlobalPriceMultiplier(message, messageText, eventExecutor);
         }
 
-        private void HandleQueueEvent(SocketUserMessage message, string messageText, EventCollection events, EventQueue eventQueue)
+        private void HandleQueueEvent(SocketUserMessage message, string messageText, ViewerEventsExecutor eventExecutor)
         {
             if (!messageText.StartsWith("!queueevent "))
             {
@@ -48,7 +51,7 @@ namespace StardewArchipelago.ViewerEventsModule.DiscordIntegration.Commands
                 return;
             }
 
-            var chosenEvent = events.GetEvent(eventName);
+            var chosenEvent = eventExecutor.Events.GetEvent(eventName);
 
             if (chosenEvent == null)
             {
@@ -56,12 +59,12 @@ namespace StardewArchipelago.ViewerEventsModule.DiscordIntegration.Commands
                 return;
             }
 
-            AddOrIncrementEventInQueue(message.Author.Username, chosenEvent, eventQueue);
+            eventExecutor.AddOrIncrementEventInQueue(message.Author.Username, chosenEvent);
             _communications.ReplyTo(message, $"Queued up one instance of {chosenEvent.name}.");
-            eventQueue.PrintToConsole();
+            eventExecutor.Queue.PrintToConsole();
         }
 
-        private void HandleTriggerEvent(SocketUserMessage message, string messageText, EventCollection events, EventQueue eventQueue)
+        private void HandleTriggerEvent(SocketUserMessage message, string messageText, ViewerEventsExecutor eventExecutor)
         {
             if (!messageText.StartsWith("!triggerevent "))
             {
@@ -74,7 +77,7 @@ namespace StardewArchipelago.ViewerEventsModule.DiscordIntegration.Commands
                 return;
             }
 
-            var chosenEvent = events.GetEvent(eventName);
+            var chosenEvent = eventExecutor.Events.GetEvent(eventName);
 
             if (chosenEvent == null)
             {
@@ -82,20 +85,20 @@ namespace StardewArchipelago.ViewerEventsModule.DiscordIntegration.Commands
                 return;
             }
 
-            var forcedEvent = new Event();
+            var forcedEvent = new ViewerEvent();
             forcedEvent.name = eventName;
             forcedEvent.SetBank(1);
             forcedEvent.SetCost(1);
             var queuedForcedEvent = new QueuedEvent(forcedEvent);
             queuedForcedEvent.queueCount = 1;
             queuedForcedEvent.username = message.Author.Username;
-            eventQueue.PushAtBeginning(queuedForcedEvent);
+            eventExecutor.Queue.PushAtBeginning(queuedForcedEvent);
             _communications.ReplyTo(message, $"Forced {forcedEvent.name} immediately.");
 
-            eventQueue.PrintToConsole();
+            eventExecutor.Queue.PrintToConsole();
         }
 
-        private void HandleSetBank(SocketUserMessage message, string messageText, EventCollection events)
+        private void HandleSetBank(SocketUserMessage message, string messageText, ViewerEventsExecutor eventExecutor)
         {
             if (!messageText.StartsWith("!setbank "))
             {
@@ -116,7 +119,7 @@ namespace StardewArchipelago.ViewerEventsModule.DiscordIntegration.Commands
 
             eventName = eventName.ToLower().Replace(" ", "");
 
-            foreach (var e in events.ToList())
+            foreach (var e in eventExecutor.Events.ToList())
             {
                 if (e.name.ToLower().Replace(" ", "") == eventName)
                 {
@@ -126,7 +129,7 @@ namespace StardewArchipelago.ViewerEventsModule.DiscordIntegration.Commands
             }
         }
 
-        private void HandleSetGlobalPriceMultiplier(SocketUserMessage message, string messageText, EventCollection events)
+        private void HandleSetGlobalPriceMultiplier(SocketUserMessage message, string messageText, ViewerEventsExecutor eventExecutor)
         {
             if (!messageText.StartsWith("!setmultiplier "))
             {
@@ -139,40 +142,40 @@ namespace StardewArchipelago.ViewerEventsModule.DiscordIntegration.Commands
                 return;
             }
 
-            events.CurrentMultiplier = multiplier;
-            _communications.SetStatusMessage($"your donations. Price Multiplier: {events.CurrentMultiplier}", ActivityType.Listening);
+            eventExecutor.Events.CurrentMultiplier = multiplier;
+            _communications.SetStatusMessage($"your donations. Price Multiplier: {eventExecutor.Events.CurrentMultiplier}", ActivityType.Listening);
             _communications.ReplyTo(message, $"Set global event price multiplier to {multiplier}");
-            _helpProvider.SendAllEventsHelpMessages(events);
+            _helpProvider.SendAllEventsHelpMessages(eventExecutor.Events);
         }
 
-        private void HandleGlobalPause(SocketUserMessage message, string messageText, EventQueue eventQueue)
+        private void HandleGlobalPause(SocketUserMessage message, string messageText, ViewerEventsExecutor eventExecutor)
         {
             if (messageText.StartsWith("!pause"))
             {
-                eventQueue.Pause();
-                _communications.ReplyTo(message, $"All events are now paused");
+                eventExecutor.Queue.Pause();
+                _communications.ReplyTo(message, $"All eventExecutor.Events are now paused");
                 return;
             }
 
             if (messageText.StartsWith("!unpause") || messageText.StartsWith("!resume"))
             {
-                eventQueue.Unpause();
-                _communications.ReplyTo(message, $"All events are now resumed");
+                eventExecutor.Queue.Unpause();
+                _communications.ReplyTo(message, $"All eventExecutor.Events are now resumed");
                 return;
             }
         }
 
-        private void HandleGetGlobalPriceMultiplier(SocketUserMessage message, string messageText, EventCollection events)
+        private void HandleGetGlobalPriceMultiplier(SocketUserMessage message, string messageText, ViewerEventsExecutor eventExecutor)
         {
             if (!messageText.Equals("!prices"))
             {
                 return;
             }
 
-            _communications.ReplyTo(message, $"The global event price is currently {events.CurrentMultiplier}");
+            _communications.ReplyTo(message, $"The global event price is currently {eventExecutor.Events.CurrentMultiplier}");
         }
 
-        private void HandleCommandBank(SocketUserMessage message, string messageText, EventCollection events)
+        private void HandleCommandBank(SocketUserMessage message, string messageText, ViewerEventsExecutor eventExecutor)
         {
             if (!messageText.StartsWith("!bank "))
             {
@@ -185,11 +188,10 @@ namespace StardewArchipelago.ViewerEventsModule.DiscordIntegration.Commands
                 return;
             }
 
-            CheckEventBank(message, events, eventName);
+            CheckEventBank(message, eventExecutor, eventName);
         }
 
-        private async Task HandleCommandPurchase(SocketUserMessage message, string messageText, CreditAccounts creditAccounts, EventCollection events,
-            EventQueue eventQueue)
+        private async Task HandleCommandPurchase(SocketUserMessage message, string messageText, CreditAccounts creditAccounts, ViewerEventsExecutor eventExecutor)
         {
             if (!messageText.StartsWith("!purchase "))
             {
@@ -204,20 +206,20 @@ namespace StardewArchipelago.ViewerEventsModule.DiscordIntegration.Commands
                 return;
             }
 
-            var chosenEvent = events.GetEvent(eventName);
+            var chosenEvent = eventExecutor.Events.GetEvent(eventName);
             if (chosenEvent == null)
             {
                 _communications.ReplyTo(message, $"{eventName} is not a valid event");
                 return;
             }
 
-            var costForNextStack = chosenEvent.GetCostToNextActivation(events.CurrentMultiplier);
+            var costForNextStack = chosenEvent.GetCostToNextActivation(eventExecutor.Events.CurrentMultiplier);
 
             LogPay(message.Author.Username, costForNextStack);
-            await PayForEvent(message, creditAccounts, events, eventQueue, chosenEvent, costForNextStack);
+            await PayForEvent(message, creditAccounts, eventExecutor, chosenEvent, costForNextStack);
         }
 
-        private async Task HandleCommandPay(SocketUserMessage message, string messageText, CreditAccounts creditAccounts, EventCollection events, EventQueue eventQueue)
+        private async Task HandleCommandPay(SocketUserMessage message, string messageText, CreditAccounts creditAccounts, ViewerEventsExecutor eventExecutor)
         {
             if (!messageText.StartsWith("!pay "))
             {
@@ -239,30 +241,28 @@ namespace StardewArchipelago.ViewerEventsModule.DiscordIntegration.Commands
                 return;
             }
 
-            await PayForEvent(message, creditAccounts, events, eventQueue, eventName, creditsToPay);
+            await PayForEvent(message, creditAccounts, eventExecutor, eventName, creditsToPay);
         }
 
-        private async Task PayForEvent(SocketUserMessage message, CreditAccounts creditAccounts, EventCollection events,
-            EventQueue eventQueue, string eventName, int creditsToPay)
+        private async Task PayForEvent(SocketUserMessage message, CreditAccounts creditAccounts, ViewerEventsExecutor eventExecutor, string eventName, int creditsToPay)
         {
-            var chosenEvent = events.GetEvent(eventName);
+            var chosenEvent = eventExecutor.Events.GetEvent(eventName);
             if (chosenEvent == null)
             {
                 _communications.ReplyTo(message, $"{eventName} is not a valid event");
                 return;
             }
 
-            await PayForEvent(message, creditAccounts, events, eventQueue, chosenEvent, creditsToPay);
+            await PayForEvent(message, creditAccounts, eventExecutor, chosenEvent, creditsToPay);
         }
 
-        private async Task PayForEvent(SocketUserMessage message, CreditAccounts creditAccounts, EventCollection events,
-            EventQueue eventQueue, Event chosenEvent, int creditsToPay)
+        private async Task PayForEvent(SocketUserMessage message, CreditAccounts creditAccounts, ViewerEventsExecutor eventExecutor, ViewerEvent chosenEvent, int creditsToPay)
         {
             var userAccount = creditAccounts[message.Author.Id];
 
             if (!chosenEvent.IsStackable())
             {
-                var costToNextActivation = chosenEvent.GetCostToNextActivation(events.CurrentMultiplier);
+                var costToNextActivation = chosenEvent.GetCostToNextActivation(eventExecutor.Events.CurrentMultiplier);
                 if (creditsToPay > costToNextActivation)
                 {
                     creditsToPay = costToNextActivation;
@@ -278,7 +278,7 @@ namespace StardewArchipelago.ViewerEventsModule.DiscordIntegration.Commands
             chosenEvent.AddToBank(creditsToPay);
             userAccount.RemoveCredits(creditsToPay);
 
-            var numberOfActivations = TriggerEventAsNeeded(message.Author.Username, chosenEvent, eventQueue, events);
+            var numberOfActivations = TriggerEventAsNeeded(message.Author.Username, chosenEvent, eventExecutor);
 
             if (numberOfActivations > 0)
             {
@@ -288,60 +288,27 @@ namespace StardewArchipelago.ViewerEventsModule.DiscordIntegration.Commands
             else
             {
                 _communications.ReplyTo(message,
-                    $"Received {creditsToPay} credits from {message.Author.Username}.  {chosenEvent.name} is now at {chosenEvent.GetBank()}/{chosenEvent.GetMultiplierCost(events.CurrentMultiplier)}.");
+                    $"Received {creditsToPay} credits from {message.Author.Username}.  {chosenEvent.name} is now at {chosenEvent.GetBank()}/{chosenEvent.GetMultiplierCost(eventExecutor.Events.CurrentMultiplier)}.");
             }
 
-            eventQueue.PrintToConsole();
+            eventExecutor.Queue.PrintToConsole();
         }
 
-        private int TriggerEventAsNeeded(string senderName, Event chosenEvent, EventQueue eventQueue, EventCollection events)
+        private int TriggerEventAsNeeded(string senderName, ViewerEvent chosenEvent, ViewerEventsExecutor eventExecutor)
         {
             var numberOfActivations = 0;
-            while (chosenEvent.GetBank() >= chosenEvent.GetMultiplierCost(events.CurrentMultiplier))
+            while (chosenEvent.GetBank() >= chosenEvent.GetMultiplierCost(eventExecutor.Events.CurrentMultiplier))
             {
-                chosenEvent.CallEvent(events.CurrentMultiplier);
+                chosenEvent.CallEvent(eventExecutor.Events.CurrentMultiplier);
                 LogEvent(senderName, chosenEvent);
-                AddOrIncrementEventInQueue(senderName, chosenEvent, eventQueue);
+                eventExecutor.AddOrIncrementEventInQueue(senderName, chosenEvent);
                 numberOfActivations++;
             }
 
             return numberOfActivations;
         }
 
-        private void AddOrIncrementEventInQueue(string senderName, Event chosenEvent, EventQueue eventQueue)
-        {
-            var isInQueue = false;
-            foreach (var qe in eventQueue)
-            {
-                if (qe.baseEventName == chosenEvent.name)
-                {
-                    qe.queueCount += 1;
-
-                    isInQueue = true;
-                    Console.WriteLine($"Increased queue count of {chosenEvent.name} to {qe.queueCount}.");
-                }
-            }
-
-            AddEventToQueueIfNeeded(senderName, isInQueue, chosenEvent, eventQueue);
-        }
-
-        private void AddEventToQueueIfNeeded(string senderName, bool isInQueue, Event chosenEvent, EventQueue eventQueue)
-        {
-            if (isInQueue)
-            {
-                return;
-            }
-
-            var invokedEvent = new QueuedEvent(chosenEvent);
-            invokedEvent.username = senderName;
-
-            eventQueue.QueueEvent(invokedEvent);
-            invokedEvent.queueCount = 1;
-
-            Console.WriteLine($"Added {invokedEvent.baseEventName} to queue.");
-        }
-
-        public void LogEvent(string senderName, Event calledEvent)
+        public void LogEvent(string senderName, ViewerEvent calledEvent)
         {
             var localDate = DateTime.Now;
             using var w = File.AppendText("EventLog.txt");
@@ -355,16 +322,16 @@ namespace StardewArchipelago.ViewerEventsModule.DiscordIntegration.Commands
             w.WriteLine($"[{localDate}] {senderName} paid {payAmount} credits.");
         }
 
-        private void CheckEventBank(SocketUserMessage message, EventCollection events, string eventName)
+        private void CheckEventBank(SocketUserMessage message, ViewerEventsExecutor eventExecutor, string eventName)
         {
-            var invokedEvent = events.GetEvent(eventName);
+            var invokedEvent = eventExecutor.Events.GetEvent(eventName);
             if (invokedEvent == null)
             {
                 _communications.ReplyTo(message, $"{eventName} is not a valid Event.");
                 return;
             }
 
-            _communications.ReplyTo(message, $"{invokedEvent.name} is at {invokedEvent.GetBank()}/{invokedEvent.GetMultiplierCost(events.CurrentMultiplier)} credits.");
+            _communications.ReplyTo(message, $"{invokedEvent.name} is at {invokedEvent.GetBank()}/{invokedEvent.GetMultiplierCost(eventExecutor.Events.CurrentMultiplier)} credits.");
         }
     }
 }

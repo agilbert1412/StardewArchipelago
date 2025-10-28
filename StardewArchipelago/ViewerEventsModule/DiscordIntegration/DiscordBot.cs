@@ -1,5 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Discord.WebSocket;
+using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using StardewArchipelago.ViewerEventsModule.EventsExecution;
 
 namespace StardewArchipelago.ViewerEventsModule.DiscordIntegration
 {
@@ -8,10 +10,10 @@ namespace StardewArchipelago.ViewerEventsModule.DiscordIntegration
         private IBotCommunicator _discord;
         private DiscordModule _discordModule;
 
-        public DiscordBot(IEventsExecutor eventsExecutor)
+        public DiscordBot(ILogger logger, ViewerEventsExecutor eventsExecutor)
         {
             _discord = new DiscordWrapper();
-            _discordModule = new DiscordModule(eventsExecutor);
+            _discordModule = new DiscordModule(logger, _discord, eventsExecutor);
         }
 
         public async Task InitializeAsync(string token)
@@ -37,7 +39,7 @@ namespace StardewArchipelago.ViewerEventsModule.DiscordIntegration
                 return;
             }
 
-            await _discordModule.ExecuteTTGCommand(msg);
+            await _discordModule.ExecuteViewerCommand(msg);
         }
     }
 }

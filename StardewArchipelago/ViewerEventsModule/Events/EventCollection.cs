@@ -10,13 +10,13 @@ namespace StardewArchipelago.ViewerEventsModule.Events
 {
     public class EventCollection
     {
-        public Dictionary<string, Event> _events;
+        public Dictionary<string, ViewerEvent> _events;
 
         public double CurrentMultiplier { get; set; }
 
         public EventCollection()
         {
-            _events = new Dictionary<string, Event>();
+            _events = new Dictionary<string, ViewerEvent>();
             CurrentMultiplier = 0.1;
         }
 
@@ -28,7 +28,7 @@ namespace StardewArchipelago.ViewerEventsModule.Events
             dynamic jsonData = JsonConvert.DeserializeObject(lines);
             foreach (JObject ttgEventString in jsonData)
             {
-                var ttgEvent = new Event(ttgEventString);
+                var ttgEvent = new ViewerEvent(ttgEventString);
                 this.Add(ttgEvent.name, ttgEvent);
             }
         }
@@ -39,12 +39,12 @@ namespace StardewArchipelago.ViewerEventsModule.Events
             File.WriteAllText(eventsFile, json);
         }
 
-        public List<Event> ToList()
+        public List<ViewerEvent> ToList()
         {
             return _events.Values.ToList();
         }
 
-        public Event GetEvent(string eventName)
+        public ViewerEvent GetEvent(string eventName)
         {
             foreach (var eventKey in _events.Keys)
             {
@@ -66,7 +66,7 @@ namespace StardewArchipelago.ViewerEventsModule.Events
             return null;
         }
 
-        private void Add(string eventKey, Event eventToAdd)
+        private void Add(string eventKey, ViewerEvent eventToAdd)
         {
             _events.Add(eventKey, eventToAdd);
         }
