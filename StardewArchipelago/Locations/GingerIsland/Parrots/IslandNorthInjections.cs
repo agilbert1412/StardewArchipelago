@@ -6,6 +6,7 @@ using StardewValley.Locations;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
+using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.Locations.GingerIsland.Parrots

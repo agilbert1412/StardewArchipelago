@@ -8,6 +8,7 @@ using StardewValley;
 using StardewValley.Events;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.Utilities.Interfaces;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {

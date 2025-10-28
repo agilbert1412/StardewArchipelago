@@ -1,6 +1,9 @@
 ﻿using System.Threading.Tasks;
 using Discord.WebSocket;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.DiscordWrapper.Interfaces;
+using KaitoKid.DiscordWrapper.Net;
+using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.ViewerEventsModule.EventsExecution;
 
 namespace StardewArchipelago.ViewerEventsModule.DiscordIntegration
@@ -12,7 +15,7 @@ namespace StardewArchipelago.ViewerEventsModule.DiscordIntegration
 
         public DiscordBot(ILogger logger, ViewerEventsExecutor eventsExecutor)
         {
-            _discord = new DiscordWrapper();
+            _discord = new DiscordWrapper(logger);
             _discordModule = new DiscordModule(logger, _discord, eventsExecutor);
         }
 

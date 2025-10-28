@@ -9,6 +9,7 @@ using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewModdingAPI;
 using StardewValley.Locations;
 using System.Linq;
+using KaitoKid.Utilities.Interfaces;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Constants.Vanilla;
 using StardewValley.GameData.Movies;

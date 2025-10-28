@@ -9,6 +9,7 @@ using StardewValley;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
+using KaitoKid.Utilities.Interfaces;
 using StardewValley.Menus;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Serialization;

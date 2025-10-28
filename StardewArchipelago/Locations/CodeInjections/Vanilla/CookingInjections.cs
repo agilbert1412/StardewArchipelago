@@ -5,6 +5,7 @@ using StardewArchipelago.Stardew;
 using StardewValley;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.Utilities.Interfaces;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {

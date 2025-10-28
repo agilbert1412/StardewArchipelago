@@ -6,6 +6,7 @@ using Archipelago.MultiClient.Net.Models;
 using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.Utilities.Interfaces;
 using Netcode;
 using Newtonsoft.Json.Linq;
 using StardewArchipelago.Archipelago;

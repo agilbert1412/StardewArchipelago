@@ -34,6 +34,7 @@ using StardewValley.SpecialOrders;
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
 using System;
+using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Constants.Modded;
 using xTile.Dimensions;
 using static System.Collections.Specialized.BitVector32;

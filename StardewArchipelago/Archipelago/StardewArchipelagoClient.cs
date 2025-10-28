@@ -24,6 +24,7 @@ using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
+using KaitoKid.Utilities.Interfaces;
 using Color = Microsoft.Xna.Framework.Color;
 
 namespace StardewArchipelago.Archipelago

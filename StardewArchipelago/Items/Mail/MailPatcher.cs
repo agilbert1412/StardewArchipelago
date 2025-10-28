@@ -12,6 +12,7 @@ using StardewValley;
 using StardewValley.Menus;
 using System;
 using System.Linq;
+using KaitoKid.Utilities.Interfaces;
 
 namespace StardewArchipelago.Items.Mail
 {

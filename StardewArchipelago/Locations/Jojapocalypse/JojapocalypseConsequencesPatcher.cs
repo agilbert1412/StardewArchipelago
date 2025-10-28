@@ -4,6 +4,7 @@ using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
 using StardewValley.Locations;
 using System;
+using KaitoKid.Utilities.Interfaces;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Locations.Jojapocalypse.Consequences;
 using StardewValley;

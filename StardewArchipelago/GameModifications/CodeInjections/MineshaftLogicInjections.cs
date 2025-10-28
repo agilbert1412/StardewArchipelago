@@ -1,6 +1,7 @@
 ﻿using System;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.Utilities.Interfaces;
 using StardewValley.Network;
 
 namespace StardewArchipelago.GameModifications.CodeInjections

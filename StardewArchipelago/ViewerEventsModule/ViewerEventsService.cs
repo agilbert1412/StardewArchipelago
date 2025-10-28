@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.ViewerEventsModule.DiscordIntegration;
 using StardewArchipelago.ViewerEventsModule.EventsExecution;
 

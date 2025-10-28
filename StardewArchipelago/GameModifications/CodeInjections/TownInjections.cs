@@ -8,6 +8,7 @@ using StardewValley.Locations;
 using StardewValley;
 using System;
 using System.Collections.Generic;
+using KaitoKid.Utilities.Interfaces;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Constants.Vanilla;
 

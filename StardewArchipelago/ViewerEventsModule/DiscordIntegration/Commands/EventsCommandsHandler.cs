@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
+using KaitoKid.DiscordWrapper.Interfaces;
 using StardewArchipelago.ViewerEventsModule.Events;
 using StardewArchipelago.ViewerEventsModule.EventsExecution;
 

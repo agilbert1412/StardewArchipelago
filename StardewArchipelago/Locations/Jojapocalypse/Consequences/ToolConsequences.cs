@@ -1,6 +1,7 @@
 ﻿using System;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Archipelago.ApworldData;
 using StardewModdingAPI;
 using StardewValley;

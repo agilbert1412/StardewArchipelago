@@ -5,6 +5,8 @@ using StardewArchipelago.ViewerEventsModule.DiscordIntegration.Commands;
 using StardewArchipelago.ViewerEventsModule.EventsExecution;
 using System;
 using System.Threading.Tasks;
+using KaitoKid.DiscordWrapper.Interfaces;
+using KaitoKid.Utilities.Interfaces;
 
 namespace StardewArchipelago.ViewerEventsModule.DiscordIntegration
 {

@@ -5,6 +5,7 @@ using Archipelago.MultiClient.Net.Packets;
 using Microsoft.Xna.Framework;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.Utilities.Interfaces;
 using StardewValley;
 using StardewArchipelago.GameModifications.CodeInjections;
 using StardewModdingAPI.Events;

@@ -10,6 +10,7 @@ using StardewValley.Locations;
 using StardewValley.Objects;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.Locations.GingerIsland

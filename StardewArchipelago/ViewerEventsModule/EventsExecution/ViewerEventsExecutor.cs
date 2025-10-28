@@ -5,6 +5,7 @@ using StardewArchipelago.ViewerEventsModule.Events;
 using StardewValley;
 using System;
 using System.Threading.Tasks;
+using KaitoKid.Utilities.Interfaces;
 
 namespace StardewArchipelago.ViewerEventsModule.EventsExecution
 {

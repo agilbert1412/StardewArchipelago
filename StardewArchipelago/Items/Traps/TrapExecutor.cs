@@ -20,6 +20,7 @@ using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
 using System.Threading;
 using Archipelago.MultiClient.Net.Enums;
+using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewValley.Network.ChestHit;
 using Object = StardewValley.Object;

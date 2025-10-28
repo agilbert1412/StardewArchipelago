@@ -34,14 +34,19 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Discord.Net" Version="3.18.0" />
-		<PackageReference Include="KaitoKid.ArchipelagoUtilities.Net" Version="2.1.5" />
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
+		<PackageReference Include="Discord.Net.WebSocket" Version="3.18.0" />
+		<PackageReference Include="KaitoKid.ArchipelagoUtilities.Net" Version="2.2.0" />
+		<PackageReference Include="KaitoKid.Utilities.Interfaces" Version="1.0.1" />
 		<PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="4.4.0" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<Reference Include="Newtonsoft.Json" HintPath="$(GamePath)\smapi-internal\Newtonsoft.Json.dll" private="false" />
+		<Reference Include="KaitoKid.DiscordWrapper.Interfaces">
+		  <HintPath>..\..\DiscordWrapper\DiscordWrapper\DiscordWrapper\bin\Debug\net6.0\KaitoKid.DiscordWrapper.Interfaces.dll</HintPath>
+		</Reference>
+		<Reference Include="KaitoKid.DiscordWrapper.Net">
+		  <HintPath>..\..\DiscordWrapper\DiscordWrapper\DiscordWrapper\bin\Debug\net6.0\KaitoKid.DiscordWrapper.Net.dll</HintPath>
+		</Reference>
 	</ItemGroup>
 
 	<ItemGroup>

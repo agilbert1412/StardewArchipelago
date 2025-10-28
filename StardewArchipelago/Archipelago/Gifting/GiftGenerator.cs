@@ -6,6 +6,7 @@ using Archipelago.Gifting.Net.Traits;
 using Archipelago.Gifting.Net.Versioning.Gifts;
 using Archipelago.Gifting.Net.Versioning.Gifts.Current;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Items.Traps;
 using StardewArchipelago.Stardew;

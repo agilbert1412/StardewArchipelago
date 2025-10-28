@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using KaitoKid.Utilities.Interfaces;
 
 namespace StardewArchipelago.Locations.ShopStockModifiers
 {

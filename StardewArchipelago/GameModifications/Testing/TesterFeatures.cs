@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.GameModifications.CodeInjections;
 using StardewModdingAPI;
 

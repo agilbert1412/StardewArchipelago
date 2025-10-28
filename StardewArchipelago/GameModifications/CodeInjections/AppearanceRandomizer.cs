@@ -11,6 +11,7 @@ using StardewModdingAPI;
 using Microsoft.Xna.Framework.Graphics;
 using System.Text;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
+using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Extensions;
 using StardewValley.Characters;
 

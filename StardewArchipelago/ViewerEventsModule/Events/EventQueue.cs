@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.Utilities.Interfaces;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 

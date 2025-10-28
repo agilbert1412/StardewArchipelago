@@ -8,6 +8,7 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 using System;
+using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Constants;
 using xTile.Dimensions;
 

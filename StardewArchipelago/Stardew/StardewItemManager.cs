@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using KaitoKid.Utilities.Interfaces;
 using StardewValley.GameData;
 using Object = StardewValley.Object;
 

@@ -4,6 +4,7 @@ using System.Linq;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Serialization;
 using StardewArchipelago.Stardew;

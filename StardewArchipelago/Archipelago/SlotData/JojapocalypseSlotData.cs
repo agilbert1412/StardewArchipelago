@@ -1,5 +1,6 @@
 ﻿using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.Utilities.Interfaces;
 
 namespace StardewArchipelago.Archipelago.SlotData
 {

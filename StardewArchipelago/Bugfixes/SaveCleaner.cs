@@ -8,6 +8,7 @@ using StardewArchipelago.Locations.InGameLocations;
 using StardewModdingAPI.Events;
 using StardewArchipelago.Constants.Vanilla;
 using System.Threading;
+using KaitoKid.Utilities.Interfaces;
 using xTile;
 using StardewValley.Internal;
 

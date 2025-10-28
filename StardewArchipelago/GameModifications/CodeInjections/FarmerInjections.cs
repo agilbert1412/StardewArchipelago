@@ -4,6 +4,7 @@ using StardewArchipelago.Archipelago;
 using StardewValley;
 using StardewArchipelago.Constants.Vanilla;
 using System.Linq;
+using KaitoKid.Utilities.Interfaces;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.Bundles;

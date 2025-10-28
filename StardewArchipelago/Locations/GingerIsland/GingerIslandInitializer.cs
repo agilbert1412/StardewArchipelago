@@ -6,6 +6,7 @@ using StardewArchipelago.Locations.GingerIsland.WalnutRoom;
 using StardewModdingAPI;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.Locations.CodeInjections

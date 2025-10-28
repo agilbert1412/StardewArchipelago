@@ -8,6 +8,7 @@ using StardewValley.GameData.Tools;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using System;
+using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 
 namespace StardewArchipelago.Locations.ShopStockModifiers

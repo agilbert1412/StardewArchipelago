@@ -17,6 +17,7 @@ using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using StardewArchipelago.Constants.Locations;
 using Microsoft.Xna.Framework.Graphics;
 using System.Reflection;
+using KaitoKid.Utilities.Interfaces;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
 {
