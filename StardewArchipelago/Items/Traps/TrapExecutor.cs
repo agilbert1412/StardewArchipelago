@@ -471,6 +471,7 @@ namespace StardewArchipelago.Items.Traps
             }
         }
 
+
         private IEnumerable<WateringCan> GetAllWateringCans()
         {
             foreach (var item in Game1.player.Items)
