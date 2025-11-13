@@ -107,6 +107,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         {
             try
             {
+                if (!ArchipelagoJunimoNoteMenu.IsBundleRemaining(MemeBundleNames.POLLUTION) &&
+                    !ArchipelagoJunimoNoteMenu.IsBundleRemaining(MemeBundleNames.CATCH_AND_RELEASE))
+                {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
                 var isWater = CrabPot.IsValidCrabPotLocationTile(__instance, (int)tileLocation.X, (int)tileLocation.Y);
                 var activeObject = who.ActiveObject;
                 if (!isWater || activeObject == null)
