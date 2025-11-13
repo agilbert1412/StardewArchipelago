@@ -33,7 +33,7 @@ Custom NPCs:
 - [Mister Ginger (cat npc)](https://www.nexusmods.com/stardewvalley/mods/5295), by Lemurkat, Version 1.6.x
 - [Ayeisha - The Postal Worker (Custom NPC)](https://www.nexusmods.com/stardewvalley/mods/6427), by TheLimeyDragon, Version 0.7.x
 - [Alecto the Witch](https://www.nexusmods.com/stardewvalley/mods/10671), by zoedoll, Version 1.1.x (including additional [patch](https://github.com/Witchybun/SDV-Randomizer-Content-Patcher/releases))
-- [Hat Mouse Lacey](https://github.com/ichortower/HatMouseLacey) by khortower, Version 1.4.x
+- [Hat Mouse Lacey](https://github.com/ichortower/HatMouseLacey) by khortower, Version 1.6.x
 
 In addition, a [Content Patcher mod](https://github.com/Witchybun/SDV-Randomizer-Content-Patcher/releases) may be required for the mod to properly function alongside your game.  Include these alongside StardewArchipelago.
 "x" is used to denote a wildcard digit, that is flexibleand allows for variations. We assume that supported mods will not break on patch updates, and if they do, we may have to be more strict in the future.
