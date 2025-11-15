@@ -26,15 +26,17 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             e.Edit(asset =>
                 {
                     var shopsData = asset.AsDictionary<string, ShopData>().Data;
-                    var marnieShopData = shopsData["AnimalShop"];
-                    foreach (var shopItemData in marnieShopData.Items)
+                    foreach (var shopData in shopsData)
                     {
-                        if (shopItemData.Id != QualifiedItemIds.GOLDEN_EGG)
+                        foreach (var shopItemData in shopData.Value.Items)
                         {
-                            continue;
-                        }
+                            if (shopItemData.Id != QualifiedItemIds.GOLDEN_EGG)
+                            {
+                                continue;
+                            }
 
-                        shopItemData.Condition = GameStateConditionProvider.CreateHasReceivedItemCondition("Golden Egg");
+                            shopItemData.Condition = GameStateConditionProvider.CreateHasReceivedItemCondition("Golden Egg");
+                        }
                     }
                 },
                 AssetEditPriority.Late
