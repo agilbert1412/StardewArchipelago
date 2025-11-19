@@ -317,6 +317,7 @@
         public const string IRIDIUM_BAR = "337";
         public const string IRIDIUM_MILK = "803";
         public const string IRIDIUM_ORE = "386";
+        public const string IRIDIUM_SNAKE_MILK = "803";
         public const string IRIDIUM_SPRINKLER = "645";
         public const string IRON_BAR = "335";
         public const string IRON_FENCE = "324";
@@ -723,7 +724,6 @@
         public const string WRIGGLING_WORM = "869";
         public const string YAM = "280";
         public const string YAM_SEEDS = "492";
-        public const string IRIDIUM_SNAKE_MILK = "803";
 
         public static bool IsSkillBook(string itemId)
         {
