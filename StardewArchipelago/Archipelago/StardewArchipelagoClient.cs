@@ -75,7 +75,7 @@ namespace StardewArchipelago.Archipelago
 
         protected override void InitializeSlotData(string slotName, Dictionary<string, object> slotDataFields)
         {
-            _slotData = new SlotData.SlotData(slotName, slotDataFields, Logger, _testerFeatures);
+            _slotData = new SlotData.SlotData(slotName, slotDataFields, Logger, _manifest, _testerFeatures);
         }
 
         public override ConnectionResult ConnectToMultiworld(ArchipelagoConnectionInfo connectionInfo)

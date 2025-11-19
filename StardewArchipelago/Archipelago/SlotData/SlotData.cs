@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.GameModifications.Testing;
 using StardewArchipelago.Locations.Jojapocalypse.Consequences;
+using StardewModdingAPI;
 
 namespace StardewArchipelago.Archipelago.SlotData
 {
@@ -72,12 +73,15 @@ namespace StardewArchipelago.Archipelago.SlotData
         public int TilesanitySize { get; private set; }
 #endif
 
-        public SlotData(string slotName, Dictionary<string, object> slotDataFields, ILogger logger, TesterFeatures testerFeatures)
+        public SlotData(string slotName, Dictionary<string, object> slotDataFields, ILogger logger, IManifest manifest, TesterFeatures testerFeatures)
         {
             SlotName = slotName;
             _slotDataFields = slotDataFields;
             _logger = logger;
             var slotDataReader = new SlotDataReader(_logger, _slotDataFields);
+
+            MultiworldVersion = slotDataReader.GetSlotSetting(SlotDataKeys.MULTIWORLD_VERSION, "");
+            _logger.LogInfo($"StardewArchipelago version '{manifest.Version}' connected to a multiworld generated with APWorld version '{MultiworldVersion}'");
 
             Goal = slotDataReader.GetSlotSetting(SlotDataKeys.GOAL, Goal.CommunityCenter);
             var farmType = slotDataReader.GetSlotSetting(SlotDataKeys.FARM_TYPE, SupportedFarmType.Standard);
@@ -129,7 +133,6 @@ namespace StardewArchipelago.Archipelago.SlotData
             Banking = true;
             DeathLink = slotDataReader.GetSlotSetting(SlotDataKeys.DEATH_LINK, false);
             Seed = slotDataReader.GetSlotSetting(SlotDataKeys.SEED, "");
-            MultiworldVersion = slotDataReader.GetSlotSetting(SlotDataKeys.MULTIWORLD_VERSION, "");
             var newEntrancesStringData = slotDataReader.GetSlotSetting(SlotDataKeys.MODIFIED_ENTRANCES, "");
             ModifiedEntrances = JsonConvert.DeserializeObject<Dictionary<string, string>>(newEntrancesStringData);
             var modsString = slotDataReader.GetSlotSetting(SlotDataKeys.MOD_LIST, "");
