@@ -1,5 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
 using StardewArchipelago.Stardew.Ids.Vanilla;
+using System;
 
 namespace StardewArchipelago.Constants.Vanilla
 {
@@ -54,6 +55,7 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string COOKIES = QualifiedObjectId(ObjectIds.COOKIES);
         public static readonly string CORN_SEEDS = QualifiedObjectId(ObjectIds.CORN_SEEDS);
         public static readonly string CRANBERRY_SEEDS = QualifiedObjectId(ObjectIds.CRANBERRY_SEEDS);
+        public static readonly string DECORATIVE_TRASH_CAN = "(F)2427";
         public static readonly string DELUXE_FERTILIZER = QualifiedObjectId(ObjectIds.DELUXE_FERTILIZER);
         public static readonly string DELUXE_RETAINING_SOIL = QualifiedObjectId(ObjectIds.DELUXE_RETAINING_SOIL);
         public static readonly string DELUXE_SPEED_GRO = QualifiedObjectId(ObjectIds.DELUXE_SPEED_GRO);
@@ -72,14 +74,13 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string GOLDEN_MYSTERY_BOX = QualifiedObjectId(ObjectIds.GOLDEN_MYSTERY_BOX);
         public static readonly string GOLDEN_PUMPKIN = QualifiedObjectId(ObjectIds.GOLDEN_PUMPKIN);
         public static readonly string GOLDEN_WALNUT = QualifiedObjectId(ObjectIds.GOLDEN_WALNUT);
+        public static readonly string GOURMAND_STATUE = "(F)2332";
         public static readonly string GRAPE_STARTER = QualifiedObjectId(ObjectIds.GRAPE_STARTER);
         public static readonly string GRASS_STARTER = QualifiedObjectId(ObjectIds.GRASS_STARTER);
         public static readonly string GREEN_ALGAE = QualifiedObjectId(ObjectIds.GREEN_ALGAE);
         public static readonly string HARDWOOD = QualifiedObjectId(ObjectIds.HARDWOOD);
         public static readonly string HOPS_STARTER = QualifiedObjectId(ObjectIds.HOPS_STARTER);
         public static readonly string HYPER_SPEED_GRO = QualifiedObjectId(ObjectIds.HYPER_SPEED_GRO);
-        public static readonly string SPRINKLER = QualifiedObjectId(ObjectIds.SPRINKLER);
-        public static readonly string QUALITY_SPRINKLER = QualifiedObjectId(ObjectIds.QUALITY_SPRINKLER);
         public static readonly string IRIDIUM_SPRINKLER = QualifiedObjectId(ObjectIds.IRIDIUM_SPRINKLER);
         public static readonly string JAZZ_SEEDS = QualifiedObjectId(ObjectIds.JAZZ_SEEDS);
         public static readonly string JOJA_COLA = QualifiedObjectId(ObjectIds.JOJA_COLA);
@@ -87,6 +88,7 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string KALE_SEEDS = QualifiedObjectId(ObjectIds.KALE_SEEDS);
         public static readonly string LARGE_BROWN_EGG = QualifiedObjectId(ObjectIds.LARGE_BROWN_EGG);
         public static readonly string LARGE_GOAT_MILK = QualifiedObjectId(ObjectIds.LARGE_GOAT_MILK);
+        public static readonly string LIFESAVER = "(F)2418";
         public static readonly string MAGIC_ROCK_CANDY = QualifiedObjectId(ObjectIds.MAGIC_ROCK_CANDY);
         public static readonly string MANGO_SAPLING = QualifiedObjectId(ObjectIds.MANGO_SAPLING);
         public static readonly string MEGA_BOMB = QualifiedObjectId(ObjectIds.MEGA_BOMB);
@@ -103,6 +105,7 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string PEACH_SAPLING = QualifiedObjectId(ObjectIds.PEACH_SAPLING);
         public static readonly string PEARL = QualifiedObjectId(ObjectIds.PEARL);
         public static readonly string PEPPER_SEEDS = QualifiedObjectId(ObjectIds.PEPPER_SEEDS);
+        public static readonly string PHYSICS_101 = "(F)2732";
         public static readonly string PINEAPPLE_SEEDS = QualifiedObjectId(ObjectIds.PINEAPPLE_SEEDS);
         public static readonly string POMEGRANATE_SAPLING = QualifiedObjectId(ObjectIds.POMEGRANATE_SAPLING);
         public static readonly string POPPY_SEEDS = QualifiedObjectId(ObjectIds.POPPY_SEEDS);
@@ -114,6 +117,7 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string QI_BEAN = QualifiedObjectId(ObjectIds.QI_BEAN);
         public static readonly string QUALITY_FERTILIZER = QualifiedObjectId(ObjectIds.QUALITY_FERTILIZER);
         public static readonly string QUALITY_RETAINING_SOIL = QualifiedObjectId(ObjectIds.QUALITY_RETAINING_SOIL);
+        public static readonly string QUALITY_SPRINKLER = QualifiedObjectId(ObjectIds.QUALITY_SPRINKLER);
         public static readonly string RADISH_SEEDS = QualifiedObjectId(ObjectIds.RADISH_SEEDS);
         public static readonly string RARE_SEED = QualifiedObjectId(ObjectIds.RARE_SEED);
         public static readonly string RED_CABBAGE_SEEDS = QualifiedObjectId(ObjectIds.RED_CABBAGE_SEEDS);
@@ -132,6 +136,7 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string SPANGLE_SEEDS = QualifiedObjectId(ObjectIds.SPANGLE_SEEDS);
         public static readonly string SPEED_GRO = QualifiedObjectId(ObjectIds.SPEED_GRO);
         public static readonly string SPRING_SEEDS = QualifiedObjectId(ObjectIds.SPRING_SEEDS);
+        public static readonly string SPRINKLER = QualifiedObjectId(ObjectIds.SPRINKLER);
         public static readonly string STARDROP = QualifiedObjectId(ObjectIds.STARDROP);
         public static readonly string STARDROP_TEA = QualifiedObjectId(ObjectIds.STARDROP_TEA);
         public static readonly string STARFRUIT_SEEDS = QualifiedObjectId(ObjectIds.STARFRUIT_SEEDS);
@@ -144,14 +149,16 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string TRASH = QualifiedObjectId(ObjectIds.TRASH);
         public static readonly string TULIP_BULB = QualifiedObjectId(ObjectIds.TULIP_BULB);
         public static readonly string VINEGAR = QualifiedObjectId(ObjectIds.VINEGAR);
+        public static readonly string VISTA = "(F)2423";
         public static readonly string VOID_MAYONNAISE = QualifiedObjectId(ObjectIds.VOID_MAYONNAISE);
+        public static readonly string WALL_BASKET = "(F)2425";
         public static readonly string WALL_CACTUS = "(F)2655";
         public static readonly string WHEAT_FLOUR = QualifiedObjectId(ObjectIds.WHEAT_FLOUR);
         public static readonly string WHEAT_SEEDS = QualifiedObjectId(ObjectIds.WHEAT_SEEDS);
         public static readonly string WHITE_ALGAE = QualifiedObjectId(ObjectIds.WHITE_ALGAE);
         public static readonly string WINTER_SEEDS = QualifiedObjectId(ObjectIds.WINTER_SEEDS);
+        public static readonly string WOOD = QualifiedObjectId(ObjectIds.WOOD);
         public static readonly string YAM_SEEDS = QualifiedObjectId(ObjectIds.YAM_SEEDS);
-        public static readonly string WALL_BASKET = "(F)2425";
 
         public static string QualifiedObjectId(string objectId)
         {

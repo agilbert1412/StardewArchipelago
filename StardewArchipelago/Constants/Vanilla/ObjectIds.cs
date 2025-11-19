@@ -10,6 +10,7 @@
         public const string APPLE_SAPLING = "633";
         public const string APRICOT_SAPLING = "629";
         public const string ARTICHOKE_SEEDS = "489";
+        public const string ARTIFACT_TROVE = "275";
         public const string BAIT = "685";
         public const string BAIT_AND_BOBBER = "SkillBook_1";
         public const string BANANA_SAPLING = "69";
@@ -22,6 +23,7 @@
         public const string BLACKBERRY = "410";
         public const string BLUEBERRY_SEEDS = "481";
         public const string BOK_CHOY_SEEDS = "491";
+        public const string BOMB = "287";
         public const string BOOK_MYSTERIES = "Book_Mystery";
         public const string BOOK_OF_MYSTERIES = "Book_Mystery";
         public const string BOOK_OF_STARS = "PurpleBook";
@@ -32,6 +34,7 @@
         public const string CACTUS_SEEDS = "802";
         public const string CAULIFLOWER_SEEDS = "474";
         public const string CAVE_JELLY = "CaveJelly";
+        public const string CHERRY_BOMB = "286";
         public const string CHERRY_SAPLING = "628";
         public const string COMBAT_QUARTERLY = "SkillBook_4";
         public const string COOKIES = "223";
@@ -43,9 +46,6 @@
         public const string DELUXE_FERTILIZER = "919";
         public const string DELUXE_RETAINING_SOIL = "920";
         public const string DELUXE_SPEED_GRO = "466";
-        public const string ARTIFACT_TROVE = "275";
-        public const string BOMB = "287";
-        public const string CHERRY_BOMB = "286";
         public const string DIAMOND = "72";
         public const string DRESSED_SPINNER = "687";
         public const string DRIED_FRUIT = "DriedFruit";
@@ -172,6 +172,7 @@
         public const string WHEAT_SEEDS = "483";
         public const string WHITE_ALGAE = "157";
         public const string WINTER_SEEDS = "498";
+        public const string WOOD = "388";
         public const string WOODCUTTER_WEEKLY = "SkillBook_2";
         public const string WOODYS_SECRET = "Book_Woodcutting";
         public const string YAM_SEEDS = "492";
