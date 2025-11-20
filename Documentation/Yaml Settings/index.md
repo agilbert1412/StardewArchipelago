@@ -26,7 +26,7 @@ These settings are critical customization of items and locations. They are the b
 - [Season Randomization](./season_randomization.md)
 - [Cropsanity](./cropsanity.md)
 - [Backpack Progression](./backpack_progression.md)
-- ~~[Tool Progression](./tool_progression.md)~~
+- [Tool Progression](./tool_progression.md)
 - ~~[Elevator Progression](./elevator_progression.md)~~
 - ~~[Skill Progression](./skill_progression.md)~~
 - ~~[Building Progression](./building_progression.md)~~
@@ -91,6 +91,7 @@ These settings are only available in the 7.x.x Pre-release version of the mod
 
 - ~~[Bundles Per Room](./bundle_per_room.md)~~
 - ~~[Backpack Size](./backpack_size.md)~~
+- ~~[Start Without](./start_without.md)~~
 - ~~[Eatsanity](./eatsanity.md)~~
 - ~~[Moviesanity](./moviesanity.md)~~
 - ~~[Secretsanity](./secretsanity.md)~~
