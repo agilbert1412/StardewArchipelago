@@ -1,21 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using HarmonyLib;
+﻿using HarmonyLib;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago.Gifting;
+using StardewArchipelago.Bundles;
 using StardewArchipelago.GameModifications;
 using StardewArchipelago.GameModifications.CodeInjections;
 using StardewArchipelago.Goals;
 using StardewArchipelago.Items.Traps;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Arcade;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
+using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Menus;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Bundle = StardewArchipelago.Bundles.Bundle;
 
 #if TILESANITY
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
@@ -176,6 +181,12 @@ namespace StardewArchipelago.Archipelago
             }
 
             if (HandlePrankCommand(messageLower))
+            {
+                _lastCommand = message;
+                return true;
+            }
+
+            if (HandleDebugRefundCommand(messageLower))
             {
                 _lastCommand = message;
                 return true;
@@ -365,6 +376,56 @@ namespace StardewArchipelago.Archipelago
             }
 
             FoolManager.TogglePrank(false);
+            return true;
+        }
+
+        private static bool HandleDebugRefundCommand(string message)
+        {
+            if (message != $"{COMMAND_PREFIX}refund")
+            {
+                return false;
+            }
+
+            var bundleManager = ModEntry.Instance.BundlesManager;
+            var bundleIndex = ArchipelagoJunimoNoteMenu.GetBundleId(MemeBundleNames.THEALGORERHYTM, out var communityCenter, out var area);
+            if (bundleIndex <= -1 || bundleManager == null)
+            {
+                return false;
+            }
+
+            var bundleDisplayName = $"{MemeBundleNames.THEALGORERHYTM} Bundle";
+            var bundleFromArchipelago = bundleManager.BundleRooms.BundlesByName[bundleDisplayName];
+            if (bundleFromArchipelago is not ItemBundle itemBundle)
+            {
+                return false;
+            }
+
+            var itemsToRefund = new List<Item>();
+            communityCenter.bundleRewards[bundleIndex] = true;
+            for (var i = 0; i < communityCenter.bundles.FieldDict[bundleIndex].Length; i++)
+            {
+                if (communityCenter.bundles.FieldDict[bundleIndex][i])
+                {
+                    var bundleItem = itemBundle.Items[i];
+                    var gameItem = ItemRegistry.Create(bundleItem.StardewItem.GetQualifiedId(), 1);
+                    if (bundleItem.Flavor != null)
+                    {
+                        var id = bundleItem.Flavor == null ? bundleItem.StardewItem.GetQualifiedId() : bundleItem.StardewItem.Name;
+                        if (id.StartsWith("Dried") && bundleItem.Flavor != null)
+                        {
+                            id = bundleItem.Flavor.Category == StardewValley.Object.FruitsCategory ? "DriedFruit" : "DriedMushroom";
+                        }
+                        gameItem = Utility.CreateFlavoredItem(id, bundleItem.Flavor.Id, 0, 1);
+                    }
+                    //gameItem.preservedParentSheetIndex = bundleItem.Flavor.GetQualifiedId();
+                    //itemsToRefund.Add();
+                    itemsToRefund.Add(gameItem);
+                    communityCenter.bundles.FieldDict[bundleIndex][i] = false;
+                }
+            }
+
+            Game1.player.addItemsByMenuIfNecessary(itemsToRefund);
+            Game1.chatBox.addMessage($"You have been refunded the items already donated to the '{MemeBundleNames.THEALGORERHYTM} Bundle'", Color.Purple);
             return true;
         }
 
