@@ -27,7 +27,7 @@ These settings are critical customization of items and locations. They are the b
 - [Cropsanity](./cropsanity.md)
 - [Backpack Progression](./backpack_progression.md)
 - [Tool Progression](./tool_progression.md)
-- ~~[Elevator Progression](./elevator_progression.md)~~
+- [Elevator Progression](./elevator_progression.md)
 - ~~[Skill Progression](./skill_progression.md)~~
 - ~~[Building Progression](./building_progression.md)~~
 
