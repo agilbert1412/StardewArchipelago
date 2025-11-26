@@ -347,6 +347,10 @@ namespace StardewArchipelago.Archipelago
             else
             {
                 scoutedLocation = ScoutSingleLocation(locationName, false);
+                if (scoutedLocation == null)
+                {
+                    return null;
+                }
                 var shouldHint = ShouldHintAfterScouting(scoutBehavior, scoutedLocation);
                 if (shouldHint)
                 {
@@ -354,8 +358,12 @@ namespace StardewArchipelago.Archipelago
                 }
             }
 
+            if (scoutedLocation == null)
+            {
+                return null;
+            }
 
-            if (scoutedLocation != null && ModEntry.Instance.Config.AnonymizeNamesInChat)
+            if (ModEntry.Instance.Config.AnonymizeNamesInChat)
             {
                 scoutedLocation = new ScoutedLocation(scoutedLocation.LocationName, scoutedLocation.ItemName, scoutedLocation.PlayerName.AnonymizePlayerNames(GetSession().Players), scoutedLocation.GameName, scoutedLocation.LocationId,
                     scoutedLocation.ItemId, scoutedLocation.PlayerId, scoutedLocation.ClassificationFlags);
