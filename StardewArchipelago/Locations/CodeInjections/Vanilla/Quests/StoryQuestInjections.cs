@@ -14,11 +14,11 @@ using StardewValley.TerrainFeatures;
 using xTile.Dimensions;
 using EventIds = StardewArchipelago.Constants.Vanilla.EventIds;
 using Object = StardewValley.Object;
-using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
 using Microsoft.Xna.Framework.Content;
 using StardewArchipelago.Archipelago;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
+using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.Locations.Secrets;
 

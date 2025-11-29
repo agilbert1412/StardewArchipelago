@@ -9,7 +9,7 @@ using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.Stardew;
 using StardewValley;
 using Object = StardewValley.Object;
-using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Bundles;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
 

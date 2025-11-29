@@ -1,16 +1,12 @@
 ﻿using KaitoKid.ArchipelagoUtilities.Net;
-using KaitoKid.ArchipelagoUtilities.Net.Constants;
-using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
-using Microsoft.Xna.Framework.Input;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Constants.Locations;
 using StardewArchipelago.Stardew;
 using StardewValley;
-using StardewValley.ItemTypeDefinitions;
 using StardewValley.Menus;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using KaitoKid.Utilities.Interfaces;
 using Microsoft.Xna.Framework;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla

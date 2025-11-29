@@ -7,7 +7,7 @@ using Archipelago.Gifting.Net.Versioning.Gifts.Current;
 using StardewArchipelago.Extensions;
 using StardewArchipelago.Stardew;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
-using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Items.Traps;
 
 namespace StardewArchipelago.Archipelago.Gifting

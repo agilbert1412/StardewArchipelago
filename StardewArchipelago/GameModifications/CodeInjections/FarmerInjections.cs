@@ -1,16 +1,15 @@
 ﻿using System;
-using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewValley;
 using StardewArchipelago.Constants.Vanilla;
 using System.Linq;
+using KaitoKid.Utilities.Interfaces;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.Bundles;
 using Object = StardewValley.Object;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
 using StardewValley.TerrainFeatures;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
 {

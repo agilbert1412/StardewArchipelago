@@ -1,7 +1,6 @@
 ﻿using StardewArchipelago.Locations.Festival;
 using StardewArchipelago.Locations.GingerIsland.Parrots;
 using System.Collections.Generic;
-using StardewArchipelago.Locations.Secrets;
 
 namespace StardewArchipelago.Constants.Locations
 {

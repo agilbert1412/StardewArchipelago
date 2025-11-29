@@ -7,11 +7,11 @@ using StardewArchipelago.Items.Unlocks.Vanilla;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Quests;
-using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
 using Microsoft.Xna.Framework.Content;
 using StardewArchipelago.Archipelago;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
+using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using Object = StardewValley.Object;
 

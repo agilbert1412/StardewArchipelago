@@ -1,18 +1,13 @@
 ﻿using HarmonyLib;
-using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago.Gifting;
-using StardewArchipelago.Bundles;
 using StardewArchipelago.GameModifications;
 using StardewArchipelago.GameModifications.CodeInjections;
 using StardewArchipelago.Goals;
 using StardewArchipelago.Items.Traps;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Arcade;
-using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
-using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
-using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
@@ -20,7 +15,7 @@ using StardewValley.Menus;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Bundle = StardewArchipelago.Bundles.Bundle;
+using KaitoKid.Utilities.Interfaces;
 
 #if TILESANITY
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;

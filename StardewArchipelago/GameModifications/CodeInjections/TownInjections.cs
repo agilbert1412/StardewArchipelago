@@ -1,6 +1,5 @@
 ﻿using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
-using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Locations.Jojapocalypse;
 using StardewModdingAPI;
@@ -8,6 +7,7 @@ using StardewValley.Locations;
 using StardewValley;
 using System;
 using System.Collections.Generic;
+using KaitoKid.Utilities.Interfaces;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Constants.Vanilla;
 

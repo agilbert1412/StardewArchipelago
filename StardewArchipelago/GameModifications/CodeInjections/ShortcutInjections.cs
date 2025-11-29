@@ -1,11 +1,11 @@
-﻿using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
-using StardewArchipelago.Archipelago;
+﻿using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.TerrainFeatures;
 using System;
 using System.Collections.Generic;
+using KaitoKid.Utilities.Interfaces;
 using Microsoft.Xna.Framework;
 
 namespace StardewArchipelago.GameModifications.CodeInjections

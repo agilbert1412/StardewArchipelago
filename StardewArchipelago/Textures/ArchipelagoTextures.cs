@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using KaitoKid.ArchipelagoUtilities.Net.ItemSprites;
+using KaitoKid.ArchipelagoUtilities.AssetDownloader.ItemSprites;
 using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Logging;
 using StardewModdingAPI;

@@ -5,10 +5,9 @@ using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.GameData.Shops;
-using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
-using System.Linq;
+using KaitoKid.Utilities.Interfaces;
 
 namespace StardewArchipelago.Locations.ShopStockModifiers
 {
