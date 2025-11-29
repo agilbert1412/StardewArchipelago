@@ -86,7 +86,8 @@ namespace StardewArchipelago.Locations.InGameLocations
         {
             if (_itemSprites == null)
             {
-                _itemSprites = new ArchipelagoItemSprites(logger);
+                var redownloadDelay = TimeSpan.FromDays(28);
+                _itemSprites = new ArchipelagoItemSprites(logger, redownloadDelay);
             }
 
             // Prefix removed for now, because the inconsistency makes it ugly

@@ -25,12 +25,12 @@
       },
       "KaitoKid.ArchipelagoUtilities.Net": {
         "type": "Direct",
-        "requested": "[3.0.0, )",
-        "resolved": "3.0.0",
-        "contentHash": "URukC2SIOmhJpl5fgRCigaBBBPzX43w9emnvkpggyqEBqmROF3atsTolC2MlVdKaNrMJ7ms6E2V8s/Xl82W4wA==",
+        "requested": "[3.1.0, )",
+        "resolved": "3.1.0",
+        "contentHash": "uC4EAe7dDE4FwmvApg9NrDUiu2mN9vtp4iehDmvcRzIdPgZ7h/QVV7SFsSW0vMje5LxoIsBYp/FtLLAk3vTDbQ==",
         "dependencies": {
           "Archipelago.MultiClient.Net": "6.6.0",
-          "KaitoKid.ArchipelagoUtilities.AssetDownloader": "3.0.0",
+          "KaitoKid.ArchipelagoUtilities.AssetDownloader": "3.1.0",
           "KaitoKid.Utilities.Interfaces": "1.0.1"
         }
       },
@@ -42,8 +42,8 @@
       },
       "KaitoKid.ArchipelagoUtilities.AssetDownloader": {
         "type": "Transitive",
-        "resolved": "3.0.0",
-        "contentHash": "6infLEATPSFFrvzEXEYn+ol9/hBYGdWA7CkpVAbLPuoP/l3wsZ3ujgwmYBChMa2RfdRQglj3ZipSt1v0uVV1hA==",
+        "resolved": "3.1.0",
+        "contentHash": "bGKPKcLQe77jcRWkfmsfnvWUk7/Y5YiRG73aTY5KRSe/n5nbOtjEnj1AEZKMLdBBbkeUxPrQ/6a8wIQJsCUnew==",
         "dependencies": {
           "Archipelago.MultiClient.Net": "6.6.0",
           "KaitoKid.Utilities.Interfaces": "1.0.1"

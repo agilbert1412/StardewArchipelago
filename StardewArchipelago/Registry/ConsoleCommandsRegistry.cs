@@ -148,6 +148,7 @@ namespace StardewArchipelago.Registry
             _archipelago.ScoutHintedLocations.Clear();
             _archipelago.ScoutedLocations.Clear();
             _state.LocationsScouted.Clear();
+            _state.LocationsScoutHinted.Clear();
         }
 
         private void OverrideDeathlink(string arg1, string[] arg2)
