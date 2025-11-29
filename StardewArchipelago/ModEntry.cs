@@ -182,6 +182,7 @@ namespace StardewArchipelago
             State.LocationsChecked = new List<string>();
             State.JojaLocationsChecked = new List<string>();
             State.LocationsScouted = new Dictionary<string, ScoutedLocation>();
+            State.LocationsScoutHinted = new List<string>();
             State.LettersGenerated = new Dictionary<string, string>();
             SkillInjections.ResetSkillExperience();
             FriendshipInjections.ResetArchipelagoFriendshipPoints();
@@ -223,6 +224,7 @@ namespace StardewArchipelago
             }
             State.JojaLocationsChecked = _jojaLocationChecker.GetAllLocationsCheckedByJoja();
             State.LocationsScouted = _archipelago.ScoutedLocations;
+            State.LocationsScoutHinted = _archipelago.ScoutHintedLocations.ToList();
             // _state.SeasonOrder should be fine?
 
             DebugAssertStateValues(State);
@@ -412,6 +414,7 @@ namespace StardewArchipelago
             {
                 State = state;
                 _archipelago.ScoutedLocations = State.LocationsScouted;
+                _archipelago.ScoutHintedLocations = State.LocationsScoutHinted.ToHashSet();
             }
 
             var apExperience = _helper.Data.ReadSaveData<Dictionary<int, int>>(AP_EXPERIENCE_KEY);

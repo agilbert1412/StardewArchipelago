@@ -12,6 +12,7 @@ namespace StardewArchipelago.Serialization
         public List<string> AttemptedLocationChecks { get; set; }
         public List<string> JojaLocationsChecked { get; set; }
         public Dictionary<string, ScoutedLocation> LocationsScouted { get; set; }
+        public List<string> LocationsScoutHinted { get; set; }
         public Dictionary<string, string> LettersGenerated { get; set; }
         public List<string> SeasonsOrder { get; set; }
         public TrapItemsDifficulty? TrapDifficultyOverride { get; set; }
@@ -33,6 +34,7 @@ namespace StardewArchipelago.Serialization
             AttemptedLocationChecks = new List<string>();
             JojaLocationsChecked = new List<string>();
             LocationsScouted = new Dictionary<string, ScoutedLocation>();
+            LocationsScoutHinted = new List<string>();
             LettersGenerated = new Dictionary<string, string>();
             SeasonsOrder = new List<string>();
             TrapDifficultyOverride = null;
