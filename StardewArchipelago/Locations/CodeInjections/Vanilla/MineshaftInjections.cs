@@ -12,16 +12,15 @@ using StardewValley.Objects;
 using StardewValley.Tools;
 using xTile.Dimensions;
 using Rectangle = xTile.Dimensions.Rectangle;
-using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
+using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.GameModifications;
 using StardewArchipelago.Locations.Jojapocalypse.Consequences;
 using StardewArchipelago.Logging;
 using SkullCavernElevator.SkullCavernElevator;
-using StardewArchipelago.Items.Unlocks.Modded;
 using StardewArchipelago.Locations.CodeInjections.Modded;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla

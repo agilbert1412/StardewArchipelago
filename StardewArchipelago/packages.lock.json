@@ -13,9 +13,9 @@
       },
       "Archipelago.MultiClient.Net": {
         "type": "Direct",
-        "requested": "[6.6.1, )",
-        "resolved": "6.6.1",
-        "contentHash": "CvojDLce6/ZkDTa/JNeCX4fM7X0gDdVAI5oIOKOtZjsOk4xJ9kTBix6ajnV2tIABEgpKzmMQm21Oz93Bu0m7IA=="
+        "requested": "[6.7.0, )",
+        "resolved": "6.7.0",
+        "contentHash": "fsK7kx3dC4EwvEA7kMTUwbP+kYeanYVWHyTXOjYKxl6zj4elHMj42YCjvOYqHee+V2NrRm0f0pljhWEY+BI72g=="
       },
       "Archipelago.MultiClient.Net.Analyzers": {
         "type": "Direct",
@@ -25,11 +25,13 @@
       },
       "KaitoKid.ArchipelagoUtilities.Net": {
         "type": "Direct",
-        "requested": "[2.1.5, )",
-        "resolved": "2.1.5",
-        "contentHash": "R1gPaBtjREyBAqsrBzygrlvKw5gmaObf3XnjeXmpV6SfT/7RV89ev8ll0aG18/s/fqJAh0a583u8Q7dqds6Ybw==",
+        "requested": "[3.0.0, )",
+        "resolved": "3.0.0",
+        "contentHash": "URukC2SIOmhJpl5fgRCigaBBBPzX43w9emnvkpggyqEBqmROF3atsTolC2MlVdKaNrMJ7ms6E2V8s/Xl82W4wA==",
         "dependencies": {
-          "Archipelago.MultiClient.Net": "6.6.0"
+          "Archipelago.MultiClient.Net": "6.6.0",
+          "KaitoKid.ArchipelagoUtilities.AssetDownloader": "3.0.0",
+          "KaitoKid.Utilities.Interfaces": "1.0.1"
         }
       },
       "Pathoschild.Stardew.ModBuildConfig": {
@@ -37,6 +39,20 @@
         "requested": "[4.4.0, )",
         "resolved": "4.4.0",
         "contentHash": "Yi7/8bZlLS1bqZxft1yZWxJmIBfIoRxQBFIwWrF0AjC4/j/HmWdDC7dbNzzM4ZtOTtjOAQ8AC7WjP6KHgLPpdg=="
+      },
+      "KaitoKid.ArchipelagoUtilities.AssetDownloader": {
+        "type": "Transitive",
+        "resolved": "3.0.0",
+        "contentHash": "6infLEATPSFFrvzEXEYn+ol9/hBYGdWA7CkpVAbLPuoP/l3wsZ3ujgwmYBChMa2RfdRQglj3ZipSt1v0uVV1hA==",
+        "dependencies": {
+          "Archipelago.MultiClient.Net": "6.6.0",
+          "KaitoKid.Utilities.Interfaces": "1.0.1"
+        }
+      },
+      "KaitoKid.Utilities.Interfaces": {
+        "type": "Transitive",
+        "resolved": "1.0.1",
+        "contentHash": "yJNh8D8823yGAWST6GShQUhU7TQylFDX6m70Ao28JUnCaAuUOGegwof0o8qPFntOwGiX1ys9eKdf4HQ19Yu6aA=="
       }
     }
   }

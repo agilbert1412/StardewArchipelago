@@ -1,13 +1,12 @@
 ﻿using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
-using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
 using StardewArchipelago.GameModifications.EntranceRandomizer;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 using System;
+using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Constants;
 using xTile.Dimensions;
 

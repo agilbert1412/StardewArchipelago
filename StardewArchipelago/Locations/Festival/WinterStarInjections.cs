@@ -5,9 +5,9 @@ using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.GameData.Characters;
 using Object = StardewValley.Object;
-using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
+using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 

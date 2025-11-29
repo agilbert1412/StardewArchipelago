@@ -1,7 +1,6 @@
 ﻿using HarmonyLib;
 using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
-using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Archipelago;
@@ -12,6 +11,7 @@ using StardewValley;
 using StardewValley.Menus;
 using System;
 using System.Linq;
+using KaitoKid.Utilities.Interfaces;
 
 namespace StardewArchipelago.Items.Mail
 {

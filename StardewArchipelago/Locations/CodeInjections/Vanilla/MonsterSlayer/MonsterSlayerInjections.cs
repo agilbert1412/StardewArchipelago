@@ -1,6 +1,5 @@
 ﻿using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
-using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.Constants.Vanilla;
@@ -16,6 +15,7 @@ using StardewValley.TokenizableStrings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using KaitoKid.Utilities.Interfaces;
 using xTile.Dimensions;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer

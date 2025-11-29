@@ -58,8 +58,8 @@
       },
       "Archipelago.MultiClient.Net": {
         "type": "Transitive",
-        "resolved": "6.6.1",
-        "contentHash": "CvojDLce6/ZkDTa/JNeCX4fM7X0gDdVAI5oIOKOtZjsOk4xJ9kTBix6ajnV2tIABEgpKzmMQm21Oz93Bu0m7IA=="
+        "resolved": "6.7.0",
+        "contentHash": "fsK7kx3dC4EwvEA7kMTUwbP+kYeanYVWHyTXOjYKxl6zj4elHMj42YCjvOYqHee+V2NrRm0f0pljhWEY+BI72g=="
       },
       "KaitoKid.ArchipelagoUtilities.Net": {
         "type": "Transitive",
@@ -581,7 +581,7 @@
         "type": "Project",
         "dependencies": {
           "Archipelago.Gifting.Net": "[0.4.3, )",
-          "Archipelago.MultiClient.Net": "[6.6.1, )",
+          "Archipelago.MultiClient.Net": "[6.7.0, )",
           "KaitoKid.ArchipelagoUtilities.Net": "[2.1.5, )",
           "Pathoschild.Stardew.ModBuildConfig": "[4.4.0, )"
         }

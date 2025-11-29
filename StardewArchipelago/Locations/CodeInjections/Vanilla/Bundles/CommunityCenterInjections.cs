@@ -8,7 +8,7 @@ using StardewArchipelago.Stardew;
 using StardewValley;
 using StardewValley.Locations;
 using xTile.Dimensions;
-using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.Utilities.Interfaces;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Bundles;
 using StardewArchipelago.Constants.Vanilla;

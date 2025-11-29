@@ -14,7 +14,6 @@ using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Network.NetEvents;
 using xTile.Dimensions;
-using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Vanilla;

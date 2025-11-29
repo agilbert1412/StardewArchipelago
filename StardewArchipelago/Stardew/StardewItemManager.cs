@@ -1,5 +1,4 @@
-﻿using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
-using Microsoft.Xna.Framework.Content;
+﻿using Microsoft.Xna.Framework.Content;
 using Newtonsoft.Json;
 using StardewArchipelago.Constants.Vanilla;
 using StardewValley;
@@ -7,11 +6,11 @@ using StardewValley.GameData.BigCraftables;
 using StardewValley.GameData.Objects;
 using StardewValley.GameData.Shirts;
 using StardewValley.GameData.Weapons;
-using StardewValley.Objects;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using KaitoKid.Utilities.Interfaces;
 using StardewValley.GameData;
 using Object = StardewValley.Object;
 

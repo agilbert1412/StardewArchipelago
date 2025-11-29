@@ -5,11 +5,10 @@ using Archipelago.Gifting.Net.Utilities.CloseTraitParser;
 using Archipelago.Gifting.Net.Versioning.Gifts.Current;
 using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Stardew;
-using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Bundles;
 using StardewArchipelago.Items.Traps;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
-using StardewValley;
 
 namespace StardewArchipelago.Archipelago.Gifting
 {

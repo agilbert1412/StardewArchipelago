@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
-using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewValley;
 using StardewValley.GameData.Characters;
@@ -11,6 +10,7 @@ using StardewModdingAPI;
 using Microsoft.Xna.Framework.Graphics;
 using System.Text;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
+using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Extensions;
 using StardewValley.Characters;
 
