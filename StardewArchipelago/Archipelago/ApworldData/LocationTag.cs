@@ -118,6 +118,7 @@
         public const string BINNING_LEVEL = "BINNING_LEVEL";
         public const string ARCHAEOLOGY_LEVEL = "ARCHAEOLOGY_LEVEL";
         public const string COOKING_LEVEL = "COOKING_LEVEL";
+        public const string ENDGAME_LOCATIONS = "ENDGAME_LOCATIONS";
 
     }
 }
