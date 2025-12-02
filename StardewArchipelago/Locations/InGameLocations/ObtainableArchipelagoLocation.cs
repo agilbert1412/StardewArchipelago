@@ -84,7 +84,7 @@ namespace StardewArchipelago.Locations.InGameLocations
 
         public ObtainableArchipelagoLocation(string locationDisplayName, string locationName, LogHandler logger, IModHelper modHelper, ILocationChecker locationChecker, StardewArchipelagoClient archipelago, Hint[] myActiveHints, bool allowScouting)
         {
-            if (_itemSprites == null)
+            if (_itemSprites == null && ModEntry.Instance.Config.CustomAssets)
             {
                 var redownloadDelay = TimeSpan.FromDays(28);
                 _itemSprites = new ArchipelagoItemSprites(logger, redownloadDelay);
@@ -124,7 +124,7 @@ namespace StardewArchipelago.Locations.InGameLocations
         protected virtual Texture2D GetCorrectTexture(LogHandler logger, IModHelper modHelper, ScoutedLocation scoutedLocation, StardewArchipelagoClient archipelago, Hint relatedHint)
         {
             var config = ModEntry.Instance.Config;
-            if (config.CustomAssets && _itemSprites.TryGetCustomAsset(scoutedLocation, archipelago.GameName, config.CustomAssetGameFlexible, config.CustomAssetGenericGame, out var sprite))
+            if (config.CustomAssets && _itemSprites != null && _itemSprites.TryGetCustomAsset(scoutedLocation, archipelago.GameName, config.CustomAssetGameFlexible, config.CustomAssetGenericGame, out var sprite))
             {
                 if (ArchipelagoTextures.TryGetItemSprite(logger, modHelper, sprite, out var texture2D))
                 {
