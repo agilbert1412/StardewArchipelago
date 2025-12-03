@@ -2,6 +2,7 @@
 using System.Linq;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.Utilities.Interfaces;
+using StardewArchipelago.Archipelago;
 using StardewArchipelago.Locations.Jojapocalypse;
 using StardewValley;
 using StardewValley.Extensions;
@@ -12,7 +13,7 @@ namespace StardewArchipelago.Locations
     {
         public HashSet<string> LocationsAlreadyAttemptedToCheck;
 
-        public DisabledLocationChecker(ILogger logger, ArchipelagoClient archipelago, List<string> locationsAlreadyChecked, List<string> locationsAlreadyFailedToCheck) : base(logger, archipelago, locationsAlreadyChecked)
+        public DisabledLocationChecker(ILogger logger, StardewArchipelagoClient archipelago, List<string> locationsAlreadyChecked, List<string> locationsAlreadyFailedToCheck) : base(logger, archipelago, locationsAlreadyChecked)
         {
             LocationsAlreadyAttemptedToCheck = new HashSet<string>(locationsAlreadyFailedToCheck);
         }
