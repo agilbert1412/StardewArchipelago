@@ -60,11 +60,11 @@ namespace StardewArchipelago.Items.Unlocks.Vanilla
 
         private void RegisterCommunityCenterRepairs(IDictionary<string, Func<ReceivedItem, LetterAttachment>> unlocks)
         {
-            unlocks.Add("Bridge Repair", RepairBridge);
-            unlocks.Add("Greenhouse", RepairGreenHouse);
-            unlocks.Add("Glittering Boulder Removed", RemoveGlitteringBoulder);
-            unlocks.Add("Minecarts Repair", RepairMinecarts);
-            unlocks.Add("Bus Repair", RepairBus);
+            unlocks.Add(APItem.BRIDGE_REPAIR, RepairBridge);
+            unlocks.Add(APItem.GREENHOUSE, RepairGreenHouse);
+            unlocks.Add(APItem.GLITTERING_BOULDER, RemoveGlitteringBoulder);
+            unlocks.Add(APItem.MINECARTS_REPAIR, RepairMinecarts);
+            unlocks.Add(APItem.BUS_REPAIR, RepairBus);
         }
 
         private void RegisterRaccoons(IDictionary<string, Func<ReceivedItem, LetterAttachment>> unlocks)

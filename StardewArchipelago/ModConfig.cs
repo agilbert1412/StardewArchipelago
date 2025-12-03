@@ -168,6 +168,16 @@ namespace StardewArchipelago
         /// Equivalent to the vanilla toggle "Use Legacy Randomization". Only applies at the save creation
         /// </summary>
         public bool UseLegacyRandomization { get; set; } = false;
+
+        /// <summary>
+        /// Some Jojapocalypse goals are triggerable pretty easily. This will make it so these goals have extra conditions, in addition to locations checked, to trigger.
+        /// </summary>
+        public bool JojapocalypseHarderGoals { get; set; } = true;
+
+        /// <summary>
+        /// Prevent sending goal as a Joja member until this percent of locations are checked.
+        /// </summary>
+        public int JojapocalypseMinimumCompletionPercentToGoal { get; set; } = 50;
     }
 
     public enum ItemIndicatorPreference
