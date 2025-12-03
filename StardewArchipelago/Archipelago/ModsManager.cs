@@ -105,7 +105,7 @@ namespace StardewArchipelago.Archipelago
                     continue;
                 }
 
-                if (!ModVersions.Versions.ContainsKey(normalizedName))
+                if (!ModVersions.Versions.ContainsKey(cleanName))
                 {
                     continue;
                 }
