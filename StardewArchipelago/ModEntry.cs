@@ -137,6 +137,7 @@ namespace StardewArchipelago
 
             _registry.RegisterOnModEntry();
 
+            ModsManager.WarnForModVersions(_logger, _helper);
         }
 
         private void ResetArchipelago()

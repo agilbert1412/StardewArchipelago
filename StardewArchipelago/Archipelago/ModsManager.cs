@@ -15,14 +15,13 @@ namespace StardewArchipelago.Archipelago
         private readonly ILogger _logger;
         private readonly TesterFeatures _testerFeatures;
         private readonly List<string> _activeMods;
-        private readonly VersionValidator _versionValidator;
+        private static readonly VersionValidator _versionValidator = new VersionValidator();
 
         public ModsManager(ILogger logger, TesterFeatures testerFeatures, List<string> activeMods)
         {
             _logger = logger;
             _testerFeatures = testerFeatures;
             _activeMods = activeMods;
-            _versionValidator = new VersionValidator();
         }
 
         public bool IsModded => _activeMods.Any();
@@ -82,6 +81,46 @@ namespace StardewArchipelago.Archipelago
             }
 
             return !missingMods.Any();
+        }
+
+        public static void WarnForModVersions(ILogger logger, IModHelper modHelper)
+        {
+            var loadedModData = modHelper.ModRegistry.GetAll().ToList();
+            foreach (var loadedModInfo in loadedModData)
+            {
+                var modName = loadedModInfo.Manifest.Name;
+                var normalizedName = GetNormalizedModName(modName);
+                string cleanName = null;
+                foreach (var nameMapping in ModInternalNames.InternalNames)
+                {
+                    if (GetNormalizedModName(nameMapping.Value).Equals(normalizedName, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        cleanName = nameMapping.Key;
+                        break;
+                    }
+                }
+
+                if (cleanName == null)
+                {
+                    continue;
+                }
+
+                if (!ModVersions.Versions.ContainsKey(normalizedName))
+                {
+                    continue;
+                }
+
+                var desiredVersion = ModVersions.Versions[cleanName];
+                var existingVersion = loadedModInfo.Manifest.Version.ToString();
+                if (_versionValidator.IsVersionCorrect(existingVersion, desiredVersion))
+                {
+                    logger.LogInfo($"Detected Mod `{cleanName}` [{existingVersion}]. This mod has Archipelago Integration available. Make sure you shuffle it from your generator options!");
+                }
+                else
+                {
+                    logger.LogWarning($"Detected Mod `{cleanName}` [{existingVersion}]. This mod has Archipelago Integration available, but this is not the supported version! The supported version is [{desiredVersion}].");
+                }
+            }
         }
 
         public bool IsExtraRequirementsStateCorrect(IModHelper modHelper, out List<MissingMod> problemMods)
