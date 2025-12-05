@@ -447,6 +447,27 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Walnutsanity
 
             // We allow the player to get extra walnuts here, but each one is less likely than the last
             chanceRequired *= Math.Pow(chanceReduction, numberWalnutsSoFar - 4);
+
+            switch (ModEntry.Instance.Config.BonusRepeatableWalnuts)
+            {
+
+                case BonusRepeatableWalnutsPreference.Never:
+                    return failCallback?.Invoke();
+                case BonusRepeatableWalnutsPreference.VeryRare:
+                    chanceRequired *= 0.1;
+                    break;
+                case BonusRepeatableWalnutsPreference.Rare:
+                    chanceRequired *= 0.4;
+                    break;
+                case BonusRepeatableWalnutsPreference.Regular:
+                    break;
+                case BonusRepeatableWalnutsPreference.Frequent:
+                    chanceRequired *= 1.5;
+                    break;
+                default:
+                    return failCallback?.Invoke();
+            }
+
             if (roll > chanceRequired)
             {
                 return failCallback?.Invoke();
