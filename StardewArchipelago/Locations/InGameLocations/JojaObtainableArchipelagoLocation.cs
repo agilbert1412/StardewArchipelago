@@ -44,6 +44,7 @@ namespace StardewArchipelago.Locations.InGameLocations
             var random = Utility.CreateDaySaveRandom(QualifiedItemId.GetHashCode());
             var randomValue = (random.NextDouble() + (1-priceVariance)) * (priceVariance*2);
             var price = (int)Math.Round(currentPrice * randomValue);
+            price = Math.Min(_maxPrice, Math.Max(_minPrice, price));
             return price;
         }
 

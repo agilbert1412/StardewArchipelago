@@ -119,7 +119,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
             if (!Game1.player.mailReceived.Contains("ccMovieTheaterJoja%&NL&%") && !Game1.player.mailReceived.Contains("jojaMovieTheater"))
             {
+                Game1.player.mailReceived.Add("ccMovieTheater");
                 Game1.player.mailReceived.Add("jojaMovieTheater");
+                Game1.player.mailReceived.Add("ccMovieTheaterJoja");
                 return new WorldChangeEvent(10);
             }
 
