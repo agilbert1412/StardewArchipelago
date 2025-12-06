@@ -1,13 +1,15 @@
-using System;
-using System.Collections.Generic;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewArchipelago.Constants;
+using StardewArchipelago.Locations.Jojapocalypse;
 using StardewValley;
+using System;
+using System.Collections.Generic;
 
 namespace StardewArchipelago.GameModifications.EntranceRandomizer
 {
     public class EquivalentWarps
     {
+        private const string communityCenter = "CommunityCenter";
         private const string jojaMart = "JojaMart";
         private const string abandonedJojaMart = "AbandonedJojaMart";
         private const string movieTheater = "MovieTheater";
@@ -21,6 +23,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
         private const string auroraVineyardCellar = "Custom_ApplesRoom";
         private const string auroraVineyardRefurbished = "Custom_AuroraVineyardRefurbished";
         private const string auroraVineyardCellarRefurbished = "Custom_AuroraVineyardCellarRefurbished";
+        private static readonly string[] _communityCenterLocations = { communityCenter, movieTheater };
         private static readonly string[] _jojaMartLocations = { jojaMart, abandonedJojaMart, movieTheater };
         private static readonly string[] _trailerLocations = { trailer, trailerBig };
         private static readonly string[] _beachLocations = { beach, beachNightMarket };
@@ -30,6 +33,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
 
         public List<string[]> EquivalentAreas = new()
         {
+            _communityCenterLocations,
             _jojaMartLocations,
             _trailerLocations,
             _beachLocations,
@@ -102,6 +106,11 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
                 return $"{correctArea1}{EntranceManager.TRANSITIONAL_STRING}{correctArea2}";
             }
 
+            if (IsCommunityCenter(entrance, out var communityCenterCorrectEntrance))
+            {
+                return communityCenterCorrectEntrance;
+            }
+
             if (IsJojaMart(entrance, out var jojaMartCorrectEntrance))
             {
                 return jojaMartCorrectEntrance;
@@ -135,6 +144,37 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             return entrance;
         }
 
+        private bool IsCommunityCenter(string area, out string correctArea)
+        {
+            foreach (var communityCenterLocation in _communityCenterLocations)
+            {
+                if (!area.Equals(communityCenterLocation, StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                if (!Game1.player.hasOrWillReceiveMail(JojaConstants.MEMBERSHIP_MAIL))
+                {
+                    correctArea = area.Replace(communityCenterLocation, communityCenter);
+                    return true;
+                }
+
+                var numberOfTheaters = _archipelago.GetReceivedItemCount(APItem.MOVIE_THEATER);
+
+                if (numberOfTheaters >= 2)
+                {
+                    correctArea = area.Replace(communityCenterLocation, movieTheater);
+                    return true;
+                }
+
+                correctArea = area.Replace(communityCenterLocation, communityCenter);
+                return true;
+            }
+
+            correctArea = area;
+            return false;
+        }
+
         private bool IsJojaMart(string area, out string correctArea)
         {
             foreach (var jojaMartLocation in _jojaMartLocations)
@@ -142,6 +182,12 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
                 if (!area.Equals(jojaMartLocation, StringComparison.OrdinalIgnoreCase))
                 {
                     continue;
+                }
+
+                if (Game1.player.hasOrWillReceiveMail(JojaConstants.MEMBERSHIP_MAIL))
+                {
+                    correctArea = area.Replace(jojaMartLocation, jojaMart);
+                    return true;
                 }
 
                 var numberOfTheaters = _archipelago.GetReceivedItemCount(APItem.MOVIE_THEATER);

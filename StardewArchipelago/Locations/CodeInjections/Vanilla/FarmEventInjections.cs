@@ -1,13 +1,14 @@
-﻿using System;
-using System.Linq;
-using Netcode;
+﻿using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.Utilities.Interfaces;
+using Netcode;
 using StardewArchipelago.Constants;
+using StardewArchipelago.Locations.Jojapocalypse;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Events;
-using KaitoKid.ArchipelagoUtilities.Net;
-using KaitoKid.Utilities.Interfaces;
+using System;
+using System.Linq;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -93,6 +94,41 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         // public static FarmEvent pickFarmEvent()
         public static FarmEvent OverwriteAbandonedJojaMartEvent(FarmEvent nightEvent)
         {
+
+            if (Game1.player.hasOrWillReceiveMail(JojaConstants.MEMBERSHIP_MAIL))
+            {
+                return OverwriteCCTheaterEvent(nightEvent);
+            }
+            else
+            {
+                return OverwriteJojaTheaterEvent(nightEvent);
+            }
+        }
+
+        private static FarmEvent OverwriteCCTheaterEvent(FarmEvent nightEvent)
+        {
+            if (Game1.weddingToday || nightEvent != null || !_archipelago.HasReceivedItem(APItem.MOVIE_THEATER))
+            {
+                return nightEvent;
+            }
+
+            if (_archipelago.GetReceivedItemCount(APItem.MOVIE_THEATER) < 2)
+            {
+                return nightEvent;
+            }
+
+            if (!Game1.player.mailReceived.Contains("ccMovieTheaterJoja%&NL&%") && !Game1.player.mailReceived.Contains("jojaMovieTheater"))
+            {
+                Game1.player.mailReceived.Add("jojaMovieTheater");
+                return new WorldChangeEvent(10);
+            }
+
+            return nightEvent;
+        }
+
+        private static FarmEvent OverwriteJojaTheaterEvent(FarmEvent nightEvent)
+        {
+
             if (Game1.weddingToday || nightEvent != null || !_archipelago.HasReceivedItem(APItem.MOVIE_THEATER))
             {
                 return nightEvent;

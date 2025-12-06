@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using KaitoKid.ArchipelagoUtilities.Net;
+﻿using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
@@ -9,12 +6,16 @@ using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Extensions;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
+using StardewArchipelago.Locations.Jojapocalypse;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.GameData;
 using StardewValley.GameData.Shops;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Category = StardewArchipelago.Constants.Vanilla.Category;
 
 namespace StardewArchipelago.GameModifications
@@ -289,6 +290,12 @@ namespace StardewArchipelago.GameModifications
             if (itemSeason != null && itemSeason != Game1.currentSeason)
             {
                 priceMultiplier *= 1.5f;
+            }
+
+            if (Game1.player.hasOrWillReceiveMail(JojaConstants.MEMBERSHIP_MAIL))
+            {
+                priceMultiplier *= 1.5f;
+                maxAmount /= 2;
             }
 
             if (hasStocklist)
