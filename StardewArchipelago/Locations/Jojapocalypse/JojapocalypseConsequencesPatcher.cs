@@ -106,7 +106,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Farmer), nameof(Farmer.doneEating)),
-                postfix: new HarmonyMethod(typeof(EatConsequences), nameof(EatConsequences.DoneEating_DropOnTheFloor_Prefix))
+                prefix: new HarmonyMethod(typeof(EatConsequences), nameof(EatConsequences.DoneEating_DropOnTheFloor_Prefix))
             );
         }
 

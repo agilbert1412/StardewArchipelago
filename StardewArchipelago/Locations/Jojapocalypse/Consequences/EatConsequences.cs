@@ -70,7 +70,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse.Consequences
             farmer.mostRecentlyGrabbedItem = null;
             farmer.itemToEat = null;
 
-            Game1.createItemDebris(itemToEat, Game1.player.Position, Game1.player.FacingDirection, Game1.player.currentLocation, 0);
+            Game1.createItemDebris(itemToEat.getOne(), Game1.player.Position, Game1.player.FacingDirection, Game1.player.currentLocation, 0);
             var emotes = new[] { "sad", "x", "pause", "blush", "angry", "surprised", "uh" };
             var emote = emotes[Game1.random.Next(emotes.Length)];
             Game1.player.performPlayerEmote(emote);
