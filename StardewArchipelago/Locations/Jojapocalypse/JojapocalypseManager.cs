@@ -7,6 +7,7 @@ using StardewValley;
 using StardewValley.Menus;
 using StardewValley.Locations;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
+using StardewModdingAPI.Events;
 
 namespace StardewArchipelago.Locations.Jojapocalypse
 {
@@ -86,6 +87,11 @@ namespace StardewArchipelago.Locations.Jojapocalypse
 
                 stockInfo.Price = jojaLocation.salePrice();
             }
+        }
+
+        public void OnUpdateTicked(UpdateTickedEventArgs updateTickedEventArgs)
+        {
+            _jojaConsequencesPatcher?.OnUpdateTicked(updateTickedEventArgs);
         }
     }
 

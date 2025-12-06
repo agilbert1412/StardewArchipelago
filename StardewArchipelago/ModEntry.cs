@@ -503,6 +503,7 @@ namespace StardewArchipelago
             }
 
             MovementInjections.UpdateMove(e);
+            _jojapocalypseManager?.OnUpdateTicked(e);
         }
 
         private void OnReturnedToTitle(object sender, ReturnedToTitleEventArgs e)

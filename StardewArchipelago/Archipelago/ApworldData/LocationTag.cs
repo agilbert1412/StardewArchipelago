@@ -98,7 +98,8 @@
         public const string MEME_BUNDLE = "MEME_BUNDLE";
         public const string HATSANITY = "HATSANITY";
         public const string HAT_POST_PERFECTION = "HAT_POST_PERFECTION";
-        public const string HAT_DIFFICULT_OR_RNG = "HAT_DIFFICULT_OR_RNG";
+        public const string HAT_DIFFICULT = "HAT_DIFFICULT";
+        public const string HAT_RNG = "HAT_RNG";
         public const string HAT_NEAR_PERFECTION = "HAT_NEAR_PERFECTION";
         public const string HAT_TAILORING = "HAT_TAILORING";
         public const string HAT_MEDIUM = "HAT_MEDIUM";

@@ -6,6 +6,7 @@ using System;
 using KaitoKid.Utilities.Interfaces;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Locations.Jojapocalypse.Consequences;
+using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Menus;
@@ -58,8 +59,13 @@ namespace StardewArchipelago.Locations.Jojapocalypse
             // Booksanity should increase bookseller prices
             // Secretsanity should decrease secret note spawn chance
             // Movie should increase ticket and snack costs
-            // Hatsanity sometimes your hat falls off lmao
+            HatConsequences.Initialize(_logger, _modHelper, _archipelago, _jojaLocationChecker); // Hatsanity sometimes your hat falls off lmao
             // Eatsanity should decrease food efficiency
+        }
+
+        public void OnUpdateTicked(UpdateTickedEventArgs updateTickedEventArgs)
+        {
+            HatConsequences.OnUpdateTicked(updateTickedEventArgs);
         }
 
         public void PatchAllConsequences()
