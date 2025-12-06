@@ -17,6 +17,8 @@ namespace StardewArchipelago.Locations.InGameLocations
     {
         private JojaLocationChecker _jojaLocationChecker;
         private JojaPriceCalculator _jojaPriceCalculator;
+        private int _minPrice;
+        private int _maxPrice;
 
         public JojaObtainableArchipelagoLocation(string locationName, LogHandler logger, IModHelper modHelper, JojaLocationChecker locationChecker, StardewArchipelagoClient archipelago, JojaPriceCalculator jojaPriceCalculator) : this(locationName, locationName, logger, modHelper, locationChecker, archipelago, jojaPriceCalculator)
         {
@@ -26,6 +28,8 @@ namespace StardewArchipelago.Locations.InGameLocations
         {
             _jojaLocationChecker = locationChecker;
             _jojaPriceCalculator = jojaPriceCalculator;
+            _minPrice = archipelago.SlotData.Jojapocalypse.StartPrice;
+            _maxPrice = archipelago.SlotData.Jojapocalypse.EndPrice;
         }
 
         protected override Texture2D GetCorrectTexture(LogHandler logger, IModHelper modHelper, ScoutedLocation scoutedLocation, StardewArchipelagoClient archipelago, Hint relatedHint)
@@ -35,7 +39,12 @@ namespace StardewArchipelago.Locations.InGameLocations
 
         public override int salePrice(bool ignoreProfitMargins = false)
         {
-            return _jojaPriceCalculator.GetNextItemPrice();
+            const double priceVariance = 0.5;
+            var currentPrice = _jojaPriceCalculator.GetNextItemPrice();
+            var random = Utility.CreateDaySaveRandom(QualifiedItemId.GetHashCode());
+            var randomValue = (random.NextDouble() + (1-priceVariance)) * (priceVariance*2);
+            var price = (int)Math.Round(currentPrice * randomValue);
+            return price;
         }
 
         public override bool actionWhenPurchased(string shopId)
