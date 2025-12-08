@@ -374,7 +374,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
             return true;
         }
 
-        private bool ValidateBundleRoomLocation(StardewArchipelagoLocation location)
+        private bool ValidateBundleLocation(StardewArchipelagoLocation location)
         {
             if (!location.LocationTags.Contains(LocationTag.COMMUNITY_CENTER_BUNDLE))
             {
