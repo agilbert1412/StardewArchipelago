@@ -54,7 +54,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             if (_archipelago.GetReceivedItemCount(APItem.MOVIE_THEATER) >= 2)
             {
                 // protected string loadedMapPath;
-                var loadedMapPathField = _modHelper.Reflection.GetField<HashSet<string>>(town, "loadedMapPath");
+                var loadedMapPathField = _modHelper.Reflection.GetField<string>(town, "loadedMapPath");
                 var loadedMapPath = loadedMapPathField.GetValue();
 
                 var rectangle = new Rectangle(46, 11, 15, 17);
